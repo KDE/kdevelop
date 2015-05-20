@@ -47,8 +47,10 @@ private slots:
 
 private:
     void appendLine(const QString &l);
+
     KProcess* proc;
     KDevelop::ProcessLineMaker* lineMaker;
+    QString m_cfgname;
 };
 
 #endif

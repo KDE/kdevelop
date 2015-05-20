@@ -185,10 +185,12 @@ void BuilderJob::addCustomJob( BuilderJob::BuildType type, KJob* job, ProjectBas
         QVector<SubJobData> subjobs = builderJob->d->takeJobList();
         builderJob->deleteLater();
         foreach( const SubJobData& subjob, subjobs ) {
+            subjob.job->setParent(this);
             addSubjob( subjob.job );
         }
         d->m_metadata << subjobs;
     } else {
+        job->setParent(this);
         addSubjob( job );
 
         SubJobData data;

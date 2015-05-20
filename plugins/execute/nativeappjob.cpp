@@ -21,13 +21,16 @@
 
 #include <QDebug>
 #include <QFileInfo>
+#include <QMessageBox>
 
 #include <KLocalizedString>
 #include <KProcess>
 #include <KShell>
 #include <KSharedConfig>
+#include <KCompositeJob>
 
 #include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/iruncontroller.h>
 #include <outputview/outputmodel.h>
 #include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
@@ -45,6 +48,7 @@ using namespace KDevelop;
 
 NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     : KDevelop::OutputJob( parent ), proc(0)
+    , m_cfgname(cfg->name())
 {
     setCapabilities(Killable);
 
@@ -133,9 +137,29 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     setObjectName(cfg->name());
 }
 
+NativeAppJob* findNativeJob(KJob* j)
+{
+    NativeAppJob* job = qobject_cast<NativeAppJob*>(j);
+    if (!job) {
+        const QList<NativeAppJob*> jobs = j->findChildren<NativeAppJob*>();
+        if (!jobs.isEmpty())
+            job = jobs.first();
+    }
+    return job;
+}
 
 void NativeAppJob::start()
 {
+    // we kill any execution of the configuration
+    foreach(KJob* j, ICore::self()->runController()->currentJobs()) {
+        NativeAppJob* job = findNativeJob(j);
+        if (job && job != this && job->m_cfgname == m_cfgname) {
+            QMessageBox::StandardButton button = QMessageBox::question(Q_NULLPTR, i18n("Job already running"), i18n("'%1' is already being executed. Should we kill the previous instance?", m_cfgname));
+            if (button != QMessageBox::NoButton)
+                j->kill();
+        }
+    }
+
     qCDebug(PLUGIN_EXECUTE) << "launching?" << proc;
     if( proc )
     {
