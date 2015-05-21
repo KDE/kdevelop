@@ -45,3 +45,11 @@ void someFunc(int a) { }
 void (foo::*f1)();
 /// "type" : { "toString"  : "void (int, int)*" }
 void (foo::*f2)(int a, int b);
+
+#define STDCALL __stdcall
+/// "type" : { "toString" : "function void (int)" }
+void STDCALL bar3(int a);
+/// "definition" : { "internalContext" : { "type" : "Function", "localDeclarationCount" : 1 } }
+void STDCALL bar3(int a); {}
+/// "type" : { "toString" : "function void ()" }
+void __pascal bar4();

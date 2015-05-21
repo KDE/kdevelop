@@ -516,7 +516,20 @@ struct Visitor
         return type;
     }
 
-    template<CXCursorKind CK, EnableIf<!CursorKindTraits::isIdentifiedType(CK)> = dummy>
+    template <CXCursorKind CK, EnableIf<CK == CXCursor_FunctionDecl> = dummy>
+    AbstractType* createType(CXCursor cursor)
+    {
+        auto clangType = clang_getCursorType(cursor);
+
+        if (clangType.kind == CXType_Unexposed) {
+            // Clang sometimes can return CXType_Unexposed for CXType_FunctionProto kind. E.g. if it's AttributedType.
+            return dispatchType<CXType_FunctionProto>(clangType, cursor);
+        }
+
+        return makeType(clangType, cursor);
+    }
+
+    template<CXCursorKind CK, EnableIf<!CursorKindTraits::isIdentifiedType(CK) && CK != CXCursor_FunctionDecl> = dummy>
     AbstractType *createType(CXCursor cursor)
     {
         auto clangType = clang_getCursorType(cursor);
