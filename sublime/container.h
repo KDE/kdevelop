@@ -70,6 +70,8 @@ public:
     /// @return Rect in global position of the tab identified by index @p tab
     QRect tabRect(int tab) const;
 
+    static bool configTabBarVisible();
+
 Q_SIGNALS:
     void activateView(Sublime::View* view);
     void requestClose(QWidget *w);

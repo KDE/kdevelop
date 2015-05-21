@@ -309,13 +309,11 @@ void MainWindow::loadSettings()
         n++;
     }
 
-    KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
-    foreach (Container *container, findChildren<Container*>())
+    const bool tabBarHidden = !Container::configTabBarVisible();
+    foreach (Container *container, d->viewContainers)
     {
-        container->setTabBarHidden(uiGroup.readEntry("TabBarVisibility", 1) == 0);
+        container->setTabBarHidden(tabBarHidden);
     }
-
-    cg.sync();
 
     hu.stop();
 
@@ -409,7 +407,7 @@ void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea , const QPoint& 
 
 View* MainWindow::viewForPosition(QPoint globalPos) const
 {
-    foreach(Container* container, d->viewContainers.values())
+    foreach(Container* container, d->viewContainers)
     {
         QRect globalGeom = QRect(container->mapToGlobal(QPoint(0,0)), container->mapToGlobal(QPoint(container->width(), container->height())));
        if(globalGeom.contains(globalPos))

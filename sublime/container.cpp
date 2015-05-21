@@ -249,12 +249,18 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, &ContainerTabBar::tabBarDoubleClicked, this, &Container::doubleClickTriggered);
     connect(d->documentListMenu, &QMenu::triggered, this, &Container::documentListActionTriggered);
 
-    KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
-    setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
+
+    setTabBarHidden(!configTabBarVisible());
     d->tabBar->setTabsClosable(true);
     d->tabBar->setMovable(true);
     d->tabBar->setExpanding(false);
     d->tabBar->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
+}
+
+bool Container::configTabBarVisible()
+{
+    KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
+    return group.readEntry("TabBarVisibility", 1);
 }
 
 void Container::setLeftCornerWidget(QWidget* widget)
