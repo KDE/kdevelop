@@ -51,12 +51,18 @@ using namespace KDevelop;
 using ClangCodeCompletionItemTester = CodeCompletionItemTester<ClangCodeCompletionContext>;
 
 struct CompletionItems {
+    CompletionItems(){}
+    CompletionItems(const KTextEditor::Cursor& position, const QStringList& completions, const QStringList& declarationItems = {})
+        : position(position)
+        , completions(completions)
+        , declarationItems(declarationItems)
+    {};
     KTextEditor::Cursor position;
     QStringList completions;
+    QStringList declarationItems; // completion items that have associated declarations
 };
 Q_DECLARE_TYPEINFO(CompletionItems, Q_MOVABLE_TYPE);
-using CompletionItemsList = QList<CompletionItems>;
-Q_DECLARE_METATYPE(CompletionItemsList);
+Q_DECLARE_METATYPE(CompletionItems);
 
 void TestCodeCompletion::initTestCase()
 {
@@ -73,8 +79,7 @@ void TestCodeCompletion::cleanupTestCase()
 
 namespace {
 
-//TODO: the test should be extended to check whether the completion item is a DeclarationItem or just a SimpleItem
-void executeCompletionTest(const QString& code, const CompletionItemsList& expectedCompletionItems,
+void executeCompletionTest(const QString& code, const CompletionItems& expectedCompletionItems,
                            const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
                                 ClangCodeCompletionContext::NoBuiltins |
                                 ClangCodeCompletionContext::NoMacros))
@@ -92,17 +97,22 @@ void executeCompletionTest(const QString& code, const CompletionItemsList& expec
     // don't hold DUChain lock when constructing ClangCodeCompletionContext
     lock.unlock();
 
-    foreach(CompletionItems items, expectedCompletionItems) {
-        // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
-        auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), items.position, QString());
-        context->setFilters(filters);
+    // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
+    auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
+    context->setFilters(filters);
 
-        DUChainReadLocker lock;
-        auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    lock.lock();
+    auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
 
-        tester.names.sort();
-        QCOMPARE(tester.names, items.completions);
+
+    for(const auto& declarationName : expectedCompletionItems.declarationItems){
+        const auto declarationItem = tester.findItem(declarationName);
+        QVERIFY(declarationItem);
+        QVERIFY(declarationItem->declaration());
     }
+
+    tester.names.sort();
+    QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
 
 using IncludeTester = CodeCompletionItemTester<IncludePathCompletionContext>;
@@ -148,7 +158,7 @@ QExplicitlySharedDataPointer<IncludePathCompletionContext> executeIncludePathCom
 void TestCodeCompletion::testClangCodeCompletion()
 {
     QFETCH(QString, code);
-    QFETCH(CompletionItemsList, expectedItems);
+    QFETCH(CompletionItems, expectedItems);
 
     executeCompletionTest(code, expectedItems);
 }
@@ -156,72 +166,71 @@ void TestCodeCompletion::testClangCodeCompletion()
 void TestCodeCompletion::testClangCodeCompletion_data()
 {
     QTest::addColumn<QString>("code");
-    QTest::addColumn<CompletionItemsList>("expectedItems");
+    QTest::addColumn<CompletionItems>("expectedItems");
 
     QTest::newRow("assignment")
         << "int foo = 5; \nint bar = "
-        << CompletionItemsList{{{1,9}, {
+        << CompletionItems{{1,9}, {
             "bar",
             "foo",
-        }}};
+        }, {"bar","foo"}};
     QTest::newRow("dotmemberaccess")
         << "class Foo { public: void foo() {} }; int main() { Foo f; \nf. "
-        << CompletionItemsList{{{1, 2}, {
+        << CompletionItems{{1, 2}, {
             "foo()",
             "operator=(Foo &&)",
             "operator=(const Foo &)",
-
-        }}};
+        }, {"foo()"}};
     QTest::newRow("arrowmemberaccess")
         << "class Foo { public: void foo() {} }; int main() { Foo* f = new Foo; \nf-> }"
-        << CompletionItemsList{{{1, 3}, {
+        << CompletionItems{{1, 3}, {
             "foo()",
             "operator=(Foo &&)",
             "operator=(const Foo &)",
-        }}};
+        }, {"foo()"}};
     QTest::newRow("enum-case")
         << "enum Foo { foo, bar }; int main() { Foo f; switch (f) {\ncase "
-        << CompletionItemsList{{{1,4}, {
+        << CompletionItems{{1,4}, {
             "bar",
             "foo",
-        }}};
+        }, {"foo", "bar"}};
     QTest::newRow("only-private")
         << "class SomeStruct { private: void priv() {} };\n"
            "int main() { SomeStruct s;\ns. "
-        << CompletionItemsList{{{2, 2}, {
+        << CompletionItems{{2, 2}, {
             "operator=(SomeStruct &&)",
             "operator=(const SomeStruct &)",
-        }}};
+        }};
     QTest::newRow("private-friend")
         << "class SomeStruct { private: void priv() {} friend int main(); };\n"
            "int main() { SomeStruct s;\ns. "
-        << CompletionItemsList{{{2, 2}, {
+        << CompletionItems{{2, 2}, {
             "operator=(SomeStruct &&)",
             "operator=(const SomeStruct &)",
             "priv()",
-        }}};
+        }, {"priv()"}};
     QTest::newRow("private-public")
         << "class SomeStruct { public: void pub() {} private: void priv() {} };\n"
            "int main() { SomeStruct s;\ns. "
-        << CompletionItemsList{{{2, 2}, {
+        << CompletionItems{{2, 2}, {
             "operator=(SomeStruct &&)",
             "operator=(const SomeStruct &)",
             "pub()",
-        }}};
+        }, {"pub()"}};
     QTest::newRow("protected-public")
         << "class SomeStruct { public: void pub() {} protected: void prot() {} };\n"
            "int main() { SomeStruct s;\ns. "
-        << CompletionItemsList{{{2, 2}, {
+        << CompletionItems{{2, 2}, {
             "operator=(SomeStruct &&)",
             "operator=(const SomeStruct &)",
             "pub()",
-        }}};
+        }, {"pub()"}};
 }
 
 void TestCodeCompletion::testVirtualOverride()
 {
     QFETCH(QString, code);
-    QFETCH(CompletionItemsList, expectedItems);
+    QFETCH(CompletionItems, expectedItems);
 
     executeCompletionTest(code, expectedItems, ClangCodeCompletionContext::NoClangCompletion);
 }
@@ -229,51 +238,51 @@ void TestCodeCompletion::testVirtualOverride()
 void TestCodeCompletion::testVirtualOverride_data()
 {
     QTest::addColumn<QString>("code");
-    QTest::addColumn<CompletionItemsList>("expectedItems");
+    QTest::addColumn<CompletionItems>("expectedItems");
 
     QTest::newRow("basic")
         <<  "class Foo { virtual void foo(); virtual char foo(char c, int i, double d); };\n"
             "class Bar : Foo \n{\n}"
-        << CompletionItemsList{{{3, 1}, {"foo()", "foo(char c, int i, double d)"}}};
+        << CompletionItems{{3, 1}, {"foo()", "foo(char c, int i, double d)"}};
 
     QTest::newRow("template")
         << "template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
            "class Bar : Foo<char, double> \n{\n}"
-        << CompletionItemsList{{{3, 1}, {"foo(char a, double b, int i)"}}};
+        << CompletionItems{{3, 1}, {"foo(char a, double b, int i)"}};
 
     QTest::newRow("nested-template")
         << "template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
            "template<class T1, class T2> class Baz { };\n"
            "class Bar : Foo<char, Baz<char, double>> \n{\n}"
-        << CompletionItemsList{{{4, 1}, {"foo(char a, Baz<char, double> b, int i)"}}};
+        << CompletionItems{{4, 1}, {"foo(char a, Baz<char, double> b, int i)"}};
 
     QTest::newRow("multi")
         << "class Foo { virtual int foo(int i); };\n"
            "class Baz { virtual char baz(char c); };\n"
            "class Bar : Foo, Baz \n{\n}"
-        << CompletionItemsList{{{4, 1}, {"baz(char c)", "foo(int i)"}}};
+        << CompletionItems{{4, 1}, {"baz(char c)", "foo(int i)"}};
 
     QTest::newRow("deep")
         << "class Foo { virtual int foo(int i); };\n"
            "class Baz : Foo { };\n"
            "class Bar : Baz \n{\n}"
-        << CompletionItemsList{{{4, 1}, {"foo(int i)"}}};
+        << CompletionItems{{4, 1}, {"foo(int i)"}};
 
     QTest::newRow("pure")
         << "class Foo { virtual void foo() = 0; foo() {} };\n"
            "class Bar : Foo \n{\n}"
-        << CompletionItemsList{{{3, 1}, {"foo() = 0"}}};
+        << CompletionItems{{3, 1}, {"foo() = 0"}};
 
     QTest::newRow("const")
         << "class Foo { virtual void foo(const int b) const; }\n;"
            "class Bar : Foo \n{\n}"
-        << CompletionItemsList{{{3, 1}, {"foo(const int b) const"}}};
+        << CompletionItems{{3, 1}, {"foo(const int b) const"}};
 }
 
 void TestCodeCompletion::testImplement()
 {
     QFETCH(QString, code);
-    QFETCH(CompletionItemsList, expectedItems);
+    QFETCH(CompletionItems, expectedItems);
 
     executeCompletionTest(code, expectedItems, ClangCodeCompletionContext::NoClangCompletion);
 }
@@ -281,49 +290,55 @@ void TestCodeCompletion::testImplement()
 void TestCodeCompletion::testImplement_data()
 {
     QTest::addColumn<QString>("code");
-    QTest::addColumn<CompletionItemsList>("expectedItems");
+    QTest::addColumn<CompletionItems>("expectedItems");
 
     QTest::newRow("basic")
         << "int foo(char c, int i); \n"
-        << CompletionItemsList{{{1, 0}, {"foo(char c, int i)"}}};
+        << CompletionItems{{1, 0}, {"foo(char c, int i)"}};
 
     QTest::newRow("class")
         << "class Foo { \n"
            "int bar(char c, int i); \n\n"
            "}; \n"
-        << CompletionItemsList{
-                {{2, 0}, {}},
-                {{4, 0}, {"Foo::bar(char c, int i)"}}
-        };
+        << CompletionItems{{2, 0}, {}};
+
+    QTest::newRow("class2")
+        << "class Foo { \n"
+            "int bar(char c, int i); \n\n"
+            "}; \n"
+        << CompletionItems{{4, 0}, {"Foo::bar(char c, int i)"}};
 
     QTest::newRow("namespace")
         << "namespace Foo { \n"
            "int bar(char c, int i); \n\n"
            "}; \n"
-        << CompletionItemsList{
-                {{2, 0}, {"bar(char c, int i)"}},
-                {{4, 0}, {"Foo::bar(char c, int i)"}}
-        };
+        << CompletionItems{{2, 0}, {"bar(char c, int i)"}};
+
+    QTest::newRow("namespace2")
+        << "namespace Foo { \n"
+           "int bar(char c, int i); \n\n"
+           "}; \n"
+        << CompletionItems{{4, 0}, {"Foo::bar(char c, int i)"}};
 
     QTest::newRow("two-namespace")
         << "namespace Foo { int bar(char c, int i); };\n"
            "namespace Foo {\n"
            "};\n"
-        << CompletionItemsList{{{2, 0}, {"bar(char c, int i)"}}};
+        << CompletionItems{{2, 0}, {"bar(char c, int i)"}};
 
     QTest::newRow("destructor")
         << "class Foo { ~Foo(); }\n"
-        << CompletionItemsList{{{1, 0}, {"Foo::~Foo()"}}};
+        << CompletionItems{{1, 0}, {"Foo::~Foo()"}};
 
     QTest::newRow("constructor")
         << "class Foo { \n"
                  "Foo(int i); \n"
                  "}; \n"
-        << CompletionItemsList{{{3, 1}, {"Foo::Foo(int i)"}}};
+        << CompletionItems{{3, 1}, {"Foo::Foo(int i)"}};
 
     QTest::newRow("template")
         << "template<typename T> class Foo { T bar(T t); };\n"
-        << CompletionItemsList{{{1, 1}, {"Foo<T>::bar(T t)"}}};
+        << CompletionItems{{1, 1}, {"Foo<T>::bar(T t)"}};
 
     QTest::newRow("specialized-template")
         << "template<typename T> class Foo { \n"
@@ -333,7 +348,7 @@ void TestCodeCompletion::testImplement_data()
            "template<> class Foo<int> { \n"
            "int bar(int t); \n"
            "}\n"
-        << CompletionItemsList{{{6, 1}, {"Foo<int>::bar(int t)"}}};
+        << CompletionItems{{6, 1}, {"Foo<int>::bar(int t)"}};
 
     QTest::newRow("nested-class")
         << "class Foo { \n"
@@ -341,11 +356,23 @@ void TestCodeCompletion::testImplement_data()
            "int baz(char c, int i); \n\n"
            "}; \n\n"
            "}; \n\n"
-        << CompletionItemsList{
-            {{3, 1}, {}},
-            {{5, 1}, {}},
-            {{7, 1}, {"Foo::Bar::baz(char c, int i)"}}
-        };
+        << CompletionItems {{3, 1}, {}};
+
+    QTest::newRow("nested-class2")
+        << "class Foo { \n"
+           "class Bar { \n"
+           "int baz(char c, int i); \n\n"
+           "}; \n\n"
+           "}; \n\n"
+        << CompletionItems {{5, 1}, {}};
+
+    QTest::newRow("nested-class3")
+        << "class Foo { \n"
+           "class Bar { \n"
+           "int baz(char c, int i); \n\n"
+           "}; \n\n"
+           "}; \n\n"
+        << CompletionItems {{7, 1}, {"Foo::Bar::baz(char c, int i)"}};
 
     QTest::newRow("nested-namespace")
         << "namespace Foo { \n"
@@ -353,33 +380,44 @@ void TestCodeCompletion::testImplement_data()
            "int baz(char c, int i); \n\n"
            "}; \n\n"
            "}; \n\n"
-        << CompletionItemsList{
-            {{3, 1}, {"baz(char c, int i)"}},
-            {{5, 1}, {"Bar::baz(char c, int i)"}},
-            {{7, 1}, {"Foo::Bar::baz(char c, int i)"}}
-        };
+        << CompletionItems {{3, 1}, {"baz(char c, int i)"}};
+
+    QTest::newRow("nested-namespace2")
+        << "namespace Foo { \n"
+           "namespace Bar { \n"
+           "int baz(char c, int i); \n\n"
+           "}; \n\n"
+           "}; \n\n"
+        << CompletionItems {{5, 1}, {"Bar::baz(char c, int i)"}};
+
+    QTest::newRow("nested-namespace3")
+        << "namespace Foo { \n"
+           "namespace Bar { \n"
+           "int baz(char c, int i); \n\n"
+           "}; \n\n"
+           "}; \n\n"
+        << CompletionItems {{7, 1}, {"Foo::Bar::baz(char c, int i)"}};
 
     QTest::newRow("partial-template")
         << "template<typename T> class Foo { \n"
            "template<typename U> class Bar;\n"
            "template<typename U> class Bar<U*> { void baz(T t, U u); }\n"
            "}\n"
-        << CompletionItemsList{{{5,1}, {"Foo<T>::Bar<U *>::baz(T t, U u)"}}};
+        << CompletionItems{{5,1}, {"Foo<T>::Bar<U *>::baz(T t, U u)"}};
 
     QTest::newRow("variadic")
         << "int foo(...); int bar(int i, ...); \n"
-        << CompletionItemsList{{{1, 1}, {"bar(int i, ...)", "foo(...)"}}};
+        << CompletionItems{{1, 1}, {"bar(int i, ...)", "foo(...)"}};
 
     QTest::newRow("const")
         << "class Foo { int bar() const; };"
-        << CompletionItemsList{{{3, 1}, {"Foo::bar() const"}}};
-
+        << CompletionItems{{3, 1}, {"Foo::bar() const"}};
 }
 
 void TestCodeCompletion::testInvalidCompletions()
 {
     QFETCH(QString, code);
-    QFETCH(CompletionItemsList, expectedItems);
+    QFETCH(CompletionItems, expectedItems);
 
     executeCompletionTest(code, expectedItems);
 }
@@ -387,11 +425,11 @@ void TestCodeCompletion::testInvalidCompletions()
 void TestCodeCompletion::testInvalidCompletions_data()
 {
     QTest::addColumn<QString>("code");
-    QTest::addColumn<CompletionItemsList>("expectedItems");
+    QTest::addColumn<CompletionItems>("expectedItems");
 
     QTest::newRow("invalid-context-incomment")
         << "class Foo { int bar() const; };\n/*\n*/"
-        << CompletionItemsList{{{2, 0}, {}}};
+        << CompletionItems{{2, 0}, {}};
 }
 
 void TestCodeCompletion::testIncludePathCompletion_data()
