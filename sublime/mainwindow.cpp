@@ -281,7 +281,7 @@ void MainWindow::loadSettings()
         state = cg.readEntry("State", state);
         state = QByteArray::fromBase64(state);
         // One day will need to load the version number, but for now, assume 0
-//         restoreState(state);
+        restoreState(state);
     } else {
         // If there's no state we use a default size of 870x650
         // Resize only when showing "code" area. If we do that for other areas,
