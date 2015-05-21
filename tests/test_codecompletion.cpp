@@ -225,6 +225,30 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "operator=(const SomeStruct &)",
             "pub()",
         }, {"pub()"}};
+    QTest::newRow("localVariable")
+        << "int main() { int localVariable;\nloc "
+        << CompletionItems{{1, 3},
+            {"localVariable","main()"},
+            {"localVariable", "main()"}
+        };
+    QTest::newRow("globalVariable")
+        << "int globalVariable;\nint main() { \ngl "
+        << CompletionItems{{2, 2},
+            {"globalVariable","main()"},
+            {"globalVariable", "main()"}
+        };
+    QTest::newRow("namespaceVariable")
+        << "namespace NameSpace{int variable};\nint main() { \nNameSpace:: "
+        << CompletionItems{{2, 11},
+            {"variable"},
+            {"variable"}
+        };
+    QTest::newRow("parentVariable")
+        << "class A{public: int m_variable;};class B : public A{};\nint main() { B b;\nb. "
+        << CompletionItems{{2, 2},
+            {"A::m_variable", "operator=(A &&)", "operator=(B &&)", "operator=(const A &)", "operator=(const B &)"},
+            {"A::m_variable"}
+        };
 }
 
 void TestCodeCompletion::testVirtualOverride()
