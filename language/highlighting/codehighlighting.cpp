@@ -437,6 +437,9 @@ CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Dec
       case DUContext::Function:
         type = FunctionVariableType;
         break;
+      case DUContext::Global:
+        type = GlobalVariableType;
+        break;
       default:
         break;
     }

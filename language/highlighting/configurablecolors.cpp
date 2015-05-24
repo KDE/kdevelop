@@ -65,6 +65,7 @@ ConfigurableHighlightingColors::ConfigurableHighlightingColors(QString highlight
 
 CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : ConfigurableHighlightingColors("KDev Semantic Highlighting")
 {
+  // TODO: The set of colors doesn't work very well. Many colors simply too dark (even on the maximum "Global colorization intensity" they hardly distinguishable from grey) and look alike.
   ADD_COLOR(ClassType, 0x005912) //Dark green
   ADD_COLOR(TypeAliasType, 0x35938d)
   ADD_COLOR(EnumType, 0x6c101e) //Dark red
