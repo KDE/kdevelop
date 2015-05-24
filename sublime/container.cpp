@@ -363,15 +363,7 @@ void Container::documentTitleChanged(Sublime::Document* doc)
     QMapIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         if (it.next().value()->document() == doc) {
-            QString txt = doc->title();
-            //TODO: Maybe add new virtual in Document to support supplying this
-            // extended information from subclasses like IDocument which can use
-            // the rest of the kdevplatform API
-            UrlDocument* udoc = dynamic_cast<UrlDocument*>( doc );
-            if( udoc ) {
-                txt = txt + " (" + udoc->url().toDisplayString(QUrl::PreferLocalFile) + ')';
-            }
-            d->fileNameCorner->setText( txt );
+            d->fileNameCorner->setText( doc->title(Document::Extended) );
             int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
                 d->tabBar->setTabText(tabIndex, doc->title());

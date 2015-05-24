@@ -81,4 +81,12 @@ QIcon UrlDocument::defaultIcon() const
     return QIcon::fromTheme(KIO::iconNameForUrl(d->url));
 }
 
+QString UrlDocument::title(TitleType type) const
+{
+    if (type == Extended)
+        return Document::title() + " (" + url().toDisplayString(QUrl::PreferLocalFile) + ')';
+    else
+        return Document::title();
+}
+
 }

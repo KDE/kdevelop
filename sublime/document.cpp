@@ -88,7 +88,7 @@ const QList<View*> &Document::views() const
     return d->views;
 }
 
-QString Document::title() const
+QString Document::title(TitleType /*type*/) const
 {
     return objectName();
 }

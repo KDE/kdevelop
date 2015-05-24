@@ -58,7 +58,8 @@ public:
     Controller *controller() const;
 
     /**@return the document title.*/
-    QString title() const;
+    enum TitleType { Normal, Extended};
+    virtual QString title(TitleType type = Normal) const;
     /**Set the document title.*/
     void setTitle(const QString& newTitle);
     void setToolTip(const QString& newToolTip);

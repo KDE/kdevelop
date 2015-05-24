@@ -48,6 +48,8 @@ public:
      */
     QIcon defaultIcon() const override;
 
+    virtual QString title(TitleType type) const override;
+
 protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0) override;
     void setUrl(const QUrl& newUrl);
