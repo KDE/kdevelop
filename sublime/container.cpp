@@ -428,10 +428,10 @@ void Sublime::Container::removeWidget(QWidget *w)
         if (d->tabBar->currentIndex() != -1 && !d->tabBar->isVisible()) {
             // repaint icon and document title only in tabbar-less mode
             // tabbar will do repainting for us
-            QWidget* w = widget( d->tabBar->currentIndex() );
-            if( w ) {
-                statusIconChanged( d->viewForWidget[w]->document() );
-                documentTitleChanged( d->viewForWidget[w]->document() );
+            View* currentView = d->viewForWidget.value(widget( d->tabBar->currentIndex() ));
+            if( currentView ) {
+                statusIconChanged( currentView->document() );
+                documentTitleChanged( currentView->document() );
             }
         }
         View* view = d->viewForWidget.take(w);
@@ -527,8 +527,8 @@ void Container::contextMenu( const QPoint& pos )
         } else if ( triggered == closeAllTabsAction ) {
             // activate last tab
             widgetActivated(count() - 1);
+
             // close all
-            QList<QWidget*> tabs;
             for ( int i = 0; i < count(); ++i ) {
                 requestClose(widget(i));
             }
@@ -568,7 +568,6 @@ void Container::documentListActionTriggered(QAction* action)
     Q_ASSERT(widget);
     setCurrentWidget(widget);
 }
-
 
 }
 

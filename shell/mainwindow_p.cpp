@@ -103,28 +103,22 @@ void MainWindowPrivate::addPlugin( IPlugin *plugin )
 void MainWindowPrivate::pluginDestroyed(QObject* pluginObj)
 {
     IPlugin* plugin = static_cast<IPlugin*>(pluginObj);
-    Q_ASSERT(m_pluginCustomClients.contains(plugin));
-    m_mainWindow->guiFactory()->removeClient( m_pluginCustomClients[plugin] );
-    delete m_pluginCustomClients[plugin];
-    m_pluginCustomClients.remove(plugin);
+    KXMLGUIClient* p = m_pluginCustomClients.take(plugin);
+    m_mainWindow->guiFactory()->removeClient( p );
+    delete p;
 }
 
 MainWindowPrivate::~MainWindowPrivate()
 {
-    foreach(KXMLGUIClient* client, m_pluginCustomClients.values())
-        delete client;
+    qDeleteAll(m_pluginCustomClients);
 }
 
 void MainWindowPrivate::removePlugin( IPlugin *plugin )
 {
     Q_ASSERT( plugin );
 
-    if(m_pluginCustomClients.contains(plugin)) {
-        m_mainWindow->guiFactory()->removeClient( m_pluginCustomClients[plugin] );
-        delete m_pluginCustomClients[plugin];
-        m_pluginCustomClients.remove(plugin);
-        disconnect(plugin, &IPlugin::destroyed, this, &MainWindowPrivate::pluginDestroyed);
-    }
+    pluginDestroyed(plugin);
+    disconnect(plugin, &IPlugin::destroyed, this, &MainWindowPrivate::pluginDestroyed);
 
     m_mainWindow->guiFactory()->removeClient( plugin );
 }
@@ -219,11 +213,10 @@ void MainWindowPrivate::setupActions()
 
     QAction* action;
 
-    QString app = qApp->applicationName();
-    QString text = i18nc( "%1 = application name", "Configure %1", app );
+    const QString app = qApp->applicationName();
     action = KStandardAction::preferences( this, SLOT(settingsDialog()),
                                       actionCollection());
-    action->setToolTip( text );
+    action->setToolTip( i18nc( "%1 = application name", "Configure %1", app ) );
     action->setWhatsThis( i18n( "Lets you customize %1.", app ) );
 
     action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
@@ -389,11 +382,10 @@ void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Contai
         }
     }
 
-    DUChainReadLocker lock;
-
     Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(view->document());
 
     if (urlDoc) {
+        DUChainReadLocker lock;
         TopDUContext* top = DUChainUtils::standardContextForUrl(urlDoc->url());
 
         if (top) {
