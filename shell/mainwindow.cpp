@@ -197,12 +197,6 @@ void MainWindow::loadSettings()
     Sublime::MainWindow::loadSettings();
 }
 
-void MainWindow::saveSettings()
-{
-    Sublime::MainWindow::saveSettings();
-}
-
-
 void MainWindow::configureShortcuts()
 {
     ///Workaround for a problem with the actions: Always start the shortcut-configuration in the first mainwindow, then propagate the updated

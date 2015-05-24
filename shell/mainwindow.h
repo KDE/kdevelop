@@ -65,7 +65,6 @@ public Q_SLOTS:
     virtual void setVisible( bool visible ) override;
     void configureShortcuts();
     virtual void loadSettings() override;
-    virtual void saveSettings() override;
 
 Q_SIGNALS:
     void finishedLoading();
