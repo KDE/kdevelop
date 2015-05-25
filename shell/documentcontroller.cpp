@@ -197,12 +197,6 @@ struct DocumentControllerPrivate {
     {
         Q_ASSERT(!inputUrl.isRelative());
         Q_ASSERT(!inputUrl.fileName().isEmpty());
-        KTextEditor::View* previousActiveTextView = controller->activeTextDocumentView();
-        KTextEditor::Cursor previousActivePosition;
-        if(previousActiveTextView)
-            previousActivePosition = previousActiveTextView->cursorPosition();
-
-
         QString _encoding = encoding;
 
         QUrl url = inputUrl;
