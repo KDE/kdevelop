@@ -216,25 +216,29 @@ void PatchReviewPlugin::updateKompareModel() {
     }
 
     qCDebug(PLUGIN_PATCHREVIEW) << "updating model";
+    removeHighlighting();
+    m_modelList.reset( nullptr );
+    delete m_diffSettings;
+    {
+        IDocument* patchDoc = ICore::self()->documentController()->documentForUrl( m_patch->file() );
+        if( patchDoc )
+            patchDoc->reload();
+    }
+
+    QString patchFile;
+    if( m_patch->file().isLocalFile() )
+        patchFile = m_patch->file().toLocalFile();
+    else if( m_patch->file().isValid() && !m_patch->file().isEmpty() ) {
+        patchFile = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+        bool ret = KIO::copy( m_patch->file(), QUrl::fromLocalFile(patchFile) )->exec();
+        if( !ret ) {
+            qWarning() << "Problem while downloading: " << m_patch->file() << "to" << patchFile;
+            patchFile.clear();
+        }
+    }
+
+    if (!patchFile.isEmpty()) //only try to construct the model if we have a patch to load
     try {
-        removeHighlighting();
-        m_modelList.reset( 0 );
-        delete m_diffSettings;
-
-        {
-            IDocument* patchDoc = ICore::self()->documentController()->documentForUrl( m_patch->file() );
-            if( patchDoc )
-                patchDoc->reload();
-        }
-        QString patchFile;
-        if( m_patch->file().isLocalFile() )
-            patchFile = m_patch->file().toLocalFile();
-        else if( m_patch->file().isValid() && !m_patch->file().isEmpty() ) {
-            bool ret = KIO::copy( m_patch->file(), QUrl::fromLocalFile(patchFile) )->exec();
-            if( !ret )
-                qWarning() << "Problem while downloading: " << m_patch->file();
-        }
-
         m_diffSettings = new DiffSettings( 0 );
         m_kompareInfo.reset( new Kompare::Info() );
         m_kompareInfo->localDestination = patchFile;
@@ -271,8 +275,8 @@ void PatchReviewPlugin::updateKompareModel() {
         KMessageBox::error( 0, str, i18n( "Kompare Model Update" ) );
     }
     removeHighlighting();
-    m_modelList.reset( 0 );
-    m_kompareInfo.reset( 0 );
+    m_modelList.reset( nullptr );
+    m_kompareInfo.reset( nullptr );
     delete m_diffSettings;
 
     emit patchChanged();
