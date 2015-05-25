@@ -81,93 +81,93 @@ static void selectAndReveal( KTextEditor::View* view, const KTextEditor::Range& 
 
 struct TextDocumentPrivate {
     TextDocumentPrivate(TextDocument *textDocument)
-        : encoding(""), m_textDocument(textDocument)
+        : document(nullptr), state(IDocument::Clean), encoding(), q(textDocument)
         , m_loaded(false), m_addedContextMenu(0)
     {
-        document = 0;
-        state = IDocument::Clean;
     }
 
     ~TextDocumentPrivate()
     {
-        if (m_addedContextMenu) {
-            delete m_addedContextMenu;
-            m_addedContextMenu = 0;
-        }
-        if (document) {
-            saveSessionConfig();
-            delete document;
-        }
+        delete m_addedContextMenu;
+        m_addedContextMenu = 0;
+
+        saveSessionConfig();
+        delete document;
     }
 
     QPointer<KTextEditor::Document> document;
     IDocument::DocumentState state;
     QString encoding;
 
-    void newDocumentStatus(KTextEditor::Document *document)
+    void setStatus(KTextEditor::Document* document, bool dirty)
     {
-        bool dirty = (state == IDocument::Dirty || state == IDocument::DirtyAndModified);
+        QIcon statusIcon;
 
-        setStatus(document, dirty);
-    }
-
-    void textChanged(KTextEditor::Document *document)
-    {
-        Q_UNUSED(document);
-        m_textDocument->notifyContentChanged();
-    }
-
-    void populateContextMenu( KTextEditor::View* v, QMenu* menu )
-    {
-        if (m_addedContextMenu) {
-            foreach ( QAction* action, m_addedContextMenu->actions() ) {
-                menu->removeAction(action);
+        if (document->isModified())
+            if (dirty) {
+                state = IDocument::DirtyAndModified;
+                statusIcon = QIcon::fromTheme("edit-delete");
+            } else {
+                state = IDocument::Modified;
+                statusIcon = QIcon::fromTheme("document-save");
             }
-            delete m_addedContextMenu;
-        }
-
-        m_addedContextMenu = new QMenu();
-
-        Context* c = new EditorContext( v, v->cursorPosition() );
-        QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
-
-        ContextMenuExtension::populateMenu(m_addedContextMenu, extensions);
-
-        {
-            QUrl url = v->document()->url();
-            QList< ProjectBaseItem* > items = Core::self()->projectController()->projectModel()->itemsForPath( IndexedString(url) );
-            if (!items.isEmpty()) {
-                populateParentItemsMenu( items.front(), m_addedContextMenu );
+        else
+            if (dirty) {
+                state = IDocument::Dirty;
+                statusIcon = QIcon::fromTheme("document-revert");
+            } else {
+                state = IDocument::Clean;
             }
-        }
 
-        foreach ( QAction* action, m_addedContextMenu->actions() ) {
-            menu->addAction(action);
+        q->notifyStateChanged();
+        Core::self()->uiControllerInternal()->setStatusIcon(q, statusIcon);
+    }
+
+    inline KConfigGroup katePartSettingsGroup() const
+    {
+        return KSharedConfig::openConfig()->group("KatePart Settings");
+    }
+
+    inline QString docConfigGroupName() const
+    {
+        return document->url().toDisplayString(QUrl::PreferLocalFile);
+    }
+
+    inline KConfigGroup docConfigGroup() const
+    {
+        return katePartSettingsGroup().group(docConfigGroupName());
+    }
+
+    void saveSessionConfig()
+    {
+        if(document && document->url().isValid()) {
+            // make sure only MAX_DOC_SETTINGS entries are stored
+            KConfigGroup katePartSettings = katePartSettingsGroup();
+            // ordered list of documents
+            QStringList documents = katePartSettings.readEntry("documents", QStringList());
+            // ensure this document is "new", i.e. at the end of the list
+            documents.removeOne(docConfigGroupName());
+            documents.append(docConfigGroupName());
+            // remove "old" documents + their group
+            while(documents.size() >= MAX_DOC_SETTINGS) {
+                katePartSettings.group(documents.takeFirst()).deleteGroup();
+            }
+            // update order
+            katePartSettings.writeEntry("documents", documents);
+
+            // actually save session config
+            KConfigGroup group = docConfigGroup();
+            document->writeSessionConfig(group);
         }
     }
 
-    void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
-        KTextEditor::ModificationInterface::ModifiedOnDiskReason reason)
+    void loadSessionConfig()
     {
-        bool dirty = false;
-        switch (reason)
-        {
-            case KTextEditor::ModificationInterface::OnDiskUnmodified:
-                break;
-            case KTextEditor::ModificationInterface::OnDiskModified:
-            case KTextEditor::ModificationInterface::OnDiskCreated:
-            case KTextEditor::ModificationInterface::OnDiskDeleted:
-                dirty = true;
-                break;
+        if (!document || !katePartSettingsGroup().hasGroup(docConfigGroupName())) {
+            return;
         }
 
-        // In some cases, the VCS (e.g. git) can know whether the old contents are "valuable", i.e.
-        // not retrieveable from the VCS. If that is not the case, then the document can safely be
-        // reloaded without displaying a dialog asking the user.
-        if ( dirty ) {
-            queryCanRecreateFromVcs(document);
-        }
-        setStatus(document, dirty);
+        document->readSessionConfig(docConfigGroup(), {"SkipUrl"});
     }
 
     // Determines whether the current contents of this document in the editor
@@ -201,130 +201,37 @@ struct TextDocumentPrivate {
             return;
         }
         QObject::connect(req, &CheckInRepositoryJob::finished,
-                         m_textDocument, [&] (bool canRecreate) { m_textDocument->d->repositoryCheckFinished(canRecreate); });
+                            q, &TextDocument::repositoryCheckFinished);
         // Abort the request when the user edits the document
-        QObject::connect(m_textDocument->textDocument(), &KTextEditor::Document::textChanged,
-                         req, &CheckInRepositoryJob::abort);
+        QObject::connect(q->textDocument(), &KTextEditor::Document::textChanged,
+                            req, &CheckInRepositoryJob::abort);
     }
 
-    void repositoryCheckFinished(bool canRecreate) {
-        if ( state != IDocument::Dirty && state != IDocument::DirtyAndModified ) {
-            // document is not dirty for whatever reason, nothing to do.
-            return;
-        }
-        if ( ! canRecreate ) {
-            return;
-        }
-        KTextEditor::ModificationInterface* modIface = qobject_cast<KTextEditor::ModificationInterface*>( document );
-        Q_ASSERT(modIface);
-        // Ok, all safe, we can clean up the document. Close it if the file is gone,
-        // and reload if it's still there.
-        setStatus(document, false);
-        modIface->setModifiedOnDisk(KTextEditor::ModificationInterface::OnDiskUnmodified);
-        if ( QFile::exists(document->url().path()) ) {
-            m_textDocument->reload();
-        } else {
-            m_textDocument->close(KDevelop::IDocument::Discard);
-        }
-    }
-
-    void setStatus(KTextEditor::Document* document, bool dirty)
+    void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
+        KTextEditor::ModificationInterface::ModifiedOnDiskReason reason)
     {
-        QIcon statusIcon;
-
-        if (document->isModified())
-            if (dirty) {
-                state = IDocument::DirtyAndModified;
-                statusIcon = QIcon::fromTheme("edit-delete");
-            } else {
-                state = IDocument::Modified;
-                statusIcon = QIcon::fromTheme("document-save");
-            }
-        else
-            if (dirty) {
-                state = IDocument::Dirty;
-                statusIcon = QIcon::fromTheme("document-revert");
-            } else {
-                state = IDocument::Clean;
-            }
-
-        m_textDocument->notifyStateChanged();
-        Core::self()->uiControllerInternal()->setStatusIcon(m_textDocument, statusIcon);
-    }
-
-    void documentUrlChanged(KTextEditor::Document* document)
-    {
-        if (m_textDocument->url() != document->url())
-            m_textDocument->setUrl(document->url());
-    }
-
-    void slotDocumentLoaded()
-    {
-        if (m_loaded)
-            return;
-        // Tell the editor integrator first
-        m_loaded = true;
-        m_textDocument->notifyLoaded();
-    }
-
-    void documentSaved(KTextEditor::Document* document, bool saveAs)
-    {
-        Q_UNUSED(document);
-        Q_UNUSED(saveAs);
-        m_textDocument->notifySaved();
-        m_textDocument->notifyStateChanged();
-    }
-
-    inline KConfigGroup katePartSettingsGroup() const
-    {
-        return KSharedConfig::openConfig()->group("KatePart Settings");
-    }
-
-    inline QString docConfigGroupName() const
-    {
-        return document->url().toDisplayString(QUrl::PreferLocalFile);
-    }
-
-    inline KConfigGroup docConfigGroup() const
-    {
-        return katePartSettingsGroup().group(docConfigGroupName());
-    }
-
-    void saveSessionConfig()
-    {
-        if(document->url().isValid()) {
-            // make sure only MAX_DOC_SETTINGS entries are stored
-            KConfigGroup katePartSettings = katePartSettingsGroup();
-            // ordered list of documents
-            QStringList documents = katePartSettings.readEntry("documents", QStringList());
-            // ensure this document is "new", i.e. at the end of the list
-            documents.removeOne(docConfigGroupName());
-            documents.append(docConfigGroupName());
-            // remove "old" documents + their group
-            while(documents.size() >= MAX_DOC_SETTINGS) {
-                katePartSettings.group(documents.takeFirst()).deleteGroup();
-            }
-            // update order
-            katePartSettings.writeEntry("documents", documents);
-
-            // actually save session config
-            KConfigGroup group = docConfigGroup();
-            document->writeSessionConfig(group);
-        }
-    }
-
-    void loadSessionConfig()
-    {
-        if (!document || !katePartSettingsGroup().hasGroup(docConfigGroupName())) {
-            return;
+        bool dirty = false;
+        switch (reason)
+        {
+            case KTextEditor::ModificationInterface::OnDiskUnmodified:
+                break;
+            case KTextEditor::ModificationInterface::OnDiskModified:
+            case KTextEditor::ModificationInterface::OnDiskCreated:
+            case KTextEditor::ModificationInterface::OnDiskDeleted:
+                dirty = true;
+                break;
         }
 
-        document->readSessionConfig(docConfigGroup(), {"SkipUrl"});
+        // In some cases, the VCS (e.g. git) can know whether the old contents are "valuable", i.e.
+        // not retrieveable from the VCS. If that is not the case, then the document can safely be
+        // reloaded without displaying a dialog asking the user.
+        if ( dirty ) {
+            queryCanRecreateFromVcs(document);
+        }
+        setStatus(document, dirty);
     }
 
-
-private:
-    TextDocument *m_textDocument;
+    TextDocument * const q;
     bool m_loaded;
     // we want to remove the added stuff when the menu hides
     QMenu* m_addedContextMenu;
@@ -333,8 +240,6 @@ private:
 struct TextViewPrivate
 {
     TextViewPrivate(TextView* q) : q(q) {}
-
-    void sendStatusChanged();
 
     TextView* const q;
     QPointer<KTextEditor::View> view;
@@ -379,9 +284,9 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         d->document = Core::self()->partControllerInternal()->createTextPart(Core::self()->documentController()->encoding());
 
         // Connect to the first text changed signal, it occurs before the completed() signal
-        connect(d->document.data(), &KTextEditor::Document::textChanged, this, [&] { d->slotDocumentLoaded(); });
+        connect(d->document.data(), &KTextEditor::Document::textChanged, this, &TextDocument::slotDocumentLoaded);
         // Also connect to the completed signal, sometimes the first text changed signal is missed because the part loads too quickly (? TODO - confirm this is necessary)
-        connect(d->document.data(), static_cast<void(KTextEditor::Document::*)()>(&KTextEditor::Document::completed), this, [&] { d->slotDocumentLoaded(); });
+        connect(d->document.data(), static_cast<void(KTextEditor::Document::*)()>(&KTextEditor::Document::completed), this, &TextDocument::slotDocumentLoaded);
 
         // force a reparse when a document gets reloaded
         connect(d->document.data(), &KTextEditor::Document::reloaded,
@@ -412,13 +317,13 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         d->loadSessionConfig();
 
         connect(d->document.data(), &KTextEditor::Document::modifiedChanged,
-                 this, [&] (KTextEditor::Document* document) { d->newDocumentStatus(document); });
+                 this, &TextDocument::newDocumentStatus);
         connect(d->document.data(), &KTextEditor::Document::textChanged,
-                 this, [&] (KTextEditor::Document* document) { d->textChanged(document); });
+                 this, &TextDocument::textChanged);
         connect(d->document.data(), &KTextEditor::Document::documentUrlChanged,
-                 this, [&] (KTextEditor::Document* document) { d->documentUrlChanged(document); });
+                 this, &TextDocument::documentUrlChanged);
         connect(d->document.data(), &KTextEditor::Document::documentSavedOrUploaded,
-                 this, [&] (KTextEditor::Document* document, bool saveAs) { d->documentSaved(document, saveAs); });
+                 this, &TextDocument::documentSaved );
 
         if (qobject_cast<KTextEditor::MarkInterface*>(d->document)) {
             // can't use new signal/slot syntax here, MarkInterface is not a QObject
@@ -440,7 +345,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     view->setStatusBarEnabled(Core::self()->partControllerInternal()->showTextEditorStatusBar());
 
     if (view) {
-        connect(view, &KTextEditor::View::contextMenuAboutToShow, this, [&] (KTextEditor::View* v, QMenu* menu) { d->populateContextMenu(v, menu); });
+        connect(view, &KTextEditor::View::contextMenuAboutToShow, this, &TextDocument::populateContextMenu);
 
         //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
         //katepart with our own restructured UI configuration
@@ -695,10 +600,7 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
     QWidget* widget = textDocument->createViewWidget(parent);
     d->view = qobject_cast<KTextEditor::View*>(widget);
     Q_ASSERT(d->view);
-    if (d->view) {
-        connect(d->view.data(), &KTextEditor::View::cursorPositionChanged,
-                this, [&] { d->sendStatusChanged(); });
-    }
+    connect(d->view, &KTextEditor::View::cursorPositionChanged, this, &KDevelop::TextView::sendStatusChanged);
     return widget;
 }
 
@@ -717,8 +619,11 @@ QString KDevelop::TextView::viewState() const
         }
     }
     else {
-        qCDebug(SHELL) << "TextView's internal KTE view disappeared!";
-        return QString();
+        KTextEditor::Range selection = d->initialRange;
+        return QStringLiteral("Selection=%1,%2,%3,%4").arg(selection.start().line())
+                                                   .arg(selection.start().column())
+                                                   .arg(selection.end().line())
+                                                   .arg(selection.end().column());
     }
 }
 
@@ -782,9 +687,9 @@ QString KDevelop::TextView::viewStatus() const
     return i18n(" Line: %1 Col: %2 ", pos.line() + 1, pos.column() + 1);
 }
 
-void KDevelop::TextViewPrivate::sendStatusChanged()
+void KDevelop::TextView::sendStatusChanged()
 {
-    emit q->statusChanged(q);
+    emit statusChanged(this);
 }
 
 KTextEditor::View* KDevelop::TextDocument::activeTextView() const
@@ -804,6 +709,93 @@ KTextEditor::View* KDevelop::TextDocument::activeTextView() const
         }
     }
     return fallback;
+}
+
+void KDevelop::TextDocument::newDocumentStatus(KTextEditor::Document *document)
+{
+    bool dirty = (d->state == IDocument::Dirty || d->state == IDocument::DirtyAndModified);
+
+    d->setStatus(document, dirty);
+}
+
+void KDevelop::TextDocument::textChanged(KTextEditor::Document *document)
+{
+    Q_UNUSED(document);
+    notifyContentChanged();
+}
+
+void KDevelop::TextDocument::populateContextMenu( KTextEditor::View* v, QMenu* menu )
+{
+    if (d->m_addedContextMenu) {
+        foreach ( QAction* action, d->m_addedContextMenu->actions() ) {
+            menu->removeAction(action);
+        }
+        delete d->m_addedContextMenu;
+    }
+
+    d->m_addedContextMenu = new QMenu();
+
+    Context* c = new EditorContext( v, v->cursorPosition() );
+    QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
+
+    ContextMenuExtension::populateMenu(d->m_addedContextMenu, extensions);
+
+    {
+        QUrl url = v->document()->url();
+        QList< ProjectBaseItem* > items = Core::self()->projectController()->projectModel()->itemsForPath( IndexedString(url) );
+        if (!items.isEmpty()) {
+            populateParentItemsMenu( items.front(), d->m_addedContextMenu );
+        }
+    }
+
+    foreach ( QAction* action, d->m_addedContextMenu->actions() ) {
+        menu->addAction(action);
+    }
+}
+
+void KDevelop::TextDocument::repositoryCheckFinished(bool canRecreate) {
+    if ( d->state != IDocument::Dirty && d->state != IDocument::DirtyAndModified ) {
+        // document is not dirty for whatever reason, nothing to do.
+        return;
+    }
+    if ( ! canRecreate ) {
+        return;
+    }
+    KTextEditor::ModificationInterface* modIface = qobject_cast<KTextEditor::ModificationInterface*>( d->document );
+    Q_ASSERT(modIface);
+    // Ok, all safe, we can clean up the document. Close it if the file is gone,
+    // and reload if it's still there.
+    d->setStatus(d->document, false);
+    modIface->setModifiedOnDisk(KTextEditor::ModificationInterface::OnDiskUnmodified);
+    if ( QFile::exists(d->document->url().path()) ) {
+        reload();
+    } else {
+        close(KDevelop::IDocument::Discard);
+    }
+}
+
+void KDevelop::TextDocument::slotDocumentLoaded()
+{
+    if (d->m_loaded)
+        return;
+    // Tell the editor integrator first
+    d->m_loaded = true;
+    notifyLoaded();
+}
+
+void KDevelop::TextDocument::documentSaved(KTextEditor::Document* document, bool saveAs)
+{
+    Q_UNUSED(document);
+    Q_UNUSED(saveAs);
+    notifySaved();
+    notifyStateChanged();
+}
+
+void KDevelop::TextDocument::documentUrlChanged(KTextEditor::Document* document)
+{
+    Q_UNUSED(document);
+    if (url() != d->document->url())
+        setUrl(d->document->url());
 }
 
 #include "moc_textdocument.cpp"

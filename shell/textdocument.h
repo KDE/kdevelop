@@ -29,6 +29,8 @@
 
 #include "shellexport.h"
 
+class QMenu;
+
 namespace KTextEditor {
 class View;
 }
@@ -79,15 +81,16 @@ protected:
     virtual Sublime::View *newView(Sublime::Document *doc) override;
 
 private:
-    Q_PRIVATE_SLOT(d, void newDocumentStatus(KTextEditor::Document*))
-    Q_PRIVATE_SLOT(d, void populateContextMenu(KTextEditor::View*, QMenu*))
-    Q_PRIVATE_SLOT(d, void textChanged(KTextEditor::Document*))
-    Q_PRIVATE_SLOT(d, void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::ModificationInterface::ModifiedOnDiskReason))
-    Q_PRIVATE_SLOT(d, void documentUrlChanged(KTextEditor::Document*))
-    Q_PRIVATE_SLOT(d, void slotDocumentLoaded())
-    Q_PRIVATE_SLOT(d, void documentSaved(KTextEditor::Document*,bool))
     Q_PRIVATE_SLOT(d, void saveSessionConfig());
-    Q_PRIVATE_SLOT(d, void repositoryCheckFinished(bool));
+    Q_PRIVATE_SLOT(d, void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::ModificationInterface::ModifiedOnDiskReason));
+
+    void newDocumentStatus(KTextEditor::Document*);
+    void populateContextMenu(KTextEditor::View*, QMenu*);
+    void textChanged(KTextEditor::Document*);
+    void documentUrlChanged(KTextEditor::Document*);
+    void slotDocumentLoaded();
+    void documentSaved(KTextEditor::Document*,bool);
+    void repositoryCheckFinished(bool);
 
     struct TextDocumentPrivate * const d;
     friend struct TextDocumentPrivate;
@@ -112,9 +115,8 @@ public:
     KTextEditor::Range initialRange() const;
 
 private:
+    void sendStatusChanged();
     struct TextViewPrivate* const d;
-
-    Q_PRIVATE_SLOT(d, void sendStatusChanged());
 };
 
 }
