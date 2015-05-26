@@ -362,16 +362,19 @@ void Container::documentTitleChanged(Sublime::Document* doc)
 {
     QMapIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
-        if (it.next().value()->document() == doc) {
-            d->fileNameCorner->setText( doc->title(Document::Extended) );
+        Sublime::View* view = it.next().value();
+        if (view->document() == doc) {
+            if (currentView() == view) {
+                d->fileNameCorner->setText( doc->title(Document::Extended) );
+            }
             int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
                 d->tabBar->setTabText(tabIndex, doc->title());
             }
 
             // Update document list popup title
-            Q_ASSERT(d->documentListActionForView.contains(it.value()));
-            d->documentListActionForView[it.value()]->setText(doc->title());
+            Q_ASSERT(d->documentListActionForView.contains(view));
+            d->documentListActionForView[view]->setText(doc->title());
             break;
         }
     }
