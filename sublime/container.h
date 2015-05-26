@@ -102,6 +102,8 @@ private Q_SLOTS:
     void documentListActionTriggered(QAction*);
 
 private:
+    Sublime::View* currentView() const;
+
     struct ContainerPrivate * const d;
 };
 

@@ -428,10 +428,10 @@ void Sublime::Container::removeWidget(QWidget *w)
         if (d->tabBar->currentIndex() != -1 && !d->tabBar->isVisible()) {
             // repaint icon and document title only in tabbar-less mode
             // tabbar will do repainting for us
-            View* currentView = d->viewForWidget.value(widget( d->tabBar->currentIndex() ));
-            if( currentView ) {
-                statusIconChanged( currentView->document() );
-                documentTitleChanged( currentView->document() );
+            View* view = currentView();
+            if( view ) {
+                statusIconChanged( view->document() );
+                documentTitleChanged( view->document() );
             }
         }
         View* view = d->viewForWidget.take(w);
@@ -471,6 +471,10 @@ void Container::setTabBarHidden(bool hide)
         d->fileNameCorner->hide();
         d->fileStatus->hide();
         d->tabBar->show();
+    }
+    View* v = currentView();
+    if (v) {
+        documentTitleChanged(v->document());
     }
 }
 
@@ -567,6 +571,10 @@ void Container::documentListActionTriggered(QAction* action)
     QWidget* widget = d->viewForWidget.key(view);
     Q_ASSERT(widget);
     setCurrentWidget(widget);
+}
+Sublime::View* Container::currentView() const
+{
+    return d->viewForWidget.value(widget( d->tabBar->currentIndex() ));
 }
 
 }
