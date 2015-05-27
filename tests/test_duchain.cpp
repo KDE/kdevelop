@@ -878,16 +878,19 @@ void TestDUChain::testReparseChangeEnvironment()
 
 void TestDUChain::testMacrosRanges()
 {
-    TestFile file("#define FUNC_MACROS(x) x\nFUNC_MACROS(1);", "cpp");
+    TestFile file("#define FUNC_MACROS(x) struct str##x{};\nFUNC_MACROS(x);", "cpp");
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
     QVERIFY(file.waitForParsed(5000));
 
     DUChainReadLocker lock;
     QVERIFY(file.topContext());
-    QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+    QCOMPARE(file.topContext()->localDeclarations().size(), 3);
     auto macroDefinition = file.topContext()->localDeclarations()[0];
     QVERIFY(macroDefinition);
     QCOMPARE(macroDefinition->range(), RangeInRevision(0,8,0,19));
+    auto structDeclaration = file.topContext()->localDeclarations()[1];
+    QVERIFY(structDeclaration);
+    QCOMPARE(structDeclaration->range(), RangeInRevision(1,0,1,0));
 
     QCOMPARE(macroDefinition->uses().size(), 1);
     QCOMPARE(macroDefinition->uses().begin()->first(), RangeInRevision(1,0,1,11));

@@ -321,6 +321,20 @@ struct Visitor
     {
         auto range = ClangHelpers::cursorSpellingNameRange(cursor, id);
 
+        // check if cursor is inside a macro expansion
+        auto clangRange = clang_Cursor_getSpellingNameRange(cursor, 0, 0);
+        unsigned int expansionLocOffset;
+        const auto spellingLocation = clang_getRangeStart(clangRange);
+        clang_getExpansionLocation(spellingLocation, nullptr, nullptr, nullptr, &expansionLocOffset);
+        if (m_macroExpansionLocations.contains(expansionLocOffset)) {
+            unsigned int spellingLocOffset;
+            clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
+            // Set empty ranges for declarations inside macro expansion
+            if (spellingLocOffset == expansionLocOffset) {
+                range.end.column = range.start.column;
+            }
+        }
+
         if (m_update) {
             const IndexedIdentifier indexedId(id);
             DUChainWriteLocker lock;
