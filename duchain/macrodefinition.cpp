@@ -37,6 +37,7 @@ public:
     }
     MacroDefinitionData(const MacroDefinitionData& rhs)
         : DeclarationData(rhs)
+        , definition(rhs.definition)
         , isFunctionLike(rhs.isFunctionLike)
     {
         initializeAppendedLists();
