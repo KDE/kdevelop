@@ -40,6 +40,9 @@ private slots:
 
     void testComments();
     void testComments_data();
+    void testElaboratedType();
+    void testElaboratedType_data();
+
     void testInclude();
     void testIncludeLocking();
     void testReparse();

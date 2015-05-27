@@ -488,10 +488,21 @@ struct Visitor
         return t;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
+    template<CXTypeKind TK, EnableIf<TK == CXType_Vector> = dummy>
     AbstractType *createType(CXType type, CXCursor /*parent*/)
     {
         return createDelayedType(type);
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_Unexposed> = dummy>
+    AbstractType *createType(CXType type, CXCursor parent)
+    {
+        // Maybe it's the ElaboratedType. E.g.: "struct Type foo();" or "NS::Type foo();" or "void foo(enum Enum e);" e.t.c.
+        auto oldType = type;
+
+        type = clang_getCanonicalType(type);
+        bool isElaboratedType = type.kind != CXType_FunctionProto && type.kind != CXType_FunctionNoProto && type.kind != CXType_Unexposed && type.kind != CXType_Invalid;
+        return !isElaboratedType ? createDelayedType(oldType) : makeType(type, parent);
     }
 
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK) && !CursorKindTraits::isAliasType(CK) && CK != CXCursor_EnumConstantDecl> = dummy>
@@ -1057,6 +1068,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_ObjCId);
     UseKind(CXType_ObjCClass);
     UseKind(CXType_ObjCSel);
+    UseKind(CXType_NullPtr);
     case CXType_Invalid:
         return nullptr;
     default:

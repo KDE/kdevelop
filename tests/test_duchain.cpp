@@ -30,6 +30,7 @@
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/problem.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/functiontype.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
@@ -108,6 +109,7 @@ struct ExpectedComment
     QString comment;
 };
 Q_DECLARE_METATYPE(ExpectedComment)
+Q_DECLARE_METATYPE(AbstractType::WhichType)
 
 void TestDUChain::testComments()
 {
@@ -155,6 +157,50 @@ void TestDUChain::testComments_data()
     QTest::newRow("comment-doxygen-tags")
         << "/** @see bar()\n@param a foo\n*/\nvoid foo(int a);\nvoid bar();"
         << ExpectedComment{"foo", "bar()\na\nfoo"};
+}
+
+void TestDUChain::testElaboratedType()
+{
+    QFETCH(QString, code);
+    QFETCH(AbstractType::WhichType, type);
+
+    TestFile file(code, "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+
+    auto decl = file.topContext()->localDeclarations()[1];
+    QVERIFY(decl);
+
+    auto function = dynamic_cast<FunctionDeclaration*>(decl);
+    QVERIFY(function);
+
+    auto functionType = function->type<FunctionType>();
+    QVERIFY(functionType);
+
+    QVERIFY(functionType->returnType()->whichType() != AbstractType::TypeDelayed);
+
+    QEXPECT_FAIL("typedef", "After using clang_getCanonicalType on ElaboratedType all typedef information get's stripped away", Continue);
+    QCOMPARE(functionType->returnType()->whichType(), type);
+}
+
+void TestDUChain::testElaboratedType_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<AbstractType::WhichType>("type");
+
+    QTest::newRow("namespace")
+        << "namespace NS{struct Type{};} struct NS::Type foo();"
+        << AbstractType::TypeStructure;
+    QTest::newRow("enum")
+        << "enum Enum{}; enum Enum foo();"
+        << AbstractType::TypeEnumeration;
+    QTest::newRow("typedef")
+        << "namespace NS{typedef int type;} NS::type foo();"
+        << AbstractType::TypeAlias;
 }
 
 void TestDUChain::testInclude()
