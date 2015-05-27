@@ -294,9 +294,9 @@ void DocumentSwitcherPlugin::addView( Sublime::View* view )
     if( !mainwindow )
         return;
 
-    qCDebug(PLUGIN_DOCUMENTSWITCHER) << "got signal from mainwindow:" << mainwindow << mainwindow->windowTitle();
-    qCDebug(PLUGIN_DOCUMENTSWITCHER) << "its area is:" << mainwindow->area() << mainwindow->area()->title();
-    qCDebug(PLUGIN_DOCUMENTSWITCHER) << "adding view:" << view << view->document()->title();
+    qCDebug(PLUGIN_DOCUMENTSWITCHER) << "got signal from mainwindow:" << mainwindow << mainwindow->windowTitle()
+        << "its area is:" << mainwindow->area() << mainwindow->area()->title()
+        << "adding view:" << view << view->document()->title();
     enableActions();
     documentLists[mainwindow][mainwindow->area()].append( view );
 }
