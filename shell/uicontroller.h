@@ -58,8 +58,6 @@ public:
     /** @return default main window - the main window for default area in the shell.
     No guarantee is given that it always exists so this method may return 0.*/
     MainWindow *defaultMainWindow();
-    /** @return the default area for this shell.*/
-    Sublime::Area *defaultArea();
 
     virtual void switchToArea(const QString &areaName, SwitchMode switchMode) override;
 

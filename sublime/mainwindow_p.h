@@ -53,20 +53,6 @@ class AreaIndex;
 class IdealMainWidget;
 class IdealController;
 
-class AreaTabButton : public QWidget {
-    public:
-    AreaTabButton(QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent, QWidget* _customButtonWidget) ;
-    
-    QLabel* iconLabel;
-    QLabel* textLabel;
-    QWidget* customButtonWidget;
-
-    void setIsCurrent ( bool arg1 );
-
-    private:
-    bool m_isCurrent;
-};
-
 class MainWindowPrivate: public QObject {
     Q_OBJECT
 public:

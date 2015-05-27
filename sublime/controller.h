@@ -99,7 +99,7 @@ public:
     const QList<Area*> &defaultAreas() const;
 
     /** Return the default area with given @p id.*/
-    Area *defaultArea(const QString &id);
+    Area *defaultArea(const QString &id) const;
 
     /** Add a main window to the set of of windows managed by this
         controller.  The ownership of the window is passed to the
@@ -121,7 +121,7 @@ public:
 
     /** Return the area with the given in main window specified
         by its index, @p mainWindow.  */
-    Area *area(int mainWindow, const QString& id);
+    Area *area(int mainWindow, const QString& id) const;
 
     /** Returns the area that contains the given view.
      * */

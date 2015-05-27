@@ -271,12 +271,12 @@ void Controller::areaReleased(Sublime::Area *area)
     d->namedAreas.remove(area->objectName());
 }
 
-Area *Controller::defaultArea(const QString &id)
+Area *Controller::defaultArea(const QString &id) const
 {
     return d->namedAreas[id];
 }
 
-Area *Controller::area(int mainWindow, const QString& id)
+Area *Controller::area(int mainWindow, const QString& id) const
 {
     foreach (Area* area, areas(mainWindow))
     {
