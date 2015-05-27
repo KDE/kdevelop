@@ -50,6 +50,7 @@ struct AreaPrivate {
         desiredToolViews = p.desiredToolViews;
         shownToolViews = p.shownToolViews;
         workingSet = p.workingSet;
+        m_actions = p.m_actions;
 
         title = p.title;
         iconName = p.iconName;
@@ -473,6 +474,7 @@ QList<QAction*> Area::actions() const
 
 void Area::addAction(QAction* action)
 {
+    Q_ASSERT(!d->m_actions.contains(action));
     connect(action, &QAction::destroyed, this, &Area::actionDestroyed);
     d->m_actions.append(action);
 }

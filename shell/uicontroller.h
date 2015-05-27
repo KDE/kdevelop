@@ -103,6 +103,8 @@ public:
 
     virtual QWidget* activeToolViewActionListener() const override;
 
+    virtual QList<Sublime::Area*> allAreas() const override;
+
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
 

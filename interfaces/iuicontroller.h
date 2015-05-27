@@ -167,6 +167,13 @@ public:
      */
     virtual QWidget* activeToolViewActionListener() const = 0;
 
+    /**
+     * @returns all areas in the shell
+     *
+     * @note there will be one per mainwindow, of each type, plus the default ones.
+     */
+    virtual QList<Sublime::Area*> allAreas() const = 0;
+
 protected:
     IUiController();
 };

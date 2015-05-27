@@ -726,6 +726,11 @@ QWidget* UiController::activeToolViewActionListener() const
     return d->activeActionListener;
 }
 
+QList<Sublime::Area*> UiController::allAreas() const
+{
+    return Sublime::Controller::allAreas();
+}
+
 }
 
 #include "uicontroller.moc"
