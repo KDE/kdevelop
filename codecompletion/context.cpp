@@ -536,9 +536,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
             const QString string = ClangString(clang_getCompletionChunkText(result.CompletionString, j)).toString();
             switch (kind) {
-                case CXCompletionChunk_Informative:
-                    display += string;
-                    break;
                 case CXCompletionChunk_TypedText:
                     display += string;
                     typed = string;

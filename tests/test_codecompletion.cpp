@@ -246,8 +246,8 @@ void TestCodeCompletion::testClangCodeCompletion_data()
     QTest::newRow("parentVariable")
         << "class A{public: int m_variable;};class B : public A{};\nint main() { B b;\nb. "
         << CompletionItems{{2, 2},
-            {"A::m_variable", "operator=(A &&)", "operator=(B &&)", "operator=(const A &)", "operator=(const B &)"},
-            {"A::m_variable"}
+            {"m_variable", "operator=(A &&)", "operator=(B &&)", "operator=(const A &)", "operator=(const B &)"},
+            {"m_variable"}
         };
 }
 
