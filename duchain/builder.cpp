@@ -515,7 +515,8 @@ struct Visitor
         auto oldType = type;
 
         type = clang_getCanonicalType(type);
-        bool isElaboratedType = type.kind != CXType_FunctionProto && type.kind != CXType_FunctionNoProto && type.kind != CXType_Unexposed && type.kind != CXType_Invalid;
+        bool isElaboratedType = type.kind != CXType_FunctionProto && type.kind != CXType_FunctionNoProto && type.kind != CXType_Unexposed && type.kind != CXType_Invalid && type.kind != CXType_Record;
+
         return !isElaboratedType ? createDelayedType(oldType) : makeType(type, parent);
     }
 

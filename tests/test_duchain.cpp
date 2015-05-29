@@ -181,6 +181,7 @@ void TestDUChain::testElaboratedType()
     auto functionType = function->type<FunctionType>();
     QVERIFY(functionType);
 
+    QEXPECT_FAIL("namespace", "The ElaboratedType is not exposed through the libclang interface, not much we can do here", Abort);
     QVERIFY(functionType->returnType()->whichType() != AbstractType::TypeDelayed);
 
     QEXPECT_FAIL("typedef", "After using clang_getCanonicalType on ElaboratedType all typedef information get's stripped away", Continue);
@@ -354,6 +355,12 @@ void TestDUChain::testTemplate()
 
     QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
     QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo::bar")).size(), 1);
+
+    auto mainCtx = file.topContext()->localDeclarations().last()->internalContext()->childContexts().first();
+    QVERIFY(mainCtx);
+    auto myFoo = mainCtx->localDeclarations().first();
+    QVERIFY(myFoo);
+    QCOMPARE(myFoo->abstractType()->toString().remove(' '), QStringLiteral("foo<int>"));
 }
 
 void TestDUChain::testNamespace()
