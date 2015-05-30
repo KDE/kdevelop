@@ -344,6 +344,7 @@ struct Visitor
                 if (decl && decl->indexedIdentifier() == indexedId) {
                     decl->setRange(range);
                     setDeclData<CK>(cursor, decl);
+                    m_cursorToDeclarationCache[clang_hashCursor(cursor)] = decl;
                     m_parentContext->previousChildDeclarations.erase(it);
                     return decl;
                 }

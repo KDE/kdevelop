@@ -987,3 +987,38 @@ void TestDUChain::testEnvironmentWithDifferentOrderOfElements()
         }
     }
 }
+
+void TestDUChain::testReparseMacro()
+{
+    TestFile file("#define DECLARE(a) typedef struct a##_ {} *a;\nDECLARE(D);\nD d;", "cpp");
+    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST));
+    QVERIFY(file.waitForParsed(5000));
+
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+    }
+
+    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    QVERIFY(file.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->localDeclarations().size(), 6);
+
+    auto macroDefinition = file.topContext()->localDeclarations()[0];
+    QVERIFY(macroDefinition);
+    QCOMPARE(macroDefinition->range(), RangeInRevision(0,8,0,15));
+    QCOMPARE(macroDefinition->uses().size(), 1);
+    QCOMPARE(macroDefinition->uses().begin()->first(), RangeInRevision(1,0,1,7));
+
+    auto structDeclaration = file.topContext()->localDeclarations()[1];
+    QVERIFY(structDeclaration);
+    QCOMPARE(structDeclaration->range(), RangeInRevision(1,0,1,0));
+
+    auto structTypedef = file.topContext()->localDeclarations()[3];
+    QVERIFY(structTypedef);
+    QCOMPARE(structTypedef->range(), RangeInRevision(1,8,1,9));
+    QCOMPARE(structTypedef->uses().size(), 1);
+    QCOMPARE(structTypedef->uses().begin()->first(), RangeInRevision(2,0,2,1));
+}
