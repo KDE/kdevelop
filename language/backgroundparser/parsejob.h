@@ -79,7 +79,7 @@ public:
         RespectsSequentialProcessing = 2,
         FullSequentialProcessing = 3
     };
-    Q_DECLARE_FLAGS(SequentialProcessingFlags, SequentialProcessingFlag);
+    Q_DECLARE_FLAGS(SequentialProcessingFlags, SequentialProcessingFlag)
 
     ///Sets the priority of this parse job. This is just for the purpose of
     ///reading it later, and does not affect the actual behaviour in any way.
