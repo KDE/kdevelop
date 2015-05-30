@@ -1102,6 +1102,48 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     }
 }
 
+RangeInRevision rangeInRevisionForUse(CXCursor cursor, CXCursorKind referencedCursorKind, CXSourceRange useRange, const QSet<unsigned int>& macroExpansionLocations)
+{
+    auto range = ClangRange(useRange).toRangeInRevision();
+
+    //TODO: Fix in clang, happens for operator<<, operator<, probably more
+    if (clang_Range_isNull(useRange)) {
+        range = ClangRange(clang_getCursorExtent(cursor)).toRangeInRevision();
+    }
+
+    if (referencedCursorKind == CXCursor_ConversionFunction) {
+        range.end = range.start;
+        range.start.column--;
+    }
+
+    // For uses inside macro expansions, create an empty use range at the spelling location
+    // the empty range is required in order to not "overlap" the macro expansion range
+    // and to allow proper navigation for the macro expansion
+    // also see JSON test 'macros.cpp'
+    if (clang_getCursorKind(cursor) != CXCursor_MacroExpansion) {
+        unsigned int expansionLocOffset;
+        const auto spellingLocation = clang_getRangeStart(useRange);
+        clang_getExpansionLocation(spellingLocation, nullptr, nullptr, nullptr, &expansionLocOffset);
+        if (macroExpansionLocations.contains(expansionLocOffset)) {
+            unsigned int spellingLocOffset;
+            clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
+            if (spellingLocOffset == expansionLocOffset) {
+                range.end = range.start;
+            }
+        }
+    } else {
+        // Workaround for wrong use range returned by clang for macro expansions
+        const auto contents = ClangUtils::getRawContents(clang_Cursor_getTranslationUnit(cursor), useRange);
+        const int firstOpeningParen = contents.indexOf('(');
+        if (firstOpeningParen != -1) {
+            range.end.column = range.start.column + firstOpeningParen;
+            range.end.line = range.start.line;
+        }
+    }
+
+    return range;
+}
+
 Visitor::Visitor(CXTranslationUnit tu, CXFile file,
                  const IncludeFileContexts& includes, const bool update)
     : m_file(file)
@@ -1136,38 +1178,8 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
                 }
             }
 
-            auto useRange = clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0);
-
-            //TODO: Fix in clang, happens for operator<<, operator<, probably more
-            if (clang_Range_isNull(useRange)) {
-               useRange = clang_getCursorExtent(cursor);
-            }
-
-            auto range = ClangRange(useRange).toRangeInRevision();
-            // For uses inside macro expansions, create an empty use range at the spelling location
-            // the empty range is required in order to not "overlap" the macro expansion range
-            // and to allow proper navigation for the macro expansion
-            // also see JSON test 'macros.cpp'
-            if (clang_getCursorKind(cursor) != CXCursor_MacroExpansion) {
-                unsigned int expansionLocOffset;
-                const auto spellingLocation = clang_getRangeStart(useRange);
-                clang_getExpansionLocation(spellingLocation, nullptr, nullptr, nullptr, &expansionLocOffset);
-                if (m_macroExpansionLocations.contains(expansionLocOffset)) {
-                    unsigned int spellingLocOffset;
-                    clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
-                    if (spellingLocOffset == expansionLocOffset) {
-                        range.end = range.start;
-                    }
-                }
-            } else {
-                // Workaround for wrong use range returned by clang for macro expansions
-                const auto contents = ClangUtils::getRawContents(tu, useRange);
-                const int firstOpeningParen = contents.indexOf('(');
-                if (firstOpeningParen != -1) {
-                    range.end.column = range.start.column + firstOpeningParen;
-                    range.end.line = range.start.line;
-                }
-            }
+            const auto useRange = clang_getCursorReferenceNameRange(cursor, 0, 0);
+            const auto range = rangeInRevisionForUse(cursor, referenced.kind, useRange, m_macroExpansionLocations);
 
             DUChainWriteLocker lock;
             auto usedIndex = top->indexForUsedDeclaration(used.data());
