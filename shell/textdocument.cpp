@@ -327,14 +327,14 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
         if (qobject_cast<KTextEditor::MarkInterface*>(d->document)) {
             // can't use new signal/slot syntax here, MarkInterface is not a QObject
-            connect(d->document, SIGNAL(marksChanged(KTextEditor::Document*)),
+            connect(d->document.data(), SIGNAL(marksChanged(KTextEditor::Document*)),
                     this, SLOT(saveSessionConfig()));
         }
 
         if (auto iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document)) {
             iface->setModifiedOnDiskWarning(true);
             // can't use new signal/slot syntax here, ModificationInterface is not a QObject
-            connect(d->document, SIGNAL(modifiedOnDisk(KTextEditor::Document*,bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
+            connect(d->document.data(), SIGNAL(modifiedOnDisk(KTextEditor::Document*,bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
                 this, SLOT(modifiedOnDisk(KTextEditor::Document*,bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
         }
 
@@ -600,7 +600,7 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
     QWidget* widget = textDocument->createViewWidget(parent);
     d->view = qobject_cast<KTextEditor::View*>(widget);
     Q_ASSERT(d->view);
-    connect(d->view, &KTextEditor::View::cursorPositionChanged, this, &KDevelop::TextView::sendStatusChanged);
+    connect(d->view.data(), &KTextEditor::View::cursorPositionChanged, this, &KDevelop::TextView::sendStatusChanged);
     return widget;
 }
 
