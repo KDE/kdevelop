@@ -55,7 +55,6 @@ SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
 
 SvnInternalJobBase::~SvnInternalJobBase()
 {
-    qDebug() << "BYE BYE" << this;
     m_ctxt->setListener(0);
     delete m_ctxt;
     m_ctxt = 0;
