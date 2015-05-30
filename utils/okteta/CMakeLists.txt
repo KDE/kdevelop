@@ -31,7 +31,6 @@ TARGET_LINK_LIBRARIES( kdevokteta
     KDev::Project
     KDev::Sublime
     KDev::Shell
-    KF5::KDELibs4Support
     KF5::WidgetsAddons
 )
 
