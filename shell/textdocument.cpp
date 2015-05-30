@@ -281,7 +281,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     if (!d->document)
     {
-        d->document = Core::self()->partControllerInternal()->createTextPart(Core::self()->documentController()->encoding());
+        d->document = Core::self()->partControllerInternal()->createTextPart();
 
         // Connect to the first text changed signal, it occurs before the completed() signal
         connect(d->document.data(), &KTextEditor::Document::textChanged, this, &TextDocument::slotDocumentLoaded);

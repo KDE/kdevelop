@@ -79,13 +79,6 @@ void TestDocumentController::cleanupTestCase()
     m_tempDir.remove();
 }
 
-void TestDocumentController::testSetEncoding()
-{
-    QString encoding("latin1");
-    m_subject->setEncoding(encoding);
-    QCOMPARE(m_subject->encoding(), encoding);
-}
-
 void TestDocumentController::testOpeningNewDocumentFromText()
 {
     qRegisterMetaType<KDevelop::IDocument*>("KDevelop::IDocument*");
@@ -103,9 +96,6 @@ void TestDocumentController::testOpeningNewDocumentFromText()
     QVERIFY(!m_subject->openDocuments().empty());
     QVERIFY(m_subject->documentForUrl(document->url()) == document);
     QVERIFY(m_subject->activeDocument() == document);
-
-    QEXPECT_FAIL("", "FIXME? DocumentController::encoding property has no effect on openDocumentFromText().", Continue);
-    QCOMPARE(document->textDocument()->encoding(), m_subject->encoding());
 }
 
 void TestDocumentController::testOpeningDocumentFromUrl()

@@ -43,7 +43,6 @@ private slots :
     void cleanup();
     void cleanupTestCase();
 
-    void testSetEncoding();
     void testOpeningNewDocumentFromText();
     void testOpeningDocumentFromUrl();
     void testSaveSomeDocuments();

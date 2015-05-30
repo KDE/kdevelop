@@ -66,12 +66,6 @@ public:
     DocumentController( QObject *parent = 0 );
     virtual ~DocumentController();
 
-    /**Call this before a call to @ref editDocument to set the encoding of the
-    document to be opened.
-    @param encoding The encoding to open as.*/
-    virtual void setEncoding( const QString &encoding ) override;
-    virtual QString encoding() const override;
-
     /**Finds the first document object corresponding to a given url.
     @param url The Url of the document.
     @return The corresponding document, or null if not found.*/

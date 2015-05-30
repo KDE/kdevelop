@@ -91,8 +91,6 @@ struct DocumentControllerPrivate {
             delete temp;
     }
 
-    QString presetEncoding;
-
     // used to map urls to open docs
     QHash< QUrl, IDocument* > documents;
 
@@ -129,7 +127,7 @@ struct DocumentControllerPrivate {
             dir = cfg.readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
         }
 
-        return KEncodingFileDialog::getOpenUrlsAndEncoding( controller->encoding(), dir, i18n( "*|Text File\n" ),
+        return KEncodingFileDialog::getOpenUrlsAndEncoding( QString(), dir, i18n( "*|Text File\n" ),
                                     Core::self()->uiControllerInternal()->defaultMainWindow(),
                                     i18n( "Open File" ) );
     }
@@ -643,16 +641,6 @@ void DocumentController::setupActions()
     action->setText( i18n( "Show Annotate on current document") );
     action->setIconText( i18n( "Annotate" ) );
     action->setIcon( QIcon::fromTheme("user-properties") );
-}
-
-void DocumentController::setEncoding( const QString &encoding )
-{
-    d->presetEncoding = encoding;
-}
-
-QString KDevelop::DocumentController::encoding() const
-{
-    return d->presetEncoding;
 }
 
 void DocumentController::slotOpenDocument(const QUrl &url)
