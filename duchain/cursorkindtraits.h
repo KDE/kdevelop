@@ -101,7 +101,8 @@ constexpr bool isDeclaration(CXCursorKind CK)
     || CK == CXCursor_NamespaceAlias
     || CK == CXCursor_UsingDirective
     || CK == CXCursor_UsingDeclaration
-    || CK == CXCursor_TypeAliasDecl;
+    || CK == CXCursor_TypeAliasDecl
+    || CK == CXCursor_LabelStmt;
 }
 
 constexpr Decision isDefinition(CXCursorKind CK)
@@ -170,7 +171,8 @@ constexpr bool isKDevDeclaration(CXCursorKind CK, bool isClassMember)
     || CK == CXCursor_UsingDeclaration
     || CK == CXCursor_TypeAliasDecl
     || CK == CXCursor_Namespace
-    || CK == CXCursor_EnumDecl);
+    || CK == CXCursor_EnumDecl
+    || CK == CXCursor_LabelStmt);
 }
 
 constexpr bool isKDevClassDeclaration(CXCursorKind CK, bool isDefinition)

@@ -69,6 +69,7 @@ private slots:
     void testReparseMacro();
     void testMultiLineMacroRanges();
     void testNestedMacroRanges();
+    void testGotoStatement();
 
     void benchDUChainBuilder();
 

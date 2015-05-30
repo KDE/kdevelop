@@ -556,7 +556,16 @@ struct Visitor
         return makeType(clangType, cursor);
     }
 
-    template<CXCursorKind CK, EnableIf<!CursorKindTraits::isIdentifiedType(CK) && CK != CXCursor_FunctionDecl> = dummy>
+    template<CXCursorKind CK, EnableIf<CK == CXCursor_LabelStmt> = dummy>
+    AbstractType *createType(CXCursor)
+    {
+        auto t = new DelayedType;
+        static const IndexedTypeIdentifier id("Label");
+        t->setIdentifier(id);
+        return t;
+    }
+
+    template<CXCursorKind CK, EnableIf<!CursorKindTraits::isIdentifiedType(CK) && CK != CXCursor_FunctionDecl && CK != CXCursor_LabelStmt> = dummy>
     AbstractType *createType(CXCursor cursor)
     {
         auto clangType = clang_getCursorType(cursor);
@@ -1221,6 +1230,7 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
     UseCursorKind(CXCursor_ObjCImplementationDecl, cursor, parent);
     UseCursorKind(CXCursor_ObjCCategoryImplDecl, cursor, parent);
     UseCursorKind(CXCursor_MacroDefinition, cursor, parent);
+    UseCursorKind(CXCursor_LabelStmt, cursor, parent);
     UseCursorKind(CXCursor_MacroExpansion, cursor);
     UseCursorKind(CXCursor_TypeRef, cursor);
     UseCursorKind(CXCursor_CXXBaseSpecifier, cursor);

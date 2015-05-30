@@ -1064,3 +1064,26 @@ void TestDUChain::testReparseMacro()
     QCOMPARE(structTypedef->uses().size(), 1);
     QCOMPARE(structTypedef->uses().begin()->first(), RangeInRevision(2,0,2,1));
 }
+
+void TestDUChain::testGotoStatement()
+{
+    TestFile file("int main() {\ngoto label;\ngoto label;\nlabel: return 0;}", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+    auto main = file.topContext()->localDeclarations()[0];
+    QVERIFY(main);
+    auto mainCtx = main->internalContext()->childContexts().first();
+    QVERIFY(mainCtx);
+    QCOMPARE(mainCtx->localDeclarations().size(), 1);
+    auto label = mainCtx->localDeclarations().first();
+    QVERIFY(label);
+    QCOMPARE(label->range(), RangeInRevision(3,0,3,5));
+
+    QCOMPARE(label->uses().size(), 1);
+    QCOMPARE(label->uses().begin()->first(), RangeInRevision(1,5,1,10));
+    QCOMPARE(label->uses().begin()->last(), RangeInRevision(2,5,2,10));
+}
