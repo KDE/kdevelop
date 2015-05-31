@@ -331,7 +331,7 @@ struct Visitor
             clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
             // Set empty ranges for declarations inside macro expansion
             if (spellingLocOffset == expansionLocOffset) {
-                range.end.column = range.start.column;
+                range.end = range.start;
             }
         }
 
@@ -1156,6 +1156,7 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
                 const int firstOpeningParen = contents.indexOf('(');
                 if (firstOpeningParen != -1) {
                     range.end.column = range.start.column + firstOpeningParen;
+                    range.end.line = range.start.line;
                 }
             }
 
