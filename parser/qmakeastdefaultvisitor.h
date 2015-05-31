@@ -22,7 +22,7 @@
 #define QMAKEASTDEFAULTVISITOR_H
 
 #include "qmakeastvisitor.h"
-#include "parserexport.h"
+#include "parser_export.h"
 
 namespace QMake
 {

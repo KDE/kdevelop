@@ -23,7 +23,7 @@
 
 #include <QtCore/QString>
 
-#include "parserexport.h"
+#include "parser_export.h"
 
 namespace QMake
 {

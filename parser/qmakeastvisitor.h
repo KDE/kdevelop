@@ -21,7 +21,7 @@
 #ifndef QMAKEASTVISITOR_H
 #define QMAKEASTVISITOR_H
 
-#include "parserexport.h"
+#include "parser_export.h"
 
 namespace QMake
 {

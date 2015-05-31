@@ -25,7 +25,7 @@
 #include "parser/qmakeastvisitor.h"
 #include "parser/ast.h"
 
-#include "qmakeduchainexport.h"
+#include "qmakeduchain_export.h"
 
 class KUrl;
 

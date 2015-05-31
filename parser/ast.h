@@ -24,7 +24,7 @@
 #include <QtCore/QString>
 #include <QtCore/QList>
 
-#include "parserexport.h"
+#include "parser_export.h"
 
 namespace KDevelop
 {

@@ -24,7 +24,7 @@
 #ifndef QMAKEEDITORINTEGRATOR_H
 #define QMAKEEDITORINTEGRATOR_H
 
-#include "qmakeduchainexport.h"
+#include "qmakeduchain_export.h"
 #include <language/editor/rangeinrevision.h>
 
 namespace QMake

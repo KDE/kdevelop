@@ -23,7 +23,7 @@
 
 #include <QtCore/QStack>
 #include <QtCore/QString>
-#include "parserexport.h"
+#include "parser_export.h"
 
 class QString;
 class kdev_pg_location_table;
