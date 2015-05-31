@@ -68,6 +68,7 @@ private slots:
     void testEnvironmentWithDifferentOrderOfElements();
     void testReparseMacro();
     void testMultiLineMacroRanges();
+    void testNestedMacroRanges();
 
     void benchDUChainBuilder();
 

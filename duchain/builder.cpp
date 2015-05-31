@@ -1147,7 +1147,7 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
                     unsigned int spellingLocOffset;
                     clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
                     if (spellingLocOffset == expansionLocOffset) {
-                        range.end.column = range.start.column;
+                        range.end = range.start;
                     }
                 }
             } else {

@@ -923,6 +923,28 @@ void TestDUChain::testMultiLineMacroRanges()
     QCOMPARE(macroDefinition->uses().begin()->first(), RangeInRevision(1,0,1,11));
 }
 
+void TestDUChain::testNestedMacroRanges()
+{
+    TestFile file("#define INNER int var; var = 0;\n#define MACRO() INNER\nint main(){MACRO(\n);}", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->localDeclarations().size(), 3);
+    auto main = file.topContext()->localDeclarations()[2];
+    QVERIFY(main);
+    auto mainCtx = main->internalContext()->childContexts().first();
+    QVERIFY(mainCtx);
+    QCOMPARE(mainCtx->localDeclarations().size(), 1);
+    auto var = mainCtx->localDeclarations().first();
+    QVERIFY(var);
+    QCOMPARE(var->range(), RangeInRevision(2,11,2,11));
+
+    QCOMPARE(var->uses().size(), 1);
+    QCOMPARE(var->uses().begin()->first(), RangeInRevision(2,11,2,11));
+}
+
 void TestDUChain::testNestedImports()
 {
     TestFile B("#pragma once\nint B();\n", "h");
