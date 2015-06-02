@@ -1087,3 +1087,20 @@ void TestDUChain::testGotoStatement()
     QCOMPARE(label->uses().begin()->first(), RangeInRevision(1,5,1,10));
     QCOMPARE(label->uses().begin()->last(), RangeInRevision(2,5,2,10));
 }
+
+void TestDUChain::testRangesOfOperatorsInsideMacro()
+{
+    TestFile file("class Test{public: Test& operator++(int);};\n#define MACRO(var) var++;\nint main(){\nTest tst; MACRO(tst)}", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->localDeclarations().size(), 3);
+    auto testClass = file.topContext()->localDeclarations()[0];
+    QVERIFY(testClass);
+    auto operatorPlusPlus = testClass->internalContext()->localDeclarations().first();
+    QVERIFY(operatorPlusPlus);
+    QCOMPARE(operatorPlusPlus->uses().size(), 1);
+    QCOMPARE(operatorPlusPlus->uses().begin()->first(), RangeInRevision(3,10,3,10));
+}

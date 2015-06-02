@@ -1108,7 +1108,8 @@ RangeInRevision rangeInRevisionForUse(CXCursor cursor, CXCursorKind referencedCu
 
     //TODO: Fix in clang, happens for operator<<, operator<, probably more
     if (clang_Range_isNull(useRange)) {
-        range = ClangRange(clang_getCursorExtent(cursor)).toRangeInRevision();
+        useRange = clang_getCursorExtent(cursor);
+        range = ClangRange(useRange).toRangeInRevision();
     }
 
     if (referencedCursorKind == CXCursor_ConversionFunction) {

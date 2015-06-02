@@ -70,6 +70,7 @@ private slots:
     void testMultiLineMacroRanges();
     void testNestedMacroRanges();
     void testGotoStatement();
+    void testRangesOfOperatorsInsideMacro();
 
     void benchDUChainBuilder();
 
