@@ -456,7 +456,15 @@ struct Visitor
         for (int i = 0; i < numArgs; ++i) {
             func->addArgument(makeAbsType(clang_getArgType(type, i), parent));
         }
-        /// TODO: variadic functions
+
+        if (clang_isFunctionTypeVariadic(type)) {
+            auto type = new DelayedType;
+            static const auto id = IndexedTypeIdentifier("...");
+            type->setIdentifier(id);
+            type->setKind(DelayedType::Unresolved);
+            func->addArgument(AbstractType::Ptr(type));
+        }
+
         return func;
     }
 

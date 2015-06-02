@@ -53,3 +53,10 @@ void STDCALL bar3(int a);
 void STDCALL bar3(int a); {}
 /// "type" : { "toString" : "function void ()" }
 void __pascal bar4();
+
+/// "type" : { "toString" : "function void (...)" }
+void variadic1(...);
+/// "type" : { "toString" : "function int (int, ...)" }
+int variadic2(int, ...);
+/// "type" : { "toString" : "function void (int, ...)" }
+void variadic3(int a...);
