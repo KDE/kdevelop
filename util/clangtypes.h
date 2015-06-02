@@ -55,6 +55,8 @@ public:
      */
     const char* c_str() const;
 
+    bool isEmpty() const;
+
     QString toString() const;
 
 private:

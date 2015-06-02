@@ -787,6 +787,18 @@ CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor, CXCursor parent)
 }
 
 template<>
+CXChildVisitResult Visitor::dispatchCursor<CXCursor_ParmDecl>(CXCursor cursor, CXCursor)
+{
+    // There is no need to create declarations for anonymous function parameters e.g.: void f(int);
+    // Currently clang_Cursor_getSpellingNameRange returns not empty ranges for anonymous parameters. So we use clang_getCursorSpelling here.
+    if (ClangString(clang_getCursorSpelling(cursor)).isEmpty()) {
+        return CXChildVisit_Recurse;
+    }
+
+    return buildDeclaration<CXCursor_ParmDecl, typename DeclType<CXCursor_ParmDecl, false, false>::Type, false>(cursor);
+}
+
+template<>
 CXChildVisitResult Visitor::dispatchCursor<CXCursor_CXXBaseSpecifier>(CXCursor cursor)
 {
     auto currentContext = m_parentContext->context;

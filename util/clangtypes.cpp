@@ -59,6 +59,11 @@ const char* ClangString::c_str() const
     return clang_getCString(string);
 }
 
+bool ClangString::isEmpty() const
+{
+    return !static_cast<const char*>(*this)[0];
+}
+
 ClangString::operator const char*() const
 {
     const char *data = clang_getCString(string);
