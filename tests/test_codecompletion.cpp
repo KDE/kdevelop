@@ -59,7 +59,7 @@ struct CompletionItems {
     {};
     KTextEditor::Cursor position;
     QStringList completions;
-    QStringList declarationItems; // completion items that have associated declarations
+    QStringList declarationItems; ///< completion items that have associated declarations. Declarations with higher match quality at the top. @sa KTextEditor::CodeCompletionModel::MatchQuality
 };
 Q_DECLARE_TYPEINFO(CompletionItems, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(CompletionItems);
@@ -104,11 +104,15 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
     lock.lock();
     auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
 
-
+    int previousMatchQuality = 10;
     for(const auto& declarationName : expectedCompletionItems.declarationItems){
         const auto declarationItem = tester.findItem(declarationName);
         QVERIFY(declarationItem);
         QVERIFY(declarationItem->declaration());
+
+        auto matchQuality = tester.itemData(declarationItem, KTextEditor::CodeCompletionModel::Name, KTextEditor::CodeCompletionModel::MatchQuality).toInt();
+        QVERIFY(matchQuality <= previousMatchQuality);
+        previousMatchQuality = matchQuality;
     }
 
     tester.names.sort();
@@ -249,6 +253,13 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             {"m_variable", "operator=(A &&)", "operator=(B &&)", "operator=(const A &)", "operator=(const B &)"},
             {"m_variable"}
         };
+    QTest::newRow("itemsPriority")
+        << "class A; class B; void f(A); int main(){ A c; B b;f(\n} "
+        << CompletionItems{{1, 0},
+            // TODO: what's the "()"?
+            {"()", "A", "B", "b", "c", "f(A)", "main()"},
+            {"c", "A", "b", "B"}
+    };
 }
 
 void TestCodeCompletion::testVirtualOverride()

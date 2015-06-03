@@ -304,14 +304,14 @@ QString& elideStringRight(QString& str, int length)
 }
 
 /**
- * @return Value suited for @ref CodeCompletionModel::MatchQuality in the range [0.0, 10.0]
+ * @return Value suited for @ref CodeCompletionModel::MatchQuality in the range [0.0, 10.0] (the higher the better)
  *
  * See http://clang.llvm.org/doxygen/CodeCompleteConsumer_8h_source.html for list of priorities
  * They (currently) have a range from [-3, 80] (the lower, the better)
  */
 int codeCompletionPriorityToMatchQuality(unsigned int completionPriority)
 {
-    return qBound(0u, completionPriority, 80u) / 8;
+    return 10u - qBound(0u, completionPriority, 80u) / 8;
 }
 
 /**
