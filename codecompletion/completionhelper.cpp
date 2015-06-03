@@ -93,6 +93,36 @@ QStringList templateParams(CXCursor cursor)
     return types;
 }
 
+FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
+{
+    QStringList params;
+
+    int numArgs = clang_Cursor_getNumArguments(cursor);
+    for (int i = 0; i < numArgs; i++) {
+        CXCursor arg = clang_Cursor_getArgument(cursor, i);
+        QString id = ClangString(clang_getCursorDisplayName(arg)).toString();
+        QString type = ClangString(clang_getTypeSpelling(clang_getCursorType(arg))).toString();
+        if (info->templateTypeMap.contains(type)) {
+            type = info->templateTypeMap.value(type);
+        }
+        params << type + ' ' + id;
+    }
+
+    FuncOverrideInfo fp;
+    QString retType = ClangString(clang_getTypeSpelling(clang_getCursorResultType(cursor))).toString();
+    if (info->templateTypeMap.contains(retType)) {
+        retType = info->templateTypeMap.value(retType);
+    }
+
+    fp.returnType = retType;
+    fp.name = ClangString(clang_getCursorSpelling(cursor)).toString();
+    fp.params =  params;
+    fp.isVirtual = clang_CXXMethod_isPureVirtual(cursor);
+    fp.isConst = ClangUtils::isConstMethod(cursor);
+
+    return fp;
+}
+
 CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientData data);
 
 void processBaseClass(CXCursor cursor, FunctionOverrideList* functionList)
@@ -123,33 +153,8 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
         processBaseClass(cursor, info->functions);
         return CXChildVisit_Continue;
     case CXCursor_CXXMethod:
-
         if (clang_CXXMethod_isVirtual(cursor)) {
-            QStringList params;
-
-            int numArgs = clang_Cursor_getNumArguments(cursor);
-            for (int i = 0; i < numArgs; i++) {
-                CXCursor arg = clang_Cursor_getArgument(cursor, i);
-                QString id = ClangString(clang_getCursorDisplayName(arg)).toString();
-                QString type = ClangString(clang_getTypeSpelling(clang_getCursorType(arg))).toString();
-                if (info->templateTypeMap.contains(type)) {
-                    type = info->templateTypeMap.value(type);
-                }
-                params << type + ' ' + id;
-            }
-
-            FuncOverrideInfo fp;
-            QString retType = ClangString(clang_getTypeSpelling(clang_getCursorResultType(cursor))).toString();
-            if (info->templateTypeMap.contains(retType)) {
-                retType = info->templateTypeMap.value(retType);
-            }
-
-            fp.returnType = retType;
-            fp.name = ClangString(clang_getCursorSpelling(cursor)).toString();
-            fp.params =  params;
-            fp.isVirtual = clang_CXXMethod_isPureVirtual(cursor);
-            fp.isConst = ClangUtils::isConstMethod(cursor);
-            info->functions->append(fp);
+            info->functions->append(processCXXMethod(cursor, info));
         }
         return CXChildVisit_Continue;
     default:
@@ -159,9 +164,24 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
 
 CXChildVisitResult findBaseVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientData data)
 {
-    if (clang_getCursorKind(cursor) == CXCursor_CXXBaseSpecifier) {
+    auto cursorKind = clang_getCursorKind(cursor);
+    if (cursorKind == CXCursor_CXXBaseSpecifier) {
         processBaseClass(cursor, static_cast<FunctionOverrideList*>(data));
+    } else if (cursorKind == CXCursor_CXXMethod)   {
+        if (!clang_CXXMethod_isVirtual(cursor)) {
+            return CXChildVisit_Continue;
+        }
+
+        auto info = static_cast<FunctionOverrideList*>(data);
+
+        OverrideInfo overrideInfo {info, {}, {}};
+        auto methodInfo = processCXXMethod(cursor, &overrideInfo);
+        if (info->contains(methodInfo)) {
+            // This method is already implemented, remove it from the list of methods that can be overridden.
+            info->remove(info->indexOf(methodInfo), 1);
+        }
     }
+
     return CXChildVisit_Continue;
 }
 
@@ -264,6 +284,12 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     return CXChildVisit_Continue;
 }
 
+}
+
+bool FuncOverrideInfo::operator==(const FuncOverrideInfo& rhs) const
+{
+    return std::make_tuple(returnType, name, params, isConst)
+    == std::make_tuple(rhs.returnType, rhs.name, rhs.params, rhs.isConst);
 }
 
 CompletionHelper::CompletionHelper()

@@ -35,6 +35,7 @@ struct FuncOverrideInfo
     QStringList params;
     bool isVirtual;
     bool isConst;
+    bool operator==(const FuncOverrideInfo& rhs) const;
 };
 
 struct FuncImplementInfo
