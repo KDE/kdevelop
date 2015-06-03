@@ -573,6 +573,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             }
         }
 
+        if(typed.isEmpty()){
+            continue;
+        }
+
         const bool isBuiltin = (result.CursorKind == CXCursor_NotImplemented);
         if (isBuiltin && m_filters & NoBuiltins) {
             continue;

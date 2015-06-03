@@ -256,8 +256,7 @@ void TestCodeCompletion::testClangCodeCompletion_data()
     QTest::newRow("itemsPriority")
         << "class A; class B; void f(A); int main(){ A c; B b;f(\n} "
         << CompletionItems{{1, 0},
-            // TODO: what's the "()"?
-            {"()", "A", "B", "b", "c", "f(A)", "main()"},
+            {"A", "B", "b", "c", "f(A)", "main()"},
             {"c", "A", "b", "B"}
     };
 }
