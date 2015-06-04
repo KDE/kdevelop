@@ -22,6 +22,6 @@ target_link_libraries(kdevprojectmanagerview
 
 ########### install files ###############
 
-install( FILES kdevprojectmanagerview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevprojectmanagerview )
+install( FILES kdevprojectmanagerview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevprojectmanagerview )
 
 

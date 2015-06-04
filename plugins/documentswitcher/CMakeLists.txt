@@ -14,6 +14,6 @@ target_link_libraries(kdevdocumentswitcher KDev::Interfaces KDev::Sublime KDev::
 
 ########### install files ###############
 
-install( FILES kdevdocumentswitcher.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevdocumentswitcher )
+install( FILES kdevdocumentswitcher.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevdocumentswitcher )
 
 

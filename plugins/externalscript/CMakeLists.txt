@@ -27,4 +27,4 @@ target_link_libraries(kdevexternalscript
 
 ########### install files ###############
 
-install( FILES kdevexternalscript.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevexternalscript )
+install( FILES kdevexternalscript.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevexternalscript )

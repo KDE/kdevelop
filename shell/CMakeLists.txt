@@ -157,12 +157,12 @@ install(FILES
     launchconfiguration.h
     environmentconfigurebutton.h
     ${CMAKE_CURRENT_BINARY_DIR}/shellexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/shell COMPONENT Devel
 )
 
-install(TARGETS KDevPlatformShell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformShell EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevdebugger )
-install( FILES kdevsessionui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevsession )
-install( FILES kdevsourceformatter.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevsourceformatter )
-install( FILES AssistantButton.qml assistantpopup.qml DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
+install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevdebugger )
+install( FILES kdevsessionui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevsession )
+install( FILES kdevsourceformatter.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevsourceformatter )
+install( FILES AssistantButton.qml assistantpopup.qml DESTINATION ${KDE_INSTALL_DATADIR}/kdevelop )

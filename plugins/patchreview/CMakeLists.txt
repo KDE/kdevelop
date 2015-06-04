@@ -28,4 +28,4 @@ if (KDEExperimentalPurpose_FOUND)
 endif()
 ########### install files ###############
 
-install(FILES kdevpatchreview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevpatchreview)
+install(FILES kdevpatchreview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevpatchreview)

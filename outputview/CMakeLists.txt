@@ -21,7 +21,7 @@ target_link_libraries(KDevPlatformOutputView PRIVATE
     KDev::Util
 )
 set_target_properties(KDevPlatformOutputView PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME OutputView)
-install(TARGETS KDevPlatformOutputView EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformOutputView EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
  ########### install files ###############
  install( FILES
@@ -34,6 +34,6 @@ install(TARGETS KDevPlatformOutputView EXPORT KDevPlatformTargets ${INSTALL_TARG
           ${CMAKE_CURRENT_BINARY_DIR}/outputviewexport.h
           outputjob.h
           outputexecutejob.h
-          DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/outputview COMPONENT Devel)
+          DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/outputview COMPONENT Devel)
 
 add_subdirectory(tests)

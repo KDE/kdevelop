@@ -59,10 +59,10 @@ LINK_PRIVATE
     KF5::KIOWidgets
     KF5::ThreadWeaver
 )
-target_include_directories(KDevPlatformInterfaces INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
+target_include_directories(KDevPlatformInterfaces INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevplatform>")
 
 set_target_properties(KDevPlatformInterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Interfaces)
-install(TARGETS KDevPlatformInterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformInterfaces EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     iassistant.h
@@ -107,10 +107,10 @@ install(FILES
     itoolviewactionlistener.h
     ${CMAKE_CURRENT_BINARY_DIR}/interfacesexport.h
     ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/interfaces COMPONENT Devel
 )
 
 install(FILES
     kdevelopplugin.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR}
+    DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR}
 )

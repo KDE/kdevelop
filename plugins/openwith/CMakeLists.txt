@@ -8,4 +8,4 @@ target_link_libraries(kdevopenwith KDev::Interfaces KDev::Project KDev::Util)
 
 ########### install files ###############
 
-install( FILES iopenwith.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/openwith COMPONENT Devel)
+install( FILES iopenwith.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/openwith COMPONENT Devel)

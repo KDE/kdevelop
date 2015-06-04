@@ -38,6 +38,6 @@ target_link_libraries(kdevgrepview
 
 ########### install files ###############
 
-install( FILES kdevgrepview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevgrepview )
+install( FILES kdevgrepview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevgrepview )
 
 add_subdirectory(tests)

@@ -18,11 +18,11 @@ LINK_PRIVATE
 )
 
 set_target_properties(KDevPlatformSerialization PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Serialization)
-install(TARGETS KDevPlatformSerialization EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KDevPlatformSerialization EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/serializationexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/serialization COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/serialization COMPONENT Devel
 )
 
 install(FILES
@@ -33,7 +33,7 @@ install(FILES
     itemrepository.h
     itemrepositoryregistry.h
     repositorymanager.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/serialization COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/serialization COMPONENT Devel
 )
 
 add_subdirectory(tests)

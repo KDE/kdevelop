@@ -60,7 +60,7 @@ LINK_PRIVATE
     KDev::Util
 )
 set_target_properties(KDevPlatformVcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Vcs)
-install(TARGETS KDevPlatformVcs EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformVcs EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/vcsexport.h
@@ -72,7 +72,7 @@ install(FILES
     vcsevent.h
     vcsstatusinfo.h
     vcslocation.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/vcs COMPONENT Devel
 )
 
 install(FILES
@@ -82,7 +82,7 @@ install(FILES
     widgets/vcscommitdialog.h
     widgets/vcslocationwidget.h
     widgets/standardvcslocationwidget.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/widgets COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/vcs/widgets COMPONENT Devel
 )
 
 
@@ -92,7 +92,7 @@ install(FILES
     models/vcsfilechangesmodel.h
     models/vcsitemeventmodel.h
     models/brancheslistmodel.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/models COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/vcs/models COMPONENT Devel
 )
 
 install(FILES
@@ -104,17 +104,17 @@ install(FILES
     interfaces/irepositoryversioncontrol.h
     interfaces/ipatchdocument.h
     interfaces/ipatchsource.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/interfaces COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/vcs/interfaces COMPONENT Devel
 )
 
 install(FILES
     dvcs/dvcsjob.h
     dvcs/dvcsplugin.h
     dvcs/dvcsevent.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/dvcs COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/vcs/dvcs COMPONENT Devel
 )
 
 install(FILES
     dvcs/ui/dvcsimportmetadatawidget.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/dvcs/ui COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/vcs/dvcs/ui COMPONENT Devel
 )

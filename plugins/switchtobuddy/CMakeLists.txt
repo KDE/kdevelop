@@ -14,4 +14,4 @@ target_link_libraries(kdevswitchtobuddy
     KDev::Language
 )
 
-install( FILES kdevswitchtobuddy.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevswitchtobuddy)
+install( FILES kdevswitchtobuddy.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevswitchtobuddy)

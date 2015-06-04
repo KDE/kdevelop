@@ -5,5 +5,5 @@ install ( FILES
     namespace_open_cpp.txt
     namespace_close_cpp.txt
     namespace_use_cpp.txt
-    DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/templates
+    DESTINATION ${KDE_INSTALL_DATADIR}/kdevcodegen/templates
 )

@@ -29,4 +29,4 @@ target_link_libraries(kdevquickopen KF5::IconThemes KF5::GuiAddons KF5::TextEdit
 
 ########### install files ###############
 
-install(FILES kdevquickopen.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevquickopen)
+install(FILES kdevquickopen.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevquickopen)

@@ -26,10 +26,10 @@ target_link_libraries(kdevappwizard
     KF5::Archive
     KDev::Interfaces KDev::Vcs KDev::Language KDev::Util)
 
-install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
+install(TARGETS kdevappwizard DESTINATION ${KDE_INSTALL_PLUGINDIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############
 
-install( FILES kdevappwizard.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevappwizard )
-install( FILES kdevappwizard.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES kdevappwizard.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevappwizard )
+install( FILES kdevappwizard.knsrc DESTINATION ${KDE_INSTALL_CONFDIR} )

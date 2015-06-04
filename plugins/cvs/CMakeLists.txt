@@ -46,4 +46,4 @@ target_link_libraries(kdevcvs
 
 ########### install files ###############
 
-install( FILES kdevcvs.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcvs )
+install( FILES kdevcvs.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevcvs )

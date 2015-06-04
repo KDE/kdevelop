@@ -31,4 +31,4 @@ target_link_libraries(kdevclassbrowser KF5::TextEditor KDev::Util KDev::Language
 
 ########### install files ###############
 
-install(FILES kdevclassbrowser.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclassbrowser)
+install(FILES kdevclassbrowser.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevclassbrowser)

@@ -12,4 +12,4 @@ target_link_libraries(kdevtestview KF5::ItemModels KDev::Interfaces KDev::Projec
 
 ########### install files ###############
 
-install( FILES kdevtestview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevtestview )
+install( FILES kdevtestview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevtestview )

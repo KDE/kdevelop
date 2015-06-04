@@ -21,5 +21,5 @@ target_link_libraries(kdevdocumentview
 
 ########### install files ###############
 
-install( FILES kdevdocumentview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevdocumentview )
+install( FILES kdevdocumentview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevdocumentview )
 

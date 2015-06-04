@@ -135,7 +135,7 @@ add_subdirectory(tests)
 
 add_subdirectory(plugins)
 
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KDevPlatform")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")
 
 ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
                               "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
@@ -151,7 +151,7 @@ ecm_setup_version(${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${
 install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatform_version.h"
         "${KDevPlatform_BINARY_DIR}/config-kdevplatform.h"
-        DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )
+        DESTINATION "${KDE_INSTALL_INCLUDEDIR}/kdevplatform" )
 install( FILES
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake"
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake"

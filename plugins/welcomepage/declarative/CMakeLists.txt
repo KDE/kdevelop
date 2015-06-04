@@ -10,5 +10,5 @@ target_link_libraries(kdevelopdashboarddeclarativeplugin
     KDev::Vcs
 )
 
-install(TARGETS kdevelopdashboarddeclarativeplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/kdevplatform)
-install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/kdevplatform)
+install(TARGETS kdevelopdashboarddeclarativeplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kdevplatform)
+install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kdevplatform)

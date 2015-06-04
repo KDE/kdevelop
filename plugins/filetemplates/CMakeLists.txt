@@ -41,8 +41,8 @@ target_link_libraries(kdevfiletemplates
 
 ########### install files ###############
 
-install( FILES kdevfiletemplates.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevfiletemplates )
-install( FILES kdevfiletemplates.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES kdevfiletemplates.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevfiletemplates )
+install( FILES kdevfiletemplates.knsrc DESTINATION ${KDE_INSTALL_CONFDIR} )
 
 install(FILES
 licenses/GPL\ v2
@@ -56,7 +56,7 @@ licenses/MIT\ X11
 licenses/Mozilla\ v1.1
 "licenses/LGPL v2+ (KDE)"
 "licenses/GPL v2+ (KDE)"
-DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/licenses
+DESTINATION ${KDE_INSTALL_DATADIR}/kdevcodegen/licenses
 )
 
 

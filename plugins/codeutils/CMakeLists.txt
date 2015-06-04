@@ -24,4 +24,4 @@ add_subdirectory(doc_templates)
 
 ########### install files ###############
 
-install( FILES kdevcodeutils.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcodeutils )
+install( FILES kdevcodeutils.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevcodeutils )

@@ -32,7 +32,7 @@ set_target_properties(KDevPlatformTests PROPERTIES
     SOVERSION ${KDEVPLATFORM_LIB_SOVERSION}
     EXPORT_NAME Tests
 )
-install(TARGETS KDevPlatformTests EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformTests EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     autotestshell.h
@@ -45,7 +45,7 @@ install(FILES
     testhelpers.h
     testplugincontroller.h
     ${CMAKE_CURRENT_BINARY_DIR}/kdevplatformtestsexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/tests/
     COMPONENT Devel
 )
 

@@ -177,13 +177,13 @@ if (Grantlee5_FOUND)
 endif()
 
 set_target_properties(KDevPlatformLanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Language)
-install(TARGETS KDevPlatformLanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformLanguage EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/languageexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language COMPONENT Devel
 )
 
 
@@ -192,7 +192,7 @@ install(FILES
     assistant/renameassistant.h
     assistant/staticassistant.h
     assistant/staticassistantsmanager.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/assistant COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/assistant COMPONENT Devel
 )
 
 install(FILES
@@ -207,7 +207,7 @@ install(FILES
     interfaces/icreateclasshelper.h
     interfaces/icontextbrowser.h
     interfaces/abbreviations.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/interfaces COMPONENT Devel
 )
 
 install(FILES
@@ -218,7 +218,7 @@ install(FILES
     editor/rangeinrevision.h
     editor/modificationrevision.h
     editor/modificationrevisionset.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/editor COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/editor COMPONENT Devel
 )
 
 install(FILES
@@ -227,7 +227,7 @@ install(FILES
     backgroundparser/parseprojectjob.h
     backgroundparser/urlparselock.h
     backgroundparser/documentchangetracker.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/backgroundparser COMPONENT Devel
 )
 
 install(FILES
@@ -237,7 +237,7 @@ install(FILES
     util/includeitem.h
     util/debuglanguageparserhelper.h
     util/kdevhash.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/util COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/util COMPONENT Devel
 )
 
 install(FILES
@@ -285,7 +285,7 @@ install(FILES
     duchain/localindexeddeclaration.h
     duchain/definitions.h
     duchain/problem.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/duchain COMPONENT Devel
 )
 
 install(FILES
@@ -312,7 +312,7 @@ install(FILES
     duchain/types/typeutils.h
     duchain/types/typealiastype.h
     duchain/types/containertypes.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/types COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/duchain/types COMPONENT Devel
 )
 
 install(FILES
@@ -321,7 +321,7 @@ install(FILES
     duchain/builders/abstracttypebuilder.h
     duchain/builders/abstractusebuilder.h
     duchain/builders/dynamiclanguageexpressionvisitor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/builders COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/duchain/builders COMPONENT Devel
 )
 
 install(FILES
@@ -335,7 +335,7 @@ install(FILES
     codecompletion/normaldeclarationcompletionitem.h
     codecompletion/abstractincludefilecompletionitem.h
     codecompletion/codecompletiontesthelper.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codecompletion COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/codecompletion COMPONENT Devel
 )
 
 install(FILES
@@ -352,7 +352,7 @@ install(FILES
     codegen/templateclassgenerator.h
     codegen/codedescription.h
     codegen/basicrefactoring.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
 install(FILES
@@ -364,14 +364,14 @@ install(FILES
     duchain/navigation/navigationaction.h
     duchain/navigation/useswidget.h
     duchain/navigation/usescollector.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/navigation COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/duchain/navigation COMPONENT Devel
 )
 
 install(FILES
     highlighting/codehighlighting.h
     highlighting/colorcache.h
     highlighting/configurablecolors.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/highlighting COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/highlighting COMPONENT Devel
 )
 
 install(FILES
@@ -379,5 +379,5 @@ install(FILES
     checks/dataaccessrepository.h
     checks/controlflowgraph.h
     checks/controlflownode.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/checks COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/checks COMPONENT Devel
 )

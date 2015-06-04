@@ -50,9 +50,9 @@ LINK_PRIVATE
     KF5::KCMUtils
     KDev::Interfaces
 )
-target_include_directories(KDevPlatformUtil INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
+target_include_directories(KDevPlatformUtil INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevplatform>")
 set_target_properties(KDevPlatformUtil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Util)
-install(TARGETS KDevPlatformUtil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformUtil EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 install( FILES kdev_format_source DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
@@ -84,4 +84,4 @@ install( FILES
     projecttestjob.h
     path.h
     ${CMAKE_CURRENT_BINARY_DIR}/utilexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/util COMPONENT Devel)

@@ -39,7 +39,7 @@ LINK_PRIVATE
     Qt5::Concurrent
 )
 set_target_properties(KDevPlatformProject PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Project)
-install(TARGETS KDevPlatformProject EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformProject EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 add_subdirectory(tests)
 
@@ -51,7 +51,7 @@ install(FILES
     interfaces/ibuildsystemmanager.h
     interfaces/iprojectfilter.h
     interfaces/iprojectfilterprovider.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project/interfaces COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/project/interfaces COMPONENT Devel
  )
 
 install(FILES
@@ -68,5 +68,5 @@ install(FILES
     abstractfilemanagerplugin.h
     projectfiltermanager.h
     ${CMAKE_CURRENT_BINARY_DIR}/projectexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/project COMPONENT Devel
  )

@@ -35,7 +35,7 @@ target_link_libraries(KDevPlatformSublime
         LINK_PRIVATE KF5::KIOWidgets
         LINK_PUBLIC KF5::Parts)
 set_target_properties(KDevPlatformSublime PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Sublime)
-install(TARGETS KDevPlatformSublime EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformSublime EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 ########### install files ###############
@@ -54,4 +54,4 @@ install(FILES
     tooldocument.h
     view.h
     ${CMAKE_CURRENT_BINARY_DIR}/sublimeexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/sublime COMPONENT Devel)
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/sublime COMPONENT Devel)

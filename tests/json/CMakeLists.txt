@@ -21,7 +21,7 @@ set_target_properties(KDevPlatformJsonTests PROPERTIES
     EXPORT_NAME JsonTests
 )
 
-install(TARGETS KDevPlatformJsonTests EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformJsonTests EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     declarationvalidator.h
@@ -33,6 +33,6 @@ install(FILES
     jsonducontexttests.h
     jsontypetests.h
     ${CMAKE_CURRENT_BINARY_DIR}/kdevplatformjsontestsexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/json/
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/tests/json/
     COMPONENT Devel
 )

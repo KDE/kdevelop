@@ -15,4 +15,4 @@ if(HAVE_MSG_NOSIGNAL)
 endif()
 
 add_executable(kdev_dbus_socket_transformer main.cpp)
-install(TARGETS kdev_dbus_socket_transformer ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kdev_dbus_socket_transformer ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )

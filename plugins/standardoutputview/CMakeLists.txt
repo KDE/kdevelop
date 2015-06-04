@@ -19,5 +19,5 @@ target_link_libraries(kdevstandardoutputview
     KDev::OutputView
 )
 
-install( FILES kdevstandardoutputview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevstandardoutputview )
+install( FILES kdevstandardoutputview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevstandardoutputview )
 

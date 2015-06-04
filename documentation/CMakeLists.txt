@@ -16,7 +16,7 @@ add_library(KDevPlatformDocumentation ${KDevPlatformDocumentation_LIB_SRCS})
 add_library(KDev::Documentation ALIAS KDevPlatformDocumentation)
 generate_export_header(KDevPlatformDocumentation EXPORT_FILE_NAME documentationexport.h)
 
-install(TARGETS KDevPlatformDocumentation EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformDocumentation EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 target_link_libraries(KDevPlatformDocumentation
         LINK_PUBLIC KDev::Interfaces Qt5::WebKitWidgets)
@@ -27,5 +27,5 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/documentationexport.h
     documentationfindwidget.h
     standarddocumentationview.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/documentation COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/documentation COMPONENT Devel
  )

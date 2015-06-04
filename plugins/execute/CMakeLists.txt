@@ -28,4 +28,4 @@ target_link_libraries(kdevexecute
 
 ########### install files ###############
 
-install(FILES iexecuteplugin.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/execute COMPONENT Devel)
+install(FILES iexecuteplugin.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/execute COMPONENT Devel)

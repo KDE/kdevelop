@@ -31,4 +31,4 @@ target_link_libraries(kdevexecutescript
 
 ########### install files ###############
 
-install(FILES iexecutescriptplugin.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/executescript COMPONENT Devel)
+install(FILES iexecutescriptplugin.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/executescript COMPONENT Devel)

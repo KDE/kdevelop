@@ -39,40 +39,40 @@ set_target_properties(KDevPlatformDebugger PROPERTIES
     VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION}
     EXPORT_NAME Debugger
 )
-install(TARGETS KDevPlatformDebugger EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformDebugger EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/debuggerexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/debugger COMPONENT Devel
 )
 install(FILES
     interfaces/idebugsession.h
     interfaces/ibreakpointcontroller.h
     interfaces/ivariablecontroller.h
     interfaces/iframestackmodel.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/interfaces COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/debugger/interfaces COMPONENT Devel
 )
 install(FILES
     util/treemodel.h
     util/treeitem.h
     util/treeview.h
     util/pathmappings.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/util COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/debugger/util COMPONENT Devel
 )
 install(FILES
     breakpoint/breakpointwidget.h
     breakpoint/breakpointdetails.h
     breakpoint/breakpoint.h
     breakpoint/breakpointmodel.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/breakpoint COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/debugger/breakpoint COMPONENT Devel
 )
 install(FILES
     variable/variablecollection.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/variable COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/debugger/variable COMPONENT Devel
 )
 install(FILES
     framestack/framestackmodel.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/framestack COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/debugger/framestack COMPONENT Devel
 )
