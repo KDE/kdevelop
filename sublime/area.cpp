@@ -334,9 +334,11 @@ void Area::load(const KConfigGroup& group)
             QString id = s.left(i);
             int pos_i = s.mid(i+1).toInt();
             Sublime::Position pos = static_cast<Sublime::Position>(pos_i);
-            if (pos != Sublime::Left && pos != Sublime::Right
-                && pos != Sublime::Top && pos != Sublime::Bottom)
+            if (pos != Sublime::Left && pos != Sublime::Right && pos != Sublime::Top && pos != Sublime::Bottom)
+            {
                 pos = Sublime::Bottom;
+            }
+
             d->desiredToolViews[id] = pos;
         }
     }
