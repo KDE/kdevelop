@@ -182,17 +182,17 @@ void TestCodeCompletion::testClangCodeCompletion_data()
     QTest::newRow("dotmemberaccess")
         << "class Foo { public: void foo() {} }; int main() { Foo f; \nf. "
         << CompletionItems{{1, 2}, {
-            "foo()",
+            "foo",
             "operator=(Foo &&)",
             "operator=(const Foo &)",
-        }, {"foo()"}};
+        }, {"foo"}};
     QTest::newRow("arrowmemberaccess")
         << "class Foo { public: void foo() {} }; int main() { Foo* f = new Foo; \nf-> }"
         << CompletionItems{{1, 3}, {
-            "foo()",
+            "foo",
             "operator=(Foo &&)",
             "operator=(const Foo &)",
-        }, {"foo()"}};
+        }, {"foo"}};
     QTest::newRow("enum-case")
         << "enum Foo { foo, bar }; int main() { Foo f; switch (f) {\ncase "
         << CompletionItems{{1,4}, {
@@ -212,35 +212,35 @@ void TestCodeCompletion::testClangCodeCompletion_data()
         << CompletionItems{{2, 2}, {
             "operator=(SomeStruct &&)",
             "operator=(const SomeStruct &)",
-            "priv()",
-        }, {"priv()"}};
+            "priv",
+        }, {"priv"}};
     QTest::newRow("private-public")
         << "class SomeStruct { public: void pub() {} private: void priv() {} };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItems{{2, 2}, {
             "operator=(SomeStruct &&)",
             "operator=(const SomeStruct &)",
-            "pub()",
-        }, {"pub()"}};
+            "pub",
+        }, {"pub"}};
     QTest::newRow("protected-public")
         << "class SomeStruct { public: void pub() {} protected: void prot() {} };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItems{{2, 2}, {
             "operator=(SomeStruct &&)",
             "operator=(const SomeStruct &)",
-            "pub()",
-        }, {"pub()"}};
+            "pub",
+        }, {"pub"}};
     QTest::newRow("localVariable")
         << "int main() { int localVariable;\nloc "
         << CompletionItems{{1, 3},
-            {"localVariable","main()"},
-            {"localVariable", "main()"}
+            {"localVariable","main"},
+            {"localVariable", "main"}
         };
     QTest::newRow("globalVariable")
         << "int globalVariable;\nint main() { \ngl "
         << CompletionItems{{2, 2},
-            {"globalVariable","main()"},
-            {"globalVariable", "main()"}
+            {"globalVariable","main"},
+            {"globalVariable", "main"}
         };
     QTest::newRow("namespaceVariable")
         << "namespace NameSpace{int variable};\nint main() { \nNameSpace:: "
@@ -257,9 +257,15 @@ void TestCodeCompletion::testClangCodeCompletion_data()
     QTest::newRow("itemsPriority")
         << "class A; class B; void f(A); int main(){ A c; B b;f(\n} "
         << CompletionItems{{1, 0},
-            {"A", "B", "b", "c", "f(A)", "main()"},
+            {"A", "B", "b", "c", "f", "main"},
             {"c", "A", "b", "B"}
     };
+    QTest::newRow("function-arguments")
+        << "class Abc; int f(Abc){\n "
+        << CompletionItems{{1, 0}, {
+            "Abc",
+            "f",
+        }};
 }
 
 void TestCodeCompletion::testVirtualOverride()
@@ -589,7 +595,8 @@ void TestCodeCompletion::testOverloadedFunctions()
     for (const auto& item : tester.items) {
         auto function = item->declaration()->type<FunctionType>();
         const QString display = item->declaration()->identifier().toString() + function->partToString(FunctionType::SignatureArguments);
-        QCOMPARE(display, tester.itemData(item).toString());
+        const QString itemDisplay = tester.itemData(item).toString() + tester.itemData(item, KTextEditor:: CodeCompletionModel::Arguments).toString();
+        QCOMPARE(display, itemDisplay);
     }
 
     QVERIFY(tester.items[0]->declaration().data() != tester.items[1]->declaration().data());

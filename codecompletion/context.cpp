@@ -174,6 +174,19 @@ public:
             return m_matchQuality;
         }
 
+        if (role == Qt::DisplayRole) {
+            if (declaration()->isFunctionDeclaration()) {
+                // As completion filtering uses CodeCompletionModel::Name role, we can't just show the whole function signature on that role, otherwise some unrelated completion items'll be shown.
+                // Also this makes the "Detailed completion" option work.
+                if (index.column() == CodeCompletionModel::Name) {
+                    return declaration()->identifier().toString();
+                } else if (index.column() == CodeCompletionModel::Arguments) {
+                    auto function = declaration()->type<FunctionType>();
+                    return function->partToString(FunctionType::SignatureArguments);
+                }
+            }
+        }
+
         auto ret = CompletionItem<NormalDeclarationCompletionItem>::data(index, role, model);
         if (ret.isValid()) {
             return ret;
