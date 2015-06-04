@@ -188,6 +188,17 @@ struct DocumentControllerPrivate {
         return 0;
     }
 
+    static bool fileExists(const QUrl& url)
+    {
+        if (url.isLocalFile()) {
+            return QFile::exists(url.toLocalFile());
+        } else {
+            auto job = KIO::stat(url, KIO::StatJob::SourceSide, 0);
+            KJobWidgets::setWindow(job, ICore::self()->uiController()->activeMainWindow());
+            return job->exec();
+        }
+    };
+
     IDocument* openDocumentInternal( const QUrl & inputUrl, const QString& prefName = QString(),
         const KTextEditor::Range& range = KTextEditor::Range::invalid(), const QString& encoding = QStringLiteral(""),
         DocumentController::DocumentActivationParams activationParams = 0,
@@ -225,12 +236,6 @@ struct DocumentControllerPrivate {
         IDocument* doc = documents.value(url);
         if (!doc)
         {
-            auto existJob = [](const QUrl& url) {
-                auto job = KIO::stat(url, KIO::StatJob::SourceSide, 0);
-                KJobWidgets::setWindow(job, ICore::self()->uiController()->activeMainWindow());
-                return job;
-            };
-
             QMimeType mimeType;
 
             if (DocumentController::isEmptyDocumentUrl(url))
@@ -245,10 +250,10 @@ struct DocumentControllerPrivate {
                 qCDebug(SHELL) << "invalid URL:" << url.url();
                 return 0;
             }
-            else if (KProtocolInfo::isKnownProtocol(url.scheme()) && !existJob(url)->exec())
+            else if (KProtocolInfo::isKnownProtocol(url.scheme()) && !fileExists(url))
             {
                 //Don't create a new file if we are not in the code mode.
-                if (static_cast<KDevelop::MainWindow*>(ICore::self()->uiController()->activeMainWindow())->area()->objectName() != "code") {
+                if (ICore::self()->uiController()->activeArea()->objectName() != "code") {
                     return 0;
                 }
                 // enfore text mime type in order to create a kate part editor which then can be used to create the file
