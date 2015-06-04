@@ -18,8 +18,6 @@
 
 #include "mi/gdbmi.h"
 
-#include <kdialog.h>
-
 #include <QContextMenuEvent>
 
 #include "gdbglobal.h"

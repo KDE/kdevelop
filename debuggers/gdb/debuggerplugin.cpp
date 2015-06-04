@@ -151,13 +151,15 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
         i18n("GDB"),
         gdbfactory);
 
-#warning port MemoryViewerWidget to KF5
-    memoryviewerfactory = 0;
-//     memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget>(
-//     this, "org.kdevelop.debugger.MemoryView", Qt::BottomDockWidgetArea);
-//     core()->uiController()->addToolView(
-//         i18n("Memory"),
-//         memoryviewerfactory);
+#ifndef WITH_OKTETA
+    memoryviewerfactory = nullptr;
+#else
+    memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget>(
+    this, "org.kdevelop.debugger.MemoryView", Qt::BottomDockWidgetArea);
+    core()->uiController()->addToolView(
+        i18n("Memory"),
+        memoryviewerfactory);
+#endif
 
     setupActions();
 

@@ -80,6 +80,7 @@ set(kdevgdb_SRCS
 )
 
 if(OKTETA_FOUND)
+    add_definitions(-DWITH_OKTETA=1)
     list(APPEND kdevgdb_SRCS
         memviewdlg.cpp)
 endif()
