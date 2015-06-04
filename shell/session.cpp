@@ -122,20 +122,14 @@ QUuid Session::id() const
 void Session::setName( const QString& newname )
 {
     d->info.name = newname;
-
     d->info.config->group( QString() ).writeEntry( cfgSessionNameEntry, newname );
-    d->info.config->sync();
-
     d->updateDescription();
 }
 
 void Session::setContainedProjects( const QList<QUrl>& projects )
 {
     d->info.projects = projects;
-
     d->info.config->group( cfgSessionOptionsGroup ).writeEntry( cfgSessionProjectsEntry, projects );
-    d->info.config->sync();
-
     d->updateDescription();
 }
 
