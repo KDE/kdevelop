@@ -1,4 +1,4 @@
 # install the cmake files
 
-install( FILES KDevelopConfig.cmake DESTINATION ${CMAKECONFIG_INSTALL_PREFIX}/KDevelop )
+install( FILES KDevelopConfig.cmake DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevelop )
 

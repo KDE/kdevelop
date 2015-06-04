@@ -140,4 +140,4 @@ endif()
 
 ########### install files ###############
 
-install( FILES kdevgdbui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevgdb )
+install( FILES kdevgdbui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevgdb )

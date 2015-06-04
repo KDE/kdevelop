@@ -33,7 +33,7 @@ IF(APPLE)
     target_link_libraries(kdevelop "-framework CoreFoundation")
 ENDIF()
 
-install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kdevelop ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES kdevelop! DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 
@@ -63,11 +63,11 @@ endif (APPLE)
 
 ########### install files ###############
 
-install( PROGRAMS kdevelop.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
-install( PROGRAMS kdevelop_ps.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
-install( FILES kdeveloprc DESTINATION ${CONFIG_INSTALL_DIR} )
-install( FILES kdevelopui.rc katepartui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevelop )
-install( FILES kdevelop.notifyrc DESTINATION ${KNOTIFYRC_INSTALL_DIR} )
-install( FILES kdevelop.xml kdevelopinternal.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
-install( FILES splash.qml DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
-update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
+install( PROGRAMS kdevelop.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
+install( PROGRAMS kdevelop_ps.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
+install( FILES kdeveloprc DESTINATION ${KDE_INSTALL_CONFDIR} )
+install( FILES kdevelopui.rc katepartui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevelop )
+install( FILES kdevelop.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR} )
+install( FILES kdevelop.xml kdevelopinternal.xml DESTINATION ${KDE_INSTALL_MIMEDIR} )
+install( FILES splash.qml DESTINATION ${KDE_INSTALL_DATADIR}/kdevelop )
+update_xdg_mimetypes( ${KDE_INSTALL_MIMEDIR} )
