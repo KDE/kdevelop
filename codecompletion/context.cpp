@@ -392,10 +392,10 @@ void addEnumItems(Declaration* declaration, QHash<QualifiedIdentifier, Declarati
     }
 }
 
-QHash<QualifiedIdentifier, Declaration*> generateCache(const DUContextPointer& ctx, const CursorInRevision& position)
+QMultiHash<QualifiedIdentifier, Declaration*> generateCache(const DUContextPointer& ctx, const CursorInRevision& position)
 {
     const auto allDeclarationsList = ctx->allDeclarations(position, ctx->topContext());
-    QHash<QualifiedIdentifier, Declaration*> declarationsHash;
+    QMultiHash<QualifiedIdentifier, Declaration*> declarationsHash;
 
     for (const auto& declaration : allDeclarationsList) {
         // We store function-local declarations with qid like: "function::declaration", but completion items provided by Clang have qid like: "declaration", so we use id here instead.
@@ -407,6 +407,41 @@ QHash<QualifiedIdentifier, Declaration*> generateCache(const DUContextPointer& c
     }
 
     return declarationsHash;
+}
+
+struct FindDeclarationResult
+{
+    Declaration* declaration = nullptr;
+    bool overloaded = false;
+};
+
+FindDeclarationResult findDeclaration(const QualifiedIdentifier& qid, const DUContextPointer& ctx, const CursorInRevision& position, const QMultiHash<QualifiedIdentifier, Declaration*>& declarationsCache, QSet<Declaration*>& handled)
+{
+    FindDeclarationResult result;
+    auto i = declarationsCache.find(qid);
+    while (i != declarationsCache.end() && i.key() == qid) {
+        auto declaration = i.value();
+        if (!handled.contains(declaration)) {
+            handled.insert(declaration);
+            result.overloaded = result.overloaded || (++i != declarationsCache.end() && i.key() == qid);
+            result.declaration = declaration;
+            return result;
+        }
+        result.overloaded = true;
+        ++i;
+    }
+
+    const auto foundDeclarations = ctx->findDeclarations(qid, position);
+    result.overloaded = foundDeclarations.size() > 1;
+    for (auto dec : foundDeclarations) {
+        if (!handled.contains(dec)) {
+            handled.insert(dec);
+            result.declaration = dec;
+            return result;
+        }
+    }
+
+    return result;
 }
 
 }
@@ -603,22 +638,18 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 continue;
             }
 
-            // TODO: This easily breaks if there are multiple function overloads
-            // e.g. void foo(), void foo(int) => only the first is selected
-            auto found = declarationsCache.value(qid);
-
-            if (!found) {
-                for (auto d : ctx->findDeclarations(qid, m_position)) {
-                    if (!handled.contains(d)) {
-                        found = d;
-                        handled.insert(d);
-                        break;
-                    }
-                }
-            }
+            auto declResult = findDeclaration(qid, ctx, m_position, declarationsCache, handled);
+            auto found = declResult.declaration;
 
             CompletionTreeItemPointer item;
             if (found) {
+                if (declResult.overloaded && found->isFunctionDeclaration()) {
+                    // In case of overloaded functions we can't use the "display" and the "resultType" provided by clang as it can mismatch declaration's data.
+                    auto function = found->type<FunctionType>();
+                    resultType = function->returnType()->toString();
+                    display = id.toString() + function->partToString(FunctionType::SignatureArguments);
+                }
+
                 auto declarationItem = new DeclarationItem(found, display, resultType, replacement);
 
                 const unsigned int completionPriority = clang_getCompletionPriority(result.CompletionString);

@@ -30,6 +30,7 @@
 #include "util/clangtypes.h"
 
 #include <language/codecompletion/codecompletiontesthelper.h>
+#include <language/duchain/types/functiontype.h>
 
 #include "codecompletion/completionhelper.h"
 #include "codecompletion/context.h"
@@ -563,4 +564,35 @@ void TestCodeCompletion::testIncludePathCompletionLocal()
     IncludeTester tester(executeIncludePathCompletion(&impl, {0, 10}));
     QVERIFY(tester.names.contains(header.url().toUrl().fileName()));
     QVERIFY(!tester.names.contains("iostream"));
+}
+
+void TestCodeCompletion::testOverloadedFunctions()
+{
+    TestFile file("void f(); int f(int); void f(int, double){\n ", "cpp");
+    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+    QVERIFY(sessionData);
+
+    DUContextPointer topPtr(top);
+    lock.unlock();
+
+    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 0}, QString());
+    context->setFilters(ClangCodeCompletionContext::ContextFilters(
+                            ClangCodeCompletionContext::NoBuiltins |
+                            ClangCodeCompletionContext::NoMacros));
+    lock.lock();
+    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    QCOMPARE(tester.items.size(), 3);
+    for (const auto& item : tester.items) {
+        auto function = item->declaration()->type<FunctionType>();
+        const QString display = item->declaration()->identifier().toString() + function->partToString(FunctionType::SignatureArguments);
+        QCOMPARE(display, tester.itemData(item).toString());
+    }
+
+    QVERIFY(tester.items[0]->declaration().data() != tester.items[1]->declaration().data());
+    QVERIFY(tester.items[0]->declaration().data() != tester.items[2]->declaration().data());
+    QVERIFY(tester.items[1]->declaration().data() != tester.items[2]->declaration().data());
 }
