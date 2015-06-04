@@ -365,10 +365,6 @@ void deleteGroupRecursive(KConfigGroup group) {
     //Why doesn't this work?
 //     Q_ASSERT(group.groupList().isEmpty());
     group.deleteGroup();
-
-#ifdef SYNC_OFTEN
-    group.sync();
-#endif
 }
 
 void WorkingSet::deleteSet(bool force, bool silent)
