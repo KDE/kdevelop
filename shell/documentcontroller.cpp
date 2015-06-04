@@ -255,18 +255,19 @@ struct DocumentControllerPrivate {
                 // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
                 mimeType = QMimeDatabase().mimeTypeForName("text/plain");
             }
-            else if(!url.isLocalFile() && mimeType.isDefault())
-            {
-                // fall back to text/plain, for remote files without extension, i.e. COPYING, LICENSE, ...
-                // using a synchronous KIO::MimetypeJob is hazardous and may lead to repeated calls to
-                // this function without it having returned in the first place
-                // and this function is *not* reentrant, see assert below:
-                // Q_ASSERT(!documents.contains(url) || documents[url]==doc);
-                mimeType = QMimeDatabase().mimeTypeForName("text/plain");
-            }
             else
             {
                 mimeType = QMimeDatabase().mimeTypeForUrl(url);
+
+                if(!url.isLocalFile() && mimeType.isDefault())
+                {
+                    // fall back to text/plain, for remote files without extension, i.e. COPYING, LICENSE, ...
+                    // using a synchronous KIO::MimetypeJob is hazardous and may lead to repeated calls to
+                    // this function without it having returned in the first place
+                    // and this function is *not* reentrant, see assert below:
+                    // Q_ASSERT(!documents.contains(url) || documents[url]==doc);
+                    mimeType = QMimeDatabase().mimeTypeForName("text/plain");
+                }
             }
 
             // is the URL pointing to a directory?
