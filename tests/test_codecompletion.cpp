@@ -180,18 +180,15 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "foo",
         }, {"bar","foo"}};
     QTest::newRow("dotmemberaccess")
-        << "class Foo { public: void foo() {} }; int main() { Foo f; \nf. "
+        << "class Foo { public: void foo() {} bool operator=(Foo &&) }; int main() { Foo f; \nf. "
         << CompletionItems{{1, 2}, {
             "foo",
-            "operator=(Foo &&)",
-            "operator=(const Foo &)",
-        }, {"foo"}};
+            "operator="
+        }, {"foo",  "operator="}};
     QTest::newRow("arrowmemberaccess")
         << "class Foo { public: void foo() {} }; int main() { Foo* f = new Foo; \nf-> }"
         << CompletionItems{{1, 3}, {
-            "foo",
-            "operator=(Foo &&)",
-            "operator=(const Foo &)",
+            "foo"
         }, {"foo"}};
     QTest::newRow("enum-case")
         << "enum Foo { foo, bar }; int main() { Foo f; switch (f) {\ncase "
@@ -203,31 +200,23 @@ void TestCodeCompletion::testClangCodeCompletion_data()
         << "class SomeStruct { private: void priv() {} };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItems{{2, 2}, {
-            "operator=(SomeStruct &&)",
-            "operator=(const SomeStruct &)",
         }};
     QTest::newRow("private-friend")
         << "class SomeStruct { private: void priv() {} friend int main(); };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItems{{2, 2}, {
-            "operator=(SomeStruct &&)",
-            "operator=(const SomeStruct &)",
             "priv",
         }, {"priv"}};
     QTest::newRow("private-public")
         << "class SomeStruct { public: void pub() {} private: void priv() {} };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItems{{2, 2}, {
-            "operator=(SomeStruct &&)",
-            "operator=(const SomeStruct &)",
             "pub",
         }, {"pub"}};
     QTest::newRow("protected-public")
         << "class SomeStruct { public: void pub() {} protected: void prot() {} };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItems{{2, 2}, {
-            "operator=(SomeStruct &&)",
-            "operator=(const SomeStruct &)",
             "pub",
         }, {"pub"}};
     QTest::newRow("localVariable")
@@ -251,7 +240,7 @@ void TestCodeCompletion::testClangCodeCompletion_data()
     QTest::newRow("parentVariable")
         << "class A{public: int m_variable;};class B : public A{};\nint main() { B b;\nb. "
         << CompletionItems{{2, 2},
-            {"m_variable", "operator=(A &&)", "operator=(B &&)", "operator=(const A &)", "operator=(const B &)"},
+            {"m_variable"},
             {"m_variable"}
         };
     QTest::newRow("itemsPriority")

@@ -174,19 +174,6 @@ public:
             return m_matchQuality;
         }
 
-        if (role == Qt::DisplayRole) {
-            if (declaration()->isFunctionDeclaration()) {
-                // As completion filtering uses CodeCompletionModel::Name role, we can't just show the whole function signature on that role, otherwise some unrelated completion items'll be shown.
-                // Also this makes the "Detailed completion" option work.
-                if (index.column() == CodeCompletionModel::Name) {
-                    return declaration()->identifier().toString();
-                } else if (index.column() == CodeCompletionModel::Arguments) {
-                    auto function = declaration()->type<FunctionType>();
-                    return function->partToString(FunctionType::SignatureArguments);
-                }
-            }
-        }
-
         auto ret = CompletionItem<NormalDeclarationCompletionItem>::data(index, role, model);
         if (ret.isValid()) {
             return ret;
@@ -420,39 +407,27 @@ QMultiHash<QualifiedIdentifier, Declaration*> generateCache(const DUContextPoint
     return declarationsHash;
 }
 
-struct FindDeclarationResult
+Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPointer& ctx, const CursorInRevision& position, const QMultiHash<QualifiedIdentifier, Declaration*>& declarationsCache, QSet<Declaration*>& handled)
 {
-    Declaration* declaration = nullptr;
-    bool overloaded = false;
-};
-
-FindDeclarationResult findDeclaration(const QualifiedIdentifier& qid, const DUContextPointer& ctx, const CursorInRevision& position, const QMultiHash<QualifiedIdentifier, Declaration*>& declarationsCache, QSet<Declaration*>& handled)
-{
-    FindDeclarationResult result;
     auto i = declarationsCache.find(qid);
     while (i != declarationsCache.end() && i.key() == qid) {
         auto declaration = i.value();
         if (!handled.contains(declaration)) {
             handled.insert(declaration);
-            result.overloaded = result.overloaded || (++i != declarationsCache.end() && i.key() == qid);
-            result.declaration = declaration;
-            return result;
+            return declaration;
         }
-        result.overloaded = true;
         ++i;
     }
 
     const auto foundDeclarations = ctx->findDeclarations(qid, position);
-    result.overloaded = foundDeclarations.size() > 1;
     for (auto dec : foundDeclarations) {
         if (!handled.contains(dec)) {
             handled.insert(dec);
-            result.declaration = dec;
-            return result;
+            return dec;
         }
     }
 
-    return result;
+    return nullptr;
 }
 
 }
@@ -550,11 +525,21 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             continue;
         }
 
+        const bool isBuiltin = (result.CursorKind == CXCursor_NotImplemented);
+        if (isBuiltin && m_filters & NoBuiltins) {
+            continue;
+        }
+
+        const bool isDeclaration = !isMacroDefinition && !isBuiltin;
+        if (isDeclaration && m_filters & NoDeclarations) {
+            continue;
+        }
+
         const uint chunks = clang_getNumCompletionChunks(result.CompletionString);
 
-        // the string that would be neede to type, usually the identifier of something
+        // the string that would be needed to type, usually the identifier of something. Also we use it as name for code completion declaration items.
         QString typed;
-        // the display string we use in the code completion items, including the function signature
+        // the display string we use in the simple code completion items, including the function signature.
         QString display;
         // the return type of a function e.g.
         QString resultType;
@@ -578,6 +563,11 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             const auto kind = clang_getCompletionChunkKind(result.CompletionString, j);
             if (kind == CXCompletionChunk_CurrentParameter || kind == CXCompletionChunk_Optional) {
                 continue;
+            }
+
+            // We don't need function signature for declaration items, we can get it directly from the declaration. Also adding the function signature to the "display" would break the "Detailed completion" option.
+            if(isDeclaration && !typed.isEmpty()){
+                break;
             }
 
             const QString string = ClangString(clang_getCompletionChunkText(result.CompletionString, j)).toString();
@@ -623,18 +613,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             continue;
         }
 
-        const bool isBuiltin = (result.CursorKind == CXCursor_NotImplemented);
-        if (isBuiltin && m_filters & NoBuiltins) {
-            continue;
-        }
-
         // ellide text to the right for overly long result types (templates especially)
         elideStringRight(resultType, MAX_RETURN_TYPE_STRING_LENGTH);
-
-        const bool isDeclaration = !isMacroDefinition && !isBuiltin;
-        if (isDeclaration && m_filters & NoDeclarations) {
-            continue;
-        }
 
         if (isDeclaration) {
             const Identifier id(typed);
@@ -649,18 +629,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 continue;
             }
 
-            auto declResult = findDeclaration(qid, ctx, m_position, declarationsCache, handled);
-            auto found = declResult.declaration;
+            auto found = findDeclaration(qid, ctx, m_position, declarationsCache, handled);
 
             CompletionTreeItemPointer item;
             if (found) {
-                if (declResult.overloaded && found->isFunctionDeclaration()) {
-                    // In case of overloaded functions we can't use the "display" and the "resultType" provided by clang as it can mismatch declaration's data.
-                    auto function = found->type<FunctionType>();
-                    resultType = function->returnType()->toString();
-                    display = id.toString() + function->partToString(FunctionType::SignatureArguments);
-                }
-
                 auto declarationItem = new DeclarationItem(found, display, resultType, replacement);
 
                 const unsigned int completionPriority = clang_getCompletionPriority(result.CompletionString);
@@ -680,7 +652,11 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             }
 
             if (isValidSpecialCompletionIdentifier(qid)) {
-                specialItems.append(item);
+                // If it's a special completion identifier e.g. "operator=(const&)" and we don't have a declaration for it, don't add it into completion list, as this item is completely useless and pollutes the test case.
+                // This happens e.g. for "class A{}; a.|".  At | we have "operator=(const A&)" as a special completion identifier without a declaration.
+                if(item->declaration()){
+                    specialItems.append(item);
+                }
             } else {
                 items.append(item);
             }
