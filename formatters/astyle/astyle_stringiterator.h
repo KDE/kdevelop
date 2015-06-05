@@ -31,20 +31,19 @@ Boston, MA 02110-1301, USA.
 
 class AStyleStringIterator : public astyle::ASSourceIterator
 {
-    public:
+public:
+    AStyleStringIterator(const QString &string);
+    virtual ~AStyleStringIterator();
 
-        AStyleStringIterator(const QString &string);
-        virtual ~AStyleStringIterator();
+    virtual bool hasMoreLines() const override;
+    virtual std::string nextLine(bool emptyLineWasDeleted = false) override;
+    virtual std::string peekNextLine() override;
+    virtual void peekReset() override;
 
-        virtual bool hasMoreLines() const override;
-        virtual std::string nextLine(bool emptyLineWasDeleted = false) override;
-        virtual std::string peekNextLine() override;
-        virtual void peekReset() override;
-
-    private:
-        QString m_content;
-        QTextStream *m_is;
-        qint64 m_peekStart;
+private:
+    QString m_content;
+    QTextStream m_is;
+    qint64 m_peekStart;
 };
 
 #endif // ASTYLESTRINGITERATOR_H

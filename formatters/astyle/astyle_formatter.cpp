@@ -35,11 +35,6 @@ AStyleFormatter::AStyleFormatter()
 {
 }
 
-// AStyleFormatter::AStyleFormatter(const QMap<QString, QVariant>& options)
-// {
-//     setOptions(options);
-// }
-
 QString AStyleFormatter::formatSource(const QString &text, const QString& leftContext, const QString& rightContext)
 {
     QString useText = leftContext + text + rightContext;
@@ -62,12 +57,6 @@ void AStyleFormatter::setOption(const QString &key, const QVariant &value)
 {
     m_options[key] = value;
 }
-
-// void AStyleFormatter::setOptions(const QMap<QString, QVariant> &options)
-// {
-//     m_options = options;
-//     updateFormatter();
-// }
 
 void AStyleFormatter::updateFormatter()
 {

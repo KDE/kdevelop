@@ -23,42 +23,43 @@ Boston, MA 02110-1301, USA.
 #include <string>
 
 AStyleStringIterator::AStyleStringIterator(const QString &text)
-  : ASSourceIterator(), m_content(text), m_peekStart(-1)
+    : ASSourceIterator()
+    , m_content(text)
+    , m_is(&m_content, QIODevice::ReadOnly)
+    , m_peekStart(-1)
 {
-  m_is = new QTextStream(&m_content, QIODevice::ReadOnly);
 }
 
 
 AStyleStringIterator::~AStyleStringIterator()
 {
-  delete m_is;
 }
 
 
 bool AStyleStringIterator::hasMoreLines() const
 {
-  return !m_is->atEnd();
+  return !m_is.atEnd();
 }
 
 
 string AStyleStringIterator::nextLine(bool emptyLineWasDeleted)
 {
   Q_UNUSED(emptyLineWasDeleted)
-  return m_is->readLine().toUtf8().data();
+  return m_is.readLine().toUtf8().data();
 }
 
 string AStyleStringIterator::peekNextLine()
 {
     if (m_peekStart == -1) {
-        m_peekStart = m_is->pos();
+        m_peekStart = m_is.pos();
     }
-    return m_is->readLine().toUtf8().data();
+    return m_is.readLine().toUtf8().data();
 }
 
 void AStyleStringIterator::peekReset()
 {
     if(m_peekStart != -1)
-        m_is->seek(m_peekStart);
+        m_is.seek(m_peekStart);
     m_peekStart = -1; // invalid
 }
 

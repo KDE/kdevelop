@@ -24,42 +24,41 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/isourceformatter.h>
 #include "ui_astyle_preferences.h"
 
-// class AStylePlugin;
 class AStyleFormatter;
 
 class AStylePreferences : public KDevelop::SettingsWidget, public Ui::AStylePreferences
 {
         Q_OBJECT
 
-    public:
-        enum Language { CPP, Java, CSharp};
-        
-        AStylePreferences(Language lang=CPP, QWidget *parent=0);
-        virtual ~AStylePreferences();
+public:
+    enum Language { CPP, Java, CSharp};
 
-        virtual void load(const KDevelop::SourceFormatterStyle &style) override;
-        virtual QString save() override;
+    AStylePreferences(Language lang=CPP, QWidget *parent=0);
+    virtual ~AStylePreferences();
 
-    protected:
-        void init();
-        void updatePreviewText(bool emitChangedSignal = true);
-        void setItemChecked(int idx, bool checked);
-        void updateWidgets();
+    virtual void load(const KDevelop::SourceFormatterStyle &style) override;
+    virtual QString save() override;
 
-    private slots:
-        void currentTabChanged();
-        void indentChanged();
-        void indentObjectsChanged(QListWidgetItem *item);
-        void minMaxValuesChanged();
-        void bracketsChanged();
-        void blocksChanged();
-        void paddingChanged();
-        void onelinersChanged();
-        void pointerAlignChanged();
+protected:
+    void init();
+    void updatePreviewText(bool emitChangedSignal = true);
+    void setItemChecked(int idx, bool checked);
+    void updateWidgets();
 
-    private:
-        AStyleFormatter *m_formatter;
-        bool m_enableWidgetSignals;
+private slots:
+    void currentTabChanged();
+    void indentChanged();
+    void indentObjectsChanged(QListWidgetItem *item);
+    void minMaxValuesChanged();
+    void bracketsChanged();
+    void blocksChanged();
+    void paddingChanged();
+    void onelinersChanged();
+    void pointerAlignChanged();
+
+private:
+    QScopedPointer<AStyleFormatter> m_formatter;
+    bool m_enableWidgetSignals;
 };
 
 #endif // ASTYLEPREFERENCES_H

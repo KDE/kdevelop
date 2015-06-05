@@ -41,15 +41,14 @@ K_PLUGIN_FACTORY_WITH_JSON(AStyleFactory, "kdevastyle.json", registerPlugin<ASty
 
 AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
     : IPlugin("kdevastyle", parent)
+    , m_formatter(new AStyleFormatter())
 {
     KDEV_USE_EXTENSION_INTERFACE(ISourceFormatter)
-    m_formatter = new AStyleFormatter();
     currentStyle = predefinedStyles().at(0);
 }
 
 AStylePlugin::~AStylePlugin()
 {
-    delete m_formatter;
 }
 
 QString AStylePlugin::name()
