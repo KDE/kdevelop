@@ -38,22 +38,6 @@ namespace CursorKindTraits {
 
 using namespace KDevelop;
 
-constexpr bool isUse(CXCursorKind CK)
-{
-    return CK == CXCursor_TypeRef
-    || CK == CXCursor_CXXBaseSpecifier
-    || CK == CXCursor_TemplateRef
-    || CK == CXCursor_NamespaceRef
-    || CK == CXCursor_MemberRef
-    || CK == CXCursor_LabelRef
-    || CK == CXCursor_OverloadedDeclRef
-    || CK == CXCursor_VariableRef
-    || CK == CXCursor_DeclRefExpr
-    || CK == CXCursor_MemberRefExpr
-    || CK == CXCursor_MacroExpansion
-    || CK == CXCursor_ObjCClassRef;
-}
-
 constexpr bool isClassTemplate(CXCursorKind CK)
 {
     return CK == CXCursor_ClassTemplate || CK == CXCursor_ClassTemplatePartialSpecialization;

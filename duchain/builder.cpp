@@ -273,12 +273,6 @@ struct Visitor
     }
 
 //BEGIN dispatch*
-    template<CXCursorKind CK, EnableIf<CursorKindTraits::isUse(CK)> = dummy>
-    CXChildVisitResult dispatchCursor(CXCursor cursor);
-
-    template<CXCursorKind CK, EnableIf<CK == CXCursor_CompoundStmt> = dummy>
-    CXChildVisitResult dispatchCursor(CXCursor cursor);
-
     template<CXCursorKind CK,
       Decision IsInClass = CursorKindTraits::isInClass(CK),
       EnableIf<IsInClass == Decision::Maybe> = dummy>
@@ -311,8 +305,11 @@ struct Visitor
     template<CXCursorKind CK, class DeclType, bool hasContext>
     CXChildVisitResult buildDeclaration(CXCursor cursor);
 
-    template<CXCursorKind CK>
     CXChildVisitResult buildUse(CXCursor cursor);
+    CXChildVisitResult buildMacroExpansion(CXCursor cursor);
+    CXChildVisitResult buildCompoundStatement(CXCursor cursor);
+    CXChildVisitResult buildCXXBaseSpecifier(CXCursor cursor);
+
 //END build*
 
 //BEGIN create*
@@ -724,26 +721,6 @@ void Visitor::setTypeModifiers(CXType type, AbstractType* kdevType) const
 
 //BEGIN dispatchCursor
 
-template<CXCursorKind CK, EnableIf<CursorKindTraits::isUse(CK)>>
-CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor)
-{
-    return buildUse<CK>(cursor);
-}
-
-template<CXCursorKind CK, EnableIf<CK == CXCursor_CompoundStmt>>
-CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor)
-{
-    if (m_parentContext->context->type() == DUContext::Function)
-    {
-        auto context = createContext<CK, DUContext::Other>(cursor);
-        CurrentContext newParent(context);
-        PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
-        clang_visitChildren(cursor, &visitCursor, this);
-        return CXChildVisit_Continue;
-    }
-    return CXChildVisit_Recurse;
-}
-
 template<CXCursorKind CK, Decision IsInClass,
          EnableIf<IsInClass == Decision::Maybe>>
 CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor, CXCursor parent)
@@ -798,30 +775,6 @@ CXChildVisitResult Visitor::dispatchCursor<CXCursor_ParmDecl>(CXCursor cursor, C
     return buildDeclaration<CXCursor_ParmDecl, typename DeclType<CXCursor_ParmDecl, false, false>::Type, false>(cursor);
 }
 
-template<>
-CXChildVisitResult Visitor::dispatchCursor<CXCursor_CXXBaseSpecifier>(CXCursor cursor)
-{
-    auto currentContext = m_parentContext->context;
-
-    bool virtualInherited = clang_isVirtualBase(cursor);
-    Declaration::AccessPolicy access = CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor));
-
-    auto classDeclCursor = clang_getCursorReferenced(cursor);
-    auto decl = findDeclaration(classDeclCursor);
-    if (!decl) {
-        // this happens for templates with template-dependent base classes e.g. - dunno whether we can/should do more here
-        clangDebug() << "failed to find declaration for base specifier:" << ClangString(clang_getCursorDisplayName(cursor));
-        return CXChildVisit_Recurse;
-    }
-
-    DUChainWriteLocker lock;
-    contextImportDecl(currentContext, decl);
-    auto classDecl = dynamic_cast<ClassDeclaration*>(currentContext->owner());
-    Q_ASSERT(classDecl);
-
-    classDecl->addBaseClass({decl->indexedType(), access, virtualInherited});
-    return CXChildVisit_Recurse;
-}
 //END dispatchCursor
 
 //BEGIN setDeclData
@@ -983,7 +936,7 @@ void Visitor::setDeclData(CXCursor cursor, NamespaceAliasDeclaration *decl) cons
 }
 //END setDeclData
 
-//BEGIN buildDeclaration
+//BEGIN build*
 template<CXCursorKind CK, class DeclType, bool hasContext>
 CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
 {
@@ -1018,22 +971,17 @@ CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
     createDeclaration<CK, DeclType>(cursor, id, nullptr);
     return CXChildVisit_Recurse;
 }
-//END buildDeclaration
 
-//BEGIN buildUse
-template<CXCursorKind CK>
 CXChildVisitResult Visitor::buildUse(CXCursor cursor)
 {
     m_uses[m_parentContext->context].push_back(cursor);
-    return CK == CXCursor_DeclRefExpr || CK == CXCursor_MemberRefExpr ?
+    return cursor.kind == CXCursor_DeclRefExpr || cursor.kind == CXCursor_MemberRefExpr ?
         CXChildVisit_Recurse : CXChildVisit_Continue;
 }
 
-template<>
-CXChildVisitResult Visitor::buildUse<CXCursor_MacroExpansion>(CXCursor cursor)
+CXChildVisitResult Visitor::buildMacroExpansion(CXCursor cursor)
 {
-    auto currentContext = m_parentContext->context;
-    m_uses[currentContext].push_back(cursor);
+    buildUse(cursor);
 
     // cache that we encountered a macro expansion at this location
     unsigned int offset;
@@ -1042,7 +990,44 @@ CXChildVisitResult Visitor::buildUse<CXCursor_MacroExpansion>(CXCursor cursor)
 
     return CXChildVisit_Recurse;
 }
-//END buildUse
+
+CXChildVisitResult Visitor::buildCompoundStatement(CXCursor cursor)
+{
+    if (m_parentContext->context->type() == DUContext::Function)
+    {
+        auto context = createContext<CXCursor_CompoundStmt, DUContext::Other>(cursor);
+        CurrentContext newParent(context);
+        PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
+        clang_visitChildren(cursor, &visitCursor, this);
+        return CXChildVisit_Continue;
+    }
+    return CXChildVisit_Recurse;
+}
+
+CXChildVisitResult Visitor::buildCXXBaseSpecifier(CXCursor cursor)
+{
+    auto currentContext = m_parentContext->context;
+
+    bool virtualInherited = clang_isVirtualBase(cursor);
+    Declaration::AccessPolicy access = CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor));
+
+    auto classDeclCursor = clang_getCursorReferenced(cursor);
+    auto decl = findDeclaration(classDeclCursor);
+    if (!decl) {
+        // this happens for templates with template-dependent base classes e.g. - dunno whether we can/should do more here
+        clangDebug() << "failed to find declaration for base specifier:" << ClangString(clang_getCursorDisplayName(cursor));
+        return CXChildVisit_Recurse;
+    }
+
+    DUChainWriteLocker lock;
+    contextImportDecl(currentContext, decl);
+    auto classDecl = dynamic_cast<ClassDeclaration*>(currentContext->owner());
+    Q_ASSERT(classDecl);
+
+    classDecl->addBaseClass({decl->indexedType(), access, virtualInherited});
+    return CXChildVisit_Recurse;
+}
+//END build*
 
 DeclarationPointer Visitor::findDeclaration(CXCursor cursor) const
 {
@@ -1264,19 +1249,23 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
     UseCursorKind(CXCursor_ObjCCategoryImplDecl, cursor, parent);
     UseCursorKind(CXCursor_MacroDefinition, cursor, parent);
     UseCursorKind(CXCursor_LabelStmt, cursor, parent);
-    UseCursorKind(CXCursor_MacroExpansion, cursor);
-    UseCursorKind(CXCursor_TypeRef, cursor);
-    UseCursorKind(CXCursor_CXXBaseSpecifier, cursor);
-    UseCursorKind(CXCursor_TemplateRef, cursor);
-    UseCursorKind(CXCursor_NamespaceRef, cursor);
-    UseCursorKind(CXCursor_MemberRef, cursor);
-    UseCursorKind(CXCursor_LabelRef, cursor);
-    UseCursorKind(CXCursor_OverloadedDeclRef, cursor);
-    UseCursorKind(CXCursor_VariableRef, cursor);
-    UseCursorKind(CXCursor_DeclRefExpr, cursor);
-    UseCursorKind(CXCursor_MemberRefExpr, cursor);
-    UseCursorKind(CXCursor_CompoundStmt, cursor);
-    UseCursorKind(CXCursor_ObjCClassRef, cursor);
+    case CXCursor_TypeRef:
+    case CXCursor_TemplateRef:
+    case CXCursor_NamespaceRef:
+    case CXCursor_MemberRef:
+    case CXCursor_LabelRef:
+    case CXCursor_OverloadedDeclRef:
+    case CXCursor_VariableRef:
+    case CXCursor_DeclRefExpr:
+    case CXCursor_MemberRefExpr:
+    case CXCursor_ObjCClassRef:
+        return visitor->buildUse(cursor);
+    case CXCursor_MacroExpansion:
+        return visitor->buildMacroExpansion(cursor);
+    case CXCursor_CompoundStmt:
+        return visitor->buildCompoundStatement(cursor);
+    case CXCursor_CXXBaseSpecifier:
+        return visitor->buildCXXBaseSpecifier(cursor);
     default:
         return CXChildVisit_Recurse;
     }
