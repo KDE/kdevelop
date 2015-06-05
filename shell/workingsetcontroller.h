@@ -101,6 +101,11 @@ private slots:
      */
     void viewAdded( Sublime::AreaIndex*, Sublime::View* );
 
+    /**
+     * Clears the files in the working set
+     */
+    void clearWorkingSet(Sublime::Area* area);
+
 private:
     void setupActions();
     const QString makeSetId(const QString& prefix) const;

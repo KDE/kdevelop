@@ -240,6 +240,12 @@ public:
     /** @returns the actions related to the area  */
     QList<QAction*> actions() const;
 
+    /**
+     * Closes all the views and requests the working set to be cleared.
+     * Works even though the area isn't opened yet
+     */
+    void clearDocuments();
+
 Q_SIGNALS:
     /**Emitted when a new view is added to the area.*/
     void viewAdded(Sublime::AreaIndex*, Sublime::View*);
@@ -259,6 +265,8 @@ Q_SIGNALS:
     void changingWorkingSet(Sublime::Area* area, QString from, QString to);
     /**Emitted after the working-set was changed.*/
     void changedWorkingSet(Sublime::Area* area, QString from, QString to);
+    /** notifies the working set that it should clear */
+    void clearWorkingSet(Sublime::Area* area);
 
 private Q_SLOTS:
     void positionChanged(Sublime::View*, int);

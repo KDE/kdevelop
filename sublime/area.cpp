@@ -465,8 +465,17 @@ bool Area::closeView(View* view, bool silent)
 
 void Area::clearViews(bool silent)
 {
-    foreach(Sublime::View* view, views())
+    foreach(Sublime::View* view, views()) {
         closeView(view, silent);
+    }
+}
+
+void Area::clearDocuments()
+{
+    if (views().isEmpty())
+        emit clearWorkingSet(this);
+    else
+        clearViews(true);
 }
 
 QList<QAction*> Area::actions() const

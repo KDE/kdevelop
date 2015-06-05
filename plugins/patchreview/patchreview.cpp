@@ -366,63 +366,39 @@ void PatchReviewPlugin::startReview( IPatchSource* patch, IPatchReview::ReviewMo
     QMetaObject::invokeMethod( this, "updateReview", Qt::QueuedConnection );
 }
 
-void PatchReviewPlugin::switchAreaAndMakeWorkingSetUique() {
-    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
-    if ( w->area()->objectName() != "review" )
+void PatchReviewPlugin::switchToEmptyReviewArea()
+{
+    foreach(Sublime::Area* area, ICore::self()->uiController()->allAreas()) {
+        if (area->objectName() == "review") {
+            emit area->clearDocuments();
+        }
+    }
+
+    if ( ICore::self()->uiController()->activeArea()->objectName() != "review" )
         ICore::self()->uiController()->switchToArea( "review", KDevelop::IUiController::ThisWindow );
-
-    setUniqueEmptyWorkingSet();
 }
 
-bool PatchReviewPlugin::isWorkingSetUnique() const {
-    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
-    foreach( Sublime::Area* area, w->areas() )
-        if( area != w->area() && area->workingSet() == w->area()->workingSet() )
-            return false;
-    return true;
+QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
+{
+    QUrl file = m_patch->baseDir();
+    file.setPath(file.toLocalFile() + '/' + model->destinationPath() + '/' + model->destinationFile());
+    return file;
 }
 
-bool PatchReviewPlugin::setUniqueEmptyWorkingSet() {
-    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
-
-    if( !ICore::self()->documentController()->saveAllDocumentsForWindow( ICore::self()->uiController()->activeMainWindow(), KDevelop::IDocument::Default, true ) )
-        return false;
-
-    if( !w->area()->workingSet().startsWith( "review" ) )
-        w->area()->setWorkingSet( "review" );
-
-    while( !isWorkingSetUnique() )
-        w->area()->setWorkingSet( QStringLiteral( "review_%1" ).arg( rand() % 10000 ) );
-
-    // We've asked the user, so just clear silently
-    w->area()->clearViews( true );
-
-    return true;
-}
-
-void PatchReviewPlugin::updateReview() {
+void PatchReviewPlugin::updateReview()
+{
     if( !m_patch )
         return;
 
     m_updateKompareTimer->stop();
     updateKompareModel();
 
-    switchAreaAndMakeWorkingSetUique();
+    switchToEmptyReviewArea();
 
     if( !m_modelList )
         return;
 
-    // list of opened documents to prevent flicker
-    QMap<QUrl, IDocument*> documents;
-    foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
-        documents[doc->url()] = doc;
-    }
-
-    IDocument* futureActiveDoc = documents.take( m_patch->file() );
-    //Open the diff itself
-    if ( !futureActiveDoc ) {
-        futureActiveDoc = ICore::self()->documentController()->openDocument( m_patch->file() );
-    }
+    IDocument* futureActiveDoc = ICore::self()->documentController()->openDocument( m_patch->file() );
 
     if ( !futureActiveDoc || !futureActiveDoc->textDocument() ) {
         // might happen if e.g. openDocument dialog was cancelled by user
@@ -442,26 +418,15 @@ void PatchReviewPlugin::updateReview() {
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
             QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
 
-            if( QFileInfo( absoluteUrl.path() ).exists() && absoluteUrl.path() != "/dev/null" )
+            if( QFileInfo( absoluteUrl.toLocalFile() ).exists() && absoluteUrl.path() != "/dev/null" )
             {
                 buddyDoc = ICore::self()->documentController()->openDocument( absoluteUrl, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate, "", buddyDoc );
-                documents.remove( absoluteUrl );
 
                 seekHunk( true, absoluteUrl ); //Jump to the first changed position
             }else{
                 // Maybe the file was deleted
                 qCDebug(PLUGIN_PATCHREVIEW) << "could not open" << absoluteUrl << "because it doesn't exist";
             }
-        }
-    }
-
-    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
-    // Close views for documents that were loaded from the working set, but are not in the patch
-    QList<IDocument*> documentsList = documents.values();
-    foreach( Sublime::View* view, w->area()->views() ) {
-        IDocument* doc = dynamic_cast<IDocument*>( view->document() );
-        if( doc && documentsList.contains( doc ) ) {
-            w->area()->closeView( view );
         }
     }
 

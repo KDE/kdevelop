@@ -124,7 +124,6 @@ const QString WorkingSetController::makeSetId(const QString& prefix) const
 
 WorkingSet* WorkingSetController::newWorkingSet(const QString& prefix)
 {
-
     return getWorkingSet(makeSetId(prefix));
 }
 
@@ -269,6 +268,8 @@ void WorkingSetController::areaCreated( Sublime::Area* area )
             this, &WorkingSetController::changedWorkingSet);
     connect(area, &Sublime::Area::viewAdded,
             this, &WorkingSetController::viewAdded);
+    connect(area, &Sublime::Area::clearWorkingSet,
+            this, &WorkingSetController::clearWorkingSet);
 }
 
 void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
@@ -321,4 +322,13 @@ void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
     }
 }
 
+void WorkingSetController::clearWorkingSet(Sublime::Area * area)
+{
+    WorkingSet* set = getWorkingSet( area->workingSet() );
+    set->deleteSet(true);
 
+    WorkingSet* newSet = getWorkingSet(area->workingSet());
+    newSet->connectArea(area);
+    newSet->loadToArea(area, area->rootIndex());
+    Q_ASSERT(newSet->fileList().isEmpty());
+}

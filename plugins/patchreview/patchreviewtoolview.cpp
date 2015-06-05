@@ -383,23 +383,22 @@ void PatchReviewToolView::fileItemChanged( QStandardItem* item )
     if (url.isEmpty())
         return;
 
+    KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
     if(m_fileModel->isCheckable() && item->checkState() != Qt::Checked)
     {
         // Eventually close the document
-        if(KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url)) {
-            if(doc->state() == IDocument::Clean)
+        if(doc && doc->state() == IDocument::Clean)
+        {
+            foreach(Sublime::View* view, ICore::self()->uiController()->activeArea()->views())
             {
-                foreach(Sublime::View* view, ICore::self()->uiController()->activeArea()->views())
+                if(view->document() == dynamic_cast<Sublime::Document*>(doc))
                 {
-                    if(view->document() == dynamic_cast<Sublime::Document*>(doc))
-                    {
-                        ICore::self()->uiController()->activeArea()->closeView(view);
-                        return;
-                    }
+                    ICore::self()->uiController()->activeArea()->closeView(view);
+                    return;
                 }
             }
         }
-    } else {
+    } else if (!doc) {
         ICore::self()->documentController()->openDocument(url, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate);
     }
 }
@@ -435,12 +434,6 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& idx ) {
     QUrl file = m_fileModel->statusInfo( i ).url();
 
     activate( file );
-}
-
-QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model ) {
-    QUrl file = m_patch->baseDir();
-    file.setPath(file.path() + '/' + model->destinationPath() + '/' + model->destinationFile());
-    return file;
 }
 
 void PatchReviewToolView::kompareModelChanged() {
