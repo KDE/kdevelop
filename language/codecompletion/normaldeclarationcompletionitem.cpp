@@ -179,6 +179,11 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           } else {
             return "<incomplete type>";
           }
+        } else if (index.column() == CodeCompletionModel::Arguments) {
+            if (m_declaration->isFunctionDeclaration()) {
+                auto function = declaration()->type<FunctionType>();
+                return function->partToString(FunctionType::SignatureArguments);
+            }
         }
       break;
     case CodeCompletionModel::BestMatchesCount:
