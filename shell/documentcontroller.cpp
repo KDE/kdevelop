@@ -64,7 +64,6 @@ Boston, MA 02110-1301, USA.
 #include "savedialog.h"
 #include "debug.h"
 
-#include "workingsetcontroller.h"
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>
 #include <vcs/vcsjob.h>
@@ -884,18 +883,19 @@ void DocumentController::reloadAllDocuments()
     }
 }
 
-void DocumentController::closeAllDocuments()
+bool DocumentController::closeAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
         QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
 
         if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
-            return;
+            return false;
 
         foreach (IDocument* doc, views)
             doc->close(IDocument::Discard);
     }
+    return true;
 }
 
 void DocumentController::closeAllOtherDocuments()

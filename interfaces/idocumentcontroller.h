@@ -158,7 +158,7 @@ public Q_SLOTS:
      */
     virtual KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefname ) = 0;
 
-    virtual void closeAllDocuments() = 0;
+    virtual bool closeAllDocuments() = 0;
 
 Q_SIGNALS:
     /// Emitted when the document has been activated.
