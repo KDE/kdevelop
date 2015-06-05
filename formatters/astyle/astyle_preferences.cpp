@@ -23,6 +23,8 @@ Boston, MA 02110-1301, USA.
 #include "astyle_formatter.h"
 #include "astyle_plugin.h"
 
+using namespace KDevelop;
+
 namespace {
 
 const int INDENT_BLOCK = 0;
@@ -59,7 +61,7 @@ const int POINTERALIGN_TYPE = 3;
 }
 
 AStylePreferences::AStylePreferences(Language lang, QWidget *parent)
-    : KDevelop::SettingsWidget(parent)
+    : SettingsWidget(parent)
     , m_formatter(new AStyleFormatter)
 {
     setupUi(this);
@@ -122,7 +124,7 @@ void AStylePreferences::init()
             this, &AStylePreferences::pointerAlignChanged);
 }
 
-void AStylePreferences::load(const KDevelop::SourceFormatterStyle &style)
+void AStylePreferences::load(const SourceFormatterStyle &style)
 {
     if(!style.content().isEmpty())
         m_formatter->loadStyle(style.content());

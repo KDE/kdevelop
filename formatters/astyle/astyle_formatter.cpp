@@ -27,8 +27,11 @@ Boston, MA 02110-1301, USA.
 
 #include <interfaces/isourceformatter.h>
 #include <util/formattinghelpers.h>
+
 #include "astyle_stringiterator.h"
 #include "debug.h"
+
+using namespace KDevelop;
 
 AStyleFormatter::AStyleFormatter()
 : ASFormatter()
@@ -50,7 +53,7 @@ QString AStyleFormatter::formatSource(const QString &text, const QString& leftCo
 
     init(0);
 
-    return KDevelop::extractFormattedTextFromContext(output, text, leftContext, rightContext, m_options["FillCount"].toInt());
+    return extractFormattedTextFromContext(output, text, leftContext, rightContext, m_options["FillCount"].toInt());
 }
 
 void AStyleFormatter::setOption(const QString &key, const QVariant &value)
@@ -60,7 +63,7 @@ void AStyleFormatter::setOption(const QString &key, const QVariant &value)
 
 void AStyleFormatter::updateFormatter()
 {
-    qCDebug(ASTYLE) << "Updating option with: " << KDevelop::ISourceFormatter::optionMapToString(m_options) << endl;
+    qCDebug(ASTYLE) << "Updating option with: " << ISourceFormatter::optionMapToString(m_options) << endl;
     // fill
     int wsCount = m_options["FillCount"].toInt();
     if(m_options["Fill"].toString() == "Tabs") {
@@ -320,13 +323,13 @@ QString AStyleFormatter::indentString()
 
 void AStyleFormatter::loadStyle(const QString &content)
 {
-    m_options = KDevelop::ISourceFormatter::stringToOptionMap(content);
+    m_options = ISourceFormatter::stringToOptionMap(content);
     updateFormatter();
 }
 
 QString AStyleFormatter::saveStyle()
 {
-    return KDevelop::ISourceFormatter::optionMapToString(m_options);
+    return ISourceFormatter::optionMapToString(m_options);
 }
 
 void AStyleFormatter::setTabIndentation(int length, bool forceTabs)

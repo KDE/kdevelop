@@ -54,12 +54,12 @@ AStylePlugin::~AStylePlugin()
 QString AStylePlugin::name()
 {
     // This needs to match the X-KDE-PluginInfo-Name entry from the .desktop file!
-    return "kdevastyle";
+    return QStringLiteral("kdevastyle");
 }
 
 QString AStylePlugin::caption()
 {
-    return "Artistic Style";
+    return QStringLiteral("Artistic Style");
 }
 
 QString AStylePlugin::description()
@@ -71,9 +71,9 @@ QString AStylePlugin::description()
 
 QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const QUrl& /*url*/, const QMimeType& mime, const QString& leftContext, const QString& rightContext )
 {
-    if(mime.inherits("text/x-java"))
+    if(mime.inherits(QStringLiteral("text/x-java")))
         m_formatter->setJavaStyle();
-    else if(mime.inherits("text/x-csharp"))
+    else if(mime.inherits(QStringLiteral("text/x-csharp")))
         m_formatter->setSharpStyle();
     else
         m_formatter->setCStyle();
@@ -91,20 +91,24 @@ QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QStri
 
 QString AStylePlugin::formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
 {
-    return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
+    return formatSourceWithStyle( ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
 
 static SourceFormatterStyle::MimeList supportedMimeTypes()
 {
-    using P = SourceFormatterStyle::MimeHighlightPair;
-    return SourceFormatterStyle::MimeList() << P{"text/x-c++src", "C++"} << P{"text/x-chdr", "C"}
-                                            << P{"text/x-c++hdr", "C++"} << P{"text/x-csrc", "C"}
-                                            << P{"text/x-java", "Java"} << P{"text/x-csharp", "C#"};
+    return {
+        {QStringLiteral("text/x-c++src"), QStringLiteral("C++")},
+        {QStringLiteral("text/x-chdr"), QStringLiteral("C")},
+        {QStringLiteral("text/x-c++hdr"), QStringLiteral("C++")},
+        {QStringLiteral("text/x-csrc"), QStringLiteral("C")},
+        {QStringLiteral("text/x-java"), QStringLiteral("Java")},
+        {QStringLiteral("text/x-csharp"), QStringLiteral("C#")},
+    };
 }
 
-KDevelop::SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption = QString())
+SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption = QString())
 {
-    KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( name );
+    SourceFormatterStyle st = SourceFormatterStyle( name );
     st.setCaption( caption.isEmpty() ? name : caption );
     AStyleFormatter fmt;
     fmt.predefinedStyle( name );
@@ -113,27 +117,25 @@ KDevelop::SourceFormatterStyle predefinedStyle(const QString& name, const QStrin
     return st;
 }
 
-QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
+QList<SourceFormatterStyle> AStylePlugin::predefinedStyles()
 {
-    QList<KDevelop::SourceFormatterStyle> styles;
-
-    styles << predefinedStyle("ANSI");
-    styles << predefinedStyle("GNU");
-    styles << predefinedStyle("Java");
-    styles << predefinedStyle("K&R", "Kernighan & Ritchie");
-    styles << predefinedStyle("Linux");
-    styles << predefinedStyle("Stroustrup");
-    styles << predefinedStyle("Horstmann");
-    styles << predefinedStyle("Whitesmith");
-    styles << predefinedStyle("Banner");
-    styles << predefinedStyle("1TBS");
-    styles << predefinedStyle("KDELibs");
-    styles << predefinedStyle("Qt");
-
-    return styles;
+    return {
+        predefinedStyle(QStringLiteral("ANSI")),
+        predefinedStyle(QStringLiteral("GNU")),
+        predefinedStyle(QStringLiteral("Java")),
+        predefinedStyle(QStringLiteral("K&R"), QStringLiteral("Kernighan & Ritchie")),
+        predefinedStyle(QStringLiteral("Linux")),
+        predefinedStyle(QStringLiteral("Stroustrup")),
+        predefinedStyle(QStringLiteral("Horstmann")),
+        predefinedStyle(QStringLiteral("Whitesmith")),
+        predefinedStyle(QStringLiteral("Banner")),
+        predefinedStyle(QStringLiteral("1TBS")),
+        predefinedStyle(QStringLiteral("KDELibs")),
+        predefinedStyle(QStringLiteral("Qt")),
+    };
 }
 
-KDevelop::SettingsWidget* AStylePlugin::editStyleWidget(const QMimeType& mime)
+SettingsWidget* AStylePlugin::editStyleWidget(const QMimeType& mime)
 {
     AStylePreferences::Language lang = AStylePreferences::CPP;
     if(mime.inherits("text/x-java"))
