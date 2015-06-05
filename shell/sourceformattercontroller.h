@@ -124,7 +124,8 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 
 		KDevelop::SourceFormatterStyle styleForMimeType(const QMimeType& mime) override;
 		
-		KConfigGroup configuration() const;
+		KConfigGroup sessionConfig() const;
+		KConfigGroup globalConfig() const;
 
 		void settingsChanged();
 		

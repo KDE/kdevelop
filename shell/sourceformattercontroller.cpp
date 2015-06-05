@@ -53,6 +53,14 @@ Boston, MA 02110-1301, USA.
 #include "debug.h"
 #include "plugincontroller.h"
 
+namespace {
+
+namespace Strings {
+	QString SourceFormatter() { return QStringLiteral("SourceFormatter"); }
+}
+
+}
+
 namespace KDevelop
 {
 
@@ -128,9 +136,15 @@ ISourceFormatter* SourceFormatterController::formatterForUrl(const QUrl &url)
 	QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
 	return formatterForMimeType(mime);
 }
-KConfigGroup SourceFormatterController::configuration() const
+
+KConfigGroup SourceFormatterController::sessionConfig() const
 {
-	return Core::self()->activeSession()->config()->group( "SourceFormatter" );
+	return KDevelop::Core::self()->activeSession()->config()->group( Strings::SourceFormatter() );
+}
+
+KConfigGroup SourceFormatterController::globalConfig() const
+{
+	return KSharedConfig::openConfig()->group( Strings::SourceFormatter() );
 }
 
 ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const QMimeType& mime ) const
@@ -168,7 +182,7 @@ SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceForm
 	foreach( const KDevelop::SourceFormatterStyle& style, ifmt->predefinedStyles() ) {
 		formatter->styles[ style.name() ] = new SourceFormatterStyle(style);
 	}
-	KConfigGroup grp = configuration();
+	KConfigGroup grp = globalConfig();
 	if( grp.hasGroup( ifmt->name() ) ) {
 		KConfigGroup fmtgrp = grp.group( ifmt->name() );
 		foreach( const QString& subgroup, fmtgrp.groupList() ) {
@@ -186,7 +200,7 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const QMimeTyp
 	if( !m_enabled || !isMimeTypeSupported( mime ) ) {
 		return 0;
 	}
-	QString formatter = configuration().readEntry( mime.name(), "" );
+	QString formatter = sessionConfig().readEntry( mime.name(), "" );
 
 	if( formatter.isEmpty() )
 	{
@@ -230,7 +244,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 
 	// If there already is a modeline in the document, adapt it while formatting, even
 	// if "add modeline" is disabled.
-	if( !configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) &&
+	if( !sessionConfig().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) &&
 		      kateModelineWithNewline.indexIn( input ) == -1 )
 		return input;
 
@@ -408,7 +422,7 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument* doc, ISource
 
 void SourceFormatterController::settingsChanged()
 {
-	if( configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) )
+	if( sessionConfig().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) )
 		foreach( KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments() )
 			adaptEditorIndentationMode( doc->textDocument(), formatterForUrl(doc->url()) );
 }
@@ -427,7 +441,7 @@ void SourceFormatterController::settingsChanged()
 
 void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document *doc, ISourceFormatter *formatter, bool ignoreModeline )
 {
-	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) || !doc )
+	if( !formatter  || !sessionConfig().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) || !doc )
 		return;
 
 	qCDebug(SHELL) << "adapting mode for" << doc->url();
@@ -572,11 +586,11 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
 
 SourceFormatterStyle SourceFormatterController::styleForMimeType(const QMimeType& mime)
 {
-	QStringList formatter = configuration().readEntry( mime.name(), "" ).split( "||", QString::SkipEmptyParts );
+	QStringList formatter = sessionConfig().readEntry( mime.name(), "" ).split( "||", QString::SkipEmptyParts );
 	if( formatter.count() == 2 )
 	{
 		SourceFormatterStyle s( formatter.at( 1 ) );
-		KConfigGroup fmtgrp = configuration().group( formatter.at(0) );
+		KConfigGroup fmtgrp = globalConfig().group( formatter.at(0) );
 		if( fmtgrp.hasGroup( formatter.at(1) ) ) {
 			KConfigGroup stylegrp = fmtgrp.group( formatter.at(1) );
 			populateStyleFromConfigGroup(&s, stylegrp);

@@ -150,7 +150,7 @@ void SourceFormatterSettings::reset()
     foreach( const QString& name, sortedLanguages )
     {
         // Pick the first appropriate mimetype for this language
-        KConfigGroup grp = fmtctrl->configuration();
+        KConfigGroup grp = fmtctrl->sessionConfig();
         LanguageSettings& l = languages[name];
         foreach (const QMimeType& mimetype, l.mimetypes) {
             QStringList formatterAndStyleName = grp.readEntry(mimetype.name(), "").split("||", QString::KeepEmptyParts);
@@ -189,8 +189,8 @@ void SourceFormatterSettings::reset()
     cbLanguages->clear();
     cbFormatters->clear();
     styleList->clear();
-    chkKateModelines->setChecked( fmtctrl->configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) );
-    chkKateOverrideIndentation->setChecked( fmtctrl->configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) );
+    chkKateModelines->setChecked( fmtctrl->sessionConfig().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) );
+    chkKateOverrideIndentation->setChecked( fmtctrl->sessionConfig().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) );
     foreach( const QString& name, sortedLanguages )
     {
         cbLanguages->addItem( name );
@@ -215,16 +215,11 @@ void SourceFormatterSettings::reset()
 
 void SourceFormatterSettings::apply()
 {
-    KConfigGroup grp = Core::self()->sourceFormatterControllerInternal()->configuration();
+    KConfigGroup globalConfig = Core::self()->sourceFormatterControllerInternal()->globalConfig();
 
-    for ( LanguageMap::const_iterator iter = languages.constBegin(); iter != languages.constEnd(); ++iter ) {
-        foreach(const QMimeType& mime, iter.value().mimetypes) {
-            grp.writeEntry(mime.name(), QStringLiteral("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg(iter.value().selectedStyle->name()));
-        }
-    }
     foreach( SourceFormatter* fmt, formatters )
     {
-        KConfigGroup fmtgrp = grp.group( fmt->formatter->name() );
+        KConfigGroup fmtgrp = globalConfig.group( fmt->formatter->name() );
 
         // delete all styles so we don't leave any behind when all user styles are deleted
         foreach( const QString& subgrp, fmtgrp.groupList() )
@@ -245,10 +240,18 @@ void SourceFormatterSettings::apply()
             }
         }
     }
-    grp.writeEntry( SourceFormatterController::kateModeLineConfigKey, chkKateModelines->isChecked() );
-    grp.writeEntry( SourceFormatterController::kateOverrideIndentationConfigKey, chkKateOverrideIndentation->isChecked() );
 
-    grp.sync();
+    KConfigGroup sessionConfig = Core::self()->sourceFormatterControllerInternal()->sessionConfig();
+    for ( LanguageMap::const_iterator iter = languages.constBegin(); iter != languages.constEnd(); ++iter ) {
+        foreach(const QMimeType& mime, iter.value().mimetypes) {
+            sessionConfig.writeEntry(mime.name(), QStringLiteral("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg(iter.value().selectedStyle->name()));
+        }
+    }
+    sessionConfig.writeEntry( SourceFormatterController::kateModeLineConfigKey, chkKateModelines->isChecked() );
+    sessionConfig.writeEntry( SourceFormatterController::kateOverrideIndentationConfigKey, chkKateOverrideIndentation->isChecked() );
+
+    sessionConfig.sync();
+    globalConfig.sync();
 
     Core::self()->sourceFormatterControllerInternal()->settingsChanged();
 }
