@@ -36,28 +36,28 @@ namespace Sublime {
 
 struct AreaPrivate {
     AreaPrivate()
+        : rootIndex(new RootAreaIndex)
+        , currentIndex(rootIndex.data())
+        , controller(nullptr)
     {
-        rootIndex = new RootAreaIndex();
-        currentIndex = rootIndex;
-        controller = 0;
     }
-    AreaPrivate(const AreaPrivate &p)
-    {
-        rootIndex = new RootAreaIndex(*(p.rootIndex));
-        currentIndex = rootIndex;
-        controller = p.controller;
-        toolViewPositions.clear();
-        desiredToolViews = p.desiredToolViews;
-        shownToolViews = p.shownToolViews;
-        workingSet = p.workingSet;
-        m_actions = p.m_actions;
 
-        title = p.title;
-        iconName = p.iconName;
+    AreaPrivate(const AreaPrivate &p)
+     : title(p.title)
+     , rootIndex(new RootAreaIndex(*(p.rootIndex)))
+     , currentIndex(rootIndex.data())
+     , controller(p.controller)
+     , toolViewPositions()
+     , desiredToolViews(p.desiredToolViews)
+     , shownToolViews(p.shownToolViews)
+     , iconName(p.iconName)
+     , workingSet(p.workingSet)
+     , m_actions(p.m_actions)
+    {
     }
+
     ~AreaPrivate()
     {
-        delete rootIndex;
     }
 
     struct ViewFinder {
@@ -84,7 +84,7 @@ struct AreaPrivate {
 
     QString title;
 
-    RootAreaIndex *rootIndex;
+    QScopedPointer<RootAreaIndex> rootIndex;
     AreaIndex *currentIndex;
     Controller *controller;
 
@@ -217,13 +217,13 @@ View* Area::removeView(View *view)
 AreaIndex *Area::indexOf(View *view)
 {
     AreaPrivate::ViewFinder f(view);
-    walkViews(f, d->rootIndex);
+    walkViews(f, d->rootIndex.data());
     return f.index;
 }
 
 RootAreaIndex *Area::rootIndex() const
 {
-    return d->rootIndex;
+    return d->rootIndex.data();
 }
 
 void Area::addToolView(View *view, Position defaultPosition)
@@ -286,7 +286,7 @@ Controller *Area::controller() const
 QList<View*> Sublime::Area::views()
 {
     AreaPrivate::ViewLister lister;
-    walkViews(lister, d->rootIndex);
+    walkViews(lister, d->rootIndex.data());
     return lister.views;
 }
 
