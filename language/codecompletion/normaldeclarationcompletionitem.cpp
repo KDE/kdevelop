@@ -27,6 +27,7 @@
 #include "../duchain/types/functiontype.h"
 #include "../duchain/types/enumeratortype.h"
 #include "../duchain/duchainutils.h"
+#include "../duchain/navigation/abstractdeclarationnavigationcontext.h"
 #include "util/debug.h"
 
 #include <KTextEditor/Document>
@@ -205,6 +206,10 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
     case CodeCompletionModel::CompletionRole:
       return (int)completionProperties();
+    case CodeCompletionModel::ItemSelected: {
+        NavigationContextPointer ctx(new AbstractDeclarationNavigationContext(DeclarationPointer(m_declaration), TopDUContextPointer()));
+        return ctx->html(true);
+    }
     case Qt::DecorationRole:
      {
       if( index.column() == CodeCompletionModel::Icon ) {
