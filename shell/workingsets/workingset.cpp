@@ -146,7 +146,6 @@ void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KCon
             }
 
             setGroup.writeEntry(QStringLiteral("View %1").arg(index), docSpec);
-            setGroup.writeEntry(QStringLiteral("View %1 Type").arg(index), view->document()->documentType());
             //The area specific config stores the working set documents in order along with their state
             areaGroup.writeEntry(QStringLiteral("View %1").arg(index), docSpec);
             areaGroup.writeEntry(QStringLiteral("View %1 State").arg(index), view->viewState());
@@ -208,11 +207,9 @@ void loadFileList(QStringList& ret, KConfigGroup group)
         }
 
     } else {
-
         int viewCount = group.readEntry("View Count", 0);
         for (int i = 0; i < viewCount; ++i) {
-            QString type = group.readEntry(QStringLiteral("View %1 Type").arg(i), "");
-            QString specifier = group.readEntry(QStringLiteral("View %1").arg(i), "");
+            QString specifier = group.readEntry(QStringLiteral("View %1").arg(i), QString());
 
             ret << specifier;
         }
@@ -315,9 +312,8 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         int viewCount = setGroup.readEntry("View Count", 0);
         QMap<int, Sublime::View*> createdViews;
         for (int i = 0; i < viewCount; ++i) {
-            QString type = setGroup.readEntry(QStringLiteral("View %1 Type").arg(i), QString());
             QString specifier = setGroup.readEntry(QStringLiteral("View %1").arg(i), QString());
-            if (type.isEmpty() || specifier.isEmpty()) {
+            if (specifier.isEmpty()) {
                 continue;
             }
             Sublime::View* previousView = area->views().empty() ? 0 : area->views().back();
@@ -337,7 +333,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 area->addView(view, areaIndex, previousView);
                 createdViews[i] = view;
             } else {
-                qWarning() << "Unable to create view of type " << type;
+                qWarning() << "Unable to create view" << specifier;
             }
         }
 
