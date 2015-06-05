@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="text/x-kdevelop">
-    <comment>KDevelop 4 Project File</comment>
+    <comment>KDevelop Project File</comment>
     <comment xml:lang="ca">Fitxer de projecte de KDevelop 4</comment>
     <comment xml:lang="ca@valencia">Fitxer de projecte de KDevelop 4</comment>
     <comment xml:lang="cs">Soubor projektu Kdevelop 4</comment>
