@@ -27,7 +27,6 @@
 #include "debuggerplugin.h"
 
 #include <ktextedit.h>
-#include <kglobalsettings.h>
 
 #include <QShowEvent>
 #include <QHideEvent>
@@ -38,6 +37,7 @@
 #include <QPushButton>
 #include <QSplitter>
 #include <QHeaderView>
+#include <QFontDatabase>
 
 #include <KLocalizedString>
 
@@ -161,7 +161,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
                         "buttons of \"step over\" instruction and "
                         "\"step into\" instruction."));
 
-        m_disassembleWindow->setFont(KGlobalSettings::fixedFont());
+        m_disassembleWindow->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
         m_disassembleWindow->setSelectionMode(QTreeWidget::SingleSelection);
         m_disassembleWindow->setColumnCount(ColumnCount);
         m_disassembleWindow->setUniformRowHeights(true);

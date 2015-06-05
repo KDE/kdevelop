@@ -20,19 +20,21 @@
 
 #include "cmakedocumentation.h"
 #include "cmakeutils.h"
+
 #include <QString>
 #include <QTextDocument>
 #include <QStringListModel>
 #include <QMimeDatabase>
+#include <QFontDatabase>
+#include <QStandardPaths>
+
 #include <interfaces/iproject.h>
-#include <KGlobalSettings>
 #include <KPluginFactory>
 #include <documentation/standarddocumentationview.h>
 #include <language/duchain/declaration.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
-#include <QStandardPaths>
 #include "cmakemanager.h"
 #include "cmakeparserutils.h"
 #include "cmakehelpdocumentation.h"
@@ -197,7 +199,7 @@ void CMakeDocumentation::initializeModel() const
 QWidget* CMakeDoc::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
 {
     KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
-    view->setFont(KGlobalSettings::fixedFont());
+    view->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     view->setHtml("<html><body style='background:#fff'><code>"+description()+"</code></body></html>");
     return view;
 }
