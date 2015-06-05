@@ -117,7 +117,7 @@ void VariableWidget::slotAddWatch(const QString &expression)
     if (!expression.isEmpty())
     {
         watchVarEditor_->addToHistory(expression);
-        qCDebug(DEBUGGER) << "Trying to add watch\n";
+        qCDebug(DEBUGGER) << "Trying to add watch";
         Variable* v = variablesRoot_->watches()->add(expression);
         if (v) {
             /* For watches on structures, we really do want them to be shown

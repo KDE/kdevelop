@@ -366,7 +366,7 @@ void MainWindowPrivate::reconstruct()
 
     m_mainWindow->blockSignals(true);
 
-    qCDebug(SUBLIME) << "RECONSTRUCT" << area << "  " << area->shownToolViews(Sublime::Left) << "\n";
+    qCDebug(SUBLIME) << "RECONSTRUCT" << area << area->shownToolViews(Sublime::Left);
     foreach (View *view, area->toolViews())
     {
         QString id = view->document()->documentSpecifier();
