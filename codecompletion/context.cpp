@@ -35,9 +35,7 @@
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
 #include "../duchain/parsesession.h"
-#include "../duchain/cursorkindtraits.h"
 #include "../duchain/navigationwidget.h"
-
 
 #include <memory>
 
