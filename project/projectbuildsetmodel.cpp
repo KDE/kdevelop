@@ -193,12 +193,11 @@ void ProjectBuildSetModel::removeItemsWithCache( const QList<int>& itemIndices )
         int index = itemIndicesCopy.back();
         Q_ASSERT( index >= 0 && index < m_items.size() );
         if( *cacheIterator == m_items.at( index ).itemPath() ) {
-            m_orderingCache.erase( cacheIterator-- );
+            cacheIterator = m_orderingCache.erase( cacheIterator );
             m_items.removeAt( index );
             itemIndicesCopy.removeLast();
-        } else {
-            --cacheIterator;
         }
+        --cacheIterator;
 
     } // for
     endRemoveRows();
