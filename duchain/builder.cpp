@@ -309,6 +309,7 @@ struct Visitor
     CXChildVisitResult buildMacroExpansion(CXCursor cursor);
     CXChildVisitResult buildCompoundStatement(CXCursor cursor);
     CXChildVisitResult buildCXXBaseSpecifier(CXCursor cursor);
+    CXChildVisitResult buildParmDecl(CXCursor cursor);
 
 //END build*
 
@@ -763,18 +764,6 @@ CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor, CXCursor parent)
     return buildDeclaration<CK, typename DeclType<CK, isDefinition, isClassMember>::Type, hasContext>(cursor);
 }
 
-template<>
-CXChildVisitResult Visitor::dispatchCursor<CXCursor_ParmDecl>(CXCursor cursor, CXCursor)
-{
-    // There is no need to create declarations for anonymous function parameters e.g.: void f(int);
-    // Currently clang_Cursor_getSpellingNameRange returns not empty ranges for anonymous parameters. So we use clang_getCursorSpelling here.
-    if (ClangString(clang_getCursorSpelling(cursor)).isEmpty()) {
-        return CXChildVisit_Recurse;
-    }
-
-    return buildDeclaration<CXCursor_ParmDecl, typename DeclType<CXCursor_ParmDecl, false, false>::Type, false>(cursor);
-}
-
 //END dispatchCursor
 
 //BEGIN setDeclData
@@ -970,6 +959,17 @@ CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
     }
     createDeclaration<CK, DeclType>(cursor, id, nullptr);
     return CXChildVisit_Recurse;
+}
+
+CXChildVisitResult Visitor::buildParmDecl(CXCursor cursor)
+{
+    // There is no need to create declarations for anonymous function parameters e.g.: void f(int);
+    // Currently clang_Cursor_getSpellingNameRange returns not empty ranges for anonymous parameters. So we use clang_getCursorSpelling here.
+    if (ClangString(clang_getCursorSpelling(cursor)).isEmpty()) {
+        return CXChildVisit_Recurse;
+    }
+
+    return buildDeclaration<CXCursor_ParmDecl, typename DeclType<CXCursor_ParmDecl, false, false>::Type, false>(cursor);
 }
 
 CXChildVisitResult Visitor::buildUse(CXCursor cursor)
@@ -1223,7 +1223,6 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
     UseCursorKind(CXCursor_EnumConstantDecl, cursor, parent);
     UseCursorKind(CXCursor_FunctionDecl, cursor, parent);
     UseCursorKind(CXCursor_VarDecl, cursor, parent);
-    UseCursorKind(CXCursor_ParmDecl, cursor, parent);
     UseCursorKind(CXCursor_TypeAliasDecl, cursor, parent);
     UseCursorKind(CXCursor_TypedefDecl, cursor, parent);
     UseCursorKind(CXCursor_CXXMethod, cursor, parent);
@@ -1266,6 +1265,8 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
         return visitor->buildCompoundStatement(cursor);
     case CXCursor_CXXBaseSpecifier:
         return visitor->buildCXXBaseSpecifier(cursor);
+    case CXCursor_ParmDecl:
+        return visitor->buildParmDecl(cursor);
     default:
         return CXChildVisit_Recurse;
     }
