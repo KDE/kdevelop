@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile name="kdeveloprc"/>
+  <group name="Clang Settings">
+    <entry name="enableCodeCompletion" key="enableCodeCompletion" type="Bool">
+        <default>true</default>
+    </entry>
+    <entry name="macros" key="macros" type="Bool">
+        <default>true</default>
+    </entry>
+    <entry name="overrideHelper" key="overrideHelper" type="Bool">
+        <default>true</default>
+    </entry>
+    <entry name="implementHelper" key="implementHelper" type="Bool">
+        <default>true</default>
+    </entry>
+
+    <entry name="enableAssistants" key="enableAssistants" type="Bool">
+        <default>true</default>
+    </entry>
+    <entry name="forwardDeclareHelper" key="forwardDeclare" type="Bool">
+        <default>true</default>
+    </entry>
+    <entry name="includePathAssistant" key="includePath" type="Bool">
+        <default>true</default>
+    </entry>
+    <entry name="adaptSignature" key="adaptSignature" type="Bool">
+        <default>true</default>
+    </entry>
+  </group>
+</kcfg>

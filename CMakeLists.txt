@@ -61,6 +61,7 @@ add_definitions(
     -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII -DQT_NO_CAST_FROM_BYTEARRAY
 )
 
+add_subdirectory(clangsettings)
 add_subdirectory(duchain)
 add_subdirectory(codecompletion)
 add_subdirectory(codegen)

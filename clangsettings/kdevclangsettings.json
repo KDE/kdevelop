@@ -1,0 +1,15 @@
+{
+    "KPlugin": {
+        "Category": "Project Management",
+        "Description": "Clang settings",
+        "Icon": "kdevelop",
+        "Id": "KDevClangSettings",
+        "Name": "Clang settings",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-Category": "Global",
+    "X-KDevelop-LoadMode": "AlwaysOn",
+    "X-KDevelop-Mode": "NoGUI"
+}
