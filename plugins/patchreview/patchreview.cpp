@@ -391,16 +391,13 @@ void PatchReviewPlugin::updateReview()
         return;
 
     m_updateKompareTimer->stop();
-    updateKompareModel();
 
     switchToEmptyReviewArea();
 
-    if( !m_modelList )
-        return;
-
     IDocument* futureActiveDoc = ICore::self()->documentController()->openDocument( m_patch->file() );
 
-    if ( !futureActiveDoc || !futureActiveDoc->textDocument() ) {
+    updateKompareModel();
+    if ( !m_modelList || !futureActiveDoc || !futureActiveDoc->textDocument() ) {
         // might happen if e.g. openDocument dialog was cancelled by user
         // or under the theoretic possibility of a non-text document getting opened
         return;
@@ -418,7 +415,7 @@ void PatchReviewPlugin::updateReview()
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
             QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
 
-            if( QFileInfo( absoluteUrl.toLocalFile() ).exists() && absoluteUrl.path() != "/dev/null" )
+            if( QFileInfo( absoluteUrl.toLocalFile() ).exists() && absoluteUrl.toLocalFile() != "/dev/null" )
             {
                 buddyDoc = ICore::self()->documentController()->openDocument( absoluteUrl, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate, "", buddyDoc );
 
