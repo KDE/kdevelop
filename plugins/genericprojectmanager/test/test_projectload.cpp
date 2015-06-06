@@ -41,7 +41,7 @@
 
 QTEST_MAIN(TestProjectLoad)
 
-Q_DECLARE_METATYPE(KDevelop::IProject*);
+Q_DECLARE_METATYPE(KDevelop::IProject*)
 
 using namespace KDevelop;
 

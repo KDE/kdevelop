@@ -51,7 +51,7 @@ private:
     KDevelop::DocumentChangePointer m_change;
 };
 
-Q_DECLARE_METATYPE(GrepOutputItem::List);
+Q_DECLARE_METATYPE(GrepOutputItem::List)
 
 class GrepOutputModel : public QStandardItemModel
 {

@@ -29,7 +29,7 @@ QTEST_MAIN(TestStringHandler);
 
 using namespace KDevelop;
 
-Q_DECLARE_METATYPE(HtmlToPlainTextMode);
+Q_DECLARE_METATYPE(HtmlToPlainTextMode)
 
 void TestStringHandler::testHtmlToPlainText()
 {

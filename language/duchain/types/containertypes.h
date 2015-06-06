@@ -100,7 +100,7 @@ public:
         auto newContentType = TypeUtils::mergeTypes<LanguageUnsureType>(contentType().abstractType(), typeToAdd);
         DUChainWriteLocker lock;
         d_func_dynamic()->m_contentType = newContentType->indexed();
-    };
+    }
 
     /**
      * @brief Replaces this list's content type by @p newType.

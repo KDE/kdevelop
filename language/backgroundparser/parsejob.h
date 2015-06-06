@@ -237,7 +237,7 @@ private:
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ParseJob::SequentialProcessingFlags);
-Q_DECLARE_METATYPE(KDevelop::ParseJob*);
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ParseJob::SequentialProcessingFlags)
+Q_DECLARE_METATYPE(KDevelop::ParseJob*)
 
 #endif

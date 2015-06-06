@@ -39,7 +39,7 @@
 
 using namespace KDevelop;
 
-WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & projects, QWidget* parent)
+WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWidget* parent)
     : QQuickWidget(parent)
 {
     qRegisterMetaType<QObject*>("KDevelop::IProjectController*");

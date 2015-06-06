@@ -56,6 +56,6 @@ private slots:
 };
 
 Q_DECLARE_METATYPE(FindReplaceTest::MatchList)
-Q_DECLARE_METATYPE(FindReplaceTest::FileList);
+Q_DECLARE_METATYPE(FindReplaceTest::FileList)
 
 #endif // KDEVPLATFORM_PLUGIN_REPLACETEST_H

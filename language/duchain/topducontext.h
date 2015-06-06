@@ -371,6 +371,6 @@ inline uint qHash(const ReferencedTopDUContext& ctx) {
 }
 
 }
-Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext);
+Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext)
 
 #endif // KDEVPLATFORM_TOPDUCONTEXT_H

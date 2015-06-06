@@ -243,7 +243,7 @@ inline uint qHash( const KDevelop::IndexedString& str ) {
  */
 KDEVPLATFORMSERIALIZATION_EXPORT QDebug operator<<(QDebug s, const KDevelop::IndexedString& string);
 
-Q_DECLARE_METATYPE(KDevelop::IndexedString);
+Q_DECLARE_METATYPE(KDevelop::IndexedString)
 Q_DECLARE_TYPEINFO(KDevelop::IndexedString, Q_MOVABLE_TYPE);
 
 #endif

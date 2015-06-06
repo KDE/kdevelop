@@ -449,8 +449,8 @@ inline uint qHash(const IndexedQualifiedIdentifier& id)
 
 Q_DECLARE_TYPEINFO(KDevelop::IndexedQualifiedIdentifier, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::IndexedIdentifier, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(KDevelop::IndexedQualifiedIdentifier);
-Q_DECLARE_METATYPE(KDevelop::IndexedIdentifier);
+Q_DECLARE_METATYPE(KDevelop::IndexedQualifiedIdentifier)
+Q_DECLARE_METATYPE(KDevelop::IndexedIdentifier)
 
 Q_DECLARE_TYPEINFO(KDevelop::QualifiedIdentifier, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::Identifier, Q_MOVABLE_TYPE);

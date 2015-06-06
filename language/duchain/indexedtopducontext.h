@@ -141,6 +141,6 @@ inline uint qHash(const IndexedTopDUContext& ctx)
 
 }
 
-Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext);
+Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
 
 #endif // KDEVPLATFORM_INDEXEDTOPDUCONTEXT_H

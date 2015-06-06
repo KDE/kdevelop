@@ -89,7 +89,7 @@ struct BenchData
 
 }
 
-Q_DECLARE_METATYPE(QVector<BenchData>);
+Q_DECLARE_METATYPE(QVector<BenchData>)
 
 void TestProjectFilter::initTestCase()
 {
