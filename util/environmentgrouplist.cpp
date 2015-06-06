@@ -49,7 +49,7 @@ void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
         QMap<QString,QString> variables;
         foreach( const QString &varname, envgrp.keyList() )
         {
-            variables[varname] = envgrp.readEntry( varname, QStringLiteral("") );
+            variables[varname] = envgrp.readEntry( varname, QString() );
         }
         d->m_groups.insert( envgrpname, variables );
     }

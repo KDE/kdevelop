@@ -52,7 +52,7 @@ public:
 
     virtual QUrl source() const override;
     virtual KDevelop::VcsLocation destination() const override;
-    virtual QString message() const override; //Is not used, it returns QStringLiteral("")
+    virtual QString message() const override; //Is not used, it returns an empty string
     virtual void setSourceLocation( const KDevelop::VcsLocation& ) override;
     virtual void setSourceLocationEditable( bool ) override;
     virtual bool hasValidData() const override;

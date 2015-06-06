@@ -199,7 +199,7 @@ struct DocumentControllerPrivate {
     };
 
     IDocument* openDocumentInternal( const QUrl & inputUrl, const QString& prefName = QString(),
-        const KTextEditor::Range& range = KTextEditor::Range::invalid(), const QString& encoding = QStringLiteral(""),
+        const KTextEditor::Range& range = KTextEditor::Range::invalid(), const QString& encoding = QString(),
         DocumentController::DocumentActivationParams activationParams = 0,
         IDocument* buddy = 0)
     {

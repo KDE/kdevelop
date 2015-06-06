@@ -258,7 +258,7 @@ void GitInitTest::testBranch(const QString& newBranch)
     // get into detached head state
     j = m_plugin->switchBranch(baseUrl, "HEAD~1");
     VERIFYJOB(j);
-    QCOMPARE(runSynchronously(m_plugin->currentBranch(baseUrl)).toString(), QStringLiteral(""));
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(baseUrl)).toString(), QString());
 
     // switch back
     j = m_plugin->switchBranch(baseUrl, newBranch);
