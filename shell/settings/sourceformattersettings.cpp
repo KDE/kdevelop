@@ -52,7 +52,11 @@ using KDevelop::SourceFormatterStyle;
 using KDevelop::SourceFormatterController;
 using KDevelop::SourceFormatter;
 
-const QString SourceFormatterSettings::userStylePrefix( "User" );
+namespace {
+namespace Strings {
+QString userStylePrefix() { return QStringLiteral("User"); }
+}
+}
 
 LanguageSettings::LanguageSettings()
     : selectedFormatter(0), selectedStyle(0) {
@@ -153,7 +157,7 @@ void SourceFormatterSettings::reset()
         KConfigGroup grp = fmtctrl->sessionConfig();
         LanguageSettings& l = languages[name];
         foreach (const QMimeType& mimetype, l.mimetypes) {
-            QStringList formatterAndStyleName = grp.readEntry(mimetype.name(), "").split("||", QString::KeepEmptyParts);
+            QStringList formatterAndStyleName = grp.readEntry(mimetype.name(), QString()).split("||", QString::KeepEmptyParts);
             FormatterMap::const_iterator formatterIter = formatters.constFind(formatterAndStyleName.first());
             if (formatterIter == formatters.constEnd()) {
                 qCDebug(SHELL) << "Reference to unknown formatter" << formatterAndStyleName.first();
@@ -189,8 +193,8 @@ void SourceFormatterSettings::reset()
     cbLanguages->clear();
     cbFormatters->clear();
     styleList->clear();
-    chkKateModelines->setChecked( fmtctrl->sessionConfig().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) );
-    chkKateOverrideIndentation->setChecked( fmtctrl->sessionConfig().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) );
+    chkKateModelines->setChecked( fmtctrl->sessionConfig().readEntry( SourceFormatterController::kateModeLineConfigKey(), false ) );
+    chkKateOverrideIndentation->setChecked( fmtctrl->sessionConfig().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey(), false ) );
     foreach( const QString& name, sortedLanguages )
     {
         cbLanguages->addItem( name );
@@ -224,19 +228,19 @@ void SourceFormatterSettings::apply()
         // delete all styles so we don't leave any behind when all user styles are deleted
         foreach( const QString& subgrp, fmtgrp.groupList() )
         {
-            if( subgrp.startsWith( userStylePrefix ) ) {
+            if( subgrp.startsWith( Strings::userStylePrefix() ) ) {
                 fmtgrp.deleteGroup( subgrp );
             }
         }
         foreach( const SourceFormatterStyle* style, fmt->styles )
         {
-            if( style->name().startsWith( userStylePrefix ) )
+            if( style->name().startsWith( Strings::userStylePrefix() ) )
             {
                 KConfigGroup stylegrp = fmtgrp.group( style->name() );
-                stylegrp.writeEntry( SourceFormatterController::styleCaptionKey, style->caption() );
-                stylegrp.writeEntry( SourceFormatterController::styleContentKey, style->content() );
-                stylegrp.writeEntry( SourceFormatterController::styleMimeTypesKey, style->mimeTypesVariant() );
-                stylegrp.writeEntry( SourceFormatterController::styleSampleKey, style->overrideSample() );
+                stylegrp.writeEntry( SourceFormatterController::styleCaptionKey(), style->caption() );
+                stylegrp.writeEntry( SourceFormatterController::styleContentKey(), style->content() );
+                stylegrp.writeEntry( SourceFormatterController::styleMimeTypesKey(), style->mimeTypesVariant() );
+                stylegrp.writeEntry( SourceFormatterController::styleSampleKey(), style->overrideSample() );
             }
         }
     }
@@ -247,8 +251,8 @@ void SourceFormatterSettings::apply()
             sessionConfig.writeEntry(mime.name(), QStringLiteral("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg(iter.value().selectedStyle->name()));
         }
     }
-    sessionConfig.writeEntry( SourceFormatterController::kateModeLineConfigKey, chkKateModelines->isChecked() );
-    sessionConfig.writeEntry( SourceFormatterController::kateOverrideIndentationConfigKey, chkKateOverrideIndentation->isChecked() );
+    sessionConfig.writeEntry( SourceFormatterController::kateModeLineConfigKey(), chkKateModelines->isChecked() );
+    sessionConfig.writeEntry( SourceFormatterController::kateOverrideIndentationConfigKey(), chkKateOverrideIndentation->isChecked() );
 
     sessionConfig.sync();
     globalConfig.sync();
@@ -265,7 +269,7 @@ void SourceFormatterSettings::defaults()
 void SourceFormatterSettings::enableStyleButtons()
 {
     bool userEntry = styleList->currentItem()
-                     && styleList->currentItem()->data( STYLE_ROLE ).toString().startsWith( userStylePrefix );
+                     && styleList->currentItem()->data( STYLE_ROLE ).toString().startsWith( Strings::userStylePrefix() );
 
     QString languageName = cbLanguages->currentText();
     QMap< QString, LanguageSettings >::const_iterator it = languages.constFind(languageName);
@@ -416,14 +420,14 @@ void SourceFormatterSettings::newStyle()
     for( int i = 0; i < styleList->count(); i++ )
     {
         QString name = styleList->item( i )->data( STYLE_ROLE ).toString();
-        if( name.startsWith( userStylePrefix ) && name.mid( userStylePrefix.length() ).toInt() >= idx )
+        if( name.startsWith( Strings::userStylePrefix() ) && name.mid( Strings::userStylePrefix().length() ).toInt() >= idx )
         {
-            idx = name.mid( userStylePrefix.length() ).toInt();
+            idx = name.mid( Strings::userStylePrefix().length() ).toInt();
         }
     }
     // Increase number for next style
     idx++;
-    SourceFormatterStyle* s = new SourceFormatterStyle( QStringLiteral( "%1%2" ).arg( userStylePrefix ).arg( idx ) );
+    SourceFormatterStyle* s = new SourceFormatterStyle( QStringLiteral( "%1%2" ).arg( Strings::userStylePrefix() ).arg( idx ) );
     if( item ) {
         SourceFormatterStyle* existstyle = fmt->styles[ item->data( STYLE_ROLE ).toString() ];
         s->setCaption( i18n( "New %1", existstyle->caption() ) );
@@ -454,7 +458,7 @@ QListWidgetItem* SourceFormatterSettings::addStyle( const SourceFormatterStyle& 
     QListWidgetItem* item = new QListWidgetItem( styleList );
     item->setText( s.caption() );
     item->setData( STYLE_ROLE, s.name() );
-    if( s.name().startsWith( userStylePrefix ) )
+    if( s.name().startsWith( Strings::userStylePrefix() ) )
     {
         item->setFlags( item->flags() | Qt::ItemIsEditable );
     }
@@ -536,5 +540,3 @@ QIcon SourceFormatterSettings::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("text-field"));
 }
-
-

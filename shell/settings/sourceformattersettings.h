@@ -84,7 +84,6 @@ private slots:
 private:
     void updatePreview();
     QListWidgetItem* addStyle( const KDevelop::SourceFormatterStyle& s );
-    static const QString userStylePrefix;
     void enableStyleButtons();
     // Language name -> language settings
     typedef QMap<QString, LanguageSettings> LanguageMap;

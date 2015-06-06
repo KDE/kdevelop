@@ -55,113 +55,111 @@ class IPlugin;
 
 struct SourceFormatter
 {
-	KDevelop::ISourceFormatter* formatter;
-	// style name -> style. style objects owned by this
-	typedef QMap<QString,KDevelop::SourceFormatterStyle*> StyleMap;
-	StyleMap styles;
-	// Get a list of supported mime types from the style map.
-	QSet<QString> supportedMimeTypes() const
-	{
-		QSet<QString> supported;
-		for ( auto style: styles ) {
-			for ( auto item: style->mimeTypes() ) {
-				supported.insert(item.mimeType);
-			}
-		}
-		return supported;
-	}
-	~SourceFormatter()
-	{
-		qDeleteAll(styles);
-	};
+    KDevelop::ISourceFormatter* formatter;
+    // style name -> style. style objects owned by this
+    typedef QMap<QString,KDevelop::SourceFormatterStyle*> StyleMap;
+    StyleMap styles;
+    // Get a list of supported mime types from the style map.
+    QSet<QString> supportedMimeTypes() const
+    {
+        QSet<QString> supported;
+        for ( auto style: styles ) {
+            for ( auto item: style->mimeTypes() ) {
+                supported.insert(item.mimeType);
+            }
+        }
+        return supported;
+    }
+    ~SourceFormatter()
+    {
+        qDeleteAll(styles);
+    };
 };
 
 /** \short A singleton class managing all source formatter plugins
- */
+*/
 class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatterController, public KXMLGUIClient
 {
-	Q_OBJECT
-	public:
-		static const QString kateModeLineConfigKey;
-		static const QString kateOverrideIndentationConfigKey;
-		static const QString styleCaptionKey;
-		static const QString styleContentKey;
-		static const QString styleMimeTypesKey;
-		static const QString styleSampleKey;
-		
-		SourceFormatterController(QObject *parent = 0);
-		virtual ~SourceFormatterController();
-		void initialize();
-		void cleanup();
-		//----------------- Public API defined in interfaces -------------------
-		/** \return The formatter corresponding to the language
-		* of the document corresponding to the \arg url.
-		*/
-		ISourceFormatter* formatterForUrl(const QUrl &url) override;
-		/** Loads and returns a source formatter for this mime type.
-		* The language is then activated and the style is loaded.
-		* The source formatter is then ready to use on a file.
-		*/
-		ISourceFormatter* formatterForMimeType(const QMimeType& mime) override;
-		/** \return Whether this mime type is supported by any plugin.
-		*/
-		bool isMimeTypeSupported(const QMimeType& mime) override;
+    Q_OBJECT
+public:
+    static QString kateModeLineConfigKey();
+    static QString kateOverrideIndentationConfigKey();
+    static QString styleCaptionKey();
+    static QString styleContentKey();
+    static QString styleMimeTypesKey();
+    static QString styleSampleKey();
 
-		/**
-		 * @brief Instantiate a Formatter for the given plugin and load its configuration.
-		 *
-		 * @param ifmt The ISourceFormatter interface of the plugin
-		 * @return KDevelop::SourceFormatter* the SourceFormatter instance for the plugin, including config items
-		 */
-		SourceFormatter* createFormatterForPlugin(KDevelop::ISourceFormatter* ifmt) const;
+    SourceFormatterController(QObject *parent = 0);
+    virtual ~SourceFormatterController();
+    void initialize();
+    void cleanup();
+    //----------------- Public API defined in interfaces -------------------
+    /** \return The formatter corresponding to the language
+    * of the document corresponding to the \arg url.
+    */
+    ISourceFormatter* formatterForUrl(const QUrl &url) override;
+    /** Loads and returns a source formatter for this mime type.
+    * The language is then activated and the style is loaded.
+    * The source formatter is then ready to use on a file.
+    */
+    ISourceFormatter* formatterForMimeType(const QMimeType& mime) override;
+    /** \return Whether this mime type is supported by any plugin.
+    */
+    bool isMimeTypeSupported(const QMimeType& mime) override;
 
-		/**
-		 * @brief Find the first formatter which supports a given mime type.
-		 */
-		ISourceFormatter* findFirstFormatterForMimeType(const QMimeType& mime) const;
+    /**
+    * @brief Instantiate a Formatter for the given plugin and load its configuration.
+    *
+    * @param ifmt The ISourceFormatter interface of the plugin
+    * @return KDevelop::SourceFormatter* the SourceFormatter instance for the plugin, including config items
+    */
+    SourceFormatter* createFormatterForPlugin(KDevelop::ISourceFormatter* ifmt) const;
 
-		KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    /**
+    * @brief Find the first formatter which supports a given mime type.
+    */
+    ISourceFormatter* findFirstFormatterForMimeType(const QMimeType& mime) const;
 
-		KDevelop::SourceFormatterStyle styleForMimeType(const QMimeType& mime) override;
-		
-		KConfigGroup sessionConfig() const;
-		KConfigGroup globalConfig() const;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
-		void settingsChanged();
-		
-		virtual void disableSourceFormatting(bool disable) override;
-		virtual bool sourceFormattingEnabled() override;
+    KDevelop::SourceFormatterStyle styleForMimeType(const QMimeType& mime) override;
 
-	private Q_SLOTS:
-		void activeDocumentChanged(KDevelop::IDocument *doc);
-		void beautifySource();
-		void beautifyLine();
-		void formatFiles();
-		void documentLoaded( KDevelop::IDocument* );
-	private:
-		/** \return A modeline string (to add at the end or the beginning of a file)
-		* corresponding to the settings of the active language.
-		*/
-		QString addModelineForCurrentLang(QString input, const QUrl& url, const QMimeType&);
-		/** \return The name of kate indentation mode for the mime type.
-		* examples are cstyle, python, etc.
-		*/
-		QString indentationMode(const QMimeType& mime);
-		void formatDocument(KDevelop::IDocument* doc, ISourceFormatter* formatter, const QMimeType& mime);
-		// Adapts the mode of the editor regarding indentation-style
-		void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
-		void formatFiles(QList<QUrl> &list);
-		// GUI actions
-		QAction* m_formatTextAction;
-		QAction* m_formatFilesAction;
-		QAction* m_formatLine;
-		QList<KDevelop::ProjectBaseItem*> m_prjItems;
-		QList<QUrl> m_urls;
-		bool m_enabled;
+    KConfigGroup sessionConfig() const;
+    KConfigGroup globalConfig() const;
+
+    void settingsChanged();
+
+    virtual void disableSourceFormatting(bool disable) override;
+    virtual bool sourceFormattingEnabled() override;
+
+private Q_SLOTS:
+    void activeDocumentChanged(KDevelop::IDocument *doc);
+    void beautifySource();
+    void beautifyLine();
+    void formatFiles();
+    void documentLoaded( KDevelop::IDocument* );
+private:
+    /** \return A modeline string (to add at the end or the beginning of a file)
+    * corresponding to the settings of the active language.
+    */
+    QString addModelineForCurrentLang(QString input, const QUrl& url, const QMimeType&);
+    /** \return The name of kate indentation mode for the mime type.
+    * examples are cstyle, python, etc.
+    */
+    QString indentationMode(const QMimeType& mime);
+    void formatDocument(KDevelop::IDocument* doc, ISourceFormatter* formatter, const QMimeType& mime);
+    // Adapts the mode of the editor regarding indentation-style
+    void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
+    void formatFiles(QList<QUrl> &list);
+    // GUI actions
+    QAction* m_formatTextAction;
+    QAction* m_formatFilesAction;
+    QAction* m_formatLine;
+    QList<KDevelop::ProjectBaseItem*> m_prjItems;
+    QList<QUrl> m_urls;
+    bool m_enabled;
 };
 
 }
 
 #endif // KDEVPLATFORM_SOURCEFORMATTERMANAGER_H
-
-// kate: indent-mode cstyle; space-indent off; tab-width 4;
