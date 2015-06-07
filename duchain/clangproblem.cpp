@@ -111,6 +111,10 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic)
     const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
     for (uint i = 0; i < numRanges; ++i) {
         auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toRange();
+        if(!range.isValid()){
+            continue;
+        }
+
         if (range.start() < docRange.start()) {
             docRange.setStart(range.start());
         }

@@ -317,3 +317,28 @@ void TestProblems::testTodoProblems_data()
         << "/* TODO: 例えば */"
         << ExpectedTodos{{"TODO: 例えば", {0, 3}, {0, 12}}};
 }
+
+void TestProblems::testRanges()
+{
+    // expected:
+    // test.cpp:4:1: error: C++ requires a type specifier for all declarations
+    // operator[](int){return string;}
+    // ^
+    //
+    // test.cpp:4:24: error: 'string' does not refer to a value
+    // operator[](int){return string;}
+    //                        ^
+    const QByteArray code = "struct string{};\nclass Test{\npublic:\noperator[](int){return string;}\n};";
+
+    auto problems = parse(code);
+    QCOMPARE(problems.size(), 2);
+    QVERIFY(problems[0]->diagnostics().isEmpty());
+    auto range = problems[0]->rangeInCurrentRevision();
+    QCOMPARE(range.start(), KTextEditor::Cursor(3, 0));
+    // Different versions of Clang provide different ranges...
+    // QCOMPARE(range.end(), KTextEditor::Cursor(3, 0));
+
+    range = problems[1]->rangeInCurrentRevision();
+    QCOMPARE(range.start(), KTextEditor::Cursor(3, 23));
+    QCOMPARE(range.end(), KTextEditor::Cursor(3, 23));
+}
