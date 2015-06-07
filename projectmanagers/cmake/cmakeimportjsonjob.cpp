@@ -39,9 +39,14 @@
 
 using namespace KDevelop;
 
+struct ImportData {
+    CMakeJsonData json;
+    QHash<KDevelop::Path, QStringList> targets;
+};
+
 namespace {
 
-CMakeJsonData import(const Path& commandsFile)
+CMakeJsonData importCommands(const Path& commandsFile)
 {
     // NOTE: to get compile_commands.json, you need -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     QFile f(commandsFile.toLocalFile());
@@ -96,14 +101,41 @@ CMakeJsonData import(const Path& commandsFile)
     return data;
 }
 
+QHash<KDevelop::Path, QStringList> importTargets(const Path& targetsFilePath, const QString& sourceDir, const QString &buildPath)
+{
+    QHash<KDevelop::Path, QStringList> targets;
+    QFile targetsFile(targetsFilePath.toLocalFile());
+    if (!targetsFile.open(QIODevice::ReadOnly)) {
+        qCDebug(CMAKE) << "Couldn't find the Targets file in" << targetsFile.fileName();
+    }
+    const QRegularExpression rx(QStringLiteral("^(.*)/CMakeFiles/(.*).dir$"));
+    for(; !targetsFile.atEnd(); ) {
+        const QByteArray line = targetsFile.readLine();
+        auto match = rx.match(QString::fromUtf8(line));
+        if (!match.isValid())
+            qCDebug(CMAKE) << "invalid match for" << line;
+        const QString sourcePath = match.captured(1).replace(buildPath, sourceDir);
+        targets[KDevelop::Path(sourcePath)].append(match.captured(2));
+    }
+    return targets;
+}
+
+ImportData import(const Path& commandsFile, const Path &targetsFilePath, const QString &sourceDir, const QString &buildPath)
+{
+    return ImportData {
+        importCommands(commandsFile),
+        importTargets(targetsFilePath, sourceDir, buildPath)
+    };
+}
+
 }
 
 CMakeImportJob::CMakeImportJob(IProject* project, QObject* parent)
     : KJob(parent)
     , m_project(project)
-    , m_futureWatcher(new QFutureWatcher<CMakeJsonData>)
+    , m_futureWatcher(new QFutureWatcher<ImportData>)
 {
-    connect(m_futureWatcher, &QFutureWatcher<CMakeJsonData>::finished, this, &CMakeImportJob::importFinished);
+    connect(m_futureWatcher, &QFutureWatcher<ImportData>::finished, this, &CMakeImportJob::importFinished);
 }
 
 void CMakeImportJob::start()
@@ -115,7 +147,14 @@ void CMakeImportJob::start()
         return;
     }
 
-    auto future = QtConcurrent::run(import, commandsFile);
+    const Path currentBuildDir = CMake::currentBuildDir(m_project);
+    Q_ASSERT (!currentBuildDir.isEmpty());
+
+    const QString buildPath = currentBuildDir.toLocalFile();
+    const Path targetsFilePath = CMake::targetDirectoriesFile(m_project);
+    const QString sourceDir = m_project->path().toLocalFile();
+
+    auto future = QtConcurrent::run(import, commandsFile, targetsFilePath, sourceDir, buildPath);
     m_futureWatcher->setFuture(future);
 }
 
@@ -126,36 +165,15 @@ void CMakeImportJob::importFinished()
 
     auto future = m_futureWatcher->future();
     auto data = future.result();
-    if (!data.isValid) {
+    if (!data.json.isValid) {
         qCWarning(CMAKE) << "Could not import CMake project ('compile_commands.json' invalid)";
         emitResult();
         return;
     }
 
-    m_data = data;
+    m_data = data.json;
+    m_targets = data.targets;
     qCDebug(CMAKE) << "Done importing, found" << m_data.files.count() << "entries for" << project()->path();
-
-    //TODO: move into thread as well?
-    m_targets.clear();
-    const Path currentBuildDir = CMake::currentBuildDir(m_project);
-    if (!currentBuildDir.isEmpty()) {
-        const QString buildPath = currentBuildDir.toLocalFile();
-        const Path targetsFilePath = CMake::targetDirectoriesFile(m_project);
-        QFile targetsFile(targetsFilePath.toLocalFile());
-        if (!targetsFile.open(QIODevice::ReadOnly)) {
-            qCDebug(CMAKE) << "Couldn't find the Targets file in" << targetsFile.fileName();
-        }
-        const QRegularExpression rx(QStringLiteral("^(.*)/CMakeFiles/(.*).dir$"));
-        const QString sourceDir = m_project->path().toLocalFile();
-        for(; !targetsFile.atEnd(); ) {
-            const QByteArray line = targetsFile.readLine();
-            auto match = rx.match(QString::fromUtf8(line));
-            if (!match.isValid())
-                qCDebug(CMAKE) << "invalid match for" << line;
-            const QString sourcePath = match.captured(1).replace(buildPath, sourceDir);
-            m_targets[KDevelop::Path(sourcePath)].append(match.captured(2));
-        }
-    }
 
     emitResult();
 }

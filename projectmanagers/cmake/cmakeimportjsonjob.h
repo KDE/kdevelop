@@ -28,6 +28,7 @@
 
 template<class T> class QFutureWatcher;
 class CMakeFolderItem;
+struct ImportData;
 
 namespace KDevelop
 {
@@ -64,7 +65,7 @@ private Q_SLOTS:
 
 private:
     KDevelop::IProject* m_project;
-    QFutureWatcher<CMakeJsonData>* m_futureWatcher;
+    QFutureWatcher<ImportData>* m_futureWatcher;
 
     CMakeJsonData m_data;
     QHash<KDevelop::Path, QStringList> m_targets;
