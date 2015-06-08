@@ -803,7 +803,7 @@ void CMakeManager::dirtyFile(const QString& path)
     //we initialize again hte project that sent the signal
     for(QHash<IProject*, CMakeProjectData>::const_iterator it = m_projects.constBegin(), itEnd = m_projects.constEnd(); it!=itEnd; ++it) {
         if(it->watcher == sender()) {
-            import(it.key());
+            reload(it.key()->projectItem());
             break;
         }
     }
