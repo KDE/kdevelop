@@ -32,6 +32,7 @@
 #include "cmakenavigationwidget.h"
 #include "icmakedocumentation.h"
 #include "cmakemodelitems.h"
+#include "testing/ctestutils.h"
 
 #include <QDir>
 #include <QThread>
@@ -265,6 +266,8 @@ void CMakeManager::importFinished(KJob* j)
     m_projects[job->project()] = data;
 
     populateTargets(job->project()->projectItem(), job->targets());
+
+    CTestUtils::createTestSuites(job->testSuites(), project);
 }
 
 // void CMakeManager::deletedWatchedDirectory(IProject* p, const QUrl &dir)

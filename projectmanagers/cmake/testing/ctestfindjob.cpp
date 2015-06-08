@@ -67,9 +67,9 @@ void CTestFindJob::findTestCases()
         return;
     }
 
-    foreach (const QUrl &file, m_pendingFiles)
+    foreach (const KDevelop::Path &file, m_pendingFiles)
     {
-        KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(file), KDevelop::TopDUContext::AllDeclarationsAndContexts, this);
+        KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(file.toUrl()), KDevelop::TopDUContext::AllDeclarationsAndContexts, this);
     }
 }
 
@@ -77,7 +77,7 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
 {
     qCDebug(CMAKE) << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
-    m_pendingFiles.removeAll(document.str());
+    m_pendingFiles.removeAll(KDevelop::Path(document.toUrl()));
 
     if (m_pendingFiles.isEmpty())
     {

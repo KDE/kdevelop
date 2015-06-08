@@ -37,11 +37,11 @@ set( cmakecommon_UI
 )
 
 set( cmakemanager_SRCS
-#   testing/ctestutils.cpp
-#   testing/ctestfindjob.cpp
-#   testing/ctestrunjob.cpp
-#   testing/ctestsuite.cpp
-#   testing/qttestdelegate.cpp
+  testing/ctestutils.cpp
+  testing/ctestfindjob.cpp
+  testing/ctestrunjob.cpp
+  testing/ctestsuite.cpp
+  testing/qttestdelegate.cpp
   cmakeimportjsonjob.cpp
   cmakenavigationwidget.cpp
   cmakemanager.cpp

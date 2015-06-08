@@ -34,47 +34,43 @@
 #include <interfaces/iprojectcontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
+#include <util/path.h>
 #include <QFileInfo>
 
 using namespace KDevelop;
 
-void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolderItem* folder)
+#warning TODO: we are lacking introspection into targets, to see what files belong to each target.
+
+void CTestUtils::createTestSuites(const QVector<Test>& testSuites, KDevelop::IProject* project)
 {
-    IProject* project = folder->project();
-    IBuildSystemManager* bsm = project->buildSystemManager();
-    const QString binDir = bsm->buildDirectory(folder->project()->projectItem()).toLocalFile();
-    const Path currentBinDir = bsm->buildDirectory(folder);
-    const Path currentSourceDir = folder->path();
+//     IProject* project = folder->project();
+//     IBuildSystemManager* bsm = project->buildSystemManager();
+//     const QString binDir = bsm->buildDirectory(folder->project()->projectItem()).toLocalFile();
+//     const Path currentBinDir = bsm->buildDirectory(folder);
+//     const Path currentSourceDir = folder->path();
+//     QList<ProjectTargetItem*> items = bsm->targets(folder);
 
     foreach (const Test& test, testSuites)
     {
-        QList<QUrl> files;
-        QString exe = test.executable;
-        QString targetName = QFileInfo(exe).fileName();
-        QList<ProjectTargetItem*> items = bsm->targets(folder);
-        foreach (ProjectTargetItem* item, items)
-        {
-            ProjectExecutableTargetItem * exeTgt = item->executable();
-            if (exeTgt && (exeTgt->text() == test.executable || exeTgt->text()==targetName))
-            {
-                exe = exeTgt->builtUrl().toLocalFile();
-                qCDebug(CMAKE) << "Found proper test target path" << test.executable << "->" << exe;
-                foreach(ProjectFileItem* file, exeTgt->fileList()) {
-                    files += file->url();
-                }
-                break;
-            }
-        }
-        exe.replace("#[bin_dir]", binDir);
-        const Path exePath(currentBinDir, exe);
+        QList<KDevelop::Path> files;
+//         QString targetName = QFileInfo(test.executable).fileName();
+//         foreach (ProjectTargetItem* item, items)
+//         {
+//             ProjectExecutableTargetItem * exeTgt = item->executable();
+//             if (exeTgt && (exeTgt->text() == test.executable || exeTgt->text()==targetName))
+//             {
+//                 exe = exeTgt->builtUrl().toLocalFile();
+//                 qCDebug(CMAKE) << "Found proper test target path" << test.executable << "->" << exe;
+//                 foreach(ProjectFileItem* file, exeTgt->fileList()) {
+//                     files += file->url();
+//                 }
+//                 break;
+//             }
+//         }
+//         exe.replace("#[bin_dir]", binDir);
 
-        QStringList args = test.arguments;
-        for (QStringList::iterator it = args.begin(), end = args.end(); it != end; ++it)
-        {
-            it->replace("#[bin_dir]", binDir);
-        }
-
-        CTestSuite* suite = new CTestSuite(test.name, exePath.toUrl(), files, project, args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
+        const bool willFail = test.properties.value("WILL_FAIL", "FALSE") == "TRUE";
+        CTestSuite* suite = new CTestSuite(test.name, test.executable, files, project, test.arguments, willFail);
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

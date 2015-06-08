@@ -41,7 +41,7 @@
 
 using namespace KDevelop;
 
-CTestSuite::CTestSuite(const QString& name, const QUrl &executable, const QList<QUrl>& files, IProject* project, const QStringList& args, bool expectFail):
+CTestSuite::CTestSuite(const QString& name, const KDevelop::Path &executable, const QList<KDevelop::Path>& files, IProject* project, const QStringList& args, bool expectFail):
 m_executable(executable),
 m_name(name),
 m_args(args),
@@ -49,7 +49,6 @@ m_files(files),
 m_project(project),
 m_expectFail(expectFail)
 {
-    m_executable.cleanPath();
     Q_ASSERT(project);
     qCDebug(CMAKE) << m_name << m_executable << m_project->name();
 }
@@ -151,7 +150,7 @@ KJob* CTestSuite::launchAllCases(TestJobVerbosity verbosity)
     return launchCases(cases(), verbosity);
 }
 
-QUrl CTestSuite::executable() const
+KDevelop::Path CTestSuite::executable() const
 {
     return m_executable;
 }
@@ -191,7 +190,7 @@ void CTestSuite::setTestCases(const QStringList& cases)
     m_cases = cases;
 }
 
-QList<QUrl> CTestSuite::sourceFiles() const
+QList<KDevelop::Path> CTestSuite::sourceFiles() const
 {
     return m_files;
 }

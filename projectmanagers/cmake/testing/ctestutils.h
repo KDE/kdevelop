@@ -26,11 +26,13 @@
 namespace KDevelop
 {
 class ProjectFolderItem;
+class Path;
+class IProject;
 }
 
 namespace CTestUtils
 {
-    void createTestSuites(const QVector<Test>& testSuites, KDevelop::ProjectFolderItem* folder);
+    void createTestSuites(const QVector<Test>& testSuites, KDevelop::IProject* project);
 }
 
 #endif // CTESTUTILS_H

@@ -121,7 +121,7 @@ void CTestRunJob::start()
     m_job = createTestJob("execute", arguments);
 
     if (ExecuteCompositeJob* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
-        m_outputJob = qobject_cast<OutputJob*>(cjob->subjobs().last());
+        m_outputJob = cjob->findChild<OutputJob*>();
         Q_ASSERT(m_outputJob);
         m_outputJob->setVerbosity(m_verbosity);
 

@@ -21,6 +21,7 @@
 
 #include "cmakelistsparser.h"
 #include "variablemap.h"
+#include <util/path.h>
 
 #include <language/duchain/indexeddeclaration.h>
 
@@ -62,7 +63,7 @@ struct Test
 {
     Test() {}
     QString name;
-    QString executable;
+    KDevelop::Path executable;
     QStringList arguments;
     QHash<QString, QString> properties;
 };

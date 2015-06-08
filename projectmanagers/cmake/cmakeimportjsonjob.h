@@ -59,6 +59,7 @@ public:
      */
     CMakeJsonData jsonData() const;
     QHash<KDevelop::Path, QStringList> targets() const { return m_targets; }
+    QVector<Test> testSuites() const { return m_testSuites; }
 
 private Q_SLOTS:
     void importFinished();
@@ -69,6 +70,7 @@ private:
 
     CMakeJsonData m_data;
     QHash<KDevelop::Path, QStringList> m_targets;
+    QVector<Test> m_testSuites;
 };
 
 #endif // CMAKEIMPORTJSONJOB_H

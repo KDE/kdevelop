@@ -22,7 +22,8 @@
 
 #include <interfaces/itestsuite.h>
 #include <language/duchain/indexeddeclaration.h>
-#include <QUrl>
+#include <util/path.h>
+#include <QHash>
 
 namespace KDevelop {
 class ITestController;
@@ -32,14 +33,14 @@ class ReferencedTopDUContext;
 class CTestSuite : public KDevelop::ITestSuite
 {
 public:
-    CTestSuite(const QString& name, const QUrl &executable, const QList<QUrl>& files, KDevelop::IProject* project, const QStringList& args, bool expectFail);
+    CTestSuite(const QString& name, const KDevelop::Path &executable, const QList<KDevelop::Path>& files, KDevelop::IProject* project, const QStringList& args, bool expectFail);
     virtual ~CTestSuite();
     
     virtual KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity);
     virtual KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity);
     virtual KJob* launchAllCases(TestJobVerbosity verbosity);
     
-    virtual QUrl executable() const;
+    virtual KDevelop::Path executable() const;
     virtual QStringList cases() const;
     virtual QString name() const;
     virtual KDevelop::IProject* project() const;
@@ -49,15 +50,15 @@ public:
     
     QStringList arguments() const;
     void setTestCases(const QStringList& cases);
-    QList<QUrl> sourceFiles() const;
+    QList<KDevelop::Path> sourceFiles() const;
     void loadDeclarations(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
     
 private:
-    QUrl m_executable;
+    KDevelop::Path m_executable;
     QString m_name;
     QStringList m_cases;
     QStringList m_args;
-    QList<QUrl> m_files;
+    QList<KDevelop::Path> m_files;
     KDevelop::IProject* m_project;
     
     QHash<QString, KDevelop::IndexedDeclaration> m_declarations;

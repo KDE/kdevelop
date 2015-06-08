@@ -30,6 +30,7 @@
 #include <language/duchain/duchainlock.h>
 #include <interfaces/iproject.h>
 
+#include <KShell>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -42,6 +43,7 @@ using namespace KDevelop;
 struct ImportData {
     CMakeJsonData json;
     QHash<KDevelop::Path, QStringList> targets;
+    QVector<Test> testSuites;
 };
 
 namespace {
@@ -101,8 +103,9 @@ CMakeJsonData importCommands(const Path& commandsFile)
     return data;
 }
 
-QHash<KDevelop::Path, QStringList> importTargets(const Path& targetsFilePath, const QString& sourceDir, const QString &buildPath)
+QHash<KDevelop::Path, QStringList> importTargets(const Path& targetsFilePath, const QString& sourceDir, const KDevelop::Path &buildDir)
 {
+    const QString buildPath = buildDir.toLocalFile();
     QHash<KDevelop::Path, QStringList> targets;
     QFile targetsFile(targetsFilePath.toLocalFile());
     if (!targetsFile.open(QIODevice::ReadOnly)) {
@@ -120,11 +123,44 @@ QHash<KDevelop::Path, QStringList> importTargets(const Path& targetsFilePath, co
     return targets;
 }
 
-ImportData import(const Path& commandsFile, const Path &targetsFilePath, const QString &sourceDir, const QString &buildPath)
+QVector<Test> importTestSuites(const Path &buildDir)
+{
+    QVector<Test> ret;
+#warning TODO use subdirs instead of this
+    foreach(const QFileInfo &info, QDir(buildDir.toLocalFile()).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        ret += importTestSuites(Path(buildDir, info.fileName()));
+    }
+
+    QFile file(buildDir.toLocalFile()+"/CTestTestfile.cmake");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return ret;
+    }
+
+    const QRegularExpression rx("add_test *\\((.+?) (.*?)\\)");
+    Q_ASSERT(rx.isValid());
+    for (; !file.atEnd();) {
+        QByteArray line = file.readLine();
+        line.chop(1);
+        const auto match = rx.match(QString::fromLocal8Bit(line));
+        if (match.hasMatch()) {
+            Test test;
+            QStringList args = KShell::splitArgs(match.captured(2));
+            test.name = match.captured(1);
+            test.executable = Path(args.takeFirst());
+            test.arguments = args;
+            ret += test;
+        }
+    }
+
+    return ret;
+}
+
+ImportData import(const Path& commandsFile, const Path &targetsFilePath, const QString &sourceDir, const KDevelop::Path &buildPath)
 {
     return ImportData {
         importCommands(commandsFile),
-        importTargets(targetsFilePath, sourceDir, buildPath)
+        importTargets(targetsFilePath, sourceDir, buildPath),
+        importTestSuites(buildPath)
     };
 }
 
@@ -150,11 +186,10 @@ void CMakeImportJob::start()
     const Path currentBuildDir = CMake::currentBuildDir(m_project);
     Q_ASSERT (!currentBuildDir.isEmpty());
 
-    const QString buildPath = currentBuildDir.toLocalFile();
     const Path targetsFilePath = CMake::targetDirectoriesFile(m_project);
     const QString sourceDir = m_project->path().toLocalFile();
 
-    auto future = QtConcurrent::run(import, commandsFile, targetsFilePath, sourceDir, buildPath);
+    auto future = QtConcurrent::run(import, commandsFile, targetsFilePath, sourceDir, currentBuildDir);
     m_futureWatcher->setFuture(future);
 }
 
@@ -173,6 +208,7 @@ void CMakeImportJob::importFinished()
 
     m_data = data.json;
     m_targets = data.targets;
+    m_testSuites = data.testSuites;
     qCDebug(CMAKE) << "Done importing, found" << m_data.files.count() << "entries for" << project()->path();
 
     emitResult();
