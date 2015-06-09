@@ -24,7 +24,7 @@ option(BUILD_qmake_parser "Build the qmake-parser debugging tool" OFF)
 if(BUILD_qmake_parser)
   add_executable(qmake-parser main.cpp)
   target_link_libraries(qmake-parser kdevqmakeparser Qt5::Core  )
-  install(TARGETS qmake-parser ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS qmake-parser ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif(BUILD_qmake_parser)
 
 add_library(kdevqmakeparser STATIC ${parser_STAT_SRCS} ${parser_GEN_SRCS})
