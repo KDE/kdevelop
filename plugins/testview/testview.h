@@ -33,21 +33,6 @@ namespace KDevelop {
 class ITestSuite;
 }
 
-
-class TestViewFilterAction : public QAction {
-    Q_OBJECT
-
-public:
-    explicit TestViewFilterAction( const QString &initialFilter, QObject* parent );
-
-signals:
-    void filterChanged(const QString& filter);
-
-protected:
-    virtual QWidget* createWidget( QWidget* parent );
-    QString m_intialFilter;
-};
-
 class TestView : public QWidget
 {
     Q_OBJECT
@@ -70,6 +55,8 @@ public slots:
     QList<QAction*> contextMenuActions();
 
 private:
+    void changeFilter(const QString &newFilter);
+
     TestViewPlugin* m_plugin;
     QStandardItemModel* m_model;
     QTreeView* m_tree;

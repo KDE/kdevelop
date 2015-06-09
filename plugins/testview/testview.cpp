@@ -50,6 +50,7 @@
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QVBoxLayout>
+#include <QWidgetAction>
 
 using namespace KDevelop;
 
@@ -58,33 +59,6 @@ enum CustomRoles {
     SuiteRole,
     CaseRole
 };
-
-//BEGIN TestViewFilterAction
-
-TestViewFilterAction::TestViewFilterAction(  const QString &initialFilter, QObject* parent )
-    : QAction( parent )
-    , m_intialFilter(initialFilter)
-{
-    setIcon(QIcon::fromTheme("view-filter"));
-    setText(i18n("Filter..."));
-    setToolTip(i18n("Insert wildcard patterns to filter the test view"
-                    " for matching test suites and cases."));
-}
-
-QWidget* TestViewFilterAction::createWidget( QWidget* parent )
-{
-    QLineEdit* edit = new QLineEdit(parent);
-    edit->setPlaceholderText(i18n("Filter..."));
-    edit->setClearButtonEnabled(true);
-    connect(edit, &QLineEdit::textChanged, this, &TestViewFilterAction::filterChanged);
-    if (!m_intialFilter.isEmpty()) {
-        edit->setText(m_intialFilter);
-    }
-
-    return edit;
-}
-
-//END TestViwFilterAction
 
 static const char sessionConfigGroup[] = "TestView";
 static const char filterConfigKey[] = "filter";
@@ -121,24 +95,20 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     connect (showSource, &QAction::triggered, this, &TestView::showSource);
     m_contextMenuActions << showSource;
 
-    QAction* runSelected = new QAction( QIcon::fromTheme("system-run"), i18n("Run Selected Tests"), this );
-    connect (runSelected, &QAction::triggered, this, &TestView::runSelectedTests);
-    m_contextMenuActions << runSelected;
-
     addAction(plugin->actionCollection()->action("run_all_tests"));
     addAction(plugin->actionCollection()->action("stop_running_tests"));
 
-    QString filterText;
-    KConfigGroup config(ICore::self()->activeSession()->config(), sessionConfigGroup);
-    if (config.hasKey(filterConfigKey))
-    {
-        filterText = config.readEntry(filterConfigKey, QString());
-    }
+    QAction* runSelected = new QAction( QIcon::fromTheme("system-run"), i18n("Run Selected Tests"), this );
+    connect (runSelected, &QAction::triggered, this, &TestView::runSelectedTests);
+    addAction(runSelected);
 
-    TestViewFilterAction* filterAction = new TestViewFilterAction(filterText, this);
-    connect(filterAction, &TestViewFilterAction::filterChanged,
-            m_filter, &QSortFilterProxyModel::setFilterFixedString);
-    addAction(filterAction);
+    QLineEdit* edit = new QLineEdit(parent);
+    edit->setPlaceholderText(i18n("Filter..."));
+    edit->setClearButtonEnabled(true);
+    QWidgetAction* widgetAction = new QWidgetAction(this);
+    widgetAction->setDefaultWidget(edit);
+    connect(edit, &QLineEdit::textChanged, this, &TestView::changeFilter);
+    addAction(widgetAction);
 
     IProjectController* pc = ICore::self()->projectController();
     connect (pc, &IProjectController::projectClosed, this, &TestView::removeProject);
@@ -185,6 +155,16 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
             TestResult::TestCaseResult caseResult = result.testCaseResults.value(caseItem->text(), TestResult::NotRun);
             caseItem->setIcon(iconForTestResult(caseResult));
         }
+    }
+}
+
+void TestView::changeFilter(const QString &newFilter)
+{
+    m_filter->setFilterWildcard(newFilter);
+    if (newFilter.isEmpty()) {
+        m_tree->collapseAll();
+    } else {
+        m_tree->expandAll();
     }
 }
 
@@ -274,7 +254,12 @@ void TestView::runSelectedTests()
     QModelIndexList indexes = m_tree->selectionModel()->selectedIndexes();
     if (indexes.isEmpty())
     {
-        return;
+        //if there's no selection we'll run all of them (or only the filtered)
+        //in case there's a filter.
+        const int rc = m_filter->rowCount();
+        for(int i=0; i<rc; ++i) {
+            indexes << m_filter->index(i, 0);
+        }
     }
 
     QList<KJob*> jobs;
