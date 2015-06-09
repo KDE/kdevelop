@@ -347,7 +347,7 @@ void TestView::showSource()
         declaration = suite->caseDeclaration(item->data(CaseRole).toString());
     }
 
-    DUChainReadLocker locker(DUChain::lock());
+    DUChainReadLocker locker;
     Declaration* d = declaration.data();
     if (!d)
     {

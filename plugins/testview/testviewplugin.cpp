@@ -104,7 +104,6 @@ void TestViewPlugin::unload()
 
 void TestViewPlugin::runAllTests()
 {
-    QString jobName = "Run %1 tests in %2";
     ITestController* tc = core()->testController();
     foreach (IProject* project, core()->projectController()->projects())
     {
