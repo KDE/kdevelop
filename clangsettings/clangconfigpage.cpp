@@ -39,16 +39,6 @@ ClangConfigPage::ClangConfigPage(KDevelop::IPlugin* plugin, const KDevelop::Proj
 ClangConfigPage::~ClangConfigPage()
 {}
 
-void ClangConfigPage::loadFrom(KConfig* /*cfg*/)
-{
-    // Nothing to do here so far
-}
-
-void ClangConfigPage::saveTo(KConfig* /*cfg*/)
-{
-    configWidget->writeSettings();
-}
-
 void ClangConfigPage::reset()
 {
     ProjectConfigPage::reset();
@@ -58,7 +48,7 @@ void ClangConfigPage::reset()
 void ClangConfigPage::apply()
 {
      ProjectConfigPage::apply();
-     saveTo(ClangProjectConfig::self()->config());
+     configWidget->writeSettings();
 }
 
 QString ClangConfigPage::name() const

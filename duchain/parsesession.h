@@ -50,8 +50,6 @@ public:
 
     enum Option {
         NoOption,                     ///< No special options
-        DisableSpellChecking,         ///< Disable -fspell-checking
-        DisableDocumentationWarnings, ///< Disable -Wdocumentation
         SkipFunctionBodies,           ///< Pass CXTranslationUnit_SkipFunctionBodies (likely unwanted)
         PrecompiledHeader             ///< Pass CXTranslationUnit_PrecompiledPreamble and others to cache precompiled headers
     };

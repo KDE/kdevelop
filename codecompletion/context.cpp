@@ -36,6 +36,7 @@
 #include "../util/clangtypes.h"
 #include "../duchain/parsesession.h"
 #include "../duchain/navigationwidget.h"
+#include "../clangsettings/clangsettingsmanager.h"
 
 #include <memory>
 
@@ -521,6 +522,11 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
             qCWarning(KDEV_CLANG) << "Something went wrong during 'clang_codeCompleteAt' for file" << file;
             return;
         }
+
+        auto addMacros = ClangSettingsManager::self()->codeCompletionSettings().macros;
+        if (!addMacros) {
+            m_filters |= NoMacros;
+        }
     }
 
     // check 'isValidPosition' after parsing the new content
@@ -740,8 +746,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         return {};
     }
 
-    addOverwritableItems();
     addImplementationHelperItems();
+    addOverwritableItems();
+
     eventuallyAddGroup(i18n("Special"), 700, specialItems);
     eventuallyAddGroup(i18n("Macros"), 900, macros);
     eventuallyAddGroup(i18n("Builtin"), 800, builtin);

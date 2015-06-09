@@ -47,15 +47,11 @@ struct ParserSettingsEntry
 struct CodeCompletionSettings
 {
     bool macros = true;
-    bool overrideHelper = true;
-    bool implementHelper = true;
 };
 
 struct AssistantsSettings
 {
     bool forwardDeclare = true;
-    bool includePath = true;
-    bool adaptSignature = true;
 };
 
 class ClangSettingsManager

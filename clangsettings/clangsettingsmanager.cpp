@@ -46,22 +46,16 @@ namespace
     const QString parserPath = QStringLiteral("path");
     const QString parserOptions = QStringLiteral("options");
 
-    const QString overrideHelper = QStringLiteral("overrideHelper");
-    const QString implementHelper = QStringLiteral("implementHelper");
     const QString macros = QStringLiteral("macros");
 
     const QString forwardDeclare = QStringLiteral("forwardDeclare");
-    const QString includePath = QStringLiteral("includePath");
-    const QString adaptSignature = QStringLiteral("adaptSignature");
 
 AssistantsSettings readAssistantsSettings(KConfig* cfg)
 {
     auto grp = cfg->group(settingsGroup);
     AssistantsSettings settings;
 
-    settings.adaptSignature = grp.readEntry(adaptSignature, true);
     settings.forwardDeclare = grp.readEntry(forwardDeclare, true);
-    settings.includePath = grp.readEntry(includePath, true);
 
     return settings;
 }
@@ -71,9 +65,7 @@ CodeCompletionSettings readCodeCompletionSettings(KConfig* cfg)
     auto grp = cfg->group(settingsGroup);
     CodeCompletionSettings settings;
 
-    settings.implementHelper = grp.readEntry(implementHelper, true);
     settings.macros = grp.readEntry(macros, true);
-    settings.overrideHelper = grp.readEntry(overrideHelper, true);
 
     return settings;
 }
@@ -165,8 +157,8 @@ QList<ParserSettingsEntry> ClangSettingsManager::readPaths(KDevelop::IProject* p
         if(path.path.isEmpty()){
             continue;
         }
-        // TODO: default value
-        path.settings.parserOptions = pathgrp.readEntry(parserOptions, "");
+
+        path.settings.parserOptions = pathgrp.readEntry(parserOptions, "-fspell-checking -Wdocumentation ");
         paths.append(path);
     }
 

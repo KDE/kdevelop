@@ -1,11 +1,21 @@
 
-set( clangsettings_SRCS
+add_library(settingsmanager
+STATIC
+        clangsettingsmanager.cpp
+)
+
+target_link_libraries(settingsmanager
+LINK_PUBLIC
+        KDev::Project
+        KDev::Util
+)
+
+set(clangsettings_SRCS
         clangconfigpage.cpp
         clangsettingsplugin.cpp
         configwidget.cpp
-        clangsettingsmanager.cpp
         sessionsettings/sessionsettings.cpp
-    )
+)
 
 ki18n_wrap_ui(clangsettings_SRCS
     configwidget.ui
@@ -15,6 +25,11 @@ ki18n_wrap_ui(clangsettings_SRCS
 kconfig_add_kcfg_files( clangsettings_SRCS clangprojectconfig.kcfgc sessionsettings/sessionconfig.kcfgc)
 
 kdevplatform_add_plugin(kdevclangsettings JSON kdevclangsettings.json SOURCES ${clangsettings_SRCS})
-target_link_libraries( kdevclangsettings LINK_PRIVATE
+
+target_link_libraries(kdevclangsettings
+LINK_PUBLIC
         KDev::Project
-        KDev::Util)
+        KDev::Util
+LINK_PRIVATE
+        settingsmanager
+)

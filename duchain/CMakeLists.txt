@@ -32,6 +32,7 @@ LINK_PRIVATE
     kdevclangcodegen
     kdevclangcodecompletion
     kdevclangutil
+    settingsmanager
 LINK_PUBLIC
     KDev::Language
     KDev::Project

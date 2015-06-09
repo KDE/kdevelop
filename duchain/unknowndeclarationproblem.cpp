@@ -26,6 +26,7 @@
 #include "../util/clangdebug.h"
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
+#include "../clangsettings/clangsettingsmanager.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -430,10 +431,12 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
 {
     ClangFixits fixits;
 
-    for( const auto& fixit : forwardDeclarations(identifier, file) ) {
-        fixits << fixit;
-        if (fixits.size() == maxSuggestions) {
-            return fixits;
+    if (ClangSettingsManager::self()->assistantsSettings().forwardDeclare) {
+        for (const auto& fixit : forwardDeclarations(identifier, file)) {
+            fixits << fixit;
+            if (fixits.size() == maxSuggestions) {
+                return fixits;
+            }
         }
     }
 

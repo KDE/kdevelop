@@ -124,16 +124,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
 
     auto languageStandard = environment.languageStandard().toLocal8Bit();
     QVector<const char*> args = argsForSession(tuUrl.str(), options, languageStandard);
-    if (!options.testFlag(DisableSpellChecking)) {
-        // TODO: Check whether this slows down parsing noticably
-        // also see http://lists.cs.uiuc.edu/pipermail/cfe-commits/Week-of-Mon-20100705/032025.html
-        args << "-fspell-checking"; // note: disabled by default in CIndex
-    }
-    if (!options.testFlag(DisableDocumentationWarnings)) {
-        // TODO: Check whether this slows down parsing noticably
-        // according to llvm.org/devmtg/2012-11/Gribenko_CommentParsing.pdf this is about 5% with lots (> 10000) of documentation comments
-        args << "-Wdocumentation";
-    }
+
     const auto& includes = environment.includes();
     const auto& pchInclude = environment.pchInclude();
     // uses QByteArray as smart-pointer for const char* ownership

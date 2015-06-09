@@ -43,9 +43,6 @@ public:
     virtual void reset() override;
 private:
     class ConfigWidget* configWidget;
-
-    void loadFrom( KConfig* cfg );
-    void saveTo( KConfig* cfg );
 };
 
 #endif
