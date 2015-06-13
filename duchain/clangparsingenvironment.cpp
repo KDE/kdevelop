@@ -122,7 +122,7 @@ uint ClangParsingEnvironment::hash() const
     }
 
     hash << qHash(m_pchInclude);
-    hash << qHash(m_languageStandard);
+    hash << qHash(m_parserSettings.parserOptions);
     return hash;
 }
 
@@ -133,15 +133,15 @@ bool ClangParsingEnvironment::operator==(const ClangParsingEnvironment& other) c
         && m_pchInclude == other.m_pchInclude
         && m_quality == other.m_quality
         && m_tuUrl == other.m_tuUrl
-        && m_languageStandard == other.m_languageStandard;
+        && m_parserSettings == other.m_parserSettings;
 }
 
-void ClangParsingEnvironment::setLanguageStandard(const QString& standard)
+void ClangParsingEnvironment::setParserSettings(const ParserSettings& parserSettings)
 {
-    m_languageStandard = standard;
+    m_parserSettings = parserSettings;
 }
 
-QString ClangParsingEnvironment::languageStandard() const
+ParserSettings ClangParsingEnvironment::parserSettings() const
 {
-    return m_languageStandard;
+    return m_parserSettings;
 }

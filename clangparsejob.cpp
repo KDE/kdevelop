@@ -43,6 +43,7 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
+#include "clangsettings/clangsettingsmanager.h"
 #include "duchain/clanghelpers.h"
 #include "duchain/clangpch.h"
 #include "duchain/parsesession.h"
@@ -148,62 +149,6 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url, bool* hasBuildSys
     return file;
 }
 
-QString languageStandard(ProjectFileItem* item)
-{
-    static const QString defaultLanguageStandard = QStringLiteral("c++11");
-    struct PathStandard {
-        QString path;
-        QString standard;
-    };
-    QList<PathStandard> paths;
-
-    auto cfg = item->project()->projectConfiguration();
-    auto grp = cfg->group("CustomDefinesAndIncludes");
-    for (const QString& grpName : grp.groupList()) {
-        if (grpName.startsWith(QLatin1String("ProjectPath"))) {
-            KConfigGroup pathgrp = grp.group(grpName);
-            PathStandard entry;
-            entry.path = pathgrp.readEntry("Path", "");
-
-            auto cgrp = pathgrp.group("Compiler");
-            entry.standard = cgrp.readEntry("Standard", QString());
-            if (entry.standard.isEmpty()) {
-                continue;
-            }
-            paths.append(entry);
-        }
-    }
-
-    if (paths.isEmpty()) {
-        return defaultLanguageStandard;
-    }
-
-    const Path itemPath = item->path();
-    const Path rootDirectory = item->project()->path();
-
-    Path closestPath;
-    QString standard;
-
-    for (const auto& entry : paths) {
-        Path targetDirectory = rootDirectory;
-
-        targetDirectory.addPath(entry.path);
-
-        if (targetDirectory == itemPath) {
-            return entry.standard;;
-        }
-
-        if (targetDirectory.isParentOf(itemPath)) {
-            if (closestPath.isEmpty() || targetDirectory.segments().size() > closestPath.segments().size()) {
-                closestPath = targetDirectory;
-                standard = entry.standard;
-            }
-        }
-    }
-
-    return standard.isEmpty() ? defaultLanguageStandard : standard;
-}
-
 ClangParsingEnvironmentFile* parsingEnvironmentFile(const TopDUContext* context)
 {
     return dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data());
@@ -234,11 +179,11 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     if (auto file = findProjectFileItem(tuUrl, &hasBuildSystemInfo)) {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(file));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(file));
-        m_environment.setLanguageStandard(languageStandard(file));
+        m_environment.setParserSettings(ClangSettingsManager::self()->parserSettings(file));
     } else {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(tuUrl.str()));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(tuUrl.str()));
-        m_environment.setLanguageStandard(QStringLiteral("c++11"));
+        m_environment.setParserSettings(ClangSettingsManager::self()->defaultParserSettings());
     }
     const bool isSource = ClangHelpers::isSource(tuUrl.str());
     m_environment.setQuality(

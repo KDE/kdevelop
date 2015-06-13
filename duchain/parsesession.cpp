@@ -46,30 +46,29 @@ using namespace KDevelop;
 
 namespace {
 
-QVector<const char*> argsForSession(const QString& path, ParseSessionData::Options options, QByteArray& languageStandard)
+QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Options options, const ParserSettings& parserSettings)
 {
     QMimeDatabase db;
     if(db.mimeTypeForFile(path).name() == QStringLiteral("text/x-objcsrc")) {
         return {"-xobjective-c++"};
     }
 
-    //this can happen for unit tests that use the ParseSession directly
-    if (languageStandard.isEmpty()) {
-        static const QByteArray defaultLanguageStandard("c++11");
-        languageStandard = defaultLanguageStandard;
+    // this can happen for unit tests that use the ParseSession directly
+    if (parserSettings.parserOptions.isEmpty()) {
+        return {"-fspell-checking", "-Wdocumentation", "-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++"};
     }
 
-    languageStandard = "-std=" + languageStandard;
+    auto result = parserSettings.toClangAPI();
+    result.append("-nostdinc");
+    result.append("-nostdinc++");
 
     if (options & ParseSessionData::PrecompiledHeader) {
-        return {languageStandard.data(), languageStandard.contains("++") ? "-xc++-header" : "-xc-header", "-Wall", "-nostdinc", "-nostdinc++"};
+        result.append(parserSettings.isCpp() ? "-xc++-header" : "-xc-header");
+        return result;
     }
 
-    if(!languageStandard.contains("++")) {
-        return { languageStandard.data(), "-Wall", "-nostdinc", "-nostdinc++" };
-    }
-
-    return { languageStandard.data(), "-xc++", "-Wall", "-nostdinc", "-nostdinc++" };
+    result.append(parserSettings.isCpp() ? "-xc++" : "-xc");
+    return result;
 }
 
 void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
@@ -122,25 +121,31 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     const auto tuUrl = environment.translationUnitUrl();
     Q_ASSERT(!tuUrl.isEmpty());
 
-    auto languageStandard = environment.languageStandard().toLocal8Bit();
-    QVector<const char*> args = argsForSession(tuUrl.str(), options, languageStandard);
+    const auto arguments = argsForSession(tuUrl.str(), options, environment.parserSettings());
+    QVector<const char*> clangArguments;
 
     const auto& includes = environment.includes();
     const auto& pchInclude = environment.pchInclude();
+
     // uses QByteArray as smart-pointer for const char* ownership
-    QVector<QByteArray> otherArgs;
-    otherArgs.reserve(includes.system.size() + includes.project.size()
-                      + pchInclude.isValid() + 1);
-    args.reserve(args.size() + otherArgs.size());
+    QVector<QByteArray> smartArgs;
+    smartArgs.reserve(includes.system.size() + includes.project.size()
+                      + pchInclude.isValid() + arguments.size() + 1);
+    clangArguments.reserve(smartArgs.size());
+
+    std::transform(arguments.constBegin(), arguments.constEnd(),
+                   std::back_inserter(clangArguments),
+                   [] (const QByteArray &argument) { return argument.constData(); });
+
     // NOTE: the PCH include must come before all other includes!
     if (pchInclude.isValid()) {
-        args << "-include";
+        clangArguments << "-include";
         QByteArray pchFile = pchInclude.toLocalFile().toUtf8();
-        otherArgs << pchFile;
-        args << pchFile.constData();
+        smartArgs << pchFile;
+        clangArguments << pchFile.constData();
     }
-    addIncludes(&args, &otherArgs, includes.system, "-isystem");
-    addIncludes(&args, &otherArgs, includes.project, "-I");
+    addIncludes(&clangArguments, &smartArgs, includes.system, "-isystem");
+    addIncludes(&clangArguments, &smartArgs, includes.project, "-I");
 
     m_definesFile.open();
     QTextStream definesStream(&m_definesFile);
@@ -150,8 +155,8 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
     }
     definesStream.flush();
-    otherArgs << m_definesFile.fileName().toUtf8();
-    args << "-imacros" << otherArgs.last().constData();
+    smartArgs << m_definesFile.fileName().toUtf8();
+    clangArguments << "-imacros" << smartArgs.last().constData();
 
     QVector<CXUnsavedFile> unsaved;
     //For PrecompiledHeader, we don't want unsaved contents (and contents.isEmpty())
@@ -162,7 +167,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
 #if CINDEX_VERSION_MINOR >= 23
     const CXErrorCode code = clang_parseTranslationUnit2(
         index->index(), tuUrl.byteArray().constData(),
-        args.constData(), args.size(),
+        clangArguments.constData(), clangArguments.size(),
         unsaved.data(), unsaved.size(),
         flags,
         &m_unit
@@ -173,7 +178,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
 #else
     m_unit = clang_parseTranslationUnit(
         index->index(), tuUrl.byteArray().constData(),
-        args.constData(), args.size(),
+        clangArguments.constData(), clangArguments.size(),
         unsaved.data(), unsaved.size(),
         flags
     );

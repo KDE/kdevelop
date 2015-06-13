@@ -25,102 +25,136 @@
 
 #include "ui_configwidget.h"
 
-#include <QFileSystemModel>
+#include "pathsmodel.h"
 
 #include <interfaces/iproject.h>
 #include <util/path.h>
 
-namespace
+#include <QFileDialog>
+
+QString languageStandard(const QString& arguments)
 {
-int indexOfPath(const QList<ParserSettingsEntry>& paths, const QString& path)
-{
-    for (int i = 0; i < paths.size(); i++) {
-        if (paths[i].path == path) {
-            return i;
-        }
+    int idx = arguments.indexOf("-std=");
+    if(idx == -1){
+        return QStringLiteral("c++11");
     }
 
-    return -1;
-}
-
-QString parserOptions(const QList<ParserSettingsEntry>& paths, const QString& path, KDevelop::IProject* project)
-{
-    int idx = indexOfPath(paths, path);
-    if (idx != -1) {
-        return paths[idx].settings.parserOptions;
-    }
-
-    return ClangSettingsManager::self()->parserSettings(path, project).parserOptions;
-}
-
+    idx += 5;
+    int end = arguments.indexOf(' ', idx) != -1 ? arguments.indexOf(' ', idx) : arguments.size();
+    return arguments.mid(idx, end - idx);
 }
 
 ConfigWidget::ConfigWidget(QWidget* parent, KDevelop::IProject* project)
     : QWidget(parent)
     , m_ui(new Ui::ConfigWidget())
     , m_project(project)
-    , m_paths(ClangSettingsManager::self()->readPaths(project))
 {
-    const auto parentFolder = project->path().parent().toLocalFile();
     const auto projectFolder = project->path().toLocalFile();
 
     m_ui->setupUi(this);
-    auto model = new QFileSystemModel(this);
-    model->setRootPath(projectFolder);
-    model->setReadOnly(true);
+    m_model = new PathsModel(this);
+    m_model->setProjectPath(project->path());
 
-    m_ui->pathView->setModel(model);
-    m_ui->pathView->setRootIndex(model->index(parentFolder));
-    m_ui->pathView->setSortingEnabled(false);
-
-    for (int i = model->columnCount() - 1; i >= 1; i--) {
-        m_ui->pathView->setColumnHidden(i, true);
+    m_ui->pathView->setModel(m_model);
+    auto paths = ClangSettingsManager::self()->readPaths(project);
+    if (paths.isEmpty()) {
+        paths.append({ClangSettingsManager::self()->parserSettings(projectFolder, project), QStringLiteral(".")});
     }
+    m_model->setPaths(paths);
 
-    // TODO: hide somehow all other non project folders in the parent directory
-    m_ui->pathView->setCurrentIndex(model->index(projectFolder));
+    m_ui->pathView->setCurrentIndex(m_model->index(0));
 
-    connect(m_ui->pathView, &QTreeView::activated, this, &ConfigWidget::itemActivated);
+    connect(m_ui->pathView, &QListView::activated, this, &ConfigWidget::itemActivated);
     connect(m_ui->parserOptions, &QLineEdit::textEdited, this, &ConfigWidget::textEdited);
 
+    connect(m_model,&PathsModel::changed, this, &ConfigWidget::changed);
+    connect(m_model,&PathsModel::rowsInserted, this, &ConfigWidget::itemActivated);
+    connect(m_model,&PathsModel::rowsRemoved, this, &ConfigWidget::itemActivated);
+
     m_ui->parserOptions->setText(ClangSettingsManager::self()->parserSettings(projectFolder, m_project).parserOptions);
+
+    QAction* delDefAction = new QAction(i18n("Delete path"), this);
+    delDefAction->setShortcut(QKeySequence(Qt::Key_Delete));
+    delDefAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    delDefAction->setIcon(QIcon::fromTheme("list-remove"));
+    m_ui->pathView->addAction(delDefAction);
+    m_ui->pathView->setContextMenuPolicy(Qt::ActionsContextMenu);
+    connect(delDefAction, &QAction::triggered, this, &ConfigWidget::deletePath);
+
+    connect(m_ui->addPath, &QPushButton::clicked, this, &ConfigWidget::addPath);
+    connect(m_ui->removePath, &QPushButton::clicked, this, &ConfigWidget::deletePath);
+
+    m_ui->languageStandards->setCurrentText(languageStandard(m_ui->parserOptions->text()));
+    connect(m_ui->languageStandards, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ConfigWidget::languageStandardChanged);
 }
 
-void ConfigWidget::itemActivated(const QModelIndex& index)
+void ConfigWidget::itemActivated()
 {
-    auto model = static_cast<const QFileSystemModel*>(index.model());
-    auto path = model->filePath(index);
+    const auto selection = m_ui->pathView->selectionModel()->currentIndex();
+    if(!selection.isValid()){
+        m_ui->parserOptions->clear();
+        return;
+    }
 
-    auto options = parserOptions(m_paths, path, m_project);
-    m_ui->parserOptions->setText(options);
+    auto settings = m_model->data(selection, PathsModel::ParserOptionsRole).value<ParserSettings>();
+
+    m_ui->parserOptions->setText(settings.parserOptions);
+    m_ui->languageStandards->setCurrentText(languageStandard(m_ui->parserOptions->text()));
+}
+
+void ConfigWidget::writeSettings()
+{
+    ClangSettingsManager::self()->writePaths(m_project, m_model->paths());
+}
+
+void ConfigWidget::deletePath()
+{
+    const auto selection = m_ui->pathView->selectionModel()->currentIndex();
+
+    m_model->removeRow(selection.row());
+}
+
+void ConfigWidget::addPath()
+{
+    QFileDialog dlg(this, "", m_project->path().toLocalFile());
+    dlg.setFileMode(QFileDialog::Directory);
+    dlg.setOption(QFileDialog::ReadOnly, true);
+    if(dlg.exec() == QDialog::Rejected){
+        return;
+    }
+
+    m_model->addPath(dlg.directoryUrl().toLocalFile());
+    m_ui->pathView->setCurrentIndex(m_model->index(m_model->rowCount() - 1));
 }
 
 void ConfigWidget::textEdited()
 {
     const auto parserOptions = m_ui->parserOptions->text();
     const auto index = m_ui->pathView->selectionModel()->currentIndex();
-    auto model = static_cast<const QFileSystemModel*>(index.model());
-    const auto path = model->filePath(index);
 
-    if(path.isEmpty()){
-        return;
-    }
+    m_model->setData(index, QVariant::fromValue(ParserSettings {parserOptions}), PathsModel::ParserOptionsRole);
 
-    auto currentSettings = ClangSettingsManager::self()->parserSettings(path, m_project);
-
-    if(currentSettings.parserOptions == parserOptions){
-        return;
-    }
-
-    int idx = indexOfPath(m_paths, path);
-    if (idx == -1) {
-        m_paths.append({{parserOptions}, path});
-    } else {
-        m_paths[idx] = {{parserOptions}, path};
-    }
+    m_ui->languageStandards->setCurrentText(languageStandard(m_ui->parserOptions->text()));
 }
 
-void ConfigWidget::writeSettings()
+void ConfigWidget::languageStandardChanged(const QString& standard)
 {
-    ClangSettingsManager::self()->writePaths(m_project, m_paths);
+    auto text = m_ui->parserOptions->text();
+
+    auto currentStandard = languageStandard(text);
+
+    m_ui->parserOptions->setText(text.replace(currentStandard, standard));
+
+    textEdited();
+}
+
+void ConfigWidget::defaults()
+{
+    ParserSettingsEntry entry;
+    entry.path = QStringLiteral(".");
+    entry.settings = ClangSettingsManager::self()->defaultParserSettings();
+    m_model->setPaths({entry});
+
+    m_ui->parserOptions->setText(entry.settings.parserOptions);
+    m_ui->languageStandards->setCurrentText(languageStandard(m_ui->parserOptions->text()));
 }

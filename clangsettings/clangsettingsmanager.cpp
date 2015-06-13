@@ -70,7 +70,7 @@ CodeCompletionSettings readCodeCompletionSettings(KConfig* cfg)
     return settings;
 }
 
-ParserSettings parserOptionsForItem(const QList<ParserSettingsEntry>& paths, const Path itemPath, const Path /*rootDirectory*/)
+ParserSettings parserOptionsForItem(const QList<ParserSettingsEntry>& paths, const Path itemPath, const Path rootDirectory)
 {
     Path closestPath;
     ParserSettings settings;
@@ -78,10 +78,9 @@ ParserSettings parserOptionsForItem(const QList<ParserSettingsEntry>& paths, con
     // find parser options configured to a path closest to the requested item
     for (const auto& entry : paths) {
         auto settingsEntry = entry;
-        // TODO: store paths without project path
-        Path targetDirectory = Path(entry.path);//rootDirectory;
+        Path targetDirectory = rootDirectory;
 
-        //targetDirectory.addPath(entry.path);
+        targetDirectory.addPath(entry.path);
 
         if (targetDirectory == itemPath){
             return settingsEntry.settings;
@@ -95,7 +94,7 @@ ParserSettings parserOptionsForItem(const QList<ParserSettingsEntry>& paths, con
         }
     }
 
-    return settings;
+    return settings.parserOptions.isEmpty() ? ClangSettingsManager::self()->defaultParserSettings() : settings;
 }
 
 }
@@ -123,8 +122,7 @@ ParserSettings ClangSettingsManager::parserSettings(KDevelop::ProjectBaseItem* i
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     if (!item) {
-        // TODO: default value;
-        return {};
+        return defaultParserSettings();
     }
 
    return parserOptionsForItem(readPaths(item->project()), item->path(), item->project()->path());
@@ -158,7 +156,7 @@ QList<ParserSettingsEntry> ClangSettingsManager::readPaths(KDevelop::IProject* p
             continue;
         }
 
-        path.settings.parserOptions = pathgrp.readEntry(parserOptions, "-fspell-checking -Wdocumentation ");
+        path.settings.parserOptions = pathgrp.readEntry(parserOptions, defaultParserSettings().parserOptions);
         paths.append(path);
     }
 
@@ -177,4 +175,32 @@ void ClangSettingsManager::writePaths(KDevelop::IProject* project, const QList<P
         pathgrp.writeEntry(parserPath, path.path);
         pathgrp.writeEntry(parserOptions, path.settings.parserOptions);
     }
+}
+
+ParserSettings ClangSettingsManager::defaultParserSettings() const
+{
+    return {"-fspell-checking -Wdocumentation -std=c++11 -Wall"};
+}
+
+bool ParserSettings::isCpp() const
+{
+    return parserOptions.contains(QStringLiteral("-std=c++"));
+}
+
+QVector<QByteArray> ParserSettings::toClangAPI() const
+{
+    auto list = parserOptions.split(' ', QString::SkipEmptyParts);
+    QVector<QByteArray> result;
+    result.reserve(list.size());
+
+    std::transform(list.constBegin(), list.constEnd(),
+                   std::back_inserter(result),
+                   [] (const QString &argument) { return argument.toUtf8(); });
+
+    return result;
+}
+
+bool ParserSettings::operator==(const ParserSettings& rhs) const
+{
+    return parserOptions == rhs.parserOptions;
 }

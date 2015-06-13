@@ -14,6 +14,7 @@ set(clangsettings_SRCS
         clangconfigpage.cpp
         clangsettingsplugin.cpp
         configwidget.cpp
+        pathsmodel.cpp
         sessionsettings/sessionsettings.cpp
 )
 

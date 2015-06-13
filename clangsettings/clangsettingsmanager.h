@@ -25,6 +25,7 @@
 #define CLANGSETTINGSMANAGER_H
 
 #include <QString>
+#include <QMetaType>
 
 class KConfig;
 
@@ -36,7 +37,11 @@ class IProject;
 
 struct ParserSettings {
     QString parserOptions;
+    bool isCpp() const;
+    QVector<QByteArray> toClangAPI() const;
+    bool operator==(const ParserSettings& rhs) const;
 };
+Q_DECLARE_METATYPE(ParserSettings);
 
 struct ParserSettingsEntry
 {
@@ -66,6 +71,8 @@ public:
     ParserSettings parserSettings(KDevelop::ProjectBaseItem* item) const;
 
     ParserSettings parserSettings(const QString& item, KDevelop::IProject* project) const;
+
+    ParserSettings defaultParserSettings() const;
 
     QList<ParserSettingsEntry> readPaths(KDevelop::IProject* project) const;
 

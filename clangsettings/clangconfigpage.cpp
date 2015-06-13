@@ -31,18 +31,20 @@
 ClangConfigPage::ClangConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<ClangProjectConfig>(plugin, options, parent)
 {
-    configWidget = new ConfigWidget(this, project());
+    m_configWidget = new ConfigWidget(this, project());
     auto layout = new QVBoxLayout(this);
-    layout->addWidget(configWidget);
+    layout->addWidget(m_configWidget);
+
+    connect(m_configWidget, &ConfigWidget::changed, this, &ClangConfigPage::changed);
 }
 
 ClangConfigPage::~ClangConfigPage()
 {}
 
-void ClangConfigPage::reset()
+void ClangConfigPage::defaults()
 {
-    ProjectConfigPage::reset();
-    // TODO: clear parser settings
+    ProjectConfigPage::defaults();
+    m_configWidget->defaults();
 }
 
 void ClangConfigPage::apply()

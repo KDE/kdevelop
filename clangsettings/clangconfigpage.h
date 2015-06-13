@@ -40,9 +40,10 @@ public:
     virtual QIcon icon() const override;
 
     virtual void apply() override;
-    virtual void reset() override;
+    virtual void defaults() override;
+
 private:
-    class ConfigWidget* configWidget;
+    class ConfigWidget* m_configWidget;
 };
 
 #endif

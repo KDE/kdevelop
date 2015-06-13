@@ -38,21 +38,31 @@ namespace KDevelop
 class IProject;
 }
 
+class PathsModel;
+
 class ConfigWidget : public QWidget
 {
+    Q_OBJECT
 public:
     ConfigWidget(QWidget* parent, KDevelop::IProject* project);
 
     void writeSettings();
+    void defaults();
+
+Q_SIGNALS:
+    void changed();
 
 private Q_SLOTS:
-    void itemActivated(const QModelIndex& index);
+    void itemActivated();
+    void addPath();
+    void deletePath();
     void textEdited();
+    void languageStandardChanged(const QString& standard);
 
 private:
     Ui::ConfigWidget* m_ui;
     KDevelop::IProject* m_project;
-    QList<ParserSettingsEntry> m_paths;
+    PathsModel* m_model;
 };
 
 #endif // CONFIGWIDGET_H

@@ -23,65 +23,116 @@
       <attribute name="title">
        <string>Parser settings</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_8">
+      <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
-        <widget class="QTreeView" name="pathView"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QPushButton" name="addPath">
+           <property name="text">
+            <string>&amp;Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="removePath">
+           <property name="text">
+            <string>&amp;Remove</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
-       <item row="0" column="1">
+       <item row="0" column="1" rowspan="2">
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
           <string>Settings</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Language standard</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="languageStandards">
+              <item>
+               <property name="text">
+                <string>c90</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>c99</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>c11</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>c++98</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>c++03</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>c++11</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>c++14</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="QLabel" name="label">
               <property name="text">
-               <string>Options  </string>
+               <string>Arguments</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="parserOptions"/>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <layout class="QGridLayout" name="gridLayout_6">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Compiler</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1" colspan="2">
-             <widget class="QComboBox" name="compiler"/>
-            </item>
-            <item row="1" column="0" colspan="2">
-             <widget class="QPushButton" name="configureCompiler">
-              <property name="text">
-               <string>Configure...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
+             <widget class="QLineEdit" name="parserOptions">
+              <property name="minimumSize">
                <size>
-                <width>40</width>
-                <height>20</height>
+                <width>100</width>
+                <height>0</height>
                </size>
               </property>
-             </spacer>
+             </widget>
             </item>
            </layout>
           </item>
-          <item row="2" column="0">
+          <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -96,6 +147,9 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QListView" name="pathView"/>
        </item>
       </layout>
      </widget>
