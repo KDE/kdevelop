@@ -146,7 +146,7 @@ QVector<Test> importTestSuites(const Path &buildDir)
             Test test;
             QStringList args = KShell::splitArgs(match.captured(2));
             test.name = match.captured(1);
-            test.executable = Path(args.takeFirst());
+            test.executable = Path(buildDir, args.takeFirst());
             test.arguments = args;
             ret += test;
         }
