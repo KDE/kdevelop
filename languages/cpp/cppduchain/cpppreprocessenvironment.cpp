@@ -117,7 +117,7 @@ void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file, bool mer
       rpp::Environment::setMacro(const_cast<rpp::pp_macro*>(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
     for( Cpp::ReferenceCountedStringSet::Iterator it = file->definedMacroNames().iterator(); it; ++it ) {
-      m_macroNameSet.insert(it.ref());
+      m_macroNameSet.insert(*it);
     }
 
     //We don't have to care about efficiency too much here, unDefinedMacros should be a rather small set
@@ -126,7 +126,7 @@ void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file, bool mer
         m->defined = false;
         m->m_valueHashValid = false;
         rpp::Environment::setMacro(m); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
-        m_macroNameSet.remove(it.ref());
+        m_macroNameSet.remove(*it);
     }
 }
 
