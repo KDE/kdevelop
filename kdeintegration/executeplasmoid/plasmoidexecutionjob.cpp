@@ -113,7 +113,7 @@ void PlasmoidExecutionJob::slotFailed(QProcess::ProcessError error)
 {
     setError(error);
     // FIXME need more detail
-    setErrorText(i18n("Ninja failed to compile %1", m_process->workingDirectory()));
+    setErrorText(i18n("Plasmoid failed to execute on %1", m_process->workingDirectory()));
     model()->appendLine( i18n("*** Failed ***") );
     emitResult();
 }
@@ -128,6 +128,7 @@ QStringList PlasmoidExecutionJob::arguments(ILaunchConfiguration* cfg)
     QStringList arguments = cfg->config().readEntry("Arguments", QStringList());
     if(workingDirectory(cfg) == QDir::tempPath()) {
         QString identifier = cfg->config().readEntry("PlasmoidIdentifier", "");
+        arguments += "-a";
         arguments += identifier;
     }
     return arguments;
