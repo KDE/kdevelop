@@ -75,7 +75,9 @@ private:
 };
 
 ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
-: QCompleter(parent), mModel(KDevelop::ICore::self()->projectController()->projectModel()), mBase( 0 )
+    : QCompleter(parent)
+    , mModel(KDevelop::ICore::self()->projectController()->projectModel())
+    , mBase( 0 )
 {
     setModel(mModel);
     setCaseSensitivity( Qt::CaseInsensitive );
@@ -147,7 +149,8 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     : QLineEdit(parent),
       m_base(0),
       m_completer( new ProjectItemCompleter( this ) ),
-      m_validator( new ProjectItemValidator( this ) )
+      m_validator( new ProjectItemValidator( this ) ),
+      m_suggestion( 0 )
 {
     setCompleter( m_completer );
     setValidator( m_validator );
@@ -197,6 +200,11 @@ bool ProjectItemLineEdit::selectItemDialog()
     connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
     mainLayout->addWidget(buttonBox);
 
+    if (m_suggestion) {
+        const QModelIndex idx = proxymodel->proxyIndexFromItem(m_suggestion->projectItem());
+        view->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
+    }
+
     int res = dialog.exec();
 
     if(res==QDialog::Accepted && view->selectionModel()->hasSelection()) {
@@ -235,6 +243,11 @@ KDevelop::ProjectBaseItem* ProjectItemLineEdit::currentItem() const
 {
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     return model->itemFromIndex(model->pathToIndex(KDevelop::splitWithEscaping(text(),'/', '\\')));
+}
+
+void ProjectItemLineEdit::setSuggestion(KDevelop::IProject* project)
+{
+    m_suggestion = project;
 }
 
 #include "projectitemlineedit.moc"

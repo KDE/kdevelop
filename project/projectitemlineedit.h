@@ -26,6 +26,7 @@
 namespace KDevelop { 
 class ProjectModel; 
 class ProjectBaseItem;
+class IProject;
 }
 
 class ProjectItemValidator;
@@ -65,6 +66,8 @@ public:
     
     KDevelop::ProjectBaseItem* currentItem() const;
     
+    void setSuggestion(KDevelop::IProject* project);
+
 public slots:
     bool selectItemDialog();
     
@@ -75,6 +78,7 @@ private:
     KDevelop::ProjectBaseItem* m_base;
     ProjectItemCompleter* m_completer;
     ProjectItemValidator* m_validator;
+    KDevelop::IProject* m_suggestion;
 };
 
 #endif

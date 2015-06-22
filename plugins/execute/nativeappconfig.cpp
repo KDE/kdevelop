@@ -81,6 +81,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
             executablePath->setUrl( pc->projects().count() ? pc->projects().first()->path().toUrl() : QUrl() );
         }
     }
+    targetDependency->setSuggestion(project);
 
     //executablePath->setFilter("application/x-executable");
 
