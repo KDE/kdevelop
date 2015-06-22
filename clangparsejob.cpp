@@ -325,7 +325,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
-    if (!clang_getFile(session.unit(), document().byteArray())) {
+    if (!clang_getFile(session.unit(), document().byteArray().constData())) {
         // this parse job's document does not exist in the pinned translation unit
         // so we need to unpin and re-add this document
         // Ideally we'd reset m_environment and session, but this is much simpler
@@ -344,7 +344,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         auto pchFile = pch->mapFile(session.unit());
         includedFiles = pch->mapIncludes(session.unit());
         includedFiles.insert(pchFile, pch->context());
-        auto tuFile = clang_getFile(session.unit(), m_environment.translationUnitUrl().byteArray());
+        auto tuFile = clang_getFile(session.unit(), m_environment.translationUnitUrl().byteArray().constData());
         imports.insert(tuFile, { pchFile, CursorInRevision(0, 0) } );
     }
 

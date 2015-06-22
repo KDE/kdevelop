@@ -170,7 +170,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
 
 #if CINDEX_VERSION_MINOR >= 23
     const CXErrorCode code = clang_parseTranslationUnit2(
-        index->index(), tuUrl.byteArray(),
+        index->index(), tuUrl.byteArray().constData(),
         args.constData(), args.size(),
         unsaved.data(), unsaved.size(),
         flags,
@@ -181,7 +181,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     }
 #else
     m_unit = clang_parseTranslationUnit(
-        index->index(), tuUrl.byteArray(),
+        index->index(), tuUrl.byteArray().constData(),
         args.constData(), args.size(),
         unsaved.data(), unsaved.size(),
         flags
@@ -193,7 +193,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         m_environment = environment;
 
         if (options.testFlag(PrecompiledHeader)) {
-            clang_saveTranslationUnit(m_unit, tuUrl.byteArray() + ".pch", CXSaveTranslationUnit_None);
+            clang_saveTranslationUnit(m_unit, (tuUrl.byteArray() + ".pch").constData(), CXSaveTranslationUnit_None);
         }
     } else {
         clangDebug() << "Failed to parse translation unit:" << tuUrl;
