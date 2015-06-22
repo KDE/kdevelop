@@ -57,9 +57,7 @@ void AllClassesFolder::populateNode()
   // Parse each existing project file
   foreach(IProject* project, ICore::self()->projectController()->projects())
   {
-    // Run over all the files in the project.
-    foreach(const IndexedString& file, project->fileSet())
-      parseDocument(file);
+    projectOpened(project);
   }
 }
 

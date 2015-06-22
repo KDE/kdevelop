@@ -82,6 +82,8 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
+
+    updateProjectPaths();
 }
 
 KDevDocumentView::~KDevDocumentView()

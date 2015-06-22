@@ -229,10 +229,14 @@ QuickOpenDataPointer BaseFileDataProvider::data(uint row) const
 
 ProjectFileDataProvider::ProjectFileDataProvider()
 {
-    connect(ICore::self()->projectController(), &IProjectController::projectClosing,
+    auto projectController = ICore::self()->projectController();
+    connect(projectController, &IProjectController::projectClosing,
             this, &ProjectFileDataProvider::projectClosing);
-    connect(ICore::self()->projectController(), &IProjectController::projectOpened,
+    connect(projectController, &IProjectController::projectOpened,
             this, &ProjectFileDataProvider::projectOpened);
+    foreach (auto project, projectController->projects()) {
+        projectOpened(project);
+    }
 }
 
 void ProjectFileDataProvider::projectClosing( IProject* project )
