@@ -67,6 +67,8 @@ public:
 
     ~ParseSessionData();
 
+    ClangParsingEnvironment environment() const;
+
 private:
     friend class ParseSession;
 

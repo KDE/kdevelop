@@ -214,6 +214,11 @@ void ParseSessionData::setUnit(CXTranslationUnit unit)
     m_file = clang_getFile(m_unit, unitFile.c_str());
 }
 
+ClangParsingEnvironment ParseSessionData::environment() const
+{
+    return m_environment;
+}
+
 ParseSession::ParseSession(const ParseSessionData::Ptr& data)
     : d(data)
 {

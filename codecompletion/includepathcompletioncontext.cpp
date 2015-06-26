@@ -281,8 +281,7 @@ IncludePathCompletionContext::IncludePathCompletionContext(const DUContextPointe
         return;
     }
 
-    ParseSession session(sessionData);
-    m_includeItems = includeItemsForUrl(url, properties, properties.local ?  session.environment().includes().project : session.environment().includes().system);
+    m_includeItems = includeItemsForUrl(url, properties, properties.local ?  sessionData->environment().includes().project : sessionData->environment().includes().system);
 }
 
 QList< CompletionTreeItemPointer > IncludePathCompletionContext::completionItems(bool& abort, bool)
