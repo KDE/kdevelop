@@ -71,6 +71,8 @@ Q_SIGNALS:
     void pruned(KDevelop::IProject*);
 
 private:
+    KJob* checkConfigureJob(KDevelop::IProject* project, bool& valid);
+
     void addBuilder(const QString& neededfile, const QStringList& generator, KDevelop::IPlugin* i);
     KDevelop::IProjectBuilder* builderForProject(KDevelop::IProject* p) const;
     QMap<QString, KDevelop::IProjectBuilder*> m_builders;

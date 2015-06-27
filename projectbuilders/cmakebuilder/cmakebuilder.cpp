@@ -98,17 +98,11 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
     IProjectBuilder* builder = builderForProject(p);
     if( builder )
     {
-        KJob* configure = 0;
-        if( CMake::checkForNeedingConfigure(dom->project()) )
-        {
-            qCDebug(CMAKEBUILDER) << "Needing configure, adding item and setting job";
-            configure = this->configure(p);
-        } else if( CMake::currentBuildDir(p).isEmpty() )
-        {
-            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
-                               i18n("No Build Directory configured, cannot build"), i18n("Aborting build") );
+        bool valid;
+        KJob* configure = checkConfigureJob(dom->project(), valid);
+        if (!valid)
             return 0;
-        }
+
         KJob* build = 0;
         if(dom->file())
         {
@@ -146,20 +140,14 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     IProjectBuilder* builder = builderForProject(dom->project());
     if( builder )
     {
+        bool valid;
+        KJob* configure = checkConfigureJob(dom->project(), valid);
+        if (!valid)
+            return nullptr;
+
         KDevelop::ProjectBaseItem* item = dom;
         if(dom->file()) //It doesn't work to compile a file
             item=(KDevelop::ProjectBaseItem*) dom->parent();
-
-        KJob* configure = 0;
-        if( CMake::checkForNeedingConfigure(item->project()) )
-        {
-            configure = this->configure(item->project());
-        } else if( CMake::currentBuildDir( item->project() ).isEmpty() )
-        {
-            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
-                               i18n("No Build Directory configured, cannot clean"), i18n("Aborting clean") );
-            return 0;
-        }
 
         qCDebug(CMAKEBUILDER) << "Cleaning with make";
         KJob* clean = builder->clean(item);
@@ -180,21 +168,14 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
     IProjectBuilder* builder = builderForProject(dom->project());
     if( builder )
     {
+        bool valid;
+        KJob* configure = checkConfigureJob(dom->project(), valid);
+        if (!valid)
+            return 0;
+
         KDevelop::ProjectBaseItem* item = dom;
         if(dom->file())
             item=(KDevelop::ProjectBaseItem*) dom->parent();
-
-
-        KJob* configure = 0;
-        if( CMake::checkForNeedingConfigure(item->project()) )
-        {
-            configure = this->configure(item->project());
-        } else if( CMake::currentBuildDir( item->project() ).isEmpty() )
-        {
-            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
-                               i18n("No Build Directory configured, cannot install"), i18n("Aborting install") );
-            return 0;
-        }
 
         qCDebug(CMAKEBUILDER) << "Installing with make";
         KJob* install = builder->install(item);
@@ -209,6 +190,24 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 
     }
     return 0;
+}
+
+KJob* CMakeBuilder::checkConfigureJob(KDevelop::IProject* project, bool& valid)
+{
+    valid = false;
+    KJob* configure = 0;
+    if( CMake::checkForNeedingConfigure(project) )
+    {
+        configure = this->configure(project);
+    }
+    else if( CMake::currentBuildDir(project).isEmpty() )
+    {
+        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                            i18n("No Build Directory configured, cannot install"), i18n("Aborting") );
+        return nullptr;
+    }
+    valid = true;
+    return configure;
 }
 
 KJob* CMakeBuilder::configure( KDevelop::IProject* project )
