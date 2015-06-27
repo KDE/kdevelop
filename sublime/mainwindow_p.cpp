@@ -43,8 +43,12 @@ class IdealToolBar : public QToolBar
 {
     Q_OBJECT
     public:
-        explicit IdealToolBar(const QString& title, Sublime::IdealButtonBarWidget* buttons, QMainWindow* parent)
-            : QToolBar(title, parent), m_buttons(buttons)
+        explicit IdealToolBar(const QString& title, bool hideWhenEmpty, Sublime::IdealButtonBarWidget* buttons, QMainWindow* parent)
+            : QToolBar(title, parent)
+            , m_timer(nullptr)
+            , m_buttons(buttons)
+            , m_hideWhenEmpty(hideWhenEmpty)
+            , m_requestedVisibility(true)
         {
             setMovable(false);
             setFloatable(false);
@@ -52,30 +56,39 @@ class IdealToolBar : public QToolBar
             layout()->setMargin(0);
 
             addWidget(m_buttons);
-        }
 
-        void hideWhenEmpty()
-        {
-            refresh();
-
-            QTimer* t = new QTimer(this);
-            t->setInterval(100);
-            t->setSingleShot(true);
-            connect(t, &QTimer::timeout, this, &IdealToolBar::refresh);
-            connect(this, &IdealToolBar::visibilityChanged, t, static_cast<void(QTimer::*)()>(&QTimer::start));
-            connect(m_buttons, &Sublime::IdealButtonBarWidget::emptyChanged, t, static_cast<void(QTimer::*)()>(&QTimer::start));
-        }
-
-    public slots:
-        void refresh()
-        {
-            if(m_buttons->isEmpty()==isVisible()) {
-                setVisible(!m_buttons->isEmpty());
+            if (m_hideWhenEmpty) {
+                m_timer = new QTimer(this);
+                m_timer->setInterval(100);
+                m_timer->setSingleShot(true);
+                connect(m_timer, &QTimer::timeout, this, &IdealToolBar::refresh);
+                connect(this, &IdealToolBar::visibilityChanged, m_timer, static_cast<void(QTimer::*)()>(&QTimer::start));
+                connect(m_buttons, &Sublime::IdealButtonBarWidget::emptyChanged, m_timer, static_cast<void(QTimer::*)()>(&QTimer::start));
             }
         }
 
+        void setVisible(bool visible) override
+        {
+            QToolBar::setVisible(visible);
+
+            m_requestedVisibility = visible;
+
+            if (m_hideWhenEmpty && visible) {
+                m_timer->start();
+            }
+        }
+
+    private slots:
+        void refresh()
+        {
+            setVisible(m_requestedVisibility && !m_buttons->isEmpty());
+        }
+
     private:
+        QTimer* m_timer;
         Sublime::IdealButtonBarWidget* m_buttons;
+        const bool m_hideWhenEmpty;
+        bool m_requestedVisibility;
 };
 
 namespace Sublime {
@@ -86,32 +99,41 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 {
     KActionCollection *ac = m_mainWindow->actionCollection();
 
+    m_concentrationModeAction = new QAction(i18n("Concentration Mode"), this);
+    m_concentrationModeAction->setIcon(QIcon::fromTheme(QStringLiteral("page-zoom")));
+    m_concentrationModeAction->setToolTip(i18n("Removes most of the controls so you can focus on what matters."));
+    m_concentrationModeAction->setCheckable(true);
+    m_concentrationModeAction->setChecked(false);
+    ac->setDefaultShortcut(m_concentrationModeAction, Qt::META | Qt::Key_C);
+    connect(m_concentrationModeAction, &QAction::toggled, this, &MainWindowPrivate::restoreConcentrationMode);
+    ac->addAction("toggle_concentration_mode", m_concentrationModeAction);
+
     QAction* action = new QAction(i18n("Show Left Dock"), this);
     action->setCheckable(true);
-    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_L);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Left);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showLeftDock);
 
     ac->addAction("show_left_dock", action);
 
     action = new QAction(i18n("Show Right Dock"), this);
     action->setCheckable(true);
-    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_R);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Right);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showRightDock);
     ac->addAction("show_right_dock", action);
 
     action = new QAction(i18n("Show Bottom Dock"), this);
     action->setCheckable(true);
-    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_B);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Down);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showBottomDock);
     ac->addAction("show_bottom_dock", action);
 
     action = new QAction(i18nc("@action", "Focus Editor"), this);
-    ac->setDefaultShortcuts(action, QList<QKeySequence>() << (Qt::META | Qt::CTRL | Qt::Key_E) << Qt::META + Qt::Key_C);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_E);
     connect(action, &QAction::triggered, this, &MainWindowPrivate::focusEditor);
     ac->addAction("focus_editor", action);
 
     action = new QAction(i18n("Hide/Restore Docks"), this);
-    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_H);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Up);
     connect(action, &QAction::triggered, this, &MainWindowPrivate::toggleDocksShown);
     ac->addAction("hide_all_docks", action);
 
@@ -132,16 +154,14 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     idealController = new IdealController(m_mainWindow);
 
-    IdealToolBar* leftToolBar = new IdealToolBar(i18n("Left Button Bar"), idealController->leftBarWidget, m_mainWindow);
-    leftToolBar->hideWhenEmpty();
-    m_mainWindow->addToolBar(Qt::LeftToolBarArea, leftToolBar);
+    m_leftToolBar = new IdealToolBar(i18n("Left Button Bar"), true, idealController->leftBarWidget, m_mainWindow);
+    m_mainWindow->addToolBar(Qt::LeftToolBarArea, m_leftToolBar);
 
-    IdealToolBar* rightToolBar = new IdealToolBar(i18n("Right Button Bar"), idealController->rightBarWidget, m_mainWindow);
-    rightToolBar->hideWhenEmpty();
-    m_mainWindow->addToolBar(Qt::RightToolBarArea, rightToolBar);
+    m_rightToolBar = new IdealToolBar(i18n("Right Button Bar"), true, idealController->rightBarWidget, m_mainWindow);
+    m_mainWindow->addToolBar(Qt::RightToolBarArea, m_rightToolBar);
 
-    IdealToolBar* bottomToolBar = new IdealToolBar(i18n("Bottom Button Bar"), idealController->bottomBarWidget, m_mainWindow);
-    m_mainWindow->addToolBar(Qt::BottomToolBarArea, bottomToolBar);
+    m_bottomToolBar = new IdealToolBar(i18n("Bottom Button Bar"), false, idealController->bottomBarWidget, m_mainWindow);
+    m_mainWindow->addToolBar(Qt::BottomToolBarArea, m_bottomToolBar);
 
     // adymo: intentionally do not add a toolbar for top buttonbar
     // this doesn't work well with toolbars added via xmlgui
@@ -173,6 +193,72 @@ MainWindowPrivate::~MainWindowPrivate()
 {
     delete m_leftTabbarCornerWidget.data();
     m_leftTabbarCornerWidget.clear();
+}
+
+void MainWindowPrivate::disableConcentrationMode()
+{
+    m_concentrationModeAction->setChecked(false);
+    restoreConcentrationMode();
+}
+
+void MainWindowPrivate::restoreConcentrationMode()
+{
+    const bool concentrationModeOn = m_concentrationModeAction->isChecked();
+    QWidget* cornerWidget = Q_NULLPTR;
+    if (m_concentrateToolBar) {
+        QLayout* l = m_concentrateToolBar->layout();
+        QLayoutItem* li = l->takeAt(1); //ensure the cornerWidget isn't destroyed with the toolbar
+        if (li) {
+            cornerWidget = li->widget();
+            delete li;
+        }
+
+        m_concentrateToolBar->deleteLater();
+    }
+
+    m_mainWindow->menuBar()->setVisible(!concentrationModeOn);
+    m_bottomToolBar->setVisible(!concentrationModeOn);
+    m_leftToolBar->setVisible(!concentrationModeOn);
+    m_rightToolBar->setVisible(!concentrationModeOn);
+    const bool hideToolBar = concentrationModeOn || !Container::configTabBarVisible();
+    foreach(Container* c, viewContainers) {
+        c->setTabBarHidden(hideToolBar);
+    }
+
+    if (concentrationModeOn) {
+        m_concentrateToolBar = new QToolBar(m_mainWindow);
+        m_concentrateToolBar->setObjectName("concentrateToolBar");
+        m_concentrateToolBar->addAction(m_concentrationModeAction);
+        QWidgetAction *action = new QWidgetAction(this);
+
+        action->setDefaultWidget(m_mainWindow->menuBar()->cornerWidget(Qt::TopRightCorner));
+        m_concentrateToolBar->addAction(action);
+        m_concentrateToolBar->setMovable(false);
+
+        m_mainWindow->addToolBar(Qt::TopToolBarArea, m_concentrateToolBar);
+        m_mainWindow->menuBar()->setCornerWidget(0, Qt::TopRightCorner);
+    } else if (cornerWidget) {
+        m_mainWindow->menuBar()->setCornerWidget(cornerWidget, Qt::TopRightCorner);
+        cornerWidget->show();
+    }
+
+    if (concentrationModeOn) {
+        m_mainWindow->installEventFilter(this);
+    } else {
+        m_mainWindow->removeEventFilter(this);
+    }
+}
+
+bool MainWindowPrivate::eventFilter(QObject* obj, QEvent* event)
+{
+    Q_ASSERT(m_mainWindow == obj);
+    if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+        Qt::KeyboardModifiers modifiers = static_cast<QKeyEvent *>(event)->modifiers();
+
+        m_mainWindow->menuBar()->setVisible(modifiers == Qt::AltModifier && event->type() == QEvent::KeyPress);
+    }
+
+    return false;
 }
 
 void MainWindowPrivate::showLeftDock(bool b)

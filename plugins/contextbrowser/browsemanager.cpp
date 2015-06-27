@@ -122,7 +122,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     const int browseKey = Qt::Key_Control;
-    const int magicModifier = Qt::Key_Alt;
+    const int magicModifier = Qt::Key_Meta;
 
     //Eventually start key-browsing
     if(keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
@@ -135,17 +135,6 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
             }else{
                 m_delayedBrowsingTimer->start(300);
                 m_browingStartedInView = view;
-            }
-
-            if(magicModifier == Qt::Key_Alt) {
-                //ugly hack:
-                //If the magic modifier is ALT, we have to prevent it from being taken by the menu-bar to switch focus to it.
-                //This behavior depends on the style, but if the menu-bar receives any key-press in between, it doesn't do it.
-                //So we send a meaningless key-press here: The shift-key.
-                QEvent* pressEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Shift, Qt::AltModifier);
-                QEvent* releaseEvent = new QKeyEvent(QEvent::KeyRelease, Qt::Key_Shift, Qt::AltModifier);
-                QApplication::postEvent(masterWidget(widget), pressEvent);
-                QApplication::postEvent(masterWidget(widget), releaseEvent);
             }
         }
 

@@ -61,7 +61,7 @@ const int ASSISTANT_MOD_KEY =
 #ifdef Q_OS_MAC
 Qt::Key_Control;
 #else
-Qt::Key_Alt;
+Qt::Key_Meta;
 #endif
 
 QWidget* findByClassname(const KTextEditor::View* view, const QString& klass)

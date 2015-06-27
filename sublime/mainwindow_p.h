@@ -43,6 +43,7 @@ class QAction;
 class QSplitter;
 class QDockWidget;
 class QComboBox;
+class IdealToolBar;
 
 namespace Sublime {
 
@@ -107,6 +108,9 @@ public:
     int ignoreDockShown;
     bool autoAreaSettingsSave;
 
+    bool eventFilter(QObject* obj, QEvent* event) override;
+    void disableConcentrationMode();
+
 public slots:
     void toggleDocksShown();
 
@@ -135,6 +139,8 @@ private slots:
     void selectPreviousDock();
 
 private:
+    void restoreConcentrationMode();
+
     void setBackgroundVisible(bool v);
     Qt::DockWidgetArea positionToDockArea(Position position);
     void cleanCentralWidget();
@@ -146,6 +152,12 @@ private:
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;
     QPointer<QWidget> m_leftTabbarCornerWidget;
+    QPointer<QToolBar> m_concentrateToolBar;
+    IdealToolBar* m_bottomToolBar;
+    IdealToolBar* m_rightToolBar;
+    IdealToolBar* m_leftToolBar;
+
+    QAction* m_concentrationModeAction;
 };
 
 }

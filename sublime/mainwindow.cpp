@@ -214,6 +214,7 @@ void Sublime::MainWindow::setActiveToolView(View *view)
 
 void MainWindow::saveSettings()
 {
+    d->disableConcentrationMode();
     QString group = "MainWindow";
     if (area())
         group += '_' + area()->objectName();
@@ -318,6 +319,8 @@ void MainWindow::loadSettings()
     hu.stop();
 
     emit settingsLoaded();
+
+    d->disableConcentrationMode();
 }
 
 bool MainWindow::queryClose()
