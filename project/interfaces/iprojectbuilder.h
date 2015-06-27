@@ -45,7 +45,7 @@ public:
     virtual ~IProjectBuilder();
 
     /**
-     * Installs the given project item, exact behaviour depends
+     * Installs the given project @p item, exact behaviour depends
      * on the implementation
      */
     virtual KJob* install(ProjectBaseItem* item) = 0;
@@ -54,37 +54,37 @@ public:
      * Builds the given project item, exact behaviour depends
      * on the implementation
      */
-    virtual KJob* build(ProjectBaseItem *dom) = 0;
+    virtual KJob* build(ProjectBaseItem *item) = 0;
 
     /**
-     * Cleans the given project item, exact behaviour depends
+     * Cleans the given project @p item, exact behaviour depends
      * on the implementation. The cleaning should only include
      * output files, like C/C++ object files, binaries, files
      * that the builder needs shouldn't be removed.
      */
-    virtual KJob* clean(ProjectBaseItem *dom) = 0;
+    virtual KJob* clean(ProjectBaseItem *item) = 0;
 
     /**
-     * Configures the given project, exact behaviour depends
+     * Configures the given @p project, exact behaviour depends
      * on the implementation. After calling this a build() call should
      * succeed (given the code doesn't have errors).
      *
      * This function is optional, the default implementation does nothing.
      */
-    virtual KJob* configure(IProject*);
+    virtual KJob* configure(IProject* project);
 
     /**
-     * Prunes the given project, exact behaviour depends
+     * Prunes the given @p project, exact behaviour depends
      * on the implementation. Additionally to what clean() does this may
      * also remove files used for the builder (or a "subbuilder"), for example
      * generated Makefiles in QMake/CMake/Automake projects
      *
      * This function is optional, the default implementation does nothing.
      */
-    virtual KJob* prune(IProject*);
+    virtual KJob* prune(IProject* project);
 
     /**
-     * Provide access to the builders related to this one.
+     * Provide access to the builders related to the @p project.
      * The list returned by this method is used to select the appropriate config pages for a project.
      * This method may safely return an empty list, as does the default implementation.
      */
