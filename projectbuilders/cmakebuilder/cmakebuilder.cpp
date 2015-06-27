@@ -116,7 +116,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             build = makeBuilder->executeMakeTarget(dom->parent(), target);
             qCDebug(CMAKEBUILDER) << "create build job for target" << build << dom << target;
         }
-        qCDebug(CMAKEBUILDER) << "Building with make";
+        qCDebug(CMAKEBUILDER) << "Building with" << builder;
         if (!build)
         {
             build = builder->build(dom);
@@ -149,7 +149,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         if(dom->file()) //It doesn't work to compile a file
             item=(KDevelop::ProjectBaseItem*) dom->parent();
 
-        qCDebug(CMAKEBUILDER) << "Cleaning with make";
+        qCDebug(CMAKEBUILDER) << "Cleaning with" << builder;
         KJob* clean = builder->clean(item);
         if( configure ) {
             KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
@@ -177,7 +177,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         if(dom->file())
             item=(KDevelop::ProjectBaseItem*) dom->parent();
 
-        qCDebug(CMAKEBUILDER) << "Installing with make";
+        qCDebug(CMAKEBUILDER) << "Installing with" << builder;
         KJob* install = builder->install(item);
         if( configure ) {
             KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
