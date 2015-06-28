@@ -36,6 +36,10 @@ ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jo
 
     qCDebug(UTIL) << "execute composite" << jobs;
     foreach(KJob* job, jobs) {
+        if (!job) {
+            qCWarning(UTIL) << "Added null job!";
+            continue;
+        }
         addSubjob(job);
         if (objectName().isEmpty()) setObjectName(job->objectName());
     }
@@ -59,7 +63,7 @@ void ExecuteCompositeJob::start()
 
 void ExecuteCompositeJob::slotResult(KJob* job)
 {
-    qCDebug(UTIL) << "finished: "<< job;
+    qCDebug(UTIL) << "finished: "<< job << job->error();
     if (d->m_abortOnError && job->error()) {
         qCDebug(UTIL) << "JOB ERROR:" << job->error() << job->errorString();
         KCompositeJob::slotResult(job);
@@ -80,15 +84,12 @@ void ExecuteCompositeJob::slotResult(KJob* job)
 
 bool ExecuteCompositeJob::doKill()
 {
-    qDebug() << "Killing subjobs:" << subjobs().size();
+    qCDebug(UTIL) << "Killing subjobs:" << subjobs().size();
     d->m_killing = true;
     while(hasSubjobs()) {
         KJob* j = subjobs().first();
-        if( !j ) {
-            removeSubjob(j);
-            continue;
-        }
-        if (j->kill()) {
+
+        if (!j || j->kill()) {
             removeSubjob(j);
         } else {
             return false;
