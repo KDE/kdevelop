@@ -167,6 +167,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
     // generate the file system listing
     jobs << KDevelop::AbstractFileManagerPlugin::createImportJob(item);
 
+    Q_ASSERT(!jobs.contains(nullptr));
     ExecuteCompositeJob* composite = new ExecuteCompositeJob(this, jobs);
 //     even if the cmake call failed, we want to load the project so that the project can be worked on
     composite->setAbortOnError(false);
