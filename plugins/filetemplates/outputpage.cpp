@@ -217,9 +217,14 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
 }
 
 void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
-                                   const QUrl& baseUrl,
+                                   const QUrl& _baseUrl,
                                    TemplateRenderer* renderer)
 {
+    QUrl baseUrl = _baseUrl;
+    if (!baseUrl.path().endsWith('/')) {
+        baseUrl.setPath(baseUrl.path()+'/');
+    }
+
     KConfigGroup codegenGroup( KSharedConfig::openConfig(), "CodeGeneration" );
     bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
     d->output->lowerFilenameCheckBox->setChecked(lower);
