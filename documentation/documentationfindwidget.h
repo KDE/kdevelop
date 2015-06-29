@@ -45,6 +45,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationFindWidget : public QWidget
         virtual void showEvent ( QShowEvent* ) override;
         
     private Q_SLOTS:
+        void startSearch();
         void searchNext();
         void searchPrevious();
         

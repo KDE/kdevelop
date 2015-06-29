@@ -69,7 +69,7 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
 
     mBack=mActions->addAction(QIcon::fromTheme("go-previous"), i18n("Back"));
     mForward=mActions->addAction(QIcon::fromTheme("go-next"), i18n("Forward"));
-    mFind=mActions->addAction(QIcon::fromTheme("edit-find"), i18n("Find"), mFindDoc, SLOT(show()));
+    mFind=mActions->addAction(QIcon::fromTheme("edit-find"), i18n("Find"), mFindDoc, SLOT(startSearch()));
     mActions->addSeparator();
     mActions->addAction(QIcon::fromTheme("go-home"), i18n("Home"), this, SLOT(showHome()));
     mProviders=new QComboBox(mActions);

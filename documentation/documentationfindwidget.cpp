@@ -64,8 +64,14 @@ void KDevelop::DocumentationFindWidget::searchPrevious()
     emit newSearch(m_ui->findText->text(), opts);
 }
 
+void KDevelop::DocumentationFindWidget::startSearch()
+{
+    show();
+    m_ui->findText->selectAll();
+    m_ui->findText->setFocus();
+}
+
 void KDevelop::DocumentationFindWidget::showEvent(QShowEvent* e)
 {
-    m_ui->findText->setFocus();
     QWidget::showEvent(e);
 }
