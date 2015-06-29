@@ -84,13 +84,14 @@ void OutputPagePrivate::updateFileNames()
 {
     bool lower = output->lowerFilenameCheckBox->isChecked();
 
-    QHash<QString, QUrl> urls = lower ? lowerCaseUrls : defaultUrls;
+    const QHash<QString, QUrl> urls = lower ? lowerCaseUrls : defaultUrls;
     for (QHash<QString, KUrlRequester*>::const_iterator it = outputFiles.constBegin();
          it != outputFiles.constEnd(); ++it)
     {
-        if (urls.contains(it.key()))
+        const QUrl url = urls.value(it.key());
+        if (!url.isEmpty())
         {
-            it.value()->setUrl(urls[it.key()]);
+            it.value()->setUrl(url);
         }
     }
 
