@@ -155,6 +155,8 @@ private:
     KDevelop::CodeCompletion *m_cc;
 
     IncludeFileDataProvider* m_quickOpenDataProvider;
+    
+    const QStringList m_mimeTypes;
 };
 
 #endif
