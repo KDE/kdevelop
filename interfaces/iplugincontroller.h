@@ -84,6 +84,11 @@ public:
     virtual KPluginMetaData pluginInfo(const IPlugin*) const = 0;
 
     /**
+     * Find the KPluginMetaData structure for the given @p pluginId.
+     */
+    virtual KPluginMetaData infoForPluginId(const QString &pluginId) const = 0;
+
+    /**
      * Get a list of currently loaded plugins
      */
     Q_SCRIPTABLE virtual QList<IPlugin*> loadedPlugins() const = 0;

@@ -67,6 +67,11 @@ public:
     KPluginMetaData pluginInfo( const IPlugin* ) const override;
 
     /**
+     * Find the KPluginMetaData structure for the given @p pluginId.
+     */
+    KPluginMetaData infoForPluginId(const QString &pluginId) const override;
+
+    /**
      * Get a list of currently loaded plugins
      */
     QList<IPlugin*> loadedPlugins() const override;
@@ -150,15 +155,6 @@ private:
      * loading.
      */
     IPlugin* loadPluginInternal( const QString &pluginId );
-
-    /**
-     * @internal
-     *
-     * Find the KPluginMetaData structure by key. Reduces some code duplication.
-     *
-     * Returns a null pointer when no plugin info is found.
-     */
-    KPluginMetaData infoForPluginId(const QString &pluginId) const;
 
     /**
      * Check whether the plugin identified by @p info has unresolved dependencies.
