@@ -46,6 +46,8 @@ private slots:
 
     void test();
     void test_data();
+
+    void testCString();
 };
 
 #endif // TESTINDEXEDSTRING_H

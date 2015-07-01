@@ -184,7 +184,7 @@ IndexedString::IndexedString( const QString& string ) {
 }
 
 IndexedString::IndexedString( const char* str) {
-  unsigned int length = strlen(str);
+  unsigned int length = str ? strlen(str) : 0;
   if(!length)
     m_index = 0;
   else if(length == 1)

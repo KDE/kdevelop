@@ -232,3 +232,9 @@ void TestIndexedString::test_data()
   QTest::newRow("string-utf8") << QString::fromUtf8("æſðđäöü");
 }
 
+void TestIndexedString::testCString()
+{
+    IndexedString str(nullptr);
+    QCOMPARE(str.index(), 0u);
+    QVERIFY(str.isEmpty());
+}
