@@ -34,6 +34,7 @@
 #include <usedecoratorvisitor.h>
 #include <controlflowgraphbuilder.h>
 #include <environmentmanager.h>
+#include <interfaces/isourceformattercontroller.h>
 
 using namespace KDevelop;
 
@@ -84,6 +85,7 @@ void TestHelper::initShell()
   AutoTestShell::init(QStringList() << "kdevcppsupport");
   TestCore* core = new TestCore();
   core->initialize(KDevelop::Core::NoUi);
+  core->sourceFormatterController()->disableSourceFormatting(true);
   EnvironmentManager::init();
 
   DUChain::self()->disablePersistentStorage();
