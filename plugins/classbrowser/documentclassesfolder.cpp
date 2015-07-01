@@ -21,7 +21,6 @@
 
 #include "documentclassesfolder.h"
 
-#include <typeinfo>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -384,10 +383,9 @@ void DocumentClassesFolder::removeClassNode(ClassModelNodes::ClassNode* a_node)
 {
   // Get the parent namespace identifier.
   QualifiedIdentifier parentNamespaceIdentifier;
-  if ( typeid(*a_node->getParent()) == typeid(StaticNamespaceFolderNode) )
+  if ( auto namespaceParent = dynamic_cast<StaticNamespaceFolderNode*>(a_node->getParent()) )
   {
-    parentNamespaceIdentifier =
-      static_cast<StaticNamespaceFolderNode*>(a_node->getParent())->qualifiedIdentifier();
+    parentNamespaceIdentifier = namespaceParent->qualifiedIdentifier();
   }
 
   // Remove the node.
