@@ -1457,7 +1457,7 @@ TopDUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump
   }
 
   static int testNumber = 0;
-  IndexedString url(QString("file:///internal/%1").arg(testNumber++));
+  IndexedString url(QString("file:///internal/%1.cpp").arg(testNumber++));
 
   DeclarationBuilder definitionBuilder(session);
 

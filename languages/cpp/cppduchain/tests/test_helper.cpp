@@ -118,7 +118,7 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
   }
 
   static int testNumber = 0;
-  IndexedString url(QString("/internal/%1").arg(testNumber++));
+  IndexedString url(QString("/internal/%1.cpp").arg(testNumber++));
 
   DeclarationBuilder definitionBuilder(session.data());
   Cpp::EnvironmentFilePointer file( new Cpp::EnvironmentFile( url, 0 ) );

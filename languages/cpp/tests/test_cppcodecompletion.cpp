@@ -62,6 +62,7 @@
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <interfaces/iplugincontroller.h>
 
 #include <QTemporaryDir>
 #include <KTextEditor/Editor>
@@ -92,8 +93,8 @@ TestCppCodeCompletion::TestCppCodeCompletion()
 void TestCppCodeCompletion::initTestCase()
 {
   AutoTestShell::init(QStringList() << "kdevcppsupport");
-  TestCore::initialize(Core::NoUi);
-  Cpp::EnvironmentManager::init();
+  auto core = TestCore::initialize(Core::NoUi);
+  core->pluginController()->loadPlugin("kdevcppsupport");
 
   DUChain::self()->disablePersistentStorage();
   typeInt = AbstractType::Ptr(new IntegralType(IntegralType::TypeInt));
@@ -3557,7 +3558,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
    ;
 
   static int testNumber = 0;
-  IndexedString url(QString("file:///internal/%1").arg(testNumber++));
+  IndexedString url(QString("file:///internal/%1.cpp").arg(testNumber++));
   if( !_identity.isEmpty() )
       url = IndexedString(_identity);
 
