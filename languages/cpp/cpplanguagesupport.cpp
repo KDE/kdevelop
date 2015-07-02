@@ -31,6 +31,7 @@
 #include <kactioncollection.h>
 #include <QAction>
 #include <QStandardPaths>
+#include <QJsonArray>
 
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
@@ -159,16 +160,18 @@ public:
 
 static QStringList mimeTypesList()
 {
-    KDesktopFile desktopFile(QStandardPaths::GenericDataLocation, QString("kservices5/kdevcppsupport.desktop"));
-    const KConfigGroup& desktopGroup = desktopFile.desktopGroup();
-    QString mimeTypesStr = desktopGroup.readEntry("X-KDevelop-SupportedMimeTypes", "");
-    return mimeTypesStr.split(QChar(','), QString::SkipEmptyParts);
+    QStringList ret;
+    auto array = ICore::self()->pluginController()->infoForPluginId("kdevcppsupport").rawData().value("X-KDevelop-SupportedMimeTypes").toArray();
+    ret.reserve(array.size());
+    foreach (const QJsonValue& value, array) {
+      ret << value.toString();
+    }
+    return ret;
 }
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
     : KDevelop::IPlugin( "kdevcppsupport", parent ),
-      KDevelop::ILanguageSupport(),
-      m_mimeTypes(mimeTypesList())
+      KDevelop::ILanguageSupport()
 {
     m_self = this;
 
@@ -202,8 +205,8 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     core()->languageController()->staticAssistantsManager()->registerAssistant(StaticAssistant::Ptr(new RenameAssistant(this)));
     core()->languageController()->staticAssistantsManager()->registerAssistant(StaticAssistant::Ptr(new Cpp::AdaptSignatureAssistant(this)));
 
-    foreach(QString mimeType, m_mimeTypes){
-        KDevelop::IBuddyDocumentFinder::addFinder(mimeType,this);
+    foreach(const QString& mimeType, mimeTypesList()){
+        KDevelop::IBuddyDocumentFinder::addFinder(mimeType, this);
     }
 }
 
@@ -242,7 +245,7 @@ CppLanguageSupport::~CppLanguageSupport()
     delete m_blockTester;
 #endif
 
-    foreach(QString mimeType, m_mimeTypes){
+    foreach(const QString& mimeType, mimeTypesList()){
         KDevelop::IBuddyDocumentFinder::removeFinder(mimeType);
     }
 }
