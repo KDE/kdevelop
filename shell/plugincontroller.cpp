@@ -599,7 +599,7 @@ void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
 
 bool PluginController::loadDependencies( const KPluginMetaData& info, QString& failedDependency )
 {
-   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Optional);
+   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Required);
    foreach (const QString& value, dependencies) {
         Dependency dependency(value);
         if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
