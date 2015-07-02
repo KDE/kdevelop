@@ -138,7 +138,7 @@ private:
 
     QPair<KDevelop::TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const QUrl &url, const KTextEditor::Cursor& position);
 
-    QPair<KTextEditor::Range, const rpp::pp_macro*> usedMacroForPosition(const QUrl &url, const KTextEditor::Cursor& position);
+    QPair<KTextEditor::Range, const rpp::pp_macro> usedMacroForPosition(const QUrl &url, const KTextEditor::Cursor& position);
 
     virtual KTextEditor::Range specialLanguageObjectRange(const QUrl &url, const KTextEditor::Cursor& position) override;
 
@@ -146,7 +146,7 @@ private:
 
     virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position) override;
 
-    bool isFunctionLike(const rpp::pp_macro* pm, const QUrl& url);
+    bool isFunctionLike(const rpp::pp_macro& pm, const QUrl& url);
 
     static CppLanguageSupport* m_self;
 

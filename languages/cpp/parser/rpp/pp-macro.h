@@ -44,10 +44,12 @@ public:
 
    ///@todo enable structure packing
   pp_macro(const KDevelop::IndexedString& name = KDevelop::IndexedString());
-  pp_macro(const char* name);
+  explicit pp_macro(const char* name);
   pp_macro(const pp_macro& rhs, bool dynamic = true);
   ~pp_macro();
-  
+
+  pp_macro& operator=(const pp_macro& rhs);
+
   uint classSize() const {
     return sizeof(pp_macro);
   }
@@ -78,6 +80,8 @@ public:
   mutable HashType m_valueHash; //Hash that represents the values of all macros
   
   bool operator==(const pp_macro& rhs) const;
+  bool operator!=(const pp_macro& rhs) const;
+  bool isValid() const;
   
   bool isUndef() const  {
     return !defined;
@@ -171,8 +175,7 @@ public:
     return !appendedListsDynamic();
   }
 
-  private:
-    pp_macro& operator=(const pp_macro& rhs);
+private:
     void computeHash() const;
 };
 

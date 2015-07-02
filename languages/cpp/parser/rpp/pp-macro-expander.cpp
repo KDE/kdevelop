@@ -79,7 +79,7 @@ void trim(QVector<uint>& array) {
 
 using namespace rpp;
 
-pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<pp_actual>& __actuals)
+pp_frame::pp_frame(const pp_macro& __expandingMacro, const QList<pp_actual>& __actuals)
   : depth(0)
   , expandingMacro(__expandingMacro)
   , actuals(__actuals)
@@ -91,10 +91,8 @@ pp_actual pp_macro_expander::resolve_formal(const IndexedString& name, Stream& i
   if (!m_frame)
     return pp_actual();
 
-  Q_ASSERT(m_frame->expandingMacro != 0);
-
-  const IndexedString* formals = m_frame->expandingMacro->formals();
-  uint formalsSize = m_frame->expandingMacro->formalsSize();
+  const IndexedString* formals = m_frame->expandingMacro.formals();
+  uint formalsSize = m_frame->expandingMacro.formalsSize();
 
   if(name.isEmpty()) {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
@@ -122,7 +120,7 @@ pp_actual pp_macro_expander::resolve_formal(const IndexedString& name, Stream& i
   return pp_actual();
 }
 
-#define RETURN_IF_INPUT_BROKEN    if(input.atEnd()) { qCDebug(RPP) << "too early end while expanding" << macro->name.str(); return; }
+#define RETURN_IF_INPUT_BROKEN    if(input.atEnd()) { qCDebug(RPP) << "too early end while expanding" << macro.name.str(); return; }
 
 
 pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderSection, bool has_if)
@@ -170,18 +168,20 @@ struct EnableMacroExpansion {
 //A helper class that temporary hides a macro in the environment
 class MacroHider {
   public:
-  MacroHider(pp_macro* macro, Environment* environment) : m_macro(macro), m_environment(environment) {
-
-    m_hideMacro.name = macro->name;
+  MacroHider(const pp_macro& macro, Environment* environment)
+    : m_macro(macro), m_environment(environment)
+  {
+    m_hideMacro.name = macro.name;
     m_hideMacro.hidden = true;
-    environment->insertMacro(&m_hideMacro);
+    environment->insertMacro(m_hideMacro);
   }
-  ~MacroHider() {
+  ~MacroHider()
+  {
     m_environment->insertMacro(m_macro);
   }
   private:
     pp_macro m_hideMacro;
-    pp_macro* m_macro;
+    const pp_macro& m_macro;
     Environment* m_environment;
 };
 
@@ -368,18 +368,18 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
           continue;
         }
         if(m_has_if && m_has_defined){
-          pp_macro* macro = m_engine->environment()->retrieveMacro(name, true);
+          const pp_macro& macro = m_engine->environment()->retrieveMacro(name, true);
           unsigned int value = 0;
-          if(macro && macro->defined)
+          if(macro.isValid() && macro.defined)
             value = 1;
           output.appendString(inputPosition, convertFromByteArray(QByteArray::number(value)));
           m_has_defined = false;
           continue;
         }
 
-        pp_macro* macro = m_engine->environment()->retrieveMacro(name, false);
+        const pp_macro& macro = m_engine->environment()->retrieveMacro(name, false);
 
-        if (!macro || !macro->defined || macro->hidden || macro->function_like || m_engine->hideNextMacro())
+        if (!macro.isValid() || !macro.defined || macro.hidden || macro.function_like || m_engine->hideNextMacro())
         {
           static const IndexedString lineIndex = IndexedString("__LINE__");
           static const IndexedString fileIndex = IndexedString("__FILE__");
@@ -416,13 +416,13 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
 
         EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
 
-          if (macro->definitionSize()) {
+          if (macro.definitionSize()) {
             //Hide the expanded macro to prevent endless expansion
             MacroHider hideMacro(macro, m_engine->environment());
 
             pp_macro_expander expand_macro(m_engine);
             ///@todo UGLY conversion
-            Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
+            Stream ms((uint*)macro.definition(), macro.definitionSize(), Anchor(input.inputPosition(), true));
             ms.setOriginalInputPosition(input.originalInputPosition());
             PreprocessedContents expanded;
             {
@@ -451,8 +451,8 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
           previous = IndexedString::fromIndex(output.peekLastOutput(stepsBack));
           ++stepsBack;
         }
-        pp_macro* macro = m_engine->environment()->retrieveMacro(previous, false);
-        if(!macro || !macro->function_like || !macro->defined || macro->hidden) {
+        const pp_macro& macro = m_engine->environment()->retrieveMacro(previous, false);
+        if(!macro.isValid() || !macro.function_like || !macro.defined || macro.hidden) {
           output << input;
           ++input;
           continue;
@@ -476,12 +476,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
             ++input;
           }
 
-          qCDebug(RPP) << "too early end while expanding" << macro->name.str();
+          qCDebug(RPP) << "too early end while expanding" << macro.name.str();
           return;
         }
 
         pp_macro_expander expand_actual(m_engine, m_frame);
-        skip_actual_parameter(input, *macro, actuals, expand_actual);
+        skip_actual_parameter(input, macro, actuals, expand_actual);
 
         while (!input.atEnd() && input == ',')
         {
@@ -498,11 +498,11 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
               ++input;
             }
 
-            qCDebug(RPP) << "too early end while expanding" << macro->name.str();
+            qCDebug(RPP) << "too early end while expanding" << macro.name.str();
             return;
           }
 
-          skip_actual_parameter(input, *macro, actuals, expand_actual);
+          skip_actual_parameter(input, macro, actuals, expand_actual);
         }
 
         if( input != ')' ) {
@@ -540,7 +540,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
 
         if(frame.depth >= maxMacroExpansionDepth)
         {
-          qCDebug(RPP) << "reached maximum macro-expansion depth while expanding" << macro->name.str();
+          qCDebug(RPP) << "reached maximum macro-expansion depth while expanding" << macro.name.str();
           RETURN_IF_INPUT_BROKEN
 
           output << input;
@@ -552,7 +552,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
           MacroHider hideMacro(macro, m_engine->environment());
 
           ///@todo UGLY conversion
-          Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
+          Stream ms((uint*)macro.definition(), macro.definitionSize(), Anchor(input.inputPosition(), true));
 
           PreprocessedContents expansion_text;
           rpp::LocationTable table;
@@ -573,14 +573,14 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
   }
 }
 
-void pp_macro_expander::skip_actual_parameter(Stream& input, rpp::pp_macro& macro, QList< pp_actual >& actuals, pp_macro_expander& expander)
+void pp_macro_expander::skip_actual_parameter(Stream& input, const pp_macro& macro, QList< pp_actual >& actuals, pp_macro_expander& expander)
 {
   PreprocessedContents actualText;
   skip_whitespaces(input, devnull());
   Anchor actualStart = input.inputPosition();
   {
     Stream as(&actualText);
-    skip_argument_variadics(actuals, &macro, input, as);
+    skip_argument_variadics(actuals, macro, input, as);
   }
   trim(actualText);
 
@@ -603,7 +603,7 @@ void pp_macro_expander::skip_actual_parameter(Stream& input, rpp::pp_macro& macr
   actuals.append(newActual);
 }
 
-void pp_macro_expander::skip_argument_variadics (const QList<pp_actual>& __actuals, pp_macro *__macro, Stream& input, Stream& output)
+void pp_macro_expander::skip_argument_variadics (const QList<pp_actual>& __actuals, const pp_macro& __macro, Stream& input, Stream& output)
 {
   int first;
 
@@ -611,9 +611,9 @@ void pp_macro_expander::skip_argument_variadics (const QList<pp_actual>& __actua
     first = input.offset();
     skip_argument(input, output);
 
-  } while ( __macro->variadics
+  } while ( __macro.variadics
             && first != input.offset()
             && !input.atEnd()
             && input == '.'
-            && (__actuals.size() + 1) == (int)__macro->formalsSize());
+            && (__actuals.size() + 1) == (int)__macro.formalsSize());
 }

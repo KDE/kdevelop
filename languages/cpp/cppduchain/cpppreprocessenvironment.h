@@ -37,7 +37,7 @@ public:
   ///@param leaveEnvironmentFile Whether the environment-file should be left untouched
   void finishEnvironment(bool leaveEnvironmentFile = false);
 
-  virtual rpp::pp_macro* retrieveMacro( const KDevelop::IndexedString& name, bool isImportant ) const override;
+  virtual rpp::pp_macro retrieveMacro( const KDevelop::IndexedString& name, bool isImportant ) const override;
 
   void setEnvironmentFile( const QExplicitlySharedDataPointer<Cpp::EnvironmentFile>& environmentFile );
   QExplicitlySharedDataPointer<Cpp::EnvironmentFile> environmentFile() const;
@@ -53,7 +53,7 @@ public:
   ///@param mergeEnvironments Whether the environment-files should also be merged using Cpp::EnvironmentFile::merge
   void merge( const Cpp::EnvironmentFile* file, bool mergeEnvironments = false );
 
-  virtual void setMacro(rpp::pp_macro* macro) override;
+  virtual void setMacro(const rpp::pp_macro& macro) override;
 
   virtual int type() const override;
 
@@ -83,6 +83,8 @@ public:
   static void setRecordOnlyImportantString(bool);
   
 private:
+    void setMacro(const rpp::pp_macro& macro, const rpp::pp_macro& hadMacro);
+
     uint m_identityOffsetRestriction;
     bool m_identityOffsetRestrictionEnabled;
     bool m_finished;

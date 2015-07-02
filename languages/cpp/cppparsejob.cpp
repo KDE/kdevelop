@@ -225,8 +225,8 @@ void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
 
   for(QHash<QString, QString>::const_iterator it = defines.constBegin(); it != defines.constEnd(); ++it)
   {
-    rpp::pp_macro* m = new rpp::pp_macro(IndexedString(it.key()));
-    m->setDefinitionText( *it );
+    rpp::pp_macro m(IndexedString(it.key()));
+    m.setDefinitionText( *it );
 
     //Call rpp::Environment::setMacro directly, so we don't add the macro to the environment-file.
     //It should be only part of the environment.

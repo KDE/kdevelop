@@ -64,10 +64,10 @@ public:
 class pp_frame
 {
 public:
-  pp_frame (pp_macro* __expandingMacro, const QList<pp_actual>& __actuals);
+  pp_frame (const pp_macro& __expandingMacro, const QList<pp_actual>& __actuals);
 
   int depth;
-  pp_macro* expandingMacro;
+  pp_macro expandingMacro;
   QList<pp_actual> actuals;
 };
 
@@ -83,7 +83,7 @@ public:
   /// If substitute == true, perform only macro parameter substitution and # token processing
   void operator()(Stream& input, Stream& output, bool substitute = false, LocationTable* table = 0);
 
-  void skip_argument_variadics (const QList<pp_actual>& __actuals, pp_macro *__macro,
+  void skip_argument_variadics (const QList<pp_actual>& __actuals, const pp_macro& __macro,
                                 Stream& input, Stream& output);
 
   bool in_header_section() const {
@@ -101,7 +101,7 @@ public:
 private:
   /// Read actual parameter of @ref macro value from @ref input and append it to @ref actuals
   /// @ref expander is a reusable macro expander
-  void skip_actual_parameter(rpp::Stream& input, rpp::pp_macro& macro, QList< rpp::pp_actual >& actuals, rpp::pp_macro_expander& expander);
+  void skip_actual_parameter(rpp::Stream& input, const rpp::pp_macro& macro, QList< rpp::pp_actual >& actuals, rpp::pp_macro_expander& expander);
 
   pp* m_engine;
   pp_frame* m_frame;

@@ -27,7 +27,7 @@
 
 #include <QStack>
 #include "cpprppexport.h"
-// #include "pp-macro.h"
+#include "pp-macro.h"
 
 namespace KDevelop {
   class IndexedString;
@@ -35,13 +35,12 @@ namespace KDevelop {
 
 namespace rpp {
 
-class pp_macro;
 class LocationTable;
 
 class KDEVCPPRPP_EXPORT Environment
 {
 public:
-  typedef QHash<KDevelop::IndexedString, pp_macro*> EnvironmentMap;
+  typedef QHash<KDevelop::IndexedString, pp_macro> EnvironmentMap;
 
   Environment();
   virtual ~Environment();
@@ -50,19 +49,19 @@ public:
 
   //The macro will be owned by the environment object
   //Note: Undef-macros are allowed too
-  virtual void setMacro(pp_macro* macro);
+  virtual void setMacro(const pp_macro& macro);
 
   //Inserts a macro that will not be explicitly owned by the Environment,
   //without notifying subclasses etc.
-  void insertMacro(pp_macro* macro);
+  void insertMacro(const pp_macro& macro);
   
-  virtual pp_macro* retrieveMacro(const KDevelop::IndexedString& name, bool isImportant) const;
+  virtual pp_macro retrieveMacro(const KDevelop::IndexedString& name, bool isImportant) const;
   
   //Returns macros that are really stored locally(retrieveMacro may be overridden to perform more complex actions)
-  pp_macro* retrieveStoredMacro(const KDevelop::IndexedString& name) const;
+  pp_macro retrieveStoredMacro(const KDevelop::IndexedString& name) const;
   
   //Returns all currently visible macros
-  QList<pp_macro*> allMacros() const;
+  QList<pp_macro> allMacros() const;
 
   //Swap the macros with the given environment, includign ownership
   virtual void swapMacros( Environment* parentEnvironment );
@@ -76,7 +75,6 @@ public:
 private:
   EnvironmentMap m_environment;
 
-  QVector<pp_macro*> m_ownedMacros;
   LocationTable* m_locationTable;
 };
 

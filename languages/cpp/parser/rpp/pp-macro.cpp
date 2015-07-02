@@ -53,6 +53,16 @@ bool pp_macro::operator==(const pp_macro& rhs) const {
          listsEqual(rhs);
 }
 
+bool pp_macro::operator!=(const pp_macro& rhs) const
+{
+  return !(*this == rhs);
+}
+
+bool pp_macro::isValid() const
+{
+    return *this != pp_macro();
+}
+
 void pp_macro::invalidateHash() {
   m_valueHashValid = false;
 }
@@ -88,18 +98,28 @@ pp_macro::pp_macro(const pp_macro& rhs, bool dynamic) :
   copyListsFrom(rhs);
 }
 
-pp_macro::pp_macro(const char* nm) : name(KDevelop::IndexedString(nm, strlen(nm)))
-  , sourceLine(-1)
-  , defined(true)
-  , hidden(false)
-  , function_like(false)
-  , variadics(false)
-  , fixed(false)
-  , defineOnOverride(false)
-  , m_valueHashValid(false)
-  , m_valueHash(0)
+pp_macro& pp_macro::operator=(const pp_macro& rhs)
 {
-  initializeAppendedLists();
+  name = rhs.name;
+  file = rhs.file;
+  sourceLine = rhs.sourceLine;
+  defined = rhs.defined;
+  hidden = rhs.hidden;
+  function_like = rhs.function_like;
+  variadics = rhs.variadics;
+  fixed = rhs.fixed;
+  defineOnOverride = rhs.defineOnOverride;
+  m_valueHashValid = true;
+  m_valueHash = rhs.valueHash();
+
+  copyListsFrom(rhs);
+
+  return *this;
+}
+
+pp_macro::pp_macro(const char* nm)
+  : pp_macro(IndexedString(nm))
+{
 }
 
 QString pp_macro::toString() const {

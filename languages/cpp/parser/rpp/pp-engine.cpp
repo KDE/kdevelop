@@ -312,16 +312,16 @@ void pp::createProblem(Stream& input, const QString& description) {
 
 void pp::handle_define (Stream& input)
 {
-  pp_macro* macro = new pp_macro;
-  macro->file = currentFileName();
-  macro->sourceLine = input.originalInputPosition().line;
+  pp_macro macro;
+  macro.file = currentFileName();
+  macro.sourceLine = input.originalInputPosition().line;
 
   skip_blanks (input, devnull());
-  macro->name = KDevelop::IndexedString::fromIndex(skip_identifier(input, true)); //@todo make macros utf8 too
+  macro.name = KDevelop::IndexedString::fromIndex(skip_identifier(input, true)); //@todo make macros utf8 too
 
   if (!input.atEnd() && input == '(')
   {
-    macro->function_like = true;
+    macro.function_like = true;
 
     skip_blanks (++input, devnull()); // skip '('
     uint formal = skip_identifier(input);
@@ -329,15 +329,15 @@ void pp::handle_define (Stream& input)
     skip_blanks(input, devnull());
 
     if (input == '.') {
-      macro->variadics = true;
+      macro.variadics = true;
 
       do {
         ++input;
 
       } while (input == '.');
     }
-    if (formal && !macro->variadics)
-      macro->formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
+    if (formal && !macro.variadics)
+      macro.formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
 
 
     while (!input.atEnd() && input == ',')
@@ -349,7 +349,7 @@ void pp::handle_define (Stream& input)
       skip_blanks (input, devnull());
 
       if (input == '.') {
-        macro->variadics = true;
+        macro.variadics = true;
 
         do {
           ++input;
@@ -357,8 +357,8 @@ void pp::handle_define (Stream& input)
         } while (input == '.');
       }
 
-      if (formal && !macro->variadics)
-        macro->formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
+      if (formal && !macro.variadics)
+        macro.formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
     }
 
     RETURN_ON_FAIL(input == ')');
@@ -383,7 +383,7 @@ void pp::handle_define (Stream& input)
       if (!input.atEnd() && input == '\n')
       {
         skip_blanks(++input, devnull());
-        macro->definitionList().append(KDevelop::IndexedString::fromIndex(indexFromCharacter(' ')));
+        macro.definitionList().append(KDevelop::IndexedString::fromIndex(indexFromCharacter(' ')));
         continue;
 
       } else {
@@ -396,24 +396,24 @@ void pp::handle_define (Stream& input)
       do {
         if (input == '\\' && input.peekNextCharacter() == '"') {
           // skip escaped close quote
-          macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
+          macro.definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
           ++input;
           if(input.atEnd())
             break;
         }
-        macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
+        macro.definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
         ++input;
       } while (!input.atEnd() && input != '"' && input != '\n');
 
       if(!input.atEnd())
       {
-        macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
+        macro.definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
         ++input;
       }
       continue;
     }
 
-    macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
+    macro.definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
     ++input;
   }
 
@@ -507,8 +507,8 @@ Value pp::eval_primary(Stream& input)
       }
 
       {
-        pp_macro* m = m_environment->retrieveMacro(token_text, true);
-        result.set_long( (m && !m->isUndef()) ? 1 : 0);
+        const pp_macro& m = m_environment->retrieveMacro(token_text, true);
+        result.set_long(m.isUndef() ? 0 : 1);
       }
 
       token = next_token(input); // skip '('
@@ -1011,9 +1011,9 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
 
   if (test_if_level())
   {
-    pp_macro* macro = m_environment->retrieveMacro(macro_name, true);
+    const pp_macro& macro = m_environment->retrieveMacro(macro_name, true);
     bool value = false;
-    if( macro && macro->defined )
+    if( macro.isValid() && macro.defined )
       value = true;
 
     if (check_undefined)
@@ -1032,12 +1032,12 @@ void pp::handle_undef(Stream& input)
   KDevelop::IndexedString macro_name = KDevelop::IndexedString::fromIndex(skip_identifier(input));
   RETURN_ON_FAIL(!macro_name.isEmpty());
 
-  pp_macro* macro = new pp_macro;
-  macro->file = currentFileName();
-  macro->name = macro_name;
-  macro->sourceLine = input.originalInputPosition().line;
+  pp_macro macro;
+  macro.file = currentFileName();
+  macro.name = macro_name;
+  macro.sourceLine = input.originalInputPosition().line;
 
-  macro->defined = false;
+  macro.defined = false;
 
   m_environment->setMacro(macro);
 }

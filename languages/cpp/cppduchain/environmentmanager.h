@@ -101,7 +101,6 @@ The good things:
 
 namespace rpp {
   class pp_macro;
-  class pp_macro;
   class Environment;
 }
 
@@ -215,7 +214,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     void addStrings( const std::set<Utils::BasicSetRepository::Index>& strings );
 
     ///If there previously was a macro defined of the same name, it must be given through previousOfSameName, else it can be zero.
-    void addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro* previousOfSameName );
+    void addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro& previousOfSameName );
 
     ///the given macro will only make it into usedMacros() if it was not defined in this file
     void usingMacro( const rpp::pp_macro& macro );

@@ -38,8 +38,6 @@ Environment::Environment()
 Environment::~Environment()
 {
   delete m_locationTable;
-  foreach(pp_macro* macro, m_ownedMacros)
-    delete macro;
 }
 
 LocationTable* Environment::locationTable() const
@@ -56,8 +54,6 @@ LocationTable* Environment::takeLocationTable()
 
 void Environment::swapMacros( Environment* parentEnvironment ) {
   qSwap(m_environment, parentEnvironment->m_environment);
-
-  qSwap(m_ownedMacros, parentEnvironment->m_ownedMacros);
 }
 
 void Environment::clearMacro(const KDevelop::IndexedString& name)
@@ -65,34 +61,31 @@ void Environment::clearMacro(const KDevelop::IndexedString& name)
   m_environment.remove(name);
 }
 
-void Environment::setMacro(pp_macro* macro)
+void Environment::setMacro(const pp_macro& macro)
 {
-  if(!macro->isRepositoryMacro())
-    m_ownedMacros.append(macro);
-
-  m_environment.insert(macro->name, macro);
+  m_environment.insert(macro.name, macro);
 }
 
-void Environment::insertMacro(pp_macro* macro)
+void Environment::insertMacro(const pp_macro& macro)
 {
-  m_environment.insert(macro->name, macro);
+  m_environment.insert(macro.name, macro);
 }
 
 const Environment::EnvironmentMap& Environment::environment() const {
   return m_environment;
 }
 
-pp_macro* Environment::retrieveStoredMacro(const KDevelop::IndexedString& name) const
+pp_macro Environment::retrieveStoredMacro(const KDevelop::IndexedString& name) const
 {
-  return m_environment.value(name, nullptr);
+  return m_environment.value(name);
 }
 
-pp_macro* Environment::retrieveMacro(const KDevelop::IndexedString& name, bool /*isImportant*/) const
+pp_macro Environment::retrieveMacro(const KDevelop::IndexedString& name, bool /*isImportant*/) const
 {
   return retrieveStoredMacro(name);
 }
 
-QList<pp_macro*> Environment::allMacros() const
+QList<pp_macro> Environment::allMacros() const
 {
   return m_environment.values();
 }

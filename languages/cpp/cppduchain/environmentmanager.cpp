@@ -168,7 +168,7 @@ QString print(const Cpp::ReferenceCountedMacroSet& set) {
       ret += ", ";
     first = false;
 
-    ret += it.ref().toString();
+    ret += (*it).toString();
     ++it;
   }
   return ret;
@@ -230,15 +230,14 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   const ReferenceCountedStringSet& conflicts = strings() - d_func()->m_usedMacroNames;
 
   for( ReferenceCountedStringSet::Iterator it(conflicts.iterator()); it; ++it ) {
-    if (!environmentMacroNames.contains(it.ref())) {
+    if (!environmentMacroNames.contains(*it)) {
       continue;
     }
-    rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( *it );
-    if(m && !m->isUndef()) {
-
+    const rpp::pp_macro& m = cppEnvironment->retrieveStoredMacro( *it );
+    if(m.isValid() && !m.isUndef()) {
 #ifdef DEBUG_LEXERCACHE
       if(debugging()) {
-        qCDebug(CPPDUCHAIN) << "The environment contains a macro that can affect the cached file, but that should not exist:" << m->name.str();
+        qCDebug(CPPDUCHAIN) << "The environment contains a macro that can affect the cached file, but that should not exist:" << m.name.str();
       }
 #endif
       return false;
@@ -252,19 +251,20 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   ifDebug( qCDebug(CPPDUCHAIN) << "Count of used macros that need to be verified:" << d_func()->m_usedMacros.set().count() );
 
   for ( ReferenceCountedMacroSet::Iterator it( d_func()->m_usedMacros.iterator() ); it; ++it ) {
-    rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( it.ref().name );
-    if ( !m || !(*m == it.ref()) ) {
-      if( !m && it.ref().isUndef() ) {
-        ifDebug( qCDebug(CPPDUCHAIN) << "Undef-macro" << it.ref().name.str() << "is ok" << m );
+    const auto& macro = *it;
+    const auto& m = cppEnvironment->retrieveStoredMacro( macro.name );
+    if ( !m.isValid() || m != macro ) {
+      if( !m.isValid() && macro.isUndef() ) {
+        ifDebug( qCDebug(CPPDUCHAIN) << "Undef-macro" << macro.name.str() << "is ok" << m );
         //It is okay, we did not find a macro, but the used macro is an undef macro
         //Q_ASSERT(0); //Undef-macros should not be marked as used
       } else {
-        ifDebug( qCDebug(CPPDUCHAIN) << "The cached file " << url().str() << " used a macro called \"" << it.ref().name.str() << "\"(from" << it.ref().file.str() << "), but the environment" << (m ? "contains differing macro of that name" : "does not contain that macro") << ", the cached file is not used"  );
-        ifDebug( if(m) { qCDebug(CPPDUCHAIN) << "Used macro: " << it.ref().toString()  << "from" << it.ref().file.str() << "found:" << m->toString() << "from" << m->file.str(); } );
+        ifDebug( qCDebug(CPPDUCHAIN) << "The cached file " << url().str() << " used a macro called \"" << macro.name.str() << "\"(from" << macro.file.str() << "), but the environment" << (m ? "contains differing macro of that name" : "does not contain that macro") << ", the cached file is not used"  );
+        ifDebug( if(m) { qCDebug(CPPDUCHAIN) << "Used macro: " << macro.toString()  << "from" << macro.file.str() << "found:" << m->toString() << "from" << m->file.str(); } );
         return false;
       }
     }else{
-      ifDebug( qCDebug(CPPDUCHAIN) << it.ref().name.str() << "match" );
+      ifDebug( qCDebug(CPPDUCHAIN) << macro.name.str() << "match" );
     }
   }
 
@@ -327,22 +327,24 @@ int EnvironmentFile::contentStartLine() const {
   return d_func()->m_contentStartLine;
 }
 
-void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro* previousOfSameName ) {
+void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro& previousOfSameName ) {
   ENSURE_WRITE_LOCKED
 #ifdef DEBUG_LEXERCACHE
   if(debugging()) {
   qCDebug(CPPDUCHAIN)  << id(this) << "defined macro" << macro.name.str();
   }
 #endif
-  if( previousOfSameName && d_func()->m_definedMacros.contains(*previousOfSameName) )
-    d_func_dynamic()->m_definedMacros.remove( *previousOfSameName );
+  if( previousOfSameName.isValid() && d_func()->m_definedMacros.contains(previousOfSameName) )
+    d_func_dynamic()->m_definedMacros.remove( previousOfSameName );
   else if( d_func()->m_definedMacroNames.contains(macro.name) ) {
     //Search if there is already a macro of the same name in the set, and remove it
     //This is slow, but should not happen too often
     ///@todo maybe give a warning, and find out how this can happen
-    for( ReferenceCountedMacroSet::Iterator it( d_func()->m_definedMacros.iterator() ); it; ++it )
-      if( macro.name == it.ref().name )
-        d_func_dynamic()->m_definedMacros.remove(it.ref());
+    for( ReferenceCountedMacroSet::Iterator it( d_func()->m_definedMacros.iterator() ); it; ++it ) {
+      const auto& m = *it;
+      if( macro.name == m.name )
+        d_func_dynamic()->m_definedMacros.remove(m);
+    }
   }
 
   if(macro.isUndef()) {
@@ -518,7 +520,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
     Q_ASSERT(backup.set().setIndex() == file.d_func()->m_usedMacros.set().setIndex());
 
     for(ReferenceCountedMacroSet::Iterator it( file.d_func()->m_usedMacros.iterator() ); it; ++it) {
-      const rpp::pp_macro& macro(it.ref());
+      const auto& macro = *it;
       if( !definedMacroNamesSet.contains(macro.name.index()) && !unDefinedMacroNamesSet.contains(macro.name.index()) )
         addUsedMacros.insert(it.index());
     }
@@ -561,8 +563,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
     if(!affectedMacros.isEmpty()) {
       //We have to iterate through all potentially removed macros
       for( ReferenceCountedMacroSet::Iterator it( potentiallyRemoveMacros.iterator() ); it; ++it ) {
-        const rpp::pp_macro& macro(it.ref());
-        if( affectedMacros.contains( macro.name ) )
+        if( affectedMacros.contains( (*it).name ) )
           removeDefinedMacros.insert(it.index());
       }
     }

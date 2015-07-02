@@ -526,12 +526,12 @@ QPair<TopDUContextPointer, KTextEditor::Range> CppLanguageSupport::importedConte
   return qMakePair(TopDUContextPointer(), KTextEditor::Range::invalid());
 }
 
-QPair<KTextEditor::Range, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPosition(const QUrl &url, const KTextEditor::Cursor& position) {
+QPair<KTextEditor::Range, const rpp::pp_macro> CppLanguageSupport::usedMacroForPosition(const QUrl &url, const KTextEditor::Cursor& position) {
   //Extract the word under the cursor
 
   QPair<QPair<QString, KTextEditor::Range>, QString> found = cursorIdentifier(url, position);
   if(!found.first.second.isValid())
-    return qMakePair(KTextEditor::Range::invalid(), (const rpp::pp_macro*)0);
+    return qMakePair(KTextEditor::Range::invalid(), rpp::pp_macro());
 
   IndexedString word(found.first.first);
   KTextEditor::Range wordRange(found.first.second);
@@ -540,38 +540,40 @@ QPair<KTextEditor::Range, const rpp::pp_macro*> CppLanguageSupport::usedMacroFor
   DUChainReadLocker lock(DUChain::lock(), 100);
   if(!lock.locked()) {
     qCDebug(CPP) << "Failed to lock the du-chain in time";
-    return qMakePair(KTextEditor::Range::invalid(), (const rpp::pp_macro*)0);
+    return qMakePair(KTextEditor::Range::invalid(), rpp::pp_macro());
   }
 
   TopDUContext* ctx = standardContext(url, true);
   if(word.isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
-    return qMakePair(KTextEditor::Range::invalid(), (const rpp::pp_macro*)0);
+    return qMakePair(KTextEditor::Range::invalid(), rpp::pp_macro());
 
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
 
   Q_ASSERT(p);
 
   if(!p->usedMacroNames().contains(word) && !p->definedMacroNames().contains(word))
-    return qMakePair(KTextEditor::Range::invalid(), (const rpp::pp_macro*)0);
+    return qMakePair(KTextEditor::Range::invalid(), rpp::pp_macro());
 
   //We need to do a flat search through all macros here, which really hurts
 
   Cpp::ReferenceCountedMacroSet::Iterator it = p->usedMacros().iterator();
 
   while(it) {
-    if(it.ref().name == word && !it.ref().isUndef())
-      return qMakePair(wordRange, &it.ref());
+    const auto& macro = *it;
+    if(macro.name == word && !macro.isUndef())
+      return qMakePair(wordRange, macro);
     ++it;
   }
 
   it = p->definedMacros().iterator();
   while(it) {
-    if(it.ref().name == word && !it.ref().isUndef())
-      return qMakePair(wordRange, &it.ref());
+    const auto& macro = *it;
+    if(macro.name == word && !macro.isUndef())
+      return qMakePair(wordRange, macro);
     ++it;
   }
 
-  return qMakePair(KTextEditor::Range::invalid(), (const rpp::pp_macro*)0);
+  return qMakePair(KTextEditor::Range::invalid(), rpp::pp_macro());
 }
 
 KTextEditor::Range CppLanguageSupport::specialLanguageObjectRange(const QUrl &url, const KTextEditor::Cursor& position) {
@@ -592,12 +594,12 @@ QPair<QUrl, KTextEditor::Cursor> CppLanguageSupport::specialLanguageObjectJumpCu
         return qMakePair(import.first->url().toUrl(), KTextEditor::Cursor(0,0));
     }
 
-    QPair<KTextEditor::Range, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
+    const QPair<KTextEditor::Range, const rpp::pp_macro>& m = usedMacroForPosition(url, position);
 
     if(!m.first.isValid())
       return qMakePair(QUrl(), KTextEditor::Cursor::invalid());
 
-    return qMakePair(m.second->file.toUrl(), KTextEditor::Cursor(m.second->sourceLine, 0));
+    return qMakePair(m.second.file.toUrl(), KTextEditor::Cursor(m.second.sourceLine, 0));
 }
 
 QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position) {
@@ -618,7 +620,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const QUrl &u
       }
     }
 
-    QPair<KTextEditor::Range, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
+    const QPair<KTextEditor::Range, const rpp::pp_macro>& m = usedMacroForPosition(url, position);
     if(!m.first.isValid())
       return 0;
 
@@ -667,12 +669,12 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const QUrl &u
       preprocessedBody = i->formatSourceWithStyle(style, preprocessedBody, QUrl(), mime);
     }
 
-    return new Cpp::NavigationWidget(*m.second, preprocessedBody);
+    return new Cpp::NavigationWidget(m.second, preprocessedBody);
 }
 
-bool CppLanguageSupport::isFunctionLike(const rpp::pp_macro* pm, const QUrl& url)
+bool CppLanguageSupport::isFunctionLike(const rpp::pp_macro& pm, const QUrl& url)
 {
-  if(pm->function_like)
+  if(pm.function_like)
     return true;
 
   DUChainReadLocker lock(DUChain::lock(), 100);
@@ -688,7 +690,7 @@ bool CppLanguageSupport::isFunctionLike(const rpp::pp_macro* pm, const QUrl& url
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
 
   Q_ASSERT(p);
-  QByteArray strdef = stringFromContents((uint*)pm->definition(), pm->definitionSize()).trimmed();
+  QByteArray strdef = stringFromContents((uint*)pm.definition(), pm.definitionSize()).trimmed();
 
   Cpp::ReferenceCountedMacroSet::Iterator it = p->usedMacros().iterator();
 
@@ -699,10 +701,11 @@ bool CppLanguageSupport::isFunctionLike(const rpp::pp_macro* pm, const QUrl& url
       return false;
 
     while(it) {
-      if(it.ref().name.byteArray() == strdef) {
-        if(it.ref().function_like)
+      const auto& macro = *it;
+      if(macro.name.byteArray() == strdef) {
+        if(macro.function_like)
           return true;
-        strdef = stringFromContents((uint*)it.ref().definition(), it.ref().definitionSize());
+        strdef = stringFromContents((uint*)macro.definition(), macro.definitionSize());
       }
       ++it;
     }
@@ -710,10 +713,11 @@ bool CppLanguageSupport::isFunctionLike(const rpp::pp_macro* pm, const QUrl& url
     it = p->definedMacros().iterator();
 
     while(it) {
-      if(it.ref().name.byteArray() == strdef) {
-        if(it.ref().function_like)
+      const auto& macro = *it;
+      if(macro.name.byteArray() == strdef) {
+        if(macro.function_like)
           return true;
-        strdef = stringFromContents((uint*)it.ref().definition(), it.ref().definitionSize());
+        strdef = stringFromContents((uint*)macro.definition(), macro.definitionSize());
       }
       ++it;
     }

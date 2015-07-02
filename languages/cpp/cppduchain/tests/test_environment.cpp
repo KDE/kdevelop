@@ -57,16 +57,16 @@ void TestEnvironment::benchMerge()
     rpp::pp_macro m1(IndexedString(QString("my1Macro%1").arg(i)));
     rpp::pp_macro m2(IndexedString(QString("my2Macro%1").arg(i)));
     // define the two in the files
-    f1.addDefinedMacro(m1, 0);
-    f2.addDefinedMacro(m2, 0);
+    f1.addDefinedMacro(m1, {});
+    f2.addDefinedMacro(m2, {});
     // undef them in the other file
     m1.defined = false;
     m2.defined = false;
-    f1.addDefinedMacro(m2, 0);
-    f2.addDefinedMacro(m1, 0);
+    f1.addDefinedMacro(m2, {});
+    f2.addDefinedMacro(m1, {});
     // and add some other macros
-    f1.addDefinedMacro(rpp::pp_macro(IndexedString(QString("my1UntouchedMacro%1").arg(i))), 0);
-    f2.addDefinedMacro(rpp::pp_macro(IndexedString(QString("my2UntouchedMacro%1").arg(i))), 0);
+    f1.addDefinedMacro(rpp::pp_macro(IndexedString(QString("my1UntouchedMacro%1").arg(i))), {});
+    f2.addDefinedMacro(rpp::pp_macro(IndexedString(QString("my2UntouchedMacro%1").arg(i))), {});
   }
   const IndexedString file(QLatin1String("f3"));
   QBENCHMARK {

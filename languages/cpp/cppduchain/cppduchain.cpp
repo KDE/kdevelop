@@ -428,17 +428,17 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line, Q
       DUChainReadLocker lock(DUChain::lock());
     //Copy in all macros from the file
     for( Cpp::ReferenceCountedMacroSet::Iterator it( file->definedMacros().iterator() ); it; ++it ) {
-      if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
-        if(!disableMacros.contains( it.ref().name ))
+      if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
+        if(!disableMacros.contains( (*it).name ))
         {
-          pp.environment()->setMacro( new rpp::pp_macro(it.ref()) );
+          pp.environment()->setMacro( *it );
         }
       }
     }
     for( Cpp::ReferenceCountedMacroSet::Iterator it( file->usedMacros().iterator() ); it; ++it ) {
-      if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
-        if(!disableMacros.contains( it.ref().name ))
-          pp.environment()->setMacro( new rpp::pp_macro(it.ref()) );
+      if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
+        if(!disableMacros.contains( (*it).name ))
+          pp.environment()->setMacro( *it );
       }
     }
   }
