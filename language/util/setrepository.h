@@ -53,10 +53,6 @@ class ConvenientIterator : public Conversion {
       return Conversion::toItem(*m_it);
     }
 
-    const T& ref() const {
-      return Conversion::toItem(*m_it);
-    }
-
     uint index() const {
       return *m_it;
     }
