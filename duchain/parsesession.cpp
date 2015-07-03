@@ -50,24 +50,24 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
 {
     QMimeDatabase db;
     if(db.mimeTypeForFile(path).name() == QStringLiteral("text/x-objcsrc")) {
-        return {"-xobjective-c++"};
+        return {QByteArrayLiteral("-xobjective-c++")};
     }
 
     // this can happen for unit tests that use the ParseSession directly
     if (parserSettings.parserOptions.isEmpty()) {
-        return {"-fspell-checking", "-Wdocumentation", "-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++"};
+        return {QByteArrayLiteral("-fspell-checking"), QByteArrayLiteral("-Wdocumentation"), QByteArrayLiteral("-std=c++11"), QByteArrayLiteral("-xc++"), QByteArrayLiteral("-Wall"), QByteArrayLiteral("-nostdinc"), QByteArrayLiteral("-nostdinc++")};
     }
 
     auto result = parserSettings.toClangAPI();
-    result.append("-nostdinc");
-    result.append("-nostdinc++");
+    result.append(QByteArrayLiteral("-nostdinc"));
+    result.append(QByteArrayLiteral("-nostdinc++"));
 
     if (options & ParseSessionData::PrecompiledHeader) {
-        result.append(parserSettings.isCpp() ? "-xc++-header" : "-xc-header");
+        result.append(parserSettings.isCpp() ? QByteArrayLiteral("-xc++-header") : QByteArrayLiteral("-xc-header"));
         return result;
     }
 
-    result.append(parserSettings.isCpp() ? "-xc++" : "-xc");
+    result.append(parserSettings.isCpp() ? QByteArrayLiteral("-xc++") : QByteArrayLiteral("-xc"));
     return result;
 }
 

@@ -55,12 +55,12 @@ void ClangConfigPage::apply()
 
 QString ClangConfigPage::name() const
 {
-    return i18n("Clang command-line options");
+    return i18n("C/C++ parser");
 }
 
 QString ClangConfigPage::fullName() const
 {
-    return i18n("Configure Clang command-line options");
+    return i18n("Configure C/C++ parser");
 }
 
 QIcon ClangConfigPage::icon() const

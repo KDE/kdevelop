@@ -70,7 +70,7 @@ CodeCompletionSettings readCodeCompletionSettings(KConfig* cfg)
     return settings;
 }
 
-ParserSettings parserOptionsForItem(const QList<ParserSettingsEntry>& paths, const Path itemPath, const Path rootDirectory)
+ParserSettings parserOptionsForItem(const QVector<ParserSettingsEntry>& paths, const Path itemPath, const Path rootDirectory)
 {
     Path closestPath;
     ParserSettings settings;
@@ -138,12 +138,12 @@ ParserSettings ClangSettingsManager::parserSettings(const QString& item, KDevelo
     return parserOptionsForItem(readPaths(project), itemPath, rootDirectory);
 }
 
-QList<ParserSettingsEntry> ClangSettingsManager::readPaths(KDevelop::IProject* project) const
+QVector<ParserSettingsEntry> ClangSettingsManager::readPaths(KDevelop::IProject* project) const
 {
     auto cfg = project->projectConfiguration().data();
     auto grp = cfg->group(settingsGroup);
 
-    QList<ParserSettingsEntry> paths;
+    QVector<ParserSettingsEntry> paths;
     for (const auto& grpName : grp.groupList()) {
         if (!grpName.startsWith(parserGroup)) {
             continue;
@@ -163,7 +163,7 @@ QList<ParserSettingsEntry> ClangSettingsManager::readPaths(KDevelop::IProject* p
     return paths;
 }
 
-void ClangSettingsManager::writePaths(KDevelop::IProject* project, const QList<ParserSettingsEntry>& paths)
+void ClangSettingsManager::writePaths(KDevelop::IProject* project, const QVector<ParserSettingsEntry>& paths)
 {
     auto cfg = project->projectConfiguration().data();
     auto grp = cfg->group(settingsGroup);
@@ -179,7 +179,7 @@ void ClangSettingsManager::writePaths(KDevelop::IProject* project, const QList<P
 
 ParserSettings ClangSettingsManager::defaultParserSettings() const
 {
-    return {"-fspell-checking -Wdocumentation -std=c++11 -Wall"};
+    return {QStringLiteral("-fspell-checking -Wdocumentation -std=c++11 -Wall")};
 }
 
 bool ParserSettings::isCpp() const
@@ -189,7 +189,8 @@ bool ParserSettings::isCpp() const
 
 QVector<QByteArray> ParserSettings::toClangAPI() const
 {
-    auto list = parserOptions.split(' ', QString::SkipEmptyParts);
+    // TODO: This is not efficient.
+    auto list = parserOptions.split(QLatin1Char(' '), QString::SkipEmptyParts);
     QVector<QByteArray> result;
     result.reserve(list.size());
 

@@ -33,10 +33,13 @@ using namespace KDevelop;
 
 namespace
 {
+const QString projectRoot = QStringLiteral("(project root)");
+const QString dotPath = QStringLiteral(".");
+
 QString toRelativePath(const QString& path, const Path& projectPath)
 {
     auto relativePath = projectPath.relativePath(KDevelop::Path(path));
-    return relativePath.isEmpty() ? QStringLiteral(".") : relativePath;
+    return relativePath.isEmpty() ? dotPath : relativePath;
 }
 }
 
@@ -62,7 +65,8 @@ QVariant PathsModel::data(const QModelIndex& index, int role) const
         return QVariant::fromValue(m_paths.at(index.row()).settings);
     }
 
-    return m_paths.at(index.row()).path;
+    const auto path = m_paths.at(index.row()).path;
+    return path == dotPath ? projectRoot : path;
 }
 
 int PathsModel::rowCount(const QModelIndex& parent) const
@@ -89,7 +93,7 @@ bool PathsModel::setData(const QModelIndex& index, const QVariant& value, int ro
             return false;
         }
 
-        m_paths[index.row()].path = path;
+        m_paths[index.row()].path = (path == projectRoot) ? dotPath : path;
     }
 
     emit dataChanged(index, index);
@@ -106,12 +110,12 @@ Qt::ItemFlags PathsModel::flags(const QModelIndex& index) const
     return Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
-QList<ParserSettingsEntry> PathsModel::paths() const
+QVector<ParserSettingsEntry> PathsModel::paths() const
 {
     return m_paths;
 }
 
-void PathsModel::setPaths(const QList<ParserSettingsEntry>& paths)
+void PathsModel::setPaths(const QVector<ParserSettingsEntry>& paths)
 {
     beginResetModel();
     m_paths = paths;

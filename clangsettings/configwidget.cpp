@@ -76,7 +76,7 @@ ConfigWidget::ConfigWidget(QWidget* parent, KDevelop::IProject* project)
     QAction* delDefAction = new QAction(i18n("Delete path"), this);
     delDefAction->setShortcut(QKeySequence(Qt::Key_Delete));
     delDefAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    delDefAction->setIcon(QIcon::fromTheme("list-remove"));
+    delDefAction->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     m_ui->pathView->addAction(delDefAction);
     m_ui->pathView->setContextMenuPolicy(Qt::ActionsContextMenu);
     connect(delDefAction, &QAction::triggered, this, &ConfigWidget::deletePath);
@@ -87,6 +87,8 @@ ConfigWidget::ConfigWidget(QWidget* parent, KDevelop::IProject* project)
     m_ui->languageStandards->setCurrentText(languageStandard(m_ui->parserOptions->text()));
     connect(m_ui->languageStandards, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ConfigWidget::languageStandardChanged);
 }
+
+ConfigWidget::~ConfigWidget() = default;
 
 void ConfigWidget::itemActivated()
 {

@@ -30,14 +30,14 @@
 
 SessionSettings::SessionSettings(QWidget* parent)
     : ConfigPage(nullptr, SessionConfig::self(), parent)
+    , m_settings(new Ui::SessionSettings)
 {
     auto l = new QVBoxLayout(this);
     auto w = new QWidget(this);
 
-    m_settings = new Ui::SessionSettings;
-    m_settings->setupUi( w );
+    m_settings->setupUi(w);
 
-    l->addWidget( w );
+    l->addWidget(w);
 }
 
 void SessionSettings::reset()

@@ -25,6 +25,7 @@
 #define CONFIGWIDGET_H
 
 #include <QWidget>
+#include <QScopedPointer>
 
 #include "clangsettingsmanager.h"
 
@@ -45,14 +46,15 @@ class ConfigWidget : public QWidget
     Q_OBJECT
 public:
     ConfigWidget(QWidget* parent, KDevelop::IProject* project);
+    ~ConfigWidget();
 
     void writeSettings();
     void defaults();
 
-Q_SIGNALS:
+signals:
     void changed();
 
-private Q_SLOTS:
+private slots:
     void itemActivated();
     void addPath();
     void deletePath();
@@ -60,7 +62,7 @@ private Q_SLOTS:
     void languageStandardChanged(const QString& standard);
 
 private:
-    Ui::ConfigWidget* m_ui;
+    QScopedPointer<Ui::ConfigWidget> m_ui;
     KDevelop::IProject* m_project;
     PathsModel* m_model;
 };

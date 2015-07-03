@@ -26,6 +26,8 @@
 
 #include <interfaces/configpage.h>
 
+#include <QScopedPointer>
+
 namespace Ui
 {
     class SessionSettings;
@@ -46,7 +48,7 @@ public:
     void reset() override;
 
 private:
-    Ui::SessionSettings* m_settings;
+    QScopedPointer<Ui::SessionSettings> m_settings;
 
 };
 

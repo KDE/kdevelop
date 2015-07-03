@@ -35,7 +35,8 @@ class ProjectBaseItem;
 class IProject;
 }
 
-struct ParserSettings {
+struct ParserSettings
+{
     QString parserOptions;
     bool isCpp() const;
     QVector<QByteArray> toClangAPI() const;
@@ -48,6 +49,7 @@ struct ParserSettingsEntry
     ParserSettings settings;
     QString path;
 };
+Q_DECLARE_TYPEINFO(ParserSettingsEntry, Q_MOVABLE_TYPE);
 
 struct CodeCompletionSettings
 {
@@ -74,9 +76,9 @@ public:
 
     ParserSettings defaultParserSettings() const;
 
-    QList<ParserSettingsEntry> readPaths(KDevelop::IProject* project) const;
+    QVector<ParserSettingsEntry> readPaths(KDevelop::IProject* project) const;
 
-    void writePaths(KDevelop::IProject* project, const QList<ParserSettingsEntry>& paths);
+    void writePaths(KDevelop::IProject* project, const QVector<ParserSettingsEntry>& paths);
 
 private:
     ClangSettingsManager();

@@ -38,8 +38,8 @@ public:
     };
 
     PathsModel(QObject* parent = 0);
-    void setPaths(const QList<ParserSettingsEntry>& paths);
-    QList<ParserSettingsEntry> paths() const;
+    void setPaths(const QVector<ParserSettingsEntry>& paths);
+    QVector<ParserSettingsEntry> paths() const;
     void addPath(const QString& path);
     void setProjectPath(const KDevelop::Path& path);
 
@@ -49,12 +49,13 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
-Q_SIGNALS: void changed();
+signals:
+    void changed();
 
 private:
     void addPathInternal(const QString& path);
 
-    QList<ParserSettingsEntry> m_paths;
+    QVector<ParserSettingsEntry> m_paths;
     KDevelop::Path m_projectPath;
 };
 
