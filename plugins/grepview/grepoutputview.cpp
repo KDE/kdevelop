@@ -117,8 +117,6 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(m_expandAll, &QAction::triggered, this, &GrepOutputView::expandAllItems);
     connect(applyButton, &QPushButton::clicked,  this, &GrepOutputView::onApply);
     connect(m_clearSearchHistory, &QAction::triggered, this, &GrepOutputView::clearSearchHistory);
-    connect(resultsTreeView, &QTreeView::collapsed, this, &GrepOutputView::updateScrollArea);
-    connect(resultsTreeView, &QTreeView::expanded, this, &GrepOutputView::updateScrollArea);
 
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
@@ -129,6 +127,8 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(replacementCombo, static_cast<void(KComboBox::*)()>(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
+
+    resultsTreeView->header()->setStretchLastSection(true);
 
     updateCheckable();
 }
@@ -171,6 +171,7 @@ GrepOutputModel* GrepOutputView::renewModel(QString name, QString descriptionOrU
     connect(replacementCombo, &KComboBox::editTextChanged, newModel, &GrepOutputModel::setReplacement);
     connect(newModel, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
     connect(newModel, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
+    connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepOutputView::updateScrollArea);
 
     QString prettyUrl = descriptionOrUrl;
     if(descriptionOrUrl.startsWith('/'))
@@ -274,16 +275,14 @@ void GrepOutputView::showDialog()
     m_plugin->showDialog(true);
 }
 
-void GrepOutputView::expandElements(const QModelIndex&)
+void GrepOutputView::expandElements(const QModelIndex& index)
 {
     m_prev->setEnabled(true);
     m_next->setEnabled(true);
     m_collapseAll->setEnabled(true);
     m_expandAll->setEnabled(true);
 
-    resultsTreeView->expandAll();
-    for (int col = 0; col < model()->columnCount(); ++col)
-        resultsTreeView->resizeColumnToContents(col);
+    resultsTreeView->expand(index);
 }
 
 void GrepOutputView::selectPreviousItem()
@@ -380,7 +379,8 @@ void GrepOutputView::modelSelectorContextMenu(const QPoint& pos)
     myMenu.exec(globalPos);
 }
 
-void GrepOutputView::updateScrollArea(const QModelIndex& index)
+void GrepOutputView::updateScrollArea()
 {
-    resultsTreeView->resizeColumnToContents( index.column() );
+    for (int col = 0; col < model()->columnCount(); ++col)
+        resultsTreeView->resizeColumnToContents(col);
 }
