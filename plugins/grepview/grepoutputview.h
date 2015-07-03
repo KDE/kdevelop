@@ -92,7 +92,7 @@ private slots:
     void rowsRemoved();
     void clearSearchHistory();
     void modelSelectorContextMenu(const QPoint& pos);
-    void updateScrollArea( const QModelIndex &index );
+    void updateScrollArea();
     void updateCheckable();
 };
 

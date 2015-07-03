@@ -48,6 +48,10 @@ public Q_SLOTS:
     ///@param showDIalog whether the search dialog should be shown. if false,
     ///                  the parameters of the last search will be used.
     Q_SCRIPTABLE void startSearch(QString pattern, QString directory, bool showOptions);
+
+Q_SIGNALS:
+    Q_SIGNAL void grepJobFinished();
+
 private Q_SLOTS:
     void showDialogFromMenu();
     void showDialogFromProject();

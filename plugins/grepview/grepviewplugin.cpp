@@ -230,6 +230,7 @@ void GrepViewPlugin::jobFinished(KJob* job)
 {
     if(job == m_currentJob)
     {
+        emit grepJobFinished();
         m_currentJob = 0;
     }
 }
