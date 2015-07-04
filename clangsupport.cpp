@@ -61,6 +61,8 @@
 #include <language/duchain/use.h>
 #include <language/editor/documentcursor.h>
 
+#include "clangsettings/sessionsettings/sessionsettings.h"
+
 #include <KActionCollection>
 #include <KPluginFactory>
 
@@ -245,6 +247,16 @@ ClangSupport::~ClangSupport()
     }
 
     ClangIntegration::DUChainUtils::unregisterDUChainItems();
+}
+
+KDevelop::ConfigPage* ClangSupport::configPage(int number, QWidget* parent)
+{
+    return number == 0 ? new SessionSettings(parent) : nullptr;
+}
+
+int ClangSupport::configPages() const
+{
+    return 1;
 }
 
 ParseJob* ClangSupport::createParseJob(const IndexedString& url)

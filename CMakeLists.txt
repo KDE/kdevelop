@@ -80,6 +80,7 @@ target_link_libraries(kdevclangsupport
     kdevclangcodecompletion
     kdevclangcodegen
     kdevclangutil
+    sessionsettings
 
     KF5::ThreadWeaver
     KF5::TextEditor

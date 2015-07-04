@@ -10,27 +10,23 @@ LINK_PUBLIC
         KDev::Util
 )
 
-set(clangsettings_SRCS
-        clangconfigpage.cpp
-        clangsettingsplugin.cpp
-        configwidget.cpp
-        pathsmodel.cpp
-        sessionsettings/sessionsettings.cpp
+set(sessionsettings_SRCS
+    sessionsettings/sessionsettings.cpp
 )
 
-ki18n_wrap_ui(clangsettings_SRCS
-    configwidget.ui
+ki18n_wrap_ui(sessionsettings_SRCS
     sessionsettings/sessionsettings.ui
 )
 
-kconfig_add_kcfg_files( clangsettings_SRCS clangprojectconfig.kcfgc sessionsettings/sessionconfig.kcfgc)
+kconfig_add_kcfg_files(sessionsettings_SRCS sessionsettings/sessionconfig.kcfgc)
 
-kdevplatform_add_plugin(kdevclangsettings JSON kdevclangsettings.json SOURCES ${clangsettings_SRCS})
+add_library(sessionsettings
+STATIC
+        ${sessionsettings_SRCS}
+)
 
-target_link_libraries(kdevclangsettings
+target_link_libraries(sessionsettings
 LINK_PUBLIC
         KDev::Project
         KDev::Util
-LINK_PRIVATE
-        settingsmanager
 )

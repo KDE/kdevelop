@@ -44,6 +44,8 @@ public:
     QString fullName() const override;
     QIcon icon() const override;
 
+    KDevelop::ConfigPage::ConfigPageType configPageType() const override;
+
     void apply() override;
     void reset() override;
 

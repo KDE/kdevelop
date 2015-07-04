@@ -183,7 +183,7 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     } else {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(tuUrl.str()));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(tuUrl.str()));
-        m_environment.setParserSettings(ClangSettingsManager::self()->defaultParserSettings());
+        m_environment.setParserSettings(ClangSettingsManager::self()->parserSettings(nullptr));
     }
     const bool isSource = ClangHelpers::isSource(tuUrl.str());
     m_environment.setQuality(

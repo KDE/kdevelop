@@ -69,3 +69,8 @@ QIcon SessionSettings::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("kdevelop"));
 }
+
+KDevelop::ConfigPage::ConfigPageType SessionSettings::configPageType() const
+{
+    return ConfigPage::LanguageConfigPage;
+}

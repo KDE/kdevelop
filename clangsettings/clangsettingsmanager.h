@@ -44,13 +44,6 @@ struct ParserSettings
 };
 Q_DECLARE_METATYPE(ParserSettings);
 
-struct ParserSettingsEntry
-{
-    ParserSettings settings;
-    QString path;
-};
-Q_DECLARE_TYPEINFO(ParserSettingsEntry, Q_MOVABLE_TYPE);
-
 struct CodeCompletionSettings
 {
     bool macros = true;
@@ -71,14 +64,6 @@ public:
     CodeCompletionSettings codeCompletionSettings() const;
 
     ParserSettings parserSettings(KDevelop::ProjectBaseItem* item) const;
-
-    ParserSettings parserSettings(const QString& item, KDevelop::IProject* project) const;
-
-    ParserSettings defaultParserSettings() const;
-
-    QVector<ParserSettingsEntry> readPaths(KDevelop::IProject* project) const;
-
-    void writePaths(KDevelop::IProject* project, const QVector<ParserSettingsEntry>& paths);
 
 private:
     ClangSettingsManager();

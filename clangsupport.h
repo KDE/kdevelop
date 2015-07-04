@@ -64,6 +64,10 @@ public:
 
     KDevelop::TopDUContext* standardContext(const QUrl &url, bool proxyContext = false) override;
 
+    virtual KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
+
+    virtual int configPages() const override;
+
     //BEGIN IBuddyDocumentFinder
 
     bool areBuddies(const QUrl &url1, const QUrl& url2) override;

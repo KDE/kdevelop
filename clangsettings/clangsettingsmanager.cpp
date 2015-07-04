@@ -32,6 +32,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 #include <interfaces/iproject.h>
+#include <custom-definesandincludes/idefinesandincludesmanager.h>
 #include <util/path.h>
 
 #include <project/projectmodel.h>
@@ -41,10 +42,6 @@ using namespace KDevelop;
 namespace
 {
     const QString settingsGroup = QStringLiteral("Clang Settings");
-
-    const QString parserGroup = QStringLiteral("group");
-    const QString parserPath = QStringLiteral("path");
-    const QString parserOptions = QStringLiteral("options");
 
     const QString macros = QStringLiteral("macros");
 
@@ -69,34 +66,6 @@ CodeCompletionSettings readCodeCompletionSettings(KConfig* cfg)
 
     return settings;
 }
-
-ParserSettings parserOptionsForItem(const QVector<ParserSettingsEntry>& paths, const Path itemPath, const Path rootDirectory)
-{
-    Path closestPath;
-    ParserSettings settings;
-
-    // find parser options configured to a path closest to the requested item
-    for (const auto& entry : paths) {
-        auto settingsEntry = entry;
-        Path targetDirectory = rootDirectory;
-
-        targetDirectory.addPath(entry.path);
-
-        if (targetDirectory == itemPath){
-            return settingsEntry.settings;
-        }
-
-        if (targetDirectory.isParentOf(itemPath)) {
-            if(settings.parserOptions.isEmpty() || targetDirectory.segments().size() > closestPath.segments().size()){
-                settings = settingsEntry.settings;
-                closestPath = targetDirectory;
-            }
-        }
-    }
-
-    return settings.parserOptions.isEmpty() ? ClangSettingsManager::self()->defaultParserSettings() : settings;
-}
-
 }
 
 ClangSettingsManager* ClangSettingsManager::self()
@@ -121,66 +90,11 @@ ParserSettings ClangSettingsManager::parserSettings(KDevelop::ProjectBaseItem* i
 {
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
-    if (!item) {
-        return defaultParserSettings();
-    }
-
-   return parserOptionsForItem(readPaths(item->project()), item->path(), item->project()->path());
+    return {IDefinesAndIncludesManager::manager()->parserArguments(item)};
 }
 
 ClangSettingsManager::ClangSettingsManager()
 {}
-
-ParserSettings ClangSettingsManager::parserSettings(const QString& item, KDevelop::IProject* project) const
-{
-    const Path itemPath(item);
-    const Path rootDirectory = project->path();
-    return parserOptionsForItem(readPaths(project), itemPath, rootDirectory);
-}
-
-QVector<ParserSettingsEntry> ClangSettingsManager::readPaths(KDevelop::IProject* project) const
-{
-    auto cfg = project->projectConfiguration().data();
-    auto grp = cfg->group(settingsGroup);
-
-    QVector<ParserSettingsEntry> paths;
-    for (const auto& grpName : grp.groupList()) {
-        if (!grpName.startsWith(parserGroup)) {
-            continue;
-        }
-        KConfigGroup pathgrp = grp.group(grpName);
-
-        ParserSettingsEntry path;
-        path.path = pathgrp.readEntry(parserPath, "");
-        if(path.path.isEmpty()){
-            continue;
-        }
-
-        path.settings.parserOptions = pathgrp.readEntry(parserOptions, defaultParserSettings().parserOptions);
-        paths.append(path);
-    }
-
-    return paths;
-}
-
-void ClangSettingsManager::writePaths(KDevelop::IProject* project, const QVector<ParserSettingsEntry>& paths)
-{
-    auto cfg = project->projectConfiguration().data();
-    auto grp = cfg->group(settingsGroup);
-    grp.deleteGroup();
-
-    int pathIndex = 0;
-    for (const auto& path : paths) {
-        auto pathgrp = grp.group(parserGroup + QString::number(pathIndex++));
-        pathgrp.writeEntry(parserPath, path.path);
-        pathgrp.writeEntry(parserOptions, path.settings.parserOptions);
-    }
-}
-
-ParserSettings ClangSettingsManager::defaultParserSettings() const
-{
-    return {QStringLiteral("-fspell-checking -Wdocumentation -std=c++11 -Wall")};
-}
 
 bool ParserSettings::isCpp() const
 {
