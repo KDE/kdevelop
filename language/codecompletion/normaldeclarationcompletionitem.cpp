@@ -182,8 +182,8 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           }
         } else if (index.column() == CodeCompletionModel::Arguments) {
             if (m_declaration->isFunctionDeclaration()) {
-                auto function = declaration()->type<FunctionType>();
-                return function->partToString(FunctionType::SignatureArguments);
+                auto functionType = declaration()->type<FunctionType>();
+                return functionType ? functionType->partToString(FunctionType::SignatureArguments) : QVariant();
             }
         }
       break;
