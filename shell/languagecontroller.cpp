@@ -36,7 +36,7 @@
 #include "problemmodelset.h"
 
 #include "core.h"
-#include "settings/ccpreferences.h"
+#include "settings/languagepreferences.h"
 #include "completionsettings.h"
 #include "debug.h"
 

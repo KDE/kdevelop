@@ -73,7 +73,7 @@ set(KDevPlatformShell_LIB_SRCS
     settings/environmentwidget.cpp
     settings/environmentgroupmodel.cpp
     settings/environmentpreferences.cpp
-    settings/ccpreferences.cpp
+    settings/languagepreferences.cpp
     settings/bgpreferences.cpp
     settings/templateconfig.cpp
     settings/templatepage.cpp
@@ -83,7 +83,7 @@ set(KDevPlatformShell_LIB_SRCS
 kconfig_add_kcfg_files(KDevPlatformShell_LIB_SRCS
     settings/uiconfig.kcfgc
     settings/projectconfig.kcfgc
-    settings/ccconfig.kcfgc
+    settings/languageconfig.kcfgc
     settings/bgconfig.kcfgc
 )
 
@@ -97,7 +97,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/sourceformattersettings.ui
     settings/projectpreferences.ui
     settings/environmentwidget.ui
-    settings/ccpreferences.ui
+    settings/languagepreferences.ui
     settings/bgpreferences.ui
     settings/templateconfig.ui
     settings/templatepage.ui

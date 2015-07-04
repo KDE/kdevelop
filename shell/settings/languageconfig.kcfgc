@@ -1,5 +1,5 @@
-File=ccconfig.kcfg
-ClassName=CCSettings
+File=languageconfig.kcfg
+ClassName=LanguageConfig
 Singleton=true
 UseEnumTypes=true
 SetUserTexts=true

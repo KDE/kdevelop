@@ -121,4 +121,9 @@ IPlugin* ConfigPage::plugin() const
     return d->plugin;
 }
 
+ConfigPage::ConfigPageType ConfigPage::configPageType() const
+{
+    return DefaultConfigPage;
+}
+
 } // namespace KDevelop

@@ -55,6 +55,14 @@ public Q_SLOTS:
      */
     void addConfigPage(ConfigPage* page, ConfigPage* next = nullptr);
 
+
+    /**
+     * Add a new sub config page
+     * @param parentPage the parent page
+     * @param page the page to add
+     */
+    void addSubConfigPage(ConfigPage* parentPage, ConfigPage* page);
+
 Q_SIGNALS:
     void configSaved(ConfigPage* page);
 

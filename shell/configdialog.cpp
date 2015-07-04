@@ -158,6 +158,13 @@ void ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previous)
     }
 }
 
+void ConfigDialog::addSubConfigPage(ConfigPage* parentPage, ConfigPage* page)
+{
+    auto item = itemForPage(parentPage);
+    Q_ASSERT(item);
+    addConfigPageInternal(addSubPage(item, page, page->name()), page);
+}
+
 void ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, ConfigPage* page)
 {
     item->setHeader(page->fullName());
@@ -169,7 +176,7 @@ void ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, ConfigPage* page
     m_pages.append(item);
     for (int i = 0; i < page->childPages(); ++i) {
         auto child = page->childPage(i);
-        addConfigPageInternal(addSubPage(item, child, child->name()), child);
+        addSubConfigPage(page, child);
     }
 }
 

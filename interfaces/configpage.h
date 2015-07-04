@@ -61,6 +61,17 @@ public:
      */
     virtual ConfigPage* childPage(int number);
 
+    enum ConfigPageType
+    {
+        DefaultConfigPage,
+        LanguageConfigPage ///< A config page that contains language specific settings. This page is appended as a child page to the "Language support" config page.
+    };
+
+    /**
+     * @return The type of this config page. Default implementaion returns DefaultConfigPageType
+     */
+    virtual ConfigPageType configPageType() const;
+
     /**
      * @return the plugin that this config page was created by or nullptr if it was not created by a plugin.
      */

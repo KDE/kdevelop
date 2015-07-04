@@ -19,25 +19,25 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_CCPREFERENCES_H
-#define KDEVPLATFORM_CCPREFERENCES_H
+#ifndef KDEVPLATFORM_LANGUAGEPREFERENCESPREFERENCES_H
+#define KDEVPLATFORM_LANGUAGEPREFERENCESPREFERENCES_H
 
 #include <interfaces/configpage.h>
 
 namespace Ui
 {
-class CCPreferences;
+class LanguagePreferences;
 }
 
 namespace KDevelop
 {
 
-class CCPreferences : public ConfigPage
+class LanguagePreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    explicit CCPreferences(QWidget* parent);
-    virtual ~CCPreferences();
+    explicit LanguagePreferences(QWidget* parent);
+    virtual ~LanguagePreferences();
 
     virtual QString name() const override;
     virtual QString fullName() const override;
@@ -48,7 +48,7 @@ public:
     void notifySettingsChanged();
 
 private:
-    Ui::CCPreferences *preferencesDialog;
+    Ui::LanguagePreferences *preferencesDialog;
 };
 
 }

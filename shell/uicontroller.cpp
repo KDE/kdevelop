@@ -54,7 +54,7 @@
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
 #include "settings/bgpreferences.h"
-#include "settings/ccpreferences.h"
+#include "settings/languagepreferences.h"
 #include "settings/environmentpreferences.h"
 #include "settings/pluginpreferences.h"
 #include "settings/projectpreferences.h"
@@ -468,6 +468,7 @@ void UiController::addNewToolView(MainWindow *mw, QListWidgetItem* item)
 void UiController::showSettingsDialog()
 {
     auto editorConfigPage = new EditorConfigPage(activeMainWindow());
+    auto languageConfigPage = new LanguagePreferences(activeMainWindow());
 
     auto configPages = QVector<KDevelop::ConfigPage*> {
         new UiPreferences(activeMainWindow()),
@@ -475,7 +476,6 @@ void UiController::showSettingsDialog()
         new SourceFormatterSettings(activeMainWindow()),
         new ProjectPreferences(activeMainWindow()),
         new EnvironmentPreferences(QString(), activeMainWindow()),
-        new CCPreferences(activeMainWindow()),
         new BGPreferences(activeMainWindow()),
         new TemplateConfig(activeMainWindow()),
         editorConfigPage
@@ -485,10 +485,18 @@ void UiController::showSettingsDialog()
 
     auto addPluginPages = [&](IPlugin* plugin) {
         for (int i = 0, numPages = plugin->configPages(); i < numPages; ++i) {
-            // insert them before the editor config page
-            cfgDlg.addConfigPage(plugin->configPage(i, &cfgDlg), editorConfigPage);
+            auto page = plugin->configPage(i, &cfgDlg);
+            if(page && page->configPageType() == ConfigPage::LanguageConfigPage){
+                cfgDlg.addSubConfigPage(languageConfigPage, page);
+            } else {
+                // insert them before the editor config page
+                cfgDlg.addConfigPage(plugin->configPage(i, &cfgDlg), editorConfigPage);
+            }
         }
     };
+
+    cfgDlg.addConfigPage(languageConfigPage, configPages[5]);
+
     for (IPlugin* plugin : ICore::self()->pluginController()->loadedPlugins()) {
         addPluginPages(plugin);
     }

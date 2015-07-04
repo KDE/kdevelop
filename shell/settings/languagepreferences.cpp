@@ -20,7 +20,7 @@
 * 02110-1301, USA.
 */
 
-#include "ccpreferences.h"
+#include "languagepreferences.h"
 
 #include <QVBoxLayout>
 
@@ -35,38 +35,38 @@
 
 #include "../completionsettings.h"
 #include "../core.h"
-#include "ccconfig.h"
-#include "ui_ccpreferences.h"
+#include "languageconfig.h"
+#include "ui_languagepreferences.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
-CCPreferences::CCPreferences(QWidget* parent)
-    : ConfigPage(nullptr, CCSettings::self(), parent)
+LanguagePreferences::LanguagePreferences(QWidget* parent)
+    : ConfigPage(nullptr, LanguageConfig::self(), parent)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
-    preferencesDialog = new Ui::CCPreferences;
+    preferencesDialog = new Ui::LanguagePreferences;
     preferencesDialog->setupUi( w );
 
     l->addWidget( w );
 }
 
-void CCPreferences::notifySettingsChanged()
+void LanguagePreferences::notifySettingsChanged()
 {
     CompletionSettings& settings(static_cast<CompletionSettings&>(*ICore::self()->languageController()->completionSettings()));
 
     settings.emitChanged();
 }
 
-CCPreferences::~CCPreferences( )
+LanguagePreferences::~LanguagePreferences( )
 {
     delete preferencesDialog;
 }
 
-void CCPreferences::apply()
+void LanguagePreferences::apply()
 {
     ConfigPage::apply();
 
@@ -79,24 +79,23 @@ void CCPreferences::apply()
             }
         }
     }
+
     notifySettingsChanged();
 }
 
-QString CCPreferences::name() const
+QString LanguagePreferences::name() const
 {
     return i18n("Language Support");
 }
 
-QString CCPreferences::fullName() const
+QString LanguagePreferences::fullName() const
 {
     return i18n("Configure code-completion and semantic highlighting");
 }
 
-QIcon CCPreferences::icon() const
+QIcon LanguagePreferences::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("page-zoom"));
 }
 
 }
-
-
