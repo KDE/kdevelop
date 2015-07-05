@@ -51,8 +51,7 @@ void testCompilerEntry(SettingsManager& settings, KConfig* config){
     Q_ASSERT(!compilers.isEmpty());
     bool gccCompilerInstalled = std::any_of(compilers.begin(), compilers.end(), [](const CompilerPointer& compiler){return compiler->name().contains("gcc", Qt::CaseInsensitive);});
     if (gccCompilerInstalled) {
-        QCOMPARE(entry.compiler->languageStandard(), QStringLiteral("c99"));
-        QCOMPARE(entry.compiler->name(), QStringLiteral("GCC c99"));
+        QCOMPARE(entry.compiler->name(), QStringLiteral("GCC"));
     }
 }
 
@@ -113,12 +112,8 @@ void TestCompilerProvider::testCompilerIncludesAndDefines()
     auto provider = settings.provider();
     for (auto c : provider->compilers()) {
         if (!c->editable() && !c->path().isEmpty()) {
-            QVERIFY(!c->defines().isEmpty());
-            QVERIFY(!c->includes().isEmpty());
-            if (!c->supportedStandards().isEmpty()) {
-                QVERIFY(c->setLanguageStandard(c->supportedStandards().first()));
-                QVERIFY(!c->setLanguageStandard("bar"));
-            }
+            QVERIFY(!c->defines({}).isEmpty());
+            QVERIFY(!c->includes({}).isEmpty());
         }
     }
 
@@ -127,8 +122,8 @@ void TestCompilerProvider::testCompilerIncludesAndDefines()
 
     auto compiler = provider->compilerForItem(nullptr);
     QVERIFY(compiler);
-    QVERIFY(!compiler->defines().isEmpty());
-    QVERIFY(!compiler->includes().isEmpty());
+    QVERIFY(!compiler->defines(QStringLiteral("--std=c++11")).isEmpty());
+    QVERIFY(!compiler->includes(QStringLiteral("--std=c++11")).isEmpty());
 }
 
 void TestCompilerProvider::testStorageBackwardsCompatible()
@@ -144,7 +139,7 @@ void TestCompilerProvider::testStorageBackwardsCompatible()
       "Defines=\\x00\\x00\\x00\\x02\\x00\\x00\\x00\\x0c\\x00_\\x00D\\x00E\\x00B\\x00U\\x00G\\x00\\x00\\x00\\n\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x10\\x00V\\x00A\\x00R\\x00I\\x00A\\x00B\\x00L\\x00E\\x00\\x00\\x00\\n\\x00\\x00\\x00\\x00\\n\\x00V\\x00A\\x00L\\x00U\\x00E\n" <<
       "Includes=\\x00\\x00\\x00\\x01\\x00\\x00\\x00$\\x00/\\x00u\\x00s\\x00r\\x00/\\x00i\\x00n\\x00c\\x00l\\x00u\\x00d\\x00e\\x00/\\x00m\\x00y\\x00d\\x00i\\x00r\n" <<
       "Path=/\n" <<
-      "[CustomDefinesAndIncludes][ProjectPath0][Compiler]\nName=GCC c99\nPath=gcc\nStandard=c99\nType=GCC\n";
+      "[CustomDefinesAndIncludes][ProjectPath0][Compiler]\nName=GCC\nPath=gcc\nType=GCC\n";
     file.close();
     KConfig config(file.fileName());
     auto entries = settings.readPaths(&config);
@@ -179,7 +174,7 @@ void TestCompilerProvider::testStorageNewSystem()
       "[CustomDefinesAndIncludes][ProjectPath0][Includes]\n" <<
       "1=/usr/include/mydir\n" <<
       "2=/usr/local/include/mydir\n" <<
-      "[CustomDefinesAndIncludes][ProjectPath0][Compiler]\nName=GCC c99\nPath=gcc\nStandard=c99\nType=GCC\n";
+      "[CustomDefinesAndIncludes][ProjectPath0][Compiler]\nName=GCC\nPath=gcc\nType=GCC\n";
     file.close();
     KConfig config(file.fileName());
     auto entries = settings.readPaths(&config);

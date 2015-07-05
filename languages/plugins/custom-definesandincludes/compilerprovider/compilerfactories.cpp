@@ -27,12 +27,6 @@
 #include "gcclikecompiler.h"
 #include "msvccompiler.h"
 
-namespace
-{
-const QString cpp11 = QStringLiteral("c++11");
-const QString c99 = QStringLiteral("c99");
-}
-
 QString ClangFactory::name() const
 {
     return QStringLiteral("Clang");
@@ -46,18 +40,9 @@ CompilerPointer ClangFactory::createCompiler(const QString& name, const QString&
 void ClangFactory::registerDefaultCompilers(CompilerProvider* provider) const
 {
     const QString clang = QStringLiteral("clang");
-    const auto standards = GccLikeCompiler::supportedStandards(clang);
-    if (standards.contains(cpp11)) {
-        auto compiler = createCompiler(QStringLiteral("Clang c++11"), clang, false);
-        compiler->setLanguageStandard(cpp11);
-        provider->registerCompiler(compiler);
-    }
 
-    if (standards.contains(c99)) {
-        auto compiler = createCompiler(QStringLiteral("Clang c99"), clang, false);
-        compiler->setLanguageStandard(c99);
-        provider->registerCompiler(compiler);
-    }
+    auto compiler = createCompiler(QStringLiteral("Clang"), clang, false);
+    provider->registerCompiler(compiler);
 }
 
 QString GccFactory::name() const
@@ -73,18 +58,9 @@ CompilerPointer GccFactory::createCompiler(const QString& name, const QString& p
 void GccFactory::registerDefaultCompilers(CompilerProvider* provider) const
 {
     const QString gcc = QStringLiteral("gcc");
-    const auto standards = GccLikeCompiler::supportedStandards(gcc);
-    if (standards.contains(cpp11)) {
-        auto compiler = createCompiler(QStringLiteral("GCC c++11"), gcc, false);
-        compiler->setLanguageStandard(cpp11);
-        provider->registerCompiler(compiler);
-    }
 
-    if (standards.contains(c99)) {
-        auto compiler = createCompiler(QStringLiteral("GCC c99"), gcc, false);
-        compiler->setLanguageStandard(c99);
-        provider->registerCompiler(compiler);
-    }
+    auto compiler = createCompiler(QStringLiteral("GCC"), gcc, false);
+    provider->registerCompiler(compiler);
 }
 
 QString MsvcFactory::name() const

@@ -49,29 +49,56 @@ public:
         ICompiler(i18n("None"), QString(), QString(), false)
     {}
 
-    virtual QHash< QString, QString > defines() const override
+    QHash< QString, QString > defines(const QString&) const override
     {
         return {};
     }
 
-    virtual Path::List includes() const override
+    Path::List includes(const QString&) const override
     {
         return {};
     }
-
-    virtual QStringList supportedStandards() const override
-    {
-        return {};
-    }
-
-    virtual void clearCache() override
-    {}
 };
 
 static CompilerPointer createDummyCompiler()
 {
     static CompilerPointer compiler(new NoCompiler());
     return compiler;
+}
+
+ConfigEntry configForItem(KDevelop::ProjectBaseItem* item)
+{
+    if(!item){
+        return {};
+    }
+
+    const Path itemPath = item->path();
+    const Path rootDirectory = item->project()->path();
+
+    auto paths = SettingsManager::globalInstance()->readPaths(item->project()->projectConfiguration().data());
+    ConfigEntry config;
+    Path closestPath;
+
+    // find config entry closest to the requested item
+    for (const auto& entry : paths) {
+        auto configEntry = entry;
+        Path targetDirectory = rootDirectory;
+
+        targetDirectory.addPath(entry.path);
+
+        if (targetDirectory == itemPath) {
+            return configEntry;
+        }
+
+        if (targetDirectory.isParentOf(itemPath)) {
+            if (config.path.isEmpty() || targetDirectory.segments().size() > closestPath.segments().size()) {
+                config = configEntry;
+                closestPath = targetDirectory;
+            }
+        }
+    }
+
+    return config;
 }
 }
 
@@ -105,12 +132,14 @@ CompilerProvider::~CompilerProvider() = default;
 
 QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
 {
-    return compilerForItem(item)->defines();
+    auto config = configForItem(item);
+    return config.compiler->defines(config.parserArguments);
 }
 
 Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
 {
-    return compilerForItem(item)->includes();
+    auto config = configForItem(item);
+    return config.compiler->includes(config.parserArguments);
 }
 
 IDefinesAndIncludesManager::Type CompilerProvider::type() const
@@ -147,37 +176,9 @@ QVector< CompilerPointer > CompilerProvider::compilers() const
 
 CompilerPointer CompilerProvider::compilerForItem( KDevelop::ProjectBaseItem* item ) const
 {
-    if (!item) {
-        return checkCompilerExists({});
-    }
-
-    const Path itemPath = item->path();
-    const Path rootDirectory = item->project()->path();
-
-    auto compilers = m_settings->readPaths(item->project()->projectConfiguration().data());
-    CompilerPointer compiler;
-    Path closestPath;
-
-    // find compiler configured to a path closest to the requested item, or fallback to the default compiler
-    for (const auto& entry : compilers) {
-        auto compilerEntry = entry.compiler;
-        Path targetDirectory = rootDirectory;
-
-        targetDirectory.addPath(entry.path);
-
-        if (targetDirectory == itemPath){
-            return compilerEntry;
-        }
-
-        if (targetDirectory.isParentOf(itemPath)) {
-            if(!compiler || targetDirectory.segments().size() > closestPath.segments().size()){
-                compiler = compilerEntry;
-                closestPath = targetDirectory;
-            }
-        }
-    }
-
-    return checkCompilerExists(compiler);
+    auto compiler = configForItem(item).compiler;
+    Q_ASSERT(compiler);
+    return compiler;
 }
 
 bool CompilerProvider::registerCompiler(const CompilerPointer& compiler)

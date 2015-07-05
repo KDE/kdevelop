@@ -305,11 +305,9 @@ void ProjectPathsWidget::userDefinedCompilerChanged()
 
 void ProjectPathsWidget::tabChanged(int idx)
 {
-    if (idx == CompilerPage) {
+    if (idx == CompilerPage || idx == ParserArgumentsPage) {
         ui->batchEdit->setVisible(false);
         ui->compilerBox->setVisible(true);
-    } else if(idx == ParserArgumentsPage){
-        ui->batchEdit->setVisible(false);
     } else {
         ui->batchEdit->setVisible(true);
         ui->compilerBox->setVisible(false);

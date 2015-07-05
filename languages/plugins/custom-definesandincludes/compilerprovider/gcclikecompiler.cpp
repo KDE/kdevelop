@@ -38,75 +38,28 @@
 
 using namespace KDevelop;
 
-enum class CompilerStandard
-{
-    C90 = 0,
-    C99,
-    C11,
-
-    CPP_98,
-    CPP_03,
-    CPP_11,
-    CPP_14,
-
-    DEFAULT = CPP_11
-};
-
 namespace
 {
-
-const QMap<CompilerStandard, QString> languageStandards()
+QStringList languageOptions(const QString& arguments)
 {
-    //TODO: query compiler for supported standards instead
-    const static QMap<CompilerStandard, QString> standards {
-        {CompilerStandard::C90, "c90"},
-        {CompilerStandard::C99, "c99"},
-        {CompilerStandard::C11, "c11"},
+    static const QRegExp regexp("-std=(c|c\\+\\+)[0-9]{2}");
 
-        {CompilerStandard::CPP_98, "c++98"},
-        {CompilerStandard::CPP_03, "c++03"},
-        {CompilerStandard::CPP_11, "c++11"},
-        {CompilerStandard::CPP_14, "c++14"},
-    };
-
-    return standards;
-}
-
-QString compilerStandardToString(CompilerStandard standard)
-{
-    if(languageStandards().contains(standard)) {
-        return languageStandards().value(standard);
+    int idx = regexp.indexIn(arguments);
+    if(idx != -1){
+        auto standard = regexp.cap(0);
+        auto language = regexp.cap(1) == QStringLiteral("c++") ? QStringLiteral("-xc++") : QStringLiteral("-xc");
+        return {standard, language};
     }
 
-    Q_UNREACHABLE();
-    return "Invalid";
+    return {QStringLiteral("--std=c++11"), QStringLiteral("-xc++")};
 }
 
-CompilerStandard stringToCompilerStandard(const QString& standard)
+}
+
+Defines GccLikeCompiler::defines(const QString& arguments) const
 {
-    return languageStandards().key(standard, CompilerStandard::DEFAULT);
-}
-
-QString languageOption(CompilerStandard standard)
-{
-    if (standard < CompilerStandard::CPP_98) {
-        return QStringLiteral("-xc");
-    }
-
-    return QStringLiteral("-xc++");
-}
-
-QString standardOption(CompilerStandard standard)
-{
-    return QStringLiteral("-std=") + compilerStandardToString(standard);
-}
-
-}
-
-Defines GccLikeCompiler::defines() const
-{
-    if (!m_definesIncludes.definedMacros.isEmpty() ) {
-        return m_definesIncludes.definedMacros;
+    if (!m_definesIncludes.value(arguments).definedMacros.isEmpty() ) {
+        return m_definesIncludes.value(arguments).definedMacros;
     }
 
     // #define a 1
@@ -116,8 +69,12 @@ Defines GccLikeCompiler::defines() const
     QProcess proc;
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
-    const auto standard = stringToCompilerStandard(languageStandard());
-    proc.start( path(), {standardOption(standard), languageOption(standard), "-dM", "-E", NULL_DEVICE} );
+    auto compilerArguments = languageOptions(arguments);
+    compilerArguments.append("-dM");
+    compilerArguments.append("-E");
+    compilerArguments.append(NULL_DEVICE);
+
+    proc.start(path(), compilerArguments);
 
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
         definesAndIncludesDebug() <<  "Unable to read standard macro definitions from "<< path();
@@ -128,17 +85,17 @@ Defines GccLikeCompiler::defines() const
         auto line = proc.readLine();
 
         if ( defineExpression.indexIn( line ) != -1 ) {
-            m_definesIncludes.definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 2 ).trimmed();
+            m_definesIncludes[arguments].definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 2 ).trimmed();
         }
     }
 
-    return m_definesIncludes.definedMacros;
+    return m_definesIncludes[arguments].definedMacros;
 }
 
-Path::List GccLikeCompiler::includes() const
+Path::List GccLikeCompiler::includes(const QString& arguments) const
 {
-    if ( !m_definesIncludes.includePaths.isEmpty() ) {
-        return m_definesIncludes.includePaths;
+    if ( !m_definesIncludes.value(arguments).includePaths.isEmpty() ) {
+        return m_definesIncludes.value(arguments).includePaths;
     }
 
     QProcess proc;
@@ -156,8 +113,13 @@ Path::List GccLikeCompiler::includes() const
     //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
     //  /usr/include
     // End of search list.
-    const auto standard = stringToCompilerStandard(languageStandard());
-    proc.start( path(), {standardOption(standard), languageOption(standard), "-E", "-v", NULL_DEVICE} );
+
+    auto compilerArguments = languageOptions(arguments);
+    compilerArguments.append("-E");
+    compilerArguments.append("-v");
+    compilerArguments.append(NULL_DEVICE);
+
+    proc.start(path(), compilerArguments);
 
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
         definesAndIncludesDebug() <<  "Unable to read standard include paths from " << path();
@@ -192,7 +154,7 @@ Path::List GccLikeCompiler::includes() const
                     mode = Finished;
                 } else {
                     // This is an include path, add it to the list.
-                    m_definesIncludes.includePaths << Path( QDir::cleanPath( line.trimmed() ) );
+                    m_definesIncludes[arguments].includePaths << Path( QDir::cleanPath( line.trimmed() ) );
                 }
                 break;
             default:
@@ -203,25 +165,9 @@ Path::List GccLikeCompiler::includes() const
         }
     }
 
-    return m_definesIncludes.includePaths;
+    return m_definesIncludes[arguments].includePaths;
 }
 
 GccLikeCompiler::GccLikeCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName):
     ICompiler(name, path, factoryName, editable)
 {}
-
-QStringList GccLikeCompiler::supportedStandards() const
-{
-    return languageStandards().values();
-}
-
-void GccLikeCompiler::clearCache()
-{
-    m_definesIncludes.includePaths.clear();
-    m_definesIncludes.definedMacros.clear();
-}
-
-QStringList GccLikeCompiler::supportedStandards(const QString& /*path*/)
-{
-    return languageStandards().values();
-}

@@ -79,7 +79,7 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler/standard that will be used for parsing files under given directory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler that will be used to retrieve standard include directories and defined macros.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
            <string>Compiler for path</string>
@@ -89,7 +89,7 @@
         <item>
          <widget class="QComboBox" name="compiler">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler/standard that will be used for parsing files under given directory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler that will be used to retrieve standard include directories and defined macros.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>

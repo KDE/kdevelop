@@ -42,11 +42,17 @@ public:
     **/
     ICompiler( const QString& name, const QString& path, const QString& factoryName, bool editable );
 
-    /// @return list of defined macros for the compiler
-    virtual KDevelop::Defines defines() const = 0;
+    /**
+     * @param arguments compiler command-line arguments
+     * @return list of defined macros for the compiler
+     */
+    virtual KDevelop::Defines defines(const QString& arguments) const = 0;
 
-    /// @return list of include directories for the compiler
-    virtual KDevelop::Path::List includes() const = 0;
+    /**
+     * @param arguments compiler command-line arguments
+     * @return list of include directories for the compiler
+     */
+    virtual KDevelop::Path::List includes(const QString& arguments) const = 0;
 
     void setPath( const QString &path );
 
@@ -64,33 +70,13 @@ public:
     /// @return name of the factory that created this compiler
     QString factoryName() const;
 
-    /**
-     * sets language standard to @p standard
-     * @return true if compiler supports given standard
-     * @sa supportedStandards
-     */
-    bool setLanguageStandard(const QString& standard);
-
-    /// @return current language standard
-    QString languageStandard() const;
-
-    /**
-     * @return list of all language standard, that current compiler supports
-     */
-    virtual QStringList supportedStandards() const = 0;
-
     virtual ~ICompiler() = default;
-
-protected :
-    /// Called when includes/defines cache must be cleared. E.g. when path to the compiler/standard changes
-    virtual void clearCache() = 0;
 
 private:
     bool m_editable;
     QString m_name;
     QString m_path;
     QString m_factoryName;
-    QString m_standard;
 };
 
 typedef QSharedPointer<ICompiler> CompilerPointer;

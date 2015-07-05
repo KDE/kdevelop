@@ -49,7 +49,6 @@ const QString compilersGroup = QLatin1String( "Compilers" );
 const QString compilerNameKey = QLatin1String( "Name" );
 const QString compilerPathKey = QLatin1String( "Path" );
 const QString compilerTypeKey = QLatin1String( "Type" );
-const QString compilerStandardKey = QLatin1String( "Standard" );
 
 const auto parserArguments = QStringLiteral("parserArguments");
 }
@@ -79,7 +78,6 @@ CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
     for (auto f : cf) {
         if (f->name() == type) {
             auto compiler = f->createCompiler(name, path, true);
-            compiler->setLanguageStandard(grp.readEntry(ConfigConstants::compilerStandardKey, QString()));
             return compiler;
         }
     }
@@ -95,7 +93,6 @@ void writeCompilerToConfig(KConfigGroup& cfg, const CompilerPointer& compiler)
     grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
     grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
     grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
-    grp.writeEntry(ConfigConstants::compilerStandardKey, compiler->languageStandard());
 }
 
 void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
@@ -316,7 +313,6 @@ void SettingsManager::writeUserDefinedCompilers(const QVector< CompilerPointer >
         grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
         grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
         grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
-        grp.writeEntry(ConfigConstants::compilerStandardKey, compiler->languageStandard());
     }
     config.sync();
 }
@@ -338,7 +334,6 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
         for (auto f : cf) {
             if (f->name() == type) {
                 auto compiler = f->createCompiler(name, path);
-                compiler->setLanguageStandard(grp.readEntry(ConfigConstants::compilerStandardKey, QString()));
                 compilers.append(compiler);
             }
         }

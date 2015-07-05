@@ -31,17 +31,9 @@ class GccLikeCompiler : public ICompiler
 public:
     GccLikeCompiler( const QString& name, const QString& path, bool editable, const QString& factoryName );
 
-    virtual KDevelop::Defines defines() const override;
+    virtual KDevelop::Defines defines(const QString& arguments) const override;
 
-    virtual KDevelop::Path::List includes() const override;
-
-    virtual QStringList supportedStandards() const override;
-
-    /// Helper function to retrieve compiler standards without creating a compiler
-    static QStringList supportedStandards(const QString& path);
-
-protected:
-    virtual void clearCache() override;
+    virtual KDevelop::Path::List includes(const QString& arguments) const override;
 
 private:
     struct DefinesIncludes {
@@ -49,7 +41,8 @@ private:
         KDevelop::Path::List includePaths;
     };
 
-    mutable DefinesIncludes m_definesIncludes;
+    /// List of defines/includes per arguments
+    mutable QHash<QString, DefinesIncludes> m_definesIncludes;
 };
 
 #endif // GCCLIKECOMPILER_H

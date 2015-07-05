@@ -31,14 +31,9 @@ class MsvcCompiler : public ICompiler
 public:
     MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName);
 
-    virtual KDevelop::Defines defines() const override;
+    virtual KDevelop::Defines defines(const QString& arguments) const override;
 
-    virtual KDevelop::Path::List includes() const override;
-
-    virtual QStringList supportedStandards() const override;
-
-protected:
-    virtual void clearCache() override;
+    virtual KDevelop::Path::List includes(const QString& arguments) const override;
 };
 
 #endif // MSVCCOMPILER_H

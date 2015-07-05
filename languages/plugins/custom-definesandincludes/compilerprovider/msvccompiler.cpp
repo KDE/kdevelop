@@ -34,7 +34,7 @@
 
 using namespace KDevelop;
 
-Defines MsvcCompiler::defines() const
+Defines MsvcCompiler::defines(const QString&) const
 {
     Defines ret;
     //Get standard macros from kdevmsvcdefinehelpers
@@ -115,7 +115,7 @@ Defines MsvcCompiler::defines() const
     return ret;
 }
 
-Path::List MsvcCompiler::includes() const
+Path::List MsvcCompiler::includes(const QString&) const
 {
     QStringList _includePaths = QProcessEnvironment::systemEnvironment().value( "INCLUDE" ).split( ";", QString::SkipEmptyParts );
     Path::List includePaths;
@@ -127,13 +127,4 @@ Path::List MsvcCompiler::includes() const
 
 MsvcCompiler::MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName):
     ICompiler(name, path, factoryName, editable)
-{}
-
-QStringList MsvcCompiler::supportedStandards() const
-{
-    //TODO: query compiler for supported standards somehow
-    return {};
-}
-
-void MsvcCompiler::clearCache()
 {}
