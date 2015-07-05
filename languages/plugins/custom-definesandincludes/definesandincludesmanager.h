@@ -62,6 +62,8 @@ public:
     virtual void registerBackgroundProvider(BackgroundProvider* provider) override;
     virtual bool unregisterBackgroundProvider(BackgroundProvider* provider) override;
 
+    virtual QString parserArguments(KDevelop::ProjectBaseItem* item) const override;
+
     virtual void openConfigurationDialog( const QString& pathToFile ) override;
     virtual int perProjectConfigPages() const override;
     virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options,

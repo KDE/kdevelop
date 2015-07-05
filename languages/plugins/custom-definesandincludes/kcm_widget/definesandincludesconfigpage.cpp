@@ -104,12 +104,12 @@ void DefinesAndIncludesConfigPage::apply()
 
 QString DefinesAndIncludesConfigPage::name() const
 {
-    return i18n("Custom Defines and Includes");
+    return i18n("Language Support");
 }
 
 QString DefinesAndIncludesConfigPage::fullName() const
 {
-    return i18n("Configure Custom Defines and Includes");
+    return i18n("Configure Language Support");
 }
 
 QIcon DefinesAndIncludesConfigPage::icon() const

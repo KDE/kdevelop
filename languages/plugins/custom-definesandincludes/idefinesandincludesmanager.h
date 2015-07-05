@@ -132,6 +132,12 @@ public:
     **/
     virtual Defines definesInBackground( const QString& path ) const = 0;
 
+    /**
+     * @param item project item. Use nullptr to get default arguments
+     * @return The parser command-line arguments used to parse the @p item
+     */
+    virtual QString parserArguments(ProjectBaseItem* item) const = 0;
+
     ///@return the instance of the plugin.
     inline static IDefinesAndIncludesManager* manager();
 

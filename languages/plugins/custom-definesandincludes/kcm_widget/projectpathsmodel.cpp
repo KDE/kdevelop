@@ -63,6 +63,9 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
     case CompilerDataRole:
         return QVariant::fromValue(pathConfig.compiler);
         break;
+    case ParserArgumentsRole:
+        return pathConfig.parserArguments;
+        break;
     default:
         break;
     }
@@ -117,6 +120,9 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         break;
     case CompilerDataRole:
         pathConfig.compiler = value.value<CompilerPointer>();
+        break;
+    case ParserArgumentsRole:
+        pathConfig.parserArguments = value.toString();
         break;
     default:
         return false;

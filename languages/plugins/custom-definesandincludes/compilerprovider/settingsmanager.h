@@ -40,6 +40,7 @@ struct ConfigEntry
     QStringList includes;
     KDevelop::Defines defines;
     CompilerPointer compiler;
+    QString parserArguments;
 
     ConfigEntry( const QString& path = QString() );
 
@@ -60,6 +61,8 @@ public:
     void writeUserDefinedCompilers(const QVector<CompilerPointer>& compilers);
 
     bool needToReparseCurrentProject( KConfig* cfg ) const;
+
+    QString defaultParserArguments() const;
 
     CompilerProvider* provider();
     const CompilerProvider* provider() const;

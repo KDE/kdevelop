@@ -48,6 +48,7 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
 
     const Path itemPath = item->path();
     const Path rootDirectory = item->project()->path();
+    Path closestPath;
 
     for (const ConfigEntry & entry : paths) {
         Path targetDirectory = rootDirectory;
@@ -63,6 +64,11 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
                 if (!ret.defines.contains(it.key())) {
                     ret.defines[it.key()] = it.value();
                 }
+            }
+
+            if (ret.parserArguments.isEmpty() || targetDirectory.segments().size() > closestPath.segments().size()) {
+                ret.parserArguments = entry.parserArguments;
+                closestPath = targetDirectory;
             }
         }
     }
@@ -246,6 +252,16 @@ void DefinesAndIncludesManager::registerBackgroundProvider(IDefinesAndIncludesMa
     }
 
     m_backgroundProviders.push_back(provider);
+}
+
+QString DefinesAndIncludesManager::parserArguments(KDevelop::ProjectBaseItem* item) const
+{
+    if(!item){
+        return m_settings.defaultParserArguments();
+    }
+
+    auto cfg = item->project()->projectConfiguration().data();
+    return findConfigForItem(m_settings.readPaths(cfg), item).parserArguments;
 }
 
 int DefinesAndIncludesManager::perProjectConfigPages() const

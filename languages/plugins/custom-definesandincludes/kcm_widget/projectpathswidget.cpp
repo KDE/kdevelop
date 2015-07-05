@@ -41,6 +41,16 @@
 
 using namespace KDevelop;
 
+namespace
+{
+enum PageType {
+    IncludesPage,
+    DefinesPage,
+    CompilerPage,
+    ParserArgumentsPage
+};
+}
+
 ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     : QWidget(parent),
       ui(new Ui::ProjectPathsWidget),
@@ -76,6 +86,8 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
             this, &ProjectPathsWidget::userDefinedCompilerChanged);
 
     connect(ui->languageParameters, &QTabWidget::currentChanged, this, &ProjectPathsWidget::tabChanged);
+
+    connect(ui->parserWidget, &ParserWidget::changed, this, &ProjectPathsWidget::parserArgumentsChanged);
 }
 
 QList<ConfigEntry> ProjectPathsWidget::paths() const
@@ -89,6 +101,7 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
     clear();
     pathsModel->setPaths( paths );
     blockSignals( b );
+    Q_ASSERT(!paths.isEmpty());
     ui->projectPaths->setCurrentIndex(0); // at least a project root item is present
     projectPathSelected(0);
     ui->languageParameters->setCurrentIndex(0);
@@ -105,6 +118,11 @@ void ProjectPathsWidget::includesChanged( const QStringList& includes )
 {
     definesAndIncludesDebug() << "includes changed";
     updatePathsModel( includes, ProjectPathsModel::IncludesDataRole );
+}
+
+void ProjectPathsWidget::parserArgumentsChanged()
+{
+    updatePathsModel(ui->parserWidget->parserArguments(), ProjectPathsModel::ParserArgumentsRole);
 }
 
 void ProjectPathsWidget::updatePathsModel(const QVariant& newData, int role)
@@ -131,6 +149,8 @@ void ProjectPathsWidget::projectPathSelected( int index )
     Q_ASSERT(pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>());
 
     ui->compiler->setCurrentText(pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>()->name());
+
+    ui->parserWidget->setParserArguments(pathsModel->data(midx, ProjectPathsModel::ParserArgumentsRole ).toString());
 
     updateEnablements();
 }
@@ -285,9 +305,11 @@ void ProjectPathsWidget::userDefinedCompilerChanged()
 
 void ProjectPathsWidget::tabChanged(int idx)
 {
-    if (idx==2) {
+    if (idx == CompilerPage) {
         ui->batchEdit->setVisible(false);
         ui->compilerBox->setVisible(true);
+    } else if(idx == ParserArgumentsPage){
+        ui->batchEdit->setVisible(false);
     } else {
         ui->batchEdit->setVisible(true);
         ui->compilerBox->setVisible(false);

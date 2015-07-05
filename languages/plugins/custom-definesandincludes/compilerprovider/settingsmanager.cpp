@@ -50,10 +50,14 @@ const QString compilerNameKey = QLatin1String( "Name" );
 const QString compilerPathKey = QLatin1String( "Path" );
 const QString compilerTypeKey = QLatin1String( "Type" );
 const QString compilerStandardKey = QLatin1String( "Standard" );
+
+const auto parserArguments = QStringLiteral("parserArguments");
 }
 
 namespace
 {
+ const auto defaultArguments = QStringLiteral("-fspell-checking -Wdocumentation -std=c++11 -Wall");
+
 CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
 {
     auto grp = cfg.group("Compiler");
@@ -99,7 +103,9 @@ void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
     int pathIndex = 0;
     for ( const auto& path : paths ) {
         KConfigGroup pathgrp = grp.group( ConfigConstants::projectPathPrefix + QString::number( pathIndex++ ) );
-        pathgrp.writeEntry( ConfigConstants::projectPathKey, path.path );
+        pathgrp.writeEntry(ConfigConstants::projectPathKey, path.path);
+        pathgrp.writeEntry(ConfigConstants::parserArguments, path.parserArguments);
+
         {
             int index = 0;
             KConfigGroup includes(pathgrp.group(ConfigConstants::includesKey));
@@ -128,6 +134,7 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
 
             ConfigEntry path;
             path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
+            path.parserArguments = pathgrp.readEntry(ConfigConstants::parserArguments, defaultArguments);
 
             {
                 // Backwards compatibility with old config style
@@ -337,6 +344,11 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
         }
     }
     return compilers;
+}
+
+QString SettingsManager::defaultParserArguments() const
+{
+    return defaultArguments;
 }
 
 ConfigEntry::ConfigEntry(const QString& path)

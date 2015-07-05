@@ -79,6 +79,8 @@ private slots:
 
     void userDefinedCompilerChanged();
 
+    void parserArgumentsChanged();
+
 private:
     Ui::ProjectPathsWidget* ui;
     ProjectPathsModel* pathsModel;

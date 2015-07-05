@@ -39,7 +39,8 @@ public:
         IncludesDataRole = Qt::UserRole + 1,
         DefinesDataRole = Qt::UserRole + 2,
         FullUrlDataRole = Qt::UserRole + 3,
-        CompilerDataRole = Qt::UserRole + 4
+        CompilerDataRole = Qt::UserRole + 4,
+        ParserArgumentsRole = CompilerDataRole + 1
     };
     ProjectPathsModel( QObject* parent = 0 );
     void setProject( KDevelop::IProject* w_project );
