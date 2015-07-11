@@ -53,6 +53,7 @@ signals:
 private slots:
     void textEdited();
     void languageStandardChanged(const QString& standard);
+    void updateEnablements();
 
 private:
     QScopedPointer<Ui::ParserWidget> m_ui;

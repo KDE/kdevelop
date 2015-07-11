@@ -41,7 +41,7 @@ void ClangFactory::registerDefaultCompilers(CompilerProvider* provider) const
 {
     const QString clang = QStringLiteral("clang");
 
-    auto compiler = createCompiler(QStringLiteral("Clang"), clang, false);
+    auto compiler = createCompiler(name(), clang, false);
     provider->registerCompiler(compiler);
 }
 
@@ -59,7 +59,7 @@ void GccFactory::registerDefaultCompilers(CompilerProvider* provider) const
 {
     const QString gcc = QStringLiteral("gcc");
 
-    auto compiler = createCompiler(QStringLiteral("GCC"), gcc, false);
+    auto compiler = createCompiler(name(), gcc, false);
     provider->registerCompiler(compiler);
 }
 
@@ -75,5 +75,5 @@ CompilerPointer MsvcFactory::createCompiler(const QString& name, const QString& 
 
 void MsvcFactory::registerDefaultCompilers(CompilerProvider* provider) const
 {
-    provider->registerCompiler(createCompiler(QStringLiteral("MSVC"), QStringLiteral("cl.exe"), false));
+    provider->registerCompiler(createCompiler(name(), QStringLiteral("cl.exe"), false));
 }

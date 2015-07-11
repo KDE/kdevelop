@@ -9,5 +9,11 @@
     <entry name="reparse" key="reparse" type="Bool">
         <default>true</default>
     </entry>
+    <entry name="useProfile" key="useProfile" type="Bool">
+        <default>true</default>
+    </entry>
+    <entry name="useArguments" key="useArguments" type="Bool">
+        <default>false</default>
+    </entry>
   </group>
 </kcfg>

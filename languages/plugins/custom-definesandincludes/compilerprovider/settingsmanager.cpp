@@ -34,8 +34,8 @@
 
 using namespace KDevelop;
 
-namespace ConfigConstants
-{
+namespace {
+namespace ConfigConstants {
 const QString configKey = QLatin1String( "CustomDefinesAndIncludes" );
 const QString definesKey = QLatin1String( "Defines" );
 const QString includesKey = QLatin1String( "Includes" );
@@ -50,12 +50,10 @@ const QString compilerNameKey = QLatin1String( "Name" );
 const QString compilerPathKey = QLatin1String( "Path" );
 const QString compilerTypeKey = QLatin1String( "Type" );
 
-const auto parserArguments = QStringLiteral("parserArguments");
+QString parserArguments(){ return QStringLiteral("parserArguments"); }
 }
 
-namespace
-{
- const auto defaultArguments = QStringLiteral("-fspell-checking -Wdocumentation -std=c++11 -Wall");
+QString defaultArguments(){ return QStringLiteral("-fspell-checking -Wdocumentation -std=c++11 -Wall"); }
 
 CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
 {
@@ -101,7 +99,7 @@ void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
     for ( const auto& path : paths ) {
         KConfigGroup pathgrp = grp.group( ConfigConstants::projectPathPrefix + QString::number( pathIndex++ ) );
         pathgrp.writeEntry(ConfigConstants::projectPathKey, path.path);
-        pathgrp.writeEntry(ConfigConstants::parserArguments, path.parserArguments);
+        pathgrp.writeEntry(ConfigConstants::parserArguments(), path.parserArguments);
 
         {
             int index = 0;
@@ -131,7 +129,7 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
 
             ConfigEntry path;
             path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
-            path.parserArguments = pathgrp.readEntry(ConfigConstants::parserArguments, defaultArguments);
+            path.parserArguments = pathgrp.readEntry(ConfigConstants::parserArguments(), defaultArguments());
 
             {
                 // Backwards compatibility with old config style
@@ -343,7 +341,7 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
 
 QString SettingsManager::defaultParserArguments() const
 {
-    return defaultArguments;
+    return defaultArguments();
 }
 
 ConfigEntry::ConfigEntry(const QString& path)

@@ -25,7 +25,7 @@
 
 #include <QDir>
 #include <QProcess>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QMap>
 
 #include "../debugarea.h"
@@ -42,12 +42,12 @@ namespace
 {
 QStringList languageOptions(const QString& arguments)
 {
-    static const QRegExp regexp("-std=(c|c\\+\\+)[0-9]{2}");
+    const QRegularExpression regexp("-std=(c|c\\+\\+)[0-9]{2}");
 
-    int idx = regexp.indexIn(arguments);
-    if(idx != -1){
-        auto standard = regexp.cap(0);
-        auto language = regexp.cap(1) == QStringLiteral("c++") ? QStringLiteral("-xc++") : QStringLiteral("-xc");
+    auto result = regexp.match(arguments);
+    if(result.hasMatch()){
+        auto standard = result.captured(0);
+        auto language = result.captured(1) == QStringLiteral("c++") ? QStringLiteral("-xc++") : QStringLiteral("-xc");
         return {standard, language};
     }
 

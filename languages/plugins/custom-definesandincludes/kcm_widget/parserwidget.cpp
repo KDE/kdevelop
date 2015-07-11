@@ -25,6 +25,8 @@
 
 #include "ui_parserwidget.h"
 
+#include "compilerprovider/settingsmanager.h"
+
 #include <util/path.h>
 
 QString languageStandard(const QString& arguments)
@@ -46,8 +48,13 @@ ParserWidget::ParserWidget(QWidget* parent)
     m_ui->setupUi(this);
 
     connect(m_ui->parserOptions, &QLineEdit::textEdited, this, &ParserWidget::textEdited);
+    connect(m_ui->languageStandards, static_cast<void(QComboBox::*)(const
+QString&)>(&QComboBox::activated), this,
+&ParserWidget::languageStandardChanged);
+    connect(m_ui->kcfg_useProfile, &QRadioButton::toggled, this,
+&ParserWidget::updateEnablements);
 
-    connect(m_ui->languageStandards, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ParserWidget::languageStandardChanged);
+    updateEnablements();
 }
 
 ParserWidget::~ParserWidget() = default;
@@ -80,4 +87,16 @@ void ParserWidget::setParserArguments(const QString& arguments)
 QString ParserWidget::parserArguments() const
 {
     return m_ui->parserOptions->text();
+}
+
+void ParserWidget::updateEnablements()
+{
+    if (m_ui->kcfg_useProfile->isChecked()) {
+        m_ui->languageStandards->setHidden(false);
+        m_ui->parserOptions->setHidden(true);
+        setParserArguments(SettingsManager::globalInstance()->defaultParserArguments());
+    } else {
+        m_ui->languageStandards->setHidden(true);
+        m_ui->parserOptions->setHidden(false);
+    }
 }
