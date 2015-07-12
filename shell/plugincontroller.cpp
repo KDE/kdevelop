@@ -53,38 +53,38 @@ Boston, MA 02110-1301, USA.
 
 namespace {
 
-const QString KEY_Plugins = QStringLiteral("Plugins");
-const QString KEY_Suffix_Enabled = QStringLiteral("Enabled");
+inline QString KEY_Plugins() { return QStringLiteral("Plugins"); }
+inline QString KEY_Suffix_Enabled() { return QStringLiteral("Enabled"); }
 
-const QString KEY_LoadMode = QStringLiteral("X-KDevelop-LoadMode");
-const QString KEY_Category = QStringLiteral("X-KDevelop-Category");
-const QString KEY_Mode = QStringLiteral("X-KDevelop-Mode");
-const QString KEY_Version = QStringLiteral("X-KDevelop-Version");
-const QString KEY_Interfaces = QStringLiteral("X-KDevelop-Interfaces");
-const QString KEY_Required = QStringLiteral("X-KDevelop-IRequired");
-const QString KEY_Optional = QStringLiteral("X-KDevelop-IOptional");
+inline QString KEY_LoadMode() { return QStringLiteral("X-KDevelop-LoadMode"); }
+inline QString KEY_Category() { return QStringLiteral("X-KDevelop-Category"); }
+inline QString KEY_Mode() { return QStringLiteral("X-KDevelop-Mode"); }
+inline QString KEY_Version() { return QStringLiteral("X-KDevelop-Version"); }
+inline QString KEY_Interfaces() { return QStringLiteral("X-KDevelop-Interfaces"); }
+inline QString KEY_Required() { return QStringLiteral("X-KDevelop-IRequired"); }
+inline QString KEY_Optional() { return QStringLiteral("X-KDevelop-IOptional"); }
 
-const QString KEY_Global = QStringLiteral("Global");
-const QString KEY_Project = QStringLiteral("Project");
-const QString KEY_Gui = QStringLiteral("GUI");
-const QString KEY_AlwaysOn = QStringLiteral("AlwaysOn");
-const QString KEY_UserSelectable = QStringLiteral("UserSelectable");
+inline QString KEY_Global() { return QStringLiteral("Global"); }
+inline QString KEY_Project() { return QStringLiteral("Project"); }
+inline QString KEY_Gui() { return QStringLiteral("GUI"); }
+inline QString KEY_AlwaysOn() { return QStringLiteral("AlwaysOn"); }
+inline QString KEY_UserSelectable() { return QStringLiteral("UserSelectable"); }
 
 
 bool isUserSelectable( const KPluginMetaData& info )
 {
-    QString loadMode = info.value(KEY_LoadMode);
-    return loadMode.isEmpty() || loadMode == KEY_UserSelectable;
+    QString loadMode = info.value(KEY_LoadMode());
+    return loadMode.isEmpty() || loadMode == KEY_UserSelectable();
 }
 
 bool isGlobalPlugin( const KPluginMetaData& info )
 {
-    return info.value(KEY_Category) == KEY_Global;
+    return info.value(KEY_Category()) == KEY_Global();
 }
 
 bool hasMandatoryProperties( const KPluginMetaData& info )
 {
-    QString mode = info.value(KEY_Mode);
+    QString mode = info.value(KEY_Mode());
     if (mode.isEmpty()) {
         return false;
     }
@@ -95,7 +95,7 @@ bool hasMandatoryProperties( const KPluginMetaData& info )
     }
 
     // the version property is only required when the plugin is not installed into the right directory
-    QVariant version = info.rawData().value(KEY_Version).toVariant();
+    QVariant version = info.rawData().value(KEY_Version()).toVariant();
     if (version.isValid() && version.value<int>() == KDEVELOP_PLUGIN_VERSION) {
         return true;
     }
@@ -168,16 +168,16 @@ public:
 
     bool canUnload(const KPluginMetaData& plugin)
     {
-        qCDebug(SHELL) << "checking can unload for:" << plugin.name() << plugin.value(KEY_LoadMode);
-        if (plugin.value(KEY_LoadMode) == KEY_AlwaysOn) {
+        qCDebug(SHELL) << "checking can unload for:" << plugin.name() << plugin.value(KEY_LoadMode());
+        if (plugin.value(KEY_LoadMode()) == KEY_AlwaysOn()) {
             return false;
         }
-        const QStringList interfaces = KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces);
+        const QStringList interfaces = KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces());
         qCDebug(SHELL) << "checking dependencies:" << interfaces;
         foreach (const KPluginMetaData& info, loadedPlugins.keys()) {
             if (info.pluginId() != plugin.pluginId()) {
-                QStringList dependencies = KPluginMetaData::readStringList(plugin.rawData(), KEY_Required);
-                dependencies += KPluginMetaData::readStringList(plugin.rawData(), KEY_Optional);
+                QStringList dependencies = KPluginMetaData::readStringList(plugin.rawData(), KEY_Required());
+                dependencies += KPluginMetaData::readStringList(plugin.rawData(), KEY_Optional());
                 foreach (const QString& dep, dependencies) {
                     Dependency dependency(dep);
                     if (!dependency.pluginName.isEmpty() && dependency.pluginName != plugin.pluginId()) {
@@ -216,7 +216,7 @@ public:
     {
         foreach (const auto& info, plugins) {
             if ((pluginName.isEmpty() || info.pluginId() == pluginName)
-                && (extension.isEmpty() || KPluginMetaData::readStringList(info.rawData(), KEY_Interfaces).contains(extension))
+                && (extension.isEmpty() || KPluginMetaData::readStringList(info.rawData(), KEY_Interfaces()).contains(extension))
                 && constraintsMatch(info, constraints)
                 && isEnabled(info))
             {
@@ -238,9 +238,9 @@ public:
             return true;
         }
 
-        KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins );
+        KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins() );
         const bool isDefaultPlugin = ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains(info.pluginId());
-        bool isEnabled = grp.readEntry(info.pluginId() + KEY_Suffix_Enabled, isDefaultPlugin);
+        bool isEnabled = grp.readEntry(info.pluginId() + KEY_Suffix_Enabled(), isDefaultPlugin);
         //qCDebug(SHELL) << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginId() );
         return isEnabled;
     }
@@ -352,14 +352,14 @@ void PluginController::initialize()
         }
     }
 
-    KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins );
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins() );
     QMap<QString, QString> entries = grp.entryMap();
 
     QMap<QString, QString>::Iterator it;
     for ( it = entries.begin(); it != entries.end(); ++it )
     {
         QString key = it.key();
-        if (key.endsWith(KEY_Suffix_Enabled)) {
+        if (key.endsWith(KEY_Suffix_Enabled())) {
             QString pluginid = key.left( key.length() - 7 );
             bool defValue;
             QMap<QString, bool>::const_iterator entry = pluginMap.constFind( pluginid );
@@ -382,11 +382,11 @@ void PluginController::initialize()
             {
                 // Plugin is mentioned in pluginmap and the value is true, so try to load it
                 loadPluginInternal( pi.pluginId() );
-                if(!grp.hasKey(pi.pluginId() + KEY_Suffix_Enabled)) {
+                if(!grp.hasKey(pi.pluginId() + KEY_Suffix_Enabled())) {
                     if( isUserSelectable( pi ) )
                     {
                         // If plugin isn't listed yet, add it with true now
-                        grp.writeEntry(pi.pluginId() + KEY_Suffix_Enabled, true);
+                        grp.writeEntry(pi.pluginId() + KEY_Suffix_Enabled(), true);
                     }
                 } else if( grp.hasKey( pi.pluginId() + "Disabled" ) && !isUserSelectable( pi ) )
                 {
@@ -485,7 +485,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return nullptr;
     }
 
-    if ( info.value(KEY_Mode) == KEY_Gui && Core::self()->setupFlags() == Core::NoUi ) {
+    if ( info.value(KEY_Mode()) == KEY_Gui() && Core::self()->setupFlags() == Core::NoUi ) {
         qCDebug(SHELL) << "Not loading plugin named" << pluginId
                        << "- Running in No-Ui mode, but the plugin says it needs a GUI";
         return nullptr;
@@ -535,12 +535,12 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return nullptr;
     }
 
-    KConfigGroup group = Core::self()->activeSession()->config()->group(KEY_Plugins);
+    KConfigGroup group = Core::self()->activeSession()->config()->group(KEY_Plugins());
     // runtime errors such as missing executables on the system or such get checked now
     if (plugin->hasError()) {
         qWarning() << "Could not load plugin" << pluginId << ", it reported the error:" << plugin->errorDescription()
                     << "Disabling the plugin now.";
-        group.writeEntry(info.pluginId() + KEY_Suffix_Enabled, false); // do the same as KPluginInfo did
+        group.writeEntry(info.pluginId() + KEY_Suffix_Enabled(), false); // do the same as KPluginInfo did
         group.sync();
         unloadPlugin(pluginId);
         return nullptr;
@@ -548,7 +548,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
     // yay, it all worked - the plugin is loaded
     d->loadedPlugins.insert(info, plugin);
-    group.writeEntry(info.pluginId() + KEY_Suffix_Enabled, true); // do the same as KPluginInfo did
+    group.writeEntry(info.pluginId() + KEY_Suffix_Enabled(), true); // do the same as KPluginInfo did
     group.sync();
     qCDebug(SHELL) << "Successfully loaded plugin" << pluginId << "from" << loader.fileName() << "- took:" << timer.elapsed() << "ms";
     emit pluginLoaded( plugin );
@@ -568,10 +568,10 @@ IPlugin* PluginController::plugin( const QString& pluginId )
 
 bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, QStringList& missing ) const
 {
-    QSet<QString> required = KPluginMetaData::readStringList(info.rawData(), KEY_Required).toSet();
+    QSet<QString> required = KPluginMetaData::readStringList(info.rawData(), KEY_Required()).toSet();
     if (!required.isEmpty()) {
         d->foreachEnabledPlugin([&required] (const KPluginMetaData& plugin) -> bool {
-            foreach (const QString& iface, KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces)) {
+            foreach (const QString& iface, KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces())) {
                 required.remove(iface);
                 required.remove(iface + '@' + plugin.pluginId());
             }
@@ -588,7 +588,7 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
 
 void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
 {
-   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Optional);
+   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Optional());
    foreach (const QString& dep, dependencies) {
         Dependency dependency(dep);
         if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
@@ -599,7 +599,7 @@ void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
 
 bool PluginController::loadDependencies( const KPluginMetaData& info, QString& failedDependency )
 {
-   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Required);
+   const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Required());
    foreach (const QString& value, dependencies) {
         Dependency dependency(value);
         if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
@@ -680,7 +680,7 @@ QStringList PluginController::projectPlugins()
 {
     QStringList names;
     foreach (const KPluginMetaData& info, d->plugins) {
-        if (info.value(KEY_Category) == KEY_Project) {
+        if (info.value(KEY_Category()) == KEY_Project()) {
             names << info.pluginId();
         }
     }
@@ -711,19 +711,19 @@ QVector<KPluginMetaData> PluginController::allPluginInfos() const
 void PluginController::updateLoadedPlugins()
 {
     QStringList defaultPlugins = ShellExtension::getInstance()->defaultPlugins();
-    KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins );
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins() );
     foreach( const KPluginMetaData& info, d->plugins )
     {
         if( isGlobalPlugin( info ) )
         {
-            bool enabled = grp.readEntry(info.pluginId() + KEY_Suffix_Enabled, ( defaultPlugins.isEmpty() || defaultPlugins.contains( info.pluginId() ) ) ) || !isUserSelectable( info );
+            bool enabled = grp.readEntry(info.pluginId() + KEY_Suffix_Enabled(), ( defaultPlugins.isEmpty() || defaultPlugins.contains( info.pluginId() ) ) ) || !isUserSelectable( info );
             bool loaded = d->loadedPlugins.contains( info );
             if( loaded && !enabled )
             {
                 qCDebug(SHELL) << "unloading" << info.pluginId();
                 if( !unloadPlugin( info.pluginId() ) )
                 {
-                    grp.writeEntry( info.pluginId() + KEY_Suffix_Enabled, false );
+                    grp.writeEntry( info.pluginId() + KEY_Suffix_Enabled(), false );
                 }
             } else if( !loaded && enabled )
             {
@@ -736,9 +736,9 @@ void PluginController::updateLoadedPlugins()
 void PluginController::resetToDefaults()
 {
     KSharedConfigPtr cfg = Core::self()->activeSession()->config();
-    cfg->deleteGroup( KEY_Plugins );
+    cfg->deleteGroup( KEY_Plugins() );
     cfg->sync();
-    KConfigGroup grp = cfg->group( KEY_Plugins );
+    KConfigGroup grp = cfg->group( KEY_Plugins() );
     QStringList plugins = ShellExtension::getInstance()->defaultPlugins();
     if( plugins.isEmpty() )
     {
@@ -749,7 +749,7 @@ void PluginController::resetToDefaults()
     }
     foreach( const QString& s, plugins )
     {
-        grp.writeEntry(s + KEY_Suffix_Enabled, true);
+        grp.writeEntry(s + KEY_Suffix_Enabled(), true);
     }
     grp.sync();
 }
