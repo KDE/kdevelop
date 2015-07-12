@@ -198,14 +198,7 @@ void MainWindowPrivate::viewAddNewToolView()
 
 void MainWindowPrivate::quitAll()
 {
-    s_quitRequested = true;
-
     QApplication::closeAllWindows();
-
-    //if (Core::self()->documentController()->saveAllDocuments(IDocument::Default))
-    //    return qApp->exit();
-
-    s_quitRequested = false;
 }
 
 void MainWindowPrivate::configureNotifications()

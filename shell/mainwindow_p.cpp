@@ -61,8 +61,6 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop {
 
-bool MainWindowPrivate::s_quitRequested = false;
-
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
 : m_mainWindow(mainWindow), m_statusBar(0), lastXMLGUIClientView(0), m_changingActiveView(false)
 {
@@ -325,11 +323,6 @@ void MainWindowPrivate::toggleArea(bool b)
 KActionCollection * MainWindowPrivate::actionCollection()
 {
     return m_mainWindow->actionCollection();
-}
-
-bool MainWindowPrivate::applicationQuitRequested() const
-{
-    return s_quitRequested;
 }
 
 void MainWindowPrivate::registerStatus(QObject* status)

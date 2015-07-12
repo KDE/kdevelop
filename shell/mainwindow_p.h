@@ -109,8 +109,6 @@ public Q_SLOTS:
     ///Returns true if we're currently changing the active view through changeActiveView()
     bool changingActiveView() const ;
 
-    bool applicationQuitRequested() const;
-
     void configureNotifications();
     void showAboutPlatform();
     void showLoadedPlugins();
@@ -139,7 +137,6 @@ private:
 
     QMap<IPlugin*, KXMLGUIClient*> m_pluginCustomClients;
 
-    static bool s_quitRequested;
     bool m_changingActiveView;
     /// the view of the tab that got it's context menu connected
     Sublime::View* m_tabView;
