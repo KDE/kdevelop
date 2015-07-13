@@ -37,7 +37,7 @@ namespace KDevelop {
  */
 class KDEVPLATFORMUTIL_EXPORT ActiveToolTip : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     ///@param parent Parent widget. Must not be zero, else the widget won't be shown.
     /// @param position Position where to show the tooltip, in global coordinates.
@@ -53,28 +53,28 @@ public:
     ///@param priority The priority of this tooltip. Lower is better. Multiple tooltips will be stacked down in the given order.
     ///                If it is zero, the given tooltip will be shown exclusively.
     ///@param uniqueId If this is nonempty, ActiveTooltip will make sure that only one tooltip with the given id is shown at a time
-    static void showToolTip(ActiveToolTip* tooltip, float priority = 100, QString uniqueId = QString());
-    
+    static void showToolTip(ActiveToolTip* tooltip, float priority = 100, const QString& uniqueId = QString());
+
     bool eventFilter(QObject *object, QEvent *e) override;
-    
+
     bool insideThis(QObject* object);
 
     void showEvent(QShowEvent*) override;
 
     void resizeEvent(QResizeEvent*) override;
-    
+
     void moveEvent(QMoveEvent*) override;
 
     void paintEvent(QPaintEvent*) override;
 
     void adjustRect();
-    
+
     ///Clicks within the friend widget are allowed
     void addFriendWidget(QWidget* widget);
-    
+
     ///Add a rectangle to the area in which the mouse can be moved freely without hiding the tooltip
     void addExtendRect(const QRect& rect);
-    
+
     ///Set the area within which the mouse can be moved freely without hiding the tooltip
     void setBoundingGeometry(const QRect& geometry);
 Q_SIGNALS:
@@ -86,7 +86,7 @@ Q_SIGNALS:
 private:
     virtual void closeEvent(QCloseEvent* ) override;
     void updateMouseDistance();
-    
+
     class ActiveToolTipPrivate* const d;
 };
 
