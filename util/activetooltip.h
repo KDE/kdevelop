@@ -25,14 +25,6 @@
 
 namespace KDevelop {
 
-///Internal
-class KDEVPLATFORMUTIL_EXPORT ActiveToolTipManager : public QObject {
-    Q_OBJECT
-    friend class ActiveToolTip;
-    private Q_SLOTS:
-        void doVisibility();
-};
-
 /** This class implements a tooltip that can contain arbitrary
     widgets that the user can interact with.
 
