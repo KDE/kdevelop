@@ -12,6 +12,7 @@
         "Description[de]": "Dieses Modul zeigt eine Ansicht der Funktions-Kurzinfos im aktuell geöffneten Dokument.", 
         "Description[en_GB]": "This plugin provides a view to show the outline of the currently open document.", 
         "Description[es]": "Este complemento proporciona una vista para mostrar el boceto del documento actualmente abierto.", 
+        "Description[fi]": "Tämä liitännäinen tarjoaa näkymän, jossa näkyy tällä hetkellä avoimen tiedoston rakenne.", 
         "Description[gl]": "Este complemento fornece unha vista para mostrar o esquema do documento actual.", 
         "Description[nl]": "Deze plugin biedt zicht op de outline van het nu geopende document.", 
         "Description[pl]": "Ta wtyczka dostarcza zarys obecnie otwartego dokumentu.", 
