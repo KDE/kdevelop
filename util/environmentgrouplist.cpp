@@ -25,24 +25,32 @@ Boston, MA 02110-1301, USA.
 
 #include <KConfigGroup>
 
-namespace KDevelop
-{
 
+namespace KDevelop {
 class EnvironmentGroupListPrivate
 {
 public:
     QMap<QString, QMap<QString,QString> > m_groups;
     QString m_defaultGroup;
 };
+}
 
-static const QString defaultEnvGroupKey = "Default Environment Group";
-static const QString envGroup = "Environment Settings";
-static const QString groupListKey = "Group List";
+using namespace KDevelop;
 
-void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
+namespace {
+
+namespace Strings {
+inline QString defaultEnvGroupKey() { return QStringLiteral("Default Environment Group"); }
+inline QString envGroup() { return QStringLiteral("Environment Settings"); }
+inline QString groupListKey() { return QStringLiteral("Group List"); }
+inline QString defaultGroup() { return QStringLiteral("default"); }
+}
+
+void decode( KConfig* config, EnvironmentGroupListPrivate* d )
 {
-    d->m_defaultGroup = cfg.readEntry( defaultEnvGroupKey, QStringLiteral( "default" ) );
-    QStringList grouplist = cfg.readEntry( groupListKey, QStringList() << "default" );
+    KConfigGroup cfg( config, Strings::envGroup() );
+    d->m_defaultGroup = cfg.readEntry( Strings::defaultEnvGroupKey(), Strings::defaultGroup() );
+    QStringList grouplist = cfg.readEntry( Strings::groupListKey(), QStringList{Strings::defaultGroup()} );
     foreach( const QString &envgrpname, grouplist )
     {
         KConfigGroup envgrp( &cfg, envgrpname );
@@ -55,10 +63,11 @@ void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
     }
 }
 
-void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
+void encode( KConfig* config, EnvironmentGroupListPrivate* d )
 {
-    cfg.writeEntry( defaultEnvGroupKey, d->m_defaultGroup );
-    cfg.writeEntry( groupListKey, d->m_groups.keys() );
+    KConfigGroup cfg( config, Strings::envGroup() );
+    cfg.writeEntry( Strings::defaultEnvGroupKey(), d->m_defaultGroup );
+    cfg.writeEntry( Strings::groupListKey(), d->m_groups.keys() );
     foreach( const QString &group, cfg.groupList() )
     {
         if( !d->m_groups.keys().contains( group ) )
@@ -78,6 +87,8 @@ void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
     cfg.sync();
 }
 
+}
+
 EnvironmentGroupList::EnvironmentGroupList( const EnvironmentGroupList& rhs )
     : d( new EnvironmentGroupListPrivate( *rhs.d ) )
 {
@@ -92,15 +103,13 @@ EnvironmentGroupList& EnvironmentGroupList::operator=( const EnvironmentGroupLis
 EnvironmentGroupList::EnvironmentGroupList( KSharedConfigPtr config )
     : d( new EnvironmentGroupListPrivate )
 {
-    KConfigGroup cfg( config, envGroup );
-    decode( cfg, d );
+    decode( config.data(), d );
 }
 
 EnvironmentGroupList::EnvironmentGroupList( KConfig* config )
     : d( new EnvironmentGroupListPrivate )
 {
-    KConfigGroup cfg( config, envGroup );
-    decode( cfg, d );
+    decode( config, d );
 }
 
 EnvironmentGroupList::~EnvironmentGroupList()
@@ -138,16 +147,14 @@ void EnvironmentGroupList::setDefaultGroup( const QString& group )
 
 void EnvironmentGroupList::saveSettings( KConfig* config ) const
 {
-    KConfigGroup cfg(config, envGroup );
-    encode( cfg, d );
+    encode( config, d );
     config->sync();
 }
 
 void EnvironmentGroupList::loadSettings( KConfig* config )
 {
     d->m_groups.clear();
-    KConfigGroup cfg(config, envGroup );
-    decode( cfg, d );
+    decode( config, d );
 }
 
 QStringList EnvironmentGroupList::groups() const
@@ -193,6 +200,4 @@ QStringList EnvironmentGroupList::createEnvironment( const QString & group, cons
     }
 
     return env;
-}
-
 }
