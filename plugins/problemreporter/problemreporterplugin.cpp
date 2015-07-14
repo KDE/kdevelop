@@ -45,13 +45,18 @@
 
 #include "problemhighlighter.h"
 #include "problemtreeview.h"
-#include "problemmodel.h"
+#include "./problemreportermodel.h"
 #include <interfaces/context.h>
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/duchainutils.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iassistant.h>
 #include <QAction>
+
+#include "shell/problemmodelset.h"
+#include "problemsview.h"
+
+#include <shell/problem.h>
 
 Q_LOGGING_CATEGORY(PLUGIN_PROBLEMREPORTER, "kdevplatform.plugins.problemreporter")
 K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevproblemreporter.json", registerPlugin<ProblemReporterPlugin>();)
@@ -65,10 +70,11 @@ public:
 
   virtual QWidget* create(QWidget *parent = 0) override
   {
-    ProblemTreeView* treeView = new ProblemTreeView(parent, m_plugin);
-    ProblemModel* model = m_plugin->getModel();
-    treeView->setModel(model);
-    return treeView;
+    Q_UNUSED(parent);
+
+    ProblemsView *v = new ProblemsView();
+    v->load();
+    return v;
   }
 
   virtual Qt::DockWidgetArea defaultPosition() override
@@ -87,8 +93,10 @@ private:
 
 ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList&)
 : KDevelop::IPlugin("kdevproblemreporter", parent)
-    , m_factory(new ProblemReporterFactory(this)), m_model(new ProblemModel(this))
+    , m_factory(new ProblemReporterFactory(this)), m_model(new ProblemReporterModel(this))
 {
+  KDevelop::ProblemModelSet *pms = core()->languageController()->problemModelSet();
+  pms->addModel("Parser", m_model);
   core()->uiController()->addToolView(i18n("Problems"), m_factory);
   setXMLFile( "kdevproblemreporter.rc" );
 
@@ -102,13 +110,16 @@ ProblemReporterPlugin::~ProblemReporterPlugin()
   qDeleteAll(m_highlighters);
 }
 
-ProblemModel* ProblemReporterPlugin::getModel() const
+ProblemReporterModel* ProblemReporterPlugin::model() const
 {
   return m_model;
 }
 
 void ProblemReporterPlugin::unload()
 {
+  KDevelop::ProblemModelSet *pms = KDevelop::ICore::self()->languageController()->problemModelSet();
+  pms->removeModel("Parser");
+
   core()->uiController()->removeToolView(m_factory);
 }
 
@@ -134,7 +145,7 @@ void ProblemReporterPlugin::updateReady(const IndexedString &url, const KDevelop
   m_model->problemsUpdated(url);
   ProblemHighlighter* ph = m_highlighters.value(url);
   if (ph) {
-    QList<ProblemPointer> allProblems = m_model->getProblems(url, false);
+    QVector<IProblem::Ptr> allProblems = m_model->problems(url, false);
     ph->setProblems(allProblems);
   }
 }

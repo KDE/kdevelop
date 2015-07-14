@@ -37,7 +37,7 @@ namespace KTextEditor { class Document; }
 namespace KDevelop { class IDocument; class ParseJob; }
 
 class ProblemHighlighter;
-class ProblemModel;
+class ProblemReporterModel;
 
 class ProblemReporterPlugin : public KDevelop::IPlugin
 {
@@ -52,7 +52,7 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     // KDevelop::Plugin methods
     virtual void unload() override;
 
-    ProblemModel* getModel() const;
+    ProblemReporterModel* model() const;
 
   private Q_SLOTS:
     void updateReady(const KDevelop::IndexedString &url,
@@ -62,7 +62,7 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
 
   private:
     class ProblemReporterFactory* m_factory;
-    class ProblemModel* m_model;
+    ProblemReporterModel* m_model;
 
     QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
 public slots:

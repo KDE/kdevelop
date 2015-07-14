@@ -744,7 +744,7 @@ void TestDUChain::testProblemSerialization()
   DUChain::self()->storeToDisk();
 
   ProblemPointer parent_deserialized;
-  ProblemPointer child_deserialized;
+  IProblem::Ptr child_deserialized;
 
   { // deserialize
     DUChainWriteLocker lock;

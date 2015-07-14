@@ -33,6 +33,8 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 
+#include "problemmodelset.h"
+
 #include "core.h"
 #include "settings/ccpreferences.h"
 #include "completionsettings.h"
@@ -67,6 +69,7 @@ struct LanguageControllerPrivate
         , backgroundParser(new BackgroundParser(controller))
         , staticAssistantsManager(nullptr)
         , m_cleanedUp(false)
+        , problemModelSet(new ProblemModelSet(controller))
         , m_controller(controller)
     {}
 
@@ -103,6 +106,8 @@ struct LanguageControllerPrivate
 
     void addLanguageSupport(ILanguageSupport* support, const QStringList& mimetypes);
     void addLanguageSupport(ILanguageSupport* support);
+
+    ProblemModelSet *problemModelSet;
 
 private:
     LanguageController *m_controller;
@@ -180,8 +185,14 @@ StaticAssistantsManager* LanguageController::staticAssistantsManager() const
     return d->staticAssistantsManager;
 }
 
-ICompletionSettings *LanguageController::completionSettings() const {
+ICompletionSettings *LanguageController::completionSettings() const
+{
     return &CompletionSettings::self();
+}
+
+ProblemModelSet* LanguageController::problemModelSet() const
+{
+    return d->problemModelSet;
 }
 
 QList<ILanguageSupport*> LanguageController::loadedLanguages() const

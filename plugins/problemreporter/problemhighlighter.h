@@ -28,6 +28,7 @@
 #include <qpointer.h>
 #include <ktexteditor/movingrange.h>
 #include <KTextEditor/TextHintInterface>
+#include <interfaces/iproblem.h>
 
 class ProblemHighlighter : public QObject
 {
@@ -36,7 +37,7 @@ public:
     ProblemHighlighter(KTextEditor::Document* document);
     virtual ~ProblemHighlighter();
 
-    void setProblems(const QList<KDevelop::ProblemPointer>& problems);
+    void setProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
 private slots:
     void viewCreated(KTextEditor::Document*,KTextEditor::View*);
@@ -47,8 +48,8 @@ private slots:
 private:
     QPointer<KTextEditor::Document> m_document;
     QList<KTextEditor::MovingRange*> m_topHLRanges;
-    QList<KDevelop::ProblemPointer> m_problems;
-    QMap<KTextEditor::MovingRange*, KDevelop::ProblemPointer> m_problemsForRanges;
+    QVector<KDevelop::IProblem::Ptr> m_problems;
+    QMap<KTextEditor::MovingRange*, KDevelop::IProblem::Ptr> m_problemsForRanges;
 
     friend class ProblemTextHintProvider;
 

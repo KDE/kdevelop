@@ -279,7 +279,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
             KFormat f;
 
             KDevelop::ProblemPointer p(new Problem());
-            p->setSource(KDevelop::ProblemData::Disk);
+            p->setSource(IProblem::Disk);
             p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile ));
             p->setExplanation(i18nc("%1: file size, %2: limit file size",
                                     "The file is %1 and exceeds the limit of %2.",
@@ -294,7 +294,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
         if ( !file.open( QIODevice::ReadOnly ) )
         {
             KDevelop::ProblemPointer p(new Problem());
-            p->setSource(KDevelop::ProblemData::Disk);
+            p->setSource(IProblem::Disk);
             p->setDescription(i18n( "Could not open file '%1'", localFile ));
             switch (file.error()) {
               case QFile::ReadError:

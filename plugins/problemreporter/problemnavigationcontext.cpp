@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "problemnavigationcontext.h"
+#include "./problemnavigationcontext.h"
 
 #include <QHBoxLayout>
 #include <QMenu>
@@ -26,13 +26,12 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
-#include <language/duchain/problem.h>
 #include <interfaces/iassistant.h>
 #include <util/richtextpushbutton.h>
 
 using namespace KDevelop;
 
-ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_problem(problem)
+ProblemNavigationContext::ProblemNavigationContext(const IProblem::Ptr &problem): m_problem(problem)
 {
   m_widget = 0;
 
@@ -92,7 +91,7 @@ QString ProblemNavigationContext::html(bool shorten)
   modifyHtml() += "<br/>";
   modifyHtml() += "<i style=\"white-space:pre-wrap\">" + m_problem->explanation().toHtmlEscaped() + "</i>";
 
-  const QVector<IProblem::Ptr> diagnostics = m_problem->diagnostics();
+  const QVector<IProblem::Ptr> &diagnostics = m_problem->diagnostics();
   if (!diagnostics.isEmpty()) {
     modifyHtml() += "<br/>";
 

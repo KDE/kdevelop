@@ -27,29 +27,27 @@
 
 #include <serialization/indexedstring.h>
 
-#include "problemmodel.h"
+#include "./problemconstants.h"
 
 namespace KDevelop {
-    class IDocument;
-    class IProject;
-    class ProjectFileItem;
+class IDocument;
+class IProject;
+class ProjectFileItem;
 class Path;
-}
+
 
 /**
- * Helper class for ProblemModel that tracks the set of documents from which errors are listed
- * and notifies its owner whenever this set changes. Derived classes implement different tracking strategies.
+ * Helper class that tracks set of documents and notifies its owner whenever this set changes. Derived classes implement different tracking strategies.
  */
 class WatchedDocumentSet : public QObject
 {
     Q_OBJECT
 public:
-    typedef QSet<KDevelop::IndexedString> DocumentSet;
-    explicit WatchedDocumentSet(ProblemModel* parent);
-    ProblemModel* model() const;
+    typedef QSet<IndexedString> DocumentSet;
+    explicit WatchedDocumentSet(QObject* parent);
     virtual DocumentSet get() const;
-    virtual void setCurrentDocument(const KDevelop::IndexedString& url);
-    virtual ProblemModel::Scope getScope() const = 0;
+    virtual void setCurrentDocument(const IndexedString& url);
+    virtual ProblemScope getScope() const = 0;
     virtual ~WatchedDocumentSet() {}
 
 signals:
@@ -67,9 +65,9 @@ class CurrentDocumentSet : public WatchedDocumentSet
 {
     Q_OBJECT
 public:
-    explicit CurrentDocumentSet(const KDevelop::IndexedString& document, ProblemModel * parent);
-    virtual void setCurrentDocument(const KDevelop::IndexedString& url) override;
-    virtual ProblemModel::Scope getScope() const override;
+    explicit CurrentDocumentSet(const IndexedString& document, QObject* parent);
+    virtual void setCurrentDocument(const IndexedString& url) override;
+    virtual ProblemScope getScope() const override;
 };
 
 /**
@@ -79,12 +77,12 @@ class OpenDocumentSet : public WatchedDocumentSet
 {
     Q_OBJECT
 public:
-    explicit OpenDocumentSet(ProblemModel* parent);
-    virtual ProblemModel::Scope getScope() const override;
+    explicit OpenDocumentSet(QObject* parent);
+    virtual ProblemScope getScope() const override;
 
 private slots:
-    void documentClosed(KDevelop::IDocument* doc);
-    void documentCreated(KDevelop::IDocument* doc);
+    void documentClosed(IDocument* doc);
+    void documentCreated(IDocument* doc);
 };
 
 /**
@@ -95,15 +93,15 @@ class ProjectSet : public WatchedDocumentSet
 {
     Q_OBJECT
 public:
-    explicit ProjectSet(ProblemModel* parent);
+    explicit ProjectSet(QObject* parent);
 
 protected:
-    void trackProjectFiles(const KDevelop::IProject* project);
+    void trackProjectFiles(const IProject* project);
 
 protected slots:
-    void fileAdded(KDevelop::ProjectFileItem*);
-    void fileRemoved(KDevelop::ProjectFileItem* file);
-    void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
+    void fileAdded(ProjectFileItem*);
+    void fileRemoved(ProjectFileItem* file);
+    void fileRenamed(const Path& oldFile, ProjectFileItem* newFile);
 };
 
 /**
@@ -113,21 +111,23 @@ class CurrentProjectSet : public ProjectSet
 {
     Q_OBJECT
 public:
-    explicit CurrentProjectSet(const KDevelop::IndexedString& document, ProblemModel* parent);
-    virtual void setCurrentDocument(const KDevelop::IndexedString& url) override;
-    virtual ProblemModel::Scope getScope() const override;
+    explicit CurrentProjectSet(const IndexedString& document, QObject* parent);
+    virtual void setCurrentDocument(const IndexedString& url) override;
+    virtual ProblemScope getScope() const override;
 
 private:
-    void setCurrentDocumentInternal(const KDevelop::IndexedString& url); // to avoid virtual in constructor
-    KDevelop::IProject* m_currentProject;
+    void setCurrentDocumentInternal(const IndexedString& url); // to avoid virtual in constructor
+    IProject* m_currentProject;
 };
 
 class AllProjectSet : public ProjectSet
 {
     Q_OBJECT
 public:
-    explicit AllProjectSet(ProblemModel* parent);
-    virtual ProblemModel::Scope getScope() const override;
+    explicit AllProjectSet(QObject* parent);
+    virtual ProblemScope getScope() const override;
 };
+
+}
 
 #endif // KDEVPLATFORM_PLUGIN_WATCHEDDOCUMENTSET_H

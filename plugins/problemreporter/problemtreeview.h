@@ -28,9 +28,9 @@ namespace KDevelop {
   class ParseJob;
   class TopDUContext;
   class IDocument;
+  class ProblemModel;
 }
 
-class ProblemModel;
 class ProblemReporterPlugin;
 
 class ProblemTreeView : public QTreeView
@@ -38,23 +38,27 @@ class ProblemTreeView : public QTreeView
   Q_OBJECT
 
 public:
-  ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin);
+  ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel);
   virtual ~ProblemTreeView();
 
-  ProblemModel* model() const;
+  KDevelop::ProblemModel* model() const;
   virtual void setModel(QAbstractItemModel* model) override;
 
   virtual void contextMenuEvent(QContextMenuEvent* ) override;
   virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
                            const QVector<int>& roles = QVector<int>()) override;
   virtual void reset() override;
+
+signals:
+  // Emitted when the model's rows change (added/removed/reset)
+  void changed();
   
 protected:
   virtual void showEvent(QShowEvent* event) override;
 
-private Q_SLOTS:
+private slots:
   void itemActivated(const QModelIndex& index);
-  
+
 private:
   void resizeColumns();
   ProblemReporterPlugin* m_plugin;

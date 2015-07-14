@@ -30,7 +30,6 @@
 
 #include <serialization/indexedstring.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <language/duchain/navigation/problemnavigationcontext.h>
 #include <language/util/navigationtooltip.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -41,20 +40,23 @@
 
 #include <kcolorscheme.h>
 
+#include <shell/problem.h>
+#include "./problemnavigationcontext.h"
+
 using namespace KTextEditor;
 using namespace KDevelop;
 
 namespace {
 
-QColor colorForSeverity(ProblemData::Severity severity)
+QColor colorForSeverity(IProblem::Severity severity)
 {
     KColorScheme scheme(QPalette::Active);
     switch (severity) {
-    case ProblemData::Error:
+    case IProblem::Error:
         return scheme.foreground(KColorScheme::NegativeText).color();
-    case ProblemData::Warning:
+    case IProblem::Warning:
         return scheme.foreground(KColorScheme::NeutralText).color();
-    case ProblemData::Hint:
+    case IProblem::Hint:
     default:
         return scheme.foreground(KColorScheme::PositiveText).color();
     }
@@ -113,8 +115,8 @@ QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
             if(m_highlighter->m_problemsForRanges.contains(range) && range->contains(pos))
             {
                 //There is a problem which's range contains the cursor
-                ProblemPointer problem = m_highlighter->m_problemsForRanges[range];
-                if (problem->source() == ProblemData::ToDo) {
+                IProblem::Ptr problem = m_highlighter->m_problemsForRanges[range];
+                if (problem->source() == IProblem::ToDo) {
                     continue;
                 }
 
@@ -140,7 +142,7 @@ ProblemHighlighter::~ProblemHighlighter()
     qDeleteAll(m_topHLRanges);
 }
 
-void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& problems)
+void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
 {
     if(!m_document)
         return;
@@ -177,7 +179,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
 
     TopDUContext* top = DUChainUtils::standardContextForUrl(m_document->url());
 
-    foreach (const KDevelop::ProblemPointer& problem, problems) {
+    foreach (const IProblem::Ptr problem, problems) {
         if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
             continue;
 
@@ -199,7 +201,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         m_problemsForRanges.insert(problemRange, problem);
         m_topHLRanges.append(problemRange);
 
-        if(problem->source() != ProblemData::ToDo && (problem->severity() != ProblemData::Hint
+        if(problem->source() != IProblem::ToDo && (problem->severity() != IProblem::Hint
             || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()))
         {
             KTextEditor::Attribute::Ptr attribute(new KTextEditor::Attribute());
@@ -210,9 +212,9 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
 
         if (markIface && ICore::self()->languageController()->completionSettings()->highlightProblematicLines()) {
             uint mark;
-            if (problem->severity() == ProblemData::Error) {
+            if (problem->severity() == IProblem::Error) {
                 mark = errorMarkType;
-            } else if (problem->severity() == ProblemData::Warning) {
+            } else if (problem->severity() == IProblem::Warning) {
                 mark = warningMarkType;
             } else {
                 continue;

@@ -32,6 +32,7 @@ class ILanguageSupport;
 class BackgroundParser;
 class ICompletionSettings;
 class StaticAssistantsManager;
+class ProblemModelSet;
 
 /**
  * @class ILanguageController
@@ -73,6 +74,8 @@ public:
 
     /** Access to the completion settings */
     Q_SCRIPTABLE virtual ICompletionSettings *completionSettings() const = 0;
+
+    virtual ProblemModelSet* problemModelSet() const = 0;
 };
 
 }

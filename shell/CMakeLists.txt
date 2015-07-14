@@ -51,6 +51,13 @@ set(KDevPlatformShell_LIB_SRCS
     editorconfigpage.cpp
     environmentconfigurebutton.cpp
 
+    problem.cpp
+    problemmodelset.cpp
+    problemmodel.cpp
+    problemstore.cpp
+    watcheddocumentset.cpp
+    filteredproblemstore.cpp
+
     progresswidget/progressmanager.cpp
     progresswidget/statusbarprogresswidget.cpp
     progresswidget/overlaywidget.cpp
@@ -156,6 +163,11 @@ install(FILES
     runcontroller.h
     launchconfiguration.h
     environmentconfigurebutton.h
+    problem.h
+    problemmodel.h
+    problemmodelset.h
+    problemconstants.h
+    filteredproblemstore.h
     ${CMAKE_CURRENT_BINARY_DIR}/shellexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/shell COMPONENT Devel
 )

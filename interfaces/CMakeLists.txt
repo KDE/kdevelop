@@ -105,6 +105,7 @@ install(FILES
     itestsuite.h
     itestcontroller.h
     itoolviewactionlistener.h
+    iproblem.h
     ${CMAKE_CURRENT_BINARY_DIR}/interfacesexport.h
     ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/interfaces COMPONENT Devel

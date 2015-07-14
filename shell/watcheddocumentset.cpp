@@ -30,16 +30,15 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/iprojectfilemanager.h>
 
-#include "problemreporterplugin.h"
+namespace KDevelop
+{
 
-using namespace KDevelop;
-
-WatchedDocumentSet::WatchedDocumentSet(ProblemModel* parent)
+WatchedDocumentSet::WatchedDocumentSet(QObject* parent)
     :QObject(parent)
 {
 }
 
-void WatchedDocumentSet::setCurrentDocument(const KDevelop::IndexedString&)
+void WatchedDocumentSet::setCurrentDocument(const IndexedString&)
 {
 }
 
@@ -48,59 +47,54 @@ WatchedDocumentSet::DocumentSet WatchedDocumentSet::get() const
     return m_documents;
 }
 
-ProblemModel* WatchedDocumentSet::model() const
-{
-    return static_cast<ProblemModel*>(parent());
-}
-
-CurrentDocumentSet::CurrentDocumentSet(const KDevelop::IndexedString& document, ProblemModel * parent)
+CurrentDocumentSet::CurrentDocumentSet(const IndexedString& document, QObject *parent)
     : WatchedDocumentSet(parent)
 {
     m_documents.insert(document);
 }
 
-void CurrentDocumentSet::setCurrentDocument(const KDevelop::IndexedString& url)
+void CurrentDocumentSet::setCurrentDocument(const IndexedString& url)
 {
     m_documents.clear();
     m_documents.insert(url);
     emit changed();
 }
 
-ProblemModel::Scope CurrentDocumentSet::getScope() const
+ProblemScope CurrentDocumentSet::getScope() const
 {
-    return ProblemModel::CurrentDocument;
+    return CurrentDocument;
 }
 
-OpenDocumentSet::OpenDocumentSet(ProblemModel* parent)
+OpenDocumentSet::OpenDocumentSet(QObject *parent)
     : WatchedDocumentSet(parent)
 {
-    QList<KDevelop::IDocument*> docs = model()->plugin()->core()->documentController()->openDocuments();
-    foreach (KDevelop::IDocument* doc, docs) {
-        m_documents.insert(KDevelop::IndexedString(doc->url()));
+    QList<IDocument*> docs = ICore::self()->documentController()->openDocuments();
+    foreach (IDocument* doc, docs) {
+        m_documents.insert(IndexedString(doc->url()));
     }
-    connect(model()->plugin()->core()->documentController(), &IDocumentController::documentClosed, this, &OpenDocumentSet::documentClosed);
-    connect(model()->plugin()->core()->documentController(), &IDocumentController::textDocumentCreated, this, &OpenDocumentSet::documentCreated);
+    connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &OpenDocumentSet::documentClosed);
+    connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &OpenDocumentSet::documentCreated);
 }
 
-void OpenDocumentSet::documentClosed(KDevelop::IDocument* doc)
+void OpenDocumentSet::documentClosed(IDocument* doc)
 {
-    if (m_documents.remove(KDevelop::IndexedString(doc->url()))) {
+    if (m_documents.remove(IndexedString(doc->url()))) {
         emit changed();
     }
 }
 
-void OpenDocumentSet::documentCreated(KDevelop::IDocument* doc)
+void OpenDocumentSet::documentCreated(IDocument* doc)
 {
-    m_documents.insert(KDevelop::IndexedString(doc->url()));
+    m_documents.insert(IndexedString(doc->url()));
     emit changed();
 }
 
-ProblemModel::Scope OpenDocumentSet::getScope() const
+ProblemScope OpenDocumentSet::getScope() const
 {
-    return ProblemModel::OpenDocuments;
+    return OpenDocuments;
 }
 
-ProjectSet::ProjectSet(ProblemModel* parent)
+ProjectSet::ProjectSet(QObject *parent)
     : WatchedDocumentSet(parent)
 {
 }
@@ -132,31 +126,31 @@ void ProjectSet::trackProjectFiles(const IProject* project)
         QObject* fileManager = dynamic_cast<QObject*>(project->projectFileManager());
         if (fileManager) {
             // can't use new signal/slot syntax here, IProjectFileManager is no a QObject
-            connect(fileManager, SIGNAL(fileAdded(KDevelop::ProjectFileItem*)),
-                    this, SLOT(fileAdded(KDevelop::ProjectFileItem*)));
-            connect(fileManager, SIGNAL(fileRemoved(KDevelop::ProjectFileItem*)),
-                    this, SLOT(fileRemoved(KDevelop::ProjectFileItem*)));
-            connect(fileManager, SIGNAL(fileRenamed(KDevelop::Path,KDevelop::ProjectFileItem*)),
-                    this, SLOT(fileRenamed(KDevelop::Path,KDevelop::ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileAdded(ProjectFileItem*)),
+                    this, SLOT(fileAdded(ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileRemoved(ProjectFileItem*)),
+                    this, SLOT(fileRemoved(ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileRenamed(Path,ProjectFileItem*)),
+                    this, SLOT(fileRenamed(Path,ProjectFileItem*)));
         }
     }
 }
 
-CurrentProjectSet::CurrentProjectSet(const KDevelop::IndexedString& document, ProblemModel* parent)
+CurrentProjectSet::CurrentProjectSet(const IndexedString& document, QObject *parent)
     : ProjectSet(parent), m_currentProject(0)
 {
     setCurrentDocumentInternal(document);
     trackProjectFiles(m_currentProject);
 }
 
-void CurrentProjectSet::setCurrentDocument(const KDevelop::IndexedString& url)
+void CurrentProjectSet::setCurrentDocument(const IndexedString& url)
 {
     setCurrentDocumentInternal(url);
 }
 
-void CurrentProjectSet::setCurrentDocumentInternal(const KDevelop::IndexedString& url)
+void CurrentProjectSet::setCurrentDocumentInternal(const IndexedString& url)
 {
-    IProject* projectForUrl = model()->plugin()->core()->projectController()->findProjectForUrl(url.toUrl());
+    IProject* projectForUrl = ICore::self()->projectController()->findProjectForUrl(url.toUrl());
     if (projectForUrl && projectForUrl != m_currentProject) {
         m_documents.clear();
         m_currentProject = projectForUrl;
@@ -168,15 +162,15 @@ void CurrentProjectSet::setCurrentDocumentInternal(const KDevelop::IndexedString
     }
 }
 
-ProblemModel::Scope CurrentProjectSet::getScope() const
+ProblemScope CurrentProjectSet::getScope() const
 {
-    return ProblemModel::CurrentProject;
+    return CurrentProject;
 }
 
-AllProjectSet::AllProjectSet(ProblemModel* parent)
+AllProjectSet::AllProjectSet(QObject *parent)
     : ProjectSet(parent)
 {
-    foreach(const IProject* project, model()->plugin()->core()->projectController()->projects()) {
+    foreach(const IProject* project, ICore::self()->projectController()->projects()) {
         foreach (ProjectFileItem* file, project->projectItem()->fileList()) {
             m_documents.insert(file->indexedPath());
         }
@@ -184,7 +178,10 @@ AllProjectSet::AllProjectSet(ProblemModel* parent)
     }
 }
 
-ProblemModel::Scope AllProjectSet::getScope() const
+ProblemScope AllProjectSet::getScope() const
 {
-    return ProblemModel::AllProjects;
+    return AllProjects;
 }
+
+}
+

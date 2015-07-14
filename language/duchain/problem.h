@@ -31,6 +31,7 @@ Boston, MA 02110-1301, USA.
 #include "duchainbase.h"
 #include <serialization/indexedstring.h>
 #include "indexedtopducontext.h"
+#include <interfaces/iproblem.h>
 
 namespace KDevelop
 {
@@ -84,26 +85,9 @@ KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ProblemData, diagnostics, L
 class KDEVPLATFORMLANGUAGE_EXPORT ProblemData : public DUChainBaseData
 {
 public:
-    enum Source {
-        Unknown        /**< Unknown problem */,
-        Disk           /**< problem reading from disk */,
-        Preprocessor   /**< problem during pre-processing */,
-        Lexer          /**< problem while lexing the file */,
-        Parser         /**< problem while parsing the file */,
-        DUChainBuilder /**< problem while building the duchain */,
-        SemanticAnalysis /**< problem during semantic analysis */,
-        ToDo           /**< TODO item in a comment */
-    };
-
-    enum Severity {
-        Error,
-        Warning,
-        Hint        //For implementation-helpers and such stuff. Is not highlighted if the user disables the "highlight semantic problems" option
-    };
-
     ProblemData()
-        : source(Unknown)
-        , severity(Error)
+        : source(IProblem::Unknown)
+        , severity(IProblem::Error)
     {
       initializeAppendedLists();
     }
@@ -125,8 +109,8 @@ public:
       freeAppendedLists();
     }
 
-    Source source;
-    Severity severity;
+    IProblem::Source source;
+    IProblem::Severity severity;
     IndexedString url;
     IndexedString description;
     IndexedString explanation;
@@ -144,7 +128,7 @@ public:
  *
  * @warning Access to problems must be serialized through DUChainLock.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public QSharedData
+class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public IProblem
 {
 public:
     using Ptr = QExplicitlySharedDataPointer<Problem>;
@@ -153,13 +137,13 @@ public:
     Problem(ProblemData& data);
     ~Problem();
 
-    ProblemData::Source source() const;
-    void setSource(ProblemData::Source source);
+    Source source() const override;
+    void setSource(IProblem::Source source) override;
 
     /**
      * Returns a string version of the problem source
      */
-    QString sourceString() const;
+    QString sourceString() const override;
 
     TopDUContext* topContext() const override;
     KDevelop::IndexedString url() const override;
@@ -168,8 +152,8 @@ public:
      * Location where this problem occurred
      * @warning Must only be called from the foreground
      * */
-    DocumentRange finalLocation() const;
-    void setFinalLocation(const DocumentRange& location);
+    DocumentRange finalLocation() const override;
+    void setFinalLocation(const DocumentRange& location) override;
 
     /**
      * Returns child diagnostics of this particular problem
@@ -186,16 +170,17 @@ public:
      * Additionally, @p diagnostics may return the two locations to the ambiguous overloads,
      * with descriptions such as 'test.cpp:1: candidate : ...'
      */
-    QList<Ptr> diagnostics() const;
-    void setDiagnostics(const QList<Ptr>& diagnostics);
-    void addDiagnostic(const Ptr& diagnostic);
-    void clearDiagnostics();
+    void clearDiagnostics() override;
+
+    QVector<IProblem::Ptr> diagnostics() const override;
+    void setDiagnostics(const QVector<IProblem::Ptr> &diagnostics) override;
+    void addDiagnostic(const IProblem::Ptr &diagnostic) override;
 
     /**
      * A brief description of the problem.
      */
-    QString description() const;
-    void setDescription(const QString& description);
+    QString description() const override;
+    void setDescription(const QString& description) override;
 
     /**
      * A (detailed) explanation of why the problem occurred.
@@ -209,22 +194,22 @@ public:
      *
      * @see setSeverity()
      */
-    ProblemData::Severity severity() const;
+    Severity severity() const override;
 
     /**
      * Set the severity of this problem.
      */
-    void setSeverity(ProblemData::Severity severity);
+    void setSeverity(Severity severity) override;
 
     /**
      * Returns a string representation of the severity.
      */
-    QString severityString() const;
+    QString severityString() const override;
 
      /**
      * If this problem can be solved, this may return an assistant for the solution.
      */
-    virtual QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const;
+    virtual QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const override;
 
     enum {
         Identity = 15

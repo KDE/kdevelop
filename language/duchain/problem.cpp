@@ -96,30 +96,14 @@ IndexedString Problem::url() const
 
 DocumentRange Problem::finalLocation() const
 {
-    return DocumentRange(d_func()->url, rangeInCurrentRevision());
+    return DocumentRange(d_func()->url, d_func()->m_range.castToSimpleRange());
 }
 
 void Problem::setFinalLocation(const DocumentRange& location)
 {
-    setRange(transformToLocalRevision(location));
+
+    setRange(RangeInRevision::castFromSimpleRange(location));
     d_func_dynamic()->url = location.document;
-}
-
-QList<ProblemPointer> Problem::diagnostics() const
-{
-    return m_diagnostics;
-}
-
-void Problem::setDiagnostics(const QList<ProblemPointer>& diagnostics)
-{
-    m_diagnostics = diagnostics;
-    // keep serialization in sync, see also LocalIndexedProblem ctor above
-    d_func_dynamic()->diagnosticsList().clear();
-}
-
-void Problem::addDiagnostic(const ProblemPointer& diagnostic)
-{
-    m_diagnostics << diagnostic;
 }
 
 void Problem::clearDiagnostics()
@@ -127,6 +111,38 @@ void Problem::clearDiagnostics()
     m_diagnostics.clear();
     // keep serialization in sync, see also LocalIndexedProblem ctor above
     d_func_dynamic()->diagnosticsList().clear();
+}
+
+QVector<IProblem::Ptr> Problem::diagnostics() const
+{
+    QVector<IProblem::Ptr> vector;
+
+    foreach(ProblemPointer ptr, m_diagnostics)
+    {
+        vector.push_back(ptr);
+    }
+
+    return vector;
+}
+
+void Problem::setDiagnostics(const QVector<IProblem::Ptr> &diagnostics)
+{
+    clearDiagnostics();
+
+    foreach(IProblem::Ptr problem, diagnostics)
+    {
+        addDiagnostic(problem);
+    }
+}
+
+void Problem::addDiagnostic(const IProblem::Ptr &diagnostic)
+{
+    Problem *problem = dynamic_cast<Problem*>(diagnostic.data());
+    Q_ASSERT(problem != NULL);
+
+    ProblemPointer ptr(problem);
+
+    m_diagnostics << ptr;
 }
 
 QString Problem::description() const
@@ -149,12 +165,12 @@ void Problem::setExplanation(const QString& explanation)
     d_func_dynamic()->explanation = IndexedString(explanation);
 }
 
-ProblemData::Source Problem::source() const
+IProblem::Source Problem::source() const
 {
     return d_func()->source;
 }
 
-void Problem::setSource(ProblemData::Source source)
+void Problem::setSource(IProblem::Source source)
 {
     d_func_dynamic()->source = source;
 }
@@ -164,12 +180,12 @@ QExplicitlySharedDataPointer<IAssistant> Problem::solutionAssistant() const
     return {};
 }
 
-ProblemData::Severity Problem::severity() const
+IProblem::Severity Problem::severity() const
 {
     return d_func()->severity;
 }
 
-void Problem::setSeverity(ProblemData::Severity severity)
+void Problem::setSeverity(Severity severity)
 {
     d_func_dynamic()->severity = severity;
 }
@@ -177,11 +193,11 @@ void Problem::setSeverity(ProblemData::Severity severity)
 QString Problem::severityString() const
 {
     switch(severity()) {
-        case ProblemData::Error:
+        case IProblem::Error:
             return i18n("Error");
-        case ProblemData::Warning:
+        case IProblem::Warning:
             return i18n("Warning");
-        case ProblemData::Hint:
+        case IProblem::Hint:
             return i18n("Hint");
     }
     return QString();
@@ -190,21 +206,21 @@ QString Problem::severityString() const
 QString Problem::sourceString() const
 {
     switch (source()) {
-        case ProblemData::Disk:
+        case IProblem::Disk:
             return i18n("Disk");
-        case ProblemData::Preprocessor:
+        case IProblem::Preprocessor:
             return i18n("Preprocessor");
-        case ProblemData::Lexer:
+        case IProblem::Lexer:
             return i18n("Lexer");
-        case ProblemData::Parser:
+        case IProblem::Parser:
             return i18n("Parser");
-        case ProblemData::DUChainBuilder:
+        case IProblem::DUChainBuilder:
             return i18n("Definition-Use Chain");
-        case ProblemData::SemanticAnalysis:
+        case IProblem::SemanticAnalysis:
             return i18n("Semantic analysis");
-        case ProblemData::ToDo:
+        case IProblem::ToDo:
             return i18n("To-do");
-        case ProblemData::Unknown:
+        case IProblem::Unknown:
         default:
             return i18n("Unknown");
     }

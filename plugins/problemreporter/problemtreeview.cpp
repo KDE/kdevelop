@@ -40,120 +40,169 @@
 #include <util/kdevstringhandler.h>
 
 #include "problemreporterplugin.h"
-#include "problemmodel.h"
+#include <shell/problemmodel.h>
+#include <shell/problem.h>
+#include <shell/problemconstants.h>
 
 //#include "modeltest.h"
 
 using namespace KDevelop;
 
-ProblemTreeView::ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin)
+ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
     : QTreeView(parent)
-    , m_plugin(plugin)
 {
+    ProblemModel *problemModel = dynamic_cast<ProblemModel*>(itemModel);
+    Q_ASSERT(problemModel);
+
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problems"));
     setWindowIcon( QIcon::fromTheme("dialog-information") ); ///@todo Use a proper icon
     setRootIsDecorated(false);
     setWhatsThis( i18n( "Problems" ) );
 
-    setModel(m_plugin->getModel());
+    setModel(problemModel);
     header()->setStretchLastSection(false);
 
-    QAction* fullUpdateAction = new QAction(this);
-    fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    fullUpdateAction->setText(i18n("Force Full Update"));
-    fullUpdateAction->setToolTip(i18nc("@info:tooltip", "Re-parse all watched documents"));
-    fullUpdateAction->setIcon(QIcon::fromTheme("view-refresh"));
-    connect(fullUpdateAction, &QAction::triggered, model(), &ProblemModel::forceFullUpdate);
-    addAction(fullUpdateAction);
-
-    QAction* showImportsAction = new QAction(this);
-    addAction(showImportsAction);
-    showImportsAction->setCheckable(true);
-    showImportsAction->setChecked(false);
-    showImportsAction->setText(i18n("Show Imports"));
-    showImportsAction->setToolTip(i18nc("@info:tooltip", "Display problems in imported files"));
-    this->model()->setShowImports(false);
-    connect(showImportsAction, &QAction::triggered, this->model(), &ProblemModel::setShowImports);
-
-    KActionMenu* scopeMenu = new KActionMenu(this);
-    scopeMenu->setDelayed(false);
-    scopeMenu->setText(i18n("Scope"));
-    scopeMenu->setToolTip(i18nc("@info:tooltip", "Which files to display the problems for"));
-
-    QActionGroup* scopeActions = new QActionGroup(this);
-
-    QAction* currentDocumentAction = new QAction(this);
-    currentDocumentAction->setText(i18n("Current Document"));
-    currentDocumentAction->setToolTip(i18nc("@info:tooltip", "Display problems in current document"));
-
-    QAction* openDocumentsAction = new QAction(this);
-    openDocumentsAction->setText(i18n("Open Documents"));
-    openDocumentsAction->setToolTip(i18nc("@info:tooltip", "Display problems in all open documents"));
-
-    QAction* currentProjectAction = new QAction(this);
-    currentProjectAction->setText(i18n("Current Project"));
-    currentProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in current project"));
-
-    QAction* allProjectAction = new QAction(this);
-    allProjectAction->setText(i18n("All Projects"));
-    allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
-
-    QAction* scopeActionArray[] = {currentDocumentAction, openDocumentsAction, currentProjectAction, allProjectAction};
-    for (int i = 0; i < 4; ++i) {
-        scopeActionArray[i]->setCheckable(true);
-        scopeActions->addAction(scopeActionArray[i]);
-        scopeMenu->addAction(scopeActionArray[i]);
+    if (problemModel->features().testFlag(ProblemModel::CanDoFullUpdate)) {
+        QAction* fullUpdateAction = new QAction(this);
+        fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        fullUpdateAction->setText(i18n("Force Full Update"));
+        fullUpdateAction->setToolTip(i18nc("@info:tooltip", "Re-parse all watched documents"));
+        fullUpdateAction->setIcon(QIcon::fromTheme("view-refresh"));
+        connect(fullUpdateAction, &QAction::triggered, model(), &ProblemModel::forceFullUpdate);
+        addAction(fullUpdateAction);
     }
-    addAction(scopeMenu);
 
-    currentDocumentAction->setChecked(true);
-    model()->setScope(ProblemModel::CurrentDocument);
-    QSignalMapper * scopeMapper = new QSignalMapper(this);
-    scopeMapper->setMapping(currentDocumentAction, ProblemModel::CurrentDocument);
-    scopeMapper->setMapping(openDocumentsAction, ProblemModel::OpenDocuments);
-    scopeMapper->setMapping(currentProjectAction, ProblemModel::CurrentProject);
-    scopeMapper->setMapping(allProjectAction, ProblemModel::AllProjects);
-    connect(currentDocumentAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(openDocumentsAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(currentProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(allProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(scopeMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setScope);
-
-    KActionMenu* severityMenu = new KActionMenu(i18n("Severity"), this);
-    severityMenu->setDelayed(false);
-    severityMenu->setToolTip(i18nc("@info:tooltip", "Select the lowest level of problem severity to be displayed"));
-    QActionGroup* severityActions = new QActionGroup(this);
-
-    QAction* errorSeverityAction = new QAction(i18n("Error"), this);
-    errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display only errors"));
-
-    QAction* warningSeverityAction = new QAction(i18n("Warning"), this);
-    warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors and warnings"));
-
-    QAction* hintSeverityAction = new QAction(i18n("Hint"), this);
-    hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
-
-    QAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
-    for (int i = 0; i < 3; ++i) {
-        severityActionArray[i]->setCheckable(true);
-        severityActions->addAction(severityActionArray[i]);
-        severityMenu->addAction(severityActionArray[i]);
+    if (problemModel->features().testFlag(ProblemModel::CanShowImports)) {
+        QAction* showImportsAction = new QAction(this);
+        addAction(showImportsAction);
+        showImportsAction->setCheckable(true);
+        showImportsAction->setChecked(false);
+        showImportsAction->setText(i18n("Show Imports"));
+        showImportsAction->setToolTip(i18nc("@info:tooltip", "Display problems in imported files"));
+        this->model()->setShowImports(false);
+        connect(showImportsAction, &QAction::triggered, model(), &ProblemModel::setShowImports);
     }
-    addAction(severityMenu);
 
-    hintSeverityAction->setChecked(true);
-    model()->setSeverity(ProblemData::Hint);
-    QSignalMapper * severityMapper = new QSignalMapper(this);
-    severityMapper->setMapping(errorSeverityAction, ProblemData::Error);
-    severityMapper->setMapping(warningSeverityAction, ProblemData::Warning);
-    severityMapper->setMapping(hintSeverityAction, ProblemData::Hint);
-    connect(errorSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(warningSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(hintSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(severityMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setSeverity);
+    if (problemModel->features().testFlag(ProblemModel::ScopeFilter)) {
+        KActionMenu* scopeMenu = new KActionMenu(this);
+        scopeMenu->setDelayed(false);
+        scopeMenu->setText(i18n("Scope"));
+        scopeMenu->setToolTip(i18nc("@info:tooltip", "Which files to display the problems for"));
+
+        QActionGroup* scopeActions = new QActionGroup(this);
+
+        QAction* currentDocumentAction = new QAction(this);
+        currentDocumentAction->setText(i18n("Current Document"));
+        currentDocumentAction->setToolTip(i18nc("@info:tooltip", "Display problems in current document"));
+
+        QAction* openDocumentsAction = new QAction(this);
+        openDocumentsAction->setText(i18n("Open Documents"));
+        openDocumentsAction->setToolTip(i18nc("@info:tooltip", "Display problems in all open documents"));
+
+        QAction* currentProjectAction = new QAction(this);
+        currentProjectAction->setText(i18n("Current Project"));
+        currentProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in current project"));
+
+        QAction* allProjectAction = new QAction(this);
+        allProjectAction->setText(i18n("All Projects"));
+        allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
+
+        QAction* scopeActionArray[] = {currentDocumentAction, openDocumentsAction, currentProjectAction, allProjectAction};
+        for (int i = 0; i < 4; ++i) {
+            scopeActionArray[i]->setCheckable(true);
+            scopeActions->addAction(scopeActionArray[i]);
+            scopeMenu->addAction(scopeActionArray[i]);
+        }
+        addAction(scopeMenu);
+
+        currentDocumentAction->setChecked(true);
+        model()->setScope(CurrentDocument);
+        QSignalMapper * scopeMapper = new QSignalMapper(this);
+        scopeMapper->setMapping(currentDocumentAction, CurrentDocument);
+        scopeMapper->setMapping(openDocumentsAction, OpenDocuments);
+        scopeMapper->setMapping(currentProjectAction, CurrentProject);
+        scopeMapper->setMapping(allProjectAction, AllProjects);
+        connect(currentDocumentAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(openDocumentsAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(currentProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(allProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(scopeMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setScope);
+    }
+
+    if (problemModel->features().testFlag(ProblemModel::SeverityFilter)) {
+        KActionMenu* severityMenu = new KActionMenu(i18n("Severity"), this);
+        severityMenu->setDelayed(false);
+        severityMenu->setToolTip(i18nc("@info:tooltip", "Select the lowest level of problem severity to be displayed"));
+        QActionGroup* severityActions = new QActionGroup(this);
+
+        QAction* errorSeverityAction = new QAction(i18n("Error"), this);
+        errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display only errors"));
+
+        QAction* warningSeverityAction = new QAction(i18n("Warning"), this);
+        warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors and warnings"));
+
+        QAction* hintSeverityAction = new QAction(i18n("Hint"), this);
+        hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
+
+        QAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
+        for (int i = 0; i < 3; ++i) {
+            severityActionArray[i]->setCheckable(true);
+            severityActions->addAction(severityActionArray[i]);
+            severityMenu->addAction(severityActionArray[i]);
+        }
+        addAction(severityMenu);
+
+        hintSeverityAction->setChecked(true);
+        model()->setSeverity(IProblem::Hint);
+        QSignalMapper * severityMapper = new QSignalMapper(this);
+        severityMapper->setMapping(errorSeverityAction, IProblem::Error);
+        severityMapper->setMapping(warningSeverityAction, IProblem::Warning);
+        severityMapper->setMapping(hintSeverityAction, IProblem::Hint);
+        connect(errorSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(warningSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(hintSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(severityMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setSeverity);
+    }
+
+    if (problemModel->features().testFlag(ProblemModel::Grouping)) {
+        KActionMenu* groupingMenu = new KActionMenu(i18n("Grouping"), this);
+        groupingMenu->setDelayed(false);
+
+        QActionGroup* groupingActions = new QActionGroup(this);
+
+        QAction* noGroupingAction = new QAction(i18n("None"), this);
+        QAction* pathGroupingAction = new QAction(i18n("Path"), this);
+        QAction* severityGroupingAction = new QAction(i18n("Severity"), this);
+
+        QAction* groupingActionArray[] = {noGroupingAction, pathGroupingAction, severityGroupingAction};
+        for(unsigned i = 0; i < sizeof(groupingActionArray) / sizeof(QAction*); ++i)
+        {
+            QAction* action = groupingActionArray[i];
+            action->setCheckable(true);
+            groupingActions->addAction(action);
+            groupingMenu->addAction(action);
+        }
+        addAction(groupingMenu);
+
+        noGroupingAction->setChecked(true);
+        QSignalMapper * groupingMapper = new QSignalMapper(this);
+        groupingMapper->setMapping(noGroupingAction, NoGrouping);
+        groupingMapper->setMapping(pathGroupingAction, PathGrouping);
+        groupingMapper->setMapping(severityGroupingAction, SeverityGrouping);
+
+        connect(noGroupingAction, &QAction::triggered, groupingMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(pathGroupingAction, &QAction::triggered, groupingMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(severityGroupingAction, &QAction::triggered, groupingMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+
+        connect(groupingMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setGrouping);
+    }
 
     connect(this, &ProblemTreeView::activated, this, &ProblemTreeView::itemActivated);
+
+    connect(model(), &QAbstractItemModel::rowsInserted, this, &ProblemTreeView::changed);
+    connect(model(), &QAbstractItemModel::rowsRemoved, this, &ProblemTreeView::changed);
+    connect(model(), &QAbstractItemModel::modelReset, this, &ProblemTreeView::changed);
 }
 
 ProblemTreeView::~ProblemTreeView()
@@ -171,12 +220,15 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
     {
         // TODO: is this really necessary?
         DUChainReadLocker lock(DUChain::lock());
-        ProblemPointer problem = model()->problemForIndex(index);
+        IProblem::Ptr problem = model()->problemForIndex(index);
+        if(!problem)
+            return;
+
         url = problem->finalLocation().document.toUrl();
         start = problem->finalLocation().start();
     }
 
-    m_plugin->core()->documentController()->openDocument(url, start);
+    ICore::self()->documentController()->openDocument(url, start);
 }
 
 void ProblemTreeView::resizeColumns()
@@ -232,7 +284,7 @@ void ProblemTreeView::setModel(QAbstractItemModel* model)
 void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event) {
     QModelIndex index = indexAt(event->pos());
     if(index.isValid()) {
-        KDevelop::ProblemPointer problem = model()->problemForIndex(index);
+        IProblem::Ptr problem = model()->problemForIndex(index);
         if(problem) {
             QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
             if(solution) {

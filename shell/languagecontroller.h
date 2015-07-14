@@ -59,6 +59,8 @@ public:
 
     virtual ICompletionSettings *completionSettings() const override;
 
+    virtual ProblemModelSet* problemModelSet() const override;
+
     QList<ILanguageSupport*> languagesForMimetype(const QString& mime);
     QList<QString> mimetypesForLanguageName(const QString& languageName);
 
