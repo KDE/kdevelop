@@ -151,7 +151,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
         QExplicitlySharedDataPointer<KDevelop::Problem> problem(new Problem);
         problem->setDescription(i18n("Use of deleted function: %1", decl->identifier().toString()));
 
-        problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
+        problem->setSource(IProblem::SemanticAnalysis);
 
         CppEditorIntegrator editor(session());
         Q_ASSERT(topContext());

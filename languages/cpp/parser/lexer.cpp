@@ -1115,7 +1115,7 @@ KDevelop::ProblemPointer Lexer::createProblem() const
   KDevelop::ProblemPointer p(new KDevelop::Problem);
 
   KDevelop::CursorInRevision position = session->positionAt(cursor.offsetIn(session->contents()), true);
-  p->setSource(KDevelop::ProblemData::Lexer);
+  p->setSource(KDevelop::IProblem::Lexer);
   p->setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position.castToSimpleCursor(), 1)));
 
   return p;

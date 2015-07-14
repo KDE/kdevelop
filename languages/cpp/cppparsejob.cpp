@@ -562,7 +562,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
         ast = parser.parse( parentJob()->parseSession().data() );
 
         //This will be set to true if the duchain data should be left untouched
-        if((ast->hadMissingCompoundTokens || control.hasProblem(KDevelop::ProblemData::Lexer)) && updatingContentContext) {
+        if((ast->hadMissingCompoundTokens || control.hasProblem(IProblem::Lexer)) && updatingContentContext) {
           //Make sure we don't update into a completely invalid state where everything is invalidated temporarily.
           DUChainWriteLocker l(DUChain::lock());
 
@@ -574,7 +574,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
             l.unlock();
             doNotChangeDUChain = true;
             ProblemPointer problem(new Problem);
-            problem->setSource(ProblemData::Parser);
+            problem->setSource(IProblem::Parser);
             problem->setDescription("Not updating the DUChain because of serious document inconsistency");
             control.reportProblem(problem);
           }

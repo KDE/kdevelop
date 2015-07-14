@@ -111,9 +111,9 @@ void CommentFormatter::extractToDos( uint token, const ParseSession* session, Co
 
       if( containsToDo(*it) ) {
         KDevelop::ProblemPointer p(new KDevelop::Problem());
-        p->setSource(KDevelop::ProblemData::ToDo);
+        p->setSource(KDevelop::IProblem::ToDo);
         p->setDescription(QString::fromUtf8(*it));
-        p->setSeverity(KDevelop::ProblemData::Hint);
+        p->setSeverity(KDevelop::IProblem::Hint);
         int start_line = comment_start.line() + (it - bit);
         int start_column = (it == bit) ? comment_start.column() + stripped_left : stripped_left;
         p->setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(start_line, start_column, start_line, it->size() + start_column)));

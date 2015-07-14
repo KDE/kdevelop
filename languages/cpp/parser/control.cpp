@@ -37,7 +37,7 @@ void Control::reportProblem(const KDevelop::ProblemPointer &problem)
   m_problems.append(problem);
 }
 
-bool Control::hasProblem(KDevelop::ProblemData::Source source) const
+bool Control::hasProblem(KDevelop::IProblem::Source source) const
 {
   foreach(KDevelop::ProblemPointer problem, m_problems)
     if(problem->source() == source)

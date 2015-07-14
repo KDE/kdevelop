@@ -127,7 +127,7 @@ void ContextBuilder::createUserProblem(AST* node, QString text) {
     DUChainWriteLocker lock(DUChain::lock());
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
     problem->setDescription(text);
-    problem->setSource(KDevelop::ProblemData::DUChainBuilder);
+    problem->setSource(IProblem::DUChainBuilder);
     problem->setFinalLocation(DocumentRange(IndexedString(currentContext()->url().str()), editor()->findRange(node).castToSimpleRange()));
     currentContext()->topContext()->addProblem(problem);
 }

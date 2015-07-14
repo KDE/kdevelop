@@ -43,7 +43,7 @@ public:
   void reportProblem(const KDevelop::ProblemPointer &problem);
 
   /**Returns whether there is a problem from the given source */
-  bool hasProblem(KDevelop::ProblemData::Source source) const;
+  bool hasProblem(KDevelop::IProblem::Source source) const;
   
 private:
   QList<KDevelop::ProblemPointer> m_problems;

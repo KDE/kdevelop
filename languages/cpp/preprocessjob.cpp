@@ -267,7 +267,7 @@ void PreprocessJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
     m_currentEnvironment->finishEnvironment(m_currentEnvironment->environmentFile() == m_updatingEnvironmentFile);
 
     foreach (KDevelop::ProblemPointer p, preprocessor.problems()) {
-      p->setSource(KDevelop::ProblemData::Preprocessor);
+      p->setSource(IProblem::Preprocessor);
       parentJob()->addPreprocessorProblem(p);
     }
 
@@ -457,7 +457,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
           while(current) {
             if(current->parentJob()->document() == indexedFile) {
               KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
-              p->setSource(KDevelop::ProblemData::Preprocessor);
+              p->setSource(IProblem::Preprocessor);
               p->setDescription(i18n("File was included recursively from within itself: %1", includedFile.pathOrUrl() ));
               p->setFinalLocation(DocumentRange(parentJob()->document(), KTextEditor::Range(sourceLine,0, sourceLine+1,0)));
               parentJob()->addPreprocessorProblem(p);
@@ -601,7 +601,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     } else {
         qCDebug(CPP) << "PreprocessJob" << parentJob()->document().str() << ": include not found:" << fileName;
         Cpp::MissingIncludePathProblem::Ptr p(new Cpp::MissingIncludePathProblem); ///@todo create special include-problem
-        p->setSource(KDevelop::ProblemData::Preprocessor);
+        p->setSource(IProblem::Preprocessor);
         p->setDescription(i18n("Included file was not found: %1", fileName ));
         p->setExplanation(i18n("Searched include path:\n%1", pathsToString(parentJob()->includePathUrls())));
         p->setFinalLocation(DocumentRange(parentJob()->document(), KTextEditor::Range(sourceLine,0, sourceLine+1,0)));

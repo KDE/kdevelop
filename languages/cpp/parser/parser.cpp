@@ -406,7 +406,7 @@ void Parser::reportPendingErrors()
   holdErrors(hold);
 }
 
-void Parser::reportError(const QString& msg, KDevelop::ProblemData::Severity severity)
+void Parser::reportError(const QString& msg, KDevelop::IProblem::Severity severity)
 {
   if (!_M_hold_errors && _M_problem_count < _M_max_problem_count)
     {
@@ -420,7 +420,7 @@ void Parser::reportError(const QString& msg, KDevelop::ProblemData::Severity sev
       KDevelop::ProblemPointer p(new KDevelop::Problem);
       p->setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position.castToSimpleCursor(), 0)));
       p->setDescription(msg);
-      p->setSource(KDevelop::ProblemData::Parser);
+      p->setSource(KDevelop::IProblem::Parser);
       p->setSeverity(severity);
 
       control->reportProblem(p);
@@ -5208,7 +5208,7 @@ bool Parser::parseConditionalExpression(ExpressionAST *&node, bool templArgs)
         //NOTE: allow ommitting operand, for compatibility with gcc, see also:
         // http://gcc.gnu.org/onlinedocs/gcc-2.95.3/gcc_4.html#SEC70
         // https://bugs.kde.org/show_bug.cgi?id=292357
-        reportError("ISO C++ does not allow ?: with omitted middle operand", KDevelop::ProblemData::Warning);
+        reportError("ISO C++ does not allow ?: with omitted middle operand", KDevelop::IProblem::Warning);
       }
 
       CHECK(':');
