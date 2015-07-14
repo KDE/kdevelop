@@ -308,12 +308,12 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         && !clang_Location_isInSystemHeader(clang_getLocationForOffset(d->m_unit, file, 0)))
     {
         ProblemPointer problem(new Problem);
-        problem->setSeverity(ProblemData::Warning);
+        problem->setSeverity(IProblem::Warning);
         problem->setDescription(i18n("Header is not guarded against multiple inclusions"));
         problem->setExplanation(i18n("The given header is not guarded against multiple inclusions, "
             "either with the conventional #ifndef/#define/#endif macro guards or with #pragma once."));
         problem->setFinalLocation({indexedPath, KTextEditor::Range()});
-        problem->setSource(ProblemData::Preprocessor);
+        problem->setSource(IProblem::Preprocessor);
         problems << problem;
         // TODO: Easy to add an assistant here that adds the guards -- any takers?
     }

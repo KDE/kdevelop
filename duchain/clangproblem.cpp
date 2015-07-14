@@ -33,17 +33,17 @@ using namespace KDevelop;
 
 namespace {
 
-ProblemData::Severity diagnosticSeverityToSeverity(CXDiagnosticSeverity severity)
+IProblem::Severity diagnosticSeverityToSeverity(CXDiagnosticSeverity severity)
 {
     switch (severity) {
     case CXDiagnostic_Fatal:
     case CXDiagnostic_Error:
-        return ProblemData::Error;
+        return IProblem::Error;
     case CXDiagnostic_Warning:
-        return ProblemData::Warning;
+        return IProblem::Warning;
         break;
     default:
-        return ProblemData::Hint;
+        return IProblem::Hint;
     }
 }
 
@@ -125,9 +125,9 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic)
 
     setFixits(fixitsForDiagnostic(diagnostic));
     setFinalLocation(docRange);
-    setSource(ProblemData::SemanticAnalysis);
+    setSource(IProblem::SemanticAnalysis);
 
-    QList<ProblemPointer> diagnostics;
+    QVector<IProblem::Ptr> diagnostics;
     auto childDiagnostics = clang_getChildDiagnostics(diagnostic);
     auto numChildDiagnostics = clang_getNumDiagnosticsInSet(childDiagnostics);
     for (uint j = 0; j < numChildDiagnostics; ++j) {
@@ -162,7 +162,7 @@ ClangFixits ClangProblem::allFixits() const
     ClangFixits result;
     result << m_fixits;
 
-    for (const ProblemPointer& diagnostic : diagnostics()) {
+    for (const IProblem::Ptr& diagnostic : diagnostics()) {
         const Ptr problem(dynamic_cast<ClangProblem*>(diagnostic.data()));
         Q_ASSERT(problem);
         result << problem->allFixits();

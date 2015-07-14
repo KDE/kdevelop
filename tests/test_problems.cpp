@@ -136,10 +136,12 @@ void TestProblems::testChildDiagnostics()
     QCOMPARE(range.start(), KTextEditor::Cursor(2, 13));
     QCOMPARE(range.end(), KTextEditor::Cursor(2, 16));
     QCOMPARE(problems[0]->diagnostics().size(), 2);
-    const ProblemPointer d1 = problems[0]->diagnostics()[0];
+    IProblem::Ptr p1 = problems[0]->diagnostics()[0];
+    const ProblemPointer d1 = ProblemPointer(dynamic_cast<Problem*>(p1.data()));
     QCOMPARE(d1->url().str(), FileName);
     QCOMPARE(d1->rangeInCurrentRevision().start(), KTextEditor::Cursor(0, 5));
-    const ProblemPointer d2 = problems[0]->diagnostics()[1];
+    IProblem::Ptr p2 = problems[0]->diagnostics()[1];
+    const ProblemPointer d2 = ProblemPointer(dynamic_cast<Problem*>(p2.data()));
     QCOMPARE(d2->url().str(), FileName);
     QCOMPARE(d2->rangeInCurrentRevision().start(), KTextEditor::Cursor(1, 5));
 }

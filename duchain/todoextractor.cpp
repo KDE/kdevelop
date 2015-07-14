@@ -179,8 +179,8 @@ void TodoExtractor::extractTodos()
         foreach (const CommentTodoParser::Result& result, parser.results()) {
             ProblemPointer problem(new Problem);
             problem->setDescription(result.description);
-            problem->setSeverity(ProblemData::Hint);
-            problem->setSource(ProblemData::ToDo);
+            problem->setSeverity(IProblem::Hint);
+            problem->setSource(IProblem::ToDo);
 
             // move the local range to the correct location
             // note: localRange is the range *within* the comment only
