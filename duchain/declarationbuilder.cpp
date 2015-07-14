@@ -371,7 +371,7 @@ void DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
                 "Possible type mismatch between the argument type (%1) and the value passed as argument (%2)",
                 current_type->toString(),
                 call_type->toString()
-            ), ProblemData::Hint);
+            ), IProblem::Hint);
         }
     }
 
@@ -1216,7 +1216,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
                 "Mismatch between the value type (%1) and the property type (%2)",
                 expressionType->toString(),
                 bindingDecl->abstractType()->toString()
-            ), ProblemData::Error);
+            ), IProblem::Error);
         }
     }
 

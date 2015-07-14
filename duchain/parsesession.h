@@ -85,7 +85,7 @@ public:
      */
     void addProblem(QmlJS::AST::Node* node,
                     const QString& message,
-                    KDevelop::ProblemData::Severity severity = KDevelop::ProblemData::Warning);
+                    KDevelop::IProblem::Severity severity = KDevelop::IProblem::Warning);
 
     /**
      * @return the problems encountered during parsing.
