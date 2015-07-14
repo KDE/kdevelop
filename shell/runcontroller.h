@@ -51,9 +51,6 @@ public:
     RunController(QObject *parent);
     ~RunController();
 
-    static QString LaunchConfigurationsGroup;
-    static QString LaunchConfigurationsListEntry;
-
     virtual void registerJob(KJob *job) override;
     virtual void unregisterJob(KJob *job) override;
     virtual QList<KJob*> currentJobs() const override;

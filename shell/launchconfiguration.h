@@ -43,8 +43,8 @@ public:
     LaunchConfiguration( KConfigGroup, IProject* = 0, QObject* = 0 );
     virtual ~LaunchConfiguration();
 
-    static QString LaunchConfigurationNameEntry;
-    static QString LaunchConfigurationTypeEntry;
+    static QString LaunchConfigurationNameEntry();
+    static QString LaunchConfigurationTypeEntry();
 
     /**
      * Change the name of this launch configuration

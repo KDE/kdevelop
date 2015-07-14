@@ -54,10 +54,11 @@
 
 #include <csignal>
 
-volatile std::sig_atomic_t handlingSignal = 0;
-
+namespace {
 void shutdownGracefully(int sig)
 {
+    static volatile std::sig_atomic_t handlingSignal = 0;
+
     if ( !handlingSignal ) {
         handlingSignal = 1;
         qCDebug(SHELL) << "signal " << sig << " received, shutting down gracefully";
@@ -85,6 +86,7 @@ void installSignalHandler()
 #ifdef SIGTERM
     std::signal(SIGTERM, shutdownGracefully);
 #endif
+}
 }
 
 namespace KDevelop {

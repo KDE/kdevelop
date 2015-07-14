@@ -59,11 +59,34 @@ Boston, MA 02110-1301, USA.
 
 using namespace KDevelop;
 
-QString RunController::LaunchConfigurationsGroup = "Launch";
-QString RunController::LaunchConfigurationsListEntry = "Launch Configurations";
-static QString CurrentLaunchConfigProjectEntry = "Current Launch Config Project";
-static QString CurrentLaunchConfigNameEntry = "Current Launch Config GroupName";
-static QString ConfiguredFromProjectItemEntry = "Configured from ProjectItem";
+namespace {
+namespace Strings {
+QString LaunchConfigurationsGroup()
+{
+    return QStringLiteral("Launch");
+}
+
+QString LaunchConfigurationsListEntry()
+{
+    return QStringLiteral("Launch Configurations");
+}
+
+QString CurrentLaunchConfigProjectEntry()
+{
+    return QStringLiteral("Current Launch Config Project");
+}
+
+QString CurrentLaunchConfigNameEntry()
+{
+    return QStringLiteral("Current Launch Config GroupName");
+}
+
+QString ConfiguredFromProjectItemEntry()
+{
+    return QStringLiteral("Configured from ProjectItem");
+}
+}
+}
 
 typedef QPair<QString, IProject*> Target;
 Q_DECLARE_METATYPE(Target)
@@ -134,10 +157,10 @@ public:
 
         if( currentTargetAction->currentAction() )
         {
-            KConfigGroup grp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
+            KConfigGroup grp = Core::self()->activeSession()->config()->group( Strings::LaunchConfigurationsGroup() );
             LaunchConfiguration* l = static_cast<LaunchConfiguration*>( currentTargetAction->currentAction()->data().value<void*>() );
-            grp.writeEntry( CurrentLaunchConfigProjectEntry, l->project() ? l->project()->name() : "" );
-            grp.writeEntry( CurrentLaunchConfigNameEntry, l->configGroupName() );
+            grp.writeEntry( Strings::CurrentLaunchConfigProjectEntry(), l->project() ? l->project()->name() : "" );
+            grp.writeEntry( Strings::CurrentLaunchConfigNameEntry(), l->configGroupName() );
             grp.sync();
         }
     }
@@ -186,7 +209,7 @@ public:
                 QStringList itemPath = Core::self()->projectController()->projectModel()->pathFromIndex(contextItem->index());
                 ILaunchConfiguration* ilaunch = 0;
                 foreach (LaunchConfiguration *l, launchConfigurations) {
-                    QStringList path = l->config().readEntry(ConfiguredFromProjectItemEntry, QStringList());
+                    QStringList path = l->config().readEntry(Strings::ConfiguredFromProjectItemEntry(), QStringList());
                     if (l->type() == type && path == itemPath) {
                         qCDebug(SHELL) << "already generated ilaunch" << path;
                         ilaunch = l;
@@ -200,7 +223,7 @@ public:
                                                             contextItem->text() );
                     LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
                     type->configureLaunchFromItem( launch->config(), contextItem );
-                    launch->config().writeEntry(ConfiguredFromProjectItemEntry, itemPath);
+                    launch->config().writeEntry(Strings::ConfiguredFromProjectItemEntry(), itemPath);
                     //qCDebug(SHELL) << "created config, launching";
                 } else {
                     //qCDebug(SHELL) << "reusing generated config, launching";
@@ -215,9 +238,9 @@ public:
     {
         if (!currentTargetAction) return;
 
-        KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
-        QString currentLaunchProject = launchGrp.readEntry( CurrentLaunchConfigProjectEntry, "" );
-        QString currentLaunchName = launchGrp.readEntry( CurrentLaunchConfigNameEntry, "" );
+        KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( Strings::LaunchConfigurationsGroup() );
+        QString currentLaunchProject = launchGrp.readEntry( Strings::CurrentLaunchConfigProjectEntry(), "" );
+        QString currentLaunchName = launchGrp.readEntry( Strings::CurrentLaunchConfigNameEntry(), "" );
 
         LaunchConfiguration* l = 0;
         if( currentTargetAction->currentAction() )
@@ -261,13 +284,13 @@ public:
     }
     void readLaunchConfigs( KSharedConfigPtr cfg, IProject* prj )
     {
-        KConfigGroup group(cfg, RunController::LaunchConfigurationsGroup);
-        QStringList configs = group.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
+        KConfigGroup group(cfg, Strings::LaunchConfigurationsGroup());
+        QStringList configs = group.readEntry( Strings::LaunchConfigurationsListEntry(), QStringList() );
 
         foreach( const QString& cfg, configs )
         {
             KConfigGroup grp = group.group( cfg );
-            if( launchConfigurationTypeForId( grp.readEntry( LaunchConfiguration::LaunchConfigurationTypeEntry, "" ) ) )
+            if( launchConfigurationTypeForId( grp.readEntry( LaunchConfiguration::LaunchConfigurationTypeEntry(), "" ) ) )
             {
                 q->addLaunchConfiguration( new LaunchConfiguration( grp, prj ) );
             }
@@ -794,14 +817,14 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
 {
     KConfigGroup launcherGroup;
     if( l->project() ) {
-        launcherGroup = l->project()->projectConfiguration()->group( LaunchConfigurationsGroup );
+        launcherGroup = l->project()->projectConfiguration()->group( Strings::LaunchConfigurationsGroup() );
     } else {
-        launcherGroup = Core::self()->activeSession()->config()->group( LaunchConfigurationsGroup );
+        launcherGroup = Core::self()->activeSession()->config()->group( Strings::LaunchConfigurationsGroup() );
     }
-    QStringList configs = launcherGroup.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
+    QStringList configs = launcherGroup.readEntry( Strings::LaunchConfigurationsListEntry(), QStringList() );
     configs.removeAll( l->configGroupName() );
     launcherGroup.deleteGroup( l->configGroupName() );
-    launcherGroup.writeEntry( RunController::LaunchConfigurationsListEntry, configs );
+    launcherGroup.writeEntry( Strings::LaunchConfigurationsListEntry(), configs );
     launcherGroup.sync();
 
     foreach( QAction* a, d->currentTargetAction->actions() )
@@ -874,14 +897,14 @@ ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigura
     KConfigGroup launchGroup;
     if( project )
     {
-        launchGroup = project->projectConfiguration()->group( RunController::LaunchConfigurationsGroup );
+        launchGroup = project->projectConfiguration()->group( Strings::LaunchConfigurationsGroup() );
 
     } else
     {
-        launchGroup = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
+        launchGroup = Core::self()->activeSession()->config()->group( Strings::LaunchConfigurationsGroup() );
 
     }
-    QStringList configs = launchGroup.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
+    QStringList configs = launchGroup.readEntry( Strings::LaunchConfigurationsListEntry(), QStringList() );
     uint num = 0;
     QString baseName = "Launch Configuration";
     while( configs.contains( QStringLiteral( "%1 %2" ).arg( baseName ).arg( num ) ) )
@@ -897,11 +920,11 @@ ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigura
         cfgName = makeUnique(cfgName);
     }
 
-    launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationNameEntry, cfgName );
-    launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationTypeEntry, type->id() );
+    launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationNameEntry(), cfgName );
+    launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationTypeEntry(), type->id() );
     launchConfigGroup.sync();
     configs << groupName;
-    launchGroup.writeEntry( RunController::LaunchConfigurationsListEntry, configs );
+    launchGroup.writeEntry( Strings::LaunchConfigurationsListEntry(), configs );
     launchGroup.sync();
     LaunchConfiguration* l = new LaunchConfiguration( launchConfigGroup, project );
     l->setLauncherForMode( launcher.first, launcher.second );

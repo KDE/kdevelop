@@ -30,13 +30,20 @@
 namespace KDevelop
 {
 
-QString LaunchConfiguration::LaunchConfigurationNameEntry = "Name";
-QString LaunchConfiguration::LaunchConfigurationTypeEntry = "Type";
+QString LaunchConfiguration::LaunchConfigurationNameEntry()
+{
+    return QStringLiteral("Name");
+}
+
+QString LaunchConfiguration::LaunchConfigurationTypeEntry()
+{
+    return QStringLiteral("Type");
+}
 
 LaunchConfiguration::LaunchConfiguration(KConfigGroup grp, IProject* project, QObject* parent ) 
     : QObject( parent ), ILaunchConfiguration(), baseGroup( grp ), m_project( project )
 {
-    m_type = Core::self()->runControllerInternal()->launchConfigurationTypeForId( grp.readEntry(LaunchConfigurationTypeEntry, "") );
+    m_type = Core::self()->runControllerInternal()->launchConfigurationTypeForId( grp.readEntry(LaunchConfigurationTypeEntry(), "") );
 }
 
 LaunchConfiguration::~LaunchConfiguration()
@@ -55,7 +62,7 @@ const KConfigGroup LaunchConfiguration::config() const
 
 QString LaunchConfiguration::name() const
 {
-    return baseGroup.readEntry( LaunchConfigurationNameEntry, "" );
+    return baseGroup.readEntry( LaunchConfigurationNameEntry(), "" );
 }
 
 IProject* LaunchConfiguration::project() const
@@ -70,7 +77,7 @@ LaunchConfigurationType* LaunchConfiguration::type() const
 
 void LaunchConfiguration::setName(const QString& name)
 {
-    baseGroup.writeEntry( LaunchConfigurationNameEntry, name );
+    baseGroup.writeEntry( LaunchConfigurationNameEntry(), name );
     baseGroup.sync();
     emit nameChanged( this );
 }
@@ -85,7 +92,7 @@ void LaunchConfiguration::setType(const QString& typeId)
     {
         baseGroup.deleteGroup("Data");
         m_type = t;
-        baseGroup.writeEntry( LaunchConfigurationTypeEntry, m_type->id() );
+        baseGroup.writeEntry( LaunchConfigurationTypeEntry(), m_type->id() );
         baseGroup.sync();
         emit typeChanged( t );
     }
