@@ -116,7 +116,7 @@ public:
      * Afterwards, finderForMimeType(@param mimeType) will return @param finder,
      * as long as the entry is not overwritten by another call to addFinder.
      */
-    static void addFinder(QString mimeType, IBuddyDocumentFinder* finder);
+    static void addFinder(const QString& mimeType, IBuddyDocumentFinder* finder);
 
     /**
      * Un-registers a IBuddyDocumentFinder object for a mimetype.
@@ -125,14 +125,14 @@ public:
      * Afterwards, finderForMimeType(@param mimeType) will return 0, until a new
      * entry for this mimetype is created by addFinder().
      */
-    static void removeFinder(QString mimeType);
+    static void removeFinder(const QString& mimeType);
 
     /**
      * Returns the registered IBuddyDocumentFinder for this mimetype, or 0.
      *
      * Used in the DocumentController (shell).
      */
-    static IBuddyDocumentFinder* finderForMimeType(QString mimeType);
+    static IBuddyDocumentFinder* finderForMimeType(const QString& mimeType);
 
 private:
     struct Private;

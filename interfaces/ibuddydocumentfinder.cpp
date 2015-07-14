@@ -27,26 +27,27 @@ namespace KDevelop {
 //instance of the private data class
 struct IBuddyDocumentFinder::Private
 {
-    static QMap<QString, IBuddyDocumentFinder*> s_finders;
+    static QMap<QString, IBuddyDocumentFinder*>& finders()
+    {
+        static QMap<QString, IBuddyDocumentFinder*> finders;
+        return finders;
+    }
 };
-QMap<QString, IBuddyDocumentFinder*> IBuddyDocumentFinder::Private::s_finders;
-
-
 
 // ---------------- "Registry" interface --------------------------------------------
-void IBuddyDocumentFinder::addFinder(QString mimeType, IBuddyDocumentFinder *finder)
+void IBuddyDocumentFinder::addFinder(const QString& mimeType, IBuddyDocumentFinder *finder)
 {
-    Private::s_finders[mimeType] = finder;
+    Private::finders()[mimeType] = finder;
 }
 
-void IBuddyDocumentFinder::removeFinder(QString mimeType)
+void IBuddyDocumentFinder::removeFinder(const QString& mimeType)
 {
-    Private::s_finders.remove(mimeType);
+    Private::finders().remove(mimeType);
 }
 
-IBuddyDocumentFinder* IBuddyDocumentFinder::finderForMimeType(QString mimeType)
+IBuddyDocumentFinder* IBuddyDocumentFinder::finderForMimeType(const QString& mimeType)
 {
-    return Private::s_finders.value(mimeType, 0);
+    return Private::finders().value(mimeType, 0);
 }
 
 }
