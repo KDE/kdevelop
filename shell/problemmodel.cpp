@@ -194,7 +194,7 @@ QModelIndex ProblemModel::parent(const QModelIndex& index) const
 
 QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent) const
 {
-    if (row < 0 || column < 0 || column >= LastColumn)
+    if (row < 0 || row >= rowCount(parent) || column < 0 || column >= LastColumn)
         return QModelIndex();
 
 
