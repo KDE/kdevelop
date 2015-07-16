@@ -257,6 +257,11 @@ public:
         m_matchQuality = value;
     }
 
+    void setInheritanceDepth(int depth)
+    {
+        m_inheritanceDepth = depth;
+    }
+
 private:
     int m_matchQuality = 0;
     QString m_replacement;
@@ -689,6 +694,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 if (bestMatch && !found->indexedIdentifier().identifier().toString().startsWith("__") ) {
                     const int matchQuality = codeCompletionPriorityToMatchQuality(completionPriority);
                     declarationItem->setMatchQuality(matchQuality);
+                } else {
+                    declarationItem->setInheritanceDepth(completionPriority);
                 }
 
                 item = declarationItem;
