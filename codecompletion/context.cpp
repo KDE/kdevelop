@@ -45,12 +45,46 @@
 using namespace KDevelop;
 
 namespace {
-/// Completion results with priority below this value will be shown in "Best Matches" group
-/// See http://clang.llvm.org/doxygen/CodeCompleteConsumer_8h_source.html
-/// We currently treat CCP_SuperCompletion = 20 as the highest priority that still gives a "Best Match"
-const unsigned int MAX_PRIORITY_FOR_BEST_MATCHES = 20;
 /// Maximum return-type string length in completion items
 const int MAX_RETURN_TYPE_STRING_LENGTH = 20;
+
+/// Priority of code-completion results. NOTE: Keep in sync with Clang code base.
+enum CodeCompletionPriority {
+  /// Priority for the next initialization in a constructor initializer list.
+  CCP_NextInitializer = 7,
+  /// Priority for an enumeration constant inside a switch whose condition is of the enumeration type.
+  CCP_EnumInCase = 7,
+
+  CCP_LocalDeclarationMatch = 8,
+
+  CCP_DeclarationMatch = 12,
+
+  CCP_LocalDeclarationSimiliar = 17,
+  /// Priority for a send-to-super completion.
+  CCP_SuperCompletion = 20,
+
+  CCP_DeclarationSimiliar = 25,
+  /// Priority for a declaration that is in the local scope.
+  CCP_LocalDeclaration = 34,
+  /// Priority for a member declaration found from the current method or member function.
+  CCP_MemberDeclaration = 35,
+  /// Priority for a language keyword (that isn't any of the other categories).
+  CCP_Keyword = 40,
+  /// Priority for a code pattern.
+  CCP_CodePattern = 40,
+  /// Priority for a non-type declaration.
+  CCP_Declaration = 50,
+  /// Priority for a type.
+  CCP_Type = CCP_Declaration,
+  /// Priority for a constant value (e.g., enumerator).
+  CCP_Constant = 65,
+  /// Priority for a preprocessor macro.
+  CCP_Macro = 70,
+  /// Priority for a nested-name-specifier.
+  CCP_NestedNameSpecifier = 75,
+  /// Priority for a result that isn't likely to be what the user wants, but is included for completeness.
+  CCP_Unlikely = 80
+};
 
 /**
  * Common base class for Clang code completion items.
@@ -310,6 +344,19 @@ QString& elideStringRight(QString& str, int length)
 int codeCompletionPriorityToMatchQuality(unsigned int completionPriority)
 {
     return 10u - qBound(0u, completionPriority, 80u) / 8;
+}
+
+/// Adjusts piority for the @p decl
+int adjustPriorityForDeclaration(Declaration* decl, unsigned int completionPriority)
+{
+    if (completionPriority == CCP_LocalDeclarationSimiliar) {
+        // Clang considers all pointers similar, this is not what we want.
+        if (decl->abstractType() && decl->abstractType()->whichType() == AbstractType::TypePointer) {
+            completionPriority += 4;
+        }
+    }
+
+    return completionPriority;
 }
 
 /**
@@ -635,8 +682,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             if (found) {
                 auto declarationItem = new DeclarationItem(found, display, resultType, replacement);
 
-                const unsigned int completionPriority = clang_getCompletionPriority(result.CompletionString);
-                const bool bestMatch = completionPriority <= MAX_PRIORITY_FOR_BEST_MATCHES;
+                const unsigned int completionPriority = adjustPriorityForDeclaration(found, clang_getCompletionPriority(result.CompletionString));
+                const bool bestMatch = completionPriority <= CCP_SuperCompletion;
 
                 //don't set best match property for internal identifiers, also prefer declarations from current file
                 if (bestMatch && !found->indexedIdentifier().identifier().toString().startsWith("__") ) {

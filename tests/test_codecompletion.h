@@ -46,6 +46,7 @@ private slots:
     void testInvalidCompletions_data();
 
     void testOverloadedFunctions();
+    void testCompletionPriority();
 };
 
 #endif // TESTCODECOMPLETION_H
