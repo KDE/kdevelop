@@ -355,9 +355,16 @@ int codeCompletionPriorityToMatchQuality(unsigned int completionPriority)
 int adjustPriorityForDeclaration(Declaration* decl, unsigned int completionPriority)
 {
     if (completionPriority == CCP_LocalDeclarationSimiliar) {
-        // Clang considers all pointers similar, this is not what we want.
-        if (decl->abstractType() && decl->abstractType()->whichType() == AbstractType::TypePointer) {
-            completionPriority += 4;
+        const auto type = decl->abstractType();
+        if (type) {
+            const auto whichType = type->whichType();
+            if (whichType == AbstractType::TypePointer) {
+                // Clang considers all pointers as similar, this is not what we want.
+                completionPriority += 4;
+            } else if (whichType == AbstractType::TypeStructure) {
+                // Clang considers all classes as similar too...
+                completionPriority += 4;
+            }
         }
     }
 

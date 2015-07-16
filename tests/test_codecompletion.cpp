@@ -593,7 +593,7 @@ void TestCodeCompletion::testOverloadedFunctions()
     QVERIFY(tester.items[1]->declaration().data() != tester.items[2]->declaration().data());
 }
 
-void TestCodeCompletion::testCompletionPriority()
+void TestCodeCompletion::testPointerCompletionPriority()
 {
     TestFile file("class A{}; class B{}; class C : public B{}; int main(){A* a; B* b; C* c; b =\n ", "cpp");
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
@@ -625,6 +625,77 @@ void TestCodeCompletion::testCompletionPriority()
             QEXPECT_FAIL("", "Pointer to derived class is not added to the Best Matches group", Continue);
             QVERIFY(matchQuality > 0);
         } else{
+            QVERIFY(matchQuality == 0);
+        }
+    }
+}
+
+void TestCodeCompletion::testClassCompletionPriority()
+{
+    TestFile file("class A{}; class B{}; class C : public B{}; int main(){A a; B b; C c; b =\n ", "cpp");
+    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+    QVERIFY(sessionData);
+
+    DUContextPointer topPtr(top);
+    lock.unlock();
+
+    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 0}, QString());
+    context->setFilters(ClangCodeCompletionContext::ContextFilters(
+                            ClangCodeCompletionContext::NoBuiltins |
+                            ClangCodeCompletionContext::NoMacros));
+    lock.lock();
+    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    QCOMPARE(tester.items.size(), 7);
+
+    for (auto item : {QStringLiteral("a"), QStringLiteral("b"), QStringLiteral("c")}) {
+        const auto declarationItem = tester.findItem(item);
+        QVERIFY(declarationItem);
+        QVERIFY(declarationItem->declaration());
+        auto matchQuality = tester.itemData(declarationItem, KTextEditor::CodeCompletionModel::Name, KTextEditor::CodeCompletionModel::MatchQuality).toInt();
+        if (item == QStringLiteral("b")) {
+            QVERIFY(matchQuality > 0);
+        } else if (item == QStringLiteral("c")) {
+            QEXPECT_FAIL("", "Derived class is not added to the Best Matches group", Continue);
+            QVERIFY(matchQuality > 0);
+        } else {
+            QVERIFY(matchQuality == 0);
+        }
+    }
+}
+
+void TestCodeCompletion::testPrimaryTypePriority()
+{
+    TestFile file("class A{}; int main(){A a; int b; bool c = \n ", "cpp");
+    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+    QVERIFY(sessionData);
+
+    DUContextPointer topPtr(top);
+    lock.unlock();
+
+    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 0}, QString());
+    context->setFilters(ClangCodeCompletionContext::ContextFilters(
+                            ClangCodeCompletionContext::NoBuiltins |
+                            ClangCodeCompletionContext::NoMacros));
+    lock.lock();
+    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    QCOMPARE(tester.items.size(), 5);
+
+    for (auto item : {QStringLiteral("a"), QStringLiteral("b"), QStringLiteral("c")}) {
+        const auto declarationItem = tester.findItem(item);
+        QVERIFY(declarationItem);
+        QVERIFY(declarationItem->declaration());
+        auto matchQuality = tester.itemData(declarationItem, KTextEditor::CodeCompletionModel::Name, KTextEditor::CodeCompletionModel::MatchQuality).toInt();
+        if (item == QStringLiteral("b") || item == QStringLiteral("c")) {
+            QVERIFY(matchQuality > 0);
+        } else {
             QVERIFY(matchQuality == 0);
         }
     }
