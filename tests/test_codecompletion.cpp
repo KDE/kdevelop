@@ -2,6 +2,7 @@
  * Copyright 2014  David Stevens <dgedstevens@gmail.com>
  * Copyright 2014  Kevin Funk <kfunk@kde.org>
  * Copyright 2015 Milian Wolff <mail@milianw.de>
+ * Copyright 2015 Sergey Kalinichev <kalinichev.so.0@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -65,6 +66,36 @@ struct CompletionItems {
 Q_DECLARE_TYPEINFO(CompletionItems, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(CompletionItems);
 
+
+struct CompletionPriorityItem
+{
+    CompletionPriorityItem(const QString name, int matchQuality = 0, int inheritanceDepth = 0, const QString failMessage = {})
+        : name(name)
+        , failMessage(failMessage)
+        , matchQuality(matchQuality)
+        , inheritanceDepth(inheritanceDepth)
+    {}
+
+    QString name;
+    QString failMessage;
+    int matchQuality;
+    int inheritanceDepth;
+};
+
+struct CompletionPriorityItems : public CompletionItems
+{
+    CompletionPriorityItems(){}
+    CompletionPriorityItems(const KTextEditor::Cursor& position, const QList<CompletionPriorityItem>& completions)
+        : CompletionItems(position, {})
+        , completions(completions)
+    {};
+
+    QList<CompletionPriorityItem> completions;
+};
+
+Q_DECLARE_TYPEINFO(CompletionPriorityItems, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(CompletionPriorityItems);
+
 void TestCodeCompletion::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
@@ -118,6 +149,45 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
 
     tester.names.sort();
     QCOMPARE(tester.names, expectedCompletionItems.completions);
+}
+
+void executeCompletionPriorityTest(const QString& code, const CompletionPriorityItems& expectedCompletionItems,
+                           const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
+                                ClangCodeCompletionContext::NoBuiltins |
+                                ClangCodeCompletionContext::NoMacros))
+{
+    TestFile file(code, "cpp");
+    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+    QVERIFY(sessionData);
+
+    DUContextPointer topPtr(top);
+
+    // don't hold DUChain lock when constructing ClangCodeCompletionContext
+    lock.unlock();
+
+    auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
+    context->setFilters(filters);
+
+    lock.lock();
+    auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+
+    for(const auto& declaration : expectedCompletionItems.completions){
+        const auto declarationItem = tester.findItem(declaration.name);
+        QVERIFY(declarationItem);
+        QVERIFY(declarationItem->declaration());
+
+        auto matchQuality = tester.itemData(declarationItem, KTextEditor::CodeCompletionModel::Name, KTextEditor::CodeCompletionModel::MatchQuality).toInt();
+        auto inheritanceDepth = declarationItem->inheritanceDepth();
+
+        if(!declaration.failMessage.isEmpty()){
+            QEXPECT_FAIL("", declaration.failMessage.toUtf8().constData(), Continue);
+        }
+        QVERIFY(matchQuality == declaration.matchQuality && inheritanceDepth == declaration.inheritanceDepth);
+    }
 }
 
 using IncludeTester = CodeCompletionItemTester<IncludePathCompletionContext>;
@@ -593,110 +663,30 @@ void TestCodeCompletion::testOverloadedFunctions()
     QVERIFY(tester.items[1]->declaration().data() != tester.items[2]->declaration().data());
 }
 
-void TestCodeCompletion::testPointerCompletionPriority()
+void TestCodeCompletion::testCompletionPriority()
 {
-    TestFile file("class A{}; class B{}; class C : public B{}; int main(){A* a; B* b; C* c; b =\n ", "cpp");
-    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
-    DUChainReadLocker lock;
-    auto top = file.topContext();
-    QVERIFY(top);
-    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
-    QVERIFY(sessionData);
+    QFETCH(QString, code);
+    QFETCH(CompletionPriorityItems, expectedItems);
 
-    DUContextPointer topPtr(top);
-    lock.unlock();
-
-    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 0}, QString());
-    context->setFilters(ClangCodeCompletionContext::ContextFilters(
-                            ClangCodeCompletionContext::NoBuiltins |
-                            ClangCodeCompletionContext::NoMacros));
-    lock.lock();
-    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
-    QCOMPARE(tester.items.size(), 7);
-
-    for (auto item : {QStringLiteral("a"), QStringLiteral("b"), QStringLiteral("c")}) {
-        const auto declarationItem = tester.findItem(item);
-        QVERIFY(declarationItem);
-        QVERIFY(declarationItem->declaration());
-        auto matchQuality = tester.itemData(declarationItem, KTextEditor::CodeCompletionModel::Name, KTextEditor::CodeCompletionModel::MatchQuality).toInt();
-        if (item == QStringLiteral("b")) {
-            QVERIFY(matchQuality > 0);
-        } else if(item == QStringLiteral("c")) {
-            QEXPECT_FAIL("", "Pointer to derived class is not added to the Best Matches group", Continue);
-            QVERIFY(matchQuality > 0);
-        } else{
-            QVERIFY(matchQuality == 0);
-        }
-    }
+    executeCompletionPriorityTest(code, expectedItems);
 }
 
-void TestCodeCompletion::testClassCompletionPriority()
+void TestCodeCompletion::testCompletionPriority_data()
 {
-    TestFile file("class A{}; class B{}; class C : public B{}; int main(){A a; B b; C c; b =\n ", "cpp");
-    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
-    DUChainReadLocker lock;
-    auto top = file.topContext();
-    QVERIFY(top);
-    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
-    QVERIFY(sessionData);
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionPriorityItems>("expectedItems");
 
-    DUContextPointer topPtr(top);
-    lock.unlock();
+    QTest::newRow("pointer")
+        << "class A{}; class B{}; class C : public B{}; int main(){A* a; B* b; C* c; b =\n "
+        << CompletionPriorityItems{{1,0}, {{"a", 0, 21}, {"b", 9, 0},
+        {"c", 8, 0, QStringLiteral("Pointer to derived class is not added to the Best Matches group")}}};
 
-    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 0}, QString());
-    context->setFilters(ClangCodeCompletionContext::ContextFilters(
-                            ClangCodeCompletionContext::NoBuiltins |
-                            ClangCodeCompletionContext::NoMacros));
-    lock.lock();
-    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
-    QCOMPARE(tester.items.size(), 7);
+    QTest::newRow("class")
+        << "class A{}; class B{}; class C : public B{}; int main(){A a; B b; C c; b =\n "
+        << CompletionPriorityItems{{1,0}, {{"a", 0, 21}, {"b", 9, 0},
+        {"c", 8, 0, QStringLiteral("Derived class is not added to the Best Matches group")}}};
 
-    for (auto item : {QStringLiteral("a"), QStringLiteral("b"), QStringLiteral("c")}) {
-        const auto declarationItem = tester.findItem(item);
-        QVERIFY(declarationItem);
-        QVERIFY(declarationItem->declaration());
-        auto matchQuality = tester.itemData(declarationItem, KTextEditor::CodeCompletionModel::Name, KTextEditor::CodeCompletionModel::MatchQuality).toInt();
-        if (item == QStringLiteral("b")) {
-            QVERIFY(matchQuality > 0);
-        } else if (item == QStringLiteral("c")) {
-            QEXPECT_FAIL("", "Derived class is not added to the Best Matches group", Continue);
-            QVERIFY(matchQuality > 0);
-        } else {
-            QVERIFY(matchQuality == 0);
-        }
-    }
-}
-
-void TestCodeCompletion::testPrimaryTypePriority()
-{
-    TestFile file("class A{}; int main(){A a; int b; bool c = \n ", "cpp");
-    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
-    DUChainReadLocker lock;
-    auto top = file.topContext();
-    QVERIFY(top);
-    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
-    QVERIFY(sessionData);
-
-    DUContextPointer topPtr(top);
-    lock.unlock();
-
-    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 0}, QString());
-    context->setFilters(ClangCodeCompletionContext::ContextFilters(
-                            ClangCodeCompletionContext::NoBuiltins |
-                            ClangCodeCompletionContext::NoMacros));
-    lock.lock();
-    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
-    QCOMPARE(tester.items.size(), 5);
-
-    for (auto item : {QStringLiteral("a"), QStringLiteral("b"), QStringLiteral("c")}) {
-        const auto declarationItem = tester.findItem(item);
-        QVERIFY(declarationItem);
-        QVERIFY(declarationItem->declaration());
-        auto matchQuality = tester.itemData(declarationItem, KTextEditor::CodeCompletionModel::Name, KTextEditor::CodeCompletionModel::MatchQuality).toInt();
-        if (item == QStringLiteral("b") || item == QStringLiteral("c")) {
-            QVERIFY(matchQuality > 0);
-        } else {
-            QVERIFY(matchQuality == 0);
-        }
-    }
+    QTest::newRow("primary-types")
+        << "class A{}; int main(){A a; int b; bool c = \n "
+        << CompletionPriorityItems{{1,0}, {{"a", 0, 34}, {"b", 8, 0}, {"c", 9, 0}}};
 }
