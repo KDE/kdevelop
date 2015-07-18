@@ -114,7 +114,13 @@ QByteArray makeComment(CXComment comment)
 AbstractType* createDelayedType(CXType type)
 {
     auto t = new DelayedType;
-    t->setIdentifier(IndexedTypeIdentifier(ClangString(clang_getTypeSpelling(type)).toString()));
+
+    // TODO: Fix clang_getTypeSpelling not to prepend type modifiers for auto types
+    QString typeName = ClangString(clang_getTypeSpelling(type)).toString();
+    typeName.remove(QStringLiteral("const "));
+    typeName.remove(QStringLiteral("volatile "));
+
+    t->setIdentifier(IndexedTypeIdentifier(typeName));
     return t;
 }
 
