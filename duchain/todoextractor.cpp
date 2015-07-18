@@ -30,8 +30,10 @@
 #include <interfaces/icompletionsettings.h>
 
 #include <QStringList>
+#include <QDir>
 
 #include <algorithm>
+#include <limits>
 
 using namespace KDevelop;
 
@@ -148,7 +150,7 @@ private:
 
 }
 
-TodoExtractor::TodoExtractor(CXTranslationUnit unit, const KDevelop::IndexedString& file)
+TodoExtractor::TodoExtractor(CXTranslationUnit unit, CXFile file)
     : m_unit(unit)
     , m_file(file)
     , m_todoMarkerWords(KDevelop::ICore::self()->languageController()->completionSettings()->todoMarkerWords())
@@ -158,8 +160,19 @@ TodoExtractor::TodoExtractor(CXTranslationUnit unit, const KDevelop::IndexedStri
 
 void TodoExtractor::extractTodos()
 {
-    auto cursor = clang_getTranslationUnitCursor(m_unit);
-    CXSourceRange range = clang_getCursorExtent(cursor);
+    std::numeric_limits<uint> uintLimit;
+
+    auto start = clang_getLocation(m_unit, m_file, 1, 1);
+    auto end = clang_getLocation(m_unit, m_file, uintLimit.max(), uintLimit.max());
+
+    auto range = clang_getRange(start, end);
+
+    IndexedString path(QDir::cleanPath(ClangString(clang_getFileName
+(m_file)).toString()));
+
+    if(clang_Range_isNull(range)){
+        return;
+    }
 
     CXToken* tokens = nullptr;
     unsigned int nTokens = 0;
@@ -190,7 +203,7 @@ void TodoExtractor::extractTodos()
                 localRange.start().column(),
                 tokenRange.start().line() + localRange.end().line(),
                 localRange.end().column()};
-            problem->setFinalLocation({m_file, todoRange});
+            problem->setFinalLocation({path, todoRange});
             m_problems << problem;
         }
     }

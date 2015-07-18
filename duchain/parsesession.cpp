@@ -295,13 +295,8 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
     const QString path = QDir::cleanPath(ClangString(clang_getFileName(file)).toString());
     const IndexedString indexedPath(path);
 
-    // extract to-do problems
-    if (ClangUtils::isFileEqual(file, d->m_file)) {
-        // TODO: also extract problems from included files and put them into the correct places
-        // currently, this is not possible as we don't know ho
-        TodoExtractor extractor(unit(), indexedPath);
-        problems << extractor.problems();
-    }
+    TodoExtractor extractor(unit(), file);
+    problems << extractor.problems();
 
     // other problem sources
     if (ClangHelpers::isHeader(path) && !clang_isFileMultipleIncludeGuarded(unit(), file)

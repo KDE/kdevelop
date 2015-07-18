@@ -31,7 +31,7 @@
 class KDEVCLANGDUCHAIN_EXPORT TodoExtractor
 {
 public:
-    TodoExtractor(CXTranslationUnit unit, const KDevelop::IndexedString& file);
+    TodoExtractor(CXTranslationUnit unit, CXFile file);
 
     /**
      * Retrieve the list of to-do problems this instance found
@@ -42,7 +42,7 @@ private:
     void extractTodos();
 
     CXTranslationUnit m_unit;
-    KDevelop::IndexedString m_file;
+    CXFile m_file;
     QStringList m_todoMarkerWords;
 
     QList<KDevelop::ProblemPointer> m_problems;

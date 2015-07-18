@@ -320,6 +320,32 @@ void TestProblems::testTodoProblems_data()
         << ExpectedTodos{{"TODO: 例えば", {0, 3}, {0, 12}}};
 }
 
+void TestProblems::testProblemsForIncludedFiles()
+{
+    TestFile header("#pragma once\n//TODO: header\n", "h");
+    TestFile file("#include \"" + header.url().byteArray() + "\"\n//TODO: source\n", "cpp");
+
+    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST | TopDUContext::ForceUpdate));
+    QVERIFY(file.waitForParsed(5000));
+
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+
+        auto context = DUChain::self()->chainForDocument(file.url());
+        QVERIFY(context);
+        QCOMPARE(context->problems().size(), 1);
+        QCOMPARE(context->problems()[0]->description(), QStringLiteral("TODO: source"));
+        QCOMPARE(context->problems()[0]->finalLocation().document, file.url());
+
+        context = DUChain::self()->chainForDocument(header.url());
+        QVERIFY(context);
+        QCOMPARE(context->problems().size(), 1);
+        QCOMPARE(context->problems()[0]->description(), QStringLiteral("TODO: header"));
+        QCOMPARE(context->problems()[0]->finalLocation().document, header.url());
+    }
+}
+
 void TestProblems::testRanges()
 {
     // expected:
