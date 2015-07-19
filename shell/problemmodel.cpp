@@ -236,6 +236,13 @@ void ProblemModel::addProblem(const IProblem::Ptr &problem)
     endInsertRows();
 }
 
+void ProblemModel::setProblems(const QVector<IProblem::Ptr> &problems)
+{
+    beginResetModel();
+    d->m_problems->setProblems(problems);
+    endResetModel();
+}
+
 void ProblemModel::clearProblems()
 {
     beginResetModel();

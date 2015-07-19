@@ -79,6 +79,8 @@ public:
     // Adds a new problem to the model
     void addProblem(const IProblem::Ptr &problem);
 
+    void setProblems(const QVector<IProblem::Ptr> &problems);
+
     // Clears the problems
     void clearProblems();
 
