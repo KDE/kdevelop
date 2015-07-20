@@ -1120,7 +1120,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     {
         if(urlsWithSeparators.size() > 1)
         {
-            foreach(QStringList group, groups)
+            foreach(const QStringList& group, groups)
                 ret &= openDocumentsWithSplitSeparators( index, group, isFirstView );
         }else{
             while(index->isSplit())

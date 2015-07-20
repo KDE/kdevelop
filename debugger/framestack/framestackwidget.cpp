@@ -212,7 +212,7 @@ void FramestackWidget::copySelection()
     QClipboard *cb = QApplication::clipboard();
     QModelIndexList indexes = m_frames->selectionModel()->selectedRows();
     QString content;
-    Q_FOREACH( QModelIndex index, indexes) {
+    Q_FOREACH(const QModelIndex& index, indexes) {
         IFrameStackModel::FrameItem frame = m_session->frameStackModel()->frame(index);
         if (frame.line == -1) {
             content += i18nc("#frame function() at file", "#%1 %2() at %3\n",

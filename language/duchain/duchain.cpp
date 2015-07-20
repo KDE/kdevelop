@@ -710,7 +710,7 @@ public:
       writeLock.unlock();
 
       //Here we wait for all parsing-threads to stop their processing
-      foreach(auto language, lockedParseMutexes) {
+      foreach(const auto& language, lockedParseMutexes) {
         language->parseLock()->lockForWrite();
         locked << language->parseLock();
       }
@@ -1483,7 +1483,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
         if(allImportsLoaded) {
           l.unlock();
           lock.unlock();
-          foreach(auto language, languages) {
+          foreach(const auto& language, languages) {
             if(language->codeHighlighting()) {
               language->codeHighlighting()->highlightDUChain(standardContext);
             }

@@ -91,7 +91,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
 
   //BEGIN load config
   KConfigGroup config = getConfig();
-  foreach( const QString group, config.groupList() ) {
+  foreach( const QString& group, config.groupList() ) {
     KConfigGroup script = config.group( group );
     if ( script.hasKey( "name" ) && script.hasKey( "command" ) ) {
       ExternalScriptItem* item = new ExternalScriptItem;

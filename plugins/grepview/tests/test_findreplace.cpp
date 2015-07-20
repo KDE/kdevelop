@@ -152,7 +152,7 @@ void FindReplaceTest::testReplace()
     QTemporaryDir tempDir;
     QDir     dir(tempDir.path());  // we need some convenience functions that are not in QTemporaryDir
 
-    foreach(File fileData, subject)
+    foreach(const File& fileData, subject)
     {
         QFile file(dir.filePath(fileData.first));
         QVERIFY(file.open(QIODevice::WriteOnly));
@@ -181,7 +181,7 @@ void FindReplaceTest::testReplace()
     model->makeItemsCheckable(true);
     model->doReplacements();
 
-    foreach(File fileData, result)
+    foreach(const File& fileData, result)
     {
         QFile file(dir.filePath(fileData.first));
         QVERIFY(file.open(QIODevice::ReadOnly));

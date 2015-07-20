@@ -371,7 +371,7 @@ void TestView::addTestSuite(ITestSuite* suite)
     QStandardItem* suiteItem = new QStandardItem(QIcon::fromTheme("view-list-tree"), suite->name());
 
     suiteItem->setData(suite->name(), SuiteRole);
-    foreach (QString caseName, suite->cases())
+    foreach (const QString& caseName, suite->cases())
     {
         QStandardItem* caseItem = new QStandardItem(iconForTestResult(TestResult::NotRun), caseName);
         caseItem->setData(caseName, CaseRole);

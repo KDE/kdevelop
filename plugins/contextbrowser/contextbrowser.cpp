@@ -459,7 +459,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
   QWidget* navigationWidget = 0;
   {
     DUChainReadLocker lock(DUChain::lock());
-    foreach (auto language, languages) {
+    foreach (const auto& language, languages) {
       auto widget = language->specialLanguageObjectNavigationWidget(viewUrl, KTextEditor::Cursor(position));
       navigationWidget = qobject_cast<AbstractNavigationWidget*>(widget);
       if(navigationWidget)

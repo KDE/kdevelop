@@ -143,7 +143,7 @@ void GrepFindFilesThread::run()
 
     qCDebug(PLUGIN_GREPVIEW) << "running with start dir" << m_startDirs;
 
-    foreach(QUrl directory, m_startDirs)
+    foreach(const QUrl& directory, m_startDirs)
     {
         if(m_project)
             m_files += thread_getProjectFiles(directory, m_depth, include, exclude, m_tryAbort);

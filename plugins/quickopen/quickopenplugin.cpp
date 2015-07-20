@@ -1053,7 +1053,7 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
   QUrl url = ICore::self()->documentController()->activeDocument()->url();
 
   const auto languages = ICore::self()->languageController()->languagesForUrl(url);
-  foreach (auto language, languages) {
+  foreach (const auto& language, languages) {
     QWidget* w = language->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(view->cursorPosition()) );
     if(w)
       return w;
@@ -1070,7 +1070,7 @@ QPair<QUrl, KTextEditor::Cursor> QuickOpenPlugin::specialObjectJumpPosition() co
 
   QUrl url = ICore::self()->documentController()->activeDocument()->url();
   const auto languages = ICore::self()->languageController()->languagesForUrl(url);
-  foreach (auto language, languages) {
+  foreach (const auto& language, languages) {
     QPair<QUrl, KTextEditor::Cursor> pos = language->specialLanguageObjectJumpCursor(url, KTextEditor::Cursor(view->cursorPosition()) );
     if(pos.second.isValid()) {
       return pos;

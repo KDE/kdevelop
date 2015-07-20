@@ -70,7 +70,7 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
 
     // Check whether a language plugin is tracking the document which belongs to a
     // whitespace-sensitive language (e.g. python)
-    foreach (auto lang, ICore::self()->languageController()->languagesForUrl(document->url())) {
+    foreach (const auto& lang, ICore::self()->languageController()->languagesForUrl(document->url())) {
         if (!lang) {
             continue;
         }

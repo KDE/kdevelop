@@ -256,7 +256,7 @@ void GrepDialog::directoryChanged(const QString& dir)
 
     bool projectAvailable = true;
 
-    foreach(QUrl url, getDirectoryChoice())
+    foreach(const QUrl& url, getDirectoryChoice())
     {
         IProject *proj = ICore::self()->projectController()->findProjectForUrl( currentUrl );
         if( !proj || !proj->path().toUrl().isLocalFile() )
@@ -393,7 +393,7 @@ QList< QUrl > GrepDialog::getDirectoryChoice() const
         {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
             // a semicolon in the name.
-            foreach(QString file, semicolonSeparatedFileList)
+            foreach(const QString& file, semicolonSeparatedFileList)
                 ret << QUrl::fromLocalFile(file);
         }else{
             ret << QUrl::fromUserInput(searchPaths->currentText());
@@ -404,7 +404,7 @@ QList< QUrl > GrepDialog::getDirectoryChoice() const
 
 bool GrepDialog::isPartOfChoice(QUrl url) const
 {
-    foreach(QUrl choice, getDirectoryChoice())
+    foreach(const QUrl& choice, getDirectoryChoice())
         if(choice.isParentOf(url) || choice == url)
             return true;
     return false;

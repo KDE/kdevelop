@@ -192,7 +192,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
             QPair<QUrl, KTextEditor::Cursor> jumpTo;
 
             //Step 1: Look for a special language object(Macro, included header, etc.)
-            foreach (auto language, languages) {
+            foreach (const auto& language, languages) {
                 jumpTo = language->specialLanguageObjectJumpCursor(viewUrl, KTextEditor::Cursor(textCursor));
                 if(jumpTo.first.isValid() && jumpTo.second.isValid())
                     break; //Found a special object to jump to

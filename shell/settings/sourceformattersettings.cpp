@@ -138,7 +138,7 @@ void SourceFormatterSettings::reset()
     // Sort the languages, preferring firstly active, then loaded languages
     QList<QString> sortedLanguages;
 
-    foreach(auto language,
+    foreach(const auto& language,
                 KDevelop::ICore::self()->languageController()->activeLanguages() +
                 KDevelop::ICore::self()->languageController()->loadedLanguages())
     {

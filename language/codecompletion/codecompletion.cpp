@@ -110,7 +110,7 @@ void CodeCompletion::checkDocument(Document* textDocument)
   auto langs = ICore::self()->languageController()->languagesForUrl( textDocument->url() );
 
   bool found = false;
-  foreach(auto lang, langs) {
+  foreach(const auto& lang, langs) {
     if(m_language==lang->name()) {
       found=true;
       break;

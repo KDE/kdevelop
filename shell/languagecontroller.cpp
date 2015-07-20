@@ -83,7 +83,7 @@ struct LanguageControllerPrivate
         activeLanguages.clear();
 
         QList<ILanguageSupport*> languages = m_controller->languagesForUrl(url);
-        foreach (auto lang, languages) {
+        foreach (const auto& lang, languages) {
             activeLanguages << lang;
         }
     }

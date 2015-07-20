@@ -60,7 +60,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
     m_oldMessages = new KComboBox(m_commitMessageWidget.data());
 
     m_oldMessages->addItem(i18n("Old Messages"));
-    foreach(QString message, oldMessages())
+    foreach(const QString& message, oldMessages())
         m_oldMessages->addItem(message, message);
     m_oldMessages->setMaximumWidth(200);
 

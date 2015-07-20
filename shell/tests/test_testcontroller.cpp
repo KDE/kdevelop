@@ -204,7 +204,7 @@ void TestTestController::testResults()
     QList<TestResult::TestCaseResult> results;
     results << TestResult::Passed << TestResult::Failed << TestResult::Error << TestResult::Skipped << TestResult::NotRun;
 
-    foreach (TestResult::TestCaseResult result, results)
+    foreach (const TestResult::TestCaseResult& result, results)
     {
         emitTestResult(suite, result);
         QCOMPARE(spy.size(), 1);

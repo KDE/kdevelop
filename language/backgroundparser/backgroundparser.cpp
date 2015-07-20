@@ -261,7 +261,7 @@ public:
         ///FIXME: use IndexedString in the other APIs as well! Esp. for createParseJob!
         QUrl qUrl = url.toUrl();
         auto languages = m_languageController->languagesForUrl(qUrl);
-        foreach (auto language, languages) {
+        foreach (const auto& language, languages) {
             if(!language) {
                 qCWarning(LANGUAGE) << "got zero language for" << qUrl;
                 continue;

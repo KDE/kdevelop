@@ -204,7 +204,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
     searchPaths.removeDuplicates();
     foreach(const QString &archivePath, searchPaths) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
-        foreach(QString file, files) {
+        foreach(const QString& file, files) {
             if(file.endsWith(".zip") || file.endsWith(".tar.bz2")) {
                 QString archfile = archivePath + file;
                 templateArchives.append(archfile);

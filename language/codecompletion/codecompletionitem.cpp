@@ -70,7 +70,7 @@ void CompletionTreeNode::appendChildren(QList< QExplicitlySharedDataPointer< KDe
 }
 
 void CompletionTreeNode::appendChildren(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > children) {
-  foreach (auto child, children) {
+  foreach (const auto& child, children) {
     appendChild(CompletionTreeElementPointer(child.data()));
   }
 }

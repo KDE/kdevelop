@@ -267,7 +267,7 @@ TopDUContext* DUChainUtils::standardContextForUrl(const QUrl& url, bool preferPr
 
   auto languages = ICore::self()->languageController()->languagesForUrl(url);
 
-  foreach(auto language, languages)
+  foreach(const auto& language, languages)
   {
     if(!chosen)
     {

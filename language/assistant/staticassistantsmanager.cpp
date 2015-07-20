@@ -185,7 +185,7 @@ void StaticAssistantsManager::Private::eventuallyStartAssistant()
     }
 
     qCDebug(LANGUAGE) << "Trying to find assistants for language" << language->name();
-    foreach (auto assistant, m_registeredAssistants) {
+    foreach (const auto& assistant, m_registeredAssistants) {
         if (assistant->supportedLanguage() != language)
             continue;
 
