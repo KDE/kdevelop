@@ -30,6 +30,8 @@
 #include "duchain/parsesession.h"
 #include "util/clangtypes.h"
 
+#include <interfaces/idocumentcontroller.h>
+
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/types/functiontype.h>
 
@@ -101,8 +103,8 @@ void TestCodeCompletion::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
-    AutoTestShell::init();
-    TestCore::initialize(Core::NoUi);
+    AutoTestShell::init({QStringLiteral("kdevclangsupport")});
+    TestCore::initialize();
 
     ClangSettingsManager::self()->m_enableTesting = true;
 }
@@ -194,6 +196,46 @@ void executeCompletionPriorityTest(const QString& code, const CompletionPriority
         }
         QVERIFY(matchQuality == declaration.matchQuality && inheritanceDepth == declaration.inheritanceDepth);
     }
+}
+
+void executeMemberAccessReplacerTest(const QString& code, const CompletionItems& expectedCompletionItems,
+                                     const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
+                                            ClangCodeCompletionContext::NoBuiltins |
+                                            ClangCodeCompletionContext::NoMacros))
+{
+    TestFile file(code, "cpp");
+
+    auto document = ICore::self()->documentController()->openDocument(file.url().toUrl());
+    QVERIFY(document);
+    ICore::self()->documentController()->activateDocument(document);
+    auto view = ICore::self()->documentController()->activeTextDocumentView();
+    Q_ASSERT(view);
+    view->setCursorPosition(expectedCompletionItems.position);
+
+    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+    QVERIFY(sessionData);
+
+    DUContextPointer topPtr(top);
+
+    lock.unlock();
+
+    auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
+
+    QApplication::processEvents();
+    document->close(KDevelop::IDocument::Silent);
+    // The previous ClangCodeCompletionContext call should replace member access.
+    context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
+    context->setFilters(filters);
+    lock.lock();
+    auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+
+    tester.names.sort();
+    QEXPECT_FAIL("replace dot to arrow", "Clang doesn't provide the diagnostic when '.' used instead of '->'", Continue);
+    QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
 
 using IncludeTester = CodeCompletionItemTester<IncludePathCompletionContext>;
@@ -411,6 +453,34 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "instance",
             "instance.intItem"
         }};
+}
+
+void TestCodeCompletion::testReplaceMemberAccess()
+{
+    QFETCH(QString, code);
+    QFETCH(CompletionItems, expectedItems);
+
+    executeMemberAccessReplacerTest(code, expectedItems);
+}
+
+void TestCodeCompletion::testReplaceMemberAccess_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionItems>("expectedItems");
+
+    QTest::newRow("replace arrow to dot")
+    <<  "struct Struct { void function(); };"
+        "int main() { Struct s; \ns-> "
+    << CompletionItems{{1, 3}, {
+        "function"
+    }};
+
+    QTest::newRow("replace dot to arrow")
+    <<  "struct Struct { void function(); };"
+        "int main() { Struct* s; \ns. "
+    << CompletionItems{{1, 2}, {
+        "function"
+    }};
 }
 
 void TestCodeCompletion::testVirtualOverride()

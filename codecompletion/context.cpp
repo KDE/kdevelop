@@ -21,6 +21,9 @@
 
 #include "context.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
@@ -41,6 +44,7 @@
 
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
+#include "../duchain/clangdiagnosticevaluator.h"
 #include "../duchain/parsesession.h"
 #include "../duchain/navigationwidget.h"
 #include "../clangsettings/clangsettingsmanager.h"
@@ -613,7 +617,51 @@ private:
     bool m_enabled;
 };
 
+struct MemberAccessReplacer : public QObject
+{
+    Q_OBJECT
+
+public:
+    enum Type {
+        None,
+        DotToArrow,
+        ArrowToDot
+    };
+
+public slots:
+    void replaceCurrentAccess(MemberAccessReplacer::Type type)
+    {
+        if (auto document = ICore::self()->documentController()->activeDocument()) {
+            if (auto textDocument = document->textDocument()) {
+                auto activeView = document->activeTextView();
+                if (!activeView) {
+                    return;
+                }
+
+                auto cursor = activeView->cursorPosition();
+
+                QString oldAccess, newAccess;
+                if (type == DotToArrow) {
+                    oldAccess = QStringLiteral("->");
+                    newAccess = QStringLiteral(".");
+                } else {
+                    oldAccess = QStringLiteral(".");
+                    newAccess = QStringLiteral("->");
+                }
+
+                auto oldRange = KTextEditor::Range(cursor - KTextEditor::Cursor(0, oldAccess.length()), cursor);
+                if (oldRange.start().column() >= 0 && textDocument->text(oldRange) == oldAccess) {
+                    textDocument->replaceText(oldRange, newAccess);
+                }
+            }
+        }
+    }
+};
+static MemberAccessReplacer s_memberAccessReplacer;
+
 }
+
+Q_DECLARE_METATYPE(MemberAccessReplacer::Type)
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
                                                        const ParseSessionData::Ptr& sessionData,
@@ -625,6 +673,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
     , m_results(nullptr, clang_disposeCodeCompleteResults)
     , m_parseSessionData(sessionData)
 {
+    qRegisterMetaType<MemberAccessReplacer::Type>();
     const QByteArray file = url.toLocalFile().toUtf8();
     ParseSession session(m_parseSessionData);
     {
@@ -644,6 +693,27 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         if (!m_results) {
             qCWarning(KDEV_CLANG) << "Something went wrong during 'clang_codeCompleteAt' for file" << file;
             return;
+        }
+
+        auto numDiagnostics = clang_codeCompleteGetNumDiagnostics(m_results.get());
+        for (uint i = 0; i < numDiagnostics; i++) {
+            auto diagnostic = clang_codeCompleteGetDiagnostic(m_results.get(), i);
+            auto diagnosticType = ClangDiagnosticEvaluator::diagnosticType(diagnostic);
+            clang_disposeDiagnostic(diagnostic);
+            if (diagnosticType == ClangDiagnosticEvaluator::ReplaceWithArrowProblem || diagnosticType == ClangDiagnosticEvaluator::ReplaceWithDotProblem) {
+                MemberAccessReplacer::Type replacementType;
+                if (diagnosticType == ClangDiagnosticEvaluator::ReplaceWithDotProblem) {
+                    replacementType = MemberAccessReplacer::DotToArrow;
+                } else {
+                    replacementType = MemberAccessReplacer::ArrowToDot;
+                }
+
+                QMetaObject::invokeMethod(&s_memberAccessReplacer, "replaceCurrentAccess", Qt::QueuedConnection,
+                                          Q_ARG(MemberAccessReplacer::Type, replacementType));
+
+                m_valid = false;
+                return;
+            }
         }
 
         auto addMacros = ClangSettingsManager::self()->codeCompletionSettings().macros;
@@ -970,3 +1040,5 @@ void ClangCodeCompletionContext::setFilters(const ClangCodeCompletionContext::Co
 {
     m_filters = filters;
 }
+
+#include "context.moc"

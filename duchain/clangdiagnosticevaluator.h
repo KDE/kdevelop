@@ -30,6 +30,20 @@ class ClangProblem;
 
 namespace ClangDiagnosticEvaluator {
 KDEVCLANGDUCHAIN_EXPORT ClangProblem* createProblem(CXDiagnostic diagnostic, CXTranslationUnit unit);
+
+enum DiagnosticType {
+    Unknown,
+    UnknownDeclarationProblem,
+    IncludeFileNotFoundProblem,
+    ReplaceWithDotProblem,
+    ReplaceWithArrowProblem
+};
+
+/**
+ * @return Type of @p diagnostic
+ * @sa DiagnosticType
+ */
+KDEVCLANGDUCHAIN_EXPORT DiagnosticType diagnosticType(CXDiagnostic diagnostic);
 }
 
 #endif // CLANGDIAGNOSTICEVALUATOR_H

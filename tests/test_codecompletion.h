@@ -46,6 +46,8 @@ private slots:
     void testInvalidCompletions_data();
     void testCompletionPriority();
     void testCompletionPriority_data();
+    void testReplaceMemberAccess();
+    void testReplaceMemberAccess_data();
 
     void testOverloadedFunctions();
     void testVariableScope();

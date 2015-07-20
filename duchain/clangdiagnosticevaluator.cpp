@@ -62,12 +62,57 @@ bool isIncludeFileNotFound(CXDiagnostic diagnostic)
     return ClangString(clang_getDiagnosticSpelling(diagnostic)).toString().endsWith(QLatin1String("file not found"));
 }
 
+bool isReplaceWithDotProblem(CXDiagnostic diagnostic)
+{
+    // TODO: The diagnostic message depends on LibClang version.
+    const QList<QString> diagnosticMessages {QStringLiteral("did you mean to use '.'?"), QStringLiteral("maybe you meant to use '.'?")};
+
+    QString description = ClangString(clang_getDiagnosticSpelling(diagnostic)).toString();
+    for (const auto& diagnStr : diagnosticMessages) {
+        if (description.endsWith(diagnStr)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool isReplaceWithArrowProblem(CXDiagnostic diagnostic)
+{
+    // TODO: The diagnostic message depends on LibClang version.
+    const QList<QString> diagnosticMessages {QStringLiteral("did you mean to use '->'?"), QStringLiteral("maybe you meant to use '->'?")};
+
+    QString description = ClangString(clang_getDiagnosticSpelling(diagnostic)).toString();
+    for (const auto& diagnStr : diagnosticMessages) {
+        if (description.endsWith(diagnStr)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+}
+
+ClangDiagnosticEvaluator::DiagnosticType ClangDiagnosticEvaluator::diagnosticType(CXDiagnostic diagnostic)
+{
+    if (isDeclarationProblem(diagnostic)) {
+        return UnknownDeclarationProblem;
+    } else if (isIncludeFileNotFound(diagnostic)) {
+        return IncludeFileNotFoundProblem;
+    } else if (isReplaceWithDotProblem(diagnostic)) {
+        return ReplaceWithDotProblem;
+    } else if (isReplaceWithArrowProblem(diagnostic)) {
+        return ReplaceWithArrowProblem;
+    }
+
+    return Unknown;
 }
 
 ClangProblem* ClangDiagnosticEvaluator::createProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
 {
     if (isDeclarationProblem(diagnostic)) {
-        return new UnknownDeclarationProblem(diagnostic, unit);
+        return new class UnknownDeclarationProblem(diagnostic, unit);
     } else if(isIncludeFileNotFound(diagnostic)){
         return new MissingIncludePathProblem(diagnostic, unit);
     }
