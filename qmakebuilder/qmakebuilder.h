@@ -40,7 +40,7 @@ public:
 
     virtual KJob* build(KDevelop::ProjectBaseItem *dom) override;
     virtual KJob* clean(KDevelop::ProjectBaseItem *dom) override;
-    virtual KJob* install(KDevelop::ProjectBaseItem *dom) override;
+    virtual KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl& /* prefix */) override;
     virtual KJob* configure(KDevelop::IProject *dom) override;
     virtual KJob* prune(KDevelop::IProject *dom) override;
 

@@ -126,7 +126,7 @@ KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     return nullptr;
 }
 
-KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
+KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl& /* prefix */)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Installing";
     if( m_makeBuilder )
