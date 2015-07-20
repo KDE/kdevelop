@@ -56,19 +56,24 @@ KJob* MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
     return runMake( dom, MakeJob::CleanCommand, QStringList("clean") );
 }
 
-KJob* MakeBuilder::install( KDevelop::ProjectBaseItem *dom )
+KJob* MakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath)
 {
     KSharedConfigPtr configPtr = dom->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
     bool installAsRoot = builderGroup.readEntry("Install As Root", false);
+
+    QStringList args("install");
+    if (!installPath.isEmpty())
+        args << "DESTDIR="+installPath.toLocalFile();
+
     if(installAsRoot) {
         KDevelop::BuilderJob* job = new KDevelop::BuilderJob;
         job->addCustomJob( KDevelop::BuilderJob::Build, build(dom), dom );
-        job->addCustomJob( KDevelop::BuilderJob::Install, runMake( dom, MakeJob::InstallCommand, QStringList("install") ), dom );
+        job->addCustomJob( KDevelop::BuilderJob::Install, runMake( dom, MakeJob::InstallCommand, args ), dom );
         job->updateJobName();
         return job;
     } else
-        return runMake( dom, MakeJob::InstallCommand, QStringList("install") );
+        return runMake( dom, MakeJob::InstallCommand, args );
 }
 
 void MakeBuilder::jobFinished(KJob* job)

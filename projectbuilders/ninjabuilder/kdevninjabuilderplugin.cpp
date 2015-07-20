@@ -181,5 +181,26 @@ KDevelop::ConfigPage* KDevNinjaBuilderPlugin::perProjectConfigPage(int number, c
     return nullptr;
 }
 
+class ErrorJob : public KJob
+{
+public:
+    ErrorJob(QObject* parent, const QString& error)
+        : KJob(parent)
+    {}
+
+    void start() override {
+        setError(!m_error.isEmpty());
+        setErrorText(m_error);
+        emitResult();
+    }
+
+private:
+    QString m_error;
+};
+
+KJob* KDevNinjaBuilderPlugin::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath)
+{
+    return installPath.isEmpty() ? install(dom) : new ErrorJob(nullptr, i18n("Cannot specify prefix in %1, on ninja", installPath.toDisplayString()));
+}
 
 #include "kdevninjabuilderplugin.moc"

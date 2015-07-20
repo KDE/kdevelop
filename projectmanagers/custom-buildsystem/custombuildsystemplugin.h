@@ -49,7 +49,9 @@ public:
     KJob* build( KDevelop::ProjectBaseItem* dom ) override;
     KJob* clean( KDevelop::ProjectBaseItem* dom ) override;
     KJob* prune( KDevelop::IProject* ) override;
-    KJob* install( KDevelop::ProjectBaseItem* item ) override;
+
+    /// @p installPrefix will be passed as DESTDIR environment variable
+    KJob* install( KDevelop::ProjectBaseItem* item, const QUrl &installPrefix ) override;
     KJob* configure( KDevelop::IProject* ) override;
 signals:
     void built( KDevelop::ProjectBaseItem *dom );

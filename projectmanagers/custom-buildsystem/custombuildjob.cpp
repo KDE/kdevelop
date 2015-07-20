@@ -85,7 +85,8 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
         title = i18nc("Cleaning: <command> <project item name>", "Cleaning: %1 %2", cmd, item->text());
         break;
     case CustomBuildSystemTool::Install:
-        title = i18nc("Installing: <command> <project item name>", "Installing: %1 %2", cmd, item->text());
+        title = installPrefix.isEmpty() ? i18nc("Installing: <command> <project item name>", "Installing: %1 %2", cmd, item->text())
+              : i18nc("Installing: <command> <project item name> <installPrefix>", "Installing: %1 %2 %3", cmd, item->text(), installPrefix.toDisplayString(QUrl::PreferLocalFile));
         break;
     case CustomBuildSystemTool::Configure:
         title = i18nc("Configuring: <command> <project item name>", "Configuring: %1 %2", cmd, item->text());
@@ -144,8 +145,12 @@ void CustomBuildJob::start()
 
         exec = new KDevelop::CommandExecutor( cmd, this );
 
+        auto env = KDevelop::EnvironmentGroupList( KSharedConfig::openConfig() ).createEnvironment( environment, QProcess::systemEnvironment() );
+        if (!installPrefix.isEmpty())
+            env.append("DESTDIR="+installPrefix.toDisplayString(QUrl::PreferLocalFile));
+
         exec->setArguments( strargs );
-        exec->setEnvironment( KDevelop::EnvironmentGroupList( KSharedConfig::openConfig() ).createEnvironment( environment, KProcess::systemEnvironment() ) );
+        exec->setEnvironment( env );
         exec->setWorkingDirectory( builddir );
 
         
@@ -155,7 +160,7 @@ void CustomBuildJob::start()
         connect( exec, &CommandExecutor::receivedStandardError, model, &OutputModel::appendLines );
         connect( exec, &CommandExecutor::receivedStandardOutput, model, &OutputModel::appendLines );
 
-        model->appendLine( QString("%1>%2 %3").arg( builddir ).arg( cmd ).arg( arguments ) );
+        model->appendLine( QStringLiteral("%1> %2 %3").arg( builddir ).arg( cmd ).arg( arguments ) );
         exec->start();
     }
 }

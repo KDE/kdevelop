@@ -67,7 +67,7 @@ public:
      */
     virtual KJob* build(KDevelop::ProjectBaseItem *dom) override;
     virtual KJob* clean(KDevelop::ProjectBaseItem *dom) override;
-    virtual KJob* install(KDevelop::ProjectBaseItem *dom) override;
+    virtual KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath) override;
 
     virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname ) override;
     virtual KJob* executeMakeTargets(KDevelop::ProjectBaseItem* item, const QStringList& targetnames,

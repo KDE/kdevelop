@@ -51,7 +51,7 @@ public:
     virtual ~CMakeBuilder();
 
     virtual KJob* build(KDevelop::ProjectBaseItem *dom) override;
-    virtual KJob* install(KDevelop::ProjectBaseItem *dom) override;
+    virtual KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPrefix) override;
     virtual KJob* clean(KDevelop::ProjectBaseItem *dom) override;
     virtual KJob* configure(KDevelop::IProject*) override;
     virtual KJob* prune(KDevelop::IProject*) override;

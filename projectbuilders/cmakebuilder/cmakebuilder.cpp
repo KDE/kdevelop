@@ -163,7 +163,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     return 0;
 }
 
-KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
+KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPrefix)
 {
     IProjectBuilder* builder = builderForProject(dom->project());
     if( builder )
@@ -178,7 +178,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
             item=(KDevelop::ProjectBaseItem*) dom->parent();
 
         qCDebug(CMAKEBUILDER) << "Installing with" << builder;
-        KJob* install = builder->install(item);
+        KJob* install = builder->install(item, installPrefix);
         if( configure ) {
             KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
             builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, item );

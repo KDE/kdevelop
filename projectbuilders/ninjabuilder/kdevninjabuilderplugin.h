@@ -37,7 +37,8 @@ class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuild
         
         virtual KJob* build(KDevelop::ProjectBaseItem* item) override;
         virtual KJob* clean(KDevelop::ProjectBaseItem* item) override;
-        virtual KJob* install(KDevelop::ProjectBaseItem* item) override;
+        virtual KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath) override;
+        KJob* install(KDevelop::ProjectBaseItem* item);
         
         NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal);
 

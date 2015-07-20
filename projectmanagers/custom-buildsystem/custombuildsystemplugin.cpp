@@ -144,9 +144,11 @@ Path::List CustomBuildSystem::includeDirectories( ProjectBaseItem* ) const
     return {};
 }
 
-KJob* CustomBuildSystem::install( ProjectBaseItem* item )
+KJob* CustomBuildSystem::install( KDevelop::ProjectBaseItem* item, const QUrl &installPrefix )
 {
-    return new CustomBuildJob( this, item, CustomBuildSystemTool::Install );
+    auto job = new CustomBuildJob( this, item, CustomBuildSystemTool::Install );
+    job->setInstallPrefix(installPrefix);
+    return job;
 }
 
 KJob* CustomBuildSystem::prune( IProject* project )

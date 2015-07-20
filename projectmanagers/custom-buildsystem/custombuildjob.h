@@ -50,6 +50,9 @@ public:
     CustomBuildJob( CustomBuildSystem*, KDevelop::ProjectBaseItem*, CustomBuildSystemTool::ActionType t );
     virtual void start() override;
     virtual bool doKill() override;
+
+    void setInstallPrefix(const QUrl &installPrefix) { this->installPrefix=installPrefix; }
+
 private slots:
     void procFinished(int);
     void procError( QProcess::ProcessError );
@@ -61,6 +64,7 @@ private:
     QString arguments;
     QString environment;
     QString builddir;
+    QUrl installPrefix;
     KDevelop::CommandExecutor* exec;
     bool killed;
     bool enabled;
