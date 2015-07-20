@@ -22,9 +22,14 @@
 
 #include <QObject>
 
-#include <KCModule>
+#include <kdevplatform/interfaces/configpage.h>
 
 class QIcon;
+
+namespace KDevelop
+{
+class IProject;
+}
 
 namespace cppcheck
 {
@@ -35,25 +40,26 @@ namespace Ui
 class GenericConfig;
 }
 
-class   GenericConfigPage : public KCModule
+class GenericConfigPage : public KDevelop::ConfigPage
 {
     Q_OBJECT
 
 public:
 
-    GenericConfigPage(QWidget* parent, const QVariantList& args = QVariantList());
+    GenericConfigPage(KDevelop::IProject *project, QWidget* parent);
     ~GenericConfigPage();
 
-    QIcon icon() const;
-    QString title() const;
+    virtual QString name() const override;
 
 signals:
 
 public slots:
-    void save();
-    void load();
+    virtual void apply() override;
+    virtual void defaults() override;
+    virtual void reset() override;
 
 private:
+    KDevelop::IProject *m_project;
     Ui::GenericConfig* ui;
 };
 

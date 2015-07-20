@@ -62,7 +62,21 @@ class Job : public KDevelop::OutputJob
     Q_OBJECT
 
 public:
-    Job(cppcheck::Plugin* inst, bool allFiles, QObject* parent = 0);
+    struct Parameters
+    {
+        QString parameters;
+        int viewMode;
+        bool checkStyle;
+        bool checkPerformance;
+        bool checkPortability;
+        bool checkInformation;
+        bool checkUnusedFunction;
+        bool checkMissingInclude;
+        QString path;
+        QString executable;
+    };
+
+    Job(cppcheck::Plugin* inst, const Parameters &params, QObject* parent = 0);
     ~Job();
     cppcheck::Plugin* plugin() const;
     KDevelop::OutputModel* model();
@@ -87,13 +101,6 @@ protected:
     void processStarted(); // called after the process has been launched
     void processEnded(); // called when the process ended
 
-    void addToolArgs(QStringList& args, KConfigGroup& cfg) const;
-
-    void processModeArgs(QStringList& out,
-                         const t_cppcheck_cfg_argarray mode_args,
-                         int mode_args_count,
-                         KConfigGroup& cfg) const;
-
     QStringList buildCommandLine() const;
 
 
@@ -113,10 +120,10 @@ protected:
     // The cppcheck output file
     QFile* m_file;
     bool      m_killed;
-    bool allFiles;
     QBuffer* string_device;
     QString stdout_output;
     QString stderr_output;
+    Parameters parameters;
 
 private:
 };

@@ -25,77 +25,75 @@
 
 #include "ui_genericconfig.h"
 
-#include <KAboutData>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kdevplatform/interfaces/iproject.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(CppcheckPreferencesFactory, "kcm_kdev_cppcheck.json", registerPlugin<cppcheck::GenericConfigPage>();)
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 namespace cppcheck
 {
 
-GenericConfigPage::GenericConfigPage(QWidget* parent, const QVariantList& args)
-    : KCModule(KAboutData::pluginData("kcm_kdev_cppcheck"), parent, args)
+GenericConfigPage::GenericConfigPage(KDevelop::IProject *project, QWidget* parent)
+    : ConfigPage(nullptr, nullptr, parent)
+    , m_project(project)
 {
 
     ui = new Ui::GenericConfig();
     ui->setupUi(this);
-    connect(ui->SavePushButton , SIGNAL(clicked()), this, SLOT(save()));
     ui->OutputViewModeComboBox->addItem(i18n("Flat list"));
     ui->OutputViewModeComboBox->addItem(i18n("Grouped by file"));
     ui->OutputViewModeComboBox->addItem(i18n("Grouped by severity"));
 }
 GenericConfigPage::~GenericConfigPage(void)
 {
-    disconnect(ui->SavePushButton , SIGNAL(clicked()), this, SLOT(save()));
     delete ui;
 }
 
-QIcon GenericConfigPage::icon() const
+QString GenericConfigPage::name() const
 {
-    return QIcon::fromTheme("fork");
+    return QStringLiteral("cppcheck");
 }
 
-void GenericConfigPage::load()
+void GenericConfigPage::apply()
 {
-    qCDebug(KDEV_CPPCHECK) << "load config";
+    KSharedConfigPtr ptr = m_project->projectConfiguration();
+    KConfigGroup group = ptr->group("CppCheck");
+
+    group.writeEntry("cppcheckParameters", ui->cppcheckParameters->text());
+    group.writeEntry("OutputViewMode", ui->OutputViewModeComboBox->currentIndex());
+    group.writeEntry("AdditionalCheckStyle", ui->styleCheckBox->isChecked());
+    group.writeEntry("AdditionalCheckPerformance", ui->performanceCheckBox->isChecked());
+    group.writeEntry("AdditionalCheckPortability", ui->portabilityCheckBox->isChecked());
+    group.writeEntry("AdditionalCheckInformation", ui->informationCheckBox->isChecked());
+    group.writeEntry("AdditionalCheckUnusedFunction", ui->unusedFunctionCheckBox->isChecked());
+    group.writeEntry("AdditionalCheckMissingInclude", ui->missingIncludeCheckBox->isChecked());
+}
+
+void GenericConfigPage::defaults()
+{
+    reset();
+}
+
+void GenericConfigPage::reset()
+{
+    KSharedConfigPtr ptr = m_project->projectConfiguration();
+    KConfigGroup group = ptr->group("CppCheck");
+    if (!group.isValid())
+        return;
+
     bool wasBlocked = signalsBlocked();
     blockSignals(true);
-    KConfig config("kdevcppcheckrc");
-    KConfigGroup cfg = config.group("cppcheck");
-    ui->cppcheckExecutable->setUrl(cfg.readEntry("CppcheckExecutable", QUrl::fromLocalFile("/usr/bin/cppcheck")));
-    ui->cppcheckParameters->setText(cfg.readEntry("cppcheckParameters", QString("")));
-    ui->OutputViewModeComboBox->setCurrentIndex(cfg.readEntry("OutputViewMode", "0").toInt());
-    ui->styleCheckBox->setChecked(cfg.readEntry("AdditionalCheckStyle", false));
-    ui->performanceCheckBox->setChecked(cfg.readEntry("AdditionalCheckPerformance", false));
-    ui->portabilityCheckBox->setChecked(cfg.readEntry("AdditionalCheckPortability", false));
-    ui->informationCheckBox->setChecked(cfg.readEntry("AdditionalCheckInformation", false));
-    ui->unusedFunctionCheckBox->setChecked(cfg.readEntry("AdditionalCheckUnusedInclude", false));
-    ui->missingIncludeCheckBox->setChecked(cfg.readEntry("AdditionalCheckMissingInclude", false));
+
+    ui->cppcheckParameters->setText(group.readEntry("cppcheckParameters", QString("")));
+    ui->OutputViewModeComboBox->setCurrentIndex(group.readEntry("OutputViewMode", "0").toInt());
+    ui->styleCheckBox->setChecked(group.readEntry("AdditionalCheckStyle", false));
+    ui->performanceCheckBox->setChecked(group.readEntry("AdditionalCheckPerformance", false));
+    ui->portabilityCheckBox->setChecked(group.readEntry("AdditionalCheckPortability", false));
+    ui->informationCheckBox->setChecked(group.readEntry("AdditionalCheckInformation", false));
+    ui->unusedFunctionCheckBox->setChecked(group.readEntry("AdditionalCheckUnusedFunction", false));
+    ui->missingIncludeCheckBox->setChecked(group.readEntry("AdditionalCheckMissingInclude", false));
 
     blockSignals(wasBlocked);
-}
-
-void GenericConfigPage::save()
-{
-    qCDebug(KDEV_CPPCHECK) << "save config";
-    KConfig config("kdevcppcheckrc");
-    KConfigGroup cfg = config.group("cppcheck");
-    cfg.writeEntry("CppcheckExecutable", ui->cppcheckExecutable->url());
-    cfg.writeEntry("cppcheckParameters", ui->cppcheckParameters->text());
-    cfg.writeEntry("OutputViewMode", ui->OutputViewModeComboBox->currentIndex());
-    cfg.writeEntry("AdditionalCheckStyle", ui->styleCheckBox->isChecked());
-    cfg.writeEntry("AdditionalCheckPerformance", ui->performanceCheckBox->isChecked());
-    cfg.writeEntry("AdditionalCheckPortability", ui->portabilityCheckBox->isChecked());
-    cfg.writeEntry("AdditionalCheckInformation", ui->informationCheckBox->isChecked());
-    cfg.writeEntry("AdditionalCheckUnusedInclude", ui->unusedFunctionCheckBox->isChecked());
-    cfg.writeEntry("AdditionalCheckMissingInclude", ui->missingIncludeCheckBox->isChecked());
-
-}
-
-QString GenericConfigPage::title() const
-{
-    return i18n("Global Settings");
 }
 
 }

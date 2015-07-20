@@ -42,6 +42,10 @@
 #include <interfaces/launchconfigurationtype.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idebugcontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
 #include <util/executecompositejob.h>
 
 #include <language/interfaces/editorcontext.h>
@@ -55,6 +59,11 @@
 
 #include <KXMLGUIFactory>
 
+#include "./config/genericconfigpage.h"
+#include "./config/cppcheckpreferences.h"
+#include <kdevplatform/project/projectconfigpage.h>
+
+#include <QMessageBox>
 
 using namespace KDevelop;
 
@@ -124,8 +133,59 @@ Plugin::~Plugin()
 
 void Plugin::runCppcheck(bool allFiles)
 {
+    KDevelop::IDocument *doc = core()->documentController()->activeDocument();
+    if (!doc) {
+        QMessageBox::critical(nullptr,
+                              i18n("Error starting CppCheck"),
+                              i18n("No active file, unable to deduce project."));
+        return;
+    }
+
+    KDevelop::IProject *project = core()->projectController()->findProjectForUrl(doc->url());
+    if (!project) {
+        QMessageBox::critical(nullptr,
+                              i18n("Error starting CppCheck"),
+                              i18n("Active file isn't in a project"));
+        return;
+    }
+
+    KSharedConfigPtr ptr = project->projectConfiguration();
+    KConfigGroup group = ptr->group("CppCheck");
+    if (!group.isValid()) {
+        QMessageBox::critical(nullptr,
+                              i18n("Error starting CppCheck"),
+                              i18n("Can't load parameters. They must be set in the project settings."));
+        return;
+    }
+
+    KConfigGroup group2 = KSharedConfig::openConfig()->group("CppCheck");
+    QUrl cppcheckPath = group2.readEntry("CppCheck Path");
+
+
+    Job::Parameters params;
+    params.parameters           = group.readEntry("cppcheckParameters", QString(""));
+    params.viewMode             = group.readEntry("OutputViewMode", "0").toInt();
+    params.checkStyle           = group.readEntry("AdditionalCheckStyle", false);
+    params.checkPerformance     = group.readEntry("AdditionalCheckPerformance", false);
+    params.checkPortability     = group.readEntry("AdditionalCheckPortability", false);
+    params.checkInformation     = group.readEntry("AdditionalCheckInformation", false);
+    params.checkUnusedFunction  = group.readEntry("AdditionalCheckUnusedFunction", false);
+    params.checkMissingInclude  = group.readEntry("AdditionalCheckMissingInclude", false);
+
+    if (cppcheckPath.toLocalFile().isEmpty())
+        params.executable = QStringLiteral("/usr/bin/cppcheck");
+    else
+        params.executable = cppcheckPath.toLocalFile();
+
+    if (allFiles)
+        params.path = project->path().toUrl().toLocalFile();
+    else
+        params.path = doc->url().toLocalFile();
+
     QList<KJob*> l;
-    l << new cppcheck::Job(this, allFiles, KDevelop::ICore::self()->runController());
+    Job *job = new cppcheck::Job(this, params, KDevelop::ICore::self()->runController());
+
+    l << job;
     KDevelop::ExecuteCompositeJob *ej = new KDevelop::ExecuteCompositeJob(KDevelop::ICore::self()->runController(), l);
     connect (l.first(), SIGNAL(jobFinished()), this, SLOT(result()));
     ej->start();
@@ -165,6 +225,22 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
         extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
     }
     return extension;
+}
+
+KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConfigOptions &options, QWidget *parent)
+{
+    if (number != 0)
+        return nullptr;
+    else
+        return new GenericConfigPage(options.project, parent);
+}
+
+KDevelop::ConfigPage* Plugin::configPage(int number, QWidget *parent)
+{
+    if (number != 0)
+        return nullptr;
+    else
+        return new CppCheckPreferences(this, parent);
 }
 
 }

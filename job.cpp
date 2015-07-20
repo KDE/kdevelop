@@ -73,38 +73,34 @@ class ModelParserFactoryPrivate
 {
 
 public:
-    void make(const QString& type, cppcheck::Model*& m_model, cppcheck::Parser*& m_parser);
+    void make(cppcheck::Model*& m_model, cppcheck::Parser*& m_parser, int viewMode);
 
 };
 
-void ModelParserFactoryPrivate::make(const QString& tool, cppcheck::Model*& m_model, cppcheck::Parser*& m_parser)
+void ModelParserFactoryPrivate::make(cppcheck::Model*& m_model, cppcheck::Parser*& m_parser, int viewMode)
 {
-    Q_UNUSED(tool);
     ModelWrapper* modelWrapper = 0;
-    KConfig config("kdevcppcheckrc");
-    KConfigGroup grp = config.group("cppcheck");
 
-    int OutputViewMode = grp.readEntry("OutputViewMode", 0);
-    if (OutputViewMode == cppcheck::CppcheckView::flatOutputMode)
+    if (viewMode == cppcheck::CppcheckView::flatOutputMode)
         m_model = new cppcheck::CppcheckModel();
-    else if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode)
+    else if (viewMode == cppcheck::CppcheckView::groupedByFileOutputMode)
         m_model = new cppcheck::CppcheckFileModel();
-    else if (OutputViewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode)
+    else if (viewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode)
         m_model = new cppcheck::CppcheckSeverityModel();
 
     modelWrapper = new ModelWrapper(m_model);    m_parser = new cppcheck::CppcheckParser(m_model);
 
-    if (OutputViewMode == cppcheck::CppcheckView::flatOutputMode) {
+    if (viewMode == cppcheck::CppcheckView::flatOutputMode) {
         QObject::connect(m_parser, SIGNAL(newElement(cppcheck::Model::eElementType)),
                             modelWrapper, SLOT(newElement(cppcheck::Model::eElementType)));
         QObject::connect(m_parser, SIGNAL(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)),
                             modelWrapper, SLOT(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)));
     }
-    else if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
+    else if (viewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
         QObject::connect(m_parser, SIGNAL(newItem(cppcheck::ModelItem*)),
                         modelWrapper, SLOT(newItem(cppcheck::ModelItem*)));
     }
-    else if (OutputViewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode) {
+    else if (viewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode) {
         QObject::connect(m_parser, SIGNAL(newItem(cppcheck::ModelItem*)),
                         modelWrapper, SLOT(newItem(cppcheck::ModelItem*)));
     }
@@ -116,7 +112,7 @@ void ModelParserFactoryPrivate::make(const QString& tool, cppcheck::Model*& m_mo
     m_model->reset();
 }
 
-Job::Job(cppcheck::Plugin* inst, bool allFiles, QObject* parent)
+Job::Job(cppcheck::Plugin* inst, const Parameters &params, QObject* parent)
     : KDevelop::OutputJob(parent)
     , m_process(new QProcess(this))
     , m_pid(0)
@@ -125,7 +121,7 @@ Job::Job(cppcheck::Plugin* inst, bool allFiles, QObject* parent)
     , m_applicationOutput(new KDevelop::ProcessLineMaker(this))
     , m_plugin(inst)
     , m_killed(false)
-    , allFiles(allFiles)
+    , parameters(params)
 {
     setCapabilities(KJob::Killable);
     m_process->setProcessChannelMode(QProcess::SeparateChannels);
@@ -139,10 +135,9 @@ Job::Job(cppcheck::Plugin* inst, bool allFiles, QObject* parent)
             SLOT(processErrored(QProcess::ProcessError)));
 
     // create the correct model for each tool
-    QString tool = "cppcheck";
     ModelParserFactoryPrivate factory;
 
-    factory.make(tool, m_model, m_parser);
+    factory.make(m_model, m_parser, parameters.viewMode);
     m_model->getModelWrapper()->job(this);
     m_plugin->incomingModel(m_model);
 
@@ -158,36 +153,6 @@ Job::~Job()
     delete m_parser;
 }
 
-void        Job::processModeArgs(QStringList& out,
-                                 const t_cppcheck_cfg_argarray mode_args,
-                                 int mode_args_count,
-                                 KConfigGroup& cfg) const
-{
-    // For each option, set the right string in the arguments list
-    for (int i = 0; i < mode_args_count; ++i) {
-        QString val;
-        QString argtype = mode_args[i][2];
-
-        if (argtype == "str")
-            val = cfg.readEntry(mode_args[i][0]);
-        else if (argtype == "int") {
-            int n = cfg.readEntry(mode_args[i][0], 0);
-            if (n) {
-                val.sprintf("%d", n);
-            }
-        } else if (argtype == "bool") {
-            bool n = cfg.readEntry(mode_args[i][0], false);
-            val = n ? "yes" : "no";
-        } else if (argtype == "float") {
-            int n = cfg.readEntry(mode_args[i][0], 1);
-            val.sprintf("%d.0", n);
-        }
-        if (val.length()) {
-            QString argument = QString(mode_args[i][1]) + val;
-            out << argument;
-        }
-    }
-}
 
 void Job::readyReadStandardError()
 {
@@ -205,76 +170,47 @@ void Job::readyReadStandardOutput()
 
 QStringList Job::buildCommandLine() const
 {
-    static const t_cppcheck_cfg_argarray generic_args = {
-    };
-    static const int        generic_args_count = sizeof(generic_args) / sizeof(*generic_args);
-
-    KConfig config("kdevcppcheckrc");
-    KConfigGroup cfg = config.group("cppcheck");
-
     QStringList     args;
-    args.append(KShell::splitArgs(cfg.readEntry("Cppcheck Arguments", "")));
 
     args.append("--force");
     args.append("--xml-version=2");
 
     /* extra parameters */
-    QString cppcheckParameters(cfg.readEntry("cppcheckParameters", ""));
+    QString cppcheckParameters(parameters.parameters);
     if (!cppcheckParameters.isEmpty())
         args.append(cppcheckParameters);
 
-    bool additionalCheckStyle = cfg.readEntry("AdditionalCheckStyle", false);
-    if (additionalCheckStyle)
+    if (parameters.checkStyle)
         args.append("--enable=style");
 
-    bool additionalCheckPerformance = cfg.readEntry("AdditionalCheckPerformance", false);
-    if (additionalCheckPerformance)
+    if (parameters.checkPerformance)
         args.append("--enable=performance");
 
 
-    bool additionalCheckPortability = cfg.readEntry("AdditionalCheckPortability", false);
-    if (additionalCheckPortability)
+    if (parameters.checkPortability)
         args.append("--enable=portability");
-    bool additionalCheckInformation = cfg.readEntry("AdditionalCheckInformation", false);
-    if (additionalCheckInformation)
+
+    if (parameters.checkInformation)
         args.append("--enable=information");
 
-    bool AdditionalCheckUnusedFunction = cfg.readEntry("AdditionalCheckUnusedFunction", false);
-    if (AdditionalCheckUnusedFunction)
+    if (parameters.checkUnusedFunction)
         args.append("--enable=unusedFunction");
 
-    bool additionalCheckMissingInclude = cfg.readEntry("AdditionalCheckMissingInclude", false);
-    if (additionalCheckMissingInclude)
+    if (parameters.checkMissingInclude)
         args.append("--enable=missingInclude");
 
-    if (allFiles == false) {
-        qCDebug(KDEV_CPPCHECK) << "checking file: " << m_plugin->core()->documentController()->activeDocument()->url().toLocalFile() << "(" << "" << ")";
-        args.append(m_plugin->core()->documentController()->activeDocument()->url().toLocalFile());
-    } else {
-        qCDebug(KDEV_CPPCHECK) << "checking all files";
-        // project path
-        for (int i = 0; i < KDevelop::ICore::self()->projectController()->projects().count(); i++) {
-            args.append(KDevelop::ICore::self()->projectController()->projects().at(i)->path().toUrl().toLocalFile());
-        }
-    }
+    qCDebug(KDEV_CPPCHECK) << "checking paht" << parameters.path;
+    args.append(parameters.path);
 
-    QString         tool = cfg.readEntry("Current Tool", "cppcheck");
-    processModeArgs(args, generic_args, generic_args_count, cfg);
-
-    addToolArgs(args, cfg);
     return args;
 }
 
 void Job::start()
 {
-    KConfig config("kdevcppcheckrc");
-    KConfigGroup grp = config.group("cppcheck");    KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
-
-    QUrl cppcheckExecutable(grp.readEntry("CppcheckExecutable", QUrl::fromLocalFile("/usr/bin/cppcheck")));
-
-    QString err;
+    QUrl cppcheckExecutable(QUrl::fromLocalFile(parameters.executable));
 
     QString envgrp = "";
+    KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
 
     setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
@@ -414,16 +350,6 @@ void Job::processEnded()
 KDevelop::OutputModel* Job::model()
 {
     return dynamic_cast<KDevelop::OutputModel*>(KDevelop::OutputJob::model());
-}
-
-void Job::addToolArgs(QStringList& args, KConfigGroup& cfg) const
-{
-    static const t_cppcheck_cfg_argarray cppcheck_args = {
-        {"Cppcheck Arguments", "", "str"},
-    };
-    static const int        count = sizeof(cppcheck_args) / sizeof(*cppcheck_args);
-
-    processModeArgs(args, cppcheck_args, count, cfg);
 }
 
 /*

@@ -47,6 +47,8 @@ set(kdevcppcheck_PART_SRCS
     iparser.cpp
     plugin.cpp
     widget.cpp
+    config/genericconfigpage.cpp
+    config/cppcheckpreferences.cpp
     models/cppcheckmodel.cpp
     models/cppcheckitemsimpl.cpp
     models/cppcheck_file_model.cpp
@@ -64,7 +66,9 @@ set(kdevcppcheck_CONFIG_SRCS
 set(kdevcppcheck_PART_UI
 )
 
-ki18n_wrap_ui(kdevcppcheck_PART_SRCS  ${kdevcppcheck_PART_UI})
+ki18n_wrap_ui(kdevcppcheck_PART_SRCS  ${kdevcppcheck_PART_UI} config/ui/genericconfig.ui config/ui/cppchecksettings.ui)
+
+kconfig_add_kcfg_files(kdevcppcheck_PART_SRCS config/cppcheckconfig.kcfgc)
 
 kdevplatform_add_plugin(kdevcppcheck JSON kdevcppcheck.json SOURCES ${kdevcppcheck_PART_SRCS} ${kdevcppcheck_CONFIG_SRCS})
 
@@ -85,20 +89,3 @@ install(TARGETS kdevcppcheck DESTINATION ${PLUGIN_INSTALL_DIR} )
 ########### install files ###############
 
 install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
-
-#preferences-plugin
-set(cppcheckpreferences_PART_SRCS 
-    debug.cpp
-    config/genericconfigpage.cpp
-)
-ki18n_wrap_ui(cppcheckpreferences_PART_SRCS config/ui/genericconfig.ui)
-
-kdevplatform_add_plugin(kcm_kdev_cppcheck JSON kcm_kdev_cppcheck.json SOURCES ${cppcheckpreferences_PART_SRCS} )
-
-target_link_libraries(kcm_kdev_cppcheck
-    KDev::Interfaces
-    KF5::KIOCore
-)
-
-install(TARGETS kcm_kdev_cppcheck  DESTINATION ${PLUGIN_INSTALL_DIR})
-

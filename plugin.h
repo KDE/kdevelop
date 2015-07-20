@@ -56,6 +56,12 @@ public:
     void incomingModel(cppcheck::Model* model);
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
+    virtual int configPages() const override { return 1; }
+    virtual KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
+
+    virtual int perProjectConfigPages() const override { return 1; }
+    virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions &options, QWidget *parent) override;
+
 signals:
     void newModel(cppcheck::Model* model);
 
