@@ -23,6 +23,7 @@
 #include <project/projectexport.h>
 
 #include <QtCore/QObject>
+#include <QtCore/QUrl>
 
 class KJob;
 
@@ -46,12 +47,14 @@ public:
 
     /**
      * Installs the given project @p item, exact behaviour depends
-     * on the implementation
+     * on the implementation.
+     *
+     * @param specificPrefix defines where the project will be installed.
      */
-    virtual KJob* install(ProjectBaseItem* item) = 0;
+    virtual KJob* install(ProjectBaseItem* item, const QUrl &specificPrefix = {}) = 0;
 
     /**
-     * Builds the given project item, exact behaviour depends
+     * Builds the given project @p item, exact behaviour depends
      * on the implementation
      */
     virtual KJob* build(ProjectBaseItem *item) = 0;
