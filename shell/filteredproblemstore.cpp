@@ -29,6 +29,17 @@ using namespace KDevelop;
 namespace
 {
 
+// Adds diagnostics as sub-nodes
+void addDiagnostics(ProblemStoreNode *node, const QVector<IProblem::Ptr> &diagnostics)
+{
+    foreach (const IProblem::Ptr &ptr, diagnostics) {
+        ProblemNode *child = new ProblemNode(node, ptr);
+        node->addChild(child);
+
+        addDiagnostics(child, ptr->diagnostics());
+    }
+}
+
 // Base class for grouping strategy classes
 // These classes build the problem tree based on the respective strategies
 class GroupingStrategy
@@ -88,7 +99,10 @@ public:
 
     void addProblem(const IProblem::Ptr &problem) override
     {
-        m_groupedRootNode->addChild(new ProblemNode(m_groupedRootNode.data(), problem));
+        ProblemNode *node = new ProblemNode(m_groupedRootNode.data(), problem);
+        addDiagnostics(node, problem->diagnostics());
+        m_groupedRootNode->addChild(node);
+
     }
 
 };
@@ -123,7 +137,9 @@ public:
             m_groupedRootNode->addChild(parent);
         }
 
-        parent->addChild(new ProblemNode(parent, problem));
+        ProblemNode *node = new ProblemNode(parent, problem);
+        addDiagnostics(node, problem->diagnostics());
+        parent->addChild(node);
     }
 
 };
@@ -160,7 +176,9 @@ public:
             case IProblem::Hint: parent = m_groupedRootNode->child(GroupHint); break;
         }
 
-        parent->addChild(new ProblemNode(m_groupedRootNode.data(), problem));
+        ProblemNode *node = new ProblemNode(m_groupedRootNode.data(), problem);
+        addDiagnostics(node, problem->diagnostics());
+        parent->addChild(node);
     }
 
     void clear()
