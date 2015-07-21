@@ -70,10 +70,12 @@ struct EditorDisableReplaceTabs {
 
 struct KDevEditingTransaction {
     KDevEditingTransaction(KTextEditor::Document* document)
-    : disableReplaceTabs(document)
-    , edit(document) { }
-    EditorDisableReplaceTabs disableReplaceTabs;
+        : edit(document)
+        , disableReplaceTabs(document)
+    {}
+    // NOTE: It's important to close the transaction first and only then destroy the EditorDisableReplaceTabs. Otherwise we hit asserts in KTextEditor.
     KTextEditor::Document::EditingTransaction edit;
+    EditorDisableReplaceTabs disableReplaceTabs;
     typedef std::unique_ptr<KDevEditingTransaction> Ptr;
 };
 
