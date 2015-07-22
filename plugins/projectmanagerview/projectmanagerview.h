@@ -76,12 +76,14 @@ private slots:
     void locateCurrentDocument();
     void updateSyncAction();
     void open( const KDevelop::Path& );
+    void toggleHideTargets(bool hidden);
 
 private:
     QModelIndex indexFromView(const QModelIndex& index) const;
     QModelIndex indexToView(const QModelIndex& index) const;
 
     QAction* m_syncAction;
+    QAction* m_toggleTargetsAction;
     Ui::ProjectManagerView* m_ui;
     QStringList m_cachedFileList;
     ProjectProxyModel* m_modelFilter;

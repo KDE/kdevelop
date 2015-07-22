@@ -43,8 +43,14 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyMode
         QModelIndex proxyIndexFromItem(KDevelop::ProjectBaseItem* item) const;
         KDevelop::ProjectBaseItem* itemFromProxyIndex(const QModelIndex&) const;
 
+        void showTargets(bool visible);
+
+    protected:
+        bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const Q_DECL_OVERRIDE;
+
     private:
         KDevelop::ProjectModel* projectModel() const;
+        bool m_showTargets;
 
 };
 

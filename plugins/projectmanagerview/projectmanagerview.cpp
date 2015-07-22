@@ -67,6 +67,7 @@ ProjectManagerView *ProjectManagerViewItemContext::view() const
 
 static const char sessionConfigGroup[] = "ProjectManagerView";
 static const char splitterStateConfigKey[] = "splitterState";
+static const char targetsVisibleConfigKey[] = "targetsVisible";
 static const int projectTreeViewStrechFactor = 75; // %
 static const int projectBuildSetStrechFactor = 25; // %
 
@@ -99,6 +100,13 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     addAction(m_syncAction);
     updateSyncAction();
 
+    m_toggleTargetsAction = new QAction(i18n("Show Targets"), this);
+    m_toggleTargetsAction->setCheckable(true);
+    m_toggleTargetsAction->setChecked(pmviewConfig.readEntry<bool>(targetsVisibleConfigKey, true));
+    m_toggleTargetsAction->setIcon(QIcon::fromTheme("system-run"));
+    connect(m_toggleTargetsAction, &QAction::triggered, this, &ProjectManagerView::toggleHideTargets);
+    addAction(m_toggleTargetsAction);
+
     addAction(plugin->actionCollection()->action("project_build"));
     addAction(plugin->actionCollection()->action("project_install"));
     addAction(plugin->actionCollection()->action("project_clean"));
@@ -108,6 +116,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_ui->buildSetView->setProjectView( this );
 
     m_modelFilter = new ProjectProxyModel( this );
+    m_modelFilter->showTargets(m_toggleTargetsAction->isChecked());
     m_modelFilter->setSourceModel(ICore::self()->projectController()->projectModel());
     m_overlayProxy = new VcsOverlayProxyModel( this );
     m_overlayProxy->setSourceModel(m_modelFilter);
@@ -209,6 +218,13 @@ void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
 void ProjectManagerView::expandItem(ProjectBaseItem* item)
 {
     m_ui->projectTreeView->expand( indexToView(item->index()));
+}
+
+void ProjectManagerView::toggleHideTargets(bool visible)
+{
+    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
+    pmviewConfig.writeEntry<bool>(targetsVisibleConfigKey, visible);
+    m_modelFilter->showTargets(visible);
 }
 
 void ProjectManagerView::locateCurrentDocument()

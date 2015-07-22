@@ -19,9 +19,11 @@
 
 #include "projectproxymodel.h"
 #include <project/projectmodel.h>
+#include <QDebug>
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)
+    , m_showTargets(true)
 {
     setDynamicSortFilter(true);
     sort(0); //initiate sorting regardless of the view
@@ -38,6 +40,30 @@ bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & r
     if(!iLeft || !iRight) return false;
 
     return( iLeft->lessThan( iRight ) );
+}
+
+void ProjectProxyModel::showTargets(bool visible)
+{
+    if (visible != m_showTargets) {
+        m_showTargets = visible;
+        invalidateFilter();
+    }
+}
+
+bool ProjectProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    if (m_showTargets) {
+        return true;
+    }
+    else {
+        // Get the base item for the associated parent and row.
+        QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
+        auto *item = projectModel()->itemFromIndex(index);
+        // If it's a target, return false, otherwise true.
+        return item->type() != KDevelop::ProjectBaseItem::Target
+            && item->type() != KDevelop::ProjectBaseItem::LibraryTarget
+            && item->type() != KDevelop::ProjectBaseItem::ExecutableTarget;
+    }
 }
 
 QModelIndex ProjectProxyModel::proxyIndexFromItem(KDevelop::ProjectBaseItem* item) const
