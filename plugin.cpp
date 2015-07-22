@@ -46,22 +46,23 @@
 #include <interfaces/iproject.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <util/executecompositejob.h>
+
+#include <shell/problemmodelset.h>
+#include <shell/problemmodel.h>
 
 #include <language/interfaces/editorcontext.h>
 
 #include "debug.h"
 #include "plugin.h"
-#include "marks.h"
-#include "cppcheckmodel.h"
 #include "job.h"
-#include "widget.h"
 
 #include <KXMLGUIFactory>
 
 #include "./config/genericconfigpage.h"
 #include "./config/cppcheckpreferences.h"
-#include <kdevplatform/project/projectconfigpage.h>
+#include <project/projectconfigpage.h>
 
 #include <QMessageBox>
 
@@ -72,37 +73,14 @@ K_PLUGIN_FACTORY_WITH_JSON(CppcheckFactory, "kdevcppcheck.json", registerPlugin<
 namespace cppcheck
 {
 
-WidgetFactory::WidgetFactory(cppcheck::Plugin* plugin)
-        : m_plugin(plugin)
-{
-}
-
-QWidget* WidgetFactory::create(QWidget *parent)
-{
-        return new cppcheck::Widget(m_plugin, parent);
-}
-
-Qt::DockWidgetArea WidgetFactory::defaultPosition()
-{
-    return Qt::BottomDockWidgetArea;
-}
-
-QString WidgetFactory::id() const
-{
-    return "org.kdevelop.CppcheckView";
-}
-
-
 Plugin::Plugin(QObject *parent, const QVariantList&)
     : IPlugin("kdevcppcheck", parent)
-    , m_factory(new cppcheck::WidgetFactory(this))
-    , m_marks(new cppcheck::Marks(this))
+    , m_model(new KDevelop::ProblemModel(parent))
 {
 
     qCDebug(KDEV_CPPCHECK) << "setting cppcheck rc file";
     setXMLFile("kdevcppcheck.rc");
 
-    core()->uiController()->addToolView(i18n("Cppcheck"), m_factory);
     QAction* act_checkfile;
     act_checkfile = actionCollection()->addAction("cppcheck_file", this, SLOT(runCppcheckFile()));
     act_checkfile->setStatusTip(i18n("Launches Cppcheck for current file"));
@@ -115,16 +93,15 @@ Plugin::Plugin(QObject *parent, const QVariantList&)
 
     IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
     Q_ASSERT(iface);
+
+    ProblemModelSet *pms = core()->languageController()->problemModelSet();
+    pms->addModel(QStringLiteral("CppCheck"), m_model.data());
 }
 
 void Plugin::unload()
 {
-    core()->uiController()->removeToolView(m_factory);
-}
-
-void Plugin::incomingModel(cppcheck::Model *model)
-{
-    emit newModel(model);
+    ProblemModelSet *pms = core()->languageController()->problemModelSet();
+    pms->removeModel(QStringLiteral("CppCheck"));
 }
 
 Plugin::~Plugin()
@@ -183,11 +160,11 @@ void Plugin::runCppcheck(bool allFiles)
         params.path = doc->url().toLocalFile();
 
     QList<KJob*> l;
-    Job *job = new cppcheck::Job(this, params, KDevelop::ICore::self()->runController());
+    Job *job = new cppcheck::Job(params, KDevelop::ICore::self()->runController());
 
     l << job;
     KDevelop::ExecuteCompositeJob *ej = new KDevelop::ExecuteCompositeJob(KDevelop::ICore::self()->runController(), l);
-    connect (l.first(), SIGNAL(jobFinished()), this, SLOT(result()));
+    connect (l.first(), SIGNAL(finished(KJob*)), this, SLOT(result(KJob*)));
     ej->start();
 }
 
@@ -208,11 +185,13 @@ void Plugin::loadOutput()
 {
 }
 
-void Plugin::result()
+void Plugin::result(KJob *job)
 {
-    
-    QWidget *toolview_widget = KDevelop::ICore::self()->uiController()->findToolView(i18n("Cppcheck"), m_factory);
-    KDevelop::ICore::self()->uiController()->raiseToolView(toolview_widget);
+    Job *aj = dynamic_cast<Job*>(job);
+    if (!aj)
+        return;
+
+    m_model->setProblems(aj->problems());
 }
 
 KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context)

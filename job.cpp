@@ -53,73 +53,21 @@
 
 #include <QDir>
 
-#include "cppcheckmodel.h"
-#include "cppcheck_file_model.h"
-#include "cppcheck_severity_model.h"
 #include "cppcheckparser.h"
-#include "cppcheckview.h"
 
 #include "debug.h"
 #include "plugin.h"
-#include "modelwrapper.h"
 
 namespace cppcheck
 {
-/*!
- * Creates a model and a parser according to the specified name and
- * connects the 2 items
- */
-class ModelParserFactoryPrivate
-{
-
-public:
-    void make(cppcheck::Model*& m_model, cppcheck::Parser*& m_parser, int viewMode);
-
-};
-
-void ModelParserFactoryPrivate::make(cppcheck::Model*& m_model, cppcheck::Parser*& m_parser, int viewMode)
-{
-    ModelWrapper* modelWrapper = 0;
-
-    if (viewMode == cppcheck::CppcheckView::flatOutputMode)
-        m_model = new cppcheck::CppcheckModel();
-    else if (viewMode == cppcheck::CppcheckView::groupedByFileOutputMode)
-        m_model = new cppcheck::CppcheckFileModel();
-    else if (viewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode)
-        m_model = new cppcheck::CppcheckSeverityModel();
-
-    modelWrapper = new ModelWrapper(m_model);    m_parser = new cppcheck::CppcheckParser(m_model);
-
-    if (viewMode == cppcheck::CppcheckView::flatOutputMode) {
-        QObject::connect(m_parser, SIGNAL(newElement(cppcheck::Model::eElementType)),
-                            modelWrapper, SLOT(newElement(cppcheck::Model::eElementType)));
-        QObject::connect(m_parser, SIGNAL(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)),
-                            modelWrapper, SLOT(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)));
-    }
-    else if (viewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
-        QObject::connect(m_parser, SIGNAL(newItem(cppcheck::ModelItem*)),
-                        modelWrapper, SLOT(newItem(cppcheck::ModelItem*)));
-    }
-    else if (viewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode) {
-        QObject::connect(m_parser, SIGNAL(newItem(cppcheck::ModelItem*)),
-                        modelWrapper, SLOT(newItem(cppcheck::ModelItem*)));
-    }
-    m_model->setModelWrapper(modelWrapper);
-    QObject::connect(m_parser, SIGNAL(reset()), modelWrapper, SLOT(reset()));
 
 
-
-    m_model->reset();
-}
-
-Job::Job(cppcheck::Plugin* inst, const Parameters &params, QObject* parent)
+Job::Job(const Parameters &params, QObject* parent)
     : KDevelop::OutputJob(parent)
     , m_process(new QProcess(this))
     , m_pid(0)
-    , m_model(0)
-    , m_parser(0)
+    , m_parser(new cppcheck::CppcheckParser())
     , m_applicationOutput(new KDevelop::ProcessLineMaker(this))
-    , m_plugin(inst)
     , m_killed(false)
     , parameters(params)
 {
@@ -134,20 +82,11 @@ Job::Job(cppcheck::Plugin* inst, const Parameters &params, QObject* parent)
     connect(m_process, SIGNAL(error(QProcess::ProcessError)),
             SLOT(processErrored(QProcess::ProcessError)));
 
-    // create the correct model for each tool
-    ModelParserFactoryPrivate factory;
-
-    factory.make(m_model, m_parser, parameters.viewMode);
-    m_model->getModelWrapper()->job(this);
-    m_plugin->incomingModel(m_model);
-
 }
 
 Job::~Job()
 {
     doKill();
-    if (m_model && m_model->getModelWrapper())
-        m_model->getModelWrapper()->job(0);
     delete m_process;
     delete m_applicationOutput;
     delete m_parser;
@@ -242,8 +181,6 @@ void Job::start()
 
 
 
-    emit updateTabText(m_model, i18n("job running (pid=%1)",  m_pid));
-
     processStarted();
 }
 
@@ -257,11 +194,9 @@ bool Job::doKill()
     return true;
 }
 
-
-
-cppcheck::Plugin* Job::plugin() const
+QVector<KDevelop::IProblem::Ptr> Job::problems() const
 {
-    return m_plugin;
+    return m_parser->problems();
 }
 
 void Job::processErrored(QProcess::ProcessError e)
@@ -328,7 +263,6 @@ void Job::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
         m_parser->parse();
         string_device->close();
 
-        emit updateTabText(m_model, tabname);
     }
     processEnded();
     emitResult();

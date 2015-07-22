@@ -24,7 +24,8 @@
 
 #include <QXmlStreamReader>
 
-#include "imodel.h"
+#include <QVector>
+#include <interfaces/iproblem.h>
 
 namespace cppcheck
 {
@@ -37,26 +38,13 @@ public:
 
     Parser(QObject* parent = 0);
 
+    virtual QVector<KDevelop::IProblem::Ptr> problems() const = 0;
+
 signals:
-    /**
-     * Emission of a new item from the parser
-     */
-    void newElement(cppcheck::Model::eElementType);
-
-    /**
-     * Emission of data to register from the parser
-     */
-    void newData(cppcheck::Model::eElementType, QString name, QString value);
-
     /**
     * Resets the parser content
     */
     void reset();
-
-    /**
-     * Emission of an item from a parser to a model
-     */
-    void newItem(ModelItem*);
 
 public slots:
 

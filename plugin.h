@@ -31,16 +31,17 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/contextmenuextension.h>
 
-#include "imodel.h"
-
 class KJob;
 class QTreeView;
+
+namespace KDevelop
+{
+class ProblemModel;
+}
 
 namespace cppcheck
 {
 class Control;
-class Marks;
-class WidgetFactory;
 
 class Plugin : public KDevelop::IPlugin
 {
@@ -53,7 +54,6 @@ public:
 
     void unload();
 
-    void incomingModel(cppcheck::Model* model);
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
     virtual int configPages() const override { return 1; }
@@ -62,37 +62,19 @@ public:
     virtual int perProjectConfigPages() const override { return 1; }
     virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions &options, QWidget *parent) override;
 
-signals:
-    void newModel(cppcheck::Model* model);
-
 private slots:
     void loadOutput();
     void runCppcheck(bool allFiles);
     void runCppcheckFile();
     void runCppcheckAll();
-    void result();
+    void result(KJob *job);
 
 private:
     QString m_lastExec, m_lastParams, m_lastValExec, m_lastValParams,
             m_lastCtExec, m_lastCtParams, m_lastKcExec;
-    cppcheck::WidgetFactory *m_factory;
-    cppcheck::Marks         *m_marks;
+
+    QScopedPointer<KDevelop::ProblemModel> m_model;
 };
-
-class WidgetFactory : public KDevelop::IToolViewFactory
-{
-public:
-    WidgetFactory(cppcheck::Plugin* plugin);
-
-    QWidget* create(QWidget *parent = 0);
-
-    Qt::DockWidgetArea defaultPosition();
-    QString id() const;
-
-private:
-    cppcheck::Plugin* m_plugin;
-};
-
 
 }
 

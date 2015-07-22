@@ -25,7 +25,7 @@
 
 #include "ui_genericconfig.h"
 
-#include <kdevplatform/interfaces/iproject.h>
+#include <interfaces/iproject.h>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -40,9 +40,6 @@ GenericConfigPage::GenericConfigPage(KDevelop::IProject *project, QWidget* paren
 
     ui = new Ui::GenericConfig();
     ui->setupUi(this);
-    ui->OutputViewModeComboBox->addItem(i18n("Flat list"));
-    ui->OutputViewModeComboBox->addItem(i18n("Grouped by file"));
-    ui->OutputViewModeComboBox->addItem(i18n("Grouped by severity"));
 }
 GenericConfigPage::~GenericConfigPage(void)
 {
@@ -60,7 +57,6 @@ void GenericConfigPage::apply()
     KConfigGroup group = ptr->group("CppCheck");
 
     group.writeEntry("cppcheckParameters", ui->cppcheckParameters->text());
-    group.writeEntry("OutputViewMode", ui->OutputViewModeComboBox->currentIndex());
     group.writeEntry("AdditionalCheckStyle", ui->styleCheckBox->isChecked());
     group.writeEntry("AdditionalCheckPerformance", ui->performanceCheckBox->isChecked());
     group.writeEntry("AdditionalCheckPortability", ui->portabilityCheckBox->isChecked());
@@ -85,7 +81,6 @@ void GenericConfigPage::reset()
     blockSignals(true);
 
     ui->cppcheckParameters->setText(group.readEntry("cppcheckParameters", QString("")));
-    ui->OutputViewModeComboBox->setCurrentIndex(group.readEntry("OutputViewMode", "0").toInt());
     ui->styleCheckBox->setChecked(group.readEntry("AdditionalCheckStyle", false));
     ui->performanceCheckBox->setChecked(group.readEntry("AdditionalCheckPerformance", false));
     ui->portabilityCheckBox->setChecked(group.readEntry("AdditionalCheckPortability", false));

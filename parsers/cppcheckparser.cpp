@@ -31,17 +31,18 @@
 
 #include <util/path.h>
 
+#include <shell/problem.h>
+
 namespace cppcheck {
 
 
-CppcheckParser::CppcheckParser(cppcheck::Model *m_model, QObject* parent) :
+CppcheckParser::CppcheckParser(QObject* parent) :
     ErrorLine(0),
     ErrorFile(""),
     Message(""),
     MessageVerbose(""),
     Severity(Unknown),
-    ProjectPath(""),
-    m_model(m_model)
+    ProjectPath("")
 {
     Q_UNUSED(parent)
 }
@@ -101,11 +102,6 @@ bool CppcheckParser::startElement()
         if (attributes().hasAttribute("severity"))
             Severity = attributes().value("severity").toString();
 
-        
-        if (dynamic_cast<cppcheck::CppcheckModel *>(m_model))
-            emit newElement(cppcheck::CppcheckModel::startError);
-//         if (dynamic_cast<cppcheck::CppcheckFileModel *>(m_model))
-//             emit newElement(cppcheck::CppcheckFileModel::startError);
     } else {
         m_stateStack.push(m_stateStack.top());
         return true;
@@ -128,20 +124,8 @@ bool CppcheckParser::endElement()
         break;
     case Error:
         qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: new error elem: line: " << ErrorLine << " at " << ErrorFile << ", msg: " << Message;
-        if (dynamic_cast<cppcheck::CppcheckModel *>(m_model))
-            emit newData(cppcheck::CppcheckModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
-        else if (dynamic_cast<cppcheck::CppcheckFileModel *>(m_model)) {
-            //emit newData(cppcheck::CppcheckFileModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
-            CppcheckFileItem *m_item = new CppcheckFileItem();
-            m_item->incomingData(name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
-            emit newItem(m_item);
-        }
-        else if (dynamic_cast<cppcheck::CppcheckSeverityModel *>(m_model)) {
-            //emit newData(cppcheck::CppcheckSeverityModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
-            CppcheckSeverityItem *m_item = new CppcheckSeverityItem();
-            m_item->incomingData(name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
-            emit newItem(m_item);
-        }
+
+        storeError();
         break;
     case Results:
         // results finished
@@ -180,7 +164,7 @@ void CppcheckParser::parse()
             break;
         }
     }
-    emit newItem(NULL);
+
     qCDebug(KDEV_CPPCHECK) << "CppcheckParser::parse: end";
 
     if (hasError()) {
@@ -195,6 +179,31 @@ void CppcheckParser::parse()
             break;
         }
     }
+}
+
+void CppcheckParser::storeError()
+{
+   KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem());
+   problem->setDescription(Message);
+   problem->setExplanation(MessageVerbose);
+
+   KDevelop::DocumentRange range;
+   range.document = KDevelop::IndexedString(ProjectPath + ErrorFile);
+   range.setBothLines(ErrorLine - 1);
+
+   problem->setFinalLocation(range);
+
+   if (Severity == "error")
+       problem->setSeverity(KDevelop::IProblem::Error);
+   else
+   if (Severity == "warning")
+       problem->setSeverity(KDevelop::IProblem::Warning);
+   else
+       problem->setSeverity(KDevelop::IProblem::Hint);
+
+   problem->setSource(KDevelop::IProblem::Plugin);
+
+   m_problems.push_back(problem);
 }
 
 }

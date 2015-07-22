@@ -18,7 +18,7 @@
 #ifndef CPPCHECKPREFERENCES_H
 #define CPPCHECKPREFERENCES_H
 
-#include <kdevplatform/interfaces/configpage.h>
+#include <interfaces/configpage.h>
 
 class CppCheckSettings;
 

@@ -29,10 +29,7 @@ include_directories(
     ${cppcheck_BINARY_DIR}
     ${cppcheck_SOURCE_DIR}
     ${cppcheck_SOURCE_DIR}/config
-    ${cppcheck_SOURCE_DIR}/models
     ${cppcheck_SOURCE_DIR}/parsers
-    ${cppcheck_SOURCE_DIR}/jobs
-    ${cppcheck_SOURCE_DIR}/views
 )
 
 
@@ -41,22 +38,11 @@ include_directories(
 set(kdevcppcheck_PART_SRCS
     debug.cpp
     job.cpp
-    marks.cpp
-    imodel.cpp
-    modelwrapper.cpp
     iparser.cpp
     plugin.cpp
-    widget.cpp
     config/genericconfigpage.cpp
     config/cppcheckpreferences.cpp
-    models/cppcheckmodel.cpp
-    models/cppcheckitemsimpl.cpp
-    models/cppcheck_file_model.cpp
-    models/cppcheck_severity_model.cpp
-    models/cppcheck_file_item.cpp
-    models/cppcheck_severity_item.cpp
     parsers/cppcheckparser.cpp
-    views/cppcheckview.cpp
 )
 
 set(kdevcppcheck_CONFIG_SRCS
@@ -78,6 +64,7 @@ target_link_libraries(kdevcppcheck
     KDev::Language
     KDev::OutputView
     KDev::Util
+    KDev::Shell
     KF5::ConfigCore
     KF5::IconThemes
     KF5::KIOCore

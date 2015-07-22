@@ -54,7 +54,6 @@ class LaunchConfiguration;
 
 namespace cppcheck
 {
-class Plugin;
 class Parser;
 
 class Job : public KDevelop::OutputJob
@@ -76,15 +75,15 @@ public:
         QString executable;
     };
 
-    Job(cppcheck::Plugin* inst, const Parameters &params, QObject* parent = 0);
+    Job(const Parameters &params, QObject* parent = 0);
     ~Job();
-    cppcheck::Plugin* plugin() const;
     KDevelop::OutputModel* model();
     void start();
     bool doKill();
 
+    QVector<KDevelop::IProblem::Ptr> problems() const;
+
 signals:
-    void updateTabText(cppcheck::Model*, const QString& text);
     void jobFinished();
 
 private slots:
@@ -110,12 +109,10 @@ protected:
     QUrl m_workingDir;
     int m_pid;
 
-    cppcheck::Model* m_model;
     cppcheck::Parser* m_parser;
 
     KDevelop::ProcessLineMaker* m_applicationOutput;
     KDevelop::ILaunchConfiguration* m_launchcfg;
-    cppcheck::Plugin* m_plugin;
 
     // The cppcheck output file
     QFile* m_file;

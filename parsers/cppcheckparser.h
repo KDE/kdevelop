@@ -22,11 +22,7 @@
 
 #include <QXmlStreamReader>
 #include <QApplication>
-
-#include "cppcheckitems.h"
-#include "cppcheckmodel.h"
-#include "cppcheck_file_model.h"
-#include "cppcheck_severity_model.h"
+#include <QStack>
 
 #include "iparser.h"
 
@@ -43,19 +39,12 @@ class CppcheckParser : public Parser
 
 public:
 
-    CppcheckParser(cppcheck::Model *m_model, QObject* parent = 0);
+    CppcheckParser(QObject* parent = 0);
     ~CppcheckParser();
 
+    QVector<KDevelop::IProblem::Ptr> problems() const override{ return m_problems; }
 
 signals:
-
-    /**
-     * Emits this signal when a new item is parsed
-     */
-    void newElement(cppcheck::Model::eElementType);
-    void newData(cppcheck::Model::eElementType, QString name, QString value, int Line, QString SourceFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
-    void newItem(cppcheck::ModelItem*);
-
     void reset();
 
 public slots:
@@ -64,6 +53,7 @@ public slots:
 
 
 private:
+    void storeError();
 
     // XML parsing
     bool endElement();
@@ -91,7 +81,7 @@ private:
     QString Severity;
     QString ProjectPath;
 
-   cppcheck::Model *m_model;
+    QVector<KDevelop::IProblem::Ptr> m_problems;
 
 };
 }

@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include <kdevplatform/interfaces/configpage.h>
+#include <interfaces/configpage.h>
 
 class QIcon;
 
