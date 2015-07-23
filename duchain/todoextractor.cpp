@@ -160,10 +160,10 @@ TodoExtractor::TodoExtractor(CXTranslationUnit unit, CXFile file)
 
 void TodoExtractor::extractTodos()
 {
-    std::numeric_limits<uint> uintLimit;
+    using uintLimits = std::numeric_limits<uint>;
 
     auto start = clang_getLocation(m_unit, m_file, 1, 1);
-    auto end = clang_getLocation(m_unit, m_file, uintLimit.max(), uintLimit.max());
+    auto end = clang_getLocation(m_unit, m_file, uintLimits::max(), uintLimits::max());
 
     auto range = clang_getRange(start, end);
 
