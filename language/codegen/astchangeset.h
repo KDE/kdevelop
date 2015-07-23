@@ -71,7 +71,7 @@ public:
             ItemMove
         };
 
-        AstChange(ChangeTypes t)
+        explicit AstChange(ChangeTypes t)
             : type(t)
             , newNode(0)
             , listOffset(-1)

@@ -44,7 +44,7 @@ class KDEVPLATFORMSHELL_EXPORT ProblemModelSet : public QObject
 {
     Q_OBJECT
 public:
-    ProblemModelSet(QObject *parent = nullptr);
+    explicit ProblemModelSet(QObject *parent = nullptr);
     ~ProblemModelSet();
 
     // Adds a model

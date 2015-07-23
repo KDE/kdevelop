@@ -40,7 +40,7 @@ namespace KDevelop {
 class KDEVPLATFORMUTIL_EXPORT FocusedTreeView : public QTreeView {
     Q_OBJECT
     public:
-        FocusedTreeView(QWidget* parent) ;
+        explicit FocusedTreeView(QWidget* parent) ;
         virtual ~FocusedTreeView();
 
         /**

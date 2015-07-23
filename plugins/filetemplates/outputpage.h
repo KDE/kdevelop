@@ -37,7 +37,7 @@ class OutputPage : public QWidget
     Q_OBJECT
 
 public:
-    OutputPage(QWidget* parent);
+    explicit OutputPage(QWidget* parent);
     virtual ~OutputPage();
 
     /**

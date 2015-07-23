@@ -49,7 +49,7 @@ public:
      * @param parent parent widget
      * @param baseUrl the directory where the new class should be created
      **/
-    TemplateClassAssistant(QWidget* parent, const QUrl& baseUrl = QUrl());
+    explicit TemplateClassAssistant(QWidget* parent, const QUrl& baseUrl = QUrl());
     /**
      * Destroys the assistant
      **/

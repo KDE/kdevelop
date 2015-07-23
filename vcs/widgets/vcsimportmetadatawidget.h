@@ -36,7 +36,7 @@ class KDEVPLATFORMVCS_EXPORT VcsImportMetadataWidget : public QWidget
 {
 Q_OBJECT
 public:
-    VcsImportMetadataWidget( QWidget* parent );
+    explicit VcsImportMetadataWidget( QWidget* parent );
     virtual ~VcsImportMetadataWidget();
     virtual QUrl source() const = 0;
     virtual VcsLocation destination() const = 0;

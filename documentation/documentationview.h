@@ -76,7 +76,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT ProvidersModel : public QAbstractListMode
 {
     Q_OBJECT
 public:
-    ProvidersModel(QObject* parent = 0);
+    explicit ProvidersModel(QObject* parent = 0);
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual int rowCount(const QModelIndex& idx = QModelIndex()) const override;

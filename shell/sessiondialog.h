@@ -40,7 +40,7 @@ class SessionModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    SessionModel( QObject* parent = 0 );
+    explicit SessionModel( QObject* parent = 0 );
     int rowCount( const QModelIndex& = QModelIndex() ) const override;
     QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const override;
     QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const override;
@@ -56,7 +56,7 @@ class SessionDialog : public QDialog
 {
     Q_OBJECT
 public:
-    SessionDialog( QWidget* = 0 );
+    explicit SessionDialog( QWidget* = 0 );
     virtual ~SessionDialog();
 private Q_SLOTS:
     void createSession();

@@ -47,7 +47,7 @@ class KDEVPLATFORMVCS_EXPORT DvcsImportMetadataWidget : public KDevelop::VcsImpo
     Q_DECLARE_PRIVATE(DvcsImportMetadataWidget)
     
 public:
-    DvcsImportMetadataWidget(QWidget* parent=0);
+    explicit DvcsImportMetadataWidget(QWidget* parent=0);
     virtual ~DvcsImportMetadataWidget();
 
     virtual QUrl source() const override;

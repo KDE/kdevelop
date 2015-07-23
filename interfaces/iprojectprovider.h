@@ -38,7 +38,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IProjectProviderWidget : public QWidget
 {
     Q_OBJECT
     public:
-        IProjectProviderWidget(QWidget* parent = 0);
+        explicit IProjectProviderWidget(QWidget* parent = 0);
 
         /**
          * @returns a job that will create a working copy given the current state of the widget.

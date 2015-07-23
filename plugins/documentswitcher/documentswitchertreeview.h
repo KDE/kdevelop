@@ -26,7 +26,7 @@ class DocumentSwitcherPlugin;
 class DocumentSwitcherTreeView : public QListView
 {
 public:
-    DocumentSwitcherTreeView( DocumentSwitcherPlugin* );
+    explicit DocumentSwitcherTreeView( DocumentSwitcherPlugin* );
 
 protected:
 virtual void keyPressEvent(QKeyEvent* event) override;

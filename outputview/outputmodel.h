@@ -54,7 +54,7 @@ public:
     };
 
     explicit OutputModel( const QUrl& builddir , QObject* parent = 0 );
-    OutputModel( QObject* parent = 0 );
+    explicit OutputModel( QObject* parent = 0 );
     virtual ~OutputModel();
 
     /// IOutputViewModel interfaces

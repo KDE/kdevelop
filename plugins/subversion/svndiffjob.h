@@ -43,7 +43,7 @@ class SvnDiffJob : public SvnJobBaseImpl<SvnInternalDiffJob>
 {
     Q_OBJECT
 public:
-    SvnDiffJob( KDevSvnPlugin* parent );
+    explicit SvnDiffJob( KDevSvnPlugin* parent );
     QVariant fetchResults() override;
     void start() override;
     void setSource( const KDevelop::VcsLocation& );

@@ -42,7 +42,7 @@ class OutputData : public QObject
 {
 Q_OBJECT
 public:
-    OutputData( ToolViewData* tv );
+    explicit OutputData( ToolViewData* tv );
     QAbstractItemDelegate* delegate;
     QAbstractItemModel* model;
     ToolViewData* toolView;
@@ -60,7 +60,7 @@ class ToolViewData : public QObject
 {
 Q_OBJECT
 public:
-    ToolViewData( QObject* parent );
+    explicit ToolViewData( QObject* parent );
     ~ToolViewData();
     OutputData* addOutput( int id, const QString& title, KDevelop::IOutputView::Behaviours behave );
     // If we would adhere to model-view-separation strictly, then this member would move into standardoutputview, but it is more convenient this way.

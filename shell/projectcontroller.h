@@ -73,7 +73,7 @@ class KDEVPLATFORMSHELL_EXPORT ProjectController : public IProjectController
     friend class ProjectPreferences;
 
 public:
-    ProjectController( Core* core );
+    explicit ProjectController( Core* core );
     virtual ~ProjectController();
 
     virtual IProject* projectAt( int ) const override;
@@ -154,7 +154,7 @@ class ProjectDialogProvider : public IProjectDialogProvider
 {
 Q_OBJECT
 public:
-    ProjectDialogProvider(ProjectControllerPrivate* const p);
+    explicit ProjectDialogProvider(ProjectControllerPrivate* const p);
     virtual ~ProjectDialogProvider();
     ProjectControllerPrivate* const d;
 

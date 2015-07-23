@@ -132,7 +132,7 @@ class KDEVPLATFORMINTERFACES_EXPORT FileContext : public Context
 public:
     /**Builds the file context using a @ref QList<QUrl>
         @param urls The list of selected url.*/
-    FileContext( const QList<QUrl> &urls );
+    explicit FileContext( const QList<QUrl> &urls );
 
     /**Destructor.*/
     virtual ~FileContext();
@@ -155,7 +155,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ProjectItemContext : public Context
 public:
     /**Builds the context.
         @param items The items to build the context from.*/
-    ProjectItemContext( const QList<ProjectBaseItem*> &items );
+    explicit ProjectItemContext( const QList<ProjectBaseItem*> &items );
 
     /**Destructor.*/
     virtual ~ProjectItemContext();

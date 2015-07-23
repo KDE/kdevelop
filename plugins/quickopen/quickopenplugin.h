@@ -51,7 +51,7 @@ class QuickOpenPlugin : public KDevelop::IPlugin, public KDevelop::IQuickOpen
     Q_INTERFACES( KDevelop::IQuickOpen )
 
 public:
-    QuickOpenPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    explicit QuickOpenPlugin( QObject *parent, const QVariantList & = QVariantList() );
     virtual ~QuickOpenPlugin();
 
     static QuickOpenPlugin* self();
@@ -214,7 +214,7 @@ class QuickOpenWidgetCreator;
 class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
   Q_OBJECT
   public:
-    QuickOpenLineEdit(QuickOpenWidgetCreator* creator) ;
+    explicit QuickOpenLineEdit(QuickOpenWidgetCreator* creator) ;
     ~QuickOpenLineEdit() ;
     
     bool insideThis(QObject* object);

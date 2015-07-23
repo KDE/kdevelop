@@ -62,7 +62,7 @@ public:
     };
     Q_DECLARE_FLAGS(DocumentActivationParams, DocumentActivation)
 
-    IDocumentController(QObject *parent);
+    explicit IDocumentController(QObject *parent);
 
     /**
      * Finds the first document object corresponding to a given url.

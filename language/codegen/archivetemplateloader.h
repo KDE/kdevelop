@@ -59,7 +59,7 @@ private:
 class ArchiveTemplateLocation
 {
 public:
-    ArchiveTemplateLocation(const KArchiveDirectory* directory);
+    explicit ArchiveTemplateLocation(const KArchiveDirectory* directory);
     ~ArchiveTemplateLocation();
 
     bool hasTemplate(const QString& name) const;

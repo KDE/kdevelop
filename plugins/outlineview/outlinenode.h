@@ -35,7 +35,7 @@ class OutlineNode
     void appendContext(KDevelop::DUContext* ctx, KDevelop::TopDUContext* top);
 public:
     OutlineNode(const QString& text, OutlineNode* parent);
-    OutlineNode(OutlineNode&& other) noexcept;
+    explicit OutlineNode(OutlineNode&& other) noexcept;
     OutlineNode(KDevelop::Declaration* decl, OutlineNode* parent);
     virtual ~OutlineNode();
     QIcon icon() const;

@@ -49,7 +49,7 @@ public:
      * Constructor for class.
      * @param isCheckable if true, model will show checkboxes on items.
      */
-    VcsFileChangesModel(QObject *parent, bool isCheckable = false);
+    explicit VcsFileChangesModel(QObject *parent, bool isCheckable = false);
     enum ItemRoles { VcsStatusInfoRole = Qt::UserRole+1 };
 
     /**

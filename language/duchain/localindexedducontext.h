@@ -33,8 +33,8 @@ class TopDUContext;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
   public:
-    LocalIndexedDUContext(DUContext* decl);
-    LocalIndexedDUContext(uint contextIndex = 0);
+    explicit LocalIndexedDUContext(DUContext* decl);
+    explicit LocalIndexedDUContext(uint contextIndex = 0);
 
     /**
      * @warning Duchain must be read locked

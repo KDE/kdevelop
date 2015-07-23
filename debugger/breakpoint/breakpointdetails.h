@@ -35,7 +35,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT BreakpointDetails : public QWidget
 {
     Q_OBJECT
 public:
-    BreakpointDetails(QWidget *parent);
+    explicit BreakpointDetails(QWidget *parent);
 
     void setItem(Breakpoint *b);
 

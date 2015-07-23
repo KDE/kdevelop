@@ -22,7 +22,7 @@ class CvsAnnotateJob : public CvsJob
 {
     Q_OBJECT
 public:
-    CvsAnnotateJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    explicit CvsAnnotateJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     virtual ~CvsAnnotateJob();
 
     // Begin:  KDevelop::VcsJob

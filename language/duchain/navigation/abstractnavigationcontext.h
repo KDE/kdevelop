@@ -59,7 +59,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
 {
   Q_OBJECT
   public:
-    AbstractNavigationContext( KDevelop::TopDUContextPointer topContext = KDevelop::TopDUContextPointer(), AbstractNavigationContext* previousContext = 0 );
+    explicit AbstractNavigationContext( KDevelop::TopDUContextPointer topContext = KDevelop::TopDUContextPointer(), AbstractNavigationContext* previousContext = 0 );
 
     virtual ~AbstractNavigationContext() {
     }

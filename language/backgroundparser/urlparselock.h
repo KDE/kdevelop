@@ -39,7 +39,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT UrlParseLock
 {
 public:
-  UrlParseLock(const IndexedString& url);
+  explicit UrlParseLock(const IndexedString& url);
   ~UrlParseLock();
 
 private:

@@ -33,7 +33,7 @@ class SvnCopyJob : public SvnJobBaseImpl<SvnInternalCopyJob>
 {
     Q_OBJECT
 public:
-    SvnCopyJob( KDevSvnPlugin* parent );
+    explicit SvnCopyJob( KDevSvnPlugin* parent );
     QVariant fetchResults() override;
     void start() override;
     void setSourceLocation( const QUrl &location );

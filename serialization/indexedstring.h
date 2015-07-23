@@ -81,7 +81,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString {
    */
   explicit IndexedString( const QByteArray& str );
 
-  IndexedString( IndexedString&& o ) Q_DECL_NOEXCEPT
+  explicit IndexedString( IndexedString&& o ) Q_DECL_NOEXCEPT
     : m_index(o.m_index)
   {
     o.m_index = 0;

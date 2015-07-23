@@ -67,7 +67,7 @@ namespace KDevelop {
     class KDEVPLATFORMLANGUAGE_EXPORT NavigatableWidgetList : public QScrollArea {
       Q_OBJECT
       public:
-        NavigatableWidgetList(bool allowScrolling = false, uint maxHeight = 0, bool vertical = true);
+        explicit NavigatableWidgetList(bool allowScrolling = false, uint maxHeight = 0, bool vertical = true);
         ~NavigatableWidgetList();
         void addItem(QWidget* widget, int pos = -1);
         void addHeaderItem(QWidget* widget, Qt::Alignment alignment = 0);
@@ -142,7 +142,7 @@ namespace KDevelop {
             };
             virtual QSize sizeHint () const override;
             ///@param customCollector allows specifying an own subclass of UsesWidgetCollector.
-            UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<UsesWidgetCollector> customCollector = {});
+            explicit UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<UsesWidgetCollector> customCollector = {});
             ~UsesWidget();
             void setAllExpanded(bool expanded);
             unsigned int countAllUses() const;

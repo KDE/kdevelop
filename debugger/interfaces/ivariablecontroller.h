@@ -44,7 +44,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT IVariableController : public QObject
 {
     Q_OBJECT
 public:
-    IVariableController(IDebugSession* parent);
+    explicit IVariableController(IDebugSession* parent);
 
     /* Create a variable for the specified expression in the currentl
        thread and frame.  */     

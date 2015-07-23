@@ -305,7 +305,7 @@ public: // Node overrides
 class BaseClassesFolderNode : public DynamicFolderNode
 {
 public:
-  BaseClassesFolderNode(NodesModelInterface* a_model);
+  explicit BaseClassesFolderNode(NodesModelInterface* a_model);
 
 public: // Node overrides
   virtual void populateNode() override;
@@ -319,7 +319,7 @@ public: // Node overrides
 class DerivedClassesFolderNode : public DynamicFolderNode
 {
 public:
-  DerivedClassesFolderNode(NodesModelInterface* a_model);
+  explicit DerivedClassesFolderNode(NodesModelInterface* a_model);
 
 public: // Node overrides
   virtual void populateNode() override;

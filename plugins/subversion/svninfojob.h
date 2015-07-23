@@ -71,7 +71,7 @@ public:
         RevisionOnly,
         RepoUrlOnly
     };
-    SvnInfoJob( KDevSvnPlugin* parent );
+    explicit SvnInfoJob( KDevSvnPlugin* parent );
     QVariant fetchResults() override;
     void start() override;
     void setLocation( const QUrl &location );

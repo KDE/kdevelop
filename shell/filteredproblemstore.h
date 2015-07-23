@@ -38,7 +38,7 @@ class KDEVPLATFORMSHELL_EXPORT FilteredProblemStore : public ProblemStore
 {
     Q_OBJECT
 public:
-    FilteredProblemStore(QObject *parent = nullptr);
+    explicit FilteredProblemStore(QObject *parent = nullptr);
     ~FilteredProblemStore();
 
     // Adds a problem, which is then filtered and also added to the filtered problem list if it matches the filters

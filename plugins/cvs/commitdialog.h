@@ -25,7 +25,7 @@ class CommitDialog : public QDialog, private Ui::CommitDialogBase
 {
 Q_OBJECT
 public:
-    CommitDialog(QDialog *parent = 0);
+    explicit CommitDialog(QDialog *parent = 0);
     virtual ~CommitDialog();
 
     /**

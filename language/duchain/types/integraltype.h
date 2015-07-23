@@ -67,11 +67,11 @@ public:
   };
 
   /// Default constructor
-  IntegralType(uint type = TypeNone);
+  explicit IntegralType(uint type = TypeNone);
   /// Copy constructor. \param rhs type to copy
   IntegralType(const IntegralType& rhs);
   /// Constructor using raw data. \param data internal data.
-  IntegralType(IntegralTypeData& data);
+  explicit IntegralType(IntegralTypeData& data);
   /// Destructor
   virtual ~IntegralType();
 

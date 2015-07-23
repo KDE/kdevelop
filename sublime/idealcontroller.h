@@ -48,7 +48,7 @@ class IdealController: public QObject
 {
     Q_OBJECT
 public:
-    IdealController(Sublime::MainWindow *mainWindow);
+    explicit IdealController(Sublime::MainWindow *mainWindow);
 
     void addView(Qt::DockWidgetArea area, View* view);
 

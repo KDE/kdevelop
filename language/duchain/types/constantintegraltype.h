@@ -41,9 +41,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ConstantIntegralType : public IntegralType
 public:
   ConstantIntegralType(const ConstantIntegralType& rhs);
 
-  ConstantIntegralType(ConstantIntegralTypeData& data);
+  explicit ConstantIntegralType(ConstantIntegralTypeData& data);
 
-  ConstantIntegralType(uint type = TypeNone);
+  explicit ConstantIntegralType(uint type = TypeNone);
 
   typedef TypePtr<ConstantIntegralType> Ptr;
 

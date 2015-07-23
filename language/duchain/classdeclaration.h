@@ -95,7 +95,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassDeclaration : public KDevelop::ClassMembe
 {
 public:
   ClassDeclaration(const ClassDeclaration& rhs);
-  ClassDeclaration(ClassDeclarationData& data);
+  explicit ClassDeclaration(ClassDeclarationData& data);
   ClassDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
   ClassDeclaration(ClassDeclarationData& data, const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
   ~ClassDeclaration();

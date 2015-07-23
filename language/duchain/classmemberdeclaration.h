@@ -35,7 +35,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclaration : public Declaration
 public:
   ClassMemberDeclaration(const ClassMemberDeclaration& rhs);
   ClassMemberDeclaration(const RangeInRevision& range, DUContext* context);
-  ClassMemberDeclaration(ClassMemberDeclarationData& dd);
+  explicit ClassMemberDeclaration(ClassMemberDeclarationData& dd);
   ~ClassMemberDeclaration();
 
   AccessPolicy accessPolicy() const;

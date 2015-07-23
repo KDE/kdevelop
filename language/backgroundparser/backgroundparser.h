@@ -66,7 +66,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public ISta
     Q_INTERFACES( KDevelop::IStatus )
 
 public:
-    BackgroundParser(ILanguageController *languageController);
+    explicit BackgroundParser(ILanguageController *languageController);
     ~BackgroundParser();
 
     virtual QString statusName() const override;

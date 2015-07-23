@@ -56,7 +56,7 @@ public:
    */
   AliasDeclaration(const RangeInRevision& range, DUContext* context);
   
-  AliasDeclaration(AliasDeclarationData& data);
+  explicit AliasDeclaration(AliasDeclarationData& data);
   /// Destructor
   virtual ~AliasDeclaration();
 

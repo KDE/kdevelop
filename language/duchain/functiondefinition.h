@@ -35,7 +35,7 @@ namespace KDevelop {
   class KDEVPLATFORMLANGUAGE_EXPORT FunctionDefinition : public FunctionDeclaration {
     public:
     FunctionDefinition(const RangeInRevision& range, DUContext* context);
-    FunctionDefinition(FunctionDefinitionData& data);
+    explicit FunctionDefinition(FunctionDefinitionData& data);
     ~FunctionDefinition();
 
     /**

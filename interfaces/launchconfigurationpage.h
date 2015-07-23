@@ -39,7 +39,7 @@ class KDEVPLATFORMINTERFACES_EXPORT LaunchConfigurationPage : public QWidget
 {
 Q_OBJECT
 public:
-    LaunchConfigurationPage( QWidget* parent );
+    explicit LaunchConfigurationPage( QWidget* parent );
     /**
      * Allows the page to load values from an existing launch configuration
      * @param cfg the configuration to load from

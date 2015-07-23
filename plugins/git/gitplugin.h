@@ -72,7 +72,7 @@ class GitPlugin: public KDevelop::DistributedVersionControlPlugin, public KDevel
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl KDevelop::IContentAwareVersionControl)
     friend class GitInitTest;
 public:
-    GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
+    explicit GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~GitPlugin();
    
     QString name() const override;

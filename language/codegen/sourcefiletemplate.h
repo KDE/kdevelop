@@ -214,7 +214,7 @@ public:
      * @param templateDescription template description file, used to find the
      *        archive and read information
      */
-    SourceFileTemplate(const QString& templateDescription);
+    explicit SourceFileTemplate(const QString& templateDescription);
 
     /**
      * Copy constructor

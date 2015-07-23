@@ -22,7 +22,7 @@ class CvsDiffJob : public CvsJob
 {
     Q_OBJECT
 public:
-    CvsDiffJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    explicit CvsDiffJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     virtual ~CvsDiffJob();
 
     // Begin:  KDevelop::VcsJob

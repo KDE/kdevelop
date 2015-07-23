@@ -46,8 +46,8 @@ class KDEVPLATFORMUTIL_EXPORT ProcessLineMaker : public QObject
     Q_OBJECT
 
 public:
-    ProcessLineMaker( QObject* parent = 0 );
-    ProcessLineMaker( QProcess* process, QObject* parent = 0 );
+    explicit ProcessLineMaker( QObject* parent = 0 );
+    explicit ProcessLineMaker( QProcess* process, QObject* parent = 0 );
     
     ~ProcessLineMaker();
 

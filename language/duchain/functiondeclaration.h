@@ -61,7 +61,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration : public FunctionDeclarati
 public:
   FunctionDeclaration(const FunctionDeclaration& rhs);
   FunctionDeclaration(const RangeInRevision& range, DUContext* context);
-  FunctionDeclaration(FunctionDeclarationData& data);
+  explicit FunctionDeclaration(FunctionDeclarationData& data);
   FunctionDeclaration(FunctionDeclarationData& data, const KDevelop::RangeInRevision&);
   virtual ~FunctionDeclaration();
 

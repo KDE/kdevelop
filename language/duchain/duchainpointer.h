@@ -67,7 +67,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
 
   private:
     ///Should not be used from outside, but is needed sometimes to construct an invalid dummy-pointer
-    DUChainPointerData( DUChainBase* base );
+    explicit DUChainPointerData( DUChainBase* base );
 
     friend class DUChainBase;
     DUChainBase * m_base;

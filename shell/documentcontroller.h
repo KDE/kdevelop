@@ -63,7 +63,7 @@ public:
 
     /**Constructor.
     @param parent The parent object.*/
-    DocumentController( QObject *parent = 0 );
+    explicit DocumentController( QObject *parent = 0 );
     virtual ~DocumentController();
 
     /**Finds the first document object corresponding to a given url.

@@ -23,7 +23,7 @@ class SvnImportMetadataWidget : public KDevelop::VcsImportMetadataWidget
 {
     Q_OBJECT
 public:
-    SvnImportMetadataWidget( QWidget *parent );
+    explicit SvnImportMetadataWidget( QWidget *parent );
     virtual ~SvnImportMetadataWidget();
 
     virtual void setSourceLocation( const KDevelop::VcsLocation& ) override;

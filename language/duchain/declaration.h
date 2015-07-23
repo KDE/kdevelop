@@ -87,7 +87,7 @@ public:
   /// Destructor
   virtual ~Declaration();
   /// Uses the given data
-  Declaration( DeclarationData & dd );
+  explicit Declaration( DeclarationData & dd );
 
   virtual TopDUContext* topContext() const override;
 

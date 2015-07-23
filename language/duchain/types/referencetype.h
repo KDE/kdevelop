@@ -43,7 +43,7 @@ public:
   /// Copy constructor. \param rhs type to copy
   ReferenceType (const ReferenceType& rhs);
   /// Constructor using raw data. \param data internal data.
-  ReferenceType(ReferenceTypeData& data);
+  explicit ReferenceType(ReferenceTypeData& data);
   /// Destructor
   virtual ~ReferenceType();
 

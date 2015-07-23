@@ -216,8 +216,6 @@ void TestIndexedString::test()
   QCOMPARE(indexed.length(), data.toUtf8().length());
 
   IndexedString moved = std::move(indexed);
-  QCOMPARE(indexed, IndexedString());
-  QVERIFY(indexed.isEmpty());
   QCOMPARE(moved.str(), data);
 }
 

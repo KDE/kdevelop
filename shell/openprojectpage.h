@@ -25,7 +25,7 @@ class OpenProjectPage : public QWidget
     Q_OBJECT
 
 public:
-    OpenProjectPage( const QUrl& startUrl, QWidget* parent = 0 );
+    explicit OpenProjectPage( const QUrl& startUrl, QWidget* parent = 0 );
     QMap<QString,QStringList> projectFilters() const;
     void setUrl(const QUrl& url);
 

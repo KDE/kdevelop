@@ -44,7 +44,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IRunController : public KJobTrackerInterface
     Q_ENUMS(State)
 public:
     ///Constructor.
-    IRunController(QObject *parent);
+    explicit IRunController(QObject *parent);
 
     /**
      * Interrogate the current managed jobs

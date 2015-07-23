@@ -35,7 +35,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParseProjectJob : public KJob
 {
     Q_OBJECT
 public:
-    ParseProjectJob(KDevelop::IProject* project, bool forceUpdate = false );
+    explicit ParseProjectJob(KDevelop::IProject* project, bool forceUpdate = false );
     virtual ~ParseProjectJob();
     virtual void start() override;
     virtual bool doKill() override;

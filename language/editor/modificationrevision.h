@@ -55,7 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 	static void clearModificationCache(const IndexedString& fileName);
 
 	///The default-revision is 0, because that is the kate moving-revision for cleanly opened documents
-	ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 0 );
+	explicit ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 0 );
 
 	bool operator <( const ModificationRevision& rhs ) const;
 

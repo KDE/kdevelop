@@ -31,7 +31,7 @@ class ProjectTargetsComboBox : public QComboBox
 {
     Q_OBJECT
     public:
-        ProjectTargetsComboBox(QWidget* parent = 0);
+        explicit ProjectTargetsComboBox(QWidget* parent = 0);
         
         void setBaseItem(KDevelop::ProjectFolderItem* item, bool exec);
         void setCurrentItemPath(const QStringList& str);

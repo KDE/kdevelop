@@ -32,7 +32,7 @@ namespace KDevelop
 class SessionConfigSkeleton : public KConfigSkeleton
 {
 public:
-    SessionConfigSkeleton( const QString& )
+    explicit SessionConfigSkeleton( const QString& )
         : KConfigSkeleton( Core::self()->activeSession()->config() )
     {
     }

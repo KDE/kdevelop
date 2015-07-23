@@ -27,7 +27,7 @@
 class GitJob : public KDevelop::DVcsJob
 {
     public:
-        GitJob(const QDir& workingDir, KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+        explicit GitJob(const QDir& workingDir, KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
         
 };
 

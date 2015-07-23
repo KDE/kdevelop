@@ -26,7 +26,7 @@ class KDEVPLATFORMVCS_EXPORT VcsCommitDialog : public QDialog
 {
     Q_OBJECT
 public:
-    VcsCommitDialog( IPatchSource *patchSource, QWidget *parent = 0 );
+    explicit VcsCommitDialog( IPatchSource *patchSource, QWidget *parent = 0 );
     virtual ~VcsCommitDialog();
     ///Sets the commit candidates
     void setCommitCandidates( const QList<KDevelop::VcsStatusInfo>& statuses );

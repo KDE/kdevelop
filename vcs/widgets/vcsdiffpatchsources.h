@@ -63,8 +63,8 @@ private:
 class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource {
     public:
     /// The ownership of the updater is taken
-    VCSDiffPatchSource(VCSDiffUpdater* updater);
-    VCSDiffPatchSource(const KDevelop::VcsDiff& diff);
+    explicit VCSDiffPatchSource(VCSDiffUpdater* updater);
+    explicit VCSDiffPatchSource(const KDevelop::VcsDiff& diff);
     virtual ~VCSDiffPatchSource();
 
     virtual QUrl baseDir() const override ;
@@ -95,7 +95,7 @@ class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSourc
     Q_OBJECT
     public:
     /// The ownership of the updater is taken
-    VCSCommitDiffPatchSource(VCSDiffUpdater* updater);
+    explicit VCSCommitDiffPatchSource(VCSDiffUpdater* updater);
     ~VCSCommitDiffPatchSource() ;
 
     QStringList oldMessages() const;

@@ -77,8 +77,8 @@ public:
      * Creates an a list of EnvironmentGroups from a KConfig object
      * @param config the KConfig object to read the environment groups from
      */
-    EnvironmentGroupList( KSharedConfigPtr config );
-    EnvironmentGroupList( KConfig* config );
+    explicit EnvironmentGroupList( KSharedConfigPtr config );
+    explicit EnvironmentGroupList( KConfig* config );
     ~EnvironmentGroupList();
 
     /**

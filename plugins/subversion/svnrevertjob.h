@@ -32,7 +32,7 @@ class SvnRevertJob : public SvnJobBaseImpl<SvnInternalRevertJob>
 {
     Q_OBJECT
 public:
-    SvnRevertJob( KDevSvnPlugin* parent );
+    explicit SvnRevertJob( KDevSvnPlugin* parent );
     QVariant fetchResults() override;
     void start() override;
     void setLocations( const QList<QUrl>& locations );

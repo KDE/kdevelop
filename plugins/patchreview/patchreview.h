@@ -51,7 +51,7 @@ class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchRevie
     Q_INTERFACES( KDevelop::IPatchReview )
 
 public :
-    PatchReviewPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    explicit PatchReviewPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~PatchReviewPlugin();
     virtual void unload() override;
 

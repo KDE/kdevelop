@@ -35,7 +35,7 @@ class LicensePage : public QWidget
     Q_OBJECT
 
 public:
-    LicensePage(QWidget* parent);
+    explicit LicensePage(QWidget* parent);
     virtual ~LicensePage();
 
     /**

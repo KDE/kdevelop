@@ -49,7 +49,7 @@ public:
     static const QString cfgSessionProjectsEntry;
     static const QString cfgSessionOptionsGroup;
 
-    Session( const QString& id, QObject * parent = 0 );
+    explicit Session( const QString& id, QObject * parent = 0 );
     virtual ~Session();
 
     virtual QUrl pluginDataArea( const IPlugin* ) override;

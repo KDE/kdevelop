@@ -44,7 +44,7 @@ class KDEVPLATFORMSHELL_EXPORT UiController: public Sublime::Controller, public 
     Q_OBJECT
 
 public:
-    UiController(Core *core);
+    explicit UiController(Core *core);
     virtual ~UiController();
 
     /** @return area for currently active sublime mainwindow or 0 if

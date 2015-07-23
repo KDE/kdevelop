@@ -36,7 +36,7 @@ class KDEVPLATFORMVCS_EXPORT CheckInRepositoryJob : public KJob
 {
 Q_OBJECT
 public:
-    CheckInRepositoryJob(KTextEditor::Document* document);
+    explicit CheckInRepositoryJob(KTextEditor::Document* document);
     virtual ~CheckInRepositoryJob();
 
     KTextEditor::Document* document() const;

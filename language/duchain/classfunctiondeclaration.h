@@ -71,7 +71,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassFunctio
 public:
   ClassFunctionDeclaration(const RangeInRevision& range, DUContext* context);
   ClassFunctionDeclaration(ClassFunctionDeclarationData& data, const RangeInRevision& range, DUContext* context);
-  ClassFunctionDeclaration(ClassFunctionDeclarationData& data);
+  explicit ClassFunctionDeclaration(ClassFunctionDeclarationData& data);
   ~ClassFunctionDeclaration();
 
   ///Whether this function is a signal, for example a C++ Qt signal

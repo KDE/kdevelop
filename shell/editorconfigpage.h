@@ -34,7 +34,7 @@ class EditorConfigPage : public ConfigPage
 {
     Q_OBJECT
 public:
-    EditorConfigPage(QWidget* parent);
+    explicit EditorConfigPage(QWidget* parent);
     virtual ~EditorConfigPage();
 
     virtual QString name() const override;

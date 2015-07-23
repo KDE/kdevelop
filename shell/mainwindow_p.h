@@ -55,7 +55,7 @@ class StatusBar;
 class MainWindowPrivate: public QObject {
     Q_OBJECT
 public:
-    MainWindowPrivate(MainWindow *mainWindow);
+    explicit MainWindowPrivate(MainWindow *mainWindow);
     ~MainWindowPrivate();
 
     QPointer<QWidget> centralPlugin;

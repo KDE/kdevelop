@@ -57,9 +57,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier : public ReferenceCountManag
 {
 public:
   IndexedIdentifier();
-  IndexedIdentifier(const Identifier& id);
+  explicit IndexedIdentifier(const Identifier& id);
   IndexedIdentifier(const IndexedIdentifier& rhs);
-  IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT;
+  explicit IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT;
   IndexedIdentifier& operator=(const Identifier& id);
   IndexedIdentifier& operator=(const IndexedIdentifier& rhs);
   IndexedIdentifier& operator=(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT;
@@ -148,9 +148,9 @@ public:
    */
   explicit Identifier(const IndexedString& str);
   Identifier(const Identifier& rhs);
-  Identifier(uint index);
+  explicit Identifier(uint index);
   Identifier();
-  Identifier(Identifier&& rhs) Q_DECL_NOEXCEPT;
+  explicit Identifier(Identifier&& rhs) Q_DECL_NOEXCEPT;
   ~Identifier();
   Identifier& operator=(const Identifier& rhs);
   Identifier& operator=(Identifier&& rhs) Q_DECL_NOEXCEPT;
@@ -229,9 +229,9 @@ public:
   explicit QualifiedIdentifier(const QString& id, bool isExpression = false);
   explicit QualifiedIdentifier(const Identifier& id);
   QualifiedIdentifier(const QualifiedIdentifier& id);
-  QualifiedIdentifier(uint index);
+  explicit QualifiedIdentifier(uint index);
   QualifiedIdentifier();
-  QualifiedIdentifier(QualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT;
+  explicit QualifiedIdentifier(QualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT;
   ~QualifiedIdentifier();
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
   QualifiedIdentifier& operator=(QualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT;

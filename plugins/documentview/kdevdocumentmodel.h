@@ -96,7 +96,7 @@ class KDevDocumentModel: public QStandardItemModel
     Q_OBJECT
 
 public:
-    KDevDocumentModel( QObject *parent = 0 );
+    explicit KDevDocumentModel( QObject *parent = 0 );
     virtual ~KDevDocumentModel();
 
     QList<KDevCategoryItem*> categoryList() const;

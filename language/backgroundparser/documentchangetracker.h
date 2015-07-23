@@ -143,7 +143,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeTracker : public QObject
 {
     Q_OBJECT
 public:
-    DocumentChangeTracker( KTextEditor::Document* document );
+    explicit DocumentChangeTracker( KTextEditor::Document* document );
     virtual ~DocumentChangeTracker();
 
     /**

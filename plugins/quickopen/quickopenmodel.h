@@ -32,7 +32,7 @@
 class QuickOpenModel : public ExpandingWidgetModel {
   Q_OBJECT
   public:
-    QuickOpenModel( QWidget* parent );
+    explicit QuickOpenModel( QWidget* parent );
     
     void registerProvider( const QStringList& scopes, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider );
 

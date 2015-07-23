@@ -40,7 +40,7 @@ public:
 	typedef QVector<MimeHighlightPair> MimeList;
 
 	SourceFormatterStyle();
-	SourceFormatterStyle( const QString& name );
+	explicit SourceFormatterStyle( const QString& name );
 	void setContent( const QString& content );
 	void setCaption( const QString& caption );
 	QString content() const;
@@ -102,7 +102,7 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 		Q_OBJECT
 
 	public:
-		SettingsWidget(QWidget *parent = 0);
+		explicit SettingsWidget(QWidget *parent = 0);
 		virtual ~SettingsWidget();
 
 		/** This function is called after the creation of the dialog.

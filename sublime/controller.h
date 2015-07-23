@@ -89,7 +89,7 @@ need to show completely different sets of areas.
 class KDEVPLATFORMSUBLIME_EXPORT Controller: public QObject, public MainWindowOperator {
     Q_OBJECT
 public:
-    Controller(QObject *parent = 0);
+    explicit Controller(QObject *parent = 0);
     ~Controller();
 
     /** Add the area to the set of default areas in this controller. */

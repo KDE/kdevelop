@@ -28,7 +28,7 @@ class UiHelper : public QObject
 {
     Q_OBJECT
     public:
-        UiHelper(QObject* parent);
+        explicit UiHelper(QObject* parent);
         
     public slots:
         QAction* retrieveMenuAction(const QString& name);

@@ -37,7 +37,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyMode
 {
     Q_OBJECT
     public:
-        ProjectProxyModel(QObject *parent);
+        explicit ProjectProxyModel(QObject *parent);
         bool lessThan (const QModelIndex & left, const QModelIndex & right) const override;
 
         QModelIndex proxyIndexFromItem(KDevelop::ProjectBaseItem* item) const;

@@ -428,7 +428,7 @@ public:
         , LastRole
     };
 
-    ProjectModel( QObject *parent = 0 );
+    explicit ProjectModel( QObject *parent = 0 );
     virtual ~ProjectModel();
 
     void clear();

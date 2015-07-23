@@ -27,7 +27,7 @@ class SvnInternalCopyJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    SvnInternalCopyJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalCopyJob( SvnJobBase* parent = 0 );
     void setSourceLocation( const QUrl& );
     void setDestinationLocation( const QUrl& );
 

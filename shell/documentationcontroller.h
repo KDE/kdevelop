@@ -37,7 +37,7 @@ class DocumentationController : public IDocumentationController
 {
     Q_OBJECT
 public:
-    DocumentationController(Core* core);
+    explicit DocumentationController(Core* core);
 
     void initialize();
 

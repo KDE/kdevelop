@@ -38,7 +38,7 @@ public:
     : KDevelop::StructureTypeData(rhs)
     , m_contentType(rhs.m_contentType) { }
 
-    ListTypeData(const KDevelop::StructureTypeData& rhs)
+    explicit ListTypeData(const KDevelop::StructureTypeData& rhs)
     : KDevelop::StructureTypeData(rhs)
     , m_contentType() { }
 
@@ -79,7 +79,7 @@ public:
 
     ListType();
     ListType(const ListType& rhs);
-    ListType(StructureTypeData& data);
+    explicit ListType(StructureTypeData& data);
 
     /**
      * @brief Adds @p typeToAdd to the content type of this list.
@@ -145,7 +145,7 @@ public:
     : ListTypeData(rhs)
     , m_keyType(rhs.m_keyType) { }
 
-    MapTypeData(const ListTypeData& rhs)
+    explicit MapTypeData(const ListTypeData& rhs)
     : ListTypeData(rhs)
     , m_keyType() { }
 
@@ -164,7 +164,7 @@ public:
 
     MapType();
     MapType(const MapType& rhs);
-    MapType(ListTypeData& data);
+    explicit MapType(ListTypeData& data);
 
     /**
     * @brief Add @p typeToAdd to this map's key type.

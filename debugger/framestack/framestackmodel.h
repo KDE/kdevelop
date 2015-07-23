@@ -46,7 +46,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT FrameStackModel : public IFrameStackModel
 {
     Q_OBJECT
 public:
-    FrameStackModel(IDebugSession* session);
+    explicit FrameStackModel(IDebugSession* session);
     virtual ~FrameStackModel();
     
     struct ThreadItem {

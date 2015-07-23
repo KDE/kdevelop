@@ -30,7 +30,7 @@ class ClassIdentifierPage : public QWidget
     Q_PROPERTY(QStringList inheritance READ inheritanceList)
 
 public:
-    ClassIdentifierPage(QWidget* parent);
+    explicit ClassIdentifierPage(QWidget* parent);
     virtual ~ClassIdentifierPage();
 
     /**

@@ -37,7 +37,7 @@ class SvnClient : public QObject, public svn::Client
 {
     Q_OBJECT
 public:
-    SvnClient( svn::Context* = 0 );
+    explicit SvnClient( svn::Context* = 0 );
 
     QString diff( const svn::Path& src, const svn::Revision& srcRev,
                   const svn::Path& dst, const svn::Revision& dstRev,

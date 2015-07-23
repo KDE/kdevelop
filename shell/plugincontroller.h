@@ -51,7 +51,7 @@ friend class CorePrivate;
 
 public:
 
-    PluginController(Core *core);
+    explicit PluginController(Core *core);
 
     virtual ~PluginController();
 

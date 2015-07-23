@@ -27,7 +27,7 @@ class SvnInternalUpdateJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    SvnInternalUpdateJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalUpdateJob( SvnJobBase* parent = 0 );
     void setLocations( const QList<QUrl>& );
     void setRecursive( bool );
     void setRevision( const KDevelop::VcsRevision& );

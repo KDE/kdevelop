@@ -47,7 +47,7 @@ class DUContext;
 class KDEVPLATFORMLANGUAGE_EXPORT BasicRefactoringCollector : public UsesWidget::UsesWidgetCollector
 {
 public:
-    BasicRefactoringCollector(const IndexedDeclaration &decl);
+    explicit BasicRefactoringCollector(const IndexedDeclaration &decl);
     QVector<IndexedTopDUContext> allUsingContexts() const;
 
 protected:

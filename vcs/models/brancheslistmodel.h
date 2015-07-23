@@ -40,7 +40,7 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
     public:
         enum Roles { CurrentRole = Qt::UserRole+1 };
 
-        BranchesListModel(QObject* parent = 0);
+        explicit BranchesListModel(QObject* parent = 0);
         ~BranchesListModel();
 
         void initialize(KDevelop::IBranchingVersionControl* dvcsplugin, const QUrl& repo);

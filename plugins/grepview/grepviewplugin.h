@@ -27,7 +27,7 @@ class GrepViewPlugin : public KDevelop::IPlugin
     Q_OBJECT
 
 public:
-    GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    explicit GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~GrepViewPlugin();
     virtual void unload() override;
 

@@ -39,7 +39,7 @@ class ProblemsView : public QMainWindow
     Q_OBJECT
 
 public:
-    ProblemsView(QWidget *parent = NULL);
+    explicit ProblemsView(QWidget *parent = NULL);
     ~ProblemsView();
 
     // Load all the current models and create tabs for them

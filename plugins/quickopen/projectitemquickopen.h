@@ -51,7 +51,7 @@ public:
     AllItemTypes = Classes + Functions
   };
 
-  ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen );
+  explicit ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen );
 
   virtual void enableData( const QStringList& items, const QStringList& scopes ) override;
 

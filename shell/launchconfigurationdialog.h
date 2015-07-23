@@ -61,7 +61,7 @@ class LaunchConfigurationsModel : public QAbstractItemModel
 {
 Q_OBJECT
 public:
-    LaunchConfigurationsModel(QObject* parent = 0);
+    explicit LaunchConfigurationsModel(QObject* parent = 0);
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
@@ -120,7 +120,7 @@ class LaunchConfigPagesContainer : public QWidget
 {
 Q_OBJECT
 public:
-    LaunchConfigPagesContainer( const QList<LaunchConfigurationPageFactory*> &, QWidget* parent = 0 );
+    explicit LaunchConfigPagesContainer( const QList<LaunchConfigurationPageFactory*> &, QWidget* parent = 0 );
     void setLaunchConfiguration( LaunchConfiguration* );
     void save();
 signals:
@@ -134,7 +134,7 @@ class LaunchConfigurationDialog : public QDialog, public Ui::LaunchConfiguration
 {
 Q_OBJECT
 public:
-    LaunchConfigurationDialog(QWidget* parent = 0 );
+    explicit LaunchConfigurationDialog(QWidget* parent = 0 );
     virtual QSize sizeHint() const override;
 
 private slots:

@@ -36,7 +36,7 @@ class ILanguageSupport;
 class KDEVPLATFORMSHELL_EXPORT LanguageController : public ILanguageController {
     Q_OBJECT
 public:
-    LanguageController(QObject *parent);
+    explicit LanguageController(QObject *parent);
     virtual ~LanguageController();
 
     void initialize();

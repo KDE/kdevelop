@@ -27,7 +27,7 @@ public:
       DEFAULT_SEED = 2166136261u
   };
 
-  KDevHash(unsigned int hash = DEFAULT_SEED)
+  explicit KDevHash(unsigned int hash = DEFAULT_SEED)
     : m_hash(hash)
   {}
 

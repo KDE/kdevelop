@@ -35,7 +35,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectChangesModel : public VcsFileChangesMode
     Q_OBJECT
     public:
         enum Role { ProjectNameRole = Qt::UserRole };
-        ProjectChangesModel(QObject* parent);
+        explicit ProjectChangesModel(QObject* parent);
         virtual ~ProjectChangesModel();
         
         void updateState(KDevelop::IProject* p, const KDevelop::VcsStatusInfo& status);

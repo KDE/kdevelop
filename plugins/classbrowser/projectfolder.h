@@ -38,7 +38,7 @@ class ProjectFolder : public DocumentClassesFolder
   Q_OBJECT
 public:
   ProjectFolder(NodesModelInterface* a_model, KDevelop::IProject* project);
-  ProjectFolder(NodesModelInterface* a_model);
+  explicit ProjectFolder(NodesModelInterface* a_model);
 
   virtual void populateNode() override;
 

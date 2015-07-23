@@ -48,7 +48,7 @@ namespace KDevelop {
 class KDEVPLATFORMUTIL_EXPORT ForegroundLock
 {
     public:
-        ForegroundLock(bool lock = true);
+        explicit ForegroundLock(bool lock = true);
         ~ForegroundLock();
         void unlock();
         void relock();

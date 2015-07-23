@@ -40,7 +40,7 @@ class ProblemModelSet;
 class KDEVPLATFORMINTERFACES_EXPORT ILanguageController: public QObject {
     Q_OBJECT
 public:
-    ILanguageController(QObject *parent = 0);
+    explicit ILanguageController(QObject *parent = 0);
 
     /**
      * @return the currently active languages loaded for the currently active file.

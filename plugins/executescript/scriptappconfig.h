@@ -34,7 +34,7 @@ class ScriptAppConfigPage : public KDevelop::LaunchConfigurationPage, Ui::Script
 {
 Q_OBJECT
 public:
-    ScriptAppConfigPage( QWidget* parent );
+    explicit ScriptAppConfigPage( QWidget* parent );
     void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 ) override;
     void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const override;
     QString title() const override;
@@ -44,7 +44,7 @@ public:
 class ScriptAppLauncher : public KDevelop::ILauncher
 {
 public:
-    ScriptAppLauncher( ExecuteScriptPlugin* );
+    explicit ScriptAppLauncher( ExecuteScriptPlugin* );
     virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
     virtual QString description() const override;
     virtual QString id() override;

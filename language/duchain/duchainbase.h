@@ -127,7 +127,7 @@ public:
    * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier
    */
-  DUChainBase(const RangeInRevision& range);
+  explicit DUChainBase(const RangeInRevision& range);
   /// Destructor
   virtual ~DUChainBase();
 
@@ -151,7 +151,7 @@ public:
   ///After this was called, the data-pointer is dynamic. It is cloned if needed.
   void makeDynamic();
   
-  DUChainBase( DUChainBaseData& dd );
+  explicit DUChainBase( DUChainBaseData& dd );
   
   ///This must only be used to change the storage-location or storage-kind(dynamic/constant) of the data, but
   ///the data must always be equal!

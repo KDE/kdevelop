@@ -44,7 +44,7 @@ class QAction;
 class DocumentSwitcherPlugin: public KDevelop::IPlugin {
     Q_OBJECT
 public:
-    DocumentSwitcherPlugin( QObject *parent, const QVariantList &args = QVariantList() );
+    explicit DocumentSwitcherPlugin( QObject *parent, const QVariantList &args = QVariantList() );
     ~DocumentSwitcherPlugin();
 
     virtual void unload() override;

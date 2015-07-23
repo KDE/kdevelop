@@ -48,7 +48,7 @@ public:
   };
   Q_DECLARE_FLAGS(Features, Feature);
 
-  DUChainDumper(Features features = DumpContext);
+  explicit DUChainDumper(Features features = DumpContext);
   ~DUChainDumper();
 
   /**

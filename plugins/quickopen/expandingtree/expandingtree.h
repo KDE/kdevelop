@@ -27,7 +27,7 @@
 //A tree that allows drawing additional information
 class ExpandingTree : public QTreeView {
  public:
-   ExpandingTree(QWidget* parent);
+   explicit ExpandingTree(QWidget* parent);
   protected:
     virtual void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
     virtual int sizeHintForColumn ( int column ) const override;

@@ -81,7 +81,7 @@ public:
     /**
      * @p description The label to show.
      */
-    AssistantLabelAction(const QString& description);
+    explicit AssistantLabelAction(const QString& description);
     /**
      * @return the label contents.
      */

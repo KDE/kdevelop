@@ -21,7 +21,7 @@ class CvsStatusJob : public CvsJob
 {
     Q_OBJECT
 public:
-    CvsStatusJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    explicit CvsStatusJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     virtual ~CvsStatusJob();
 
     // Begin:  KDevelop::VcsJob

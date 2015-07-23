@@ -67,7 +67,7 @@ Q_DECLARE_TYPEINFO(ProjectFile, Q_MOVABLE_TYPE);
 class ProjectFileData : public KDevelop::QuickOpenDataBase
 {
 public:
-    ProjectFileData( const ProjectFile& file );
+    explicit ProjectFileData( const ProjectFile& file );
 
     virtual QString text() const override;
     virtual QString htmlDescription() const override;

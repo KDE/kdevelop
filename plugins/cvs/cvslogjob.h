@@ -20,7 +20,7 @@ class CvsLogJob : public CvsJob
 {
     Q_OBJECT
 public:
-    CvsLogJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    explicit CvsLogJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     virtual ~CvsLogJob();
 
     // Begin:  KDevelop::VcsJob

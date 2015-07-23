@@ -55,7 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
   Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
 
   public:
-    CodeCompletionModel(QObject* parent);
+    explicit CodeCompletionModel(QObject* parent);
     virtual ~CodeCompletionModel();
 
     ///This MUST be called after the creation of this completion-model.

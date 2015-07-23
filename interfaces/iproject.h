@@ -68,7 +68,7 @@ public:
      *
      * @param parent The parent object for the plugin.
      */
-    IProject(QObject *parent = 0);
+    explicit IProject(QObject *parent = 0);
 
     /// Destructor.
     virtual ~IProject();

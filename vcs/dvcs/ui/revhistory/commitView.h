@@ -35,7 +35,7 @@ class CommitView : public QTreeView
 {
     Q_OBJECT
 public:
-    CommitView(QWidget *parent = 0);
+    explicit CommitView(QWidget *parent = 0);
     ~CommitView() {};
 //     void setLineHeight(int h) { lineHeight = h; }
     int getLineHeight(const QModelIndex & index) {return rowHeight(index);}

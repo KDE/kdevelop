@@ -36,7 +36,7 @@ class OverridesPage : public QWidget
     Q_OBJECT
 
 public:
-    OverridesPage(QWidget* parent);
+    explicit OverridesPage(QWidget* parent);
     virtual ~OverridesPage();
 
     /**

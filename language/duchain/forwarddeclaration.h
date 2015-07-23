@@ -51,7 +51,7 @@ public:
    * \param parentContext context in which this declaration occurred
    * */
   ForwardDeclaration(const RangeInRevision& range, DUContext* context);
-  ForwardDeclaration(ForwardDeclarationData& data);
+  explicit ForwardDeclaration(ForwardDeclarationData& data);
 
   ///Copy-constructor for cloning
   ForwardDeclaration(const ForwardDeclaration& rhs);

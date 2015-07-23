@@ -38,7 +38,7 @@ public:
   TypeAliasType(const TypeAliasType& rhs) : TypeAliasTypeBase(copyData<TypeAliasType>(*rhs.d_func())) {
   }
 
-  TypeAliasType(TypeAliasTypeData& data) : TypeAliasTypeBase(data) {
+  explicit TypeAliasType(TypeAliasTypeData& data) : TypeAliasTypeBase(data) {
   }
 
   TypeAliasType() : TypeAliasTypeBase(createData<TypeAliasType>()) {

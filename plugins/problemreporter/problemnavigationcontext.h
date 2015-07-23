@@ -30,7 +30,7 @@ namespace KDevelop {
 class ProblemNavigationContext : public AbstractNavigationContext
 {
   public:
-    ProblemNavigationContext(const IProblem::Ptr &problem);
+    explicit ProblemNavigationContext(const IProblem::Ptr &problem);
     ~ProblemNavigationContext();
     virtual QString name() const override;
     virtual QString html(bool shorten = false) override;

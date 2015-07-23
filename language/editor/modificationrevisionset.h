@@ -31,7 +31,7 @@ namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevisionSet
 {
   public:
-    ModificationRevisionSet(uint index = 0);
+    explicit ModificationRevisionSet(uint index = 0);
 
     static void clearCache();
 

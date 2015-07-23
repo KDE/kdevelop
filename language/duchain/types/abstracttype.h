@@ -119,7 +119,7 @@ public:
   /// Constructor.
   AbstractType();
   /// Constructor from data.
-  AbstractType(AbstractTypeData& dd);
+  explicit AbstractType(AbstractTypeData& dd);
   /// Destructor.
   virtual ~AbstractType ();
 

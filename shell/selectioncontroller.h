@@ -36,7 +36,7 @@ class KDEVPLATFORMSHELL_EXPORT SelectionController : public ISelectionController
     Q_OBJECT
 public:
     ///Constructor.
-    SelectionController(QObject *parent);
+    explicit SelectionController(QObject *parent);
     ~SelectionController();
 
     /**

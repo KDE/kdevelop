@@ -53,7 +53,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT NamespaceAliasDeclaration : public Declaration
 public:
   NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs);
   NamespaceAliasDeclaration(const RangeInRevision& range, DUContext* context);
-  NamespaceAliasDeclaration(NamespaceAliasDeclarationData& data);
+  explicit NamespaceAliasDeclaration(NamespaceAliasDeclarationData& data);
 
   virtual ~NamespaceAliasDeclaration();
   ///A NamespaceAliasDeclaration cannot have a type, so setAbstractType does nothing here.

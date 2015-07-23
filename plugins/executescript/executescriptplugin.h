@@ -38,7 +38,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     Q_INTERFACES( IExecuteScriptPlugin )
 
   public:
-    ExecuteScriptPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    explicit ExecuteScriptPlugin(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ExecuteScriptPlugin();
 
     static QString _scriptAppConfigTypeId;

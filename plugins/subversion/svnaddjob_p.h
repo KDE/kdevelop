@@ -27,7 +27,7 @@ class SvnInternalAddJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    SvnInternalAddJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalAddJob( SvnJobBase* parent = 0 );
     void setLocations( const QList<QUrl>& );
     void setRecursive( bool );
 

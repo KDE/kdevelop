@@ -36,7 +36,7 @@ class SvnLogJob : public SvnJobBaseImpl<SvnInternalLogJob>
 {
     Q_OBJECT
 public:
-    SvnLogJob( KDevSvnPlugin* parent );
+    explicit SvnLogJob( KDevSvnPlugin* parent );
     QVariant fetchResults() override;
     void start() override;
     void setLocation( const QUrl &location );

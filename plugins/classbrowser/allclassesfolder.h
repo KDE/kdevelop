@@ -38,7 +38,7 @@ class AllClassesFolder : public DocumentClassesFolder
 {
   Q_OBJECT
 public:
-  AllClassesFolder(NodesModelInterface* a_model);
+  explicit AllClassesFolder(NodesModelInterface* a_model);
 
 public: // Node overrides
   virtual void nodeCleared() override;
@@ -55,7 +55,7 @@ class FilteredAllClassesFolder : public AllClassesFolder
 {
   Q_OBJECT
 public:
-  FilteredAllClassesFolder(NodesModelInterface* a_model);
+  explicit FilteredAllClassesFolder(NodesModelInterface* a_model);
 
 public: // Operations.
   /// Call this to update the classes filter string.

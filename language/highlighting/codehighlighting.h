@@ -149,7 +149,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
 
   public:
 
-    CodeHighlighting(QObject* parent);
+    explicit CodeHighlighting(QObject* parent);
     virtual ~CodeHighlighting();
 
     /// This function is thread-safe

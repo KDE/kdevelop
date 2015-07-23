@@ -41,7 +41,7 @@ class WorkingSetWidget : public WorkingSetToolButton {
     Q_OBJECT
 
 public:
-    WorkingSetWidget(Sublime::Area* area, QWidget* parent = 0);
+    explicit WorkingSetWidget(Sublime::Area* area, QWidget* parent = 0);
     virtual void setVisible( bool visible ) override;
 
 private slots:

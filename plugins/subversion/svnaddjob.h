@@ -33,7 +33,7 @@ class SvnAddJob : public SvnJobBaseImpl<SvnInternalAddJob>
 {
     Q_OBJECT
 public:
-    SvnAddJob( KDevSvnPlugin* parent );
+    explicit SvnAddJob( KDevSvnPlugin* parent );
     QVariant fetchResults() override;
     void start() override;
 

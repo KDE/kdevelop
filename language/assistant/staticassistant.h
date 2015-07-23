@@ -59,7 +59,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistant : public IAssistant
 public:
     using Ptr = QExplicitlySharedDataPointer<StaticAssistant>;
 
-    StaticAssistant(ILanguageSupport* supportedLanguage);
+    explicit StaticAssistant(ILanguageSupport* supportedLanguage);
     virtual ~StaticAssistant();
 
     /**

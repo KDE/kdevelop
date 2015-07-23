@@ -26,7 +26,7 @@ class KDevDocumentSelection: public QItemSelectionModel
 {
     Q_OBJECT
 public:
-    KDevDocumentSelection( QAbstractItemModel* model );
+    explicit KDevDocumentSelection( QAbstractItemModel* model );
     virtual ~KDevDocumentSelection();
 
 public slots:

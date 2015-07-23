@@ -45,7 +45,7 @@ namespace KDevelop {
             int line;
         };
         
-        IFrameStackModel(IDebugSession *session) 
+        explicit IFrameStackModel(IDebugSession *session) 
         : QAbstractItemModel(session), m_session(session) {}
         
         IDebugSession* session() const { return m_session; }

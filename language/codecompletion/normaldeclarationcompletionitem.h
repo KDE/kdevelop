@@ -30,7 +30,7 @@ namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT NormalDeclarationCompletionItem : public CompletionTreeItem
 {
 public:
-  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), QExplicitlySharedDataPointer<CodeCompletionContext> context=QExplicitlySharedDataPointer<CodeCompletionContext>(), int inheritanceDepth = 0);
+  explicit NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), QExplicitlySharedDataPointer<CodeCompletionContext> context=QExplicitlySharedDataPointer<CodeCompletionContext>(), int inheritanceDepth = 0);
   virtual KDevelop::DeclarationPointer declaration() const override;
   QExplicitlySharedDataPointer<CodeCompletionContext> completionContext() const;
   virtual int inheritanceDepth() const override;

@@ -29,7 +29,7 @@ class TestViewPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    TestViewPlugin(QObject* parent, const QVariantList& args = QVariantList());
+    explicit TestViewPlugin(QObject* parent, const QVariantList& args = QVariantList());
     virtual ~TestViewPlugin();
 
     virtual void unload() override;

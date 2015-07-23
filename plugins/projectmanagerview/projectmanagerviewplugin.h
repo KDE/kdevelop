@@ -48,7 +48,7 @@ class ProjectManagerViewPlugin: public KDevelop::IPlugin
 public:
 
 public:
-    ProjectManagerViewPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    explicit ProjectManagerViewPlugin(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ProjectManagerViewPlugin();
 
     // Plugin methods

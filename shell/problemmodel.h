@@ -55,7 +55,7 @@ public:
 
     Q_DECLARE_FLAGS(Features, FeatureCode)
 
-    ProblemModel(QObject *parent, ProblemStore *store = NULL);
+    explicit ProblemModel(QObject *parent, ProblemStore *store = NULL);
     virtual ~ProblemModel();
 
     enum Columns {

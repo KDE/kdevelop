@@ -57,7 +57,7 @@ if someCall was using HoldUpdates too, it will make sure to only call setUpdates
  */
 class KDEVPLATFORMSUBLIME_EXPORT HoldUpdates {
     public:
-        HoldUpdates(QWidget* w);
+        explicit HoldUpdates(QWidget* w);
         ~HoldUpdates();
          void stop();
     

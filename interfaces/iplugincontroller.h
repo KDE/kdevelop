@@ -74,7 +74,7 @@ public:
         Project ///< Indicates that the plugin is loaded with the first opened project
     };
 
-    IPluginController( QObject* parent = 0 );
+    explicit IPluginController( QObject* parent = 0 );
 
     virtual ~IPluginController();
 

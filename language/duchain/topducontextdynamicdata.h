@@ -41,7 +41,7 @@ typedef QPair<QByteArray, uint> ArrayWithPosition;
 ///This class contains dynamic data of a top-context, and also the repository that contains all the data within this top-context.
 class TopDUContextDynamicData {
   public:
-  TopDUContextDynamicData(TopDUContext* topContext);
+  explicit TopDUContextDynamicData(TopDUContext* topContext);
   ~TopDUContextDynamicData();
 
   void clear();

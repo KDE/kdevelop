@@ -45,7 +45,7 @@ class EditorViewWatcher : public QObject {
     Q_OBJECT
 public:
     ///@param sameWindow If this is true, only views that are child of the same window as the given widget are registered
-    EditorViewWatcher(QObject* parent = 0);
+    explicit EditorViewWatcher(QObject* parent = 0);
     QList<KTextEditor::View*> allViews();
 private:
     ///Called for every added view. Reimplement this to catch them.
@@ -69,7 +69,7 @@ class ContextBrowserPlugin;
 class BrowseManager : public QObject {
     Q_OBJECT
     public:
-        BrowseManager(ContextBrowserPlugin* controller);
+        explicit BrowseManager(ContextBrowserPlugin* controller);
     Q_SIGNALS:
         //Emitted when browsing was started using the magic-modifier
         void startDelayedBrowsing(KTextEditor::View* view);
@@ -83,7 +83,7 @@ class BrowseManager : public QObject {
         void viewAdded(KTextEditor::View* view);
         class Watcher : public EditorViewWatcher {
             public:
-                Watcher(BrowseManager* manager);
+                explicit Watcher(BrowseManager* manager);
                 virtual void viewAdded(KTextEditor::View*) override;
             private:
                 BrowseManager* m_manager;

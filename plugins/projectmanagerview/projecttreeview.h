@@ -46,7 +46,7 @@ class ProjectTreeView: public QTreeView
 {
         Q_OBJECT
     public:
-        ProjectTreeView( QWidget *parent = 0 );
+        explicit ProjectTreeView( QWidget *parent = 0 );
         virtual ~ProjectTreeView();
 
         static QModelIndex mapFromSource(const QAbstractProxyModel* proxy, const QModelIndex& sourceIdx);

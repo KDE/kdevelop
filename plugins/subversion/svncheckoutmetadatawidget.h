@@ -23,7 +23,7 @@ class SvnCheckoutMetadataWidget : public QWidget
 {
     Q_OBJECT
 public:
-    SvnCheckoutMetadataWidget( QWidget *parent );
+    explicit SvnCheckoutMetadataWidget( QWidget *parent );
     virtual ~SvnCheckoutMetadataWidget();
     void setDestinationLocation( const QUrl& );
     virtual KDevelop::VcsLocation source() const;

@@ -34,7 +34,7 @@ namespace KDevelop
 class ProblemStoreNode
 {
 public:
-    ProblemStoreNode(ProblemStoreNode *parent = nullptr)
+    explicit ProblemStoreNode(ProblemStoreNode *parent = nullptr)
     {
         m_parent = parent;
     }
@@ -132,7 +132,7 @@ private:
 class LabelNode : public ProblemStoreNode
 {
 public:
-    LabelNode(ProblemStoreNode *parent = nullptr, const QString &l = QString())
+    explicit LabelNode(ProblemStoreNode *parent = nullptr, const QString &l = QString())
         : ProblemStoreNode(parent)
         , m_label(l)
     {
@@ -158,7 +158,7 @@ private:
 class ProblemNode : public ProblemStoreNode
 {
 public:
-    ProblemNode(ProblemStoreNode *parent = nullptr, const IProblem::Ptr &problem = IProblem::Ptr(nullptr))
+    explicit ProblemNode(ProblemStoreNode *parent = nullptr, const IProblem::Ptr &problem = IProblem::Ptr(nullptr))
         : ProblemStoreNode(parent)
         , m_problem(problem)
     {

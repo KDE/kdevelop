@@ -30,7 +30,7 @@ class SvnInternalLogJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    SvnInternalLogJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalLogJob( SvnJobBase* parent = 0 );
 
     void setLocation( const QUrl &location );
     void setLimit( int limit );

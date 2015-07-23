@@ -53,7 +53,7 @@ class IndexedDUContext;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT  DUContextContext : public Context {
 public:
-    DUContextContext(const IndexedDUContext& context);
+    explicit DUContextContext(const IndexedDUContext& context);
     virtual ~DUContextContext();
         
     ///Returns the represented DUContext
@@ -84,7 +84,7 @@ public:
      * @param context If this represents a use, then this should be the context 
      *              surrounding the use. Else it should be the context surrounding the declaration.
      */
-    DeclarationContext(const IndexedDeclaration& declaration, const DocumentRange& use = DocumentRange::invalid(), const IndexedDUContext& context = IndexedDUContext());
+    explicit DeclarationContext(const IndexedDeclaration& declaration, const DocumentRange& use = DocumentRange::invalid(), const IndexedDUContext& context = IndexedDUContext());
     ///Computes the items under the cursor
     DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position);
 

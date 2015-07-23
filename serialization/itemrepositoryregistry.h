@@ -100,7 +100,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
     QMutex& mutex();
 
   private:
-    ItemRepositoryRegistry(const ISessionLock::Ptr& session);
+    explicit ItemRepositoryRegistry(const ISessionLock::Ptr& session);
 
     ItemRepositoryRegistryPrivate* d;
     static ItemRepositoryRegistry* m_self;

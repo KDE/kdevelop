@@ -29,9 +29,9 @@ class CvsJob : public KDevelop::DVcsJob
 {
     Q_OBJECT
 public:
-    CvsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    explicit CvsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
-    KDEVPLATFORMVCS_DEPRECATED CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    KDEVPLATFORMVCS_DEPRECATED explicit CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     virtual ~CvsJob();
 

@@ -41,7 +41,7 @@ class KDEVPLATFORMSHELL_EXPORT ProblemStore : public QObject
 {
     Q_OBJECT
 public:
-    ProblemStore(QObject *parent = nullptr);
+    explicit ProblemStore(QObject *parent = nullptr);
     virtual ~ProblemStore();
 
     // Adds a problem

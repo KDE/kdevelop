@@ -29,7 +29,7 @@ namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavigationContext
 {
   public:
-    ProblemNavigationContext(KDevelop::ProblemPointer problem);
+    explicit ProblemNavigationContext(KDevelop::ProblemPointer problem);
     ~ProblemNavigationContext();
     virtual QString name() const override;  
     virtual QString html(bool shorten = false) override;    

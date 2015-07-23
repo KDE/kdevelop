@@ -115,7 +115,7 @@ public:
    * \param duChainLock lock to read-acquire. If this is left zero, DUChain::lock() is used.
    * \param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
    */
-  DUChainReadLocker(DUChainLock* duChainLock = 0, unsigned int timeout = 0);
+  explicit DUChainReadLocker(DUChainLock* duChainLock = 0, unsigned int timeout = 0);
 
   /// Destructor.
   ~DUChainReadLocker();
@@ -147,7 +147,7 @@ public:
    * \param duChainLock lock to write-acquire. If this is left zero, DUChain::lock() is used.
    * \param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
    */
-  DUChainWriteLocker(DUChainLock* duChainLock = 0, unsigned int timeout = 0);
+  explicit DUChainWriteLocker(DUChainLock* duChainLock = 0, unsigned int timeout = 0);
   /// Destructor.
   ~DUChainWriteLocker();
 

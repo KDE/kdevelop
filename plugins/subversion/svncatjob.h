@@ -40,7 +40,7 @@ class SvnCatJob : public SvnJobBaseImpl<SvnInternalCatJob>
 {
     Q_OBJECT
 public:
-    SvnCatJob( KDevSvnPlugin* parent );
+    explicit SvnCatJob( KDevSvnPlugin* parent );
     QVariant fetchResults() override;
     void start() override;
     void setSource( const KDevelop::VcsLocation& );

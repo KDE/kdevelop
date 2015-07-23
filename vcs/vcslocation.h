@@ -48,8 +48,8 @@ public:
     };
 
     VcsLocation();
-    VcsLocation( const QUrl& );
-    VcsLocation( const QString& );
+    explicit VcsLocation( const QUrl& );
+    explicit VcsLocation( const QString& );
     ~VcsLocation();
     VcsLocation( const VcsLocation& );
     VcsLocation& operator=( const VcsLocation& );

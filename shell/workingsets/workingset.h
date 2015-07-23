@@ -70,7 +70,7 @@ class WorkingSet : public QObject {
     Q_OBJECT
 
 public:
-    WorkingSet(const QString& id);
+    explicit WorkingSet(const QString& id);
 
     bool isConnected(Sublime::Area* area);
 

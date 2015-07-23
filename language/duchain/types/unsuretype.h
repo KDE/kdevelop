@@ -55,7 +55,7 @@ public:
 
   UnsureType(const UnsureType& rhs);
   UnsureType();
-  UnsureType(UnsureTypeData& data);
+  explicit UnsureType(UnsureTypeData& data);
   
   virtual KDevelop::AbstractType* clone() const override;
   virtual QString toString() const override;

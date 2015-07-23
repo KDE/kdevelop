@@ -36,7 +36,7 @@ class KDEVPLATFORMVCS_EXPORT VcsItemEventModel : public QStandardItemModel
 {
 Q_OBJECT
 public:
-    VcsItemEventModel( QObject* parent );
+    explicit VcsItemEventModel( QObject* parent );
     ~VcsItemEventModel();
     
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

@@ -27,7 +27,7 @@ class FileManager;
 class KDevFileManagerPlugin: public KDevelop::IPlugin {
     Q_OBJECT
 public:
-    KDevFileManagerPlugin(QObject *parent, const QVariantList &args = QVariantList() );
+    explicit KDevFileManagerPlugin(QObject *parent, const QVariantList &args = QVariantList() );
     ~KDevFileManagerPlugin();
 
     virtual void unload() override;

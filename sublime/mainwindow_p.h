@@ -63,7 +63,7 @@ public:
     /**Use this to create tool views for an area.*/
     class IdealToolViewCreator {
     public:
-        IdealToolViewCreator(MainWindowPrivate *_d): d(_d) {}
+        explicit IdealToolViewCreator(MainWindowPrivate *_d): d(_d) {}
         Area::WalkerMode operator() (View *view, Sublime::Position position);
     private:
         MainWindowPrivate *d;
@@ -72,7 +72,7 @@ public:
     /**Use this to create views for an area.*/
     class ViewCreator {
     public:
-        ViewCreator(MainWindowPrivate *_d, QList<View*> _topViews = QList<View*>()): d(_d), topViews(_topViews.toSet()) {}
+        explicit ViewCreator(MainWindowPrivate *_d, QList<View*> _topViews = QList<View*>()): d(_d), topViews(_topViews.toSet()) {}
         Area::WalkerMode operator() (AreaIndex *index);
     private:
         MainWindowPrivate *d;

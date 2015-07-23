@@ -48,7 +48,7 @@ class TestController;
 
 class KDEVPLATFORMSHELL_EXPORT CorePrivate {
 public:
-    CorePrivate(Core *core);
+    explicit CorePrivate(Core *core);
     ~CorePrivate();
     bool initialize( Core::Setup mode, QString session );
     QPointer<PluginController> pluginController;

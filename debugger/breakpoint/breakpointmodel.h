@@ -100,7 +100,7 @@ public:
     };
     Q_DECLARE_FLAGS(ColumnFlags, ColumnFlag)
 
-    BreakpointModel(QObject* parent);
+    explicit BreakpointModel(QObject* parent);
     virtual ~BreakpointModel();
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;

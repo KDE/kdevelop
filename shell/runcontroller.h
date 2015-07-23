@@ -48,7 +48,7 @@ class KDEVPLATFORMSHELL_EXPORT RunController : public IRunController
     Q_OBJECT
 
 public:
-    RunController(QObject *parent);
+    explicit RunController(QObject *parent);
     ~RunController();
 
     virtual void registerJob(KJob *job) override;
@@ -150,7 +150,7 @@ class RunDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    RunDelegate( QObject* = 0 );
+    explicit RunDelegate( QObject* = 0 );
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const override;
 private:
     KStatefulBrush runProviderBrush;

@@ -46,7 +46,7 @@ Q_DECLARE_TYPEINFO(DUChainItem, Q_MOVABLE_TYPE);
 class DUChainItemData : public KDevelop::QuickOpenDataBase
 {
   public:
-    DUChainItemData( const DUChainItem& item, bool openDefinition = false );
+    explicit DUChainItemData( const DUChainItem& item, bool openDefinition = false );
 
     virtual QString text() const override;
     virtual QString htmlDescription() const override;
@@ -76,7 +76,7 @@ public:
     typedef KDevelop::Filter<DUChainItem> Base;
 
     /// When openDefinitions is true, the definitions will be opened if available on execute().
-    DUChainItemDataProvider( KDevelop::IQuickOpen* quickopen, bool openDefinitions = false );
+    explicit DUChainItemDataProvider( KDevelop::IQuickOpen* quickopen, bool openDefinitions = false );
     virtual void setFilterText( const QString& text ) override;
     virtual uint itemCount() const override;
     virtual uint unfilteredItemCount() const override;

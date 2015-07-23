@@ -19,7 +19,7 @@ class AppWizardPlugin;
 
 class ProjectTemplatesModel: public KDevelop::TemplatesModel {
 public:
-    ProjectTemplatesModel(AppWizardPlugin *parent);
+    explicit ProjectTemplatesModel(AppWizardPlugin *parent);
 };
 
 #endif

@@ -50,7 +50,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISelectionController : public QObject
     Q_OBJECT
 public:
     ///Constructor.
-    ISelectionController(QObject *parent);
+    explicit ISelectionController(QObject *parent);
     ~ISelectionController();
 
     /**

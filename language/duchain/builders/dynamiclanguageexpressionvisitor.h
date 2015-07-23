@@ -96,12 +96,12 @@ public:
      *
      * @param context The DUContext the expression visitor resolves names in.
      */
-    DynamicLanguageExpressionVisitor(const DUContext* context);
+    explicit DynamicLanguageExpressionVisitor(const DUContext* context);
 
     /**
      * @brief Construct a new expression visitor and copy all fixed properties from @p parent.
      */
-    DynamicLanguageExpressionVisitor(DynamicLanguageExpressionVisitor* parent);
+    explicit DynamicLanguageExpressionVisitor(DynamicLanguageExpressionVisitor* parent);
 
     virtual ~DynamicLanguageExpressionVisitor() { };
 

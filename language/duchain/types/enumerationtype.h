@@ -39,7 +39,7 @@ public:
 
   EnumerationType(const EnumerationType& rhs);
 
-  EnumerationType(EnumerationTypeData& data);
+  explicit EnumerationType(EnumerationTypeData& data);
   typedef TypePtr<EnumerationType> Ptr;
 
   virtual uint hash() const override;

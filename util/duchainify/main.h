@@ -35,7 +35,7 @@ class QCommandLineParser;
 class Manager : public QObject {
     Q_OBJECT
     public:
-        Manager(QCommandLineParser* args);
+        explicit Manager(QCommandLineParser* args);
         void addToBackgroundParser(QString path, KDevelop::TopDUContext::Features features);
         QSet<QUrl> waiting();
     private:

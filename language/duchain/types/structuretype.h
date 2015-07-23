@@ -46,7 +46,7 @@ public:
   /// Copy constructor. \param rhs type to copy
   StructureType(const StructureType& rhs);
   /// Constructor using raw data. \param data internal data.
-  StructureType(StructureTypeData& data);
+  explicit StructureType(StructureTypeData& data);
   /// Destructor
   virtual ~StructureType();
 

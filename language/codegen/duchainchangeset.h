@@ -134,7 +134,7 @@ public:
         TypeChange
     } type;
 
-    DUChainChange(ChangeTypes t) : type(t) {}
+    explicit DUChainChange(ChangeTypes t) : type(t) {}
 
     enum ItemToChange {
         ContextChildren,
@@ -173,7 +173,7 @@ public:
      * \param topContext the top context of the read-only DUChain to modify, or set to null if creating
      *                   a new DUChain from scratch.
      */
-    DUChainChangeSet(ReferencedTopDUContext topContext);
+    explicit DUChainChangeSet(ReferencedTopDUContext topContext);
 
     /**
      * Destructor, deletes all objects, references and changes owned by this change set.

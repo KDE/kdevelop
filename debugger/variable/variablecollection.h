@@ -125,7 +125,7 @@ private:
 class KDEVPLATFORMDEBUGGER_EXPORT TooltipRoot : public TreeItem
 {
 public:
-    TooltipRoot(TreeModel* model)
+    explicit TooltipRoot(TreeModel* model)
     : TreeItem(model)
     {}
 
@@ -182,7 +182,7 @@ private:
 class KDEVPLATFORMDEBUGGER_EXPORT VariablesRoot : public TreeItem
 {
 public:
-    VariablesRoot(TreeModel* model);
+    explicit VariablesRoot(TreeModel* model);
 
     Watches *watches() const { return watches_; }
     Locals *locals(const QString &name = "Locals");
@@ -200,7 +200,7 @@ private:
 class VariableProvider : public KTextEditor::TextHintProvider
 {
 public:
-    VariableProvider(VariableCollection* collection);
+    explicit VariableProvider(VariableCollection* collection);
     virtual QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) Q_DECL_OVERRIDE;
 
 private:
@@ -218,7 +218,7 @@ public:
         TypeColumn
     };
 
-    VariableCollection(IDebugController* parent);
+    explicit VariableCollection(IDebugController* parent);
     virtual ~VariableCollection();
 
     VariablesRoot* root() const { return universe_; }

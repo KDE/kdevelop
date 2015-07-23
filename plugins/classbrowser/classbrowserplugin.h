@@ -40,7 +40,7 @@ class ClassBrowserPlugin : public KDevelop::IPlugin
   Q_OBJECT
 
 public:
-  ClassBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
+  explicit ClassBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
   virtual ~ClassBrowserPlugin();
 
   void setActiveClassTree(ClassTree* a_classTree) { m_activeClassTree = a_classTree; }

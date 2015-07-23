@@ -100,7 +100,7 @@ class KDEVPLATFORMSHELL_EXPORT TextView : public Sublime::View
 {
     Q_OBJECT
 public:
-    TextView(TextDocument* doc);
+    explicit TextView(TextDocument* doc);
     virtual ~TextView();
 
     QWidget *createWidget(QWidget *parent = 0) override;

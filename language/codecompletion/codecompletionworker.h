@@ -50,7 +50,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
   Q_OBJECT
 
   public:
-    CodeCompletionWorker(CodeCompletionModel* model);
+    explicit CodeCompletionWorker(CodeCompletionModel* model);
     virtual ~CodeCompletionWorker();
 
     virtual void abortCurrentCompletion();

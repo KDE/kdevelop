@@ -28,7 +28,7 @@ class SvnInternalInfoJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    SvnInternalInfoJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalInfoJob( SvnJobBase* parent = 0 );
     void setLocation( const QUrl& );
 
     QUrl location() const;

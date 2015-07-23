@@ -122,9 +122,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
 {
   public:
     virtual ~ParsingEnvironmentFile();
-    ParsingEnvironmentFile(const IndexedString& url);
+    explicit ParsingEnvironmentFile(const IndexedString& url);
     ParsingEnvironmentFile(ParsingEnvironmentFileData& data, const IndexedString& url);
-    ParsingEnvironmentFile(ParsingEnvironmentFileData& data);
+    explicit ParsingEnvironmentFile(ParsingEnvironmentFileData& data);
 
     ///@see ParsingEnvironmentType
     virtual int type() const;

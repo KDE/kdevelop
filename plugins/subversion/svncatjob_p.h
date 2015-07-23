@@ -29,7 +29,7 @@ class SvnInternalCatJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    SvnInternalCatJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalCatJob( SvnJobBase* parent = 0 );
     void setSource( const KDevelop::VcsLocation& );
     void setSrcRevision( const KDevelop::VcsRevision& );
     void setPegRevision( const KDevelop::VcsRevision& );

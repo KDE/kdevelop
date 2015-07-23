@@ -41,7 +41,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT IBreakpointController : public QObject
 {
     Q_OBJECT
 public:
-    IBreakpointController(IDebugSession* parent);
+    explicit IBreakpointController(IDebugSession* parent);
 
     /**
      * Called just after a breakpoint is added in the given row.

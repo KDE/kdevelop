@@ -90,12 +90,9 @@ void TestIdentifier::testIdentifier()
   QCOMPARE(indexedCopy, indexedId);
 
   Identifier moved = std::move(id);
-  QVERIFY(id.isEmpty());
-  QVERIFY(id.inRepository());
   QCOMPARE(moved, copy);
 
   IndexedIdentifier movedIndexed = std::move(indexedId);
-  QVERIFY(indexedId.isEmpty());
   QCOMPARE(movedIndexed, indexedCopy);
 }
 
@@ -160,11 +157,9 @@ void TestIdentifier::testQualifiedIdentifier()
   QCOMPARE(indexedCopy, indexedId);
 
   QualifiedIdentifier moved = std::move(id);
-  QVERIFY(id.isEmpty());
   QCOMPARE(moved, copy);
 
   IndexedQualifiedIdentifier movedIndexed = std::move(indexedId);
-  QVERIFY(!indexedId.isValid());
   QCOMPARE(movedIndexed, indexedCopy);
 
   copy.clear();

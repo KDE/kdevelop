@@ -34,7 +34,7 @@ namespace KDevelop {
     class KDEVPLATFORMLANGUAGE_EXPORT UsesCollector : public QObject {
         Q_OBJECT
         public:
-            UsesCollector(IndexedDeclaration declaration);
+            explicit UsesCollector(IndexedDeclaration declaration);
             virtual ~UsesCollector();
             
             ///@warning For most tasks, you should use declarations() instead, and respect all of them!

@@ -52,7 +52,7 @@ public:
   /// Copy constructor. \param rhs type to copy
   DelayedType(const DelayedType& rhs);
   /// Constructor using raw data. \param data internal data.
-  DelayedType(DelayedTypeData& data);
+  explicit DelayedType(DelayedTypeData& data);
   /// Destructor
   virtual ~DelayedType();
 

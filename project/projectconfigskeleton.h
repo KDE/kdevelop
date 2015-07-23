@@ -41,7 +41,7 @@ public:
      *
      * @param configname The absolute filename of the developer configuration file
      */
-    ProjectConfigSkeleton( const QString & configname );
+    explicit ProjectConfigSkeleton( const QString & configname );
 
     virtual ~ProjectConfigSkeleton();
 
@@ -63,7 +63,7 @@ private:
      * this constructor is used and see if we need to add appropriate API to
      * kdelibs
      */
-     ProjectConfigSkeleton( KSharedConfigPtr config );
+     explicit ProjectConfigSkeleton( KSharedConfigPtr config );
      struct ProjectConfigSkeletonPrivate * const d;
 };
 

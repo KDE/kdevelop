@@ -32,7 +32,7 @@ class ImportMetadataWidget : public KDevelop::VcsImportMetadataWidget, private U
 {
     Q_OBJECT
 public:
-    ImportMetadataWidget(QWidget* parent=0);
+    explicit ImportMetadataWidget(QWidget* parent=0);
     virtual ~ImportMetadataWidget();
 
     virtual QUrl source() const override;

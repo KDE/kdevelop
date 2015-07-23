@@ -38,7 +38,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     Q_INTERFACES( IExecutePlugin )
 
   public:
-    ExecutePlugin(QObject *parent, const QVariantList & = QVariantList() );
+    explicit ExecutePlugin(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ExecutePlugin();
 
     static QString _nativeAppConfigTypeId;

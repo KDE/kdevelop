@@ -88,7 +88,7 @@ class KDEVPLATFORMVCS_EXPORT DVcsJob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
-    DVcsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    explicit DVcsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     virtual ~DVcsJob();
 
     /**

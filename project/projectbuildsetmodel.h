@@ -58,7 +58,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBuildSetModel : public QAbstractTableMod
 {
     Q_OBJECT
 public:
-    ProjectBuildSetModel( QObject* parent );
+    explicit ProjectBuildSetModel( QObject* parent );
     QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const override;
     QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const override;
     int rowCount( const QModelIndex& = QModelIndex() ) const override;

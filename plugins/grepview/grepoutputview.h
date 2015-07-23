@@ -31,7 +31,7 @@ class GrepOutputDelegate;
 class GrepOutputViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-    GrepOutputViewFactory(GrepViewPlugin* plugin);
+    explicit GrepOutputViewFactory(GrepViewPlugin* plugin);
     virtual QWidget* create(QWidget* parent = 0) override;
     virtual Qt::DockWidgetArea defaultPosition() override;
     virtual QString id() const override;

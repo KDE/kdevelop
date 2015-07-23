@@ -40,7 +40,7 @@ namespace CodeGenUtils
 class KDEVPLATFORMLANGUAGE_EXPORT IdentifierValidator : public QValidator
 {
   public:
-    IdentifierValidator( DUContext * context);
+    explicit IdentifierValidator( DUContext * context);
     ~IdentifierValidator();
     
     virtual State validate(QString & input, int &) const override;

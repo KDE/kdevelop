@@ -37,7 +37,7 @@ class SvnBlameJob : public SvnJobBaseImpl<SvnInternalBlameJob>
 {
     Q_OBJECT
 public:
-    SvnBlameJob( KDevSvnPlugin* parent );
+    explicit SvnBlameJob( KDevSvnPlugin* parent );
     QVariant fetchResults() override;
     void start() override;
     void setLocation( const QUrl &location );

@@ -51,7 +51,7 @@ public:
   /// Copy constructor. \param rhs type to copy
   FunctionType(const FunctionType& rhs);
   /// Constructor using raw data. \param data internal data.
-  FunctionType(FunctionTypeData& data);
+  explicit FunctionType(FunctionTypeData& data);
   /// Destructor
   ~FunctionType();
 

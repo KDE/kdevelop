@@ -32,7 +32,7 @@ class CodeUtilsPlugin : public KDevelop::IPlugin
     Q_OBJECT
 
 public:
-    CodeUtilsPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    explicit CodeUtilsPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CodeUtilsPlugin();
 
 private slots:

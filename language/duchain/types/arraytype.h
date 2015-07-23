@@ -37,7 +37,7 @@ public:
   /// Copy constructor. \param rhs type to copy
   ArrayType(const ArrayType& rhs);
   /// Constructor using raw data. \param data internal data.
-  ArrayType(ArrayTypeData& data);
+  explicit ArrayType(ArrayTypeData& data);
   /// Destructor
   virtual ~ArrayType();
 

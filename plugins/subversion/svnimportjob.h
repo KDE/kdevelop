@@ -30,7 +30,7 @@ class SvnImportJob : public SvnJobBaseImpl<SvnImportInternalJob>
 {
     Q_OBJECT
 public:
-    SvnImportJob( KDevSvnPlugin* parent );
+    explicit SvnImportJob( KDevSvnPlugin* parent );
     QVariant fetchResults() override;
     void start() override;
     void setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository);

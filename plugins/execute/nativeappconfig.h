@@ -33,7 +33,7 @@ class NativeAppConfigPage : public KDevelop::LaunchConfigurationPage, Ui::Native
 {
 Q_OBJECT
 public:
-    NativeAppConfigPage( QWidget* parent );
+    explicit NativeAppConfigPage( QWidget* parent );
     void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 ) override;
     void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const override;
     QString title() const override;

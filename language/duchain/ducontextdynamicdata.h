@@ -36,7 +36,7 @@ private:
     static inline DUContextDynamicData* ctx_dynamicData(DUContext* ctx) { return ctx->m_dynamicData; }
 
 public:
-  DUContextDynamicData( DUContext* );
+  explicit DUContextDynamicData( DUContext* );
   DUContextPointer m_parentContext;
 
   TopDUContext* m_topContext;
@@ -94,7 +94,7 @@ public:
       uint nextChild;
     };
 
-    VisibleDeclarationIterator(const DUContextDynamicData* data)
+    explicit VisibleDeclarationIterator(const DUContextDynamicData* data)
       : current(data)
     {
       toValidPosition();

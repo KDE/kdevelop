@@ -49,7 +49,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
 {
   public:
     LocalIndexedProblem(const ProblemPointer& problem, const TopDUContext* top);
-    LocalIndexedProblem(uint index = 0)
+    explicit LocalIndexedProblem(uint index = 0)
       : m_index(index)
     {}
 
@@ -134,7 +134,7 @@ public:
     using Ptr = QExplicitlySharedDataPointer<Problem>;
 
     Problem();
-    Problem(ProblemData& data);
+    explicit Problem(ProblemData& data);
     ~Problem();
 
     Source source() const override;

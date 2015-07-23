@@ -43,7 +43,7 @@ public:
   /// Copy constructor. \param rhs type to copy
   PointerType(const PointerType& rhs);
   /// Constructor using raw data. \param data internal data.
-  PointerType(PointerTypeData& data);
+  explicit PointerType(PointerTypeData& data);
   /// Destructor
   virtual ~PointerType();
 

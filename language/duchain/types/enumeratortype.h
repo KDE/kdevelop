@@ -38,7 +38,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT EnumeratorType : public EnumeratorTypeBase
 public:
   EnumeratorType(const EnumeratorType& rhs);
 
-  EnumeratorType(EnumeratorTypeData& data);
+  explicit EnumeratorType(EnumeratorTypeData& data);
 
   EnumeratorType();
 
