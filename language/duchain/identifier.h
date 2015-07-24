@@ -59,7 +59,7 @@ public:
   IndexedIdentifier();
   explicit IndexedIdentifier(const Identifier& id);
   IndexedIdentifier(const IndexedIdentifier& rhs);
-  explicit IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT;
+  IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT;
   IndexedIdentifier& operator=(const Identifier& id);
   IndexedIdentifier& operator=(const IndexedIdentifier& rhs);
   IndexedIdentifier& operator=(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT;
@@ -150,7 +150,7 @@ public:
   Identifier(const Identifier& rhs);
   explicit Identifier(uint index);
   Identifier();
-  explicit Identifier(Identifier&& rhs) Q_DECL_NOEXCEPT;
+  Identifier(Identifier&& rhs) Q_DECL_NOEXCEPT;
   ~Identifier();
   Identifier& operator=(const Identifier& rhs);
   Identifier& operator=(Identifier&& rhs) Q_DECL_NOEXCEPT;
@@ -231,7 +231,7 @@ public:
   QualifiedIdentifier(const QualifiedIdentifier& id);
   explicit QualifiedIdentifier(uint index);
   QualifiedIdentifier();
-  explicit QualifiedIdentifier(QualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT;
+  QualifiedIdentifier(QualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT;
   ~QualifiedIdentifier();
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
   QualifiedIdentifier& operator=(QualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT;
