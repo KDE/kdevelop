@@ -202,7 +202,7 @@ QPair<TopDUContextPointer, Use> macroExpansionForPosition(const QUrl &url, const
             }
         }
     }
-    return {{}, {}};
+    return {{}, Use()};
 }
 
 }

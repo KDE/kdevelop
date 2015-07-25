@@ -88,7 +88,7 @@ void AdaptSignatureAssistant::reset()
 
     m_editingDefinition = {};
     m_declarationName = {};
-    m_otherSideId = {};
+    m_otherSideId = DeclarationId();
     m_otherSideTopContext = {};
     m_otherSideContext = {};
     m_oldSignature = {};
