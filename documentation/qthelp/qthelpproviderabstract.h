@@ -41,8 +41,6 @@ public:
     virtual KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const override;
     virtual QAbstractListModel* indexModel() const override;
 
-    virtual QIcon icon() const = 0;
-
     virtual KDevelop::IDocumentation::Ptr homePage() const override;
 
     /// @return False in case we failed to load any documentation files, else true
