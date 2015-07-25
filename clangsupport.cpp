@@ -65,7 +65,7 @@
 #include <KPluginFactory>
 
 #include <QAction>
-#include <QRegExp>
+#include <QRegularExpression>
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevClangSupportFactory, "kdevclangsupport.json", registerPlugin<ClangSupport>(); )
 
@@ -84,7 +84,8 @@ namespace {
  */
 KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange = KTextEditor::Range())
 {
-    if (!line.contains(QRegExp("^\\s*#include"))) {
+    static const QRegularExpression pattern(QStringLiteral("^\\s*#include"));
+    if (!line.contains(pattern)) {
         return KTextEditor::Range::invalid();
     }
 
