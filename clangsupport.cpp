@@ -208,14 +208,14 @@ QPair<TopDUContextPointer, Use> macroExpansionForPosition(const QUrl &url, const
 }
 
 ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
-    : IPlugin( "kdevclangsupport", parent )
+    : IPlugin( QStringLiteral("kdevclangsupport"), parent )
     , ILanguageSupport()
     , m_highlighting(nullptr)
     , m_refactoring(nullptr)
     , m_index(nullptr)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
-    setXMLFile( "kdevclangsupport.rc" );
+    setXMLFile( QStringLiteral("kdevclangsupport.rc") );
 
     ClangIntegration::DUChainUtils::registerDUChainItems();
 
@@ -290,7 +290,7 @@ void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, 
 {
     _xmlFile = xmlFile();
 
-    QAction* renameDeclarationAction = actions.addAction("code_rename_declaration");
+    QAction* renameDeclarationAction = actions.addAction(QStringLiteral("code_rename_declaration"));
     renameDeclarationAction->setText( i18n("Rename Declaration") );
     renameDeclarationAction->setIcon(QIcon::fromTheme("edit-rename"));
     renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
