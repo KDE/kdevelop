@@ -135,7 +135,7 @@ public:
     {
         if (role == Qt::DecorationRole) {
             if (index.column() == KTextEditor::CodeCompletionModel::Icon) {
-                static const QIcon icon = QIcon::fromTheme("CTparents");
+                static const QIcon icon = QIcon::fromTheme(QStringLiteral("CTparents"));
                 return icon;
             }
         }
@@ -144,7 +144,7 @@ public:
 
     void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
     {
-        view->document()->replaceText(word, "virtual " + m_returnType + ' ' + m_display);
+        view->document()->replaceText(word, QLatin1String("virtual ") + m_returnType + QLatin1Char(' ') + m_display);
     }
 
 private:
@@ -157,8 +157,8 @@ public:
     ImplementsItem(const FuncImplementInfo& item)
         : CompletionItem<KDevelop::CompletionTreeItem>(
               item.prototype,
-              i18n("Implement %1", item.isConstructor ? "<constructor>" :
-                                   item.isDestructor ? "<destructor>" : item.returnType)
+              i18n("Implement %1", item.isConstructor ? QStringLiteral("<constructor>") :
+                                   item.isDestructor ? QStringLiteral("<destructor>") : item.returnType)
           )
         , m_item(item)
     {
@@ -168,7 +168,7 @@ public:
     {
         if (role == Qt::DecorationRole) {
             if (index.column() == KTextEditor::CodeCompletionModel::Icon) {
-                static const QIcon icon = QIcon::fromTheme("CTsuppliers");
+                static const QIcon icon = QIcon::fromTheme(QStringLiteral("CTsuppliers"));
                 return icon;
             }
         }
@@ -179,9 +179,9 @@ public:
     {
         QString replacement = m_item.templatePrefix;
         if (!m_item.isDestructor && !m_item.isConstructor) {
-            replacement += m_item.returnType + ' ';
+            replacement += m_item.returnType + QLatin1Char(' ');
         }
-        replacement += m_item.prototype + "\n{\n}\n";
+        replacement += m_item.prototype + QLatin1String("\n{\n}\n");
         view->document()->replaceText(word, replacement);
     }
 
@@ -225,7 +225,7 @@ public:
         }
 
         if(m_declaration->isFunctionDeclaration()) {
-            repl += "()";
+            repl += QLatin1String("()");
             view->document()->replaceText(word, repl);
             auto f = m_declaration->type<FunctionType>();
             if (f && f->indexedArgumentsSize()) {
@@ -335,7 +335,7 @@ bool isInsideComment(CXTranslationUnit unit, CXFile file, const KTextEditor::Cur
 QString& elideStringRight(QString& str, int length)
 {
     if (str.size() > length + 3) {
-        return str.replace(length, str.size() - length, "...");
+        return str.replace(length, str.size() - length, QLatin1String("..."));
     }
     return str;
 }
@@ -390,7 +390,7 @@ bool isValidCompletionIdentifier(const QualifiedIdentifier& identifier)
         return false; // is constructor
     }
     const QString idString = id.toString();
-    if (idString.startsWith("~") && scope.toString() == idString.midRef(1)) {
+    if (idString.startsWith(QLatin1Char('~')) && scope.toString() == idString.midRef(1)) {
         return false; // is destructor
     }
     return true;
@@ -412,7 +412,7 @@ bool isValidSpecialCompletionIdentifier(const QualifiedIdentifier& identifier)
 
     const Identifier id = identifier.last();
     const QString idString = id.toString();
-    if (idString.startsWith("operator=")) {
+    if (idString.startsWith(QLatin1String("operator="))) {
         return true; // is assignment operator
     }
     return false;
@@ -655,7 +655,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 case CXCompletionChunk_RightParen:
                     --parenDepth;
                     if (signatureState == Inside && !parenDepth) {
-                        display += ')';
+                        display += QLatin1Char(')');
                         signatureState = After;
                     }
                     break;
@@ -698,7 +698,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 const bool bestMatch = completionPriority <= CCP_SuperCompletion;
 
                 //don't set best match property for internal identifiers, also prefer declarations from current file
-                if (bestMatch && !found->indexedIdentifier().identifier().toString().startsWith("__") ) {
+                if (bestMatch && !found->indexedIdentifier().identifier().toString().startsWith(QLatin1String("__")) ) {
                     const int matchQuality = codeCompletionPriorityToMatchQuality(completionPriority);
                     declarationItem->setMatchQuality(matchQuality);
                 } else {
@@ -726,7 +726,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
         if (result.CursorKind == CXCursor_MacroDefinition) {
             // TODO: grouping of macros and built-in stuff
-            static const QIcon icon = QIcon::fromTheme("code-macro");
+            static const QIcon icon = QIcon::fromTheme(QStringLiteral("code-macro"));
             auto item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement, icon));
             macros.append(item);
         } else if (result.CursorKind == CXCursor_NotImplemented) {
@@ -769,11 +769,11 @@ void ClangCodeCompletionContext::addOverwritableItems()
     QList<CompletionTreeItemPointer> overrides;
     for (int i = 0; i < overrideList.count(); i++) {
         FuncOverrideInfo info = overrideList.at(i);
-        QString nameAndParams = info.name + '(' + info.params.join(", ") + ')';
+        QString nameAndParams = info.name + QLatin1Char('(') + info.params.join(QLatin1String(", ")) + QLatin1Char(')');
         if(info.isConst)
-            nameAndParams = nameAndParams + " const";
+            nameAndParams = nameAndParams + QLatin1String(" const");
         if(info.isVirtual)
-            nameAndParams = nameAndParams + " = 0";
+            nameAndParams = nameAndParams + QLatin1String(" = 0");
         overrides << CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
     }
     eventuallyAddGroup(i18n("Virtual Override"), 0, overrides);

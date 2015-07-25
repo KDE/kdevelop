@@ -55,7 +55,7 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
     Signature signature;
     const AbstractFunctionDeclaration* abstractFunDecl = dynamic_cast<const AbstractFunctionDeclaration*>(functionDecl);
     foreach(Declaration * parameter, functionCtxt->localDeclarations()) {
-        signature.defaultParams << (includeDefaults ? abstractFunDecl->defaultParameterForArgument(pos).str() : "");
+        signature.defaultParams << (includeDefaults ? abstractFunDecl->defaultParameterForArgument(pos).str() : QString());
         signature.parameters << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
         ++pos;
     }

@@ -66,7 +66,7 @@ QStringList templateTypeArguments(CXCursor cursor)
 {
     QStringList types;
     QString tStr = ClangString(clang_getTypeSpelling(clang_getCursorType(cursor))).toString();
-    ParamIterator iter("<>", tStr);
+    ParamIterator iter(QStringLiteral("<>"), tStr);
 
     while (iter) {
         types.append(*iter);
@@ -105,7 +105,7 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
         if (info->templateTypeMap.contains(type)) {
             type = info->templateTypeMap.value(type);
         }
-        params << type + ' ' + id;
+        params << type + QLatin1Char(' ') + id;
     }
 
     FuncOverrideInfo fp;
@@ -218,19 +218,19 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
             }
 
             if (kind == CXCursor_ClassTemplate || kind == CXCursor_ClassTemplatePartialSpecialization) {
-                part = name + "::";
+                part = name + QLatin1String("::");
 
                 //If we're at a template, we need to construct the template<typename T1, typename T2>
                 //which goes at the front of the prototype
                 QStringList templateTypes = templateParams(kind == CXCursor_ClassTemplate ? cursor : clang_getSpecializedCursorTemplate(cursor));
 
-                templatePrefix = QString("template<");
+                templatePrefix = QLatin1String("template<");
                 for (int i = 0; i < templateTypes.count(); i++) {
-                    templatePrefix = templatePrefix + ((i > 0) ? ", " : "") + "typename " + templateTypes.at(i);
+                    templatePrefix = templatePrefix + QLatin1String((i > 0) ? ", " : "") + QLatin1String("typename ") + templateTypes.at(i);
                 }
-                templatePrefix = templatePrefix + "> ";
+                templatePrefix = templatePrefix + QLatin1String("> ");
             } else {
-                part = name + "::";
+                part = name + QLatin1String("::");
             }
         }
 
@@ -268,7 +268,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
 
     QString returnType, rest;
     if (kind != CXCursor_Constructor && kind != CXCursor_Destructor) {
-        int spaceIndex = signature.indexOf(" ");
+        int spaceIndex = signature.indexOf(QLatin1Char(' '));
         returnType = signature.left(spaceIndex);
         rest = signature.right(signature.count() - spaceIndex - 1);
     } else {
@@ -304,7 +304,7 @@ void CompletionHelper::computeCompletions(const ParseSession& session, CXFile fi
 
     if (clang_equalLocations(clang_getNullLocation(), location)) {
         clangDebug() << "Completion helper given invalid position " << position
-                 << " in file " << ClangString(clang_getFileName(file));
+                 << " in file " << clang_getFileName(file);
         return;
     }
 

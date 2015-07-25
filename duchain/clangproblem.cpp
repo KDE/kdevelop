@@ -96,10 +96,10 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic)
     auto severity = diagnosticSeverityToSeverity(clang_getDiagnosticSeverity(diagnostic));
     setSeverity(severity);
 
-    QString description(ClangString(clang_getDiagnosticSpelling(diagnostic)));
-    const QString diagnosticOption(ClangString(clang_getDiagnosticOption(diagnostic, nullptr)));
+    QString description = ClangString(clang_getDiagnosticSpelling(diagnostic)).toString();
+    const QString diagnosticOption = ClangString(clang_getDiagnosticOption(diagnostic, nullptr)).toString();
     if (!diagnosticOption.isEmpty()) {
-        description.append(QString(" [%1]").arg(diagnosticOption));
+        description.append(QStringLiteral(" [%1]").arg(diagnosticOption));
     }
     setDescription(prettyDiagnosticSpelling(description));
 
@@ -107,7 +107,7 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic)
     CXFile diagnosticFile;
     clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
     const ClangString fileName(clang_getFileName(diagnosticFile));
-    DocumentRange docRange(IndexedString(fileName), KTextEditor::Range(location, location));
+    DocumentRange docRange(fileName.toIndexed(), KTextEditor::Range(location, location));
     const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
     for (uint i = 0; i < numRanges; ++i) {
         auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toRange();
@@ -214,7 +214,8 @@ QString ClangFixitAction::description() const
     // fallback in case there's no hint for the diagnostic
     // Make sure we don't break on a replacementText such as '#include <foobar>'
     auto formattedReplacement = m_fixit.replacementText;
-    formattedReplacement.replace("<", "&amp;lt;").replace(">", "&amp;gt;");
+    formattedReplacement.replace(QLatin1Char('<'), QLatin1String("&amp;lt;"))
+                        .replace(QLatin1Char('>'), QLatin1String("&amp;gt;"));
 
     const auto range = m_fixit.range;
     if (range.start() == range.end()) {

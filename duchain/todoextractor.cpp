@@ -41,19 +41,19 @@ namespace {
 
 inline int findEndOfLineOrEnd(const QString& str, int from = 0)
 {
-    const int index = str.indexOf('\n', from);
+    const int index = str.indexOf(QLatin1Char('\n'), from);
     return (index == -1 ? str.length() : index);
 }
 
 inline int findBeginningOfLineOrStart(const QString& str, int from = 0)
 {
-    const int index = str.lastIndexOf('\n', from);
+    const int index = str.lastIndexOf(QLatin1Char('\n'), from);
     return (index == -1 ? 0 : index+1);
 }
 
 inline int findEndOfCommentOrEnd(const QString& str, int from = 0)
 {
-    const int index = str.indexOf("*/", from);
+    const int index = str.indexOf(QLatin1String("*/"), from);
     return (index == -1 ? str.length() : index);
 }
 
@@ -118,14 +118,14 @@ private:
         Q_ASSERT(lineEnd > m_offset);
 
         QString text = m_str.mid(m_offset, lineEnd - m_offset);
-        Q_ASSERT(!text.contains('\n'));
+        Q_ASSERT(!text.contains(QLatin1Char('\n')));
 
         // there's nothing to be stripped on the left side, hence ignore that
         text.chop(text.length() - findEndOfCommentOrEnd(text));
         text = text.trimmed(); // remove additional whitespace from the end
 
         // check at what line within the comment we are by just counting the newlines until now
-        const int line = std::count(m_str.constBegin(), m_str.constBegin() + m_offset, '\n');
+        const int line = std::count(m_str.constBegin(), m_str.constBegin() + m_offset, QLatin1Char('\n'));
         KTextEditor::Cursor start = {line, m_offset - lineStart};
         KTextEditor::Cursor end = {line, start.column() + text.length()};
         m_results << Result{text, {start, end}};

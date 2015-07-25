@@ -33,7 +33,7 @@ using namespace KDevelop;
 
 QDebug operator<<(QDebug dbg, CXString string)
 {
-    dbg << ClangString(string);
+    dbg << ClangString(string).toByteArray();
     return dbg;
 }
 

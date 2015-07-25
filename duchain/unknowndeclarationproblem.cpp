@@ -70,7 +70,7 @@ bool isBlacklisted(const QString& path)
 
     // Do not allow including directly from the bits directory.
     // Instead use one of the forwarding headers in other directories, when possible.
-    if (path.contains( "bits" ) && path.contains( "/include/c++/"))
+    if (path.contains( QLatin1String("bits") ) && path.contains(QLatin1String("/include/c++/")))
         return true;
 
     return false;
@@ -91,17 +91,19 @@ QStringList scanIncludePaths( const QString& identifier, const QDir& dir, int ma
 
     /* Make this search case-insensitive? */
     for( const auto ext : { "", ".h", ".hpp", ".H", ".hh", "hxx", "tlh", "h++" } ) {
-        if ( !dir.exists( identifier + ext ) ) {
+        const auto file = identifier + QLatin1String(ext);
+        if ( !dir.exists( file ) ) {
             continue;
         }
 
-        clangDebug() << "Found candidate file" << path + "/" + identifier + ext;
-        candidates.append( path + "/" + identifier + ext );
+        const auto filePath = path + QLatin1Char('/') + file;
+        clangDebug() << "Found candidate file" << filePath;
+        candidates.append( filePath );
     }
 
     maxDepth--;
     for( const auto& subdir : dir.entryList( QDir::Dirs | QDir::NoDotAndDotDot ) )
-        candidates += scanIncludePaths( identifier, QDir{ path + "/" + subdir }, maxDepth );
+        candidates += scanIncludePaths( identifier, QDir{ path + QLatin1Char('/') + subdir }, maxDepth );
 
     return candidates;
 }
@@ -341,7 +343,7 @@ ClangFixit directiveForFile( const QString& includefile, const KDevelop::Path::L
         // find the include directive with the shortest length
         for( const auto& includePath : includepaths ) {
             QString relative = includePath.relativePath( canonicalFile );
-            if( relative.startsWith( "./" ) )
+            if( relative.startsWith( QLatin1String("./") ) )
                 relative = relative.mid( 2 );
 
             if( shortestDirective.isEmpty() || relative.length() < shortestDirective.length() ) {
@@ -364,11 +366,11 @@ ClangFixit directiveForFile( const QString& includefile, const KDevelop::Path::L
 
     QString directive;
     if( isRelative ) {
-        directive = QString{"#include \"%1\""}.arg(shortestDirective);
+        directive = QStringLiteral("#include \"%1\"").arg(shortestDirective);
     } else {
-        directive = QString{"#include <%1>"}.arg(shortestDirective);
+        directive = QStringLiteral("#include <%1>").arg(shortestDirective);
     }
-    return ClangFixit{directive + '\n', range, QObject::tr("Insert \'%1\'").arg(directive)};
+    return ClangFixit{directive + QLatin1Char('\n'), range, QObject::tr("Insert \'%1\'").arg(directive)};
 }
 
 KDevelop::Path::List includePaths( const KDevelop::Path& file )
@@ -419,8 +421,8 @@ ClangFixits forwardDeclarations(const QualifiedIdentifier& identifier, const Pat
 
     const auto name = identifier.last().toString();
     return {
-        {"class " + name + ";\n", range, QObject::tr("Forward declare as 'class'")},
-        {"struct " + name + ";\n", range, QObject::tr("Forward declare as 'struct'")}
+        {QLatin1String("class ") + name + QLatin1String(";\n"), range, QObject::tr("Forward declare as 'class'")},
+        {QLatin1String("struct ") + name + QLatin1String(";\n"), range, QObject::tr("Forward declare as 'struct'")}
     };
 }
 
@@ -464,11 +466,11 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
 QString symbolFromDiagnosticSpelling(const QString& str)
 {
     /* in all error messages the symbol is in in the first pair of quotes */
-    const auto split = str.split( '\'' );
+    const auto split = str.split( QLatin1Char('\'') );
     auto symbol = split.value( 1 );
 
-    if( str.startsWith( "No member named" ) ) {
-        symbol = split.value( 3 ) + "::" + split.value( 1 );
+    if( str.startsWith( QLatin1String("No member named") ) ) {
+        symbol = split.value( 3 ) + QLatin1String("::") + split.value( 1 );
     }
     return symbol;
 }

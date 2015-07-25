@@ -28,11 +28,11 @@
 using namespace KDevelop;
 
 namespace {
-KDevelop::IndexedTypeIdentifier stripPrefixIdentifiers(KDevelop::IndexedTypeIdentifier id, KDevelop::QualifiedIdentifier strip);
+IndexedTypeIdentifier stripPrefixIdentifiers(const IndexedTypeIdentifier& id, const QualifiedIdentifier& strip);
 
-KDevelop::Identifier stripPrefixIdentifiers(KDevelop::Identifier id, KDevelop::QualifiedIdentifier strip)
+Identifier stripPrefixIdentifiers(const Identifier& id, const QualifiedIdentifier& strip)
 {
-    KDevelop::Identifier ret(id);
+    Identifier ret(id);
     ret.clearTemplateIdentifiers();
     for (unsigned int a = 0; a < id.templateIdentifiersCount(); ++a) {
         ret.appendTemplateIdentifier(stripPrefixIdentifiers(id.templateIdentifier(a), strip));
@@ -41,7 +41,7 @@ KDevelop::Identifier stripPrefixIdentifiers(KDevelop::Identifier id, KDevelop::Q
     return ret;
 }
 
-KDevelop::IndexedTypeIdentifier stripPrefixIdentifiers(KDevelop::IndexedTypeIdentifier id, KDevelop::QualifiedIdentifier strip)
+IndexedTypeIdentifier stripPrefixIdentifiers(const IndexedTypeIdentifier& id, const QualifiedIdentifier& strip)
 {
     QualifiedIdentifier oldId(id.identifier().identifier());
     QualifiedIdentifier qid;
@@ -57,24 +57,24 @@ KDevelop::IndexedTypeIdentifier stripPrefixIdentifiers(KDevelop::IndexedTypeIden
         qid.push(stripPrefixIdentifiers(oldId.at(a), strip));
     }
 
-    KDevelop::IndexedTypeIdentifier ret(id);
+    IndexedTypeIdentifier ret(id);
     ret.setIdentifier(qid);
     return ret;
 }
 
-int reservedIdentifierCount(QString name)
+int reservedIdentifierCount(const QString &name)
 {
-    QStringList l = name.split("::");
+    QStringList l = name.split(QLatin1String("::"));
     int ret = 0;
     foreach(const QString &s, l)
-    if (s.startsWith('_')) {
+    if (s.startsWith(QLatin1Char('_'))) {
         ++ret;
     }
 
     return ret;
 }
 
-uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, uint pointerLevel, TopDUContext* top)
+uint buildIdentifierForType(const AbstractType::Ptr& type, IndexedTypeIdentifier& id, uint pointerLevel, TopDUContext* top)
 {
     if (!type) {
         return pointerLevel;
@@ -130,16 +130,16 @@ uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, u
     return pointerLevel;
 }
 
-IndexedTypeIdentifier identifierForType(AbstractType::Ptr type, TopDUContext* top)
+IndexedTypeIdentifier identifierForType(const AbstractType::Ptr& type, TopDUContext* top)
 {
     IndexedTypeIdentifier ret;
     buildIdentifierForType(type, ret, 0, top);
     return ret;
 }
 
-IndexedTypeIdentifier removeTemplateParameters(IndexedTypeIdentifier identifier, int behindPosition);
+IndexedTypeIdentifier removeTemplateParameters(const IndexedTypeIdentifier& identifier, int behindPosition);
 
-Identifier removeTemplateParameters(Identifier id, int behindPosition)
+Identifier removeTemplateParameters(const Identifier& id, int behindPosition)
 {
     Identifier ret(id);
 
@@ -149,7 +149,7 @@ Identifier removeTemplateParameters(Identifier id, int behindPosition)
         if (( int ) a < behindPosition) {
             ret.appendTemplateIdentifier(replacement);
         } else {
-            ret.appendTemplateIdentifier(IndexedTypeIdentifier(QualifiedIdentifier("...")));
+            ret.appendTemplateIdentifier(IndexedTypeIdentifier(QualifiedIdentifier(QStringLiteral("..."))));
             break;
         }
     }
@@ -157,7 +157,7 @@ Identifier removeTemplateParameters(Identifier id, int behindPosition)
     return ret;
 }
 
-IndexedTypeIdentifier removeTemplateParameters(IndexedTypeIdentifier identifier, int behindPosition) {
+IndexedTypeIdentifier removeTemplateParameters(const IndexedTypeIdentifier& identifier, int behindPosition) {
     IndexedTypeIdentifier ret(identifier);
 
     QualifiedIdentifier oldId(identifier.identifier().identifier());
@@ -178,25 +178,26 @@ IndexedType removeConstModifier(const IndexedType& indexedType)
     type->setModifiers(type->modifiers() & (~AbstractType::ConstModifier));
     return type->indexed();
 }
-}
 
-AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type)
+AbstractType::Ptr shortenTypeForViewing(const AbstractType::Ptr& type)
 {
     struct ShortenAliasExchanger
-        : public KDevelop::TypeExchanger
+        : public TypeExchanger
     {
-        virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) override {
+        virtual AbstractType::Ptr exchange(const AbstractType::Ptr& type) override {
             if (!type) {
                 return type;
             }
 
-            KDevelop::AbstractType::Ptr newType(type->clone());
+            AbstractType::Ptr newType(type->clone());
 
-            KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
+            TypeAliasType::Ptr alias = type.cast<TypeAliasType>();
             if (alias) {
                 //If the aliased type has less involved template arguments, prefer it
                 AbstractType::Ptr shortenedTarget = exchange(alias->type());
-                if (shortenedTarget && shortenedTarget->toString().count('<') < alias->toString().count('<') && reservedIdentifierCount(shortenedTarget->toString()) <= reservedIdentifierCount(alias->toString())) {
+                if (shortenedTarget && shortenedTarget->toString().count(QLatin1Char('<')) < alias->toString().count(QLatin1Char('<'))
+                    && reservedIdentifierCount(shortenedTarget->toString()) <= reservedIdentifierCount(alias->toString()))
+                {
                     shortenedTarget->setModifiers(shortenedTarget->modifiers() | alias->modifiers());
                     return shortenedTarget;
                 }
@@ -209,21 +210,20 @@ AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type)
     };
 
     ShortenAliasExchanger exchanger;
-    type = exchanger.exchange(type);
-    return type;
+    return exchanger.exchange(type);
 }
 
 ///Returns a type that has all template types replaced with DelayedType's that have their template default parameters stripped away,
 ///and all scope prefixes removed that are redundant within the given context
 ///The returned type should not actively be used in the  type-system, but rather only for displaying.
-AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx)
+AbstractType::Ptr stripType(const AbstractType::Ptr& type, DUContext* ctx)
 {
     if (!type) {
         return AbstractType::Ptr();
     }
 
     struct ShortenTemplateDefaultParameter
-        : public KDevelop::TypeExchanger
+        : public TypeExchanger
     {
         DUContext* ctx;
         ShortenTemplateDefaultParameter(DUContext* _ctx)
@@ -231,15 +231,15 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx)
             Q_ASSERT(ctx);
         }
 
-        virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) override {
+        virtual AbstractType::Ptr exchange(const AbstractType::Ptr& type) override {
             if (!type) {
                 return type;
             }
 
-            KDevelop::AbstractType::Ptr newType(type->clone());
+            AbstractType::Ptr newType(type->clone());
 
-            if (const KDevelop::IdentifiedType * idType = dynamic_cast<const IdentifiedType*>(type.data())) {
-                KDevelop::Declaration* decl = idType->declaration(ctx->topContext());
+            if (const IdentifiedType * idType = dynamic_cast<const IdentifiedType*>(type.data())) {
+                Declaration* decl = idType->declaration(ctx->topContext());
                 if (!decl) {
                     return type;
                 }
@@ -265,8 +265,8 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx)
                     }
                     currentId.clearTemplateIdentifiers();
 
-                    KDevelop::InstantiationInformation instantiationInfo = tempDecl->instantiatedWith().information();
-                    KDevelop::InstantiationInformation newInformation(instantiationInfo);
+                    InstantiationInformation instantiationInfo = tempDecl->instantiatedWith().information();
+                    InstantiationInformation newInformation(instantiationInfo);
                     newInformation.templateParametersList().clear();
 
                     for (uint neededParameters = 0; neededParameters < instantiationInfo.templateParametersSize(); ++neededParameters) {
@@ -292,10 +292,10 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx)
                 newTypeName = decl->qualifiedIdentifier();
 
                 //Strip unneded prefixes of the scope
-                KDevelop::QualifiedIdentifier candidate = newTypeName;
+                QualifiedIdentifier candidate = newTypeName;
                 while (candidate.count() > 1) {
                     candidate = candidate.mid(1);
-                    QList<KDevelop::Declaration*> decls = ctx->findDeclarations(candidate);
+                    QList<Declaration*> decls = ctx->findDeclarations(candidate);
                     if (decls.isEmpty()) {
                         continue; // type aliases might be available for nested sub scopes, hence we must not break early
                     }
@@ -308,7 +308,7 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx)
                     return type;
                 }
 
-                DelayedType::Ptr ret(new KDevelop::DelayedType);
+                DelayedType::Ptr ret(new DelayedType);
                 IndexedTypeIdentifier ti(newTypeName);
                 ti.setIsConstant(type->modifiers() & AbstractType::ConstModifier);
                 ret->setIdentifier(ti);
@@ -321,11 +321,12 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx)
     };
 
     ShortenTemplateDefaultParameter exchanger(ctx);
-    type = exchanger.exchange(type);
-    return type;
+    return exchanger.exchange(type);
+}
 }
 
-AbstractType::Ptr CodegenHelper::typeForShortenedString(Declaration* decl)
+namespace CodegenHelper {
+AbstractType::Ptr typeForShortenedString(Declaration* decl)
 {
     AbstractType::Ptr type = decl->abstractType();
     if (decl->isTypeAlias()) {
@@ -344,26 +345,29 @@ AbstractType::Ptr CodegenHelper::typeForShortenedString(Declaration* decl)
     return type;
 }
 
-QString CodegenHelper::shortenedTypeString(KDevelop::Declaration* decl, KDevelop::DUContext* ctx, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix)
+QString shortenedTypeString(Declaration* decl, DUContext* ctx, int desiredLength, const QualifiedIdentifier& stripPrefix)
 {
     return shortenedTypeString(typeForShortenedString(decl), ctx, desiredLength, stripPrefix);
 }
 
-QString CodegenHelper::simplifiedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* visibilityFrom)
+QString simplifiedTypeString(const AbstractType::Ptr& type, DUContext* visibilityFrom)
 {
     return shortenedTypeString(type, visibilityFrom, 100000);
 }
 
-QString CodegenHelper::shortenedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* ctx, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix)
+QString shortenedTypeString(const AbstractType::Ptr& type, DUContext* ctx, int desiredLength, const QualifiedIdentifier& stripPrefix)
 {
     return shortenedTypeIdentifier(type, ctx, desiredLength, stripPrefix).toString();
 }
 
-IndexedTypeIdentifier CodegenHelper::shortenedTypeIdentifier(AbstractType::Ptr type, DUContext* ctx, int desiredLength, QualifiedIdentifier stripPrefix)
+IndexedTypeIdentifier shortenedTypeIdentifier(const AbstractType::Ptr& type_, DUContext* ctx, int desiredLength,
+                                                             const QualifiedIdentifier& stripPrefix)
 {
     bool isReference = false;
     bool isRValue = false;
-    if (ReferenceType::Ptr refType = type.cast<ReferenceType>()) {
+
+    auto type = type_;
+    if (const auto& refType = type.cast<ReferenceType>()) {
         isReference = true;
         type = refType->baseType();
         isRValue = refType->isRValue();
@@ -399,4 +403,6 @@ IndexedTypeIdentifier CodegenHelper::shortenedTypeIdentifier(AbstractType::Ptr t
         identifier = removeTemplateParameters(identifier, removeTemplateParametersFrom);
     }
     return identifier;
+}
+
 }

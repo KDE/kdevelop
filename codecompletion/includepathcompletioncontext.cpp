@@ -61,7 +61,7 @@ IncludePathProperties includePathProperties(const QString& text, int rightBounda
 {
     IncludePathProperties properties;
 
-    int idx = text.lastIndexOf('\n');
+    int idx = text.lastIndexOf(QLatin1Char('\n'));
     if (idx == -1) {
         idx = 0;
     }
@@ -78,23 +78,23 @@ IncludePathProperties includePathProperties(const QString& text, int rightBounda
         FindTypeEnd
     };
     FindState state = FindBang;
-    char expectedEnd = '>';
+    QChar expectedEnd = QLatin1Char('>');
     for (; idx < text.size(); ++idx) {
         const auto c = text.at(idx);
         if (c.isSpace()) {
             continue;
         }
-        if (c == '/' && state != FindTypeEnd) {
+        if (c == QLatin1Char('/') && state != FindTypeEnd) {
             // skip comments
-            if (idx >= text.length() - 1 || text.at(idx + 1) != '*') {
+            if (idx >= text.length() - 1 || text.at(idx + 1) != QLatin1Char('*')) {
                 properties.valid = false;
                 return properties;
             }
             idx += 2;
-            while (idx < text.length() - 1 && (text.at(idx) != '*' || text.at(idx + 1) != '/')) {
+            while (idx < text.length() - 1 && (text.at(idx) != QLatin1Char('*') || text.at(idx + 1) != QLatin1Char('/'))) {
                 ++idx;
             }
-            if (idx >= text.length() - 1 || text.at(idx) != '*' || text.at(idx + 1) != '/') {
+            if (idx >= text.length() - 1 || text.at(idx) != QLatin1Char('*') || text.at(idx + 1) != QLatin1Char('/')) {
                 properties.valid = false;
                 return properties;
             }
@@ -103,13 +103,13 @@ IncludePathProperties includePathProperties(const QString& text, int rightBounda
         }
         switch (state) {
             case FindBang:
-                if (c != '#') {
+                if (c != QLatin1Char('#')) {
                     return properties;
                 }
                 state = FindInclude;
                 break;
             case FindInclude:
-                if (text.midRef(idx, 7) != "include") {
+                if (text.midRef(idx, 7) != QLatin1String("include")) {
                     return properties;
                 }
                 idx += 6;
@@ -118,10 +118,10 @@ IncludePathProperties includePathProperties(const QString& text, int rightBounda
                 break;
             case FindType:
                 properties.inputFrom = idx + 1;
-                if (c == '"') {
-                    expectedEnd = '"';
+                if (c == QLatin1Char('"')) {
+                    expectedEnd = QLatin1Char('"');
                     properties.local = true;
-                } else if (c != '<') {
+                } else if (c != QLatin1Char('<')) {
                     properties.valid = false;
                     return properties;
                 }
@@ -148,7 +148,7 @@ IncludePathProperties includePathProperties(const QString& text, int rightBounda
     if (properties.inputFrom != -1) {
         int end = properties.inputTo;
         if (end >= rightBoundary || end == -1) {
-            end = text.lastIndexOf('/', rightBoundary - 1) + 1;
+            end = text.lastIndexOf(QLatin1Char('/'), rightBoundary - 1) + 1;
         }
         if (end > 0) {
             properties.prefixPath = text.mid(properties.inputFrom, end - properties.inputFrom);
@@ -184,7 +184,7 @@ QList<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePa
             KDevelop::IncludeItem item;
             item.name = dirIterator.fileName();
 
-            if (item.name.startsWith('.') || item.name.endsWith('~')) { //filter out ".", "..", hidden files, and backups
+            if (item.name.startsWith(QLatin1Char('.')) || item.name.endsWith(QLatin1Char('~'))) { //filter out ".", "..", hidden files, and backups
                 continue;
             }
 
@@ -193,7 +193,7 @@ QList<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePa
 
             // filter files that are not a header
             // note: system headers sometimes don't have any extension, and we still want to show those
-            if (!item.isDirectory && item.name.contains('.') && !ClangHelpers::isHeader(item.name)) {
+            if (!item.isDirectory && item.name.contains(QLatin1Char('.')) && !ClangHelpers::isHeader(item.name)) {
                 continue;
             }
 
@@ -234,19 +234,19 @@ public:
             return;
         }
 
-        QString newText = includeItem.isDirectory ? includeItem.name + '/' : includeItem.name;
+        QString newText = includeItem.isDirectory ? (includeItem.name + QLatin1Char('/')) : includeItem.name;
 
         if (properties.inputFrom == -1) {
-            newText.prepend('<');
+            newText.prepend(QLatin1Char('<'));
         } else {
             range.setStart({lineNumber, properties.inputFrom});
         }
         if (properties.inputTo == -1) {
             // Add suffix
             if (properties.local) {
-                newText += '"';
+                newText += QLatin1Char('"');
             } else {
-                newText += '>';
+                newText += QLatin1Char('>');
             }
 
             // replace the whole line

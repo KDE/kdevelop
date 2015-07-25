@@ -44,14 +44,14 @@ namespace {
 bool includePathCompletionRequired(const QString& text)
 {
     QString line;
-    const int idx = text.lastIndexOf('\n');
+    const int idx = text.lastIndexOf(QLatin1Char('\n'));
     if (idx != -1) {
         line = text.mid(idx + 1).trimmed();
     } else {
         line = text.trimmed();
     }
 
-    const static QRegularExpression includeRegExp("^\\s*#\\s*include");
+    const static QRegularExpression includeRegExp(QStringLiteral("^\\s*#\\s*include"));
     if (!line.contains(includeRegExp)) {
         return false;
     }
@@ -59,7 +59,7 @@ bool includePathCompletionRequired(const QString& text)
     return true;
 }
 
-QSharedPointer<CodeCompletionContext> createCompletionContext(const KDevelop::DUContextPointer& context,
+QSharedPointer<CodeCompletionContext> createCompletionContext(const DUContextPointer& context,
                                                               const ParseSessionData::Ptr& session,
                                                               const QUrl& url,
                                                               const KTextEditor::Cursor& position,

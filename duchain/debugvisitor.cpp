@@ -74,7 +74,7 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
     }
 
     ClangString displayName(clang_getCursorDisplayName(cursor));
-    if (strlen(displayName)) {
+    if (!displayName.isEmpty()) {
         (*data->out) << "| display: \"" << displayName << "\" ";
     }
 

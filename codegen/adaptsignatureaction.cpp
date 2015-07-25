@@ -49,19 +49,19 @@ QString makeSignatureString(const Declaration* functionDecl, const Signature& si
     QString ret = CodegenHelper::simplifiedTypeString(signature.returnType.abstractType(),
                                                       visibilityFrom);
 
-    ret += ' ';
+    ret += QLatin1Char(' ');
 
     QualifiedIdentifier namespaceIdentifier = visibilityFrom->scopeIdentifier(false);
     Identifier id(IndexedString(functionDecl->qualifiedIdentifier().mid(namespaceIdentifier.count()).toString()));
     ret += functionDecl->identifier().toString();
 
-    ret += '(';
+    ret += QLatin1Char('(');
     int pos = 0;
 
     foreach(const ParameterItem &item, signature.parameters)
     {
         if (pos != 0) {
-            ret += ", ";
+            ret += QLatin1String(", ");
         }
 
         ///TODO: merge common code with helpers.cpp::createArgumentList
@@ -76,24 +76,24 @@ QString makeSignatureString(const Declaration* functionDecl, const Signature& si
                 arrayAppendix.prepend(QStringLiteral("[%1]").arg(arrayType->dimension()));
             } else {
                 // dimensionless
-                arrayAppendix.prepend(QStringLiteral("[]"));
+                arrayAppendix.prepend(QLatin1String("[]"));
             }
         }
         ret += CodegenHelper::simplifiedTypeString(type,
                                                    visibilityFrom);
 
         if (!item.second.isEmpty()) {
-            ret += ' ' + item.second;
+            ret += QLatin1Char(' ') + item.second;
         }
         ret += arrayAppendix;
         if (signature.defaultParams.size() > pos && !signature.defaultParams[pos].isEmpty()) {
-            ret += " = " + signature.defaultParams[pos];
+            ret += QLatin1String(" = ") + signature.defaultParams[pos];
         }
         ++pos;
     }
-    ret += ')';
+    ret += QLatin1Char(')');
     if (signature.isConst) {
-        ret += " const";
+        ret += QLatin1String(" const");
     }
     return ret;
 }
@@ -168,7 +168,7 @@ void AdaptSignatureAction::execute()
     QString newText = makeSignatureString(otherSide, m_newSignature);
     if (!m_editingDefinition) {
         // append a newline after the method signature in case the method definition follows
-        newText += "\n";
+        newText += QLatin1Char('\n');
     }
 
     DocumentChange changeParameters(functionContext->url(), parameterRange, QString(), newText);

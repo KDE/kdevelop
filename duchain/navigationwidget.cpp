@@ -58,7 +58,7 @@ bool IncludeNavigationContext::filterDeclaration(Declaration* decl)
     //filter out forward-declarations and macro-expansions without a range
     //And filter out declarations with reserved identifiers
     return !decl->qualifiedIdentifier().toString().isEmpty() && !decl->range().isEmpty() && !decl->isForwardDeclaration()
-            && !(declId.startsWith("__") || (declId.startsWith("_") && declId.length() > 1 && declId[1].isUpper()) );
+            && !(declId.startsWith(QLatin1String("__")) || (declId.startsWith(QLatin1Char('_')) && declId.length() > 1 && declId[1].isUpper()) );
 }
 
 ClangNavigationWidget::ClangNavigationWidget(const DeclarationPointer& declaration)

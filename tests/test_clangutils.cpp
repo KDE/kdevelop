@@ -134,7 +134,7 @@ void TestClangUtils::testGetScope()
     runVisitor(code, visitor);
     QVERIFY(cursorIndex < visitor.cursors.size());
     const auto cursor = visitor.cursors[cursorIndex];
-    clangDebug() << "Found decl:" << ClangString(clang_getCursorSpelling(cursor)) << "| range:" << ClangRange(clang_getCursorExtent(cursor)).toRange();
+    clangDebug() << "Found decl:" << clang_getCursorSpelling(cursor) << "| range:" << ClangRange(clang_getCursorExtent(cursor)).toRange();
     const QString scope = ClangUtils::getScope(cursor);
     QCOMPARE(scope, expectedScope);
 

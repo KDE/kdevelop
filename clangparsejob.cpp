@@ -98,7 +98,7 @@ Path::List readPathListFile(const QString& filepath)
     }
 
     const QString text = QString::fromLocal8Bit(f.readAll());
-    const QStringList lines = text.split('\n', QString::SkipEmptyParts);
+    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
     Path::List paths(lines.length());
     std::transform(lines.begin(), lines.end(), paths.begin(), [] (const QString& line) { return Path(line); });
     return paths;
@@ -160,7 +160,7 @@ QString languageStandard(ProjectFileItem* item)
     auto cfg = item->project()->projectConfiguration();
     auto grp = cfg->group("CustomDefinesAndIncludes");
     for (const QString& grpName : grp.groupList()) {
-        if (grpName.startsWith("ProjectPath")) {
+        if (grpName.startsWith(QLatin1String("ProjectPath"))) {
             KConfigGroup pathgrp = grp.group(grpName);
             PathStandard entry;
             entry.path = pathgrp.readEntry("Path", "");

@@ -50,16 +50,16 @@ bool isDeclarationProblem(CXDiagnostic diagnostic)
      */
 
     QString description = ClangString(clang_getDiagnosticSpelling(diagnostic)).toString();
-    return description.startsWith( "use of undeclared identifier" )
-           || description.startsWith( "no member named" )
-           || description.startsWith( "unknown type name" )
-           || description.startsWith( "variable has incomplete type" );
+    return description.startsWith( QLatin1String("use of undeclared identifier") )
+           || description.startsWith( QLatin1String("no member named") )
+           || description.startsWith( QLatin1String("unknown type name") )
+           || description.startsWith( QLatin1String("variable has incomplete type") );
 }
 
 /// @return true if @p diagnostic says that include file not found
 bool isIncludeFileNotFound(CXDiagnostic diagnostic)
 {
-    return ClangString(clang_getDiagnosticSpelling(diagnostic)).toString().endsWith("file not found");
+    return ClangString(clang_getDiagnosticSpelling(diagnostic)).toString().endsWith(QLatin1String("file not found"));
 }
 
 }

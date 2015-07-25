@@ -126,7 +126,8 @@ KTextEditor::Cursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor 
 
     int endLine = search.line(), endColumn = search.column();
     int rangeEnd = range.end().line();
-    QChar endChar(')'), searchChar;
+    QChar endChar = QLatin1Char(')');
+    QChar searchChar;
 
     do {
         searchChar = targetDoc->characterAt(KTextEditor::Cursor(endLine, endColumn));
@@ -142,8 +143,8 @@ KTextEditor::Cursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor 
             return KTextEditor::Cursor::invalid();
         }
 
-        if (endChar == QChar(')') && ClangUtils::isConstMethod(cursor)) {
-            endChar = QChar('t');
+        if (endChar == QLatin1Char(')') && ClangUtils::isConstMethod(cursor)) {
+            endChar = QLatin1Char('t');
         }
     } while (searchChar != endChar);
 
@@ -152,8 +153,8 @@ KTextEditor::Cursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor 
 
 QUrl findCompanionFile(const QUrl &fileUrl, const KTextEditor::Cursor& sc, const CXFile& file, CXCursor& otherSide)
 {
-    static QStringList headerMime({"text/x-c++hdr", "text/x-chdr"});
-    static QStringList srcMime({"text/x-c++src", "text/x-csrc"});
+    static QStringList headerMime({QStringLiteral("text/x-c++hdr"), QStringLiteral("text/x-chdr")});
+    static QStringList srcMime({QStringLiteral("text/x-c++src"), QStringLiteral("text/x-csrc")});
 
     QMimeDatabase db;
     QString me = db.mimeTypeForUrl(fileUrl).name();

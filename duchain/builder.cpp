@@ -91,7 +91,7 @@ CXCursor referencedCursor(CXCursor cursor)
 
 Identifier makeId(CXCursor cursor)
 {
-    return Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
+    return Identifier(ClangString(clang_getCursorSpelling(cursor)).toIndexed());
 }
 
 QByteArray makeComment(CXComment comment)
@@ -99,7 +99,7 @@ QByteArray makeComment(CXComment comment)
     if (Q_UNLIKELY(s_jsonTestRun)) {
         auto kind = clang_Comment_getKind(comment);
         if (kind == CXComment_Text)
-            return {ClangString(clang_TextComment_getText(comment))};
+            return ClangString(clang_TextComment_getText(comment)).toByteArray();
 
         QByteArray text;
         int numChildren = clang_Comment_getNumChildren(comment);
@@ -108,7 +108,7 @@ QByteArray makeComment(CXComment comment)
         return text;
     }
 
-    return {ClangString(clang_FullComment_getAsHTML(comment))};
+    return ClangString(clang_FullComment_getAsHTML(comment)).toByteArray();
 }
 
 AbstractType* createDelayedType(CXType type)
@@ -463,7 +463,7 @@ struct Visitor
 
         if (clang_isFunctionTypeVariadic(type)) {
             auto type = new DelayedType;
-            static const auto id = IndexedTypeIdentifier("...");
+            static const auto id = IndexedTypeIdentifier(QStringLiteral("..."));
             type->setIdentifier(id);
             type->setKind(DelayedType::Unresolved);
             func->addArgument(AbstractType::Ptr(type));
@@ -510,7 +510,7 @@ struct Visitor
     AbstractType *createType(CXType, CXCursor /*parent*/)
     {
         auto t = new DelayedType;
-        static const IndexedTypeIdentifier id(CursorKindTraits::delayedTypeName(TK));
+        static const IndexedTypeIdentifier id(QLatin1String(CursorKindTraits::delayedTypeName(TK)));
         t->setIdentifier(id);
         return t;
     }
@@ -572,7 +572,7 @@ struct Visitor
     AbstractType *createType(CXCursor)
     {
         auto t = new DelayedType;
-        static const IndexedTypeIdentifier id("Label");
+        static const IndexedTypeIdentifier id(QStringLiteral("Label"));
         t->setIdentifier(id);
         return t;
     }
@@ -809,9 +809,9 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
     // And no way to get the actual definition text range
     // Should be quite easy to expose that in libclang, though
     // Let' still get some basic support for this and parse on our own, it's not that difficult
-    const QByteArray contents = ClangUtils::getRawContents(unit, range);
-    const int firstOpeningParen = contents.indexOf('(');
-    const int firstWhitespace = contents.indexOf(' ');
+    const QString contents = QString::fromUtf8(ClangUtils::getRawContents(unit, range));
+    const int firstOpeningParen = contents.indexOf(QLatin1Char('('));
+    const int firstWhitespace = contents.indexOf(QLatin1Char(' '));
     const bool isFunctionLike = (firstOpeningParen != -1) && (firstOpeningParen < firstWhitespace);
     decl->setFunctionLike(isFunctionLike);
 
@@ -823,8 +823,8 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
             start = closingParen + 2; // + ')' + ' '
 
             // extract macro function parameters
-            const QString parameters = QString::fromUtf8(contents.mid(firstOpeningParen, closingParen - firstOpeningParen + 1));
-            ParamIterator paramIt("():", parameters, 0);
+            const QString parameters = contents.mid(firstOpeningParen, closingParen - firstOpeningParen + 1);
+            ParamIterator paramIt(QStringLiteral("():"), parameters, 0);
             while (paramIt) {
                 decl->addParameter(IndexedString(*paramIt));
                 ++paramIt;
@@ -835,9 +835,9 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
     }
     if (start == -1) {
         // unlikely: invalid macro definition, insert the complete #define statement
-        decl->setDefinition(IndexedString("#define " + contents));
+        decl->setDefinition(IndexedString(QLatin1String("#define ") + contents));
     } else if (start < contents.size()) {
-        decl->setDefinition(IndexedString(contents.constData() + start));
+        decl->setDefinition(IndexedString(contents.mid(start)));
     } // else: macro has no body => leave the definition text empty
 }
 
@@ -1021,7 +1021,7 @@ CXChildVisitResult Visitor::buildCXXBaseSpecifier(CXCursor cursor)
     auto decl = findDeclaration(classDeclCursor);
     if (!decl) {
         // this happens for templates with template-dependent base classes e.g. - dunno whether we can/should do more here
-        clangDebug() << "failed to find declaration for base specifier:" << ClangString(clang_getCursorDisplayName(cursor));
+        clangDebug() << "failed to find declaration for base specifier:" << clang_getCursorDisplayName(cursor);
         return CXChildVisit_Recurse;
     }
 
@@ -1108,7 +1108,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     case CXType_Invalid:
         return nullptr;
     default:
-        qCWarning(KDEV_CLANG) << "Unhandled type:" << type.kind << ClangString(clang_getTypeSpelling(type));
+        qCWarning(KDEV_CLANG) << "Unhandled type:" << type.kind << clang_getTypeSpelling(type);
         return nullptr;
     }
 }

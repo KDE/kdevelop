@@ -50,7 +50,7 @@ void SimpleRefactoring::fillContextMenu(ContextMenuExtension& extension, Context
             if (fileInfo.isWritable()) {
                 QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
                 action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-                action->setIcon(QIcon::fromTheme("edit-rename"));
+                action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
                 connect(action, &QAction::triggered,
                         this, &SimpleRefactoring::executeRenameAction);
 

@@ -156,8 +156,8 @@ QUrl duchainBuddyFile(const QUrl& url, FileType type)
 QPair<QString,FileType> basePathAndTypeForUrl(const QUrl &url)
 {
     QString path = url.toLocalFile();
-    int idxSlash = path.lastIndexOf('/');
-    int idxDot = path.lastIndexOf('.');
+    int idxSlash = path.lastIndexOf(QLatin1Char('/'));
+    int idxDot = path.lastIndexOf(QLatin1Char('.'));
     FileType fileType = Unknown;
     QString basePath;
     if (idxSlash >= 0 && idxDot >= 0 && idxDot > idxSlash) {
@@ -246,8 +246,8 @@ QVector< QUrl > DocumentFinderHelpers::getPotentialBuddies(const QUrl &url, bool
     const auto& extensions = ( type.second == Header ? ClangHelpers::sourceExtensions() : ClangHelpers::headerExtensions() );
     QVector< QUrl > buddies;
     for(const QString& extension : extensions) {
-        if (!extension.contains('.')) {
-            buddies.append(QUrl::fromLocalFile(type.first + '.' + extension));
+        if (!extension.contains(QLatin1Char('.'))) {
+            buddies.append(QUrl::fromLocalFile(type.first + QLatin1Char('.') + extension));
         } else {
             buddies.append(QUrl::fromLocalFile(type.first + extension));
         }

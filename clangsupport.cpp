@@ -92,14 +92,14 @@ KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEdito
     KTextEditor::Range range = originalRange;
     int pos = 0;
     for (; pos < line.size(); ++pos) {
-        if(line[pos] == '"' || line[pos] == '<') {
+        if(line[pos] == QLatin1Char('"') || line[pos] == QLatin1Char('<')) {
             range.setStart({range.start().line(), ++pos});
             break;
         }
     }
 
     for (; pos < line.size(); ++pos) {
-        if(line[pos] == '"' || line[pos] == '>') {
+        if(line[pos] == QLatin1Char('"') || line[pos] == QLatin1Char('>')) {
             range.setEnd({range.start().line(), pos});
             break;
         }
@@ -172,7 +172,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const 
     auto includeName = line.mid(wordRange.start().column(), wordRange.end().column() - wordRange.start().column());
 
     if (!includeName.isEmpty()) {
-        if (includeName.startsWith('.')) {
+        if (includeName.startsWith(QLatin1Char('.'))) {
             const Path dir = Path(url).parent();
             includeName = Path(dir, includeName).toLocalFile();
         }
@@ -181,7 +181,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const 
         auto iterator = recursiveImports.iterator();
         while (iterator) {
             const auto str = (*iterator).url().str();
-            if (str == includeName || (str.endsWith(includeName) && str[str.size()-includeName.size()-1]=='/')) {
+            if (str == includeName || (str.endsWith(includeName) && str[str.size()-includeName.size()-1] == QLatin1Char('/'))) {
                 return {TopDUContextPointer((*iterator).data()), wordRange};
             }
             ++iterator;
@@ -293,7 +293,7 @@ void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, 
 
     QAction* renameDeclarationAction = actions.addAction(QStringLiteral("code_rename_declaration"));
     renameDeclarationAction->setText( i18n("Rename Declaration") );
-    renameDeclarationAction->setIcon(QIcon::fromTheme("edit-rename"));
+    renameDeclarationAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
     renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
     connect(renameDeclarationAction, &QAction::triggered,
             m_refactoring, &SimpleRefactoring::executeRenameAction);

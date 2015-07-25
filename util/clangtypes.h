@@ -27,6 +27,8 @@
 
 #include <util/path.h>
 
+class QTextStream;
+
 namespace KTextEditor {
 class Cursor;
 class Range;
@@ -37,6 +39,7 @@ class DocumentCursor;
 class DocumentRange;
 class CursorInRevision;
 class RangeInRevision;
+class IndexedString;
 }
 
 class ClangString
@@ -48,8 +51,6 @@ public:
     ClangString(const ClangString&) = delete;
     ClangString& operator=(const ClangString&) = delete;
 
-    operator const char*() const;
-
     /**
      * Might return nullptr for invalid strings
      */
@@ -58,10 +59,14 @@ public:
     bool isEmpty() const;
 
     QString toString() const;
+    QByteArray toByteArray() const;
+    KDevelop::IndexedString toIndexed() const;
 
 private:
     CXString string;
 };
+
+QTextStream& operator<<(QTextStream& stream, const ClangString& str);
 
 class ClangLocation
 {

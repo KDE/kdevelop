@@ -195,7 +195,7 @@ QString ClangUtils::getScope(CXCursor cursor)
         scope.prepend(ClangString(clang_getCursorSpelling(search)).toString());
         search = clang_getCursorSemanticParent(search);
     }
-    return scope.join("::");
+    return scope.join(QStringLiteral("::"));
 }
 
 QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, const QVector<QString>& defaultArgs)
@@ -216,8 +216,8 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
     }
 
     QString functionName = ClangString(clang_getCursorSpelling(cursor)).toString();
-    if (functionName.contains('<')) {
-        stream << functionName.left(functionName.indexOf('<'));
+    if (functionName.contains(QLatin1Char('<'))) {
+        stream << functionName.left(functionName.indexOf(QLatin1Char('<')));
     } else {
         stream << functionName;
     }

@@ -61,18 +61,28 @@ const char* ClangString::c_str() const
 
 bool ClangString::isEmpty() const
 {
-    return !static_cast<const char*>(*this)[0];
-}
-
-ClangString::operator const char*() const
-{
-    const char *data = clang_getCString(string);
-    return data ? data : "";
+    auto str = c_str();
+    return !str || !str[0];
 }
 
 QString ClangString::toString() const
 {
-    return QString::fromUtf8(clang_getCString(string));
+    return QString::fromUtf8(c_str());
+}
+
+QByteArray ClangString::toByteArray() const
+{
+    return QByteArray(c_str());
+}
+
+IndexedString ClangString::toIndexed() const
+{
+    return IndexedString(c_str());
+}
+
+QTextStream& operator<<(QTextStream& stream, const ClangString& str)
+{
+    return stream << str.toString();
 }
 
 ClangLocation::ClangLocation(CXSourceLocation location)
@@ -88,7 +98,7 @@ ClangLocation::operator DocumentCursor() const
     CXFile file;
     clang_getFileLocation(location, &file, &line, &column, 0);
     ClangString fileName(clang_getFileName(file));
-    return {IndexedString(fileName), {static_cast<int>(line-1), static_cast<int>(column-1)}};
+    return {IndexedString(fileName.c_str()), {static_cast<int>(line-1), static_cast<int>(column-1)}};
 }
 
 ClangLocation::operator KTextEditor::Cursor() const
@@ -137,7 +147,7 @@ DocumentRange ClangRange::toDocumentRange() const
     CXFile file;
     clang_getFileLocation(start, &file, 0, 0, 0);
     ClangString fileName(clang_getFileName(file));
-    return {IndexedString(fileName), toRange()};
+    return {IndexedString(fileName.c_str()), toRange()};
 }
 
 KTextEditor::Range ClangRange::toRange() const

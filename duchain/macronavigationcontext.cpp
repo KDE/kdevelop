@@ -116,7 +116,7 @@ QString MacroNavigationContext::html(bool shorten)
 {
     clear();
 
-    modifyHtml() += "<html><body><p>" + fontSizePrefix(shorten);
+    modifyHtml() += QLatin1String("<html><body><p>") + fontSizePrefix(shorten);
     addExternalHtml(m_prefix);
 
     QStringList parameterList;
@@ -124,7 +124,7 @@ QString MacroNavigationContext::html(bool shorten)
         parameterList << parameter.str();
     }
     const QString parameters = (!parameterList.isEmpty() ?
-        QString("(%1)").arg(parameterList.join(", ")) :
+        QStringLiteral("(%1)").arg(parameterList.join(QLatin1String(", "))) :
         QString());
 
     const QUrl url = m_macro->url().toUrl();
@@ -136,14 +136,14 @@ QString MacroNavigationContext::html(bool shorten)
                           "%1: %2",
                           (m_macro->isFunctionLike() ? i18n("Function macro") : i18n("Macro")),
                           importantHighlight(name()) + parameters);
-    modifyHtml() += "<br/>";
+    modifyHtml() += QStringLiteral("<br/>");
     modifyHtml() += i18nc("%1: the link to the definition", "Defined in: %1",
-                          createLink(QString("%1 :%2").arg(url.fileName()).arg(cursor.line()+1), path, action));
+                          createLink(QStringLiteral("%1 :%2").arg(url.fileName()).arg(cursor.line()+1), path, action));
 
-    modifyHtml() += " "; //The action name _must_ stay "show_uses", since that is also used from outside
-    makeLink(i18n("Show uses"), "show_uses", NavigationAction(m_macro.dynamicCast<Declaration>(), NavigationAction::NavigateUses));
+    modifyHtml() += QStringLiteral(" "); //The action name _must_ stay "show_uses", since that is also used from outside
+    makeLink(i18n("Show uses"), QStringLiteral("show_uses"), NavigationAction(m_macro.dynamicCast<Declaration>(), NavigationAction::NavigateUses));
 
-    modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
+    modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
     return currentHtml();
 }
 
