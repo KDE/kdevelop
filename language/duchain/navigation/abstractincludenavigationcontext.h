@@ -70,7 +70,7 @@ private:
   typedef QPair<int, uint> IdentifierPair;
   void addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first,
                                   QList<IdentifierPair>& addedDeclarations,
-                                  const QString& indent = "" );
+                                  const QString& indent = {} );
   IncludeItem m_item;
 };
 

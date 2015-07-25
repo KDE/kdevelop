@@ -43,7 +43,7 @@ int KDEVPLATFORMLANGUAGE_EXPORT findClose( const QString& str , int pos );
  * @param validEnd when this is set differently, the function will stop when it finds a comma or the given character, and not at closing-braces.
  * @return  On fail, str.length() is returned, else the position of the closing character.
  */
-int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd( const QString& str , int pos, QChar validEnd = ' ' );
+int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd( const QString& str , int pos, QChar validEnd = QLatin1Char(' ') );
 
 /**
  * Skips in the string backwards over function-arguments, and stops at the right side of a "("
@@ -58,17 +58,17 @@ void KDEVPLATFORMLANGUAGE_EXPORT skipFunctionArguments(QString str, QStringList&
 QString KDEVPLATFORMLANGUAGE_EXPORT reduceWhiteSpace(QString str);
 
 QString KDEVPLATFORMLANGUAGE_EXPORT stripFinalWhitespace(QString str);
-
+// 
 /**
  * Fills all c++-style comments  within the given code with the given 'replacement' character
  * Newlines are preserved.
  */
-QString KDEVPLATFORMLANGUAGE_EXPORT clearComments( QString str, QChar replacement = ' ' );
+QString KDEVPLATFORMLANGUAGE_EXPORT clearComments( QString str, QChar replacement = QLatin1Char(' ') );
 /**
  * Fills all c++-strings within the given code with the given 'replacement' character
  * Comments should have been removed before.
  */
-QString KDEVPLATFORMLANGUAGE_EXPORT clearStrings( QString str, QChar replacement = ' ' );
+QString KDEVPLATFORMLANGUAGE_EXPORT clearStrings( QString str, QChar replacement = QLatin1Char(' ') );
 
 /**
  * Extracts the interesting information out of a comment.

@@ -91,7 +91,7 @@ public:
      *            will be opened.
      * @return the initialized test core
      */
-    static TestCore* initialize( Core::Setup mode = Core::Default, const QString& session = "" );
+    static TestCore* initialize( Core::Setup mode = Core::Default, const QString& session = {} );
 
     /**
      * Calls @c cleanup() on the current TestCore instance,

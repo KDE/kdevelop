@@ -278,19 +278,12 @@ public:
     /**
      * @return true when this Path points to a local file, false otherwise.
      */
-    inline bool isLocalFile() const
-    {
-        // if the first data element contains a '/' it is a Path prefix
-        return !m_data.isEmpty() && !m_data.first().contains('/');
-    }
+    bool isLocalFile() const;
 
     /**
      * @return true when this Path points to a remote file, false otherwise.
      */
-    inline bool isRemote() const
-    {
-        return !m_data.isEmpty() && m_data.first().contains('/');
-    }
+    bool isRemote() const;
 
     /**
      * @return the last element of the path.

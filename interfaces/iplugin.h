@@ -42,7 +42,7 @@ class MainWindow;
  */
 
 #define KDEV_USE_EXTENSION_INTERFACE( Extension ) \
-    addExtension( qobject_interface_iid<Extension*>() );
+    addExtension( QByteArray::fromRawData(qobject_interface_iid<Extension*>(), strlen(qobject_interface_iid<Extension*>())) );
 
 namespace KDevelop
 {
@@ -165,11 +165,11 @@ public:
      */
     Q_SCRIPTABLE ICore *core() const;
 
-    Q_SCRIPTABLE QStringList extensions() const;
+    Q_SCRIPTABLE QVector<QByteArray> extensions() const;
 
     template<class Extension> Extension* extension()
     {
-        if( extensions().contains( qobject_interface_iid<Extension*>() ) ) {
+        if( extensions().contains( QByteArray::fromRawData(qobject_interface_iid<Extension*>(), strlen(qobject_interface_iid<Extension*>())) ) ) {
             return qobject_cast<Extension*>( this );
         }
         return 0;
@@ -251,7 +251,7 @@ public:
     virtual QObject* createView(KTextEditor::MainWindow*) override final;
 
 protected:
-    void addExtension( const QString& );
+    void addExtension( const QByteArray& );
 
     /**
      * Initialize the XML GUI State.

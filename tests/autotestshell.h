@@ -52,11 +52,11 @@ public:
 
     QString xmlFile() override { return QString(); }
     virtual QString binaryPath() override { return QString(); };
-    QString defaultProfile() { return "kdevtest"; }
+    QString defaultProfile() { return QStringLiteral("kdevtest"); }
     KDevelop::AreaParams defaultArea() override {
         KDevelop::AreaParams params;
-        params.name = "test";
-        params.title = "Test";
+        params.name = QStringLiteral("test");
+        params.title = QStringLiteral("Test");
         return params;
     }
     QString projectFileExtension() override { return QString(); }

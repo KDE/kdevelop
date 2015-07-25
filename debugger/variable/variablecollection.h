@@ -54,7 +54,7 @@ public:
 protected:
     Variable(TreeModel* model, TreeItem* parent,
              const QString& expression,
-             const QString& display = "");
+             const QString& display = {});
 
 public:
     enum format_t { Natural, Binary, Octal, Decimal, Hexadecimal };
@@ -185,7 +185,7 @@ public:
     explicit VariablesRoot(TreeModel* model);
 
     Watches *watches() const { return watches_; }
-    Locals *locals(const QString &name = "Locals");
+    Locals *locals(const QString &name = QLatin1String("Locals"));
     QHash<QString, Locals*> allLocals() const;
 
     void fetchMoreChildren() override {}

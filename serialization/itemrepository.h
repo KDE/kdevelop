@@ -2076,7 +2076,7 @@ class ItemRepository : public AbstractItemRepository {
     //qDebug() << "opening repository" << m_repositoryName << "at" << path;
     QDir dir(path);
     m_file = new QFile(dir.absoluteFilePath( m_repositoryName ));
-    m_dynamicFile = new QFile(dir.absoluteFilePath( m_repositoryName + "_dynamic" ));
+    m_dynamicFile = new QFile(dir.absoluteFilePath( m_repositoryName + QLatin1String("_dynamic") ));
     if(!m_file->open( QFile::ReadWrite ) || !m_dynamicFile->open( QFile::ReadWrite ) ) {
       delete m_file;
       m_file = 0;

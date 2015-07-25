@@ -66,7 +66,7 @@ public:
     @param title is the user-visible (translatable) title for the area.
         Use @ref title and @ref setTitle to operate on the title.
         This parameter can be omitted and then name will be used as title.*/
-    Area(Controller *controller, const QString &name, const QString &title = "");
+    Area(Controller *controller, const QString &name, const QString &title = {});
     Area(const Area &area);
     ~Area();
 

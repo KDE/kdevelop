@@ -77,7 +77,7 @@ public:
 
     IPlugin *q;
     ICore *core;
-    QStringList m_extensions;
+    QVector<QByteArray> m_extensions;
 };
 
 IPlugin::IPlugin( const QString &componentName, QObject *parent )
@@ -130,12 +130,12 @@ ICore *IPlugin::core() const
 
 }
 
-QStringList KDevelop::IPlugin::extensions( ) const
+QVector<QByteArray> KDevelop::IPlugin::extensions( ) const
 {
     return d->m_extensions;
 }
 
-void KDevelop::IPlugin::addExtension( const QString& ext )
+void KDevelop::IPlugin::addExtension( const QByteArray& ext )
 {
     d->m_extensions << ext;
 }

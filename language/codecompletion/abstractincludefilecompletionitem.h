@@ -64,11 +64,11 @@ public:
         switch (index.column()) {
           case CodeCompletionModel::Prefix:
             if(item.isDirectory)
-              return QVariant("directory");
+              return QStringLiteral("directory");
             else
-              return QVariant("file");
+              return QStringLiteral("file");
           case CodeCompletionModel::Name: {
-            return item.isDirectory ? item.name + '/' : item.name;
+            return item.isDirectory ? (item.name + QLatin1Char('/')) : item.name;
           }
         }
         break;

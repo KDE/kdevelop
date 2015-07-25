@@ -113,7 +113,7 @@ public Q_SLOTS:
     KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Cursor& cursor,
             DocumentActivationParams activationParams = 0,
-            const QString& encoding = "");
+            const QString& encoding = {});
 
     /**
      * Opens a new or existing document.
@@ -131,7 +131,7 @@ public Q_SLOTS:
     virtual KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
-            const QString& encoding = "",
+            const QString& encoding = {},
             IDocument* buddy = 0) = 0;
 
     /**

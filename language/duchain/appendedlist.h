@@ -72,7 +72,12 @@ enum {
 template<class T, bool threadSafe = true>
 class TemporaryDataManager {
   public:
-    TemporaryDataManager(QString id = QString()) : m_itemsUsed(0), m_itemsSize(0), m_items(0), m_id(id) {
+    TemporaryDataManager(const QByteArray& id = {})
+        : m_itemsUsed(0)
+        , m_itemsSize(0)
+        , m_items(0)
+        , m_id(id)
+    {
       uint first = alloc();  //Allocate the zero item, just to reserve that index
       Q_ASSERT(first == (uint)DynamicAppendedListMask);
       Q_UNUSED(first);
@@ -81,7 +86,7 @@ class TemporaryDataManager {
       free(DynamicAppendedListMask); //Free the zero index, so we don't get wrong warnings
       uint cnt = usedItemCount();
       if(cnt) //Don't use qDebug, because that may not work during destruction
-        std::cout << m_id.toLocal8Bit().data() << " There were items left on destruction: " << usedItemCount() << "\n";
+        std::cout << m_id.constData() << " There were items left on destruction: " << usedItemCount() << "\n";
 
       for(uint a = 0; a < m_itemsUsed; ++a)
         delete m_items[a];
@@ -198,7 +203,7 @@ class TemporaryDataManager {
     QStack<uint> m_freeIndicesWithData;
     QStack<uint> m_freeIndices;
     QMutex m_mutex;
-    QString m_id;
+    QByteArray m_id;
     QList<QPair<time_t, T**> > m_deleteLater;
 };
 

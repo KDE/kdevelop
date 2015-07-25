@@ -125,7 +125,7 @@ public Q_SLOTS:
     virtual Q_SCRIPTABLE IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
-            const QString& encoding = "",
+            const QString& encoding = {},
             IDocument* buddy = 0 ) override;
 
     virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data ) override;
@@ -150,7 +150,7 @@ public Q_SLOTS:
     // If 'target' is "[selection]", returns the path of the currently active selection.
     // If 'target' is the name of a project, returns the root-path of that project.
     // Whenever the returned path corresponds to a directory, a '/.' suffix is appended.
-    Q_SCRIPTABLE QString activeDocumentPath(QString target="") const;
+    Q_SCRIPTABLE QString activeDocumentPath(QString target = {}) const;
 
     // Returns all open documents in the current area
     Q_SCRIPTABLE QStringList activeDocumentPaths() const;

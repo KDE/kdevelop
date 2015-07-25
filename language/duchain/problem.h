@@ -185,8 +185,8 @@ public:
     /**
      * A (detailed) explanation of why the problem occurred.
      */
-    QString explanation() const;
-    void setExplanation(const QString& explanation);
+    QString explanation() const override;
+    void setExplanation(const QString& explanation) override;
 
     /**
      * Get the severity of this problem.

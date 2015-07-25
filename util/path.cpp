@@ -282,6 +282,17 @@ QUrl Path::toUrl() const
     return QUrl::fromUserInput(pathOrUrl());
 }
 
+bool Path::isLocalFile() const
+{
+    // if the first data element contains a '/' it is a Path prefix
+    return !m_data.isEmpty() && !m_data.first().contains(QLatin1Char('/'));
+}
+
+bool Path::isRemote() const
+{
+    return !m_data.isEmpty() && m_data.first().contains(QLatin1Char('/'));
+}
+
 QString Path::lastPathSegment() const
 {
     // remote Paths are offset by one, thus never return the first item of them as file name

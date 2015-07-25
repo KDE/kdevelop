@@ -47,8 +47,8 @@ struct EditorDisableReplaceTabs {
         if( m_count > 1 )
             return;
         if ( m_iface ) {
-            m_oldReplaceTabs = m_iface->configValue( "replace-tabs" );
-            m_iface->setConfigValue( "replace-tabs", false );
+            m_oldReplaceTabs = m_iface->configValue(configKey());
+            m_iface->setConfigValue(configKey(), false);
         }
     }
 
@@ -60,7 +60,12 @@ struct EditorDisableReplaceTabs {
         Q_ASSERT( m_count == 0 );
 
         if (m_iface)
-            m_iface->setConfigValue("replace-tabs", m_oldReplaceTabs);
+            m_iface->setConfigValue(configKey(), m_oldReplaceTabs);
+    }
+
+    inline QString configKey() const
+    {
+        return QStringLiteral("replace-tabs");
     }
 
     KTextEditor::ConfigInterface* m_iface;

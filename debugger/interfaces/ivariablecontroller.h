@@ -50,7 +50,7 @@ public:
        thread and frame.  */     
     virtual Variable* createVariable(TreeModel* model, TreeItem* parent, 
                                      const QString& expression,
-                                     const QString& display = "") = 0;
+                                     const QString& display = {}) = 0;
 
     virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) = 0;
 

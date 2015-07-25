@@ -104,7 +104,7 @@ void TestPluginController::loadFromExtension()
 {
     IPlugin* plugin = m_pluginCtrl->pluginForExtension( "org.kdevelop.ITestNonGuiInterface" );
     QVERIFY( plugin );
-    QCOMPARE( plugin->extensions(), QStringList() << "org.kdevelop.ITestNonGuiInterface" );
+    QCOMPARE( plugin->extensions(), QVector<QByteArray>() << "org.kdevelop.ITestNonGuiInterface" );
 }
 
 void TestPluginController::benchPluginForExtension()
