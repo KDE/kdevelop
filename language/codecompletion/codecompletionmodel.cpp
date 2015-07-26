@@ -323,35 +323,33 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   if ( role == Qt::TextAlignmentRole && index.column() == 0 ) {
     return Qt::AlignRight;
   }
-  CompletionTreeElement* element = static_cast<CompletionTreeElement*>(index.internalPointer());
+  auto element = static_cast<const CompletionTreeElement*>(index.internalPointer());
   if( !element )
     return QVariant();
 
-  CompletionTreeElement& treeElement(*element);
-
   if( role == CodeCompletionModel::GroupRole ) {
-    if( treeElement.asNode() ) {
-      return QVariant(treeElement.asNode()->role);
+    if( element->asNode() ) {
+      return QVariant(element->asNode()->role);
     }else {
       qCDebug(LANGUAGE) << "Requested group-role from leaf tree element";
       return QVariant();
     }
   }else{
-    if( treeElement.asNode() ) {
+    if( element->asNode() ) {
       if( role == CodeCompletionModel::InheritanceDepth ) {
-        CompletionCustomGroupNode* customGroupNode = dynamic_cast<CompletionCustomGroupNode*>(element);
+        auto customGroupNode = dynamic_cast<const CompletionCustomGroupNode*>(element);
         if(customGroupNode)
           return QVariant(customGroupNode->inheritanceDepth);
       }
-      if( role == treeElement.asNode()->role ) {
-        return treeElement.asNode()->roleValue;
+      if( role == element->asNode()->role ) {
+        return element->asNode()->roleValue;
       } else {
         return QVariant();
       }
     }
   }
 
-  if(!treeElement.asItem()) {
+  if(!element->asItem()) {
     qCWarning(LANGUAGE) << "Error in completion model";
     return QVariant();
   }
@@ -359,12 +357,12 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   //Navigation widget interaction is done here, the other stuff is done within the tree-elements
   switch (role) {
     case CodeCompletionModel::InheritanceDepth:
-      return treeElement.asItem()->inheritanceDepth();
+      return element->asItem()->inheritanceDepth();
     case CodeCompletionModel::ArgumentHintDepth:
-      return treeElement.asItem()->argumentHintDepth();
+      return element->asItem()->argumentHintDepth();
 
     case CodeCompletionModel::ItemSelected: {
-      DeclarationPointer decl = treeElement.asItem()->declaration();
+      DeclarationPointer decl = element->asItem()->declaration();
       if(decl) {
         DUChain::self()->emitDeclarationSelected(decl);
       }
@@ -373,10 +371,10 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   }
 
   //In minimal completion mode, hide all columns except the "name" one
-  if(!m_fullCompletion && role == Qt::DisplayRole && index.column() != Name && (treeElement.asItem()->argumentHintDepth() == 0 || index.column() == Prefix))
+  if(!m_fullCompletion && role == Qt::DisplayRole && index.column() != Name && (element->asItem()->argumentHintDepth() == 0 || index.column() == Prefix))
     return QVariant();
 
-  QVariant ret = treeElement.asItem()->data(index, role, this);
+  QVariant ret = element->asItem()->data(index, role, this);
 
   //In reduced completion mode, don't show information text with the selected items
   if(role == ItemSelected && (!m_fullCompletion || !ICore::self()->languageController()->completionSettings()->showMultiLineSelectionInformation()))
