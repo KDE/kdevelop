@@ -302,7 +302,9 @@ struct Visitor
         IF_DEBUG(clangDebug() << "TK:" << type.kind;)
 
         auto kdevType = createType<TK>(type, cursor);
-        setTypeModifiers<TK>(type, kdevType);
+        if (kdevType) {
+            setTypeModifiers<TK>(type, kdevType);
+        }
         return kdevType;
     }
 //BEGIN dispatch*
