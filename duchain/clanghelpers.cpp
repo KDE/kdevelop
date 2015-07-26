@@ -129,8 +129,6 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     UrlParseLock urlLock(path);
     ReferencedTopDUContext context;
     {
-        const auto problems = session.problemsForFile(file);
-
         DUChainWriteLocker lock;
         context = DUChain::self()->chainForDocument(path, &environment);
         if (!context) {
@@ -138,8 +136,6 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         } else {
             update = true;
         }
-
-        context->setProblems(problems);
 
         includedFiles.insert(file, context);
         if (update) {
@@ -170,6 +166,12 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
             context->addImportedParentContext(ctx, import.location);
         }
         context->updateImportsCache();
+    }
+
+    const auto problems = session.problemsForFile(file);
+    {
+        DUChainWriteLocker lock;
+        context->setProblems(problems);
     }
 
     Builder::visit(session.unit(), file, includedFiles, update);
