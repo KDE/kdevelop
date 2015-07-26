@@ -7,6 +7,14 @@ target_link_libraries(clang-parser
     kdevclangduchain
 )
 
+add_executable(clang-minimal-visitor
+    minimal_visitor.cpp
+)
+
+target_link_libraries(clang-minimal-visitor
+    ${CLANG_CLANG_LIB}
+)
+
 ecm_add_test(test_buddies.cpp
     TEST_NAME test_buddies
     LINK_LIBRARIES
