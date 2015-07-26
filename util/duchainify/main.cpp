@@ -174,13 +174,19 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
 
     m_waiting.remove(url.toUrl());
 
-    std::cerr << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << std::endl;
-    if (!topContext)
-        return;
+    std::cerr << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << "\n";
+    dump(topContext);
+}
 
-    std::cerr << std::endl;
+void Manager::dump(const ReferencedTopDUContext& topContext)
+{
+    if (!topContext) {
+        return;
+    }
 
     QTextStream stream(stdout);
+
+    std::cerr << "\n";
 
     if (m_args->isSet("dump-definitions")) {
         DUChainReadLocker lock;
@@ -216,6 +222,17 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
         DumpDotGraph dumpGraph;
         const QString dotOutput = dumpGraph.dotGraph(topContext);
         std::cout << qPrintable(dotOutput) << std::endl;
+    }
+
+    if (m_args->isSet("dump-imported-errors")) {
+        DUChainReadLocker lock;
+        foreach(const auto& import, topContext->importedParentContexts()) {
+            auto top = dynamic_cast<TopDUContext*>(import.indexedContext().context());
+            if (top && top != topContext && !top->problems().isEmpty()) {
+                DUChainDumper dumpChain(DUChainDumper::DumpProblems);
+                dumpChain.dump(top, 0);
+            }
+        }
     }
 }
 
@@ -287,6 +304,7 @@ int main(int argc, char** argv)
     parser.addOption(QCommandLineOption{QStringList{"dump-depth"}, i18n("Number defining the maximum depth where declaration details are printed"), "depth"});
     parser.addOption(QCommandLineOption{QStringList{"dump-graph"}, i18n("Dump DUChain graph (in .dot format)")});
     parser.addOption(QCommandLineOption{QStringList{"d", "dump-errors"}, i18n("Print problems encountered during parsing")});
+    parser.addOption(QCommandLineOption{QStringList{"dump-imported-errors"}, i18n("Recursively dump errors from imported contexts.")});
 
     parser.process(app);
 

@@ -49,6 +49,7 @@ class Manager : public QObject {
         void init();
         void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
         void finish();
+        void dump(const KDevelop::ReferencedTopDUContext& topContext);
 };
 
 #endif
