@@ -85,11 +85,11 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
     m_factories.append(CompilerFactoryPointer(new MsvcFactory()));
 #endif
 
-    if (!QStandardPaths::findExecutable( "gcc" ).isEmpty()) {
-        m_factories[0]->registerDefaultCompilers(this);
-    }
     if (!QStandardPaths::findExecutable( "clang" ).isEmpty()) {
         m_factories[1]->registerDefaultCompilers(this);
+    }
+    if (!QStandardPaths::findExecutable( "gcc" ).isEmpty()) {
+        m_factories[0]->registerDefaultCompilers(this);
     }
 #ifdef _WIN32
     if (!QStandardPaths::findExecutable("cl.exe").isEmpty()) {
