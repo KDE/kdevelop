@@ -361,6 +361,10 @@ struct Visitor
         decl->setIdentifier(id);
         m_cursorToDeclarationCache[clang_hashCursor(cursor)] = decl;
         setDeclData<CK>(cursor, decl);
+        {
+            DUChainWriteLocker lock;
+            decl->setContext(m_parentContext->context);
+        }
         return decl;
     }
 
@@ -371,7 +375,6 @@ struct Visitor
         auto type = createType<CK>(cursor);
 
         DUChainWriteLocker lock;
-        decl->setContext(m_parentContext->context);
         if (context)
             decl->setInternalContext(context);
         setDeclType<CK>(decl, type);
