@@ -374,13 +374,12 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   if(!m_fullCompletion && role == Qt::DisplayRole && index.column() != Name && (element->asItem()->argumentHintDepth() == 0 || index.column() == Prefix))
     return QVariant();
 
-  QVariant ret = element->asItem()->data(index, role, this);
 
   //In reduced completion mode, don't show information text with the selected items
   if(role == ItemSelected && (!m_fullCompletion || !ICore::self()->languageController()->completionSettings()->showMultiLineSelectionInformation()))
     return QVariant();
 
-  return ret;
+  return element->asItem()->data(index, role, this);
 }
 
 KDevelop::TopDUContextPointer CodeCompletionModel::currentTopContext() const
