@@ -284,7 +284,7 @@ int main(int argc, char** argv)
     parser.addOption(QCommandLineOption{QStringList{"dump-context"}, i18n("Print complete Definition-Use Chain on successful parse")});
     parser.addOption(QCommandLineOption{QStringList{"dump-definitions"}, i18n("Print complete DUChain Definitions repository on successful parse")});
     parser.addOption(QCommandLineOption{QStringList{"dump-symboltable"}, i18n("Print complete DUChain PersistentSymbolTable repository on successful parse")});
-    parser.addOption(QCommandLineOption{QStringList{"depth"}, i18n("Number defining the maximum depth where declaration details are printed"), "depth"});
+    parser.addOption(QCommandLineOption{QStringList{"dump-depth"}, i18n("Number defining the maximum depth where declaration details are printed"), "depth"});
     parser.addOption(QCommandLineOption{QStringList{"dump-graph"}, i18n("Dump DUChain graph (in .dot format)")});
     parser.addOption(QCommandLineOption{QStringList{"d", "dump-errors"}, i18n("Print problems encountered during parsing")});
 
