@@ -28,6 +28,7 @@
 #include <QMutexLocker>
 #include <QPointer>
 #include <QTimer>
+#include <QThread>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -322,7 +323,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
         m_delay = BACKWARDS_COMPATIBLE_ENTRY("Delay", 500);
         m_timer.setInterval(m_delay);
         m_threads = 0;
-        m_parser->setThreadCount(BACKWARDS_COMPATIBLE_ENTRY("Number of Threads", 1));
+        m_parser->setThreadCount(BACKWARDS_COMPATIBLE_ENTRY("Number of Threads", QThread::idealThreadCount()));
 
         resume();
 
