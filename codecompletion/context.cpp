@@ -27,6 +27,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/typealiastype.h>
 #include <language/interfaces/iastcontainer.h>
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/codecompletionmodel.h>
@@ -352,24 +353,41 @@ int codeCompletionPriorityToMatchQuality(unsigned int completionPriority)
     return 10u - qBound(0u, completionPriority, 80u) / 8;
 }
 
-/// Adjusts piority for the @p decl
-int adjustPriorityForDeclaration(Declaration* decl, unsigned int completionPriority)
+int adjustPriorityForType(const AbstractType::Ptr& type, int completionPriority)
 {
-    if (completionPriority == CCP_LocalDeclarationSimiliar) {
-        const auto type = decl->abstractType();
-        if (type) {
-            const auto whichType = type->whichType();
-            if (whichType == AbstractType::TypePointer) {
-                // Clang considers all pointers as similar, this is not what we want.
-                completionPriority += 4;
-            } else if (whichType == AbstractType::TypeStructure) {
-                // Clang considers all classes as similar too...
-                completionPriority += 4;
-            }
+    const auto modifier = 4;
+    if (type) {
+        const auto whichType = type->whichType();
+        if (whichType == AbstractType::TypePointer || whichType == AbstractType::TypeReference) {
+            // Clang considers all pointers as similar, this is not what we want.
+            completionPriority += modifier;
+        } else if (whichType == AbstractType::TypeStructure) {
+            // Clang considers all classes as similar too...
+            completionPriority += modifier;
+        } else if (whichType == AbstractType::TypeDelayed) {
+            completionPriority += modifier;
+        } else if (whichType == AbstractType::TypeAlias) {
+            auto aliasedType = type.cast<TypeAliasType>();
+            return adjustPriorityForType(aliasedType ? aliasedType->type() : AbstractType::Ptr(), completionPriority);
+        } else if (whichType == AbstractType::TypeFunction) {
+            auto functionType = type.cast<FunctionType>();
+            return adjustPriorityForType(functionType ? functionType->returnType() : AbstractType::Ptr(), completionPriority);
         }
+    } else {
+        completionPriority += modifier;
     }
 
     return completionPriority;
+}
+
+/// Adjusts priority for the @p decl
+int adjustPriorityForDeclaration(Declaration* decl, unsigned int completionPriority)
+{
+    if(completionPriority < CCP_LocalDeclarationSimiliar || completionPriority > CCP_SuperCompletion){
+        return completionPriority;
+    }
+
+    return adjustPriorityForType(decl->abstractType(), completionPriority);
 }
 
 /**
