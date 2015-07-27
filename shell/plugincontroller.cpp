@@ -33,7 +33,6 @@ Boston, MA 02110-1301, USA.
 #include <KPluginLoader>
 #include <KServiceTypeTrader>
 
-#include <assert.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>
