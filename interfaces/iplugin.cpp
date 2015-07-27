@@ -81,7 +81,7 @@ public:
 };
 
 IPlugin::IPlugin( const QString &componentName, QObject *parent )
-    : KTextEditor::Plugin(parent)
+    : QObject(parent)
     , KXMLGUIClient()
     , d(new IPluginPrivate(this))
 {
@@ -191,6 +191,16 @@ QString KDevelop::IPlugin::errorDescription() const
     return QString();
 }
 
+int KDevelop::IPlugin::configPages() const
+{
+    return 0;
+}
+
+KDevelop::ConfigPage* KDevelop::IPlugin::configPage (int, QWidget*)
+{
+    return nullptr;
+}
+
 int KDevelop::IPlugin::perProjectConfigPages() const
 {
     return 0;
@@ -200,17 +210,4 @@ KDevelop::ConfigPage* KDevelop::IPlugin::perProjectConfigPage(int, const Project
 {
     return nullptr;
 }
-
-KDevelop::ConfigPage* KDevelop::IPlugin::configPage (int, QWidget*)
-{
-    return nullptr;
-}
-
-QObject* KDevelop::IPlugin::createView(KTextEditor::MainWindow*)
-{
-    Q_UNREACHABLE();
-    return nullptr;
-}
-
-
 #include "moc_iplugin.cpp"

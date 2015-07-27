@@ -27,7 +27,6 @@
 #include <QtCore/QList>
 
 #include <KXMLGUIClient>
-#include <KTextEditor/Plugin>
 
 #include "configpage.h"
 #include "interfacesexport.h"
@@ -141,7 +140,7 @@ struct ProjectConfigOptions;
  * @sa Core class documentation for information about features available to
  * plugins from shell applications.
  */
-class KDEVPLATFORMINTERFACES_EXPORT IPlugin: public KTextEditor::Plugin, public KXMLGUIClient
+class KDEVPLATFORMINTERFACES_EXPORT IPlugin: public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 
@@ -220,14 +219,7 @@ public:
     virtual QString errorDescription() const;
 
     /**
-     * Get the number of available config pages for per project settings.
-     * @return number of per project config pages. The default implementation returns zero.
-     * @see perProjectConfigPage()
-     */
-    virtual int perProjectConfigPages() const;
-
-    /**
-     * Get the per project config page with the \p number, config pages from 0 to
+     * Get the global config page with the \p number, config pages from 0 to
      * configPages()-1 are available if configPages() > 0.
      *
      * @param number index of config page
@@ -238,17 +230,35 @@ public:
      * The default implementation returns @c nullptr.
      * @see perProjectConfigPages(), ProjectConfigPage
      */
-    virtual ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
+    virtual ConfigPage* configPage(int number, QWidget *parent);
 
     /**
-     * Make sure plugins return a KDevelop::ConfigPage and not just a KTextEditor::ConfigPage
-     * @see KTextEditor::Plugin::configPage
+     * Get the number of available config pages for global settings.
+     * @return number of global config pages. The default implementation returns zero.
+     * @see configPage()
      */
-    virtual KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
+    virtual int configPages() const;
 
+    /**
+     * Get the number of available config pages for per project settings.
+     * @return number of per project config pages. The default implementation returns zero.
+     * @see perProjectConfigPage()
+     */
+    virtual int perProjectConfigPages() const;
 
-    /** This is implemented to do nothing, so that we can inherit from KTextEditor::Plugin */
-    virtual QObject* createView(KTextEditor::MainWindow*) override final;
+    /**
+     * Get the per project config page with the \p number, config pages from 0 to
+     * perProjectConfigPages()-1 are available if perProjectConfigPages() > 0.
+     *
+     * @param number index of config page
+     * @param options The options used to initialize the ProjectConfigPage
+     * @param parent parent widget for config page
+     * @return newly created config page or NULL, if the number is out of bounds, default implementation returns NULL.
+     * This config page should inherit from ProjectConfigPage, but it is not a strict requirement.
+     * The default implementation returns @c nullptr.
+     * @see perProjectConfigPages(), ProjectConfigPage
+     */
+    virtual ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
 
 protected:
     void addExtension( const QByteArray& );
