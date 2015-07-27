@@ -154,9 +154,9 @@ void CurrentProjectSet::setCurrentDocumentInternal(const IndexedString& url)
     if (projectForUrl && projectForUrl != m_currentProject) {
         m_documents.clear();
         m_currentProject = projectForUrl;
-        QList<ProjectFileItem*> files = m_currentProject->projectItem()->fileList();
-        foreach (ProjectFileItem* file, files) {
-            m_documents.insert(file->indexedPath());
+
+        foreach (const IndexedString &indexedString, m_currentProject->fileSet()) {
+            m_documents.insert(indexedString);
         }
         emit changed();
     }
@@ -171,8 +171,8 @@ AllProjectSet::AllProjectSet(QObject *parent)
     : ProjectSet(parent)
 {
     foreach(const IProject* project, ICore::self()->projectController()->projects()) {
-        foreach (ProjectFileItem* file, project->projectItem()->fileList()) {
-            m_documents.insert(file->indexedPath());
+        foreach (const IndexedString &indexedString, project->fileSet()) {
+            m_documents.insert(indexedString);
         }
         trackProjectFiles(project);
     }
