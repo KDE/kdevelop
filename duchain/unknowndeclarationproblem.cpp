@@ -92,12 +92,12 @@ QStringList scanIncludePaths( const QString& identifier, const QDir& dir, int ma
 
     /* Make this search case-insensitive? */
     for( const auto ext : { "", ".h", ".hpp", ".H", ".hh", "hxx", "tlh", "h++" } ) {
-        const auto file = identifier + QLatin1String(ext);
+        const QString file = identifier + QLatin1String(ext);
         if ( !dir.exists( file ) ) {
             continue;
         }
 
-        const auto filePath = path + QLatin1Char('/') + file;
+        const QString filePath = path + QLatin1Char('/') + file;
         clangDebug() << "Found candidate file" << filePath;
         candidates.append( filePath );
     }
