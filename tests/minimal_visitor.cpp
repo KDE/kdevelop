@@ -54,7 +54,11 @@ int main(int argc, char** argv)
     auto index = clang_createIndex(0, 0);
 
     CXTranslationUnit unit;
+#if CINDEX_VERSION_MINOR >= 23
     clang_parseTranslationUnit2(index, argv[1], nullptr, 0, nullptr, 0, 0, &unit);
+#else
+    unit = clang_parseTranslationUnit(index, argv[1], nullptr, 0, nullptr, 0, 0);
+#endif
 
     auto tuCursor = clang_getTranslationUnitCursor(unit);
     clang_visitChildren(tuCursor, &visitCursor, nullptr);

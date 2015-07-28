@@ -159,7 +159,7 @@ bool ClangUtils::isConstMethod(CXCursor cursor)
     //const qualifier. This parses the Unified Symbol Resolution to retrieve that information.
     //However, since the USR is undocumented, this might break in the future.
     QString usr = ClangString(clang_getCursorUSR(cursor)).toString();
-    if (usr.length() >= 2 && usr.at(usr.length() - 2) == '#') {
+    if (usr.length() >= 2 && usr.at(usr.length() - 2) == QLatin1Char('#')) {
         return ((usr.at(usr.length() - 1).toAscii()) - '0') & 0x1;
     } else {
         return false;
