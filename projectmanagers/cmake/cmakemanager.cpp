@@ -189,14 +189,32 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
     return ret;
 }
 
+CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
+{
+    const CMakeJsonData & data = m_projects[item->project()].jsonData;
+    QHash<KDevelop::Path, CMakeFile>::const_iterator it = data.files.constFind(item->path());
+    if (it != data.files.constEnd()) {
+        return *it;
+    } else if (item->type() == ProjectBaseItem::Folder) {
+        Path p = item->path().parent();
+
+        for( it = data.files.constBegin(); it != data.files.constEnd(); ++it) {
+            if (p.isDirectParentOf(it.key())) {
+                return *it;
+            }
+        }
+    }
+    return {};
+}
+
 Path::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
-    return m_projects[item->project()].jsonData.files[item->path()].includes;
+    return fileInformation(item).includes;
 }
 
 QHash<QString, QString> CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const
 {
-    return m_projects[item->project()].jsonData.files[item->path()].defines;
+    return fileInformation(item).defines;
 }
 
 KDevelop::IProjectBuilder * CMakeManager::builder() const

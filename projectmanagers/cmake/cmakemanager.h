@@ -34,7 +34,7 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
 
-#include "cmakelistsparser.h"
+#include "cmakeprojectdata.h"
 #include "icmakemanager.h"
 #include "cmakeprojectvisitor.h"
 
@@ -156,6 +156,8 @@ private slots:
     void importFinished(KJob* job);
 
 private:
+    CMakeFile fileInformation(KDevelop::ProjectBaseItem* item) const;
+
     void folderAdded(KDevelop::ProjectFolderItem* folder);
 
     QHash<KDevelop::IProject*, CMakeProjectData> m_projects;
