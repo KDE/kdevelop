@@ -510,12 +510,28 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
 }
 
 /// If any parent of this context is a class, the closest class declaration is returned, nullptr otherwise
-Declaration* classDeclarationForContext(const DUContextPointer& context)
+Declaration* classDeclarationForContext(const DUContextPointer& context, const CursorInRevision& position, const QMultiHash<QualifiedIdentifier, Declaration*>& declarationsCache)
 {
     auto parent = context;
     while (parent) {
         if (parent->type() == DUContext::Class) {
             break;
+        }
+
+        if (auto owner = parent->owner()) {
+            // Work-around for out-of-line methods. They have Helper context instead of Class context
+            if (owner->context() && owner->context()->type() == DUContext::Helper) {
+                auto qid = owner->qualifiedIdentifier();
+                qid.pop();
+
+                QSet<Declaration*> tmp;
+                auto decl = findDeclaration(qid, context, position, declarationsCache, tmp);
+
+                if (decl && decl->internalContext() && decl->internalContext()->type() == DUContext::Class) {
+                    parent = decl->internalContext();
+                    break;
+                }
+            }
         }
         parent = parent->parentContext();
     }
@@ -634,7 +650,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             continue;
         }
 
-        if (availability == CXAvailability_NotAccessible && (!isDeclaration || !classDeclarationForContext(ctx))) {
+        // If ctx is/inside the Class context, this represents that context.
+        auto currentClassContext = classDeclarationForContext(ctx, m_position, declarationsCache);
+        if (availability == CXAvailability_NotAccessible && (!isDeclaration || !currentClassContext)) {
             continue;
         }
 
@@ -743,8 +761,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                             continue;
                         }
 
-                        auto declarationClassContext = classDeclarationForContext(DUContextPointer(found->context()));
-                        auto currentClassContext = classDeclarationForContext(ctx);
+                        auto declarationClassContext = classDeclarationForContext(DUContextPointer(found->context()), m_position, declarationsCache);
 
                         uint steps = 10;
                         auto inheriters = DUChainUtils::getInheriters(declarationClassContext, steps);

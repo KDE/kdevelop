@@ -946,7 +946,7 @@ CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
     // Code path for class declarations that may be defined "out-of-line", e.g.
     // "SomeNameSpace::SomeClass {};"
     QScopedPointer<CurrentContext> helperContext;
-    if (CursorKindTraits::isClass(CK)) {
+    if (CursorKindTraits::isClass(CK) || CursorKindTraits::isFunction(CK)) {
         const auto lexicalParent = clang_getCursorLexicalParent(cursor);
         const auto semanticParent = clang_getCursorSemanticParent(cursor);
         const bool isOutOfLine = !clang_equalCursors(lexicalParent, semanticParent);

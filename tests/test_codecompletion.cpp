@@ -177,7 +177,6 @@ void executeCompletionPriorityTest(const QString& code, const CompletionPriority
 
     for(const auto& declaration : expectedCompletionItems.completions){
         const auto declarationItem = tester.findItem(declaration.name);
-        QEXPECT_FAIL("protected-access2", declaration.failMessage.toUtf8().constData(), Abort);
         QVERIFY(declarationItem);
         QVERIFY(declarationItem->declaration());
 
@@ -724,5 +723,5 @@ void TestCodeCompletion::testCompletionPriority_data()
         << "class Base { protected: int m_protected; };"
            "class Derived: public Base {public: void f();};"
            "void Derived::f(){\n }"
-        << CompletionPriorityItems{{1,0}, {{"m_protected", 0, 37, QStringLiteral("Out of line methods have wrong parent context attached (Global instead of Class)")}}};
+        << CompletionPriorityItems{{1,0}, {{"m_protected", 0, 37}}};
 }
