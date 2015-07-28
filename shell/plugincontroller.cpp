@@ -40,7 +40,6 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/ipluginversion.h>
 
-#include "mainwindow.h"
 #include "core.h"
 #include "shellextension.h"
 #include "runcontroller.h"
@@ -48,6 +47,7 @@ Boston, MA 02110-1301, USA.
 #include "documentationcontroller.h"
 #include "sourceformattercontroller.h"
 #include "projectcontroller.h"
+#include "ktexteditorpluginintegration.h"
 #include "debug.h"
 
 namespace {
@@ -68,7 +68,6 @@ inline QString KEY_Project() { return QStringLiteral("Project"); }
 inline QString KEY_Gui() { return QStringLiteral("GUI"); }
 inline QString KEY_AlwaysOn() { return QStringLiteral("AlwaysOn"); }
 inline QString KEY_UserSelectable() { return QStringLiteral("UserSelectable"); }
-
 
 bool isUserSelectable( const KPluginMetaData& info )
 {
@@ -282,6 +281,23 @@ PluginController::PluginController(Core *core)
                 " It must be ported to JSON metadata or it will no longer work with future kdevplatform versions.";
             d->plugins.append(info.toMetaData());
         }
+    }
+
+    KTextEditorIntegration::initialize();
+    const QVector<KPluginMetaData> katePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData & md) {
+        static const QVector<QString> whiteListedPlugins = {
+            QStringLiteral("katesnippetsplugin")
+        };
+        return md.serviceTypes().contains(QStringLiteral("KTextEditor/Plugin"))
+            && whiteListedPlugins.contains(md.pluginId());
+    });
+    foreach (const auto& info, katePlugins) {
+        auto data = info.rawData();
+        // add some KDevelop specific JSON data
+        data[KEY_Category()] = KEY_Global();
+        data[KEY_Mode()] = KEY_Gui();
+        data[KEY_Version()] = KDEVELOP_PLUGIN_VERSION;
+        d->plugins.append({data, info.fileName(), info.metaDataFileName()});
     }
 
     d->cleanupMode = PluginControllerPrivate::Running;
@@ -530,8 +546,12 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     // now create it
     auto plugin = factory->create<IPlugin>(d->core);
     if (!plugin) {
-        qWarning() << "Creating plugin" << pluginId << "failed.";
-        return nullptr;
+        if (auto katePlugin = factory->create<KTextEditor::Plugin>(d->core, QVariantList() << info.pluginId())) {
+            plugin = new KTextEditorIntegration::Plugin(katePlugin, this);
+        } else {
+            qWarning() << "Creating plugin" << pluginId << "failed.";
+            return nullptr;
+        }
     }
 
     KConfigGroup group = Core::self()->activeSession()->config()->group(KEY_Plugins());

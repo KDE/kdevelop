@@ -36,6 +36,7 @@ Boston, MA 02110-1301, USA.
 #include <KShortcutsDialog>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+#include <KTextEditor/MainWindow>
 #include <KWindowSystem>
 #include <KXMLGUIFactory>
 
@@ -115,6 +116,11 @@ MainWindow::~ MainWindow()
     }
 
     delete d;
+}
+
+KTextEditorIntegration::MainWindow *MainWindow::kateWrapper() const
+{
+    return d->kateWrapper();
 }
 
 void MainWindow::ensureVisible()

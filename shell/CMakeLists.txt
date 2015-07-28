@@ -14,6 +14,7 @@ set(KDevPlatformShell_LIB_SRCS
     mainwindow.cpp
     mainwindow_p.cpp
     plugincontroller.cpp
+    ktexteditorpluginintegration.cpp
     shellextension.cpp
     core.cpp
     uicontroller.cpp

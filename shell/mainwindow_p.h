@@ -46,6 +46,10 @@ namespace KTextEditor {
 class View;
 }
 
+namespace KTextEditorIntegration {
+class MainWindow;
+}
+
 namespace KDevelop {
 
 class IPlugin;
@@ -127,6 +131,8 @@ public Q_SLOTS:
     /// reload all open documents
     void reloadAll();
 
+    KTextEditorIntegration::MainWindow *kateWrapper() const;
+
 private:
     KActionCollection *actionCollection();
 
@@ -141,6 +147,7 @@ private:
     /// the view of the tab that got it's context menu connected
     Sublime::View* m_tabView;
     QPair<Sublime::View*, QPointer<NavigationToolTip> > m_tabTooltip;
+    KTextEditorIntegration::MainWindow* m_kateWrapper;
 };
 
 }

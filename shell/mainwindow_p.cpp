@@ -52,6 +52,7 @@ Boston, MA 02110-1301, USA.
 #include "textdocument.h"
 #include "sessioncontroller.h"
 #include "debug.h"
+#include "ktexteditorpluginintegration.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
@@ -59,10 +60,16 @@ Boston, MA 02110-1301, USA.
 #include <sublime/container.h>
 #include <sublime/holdupdates.h>
 
+
 namespace KDevelop {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
-: m_mainWindow(mainWindow), m_statusBar(0), lastXMLGUIClientView(0), m_changingActiveView(false)
+    : QObject(mainWindow)
+    , m_mainWindow(mainWindow)
+    , m_statusBar(0)
+    , lastXMLGUIClientView(0)
+    , m_changingActiveView(false)
+    , m_kateWrapper(new KTextEditorIntegration::MainWindow(mainWindow))
 {
 }
 
@@ -432,6 +439,11 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
 bool MainWindowPrivate::changingActiveView() const
 {
     return m_changingActiveView;
+}
+
+KTextEditorIntegration::MainWindow *MainWindowPrivate::kateWrapper() const
+{
+    return m_kateWrapper;
 }
 
 }

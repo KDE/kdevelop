@@ -36,3 +36,6 @@ ecm_add_test(test_plugincontroller.cpp
 
 ecm_add_test(test_testcontroller.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests)
+
+ecm_add_test(test_ktexteditorpluginintegration.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)

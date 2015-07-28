@@ -29,7 +29,13 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 
-namespace KTextEditor { class View; }
+namespace KTextEditor {
+class View;
+}
+
+namespace KTextEditorIntegration {
+class MainWindow;
+}
 
 namespace KDevelop
 {
@@ -50,6 +56,8 @@ public:
 
     /*! @p status must implement KDevelop::IStatus */
     void registerStatus(QObject* status);
+
+    KTextEditorIntegration::MainWindow *kateWrapper() const;
 
 public Q_SLOTS:
     /*! Shows an error message in the status bar.
