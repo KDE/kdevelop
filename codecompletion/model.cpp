@@ -64,12 +64,13 @@ QSharedPointer<CodeCompletionContext> createCompletionContext(const DUContextPoi
                                                               const ParseSessionData::Ptr& session,
                                                               const QUrl& url,
                                                               const KTextEditor::Cursor& position,
-                                                              const QString& text)
+                                                              const QString& text,
+                                                              const QString& followingText)
 {
     if (includePathCompletionRequired(text)) {
         return QSharedPointer<IncludePathCompletionContext>::create(context, session, url, position, text);
     } else {
-        return QSharedPointer<ClangCodeCompletionContext>::create(context, session, url, position, text);
+        return QSharedPointer<ClangCodeCompletionContext>::create(context, session, url, position, text + followingText);
     }
 }
 
@@ -84,7 +85,7 @@ public:
     virtual ~ClangCodeCompletionWorker() = default;
 
 public slots:
-    void completionRequested(const QUrl &url, const KTextEditor::Cursor& position, const QString& text)
+    void completionRequested(const QUrl &url, const KTextEditor::Cursor& position, const QString& text, const QString& followingText)
     {
         aborting() = false;
 
@@ -125,7 +126,7 @@ public slots:
             return;
         }
 
-        auto completionContext = ::createCompletionContext(DUContextPointer(top), sessionData, url, position, text);
+        auto completionContext = ::createCompletionContext(DUContextPointer(top), sessionData, url, position, text, followingText);
 
         lock.lock();
         if (aborting()) {
@@ -183,9 +184,9 @@ CodeCompletionWorker* ClangCodeCompletionModel::createCompletionWorker()
 void ClangCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range,
                                                          CodeCompletionModel::InvocationType /*invocationType*/, const QUrl &url)
 {
-    // get text before this range so we can parse this version with clang
     auto text = view->document()->text({0, 0, range.start().line(), range.start().column()});
-    emit requestCompletion(url, KTextEditor::Cursor(range.start()), text);
+    auto followingText = view->document()->text({{range.start().line(), range.start().column()}, view->document()->documentEnd()});
+    emit requestCompletion(url, KTextEditor::Cursor(range.start()), text, followingText);
 }
 
 #include "model.moc"

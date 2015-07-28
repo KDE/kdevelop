@@ -42,7 +42,7 @@ public:
     virtual ~ClangCodeCompletionModel();
 
 signals:
-    void requestCompletion(const QUrl &url, const KTextEditor::Cursor& cursor, const QString& text);
+    void requestCompletion(const QUrl &url, const KTextEditor::Cursor& cursor, const QString& text, const QString& followingText);
 
 protected:
     KDevelop::CodeCompletionWorker* createCompletionWorker() override;
