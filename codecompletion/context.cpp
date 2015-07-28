@@ -25,6 +25,7 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/typealiastype.h>
@@ -508,6 +509,20 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
     return nullptr;
 }
 
+/// If any parent of this context is a class, the closest class declaration is returned, nullptr otherwise
+Declaration* classDeclarationForContext(const DUContextPointer& context)
+{
+    auto parent = context;
+    while (parent) {
+        if (parent->type() == DUContext::Class) {
+            break;
+        }
+        parent = parent->parentContext();
+    }
+
+    return parent ? parent->owner() : nullptr;
+}
+
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
@@ -600,7 +615,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         auto result = m_results->Results[i];
 
         const auto availability = clang_getCompletionAvailability(result.CompletionString);
-        if (availability == CXAvailability_NotAvailable || availability == CXAvailability_NotAccessible) {
+        if (availability == CXAvailability_NotAvailable) {
             continue;
         }
 
@@ -616,6 +631,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
         const bool isDeclaration = !isMacroDefinition && !isBuiltin;
         if (isDeclaration && m_filters & NoDeclarations) {
+            continue;
+        }
+
+        if (availability == CXAvailability_NotAccessible && (!isDeclaration || !classDeclarationForContext(ctx))) {
             continue;
         }
 
@@ -717,6 +736,26 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
             CompletionTreeItemPointer item;
             if (found) {
+                // TODO: Bug in Clang: protected members from base classes not accessible in derived classes.
+                if (availability == CXAvailability_NotAccessible) {
+                    if (auto cl = dynamic_cast<ClassMemberDeclaration*>(found)) {
+                        if (cl->accessPolicy() != Declaration::Protected) {
+                            continue;
+                        }
+
+                        auto declarationClassContext = classDeclarationForContext(DUContextPointer(found->context()));
+                        auto currentClassContext = classDeclarationForContext(ctx);
+
+                        uint steps = 10;
+                        auto inheriters = DUChainUtils::getInheriters(declarationClassContext, steps);
+                        if(!inheriters.contains(currentClassContext)){
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+
                 auto declarationItem = new DeclarationItem(found, display, resultType, replacement);
 
                 const unsigned int completionPriority = adjustPriorityForDeclaration(found, clang_getCompletionPriority(result.CompletionString));
