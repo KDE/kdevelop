@@ -195,17 +195,22 @@ CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
     QHash<KDevelop::Path, CMakeFile>::const_iterator it = data.files.constFind(item->path());
     if (it != data.files.constEnd()) {
         return *it;
-    } else if (item->type() == ProjectBaseItem::Folder) {
-        Path p = item->path().parent();
+    } else {
+        // otherwise look for siblings and use the include paths of any we find
+        const Path folder = item->folder() ? item->path() : item->path().parent();
 
         for( it = data.files.constBegin(); it != data.files.constEnd(); ++it) {
-            if (p.isDirectParentOf(it.key())) {
+            if (folder.isDirectParentOf(it.key())) {
                 return *it;
             }
         }
-    } else if (auto parent = item->parent()) {
+    }
+
+    // last-resort fallback: bubble up the parent chain, and keep looking for include paths
+    if (auto parent = item->parent()) {
         return fileInformation(parent);
     }
+
     return {};
 }
 
