@@ -203,6 +203,8 @@ CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
                 return *it;
             }
         }
+    } else if (auto parent = item->parent()) {
+        return fileInformation(parent);
     }
     return {};
 }
