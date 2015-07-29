@@ -76,6 +76,7 @@ CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
     for (auto f : cf) {
         if (f->name() == type) {
             auto compiler = f->createCompiler(name, path, true);
+            SettingsManager::globalInstance()->provider()->registerCompiler(compiler);
             return compiler;
         }
     }
