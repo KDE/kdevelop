@@ -512,6 +512,10 @@ void TestCodeCompletion::testImplement_data()
     QTest::newRow("const")
         << "class Foo { int bar() const; };"
         << CompletionItems{{3, 1}, {"Foo::bar() const"}};
+
+    QTest::newRow("multiple-methods")
+        << "class Foo { int bar(); void foo(); char asdf() const; };"
+        << CompletionItems{{3, 1}, {"Foo::asdf() const", "Foo::bar()", "Foo::foo()"}};
 }
 
 void TestCodeCompletion::testInvalidCompletions()

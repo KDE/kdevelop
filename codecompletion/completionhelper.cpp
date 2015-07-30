@@ -263,8 +263,12 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     }
 
     //TODO Add support for pure virtual functions
-    data->scopePrefix.chop(2); // chop '::'
-    QString signature = ClangUtils::getCursorSignature(cursor, data->scopePrefix);
+
+    auto scope = data->scopePrefix;
+    if (scope.endsWith(QLatin1String("::"))) {
+        scope.chop(2); // chop '::'
+    }
+    QString signature = ClangUtils::getCursorSignature(cursor, scope);
 
     QString returnType, rest;
     if (kind != CXCursor_Constructor && kind != CXCursor_Destructor) {

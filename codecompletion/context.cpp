@@ -813,7 +813,7 @@ void ClangCodeCompletionContext::addImplementationHelperItems()
     }
 
     QList<CompletionTreeItemPointer> implements;
-    foreach(FuncImplementInfo info, implementsList) {
+    foreach(const auto& info, implementsList) {
         implements << CompletionTreeItemPointer(new ImplementsItem(info));
     }
     eventuallyAddGroup(i18n("Implement Function"), 0, implements);
