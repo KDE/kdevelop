@@ -47,7 +47,7 @@ public:
     virtual int perProjectConfigPages() const override;
     virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 
-    QList<IProjectBuilder*> additionalBuilderPlugins(KDevelop::IProject* project) const;
+    QList<IProjectBuilder*> additionalBuilderPlugins(KDevelop::IProject* project) const override;
 
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
