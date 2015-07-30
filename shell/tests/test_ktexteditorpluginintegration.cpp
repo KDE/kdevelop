@@ -83,7 +83,19 @@ void TestKTextEditorPluginIntegration::initTestCase()
 
 void TestKTextEditorPluginIntegration::cleanupTestCase()
 {
+    auto controller = Core::self()->pluginController();
+    const auto id = QStringLiteral("katesnippetsplugin");
+    auto plugin = makeQPointer(controller->loadPlugin(id));
+    QVERIFY(plugin);
+
+    const auto editor = makeQPointer(KTextEditor::Editor::instance());
+    const auto application = makeQPointer(editor->application());
+    const auto window = makeQPointer(application->activeMainWindow());
+    Core::self()->uiControllerInternal()->mainWindowDeleted(Core::self()->uiControllerInternal()->defaultMainWindow());
+
     TestCore::shutdown();
+
+    QVERIFY(!plugin);
 }
 
 void TestKTextEditorPluginIntegration::testApplication()
@@ -175,7 +187,5 @@ void TestKTextEditorPluginIntegration::testPluginUnload()
     // don't crash
     plugin->unload();
 }
-
-
 
 QTEST_MAIN(TestKTextEditorPluginIntegration);

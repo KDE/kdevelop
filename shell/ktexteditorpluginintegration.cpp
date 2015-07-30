@@ -47,7 +47,7 @@ namespace {
 KTextEditor::MainWindow *toKteWrapper(KParts::MainWindow *window)
 {
     if (auto mainWindow = dynamic_cast<KDevelop::MainWindow*>(window)) {
-        return mainWindow->kateWrapper()->interface();
+        return mainWindow->kateWrapper() ? mainWindow->kateWrapper()->interface() : nullptr;
     } else {
         return nullptr;
     }
@@ -173,7 +173,10 @@ Application::Application(QObject *parent)
 {
 }
 
-Application::~Application() = default;
+Application::~Application()
+{
+    KTextEditor::Editor::instance()->setApplication(nullptr);
+}
 
 KTextEditor::MainWindow *Application::activeMainWindow() const
 {
@@ -285,8 +288,9 @@ void Plugin::unload()
 {
     if (auto mainWindow = KTextEditor::Editor::instance()->application()->activeMainWindow()) {
         auto integration = dynamic_cast<MainWindow*>(mainWindow->parent());
-        Q_ASSERT(integration);
-        integration->removePluginView(pluginId());
+        if (integration) {
+            integration->removePluginView(pluginId());
+        }
     }
     m_tracker->deleteAll();
     delete m_plugin;
