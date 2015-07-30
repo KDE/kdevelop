@@ -283,7 +283,7 @@ Plugin::~Plugin() = default;
 
 void Plugin::unload()
 {
-    foreach (auto mainWindow, KTextEditor::Editor::instance()->application()->mainWindows()) {
+    if (auto mainWindow = KTextEditor::Editor::instance()->application()->activeMainWindow()) {
         auto integration = dynamic_cast<MainWindow*>(mainWindow->parent());
         Q_ASSERT(integration);
         integration->removePluginView(pluginId());
