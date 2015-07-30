@@ -180,7 +180,7 @@ QString CMakeDocumentation::name() const
 
 KDevelop::IDocumentation::Ptr CMakeDocumentation::homePage() const
 {
-    if(!m_typeForName.isEmpty())
+    if(m_typeForName.isEmpty())
         const_cast<CMakeDocumentation*>(this)->delayedInitialization();
 //     initializeModel();
     return KDevelop::IDocumentation::Ptr(new CMakeHomeDocumentation);
