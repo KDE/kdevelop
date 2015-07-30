@@ -117,6 +117,7 @@ public:
         widget->setWindowIcon(m_icon);
         widget->setLayout(new QVBoxLayout);
         widget->layout()->addWidget(m_container);
+        widget->addActions(m_container->actions());
         return widget;
     }
 
