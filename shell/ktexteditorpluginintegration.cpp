@@ -133,6 +133,8 @@ public:
             case KTextEditor::MainWindow::Bottom:
                 return Qt::BottomDockWidgetArea;
         }
+        Q_ASSERT_X(false, Q_FUNC_INFO, "Unreachable code");
+        return Qt::LeftDockWidgetArea;
     }
 
     QString id() const override
