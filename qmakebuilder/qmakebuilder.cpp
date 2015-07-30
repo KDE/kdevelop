@@ -40,6 +40,8 @@
 
 #include "qmakejob.h"
 
+using namespace KDevelop;
+
 K_PLUGIN_FACTORY(QMakeBuilderFactory, registerPlugin<QMakeBuilder>(); )
 K_EXPORT_PLUGIN(QMakeBuilderFactory(KAboutData(
     "kdevqmakebuilder","kdevqmakebuilder", ki18n("QMake Builder"),
@@ -143,4 +145,14 @@ KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
     return 0;
 }
 
+QList<IProjectBuilder*> QMakeBuilder::additionalBuilderPlugins(KDevelop::IProject* project) const
+{
+    Q_UNUSED(project);
+
+    if (IMakeBuilder* makeBuilder = m_makeBuilder->extension<IMakeBuilder>()) {
+        return QList<KDevelop::IProjectBuilder*>() << makeBuilder;
+    }
+
+    return QList<IProjectBuilder*>();
+}
 #include "qmakebuilder.moc"

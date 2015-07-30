@@ -44,6 +44,8 @@ public:
     virtual KJob* configure(KDevelop::IProject *dom);
     virtual KJob* prune(KDevelop::IProject *dom);
 
+    QList<IProjectBuilder*> additionalBuilderPlugins(KDevelop::IProject* project) const;
+
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);
