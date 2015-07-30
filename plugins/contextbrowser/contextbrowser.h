@@ -260,7 +260,7 @@ class ContextBrowserHintProvider : public KTextEditor::TextHintProvider
 {
 public:
   explicit ContextBrowserHintProvider(ContextBrowserPlugin* plugin);
-  virtual QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) Q_DECL_OVERRIDE;
+  virtual QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
 
 private:
   ContextBrowserPlugin* m_plugin;

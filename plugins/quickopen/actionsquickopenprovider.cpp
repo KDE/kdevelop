@@ -40,7 +40,7 @@ public:
     , m_display(display)
     {}
 
-    virtual QString text() const Q_DECL_OVERRIDE
+    virtual QString text() const override
     {
         return m_display;
     }
