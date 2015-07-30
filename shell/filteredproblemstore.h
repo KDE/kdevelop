@@ -20,8 +20,8 @@
 #ifndef FILTEREDPROBLEMSTORE_H
 #define FILTEREDPROBLEMSTORE_H
 
-#include "./problemstore.h"
-#include "./problemconstants.h"
+#include "problemstore.h"
+#include "problemconstants.h"
 
 namespace
 {

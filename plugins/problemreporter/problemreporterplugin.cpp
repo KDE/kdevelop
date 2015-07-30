@@ -45,7 +45,7 @@
 
 #include "problemhighlighter.h"
 #include "problemtreeview.h"
-#include "./problemreportermodel.h"
+#include "problemreportermodel.h"
 #include <interfaces/context.h>
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/duchainutils.h>

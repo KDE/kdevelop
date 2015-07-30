@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "./modificationrevisionset.h"
+#include "modificationrevisionset.h"
 #include "util/debug.h"
 
 #include <serialization/itemrepository.h>

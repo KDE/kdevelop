@@ -27,7 +27,7 @@
 
 #include <serialization/indexedstring.h>
 
-#include "./problemconstants.h"
+#include "problemconstants.h"
 
 namespace KDevelop {
 class IDocument;

@@ -41,7 +41,7 @@
 #include <kcolorscheme.h>
 
 #include <shell/problem.h>
-#include "./problemnavigationcontext.h"
+#include "problemnavigationcontext.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;

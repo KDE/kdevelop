@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "./instantiationinformation.h"
+#include "instantiationinformation.h"
 #include "identifier.h"
 #include "serialization/itemrepository.h"
 #include "types/typeutils.h"

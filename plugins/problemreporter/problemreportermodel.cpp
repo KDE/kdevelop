@@ -19,7 +19,7 @@
  */
 
 
-#include "./problemreportermodel.h"
+#include "problemreportermodel.h"
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parsejob.h>

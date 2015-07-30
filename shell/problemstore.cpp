@@ -18,10 +18,10 @@
  */
 
 
-#include "./problemstore.h"
+#include "problemstore.h"
 #include <shell/problem.h>
 #include <shell/watcheddocumentset.h>
-#include "./problemstorenode.h"
+#include "problemstorenode.h"
 
 struct ProblemStorePrivate
 {

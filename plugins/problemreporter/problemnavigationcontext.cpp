@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "./problemnavigationcontext.h"
+#include "problemnavigationcontext.h"
 
 #include <QHBoxLayout>
 #include <QMenu>

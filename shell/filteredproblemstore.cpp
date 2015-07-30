@@ -17,10 +17,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "./filteredproblemstore.h"
-#include "./problem.h"
-#include "./watcheddocumentset.h"
-#include "./problemstorenode.h"
+#include "filteredproblemstore.h"
+#include "problem.h"
+#include "watcheddocumentset.h"
+#include "problemstorenode.h"
 
 #include <KLocalizedString>
 
