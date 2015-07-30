@@ -220,6 +220,9 @@ KJob* CMakeBuilder::configure( KDevelop::IProject* project )
     }
     CMakeJob* job = new CMakeJob(this);
     job->setProject(project);
+    connect(job, &KJob::result, this, [this, project] {
+        emit configured(project);
+    });
     return job;
 }
 

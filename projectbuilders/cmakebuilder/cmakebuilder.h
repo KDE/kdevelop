@@ -68,6 +68,7 @@ Q_SIGNALS:
     void failed(KDevelop::ProjectBaseItem*);
     void installed(KDevelop::ProjectBaseItem*);
     void cleaned(KDevelop::ProjectBaseItem*);
+    void configured(KDevelop::IProject*);
     void pruned(KDevelop::IProject*);
 
 private:
