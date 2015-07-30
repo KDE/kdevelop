@@ -196,7 +196,8 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
     auto doc = provider->documentationForDeclaration(typeDecl);
     QVERIFY(doc);
     QCOMPARE(doc->name(), QString("QObject"));
-    QVERIFY(doc->description().contains("The QObject class"));
+    const auto description = doc->description();
+    QVERIFY(description.contains("QObject"));
 }
 
 void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
