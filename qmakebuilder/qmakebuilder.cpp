@@ -41,7 +41,10 @@
 #include "qmakejob.h"
 #include "qmakebuilderdebug.h"
 
+using namespace KDevelop;
+
 K_PLUGIN_FACTORY_WITH_JSON(QMakeBuilderFactory, "kdevqmakebuilder.json", registerPlugin<QMakeBuilder>(); )
+
 
 QMakeBuilder::QMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin("kdevqmakebuilder", parent)
@@ -157,4 +160,14 @@ KDevelop::ConfigPage* QMakeBuilder::perProjectConfigPage(int number, const KDeve
 }
 
 
+QList<IProjectBuilder*> QMakeBuilder::additionalBuilderPlugins(KDevelop::IProject* project) const
+{
+    Q_UNUSED(project);
+
+    if (IMakeBuilder* makeBuilder = m_makeBuilder->extension<IMakeBuilder>()) {
+        return QList<KDevelop::IProjectBuilder*>() << makeBuilder;
+    }
+
+    return QList<IProjectBuilder*>();
+}
 #include "qmakebuilder.moc"
