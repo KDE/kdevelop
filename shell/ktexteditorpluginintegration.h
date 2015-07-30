@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QObject>
 #include <QVector>
+#include <QPointer>
 
 #include <KTextEditor/MainWindow>
 #include <KTextEditor/Plugin>
@@ -99,7 +100,7 @@ public:
     QString pluginId() const;
 
 private:
-    QScopedPointer<KTextEditor::Plugin> m_plugin;
+    QPointer<KTextEditor::Plugin> m_plugin;
     // view objects and toolviews that should get deleted when the plugin gets unloaded
     KDevelop::ObjectListTracker *m_tracker;
 };

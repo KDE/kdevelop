@@ -34,6 +34,7 @@ private slots:
     void testApplication();
     void testMainWindow();
     void testPlugin();
+    void testPluginUnload();
 };
 
 #endif // KDEVPLATFORM_TEST_KTEXTEDITORPLUGININTEGRATION_H

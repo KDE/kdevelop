@@ -289,7 +289,7 @@ void Plugin::unload()
         integration->removePluginView(pluginId());
     }
     m_tracker->deleteAll();
-    m_plugin.reset();
+    delete m_plugin;
 }
 
 KXMLGUIClient *Plugin::createGUIForMainWindow(Sublime::MainWindow* window)

@@ -161,4 +161,21 @@ void TestKTextEditorPluginIntegration::testPlugin()
     QVERIFY(!view);
 }
 
+void TestKTextEditorPluginIntegration::testPluginUnload()
+{
+    auto controller = Core::self()->pluginController();
+    const auto id = QStringLiteral("katesnippetsplugin");
+    auto plugin = makeQPointer(controller->loadPlugin(id));
+    QVERIFY(plugin);
+
+    auto app = KTextEditor::Editor::instance()->application();
+    auto ktePlugin = makeQPointer(app->plugin(id));
+    QVERIFY(ktePlugin);
+    delete ktePlugin;
+    // don't crash
+    plugin->unload();
+}
+
+
+
 QTEST_MAIN(TestKTextEditorPluginIntegration);
