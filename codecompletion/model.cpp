@@ -26,6 +26,7 @@
 #include "includepathcompletioncontext.h"
 
 #include "duchain/parsesession.h"
+#include "duchain/clangindex.h"
 
 #include <language/codecompletion/codecompletionworker.h>
 #include <language/duchain/topducontext.h>
@@ -76,8 +77,9 @@ class ClangCodeCompletionWorker : public CodeCompletionWorker
 {
     Q_OBJECT
 public:
-    ClangCodeCompletionWorker(CodeCompletionModel* model)
+    ClangCodeCompletionWorker(ClangIndex* index, CodeCompletionModel* model)
         : CodeCompletionWorker(model)
+        , m_index(index)
     {}
     virtual ~ClangCodeCompletionWorker() = default;
 
@@ -101,7 +103,17 @@ public slots:
         // We hold DUChain lock, and ask for ParseSession, but TUDUChain indirectly holds ParseSession lock.
         lock.unlock();
 
-        const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+        ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+        if (!sessionData) {
+            // ask the TU to which we are pinned, if available
+            const auto tuUrl = m_index->translationUnitForUrl(top->url());
+            if (tuUrl != top->url()) {
+                auto tu = DUChainUtils::standardContextForUrl(tuUrl.toUrl());
+                if (tu) {
+                    sessionData = dynamic_cast<ParseSessionData*>(tu->ast().data());
+                }
+            }
+        }
         if (!sessionData) {
             // TODO: trigger reparse and re-request code completion
             qCWarning(KDEV_CLANG) << "No parse session / AST attached to context for url" << url;
@@ -143,11 +155,14 @@ public slots:
 
         foundDeclarations( tree, {} );
     }
+private:
+    ClangIndex* m_index;
 };
 }
 
-ClangCodeCompletionModel::ClangCodeCompletionModel(QObject* parent)
+ClangCodeCompletionModel::ClangCodeCompletionModel(ClangIndex* index, QObject* parent)
     : CodeCompletionModel(parent)
+    , m_index(index)
 {
     qRegisterMetaType<KTextEditor::Cursor>();
 }
@@ -159,7 +174,7 @@ ClangCodeCompletionModel::~ClangCodeCompletionModel()
 
 CodeCompletionWorker* ClangCodeCompletionModel::createCompletionWorker()
 {
-    auto worker = new ClangCodeCompletionWorker(this);
+    auto worker = new ClangCodeCompletionWorker(m_index, this);
     connect(this, &ClangCodeCompletionModel::requestCompletion,
             worker, &ClangCodeCompletionWorker::completionRequested);
     return worker;

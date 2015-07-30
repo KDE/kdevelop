@@ -31,12 +31,14 @@
 Q_DECLARE_METATYPE(KTextEditor::Cursor)
 #endif
 
+class ClangIndex;
+
 class ClangCodeCompletionModel : public KDevelop::CodeCompletionModel
 {
     Q_OBJECT
 
 public:
-    explicit ClangCodeCompletionModel(QObject* parent);
+    explicit ClangCodeCompletionModel(ClangIndex* index, QObject* parent);
     virtual ~ClangCodeCompletionModel();
 
 signals:
@@ -47,6 +49,9 @@ protected:
 
     void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range,
                                    InvocationType invocationType, const QUrl &url) override;
+
+private:
+    ClangIndex* m_index;
 };
 
 #endif // CLANGCODECOMPLETIONMODEL_H

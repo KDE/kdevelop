@@ -226,7 +226,7 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     m_refactoring = new SimpleRefactoring(this);
     m_index.reset(new ClangIndex);
 
-    new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(this), name() );
+    new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(m_index.data(), this), name() );
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()){
         KDevelop::IBuddyDocumentFinder::addFinder(type, this);
     }
