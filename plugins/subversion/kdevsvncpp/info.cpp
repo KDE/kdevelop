@@ -114,7 +114,7 @@ namespace svn
     return m->path;
   }
   
-  const svn_revnum_t 
+  svn_revnum_t
   Info::revision () const
   {
     if (isValid())

@@ -82,7 +82,7 @@ namespace svn
     path() const;
 
     /** @return base revision */
-    const svn_revnum_t
+    svn_revnum_t
     revision() const;
 
     /** @return url in repository */
