@@ -186,7 +186,7 @@ void TestIndexedString::bench_kdevhash()
   quint64 sum = 0;
   QBENCHMARK {
     for (const auto& array : byteArrays) {
-      sum += KDevHash::hash(array.constData(), array.length());
+      sum += KDevHash() << array;
     }
   }
   QVERIFY(sum > 0);

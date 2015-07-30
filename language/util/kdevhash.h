@@ -19,7 +19,22 @@
 #ifndef KDEVPLATFORM_KDEVHASH_H
 #define KDEVPLATFORM_KDEVHASH_H
 
-//Partial one at a time hash, starting with fnv prime
+#include <QHash>
+
+/**
+ * A helper class to implement hashing for aggregate types.
+ *
+ * @code
+ * class MyType {
+ *     ...
+ *     uint hash() const
+ *     {
+ *         KDevHash hash;
+ *         return hash << m_1 << m_2 << ...;
+ *     }
+ * };
+ * @endcode
+ */
 class KDevHash
 {
 public:
@@ -27,37 +42,33 @@ public:
       DEFAULT_SEED = 2166136261u
   };
 
-  explicit KDevHash(unsigned int hash = DEFAULT_SEED)
+  explicit KDevHash(uint hash = DEFAULT_SEED)
     : m_hash(hash)
   {}
 
   KDevHash(const KDevHash&) = delete;
   KDevHash& operator=(const KDevHash&) = delete;
 
-  operator unsigned int() const
+  inline operator uint() const
   {
     return m_hash;
   }
 
   template<typename T>
-  KDevHash& operator<<(T addition)
+  inline KDevHash& operator<<(T value)
   {
-    m_hash = hash(reinterpret_cast<const char*>(&addition), sizeof(T), m_hash);
+    m_hash = hash_combine(m_hash, qHash(value));
     return *this;
   }
 
-  static unsigned int hash(const char* const data, const unsigned int size, unsigned int seed = DEFAULT_SEED)
+  static inline uint hash_combine(uint seed, uint hash)
   {
-    for (unsigned int i = 0; i < size; ++i) {
-      seed += data[i];
-      seed += ( seed << 10 );
-      seed ^= ( seed >> 6 );
-    }
-    return seed;
+    // this is copied from boost::hash_combine
+    return seed ^ (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
   }
 
 private:
-  unsigned int m_hash;
+  uint m_hash;
 };
 
 #endif //KDEVPLATFORM_KDEVHASH_H

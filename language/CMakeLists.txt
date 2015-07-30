@@ -4,6 +4,7 @@ add_subdirectory(highlighting/tests)
 add_subdirectory(duchain/tests)
 add_subdirectory(backgroundparser/tests)
 add_subdirectory(codegen/tests)
+add_subdirectory(util/tests)
 
 set(KDevPlatformLanguage_LIB_SRCS
     assistant/staticassistantsmanager.cpp
