@@ -197,6 +197,7 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         return new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
     } else {
         StandardDocumentationView* view = new StandardDocumentationView(findWidget, parent);
+        view->settings()->setAttribute(QWebSettings::JavascriptEnabled, false);
         view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_provider->engine(), 0));
         view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
         view->setContextMenuPolicy(Qt::CustomContextMenu);
