@@ -205,7 +205,7 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         QObject::connect(view, &StandardDocumentationView::linkClicked, this, &QtHelpDocumentation::jumpedTo);
 
         setUserStyleSheet(view, m_current.value());
-        view->load(m_current.value());
+        view->setContent(m_provider->engine()->fileData(m_current.value()), QStringLiteral("text/html"), m_current.value());
         lastView = view;
         return view;
     }
