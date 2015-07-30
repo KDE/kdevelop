@@ -193,9 +193,8 @@ void QtHelpDocumentation::setUserStyleSheet(QWebView* view, const QUrl& url)
 
 QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent)
 {
-    QWidget* ret;
     if(m_info.isEmpty()) { //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
-        ret=new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
+        return new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
     } else {
         StandardDocumentationView* view = new StandardDocumentationView(findWidget, parent);
         view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_provider->engine(), 0));
@@ -207,10 +206,9 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
 
         setUserStyleSheet(view, m_current.value());
         view->load(m_current.value());
-        ret=view;
-        lastView=view;
+        lastView = view;
+        return view;
     }
-    return ret;
 }
 
 void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
