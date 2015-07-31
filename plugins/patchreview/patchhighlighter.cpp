@@ -70,7 +70,7 @@ QSize sizeHintForHtml( QString html, QSize maxSize ) {
 
 }
 
-void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange* markRange, QPair<int, int> highlightMark ) {
+void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange* markRange) {
     if( currentTooltipMark == markRange && currentTooltip )
         return;
     delete currentTooltip;
@@ -127,10 +127,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
             QString spanText = string.mid( currentPos, markers[b]->offset() - currentPos ).toHtmlEscaped();
             if( markers[b]->type() == Diff2::Marker::End && ( currentPos != 0 || markers[b]->offset() != static_cast<uint>( string.size() ) ) )
             {
-                if( a == highlightMark.first && b == highlightMark.second )
-                    html += "<b><span style=\"background:#FF5555\">" + spanText + "</span></b>";
-                else
-                    html += "<b><span style=\"background:#FFBBBB\">" + spanText + "</span></b>";
+                html += "<b><span style=\"background:#FFBBBB\">" + spanText + "</span></b>";
             }else{
                 html += spanText;
             }

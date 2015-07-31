@@ -22,6 +22,7 @@
 #define KDEVPLATFORM_KDEVVARLENGTHARRAY_H
 
 #include <QtCore/QVarLengthArray>
+#include <QtCore/QVector>
 
 /**
  * Extended QVarLengthArray with additional convenience API.
