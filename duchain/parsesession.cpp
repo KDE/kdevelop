@@ -173,7 +173,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         &m_unit
     );
     if (code != CXError_Success) {
-        clangDebug() << "clang_parseTranslationUnit2 return with error code" << code;
+        qWarning() << "clang_parseTranslationUnit2 return with error code" << code;
     }
 #else
     m_unit = clang_parseTranslationUnit(
@@ -192,7 +192,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
             clang_saveTranslationUnit(m_unit, (tuUrl.byteArray() + ".pch").constData(), CXSaveTranslationUnit_None);
         }
     } else {
-        clangDebug() << "Failed to parse translation unit:" << tuUrl;
+        qWarning() << "Failed to parse translation unit:" << tuUrl;
     }
 }
 
@@ -269,7 +269,6 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
     QList<ProblemPointer> problems;
 
     // extra clang diagnostics
-    static const ClangDiagnosticEvaluator evaluator;
     const uint numDiagnostics = clang_getNumDiagnostics(d->m_unit);
     problems.reserve(numDiagnostics);
     for (uint i = 0; i < numDiagnostics; ++i) {
@@ -282,7 +281,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
             continue;
         }
 
-        ProblemPointer problem(evaluator.createProblem(diagnostic));
+        ProblemPointer problem(ClangDiagnosticEvaluator::createProblem(diagnostic, d->m_unit));
         problems << problem;
 
         clang_disposeDiagnostic(diagnostic);

@@ -64,18 +64,14 @@ bool isIncludeFileNotFound(CXDiagnostic diagnostic)
 
 }
 
-ClangDiagnosticEvaluator::ClangDiagnosticEvaluator()
-{
-}
-
-ClangProblem* ClangDiagnosticEvaluator::createProblem(CXDiagnostic diagnostic) const
+ClangProblem* ClangDiagnosticEvaluator::createProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
 {
     if (isDeclarationProblem(diagnostic)) {
-        return new UnknownDeclarationProblem(diagnostic);
+        return new UnknownDeclarationProblem(diagnostic, unit);
     } else if(isIncludeFileNotFound(diagnostic)){
-        return new MissingIncludePathProblem(diagnostic);
+        return new MissingIncludePathProblem(diagnostic, unit);
     }
 
-    return new ClangProblem(diagnostic);
+    return new ClangProblem(diagnostic, unit);
 }
 

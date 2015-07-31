@@ -59,7 +59,7 @@ public:
      *
      * @param[in] diagnostic To-be-imported clang diagnostic
      */
-    ClangProblem(CXDiagnostic diagnostic);
+    ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit);
 
     virtual KDevelop::IAssistant::Ptr solutionAssistant() const override;
 

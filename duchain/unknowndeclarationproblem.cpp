@@ -480,8 +480,8 @@ QString symbolFromDiagnosticSpelling(const QString& str)
 
 }
 
-UnknownDeclarationProblem::UnknownDeclarationProblem(CXDiagnostic diagnostic)
-    : ClangProblem(diagnostic)
+UnknownDeclarationProblem::UnknownDeclarationProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
+    : ClangProblem(diagnostic, unit)
 {
     setSymbol(QualifiedIdentifier(symbolFromDiagnosticSpelling(description())));
 }

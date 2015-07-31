@@ -28,11 +28,8 @@
 
 class ClangProblem;
 
-class KDEVCLANGDUCHAIN_EXPORT ClangDiagnosticEvaluator
-{
-public:
-    ClangDiagnosticEvaluator();
-    ClangProblem* createProblem(CXDiagnostic diagnostic) const;
-};
+namespace ClangDiagnosticEvaluator {
+KDEVCLANGDUCHAIN_EXPORT ClangProblem* createProblem(CXDiagnostic diagnostic, CXTranslationUnit unit);
+}
 
 #endif // CLANGDIAGNOSTICEVALUATOR_H

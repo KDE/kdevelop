@@ -104,8 +104,8 @@ private:
     KDevelop::IndexedString m_path;
 };
 
-MissingIncludePathProblem::MissingIncludePathProblem(CXDiagnostic diagnostic)
-    : ClangProblem(diagnostic)
+MissingIncludePathProblem::MissingIncludePathProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
+    : ClangProblem(diagnostic, unit)
 {}
 
 KDevelop::IAssistant::Ptr MissingIncludePathProblem::solutionAssistant() const

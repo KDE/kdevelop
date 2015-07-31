@@ -91,7 +91,7 @@ QDebug operator<<(QDebug debug, const ClangFixit& fixit)
     return debug;
 }
 
-ClangProblem::ClangProblem(CXDiagnostic diagnostic)
+ClangProblem::ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
 {
     auto severity = diagnosticSeverityToSeverity(clang_getDiagnosticSeverity(diagnostic));
     setSeverity(severity);
@@ -122,6 +122,23 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic)
             docRange.setEnd(range.end());
         }
     }
+    if (docRange.isEmpty()) {
+        // try to find a bigger range for the given location by using the token at the given location
+        CXFile file = nullptr;
+        unsigned line = 0;
+        unsigned column = 0;
+        clang_getExpansionLocation(location, &file, &line, &column, nullptr);
+        // just skip ahead some characters, hoping that it's sufficient to encompass
+        // a token we can use for building the range
+        auto nextLocation = clang_getLocation(unit, file, line, column + 100);
+        auto rangeToTokenize = clang_getRange(location, nextLocation);
+        CXToken *tokens = nullptr;
+        unsigned numTokens = 0;
+        clang_tokenize(unit, rangeToTokenize, &tokens, &numTokens);
+        if (numTokens) {
+            docRange.setRange(ClangRange(clang_getTokenExtent(unit, tokens[0])).toRange());
+        }
+    }
 
     setFixits(fixitsForDiagnostic(diagnostic));
     setFinalLocation(docRange);
@@ -132,7 +149,7 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic)
     auto numChildDiagnostics = clang_getNumDiagnosticsInSet(childDiagnostics);
     for (uint j = 0; j < numChildDiagnostics; ++j) {
         auto childDiagnostic = clang_getDiagnosticInSet(childDiagnostics, j);
-        ClangProblem::Ptr problem(new ClangProblem(childDiagnostic));
+        ClangProblem::Ptr problem(new ClangProblem(childDiagnostic, unit));
         diagnostics << ProblemPointer(problem.data());
     }
     setDiagnostics(diagnostics);

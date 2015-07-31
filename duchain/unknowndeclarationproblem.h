@@ -35,7 +35,7 @@ public:
     using Ptr = QExplicitlySharedDataPointer<UnknownDeclarationProblem>;
     using ConstPtr = QExplicitlySharedDataPointer<const UnknownDeclarationProblem>;
 
-    UnknownDeclarationProblem(CXDiagnostic diagnostic);
+    UnknownDeclarationProblem(CXDiagnostic diagnostic, CXTranslationUnit unit);
 
     void setSymbol(const KDevelop::QualifiedIdentifier& identifier);
 

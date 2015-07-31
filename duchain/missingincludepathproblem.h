@@ -31,7 +31,7 @@ class MissingIncludePathProblem : public ClangProblem
 public:
     using Ptr = QExplicitlySharedDataPointer<MissingIncludePathProblem>;
 
-    MissingIncludePathProblem(CXDiagnostic diagnostic);
+    MissingIncludePathProblem(CXDiagnostic diagnostic, CXTranslationUnit unit);
 
     virtual KDevelop::IAssistant::Ptr solutionAssistant() const override;
 };

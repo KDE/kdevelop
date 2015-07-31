@@ -35,6 +35,7 @@ private slots:
     void testBasicProblems();
     void testBasicRangeSupport();
     void testChildDiagnostics();
+    void testRanges_data();
     void testRanges();
     void testProblemsForIncludedFiles();
 
