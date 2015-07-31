@@ -24,8 +24,8 @@ target_link_libraries(kdevelop
     KDev::Interfaces
     KDev::Shell
 
-    KF5::KDELibs4Support
     KF5::Declarative
+    KF5::IconThemes
 
     Qt5::Quick
 )
