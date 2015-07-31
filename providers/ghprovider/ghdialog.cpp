@@ -17,9 +17,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-
 #include <QLabel>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KPasswordDialog>
@@ -27,7 +30,6 @@
 #include <ghdialog.h>
 #include <ghaccount.h>
 #include <ghresource.h>
-
 
 #define VALID_ACCOUNT "You're logged in as <b>%1</b>. You can check the " \
     "authorization for this application and others " \
@@ -40,34 +42,58 @@
 namespace gh
 {
 
-Dialog::Dialog(QWidget *parent, Account *account) : KDialog(parent)
+Dialog::Dialog(QWidget *parent, Account *account) : QDialog(parent)
 {
     m_account = account;
     m_name = "";
 
+    auto mainWidget = new QWidget(this);
+    auto mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
+
+    auto buttonBox = new QDialogButtonBox();
+
     if (m_account->validAccount()) {
         QString str = QString(VALID_ACCOUNT).arg(m_account->name());
         m_text = new QLabel(i18n(str.toUtf8()), this);
-        setButtons(KDialog::User2 | KDialog::User3);
-        setButtonText(KDialog::User2, i18n("Log out"));
-        setButtonIcon(KDialog::User2, QIcon::fromTheme("dialog-cancel"));
-        connect(this, &Dialog::user2Clicked, this, &Dialog::revokeAccess);
-        setButtonIcon(KDialog::User3, QIcon::fromTheme("view-refresh"));
-        setButtonText(KDialog::User3, i18n("Force sync"));
-        connect(this, &Dialog::user3Clicked, this, &Dialog::syncUser);
+
+        auto logOutButton = new QPushButton;
+        logOutButton->setText(i18n("Log out"));
+        logOutButton->setIcon(QIcon::fromTheme("dialog-cancel"));
+        buttonBox->addButton(logOutButton, QDialogButtonBox::ActionRole);
+        connect(logOutButton, &QPushButton::clicked, this, &Dialog::revokeAccess);
+
+        auto forceSyncButton = new QPushButton;
+        forceSyncButton->setText(i18n("Force Sync"));
+        forceSyncButton->setIcon(QIcon::fromTheme("view-refresh"));
+        buttonBox->addButton(forceSyncButton, QDialogButtonBox::ActionRole);
+        connect(forceSyncButton, &QPushButton::clicked, this, &Dialog::syncUser);
+
+        connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+        connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     } else {
         m_text = new QLabel(i18n(INVALID_ACCOUNT), this);
-        setButtons(KDialog::User1 | KDialog::Cancel);
-        setButtonText(KDialog::User1, i18n("Authorize"));
-        setButtonIcon(KDialog::User1, QIcon::fromTheme("dialog-ok"));
-        connect(this, &Dialog::user1Clicked, this, &Dialog::authorizeClicked);
+
+        buttonBox->addButton(QDialogButtonBox::Cancel);
+
+        auto authorizeButton = new QPushButton;
+        buttonBox->addButton(authorizeButton, QDialogButtonBox::ActionRole);
+        authorizeButton->setText(i18n("Authorize"));
+        authorizeButton->setIcon(QIcon::fromTheme("dialog-ok"));
+        connect(authorizeButton, &QPushButton::clicked, this, &Dialog::authorizeClicked);
     }
 
     m_text->setWordWrap(true);
     m_text->setOpenExternalLinks(true);
     setMinimumWidth(350);
-    setMainWidget(m_text);
-    setCaption(i18n("Github Account"));
+    mainLayout->addWidget(m_text);
+
+    mainLayout->addWidget(buttonBox);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    setWindowTitle(i18n("Github Account"));
 }
 
 void Dialog::authorizeClicked()

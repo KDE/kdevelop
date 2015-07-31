@@ -22,7 +22,7 @@
 #define GH_DIALOG_H
 
 
-#include <KDialog>
+#include <QDialog>
 
 class QLabel;
 
@@ -36,7 +36,7 @@ class Account;
  * The Dialog class handles the configuration dialog to be shown so the
  * user can setup its Github account.
  */
-class Dialog : public KDialog
+class Dialog : public QDialog
 {
     Q_OBJECT
 

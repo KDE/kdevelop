@@ -17,7 +17,6 @@ set(kdevghprovider_PART_SRCS
 kdevplatform_add_plugin(kdevghprovider JSON kdevghprovider.json	SOURCES ${kdevghprovider_PART_SRCS})
 target_link_libraries(kdevghprovider
   KF5::KIOWidgets
-  KF5::KDELibs4Support
   KDev::Interfaces
   KDev::Vcs
   KDev::Language
