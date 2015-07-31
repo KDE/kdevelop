@@ -50,7 +50,7 @@ LanguagePreferences::LanguagePreferences(QWidget* parent)
     QWidget* w = new QWidget;
     preferencesDialog = new Ui::LanguagePreferences;
     preferencesDialog->setupUi( w );
-
+    preferencesDialog->kcfg_minFilesForSimplifiedParsing->setSuffix(ki18np(" file", " files"));
     l->addWidget( w );
 }
 

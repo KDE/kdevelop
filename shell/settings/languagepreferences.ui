@@ -283,7 +283,7 @@ parsed in simplified mode, increasing the efficiency by gathering less informati
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="kcfg_minFilesForSimplifiedParsing">
+       <widget class="KPluralHandlingSpinBox" name="kcfg_minFilesForSimplifiedParsing">
         <property name="minimumSize">
          <size>
           <width>100</width>
@@ -299,9 +299,6 @@ parsed in simplified mode, increasing the efficiency by gathering less informati
         <property name="toolTip">
          <string>&lt;p&gt;When a project contains more files than this number, the project will be
 parsed in simplified mode, increasing the efficiency by gathering less information. Global code navigation and quickopen capabilities will be reduced.&lt;/p&gt;</string>
-        </property>
-        <property name="suffix">
-         <string> files</string>
         </property>
         <property name="maximum">
          <number>99999999</number>
