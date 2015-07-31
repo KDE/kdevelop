@@ -19,9 +19,9 @@
 
 #include "projectpathswidget.h"
 
-#include <kfiledialog.h>
 #include <kmessagebox.h>
 
+#include <QFileDialog>
 #include <QRegExp>
 
 #include <util/environmentgrouplist.h>
@@ -167,10 +167,12 @@ void ProjectPathsWidget::clear()
 
 void ProjectPathsWidget::addProjectPath()
 {
-    KFileDialog dlg(pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<QUrl>(), "", this);
-    dlg.setMode( KFile::LocalOnly | KFile::ExistingOnly | KFile::File | KFile::Directory );
+    const QUrl directory = pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<QUrl>();
+    QFileDialog dlg(this, tr("Select Project Path"), directory.toLocalFile());
+    dlg.setFileMode(QFileDialog::Directory);
+    dlg.setOption(QFileDialog::ShowDirsOnly);
     dlg.exec();
-    pathsModel->addPath(dlg.selectedUrl());
+    pathsModel->addPath(dlg.selectedUrls().value(0));
     ui->projectPaths->setCurrentIndex(pathsModel->rowCount() - 1);
     updateEnablements();
 }

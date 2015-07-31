@@ -30,7 +30,6 @@ kconfig_add_kcfg_files( kdevdefinesandincludesmanager_SRCS kcm_widget/customdefi
 
 kdevplatform_add_plugin(kdevdefinesandincludesmanager JSON kdevdefinesandincludesmanager.json SOURCES ${kdevdefinesandincludesmanager_SRCS})
 target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
-        KF5::KDELibs4Support
         KDev::Project
         KDev::Util
         KDev::Language
