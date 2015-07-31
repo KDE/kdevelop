@@ -55,6 +55,23 @@ Q_LOGGING_CATEGORY(CMAKEBUILDER, "kdevelop.projectbuilders.cmakebuilder")
 
 K_PLUGIN_FACTORY_WITH_JSON(CMakeBuilderFactory, "kdevcmakebuilder.json", registerPlugin<CMakeBuilder>(); )
 
+class ErrorJob : public KJob
+{
+public:
+    ErrorJob(QObject* parent, const QString& error)
+        : KJob(parent)
+    {}
+
+    void start() override {
+        setError(!m_error.isEmpty());
+        setErrorText(m_error);
+        emitResult();
+    }
+
+private:
+    QString m_error;
+};
+
 CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin("kdevcmakebuilder", parent)
 {
@@ -100,15 +117,13 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
     {
         bool valid;
         KJob* configure = checkConfigureJob(dom->project(), valid);
-        if (!valid)
-            return 0;
 
         KJob* build = 0;
         if(dom->file())
         {
             IMakeBuilder* makeBuilder = dynamic_cast<IMakeBuilder*>(builder);
             if (!makeBuilder) {
-                return 0;
+                return new ErrorJob(this, i18n("Couldn't find the make builder. Check your installation"));
             }
             KDevelop::ProjectFileItem* file = dom->file();
             int lastDot = file->text().lastIndexOf('.');
@@ -132,7 +147,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         }
         return build;
     }
-    return 0;
+    return new ErrorJob(this, i18n("Couldn't find a builder for %1", p->name()));
 }
 
 KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
@@ -142,8 +157,6 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     {
         bool valid;
         KJob* configure = checkConfigureJob(dom->project(), valid);
-        if (!valid)
-            return nullptr;
 
         KDevelop::ProjectBaseItem* item = dom;
         if(dom->file()) //It doesn't work to compile a file
@@ -160,7 +173,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         }
         return clean;
     }
-    return 0;
+    return new ErrorJob(this, i18n("Couldn't find a builder for %1", dom->project()->name()));
 }
 
 KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPrefix)
@@ -170,8 +183,6 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installP
     {
         bool valid;
         KJob* configure = checkConfigureJob(dom->project(), valid);
-        if (!valid)
-            return 0;
 
         KDevelop::ProjectBaseItem* item = dom;
         if(dom->file())
@@ -189,24 +200,24 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installP
         return install;
 
     }
-    return 0;
+    return new ErrorJob(this, i18n("Couldn't find a builder for %1", dom->project()->name()));
 }
 
 KJob* CMakeBuilder::checkConfigureJob(KDevelop::IProject* project, bool& valid)
 {
     valid = false;
-    KJob* configure = 0;
+    KJob* configure = nullptr;
     if( CMake::checkForNeedingConfigure(project) )
     {
         configure = this->configure(project);
     }
     else if( CMake::currentBuildDir(project).isEmpty() )
     {
-        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
-                            i18n("No Build Directory configured, cannot install"), i18n("Aborting") );
-        return nullptr;
+        return new ErrorJob(this, i18n("No Build Directory configured, cannot install"));
     }
     valid = true;
+    if (!configure)
+        configure = new ErrorJob(this, i18n("Couldn't configure the build directory."));
     return configure;
 }
 
@@ -214,9 +225,7 @@ KJob* CMakeBuilder::configure( KDevelop::IProject* project )
 {
     if( CMake::currentBuildDir( project ).isEmpty() )
     {
-        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
-                           i18n("No Build Directory configured, cannot configure"), i18n("Aborting configure") );
-        return 0;
+        return new ErrorJob(this, i18n("No Build Directory configured, cannot configure"));
     }
     CMakeJob* job = new CMakeJob(this);
     job->setProject(project);
