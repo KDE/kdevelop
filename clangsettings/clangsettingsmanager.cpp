@@ -44,6 +44,7 @@ namespace
     const QString settingsGroup = QStringLiteral("Clang Settings");
 
     const QString macros = QStringLiteral("macros");
+    const QString lookAhead = QStringLiteral("lookAhead");
 
     const QString forwardDeclare = QStringLiteral("forwardDeclare");
 
@@ -63,6 +64,7 @@ CodeCompletionSettings readCodeCompletionSettings(KConfig* cfg)
     CodeCompletionSettings settings;
 
     settings.macros = grp.readEntry(macros, true);
+    settings.lookAhead = grp.readEntry(lookAhead, false);
 
     return settings;
 }
@@ -82,6 +84,13 @@ AssistantsSettings ClangSettingsManager::assistantsSettings() const
 
 CodeCompletionSettings ClangSettingsManager::codeCompletionSettings() const
 {
+    if (m_enableTesting) {
+        CodeCompletionSettings settings;
+        settings.lookAhead = true;
+        settings.macros = true;
+        return settings;
+    }
+
     auto cfg = ICore::self()->activeSession()->config();
     return readCodeCompletionSettings(cfg.data());
 }

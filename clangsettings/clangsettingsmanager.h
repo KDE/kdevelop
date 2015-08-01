@@ -47,6 +47,7 @@ Q_DECLARE_METATYPE(ParserSettings);
 struct CodeCompletionSettings
 {
     bool macros = true;
+    bool lookAhead = false;
 };
 
 struct AssistantsSettings
@@ -67,6 +68,9 @@ public:
 
 private:
     ClangSettingsManager();
+
+    bool m_enableTesting = false;
+    friend class TestCodeCompletion;
 };
 
 #endif // CLANGSETTINGSMANAGER_H

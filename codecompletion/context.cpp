@@ -26,9 +26,13 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/typealiastype.h>
+#include <language/duchain/types/typeutils.h>
 #include <language/interfaces/iastcontainer.h>
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/codecompletionmodel.h>
@@ -539,6 +543,119 @@ Declaration* classDeclarationForContext(const DUContextPointer& context, const C
     return parent ? parent->owner() : nullptr;
 }
 
+class LookAheadItemMatcher
+{
+public:
+    LookAheadItemMatcher(const TopDUContextPointer& ctx)
+        : m_topContext(ctx)
+        , m_enabled(ClangSettingsManager::self()->codeCompletionSettings().lookAhead)
+    {}
+
+    /// Adds all local declarations for @p declaration into possible look-ahead items.
+    void addDeclarations(Declaration* declaration)
+    {
+        if (!m_enabled) {
+            return;
+        }
+
+        if (declaration->kind() != Declaration::Instance) {
+            return;
+        }
+
+        auto type = typeForDeclaration(declaration);
+        auto identifiedType = dynamic_cast<const IdentifiedType*>(type.data());
+        if (!identifiedType) {
+            return;
+        }
+
+        addDeclarationsForType(identifiedType, declaration);
+    }
+
+    /// Add type for matching. This type'll be used for filtering look-ahead items
+    /// Only items with @p type will be returned through @sa matchedItems
+    void addMatchedType(const IndexedType& type)
+    {
+        matchedTypes.insert(type);
+    }
+
+    /// @return look-ahead items that math given types. @sa addMatchedType
+    QList<CompletionTreeItemPointer> matchedItems()
+    {
+        QList<CompletionTreeItemPointer> lookAheadItems;
+        for (auto it = possibleLookAheadDeclarations.begin(); it != possibleLookAheadDeclarations.end(); it++) {
+            auto decl = it.key().first;
+            if (matchedTypes.contains(decl->indexedType())) {
+                QString text = it.value() + decl->identifier().toString();
+                auto item = new DeclarationItem(decl, text, {}, text);
+                item->setMatchQuality(8);
+                lookAheadItems.append(CompletionTreeItemPointer(item));
+            }
+        }
+
+        return lookAheadItems;
+    }
+
+private:
+    AbstractType::Ptr typeForDeclaration(const Declaration* decl)
+    {
+        return TypeUtils::targetType(decl->abstractType(), m_topContext.data());
+    }
+
+    void addDeclarationsForType(const IdentifiedType* identifiedType, Declaration* declaration)
+    {
+        if (auto typeDecl = identifiedType->declaration(m_topContext.data())) {
+            if (dynamic_cast<ClassDeclaration*>(typeDecl->logicalDeclaration(m_topContext.data()))) {
+                if (!typeDecl->internalContext()) {
+                    return;
+                }
+
+                for (auto localDecl : typeDecl->internalContext()->localDeclarations()) {
+                    if(localDecl->identifier().isEmpty()){
+                        continue;
+                    }
+
+                    if(auto classMember = dynamic_cast<ClassMemberDeclaration*>(localDecl)){
+                        // TODO: Also add protected/private members if completion is inside this class context.
+                        if(classMember->accessPolicy() != Declaration::Public){
+                            continue;
+                        }
+                    }
+
+                    if(!declaration->abstractType()){
+                        continue;
+                    }
+
+                    if (declaration->abstractType()->whichType() == AbstractType::TypeIntegral) {
+                        if (auto integralType = declaration->abstractType().cast<IntegralType>()) {
+                            if (integralType->dataType() == IntegralType::TypeVoid) {
+                                continue;
+                            }
+                        }
+                    }
+
+                    QString access = declaration->abstractType()->whichType() == AbstractType::TypePointer
+                                     ? QStringLiteral("->") : QStringLiteral(".");
+                    possibleLookAheadDeclarations.insert({localDecl, declaration}, declaration->identifier().toString() + access);
+                }
+            }
+        }
+    }
+
+    // Declaration and it's context
+    typedef QPair<Declaration*, Declaration*> DeclarationContext;
+
+    /// Types of declarations that look-ahead completion items can have
+    QSet<IndexedType> matchedTypes;
+
+    // List of declarations that can be added to the Look Ahead group
+    // QString represents context and access (e.g. "classInstance->")
+    QHash<DeclarationContext, QString> possibleLookAheadDeclarations;
+
+    TopDUContextPointer m_topContext;
+
+    bool m_enabled;
+};
+
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
@@ -620,6 +737,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
     QList<CompletionTreeItemPointer> builtin;
 
     QSet<Declaration*> handled;
+
+    LookAheadItemMatcher lookAheadMatcher(TopDUContextPointer(ctx->topContext()));
 
     clangDebug() << "Clang found" << m_results->NumResults << "completion results";
 
@@ -782,10 +901,14 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 if (bestMatch && !found->indexedIdentifier().identifier().toString().startsWith(QLatin1String("__")) ) {
                     const int matchQuality = codeCompletionPriorityToMatchQuality(completionPriority);
                     declarationItem->setMatchQuality(matchQuality);
+
+                    // TODO: LibClang missing API to determine expected code completion type.
+                    lookAheadMatcher.addMatchedType(found->indexedType());
                 } else {
                     declarationItem->setInheritanceDepth(completionPriority);
-                }
 
+                    lookAheadMatcher.addDeclarations(found);
+                }
                 item = declarationItem;
             } else {
                 // still, let's trust that Clang found something useful and put it into the completion result list
@@ -824,8 +947,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
     addOverwritableItems();
 
     eventuallyAddGroup(i18n("Special"), 700, specialItems);
-    eventuallyAddGroup(i18n("Macros"), 900, macros);
-    eventuallyAddGroup(i18n("Builtin"), 800, builtin);
+    eventuallyAddGroup(i18n("Look-ahead Matches"), 800, lookAheadMatcher.matchedItems());
+    eventuallyAddGroup(i18n("Builtin"), 900, builtin);
+    eventuallyAddGroup(i18n("Macros"), 1000, macros);
     return items;
 }
 

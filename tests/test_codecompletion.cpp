@@ -36,6 +36,7 @@
 #include "codecompletion/completionhelper.h"
 #include "codecompletion/context.h"
 #include "codecompletion/includepathcompletioncontext.h"
+#include "../clangsettings/clangsettingsmanager.h"
 
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>
@@ -102,6 +103,8 @@ void TestCodeCompletion::initTestCase()
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
+
+    ClangSettingsManager::self()->m_enableTesting = true;
 }
 
 void TestCodeCompletion::cleanupTestCase()
@@ -148,6 +151,9 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
     }
 
     tester.names.sort();
+    QEXPECT_FAIL("look-ahead function primary type argument", "No API in LibClang to determine expected code completion type", Continue);
+    QEXPECT_FAIL("look-ahead template", "Templates not supported. Template type inaccessible through LibClang", Continue);
+    QEXPECT_FAIL("look-ahead auto item", "Auto type, like many other types, is not exposed through LibClang. We assign DelayedType to it instead of IdentifiedType", Continue);
     QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
 
@@ -324,6 +330,78 @@ void TestCodeCompletion::testClangCodeCompletion_data()
         << CompletionItems{{1, 0}, {
             "Abc",
             "f",
+        }};
+    QTest::newRow("look-ahead int")
+        << "struct LookAhead { int intItem;}; int main() {LookAhead* pInstance; LookAhead instance; int i =\n }"
+        << CompletionItems{{1, 0}, {
+            "LookAhead", "i", "instance",
+            "instance.intItem", "main",
+            "pInstance", "pInstance->intItem",
+        }};
+    QTest::newRow("look-ahead class")
+        << "class Class{}; struct LookAhead {Class classItem;}; int main() {LookAhead* pInstance; LookAhead instance; Class cl =\n }"
+        << CompletionItems{{1, 0}, {
+            "Class", "LookAhead", "cl",
+            "instance", "instance.classItem",
+            "main", "pInstance", "pInstance->classItem",
+        }};
+    QTest::newRow("look-ahead function argument")
+        << "class Class{}; struct LookAhead {Class classItem;}; void function(Class cl);"
+           "int main() {LookAhead* pInstance; LookAhead instance; function(\n }"
+        << CompletionItems{{1, 0}, {
+            "Class", "LookAhead", "function",
+            "instance", "instance.classItem",
+            "main", "pInstance", "pInstance->classItem",
+        }};
+    QTest::newRow("look-ahead function primary type argument")
+        << "struct LookAhead {double doubleItem;}; void function(double double);"
+           "int main() {LookAhead* pInstance; LookAhead instance; function(\n }"
+        << CompletionItems{{1, 0}, {
+            "LookAhead", "function", "instance",
+            "instance.doubleItem", "main",
+            "pInstance", "pInstance->doubleItem",
+        }};
+    QTest::newRow("look-ahead typedef")
+        << "typedef double DOUBLE; struct LookAhead {DOUBLE doubleItem;};"
+           "int main() {LookAhead* pInstance; LookAhead instance; double i =\n "
+        << CompletionItems{{1, 0}, {
+            "DOUBLE", "LookAhead", "i",
+            "instance", "instance.doubleItem",
+            "main", "pInstance", "pInstance->doubleItem",
+        }};
+    QTest::newRow("look-ahead pointer")
+        << "struct LookAhead {int* pInt;};"
+           "int main() {LookAhead* pInstance; LookAhead instance; int* i =\n "
+        << CompletionItems{{1, 0}, {
+            "LookAhead", "i", "instance",
+            "instance.pInt", "main",
+            "pInstance", "pInstance->pInt",
+        }};
+    QTest::newRow("look-ahead template")
+        << "template <typename T> struct LookAhead {int intItem;};"
+           "int main() {LookAhead<int>* pInstance; LookAhead<int> instance; int i =\n "
+        << CompletionItems{{1, 0}, {
+            "LookAhead", "i", "instance",
+            "instance.intItem", "main",
+            "pInstance", "pInstance->intItem",
+        }};
+        QTest::newRow("look-ahead item access")
+        << "class Class { public: int publicInt; protected: int protectedInt; private: int privateInt;};"
+           "int main() {Class cl; int i =\n "
+        << CompletionItems{{1, 0}, {
+            "Class", "cl",
+            "cl.publicInt",
+            "i", "main",
+        }};
+
+        QTest::newRow("look-ahead auto item")
+        << "struct LookAhead { int intItem; };"
+           "int main() {auto instance = LookAhead(); int i = \n "
+        << CompletionItems{{1, 0}, {
+            "LookAhead",
+            "i",
+            "instance",
+            "instance.intItem"
         }};
 }
 
