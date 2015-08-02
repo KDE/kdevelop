@@ -1,2 +1,1 @@
-ecm_optional_add_subdirectory(kdeprovider)
 ecm_optional_add_subdirectory(executeplasmoid)
