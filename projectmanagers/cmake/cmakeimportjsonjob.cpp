@@ -126,7 +126,7 @@ QHash<KDevelop::Path, QStringList> importTargets(const Path& targetsFilePath, co
 QVector<Test> importTestSuites(const Path &buildDir)
 {
     QVector<Test> ret;
-#warning TODO use subdirs instead of this
+#pragma message("TODO use subdirs instead of this")
     foreach(const QFileInfo &info, QDir(buildDir.toLocalFile()).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         ret += importTestSuites(Path(buildDir, info.fileName()));
     }

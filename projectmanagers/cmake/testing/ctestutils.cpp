@@ -39,7 +39,7 @@
 
 using namespace KDevelop;
 
-#warning TODO: we are lacking introspection into targets, to see what files belong to each target.
+#pragma message("TODO: we are lacking introspection into targets, to see what files belong to each target.")
 
 void CTestUtils::createTestSuites(const QVector<Test>& testSuites, KDevelop::IProject* project)
 {
