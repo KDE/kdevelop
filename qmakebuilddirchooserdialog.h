@@ -22,14 +22,17 @@
 #ifndef QMAKEBUILDDIRCHOOSERDIALOG_H
 #define QMAKEBUILDDIRCHOOSERDIALOG_H
 
-#include "qmakebuilddirchooser.h"
-#include <KDialog>
+#include <QDialog>
+
+class QMakeBuildDirChooser;
+
+class QDialogButtonBox;
 
 namespace KDevelop {
-    class IProject;
+class IProject;
 }
 
-class QMakeBuildDirChooserDialog : public KDialog, public QMakeBuildDirChooser
+class QMakeBuildDirChooserDialog : public QDialog
 {
     Q_OBJECT
     
@@ -37,11 +40,20 @@ public:
     explicit QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget *parent = nullptr);
     virtual ~QMakeBuildDirChooserDialog();
 
-    virtual void saveConfig() override;
+    void loadConfig();
+    void saveConfig();
 
-protected slots:
-    virtual void slotButtonClicked(int button) override;
+    QString buildDir() const;
+
+public slots:
+    virtual void accept() override;
+
+private slots:
     void validate();
+
+private:
+    QMakeBuildDirChooser* m_chooserUi;
+    QDialogButtonBox* m_buttonBox;
 };
 
 #endif

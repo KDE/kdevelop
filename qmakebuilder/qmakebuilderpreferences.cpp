@@ -57,23 +57,20 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     m_prefsUi->removeButton->setIcon(QIcon::fromTheme("list-remove"));
     m_prefsUi->removeButton->setText(QString());
 
-    m_chooserUi = new QMakeBuildDirChooser(m_prefsUi->groupBox, m_project);
+    m_chooserUi = new QMakeBuildDirChooser(m_project);
+    auto groupBoxLayout = new QVBoxLayout(m_prefsUi->groupBox);
+    groupBoxLayout->addWidget(m_chooserUi);
+
     m_chooserUi->kcfg_buildDir->setEnabled(false);  // build directory MUST NOT be changed here
-    connect(m_chooserUi->kcfg_qmakeBin, &KUrlRequester::textChanged, this, &QMakeBuilderPreferences::changed);
-    connect(m_chooserUi->kcfg_buildDir, &KUrlRequester::textChanged, this, &QMakeBuilderPreferences::changed);
-    connect(m_chooserUi->kcfg_installPrefix, &KUrlRequester::textChanged, this, &QMakeBuilderPreferences::changed);
-    connect(m_chooserUi->kcfg_buildType, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-            this, &QMakeBuilderPreferences::changed);
-    connect(m_chooserUi->kcfg_extraArgs, &KLineEdit::textChanged, this, &QMakeBuilderPreferences::changed);
     l->addWidget( w );
-    //addConfig( QMakeBuilderSettings::self(), w );
+    connect(m_chooserUi, &QMakeBuildDirChooser::changed, this, &QMakeBuilderPreferences::changed);
+    connect(m_chooserUi, &QMakeBuildDirChooser::changed, this, &QMakeBuilderPreferences::validate);
 
     connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
     connect(m_prefsUi->buildDirCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
             this, &QMakeBuilderPreferences::changed);
     connect(m_prefsUi->addButton, SIGNAL(pressed()), this, SLOT(addBuildConfig()));
     connect(m_prefsUi->removeButton, SIGNAL(pressed()), this, SLOT(removeBuildConfig()));
-    connect(this, SIGNAL(changed(bool)), this, SLOT(validate()));
 
     reset(); // load initial values
 }
@@ -116,7 +113,7 @@ void QMakeBuilderPreferences::apply()
     qCDebug(KDEV_QMAKEBUILDER) << "Saving data";
     QString errormsg;
 
-    if(m_chooserUi->isValid(&errormsg))
+    if(m_chooserUi->validate(&errormsg))
     {
         // data is valid: save, once in the build dir's data and also as current data
         m_chooserUi->saveConfig();
@@ -134,7 +131,7 @@ void QMakeBuilderPreferences::apply()
 
 void QMakeBuilderPreferences::validate()
 {
-    m_chooserUi->isValid();
+    m_chooserUi->validate();
 }
 
 void QMakeBuilderPreferences::loadOtherConfig(const QString& config)

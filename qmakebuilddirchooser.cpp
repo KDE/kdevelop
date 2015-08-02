@@ -26,8 +26,9 @@
 #include <KLocalizedString>
 #include <KMessageWidget>
 
-#include <QUrl>
 #include <QDebug>
+#include <QSignalBlocker>
+#include <QUrl>
 
 #include <util/path.h>
 
@@ -41,24 +42,52 @@
 
 using namespace KDevelop;
 
-QMakeBuildDirChooser::QMakeBuildDirChooser(QWidget *parent, KDevelop::IProject* project)
-    :  Ui::QMakeBuildDirChooser(), m_project(project)
+QMakeBuildDirChooser::QMakeBuildDirChooser(KDevelop::IProject* project, QWidget* parent)
+    :  QWidget(parent), Ui::QMakeBuildDirChooser(), m_project(project)
 {
-    setupUi(parent);
+    setupUi(this);
 
     status->hide();
     status->setCloseButtonVisible(false);
     status->setMessageType(KMessageWidget::Error);
     status->setWordWrap(true);
+
     kcfg_buildDir->setMode(KFile::Directory | KFile::LocalOnly);
     kcfg_installPrefix->setMode(KFile::Directory | KFile::LocalOnly);
     kcfg_qmakeBin->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
+
+    connect(kcfg_qmakeBin, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
+    connect(kcfg_buildDir, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
+    connect(kcfg_installPrefix, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
+    connect(kcfg_buildType, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+            this, &QMakeBuildDirChooser::changed);
+    connect(kcfg_extraArgs, &KLineEdit::textChanged, this, &QMakeBuildDirChooser::changed);
 }
 
 QMakeBuildDirChooser::~QMakeBuildDirChooser()
 {
     //don't save in destructor; instead, on click of OK-button
     //saveConfig();
+}
+
+QString QMakeBuildDirChooser::errorString() const
+{
+    return status->text();
+}
+
+void QMakeBuildDirChooser::setErrorString(const QString& errorString)
+{
+    if (errorString.isEmpty()) {
+        status->animatedHide();
+    } else {
+        status->setText(errorString);
+        status->animatedShow();
+    }
+}
+
+IProject* QMakeBuildDirChooser::project() const
+{
+    return m_project;
 }
 
 void QMakeBuildDirChooser::saveConfig()
@@ -91,15 +120,20 @@ void QMakeBuildDirChooser::loadConfig(const QString& config)
     KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
     const KConfigGroup build = cg.group(config);
 
-    // sets values into fields
-    setQmakeBin( QMakeConfig::qmakeBinary(m_project) );
-    setBuildDir( config );
-    setInstallPrefix( build.readEntry(QMakeConfig::INSTALL_PREFIX, QString()) );
-    setExtraArgs( build.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()) );
-    setBuildType( build.readEntry(QMakeConfig::BUILD_TYPE, 0) );
+    {
+        QSignalBlocker blocker(this); // only emit changed once
+
+        // sets values into fields
+        setQmakeBin( QMakeConfig::qmakeBinary(m_project) );
+        setBuildDir( config );
+        setInstallPrefix( build.readEntry(QMakeConfig::INSTALL_PREFIX, QString()) );
+        setExtraArgs( build.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()) );
+        setBuildType( build.readEntry(QMakeConfig::BUILD_TYPE, 0) );
+    }
+    emit changed();
 }
 
-bool QMakeBuildDirChooser::isValid(QString *message)
+bool QMakeBuildDirChooser::validate(QString *message)
 {
     bool valid = true;
     QString msg;
@@ -129,22 +163,17 @@ bool QMakeBuildDirChooser::isValid(QString *message)
         }
     }
 
+
     if(buildDir().isEmpty())
     {
         msg = i18n("Please specify a build folder.");
         valid = false;
     }
-
     if (message)
     {
         *message = msg;
     }
-    if (valid) {
-        status->animatedHide();
-    } else {
-        status->setText(msg);
-        status->animatedShow();
-    }
+    setErrorString(msg);
     qCDebug(KDEV_QMAKE) << "VALID == " << valid;
     return valid;
 }

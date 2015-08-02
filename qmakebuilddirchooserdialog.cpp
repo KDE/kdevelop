@@ -21,26 +21,35 @@
 
 #include "qmakebuilddirchooserdialog.h"
 
-#include <QDebug>
-#include <KLocalizedString>
-
-#include "qmakeconfig.h"
 #include "debug.h"
+#include "qmakebuilddirchooser.h"
+#include "qmakeconfig.h"
+
+#include <QDebug>
+#include <QDialogButtonBox>
+#include <KLocalizedString>
 
 #include <interfaces/iproject.h>
 
-QMakeBuildDirChooserDialog::QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget* parent) :
-    KDialog(parent),
-    QMakeBuildDirChooser(mainWidget(), project)
+QMakeBuildDirChooserDialog::QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget* parent)
+    : QDialog(parent)
 {
-    setButtons( KDialog::Ok | KDialog::Cancel );
-    setCaption( i18n("Configure QMake build settings") );
-    setDefaultButton( KDialog::Ok );
+    setWindowTitle(i18n("Configure a build directory"));
 
-    connect(kcfg_qmakeBin, SIGNAL(textChanged(QString)), this, SLOT(validate()));
-    connect(kcfg_buildDir, SIGNAL(textChanged(QString)), this, SLOT(validate()));
-    connect(kcfg_installPrefix, SIGNAL(textChanged(QString)), this, SLOT(validate()));
-    //connect(extraArguments, SIGNAL(textChanged(QString)), this, SLOT(validate()));
+    auto mainWidget = new QWidget(this);
+    auto mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
+
+    m_chooserUi = new QMakeBuildDirChooser(project);
+    connect(m_chooserUi, &QMakeBuildDirChooser::changed, this, &QMakeBuildDirChooserDialog::validate);
+    mainLayout->addWidget(m_chooserUi);
+
+    m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    m_buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    mainLayout->addWidget(m_buttonBox);
 
     loadConfig();
     //save; like this, we can be sure to have a qmake binary and build path set
@@ -52,44 +61,39 @@ QMakeBuildDirChooserDialog::QMakeBuildDirChooserDialog(KDevelop::IProject* proje
 
 QMakeBuildDirChooserDialog::~QMakeBuildDirChooserDialog()
 {
+}
 
+void QMakeBuildDirChooserDialog::loadConfig()
+{
+    m_chooserUi->loadConfig();
 }
 
 void QMakeBuildDirChooserDialog::saveConfig()
 {
     // store this builds config
-    QMakeBuildDirChooser::saveConfig();
+    m_chooserUi->saveConfig();
 
     // also save as current values
-    KConfigGroup config(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    QMakeBuildDirChooser::saveConfig(config);
+    KConfigGroup config(m_chooserUi->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    m_chooserUi->saveConfig(config);
     config.writeEntry(QMakeConfig::BUILD_FOLDER, buildDir());
 }
 
-
-void QMakeBuildDirChooserDialog::slotButtonClicked(int button)
+QString QMakeBuildDirChooserDialog::buildDir() const
 {
-    if(button == KDialog::Ok)
-    {
-        if(isValid())
-        {
-            accept();
-            saveConfig();
-        }
-        else
-        {
-            qCDebug(KDEV_QMAKE) << "OK-button not accepted, input invalid";
-        }
-    }
-    else
-    {
-        qCDebug(KDEV_QMAKE) << "button != OK";
-        KDialog::slotButtonClicked(button);
+    return m_chooserUi->buildDir();
+}
+
+void QMakeBuildDirChooserDialog::accept()
+{
+    if (m_chooserUi->validate()) {
+        accept();
+        saveConfig();
     }
 }
 
 void QMakeBuildDirChooserDialog::validate()
 {
-    button(KDialog::Ok)->setEnabled(isValid());
+    m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(m_chooserUi->validate());
 }
 

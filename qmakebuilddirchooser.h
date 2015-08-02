@@ -34,11 +34,15 @@ namespace KDevelop {
  * Handles QMake project configuration on both project creation/import and
  * regular project configuration.
  */
-class QMakeBuildDirChooser : public Ui::QMakeBuildDirChooser
+class QMakeBuildDirChooser : public QWidget, public Ui::QMakeBuildDirChooser
 {
+    Q_OBJECT
+
 public:
-    explicit QMakeBuildDirChooser(QWidget *parent, KDevelop::IProject* project);
+    explicit QMakeBuildDirChooser(KDevelop::IProject* project, QWidget *parent = nullptr);
     virtual ~QMakeBuildDirChooser();
+
+    KDevelop::IProject* project() const;
 
 public:
     /**
@@ -46,12 +50,12 @@ public:
      * If provided, message is filled with error message, if any.
      * Error message is displayed in dialog anyway.
      */
-    bool isValid(QString *message=nullptr);
+    bool validate(QString *message=nullptr);
 
     /**
      * Saves current data to this build dir's config group (not to current values).
      */
-    virtual void saveConfig();
+    void saveConfig();
 
     /**
      * Saves current data to the given config group.
@@ -68,6 +72,8 @@ public:
      */
     void loadConfig(const QString &config);
 
+    QString errorString() const;
+
     QString qmakeBin() const;
     QString buildDir() const;
     QString installPrefix() const;
@@ -80,7 +86,13 @@ public:
     void setBuildType(int type);
     void setExtraArgs(const QString &args);
 
-protected:
+Q_SIGNALS:
+    /// Emitted whenever one of the fields of this dialog is changed
+    void changed();
+
+private:
+    void setErrorString(const QString& errorString);
+
     KDevelop::IProject* m_project;
 };
 
