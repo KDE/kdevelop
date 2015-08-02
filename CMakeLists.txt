@@ -21,6 +21,7 @@ include(ECMAddTests)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 
+include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
 include(WriteBasicConfigVersionFile)
@@ -34,6 +35,8 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick WebK
 set(KF5_DEP_VERSION "5.3.0")
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Config
+  DocTools
+  IconThemes
   I18n
   ItemModels
   ItemViews
@@ -48,14 +51,10 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   ThreadWeaver
   XmlGui
   WindowSystem
-
-  # TODO KF5: Port away from this
-  KDELibs4Support
 )
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQT_NO_URL_CAST_FROM_STRING)
-remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0) # comes from KDELibs4Support
 add_definitions(-DQT_DEPRECATED_WARNINGS -DQT_DISABLE_DEPRECATED_BEFORE=0x050400)
 
 # Turn off missing-field-initializers warning to avoid noise from false positives with empty {}

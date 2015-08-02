@@ -101,6 +101,7 @@ set(kdevgdb_UI
     registers/registersview.ui
 )
 
+kde_enable_exceptions()
 ki18n_wrap_ui(kdevgdb_SRCS ${kdevgdb_UI})
 kdevplatform_add_plugin(kdevgdb JSON kdevgdb.json SOURCES ${kdevgdb_SRCS})
 target_link_libraries(kdevgdb
