@@ -168,7 +168,7 @@ public:
 
     template<class Extension> Extension* extension()
     {
-        if( extensions().contains( QByteArray::fromRawData(qobject_interface_iid<Extension*>(), strlen(qobject_interface_iid<Extension*>())) ) ) {
+        if( extensions().contains( QByteArray::fromRawData(qobject_interface_iid<Extension*>(), (int)strlen(qobject_interface_iid<Extension*>())) ) ) {
             return qobject_cast<Extension*>( this );
         }
         return 0;
