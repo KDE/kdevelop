@@ -22,7 +22,7 @@
 */
 
 
-#include "gdblaunchconfig.h"
+#include "gdbconfigpage.h"
 
 #include <QDebug>
 
@@ -47,7 +47,7 @@
 #include "debugsession.h"
 #include "debuggerplugin.h"
 
-#include "ui_debuggerconfigwidget.h"
+#include "ui_gdbconfigpage.h"
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
 #include "debugjob.h"
@@ -55,7 +55,7 @@
 using namespace KDevelop;
 
 GdbConfigPage::GdbConfigPage( QWidget* parent )
-    : LaunchConfigurationPage(parent), ui( new Ui::DebuggerConfigWidget )
+    : LaunchConfigurationPage(parent), ui( new Ui::GdbConfigPage )
 {
     ui->setupUi( this );
     ui->kcfg_gdbPath->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);

@@ -30,7 +30,7 @@
 class IExecutePlugin;
 namespace Ui
 {
-class DebuggerConfigWidget;
+class GdbConfigPage;
 }
 namespace KDevelop
 {
@@ -62,7 +62,7 @@ public:
     virtual void saveToConfiguration(KConfigGroup, KDevelop::IProject* = 0 ) const override;
     virtual QString title() const override;
 private:
-    Ui::DebuggerConfigWidget* ui;
+    Ui::GdbConfigPage* ui;
 };
 
 class GdbLauncher : public KDevelop::ILauncher

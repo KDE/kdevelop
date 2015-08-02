@@ -75,7 +75,7 @@
 #include "selectcoredialog.h"
 
 #include <iostream>
-#include "gdblaunchconfig.h"
+#include "gdbconfigpage.h"
 #include "debugjob.h"
 
 

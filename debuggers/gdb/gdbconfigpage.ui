@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DebuggerConfigWidget</class>
- <widget class="QWidget" name="DebuggerConfigWidget">
+ <class>GdbConfigPage</class>
+ <widget class="QWidget" name="GdbConfigPage">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -35,7 +35,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Debugger executable:</string>
+         <string>Debugger e&amp;xecutable:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -70,7 +70,7 @@
          <string/>
         </property>
         <property name="text">
-         <string>&amp;Shell script:</string>
+         <string>She&amp;ll script:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -152,7 +152,7 @@ However, non-mangled names are easier to read.</string>
       <item row="2" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Start Debugger with:</string>
+         <string>S&amp;tart Debugger with:</string>
         </property>
         <property name="buddy">
          <cstring>kcfg_startWith</cstring>
@@ -294,6 +294,7 @@ However, non-mangled names are easier to read.</string>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

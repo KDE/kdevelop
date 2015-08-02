@@ -64,7 +64,7 @@ set(kdevgdb_SRCS
     mi/miparser.cpp
     stringhelpers.cpp
     debugsession.cpp
-    gdblaunchconfig.cpp
+    gdbconfigpage.cpp
     debugjob.cpp
     selectcoredialog.cpp
     variablecontroller.cpp
@@ -95,7 +95,7 @@ endif(KDE4WORKSPACE_FOUND)
 
 set(kdevgdb_UI
     debuggertracingdialog.ui
-    debuggerconfigwidget.ui
+    gdbconfigpage.ui
     selectcoredialog.ui
     selectaddressdialog.ui
     registers/registersview.ui
