@@ -101,7 +101,6 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
     clear();
     pathsModel->setPaths( paths );
     blockSignals( b );
-    Q_ASSERT(!paths.isEmpty());
     ui->projectPaths->setCurrentIndex(0); // at least a project root item is present
     projectPathSelected(0);
     ui->languageParameters->setCurrentIndex(0);
