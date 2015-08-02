@@ -94,7 +94,7 @@ kdevplatform_add_plugin(kdevcmakemanager JSON kdevcmakemanager.json SOURCES ${cm
 target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
                         KDev::Interfaces kdevcmakecommon kdevmakefileresolver
                         KDev::Project KDev::Language KDev::Shell
-                        KDev::OutputView KF5::TextEditor KF5::KDELibs4Support Qt5::Concurrent)
+                        KDev::OutputView KF5::TextEditor Qt5::Concurrent)
 
 kdevplatform_add_plugin(kdevcmakedocumentation JSON kdevcmakedocumentation.json SOURCES ${cmakedoc_SRCS})
 target_link_libraries( kdevcmakedocumentation

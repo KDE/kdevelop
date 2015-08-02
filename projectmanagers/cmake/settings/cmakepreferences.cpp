@@ -25,7 +25,6 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
 #include <QFile>
@@ -292,14 +291,14 @@ void CMakePreferences::removeBuildDir()
     QString removed = removedPath.toLocalFile();
     if(QDir(removed).exists())
     {
-        int ret=KMessageBox::warningYesNo(this,
+        KMessageBox::ButtonCode ret = KMessageBox::warningYesNo(this,
                 i18n("The %1 directory is about to be removed in KDevelop's list.\n"
                     "Do you want KDevelop to remove it in the file system as well?", removed));
-        if(ret==KMessageBox::Yes)
+        if(ret == KMessageBox::Yes)
         {
-            bool correct=KIO::NetAccess::del(removedPath.toUrl(), this);
+            bool correct = KIO::del(removedPath.toUrl())->exec();
             if(!correct)
-                KMessageBox::error(this, i18n("Could not remove: %1.\n", removed));
+                KMessageBox::error(this, i18n("Could not remove: %1\n", removed));
         }
     }
 
