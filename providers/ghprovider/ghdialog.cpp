@@ -42,11 +42,10 @@
 namespace gh
 {
 
-Dialog::Dialog(QWidget *parent, Account *account) : QDialog(parent)
+Dialog::Dialog(QWidget *parent, Account *account)
+    : QDialog(parent)
+    , m_account(account)
 {
-    m_account = account;
-    m_name = "";
-
     auto mainWidget = new QWidget(this);
     auto mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
@@ -122,7 +121,7 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token)
     if (id.isEmpty()) {
         m_text->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         m_text->setText(i18n(INVALID_ACCOUNT));
-        m_account->setName("");
+        m_account->setName(QString());
         KMessageBox::sorry(this, i18n("Authentication failed! Please, "
                                       "try again"));
         return;
