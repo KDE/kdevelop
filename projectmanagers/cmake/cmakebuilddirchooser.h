@@ -21,18 +21,20 @@
 #ifndef CMAKEBUILDDIRCHOOSER_H
 #define CMAKEBUILDDIRCHOOSER_H
 
-#include <KDialog>
+#include <QDialog>
 #include <QFlags>
 
 #include <util/path.h>
 
 #include "cmakecommonexport.h"
 
+class QDialogButtonBox;
+
 namespace Ui {
     class CMakeBuildDirChooser;
 }
 
-class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
+class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
 {
     Q_OBJECT
     public:
@@ -73,6 +75,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
         QStringList extraArgumentsHistory() const;
 
         Ui::CMakeBuildDirChooser* m_chooserUi;
+        QDialogButtonBox* m_buttonBox;
+
         KDevelop::Path m_srcFolder;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS( CMakeBuildDirChooser::StatusTypes )

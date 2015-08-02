@@ -22,7 +22,8 @@
 
 #include "cmake-test-paths.h"
 #include <cmakebuilddirchooser.h>
-#include <kconfig.h>
+#include <KConfig>
+#include <KConfigGroup>
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>

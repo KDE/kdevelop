@@ -19,16 +19,19 @@
  */
 
 #include "cmakebuilddirchooser.h"
-#include <QDir>
-#include <KProcess>
-#include <KMessageBox>
-#include <KLocalizedString>
-#include <KSharedConfig>
 #include "ui_cmakebuilddirchooser.h"
 #include "debug.h"
 
 #include <KColorScheme>
+#include <KProcess>
+#include <KMessageBox>
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KConfigGroup>
+
+#include <QDir>
 #include <QStandardPaths>
+#include <QVBoxLayout>
 
 using namespace KDevelop;
 
@@ -57,17 +60,26 @@ Path proposedBuildFolder(const Path &srcFolder)
 }
 
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
-    : KDialog(parent)
+    : QDialog(parent)
 {
-    setDefaultButton(KDialog::Ok);
-    setCaption(i18n("Configure a build directory"));
+    setWindowTitle(i18n("Configure a build directory"));
 
-//     QWidget* w= new QWidget(this);
+    m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    m_buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    auto mainWidget = new QWidget(this);
+    auto mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
+
     m_chooserUi = new Ui::CMakeBuildDirChooser;
-    m_chooserUi->setupUi(mainWidget());
+    m_chooserUi->setupUi(mainWidget);
+    mainLayout->addWidget(m_buttonBox);
+
     m_chooserUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
     m_chooserUi->installPrefix->setMode(KFile::Directory|KFile::ExistingOnly);
-//     setMainWidget(w);
 
     setCMakeBinary(Path(QStandardPaths::findExecutable( "cmake" )));
 
@@ -84,6 +96,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     connect(m_chooserUi->buildFolder, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->buildType, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->extraArguments, &KComboBox::editTextChanged, this, &CMakeBuildDirChooser::updated);
+
     updated();
 }
 
@@ -101,7 +114,7 @@ void CMakeBuildDirChooser::setSourceFolder( const Path &srcFolder )
     m_srcFolder = srcFolder;
 
     m_chooserUi->buildFolder->setUrl(proposedBuildFolder(srcFolder).toUrl());
-    setCaption(i18n("Configure a build directory for %1", srcFolder.toLocalFile()));
+    setWindowTitle(i18n("Configure a build directory for %1", srcFolder.toLocalFile()));
     update();
 }
 
@@ -276,12 +289,11 @@ void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
     }
     m_chooserUi->status->setText(QString("<i><font color='%1'>%2</font></i>").arg(scheme.foreground(role).color().name()).arg(message));
 
-    enableButtonOk(canApply);
+    auto okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(canApply);
     if (canApply) {
-        QPushButton* cancelbutton = button(Cancel);
-        if (cancelbutton) {
-            cancelbutton->clearFocus();
-        }
+        auto cancelButton = m_buttonBox->button(QDialogButtonBox::Cancel);
+        cancelButton->clearFocus();
     }
 }
 
