@@ -25,6 +25,7 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QDebug>
 
+#include "debug.h"
 #include <ghresource.h>
 #include <ghprovidermodel.h>
 
@@ -138,6 +139,9 @@ void Resource::slotAuthenticate(KJob *job)
 
     QJsonParseError error;
     QJsonDocument doc = QJsonDocument::fromJson(qobject_cast<KIO::StoredTransferJob *>(job)->data(), &error);
+
+    qCDebug(GHPROVIDER) << "Response:" << doc;
+
     if (error.error == 0) {
         QVariantMap map = doc.toVariant().toMap();
         emit authenticated(map.value("id").toByteArray(),
