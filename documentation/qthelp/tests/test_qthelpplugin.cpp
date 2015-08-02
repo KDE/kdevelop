@@ -182,6 +182,7 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
 
     DUChainReadLocker lock;
     auto ctx = file.topContext();
+    QVERIFY(ctx);
     auto decl = ctx->findDeclarations(QualifiedIdentifier("o")).first();
     QVERIFY(decl);
     auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().data())->declaration(0);
