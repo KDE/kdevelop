@@ -112,7 +112,6 @@ target_link_libraries(kdevgdb
     KDev::Project
     KDev::Util
     KF5::TextEditor
-    KF5::KDELibs4Support
     ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
 
@@ -130,7 +129,6 @@ ecm_add_test(${test_gdb_SRCS}
         KF5::KIOWidgets
         KF5::TextEditor
         KF5::Parts
-        KF5::KDELibs4Support
         ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
 
