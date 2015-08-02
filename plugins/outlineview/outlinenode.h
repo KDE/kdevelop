@@ -47,7 +47,7 @@ public:
     int indexOf(const OutlineNode* child) const;
     /** DUChain must be read-locked */
     const KDevelop::Declaration* declaration() const;
-    static ssize_t findNode(const std::vector<OutlineNode>& vec, const OutlineNode* n);
+    static int findNode(const std::vector<OutlineNode>& vec, const OutlineNode* n);
 private:
     QString m_cachedText;
     QIcon m_cachedIcon;
@@ -97,12 +97,12 @@ inline const KDevelop::Declaration* OutlineNode::declaration() const
     return m_decl.data();
 }
 
-inline ssize_t OutlineNode::findNode(const std::vector< OutlineNode >& vec, const OutlineNode* n)
+inline int OutlineNode::findNode(const std::vector< OutlineNode >& vec, const OutlineNode* n)
 {
     const auto max = vec.size();
     for (size_t i = 0; i < max; i++) {
         if (n == &vec[i]) {
-            return i;
+            return (int)i;
         }
     }
     return -1;
