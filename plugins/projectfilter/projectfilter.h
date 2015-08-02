@@ -22,7 +22,6 @@
 #ifndef PROJECTFILTER_H
 #define PROJECTFILTER_H
 
-#include <QRegExp>
 #include <QVector>
 
 #include <project/interfaces/iprojectfilter.h>
