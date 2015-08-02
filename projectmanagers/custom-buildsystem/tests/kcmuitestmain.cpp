@@ -18,7 +18,9 @@
  ************************************************************************/
 
 #include <KLocalizedString>
-#include <kdialog.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 #include <QTemporaryDir>
 #include <qfile.h>
 #include <qtextstream.h>
@@ -30,6 +32,7 @@
 #include <QApplication>
 #include <KAboutData>
 #include <QCommandLineParser>
+#include <KConfigGroup>
 
 #include "custombuildsystemconfigwidget.h"
 #include "../debug.h"
@@ -43,30 +46,39 @@ class State : public QObject
 {
 Q_OBJECT
 public:
-    State( KDialog* dlg, CustomBuildSystemConfigWidget* cfgWidget, KConfig* config, KDevelop::IProject* proj )
-        : dialog(dlg), configWidget(cfgWidget), cfg(config), project(proj)
+    State( QDialogButtonBox* buttonBox, CustomBuildSystemConfigWidget* cfgWidget, KConfig* config, KDevelop::IProject* proj )
+        : buttonBox(buttonBox), configWidget(cfgWidget), cfg(config), project(proj)
     {
-        connect(dlg, &KDialog::applyClicked, this, &State::apply);
-        connect(dlg, &KDialog::okClicked, this, &State::ok);
-        connect(dlg, &KDialog::cancelClicked, qApp, &QApplication::quit);
+        connect(buttonBox, &QDialogButtonBox::clicked, this, &State::buttonClicked);
         connect(configWidget, &CustomBuildSystemConfigWidget::changed, this, &State::configChanged);
     }
 public slots:
+    void buttonClicked(QAbstractButton* button)
+    {
+        if (button == buttonBox->button(QDialogButtonBox::Apply)) {
+            apply();
+        } else if (button == buttonBox->button(QDialogButtonBox::Ok)) {
+            ok();
+        } else if (button == buttonBox->button(QDialogButtonBox::Cancel)) {
+            qApp->quit();
+        }
+    }
+
     void apply() {
         configWidget->saveTo(cfg, project);
-        dialog->button( KDialog::Apply )->setEnabled(false);
-        dialog->button( KDialog::Ok )->setEnabled(false);
+        buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
+        buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     }
     void ok() {
         apply();
         qApp->quit();
     }
     void configChanged() {
-        dialog->button( KDialog::Apply )->setEnabled(true);
-        dialog->button( KDialog::Ok )->setEnabled(true);
+        buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
+        buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
 private:
-    KDialog* dialog;
+    QDialogButtonBox* buttonBox;
     CustomBuildSystemConfigWidget* configWidget;
     KConfig* cfg;
     KDevelop::IProject* project;
@@ -101,22 +113,25 @@ int main(int argc, char **argv)
 
     qCDebug(CUSTOMBUILDSYSTEM) << "project config:" << projkcfg.name();
 
-    KDialog dlg;
-    dlg.setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel );
+    QDialog dlg;
+
+    QVBoxLayout mainLayout;
+    dlg.setLayout(&mainLayout);
 
     KDevelop::TestProject proj;
     proj.setPath( KDevelop::Path(projkcfg.name()));
 
     CustomBuildSystemConfigWidget widget(nullptr);
     widget.loadFrom(&projkcfg);
-    dlg.setMainWidget(&widget);
+    mainLayout.addWidget(&widget);
 
-    dlg.setCaption("Ui Test App for Config Widget");
+    dlg.setWindowTitle("Ui Test App for Config Widget");
 
-    dlg.button( KDialog::Apply )->setEnabled(false);
-    dlg.button( KDialog::Ok )->setEnabled(false);
+    QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel);
+    buttonBox.button(QDialogButtonBox::Apply)->setEnabled(false);
+    buttonBox.button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    State state(&dlg, &widget, &projkcfg, &proj );
+    State state(&buttonBox, &widget, &projkcfg, &proj );
 
     dlg.resize(800, 600);
 

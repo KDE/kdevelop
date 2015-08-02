@@ -26,7 +26,6 @@
 #include <tests/testcore.h>
 #include <tests/kdevsignalspy.h>
 #include <shell/sessioncontroller.h>
-#include <kio/netaccess.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>
 #include <interfaces/iproject.h>
