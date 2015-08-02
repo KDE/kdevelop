@@ -157,7 +157,7 @@ void TestProblems::testFixits()
     QFETCH(int, problemsCount);
     QFETCH(QVector<ClangFixit>, fixits);
 
-    auto problems = parse(code.toAscii());
+    auto problems = parse(code.toLatin1());
 
     qDebug() << problems.last()->description();
     QCOMPARE(problems.size(), problemsCount);

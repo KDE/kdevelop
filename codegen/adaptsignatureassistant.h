@@ -26,6 +26,7 @@
 #include <language/duchain/identifier.h>
 #include <language/duchain/topducontext.h>
 
+#include <QPointer>
 #include <QUrl>
 
 namespace KTextEditor {
@@ -66,7 +67,7 @@ private:
     //old signature of the _other_side
     Signature m_oldSignature;
     QUrl m_document;
-    QWeakPointer<KTextEditor::View> m_view;
+    QPointer<KTextEditor::View> m_view;
 
 private slots:
     void parseJobFinished(KDevelop::ParseJob*);

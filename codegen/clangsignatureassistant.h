@@ -87,7 +87,7 @@ private slots:
     void reset();
 
 private:
-    QWeakPointer<KTextEditor::View> m_view;
+    QPointer<KTextEditor::View> m_view;
 
     //True if and only if the assistant is adjusting the declaration
     bool m_targetDecl;
