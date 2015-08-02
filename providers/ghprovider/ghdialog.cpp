@@ -106,6 +106,7 @@ void Dialog::authorizeClicked()
     m_text->setAlignment(Qt::AlignCenter);
     m_text->setText(i18n("Waiting for response"));
     m_account->setName(dlg.username());
+
     Resource *rs = m_account->resource();
     rs->authenticate(dlg.username(), dlg.password());
     connect(rs, &Resource::authenticated,
@@ -114,6 +115,10 @@ void Dialog::authorizeClicked()
 
 void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token)
 {
+    Resource *rs = m_account->resource();
+    disconnect(rs, &Resource::authenticated,
+               this, &Dialog::authorizeResponse);
+
     if (id.isEmpty()) {
         m_text->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         m_text->setText(i18n(INVALID_ACCOUNT));
@@ -122,6 +127,7 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token)
                                       "try again"));
         return;
     }
+
     m_account->saveToken(id, token);
     syncUser();
 }
@@ -138,6 +144,10 @@ void Dialog::syncUser()
 
 void Dialog::updateOrgs(const QStringList orgs)
 {
+    Resource *rs = m_account->resource();
+    disconnect(rs, &Resource::orgsUpdated,
+              this, &Dialog::updateOrgs);
+
     if (!orgs.isEmpty())
         m_account->setOrgs(orgs);
     emit shouldUpdate();
