@@ -160,7 +160,7 @@ bool ClangUtils::isConstMethod(CXCursor cursor)
     //However, since the USR is undocumented, this might break in the future.
     QString usr = ClangString(clang_getCursorUSR(cursor)).toString();
     if (usr.length() >= 2 && usr.at(usr.length() - 2) == QLatin1Char('#')) {
-        return ((usr.at(usr.length() - 1).toAscii()) - '0') & 0x1;
+        return ((usr.at(usr.length() - 1).toLatin1()) - '0') & 0x1;
     } else {
         return false;
     }
