@@ -26,8 +26,6 @@
 #include "gdbcommand.h"
 #include "debuggerplugin.h"
 
-#include <ktextedit.h>
-
 #include <QShowEvent>
 #include <QHideEvent>
 #include <QAction>
@@ -40,6 +38,8 @@
 #include <QFontDatabase>
 
 #include <KLocalizedString>
+#include <KSharedConfig>
+#include <KTextEdit>
 
 #include <util/autoorientedsplitter.h>
 
