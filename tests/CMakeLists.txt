@@ -1,5 +1,6 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
+get_property(QMAKE_EXECUTABLE_LOCATION TARGET Qt5::qmake PROPERTY LOCATION)
 configure_file(qmaketestconfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/qmaketestconfig.h)
 
 include_directories( 

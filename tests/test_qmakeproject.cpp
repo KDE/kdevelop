@@ -24,6 +24,7 @@
 
 #include <shell/core.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
@@ -31,6 +32,7 @@
 #include <project/projectmodel.h>
 #include <serialization/indexedstring.h>
 
+#include <QFileInfo>
 #include <QTest>
 #include <QSignalSpy>
 #include <KConfigGroup>
@@ -42,19 +44,23 @@ using namespace KDevelop;
 
 TestQMakeProject::TestQMakeProject(QObject* parent): QObject(parent)
 {
-    // be sure that we crate a new session (reuse an existing session makes the test crash)
-    KIO::DeleteJob *job = KIO::del(QUrl::fromLocalFile(QString(getenv("KDEHOME")) + "/share/apps/qttest/sessions"));
-    QSignalSpy newOwnerSpy(job, SIGNAL(result(KJob*)));
-    newOwnerSpy.wait(10000);
-
-    AutoTestShell::init();
-    Core::initialize(nullptr, Core::Default);
-    QTest::qWait(500); //wait for previously loaded projects
+    qRegisterMetaType<IProject*>();
 }
 
 TestQMakeProject::~TestQMakeProject()
-{}
+{
+}
 
+void TestQMakeProject::initTestCase()
+{
+    AutoTestShell::init({"kdevqmakemanager"});
+    TestCore::initialize();
+}
+
+void TestQMakeProject::cleanupTestCase()
+{
+    Core::self()->cleanup();
+}
 
 void TestQMakeProject::testBuildDirectory_data()
 {
@@ -72,18 +78,34 @@ void TestQMakeProject::testBuildDirectory()
     QFETCH(QString, projectName);
     QFETCH(QString, target);
     QFETCH(QString, expected);
-    const QString BASE_DIR = "/tmp/some/path";  // some dummy directory to build (nothing will be built anyway)
+
+    const QString buildDir = "/tmp/some/path";  // some dummy directory to build (nothing will be built anyway)
     
     foreach(IProject *p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
     }
 
-    // setup project config
+    qDebug() << "HERE" << projectName;
+
+    // setup project config, to avoid build dir chooser dialog popping up
     {
-        KConfig cfg(QString("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
+        // note: all checks from QMakeProjectManager::projectNeedsConfiguration must be satisfied
+
+        const QString fileName = QString("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName);
+
+        qDebug() << "WRITING" << fileName;
+        QVERIFY(QFileInfo(fileName).exists());
+        KConfig cfg(fileName);
         KConfigGroup group(&cfg, QMakeConfig::CONFIG_GROUP);
-        group.writeEntry(QMakeConfig::BUILD_FOLDER, BASE_DIR);
+
+        group.writeEntry(QMakeConfig::BUILD_FOLDER, buildDir);
+        group.writeEntry(QMakeConfig::QMAKE_BINARY, QMAKE_TESTS_QMAKE_BINARY);
         group.sync();
+
+        /// create subgroup for one build dir
+        KConfigGroup buildDirGroup = KConfigGroup(&cfg, QMakeConfig::CONFIG_GROUP).group(buildDir);
+        buildDirGroup.writeEntry(QMakeConfig::QMAKE_BINARY, QMAKE_TESTS_QMAKE_BINARY);
+        buildDirGroup.sync();
     }
 
     // opens project with kdevelop
@@ -91,7 +113,6 @@ void TestQMakeProject::testBuildDirectory()
     ICore::self()->projectController()->openProject(projectUrl);
     
     // wait for loading finished
-    //TODO: this pops the configuration dialog! Find a fox for that!
     QSignalSpy spy(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
     bool gotSignal = spy.wait(30000);
     QVERIFY2(gotSignal, "Timeout while waiting for opened signal");
@@ -99,14 +120,14 @@ void TestQMakeProject::testBuildDirectory()
     IProject* project = ICore::self()->projectController()->findProjectByName(projectName);
     
     // adds expected directory to our base path
-    Path expectedPath(Path(BASE_DIR), expected);
+    Path expectedPath(Path(buildDir), expected);
     
     // path for files to build
     Path buildUrl(QString("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(target));
-    QList<ProjectFolderItem*> buidItem = project->foldersForPath(IndexedString(buildUrl.pathOrUrl()));
-    QCOMPARE(buidItem.size(), 1);
+    QList<ProjectFolderItem*> buildItems = project->foldersForPath(IndexedString(buildUrl.pathOrUrl()));
+    QCOMPARE(buildItems.size(), 1);
     IBuildSystemManager *buildManager = project->buildSystemManager();
-    const Path actual = buildManager->buildDirectory(buidItem.first());
+    const Path actual = buildManager->buildDirectory(buildItems.first());
 
     QCOMPARE(actual, expectedPath);
 }

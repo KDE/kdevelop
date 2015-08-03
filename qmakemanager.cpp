@@ -136,7 +136,7 @@ Path QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
         } else {
             // build sub-item
             foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
-                if ( QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->path().toUrl().toLocalFile()).absoluteDir() ||
+                if ( QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->path().toUrl().toLocalFile() + '/').absoluteDir() ||
                     pro->hasSubProject( qmakeItem->path().toUrl().toLocalFile() ) ) {
                     // get path from project root and it to buildDir
                     dir = QMakeConfig::buildDirFromSrc( qmakeItem->project(), Path(pro->absoluteDir()) );

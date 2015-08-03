@@ -30,10 +30,15 @@
  */
 class TestQMakeProject : public QObject {
     Q_OBJECT
+
 public:
     TestQMakeProject(QObject* parent = nullptr);
     virtual ~TestQMakeProject();
+
 private slots:
+    void initTestCase();
+    void cleanupTestCase();
+
     void testBuildDirectory_data();
     void testBuildDirectory();
 };
