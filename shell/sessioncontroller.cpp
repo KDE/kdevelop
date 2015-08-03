@@ -696,6 +696,8 @@ void SessionController::deleteSession( const ISessionLock::Ptr& lock )
 
 void SessionController::deleteSessionFromDisk( const ISessionLock::Ptr& lock )
 {
+    qCDebug(SHELL) << "Deleting session:" << lock->id();
+
     QDir(sessionDirectory(lock->id())).removeRecursively();
     ItemRepositoryRegistry::deleteRepositoryFromDisk( lock );
 }
