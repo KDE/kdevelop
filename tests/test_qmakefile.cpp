@@ -30,10 +30,10 @@
 #include <QTextStream>
 #include <QProcessEnvironment>
 #include <QDebug>
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <QFileInfo>
 #include <QDir>
-#include <KTempDir>
+#include <QTemporaryDir>
 
 QTEST_MAIN(TestQMakeFile);
 
@@ -91,7 +91,7 @@ void TestQMakeFile::varResolution()
     QFETCH(QString, fileContents);
     QFETCH(QMakeFile::VariableMap, variables);
 
-    KTemporaryFile tmpfile;
+    QTemporaryFile tmpfile;
     tmpfile.open();
     QTextStream stream(&tmpfile);
     stream << fileContents;
@@ -178,7 +178,7 @@ void TestQMakeFile::libTarget()
     QFETCH(QString, target);
     QFETCH(QString, resolved);
 
-    KTemporaryFile tmpfile;
+    QTemporaryFile tmpfile;
     tmpfile.open();
     QTextStream stream(&tmpfile);
     stream << "TARGET = " << target << "\nTEMPLATE = lib\n";
@@ -207,7 +207,7 @@ void TestQMakeFile::defines()
 {
     QFETCH(QString, fileContents);
     QFETCH(DefineHash, expectedDefines);
-    KTemporaryFile tmpfile;
+    QTemporaryFile tmpfile;
     tmpfile.open();
     QTextStream stream(&tmpfile);
     stream << fileContents;
@@ -279,7 +279,7 @@ void TestQMakeFile::replaceFunctions()
     QFETCH(QMakeFile::VariableMap, definedVariables);
     QFETCH(QStringList, undefinedVariables);
 
-    KTemporaryFile tmpFile;
+    QTemporaryFile tmpFile;
     tmpFile.open();
     tmpFile.write(fileContents.toUtf8());
     tmpFile.close();
@@ -363,7 +363,7 @@ void TestQMakeFile::qtIncludeDirs()
     moduleMap["dbus"] = "QtDBus";
     moduleMap["declarative"] = "QtDeclarative";
 
-    KTemporaryFile tmpFile;
+    QTemporaryFile tmpFile;
     tmpFile.open();
     tmpFile.write(fileContents.toUtf8());
     tmpFile.close();
@@ -375,7 +375,6 @@ void TestQMakeFile::qtIncludeDirs()
     QVERIFY(file.read());
 
     const QStringList includes = file.includeDirectories();
-    qDebug() << includes;
 
     // should always be there
     QVERIFY(includes.contains(qmvars["QT_INSTALL_HEADERS"]));
@@ -404,10 +403,9 @@ void TestQMakeFile::qtIncludeDirs()
 
 void TestQMakeFile::testInclude()
 {
-    KTempDir tempDir;
-    QVERIFY(tempDir.exists());
-    KTemporaryFile includeFile;
-    includeFile.setPrefix(tempDir.name() + "qmake-include");
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    QTemporaryFile includeFile(tempDir.path() + "/qmake-include");
     QVERIFY(includeFile.open());
     includeFile.write(
         "DEFINES += SOME_INCLUDE_DEF\n"
@@ -417,7 +415,7 @@ void TestQMakeFile::testInclude()
     );
     includeFile.close();
 
-    KTemporaryFile baseFile;
+    QTemporaryFile baseFile;
     baseFile.open();
     baseFile.write(
         "TEMPLATE = app\n"
@@ -482,8 +480,8 @@ void TestQMakeFile::testInclude()
     QCOMPARE(file.variableValues("SOURCES"), QStringList() << "file.cpp" << "includedFile.cpp");
     QCOMPARE(file.variableValues("QT"), QStringList() << "core" << "gui" << "network" << "webkit");
     // verify that include path was properly propagated
-    QVERIFY(tempDir.name().endsWith('/'));
-    QVERIFY(file.includeDirectories().contains(tempDir.name().left(tempDir.name().size() - 1)));
+
+    QVERIFY(file.includeDirectories().contains(tempDir.path()));
 }
 
 void TestQMakeFile::globbing_data()
@@ -534,19 +532,17 @@ void TestQMakeFile::globbing()
     QFETCH(QString, pattern);
     QFETCH(QStringList, matches);
 
-    KTempDir tempDir;
-    QDir tempDirDir(tempDir.name());
-    QVERIFY(tempDir.exists());
+    QTemporaryDir tempDir;
+    QDir tempDirDir(tempDir.path());
+    QVERIFY(tempDir.isValid());
 
     foreach(const QString& file, files) {
-        tempDirDir.mkpath(QFileInfo(file).path());
-        QFile f(tempDir.name() + file);
+        QVERIFY(tempDirDir.mkpath(QFileInfo(file).path()));
+        QFile f(tempDir.path() + '/' + file);
         QVERIFY(f.open(QIODevice::WriteOnly));
     }
 
-    KTemporaryFile testFile;
-    testFile.setPrefix(tempDir.name());
-    testFile.setSuffix(".pro");
+    QTemporaryFile testFile(tempDir.path() + "/XXXXXX.pro");
     QVERIFY(testFile.open());
     testFile.write(("SOURCES = " + pattern + "\n").toUtf8());
     testFile.close();
@@ -559,7 +555,7 @@ void TestQMakeFile::globbing()
 
     QStringList actual;
     foreach(QString path, pro.files()) {
-        actual << path.remove(tempDir.name());
+        actual << path.remove(tempDir.path() + '/');
     }
     qSort(actual);
     qSort(matches);
@@ -568,8 +564,8 @@ void TestQMakeFile::globbing()
 
 void TestQMakeFile::benchGlobbing()
 {
-    KTempDir tempDir;
-    QDir dir(tempDir.name());
+    QTemporaryDir tempDir;
+    QDir dir(tempDir.path());
     const int folders = 10;
     const int files = 100;
     for(int i = 0; i < folders; ++i) {
@@ -583,9 +579,7 @@ void TestQMakeFile::benchGlobbing()
         }
     }
 
-    KTemporaryFile testFile;
-    testFile.setPrefix(tempDir.name());
-    testFile.setSuffix(".pro");
+    QTemporaryFile testFile(tempDir.path() + "/XXXXXX.pro");
     QVERIFY(testFile.open());
     testFile.write("SOURCES = fo?der[0-9]/*.cpp\n");
     testFile.close();
@@ -606,8 +600,8 @@ void TestQMakeFile::benchGlobbing()
 
 void TestQMakeFile::benchGlobbingNoPattern()
 {
-    KTempDir tempDir;
-    QDir dir(tempDir.name());
+    QTemporaryDir tempDir;
+    QDir dir(tempDir.path());
     const int folders = 10;
     const int files = 100;
     for(int i = 0; i < folders; ++i) {
@@ -621,9 +615,7 @@ void TestQMakeFile::benchGlobbingNoPattern()
         }
     }
 
-    KTemporaryFile testFile;
-    testFile.setPrefix(tempDir.name());
-    testFile.setSuffix(".pro");
+    QTemporaryFile testFile(tempDir.path() + "/XXXXXX.pro");
     QVERIFY(testFile.open());
     testFile.write("SOURCES = folder0/file1.cpp\n");
     testFile.close();
