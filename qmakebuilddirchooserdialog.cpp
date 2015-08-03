@@ -87,7 +87,7 @@ QString QMakeBuildDirChooserDialog::buildDir() const
 void QMakeBuildDirChooserDialog::accept()
 {
     if (m_chooserUi->validate()) {
-        accept();
+        QDialog::accept();
         saveConfig();
     }
 }
