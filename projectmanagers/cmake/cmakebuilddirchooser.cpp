@@ -22,6 +22,8 @@
 #include "ui_cmakebuilddirchooser.h"
 #include "debug.h"
 
+#include <project/helper.h>
+
 #include <KColorScheme>
 #include <KProcess>
 #include <KMessageBox>
@@ -38,24 +40,6 @@ using namespace KDevelop;
 namespace {
 
 const int maxExtraArgumentsInHistory = 15;
-
-/// Return the proposed build folder URL for given @p srcFolder
-Path proposedBuildFolder(const Path &srcFolder)
-{
-    Path proposedBuildFolder;
-    if (srcFolder.path().contains("/src/")) {
-        const QString srcBuildPath = srcFolder.path().replace("/src/", "/build/");
-        Q_ASSERT(!srcBuildPath.isEmpty());
-        if (QDir(srcBuildPath).exists()) {
-            proposedBuildFolder = Path(srcBuildPath);
-        }
-    }
-    if (!proposedBuildFolder.isValid()) {
-        proposedBuildFolder = Path( srcFolder, "build" );
-    }
-
-    return proposedBuildFolder;
-}
 
 }
 
@@ -113,7 +97,7 @@ void CMakeBuildDirChooser::setSourceFolder( const Path &srcFolder )
 {
     m_srcFolder = srcFolder;
 
-    m_chooserUi->buildFolder->setUrl(proposedBuildFolder(srcFolder).toUrl());
+    m_chooserUi->buildFolder->setUrl(KDevelop::proposedBuildFolder(srcFolder).toUrl());
     setWindowTitle(i18n("Configure a build directory for %1", srcFolder.toLocalFile()));
     update();
 }
