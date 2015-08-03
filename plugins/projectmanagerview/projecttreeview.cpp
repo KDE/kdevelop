@@ -29,6 +29,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <project/projectmodel.h>

@@ -18,18 +18,20 @@
 #include "greputil.h"
 #include "grepjob.h"
 
-#include <QAction>
-#include <QStringListModel>
+#include <interfaces/icore.h>
+#include <interfaces/isession.h>
+#include <interfaces/iprojectcontroller.h>
+#include <outputview/ioutputview.h>
+
+#include <KConfigGroup>
 #include <KMessageBox>
 #include <KColorScheme>
 #include <klocalizedstring.h>
-#include <QMenu>
 
-#include <interfaces/icore.h>
-#include <interfaces/isession.h>
+#include <QAction>
+#include <QMenu>
+#include <QStringListModel>
 #include <QWidgetAction>
-#include <interfaces/iprojectcontroller.h>
-#include <outputview/ioutputview.h>
 
 using namespace KDevelop;
 

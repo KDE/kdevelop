@@ -19,6 +19,7 @@
 */
 #include "scriptappconfig.h"
 
+#include <KConfigGroup>
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KShell>

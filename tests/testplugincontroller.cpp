@@ -21,6 +21,8 @@
 
 #include "testplugincontroller.h"
 
+#include <QVariant>
+
 using namespace KDevelop;
 
 TestPluginController::TestPluginController(Core* core) : PluginController(core)

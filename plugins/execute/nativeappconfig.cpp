@@ -47,6 +47,7 @@
 #include <QIcon>
 #include <QMenu>
 
+#include <KConfigGroup>
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KShell>

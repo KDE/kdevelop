@@ -24,11 +24,10 @@
 #define KDEVPLATFORM_IPLUGIN_H
 
 #include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QtCore/QVector>
 
 #include <KXMLGUIClient>
 
-#include "configpage.h"
 #include "interfacesexport.h"
 
 namespace Sublime {
@@ -39,9 +38,9 @@ class MainWindow;
  * This macro adds an extension interface to register with the extension manager
  * Call this macro for all interfaces your plugin implements in its constructor
  */
-
-#define KDEV_USE_EXTENSION_INTERFACE( Extension ) \
-    addExtension( QByteArray::fromRawData(qobject_interface_iid<Extension*>(), strlen(qobject_interface_iid<Extension*>())) );
+#define KDEV_USE_EXTENSION_INTERFACE(Extension) \
+    addExtension(QByteArray::fromRawData(qobject_interface_iid<Extension*>(), \
+                                         static_cast<int>(strlen(qobject_interface_iid<Extension*>()))));
 
 namespace KDevelop
 {
@@ -168,10 +167,12 @@ public:
 
     template<class Extension> Extension* extension()
     {
-        if( extensions().contains( QByteArray::fromRawData(qobject_interface_iid<Extension*>(), (int)strlen(qobject_interface_iid<Extension*>())) ) ) {
-            return qobject_cast<Extension*>( this );
+        const auto extensionIID = QByteArray::fromRawData(qobject_interface_iid<Extension*>(),
+                                                          static_cast<int>(strlen(qobject_interface_iid<Extension*>())));
+        if (extensions().contains(extensionIID)) {
+            return qobject_cast<Extension*>(this);
         }
-        return 0;
+        return nullptr;
     }
 
     /**

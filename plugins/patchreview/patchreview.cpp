@@ -14,6 +14,7 @@
 #include "patchreview.h"
 
 #include <QFileInfo>
+#include <QStandardPaths>
 #include <QTimer>
 
 #include <KActionCollection>

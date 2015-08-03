@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QDir>
 #include <QUrl>
 
+#include <KConfigGroup>
 #include <KParts/MainWindow>
 #include <KStringHandler>
 

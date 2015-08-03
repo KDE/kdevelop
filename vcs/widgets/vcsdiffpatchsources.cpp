@@ -25,6 +25,7 @@
 #include <QTemporaryFile>
 
 #include <KComboBox>
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KTextEdit>

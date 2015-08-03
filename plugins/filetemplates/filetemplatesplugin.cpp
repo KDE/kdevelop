@@ -14,6 +14,7 @@
 #include <util/path.h>
 
 #include <KActionCollection>
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KPluginFactory>
 
