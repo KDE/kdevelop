@@ -70,7 +70,6 @@ ki18n_wrap_ui( kdevqmakemanager_PART_SRCS ${kdevqmakemanager_PART_UI} )
 
 kdevplatform_add_plugin(kdevqmakemanager JSON kdevqmakemanager.json SOURCES ${kdevqmakemanager_PART_SRCS})
 target_link_libraries( kdevqmakemanager
-    KF5::KDELibs4Support
     KDev::Interfaces
     KDev::Project
     KDev::Language

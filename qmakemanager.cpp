@@ -26,10 +26,9 @@
 #include <QFileInfo>
 #include <QHash>
 #include <QList>
+#include <QUrl>
 
-
-#include <KUrl>
-#include <KIO//Job>
+#include <kio/global.h>
 #include <KDirWatch>
 #include <QIcon>
 #include <KPluginFactory>
@@ -347,8 +346,7 @@ void QMakeProjectManager::slotDirty(const QString& path)
         return;
     }
 
-    ///FIXME: use Path
-    const KUrl url(path);
+    const QUrl url = QUrl::fromLocalFile(path);
     if (!isValid(Path(url), false, nullptr)) {
         return;
     }
@@ -361,7 +359,7 @@ void QMakeProjectManager::slotDirty(const QString& path)
     }
 
     bool finished = false;
-    foreach(ProjectFolderItem* folder, project->foldersForPath(IndexedString(url.upUrl()))) {
+    foreach(ProjectFolderItem* folder, project->foldersForPath(IndexedString(KIO::upUrl(url)))) {
         if (QMakeFolderItem* qmakeFolder = dynamic_cast<QMakeFolderItem*>( folder )) {
             foreach(QMakeProjectFile* pro, qmakeFolder->projectFiles()) {
                 if (pro->absoluteFile() == path) {
