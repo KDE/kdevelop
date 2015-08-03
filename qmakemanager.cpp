@@ -23,14 +23,16 @@
 #include <QAction>
 #include <QDebug>
 #include <QDir>
+#include <QIcon>
 #include <QFileInfo>
 #include <QHash>
 #include <QList>
 #include <QUrl>
 
 #include <kio/global.h>
+#include <KConfigGroup>
 #include <KDirWatch>
-#include <QIcon>
+#include <KLocalizedString>
 #include <KPluginFactory>
 #include <KPluginLoader>
 
