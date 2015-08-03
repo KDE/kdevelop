@@ -20,42 +20,45 @@
 
 #include "qmakedriver.h"
 
-#include <QtCore/QString>
+#include <KAboutData>
 
-#include <kcmdlineargs.h>
-#include <kurl.h>
+#include <QCoreApplication>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 int main( int argc, char* argv[] )
 {
-    KCmdLineArgs::init( argc, argv, "QMake Parser", 0, ki18n("qmake-parser"), "4.0.0", ki18n("Parse QMake project files"));
+    KAboutData aboutData(QLatin1String("QMake Parser"), "qmake-parser", QLatin1String("1.0"));
+    aboutData.setShortDescription("Parse QMake project files");
+    QCoreApplication app(argc, argv);
+    QCommandLineParser parser;
+    KAboutData::setApplicationData(aboutData);
+    parser.addVersionOption();
+    parser.addHelpOption();
+    parser.addOption(QCommandLineOption(QLatin1String("debug"), "Enable output of the debug AST"));
+    parser.addPositionalArgument("files", "QMake project files");
 
-    KCmdLineOptions options;
-    options.add("!debug", ki18n("Enable output of the debug AST"));
-    options.add("!+files", ki18n("QMake project files"));
-    KCmdLineArgs::addCmdLineOptions(options);
+    aboutData.setupCommandLine(&parser);
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
-    if( args->count() < 1 )
-    {
-        KCmdLineArgs::usage(0);
+    if (parser.positionalArguments().isEmpty()) {
+        parser.showHelp();
+        return 1;
     }
 
-    int debug = 0;
-    if( args->isSet("debug") )
-        debug = 1;
-    for( int i = 0 ; i < args->count() ; i++ )
-    {
-        QMake::Driver d;
-        if( !d.readFile( args->url(i).toLocalFile() ) )
+    const bool debug = parser.isSet("debug");
+
+    foreach (const auto arg, parser.positionalArguments()) {
+        QMake::Driver driver;
+        if (!driver.readFile(arg)) {
             exit( EXIT_FAILURE );
-        d.setDebug( debug );
+        }
+        driver.setDebug( debug );
 
         QMake::ProjectAST* ast = 0;
-        if ( !d.parse( &ast ) ) {
-            exit( EXIT_FAILURE );
-        }else
-        {
+        if (!driver.parse(&ast)) {
+            exit(EXIT_FAILURE);
         }
     }
     return EXIT_SUCCESS;

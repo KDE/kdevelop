@@ -22,8 +22,8 @@ add_subdirectory(tests)
 
 option(BUILD_qmake_parser "Build the qmake-parser debugging tool" OFF)
 if(BUILD_qmake_parser)
-  add_executable(qmake-parser main.cpp)
-  target_link_libraries(qmake-parser kdevqmakeparser Qt5::Core  )
+  add_executable(qmake-parser ../debug.cpp main.cpp)
+  target_link_libraries(qmake-parser kdevqmakeparser KF5::CoreAddons Qt5::Core)
   install(TARGETS qmake-parser ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif(BUILD_qmake_parser)
 
