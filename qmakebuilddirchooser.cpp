@@ -32,6 +32,7 @@
 
 #include <util/path.h>
 
+#include <project/helper.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
 
@@ -109,9 +110,8 @@ void QMakeBuildDirChooser::saveConfig(KConfigGroup& config)
 
 void QMakeBuildDirChooser::loadConfig()
 {
-    Path proposedBuildPath( m_project->path(), "build" );
     KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    loadConfig(cg.readEntry(QMakeConfig::BUILD_FOLDER, proposedBuildPath.toLocalFile()));
+    loadConfig(cg.readEntry(QMakeConfig::BUILD_FOLDER, KDevelop::proposedBuildFolder(m_project->path()).toLocalFile()));
 }
 
 void QMakeBuildDirChooser::loadConfig(const QString& config)
