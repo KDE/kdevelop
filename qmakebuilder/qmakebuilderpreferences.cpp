@@ -25,11 +25,12 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
-#include <KIO/NetAccess>
+#include <kio/deletejob.h>
 #include <kaboutdata.h>
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
 #include <KMessageBox>
+#include <KJobWidgets>
 
 #include "ui_qmakeconfig.h"
 #include "../qmakebuilddirchooser.h"
@@ -192,8 +193,9 @@ void QMakeBuilderPreferences::removeBuildConfig()
                     "Do you want KDevelop to remove it in the file system as well?", removed));
         if(ret==KMessageBox::Yes)
         {
-            bool correct=KIO::NetAccess::del(QUrl::fromLocalFile(removed), this);
-            if(!correct)
+            auto deleteJob = KIO::del(QUrl::fromLocalFile(removed));
+            KJobWidgets::setWindow(deleteJob, this);
+            if(!deleteJob->exec())
                 KMessageBox::error(this, i18n("Could not remove: %1.", removed));
         }
     }

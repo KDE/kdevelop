@@ -36,7 +36,6 @@
 
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
-#include <klocale.h>
 
 #include "qmakejob.h"
 #include "qmakebuilderdebug.h"

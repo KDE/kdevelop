@@ -30,5 +30,6 @@ endif(BUILD_qmake_parser)
 add_library(kdevqmakeparser STATIC ${parser_STAT_SRCS} ${parser_GEN_SRCS})
 generate_export_header(kdevqmakeparser BASE_NAME parser EXPORT_MACRO_NAME KDEVQMAKEPARSER_EXPORT)
 target_link_libraries(kdevqmakeparser LINK_PRIVATE
-    KF5::KDELibs4Support
+    KF5::CoreAddons
+    KF5::KIOCore
 )

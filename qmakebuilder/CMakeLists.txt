@@ -21,7 +21,6 @@ kconfig_add_kcfg_files(qmakebuilder_SRCS qmakebuilderconfig.kcfgc)
 kdevplatform_add_plugin(kdevqmakebuilder JSON kdevqmakebuilder.json SOURCES ${qmakebuilder_SRCS})
 target_link_libraries(kdevqmakebuilder
     ${QT_QTDESIGNER_LIBRARY}
-    KF5::KDELibs4Support
     KDev::Interfaces
     KDev::OutputView
     KDev::Util

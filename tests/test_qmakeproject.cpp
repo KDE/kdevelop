@@ -32,8 +32,7 @@
 #include <serialization/indexedstring.h>
 
 #include <QTest>
-#include <qtest_kde.h>
-#include <KUrl>
+#include <QSignalSpy>
 #include <KConfigGroup>
 #include <kio/deletejob.h>
 
@@ -44,8 +43,9 @@ using namespace KDevelop;
 TestQMakeProject::TestQMakeProject(QObject* parent): QObject(parent)
 {
     // be sure that we crate a new session (reuse an existing session makes the test crash)
-    KIO::DeleteJob *job = KIO::del(KUrl(QString(getenv("KDEHOME")) + "/share/apps/qttest/sessions"));
-    QTest::kWaitForSignal(job, SIGNAL(result(KJob*)), 10000);
+    KIO::DeleteJob *job = KIO::del(QUrl::fromLocalFile(QString(getenv("KDEHOME")) + "/share/apps/qttest/sessions"));
+    QSignalSpy newOwnerSpy(job, SIGNAL(result(KJob*)));
+    newOwnerSpy.wait(10000);
 
     AutoTestShell::init();
     Core::initialize(nullptr, Core::Default);
@@ -87,12 +87,13 @@ void TestQMakeProject::testBuildDirectory()
     }
 
     // opens project with kdevelop
-    KUrl projectUrl(QString("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
+    const QUrl projectUrl = QUrl::fromLocalFile(QString("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
     ICore::self()->projectController()->openProject(projectUrl);
     
     // wait for loading finished
     //TODO: this pops the configuration dialog! Find a fox for that!
-    bool gotSignal = QTest::kWaitForSignal(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 30000);
+    QSignalSpy spy(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
+    bool gotSignal = spy.wait(30000);
     QVERIFY2(gotSignal, "Timeout while waiting for opened signal");
     
     IProject* project = ICore::self()->projectController()->findProjectByName(projectName);

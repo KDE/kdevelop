@@ -31,7 +31,6 @@ target_link_libraries(qmakefiletest
 
 target_link_libraries(qmakeprojecttest
     Qt5::Test
-    KF5::KDELibs4Support
     KDev::Tests
     KDev::Util
     kdevqmakeparser
