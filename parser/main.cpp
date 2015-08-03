@@ -44,7 +44,7 @@ int main( int argc, char* argv[] )
 
     if (parser.positionalArguments().isEmpty()) {
         parser.showHelp();
-        return 1;
+        return EXIT_FAILURE;
     }
 
     const bool debug = parser.isSet("debug");
@@ -52,11 +52,11 @@ int main( int argc, char* argv[] )
     foreach (const auto arg, parser.positionalArguments()) {
         QMake::Driver driver;
         if (!driver.readFile(arg)) {
-            exit( EXIT_FAILURE );
+            exit(EXIT_FAILURE);
         }
         driver.setDebug( debug );
 
-        QMake::ProjectAST* ast = 0;
+        QMake::ProjectAST* ast = nullptr;
         if (!driver.parse(&ast)) {
             exit(EXIT_FAILURE);
         }
