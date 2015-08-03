@@ -21,6 +21,7 @@
 #include "path.h"
 
 #include <QApplication>
+#include <QDir>
 #include <QFileInfo>
 
 #include <KIO/CopyJob>
@@ -41,6 +42,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
+
+using namespace KDevelop;
 
 bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, const bool isFolder)
 {
@@ -193,4 +196,21 @@ bool KDevelop::copyUrl(const KDevelop::IProject* project, const QUrl& source, co
 bool KDevelop::copyPath(const KDevelop::IProject* project, const KDevelop::Path& source, const KDevelop::Path& target)
 {
     return copyUrl(project, source.toUrl(), target.toUrl());
+}
+
+Path KDevelop::proposedBuildFolder(const Path& sourceFolder)
+{
+    Path proposedBuildFolder;
+    if (sourceFolder.path().contains("/src/")) {
+        const QString srcBuildPath = sourceFolder.path().replace("/src/", "/build/");
+        Q_ASSERT(!srcBuildPath.isEmpty());
+        if (QDir(srcBuildPath).exists()) {
+            proposedBuildFolder = Path(srcBuildPath);
+        }
+    }
+    if (!proposedBuildFolder.isValid()) {
+        proposedBuildFolder = Path( sourceFolder, "build" );
+    }
+
+    return proposedBuildFolder;
 }

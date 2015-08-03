@@ -89,6 +89,11 @@ bool KDEVPLATFORMPROJECT_EXPORT copyUrl(const KDevelop::IProject* project, const
  * @return whether it got copied or not
  */
 bool KDEVPLATFORMPROJECT_EXPORT copyPath(const KDevelop::IProject* project, const Path& source, const Path& target);
+
+/**
+ * Return the proposed build folder URL for given @p sourceFolder
+ */
+Path KDEVPLATFORMPROJECT_EXPORT proposedBuildFolder(const Path& sourceFolder);
 }
 
 #endif // KDEVPLATFORM_PROJECTHELPER_H
