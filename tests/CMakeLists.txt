@@ -25,7 +25,6 @@ ecm_mark_as_test(qmakeprojecttest)
 
 target_link_libraries(qmakefiletest
     Qt5::Test
-    KF5::KDELibs4Support
     KDev::Tests
     kdevqmakeparser
     )
