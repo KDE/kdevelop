@@ -6,7 +6,7 @@ class foo
     int b;
 };
 
-/// "internalContext" : { "localDeclarationCount" : 0}
+/// "internalContext" : { "localDeclarationCount" : 1, "findDeclarations" : { "" : {"range" : "[(9, 10), (9, 10)]" } } }
 void f(int);
 /// "internalContext" : { "localDeclarationCount" : 1}
 void f2(int a);

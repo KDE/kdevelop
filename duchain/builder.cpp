@@ -326,6 +326,12 @@ struct Visitor
     {
         auto range = ClangHelpers::cursorSpellingNameRange(cursor, id);
 
+        if (CK == CXCursor_ParmDecl && id.isEmpty()) {
+            // This is an anonymous function parameter e.g.: void f(int);
+            // Set empty range for it
+            range.end = range.start;
+        }
+
         // check if cursor is inside a macro expansion
         auto clangRange = clang_Cursor_getSpellingNameRange(cursor, 0, 0);
         unsigned int expansionLocOffset;
@@ -1028,12 +1034,6 @@ CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
 
 CXChildVisitResult Visitor::buildParmDecl(CXCursor cursor)
 {
-    // There is no need to create declarations for anonymous function parameters e.g.: void f(int);
-    // Currently clang_Cursor_getSpellingNameRange returns not empty ranges for anonymous parameters. So we use clang_getCursorSpelling here.
-    if (ClangString(clang_getCursorSpelling(cursor)).isEmpty()) {
-        return CXChildVisit_Recurse;
-    }
-
     return buildDeclaration<CXCursor_ParmDecl, typename DeclType<CXCursor_ParmDecl, false, false>::Type, false>(cursor);
 }
 

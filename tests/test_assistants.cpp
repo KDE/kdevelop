@@ -357,8 +357,9 @@ void TestAssistants::testSignatureAssistant()
         testbed.changeDocument(stateChange.document, stateChange.range, stateChange.newText, true);
 
         if (stateChange.result == SHOULD_ASSIST) {
+            QEXPECT_FAIL("swap_args_definition_side", "Parameters order is not tracked anywhere", Abort);
             QVERIFY(staticAssistantsManager()->activeAssistant());
-            QEXPECT_FAIL("change_function_type", "For some reason, no function is found in the expected line and thus no action added", Abort);
+            QEXPECT_FAIL("change_function_type", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't parse the code...", Abort);
             QVERIFY(!staticAssistantsManager()->activeAssistant()->actions().isEmpty());
         } else {
             QVERIFY(!staticAssistantsManager()->activeAssistant() || staticAssistantsManager()->activeAssistant()->actions().isEmpty());
@@ -370,6 +371,5 @@ void TestAssistants::testSignatureAssistant()
     QFETCH(QString, finalHeaderContents);
     QFETCH(QString, finalCppContents);
     QCOMPARE(testbed.documentText(Testbed::HeaderDoc), finalHeaderContents);
-    QEXPECT_FAIL("change_argument_type", "The QID is broken, and thus we lose the parent identifier", Abort);
     QCOMPARE(testbed.documentText(Testbed::CppDoc), finalCppContents);
 }

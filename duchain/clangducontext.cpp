@@ -42,6 +42,11 @@ QWidget* ClangTopDUContext::createNavigationWidget(Declaration* decl, TopDUConte
 
         return new ClangNavigationWidget(item, TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix);
     }
+
+    if (decl->range().isEmpty()) {
+        return nullptr;
+    }
+
     return new ClangNavigationWidget(DeclarationPointer(decl));
 }
 
@@ -49,8 +54,7 @@ template<>
 QWidget* ClangNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* /*topContext*/,
                                                       const QString& /*htmlPrefix*/, const QString& /*htmlSuffix*/) const
 {
-
-    if (!decl) {
+    if (!decl || decl->range().isEmpty()) {
         clangDebug() << "no declaration, not returning navigationwidget";
         return 0;
     }

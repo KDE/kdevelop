@@ -36,7 +36,7 @@
 
 using namespace KDevelop;
 
-QString makeSignatureString(const Declaration* functionDecl, const Signature& signature)
+QString makeSignatureString(const Declaration* functionDecl, const Signature& signature, const bool editingDefinition)
 {
     if (!functionDecl || !functionDecl->internalContext()) {
         return {};
@@ -51,9 +51,7 @@ QString makeSignatureString(const Declaration* functionDecl, const Signature& si
 
     ret += QLatin1Char(' ');
 
-    QualifiedIdentifier namespaceIdentifier = visibilityFrom->scopeIdentifier(false);
-    Identifier id(IndexedString(functionDecl->qualifiedIdentifier().mid(namespaceIdentifier.count()).toString()));
-    ret += functionDecl->identifier().toString();
+    ret += editingDefinition ? functionDecl->qualifiedIdentifier().toString() : functionDecl->identifier().toString();
 
     ret += QLatin1Char('(');
     int pos = 0;
@@ -131,8 +129,8 @@ QString AdaptSignatureAction::toolTip() const
     }
     return i18n("Update %1 signature\nfrom: %2\nto: %3",
                 m_editingDefinition ? i18n("declaration") : i18n("definition"),
-                makeSignatureString(declaration, m_oldSignature),
-                makeSignatureString(declaration, m_newSignature));
+                makeSignatureString(declaration, m_oldSignature, m_editingDefinition),
+                makeSignatureString(declaration, m_newSignature, !m_editingDefinition));
 }
 
 void AdaptSignatureAction::execute()
@@ -165,7 +163,7 @@ void AdaptSignatureAction::execute()
 
     DocumentChangeSet changes;
     KTextEditor::Range parameterRange = ClangIntegration::DUChainUtils::functionSignatureRange(otherSide);
-    QString newText = makeSignatureString(otherSide, m_newSignature);
+    QString newText = makeSignatureString(otherSide, m_newSignature, !m_editingDefinition);
     if (!m_editingDefinition) {
         // append a newline after the method signature in case the method definition follows
         newText += QLatin1Char('\n');
