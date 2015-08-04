@@ -36,7 +36,8 @@
 using namespace KDevelop;
 
 OutlineModel::OutlineModel(QObject* parent)
-    : QAbstractItemModel(parent), m_lastDoc(nullptr)
+    : QAbstractItemModel(parent)
+    , m_lastDoc(nullptr)
 {
     auto docController = ICore::self()->documentController();
     // build the initial outline now

@@ -88,7 +88,7 @@ inline int OutlineNode::indexOf(const OutlineNode* child) const
     const auto max = m_children.size();
     // Comparing the address here is only fine since we never modify the vector after initial creation
     for (size_t i = 0; i < max; i++) {
-        if (child== &m_children[i]) {
+        if (child == &m_children[i]) {
             return i;
         }
     }

@@ -69,7 +69,6 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     m_sortAlphabetically->setToolTip(i18n("Sort alphabetically"));
     m_sortAlphabetically->setCheckable(true);
     connect(m_sortAlphabetically, &QPushButton::toggled, this, [this](bool sort) {
-        qDebug("Set sorting: %d", sort);
         // calling sort with -1 will restore the original order
         m_proxy->sort(sort ? 0 : -1, Qt::AscendingOrder);
         m_sortAlphabetically->setChecked(sort);
