@@ -22,6 +22,8 @@
 
 #include "settingsmanager.h"
 
+#include <QDataStream>
+
 #include <KConfig>
 #include <KConfigGroup>
 
