@@ -29,11 +29,13 @@ class QAbstractItemModel;
 namespace KDevelop
 {
 
+class ProblemModel;
+
 // Struct that handles the model and it's name as one unit, stored in ProblemModelSet
 struct ModelData
 {
     QString name;
-    QAbstractItemModel *model;
+    ProblemModel *model;
 };
 
 struct ProblemModelSetPrivate;
@@ -48,7 +50,7 @@ public:
     ~ProblemModelSet();
 
     // Adds a model
-    void addModel(const QString &name, QAbstractItemModel *model);
+    void addModel(const QString &name, ProblemModel *model);
 
     // Removes a model
     void removeModel(const QString &name);

@@ -36,7 +36,7 @@ ProblemModelSet::ProblemModelSet(QObject *parent)
 
 ProblemModelSet::~ProblemModelSet() = default;
 
-void ProblemModelSet::addModel(const QString &name, QAbstractItemModel *model)
+void ProblemModelSet::addModel(const QString &name, ProblemModel *model)
 {
     ModelData m;
     m.name = name;
