@@ -582,10 +582,13 @@ public:
     QList<CompletionTreeItemPointer> matchedItems()
     {
         QList<CompletionTreeItemPointer> lookAheadItems;
-        for (auto it = possibleLookAheadDeclarations.begin(); it != possibleLookAheadDeclarations.end(); it++) {
-            auto decl = it.key().first;
+        for (const auto& pair: possibleLookAheadDeclarations) {
+            auto decl = pair.first;
             if (matchedTypes.contains(decl->indexedType())) {
-                QString text = it.value() + decl->identifier().toString();
+                auto parent = pair.second;
+                const QString access = parent->abstractType()->whichType() == AbstractType::TypePointer
+                                 ? QStringLiteral("->") : QStringLiteral(".");
+                const QString text = parent->identifier().toString() + access + decl->identifier().toString();
                 auto item = new DeclarationItem(decl, text, {}, text);
                 item->setMatchQuality(8);
                 lookAheadItems.append(CompletionTreeItemPointer(item));
@@ -633,9 +636,7 @@ private:
                         }
                     }
 
-                    QString access = declaration->abstractType()->whichType() == AbstractType::TypePointer
-                                     ? QStringLiteral("->") : QStringLiteral(".");
-                    possibleLookAheadDeclarations.insert({localDecl, declaration}, declaration->identifier().toString() + access);
+                    possibleLookAheadDeclarations.insert({localDecl, declaration});
                 }
             }
         }
@@ -648,8 +649,8 @@ private:
     QSet<IndexedType> matchedTypes;
 
     // List of declarations that can be added to the Look Ahead group
-    // QString represents context and access (e.g. "classInstance->")
-    QHash<DeclarationContext, QString> possibleLookAheadDeclarations;
+    // Second declaration represents context
+    QSet<DeclarationContext> possibleLookAheadDeclarations;
 
     TopDUContextPointer m_topContext;
 
