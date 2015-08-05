@@ -28,6 +28,7 @@
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/pointertype.h>
@@ -442,64 +443,16 @@ bool isValidSpecialCompletionIdentifier(const QualifiedIdentifier& identifier)
     return false;
 }
 
-void addEnumItems(Declaration* declaration, QHash<QualifiedIdentifier, Declaration*>& declarationsCache);
-
-/// Add declarations from namespace into @p declarationsCache
-void addNamespaceItems(Declaration* declaration, QHash<QualifiedIdentifier, Declaration*>& declarationsCache)
+Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPointer& ctx, const CursorInRevision& position, QSet<Declaration*>& handled)
 {
-    if (declaration->kind() != Declaration::Namespace || !declaration->internalContext()) {
-        return;
-    }
+    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(qid);
 
-    const auto namespaceDeclarations = declaration->internalContext()->localDeclarations();
-    for (const auto& nd : namespaceDeclarations) {
-        declarationsCache.insert(nd->qualifiedIdentifier(), nd);
-        addEnumItems(nd, declarationsCache);
-    }
-}
-
-/// Add enumerators into @p declarationsCache
-void addEnumItems(Declaration* declaration, QHash<QualifiedIdentifier, Declaration*>& declarationsCache)
-{
-    if (declaration->kind() != Declaration::Type || !declaration->internalContext()) {
-        return;
-    }
-
-    const auto ictx = declaration->internalContext();
-    if (ictx->type() == DUContext::Enum) {
-        for (const auto enumerator : ictx->localDeclarations()) {
-            declarationsCache.insert(enumerator->qualifiedIdentifier(), enumerator);
-        }
-    }
-}
-
-QMultiHash<QualifiedIdentifier, Declaration*> generateCache(const DUContextPointer& ctx, const CursorInRevision& position)
-{
-    const auto allDeclarationsList = ctx->allDeclarations(position, ctx->topContext());
-    QMultiHash<QualifiedIdentifier, Declaration*> declarationsHash;
-
-    for (const auto& declaration : allDeclarationsList) {
-        // We store function-local declarations with qid like: "function::declaration", but completion items provided by Clang have qid like: "declaration", so we use id here instead.
-        declarationsHash.insert(declaration.second ? declaration.first->qualifiedIdentifier() : QualifiedIdentifier(declaration.first->identifier()), declaration.first);
-
-        // Intentionally not recurse into nested namespaces and inner class contexts as the findDeclarations call is much cheaper.
-        addNamespaceItems(declaration.first, declarationsHash);
-        addEnumItems(declaration.first, declarationsHash);
-    }
-
-    return declarationsHash;
-}
-
-Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPointer& ctx, const CursorInRevision& position, const QMultiHash<QualifiedIdentifier, Declaration*>& declarationsCache, QSet<Declaration*>& handled)
-{
-    auto i = declarationsCache.find(qid);
-    while (i != declarationsCache.end() && i.key() == qid) {
-        auto declaration = i.value();
+    for (auto it = decl.iterator(); it; ++it) {
+        auto declaration = it->declaration();
         if (!handled.contains(declaration)) {
             handled.insert(declaration);
             return declaration;
         }
-        ++i;
     }
 
     const auto foundDeclarations = ctx->findDeclarations(qid, position);
@@ -514,7 +467,7 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
 }
 
 /// If any parent of this context is a class, the closest class declaration is returned, nullptr otherwise
-Declaration* classDeclarationForContext(const DUContextPointer& context, const CursorInRevision& position, const QMultiHash<QualifiedIdentifier, Declaration*>& declarationsCache)
+Declaration* classDeclarationForContext(const DUContextPointer& context, const CursorInRevision& position)
 {
     auto parent = context;
     while (parent) {
@@ -529,7 +482,7 @@ Declaration* classDeclarationForContext(const DUContextPointer& context, const C
                 qid.pop();
 
                 QSet<Declaration*> tmp;
-                auto decl = findDeclaration(qid, context, position, declarationsCache, tmp);
+                auto decl = findDeclaration(qid, context, position, tmp);
 
                 if (decl && decl->internalContext() && decl->internalContext()->type() == DUContext::Class) {
                     parent = decl->internalContext();
@@ -726,7 +679,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
     }
 
     const auto ctx = DUContextPointer(m_duContext->findContextAt(m_position));
-    const auto declarationsCache = generateCache(ctx, m_position);
 
     /// Normal completion items, such as 'void Foo::foo()'
     QList<CompletionTreeItemPointer> items;
@@ -771,7 +723,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         }
 
         // If ctx is/inside the Class context, this represents that context.
-        auto currentClassContext = classDeclarationForContext(ctx, m_position, declarationsCache);
+        auto currentClassContext = classDeclarationForContext(ctx, m_position);
         if (availability == CXAvailability_NotAccessible && (!isDeclaration || !currentClassContext)) {
             continue;
         }
@@ -870,7 +822,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 continue;
             }
 
-            auto found = findDeclaration(qid, ctx, m_position, declarationsCache, handled);
+            auto found = findDeclaration(qid, ctx, m_position, handled);
 
             CompletionTreeItemPointer item;
             if (found) {
@@ -881,7 +833,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                             continue;
                         }
 
-                        auto declarationClassContext = classDeclarationForContext(DUContextPointer(found->context()), m_position, declarationsCache);
+                        auto declarationClassContext = classDeclarationForContext(DUContextPointer(found->context()), m_position);
 
                         uint steps = 10;
                         auto inheriters = DUChainUtils::getInheriters(declarationClassContext, steps);
