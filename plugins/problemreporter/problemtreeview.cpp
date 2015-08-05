@@ -128,8 +128,15 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
         }
         addAction(scopeMenu);
 
-        currentDocumentAction->setChecked(true);
-        model()->setScope(CurrentDocument);
+        // Show All should be default if it's supported. It helps with error messages that are otherwise invisible
+        if (problemModel->features().testFlag(ProblemModel::CanByPassScopeFilter)) {
+            actions.last()->setChecked(true);
+            model()->setScope(BypassScopeFilter);
+        } else {
+            currentDocumentAction->setChecked(true);
+            model()->setScope(CurrentDocument);
+        }
+
         QSignalMapper * scopeMapper = new QSignalMapper(this);
         scopeMapper->setMapping(currentDocumentAction, CurrentDocument);
         scopeMapper->setMapping(openDocumentsAction, OpenDocuments);
