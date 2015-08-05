@@ -46,6 +46,20 @@ void ProblemModelSet::addModel(const QString &name, ProblemModel *model)
     emit added(m);
 }
 
+ProblemModel* ProblemModelSet::findModel(const QString &name) const
+{
+    ProblemModel *model = nullptr;
+
+    foreach (const ModelData &data, d->data) {
+        if (data.name == name) {
+            model = data.model;
+            break;
+        }
+    }
+
+    return model;
+}
+
 void ProblemModelSet::removeModel(const QString &name)
 {
     QVector<ModelData>::iterator itr = d->data.begin();

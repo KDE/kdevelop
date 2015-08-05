@@ -52,6 +52,9 @@ public:
     // Adds a model
     void addModel(const QString &name, ProblemModel *model);
 
+    // Finds a model
+    ProblemModel* findModel(const QString &name) const;
+
     // Removes a model
     void removeModel(const QString &name);
 
