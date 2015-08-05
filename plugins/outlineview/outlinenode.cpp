@@ -178,7 +178,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
     }
 }
 
-inline std::unique_ptr<OutlineNode> OutlineNode::dummyNode()
+std::unique_ptr<OutlineNode> OutlineNode::dummyNode()
 {
     return std::unique_ptr<OutlineNode>(new OutlineNode(QStringLiteral("<dummy node>"), nullptr));
 }
