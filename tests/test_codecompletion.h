@@ -48,6 +48,7 @@ private slots:
     void testCompletionPriority_data();
 
     void testOverloadedFunctions();
+    void testVariableScope();
 };
 
 #endif // TESTCODECOMPLETION_H

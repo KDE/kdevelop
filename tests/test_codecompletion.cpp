@@ -803,3 +803,29 @@ void TestCodeCompletion::testCompletionPriority_data()
            "void Derived::f(){\n }"
         << CompletionPriorityItems{{1,0}, {{"m_protected", 0, 37}}};
 }
+
+void TestCodeCompletion::testVariableScope()
+{
+    TestFile file("int var; \nvoid test(int var) {int tmp =\n }", "cpp");
+    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+    QVERIFY(sessionData);
+
+    DUContextPointer topPtr(top);
+    lock.unlock();
+
+    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {2, 0}, QString());
+    context->setFilters(ClangCodeCompletionContext::ContextFilters(
+                            ClangCodeCompletionContext::NoBuiltins |
+                            ClangCodeCompletionContext::NoMacros));
+    lock.lock();
+    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+
+    QCOMPARE(tester.items.size(), 4);
+    auto item = tester.findItem(QStringLiteral("var"));
+    VERIFY(item);
+    QCOMPARE(item->declaration()->range().start, CursorInRevision(1, 14));
+}

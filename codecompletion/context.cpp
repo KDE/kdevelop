@@ -449,6 +449,9 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
 
     for (auto it = decl.iterator(); it; ++it) {
         auto declaration = it->declaration();
+        if (declaration->kind() == Declaration::Instance) {
+            break;
+        }
         if (!handled.contains(declaration)) {
             handled.insert(declaration);
             return declaration;
