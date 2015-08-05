@@ -50,7 +50,8 @@ public:
         CanShowImports             = 2, // Show problems from imported files. E.g.: Header files in C/C++
         ScopeFilter                = 4, // Filter problems by scope. E.g.: current document, open documents, etc
         SeverityFilter             = 8, // Filter problem by severity. E.g.: hint, warning, error, etc
-        Grouping                   = 16
+        Grouping                   = 16,
+        CanByPassScopeFilter       = 32 // Can bypass scope filter
     };
 
     Q_DECLARE_FLAGS(Features, FeatureCode)

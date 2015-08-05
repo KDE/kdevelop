@@ -124,8 +124,14 @@ void ProblemStore::setScope(int scope)
 {
     ProblemScope cast_scope = static_cast<ProblemScope>(scope);
 
-    if(d->m_documents)
-    {
+    if (cast_scope == BypassScopeFilter) {
+        setBypassScopeFilter(true);
+        return;
+    }
+
+    setBypassScopeFilter(false);
+
+    if (d->m_documents) {
         if(cast_scope == d->m_documents->getScope())
             return;
 
@@ -157,6 +163,11 @@ void ProblemStore::setScope(int scope)
 void ProblemStore::setGrouping(int grouping)
 {
     Q_UNUSED(grouping);
+}
+
+void ProblemStore::setBypassScopeFilter(bool bypass)
+{
+    Q_UNUSED(bypass);
 }
 
 void ProblemStore::setCurrentDocument(const IndexedString &doc)

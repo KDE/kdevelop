@@ -59,12 +59,16 @@ public:
     // Set the grouping method. See the GroupingMethod enum.
     void setGrouping(int grouping);
 
+    // Sets whether we should bypass the scope filter
+    void setBypassScopeFilter(bool bypass) override;
+
 private:
     // Tells if the problem matches the filters
     bool match(const IProblem::Ptr &problem) const;
 
     GroupingMethod m_grouping;
     QScopedPointer<GroupingStrategy> m_strategy;
+    bool m_bypassScopeFilter;
 };
 
 }

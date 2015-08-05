@@ -78,7 +78,7 @@ ProblemModel::ProblemModel(QObject * parent, ProblemStore *store)
 {
     if (!d->m_problems) {
         d->m_problems.reset(new FilteredProblemStore());
-        d->m_features = ScopeFilter | SeverityFilter | Grouping;
+        d->m_features = ScopeFilter | SeverityFilter | Grouping | CanByPassScopeFilter;
     }
 
     setScope(CurrentDocument);

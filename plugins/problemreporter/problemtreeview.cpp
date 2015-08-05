@@ -107,11 +107,24 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
         allProjectAction->setText(i18n("All Projects"));
         allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
 
-        QAction* scopeActionArray[] = {currentDocumentAction, openDocumentsAction, currentProjectAction, allProjectAction};
-        for (int i = 0; i < 4; ++i) {
-            scopeActionArray[i]->setCheckable(true);
-            scopeActions->addAction(scopeActionArray[i]);
-            scopeMenu->addAction(scopeActionArray[i]);
+        QVector<QAction*> actions;
+        actions.push_back(currentDocumentAction);
+        actions.push_back(openDocumentsAction);
+        actions.push_back(currentProjectAction);
+        actions.push_back(allProjectAction);
+
+
+        if (problemModel->features().testFlag(ProblemModel::CanByPassScopeFilter)) {
+            QAction *showAllAction = new QAction(this);
+            showAllAction->setText(i18n("Show All"));
+            showAllAction->setToolTip(i18nc("@info:tooltip","Display ALL problems"));
+            actions.push_back(showAllAction);
+        }
+
+        foreach (QAction* action, actions) {
+            action->setCheckable(true);
+            scopeActions->addAction(action);
+            scopeMenu->addAction(action);
         }
         addAction(scopeMenu);
 
@@ -126,6 +139,12 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
         connect(openDocumentsAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
         connect(currentProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
         connect(allProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+
+        if (problemModel->features().testFlag(ProblemModel::CanByPassScopeFilter)) {
+            scopeMapper->setMapping(actions.last(), BypassScopeFilter);
+            connect(actions.last(), &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        }
+
         connect(scopeMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setScope);
     }
 

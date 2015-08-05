@@ -77,6 +77,9 @@ public:
     // Sets the grouping method
     virtual void setGrouping(int grouping);
 
+    // Sets whether we should bypass the scope filter
+    virtual void setBypassScopeFilter(bool bypass);
+
     // Sets the currently shown document (in the editor, it's triggered by the IDE)
     void setCurrentDocument(const IndexedString &doc);
 
