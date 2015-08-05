@@ -490,7 +490,7 @@ void UiController::showSettingsDialog()
                 cfgDlg.addSubConfigPage(languageConfigPage, page);
             } else {
                 // insert them before the editor config page
-                cfgDlg.addConfigPage(plugin->configPage(i, &cfgDlg), editorConfigPage);
+                cfgDlg.addConfigPage(page, editorConfigPage);
             }
         }
     };
