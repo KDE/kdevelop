@@ -23,6 +23,7 @@
 #include "navigationwidget.h"
 
 #include "macronavigationcontext.h"
+#include "types/classspecializationtype.h"
 
 #include <language/duchain/navigation/abstractdeclarationnavigationcontext.h>
 #include <language/duchain/navigation/abstractincludenavigationcontext.h>
@@ -36,6 +37,28 @@ public:
     DeclarationNavigationContext(const DeclarationPointer& decl, AbstractNavigationContext* previousContext = 0)
         : AbstractDeclarationNavigationContext(decl, {}, previousContext)
     {
+    }
+
+    void htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType) override
+    {
+        AbstractDeclarationNavigationContext::htmlIdentifiedType(type, idType);
+
+        if (auto cst = dynamic_cast<const ClassSpecializationType*>(type.data())) {
+            modifyHtml() += QStringLiteral("< ").toHtmlEscaped();
+
+            bool first = true;
+            for (const auto& type : cst->templateParameters()) {
+                if (first) {
+                    first = false;
+                } else {
+                    modifyHtml() += QStringLiteral(", ");
+                }
+
+                eventuallyMakeTypeLinks(type.abstractType());
+            }
+
+            modifyHtml() += QStringLiteral(" >").toHtmlEscaped();
+        }
     }
 };
 

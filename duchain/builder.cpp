@@ -28,6 +28,7 @@
 #include "cursorkindtraits.h"
 #include "clangducontext.h"
 #include "macrodefinition.h"
+#include "types/classspecializationtype.h"
 #include "util/clangdebug.h"
 #include "util/clangutils.h"
 #include "util/clangtypes.h"
@@ -529,6 +530,12 @@ struct Visitor
     template<CXTypeKind TK, EnableIf<TK == CXType_Unexposed> = dummy>
     AbstractType *createType(CXType type, CXCursor parent)
     {
+        auto numTA = clang_Type_getNumTemplateArguments(type);
+        if (numTA != -1) {
+            // This is a class template specialization.
+            return createClassTemplateSpecializationType(type);
+        }
+
         // Maybe it's the ElaboratedType. E.g.: "struct Type foo();" or "NS::Type foo();" or "void foo(enum Enum e);" e.t.c.
         auto oldType = type;
 
@@ -588,6 +595,57 @@ struct Visitor
         auto clangType = clang_getCursorType(cursor);
         return makeType(clangType, cursor);
     }
+
+    AbstractType* createClassTemplateSpecializationType(CXType type)
+    {
+        auto numTA = clang_Type_getNumTemplateArguments(type);
+        Q_ASSERT(numTA != -1);
+
+        auto cst = new ClassSpecializationType;
+        auto typeDecl = clang_getTypeDeclaration(type);
+
+        QStringList typesStr;
+        QString tStr = ClangString(clang_getTypeSpelling(type)).toString();
+        ParamIterator iter(QStringLiteral("<>"), tStr);
+
+        while (iter) {
+            typesStr.append(*iter);
+            ++iter;
+        }
+
+        for (int i = 0; i < numTA; i++) {
+            auto argumentType = clang_Type_getTemplateArgumentAsType(type, i);
+            AbstractType::Ptr currentType;
+            if (argumentType.kind == CXType_Invalid) {
+                if(i >= typesStr.size()){
+                    currentType = createDelayedType(argumentType);
+                } else {
+                    auto t = new DelayedType;
+                    t->setIdentifier(IndexedTypeIdentifier(typesStr[i]));
+                    currentType = t;
+                }
+            } else {
+                if (clang_Type_getNumTemplateArguments(argumentType) != -1) {
+                    // E.g. type< type<int> >. Use a delayed type for now.
+                    currentType = createDelayedType(argumentType);
+                } else {
+                    currentType = makeType(argumentType, typeDecl);
+                }
+            }
+
+            if (currentType) {
+                cst->addParameter(currentType->indexed());
+            }
+        }
+
+        auto decl = findDeclaration(typeDecl);
+
+        DUChainReadLocker lock;
+        cst->setDeclaration(decl.data());
+
+        return cst;
+    }
+
 //END create*
 
 //BEGIN setDeclData

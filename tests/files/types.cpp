@@ -37,6 +37,10 @@ template<typename T>
 struct Class_volatile_const
 {};
 
+template <typename T, int i = 100>
+class TemplateTest
+{};
+
 /// "toString" : "int main (int, char**)"
 int main(int argc, char** argv)
 {
@@ -102,4 +106,6 @@ int main(int argc, char** argv)
     const volatile auto autoVar2 = 321;
     /// "type" : { "toString" : "Class_volatile_const< int >" }
     Class_volatile_const<int> instance;
+    /// "type" : { "toString" : "TemplateTest< TemplateTest< int, 100 >, 30 >" }
+    TemplateTest<TemplateTest<int, 100>, 30> tst;
 }

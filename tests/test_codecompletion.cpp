@@ -152,7 +152,7 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
 
     tester.names.sort();
     QEXPECT_FAIL("look-ahead function primary type argument", "No API in LibClang to determine expected code completion type", Continue);
-    QEXPECT_FAIL("look-ahead template", "Templates not supported. Template type inaccessible through LibClang", Continue);
+    QEXPECT_FAIL("look-ahead template parameter substitution", "No parameters substitution so far", Continue);
     QEXPECT_FAIL("look-ahead auto item", "Auto type, like many other types, is not exposed through LibClang. We assign DelayedType to it instead of IdentifiedType", Continue);
     QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
@@ -384,6 +384,14 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "LookAhead", "i", "instance",
             "instance.intItem", "main",
             "pInstance", "pInstance->intItem",
+        }};
+    QTest::newRow("look-ahead template parameter substitution")
+        << "template <typename T> struct LookAhead {T itemT;};"
+           "int main() {LookAhead<int>* pInstance; LookAhead<int> instance; int i =\n "
+        << CompletionItems{{1, 0}, {
+            "LookAhead", "i", "instance",
+            "instance.itemT", "main",
+            "pInstance", "pInstance->itemT",
         }};
         QTest::newRow("look-ahead item access")
         << "class Class { public: int publicInt; protected: int protectedInt; private: int privateInt;};"

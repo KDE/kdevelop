@@ -26,10 +26,12 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/duchain/types/typeregister.h>
 
 #include "macrodefinition.h"
 #include "clangducontext.h"
 #include "clangparsingenvironmentfile.h"
+#include "types/classspecializationtype.h"
 
 using namespace KDevelop;
 
@@ -60,10 +62,14 @@ void DUChainUtils::registerDUChainItems()
     duchainRegisterType<ClangParsingEnvironmentFile>();
     duchainRegisterType<ClangNormalDUContext>();
     duchainRegisterType<MacroDefinition>();
+
+    TypeSystem::self().registerTypeClass<ClassSpecializationType, ClassSpecializationTypeData>();
 }
 
 void DUChainUtils::unregisterDUChainItems()
 {
+    TypeSystem::self().unregisterTypeClass<ClassSpecializationType, ClassSpecializationTypeData>();
+
     /// FIXME: this is currently not supported by the DUChain code...
     /// When the items are unregistered on plugin destruction, we'll get hit by
     /// assertions later on when the DUChain is finalized. There, when the data is getting cleaned up,
@@ -74,6 +80,7 @@ void DUChainUtils::unregisterDUChainItems()
     duchainUnregisterType<ClangParsingEnvironmentFile>();
     duchainUnregisterType<ClangNormalDUContext>();
     duchainUnregisterType<MacroDefinition>();
+
 */
 }
 
