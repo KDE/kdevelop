@@ -1469,7 +1469,7 @@ void DebugSession::handleVersion(const QStringList& s)
     int idx = rx.indexIn(s.first());
     if (idx == -1)
     {
-        if (qobject_cast<QGuiApplication*>(qApp))  {
+        if (!qobject_cast<QGuiApplication*>(qApp))  {
             //for unittest
             qFatal("You need a graphical application.");
         }
