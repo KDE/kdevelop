@@ -709,10 +709,8 @@ struct Visitor
     {
         setDeclInCtxtData<CK>(cursor, static_cast<FunctionDeclaration*>(def));
 
-        CXCursor canon = clang_getCanonicalCursor(cursor);
-        if (clang_equalCursors(canon, cursor)) {
-            def->setDeclarationIsDefinition(true);
-        } else if (auto decl = findDeclaration(canon)) {
+        const CXCursor canon = clang_getCanonicalCursor(cursor);
+        if (auto decl = findDeclaration(canon)) {
             def->setDeclaration(decl.data());
         }
     }

@@ -580,9 +580,11 @@ void TestDUChain::testFunctionDefinitionVsDeclaration()
     QVERIFY(file.topContext());
     QCOMPARE(file.topContext()->localDeclarations().size(), 2);
     auto funcDecl = file.topContext()->localDeclarations()[0];
+    QVERIFY(!funcDecl->isDefinition());
     QVERIFY(!dynamic_cast<FunctionDefinition*>(funcDecl));
     auto funcDef = file.topContext()->localDeclarations()[1];
     QVERIFY(dynamic_cast<FunctionDefinition*>(funcDef));
+    QVERIFY(funcDef->isDefinition());
 }
 
 void TestDUChain::testEnsureNoDoubleVisit()
