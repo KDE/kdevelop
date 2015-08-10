@@ -31,6 +31,7 @@ FunctionDefinition::FunctionDefinition(const RangeInRevision& range, DUContext* 
   : FunctionDeclaration(*new FunctionDefinitionData, range)
 {
   d_func_dynamic()->setClassId(this);
+  setDeclarationIsDefinition(true);
   if( context )
     setContext( context );
 }
