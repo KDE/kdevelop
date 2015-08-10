@@ -15,14 +15,8 @@ endif()
 
 set(kdevclassbrowser_PART_SRCS
     classbrowserplugin.cpp
-    classmodel.cpp
-    classmodelnode.cpp
-    classmodelnodescontroller.cpp
     classwidget.cpp
     classtree.cpp
-    documentclassesfolder.cpp
-    projectfolder.cpp
-    allclassesfolder.cpp
 )
 
 kdevplatform_add_plugin(kdevclassbrowser JSON kdevclassbrowser.json SOURCES ${kdevclassbrowser_PART_SRCS})

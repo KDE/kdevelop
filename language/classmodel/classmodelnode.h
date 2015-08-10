@@ -20,13 +20,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_PLUGIN_CLASSMODELNODE_H
-#define KDEVPLATFORM_PLUGIN_CLASSMODELNODE_H
+#ifndef KDEVPLATFORM_CLASSMODELNODE_H
+#define KDEVPLATFORM_CLASSMODELNODE_H
 
 #include "classmodel.h"
 #include <qicon.h>
-#include <language/duchain/identifier.h>
-#include <language/duchain/duchainpointer.h>
+#include "../duchain/identifier.h"
+#include "../duchain/duchainpointer.h"
 #include "classmodelnodescontroller.h"
 
 class QTimer;

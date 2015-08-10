@@ -31,7 +31,7 @@
 #include <KLocalizedString>
 #include <QLineEdit>
 
-#include "classmodel.h"
+#include "language/classmodel/classmodel.h"
 #include "classtree.h"
 #include "classbrowserplugin.h"
 

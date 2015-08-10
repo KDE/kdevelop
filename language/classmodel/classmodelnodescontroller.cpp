@@ -21,9 +21,9 @@
 
 #include "classmodelnodescontroller.h"
 #include "classmodelnode.h"
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <language/duchain/classdeclaration.h>
+#include "../duchain/duchainlock.h"
+#include "../duchain/duchain.h"
+#include "../duchain/classdeclaration.h"
 #include <QTimer>
 
 using namespace KDevelop;

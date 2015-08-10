@@ -41,7 +41,7 @@
 #include "language/duchain/declaration.h"
 #include <serialization/indexedstring.h>
 
-#include "classmodel.h"
+#include "language/classmodel/classmodel.h"
 #include "classbrowserplugin.h"
 
 using namespace KDevelop;

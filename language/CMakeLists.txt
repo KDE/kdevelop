@@ -137,6 +137,13 @@ set(KDevPlatformLanguage_LIB_SRCS
 
     checks/dataaccessrepository.cpp checks/dataaccess.cpp
     checks/controlflowgraph.cpp checks/controlflownode.cpp
+
+    classmodel/classmodel.cpp
+    classmodel/classmodelnode.cpp
+    classmodel/classmodelnodescontroller.cpp
+    classmodel/allclassesfolder.cpp
+    classmodel/documentclassesfolder.cpp
+    classmodel/projectfolder.cpp
 )
 
 set(grantlee_LIB_SRCS
@@ -380,4 +387,14 @@ install(FILES
     checks/controlflowgraph.h
     checks/controlflownode.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/checks COMPONENT Devel
+)
+
+install(FILES
+    classmodel/classmodel.h
+    classmodel/classmodelnode.h
+    classmodel/classmodelnodescontroller.h
+    classmodel/allclassesfolder.h
+    classmodel/documentclassesfolder.h
+    classmodel/projectfolder.h
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language/classmodel COMPONENT Devel
 )

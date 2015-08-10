@@ -19,12 +19,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_PLUGIN_CLASSMODELNODESCONTROLLER_H
-#define KDEVPLATFORM_PLUGIN_CLASSMODELNODESCONTROLLER_H
+#ifndef KDEVPLATFORM_CLASSMODELNODESCONTROLLER_H
+#define KDEVPLATFORM_CLASSMODELNODESCONTROLLER_H
 
 #include <QObject>
-#include <serialization/indexedstring.h>
-#include <language/duchain/ducontext.h>
+#include "../../serialization/indexedstring.h"
+#include "../duchain/ducontext.h"
 
 class QTimer;
 

@@ -26,14 +26,16 @@
 #include <typeinfo>
 #include <KLocalizedString>
 
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <language/duchain/persistentsymboltable.h>
-#include <language/duchain/duchainutils.h>
-#include <language/duchain/classdeclaration.h>
-#include <language/duchain/classfunctiondeclaration.h>
-#include <language/duchain/types/functiontype.h>
-#include <language/duchain/types/enumerationtype.h>
+#include "../duchain/duchainlock.h"
+#include "../duchain/duchain.h"
+#include "../duchain/persistentsymboltable.h"
+#include "../duchain/duchainutils.h"
+#include "../duchain/classdeclaration.h"
+#include "../duchain/classfunctiondeclaration.h"
+#include "../duchain/types/functiontype.h"
+#include "../duchain/types/enumerationtype.h"
+
+#include "util/debug.h"
 
 using namespace KDevelop;
 using namespace ClassModelNodes;
@@ -192,7 +194,7 @@ bool ClassNode::updateClassDeclarations()
       else
       {
         // Debug - for reference.
-        qCDebug(PLUGIN_CLASSBROWSER) << "class: " << klass->toString() << "name: " << decl->toString() << " - unknown declaration type: " << typeid(*decl).name();
+        qCDebug(LANGUAGE) << "class: " << klass->toString() << "name: " << decl->toString() << " - unknown declaration type: " << typeid(*decl).name();
       }
 
       if ( newNode )

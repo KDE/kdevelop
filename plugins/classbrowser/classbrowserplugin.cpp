@@ -41,7 +41,7 @@
 #include <serialization/indexedstring.h>
 
 #include "debug.h"
-#include "classmodel.h"
+#include "language/classmodel/classmodel.h"
 #include "classtree.h"
 #include "classwidget.h"
 #include <language/interfaces/editorcontext.h>

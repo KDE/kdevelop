@@ -16,8 +16,8 @@
 
 #include "projectfolder.h"
 
-#include <interfaces/iproject.h>
-#include <serialization/indexedstring.h>
+#include "../../interfaces/iproject.h"
+#include "../../serialization/indexedstring.h"
 #include <KLocalizedString>
 
 using namespace KDevelop;

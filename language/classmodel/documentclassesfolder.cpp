@@ -21,11 +21,11 @@
 
 #include "documentclassesfolder.h"
 
-#include <language/duchain/declaration.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <language/duchain/persistentsymboltable.h>
-#include <language/duchain/codemodel.h>
+#include "../duchain/declaration.h"
+#include "../duchain/duchainlock.h"
+#include "../duchain/duchain.h"
+#include "../duchain/persistentsymboltable.h"
+#include "../duchain/codemodel.h"
 
 #include <QIcon>
 #include <QTimer>

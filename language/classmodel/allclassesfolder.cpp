@@ -21,7 +21,7 @@
 
 #include "allclassesfolder.h"
 
-#include <interfaces/icore.h>
+#include "../../interfaces/icore.h"
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 

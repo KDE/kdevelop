@@ -24,12 +24,12 @@
 #include "classmodelnode.h"
 #include "allclassesfolder.h"
 #include "projectfolder.h"
-#include <language/duchain/declaration.h>
+#include "../duchain/declaration.h"
 #include <typeinfo>
 
-#include <interfaces/icore.h>
-#include <interfaces/iproject.h>
-#include <interfaces/iprojectcontroller.h>
+#include "../../interfaces/icore.h"
+#include "../../interfaces/iproject.h"
+#include "../../interfaces/iprojectcontroller.h"
 
 using namespace KDevelop;
 using namespace ClassModelNodes;

@@ -1,7 +1,7 @@
 /*
  * KDevelop Class Browser
  *
- * Copyright 2009 Milian Wolff <mail@milianw.de>
+ * Copyright 2009 Lior Mualem <lior.m.kde@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -18,8 +18,9 @@
  * Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KDEVPLATFORM_PLUGIN_PROJECTFOLDER_H
-#define KDEVPLATFORM_PLUGIN_PROJECTFOLDER_H
+
+#ifndef KDEVPLATFORM_ALLCLASSESFOLDER_H
+#define KDEVPLATFORM_ALLCLASSESFOLDER_H
 
 #include "documentclassesfolder.h"
 
@@ -31,28 +32,30 @@ namespace KDevelop
 namespace ClassModelNodes
 {
 
-/// Special folder
-/// It displays all items of a given project.
-class ProjectFolder : public DocumentClassesFolder
+/// Special folder.
+/// It displays all the classes in the projects by using the IProject
+class AllClassesFolder : public DocumentClassesFolder
 {
   Q_OBJECT
 public:
-  ProjectFolder(NodesModelInterface* a_model, KDevelop::IProject* project);
-  explicit ProjectFolder(NodesModelInterface* a_model);
+  explicit AllClassesFolder(NodesModelInterface* a_model);
 
+public: // Node overrides
+  virtual void nodeCleared() override;
   virtual void populateNode() override;
 
-protected:
-  KDevelop::IProject* m_project;
+private Q_SLOTS:
+  // Project watching
+  void projectOpened(KDevelop::IProject* project);
+  void projectClosing(KDevelop::IProject* project);
 };
 
-/// Filter for the project folder.
-/// TODO: can't we share some code with FilteredAllClassesFolder somehow?
-class FilteredProjectFolder : public ProjectFolder
+/// Contains a filter for the all classes folder.
+class FilteredAllClassesFolder : public AllClassesFolder
 {
   Q_OBJECT
 public:
-  FilteredProjectFolder(NodesModelInterface* a_model, KDevelop::IProject* project);
+  explicit FilteredAllClassesFolder(NodesModelInterface* a_model);
 
 public: // Operations.
   /// Call this to update the classes filter string.
@@ -66,6 +69,6 @@ private:
   QString m_filterString;
 };
 
-}
+} // namespace ClassModelNodes
 
-#endif // KDEVPLATFORM_PLUGIN_PROJECTFOLDER_H
+#endif

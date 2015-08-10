@@ -20,11 +20,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_PLUGIN_CLASSMODEL_H
-#define KDEVPLATFORM_PLUGIN_CLASSMODEL_H
+#ifndef KDEVPLATFORM_CLASSMODEL_H
+#define KDEVPLATFORM_CLASSMODEL_H
 
 #include <QtCore/QAbstractItemModel>
 #include "classmodelnode.h"
+
+#include <language/languageexport.h>
 
 class ClassBrowserPlugin;
 
@@ -70,7 +72,7 @@ public:
  *
  * The nodes are defined in the namespace @ref ClassModelNodes
  */
-class ClassModel : public QAbstractItemModel, public NodesModelInterface
+class KDEVPLATFORMLANGUAGE_EXPORT ClassModel : public QAbstractItemModel, public NodesModelInterface
 {
   Q_OBJECT
 public:
