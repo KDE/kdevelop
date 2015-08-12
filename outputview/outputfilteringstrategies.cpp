@@ -182,10 +182,10 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         ActionFormat( ki18nc("compiling a file: %1 file %2 compiler", "compiling %1 (%2)"), QStringLiteral("dcopidl2cpp"),
                       QStringLiteral("dcopidl2cpp (?:\\S* )*([^\\s;]+)"), 1 ),
         // match against Entering directory to update current build dir
-        ActionFormat( ki18nc("change directory: %1: path", "cd %1"), QStringLiteral("cd"),
+        ActionFormat( ki18nc("change directory: %1: path", "entering %1 (%2)"), QStringLiteral("cd"),
                       QStringLiteral("make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'"), 2),
         // waf and scons use the same basic convention as make
-        ActionFormat( ki18nc("change directory: %1: path", "cd %1"), QStringLiteral("cd"),
+        ActionFormat( ki18nc("change directory: %1: path", "entering %1 (%2)"), QStringLiteral("cd"),
                       QStringLiteral("(Waf|scons): Entering directory (\\`|\\')(.+)'"), 3)
     };
 
