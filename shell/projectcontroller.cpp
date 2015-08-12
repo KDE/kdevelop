@@ -256,11 +256,11 @@ public:
     void importProject(const QUrl& url_)
     {
         QUrl url(url_);
-        if ( url.isLocalFile() )
-        {
-            QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
-            if ( !path.isEmpty() )
-                url.setPath( path );
+        if (url.isLocalFile()) {
+            const QString path = QFileInfo(url.toLocalFile()).canonicalFilePath();
+            if (!path.isEmpty()) {
+                url = QUrl::fromLocalFile(path);
+            }
         }
 
         if ( !url.isValid() )
