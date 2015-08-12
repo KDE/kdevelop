@@ -17,12 +17,9 @@
 */
 
 #include "ninjajob.h"
+
 #include "kdevninjabuilderplugin.h"
 
-#include <KProcess>
-#include <QUrl>
-#include <KLocalizedString>
-#include <KConfigGroup>
 #include <interfaces/iproject.h>
 #include <outputview/outputmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -30,8 +27,15 @@
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+
+#include <KProcess>
+#include <KLocalizedString>
+#include <KConfigGroup>
+
 #include <QFile>
+#include <QRegularExpression>
 #include <QStandardPaths>
+#include <QUrl>
 
 NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent)
     : OutputExecuteJob(parent)
