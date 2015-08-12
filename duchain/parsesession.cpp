@@ -164,7 +164,6 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         unsaved = toClangApi(unsavedFiles);
     }
 
-#if CINDEX_VERSION_MINOR >= 23
     const CXErrorCode code = clang_parseTranslationUnit2(
         index->index(), tuUrl.byteArray().constData(),
         clangArguments.constData(), clangArguments.size(),
@@ -175,14 +174,6 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     if (code != CXError_Success) {
         qWarning() << "clang_parseTranslationUnit2 return with error code" << code;
     }
-#else
-    m_unit = clang_parseTranslationUnit(
-        index->index(), tuUrl.byteArray().constData(),
-        clangArguments.constData(), clangArguments.size(),
-        unsaved.data(), unsaved.size(),
-        flags
-    );
-#endif
 
     if (m_unit) {
         setUnit(m_unit);

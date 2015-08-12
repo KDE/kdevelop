@@ -98,13 +98,6 @@ namespace ClangUtils
     QByteArray getRawContents(CXTranslationUnit unit, CXSourceRange range);
 
     /**
-     * TODO remove once we depend on Clang 3.5
-     * Given a cursor, returns true if and only if the function is a
-     * const qualified class method.
-     */
-    bool isConstMethod(CXCursor cursor);
-
-    /**
      * @brief Return true if file @p file1 and file @p file2 are equal
      *
      * @see clang_File_isEqual

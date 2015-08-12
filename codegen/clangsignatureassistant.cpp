@@ -143,7 +143,7 @@ KTextEditor::Cursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor 
             return KTextEditor::Cursor::invalid();
         }
 
-        if (endChar == QLatin1Char(')') && ClangUtils::isConstMethod(cursor)) {
+        if (endChar == QLatin1Char(')') && clang_CXXMethod_isConst(cursor)) {
             endChar = QLatin1Char('t');
         }
     } while (searchChar != endChar);

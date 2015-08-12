@@ -23,7 +23,7 @@ find_package(KF5 REQUIRED COMPONENTS I18n ItemModels ThreadWeaver TextEditor)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 find_package(KDevelop REQUIRED)
 
-find_package(Clang 3.4)
+find_package(Clang 3.5)
 set_package_properties(Clang PROPERTIES
     TYPE REQUIRED
     PURPOSE "LibClang is a high level C interface to clang"

@@ -49,9 +49,7 @@
 #include <language/duchain/types/typealiastype.h>
 #include <language/duchain/types/indexedtype.h>
 
-#if CINDEX_VERSION_MINOR >= 25
 #include <clang-c/Documentation.h>
-#endif
 
 #include <unordered_map>
 #include <typeinfo>
@@ -697,7 +695,7 @@ struct Visitor
         // TODO: Debug further
         auto type = decl->abstractType();
         if (type) {
-            if (ClangUtils::isConstMethod(cursor)) {
+            if (clang_CXXMethod_isConst(cursor)) {
                 type->setModifiers(type->modifiers() | AbstractType::ConstModifier);
                 decl->setAbstractType(type);
             }

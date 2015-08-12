@@ -145,28 +145,6 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor, DefaultArgumen
     return arguments;
 }
 
-
-bool ClangUtils::isConstMethod(CXCursor cursor)
-{
-    if (clang_getCursorKind(cursor) != CXCursor_CXXMethod) {
-        return false;
-    }
-
-#if CINDEX_VERSION_MINOR >= 24
-    return clang_CXXMethod_isConst(cursor);
-#else
-    // The clang-c API currently doesn't provide access to a function declaration's
-    //const qualifier. This parses the Unified Symbol Resolution to retrieve that information.
-    //However, since the USR is undocumented, this might break in the future.
-    QString usr = ClangString(clang_getCursorUSR(cursor)).toString();
-    if (usr.length() >= 2 && usr.at(usr.length() - 2) == QLatin1Char('#')) {
-        return ((usr.at(usr.length() - 1).toLatin1()) - '0') & 0x1;
-    } else {
-        return false;
-    }
-#endif
-}
-
 bool ClangUtils::isFileEqual(CXFile file1, CXFile file2)
 {
 #if CINDEX_VERSION_MINOR >= 28
@@ -260,7 +238,7 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
 
     stream << ')';
 
-    if (isConstMethod(cursor)) {
+    if (clang_CXXMethod_isConst(cursor)) {
         stream << " const";
     }
 
