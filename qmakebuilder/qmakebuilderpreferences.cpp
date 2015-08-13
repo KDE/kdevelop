@@ -46,11 +46,11 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     : KDevelop::ConfigPage(plugin, nullptr, parent)
     , m_project(options.project)
 {
-    auto l = new QVBoxLayout(this);
-    auto w = new QWidget;
+    auto  l = new QVBoxLayout( this );
+    auto  w = new QWidget;
 
     m_prefsUi = new Ui::QMakeConfig;
-    m_prefsUi->setupUi(w);
+    m_prefsUi->setupUi( w );
 
     // display icons instead of text
     m_prefsUi->addButton->setIcon(QIcon::fromTheme("list-add"));
@@ -63,12 +63,12 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     groupBoxLayout->addWidget(m_chooserUi);
 
     m_chooserUi->kcfg_buildDir->setEnabled(false);  // build directory MUST NOT be changed here
-    l->addWidget(w);
+    l->addWidget( w );
     connect(m_chooserUi, &QMakeBuildDirChooser::changed, this, &QMakeBuilderPreferences::changed);
     connect(m_chooserUi, &QMakeBuildDirChooser::changed, this, &QMakeBuilderPreferences::validate);
 
     connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
-    connect(m_prefsUi->buildDirCombo, static_cast<void (QComboBox::*)( int )>(&QComboBox::currentIndexChanged),
+    connect(m_prefsUi->buildDirCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
             this, &QMakeBuilderPreferences::changed);
     connect(m_prefsUi->addButton, SIGNAL(pressed()), this, SLOT(addBuildConfig()));
     connect(m_prefsUi->removeButton, SIGNAL(pressed()), this, SLOT(removeBuildConfig()));
@@ -114,13 +114,15 @@ void QMakeBuilderPreferences::apply()
     qCDebug(KDEV_QMAKEBUILDER) << "Saving data";
     QString errormsg;
 
-    if (m_chooserUi->validate(&errormsg)) {
+    if(m_chooserUi->validate(&errormsg))
+    {
         // data is valid: save, once in the build dir's data and also as current data
         m_chooserUi->saveConfig();
         KConfigGroup config(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
         m_chooserUi->saveConfig(config);
         config.writeEntry(QMakeConfig::BUILD_FOLDER, m_chooserUi->buildDir());
-    } else
+    }
+    else
     {
         // invalid data: message box
         KMessageBox::error(nullptr, errormsg, "Data is invalid!");
@@ -135,7 +137,7 @@ void QMakeBuilderPreferences::validate()
 
 void QMakeBuilderPreferences::loadOtherConfig(const QString& config)
 {
-    qCDebug(KDEV_QMAKEBUILDER) << "Loading config " << config;
+    qCDebug(KDEV_QMAKEBUILDER) << "Loading config "<< config;
     if (!verifyChanges()) {
         return;
     }
@@ -152,13 +154,11 @@ bool QMakeBuilderPreferences::verifyChanges()
         int ret = KMessageBox::questionYesNoCancel(this, i18n("Current changes will be lost. Would you want to save them?"));
         if (ret == KMessageBox::Yes) {
             apply();
-        } else {
-            if (ret == KMessageBox::Cancel) {
-                return false;
-            }
+        } else if (ret == KMessageBox::Cancel) {
+            return false;
         }
-        return true;
     }
+    return true;
 }
 
 void QMakeBuilderPreferences::addBuildConfig()
@@ -169,7 +169,7 @@ void QMakeBuilderPreferences::addBuildConfig()
     qCDebug(KDEV_QMAKEBUILDER) << "Adding a new config.";
     // for more simpicity, just launch regular dialog
     auto dlg = new QMakeBuildDirChooserDialog(m_project);
-    if (dlg->exec() == QDialog::Accepted) {
+    if(dlg->exec() == QDialog::Accepted) {
         m_prefsUi->buildDirCombo->setCurrentItem(dlg->buildDir(), true);
         m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);
         //TODO run qmake
@@ -186,16 +186,17 @@ void QMakeBuilderPreferences::removeBuildConfig()
     m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);
     cg.group(removed).deleteGroup(KConfigBase::Persistent);
 
-    if (QDir(removed).exists()) {
-        int ret = KMessageBox::warningYesNo(this,
-                                            i18n("The %1 directory is about to be removed in KDevelop's list.\n"
-                                                 "Do you want KDevelop to remove it in the file system as well?", removed));
-        if (ret == KMessageBox::Yes) {
+    if(QDir(removed).exists())
+    {
+        int ret=KMessageBox::warningYesNo(this,
+                i18n("The %1 directory is about to be removed in KDevelop's list.\n"
+                    "Do you want KDevelop to remove it in the file system as well?", removed));
+        if(ret==KMessageBox::Yes)
+        {
             auto deleteJob = KIO::del(QUrl::fromLocalFile(removed));
             KJobWidgets::setWindow(deleteJob, this);
-            if (!deleteJob->exec()) {
+            if(!deleteJob->exec())
                 KMessageBox::error(this, i18n("Could not remove: %1.", removed));
-            }
         }
     }
 }

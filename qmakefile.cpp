@@ -33,9 +33,9 @@
 
 //@TODO: Make the globbing stuff work with drives on win32
 
-void resolveShellGlobbingInternal(QStringList& entries, const QStringList& segments, const QFileInfo& match, QDir& dir, int offset);
+void resolveShellGlobbingInternal( QStringList& entries, const QStringList& segments, const QFileInfo& match, QDir& dir, int offset );
 
-QStringList resolveShellGlobbingInternal(const QStringList& segments, QDir& dir, int offset = 0)
+QStringList resolveShellGlobbingInternal( const QStringList& segments, QDir& dir, int offset = 0 )
 {
     if (offset >= segments.size()) {
         return QStringList();
@@ -46,7 +46,7 @@ QStringList resolveShellGlobbingInternal(const QStringList& segments, QDir& dir,
     QStringList entries;
     if (pathPattern.contains('*') || pathPattern.contains('?') || pathPattern.contains('[')) {
         // pattern contains globbing chars
-        foreach (const QFileInfo& match, dir.entryInfoList(QStringList() << pathPattern, QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Unsorted)) {
+        foreach(const QFileInfo& match, dir.entryInfoList(QStringList() << pathPattern, QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Unsorted)) {
             resolveShellGlobbingInternal(entries, segments, match, dir, offset);
         }
     } else {
@@ -60,7 +60,7 @@ QStringList resolveShellGlobbingInternal(const QStringList& segments, QDir& dir,
     return entries;
 }
 
-void resolveShellGlobbingInternal(QStringList& entries, const QStringList& segments, const QFileInfo& match, QDir& dir, int offset)
+void resolveShellGlobbingInternal( QStringList& entries, const QStringList& segments, const QFileInfo& match, QDir& dir, int offset )
 {
     if (match.isDir() && offset + 1 < segments.size()) {
         dir.cd(match.fileName());
@@ -71,9 +71,10 @@ void resolveShellGlobbingInternal(QStringList& entries, const QStringList& segme
     }
 }
 
-QStringList resolveShellGlobbingInternal(const QString& pattern, const QString& dir)
+QStringList resolveShellGlobbingInternal( const QString& pattern, const QString& dir )
 {
-    if (pattern.isEmpty()) {
+    if( pattern.isEmpty() )
+    {
         return QStringList();
     }
 
@@ -83,10 +84,8 @@ QStringList resolveShellGlobbingInternal(const QString& pattern, const QString& 
     return resolveShellGlobbingInternal(pattern.split(QLatin1Char('/'), QString::SkipEmptyParts), dir_);
 }
 
-QMakeFile::QMakeFile(QString file)
-    : m_ast(nullptr)
-    , m_projectFile(std::move(file))
-    , m_project(nullptr)
+QMakeFile::QMakeFile( QString  file )
+    : m_ast(nullptr), m_projectFile(std::move(file)), m_project(nullptr)
 {
     Q_ASSERT(!m_projectFile.isEmpty());
 }
@@ -94,39 +93,42 @@ QMakeFile::QMakeFile(QString file)
 bool QMakeFile::read()
 {
     Q_ASSERT(!m_projectFile.isEmpty());
-    QFileInfo fi(m_projectFile);
-    ifDebug(qCDebug(KDEV_QMAKE) << "Is" << m_projectFile << "a dir?" << fi.isDir(); )
-    if (fi.isDir()) {
-        QDir dir(m_projectFile);
-        QStringList l = dir.entryList(QStringList() << "*.pro");
+    QFileInfo fi( m_projectFile );
+    ifDebug(qCDebug(KDEV_QMAKE) << "Is" << m_projectFile << "a dir?" << fi.isDir() ;)
+    if( fi.isDir() )
+    {
+        QDir dir( m_projectFile );
+        QStringList l = dir.entryList( QStringList() << "*.pro" );
 
         QString projectfile;
 
-        if (!l.count() || (l.count() && l.indexOf(fi.baseName() + ".pro") != -1)) {
+        if( !l.count() || ( l.count() && l.indexOf( fi.baseName() + ".pro" ) != -1 ) )
+        {
             projectfile = fi.baseName() + ".pro";
-        } else
+        }else
         {
             projectfile = l.first();
         }
         m_projectFile += '/' + projectfile;
     }
     QMake::Driver d;
-    d.readFile(m_projectFile);
+    d.readFile( m_projectFile );
 
-    if (!d.parse(&m_ast)) {
+    if( !d.parse( &m_ast ) )
+    {
         qCWarning(KDEV_QMAKE) << "Couldn't parse project:" << m_projectFile;
         delete m_ast;
         m_ast = nullptr;
         m_projectFile = QString();
         return false;
-    } else
+    }else
     {
-        ifDebug(qCDebug(KDEV_QMAKE) << "found ast:" << m_ast->statements.count(); )
+        ifDebug(qCDebug(KDEV_QMAKE) << "found ast:" << m_ast->statements.count() ;)
         QMakeFileVisitor visitor(this, this);
         ///TODO: cleanup, re-use m_variableValues directly in the visitor
         visitor.setVariables(m_variableValues);
         m_variableValues = visitor.visitFile(m_ast);
-        ifDebug(qCDebug(KDEV_QMAKE) << "Variables found:" << m_variableValues; )
+        ifDebug(qCDebug(KDEV_QMAKE) << "Variables found:" << m_variableValues ;)
     }
     return true;
 }
@@ -139,7 +141,7 @@ QMakeFile::~QMakeFile()
 
 QString QMakeFile::absoluteDir() const
 {
-    return QFileInfo(m_projectFile).absoluteDir().canonicalPath();
+    return QFileInfo( m_projectFile ).absoluteDir().canonicalPath();
 }
 
 QString QMakeFile::absoluteFile() const
@@ -157,14 +159,14 @@ QStringList QMakeFile::variables() const
     return m_variableValues.keys();
 }
 
-QStringList QMakeFile::variableValues(const QString& variable) const
+QStringList QMakeFile::variableValues( const QString& variable ) const
 {
-    return m_variableValues.value(variable, QStringList());
+    return m_variableValues.value( variable, QStringList() );
 }
 
-bool QMakeFile::containsVariable(const QString& variable) const
+bool QMakeFile::containsVariable( const QString& variable ) const
 {
-    return m_variableValues.contains(variable);
+    return m_variableValues.contains( variable );
 }
 
 QMakeFile::VariableMap QMakeFile::variableMap() const
@@ -182,24 +184,23 @@ QStringList QMakeFile::resolveVariable(const QString& variable, VariableInfo::Va
     }
 }
 
-QStringList QMakeFile::resolveShellGlobbing(const QString& pattern) const
+QStringList QMakeFile::resolveShellGlobbing( const QString& pattern ) const
 {
     return resolveShellGlobbingInternal(pattern, absoluteDir());
 }
 
-QString QMakeFile::resolveToSingleFileName(const QString& file) const
+QString QMakeFile::resolveToSingleFileName( const QString& file ) const
 {
-    QStringList l = resolveFileName(file);
-    if (l.isEmpty()) {
+    QStringList l = resolveFileName( file );
+    if(l.isEmpty())
         return QString();
-    } else {
+    else
         return l.first();
-    }
 }
 
-QStringList QMakeFile::resolveFileName(const QString& file) const
+QStringList QMakeFile::resolveFileName( const QString& file ) const
 {
-    return resolveShellGlobbing(file);
+    return resolveShellGlobbing( file );
 }
 
 void QMakeFile::setProject(KDevelop::IProject* project)

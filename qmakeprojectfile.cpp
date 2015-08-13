@@ -40,23 +40,21 @@
 QHash<QString, QPair<QString, QString> > QMakeProjectFile::m_qmakeQueryCache = QHash<QString, QPair<QString, QString> >();
 
 const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
-                                                                  << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES"
-                                                                  << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES"
-                                                                  << "INTERFACES" << "FORMS";
+        << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES"
+        << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES"
+        << "INTERFACES" << "FORMS" ;
 
-QMakeProjectFile::QMakeProjectFile(const QString& projectfile)
-    : QMakeFile(projectfile)
-    , m_mkspecs(nullptr)
-    , m_cache(nullptr)
+QMakeProjectFile::QMakeProjectFile( const QString& projectfile )
+    : QMakeFile( projectfile ), m_mkspecs(nullptr), m_cache(nullptr)
 {
 }
 
-void QMakeProjectFile::setQMakeCache(QMakeCache* cache)
+void QMakeProjectFile::setQMakeCache( QMakeCache* cache )
 {
     m_cache = cache;
 }
 
-void QMakeProjectFile::setMkSpecs(QMakeMkSpecs* mkspecs)
+void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 {
     m_mkspecs = mkspecs;
 }
@@ -74,16 +72,18 @@ bool QMakeProjectFile::read()
     }
 
     Q_ASSERT(m_mkspecs);
-    foreach (const QString& var, m_mkspecs->variables()) {
+    foreach( const QString& var, m_mkspecs->variables() )
+    {
         if (!m_variableValues.contains(var)) {
-            m_variableValues[var] = m_mkspecs->variableValues(var);
+            m_variableValues[var] = m_mkspecs->variableValues( var );
         }
     }
-
-    if (m_cache) {
-        foreach (const QString& var, m_cache->variables()) {
+    if( m_cache )
+    {
+        foreach( const QString& var, m_cache->variables() )
+        {
             if (!m_variableValues.contains(var)) {
-                m_variableValues[var] = m_cache->variableValues(var);
+                m_variableValues[var] = m_cache->variableValues( var );
             }
         }
     }
@@ -99,9 +99,9 @@ bool QMakeProjectFile::read()
         // Let's cache the Qt include dir
         KProcess qtInc;
         qtInc << binary << "-query" << "QT_INSTALL_HEADERS" << "QT_VERSION";
-        qtInc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
+        qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
         qtInc.start();
-        if (!qtInc.waitForFinished()) {
+        if ( !qtInc.waitForFinished() ) {
             qCWarning(KDEV_QMAKE) << "Failed to query Qt header path using qmake, is qmake installed?";
         } else {
             const QStringList result = QString::fromLocal8Bit(qtInc.readAll()).split(QRegExp("[:\n]"), QString::SkipEmptyParts);
@@ -121,23 +121,25 @@ bool QMakeProjectFile::read()
 
 QStringList QMakeProjectFile::subProjects() const
 {
-    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching subprojects"; )
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching subprojects";)
     QStringList list;
-    foreach (QString subdir, variableValues("SUBDIRS")) {
+    foreach(  QString subdir, variableValues( "SUBDIRS" ) )
+    {
         QString fileOrPath;
-        ifDebug(qCDebug(KDEV_QMAKE) << "Found value:" << subdir; )
-        if (containsVariable(subdir + ".file") && !variableValues(subdir + ".file").isEmpty()) {
-            subdir = variableValues(subdir + ".file").first();
-        } else {
-            if (containsVariable(subdir + ".subdir") && !variableValues(subdir + ".subdir").isEmpty()) {
-                subdir = variableValues(subdir + ".subdir").first();
-            }
-            if (subdir.endsWith(".pro")) {
-                fileOrPath = resolveToSingleFileName(subdir.trimmed());
-            } else
-            {
-                fileOrPath = resolveToSingleFileName(subdir.trimmed());
-            }
+        ifDebug(qCDebug(KDEV_QMAKE) << "Found value:" << subdir;)
+        if ( containsVariable( subdir+".file" ) && !variableValues( subdir+".file" ).isEmpty() )
+        {
+            subdir = variableValues( subdir+".file" ).first();
+        }else if( containsVariable( subdir+".subdir" ) && !variableValues( subdir+".subdir" ).isEmpty() )
+        {
+            subdir = variableValues( subdir+".subdir" ).first();
+        }
+        if( subdir.endsWith( ".pro" ) )
+        {
+            fileOrPath = resolveToSingleFileName( subdir.trimmed() );
+        }else
+        {
+            fileOrPath = resolveToSingleFileName( subdir.trimmed() );
         }
         if (fileOrPath.isEmpty()) {
             qCWarning(KDEV_QMAKE) << "could not resolve subdir" << subdir << "to file or path, skipping";
@@ -146,31 +148,29 @@ QStringList QMakeProjectFile::subProjects() const
         list << fileOrPath;
     }
 
-    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "subprojects"; )
+    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "subprojects";)
     return list;
 }
 
 bool QMakeProjectFile::hasSubProject(const QString& file) const
 {
-    foreach (const QString& sub, subProjects()) {
+    foreach( const QString& sub, subProjects() ) {
         if (sub == file) {
             return true;
-        } else {
-            if (QFileInfo(file).absoluteDir() == sub) {
-                return true;
-            }
+        } else if ( QFileInfo(file).absoluteDir() == sub ) {
+            return true;
         }
-        return false;
     }
+    return false;
 }
 
 void QMakeProjectFile::addPathsForVariable(const QString& variable, QStringList* list) const
 {
     const QStringList values = variableValues(variable);
-    ifDebug(qCDebug(KDEV_QMAKE) << variable << values; )
-    foreach (const QString& val, values) {
+    ifDebug(qCDebug(KDEV_QMAKE) << variable << values;)
+    foreach( const QString& val, values ) {
         QString path = resolveToSingleFileName(val);
-        if (!path.isEmpty() && !list->contains(val)) {
+        if( !path.isEmpty() && !list->contains(val) ) {
             list->append(path);
         }
     }
@@ -178,19 +178,20 @@ void QMakeProjectFile::addPathsForVariable(const QString& variable, QStringList*
 
 QStringList QMakeProjectFile::includeDirectories() const
 {
-    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching include dirs" << m_qtIncludeDir; )
-    ifDebug(qCDebug(KDEV_QMAKE) << "CONFIG" << variableValues("CONFIG"); )
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching include dirs" << m_qtIncludeDir;)
+    ifDebug(qCDebug(KDEV_QMAKE) << "CONFIG" << variableValues("CONFIG");)
 
     QStringList list;
     addPathsForVariable("INCLUDEPATH", &list);
     addPathsForVariable("QMAKE_INCDIR", &list);
-    if (variableValues("CONFIG").contains("opengl")) {
+    if( variableValues("CONFIG").contains("opengl") )
+    {
         addPathsForVariable("QMAKE_INCDIR_OPENGL", &list);
     }
-    if (variableValues("CONFIG").contains("qt")) {
-        if (!list.contains(m_qtIncludeDir)) {
+    if( variableValues("CONFIG").contains("qt") )
+    {
+        if( !list.contains( m_qtIncludeDir ) )
             list << m_qtIncludeDir;
-        }
 
         QDir incDir(m_qtIncludeDir);
         auto modules = variableValues("QT");
@@ -199,7 +200,8 @@ QStringList QMakeProjectFile::includeDirectories() const
             // for now, at least include core if we include any other module
             modules << "core";
         }
-        foreach (const QString& module, modules) {
+        foreach( const QString& module, modules )
+        {
             QString pattern = module;
             const bool isPrivate = module.endsWith("-private");
             if (isPrivate) {
@@ -207,20 +209,14 @@ QStringList QMakeProjectFile::includeDirectories() const
             }
             if (pattern == "qtestlib" || pattern == "testlib") {
                 pattern = "QtTest";
-            } else {
-                if (pattern == "qaxcontainer") {
-                    pattern = "ActiveQt";
-                } else {
-                    if (pattern == "qaxserver") {
-                        pattern = "ActiveQt";
-                    } else {
-                        if (pattern != "phonon" && pattern != "qt3support") {
-                            pattern.prepend("Qt");
-                        }
-                        const QFileInfoList match = incDir.entryInfoList(QStringList(pattern), QDir::Dirs);
-                    }
-                }
+            } else if ( pattern == "qaxcontainer" ) {
+                pattern = "ActiveQt";
+            } else if ( pattern == "qaxserver" ) {
+                pattern = "ActiveQt";
+            } else if ( pattern != "phonon" && pattern != "qt3support" ) {
+                pattern.prepend("Qt");
             }
+            const QFileInfoList match = incDir.entryInfoList(QStringList(pattern), QDir::Dirs);
             if (match.isEmpty()) {
                 qCWarning(KDEV_QMAKE) << "unhandled Qt module:" << module << pattern;
                 continue;
@@ -229,16 +225,18 @@ QStringList QMakeProjectFile::includeDirectories() const
             if (isPrivate) {
                 path += '/' + m_qtVersion + '/' + match.first().fileName() + "/private/";
             }
-            if (!list.contains(path)) {
+            if ( !list.contains(path) ) {
                 list << path;
             }
         }
     }
 
-    if (variableValues("CONFIG").contains("thread")) {
+    if( variableValues("CONFIG").contains("thread") )
+    {
         addPathsForVariable("QMAKE_INCDIR_THREAD", &list);
     }
-    if (variableValues("CONFIG").contains("x11")) {
+    if( variableValues("CONFIG").contains("x11") )
+    {
         addPathsForVariable("QMAKE_INCDIR_X11", &list);
     }
 
@@ -246,53 +244,61 @@ QStringList QMakeProjectFile::includeDirectories() const
     addPathsForVariable("OBJECTS_DIR", &list);
     addPathsForVariable("UI_DIR", &list);
 
-    ifDebug(qCDebug(KDEV_QMAKE) << "final list:" << list; )
+    ifDebug(qCDebug(KDEV_QMAKE) << "final list:" << list;)
     return list;
 }
 
 QStringList QMakeProjectFile::files() const
 {
-    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching files"; )
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching files";)
 
     QStringList list;
-    foreach (const QString& variable, QMakeProjectFile::FileVariables) {
-        foreach (const QString& value, variableValues(variable)) {
-            list += resolveFileName(value);
+    foreach( const QString& variable, QMakeProjectFile::FileVariables )
+    {
+        foreach( const QString& value, variableValues(variable) )
+        {
+            list += resolveFileName( value );
         }
     }
-
-    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "files"; )
+    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "files";)
     return list;
 }
 
-QStringList QMakeProjectFile::filesForTarget(const QString& s) const
+QStringList QMakeProjectFile::filesForTarget( const QString& s ) const
 {
-    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching files"; )
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching files";)
 
     QStringList list;
-    if (variableValues("INSTALLS").contains(s)) {
-        const QStringList files = variableValues(s + ".files");
-        if (!files.isEmpty()) {
-            foreach (const QString& val, files) {
-                list += QStringList(resolveFileName(val));
+    if( variableValues("INSTALLS").contains(s) )
+    {
+        const QStringList files = variableValues(s+".files");
+        if( !files.isEmpty() )
+        {
+            foreach( const QString& val, files )
+            {
+                list += QStringList( resolveFileName( val ) );
             }
         }
     }
-    if (!variableValues("INSTALLS").contains(s) || s == "target") {
-        foreach (const QString& variable, QMakeProjectFile::FileVariables) {
-            foreach (const QString& value, variableValues(variable)) {
-                list += QStringList(resolveFileName(value));
+    if( !variableValues("INSTALLS").contains(s) || s == "target" )
+    {
+        foreach( const QString& variable, QMakeProjectFile::FileVariables )
+        {
+            foreach( const QString& value, variableValues(variable) )
+            {
+                list += QStringList( resolveFileName( value ) );
             }
         }
     }
-    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "files"; )
+    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "files";)
     return list;
 }
 
 QString QMakeProjectFile::getTemplate() const
 {
     QString templ = "app";
-    if (!variableValues("TEMPLATE").isEmpty()) {
+    if( !variableValues("TEMPLATE").isEmpty() )
+    {
         templ = variableValues("TEMPLATE").first();
     }
     return templ;
@@ -300,19 +306,20 @@ QString QMakeProjectFile::getTemplate() const
 
 QStringList QMakeProjectFile::targets() const
 {
-    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching targets"; )
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching targets";)
 
     QStringList list;
 
     list += variableValues("TARGET");
-    if (list.isEmpty() && getTemplate() != "subdirs") {
-        list += QFileInfo(absoluteFile()).baseName();
+    if( list.isEmpty() && getTemplate() != "subdirs" )
+    {
+        list += QFileInfo( absoluteFile() ).baseName();
     }
 
-    foreach (const QString& target, variableValues("INSTALLS")) {
-        if (!target.isEmpty() && target != "target") {
+    foreach( const QString& target, variableValues("INSTALLS") )
+    {
+        if( !target.isEmpty() && target != "target" )
             list << target;
-        }
     }
 
     if (list.removeAll(QString())) {
@@ -320,7 +327,7 @@ QStringList QMakeProjectFile::targets() const
         qCWarning(KDEV_QMAKE) << "got empty entry in TARGET of file" << absoluteFile();
     }
 
-    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "targets"; )
+    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "targets";)
     return list;
 }
 
@@ -353,21 +360,23 @@ QMakeCache* QMakeProjectFile::qmakeCache() const
     return m_cache;
 }
 
-QList<QMakeProjectFile::DefinePair> QMakeProjectFile::defines() const
+QList< QMakeProjectFile::DefinePair > QMakeProjectFile::defines() const
 {
-    QList<DefinePair> d;
-    foreach (QString def, variableMap()["DEFINES"]) {
+    QList< DefinePair > d;
+    foreach(QString def, variableMap()["DEFINES"])
+    {
         int pos = def.indexOf('=');
-        if (pos >= 0) {
+        if(pos >= 0)
+        {
             // a value is attached to define
-            d.append(DefinePair(def.left(pos), def.right(def.length() - (pos + 1))));
-        } else
+            d.append(DefinePair( def.left(pos), def.right(def.length() - (pos+1)) ));
+        }
+        else
         {
             // a value-less define
-            d.append(DefinePair(def, ""));
+            d.append(DefinePair( def, "" ));
         }
     }
-
     return d;
 }
 

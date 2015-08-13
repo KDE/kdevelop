@@ -26,7 +26,7 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
-int main(int argc, char* argv[])
+int main( int argc, char* argv[] )
 {
     KAboutData aboutData(QLatin1String("QMake Parser"), "qmake-parser", QLatin1String("1.0"));
     aboutData.setShortDescription("Parse QMake project files");
@@ -54,14 +54,13 @@ int main(int argc, char* argv[])
         if (!driver.readFile(arg)) {
             exit(EXIT_FAILURE);
         }
-        driver.setDebug(debug);
+        driver.setDebug( debug );
 
         QMake::ProjectAST* ast = nullptr;
         if (!driver.parse(&ast)) {
             exit(EXIT_FAILURE);
         }
     }
-
     return EXIT_SUCCESS;
 }
 

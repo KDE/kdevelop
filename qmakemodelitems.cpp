@@ -26,9 +26,10 @@
 
 #include "qmakeprojectfile.h"
 
-QMakeFolderItem::QMakeFolderItem(KDevelop::IProject* project, const KDevelop::Path& path,
-                                 KDevelop::ProjectBaseItem* parent)
-    : KDevelop::ProjectBuildFolderItem(project, path, parent)
+
+QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, const KDevelop::Path& path,
+                                  KDevelop::ProjectBaseItem* parent )
+    : KDevelop::ProjectBuildFolderItem( project, path, parent )
 {
 }
 
@@ -47,9 +48,9 @@ QMakeFolderItem::~QMakeFolderItem()
     qDeleteAll(m_projectFiles);
 }
 
-QMakeTargetItem::QMakeTargetItem(QMakeProjectFile* pro, KDevelop::IProject* project,
-                                 const QString& s, KDevelop::ProjectBaseItem* parent)
-    : KDevelop::ProjectExecutableTargetItem(project, s, parent)
+QMakeTargetItem::QMakeTargetItem( QMakeProjectFile* pro, KDevelop::IProject* project,
+                                  const QString& s, KDevelop::ProjectBaseItem* parent )
+    : KDevelop::ProjectExecutableTargetItem( project, s, parent )
     , m_pro(pro)
 {
 }
