@@ -51,6 +51,9 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
     setFilteringStrategy( KDevelop::OutputModel::CompilerFilter );
     setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint | PostProcessOutput );
 
+    // hardcode the ninja output format so we can parse it reliably
+    addEnvironmentOverride(QStringLiteral("NINJA_STATUS"), QStringLiteral("[%s/%t] "));
+
     *this << ninjaBinary();
     *this << arguments;
 
@@ -165,6 +168,7 @@ void NinjaJob::appendLines(const QStringList& lines)
     bool prev = false;
     for(QStringList::iterator it=ret.end(); it!=ret.begin(); ) {
         --it;
+        parseProgress(*it);
         bool curr = it->startsWith('[');
         if((prev && curr) || it->endsWith("] "))
             it = ret.erase(it);
@@ -177,4 +181,28 @@ void NinjaJob::appendLines(const QStringList& lines)
 KDevelop::ProjectBaseItem* NinjaJob::item() const
 {
     return KDevelop::ICore::self()->projectController()->projectModel()->itemFromIndex(m_idx);
+}
+
+void NinjaJob::parseProgress(const QString& line)
+{
+    // TODO: Probably more clever to move this into the output filtering (which is being performed in a separate thread)
+    // example string: [87/88] Building CXX object projectbuilders/ninjabuilder/CMakeFiles/kdevninja.dir/ninjajob.cpp.o
+    static const QRegularExpression re("^\\[([0-9]+)\\/([0-9]+)\\] (.*)");
+
+    QRegularExpressionMatch match = re.match(line);
+    if (match.hasMatch()) {
+        const int current = match.captured(1).toInt();
+        const int total = match.captured(2).toInt();
+        if (current && total) {
+            // this is output from ninja
+            emitPercent(current, total);
+
+            if (current == total) {
+                emit infoMessage(this, i18n("Build finished"));
+            } else {
+                const QString action = match.captured(3);
+                emit infoMessage(this, action);
+            }
+        }
+    }
 }
