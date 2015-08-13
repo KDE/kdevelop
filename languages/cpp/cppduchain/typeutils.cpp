@@ -143,7 +143,8 @@ using namespace KDevelop;
   }
 
   ///Returns whether base is a base-class of c
-  void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
+  void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant,int recursionCount)  {
+    static const int MaxRecursionCount = 50;
     Declaration* klassDecl = klass->declaration(topContext);
     ClassDeclaration* cppClassDecl = dynamic_cast<ClassDeclaration*>(klassDecl);
     DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
@@ -172,8 +173,8 @@ using namespace KDevelop;
       FOREACH_FUNCTION(const KDevelop::BaseClassInstance& base, cppClassDecl->baseClasses) {
         if( base.access != KDevelop::Declaration::Private ) { //we need const-cast here because the constant list makes also the pointers constant, which is not intended
           CppClassType::Ptr baseClass = base.baseClass.type<CppClassType>();
-          if( baseClass && !baseClass->equals(klass.constData()) )
-            getMemberFunctions( baseClass, topContext, functions, functionName,   mustBeConstant);
+          if(baseClass && !baseClass->equals(klass.constData()) && recursionCount < MaxRecursionCount)
+            getMemberFunctions(baseClass, topContext, functions, functionName, mustBeConstant, recursionCount+1);
         }
       }
     }

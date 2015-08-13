@@ -105,7 +105,7 @@ namespace TypeUtils {
    * @param functions A hash that will map functions to their types
    * @param functionName Name of the functions
    * */
-  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false, int recursionCount=0);
 
   /**
    * Same as above, except that it adds the functions to a list.
