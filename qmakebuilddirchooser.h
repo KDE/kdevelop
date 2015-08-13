@@ -80,7 +80,7 @@ public:
     int buildType() const;
     QString extraArgs() const;
 
-    void setQmakeBin(const QString &binary);
+    void setQMakeBin(const QString &binary);
     void setBuildDir(const QString &buildDir);
     void setInstallPrefix(const QString &prefix);
     void setBuildType(int type);

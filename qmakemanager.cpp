@@ -87,7 +87,7 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
         : AbstractFileManagerPlugin("kdevqmakemanager", parent),
           IBuildSystemManager(),
           m_builder(nullptr),
-          m_runQmake(nullptr)
+          m_runQMake(nullptr)
 {
     Q_ASSERT(!m_self);
     m_self = this;
@@ -101,8 +101,8 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
     connect(this, SIGNAL(folderAdded(KDevelop::ProjectFolderItem*)),
             this, SLOT(slotFolderAdded(KDevelop::ProjectFolderItem*)));
 
-    m_runQmake = new QAction(QIcon::fromTheme("qtlogo"), i18n("Run QMake"), this);
-    connect(m_runQmake, SIGNAL(triggered(bool)),
+    m_runQMake = new QAction(QIcon::fromTheme("qtlogo"), i18n("Run QMake"), this);
+    connect(m_runQMake, SIGNAL(triggered(bool)),
             this, SLOT(slotRunQMake()));
 }
 
@@ -502,7 +502,7 @@ ContextMenuExtension QMakeProjectManager::contextMenuExtension( Context* context
 
         m_actionItem = dynamic_cast<QMakeFolderItem*>( pic->items().first() );
         if ( m_actionItem ) {
-            ext.addAction( ContextMenuExtension::ProjectGroup, m_runQmake );
+            ext.addAction( ContextMenuExtension::ProjectGroup, m_runQMake );
         }
     }
 

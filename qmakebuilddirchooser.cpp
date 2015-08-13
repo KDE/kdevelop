@@ -124,7 +124,7 @@ void QMakeBuildDirChooser::loadConfig(const QString& config)
         QSignalBlocker blocker(this); // only emit changed once
 
         // sets values into fields
-        setQmakeBin( QMakeConfig::qmakeBinary(m_project) );
+        setQMakeBin( QMakeConfig::qmakeBinary(m_project) );
         setBuildDir( config );
         setInstallPrefix( build.readEntry(QMakeConfig::INSTALL_PREFIX, QString()) );
         setExtraArgs( build.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()) );
@@ -143,7 +143,7 @@ bool QMakeBuildDirChooser::validate(QString *message)
     } else {
         QFileInfo info(qmakeBin());
         if(!info.exists()) {
-            msg = i18n("Qmake binary \"%1\" does not exist.", qmakeBin());
+            msg = i18n("QMake binary \"%1\" does not exist.", qmakeBin());
             valid = false;
         } else if(!info.isFile()) {
             msg = i18n("QMake binary is not a file.");
@@ -203,7 +203,7 @@ QString QMakeBuildDirChooser::extraArgs() const
     return kcfg_extraArgs->text();
 }
 
-void QMakeBuildDirChooser::setQmakeBin(const QString& binary)
+void QMakeBuildDirChooser::setQMakeBin(const QString& binary)
 {
     kcfg_qmakeBin->setUrl(QUrl::fromLocalFile(binary));
 }

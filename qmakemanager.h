@@ -97,7 +97,7 @@ private:
     
     IQMakeBuilder* m_builder;
     mutable QString m_qtIncludeDir;
-    QAction* m_runQmake;
+    QAction* m_runQMake;
     QMakeFolderItem* m_actionItem;
 
     static QMakeProjectManager* m_self;
