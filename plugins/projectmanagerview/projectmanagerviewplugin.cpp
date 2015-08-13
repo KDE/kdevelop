@@ -43,6 +43,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <project/interfaces/iprojectbuilder.h>
+#include <util/jobstatus.h>
 #include <util/path.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>
@@ -394,6 +395,7 @@ void ProjectManagerViewPlugin::runBuilderJob( BuilderJob::BuildType type, QList<
     BuilderJob* builder = new BuilderJob;
     builder->addItems( type, items );
     builder->updateJobName();
+    ICore::self()->uiController()->registerStatus(new JobStatus(builder));
     ICore::self()->runController()->registerJob( builder );
 }
 
