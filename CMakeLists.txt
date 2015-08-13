@@ -38,7 +38,6 @@ include_directories(
 )
 
 add_subdirectory(parser)
-add_subdirectory(duchain)
 add_subdirectory(tests)
 
 include_directories(${QMakeManager_SOURCE_DIR}/parser)
