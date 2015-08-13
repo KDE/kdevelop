@@ -39,7 +39,11 @@ public:
     void setAbortOnError(bool abort);
 
 public Q_SLOTS:
+    virtual bool addSubjob(KJob* job) override;
     virtual void slotResult(KJob* job) override;
+
+protected Q_SLOTS:
+    virtual void slotPercent(KJob* job, unsigned long percent);
 
 protected:
     virtual bool doKill() override;

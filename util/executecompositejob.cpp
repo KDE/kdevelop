@@ -25,12 +25,17 @@ namespace KDevelop
 class ExecuteCompositeJobPrivate
 {
 public:
-    bool m_killing;
-    bool m_abortOnError;
+    void startNextJob(KJob* job);
+
+    bool m_killing = false;
+    bool m_abortOnError = true;
+
+    int m_jobIndex = -1;
+    int m_jobCount = 0;
 };
 
 ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs)
-: KCompositeJob(parent), d(new ExecuteCompositeJobPrivate {false, true})
+: KCompositeJob(parent), d(new ExecuteCompositeJobPrivate)
 {
     setCapabilities(Killable);
 
@@ -50,20 +55,57 @@ ExecuteCompositeJob::~ExecuteCompositeJob()
     delete d;
 }
 
+void ExecuteCompositeJobPrivate::startNextJob(KJob* job)
+{
+    ++m_jobIndex;
+
+    qCDebug(UTIL) << "starting:" << job;
+    job->start();
+}
+
 void ExecuteCompositeJob::start()
 {
     if(hasSubjobs()) {
-        auto first = subjobs().first();
-        qCDebug(UTIL) << "starting:" << first;
-        first->start();
+        d->startNextJob(subjobs().first());
     } else {
         emitResult();
     }
 }
 
+bool ExecuteCompositeJob::addSubjob(KJob* job)
+{
+    const bool success = KCompositeJob::addSubjob(job);
+    if (!success)
+        return false;
+
+    ++d->m_jobCount;
+
+    connect(job, SIGNAL(percent(KJob*, unsigned long)), this, SLOT(slotPercent(KJob*, unsigned long)));
+    return true;
+}
+
+void ExecuteCompositeJob::slotPercent(KJob* job, unsigned long percent)
+{
+    Q_UNUSED(job);
+
+    Q_ASSERT(d->m_jobCount > 0);
+    Q_ASSERT(d->m_jobIndex >= 0 && d->m_jobIndex < d->m_jobCount);
+
+    const float ratio = (float)d->m_jobIndex / d->m_jobCount;
+    const unsigned long totalPercent = ratio * 100 + ((float)percent / d->m_jobCount);
+
+    emitPercent(totalPercent, 100);
+}
+
 void ExecuteCompositeJob::slotResult(KJob* job)
 {
-    qCDebug(UTIL) << "finished: "<< job << job->error();
+    disconnect(job, SIGNAL(percent(KJob*, unsigned long)), this, SLOT(slotPercent(KJob*, unsigned long)));
+
+    // jobIndex + 1 because this job just finished
+    const float ratio = d->m_jobIndex != -1 ? (d->m_jobIndex + 1.0) / d->m_jobCount : 1.0;
+    emitPercent(ratio * 100, 100);
+
+    qCDebug(UTIL) << "finished: "<< job << job->error() << "percent:" << ratio * 100;
     if (d->m_abortOnError && job->error()) {
         qCDebug(UTIL) << "JOB ERROR:" << job->error() << job->errorString();
         KCompositeJob::slotResult(job);
@@ -72,9 +114,7 @@ void ExecuteCompositeJob::slotResult(KJob* job)
 
     if (hasSubjobs() && !error() && !d->m_killing) {
         qCDebug(UTIL) << "remaining: " << subjobs().count() << subjobs();
-        KJob* nextJob = subjobs().first();
-        qCDebug(UTIL) << "starting:" << nextJob;
-        nextJob->start();
+        d->startNextJob(subjobs().first());
     } else {
         setError(job->error());
         setErrorText(job->errorString());
