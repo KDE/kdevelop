@@ -17,10 +17,8 @@ set(qmakebuilder_UI
 )
 qt5_wrap_ui(qmakebuilder_SRCS ${qmakebuilder_UI})
 kconfig_add_kcfg_files(qmakebuilder_SRCS qmakebuilderconfig.kcfgc)
-#add_library(kdevqmakebuilder MODULE ${qmakebuilder_SRCS})
 kdevplatform_add_plugin(kdevqmakebuilder JSON kdevqmakebuilder.json SOURCES ${qmakebuilder_SRCS})
 target_link_libraries(kdevqmakebuilder
-    ${QT_QTDESIGNER_LIBRARY}
     KDev::Interfaces
     KDev::OutputView
     KDev::Util

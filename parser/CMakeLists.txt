@@ -1,5 +1,4 @@
-
-set(parser_STAT_SRCS
+set(kdevqmakeparser_SRCS
     qmakeast.cpp
     qmakedriver.cpp
     qmakedebugvisitor.cpp
@@ -25,11 +24,12 @@ if(BUILD_qmake_parser)
   add_executable(qmake-parser ../debug.cpp main.cpp)
   target_link_libraries(qmake-parser kdevqmakeparser KF5::CoreAddons Qt5::Core)
   install(TARGETS qmake-parser ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-endif(BUILD_qmake_parser)
+endif()
 
-add_library(kdevqmakeparser STATIC ${parser_STAT_SRCS} ${parser_GEN_SRCS})
+add_library(kdevqmakeparser STATIC ${kdevqmakeparser_SRCS} ${parser_GEN_SRCS})
 generate_export_header(kdevqmakeparser BASE_NAME parser EXPORT_MACRO_NAME KDEVQMAKEPARSER_EXPORT)
 target_link_libraries(kdevqmakeparser LINK_PRIVATE
     KF5::CoreAddons
     KF5::KIOCore
 )
+target_include_directories(kdevqmakeparser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

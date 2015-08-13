@@ -29,18 +29,13 @@ include_directories(${KDEVELOP_INCLUDE_DIR})
 add_subdirectory(qmakebuilder)
 add_subdirectory(app_templates)
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9024 )
-
 include_directories(
-    ${qmakebuilder_SOURCE_DIR}
     ${QMakeManager_SOURCE_DIR}
     ${QMakeManager_BINARY_DIR}
 )
 
 add_subdirectory(parser)
 add_subdirectory(tests)
-
-include_directories(${QMakeManager_SOURCE_DIR}/parser)
 
 ########### next target ###############
 

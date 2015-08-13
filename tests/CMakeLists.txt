@@ -7,36 +7,27 @@ file(COPY ${QMAKE_TESTS_PROJECTS_SOURCE_DIR} DESTINATION "${QMAKE_TESTS_PROJECTS
 get_property(QMAKE_EXECUTABLE_LOCATION TARGET Qt5::qmake PROPERTY LOCATION)
 configure_file(qmaketestconfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/qmaketestconfig.h)
 
-include_directories( 
-    ${QMakeManager_SOURCE_DIR}/parser
-    ${QMakeManager_BINARY_DIR}/parser
-)
-
-set(qmakefiletest_SRCS test_qmakefile.cpp
+set(test_qmakefile_SRCS test_qmakefile.cpp
     ../debug.cpp
-    ../qmakefile.cpp ../qmakeincludefile.cpp ../qmakeprojectfile.cpp ../qmakefilevisitor.cpp
-    ../variablereferenceparser.cpp ../qmakemkspecs.cpp
-    ../qmakeconfig.cpp )
-
-set(qmakeprojecttest_SRCS test_qmakeproject.cpp
-    ../qmakeconfig.cpp ../debug.cpp)
-
-add_executable(qmakefiletest ${qmakefiletest_SRCS})
-add_test(qmakefiletest qmakefiletest)
-ecm_mark_as_test(qmakefiletest)
-add_executable(qmakeprojecttest ${qmakeprojecttest_SRCS})
-add_test(qmakeprojecttest qmakeprojecttest)
-ecm_mark_as_test(qmakeprojecttest)
-
-target_link_libraries(qmakefiletest
+    ../qmakefile.cpp
+    ../qmakeincludefile.cpp
+    ../qmakeprojectfile.cpp
+    ../qmakefilevisitor.cpp
+    ../qmakemkspecs.cpp
+    ../qmakeconfig.cpp
+    ../variablereferenceparser.cpp)
+ecm_add_test(${test_qmakefile_SRCS} TEST_NAME test_qmakefile LINK_LIBRARIES
     Qt5::Test
     KDev::Tests
     kdevqmakeparser
-    )
+)
 
-target_link_libraries(qmakeprojecttest
+set(test_qmakeproject_SRCS test_qmakeproject.cpp
+    ../qmakeconfig.cpp
+    ../debug.cpp)
+ecm_add_test(${test_qmakeproject_SRCS} TEST_NAME test_qmakeproject LINK_LIBRARIES
     Qt5::Test
     KDev::Tests
     KDev::Util
     kdevqmakeparser
-    )
+)
