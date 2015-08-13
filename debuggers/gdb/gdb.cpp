@@ -44,7 +44,10 @@
 using namespace GDBDebugger;
 
 GDB::GDB(QObject* parent)
-: QObject(parent), process_(0), sawPrompt_(false), currentCmd_(0), receivedReply_(false), isRunning_(false), childPid_(0)
+: QObject(parent), process_(0), sawPrompt_(false), currentCmd_(0), receivedReply_(false), isRunning_(false)
+#if defined(Q_OS_MAC)
+, childPid_(0)
+#endif
 {
 }
 
@@ -157,9 +160,14 @@ void GDB::interrupt()
 {
     //TODO:win32 Porting needed
     int pid = process_->pid();
+
+    #if defined(Q_OS_MAC)
     if (childPid_) {
-        ::kill(childPid_, SIGINT);
-    } else if (pid != 0) {
+        pid = childPid_;
+    }
+    #endif
+
+    if (pid) {
         ::kill(pid, SIGINT);
     }
 }
@@ -271,6 +279,7 @@ void GDB::processLine(const QByteArray& line)
                        }
                    }
                }
+	       #endif
 
                // FIXME: the code below should be reviewed to consider result record
                // subtype when doing all decisions.

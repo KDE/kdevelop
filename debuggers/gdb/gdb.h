@@ -144,7 +144,9 @@ private:
     
     bool receivedReply_;
     bool isRunning_;
+    #if defined(Q_OS_MAC)
     unsigned long childPid_;
+    #endif
 };
 }
 
