@@ -14,6 +14,7 @@ set(KDevPlatformUtil_LIB_SRCS
     environmentselectionwidget.cpp
     environmentselectionmodel.cpp
     environmentgrouplist.cpp
+    jobstatus.cpp
     activetooltip.cpp
     executecompositejob.cpp
     shellutils.cpp
@@ -73,6 +74,7 @@ install( FILES
     commandexecutor.h
     environmentselectionwidget.h
     environmentgrouplist.h
+    jobstatus.h
     pushvalue.h
     kdevvarlengtharray.h
     embeddedfreetree.h
