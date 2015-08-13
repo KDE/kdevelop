@@ -71,7 +71,6 @@ kdevplatform_add_plugin(kdevqmakemanager JSON kdevqmakemanager.json SOURCES ${kd
 target_link_libraries( kdevqmakemanager
     KDev::Interfaces
     KDev::Project
-    KDev::Language
     KDev::Util
     KDev::OutputView
     KDev::Serialization
