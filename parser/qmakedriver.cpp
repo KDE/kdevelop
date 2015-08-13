@@ -36,37 +36,35 @@
 
 #define ifDebug(x)
 
-namespace QMake
-{
-
+namespace QMake {
 Driver::Driver()
     : m_debug(false)
 {
 }
 
-bool Driver::readFile( const QString& filename, const char* codec )
+bool Driver::readFile(const QString& filename, const char* codec)
 {
     QFile f(filename);
-    if( !f.open(QIODevice::ReadOnly) )
-    {
+    if (!f.open(QIODevice::ReadOnly)) {
         qCWarning(KDEV_QMAKE) << "Couldn't open project file:" << filename;
         return false;
     }
     QTextStream s(&f);
-    if( codec )
-        s.setCodec( QTextCodec::codecForName(codec) );
+    if (codec) {
+        s.setCodec(QTextCodec::codecForName(codec));
+    }
     m_content = s.readAll();
     return true;
 }
-void Driver::setContent( const QString& content )
+void Driver::setContent(const QString& content)
 {
     m_content = content;
 }
-void Driver::setDebug( bool debug )
+void Driver::setDebug(bool debug)
 {
     m_debug = debug;
 }
-bool Driver::parse( ProjectAST** qmast )
+bool Driver::parse(ProjectAST** qmast)
 {
     KDevPG::TokenStream tokenStream;
     KDevPG::MemoryPool memory_pool;
@@ -74,31 +72,27 @@ bool Driver::parse( ProjectAST** qmast )
     Parser qmakeparser;
     qmakeparser.setTokenStream(&tokenStream);
     qmakeparser.setMemoryPool(&memory_pool);
-    qmakeparser.setDebug( m_debug );
+    qmakeparser.setDebug(m_debug);
 
     qmakeparser.tokenize(m_content);
     ProjectAst* ast = nullptr;
     bool matched = qmakeparser.parseProject(&ast);
-    if( matched )
-    {
-        ifDebug(qCDebug(KDEV_QMAKE) << "Successfully parsed";)
-        if( m_debug )
-        {
+    if (matched) {
+        ifDebug(qCDebug(KDEV_QMAKE) << "Successfully parsed"; )
+        if (m_debug) {
             DebugVisitor d(&qmakeparser);
             d.visitProject(ast);
         }
         *qmast = new ProjectAST();
-        BuildASTVisitor d( &qmakeparser, *qmast );
+        BuildASTVisitor d(&qmakeparser, *qmast);
         d.visitProject(ast);
-        ifDebug(qCDebug(KDEV_QMAKE) << "Found" << (*qmast)->statements.count() << "Statements";)
-    }else
+        ifDebug(qCDebug(KDEV_QMAKE) << "Found" << (*qmast)->statements.count() << "Statements"; )
+    } else
     {
         ast = nullptr;
         qCDebug(KDEV_QMAKE) << "Couldn't parse content";
     }
     return matched;
 }
-
 }
-
 

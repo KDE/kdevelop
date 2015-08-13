@@ -22,7 +22,6 @@
 #include "qmakebuilddirchooser.h"
 #include "qmakeconfig.h"
 
-
 #include <KLocalizedString>
 #include <KMessageWidget>
 
@@ -44,7 +43,9 @@
 using namespace KDevelop;
 
 QMakeBuildDirChooser::QMakeBuildDirChooser(KDevelop::IProject* project, QWidget* parent)
-    :  QWidget(parent), Ui::QMakeBuildDirChooser(), m_project(project)
+    :  QWidget(parent)
+    , Ui::QMakeBuildDirChooser()
+    , m_project(project)
 {
     setupUi(this);
 
@@ -60,7 +61,7 @@ QMakeBuildDirChooser::QMakeBuildDirChooser(KDevelop::IProject* project, QWidget*
     connect(kcfg_qmakeBin, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
     connect(kcfg_buildDir, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
     connect(kcfg_installPrefix, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
-    connect(kcfg_buildType, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+    connect(kcfg_buildType, static_cast<void (QComboBox::*)( int )>(&QComboBox::currentIndexChanged),
             this, &QMakeBuildDirChooser::changed);
     connect(kcfg_extraArgs, &KLineEdit::textChanged, this, &QMakeBuildDirChooser::changed);
 }
@@ -124,58 +125,61 @@ void QMakeBuildDirChooser::loadConfig(const QString& config)
         QSignalBlocker blocker(this); // only emit changed once
 
         // sets values into fields
-        setQMakeBin( QMakeConfig::qmakeBinary(m_project) );
-        setBuildDir( config );
-        setInstallPrefix( build.readEntry(QMakeConfig::INSTALL_PREFIX, QString()) );
-        setExtraArgs( build.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()) );
-        setBuildType( build.readEntry(QMakeConfig::BUILD_TYPE, 0) );
+        setQMakeBin(QMakeConfig::qmakeBinary(m_project));
+        setBuildDir(config);
+        setInstallPrefix(build.readEntry(QMakeConfig::INSTALL_PREFIX, QString()));
+        setExtraArgs(build.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()));
+        setBuildType(build.readEntry(QMakeConfig::BUILD_TYPE, 0));
     }
     emit changed();
 }
 
-bool QMakeBuildDirChooser::validate(QString *message)
+bool QMakeBuildDirChooser::validate(QString* message)
 {
     bool valid = true;
     QString msg;
-    if(qmakeBin().isEmpty()) {
+    if (qmakeBin().isEmpty()) {
         msg = i18n("Please specify path to QMake binary.");
         valid = false;
     } else {
         QFileInfo info(qmakeBin());
-        if(!info.exists()) {
+        if (!info.exists()) {
             msg = i18n("QMake binary \"%1\" does not exist.", qmakeBin());
             valid = false;
-        } else if(!info.isFile()) {
-            msg = i18n("QMake binary is not a file.");
-            valid = false;
-        } else if(!info.isExecutable()) {
-            msg = i18n("QMake binary is not executable.");
-            valid = false;
         } else {
-            const QHash<QString, QString> vars = QMakeConfig::queryQMake(info.absoluteFilePath());
-            if (vars.isEmpty()) {
-                msg = i18n("QMake binary cannot be queried for variables.");
+            if (!info.isFile()) {
+                msg = i18n("QMake binary is not a file.");
                 valid = false;
-            } else if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
-                msg = i18n("No basic MkSpec file could be found for the given QMake binary.");
-                valid = false;
+            } else {
+                if (!info.isExecutable()) {
+                    msg = i18n("QMake binary is not executable.");
+                    valid = false;
+                } else {
+                    const QHash<QString, QString> vars = QMakeConfig::queryQMake(info.absoluteFilePath());
+                    if (vars.isEmpty()) {
+                        msg = i18n("QMake binary cannot be queried for variables.");
+                        valid = false;
+                    } else {
+                        if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
+                            msg = i18n("No basic MkSpec file could be found for the given QMake binary.");
+                            valid = false;
+                        }
+                    }
+                }
+
+                if (buildDir().isEmpty()) {
+                    msg = i18n("Please specify a build folder.");
+                    valid = false;
+                }
+                if (message) {
+                    *message = msg;
+                }
+                setErrorString(msg);
             }
+            qCDebug(KDEV_QMAKE) << "VALID == " << valid;
+            return valid;
         }
     }
-
-
-    if(buildDir().isEmpty())
-    {
-        msg = i18n("Please specify a build folder.");
-        valid = false;
-    }
-    if (message)
-    {
-        *message = msg;
-    }
-    setErrorString(msg);
-    qCDebug(KDEV_QMAKE) << "VALID == " << valid;
-    return valid;
 }
 
 QString QMakeBuildDirChooser::qmakeBin() const

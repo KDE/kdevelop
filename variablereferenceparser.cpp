@@ -20,14 +20,14 @@
 
 #include "variablereferenceparser.h"
 
-bool isVarNameChar( QChar* c )
+bool isVarNameChar(QChar* c)
 {
     bool ret = c->isLetterOrNumber() || c->unicode() == '_';
     return ret;
 }
 
 VariableInfo::VariableInfo()
-    : type( VariableInfo::Invalid )
+    : type(VariableInfo::Invalid)
 {
 }
 
@@ -35,7 +35,7 @@ VariableReferenceParser::VariableReferenceParser()
 {
 }
 
-void VariableReferenceParser::setContent( const QString& content )
+void VariableReferenceParser::setContent(const QString& content)
 {
     m_content = content;
 }
@@ -44,110 +44,106 @@ bool VariableReferenceParser::parse()
 {
     int size = m_content.size();
     int curpos = 0;
-    if( size == 0 || size < 3 )
-    {
+    if (size == 0 || size < 3) {
         return true;
     }
     QChar* it = m_content.data();
     do
     {
-        if( it->unicode() == '$' && size > curpos+2 )
-        {
+        if (it->unicode() == '$' && size > curpos + 2) {
             it++;
             curpos++;
-            if( it->unicode() == '$' )
-            {
-                int begin = curpos-1;
+            if (it->unicode() == '$') {
+                int begin = curpos - 1;
                 it++;
                 curpos++;
                 QString variable;
                 VariableInfo::VariableType type = VariableInfo::QMakeVariable;
-                if( it->unicode() == '(' )
-                {
+                if (it->unicode() == '(') {
                     do
                     {
                         it++;
                         curpos++;
-                    }while( curpos < size && it->unicode() != ')' );
+                    } while (curpos < size && it->unicode() != ')');
                     type = VariableInfo::ShellVariableResolveQMake;
-                    variable = m_content.mid( begin + 3, curpos - begin - 3 );
+                    variable = m_content.mid(begin + 3, curpos - begin - 3);
                     ++curpos;
-                }else if( it->unicode() == '{' )
-                {
-                    do
-                    {
-                        it++;
-                        curpos++;
-                        if( it->unicode() == '(' )
-                        {
-                            type = VariableInfo::FunctionCall;
-                        }
-                    }while( curpos < size && it->unicode() != '}' );
-                    variable = m_content.mid( begin + 3, curpos - begin - 3 );
-                    ++curpos;
-                }else if( it->unicode() == '[' )
-                {
-                    do
-                    {
-                        it++;
-                        curpos++;
-                    }while( curpos < size && it->unicode() != ']' );
-                    type = VariableInfo::QtConfigVariable;
-                    variable = m_content.mid( begin + 3, curpos - begin - 3 );
-                    ++curpos;
-                }else
-                {
-                    do
-                    {
-                        it++;
-                        curpos++;
-                    }while( curpos < size && isVarNameChar( it ) );
-                    variable = m_content.mid( begin + 2, curpos - begin - 2 );
-
-                    if( it->unicode() == '(' )
-                    {
-                        type = VariableInfo::FunctionCall;
-                        int braceCount = 0;
+                } else {
+                    if (it->unicode() == '{') {
                         do
                         {
                             it++;
                             curpos++;
-                            if( it->unicode() == ')' )
-                            {
-                                braceCount--;
-                            }else if( it->unicode() == '(' )
-                            {
-                                braceCount++;
+                            if (it->unicode() == '(') {
+                                type = VariableInfo::FunctionCall;
                             }
-                        }while( curpos < size && ( it->unicode() != ')' || braceCount == 0 ) );
-                        // count the current position one further if we have it
-                        // at the closing brace, this is needed for proper end-calculation
-                        if( curpos < size && it->unicode() == ')' )
+                        } while (curpos < size && it->unicode() != '}');
+                        variable = m_content.mid(begin + 3, curpos - begin - 3);
+                        ++curpos;
+                    } else {
+                        if (it->unicode() == '[') {
+                            do
+                            {
+                                it++;
+                                curpos++;
+                            } while (curpos < size && it->unicode() != ']');
+                            type = VariableInfo::QtConfigVariable;
+                            variable = m_content.mid(begin + 3, curpos - begin - 3);
+                            ++curpos;
+                        } else
                         {
-                            it++;
-                            curpos++;
+                            do
+                            {
+                                it++;
+                                curpos++;
+                            } while (curpos < size && isVarNameChar(it));
+                            variable = m_content.mid(begin + 2, curpos - begin - 2);
+
+                            if (it->unicode() == '(') {
+                                type = VariableInfo::FunctionCall;
+                                int braceCount = 0;
+                                do
+                                {
+                                    it++;
+                                    curpos++;
+                                    if (it->unicode() == ')') {
+                                        braceCount--;
+                                    } else {
+                                        if (it->unicode() == '(') {
+                                            braceCount++;
+                                        }
+                                    } while (curpos < size && (it->unicode() != ')' || braceCount == 0)) ;
+                                }
+                                // count the current position one further if we have it
+                                // at the closing brace, this is needed for proper end-calculation
+                                if (curpos < size && it->unicode() == ')') {
+                                    it++;
+                                    curpos++;
+                                }
+                            }
                         }
+                        int end = curpos - 1;
+                        appendPosition(variable, begin, end, type);
                     }
                 }
-                int end = curpos-1;
-                appendPosition( variable, begin, end, type );
-            }else if( it->unicode() == '(' )
+            } else {
+                if (it->unicode() == '(') {
+                    int begin = curpos - 1;
+                    do
+                    {
+                        it++;
+                        curpos++;
+                    } while (curpos < size && it->unicode() != ')');
+                    int end = curpos - 1;
+                    appendPosition(m_content.mid(begin + 2, end - (begin + 2)),
+                                   begin, end, VariableInfo::ShellVariableResolveMake);
+                }
+            } else
             {
-                int begin = curpos-1;
-                do
-                {
-                    it++;
-                    curpos++;
-                }while( curpos < size && it->unicode() != ')' );
-                int end = curpos-1;
-                appendPosition( m_content.mid( begin + 2, end - ( begin + 2 ) ),
-                                begin, end, VariableInfo::ShellVariableResolveMake );
+                curpos++;
             }
-        }else
-        {
-            curpos++;
         }
-    }while( curpos < size );
+    } while (curpos < size);
     return true;
 }
 
@@ -156,20 +152,19 @@ QStringList VariableReferenceParser::variableReferences() const
     return m_variables.keys();
 }
 
-VariableInfo VariableReferenceParser::variableInfo( const QString& var ) const
+VariableInfo VariableReferenceParser::variableInfo(const QString& var) const
 {
-    return m_variables.value( var, VariableInfo());
+    return m_variables.value(var, VariableInfo());
 }
 
-void VariableReferenceParser::appendPosition( const QString& var, int start, int end,
-                                             VariableInfo::VariableType type )
+void VariableReferenceParser::appendPosition(const QString& var, int start, int end,
+                                             VariableInfo::VariableType type)
 {
-    if( !m_variables.contains( var ) )
-    {
+    if (!m_variables.contains(var)) {
         VariableInfo vi;
         vi.type = type;
         m_variables[var] = vi;
     }
-    m_variables[var].positions << VariableInfo::Position( start, end );
+    m_variables[var].positions << VariableInfo::Position(start, end);
 }
 

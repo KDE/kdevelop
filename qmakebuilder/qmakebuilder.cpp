@@ -44,29 +44,26 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(QMakeBuilderFactory, "kdevqmakebuilder.json", registerPlugin<QMakeBuilder>(); )
 
-
-QMakeBuilder::QMakeBuilder(QObject *parent, const QVariantList &)
+QMakeBuilder::QMakeBuilder(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin("kdevqmakebuilder", parent)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
-    KDEV_USE_EXTENSION_INTERFACE( IQMakeBuilder )
+    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IProjectBuilder)
+    KDEV_USE_EXTENSION_INTERFACE(IQMakeBuilder)
 
     m_makeBuilder = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
-    if( m_makeBuilder )
-    {
+    if (m_makeBuilder) {
         IMakeBuilder* mbuilder = m_makeBuilder->extension<IMakeBuilder>();
-        if( mbuilder )
-        {
-            connect( m_makeBuilder, SIGNAL( built( KDevelop::ProjectBaseItem* ) ),
-                this, SIGNAL( built( KDevelop::ProjectBaseItem* ) ) );
-            connect( m_makeBuilder, SIGNAL( cleaned( KDevelop::ProjectBaseItem* ) ),
-                this, SIGNAL( cleaned( KDevelop::ProjectBaseItem* ) ) );
-            connect( m_makeBuilder, SIGNAL( installed( KDevelop::ProjectBaseItem* ) ),
-                this, SIGNAL( installed( KDevelop::ProjectBaseItem* ) ) );
-            connect( m_makeBuilder, SIGNAL( failed( KDevelop::ProjectBaseItem* ) ),
-                this, SIGNAL( failed( KDevelop::ProjectBaseItem* ) ) );
-            connect( m_makeBuilder, SIGNAL( makeTargetBuilt( KDevelop::ProjectBaseItem*, const QString& ) ),
-                this, SIGNAL( pruned( KDevelop::ProjectBaseItem* ) ) );
+        if (mbuilder) {
+            connect(m_makeBuilder, SIGNAL(built(KDevelop::ProjectBaseItem*)),
+                    this, SIGNAL(built(KDevelop::ProjectBaseItem*)));
+            connect(m_makeBuilder, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)),
+                    this, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)));
+            connect(m_makeBuilder, SIGNAL(installed(KDevelop::ProjectBaseItem*)),
+                    this, SIGNAL(installed(KDevelop::ProjectBaseItem*)));
+            connect(m_makeBuilder, SIGNAL(failed(KDevelop::ProjectBaseItem*)),
+                    this, SIGNAL(failed(KDevelop::ProjectBaseItem*)));
+            connect(m_makeBuilder, SIGNAL(makeTargetBuilt(KDevelop::ProjectBaseItem *, const QString &)),
+                    this, SIGNAL(pruned(KDevelop::ProjectBaseItem*)));
         }
     }
 }
@@ -75,14 +72,12 @@ QMakeBuilder::~QMakeBuilder()
 {
 }
 
-KJob* QMakeBuilder::prune( KDevelop::IProject* project )
+KJob* QMakeBuilder::prune(KDevelop::IProject* project)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Distcleaning";
-    if( m_makeBuilder )
-    {
+    if (m_makeBuilder) {
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
-        if( builder )
-        {
+        if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Distcleaning with make";
             return builder->executeMakeTarget(project->projectItem(), "distclean");
         }
@@ -90,14 +85,12 @@ KJob* QMakeBuilder::prune( KDevelop::IProject* project )
     return nullptr;
 }
 
-KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
+KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem* dom)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Building";
-    if( m_makeBuilder )
-    {
+    if (m_makeBuilder) {
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
-        if( builder )
-        {
+        if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Building with make";
             return builder->build(dom);
         }
@@ -105,22 +98,19 @@ KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
     return nullptr;
 }
 
-KJob* QMakeBuilder::configure( KDevelop::IProject* project )
+KJob* QMakeBuilder::configure(KDevelop::IProject* project)
 {
-    auto  job = new QMakeJob(this);
+    auto job = new QMakeJob(this);
     job->setProject(project);
     return job;
 }
 
-
-KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
+KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem* dom)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Cleaning";
-    if( m_makeBuilder )
-    {
+    if (m_makeBuilder) {
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
-        if( builder )
-        {
+        if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Cleaning with make";
             return builder->clean(dom);
         }
@@ -128,14 +118,12 @@ KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     return nullptr;
 }
 
-KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl& /* prefix */)
+KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem* dom, const QUrl& /* prefix */)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Installing";
-    if( m_makeBuilder )
-    {
+    if (m_makeBuilder) {
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
-        if( builder )
-        {
+        if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Installing with make";
             return builder->install(dom);
         }
@@ -158,12 +146,11 @@ KDevelop::ConfigPage* QMakeBuilder::perProjectConfigPage(int number, const KDeve
     }
 }
 
-
 QList<IProjectBuilder*> QMakeBuilder::additionalBuilderPlugins(KDevelop::IProject* project) const
 {
     Q_UNUSED(project);
 
-    if (IMakeBuilder* makeBuilder = m_makeBuilder->extension<IMakeBuilder>()) {
+    if (IMakeBuilder * makeBuilder = m_makeBuilder->extension<IMakeBuilder>()) {
         return QList<KDevelop::IProjectBuilder*>() << makeBuilder;
     }
 

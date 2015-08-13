@@ -20,72 +20,73 @@
 
 #include "ast.h"
 
-namespace QMake
-{
-
-AST::AST( AST* parent, AST::Type type )
-        : type(type), startLine(-1), 
-          endLine(-1), startColumn(-1), 
-          endColumn(-1), start(-1), end(-1), 
-          parent( parent )
+namespace QMake {
+AST::AST(AST* parent, AST::Type type)
+    : type(type)
+    , startLine(-1)
+    , endLine(-1)
+    , startColumn(-1)
+    , endColumn(-1)
+    , start(-1)
+    , end(-1)
+    , parent(parent)
 {}
 
 AST::~AST()
 {
 }
 
-ValueAST::ValueAST( AST* parent )
-        : AST( parent, AST::Value )
+ValueAST::ValueAST(AST* parent)
+    : AST(parent, AST::Value)
 {}
 
-StatementAST::StatementAST( AST* parent, AST::Type type )
-        : AST( parent, type )
+StatementAST::StatementAST(AST* parent, AST::Type type)
+    : AST(parent, type)
 {}
 
-StatementAST::~StatementAST( )
+StatementAST::~StatementAST()
 {
 }
 
-
-AssignmentAST::AssignmentAST( AST* parent )
-        : StatementAST( parent, AST::Assignment ), identifier(nullptr)
+AssignmentAST::AssignmentAST(AST* parent)
+    : StatementAST(parent, AST::Assignment)
+    , identifier(nullptr)
 {}
 
 AssignmentAST::~AssignmentAST()
 {
     delete identifier;
     identifier = nullptr;
-    qDeleteAll( values );
+    qDeleteAll(values);
     values.clear();
     delete op;
 }
 
-ScopeBodyAST::ScopeBodyAST( AST* parent, AST::Type type )
-        : AST( parent, type )
+ScopeBodyAST::ScopeBodyAST(AST* parent, AST::Type type)
+    : AST(parent, type)
 {}
 
 ScopeBodyAST::~ScopeBodyAST()
 {
-    qDeleteAll( statements );
+    qDeleteAll(statements);
     statements.clear();
 }
 
-
-FunctionCallAST::FunctionCallAST( AST* parent )
-        : ScopeAST( parent, AST::FunctionCall ), identifier(nullptr)
+FunctionCallAST::FunctionCallAST(AST* parent)
+    : ScopeAST(parent, AST::FunctionCall)
+    , identifier(nullptr)
 {}
-
 
 FunctionCallAST::~FunctionCallAST()
 {
     delete identifier;
     identifier = nullptr;
-    qDeleteAll( args );
+    qDeleteAll(args);
     args.clear();
 }
 
-OrAST::OrAST( AST* parent )
-        : ScopeAST( parent, AST::Or )
+OrAST::OrAST(AST* parent)
+    : ScopeAST(parent, AST::Or)
 {}
 
 OrAST::~OrAST()
@@ -95,15 +96,16 @@ OrAST::~OrAST()
 }
 
 ProjectAST::ProjectAST()
-        : ScopeBodyAST( nullptr, AST::Project )
+    : ScopeBodyAST(nullptr, AST::Project)
 {}
 
 ProjectAST::~ProjectAST()
 {
 }
 
-ScopeAST::ScopeAST( AST* parent, AST::Type type )
-        : StatementAST( parent, type ), body( nullptr )
+ScopeAST::ScopeAST(AST* parent, AST::Type type)
+    : StatementAST(parent, type)
+    , body(nullptr)
 {}
 
 ScopeAST::~ScopeAST()
@@ -112,8 +114,9 @@ ScopeAST::~ScopeAST()
     body = nullptr;
 }
 
-SimpleScopeAST::SimpleScopeAST( AST* parent )
-        : ScopeAST( parent, AST::SimpleScope ), identifier(nullptr)
+SimpleScopeAST::SimpleScopeAST(AST* parent)
+    : ScopeAST(parent, AST::SimpleScope)
+    , identifier(nullptr)
 {}
 
 SimpleScopeAST::~SimpleScopeAST()
@@ -121,6 +124,5 @@ SimpleScopeAST::~SimpleScopeAST()
     delete identifier;
     identifier = nullptr;
 }
-
 }
 

@@ -21,68 +21,61 @@
 #include "qmakeastdefaultvisitor.h"
 #include "ast.h"
 
-namespace QMake
-{
-
+namespace QMake {
 ASTDefaultVisitor::~ASTDefaultVisitor()
 {
 }
 
-void ASTDefaultVisitor::visitProject( ProjectAST* node )
+void ASTDefaultVisitor::visitProject(ProjectAST* node)
 {
-    foreach( StatementAST* stmt, node->statements )
-    {
+    foreach (StatementAST* stmt, node->statements) {
         visitNode(stmt);
     }
 }
 
-void ASTDefaultVisitor::visitAssignment( AssignmentAST* node )
+void ASTDefaultVisitor::visitAssignment(AssignmentAST* node)
 {
     visitNode(node->identifier);
     visitNode(node->op);
-    foreach( ValueAST* value, node->values )
-    {
+    foreach (ValueAST* value, node->values) {
         visitNode(value);
     }
 }
 
-
-void ASTDefaultVisitor::visitValue( ValueAST* )
+void ASTDefaultVisitor::visitValue(ValueAST*)
 {
 }
 
-void ASTDefaultVisitor::visitFunctionCall( FunctionCallAST* node )
+void ASTDefaultVisitor::visitFunctionCall(FunctionCallAST* node)
 {
     visitNode(node->identifier);
-    foreach(ValueAST* value, node->args)
-    {
+    foreach (ValueAST* value, node->args) {
         visitNode(value);
     }
+
     visitNode(node->body);
 }
 
-void ASTDefaultVisitor::visitScopeBody( ScopeBodyAST* node )
+void ASTDefaultVisitor::visitScopeBody(ScopeBodyAST* node)
 {
-    foreach( StatementAST* stmt, node->statements )
-    {
+    foreach (StatementAST* stmt, node->statements) {
         visitNode(stmt);
     }
 }
 
-void ASTDefaultVisitor::visitOr( OrAST* node )
+void ASTDefaultVisitor::visitOr(OrAST* node)
 {
-    foreach( ScopeAST* scope, node->scopes )
-    {
+    foreach (ScopeAST* scope, node->scopes) {
         visitNode(scope);
     }
+
     visitNode(node->body);
 }
 
-void ASTDefaultVisitor::visitSimpleScope( SimpleScopeAST* node )
+void ASTDefaultVisitor::visitSimpleScope(SimpleScopeAST* node)
 {
     visitNode(node->identifier);
     visitNode(node->body);
 }
-
 }
 
