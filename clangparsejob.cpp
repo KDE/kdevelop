@@ -46,6 +46,7 @@
 #include "clangsettings/clangsettingsmanager.h"
 #include "duchain/clanghelpers.h"
 #include "duchain/clangpch.h"
+#include "duchain/duchainutils.h"
 #include "duchain/parsesession.h"
 #include "duchain/clangindex.h"
 #include "duchain/clangparsingenvironmentfile.h"
@@ -65,10 +66,6 @@
 using namespace KDevelop;
 
 namespace {
-
-enum CustomFeatures {
-    Rescheduled = (KDevelop::TopDUContext::LastFeature << 1)
-};
 
 QString findConfigFile(const QString& forFile, const QString& configFileName)
 {
@@ -159,16 +156,6 @@ bool hasTracker(const IndexedString& url)
     return ICore::self()->languageController()->backgroundParser()->trackerForUrl(url);
 }
 
-ParseSessionData::Ptr findParseSession(const IndexedString &file)
-{
-    DUChainReadLocker lock;
-    const auto& context = DUChainUtils::standardContextForUrl(file.toUrl());
-    if (context) {
-        return ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
-    }
-    return {};
-}
-
 }
 
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
@@ -237,6 +224,26 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
+    if (minimumFeatures() & AttachASTWithoutUpdating) {
+        // The context doesn't need to be updated, but has no AST attached (restored from disk),
+        // so attach AST to it, without updating DUChain
+        ParseSession session(createSessionData());
+
+        DUChainWriteLocker lock;
+        auto ctx = DUChainUtils::standardContextForUrl(document().toUrl());
+        if (!ctx) {
+            clangDebug() << "Lost context while attaching AST";
+            return;
+        }
+        ctx->setAst(IAstContainer::Ptr(session.data()));
+
+        if (minimumFeatures() & UpdateHighlighting) {
+            lock.unlock();
+            languageSupport()->codeHighlighting()->highlightDUChain(ctx);
+        }
+        return;
+    }
+
     {
         UrlParseLock urlLock(document());
         if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
@@ -244,20 +251,9 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         }
     }
 
-    ParseSession session(findParseSession(document()));
+    ParseSession session(ClangIntegration::DUChainUtils::findParseSessionData(document(), m_environment.translationUnitUrl()));
     if (abortRequested()) {
         return;
-    }
-
-    if (!session.data() && document() != m_environment.translationUnitUrl()) {
-        // no cached data found for the current file, but maybe
-        // we are lucky and can grab it from the TU context
-        // this happens e.g. when originally a .cpp file is open and then one
-        // of its included files is opened in the editor.
-        session.setData(findParseSession(m_environment.translationUnitUrl()));
-        if (abortRequested()) {
-            return;
-        }
     }
 
     if (!session.data() || !session.reparse(m_unsavedFiles, m_environment)) {

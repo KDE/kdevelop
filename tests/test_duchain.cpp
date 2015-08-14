@@ -38,6 +38,7 @@
 #include <language/duchain/functiondefinition.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include <util/kdevstringhandler.h>
 
 #include "duchain/clangparsingenvironmentfile.h"
@@ -48,7 +49,7 @@
 
 #include <QtTest>
 
-QTEST_GUILESS_MAIN(TestDUChain);
+QTEST_MAIN(TestDUChain);
 
 using namespace KDevelop;
 
@@ -81,9 +82,8 @@ void TestDUChain::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
-    AutoTestShell::init();
-    TestCore::initialize(Core::NoUi);
-
+    AutoTestShell::init({QStringLiteral("kdevclangsupport")});
+    TestCore::initialize();
 }
 
 void TestDUChain::cleanupTestCase()
@@ -709,9 +709,73 @@ void TestDUChain::testParsingEnvironment()
         QCOMPARE(envFile->features(), features);
         QVERIFY(envFile->featuresSatisfied(features));
         QVERIFY(!envFile->needsUpdate(&lastEnv));
-
         DUChain::self()->removeDocumentChain(indexed.data());
     }
+}
+
+void TestDUChain::testActiveDocumentHasASTAttached()
+{
+  const TopDUContext::Features features = TopDUContext::AllDeclarationsContextsAndUses;
+
+    IndexedTopDUContext indexed;
+    ClangParsingEnvironment lastEnv;
+    {
+        TestFile file("int main() {}\n", "cpp");
+        auto astFeatures = static_cast<TopDUContext::Features>(features | TopDUContext::AST);
+        file.parse(astFeatures);
+        file.setKeepDUChainData(true);
+        QVERIFY(file.waitForParsed());
+
+        DUChainWriteLocker lock;
+        auto top = file.topContext();
+        QVERIFY(top);
+        auto sessionData = ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(top->ast().data()));
+        lock.unlock();
+        ParseSession session(sessionData);
+        lock.lock();
+        QVERIFY(session.data());
+        QVERIFY(top);
+        QVERIFY(top->ast());
+
+        indexed = top->indexed();
+    }
+
+    DUChain::self()->storeToDisk();
+
+    {
+        DUChainWriteLocker lock;
+        QVERIFY(!DUChain::self()->isInMemory(indexed.index()));
+        QVERIFY(indexed.data());
+    }
+
+    QUrl url;
+    {
+        DUChainReadLocker lock;
+        auto ctx = indexed.data();
+        QVERIFY(ctx);
+        QVERIFY(!ctx->ast());
+        url = ctx->url().toUrl();
+    }
+
+    // Here the file is already deleted, so clang_parseTranslationUnit2 will fail, but we still get ParseSessionData attached.
+    auto document = ICore::self()->documentController()->openDocument(url);
+    QVERIFY(document);
+    ICore::self()->documentController()->activateDocument(document);
+
+    QApplication::processEvents();
+    ICore::self()->languageController()->backgroundParser()->parseDocuments();
+    QThread::sleep(1);
+
+    document->close(KDevelop::IDocument::Discard);
+    {
+        DUChainReadLocker lock;
+        auto ctx = indexed.data();
+        QVERIFY(ctx);
+        QVERIFY(ctx->ast());
+    }
+
+    DUChainWriteLocker lock;
+    DUChain::self()->removeDocumentChain(indexed.data());
 }
 
 void TestDUChain::testSystemIncludes()

@@ -33,6 +33,10 @@
 
 class ClangIndex;
 class SimpleRefactoring;
+namespace KDevelop
+{
+class IDocument;
+}
 
 class ClangSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport, public KDevelop::IBuddyDocumentFinder
 {
@@ -75,6 +79,9 @@ public:
     QVector< QUrl > getPotentialBuddies(const QUrl &url) const override;
 
     //END IBuddyDocumentFinder
+
+private slots:
+    void documentActivated(KDevelop::IDocument* doc);
 
 private:
     KDevelop::ICodeHighlighting *m_highlighting;

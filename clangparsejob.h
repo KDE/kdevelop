@@ -40,6 +40,12 @@ public:
 
     ClangSupport* clang() const;
 
+    enum CustomFeatures {
+        Rescheduled = (KDevelop::TopDUContext::LastFeature << 1),
+        AttachASTWithoutUpdating = (Rescheduled << 1), ///< Used when context is up to date, but has no AST attached.
+        UpdateHighlighting = (AttachASTWithoutUpdating << 1) ///< Used when we only need to update highlighting
+    };
+
 protected:
     virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
 

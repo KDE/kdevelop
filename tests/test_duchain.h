@@ -71,6 +71,7 @@ private slots:
     void testNestedMacroRanges();
     void testGotoStatement();
     void testRangesOfOperatorsInsideMacro();
+    void testActiveDocumentHasASTAttached();
 
     void benchDUChainBuilder();
 

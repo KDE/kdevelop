@@ -51,6 +51,7 @@
 
 #include <language/assistant/staticassistantsmanager.h>
 #include <language/assistant/renameassistant.h>
+#include <language/backgroundparser/backgroundparser.h>
 #include <language/codecompletion/codecompletion.h>
 #include <language/highlighting/codehighlighting.h>
 #include <language/interfaces/editorcontext.h>
@@ -234,6 +235,9 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     auto assistantsManager = core()->languageController()->staticAssistantsManager();
     assistantsManager->registerAssistant(StaticAssistant::Ptr(new RenameAssistant(this)));
     assistantsManager->registerAssistant(StaticAssistant::Ptr(new AdaptSignatureAssistant(this)));
+
+    connect(ICore::self()->documentController(), &IDocumentController::documentActivated,
+            this, &ClangSupport::documentActivated);
 }
 
 ClangSupport::~ClangSupport()
@@ -381,6 +385,49 @@ TopDUContext* ClangSupport::standardContext(const QUrl &url, bool /*proxyContext
 {
     ClangParsingEnvironment env;
     return DUChain::self()->chainForDocument(url, &env);
+}
+
+void ClangSupport::documentActivated(IDocument* doc)
+{
+    TopDUContext::Features features;
+    {
+        DUChainReadLocker lock;
+        auto ctx = DUChainUtils::standardContextForUrl(doc->url());
+        if (!ctx) {
+            return;
+        }
+
+        auto file = ctx->parsingEnvironmentFile();
+        if (!file) {
+            return;
+        }
+
+        if (file->type() != CppParsingEnvironment) {
+            return;
+        }
+
+        if (file->needsUpdate()) {
+            return;
+        }
+
+        features = ctx->features();
+    }
+
+    const auto indexedUrl = IndexedString(doc->url());
+
+    auto sessionData = ClangIntegration::DUChainUtils::findParseSessionData(indexedUrl, index()->translationUnitForUrl(IndexedString(doc->url())));
+    if (sessionData) {
+        return;
+    }
+
+    features = static_cast<TopDUContext::Features>(ClangParseJob::AttachASTWithoutUpdating | features);
+    if (ICore::self()->languageController()->backgroundParser()->isQueued(indexedUrl)) {
+        // The document is already scheduled for parsing (happens when opening a project with an active document)
+        // The background parser will optimize the previous request out, so we need to update highlighting
+        features = static_cast<TopDUContext::Features>(ClangParseJob::UpdateHighlighting | features);
+    }
+
+    ICore::self()->languageController()->backgroundParser()->addDocument(indexedUrl, features);
 }
 
 #include "clangsupport.moc"

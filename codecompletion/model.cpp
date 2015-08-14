@@ -27,6 +27,7 @@
 
 #include "duchain/parsesession.h"
 #include "duchain/clangindex.h"
+#include "duchain/duchainutils.h"
 
 #include <language/codecompletion/codecompletionworker.h>
 #include <language/duchain/topducontext.h>
@@ -101,20 +102,8 @@ public slots:
             return;
         }
 
-        // We hold DUChain lock, and ask for ParseSession, but TUDUChain indirectly holds ParseSession lock.
-        lock.unlock();
+        ParseSessionData::Ptr sessionData(ClangIntegration::DUChainUtils::findParseSessionData(top->url(), m_index->translationUnitForUrl(top->url())));
 
-        ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
-        if (!sessionData) {
-            // ask the TU to which we are pinned, if available
-            const auto tuUrl = m_index->translationUnitForUrl(top->url());
-            if (tuUrl != top->url()) {
-                auto tu = DUChainUtils::standardContextForUrl(tuUrl.toUrl());
-                if (tu) {
-                    sessionData = dynamic_cast<ParseSessionData*>(tu->ast().data());
-                }
-            }
-        }
         if (!sessionData) {
             // TODO: trigger reparse and re-request code completion
             qCWarning(KDEV_CLANG) << "No parse session / AST attached to context for url" << url;
@@ -125,6 +114,9 @@ public slots:
             failed();
             return;
         }
+
+        // We hold DUChain lock, and ask for ParseSession, but TUDUChain indirectly holds ParseSession lock.
+        lock.unlock();
 
         auto completionContext = ::createCompletionContext(DUContextPointer(top), sessionData, url, position, text, followingText);
 

@@ -23,6 +23,8 @@
 
 #include <duchain/clangduchainexport.h>
 
+#include "duchain/parsesession.h"
+
 namespace KTextEditor {
 class Range;
 }
@@ -39,6 +41,13 @@ KDEVCLANGDUCHAIN_EXPORT KTextEditor::Range functionSignatureRange(const KDevelop
 
 KDEVCLANGDUCHAIN_EXPORT void registerDUChainItems();
 KDEVCLANGDUCHAIN_EXPORT void unregisterDUChainItems();
+
+/**
+ * Finds attached parse session data (aka AST) to the @p file
+ *
+ * If no session data found, then @p tuFile asked for the attached session data
+ */
+ParseSessionData::Ptr findParseSessionData(const KDevelop::IndexedString &file, const KDevelop::IndexedString &tufile);
 
 };
 

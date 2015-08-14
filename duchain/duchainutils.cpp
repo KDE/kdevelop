@@ -84,4 +84,22 @@ void DUChainUtils::unregisterDUChainItems()
 */
 }
 
+ParseSessionData::Ptr DUChainUtils::findParseSessionData(const IndexedString &file, const IndexedString &tufile)
+{
+    DUChainReadLocker lock;
+    auto context = KDevelop::DUChainUtils::standardContextForUrl(file.toUrl());
+    if (!context || !context->ast()) {
+        // no cached data found for the current file, but maybe
+        // we are lucky and can grab it from the TU context
+        // this happens e.g. when originally a .cpp file is open and then one
+        // of its included files is opened in the editor.
+        context = KDevelop::DUChainUtils::standardContextForUrl(tufile.toUrl());
+    }
+
+    if (context) {
+        return ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
+    }
+    return {};
+}
+
 }
