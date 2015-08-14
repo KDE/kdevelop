@@ -262,6 +262,7 @@ void GDB::processLine(const QByteArray& line)
 
                emit internalCommandOutput(QString::fromUtf8(line) + '\n');
 
+               #if defined(Q_OS_MAC)
                if (result.reason == "thread-group-started") {
                    if (currentCmd_->cmdToSend().contains("exec-run"))
                        receivedReply_ = true;
@@ -279,7 +280,7 @@ void GDB::processLine(const QByteArray& line)
                        }
                    }
                }
-	       #endif
+               #endif
 
                // FIXME: the code below should be reviewed to consider result record
                // subtype when doing all decisions.
