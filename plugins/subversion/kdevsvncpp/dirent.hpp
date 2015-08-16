@@ -41,7 +41,7 @@ namespace svn
     /**
      * constructor for existing @a svn_dirent_t entries
      */
-    DirEntry(const char * name, svn_dirent_t * dirEntry);
+    DirEntry(const char * name, const svn_dirent_t * dirEntry);
 
     /**
      * copy constructor
