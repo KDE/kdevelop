@@ -52,6 +52,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   XmlGui
   WindowSystem
 )
+find_package(KDevelop-PG-Qt REQUIRED)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 add_definitions(
@@ -86,6 +87,7 @@ add_subdirectory(debuggers)
 add_subdirectory(app_templates)
 add_subdirectory(documentation)
 add_subdirectory(kdeintegration)
+add_subdirectory(qmakeintegration)
 add_subdirectory(utils)
 add_subdirectory(file_templates)
 add_subdirectory(providers)

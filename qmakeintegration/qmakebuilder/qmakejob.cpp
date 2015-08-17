@@ -23,12 +23,12 @@
 
 #include "../qmakeconfig.h"
 
-#include "make/imakebuilder.h"
 
 #include <interfaces/iproject.h>
 #include <outputview/ioutputview.h>
 #include <outputview/outputmodel.h>
 #include <project/projectmodel.h>
+#include <projectbuilders/makebuilder/imakebuilder.h>
 #include <util/commandexecutor.h>
 #include <util/path.h>
 

@@ -8,11 +8,9 @@ set(kdevqmakeparser_SRCS
     qmakeastdefaultvisitor.cpp
     )
 
-include_directories( ${QMakeManager_SOURCE_DIR}/parser ${QMakeManager_BINARY_DIR}/parser )
-
 kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO
-    "${QMakeManager_SOURCE_DIR}/parser/qmake.g"
-    "${QMakeManager_SOURCE_DIR}/parser/qmakelexer.h")
+    "${CMAKE_CURRENT_SOURCE_DIR}/qmake.g"
+    "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.h")
 
 include_directories(
     ${KDEVPGQT_INCLUDE_DIR} )

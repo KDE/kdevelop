@@ -21,7 +21,6 @@
 #include "qmakebuilder.h"
 
 #include "qmakebuilderpreferences.h"
-#include "make/imakebuilder.h"
 #include "../qmakeconfig.h"
 
 #include <QtCore/QStringList>
@@ -32,6 +31,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <outputview/ioutputview.h>
+#include <projectbuilders/makebuilder/imakebuilder.h>
 #include <util/commandexecutor.h>
 
 #include <kpluginfactory.h>
