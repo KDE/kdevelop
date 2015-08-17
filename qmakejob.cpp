@@ -18,7 +18,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-
 #include "qmakejob.h"
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
@@ -33,26 +32,25 @@
 
 using namespace KDevelop;
 
-QMakeJob::QMakeJob( QString  srcDir, QString buildDir, QObject* parent )
-    : OutputJob( parent ),
-      m_srcDir(std::move(srcDir)),
-      m_buildDir(std::move(buildDir)),
-      m_qmakePath("qmake"),
-      m_buildType(0),
-      m_process(nullptr),
-      m_model(nullptr)
+QMakeJob::QMakeJob(QString srcDir, QString buildDir, QObject* parent)
+    : OutputJob(parent)
+    , m_srcDir(std::move(srcDir))
+    , m_buildDir(std::move(buildDir))
+    , m_qmakePath("qmake")
+    , m_buildType(0)
+    , m_process(nullptr)
+    , m_model(nullptr)
 
 {
-  setCapabilities( Killable );
-  setStandardToolView( IOutputView::RunView );
-  setBehaviours( IOutputView::AllowUserClose | IOutputView::AutoScroll );
+    setCapabilities(Killable);
+    setStandardToolView(IOutputView::RunView);
+    setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll);
 
-  setObjectName(i18n("Run QMake in %1", m_buildDir));
+    setObjectName(i18n("Run QMake in %1", m_buildDir));
 }
 
 QMakeJob::~QMakeJob()
 {
-
 }
 
 void QMakeJob::setQMakePath(const QString& path)
@@ -75,30 +73,29 @@ void QMakeJob::setExtraArguments(const QString& args)
     m_extraArguments = args;
 }
 
-
 void QMakeJob::start()
 {
-    static const char *BUILD_TYPES[] = { "debug", "build", "(don't specify)" };
+    static const char* BUILD_TYPES[] = { "debug", "build", "(don't specify)" };
 
     m_model = new OutputModel;
-    setModel( m_model );
+    setModel(m_model);
 
     startOutput();
 
     QStringList args;
     args << m_qmakePath;
-    if(m_buildType < 2)
+    if (m_buildType < 2)
         args << QString("CONFIG+=") + BUILD_TYPES[m_buildType];
-    if(!m_installPrefix.isEmpty())
+    if (!m_installPrefix.isEmpty())
         args << "target.path=" + m_installPrefix;
-    if(!m_extraArguments.isEmpty()) {
+    if (!m_extraArguments.isEmpty()) {
         KShell::Errors err;
-        QStringList tmp = KShell::splitArgs( m_extraArguments, KShell::TildeExpand | KShell::AbortOnMeta, &err );
-        if( err == KShell::NoError ) {
+        QStringList tmp = KShell::splitArgs(m_extraArguments, KShell::TildeExpand | KShell::AbortOnMeta, &err);
+        if (err == KShell::NoError) {
             args += tmp;
         } else {
             qCWarning(KDEV_QMAKE) << "Ignoring qmake Extra arguments";
-            if( err == KShell::BadQuoting ) {
+            if (err == KShell::BadQuoting) {
                 qCWarning(KDEV_QMAKE) << "QMake arguments badly quoted:" << m_extraArguments;
             } else {
                 qCWarning(KDEV_QMAKE) << "QMake arguments had meta character:" << m_extraArguments;
@@ -110,31 +107,27 @@ void QMakeJob::start()
     m_model->appendLine(m_buildDir + ": " + args.join(" "));
 
     QDir build(m_buildDir);
-    if( !build.exists() ) {
+    if (!build.exists()) {
         build.mkpath(build.absolutePath());
     }
 
     m_process = new KProcess(this);
     m_process->setWorkingDirectory(m_buildDir);
     m_process->setProgram(args);
-    m_process->setOutputChannelMode( KProcess::MergedChannels );
-    auto  lineMaker = new KDevelop::ProcessLineMaker( m_process, this );
+    m_process->setOutputChannelMode(KProcess::MergedChannels);
+    auto lineMaker = new KDevelop::ProcessLineMaker(m_process, this);
 
-    connect( lineMaker, SIGNAL( receivedStdoutLines(QStringList) ),
-            m_model, SLOT( appendLines(QStringList)) );
-    connect( lineMaker, SIGNAL( receivedStderrLines( QStringList ) ),
-            m_model, SLOT( appendLines(QStringList)) );
-    connect( m_process, SIGNAL( error( QProcess::ProcessError ) ),
-            SLOT( processError( QProcess::ProcessError ) ) );
-    connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
-            SLOT( processFinished(int, QProcess::ExitStatus ) ) );
+    connect(lineMaker, SIGNAL(receivedStdoutLines(QStringList)), m_model, SLOT(appendLines(QStringList)));
+    connect(lineMaker, SIGNAL(receivedStderrLines(QStringList)), m_model, SLOT(appendLines(QStringList)));
+    connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)));
+    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
 
     m_process->start();
 }
 
 bool QMakeJob::doKill()
 {
-    if ( !m_process ) {
+    if (!m_process) {
         return true;
     }
 
@@ -147,21 +140,21 @@ QString QMakeJob::errorString() const
     return m_process->errorString();
 }
 
-void QMakeJob::processError( QProcess::ProcessError error )
+void QMakeJob::processError(QProcess::ProcessError error)
 {
     m_model->appendLine(errorString());
     setError(error);
     emitResult();
 }
 
-void QMakeJob::processFinished( int exitCode , QProcess::ExitStatus status )
+void QMakeJob::processFinished(int exitCode, QProcess::ExitStatus status)
 {
-    if ( status == QProcess::NormalExit ) {
-        m_model->appendLine( i18n( "*** Exited with return code: %1 ***", exitCode ) );
-    } else if ( error() == KJob::KilledJobError ) {
-        m_model->appendLine( i18n( "*** Process aborted ***" ) );
+    if (status == QProcess::NormalExit) {
+        m_model->appendLine(i18n("*** Exited with return code: %1 ***", exitCode));
+    } else if (error() == KJob::KilledJobError) {
+        m_model->appendLine(i18n("*** Process aborted ***"));
     } else {
-        m_model->appendLine( i18n( "*** Crashed with return code: %1 ***", exitCode ) );
+        m_model->appendLine(i18n("*** Crashed with return code: %1 ***", exitCode));
     }
 
     emitResult();

@@ -24,22 +24,21 @@
 
 #include "qmakemkspecs.h"
 
-QMakeCache::QMakeCache( const QString& cachefile )
-    : QMakeFile( cachefile ), m_mkspecs(nullptr)
+QMakeCache::QMakeCache(const QString& cachefile)
+    : QMakeFile(cachefile)
+    , m_mkspecs(nullptr)
 {
 }
 
-void QMakeCache::setMkSpecs( QMakeMkSpecs* specs )
+void QMakeCache::setMkSpecs(QMakeMkSpecs* specs)
 {
     m_mkspecs = specs;
 }
 
 bool QMakeCache::read()
 {
-    foreach( const QString &var, m_mkspecs->variables() )
-    {
-        m_variableValues[var] = m_mkspecs->variableValues( var );
+    foreach (const QString& var, m_mkspecs->variables()) {
+        m_variableValues[var] = m_mkspecs->variableValues(var);
     }
     return QMakeFile::read();
 }
-

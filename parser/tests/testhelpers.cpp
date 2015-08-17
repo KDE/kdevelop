@@ -24,61 +24,48 @@
 #include <QtTest/QtTest>
 #include "ast.h"
 
-void matchScopeBodies( QList<QMake::StatementAST*> realbody,
-                             QList<QMake::StatementAST*> testbody )
+void matchScopeBodies(QList<QMake::StatementAST*> realbody, QList<QMake::StatementAST*> testbody)
 {
-    QVERIFY( realbody.count() == testbody.count() );
+    QVERIFY(realbody.count() == testbody.count());
     int i = 0;
     QMake::AssignmentAST* assign;
     QMake::ScopeAST* scope;
     QMake::AssignmentAST* testassign;
     QMake::ScopeAST* testscope;
 
-    foreach( QMake::StatementAST* ast, realbody )
-    {
+    foreach (QMake::StatementAST* ast, realbody) {
         scope = dynamic_cast<QMake::ScopeAST*>(ast);
-        testscope = dynamic_cast<QMake::ScopeAST*>( testbody.at( i ) );
+        testscope = dynamic_cast<QMake::ScopeAST*>(testbody.at(i));
 
-        if( scope && testscope )
-        {
+        if (scope && testscope) {
             QMake::FunctionCallAST* call = dynamic_cast<QMake::FunctionCallAST*>(scope);
             QMake::FunctionCallAST* testcall = dynamic_cast<QMake::FunctionCallAST*>(testscope);
             QMake::SimpleScopeAST* simple = dynamic_cast<QMake::SimpleScopeAST*>(scope);
             QMake::SimpleScopeAST* testsimple = dynamic_cast<QMake::SimpleScopeAST*>(testscope);
             QMake::OrAST* orop = dynamic_cast<QMake::OrAST*>(scope);
             QMake::OrAST* testorop = dynamic_cast<QMake::OrAST*>(testscope);
-            QVERIFY( ( call && testcall )
-                || ( simple && testsimple )
-                || ( orop && testorop ) );
-            if( call && testcall )
-            {
-                TESTFUNCNAME( call, testcall->identifier->value )
-            }else if( simple && testsimple )
-            {
+            QVERIFY((call && testcall) || (simple && testsimple) || (orop && testorop));
+            if (call && testcall) {
+                TESTFUNCNAME(call, testcall->identifier->value)
+            } else if (simple && testsimple) {
 
-            }else if( orop && testorop )
-            {
-                TESTOROPAST( orop, testorop )
+            } else if (orop && testorop) {
+                TESTOROPAST(orop, testorop)
             }
-            QVERIFY( ( scope->body && testscope->body )
-                        || ( !scope->body && !testscope->body ) );
-            if( scope->body && testscope->body )
-            {
+            QVERIFY((scope->body && testscope->body) || (!scope->body && !testscope->body));
+            if (scope->body && testscope->body) {
                 QList<QMake::StatementAST*> bodylist;
                 QList<QMake::StatementAST*> testbodylist;
                 bodylist = scope->body->statements;
                 testbodylist = testscope->body->statements;
-                matchScopeBodies( bodylist, testbodylist );
+                matchScopeBodies(bodylist, testbodylist);
             }
         }
         assign = dynamic_cast<QMake::AssignmentAST*>(ast);
-        testassign = dynamic_cast<QMake::AssignmentAST*>( testbody.at( i ) );
-        if( assign && testassign )
-        {
-            TESTASSIGNMENT( assign, testassign->identifier->value, testassign->op->value,
-                            testassign->values.count() )
+        testassign = dynamic_cast<QMake::AssignmentAST*>(testbody.at(i));
+        if (assign && testassign) {
+            TESTASSIGNMENT(assign, testassign->identifier->value, testassign->op->value, testassign->values.count())
         }
         i++;
     }
 }
-

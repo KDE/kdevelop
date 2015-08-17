@@ -30,14 +30,14 @@
 #include <util/path.h>
 #include "debug.h"
 
-const char *QMakeConfig::CONFIG_GROUP = "QMake_Builder";
+const char* QMakeConfig::CONFIG_GROUP = "QMake_Builder";
 
-const char *QMakeConfig::QMAKE_BINARY = "QMake_Binary";
-const char *QMakeConfig::BUILD_FOLDER = "Build_Folder";
-const char *QMakeConfig::INSTALL_PREFIX = "Install_Prefix";
-const char *QMakeConfig::EXTRA_ARGUMENTS = "Extra_Arguments";
-const char *QMakeConfig::BUILD_TYPE = "Build_Type";
-const char *QMakeConfig::ALL_BUILDS = "All_Builds";
+const char* QMakeConfig::QMAKE_BINARY = "QMake_Binary";
+const char* QMakeConfig::BUILD_FOLDER = "Build_Folder";
+const char* QMakeConfig::INSTALL_PREFIX = "Install_Prefix";
+const char* QMakeConfig::EXTRA_ARGUMENTS = "Extra_Arguments";
+const char* QMakeConfig::BUILD_TYPE = "Build_Type";
+const char* QMakeConfig::ALL_BUILDS = "All_Builds";
 
 namespace {
 
@@ -49,12 +49,11 @@ QChar pathListSeparator()
     return QLatin1Char(':');
 #endif
 }
-
 }
 
 using namespace KDevelop;
 
-///NOTE: KConfig is not thread safe
+/// NOTE: KConfig is not thread safe
 QMutex s_buildDirMutex;
 
 bool QMakeConfig::isConfigured(const IProject* project)
@@ -71,7 +70,7 @@ Path QMakeConfig::buildDirFromSrc(const IProject* project, const Path& srcDir)
     Path buildDir = Path(cg.readEntry(QMakeConfig::BUILD_FOLDER, project->path().toLocalFile()));
     lock.unlock();
 
-    if(buildDir.isValid()) {
+    if (buildDir.isValid()) {
         buildDir.addPath(project->path().relativePath(srcDir));
     }
     return buildDir;
@@ -85,7 +84,7 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), CONFIG_GROUP);
         if (group.hasKey(QMAKE_BINARY)) {
-            exe = group.readEntry(QMAKE_BINARY, QString() );
+            exe = group.readEntry(QMAKE_BINARY, QString());
             QFileInfo info(exe);
             if (!info.exists() || !info.isExecutable()) {
                 qWarning() << "bad QMake configured for project " << project->path().toUrl() << ":" << exe;
@@ -108,17 +107,17 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
 
 QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeBinary)
 {
-    QHash<QString,QString> hash;
+    QHash<QString, QString> hash;
     KProcess p;
-    p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+    p.setOutputChannelMode(KProcess::OnlyStdoutChannel);
     p << qmakeBinary << "-query";
     int execed = p.execute();
     if (execed != 0) {
         qWarning() << "failed to execute qmake query " << p.program().join(" ") << "return code was:" << execed;
-        return QHash<QString,QString>();
+        return QHash<QString, QString>();
     }
 
-    foreach( const QByteArray& line, p.readAllStandardOutput().split('\n')) {
+    foreach (const QByteArray& line, p.readAllStandardOutput().split('\n')) {
         const int colon = line.indexOf(':');
         if (colon == -1) {
             continue;
@@ -131,7 +130,7 @@ QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeBinary)
     return hash;
 }
 
-QString QMakeConfig::findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
+QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
 {
     QStringList paths;
     if (qmakeVars.contains("QMAKE_MKSPECS")) {

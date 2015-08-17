@@ -35,7 +35,7 @@
 #include <QDebug>
 #include <KLocalizedString>
 
-QMakeJob::QMakeJob(QObject *parent)
+QMakeJob::QMakeJob(QObject* parent)
     : OutputExecuteJob(parent)
     , m_killed(false)
 {
@@ -44,7 +44,7 @@ QMakeJob::QMakeJob(QObject *parent)
 
 void QMakeJob::start()
 {
-    if( !m_project ) {
+    if (!m_project) {
         setError(NoProjectError);
         setErrorText(i18n("No project specified."));
         return emitResult();
@@ -55,16 +55,13 @@ void QMakeJob::start()
     setModel(new KDevelop::OutputModel);
     startOutput();
 
-    QString cmd = QMakeConfig::qmakeBinary( m_project );
+    QString cmd = QMakeConfig::qmakeBinary(m_project);
     m_cmd = new KDevelop::CommandExecutor(cmd, this);
-    connect(m_cmd, SIGNAL(receivedStandardError(const QStringList&)),
-            model(), SLOT(appendLines(const QStringList&) ) );
-    connect(m_cmd, SIGNAL(receivedStandardOutput(const QStringList&)),
-            model(), SLOT(appendLines(const QStringList&) ) );
-    m_cmd->setWorkingDirectory( m_project->path().toUrl().toLocalFile() );
-    connect( m_cmd, SIGNAL( failed(QProcess::ProcessError) ),
-             this, SLOT( slotFailed(QProcess::ProcessError) ) );
-    connect( m_cmd, SIGNAL( completed(int) ), this, SLOT( slotCompleted(int) ) );
+    connect(m_cmd, SIGNAL(receivedStandardError(const QStringList&)), model(), SLOT(appendLines(const QStringList&)));
+    connect(m_cmd, SIGNAL(receivedStandardOutput(const QStringList&)), model(), SLOT(appendLines(const QStringList&)));
+    m_cmd->setWorkingDirectory(m_project->path().toUrl().toLocalFile());
+    connect(m_cmd, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)));
+    connect(m_cmd, SIGNAL(completed(int)), this, SLOT(slotCompleted(int)));
     m_cmd->start();
 }
 
@@ -90,8 +87,8 @@ void QMakeJob::slotFailed(QProcess::ProcessError error)
 
 void QMakeJob::slotCompleted(int code)
 {
-    if( code != 0 ) {
-        setError( FailedShownError );
+    if (code != 0) {
+        setError(FailedShownError);
     }
     emitResult();
 }

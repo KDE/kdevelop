@@ -20,5 +20,3 @@
 #include "qmakebuilderdebug.h"
 
 Q_LOGGING_CATEGORY(KDEV_QMAKEBUILDER, "kdevelop.plugins.qmakebuilder")
-
-

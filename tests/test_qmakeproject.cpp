@@ -42,7 +42,8 @@ QTEST_MAIN(TestQMakeProject);
 
 using namespace KDevelop;
 
-TestQMakeProject::TestQMakeProject(QObject* parent): QObject(parent)
+TestQMakeProject::TestQMakeProject(QObject* parent)
+    : QObject(parent)
 {
     qRegisterMetaType<IProject*>();
 }
@@ -53,7 +54,7 @@ TestQMakeProject::~TestQMakeProject()
 
 void TestQMakeProject::initTestCase()
 {
-    AutoTestShell::init({"kdevqmakemanager"});
+    AutoTestShell::init({ "kdevqmakemanager" });
     TestCore::initialize();
 }
 
@@ -64,13 +65,19 @@ void TestQMakeProject::cleanupTestCase()
 
 void TestQMakeProject::testBuildDirectory_data()
 {
-    QTest::addColumn<QString>("projectName");  // name of the project (both directory and .kde4 file)
-    QTest::addColumn<QString>("target");       // directory to compile from project root
-    QTest::addColumn<QString>("expected");     // expected build directory from build dir
-    
-    QTest::newRow("Basic Project") << "basic_project" << "" << "";
-    QTest::newRow("Subdirs Project (root)") << "subdirs_project" << "" << "";
-    QTest::newRow("Subdirs Project (dir_a)") << "subdirs_project" << "dir_a" << "dir_a";
+    QTest::addColumn<QString>("projectName"); // name of the project (both directory and .kde4 file)
+    QTest::addColumn<QString>("target"); // directory to compile from project root
+    QTest::addColumn<QString>("expected"); // expected build directory from build dir
+
+    QTest::newRow("Basic Project") << "basic_project"
+                                   << ""
+                                   << "";
+    QTest::newRow("Subdirs Project (root)") << "subdirs_project"
+                                            << ""
+                                            << "";
+    QTest::newRow("Subdirs Project (dir_a)") << "subdirs_project"
+                                             << "dir_a"
+                                             << "dir_a";
 }
 
 void TestQMakeProject::testBuildDirectory()
@@ -79,9 +86,9 @@ void TestQMakeProject::testBuildDirectory()
     QFETCH(QString, target);
     QFETCH(QString, expected);
 
-    const QString buildDir = "/tmp/some/path";  // some dummy directory to build (nothing will be built anyway)
-    
-    foreach(IProject *p, ICore::self()->projectController()->projects()) {
+    const QString buildDir = "/tmp/some/path"; // some dummy directory to build (nothing will be built anyway)
+
+    foreach (IProject* p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
     }
 
@@ -91,7 +98,8 @@ void TestQMakeProject::testBuildDirectory()
     {
         // note: all checks from QMakeProjectManager::projectNeedsConfiguration must be satisfied
 
-        const QString fileName = QString("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName);
+        const QString fileName
+            = QString("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName);
 
         qDebug() << "WRITING" << fileName;
         QVERIFY(QFileInfo(fileName).exists());
@@ -109,24 +117,25 @@ void TestQMakeProject::testBuildDirectory()
     }
 
     // opens project with kdevelop
-    const QUrl projectUrl = QUrl::fromLocalFile(QString("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
+    const QUrl projectUrl = QUrl::fromLocalFile(
+        QString("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
     ICore::self()->projectController()->openProject(projectUrl);
-    
+
     // wait for loading finished
     QSignalSpy spy(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
     bool gotSignal = spy.wait(30000);
     QVERIFY2(gotSignal, "Timeout while waiting for opened signal");
-    
+
     IProject* project = ICore::self()->projectController()->findProjectByName(projectName);
-    
+
     // adds expected directory to our base path
     Path expectedPath(Path(buildDir), expected);
-    
+
     // path for files to build
     Path buildUrl(QString("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(target));
     QList<ProjectFolderItem*> buildItems = project->foldersForPath(IndexedString(buildUrl.pathOrUrl()));
     QCOMPARE(buildItems.size(), 1);
-    IBuildSystemManager *buildManager = project->buildSystemManager();
+    IBuildSystemManager* buildManager = project->buildSystemManager();
     const Path actual = buildManager->buildDirectory(buildItems.first());
 
     QCOMPARE(actual, expectedPath);
