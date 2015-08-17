@@ -103,18 +103,18 @@ void BuildASTVisitor::visitScope(ScopeAst* node)
 {
     if (node->orOperator) {
         OrAST* orast = createAst<OrAST>(node, aststack.top());
-        //         qCDebug(KDEV_QMAKE) << "created orast:" << orast;
+        // qCDebug(KDEV_QMAKE) << "created orast:" << orast;
         if (node->functionArguments) {
             FunctionCallAST* ast = createAst<FunctionCallAST>(node, orast);
             aststack.push(ast);
-            //             qCDebug(KDEV_QMAKE) << "creating function call as first or-op" << ast;
+            // qCDebug(KDEV_QMAKE) << "creating function call as first or-op" << ast;
             visitNode(node->functionArguments);
-            //             qCDebug(KDEV_QMAKE) << "function call done";
+            // qCDebug(KDEV_QMAKE) << "function call done";
             aststack.pop();
             orast->scopes.append(ast);
         } else {
             SimpleScopeAST* simple = createAst<SimpleScopeAST>(node, orast);
-            //             qCDebug(KDEV_QMAKE) << "creating simple scope as first or-op";
+            // qCDebug(KDEV_QMAKE) << "creating simple scope as first or-op";
             orast->scopes.append(simple);
         }
         aststack.push(orast);
@@ -164,14 +164,14 @@ void BuildASTVisitor::visitStatement(StatementAst* node)
     DefaultVisitor::visitStatement(node);
     if (!node->isNewline) {
         StatementAST* stmt = stackPop<StatementAST>();
-        //         qCDebug(KDEV_QMAKE) << "got statement ast, setting value" << stmt;
+        // qCDebug(KDEV_QMAKE) << "got statement ast, setting value" << stmt;
         ValueAST* val = createAst<ValueAST>(node, stmt);
-        //         qCDebug(KDEV_QMAKE) << "created value ast:" << val;
+        // qCDebug(KDEV_QMAKE) << "created value ast:" << val;
         val->value = getTokenString(node->id);
-        //         qCDebug(KDEV_QMAKE) << "set value" << val << val->value;
+        // qCDebug(KDEV_QMAKE) << "set value" << val << val->value;
         setPositionForToken(node->id, val);
         if (node->isExclam) {
-            //                 qCDebug(KDEV_QMAKE) << "found exclam";
+            // qCDebug(KDEV_QMAKE) << "found exclam";
             val->value = '!' + val->value;
         }
         setIdentifierForStatement(stmt, val);

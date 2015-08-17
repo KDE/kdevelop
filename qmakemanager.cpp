@@ -434,7 +434,7 @@ Path::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
         if (!list.contains(folder->path())) {
             list << folder->path();
         }
-        //         qCDebug(KDEV_QMAKE) << "include dirs for" << item->path() << ":" << list;
+        // qCDebug(KDEV_QMAKE) << "include dirs for" << item->path() << ":" << list;
     }
     return list;
 }

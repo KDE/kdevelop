@@ -71,8 +71,7 @@ void QMakeProjectFile::setMkSpecs(QMakeMkSpecs* mkspecs)
 bool QMakeProjectFile::read()
 {
     // default values
-    // NOTE: if we already have such a var, e.g. in an include file,
-    //       we must not overwrite it here!
+    // NOTE: if we already have such a var, e.g. in an include file, we must not overwrite it here!
     if (!m_variableValues.contains("QT")) {
         m_variableValues["QT"] = QStringList() << "core"
                                                << "gui";

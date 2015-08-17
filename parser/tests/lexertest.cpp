@@ -62,10 +62,6 @@ void LexerTest::varAssignment()
     begins.removeLast();
     ends.removeLast();
 
-    //     qDebug() << project;
-    //     qDebug() << tokens << expectedtokens;
-    //     qDebug() << begins << expectedbegins;
-    //     qDebug() << ends << expectedends;
     QVERIFY(tokens == expectedtokens);
     QVERIFY(begins == expectedbegins);
     QVERIFY(ends == expectedends);
@@ -223,10 +219,6 @@ void LexerTest::functions()
     begins.removeLast();
     ends.removeLast();
 
-    //     qDebug() << project;
-    //     qDebug() << tokens << expectedtokens;
-    //     qDebug() << begins << expectedbegins;
-    //     qDebug() << ends << expectedends;
     QVERIFY(tokens == expectedtokens);
     QVERIFY(begins == expectedbegins);
     QVERIFY(ends == expectedends);
@@ -412,10 +404,6 @@ void LexerTest::scope()
     begins.removeLast();
     ends.removeLast();
 
-    //     qDebug() << project;
-    //     qDebug() << tokens << expectedtokens;
-    //     qDebug() << begins << expectedbegins;
-    //     qDebug() << ends << expectedends;
     QVERIFY(tokens == expectedtokens);
     QVERIFY(begins == expectedbegins);
     QVERIFY(ends == expectedends);
