@@ -487,6 +487,10 @@ struct Visitor
             decl = ClangHelpers::findForwardDeclaration(type, m_parentContext->context, parent);
         }
 
+        if (clang_Type_getNumTemplateArguments(type) != -1) {
+            return createClassTemplateSpecializationType(type);
+        }
+
         auto t = new StructureType;
         t->setDeclaration(decl.data());
         return t;
@@ -594,7 +598,8 @@ struct Visitor
         return makeType(clangType, cursor);
     }
 
-    AbstractType* createClassTemplateSpecializationType(CXType type)
+    /// @param declaration an optional declaration that will be associated with created type
+    AbstractType* createClassTemplateSpecializationType(CXType type, const DeclarationPointer declaration = {})
     {
         auto numTA = clang_Type_getNumTemplateArguments(type);
         Q_ASSERT(numTA != -1);
@@ -623,12 +628,7 @@ struct Visitor
                     currentType = t;
                 }
             } else {
-                if (clang_Type_getNumTemplateArguments(argumentType) != -1) {
-                    // E.g. type< type<int> >. Use a delayed type for now.
-                    currentType = createDelayedType(argumentType);
-                } else {
-                    currentType = makeType(argumentType, typeDecl);
-                }
+                currentType = makeType(argumentType, typeDecl);
             }
 
             if (currentType) {
@@ -636,7 +636,7 @@ struct Visitor
             }
         }
 
-        auto decl = findDeclaration(typeDecl);
+        auto decl = declaration ? declaration : findDeclaration(typeDecl);
 
         DUChainReadLocker lock;
         cst->setDeclaration(decl.data());

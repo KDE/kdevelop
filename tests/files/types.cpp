@@ -106,6 +106,6 @@ int main(int argc, char** argv)
     const volatile auto autoVar2 = 321;
     /// "type" : { "toString" : "Class_volatile_const< int >" }
     Class_volatile_const<int> instance;
-    /// "type" : { "toString" : "TemplateTest< TemplateTest< int, 100 >, 30 >" }
-    TemplateTest<TemplateTest<int, 100>, 30> tst;
+    /// "type" : { "toString" : "TemplateTest< const TemplateTest< int, 100 >&, 30 >" }
+    TemplateTest<const TemplateTest<int, 100>&, 30> tst;
 }
