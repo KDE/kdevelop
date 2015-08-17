@@ -93,7 +93,8 @@ bool isReplaceWithArrowProblem(const QByteArray& description)
 
 ClangDiagnosticEvaluator::DiagnosticType ClangDiagnosticEvaluator::diagnosticType(CXDiagnostic diagnostic)
 {
-    const auto description = ClangString(clang_getDiagnosticSpelling(diagnostic)).toByteArray();
+    const ClangString str(clang_getDiagnosticSpelling(diagnostic));
+    const auto description = QByteArray::fromRawData(str.c_str(), qstrlen(str.c_str()));
 
     if (isDeclarationProblem(description)) {
         return UnknownDeclarationProblem;
