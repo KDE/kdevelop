@@ -48,6 +48,7 @@ OutlineNode::OutlineNode(DUContext* ctx, const QString& name, OutlineNode* paren
     , m_parent(parent)
 {
     KTextEditor::CodeCompletionModel::CompletionProperties prop;
+    qCDebug(PLUGIN_OUTLINE, "ctx->type=%d", ctx->type());
     switch (ctx->type()) {
         case KDevelop::DUContext::Class:
             prop |= KTextEditor::CodeCompletionModel::Class;
@@ -225,7 +226,31 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
             // namespace Foo { class Bar; }
             // class Foo::Bar { ... };
             // TODO: icon and location for the namespace
-            m_children.emplace_back(childContext, ctxName, this);
+            if (childContext->type() == DUContext::ContextType::Helper) {
+                // This context could be for a definition of an existing class method.
+                // If we don't merge all those context end up with a tree like this:
+                //  +-+- FooClass
+                //  | \-- method1()
+                //  +-+- FooClass
+                //  | \-- method2()
+                //  \ OtherStuff
+                auto it = std::find_if(m_children.begin(), m_children.end(), [childContext](const OutlineNode& node) {
+                    if (DUContext* ctx = dynamic_cast<DUContext*>(node.duChainObject())) {
+                        return ctx->equalScopeIdentifier(childContext);
+                    }
+                    return false;
+                });
+                if (it != m_children.end()) {
+                    it->appendContext(childContext, top);
+                }
+                else {
+                    // TODO: get the correct icon for the context
+                    m_children.emplace_back(childContext, ctxName, this);
+                }
+            } else {
+                // just add the context
+                m_children.emplace_back(childContext, ctxName, this);
+            }
         }
     }
     // we now need to sort since sometimes the elements from ctx->localDeclarations(top)

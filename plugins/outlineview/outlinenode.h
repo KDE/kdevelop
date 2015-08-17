@@ -53,7 +53,7 @@ public:
     int indexOf(const OutlineNode* child) const;
     static std::unique_ptr<OutlineNode> fromTopContext(KDevelop::TopDUContext* ctx);
     static std::unique_ptr<OutlineNode> dummyNode();
-    KDevelop::DUChainBase* duChainObject();
+    KDevelop::DUChainBase* duChainObject() const;
     friend void swap(OutlineNode& n1, OutlineNode& n2);
 private:
     QString m_cachedText;
@@ -105,7 +105,7 @@ inline QString OutlineNode::text() const
     return m_cachedText;
 }
 
-inline KDevelop::DUChainBase* OutlineNode::duChainObject()
+inline KDevelop::DUChainBase* OutlineNode::duChainObject() const
 {
     Q_ASSERT(KDevelop::DUChain::lock()->currentThreadHasReadLock());
     return m_declOrContext.data();
