@@ -48,7 +48,6 @@ OutlineNode::OutlineNode(DUContext* ctx, const QString& name, OutlineNode* paren
     , m_parent(parent)
 {
     KTextEditor::CodeCompletionModel::CompletionProperties prop;
-    qCDebug(PLUGIN_OUTLINE, "ctx->type=%d", ctx->type());
     switch (ctx->type()) {
         case KDevelop::DUContext::Class:
             prop |= KTextEditor::CodeCompletionModel::Class;
