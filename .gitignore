@@ -5,6 +5,7 @@ build
 *~
 *.bak
 *.orig
+*.pyc
 *.rej
 doxygen.log
 Doxyfile
