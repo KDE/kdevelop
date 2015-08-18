@@ -77,8 +77,15 @@ set_package_properties(Grantlee5 PROPERTIES
     PURPOSE "Grantlee templating library, needed for file templates"
     URL "http://www.grantlee.org/")
 
-add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQT_NO_URL_CAST_FROM_STRING)
-add_definitions(-DQT_DEPRECATED_WARNINGS -DQT_DISABLE_DEPRECATED_BEFORE=0x050400)
+add_definitions(
+    -DQT_DEPRECATED_WARNINGS
+    -DQT_DISABLE_DEPRECATED_BEFORE=0x050400
+    -DQT_NO_URL_CAST_FROM_STRING
+    -DQT_RESTRICTED_CAST_FROM_ASCII
+    -DQT_STRICT_ITERATORS
+    -DQT_USE_FAST_CONCATENATION
+    -DQT_USE_FAST_OPERATOR_PLUS
+)
 
 # Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
 # See discussion: http://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html
