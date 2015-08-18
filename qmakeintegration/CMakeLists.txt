@@ -6,10 +6,6 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# FIXME
-remove_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQT_NO_URL_CAST_FROM_STRING)
-remove_definitions(-DQT_DEPRECATED_WARNINGS -DQT_DISABLE_DEPRECATED_BEFORE=0x050400)
-
 add_subdirectory(parser)
 add_subdirectory(tests)
 

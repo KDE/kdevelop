@@ -35,6 +35,8 @@
 #include <QDir>
 #include <QTemporaryDir>
 
+#include <algorithm>
+
 QTEST_MAIN(TestQMakeFile);
 
 typedef QHash<QString, QString> DefineHash;
@@ -62,7 +64,10 @@ char* toString(const QMakeFile::VariableMap& variables)
     QByteArray ba = "VariableMap(";
     QMakeFile::VariableMap::const_iterator it = variables.constBegin();
     while (it != variables.constEnd()) {
-        ba += "[" + it.key() + "] = " + toString(it.value());
+        ba += "[";
+        ba += it.key().toLocal8Bit();
+        ba += "] = ";
+        ba += toString(it.value());
         ++it;
         if (it != variables.constEnd()) {
             ba += ", ";
@@ -341,7 +346,7 @@ void TestQMakeFile::qtIncludeDirs_data()
             if (module != "core") {
                 expected << "core";
             }
-            QTest::newRow(qPrintable(module)) << ("QT = " + module) << expected;
+            QTest::newRow(qPrintable(module)) << QString("QT = %1").arg(module) << expected;
         }
     }
 }
@@ -572,8 +577,8 @@ void TestQMakeFile::globbing()
     foreach (QString path, pro.files()) {
         actual << path.remove(tempDir.path() + '/');
     }
-    qSort(actual);
-    qSort(matches);
+    std::sort(actual.begin(), actual.end());
+    std::sort(matches.begin(), matches.end());
     QCOMPARE(actual, matches);
 }
 
