@@ -1,5 +1,3 @@
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9039 )
-
 set(qmakebuilder_SRCS
     qmakebuilder.cpp
     qmakebuilderpreferences.cpp
