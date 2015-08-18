@@ -46,7 +46,7 @@
 #include <project/projectmodel.h>
 #include <serialization/indexedstring.h>
 
-#include "qmakebuilder/iqmakebuilder.h"
+#include <projectbuilders/qmakebuilder/iqmakebuilder.h>
 
 #include "qmakemodelitems.h"
 #include "qmakeprojectfile.h"
