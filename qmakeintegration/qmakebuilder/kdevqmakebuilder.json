@@ -1,0 +1,49 @@
+{
+    "KPlugin": {
+        "Description": "Builds QMake Projects", 
+        "Description[ca]": "Construeix projectes QMake", 
+        "Description[de]": "Erstellt QMake-Projekte", 
+        "Description[es]": "Compila proyectos de QMake", 
+        "Description[gl]": "Constrúe proxectos QMake.", 
+        "Description[nl]": "Bouwt QMake-projecten", 
+        "Description[pl]": "Buduje projekty QMake", 
+        "Description[pt]": "Cria projectos do QMake", 
+        "Description[pt_BR]": "Compila projetos do QMake", 
+        "Description[sk]": "Prekladá projekty QMake", 
+        "Description[sv]": "Bygger QMake-projekt", 
+        "Description[tr]": "QMake Projelerini Derler", 
+        "Description[uk]": "Збирає проекти QMake", 
+        "Description[x-test]": "xxBuilds QMake Projectsxx", 
+        "Description[zh_CN]": "构建 QMake 工程", 
+        "Icon": "gear", 
+        "Id": "KDevQMakeBuilder", 
+        "Name": "QMake Project Builder", 
+        "Name[ca]": "Constructor de projecte QMake", 
+        "Name[de]": "Ersteller für QMake-Projekte", 
+        "Name[es]": "Compilador de proyectos QMake", 
+        "Name[gl]": "Construtor de proxectos QMake", 
+        "Name[nl]": "QMake-projectbouwer", 
+        "Name[pl]": "Budowanie projektu QMake", 
+        "Name[pt]": "Construtor de Projectos do QMake", 
+        "Name[pt_BR]": "Construtor de projetos do QMake", 
+        "Name[sk]": "Prekladač projektov QMake", 
+        "Name[sv]": "QMake-projektbyggverktyg", 
+        "Name[tr]": "QMake Proje Oluşturucu", 
+        "Name[uk]": "Засіб збирання проектів QMake", 
+        "Name[x-test]": "xxQMake Project Builderxx", 
+        "Name[zh_CN]": "QMake 工程构建器", 
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    }, 
+    "X-KDevelop-Category": "Project", 
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IOutputView", 
+        "org.kdevelop.IMakeBuilder"
+    ], 
+    "X-KDevelop-Interfaces": [
+        "org.kdevelop.IQMakeBuilder"
+    ], 
+    "X-KDevelop-Mode": "NoGUI", 
+    "X-KDevelop-ProjectBuilder": "QMake"
+}

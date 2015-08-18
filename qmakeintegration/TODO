@@ -1,0 +1,20 @@
+So the basic way of how I imagined this should work is:
+
+a) run qmake to find out the place of the Qt installation, in particular
+the include, lib and plugin dirs and most importantly the mkspecs dir
+and which mkspec to use (possibly use-configurable).
+b) read and parse the .prf files from mkspecs/features, usually starting with
+qt_config.prf this will declare a lot of the QMake functions and they're
+implemented with qmake itself
+c) read and parse the files for the mkspec (qmake.conf, all the included
+files), this should produce a couple base variables
+d) start with the top-level qmake file from the project (this might
+again need user-specification via gui which file should be used)
+e) during parsing, evaluate all the known functions, so we automatically
+dive into include() directives, can do variable substitution and also
+the list-stuff qmake supports
+
+Thats the theory, whats there right now is a full qmake parser (no known
+bugs or missing features from qmake) and the start of some basic
+evaluation. I've actually started with the variable substitution.
+
