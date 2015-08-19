@@ -1,6 +1,7 @@
 /*
  * This file is part of KDevelop
  * Copyright 2012 Milian Wolff <mail@milianw.de>
+ * Copyright 2015 Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -175,10 +176,38 @@ void TestPath::bench_hash()
     }
 }
 
+/// Invoke @p op on URL @p base, but preserve drive letter if @p op removes it
+template<typename Func>
+QUrl preserveWindowsDriveLetter(const QUrl& base, Func op)
+{
+#ifndef Q_OS_WIN
+    return op(base);
+#else
+    // only apply to local files
+    if (!base.isLocalFile()) {
+        return op(base);
+    }
+
+    // save drive letter
+    const QString windowsDriveLetter = base.toLocalFile().mid(0, 2);
+    QUrl url = op(base);
+    // restore drive letter
+    if (url.toLocalFile().startsWith('/')) {
+        url = QUrl::fromLocalFile(windowsDriveLetter + url.toLocalFile());
+    }
+    return url;
+#endif
+}
+
+QUrl resolvedUrl(const QUrl& base, const QUrl& relative)
+{
+    return preserveWindowsDriveLetter(base, [&](const QUrl& url) { return url.resolved(relative); });
+}
+
 QUrl comparableUpUrl(const QUrl& url)
 {
-    QUrl ret = KIO::upUrl(url).adjusted(QUrl::StripTrailingSlash | QUrl::RemovePassword);
-    return ret;
+    QUrl ret = preserveWindowsDriveLetter(url, [&](const QUrl& url) { return KIO::upUrl(url).adjusted(QUrl::RemovePassword); });
+    return ret.adjusted(QUrl::StripTrailingSlash);
 }
 
 void TestPath::testPath()
@@ -197,11 +226,11 @@ void TestPath::testPath()
         QCOMPARE(optUrl.toUrl(), url);
     }
     QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
-    QCOMPARE(optUrl.pathOrUrl(), url.toDisplayString(QUrl::PreferLocalFile));
+    QCOMPARE(optUrl.pathOrUrl(), toUrlOrLocalFile(url, QUrl::RemovePassword));
     QCOMPARE(optUrl.isValid(), url.isValid());
     QCOMPARE(optUrl.isEmpty(), url.isEmpty());
     QCOMPARE(optUrl.lastPathSegment(), url.fileName());
-    QCOMPARE(optUrl.path(), url.path());
+    QCOMPARE(optUrl.path(), url.isLocalFile() ? url.toLocalFile() : url.path());
     QCOMPARE(optUrl.parent().toUrl(), comparableUpUrl(url));
     QCOMPARE(optUrl.toLocalFile(), url.toLocalFile());
 
@@ -224,6 +253,7 @@ void TestPath::testPath()
         QVERIFY(optUrl.isParentOf(relativePath));
         QVERIFY(!relativePath.isParentOf(optUrl));
 
+#ifndef Q_OS_WIN
         Path absolutePath(optUrl, "/laa/loo");
         QCOMPARE(absolutePath.path(), QLatin1String("/laa/loo"));
         QCOMPARE(url.resolved(QUrl("/laa/loo")).path(), QLatin1String("/laa/loo"));
@@ -231,6 +261,7 @@ void TestPath::testPath()
         Path absolutePath2(optUrl, "/");
         QCOMPARE(absolutePath2.path(), QLatin1String("/"));
         QCOMPARE(url.resolved(QUrl("/")).path(), QLatin1String("/"));
+#endif
 
         Path unrelatedPath("https://test@blubasdf.com:12345/");
         QCOMPARE(optUrl.relativePath(unrelatedPath), unrelatedPath.pathOrUrl());
@@ -256,13 +287,13 @@ void TestPath::testPath()
     }
     optUrl.addPath("test/foo/bar");
     QCOMPARE(optUrl.lastPathSegment(), url.fileName());
-    QCOMPARE(optUrl.path(), url.path());
+    QCOMPARE(optUrl.path(), url.isLocalFile() ? url.toLocalFile() : url.path());
 
     url = url.adjusted(QUrl::RemoveFilename);
     url.setPath(url.path() + "lalalala_adsf.txt");
     optUrl.setLastPathSegment("lalalala_adsf.txt");
     QCOMPARE(optUrl.lastPathSegment(), url.fileName());
-    QCOMPARE(optUrl.path(), url.path());
+    QCOMPARE(optUrl.path(), url.isLocalFile() ? url.toLocalFile() : url.path());
 
     QCOMPARE(optUrl.parent().toUrl(), comparableUpUrl(url));
 
@@ -283,15 +314,24 @@ void TestPath::testPath_data()
 {
     QTest::addColumn<QString>("input");
 
+#ifndef Q_OS_WIN
     QTest::newRow("invalid") << "";
     QTest::newRow("path") << "/tmp/foo/asdf.txt";
     QTest::newRow("path-folder") << "/tmp/foo/asdf/";
     QTest::newRow("root") << "/";
     QTest::newRow("clean-path") << "/tmp/..///asdf/";
-    QTest::newRow("remote-root") << "http://www.test.com/";
-    QTest::newRow("http") << "http://www.test.com/tmp/asdf.txt";
     QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
     QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
+#else
+    QTest::newRow("path") << "C:/tmp/foo/asdf.txt";
+    QTest::newRow("path-folder") << "C:/tmp/foo/asdf/";
+    QTest::newRow("root") << "C:/";
+    QTest::newRow("clean-path") << "C:/tmp/..///asdf/";
+    QTest::newRow("file") << "file:///C:tmp/foo/asdf.txt";
+    QTest::newRow("file-folder") << "file:///C:tmp/foo/bar/";
+#endif
+    QTest::newRow("remote-root") << "http://www.test.com/";
+    QTest::newRow("http") << "http://www.test.com/tmp/asdf.txt";
     QTest::newRow("ftps") << "ftps://user@host.com/tmp/foo/asdf.txt";
     QTest::newRow("password") << "ftps://user:password@host.com/tmp/asdf.txt";
     QTest::newRow("port") << "http://localhost:8080/foo/bar/test.txt";
@@ -370,22 +410,29 @@ void TestPath::testPathAddData()
 {
     QFETCH(QString, pathToAdd);
 
-    const QStringList bases = QStringList()
-        << "/foo/bar/asdf/"
-        << "file:///foo/bar/asdf/"
-        << "http://www.asdf.com/foo/bar/asdf/"
-        << "/"
-        ;
+    const QStringList bases = {
+#ifndef Q_OS_WIN
+        "/",
+        "/foo/bar/asdf/",
+        "file:///foo/bar/asdf/",
+#else
+        "C:/",
+        "C:/foo/bar/asdf/",
+        "file:///C:/foo/bar/asdf/",
+#endif
+        "http://www.asdf.com/foo/bar/asdf/",
+    };
+
     foreach(const QString& base, bases) {
         QUrl baseUrl = QUrl::fromUserInput(base);
         if (QDir::isRelativePath(pathToAdd)) {
-            baseUrl = baseUrl.resolved(QUrl(pathToAdd));
+            baseUrl = resolvedUrl(baseUrl, QUrl(pathToAdd));
         } else {
             baseUrl.setPath(baseUrl.path() + pathToAdd);
         }
+
         baseUrl = baseUrl.adjusted(QUrl::NormalizePathSegments);
         // QUrl::StripTrailingSlash converts file:/// to file: which is not what we want
-        qDebug() << baseUrl;
         if (baseUrl.path() != QLatin1String("/")) {
             baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
         }
@@ -393,7 +440,7 @@ void TestPath::testPathAddData()
         Path basePath(base);
         basePath.addPath(pathToAdd);
 
-        QCOMPARE(basePath.pathOrUrl(), baseUrl.toDisplayString(QUrl::PreferLocalFile));
+        QCOMPARE(basePath.pathOrUrl(), toUrlOrLocalFile(baseUrl));
         QCOMPARE(basePath.toUrl(), baseUrl);
     }
 }
@@ -441,6 +488,7 @@ void TestPath::testPathBaseCtor_data()
     QTest::addColumn<QString>("expected");
 
     QTest::newRow("empty") << "" << "" << "";
+#ifndef Q_OS_WIN
     QTest::newRow("root-empty") << "/" << "" << "/";
     QTest::newRow("root-root") << "/" << "/" << "/";
     QTest::newRow("root-relative") << "/" << "bar" << "/bar";
@@ -448,6 +496,16 @@ void TestPath::testPathBaseCtor_data()
     QTest::newRow("empty-relative") << "" << "bar/foo/" << "/bar/foo";
     QTest::newRow("path-relative") << "/foo/bar" << "bar/foo" << "/foo/bar/bar/foo";
     QTest::newRow("path-absolute") << "/foo/bar" << "/bar/foo" << "/bar/foo";
+#else
+    QTest::newRow("root-empty") << "C:/" << "" << "C:";
+    QTest::newRow("root1-empty") << "C:" << "" << "C:";
+    QTest::newRow("root-root") << "C:/" << "C:/" << "C:";
+    QTest::newRow("root-relative") << "C:/" << "bar" << "C:/bar";
+    QTest::newRow("root1-relative") << "C:" << "bar" << "C:/bar";
+    QTest::newRow("root-relative-dirty") << "C:/" << "bar//foo/a/.." << "C:/bar/foo";
+    QTest::newRow("path-relative") << "C:/foo/bar" << "bar/foo" << "C:/foo/bar/bar/foo";
+    QTest::newRow("path-absolute") << "C:/foo/bar" << "C:/bar/foo" << "C:/bar/foo";
+#endif
     QTest::newRow("remote-path-absolute") << "http://foo.com/foo/bar" << "/bar/foo" << "http://foo.com/bar/foo";
     QTest::newRow("remote-path-relative") << "http://foo.com/foo/bar" << "bar/foo" << "http://foo.com/foo/bar/bar/foo";
 }
@@ -480,7 +538,7 @@ void TestPath::testPathCd()
     }
     url = url.adjusted(QUrl::NormalizePathSegments);
 
-    QCOMPARE(changed.pathOrUrl(), url.toDisplayString(QUrl::PreferLocalFile | QUrl::StripTrailingSlash));
+    QCOMPARE(changed.pathOrUrl(), toUrlOrLocalFile(url, QUrl::StripTrailingSlash));
 }
 
 void TestPath::testPathCd_data()
@@ -488,7 +546,15 @@ void TestPath::testPathCd_data()
     QTest::addColumn<QString>("base");
     QTest::addColumn<QString>("change");
 
-    const QVector<QString> bases{"", "/foo", "/foo/bar/asdf", "http://foo.com/", "http://foo.com/foo", "http://foo.com/foo/bar/asdf"};
+    const QVector<QString> bases{
+        "",
+#ifndef Q_OS_WIN
+        "/foo", "/foo/bar/asdf",
+#else
+        "C:/foo", "C:/foo/bar/asdf",
+#endif
+        "http://foo.com/", "http://foo.com/foo", "http://foo.com/foo/bar/asdf"
+    };
     foreach (const QString& base, bases) {
         QTest::newRow(qstrdup(qPrintable(base + "-"))) << base << "";
         QTest::newRow(qstrdup(qPrintable(base + "-.."))) << base << "..";
@@ -501,8 +567,15 @@ void TestPath::testPathCd_data()
         QTest::newRow(qstrdup(qPrintable(base + "-foo/.."))) << base << "foo/..";
         QTest::newRow(qstrdup(qPrintable(base + "-foo/"))) << base << "foo/";
         QTest::newRow(qstrdup(qPrintable(base + "-foo/../bar"))) << base << "foo/../bar";
+#ifdef Q_OS_WIN
+        if (!base.startsWith("C:/") ) {
+            // only add next rows for remote URLs on Windows
+#endif
         QTest::newRow(qstrdup(qPrintable(base + "-/foo"))) << base << "/foo";
         QTest::newRow(qstrdup(qPrintable(base + "-/foo/../bar"))) << base << "/foo/../bar";
+#ifdef Q_OS_WIN
+        }
+#endif
     }
 }
 

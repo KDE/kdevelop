@@ -1,6 +1,7 @@
 /*
  * This file is part of KDevelop
  * Copyright 2012 Milian Wolff <mail@milianw.de>
+ * Copyright 2015 Kevin Funk <kfunk@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +29,44 @@
 #include <language/util/kdevhash.h>
 
 using namespace KDevelop;
+
+namespace {
+
+inline bool isWindowsDriveLetter(const QString& segment)
+{
+#ifdef Q_OS_WIN
+    return segment.size() == 2 && segment.at(0).isLetter() && segment.at(1) == ':';
+#else
+    return false;
+#endif
+}
+
+inline bool isAbsolutePath(const QString& path)
+{
+    if (path.startsWith('/')) {
+        return true; // Even on Windows: Potentially a path of a remote URL
+    }
+
+#ifdef Q_OS_WIN
+    return path.size() >= 2 && path.at(0).isLetter() && path.at(1) == ':';
+#else
+    return false;
+#endif
+}
+
+}
+
+QString KDevelop::toUrlOrLocalFile(const QUrl& url, QUrl::FormattingOptions options)
+{
+    const auto str = url.toString(options | QUrl::PreferLocalFile);
+#ifdef Q_OS_WIN
+    // potentially strip leading slash
+    if (url.isLocalFile() && !str.isEmpty() && str[0] == '/') {
+        return str.mid(1); // expensive copying, but we'd like toString(...) to properly format everything first
+    }
+#endif
+    return str;
+}
 
 Path::Path()
 {
@@ -94,7 +133,7 @@ void Path::init(QUrl url)
 Path::Path(const Path& other, const QString& child)
 : m_data(other.m_data)
 {
-    if (child.startsWith('/')) {
+    if (isAbsolutePath(child)) {
         // absolute path: only share the remote part of @p other
         m_data.resize(isRemote() ? 1 : 0);
     }
@@ -319,15 +358,20 @@ static void cleanPath(QVector<QString>* data, const bool isRemote)
     if (data->isEmpty()) {
         return;
     }
-    QVector<QString>::iterator it = data->begin();
     const int startOffset = isRemote ? 1 : 0;
-    it += startOffset;
+    const auto start = data->begin() + startOffset;
+
+    auto it = start;
     while(it != data->end()) {
         if (*it == QLatin1String("..")) {
-            if (it == (data->begin() + startOffset)) {
+            if (it == start) {
                 it = data->erase(it);
             } else {
-                it = data->erase(it - 1, it + 1);
+                if (isWindowsDriveLetter(*(it - 1))) {
+                    it = data->erase(it); // keep the drive letter
+                } else {
+                    it = data->erase(it - 1, it + 1);
+                }
             }
         } else if (*it == QLatin1String(".")) {
             it = data->erase(it);
@@ -394,7 +438,10 @@ Path Path::parent() const
     if (m_data.size() == (1 + (isRemote() ? 1 : 0))) {
         // keep the root item, but clear it, otherwise we'd make the path invalid
         // or a URL a local path
-        ret.m_data.last().clear();
+        auto& root = ret.m_data.last();
+        if (!isWindowsDriveLetter(root)) {
+            root.clear();
+        }
     } else {
         ret.m_data.pop_back();
     }
