@@ -12,7 +12,14 @@ set(qmakecommon_SRCS
     debug.cpp
     qmakebuilddirchooser.cpp
     qmakebuilddirchooserdialog.cpp
+    qmakecache.cpp
     qmakeconfig.cpp
+    qmakefile.cpp
+    qmakefilevisitor.cpp
+    qmakeincludefile.cpp
+    qmakemkspecs.cpp
+    qmakeprojectfile.cpp
+    variablereferenceparser.cpp
 )
 ki18n_wrap_ui(qmakecommon_SRCS qmakebuilddirchooser.ui)
 add_library(kdevqmakecommon STATIC ${qmakecommon_SRCS})
@@ -21,16 +28,8 @@ target_link_libraries(kdevqmakecommon
     kdevqmakeparser)
 
 set(kdevqmakemanager_PART_SRCS
-    debug.cpp
     qmakemanager.cpp
     qmakemodelitems.cpp
-    qmakeprojectfile.cpp
-    qmakeincludefile.cpp
-    qmakemkspecs.cpp
-    qmakefile.cpp
-    qmakefilevisitor.cpp
-    qmakecache.cpp
-    variablereferenceparser.cpp
     qmakejob.cpp
 )
 kdevplatform_add_plugin(kdevqmakemanager JSON kdevqmakemanager.json SOURCES ${kdevqmakemanager_PART_SRCS})
