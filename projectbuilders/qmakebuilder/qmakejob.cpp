@@ -21,8 +21,7 @@
 
 #include "qmakejob.h"
 
-#include "../qmakeconfig.h"
-
+#include "qmakeconfig.h"
 
 #include <interfaces/iproject.h>
 #include <outputview/ioutputview.h>

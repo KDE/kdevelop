@@ -21,7 +21,7 @@
 #include "qmakebuilder.h"
 
 #include "qmakebuilderpreferences.h"
-#include "../qmakeconfig.h"
+#include "qmakeconfig.h"
 
 #include <QtCore/QStringList>
 #include <QDebug>

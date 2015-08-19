@@ -14,6 +14,7 @@ target_link_libraries(kdevqmakebuilder
     KDev::OutputView
     KDev::Util
     KDev::Project
+    kdevqmakecommon
 )
 
 install( FILES iqmakebuilder.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevelop/qmake COMPONENT Devel)

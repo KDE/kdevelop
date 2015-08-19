@@ -33,9 +33,9 @@
 #include <KJobWidgets>
 
 #include "ui_qmakeconfig.h"
-#include "../qmakebuilddirchooser.h"
-#include "../qmakebuilddirchooserdialog.h"
-#include "../qmakeconfig.h"
+#include "qmakebuilddirchooser.h"
+#include "qmakebuilddirchooserdialog.h"
+#include "qmakeconfig.h"
 #include "qmakebuilderconfig.h"
 #include "qmakebuilderdebug.h"
 
