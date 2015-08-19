@@ -55,6 +55,11 @@ void TestIndexedString::testUrl_data()
   QTest::newRow("http://foo.com/") << QUrl("http://foo.com/") << QStringLiteral("http://foo.com/");
   QTest::newRow("http://foo.com/bar/asdf") << QUrl("http://foo.com/bar/asdf") << QStringLiteral("http://foo.com/bar/asdf");
   QTest::newRow("file:///bar/asdf") << QUrl("file:///bar/asdf") << QStringLiteral("/bar/asdf");
+
+#ifdef Q_OS_WIN
+  // Make sure we're not running into https://bugreports.qt.io/browse/QTBUG-41729
+  QTest::newRow("file:///C:/bar/asdf") << QUrl("file:///C:/bar/asdf") << QStringLiteral("C:/bar/asdf");
+#endif
 }
 
 void TestIndexedString::testUrl()

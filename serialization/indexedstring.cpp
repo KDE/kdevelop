@@ -144,7 +144,7 @@ IndexedString::IndexedString( char c ) {
 
 IndexedString::IndexedString( const QUrl& url ) {
   Q_ASSERT(url.isEmpty() || !url.isRelative());
-  QByteArray array(url.toString(QUrl::PreferLocalFile).toUtf8());
+  QByteArray array((url.isLocalFile() ? url.toLocalFile() : url.toString()).toUtf8());
 
   const char* str = array.constData();
 
