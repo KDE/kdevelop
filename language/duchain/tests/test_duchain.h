@@ -34,7 +34,10 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+#ifndef Q_OS_WIN
+	// Causes stack overflow on Windows (MSVC2015)
     void testStringSets();
+#endif
     void testSymbolTableValid();
     void testIndexedStrings();
     void testImportStructure();

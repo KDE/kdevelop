@@ -89,6 +89,7 @@ void TestDUChain::cleanupTestCase()
   TestCore::shutdown();
 }
 
+#ifndef Q_OS_WIN
 void TestDUChain::testStringSets() {
 
   const unsigned int setCount = 8;
@@ -361,6 +362,7 @@ void TestDUChain::testStringSets() {
              << " generic-set: " << float(genericDifferenceTime);
   }
 }
+#endif
 
 void TestDUChain::testSymbolTableValid() {
   DUChainReadLocker lock(DUChain::lock());
