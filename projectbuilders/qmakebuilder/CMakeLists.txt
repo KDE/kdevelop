@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevqmakebuilder\")
+
 set(qmakebuilder_SRCS
     qmakebuilder.cpp
     qmakebuilderpreferences.cpp
