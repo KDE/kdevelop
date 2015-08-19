@@ -108,7 +108,10 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
                     } else {
                         m_cachedText += QStringLiteral(", ");
                     }
-                    m_cachedText += childDecl->abstractType()->toString();
+
+                    if (childDecl->abstractType()) {
+                        m_cachedText += childDecl->abstractType()->toString();
+                    }
                     auto ident = childDecl->identifier();
                     if (!ident.isEmpty()) {
                         m_cachedText += ' ' +  ident.toString();
