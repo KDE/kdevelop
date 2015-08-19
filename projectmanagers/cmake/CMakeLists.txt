@@ -68,7 +68,7 @@ set( cmakesettings_SRCS
   settings/cmakecachemodel.cpp
   debug.cpp
 )
-qt5_wrap_ui(cmakesettings_SRCS settings/cmakebuildsettings.ui)
+ki18n_wrap_ui(cmakesettings_SRCS settings/cmakebuildsettings.ui)
 
 set( cmakedoc_SRCS
   cmakedocumentation.cpp
