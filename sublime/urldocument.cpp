@@ -68,7 +68,7 @@ QWidget *UrlDocument::createViewWidget(QWidget *parent)
 
 QString UrlDocument::documentType() const
 {
-    return "Url";
+    return QStringLiteral("Url");
 }
 
 QString UrlDocument::documentSpecifier() const

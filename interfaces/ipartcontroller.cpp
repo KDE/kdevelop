@@ -61,7 +61,7 @@ KPluginFactory* IPartController::findPartFactory ( const QString& mimetype, cons
         {
             ptr = offers.first();
         }
-        KPluginLoader loader( QFile::encodeName( ptr->library() ) );
+        KPluginLoader loader( ptr->library() );
         return loader.factory();
     }
 

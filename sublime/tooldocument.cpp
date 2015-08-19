@@ -60,7 +60,7 @@ QWidget *ToolDocument::createViewWidget(QWidget *parent)
 
 QString ToolDocument::documentType() const
 {
-    return "Tool";
+    return QStringLiteral("Tool");
 }
 
 QString ToolDocument::documentSpecifier() const
