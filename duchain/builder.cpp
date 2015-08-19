@@ -494,7 +494,7 @@ struct Visitor
         }
 
         if (clang_Type_getNumTemplateArguments(type) != -1) {
-            return createClassTemplateSpecializationType(type);
+            return createClassTemplateSpecializationType(type, decl);
         }
 
         auto t = new StructureType;
