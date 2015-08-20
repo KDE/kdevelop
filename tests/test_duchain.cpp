@@ -1,6 +1,7 @@
 /*
  * Copyright 2014  Milian Wolff <mail@milianw.de>
  * Copyright 2014  Kevin Funk <kfunk@kde.org>
+ * Copyright 2015  Sergey Kalinichev <kalinichev.so.0@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
