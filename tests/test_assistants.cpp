@@ -358,9 +358,8 @@ void TestAssistants::testSignatureAssistant()
 
         if (stateChange.result == SHOULD_ASSIST) {
             QEXPECT_FAIL("swap_args_definition_side", "Parameters order is not tracked anywhere", Abort);
-            QVERIFY(staticAssistantsManager()->activeAssistant());
             QEXPECT_FAIL("change_function_type", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't parse the code...", Abort);
-            QVERIFY(!staticAssistantsManager()->activeAssistant()->actions().isEmpty());
+            QVERIFY(staticAssistantsManager()->activeAssistant() && !staticAssistantsManager()->activeAssistant()->actions().isEmpty());
         } else {
             QVERIFY(!staticAssistantsManager()->activeAssistant() || staticAssistantsManager()->activeAssistant()->actions().isEmpty());
         }
