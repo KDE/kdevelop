@@ -25,21 +25,12 @@ typedef int myTypedef;
 /// "kind" : "Type"
 using myTypeAlias = int;
 
-// Test for CXType_DependentSizedArray
-template<typename T>
-struct Class
+class Friend;
+class Class
 {
-    /// "toString" : "char[] data"
-    char data[10 * sizeof(T)];
+    /// "type" : { "toString" : "Friend", "EXPECT_FAIL": {"toString": "FriendDecl is not accessible through LibClang"} }
+    friend class Friend;
 };
-
-template<typename T>
-struct Class_volatile_const
-{};
-
-template <typename T, int i = 100>
-class TemplateTest
-{};
 
 /// "toString" : "int main (int, char**)"
 int main(int argc, char** argv)
@@ -104,8 +95,4 @@ int main(int argc, char** argv)
     auto autoVar = 123;
     /// "toString" : "const volatile auto autoVar2"
     const volatile auto autoVar2 = 321;
-    /// "type" : { "toString" : "Class_volatile_const< int >" }
-    Class_volatile_const<int> instance;
-    /// "type" : { "toString" : "TemplateTest< const TemplateTest< int, 100 >&, 30 >" }
-    TemplateTest<const TemplateTest<int, 100>&, 30> tst;
 }
