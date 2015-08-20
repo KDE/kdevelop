@@ -156,6 +156,9 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
     QEXPECT_FAIL("look-ahead function primary type argument", "No API in LibClang to determine expected code completion type", Continue);
     QEXPECT_FAIL("look-ahead template parameter substitution", "No parameters substitution so far", Continue);
     QEXPECT_FAIL("look-ahead auto item", "Auto type, like many other types, is not exposed through LibClang. We assign DelayedType to it instead of IdentifiedType", Continue);
+    QEXPECT_FAIL("deleted-copy-ctor", "There doesn't seem to be any API to see if a function is explicitly deleted", Continue);
+    QEXPECT_FAIL("deleted-overload-member", "There doesn't seem to be any API to see if a function is explicitly deleted", Continue);
+    QEXPECT_FAIL("deleted-overload-global", "There doesn't seem to be any API to see if a function is explicitly deleted", Continue);
     QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
 
@@ -671,7 +674,21 @@ void TestCodeCompletion::testImplement_data()
 
     QTest::newRow("multiple-methods")
         << "class Foo { int bar(); void foo(); char asdf() const; };"
-        << CompletionItems{{3, 1}, {"Foo::asdf() const", "Foo::bar()", "Foo::foo()"}};
+        << CompletionItems{{1, 1}, {"Foo::asdf() const", "Foo::bar()", "Foo::foo()"}};
+
+    QTest::newRow("deleted-copy-ctor")
+        << "struct S { S(); S(const S&) = delete; };"
+        << CompletionItems{{1,1}, {"S::S()"}};
+    QTest::newRow("deleted-overload-member")
+        << "struct Foo {\n"
+           "  int x();\n"
+           "  int x(int) = delete;\n"
+           "};\n"
+        << CompletionItems{{5,1}, {"Foo::x()"}};
+    QTest::newRow("deleted-overload-global")
+        << "int x();\n"
+           "int x(int) = delete;\n"
+        << CompletionItems{{2,1}, {"x()"}};
 }
 
 void TestCodeCompletion::testInvalidCompletions()
