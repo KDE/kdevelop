@@ -17,3 +17,5 @@ target_link_libraries(kdevproblemreporter KF5::TextEditor KF5::Parts KDev::Langu
 ########### install files ###############
 
 install(FILES kdevproblemreporter.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevproblemreporter)
+
+add_subdirectory(tests)

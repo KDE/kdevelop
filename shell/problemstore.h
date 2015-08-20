@@ -74,6 +74,9 @@ public:
     // Sets the scope filter
     void setScope(int scope);
 
+    // Returns the current scope
+    int scope() const;
+
     // Sets the grouping method
     virtual void setGrouping(int grouping);
 

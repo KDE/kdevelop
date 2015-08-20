@@ -4,6 +4,7 @@ include_directories(
     ${KDevPlatform_SOURCE_DIR}
     ${KDevPlatform_SOURCE_DIR}/interfaces
     ${KDevPlatform_SOURCE_DIR}/shell
+    ${KDevPlatform_BINARY_DIR}/serialization
     )
 
 ecm_add_test(test_documentcontroller.cpp
@@ -39,3 +40,22 @@ ecm_add_test(test_testcontroller.cpp
 
 ecm_add_test(test_ktexteditorpluginintegration.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)
+
+ecm_add_test(test_detectedproblem.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell KDev::Serialization)
+
+ecm_add_test(test_problemmodelset.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell)
+
+ecm_add_test(test_problemstorenode.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell)
+
+ecm_add_test(test_problemstore.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell)
+
+ecm_add_test(test_filteredproblemstore.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell)
+
+ecm_add_test(test_problemmodel.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell)
+

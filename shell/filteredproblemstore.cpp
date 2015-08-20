@@ -266,6 +266,11 @@ void FilteredProblemStore::setGrouping(int grouping)
     emit changed();
 }
 
+int FilteredProblemStore::grouping() const
+{
+    return m_grouping;
+}
+
 void FilteredProblemStore::setBypassScopeFilter(bool bypass)
 {
     if (m_bypassScopeFilter != bypass) {
@@ -273,6 +278,11 @@ void FilteredProblemStore::setBypassScopeFilter(bool bypass)
         rebuild();
         emit changed();
     }
+}
+
+bool FilteredProblemStore::bypassScopeFilter() const
+{
+    return m_bypassScopeFilter;
 }
 
 

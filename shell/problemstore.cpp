@@ -160,6 +160,13 @@ void ProblemStore::setScope(int scope)
     emit changed();
 }
 
+int ProblemStore::scope() const
+{
+    Q_ASSERT(d->m_documents != nullptr);
+
+    return d->m_documents->getScope();
+}
+
 void ProblemStore::setGrouping(int grouping)
 {
     Q_UNUSED(grouping);
