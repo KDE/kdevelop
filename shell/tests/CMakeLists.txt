@@ -59,3 +59,5 @@ ecm_add_test(test_filteredproblemstore.cpp
 ecm_add_test(test_problemmodel.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell)
 
+ecm_add_test(test_checkerstatus.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell)

@@ -52,6 +52,7 @@ set(KDevPlatformShell_LIB_SRCS
     editorconfigpage.cpp
     environmentconfigurebutton.cpp
 
+    checkerstatus.cpp
     problem.cpp
     problemmodelset.cpp
     problemmodel.cpp
@@ -164,6 +165,7 @@ install(FILES
     runcontroller.h
     launchconfiguration.h
     environmentconfigurebutton.h
+    checkerstatus.h
     problem.h
     problemmodel.h
     problemmodelset.h
