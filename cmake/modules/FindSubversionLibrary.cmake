@@ -130,17 +130,18 @@ ELSE (NOT WIN32)
 
 # search for pathes
 
-    MACRO(FIND_SUB_INC targetvar libname pathadd)
+    MACRO(FIND_SUB_INC targetvar include pathadd)
       IF (SUBVERSION_INSTALL_PATH)
-          FIND_PATH(${targetvar} ${libname}
+          FIND_PATH(${targetvar} ${include}
               PATHS
               ${SUBVERSION_INSTALL_PATH}/include${pathadd}
               "$ENV{ProgramFiles}/Subversion/include${pathadd}"
+              PATH_SUFFIXES subversion-1
           )
       ELSE(SUBVERSION_INSTALL_PATH)
-          FIND_LIBRARY(${targetvar} ${libname}
-              PATHS
+          FIND_PATH(${targetvar} ${include}
               "$ENV{ProgramFiles}/Subversion/include${pathadd}"
+              PATH_SUFFIXES "subversion-1"
           )
       ENDIF(SUBVERSION_INSTALL_PATH)
     ENDMACRO(FIND_SUB_INC)
@@ -162,17 +163,17 @@ ELSE (NOT WIN32)
 
     FIND_SUB_INC(SUBVERSION_INCLUDE_DIR svn_version.h "")
 
-    FIND_SUB_INC(APR_INCLUDE_DIR apr.h /apr)
+    FIND_SUB_INC(APR_INCLUDE_DIR apr.h "")
 
-    FIND_SUB_INC(APU_INCLUDE_DIR apu.h /apr-util)
+    FIND_SUB_INC(APU_INCLUDE_DIR apu.h "")
 
 
   # search for libraries
-    FIND_SUB_LIB(APR_LIBRARY apr)
+    FIND_SUB_LIB(APR_LIBRARY apr-1)
 
-    FIND_SUB_LIB(APRICONV_LIB apriconv)
+    FIND_SUB_LIB(APRICONV_LIB apriconv-1)
 
-    FIND_SUB_LIB(APU_LIBRARY aprutil)
+    FIND_SUB_LIB(APU_LIBRARY aprutil-1)
 
     #FIND_SUB_LIB(APU_XMLLIB xml)
 
@@ -180,31 +181,31 @@ ELSE (NOT WIN32)
 
     #FIND_SUB_LIB(NEON_ZLIBSTATLIB zlibstat )
 
-    FIND_SUB_LIB(SUBVERSION_CLIENTLIB libsvn_client-1)
+    FIND_SUB_LIB(SUBVERSION_CLIENTLIB svn_client-1)
 
-    FIND_SUB_LIB(SUBVERSION_DELTALIB libsvn_delta-1)
+    FIND_SUB_LIB(SUBVERSION_DELTALIB svn_delta-1)
 
-    FIND_SUB_LIB(SUBVERSION_DIFFLIB libsvn_diff-1)
+    FIND_SUB_LIB(SUBVERSION_DIFFLIB svn_diff-1)
 
-    #FIND_SUB_LIB(SUBVERSION_FSBASELIB libsvn_fs_base-1)
+    #FIND_SUB_LIB(SUBVERSION_FSBASELIB svn_fs_base-1)
 
-    #FIND_SUB_LIB(SUBVERSION_FSFSLIB libsvn_fs_fs-1)
+    #FIND_SUB_LIB(SUBVERSION_FSFSLIB svn_fs_fs-1)
 
-    FIND_SUB_LIB(SUBVERSION_FSLIB libsvn_fs-1)
+    FIND_SUB_LIB(SUBVERSION_FSLIB svn_fs-1)
 
-    #FIND_SUB_LIB(SUBVERSION_RADAVLIB libsvn_ra_dav-1)
+    #FIND_SUB_LIB(SUBVERSION_RADAVLIB svn_ra_dav-1)
 
-    #FIND_SUB_LIB(SUBVERSION_RALOCALLIB libsvn_ra_local-1)
+    #FIND_SUB_LIB(SUBVERSION_RALOCALLIB svn_ra_local-1)
 
-    #FIND_SUB_LIB(SUBVERSION_RASVNLIB libsvn_ra_svn-1)
+    #FIND_SUB_LIB(SUBVERSION_RASVNLIB svn_ra_svn-1)
 
-    FIND_SUB_LIB(SUBVERSION_RALIB libsvn_ra-1)
+    FIND_SUB_LIB(SUBVERSION_RALIB svn_ra-1)
 
-    FIND_SUB_LIB(SUBVERSION_REPOSITORYLIB libsvn_repos-1)
+    FIND_SUB_LIB(SUBVERSION_REPOSITORYLIB svn_repos-1)
 
-    FIND_SUB_LIB(SUBVERSION_SUBRLIB libsvn_subr-1)
+    FIND_SUB_LIB(SUBVERSION_SUBRLIB svn_subr-1)
 
-    FIND_SUB_LIB(SUBVERSION_WCLIB libsvn_wc-1)
+    FIND_SUB_LIB(SUBVERSION_WCLIB svn_wc-1)
 
     # these are the win32-only libs, the others handled at the bottom.
     MARK_AS_ADVANCED(
