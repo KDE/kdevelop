@@ -84,14 +84,14 @@ void ProblemsView::onModelAdded(const ModelData &data)
     addModel(data);
 }
 
-// Returns the name part of the label
-// E.g.: Test(666) => Test
+/// Returns the name part of the label
+/// E.g.: Test (666) => Test
 QString nameFromLabel(const QString &label)
 {
     QString txt = label;
     int i = txt.lastIndexOf('(');
     if (i != -1)
-        txt = txt.left(i);
+        txt = txt.left(i - 1); // ignore whitespace before '('
     return txt;
 }
 
@@ -149,8 +149,9 @@ void ProblemsView::updateToolBar()
 
 void ProblemsView::updateTab(int idx, int rows)
 {
-    const QString txt = nameFromLabel(m_tabWidget->tabText(idx)) + '(' + QString::number(rows) + ')';
-    m_tabWidget->setTabText(idx, txt);
+    const QString name = nameFromLabel(m_tabWidget->tabText(idx));
+    const QString tabText = i18nc("%1: tab name, %2: number of problems", "%1 (%2)", name, rows);
+    m_tabWidget->setTabText(idx, tabText);
 }
 
 }
