@@ -26,6 +26,7 @@
 #include <QContextMenuEvent>
 #include <QHeaderView>
 #include <QIcon>
+#include <QItemDelegate>
 #include <QMenu>
 #include <QSignalMapper>
 
@@ -48,6 +49,34 @@
 
 using namespace KDevelop;
 
+namespace KDevelop {
+
+class ProblemTreeViewItemDelegate : public QItemDelegate
+{
+    Q_OBJECT
+
+public:
+    explicit ProblemTreeViewItemDelegate(QObject* parent = nullptr);
+
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+};
+
+}
+
+ProblemTreeViewItemDelegate::ProblemTreeViewItemDelegate(QObject* parent)
+    : QItemDelegate(parent)
+{
+}
+
+void ProblemTreeViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    QStyleOptionViewItem newOption(option);
+    newOption.textElideMode = index.column() == ProblemModel::File ? Qt::ElideMiddle : Qt::ElideRight;
+
+    QItemDelegate::paint(painter, newOption, index);
+}
+
+
 ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
     : QTreeView(parent)
 {
@@ -56,6 +85,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
 
     setObjectName("Problem Reporter Tree");
     setWhatsThis( i18n( "Problems" ) );
+    setItemDelegate(new ProblemTreeViewItemDelegate);
 
     setModel(problemModel);
     header()->setStretchLastSection(false);
@@ -342,3 +372,4 @@ void ProblemTreeView::showEvent(QShowEvent * event)
         resizeColumnToContents(i);
 }
 
+#include "problemtreeview.moc"
