@@ -47,8 +47,8 @@ TestQtHelpPlugin::TestQtHelpPlugin()
 
 void TestQtHelpPlugin::initTestCase()
 {
-    KDevelop::AutoTestShell::init();
-    m_testCore = new KDevelop::TestCore();
+    AutoTestShell::init({"kdevqthelp"});
+    m_testCore = new TestCore();
     m_testCore->initialize();
 }
 
