@@ -59,7 +59,7 @@ public:
      * Oldest models are deleted if needed.
      * @return pointer to the new model
      */
-    GrepOutputModel* renewModel(QString name, QString descriptionOrUrl);
+    GrepOutputModel* renewModel(const QString& name, const QString& description);
     
     void setMessage(const QString& msg, MessageType type = Information);
 

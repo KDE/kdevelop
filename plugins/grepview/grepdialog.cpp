@@ -189,7 +189,7 @@ void GrepDialog::selectDirectoryDialog()
 void GrepDialog::addUrlToMenu(QMenu* menu, const QUrl& url)
 {
     QAction* action = menu->addAction(m_plugin->core()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain));
-    action->setData(QVariant(url.toString()));
+    action->setData(QVariant(url.toString(QUrl::PreferLocalFile)));
     connect(action, &QAction::triggered, this, &GrepDialog::synchronizeDirActionTriggered);
 }
 
@@ -437,11 +437,20 @@ void GrepDialog::startSearch()
 
     GrepJob* job = m_plugin->newGrepJob();
 
-    QString descriptionOrUrl(searchPaths->currentText());
+    const QString descriptionOrUrl(searchPaths->currentText());
     QString description = descriptionOrUrl;
     // Shorten the description
-    if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString && choice.size() > 1)
-        description = i18np("%2, and %1 more item", "%2, and %1 more items", choice.size() - 1, choice[0].toDisplayString(QUrl::PreferLocalFile));
+    if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString) {
+        auto prettyFileName = [](const QUrl& url) {
+            return ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
+        };
+
+        if (choice.size() > 1) {
+            description = i18np("%2, and %1 more item", "%2, and %1 more items", choice.size() - 1, prettyFileName(choice[0]));
+        } else if (!choice.isEmpty()) {
+            description = prettyFileName(choice[0]);
+        }
+    }
 
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
