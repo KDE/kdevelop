@@ -86,6 +86,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
     setObjectName("Problem Reporter Tree");
     setWhatsThis( i18n( "Problems" ) );
     setItemDelegate(new ProblemTreeViewItemDelegate);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
 
     setModel(problemModel);
     header()->setStretchLastSection(false);
@@ -254,7 +255,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
         connect(groupingMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setGrouping);
     }
 
-    connect(this, &ProblemTreeView::activated, this, &ProblemTreeView::itemActivated);
+    connect(this, &ProblemTreeView::clicked, this, &ProblemTreeView::itemActivated);
 
     connect(model(), &QAbstractItemModel::rowsInserted, this, &ProblemTreeView::changed);
     connect(model(), &QAbstractItemModel::rowsRemoved, this, &ProblemTreeView::changed);
