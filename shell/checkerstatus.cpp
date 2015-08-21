@@ -45,9 +45,7 @@ CheckerStatus::~CheckerStatus() = default;
 
 QString CheckerStatus::statusName() const
 {
-    QString s = QStringLiteral("Running ") + d->m_name;
-
-    return i18nc("@info:progress", s.toUtf8().data());
+    return i18nc("@info:progress", "Running %1", d->m_name);
 }
 
 void CheckerStatus::setCheckerName(const QString &name)
