@@ -55,8 +55,6 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
     Q_ASSERT(problemModel);
 
     setObjectName("Problem Reporter Tree");
-    setWindowTitle(i18n("Problems"));
-    setWindowIcon( QIcon::fromTheme("dialog-information") ); ///@todo Use a proper icon
     setWhatsThis( i18n( "Problems" ) );
 
     setModel(problemModel);

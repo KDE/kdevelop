@@ -18,6 +18,9 @@
  */
 
 #include "problemsview.h"
+
+#include <KLocalizedString>
+
 #include <QToolBar>
 #include <QTabWidget>
 
@@ -33,6 +36,9 @@ namespace KDevelop
 ProblemsView::ProblemsView(QWidget *parent) :
 QMainWindow(parent)
 {
+    setWindowTitle(i18n("Problems"));
+    setWindowIcon(QIcon::fromTheme("emblem-important"));
+
     m_toolBar = new QToolBar(this);
     m_toolBar->setMovable(false);
     m_toolBar->setFloatable(false);
