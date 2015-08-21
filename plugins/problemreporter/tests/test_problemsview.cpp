@@ -82,7 +82,7 @@ void TestProblemsView::testLoad()
     QTabWidget *tab = tabWidget();
     QVERIFY(tab != nullptr);
     QCOMPARE(tab->count(), 1);
-    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL1(1)"));
+    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL1 (1)"));
 }
 
 void TestProblemsView::testAddModel()
@@ -93,8 +93,8 @@ void TestProblemsView::testAddModel()
     QTabWidget *tab = tabWidget();
     QVERIFY(tab != nullptr);
     QCOMPARE(tab->count(), 2);
-    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL1(1)"));
-    QCOMPARE(tab->tabText(1), QStringLiteral("MODEL2(0)"));
+    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL1 (1)"));
+    QCOMPARE(tab->tabText(1), QStringLiteral("MODEL2 (0)"));
 }
 
 void TestProblemsView::testSwitchTab()
@@ -133,7 +133,7 @@ void TestProblemsView::testRemoveModel()
     QTabWidget *tab = tabWidget();
     QVERIFY(tab != nullptr);
     QCOMPARE(tab->count(), 1);
-    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2(0)"));
+    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2 (0)"));
 }
 
 void TestProblemsView::testAddRemoveProblems()
@@ -147,7 +147,7 @@ void TestProblemsView::testAddRemoveProblems()
 
     // Make sure there are no problems right now
     model->clearProblems();
-    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2(0)"));
+    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2 (0)"));
 
     // Let's add some problems
     int c = 0;
@@ -157,7 +157,7 @@ void TestProblemsView::testAddRemoveProblems()
         c++;
 
         // Check if the view has noticed the addition
-        QString label = QStringLiteral("MODEL2") + '(' + QString::number(c) + ')';
+        QString label = QStringLiteral("MODEL2 (%1)").arg(c);
         QCOMPARE(tab->tabText(0), label);
     }
 
@@ -165,7 +165,7 @@ void TestProblemsView::testAddRemoveProblems()
     model->clearProblems();
 
     // Check if the view has noticed the clear
-    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2(0)"));
+    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2 (0)"));
 }
 
 void TestProblemsView::testSetProblems()
@@ -179,7 +179,7 @@ void TestProblemsView::testSetProblems()
 
     // Make sure there are no problems right now
     model->clearProblems();
-    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2(0)"));
+    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2 (0)"));
 
     // Build a problem vector and set the problems
     QVector<IProblem::Ptr> problems;
@@ -190,7 +190,7 @@ void TestProblemsView::testSetProblems()
     model->setProblems(problems);
 
     // Check if the view has noticed
-    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2(3)"));
+    QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2 (3)"));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////

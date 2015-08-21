@@ -499,7 +499,7 @@ void TestProjectController::prettyFileName()
     Path filePath = Path(m_projFolder, relativeFilePath);
     fileMng->addFileToFolder(m_projFolder, filePath);
 
-    QCOMPARE(m_projCtrl->prettyFileName(filePath.toUrl(), ProjectController::FormattingOptions::FormatPlain), QString(m_projName + '/' + relativeFilePath));
+    QCOMPARE(m_projCtrl->prettyFileName(filePath.toUrl(), ProjectController::FormattingOptions::FormatPlain), QString(m_projName + ':' + relativeFilePath));
 }
 
 ////////////////////// Helpers ///////////////////////////////////////////////
