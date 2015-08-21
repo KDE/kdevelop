@@ -76,7 +76,7 @@ public:
 void TestKTextEditorPluginIntegration::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
-    AutoTestShell::init();
+    AutoTestShell::init({"katesnippetsplugin"});
     TestCore::initialize();
     QVERIFY(KTextEditor::Editor::instance());
 }
@@ -86,7 +86,6 @@ void TestKTextEditorPluginIntegration::cleanupTestCase()
     auto controller = Core::self()->pluginController();
     const auto id = QStringLiteral("katesnippetsplugin");
     auto plugin = makeQPointer(controller->loadPlugin(id));
-    QVERIFY(plugin);
 
     const auto editor = makeQPointer(KTextEditor::Editor::instance());
     const auto application = makeQPointer(editor->application());
@@ -153,7 +152,9 @@ void TestKTextEditorPluginIntegration::testPlugin()
     auto controller = Core::self()->pluginController();
     const auto id = QStringLiteral("katesnippetsplugin");
     auto plugin = makeQPointer(controller->loadPlugin(id));
-    QVERIFY(plugin);
+    if (!plugin) {
+        QSKIP("Cannot continue without katesnippetsplugin, install Kate");
+    }
 
     auto app = KTextEditor::Editor::instance()->application();
     auto ktePlugin = makeQPointer(app->plugin(id));
@@ -178,7 +179,9 @@ void TestKTextEditorPluginIntegration::testPluginUnload()
     auto controller = Core::self()->pluginController();
     const auto id = QStringLiteral("katesnippetsplugin");
     auto plugin = makeQPointer(controller->loadPlugin(id));
-    QVERIFY(plugin);
+    if (!plugin) {
+        QSKIP("Cannot continue without katesnippetsplugin, install Kate");
+    }
 
     auto app = KTextEditor::Editor::instance()->application();
     auto ktePlugin = makeQPointer(app->plugin(id));
