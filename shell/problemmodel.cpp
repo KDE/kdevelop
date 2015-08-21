@@ -109,11 +109,10 @@ int ProblemModel::rowCount(const QModelIndex & parent) const
 
 static QString displayUrl(const QUrl &url, const QUrl &base)
 {
-    QUrl location = url;
-    if ( location.isParentOf(base) ) {
-        return location.toDisplayString(QUrl::PreferLocalFile).mid(base.toDisplayString(QUrl::PreferLocalFile).length());
+    if (base.isParentOf(url)) {
+        return url.toDisplayString(QUrl::PreferLocalFile).mid(base.toDisplayString(QUrl::PreferLocalFile).length());
     } else {
-        return location.toDisplayString(QUrl::PreferLocalFile);
+        return url.toDisplayString(QUrl::PreferLocalFile);
     }
 }
 
