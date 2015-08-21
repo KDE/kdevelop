@@ -241,8 +241,9 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
         errorValue = "UnknownError";
         break;
     }
-    qCDebug(VCS) << "oops, found an error while running" << displayCommand << ":" << errorValue
+    qCDebug(VCS) << "Found an error while running" << displayCommand << ":" << errorValue
                                                      << "Exit code is:" << d->childproc->exitCode();
+    qCDebug(VCS) << "Error:" << completeErrorText;
     displayOutput(QString::fromLocal8Bit(d->errorOutput));
     d->model->appendLine(i18n("Command finished with error %1.", errorValue));
 

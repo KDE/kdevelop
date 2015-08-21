@@ -84,7 +84,7 @@ QDir dotGitDirectory(const QUrl& dirPath)
     while (!dir.exists(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
 
     if (dir.isRoot()) {
-        qWarning() << "couldn't find the git root for" << dirPath;
+        qCWarning(PLUGIN_GIT) << "couldn't find the git root for" << dirPath;
     }
 
     return dir;
@@ -1194,7 +1194,7 @@ void GitPlugin::parseGitVersionOutput(DVcsJob* job)
     m_oldVersion = false;
     if (versionString.size() < minimumVersion.size()) {
         m_oldVersion = true;
-        qWarning() << "invalid git version string:" << job->output().trimmed();
+        qCWarning(PLUGIN_GIT) << "invalid git version string:" << job->output().trimmed();
         return;
     }
     foreach(int num, minimumVersion) {
