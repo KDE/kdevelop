@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 import QtQuick 2.1
+import QtQuick.Layouts 1.1
 
 // The background image for the splash is still a bitmap, provided by QSplashScreen.
 // This widget has a transprent background and appears above that pixmap.
@@ -26,32 +27,39 @@ import QtQuick 2.1
 
 Rectangle {
     id: root
-    // this property is updated from C++
-    property int progress: 0
+
+    property int progress: 50
+    property url appIcon
+    property string appVersionMajor: "2"
+    property string appVersionMinor: "0"
+    property string appVersionPatch: "0"
+
     // color for the non-colored rectangles
-    property string defaultColor: "#3E3E3E"
+    readonly property string defaultColor: "#3E3E3E"
     // amount of rectangles in each column
-    property variant counts: [22, 20, 21, 19, 17, 19, 20, 17, 18, 15, 16, 15, 14, 16, 13, 11, 12, 10, 12,
-                              11, 8, 10, 6, 8, 9, 5, 7, 6, 4, 5, 6, 3, 5, 4, 2, 3, 2, 1, 2, 1]
+    readonly property var counts: [22, 20, 21, 19, 17, 19, 20, 17, 18, 15, 16, 15, 14, 16, 13, 11, 12, 10, 12,
+                                   11, 8, 10, 6, 8, 9, 5, 7, 6, 4, 5, 6, 3, 5, 4, 2, 3, 2, 1, 2, 1]
     // "active" colors for the rectangles
     // only half as many colors, use each color twice.
     // TODO could try if it looks nicer with one color each
-    property variant activeColors: ["#960A0A", "#B40F0F", "#FF4000", "#FF8400", "#FFDD00", "#CDEC00", "#99FF00", "#4CB700", "#1DB300", "#076813",
-                                    "#08BA5B", "#00DA99", "#00B5E7", "#085BBB", "#2A5CFF", "#7044FF", "#9625FF", "#F013FF", "#FF2CC0", "#FF1A1D"]
-    // this size is a fallback, it's scaled in the c++ code actually,
-    // but this is the real splash size, so it's useful for testing in qmlviewer
-    width: 475
-    height: 301
-    anchors.fill: parent
+    readonly property var activeColors: ["#960A0A", "#B40F0F", "#FF4000", "#FF8400", "#FFDD00", "#CDEC00", "#99FF00", "#4CB700", "#1DB300", "#076813",
+                                         "#08BA5B", "#00DA99", "#00B5E7", "#085BBB", "#2A5CFF", "#7044FF", "#9625FF", "#F013FF", "#FF2CC0", "#FF1A1D"]
+
     gradient: Gradient {
          GradientStop { position: 0.0; color: "#0A0A0A" }
          GradientStop { position: 0.5; color: "#1F1F1F" }
          GradientStop { position: 1.0; color: "#0A0A0A" }
-     }
+    }
+
+    width: centerWidget.width + mainLayout.anchors.margins * 2
+    height: centerWidget.height + mainLayout.anchors.margins * 2
 
     // scanlines always look fancy
     ListView {
+        id: background
+
         anchors.fill: parent
+
         model: Math.floor(parent.height / 2)
         spacing: 2
         delegate: Rectangle {
@@ -61,78 +69,88 @@ Rectangle {
             opacity: 0.10
         }
     }
-    // draw the rectangles
-    ListView {
-        x: -40
-        y: -52
-        height: root.height
-        width: root.width
-        // this is needed to make the columns fill the widget from the bottom upwards
-        rotation: 180
-        spacing: 4
-        // draw one column per entry in the root.counts list
-        model: root.counts
-        orientation: ListView.Horizontal
-        // this delegate draws one column of rectangles
-        delegate: Column {
-            opacity: 0.75
-            property string color
-            property int count
-            color: (1-root.progress/100.0) * root.counts.length <= index ? activeColors[Math.floor(index/2)] : root.defaultColor
-            count: root.counts[index]
-            x: 6
-            y: 12
-            spacing: 4
-            Repeater {
-                model: parent.count
-                delegate: Rectangle {
-                    color: parent.color
-                    width: 6
-                    height: 6
+
+    ColumnLayout {
+        id: centerWidget
+
+        ColumnLayout {
+            id: mainLayout
+
+            anchors.fill: parent
+            anchors.margins: 15
+
+            RowLayout {
+                Text {
+                    Layout.fillWidth: true
+
+                    color: "white"
+                    opacity: 0.65
+                    text: "www.kdevelop.org"
+                }
+
+                Text {
+                    color: "white"
+                    opacity: 0.65
+                    text: root.progress+"%"
+                }
+            }
+
+            Item { height: 10 } // spacer
+
+            // draw the rectangles
+            Row {
+                Layout.alignment: Qt.AlignRight
+
+                spacing: 4
+                rotation: 180
+
+                Repeater {
+                    // draw one column per entry in the root.counts list
+                    model: root.counts
+                    // this delegate draws one column of rectangles
+                    delegate: Column {
+                        readonly property string color: (1-root.progress/100.0) * root.counts.length <= index ? activeColors[Math.floor(index/2)] : root.defaultColor
+                        readonly property int count: root.counts[index]
+
+                        opacity: 0.75
+                        spacing: 4
+
+                        Repeater {
+                            model: parent.count
+                            delegate: Rectangle {
+                                color: parent.color
+                                width: 6
+                                height: 6
+                            }
+                        }
+                    }
+                }
+            }
+
+            Item { height: 5 } // spacer
+
+            RowLayout {
+                Image {
+                    width: 48
+                    height: width
+                    source: appIcon
+                }
+
+                Text {
+                    Layout.fillWidth: true
+                    color: "white"
+                    verticalAlignment: Text.AlignVCenter
+                    font {
+                        pointSize: 26
+                        bold: true
+                        family: "sans"
+                    }
+                    style: Text.Raised;
+                    styleColor: "black"
+                    text: "KDevelop " + appVersionMajor + "." + appVersionMinor +
+                          "<span style='font-size:15px;'>&nbsp;." + appVersionPatch + "</span>"
                 }
             }
         }
-    }
-    // text in the upper right corner
-    Text {
-        anchors.margins: 6
-        anchors.left: parent.left
-        anchors.top: parent.top
-        color: "white"
-        opacity: 0.65
-        text: "KDevelop Integrated Development Environment – http://kdevelop.org<br>" + root.progress+"%"
-    }
-    // icon in the lower left corner
-    Image {
-        id: icon
-        anchors {
-            bottom: parent.bottom
-            left: parent.left
-            margins: 6
-        }
-        width: 48
-        height: width
-        source: appIcon
-    }
-    // Text next to the icon
-    Text {
-        anchors {
-            left: icon.right
-            bottom: parent.bottom
-            margins: 8
-        }
-        height: icon.height
-        width: parent.width - icon.width
-        color: "white"
-        verticalAlignment: Text.AlignVCenter
-        font {
-            pointSize: 26
-            bold: true
-            family: "sans"
-        }
-        style: Text.Raised;
-        styleColor: "black"
-        text: "KDevelop " + appVersionMajor + "." + appVersionMinor +
-              "<span style='font-size:15px;'>&nbsp;." + appVersionPatch + "</span>"
     }
 }

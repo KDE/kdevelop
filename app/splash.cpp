@@ -22,7 +22,6 @@
 
 #include <KIconLoader>
 
-
 #include <QQuickView>
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -37,24 +36,25 @@ KDevSplashScreen::KDevSplashScreen()
     : QQuickView()
 {
     setFlags(Qt::FramelessWindowHint | Qt::Tool);
-
-    QRect geo(0,0, 475, 301);
-    geo.moveCenter(screen()->geometry().center());
-    setMaximumSize(geo.size());
-    setMinimumSize(geo.size());
-    setGeometry(geo);
-
-    engine()->rootContext()->setContextProperty("appIcon",
-        QUrl::fromLocalFile(KIconLoader().iconPath("kdevelop", -48)));
-    engine()->rootContext()->setContextProperty("appVersionMajor", VERSION_MAJOR);
-    engine()->rootContext()->setContextProperty("appVersionMinor", VERSION_MINOR);
-    engine()->rootContext()->setContextProperty("appVersionPatch", VERSION_PATCH);
+    setResizeMode(QQuickView::SizeViewToRootObject);
 
     QString splashScript = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevelop/splash.qml");
     setSource(QUrl::fromLocalFile(splashScript));
-    if ( !rootObject() ) {
+    if (!rootObject()) {
         qWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml" << splashScript;
     }
+
+    if (rootObject()) {
+        rootObject()->setProperty("appIcon",
+            QUrl::fromLocalFile(KIconLoader().iconPath("kdevelop", -48)));
+        rootObject()->setProperty("appVersionMajor", VERSION_MAJOR);
+        rootObject()->setProperty("appVersionMinor", VERSION_MINOR);
+        rootObject()->setProperty("appVersionPatch", VERSION_PATCH);
+    }
+
+    QRect geo = geometry();
+    geo.moveCenter(screen()->geometry().center());
+    setGeometry(geo);
 }
 
 KDevSplashScreen::~KDevSplashScreen()
@@ -66,7 +66,9 @@ void KDevSplashScreen::progress(int progress)
     Q_ASSERT(rootObject());
 
     // notify the QML script of the progress change
-    rootObject()->setProperty("progress", progress);
+    if (rootObject()) {
+        rootObject()->setProperty("progress", progress);
+    }
 
     // note: We don't have an eventloop running, hence we need to call both processEvents and sendPostedEvents here
     // DeferredDelete events alone won't be processed until sendPostedEvents is called
