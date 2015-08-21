@@ -25,6 +25,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
 #include <interfaces/iassistant.h>
@@ -112,7 +113,7 @@ static QString displayUrl(const QUrl &url, const QUrl &base)
     if (base.isParentOf(url)) {
         return url.toDisplayString(QUrl::PreferLocalFile).mid(base.toDisplayString(QUrl::PreferLocalFile).length());
     } else {
-        return url.toDisplayString(QUrl::PreferLocalFile);
+        return ICore::self()->projectController()->prettyFileName(url, IProjectController::FormatPlain);
     }
 }
 
