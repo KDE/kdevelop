@@ -159,14 +159,17 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
         severityMenu->setToolTip(i18nc("@info:tooltip", "Select the lowest level of problem severity to be displayed"));
         QActionGroup* severityActions = new QActionGroup(this);
 
-        QAction* errorSeverityAction = new QAction(i18n("Error"), this);
+        auto errorSeverityAction = new QAction(i18n("Error"), this);
         errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display only errors"));
+        errorSeverityAction->setIcon(QIcon::fromTheme("dialog-error"));
 
-        QAction* warningSeverityAction = new QAction(i18n("Warning"), this);
+        auto warningSeverityAction = new QAction(i18n("Warning"), this);
         warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors and warnings"));
+        warningSeverityAction->setIcon(QIcon::fromTheme("dialog-warning"));
 
-        QAction* hintSeverityAction = new QAction(i18n("Hint"), this);
+        auto hintSeverityAction = new QAction(i18n("Hint"), this);
         hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
+        hintSeverityAction->setIcon(QIcon::fromTheme("dialog-information"));
 
         QAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
         for (int i = 0; i < 3; ++i) {
