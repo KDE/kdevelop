@@ -359,6 +359,8 @@ void KDevelop::UiController::raiseToolView(Sublime::View * view)
         if( area->toolViews().contains( view ) )
             area->raiseToolView( view );
     }
+
+    slotActiveToolViewChanged(view);
 }
 
 void UiController::slotAreaChanged(Sublime::Area*)
