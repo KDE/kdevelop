@@ -72,6 +72,8 @@ public:
         if (Core::self()->workingSetControllerInternal())
             Core::self()->workingSetControllerInternal()->initializeController(m_controller);
 
+        m_controller->connect(m_controller, &Sublime::Controller::mainWindowAdded, m_controller, &UiController::mainWindowAdded);
+
         QMap<QString, Sublime::Position> desired;
 
         desired["org.kdevelop.ClassBrowserView"] = Sublime::Left;
@@ -239,6 +241,12 @@ void UiController::setupActions()
 {
 }
 
+void UiController::mainWindowAdded(Sublime::MainWindow* mainWindow)
+{
+    connect(mainWindow, &MainWindow::activeToolViewChanged, this, &UiController::slotActiveToolViewChanged);
+    connect(mainWindow, &MainWindow::areaChanged, this, &UiController::slotAreaChanged); // also check after area reconstruction
+}
+
 void UiController::mainWindowDeleted(MainWindow* mw)
 {
     if (d->defaultMainWindow == mw)
@@ -351,7 +359,31 @@ void KDevelop::UiController::raiseToolView(Sublime::View * view)
         if( area->toolViews().contains( view ) )
             area->raiseToolView( view );
     }
+}
 
+void UiController::slotAreaChanged(Sublime::Area*)
+{
+    // this slot gets call if an area in *any* MainWindow changed
+    // so let's first get the "active area"
+    const auto area = activeSublimeWindow()->area();
+    if (area) {
+        // walk through shown tool views and maku sure the
+        const auto shownIds = area->shownToolViews(Sublime::AllPositions);
+        foreach (Sublime::View* toolView, area->toolViews()) {
+            if (shownIds.contains(toolView->document()->documentSpecifier())) {
+                slotActiveToolViewChanged(toolView);
+            }
+        }
+    }
+}
+
+void UiController::slotActiveToolViewChanged(Sublime::View* view)
+{
+    if (!view) {
+        return;
+    }
+
+    // record the last active tool view action listener
     if (qobject_cast<IToolViewActionListener*>(view->widget())) {
         d->activeActionListener = view->widget();
     }
@@ -399,6 +431,7 @@ void UiController::initialize()
 {
     defaultMainWindow()->initialize();
 }
+
 
 void UiController::cleanup()
 {

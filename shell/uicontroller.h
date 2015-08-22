@@ -75,6 +75,7 @@ public:
     void showSettingsDialog();
     Sublime::Controller* controller() override;
 
+    void mainWindowAdded(Sublime::MainWindow* mainWindow);
     void mainWindowDeleted(MainWindow* mw);
 
     void saveAllAreas(KSharedConfigPtr config);
@@ -108,6 +109,10 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void addNewToolView(MainWindow* mw, QListWidgetItem* item);
+
+    void slotAreaChanged(Sublime::Area* area);
+    void slotActiveToolViewChanged(Sublime::View* view);
+
     void hideAssistant() override;
 
 private:
