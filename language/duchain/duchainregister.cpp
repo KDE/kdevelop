@@ -19,6 +19,11 @@
 #include "duchainregister.h"
 #include "duchainbase.h"
 
+#include <QDebug>
+
+#define ENSURE_VALID_CLASSID(id) \
+  qFatal("Invalid class id: %i", id);
+
 namespace KDevelop {
 DUChainBase* DUChainItemSystem::create(DUChainBaseData* data) const {
   if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == 0)
@@ -28,7 +33,7 @@ DUChainBase* DUChainItemSystem::create(DUChainBaseData* data) const {
 
 DUChainBaseData* DUChainItemSystem::cloneData(const DUChainBaseData& data) const {
   if(uint(m_factories.size()) <= data.classId || m_factories[data.classId] == 0) {
-    Q_ASSERT(0); //Or we'll crash later
+    ENSURE_VALID_CLASSID(data.classId)
     return 0;
   }
   return m_factories[data.classId]->cloneData(data);
@@ -62,7 +67,7 @@ uint DUChainItemSystem::dataClassSize(const DUChainBaseData& data) const {
 
 void DUChainItemSystem::copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
   if(uint(m_factories.size()) <= from.classId || m_factories[from.classId] == 0) {
-    Q_ASSERT(0); //Shouldn't try to copy an unknown type
+    ENSURE_VALID_CLASSID(from.classId)
     return;
   }
   return m_factories[from.classId]->copy(from, to, constant);
