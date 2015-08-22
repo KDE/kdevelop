@@ -62,7 +62,7 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
     // which are called before they are defined (which is easily possible, due to JS's dynamic nature).
     if (!m_prebuilding) {
         qCDebug(KDEV_QMLJS_DUCHAIN) << "building, but running pre-builder first";
-        DeclarationBuilder* prebuilder = new DeclarationBuilder(m_session);
+        auto  prebuilder = new DeclarationBuilder(m_session);
 
         prebuilder->m_prebuilding = true;
         updateContext = prebuilder->build(url, node, updateContext);
@@ -1394,7 +1394,7 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
             realName = QLatin1String("vector3d");
         } else if (name.endsWith(QLatin1String("ScriptString"))) {
             // Q{Declarative,Qml}ScriptString represents a JS snippet
-            QmlJS::FunctionType* func = new QmlJS::FunctionType;
+            auto  func = new QmlJS::FunctionType;
             func->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
             return AbstractType::Ptr(func);
         }

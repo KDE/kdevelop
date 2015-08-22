@@ -276,7 +276,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::functionCallTips()
             DeclarationPointer functionDecl = declarationAtEndOfString(m_text.left(entry.startPosition - 1));
 
             if (functionDecl) {
-                FunctionCalltipCompletionItem* item = new FunctionCalltipCompletionItem(
+                auto  item = new FunctionCalltipCompletionItem(
                     functionDecl,
                     argumentHintDepth,
                     entry.commas

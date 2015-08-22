@@ -158,7 +158,7 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEd
     kdeclarative.setupBindings();        //binds things like kconfig and icons
 
     // Configure layout
-    QHBoxLayout*l = new QHBoxLayout;
+    auto l = new QHBoxLayout;
 
     l->setContentsMargins(0, 0, 0, 0);
     setLayout(l);
