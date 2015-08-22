@@ -102,6 +102,7 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
     m_view = m_preview->createView(this);
+    m_view->setStatusBarEnabled(false);
     if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(m_view)) {
         config->setConfigValue("icon-bar", false);
         config->setConfigValue("folding-bar", false);
