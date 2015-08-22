@@ -172,12 +172,12 @@ Controller *MainWindow::controller() const
     return d->controller;
 }
 
-View *MainWindow::activeView()
+View *MainWindow::activeView() const
 {
     return d->activeView;
 }
 
-View *MainWindow::activeToolView()
+View *MainWindow::activeToolView() const
 {
     return d->activeToolView;
 }

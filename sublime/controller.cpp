@@ -230,6 +230,8 @@ void Controller::addDefaultArea(Area *area)
 
 void Controller::addMainWindow(MainWindow* mainWindow)
 {
+    Q_ASSERT(mainWindow);
+
     Q_ASSERT (!d->controlledWindows.contains(mainWindow));
     d->controlledWindows << mainWindow;
     d->mainWindowAreas.resize(d->controlledWindows.size());

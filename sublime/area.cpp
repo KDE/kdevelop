@@ -367,6 +367,14 @@ void Area::setShownToolViews(Sublime::Position pos, const QStringList& ids)
 
 QStringList Area::shownToolViews(Sublime::Position pos) const
 {
+    if (pos == Sublime::AllPositions) {
+        QStringList allIds;
+        std::for_each(d->shownToolViews.constBegin(), d->shownToolViews.constEnd(), [&](const QStringList& ids) {
+            allIds << ids;
+        });
+        return allIds;
+    }
+
     return d->shownToolViews[pos];
 }
 

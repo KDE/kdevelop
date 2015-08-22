@@ -62,9 +62,9 @@ public:
     Controller *controller() const;
 
     /**@return active view inside this mainwindow.*/
-    View *activeView();
+    View *activeView() const;
     /**@return active toolview inside this mainwindow.*/
-    View *activeToolView();
+    View *activeToolView() const;
 
     /**Enable saving of per-area UI settings (like toolbar properties
        and position) whenever area is changed.  This should be
