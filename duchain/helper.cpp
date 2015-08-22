@@ -103,7 +103,7 @@ QmlJS::AST::Statement* getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, 
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 QString getNodeValue(AST::Node* node)

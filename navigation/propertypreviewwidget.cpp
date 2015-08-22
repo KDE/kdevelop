@@ -112,7 +112,7 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
         return new PropertyPreviewWidget(doc, keyRange, valueRange, property, value);
     }
 
-    return 0;
+    return nullptr;
 }
 
 void PropertyPreviewWidget::updateValue()

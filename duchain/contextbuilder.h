@@ -70,7 +70,7 @@ public:
     virtual KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node);
 
     virtual KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range,
-                                                  KDevelop::ParsingEnvironmentFile* file = 0);
+                                                  KDevelop::ParsingEnvironmentFile* file = nullptr);
     virtual KDevelop::DUContext* newContext(const KDevelop::RangeInRevision& range);
 
     ExpressionType findType(QmlJS::AST::Node* node);

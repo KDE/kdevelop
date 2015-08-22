@@ -272,7 +272,7 @@ void ParseSession::scheduleForParsing(const IndexedString& url, int priority)
         bgparser->removeDocument(url);
     }
 
-    bgparser->addDocument(url, features, priority, 0, ParseJob::FullSequentialProcessing);
+    bgparser->addDocument(url, features, priority, nullptr, ParseJob::FullSequentialProcessing);
 }
 
 void ParseSession::dumpNode(QmlJS::AST::Node* node) const

@@ -26,7 +26,7 @@ using namespace KDevelop;
 
 ContextBuilder::ContextBuilder()
 : ContextBuilderBase()
-, m_session(0)
+, m_session(nullptr)
 , m_mapAst(false)
 , m_editor(new Editor(&m_session))
 {

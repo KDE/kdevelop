@@ -176,13 +176,13 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
                                           CompletionItem::NoDecoration);
         } else {
             items << completionsInContext(m_duContext,
-                                          0,
+                                          nullptr,
                                           CompletionItem::NoDecoration);
-            items << completionsFromImports(0);
-            items << completionsFromNodeModule(0, QLatin1String("__builtin_ecmascript"));
+            items << completionsFromImports(nullptr);
+            items << completionsFromNodeModule(nullptr, QLatin1String("__builtin_ecmascript"));
 
             if (!QmlJS::isQmlFile(m_duContext.data())) {
-                items << completionsFromNodeModule(0, QLatin1String("__builtin_dom"));
+                items << completionsFromNodeModule(nullptr, QLatin1String("__builtin_dom"));
             }
         }
     }

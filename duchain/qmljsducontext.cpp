@@ -38,7 +38,7 @@ template<>
 QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
     if (!decl) {
         qCDebug(KDEV_QMLJS_DUCHAIN) << "no declaration, not returning navigationwidget";
-        return 0;
+        return nullptr;
     }
     return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix);
 }
@@ -47,7 +47,7 @@ template<>
 QWidget* QmlJSNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
     if (!decl) {
         qCDebug(KDEV_QMLJS_DUCHAIN) << "no declaration, not returning navigationwidget";
-        return 0;
+        return nullptr;
     }
     return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix);
 }
