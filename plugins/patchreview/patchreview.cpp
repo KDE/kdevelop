@@ -470,7 +470,6 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
     qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
 
-    core()->uiController()->addToolView( i18n( "Patch Review" ), m_factory );
     setXMLFile( "kdevpatchreview.rc" );
 
     connect( ICore::self()->documentController(), &IDocumentController::documentClosed, this, &PatchReviewPlugin::documentClosed );
@@ -490,6 +489,8 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
         if (area->objectName() == "review")
             area->addAction(m_finishReview);
     }
+
+    core()->uiController()->addToolView( i18n( "Patch Review" ), m_factory );
 
     areaChanged(ICore::self()->uiController()->activeArea());
 }
