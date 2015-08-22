@@ -107,9 +107,7 @@ void Controller::init()
 
 Controller::~Controller()
 {
-    // FIXME:
-//    foreach (MainWindow *w, d->controlledWindows)
-//        delete w;
+    qDeleteAll(d->controlledWindows);
     delete d;
 }
 
