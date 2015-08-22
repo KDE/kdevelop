@@ -266,6 +266,11 @@ ProblemTreeView::~ProblemTreeView()
 {
 }
 
+void ProblemTreeView::openDocumentForCurrentProblem()
+{
+    itemActivated(currentIndex());
+}
+
 void ProblemTreeView::itemActivated(const QModelIndex& index)
 {
     if (!index.isValid())

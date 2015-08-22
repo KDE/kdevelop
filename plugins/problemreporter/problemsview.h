@@ -21,7 +21,11 @@
 #ifndef PROBLEMSVIEW_H
 #define PROBLEMSVIEW_H
 
+#include <interfaces/itoolviewactionlistener.h>
+
 #include <QMainWindow>
+
+class ProblemTreeView;
 
 namespace KDevelop
 {
@@ -34,9 +38,10 @@ struct ModelData;
 // TODO: According to apol this should NOT be a QMainWindow,
 // because updating the widget's actions should be sufficient to update the
 // toolbar of the toolviiew
-class ProblemsView : public QMainWindow
+class ProblemsView : public QMainWindow, public IToolViewActionListener
 {
     Q_OBJECT
+    Q_INTERFACES(KDevelop::IToolViewActionListener)
 
 public:
     explicit ProblemsView(QWidget *parent = NULL);
@@ -58,7 +63,12 @@ public Q_SLOTS:
     // Triggered when a view changes (happens when the model data changes)
     void onViewChanged();
 
+    void selectNextItem() override;
+    void selectPreviousItem() override;
+
 private:
+    ProblemTreeView* currentView() const;
+
     // Create a view for the model and add to the tabbed widget
     void addModel(const ModelData &data);
 

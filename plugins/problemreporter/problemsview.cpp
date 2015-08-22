@@ -33,6 +33,68 @@
 namespace KDevelop
 {
 
+/// TODO: Move to util?
+/// Note: Support for recursing into child indices would be nice
+class ItemViewWalker
+{
+public:
+    ItemViewWalker(QItemSelectionModel* itemView);
+
+    void selectNextIndex();
+    void selectPreviousIndex();
+
+    enum Direction {
+        NextIndex,
+        PreviousIndex
+    };
+    void selectIndex(Direction direction);
+
+private:
+    QItemSelectionModel* m_selectionModel;
+};
+
+ItemViewWalker::ItemViewWalker(QItemSelectionModel* itemView)
+    : m_selectionModel(itemView)
+{
+}
+
+void ItemViewWalker::selectNextIndex()
+{
+    selectIndex(NextIndex);
+}
+
+void ItemViewWalker::selectPreviousIndex()
+{
+    selectIndex(PreviousIndex);
+}
+
+void ItemViewWalker::selectIndex(Direction direction)
+{
+    if (!m_selectionModel) {
+        return;
+    }
+
+    const QModelIndexList list = m_selectionModel->selectedRows();
+
+    qWarning() << "FOO" << list;
+    const QModelIndex currentIndex = list.value(0);
+    if (!currentIndex.isValid()) {
+        // no selection yet, just select the first
+        const QModelIndex firstIndex = m_selectionModel->model()->index(0, 0);
+        m_selectionModel->setCurrentIndex(firstIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+        return;
+    }
+
+    const int nextRow = currentIndex.row() + (direction == NextIndex ? 1 : -1);
+    const QModelIndex nextIndex = currentIndex.sibling(nextRow, 0);
+    if (!nextIndex.isValid()) {
+        return; // never invalidate the selection
+    }
+
+    m_selectionModel->setCurrentIndex(nextIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+}
+
+
 ProblemsView::ProblemsView(QWidget *parent) :
 QMainWindow(parent)
 {
@@ -154,6 +216,30 @@ void ProblemsView::updateTab(int idx, int rows)
     m_tabWidget->setTabText(idx, tabText);
 }
 
+ProblemTreeView* ProblemsView::currentView() const
+{
+    return qobject_cast<ProblemTreeView*>(m_tabWidget->currentWidget());
+}
+
+void ProblemsView::selectNextItem()
+{
+    auto view = currentView();
+    if (view) {
+        ItemViewWalker walker(view->selectionModel());
+        walker.selectNextIndex();
+        view->openDocumentForCurrentProblem();
+    }
+}
+
+void ProblemsView::selectPreviousItem()
+{
+    auto view = currentView();
+    if (view) {
+        ItemViewWalker walker(view->selectionModel());
+        walker.selectPreviousIndex();
+        view->openDocumentForCurrentProblem();
+    }
 }
 
 
+}

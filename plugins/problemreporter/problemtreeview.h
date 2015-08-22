@@ -49,6 +49,9 @@ public:
                            const QVector<int>& roles = QVector<int>()) override;
   virtual void reset() override;
 
+public slots:
+  void openDocumentForCurrentProblem();
+
 signals:
   // Emitted when the model's rows change (added/removed/reset)
   void changed();
