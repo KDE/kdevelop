@@ -454,7 +454,7 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
 
     for (auto it = decl.iterator(); it; ++it) {
         auto declaration = it->declaration();
-        if (declaration->kind() == Declaration::Instance) {
+        if (declaration->kind() == Declaration::Instance && !declaration->isFunctionDeclaration()) {
             break;
         }
         if (!handled.contains(declaration)) {
