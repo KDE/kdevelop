@@ -504,7 +504,6 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
     qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
 
-    core()->uiController()->addToolView( i18n( "Patch Review" ), m_factory );
     setXMLFile( "kdevpatchreview.rc" );
 
     connect( ICore::self()->documentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
@@ -522,6 +521,8 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     ICore::self()->uiController()->activeArea()->addAction(m_finishReview);
 
     setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
+
+    core()->uiController()->addToolView( i18n( "Patch Review" ), m_factory );
     areaChanged(ICore::self()->uiController()->activeArea());
 }
 
