@@ -55,16 +55,15 @@ class CommandQueue;
 class GDBCommand;
 class GDB;
 
-static QString gdbPathEntry = "GDB Path";
-static QString debuggerShellEntry = "Debugger Shell";
-static QString remoteGdbConfigEntry = "Remote GDB Config Script";
-static QString remoteGdbShellEntry = "Remote GDB Shell Script";
-static QString remoteGdbRunEntry = "Remote GDB Run Script";
-static QString staticMembersEntry = "Display Static Members";
-static QString demangleNamesEntry = "Display Demangle Names";
-//static QString separateTerminalEntry = "Separate Terminal For Application IO";
-static QString allowForcedBPEntry = "Allow Forced Breakpoint Set";
-static QString startWithEntry = "Start With";
+static const char gdbPathEntry[] = "GDB Path";
+static const char debuggerShellEntry[] = "Debugger Shell";
+static const char remoteGdbConfigEntry[] = "Remote GDB Config Script";
+static const char remoteGdbShellEntry[] = "Remote GDB Shell Script";
+static const char remoteGdbRunEntry[] = "Remote GDB Run Script";
+static const char staticMembersEntry[] = "Display Static Members";
+static const char demangleNamesEntry[] = "Display Demangle Names";
+static const char allowForcedBPEntry[] = "Allow Forced Breakpoint Set";
+static const char startWithEntry[] = "Start With";
 
 class DebugSession : public KDevelop::IDebugSession
 {
