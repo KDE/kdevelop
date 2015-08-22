@@ -33,7 +33,6 @@
 
 #include <QtTest/QTest>
 
-#include "../../duchain/helper.h"
 #include "../context.h"
 #include "../model.h"
 
