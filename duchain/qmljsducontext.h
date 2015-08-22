@@ -23,6 +23,7 @@
 #ifndef __QMLJSDUCONTEXT_H__
 #define __QMLJSDUCONTEXT_H__
 
+#include <language/duchain/duchainregister.h>
 #include <language/duchain/ducontext.h>
 
 class QWidget;
@@ -75,5 +76,7 @@ typedef QmlJSDUContext<KDevelop::DUContext, 111> QmlJSNormalDUContext;
 
 }
 
+DUCHAIN_DECLARE_TYPE(QmlJS::QmlJSTopDUContext)
+DUCHAIN_DECLARE_TYPE(QmlJS::QmlJSNormalDUContext)
 
 #endif

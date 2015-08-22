@@ -23,8 +23,10 @@
 #define __FUNCTIONDECLARATION_H__
 
 #include "duchainexport.h"
+
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/indexedducontext.h>
+#include <language/duchain/duchainregister.h>
 
 namespace QmlJS {
 
@@ -82,10 +84,13 @@ public:
     };
 
     typedef KDevelop::DUChainPointer<FunctionDeclaration> Ptr;
+
 private:
     DUCHAIN_DECLARE_DATA(FunctionDeclaration);
 };
 
 }
+
+DUCHAIN_DECLARE_TYPE(QmlJS::FunctionDeclaration)
 
 #endif

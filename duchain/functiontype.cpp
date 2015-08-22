@@ -26,8 +26,6 @@
 
 namespace QmlJS {
 
-KDevelop::TypeSystemRegistrator<FunctionType, FunctionType::Data> registerFunctionType;
-
 FunctionType::FunctionType()
 : FunctionTypeBase(createData<FunctionType>())
 {

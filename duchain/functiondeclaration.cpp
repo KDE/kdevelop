@@ -24,8 +24,6 @@
 
 namespace QmlJS {
 
-REGISTER_DUCHAIN_ITEM(FunctionDeclaration);
-
 FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs)
 : KDevelop::FunctionDeclaration(*new FunctionDeclarationData(*rhs.d_func()))
 {
@@ -74,4 +72,6 @@ void FunctionDeclaration::setPrototypeContext(KDevelop::DUContext* context)
     }
 }
 
-};
+}
+
+DUCHAIN_DEFINE_TYPE(QmlJS::FunctionDeclaration)

@@ -21,6 +21,7 @@
 
 #include "testdeclarations.h"
 
+#include "../helper.h"
 #include "../parsesession.h"
 #include "../declarationbuilder.h"
 
@@ -43,6 +44,8 @@ void TestDeclarations::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
+
+    QmlJS::registerDUChainItems();
 }
 
 void TestDeclarations::cleanupTestCase()

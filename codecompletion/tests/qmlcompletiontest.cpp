@@ -33,6 +33,7 @@
 
 #include <QtTest/QTest>
 
+#include "../../duchain/helper.h"
 #include "../context.h"
 #include "../model.h"
 
@@ -175,7 +176,7 @@ namespace QmlJS {
 
 void QmlCompletionTest::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({"kdevqmljs"});
     TestCore::initialize(Core::NoUi);
     DUChain::self()->disablePersistentStorage();
     CodeRepresentation::setDiskChangesForbidden(true);

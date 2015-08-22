@@ -24,6 +24,7 @@
 #include "qmljshighlighting.h"
 #include "codecompletion/model.h"
 #include "navigation/propertypreviewwidget.h"
+#include "duchain/helper.h"
 
 #include <KPluginFactory>
 #include <KAboutData>
@@ -52,6 +53,8 @@ KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
 {
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
 
+    QmlJS::registerDUChainItems();
+
     CodeCompletionModel* codeCompletion = new QmlJS::CodeCompletionModel(this);
     new KDevelop::CodeCompletion(this, codeCompletion, name());
 
@@ -61,6 +64,7 @@ KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
 
 KDevQmlJsPlugin::~KDevQmlJsPlugin()
 {
+    QmlJS::unregisterDUChainItems();
 }
 
 ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)

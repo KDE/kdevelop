@@ -21,6 +21,7 @@
 
 #include "testcontexts.h"
 
+#include "../helper.h"
 #include "../parsesession.h"
 #include "../declarationbuilder.h"
 
@@ -38,6 +39,8 @@ void TestContexts::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
+
+    QmlJS::registerDUChainItems();
 }
 
 void TestContexts::cleanupTestCase()

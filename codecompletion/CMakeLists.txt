@@ -14,7 +14,7 @@ set(completion_SRCS
     ../libs/qmljs/parser/qmljsgrammar.cpp
 )
 
-add_library(kdevqmljscompletion SHARED ${completion_SRCS})
+add_library(kdevqmljscompletion STATIC ${completion_SRCS})
 
 generate_export_header(kdevqmljscompletion EXPORT_MACRO_NAME KDEVQMLJSCOMPLETION_EXPORT
                                            EXPORT_FILE_NAME codecompletionexport.h)
@@ -26,7 +26,5 @@ target_link_libraries(kdevqmljscompletion LINK_PRIVATE
     kdevqmljsduchain
     kdevqtc-qmlsupport
 )
-
-install(TARGETS kdevqmljscompletion DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 add_subdirectory(tests)

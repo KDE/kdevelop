@@ -21,9 +21,11 @@
 #include "functiontype.h"
 #include "parsesession.h"
 #include "frameworks/nodejs.h"
+#include "qmljsducontext.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainregister.h>
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
@@ -32,6 +34,7 @@
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/typeutils.h>
+#include <language/duchain/types/typeregister.h>
 
 namespace QmlJS
 {
@@ -286,6 +289,22 @@ bool isQmlFile(const DUContext* context)
 {
     DUChainReadLocker lock;
     return ParseSession::guessLanguageFromSuffix(context->topContext()->url().str()) == Language::Qml;
+}
+
+void registerDUChainItems()
+{
+    duchainRegisterType<QmlJSTopDUContext>();
+    duchainRegisterType<QmlJSNormalDUContext>();
+    duchainRegisterType<FunctionDeclaration>();
+
+    TypeSystem::self().registerTypeClass<FunctionType>();
+}
+
+void unregisterDUChainItems()
+{
+    TypeSystem::self().unregisterTypeClass<FunctionType>();
+
+    // rest not supported, see comment in kdev-clang
 }
 
 } // End of namespace QmlJS

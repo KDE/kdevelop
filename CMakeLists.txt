@@ -28,7 +28,7 @@ include_directories(
 )
 
 add_definitions(-DQT_CREATOR) # :D
-add_definitions(-DQML_BUILD_STATIC_LIB=0 -DQMLJS_BUILD_DIR)
+add_definitions(-DQML_BUILD_STATIC_LIB=1)
 
 add_subdirectory(libs)
 add_subdirectory(duchain)

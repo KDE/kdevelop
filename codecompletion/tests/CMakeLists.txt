@@ -5,4 +5,5 @@ target_link_libraries(qmlcompletiontest
     Qt5::Test
     KDev::Tests
     kdevqmljscompletion
+    kdevqmljsduchain
 )

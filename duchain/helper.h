@@ -131,6 +131,9 @@ using namespace KDevelop;
      */
     KDEVQMLJSDUCHAIN_EXPORT bool isQmlFile(const DUContext* context);
 
+    KDEVQMLJSDUCHAIN_EXPORT void registerDUChainItems();
+    KDEVQMLJSDUCHAIN_EXPORT void unregisterDUChainItems();
+
 
 } // End of namespace QmlJS
 

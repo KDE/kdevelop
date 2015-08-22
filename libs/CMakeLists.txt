@@ -5,7 +5,7 @@ qt5_wrap_ui(uifiles_SRCS
 	utils/newclasswidget.ui
 )
 
-add_library(kdevqtc-qmlsupport SHARED
+add_library(kdevqtc-qmlsupport STATIC
 	${uifiles_SRCS}
 	languageutils/componentversion.cpp
 	languageutils/fakemetaobject.cpp
@@ -25,7 +25,7 @@ add_library(kdevqtc-qmlsupport SHARED
 	utils/savefile.cpp
 )
 
-set_target_properties(kdevqtc-qmlsupport PROPERTIES COMPILE_FLAGS "-DLANGUAGEUTILS_BUILD_DIR\ -DQMLJS_BUILD_DIR\ -DQTCREATOR_UTILS_LIB")
+set_target_properties(kdevqtc-qmlsupport PROPERTIES COMPILE_FLAGS "-DLANGUAGEUTILS_BUILD_DIR\ -DQTCREATOR_UTILS_LIB")
 target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     Qt5::Core
     Qt5::Gui
@@ -33,5 +33,3 @@ target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     Qt5::Script
     Qt5::Network
 )
-
-install(TARGETS kdevqtc-qmlsupport ${INSTALL_TARGETS_DEFAULT_ARGS})

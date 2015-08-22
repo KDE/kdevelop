@@ -34,10 +34,6 @@ using namespace KDevelop;
 
 namespace QmlJS {
 
-REGISTER_DUCHAIN_ITEM_WITH_DATA(QmlJSTopDUContext, TopDUContextData);
-
-REGISTER_DUCHAIN_ITEM_WITH_DATA(QmlJSNormalDUContext, DUContextData);
-
 template<>
 QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
     if (!decl) {
@@ -57,3 +53,6 @@ QWidget* QmlJSNormalDUContext::createNavigationWidget(Declaration* decl, TopDUCo
 }
 
 }
+
+DUCHAIN_DEFINE_TYPE_WITH_DATA(QmlJS::QmlJSNormalDUContext, DUContextData)
+DUCHAIN_DEFINE_TYPE_WITH_DATA(QmlJS::QmlJSTopDUContext, TopDUContextData)
