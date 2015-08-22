@@ -17,7 +17,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef PROBLEMSVIEW_H
 #define PROBLEMSVIEW_H
 
@@ -44,7 +43,7 @@ class ProblemsView : public QMainWindow, public IToolViewActionListener
     Q_INTERFACES(KDevelop::IToolViewActionListener)
 
 public:
-    explicit ProblemsView(QWidget *parent = NULL);
+    explicit ProblemsView(QWidget* parent = NULL);
     ~ProblemsView();
 
     // Load all the current models and create tabs for them
@@ -52,10 +51,10 @@ public:
 
 public Q_SLOTS:
     // Triggered when a new model is added to the ModelSet
-    void onModelAdded(const ModelData &data);
+    void onModelAdded(const ModelData& data);
 
     // Triggered when a model is removed from the ModelSet
-    void onModelRemoved(const QString &name);
+    void onModelRemoved(const QString& name);
 
     // Triggered when the user (or program) selects a new tab
     void onCurrentChanged(int idx);
@@ -70,7 +69,7 @@ private:
     ProblemTreeView* currentView() const;
 
     // Create a view for the model and add to the tabbed widget
-    void addModel(const ModelData &data);
+    void addModel(const ModelData& data);
 
     // Update the toolbar with the widget's actions
     void updateToolBar();
@@ -78,10 +77,9 @@ private:
     // Update the tab's text (name + number of problems in that tab)
     void updateTab(int idx, int rows);
 
-    QToolBar *m_toolBar;
-    QTabWidget *m_tabWidget;
+    QToolBar* m_toolBar;
+    QTabWidget* m_tabWidget;
 };
-
 }
 
 #endif

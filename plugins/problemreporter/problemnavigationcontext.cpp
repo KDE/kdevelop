@@ -31,37 +31,38 @@
 
 using namespace KDevelop;
 
-ProblemNavigationContext::ProblemNavigationContext(const IProblem::Ptr &problem): m_problem(problem)
+ProblemNavigationContext::ProblemNavigationContext(const IProblem::Ptr& problem)
+    : m_problem(problem)
 {
-  m_widget = 0;
+    m_widget = 0;
 
-  QExplicitlySharedDataPointer< IAssistant > solution = problem->solutionAssistant();
-  if(solution && !solution->actions().isEmpty()) {
-    m_widget = new QWidget;
-    QHBoxLayout* layout = new QHBoxLayout(m_widget);
-    RichTextPushButton* button = new RichTextPushButton;
-//     button->setPopupMode(QToolButton::InstantPopup);
-    if(!solution->title().isEmpty())
-      button->setHtml(i18n("Solve: %1", solution->title()));
-    else
-      button->setHtml(i18n("Solve"));
+    QExplicitlySharedDataPointer<IAssistant> solution = problem->solutionAssistant();
+    if (solution && !solution->actions().isEmpty()) {
+        m_widget = new QWidget;
+        QHBoxLayout* layout = new QHBoxLayout(m_widget);
+        RichTextPushButton* button = new RichTextPushButton;
+        //     button->setPopupMode(QToolButton::InstantPopup);
+        if (!solution->title().isEmpty())
+            button->setHtml(i18n("Solve: %1", solution->title()));
+        else
+            button->setHtml(i18n("Solve"));
 
-    QMenu* menu = new QMenu;
-    menu->setFocusPolicy(Qt::NoFocus);
-    foreach(IAssistantAction::Ptr action, solution->actions()) {
-      menu->addAction(action->toKAction());
+        QMenu* menu = new QMenu;
+        menu->setFocusPolicy(Qt::NoFocus);
+        foreach (IAssistantAction::Ptr action, solution->actions()) {
+            menu->addAction(action->toKAction());
+        }
+        button->setMenu(menu);
+
+        layout->addWidget(button);
+        layout->setAlignment(button, Qt::AlignLeft);
+        m_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     }
-    button->setMenu(menu);
-
-    layout->addWidget(button);
-    layout->setAlignment(button, Qt::AlignLeft);
-    m_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-  }
 }
 
 ProblemNavigationContext::~ProblemNavigationContext()
 {
-  delete m_widget;
+    delete m_widget;
 }
 
 QWidget* ProblemNavigationContext::widget() const
@@ -76,43 +77,46 @@ bool ProblemNavigationContext::isWidgetMaximized() const
 
 QString ProblemNavigationContext::name() const
 {
-  return i18n("Problem");
+    return i18n("Problem");
 }
-
 
 QString ProblemNavigationContext::html(bool shorten)
 {
-  clear();
-  m_shorten = shorten;
-  modifyHtml() += "<html><body><p>";
+    clear();
+    m_shorten = shorten;
+    modifyHtml() += "<html><body><p>";
 
-  modifyHtml() += i18n("Problem in <b>%1</b>:<br/>", m_problem->sourceString());
-  modifyHtml() += m_problem->description().toHtmlEscaped();
-  modifyHtml() += "<br/>";
-  modifyHtml() += "<i style=\"white-space:pre-wrap\">" + m_problem->explanation().toHtmlEscaped() + "</i>";
-
-  const QVector<IProblem::Ptr> &diagnostics = m_problem->diagnostics();
-  if (!diagnostics.isEmpty()) {
+    modifyHtml() += i18n("Problem in <b>%1</b>:<br/>", m_problem->sourceString());
+    modifyHtml() += m_problem->description().toHtmlEscaped();
     modifyHtml() += "<br/>";
+    modifyHtml() += "<i style=\"white-space:pre-wrap\">" + m_problem->explanation().toHtmlEscaped() + "</i>";
 
-    DUChainReadLocker lock;
-    for (auto diagnostic : diagnostics) {
-      const DocumentRange range = diagnostic->finalLocation();
-      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start());
-
-      modifyHtml() += labelHighlight(QStringLiteral("%1: ").arg(diagnostic->severityString()));
-      modifyHtml() += diagnostic->description();
-
-      if (declaration) {
+    const QVector<IProblem::Ptr>& diagnostics = m_problem->diagnostics();
+    if (!diagnostics.isEmpty()) {
         modifyHtml() += "<br/>";
-        makeLink(declaration->toString(), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
-        modifyHtml() += i18n(" in ");
-        makeLink(QStringLiteral("%1 :%2").arg(declaration->url().toUrl().fileName()).arg(declaration->rangeInCurrentRevision().start().line()+1), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
-      }
-      modifyHtml() += "<br/>";
-    }
-  }
 
-  modifyHtml() += "</p></body></html>";
-  return currentHtml();
+        DUChainReadLocker lock;
+        for (auto diagnostic : diagnostics) {
+            const DocumentRange range = diagnostic->finalLocation();
+            Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start());
+
+            modifyHtml() += labelHighlight(QStringLiteral("%1: ").arg(diagnostic->severityString()));
+            modifyHtml() += diagnostic->description();
+
+            if (declaration) {
+                modifyHtml() += "<br/>";
+                makeLink(declaration->toString(), KDevelop::DeclarationPointer(declaration),
+                         NavigationAction::NavigateDeclaration);
+                modifyHtml() += i18n(" in ");
+                makeLink(QStringLiteral("%1 :%2")
+                             .arg(declaration->url().toUrl().fileName())
+                             .arg(declaration->rangeInCurrentRevision().start().line() + 1),
+                         KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+            }
+            modifyHtml() += "<br/>";
+        }
+    }
+
+    modifyHtml() += "</p></body></html>";
+    return currentHtml();
 }

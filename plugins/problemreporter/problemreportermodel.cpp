@@ -18,7 +18,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "problemreportermodel.h"
 
 #include <language/backgroundparser/backgroundparser.h>
@@ -44,7 +43,7 @@ using namespace KDevelop;
 const int ProblemReporterModel::MinTimeout = 1000;
 const int ProblemReporterModel::MaxTimeout = 5000;
 
-ProblemReporterModel::ProblemReporterModel(QObject *parent)
+ProblemReporterModel::ProblemReporterModel(QObject* parent)
     : ProblemModel(parent, new ProblemStore())
     , m_showImports(false)
 {
@@ -65,7 +64,6 @@ ProblemReporterModel::~ProblemReporterModel()
 {
 }
 
-
 QVector<IProblem::Ptr> ProblemReporterModel::problems(const KDevelop::IndexedString& url, bool showImports) const
 {
     QVector<IProblem::Ptr> result;
@@ -75,7 +73,7 @@ QVector<IProblem::Ptr> ProblemReporterModel::problems(const KDevelop::IndexedStr
     return result;
 }
 
-QVector<IProblem::Ptr> ProblemReporterModel::problems(const QSet< KDevelop::IndexedString > &urls, bool showImports) const
+QVector<IProblem::Ptr> ProblemReporterModel::problems(const QSet<KDevelop::IndexedString>& urls, bool showImports) const
 {
     QVector<IProblem::Ptr> result;
     QSet<KDevelop::TopDUContext*> visitedContexts;
@@ -85,7 +83,6 @@ QVector<IProblem::Ptr> ProblemReporterModel::problems(const QSet< KDevelop::Inde
     }
     return result;
 }
-
 
 void ProblemReporterModel::forceFullUpdate()
 {
@@ -100,11 +97,15 @@ void ProblemReporterModel::forceFullUpdate()
         KDevelop::TopDUContext::Features updateType = KDevelop::TopDUContext::ForceUpdate;
         if (documents.size() == 1)
             updateType = KDevelop::TopDUContext::ForceUpdateRecursive;
-        KDevelop::DUChain::self()->updateContextForUrl(document, (KDevelop::TopDUContext::Features)(updateType | KDevelop::TopDUContext::VisibleDeclarationsAndContexts));
+        KDevelop::DUChain::self()->updateContextForUrl(
+            document,
+            (KDevelop::TopDUContext::Features)(updateType | KDevelop::TopDUContext::VisibleDeclarationsAndContexts));
     }
 }
 
-void ProblemReporterModel::problemsInternal(KDevelop::TopDUContext* context, bool showImports, QSet<KDevelop::TopDUContext*>& visitedContexts, QVector<IProblem::Ptr>& result) const
+void ProblemReporterModel::problemsInternal(KDevelop::TopDUContext* context, bool showImports,
+                                            QSet<KDevelop::TopDUContext*>& visitedContexts,
+                                            QVector<IProblem::Ptr>& result) const
 {
     if (!context || visitedContexts.contains(context)) {
         return;
@@ -117,14 +118,15 @@ void ProblemReporterModel::problemsInternal(KDevelop::TopDUContext* context, boo
     visitedContexts.insert(context);
     if (showImports) {
         bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
-        foreach (const KDevelop::DUContext::Import &ctx, context->importedParentContexts()) {
+        foreach (const KDevelop::DUContext::Import& ctx, context->importedParentContexts()) {
             if (!ctx.indexedContext().indexedTopContext().isLoaded())
                 continue;
             KDevelop::TopDUContext* topCtx = dynamic_cast<KDevelop::TopDUContext*>(ctx.context(0));
             if (topCtx) {
-                //If we are starting at a proxy-context, only recurse into other proxy-contexts,
-                //because those contain the problems.
-                if (!isProxy || (topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext()))
+                // If we are starting at a proxy-context, only recurse into other proxy-contexts,
+                // because those contain the problems.
+                if (!isProxy
+                    || (topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext()))
                     problemsInternal(topCtx, showImports, visitedContexts, result);
             }
         }
@@ -143,7 +145,7 @@ void ProblemReporterModel::timerExpired()
     rebuildProblemList();
 }
 
-void ProblemReporterModel::setCurrentDocument(KDevelop::IDocument *doc)
+void ProblemReporterModel::setCurrentDocument(KDevelop::IDocument* doc)
 {
     Q_ASSERT(thread() == QThread::currentThread());
 
@@ -189,6 +191,3 @@ void ProblemReporterModel::rebuildProblemList()
 
     endResetModel();
 }
-
-
-

@@ -46,7 +46,8 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
-namespace {
+namespace
+{
 
 QColor colorForSeverity(IProblem::Severity severity)
 {
@@ -61,7 +62,6 @@ QColor colorForSeverity(IProblem::Severity severity)
         return scheme.foreground(KColorScheme::PositiveText).color();
     }
 }
-
 }
 
 ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
@@ -69,33 +69,33 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
 {
     Q_ASSERT(m_document);
 
-    foreach(KTextEditor::View* view, m_document->views())
+    foreach (KTextEditor::View* view, m_document->views())
         viewCreated(document, view);
 
     connect(m_document.data(), &Document::viewCreated, this, &ProblemHighlighter::viewCreated);
-    connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this, &ProblemHighlighter::settingsChanged);
-    connect(m_document.data(), &Document::reloaded,
-            this, &ProblemHighlighter::documentReloaded);
+    connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this,
+            &ProblemHighlighter::settingsChanged);
+    connect(m_document.data(), &Document::reloaded, this, &ProblemHighlighter::documentReloaded);
     if (qobject_cast<MovingInterface*>(m_document)) {
         // can't use new signal/slot syntax here, MovingInterface is not a QObject
-        connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
-                this, SLOT(aboutToInvalidateMovingInterfaceContent()));
+        connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
+                SLOT(aboutToInvalidateMovingInterfaceContent()));
     }
     // TODO: this depends on m_document being a KateDocument, should we rely on internals here?
-    connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)),
-            this, SLOT(aboutToRemoveText(KTextEditor::Range)));
+    connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)), this,
+            SLOT(aboutToRemoveText(KTextEditor::Range)));
 }
 
 void ProblemHighlighter::settingsChanged()
 {
-    //Re-highlight
+    // Re-highlight
     setProblems(m_problems);
 }
 
-void ProblemHighlighter::viewCreated(Document* , View* view)
+void ProblemHighlighter::viewCreated(Document*, View* view)
 {
     KTextEditor::TextHintInterface* iface = dynamic_cast<KTextEditor::TextHintInterface*>(view);
-    if( !iface )
+    if (!iface)
         return;
 
     iface->registerTextHintProvider(new ProblemTextHintProvider(this));
@@ -109,12 +109,11 @@ ProblemTextHintProvider::ProblemTextHintProvider(ProblemHighlighter* highlighter
 QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
 {
     KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(view->document());
-    if(moving) {
+    if (moving) {
         ///@todo Sort the ranges when writing them, and do binary search instead of linear
-        foreach(MovingRange* range, m_highlighter->m_topHLRanges) {
-            if(m_highlighter->m_problemsForRanges.contains(range) && range->contains(pos))
-            {
-                //There is a problem which's range contains the cursor
+        foreach (MovingRange* range, m_highlighter->m_topHLRanges) {
+            if (m_highlighter->m_problemsForRanges.contains(range) && range->contains(pos)) {
+                // There is a problem which's range contains the cursor
                 IProblem::Ptr problem = m_highlighter->m_problemsForRanges[range];
                 if (problem->source() == IProblem::ToDo) {
                     continue;
@@ -123,9 +122,10 @@ QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
                 KDevelop::AbstractNavigationWidget* widget = new KDevelop::AbstractNavigationWidget;
                 widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problem)));
 
-                KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, QCursor::pos() + QPoint(20, 40), widget);
+                KDevelop::NavigationToolTip* tooltip
+                    = new KDevelop::NavigationToolTip(view, QCursor::pos() + QPoint(20, 40), widget);
 
-                tooltip->resize( widget->sizeHint() + QSize(10, 10) );
+                tooltip->resize(widget->sizeHint() + QSize(10, 10));
                 ActiveToolTip::showToolTip(tooltip, 99, "problem-tooltip");
                 return QString();
             }
@@ -136,7 +136,7 @@ QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
 
 ProblemHighlighter::~ProblemHighlighter()
 {
-    if(m_topHLRanges.isEmpty() || !m_document)
+    if (m_topHLRanges.isEmpty() || !m_document)
         return;
 
     qDeleteAll(m_topHLRanges);
@@ -144,7 +144,7 @@ ProblemHighlighter::~ProblemHighlighter()
 
 void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
 {
-    if(!m_document)
+    if (!m_document)
         return;
 
     KTextEditor::MovingInterface* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
@@ -157,9 +157,9 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     m_topHLRanges.clear();
     m_problemsForRanges.clear();
 
-    IndexedString url( m_document->url() );
+    IndexedString url(m_document->url());
 
-    ///TODO: create a better MarkInterface that makes it possible to add the marks to the scrollbar
+    /// TODO: create a better MarkInterface that makes it possible to add the marks to the scrollbar
     ///      but having no background.
     ///      also make it nicer together with other plugins, this would currently fail with
     ///      this method...
@@ -168,7 +168,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>(m_document.data());
     if (markIface && hadProblems) {
         // clear previously added marks
-        foreach(KTextEditor::Mark* mark, markIface->marks().values()) {
+        foreach (KTextEditor::Mark* mark, markIface->marks().values()) {
             if (mark->type == errorMarkType || mark->type == warningMarkType) {
                 markIface->removeMark(mark->line, mark->type);
             }
@@ -184,15 +184,15 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
             continue;
 
         KTextEditor::Range range;
-        if(top)
+        if (top)
             range = top->transformFromLocalRevision(RangeInRevision::castFromSimpleRange(problem->finalLocation()));
         else
             range = problem->finalLocation();
 
-        if(range.end().line() >= m_document->lines())
-            range.end() = KTextEditor::Cursor(m_document->endOfLine(m_document->lines()-1));
+        if (range.end().line() >= m_document->lines())
+            range.end() = KTextEditor::Cursor(m_document->endOfLine(m_document->lines() - 1));
 
-        if(range.isEmpty()) {
+        if (range.isEmpty()) {
             range.setEnd(range.end() + KTextEditor::Cursor(0, 1));
         }
 
@@ -201,9 +201,9 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
         m_problemsForRanges.insert(problemRange, problem);
         m_topHLRanges.append(problemRange);
 
-        if(problem->source() != IProblem::ToDo && (problem->severity() != IProblem::Hint
-            || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()))
-        {
+        if (problem->source() != IProblem::ToDo
+            && (problem->severity() != IProblem::Hint
+                || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())) {
             KTextEditor::Attribute::Ptr attribute(new KTextEditor::Attribute());
             attribute->setUnderlineStyle(QTextCharFormat::WaveUnderline);
             attribute->setUnderlineColor(colorForSeverity(problem->severity()));
@@ -231,14 +231,14 @@ void ProblemHighlighter::aboutToInvalidateMovingInterfaceContent()
     m_problemsForRanges.clear();
 }
 
-void ProblemHighlighter::aboutToRemoveText( const KTextEditor::Range& range )
+void ProblemHighlighter::aboutToRemoveText(const KTextEditor::Range& range)
 {
     if (range.onSingleLine()) { // no need to optimize this
         return;
     }
 
-    QList< MovingRange* >::iterator it = m_topHLRanges.begin();
-    while(it != m_topHLRanges.end()) {
+    QList<MovingRange*>::iterator it = m_topHLRanges.begin();
+    while (it != m_topHLRanges.end()) {
         if (range.contains((*it)->toRange())) {
             m_problemsForRanges.remove(*it);
             delete (*it);
@@ -253,4 +253,3 @@ void ProblemHighlighter::documentReloaded()
 {
     setProblems(m_problems);
 }
-

@@ -23,7 +23,6 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H
 #define KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H
 
-
 #include <language/duchain/problem.h>
 #include <qpointer.h>
 #include <ktexteditor/movingrange.h>
@@ -40,7 +39,7 @@ public:
     void setProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
 private slots:
-    void viewCreated(KTextEditor::Document*,KTextEditor::View*);
+    void viewCreated(KTextEditor::Document*, KTextEditor::View*);
     void aboutToInvalidateMovingInterfaceContent();
     void aboutToRemoveText(const KTextEditor::Range& range);
     void documentReloaded();

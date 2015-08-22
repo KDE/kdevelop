@@ -59,149 +59,154 @@
 #include <shell/problem.h>
 
 Q_LOGGING_CATEGORY(PLUGIN_PROBLEMREPORTER, "kdevplatform.plugins.problemreporter")
-K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevproblemreporter.json", registerPlugin<ProblemReporterPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevproblemreporter.json",
+                           registerPlugin<ProblemReporterPlugin>();)
 
 using namespace KDevelop;
 
-class ProblemReporterFactory: public KDevelop::IToolViewFactory
+class ProblemReporterFactory : public KDevelop::IToolViewFactory
 {
 public:
-  ProblemReporterFactory(ProblemReporterPlugin *plugin): m_plugin(plugin) {}
+    ProblemReporterFactory(ProblemReporterPlugin* plugin)
+        : m_plugin(plugin)
+    {
+    }
 
-  virtual QWidget* create(QWidget *parent = 0) override
-  {
-    Q_UNUSED(parent);
+    virtual QWidget* create(QWidget* parent = 0) override
+    {
+        Q_UNUSED(parent);
 
-    ProblemsView *v = new ProblemsView();
-    v->load();
-    return v;
-  }
+        ProblemsView* v = new ProblemsView();
+        v->load();
+        return v;
+    }
 
-  virtual Qt::DockWidgetArea defaultPosition() override
-  {
-    return Qt::BottomDockWidgetArea;
-  }
+    virtual Qt::DockWidgetArea defaultPosition() override { return Qt::BottomDockWidgetArea; }
 
-  virtual QString id() const override
-  {
-    return "org.kdevelop.ProblemReporterView";
-  }
+    virtual QString id() const override { return "org.kdevelop.ProblemReporterView"; }
 
 private:
-  ProblemReporterPlugin *m_plugin;
+    ProblemReporterPlugin* m_plugin;
 };
 
-ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList&)
-: KDevelop::IPlugin("kdevproblemreporter", parent)
-    , m_factory(new ProblemReporterFactory(this)), m_model(new ProblemReporterModel(this))
+ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList&)
+    : KDevelop::IPlugin("kdevproblemreporter", parent)
+    , m_factory(new ProblemReporterFactory(this))
+    , m_model(new ProblemReporterModel(this))
 {
-  KDevelop::ProblemModelSet *pms = core()->languageController()->problemModelSet();
-  pms->addModel("Parser", m_model);
-  core()->uiController()->addToolView(i18n("Problems"), m_factory);
-  setXMLFile( "kdevproblemreporter.rc" );
+    KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
+    pms->addModel("Parser", m_model);
+    core()->uiController()->addToolView(i18n("Problems"), m_factory);
+    setXMLFile("kdevproblemreporter.rc");
 
-  connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &ProblemReporterPlugin::documentClosed);
-  connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &ProblemReporterPlugin::textDocumentCreated);
-  connect(ICore::self()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished, this, &ProblemReporterPlugin::parseJobFinished, Qt::DirectConnection);
+    connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this,
+            &ProblemReporterPlugin::documentClosed);
+    connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this,
+            &ProblemReporterPlugin::textDocumentCreated);
+    connect(ICore::self()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished, this,
+            &ProblemReporterPlugin::parseJobFinished, Qt::DirectConnection);
 }
 
 ProblemReporterPlugin::~ProblemReporterPlugin()
 {
-  qDeleteAll(m_highlighters);
+    qDeleteAll(m_highlighters);
 }
 
 ProblemReporterModel* ProblemReporterPlugin::model() const
 {
-  return m_model;
+    return m_model;
 }
 
 void ProblemReporterPlugin::unload()
 {
-  KDevelop::ProblemModelSet *pms = KDevelop::ICore::self()->languageController()->problemModelSet();
-  pms->removeModel("Parser");
+    KDevelop::ProblemModelSet* pms = KDevelop::ICore::self()->languageController()->problemModelSet();
+    pms->removeModel("Parser");
 
-  core()->uiController()->removeToolView(m_factory);
+    core()->uiController()->removeToolView(m_factory);
 }
 
 void ProblemReporterPlugin::documentClosed(IDocument* doc)
 {
-  if(!doc->textDocument())
-    return;
+    if (!doc->textDocument())
+        return;
 
-  IndexedString url(doc->url());
-  delete m_highlighters.take(url);
+    IndexedString url(doc->url());
+    delete m_highlighters.take(url);
 }
 
 void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
 {
-  Q_ASSERT(document->textDocument());
-  m_highlighters.insert(IndexedString(document->url()), new ProblemHighlighter(document->textDocument()));
-  DUChainReadLocker lock(DUChain::lock());
-  DUChain::self()->updateContextForUrl(IndexedString(document->url()), KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
+    Q_ASSERT(document->textDocument());
+    m_highlighters.insert(IndexedString(document->url()), new ProblemHighlighter(document->textDocument()));
+    DUChainReadLocker lock(DUChain::lock());
+    DUChain::self()->updateContextForUrl(IndexedString(document->url()),
+                                         KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
-void ProblemReporterPlugin::updateReady(const IndexedString &url, const KDevelop::ReferencedTopDUContext&)
+void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop::ReferencedTopDUContext&)
 {
-  m_model->problemsUpdated(url);
-  ProblemHighlighter* ph = m_highlighters.value(url);
-  if (ph) {
-    QVector<IProblem::Ptr> allProblems = m_model->problems(url, false);
-    ph->setProblems(allProblems);
-  }
+    m_model->problemsUpdated(url);
+    ProblemHighlighter* ph = m_highlighters.value(url);
+    if (ph) {
+        QVector<IProblem::Ptr> allProblems = m_model->problems(url, false);
+        ph->setProblems(allProblems);
+    }
 }
 
 void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
 {
-  if(parseJob->duChain())
-    updateReady(parseJob->document());
+    if (parseJob->duChain())
+        updateReady(parseJob->document());
 }
 
-KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context) {
-  KDevelop::ContextMenuExtension extension;
+KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context)
+{
+    KDevelop::ContextMenuExtension extension;
 
-  KDevelop::EditorContext* editorContext = dynamic_cast<KDevelop::EditorContext*>(context);
-  if(editorContext) {
-      DUChainReadLocker lock(DUChain::lock(), 1000);
-      if(!lock.locked()) {
-        qCDebug(PLUGIN_PROBLEMREPORTER) << "failed to lock duchain in time";
-        return extension;
-      }
-
-    QString title;
-    QList<QAction*> actions;
-
-    TopDUContext* top = DUChainUtils::standardContextForUrl(editorContext->url());
-    if(top) {
-      foreach(KDevelop::ProblemPointer problem, top->problems()) {
-        if(problem->range().contains(top->transformToLocalRevision(KTextEditor::Cursor(editorContext->position())))) {
-          KDevelop::IAssistant::Ptr solution = problem ->solutionAssistant();
-          if(solution) {
-            title = solution->title();
-            foreach(KDevelop::IAssistantAction::Ptr action, solution->actions())
-              actions << action->toKAction();
-          }
+    KDevelop::EditorContext* editorContext = dynamic_cast<KDevelop::EditorContext*>(context);
+    if (editorContext) {
+        DUChainReadLocker lock(DUChain::lock(), 1000);
+        if (!lock.locked()) {
+            qCDebug(PLUGIN_PROBLEMREPORTER) << "failed to lock duchain in time";
+            return extension;
         }
-      }
+
+        QString title;
+        QList<QAction*> actions;
+
+        TopDUContext* top = DUChainUtils::standardContextForUrl(editorContext->url());
+        if (top) {
+            foreach (KDevelop::ProblemPointer problem, top->problems()) {
+                if (problem->range().contains(
+                        top->transformToLocalRevision(KTextEditor::Cursor(editorContext->position())))) {
+                    KDevelop::IAssistant::Ptr solution = problem->solutionAssistant();
+                    if (solution) {
+                        title = solution->title();
+                        foreach (KDevelop::IAssistantAction::Ptr action, solution->actions())
+                            actions << action->toKAction();
+                    }
+                }
+            }
+        }
+
+        if (!actions.isEmpty()) {
+            QString text;
+            if (title.isEmpty())
+                text = i18n("Solve Problem");
+            else {
+                text = i18n("Solve: %1", KDevelop::htmlToPlainText(title));
+            }
+
+            QAction* menuAction = new QAction(text, 0);
+            QMenu* menu(new QMenu(text, 0));
+            menuAction->setMenu(menu);
+            foreach (QAction* action, actions)
+                menu->addAction(action);
+
+            extension.addAction(ContextMenuExtension::ExtensionGroup, menuAction);
+        }
     }
-
-    if(!actions.isEmpty()) {
-      QString text;
-      if(title.isEmpty())
-        text = i18n("Solve Problem");
-      else {
-        text = i18n("Solve: %1", KDevelop::htmlToPlainText(title));
-      }
-
-      QAction* menuAction = new QAction(text, 0);
-      QMenu* menu(new QMenu(text, 0));
-      menuAction->setMenu(menu);
-      foreach(QAction* action, actions)
-        menu->addAction(action);
-
-      extension.addAction(ContextMenuExtension::ExtensionGroup, menuAction);
-    }
-  }
-  return extension;
+    return extension;
 }
 
 #include "problemreporterplugin.moc"

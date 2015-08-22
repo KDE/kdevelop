@@ -50,7 +50,7 @@ private slots:
 private:
     QTabWidget* tabWidget();
     QToolBar* toolBar();
-    bool compareActions(QWidget *w, QToolBar *tb);
+    bool compareActions(QWidget* w, QToolBar* tb);
 
     QScopedPointer<ProblemsView> m_view;
 };
@@ -60,8 +60,8 @@ void TestProblemsView::initTestCase()
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 
-    ProblemModelSet *pms = ICore::self()->languageController()->problemModelSet();
-    ProblemModel *model = new ProblemModel(pms);
+    ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
+    ProblemModel* model = new ProblemModel(pms);
     IProblem::Ptr p(new DetectedProblem());
     model->addProblem(p);
     pms->addModel(QStringLiteral("MODEL1"), model);
@@ -79,7 +79,7 @@ void TestProblemsView::testLoad()
     m_view->load();
 
     // Check that the inital model's tab shows up
-    QTabWidget *tab = tabWidget();
+    QTabWidget* tab = tabWidget();
     QVERIFY(tab != nullptr);
     QCOMPARE(tab->count(), 1);
     QCOMPARE(tab->tabText(0), QStringLiteral("MODEL1 (1)"));
@@ -87,10 +87,10 @@ void TestProblemsView::testLoad()
 
 void TestProblemsView::testAddModel()
 {
-    ProblemModelSet *pms = ICore::self()->languageController()->problemModelSet();
+    ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
     pms->addModel(QStringLiteral("MODEL2"), new ProblemModel(pms));
 
-    QTabWidget *tab = tabWidget();
+    QTabWidget* tab = tabWidget();
     QVERIFY(tab != nullptr);
     QCOMPARE(tab->count(), 2);
     QCOMPARE(tab->tabText(0), QStringLiteral("MODEL1 (1)"));
@@ -99,21 +99,21 @@ void TestProblemsView::testAddModel()
 
 void TestProblemsView::testSwitchTab()
 {
-    QTabWidget *tab = tabWidget();
+    QTabWidget* tab = tabWidget();
     QVERIFY(tab != nullptr);
 
-    QToolBar *tb = toolBar();
+    QToolBar* tb = toolBar();
     QVERIFY(tb != nullptr);
 
     // Check that the current widget's actions are in the toolbar
-    QWidget *oldWidget = tab->currentWidget();
+    QWidget* oldWidget = tab->currentWidget();
     QVERIFY(oldWidget != nullptr);
     QVERIFY(compareActions(oldWidget, tb));
 
     tab->setCurrentIndex(1);
 
     // Check that the new widget's actions are in the toolbar
-    QWidget *newWidget = tab->currentWidget();
+    QWidget* newWidget = tab->currentWidget();
     QVERIFY(newWidget != nullptr);
     QVERIFY(newWidget != oldWidget);
     QVERIFY(compareActions(newWidget, tb));
@@ -122,15 +122,15 @@ void TestProblemsView::testSwitchTab()
 void TestProblemsView::testRemoveModel()
 {
     // Remove the model
-    ProblemModelSet *pms = ICore::self()->languageController()->problemModelSet();
-    ProblemModel *model = pms->findModel(QStringLiteral("MODEL1"));
+    ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
+    ProblemModel* model = pms->findModel(QStringLiteral("MODEL1"));
     QVERIFY(model != nullptr);
     pms->removeModel(QStringLiteral("MODEL1"));
     delete model;
     model = nullptr;
 
     // Now let's see if the view has been updated!
-    QTabWidget *tab = tabWidget();
+    QTabWidget* tab = tabWidget();
     QVERIFY(tab != nullptr);
     QCOMPARE(tab->count(), 1);
     QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2 (0)"));
@@ -138,11 +138,11 @@ void TestProblemsView::testRemoveModel()
 
 void TestProblemsView::testAddRemoveProblems()
 {
-    ProblemModelSet *pms = ICore::self()->languageController()->problemModelSet();
-    ProblemModel *model = pms->findModel(QStringLiteral("MODEL2"));
+    ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
+    ProblemModel* model = pms->findModel(QStringLiteral("MODEL2"));
     QVERIFY(model != nullptr);
 
-    QTabWidget *tab = tabWidget();
+    QTabWidget* tab = tabWidget();
     QVERIFY(tab != nullptr);
 
     // Make sure there are no problems right now
@@ -170,11 +170,11 @@ void TestProblemsView::testAddRemoveProblems()
 
 void TestProblemsView::testSetProblems()
 {
-    ProblemModelSet *pms = ICore::self()->languageController()->problemModelSet();
-    ProblemModel *model = pms->findModel(QStringLiteral("MODEL2"));
+    ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
+    ProblemModel* model = pms->findModel(QStringLiteral("MODEL2"));
     QVERIFY(model != nullptr);
 
-    QTabWidget *tab = tabWidget();
+    QTabWidget* tab = tabWidget();
     QVERIFY(tab != nullptr);
 
     // Make sure there are no problems right now
@@ -197,17 +197,17 @@ void TestProblemsView::testSetProblems()
 
 QTabWidget* TestProblemsView::tabWidget()
 {
-    QTabWidget *tab = m_view->findChild<QTabWidget*>();
+    QTabWidget* tab = m_view->findChild<QTabWidget*>();
     return tab;
 }
 
 QToolBar* TestProblemsView::toolBar()
 {
-    QToolBar *tb = m_view->findChild<QToolBar*>();
+    QToolBar* tb = m_view->findChild<QToolBar*>();
     return tb;
 }
 
-bool TestProblemsView::compareActions(QWidget *w, QToolBar *tb)
+bool TestProblemsView::compareActions(QWidget* w, QToolBar* tb)
 {
     // Check that they have the same number of actions
     if (w->actions().count() != tb->actions().count())

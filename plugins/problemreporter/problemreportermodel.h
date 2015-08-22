@@ -18,10 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef PROBLEMREPORTERMODEL_H
 #define PROBLEMREPORTERMODEL_H
-
 
 #include <shell/problemmodel.h>
 
@@ -40,17 +38,17 @@ class ProblemReporterModel : public KDevelop::ProblemModel
 {
     Q_OBJECT
 public:
-    explicit ProblemReporterModel(QObject *parent);
+    explicit ProblemReporterModel(QObject* parent);
     ~ProblemReporterModel();
 
     /**
      * Get problems for @ref url.
      */
-    QVector<KDevelop::IProblem::Ptr> problems(const KDevelop::IndexedString &url, bool showImports) const;
+    QVector<KDevelop::IProblem::Ptr> problems(const KDevelop::IndexedString& url, bool showImports) const;
     /**
      * Get merged list of problems for all @ref urls.
      */
-    QVector<KDevelop::IProblem::Ptr> problems(const QSet<KDevelop::IndexedString> &urls, bool showImports) const;
+    QVector<KDevelop::IProblem::Ptr> problems(const QSet<KDevelop::IndexedString>& urls, bool showImports) const;
 
 public Q_SLOTS:
     /**
@@ -70,9 +68,10 @@ private Q_SLOTS:
     void setCurrentDocument(KDevelop::IDocument* doc);
 
 private:
-    void problemsInternal(KDevelop::TopDUContext* context, bool showImports, QSet<KDevelop::TopDUContext*>& visitedContexts, QVector<KDevelop::IProblem::Ptr>& result) const;
+    void problemsInternal(KDevelop::TopDUContext* context, bool showImports,
+                          QSet<KDevelop::TopDUContext*>& visitedContexts,
+                          QVector<KDevelop::IProblem::Ptr>& result) const;
     void rebuildProblemList();
-
 
     bool m_showImports; // include problems from imported documents
     QTimer* m_minTimer;
@@ -82,4 +81,3 @@ private:
 };
 
 #endif
-

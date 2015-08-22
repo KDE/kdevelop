@@ -49,7 +49,8 @@
 
 using namespace KDevelop;
 
-namespace KDevelop {
+namespace KDevelop
+{
 
 class ProblemTreeViewItemDelegate : public QItemDelegate
 {
@@ -60,7 +61,6 @@ public:
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 };
-
 }
 
 ProblemTreeViewItemDelegate::ProblemTreeViewItemDelegate(QObject* parent)
@@ -68,7 +68,8 @@ ProblemTreeViewItemDelegate::ProblemTreeViewItemDelegate(QObject* parent)
 {
 }
 
-void ProblemTreeViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ProblemTreeViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
+                                        const QModelIndex& index) const
 {
     QStyleOptionViewItem newOption(option);
     newOption.textElideMode = index.column() == ProblemModel::File ? Qt::ElideMiddle : Qt::ElideRight;
@@ -76,15 +77,14 @@ void ProblemTreeViewItemDelegate::paint(QPainter* painter, const QStyleOptionVie
     QItemDelegate::paint(painter, newOption, index);
 }
 
-
-ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
+ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     : QTreeView(parent)
 {
-    ProblemModel *problemModel = dynamic_cast<ProblemModel*>(itemModel);
+    ProblemModel* problemModel = dynamic_cast<ProblemModel*>(itemModel);
     Q_ASSERT(problemModel);
 
     setObjectName("Problem Reporter Tree");
-    setWhatsThis( i18n( "Problems" ) );
+    setWhatsThis(i18n("Problems"));
     setItemDelegate(new ProblemTreeViewItemDelegate);
     setSelectionBehavior(QAbstractItemView::SelectRows);
 
@@ -142,11 +142,10 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
         actions.push_back(currentProjectAction);
         actions.push_back(allProjectAction);
 
-
         if (problemModel->features().testFlag(ProblemModel::CanByPassScopeFilter)) {
-            QAction *showAllAction = new QAction(this);
+            QAction* showAllAction = new QAction(this);
             showAllAction->setText(i18n("Show All"));
-            showAllAction->setToolTip(i18nc("@info:tooltip","Display ALL problems"));
+            showAllAction->setToolTip(i18nc("@info:tooltip", "Display ALL problems"));
             actions.push_back(showAllAction);
         }
 
@@ -166,22 +165,28 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
             model()->setScope(CurrentDocument);
         }
 
-        QSignalMapper * scopeMapper = new QSignalMapper(this);
+        QSignalMapper* scopeMapper = new QSignalMapper(this);
         scopeMapper->setMapping(currentDocumentAction, CurrentDocument);
         scopeMapper->setMapping(openDocumentsAction, OpenDocuments);
         scopeMapper->setMapping(currentProjectAction, CurrentProject);
         scopeMapper->setMapping(allProjectAction, AllProjects);
-        connect(currentDocumentAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(openDocumentsAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(currentProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(allProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(currentDocumentAction, &QAction::triggered, scopeMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(openDocumentsAction, &QAction::triggered, scopeMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(currentProjectAction, &QAction::triggered, scopeMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(allProjectAction, &QAction::triggered, scopeMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
 
         if (problemModel->features().testFlag(ProblemModel::CanByPassScopeFilter)) {
             scopeMapper->setMapping(actions.last(), BypassScopeFilter);
-            connect(actions.last(), &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+            connect(actions.last(), &QAction::triggered, scopeMapper,
+                    static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
         }
 
-        connect(scopeMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setScope);
+        connect(scopeMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(),
+                &ProblemModel::setScope);
     }
 
     if (problemModel->features().testFlag(ProblemModel::SeverityFilter)) {
@@ -202,7 +207,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
         hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
         hintSeverityAction->setIcon(QIcon::fromTheme("dialog-information"));
 
-        QAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
+        QAction* severityActionArray[] = { errorSeverityAction, warningSeverityAction, hintSeverityAction };
         for (int i = 0; i < 3; ++i) {
             severityActionArray[i]->setCheckable(true);
             severityActions->addAction(severityActionArray[i]);
@@ -212,14 +217,18 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
 
         hintSeverityAction->setChecked(true);
         model()->setSeverity(IProblem::Hint);
-        QSignalMapper * severityMapper = new QSignalMapper(this);
+        QSignalMapper* severityMapper = new QSignalMapper(this);
         severityMapper->setMapping(errorSeverityAction, IProblem::Error);
         severityMapper->setMapping(warningSeverityAction, IProblem::Warning);
         severityMapper->setMapping(hintSeverityAction, IProblem::Hint);
-        connect(errorSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(warningSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(hintSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(severityMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setSeverity);
+        connect(errorSeverityAction, &QAction::triggered, severityMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(warningSeverityAction, &QAction::triggered, severityMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(hintSeverityAction, &QAction::triggered, severityMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(severityMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(),
+                &ProblemModel::setSeverity);
     }
 
     if (problemModel->features().testFlag(ProblemModel::Grouping)) {
@@ -232,9 +241,8 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
         QAction* pathGroupingAction = new QAction(i18n("Path"), this);
         QAction* severityGroupingAction = new QAction(i18n("Severity"), this);
 
-        QAction* groupingActionArray[] = {noGroupingAction, pathGroupingAction, severityGroupingAction};
-        for(unsigned i = 0; i < sizeof(groupingActionArray) / sizeof(QAction*); ++i)
-        {
+        QAction* groupingActionArray[] = { noGroupingAction, pathGroupingAction, severityGroupingAction };
+        for (unsigned i = 0; i < sizeof(groupingActionArray) / sizeof(QAction*); ++i) {
             QAction* action = groupingActionArray[i];
             action->setCheckable(true);
             groupingActions->addAction(action);
@@ -243,16 +251,20 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel *itemModel)
         addAction(groupingMenu);
 
         noGroupingAction->setChecked(true);
-        QSignalMapper * groupingMapper = new QSignalMapper(this);
+        QSignalMapper* groupingMapper = new QSignalMapper(this);
         groupingMapper->setMapping(noGroupingAction, NoGrouping);
         groupingMapper->setMapping(pathGroupingAction, PathGrouping);
         groupingMapper->setMapping(severityGroupingAction, SeverityGrouping);
 
-        connect(noGroupingAction, &QAction::triggered, groupingMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(pathGroupingAction, &QAction::triggered, groupingMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(severityGroupingAction, &QAction::triggered, groupingMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(noGroupingAction, &QAction::triggered, groupingMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(pathGroupingAction, &QAction::triggered, groupingMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(severityGroupingAction, &QAction::triggered, groupingMapper,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
 
-        connect(groupingMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setGrouping);
+        connect(groupingMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(),
+                &ProblemModel::setGrouping);
     }
 
     connect(this, &ProblemTreeView::clicked, this, &ProblemTreeView::itemActivated);
@@ -283,7 +295,7 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
         // TODO: is this really necessary?
         DUChainReadLocker lock(DUChain::lock());
         IProblem::Ptr problem = model()->problemForIndex(index);
-        if(!problem)
+        if (!problem)
             return;
 
         url = problem->finalLocation().document.toUrl();
@@ -332,7 +344,7 @@ void ProblemTreeView::reset()
     resizeColumns();
 }
 
-ProblemModel * ProblemTreeView::model() const
+ProblemModel* ProblemTreeView::model() const
 {
     return static_cast<ProblemModel*>(QTreeView::model());
 }
@@ -343,18 +355,19 @@ void ProblemTreeView::setModel(QAbstractItemModel* model)
     QTreeView::setModel(model);
 }
 
-void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event) {
+void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
+{
     QModelIndex index = indexAt(event->pos());
-    if(index.isValid()) {
+    if (index.isValid()) {
         IProblem::Ptr problem = model()->problemForIndex(index);
-        if(problem) {
+        if (problem) {
             QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
-            if(solution) {
+            if (solution) {
                 QList<QAction*> actions;
-                foreach(KDevelop::IAssistantAction::Ptr action, solution->actions()) {
+                foreach (KDevelop::IAssistantAction::Ptr action, solution->actions()) {
                     actions << action->toKAction();
                 }
-                if(!actions.isEmpty()) {
+                if (!actions.isEmpty()) {
                     QString title = solution->title();
                     title = KDevelop::htmlToPlainText(title);
                     title.replace("&apos;", "\'");
@@ -370,7 +383,7 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event) {
     }
 }
 
-void ProblemTreeView::showEvent(QShowEvent * event)
+void ProblemTreeView::showEvent(QShowEvent* event)
 {
     Q_UNUSED(event)
 

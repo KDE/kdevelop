@@ -33,8 +33,15 @@
 #include <QLoggingCategory>
 Q_DECLARE_LOGGING_CATEGORY(PLUGIN_PROBLEMREPORTER)
 
-namespace KTextEditor { class Document; }
-namespace KDevelop { class IDocument; class ParseJob; }
+namespace KTextEditor
+{
+class Document;
+}
+namespace KDevelop
+{
+class IDocument;
+class ParseJob;
+}
 
 class ProblemHighlighter;
 class ProblemReporterModel;
@@ -43,8 +50,8 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 
-  public:
-    explicit ProblemReporterPlugin(QObject *parent, const QVariantList & = QVariantList() );
+public:
+    explicit ProblemReporterPlugin(QObject* parent, const QVariantList& = QVariantList());
     virtual ~ProblemReporterPlugin();
 
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
@@ -54,13 +61,13 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
 
     ProblemReporterModel* model() const;
 
-  private Q_SLOTS:
-    void updateReady(const KDevelop::IndexedString &url,
+private Q_SLOTS:
+    void updateReady(const KDevelop::IndexedString& url,
                      const KDevelop::ReferencedTopDUContext& = KDevelop::ReferencedTopDUContext());
     void textDocumentCreated(KDevelop::IDocument* document);
     void parseJobFinished(KDevelop::ParseJob* parseJob);
 
-  private:
+private:
     class ProblemReporterFactory* m_factory;
     ProblemReporterModel* m_model;
 

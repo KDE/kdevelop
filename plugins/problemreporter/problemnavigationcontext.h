@@ -24,23 +24,24 @@
 
 #include <interfaces/iproblem.h>
 
-namespace KDevelop {
+namespace KDevelop
+{
 
 // Navigation context for IProblem
 class ProblemNavigationContext : public AbstractNavigationContext
 {
-  public:
-    explicit ProblemNavigationContext(const IProblem::Ptr &problem);
+public:
+    explicit ProblemNavigationContext(const IProblem::Ptr& problem);
     ~ProblemNavigationContext();
     virtual QString name() const override;
     virtual QString html(bool shorten = false) override;
     virtual QWidget* widget() const override;
     virtual bool isWidgetMaximized() const override;
-  private:
+
+private:
     QPointer<QWidget> m_widget;
     IProblem::Ptr m_problem;
 };
-
 }
 
 #endif // KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H
