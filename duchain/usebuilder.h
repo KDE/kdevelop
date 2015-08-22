@@ -36,15 +36,15 @@ protected:
     using Visitor::preVisit;
     using Visitor::postVisit;
 
-    virtual bool preVisit(QmlJS::AST::Node* node);
-    virtual void postVisit(QmlJS::AST::Node* node);
+    virtual bool preVisit(QmlJS::AST::Node* node) override;
+    virtual void postVisit(QmlJS::AST::Node* node) override;
 
-    virtual bool visit(QmlJS::AST::FieldMemberExpression* node);
-    virtual bool visit(QmlJS::AST::IdentifierExpression* node);
-    virtual bool visit(QmlJS::AST::UiQualifiedId* node);
-    virtual bool visit(QmlJS::AST::UiImport* node);
-    virtual bool visit(QmlJS::AST::UiPublicMember* node);
-    virtual bool visit(QmlJS::AST::UiScriptBinding* node);
+    virtual bool visit(QmlJS::AST::FieldMemberExpression* node) override;
+    virtual bool visit(QmlJS::AST::IdentifierExpression* node) override;
+    virtual bool visit(QmlJS::AST::UiQualifiedId* node) override;
+    virtual bool visit(QmlJS::AST::UiImport* node) override;
+    virtual bool visit(QmlJS::AST::UiPublicMember* node) override;
+    virtual bool visit(QmlJS::AST::UiScriptBinding* node) override;
 
 private:
     void useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeInRevision &range = KDevelop::RangeInRevision::invalid());

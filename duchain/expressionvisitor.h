@@ -60,27 +60,27 @@ public:
     using Visitor::endVisit;
 
 protected:
-    virtual bool visit(QmlJS::AST::NumericLiteral* node);
-    virtual bool visit(QmlJS::AST::StringLiteral* node);
-    virtual bool visit(QmlJS::AST::RegExpLiteral* node);
-    virtual bool visit(QmlJS::AST::TrueLiteral* node);
-    virtual bool visit(QmlJS::AST::FalseLiteral* node);
+    virtual bool visit(QmlJS::AST::NumericLiteral* node) override;
+    virtual bool visit(QmlJS::AST::StringLiteral* node) override;
+    virtual bool visit(QmlJS::AST::RegExpLiteral* node) override;
+    virtual bool visit(QmlJS::AST::TrueLiteral* node) override;
+    virtual bool visit(QmlJS::AST::FalseLiteral* node) override;
 
-    virtual bool visit(QmlJS::AST::ArrayLiteral* node);
-    virtual bool visit(QmlJS::AST::ObjectLiteral* node);
-    virtual bool visit(QmlJS::AST::ArrayMemberExpression* node);
-    virtual bool visit(QmlJS::AST::FieldMemberExpression* node);
+    virtual bool visit(QmlJS::AST::ArrayLiteral* node) override;
+    virtual bool visit(QmlJS::AST::ObjectLiteral* node) override;
+    virtual bool visit(QmlJS::AST::ArrayMemberExpression* node) override;
+    virtual bool visit(QmlJS::AST::FieldMemberExpression* node) override;
 
-    virtual bool visit(QmlJS::AST::BinaryExpression* node);
-    virtual bool visit(QmlJS::AST::IdentifierExpression* node);
-    virtual bool visit(QmlJS::AST::UiQualifiedId* node);
-    virtual bool visit(QmlJS::AST::ThisExpression* node);
+    virtual bool visit(QmlJS::AST::BinaryExpression* node) override;
+    virtual bool visit(QmlJS::AST::IdentifierExpression* node) override;
+    virtual bool visit(QmlJS::AST::UiQualifiedId* node) override;
+    virtual bool visit(QmlJS::AST::ThisExpression* node) override;
 
-    virtual bool visit(QmlJS::AST::FunctionExpression* node);
-    virtual bool visit(QmlJS::AST::CallExpression* node);
-    virtual bool visit(QmlJS::AST::NewMemberExpression* node);
+    virtual bool visit(QmlJS::AST::FunctionExpression* node) override;
+    virtual bool visit(QmlJS::AST::CallExpression* node) override;
+    virtual bool visit(QmlJS::AST::NewMemberExpression* node) override;
 
-    virtual void postVisit(QmlJS::AST::Node* node);
+    virtual void postVisit(QmlJS::AST::Node* node) override;
 
 private:
     using KDevelop::DynamicLanguageExpressionVisitor::encounter;

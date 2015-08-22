@@ -29,7 +29,7 @@ public:
     : CodeHighlightingInstance(highlighting)
     {}
 
-    virtual bool useRainbowColor(Declaration* dec) const
+    virtual bool useRainbowColor(Declaration* dec) const override
     {
         // JS has a function-based prototype OO system, so for now rainbow-color
         // everything that is not a function declaration.

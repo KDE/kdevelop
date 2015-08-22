@@ -62,16 +62,16 @@ public:
 public:
     ContextBuilder();
 
-    virtual void startVisiting(QmlJS::AST::Node* node);
-    virtual KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode);
-    virtual KDevelop::QualifiedIdentifier identifierForNode(QmlJS::AST::IdentifierPropertyName* node);
+    virtual void startVisiting(QmlJS::AST::Node* node) override;
+    virtual KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode) override;
+    virtual KDevelop::QualifiedIdentifier identifierForNode(QmlJS::AST::IdentifierPropertyName* node) override;
 
-    virtual void setContextOnNode(QmlJS::AST::Node* node, KDevelop::DUContext* context);
-    virtual KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node);
+    virtual void setContextOnNode(QmlJS::AST::Node* node, KDevelop::DUContext* context) override;
+    virtual KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node) override;
 
     virtual KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range,
-                                                  KDevelop::ParsingEnvironmentFile* file = nullptr);
-    virtual KDevelop::DUContext* newContext(const KDevelop::RangeInRevision& range);
+                                                  KDevelop::ParsingEnvironmentFile* file = nullptr) override;
+    virtual KDevelop::DUContext* newContext(const KDevelop::RangeInRevision& range) override;
 
     ExpressionType findType(QmlJS::AST::Node* node);
     void setParseSession(ParseSession* session);

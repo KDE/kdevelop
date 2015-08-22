@@ -64,7 +64,7 @@ public:
     virtual QWidget* createNavigationWidget(KDevelop::Declaration* decl,
                                             KDevelop::TopDUContext* topContext,
                                             const QString& htmlPrefix,
-                                            const QString& htmlSuffix) const;
+                                            const QString& htmlSuffix) const override;
 
     enum {
         Identity = IdentityT

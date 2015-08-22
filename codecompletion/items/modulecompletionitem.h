@@ -37,12 +37,12 @@ public:
 
     ModuleCompletionItem(const QString &name, Decoration decoration);
 
-    virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
-    virtual int inheritanceDepth() const;
-    virtual int argumentHintDepth() const;
-    virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
+    virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
+    virtual int inheritanceDepth() const override;
+    virtual int argumentHintDepth() const override;
+    virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const override;
 
-    virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word);
+    virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
 
 private:
     QString m_name;

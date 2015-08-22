@@ -31,13 +31,13 @@ public:
     explicit KDevQmlJsPlugin( QObject* parent, const QVariantList& args = QVariantList() );
     virtual ~KDevQmlJsPlugin();
 
-    virtual KDevelop::ParseJob* createParseJob(const KDevelop::IndexedString& url);
-    virtual QString name() const;
+    virtual KDevelop::ParseJob* createParseJob(const KDevelop::IndexedString& url) override;
+    virtual QString name() const override;
 
-    virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
-    virtual KDevelop::BasicRefactoring* refactoring() const;
+    virtual KDevelop::ICodeHighlighting* codeHighlighting() const override;
+    virtual KDevelop::BasicRefactoring* refactoring() const override;
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
     virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
 
 private:
