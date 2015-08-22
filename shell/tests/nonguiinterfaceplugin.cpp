@@ -23,7 +23,7 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(KDevNonGuiInterfacePluginFactory, registerPlugin<NonGuiInterfacePlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevnonguiinterfaceplugin.json", registerPlugin<NonGuiInterfacePlugin>();)
 
 NonGuiInterfacePlugin::NonGuiInterfacePlugin( QObject* parent, const QVariantList& )
     : IPlugin( "kdevnonguiinterfaceplugin", parent )

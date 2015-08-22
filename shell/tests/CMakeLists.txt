@@ -27,10 +27,8 @@ ecm_add_test(test_sessioncontroller.cpp
     LINK_LIBRARIES Qt5::Test KF5::KIOWidgets KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)
 
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
-configure_file(share/kde4/services/kdevnonguiinterfaceplugin.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kservices5/kdevnonguiinterfaceplugin.desktop)
-set( plugincontrollertest_plugin_SRCS nonguiinterfaceplugin.cpp )
-add_library( kdevnonguiinterfaceplugin MODULE ${plugincontrollertest_plugin_SRCS} )
-target_link_libraries( kdevnonguiinterfaceplugin Qt5::Core KDev::Interfaces )
+kdevplatform_add_plugin(kdevnonguiinterfaceplugin JSON kdevnonguiinterfaceplugin.json SKIP_INSTALL SOURCES nonguiinterfaceplugin.cpp)
+target_link_libraries(kdevnonguiinterfaceplugin Qt5::Core KDev::Interfaces)
 
 ecm_add_test(test_plugincontroller.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)

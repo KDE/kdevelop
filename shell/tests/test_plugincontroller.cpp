@@ -47,7 +47,7 @@ void TestPluginController::initTestCase()
     p.start();
     QVERIFY(p.waitForFinished());
 
-    AutoTestShell::init();
+    AutoTestShell::init({"kdevnonguiinterface"});
     TestCore::initialize( Core::NoUi );
     m_core = Core::self();
     m_pluginCtrl = m_core->pluginControllerInternal();
