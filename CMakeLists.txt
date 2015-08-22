@@ -31,10 +31,11 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick WebKitWidgets Script Test)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Declarative Quick QuickWidgets WebKitWidgets Script Test)
 set(KF5_DEP_VERSION "5.3.0")
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Config
+  Declarative
   DocTools
   IconThemes
   I18n

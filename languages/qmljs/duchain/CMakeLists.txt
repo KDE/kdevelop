@@ -30,8 +30,5 @@ target_link_libraries(kdevqmljsduchain
         KDev::Project
         kdevqtc-qmlsupport
 )
-#target_include_directories(kdevqmljsduchain PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
-
-install(TARGETS kdevqmljsduchain ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 add_subdirectory(tests)
