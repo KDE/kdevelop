@@ -75,7 +75,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
  * Template class to implement factories for each AbstractType subclass you want
  * to instantiate.
  */
-template<class T, class Data>
+template<class T, class Data = typename T::Data>
 class TypeFactory : public AbstractTypeFactory {
   public:
   AbstractType* create(AbstractTypeData* data) const override {
@@ -131,7 +131,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
     /**
      * Register a new AbstractType subclass.
      */
-    template<class T, class Data>
+    template<class T, class Data = typename T::Data>
     void registerTypeClass()
     {
       registerTypeClassInternal(new TypeFactory<T, Data>(), sizeof(Data), T::Identity);
@@ -140,7 +140,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
     /**
      * Unregister an AbstractType subclass.
      */
-    template<class T, class Data>
+    template<class T, class Data = typename T::Data>
     void unregisterTypeClass()
     {
       unregisterTypeClassInternal(T::Identity);
@@ -185,7 +185,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
 /// Helper class to register an AbstractType subclass.
 ///
 /// Just use the REGISTER_TYPE(YourTypeClass) macro in your code, and you're done.
-template<class T, class Data>
+template<class T, class Data = typename T::Data>
 struct TypeSystemRegistrator {
   TypeSystemRegistrator() {
     TypeSystem::self().registerTypeClass<T, Data>();
