@@ -37,6 +37,7 @@ inline bool isWindowsDriveLetter(const QString& segment)
 #ifdef Q_OS_WIN
     return segment.size() == 2 && segment.at(0).isLetter() && segment.at(1) == ':';
 #else
+    Q_UNUSED(segment);
     return false;
 #endif
 }
