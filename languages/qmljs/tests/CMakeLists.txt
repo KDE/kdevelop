@@ -6,15 +6,13 @@ target_link_libraries(qml-parser
     kdevqmljsduchain
 )
 
-set(filestest_SRCS test_files.cpp)
-add_executable(filestest ${filestest_SRCS})
-add_test(filestest filestest)
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
-target_link_libraries(filestest
-    Qt5::Test
-    Qt5::Core
-    KDev::Language
-    KDev::Tests
-    KDev::JsonTests
-    kdevqmljsduchain
+ecm_add_test(test_files.cpp
+    LINK_LIBRARIES
+        Qt5::Test
+        Qt5::Core
+        KDev::Language
+        KDev::Tests
+        KDev::JsonTests
+        kdevqmljsduchain
 )

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "testcontexts.h"
+#include "test_qmljscontexts.h"
 
 #include "../helper.h"
 #include "../parsesession.h"

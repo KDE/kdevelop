@@ -16,7 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>    *
  *****************************************************************************/
 
-#include "qmlcompletiontest.h"
+#include "test_qmljscompletion.h"
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchain.h>
