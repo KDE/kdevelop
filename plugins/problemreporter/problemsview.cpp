@@ -73,7 +73,6 @@ void ItemViewWalker::selectIndex(Direction direction)
 
     const QModelIndexList list = m_selectionModel->selectedRows();
 
-    qWarning() << "FOO" << list;
     const QModelIndex currentIndex = list.value(0);
     if (!currentIndex.isValid()) {
         // no selection yet, just select the first
