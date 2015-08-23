@@ -39,12 +39,12 @@ const QString TEST_NOT_FOUND = "Test not found";
 
 template<class T> class TestSuite;
 
-KDEVPLATFORMJSONTESTS_EXPORT TestSuite<KDevelop::Declaration*>& declarationTestSuite();
-KDEVPLATFORMJSONTESTS_EXPORT TestSuite<KDevelop::DUContext*>& contextTestSuite();
-KDEVPLATFORMJSONTESTS_EXPORT TestSuite<KDevelop::AbstractType::Ptr>& typeTestSuite();
+KDEVPLATFORMTESTS_EXPORT TestSuite<KDevelop::Declaration*>& declarationTestSuite();
+KDEVPLATFORMTESTS_EXPORT TestSuite<KDevelop::DUContext*>& contextTestSuite();
+KDEVPLATFORMTESTS_EXPORT TestSuite<KDevelop::AbstractType::Ptr>& typeTestSuite();
 
 template<class T>
-class KDEVPLATFORMJSONTESTS_EXPORT TestSuite
+class KDEVPLATFORMTESTS_EXPORT TestSuite
 {
 public:
   typedef QString (*TestFunction)(const QVariant&, T);

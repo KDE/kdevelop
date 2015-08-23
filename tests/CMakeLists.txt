@@ -8,6 +8,10 @@ set(kdevtests_LIB_SRCS
     testhelpers.cpp
     testplugincontroller.cpp
     modeltest.cpp
+
+    json/delayedoutput.cpp
+    json/declarationvalidator.cpp
+    json/testsuite.cpp
 )
 
 kdevplatform_add_library(KDevPlatformTests SOURCES ${kdevtests_LIB_SRCS})
@@ -35,4 +39,15 @@ install(FILES
     COMPONENT Devel
 )
 
-add_subdirectory(json)
+install(FILES
+    json/declarationvalidator.h
+    json/delayedoutput.h
+    json/jsontesthelpers.h
+    json/testsuite.h
+    json/testsuite.cpp
+    json/jsondeclarationtests.h
+    json/jsonducontexttests.h
+    json/jsontypetests.h
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/tests/json
+    COMPONENT Devel
+)

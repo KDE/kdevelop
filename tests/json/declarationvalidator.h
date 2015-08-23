@@ -19,14 +19,14 @@
 #ifndef KDEVPLATFORM_DECLARATIONVALIDATOR_H
 #define KDEVPLATFORM_DECLARATIONVALIDATOR_H
 
-#include "jsontestsexport.h"
+#include <tests/testsexport.h>
 
 #include "language/duchain/ducontext.h"
 
 namespace KDevelop {
 
 class DeclarationValidatorPrivate;
-class KDEVPLATFORMJSONTESTS_EXPORT DeclarationValidator : public DUChainVisitor
+class KDEVPLATFORMTESTS_EXPORT DeclarationValidator : public DUChainVisitor
 {
 public:
   DeclarationValidator();
