@@ -75,7 +75,7 @@ void ItemViewWalker::selectIndex(Direction direction)
 
     const QModelIndex currentIndex = list.value(0);
     if (!currentIndex.isValid()) {
-        // no selection yet, just select the first
+        /// no selection yet, just select the first
         const QModelIndex firstIndex = m_selectionModel->model()->index(0, 0);
         m_selectionModel->setCurrentIndex(firstIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
         return;
@@ -84,7 +84,7 @@ void ItemViewWalker::selectIndex(Direction direction)
     const int nextRow = currentIndex.row() + (direction == NextIndex ? 1 : -1);
     const QModelIndex nextIndex = currentIndex.sibling(nextRow, 0);
     if (!nextIndex.isValid()) {
-        return; // never invalidate the selection
+        return; /// never invalidate the selection
     }
 
     m_selectionModel->setCurrentIndex(nextIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
@@ -140,14 +140,17 @@ void ProblemsView::onModelAdded(const ModelData& data)
     addModel(data);
 }
 
-/// Returns the name part of the label
-/// E.g.: Test (666) => Test
+/**
+ * @brief Returns the name part of the label
+ *
+ * E.g.: Test (666) => Test
+ */
 QString nameFromLabel(const QString& label)
 {
     QString txt = label;
     int i = txt.lastIndexOf('(');
     if (i != -1)
-        txt = txt.left(i - 1); // ignore whitespace before '('
+        txt = txt.left(i - 1); /// ignore whitespace before '('
     return txt;
 }
 

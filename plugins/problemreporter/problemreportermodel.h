@@ -32,8 +32,11 @@ class TopDUContext;
 class WatchedDocumentSet;
 class QTimer;
 
-// ProblemModel subclass that retrieves the problems from DUChain
-// Provides a ProblemModel interface so these problems can be shown in the Problems toolview.
+/**
+ * @brief ProblemModel subclass that retrieves the problems from DUChain.
+ *
+ * Provides a ProblemModel interface so these problems can be shown in the Problems toolview.
+ */
 class ProblemReporterModel : public KDevelop::ProblemModel
 {
     Q_OBJECT
@@ -60,7 +63,7 @@ public Q_SLOTS:
     void forceFullUpdate();
 
 protected Q_SLOTS:
-    // Triggered when the problemstore's problems have changed
+    /// Triggered when the problemstore's problems have changed
     void onProblemsChanged();
 
 private Q_SLOTS:
@@ -73,7 +76,7 @@ private:
                           QVector<KDevelop::IProblem::Ptr>& result) const;
     void rebuildProblemList();
 
-    bool m_showImports; // include problems from imported documents
+    bool m_showImports; /// include problems from imported documents
     QTimer* m_minTimer;
     QTimer* m_maxTimer;
     const static int MinTimeout;

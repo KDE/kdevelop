@@ -31,7 +31,7 @@ namespace KDevelop
 
 class ProblemModel;
 
-// Struct that handles the model and it's name as one unit, stored in ProblemModelSet
+/// Struct that handles the model and it's name as one unit, stored in ProblemModelSet
 struct ModelData
 {
     QString name;
@@ -40,8 +40,23 @@ struct ModelData
 
 struct ProblemModelSetPrivate;
 
-// Stores name/model pairs with the model's respective actions.
-// The assumption is that the clients add/remove the models so there's no deletion.
+/**
+ * @brief Stores name/model pairs and emits signals when they are added/removed.
+ *
+ * Typically it's used from plugins, which maintains a reference to the model added.
+ * Therefore It assumes that models get removed, so it doesn't delete!
+ *
+ * Usage example:
+ * @code
+ * ProblemModelSet *set = new ProblemModelSet();
+ * ProblemModel *model = new ProblemModel(nullptr);
+ * set->addModel(QStringLiteral("MODEL"), model); // added() signal is emitted
+ * set->models().count(); // returns 1
+ * set->findModel(QStringLiteral("MODEL")); // returns the model just added
+ * set->removeModel(QStringLiteral("MODEL")); // removed() signal is emitted
+ * @endcode
+ *
+ */
 class KDEVPLATFORMSHELL_EXPORT ProblemModelSet : public QObject
 {
     Q_OBJECT
@@ -49,23 +64,23 @@ public:
     explicit ProblemModelSet(QObject *parent = nullptr);
     ~ProblemModelSet();
 
-    // Adds a model
+    /// Adds a model
     void addModel(const QString &name, ProblemModel *model);
 
-    // Finds a model
+    /// Finds a model
     ProblemModel* findModel(const QString &name) const;
 
-    // Removes a model
+    /// Removes a model
     void removeModel(const QString &name);
 
-    // Retrieves a list of models stored
+    /// Retrieves a list of models stored
     QVector<ModelData> models() const;
 
 signals:
-    // Emitted when a new model is added
+    /// Emitted when a new model is added
     void added(const ModelData &model);
 
-    // Emitted when a model is removed
+    /// Emitted when a model is removed
     void removed(const QString &name);
 
 private:

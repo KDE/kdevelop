@@ -31,9 +31,51 @@ class GroupingStrategy;
 namespace KDevelop
 {
 
-// ProblemStore subclass that can filter and group problems
-// Filtering is based on severity and source file criteria, see match() for details
-// Grouping is done by grouping strategies, see GroupingStrategy and it's subclasses
+/**
+ * @brief ProblemStore subclass that can group by severity, and path, and filter by scope, and severity.
+ *
+ * Internally grouping is implemented using a tree structure.
+ * When grouping is on, the top level nodes are the groups, and their children are the nodes containing the problems that belong into that node.
+ * If the problems have diagnostics, then the diagnostics are added as children nodes as well. This was implemented so they can be browsed in a model/view architecture.
+ * When grouping is off, the top level nodes are the problem nodes.
+ *
+ * Grouping can be set and queried using the following methods
+ * \li setGrouping();
+ * \li grouping();
+ *
+ * Valid grouping settings:
+ * \li NoGrouping
+ * \li PathGrouping
+ * \li SeverityGrouping
+ *
+ * Severity filter can be set and queried using the following methods
+ * \li setSeverity()
+ * \li severity()
+ *
+ * Valid severity setting:
+ * \li IProblem::Error
+ * \li IProblem::Warning
+ * \li IProblem::Hint
+ *
+ * When changing the grouping or filtering method the following signals are emitted in order:
+ * \li beginRebuild()
+ * \li endRebuild()
+ * \li changed()
+ *
+ * Usage example:
+ * @code
+ * IProblem::Ptr problem(new DetectedProblem);
+ * problem->setSeverity(IProblem::Error);
+ * ...
+ * FilteredProblemStore *store = new FilteredProblemStore();
+ * store->setGrouping(SeverityGrouping);
+ * store->addProblem(problem);
+ * ProblemStoreNode *label = store->findNode(0); // Label node with the label "Error"
+ * ProblemNode *problemNode = dynamic_cast<ProblemNode*>(label->child(0)); // the node with the problem
+ * problemNode->problem(); // The problem we added
+ * @endcode
+ *
+ */
 class KDEVPLATFORMSHELL_EXPORT FilteredProblemStore : public ProblemStore
 {
     Q_OBJECT
@@ -41,35 +83,35 @@ public:
     explicit FilteredProblemStore(QObject *parent = nullptr);
     ~FilteredProblemStore();
 
-    // Adds a problem, which is then filtered and also added to the filtered problem list if it matches the filters
+    /// Adds a problem, which is then filtered and also added to the filtered problem list if it matches the filters
     void addProblem(const IProblem::Ptr &problem) override;
 
-    // Retrieves the specified node
+    /// Retrieves the specified node
     const ProblemStoreNode* findNode(int row, ProblemStoreNode *parent = nullptr) const;
 
-    // Retrieves the number of filtered problems
+    /// Retrieves the number of filtered problems
     int count(ProblemStoreNode *parent = nullptr) const;
 
-    // Clears the problems
+    /// Clears the problems
     void clear();
 
-    // Rebuilds the filtered problem list
+    /// Rebuilds the filtered problem list
     void rebuild();
 
-    // Set the grouping method. See the GroupingMethod enum.
+    /// Set the grouping method. See the GroupingMethod enum.
     void setGrouping(int grouping);
 
-    // Tells which grouping strategy is currently in use
+    /// Tells which grouping strategy is currently in use
     int grouping() const;
 
-    // Sets whether we should bypass the scope filter
+    /// Sets whether we should bypass the scope filter
     void setBypassScopeFilter(bool bypass) override;
 
-    // Tells whether the scope filter bypass is on
+    /// Tells whether the scope filter bypass is on
     bool bypassScopeFilter() const;
 
 private:
-    // Tells if the problem matches the filters
+    /// Tells if the problem matches the filters
     bool match(const IProblem::Ptr &problem) const;
 
     GroupingMethod m_grouping;

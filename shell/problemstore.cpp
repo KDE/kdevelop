@@ -32,16 +32,16 @@ struct ProblemStorePrivate
     {
     }
 
-    // Watched document set. Only problems that are in files in this set are stored.
+    /// Watched document set. Only problems that are in files in this set are stored.
     KDevelop::WatchedDocumentSet *m_documents;
 
-    // The severity filter setting
+    /// The severity filter setting
     int m_severity;
 
-    // The problems list
+    /// The problems list
     KDevelop::ProblemStoreNode *m_rootNode;
 
-    // Path of the currently open document
+    /// Path of the currently open document
     KDevelop::IndexedString m_currentDocument;
 };
 

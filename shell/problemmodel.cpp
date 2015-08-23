@@ -63,10 +63,7 @@ struct ProblemModelPrivate
     {
     }
 
-    // Class that actually stores the problems
     QScopedPointer<KDevelop::ProblemStore> m_problems;
-
-    // Supported features
     KDevelop::ProblemModel::Features m_features;
 };
 
@@ -85,7 +82,7 @@ ProblemModel::ProblemModel(QObject * parent, ProblemStore *store)
     setScope(CurrentDocument);
 
     connect(ICore::self()->documentController(), &IDocumentController::documentActivated, this, &ProblemModel::setCurrentDocument);
-    // CompletionSettings include a list of todo markers we care for, so need to update
+    /// CompletionSettings include a list of todo markers we care for, so need to update
     connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this, &ProblemModel::forceFullUpdate);
 
     if (ICore::self()->documentController()->activeDocument()) {
@@ -279,7 +276,7 @@ void ProblemModel::setCurrentDocument(IDocument* document)
     Q_ASSERT(thread() == QThread::currentThread());
 
     QUrl currentDocument = document->url();
-    // Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
+    /// Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
     d->m_problems->setCurrentDocument(IndexedString(currentDocument));
 }
 
@@ -297,7 +294,7 @@ void ProblemModel::setScope(int scope)
 {
     Q_ASSERT(thread() == QThread::currentThread());
 
-    // Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
+    /// Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
     d->m_problems->setScope(scope);
 }
 
@@ -305,13 +302,13 @@ void ProblemModel::setSeverity(int severity)
 {
     Q_ASSERT(thread() == QThread::currentThread());
 
-    // Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
+    /// Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
     d->m_problems->setSeverity(severity);
 }
 
 void ProblemModel::setGrouping(int grouping)
 {
-    // Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
+    /// Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
     d->m_problems->setGrouping(grouping);
 }
 

@@ -123,8 +123,7 @@ void ProblemReporterModel::problemsInternal(KDevelop::TopDUContext* context, boo
                 continue;
             KDevelop::TopDUContext* topCtx = dynamic_cast<KDevelop::TopDUContext*>(ctx.context(0));
             if (topCtx) {
-                // If we are starting at a proxy-context, only recurse into other proxy-contexts,
-                // because those contain the problems.
+                /// If we are starting at a proxy-context, only recurse into other proxy-contexts, because those contain the problems.
                 if (!isProxy
                     || (topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext()))
                     problemsInternal(topCtx, showImports, visitedContexts, result);
@@ -152,7 +151,7 @@ void ProblemReporterModel::setCurrentDocument(KDevelop::IDocument* doc)
     beginResetModel();
     QUrl currentDocument = doc->url();
 
-    // Will trigger signal changed() if problems change
+    /// Will trigger signal changed() if problems change
     store()->setCurrentDocument(KDevelop::IndexedString(currentDocument));
     endResetModel();
 }
@@ -162,9 +161,9 @@ void ProblemReporterModel::problemsUpdated(const KDevelop::IndexedString& url)
     Q_ASSERT(thread() == QThread::currentThread());
 
     if (store()->documents()->get().contains(url)) {
-        // m_minTimer will expire in MinTimeout unless some other parsing job finishes in this period.
+        /// m_minTimer will expire in MinTimeout unless some other parsing job finishes in this period.
         m_minTimer->start();
-        // m_maxTimer will expire unconditionally in MaxTimeout
+        /// m_maxTimer will expire unconditionally in MaxTimeout
         if (!m_maxTimer->isActive()) {
             m_maxTimer->start();
         }
@@ -183,7 +182,7 @@ void ProblemReporterModel::setShowImports(bool showImports)
 void ProblemReporterModel::rebuildProblemList()
 {
     QVector<IProblem::Ptr> problems;
-    // No locking here, because it may be called from an already locked context
+    /// No locking here, because it may be called from an already locked context
     beginResetModel();
 
     problems = this->problems(store()->documents()->get(), m_showImports);

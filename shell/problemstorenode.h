@@ -28,9 +28,21 @@
 namespace KDevelop
 {
 
-// Base class for ProblemStore node classes
-// These nodes make up the problem tree for the problem store / problem model,
-// that is then displayed in the problem tree view
+/**
+ * @brief Base class for ProblemStoreNode classes, which together make up a tree structure with label or problem leaves.
+ *
+ * When adding a child the node is automatically reparented.
+ *
+ * Usage:
+ * @code
+ * ProblemStoreNode *root = new ProblemStoreNode();
+ * root->addChild(new ProblemStoreNode());
+ * root->addChild(new ProblemStoreNode());
+ * root->addChild(new ProblemStoreNode());
+ * root->count(); // Returns 3
+ * @endcode
+ *
+ */
 class ProblemStoreNode
 {
 public:
@@ -44,15 +56,15 @@ public:
         clear();
     }
 
-    // Clear the children nodes
+    /// Clear the children nodes
     void clear()
     {
         qDeleteAll(m_children);
         m_children.clear();
     }
 
-    // Tells if the node is a root node.
-    // A node is considered a root node (in this context), when it has no parent
+    /// Tells if the node is a root node.
+    /// A node is considered a root node (in this context), when it has no parent
     bool isRoot() const
     {
         if(!m_parent)
@@ -61,7 +73,7 @@ public:
             return false;
     }
 
-    // Returns the index of this node in the parent's child list.
+    /// Returns the index of this node in the parent's child list.
     int index()
     {
         if(!m_parent)
@@ -71,64 +83,74 @@ public:
         return children.indexOf(this);
     }
 
-    // Returns the parent of this node
+    /// Returns the parent of this node
     ProblemStoreNode* parent() const{
         return m_parent;
     }
 
-    // Sets the parent of this node
+    /// Sets the parent of this node
     void setParent(ProblemStoreNode *parent)
     {
         m_parent = parent;
     }
 
-    // Returns the number of children nodes
+    /// Returns the number of children nodes
     int count() const
     {
         return m_children.count();
     }
 
-    // Returns a particular child node
+    /// Returns a particular child node
     ProblemStoreNode* child(int row) const
     {
         return m_children[row];
     }
 
-    // Returns the list of children nodes
+    /// Returns the list of children nodes
     const QVector<ProblemStoreNode*>& children() const{
         return m_children;
     }
 
-    // Adds a child node, and reparents the child
+    /// Adds a child node, and reparents the child
     void addChild(ProblemStoreNode *child)
     {
         m_children.push_back(child);
         child->setParent(this);
     }
 
-    // Returns the label of this node, if there's one
+    /// Returns the label of this node, if there's one
     virtual QString label() const{
         return QString();
     }
 
-    // Returns the node's stored problem, if there's such
+    /// Returns the node's stored problem, if there's such
     virtual IProblem::Ptr problem() const{
         return IProblem::Ptr(nullptr);
     }
 
 private:
-    // The parent node
+    /// The parent node
     ProblemStoreNode *m_parent;
 
-    // Children nodes
+    /// Children nodes
     QVector<ProblemStoreNode*> m_children;
 };
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Label node, basically instead of storing a problem, it stores just a label, and used as parent node for problems
-// E.g.: Path, Severity for grouping
+/**
+ * @brief A ProblemStoreNode that contains a label. For example: Label for severity or path grouping of problem nodes.
+ *
+ * Usage:
+ * @code
+ * ProblemStoreNode *root = new ProblemStoreNode();
+ * ...
+ * root->addChild(new LabelNode(root, QStringLiteral("ERROR")));
+ * root->children().last()->label(); // "ERROR"
+ * @endcode
+ *
+ */
 class LabelNode : public ProblemStoreNode
 {
 public:
@@ -144,17 +166,28 @@ public:
 
     QString label() const{ return m_label; }
 
-    // Sets the label
+    /// Sets the label
     void setLabel(const QString &s){ m_label = s; }
 
 private:
-    // The label
+    /// The label
     QString m_label;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Problem node, stores problems
+/**
+ * @brief A ProblemStoreNode that contains a problem. For example: as part of a problem list in a severity or path group.
+ *
+ * Usage:
+ * @code
+ * IProblem::Ptr problem1(new DetectedProblem());
+ * ...
+ * label->addChild(new ProblemNode(label, problem1));
+ * label->children().last()->problem(); // Provides problem1
+ * @endcode
+ *
+ */
 class ProblemNode : public ProblemStoreNode
 {
 public:
@@ -172,14 +205,14 @@ public:
         return m_problem;
     }
 
-    // Sets the problem
+    /// Sets the problem
     void setProblem(const IProblem::Ptr &problem){
         m_problem = problem;
     }
 
 
 private:
-    // The problem
+    /// The problem
     IProblem::Ptr m_problem;
 };
 

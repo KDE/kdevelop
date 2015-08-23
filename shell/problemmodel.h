@@ -35,23 +35,61 @@ namespace KDevelop {
 
 class ProblemStore;
 
-// Provides a model interface for the problems so they can be shown
-// Can support various features, see the FeatureCode enum!
+/**
+ * @brief Wraps a ProblemStore and adds the QAbstractItemModel interface, so the it can be used in a model/view architecture.
+ *
+ * By default ProblemModel instantiates a FilteredProblemStore, with the following features on:
+ * \li ScopeFilter
+ * \li SeverityFilter
+ * \li Grouping
+ * \li CanByPassScopeFilter
+ *
+ * Has to following columns:
+ * \li Error
+ * \li Source
+ * \li File
+ * \li Line
+ * \li Column
+ * \li LastColumn
+ *
+ * Possible ProblemModel features
+ * \li NoFeatures
+ * \li CanDoFullUpdate
+ * \li CanShowImports
+ * \li ScopeFilter
+ * \li SeverityFilter
+ * \li Grouping
+ * \li CanByPassScopeFilter
+ *
+ * Scope, severity, grouping, imports can be set using the slots named after these features.
+ *
+ * Usage example:
+ * @code
+ * IProblem::Ptr problem(new DetectedProblem);
+ * problem->setDescription(QStringLiteral("Problem"));
+ * ProblemModel *model = new ProblemModel(nullptr);
+ * model->addProblem(problem);
+ * model->rowCount(); // returns 1
+ * QModelIndex idx = model->index(0, 0);
+ * model->data(index); // "Problem"
+ * @endcode
+ *
+ */
 class KDEVPLATFORMSHELL_EXPORT ProblemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    // List of supportable features
+    /// List of supportable features
     enum FeatureCode
     {
-        NoFeatures                 = 0, // No features :(
-        CanDoFullUpdate            = 1, // Reload/Reparse problems
-        CanShowImports             = 2, // Show problems from imported files. E.g.: Header files in C/C++
-        ScopeFilter                = 4, // Filter problems by scope. E.g.: current document, open documents, etc
-        SeverityFilter             = 8, // Filter problem by severity. E.g.: hint, warning, error, etc
-        Grouping                   = 16,
-        CanByPassScopeFilter       = 32 // Can bypass scope filter
+        NoFeatures                 = 0,  /// No features :(
+        CanDoFullUpdate            = 1,  /// Reload/Reparse problems
+        CanShowImports             = 2,  /// Show problems from imported files. E.g.: Header files in C/C++
+        ScopeFilter                = 4,  /// Filter problems by scope. E.g.: current document, open documents, etc
+        SeverityFilter             = 8,  /// Filter problems by severity. E.g.: hint, warning, error, etc
+        Grouping                   = 16, /// Can group problems
+        CanByPassScopeFilter       = 32  /// Can bypass scope filter
     };
 
     Q_DECLARE_FLAGS(Features, FeatureCode)
@@ -77,52 +115,52 @@ public:
 
     IProblem::Ptr problemForIndex(const QModelIndex& index) const;
 
-    // Adds a new problem to the model
+    /// Adds a new problem to the model
     void addProblem(const IProblem::Ptr &problem);
 
-    // Clears the problems, then adds a new set of them
+    /// Clears the problems, then adds a new set of them
     void setProblems(const QVector<IProblem::Ptr> &problems);
 
-    // Clears the problems
+    /// Clears the problems
     void clearProblems();
 
-    // Retrieve the supported features
+    /// Retrieve the supported features
     Features features() const;
 
-    // Set the supported features
+    /// Set the supported features
     void setFeatures(Features features);
 
 public slots:
-    // Show imports
+    /// Show imports
     virtual void setShowImports(bool){}
 
-    // Sets the scope filter
-    // Use int to be able to use QSignalMapper
+    /// Sets the scope filter. Uses int to be able to use QSignalMapper
     virtual void setScope(int scope);
 
-    // Sets the severity filter
-    // Use int to be able to use QSignalMapper
+    /// Sets the severity filter. Uses int to be able to use QSignalMapper
     virtual void setSeverity(int severity);
 
     void setGrouping(int grouping);
 
-    // Force a full problem update.
-    // E.g.: Reparse the source code
-    // Obviously it doesn't make sense for run-time problem checkers.
+    /**
+     * Force a full problem update.
+     * E.g.: Reparse the source code.
+     * Obviously it doesn't make sense for run-time problem checkers.
+     */
     virtual void forceFullUpdate(){}
 
 protected slots:
-    // Triggered when problems change
+    /// Triggered when problems change
     virtual void onProblemsChanged(){}
 
 private slots:
-    // Triggered when the current document changes
+    /// Triggered when the current document changes
     virtual void setCurrentDocument(IDocument* doc);
 
-    // Triggered before the problems are rebuilt
+    /// Triggered before the problems are rebuilt
     void onBeginRebuild();
 
-    // Triggered once the problems have been rebuilt
+    /// Triggered once the problems have been rebuilt
     void onEndRebuild();
 
 protected:

@@ -29,7 +29,33 @@ struct CheckerStatusPrivate;
 namespace KDevelop
 {
 
-// Status / Progress reporter for checker tools
+/**
+* Status / Progress reporter for checker tools. It shows a progress bar as more and more items are checked.
+* As part of initialization the max. number of items have to be set, and then when an item is checked that has to be indicated to the class. When stopped the progressbar first filled up to max, then it disappears.
+*
+* Initialization:
+* @code
+* m_status = new CheckerStatus();
+* m_status->setCheckerName(QStringLiteral("SomeChecker"));
+* ICore::self()->uiController()->registerStatus(m_status);
+* @endcode
+*
+* Starting:
+* @code
+* m_status->setMaxItems(9001);
+* m_status->start();
+* @endcode
+*
+* Stopping:
+* @code
+* m_status->stop();
+* @endcode
+*
+* Showing progress:
+* @code
+* m_status->itemChecked();
+* @endcode
+*/
 class KDEVPLATFORMSHELL_EXPORT CheckerStatus : public QObject, public KDevelop::IStatus
 {
     Q_OBJECT
@@ -40,19 +66,19 @@ public:
 
     virtual QString statusName() const override;
 
-    // Sets the name of the checker tool
+    /// Sets the name of the checker tool
     void setCheckerName(const QString &name);
 
-    // Sets the maximum number of items that will be checked
+    /// Sets the maximum number of items that will be checked
     void setMaxItems(int maxItems);
 
-    // Increases the number of checked items
+    /// Increases the number of checked items
     void itemChecked();
 
-    // Starts status / progress reporting
+    /// Starts status / progress reporting
     void start();
 
-    // Stops status / progress reporting
+    /// Stops status / progress reporting
     void stop();
 
 signals:

@@ -32,12 +32,29 @@ struct DetectedProblemPrivate;
 namespace KDevelop
 {
 
-// Class that represents a problem.
-// Provides an interface so problems can be stored in a ProblemStore.
-// Which can then be decorated with a model and shown in the problems view.
-// It is basically a mirror of DUChain's Problem class.
-// However that class is strongly coupled with DUChain's internals due to DUChain's needs (special serialization).
-// Everything is public since the class has no behavtior, it just wraps some data that is handled as one unit!
+/**
+ * @brief Represents a problem as one unit with the IProblem interface so can be used with anything that can handle IProblem.
+ *
+ * You should have it wrapped in an IProblem::Ptr which is a shared pointer for it.
+ * It is basically a mirror of DUChain's Problem class.
+ * However that class is strongly coupled with DUChain's internals due to DUChain's needs (special serialization).
+ *
+ * Usage example:
+ * @code
+ * IProblem::Ptr problem(new DetectedProblem());
+ * problem->setSource(IProblem::Plugin);
+ * problem->setSeverity(IProblem::Error);
+ * problem->setDescription(QStringLiteral("Error message"));
+ * problem->setExplanation(QStringLiteral("Error explanation"));
+ *
+ * DocumentRange range;
+ * range.document = IndexedString("/path/to/source/file");
+ * range.setBothLines(1337);
+ * range.setBothColumns(12);
+ * problem->setFinalLocation(range);
+ * @endcode
+ *
+ */
 class KDEVPLATFORMSHELL_EXPORT DetectedProblem : public IProblem
 {
 public:
@@ -46,7 +63,6 @@ public:
 
     Source source() const override;
     void setSource(Source source) override;
-    // Retrieves the string representation of the problem's source
     QString sourceString() const override;
 
     DocumentRange finalLocation() const override;
@@ -60,8 +76,6 @@ public:
 
     Severity severity() const override;
     void setSeverity(Severity severity) override;
-
-    // Retrives the string representation of the problem's severity
     QString severityString() const override;
 
     QVector<Ptr> diagnostics() const override;
@@ -69,7 +83,6 @@ public:
     void addDiagnostic(const Ptr &diagnostic) override;
     void clearDiagnostics() override;
 
-    // A solution assistant to the problem, implement in subclass!
     virtual QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const override;
 
 private:

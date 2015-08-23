@@ -29,7 +29,7 @@ using namespace KDevelop;
 namespace
 {
 
-// Adds diagnostics as sub-nodes
+/// Adds diagnostics as sub-nodes
 void addDiagnostics(ProblemStoreNode *node, const QVector<IProblem::Ptr> &diagnostics)
 {
     foreach (const IProblem::Ptr &ptr, diagnostics) {
@@ -40,8 +40,11 @@ void addDiagnostics(ProblemStoreNode *node, const QVector<IProblem::Ptr> &diagno
     }
 }
 
-// Base class for grouping strategy classes
-// These classes build the problem tree based on the respective strategies
+/**
+ * @brief Base class for grouping strategy classes
+ *
+ * These classes build the problem tree based on the respective strategies
+ */
 class GroupingStrategy
 {
 public:
@@ -54,10 +57,10 @@ public:
     virtual ~GroupingStrategy(){
     }
 
-    // Add a problem to the appropriate group
+    /// Add a problem to the appropriate group
     virtual void addProblem(const IProblem::Ptr &problem) = 0;
 
-    // Find the specified noe
+    /// Find the specified noe
     const ProblemStoreNode* findNode(int row, ProblemStoreNode *parent = nullptr) const
     {
         if (parent == nullptr)
@@ -66,7 +69,7 @@ public:
             return parent->child(row);
     }
 
-    // Returns the number of children nodes
+    /// Returns the number of children nodes
     int count(ProblemStoreNode *parent = nullptr)
     {
         if (parent == nullptr)
@@ -75,7 +78,7 @@ public:
             return parent->count();
     }
 
-    // Clears the problems
+    /// Clears the problems
     virtual void clear()
     {
         m_groupedRootNode->clear();
@@ -88,7 +91,7 @@ protected:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Implements no grouping strategy, that is just stores the problems without any grouping
+/// Implements no grouping strategy, that is just stores the problems without any grouping
 class NoGroupingStrategy final : public GroupingStrategy
 {
 public:
@@ -109,7 +112,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Implements grouping based on path
+/// Implements grouping based on path
 class PathGroupingStrategy final : public GroupingStrategy
 {
 public:
@@ -122,7 +125,7 @@ public:
     {
         QString path = problem->finalLocation().document.str();
 
-        // See if we already have this path
+        /// See if we already have this path
         ProblemStoreNode *parent = nullptr;
         foreach (ProblemStoreNode *node, m_groupedRootNode->children()) {
             if (node->label() == path) {
@@ -131,7 +134,7 @@ public:
             }
         }
 
-        // If not add it!
+        /// If not add it!
         if (parent == nullptr) {
             parent = new LabelNode(m_groupedRootNode.data(), path);
             m_groupedRootNode->addChild(parent);
@@ -146,7 +149,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Implements grouping based on severity
+/// Implements grouping based on severity
 class SeverityGroupingStrategy final : public GroupingStrategy
 {
 public:
@@ -160,7 +163,7 @@ public:
     SeverityGroupingStrategy(ProblemStoreNode *root)
         : GroupingStrategy(root)
     {
-        // Create the groups on construction, so there's no need to search for them on addition
+        /// Create the groups on construction, so there's no need to search for them on addition
         m_groupedRootNode->addChild(new LabelNode(m_groupedRootNode.data(), i18n("Error")));
         m_groupedRootNode->addChild(new LabelNode(m_groupedRootNode.data(), i18n("Warning")));
         m_groupedRootNode->addChild(new LabelNode(m_groupedRootNode.data(), i18n("Hint")));
@@ -288,13 +291,13 @@ bool FilteredProblemStore::bypassScopeFilter() const
 
 bool FilteredProblemStore::match(const IProblem::Ptr &problem) const
 {
-    // If the problem is less severe than our filter criterion then it's discarded
+    /// If the problem is less severe than our filter criterion then it's discarded
     if(problem->severity() > severity())
         return false;
 
-    // If we have bypass on, don't check the scope
+    /// If we have bypass on, don't check the scope
     if (!m_bypassScopeFilter) {
-        // If the problem isn't in a file that's in the watched document set, it's discarded
+        /// If the problem isn't in a file that's in the watched document set, it's discarded
         const WatchedDocumentSet::DocumentSet &docs = documents()->get();
         if(!docs.contains(problem->finalLocation().document))
             return false;
