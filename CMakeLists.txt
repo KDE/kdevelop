@@ -72,10 +72,11 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   XmlGui
 )
 
-find_package(Grantlee5 REQUIRED)
+find_package(Grantlee5)
 set_package_properties(Grantlee5 PROPERTIES
     PURPOSE "Grantlee templating library, needed for file templates"
-    URL "http://www.grantlee.org/")
+    URL "http://www.grantlee.org/"
+    TYPE REQUIRED)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)
