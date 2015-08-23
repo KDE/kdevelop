@@ -33,15 +33,7 @@ if (Qt5QuickWidgets_FOUND)
 endif()
 add_subdirectory(outlineview)
 
-set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
-find_package(Boost 1.35.0)
-set_package_properties(Boost PROPERTIES
-    PURPOSE "Boost libraries for enabling the classbrowser"
-    URL "http://www.boost.org"
-    TYPE OPTIONAL)
-if(Boost_FOUND)
-    ecm_optional_add_subdirectory(classbrowser)
-endif()
+ecm_optional_add_subdirectory(classbrowser)
 
 find_package(SubversionLibrary)
 set_package_properties(SubversionLibrary PROPERTIES
