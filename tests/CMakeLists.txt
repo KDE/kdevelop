@@ -1,6 +1,3 @@
-
-include_directories( ${KDevPlatform_SOURCE_DIR}/shell )
-
 set(kdevtests_LIB_SRCS
     autotestshell.cpp
     kdevsignalspy.cpp

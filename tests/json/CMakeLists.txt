@@ -1,5 +1,3 @@
-include_directories(${KDevPlatform_SOURCE_DIR}/shell ${QJSON_INCLUDE_DIR})
-
 set(KDevPlatformJsonTests_LIB_SRCS
     delayedoutput.cpp
     declarationvalidator.cpp

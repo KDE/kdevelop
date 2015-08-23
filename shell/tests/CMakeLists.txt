@@ -1,12 +1,3 @@
-# also needed for the plugin, so the plugincontrollertest knows the binary dir
-#add_definitions( -DBUILD_DIR="\\"${KDevPlatform_BINARY_DIR}\\"" )
-include_directories(
-    ${KDevPlatform_SOURCE_DIR}
-    ${KDevPlatform_SOURCE_DIR}/interfaces
-    ${KDevPlatform_SOURCE_DIR}/shell
-    ${KDevPlatform_BINARY_DIR}/serialization
-    )
-
 ecm_add_test(test_documentcontroller.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests)
 
