@@ -22,11 +22,7 @@ set(KDevPlatformProject_LIB_SRCS
     interfaces/iprojectfilterprovider.cpp
 )
 
-
-add_library(KDevPlatformProject ${KDevPlatformProject_LIB_SRCS})
-add_library(KDev::Project ALIAS KDevPlatformProject)
-
-generate_export_header(KDevPlatformProject EXPORT_FILE_NAME projectexport.h)
+kdevplatform_add_library(KDevPlatformProject SOURCES ${KDevPlatformProject_LIB_SRCS})
 target_link_libraries(KDevPlatformProject
 LINK_PUBLIC
     KDev::Interfaces
@@ -38,12 +34,8 @@ LINK_PRIVATE
     KF5::KIOWidgets
     Qt5::Concurrent
 )
-set_target_properties(KDevPlatformProject PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Project)
-install(TARGETS KDevPlatformProject EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 add_subdirectory(tests)
-
-########### install files ###############
 
 install(FILES
     interfaces/iprojectbuilder.h
@@ -52,7 +44,7 @@ install(FILES
     interfaces/iprojectfilter.h
     interfaces/iprojectfilterprovider.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/project/interfaces COMPONENT Devel
- )
+)
 
 install(FILES
     projectutils.h
@@ -67,6 +59,5 @@ install(FILES
     helper.h
     abstractfilemanagerplugin.h
     projectfiltermanager.h
-    ${CMAKE_CURRENT_BINARY_DIR}/projectexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/project COMPONENT Devel
- )
+)

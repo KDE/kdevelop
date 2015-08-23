@@ -25,7 +25,7 @@
 
 #include <language/duchain/topducontext.h>
 
-#include "kdevplatformtestsexport.h"
+#include "testsexport.h"
 
 namespace KDevelop {
 

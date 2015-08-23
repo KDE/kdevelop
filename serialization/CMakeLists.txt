@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
+
 set(KDevPlatformSerialization_LIB_SRCS
     abstractitemrepository.cpp
     indexedstring.cpp
@@ -6,23 +8,12 @@ set(KDevPlatformSerialization_LIB_SRCS
     debug.cpp
 )
 
-add_library(KDevPlatformSerialization SHARED ${KDevPlatformSerialization_LIB_SRCS})
-add_library(KDev::Serialization ALIAS KDevPlatformSerialization)
-
-generate_export_header(KDevPlatformSerialization EXPORT_FILE_NAME serializationexport.h)
+kdevplatform_add_library(KDevPlatformSerialization SOURCES ${KDevPlatformSerialization_LIB_SRCS})
 target_link_libraries(KDevPlatformSerialization
 LINK_PUBLIC
     KDev::Interfaces
 LINK_PRIVATE
     KDev::Util
-)
-
-set_target_properties(KDevPlatformSerialization PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Serialization)
-install(TARGETS KDevPlatformSerialization EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/serializationexport.h
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/serialization COMPONENT Devel
 )
 
 install(FILES

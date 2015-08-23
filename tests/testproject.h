@@ -28,7 +28,7 @@
 #include <serialization/indexedstring.h>
 #include <shell/projectcontroller.h>
 
-#include "kdevplatformtestsexport.h"
+#include "testsexport.h"
 #include <util/path.h>
 
 namespace KDevelop {

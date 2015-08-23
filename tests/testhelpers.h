@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_TESTHELPERS_H
 #define KDEVPLATFORM_TESTHELPERS_H
 
-#include "kdevplatformtestsexport.h"
+#include "testsexport.h"
 
 #include <language/editor/rangeinrevision.h>
 #include <language/duchain/types/abstracttype.h>

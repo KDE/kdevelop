@@ -19,9 +19,10 @@
 #ifndef KDEVPLATFORM_DELAYEDOUTPUT_H
 #define KDEVPLATFORM_DELAYEDOUTPUT_H
 
+#include "jsontestsexport.h"
+
 #include <QStack>
 #include <QPair>
-#include "kdevplatformjsontestsexport.h"
 
 namespace KDevelop
 {

@@ -1,8 +1,6 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
-########### next target ###############
-
-set( KDevPlatformDebugger_LIB_SRCS
+set(KDevPlatformDebugger_LIB_SRCS
     interfaces/idebugsession.cpp
     interfaces/iframestackmodel.cpp
     interfaces/ibreakpointcontroller.cpp
@@ -22,9 +20,9 @@ set( KDevPlatformDebugger_LIB_SRCS
     framestack/framestackmodel.cpp
     framestack/framestackwidget.cpp
 )
-add_library(KDevPlatformDebugger ${KDevPlatformDebugger_LIB_SRCS})
-generate_export_header(KDevPlatformDebugger EXPORT_FILE_NAME debuggerexport.h)
-target_link_libraries(KDevPlatformDebugger LINK_PUBLIC
+kdevplatform_add_library(KDevPlatformDebugger SOURCES ${KDevPlatformDebugger_LIB_SRCS})
+target_link_libraries(KDevPlatformDebugger
+LINK_PUBLIC
     KDev::Interfaces
     KDev::Util
 LINK_PRIVATE
@@ -33,20 +31,7 @@ LINK_PRIVATE
     KF5::TextEditor
     KDev::Sublime
 )
-add_library(KDev::Debugger ALIAS KDevPlatformDebugger)
 
-set_target_properties(KDevPlatformDebugger PROPERTIES
-    VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION}
-    EXPORT_NAME Debugger
-)
-install(TARGETS KDevPlatformDebugger EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
-
-########### install files ###############
-
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/debuggerexport.h
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/debugger COMPONENT Devel
-)
 install(FILES
     interfaces/idebugsession.h
     interfaces/ibreakpointcontroller.h

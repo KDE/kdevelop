@@ -28,7 +28,7 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QStack>
 
-#include "kdevplatformtestsexport.h"
+#include "testsexport.h"
 
 class KDEVPLATFORMTESTS_EXPORT ModelTest : public QObject
 {

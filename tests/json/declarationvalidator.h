@@ -19,8 +19,9 @@
 #ifndef KDEVPLATFORM_DECLARATIONVALIDATOR_H
 #define KDEVPLATFORM_DECLARATIONVALIDATOR_H
 
+#include "jsontestsexport.h"
+
 #include "language/duchain/ducontext.h"
-#include "kdevplatformjsontestsexport.h"
 
 namespace KDevelop {
 

@@ -1,4 +1,5 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
+
 set(KDevPlatformInterfaces_LIB_SRCS
     iassistant.cpp
     context.cpp
@@ -43,9 +44,7 @@ set(KDevPlatformInterfaces_LIB_SRCS
 )
 configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 
-add_library(KDevPlatformInterfaces ${KDevPlatformInterfaces_LIB_SRCS})
-add_library(KDev::Interfaces ALIAS KDevPlatformInterfaces)
-generate_export_header(KDevPlatformInterfaces EXPORT_FILE_NAME interfacesexport.h)
+kdevplatform_add_library(KDevPlatformInterfaces SOURCES ${KDevPlatformInterfaces_LIB_SRCS})
 target_link_libraries(KDevPlatformInterfaces
 LINK_PUBLIC
     KF5::ConfigCore
@@ -59,10 +58,6 @@ LINK_PRIVATE
     KF5::KIOWidgets
     KF5::ThreadWeaver
 )
-target_include_directories(KDevPlatformInterfaces INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevplatform>")
-
-set_target_properties(KDevPlatformInterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Interfaces)
-install(TARGETS KDevPlatformInterfaces EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     iassistant.h
@@ -106,7 +101,6 @@ install(FILES
     itestcontroller.h
     itoolviewactionlistener.h
     iproblem.h
-    ${CMAKE_CURRENT_BINARY_DIR}/interfacesexport.h
     ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/interfaces COMPONENT Devel
 )

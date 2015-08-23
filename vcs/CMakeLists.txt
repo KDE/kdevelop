@@ -45,11 +45,8 @@ set(KDevPlatformVcs_LIB_SRCS
     interfaces/ipatchdocument.cpp
     interfaces/ipatchsource.cpp
 )
-
 ki18n_wrap_ui(KDevPlatformVcs_LIB_SRCS ${KDevPlatformVcs_UIS})
-add_library(KDevPlatformVcs ${KDevPlatformVcs_LIB_SRCS})
-add_library(KDev::Vcs ALIAS KDevPlatformVcs)
-generate_export_header(KDevPlatformVcs EXPORT_FILE_NAME vcsexport.h)
+kdevplatform_add_library(KDevPlatformVcs SOURCES ${KDevPlatformVcs_LIB_SRCS})
 target_link_libraries(KDevPlatformVcs
 LINK_PUBLIC
     KDev::OutputView
@@ -59,11 +56,8 @@ LINK_PRIVATE
     KF5::Parts
     KDev::Util
 )
-set_target_properties(KDevPlatformVcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Vcs)
-install(TARGETS KDevPlatformVcs EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/vcsexport.h
     vcsjob.h
     vcsrevision.h
     vcsannotation.h

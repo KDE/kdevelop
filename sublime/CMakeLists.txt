@@ -1,8 +1,7 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
+
 add_subdirectory(examples)
 add_subdirectory(tests)
-
-########### next target ###############
 
 set(sublime_LIB_SRCS
     area.cpp
@@ -26,19 +25,10 @@ set(sublime_LIB_SRCS
     idealdockwidget.cpp
     idealbuttonbarwidget.cpp
 )
-
-add_library(KDevPlatformSublime ${sublime_LIB_SRCS})
-add_library(KDev::Sublime ALIAS KDevPlatformSublime)
-
-generate_export_header(KDevPlatformSublime EXPORT_FILE_NAME sublimeexport.h)
+kdevplatform_add_library(KDevPlatformSublime SOURCES ${sublime_LIB_SRCS})
 target_link_libraries(KDevPlatformSublime
         LINK_PRIVATE KF5::KIOWidgets
         LINK_PUBLIC KF5::Parts)
-set_target_properties(KDevPlatformSublime PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Sublime)
-install(TARGETS KDevPlatformSublime EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
-
-
-########### install files ###############
 
 install(FILES
     area.h
@@ -53,5 +43,4 @@ install(FILES
     sublimedefs.h
     tooldocument.h
     view.h
-    ${CMAKE_CURRENT_BINARY_DIR}/sublimeexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/sublime COMPONENT Devel)

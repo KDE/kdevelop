@@ -1,6 +1,6 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
-set( outputviewinterfaces_LIB_SRCS
+set(outputviewinterfaces_LIB_SRCS
     outputdelegate.cpp
     outputformats.cpp
     filtereditem.cpp
@@ -12,28 +12,22 @@ set( outputviewinterfaces_LIB_SRCS
     outputjob.cpp
     outputexecutejob.cpp
 )
-add_library( KDevPlatformOutputView ${outputviewinterfaces_LIB_SRCS} )
-add_library( KDev::OutputView ALIAS KDevPlatformOutputView )
-generate_export_header(KDevPlatformOutputView EXPORT_FILE_NAME outputviewexport.h)
+kdevplatform_add_library(KDevPlatformOutputView SOURCES ${outputviewinterfaces_LIB_SRCS})
 target_link_libraries(KDevPlatformOutputView PRIVATE
     Qt5::Core
     KDev::Interfaces
     KDev::Util
 )
-set_target_properties(KDevPlatformOutputView PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME OutputView)
-install(TARGETS KDevPlatformOutputView EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
- ########### install files ###############
- install( FILES
-          ioutputview.h
-          filtereditem.h
-          outputmodel.h
-          outputdelegate.h
-          ioutputviewmodel.h
-          ifilterstrategy.h
-          ${CMAKE_CURRENT_BINARY_DIR}/outputviewexport.h
-          outputjob.h
-          outputexecutejob.h
-          DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/outputview COMPONENT Devel)
+install(FILES
+    ioutputview.h
+    filtereditem.h
+    outputmodel.h
+    outputdelegate.h
+    ioutputviewmodel.h
+    ifilterstrategy.h
+    outputjob.h
+    outputexecutejob.h
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/outputview COMPONENT Devel)
 
 add_subdirectory(tests)

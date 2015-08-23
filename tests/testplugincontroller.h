@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_TESTPLUGINCONTROLLER_H
 #define KDEVPLATFORM_TESTPLUGINCONTROLLER_H
 
-#include "kdevplatformtestsexport.h"
+#include "testsexport.h"
 
 #include <shell/plugincontroller.h>
 #include <interfaces/contextmenuextension.h>

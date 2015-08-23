@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_KDEVPLATFORMTESTCORE_H
 #define KDEVPLATFORM_KDEVPLATFORMTESTCORE_H
 
-#include "kdevplatformtestsexport.h"
+#include "testsexport.h"
 #include <shell/core.h>
 
 namespace KDevelop

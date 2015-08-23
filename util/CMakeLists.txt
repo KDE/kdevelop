@@ -39,10 +39,7 @@ add_subdirectory(duchainify)
 add_subdirectory(tests)
 
 ki18n_wrap_ui(KDevPlatformUtil_LIB_SRCS ${KDevPlatformUtil_LIB_US})
-add_library(KDevPlatformUtil ${KDevPlatformUtil_LIB_SRCS})
-add_library(KDev::Util ALIAS KDevPlatformUtil)
-
-generate_export_header(KDevPlatformUtil EXPORT_FILE_NAME utilexport.h)
+kdevplatform_add_library(KDevPlatformUtil SOURCES ${KDevPlatformUtil_LIB_SRCS})
 target_link_libraries(KDevPlatformUtil
 LINK_PUBLIC
     KF5::ConfigWidgets
@@ -51,9 +48,6 @@ LINK_PRIVATE
     KF5::KCMUtils
     KDev::Interfaces
 )
-target_include_directories(KDevPlatformUtil INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevplatform>")
-set_target_properties(KDevPlatformUtil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Util)
-install(TARGETS KDevPlatformUtil EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 install( FILES kdev_format_source DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)

@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_TESTLANGUAGECONTROLLER_H
 #define KDEVPLATFORM_TESTLANGUAGECONTROLLER_H
 
-#include "kdevplatformtestsexport.h"
+#include "testsexport.h"
 
 #include <shell/languagecontroller.h>
 

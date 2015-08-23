@@ -22,7 +22,7 @@
 #define KDEVPLATFORM_KDEVSIGNALSPY_H
 
 #include <QtCore/QObject>
-#include "kdevplatformtestsexport.h"
+#include "testsexport.h"
 
 class QEventLoop;
 class QTimer;

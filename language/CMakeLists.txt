@@ -164,9 +164,7 @@ ki18n_wrap_ui(KDevPlatformLanguage_LIB_SRCS
     codegen/basicrefactoring.ui
     codegen/progressdialogs/refactoringdialog.ui)
 
-add_library(KDevPlatformLanguage ${KDevPlatformLanguage_LIB_SRCS})
-add_library(KDev::Language ALIAS KDevPlatformLanguage)
-generate_export_header(KDevPlatformLanguage EXPORT_FILE_NAME languageexport.h)
+kdevplatform_add_library(KDevPlatformLanguage SOURCES ${KDevPlatformLanguage_LIB_SRCS})
 target_link_libraries(KDevPlatformLanguage LINK_PUBLIC
         KF5::ThreadWeaver
         KDev::Interfaces
@@ -183,17 +181,6 @@ LINK_PRIVATE
 if (Grantlee5_FOUND)
     target_link_libraries(KDevPlatformLanguage LINK_PRIVATE Grantlee5::Templates)
 endif()
-
-set_target_properties(KDevPlatformLanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Language)
-install(TARGETS KDevPlatformLanguage EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
-
-########### install files ###############
-
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/languageexport.h
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/language COMPONENT Devel
-)
-
 
 install(FILES
     assistant/renameaction.h

@@ -1,4 +1,5 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
+
 add_subdirectory(tests)
 
 set(KDevPlatformShell_LIB_SRCS
@@ -105,10 +106,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/templatepage.ui
 )
 
-add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})
-add_library(KDev::Shell ALIAS KDevPlatformShell)
-
-generate_export_header(KDevPlatformShell EXPORT_FILE_NAME shellexport.h)
+kdevplatform_add_library(KDevPlatformShell SOURCES ${KDevPlatformShell_LIB_SRCS})
 target_link_libraries(KDevPlatformShell
 LINK_PUBLIC
     KF5::XmlGui
@@ -142,7 +140,6 @@ LINK_PRIVATE
     KDev::Util
     KDev::Documentation
 )
-set_target_properties(KDevPlatformShell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Shell)
 
 install(FILES
     mainwindow.h
@@ -171,11 +168,8 @@ install(FILES
     problemmodelset.h
     problemconstants.h
     filteredproblemstore.h
-    ${CMAKE_CURRENT_BINARY_DIR}/shellexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/shell COMPONENT Devel
 )
-
-install(TARGETS KDevPlatformShell EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevdebugger )
 install( FILES kdevsessionui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevsession )

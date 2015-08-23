@@ -10,10 +10,7 @@ set(kdevtests_LIB_SRCS
     modeltest.cpp
 )
 
-add_library(KDevPlatformTests ${kdevtests_LIB_SRCS})
-add_library(KDev::Tests ALIAS KDevPlatformTests)
-
-generate_export_header(KDevPlatformTests EXPORT_FILE_NAME kdevplatformtestsexport.h)
+kdevplatform_add_library(KDevPlatformTests SOURCES ${kdevtests_LIB_SRCS})
 target_link_libraries(KDevPlatformTests LINK_PUBLIC
     KDev::Shell
     KDev::Language
@@ -23,13 +20,6 @@ target_link_libraries(KDevPlatformTests LINK_PRIVATE
     Qt5::Core
     Qt5::Test
 )
-
-set_target_properties(KDevPlatformTests PROPERTIES
-    VERSION ${KDEVPLATFORM_LIB_VERSION}
-    SOVERSION ${KDEVPLATFORM_LIB_SOVERSION}
-    EXPORT_NAME Tests
-)
-install(TARGETS KDevPlatformTests EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     autotestshell.h
@@ -41,7 +31,6 @@ install(FILES
     testlanguagecontroller.h
     testhelpers.h
     testplugincontroller.h
-    ${CMAKE_CURRENT_BINARY_DIR}/kdevplatformtestsexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/tests/
     COMPONENT Devel
 )

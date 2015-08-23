@@ -23,7 +23,7 @@
 
 #include <QtCore/QStringList>
 
-#include "kdevplatformtestsexport.h"
+#include "testsexport.h"
 #include <shell/shellextension.h>
 #include <shell/core.h>
 
