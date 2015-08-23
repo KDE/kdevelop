@@ -13,6 +13,5 @@ ecm_add_test(test_files.cpp
         Qt5::Core
         KDev::Language
         KDev::Tests
-        KDev::JsonTests
         kdevqmljsduchain
 )

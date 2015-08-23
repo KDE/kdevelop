@@ -56,7 +56,6 @@ configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 ecm_add_test(test_cppfiles.cpp
 LINK_LIBRARIES
     ${test_common_LIBS}
-    KDev::JsonTests
 )
 
 ecm_add_test(test_specialcompletion.cpp ${test_common_SRCS} TEST_NAME test_specialcompletion
