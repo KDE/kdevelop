@@ -42,6 +42,8 @@ KDevSplashScreen::KDevSplashScreen()
     setSource(QUrl::fromLocalFile(splashScript));
     if (!rootObject()) {
         qWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml" << splashScript;
+        hide(); // hide instead of showing garbage
+        return;
     }
 
     if (rootObject()) {
@@ -63,8 +65,6 @@ KDevSplashScreen::~KDevSplashScreen()
 
 void KDevSplashScreen::progress(int progress)
 {
-    Q_ASSERT(rootObject());
-
     // notify the QML script of the progress change
     if (rootObject()) {
         rootObject()->setProperty("progress", progress);
