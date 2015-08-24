@@ -1,6 +1,6 @@
 /*
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
- * Copyright 2015 Laszlo Kis-Adam
+ * Copyright 2015 Laszlo Kis-Adam <laszlo.kis-adam@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
