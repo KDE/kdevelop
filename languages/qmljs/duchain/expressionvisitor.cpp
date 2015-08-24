@@ -30,6 +30,8 @@
 #include "parsesession.h"
 #include "frameworks/nodejs.h"
 
+#include <cmath>
+
 using namespace KDevelop;
 
 ExpressionVisitor::ExpressionVisitor(DUContext* context)
