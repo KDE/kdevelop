@@ -59,8 +59,6 @@ public:
      * @param parent The parent object for the plugin.
      */
     explicit Project(QObject *parent = 0);
-
-    /// Destructor.
     virtual ~Project();
 
     virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const override;
@@ -80,13 +78,8 @@ public:
 
     virtual bool isReady() const override;
 
-    /**
-     * @brief Get the project path
-     * @return The canonical absolute directory of the project.
-     */
     virtual Path path() const override;
 
-    /** Returns the name of the project. */
     virtual Q_SCRIPTABLE QString name() const override;
 
 public Q_SLOTS:
@@ -107,26 +100,10 @@ public Q_SLOTS:
     /** This method is invoked when the project needs to be closed. */
     void close();
 
-    /**
-     * Get the file manager for the project
-     *
-     * @return the file manager for the project, if one exists; otherwise null
-     */
     IProjectFileManager* projectFileManager() const override;
-
-    /**
-     * Get the build system manager for the project
-     *
-     * @return the build system manager for the project, if one exists; otherwise null
-     */
     IBuildSystemManager* buildSystemManager() const override;
-
     IPlugin* versionControlPlugin() const override;
 
-    /**
-     * Get the plugin that manages the project
-     * This can be used to get other interfaces like IBuildSystemManager
-     */
     IPlugin* managerPlugin() const override;
 
     /**
@@ -134,9 +111,6 @@ public Q_SLOTS:
      */
     void setManagerPlugin( IPlugin* manager );
 
-    /**
-     * With this the top-level project item can be retrieved
-     */
     ProjectFolderItem* projectItem() const override;
 
     /**
