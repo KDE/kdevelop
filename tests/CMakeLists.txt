@@ -83,7 +83,6 @@ if(KDEVPLATFORM_JSONTESTS_LIBRARIES)
         Qt5::Core
         KDev::Language
         KDev::Tests
-        KDev::JsonTests
         kdevclangduchain
   )
 endif()
