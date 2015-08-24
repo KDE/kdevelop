@@ -21,6 +21,9 @@
 #ifndef PROBLEMCONSTANTS_H
 #define PROBLEMCONSTANTS_H
 
+namespace KDevelop
+{
+
 
 // Which set of files should be tracked for errors.
 enum ProblemScope {
@@ -38,6 +41,8 @@ enum GroupingMethod
     PathGrouping,
     SeverityGrouping
 };
+
+}
 
 #endif
 
