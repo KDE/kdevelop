@@ -299,11 +299,14 @@ void TestPath::testPath()
 
     QVERIFY(optUrl.parent().isDirectParentOf(optUrl));
     QVERIFY(!optUrl.parent().parent().isDirectParentOf(optUrl));
+
+#ifndef Q_OS_WIN
     Path a("/foo/bar/asdf/");
     Path b("/foo/bar/");
     QVERIFY(b.isDirectParentOf(a));
     Path c("/foo/bar");
     QVERIFY(c.isDirectParentOf(a));
+#endif
 
     optUrl.clear();
     url.clear();
@@ -327,8 +330,8 @@ void TestPath::testPath_data()
     QTest::newRow("path-folder") << "C:/tmp/foo/asdf/";
     QTest::newRow("root") << "C:/";
     QTest::newRow("clean-path") << "C:/tmp/..///asdf/";
-    QTest::newRow("file") << "file:///C:tmp/foo/asdf.txt";
-    QTest::newRow("file-folder") << "file:///C:tmp/foo/bar/";
+    QTest::newRow("file") << "file:///C:/tmp/foo/asdf.txt";
+    QTest::newRow("file-folder") << "file:///C:/tmp/foo/bar/";
 #endif
     QTest::newRow("remote-root") << "http://www.test.com/";
     QTest::newRow("http") << "http://www.test.com/tmp/asdf.txt";
@@ -488,12 +491,12 @@ void TestPath::testPathBaseCtor_data()
     QTest::addColumn<QString>("expected");
 
     QTest::newRow("empty") << "" << "" << "";
+    QTest::newRow("empty-relative") << "" << "foo" << "";
 #ifndef Q_OS_WIN
     QTest::newRow("root-empty") << "/" << "" << "/";
     QTest::newRow("root-root") << "/" << "/" << "/";
     QTest::newRow("root-relative") << "/" << "bar" << "/bar";
     QTest::newRow("root-relative-dirty") << "/" << "bar//foo/a/.." << "/bar/foo";
-    QTest::newRow("empty-relative") << "" << "bar/foo/" << "/bar/foo";
     QTest::newRow("path-relative") << "/foo/bar" << "bar/foo" << "/foo/bar/bar/foo";
     QTest::newRow("path-absolute") << "/foo/bar" << "/bar/foo" << "/bar/foo";
 #else

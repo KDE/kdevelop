@@ -123,7 +123,7 @@ void Path::init(QUrl url)
         m_data << urlPrefix;
     }
 
-    addPath(url.path());
+    addPath(url.isLocalFile() ? url.toLocalFile() : url.path());
 
     // support for root paths, they are valid but don't really contain any data
     if (m_data.isEmpty() || (isRemote() && m_data.size() == 1)) {
@@ -137,6 +137,10 @@ Path::Path(const Path& other, const QString& child)
     if (isAbsolutePath(child)) {
         // absolute path: only share the remote part of @p other
         m_data.resize(isRemote() ? 1 : 0);
+    } else if (!other.isValid() && !child.isEmpty()) {
+        qWarning("Path::Path: tried to append relative path \"%s\" to invalid base",
+                 qPrintable(child));
+        return;
     }
     addPath(child);
 }
