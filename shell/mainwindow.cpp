@@ -321,7 +321,8 @@ bool MainWindow::queryClose()
 
 void MainWindow::updateCaption()
 {
-    QString title = Core::self()->sessionController()->activeSession()->description();
+    const auto activeSession = Core::self()->sessionController()->activeSession();
+    QString title = activeSession ? activeSession->description() : QString();
 
     if(area()->activeView())
     {
