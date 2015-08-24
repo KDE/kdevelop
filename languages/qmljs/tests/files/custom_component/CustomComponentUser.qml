@@ -1,0 +1,3 @@
+CustomComponent {
+    id: instance
+}

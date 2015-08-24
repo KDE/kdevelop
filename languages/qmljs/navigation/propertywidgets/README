@@ -1,0 +1,34 @@
+This folder contians the implementations for the "edit a property with a slider-style" widgets
+which show up when you move the cursor over certain properties in a QML document.
+When creating a new widget, you MUST:
+    * create a new QML file in this folder, named like whatever you want
+    * add that file with the property name you want to support to propertypreviewwidget.cpp::constructIfPossible
+      (it's okay to redirect multiple properties to the same file)
+    * implement the widget in QML, where you MUST
+         - add a "property string value" property to your root widget, which will
+           be set to the value the widget should start with during initialization
+           (but after the component completes loading, so you have to listen for changes on it)
+         - add a signal with signature "signal valueChanged(string newValue)" to your root widget
+         - specify a width and height for your root widget, in pixels.
+You usually do the following in your widget then:
+    * If it's a slider based widget, just copy one of the examples, e.g. Distance.qml and edit it.
+      For sliders, you MUST have two functions
+            function sliderToValue(slider) {
+                return slider;
+            }
+            function valueToSlider(value) {
+                return value;
+            }
+      defined in your root widget, which convert the slider value (0-96) to the value you want in the text document
+      and vice versa (so sliderToValue ° valueToSlider must be identity if you don't want your slider to jump)
+      If the widget is slider based, the valueChanged signal you defined will be emitted automatically by the Slider class.
+    * Otherwise, do whatever you like, just call valueChanged(text) when you want to update the text in the document.
+      The text will be set directly to whatever you pass to that signal, without any checks done.
+
+Widgets only displaying stuff are fine too, see e.g. FontFamily.qml.
+Such a "read-only" widget must still have a value property and a valueChanged signal defined!
+
+Altough it might seem obvious, you do not have to restart KDevelop to test these widgets, just running "make install"
+and re-opening the widget is enough. You can even specify the path to your kdev-qml/navigation/propertywidgets folder
+in the propertypreviewwidget class temporarily (instead of the one determined by kstandarddirs), then you can
+test without re-running installation.

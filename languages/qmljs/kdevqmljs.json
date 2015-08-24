@@ -1,0 +1,41 @@
+{
+    "KPlugin": {
+        "Category": "Language Support", 
+        "Icon": "text-x-qml", 
+        "Id": "kdevqmljs", 
+        "License": "GPL", 
+        "Name": "QML Support", 
+        "Name[ast]": "Sofitu QML", 
+        "Name[bs]": "QML podrška", 
+        "Name[ca]": "Implementació del QML", 
+        "Name[cs]": "Podpora QML", 
+        "Name[de]": "Unterstützung für QML", 
+        "Name[en_GB]": "QML Support", 
+        "Name[es]": "Implementación de QML", 
+        "Name[fi]": "QML-tuki", 
+        "Name[gl]": "Compatibilidade con QML", 
+        "Name[hu]": "QML támogatás", 
+        "Name[nl]": "Ondersteuning van QML", 
+        "Name[pl]": "Obsługa QML", 
+        "Name[pt]": "Suporte para QML", 
+        "Name[pt_BR]": "Suporte à QML", 
+        "Name[sk]": "Podpora QML", 
+        "Name[sv]": "QML-stöd", 
+        "Name[tr]": "QML Desteği", 
+        "Name[uk]": "Підтримка QML", 
+        "Name[x-test]": "xxQML Supportxx", 
+        "Name[zh_CN]": "QML 支持", 
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    }, 
+    "X-KDevelop-Interfaces": [
+        "ILanguageSupport"
+    ], 
+    "X-KDevelop-Language": "QML/JS", 
+    "X-KDevelop-Mode": "NoGUI", 
+    "X-KDevelop-SupportedMimeTypes": [
+        "text/x-qml", 
+        "application/javascript"
+    ]
+}
