@@ -46,6 +46,8 @@
 #include <KLocalizedString>
 #include <QStandardPaths>
 
+using namespace KDevelop;
+
 CMakePreferences::CMakePreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
     : KDevelop::ConfigPage(plugin, nullptr, parent), m_project(options.project), m_currentModel(0)
 {
@@ -169,7 +171,7 @@ void CMakePreferences::configureCacheView()
 
 void CMakePreferences::updateCache(const KDevelop::Path &newBuildDir)
 {
-    KDevelop::Path file(newBuildDir, "CMakeCache.txt");
+    const Path file = newBuildDir.isValid() ? Path(newBuildDir, "CMakeCache.txt") : Path();
     if(QFile::exists(file.toLocalFile()))
     {
         m_currentModel->deleteLater();
