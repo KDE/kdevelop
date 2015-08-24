@@ -23,7 +23,6 @@ target_link_libraries(kdevqmljslanguagesupport
     kdevqmljsduchain
     kdevqmljscompletion
     Qt5::Widgets
-    Qt5::Declarative
     Qt5::QuickWidgets
     KF5::Declarative
 )

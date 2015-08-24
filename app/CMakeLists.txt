@@ -8,7 +8,6 @@ if(KF5Plasma_FOUND)
 endif()
 
 find_package(SharedMimeInfo REQUIRED)
-find_package(KF5Declarative)
 
 set(kdevelop_SRCS  main.cpp kdevideextension.cpp splash.cpp)
 # kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
