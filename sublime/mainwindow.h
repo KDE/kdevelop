@@ -90,6 +90,8 @@ public:
     /**Returns a list of all views which are on top of their corresponding view stacks*/
     QList<View*> getTopViews() const;
 
+    QList<Container*> containers() const;
+
     /**Returns the view that is closest to the given global position, or zero.*/
     View* viewForPosition(QPoint globalPos) const;
 

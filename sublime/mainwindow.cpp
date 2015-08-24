@@ -99,6 +99,11 @@ QList<View*> MainWindow::getTopViews() const
     return topViews;
 }
 
+QList<Container*> MainWindow::containers() const
+{
+    return d->viewContainers.values();
+}
+
 void MainWindow::setArea(Area *area)
 {
     if (d->area)

@@ -39,7 +39,6 @@
 
 #include "view.h"
 #include "document.h"
-#include "urldocument.h"
 #include <ksqueezedtextlabel.h>
 
 namespace Sublime {
@@ -285,6 +284,11 @@ Container::~Container()
     delete d;
 }
 
+QList<View*> Container::views() const
+{
+    return d->viewForWidget.values();
+}
+
 void Container::requestClose(int idx)
 {
     emit requestClose(widget(idx));
@@ -422,7 +426,7 @@ int Container::indexOf(QWidget* w) const
     return d->stack->indexOf(w);
 }
 
-void Sublime::Container::removeWidget(QWidget *w)
+void Container::removeWidget(QWidget *w)
 {
     if (w) {
         int widgetIdx = d->stack->indexOf(w);
@@ -478,6 +482,22 @@ void Container::setTabBarHidden(bool hide)
     View* v = currentView();
     if (v) {
         documentTitleChanged(v->document());
+    }
+}
+
+void Container::resetTabColors(const QColor& color)
+{
+    for (int i = 0; i < count(); i++){
+        d->tabBar->setTabTextColor(i, color);
+    }
+}
+
+void Container::setTabColor(const View* view, const QColor& color)
+{
+    for (int i = 0; i < count(); i++){
+        if (view == viewForWidget(widget(i))) {
+            d->tabBar->setTabTextColor(i, color);
+        }
     }
 }
 

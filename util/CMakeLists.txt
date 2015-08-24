@@ -22,6 +22,7 @@ set(KDevPlatformUtil_LIB_SRCS
     objectlist.cpp
     placeholderitemproxymodel.cpp
     projecttestjob.cpp
+    widgetcolorizer.cpp
     path.cpp
     debug.cpp
 )
@@ -78,6 +79,7 @@ install( FILES
     objectlist.h
     placeholderitemproxymodel.h
     projecttestjob.h
+    widgetcolorizer.h
     path.h
     ${CMAKE_CURRENT_BINARY_DIR}/utilexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/util COMPONENT Devel)

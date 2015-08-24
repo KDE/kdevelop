@@ -89,7 +89,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -108,19 +108,6 @@
       <string>Tabbed Browsing</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_1">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="kcfg_TabBarVisibility">
-        <property name="toolTip">
-         <string>Enables or disables the display of the tab bar at the top of the editor window.</string>
-        </property>
-        <property name="text">
-         <string>Show tabs</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="kcfg_TabBarOpenAfterCurrent">
         <property name="toolTip">
@@ -142,6 +129,41 @@ For example, a header file will be opened next to the implementation file.</stri
         </property>
         <property name="text">
          <string>Arrange related documents side by side</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="kcfg_TabBarVisibility">
+        <property name="toolTip">
+         <string>Enables or disables the display of the tab bar at the top of the editor window.</string>
+        </property>
+        <property name="text">
+         <string>Show tabs</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Coloring</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="kcfg_ColorizeByProject">
+        <property name="toolTip">
+         <string>When enabled, tabs and other widgets are colored based on the project affiliation</string>
+        </property>
+        <property name="text">
+         <string>Color widgets based on the project affiliation</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
       </item>

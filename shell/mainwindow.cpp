@@ -39,11 +39,13 @@ Boston, MA 02110-1301, USA.
 #include <KTextEditor/MainWindow>
 #include <KWindowSystem>
 #include <KXMLGUIFactory>
+#include <KColorScheme>
 
 #include <sublime/area.h>
 #include "shellextension.h"
 #include "partcontroller.h"
 #include "plugincontroller.h"
+#include "projectcontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "debugcontroller.h"
@@ -51,16 +53,39 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include "sourceformattercontroller.h"
 #include "areadisplay.h"
+#include "project.h"
 #include "debug.h"
+#include "uiconfig.h"
 
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
 #include <sublime/view.h>
 #include <sublime/document.h>
 #include <sublime/urldocument.h>
+#include <sublime/container.h>
+#include <util/path.h>
+#include <util/widgetcolorizer.h>
 
-namespace KDevelop
+using namespace KDevelop;
+
+namespace {
+
+QColor defaultColor(const QPalette& palette)
 {
+    const KColorScheme scheme(palette.currentColorGroup());
+    return scheme.foreground(KColorScheme::NormalText).color();
+}
+
+QColor colorForDocument(const QUrl& url, const QPalette& palette)
+{
+    auto project = Core::self()->projectController()->findProjectForUrl(url);
+    if (!project)
+        return QColor();
+
+    return WidgetColorizer::colorForId(qHash(project->path()), palette);
+}
+
+}
 
 void MainWindow::applyMainWindowSettings(const KConfigGroup& config)
 {
@@ -200,6 +225,8 @@ void MainWindow::loadSettings()
     else if( bottomright == 1 )
         setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
 
+    updateAllTabColors();
+
     Sublime::MainWindow::loadSettings();
 }
 
@@ -295,8 +322,12 @@ void MainWindow::initialize()
     connect(Core::self()->documentController(), &IDocumentController::documentActivated, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->documentController(), &IDocumentController::documentClosed, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
-
     connect(Core::self()->sessionController()->activeSession(), &ISession::sessionUpdated, this, &MainWindow::updateCaption);
+
+    connect(Core::self()->documentController(), &IDocumentController::documentOpened, this, &MainWindow::updateTabColor, Qt::QueuedConnection);
+    connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateTabColor, Qt::QueuedConnection);
+    connect(this, &Sublime::MainWindow::viewAdded, this, &MainWindow::updateAllTabColors);
+    connect(Core::self()->projectController(), &ProjectController::projectOpened, this, &MainWindow::updateAllTabColors, Qt::QueuedConnection);
 
     updateCaption();
 }
@@ -342,6 +373,47 @@ void MainWindow::updateCaption()
     setCaption(title);
 }
 
+void MainWindow::updateAllTabColors()
+{
+    auto documentController = Core::self()->documentController();
+    if (!documentController)
+        return;
+
+    const auto defaultColor = ::defaultColor(palette());
+    if (UiConfig::colorizeByProject()){
+        foreach (auto container, containers()) {
+            foreach (auto view, container->views()) {
+                const auto urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
+                if (urlDoc) {
+                    const auto color = colorForDocument(urlDoc->url(), palette());
+                    container->setTabColor(view, color.isValid() ? color : defaultColor);
+                }
+            }
+        }
+    } else {
+        foreach (auto container, containers()) {
+            container->resetTabColors(defaultColor);
+        }
+    }
+}
+
+void MainWindow::updateTabColor(IDocument* doc)
+{
+    if (!UiConfig::self()->colorizeByProject())
+        return;
+
+    const auto defaultColor = ::defaultColor(palette());
+    const auto color = colorForDocument(doc->url(), palette());
+    foreach (auto container, containers()) {
+        foreach (auto view, container->views()) {
+            const auto urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
+            if (urlDoc && urlDoc->url() == doc->url()) {
+                container->setTabColor(view, color.isValid() ? color : defaultColor);
+            }
+        }
+    }
+}
+
 void MainWindow::registerStatus(QObject* status)
 {
     d->registerStatus(status);
@@ -379,6 +451,3 @@ void MainWindow::newTabRequested()
 
     d->fileNew();
 }
-
-}
-

@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_SUBLIMECONTAINER_H
 
 #include <QWidget>
-
+#include "urldocument.h"
 #include "sublimeexport.h"
 
 class QMenu;
@@ -51,6 +51,8 @@ public:
     /** @return true if widget is placed inside this container.*/
     bool hasWidget(QWidget *w);
 
+    QList<View*> views() const;
+
     int count() const;
     QWidget *currentWidget() const;
     void setCurrentWidget(QWidget *w);
@@ -60,6 +62,9 @@ public:
     View *viewForWidget(QWidget *w) const;
 
     void setTabBarHidden(bool hide);
+
+    void setTabColor(const View* view, const QColor& color);
+    void resetTabColors(const QColor& color);
 
     /** Adds a corner widget to the left of this containers tab-bar. To remove it again, just delete it.
       * The ownership otherwise goes to the container. */

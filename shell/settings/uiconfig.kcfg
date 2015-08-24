@@ -18,5 +18,8 @@
         <entry name="TabBarArrangeBuddies" key="TabBarArrangeBuddies" type="Int">
             <default>1</default>
         </entry>
+        <entry name="ColorizeByProject" key="ColorizeByProject" type="Bool">
+            <default>false</default>
+        </entry>
   </group>
 </kcfg>

@@ -56,7 +56,6 @@ public:
 
     /*! @p status must implement KDevelop::IStatus */
     void registerStatus(QObject* status);
-
     KTextEditorIntegration::MainWindow *kateWrapper() const;
 
 public Q_SLOTS:
@@ -99,6 +98,10 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     void updateCaption();
+
+    void updateTabColor(IDocument* doc);
+    void updateAllTabColors();
+
     void shortcutsChanged();
 
 private:

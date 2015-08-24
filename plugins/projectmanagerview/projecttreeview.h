@@ -67,6 +67,7 @@ class ProjectTreeView: public QTreeView
     protected:
         virtual void keyPressEvent(QKeyEvent *event) override;
         virtual void dropEvent(QDropEvent* event) override;
+        virtual void drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const override;
 
     private:
         QModelIndex mapFromItem(const KDevelop::ProjectBaseItem* item);

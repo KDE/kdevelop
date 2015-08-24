@@ -28,6 +28,7 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QPainter>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -53,6 +54,7 @@
 #include <language/duchain/duchain.h>
 #include <language/util/navigationtooltip.h>
 #include <project/projectutils.h>
+#include <widgetcolorizer.h>
 
 using namespace KDevelop;
 
@@ -444,4 +446,16 @@ void ProjectTreeView::keyPressEvent(QKeyEvent* event)
     }
     else
         QTreeView::keyPressEvent(event);
+}
+
+void ProjectTreeView::drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const
+{
+    const bool colorizeByProject = KSharedConfig::openConfig()->group("UiSettings").readEntry("ColorizeByProject", false);
+    if (colorizeByProject) {
+        const auto projectPath = index.data(ProjectModel::ProjectRole).value<IProject *>()->path();
+        const QColor color = WidgetColorizer::colorForId(qHash(projectPath), palette());
+        WidgetColorizer::drawBranches(this, painter, rect, index, color);
+    }
+
+    QTreeView::drawBranches(painter, rect, index);
 }
