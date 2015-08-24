@@ -9,6 +9,7 @@ set(filetemplate_DIRS
     classes/c_gobject_properties
     classes/qt_shared
 
+    testing/cpp_cpputest
     testing/cpp_qtestlib
     testing/cpp_qtestlib_kde
     testing/cpp_qtestlib_kdevelop

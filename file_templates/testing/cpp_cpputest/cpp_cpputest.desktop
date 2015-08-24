@@ -1,0 +1,12 @@
+[General]
+Name=CppUTest
+Comment=A unit test using the CppUTest library
+Category=C++/Basic
+Language=C++
+Type=Test
+Files=Implementation
+
+[Implementation]
+Name=Implementation
+File=class.cpp
+OutputFile={{ name }}_test.cpp
