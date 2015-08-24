@@ -341,11 +341,6 @@ public:
     Path cd(const QString& dir) const;
 
 private:
-    /**
-     * Initialize this Path from the data of @p url.
-     */
-    void init(QUrl url);
-
     // for remote urls the first element contains the a Path prefix
     // containing the protocol, user, port etc. pp.
     QVector<QString> m_data;
