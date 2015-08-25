@@ -9,6 +9,7 @@
  *   Copyright 2001-2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>       *
  *   Copyright 2003 Roberto Raggi <roberto@kdevelop.org>                   *
  *   Copyright 2010 Niko Sams <niko.sams@gmail.com>                        *
+ *   Copyright 2015 Kevin Funk <kfunk@kde.org>                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -224,6 +225,11 @@ static qint64 findSessionPid(const QString &sessionId)
 
 int main( int argc, char *argv[] )
 {
+    // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option (would be useful for OSX as well)
+#ifdef Q_OS_WIN
+    qputenv("KDE_FORK_SLAVES", "1"); // KIO slaves will be forked off instead of being started via DBus
+#endif
+
     // Don't show any debug output by default.
     // If you need to enable additional logging for debugging use a rules file
     // as explained in the QLoggingCategory documentation:
