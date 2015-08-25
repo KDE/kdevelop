@@ -27,6 +27,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainpointer.h>
 
+
 namespace KDevelop {
 class Declaration;
 class DUContext;
@@ -39,8 +40,8 @@ class OutlineNode
     void sortByLocation(bool requiresSorting);
 public:
     OutlineNode(const QString& text, OutlineNode* parent);
-    OutlineNode(OutlineNode&& other) noexcept;
-    OutlineNode& operator=(OutlineNode&& other) noexcept;
+    OutlineNode(OutlineNode&& other) Q_DECL_NOEXCEPT;
+    OutlineNode& operator=(OutlineNode&& other) Q_DECL_NOEXCEPT;
     OutlineNode(KDevelop::Declaration* decl, OutlineNode* parent);
     OutlineNode(KDevelop::DUContext* ctx, const QString& name, OutlineNode* parent);
     virtual ~OutlineNode();
@@ -112,7 +113,7 @@ inline KDevelop::DUChainBase* OutlineNode::duChainObject() const
 }
 
 
-inline OutlineNode::OutlineNode(OutlineNode&& other) noexcept
+inline OutlineNode::OutlineNode(OutlineNode&& other) Q_DECL_NOEXCEPT
     : m_cachedText(std::move(other.m_cachedText))
     , m_cachedIcon(std::move(other.m_cachedIcon))
     , m_declOrContext(std::move(other.m_declOrContext))
@@ -128,7 +129,7 @@ inline OutlineNode::OutlineNode(OutlineNode&& other) noexcept
     }
 }
 
-inline OutlineNode& OutlineNode::operator=(OutlineNode&& other) noexcept
+inline OutlineNode& OutlineNode::operator=(OutlineNode&& other) Q_DECL_NOEXCEPT
 {
     if (this == &other) {
         return *this;
