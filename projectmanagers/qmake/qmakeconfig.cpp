@@ -41,7 +41,8 @@ const char* QMakeConfig::ALL_BUILDS = "All_Builds";
 
 namespace {
 
-QChar pathListSeparator()
+// TODO: Just use QDir::listSeparator once we depend on Qt 5.6
+Q_DECL_CONSTEXPR inline QChar listSeparator() Q_DECL_NOTHROW
 {
 #ifdef Q_OS_WIN
     return QLatin1Char(';');
@@ -135,7 +136,7 @@ QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
     QStringList paths;
     if (qmakeVars.contains("QMAKE_MKSPECS")) {
         // qt4
-        foreach (const QString& dir, qmakeVars["QMAKE_MKSPECS"].split(pathListSeparator())) {
+        foreach (const QString& dir, qmakeVars["QMAKE_MKSPECS"].split(listSeparator())) {
             paths << dir + "/default/qmake.conf";
         }
     } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QMAKE_SPEC")) {
