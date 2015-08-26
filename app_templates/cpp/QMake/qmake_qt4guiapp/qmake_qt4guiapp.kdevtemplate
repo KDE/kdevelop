@@ -40,6 +40,7 @@ Comment[lv]=Ģenerē QMake/Qt4 bāzētu programmu ar grafisku lietotāja saskarn
 Comment[nds]=En Programm mit graafsch Böversiet opstellen, dat op QMake un Qt4 opbuut (över Bedriefümgeven weg kompatibel)
 Comment[ne]=(क्रसप्लेटफर्मसँग मिल्दोजुल्दो) ग्राफिकल प्रयोगकर्ता इन्टरफेससँग QMake/Qt4 आधारित अनुप्रयोग सिर्जना गर्नुहोस्
 Comment[nl]=Genereert een op Qmake/Qt4 gebaseerde toepassing met grafische gebruikersinterface (crossplatform compatible)
+Comment[nn]=Lag eit QMake/Qt4-basert program med grafisk brukargrensesnitt (kryssplattform)
 Comment[pl]=Generuje program używający QMake i Qt/4 z graficznym interfejsem użytkownika (wieloplatformowy)
 Comment[pt]=Gera uma aplicação baseada no QMake/Qt4 com uma interface gráfica (compatível com várias plataformas)
 Comment[pt_BR]=Gera um aplicativo em QMake/Qt4 com uma interface gráfica (compatível com várias plataformas)

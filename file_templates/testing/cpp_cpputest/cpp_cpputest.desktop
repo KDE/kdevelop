@@ -1,6 +1,22 @@
 [General]
 Name=CppUTest
+Name[ca]=CppUTest
+Name[de]=CppUTest
+Name[nl]=CppUTest
+Name[pt]=CppUTest
+Name[pt_BR]=CppUTest
+Name[sv]=CppUTest
+Name[uk]=CppUTest
+Name[x-test]=xxCppUTestxx
 Comment=A unit test using the CppUTest library
+Comment[ca]=Una prova unitària utilitzant la biblioteca CppUTest
+Comment[de]=Ein Unit-Test, der die CppUTest-Bibliothek verwendet
+Comment[nl]=Een test van een eenheid met gebruik van de bibliotheek CppUTest
+Comment[pt]=Um teste unitário que usa a plataforma CppUTest
+Comment[pt_BR]=Teste unitário que usa a biblioteca CppUTest
+Comment[sv]=En enhetstest som använder biblioteket CppUTest
+Comment[uk]=Перевірка модулів за допомогою бібліотеки CppUTest
+Comment[x-test]=xxA unit test using the CppUTest libraryxx
 Category=C++/Basic
 Language=C++
 Language[bs]=C++
