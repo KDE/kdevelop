@@ -276,7 +276,7 @@ TopDUContext* DUChainUtils::standardContextForUrl(const QUrl& url, bool preferPr
   }
 
   if(!chosen)
-    chosen = DUChain::self()->chainForDocument(IndexedString(url.toString()), preferProxyContext);
+    chosen = DUChain::self()->chainForDocument(IndexedString(url), preferProxyContext);
 
   if(!chosen && preferProxyContext)
     return standardContextForUrl(url, false); // Fall back to a normal context
