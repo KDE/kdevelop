@@ -340,11 +340,6 @@ public:
    */
   uint hash() const;
 
-  /**
-   * Finds all identifiers in the identifier-repository that have the given hash value
-   */
-  static void findByHash(uint hash, KDevVarLengthArray<QualifiedIdentifier>& target);
-
 protected:
   bool sameIdentifiers(const QualifiedIdentifier& rhs) const;
 

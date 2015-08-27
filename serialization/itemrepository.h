@@ -495,19 +495,6 @@ class Bucket {
       return false;
     }
 
-    struct ClashVisitor {
-      ClashVisitor(int _hash, int _modulo) : result(0), hash(_hash), modulo(_modulo) {
-      }
-      bool operator()(const Item* item) {
-        if((item->hash() % modulo) == (hash % modulo))
-          result = item;
-
-        return true;
-      }
-      const Item* result;
-      uint hash, modulo;
-    };
-
     void countFollowerIndexLengths(uint& usedSlots, uint& lengths, uint& slotCount, uint& longestInBucketFollowerChain) {
       for(uint a = 0; a < m_objectMapSize; ++a) {
         unsigned short currentIndex = m_objectMap[a];
@@ -531,17 +518,6 @@ class Bucket {
       }
     }
 
-    //A version of hasClashingItem that visits all items naively without using any assumptions.
-    //This was used to debug hasClashingItem, but should not be used otherwise.
-    bool hasClashingItemReal(uint hash, uint modulo) {
-
-      m_lastUsed = 0;
-
-      ClashVisitor visitor(hash, modulo);
-      visitAllItems<ClashVisitor>(visitor);
-      return (bool)visitor.result;
-    }
-
     //Returns whether the given item is reachabe within this bucket, through its hash.
     bool itemReachable(const Item* item, uint hash) const {
 
@@ -556,23 +532,6 @@ class Bucket {
       }
       return false;
     }
-
-    template<class Visitor>
-    bool visitItemsWithHash(Visitor& visitor, uint hash, unsigned short bucketIndex) const {
-      m_lastUsed = 0;
-
-      unsigned short localHash = hash % m_objectMapSize;
-      unsigned short currentIndex = m_objectMap[localHash];
-
-      while(currentIndex) {
-        if(!visitor(itemFromIndex(currentIndex), (bucketIndex << 16) + currentIndex))
-          return false;
-
-        currentIndex = followerIndex(currentIndex);
-      }
-      return true;
-    }
-
 
     template<class Repository>
     void deleteItem(unsigned short index, unsigned int hash, Repository& repository) {
@@ -836,20 +795,6 @@ class Bucket {
         currentIndex = followerIndex(currentIndex);
       }
       return need-found;
-    }
-    ///Slow
-    bool isFreeItem(unsigned short index) const {
-      unsigned short currentIndex = m_largestFreeItem;
-      unsigned short currentSize = 0xffff;
-      while(currentIndex) {
-        Q_ASSERT(freeSize(currentIndex) <= currentSize);
-        currentSize = freeSize(currentIndex);
-        if(index == currentIndex)
-          return true;
-
-        currentIndex = followerIndex(currentIndex);
-      }
-      return false;
     }
 
   private:
@@ -1506,7 +1451,6 @@ class ItemRepository : public AbstractItemRepository {
       auto nextBucket = bucketPtr;
       while(!nextBucket->hasClashingItem(hash, bucketHashSize))
       {
-//         Q_ASSERT(!bucketPtr->hasClashingItemReal(hash, bucketHashSize));
         unsigned short next = nextBucket->nextBucketForHash(hash);
         ENSURE_REACHABLE(next);
         ENSURE_REACHABLE(previous);
@@ -1532,7 +1476,6 @@ class ItemRepository : public AbstractItemRepository {
       }
     }else{
       if(!bucketPtr->hasClashingItem(hash, MyBucket::NextBucketHashSize)) {
-//         Q_ASSERT(!bucketPtr->hasClashingItemReal(hash, MyBucket::NextBucketHashSize));
         ///Debug: Check for infinite recursion
         walkBucketLinks(*bucketHashPosition, hash);
 
@@ -1627,33 +1570,6 @@ class ItemRepository : public AbstractItemRepository {
     bucketPtr->prepareChange();
     unsigned short indexInBucket = index & 0xffff;
     return const_cast<Item*>(bucketPtr->itemFromIndex(indexInBucket));
-  }
-  ///@param Action Must be an object that has an "operator()(Item&)" function.
-  ///That function is allowed to do any action on the item, except for anything that
-  ///changes its identity/hash-value
-  template<class Action>
-  void dynamicAction(unsigned int index, Action& action) {
-    verifyIndex(index);
-
-    ThisLocker lock(m_mutex);
-
-    unsigned short bucket = (index >> 16);
-
-    MyBucket* bucketPtr = m_buckets[bucket];
-    if(!bucketPtr) {
-      initializeBucket(bucket);
-      bucketPtr = m_buckets[bucket];
-    }
-    bucketPtr->prepareChange();
-    unsigned short indexInBucket = index & 0xffff;
-
-    if(markForReferenceCounting)
-      enableDUChainReferenceCounting(bucketPtr->data(), bucketPtr->dataSize());
-
-    action(const_cast<Item&>(*bucketPtr->itemFromIndex(indexInBucket, 0)));
-
-    if(markForReferenceCounting)
-      disableDUChainReferenceCounting(bucketPtr->data());
   }
 
   ///@param index The index. It must be valid(match an existing item), and nonzero.
@@ -1854,30 +1770,6 @@ class ItemRepository : public AbstractItemRepository {
     }
   }
 
-  ///Visits all items that have the given hash-value, plus an arbitrary count of other items with a clashing hash.
-  ///@param visitor Should be an instance of a class that has a bool operator()(const Item*, uint index) member function,
-  ///               that returns whether more items are wanted.
-  template<class Visitor>
-  void visitItemsWithHash(Visitor& visitor, uint hash) const {
-    ThisLocker lock(m_mutex);
-
-    short unsigned int bucket = *(m_firstBucketForHash + (hash % bucketHashSize));
-
-    while(bucket) {
-
-      MyBucket* bucketPtr = m_buckets[bucket];
-      if(!bucketPtr) {
-        initializeBucket(bucket);
-        bucketPtr = m_buckets[bucket];
-      }
-
-      if(!bucketPtr->visitItemsWithHash(visitor, hash, bucket))
-        return;
-
-      bucket = bucketPtr->nextBucketForHash(hash);
-    }
-  }
-
   ///Synchronizes the state on disk to the one in memory, and does some memory-management.
   ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
   virtual void store() override {
@@ -2072,7 +1964,6 @@ class ItemRepository : public AbstractItemRepository {
     QMutexLocker lock(m_mutex);
 
     close();
-    m_currentOpenPath = path;
     //qDebug() << "opening repository" << m_repositoryName << "at" << path;
     QDir dir(path);
     m_file = new QFile(dir.absoluteFilePath( m_repositoryName ));
@@ -2182,7 +2073,6 @@ class ItemRepository : public AbstractItemRepository {
 
   ///@warning by default, this does not store the current state to disk.
   virtual void close(bool doStore = false) override {
-    m_currentOpenPath.clear();
 
     if(doStore)
       store();
@@ -2252,15 +2142,6 @@ class ItemRepository : public AbstractItemRepository {
     AllItemsReachableVisitor visitor(this);
     return bucketPtr->visitAllItems(visitor);
   }
-
-  struct CleanupVisitor {
-    bool operator()(const Item* item) {
-      if(!ItemRequest::persistent(item)) {
-        //Delete the item
-      }
-      return true;
-    }
-  };
 
   virtual int finalCleanup() override {
     ThisLocker lock(m_mutex);
@@ -2422,7 +2303,6 @@ class ItemRepository : public AbstractItemRepository {
   mutable QMutex m_ownMutex;
   mutable QMutex* m_mutex;
   QString m_repositoryName;
-  unsigned int m_size;
   mutable int m_currentBucket;
   //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first. Second order sorting: Bucket index
   QVector<uint> m_freeSpaceBuckets;
@@ -2431,7 +2311,6 @@ class ItemRepository : public AbstractItemRepository {
   //Maps hash-values modulo 1<<bucketHashSizeBits to the first bucket such a hash-value appears in
   short unsigned int m_firstBucketForHash[bucketHashSize];
 
-  QString m_currentOpenPath;
   ItemRepositoryRegistry* m_registry;
   //File that contains the buckets
   QFile* m_file;

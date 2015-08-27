@@ -959,12 +959,6 @@ struct Visitor
   const uint hash;
 };
 
-void QualifiedIdentifier::findByHash(uint hash, KDevVarLengthArray<QualifiedIdentifier>& target)
-{
-  Visitor v(target, hash);
-  qualifiedidentifierRepository()->visitItemsWithHash<Visitor>(v, hash);
-}
-
 uint QualifiedIdentifier::hash() const
 {
   if(m_index)
