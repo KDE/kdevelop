@@ -324,10 +324,16 @@ void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
 
 void WorkingSetController::clearWorkingSet(Sublime::Area * area)
 {
-    WorkingSet* set = getWorkingSet( area->workingSet() );
+    const QString workingSet = area->workingSet();
+    if (workingSet.isEmpty()) {
+        // Nothing to do - area has no working set
+        return;
+    }
+
+    WorkingSet* set = getWorkingSet(workingSet);
     set->deleteSet(true);
 
-    WorkingSet* newSet = getWorkingSet(area->workingSet());
+    WorkingSet* newSet = getWorkingSet(workingSet);
     newSet->connectArea(area);
     newSet->loadToArea(area, area->rootIndex());
     Q_ASSERT(newSet->fileList().isEmpty());
