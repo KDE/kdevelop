@@ -278,7 +278,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         clang_disposeDiagnostic(diagnostic);
     }
 
-    const QString path = QDir::cleanPath(ClangString(clang_getFileName(file)).toString());
+    const QString path = QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath();
     const IndexedString indexedPath(path);
 
     TodoExtractor extractor(unit(), file);

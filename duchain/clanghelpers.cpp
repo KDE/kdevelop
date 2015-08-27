@@ -121,7 +121,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         buildDUChain(import.file, imports, session, features, includedFiles, index);
     }
 
-    const IndexedString path(QDir::cleanPath(ClangString(clang_getFileName(file)).toString()));
+    const IndexedString path(QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath());
 
     const auto& environment = session.environment();
 

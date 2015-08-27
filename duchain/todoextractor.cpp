@@ -167,8 +167,7 @@ void TodoExtractor::extractTodos()
 
     auto range = clang_getRange(start, end);
 
-    IndexedString path(QDir::cleanPath(ClangString(clang_getFileName
-(m_file)).toString()));
+    IndexedString path(QDir(ClangString(clang_getFileName(m_file)).toString()).canonicalPath());
 
     if(clang_Range_isNull(range)){
         return;
