@@ -1104,58 +1104,52 @@ class ItemRepository : public AbstractItemRepository {
 
     ThisLocker lock(m_mutex);
 
-    unsigned int hash = request.hash();
-    unsigned int size = request.itemSize();
+    const uint hash = request.hash();
+    const uint size = request.itemSize();
 
-    short unsigned int* bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
-    short unsigned int previousBucketNumber = *bucketHashPosition;
+    // Bucket indexes tracked while walking the bucket chain for this request hash
+    unsigned short bucketInChainWithSpace = 0;
+    unsigned short lastBucketWalked = 0;
 
-    int useBucket = m_currentBucket;
-    bool pickedBucketInChain = false; //Whether a bucket was picked for re-use that already is in the hash chain
-    int reOrderFreeSpaceBucketIndex = -1;
+    const ushort foundIndexInBucket = walkBucketChain(hash, [&](ushort bucketIdx, const MyBucket* bucketPtr) {
+      lastBucketWalked = bucketIdx;
 
-    while(previousBucketNumber) {
-      //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
-      MyBucket* bucketPtr = m_buckets[previousBucketNumber];
-      if(!bucketPtr) {
-        initializeBucket(previousBucketNumber);
-        bucketPtr = m_buckets[previousBucketNumber];
+      const ushort found = bucketPtr->findIndex(request);
+
+      if (!found && !bucketInChainWithSpace && bucketPtr->canAllocateItem(size)) {
+        bucketInChainWithSpace = bucketIdx;
       }
 
-      unsigned short indexInBucket = bucketPtr->findIndex(request);
-      if(indexInBucket) {
-        //We've found the item, it's already there
-        uint index = (previousBucketNumber << 16) + indexInBucket;
-        verifyIndex(index);
-        return index; //Combine the index in the bucket, and the bucker number into one index
-      } else {
-#ifdef DEBUG_HASH_SEQUENCES
-        if(previousBucketNumber==*bucketHashPosition)
-          Q_ASSERT(bucketPtr->hasClashingItem(hash, bucketHashSize));
-        else
-          Q_ASSERT(bucketPtr->hasClashingItem(hash, MyBucket::NextBucketHashSize));
-#endif
+      return found;
+    });
 
-        if(!pickedBucketInChain && bucketPtr->canAllocateItem(size)) {
-          //Remember that this bucket has enough space to store the item, if it isn't already stored.
-          //This gives a better structure, and saves us from cyclic follower structures.
-          useBucket = previousBucketNumber;
-          reOrderFreeSpaceBucketIndex = m_freeSpaceBuckets.indexOf(useBucket);
-          pickedBucketInChain = true;
-        }
-        //The item isn't in bucket previousBucketNumber, but maybe the bucket has a pointer to the next bucket that might contain the item
-        //Should happen rarely
-        short unsigned int next = bucketPtr->nextBucketForHash(hash);
-        if(next) {
-          previousBucketNumber = next;
-        } else
-          break;
-      }
+    if (foundIndexInBucket) {
+      // 'request' is already present, return the existing index
+      return createIndex(lastBucketWalked, foundIndexInBucket);
     }
+
+    /*
+     * Disclaimer: Writer of comment != writer of code, believe with caution
+     *
+     * Requested item does not yet exist. Need to find a place to put it...
+     *
+     * First choice is to place it in an existing bucket in the chain for the request hash
+     * Second choice is to find an existing bucket anywhere with enough space
+     * Otherwise use m_currentBucket (the latest unused bucket)
+     *
+     * If the chosen bucket fails to allocate the item, merge buckets to create a monster (dragon?)
+     *
+     * Finally, if the first option failed or the selected bucket failed to allocate, add the
+     * bucket which the item ended up in to the chain of buckets for the request's hash
+     */
 
     m_metaDataChanged = true;
 
-    if(!pickedBucketInChain && useBucket == m_currentBucket) {
+    const bool pickedBucketInChain = bucketInChainWithSpace;
+    int useBucket = bucketInChainWithSpace;
+    int reOrderFreeSpaceBucketIndex = -1;
+
+    if (!pickedBucketInChain) {
       //Try finding an existing bucket with deleted space to store the data into
       for(int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
         MyBucket* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
@@ -1168,6 +1162,12 @@ class ItemRepository : public AbstractItemRepository {
           break;
         }
       }
+
+      if (!useBucket) {
+        useBucket = m_currentBucket;
+      }
+    } else {
+      reOrderFreeSpaceBucketIndex = m_freeSpaceBuckets.indexOf(useBucket);
     }
 
     //The item isn't in the repository yet, find a new bucket for it
@@ -1257,6 +1257,9 @@ class ItemRepository : public AbstractItemRepository {
       if(indexInBucket) {
         ++m_statItemCount;
 
+        const int previousBucketNumber = lastBucketWalked;
+        unsigned short* const bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
+
         if(!(*bucketHashPosition)) {
           Q_ASSERT(!previousBucketNumber);
           (*bucketHashPosition) = useBucket;
@@ -1322,10 +1325,7 @@ class ItemRepository : public AbstractItemRepository {
         if(reOrderFreeSpaceBucketIndex != -1)
           updateFreeSpaceOrder(reOrderFreeSpaceBucketIndex);
 
-        //Combine the index in the bucket, and the bucker number into one index
-        uint index = (useBucket << 16) + indexInBucket;
-        verifyIndex(index);
-        return index;
+        return createIndex(useBucket, indexInBucket);
       }else{
         //This should never happen when we picked a bucket for re-use
         Q_ASSERT(!pickedBucketInChain);
@@ -1351,38 +1351,10 @@ class ItemRepository : public AbstractItemRepository {
 
     ThisLocker lock(m_mutex);
 
-    unsigned int hash = request.hash();
-
-    short unsigned int* bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
-    short unsigned int previousBucketNumber = *bucketHashPosition;
-
-    while(previousBucketNumber) {
-      //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
-
-      MyBucket* bucketPtr = m_buckets[previousBucketNumber];
-      if(!bucketPtr) {
-        initializeBucket(previousBucketNumber);
-        bucketPtr = m_buckets[previousBucketNumber];
-      }
-
-      unsigned short indexInBucket = bucketPtr->findIndex(request);
-      if(indexInBucket) {
-        //We've found the item, it's already there
-        uint index = (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
-        verifyIndex(index);
-        return index;
-      } else {
-        //The item isn't in bucket previousBucketNumber, but maybe the bucket has a pointer to the next bucket that might contain the item
-        //Should happen rarely
-        short unsigned int next = bucketPtr->nextBucketForHash(hash);
-        if(next)
-          previousBucketNumber = next;
-        else
-          break;
-      }
-    }
-
-    return 0;
+    return walkBucketChain(request.hash(), [this, &request](ushort bucketIdx, const MyBucket* bucketPtr) {
+        const ushort indexInBucket = bucketPtr->findIndex(request);
+        return indexInBucket ? createIndex(bucketIdx, indexInBucket) : 0u;
+    });
   }
 
   ///Deletes the item from the repository.
@@ -1849,6 +1821,41 @@ class ItemRepository : public AbstractItemRepository {
   }
 
   private:
+
+  uint createIndex(ushort bucketIndex, ushort indexInBucket)
+  {
+    //Combine the index in the bucket, and the bucket number into one index
+    const uint index = (bucketIndex << 16) + indexInBucket;
+    verifyIndex(index);
+    return index;
+  }
+
+  /**
+   * Walks through all buckets clashing with @param hash
+   *
+   * Will return the value returned by the lambda, returning early if truthy
+   */
+  template<typename Visitor>
+  auto walkBucketChain(unsigned int hash, const Visitor& visitor) -> decltype(visitor(0, nullptr))
+  {
+    unsigned short bucketIndex = m_firstBucketForHash[hash % bucketHashSize];
+
+    while (bucketIndex) {
+      const auto* bucketPtr = m_buckets[bucketIndex];
+      if (!bucketPtr) {
+        initializeBucket(bucketIndex);
+        bucketPtr = m_buckets[bucketIndex];
+      }
+
+      if (auto visitResult = visitor(bucketIndex, bucketPtr)) {
+        return visitResult;
+      }
+
+      bucketIndex = bucketPtr->nextBucketForHash(hash);
+    }
+
+    return {};
+  }
 
   ///Makes sure the order within m_freeSpaceBuckets is correct, after largestFreeSize has been changed for m_freeSpaceBuckets[index].
   ///If too few space is free within the given bucket, it is removed from m_freeSpaceBuckets.
