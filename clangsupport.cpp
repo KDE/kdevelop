@@ -153,11 +153,6 @@ QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const 
         return {TopDUContextPointer(), KTextEditor::Range::invalid()};
     }
 
-    if ((topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext())) {
-        clangDebug() << "Strange: standard-context for" << topContext->url().str() << "is a proxy-context";
-        return {TopDUContextPointer(), KTextEditor::Range::invalid()};
-    }
-
     // It's an #include, find out which file was included at the given line
     foreach(const DUContext::Import &imported, topContext->importedParentContexts()) {
         auto context = imported.context(nullptr);
@@ -369,13 +364,6 @@ QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const QUrl &url, co
     const QPair<TopDUContextPointer, KTextEditor::Range> import = importedContextForPosition(url, position);
 
     if (import.first) {
-        // Prefer a standardContext, because the included one may have become empty due to
-        if (import.first->localDeclarations().count() == 0 && import.first->childContexts().count() == 0) {
-            KDevelop::TopDUContext* betterCtx = standardContext(import.first->url().toUrl());
-            if (betterCtx && (betterCtx->localDeclarations().count() != 0 || betterCtx->childContexts().count() != 0)) {
-                return betterCtx->createNavigationWidget(0, 0, i18n("Emptied by preprocessor<br />"));
-            }
-        }
         return import.first->createNavigationWidget();
     }
     return nullptr;
