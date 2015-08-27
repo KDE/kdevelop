@@ -2,6 +2,7 @@
 [General]
 Name=Qt4 GUI Application
 Name[ca]=Una aplicació IGU per a les Qt4
+Name[cs]=Aplikace prostředí Qt4
 Name[de]=Qt-4-Anwendung mit grafischer Oberfläche
 Name[el]=Εφαρμογή GUI της Qt4
 Name[es]=Aplicación con interfaz gráfica Qt4

@@ -2,6 +2,8 @@
 Name=CppUTest
 Name[ca]=CppUTest
 Name[de]=CppUTest
+Name[es]=CppUTest
+Name[gl]=CppUTest
 Name[nl]=CppUTest
 Name[pt]=CppUTest
 Name[pt_BR]=CppUTest
@@ -11,6 +13,8 @@ Name[x-test]=xxCppUTestxx
 Comment=A unit test using the CppUTest library
 Comment[ca]=Una prova unitària utilitzant la biblioteca CppUTest
 Comment[de]=Ein Unit-Test, der die CppUTest-Bibliothek verwendet
+Comment[es]=Una prueba unitaria que usa la infraestructura CppUTest
+Comment[gl]=Unha proba unitaria que usa a biblioteca CppUTest.
 Comment[nl]=Een test van een eenheid met gebruik van de bibliotheek CppUTest
 Comment[pt]=Um teste unitário que usa a plataforma CppUTest
 Comment[pt_BR]=Teste unitário que usa a biblioteca CppUTest

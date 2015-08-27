@@ -2,6 +2,7 @@
     "KPlugin": {
         "Description": "Builds QMake Projects", 
         "Description[ca]": "Construeix projectes QMake", 
+        "Description[cs]": "Překládá projekty QMake", 
         "Description[de]": "Erstellt QMake-Projekte", 
         "Description[es]": "Compila proyectos de QMake", 
         "Description[fi]": "Kääntää QMake-projekteja", 
@@ -16,6 +17,7 @@
         "Id": "KDevQMakeBuilder", 
         "Name": "QMake Project Builder", 
         "Name[ca]": "Constructor de projecte QMake", 
+        "Name[cs]": "Překladač projektů QMake", 
         "Name[de]": "Ersteller für QMake-Projekte", 
         "Name[es]": "Compilador de proyectos QMake", 
         "Name[fi]": "QMake-projektikäännin", 
