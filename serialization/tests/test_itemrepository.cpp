@@ -244,6 +244,112 @@ class TestItemRepository : public QObject {
       QVERIFY(!repository.findIndex(TestItemRequest(*monsterItem, true)));
       repository.deleteItem(smallIndex);
     }
+    void usePermissiveModuloWhenRemovingClashLinks()
+    {
+      KDevelop::ItemRepository<TestItem, TestItemRequest> repository("PermissiveModulo");
+
+      const uint bucketHashSize = decltype(repository)::bucketHashSize;
+      const uint nextBucketHashSize = decltype(repository)::MyBucket::NextBucketHashSize;
+      auto bucketNumberForIndex = [](const uint index) {
+        return index >> 16;
+      };
+
+      const uint clashValue = 2;
+
+      // Choose sizes that ensure that the items fit in the desired buckets
+      const uint bigItemSize = KDevelop::ItemRepositoryBucketSize * 0.55 - 1;
+      const uint smallItemSize = KDevelop::ItemRepositoryBucketSize * 0.25 - 1;
+
+      // Will get placed in bucket 1 (bucket zero is invalid), so the root bucket table at position 'clashValue' will be '1'
+      const QScopedPointer<TestItem> firstChainFirstLink(createItem(clashValue, bigItemSize));
+      const uint firstChainFirstLinkIndex = repository.index(*firstChainFirstLink);
+      QCOMPARE(bucketNumberForIndex(firstChainFirstLinkIndex), 1u);
+
+      // Will also get placed in bucket 1, so root bucket table at position 'nextBucketHashSize + clashValue' will be '1'
+      const QScopedPointer<TestItem> secondChainFirstLink(createItem(nextBucketHashSize + clashValue, smallItemSize));
+      const uint secondChainFirstLinkIndex = repository.index(*secondChainFirstLink);
+      QCOMPARE(bucketNumberForIndex(secondChainFirstLinkIndex), 1u);
+
+      // Will get placed in bucket 2, so bucket 1's next hash table at position 'clashValue' will be '2'
+      const QScopedPointer<TestItem> firstChainSecondLink(createItem(bucketHashSize + clashValue, bigItemSize));
+      const uint firstChainSecondLinkIndex = repository.index(*firstChainSecondLink);
+      QCOMPARE(bucketNumberForIndex(firstChainSecondLinkIndex), 2u);
+
+      // Will also get placed in bucket 2, reachable since bucket 1's next hash table at position 'clashValue' is '2'
+      const QScopedPointer<TestItem> secondChainSecondLink(createItem(bucketHashSize + nextBucketHashSize + clashValue, smallItemSize));
+      const uint secondChainSecondLinkIndex = repository.index(*secondChainSecondLink);
+      QCOMPARE(bucketNumberForIndex(secondChainSecondLinkIndex), 2u);
+
+      /*
+       * At this point we have two chains in the repository, rooted at 'clashValue' and 'nextBucketHashSize + clashValue'
+       * Both of the chains start in bucket 1 and end in bucket 2, but both chains share the same link to bucket 2
+       * This is because two of the hashes clash the other two when % bucketHashSize, but all of them clash % nextBucketHashSize
+       */
+
+      repository.deleteItem(firstChainSecondLinkIndex);
+
+      /*
+       * Now we've deleted the second item in the first chain, this means the first chain no longer requires a link to the
+       * second bucket where that item was... but the link must remain, since it's shared (clashed) by the second chain.
+       *
+       * When cutting a link out of the middle of the chain, we need to check if its items clash using the "permissive"
+       * modulus (the size of the /next/ buckets map), which is always a factor of the "stricter" modulus (the size of the
+       * /root/ buckets map).
+       *
+       * This behavior implies that there will sometimes be useless buckets in the bucket chain for a given hash, so when
+       * cutting out the root link, it's safe to skip over them to the first clash with the 'stricter' modulus.
+       */
+
+      // The second item of the second chain must still be reachable
+      QCOMPARE(repository.findIndex(*secondChainSecondLink), secondChainSecondLinkIndex);
+
+      /*
+       * As a memo to anyone who's still reading this, this also means the following situation can exist:
+       *
+       * bucketHashSize == 8
+       * nextBucketHashSize == 4
+       * U is a link table
+       * B is a bucket
+       * [...] are the hashes of the contained items
+       *
+       * U
+       * U
+       * U -> B1
+       * U
+       * U
+       * U
+       * U -> B2
+       * U
+       *
+       * B0 (Invalid)
+       * B1 -> [2, 6]
+       *   U
+       *   U
+       *   U -> B3
+       *   U
+       * B2 -> [14]
+       *   U
+       *   U
+       *   U -> B1
+       *   U
+       * B3 -> [10]
+       *   U
+       *   U
+       *   U
+       *   U
+       *
+       * The chain for hash 6 is:
+       * Root[6] -> B2[2] -> B1[2] -> B3
+       *
+       * If you remove the item with hash 6, 6 and 2 will clash with mod 4 (permissive)
+       *
+       * So the useless link `B2[2] -> B1` will be preserved, even though its useless
+       * as the item with hash 2 is reachable directly from the root.
+       *
+       * So TODO: Don't preserve links to items accessible from root buckets. This cannot
+       * be done correctly using only Bucket::hasClashingItem as of now.
+       */
+    }
 };
 
 #include "test_itemrepository.moc"

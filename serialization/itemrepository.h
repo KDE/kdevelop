@@ -54,9 +54,6 @@
 #define IF_ENSURE_REACHABLE(x)
 #endif
 
-///Do not enable this #define, the issue it catches is non-critical and happens on a regular basis
-// #define DEBUG_HASH_SEQUENCES
-
 #define ITEMREPOSITORY_USE_MMAP_LOADING
 
 //Assertion macro that prevents warnings if debugging is disabled
@@ -72,6 +69,8 @@
 ///The problem: This temporarily overwrites valid data in the following item, so it will cause serious problems if that data is accessed
 ///during the call to createItem().
 // #define DEBUG_WRITING_EXTENTS
+
+class TestItemRepository;
 
 namespace KDevelop {
 
@@ -1364,106 +1363,49 @@ class ItemRepository : public AbstractItemRepository {
 
     m_metaDataChanged = true;
 
-    unsigned short bucket = (index >> 16);
-
-    unsigned int hash = itemFromIndex(index)->hash();
-
-    short unsigned int* bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
-    short unsigned int previousBucketNumber = *bucketHashPosition;
-
-    Q_ASSERT(previousBucketNumber);
-
-    if(previousBucketNumber == bucket)
-      previousBucketNumber = 0;
-
-    MyBucket* previousBucketPtr = 0;
+    const uint hash = itemFromIndex(index)->hash();
+    const ushort bucket = (index >> 16);
 
     //Apart from removing the item itself, we may have to recreate the nextBucketForHash link, so we need the previous bucket
-
-    while(previousBucketNumber) {
-      //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
-
-      previousBucketPtr = m_buckets[previousBucketNumber];
-      if(!previousBucketPtr) {
-        initializeBucket(previousBucketNumber);
-        previousBucketPtr = m_buckets[previousBucketNumber];
+    MyBucket* previousBucketPtr = nullptr;
+    MyBucket* const bucketPtr = walkBucketChain(hash,
+      [bucket, &previousBucketPtr](ushort bucketIdx, MyBucket* bucketPtr) -> MyBucket* {
+      if (bucket != bucketIdx) {
+        previousBucketPtr = bucketPtr;
+        return nullptr;
       }
+      return bucketPtr; // found bucket, stop looking
+    });
 
-      short unsigned int nextBucket = previousBucketPtr->nextBucketForHash(hash);
-      Q_ASSERT(nextBucket);
-      if(nextBucket == bucket)
-        break; //Now previousBucketNumber
-      else
-        previousBucketNumber = nextBucket;
-    }
-
-    //Make sure the index was reachable through the hashes
-    Q_ASSERT(previousBucketNumber || *bucketHashPosition == bucket);
-
-    MyBucket* bucketPtr = m_buckets[bucket];
-    if(!bucketPtr) {
-      initializeBucket(bucket);
-      bucketPtr = m_buckets[bucket];
-    }
+    //Make sure the index was reachable through the hash chain
+    Q_ASSERT(bucketPtr);
 
     --m_statItemCount;
 
     bucketPtr->deleteItem(index, hash, *this);
 
     /**
-     * Now check whether the link previousBucketNumber -> bucket is still needed.
+     * Now check whether the link root/previousBucketNumber -> bucket is still needed.
      */
-    ///@todo Clear the nextBucketForHash links when not needed any more, by doing setNextBucketForHash(hash, 0);
-    //return; ///@todo Find out what this problem is about. If we don't return here, some items become undiscoverable through hashes after some time
-    if(previousBucketNumber == 0) {
-      //The item is directly in the m_firstBucketForHash hash
-      //Put the next item in the nextBucketForHash chain into m_firstBucketForHash that has a hash clashing in that array.
-      Q_ASSERT(*bucketHashPosition == bucket);
-      IF_ENSURE_REACHABLE(unsigned short previous = bucket;)
-      auto nextBucket = bucketPtr;
-      while(!nextBucket->hasClashingItem(hash, bucketHashSize))
-      {
-        unsigned short next = nextBucket->nextBucketForHash(hash);
-        ENSURE_REACHABLE(next);
-        ENSURE_REACHABLE(previous);
 
-        *bucketHashPosition = next;
-
-        ENSURE_REACHABLE(previous);
-        ENSURE_REACHABLE(next);
-
-        IF_ENSURE_REACHABLE(previous = next;)
-
-        if(next) {
-          nextBucket = m_buckets[next];
-
-          if(!nextBucket)
-          {
-            initializeBucket(next);
-            nextBucket = m_buckets[next];
-          }
-        }else{
-          break;
+    if (!previousBucketPtr) {
+      // This bucket is linked in the m_firstBucketForHash array, find the next clashing bucket in the chain
+      // There may be items in the chain that clash only with MyBucket::NextBucketHashSize, skipped here
+      m_firstBucketForHash[hash % bucketHashSize] = walkBucketChain(hash, [hash](ushort bucketIdx, MyBucket *bucketPtr){
+        if (bucketPtr->hasClashingItem(hash, bucketHashSize)) {
+          return bucketIdx;
         }
-      }
-    }else{
-      if(!bucketPtr->hasClashingItem(hash, MyBucket::NextBucketHashSize)) {
-        ///Debug: Check for infinite recursion
-        walkBucketLinks(*bucketHashPosition, hash);
+        return static_cast<ushort>(0);
+      });
+    } else if(!bucketPtr->hasClashingItem(hash, MyBucket::NextBucketHashSize)) {
+      // TODO: Skip clashing items reachable from m_firstBucketForHash
+      // (see note in usePermissiveModuloWhenRemovingClashLinks() test)
 
-        Q_ASSERT(previousBucketPtr->nextBucketForHash(hash) == bucket);
+      ENSURE_REACHABLE(bucket);
 
-        ENSURE_REACHABLE(bucket);
+      previousBucketPtr->setNextBucketForHash(hash, bucketPtr->nextBucketForHash(hash));
 
-        previousBucketPtr->setNextBucketForHash(hash, bucketPtr->nextBucketForHash(hash));
-
-        ENSURE_REACHABLE(bucket);
-
-        ///Debug: Check for infinite recursion
-        Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, bucketPtr->nextBucketForHash(hash)));
-
-        Q_ASSERT(bucketPtr->nextBucketForHash(hash) != previousBucketNumber);
-      }
+      Q_ASSERT(m_buckets[bucketPtr->nextBucketForHash(hash)] != previousBucketPtr);
     }
 
     ENSURE_REACHABLE(bucket);
@@ -1472,7 +1414,7 @@ class ItemRepository : public AbstractItemRepository {
       //Convert the monster-bucket back to multiple normal buckets, and put them into the free list
       uint newBuckets = bucketPtr->monsterBucketExtent()+1;
       Q_ASSERT(bucketPtr->isEmpty());
-      if (!previousBucketNumber) {
+      if (!previousBucketPtr) {
         // see https://bugs.kde.org/show_bug.cgi?id=272408
         // the monster bucket will be deleted and new smaller ones created
         // the next bucket for this hash is invalid anyways as done above
@@ -1489,10 +1431,6 @@ class ItemRepository : public AbstractItemRepository {
     }else{
       putIntoFreeList(bucket, bucketPtr);
     }
-
-#ifdef DEBUG_HASH_SEQUENCES
-    Q_ASSERT(*bucketHashPosition == 0 || bucketForIndex(*bucketHashPosition)->hasClashingItem(hash, bucketHashSize));
-#endif
   }
 
   ///This returns an editable version of the item. @warning: Never change an entry that affects the hash,
@@ -1841,7 +1779,7 @@ class ItemRepository : public AbstractItemRepository {
     unsigned short bucketIndex = m_firstBucketForHash[hash % bucketHashSize];
 
     while (bucketIndex) {
-      const auto* bucketPtr = m_buckets[bucketIndex];
+      auto* bucketPtr = m_buckets[bucketIndex];
       if (!bucketPtr) {
         initializeBucket(bucketIndex);
         bucketPtr = m_buckets[bucketIndex];
@@ -2314,6 +2252,7 @@ class ItemRepository : public AbstractItemRepository {
   uint m_repositoryVersion;
   bool m_unloadingEnabled;
   AbstractRepositoryManager* m_manager;
+  friend class ::TestItemRepository;
 };
 
 }
