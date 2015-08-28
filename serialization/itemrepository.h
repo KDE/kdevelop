@@ -2118,25 +2118,11 @@ class ItemRepository : public AbstractItemRepository {
 
   //Returns whether the given item is reachable through its hash
   bool itemReachable(const Item* item) const {
-    uint hash = item->hash();
+    const uint hash = item->hash();
 
-    short unsigned int bucket = *(m_firstBucketForHash + (hash % bucketHashSize));
-
-    while(bucket) {
-
-      MyBucket* bucketPtr = m_buckets[bucket];
-      if(!bucketPtr) {
-        initializeBucket(bucket);
-        bucketPtr = m_buckets[bucket];
-      }
-
-      if(bucketPtr->itemReachable(item, hash))
-        return true;
-
-      bucket = bucketPtr->nextBucketForHash(hash);
-    }
-
-    return false;
+    return walkBucketChain(hash, [=](ushort /*bucketIndex*/, const MyBucket* bucketPtr) {
+        return bucketPtr->itemReachable(item, hash);
+    });
   }
 
   //Returns true if all items in the given bucket are reachable through their hashes
