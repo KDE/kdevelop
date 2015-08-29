@@ -155,7 +155,8 @@ bool LicensePagePrivate::saveLicense()
     qCDebug(PLUGIN_FILETEMPLATES) << "Attempting to save custom license: " << license->licenseName->text();
 
     QString localDataDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/kdevcodegen/licenses/";
-    QFile newFile(localDataDir + license->licenseName->text());
+    QString fullPath = localDataDir + license->licenseName->text();
+    QFile newFile(fullPath);
 
     if(newFile.exists())
     {
@@ -170,7 +171,7 @@ bool LicensePagePrivate::saveLicense()
 
     if(result == -1)
     {
-        KMessageBox::sorry(page, i18n("There was an error writing the file."));
+        KMessageBox::sorry(page, i18n("Failed to write custom license template to file %1.", fullPath));
         return false;
     }
 
