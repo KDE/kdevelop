@@ -38,6 +38,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/stringhelpers.h>
+#include <language/duchain/duchainutils.h>
 
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
@@ -1234,7 +1235,7 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
     }
     for (const auto &contextUses : m_uses) {
         for (const auto &cursor : contextUses.second) {
-            auto referenced = referencedCursor(cursor);
+            auto referenced = clang_getCanonicalCursor(referencedCursor(cursor));
             if (clang_Cursor_isNull(referenced)) {
                 continue;
             }
@@ -1248,6 +1249,15 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
                     continue;
                 }
             }
+
+#if CINDEX_VERSION_MINOR >= 29
+            if (clang_Cursor_getNumTemplateArguments(referenced) >= 0) {
+                // Ideally, we don't need this, but for function templates clang_getCanonicalCursor returns a function definition
+                // See also the testUsesCreatedForDeclarations test
+                DUChainReadLocker lock;
+                used = DUChainUtils::declarationForDefinition(used.data());
+            }
+#endif
 
             const auto useRange = clang_getCursorReferenceNameRange(cursor, 0, 0);
             const auto range = rangeInRevisionForUse(cursor, referenced.kind, useRange, m_macroExpansionLocations);

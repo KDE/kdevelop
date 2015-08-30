@@ -1171,3 +1171,41 @@ void TestDUChain::testRangesOfOperatorsInsideMacro()
     QCOMPARE(operatorPlusPlus->uses().size(), 1);
     QCOMPARE(operatorPlusPlus->uses().begin()->first(), RangeInRevision(3,10,3,10));
 }
+
+void TestDUChain::testUsesCreatedForDeclarations()
+{
+    auto code = R"(template<typename T> void functionTemplate(T);
+            template<typename U> void functionTemplate(U) {}
+
+            namespace NS { class Class{}; }
+            using NS::Class;
+
+            Class function();
+            NS::Class function(){}
+
+            int main () {
+                functionTemplate(int());
+                function(); }
+    )";
+    TestFile file(code, "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed());
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+
+    auto functionTemplate = file.topContext()->findDeclarations(QualifiedIdentifier("functionTemplate"));
+    QVERIFY(!functionTemplate.isEmpty());
+    auto functionTemplateDeclaration = DUChainUtils::declarationForDefinition(functionTemplate.first());
+    QVERIFY(!functionTemplateDeclaration->isDefinition());
+#if CINDEX_VERSION_MINOR < 29
+    QEXPECT_FAIL("", "No API in LibClang to determine function template type", Continue);
+#endif
+    QCOMPARE(functionTemplateDeclaration->uses().count(), 1);
+
+    auto function = file.topContext()->findDeclarations(QualifiedIdentifier("function"));
+    QVERIFY(!function.isEmpty());
+    auto functionDeclaration = DUChainUtils::declarationForDefinition(function.first());
+    QVERIFY(!functionDeclaration->isDefinition());
+    QCOMPARE(functionDeclaration->uses().count(), 1);
+}
