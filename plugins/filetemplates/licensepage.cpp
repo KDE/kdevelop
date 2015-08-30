@@ -165,6 +165,7 @@ bool LicensePagePrivate::saveLicense()
         return false;
     }
 
+    QDir().mkpath(localDataDir);
     newFile.open(QIODevice::WriteOnly);
     qint64 result = newFile.write(license->licenseTextEdit->toPlainText().toUtf8());
     newFile.close();
