@@ -1,3 +1,5 @@
+#include <clang-c/Index.h>
+
 /// "toString" : "struct myTemplate",
 /// "kind" : "Type"
 template<class T>
@@ -32,10 +34,20 @@ using TypeAliasTemplate = T;
 
 /// "type" : { "toString" : "Class_volatile_const< int >" }
 Class_volatile_const<int> instance;
-/// "type" : { "toString" : "TemplateTest< const TemplateTest< int, 100 >&, 30 >" }
-TemplateTest<const TemplateTest<int, 100>&, 30> tst;
+
+myTemplate<myTemplate<int>& > templRefParam;
+/// "type" : { "toString" : "myTemplate< myTemplate< int >& >", "EXPECT_FAIL": {"toString": "For some reasons reference gets lost. Need to investigate it further."} }
+auto autoTemplRefParam = templRefParam;
 /// "type" : { "toString" : "VariadicTemplate< int, double, bool >", "EXPECT_FAIL": {"toString": "No way to get variadic template arguments with LibClang"} }
 VariadicTemplate<int, double, bool> variadic;
+
+/// "type" : { "toString" : "TemplateTest< const TemplateTest< int, 100 >, 30 >" }
+TemplateTest<const TemplateTest<int, 100>, 30> tst;
+#if CINDEX_VERSION_MINOR >= 30
+auto tst2 = tst;
+/// "type" : { "toString" : "TemplateTest< const TemplateTest< int, 100 >, 30 >" }
+auto tst3 = tst2;
+#endif
 
 /*This example used to crash while building the type of Bar*/
 /// "type" : { "toString" : "Bar" }

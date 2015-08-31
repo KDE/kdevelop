@@ -115,10 +115,11 @@ AbstractType* createDelayedType(CXType type)
 {
     auto t = new DelayedType;
 
-    // TODO: Fix clang_getTypeSpelling not to prepend type modifiers for auto types
     QString typeName = ClangString(clang_getTypeSpelling(type)).toString();
+#if CINDEX_VERSION_MINOR < 30
     typeName.remove(QStringLiteral("const "));
     typeName.remove(QStringLiteral("volatile "));
+#endif
 
     t->setIdentifier(IndexedTypeIdentifier(typeName));
     return t;
@@ -613,8 +614,12 @@ struct Visitor
         auto numTA = clang_Type_getNumTemplateArguments(type);
         Q_ASSERT(numTA != -1);
 
-        auto cst = new ClassSpecializationType;
         auto typeDecl = clang_getTypeDeclaration(type);
+
+        if (!declaration && typeDecl.kind == CXCursor_NoDeclFound) {
+            // clang_getTypeDeclaration doesn't handle all types, fall back to delayed type...
+            return createDelayedType(type);
+        }
 
         QStringList typesStr;
         QString tStr = ClangString(clang_getTypeSpelling(type)).toString();
@@ -624,6 +629,8 @@ struct Visitor
             typesStr.append(*iter);
             ++iter;
         }
+
+        auto cst = new ClassSpecializationType;
 
         for (int i = 0; i < numTA; i++) {
             auto argumentType = clang_Type_getTemplateArgumentAsType(type, i);

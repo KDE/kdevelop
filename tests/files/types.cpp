@@ -90,9 +90,4 @@ int main(int argc, char** argv)
     __int128 i128;
     /// "toString" : "unsigned __int128 ui128"
     unsigned __int128 ui128;
-    // TODO: get the actual type here somehow?
-    /// "toString" : "auto autoVar"
-    auto autoVar = 123;
-    /// "toString" : "const volatile auto autoVar2"
-    const volatile auto autoVar2 = 321;
 }
