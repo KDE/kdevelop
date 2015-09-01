@@ -341,7 +341,12 @@ int main( int argc, char *argv[] )
     }
 
     KDevelopApplication app(argc, argv);
+
+    // High DPI support
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     qCDebug(APP) << "Startup";
+
     QCommandLineParser parser;
     KAboutData::setApplicationData(aboutData);
     parser.addVersionOption();
