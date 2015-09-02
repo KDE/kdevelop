@@ -33,25 +33,58 @@ namespace KDevelop {
 
 DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId,
                              const IndexedInstantiationInformation& specialization)
-  : m_direct(false)
+  : m_indirectData{id, additionalId}
+  , m_isDirect(false)
   , m_specialization(specialization)
 {
-  indirect.m_identifier = id;
-  indirect.m_additionalIdentity = additionalId;
 }
 
 DeclarationId::DeclarationId(const IndexedDeclaration& decl,
                              const IndexedInstantiationInformation& specialization)
-  : direct(decl)
-  , m_direct(true)
+  : m_directData(decl)
+  , m_isDirect(true)
   , m_specialization(specialization)
 {
+}
 
+DeclarationId::DeclarationId(const DeclarationId& rhs)
+  : m_isDirect(rhs.m_isDirect)
+  , m_specialization(rhs.m_specialization)
+{
+  if (!m_isDirect) {
+    // IndexedQualifiedIdentifier doesn't like zero-initialization...
+    new (&m_indirectData.identifier) IndexedQualifiedIdentifier(rhs.m_indirectData.identifier);
+    m_indirectData.additionalIdentity = rhs.m_indirectData.additionalIdentity;
+  } else {
+    m_directData = rhs.m_directData;
+  }
+}
+
+DeclarationId::~DeclarationId()
+{
+  if (!m_isDirect) {
+    m_indirectData.~Indirect();
+  }
+}
+
+DeclarationId& DeclarationId::operator=(const DeclarationId& rhs)
+{
+  if (&rhs == this)
+    return *this;
+
+  m_isDirect = rhs.m_isDirect;
+  m_specialization = rhs.m_specialization;
+  if (!m_isDirect) {
+    m_indirectData = rhs.m_indirectData;
+  } else {
+    m_directData = rhs.m_directData;
+  }
+  return *this;
 }
 
 bool DeclarationId::isDirect() const
 {
-  return m_direct;
+  return m_isDirect;
 }
 
 void DeclarationId::setSpecialization(const IndexedInstantiationInformation& spec)
@@ -68,9 +101,9 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
 {
   KDevVarLengthArray<Declaration*> ret;
 
-  if(m_direct == false) {
+  if(m_isDirect == false) {
     //Find the declaration by its qualified identifier and additionalIdentity
-    QualifiedIdentifier id(indirect.m_identifier);
+    QualifiedIdentifier id(m_indirectData.identifier);
 
     if(top) {
       //Do filtering
@@ -78,7 +111,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
           PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
-          if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
+          if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
             //Hit
             ret.append(decl);
           }
@@ -97,7 +130,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
 
         if(!top) {
           Declaration* decl = iDecl.data();
-          if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
+          if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
             //Hit
             ret.append(decl);
           }
@@ -105,7 +138,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
       }
     }
   }else{
-    Declaration* decl = direct.declaration();
+    Declaration* decl = m_directData.declaration();
     if(decl)
       ret.append(decl);
   }
@@ -126,9 +159,9 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
 {
   Declaration* ret = 0;
 
-  if(m_direct == false) {
+  if(m_isDirect == false) {
     //Find the declaration by its qualified identifier and additionalIdentity
-    QualifiedIdentifier id(indirect.m_identifier);
+    QualifiedIdentifier id(m_indirectData.identifier);
 
     if(top) {
       //Do filtering
@@ -136,7 +169,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
           PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
-          if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
+          if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
             //Hit
             ret = decl;
             if(!ret->isForwardDeclaration())
@@ -157,7 +190,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
 
         if(!top) {
           Declaration* decl = iDecl.data();
-          if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
+          if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
             //Hit
             ret = decl;
             if(!ret->isForwardDeclaration())
@@ -168,7 +201,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
     }
   }else{
     //Find the declaration by m_topContext and m_declaration
-    ret = direct.declaration();
+    ret = m_directData.declaration();
   }
 
 
@@ -193,8 +226,8 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
 QualifiedIdentifier DeclarationId::qualifiedIdentifier() const
 {
 
-  if(!m_direct) {
-    QualifiedIdentifier baseIdentifier = indirect.m_identifier.identifier();
+  if(!m_isDirect) {
+    QualifiedIdentifier baseIdentifier = m_indirectData.identifier.identifier();
     if(!m_specialization.index())
       return baseIdentifier;
     return m_specialization.information().applyToIdentifier(baseIdentifier);
@@ -206,7 +239,7 @@ QualifiedIdentifier DeclarationId::qualifiedIdentifier() const
     return QualifiedIdentifier(i18n("(unknown direct declaration)"));
   }
 
-  return QualifiedIdentifier(i18n("(missing)")) + indirect.m_identifier.identifier();
+  return QualifiedIdentifier(i18n("(missing)")) + m_indirectData.identifier.identifier();
 }
 
 }

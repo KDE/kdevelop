@@ -74,6 +74,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
     explicit DeclarationId(const IndexedDeclaration& decl,
                            const IndexedInstantiationInformation& specialization = IndexedInstantiationInformation());
 
+
+    DeclarationId(const DeclarationId& rhs);
+
+    ~DeclarationId();
+
+    DeclarationId& operator=(const DeclarationId& rhs);
+
     /**
      * Equality operator.
      *
@@ -81,13 +88,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \returns true if equal, otherwise false.
      */
     bool operator==(const DeclarationId& rhs) const {
-      if(m_direct != rhs.m_direct)
+      if(m_isDirect != rhs.m_isDirect)
         return false;
 
-      if(!m_direct)
-        return indirect.m_identifier == rhs.indirect.m_identifier && indirect.m_additionalIdentity == rhs.indirect.m_additionalIdentity && m_specialization == rhs.m_specialization;
+      if(!m_isDirect)
+        return m_indirectData.identifier == rhs.m_indirectData.identifier
+          && m_indirectData.additionalIdentity == rhs.m_indirectData.additionalIdentity
+          && m_specialization == rhs.m_specialization;
       else
-        return direct == rhs.direct && m_specialization == rhs.m_specialization;
+        return m_directData == rhs.m_directData && m_specialization == rhs.m_specialization;
     }
 
     /**
@@ -104,7 +113,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * Determine whether this declaration identifier references a valid declaration.
      */
     bool isValid() const {
-      return (m_direct && direct.isValid()) || indirect.m_identifier.isValid();
+      return (m_isDirect && m_directData.isValid()) || m_indirectData.identifier.isValid();
     }
 
     /**
@@ -115,10 +124,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      *          and thus you cannot compare hashes for declaration equality (use operator==() instead)
      */
     uint hash() const {
-      if(m_direct)
-        return KDevHash() << direct.hash() << m_specialization.index();
+      if(m_isDirect)
+        return KDevHash() << m_directData.hash() << m_specialization.index();
       else
-        return KDevHash() << indirect.m_identifier.getIndex() << indirect.m_additionalIdentity << m_specialization.index();
+        return KDevHash() << m_indirectData.identifier.getIndex() << m_indirectData.additionalIdentity << m_specialization.index();
     }
 
     /**
@@ -168,20 +177,22 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
     QualifiedIdentifier qualifiedIdentifier() const;
 
   private:
+    /// An indirect reference to the declaration, which uses the symbol-table for lookup. Should be preferred for all
+    /// declarations that are in the symbol-table
     struct Indirect {
-      IndexedQualifiedIdentifier m_identifier;
-      // Hash from signature, or similar.
-      // Used to disambiguate multiple declarations of the same name.
-      uint m_additionalIdentity;
-    } ;
+      IndexedQualifiedIdentifier identifier;
+      /// Hash from signature, or similar. Used to disambiguate multiple declarations of the same name.
+      uint additionalIdentity;
 
-    //union {
-      //An indirect reference to the declaration, which uses the symbol-table for lookup. Should be preferred for all
-      //declarations that are in the symbol-table
-      Indirect indirect;
-      IndexedDeclaration direct;
-    //};
-    bool m_direct;
+      Indirect& operator=(const Indirect& rhs) = default;
+    };
+
+    union {
+      Indirect m_indirectData;
+      IndexedDeclaration m_directData;
+    };
+    bool m_isDirect;
+
     // Can be used in a language-specific way to pick other versions of the declaration.
     // When the declaration is found, pickSpecialization is called on the found declaration
     // with this value, and the returned value is the actually found declaration.
