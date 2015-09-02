@@ -42,7 +42,7 @@ public:
   typedef TypePtr<DelayedType> Ptr;
 
   /// An enumeration of
-  enum Kind {
+  enum Kind : quint8 {
     Delayed /**< The type should be resolved later. This is the default. */,
     Unresolved /**< The type could not be resolved */
   };

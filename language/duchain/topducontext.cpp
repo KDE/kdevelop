@@ -916,7 +916,6 @@ TopDUContext * TopDUContext::topContext() const
 
 bool TopDUContext::deleting() const
 {
-  ///@todo remove d_func()->m_deleting, not used any more
   return m_dynamicData->m_deleting;
 }
 

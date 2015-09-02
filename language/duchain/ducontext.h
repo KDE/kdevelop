@@ -95,7 +95,7 @@ public:
    */
   virtual ~DUContext();
 
-  enum ContextType {
+  enum ContextType : quint8 {
     Global    /**< A context that declares functions, namespaces or classes */,
     Namespace /**< A context that declares namespace members */,
     Class     /**< A context that declares class members */,

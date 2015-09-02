@@ -177,7 +177,7 @@ public:
     Identity = 4
   };
 
-  enum Features {
+  enum Features : quint16 {
     ///Top-context features standard that can be requested from the duchain, and that are stored in the features() member.
     Empty = 0, //Only the top-context structure (imports etc.) is built, but no declarations and no contexts
     SimplifiedVisibleDeclarationsAndContexts = 2, //The top-context should only contain publically simplified accessible declarations and contexts, without doing type look-up,

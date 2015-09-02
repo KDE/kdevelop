@@ -76,7 +76,7 @@ public:
     
     APPENDED_LISTS_STUB(DUChainBaseData)
     
-    uint classId;
+    quint16 classId;
 
     bool isDynamic() const {
       return m_dynamic;
@@ -90,6 +90,7 @@ public:
     */
     template<class T>
     void setClassId(T*) {
+      static_assert(T::Identity < std::numeric_limits<decltype(classId)>::max(), "Class ID out of bounds");
       classId = T::Identity;
     }
       

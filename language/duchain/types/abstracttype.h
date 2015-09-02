@@ -99,8 +99,9 @@ public:
    *          and attributes of specific Declarations like public/private should be stored in
    *          the Declarations themselves, not in the type-system.
    */
-  enum CommonModifiers {
+  enum CommonModifiers : quint32 {
     NoModifiers                 = 0,
+
     ConstModifier               = 1 << 0,
     VolatileModifier            = 1 << 1,
     TransientModifier           = 1 << 2,
@@ -113,7 +114,8 @@ public:
     LongLongModifier            = 1 << 9,
     SignedModifier              = 1 << 10,
     UnsignedModifier            = 1 << 11,
-    LanguageSpecificModifier    = 1 << 12 //TODO make this support 64 bit values
+
+    LanguageSpecificModifier    = 1 << 12
   };
 
   /// Constructor.
@@ -128,14 +130,14 @@ public:
    *
    * \returns the type's modifiers.
    */
-  quint64 modifiers() const;
+  quint32 modifiers() const;
 
   /**
    * Set the type's modifiers.
    *
    * \param modifiers modifiers of this type.
    */
-  void setModifiers(quint64 modifiers);
+  void setModifiers(quint32 modifiers);
 
   /**
    * Visitor method.  Called by TypeVisitor to visit the type heirachy.
@@ -184,7 +186,7 @@ public:
   IndexedType indexed() const;
 
   /// Enumeration of major data types.
-  enum WhichType {
+  enum WhichType : quint8 {
     TypeAbstract  /**< an abstract type */,
     TypeIntegral  /**< an integral */,
     TypePointer   /**< a pointer*/,

@@ -54,14 +54,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase
 {
 public:
   /// Access types
-  enum AccessPolicy {
+  enum AccessPolicy : quint8 {
     Public    /**< a public declaration */,
     Protected /**< a protected declaration */,
     Private   /**< a private declaration */,
     DefaultAccess /**<a declaration with default access; in java, only package-level access. */
   };
   /// Enumeration of the types of declarations
-  enum Kind {
+  enum Kind : quint8 {
     Type     /**< A type is declared, like a class-declaration or function-declaration, or a typedef("class MyClass {};") */,
     Instance /**< An instance of a type is declared("MyClass m;") */,
     NamespaceAlias/**< This is a namespace-alias. You can safely cast this object to NamespaceAliasDeclaration. */,

@@ -47,12 +47,12 @@ AbstractType::AbstractType( AbstractTypeData& dd )
 {
 }
 
-quint64 AbstractType::modifiers() const
+quint32 AbstractType::modifiers() const
 {
   return d_func()->m_modifiers;
 }
 
-void AbstractType::setModifiers(quint64 modifiers)
+void AbstractType::setModifiers(quint32 modifiers)
 {
   d_func_dynamic()->m_modifiers = modifiers;
 }

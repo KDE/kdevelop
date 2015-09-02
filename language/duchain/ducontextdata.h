@@ -48,7 +48,7 @@ public:
   DUContextData();
   ~DUContextData();
   DUContextData(const DUContextData& rhs);
-  DUContext::ContextType m_contextType;
+
   IndexedQualifiedIdentifier m_scopeIdentifier;
   IndexedDeclaration m_owner;
   typedef DUContext::Import Import;
@@ -69,6 +69,7 @@ public:
   APPENDED_LIST(DUContextData, Use, m_uses, m_localDeclarations);
   END_APPENDED_LISTS(DUContextData, m_uses);
 
+  DUContext::ContextType m_contextType;
   bool m_inSymbolTable : 1;
   bool m_anonymousInParent : 1; //Whether this context was added anonymously into the parent. This means that it cannot be found as child-context in the parent.
   bool m_propagateDeclarations : 1;

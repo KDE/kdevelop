@@ -38,7 +38,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT TopDUContextData : public DUContextData
 public:
   explicit TopDUContextData(IndexedString url)
     : DUContextData()
-    , m_deleting(false)
     , m_url(url)
     , m_ownIndex(0)
     , m_currentUsedDeclarationIndex(0)
@@ -48,7 +47,6 @@ public:
 
   TopDUContextData(const TopDUContextData& rhs)
     : DUContextData(rhs)
-    , m_deleting(false)
   {
     initializeAppendedLists();
     copyListsFrom(rhs);
@@ -64,8 +62,6 @@ public:
   }
 
   TopDUContext::Features m_features;
-
-  bool m_deleting : 1; ///@todo remove
 
   IndexedString m_url;
   uint m_ownIndex;

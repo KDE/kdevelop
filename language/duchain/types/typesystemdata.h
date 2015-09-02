@@ -68,20 +68,21 @@ public:
    */
   template<class T>
   void setTypeClassId() {
+    static_assert(T::Identity < std::numeric_limits<decltype(typeClassId)>::max(), "TypeClass ID out of bounds");
     typeClassId = T::Identity;
   }
 
-  /// Remember which type this data was created for. \sa setTypeClassId()
-  uint typeClassId;
+  /// Reference-count for this type within the repository. Not used for comparison or hashes.
+  uint refCount;
 
   /// Type modifier flags
-  quint64 m_modifiers;
+  quint32 m_modifiers;
+
+  /// Remember which type this data was created for. \sa setTypeClassId()
+  quint16 typeClassId;
 
   /// Remember whether this type is in a TypeRepository. Not used for comparison or hashes.
   bool inRepository : 1;
-  
-  /// Reference-count for this type within the repository. Not used for comparison or hashes.
-  uint refCount;
 
   APPENDED_LISTS_STUB(AbstractTypeData)
   
