@@ -230,6 +230,13 @@ int main( int argc, char *argv[] )
     qputenv("KDE_FORK_SLAVES", "1"); // KIO slaves will be forked off instead of being started via DBus
 #endif
 
+    // Useful for valgrind runs, just `export KDEV_DISABLE_JIT=1`
+    if (qEnvironmentVariableIsSet("KDEV_DISABLE_JIT")) {
+        qputenv("KDEV_DISABLE_SPLASH", "1");
+        qputenv("KDEV_DISABLE_WELCOMEPAGE", "1");
+        qputenv("QT_ENABLE_REGEXP_JIT", "0");
+    }
+
     // Don't show any debug output by default.
     // If you need to enable additional logging for debugging use a rules file
     // as explained in the QLoggingCategory documentation:
@@ -620,7 +627,7 @@ int main( int argc, char *argv[] )
 
 #ifdef WITH_WELCOMEPAGE
     // make it possible to disable the welcome page, useful for valgrind runs e.g.
-    if (!QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_WELCOMEPAGE")) {
+    if (!qEnvironmentVariableIsSet("KDEV_DISABLE_WELCOMEPAGE")) {
         trySetupWelcomePageView();
     }
 #endif
