@@ -32,7 +32,12 @@
 // #define TEST_REFERENCE_COUNTING
 
 namespace KDevelop {
-  
+
+  template <typename T>
+  const T* make_const(const T* argument) {
+      return argument;
+  }
+
   ///Since shouldDoDUChainReferenceCounting is called extremely often, we export some internals into the header here,
   ///so the reference-counting code can be inlined.
   
@@ -48,8 +53,8 @@ namespace KDevelop {
   ///@internal The spin-lock ,must already be locked
   inline bool shouldDoDUChainReferenceCountingInternal(void* item)
   {
-    QMap< void*, QPair<uint, uint> >::iterator it = refCountingRanges->upperBound(item);
-    if(it != refCountingRanges->begin()) {
+    auto it = make_const(refCountingRanges)->upperBound(item);
+    if (it != refCountingRanges->constBegin()) {
       --it;
       return ((char*)it.key()) <= (char*)item && (char*)item < ((char*)it.key()) + it.value().first;
     }
