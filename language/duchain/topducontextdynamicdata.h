@@ -112,11 +112,8 @@ class TopDUContextDynamicData {
   bool m_deleting; ///Flag used during destruction
 
   struct ItemDataInfo {
-    //parentContext 0 means the global context
-    ItemDataInfo(uint _dataOffset = 0, uint _parentContext = 0) : dataOffset(_dataOffset), parentContext(_parentContext) {
-    }
-    uint dataOffset; //Offset of the data
-    uint parentContext; //Parent context of the data
+    uint dataOffset; /// Offset of the data
+    uint parentContext; /// Parent context of the data (0 means the global context)
   };
 
   private:
@@ -182,6 +179,6 @@ class TopDUContextDynamicData {
 };
 }
 
-Q_DECLARE_TYPEINFO(KDevelop::TopDUContextDynamicData::ItemDataInfo, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::TopDUContextDynamicData::ItemDataInfo, Q_PRIMITIVE_TYPE);
 
 #endif

@@ -291,7 +291,7 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::storeData(uint& currentD
         offsets << ItemDataInfo();
       }
     } else {
-      offsets << ItemDataInfo(currentDataOffset, indexForParentContext(item));
+      offsets << ItemDataInfo{currentDataOffset, indexForParentContext(item)};
       saveDUChainItem(data->m_data, *item, currentDataOffset, isSharedDataItem<Item>());
     }
   }
