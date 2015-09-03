@@ -581,10 +581,12 @@ struct Visitor
     {
         auto clangType = clang_getCursorType(cursor);
 
+#if CINDEX_VERSION_MINOR < 30
         if (clangType.kind == CXType_Unexposed) {
             // Clang sometimes can return CXType_Unexposed for CXType_FunctionProto kind. E.g. if it's AttributedType.
             return dispatchType<CXType_FunctionProto>(clangType, cursor);
         }
+#endif
 
         return makeType(clangType, cursor);
     }
