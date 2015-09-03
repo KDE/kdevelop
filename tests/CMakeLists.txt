@@ -74,15 +74,13 @@ ecm_add_test(test_problems.cpp
         kdevclangduchain
 )
 
-if(KDEVPLATFORM_JSONTESTS_LIBRARIES)
-  configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
-  ecm_add_test(test_files.cpp
-    TEST_NAME test_files
-    LINK_LIBRARIES
-        Qt5::Test
-        Qt5::Core
-        KDev::Language
-        KDev::Tests
-        kdevclangduchain
-  )
-endif()
+configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
+ecm_add_test(test_files.cpp
+TEST_NAME test_files
+LINK_LIBRARIES
+    Qt5::Test
+    Qt5::Core
+    KDev::Language
+    KDev::Tests
+    kdevclangduchain
+)
