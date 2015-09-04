@@ -29,7 +29,9 @@
 #include <QTimer>
 #include <KIcon>
 
+#ifndef Q_MOC_RUN
 #include <boost/foreach.hpp>
+#endif
 
 using namespace KDevelop;
 using namespace ClassModelNodes;
