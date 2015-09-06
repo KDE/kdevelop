@@ -21,7 +21,7 @@
 #ifndef QMAKELEXER_H
 #define QMAKELEXER_H
 
-#include <QtCore/QStack>
+#include <util/stack.h>
 #include <QtCore/QString>
 #include "parser_export.h"
 
@@ -56,7 +56,7 @@ private:
     QChar* ignoreWhitespaceAndComment(QChar* it);
     void createNewline( int pos );
 
-    QStack<int> mState;
+    KDevelop::Stack<int> mState;
     enum State
     {
         ErrorState = -1,

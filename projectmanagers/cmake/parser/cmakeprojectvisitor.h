@@ -24,7 +24,7 @@
 #include <QString>
 #include <QStringList>
 #include <QHash>
-#include <QStack>
+#include <util/stack.h>
 
 #include "cmakeastvisitor.h"
 #include "cmaketypes.h"
@@ -178,7 +178,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         bool haveToFind(const QString &varName);
         void createDefinitions(const CMakeAst* ast);
         void createUses(const CMakeFunctionDesc& ast);
-        void printBacktrace(const QStack<VisitorState> &backtrace);
+        void printBacktrace(const KDevelop::Stack<VisitorState> &backtrace);
         VisitorState stackTop() const;
         QStringList dependees(const QString& s) const;
         int declareFunction(Macro m, const CMakeFileContent& content, int initial, const QString& end);
@@ -193,7 +193,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QHash<QString, QStringList> m_generatedFiles;
         QHash<QString, Target> m_targetForId;
         
-        QStack<VisitorState> m_backtrace;
+        KDevelop::Stack<VisitorState> m_backtrace;
         QString m_root;
         VariableMap *m_vars;
         MacroMap *m_macros;

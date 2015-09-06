@@ -246,7 +246,7 @@ protected:
 #endif
 
   QVector<KDevelop::DUContext::Import> m_importedParentContexts;
-  QStack< QVector<KDevelop::DUContext::Import> > m_tryParentContexts;
+  Stack< QVector<KDevelop::DUContext::Import> > m_tryParentContexts;
   InitializerAST* m_currentInitializer;
   ConditionAST* m_currentCondition;
   

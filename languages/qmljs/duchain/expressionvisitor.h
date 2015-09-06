@@ -19,7 +19,7 @@
 #ifndef EXPRESSIONVISITOR_H
 #define EXPRESSIONVISITOR_H
 
-#include <QStack>
+#include <util/stack.h>
 
 #include <language/duchain/builders/dynamiclanguageexpressionvisitor.h>
 #include <language/duchain/types/integraltype.h>

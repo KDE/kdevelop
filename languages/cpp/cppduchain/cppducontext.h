@@ -51,6 +51,7 @@ While construction:
 #include <language/duchain/ducontext.h>
 
 #include <QMutex>
+#include <util/stack.h>
 
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/declaration.h>
@@ -157,7 +158,7 @@ extern QMutex cppDuContextInstantiationsMutex;
 
         typedef QExplicitlySharedDataPointer<State> StatePtr;
 
-        QStack<StatePtr> m_states;
+        Stack<StatePtr> m_states;
         const DUContext* m_context;
         const TopDUContext* m_source;
         DUContext::SearchFlags m_flags;
