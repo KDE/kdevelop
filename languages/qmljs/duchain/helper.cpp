@@ -198,9 +198,15 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
         auto integralType = IntegralType::Ptr::dynamicCast(declaration->abstractType());
 
         if (structureType) {
-            return getInternalContext(
-                DeclarationPointer(structureType->declaration(declaration->topContext()))
-            );
+            auto structureDeclaration = structureType->declaration(declaration->topContext());
+
+            if (structureDeclaration != declaration.data()) {
+                return getInternalContext(
+                    DeclarationPointer(structureDeclaration)
+                );
+            } else {
+                return nullptr;
+            }
         } else if ((integralType || functionType) && declaration->identifier() != Identifier(QLatin1String("Object"))) {
             QString baseClass;
 
