@@ -34,10 +34,24 @@
 
 using namespace KDevelop;
 
+namespace {
+
+// TODO: Just use QDir::listSeparator once we depend on Qt 5.6
+Q_DECL_CONSTEXPR inline QChar listSeparator() Q_DECL_NOTHROW
+{
+#ifdef Q_OS_WIN
+    return QLatin1Char(';');
+#else
+    return QLatin1Char(':');
+#endif
+}
+
+}
+
 void TestPluginController::initTestCase()
 {
     QByteArray pluginPaths = qgetenv("QT_PLUGIN_PATH");
-    pluginPaths.prepend(":" TEST_PLUGIN_DIR);
+    pluginPaths.prepend(QByteArrayLiteral(TEST_PLUGIN_DIR) + listSeparator().toLatin1());
     qputenv("QT_PLUGIN_PATH", pluginPaths);
 
     AutoTestShell::init({"kdevnonguiinterface"});
