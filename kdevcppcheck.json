@@ -29,6 +29,7 @@
         "Description[de]": "Cppcheck ist ein Werkzeug, das Ihnen hilft, Syntaxprobleme in Programmen zu finden. http://cppcheck.sf.net/", 
         "Description[es]": "Cppcheck es una herramienta que le ayuda a encontrar problemas de sintaxis en los programas. http://cppcheck.sf.net/", 
         "Description[gl]": "Cppcheck é unha ferramenta que lle axuda a atopar problemas de sintaxe en programas. http://cppcheck.sf.net/", 
+        "Description[hu]": "A Cppcheck egy olyan eszköz, amely segít megtalálni a szintaktikai hibákat a programokban. http://cppcheck.sf.net/", 
         "Description[nl]": "Cppcheck is een hulpmiddel dat helpt u bij het vinden van problemen in de syntaxis in programma's. http://cppcheck.sf.net/", 
         "Description[pl]": "Cppcheck jest narzędziem, które pomaga znaleźć problemy w składni twoich programów. http://cppcheck.sf.net/", 
         "Description[pt]": "O CppCheck é uma ferramenta que o ajuda a detectar problemas de sintaxe nos programas. http://cppcheck.sf.net/", 
