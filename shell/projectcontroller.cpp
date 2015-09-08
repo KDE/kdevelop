@@ -509,7 +509,7 @@ void ProjectController::setupActions()
 
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18nc( "@action", "Fetch Project..." ) );
-    action->setIcon( QIcon::fromTheme( "download" ) );
+    action->setIcon( QIcon::fromTheme( "edit-download" ) );
     action->setToolTip( i18nc( "@info:tooltip", "Fetch project" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Guides the user through the project fetch "
                                                     "and then imports it into KDevelop 4." ) );
