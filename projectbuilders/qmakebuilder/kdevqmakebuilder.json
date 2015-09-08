@@ -12,6 +12,7 @@
         "Description[pt]": "Cria projectos do QMake", 
         "Description[pt_BR]": "Compila projetos do QMake", 
         "Description[sv]": "Bygger QMake-projekt", 
+        "Description[tr]": "QMake Projelerini Derler", 
         "Description[uk]": "Збирає проекти QMake", 
         "Description[x-test]": "xxBuilds QMake Projectsxx", 
         "Icon": "gear", 
@@ -29,6 +30,7 @@
         "Name[pt]": "Construtor de Projectos do QMake", 
         "Name[pt_BR]": "Construtor de projetos do QMake", 
         "Name[sv]": "QMake-projektbyggverktyg", 
+        "Name[tr]": "QMake Proje Oluşturucu", 
         "Name[uk]": "Засіб збирання проектів QMake", 
         "Name[x-test]": "xxQMake Project Builderxx", 
         "ServiceTypes": [
