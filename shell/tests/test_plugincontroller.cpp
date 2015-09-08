@@ -37,7 +37,7 @@ using namespace KDevelop;
 void TestPluginController::initTestCase()
 {
     QByteArray pluginPaths = qgetenv("QT_PLUGIN_PATH");
-    pluginPaths += QByteArrayLiteral(":" TEST_PLUGIN_DIR);
+    pluginPaths.prepend(":" TEST_PLUGIN_DIR);
     qputenv("QT_PLUGIN_PATH", pluginPaths);
 
     AutoTestShell::init({"kdevnonguiinterface"});
