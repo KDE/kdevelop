@@ -113,6 +113,11 @@ void GitInitTest::repoInit()
     QVERIFY(j2->exec());
     QString out = j2->output();
     QVERIFY(j2->output().isEmpty());
+
+    // Make sure to set the Git identity so unit tests don't depend on that
+    auto j3 = m_plugin->setConfigOption(QUrl::fromLocalFile(gitTest_BaseDir),
+              QStringLiteral("user.email"), QStringLiteral("me@example.com"));
+    VERIFYJOB(j3);
 }
 
 void GitInitTest::addFiles()

@@ -145,6 +145,8 @@ public:
 
     KDevelop::CheckInRepositoryJob* isInRepository(KTextEditor::Document* document) override;
 
+    KDevelop::DVcsJob* setConfigOption(const QUrl& repository, const QString& key, const QString& value);
+
     // this indicates whether the diff() function will generate a diff (patch) which
     // includes the working copy directory name or not (in which case git diff is called
     // with --no-prefix).

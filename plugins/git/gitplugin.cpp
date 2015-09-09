@@ -1453,3 +1453,10 @@ CheckInRepositoryJob* GitPlugin::isInRepository(KTextEditor::Document* document)
     job->start();
     return job;
 }
+
+DVcsJob* GitPlugin::setConfigOption(const QUrl& repository, const QString& key, const QString& value)
+{
+    auto job = new DVcsJob(urlDir(repository), this);
+    *job << "git" << "config" << key << value;
+    return job;
+}
