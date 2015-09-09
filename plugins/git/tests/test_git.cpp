@@ -118,6 +118,9 @@ void GitInitTest::repoInit()
     auto j3 = m_plugin->setConfigOption(QUrl::fromLocalFile(gitTest_BaseDir),
               QStringLiteral("user.email"), QStringLiteral("me@example.com"));
     VERIFYJOB(j3);
+    auto j4 = m_plugin->setConfigOption(QUrl::fromLocalFile(gitTest_BaseDir),
+              QStringLiteral("user.name"), QStringLiteral("My Name"));
+    VERIFYJOB(j4);
 }
 
 void GitInitTest::addFiles()
