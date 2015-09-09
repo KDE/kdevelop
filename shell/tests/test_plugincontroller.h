@@ -30,7 +30,8 @@ class PluginController;
 
 class TestPluginController : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+
 private slots:
     void initTestCase();
     void cleanupTestCase();
@@ -40,9 +41,8 @@ private slots:
     void loadFromExtension();
     void pluginInfo();
     void benchPluginForExtension();
-private:
 
-    KDevelop::Core* m_core;
+private:
     KDevelop::PluginController* m_pluginCtrl;
 };
 
