@@ -25,6 +25,8 @@
 #include "typeregister.h"
 #include "typesystem.h"
 
+#include <QHash>
+
 namespace KDevelop
 {
 REGISTER_TYPE(DelayedType);
@@ -95,6 +97,11 @@ void DelayedType::accept0 (KDevelop::TypeVisitor *v) const
 {
     v->visit(this);
 /*    v->endVisit(this);*/
+}
+
+inline uint qHash(DelayedType::Kind kind)
+{
+  return ::qHash(static_cast<quint8>(kind));
 }
 
 uint DelayedType::hash() const
