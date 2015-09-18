@@ -71,7 +71,7 @@ QSharedPointer<CodeCompletionContext> createCompletionContext(const DUContextPoi
     if (includePathCompletionRequired(text)) {
         return QSharedPointer<IncludePathCompletionContext>::create(context, session, url, position, text);
     } else {
-        return QSharedPointer<ClangCodeCompletionContext>::create(context, session, url, position, text + followingText);
+        return QSharedPointer<ClangCodeCompletionContext>::create(context, session, url, position, text, followingText);
     }
 }
 

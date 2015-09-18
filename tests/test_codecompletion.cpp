@@ -226,7 +226,7 @@ void executeMemberAccessReplacerTest(const QString& code, const CompletionItems&
 
     lock.unlock();
 
-    auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
+    auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, code);
 
     QApplication::processEvents();
     document->close(KDevelop::IDocument::Silent);
@@ -237,7 +237,6 @@ void executeMemberAccessReplacerTest(const QString& code, const CompletionItems&
     auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
 
     tester.names.sort();
-    QEXPECT_FAIL("replace dot to arrow", "Clang doesn't provide the diagnostic when '.' used instead of '->'", Continue);
     QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
 
@@ -480,8 +479,8 @@ void TestCodeCompletion::testReplaceMemberAccess_data()
 
     QTest::newRow("replace dot to arrow")
     <<  "struct Struct { void function(); };"
-        "int main() { Struct* s; \ns. "
-    << CompletionItems{{1, 2}, {
+        "int main() { Struct* s; \ns.  "
+    << CompletionItems{{1, 3}, {
         "function"
     }};
 }

@@ -642,7 +642,7 @@ public slots:
                 auto cursor = activeView->cursorPosition();
 
                 QString oldAccess, newAccess;
-                if (type == DotToArrow) {
+                if (type == ArrowToDot) {
                     oldAccess = QStringLiteral("->");
                     newAccess = QStringLiteral(".");
                 } else {
@@ -651,6 +651,14 @@ public slots:
                 }
 
                 auto oldRange = KTextEditor::Range(cursor - KTextEditor::Cursor(0, oldAccess.length()), cursor);
+
+                // This code needed for testReplaceMemberAccess test
+                // Maybe we should do a similar thing for '->' to '.' direction, but this is not so important
+                while (textDocument->text(oldRange) == QLatin1String(" ") && oldRange.start().column() >= 0) {
+                    oldRange = KTextEditor::Range({oldRange.start().line(), oldRange.start().column() - 1},
+                                                  {oldRange.end().line(), oldRange.end().column() - 1});
+                }
+
                 if (oldRange.start().column() >= 0 && textDocument->text(oldRange) == oldAccess) {
                     textDocument->replaceText(oldRange, newAccess);
                 }
@@ -668,9 +676,10 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
                                                        const ParseSessionData::Ptr& sessionData,
                                                        const QUrl& url,
                                                        const KTextEditor::Cursor& position,
-                                                       const QString& text
+                                                       const QString& text,
+                                                       const QString& followingText
                                                       )
-    : CodeCompletionContext(context, text, CursorInRevision::castFromSimpleCursor(position), 0)
+    : CodeCompletionContext(context, text + followingText, CursorInRevision::castFromSimpleCursor(position), 0)
     , m_results(nullptr, clang_disposeCodeCompleteResults)
     , m_parseSessionData(sessionData)
 {
@@ -704,9 +713,9 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
             if (diagnosticType == ClangDiagnosticEvaluator::ReplaceWithArrowProblem || diagnosticType == ClangDiagnosticEvaluator::ReplaceWithDotProblem) {
                 MemberAccessReplacer::Type replacementType;
                 if (diagnosticType == ClangDiagnosticEvaluator::ReplaceWithDotProblem) {
-                    replacementType = MemberAccessReplacer::DotToArrow;
-                } else {
                     replacementType = MemberAccessReplacer::ArrowToDot;
+                } else {
+                    replacementType = MemberAccessReplacer::DotToArrow;
                 }
 
                 QMetaObject::invokeMethod(&s_memberAccessReplacer, "replaceCurrentAccess", Qt::QueuedConnection,
@@ -720,6 +729,35 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         auto addMacros = ClangSettingsManager::self()->codeCompletionSettings().macros;
         if (!addMacros) {
             m_filters |= NoMacros;
+        }
+    }
+
+    if (!m_results->NumResults) {
+        const auto trimmedText = text.trimmed();
+        if (trimmedText.endsWith(QLatin1Char('.'))) {
+            // TODO: This shouldn't be needed if Clang provided diagnostic.
+            // But it doesn't always do it, so let's try to manually determine whether '.' is used instead of '->'
+            m_text = trimmedText.left(trimmedText.size() - 1);
+            m_text += QStringLiteral("->");
+
+            CXUnsavedFile unsaved;
+            unsaved.Filename = file.constData();
+            const QByteArray content = m_text.toUtf8();
+            unsaved.Contents = content.constData();
+            unsaved.Length = content.size() + 1;
+
+            m_results.reset(clang_codeCompleteAt(session.unit(), file.constData(),
+                                                 position.line() + 1, position.column() + 1,
+                                                 &unsaved, 1,
+                                                 clang_defaultCodeCompleteOptions()));
+
+            if (m_results && m_results->NumResults) {
+                QMetaObject::invokeMethod(&s_memberAccessReplacer, "replaceCurrentAccess", Qt::QueuedConnection,
+                                          Q_ARG(MemberAccessReplacer::Type, MemberAccessReplacer::DotToArrow));
+            }
+
+            m_valid = false;
+            return;
         }
     }
 

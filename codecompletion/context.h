@@ -49,7 +49,8 @@ public:
                                const ParseSessionData::Ptr& sessionData,
                                const QUrl& url,
                                const KTextEditor::Cursor& position,
-                               const QString& text);
+                               const QString& text,
+                               const QString& followingText = {});
     ~ClangCodeCompletionContext();
 
     virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
