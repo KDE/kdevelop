@@ -163,3 +163,37 @@ RangeInRevision ClangRange::toRangeInRevision() const
 ClangRange::~ClangRange()
 {
 }
+
+ClangTokens::ClangTokens(CXTranslationUnit unit, CXSourceRange range)
+    : m_unit(unit)
+{
+    clang_tokenize(m_unit, range, &m_tokens, &m_numTokens);
+}
+ClangTokens::~ClangTokens()
+{
+    clang_disposeTokens(m_unit, m_tokens, m_numTokens);
+}
+CXToken* ClangTokens::begin() const
+{
+    return m_tokens;
+}
+CXToken* ClangTokens::end() const
+{
+    return m_tokens + m_numTokens;
+}
+std::reverse_iterator<CXToken*> ClangTokens::rbegin() const
+{
+    return std::reverse_iterator<CXToken*>(end());
+}
+std::reverse_iterator<CXToken*> ClangTokens::rend() const
+{
+    return std::reverse_iterator<CXToken*>(begin());
+}
+uint ClangTokens::size() const
+{
+    return m_numTokens;
+}
+CXToken ClangTokens::at(uint index) const {
+    Q_ASSERT(index < m_numTokens);
+    return m_tokens[index];
+}

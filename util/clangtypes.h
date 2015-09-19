@@ -27,6 +27,8 @@
 
 #include <util/path.h>
 
+#include <iterator>
+
 class QTextStream;
 
 namespace KTextEditor {
@@ -106,6 +108,23 @@ public:
 
 private:
     CXSourceRange m_range;
+};
+
+class ClangTokens
+{
+public:
+    ClangTokens(CXTranslationUnit unit, CXSourceRange range);
+    ~ClangTokens();
+    CXToken* begin() const;
+    CXToken* end() const;
+    std::reverse_iterator<CXToken*> rbegin() const;
+    std::reverse_iterator<CXToken*> rend() const;
+    uint size() const;
+    CXToken at(uint index) const;
+private:
+    CXTranslationUnit m_unit;
+    CXToken* m_tokens;
+    uint m_numTokens;
 };
 
 #endif // CLANGTYPES_H

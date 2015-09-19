@@ -70,8 +70,6 @@ CXChildVisitResult paramVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientDa
     }
 
     FunctionInfo *info = static_cast<FunctionInfo*>(data);
-    CXToken *tokens;
-    unsigned int numTokens;
     ClangRange range(clang_getCursorExtent(cursor));
 
     CXFile file;
@@ -87,12 +85,10 @@ CXChildVisitResult paramVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientDa
     //the declaration or definition, and the default arguments don't have lexical
     //parents. So this range check is the only thing that really works.
     if ((info->fileName.isEmpty() || fileName == info->fileName) && info->range.contains(range.toRange())) {
-        clang_tokenize(info->unit, range.range(), &tokens, &numTokens);
-        for (unsigned int i = 0; i < numTokens; i++) {
-            info->stringParts.append(ClangString(clang_getTokenSpelling(info->unit, tokens[i])).toString());
+        const ClangTokens tokens(info->unit, range.range());
+        for (CXToken token : tokens) {
+            info->stringParts.append(ClangString(clang_getTokenSpelling(info->unit, token)).toString());
         }
-
-        clang_disposeTokens(info->unit, tokens, numTokens);
     }
     return CXChildVisit_Continue;
 }
@@ -254,23 +250,19 @@ QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange rang
     clang_getFileLocation(rangeEnd, nullptr, nullptr, nullptr, &end);
 
     QByteArray result;
-    CXToken *tokens = 0;
-    unsigned int nTokens = 0;
-    clang_tokenize(unit, range, &tokens, &nTokens);
-    for (unsigned int i = 0; i < nTokens; i++) {
-        const auto location = ClangLocation(clang_getTokenLocation(unit, tokens[i]));
+    const ClangTokens tokens(unit, range);
+    for (CXToken token : tokens) {
+        const auto location = ClangLocation(clang_getTokenLocation(unit, token));
         unsigned int offset;
         clang_getFileLocation(location, nullptr, nullptr, nullptr, &offset);
         Q_ASSERT(offset >= start);
         const int fillCharacters = offset - start - result.size();
         Q_ASSERT(fillCharacters >= 0);
         result.append(QByteArray(fillCharacters, ' '));
-        const auto spelling = clang_getTokenSpelling(unit, tokens[i]);
+        const auto spelling = clang_getTokenSpelling(unit, token);
         result.append(clang_getCString(spelling));
         clang_disposeString(spelling);
     }
-    clang_disposeTokens(unit, tokens, nTokens);
-
     // Clang always appends the full range of the last token, even if this exceeds the end of the requested range.
     // Fix this.
     result.chop((result.size() - 1) - (end - start));
@@ -282,16 +274,14 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
 {
     // TODO: expose clang::FunctionDecl::isDeleted() and clang::FunctionDecl::isExplicitlyDefaulted() in libclang
     auto declCursor = clang_getCanonicalCursor(cursor);
-    uint numTokens = 0;
-    CXToken* tokens = nullptr;
     CXTranslationUnit tu = clang_Cursor_getTranslationUnit(declCursor);
-    clang_tokenize(tu, clang_getCursorExtent(declCursor), &tokens, &numTokens);
+    ClangTokens tokens(tu, clang_getCursorExtent(declCursor));
     int parenDepth = 0; // we want to ignore =delete within parentheses
     bool foundFirstClosingParen = false; // a function needs at least one closing parenthesis before the = delete
     bool lastTokenWasEquals = false;
     bool explicitlyDefaultedOrDeleted = false;
-    for (uint i = 0; i < numTokens && !explicitlyDefaultedOrDeleted; ++i) {
-        auto kind = clang_getTokenKind(tokens[i]);
+    for (uint i = 0; i < tokens.size() && !explicitlyDefaultedOrDeleted; ++i) {
+        auto kind = clang_getTokenKind(tokens.at(i));
         switch (kind) {
             case CXToken_Comment:
                 break;
@@ -300,7 +290,7 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
                 lastTokenWasEquals = false;
                 break;
             case CXToken_Punctuation: {
-                ClangString spelling(clang_getTokenSpelling(tu, tokens[i]));
+                ClangString spelling(clang_getTokenSpelling(tu, tokens.at(i)));
                 const char* spellingCStr = spelling.c_str();
                 if (strcmp(spellingCStr, "(") == 0) {
                     parenDepth++;
@@ -316,7 +306,7 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
                 if (!lastTokenWasEquals || parenDepth > 0) {
                     break;
                 }
-                ClangString spelling(clang_getTokenSpelling(tu, tokens[i]));
+                ClangString spelling(clang_getTokenSpelling(tu, tokens.at(i)));
                 const char* spellingCStr = spelling.c_str();
                 if (strcmp(spellingCStr, "default") == 0 || strcmp(spellingCStr, "delete") == 0) {
                     explicitlyDefaultedOrDeleted = true; // break loop
@@ -325,10 +315,7 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
                 }
                 break;
             }
-            default:
-                Q_UNREACHABLE();
         }
     }
-    clang_disposeTokens(tu, tokens, numTokens);
     return explicitlyDefaultedOrDeleted;
 }

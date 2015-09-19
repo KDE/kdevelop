@@ -109,9 +109,6 @@ void TestCodeCompletion::initTestCase()
     TestCore::initialize();
 
     ClangSettingsManager::self()->m_enableTesting = true;
-    auto languages = ICore::self()->languageController()->languagesForUrl(QUrl::fromLocalFile("/tmp/foo.cpp"));
-    QCOMPARE(languages.size(), 1);
-    QCOMPARE(languages[0]->name(), QStringLiteral("clang"));
 }
 
 void TestCodeCompletion::cleanupTestCase()

@@ -132,11 +132,9 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
         // a token we can use for building the range
         auto nextLocation = clang_getLocation(unit, file, line, column + 100);
         auto rangeToTokenize = clang_getRange(location, nextLocation);
-        CXToken *tokens = nullptr;
-        unsigned numTokens = 0;
-        clang_tokenize(unit, rangeToTokenize, &tokens, &numTokens);
-        if (numTokens) {
-            docRange.setRange(ClangRange(clang_getTokenExtent(unit, tokens[0])).toRange());
+        const ClangTokens tokens(unit, rangeToTokenize);
+        if (tokens.size()) {
+            docRange.setRange(ClangRange(clang_getTokenExtent(unit, tokens.at(0))).toRange());
         }
     }
 

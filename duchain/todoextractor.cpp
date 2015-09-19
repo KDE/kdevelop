@@ -173,11 +173,8 @@ void TodoExtractor::extractTodos()
         return;
     }
 
-    CXToken* tokens = nullptr;
-    unsigned int nTokens = 0;
-    clang_tokenize(m_unit, range, &tokens, &nTokens);
-    for (unsigned int i = 0; i < nTokens; ++i) {
-        CXToken token = tokens[i];
+    const ClangTokens tokens(m_unit, range);
+    for (CXToken token : tokens) {
         CXTokenKind tokenKind = clang_getTokenKind(token);
         if (tokenKind != CXToken_Comment) {
             continue;
@@ -206,7 +203,6 @@ void TodoExtractor::extractTodos()
             m_problems << problem;
         }
     }
-    clang_disposeTokens(m_unit, tokens, nTokens);
 }
 
 QList< ProblemPointer > TodoExtractor::problems() const

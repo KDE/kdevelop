@@ -327,11 +327,8 @@ bool isInsideComment(CXTranslationUnit unit, CXFile file, const KTextEditor::Cur
 
     // tokenize the whole range from the start until 'position'
     // if we detect a comment token at this position, return true
-    CXToken* tokens = nullptr;
-    unsigned int nTokens = 0;
-    clang_tokenize(unit, range, &tokens, &nTokens);
-    for (unsigned int i = 0; i < nTokens; ++i) {
-        CXToken token = tokens[i];
+    const ClangTokens tokens(unit, range);
+    for (CXToken token : tokens) {
         CXTokenKind tokenKind = clang_getTokenKind(token);
         if (tokenKind != CXToken_Comment) {
             continue;

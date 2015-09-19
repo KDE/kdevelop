@@ -114,9 +114,6 @@ namespace ClangUtils
      * such API in libclang so having one function to check both cases is more efficient (only tokenize once)
      */
     bool isExplicitlyDefaultedOrDeleted(CXCursor cursor);
-
-
-
 };
 
 #endif // CLANGUTILS_H
