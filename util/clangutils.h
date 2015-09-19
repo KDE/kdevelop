@@ -103,6 +103,20 @@ namespace ClangUtils
      * @see clang_File_isEqual
      */
     bool isFileEqual(CXFile file1, CXFile file2);
+
+    /**
+     * @brief Return true if the cursor @p cursor refers to an explicitly deleted/defaulted function
+     * such as the default constructor in "struct Foo { Foo() = delete; }"
+     *
+     * TODO: do we need isExplicitlyDefaulted() + isExplicitlyDeleted()?
+     * Currently this is only used by the implements completion to hide deleted+defaulted functions so
+     * we don't need to know the difference. We need to tokenize the source code because there is no
+     * such API in libclang so having one function to check both cases is more efficient (only tokenize once)
+     */
+    bool isExplicitlyDefaultedOrDeleted(CXCursor cursor);
+
+
+
 };
 
 #endif // CLANGUTILS_H

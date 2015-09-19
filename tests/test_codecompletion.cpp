@@ -31,6 +31,8 @@
 #include "util/clangtypes.h"
 
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iplugincontroller.h>
 
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/types/functiontype.h>
@@ -107,6 +109,9 @@ void TestCodeCompletion::initTestCase()
     TestCore::initialize();
 
     ClangSettingsManager::self()->m_enableTesting = true;
+    auto languages = ICore::self()->languageController()->languagesForUrl(QUrl::fromLocalFile("/tmp/foo.cpp"));
+    QCOMPARE(languages.size(), 1);
+    QCOMPARE(languages[0]->name(), QStringLiteral("clang"));
 }
 
 void TestCodeCompletion::cleanupTestCase()
@@ -156,9 +161,7 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
     QEXPECT_FAIL("look-ahead function primary type argument", "No API in LibClang to determine expected code completion type", Continue);
     QEXPECT_FAIL("look-ahead template parameter substitution", "No parameters substitution so far", Continue);
     QEXPECT_FAIL("look-ahead auto item", "Auto type, like many other types, is not exposed through LibClang. We assign DelayedType to it instead of IdentifiedType", Continue);
-    QEXPECT_FAIL("deleted-copy-ctor", "There doesn't seem to be any API to see if a function is explicitly deleted", Continue);
-    QEXPECT_FAIL("deleted-overload-member", "There doesn't seem to be any API to see if a function is explicitly deleted", Continue);
-    QEXPECT_FAIL("deleted-overload-global", "There doesn't seem to be any API to see if a function is explicitly deleted", Continue);
+    QEXPECT_FAIL("deleted-overload-global", "The range for a global function defintion ends after the '=' so 'delete' after that is not detected.", Continue);
     QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
 
@@ -680,19 +683,31 @@ void TestCodeCompletion::testImplement_data()
         << "class Foo { int bar(); void foo(); char asdf() const; };"
         << CompletionItems{{1, 1}, {"Foo::asdf() const", "Foo::bar()", "Foo::foo()"}};
 
+    // explicitly deleted/defaulted functions should not appear in the implements completion
     QTest::newRow("deleted-copy-ctor")
-        << "struct S { S(); S(const S&) = delete; };"
+        << "struct S { S(); S(const S&) = /*some comment*/ delete; };"
         << CompletionItems{{1,1}, {"S::S()"}};
     QTest::newRow("deleted-overload-member")
         << "struct Foo {\n"
            "  int x();\n"
-           "  int x(int) = delete;\n"
+           "  int x(int) =delete;\n"
            "};\n"
         << CompletionItems{{5,1}, {"Foo::x()"}};
     QTest::newRow("deleted-overload-global")
         << "int x();\n"
-           "int x(int) = delete;\n"
+           "int x(int)=  delete;\n"
         << CompletionItems{{2,1}, {"x()"}};
+    // FIXME: the rage seems to be wrong here (stops after =), but I don't know how to fix that
+    // QDEBUG : TestCodeCompletion::testImplement(deleted-overload-global) default: "int x(int)=" contains "=\\s*delete\\s*;" = false
+    QTest::newRow("defaulted-copy-ctor")
+        << "struct S { S(); S(const S&) = default; };"
+        << CompletionItems{{1,1}, {"S::S()"}};
+    QTest::newRow("defaulted-dtor")
+        << "struct Foo {\n"
+           "  Foo();\n"
+           "  ~Foo() =default;\n"
+           "};\n"
+        << CompletionItems{{5,1}, {"Foo::Foo()"}};
 }
 
 void TestCodeCompletion::testInvalidCompletions()

@@ -277,3 +277,58 @@ QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange rang
 
     return result;
 }
+
+bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
+{
+    // TODO: expose clang::FunctionDecl::isDeleted() and clang::FunctionDecl::isExplicitlyDefaulted() in libclang
+    auto declCursor = clang_getCanonicalCursor(cursor);
+    uint numTokens = 0;
+    CXToken* tokens = nullptr;
+    CXTranslationUnit tu = clang_Cursor_getTranslationUnit(declCursor);
+    clang_tokenize(tu, clang_getCursorExtent(declCursor), &tokens, &numTokens);
+    int parenDepth = 0; // we want to ignore =delete within parentheses
+    bool foundFirstClosingParen = false; // a function needs at least one closing parenthesis before the = delete
+    bool lastTokenWasEquals = false;
+    bool explicitlyDefaultedOrDeleted = false;
+    for (uint i = 0; i < numTokens && !explicitlyDefaultedOrDeleted; ++i) {
+        auto kind = clang_getTokenKind(tokens[i]);
+        switch (kind) {
+            case CXToken_Comment:
+                break;
+            case CXToken_Identifier:
+            case CXToken_Literal:
+                lastTokenWasEquals = false;
+                break;
+            case CXToken_Punctuation: {
+                ClangString spelling(clang_getTokenSpelling(tu, tokens[i]));
+                const char* spellingCStr = spelling.c_str();
+                if (strcmp(spellingCStr, "(") == 0) {
+                    parenDepth++;
+                } else if (strcmp(spellingCStr, ")") == 0) {
+                    parenDepth--;
+                    foundFirstClosingParen = true;
+                } else if (strcmp(spellingCStr, "=") == 0) {
+                    lastTokenWasEquals = true;
+                }
+                break;
+            }
+            case CXToken_Keyword: {
+                if (!lastTokenWasEquals || parenDepth > 0) {
+                    break;
+                }
+                ClangString spelling(clang_getTokenSpelling(tu, tokens[i]));
+                const char* spellingCStr = spelling.c_str();
+                if (strcmp(spellingCStr, "default") == 0 || strcmp(spellingCStr, "delete") == 0) {
+                    explicitlyDefaultedOrDeleted = true; // break loop
+                } else {
+                    lastTokenWasEquals = false;
+                }
+                break;
+            }
+            default:
+                Q_UNREACHABLE();
+        }
+    }
+    clang_disposeTokens(tu, tokens, numTokens);
+    return explicitlyDefaultedOrDeleted;
+}

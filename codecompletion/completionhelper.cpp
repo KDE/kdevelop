@@ -261,7 +261,10 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
                                                && !clang_equalCursors(origin, data->top))) {
         return CXChildVisit_Continue;
     }
-
+    // skip explicitly defaulted/deleted functions as they don't need a definition
+    if (ClangUtils::isExplicitlyDefaultedOrDeleted(cursor)) {
+        return CXChildVisit_Continue;
+    }
     //TODO Add support for pure virtual functions
 
     auto scope = data->scopePrefix;
