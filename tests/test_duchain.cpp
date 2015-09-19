@@ -418,11 +418,11 @@ void TestDUChain::testAutoTypeDeduction()
     QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
     Declaration* decl = ctx->findDeclarations(QualifiedIdentifier("foo"))[0];
     QCOMPARE(decl->identifier(), Identifier("foo"));
-#if CINDEX_VERSION_MINOR < 30
+#if CINDEX_VERSION_MINOR < 31
     QEXPECT_FAIL("", "No type deduction here unfortunately, missing API in Clang", Continue);
 #endif
     QVERIFY(decl->type<IntegralType>());
-#if CINDEX_VERSION_MINOR < 30
+#if CINDEX_VERSION_MINOR < 31
     QCOMPARE(decl->toString(), QStringLiteral("const volatile auto foo"));
 #else
     QCOMPARE(decl->toString(), QStringLiteral("const volatile int foo"));
@@ -461,7 +461,7 @@ void TestDUChain::testTypeDeductionInTemplateInstantiation()
     QCOMPARE(decl->identifier(), Identifier("f"));
     decl = ctx->localDeclarations()[2];
     QCOMPARE(decl->identifier(), Identifier("i"));
-#if CINDEX_VERSION_MINOR < 30
+#if CINDEX_VERSION_MINOR < 31
     QEXPECT_FAIL("", "No type deduction here unfortunately, missing API in Clang", Continue);
 #endif
     QVERIFY(decl->type<IntegralType>());

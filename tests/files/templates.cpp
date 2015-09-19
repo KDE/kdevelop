@@ -43,7 +43,7 @@ VariadicTemplate<int, double, bool> variadic;
 
 /// "type" : { "toString" : "TemplateTest< const TemplateTest< int, 100 >, 30 >" }
 TemplateTest<const TemplateTest<int, 100>, 30> tst;
-#if CINDEX_VERSION_MINOR >= 30
+#if CINDEX_VERSION_MINOR >= 31
 auto tst2 = tst;
 /// "type" : { "toString" : "TemplateTest< const TemplateTest< int, 100 >, 30 >" }
 auto tst3 = tst2;
