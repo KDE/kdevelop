@@ -326,8 +326,9 @@ struct Visitor
     {
         auto range = ClangHelpers::cursorSpellingNameRange(cursor, id);
 
-        if (CK == CXCursor_ParmDecl && id.isEmpty()) {
-            // This is an anonymous function parameter e.g.: void f(int);
+        if (id.isEmpty()) {
+            // This is either an anonymous function parameter e.g.: void f(int);
+            // Or anonymous struct/class/union e.g.: struct {} anonymous;
             // Set empty range for it
             range.end = range.start;
         }
