@@ -49,6 +49,13 @@ auto tst2 = tst;
 auto tst3 = tst2;
 #endif
 
+template<class Type>
+void test()
+{
+    /// "type" : { "toString" : "const volatile auto" }
+    const volatile auto type = Type();
+}
+
 /*This example used to crash while building the type of Bar*/
 /// "type" : { "toString" : "Bar" }
 template <typename T>

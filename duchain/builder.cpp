@@ -116,10 +116,8 @@ AbstractType* createDelayedType(CXType type)
     auto t = new DelayedType;
 
     QString typeName = ClangString(clang_getTypeSpelling(type)).toString();
-#if CINDEX_VERSION_MINOR < 31
     typeName.remove(QStringLiteral("const "));
     typeName.remove(QStringLiteral("volatile "));
-#endif
 
     t->setIdentifier(IndexedTypeIdentifier(typeName));
     return t;
