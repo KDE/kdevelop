@@ -272,50 +272,51 @@ QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange rang
 
 bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
 {
-    // TODO: expose clang::FunctionDecl::isDeleted() and clang::FunctionDecl::isExplicitlyDefaulted() in libclang
+    // after http://reviews.llvm.org/D12666 explicitly deleted functions will be removed from the possible
+    // candidates from clang_getCursorAvailability(). However, we still need to remove explicitly defaulted functions
+    // from the implement candidates as they are implemented by the compiler.
+    // TODO: expose clang::FunctionDecl::isExplicitlyDefaulted() in libclang
+    // For symmetry we should probably also expose clang::FunctionDecl::isDeleted()
     auto declCursor = clang_getCanonicalCursor(cursor);
     CXTranslationUnit tu = clang_Cursor_getTranslationUnit(declCursor);
     ClangTokens tokens(tu, clang_getCursorExtent(declCursor));
-    int parenDepth = 0; // we want to ignore =delete within parentheses
-    bool foundFirstClosingParen = false; // a function needs at least one closing parenthesis before the = delete
-    bool lastTokenWasEquals = false;
-    bool explicitlyDefaultedOrDeleted = false;
-    for (uint i = 0; i < tokens.size() && !explicitlyDefaultedOrDeleted; ++i) {
-        auto kind = clang_getTokenKind(tokens.at(i));
+    bool lastTokenWasDeleteOrDefault = false;
+    for (auto it = tokens.rbegin(), end = tokens.rend(); it != end; ++it) {
+        CXToken token = *it;
+        auto kind = clang_getTokenKind(token);
         switch (kind) {
             case CXToken_Comment:
                 break;
             case CXToken_Identifier:
             case CXToken_Literal:
-                lastTokenWasEquals = false;
+                lastTokenWasDeleteOrDefault = false;
                 break;
             case CXToken_Punctuation: {
-                ClangString spelling(clang_getTokenSpelling(tu, tokens.at(i)));
+                ClangString spelling(clang_getTokenSpelling(tu, token));
                 const char* spellingCStr = spelling.c_str();
-                if (strcmp(spellingCStr, "(") == 0) {
-                    parenDepth++;
-                } else if (strcmp(spellingCStr, ")") == 0) {
-                    parenDepth--;
-                    foundFirstClosingParen = true;
+                if (strcmp(spellingCStr, ")") == 0) {
+                    // a closing parent means we have reached the end of the function parameter list
+                    // therefore this function can't be explicitly deleted/defaulted
+                    return false;
                 } else if (strcmp(spellingCStr, "=") == 0) {
-                    lastTokenWasEquals = true;
+                    if (lastTokenWasDeleteOrDefault) {
+                        return true;
+                    }
                 }
+                lastTokenWasDeleteOrDefault = false;
                 break;
             }
             case CXToken_Keyword: {
-                if (!lastTokenWasEquals || parenDepth > 0) {
-                    break;
-                }
-                ClangString spelling(clang_getTokenSpelling(tu, tokens.at(i)));
+                ClangString spelling(clang_getTokenSpelling(tu, token));
                 const char* spellingCStr = spelling.c_str();
                 if (strcmp(spellingCStr, "default") == 0 || strcmp(spellingCStr, "delete") == 0) {
-                    explicitlyDefaultedOrDeleted = true; // break loop
+                    lastTokenWasDeleteOrDefault = true;
                 } else {
-                    lastTokenWasEquals = false;
+                    lastTokenWasDeleteOrDefault = false;
                 }
                 break;
             }
         }
     }
-    return explicitlyDefaultedOrDeleted;
+    return false;
 }
