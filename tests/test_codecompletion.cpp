@@ -159,6 +159,7 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
     QEXPECT_FAIL("look-ahead template parameter substitution", "No parameters substitution so far", Continue);
     QEXPECT_FAIL("look-ahead auto item", "Auto type, like many other types, is not exposed through LibClang. We assign DelayedType to it instead of IdentifiedType", Continue);
     QEXPECT_FAIL("deleted-overload-global", "The range for a global function defintion ends after the '=' so 'delete' after that is not detected.", Continue);
+    QEXPECT_FAIL("default parameters", "Default parameters not supported yet", Continue);
     QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
 
@@ -366,7 +367,11 @@ void TestCodeCompletion::testClangCodeCompletion_data()
     QTest::newRow("itemsPriority")
         << "class A; class B; void f(A); int main(){ A c; B b;f(\n} "
         << CompletionItems{{1, 0},
-            {"A", "B", "b", "c", "f", "main"},
+            {"A", "B", "b", "c", "f",
+#if CINDEX_VERSION_MINOR >= 30
+             "f(A)",
+#endif
+                         "main"},
             {"c", "A", "b", "B"}
     };
     QTest::newRow("function-arguments")
@@ -394,6 +399,9 @@ void TestCodeCompletion::testClangCodeCompletion_data()
            "int main() {LookAhead* pInstance; LookAhead instance; function(\n }"
         << CompletionItems{{1, 0}, {
             "Class", "LookAhead", "function",
+#if CINDEX_VERSION_MINOR >= 30
+            "function(Class cl)",
+#endif
             "instance", "instance.classItem",
             "main", "pInstance", "pInstance->classItem",
         }};
@@ -939,4 +947,70 @@ void TestCodeCompletion::testVariableScope()
     auto item = tester.findItem(QStringLiteral("var"));
     VERIFY(item);
     QCOMPARE(item->declaration()->range().start, CursorInRevision(1, 14));
+}
+
+void TestCodeCompletion::testArgumentHintCompletion()
+{
+    QFETCH(QString, code);
+    QFETCH(CompletionItems, expectedItems);
+
+    executeCompletionTest(code, expectedItems);
+}
+
+void TestCodeCompletion::testArgumentHintCompletion_data()
+{
+#if CINDEX_VERSION_MINOR < 30
+    QSKIP("You need at least LibClang 3.7");
+#endif
+
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionItems>("expectedItems");
+
+    QTest::newRow("global function")
+        << "void foo(int);\n"
+           "int main() { \nfoo( "
+        << CompletionItems{{2,4}, {
+            "foo", "foo(int)",
+            "main"
+        }};
+
+    QTest::newRow("member function")
+        << "struct Struct{ void foo(int);}\n"
+           "int main() {Struct s; \ns.foo( "
+        << CompletionItems{{2,6}, {
+            "Struct", "foo(int)",
+            "main", "s"
+        }};
+
+    QTest::newRow("template function")
+        << "template <typename T> void foo(T);\n"
+           "int main() { \nfoo( "
+        << CompletionItems{{2,6}, {
+            "foo", "foo(T)",
+            "main"
+        }};
+
+    QTest::newRow("overloaded functions")
+        << "void foo(int); void foo(int, double)\n"
+           "int main() { \nfoo( "
+        << CompletionItems{{2,6}, {
+            "foo", "foo", "foo(int)", "foo(int, double)",
+            "main"
+        }};
+
+    QTest::newRow("overloaded functions2")
+        << "void foo(int); void foo(int, double)\n"
+           "int main() { foo(1,\n  "
+        << CompletionItems{{2,1}, {
+            "foo", "foo", "foo(int, double)",
+            "main"
+        }};
+
+    QTest::newRow("default parameters")
+        << "void foo(int i = 0);\n"
+           "int main() { \nfoo( "
+        << CompletionItems{{2,4}, {
+            "foo", "foo(int i = 0)",
+            "main"
+        }};
 }

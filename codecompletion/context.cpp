@@ -275,8 +275,19 @@ public:
         m_inheritanceDepth = depth;
     }
 
+    int argumentHintDepth() const override
+    {
+        return m_depth;
+    }
+
+    void setArgumentHintDepth(int depth)
+    {
+        m_depth = depth;
+    }
+
 private:
     int m_matchQuality = 0;
+    int m_depth = 0;
     QString m_replacement;
 };
 
@@ -863,16 +874,25 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         //END function signature parsing
         for (uint j = 0; j < chunks; ++j) {
             const auto kind = clang_getCompletionChunkKind(result.CompletionString, j);
-            if (kind == CXCompletionChunk_CurrentParameter || kind == CXCompletionChunk_Optional) {
+            // TODO: Use it for default parameters of CXCursor_OverloadCandidate
+            if (kind == CXCompletionChunk_Optional) {
                 continue;
             }
 
             // We don't need function signature for declaration items, we can get it directly from the declaration. Also adding the function signature to the "display" would break the "Detailed completion" option.
-            if(isDeclaration && !typed.isEmpty()){
+            if (isDeclaration && !typed.isEmpty()) {
+#if CINDEX_VERSION_MINOR >= 30
+                // TODO: When parent context for CXCursor_OverloadCandidate is fixed remove this check
+                if (result.CursorKind != CXCursor_OverloadCandidate) {
+                    break;
+                }
+#else
                 break;
+#endif
             }
 
             const QString string = ClangString(clang_getCompletionChunkText(result.CompletionString, j)).toString();
+
             switch (kind) {
                 case CXCompletionChunk_TypedText:
                     display += string;
@@ -883,8 +903,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     resultType = string;
                     continue;
                 case CXCompletionChunk_Placeholder:
-                    //TODO:consider KTextEditor::TemplateInterface possibility
-                    //replacement += "/*" + string + "*/";
                     if (signatureState == Inside) {
                         display += string;
                     }
@@ -902,17 +920,20 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                         signatureState = After;
                     }
                     break;
+                case CXCompletionChunk_Text:
+#if CINDEX_VERSION_MINOR >= 30
+                    if (result.CursorKind == CXCursor_OverloadCandidate) {
+                        display += string;
+                        typed += string;
+                    }
+#endif
+                    break;
                 default:
                     break;
             }
-            //replacement += string;
             if (signatureState == Inside) {
                 display += string;
             }
-        }
-
-        if(typed.isEmpty()){
-            continue;
         }
 
         // ellide text to the right for overly long result types (templates especially)
@@ -954,7 +975,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     }
                 }
 
-                auto declarationItem = new DeclarationItem(found, display, resultType, replacement);
+                auto declarationItem = new DeclarationItem(found, typed, resultType, replacement);
 
                 const unsigned int completionPriority = adjustPriorityForDeclaration(found, clang_getCompletionPriority(result.CompletionString));
                 const bool bestMatch = completionPriority <= CCP_SuperCompletion;
@@ -971,11 +992,28 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
                     lookAheadMatcher.addDeclarations(found);
                 }
+#if CINDEX_VERSION_MINOR >= 30
+                if (result.CursorKind == CXCursor_OverloadCandidate) {
+                    declarationItem->setArgumentHintDepth(1);
+                }
+#endif
+
                 item = declarationItem;
             } else {
-                // still, let's trust that Clang found something useful and put it into the completion result list
-                clangDebug() << "Could not find declaration for" << qid;
-                item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
+#if CINDEX_VERSION_MINOR >= 30
+                if (result.CursorKind == CXCursor_OverloadCandidate) {
+                    // TODO: No parent context for CXCursor_OverloadCandidate items, hence qid is broken -> no declaration found
+                    auto di = new DeclarationItem({}, display, resultType, replacement);
+                    di->setArgumentHintDepth(1);
+                    item = di;
+                } else {
+#endif
+                    // still, let's trust that Clang found something useful and put it into the completion result list
+                    clangDebug() << "Could not find declaration for" << qid;
+                    item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
+#if CINDEX_VERSION_MINOR >= 30
+                }
+#endif
             }
 
             if (isValidSpecialCompletionIdentifier(qid)) {
