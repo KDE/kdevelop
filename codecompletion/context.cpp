@@ -291,6 +291,50 @@ private:
     QString m_replacement;
 };
 
+
+class ArgumentHintItem : public DeclarationItem
+{
+public:
+    struct CurrentArgumentRange
+    {
+        int start;
+        int end;
+    };
+
+    ArgumentHintItem(Declaration* decl,  const QString& prefix, const QString& name, const QString& arguments, const CurrentArgumentRange& range)
+        : DeclarationItem(decl, name, prefix, {})
+        , m_range(range)
+        , m_arguments(arguments)
+    {}
+
+     QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
+    {
+        if (role == CodeCompletionModel::CustomHighlight && index.column() == CodeCompletionModel::Arguments && argumentHintDepth()) {
+            QList<QVariant> highlighting;
+            highlighting << QVariant(m_range.start);
+            highlighting << QVariant(m_range.end);
+            QTextCharFormat boldFormat;
+            boldFormat.setFontWeight(QFont::Bold);
+            highlighting << boldFormat;
+            return highlighting;
+        }
+
+        if (role == CodeCompletionModel::HighlightingMethod && index.column() == CodeCompletionModel::Arguments && argumentHintDepth()) {
+            return QVariant(CodeCompletionModel::CustomHighlighting);
+        }
+
+        if (index.column() == CodeCompletionModel::Arguments && !m_declaration) {
+            return m_arguments;
+        }
+
+        return DeclarationItem::data(index, role, model);
+    }
+
+private:
+    CurrentArgumentRange m_range;
+    QString m_arguments;
+};
+
 /**
  * A minimalistic completion item for macros and such
  */
@@ -858,6 +902,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         QString resultType;
         // the replacement text when an item gets executed
         QString replacement;
+
+        QString arguments;
+
+        ArgumentHintItem::CurrentArgumentRange argumentRange;
         //BEGIN function signature parsing
         // nesting depth of parentheses
         int parenDepth = 0;
@@ -904,7 +952,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     continue;
                 case CXCompletionChunk_Placeholder:
                     if (signatureState == Inside) {
-                        display += string;
+                        arguments += string;
                     }
                     continue;
                 case CXCompletionChunk_LeftParen:
@@ -916,7 +964,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 case CXCompletionChunk_RightParen:
                     --parenDepth;
                     if (signatureState == Inside && !parenDepth) {
-                        display += QLatin1Char(')');
+                        arguments += QLatin1Char(')');
                         signatureState = After;
                     }
                     break;
@@ -928,11 +976,15 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     }
 #endif
                     break;
+                case CXCompletionChunk_CurrentParameter:
+                    argumentRange.start = arguments.size();
+                    argumentRange.end = string.size();
+                    break;
                 default:
                     break;
             }
             if (signatureState == Inside) {
-                display += string;
+                arguments += string;
             }
         }
 
@@ -1003,9 +1055,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 #if CINDEX_VERSION_MINOR >= 30
                 if (result.CursorKind == CXCursor_OverloadCandidate) {
                     // TODO: No parent context for CXCursor_OverloadCandidate items, hence qid is broken -> no declaration found
-                    auto di = new DeclarationItem({}, display, resultType, replacement);
-                    di->setArgumentHintDepth(1);
-                    item = di;
+                    auto ahi = new ArgumentHintItem({}, resultType, typed, arguments, argumentRange);
+                    ahi->setArgumentHintDepth(1);
+                    item = ahi;
                 } else {
 #endif
                     // still, let's trust that Clang found something useful and put it into the completion result list
@@ -1031,7 +1083,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         if (result.CursorKind == CXCursor_MacroDefinition) {
             // TODO: grouping of macros and built-in stuff
             static const QIcon icon = QIcon::fromTheme(QStringLiteral("code-macro"));
-            auto item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement, icon));
+            auto item = CompletionTreeItemPointer(new SimpleItem(display + arguments, resultType, replacement, icon));
             macros.append(item);
         } else if (result.CursorKind == CXCursor_NotImplemented) {
             auto item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
