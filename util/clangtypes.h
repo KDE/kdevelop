@@ -114,6 +114,8 @@ class ClangTokens
 {
 public:
     ClangTokens(CXTranslationUnit unit, CXSourceRange range);
+    ClangTokens(const ClangTokens&) = delete;
+    ClangTokens& operator=(const ClangTokens&) = delete;
     ~ClangTokens();
     CXToken* begin() const;
     CXToken* end() const;
