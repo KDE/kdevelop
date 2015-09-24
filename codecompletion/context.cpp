@@ -747,7 +747,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
             unsaved.Length = content.size() + 1;
 
             m_results.reset(clang_codeCompleteAt(session.unit(), file.constData(),
-                                                 position.line() + 1, position.column() + 1,
+                                                 position.line() + 1, position.column() + 1 + 1,
                                                  &unsaved, 1,
                                                  clang_defaultCodeCompleteOptions()));
 

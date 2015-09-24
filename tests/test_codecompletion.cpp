@@ -483,6 +483,11 @@ void TestCodeCompletion::testReplaceMemberAccess_data()
     << CompletionItems{{1, 3}, {
         "function"
     }};
+
+    QTest::newRow("no replacement needed")
+    <<  "int main() { double a = \n0.  "
+    << CompletionItems{{1, 2}, {
+    }};
 }
 
 void TestCodeCompletion::testVirtualOverride()
