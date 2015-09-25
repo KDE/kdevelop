@@ -857,6 +857,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
     LookAheadItemMatcher lookAheadMatcher(TopDUContextPointer(ctx->topContext()));
 
+    // If ctx is/inside the Class context, this represents that context.
+    const auto currentClassContext = classDeclarationForContext(ctx, m_position);
+
     clangDebug() << "Clang found" << m_results->NumResults << "completion results";
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
@@ -886,8 +889,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             continue;
         }
 
-        // If ctx is/inside the Class context, this represents that context.
-        auto currentClassContext = classDeclarationForContext(ctx, m_position);
         if (availability == CXAvailability_NotAccessible && (!isDeclaration || !currentClassContext)) {
             continue;
         }
