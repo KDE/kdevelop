@@ -896,8 +896,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
         // the string that would be needed to type, usually the identifier of something. Also we use it as name for code completion declaration items.
         QString typed;
-        // the display string we use in the simple code completion items, including the function signature.
-        QString display;
         // the return type of a function e.g.
         QString resultType;
         // the replacement text when an item gets executed
@@ -943,7 +941,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
             switch (kind) {
                 case CXCompletionChunk_TypedText:
-                    display += string;
                     typed = string;
                     replacement = string;
                     break;
@@ -971,7 +968,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 case CXCompletionChunk_Text:
 #if CINDEX_VERSION_MINOR >= 30
                     if (result.CursorKind == CXCursor_OverloadCandidate) {
-                        display += string;
                         typed += string;
                     }
 #endif
@@ -1062,7 +1058,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 #endif
                     // still, let's trust that Clang found something useful and put it into the completion result list
                     clangDebug() << "Could not find declaration for" << qid;
-                    item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
+                    item = CompletionTreeItemPointer(new SimpleItem(typed + arguments, resultType, replacement));
 #if CINDEX_VERSION_MINOR >= 30
                 }
 #endif
@@ -1083,10 +1079,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         if (result.CursorKind == CXCursor_MacroDefinition) {
             // TODO: grouping of macros and built-in stuff
             static const QIcon icon = QIcon::fromTheme(QStringLiteral("code-macro"));
-            auto item = CompletionTreeItemPointer(new SimpleItem(display + arguments, resultType, replacement, icon));
+            auto item = CompletionTreeItemPointer(new SimpleItem(typed + arguments, resultType, replacement, icon));
             macros.append(item);
         } else if (result.CursorKind == CXCursor_NotImplemented) {
-            auto item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
+            auto item = CompletionTreeItemPointer(new SimpleItem(typed, resultType, replacement));
             builtin.append(item);
         }
     }
