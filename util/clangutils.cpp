@@ -272,9 +272,10 @@ QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange rang
 
 bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
 {
-    // after http://reviews.llvm.org/D12666 explicitly deleted functions will be removed from the possible
-    // candidates from clang_getCursorAvailability(). However, we still need to remove explicitly defaulted functions
-    // from the implement candidates as they are implemented by the compiler.
+    if (clang_getCursorAvailability(cursor) == CXAvailability_NotAvailable) {
+        return true;
+    }
+
     // TODO: expose clang::FunctionDecl::isExplicitlyDefaulted() in libclang
     // For symmetry we should probably also expose clang::FunctionDecl::isDeleted()
     auto declCursor = clang_getCanonicalCursor(cursor);
@@ -309,7 +310,11 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
             case CXToken_Keyword: {
                 ClangString spelling(clang_getTokenSpelling(tu, token));
                 const char* spellingCStr = spelling.c_str();
-                if (strcmp(spellingCStr, "default") == 0 || strcmp(spellingCStr, "delete") == 0) {
+                if (strcmp(spellingCStr, "default") == 0
+#if CINDEX_VERSION_MINOR < 31
+                    || strcmp(spellingCStr, "delete") == 0
+#endif
+                ) {
                     lastTokenWasDeleteOrDefault = true;
                 } else {
                     lastTokenWasDeleteOrDefault = false;

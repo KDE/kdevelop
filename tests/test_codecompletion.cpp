@@ -158,7 +158,9 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
     QEXPECT_FAIL("look-ahead function primary type argument", "No API in LibClang to determine expected code completion type", Continue);
     QEXPECT_FAIL("look-ahead template parameter substitution", "No parameters substitution so far", Continue);
     QEXPECT_FAIL("look-ahead auto item", "Auto type, like many other types, is not exposed through LibClang. We assign DelayedType to it instead of IdentifiedType", Continue);
+#if CINDEX_VERSION_MINOR < 31
     QEXPECT_FAIL("deleted-overload-global", "The range for a global function defintion ends after the '=' so 'delete' after that is not detected.", Continue);
+#endif
     QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
 
