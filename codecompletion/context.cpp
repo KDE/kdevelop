@@ -893,8 +893,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             continue;
         }
 
-        const uint chunks = clang_getNumCompletionChunks(result.CompletionString);
-
         // the string that would be needed to type, usually the identifier of something. Also we use it as name for code completion declaration items.
         QString typed;
         // the return type of a function e.g.
@@ -919,28 +917,34 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         // current state
         FunctionSignatureState signatureState = Before;
         //END function signature parsing
-        for (uint j = 0; j < chunks; ++j) {
-            const auto kind = clang_getCompletionChunkKind(result.CompletionString, j);
-            // TODO: Use it for default parameters of CXCursor_OverloadCandidate
-            if (kind == CXCompletionChunk_Optional) {
-                continue;
-            }
 
-            // We don't need function signature for declaration items, we can get it directly from the declaration. Also adding the function signature to the "display" would break the "Detailed completion" option.
-            if (isDeclaration && !typed.isEmpty()) {
-#if CINDEX_VERSION_MINOR >= 30
-                // TODO: When parent context for CXCursor_OverloadCandidate is fixed remove this check
-                if (result.CursorKind != CXCursor_OverloadCandidate) {
-                    break;
+        std::function<void (CXCompletionString)> processChunks = [&] (CXCompletionString completionString) {
+            const uint chunks = clang_getNumCompletionChunks(completionString);
+            for (uint j = 0; j < chunks; ++j) {
+                const auto kind = clang_getCompletionChunkKind(completionString, j);
+                if (kind == CXCompletionChunk_Optional) {
+                    completionString = clang_getCompletionChunkCompletionString(completionString, j);
+                    if (completionString) {
+                        processChunks(completionString);
+                    }
+                    continue;
                 }
+
+                // We don't need function signature for declaration items, we can get it directly from the declaration. Also adding the function signature to the "display" would break the "Detailed completion" option.
+                if (isDeclaration && !typed.isEmpty()) {
+#if CINDEX_VERSION_MINOR >= 30
+                    // TODO: When parent context for CXCursor_OverloadCandidate is fixed remove this check
+                    if (result.CursorKind != CXCursor_OverloadCandidate) {
+                        break;
+                    }
 #else
-                break;
+                    break;
 #endif
-            }
+                }
 
-            const QString string = ClangString(clang_getCompletionChunkText(result.CompletionString, j)).toString();
+                const QString string = ClangString(clang_getCompletionChunkText(completionString, j)).toString();
 
-            switch (kind) {
+                switch (kind) {
                 case CXCompletionChunk_TypedText:
                     typed = string;
                     replacement = string;
@@ -979,12 +983,21 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     break;
                 default:
                     break;
+                }
+                if (signatureState == Inside) {
+                    arguments += string;
+                }
             }
-            if (signatureState == Inside) {
-                arguments += string;
-            }
-        }
+        };
 
+        processChunks(result.CompletionString);
+
+#if CINDEX_VERSION_MINOR >= 30
+        // TODO: No closing paren if default parameters present
+        if (result.CursorKind == CXCursor_OverloadCandidate && !arguments.endsWith(QLatin1Char(')'))) {
+            arguments += QLatin1Char(')');
+        }
+#endif
         // ellide text to the right for overly long result types (templates especially)
         elideStringRight(resultType, MAX_RETURN_TYPE_STRING_LENGTH);
 

@@ -1006,6 +1006,42 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
             "foo", "foo", "foo",
             "main"
         }};
+}
 
-        // TODO: Test default parameters. We need something like testOverloadedFunctions for that
+void TestCodeCompletion::testArgumentHintCompletionDefaultParameters()
+{
+#if CINDEX_VERSION_MINOR < 30
+    QSKIP("You need at least LibClang 3.7");
+#endif
+
+    TestFile file("void f(int i, int j = 0, double k =1){\nf( ", "cpp");
+    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+    QVERIFY(sessionData);
+
+    DUContextPointer topPtr(top);
+    lock.unlock();
+
+    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 2}, QString());
+    context->setFilters(ClangCodeCompletionContext::ContextFilters(
+                            ClangCodeCompletionContext::NoBuiltins |
+                            ClangCodeCompletionContext::NoMacros));
+    lock.lock();
+    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    QExplicitlySharedDataPointer<KDevelop::CompletionTreeItem> f;
+
+    for (const auto& item : tester.items) {
+        if (item->argumentHintDepth() == 1) {
+            f = item;
+            break;
+        }
+    }
+
+    QVERIFY(f.data());
+
+    const QString itemDisplay = tester.itemData(f).toString() + tester.itemData(f, KTextEditor:: CodeCompletionModel::Arguments).toString();
+    QCOMPARE(QStringLiteral("f(int i, int j, double k)"), itemDisplay);
 }
