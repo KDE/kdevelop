@@ -271,9 +271,23 @@ QString currentBuildType( KDevelop::IProject* project )
     return readProjectParameter( project, Config::Specific::cmakeBuildTypeKey, "Release" );
 }
 
+QString findExecutable()
+{
+    auto cmake = QStandardPaths::findExecutable("cmake");
+#ifdef Q_OS_WIN
+    if (cmake.isEmpty())
+        cmake = QStandardPaths::findExecutable("cmake",{
+            "C:\\Program Files (x86)\\CMake\\bin",
+            "C:\\Program Files\\CMake\\bin",
+            "C:\\Program Files (x86)\\CMake 2.8\\bin",
+            "C:\\Program Files\\CMake 2.8\\bin"});
+#endif
+    return cmake;
+}
+
 KDevelop::Path currentCMakeBinary( KDevelop::IProject* project )
 {
-    const auto systemBinary = QStandardPaths::findExecutable( "cmake" );
+    const auto systemBinary = findExecutable();
     auto path = readProjectParameter( project, Config::Specific::cmakeBinKey, systemBinary );
     if (path != systemBinary) {
         QFileInfo info(path);

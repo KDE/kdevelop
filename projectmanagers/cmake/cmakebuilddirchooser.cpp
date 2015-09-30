@@ -20,6 +20,7 @@
 
 #include "cmakebuilddirchooser.h"
 #include "ui_cmakebuilddirchooser.h"
+#include "cmakeutils.h"
 #include "debug.h"
 
 #include <project/helper.h>
@@ -65,7 +66,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
     m_chooserUi->installPrefix->setMode(KFile::Directory|KFile::ExistingOnly);
 
-    setCMakeBinary(Path(QStandardPaths::findExecutable( "cmake" )));
+    setCMakeBinary(Path(CMake::findExecutable()));
 
     KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");
     QStringList lastExtraArguments = config.readEntry("LastExtraArguments", QStringList());;

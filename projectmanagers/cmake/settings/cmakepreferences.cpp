@@ -248,7 +248,7 @@ void CMakePreferences::createBuildDir()
     // It may be '/' or '\', so maybe should we rely on CMake::allBuildDirs() for returning well-formed pathes?
     QStringList used = CMake::allBuildDirs( m_project );
     bdCreator.setAlreadyUsed(used);
-    bdCreator.setCMakeBinary(KDevelop::Path(QStandardPaths::findExecutable("cmake")));
+    bdCreator.setCMakeBinary(KDevelop::Path(CMake::findExecutable()));
 
     if(bdCreator.exec())
     {

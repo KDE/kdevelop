@@ -70,6 +70,11 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT QString currentBuildType( KDevelop::IProject* project );
 
     /**
+    * @returns the cmake executable, taking into account standard
+    * installation dirs on Windows, or empty string in case of failure.
+    */
+    KDEVCMAKECOMMON_EXPORT QString findExecutable();
+    /**
      * @returns the current cmake binary for the given project or
      * QStandardPaths::findExecutable("cmake") as default value. 
      */

@@ -107,7 +107,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
 
 bool CMakeManager::hasError() const
 {
-    return QStandardPaths::findExecutable("cmake").isEmpty();
+    return CMake::findExecutable().isEmpty();
 }
 
 QString CMakeManager::errorDescription() const
