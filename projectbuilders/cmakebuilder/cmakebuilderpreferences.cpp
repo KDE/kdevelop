@@ -27,6 +27,7 @@
 
 #include "ui_cmakebuildersettings.h"
 #include "cmakebuilderconfig.h"
+#include "cmakeutils.h"
 
 CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWidget* parent)
     : KDevelop::ConfigPage(plugin, CMakeBuilderSettings::self(), parent)
@@ -40,6 +41,9 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWid
     // Visual Studio solution is the standard generator under windows, but we dont want to use
     // the VS IDE, so we need nmake makefiles
     m_prefsUi->generator->addItem("NMake Makefiles");
+    static_cast<KConfigSkeleton::ItemString *>(CMakeBuilderSettings::self()->findItem("generator"))->setDefaultValue("NMake Makefiles");
+
+    m_prefsUi->cmakeExe->setFilter("*.exe");
 #else
     m_prefsUi->generator->addItem("Unix Makefiles");
 #endif
@@ -47,6 +51,11 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWid
     if(hasNinja)
         m_prefsUi->generator->addItem("Ninja");
     
+    connect(m_prefsUi->cmakeExe, &KUrlRequester::textChanged, [=](const QString& exe)
+        {
+            if (CMakeBuilderSettings::self()->cmakeExe() != exe)
+                emit changed();
+        });
     connect(m_prefsUi->generator, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuilderPreferences::generatorChanged);
 }
 
@@ -57,12 +66,14 @@ CMakeBuilderPreferences::~CMakeBuilderPreferences()
 
 void CMakeBuilderPreferences::defaults()
 {
+    m_prefsUi->cmakeExe->setText(CMake::findExecutable());
     m_prefsUi->generator->setCurrentIndex(0);
     KDevelop::ConfigPage::defaults();
 }
 
 void CMakeBuilderPreferences::apply()
 {
+    CMakeBuilderSettings::setCmakeExe(m_prefsUi->cmakeExe->text());
     CMakeBuilderSettings::setGenerator(m_prefsUi->generator->currentText());
     KDevelop::ConfigPage::apply();
     CMakeBuilderSettings::self()->save();
@@ -70,6 +81,7 @@ void CMakeBuilderPreferences::apply()
 
 void CMakeBuilderPreferences::reset()
 {
+    m_prefsUi->cmakeExe->setText(CMakeBuilderSettings::self()->cmakeExe());
     int idx = m_prefsUi->generator->findText(CMakeBuilderSettings::self()->generator());
     m_prefsUi->generator->setCurrentIndex(idx);
     KDevelop::ConfigPage::reset();
