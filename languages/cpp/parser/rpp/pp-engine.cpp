@@ -1011,7 +1011,7 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
   {
     pp_macro* macro = m_environment->retrieveMacro(macro_name, true);
     bool value = false;
-    if( macro && macro->defined )
+    if( macro && macro->defined && !(macro->file == currentFileName() && macro->sourceLine > input.originalInputPosition().line))
       value = true;
 
     if (check_undefined)
