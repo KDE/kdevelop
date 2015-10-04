@@ -232,7 +232,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   const ReferenceCountedStringSet& conflicts = strings() - d_func()->m_usedMacroNames;
 
   for( ReferenceCountedStringSet::Iterator it(conflicts.iterator()); it; ++it ) {
-    if (!environmentMacroNames.contains(it.ref())) {
+    if (!environmentMacroNames.contains( *it )) {
       continue;
     }
     rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( *it );
