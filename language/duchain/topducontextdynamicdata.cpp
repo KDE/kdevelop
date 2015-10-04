@@ -495,9 +495,11 @@ bool TopDUContextDynamicData::fileExists(uint topContextIndex)
 QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIndex) {
   QList<IndexedDUContext> ret;
   loadPartialData(topContextIndex, [&ret] (const TopDUContextData* topData) {
-    ret.reserve(topData->m_importersSize());
-    FOREACH_FUNCTION(const IndexedDUContext& importer, topData->m_importers)
-      ret << importer;
+    if(topData->m_importers()) {
+      ret.reserve(topData->m_importersSize());
+      FOREACH_FUNCTION(const IndexedDUContext& importer, topData->m_importers)
+        ret << importer;
+    }
   });
   return ret;
 }
@@ -505,9 +507,11 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIn
 QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextIndex) {
   QList<IndexedDUContext> ret;
   loadPartialData(topContextIndex, [&ret] (const TopDUContextData* topData) {
-    ret.reserve(topData->m_importedContextsSize());
-    FOREACH_FUNCTION(const DUContext::Import& import, topData->m_importedContexts)
-      ret << import.indexedContext();
+    if(topData->m_importedContexts()) {
+      ret.reserve(topData->m_importedContextsSize());
+      FOREACH_FUNCTION(const DUContext::Import& import, topData->m_importedContexts)
+        ret << import.indexedContext();
+    }
   });
   return ret;
 }
