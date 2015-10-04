@@ -249,6 +249,8 @@ QString LicensePage::license() const
     QString licenseText = d->license->licenseTextEdit->document()->toPlainText();
     /* Add date, name and email to license text */
     licenseText.replace("<year>", QDate::currentDate().toString("yyyy"));
+    licenseText.replace("<month>", QDate::currentDate().toString("MM"));
+    licenseText.replace("<day>", QDate::currentDate().toString("dd"));
     QString developer("%1 <%2>");
     KEMailSettings emailSettings;
     QString name = emailSettings.getSetting(KEMailSettings::RealName);

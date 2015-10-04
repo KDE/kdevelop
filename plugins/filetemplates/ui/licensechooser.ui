@@ -79,7 +79,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>&lt;p&gt;You can use &lt;code&gt;&amp;lt;year&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;copyright holder&amp;gt;&lt;/code&gt; as placeholders.&lt;/p&gt;</string>
+         <string>&lt;p&gt;You can use &lt;code&gt;&amp;lt;year&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;month&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;day&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;copyright holder&amp;gt;&lt;/code&gt; as placeholders.&lt;/p&gt;</string>
         </property>
         <property name="textFormat">
          <enum>Qt::RichText</enum>
