@@ -1283,7 +1283,8 @@ CodeCompletionContext* CodeCompletionContext::parentContext() const {
 }
 
 void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext, int depth = 0) {
-  if(!current)
+  const int maxDepth = 5000;
+  if(!current || (depth > maxDepth))
     return;
 
   foreach(Declaration* decl, current->localDeclarations()) {
