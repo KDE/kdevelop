@@ -604,8 +604,9 @@ class CppDUContext : public BaseContext {
     }
 
     ///@see TemplateDeclaration::instantiate
-    DUContext* instantiate(const InstantiationInformation& info, const TopDUContext* source) {
-      if(!info.isValid() || m_instantiatedWith == info.indexed() || !this->parentContext())
+    DUContext* instantiate(const InstantiationInformation& info, const TopDUContext* source, const int depth=0) {
+      const int maxDepth = 50;
+      if(!info.isValid() || m_instantiatedWith == info.indexed() || !this->parentContext() ||depth > maxDepth)
         return this;
 
       if(m_instantiatedFrom)
@@ -633,7 +634,7 @@ class CppDUContext : public BaseContext {
         //This context does not have an attached declaration, but it needs to be instantiated.
         CppDUContext<DUContext>* parent = dynamic_cast<CppDUContext<DUContext>* >(this->parentContext());
         if(parent)
-          surroundingContext = parent->instantiate(info.previousInstantiationInformation.information(), source);
+          surroundingContext = parent->instantiate(info.previousInstantiationInformation.information(), source, depth+1);
       }
       
       if(!surroundingContext)
