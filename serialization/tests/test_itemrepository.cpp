@@ -259,7 +259,6 @@ class TestItemRepository : public QObject {
       // Choose sizes that ensure that the items fit in the desired buckets
       const uint bigItemSize = KDevelop::ItemRepositoryBucketSize * 0.55 - 1;
       const uint smallItemSize = KDevelop::ItemRepositoryBucketSize * 0.25 - 1;
-      const uint monsterItemSize = KDevelop::ItemRepositoryBucketSize * 1.1;
 
       // Will get placed in bucket 1 (bucket zero is invalid), so the root bucket table at position 'clashValue' will be '1'
       const QScopedPointer<TestItem> firstChainFirstLink(createItem(clashValue, bigItemSize));
@@ -350,31 +349,6 @@ class TestItemRepository : public QObject {
        * So TODO: Don't preserve links to items accessible from root buckets. This cannot
        * be done correctly using only Bucket::hasClashingItem as of now.
        */
-
-      // Re-using the first chain above, we link a monster to the end
-      const QScopedPointer<TestItem> firstChainSecondLinkMonster(createItem(bucketHashSize + clashValue, monsterItemSize));
-      const uint firstChainSecondLinkMonsterIndex = repository.index(*firstChainSecondLinkMonster);
-      QCOMPARE(bucketNumberForIndex(firstChainSecondLinkMonsterIndex), 3u);
-
-      // And link another monster to that one
-      const QScopedPointer<TestItem> firstChainThirdLink(createItem(bucketHashSize * 2 + clashValue, monsterItemSize));
-      const uint firstChainThirdLinkIndex = repository.index(*firstChainThirdLink);
-      QCOMPARE(bucketNumberForIndex(firstChainThirdLinkIndex), 5u);
-
-      /*
-       * Now we cut the second monster out of the chain.
-       *
-       * What this test really cares about is that the stale link has been removed before the monster is destroyed.
-       *
-       * Monsters that are destroyed assert that they have no further links. That wouldn't make sense, as monsters
-       * can only contain a single item, so removing it means it should be completely cut from the chain.
-       *
-       * If stale links are correctly detected and destroyed when items are removed, this will succeed.
-       *
-       * See also deleteClashingMonsterBucket() above, which tests this condition for root buckets
-       */
-      repository.deleteItem(firstChainSecondLinkMonsterIndex);
-      QCOMPARE(repository.findIndex(*firstChainThirdLink), firstChainThirdLinkIndex);
     }
 };
 

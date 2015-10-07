@@ -469,32 +469,29 @@ class Bucket {
     ///              @param modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
     ///                            This this allows efficiently computing the clashes using the local object map hash.
 
-    enum ClashType {
-      NoClash,
-      LocalClash,
-      SearchClash,
-    };
+    bool hasClashingItem(uint hash, uint modulo) {
 
-    ClashType hasClashingItem(uint hash, uint searchMod = 0) const
-    {
+      Q_ASSERT(modulo % ObjectMapSize == 0);
+
       m_lastUsed = 0;
 
-      ushort currentIndex = m_objectMap[hash % m_objectMapSize];
+      uint hashMod = hash % modulo;
+      unsigned short localHash = hash % m_objectMapSize;
+      unsigned short currentIndex = m_objectMap[localHash];
 
-      if (!searchMod || !currentIndex)
-        return currentIndex ? LocalClash : NoClash;
-
-      Q_ASSERT(searchMod % ObjectMapSize == 0);
-      const uint hashModSearch = hash % searchMod;
+      if(currentIndex == 0)
+        return false;
 
       while(currentIndex) {
         uint currentHash = itemFromIndex(currentIndex)->hash();
 
-        if(currentHash % searchMod == hashModSearch)
-          return SearchClash;
+        Q_ASSERT(currentHash % m_objectMapSize == localHash);
+
+        if(currentHash % modulo == hashMod)
+          return true; //Clash
         currentIndex = followerIndex(currentIndex);
       }
-      return LocalClash;
+      return false;
     }
 
     void countFollowerIndexLengths(uint& usedSlots, uint& lengths, uint& slotCount, uint& longestInBucketFollowerChain) {
@@ -1394,32 +1391,19 @@ class ItemRepository : public AbstractItemRepository {
     if (!previousBucketPtr) {
       // This bucket is linked in the m_firstBucketForHash array, find the next clashing bucket in the chain
       // There may be items in the chain that clash only with MyBucket::NextBucketHashSize, skipped here
-      bool removedLastLocalClash = false;
-      m_firstBucketForHash[hash % bucketHashSize] =
-        walkBucketChain(hash, [=, &removedLastLocalClash](ushort bucketIdx, MyBucket *bucketPtr) -> ushort {
-        auto clashType = bucketPtr->hasClashingItem(hash, bucketHashSize);
-        if (clashType == MyBucket::SearchClash) {
-            return bucketIdx; // found bucket clashing with the root mod, this bucket becomes the new root
+      m_firstBucketForHash[hash % bucketHashSize] = walkBucketChain(hash, [hash](ushort bucketIdx, MyBucket *bucketPtr){
+        if (bucketPtr->hasClashingItem(hash, bucketHashSize)) {
+          return bucketIdx;
         }
-        if (clashType == MyBucket::NoClash) {
-          // This should only be possible for the bucket from which the item was just deleted
-          // An item with no local clashes for a hash may not participate in the chain for it
-          Q_ASSERT(bucketIdx == bucket);
-          removedLastLocalClash = true;
-        }
-        return 0;
+        return static_cast<ushort>(0);
       });
-      if (removedLastLocalClash) {
-        bucketPtr->setNextBucketForHash(hash, 0);
-      }
-    } else if(bucketPtr->hasClashingItem(hash) == MyBucket::NoClash) {
+    } else if(!bucketPtr->hasClashingItem(hash, MyBucket::NextBucketHashSize)) {
       // TODO: Skip clashing items reachable from m_firstBucketForHash
       // (see note in usePermissiveModuloWhenRemovingClashLinks() test)
 
       ENSURE_REACHABLE(bucket);
 
       previousBucketPtr->setNextBucketForHash(hash, bucketPtr->nextBucketForHash(hash));
-      bucketPtr->setNextBucketForHash(hash, 0);
 
       Q_ASSERT(m_buckets[bucketPtr->nextBucketForHash(hash)] != previousBucketPtr);
     }
@@ -1430,6 +1414,13 @@ class ItemRepository : public AbstractItemRepository {
       //Convert the monster-bucket back to multiple normal buckets, and put them into the free list
       uint newBuckets = bucketPtr->monsterBucketExtent()+1;
       Q_ASSERT(bucketPtr->isEmpty());
+      if (!previousBucketPtr) {
+        // see https://bugs.kde.org/show_bug.cgi?id=272408
+        // the monster bucket will be deleted and new smaller ones created
+        // the next bucket for this hash is invalid anyways as done above
+        // but calling the below unconditionally leads to other issues...
+        bucketPtr->setNextBucketForHash(hash, 0);
+      }
       convertMonsterBucket(bucket, 0);
       for(uint created = bucket; created < bucket + newBuckets; ++created) {
         putIntoFreeList(created, bucketForIndex(created));
