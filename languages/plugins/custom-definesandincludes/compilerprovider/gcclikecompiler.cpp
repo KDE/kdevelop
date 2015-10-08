@@ -154,7 +154,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
                     mode = Finished;
                 } else {
                     // This is an include path, add it to the list.
-                    m_definesIncludes[arguments].includePaths << Path( QDir::cleanPath( line.trimmed() ) );
+                    m_definesIncludes[arguments].includePaths << Path(QFileInfo(line.trimmed()).canonicalFilePath());
                 }
                 break;
             default:
