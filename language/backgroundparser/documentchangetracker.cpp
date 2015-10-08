@@ -62,7 +62,7 @@ namespace KDevelop
 {
 
 DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
-    : m_needUpdate(false), m_changedRange(0), m_document(document), m_moving(0), m_whitespaceSensitivity(ILanguageSupport::Insensitive)
+    : m_needUpdate(false), m_document(document), m_moving(0), m_whitespaceSensitivity(ILanguageSupport::Insensitive)
 {
     m_url = IndexedString(document->url());
     Q_ASSERT(document);
@@ -86,7 +86,6 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
 
     m_moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
     Q_ASSERT(m_moving);
-    m_changedRange = m_moving->newMovingRange(KTextEditor::Range(), KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
 
     // can't use new connect syntax here, MovingInterface is not a QObject
     connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
@@ -104,20 +103,12 @@ QList< QPair< KTextEditor::Range, QString > > DocumentChangeTracker::completions
     return ret;
 }
 
-Range DocumentChangeTracker::changedRange() const
-{
-    VERIFY_FOREGROUND_LOCKED
-
-    return m_changedRange->toRange();
-}
-
 void DocumentChangeTracker::reset()
 {
     VERIFY_FOREGROUND_LOCKED
 
     // We don't reset the insertion here, as it may continue
     m_needUpdate = false;
-    m_changedRange->setRange(KTextEditor::Range::invalid());
 
     m_revisionAtLastReset = acquireRevision(m_moving->revision());
     Q_ASSERT(m_revisionAtLastReset);
@@ -158,13 +149,8 @@ bool DocumentChangeTracker::checkMergeTokens(const KTextEditor::Range& range)
     return false;
 }
 
-void DocumentChangeTracker::updateChangedRange( Range changed )
+void DocumentChangeTracker::updateChangedRange()
 {
-    if(m_changedRange->toRange() == KTextEditor::Range::invalid())
-        m_changedRange->setRange(changed);
-    else
-        m_changedRange->setRange(changed.encompass(m_changedRange->toRange()));
-
 //     Q_ASSERT(m_moving->revision() != m_revisionAtLastReset->revision()); // May happen after reload
 
     // When reloading, textRemoved is called with an invalid m_document->url(). For that reason, we use m_url instead.
@@ -236,7 +222,7 @@ void DocumentChangeTracker::textInserted( Document* document, const Cursor& curs
         m_lastInsertionPosition = range.end();
     }
 
-    updateChangedRange(range);
+    updateChangedRange();
 }
 
 void DocumentChangeTracker::textRemoved( Document* /*document*/, const Range& oldRange, const QString& oldText )
@@ -255,7 +241,7 @@ void DocumentChangeTracker::textRemoved( Document* /*document*/, const Range& ol
     m_currentCleanedInsertion.clear();
     m_lastInsertionPosition = KTextEditor::Cursor::invalid();
 
-    updateChangedRange(oldRange);
+    updateChangedRange();
 }
 
 void DocumentChangeTracker::documentSavedOrUploaded(KTextEditor::Document* doc,bool)
@@ -267,7 +253,6 @@ void DocumentChangeTracker::documentDestroyed( QObject* )
 {
     m_document = 0;
     m_moving = 0;
-    m_changedRange = 0;
 }
 
 DocumentChangeTracker::~DocumentChangeTracker()

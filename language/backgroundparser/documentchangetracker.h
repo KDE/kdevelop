@@ -174,11 +174,6 @@ public:
     RevisionReference currentRevision();
 
     /**
-     * Returns the range that was changed since the last reset
-     * */
-    virtual KTextEditor::Range changedRange() const;
-
-    /**
      * Whether the changes that happened since the last reset are significant enough to require an update
      * */
     virtual bool needUpdate() const;
@@ -241,7 +236,7 @@ protected:
     KTextEditor::MovingInterface* m_moving;
     KDevelop::IndexedString m_url;
 
-    void updateChangedRange(KTextEditor::Range changed);
+    void updateChangedRange();
 public slots:
     virtual void textInserted( KTextEditor::Document* document, const KTextEditor::Cursor& position, const QString& inserted );
     virtual void textRemoved( KTextEditor::Document* document, const KTextEditor::Range& range, const QString& oldText );
