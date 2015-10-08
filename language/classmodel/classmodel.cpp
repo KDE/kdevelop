@@ -45,11 +45,17 @@ NodesModelInterface::~NodesModelInterface()
 //////////////////////////////////////////////////////////////////////////////
 
 ClassModel::ClassModel()
+  : m_features(NodesModelInterface::AllProjectsClasses |
+               NodesModelInterface::BaseAndDerivedClasses |
+               NodesModelInterface::ClassInternals)
 {
   m_topNode = new FolderNode("Top Node", this);
 
-  m_allClassesNode = new FilteredAllClassesFolder(this);
-  m_topNode->addNode( m_allClassesNode );
+  if ( features().testFlag(NodesModelInterface::AllProjectsClasses) )
+  {
+    m_allClassesNode = new FilteredAllClassesFolder(this);
+    m_topNode->addNode( m_allClassesNode );
+  }
 
   connect(ICore::self()->projectController(), &IProjectController::projectClosing,
           this, &ClassModel::removeProjectNode);

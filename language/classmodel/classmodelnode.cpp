@@ -144,14 +144,18 @@ void ClassNode::populateNode()
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  if ( updateClassDeclarations() )
+  if ( m_model->features().testFlag(NodesModelInterface::ClassInternals) )
   {
-    m_cachedUrl = getDeclaration()->url();
-    ClassModelNodesController::self().registerForChanges(m_cachedUrl, this);
+    if ( updateClassDeclarations() )
+    {
+      m_cachedUrl = getDeclaration()->url();
+      ClassModelNodesController::self().registerForChanges(m_cachedUrl, this);
+    }
   }
 
   // Add special folders
-  addBaseAndDerived();
+  if (m_model->features().testFlag(NodesModelInterface::BaseAndDerivedClasses))
+    addBaseAndDerived();
 }
 
 template <> inline bool qMapLessThanKey(const IndexedIdentifier &key1, const IndexedIdentifier &key2)

@@ -57,11 +57,19 @@ public:
   virtual ~NodesModelInterface();
 
 public:
+  enum Feature {
+      AllProjectsClasses = 0x1,
+      BaseAndDerivedClasses = 0x2,
+      ClassInternals = 0x4
+  };
+  Q_DECLARE_FLAGS(Features, Feature)
+
   virtual void nodesLayoutAboutToBeChanged(ClassModelNodes::Node* a_parent) = 0;
   virtual void nodesLayoutChanged(ClassModelNodes::Node* a_parent) = 0;
   virtual void nodesRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last) = 0;
   virtual void nodesAboutToBeAdded(ClassModelNodes::Node* a_parent, int a_pos, int a_size) = 0;
   virtual void nodesAdded(ClassModelNodes::Node* a_parent) = 0;
+  virtual Features features() const = 0;
 };
 
 /**
@@ -90,6 +98,9 @@ public:
   /// Return the model index associated with the given node.
   QModelIndex index(ClassModelNodes::Node* a_node) const;
 
+  inline void setFeatures(NodesModelInterface::Features features);
+  virtual inline NodesModelInterface::Features features() const { return m_features; }
+
 public Q_SLOTS:
   /// Call this to update the filter string for the search results folder.
   void updateFilterString(QString a_newFilterString);
@@ -111,6 +122,7 @@ private:
   ClassModelNodes::Node* m_topNode;
   ClassModelNodes::FilteredAllClassesFolder* m_allClassesNode;
   QMap<KDevelop::IProject*, ClassModelNodes::FilteredProjectFolder*> m_projectNodes;
+  NodesModelInterface::Features m_features;
 
 public Q_SLOTS:
   /// This slot needs to be attached to collapsed signal in the tree view.
@@ -131,6 +143,10 @@ public: // QAbstractItemModel overrides
   virtual QModelIndex parent(const QModelIndex& child) const override;
 };
 
+inline void ClassModel::setFeatures(Features features)
+{ m_features = features; }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(NodesModelInterface::Features)
 
 #endif
 
