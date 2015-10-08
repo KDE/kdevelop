@@ -264,7 +264,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
             t->reset(); // Reset the tracker to the current revision
             Q_ASSERT(t->revisionAtLastReset());
 
-            d->contents.contents = t->textAtLastReset().toUtf8();
+            d->contents.contents = t->document()->text().toUtf8();
             d->contents.modification = KDevelop::ModificationRevision( lastModified, t->revisionAtLastReset()->revision() );
 
             d->revision = t->acquireRevision(d->contents.modification.revision);

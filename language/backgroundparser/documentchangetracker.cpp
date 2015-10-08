@@ -121,7 +121,6 @@ void DocumentChangeTracker::reset()
 
     m_revisionAtLastReset = acquireRevision(m_moving->revision());
     Q_ASSERT(m_revisionAtLastReset);
-    m_textAtLastReset = m_document->text();
 }
 
 RevisionReference DocumentChangeTracker::currentRevision()
@@ -136,13 +135,6 @@ RevisionReference DocumentChangeTracker::revisionAtLastReset() const
     VERIFY_FOREGROUND_LOCKED
 
     return m_revisionAtLastReset;
-}
-
-QString DocumentChangeTracker::textAtLastReset() const
-{
-    VERIFY_FOREGROUND_LOCKED
-
-    return m_textAtLastReset;
 }
 
 bool DocumentChangeTracker::needUpdate() const

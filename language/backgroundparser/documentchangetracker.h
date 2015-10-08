@@ -169,11 +169,6 @@ public:
     RevisionReference revisionAtLastReset() const;
 
     /**
-     * Returns the document text at the last reset
-     * */
-    QString textAtLastReset() const;
-
-    /**
      * Returns the current revision (which is not locked by the tracker)
      * */
     RevisionReference currentRevision();
@@ -236,7 +231,6 @@ public:
     CursorInRevision transformToRevision(KTextEditor::Cursor cursor, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
 
 protected:
-    QString m_textAtLastReset;
     RevisionReference m_revisionAtLastReset;
     bool m_needUpdate;
     QString m_currentCleanedInsertion;
