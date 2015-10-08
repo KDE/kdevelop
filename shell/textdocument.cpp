@@ -27,6 +27,7 @@
 #include <QPointer>
 #include <QWidget>
 
+#include <KActionCollection>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -342,6 +343,11 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     }
 
     view = d->document->createView(parent);
+
+    // get rid of some actions regarding the config dialog, we merge that one into the kdevelop menu already
+    delete view->actionCollection()->action(QStringLiteral("set_confdlg"));
+    delete view->actionCollection()->action(QStringLiteral("editor_options"));
+
     view->setStatusBarEnabled(Core::self()->partControllerInternal()->showTextEditorStatusBar());
 
     if (view) {
