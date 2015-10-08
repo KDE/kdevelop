@@ -350,24 +350,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     view->setStatusBarEnabled(Core::self()->partControllerInternal()->showTextEditorStatusBar());
 
-    if (view) {
-        connect(view, &KTextEditor::View::contextMenuAboutToShow, this, &TextDocument::populateContextMenu);
-
-        //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
-        //katepart with our own restructured UI configuration
-        const QString uiFile = QCoreApplication::applicationName() + "/katepartui.rc";
-        QStringList katePartUIs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, uiFile);
-        if (!katePartUIs.isEmpty()) {
-            const QString katePartUI = katePartUIs.last();
-            const QString katePartLocalUI = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+ '/' + uiFile;
-            if (!QFile::exists(katePartLocalUI)) {
-                // prevent warning:
-                // kdevelop/kdeui (kdelibs): No such XML file ".../.kde/share/apps/kdevelop/katepartui.rc"
-                QFile::copy(katePartUI, katePartLocalUI);
-            }
-            view->replaceXMLFile(katePartUI, katePartLocalUI);
-        }
-    }
+    connect(view, &KTextEditor::View::contextMenuAboutToShow, this, &TextDocument::populateContextMenu);
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))
         cc->setAutomaticInvocationEnabled(core()->languageController()->completionSettings()->automaticCompletionEnabled());
