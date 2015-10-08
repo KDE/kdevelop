@@ -1,0 +1,5 @@
+File=sessionconfig.kcfg
+ClassName=SessionConfig
+Singleton=true
+Inherits=SessionConfigSkeleton
+IncludeFiles="sessionsettings/sessionconfigskeleton.h"
