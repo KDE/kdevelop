@@ -331,7 +331,6 @@ void CompletionHelper::computeCompletions(const ParseSession& session, CXFile fi
 
     clang_visitChildren(currentCursor, findBaseVisitor, &m_overrides);
 
-    //TODO This finds functions which aren't yet in scope in the current file
     if (clang_getCursorKind(currentCursor) == CXCursor_Namespace ||
        clang_equalCursors(topCursor, currentCursor)) {
 
