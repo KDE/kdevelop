@@ -22,6 +22,8 @@
 
 #include "context.h"
 
+#include <QRegularExpression>
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 
@@ -157,7 +159,7 @@ public:
 
     void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
     {
-        view->document()->replaceText(word, QLatin1String("virtual ") + m_returnType + QLatin1Char(' ') + m_display);
+        view->document()->replaceText(word, m_returnType + QLatin1Char(' ') + m_display.replace(QRegularExpression(QStringLiteral("\\s*=\\s*0")), QString()) + QLatin1String(" override;"));
     }
 
 private:
