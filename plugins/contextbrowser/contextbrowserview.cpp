@@ -193,17 +193,6 @@ void ContextBrowserView::showEvent(QShowEvent* event) {
             //Update the navigation-widget
             Declaration* decl = m_navigationWidgetDeclaration.getDeclaration(top);
             setDeclaration(decl, top, true);
-            //Update the declaration combo-box
-            /*
-            TODO: bring this back if required
-            DUContext* context = 0;
-            KDevelop::IDocument* doc = ICore::self()->documentController()->activeDocument();
-            if(doc && doc->textDocument() && doc->textDocument()->activeView()) {
-                KTextEditor::Cursor c = doc->textDocument()->activeView()->cursorPosition();
-                context = getContextAt(top->url().toUrl(), c);
-            }
-            m_plugin->updateDeclarationListBox(context);
-            */
         }
     }
     QWidget::showEvent(event);
