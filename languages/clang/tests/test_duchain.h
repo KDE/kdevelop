@@ -59,6 +59,7 @@ private slots:
     void testFunctionDefinitionVsDeclaration();
     void testEnsureNoDoubleVisit();
     void testReparseWithAllDeclarationsContextsAndUses();
+    void testReparseOnDocumentActivated();
     void testParsingEnvironment();
     void testSystemIncludes();
     void testReparseInclude();

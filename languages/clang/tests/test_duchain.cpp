@@ -854,21 +854,72 @@ void TestDUChain::testReparseWithAllDeclarationsContextsAndUses()
 
     QVERIFY(file.waitForParsed(1000));
 
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+        QCOMPARE(file.topContext()->childContexts().size(), 2);
+        QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+
+        for (int i = 0; i < 2; ++i) {
+            auto dec = file.topContext()->localDeclarations().at(i);
+            QVERIFY(dec->uses().isEmpty());
+        }
+    }
+
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
 
     QVERIFY(file.waitForParsed(500));
 
-    DUChainReadLocker lock;
-    QVERIFY(file.topContext());
-    QCOMPARE(file.topContext()->childContexts().size(), 2);
-    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+        QCOMPARE(file.topContext()->childContexts().size(), 2);
+        QCOMPARE(file.topContext()->localDeclarations().size(), 2);
 
-    DeclarationPointer mainDecl;
-    mainDecl = file.topContext()->localDeclarations()[1];
-    DeclarationPointer foo;
-    foo = file.topContext()->localDeclarations().first();
-    QVERIFY(mainDecl->uses().isEmpty());
-    QCOMPARE(foo->uses().size(), 1);
+        auto mainDecl = file.topContext()->localDeclarations()[1];
+        QVERIFY(mainDecl->uses().isEmpty());
+        auto foo = file.topContext()->localDeclarations().first();
+        QCOMPARE(foo->uses().size(), 1);
+    }
+}
+
+void TestDUChain::testReparseOnDocumentActivated()
+{
+    TestFile file("int foo() { return 0; } int main() { return foo(); }", "cpp");
+    file.parse(TopDUContext::VisibleDeclarationsAndContexts);
+
+    QVERIFY(file.waitForParsed(1000));
+
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+        QCOMPARE(file.topContext()->childContexts().size(), 2);
+        QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+
+        for (int i = 0; i < 2; ++i) {
+            auto dec = file.topContext()->localDeclarations().at(i);
+            QVERIFY(dec->uses().isEmpty());
+        }
+
+        QVERIFY(!file.topContext()->ast());
+    }
+
+    auto backgroundParser = ICore::self()->languageController()->backgroundParser();
+    QVERIFY(!backgroundParser->isQueued(file.url()));
+
+    auto doc = ICore::self()->documentController()->openDocument(file.url().toUrl());
+    QVERIFY(doc);
+
+    QVERIFY(backgroundParser->isQueued(file.url()));
+
+    auto ctx = DUChain::self()->waitForUpdate(file.url(), TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(ctx);
+    {
+        DUChainReadLocker lock;
+        qDebug() << (quint64)ctx->features();
+        QCOMPARE(ctx->features() & TopDUContext::AllDeclarationsContextsAndUses, static_cast<int>(TopDUContext::AllDeclarationsContextsAndUses));
+        QVERIFY(ctx->topContext()->ast());
+    }
 }
 
 void TestDUChain::testReparseInclude()
