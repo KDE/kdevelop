@@ -118,29 +118,20 @@ void TestCodeCompletion::cleanupTestCase()
 
 namespace {
 
-void executeCompletionTest(const QString& code, const CompletionItems& expectedCompletionItems,
+void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionItems& expectedCompletionItems,
                            const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
                                 ClangCodeCompletionContext::NoBuiltins |
                                 ClangCodeCompletionContext::NoMacros))
 {
-    TestFile file(code, "cpp");
-    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
     DUChainReadLocker lock;
-    auto top = file.topContext();
-    QVERIFY(top);
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
-
-    DUContextPointer topPtr(top);
-
-    // don't hold DUChain lock when constructing ClangCodeCompletionContext
     lock.unlock();
-
     // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
-    auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
+    auto context = new ClangCodeCompletionContext(DUContextPointer(top), sessionData, top->url().toUrl(), expectedCompletionItems.position, QString());
     context->setFilters(filters);
-
     lock.lock();
+
     auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
 
     int previousMatchQuality = 10;
@@ -162,6 +153,16 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
     QEXPECT_FAIL("deleted-overload-global", "The range for a global function defintion ends after the '=' so 'delete' after that is not detected.", Continue);
 #endif
     QCOMPARE(tester.names, expectedCompletionItems.completions);
+}
+
+void executeCompletionTest(const QString& code, const CompletionItems& expectedCompletionItems,
+                           const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
+                                ClangCodeCompletionContext::NoBuiltins |
+                                ClangCodeCompletionContext::NoMacros))
+{
+    TestFile file(code, "cpp");
+    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    executeCompletionTest(file.topContext(), expectedCompletionItems, filters);
 }
 
 void executeCompletionPriorityTest(const QString& code, const CompletionPriorityItems& expectedCompletionItems,
@@ -714,6 +715,24 @@ void TestCodeCompletion::testImplement_data()
            "  ~Foo() =default;\n"
            "};\n"
         << CompletionItems{{5,1}, {"Foo::Foo()"}};
+}
+
+void TestCodeCompletion::testImplementOtherFile()
+{
+    TestFile header1("void foo();", "h");
+    QVERIFY(header1.parseAndWait());
+    TestFile header2("void bar();", "h");
+    QVERIFY(header2.parseAndWait());
+    TestFile impl(QString("#include \"%1\"\n"
+                          "#include \"%2\"\n"
+                          "void asdf();\n\n")
+                    .arg(header1.url().str())
+                    .arg(header2.url().str()),
+                  "cpp", &header1);
+
+    CompletionItems expectedItems{{3,1}, {"asdf()", "foo()"}};
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    executeCompletionTest(impl.topContext(), expectedItems);
 }
 
 void TestCodeCompletion::testInvalidCompletions()

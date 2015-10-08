@@ -23,6 +23,7 @@
 
 #include "../duchain/cursorkindtraits.h"
 #include "../duchain/parsesession.h"
+#include "../duchain/documentfinderhelpers.h"
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
 #include "../util/clangutils.h"
@@ -48,6 +49,7 @@ struct ImplementsInfo
     CXCursor top;
     FunctionImplementsList* prototypes;
     QVector<CXCursor> originScope;
+    QVector<CXFile> fileFilter;
     int depth;
     QString templatePrefix;
     QString scopePrefix;
@@ -197,6 +199,11 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
         //       e.g. based on the path or similar
         return CXChildVisit_Continue;
     }
+    CXFile file = nullptr;
+    clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
+    if (!data->fileFilter.contains(file)) {
+        return CXChildVisit_Continue;
+    }
 
     //Recurse into cursors which could contain a function declaration
     if (canContainFunctionDecls(kind)) {
@@ -235,6 +242,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
         }
 
         ImplementsInfo info{data->origin, data->top, data->prototypes, data->originScope,
+                            data->fileFilter,
                             data->depth + 1,
                             data->templatePrefix + templatePrefix,
                             data->scopePrefix + part};
@@ -337,7 +345,17 @@ void CompletionHelper::computeCompletions(const ParseSession& session, CXFile fi
             std::reverse(scopes.begin(), scopes.end());
         }
 
-        ImplementsInfo info{currentCursor, topCursor, &m_implements, scopes, 0, QString(), QString()};
+        QVector<CXFile> fileFilter;
+        fileFilter << file;
+        const auto& buddies = DocumentFinderHelpers::getPotentialBuddies(QUrl::fromLocalFile(ClangString(clang_getFileName(file)).toString()));
+        foreach(const auto& buddy, buddies) {
+            auto buddyFile = clang_getFile(unit, qPrintable(buddy.toLocalFile()));
+            if (buddyFile) {
+                fileFilter << buddyFile;
+            }
+        }
+
+        ImplementsInfo info{currentCursor, topCursor, &m_implements, scopes, fileFilter, 0, QString(), QString()};
         clang_visitChildren(topCursor, declVisitor, &info);
     }
 }

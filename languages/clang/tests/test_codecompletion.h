@@ -42,6 +42,7 @@ private slots:
     void testVirtualOverride_data();
     void testImplement();
     void testImplement_data();
+    void testImplementOtherFile();
     void testInvalidCompletions();
     void testInvalidCompletions_data();
     void testCompletionPriority();
