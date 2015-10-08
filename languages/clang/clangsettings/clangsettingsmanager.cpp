@@ -32,7 +32,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 #include <interfaces/iproject.h>
-#include <custom-definesandincludes/idefinesandincludesmanager.h>
+#include <languages/plugins/custom-definesandincludes/idefinesandincludesmanager.h>
 #include <util/path.h>
 
 #include <project/projectmodel.h>

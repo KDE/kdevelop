@@ -45,7 +45,7 @@
 #include "duchain/clangparsingenvironment.h"
 #include "duchain/parsesession.h"
 
-#include <custom-definesandincludes/idefinesandincludesmanager.h>
+#include <languages/plugins/custom-definesandincludes/idefinesandincludesmanager.h>
 
 #include <QtTest>
 

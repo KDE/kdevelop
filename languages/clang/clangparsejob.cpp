@@ -38,7 +38,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
 
-#include <custom-definesandincludes/idefinesandincludesmanager.h>
+#include <languages/plugins/custom-definesandincludes/idefinesandincludesmanager.h>
 
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>

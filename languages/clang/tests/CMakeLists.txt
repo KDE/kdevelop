@@ -16,7 +16,7 @@ target_link_libraries(clang-minimal-visitor
 )
 
 ecm_add_test(test_buddies.cpp
-    TEST_NAME test_buddies
+    TEST_NAME test_buddies-clang
     LINK_LIBRARIES
         KDev::Tests
         Qt5::Test
@@ -50,7 +50,7 @@ ecm_add_test(test_clangutils.cpp
 )
 
 ecm_add_test(test_duchain.cpp
-    TEST_NAME test_duchain
+    TEST_NAME test_duchain-clang
     LINK_LIBRARIES
         KDev::Tests
         Qt5::Test
@@ -76,7 +76,7 @@ ecm_add_test(test_problems.cpp
 
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 ecm_add_test(test_files.cpp
-TEST_NAME test_files
+TEST_NAME test_files-clang
 LINK_LIBRARIES
     Qt5::Test
     Qt5::Core

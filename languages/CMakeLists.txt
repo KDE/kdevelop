@@ -1,3 +1,4 @@
 ecm_optional_add_subdirectory(plugins)
 ecm_optional_add_subdirectory(cpp)
+ecm_optional_add_subdirectory(clang)
 ecm_optional_add_subdirectory(qmljs)
