@@ -923,6 +923,17 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
     if (CK == CXCursor_VarDecl)
         decl->setStatic(true);
     decl->setAccessPolicy(CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor)));
+
+    auto offset = clang_Cursor_getOffsetOfField(cursor);
+    if (offset >= 0) {
+        auto type = clang_getCursorType(cursor);
+        auto sizeOf = clang_Type_getSizeOf(type);
+        auto alignedTo = clang_Type_getAlignOf(type);
+        decl->setComment(decl->comment()
+                            + i18n("\noffset in parent: %1 Bit\n"
+                                   "size: %2 Bytes\n"
+                                   "aligned to: %3 Bytes", offset, sizeOf, alignedTo).toUtf8());
+    }
 }
 
 template<CXCursorKind CK, EnableIf<CursorKindTraits::isClassTemplate(CK)>>
@@ -950,6 +961,14 @@ void Visitor::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
         decl->setClassType(ClassDeclarationData::Struct);
     if (clang_isCursorDefinition(cursor)) {
         decl->setDeclarationIsDefinition(true);
+    }
+    auto type = clang_getCursorType(cursor);
+    auto sizeOf = clang_Type_getSizeOf(type);
+    auto alignOf = clang_Type_getAlignOf(type);
+    if (sizeOf >= 0 && alignOf >= 0) {
+        decl->setComment(decl->comment()
+                            + i18n("\nsize: %1 Bytes\n"
+                                   "aligned to: %2 Bytes", sizeOf, alignOf).toUtf8());
     }
 }
 
