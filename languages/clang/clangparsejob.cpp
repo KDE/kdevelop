@@ -151,7 +151,7 @@ ClangParsingEnvironmentFile* parsingEnvironmentFile(const TopDUContext* context)
     return dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data());
 }
 
-bool hasTracker(const IndexedString& url)
+DocumentChangeTracker* trackerForUrl(const IndexedString& url)
 {
     return ICore::self()->languageController()->backgroundParser()->trackerForUrl(url);
 }
@@ -197,6 +197,10 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         m_unsavedFiles << UnsavedFile(textDocument->url().toLocalFile(), textDocument->textLines(textDocument->documentRange()));
         const IndexedString indexedUrl(textDocument->url());
         m_unsavedRevisions.insert(indexedUrl, ModificationRevision::revisionForFile(indexedUrl));
+    }
+
+    if (auto tracker = trackerForUrl(url)) {
+        tracker->reset();
     }
 }
 
@@ -329,7 +333,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
                 file->setModificationRevision(it.value());
             }
         }
-        if (::hasTracker(context->url())) {
+        if (trackerForUrl(context->url())) {
             if (clang()->index()->translationUnitForUrl(context->url()) == m_environment.translationUnitUrl()) {
                 // cache the parse session and the contained translation unit for this chain
                 // this then allows us to quickly reparse the document if it is changed by
