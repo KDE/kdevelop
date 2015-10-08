@@ -21,7 +21,6 @@
 #include "qthelpplugin.h"
 
 #include <kpluginfactory.h>
-#include <kpluginloader.h>
 #include <KAboutData>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
@@ -34,7 +33,7 @@
 
 QtHelpPlugin *QtHelpPlugin::s_plugin = 0;
 
-K_PLUGIN_FACTORY_DEFINITION(QtHelpFactory, registerPlugin<QtHelpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin("kdevqthelp", parent)
@@ -176,3 +175,4 @@ int QtHelpPlugin::configPages() const
     return 1;
 }
 
+#include "qthelpplugin.moc"

@@ -23,7 +23,6 @@
 
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationproviderprovider.h>
-#include <kpluginfactory.h>
 
 class QtHelpProvider;
 class QtHelpQtDoc;
@@ -59,7 +58,5 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         QList<QtHelpProvider*> m_qtHelpProviders;
         QtHelpQtDoc* m_qtDoc;
 };
-
-K_PLUGIN_FACTORY_DECLARATION_WITH_BASEFACTORY_JSON(QtHelpFactory, KPluginFactory, "kdevqthelp.json")
 
 #endif // QTHELPPLUGIN_H
