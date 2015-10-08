@@ -133,7 +133,6 @@ class Bucket {
       , m_data(0)
       , m_mappedData(0)
       , m_objectMap(0)
-      , m_objectMapSize(0)
       , m_largestFreeItem(0)
       , m_freeItemCount(0)
       , m_nextBucketHash(0)
@@ -157,9 +156,8 @@ class Bucket {
         m_data = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
         memset(m_data, 0, (ItemRepositoryBucketSize + monsterBucketExtent * DataSize) * sizeof(char));
         //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
-        m_objectMapSize = ObjectMapSize;
-        m_objectMap = new short unsigned int[m_objectMapSize];
-        memset(m_objectMap, 0, m_objectMapSize * sizeof(short unsigned int));
+        m_objectMap = new short unsigned int[ObjectMapSize];
+        memset(m_objectMap, 0, ObjectMapSize * sizeof(short unsigned int));
         m_nextBucketHash = new short unsigned int[NextBucketHashSize];
         memset(m_nextBucketHash, 0, NextBucketHashSize * sizeof(short unsigned int));
         m_changed = true;
@@ -180,9 +178,8 @@ class Bucket {
           readValue(current, m_monsterBucketExtent);
           Q_ASSERT(current - start == 4);
           readValue(current, m_available);
-          m_objectMapSize = ObjectMapSize;
           m_objectMap = reinterpret_cast<short unsigned int*>(current);
-          current += sizeof(short unsigned int) * m_objectMapSize;
+          current += sizeof(short unsigned int) * ObjectMapSize;
           m_nextBucketHash = reinterpret_cast<short unsigned int*>(current);
           current += sizeof(short unsigned int) * NextBucketHashSize;
           readValue(current, m_largestFreeItem);
@@ -208,7 +205,7 @@ class Bucket {
 
       file->write((char*)&m_monsterBucketExtent, sizeof(unsigned int));
       file->write((char*)&m_available, sizeof(unsigned int));
-      file->write((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
+      file->write((char*)m_objectMap, sizeof(short unsigned int) * ObjectMapSize);
       file->write((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
       file->write((char*)&m_largestFreeItem, sizeof(short unsigned int));
       file->write((char*)&m_freeItemCount, sizeof(unsigned int));
@@ -231,7 +228,7 @@ class Bucket {
         short unsigned int largestFree;
         bool dirty;
 
-        short unsigned int* m = new short unsigned int[m_objectMapSize];
+        short unsigned int* m = new short unsigned int[ObjectMapSize];
         short unsigned int* h = new short unsigned int[NextBucketHashSize];
 
 
@@ -239,7 +236,7 @@ class Bucket {
         char* d = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
 
         file->read((char*)&available, sizeof(unsigned int));
-        file->read((char*)m, sizeof(short unsigned int) * m_objectMapSize);
+        file->read((char*)m, sizeof(short unsigned int) * ObjectMapSize);
         file->read((char*)h, sizeof(short unsigned int) * NextBucketHashSize);
         file->read((char*)&largestFree, sizeof(short unsigned int));
         file->read((char*)&freeItemCount, sizeof(unsigned int));
@@ -249,7 +246,7 @@ class Bucket {
         Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
         Q_ASSERT(available == m_available);
         Q_ASSERT(memcmp(d, m_data, ItemRepositoryBucketSize + monsterBucketExtent * DataSize) == 0);
-        Q_ASSERT(memcmp(m, m_objectMap, sizeof(short unsigned int) * m_objectMapSize) == 0);
+        Q_ASSERT(memcmp(m, m_objectMap, sizeof(short unsigned int) * ObjectMapSize) == 0);
         Q_ASSERT(memcmp(h, m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize) == 0);
         Q_ASSERT(m_largestFreeItem == largestFree);
         Q_ASSERT(m_freeItemCount == freeItemCount);
@@ -276,7 +273,7 @@ class Bucket {
     unsigned short findIndex(const ItemRequest& request) const {
       m_lastUsed = 0;
 
-      unsigned short localHash = request.hash() % m_objectMapSize;
+      unsigned short localHash = request.hash() % ObjectMapSize;
       unsigned short index = m_objectMap[localHash];
 
       unsigned short follower = 0;
@@ -296,7 +293,7 @@ class Bucket {
     unsigned short index(const ItemRequest& request, unsigned int itemSize) {
       m_lastUsed = 0;
 
-      unsigned short localHash = request.hash() % m_objectMapSize;
+      unsigned short localHash = request.hash() % ObjectMapSize;
       unsigned short index = m_objectMap[localHash];
       unsigned short insertedAt = 0;
 
@@ -476,7 +473,7 @@ class Bucket {
       m_lastUsed = 0;
 
       uint hashMod = hash % modulo;
-      unsigned short localHash = hash % m_objectMapSize;
+      unsigned short localHash = hash % ObjectMapSize;
       unsigned short currentIndex = m_objectMap[localHash];
 
       if(currentIndex == 0)
@@ -485,7 +482,7 @@ class Bucket {
       while(currentIndex) {
         uint currentHash = itemFromIndex(currentIndex)->hash();
 
-        Q_ASSERT(currentHash % m_objectMapSize == localHash);
+        Q_ASSERT(currentHash % ObjectMapSize == localHash);
 
         if(currentHash % modulo == hashMod)
           return true; //Clash
@@ -495,7 +492,7 @@ class Bucket {
     }
 
     void countFollowerIndexLengths(uint& usedSlots, uint& lengths, uint& slotCount, uint& longestInBucketFollowerChain) {
-      for(uint a = 0; a < m_objectMapSize; ++a) {
+      for(uint a = 0; a < ObjectMapSize; ++a) {
         unsigned short currentIndex = m_objectMap[a];
         ++slotCount;
         uint length = 0;
@@ -520,7 +517,7 @@ class Bucket {
     //Returns whether the given item is reachabe within this bucket, through its hash.
     bool itemReachable(const Item* item, uint hash) const {
 
-      unsigned short localHash = hash % m_objectMapSize;
+      unsigned short localHash = hash % ObjectMapSize;
       unsigned short currentIndex = m_objectMap[localHash];
 
       while(currentIndex) {
@@ -541,7 +538,7 @@ class Bucket {
 
       unsigned int size = itemFromIndex(index)->itemSize();
       //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
-      unsigned short localHash = hash % m_objectMapSize;
+      unsigned short localHash = hash % ObjectMapSize;
       unsigned short currentIndex = m_objectMap[localHash];
       unsigned short previousIndex = 0;
 
@@ -601,7 +598,7 @@ class Bucket {
 #ifdef DEBUG_INCORRECT_DELETE
       //Make sure the item cannot be found any more
       {
-        unsigned short localHash = hash % m_objectMapSize;
+        unsigned short localHash = hash % ObjectMapSize;
         unsigned short currentIndex = m_objectMap[localHash];
 
         while(currentIndex && currentIndex != index) {
@@ -645,7 +642,7 @@ class Bucket {
     template<class Visitor>
     bool visitAllItems(Visitor& visitor) const {
       m_lastUsed = 0;
-      for(uint a = 0; a < m_objectMapSize; ++a) {
+      for(uint a = 0; a < ObjectMapSize; ++a) {
         uint currentIndex = m_objectMap[a];
         while(currentIndex) {
           //Get the follower early, so there is no problems when the current
@@ -668,7 +665,7 @@ class Bucket {
       while(m_dirty) {
         m_dirty = false;
 
-        for(uint a = 0; a < m_objectMapSize; ++a) {
+        for(uint a = 0; a < ObjectMapSize; ++a) {
           uint currentIndex = m_objectMap[a];
           while(currentIndex) {
             //Get the follower early, so there is no problems when the current
@@ -779,7 +776,7 @@ class Bucket {
       uint need = ItemRepositoryBucketSize - m_available;
       uint found = 0;
 
-      for(uint a = 0; a < m_objectMapSize; ++a) {
+      for(uint a = 0; a < ObjectMapSize; ++a) {
         uint currentIndex = m_objectMap[a];
         while(currentIndex) {
           found += reinterpret_cast<const Item*>(m_data+currentIndex)->itemSize() + AdditionalSpacePerItem;
@@ -804,11 +801,11 @@ class Bucket {
         short unsigned int* oldNextBucketHash = m_nextBucketHash;
 
         m_data = new char[ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize];
-        m_objectMap = new short unsigned int[m_objectMapSize];
+        m_objectMap = new short unsigned int[ObjectMapSize];
         m_nextBucketHash = new short unsigned int[NextBucketHashSize];
 
         memcpy(m_data, m_mappedData, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize);
-        memcpy(m_objectMap, oldObjectMap, m_objectMapSize * sizeof(short unsigned int));
+        memcpy(m_objectMap, oldObjectMap, ObjectMapSize * sizeof(short unsigned int));
         memcpy(m_nextBucketHash, oldNextBucketHash, NextBucketHashSize * sizeof(short unsigned int));
       }
     }
@@ -963,8 +960,7 @@ class Bucket {
     unsigned int m_available;
     char* m_data; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
     char* m_mappedData; //Read-only memory-mapped data. If this equals m_data, m_data must not be written
-    short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % m_objectMapSize) == index. Points to the item itself, so subtract 1 to get the pointer to the next item with same local hash.
-    uint m_objectMapSize;
+    short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % ObjectMapSize) == index. Points to the item itself, so subtract 1 to get the pointer to the next item with same local hash.
     short unsigned int m_largestFreeItem; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
     unsigned int m_freeItemCount;
 
