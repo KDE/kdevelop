@@ -395,6 +395,7 @@ void AssistantPopup::updateState()
         //For some reason, QAction's setShortcut does nothing, so we manage with QShortcut
         if (++curShortcut != m_shortcuts.constEnd()) {
             connect(*curShortcut, &QShortcut::activated, asQAction, &QAction::trigger);
+            connect(*curShortcut, &QShortcut::activated, hideAction, &QAction::trigger);
         }
     }
     items << hideAction;
