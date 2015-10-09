@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_ASSISTANTPOPUP_H
 #define KDEVPLATFORM_ASSISTANTPOPUP_H
 
-#include <QDeclarativeView>
+#include <QQuickWidget>
 #include <QShortcut>
 #include <interfaces/iassistant.h>
 
@@ -42,7 +42,7 @@ class AssistantPopupConfig : public QObject
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QList<QObject*> model READ model NOTIFY modelChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
-    Q_PROPERTY(bool useVerticalLayout READ useVerticalLayout WRITE setUseVerticalLayout NOTIFY useVerticalLayoutChanged)
+    Q_PROPERTY(QSize viewSize READ viewSize WRITE setViewSize NOTIFY viewSizeChanged)
 
 public:
     explicit AssistantPopupConfig(QObject *parent = 0);
@@ -51,8 +51,8 @@ public:
     QColor background() const { return m_background; }
     QColor highlight() const { return m_highlight; }
 
-    bool useVerticalLayout() const { return m_useVerticalLayout; }
-    void setUseVerticalLayout(bool vertical);
+    QSize viewSize() const { return m_viewSize; };
+    void setViewSize(const QSize &size);
 
     QString title() const { return m_title; }
     void setTitle(const QString& title);
@@ -70,7 +70,7 @@ signals:
     void titleChanged(const QString& title);
     void modelChanged(const QList<QObject*>& model);
     void activeChanged(bool active);
-    void useVerticalLayoutChanged(bool useVerticalLayout);
+    void viewSizeChanged(const QSize& size);
 
 private:
     QColor m_foreground;
@@ -80,12 +80,12 @@ private:
     QString m_title;
     QList<QObject*> m_model;
     bool m_active;
-    bool m_useVerticalLayout;
+    QSize m_viewSize;
 };
 
 Q_DECLARE_METATYPE(AssistantPopupConfig*)
 
-class AssistantPopup : public QDeclarativeView
+class AssistantPopup : public QQuickWidget
 {
     Q_OBJECT
 
@@ -111,14 +111,13 @@ public:
 private slots:
     void updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos);
     void updateState();
-    void updateLayoutType();
+    void updateLayout();
 
     void executeHideAction();
     void hideAssistant();
 
 protected:
     virtual bool eventFilter(QObject* object, QEvent* event) override;
-    virtual bool viewportEvent(QEvent *event) override;
 
 private:
     void setView(KTextEditor::View* view);
@@ -128,10 +127,8 @@ private:
     KDevelop::IAssistant::Ptr m_assistant;
     QPointer<KTextEditor::View> m_view;
     AssistantPopupConfig* m_config;
-    bool m_shownAtBottom;
-    bool m_reopening;
-    QTimer* m_updateTimer;
     QList<QShortcut*> m_shortcuts;
+    bool m_firstLayoutCompleted;
 };
 
 #endif // KDEVPLATFORM_ASSISTANTPOPUP_H

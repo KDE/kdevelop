@@ -24,12 +24,14 @@
 #include "util/kdevstringhandler.h"
 
 #include <QAction>
-#include <QDeclarativeContext>
+#include <QApplication>
 #include <QKeyEvent>
 #include <QDebug>
 #include <QEvent>
 #include <QTimer>
 #include <QStandardPaths>
+#include <QQmlContext>
+#include <QQuickItem>
 
 #include <KLocalizedString>
 #include <KParts/MainWindow>
@@ -61,7 +63,7 @@ const int ASSISTANT_MOD_KEY =
 #ifdef Q_OS_MAC
 Qt::Key_Control;
 #else
-Qt::Key_Meta;
+Qt::Key_Alt;
 #endif
 
 QWidget* findByClassname(const KTextEditor::View* view, const QString& klass)
@@ -101,7 +103,6 @@ QRect textWidgetGeometry(const KTextEditor::View *view)
 AssistantPopupConfig::AssistantPopupConfig(QObject *parent)
     : QObject(parent)
     , m_active(false)
-    , m_useVerticalLayout(false)
 {
 }
 
@@ -140,14 +141,12 @@ void AssistantPopupConfig::setActive(bool active)
     emit activeChanged(m_active);
 }
 
-void AssistantPopupConfig::setUseVerticalLayout(bool vertical)
+void AssistantPopupConfig::setViewSize(const QSize& size)
 {
-    if (m_useVerticalLayout == vertical) {
-        return;
+    if (size != m_viewSize) {
+        m_viewSize = size;
+        emit viewSizeChanged(size);
     }
-
-    m_useVerticalLayout = vertical;
-    emit useVerticalLayoutChanged(m_useVerticalLayout);
 }
 
 void AssistantPopupConfig::setTitle(const QString& title)
@@ -173,18 +172,10 @@ void AssistantPopupConfig::setModel(const QList<QObject*>& model)
 
 AssistantPopup::AssistantPopup()
 // main window as parent to use maximal space available in worst case
-    : QDeclarativeView(ICore::self()->uiController()->activeMainWindow())
+    : QQuickWidget(ICore::self()->uiController()->activeMainWindow())
     , m_config(new AssistantPopupConfig(this))
-    , m_shownAtBottom(false)
-    , m_reopening(false)
-    , m_updateTimer(new QTimer(this))
+    , m_firstLayoutCompleted(false)
 {
-    QPalette p = palette();
-    p.setColor(QPalette::Window, Qt::transparent);
-    setPalette(p);
-    setBackgroundRole(QPalette::Window);
-    setBackgroundBrush(QBrush(QColor(0, 0, 0, 0)));
-    setResizeMode(QDeclarativeView::SizeViewToRootObject);
     setAttribute(Qt::WA_ShowWithoutActivating);
 
     rootContext()->setContextProperty("config", m_config);
@@ -192,25 +183,24 @@ AssistantPopup::AssistantPopup()
     setSource(QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevelop/assistantpopup.qml")));
     if (!rootObject()) {
         qWarning() << "Failed to load assistant markup! The assistant will not work.";
+    } else {
+        connect(rootObject(), &QQuickItem::widthChanged, this, &AssistantPopup::updateLayout);
+        connect(rootObject(), &QQuickItem::heightChanged, this, &AssistantPopup::updateLayout);
     }
-
-    m_updateTimer->setInterval(UPDATE_STATE_INTERVAL);
-    m_updateTimer->setSingleShot(true);
-    connect(m_updateTimer, &QTimer::timeout, this, &AssistantPopup::updateState);
 
     for (int i = Qt::Key_0; i <= Qt::Key_9; ++i) {
         m_shortcuts.append(new QShortcut(ASSISTANT_MODIFIER + i, this));
     }
     setActive(false);
+
+    connect(qApp, &QApplication::applicationStateChanged, this, [this]{ setActive(false); });
 }
 
 void AssistantPopup::reset(KTextEditor::View* view, const IAssistant::Ptr& assistant)
 {
     setView(view);
     setAssistant(assistant);
-    updateLayoutType();
-
-    m_updateTimer->start();
+    updateState();
 }
 
 void AssistantPopup::setView(KTextEditor::View* view)
@@ -227,6 +217,7 @@ void AssistantPopup::setView(KTextEditor::View* view)
                   this, &AssistantPopup::updatePosition);
     }
     m_view = view;
+    m_config->setViewSize(m_view ? m_view->size() : QSize());
     if (m_view) {
         m_view->installEventFilter(this);
         connect(m_view.data(), &KTextEditor::View::verticalScrollPositionChanged,
@@ -241,13 +232,13 @@ void AssistantPopup::setAssistant(const IAssistant::Ptr& assistant)
     }
 
     if (m_assistant) {
-        disconnect(m_assistant.data(), &IAssistant::actionsChanged, m_updateTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
         disconnect(m_assistant.data(), &IAssistant::hide, this, &AssistantPopup::hideAssistant);
     }
     m_assistant = assistant;
     if (m_assistant) {
-        connect(m_assistant.data(), &IAssistant::actionsChanged, m_updateTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
         connect(m_assistant.data(), &IAssistant::hide, this, &AssistantPopup::hideAssistant);
+    } else {
+        hide();
     }
 }
 
@@ -259,18 +250,6 @@ void AssistantPopup::setActive(bool active)
     }
 }
 
-bool AssistantPopup::viewportEvent(QEvent *event)
-{
-    // For some reason, QGraphicsView posts a WindowActivate event
-    // when it is shown, even if disabled through setting the WA_ShowWithoutActivate
-    // attribute. This causes all focus-driven popups (QuickOpen, tooltips, ...)
-    // to hide when the assistant opens. Thus, prevent it from processing the Show event here.
-    if ( event->type() == QEvent::Show ) {
-        return true;
-    }
-    return QGraphicsView::viewportEvent(event);
-}
-
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
 {
     Q_UNUSED(object);
@@ -279,8 +258,7 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
         return false;
 
     if (event->type() == QEvent::Resize) {
-        updateLayoutType();
-        updatePosition(m_view.data(), KTextEditor::Cursor::invalid());
+        updateLayout();
     } else if (event->type() == QEvent::Hide) {
         executeHideAction();
     } else if (event->type() == QEvent::KeyPress) {
@@ -304,7 +282,7 @@ void AssistantPopup::updatePosition(KTextEditor::View* view, const KTextEditor::
 {
     static const int MARGIN = 12;
 
-    if (newPos.isValid() && newPos.line() == 0 && !m_shownAtBottom) {
+    if (newPos.isValid() && newPos.line() == 0) {
         // the position is not going to change; don't waste time
         return;
     }
@@ -328,15 +306,8 @@ void AssistantPopup::updatePosition(KTextEditor::View* view, const KTextEditor::
         return;
     }
 
-    if ( m_reopening ) {
-        // When the assistant is already visible, close to no flickering will occur anyways,
-        // so we can avoid the full repaint of the window.
-        move(targetLocation);
-    }
-    else {
-        Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
-        move(targetLocation);
-    }
+    Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
+    move(targetLocation);
 }
 
 IAssistant::Ptr AssistantPopup::assistant() const
@@ -356,23 +327,23 @@ void AssistantPopup::hideAssistant()
     reset(nullptr, {}); // indirectly calls hide()
 }
 
-void AssistantPopup::updateLayoutType()
+void AssistantPopup::updateLayout()
 {
-    if ( !m_assistant || !m_view ) {
+    if ( !m_view ) {
         return;
     }
-    // Make a rough estimate of the width the assistant will need
-    // and decide on whether to use vertical layout or not.
-    const auto& metrics = fontMetrics();
-    auto textWidth = 0;
 
-    textWidth += metrics.boundingRect(KDevelop::htmlToPlainText(assistant()->title())).width();
-    for ( const auto& action: assistant()->actions() ) {
-        textWidth += metrics.boundingRect(KDevelop::htmlToPlainText(action->description())).width();
-        textWidth += 10;
+    m_config->setViewSize(m_view->size());
+    // https://bugreports.qt.io/browse/QTBUG-44876
+    resize(rootObject()->width(), rootObject()->height());
+    updatePosition(m_view, KTextEditor::Cursor::invalid());
+
+    // HACK: QQuickWidget is corrupted due to above resize on the first show
+    if (!m_firstLayoutCompleted) {
+        hide();
+        show();
+        m_firstLayoutCompleted = true;
     }
-    m_config->setUseVerticalLayout(textWidth > textWidgetGeometry(m_view).width()*0.75);
-    updateState();
 }
 
 void AssistantPopup::updateState()
@@ -395,8 +366,8 @@ void AssistantPopup::updateState()
         //For some reason, QAction's setShortcut does nothing, so we manage with QShortcut
         if (++curShortcut != m_shortcuts.constEnd()) {
             connect(*curShortcut, &QShortcut::activated, asQAction, &QAction::trigger);
-            connect(*curShortcut, &QShortcut::activated, hideAction, &QAction::trigger);
         }
+        connect(action.data(), SIGNAL(executed(IAssistantAction*)), hideAction, SLOT(trigger()));
     }
     items << hideAction;
 
@@ -405,11 +376,6 @@ void AssistantPopup::updateState()
     m_config->setModel(items);
     m_config->setTitle(m_assistant->title());
     setActive(false);
-
-    // both changed title or actions may change the appearance of the popup
-    // force recomputing the size hint
-    resize(sizeHint());
-    updatePosition(m_view, KTextEditor::Cursor::invalid());
 
     show();
 }

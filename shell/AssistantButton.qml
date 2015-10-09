@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-import QtQuick 1.0
+import QtQuick 2.2
 
 // Component which provides a single button for the assistant widget.
 

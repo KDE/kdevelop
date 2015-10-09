@@ -19,13 +19,26 @@
 
 // This file provides the whole assistant, including title and buttons.
 
-import QtQuick 1.0
+import QtQuick 2.2
 
 Rectangle {
     id: root
 
-    width: mainFlow.width + 16
-    height: mainFlow.height + 10
+    readonly property int vSpacing: 4
+    readonly property int hSpacing: 4
+    readonly property real itemsWidth: {
+        var totalWidth = title.width;
+        for (var i = 0; i < items.count; ++i) {
+            totalWidth += items.itemAt(i).width;
+        }
+        return totalWidth + (items.count + 2) * hSpacing;
+    }
+    readonly property bool useVerticalLayout: config.viewSize.width * 0.90 < itemsWidth
+
+    // QQuickWidget crashes if either of these is zero
+    // Use ceil to ensure the widget always fits the non-integral content size
+    width: Math.ceil(Math.max(hSpacing, mainFlow.width + hSpacing * 2))
+    height: Math.ceil(Math.max(vSpacing, mainFlow.height + vSpacing * 2))
 
     border.width: 1
     border.color: Qt.lighter(config.foreground)
@@ -41,44 +54,35 @@ Rectangle {
             centerIn: parent
         }
 
-        flow: config.useVerticalLayout ? Flow.TopToBottom : Flow.LeftToRight
-        spacing: config.useVerticalLayout ? 4 : 8
+        flow: root.useVerticalLayout ? Flow.TopToBottom : Flow.LeftToRight
+        spacing: root.useVerticalLayout ? root.vSpacing : root.hSpacing
 
         Text {
             id: title
-
-            anchors.verticalCenter: parent.flow == Flow.LeftToRight ? parent.verticalCenter : undefined
-            anchors.verticalCenterOffset: 1
 
             color: config.foreground
             font.bold: true
             text: config.title
         }
 
-        // Layout for the buttons
-        Flow {
-            id: buttonsFlow
 
-            spacing: 8
+        Repeater {
+            id: items
+            objectName: "items"
 
-            Repeater {
-                id: items
-                objectName: "items"
+            y: 5
+            model: config.model
 
-                y: 5
-                model: config.model
+            AssistantButton {
+                text: modelData.text
+                highlighted: config.active
+                // what is displayed in the hotkey field of the button
+                button: index == items.model.length - 1 ? 0 : index + 1
+                foreground: config.foreground
+                background: config.background
+                highlight: config.highlight
 
-                AssistantButton {
-                    text: modelData.text
-                    highlighted: config.active
-                    // what is displayed in the hotkey field of the button
-                    button: index == items.model.length - 1 ? 0 : index + 1
-                    foreground: config.foreground
-                    background: config.background
-                    highlight: config.highlight
-
-                    onTriggered: { modelData.trigger() }
-                }
+                onTriggered: { modelData.trigger() }
             }
         }
     }

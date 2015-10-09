@@ -116,7 +116,8 @@ LINK_PUBLIC
     KDev::Debugger
     KDev::Interfaces
 LINK_PRIVATE
-    Qt5::Declarative
+    Qt5::Quick
+    Qt5::QuickWidgets
 
     KF5::GuiAddons
     KF5::IconThemes
