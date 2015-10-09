@@ -4,6 +4,6 @@ if(ROOT_VARIABLE)
     add_executable(subdirectory-foo-variable foo.cpp)
 endif()
 
-if(QT4_FOUND)
+if(Qt5Core_FOUND)
     add_executable(subdirectory-foo-package-found foo.cpp)
 endif()

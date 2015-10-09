@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 find_package(ECM 0.0.9 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
 include(KDEFrameworkCompilerSettings)
