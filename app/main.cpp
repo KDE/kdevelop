@@ -115,45 +115,53 @@ static const KDevelop::SessionInfo* findSessionInList( QList<KDevelop::SessionIn
     return 0;
 }
 
-// Represents a file to be opened, consisting of its URL and the linenumber to jump to
-typedef QPair<QUrl, int> File;
 
-/// Parses a filename given as an argument by determining its line number and full path
-static File parseFilename(QString argument)
+// Represents a file to be opened, consisting of its URL and the cursor to jump to.
+struct UrlInfo
 {
-    if ( !argument.startsWith('/') && QFileInfo(argument).isRelative() ) {
-        argument = QDir::currentPath() + "/" + argument;
-    }
-    //Allow opening specific lines in documents, like mydoc.cpp:10
-    int lineNumberOffset = argument.lastIndexOf(':');
-    int line = -1;
-    if( lineNumberOffset != -1 )
+    // Parses a file path argument and determines its line number and column and full path
+    UrlInfo(QString path = {})
+        : cursor(KTextEditor::Cursor::invalid())
     {
-        bool isInt;
-        int lineNr = argument.mid(lineNumberOffset+1).toInt(&isInt);
-        if (isInt)
-        {
-            argument = argument.left(lineNumberOffset);
-            line = lineNr;
+        if (!path.startsWith(QLatin1Char('/')) && QFileInfo(path).isRelative()) {
+            path = QDir::currentPath() + QLatin1Char('/') + path;
+        }
+        url = QUrl::fromUserInput(path);
+
+        if (url.isLocalFile() && !QFile::exists(path)) {
+            // Allow opening specific lines in documents, like mydoc.cpp:10
+            // also supports columns, i.e. mydoc.cpp:10:42
+            static const QRegularExpression pattern(QStringLiteral(":(\\d+)(?::(\\d+))?$"));
+            const auto match = pattern.match(path);
+            if (match.isValid()) {
+                path.chop(match.capturedLength());
+                int line = match.captured(1).toInt() - 1;
+                // don't use an invalid column when the line is valid
+                int column = qMax(0, match.captured(2).toInt() - 1);
+                url = QUrl::fromLocalFile(path);
+                cursor = {line, column};
+            }
         }
     }
-    return File(QUrl::fromUserInput(argument), line);
-}
+
+    QUrl url;
+    KTextEditor::Cursor cursor;
+};
 
 /// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid
 /// Returns the exit status
-static int openFilesInRunningInstance(const QVector<File>& files, int pid)
+static int openFilesInRunningInstance(const QVector<UrlInfo>& files, int pid)
 {
     const QString service = QString("org.kdevelop.kdevelop-%1").arg(pid);
     QDBusInterface iface(service, "/org/kdevelop/DocumentController", "org.kdevelop.DocumentController");
 
     QStringList urls;
     bool errors_occured = false;
-    foreach ( const File& file, files ) {
-        QDBusReply<bool> result = iface.call("openDocumentSimple", file.first.toString(), file.second);
+    foreach ( const UrlInfo& file, files ) {
+        QDBusReply<bool> result = iface.call("openDocumentSimple", file.url.toString(), file.cursor.line(), file.cursor.column());
         if ( ! result.value() ) {
             QTextStream err(stderr);
-            err << i18n("Could not open file %1.", file.first.toDisplayString(QUrl::PreferLocalFile)) << "\n";
+            err << i18n("Could not open file %1.", file.url.toDisplayString(QUrl::PreferLocalFile)) << "\n";
             errors_occured = true;
         }
     }
@@ -404,9 +412,9 @@ int main( int argc, char *argv[] )
     }
 
     // Handle extra arguments, which stand for files to open
-    QVector<File> initialFiles;
+    QVector<UrlInfo> initialFiles;
     foreach (const QString &file, parser.positionalArguments()) {
-        initialFiles.append(parseFilename(file));
+        initialFiles.append(UrlInfo(file));
     }
     if ( ! initialFiles.isEmpty() && ! parser.isSet("new-session") )
     {
@@ -618,9 +626,9 @@ int main( int argc, char *argv[] )
 
         core->runControllerInternal()->execute("debug", launch);
     } else {
-        foreach ( const File& file, initialFiles ) {
-            if(!core->documentController()->openDocument(file.first, KTextEditor::Cursor(file.second, 0))) {
-                qWarning() << i18n("Could not open %1", file.first.toDisplayString(QUrl::PreferLocalFile));
+        foreach ( const UrlInfo& file, initialFiles ) {
+            if(!core->documentController()->openDocument(file.url, file.cursor)) {
+                qWarning() << i18n("Could not open %1", file.url.toDisplayString(QUrl::PreferLocalFile));
             }
         }
     }
