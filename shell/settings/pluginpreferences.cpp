@@ -54,9 +54,8 @@ PluginPreferences::PluginPreferences(QWidget* parent)
     categories["Testing"] = i18nc("@title:group", "Testing");
     categories["Other"] = i18nc("@title:group", "Other");
     foreach (const KPluginMetaData& info, Core::self()->pluginControllerInternal()->allPluginInfos()) {
-        QString loadMode = info.value("X-KDevelop-LoadMode");
-        if( info.value("X-KDevelop-Category") == "Global"
-            && ( loadMode.isEmpty() || loadMode == "UserSelectable") )
+        const QString loadMode = info.value("X-KDevelop-LoadMode");
+        if( loadMode.isEmpty() || loadMode == "UserSelectable" )
         {
             QString category = info.category();
             if (!categories.contains(category)) {
@@ -65,12 +64,15 @@ PluginPreferences::PluginPreferences(QWidget* parent)
                 }
                 category = "Other";
             }
-            plugins[category] << info;
-        }
+            KPluginInfo kpi(info);
+            kpi.setPluginEnabled(Core::self()->pluginControllerInternal()->isEnabled(info));
+            plugins[category] << kpi;
+        } else
+            qDebug() << "skipping..." << info.pluginId() << info.value("X-KDevelop-Category") << loadMode;
     }
 
     for (auto it = plugins.constBegin(), end = plugins.constEnd(); it != end; ++it) {
-        selector->addPlugins(KPluginInfo::fromMetaData(it.value()), KPluginSelector::ReadConfigFile,
+        selector->addPlugins(it.value(), KPluginSelector::ReadConfigFile,
                               categories.value(it.key()), it.key(),
                               Core::self()->activeSession()->config() );
     }

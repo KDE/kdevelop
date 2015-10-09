@@ -135,7 +135,7 @@ public:
     void unloadProjectPlugins();
 
     void resetToDefaults();
-
+    bool isEnabled(const KPluginMetaData& info) const;
 
 private:
     /**
@@ -174,8 +174,6 @@ private:
 
     void cleanup();
     virtual void initialize();
-
-    bool isEnabled(const KPluginMetaData& info);
 
 private:
     class PluginControllerPrivate* const d;

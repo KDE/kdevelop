@@ -326,7 +326,7 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
     return loadPluginInternal( pluginName );
 }
 
-bool PluginController::isEnabled( const KPluginMetaData& info )
+bool PluginController::isEnabled( const KPluginMetaData& info ) const
 {
     return d->isEnabled(info);
 }
