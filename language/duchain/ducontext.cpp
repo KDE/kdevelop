@@ -59,6 +59,13 @@ using namespace KTextEditor;
 #define ENSURE_CAN_READ_(x)
 #endif
 
+QDebug operator<<(QDebug dbg, const KDevelop::DUContext::Import& import)
+{
+  QDebugStateSaver saver(dbg);
+  dbg.nospace() << "Import(" << import.indexedContext().data() << ')';
+  return dbg;
+}
+
 namespace KDevelop
 {
 DEFINE_LIST_MEMBER_HASH(DUContextData, m_childContexts, LocalIndexedDUContext)

@@ -930,4 +930,6 @@ KDEVPLATFORMLANGUAGE_EXPORT QList<RangeInRevision> allUses(DUContext* context,
 
 Q_DECLARE_TYPEINFO(KDevelop::DUContext::Import, Q_MOVABLE_TYPE);
 
+KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug dbg, const KDevelop::DUContext::Import& import);
+
 #endif // KDEVPLATFORM_DUCONTEXT_H
