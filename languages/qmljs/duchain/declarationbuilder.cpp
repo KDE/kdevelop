@@ -1208,7 +1208,6 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
     } else {
         // Check that the type of the value matches the type of the property
         AbstractType::Ptr expressionType = findType(node->statement).type;
-        auto expressionIntegralType = IntegralType::Ptr::dynamicCast(expressionType);
         DUChainReadLocker lock;
 
         if (!m_prebuilding && bindingDecl && !areTypesEqual(bindingDecl->abstractType(), expressionType)) {
@@ -1456,6 +1455,15 @@ void DeclarationBuilder::registerBaseClasses()
     }
 }
 
+static bool enumContainsEnumerator(const AbstractType::Ptr& a, const AbstractType::Ptr& b)
+{
+    Q_ASSERT(a->whichType() == AbstractType::TypeEnumeration);
+    auto aEnum = EnumerationType::Ptr::staticCast(a);
+    Q_ASSERT(b->whichType() == AbstractType::TypeEnumerator);
+    auto bEnumerator = EnumeratorType::Ptr::staticCast(a);
+    return bEnumerator->qualifiedIdentifier().beginsWith(aEnum->qualifiedIdentifier());
+}
+
 bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const AbstractType::Ptr& b)
 {
     if (!a || !b) {
@@ -1485,6 +1493,12 @@ bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const Abstrac
         (aIntegral->dataType() == IntegralType::TypeDouble || aIntegral->dataType() == IntegralType::TypeFloat)) {
         // Cast from int to float possible
         return true;
+    }
+
+    if (a->whichType() == AbstractType::TypeEnumeration && b->whichType() == AbstractType::TypeEnumerator) {
+        return enumContainsEnumerator(a, b);
+    } else if (a->whichType() == AbstractType::TypeEnumerator && b->whichType() == AbstractType::TypeEnumeration) {
+        return enumContainsEnumerator(b, a);
     }
 
     return a->equals(b.constData());
