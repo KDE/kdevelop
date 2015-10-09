@@ -56,6 +56,14 @@ const QString compilerTypeKey = QLatin1String( "Type" );
 QString parserArguments(){ return QStringLiteral("parserArguments"); }
 }
 
+// the grouplist is randomly sorted b/c it uses QSet internally
+// we sort the keys here, as the structure is properly defined for us
+QStringList sorted(QStringList list)
+{
+    std::sort(list.begin(), list.end());
+    return list;
+}
+
 QString defaultArguments(){ return QStringLiteral("-fspell-checking -Wdocumentation -std=c++11 -Wall"); }
 
 CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
@@ -127,7 +135,7 @@ void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
 QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
 {
     QList<ConfigEntry> paths;
-    for( const QString &grpName : grp.groupList() ) {
+    for( const QString &grpName : sorted(grp.groupList()) ) {
         if ( !grpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
             continue;
         }
@@ -206,7 +214,7 @@ QList<ConfigEntry> convertedPaths( KConfig* cfg )
         return {};
 
     QList<ConfigEntry> paths;
-    foreach( const QString &grpName, group.groupList() ) {
+    foreach( const QString &grpName, sorted(group.groupList()) ) {
         KConfigGroup subgroup = group.group( grpName );
         if ( !subgroup.isValid() )
             continue;
