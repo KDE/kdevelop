@@ -186,12 +186,17 @@ KDevelop::DocumentRange includeDirectivePosition(const KDevelop::Path& source, c
     return {IndexedString(source.pathOrUrl()), {line, 0, line, 0}};
 }
 
-KDevelop::DocumentRange forwardDeclarationPosition( const KDevelop::Path& source )
+KDevelop::DocumentRange forwardDeclarationPosition(const QualifiedIdentifier& identifier, const KDevelop::Path& source)
 {
     DUChainReadLocker lock;
     const TopDUContext* top = DUChainUtils::standardContextForUrl( source.toUrl() );
     if( !top ) {
         clangDebug() << "unable to find standard context for" << source.toLocalFile() << "Creating null range";
+        return KDevelop::DocumentRange::invalid();
+    }
+
+    if (!top->findDeclarations(identifier).isEmpty()) {
+        // Already forward-declared
         return KDevelop::DocumentRange::invalid();
     }
 
@@ -415,7 +420,7 @@ QStringList includeFiles( const QualifiedIdentifier& identifier, const KDevelop:
  */
 ClangFixits forwardDeclarations(const QualifiedIdentifier& identifier, const Path& source)
 {
-    const auto range = forwardDeclarationPosition(source);
+    const auto range = forwardDeclarationPosition(identifier, source);
     if (!range.isValid()) {
         return {};
     }

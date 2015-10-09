@@ -52,7 +52,8 @@ bool isDeclarationProblem(const QByteArray& description)
     return description.startsWith( QByteArrayLiteral("use of undeclared identifier") )
            || description.startsWith( QByteArrayLiteral("no member named") )
            || description.startsWith( QByteArrayLiteral("unknown type name") )
-           || description.startsWith( QByteArrayLiteral("variable has incomplete type") );
+           || description.startsWith( QByteArrayLiteral("variable has incomplete type") )
+           || description.startsWith( QByteArrayLiteral("member access into incomplete type") );
 }
 
 /// @return true if @p diagnostic says that include file not found
