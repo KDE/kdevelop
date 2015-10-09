@@ -79,6 +79,7 @@ Rectangle {
                 anchors.verticalCenterOffset: 1
                 color: root.foreground
                 text: root.text
+                textFormat: Text.PlainText
             }
             Rectangle { width: 2; height: 1; color: Qt.rgba(0, 0, 0, 0) } // padding
         }

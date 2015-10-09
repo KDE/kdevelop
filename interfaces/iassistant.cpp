@@ -28,18 +28,6 @@ using namespace KDevelop;
 
 Q_DECLARE_METATYPE(QExplicitlySharedDataPointer<IAssistantAction>)
 
-static QString removeHtmlFromString(QString string)
-{
-    QXmlStreamReader xml("<root>" + string + "</root>");
-    QString textString;
-    while ( !xml.atEnd() ) {
-        if ( xml.readNext() == QXmlStreamReader::Characters ) {
-            textString += xml.text();
-        }
-    }
-    return textString;
-}
-
 //BEGIN IAssistant
 
 void IAssistant::createActions()
@@ -51,7 +39,7 @@ QAction* IAssistantAction::toKAction() const
     Q_ASSERT(QThread::currentThread() == ICore::self()->thread() && "Actions must be created in the application main thread"
                                                     "(implement createActions() to create your actions)");
 
-    QAction* ret = new QAction(icon(), removeHtmlFromString(description()), 0);
+    QAction* ret = new QAction(icon(), description(), 0);
     ret->setToolTip(toolTip());
 
     //Add the data as a QExplicitlySharedDataPointer to the action, so this assistant stays alive at least as long as the QAction
