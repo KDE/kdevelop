@@ -57,7 +57,7 @@ void TestContexts::testFunctionContext()
     const IndexedString file(QUrl(QString("file:///internal/%1-functionContext.js").arg(qrand())));
     ParseSession session(file, code, 0);
     QVERIFY(session.ast());
-    QCOMPARE(session.language(), QmlJS::Language::JavaScript);
+    QCOMPARE(session.language().dialect(), QmlJS::Dialect::JavaScript);
 
     DeclarationBuilder builder(&session);
     ReferencedTopDUContext top = builder.build(file, session.ast());
@@ -118,7 +118,7 @@ void TestContexts::testQMLContext()
                                "  }\n"
                                "}\n", 0);
     QVERIFY(session.ast());
-    QCOMPARE(session.language(), QmlJS::Language::Qml);
+    QCOMPARE(session.language().dialect(), QmlJS::Dialect::Qml);
 
     DeclarationBuilder builder(&session);
     ReferencedTopDUContext top = builder.build(file, session.ast());

@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
-** Contact: http://www.qt-project.org/legal
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing
 **
 ** This file is part of Qt Creator.
 **
@@ -9,26 +9,29 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Digia.  For licensing terms and
-** conditions see http://qt.digia.com/licensing.  For further information
-** use the contact form at http://qt.digia.com/contact-us.
+** a written agreement between you and The Qt Company.  For licensing terms and
+** conditions see http://www.qt.io/terms-conditions.  For further information
+** use the contact form at http://www.qt.io/contact-us.
 **
 ** GNU Lesser General Public License Usage
 ** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** In addition, as a special exception, Digia gives you certain additional
-** rights.  These rights are described in the Digia Qt LGPL Exception
+** In addition, as a special exception, The Qt Company gives you certain additional
+** rights.  These rights are described in The Qt Company LGPL Exception
 ** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
 ****************************************************************************/
 
 #include "qmljsdocument.h"
+#include "qmljsbind.h"
 #include "qmljsconstants.h"
+#include "qmljsimportdependencies.h"
 #include <qmljs/parser/qmljslexer_p.h>
 #include <qmljs/parser/qmljsparser_p.h>
 
@@ -36,6 +39,7 @@
 
 #include <QCryptographicHash>
 #include <QDir>
+#include <QFileInfo>
 
 #include <algorithm>
 
@@ -85,88 +89,10 @@ using namespace QmlJS::AST;
     threads finish and new information becomes available.
 */
 
-
-bool Document::isQmlLikeLanguage(Language::Enum language)
-{
-    switch (language) {
-    case Language::Qml:
-    case Language::QmlQtQuick1:
-    case Language::QmlQtQuick2:
-    case Language::QmlQbs:
-    case Language::QmlProject:
-    case Language::QmlTypeInfo:
-        return true;
-    default:
-        return false;
-    }
-}
-
-bool Document::isFullySupportedLanguage(Language::Enum language)
-{
-    switch (language) {
-    case Language::JavaScript:
-    case Language::Json:
-    case Language::Qml:
-    case Language::QmlQtQuick1:
-    case Language::QmlQtQuick2:
-        return true;
-    case Language::Unknown:
-    case Language::QmlQbs:
-    case Language::QmlProject:
-    case Language::QmlTypeInfo:
-        break;
-    }
-    return false;
-}
-
-bool Document::isQmlLikeOrJsLanguage(Language::Enum language)
-{
-    switch (language) {
-    case Language::Qml:
-    case Language::QmlQtQuick1:
-    case Language::QmlQtQuick2:
-    case Language::QmlQbs:
-    case Language::QmlProject:
-    case Language::QmlTypeInfo:
-    case Language::JavaScript:
-        return true;
-    default:
-        return false;
-    }
-}
-
-QList<Language::Enum> Document::companionLanguages(Language::Enum language)
-{
-    QList<Language::Enum> langs;
-    langs << language;
-    switch (language) {
-    case Language::JavaScript:
-    case Language::Json:
-    case Language::QmlProject:
-    case Language::QmlTypeInfo:
-        break;
-    case Language::QmlQbs:
-        langs << Language::JavaScript;
-        break;
-    case Language::Qml:
-        langs << Language::QmlQtQuick1 << Language::QmlQtQuick2 << Language::JavaScript;
-        break;
-    case Language::QmlQtQuick1:
-    case Language::QmlQtQuick2:
-        langs << Language::Qml << Language::JavaScript;
-        break;
-    case Language::Unknown:
-        langs << Language::JavaScript << Language::Json << Language::QmlProject << Language:: QmlQbs
-              << Language::QmlTypeInfo << Language::QmlQtQuick1 << Language::QmlQtQuick2
-              << Language::Qml;
-        break;
-    }
-    return langs;
-}
-
-Document::Document(const QString &fileName, Language::Enum language)
+Document::Document(const QString &fileName, Dialect language)
     : _engine(0)
     , _ast(0)
+    , _bind(0)
     , _fileName(QDir::cleanPath(fileName))
     , _editorRevision(0)
     , _language(language)
@@ -175,7 +101,7 @@ Document::Document(const QString &fileName, Language::Enum language)
     QFileInfo fileInfo(fileName);
     _path = QDir::cleanPath(fileInfo.absolutePath());
 
-    if (isQmlLikeLanguage(language)) {
+    if (language.isQmlLikeLanguage()) {
         _componentName = fileInfo.baseName();
 
         if (! _componentName.isEmpty()) {
@@ -189,11 +115,14 @@ Document::Document(const QString &fileName, Language::Enum language)
 
 Document::~Document()
 {
+    if (_bind)
+        delete _bind;
+
     if (_engine)
         delete _engine;
 }
 
-Document::MutablePtr Document::create(const QString &fileName, Language::Enum language)
+Document::MutablePtr Document::create(const QString &fileName, Dialect language)
 {
     Document::MutablePtr doc(new Document(fileName, language));
     doc->_ptr = doc;
@@ -207,15 +136,15 @@ Document::Ptr Document::ptr() const
 
 bool Document::isQmlDocument() const
 {
-    return isQmlLikeLanguage(_language);
+    return _language.isQmlLikeLanguage();
 }
 
-Language::Enum Document::language() const
+Dialect Document::language() const
 {
     return _language;
 }
 
-void Document::setLanguage(Language::Enum l)
+void Document::setLanguage(Dialect l)
 {
     _language = l;
 }
@@ -302,10 +231,40 @@ QString Document::componentName() const
     return _componentName;
 }
 
+namespace {
+class CollectDirectives : public Directives
+{
+    QString documentPath;
+public:
+    CollectDirectives(const QString &documentPath)
+        : documentPath(documentPath)
+        , isLibrary(false)
+
+    {}
+
+    virtual void pragmaLibrary() { isLibrary = true; }
+    virtual void importFile(const QString &jsfile, const QString &module)
+    {
+        imports += ImportInfo::pathImport(
+                    documentPath, jsfile, LanguageUtils::ComponentVersion(), module);
+    }
+
+    virtual void importModule(const QString &uri, const QString &version, const QString &module)
+    {
+        imports += ImportInfo::moduleImport(uri, LanguageUtils::ComponentVersion(version), module);
+    }
+
+    bool isLibrary;
+    QList<ImportInfo> imports;
+};
+
+} // anonymous namespace
+
 bool Document::parse_helper(int startToken)
 {
     Q_ASSERT(! _engine);
     Q_ASSERT(! _ast);
+    Q_ASSERT(! _bind);
 
     _engine = new Engine();
 
@@ -313,7 +272,10 @@ bool Document::parse_helper(int startToken)
     Parser parser(_engine);
 
     QString source = _source;
-    lexer.setCode(source, /*line = */ 1, /*qmlMode = */isQmlLikeLanguage(_language));
+    lexer.setCode(source, /*line = */ 1, /*qmlMode = */_language.isQmlLikeLanguage());
+
+    CollectDirectives collectDirectives(path());
+    _engine->setDirectives(&collectDirectives);
 
     switch (startToken) {
     case QmlJSGrammar::T_FEED_UI_PROGRAM:
@@ -331,6 +293,8 @@ bool Document::parse_helper(int startToken)
 
     _ast = parser.rootNode();
     _diagnosticMessages = parser.diagnosticMessages();
+
+    _bind = new Bind(this, &_diagnosticMessages, collectDirectives.isLibrary, collectDirectives.imports);
 
     return _parsedCorrectly;
 }
@@ -360,7 +324,7 @@ bool Document::parseExpression()
 
 Bind *Document::bind() const
 {
-    return 0;
+    return _bind;
 }
 
 LibraryInfo::LibraryInfo(Status status)
@@ -448,6 +412,174 @@ void LibraryInfo::updateFingerprint()
 {
     _fingerprint = calculateFingerprint();
 }
+
+Snapshot::Snapshot()
+{
+}
+
+Snapshot::~Snapshot()
+{
+}
+
+Snapshot::Snapshot(const Snapshot &o)
+    : _documents(o._documents),
+      _documentsByPath(o._documentsByPath),
+      _libraries(o._libraries),
+      _dependencies(o._dependencies)
+{
+}
+
+void Snapshot::insert(const Document::Ptr &document, bool allowInvalid)
+{
+    if (document && (allowInvalid || document->qmlProgram() || document->jsProgram())) {
+        const QString fileName = document->fileName();
+        const QString path = document->path();
+        remove(fileName);
+        _documentsByPath[path].append(document);
+        _documents.insert(fileName, document);
+        CoreImport cImport;
+        cImport.importId = document->importId();
+        cImport.language = document->language();
+        cImport.possibleExports << Export(ImportKey(ImportType::File, fileName),
+                                          QString(), true, QFileInfo(fileName).baseName());
+        cImport.fingerprint = document->fingerprint();
+        _dependencies.addCoreImport(cImport);
+    }
+}
+
+void Snapshot::insertLibraryInfo(const QString &path, const LibraryInfo &info)
+{
+    QTC_CHECK(!path.isEmpty());
+    QTC_CHECK(info.fingerprint() == info.calculateFingerprint());
+    _libraries.insert(QDir::cleanPath(path), info);
+    if (!info.wasFound()) return;
+    CoreImport cImport;
+    cImport.importId = path;
+    cImport.language = Dialect::AnyLanguage;
+    QSet<ImportKey> packages;
+    foreach (const ModuleApiInfo &moduleInfo, info.moduleApis()) {
+        ImportKey iKey(ImportType::Library, moduleInfo.uri, moduleInfo.version.majorVersion(),
+                       moduleInfo.version.minorVersion());
+        packages.insert(iKey);
+    }
+    foreach (const LanguageUtils::FakeMetaObject::ConstPtr &metaO, info.metaObjects()) {
+        foreach (const LanguageUtils::FakeMetaObject::Export &e, metaO->exports()) {
+            ImportKey iKey(ImportType::Library, e.package, e.version.majorVersion(),
+                           e.version.minorVersion());
+            packages.insert(iKey);
+        }
+    }
+
+    QStringList splitPath = path.split(QLatin1Char('/'));
+    QRegExp vNr(QLatin1String("^(.+)\\.([0-9]+)(?:\\.([0-9]+))?$"));
+    QRegExp safeName(QLatin1String("^[a-zA-Z_][[a-zA-Z0-9_]*$"));
+    foreach (const ImportKey &importKey, packages) {
+        if (importKey.splitPath.size() == 1 && importKey.splitPath.at(0).isEmpty() && splitPath.length() > 0) {
+            // relocatable
+            QStringList myPath = splitPath;
+            if (vNr.indexIn(myPath.last()) == 0)
+                myPath.last() = vNr.cap(1);
+            for (int iPath = myPath.size(); iPath != 1; ) {
+                --iPath;
+                if (safeName.indexIn(myPath.at(iPath)) != 0)
+                    break;
+                ImportKey iKey(ImportType::Library, QStringList(myPath.mid(iPath)).join(QLatin1Char('.')),
+                               importKey.majorVersion, importKey.minorVersion);
+                cImport.possibleExports.append(Export(iKey, (iPath == 1) ? QLatin1String("/") :
+                     QStringList(myPath.mid(0, iPath)).join(QLatin1Char('/')), true));
+            }
+        } else {
+            QString requiredPath = QStringList(splitPath.mid(0, splitPath.size() - importKey.splitPath.size()))
+                    .join(QLatin1String("/"));
+            cImport.possibleExports << Export(importKey, requiredPath, true);
+        }
+    }
+    if (cImport.possibleExports.isEmpty() && splitPath.size() > 0) {
+        QRegExp vNr(QLatin1String("^(.+)\\.([0-9]+)(?:\\.([0-9]+))?$"));
+        QRegExp safeName(QLatin1String("^[a-zA-Z_][[a-zA-Z0-9_]*$"));
+        int majorVersion = LanguageUtils::ComponentVersion::NoVersion;
+        int minorVersion = LanguageUtils::ComponentVersion::NoVersion;
+        if (vNr.indexIn(splitPath.last()) == 0) {
+            splitPath.last() = vNr.cap(1);
+            bool ok;
+            majorVersion = vNr.cap(2).toInt(&ok);
+            if (!ok)
+                majorVersion = LanguageUtils::ComponentVersion::NoVersion;
+            minorVersion = vNr.cap(3).toInt(&ok);
+            if (vNr.cap(3).isEmpty() || !ok)
+                minorVersion = LanguageUtils::ComponentVersion::NoVersion;
+        }
+
+        for (int iPath = splitPath.size(); iPath != 1; ) {
+            --iPath;
+            if (safeName.indexIn(splitPath.at(iPath)) != 0)
+                break;
+            ImportKey iKey(ImportType::Library, QStringList(splitPath.mid(iPath)).join(QLatin1Char('.')),
+                           majorVersion, minorVersion);
+            cImport.possibleExports.append(Export(iKey, (iPath == 1) ? QLatin1String("/") :
+                QStringList(splitPath.mid(0, iPath)).join(QLatin1Char('/')), true));
+        }
+    }
+    foreach (const QmlDirParser::Component &component, info.components()) {
+        foreach (const Export &e, cImport.possibleExports)
+            _dependencies.addExport(component.fileName, e.exportName, e.pathRequired, e.typeName);
+    }
+    cImport.fingerprint = info.fingerprint();
+    _dependencies.addCoreImport(cImport);
+}
+
+void Snapshot::remove(const QString &fileName)
+{
+    Document::Ptr doc = _documents.value(fileName);
+    if (!doc.isNull()) {
+        const QString &path = doc->path();
+
+        QList<Document::Ptr> docs = _documentsByPath.value(path);
+        docs.removeAll(doc);
+        _documentsByPath[path] = docs;
+
+        _documents.remove(fileName);
+    }
+}
+
+const QmlJS::ImportDependencies *Snapshot::importDependencies() const
+{
+    return &_dependencies;
+}
+
+QmlJS::ImportDependencies *Snapshot::importDependencies()
+{
+    return &_dependencies;
+}
+
+Document::MutablePtr Snapshot::documentFromSource(
+        const QString &code, const QString &fileName,
+        Dialect language) const
+{
+    Document::MutablePtr newDoc = Document::create(fileName, language);
+
+    if (Document::Ptr thisDocument = document(fileName))
+        newDoc->_editorRevision = thisDocument->_editorRevision;
+
+    newDoc->setSource(code);
+    return newDoc;
+}
+
+Document::Ptr Snapshot::document(const QString &fileName) const
+{
+    return _documents.value(QDir::cleanPath(fileName));
+}
+
+QList<Document::Ptr> Snapshot::documentsInDirectory(const QString &path) const
+{
+    return _documentsByPath.value(QDir::cleanPath(path));
+}
+
+LibraryInfo Snapshot::libraryInfo(const QString &path) const
+{
+    return _libraries.value(QDir::cleanPath(path));
+}
+
 
 void ModuleApiInfo::addToHash(QCryptographicHash &hash) const
 {

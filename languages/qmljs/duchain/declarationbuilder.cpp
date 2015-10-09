@@ -1370,7 +1370,7 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
         type = IntegralType::TypeVoid;
     } else if (name == QLatin1String("var") || name == QLatin1String("variant")) {
         type = IntegralType::TypeMixed;
-    } else if (m_session->language() == QmlJS::Language::Qml) {
+    } else if (m_session->language() == QmlJS::Dialect::Qml) {
         // In QML files, some Qt type names need to be renamed to the QML equivalent
         if (name == QLatin1String("QFont")) {
             realName = QLatin1String("Font");

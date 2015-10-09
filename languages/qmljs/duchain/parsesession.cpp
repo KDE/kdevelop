@@ -21,6 +21,7 @@
 #include "cache.h"
 
 #include <qmljs/parser/qmljsast_p.h>
+#include <qmljs/parser/qmljsengine_p.h>
 
 #include <language/duchain/stringhelpers.h>
 #include <language/duchain/duchain.h>
@@ -51,14 +52,14 @@ bool isSorted(const QList<QmlJS::AST::SourceLocation>& locations)
     return true;
 }
 
-QmlJS::Language::Enum ParseSession::guessLanguageFromSuffix(const QString& path)
+QmlJS::Dialect ParseSession::guessLanguageFromSuffix(const QString& path)
 {
     if (path.endsWith(".js")) {
-        return QmlJS::Language::JavaScript;
+        return QmlJS::Dialect::JavaScript;
     } else if (path.endsWith(".json")) {
-        return QmlJS::Language::Json;
+        return QmlJS::Dialect::Json;
     } else {
-        return QmlJS::Language::Qml;
+        return QmlJS::Dialect::Qml;
     }
 }
 
@@ -135,7 +136,7 @@ QString ParseSession::symbolAt(const QmlJS::AST::SourceLocation& location) const
     return m_doc->source().mid(location.offset, location.length);
 }
 
-QmlJS::Language::Enum ParseSession::language() const
+QmlJS::Dialect ParseSession::language() const
 {
     return m_doc->language();
 }

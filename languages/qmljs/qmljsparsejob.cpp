@@ -193,7 +193,7 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
     if (session.isParsedCorrectly()) {
         qCDebug(KDEV_QMLJS) << "===Success===" << document().str();
     } else {
-        qCDebug(KDEV_QMLJS) << "===Failed===" << document().str();
+        qCDebug(KDEV_QMLJS) << "===Failed===" << document().str() << session.problems();
     }
 }
 

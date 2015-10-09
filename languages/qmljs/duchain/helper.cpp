@@ -294,7 +294,7 @@ bool isPrototypeIdentifier(const QString& identifier)
 bool isQmlFile(const DUContext* context)
 {
     DUChainReadLocker lock;
-    return ParseSession::guessLanguageFromSuffix(context->topContext()->url().str()) == Language::Qml;
+    return ParseSession::guessLanguageFromSuffix(context->topContext()->url().str()) == Dialect::Qml;
 }
 
 void registerDUChainItems()

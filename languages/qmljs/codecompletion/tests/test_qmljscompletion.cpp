@@ -330,7 +330,7 @@ void QmlCompletionTest::testContainsText_data()
     QTest::addColumn<bool>("qml");
 
     QTest::newRow("qml_import") << "%INVOKE" << "import %CURSOR" << "QtQuick" << true;
-    QTest::newRow("qml_import_prefix") << "%INVOKE" << "import QtQuick.%CURSOR" << "QtQuick.Dialogs" << true;
+    QTest::newRow("qml_import_prefix") << "%INVOKE\nItem {}" << "import QtQuick.%CURSOR" << "QtQuick.Controls" << true;
 
     QTest::newRow("js_node_require") << "%INVOKE" << "var m = require(%CURSOR" << "tls" << false;
 }

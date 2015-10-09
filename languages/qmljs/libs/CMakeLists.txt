@@ -23,6 +23,28 @@ add_library(kdevqtc-qmlsupport STATIC
 	utils/fileutils.cpp
 	utils/qtcassert.cpp
 	utils/savefile.cpp
+	utils/json.cpp
+	utils/filesystemwatcher.cpp
+	utils/environment.cpp
+	utils/hostosinfo.cpp
+
+    qmljs/persistenttrie.cpp
+    qmljs/qmljsbind.cpp
+    qmljs/qmljsbundle.cpp
+    qmljs/qmljscontext.cpp
+    qmljs/qmljsdialect.cpp
+    qmljs/qmljsevaluate.cpp
+    qmljs/qmljsimportdependencies.cpp
+    qmljs/qmljsinterpreter.cpp
+    qmljs/qmljsmodelmanagerinterface.cpp
+    qmljs/qmljsplugindumper.cpp
+    qmljs/qmljsqrcparser.cpp
+    qmljs/qmljsscopeastpath.cpp
+    qmljs/qmljsscopebuilder.cpp
+    qmljs/qmljsscopechain.cpp
+    qmljs/qmljstypedescriptionreader.cpp
+    qmljs/qmljsvalueowner.cpp
+    qmljs/qmljsviewercontext.cpp
 )
 
 set_target_properties(kdevqtc-qmlsupport PROPERTIES COMPILE_FLAGS "-DLANGUAGEUTILS_BUILD_DIR\ -DQTCREATOR_UTILS_LIB")
@@ -32,4 +54,5 @@ target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     Qt5::Widgets
     Qt5::Script
     Qt5::Network
+    Qt5::Xml
 )

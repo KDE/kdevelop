@@ -20,6 +20,7 @@
 #define PARSESESSION_H
 
 #include <qmljs/qmljsdocument.h>
+#include <qmljs/qmljsdialect.h>
 
 #include <serialization/indexedstring.h>
 #include <language/duchain/problem.h>
@@ -50,7 +51,7 @@ public:
     /**
      * @return the QML/JS language corresponding to a file suffix
      */
-    static QmlJS::Language::Enum guessLanguageFromSuffix(const QString& path);
+    static QmlJS::Dialect guessLanguageFromSuffix(const QString& path);
 
     /**
      * Parse the given @p contents.
@@ -100,7 +101,7 @@ public:
     /**
      * @return the language of the parsed document.
      */
-    QmlJS::Language::Enum language() const;
+    QmlJS::Dialect language() const;
 
     /**
      * @return the comment related to the given source location or an empty string
