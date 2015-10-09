@@ -197,8 +197,9 @@ class TestItemRepository : public QObject {
         items << item;
         repository.index(TestItemRequest(*item));
       }
-      qDeleteAll(items);
-      items.clear();
+      foreach(auto item, items) {
+          delete[] item;
+      }
     }
     void testStringSharing()
     {
@@ -218,8 +219,8 @@ class TestItemRepository : public QObject {
       KDevelop::ItemRepository<TestItem, TestItemRequest> repository("TestItemRepository");
       const uint hash = 1235;
 
-      QScopedPointer<TestItem> monsterItem(createItem(hash, KDevelop::ItemRepositoryBucketSize + 10));
-      QScopedPointer<TestItem> smallItem(createItem(hash, 20));
+      QScopedArrayPointer<TestItem> monsterItem(createItem(hash, KDevelop::ItemRepositoryBucketSize + 10));
+      QScopedArrayPointer<TestItem> smallItem(createItem(hash, 20));
       QVERIFY(!monsterItem->equals(smallItem.data()));
 
       uint smallIndex = repository.index(TestItemRequest(*smallItem, true));
@@ -261,22 +262,22 @@ class TestItemRepository : public QObject {
       const uint smallItemSize = KDevelop::ItemRepositoryBucketSize * 0.25 - 1;
 
       // Will get placed in bucket 1 (bucket zero is invalid), so the root bucket table at position 'clashValue' will be '1'
-      const QScopedPointer<TestItem> firstChainFirstLink(createItem(clashValue, bigItemSize));
+      const QScopedArrayPointer<TestItem> firstChainFirstLink(createItem(clashValue, bigItemSize));
       const uint firstChainFirstLinkIndex = repository.index(*firstChainFirstLink);
       QCOMPARE(bucketNumberForIndex(firstChainFirstLinkIndex), 1u);
 
       // Will also get placed in bucket 1, so root bucket table at position 'nextBucketHashSize + clashValue' will be '1'
-      const QScopedPointer<TestItem> secondChainFirstLink(createItem(nextBucketHashSize + clashValue, smallItemSize));
+      const QScopedArrayPointer<TestItem> secondChainFirstLink(createItem(nextBucketHashSize + clashValue, smallItemSize));
       const uint secondChainFirstLinkIndex = repository.index(*secondChainFirstLink);
       QCOMPARE(bucketNumberForIndex(secondChainFirstLinkIndex), 1u);
 
       // Will get placed in bucket 2, so bucket 1's next hash table at position 'clashValue' will be '2'
-      const QScopedPointer<TestItem> firstChainSecondLink(createItem(bucketHashSize + clashValue, bigItemSize));
+      const QScopedArrayPointer<TestItem> firstChainSecondLink(createItem(bucketHashSize + clashValue, bigItemSize));
       const uint firstChainSecondLinkIndex = repository.index(*firstChainSecondLink);
       QCOMPARE(bucketNumberForIndex(firstChainSecondLinkIndex), 2u);
 
       // Will also get placed in bucket 2, reachable since bucket 1's next hash table at position 'clashValue' is '2'
-      const QScopedPointer<TestItem> secondChainSecondLink(createItem(bucketHashSize + nextBucketHashSize + clashValue, smallItemSize));
+      const QScopedArrayPointer<TestItem> secondChainSecondLink(createItem(bucketHashSize + nextBucketHashSize + clashValue, smallItemSize));
       const uint secondChainSecondLinkIndex = repository.index(*secondChainSecondLink);
       QCOMPARE(bucketNumberForIndex(secondChainSecondLinkIndex), 2u);
 
