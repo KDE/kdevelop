@@ -1,6 +1,6 @@
 import ".././files/directory_to_import/" as MyDir
 import "types.js" as MyTypes
-import org.kde.kdevplatform as KDevPlatform
+import org.kde.kdevplatform 1.0 as KDevPlatform
 
 /**
  * "internalContext" : { "importedParents" : { "0" : {"type" : "Class" }}}
