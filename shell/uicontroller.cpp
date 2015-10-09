@@ -139,11 +139,11 @@ public:
     }
 
     Core *core;
-    MainWindow* defaultMainWindow;
+    QPointer<MainWindow> defaultMainWindow;
 
     QMap<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
 
-    Sublime::MainWindow* activeSublimeWindow;
+    QPointer<Sublime::MainWindow> activeSublimeWindow;
     bool areasRestored;
 
     /// Currently shown assistant popup.
@@ -245,15 +245,6 @@ void UiController::mainWindowAdded(Sublime::MainWindow* mainWindow)
 {
     connect(mainWindow, &MainWindow::activeToolViewChanged, this, &UiController::slotActiveToolViewChanged);
     connect(mainWindow, &MainWindow::areaChanged, this, &UiController::slotAreaChanged); // also check after area reconstruction
-}
-
-void UiController::mainWindowDeleted(MainWindow* mw)
-{
-    if (d->defaultMainWindow == mw)
-        d->defaultMainWindow = 0L;
-
-    if (d->activeSublimeWindow == mw)
-        d->activeSublimeWindow = 0L;
 }
 
 // FIXME: currently, this always create new window. Probably,

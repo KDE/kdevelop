@@ -90,11 +90,12 @@ void TestKTextEditorPluginIntegration::cleanupTestCase()
     const auto editor = makeQPointer(KTextEditor::Editor::instance());
     const auto application = makeQPointer(editor->application());
     const auto window = makeQPointer(application->activeMainWindow());
-    Core::self()->uiControllerInternal()->mainWindowDeleted(Core::self()->uiControllerInternal()->defaultMainWindow());
 
     TestCore::shutdown();
 
     QVERIFY(!plugin);
+    QVERIFY(!window);
+    QVERIFY(!application);
 }
 
 void TestKTextEditorPluginIntegration::testApplication()

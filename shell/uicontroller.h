@@ -76,7 +76,6 @@ public:
     Sublime::Controller* controller() override;
 
     void mainWindowAdded(Sublime::MainWindow* mainWindow);
-    void mainWindowDeleted(MainWindow* mw);
 
     void saveAllAreas(KSharedConfigPtr config);
     void saveArea(Sublime::Area* area, KConfigGroup & group);
