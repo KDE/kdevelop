@@ -924,6 +924,7 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
         decl->setStatic(true);
     decl->setAccessPolicy(CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor)));
 
+#if CINDEX_VERSION_MINOR >= 30
     auto offset = clang_Cursor_getOffsetOfField(cursor);
     if (offset >= 0) {
         auto type = clang_getCursorType(cursor);
@@ -934,6 +935,7 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
                                    "size: %2 Bytes\n"
                                    "aligned to: %3 Bytes", offset, sizeOf, alignedTo).toUtf8());
     }
+#endif
 }
 
 template<CXCursorKind CK, EnableIf<CursorKindTraits::isClassTemplate(CK)>>
