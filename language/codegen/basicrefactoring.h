@@ -99,6 +99,9 @@ public:
      */
     virtual bool shouldRenameFile(KDevelop::Declaration* declaration);
 
+public slots:
+    void executeRenameAction();
+
 protected:
     /**
      * Apply the changes to the uses that can be found inside the given
@@ -150,11 +153,6 @@ protected:
      * given declaration. The default implementation just returns true.
      */
     virtual bool acceptForContextMenu(const Declaration *decl);
-
-protected slots:
-    void executeRenameAction();
-
-    friend class ::CppLanguageSupport;
 };
 
 } // End of namespace KDevelop
