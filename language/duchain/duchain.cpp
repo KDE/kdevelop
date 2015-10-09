@@ -57,6 +57,10 @@
 #include "waitforupdate.h"
 #include "importers.h"
 
+#ifdef HAVE_MALLOC_TRIM
+#include "malloc.h"
+#endif
+
 namespace {
 //Additional "soft" cleanup steps that are done before the actual cleanup.
 //During "soft" cleanup, the consistency is not guaranteed. The repository is
@@ -887,6 +891,13 @@ public:
 
       foreach(QReadWriteLock* lock, locked)
         lock->unlock();
+
+    #ifdef HAVE_MALLOC_TRIM
+    // trim unused memory but keep a pad buffer of about 50 MB
+    // this can greatly decrease the perceived memory consumption of kdevelop
+    // see: https://sourceware.org/bugzilla/show_bug.cgi?id=14827
+    malloc_trim(50 * 1024 * 1024);
+    #endif
   }
 
   ///Checks whether the information is already loaded.
