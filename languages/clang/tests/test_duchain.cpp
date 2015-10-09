@@ -914,6 +914,7 @@ void TestDUChain::testReparseOnDocumentActivated()
 
     auto ctx = DUChain::self()->waitForUpdate(file.url(), TopDUContext::AllDeclarationsContextsAndUses);
     QVERIFY(ctx);
+    doc->close(KDevelop::IDocument::Discard);
     {
         DUChainReadLocker lock;
         qDebug() << (quint64)ctx->features();
