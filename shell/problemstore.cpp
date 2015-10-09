@@ -151,6 +151,9 @@ void ProblemStore::setScope(int scope)
     case AllProjects:
         d->m_documents = new AllProjectSet(this);
         break;
+    case BypassScopeFilter:
+        // handled above
+        break;
     }
 
     rebuild();
