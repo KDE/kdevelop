@@ -246,8 +246,6 @@ void TestCMakeManager::testDefines()
 
     bool foundInTarget = false;
     foreach(ProjectBaseItem* mainCppItem, items) {
-        ProjectBaseItem* mainContainer = mainCppItem->parent();
-
         QHash<QString, QString> defines = project->buildSystemManager()->defines(mainCppItem);
 
         QCOMPARE(defines.value("B", QStringLiteral("not found")), QString());
