@@ -152,6 +152,9 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
 #if CINDEX_VERSION_MINOR < 31
     QEXPECT_FAIL("deleted-overload-global", "The range for a global function defintion ends after the '=' so 'delete' after that is not detected.", Continue);
 #endif
+    if (tester.names.size() != expectedCompletionItems.completions.size()) {
+        qDebug() << "different results:\nactual:" << tester.names << "\nexpected:" << expectedCompletionItems.completions;
+    }
     QCOMPARE(tester.names, expectedCompletionItems.completions);
 }
 
