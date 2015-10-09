@@ -172,7 +172,7 @@ class TestItemRepository : public QObject {
 #endif
                 repository.deleteItem(newIndex);
                 QVERIFY(!repository.findIndex(*realItemsById[pick]));
-                delete realItemsById[pick];
+                delete[] realItemsById[pick];
                 realItemsById.remove(pick);
                 realItemsByIndex.remove(index);
               }
