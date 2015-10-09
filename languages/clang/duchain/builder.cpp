@@ -925,15 +925,17 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
     decl->setAccessPolicy(CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor)));
 
 #if CINDEX_VERSION_MINOR >= 30
-    auto offset = clang_Cursor_getOffsetOfField(cursor);
-    if (offset >= 0) {
-        auto type = clang_getCursorType(cursor);
-        auto sizeOf = clang_Type_getSizeOf(type);
-        auto alignedTo = clang_Type_getAlignOf(type);
-        decl->setComment(decl->comment()
-                            + i18n("\noffset in parent: %1 Bit\n"
-                                   "size: %2 Bytes\n"
-                                   "aligned to: %3 Bytes", offset, sizeOf, alignedTo).toUtf8());
+    if (!s_jsonTestRun) {
+        auto offset = clang_Cursor_getOffsetOfField(cursor);
+        if (offset >= 0) { // don't add this info to the json tests, it invalidates the comment structure
+            auto type = clang_getCursorType(cursor);
+            auto sizeOf = clang_Type_getSizeOf(type);
+            auto alignedTo = clang_Type_getAlignOf(type);
+            decl->setComment(decl->comment()
+                                + i18n("\noffset in parent: %1 Bit\n"
+                                    "size: %2 Bytes\n"
+                                    "aligned to: %3 Bytes", offset, sizeOf, alignedTo).toUtf8());
+        }
     }
 #endif
 }
@@ -964,13 +966,15 @@ void Visitor::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
     if (clang_isCursorDefinition(cursor)) {
         decl->setDeclarationIsDefinition(true);
     }
-    auto type = clang_getCursorType(cursor);
-    auto sizeOf = clang_Type_getSizeOf(type);
-    auto alignOf = clang_Type_getAlignOf(type);
-    if (sizeOf >= 0 && alignOf >= 0) {
-        decl->setComment(decl->comment()
-                            + i18n("\nsize: %1 Bytes\n"
-                                   "aligned to: %2 Bytes", sizeOf, alignOf).toUtf8());
+    if (!s_jsonTestRun) { // don't add this info to the json tests, it invalidates the comment structure
+        auto type = clang_getCursorType(cursor);
+        auto sizeOf = clang_Type_getSizeOf(type);
+        auto alignOf = clang_Type_getAlignOf(type);
+        if (sizeOf >= 0 && alignOf >= 0) {
+            decl->setComment(decl->comment()
+                                + i18n("\nsize: %1 Bytes\n"
+                                    "aligned to: %2 Bytes", sizeOf, alignOf).toUtf8());
+        }
     }
 }
 
