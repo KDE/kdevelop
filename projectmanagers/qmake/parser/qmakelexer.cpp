@@ -214,7 +214,7 @@ int Lexer::nextTokenKind()
                         m_curpos = newpos;
                         newpos++;
                     }
-                } while (temp->isSpace() && temp->unicode() != '\n' && m_curpos < m_contentSize);
+                } while (m_curpos < m_contentSize && temp->isSpace() && temp->unicode() != '\n');
                 m_curpos++;
                 return token;
             }
