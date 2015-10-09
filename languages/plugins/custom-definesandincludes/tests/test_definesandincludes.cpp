@@ -100,8 +100,10 @@ void TestDefinesAndIncludes::loadMultiPathProject()
     }
     QVERIFY(mainfile);
 
-    includes << Path("/usr/local/include/mydir");
+    includes.prepend(Path("/usr/local/include/mydir"));
     defines.insert("BUILD", "debug");
+    qDebug() << includes << "VS" << manager->includes( mainfile, IDefinesAndIncludesManager::UserDefined );
+    qDebug() << mainfile << mainfile->path();
     QCOMPARE(manager->includes( mainfile, IDefinesAndIncludesManager::UserDefined ), includes);
     QCOMPARE(defines, manager->defines( mainfile, IDefinesAndIncludesManager::UserDefined ));
 }

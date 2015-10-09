@@ -37,18 +37,25 @@
 #include <QThread>
 #include <QCoreApplication>
 
+#include <algorithm>
+
 using namespace KDevelop;
 
 namespace
 {
 ///@return: The ConfigEntry, with includes/defines from @p paths for all parent folders of @p item.
-static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDevelop::ProjectBaseItem* item)
+static ConfigEntry findConfigForItem(QList<ConfigEntry> paths, const KDevelop::ProjectBaseItem* item)
 {
     ConfigEntry ret;
 
     const Path itemPath = item->path();
     const Path rootDirectory = item->project()->path();
     Path closestPath;
+
+    std::sort(paths.begin(), paths.end(), [] (const ConfigEntry& lhs, const ConfigEntry& rhs) {
+        // sort in reverse order to do a bottom-up search
+        return lhs.path > rhs.path;
+    });
 
     for (const ConfigEntry & entry : paths) {
         Path targetDirectory = rootDirectory;
