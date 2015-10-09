@@ -31,7 +31,6 @@ Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 #include <KPluginInfo> // TODO: remove once we no longer support old style plugins
 #include <KPluginLoader>
-#include <KServiceTypeTrader>
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugin.h>
@@ -265,23 +264,6 @@ PluginController::PluginController(Core *core)
     });
     qCDebug(SHELL) << "Found" << newPlugins.size() << " plugins using the new search method:" << foundPlugins;
     d->plugins = newPlugins;
-
-    //qCDebug(SHELL) << "Fetching plugin info which matches:" << QStringLiteral( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
-    const KPluginInfo::List oldStylePlugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QStringLiteral( "KDevelop/Plugin" ),
-        QStringLiteral( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION) ) );
-    qCDebug(SHELL) << "Found" << oldStylePlugins.size() << " plugins using the old search method.";
-    if (!oldStylePlugins.isEmpty()) {
-        foreach (const KPluginInfo& info, oldStylePlugins) {
-            if (foundPlugins.contains(info.pluginName())) {
-                qWarning() << "Plugin" << info.pluginName() << "has already been found using the new plugin search method."
-                    "The .desktop file" << info.entryPath() << "should no longer be installed.";
-                continue;
-            }
-            qWarning() << "Plugin" << info.pluginName() << "still uses the old .desktop file based metadata."
-                " It must be ported to JSON metadata or it will no longer work with future kdevplatform versions.";
-            d->plugins.append(info.toMetaData());
-        }
-    }
 
     KTextEditorIntegration::initialize();
     const QVector<KPluginMetaData> katePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData & md) {
