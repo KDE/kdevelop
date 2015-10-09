@@ -23,13 +23,11 @@
 #include "problemstore.h"
 #include "problemconstants.h"
 
-namespace
-{
-class GroupingStrategy;
-}
 
 namespace KDevelop
 {
+
+struct FilteredProblemStorePrivate;
 
 /**
  * @brief ProblemStore subclass that can group by severity, and path, and filter by scope, and severity.
@@ -87,19 +85,19 @@ public:
     void addProblem(const IProblem::Ptr &problem) override;
 
     /// Retrieves the specified node
-    const ProblemStoreNode* findNode(int row, ProblemStoreNode *parent = nullptr) const;
+    const ProblemStoreNode* findNode(int row, ProblemStoreNode *parent = nullptr) const override;
 
     /// Retrieves the number of filtered problems
-    int count(ProblemStoreNode *parent = nullptr) const;
+    int count(ProblemStoreNode *parent = nullptr) const override;
 
     /// Clears the problems
-    void clear();
+    void clear() override;
 
     /// Rebuilds the filtered problem list
-    void rebuild();
+    void rebuild() override;
 
     /// Set the grouping method. See the GroupingMethod enum.
-    void setGrouping(int grouping);
+    void setGrouping(int grouping) override;
 
     /// Tells which grouping strategy is currently in use
     int grouping() const;
@@ -111,12 +109,8 @@ public:
     bool bypassScopeFilter() const;
 
 private:
-    /// Tells if the problem matches the filters
-    bool match(const IProblem::Ptr &problem) const;
-
-    GroupingMethod m_grouping;
-    QScopedPointer<GroupingStrategy> m_strategy;
-    bool m_bypassScopeFilter;
+    friend class FilteredProblemStorePrivate;
+    QScopedPointer<FilteredProblemStorePrivate> d;
 };
 
 }

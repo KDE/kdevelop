@@ -184,7 +184,7 @@ public:
         parent->addChild(node);
     }
 
-    void clear()
+    void clear() override
     {
         m_groupedRootNode->child(GroupError)->clear();
         m_groupedRootNode->child(GroupWarning)->clear();
@@ -199,11 +199,28 @@ public:
 namespace KDevelop
 {
 
+struct FilteredProblemStorePrivate
+{
+    FilteredProblemStorePrivate(FilteredProblemStore* q)
+        : q(q)
+        , m_strategy(new NoGroupingStrategy(q->rootNode()))
+        , m_grouping(NoGrouping)
+        , m_bypassScopeFilter(false)
+    {
+    }
+
+    /// Tells if the problem matches the filters
+    bool match(const IProblem::Ptr &problem) const;
+
+    FilteredProblemStore* q;
+    QScopedPointer<GroupingStrategy> m_strategy;
+    GroupingMethod m_grouping;
+    bool m_bypassScopeFilter;
+};
+
 FilteredProblemStore::FilteredProblemStore(QObject *parent)
     : ProblemStore(parent)
-    , m_grouping(NoGrouping)
-    , m_strategy(new NoGroupingStrategy(rootNode()))
-    , m_bypassScopeFilter(false)
+    , d(new FilteredProblemStorePrivate(this))
 {
 }
 
@@ -215,23 +232,23 @@ void FilteredProblemStore::addProblem(const IProblem::Ptr &problem)
 {
     ProblemStore::addProblem(problem);
 
-    if (match(problem))
-        m_strategy->addProblem(problem);
+    if (d->match(problem))
+        d->m_strategy->addProblem(problem);
 }
 
 const ProblemStoreNode* FilteredProblemStore::findNode(int row, ProblemStoreNode *parent) const
 {
-    return m_strategy->findNode(row, parent);
+    return d->m_strategy->findNode(row, parent);
 }
 
 int FilteredProblemStore::count(ProblemStoreNode *parent) const
 {
-    return m_strategy->count(parent);
+    return d->m_strategy->count(parent);
 }
 
 void FilteredProblemStore::clear()
 {
-    m_strategy->clear();
+    d->m_strategy->clear();
     ProblemStore::clear();
 }
 
@@ -239,12 +256,12 @@ void FilteredProblemStore::rebuild()
 {
     emit beginRebuild();
 
-    m_strategy->clear();
+    d->m_strategy->clear();
 
     foreach (ProblemStoreNode *node, rootNode()->children()) {
         IProblem::Ptr problem = node->problem();
-        if (match(problem)) {
-            m_strategy->addProblem(problem);
+        if (d->match(problem)) {
+            d->m_strategy->addProblem(problem);
         }
     }
 
@@ -254,15 +271,15 @@ void FilteredProblemStore::rebuild()
 void FilteredProblemStore::setGrouping(int grouping)
 {
     GroupingMethod g = GroupingMethod(grouping);
-    if(g == m_grouping)
+    if(g == d->m_grouping)
         return;
 
-    m_grouping = g;
+    d->m_grouping = g;
 
     switch (g) {
-        case NoGrouping: m_strategy.reset(new NoGroupingStrategy(rootNode())); break;
-        case PathGrouping: m_strategy.reset(new PathGroupingStrategy(rootNode())); break;
-        case SeverityGrouping: m_strategy.reset(new SeverityGroupingStrategy(rootNode())); break;
+        case NoGrouping: d->m_strategy.reset(new NoGroupingStrategy(rootNode())); break;
+        case PathGrouping: d->m_strategy.reset(new PathGroupingStrategy(rootNode())); break;
+        case SeverityGrouping: d->m_strategy.reset(new SeverityGroupingStrategy(rootNode())); break;
     }
 
     rebuild();
@@ -271,13 +288,13 @@ void FilteredProblemStore::setGrouping(int grouping)
 
 int FilteredProblemStore::grouping() const
 {
-    return m_grouping;
+    return d->m_grouping;
 }
 
 void FilteredProblemStore::setBypassScopeFilter(bool bypass)
 {
-    if (m_bypassScopeFilter != bypass) {
-        m_bypassScopeFilter = bypass;
+    if (d->m_bypassScopeFilter != bypass) {
+        d->m_bypassScopeFilter = bypass;
         rebuild();
         emit changed();
     }
@@ -285,20 +302,20 @@ void FilteredProblemStore::setBypassScopeFilter(bool bypass)
 
 bool FilteredProblemStore::bypassScopeFilter() const
 {
-    return m_bypassScopeFilter;
+    return d->m_bypassScopeFilter;
 }
 
 
-bool FilteredProblemStore::match(const IProblem::Ptr &problem) const
+bool FilteredProblemStorePrivate::match(const IProblem::Ptr &problem) const
 {
     /// If the problem is less severe than our filter criterion then it's discarded
-    if(problem->severity() > severity())
+    if(problem->severity() > q->severity())
         return false;
 
     /// If we have bypass on, don't check the scope
     if (!m_bypassScopeFilter) {
         /// If the problem isn't in a file that's in the watched document set, it's discarded
-        const WatchedDocumentSet::DocumentSet &docs = documents()->get();
+        const WatchedDocumentSet::DocumentSet &docs = q->documents()->get();
         if(!docs.contains(problem->finalLocation().document))
             return false;
     }
