@@ -136,6 +136,8 @@ void TestProblemModel::testNoGrouping()
     QVERIFY(checkIsSame(2, QModelIndex(), m_problems[2]));
 
     // Check if diagnostics are added properly
+    m_model->clearProblems();
+    m_model->addProblem(m_diagnosticTestProblem);
     QVERIFY(checkDiagnostics(0, QModelIndex()));
 
     m_model->clearProblems();
@@ -347,8 +349,6 @@ bool TestProblemModel::checkIsSame(int row, const QModelIndex &parent, const IPr
 
 bool TestProblemModel::checkDiagnostics(int row, const QModelIndex &parent)
 {
-    m_model->clearProblems();
-    m_model->addProblem(m_diagnosticTestProblem);
     MYCOMPARE(m_model->rowCount(parent), 1);
 
     QModelIndex idx;
