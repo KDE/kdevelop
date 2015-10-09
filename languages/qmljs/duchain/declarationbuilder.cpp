@@ -1464,6 +1464,14 @@ static bool enumContainsEnumerator(const AbstractType::Ptr& a, const AbstractTyp
     return bEnumerator->qualifiedIdentifier().beginsWith(aEnum->qualifiedIdentifier());
 }
 
+static bool isNumeric(const IntegralType::Ptr& type)
+{
+    return type->dataType() == IntegralType::TypeInt
+        || type->dataType() == IntegralType::TypeIntegral
+        || type->dataType() == IntegralType::TypeFloat
+        || type->dataType() == IntegralType::TypeDouble;
+}
+
 bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const AbstractType::Ptr& b)
 {
     if (!a || !b) {
@@ -1475,24 +1483,24 @@ bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const Abstrac
         return true;
     }
 
-    auto aIntegral = IntegralType::Ptr::dynamicCast(a);
-    auto bIntegral = IntegralType::Ptr::dynamicCast(b);
-
-    if ((aIntegral && aIntegral->dataType() == IntegralType::TypeMixed) ||
-        (bIntegral && bIntegral->dataType() == IntegralType::TypeMixed)) {
-        // Mixed types, don't try to be clever
-        return true;
-    }
-
+    const auto bIntegral = IntegralType::Ptr::dynamicCast(b);
     if (bIntegral && bIntegral->dataType() == IntegralType::TypeString) {
         // In QML/JS, a string can be converted to nearly everything else
         return true;
     }
 
-    if (aIntegral && bIntegral && bIntegral->dataType() == IntegralType::TypeInt &&
-        (aIntegral->dataType() == IntegralType::TypeDouble || aIntegral->dataType() == IntegralType::TypeFloat)) {
-        // Cast from int to float possible
-        return true;
+    const auto aIntegral = IntegralType::Ptr::dynamicCast(a);
+    if (aIntegral && bIntegral) {
+        if ((aIntegral->dataType() == IntegralType::TypeMixed) ||
+            (bIntegral->dataType() == IntegralType::TypeMixed)) {
+            // Mixed types, don't try to be clever
+            return true;
+        }
+
+        if (isNumeric(aIntegral) && isNumeric(bIntegral)) {
+            // Casts between integral types is possible
+            return true;
+        }
     }
 
     if (a->whichType() == AbstractType::TypeEnumeration && b->whichType() == AbstractType::TypeEnumerator) {
