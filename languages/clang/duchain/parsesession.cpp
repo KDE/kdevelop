@@ -55,7 +55,16 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
 
     // this can happen for unit tests that use the ParseSession directly
     if (parserSettings.parserOptions.isEmpty()) {
-        return {QByteArrayLiteral("-fspell-checking"), QByteArrayLiteral("-Wdocumentation"), QByteArrayLiteral("-std=c++11"), QByteArrayLiteral("-xc++"), QByteArrayLiteral("-Wall"), QByteArrayLiteral("-nostdinc"), QByteArrayLiteral("-nostdinc++")};
+        return {
+            QByteArrayLiteral("-fspell-checking"),
+            QByteArrayLiteral("-Wdocumentation"),
+            QByteArrayLiteral("-std=c++11"),
+            QByteArrayLiteral("-xc++"),
+            QByteArrayLiteral("-Wall"),
+            QByteArrayLiteral("-nostdinc"),
+            QByteArrayLiteral("-nostdinc++"),
+            QByteArrayLiteral("-ferror-limit=100")
+        };
     }
 
     auto result = parserSettings.toClangAPI();
