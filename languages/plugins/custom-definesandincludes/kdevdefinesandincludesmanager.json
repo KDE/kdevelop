@@ -45,7 +45,6 @@
             "KDevelop/Plugin"
         ]
     }, 
-    "X-KDevelop-Category": "Global", 
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IDefinesAndIncludesManager"
     ], 
