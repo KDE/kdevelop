@@ -64,7 +64,6 @@
         ], 
         "Version": "0.1"
     }, 
-    "X-KDevelop-Category": "Global", 
     "X-KDevelop-Interfaces": [
         "org.kdevelop.ITemplateProvider"
     ], 
