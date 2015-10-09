@@ -231,14 +231,18 @@ public:
             return false;
         }
 
-        if (!isGlobalPlugin( info ) || !isUserSelectable( info )) {
+        if (!isUserSelectable( info ))
             return true;
+
+        if (!isGlobalPlugin( info )) {
+            QJsonValue enabledByDefault = info.rawData()[QStringLiteral("KPlugin")].toObject()[QStringLiteral("EnabledByDefault")];
+            return enabledByDefault.isNull() || enabledByDefault.toBool(); //We consider plugins enabled until specified otherwise
         }
 
         KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins() );
         const bool isDefaultPlugin = ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains(info.pluginId());
         bool isEnabled = grp.readEntry(info.pluginId() + KEY_Suffix_Enabled(), isDefaultPlugin);
-        //qCDebug(SHELL) << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginId() );
+//         qDebug() << "read config:" << info.pluginId() << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginId() );
         return isEnabled;
     }
 
@@ -355,18 +359,13 @@ void PluginController::initialize()
     QMap<QString, QString>::Iterator it;
     for ( it = entries.begin(); it != entries.end(); ++it )
     {
-        QString key = it.key();
+        const QString key = it.key();
         if (key.endsWith(KEY_Suffix_Enabled())) {
-            QString pluginid = key.left( key.length() - 7 );
-            bool defValue;
-            QMap<QString, bool>::const_iterator entry = pluginMap.constFind( pluginid );
-            if( entry != pluginMap.constEnd() )
-            {
-                defValue = entry.value();
-            } else {
-                defValue = false;
-            }
-            pluginMap.insert( key.left(key.length() - 7), grp.readEntry(key,defValue) );
+            bool enabled = false;
+            const QString pluginid = key.left(key.length() - 7);
+            const bool defValue = pluginMap.value( pluginid, false );
+            enabled = grp.readEntry(key, defValue);
+            pluginMap.insert( pluginid, enabled );
         }
     }
 

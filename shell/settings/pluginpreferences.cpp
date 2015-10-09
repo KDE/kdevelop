@@ -42,17 +42,18 @@ PluginPreferences::PluginPreferences(QWidget* parent)
     QVBoxLayout* lay = new QVBoxLayout(this );
     selector = new KPluginSelector( this );
     lay->addWidget( selector );
-    QMap<QString, QVector<KPluginMetaData>> plugins;
-    QMap<QString, QString> categories;
-    categories["Core"] = i18nc("@title:group", "Core");
-    categories["Project Management"] = i18nc("@title:group", "Project Management");
-    categories["Version Control"] = i18nc("@title:group", "Version Control");
-    categories["Utilities"] = i18nc("@title:group", "Utilities");
-    categories["Documentation"] = i18nc("@title:group", "Documentation");
-    categories["Language Support"] = i18nc("@title:group", "Language Support");
-    categories["Debugging"] = i18nc("@title:group", "Debugging");
-    categories["Testing"] = i18nc("@title:group", "Testing");
-    categories["Other"] = i18nc("@title:group", "Other");
+    QMap<QString, QList<KPluginInfo>> plugins;
+    const QMap<QString, QString> categories = {
+        { "Core", i18nc("@title:group", "Core") },
+        { "Project Management", i18nc("@title:group", "Project Management") },
+        { "Version Control", i18nc("@title:group", "Version Control") },
+        { "Utilities", i18nc("@title:group", "Utilities") },
+        { "Documentation", i18nc("@title:group", "Documentation") },
+        { "Language Support", i18nc("@title:group", "Language Support") },
+        { "Debugging", i18nc("@title:group", "Debugging") },
+        { "Testing", i18nc("@title:group", "Testing") },
+        { "Other", i18nc("@title:group", "Other") }
+    };
     foreach (const KPluginMetaData& info, Core::self()->pluginControllerInternal()->allPluginInfos()) {
         const QString loadMode = info.value("X-KDevelop-LoadMode");
         if( loadMode.isEmpty() || loadMode == "UserSelectable" )
