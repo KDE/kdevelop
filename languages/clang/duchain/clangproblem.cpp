@@ -226,22 +226,16 @@ QString ClangFixitAction::description() const
     if (!m_fixit.description.isEmpty())
         return m_fixit.description;
 
-    // fallback in case there's no hint for the diagnostic
-    // Make sure we don't break on a replacementText such as '#include <foobar>'
-    auto formattedReplacement = m_fixit.replacementText;
-    formattedReplacement.replace(QLatin1Char('<'), QLatin1String("&amp;lt;"))
-                        .replace(QLatin1Char('>'), QLatin1String("&amp;gt;"));
-
     const auto range = m_fixit.range;
     if (range.start() == range.end()) {
         return i18n("Insert \"%1\" at line: %2, column: %3",
-                    formattedReplacement, range.start().line()+1, range.start().column()+1);
+                    m_fixit.replacementText, range.start().line()+1, range.start().column()+1);
     } else if (range.start().line() == range.end().line()) {
         return i18n("Replace text at line: %1, column: %2 with: \"%3\"",
-                    range.start().line()+1, range.start().column()+1, formattedReplacement);
+                    range.start().line()+1, range.start().column()+1, m_fixit.replacementText);
     } else {
         return i18n("Replace multiple lines starting at line: %1, column: %2 with: \"%3\"",
-                    range.start().line()+1, range.start().column()+1, formattedReplacement);
+                    range.start().line()+1, range.start().column()+1, m_fixit.replacementText);
     }
 }
 
