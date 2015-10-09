@@ -62,7 +62,6 @@ public:
 
 private:
     QModelIndex m_data;
-    IDocumentation::Ptr m_ptr;
     IDocumentationProvider* m_provider;
 };
 
