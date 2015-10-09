@@ -34,6 +34,8 @@ private slots:
     void testRenameAssistantUndoRename();
     void testSignatureAssistant_data();
     void testSignatureAssistant();
+    void testUnknownDeclarationAssistant_data();
+    void testUnknownDeclarationAssistant();
 };
 
 #endif
