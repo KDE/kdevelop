@@ -270,16 +270,6 @@ void CodeCompletionModel::foundDeclarations(QList<QExplicitlySharedDataPointer<C
   if(m_completionContext) {
     qCDebug(LANGUAGE) << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
   }
-
-
-/*  if (completionContext == m_completionContext.data()) {
-    if( !m_completionItems.isEmpty() ) {
-      beginInsertRows(QModelIndex(), m_completionItems.count(), m_completionItems.count() + items.count() - 1);
-      m_completionItems += items;
-      endInsertRows();
-    } else {*/
-/*    }
-  }*/
 }
 
 KTextEditor::CodeCompletionModelControllerInterface::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& /*matched*/)
