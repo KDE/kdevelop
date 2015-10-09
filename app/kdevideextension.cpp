@@ -56,7 +56,7 @@ QString KDevIDEExtension::projectFileExtension()
 
 QString KDevIDEExtension::projectFileDescription()
 {
-    return i18n("KDevelop4 Project Files");
+    return i18n("KDevelop Project Files");
 }
 
 QStringList KDevIDEExtension::defaultPlugins()
