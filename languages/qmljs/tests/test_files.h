@@ -33,6 +33,7 @@ private slots:
     void testNodeJS();
     void testFiles_data();
     void testFiles();
+    void testQMLTypes();
 
 private:
     void parseAndCheck(const QString& fileName, bool check = true);

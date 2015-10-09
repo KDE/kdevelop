@@ -20,6 +20,7 @@
 #include "test_files.h"
 
 #include <language/duchain/duchain.h>
+#include <language/duchain/problem.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/backgroundparser/backgroundparser.h>
 
@@ -65,6 +66,11 @@ void TestFiles::testQMLCustomComponent()
     parseAndCheck(TEST_FILES_DIR "/custom_component/CustomComponent.qml", false);
     parseAndCheck(TEST_FILES_DIR "/custom_component/CustomComponentUser.qml");
     parseAndCheck(TEST_FILES_DIR "/custom_component/CustomComponent.qml");
+}
+
+void TestFiles::testQMLTypes()
+{
+    parseAndCheck(TEST_FILES_DIR "/qmltypes/AnItem.qml", true);
 }
 
 void TestFiles::testJSUsesBetweenFiles()
@@ -114,5 +120,12 @@ void TestFiles::parseAndCheck(const QString& fileName, bool check)
     DeclarationValidator validator;
     top->visit(validator);
     QVERIFY(validator.testsPassed());
+
+    if (!top->problems().isEmpty()) {
+        foreach(auto p, top->problems()) {
+            qDebug() << p;
+        }
+    }
+    QVERIFY(top->problems().isEmpty());
   }
 }
