@@ -139,7 +139,7 @@ SourceFileTemplate& SourceFileTemplate::operator=(const SourceFileTemplate& othe
     return *this;
 }
 
-void SourceFileTemplate::setTemplateDescription(const QString& templateDescription, const QString& resourcePrefix)
+void SourceFileTemplate::setTemplateDescription(const QString& templateDescription)
 {
     delete d->archive;
 

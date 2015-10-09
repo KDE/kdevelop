@@ -238,10 +238,7 @@ public:
 
     SourceFileTemplate& operator=(const SourceFileTemplate& other);
 
-    /**
-     * @param resourcePrefix ugly ugly parameter required for testing :-/
-     */
-    void setTemplateDescription(const QString& templateDescription, const QString& resourcePrefix = QStringLiteral("kdevfiletemplates"));
+    void setTemplateDescription(const QString& templateDescription);
 
     /**
      * Returns true if this SourceFileTemplate represents an actual template archive, and false otherwise

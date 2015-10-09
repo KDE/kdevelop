@@ -248,7 +248,7 @@ TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString&
     Q_ASSERT(!tplDescription.isEmpty());
     SourceFileTemplate tpl;
     tpl.addAdditionalSearchLocation(QString(CODEGEN_TESTS_DATA_DIR) + "/kdevcodegentest/templates/");
-    tpl.setTemplateDescription(tplDescription, "kdevcodegentest");
+    tpl.setTemplateDescription(tplDescription);
     Q_ASSERT(tpl.isValid());
     generator->setTemplateDescription(tpl);
     generator->setDescription(description);
