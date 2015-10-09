@@ -40,7 +40,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <language/interfaces/iastcontainer.h>
 
-#include "codegen/simplerefactoring.h"
 #include "codegen/adaptsignatureassistant.h"
 #include "duchain/documentfinderhelpers.h"
 #include "duchain/clangindex.h"
@@ -53,6 +52,7 @@
 #include <language/assistant/renameassistant.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/codecompletion/codecompletion.h>
+#include <language/codegen/basicrefactoring.h>
 #include <language/highlighting/codehighlighting.h>
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/duchainlock.h>
@@ -219,7 +219,7 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     ClangIntegration::DUChainUtils::registerDUChainItems();
 
     m_highlighting = new ClangHighlighting(this);
-    m_refactoring = new SimpleRefactoring(this);
+    m_refactoring = new BasicRefactoring(this);
     m_index.reset(new ClangIndex);
 
     new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(m_index.data(), this), name() );
@@ -305,9 +305,9 @@ void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, 
     QAction* renameDeclarationAction = actions.addAction(QStringLiteral("code_rename_declaration"));
     renameDeclarationAction->setText( i18n("Rename Declaration") );
     renameDeclarationAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
-    renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
+    actions.setDefaultShortcut(renameDeclarationAction, Qt::CTRL | Qt::SHIFT | Qt::Key_R);
     connect(renameDeclarationAction, &QAction::triggered,
-            m_refactoring, &SimpleRefactoring::executeRenameAction);
+            m_refactoring, &BasicRefactoring::executeRenameAction);
 }
 
 KDevelop::ContextMenuExtension ClangSupport::contextMenuExtension(KDevelop::Context* context)

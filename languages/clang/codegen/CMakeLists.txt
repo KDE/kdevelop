@@ -1,7 +1,6 @@
 add_library(kdevclangcodegen STATIC
     adaptsignatureaction.cpp
     adaptsignatureassistant.cpp
-    simplerefactoring.cpp
     clangsignatureassistant.cpp
     codegenhelper.cpp
 )
