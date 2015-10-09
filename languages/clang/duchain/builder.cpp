@@ -932,8 +932,8 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
             auto sizeOf = clang_Type_getSizeOf(type);
             auto alignedTo = clang_Type_getAlignOf(type);
             decl->setComment(decl->comment()
-                                + i18n("\noffset in parent: %1 Bit\n"
-                                    "size: %2 Bytes\n"
+                                + i18n("<br/>offset in parent: %1 Bit<br/>"
+                                    "size: %2 Bytes<br/>"
                                     "aligned to: %3 Bytes", offset, sizeOf, alignedTo).toUtf8());
         }
     }
@@ -972,7 +972,7 @@ void Visitor::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
         auto alignOf = clang_Type_getAlignOf(type);
         if (sizeOf >= 0 && alignOf >= 0) {
             decl->setComment(decl->comment()
-                                + i18n("\nsize: %1 Bytes\n"
+                                + i18n("<br/>size: %1 Bytes<br/>"
                                     "aligned to: %2 Bytes", sizeOf, alignOf).toUtf8());
         }
     }
