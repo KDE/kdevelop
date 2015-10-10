@@ -60,7 +60,7 @@ void TestModels::testVcsFileChangesModel()
         status.setUrl(filenames[i]);
         status.setState(states[i]);
         model->updateState(status);
-        QVERIFY(model->rowCount() == (i+1));
+        QCOMPARE(model->rowCount(), (i+1));
     }
 
     // Pulling up-to-date file doesn't change anything
@@ -68,17 +68,17 @@ void TestModels::testVcsFileChangesModel()
         status.setUrl(filenames[3]);
         status.setState(states[3]);
         model->updateState(status);
-        QVERIFY(model->rowCount() == 3);
+        QCOMPARE(model->rowCount(), 3);
     }
 
     // Check that all OK
     for(int i = 0; i < 3; i++) {
-        QStandardItem* item = model->fileItemForUrl(filenames[i]);
-        QVERIFY(item);
-        VcsStatusInfo info = VcsFileChangesModel::statusInfo(item);
+        QModelIndex idx = model->indexForUrl(filenames[i]);
+        QVERIFY(idx.isValid());
+        VcsStatusInfo info = model->statusInfo(idx);
         QVERIFY(info.url().isValid());
-        QVERIFY(info.url() == filenames[i]);
-        QVERIFY(info.state() == states[i]);
+        QCOMPARE(info.url(), filenames[i]);
+        QCOMPARE(info.state(), states[i]);
     }
 
     // Pull it all again = nothing changed
@@ -86,16 +86,16 @@ void TestModels::testVcsFileChangesModel()
         status.setUrl(filenames[i]);
         status.setState(states[i]);
         model->updateState(status);
-        QVERIFY(model->rowCount() == 3);
+        QCOMPARE(model->rowCount(), 3);
     }
 
     // Check that all OK
     for(int i = 0; i < 3; i++) {
-        QStandardItem* item = model->fileItemForUrl(filenames[i]);
-        QVERIFY(item);
-        VcsStatusInfo info = VcsFileChangesModel::statusInfo(item);
-        QVERIFY(info.url() == filenames[i]);
-        QVERIFY(info.state() == states[i]);
+        QModelIndex item = model->indexForUrl(filenames[i]);
+        QVERIFY(item.isValid());
+        VcsStatusInfo info = model->statusInfo(item);
+        QCOMPARE(info.url(), filenames[i]);
+        QCOMPARE(info.state(), states[i]);
     }
 
     // Remove one file
@@ -104,23 +104,23 @@ void TestModels::testVcsFileChangesModel()
         status.setUrl(filenames[1]);
         status.setState(states[1]);
         model->updateState(status);
-        QVERIFY(model->rowCount() == 2);
+        QCOMPARE(model->rowCount(), 2);
     }
 
     // Check them all
     for(int i = 0; i < 3; i++) {
         if(states[i] != VcsStatusInfo::ItemUpToDate && states[i] != VcsStatusInfo::ItemUnknown) {
-            QStandardItem* item = model->fileItemForUrl(filenames[i]);
-            QVERIFY(item);
-            VcsStatusInfo info = VcsFileChangesModel::statusInfo(item);
-            QVERIFY(info.url() == filenames[i]);
-            QVERIFY(info.state() == states[i]);
+            QModelIndex item = model->indexForUrl(filenames[i]);
+            QVERIFY(item.isValid());
+            VcsStatusInfo info = model->statusInfo(item);
+            QCOMPARE(info.url(), filenames[i]);
+            QCOMPARE(info.state(), states[i]);
         }
     }
 
     // Delete them all
     model->removeRows(0, model->rowCount());
-    QVERIFY(model->rowCount() == 0);
+    QCOMPARE(model->rowCount(), 0);
 
     // Pull it all again
     for(int i = 0; i < 3; i++) {
@@ -128,7 +128,7 @@ void TestModels::testVcsFileChangesModel()
         status.setState(states[i]);
         model->updateState(status);
     }
-    QVERIFY(model->rowCount() == 2);
+    QCOMPARE(model->rowCount(), 2);
 }
 
 QTEST_MAIN(TestModels);
