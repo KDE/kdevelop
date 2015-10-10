@@ -193,15 +193,8 @@ void DocumentChangeTracker::textInserted( Document* document, const Cursor& curs
             // The language requires a document to be re-parsed if the indentation changes (e.g. python),
             // so do some special checks here to see if that is the case.
             if ( changeIsWhitespaceOnly ) {
-                QString fromLineBeginning = document->text(Range(Cursor(cursor.line(), 0), range.end()));
-                bool inIndent = true;
-                for ( int i = fromLineBeginning.length() - 1; i >= 0; --i ) {
-                    if ( ! fromLineBeginning.at(i).isSpace() ) {
-                        inIndent = false;
-                        break;
-                    }
-                }
-                if ( inIndent ) {
+                QString fromLineBeginning = document->text(Range(Cursor(cursor.line(), 0), range.end() - Cursor{0, 1}));
+                if ( fromLineBeginning.trimmed().isEmpty() ) {
                     m_needUpdate = true;
                 }
             }
@@ -225,11 +218,20 @@ void DocumentChangeTracker::textInserted( Document* document, const Cursor& curs
     updateChangedRange();
 }
 
-void DocumentChangeTracker::textRemoved( Document* /*document*/, const Range& oldRange, const QString& oldText )
+void DocumentChangeTracker::textRemoved( Document* document, const Range& oldRange, const QString& oldText )
 {
     if (whitespaceOnly(oldText) && checkMergeTokens(Range(oldRange.start(), oldRange.start())))
     {
-        // Only whitespace was changed, no update is required
+        // Only whitespace was changed, no update is required eventually
+        if ( m_whitespaceSensitivity == ILanguageSupport::Sensitive ) {
+            m_needUpdate = true;
+        }
+        else if ( m_whitespaceSensitivity == ILanguageSupport::IndentOnly ) {
+            // check text from the beginning of the line
+            if ( document->text({{oldRange.start().line(), 0}, oldRange.end()}).trimmed().isEmpty() ) {
+                m_needUpdate = true;
+            }
+        }
     } else {
         m_needUpdate = true; // If we've inserted something else than whitespace, an update is required
     }
