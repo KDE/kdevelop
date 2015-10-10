@@ -145,6 +145,7 @@ void StaticAssistantsManager::hideAssistant()
 {
     d->m_activeAssistant = QExplicitlySharedDataPointer<KDevelop::IAssistant>();
     d->m_activeProblemAssistant = false;
+    emit activeAssistantChanged();
 }
 
 void StaticAssistantsManager::Private::textInserted(Document* document, const Cursor& cursor, const QString& text)
@@ -207,6 +208,10 @@ void StaticAssistantsManager::Private::eventuallyStartAssistant()
 
 void StaticAssistantsManager::Private::startAssistant(IAssistant::Ptr assistant)
 {
+    if (assistant == m_activeAssistant) {
+        return;
+    }
+
     if (m_activeAssistant) {
         m_activeAssistant->doHide();
     }
@@ -221,6 +226,8 @@ void StaticAssistantsManager::Private::startAssistant(IAssistant::Ptr assistant)
 
         m_assistantStartedAt =  m_currentView.data()->cursorPosition();
     }
+
+    emit q->activeAssistantChanged();
 }
 
 void StaticAssistantsManager::Private::parseJobFinished(ParseJob* job)
