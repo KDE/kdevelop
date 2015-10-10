@@ -303,6 +303,14 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
                     if (lastTokenWasDeleteOrDefault) {
                         return true;
                     }
+#if CINDEX_VERSION_MINOR < 31
+                    // HACK: on old clang versions, we don't get the default/delete
+                    //       so there, assume the function is defaulted or deleted
+                    //       when the last token is an equal sign
+                    if (it == tokens.rbegin()) {
+                        return true;
+                    }
+#endif
                 }
                 lastTokenWasDeleteOrDefault = false;
                 break;
