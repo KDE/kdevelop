@@ -266,7 +266,7 @@ PluginController::PluginController(Core *core)
             return false;
         }
     });
-    qCDebug(SHELL) << "Found" << newPlugins.size() << " plugins using the new search method:" << foundPlugins;
+    qCDebug(SHELL) << "Found" << newPlugins.size() << " plugins:" << foundPlugins;
     d->plugins = newPlugins;
 
     KTextEditorIntegration::initialize();
