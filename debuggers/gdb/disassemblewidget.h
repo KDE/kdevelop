@@ -149,8 +149,7 @@ private:
     RegistersManager* m_registersManager ;
 
     DisassembleWindow * m_disassembleWindow;
-    
-    static const QIcon icon_;
+
     SelectAddressDialog* m_dlg;
 
     KConfigGroup m_config;

@@ -129,8 +129,6 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
-const QIcon DisassembleWidget::icon_ = QIcon::fromTheme("go-next");
-
 DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         : QWidget(parent),
         active_(false),
@@ -265,7 +263,8 @@ bool DisassembleWidget::displayCurrent()
         {
             // put cursor at start of line and highlight the line
             m_disassembleWindow->setCurrentItem(item);
-            item->setIcon(Icon, icon_);
+            static const QIcon icon = QIcon::fromTheme("go-next");
+            item->setIcon(Icon, icon);
             bFound = true;  // need to process all items to clear icons
         }
         else if(!item->icon(Icon).isNull()) item->setIcon(Icon, QIcon());
