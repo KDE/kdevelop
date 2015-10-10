@@ -971,19 +971,16 @@ ProjectBaseItem* ProjectModel::itemFromIndex( const QModelIndex& index ) const
     return 0;
 }
 
-QSet<int> supportedRoles() {
-    QSet<int> ret;
-    ret << Qt::DisplayRole;
-    ret << Qt::ToolTipRole;
-    ret << Qt::DecorationRole;
-    ret << KDevelop::ProjectModel::ProjectItemRole;
-    ret << KDevelop::ProjectModel::ProjectRole;
-    return ret;
-}
-
 QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 {
-    static QSet<int> allowedRoles = supportedRoles();
+    static const QSet<int> allowedRoles = {
+        Qt::DisplayRole,
+        Qt::ToolTipRole,
+        Qt::DecorationRole,
+        ProjectItemRole,
+        ProjectRole,
+        UrlRole
+    };
     if( allowedRoles.contains(role) && index.isValid() ) {
         ProjectBaseItem* item = itemFromIndex( index );
         if( item ) {
@@ -996,6 +993,8 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
                     return item->text();
                 case ProjectItemRole:
                     return QVariant::fromValue<ProjectBaseItem*>(item);
+                case UrlRole:
+                    return item->path().toUrl();
                 case ProjectRole:
                     return QVariant::fromValue<QObject*>(item->project());
             }

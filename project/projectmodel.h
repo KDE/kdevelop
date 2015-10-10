@@ -425,6 +425,7 @@ public:
     enum Roles {
           ProjectRole = Qt::UserRole+1
         , ProjectItemRole
+        , UrlRole
         , LastRole
     };
 
