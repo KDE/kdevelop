@@ -794,6 +794,7 @@ protected:
     void visit(const StringValue *) override;
     void visit(const ObjectValue *) override;
     void visit(const FunctionValue *) override;
+    using ValueVisitor::visit;
 
 private:
     ValueOwner *m_valueOwner;
@@ -817,6 +818,7 @@ protected:
     void visit(const StringValue *) override;
     void visit(const ObjectValue *) override;
     void visit(const FunctionValue *) override;
+    using ValueVisitor::visit;
 
 private:
     ValueOwner *m_valueOwner;
@@ -840,6 +842,7 @@ protected:
     void visit(const StringValue *) override;
     void visit(const ObjectValue *) override;
     void visit(const FunctionValue *) override;
+    using ValueVisitor::visit;
 
 private:
     ValueOwner *m_valueOwner;
@@ -863,6 +866,8 @@ protected:
     void visit(const FunctionValue *object) override;
     void visit(const ColorValue *) override;
     void visit(const AnchorLineValue *) override;
+    using ValueVisitor::visit;
+
 };
 
 // internal
@@ -1060,6 +1065,7 @@ public:
     virtual const Value *lookupMember(const QString &name, const Context *context,
                                       const ObjectValue **foundInObject = 0,
                                       bool examinePrototypes = true) const override;
+    using ObjectValue::lookupMember;
     void processMembers(MemberProcessor *processor) const override;
     const TypeScope *asTypeScope() const override;
 private:
@@ -1074,6 +1080,7 @@ public:
     virtual const Value *lookupMember(const QString &name, const Context *context,
                                       const ObjectValue **foundInObject = 0,
                                       bool examinePrototypes = true) const override;
+    using ObjectValue::lookupMember;
     void processMembers(MemberProcessor *processor) const override;
     const JSImportScope *asJSImportScope() const override;
 private:

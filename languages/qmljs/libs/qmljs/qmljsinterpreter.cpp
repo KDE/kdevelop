@@ -1996,6 +1996,8 @@ protected:
 
     // don't go into nested functions
     bool visit(FunctionBody *) { return false; }
+    using Visitor::visit;
+
 };
 } // anonymous namespace
 
