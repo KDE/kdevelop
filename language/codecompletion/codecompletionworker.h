@@ -62,12 +62,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
 
     ///When this is called, the result is shown in the completion-list.
     ///Call this from within your code
-    void foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
+    void foundDeclarations(const QList<QExplicitlySharedDataPointer<CompletionTreeElement>>&,
+                           const CodeCompletionContext::Ptr& completionContext);
     
   Q_SIGNALS:
 
     ///Internal connections into the foreground completion model
-    void foundDeclarationsReal(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
+    void foundDeclarationsReal(const QList<QExplicitlySharedDataPointer<CompletionTreeElement>>&,
+                               const QExplicitlySharedDataPointer<CodeCompletionContext>& completionContext);
     
   protected:
     

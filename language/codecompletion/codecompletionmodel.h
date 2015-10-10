@@ -113,7 +113,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
   protected Q_SLOTS:
     ///Connection from the background-thread into the model: This is called when the background-thread is ready
-    virtual void foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> > item, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
+    virtual void foundDeclarations(const QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& item,
+                                   const QExplicitlySharedDataPointer<CodeCompletionContext>& completionContext);
 
   protected:
     ///Eventually override this, determine the context or whatever, and then emit completionsNeeded(..) to continue processing in the background tread.

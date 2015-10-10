@@ -248,7 +248,8 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   completionInvokedInternal(view, range, invocationType, url);
 }
 
-void CodeCompletionModel::foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> > items, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext)
+void CodeCompletionModel::foundDeclarations(const QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& items,
+                                            const QExplicitlySharedDataPointer<CodeCompletionContext>& completionContext)
 {
   m_completionContext = completionContext;
 

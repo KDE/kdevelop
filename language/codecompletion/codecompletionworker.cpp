@@ -62,10 +62,11 @@ bool CodeCompletionWorker::fullCompletion() const {
 }
 
 void CodeCompletionWorker::failed() {
-    foundDeclarations( QList<QExplicitlySharedDataPointer<CompletionTreeElement> >(), QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext>() );
+    foundDeclarations({}, {});
 }
 
-void KDevelop::CodeCompletionWorker::foundDeclarations(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > >  items, QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > completionContext)
+void CodeCompletionWorker::foundDeclarations(const QList<CompletionTreeElementPointer>& items,
+                                             const CodeCompletionContext::Ptr& completionContext)
 {
     m_hasFoundDeclarations = true;
     emit foundDeclarationsReal(items, completionContext);
