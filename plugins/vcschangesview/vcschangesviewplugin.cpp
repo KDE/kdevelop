@@ -76,7 +76,7 @@ VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const 
     : KDevelop::IPlugin("kdevvcsprojectintegration", parent)
     , m_model(0)
 {
-    ICore::self()->uiController()->addToolView(i18n("VCS Changes"), new VCSProjectToolViewFactory(this));
+    ICore::self()->uiController()->addToolView(i18n("Project Changes"), new VCSProjectToolViewFactory(this));
 
     QAction* synaction = actionCollection()->addAction( "locate_document" );
     synaction->setText(i18n("Locate Current Document"));

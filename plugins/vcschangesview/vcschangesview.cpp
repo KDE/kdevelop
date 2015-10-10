@@ -51,6 +51,7 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
     setContextMenuPolicy(Qt::CustomContextMenu);
     setTextElideMode(Qt::ElideLeft);
     setWordWrap(true);
+    setWindowIcon(QIcon::fromTheme("exchange-positions"));
     
     connect(this, &VcsChangesView::customContextMenuRequested, this, &VcsChangesView::popupContextMenu);
     

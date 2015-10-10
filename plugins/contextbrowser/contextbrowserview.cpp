@@ -106,7 +106,7 @@ void ContextBrowserView::updateLockIcon(bool checked) {
 }
 
 ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new QTextBrowser()), m_autoLocked(false) {
-    setWindowIcon( QIcon::fromTheme("applications-development-web") );
+    setWindowIcon( QIcon::fromTheme("code-context") );
 
     m_allowLockedUpdate = false;
 

@@ -119,7 +119,7 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
         }
         case KDevelop::IOutputView::DebugView:
         {
-            ret = registerToolView( i18nc("@title:window", "Debug"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme("debugger"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18nc("@title:window", "Debug"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme("debug-step-into"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::TestView:

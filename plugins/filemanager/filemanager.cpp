@@ -54,8 +54,8 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     : QWidget(parent), m_plugin(plugin)
 {
     setObjectName("FileManager");
-    setWindowIcon(QIcon::fromTheme("system-file-manager"));
-    setWindowTitle(i18n("Filesystem"));
+    setWindowIcon(QIcon::fromTheme("folder-sync"));
+    setWindowTitle(i18n("File System"));
 
     QVBoxLayout *l = new QVBoxLayout(this);
     l->setMargin(0);

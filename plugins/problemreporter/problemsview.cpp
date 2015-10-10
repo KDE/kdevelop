@@ -94,7 +94,7 @@ ProblemsView::ProblemsView(QWidget* parent)
     : QMainWindow(parent)
 {
     setWindowTitle(i18n("Problems"));
-    setWindowIcon(QIcon::fromTheme("emblem-important"));
+    setWindowIcon(QIcon::fromTheme("script-error"));
 
     m_toolBar = new QToolBar(this);
     m_toolBar->setMovable(false);
