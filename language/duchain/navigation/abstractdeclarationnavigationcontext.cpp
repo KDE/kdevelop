@@ -268,16 +268,21 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     makeLink(i18n("Show uses"), "show_uses", NavigationAction(m_declaration, NavigationAction::NavigateUses));
   }
 
-  if( !shorten && (!m_declaration->comment().isEmpty() || doc) ) {
+  QByteArray declarationComment = m_declaration->comment();
+  if( !shorten && (!declarationComment.isEmpty() || doc) ) {
     modifyHtml() += "<br />";
-    QString comment = QString::fromUtf8(m_declaration->comment());
-    if(comment.isEmpty() && doc) {
-      comment = doc->description();
+
+    if(doc) {
+      QString comment = doc->description();
+      connect(doc.data(), &IDocumentation::descriptionChanged, this, &AbstractDeclarationNavigationContext::contentsChanged);
+
       if(!comment.isEmpty()) {
-        connect(doc.data(), &IDocumentation::descriptionChanged, this, &AbstractDeclarationNavigationContext::contentsChanged);
         modifyHtml() += "<br />" + commentHighlight(comment);
       }
-    } else if(!comment.isEmpty()) {
+    }
+
+    QString comment = QString::fromUtf8(declarationComment);
+    if(!comment.isEmpty()) {
       // if the first paragraph does not contain a tag, we assume that this is a plain-text comment
       if (!Qt::mightBeRichText(comment)) {
         // still might contain extra html tags for line breaks (this is the case for doxygen-style comments sometimes)
