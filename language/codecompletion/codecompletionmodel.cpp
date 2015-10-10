@@ -105,9 +105,7 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   , m_mutex(new QMutex)
   , m_thread(0)
 {
-  qRegisterMetaType<QList<CompletionTreeElement> >("QList<QExplicitlySharedDataPointer<CompletionTreeElement> >");
-  qRegisterMetaType<QExplicitlySharedDataPointer<CodeCompletionContext> >("QExplicitlySharedDataPointer<CodeCompletionContext>");
-  qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
+  qRegisterMetaType<KTextEditor::Cursor>();
 }
 
 void CodeCompletionModel::initialize() {

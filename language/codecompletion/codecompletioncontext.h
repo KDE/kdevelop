@@ -106,4 +106,6 @@ namespace KDevelop {
   };
 }
 
+Q_DECLARE_METATYPE(KDevelop::CodeCompletionContext::Ptr);
+
 #endif
