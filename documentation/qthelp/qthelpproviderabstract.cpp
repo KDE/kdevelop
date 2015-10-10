@@ -54,7 +54,6 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declarat
         static const IndexedString qmlJs("QML/JS");
         bool isQML;
         QStringList idParts;
-        QString id;
 
         {
             DUChainReadLocker lock;
@@ -62,17 +61,16 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declarat
             idParts = dec->qualifiedIdentifier().toStringList();
         }
 
+        QString id;
         if(isQML && !idParts.isEmpty()) {
             idParts.removeFirst(); // Skip the namespace (QtQuick2.0, etc)
             id = QLatin1String("QML.");
         }
 
-        id += idParts.join(QLatin1String("::"));
-
         if(!idParts.isEmpty()) {
+            id += idParts.join(QLatin1String("::"));
             QMap<QString, QUrl> links=m_engine.linksForIdentifier(id);
 
-            qCDebug(QTHELP) << "doc_found" << id << links;
             if(!links.isEmpty())
                 return IDocumentation::Ptr(new QtHelpDocumentation(id, links));
         }

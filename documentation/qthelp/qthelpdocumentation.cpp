@@ -56,43 +56,42 @@ QString QtHelpDocumentation::description() const
 
     //Extract a short description from the html data
     QString dataString = QString::fromLatin1(data); ///@todo encoding
-    QString fragment = url.fragment();
 
-    QString p = "((\\\")|(\\\'))";
-    QString exp = "< a name = " + p + fragment + p + " > < / a >";
-    QString optionalSpace = "( )*";
-    exp.replace(' ', optionalSpace);
+    const QString fragment = url.fragment();
+    const QString p = QStringLiteral("((\\\")|(\\\'))");
+    const QString optionalSpace = QStringLiteral("( )*");
+    const QString exp = QString("< a name = " + p + fragment + p + " > < / a >").replace(' ', optionalSpace);
+
     QRegExp findFragment(exp);
     int pos = findFragment.indexIn(dataString);
+
     if(fragment.isEmpty()) {
         pos = 0;
-    }else{
+    } else {
+
         //Check if there is a title opening-tag right before the fragment, and if yes add it, so we have a nicely formatted caption
-        QString titleRegExp("< h\\d class = \".*\" >");
-        titleRegExp.replace(" ", optionalSpace);
+        const QString titleRegExp = QStringLiteral("< h\\d class = \".*\" >").replace(' ', optionalSpace);
         QRegExp findTitle(titleRegExp);
-        int titleStart = findTitle.lastIndexIn(dataString, pos);
-        int titleEnd = titleStart + findTitle.matchedLength();
+        const int titleStart = findTitle.lastIndexIn(dataString, pos);
+        const int titleEnd = titleStart + findTitle.matchedLength();
         if(titleStart != -1) {
-            QString between = dataString.mid(titleEnd, pos-titleEnd).trimmed();
-//                     if(between.isEmpty())
+            const QStringRef between = dataString.midRef(titleEnd, pos-titleEnd).trimmed();
+            if(between.isEmpty())
                 pos = titleStart;
         }
     }
 
     if(pos != -1) {
-
-        QString exp = "< a name = " + p + "((\\S)*)" + p + " > < / a >";
-        exp.replace(" ", optionalSpace);
+        const QString exp = QString("< a name = " + p + "((\\S)*)" + p + " > < / a >").replace(' ', optionalSpace);
         QRegExp nextFragmentExpression(exp);
         int endPos = nextFragmentExpression.indexIn(dataString, pos+(fragment.size() ? findFragment.matchedLength() : 0));
-        if(endPos == -1)
+        if(endPos == -1) {
             endPos = dataString.size();
+        }
 
         {
             //Find the end of the last paragraph or newline, so we don't add prefixes of the following fragment
-            QString newLineRegExp("< br / > | < / p >");
-            newLineRegExp.replace(" ", optionalSpace);
+            const QString newLineRegExp = QString ("< br / > | < / p >").replace(' ', optionalSpace);
             QRegExp lastNewLine(newLineRegExp);
             int newEnd = dataString.lastIndexOf(lastNewLine, endPos);
             if(newEnd != -1 && newEnd > pos)
@@ -101,8 +100,7 @@ QString QtHelpDocumentation::description() const
 
         {
             //Find the title, and start from there
-            QString titleRegExp("< h\\d class = \"title\" >");
-            titleRegExp.replace(" ", optionalSpace);
+            const QString titleRegExp = QStringLiteral("< h\\d class = \"title\" >").replace(' ', optionalSpace);
             QRegExp findTitle(titleRegExp);
             int idx = findTitle.indexIn(dataString);
             if(idx > pos && idx < endPos)
@@ -114,8 +112,7 @@ QString QtHelpDocumentation::description() const
 
         {
             //Completely remove the first large header found, since we don't need a header
-            QString headerRegExp("< h\\d.*>.*< / h\\d >");
-            headerRegExp.replace(" ", optionalSpace);
+            const QString headerRegExp = QStringLiteral("< h\\d.*>.*< / h\\d >").replace(' ', optionalSpace);
             QRegExp findHeader(headerRegExp);
             findHeader.setMinimal(true);
             int idx = findHeader.indexIn(thisFragment);
@@ -126,16 +123,13 @@ QString QtHelpDocumentation::description() const
 
         {
             //Replace all gigantic header-font sizes with <big>
-
             {
-                QString sizeRegExp("< h\\d ");
-                sizeRegExp.replace(" ", optionalSpace);
+                const QString sizeRegExp = QStringLiteral("< h\\d ").replace(' ', optionalSpace);
                 QRegExp findSize(sizeRegExp);
                 thisFragment.replace(findSize, "<big ");
             }
             {
-                QString sizeCloseRegExp("< / h\\d >");
-                sizeCloseRegExp.replace(" ", optionalSpace);
+                const QString sizeCloseRegExp = QStringLiteral("< / h\\d >").replace(' ', optionalSpace);
                 QRegExp closeSize(sizeCloseRegExp);
                 thisFragment.replace(closeSize, "</big><br />");
             }
@@ -143,24 +137,18 @@ QString QtHelpDocumentation::description() const
 
         {
             //Replace paragraphs by newlines
+            const QString begin = QStringLiteral("< p >").replace(' ', optionalSpace);
+            const QRegExp findBegin(begin);
+            thisFragment.replace(findBegin, {});
 
-            QString begin("< p >");
-            begin.replace(" ", optionalSpace);
-
-            QRegExp findBegin(begin);
-            thisFragment.replace(findBegin, "");
-
-            QString end("< /p >");
-            end.replace(" ", optionalSpace);
-
-            QRegExp findEnd(end);
+            const QString end = QStringLiteral("< /p >").replace(' ', optionalSpace);
+            const QRegExp findEnd(end);
             thisFragment.replace(findEnd, "<br />");
         }
 
         {
             //Remove links, because they won't work
-            QString link("< a href = " + p + ".*" + p);
-            link.replace(" ", optionalSpace);
+            const QString link = QString("< a href = " + p + ".*" + p).replace(' ', optionalSpace);
             QRegExp exp(link, Qt::CaseSensitive);
             exp.setMinimal(true);
             thisFragment.replace(exp, "<a ");

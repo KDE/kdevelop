@@ -34,9 +34,9 @@
 
 #include "testqthelpconfig.h"
 
-const QString VALID1 = QTHELP_FILES + QString("/valid1.qch");
-const QString VALID2 = QTHELP_FILES + QString("/valid2.qch");
-const QString INVALID = QTHELP_FILES + QString("/invalid.qch");
+const QString VALID1 = QTHELP_FILES "/valid1.qch";
+const QString VALID2 = QTHELP_FILES "/valid2.qch";
+const QString INVALID = QTHELP_FILES "/invalid.qch";
 
 QTEST_MAIN(TestQtHelpPlugin)
 using namespace KDevelop;
@@ -196,9 +196,36 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
 
     auto doc = provider->documentationForDeclaration(typeDecl);
     QVERIFY(doc);
-    QCOMPARE(doc->name(), QString("QObject"));
+    QCOMPARE(doc->name(), QStringLiteral("QObject"));
     const auto description = doc->description();
     QVERIFY(description.contains("QObject"));
+}
+
+void TestQtHelpPlugin::testDeclarationLookup_Method()
+{
+    init();
+
+    TestFile file("class QString { static QString fromLatin1(const QByteArray&); };", "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    auto ctx = file.topContext();
+    QVERIFY(ctx);
+    auto decl = ctx->findDeclarations(QualifiedIdentifier("QString")).first();
+    auto declFromLatin1 = decl->internalContext()->findDeclarations(QualifiedIdentifier("fromLatin1")).first();
+    QVERIFY(decl);
+
+    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
+    QVERIFY(provider);
+    if (!provider->isValid() || provider->engine()->linksForIdentifier("QString::fromLatin1").isEmpty()) {
+        QSKIP("Qt help not available", SkipSingle);
+    }
+
+    auto doc = provider->documentationForDeclaration(declFromLatin1);
+    QVERIFY(doc);
+    QCOMPARE(doc->name(), QStringLiteral("QString::fromLatin1"));
+    const auto description = doc->description();
+    QVERIFY(description.contains("fromLatin1"));
 }
 
 void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()

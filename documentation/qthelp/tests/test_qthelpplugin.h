@@ -45,6 +45,7 @@ private slots:
     void testRemoveOneProvider();
 
     void testDeclarationLookup_Class();
+    void testDeclarationLookup_Method();
     void testDeclarationLookup_OperatorFunction();
 
     void cleanup();
