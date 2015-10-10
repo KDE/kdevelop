@@ -19,6 +19,7 @@
 
 #include "codedescription.h"
 #include "util/debug.h"
+#include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
@@ -105,9 +106,9 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
         DUContext* context = declaration->internalContext();
 
         DUChainPointer<FunctionDeclaration> function = declaration.dynamicCast<FunctionDeclaration>();
-        if (function && function->internalFunctionContext())
+        if (function)
         {
-            context = function->internalFunctionContext();
+            context = DUChainUtils::getArgumentContext(declaration.data());
         }
 
         DUChainPointer<ClassFunctionDeclaration> method = declaration.dynamicCast<ClassFunctionDeclaration>();
