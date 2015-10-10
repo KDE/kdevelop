@@ -79,7 +79,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::StringLiteral*)
 
 bool ExpressionVisitor::visit(QmlJS::AST::RegExpLiteral*)
 {
-    encounter(QLatin1String("RegExp"));
+    encounter(QStringLiteral("RegExp"));
 
     if (lastDeclaration()) {
         instantiateCurrentDeclaration();
@@ -299,8 +299,8 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 
     if (!encounterParent(declaration) &&
         !encounterDeclarationInContext(name, context) &&
-        !(!QmlJS::isQmlFile(m_context) && encounterDeclarationInNodeModule(name, QLatin1String("__builtin_dom"))) &&
-        !encounterDeclarationInNodeModule(name, QLatin1String("__builtin_ecmascript")) &&
+        !(!QmlJS::isQmlFile(m_context) && encounterDeclarationInNodeModule(name, QStringLiteral("__builtin_dom"))) &&
+        !encounterDeclarationInNodeModule(name, QStringLiteral("__builtin_ecmascript")) &&
         !(context == nullptr && encounterGlobalDeclaration(name))) {
         encounterNothing();
     }

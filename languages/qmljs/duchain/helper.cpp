@@ -124,9 +124,9 @@ QString getNodeValue(AST::Node* node)
     } else if (string_name) {
         return string_name->id.toString();
     } else if (true_literal) {
-        return QLatin1String("true");
+        return QStringLiteral("true");
     } else if (false_literal) {
-        return QLatin1String("false");
+        return QStringLiteral("false");
     } else {
         return QString();
     }
@@ -197,6 +197,7 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
         auto structureType = StructureType::Ptr::dynamicCast(declaration->abstractType());
         auto integralType = IntegralType::Ptr::dynamicCast(declaration->abstractType());
 
+        static const IndexedIdentifier indexedObject(Identifier(QStringLiteral("Object")));
         if (structureType) {
             auto structureDeclaration = structureType->declaration(declaration->topContext());
 
@@ -207,36 +208,36 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
             } else {
                 return nullptr;
             }
-        } else if ((integralType || functionType) && declaration->identifier() != Identifier(QLatin1String("Object"))) {
+        } else if ((integralType || functionType) && declaration->indexedIdentifier() != indexedObject) {
             QString baseClass;
 
             // Compute from which base Javascript class a type inherits
             if (integralType) {
                 switch (integralType->dataType()) {
                     case IntegralType::TypeBoolean:
-                        baseClass = QLatin1String("Boolean");
+                        baseClass = QStringLiteral("Boolean");
                         break;
                     case IntegralType::TypeString:
-                        baseClass = QLatin1String("String");
+                        baseClass = QStringLiteral("String");
                         break;
                     case IntegralType::TypeInt:
                     case IntegralType::TypeFloat:
                     case IntegralType::TypeDouble:
-                        baseClass = QLatin1String("Number");
+                        baseClass = QStringLiteral("Number");
                         break;
                     case IntegralType::TypeArray:
-                        baseClass = QLatin1String("Array");
+                        baseClass = QStringLiteral("Array");
                         break;
                     default:
-                        baseClass = QLatin1String("Object");
+                        baseClass = QStringLiteral("Object");
                         break;
                 }
             } else if (functionType) {
-                baseClass = QLatin1String("Function");
+                baseClass = QStringLiteral("Function");
             }
 
             return getInternalContext(
-                NodeJS::instance().moduleMember(QLatin1String("__builtin_ecmascript"), baseClass, declaration->topContext()->url())
+                NodeJS::instance().moduleMember(QStringLiteral("__builtin_ecmascript"), baseClass, declaration->topContext()->url())
             );
         } else {
             return nullptr;
@@ -278,7 +279,7 @@ void importDeclarationInContext(DUContext* context, const DeclarationPointer& de
 void importObjectContext(DUContext* context, TopDUContext* topContext)
 {
     DeclarationPointer objectDeclaration =
-        NodeJS::instance().moduleMember(QLatin1String("__builtin_ecmascript"), QLatin1String("Object"), topContext->url());
+        NodeJS::instance().moduleMember(QStringLiteral("__builtin_ecmascript"), QStringLiteral("Object"), topContext->url());
 
     if (objectDeclaration) {
         importDeclarationInContext(context, objectDeclaration);

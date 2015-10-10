@@ -1372,25 +1372,25 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
     } else if (m_session->language() == QmlJS::Dialect::Qml) {
         // In QML files, some Qt type names need to be renamed to the QML equivalent
         if (name == QLatin1String("QFont")) {
-            realName = QLatin1String("Font");
+            realName = QStringLiteral("Font");
         } else if (name == QLatin1String("QColor")) {
-            realName = QLatin1String("color");
+            realName = QStringLiteral("color");
         } else if (name == QLatin1String("QDateTime")) {
-            realName = QLatin1String("date");
+            realName = QStringLiteral("date");
         } else if (name == QLatin1String("QDate")) {
-            realName = QLatin1String("date");
+            realName = QStringLiteral("date");
         } else if (name == QLatin1String("QTime")) {
-            realName = QLatin1String("time");
+            realName = QStringLiteral("time");
         } else if (name == QLatin1String("QRect") || name == QLatin1String("QRectF")) {
-            realName = QLatin1String("rect");
+            realName = QStringLiteral("rect");
         } else if (name == QLatin1String("QPoint") || name == QLatin1String("QPointF")) {
-            realName = QLatin1String("point");
+            realName = QStringLiteral("point");
         } else if (name == QLatin1String("QSize") || name == QLatin1String("QSizeF")) {
-            realName = QLatin1String("size");
+            realName = QStringLiteral("size");
         } else if (name == QLatin1String("QUrl")) {
-            realName = QLatin1String("url");
+            realName = QStringLiteral("url");
         } else if (name == QLatin1String("QVector3D")) {
-            realName = QLatin1String("vector3d");
+            realName = QStringLiteral("vector3d");
         } else if (name.endsWith(QLatin1String("ScriptString"))) {
             // Q{Declarative,Qml}ScriptString represents a JS snippet
             auto  func = new QmlJS::FunctionType;

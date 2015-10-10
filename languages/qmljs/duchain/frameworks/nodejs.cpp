@@ -59,10 +59,10 @@ void NodeJS::initialize(DeclarationBuilder* builder)
 
     // Create "module", a structure that may contain "exports" if the module
     // refers to module.exports
-    createObject(QLatin1String("module"), 1, builder);
+    createObject(QStringLiteral("module"), 1, builder);
 
     // Create "exports", that can also contain the exported symbols of the module
-    createObject(QLatin1String("exports"), 2, builder);
+    createObject(QStringLiteral("exports"), 2, builder);
 }
 
 void NodeJS::createObject(const QString& name, int index, DeclarationBuilder* builder)
@@ -101,8 +101,8 @@ DeclarationPointer NodeJS::moduleExports(const QString& moduleName, const Indexe
     DUChainReadLocker lock;
 
     if (topContext) {
-        QualifiedIdentifier idModule(QLatin1String("module"));
-        QualifiedIdentifier idExports(QLatin1String("exports"));
+        static const QualifiedIdentifier idModule(QStringLiteral("module"));
+        static const QualifiedIdentifier idExports(QStringLiteral("exports"));
 
         // Try "module.exports". If this declaration exists, it contains the
         // module's exports
@@ -147,7 +147,7 @@ Path::List NodeJS::moduleDirectories(const QString& url)
     // QML/JS ships several modules that exist only in binary form in Node.js
     QStringList dirs = QStandardPaths::locateAll(
         QStandardPaths::GenericDataLocation,
-        QLatin1String("kdevqmljssupport/nodejsmodules"),
+        QStringLiteral("kdevqmljssupport/nodejsmodules"),
         QStandardPaths::LocateDirectory
     );
 
@@ -157,11 +157,11 @@ Path::List NodeJS::moduleDirectories(const QString& url)
 
     // url/../node_modules, then url/../../node_modules, etc
     Path path(url);
-    path.addPath(QLatin1String(".."));
+    path.addPath(QStringLiteral(".."));
 
     while (path.segments().size() > 1) {
-        paths.append(path.cd(QLatin1String("node_modules")));
-        path.addPath(QLatin1String(".."));
+        paths.append(path.cd(QStringLiteral("node_modules")));
+        path.addPath(QStringLiteral(".."));
     }
 
     return paths;
@@ -182,7 +182,7 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
     if (moduleName.startsWith(QLatin1Char('/')) || moduleName.startsWith(QLatin1Char('.'))) {
         // NOTE: This is not portable to Windows, but the Node.js documentation
         // only talks about module names that start with /, ./ and ../ .
-        fileName = fileOrDirectoryPath(Path(url).cd(QLatin1String("..")).cd(moduleName).toLocalFile());
+        fileName = fileOrDirectoryPath(Path(url).cd(QStringLiteral("..")).cd(moduleName).toLocalFile());
         return fileName;
     }
 

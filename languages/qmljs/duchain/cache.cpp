@@ -34,10 +34,10 @@ QmlJS::Cache::Cache()
     // qmlplugindump from Qt4 and Qt5. They will be tried in order when dumping
     // a binary QML file.
     m_pluginDumpExecutables
-        << PluginDumpExecutable("qmlplugindump", "1.0")
-        << PluginDumpExecutable("qmlplugindump-qt4", "1.0")
-        << PluginDumpExecutable("qmlplugindump-qt5", "2.0")
-        << PluginDumpExecutable("qml1plugindump-qt5", "1.0");
+        << PluginDumpExecutable(QStringLiteral("qmlplugindump"), QStringLiteral("1.0"))
+        << PluginDumpExecutable(QStringLiteral("qmlplugindump-qt4"), QStringLiteral("1.0"))
+        << PluginDumpExecutable(QStringLiteral("qmlplugindump-qt5"), QStringLiteral("2.0"))
+        << PluginDumpExecutable(QStringLiteral("qml1plugindump-qt5"), QStringLiteral("1.0"));
 }
 
 QmlJS::Cache& QmlJS::Cache::instance()
@@ -70,8 +70,8 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
         KDevelop::Path p(path);
 
         // Change /path/to/qt5/plugins to /path/to/qt5/{qml,imports}
-        paths << p.cd(QLatin1String("../qml"));
-        paths << p.cd(QLatin1String("../imports"));
+        paths << p.cd(QStringLiteral("../qml"));
+        paths << p.cd(QStringLiteral("../imports"));
     }
 
     paths << m_includeDirs[baseFile];
@@ -93,7 +93,7 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
         // HACK: QtQuick 1.0 is put in $LIB/qt5/imports/builtins.qmltypes. The "QtQuick"
         //       identifier appears nowhere.
         if (isQtQuick && isVersion1) {
-            if (QFile::exists(p.cd(QLatin1String("builtins.qmltypes")).path())) {
+            if (QFile::exists(p.cd(QStringLiteral("builtins.qmltypes")).path())) {
                 path = p.path();
                 break;
             }
@@ -153,8 +153,7 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
         }
 
         // Create a dump of the file
-        QStringList args;
-        args << QLatin1String("-noinstantiate") << QLatin1String("-path") << filePath;
+        const QStringList args = {QStringLiteral("-noinstantiate"), QStringLiteral("-path"), filePath};
 
         for (const PluginDumpExecutable& executable : m_pluginDumpExecutables) {
             QProcess qmlplugindump;
