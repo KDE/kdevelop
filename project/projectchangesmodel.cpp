@@ -168,8 +168,7 @@ void ProjectChangesModel::statusReady(KJob* job)
                 if((mode == IBasicVersionControl::NonRecursive && currentUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash) == url.adjusted(QUrl::StripTrailingSlash))
                     || (mode == IBasicVersionControl::Recursive && url.isParentOf(currentUrl))
                 ) {
-                    QStandardItem* fileItem = fileItemForUrl(itProject, currentUrl);
-                    itProject->removeRow(fileItem->row());
+                    removeUrl(currentUrl);
                 }
             }
         }

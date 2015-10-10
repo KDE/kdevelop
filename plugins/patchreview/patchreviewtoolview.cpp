@@ -205,7 +205,6 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.filesList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_editPatch.filesList, &QTreeView::customContextMenuRequested, this, &PatchReviewToolView::customContextMenuRequested);
     connect(m_fileModel, &PatchFilesModel::itemChanged, this, &PatchReviewToolView::fileItemChanged);
-
     m_editPatch.previousFile->setIcon( QIcon::fromTheme( "arrow-left" ) );
     m_editPatch.previousHunk->setIcon( QIcon::fromTheme( "arrow-up" ) );
     m_editPatch.nextHunk->setIcon( QIcon::fromTheme( "arrow-down" ) );
@@ -379,7 +378,7 @@ void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
 
 void PatchReviewToolView::fileItemChanged( QStandardItem* item )
 {
-    QUrl url = m_fileModel->statusInfo(item).url();
+    QUrl url = m_fileModel->statusInfo(item->index()).url();
     if (url.isEmpty())
         return;
 
@@ -494,9 +493,9 @@ void PatchReviewToolView::documentActivated( IDocument* doc ) {
     if ( !m_plugin->modelList() )
         return;
 
-    QStandardItem *fileItem = m_fileModel->fileItemForUrl( doc->url() );
-    if ( fileItem ) {
-        m_editPatch.filesList->setCurrentIndex( fileItem->index() );
+    QModelIndex idx = m_fileModel->indexForUrl( doc->url() );
+    if ( idx.isValid() ) {
+        m_editPatch.filesList->setCurrentIndex( idx );
     } else {
         m_editPatch.filesList->setCurrentIndex( QModelIndex() );
     }

@@ -145,16 +145,16 @@ void VcsChangesView::selectCurrentDocument()
     
     QUrl url = doc->url();
     IProject* p = ICore::self()->projectController()->findProjectForUrl(url);
-    QStandardItem* item = 0;
+    QModelIndex idx;
     
     if(p) {
         ProjectChangesModel* pcmodel = static_cast<ProjectChangesModel*>(model());
-        item = pcmodel->fileItemForUrl(pcmodel->projectItem(p), url);
+        idx = pcmodel->indexForUrl(url);
     }
     
-    if(item) {
-        expand(item->index().parent());
-        setCurrentIndex(item->index());
+    if(idx.isValid()) {
+        expand(idx.parent());
+        setCurrentIndex(idx);
     } else
         collapseAll();
 }
@@ -169,7 +169,7 @@ void VcsChangesView::openSelected(const QModelIndex& index)
 {
     if(!index.parent().isValid()) //then it's a project
         return;
-    QModelIndex idx = index.sibling(index.row(), 0);
+    QModelIndex idx = index.sibling(index.row(), 1);
     VcsStatusInfo info = idx.data(ProjectChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>();
     QUrl url = info.url();
     

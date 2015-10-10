@@ -78,6 +78,35 @@ static QIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
     return QIcon::fromTheme("dialog-error");
 }
 
+class VcsStatusInfoItem : public QStandardItem
+{
+public:
+    VcsStatusInfoItem(const VcsStatusInfo& info)
+        : QStandardItem()
+        , m_info(info) {}
+
+    void setStatus(const VcsStatusInfo& info) {
+        m_info = info;
+        emitDataChanged();
+    }
+
+    QVariant data(int role) const override
+    {
+        switch(role) {
+            case Qt::DisplayRole:
+                return stateToString(m_info.state());
+            case Qt::DecorationRole:
+                return stateToIcon(m_info.state());
+            case VcsFileChangesModel::VcsStatusInfoRole:
+                return QVariant::fromValue(m_info);
+        }
+        return {};
+    }
+
+private:
+    VcsStatusInfo m_info;
+};
+
 class VcsFileChangesModelPrivate
 {
 public:
@@ -85,24 +114,20 @@ public:
 };
 
 VcsFileChangesModel::VcsFileChangesModel(QObject *parent, bool allowSelection)
-    : QStandardItemModel(parent), d(new VcsFileChangesModelPrivate)
+    : QStandardItemModel(parent), d(new VcsFileChangesModelPrivate {allowSelection} )
 {
     setColumnCount(2);
     setHeaderData(0, Qt::Horizontal, i18n("Filename"));
     setHeaderData(1, Qt::Horizontal, i18n("Status"));
-    d->allowSelection = allowSelection;
 }
 
 int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsStatusInfo &status)
 {
-    QStandardItem* it1=fileItemForUrl(parent, status.url());
-    QStandardItem* itStatus;
-
     if(status.state()==VcsStatusInfo::ItemUnknown || status.state()==VcsStatusInfo::ItemUpToDate) {
-        if(it1)
-            parent->removeRow(it1->row());
+        removeUrl(status.url());
         return -1;
     } else {
+        QStandardItem* it1 = fileItemForUrl(parent, status.url());
         if(!it1) {
             QString path = ICore::self()->projectController()->prettyFileName(status.url(), KDevelop::IProjectController::FormatPlain);
             QMimeType mime = status.url().isLocalFile()
@@ -110,41 +135,42 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
                 : QMimeDatabase().mimeTypeForUrl(status.url());
             QIcon icon = QIcon::fromTheme(mime.iconName());
             it1 = new QStandardItem(icon, path);
-            itStatus = new QStandardItem;
+            auto itStatus = new VcsStatusInfoItem(status);
 
             if(d->allowSelection) {
                 it1->setCheckable(true);
                 it1->setCheckState(status.state() == VcsStatusInfo::ItemUnknown ? Qt::Unchecked : Qt::Checked);
             }
 
-            parent->appendRow(QList<QStandardItem*>() << it1 << itStatus);
+            parent->appendRow({ it1, itStatus });
         } else {
             QStandardItem *parent = it1->parent();
             if(parent == 0)
                 parent = invisibleRootItem();
-            itStatus = parent->child(it1->row(), 1);
+            auto itStatus = static_cast<VcsStatusInfoItem*>(parent->child(it1->row(), 1));
+            itStatus->setStatus(status);
         }
 
-        QString text = stateToString(status.state());
-        if(itStatus->text()!=text) {
-            itStatus->setText(text);
-            itStatus->setIcon(stateToIcon(status.state()));
-        }
-        it1->setData(qVariantFromValue<VcsStatusInfo>(status), VcsStatusInfoRole);
         return it1->row();
     }
 }
 
-QStandardItem* VcsFileChangesModel::fileItemForUrl(QStandardItem* parent, const QUrl& url)
+QVariant VcsFileChangesModel::data(const QModelIndex &index, int role) const
 {
-    for(int i=0; i<parent->rowCount(); i++) {
-        QStandardItem* curr=parent->child(i);
+    switch(role) {
+        case UrlRole:
+            return statusInfo(index.row(), index.parent()).url();
+    }
+    return QStandardItemModel::data(index, role);
+}
 
-        if(curr->data(VcsStatusInfoRole).value<VcsStatusInfo>().url()==url) {
-            return curr;
+QStandardItem* VcsFileChangesModel::fileItemForUrl(QStandardItem* parent, const QUrl& url) const
+{
+    for(int i=0, c=parent->rowCount(); i<c; i++) {
+        if(statusInfo(i, parent->index()).url()==url) {
+            return parent->child(i);
         }
     }
-
     return 0;
 }
 
@@ -155,10 +181,10 @@ QList<VcsStatusInfo> VcsFileChangesModel::checkedStatuses(QStandardItem *parent)
     if(!d->allowSelection)
         return ret;
 
-    for(int i = 0; i < parent->rowCount(); i++) {
+    for(int i = 0, c = parent->rowCount(); i < c; i++) {
         QStandardItem* item = parent->child(i);
         if(item->checkState() == Qt::Checked) {
-            ret << statusInfo(item);
+            ret << statusInfo(i, parent->index());
         }
     }
 
@@ -170,7 +196,7 @@ void VcsFileChangesModel::setAllChecked(bool checked)
     if(!d->allowSelection)
         return;
     QStandardItem* parent = invisibleRootItem();
-    for(int i = 0; i < parent->rowCount(); i++) {
+    for(int i = 0, c = parent->rowCount(); i < c; i++) {
         QStandardItem* item = parent->child(i);
         item->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
     }
@@ -180,22 +206,27 @@ QList<QUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
 {
     QList<QUrl> ret;
 
-    for(int i = 0; i < parent->rowCount(); i++) {
+    for(int i = 0, c = parent->rowCount(); i < c; i++) {
         QStandardItem* item = parent->child(i);
         if(!d->allowSelection || item->checkState() == Qt::Checked) {
-            ret << statusInfo(item).url();
+            ret << statusInfo(i, parent->index()).url();
         }
     }
 
     return ret;
 }
 
+VcsStatusInfo VcsFileChangesModel::statusInfo(int row, const QModelIndex &parent) const
+{
+    return index(row, 1, parent).data(VcsStatusInfoRole).value<VcsStatusInfo>();
+}
+
 QList<QUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
 {
     QList<QUrl> ret;
 
-    for(int i = 0; i < parent->rowCount(); i++) {
-        ret << statusInfo(parent->child(i)).url();
+    for(int i = 0, c = parent->rowCount(); i < c; i++) {
+        ret << statusInfo(i, parent->index()).url();
     }
 
     return ret;
@@ -208,9 +239,9 @@ void VcsFileChangesModel::checkUrls(QStandardItem *parent, const QList<QUrl>& ur
     if(!d->allowSelection)
         return;
 
-    for(int i = 0; i < parent->rowCount(); i++) {
+    for(int i = 0, c = parent->rowCount(); i < c; i++) {
         QStandardItem* item = parent->child(i);
-        item->setCheckState(urlSet.contains(statusInfo(item).url()) ? Qt::Checked : Qt::Unchecked);
+        item->setCheckState(urlSet.contains(statusInfo(i, parent->index()).url()) ? Qt::Checked : Qt::Unchecked);
     }
 }
 
@@ -222,6 +253,37 @@ void VcsFileChangesModel::setIsCheckbable(bool checkable)
 bool VcsFileChangesModel::isCheckable() const
 {
     return d->allowSelection;
+}
+
+QModelIndex VcsFileChangesModel::indexForUrl(const QUrl& url) const
+{
+    return indexForUrl(QModelIndex(), url);
+}
+
+QModelIndex VcsFileChangesModel::indexForUrl(const QModelIndex& parent, const QUrl& url) const
+{
+    for (int i=0, c=rowCount(parent); i<c; ++i) {
+        QModelIndex idx = index(i, 0, parent);
+        if (hasChildren(idx)) {
+            QModelIndex cidx = indexForUrl(idx, url);
+            if (cidx.isValid())
+                return cidx;
+        } else {
+            if (statusInfo(idx.row(), idx.parent()).url() == url) {
+                return idx;
+            }
+        }
+    }
+    return {};
+}
+
+bool VcsFileChangesModel::removeUrl(const QUrl& url)
+{
+    const QModelIndex idx = indexForUrl(url);
+    if(idx.isValid()) {
+        removeRow(idx.row(), idx.parent());
+    }
+    return idx.isValid();
 }
 
 }

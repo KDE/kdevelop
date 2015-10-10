@@ -50,14 +50,9 @@ public:
      * @param isCheckable if true, model will show checkboxes on items.
      */
     explicit VcsFileChangesModel(QObject *parent, bool isCheckable = false);
-    enum ItemRoles { VcsStatusInfoRole = Qt::UserRole+1 };
+    enum ItemRoles { VcsStatusInfoRole = Qt::UserRole+1, UrlRole, LastItemRole };
 
-    /**
-     * Returns item for particular url.
-     */
-    QStandardItem* fileItemForUrl(const QUrl &url) {
-        return fileItemForUrl(invisibleRootItem(), url);
-    }
+    QVariant data(const QModelIndex &index, int role) const override;
 
     /**
      * Returns list of currently checked statuses.
@@ -95,24 +90,14 @@ public:
     /**
      * Simple helper to get VcsStatusInfo.
      */
-    static VcsStatusInfo statusInfo(const QModelIndex &i) {
-        return i.data(VcsStatusInfoRole).value<VcsStatusInfo>();
-    }
-
-    /**
-     * Simple helper to get VcsStatusInfo.
-     */
-    static VcsStatusInfo statusInfo(const QStandardItem *item) {
-        return item->data(VcsStatusInfoRole).value<VcsStatusInfo>();
-    }
-    
-    /**
-     * Returns item for particular url.
-     */
-    static QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url);
+    VcsStatusInfo statusInfo(int row, const QModelIndex &parent) const;
+    VcsStatusInfo statusInfo(const QModelIndex &idx) const { return statusInfo(idx.row(), idx.parent()); }
 
     void setIsCheckbable(bool checkable);
     bool isCheckable() const;
+
+    QModelIndex indexForUrl(const QUrl& url) const;
+    bool removeUrl(const QUrl& url);
 
 public slots:
     /**
@@ -149,6 +134,12 @@ protected:
      * Returns all urls
      * */
     QList<QUrl> urls(QStandardItem *parent) const;
+
+    /**
+     * Returns item for particular url.
+     */
+    QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url) const;
+    QModelIndex indexForUrl(const QModelIndex& parent, const QUrl &url) const;
 
 private:
     class VcsFileChangesModelPrivate *const d;
