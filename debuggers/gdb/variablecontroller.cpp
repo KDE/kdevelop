@@ -163,13 +163,13 @@ void VariableController::updateLocals()
                         new StackListLocalsHandler(debugSession())));
 }
 
-QString VariableController::expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor)
+KTextEditor::Range VariableController::expressionRangeUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor)
 {
     QString line = doc->line(cursor.line());
     int index = cursor.column();
     QChar c = line[index];
     if (!c.isLetterOrNumber() && c != '_')
-        return QString();
+        return {};
 
     int start = Utils::expressionAt(line, index+1);
     int end = index;
@@ -180,11 +180,9 @@ QString VariableController::expressionUnderCursor(KTextEditor::Document* doc, co
             break;
     }
     if (!(start < end))
-        return QString();
+        return {};
 
-    QString expression(line.mid(start, end-start));
-    expression = expression.trimmed();
-    return expression;
+    return { KTextEditor::Cursor{cursor.line(), start}, KTextEditor::Cursor{cursor.line(), end} };
 }
 
 

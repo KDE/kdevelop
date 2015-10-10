@@ -51,7 +51,7 @@ public:
     virtual Variable* createVariable(TreeModel* model, TreeItem* parent, 
                                      const QString& expression,
                                      const QString& display = "") override;
-    virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) override;
+    virtual KTextEditor::Range expressionRangeUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) override;
     virtual void addWatch(KDevelop::Variable* variable) override;
     virtual void addWatchpoint(KDevelop::Variable* variable) override;
     virtual void update() override;
