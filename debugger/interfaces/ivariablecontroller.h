@@ -22,6 +22,7 @@
 #define KDEVPLATFORM_IVARIABLECONTROLLER_H
 
 #include <QtCore/QObject>
+#include <KTextEditor/Range>
 
 #include "idebugsession.h"
 
@@ -52,7 +53,7 @@ public:
                                      const QString& expression,
                                      const QString& display = {}) = 0;
 
-    virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) = 0;
+    virtual KTextEditor::Range expressionRangeUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) = 0;
 
     virtual void addWatch(Variable* variable) = 0;
     virtual void addWatchpoint(Variable* variable) = 0;

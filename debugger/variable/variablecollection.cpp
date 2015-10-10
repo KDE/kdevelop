@@ -41,6 +41,7 @@
 #include "../interfaces/idebugsession.h"
 #include "../interfaces/ivariablecontroller.h"
 #include "util/debug.h"
+#include "util/texteditorhelpers.h"
 #include "variabletooltip.h"
 #include <sublime/area.h>
 
@@ -508,11 +509,12 @@ QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::C
 
     KTextEditor::Document* doc = view->document();
 
-    QString expression = currentSession()->variableController()->expressionUnderCursor(doc, cursor);
+    KTextEditor::Range expressionRange = currentSession()->variableController()->expressionRangeUnderCursor(doc, cursor);
 
-    if (expression.isEmpty())
+    if (!expressionRange.isValid())
         return QString();
 
+    QString expression = doc->text(expressionRange).trimmed();
     QPoint local = view->cursorToCoordinate(cursor);
     QPoint global = view->mapToGlobal(local);
     QWidget* w = view->childAt(local);
@@ -520,6 +522,7 @@ QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::C
         w = view;
 
     m_collection->activeTooltip_ = new VariableToolTip(w, global+QPoint(30,30), expression);
+    m_collection->activeTooltip_->setHandleRect(getItemBoundingRect(view, expressionRange));
     return QString();
 }
 

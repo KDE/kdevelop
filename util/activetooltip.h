@@ -63,8 +63,6 @@ public:
 
     void resizeEvent(QResizeEvent*) override;
 
-    void moveEvent(QMoveEvent*) override;
-
     void paintEvent(QPaintEvent*) override;
 
     void adjustRect();
@@ -72,8 +70,9 @@ public:
     ///Clicks within the friend widget are allowed
     void addFriendWidget(QWidget* widget);
 
-    ///Add a rectangle to the area in which the mouse can be moved freely without hiding the tooltip
-    void addExtendRect(const QRect& rect);
+    ///Set rect of handle (object) this tool tip is created for
+    ///Moving mouse inside this rect, and between this and bounding geometry won't hide the tooltip
+    void setHandleRect(const QRect& rect);
 
     ///Set the area within which the mouse can be moved freely without hiding the tooltip
     void setBoundingGeometry(const QRect& geometry);
@@ -85,7 +84,6 @@ Q_SIGNALS:
     void mouseOut();
 private:
     virtual void closeEvent(QCloseEvent* ) override;
-    void updateMouseDistance();
 
     class ActiveToolTipPrivate* const d;
 };

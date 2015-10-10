@@ -155,7 +155,7 @@ void WorkingSetToolButton::showTooltip()
 
     QRect extended(parentWidget()->mapToGlobal(geometry().topLeft()),
                     parentWidget()->mapToGlobal(geometry().bottomRight()));
-    controller->tooltip()->addExtendRect(extended);
+    controller->tooltip()->setHandleRect(extended);
 }
 
 void WorkingSetToolButton::buttonTriggered()

@@ -25,6 +25,7 @@ set(KDevPlatformUtil_LIB_SRCS
     widgetcolorizer.cpp
     path.cpp
     debug.cpp
+    texteditorhelpers.cpp
 )
 
 set (KDevPlatformUtil_LIB_UI

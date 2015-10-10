@@ -337,6 +337,12 @@ KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const QUrl& url, const KTe
     DUContext* ctx = chosen->findContextAt(c);
     if (ctx) {
       Declaration* decl = declarationUnderCursor(c, ctx);
+
+      // Some declarations need to be searched in parent context
+      if (!decl && ctx->parentContext()) {
+        decl = declarationUnderCursor(c, ctx->parentContext());
+      }
+
       if (decl && decl->range().contains(c, RangeInRevision::IncludeBackEdge) ) {
         return decl->rangeInCurrentRevision();
       }

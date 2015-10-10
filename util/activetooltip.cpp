@@ -161,9 +161,8 @@ namespace KDevelop {
 class ActiveToolTipPrivate
 {
 public:
-    uint previousDistance_;
     QRect rect_;
-    QRegion rectExtensions_;
+    QRect handleRect_;
     QList<QPointer<QObject> > friendWidgets_;
 };
 }
@@ -173,7 +172,6 @@ ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
     , d(new ActiveToolTipPrivate)
 {
     Q_ASSERT(parent);
-    d->previousDistance_ = std::numeric_limits<uint>::max();
     setMouseTracking(true);
     d->rect_ = QRect(position, position);
     d->rect_.adjust(-10, -10, 10, 10);
@@ -208,15 +206,12 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
             return false;
         } else {
             QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPos();
-            uint distance = (d->rect_.center() - globalPos).manhattanLength();
+            QRect mergedRegion = d->rect_.united(d->handleRect_);
 
-            if(distance > d->previousDistance_) {
-                // Close if the widget under the mouse is not a child widget of the tool-tip
-                qCDebug(UTIL) << "closing because of mouse move outside the widget";
-                close();
-            } else {
-                d->previousDistance_ = distance;
+            if (mergedRegion.contains(globalPos)) {
+                return false;
             }
+            close();
         }
         break;
 
@@ -268,18 +263,6 @@ void ActiveToolTip::showEvent(QShowEvent*)
     adjustRect();
 }
 
-void ActiveToolTip::updateMouseDistance()
-{
-    d->previousDistance_ = (d->rect_.center() - QCursor::pos()).manhattanLength();
-}
-
-void ActiveToolTip::moveEvent(QMoveEvent* ev)
-{
-    QWidget::moveEvent(ev);
-
-    updateMouseDistance();
-}
-
 void ActiveToolTip::resizeEvent(QResizeEvent*)
 {
     adjustRect();
@@ -294,8 +277,6 @@ void ActiveToolTip::resizeEvent(QResizeEvent*)
     }
 
     emit resized();
-
-    updateMouseDistance();
 }
 
 void ActiveToolTip::paintEvent(QPaintEvent* event)
@@ -307,9 +288,9 @@ void ActiveToolTip::paintEvent(QPaintEvent* event)
     painter.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
 }
 
-void ActiveToolTip::addExtendRect(const QRect& rect)
+void ActiveToolTip::setHandleRect(const QRect& rect)
 {
-    d->rectExtensions_ += rect;
+    d->handleRect_= rect;
 }
 
 void ActiveToolTip::adjustRect()
@@ -318,7 +299,6 @@ void ActiveToolTip::adjustRect()
     QRect r = geometry();
     r.adjust(-10, -10, 10, 10);
     d->rect_ = r;
-    updateMouseDistance();
 }
 
 void ActiveToolTip::setBoundingGeometry(const QRect& geometry)

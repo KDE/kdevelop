@@ -392,7 +392,7 @@ void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Contai
             if ( QWidget* navigationWidget = top->createNavigationWidget() ) {
                 NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(m_mainWindow, QCursor::pos() + QPoint(20, 20), navigationWidget);
                 tooltip->resize(navigationWidget->sizeHint() + QSize(10, 10));
-                tooltip->addExtendRect(container->tabRect(tab));
+                tooltip->setHandleRect(container->tabRect(tab));
 
                 m_tabTooltip.first = view;
                 m_tabTooltip.second = tooltip;

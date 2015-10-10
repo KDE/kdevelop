@@ -157,7 +157,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
     tooltip->setLayout( layout );
     tooltip->resize( tooltip->sizeHint() + QSize( 10, 10 ) );
     tooltip->move( pos - QPoint( 0, 20 + tooltip->height() ) );
-    tooltip->addExtendRect( QRect( pos - QPoint( 15, 15 ), pos + QPoint( 15, 15 ) ) );
+    tooltip->setHandleRect( QRect( pos - QPoint( 15, 15 ), pos + QPoint( 15, 15 ) ) );
 
     currentTooltip = tooltip;
     currentTooltipMark = markRange;

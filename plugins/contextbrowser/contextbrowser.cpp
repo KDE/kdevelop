@@ -73,6 +73,8 @@
 
 #include <language/util/navigationtooltip.h>
 
+#include <util/texteditorhelpers.h>
+
 #include <sublime/mainwindow.h>
 
 Q_LOGGING_CATEGORY(PLUGIN_CONTEXTBROWSER, "kdevplatform.plugins.contextbrowser")
@@ -425,28 +427,6 @@ void ContextBrowserPlugin::hideToolTip() {
   }
 }
 
-// TODO: this is a hack, but Kate does not provide interface for this
-static int getLineHeight(KTextEditor::View* view, int curLine)
-{
-  KTextEditor::Cursor c(curLine, 0);
-  int currentHeight = view->cursorToCoordinate(c).y();
-  c.setLine(curLine + 1);
-  if (view->cursorToCoordinate(c).y() < 0) {
-    c.setLine(curLine - 1);
-  }
-  return std::abs(view->cursorToCoordinate(c).y() - currentHeight);
-}
-
-static QRect getItemBoundingRect(const QUrl& viewUrl, KTextEditor::View* view, KTextEditor::Cursor itemPosition)
-{
-  DUChainReadLocker lock;
-  KTextEditor::Range itemRange = DUChainUtils::itemRangeUnderCursor(viewUrl, KTextEditor::Cursor(itemPosition));
-  QPoint startPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.start()));
-  QPoint endPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.end()));
-  endPoint.ry() += getLineHeight(view, itemPosition.line());
-  return QRect(startPoint, endPoint);
-}
-
 void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cursor position) {
 
   ContextBrowserView* contextView = browserViewForWidget(view);
@@ -497,7 +477,12 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     }
 
     KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, view->mapToGlobal(view->cursorToCoordinate(position)) + QPoint(20, 40), navigationWidget);
-    tooltip->addExtendRect(getItemBoundingRect(viewUrl, view, position));
+    KTextEditor::Range itemRange;
+    {
+      DUChainReadLocker lock;
+      itemRange = DUChainUtils::itemRangeUnderCursor(viewUrl, KTextEditor::Cursor(position));
+    }
+    tooltip->setHandleRect(getItemBoundingRect(view, itemRange));
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
     qCDebug(PLUGIN_CONTEXTBROWSER) << "tooltip size" << tooltip->size();
     m_currentToolTip = tooltip;
