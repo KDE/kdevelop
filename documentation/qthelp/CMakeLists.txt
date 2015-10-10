@@ -21,7 +21,6 @@ target_link_libraries(kdevqthelp
     KF5::KCMUtils KF5::I18n KF5::KIOWidgets KF5::TextEditor KF5::IconThemes Qt5::Help Qt5::WebKitWidgets KF5::NewStuff
     KDev::Language KDev::Documentation KDev::Interfaces)
 
-install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 install(FILES kdevelop-qthelp.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 add_subdirectory(tests)
