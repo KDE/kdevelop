@@ -26,7 +26,11 @@
 
 #=============================================================================
 
-find_package(LLVM ${Clang_FIND_VERSION} ${Clang_FIND_REQUIRED})
+if (${Clang_FIND_REQUIRED})
+    find_package(LLVM ${Clang_FIND_VERSION} REQUIRED)
+else ()
+    find_package(LLVM ${Clang_FIND_VERSION})
+endif ()
 
 set(CLANG_FOUND FALSE)
 

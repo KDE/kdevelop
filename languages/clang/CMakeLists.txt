@@ -2,11 +2,7 @@ project(kdev-clang)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
 
-find_package(Clang 3.5)
-set_package_properties(Clang PROPERTIES
-    TYPE REQUIRED
-    PURPOSE "LibClang is a high level C interface to clang"
-    URL "http://clang.llvm.org/")
+find_package(Clang 3.5 REQUIRED)
 
 add_definitions(${LLVM_CFLAGS})
 include_directories(${CLANG_INCLUDE_DIR})
