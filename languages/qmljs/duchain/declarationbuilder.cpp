@@ -1411,10 +1411,19 @@ AbstractType::Ptr DeclarationBuilder::typeFromClassName(const QString& name)
 {
     DeclarationPointer decl = QmlJS::getDeclaration(QualifiedIdentifier(name), currentContext());
 
+    if (!decl) {
+        if (name == QLatin1String("QRegExp")) {
+            decl = QmlJS::NodeJS::instance().moduleMember(QStringLiteral("__builtin_ecmascript"), QStringLiteral("RegExp"), currentContext()->url());
+        }
+    }
+
     if (decl) {
         return decl->abstractType();
     } else {
-        return AbstractType::Ptr(new StructureType);
+        DelayedType::Ptr type(new DelayedType);
+        type->setKind(DelayedType::Unresolved);
+        type->setIdentifier(IndexedTypeIdentifier(name));
+        return type;
     }
 }
 
@@ -1508,6 +1517,11 @@ bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const Abstrac
     } else if (a->whichType() == AbstractType::TypeEnumerator && b->whichType() == AbstractType::TypeEnumeration) {
         return enumContainsEnumerator(b, a);
     }
+
+    auto aId = dynamic_cast<const IdentifiedType*>(a.constData());
+    auto bId = dynamic_cast<const IdentifiedType*>(b.constData());
+    if (aId && bId && aId->qualifiedIdentifier() == bId->qualifiedIdentifier())
+        return true;
 
     return a->equals(b.constData());
 }
