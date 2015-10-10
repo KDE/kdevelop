@@ -67,7 +67,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT VariableDescription
     /**
      * The type of this variable.
      *
-     * In weekly typed languages, this field can be empty.
+     * In weakly typed languages, this field can be empty.
      **/
     QString type;
     /**
