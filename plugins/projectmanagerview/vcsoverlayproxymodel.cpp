@@ -18,6 +18,7 @@
 */
 
 #include "vcsoverlayproxymodel.h"
+#include <projectchangesmodel.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
@@ -25,6 +26,7 @@
 #include <interfaces/iplugin.h>
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 #include <vcs/vcsjob.h>
+#include <vcs/models/vcsfilechangesmodel.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
 
@@ -50,11 +52,18 @@ VcsOverlayProxyModel::VcsOverlayProxyModel(QObject* parent): QIdentityProxyModel
 
 QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) const
 {
-    if(role == BranchNameRole && !proxyIndex.parent().isValid()) {
-        IProject* p = qobject_cast<IProject*>(proxyIndex.data(ProjectModel::ProjectRole).value<QObject*>());
-        return m_branchName.value(p);
+    if(role == VcsStatusRole) {
+        if (!proxyIndex.parent().isValid()) {
+            IProject* p = qobject_cast<IProject*>(proxyIndex.data(ProjectModel::ProjectRole).value<QObject*>());
+            return m_branchName.value(p);
+        } else {
+            ProjectChangesModel* model = ICore::self()->projectController()->changesModel();
+            const QUrl url = proxyIndex.data(ProjectModel::UrlRole).toUrl();
+            const QModelIndex idx = model->indexForUrl(url);
+            return idx.sibling(idx.row(), 1).data(Qt::DisplayRole);
+        }
     } else
-        return QAbstractProxyModel::data(proxyIndex, role);;
+        return QAbstractProxyModel::data(proxyIndex, role);
 }
 
 void VcsOverlayProxyModel::addProject(IProject* p)

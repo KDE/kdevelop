@@ -40,7 +40,7 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     displayRect.setLeft(spaceLeft.left());
 
     QRect branchNameRect(displayRect.topRight(), opt.rect.bottomRight());
-    QString branchNameData = index.data(VcsOverlayProxyModel::BranchNameRole).toString();
+    QString branchNameData = index.data(VcsOverlayProxyModel::VcsStatusRole).toString();
 
     doLayout(opt, &checkRect, &decorationRect, &displayRect, false);
     branchNameRect.setLeft(branchNameRect.left() + displayRect.left());
