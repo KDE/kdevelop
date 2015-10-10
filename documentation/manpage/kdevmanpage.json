@@ -49,7 +49,7 @@
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
-    },
+    }, 
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IDocumentationProvider"
     ], 
