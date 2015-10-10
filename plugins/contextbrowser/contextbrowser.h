@@ -86,6 +86,15 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     Q_OBJECT
     Q_INTERFACES( KDevelop::IContextBrowser )
   public:
+    enum NavigationActionType {
+      Accept,
+      Back,
+      Down,
+      Up,
+      Left,
+      Right
+    };
+
     explicit ContextBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ContextBrowserPlugin();
 
@@ -107,6 +116,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void setAllowBrowsing(bool allow);
 
     virtual void showUses(const KDevelop::DeclarationPointer& declaration) override;
+
+    void doNavigate(NavigationActionType action, KTextEditor::View* view);
 
   public Q_SLOTS:
     void showUsesDelayed(const KDevelop::DeclarationPointer& declaration);
@@ -149,13 +160,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void previousMenuAboutToShow();
     void actionTriggered();
 
-    void navigateLeft();
-    void navigateRight();
-    void navigateUp();
-    void navigateDown();
-    void navigateAccept();
-    void navigateBack();
-
   private:
     QWidget* toolbarWidgetForMainWindow(Sublime::MainWindow* window);
     virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile,
@@ -177,16 +181,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void updateButtonState();
     void openDocument(int historyIndex);
     void fillHistoryPopup(QMenu* menu, const QList<int>& historyIndices);
-
-    enum NavigationActionType {
-      Accept,
-      Back,
-      Down,
-      Up,
-      Left,
-      Right
-    };
-    void doNavigate(NavigationActionType action);
 
   private:
     
