@@ -6,4 +6,8 @@ Image {
     RegExpValidator {
         regExp: /asdf/
     }
+
+    Rectangle {
+        anchors.fill: parent
+    }
 }

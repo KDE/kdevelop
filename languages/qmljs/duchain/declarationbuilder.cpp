@@ -1518,10 +1518,27 @@ bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const Abstrac
         return enumContainsEnumerator(b, a);
     }
 
-    auto aId = dynamic_cast<const IdentifiedType*>(a.constData());
-    auto bId = dynamic_cast<const IdentifiedType*>(b.constData());
-    if (aId && bId && aId->qualifiedIdentifier() == bId->qualifiedIdentifier())
-        return true;
+    {
+        auto aId = dynamic_cast<const IdentifiedType*>(a.constData());
+        auto bId = dynamic_cast<const IdentifiedType*>(b.constData());
+        if (aId && bId && aId->qualifiedIdentifier() == bId->qualifiedIdentifier())
+            return true;
+    }
+
+    {
+        auto aStruct = StructureType::Ptr::dynamicCast(a);
+        auto bStruct = StructureType::Ptr::dynamicCast(a);
+        if (aStruct && bStruct) {
+            auto top = currentContext()->topContext();
+            auto aDecl = dynamic_cast<ClassDeclaration*>(aStruct->declaration(top));
+            auto bDecl = dynamic_cast<ClassDeclaration*>(bStruct->declaration(top));
+            if (aDecl && bDecl) {
+                if (aDecl->isPublicBaseClass(bDecl, top) || bDecl->isPublicBaseClass(aDecl, top)) {
+                    return true;
+                }
+            }
+        }
+    }
 
     return a->equals(b.constData());
 }

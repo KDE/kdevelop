@@ -334,6 +334,7 @@ bool ExpressionVisitor::encounterParent(const QString& declaration)
         (owner = QmlJS::getOwnerOfContext(parent)) &&
         owner->abstractType()) {
         encounterLvalue(DeclarationPointer(owner));
+        instantiateCurrentDeclaration();
         return true;
     }
 
