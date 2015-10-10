@@ -222,7 +222,7 @@ void StaticAssistantsManager::Private::startAssistant(IAssistant::Ptr assistant)
     m_activeAssistant = assistant;
     if (m_activeAssistant) {
         connect(m_activeAssistant.data(), &IAssistant::hide, q, &StaticAssistantsManager::hideAssistant, Qt::UniqueConnection);
-        ICore::self()->uiController()->popUpAssistant(IAssistant::Ptr(m_activeAssistant.data()));
+        ICore::self()->uiController()->showAssistant(IAssistant::Ptr(m_activeAssistant.data()));
 
         m_assistantStartedAt =  m_currentView.data()->cursorPosition();
     }

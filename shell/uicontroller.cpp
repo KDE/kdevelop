@@ -49,7 +49,6 @@
 #include "partdocument.h"
 #include "textdocument.h"
 #include "documentcontroller.h"
-#include "assistantpopup.h"
 #include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
@@ -146,8 +145,6 @@ public:
     QPointer<Sublime::MainWindow> activeSublimeWindow;
     bool areasRestored;
 
-    /// Currently shown assistant popup.
-    QPointer<AssistantPopup> currentShownAssistant;
     /// QWidget implementing IToolViewActionListener interface, or null
     QPointer<QWidget> activeActionListener;
     QTimer m_assistantTimer;
@@ -721,14 +718,7 @@ void UiController::showErrorMessage(const QString& message, int timeout)
     QMetaObject::invokeMethod(mw, "showErrorMessage", Q_ARG(QString, message), Q_ARG(int, timeout));
 }
 
-void UiController::hideAssistant()
-{
-    if (d->currentShownAssistant) {
-        d->currentShownAssistant->hide();
-    }
-}
-
-void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
+void UiController::showAssistant(const KDevelop::IAssistant::Ptr& assistant)
 {
     if(!assistant)
         return;
@@ -743,10 +733,6 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
     auto editorView = qobject_cast<KTextEditor::View*>(view->widget());
     Q_ASSERT(editorView);
     if (editorView) {
-        if ( !d->currentShownAssistant ) {
-            d->currentShownAssistant = new AssistantPopup;
-        }
-        d->currentShownAssistant->reset(editorView, assistant);
         // TODO: See if we can use CodeCompletionInterface::startCompletion for this
         // See if we can split the assistant actions into their own model and use the model param as well
         // That way we don't get unwanted completions when the assistant completions are shown

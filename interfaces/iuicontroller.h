@@ -130,15 +130,10 @@ public:
     virtual void registerStatus(QObject* status) = 0;
 
     /**
-     * Shows an assistant popup at bottom within the current central widget
-     * @p assistant the assistant that will be shown in a popup */
-    virtual void popUpAssistant(const QExplicitlySharedDataPointer<IAssistant>& assistant) = 0;
-
-    /**
-     * Hides the assistant if it is currently being shown
+     * Show the assistant specified by @p assistant
      */
-    virtual void hideAssistant() = 0;
-    
+    virtual void showAssistant(const QExplicitlySharedDataPointer<IAssistant>& assistant) = 0;
+
     /**
      * This is meant to be used by IDocument subclasses to initialize the
      * Sublime::Document.

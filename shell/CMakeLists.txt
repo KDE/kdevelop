@@ -11,7 +11,6 @@ set(KDevPlatformShell_LIB_SRCS
     workingsets/workingsetwidget.cpp
     workingsets/closedworkingsetswidget.cpp
     workingsets/workingsethelpers.cpp
-    assistantpopup.cpp
     mainwindow.cpp
     mainwindow_p.cpp
     plugincontroller.cpp
@@ -116,9 +115,6 @@ LINK_PUBLIC
     KDev::Debugger
     KDev::Interfaces
 LINK_PRIVATE
-    Qt5::Quick
-    Qt5::QuickWidgets
-
     KF5::GuiAddons
     KF5::IconThemes
     KF5::KIOFileWidgets
@@ -175,4 +171,4 @@ install(FILES
 install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevdebugger )
 install( FILES kdevsessionui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevsession )
 install( FILES kdevsourceformatter.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevsourceformatter )
-install( FILES AssistantButton.qml assistantpopup.qml DESTINATION ${KDE_INSTALL_DATADIR}/kdevelop )
+
