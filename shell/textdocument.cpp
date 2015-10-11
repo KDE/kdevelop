@@ -295,7 +295,7 @@ struct TextDocumentPrivate {
 
     void saveSessionConfig()
     {
-        if(!document->url().isValid()) {
+        if(!document || !document->url().isValid()) {
             return;
         }
         if (KTextEditor::ParameterizedSessionConfigInterface *sessionConfigIface =
