@@ -293,10 +293,11 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
 
     if(flags & Create)
     {
-        if(!d->factoryDocuments.contains(factory))
-            d->factoryDocuments[factory] = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
-
-        Sublime::ToolDocument *doc = d->factoryDocuments[factory];
+        Sublime::ToolDocument* doc = d->factoryDocuments.value(factory);
+        if(!doc) {
+            doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
+            d->factoryDocuments.insert(factory, doc);
+        }
 
         Sublime::View* view = addToolViewToArea(factory, doc, activeArea());
         if(view)
