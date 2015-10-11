@@ -34,6 +34,8 @@ Boston, MA 02110-1301, USA.
 #include <KTextEditor/Document>
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
+#include <KTextEditor/MainWindow>
+#include <KParts/MainWindow>
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
@@ -44,6 +46,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/isession.h>
 #include <interfaces/isourceformatter.h>
+#include <interfaces/iuicontroller.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <project/projectmodel.h>
@@ -545,7 +548,11 @@ void SourceFormatterController::formatFiles()
         m_urls.append(f->path().toUrl());
     }
 
-    formatFiles(m_urls);
+    auto win = ICore::self()->uiController()->activeMainWindow()->window();
+    auto reply = QMessageBox::question(win, i18n("Reformat files?"), i18n("Reformat all files in the selected folder?"));
+    if ( reply == QMessageBox::Yes ) {
+        formatFiles(m_urls);
+    }
 }
 
 void SourceFormatterController::formatFiles(QList<QUrl> &list)
