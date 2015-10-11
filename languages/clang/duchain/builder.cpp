@@ -1035,6 +1035,11 @@ template<CXCursorKind CK, class DeclType, bool hasContext>
 CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
 {
     auto id = makeId(cursor);
+    if (CK == CXCursor_UnexposedDecl && id.isEmpty()) {
+        // skip unexposed declarations that have no identifier set
+        // this is useful to skip e.g. friend declarations
+        return CXChildVisit_Continue;
+    }
     IF_DEBUG(clangDebug() << "id:" << id << "- CK:" << CK << "- DeclType:" << typeid(DeclType).name() << "- hasContext:" << hasContext;)
 
     // Code path for class declarations that may be defined "out-of-line", e.g.

@@ -1019,7 +1019,7 @@ void TestDUChain::testMacrosRanges()
 
     DUChainReadLocker lock;
     QVERIFY(file.topContext());
-    QCOMPARE(file.topContext()->localDeclarations().size(), 3);
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
     auto macroDefinition = file.topContext()->localDeclarations()[0];
     QVERIFY(macroDefinition);
     QCOMPARE(macroDefinition->range(), RangeInRevision(0,8,0,19));
@@ -1039,7 +1039,7 @@ void TestDUChain::testMultiLineMacroRanges()
 
     DUChainReadLocker lock;
     QVERIFY(file.topContext());
-    QCOMPARE(file.topContext()->localDeclarations().size(), 3);
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
     auto macroDefinition = file.topContext()->localDeclarations()[0];
     QVERIFY(macroDefinition);
     QCOMPARE(macroDefinition->range(), RangeInRevision(0,8,0,19));
@@ -1174,7 +1174,7 @@ void TestDUChain::testReparseMacro()
 
     DUChainReadLocker lock;
     QVERIFY(file.topContext());
-    QCOMPARE(file.topContext()->localDeclarations().size(), 6);
+    QCOMPARE(file.topContext()->localDeclarations().size(), 5);
 
     auto macroDefinition = file.topContext()->localDeclarations()[0];
     QVERIFY(macroDefinition);
