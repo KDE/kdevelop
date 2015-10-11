@@ -848,12 +848,13 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
 
 void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
 {
-    if( !defaultLaunch() )
+    auto dl = defaultLaunch();
+    if( !dl )
     {
         qWarning() << "no default launch!";
         return;
     }
-    execute( runMode, defaultLaunch() );
+    execute( runMode, dl );
 }
 
 void RunController::setDefaultLaunch(ILaunchConfiguration* l)
