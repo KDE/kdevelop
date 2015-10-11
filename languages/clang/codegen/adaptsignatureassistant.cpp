@@ -44,8 +44,8 @@ Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const QUr
         clangDebug() << "no context found for document" << documentUrl;
         return nullptr;
     }
-    Declaration* functionDecl = DUChainUtils::declarationInLine(cursor, top.data());
-    return functionDecl;
+    const auto *context = top->findContextAt(top->transformToLocalRevision(cursor), true);
+    return context->type() == DUContext::Function ? context->owner() : nullptr;
 }
 
 Signature getDeclarationSignature(const Declaration *functionDecl, const DUContext *functionCtxt, bool includeDefaults)
