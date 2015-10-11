@@ -258,7 +258,7 @@ void GrepDialog::directoryChanged(const QString& dir)
 
     foreach(const QUrl& url, getDirectoryChoice())
     {
-        IProject *proj = ICore::self()->projectController()->findProjectForUrl( currentUrl );
+        IProject *proj = ICore::self()->projectController()->findProjectForUrl( url );
         if( !proj || !proj->path().toUrl().isLocalFile() )
             projectAvailable = false;
     }
