@@ -31,9 +31,6 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
-#include <language/assistant/staticassistant.h>
-#include <language/assistant/staticassistantsmanager.h>
-
 #include "../duchain/declaration.h"
 #include "../duchain/classfunctiondeclaration.h"
 #include "../duchain/ducontext.h"
@@ -58,73 +55,6 @@ using namespace KTextEditor;
 
 //Multi-threaded completion creates some multi-threading related crashes, and sometimes shows the completions in the wrong position if the cursor was moved
 // #define SINGLE_THREADED_COMPLETION
-
-namespace {
-
-class AssistantItem : public KDevelop::CompletionTreeItem
-{
-public:
-    AssistantItem(const KDevelop::IAssistantAction::Ptr& action)
-        : CompletionTreeItem()
-        , m_action(action)
-    {
-        Q_ASSERT(action);
-    }
-
-    QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel*) const override
-    {
-        switch (role) {
-        case Qt::DisplayRole:
-            if (index.column() == KTextEditor::CodeCompletionModel::Name)
-                return m_action->description();
-            break;
-        }
-        return QVariant();
-    }
-
-    int argumentHintDepth() const override
-    {
-        return 1;
-    }
-
-    void execute(KTextEditor::View*, const KTextEditor::Range&) override
-    {
-        m_action->execute();
-    }
-
-private:
-    KDevelop::IAssistantAction::Ptr m_action;
-};
-
-class AssistantGroup : public KDevelop::CompletionCustomGroupNode
-{
-public:
-    AssistantGroup(const QList<KDevelop::IAssistantAction::Ptr>& actions)
-        : CompletionCustomGroupNode(QObject::tr("Assistants"), 0)
-    {
-        for (const auto& action: actions) {
-            appendChild(KDevelop::CompletionTreeItemPointer(new AssistantItem(action)));
-        }
-    }
-};
-
-KDevelop::IAssistant* activeAssistant()
-{
-    return KDevelop::ICore::self()->languageController()-> staticAssistantsManager()->activeAssistant().data();
-}
-
-KDevelop::CompletionTreeElementPointer assistantActionsGroup(KDevelop::IAssistant* assistant)
-{
-    if (assistant) {
-        const auto actions = assistant->actions();
-        if (!actions.isEmpty()) {
-            return KDevelop::CompletionTreeElementPointer(new AssistantGroup(actions));
-        }
-    }
-    return {};
-}
-
-}
 
 namespace KDevelop {
 
@@ -176,10 +106,6 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   , m_thread(0)
 {
   qRegisterMetaType<KTextEditor::Cursor>();
-
-  connect(ICore::self()->languageController()->staticAssistantsManager(),
-          &StaticAssistantsManager::activeAssistantChanged,
-          this, &CodeCompletionModel::updateAssistantItems);
 }
 
 void CodeCompletionModel::initialize() {
@@ -217,35 +143,6 @@ bool CodeCompletionModel::fullCompletion() const
 
 KDevelop::CodeCompletionWorker* CodeCompletionModel::worker() const {
   return m_thread->m_worker;
-}
-
-void CodeCompletionModel::updateAssistantItems()
-{
-    const auto assistant = activeAssistant();
-    disconnect(m_connection);
-    if (assistant) {
-        m_connection = connect(assistant, &IAssistant::actionsChanged,
-                               this, &CodeCompletionModel::updateAssistantItems);
-    }
-
-    const bool hasAssistantNode = !m_completionItems.isEmpty() &&
-        dynamic_cast<AssistantGroup*>(m_completionItems.last().data());
-
-    if (!assistant && !hasAssistantNode) {
-        return;
-    }
-    // KateCompletionModel will happily ignore beginRemoveRows/endRemoveRows for argument hint items
-    // We use argument hints otherwise we have to hack the currently typed text into the item's Name column
-    // because KateCompletionModel offers no way to force an item to skip text filtering (other than arg hints)
-    // Event if we didn't, KateCompletionModel doesn't correctly balance begin/endInsertRows, so... meh
-    beginResetModel();
-    if (hasAssistantNode) {
-        m_completionItems.removeLast();
-    }
-    if (auto assists = assistantActionsGroup(assistant)) {
-        m_completionItems.append(assists);
-    }
-    endResetModel();
 }
 
 void CodeCompletionModel::clear()
@@ -367,9 +264,6 @@ void CodeCompletionModel::foundDeclarations(const QList<QExplicitlySharedDataPoi
 
   beginResetModel();
   m_completionItems = items;
-  if (auto assists = assistantActionsGroup(activeAssistant())) {
-    m_completionItems.append(assists);
-  }
   endResetModel();
 
   if(m_completionContext) {

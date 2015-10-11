@@ -130,11 +130,6 @@ public:
     virtual void registerStatus(QObject* status) = 0;
 
     /**
-     * Show the assistant specified by @p assistant
-     */
-    virtual void showAssistant(const QExplicitlySharedDataPointer<IAssistant>& assistant) = 0;
-
-    /**
      * This is meant to be used by IDocument subclasses to initialize the
      * Sublime::Document.
      */

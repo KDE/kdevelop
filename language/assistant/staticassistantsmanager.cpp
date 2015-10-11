@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "assistantcompletionmodel.h"
 #include "staticassistantsmanager.h"
 #include "util/debug.h"
 
@@ -37,6 +38,7 @@
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parsejob.h>
+#include <language/codecompletion/codecompletion.h>
 #include <language/duchain/problem.h>
 
 using namespace KDevelop;
@@ -54,7 +56,6 @@ struct StaticAssistantsManager::Private
     }
 
     void eventuallyStartAssistant();
-    void startAssistant(KDevelop::IAssistant::Ptr assistant);
     void checkAssistantForProblems(KDevelop::TopDUContext* top);
 
     void documentLoaded(KDevelop::IDocument*);
@@ -64,6 +65,7 @@ struct StaticAssistantsManager::Private
     void documentActivated(KDevelop::IDocument*);
     void cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&);
     void timeout();
+    void setActiveAssistant(const IAssistant::Ptr& assistant);
 
     StaticAssistantsManager* q;
 
@@ -74,6 +76,7 @@ struct StaticAssistantsManager::Private
     QList<StaticAssistant::Ptr> m_registeredAssistants;
     bool m_activeProblemAssistant = false;
     QTimer* m_timer;
+    AssistantCompletionModel* m_completionModel;
 
     SafeDocumentPointer m_eventualDocument;
     KTextEditor::Range m_eventualRange;
@@ -100,6 +103,20 @@ StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
     foreach (IDocument* document, ICore::self()->documentController()->openDocuments()) {
         d->documentLoaded(document);
     }
+
+    d->m_completionModel = new AssistantCompletionModel(this);
+    connect(d->m_completionModel, &AssistantCompletionModel::hasCompletions, this, [this]{
+        if (auto view = d->m_currentView.data()) {
+            // We cannot use KTextEditor::CodeCompletionInterface::startCompletion for now
+            // It randomly disappears and refuses to invoke in many/various situations
+            // Would be very nice to fix this in KTextEditor, because we /really/ want to
+            // be able to invoke completion only on the assistants model as we could with
+            // CodeCompletionInterface::startCompletion
+            // HACK: private internal slot invocation
+            QMetaObject::invokeMethod(view, "userInvokedCompletion");
+        }
+    });
+    new KDevelop::CodeCompletion(this, d->m_completionModel, {});
 }
 
 StaticAssistantsManager::~StaticAssistantsManager()
@@ -143,9 +160,7 @@ void StaticAssistantsManager::Private::documentLoaded(IDocument* document)
 
 void StaticAssistantsManager::hideAssistant()
 {
-    d->m_activeAssistant = QExplicitlySharedDataPointer<KDevelop::IAssistant>();
-    d->m_activeProblemAssistant = false;
-    emit activeAssistantChanged();
+    d->setActiveAssistant({});
 }
 
 void StaticAssistantsManager::Private::textInserted(Document* document, const Cursor& cursor, const QString& text)
@@ -194,7 +209,7 @@ void StaticAssistantsManager::Private::eventuallyStartAssistant()
         assistant->textChanged(view, m_eventualRange, m_eventualRemovedText);
 
         if (assistant->isUseful()) {
-            startAssistant(IAssistant::Ptr(assistant.data()));
+            setActiveAssistant(IAssistant::Ptr(assistant.data()));
             break;
         }
     }
@@ -204,30 +219,6 @@ void StaticAssistantsManager::Private::eventuallyStartAssistant()
     m_eventualDocument.clear();
     m_eventualRange = Range::invalid();
     m_eventualRemovedText.clear();
-}
-
-void StaticAssistantsManager::Private::startAssistant(IAssistant::Ptr assistant)
-{
-    if (assistant == m_activeAssistant) {
-        return;
-    }
-
-    if (m_activeAssistant) {
-        m_activeAssistant->doHide();
-    }
-
-    if (!m_currentView)
-        return;
-
-    m_activeAssistant = assistant;
-    if (m_activeAssistant) {
-        connect(m_activeAssistant.data(), &IAssistant::hide, q, &StaticAssistantsManager::hideAssistant, Qt::UniqueConnection);
-        ICore::self()->uiController()->showAssistant(IAssistant::Ptr(m_activeAssistant.data()));
-
-        m_assistantStartedAt =  m_currentView.data()->cursorPosition();
-    }
-
-    emit q->activeAssistantChanged();
 }
 
 void StaticAssistantsManager::Private::parseJobFinished(ParseJob* job)
@@ -291,7 +282,7 @@ void StaticAssistantsManager::Private::checkAssistantForProblems(TopDUContext* t
         if (m_currentView && m_currentView.data()->cursorPosition().line() == problem->range().start.line) {
             IAssistant::Ptr solution = problem->solutionAssistant();
             if(solution) {
-                startAssistant(solution);
+                setActiveAssistant(solution);
                 m_activeProblemAssistant = true;
                 break;
             }
@@ -311,6 +302,36 @@ void StaticAssistantsManager::Private::timeout()
         if (top) {
             checkAssistantForProblems(top);
         }
+    }
+}
+
+void StaticAssistantsManager::Private::setActiveAssistant(const IAssistant::Ptr& assistant)
+{
+    if (assistant == m_activeAssistant) {
+        return;
+    }
+
+    m_activeAssistant = QExplicitlySharedDataPointer<KDevelop::IAssistant>();
+
+    if (m_activeAssistant) {
+        m_activeAssistant->doHide();
+        m_activeAssistant->disconnect(q);
+        m_activeAssistant->disconnect(m_completionModel);
+    }
+
+    m_activeAssistant = assistant;
+
+    if (auto activeAssistant = m_activeAssistant.data()) {
+        auto updateActions = [=]{ m_completionModel->setActions(activeAssistant->actions()); };
+        connect(activeAssistant, &IAssistant::hide, q, &StaticAssistantsManager::hideAssistant);
+        connect(activeAssistant, &IAssistant::actionsChanged, m_completionModel, updateActions);
+        if (m_currentView) {
+            m_assistantStartedAt =  m_currentView.data()->cursorPosition();
+            updateActions();
+        }
+    } else {
+        m_activeProblemAssistant = false;
+        m_completionModel->setActions({});
     }
 }
 

@@ -85,8 +85,6 @@ public:
     /*! @p status must implement KDevelop::IStatus */
     virtual void registerStatus(QObject* status) override;
 
-    virtual void showAssistant(const KDevelop::IAssistant::Ptr& assistant) override;
-
     virtual void showErrorMessage(const QString& message, int timeout) override;
 
     /// Returns list of available view factories together with their ToolDocuments.

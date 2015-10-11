@@ -21,6 +21,7 @@ set(KDevPlatformLanguage_LIB_SRCS
     assistant/renameassistant.cpp
     assistant/renamefileaction.cpp
     assistant/staticassistant.cpp
+    assistant/assistantcompletionmodel.cpp
 
     editor/persistentmovingrangeprivate.cpp
     editor/persistentmovingrange.cpp

@@ -66,9 +66,6 @@ public:
 public slots:
     void hideAssistant();
 
-signals:
-    void activeAssistantChanged();
-
 private:
     struct Private;
     QScopedPointer<Private> const d;
