@@ -387,7 +387,7 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 
     qCDebug(SHELL) ;
     //delete the tooldocument
-    Sublime::ToolDocument *doc = d->factoryDocuments[factory];
+    Sublime::ToolDocument *doc = d->factoryDocuments.value(factory);
 
     ///@todo adymo: on document deletion all its views shall be also deleted
     foreach (Sublime::View *view, doc->views()) {
@@ -663,7 +663,7 @@ void UiController::loadAllAreas(KSharedConfigPtr config)
 
 void UiController::addToolViewToDockArea(IToolViewFactory* factory, Qt::DockWidgetArea area)
 {
-    addToolViewToArea(factory, d->factoryDocuments[factory], activeArea(), Sublime::dockAreaToPosition(area));
+    addToolViewToArea(factory, d->factoryDocuments.value(factory), activeArea(), Sublime::dockAreaToPosition(area));
 }
 
 bool UiController::toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area)
