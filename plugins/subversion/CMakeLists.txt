@@ -1,4 +1,10 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevsubversion\")
+
+# silence the deprecation warnings
+# if someone wants to fix the code, I'd welcome it
+# but for now, we won't spend time on it...
+add_definitions(-DSVN_DEPRECATED=)
+
 project(KDevSubversionPlugin)
 
 add_subdirectory(tests)
