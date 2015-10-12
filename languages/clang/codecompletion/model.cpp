@@ -43,6 +43,11 @@ using namespace KDevelop;
 
 namespace {
 
+bool isSpaceOnly(const QString& string)
+{
+    return std::find_if(string.begin(), string.end(), [] (const QChar c) { return !c.isSpace(); }) == string.end();
+}
+
 bool includePathCompletionRequired(const QString& text)
 {
     QString line;
@@ -163,6 +168,19 @@ ClangCodeCompletionModel::ClangCodeCompletionModel(ClangIndex* index, QObject* p
 ClangCodeCompletionModel::~ClangCodeCompletionModel()
 {
 
+}
+
+bool ClangCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted,
+                                                     bool userInsertion, const KTextEditor::Cursor& position)
+{
+    if ( inserted.isEmpty() || isSpaceOnly(inserted) ||
+        inserted.endsWith(QLatin1Char(';')) || inserted.endsWith(QLatin1Char('}')) ||
+        inserted.endsWith(QLatin1Char(']')) || inserted.endsWith(QLatin1Char(')')) ||
+        inserted.endsWith(QLatin1Char(' ')) )
+        {
+            return false;
+        }
+    return KDevelop::CodeCompletionModel::shouldStartCompletion(view, inserted, userInsertion, position);
 }
 
 CodeCompletionWorker* ClangCodeCompletionModel::createCompletionWorker()

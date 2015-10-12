@@ -41,6 +41,9 @@ public:
     explicit ClangCodeCompletionModel(ClangIndex* index, QObject* parent);
     virtual ~ClangCodeCompletionModel();
 
+    bool shouldStartCompletion(KTextEditor::View* view, const QString& inserted,
+                               bool userInsertion, const KTextEditor::Cursor& position);
+
 signals:
     void requestCompletion(const QUrl &url, const KTextEditor::Cursor& cursor, const QString& text, const QString& followingText);
 
