@@ -31,7 +31,7 @@ class CvsJob : public KDevelop::DVcsJob
 public:
     explicit CvsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
-    KDEVPLATFORMVCS_DEPRECATED explicit CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    explicit CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     virtual ~CvsJob();
 
@@ -41,7 +41,7 @@ public:
     QString cvsCommand();
     void clear();
     void setDirectory(const QString& directory);
-    KDEVPLATFORMVCS_DEPRECATED QString getDirectory();
+    QString getDirectory();
 
     void setRSH(const QString& rsh);
     void setServer(const QString& server);
