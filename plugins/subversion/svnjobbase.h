@@ -73,12 +73,11 @@ template<typename InternalJobClass>
 class SvnJobBaseImpl : public SvnJobBase
 {
 public:
-    SvnJobBaseImpl(InternalJobClass* internalJob, KDevSvnPlugin* plugin,
+    SvnJobBaseImpl(KDevSvnPlugin* plugin,
                    KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose)
         : SvnJobBase(plugin, verbosity)
-        , m_job(internalJob)
     {
-        m_job->setParent(this);
+        m_job = new InternalJobClass(this);
     }
 
     SvnInternalJobBase* internalJob() const override
@@ -87,7 +86,7 @@ public:
     }
 
 protected:
-    InternalJobClass* m_job;
+    InternalJobClass* m_job = nullptr;
 };
 
 #endif

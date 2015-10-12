@@ -168,98 +168,98 @@ void SvnInternalDiffJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Th
 
 void SvnInternalDiffJob::setSource( const KDevelop::VcsLocation& src )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_source = src;
 }
 void SvnInternalDiffJob::setDestination( const KDevelop::VcsLocation& dst )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_destination = dst;
 }
 void SvnInternalDiffJob::setSrcRevision( const KDevelop::VcsRevision& srcRev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_srcRevision = srcRev;
 }
 void SvnInternalDiffJob::setDstRevision( const KDevelop::VcsRevision& dstRev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_dstRevision = dstRev;
 }
 void SvnInternalDiffJob::setPegRevision( const KDevelop::VcsRevision& pegRev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_pegRevision = pegRev;
 }
 void SvnInternalDiffJob::setRecursive( bool recursive )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_recursive = recursive;
 }
 void SvnInternalDiffJob::setIgnoreAncestry( bool ignoreAncestry )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_ignoreAncestry = ignoreAncestry;
 }
 void SvnInternalDiffJob::setIgnoreContentType( bool ignoreContentType )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_ignoreContentType = ignoreContentType;
 }
 void SvnInternalDiffJob::setNoDiffOnDelete( bool noDiffOnDelete )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_noDiffOnDelete = noDiffOnDelete;
 }
 
 bool SvnInternalDiffJob::recursive() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_recursive;
 }
 bool SvnInternalDiffJob::ignoreAncestry() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_ignoreAncestry;
 }
 bool SvnInternalDiffJob::ignoreContentType() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_ignoreContentType;
 }
 bool SvnInternalDiffJob::noDiffOnDelete() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_noDiffOnDelete;
 }
 KDevelop::VcsLocation SvnInternalDiffJob::source() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_source;
 }
 KDevelop::VcsLocation SvnInternalDiffJob::destination() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_destination;
 }
 KDevelop::VcsRevision SvnInternalDiffJob::srcRevision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_srcRevision;
 }
 KDevelop::VcsRevision SvnInternalDiffJob::dstRevision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_dstRevision;
 }
 KDevelop::VcsRevision SvnInternalDiffJob::pegRevision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_pegRevision;
 }
 
 SvnDiffJob::SvnDiffJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalDiffJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
     connect( m_job, &SvnInternalDiffJob::gotDiff,

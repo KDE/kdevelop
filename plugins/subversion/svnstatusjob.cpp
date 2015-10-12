@@ -75,24 +75,24 @@ SvnInternalStatusJob::SvnInternalStatusJob( SvnJobBase* parent )
 
 void SvnInternalStatusJob::setRecursive( bool recursive )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_recursive = recursive;
 }
 
 void SvnInternalStatusJob::setLocations( const QList<QUrl>& urls )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_locations = urls;
 }
 
 QList<QUrl> SvnInternalStatusJob::locations() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_locations;
 }
 bool SvnInternalStatusJob::recursive() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_recursive;
 }
 
@@ -127,7 +127,7 @@ void SvnInternalStatusJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
 }
 
 SvnStatusJob::SvnStatusJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalStatusJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Status );
     connect(m_job, &SvnInternalStatusJob::gotNewStatus,

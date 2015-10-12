@@ -63,54 +63,54 @@ void SvnInternalLogJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thr
 
 void SvnInternalLogJob::setLocation( const QUrl &url )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_location = url;
 }
 
 QUrl SvnInternalLogJob::location() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_location;
 }
 
 KDevelop::VcsRevision SvnInternalLogJob::startRevision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_startRevision;
 }
 
 KDevelop::VcsRevision SvnInternalLogJob::endRevision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_endRevision;
 }
 
 int SvnInternalLogJob::limit() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_limit;
 }
 
 void SvnInternalLogJob::setStartRevision( const KDevelop::VcsRevision& rev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_startRevision = rev;
 }
 
 void SvnInternalLogJob::setEndRevision( const KDevelop::VcsRevision& rev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_endRevision = rev;
 }
 
 void SvnInternalLogJob::setLimit( int limit )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_limit = limit;
 }
 
 SvnLogJob::SvnLogJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalLogJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Log );
     connect( m_job, &SvnInternalLogJob::logEvent,

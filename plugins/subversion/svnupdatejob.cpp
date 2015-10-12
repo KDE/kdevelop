@@ -71,55 +71,55 @@ void SvnInternalUpdateJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
 
 void SvnInternalUpdateJob::setRecursive( bool recursive )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_recursive = recursive;
 }
 
 void SvnInternalUpdateJob::setLocations( const QList<QUrl>& urls )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_locations = urls;
 }
 
 
 void SvnInternalUpdateJob::setIgnoreExternals( bool ignore )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_ignoreExternals = ignore;
 }
 
 bool SvnInternalUpdateJob::ignoreExternals() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_ignoreExternals;
 }
 
 void SvnInternalUpdateJob::setRevision( const KDevelop::VcsRevision& rev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_revision = rev;
 }
 
 QList<QUrl> SvnInternalUpdateJob::locations() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_locations;
 }
 
 KDevelop::VcsRevision SvnInternalUpdateJob::revision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_revision;
 }
 
 bool SvnInternalUpdateJob::recursive() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_recursive;
 }
 
 SvnUpdateJob::SvnUpdateJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalUpdateJob(this), parent, KDevelop::OutputJob::Verbose )
+    : SvnJobBaseImpl(parent, KDevelop::OutputJob::Verbose )
 {
     setType( KDevelop::VcsJob::Add );
     setObjectName(i18n("Subversion Update"));

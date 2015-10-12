@@ -105,42 +105,42 @@ void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::T
 
 void SvnInternalBlameJob::setLocation( const QUrl &url )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_location = url;
 }
 
 QUrl SvnInternalBlameJob::location() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_location;
 }
 
 KDevelop::VcsRevision SvnInternalBlameJob::startRevision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_startRevision;
 }
 
 KDevelop::VcsRevision SvnInternalBlameJob::endRevision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_endRevision;
 }
 
 void SvnInternalBlameJob::setStartRevision( const KDevelop::VcsRevision& rev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_startRevision = rev;
 }
 
 void SvnInternalBlameJob::setEndRevision( const KDevelop::VcsRevision& rev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_endRevision = rev;
 }
 
 SvnBlameJob::SvnBlameJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalBlameJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Annotate );
     connect(m_job, &SvnInternalBlameJob::blameLine,

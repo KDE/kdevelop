@@ -31,8 +31,8 @@
 
 #include <vcs/vcslocation.h>
 
-SvnImportInternalJob::SvnImportInternalJob()
-    : SvnInternalJobBase()
+SvnImportInternalJob::SvnImportInternalJob(SvnJobBase* parent)
+    : SvnInternalJobBase(parent)
 {
 }
 
@@ -43,7 +43,7 @@ void SvnImportInternalJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
     svn::Client cli(m_ctxt);
     try
     {
-        QMutexLocker l( m_mutex );
+        QMutexLocker l( &m_mutex );
         QString srcdir = QFileInfo( m_sourceDirectory.toLocalFile() ).canonicalFilePath();
         QByteArray srcba = srcdir.toUtf8();
         QUrl dest = QUrl::fromUserInput( m_destinationRepository.repositoryServer() );
@@ -70,31 +70,31 @@ bool SvnImportInternalJob::isValid() const
 
 QUrl SvnImportInternalJob::source() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_sourceDirectory;
 }
 
 void SvnImportInternalJob::setMessage( const QString& message )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_message = message;
 }
 
 void SvnImportInternalJob::setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_sourceDirectory = sourceDirectory;
     m_destinationRepository = destinationRepository;
 }
 
 QString SvnImportInternalJob::message() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_message;
 }
 
 SvnImportJob::SvnImportJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnImportInternalJob, parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Import );
     setObjectName(i18n("Subversion Import"));

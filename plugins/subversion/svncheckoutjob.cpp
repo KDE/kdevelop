@@ -41,7 +41,7 @@ SvnInternalCheckoutJob::SvnInternalCheckoutJob( SvnJobBase* parent )
 
 bool SvnInternalCheckoutJob::isValid() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_sourceRepository.isValid() && m_destinationDirectory.isLocalFile() && QFileInfo(KIO::upUrl(m_destinationDirectory).toLocalFile()).exists();
 }
 
@@ -68,7 +68,7 @@ void SvnInternalCheckoutJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver
 
 void SvnInternalCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_sourceRepository = sourceRepository;
     m_destinationDirectory = destinationDirectory;
     m_recursion = recursion;
@@ -76,24 +76,24 @@ void SvnInternalCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRep
 
 KDevelop::VcsLocation SvnInternalCheckoutJob::source() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_sourceRepository;
 }
 
 KDevelop::IBasicVersionControl::RecursionMode SvnInternalCheckoutJob::recursion() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_recursion;
 }
 
 QUrl SvnInternalCheckoutJob::destination() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_destinationDirectory;
 }
 
 SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalCheckoutJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Import );
     setObjectName(i18n("Subversion Checkout"));

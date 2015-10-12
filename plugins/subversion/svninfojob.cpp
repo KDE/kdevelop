@@ -76,18 +76,18 @@ void SvnInternalInfoJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Th
 
 void SvnInternalInfoJob::setLocation( const QUrl &url )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_location = url;
 }
 
 QUrl SvnInternalInfoJob::location() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_location;
 }
 
 SvnInfoJob::SvnInfoJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalInfoJob(this), parent, KDevelop::OutputJob::Silent ), m_provideInfo( SvnInfoJob::AllInfo )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent ), m_provideInfo( SvnInfoJob::AllInfo )
 {
     setType( KDevelop::VcsJob::Add );
     connect( m_job, &SvnInternalInfoJob::gotInfo,

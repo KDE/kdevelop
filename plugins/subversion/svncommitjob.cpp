@@ -48,49 +48,49 @@ SvnInternalCommitJob::SvnInternalCommitJob( SvnJobBase* parent )
 
 void SvnInternalCommitJob::setRecursive( bool recursive )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_recursive = recursive;
 }
 
 void SvnInternalCommitJob::setCommitMessage( const QString& msg )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_commitMessage = msg;
 }
 
 void SvnInternalCommitJob::setUrls( const QList<QUrl>& urls )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_urls = urls;
 }
 
 void SvnInternalCommitJob::setKeepLock( bool lock )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_keepLock = lock;
 }
 
 QList<QUrl> SvnInternalCommitJob::urls() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_urls;
 }
 
 QString SvnInternalCommitJob::commitMessage() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_commitMessage;
 }
 
 bool SvnInternalCommitJob::recursive() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_recursive;
 }
 
 bool SvnInternalCommitJob::keepLock() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_keepLock;
 }
 
@@ -119,7 +119,7 @@ void SvnInternalCommitJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
 }
 
 SvnCommitJob::SvnCommitJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalCommitJob(this), parent, KDevelop::OutputJob::Verbose )
+    : SvnJobBaseImpl(parent, KDevelop::OutputJob::Verbose )
 {
     setType( KDevelop::VcsJob::Commit );
     setObjectName(i18n("Subversion Commit"));

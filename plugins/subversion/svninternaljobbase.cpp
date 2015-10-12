@@ -41,11 +41,11 @@ extern "C" {
 #include "kdevsvncpp/revision.hpp"
 
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
-    : QObject(nullptr)
+    : QObject(parent)
     , m_ctxt( new svn::Context() )
     , m_guiSemaphore( 0 )
-    , m_mutex( new QMutex() )
-    , m_killMutex( new QMutex() )
+    , m_mutex()
+    , m_killMutex()
     , m_success( true )
     , sendFirstDelta( false )
     , killed( false )
@@ -82,7 +82,7 @@ bool SvnInternalJobBase::contextGetLogin( const std::string& realm,
 
     emit needLogin( QString::fromUtf8( realm.c_str() )  );
     m_guiSemaphore.acquire( 1 );
-    QMutexLocker l(m_mutex);
+    QMutexLocker l(&m_mutex);
     if( m_login_username.isEmpty() || m_login_password.isEmpty() )
         return false;
     username = std::string( m_login_username.toUtf8() );
@@ -203,7 +203,7 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
 
 bool SvnInternalJobBase::contextCancel()
 {
-    QMutexLocker lock( m_killMutex );
+    QMutexLocker lock( &m_killMutex );
     return killed;
 }
 
@@ -211,7 +211,7 @@ bool SvnInternalJobBase::contextGetLogMessage( std::string& msg )
 {
     emit needCommitMessage();
     m_guiSemaphore.acquire( 1 );
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     QByteArray ba = m_commitMessage.toUtf8();
     msg = std::string( ba.data() );
     return true;
@@ -278,7 +278,7 @@ svn::ContextListener::SslServerTrustAnswer SvnInternalJobBase::contextSslServerT
                                      QString::fromUtf8( issue.c_str() ),
                                      QString::fromUtf8( realm.c_str() ) );
     m_guiSemaphore.acquire(1);
-    QMutexLocker l(m_mutex);
+    QMutexLocker l(&m_mutex);
     return m_trustAnswer;
 }
 
@@ -368,19 +368,19 @@ svn::Revision SvnInternalJobBase::createSvnCppRevisionFromVcsRevision( const KDe
 
 void SvnInternalJobBase::setErrorMessage( const QString& msg )
 {
-    QMutexLocker lock( m_mutex );
+    QMutexLocker lock( &m_mutex );
     m_errorMessage = msg;
 }
 
 QString SvnInternalJobBase::errorMessage() const
 {
-    QMutexLocker lock( m_mutex );
+    QMutexLocker lock( &m_mutex );
     return m_errorMessage;
 }
 
 void SvnInternalJobBase::kill()
 {
-    QMutexLocker lock( m_killMutex );
+    QMutexLocker lock( &m_killMutex );
     killed = true;
 }
 

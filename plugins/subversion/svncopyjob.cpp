@@ -56,30 +56,30 @@ void SvnInternalCopyJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Th
 
 void SvnInternalCopyJob::setDestinationLocation( const QUrl &url )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_destinationLocation = url;
 }
 
 QUrl SvnInternalCopyJob::destinationLocation() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_destinationLocation;
 }
 
 void SvnInternalCopyJob::setSourceLocation( const QUrl &url )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_sourceLocation = url;
 }
 
 QUrl SvnInternalCopyJob::sourceLocation() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_sourceLocation;
 }
 
 SvnCopyJob::SvnCopyJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalCopyJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Copy );
     setObjectName(i18n("Subversion Copy"));

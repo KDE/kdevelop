@@ -25,6 +25,7 @@
 #include <ThreadWeaver/Job>
 #include <QEvent>
 #include <QSemaphore>
+#include <QMutex>
 
 extern "C" {
 #include <svn_wc.h>
@@ -112,8 +113,8 @@ protected:
     void defaultBegin(const ThreadWeaver::JobPointer& job, ThreadWeaver::Thread *thread) override;
     void defaultEnd(const ThreadWeaver::JobPointer& job, ThreadWeaver::Thread *thread) override;
 
-    QMutex* m_mutex;
-    QMutex* m_killMutex;
+    mutable QMutex m_mutex;
+    mutable QMutex m_killMutex;
     bool m_success;
     void setErrorMessage( const QString& );
 

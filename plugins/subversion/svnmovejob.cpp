@@ -56,42 +56,42 @@ void SvnInternalMoveJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Th
 
 void SvnInternalMoveJob::setDestinationLocation( const QUrl &url )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_destinationLocation = url;
 }
 
 QUrl SvnInternalMoveJob::destinationLocation() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_destinationLocation;
 }
 
 void SvnInternalMoveJob::setSourceLocation( const QUrl &url )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_sourceLocation = url;
 }
 
 QUrl SvnInternalMoveJob::sourceLocation() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_sourceLocation;
 }
 
 bool SvnInternalMoveJob::force() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_force;
 }
 
 void SvnInternalMoveJob::setForce( bool force )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_force = force;
 }
 
 SvnMoveJob::SvnMoveJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalMoveJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Move );
     setObjectName(i18n("Subversion Move"));

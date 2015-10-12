@@ -62,29 +62,29 @@ void SvnInternalRevertJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
 
 void SvnInternalRevertJob::setRecursive( bool recursive )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_recursive = recursive;
 }
 
 void SvnInternalRevertJob::setLocations( const QList<QUrl>& urls )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_locations = urls;
 }
 
 QList<QUrl> SvnInternalRevertJob::locations() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_locations;
 }
 bool SvnInternalRevertJob::recursive() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_recursive;
 }
 
 SvnRevertJob::SvnRevertJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalRevertJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
     setObjectName(i18n("Subversion Revert"));

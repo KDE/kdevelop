@@ -60,29 +60,29 @@ void SvnInternalAddJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thr
 
 void SvnInternalAddJob::setRecursive( bool recursive )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_recursive = recursive;
 }
 
 void SvnInternalAddJob::setLocations( const QList<QUrl>& urls )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_locations = urls;
 }
 
 QList<QUrl> SvnInternalAddJob::locations() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_locations;
 }
 bool SvnInternalAddJob::recursive() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_recursive;
 }
 
 SvnAddJob::SvnAddJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalAddJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
     setObjectName(i18n("Subversion Add"));

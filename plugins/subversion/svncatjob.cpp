@@ -73,37 +73,37 @@ void SvnInternalCatJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thr
 
 void SvnInternalCatJob::setSource( const KDevelop::VcsLocation& src )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_source = src;
 }
 void SvnInternalCatJob::setSrcRevision( const KDevelop::VcsRevision& srcRev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_srcRevision = srcRev;
 }
 void SvnInternalCatJob::setPegRevision( const KDevelop::VcsRevision& pegRev )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_pegRevision = pegRev;
 }
 KDevelop::VcsLocation SvnInternalCatJob::source() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_source;
 }
 KDevelop::VcsRevision SvnInternalCatJob::srcRevision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_srcRevision;
 }
 KDevelop::VcsRevision SvnInternalCatJob::pegRevision() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_pegRevision;
 }
 
 SvnCatJob::SvnCatJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalCatJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Cat );
     connect(m_job, &SvnInternalCatJob::gotContent,

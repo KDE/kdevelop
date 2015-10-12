@@ -63,30 +63,30 @@ void SvnInternalRemoveJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
 
 void SvnInternalRemoveJob::setLocations( const QList<QUrl>& urls )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_locations = urls;
 }
 
 QList<QUrl> SvnInternalRemoveJob::locations() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_locations;
 }
 
 void SvnInternalRemoveJob::setForce( bool force )
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     m_force = force;
 }
 
 bool SvnInternalRemoveJob::force() const
 {
-    QMutexLocker l( m_mutex );
+    QMutexLocker l( &m_mutex );
     return m_force;
 }
 
 SvnRemoveJob::SvnRemoveJob( KDevSvnPlugin* parent )
-    : SvnJobBaseImpl( new SvnInternalRemoveJob(this), parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
     setObjectName(i18n("Subversion Remove"));
