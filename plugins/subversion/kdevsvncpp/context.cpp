@@ -230,10 +230,8 @@ public:
       ctx->cancel_func = onCancel;
       ctx->cancel_baton = this;
 
-#if (SVN_VER_MAJOR >= 1) && (SVN_VER_MINOR >= 2)
       ctx->notify_func2 = onNotify2;
       ctx->notify_baton2 = this;
-#endif
     }
 
     void setAuthCache(bool value)
@@ -323,7 +321,6 @@ public:
     }
 
 
-#if (SVN_VER_MAJOR >= 1) && (SVN_VER_MINOR >= 2)
     /**
      * this is the callback function for the subversion 1.2
      * api functions to signal the progress of an action
@@ -344,8 +341,6 @@ public:
                action->content_state, action->prop_state,
                action->revision);
     }
-#endif
-
 
     /**
      * this is the callback function for the subversion
