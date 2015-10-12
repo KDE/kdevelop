@@ -1,16 +1,16 @@
 # kdevplatform version
-set(KDEVPLATFORM_VERSION_MAJOR 1)
+set(KDEVPLATFORM_VERSION_MAJOR 4)
 set(KDEVPLATFORM_VERSION_MINOR 90)
 set(KDEVPLATFORM_VERSION_PATCH 90)
 
 # plugin versions listed in the .desktop files
-set(KDEV_PLUGIN_VERSION 23)
+set(KDEV_PLUGIN_VERSION 24)
 # Increase this to reset incompatible item-repositories
-set(KDEV_ITEMREPOSITORY_VERSION 84)
+set(KDEV_ITEMREPOSITORY_VERSION 85)
 
 # library version / SO version
-set(KDEVPLATFORM_LIB_VERSION 9.0.0)
-set(KDEVPLATFORM_LIB_SOVERSION 9)
+set(KDEVPLATFORM_LIB_VERSION 10.0.0)
+set(KDEVPLATFORM_LIB_SOVERSION 10)
 
 ################################################################################
 
