@@ -539,7 +539,7 @@ KDevelop::ICodeHighlighting* CMakeManager::codeHighlighting() const
 //     return ret;
 // }
 
-bool CMakeManager::removeFilesFromTargets(const QList<ProjectFileItem*> &files)
+bool CMakeManager::removeFilesFromTargets(const QList<ProjectFileItem*> &/*files*/)
 {
 //     using namespace CMakeEdit;
 //
@@ -597,7 +597,7 @@ bool CMakeManager::removeFilesFromTargets(const QList<ProjectFileItem*> &files)
 //     return created;
 // }
 
-bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, ProjectTargetItem* target)
+bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &/*_files*/, ProjectTargetItem* /*target*/)
 {
     return false;
 //     using namespace CMakeEdit;
@@ -739,7 +739,7 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const QUrl &url, co
     return doc;
 }
 
-QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, const QString& id) const
+QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* /*project*/, const QString& /*id*/) const
 { return QPair<QString, QString>(); }
 // {
 //     QPair<QString, QString> ret;

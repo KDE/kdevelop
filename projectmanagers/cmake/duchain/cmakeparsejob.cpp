@@ -47,7 +47,7 @@ IndexedString parentCMakeFile(const IndexedString& doc)
     return IndexedString(QUrl(KIO::upUrl(doc.toUrl().adjusted(QUrl::RemoveFilename)).toString()+"CMakeLists.txt"));
 }
 
-void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void CMakeParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     const IndexedString languageName(CMakeManager::languageName());
 

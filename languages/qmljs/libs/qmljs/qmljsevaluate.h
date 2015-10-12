@@ -159,6 +159,7 @@ protected:
     bool visit(AST::StatementSourceElement *ast) override;
     bool visit(AST::DebuggerStatement *ast) override;
 
+    using AST::Visitor::visit;
 private:
     QmlJS::Document::Ptr _doc;
     ValueOwner *_valueOwner;

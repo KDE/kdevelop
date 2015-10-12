@@ -386,7 +386,7 @@ static QString indentingSample()
     "\tbarArg3);\n";
 }
 
-QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const QMimeType& mime)
+QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const QMimeType& /*mime*/)
 {
 	if ( ! style.overrideSample().isEmpty() ) {
 		return style.overrideSample();

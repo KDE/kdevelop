@@ -186,6 +186,7 @@ class ErrorJob : public KJob
 public:
     ErrorJob(QObject* parent, const QString& error)
         : KJob(parent)
+        , m_error(error)
     {}
 
     void start() override {

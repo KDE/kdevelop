@@ -23,12 +23,12 @@
 
 using namespace KDevelop;
 
-KDevelop::DUContext* ContextBuilder::contextFromNode(CMakeContentIterator* node)
+KDevelop::DUContext* ContextBuilder::contextFromNode(CMakeContentIterator* /*node*/)
 {
     return 0;
 }
 
-KDevelop::RangeInRevision ContextBuilder::editorFindRange(CMakeContentIterator* fromNode, CMakeContentIterator* toNode)
+KDevelop::RangeInRevision ContextBuilder::editorFindRange(CMakeContentIterator* /*fromNode*/, CMakeContentIterator* /*toNode*/)
 {
     return RangeInRevision();
 }
@@ -38,7 +38,7 @@ KDevelop::QualifiedIdentifier ContextBuilder::identifierForNode(CMakeFunctionDes
     return QualifiedIdentifier(node->name);
 }
 
-void ContextBuilder::setContextOnNode(CMakeContentIterator* node, KDevelop::DUContext* context)
+void ContextBuilder::setContextOnNode(CMakeContentIterator* /*node*/, KDevelop::DUContext* /*context*/)
 {
 
 }
