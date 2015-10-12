@@ -61,6 +61,7 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
             QByteArrayLiteral("-std=c++11"),
             QByteArrayLiteral("-xc++"),
             QByteArrayLiteral("-Wall"),
+            QByteArrayLiteral("-Wunused-parameter"),
             QByteArrayLiteral("-nostdinc"),
             QByteArrayLiteral("-nostdinc++"),
             QByteArrayLiteral("-ferror-limit=100")
