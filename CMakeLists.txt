@@ -2,8 +2,7 @@
 set( KDEVELOP_VERSION_MAJOR 4 )
 set( KDEVELOP_VERSION_MINOR 90 )
 set( KDEVELOP_VERSION_PATCH 90 )
-# KDevplatform dependency version
-set( KDEVPLATFORM_VERSION "1.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
+set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
 
 ################################################################################
 
@@ -59,7 +58,7 @@ set_package_properties(KDevelop-PG-Qt PROPERTIES
     PURPOSE "KDevelop parser generator library. Required for the QMake Builder/Manager plugin."
 )
 
-find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
+find_package(KDevPlatform ${KDEVELOP_VERSION} REQUIRED)
 
 add_definitions(
     -DQT_DEPRECATED_WARNINGS
