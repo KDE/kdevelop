@@ -62,6 +62,7 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
             QByteArrayLiteral("-xc++"),
             QByteArrayLiteral("-Wall"),
             QByteArrayLiteral("-Wunused-parameter"),
+            QByteArrayLiteral("-Wunreachable-code"),
             QByteArrayLiteral("-nostdinc"),
             QByteArrayLiteral("-nostdinc++"),
             QByteArrayLiteral("-ferror-limit=100")
