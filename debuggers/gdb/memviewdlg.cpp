@@ -469,7 +469,7 @@ namespace GDBDebugger
     MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* parent)
     : QWidget(parent)
     {
-        setWindowIcon(QIcon::fromTheme("debugger"));
+        setWindowIcon(QIcon::fromTheme("server-database"));
         setWindowTitle(i18n("Memory viewer"));
 
         QAction * newMemoryViewerAction = new QAction(this);

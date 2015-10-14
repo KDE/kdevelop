@@ -60,8 +60,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     showInternalCommands_(false),
     maxLines_(5000)
 {
-//     setWindowIcon(QIcon::fromTheme("inline_image"));
-    setWindowIcon(QIcon::fromTheme("debugger"));
+    setWindowIcon(QIcon::fromTheme("dialog-scripts"));
     setWindowTitle(i18n("GDB Output"));
     setWhatsThis(i18n("<b>GDB output</b><p>"
                     "Shows all gdb commands being executed. "
