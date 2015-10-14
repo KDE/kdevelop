@@ -217,8 +217,6 @@ KJob* CMakeBuilder::checkConfigureJob(KDevelop::IProject* project, bool& valid)
         return new ErrorJob(this, i18n("No Build Directory configured, cannot install"));
     }
     valid = true;
-    if (!configure)
-        configure = new ErrorJob(this, i18n("Couldn't configure the build directory."));
     return configure;
 }
 
