@@ -122,15 +122,14 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     const int browseKey = Qt::Key_Control;
-    const int magicKey = Qt::Key_Alt, magicModifier = Qt::AltModifier;
+    const int magicModifier = Qt::Key_Meta;
 
     //Eventually start key-browsing
-    if(keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicKey) && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
+    if(keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
         m_browsingByKey = keyEvent->key();
 
-        if(keyEvent->key() == magicKey) {
-            auto cci = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
-            if(cci && cci->isCompletionActive())
+        if(keyEvent->key() == magicModifier) {
+            if(dynamic_cast<KTextEditor::CodeCompletionInterface*>(view) && dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive())
             {
                 //Do nothing, completion is active.
             }else{
@@ -141,33 +140,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
 
         if(!m_browsing)
             m_plugin->setAllowBrowsing(true);
-    } else if(keyEvent && keyEvent->modifiers()&magicModifier && keyEvent->key()!=magicKey && keyEvent->type() == QEvent::KeyPress) {
-        switch(keyEvent->key()) {
-            case Qt::Key_Left:
-                m_plugin->doNavigate(ContextBrowserPlugin::Left, view);
-                keyEvent->accept();
-                return true;
-            case Qt::Key_Right:
-                m_plugin->doNavigate(ContextBrowserPlugin::Right, view);
-                keyEvent->accept();
-                return true;
-            case Qt::Key_Up:
-                m_plugin->doNavigate(ContextBrowserPlugin::Up, view);
-                keyEvent->accept();
-                return true;
-            case Qt::Key_Down:
-                m_plugin->doNavigate(ContextBrowserPlugin::Down, view);
-                keyEvent->accept();
-                return true;
-            case Qt::Key_Enter:
-                m_plugin->doNavigate(ContextBrowserPlugin::Accept, view);
-                keyEvent->accept();
-                return true;
-            case Qt::Key_Escape:
-                m_plugin->doNavigate(ContextBrowserPlugin::Back, view);
-                keyEvent->accept();
-                return true;
-        }
+
     }
 
     QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(event);
@@ -321,6 +294,15 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
     applyEventFilter(view, true);
     //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
     //so those keys are not passed to the event-filter
+
+    // can't use new signal/slot syntax here, these signals are only defined in KateView
+    // TODO: should we really depend on kate internals here?
+    connect(view, SIGNAL(navigateLeft()), m_plugin, SLOT(navigateLeft()));
+    connect(view, SIGNAL(navigateRight()), m_plugin, SLOT(navigateRight()));
+    connect(view, SIGNAL(navigateUp()), m_plugin, SLOT(navigateUp()));
+    connect(view, SIGNAL(navigateDown()), m_plugin, SLOT(navigateDown()));
+    connect(view, SIGNAL(navigateAccept()), m_plugin, SLOT(navigateAccept()));
+    connect(view, SIGNAL(navigateBack()), m_plugin, SLOT(navigateBack()));
 }
 
 void BrowseManager::Watcher::viewAdded(KTextEditor::View* view) {
