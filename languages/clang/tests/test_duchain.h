@@ -74,6 +74,7 @@ private slots:
     void testRangesOfOperatorsInsideMacro();
     void testActiveDocumentHasASTAttached();
     void testUsesCreatedForDeclarations();
+    void testExternC();
 
     void benchDUChainBuilder();
 

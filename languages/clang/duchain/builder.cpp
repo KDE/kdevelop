@@ -1038,7 +1038,7 @@ CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
     if (CK == CXCursor_UnexposedDecl && id.isEmpty()) {
         // skip unexposed declarations that have no identifier set
         // this is useful to skip e.g. friend declarations
-        return CXChildVisit_Continue;
+        return CXChildVisit_Recurse;
     }
     IF_DEBUG(clangDebug() << "id:" << id << "- CK:" << CK << "- DeclType:" << typeid(DeclType).name() << "- hasContext:" << hasContext;)
 

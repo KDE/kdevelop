@@ -1270,3 +1270,16 @@ void TestDUChain::testUsesCreatedForDeclarations()
     QVERIFY(!functionDeclaration->isDefinition());
     QCOMPARE(functionDeclaration->uses().count(), 1);
 }
+
+void TestDUChain::testExternC()
+{
+    auto code = R"(extern "C" { void foo(); })";
+    TestFile file(code, "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed());
+
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    QVERIFY(!top->findDeclarations(QualifiedIdentifier("foo")).isEmpty());
+}
