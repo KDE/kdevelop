@@ -122,7 +122,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     const int browseKey = Qt::Key_Control;
-    const int magicModifier = Qt::Key_Meta;
+    const int magicModifier = Qt::Key_Alt;
 
     //Eventually start key-browsing
     if(keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
