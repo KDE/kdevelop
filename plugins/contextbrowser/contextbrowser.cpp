@@ -1251,8 +1251,13 @@ void ContextBrowserPlugin::actionTriggered() {
     }
 }
 
-void ContextBrowserPlugin::doNavigate(NavigationActionType action, KTextEditor::View* view)
+void ContextBrowserPlugin::doNavigate(NavigationActionType action)
 {
+  KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
+  if(!view) {
+      qWarning() << "sender is not a view";
+      return;
+  }
   KTextEditor::CodeCompletionInterface* iface = qobject_cast<KTextEditor::CodeCompletionInterface*>(view);
   if(!iface || iface->isCompletionActive())
       return; // If code completion is active, the actions should be handled by the completion widget
@@ -1294,6 +1299,31 @@ void ContextBrowserPlugin::doNavigate(NavigationActionType action, KTextEditor::
     }
   }
 }
+
+void ContextBrowserPlugin::navigateAccept() {
+  doNavigate(Accept);
+}
+
+void ContextBrowserPlugin::navigateBack() {
+  doNavigate(Back);
+}
+
+void ContextBrowserPlugin::navigateDown() {
+  doNavigate(Down);
+}
+
+void ContextBrowserPlugin::navigateLeft() {
+  doNavigate(Left);
+}
+
+void ContextBrowserPlugin::navigateRight() {
+  doNavigate(Right);
+}
+
+void ContextBrowserPlugin::navigateUp() {
+  doNavigate(Up);
+}
+
 
 //BEGIN HistoryEntry
 ContextBrowserPlugin::HistoryEntry::HistoryEntry(KDevelop::DocumentCursor pos) : absoluteCursorPosition(pos) {
