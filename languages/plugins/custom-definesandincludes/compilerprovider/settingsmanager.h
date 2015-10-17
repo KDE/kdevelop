@@ -51,7 +51,6 @@ struct ConfigEntry
 class SettingsManager
 {
 public:
-    SettingsManager(bool globalInstance = false);
     ~SettingsManager();
 
     QList<ConfigEntry> readPaths(KConfig* cfg) const;
@@ -70,9 +69,8 @@ public:
     static SettingsManager* globalInstance();
 
 private:
-
+    SettingsManager();
     CompilerProvider m_provider;
-    static SettingsManager* s_globalInstance;
 };
 
 #endif // SETTINGSMANAGER_H

@@ -101,11 +101,11 @@ K_PLUGIN_FACTORY_WITH_JSON(DefinesAndIncludesManagerFactory, "kdevdefinesandincl
 
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
     : IPlugin("kdevdefinesandincludesmanager", parent )
-    , m_settings(true)
+    , m_settings(SettingsManager::globalInstance())
     , m_noProjectIPM(new NoProjectIncludePathsManager())
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
-    registerProvider(m_settings.provider());
+    registerProvider(m_settings->provider());
 }
 
 DefinesAndIncludesManager::~DefinesAndIncludesManager() = default;
@@ -115,7 +115,7 @@ Defines DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) 
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     if (!item) {
-        return m_settings.provider()->defines(nullptr);
+        return m_settings->provider()->defines(nullptr);
     }
 
     Defines defines;
@@ -137,7 +137,7 @@ Defines DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) 
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        merge(&defines, findConfigForItem(m_settings.readPaths(cfg), item).defines);
+        merge(&defines, findConfigForItem(m_settings->readPaths(cfg), item).defines);
     }
 
     return defines;
@@ -148,7 +148,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     if (!item) {
-        return m_settings.provider()->includes(nullptr);
+        return m_settings->provider()->includes(nullptr);
     }
 
     Path::List includes;
@@ -156,7 +156,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        includes += KDevelop::toPathList(findConfigForItem(m_settings.readPaths(cfg), item).includes);
+        includes += KDevelop::toPathList(findConfigForItem(m_settings->readPaths(cfg), item).includes);
     }
 
     if ( type & ProjectSpecific ) {
@@ -198,12 +198,12 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
 
 Defines DefinesAndIncludesManager::defines(const QString&) const
 {
-    return m_settings.provider()->defines(nullptr);
+    return m_settings->provider()->defines(nullptr);
 }
 
 Path::List DefinesAndIncludesManager::includes(const QString& path) const
 {
-    return m_settings.provider()->includes(nullptr) + m_noProjectIPM->includes(path);
+    return m_settings->provider()->includes(nullptr) + m_noProjectIPM->includes(path);
 }
 
 void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFile)
@@ -264,11 +264,11 @@ void DefinesAndIncludesManager::registerBackgroundProvider(IDefinesAndIncludesMa
 QString DefinesAndIncludesManager::parserArguments(KDevelop::ProjectBaseItem* item) const
 {
     if(!item){
-        return m_settings.defaultParserArguments();
+        return m_settings->defaultParserArguments();
     }
 
     auto cfg = item->project()->projectConfiguration().data();
-    return findConfigForItem(m_settings.readPaths(cfg), item).parserArguments;
+    return findConfigForItem(m_settings->readPaths(cfg), item).parserArguments;
 }
 
 int DefinesAndIncludesManager::perProjectConfigPages() const

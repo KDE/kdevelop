@@ -72,7 +72,7 @@ public:
 private:
     QVector<Provider*> m_providers;
     QVector<BackgroundProvider*> m_backgroundProviders;
-    SettingsManager m_settings;
+    SettingsManager* m_settings;
     QScopedPointer<NoProjectIncludePathsManager> m_noProjectIPM;
 };
 

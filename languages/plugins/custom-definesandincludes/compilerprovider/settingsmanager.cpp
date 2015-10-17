@@ -24,6 +24,8 @@
 
 #include <QDataStream>
 #include <QDebug>
+#include <QThread>
+#include <QCoreApplication>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -80,18 +82,7 @@ CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
         }
     }
 
-    auto path = grp.readEntry( ConfigConstants::compilerPathKey, QString() );
-    auto type = grp.readEntry( ConfigConstants::compilerTypeKey, QString() );
-
-    auto cf = SettingsManager::globalInstance()->provider()->compilerFactories();
-    for (auto f : cf) {
-        if (f->name() == type) {
-            auto compiler = f->createCompiler(name, path, true);
-            SettingsManager::globalInstance()->provider()->registerCompiler(compiler);
-            return compiler;
-        }
-    }
-
+    // Otherwise we have no such compiler registered (broken config file), return default one
     return SettingsManager::globalInstance()->provider()->checkCompilerExists({});
 }
 
@@ -100,9 +91,8 @@ void writeCompilerToConfig(KConfigGroup& cfg, const CompilerPointer& compiler)
     Q_ASSERT(compiler);
 
     auto grp = cfg.group("Compiler");
+    // Store only compiler name, path and type retrieved from registered compilers
     grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
-    grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
-    grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
 }
 
 void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
@@ -236,28 +226,18 @@ void ConfigEntry::setDefines(const QHash<QString, QVariant>& newDefines)
     }
 }
 
-SettingsManager* SettingsManager::s_globalInstance = nullptr;
-
-SettingsManager::SettingsManager(bool globalInstance)
+SettingsManager::SettingsManager()
   : m_provider(this)
-{
-    if (globalInstance) {
-        Q_ASSERT(!s_globalInstance);
-        s_globalInstance = this;
-    }
-}
+{}
 
 SettingsManager::~SettingsManager()
-{
-    if (s_globalInstance == this) {
-        s_globalInstance = nullptr;
-    }
-}
+{}
 
 SettingsManager* SettingsManager::globalInstance()
 {
-    Q_ASSERT(s_globalInstance);
-    return s_globalInstance;
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
+    static SettingsManager s_globalInstance;
+    return &s_globalInstance;
 }
 
 CompilerProvider* SettingsManager::provider()
@@ -272,6 +252,8 @@ const CompilerProvider* SettingsManager::provider() const
 
 void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& paths )
 {
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
+
     KConfigGroup grp = cfg->group( ConfigConstants::configKey );
     if ( !grp.isValid() )
         return;
@@ -283,6 +265,8 @@ void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& path
 
 QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
 {
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
+
     auto converted = convertedPaths( cfg );
     if ( !converted.isEmpty() ) {
         const_cast<SettingsManager*>(this)->writePaths( cfg, converted );

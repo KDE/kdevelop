@@ -23,9 +23,6 @@
 #define INCLUDEPATHSCONVERTER_H
 
 #include <QStringList>
-#include <QScopedPointer>
-
-class SettingsManager;
 
 class IncludePathsConverter
 {
@@ -46,9 +43,6 @@ public:
      * @return include directories retrieved from @p projectConfigFile
      */
     QStringList readIncludePaths(const QString& projectConfigFile, const QString& subdirectory = QString()) const;
-
-private:
-    QScopedPointer<SettingsManager> m_settings;
 };
 
 #endif // INCLUDEPATHSCONVERTER_H

@@ -67,7 +67,6 @@ QString findProject(const QString& subdirectory)
 }
 
 IncludePathsConverter::IncludePathsConverter()
-: m_settings(new SettingsManager(true))
 {
 }
 
@@ -78,7 +77,7 @@ bool IncludePathsConverter::addIncludePaths(const QStringList& includeDirectorie
         return false;
     }
 
-    auto configEntries = m_settings->readPaths(configFile.data());
+    auto configEntries = SettingsManager::globalInstance()->readPaths(configFile.data());
     QString path = subdirectory.isEmpty() ? "." : subdirectory;
 
     ConfigEntry config;
@@ -98,7 +97,7 @@ bool IncludePathsConverter::addIncludePaths(const QStringList& includeDirectorie
         configEntries.append(config);
     }
 
-    m_settings->writePaths(configFile.data(), configEntries);
+    SettingsManager::globalInstance()->writePaths(configFile.data(), configEntries);
 
     return true;
 }
@@ -110,7 +109,7 @@ bool IncludePathsConverter::removeIncludePaths(const QStringList& includeDirecto
         return false;
     }
 
-    auto configEntries = m_settings->readPaths(configFile.data());
+    auto configEntries = SettingsManager::globalInstance()->readPaths(configFile.data());
     QString path = subdirectory.isEmpty() ? "." : subdirectory;
 
     for (auto& entry: configEntries) {
@@ -118,7 +117,7 @@ bool IncludePathsConverter::removeIncludePaths(const QStringList& includeDirecto
             for(const auto& include: includeDirectories) {
                 entry.includes.removeAll(include);
             }
-            m_settings->writePaths(configFile.data(), configEntries);
+            SettingsManager::globalInstance()->writePaths(configFile.data(), configEntries);
             return true;
         }
     }
@@ -134,7 +133,7 @@ QStringList IncludePathsConverter::readIncludePaths(const QString& projectConfig
     }
 
     QString path = subdirectory.isEmpty() ? "." : subdirectory;
-    auto configEntries = m_settings->readPaths(configFile.data());
+    auto configEntries = SettingsManager::globalInstance()->readPaths(configFile.data());
     for (const auto& entry: configEntries) {
         if (path == entry.path) {
             return entry.includes;
