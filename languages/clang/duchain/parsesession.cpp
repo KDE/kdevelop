@@ -53,14 +53,20 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
         return {QByteArrayLiteral("-xobjective-c++")};
     }
 
+    // this can happen for unit tests that use the ParseSession directly
     if (parserSettings.parserOptions.isEmpty()) {
-        // this can happen for unit tests that use the ParseSession directly
-        auto defaultArguments = ClangSettingsManager::self()->parserSettings(nullptr).toClangAPI();
-        Q_ASSERT(!defaultArguments.isEmpty());
-        defaultArguments.append(QByteArrayLiteral("-nostdinc"));
-        defaultArguments.append(QByteArrayLiteral("-nostdinc++"));
-        defaultArguments.append(QByteArrayLiteral("-xc++"));
-        return defaultArguments;
+        return {
+            QByteArrayLiteral("-fspell-checking"),
+            QByteArrayLiteral("-Wdocumentation"),
+            QByteArrayLiteral("-std=c++11"),
+            QByteArrayLiteral("-xc++"),
+            QByteArrayLiteral("-Wall"),
+            QByteArrayLiteral("-Wunused-parameter"),
+            QByteArrayLiteral("-Wunreachable-code"),
+            QByteArrayLiteral("-nostdinc"),
+            QByteArrayLiteral("-nostdinc++"),
+            QByteArrayLiteral("-ferror-limit=100")
+        };
     }
 
     auto result = parserSettings.toClangAPI();

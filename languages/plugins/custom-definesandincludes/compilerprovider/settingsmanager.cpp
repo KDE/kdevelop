@@ -66,7 +66,7 @@ QStringList sorted(QStringList list)
     return list;
 }
 
-QString defaultArguments(){ return QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11"); }
+QString defaultArguments(){ return QStringLiteral("-fspell-checking -Wdocumentation -std=c++11 -Wall"); }
 
 CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
 {
