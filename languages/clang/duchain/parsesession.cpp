@@ -55,7 +55,6 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
 
     if (parserSettings.parserOptions.isEmpty()) {
         // The parserOptions can be empty for some unit tests that use ParseSession directly
-        // Also this can happen when e.g. user manually deleted all arguments.
         auto defaultArguments = ClangSettingsManager::self()->parserSettings(nullptr).toClangAPI();
         Q_ASSERT(!defaultArguments.isEmpty());
         defaultArguments.append(QByteArrayLiteral("-nostdinc"));
