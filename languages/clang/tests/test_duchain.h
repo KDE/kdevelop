@@ -79,6 +79,7 @@ private slots:
     void testRangesOfOperatorsInsideMacro();
     void testActiveDocumentHasASTAttached();
     void testUsesCreatedForDeclarations();
+    void testReparseIncludeGuard();
     void testExternC();
     void testReparseUnchanged_data();
     void testReparseUnchanged();

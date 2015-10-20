@@ -1328,6 +1328,25 @@ void TestDUChain::testUsesCreatedForDeclarations()
     QCOMPARE(functionDeclaration->uses().count(), 1);
 }
 
+void TestDUChain::testReparseIncludeGuard()
+{
+    TestFile header("#ifndef GUARD\n#define GUARD\nint something;\n#endif\n", "h");
+    TestFile impl("#include \"" + header.url().byteArray() + "\"\n", "cpp", &header);
+
+    impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST  ));
+    {
+        DUChainReadLocker lock;
+        QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
+            importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
+    }
+    impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+    {
+        DUChainReadLocker lock;
+        QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
+            importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
+    }
+}
+
 void TestDUChain::testExternC()
 {
     auto code = R"(extern "C" { void foo(); })";
