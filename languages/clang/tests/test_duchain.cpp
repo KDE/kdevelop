@@ -1275,17 +1275,18 @@ void TestDUChain::testUsesCreatedForDeclarations()
 void TestDUChain::testReparseIncludeGuard()
 {
     TestFile header("#ifndef GUARD\n#define GUARD\nint something;\n#endif\n", "h");
-    TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
-                  "int main() { return foo(); }", "cpp", &header);
+    TestFile impl("#include \"" + header.url().byteArray() + "\"\n", "cpp", &header);
 
     impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST  ));
     {
         DUChainReadLocker lock;
-        QCOMPARE(impl.topContext()->problems().size(), 0);
+        QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
+            importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
     }
     impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
     {
         DUChainReadLocker lock;
-        QCOMPARE(impl.topContext()->problems().size(), 0);
+        QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
+            importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
     }
 }
