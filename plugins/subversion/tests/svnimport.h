@@ -40,8 +40,7 @@ private slots:
     void testImportWithMissingDirs();
 private:
     void validateImport( const QString& repo, QTemporaryDir& checkout, const QString& origcontent );
-    KDevelop::TestCore* core;
-    KDevelop::ICentralizedVersionControl* vcs;
+    KDevelop::ICentralizedVersionControl* vcs = nullptr;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_SVNRECURSIVEADD_H
