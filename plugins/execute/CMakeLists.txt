@@ -3,6 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevexecute\")
 
 set(kdevexecute_PART_UIS
     nativeappconfig.ui
+    dependencieswidget.ui
 )
 
 set(kdevexecute_PART_SRCS
@@ -11,6 +12,7 @@ set(kdevexecute_PART_SRCS
     executeplugin.cpp
     nativeappconfig.cpp
     nativeappjob.cpp
+    dependencieswidget.cpp
 )
 
 ki18n_wrap_ui( kdevexecute_PART_SRCS ${kdevexecute_PART_UIS} )

@@ -39,14 +39,7 @@ public:
     QString title() const override;
     QIcon icon() const override;
 private slots:
-    void addDep();
-    void removeDep();
-    void moveDependencyUp();
-    void moveDependencyDown();
     void activateDeps( int );
-    void checkActions( const QItemSelection& , const QItemSelection& );
-    void depEdited( const QString& );
-    void selectItemDialog();
 };
 
 class NativeAppLauncher : public KDevelop::ILauncher

@@ -82,7 +82,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
             executablePath->setUrl( pc->projects().count() ? pc->projects().first()->path().toUrl() : QUrl() );
         }
     }
-    targetDependency->setSuggestion(project);
+    dependencies->setSuggestion(project);
 
     //executablePath->setFilter("application/x-executable");
 
@@ -97,19 +97,8 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, QString() ) );
     runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
     terminal->setEditText( cfg.readEntry( ExecutePlugin::terminalEntry, terminal->itemText(0) ) );
-    QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
-    QStringList strDeps;
-    foreach( const QVariant& dep, deps ) {
-        QStringList deplist = dep.toStringList();
-        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-        KDevelop::ProjectBaseItem* pitem=itemForPath(deplist, model);
-        QIcon icon;
-        if(pitem)
-            icon=QIcon::fromTheme(pitem->iconName());
+    dependencies->setDependencies(KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList());
 
-        QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), dependencies );
-        item->setData( Qt::UserRole, dep );
-    }
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
     blockSignals( b );
 }
@@ -123,12 +112,6 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     dependencyAction->setItemData(1, "Build" );
     dependencyAction->setItemData(2, "Install" );
     dependencyAction->setItemData(3, "SudoInstall" );
-
-    addDependency->setIcon( QIcon::fromTheme("list-add") );
-    removeDependency->setIcon( QIcon::fromTheme("list-remove") );
-    moveDepUp->setIcon( QIcon::fromTheme("go-up") );
-    moveDepDown->setIcon( QIcon::fromTheme("go-down") );
-    browseProject->setIcon(QIcon::fromTheme("folder-document"));
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -145,125 +128,17 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( workingDirectory, &KUrlRequester::urlSelected, this, &NativeAppConfigPage::changed );
     connect( workingDirectory->lineEdit(), &KLineEdit::textEdited, this, &NativeAppConfigPage::changed );
     connect( environment, &EnvironmentSelectionWidget::currentProfileChanged, this, &NativeAppConfigPage::changed );
-    connect( addDependency, &QPushButton::clicked, this, &NativeAppConfigPage::addDep );
-    connect( addDependency, &QPushButton::clicked, this, &NativeAppConfigPage::changed );
-    connect( removeDependency, &QPushButton::clicked, this, &NativeAppConfigPage::changed );
-    connect( removeDependency, &QPushButton::clicked, this, &NativeAppConfigPage::removeDep );
-    connect( moveDepDown, &QPushButton::clicked, this, &NativeAppConfigPage::changed );
-    connect( moveDepUp, &QPushButton::clicked, this, &NativeAppConfigPage::changed );
-    connect( moveDepDown, &QPushButton::clicked, this, &NativeAppConfigPage::moveDependencyDown );
-    connect( moveDepUp, &QPushButton::clicked, this, &NativeAppConfigPage::moveDependencyUp );
-    connect( dependencies->selectionModel(), &QItemSelectionModel::selectionChanged, this, &NativeAppConfigPage::checkActions );
     connect( dependencyAction, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
     connect( runInTerminal, &QCheckBox::toggled, this, &NativeAppConfigPage::changed );
     connect( terminal, &KComboBox::editTextChanged, this, &NativeAppConfigPage::changed );
     connect( terminal, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
     connect( dependencyAction, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::activateDeps );
-    connect( targetDependency, &ProjectItemLineEdit::textChanged, this, &NativeAppConfigPage::depEdited);
-    connect( browseProject, &QPushButton::clicked, this, &NativeAppConfigPage::selectItemDialog);
-}
-
-
-void NativeAppConfigPage::depEdited( const QString& str )
-{
-    int pos;
-    QString tmp = str;
-    addDependency->setEnabled( !str.isEmpty()
-                               && ( !targetDependency->validator()
-                               || targetDependency->validator()->validate( tmp, pos ) == QValidator::Acceptable ) );
+    connect( dependencies, &DependenciesWidget::changed, this, &NativeAppConfigPage::changed );
 }
 
 void NativeAppConfigPage::activateDeps( int idx )
 {
-    browseProject->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
     dependencies->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
-    targetDependency->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
-}
-
-void NativeAppConfigPage::checkActions( const QItemSelection& selected, const QItemSelection& unselected )
-{
-    Q_UNUSED( unselected );
-    qCDebug(PLUGIN_EXECUTE) << "checkActions";
-    if( !selected.indexes().isEmpty() )
-    {
-        qCDebug(PLUGIN_EXECUTE) << "have selection";
-        Q_ASSERT( selected.indexes().count() == 1 );
-        QModelIndex idx = selected.indexes().at( 0 );
-        qCDebug(PLUGIN_EXECUTE) << "index" << idx;
-        moveDepUp->setEnabled( idx.row() > 0 );
-        moveDepDown->setEnabled( idx.row() < dependencies->count() - 1 );
-        removeDependency->setEnabled( true );
-    } else
-    {
-        removeDependency->setEnabled( false );
-        moveDepUp->setEnabled( false );
-        moveDepDown->setEnabled( false );
-    }
-}
-
-void NativeAppConfigPage::moveDependencyDown()
-{
-    QList<QListWidgetItem*> list = dependencies->selectedItems();
-    if( !list.isEmpty() )
-    {
-        Q_ASSERT( list.count() == 1 );
-        QListWidgetItem* item = list.at( 0 );
-        int row = dependencies->row( item );
-        dependencies->takeItem( row );
-        dependencies->insertItem( row+1, item );
-        dependencies->selectionModel()->select( dependencies->model()->index( row+1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
-    }
-}
-
-void NativeAppConfigPage::moveDependencyUp()
-{
-
-    QList<QListWidgetItem*> list = dependencies->selectedItems();
-    if( !list.isEmpty() )
-    {
-        Q_ASSERT( list.count() == 1 );
-        QListWidgetItem* item = list.at( 0 );
-        int row = dependencies->row( item );
-        dependencies->takeItem( row );
-        dependencies->insertItem( row-1, item );
-        dependencies->selectionModel()->select( dependencies->model()->index( row-1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
-    }
-}
-
-void NativeAppConfigPage::addDep()
-{
-    QIcon icon;
-    KDevelop::ProjectBaseItem* pitem = targetDependency->currentItem();
-    if(pitem)
-        icon = QIcon::fromTheme(pitem->iconName());
-
-    QListWidgetItem* item = new QListWidgetItem(icon, targetDependency->text(), dependencies);
-    item->setData( Qt::UserRole, targetDependency->itemPath() );
-    targetDependency->setText("");
-    addDependency->setEnabled( false );
-    dependencies->selectionModel()->clearSelection();
-    item->setSelected(true);
-//     dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
-}
-
-void NativeAppConfigPage::selectItemDialog()
-{
-    if(targetDependency->selectItemDialog()) {
-        addDep();
-    }
-}
-
-void NativeAppConfigPage::removeDep()
-{
-    QList<QListWidgetItem*> list = dependencies->selectedItems();
-    if( !list.isEmpty() )
-    {
-        Q_ASSERT( list.count() == 1 );
-        int row = dependencies->row( list.at(0) );
-        delete dependencies->takeItem( row );
-
-        dependencies->selectionModel()->select( dependencies->model()->index( row - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
-    }
 }
 
 void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
@@ -278,11 +153,7 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
     cfg.writeEntry( ExecutePlugin::useTerminalEntry, runInTerminal->isChecked() );
     cfg.writeEntry( ExecutePlugin::terminalEntry, terminal->currentText() );
     cfg.writeEntry( ExecutePlugin::dependencyActionEntry, dependencyAction->itemData( dependencyAction->currentIndex() ).toString() );
-    QVariantList deps;
-    for( int i = 0; i < dependencies->count(); i++ )
-    {
-        deps << dependencies->item( i )->data( Qt::UserRole );
-    }
+    QVariantList deps = dependencies->dependencies();
     cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevelop::qvariantToString( QVariant( deps ) ) );
 }
 
@@ -298,7 +169,7 @@ QList< KDevelop::LaunchConfigurationPageFactory* > NativeAppLauncher::configPage
 
 QString NativeAppLauncher::description() const
 {
-    return "Executes Native Applications";
+    return i18n("Executes Native Applications");
 }
 
 QString NativeAppLauncher::id()

@@ -20,7 +20,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Project Target:</string>
+         <string>Project &amp;Target:</string>
         </property>
         <property name="buddy">
          <cstring>projectTargetRadio</cstring>
@@ -60,7 +60,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Executable:</string>
+         <string>E&amp;xecutable:</string>
         </property>
         <property name="buddy">
          <cstring>executableRadio</cstring>
@@ -100,10 +100,13 @@
       <string>Behavior</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Arguments:</string>
+         <string>Ar&amp;guments:</string>
         </property>
         <property name="buddy">
          <cstring>arguments</cstring>
@@ -123,7 +126,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Working Directory:</string>
+         <string>Working &amp;Directory:</string>
         </property>
         <property name="buddy">
          <cstring>workingDirectory</cstring>
@@ -143,7 +146,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Environment:</string>
+         <string>E&amp;nvironment:</string>
         </property>
         <property name="buddy">
          <cstring>environment</cstring>
@@ -250,7 +253,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Action:</string>
+         <string>Act&amp;ion:</string>
         </property>
         <property name="buddy">
          <cstring>dependencyAction</cstring>
@@ -290,121 +293,17 @@
         <property name="text">
          <string>Targets:</string>
         </property>
-        <property name="buddy">
-         <cstring>targetDependency</cstring>
-        </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="ProjectItemLineEdit" name="targetDependency">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="toolTip">
-           <string>Enter a dependency to add to the list</string>
-          </property>
-          <property name="placeholderText">
-           <string>Enter a dependency to add to the list</string>
-          </property>
-          <property name="showClearButton" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QPushButton" name="browseProject">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="addDependency">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="toolTip">
-           <string>Adds the listed target to the dependency list.</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" rowspan="4" colspan="2">
-         <widget class="QListWidget" name="dependencies">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="toolTip">
-           <string>List of indirect dependent targets.</string>
-          </property>
-          <property name="whatsThis">
-           <string>This list should contain targets that the application does not directly depend on, but for which an action needs to be taken before running the application.</string>
-          </property>
-          <property name="alternatingRowColors">
-           <bool>true</bool>
-          </property>
-          <property name="uniformItemSizes">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="removeDependency">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="toolTip">
-           <string>Removes the selected dependencies from the list.</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QPushButton" name="moveDepUp">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="toolTip">
-           <string>Move a dependency up in the list.</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QPushButton" name="moveDepDown">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="toolTip">
-           <string>Moves the selected dependency down in the list.</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="2">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
+       <widget class="DependenciesWidget" name="dependencies" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -413,34 +312,20 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QWidget</extends>
+   <header>kurlrequester.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>QLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QListWidget</class>
-   <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
-  </customwidget>
-  <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>
    <extends>KComboBox</extends>
    <header>util/environmentselectionwidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ProjectItemLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>project/projectitemlineedit.h</header>
   </customwidget>
   <customwidget>
    <class>ProjectTargetsComboBox</class>
@@ -452,18 +337,18 @@
    <extends>QToolButton</extends>
    <header>shell/environmentconfigurebutton.h</header>
   </customwidget>
+  <customwidget>
+   <class>DependenciesWidget</class>
+   <extends>QWidget</extends>
+   <header>dependencieswidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>executablePath</tabstop>
   <tabstop>arguments</tabstop>
   <tabstop>workingDirectory</tabstop>
   <tabstop>environment</tabstop>
-  <tabstop>targetDependency</tabstop>
-  <tabstop>addDependency</tabstop>
-  <tabstop>dependencies</tabstop>
-  <tabstop>removeDependency</tabstop>
-  <tabstop>moveDepUp</tabstop>
-  <tabstop>moveDepDown</tabstop>
  </tabstops>
  <resources/>
  <connections>
