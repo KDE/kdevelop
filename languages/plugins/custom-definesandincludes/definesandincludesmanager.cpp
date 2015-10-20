@@ -267,6 +267,8 @@ QString DefinesAndIncludesManager::parserArguments(KDevelop::ProjectBaseItem* it
         return m_settings->defaultParserArguments();
     }
 
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
+
     auto cfg = item->project()->projectConfiguration().data();
     return findConfigForItem(m_settings->readPaths(cfg), item).parserArguments;
 }

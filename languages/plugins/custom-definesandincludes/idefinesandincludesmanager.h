@@ -135,6 +135,8 @@ public:
     /**
      * @param item project item. Use nullptr to get default arguments
      * @return The parser command-line arguments used to parse the @p item
+     *
+     * NOTE: Call it from the main thread only, the default arguments can also be retrieved from a background thread
      */
     virtual QString parserArguments(ProjectBaseItem* item) const = 0;
 
