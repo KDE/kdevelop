@@ -75,6 +75,7 @@ private slots:
     void testActiveDocumentHasASTAttached();
     void testUsesCreatedForDeclarations();
     void testExternC();
+    void testReparseIncludeGuard();
 
     void benchDUChainBuilder();
 
