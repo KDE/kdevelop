@@ -39,14 +39,6 @@ public:
     void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const override;
     QString title() const override;
     QIcon icon() const override;
-
-private slots:
-    void addDep();
-    void removeDep();
-    void moveDependencyDown();
-    void moveDependencyUp();
-    void checkActions(const QItemSelection & selected, const QItemSelection& deselected);
-    void depEdited(const QString& newtext);
 };
 
 class PlasmoidLauncher : public KDevelop::ILauncher
