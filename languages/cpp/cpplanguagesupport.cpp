@@ -697,6 +697,9 @@ bool CppLanguageSupport::isFunctionLike(const rpp::pp_macro& pm, const QUrl& url
   while(!strdef.isEmpty()) {
     IndexedString preName(strdef);
 
+    if(pm.name == preName)
+      return false;
+
     if(!p->usedMacroNames().contains(preName) && !p->definedMacroNames().contains(preName))
       return false;
 
