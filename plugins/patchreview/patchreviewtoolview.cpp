@@ -126,13 +126,15 @@ void PatchReviewToolView::patchChanged() {
     fillEditFromPatch();
     kompareModelChanged();
 
-    IPatchSource::Ptr p = m_plugin->patch();
 #ifdef WITH_PURPOSE
-    m_exportMenu->model()->setInputData(QJsonObject {
-        { QStringLiteral("urls"), QJsonArray { p->file().toString() } },
-        { QStringLiteral("mimeType"), { QStringLiteral("text/x-patch") } },
-        { QStringLiteral("localBaseDir"), { p->baseDir().toString() } }
-    });
+    IPatchSource::Ptr p = m_plugin->patch();
+    if (p) {
+        m_exportMenu->model()->setInputData(QJsonObject {
+            { QStringLiteral("urls"), QJsonArray { p->file().toString() } },
+            { QStringLiteral("mimeType"), { QStringLiteral("text/x-patch") } },
+            { QStringLiteral("localBaseDir"), { p->baseDir().toString() } }
+        });
+    }
 #endif
 }
 
