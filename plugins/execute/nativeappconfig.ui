@@ -296,7 +296,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="DependenciesWidget" name="dependencies" native="true">
+       <widget class="KDevelop::DependenciesWidget" name="dependencies" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
@@ -338,9 +338,9 @@
    <header>shell/environmentconfigurebutton.h</header>
   </customwidget>
   <customwidget>
-   <class>DependenciesWidget</class>
+   <class>KDevelop::DependenciesWidget</class>
    <extends>QWidget</extends>
-   <header>dependencieswidget.h</header>
+   <header>project/widgets/dependencieswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

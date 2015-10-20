@@ -25,6 +25,8 @@
 #include <interfaces/iprojectcontroller.h>
 #include <util/kdevstringhandler.h>
 
+using namespace KDevelop;
+
 static KDevelop::ProjectBaseItem* itemForPath(const QStringList& path, KDevelop::ProjectModel* model)
 {
     return model->itemFromIndex(model->pathToIndex(path));

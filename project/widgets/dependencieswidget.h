@@ -23,11 +23,13 @@
 
 #include <QWidget>
 #include <QItemSelection>
+#include <project/projectexport.h>
 
 namespace Ui { class DependenciesWidget; }
-namespace KDevelop { class IProject; }
+namespace KDevelop {
+class IProject;
 
-class DependenciesWidget : public QWidget
+class KDEVPLATFORMPROJECT_EXPORT DependenciesWidget : public QWidget
 {
     Q_OBJECT
     public:
@@ -53,5 +55,7 @@ class DependenciesWidget : public QWidget
 
         Ui::DependenciesWidget* m_ui;
 };
+
+}
 
 #endif

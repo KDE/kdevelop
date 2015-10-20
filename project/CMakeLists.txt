@@ -20,7 +20,10 @@ set(KDevPlatformProject_LIB_SRCS
     interfaces/ibuildsystemmanager.cpp
     interfaces/iprojectfilter.cpp
     interfaces/iprojectfilterprovider.cpp
+    widgets/dependencieswidget.cpp
 )
+
+ki18n_wrap_ui( KDevPlatformProject_LIB_SRCS widgets/dependencieswidget.ui)
 
 kdevplatform_add_library(KDevPlatformProject SOURCES ${KDevPlatformProject_LIB_SRCS})
 target_link_libraries(KDevPlatformProject
@@ -60,4 +63,9 @@ install(FILES
     abstractfilemanagerplugin.h
     projectfiltermanager.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/project COMPONENT Devel
+)
+
+install(FILES
+    widgets/dependencieswidget.h
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/project/widgets COMPONENT Devel
 )

@@ -1,21 +1,15 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevexecute\")
 ########### next target ###############
 
-set(kdevexecute_PART_UIS
-    nativeappconfig.ui
-    dependencieswidget.ui
-)
-
 set(kdevexecute_PART_SRCS
 
     projecttargetscombobox.cpp
     executeplugin.cpp
     nativeappconfig.cpp
     nativeappjob.cpp
-    dependencieswidget.cpp
 )
 
-ki18n_wrap_ui( kdevexecute_PART_SRCS ${kdevexecute_PART_UIS} )
+ki18n_wrap_ui( kdevexecute_PART_SRCS nativeappconfig.ui)
 
 kdevplatform_add_plugin(kdevexecute JSON kdevexecute.json SOURCES ${kdevexecute_PART_SRCS})
 
