@@ -1298,7 +1298,6 @@ void TestDUChain::testReparseIncludeGuard()
     impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
     {
         DUChainReadLocker lock;
-        QEXPECT_FAIL("", "The include guard warning is added here while it should not be", Abort);
         QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
             importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
     }

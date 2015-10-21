@@ -283,13 +283,16 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         clang_disposeDiagnostic(diagnostic);
     }
 
-    const QString path = QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath();
-    const IndexedString indexedPath(path);
+    // other problem sources
 
     TodoExtractor extractor(unit(), file);
     problems << extractor.problems();
 
-    // other problem sources
+#if CINDEX_VERSION_MINOR > 30
+    // note that the below warning is triggered on every reparse when there is a precompiled preamble
+    // see also TestDUChain::testReparseIncludeGuard
+    const QString path = QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath();
+    const IndexedString indexedPath(path);
     if (ClangHelpers::isHeader(path) && !clang_isFileMultipleIncludeGuarded(unit(), file)
         && !clang_Location_isInSystemHeader(clang_getLocationForOffset(d->m_unit, file, 0)))
     {
@@ -303,6 +306,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         problems << problem;
         // TODO: Easy to add an assistant here that adds the guards -- any takers?
     }
+#endif
 
     return problems;
 }
