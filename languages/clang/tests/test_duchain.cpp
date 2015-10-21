@@ -1284,21 +1284,66 @@ void TestDUChain::testExternC()
     QVERIFY(!top->findDeclarations(QualifiedIdentifier("foo")).isEmpty());
 }
 
-void TestDUChain::testReparseIncludeGuard()
+void TestDUChain::testReparseUnchanged_data()
 {
-    TestFile header("#ifndef GUARD\n#define GUARD\nint something;\n#endif\n", "h");
-    TestFile impl("#include \"" + header.url().byteArray() + "\"\n", "cpp", &header);
+    QTest::addColumn<QString>("headerCode");
+    QTest::addColumn<QString>("implCode");
+
+    QTest::newRow("include-guards") << R"(
+        #ifndef GUARD
+        #define GUARD
+        int something;
+        #endif
+    )" << R"(
+        #include "%1"
+    )";
+
+    QTest::newRow("template-default-parameters") << R"(
+        #ifndef TEST_H
+        #define TEST_H
+
+        template<unsigned T=123, unsigned... U>
+        class dummy;
+
+        template<unsigned T, unsigned... U>
+        class dummy {
+            int field[T];
+        };
+
+        #endif
+    )" << R"(
+        #include "%1"
+
+        int main(int, char **) {
+            dummy<> x;
+            (void)x;
+        }
+    )";
+}
+
+void TestDUChain::testReparseUnchanged()
+{
+    QFETCH(QString, headerCode);
+    QFETCH(QString, implCode);
+    TestFile header(headerCode, "h");
+    TestFile impl(implCode.arg(header.url().str()), "cpp", &header);
+
+    auto checkProblems = [&] (bool reparsed) {
+        DUChainReadLocker lock;
+        auto headerCtx = DUChain::self()->chainForDocument(header.url());
+        QVERIFY(headerCtx);
+        QVERIFY(headerCtx->problems().isEmpty());
+        auto implCtx = DUChain::self()->chainForDocument(impl.url());
+        QVERIFY(implCtx);
+        if (reparsed) {
+            QEXPECT_FAIL("template-default-parameters", "the precompiled preamble messes the default template paramters up", Continue);
+        }
+        QVERIFY(implCtx->problems().isEmpty());
+    };
 
     impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST  ));
-    {
-        DUChainReadLocker lock;
-        QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
-            importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
-    }
+    checkProblems(false);
+
     impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
-    {
-        DUChainReadLocker lock;
-        QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
-            importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
-    }
+    checkProblems(true);
 }
