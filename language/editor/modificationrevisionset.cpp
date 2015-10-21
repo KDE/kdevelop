@@ -68,7 +68,7 @@ struct FileModificationPairRequest {
     return m_data.hash();
   }
 
-  size_t itemSize() const {
+  uint itemSize() const {
       return m_data.itemSize();
   }
 
