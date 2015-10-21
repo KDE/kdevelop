@@ -55,7 +55,7 @@ class PatchFilesModel : public VcsFileChangesModel
 {
 public:
     PatchFilesModel( QObject *parent, bool allowSelection ) : VcsFileChangesModel( parent, allowSelection ) { };
-    enum ItemRoles { HunksNumberRole = VcsStatusInfoRole+1 };
+    enum ItemRoles { HunksNumberRole = LastItemRole+1 };
 
 public slots:
     void updateState( const KDevelop::VcsStatusInfo &status, unsigned hunksNum ) {
@@ -81,7 +81,7 @@ private:
     void setFileInfo( QStandardItem *item, unsigned int hunksNum ) {
         QString newText = i18ncp( "%1: number of changed hunks, %2: file name",
             "%2 (1 hunk)", "%2 (%1 hunks)", hunksNum,
-            item->data(VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url().toDisplayString(QUrl::PreferLocalFile) );
+            item->index().data(VcsFileChangesModel::UrlRole).toUrl().toDisplayString(QUrl::PreferLocalFile) );
         item->setText( newText );
     }
 };
@@ -258,7 +258,7 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& )
     QList<QUrl> urls;
     QModelIndexList selectionIdxs = m_editPatch.filesList->selectionModel()->selectedIndexes();
     foreach(const QModelIndex& idx, selectionIdxs) {
-        urls += idx.sibling(idx.row(), 0).data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
+        urls += idx.data(KDevelop::VcsFileChangesModel::UrlRole).toUrl();
     }
 
     QPointer<QMenu> menu = new QMenu(m_editPatch.filesList);
