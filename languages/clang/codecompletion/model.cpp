@@ -173,14 +173,8 @@ ClangCodeCompletionModel::~ClangCodeCompletionModel()
 bool ClangCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted,
                                                      bool userInsertion, const KTextEditor::Cursor& position)
 {
-    static const QVarLengthArray<QChar, 16> noCompletionAfter = {
-        QLatin1Char(';'),
-        QLatin1Char('{'),
-        QLatin1Char('}'),
-        QLatin1Char(']'),
-        QLatin1Char(')'),
-        QLatin1Char(' '),
-    };
+    static const QString noCompletionAfter = QStringLiteral(";{}]) ");
+
     if (inserted.isEmpty() || isSpaceOnly(inserted) || noCompletionAfter.contains(inserted.at(inserted.size() - 1))) {
         return false;
     }
