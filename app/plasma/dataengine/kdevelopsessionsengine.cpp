@@ -32,7 +32,7 @@ KDevelopSessionsEngine::KDevelopSessionsEngine(QObject *parent, const QVariantLi
     : Plasma::DataEngine(parent, args),
       m_dirWatch(0)
 {
-
+    init();
 }
 
 KDevelopSessionsEngine::~KDevelopSessionsEngine()

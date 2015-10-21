@@ -48,7 +48,6 @@ Item {
 
     Component.onCompleted: {
         plasmoid.popupIcon = "kdevelop";
-        plasmoid.aspectRatioMode = IgnoreAspectRatio;
         plasmoid.popupEvent.connect('popupEvent', popupEventSlot);
     }
 
@@ -61,7 +60,7 @@ Item {
         id: headerRow
         anchors { left: parent.left; right: parent.right }
 
-        IconItem {
+        PlasmaCore.IconItem {
             id: appIcon
             source: "kdevelop"
             width: 32
@@ -166,7 +165,7 @@ Item {
         }
 
         highlightMoveDuration: 250
-        highlightMoveSpeed: 1
+        highlightMoveVelocity: 1
     }
 
     PlasmaComponents.ScrollBar {
