@@ -1770,7 +1770,7 @@ class ItemRepository : public AbstractItemRepository {
    * Will return the value returned by the lambda, returning early if truthy
    */
   template<typename Visitor>
-  auto walkBucketChain(unsigned int hash, const Visitor& visitor) -> decltype(visitor(0, nullptr))
+  auto walkBucketChain(unsigned int hash, const Visitor& visitor) const -> decltype(visitor(0, nullptr))
   {
     unsigned short bucketIndex = m_firstBucketForHash[hash % bucketHashSize];
 
