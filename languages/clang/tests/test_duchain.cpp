@@ -860,10 +860,9 @@ void TestDUChain::testReparseWithAllDeclarationsContextsAndUses()
         QCOMPARE(file.topContext()->childContexts().size(), 2);
         QCOMPARE(file.topContext()->localDeclarations().size(), 2);
 
-        for (int i = 0; i < 2; ++i) {
-            auto dec = file.topContext()->localDeclarations().at(i);
-            QVERIFY(dec->uses().isEmpty());
-        }
+        auto dec = file.topContext()->localDeclarations().at(0);
+        QEXPECT_FAIL("", "Skipping of function bodies is disabled for now", Continue);
+        QVERIFY(dec->uses().isEmpty());
     }
 
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -892,16 +891,16 @@ void TestDUChain::testReparseOnDocumentActivated()
 
     {
         DUChainReadLocker lock;
-        QVERIFY(file.topContext());
-        QCOMPARE(file.topContext()->childContexts().size(), 2);
-        QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+        auto ctx = file.topContext();
+        QVERIFY(ctx);
+        QCOMPARE(ctx->childContexts().size(), 2);
+        QCOMPARE(ctx->localDeclarations().size(), 2);
 
-        for (int i = 0; i < 2; ++i) {
-            auto dec = file.topContext()->localDeclarations().at(i);
-            QVERIFY(dec->uses().isEmpty());
-        }
+        auto dec = ctx->localDeclarations().at(0);
+        QEXPECT_FAIL("", "Skipping of function bodies was disabled for now", Continue);
+        QVERIFY(dec->uses().isEmpty());
 
-        QVERIFY(!file.topContext()->ast());
+        QVERIFY(!ctx->ast());
     }
 
     auto backgroundParser = ICore::self()->languageController()->backgroundParser();
@@ -909,15 +908,16 @@ void TestDUChain::testReparseOnDocumentActivated()
 
     auto doc = ICore::self()->documentController()->openDocument(file.url().toUrl());
     QVERIFY(doc);
-
     QVERIFY(backgroundParser->isQueued(file.url()));
 
-    auto ctx = DUChain::self()->waitForUpdate(file.url(), TopDUContext::AllDeclarationsContextsAndUses);
-    QVERIFY(ctx);
+    QSignalSpy spy(backgroundParser, &BackgroundParser::parseJobFinished);
+    spy.wait();
+
     doc->close(KDevelop::IDocument::Discard);
+
     {
         DUChainReadLocker lock;
-        qDebug() << (quint64)ctx->features();
+        auto ctx = file.topContext();
         QCOMPARE(ctx->features() & TopDUContext::AllDeclarationsContextsAndUses, static_cast<int>(TopDUContext::AllDeclarationsContextsAndUses));
         QVERIFY(ctx->topContext()->ast());
     }
