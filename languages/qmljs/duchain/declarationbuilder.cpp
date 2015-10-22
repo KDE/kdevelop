@@ -1527,7 +1527,7 @@ bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const Abstrac
 
     {
         auto aStruct = StructureType::Ptr::dynamicCast(a);
-        auto bStruct = StructureType::Ptr::dynamicCast(a);
+        auto bStruct = StructureType::Ptr::dynamicCast(b);
         if (aStruct && bStruct) {
             auto top = currentContext()->topContext();
             auto aDecl = dynamic_cast<ClassDeclaration*>(aStruct->declaration(top));
