@@ -51,7 +51,6 @@ ProjectFolderItem* FileManagerListJob::item() const
 void FileManagerListJob::addSubDir( ProjectFolderItem* item )
 {
     Q_ASSERT(!m_listQueue.contains(item));
-    Q_ASSERT(!m_item || m_item == item || m_item->path().isDirectParentOf(item->path()));
 
     m_listQueue.enqueue(item);
 }
