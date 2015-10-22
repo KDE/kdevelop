@@ -172,18 +172,17 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
             continue;
         }
 
-        Path path(baseItem->path(), name);
+        Path path(baseItem->path(), entry.isLink() ? entry.stringValue(KIO::UDSEntry::UDS_LINK_DEST) : name);
 
         if ( !q->isValid( path, entry.isDir(), baseItem->project() ) ) {
             continue;
         } else {
             if ( entry.isDir() ) {
-                if( entry.isLink() ) {
-                    const Path linkedPath = baseItem->path().cd(entry.stringValue( KIO::UDSEntry::UDS_LINK_DEST ));
+                if (entry.isLink()) {
                     // make sure we don't end in an infinite loop
-                    if( linkedPath.isParentOf( baseItem->project()->path() ) ||
-                        baseItem->project()->path().isParentOf( linkedPath ) ||
-                        linkedPath == baseItem->project()->path() )
+                    if( path.isParentOf( baseItem->project()->path() ) ||
+                        baseItem->project()->path().isParentOf( path ) ||
+                        path == baseItem->project()->path() )
                     {
                         continue;
                     }
