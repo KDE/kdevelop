@@ -380,6 +380,9 @@ void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
 
 void PatchReviewToolView::fileItemChanged( QStandardItem* item )
 {
+    if (item->column()!=0)
+        return;
+
     QUrl url = m_fileModel->statusInfo(item->index()).url();
     if (url.isEmpty())
         return;
