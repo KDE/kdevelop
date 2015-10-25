@@ -103,7 +103,7 @@
       <bool>false</bool>
      </property>
      <property name="toolTip">
-      <string>Move a dependency up in the list.</string>
+      <string>Moves the selected dependency up in the list.</string>
      </property>
      <property name="text">
       <string/>
