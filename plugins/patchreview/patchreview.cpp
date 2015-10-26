@@ -341,7 +341,7 @@ void PatchReviewPlugin::closeReview()
 
         Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
         if( w->area()->objectName() == "review" ) {
-            if( ICore::self()->documentController()->closeAllDocuments() )
+            if( ICore::self()->documentController()->saveAllDocuments() )
                 ICore::self()->uiController()->switchToArea( "code", KDevelop::IUiController::ThisWindow );
         }
     }
