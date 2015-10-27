@@ -341,7 +341,7 @@ void PatchReviewPlugin::closeReview()
 
         Sublime::Area* area = ICore::self()->uiController()->activeArea();
         if( area->objectName() == "review" ) {
-            if( ICore::self()->documentController()->closeAllDocuments() )
+            if( ICore::self()->documentController()->saveAllDocuments() )
                 ICore::self()->uiController()->switchToArea( "code", KDevelop::IUiController::ThisWindow );
         }
     }
