@@ -62,7 +62,8 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
     virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, bool userInsertion, const KTextEditor::Cursor&) override;
     virtual KDevelop::CodeCompletionWorker* createCompletionWorker() override;
 
-    virtual void foundDeclarations(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > item, QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > completionContext) override;
+    virtual void foundDeclarations(const QList<QExplicitlySharedDataPointer<KDevelop::CompletionTreeElement>>& item,
+                                   const QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext>& completionContext) override;
 
   private slots:
     void parseJobFinished(KDevelop::ParseJob* job);

@@ -228,6 +228,12 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
+    // NOTE: we must have all declarations, contexts and uses available for files that are opened in the editor
+    //       it is very hard to check this for all included files of this TU, and previously lead to problems
+    //       when we tried to skip function bodies as an optimization for files that where not open in the editor.
+    //       now, we always build everything, which is correct but a tad bit slower. we can try to optimize later.
+    setMinimumFeatures(static_cast<TopDUContext::Features>(minimumFeatures() | TopDUContext::AllDeclarationsContextsAndUses));
+
     if (minimumFeatures() & AttachASTWithoutUpdating) {
         // The context doesn't need to be updated, but has no AST attached (restored from disk),
         // so attach AST to it, without updating DUChain
@@ -316,6 +322,9 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         Q_ASSERT(file);
         // verify that features and environment where properly set in ClangHelpers::buildDUChain
         Q_ASSERT(file->featuresSatisfied(TopDUContext::Features(minimumFeatures() & ~TopDUContext::ForceUpdateRecursive)));
+        if (trackerForUrl(context->url())) {
+            Q_ASSERT(file->featuresSatisfied(TopDUContext::AllDeclarationsContextsAndUses));
+        }
 #endif
     }
 
@@ -351,9 +360,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
 
 ParseSessionData::Ptr ClangParseJob::createSessionData() const
 {
-    const bool skipFunctionBodies = (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts);
-    return ParseSessionData::Ptr(new ParseSessionData(m_unsavedFiles, clang()->index(), m_environment,
-                                 (skipFunctionBodies ? ParseSessionData::SkipFunctionBodies : ParseSessionData::NoOption)));
+    return ParseSessionData::Ptr(new ParseSessionData(m_unsavedFiles, clang()->index(), m_environment, ParseSessionData::NoOption));
 }
 
 const ParsingEnvironment* ClangParseJob::environment() const

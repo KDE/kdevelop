@@ -36,6 +36,8 @@ public:
     static KDevelop::IProject* GenerateSimpleProjectWithOutOfProjectFiles();
 
     static KDevelop::IProject* GenerateMultiPathProject();
+
+    static KDevelop::IProject* GenerateEmptyProject();
 };
 
 #endif // PROJECTSGENERATOR_H

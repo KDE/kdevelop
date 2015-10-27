@@ -44,10 +44,10 @@ using namespace KDevelop;
 
 namespace
 {
-void testCompilerEntry(SettingsManager& settings, KConfig* config){
-    auto entries = settings.readPaths(config);
+void testCompilerEntry(SettingsManager* settings, KConfig* config){
+    auto entries = settings->readPaths(config);
     auto entry = entries.first();
-    auto compilers = settings.provider()->compilers();
+    auto compilers = settings->provider()->compilers();
     Q_ASSERT(!compilers.isEmpty());
     bool gccCompilerInstalled = std::any_of(compilers.begin(), compilers.end(), [](const CompilerPointer& compiler){return compiler->name().contains("gcc", Qt::CaseInsensitive);});
     if (gccCompilerInstalled) {
@@ -55,19 +55,19 @@ void testCompilerEntry(SettingsManager& settings, KConfig* config){
     }
 }
 
-void testAddingEntry(SettingsManager& settings, KConfig* config){
-    auto entries = settings.readPaths(config);
+void testAddingEntry(SettingsManager* settings, KConfig* config){
+    auto entries = settings->readPaths(config);
     auto entry = entries.first();
-    auto compilers = settings.provider()->compilers();
+    auto compilers = settings->provider()->compilers();
     ConfigEntry otherEntry;
     otherEntry.defines["TEST"] = "lalal";
     otherEntry.includes = QStringList() << "/foo";
     otherEntry.path = "test";
     otherEntry.compiler = compilers.first();
     entries << otherEntry;
-    settings.writePaths(config, entries);
+    settings->writePaths(config, entries);
 
-    auto readWriteEntries = settings.readPaths(config);
+    auto readWriteEntries = settings->readPaths(config);
     QCOMPARE(readWriteEntries.size(), 2);
     QCOMPARE(readWriteEntries.at(0).path, entry.path);
     QCOMPARE(readWriteEntries.at(0).defines, entry.defines);
@@ -94,8 +94,8 @@ void TestCompilerProvider::cleanupTestCase()
 
 void TestCompilerProvider::testRegisterCompiler()
 {
-    SettingsManager settings;
-    auto provider = settings.provider();
+    auto settings = SettingsManager::globalInstance();
+    auto provider = settings->provider();
     auto cf = provider->compilerFactories();
     for (int i = 0 ; i < cf.size(); ++i) {
         auto compiler = cf[i]->createCompiler(QString::number(i), QString::number(i));
@@ -108,8 +108,8 @@ void TestCompilerProvider::testRegisterCompiler()
 
 void TestCompilerProvider::testCompilerIncludesAndDefines()
 {
-    SettingsManager settings;
-    auto provider = settings.provider();
+    auto settings = SettingsManager::globalInstance();
+    auto provider = settings->provider();
     for (auto c : provider->compilers()) {
         if (!c->editable() && !c->path().isEmpty()) {
             QVERIFY(!c->defines({}).isEmpty());
@@ -128,7 +128,7 @@ void TestCompilerProvider::testCompilerIncludesAndDefines()
 
 void TestCompilerProvider::testStorageBackwardsCompatible()
 {
-    SettingsManager settings;
+    auto settings = SettingsManager::globalInstance();
     QTemporaryFile file;
     QVERIFY(file.open());
     QTextStream stream(&file);
@@ -142,7 +142,7 @@ void TestCompilerProvider::testStorageBackwardsCompatible()
       "[CustomDefinesAndIncludes][ProjectPath0][Compiler]\nName=GCC\nPath=gcc\nType=GCC\n";
     file.close();
     KConfig config(file.fileName());
-    auto entries = settings.readPaths(&config);
+    auto entries = settings->readPaths(&config);
     QCOMPARE(entries.size(), 1);
     auto entry = entries.first();
     Defines defines;
@@ -160,7 +160,7 @@ void TestCompilerProvider::testStorageBackwardsCompatible()
 
 void TestCompilerProvider::testStorageNewSystem()
 {
-    SettingsManager settings;
+    auto settings = SettingsManager::globalInstance();
     QTemporaryFile file;
     QVERIFY(file.open());
     QTextStream stream(&file);
@@ -177,7 +177,7 @@ void TestCompilerProvider::testStorageNewSystem()
       "[CustomDefinesAndIncludes][ProjectPath0][Compiler]\nName=GCC\nPath=gcc\nType=GCC\n";
     file.close();
     KConfig config(file.fileName());
-    auto entries = settings.readPaths(&config);
+    auto entries = settings->readPaths(&config);
     QCOMPARE(entries.size(), 1);
     auto entry = entries.first();
     QCOMPARE(entry.path, QString("/"));
@@ -204,8 +204,8 @@ void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
     auto project = ProjectsGenerator::GenerateMultiPathProject();
     Q_ASSERT(project);
 
-    SettingsManager settings;
-    auto provider = settings.provider();
+    auto settings = SettingsManager::globalInstance();
+    auto provider = settings->provider();
 
     Q_ASSERT(!provider->compilerFactories().isEmpty());
     auto compiler = provider->compilerFactories().first()->createCompiler("name", "path");
@@ -236,9 +236,12 @@ void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
     entry.path = "src/main.cpp";
     entry.compiler = compiler;
 
-    auto entries = settings.readPaths(project->projectConfiguration().data());
+    auto entries = settings->readPaths(project->projectConfiguration().data());
+
     entries.append(entry);
-    settings.writePaths(project->projectConfiguration().data(), entries);
+    settings->writePaths(project->projectConfiguration().data(), entries);
+
+    QVERIFY(provider->compilers().contains(compiler));
 
     mainCompiler = provider->compilerForItem(mainfile);
     QVERIFY(mainCompiler);

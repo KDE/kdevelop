@@ -173,3 +173,32 @@ IProject* ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles()
 
     return project;
 }
+
+IProject* ProjectsGenerator::GenerateEmptyProject()
+{
+    // directory structure:
+    // ./emptyproject.kdev4
+    // ./.kdev4/emptyproject.kdev4
+
+    const QString ep = QLatin1String("emptyproject");
+    auto rootFolder = QDir::temp();
+    QDir(rootFolder.absolutePath() + "/" + ep).removeRecursively();
+    rootFolder.mkdir(ep);
+    rootFolder.cd(ep);
+    rootFolder.mkdir(".kdev4");
+
+    {
+        QFile file(rootFolder.filePath("emptyproject.kdev4"));
+        createFile(file);
+        QTextStream stream(&file);
+        stream << "[Project]\nName=EmptyProject\nManager=KDevCustomBuildSystem";
+    }
+
+    {
+        QFile file(rootFolder.filePath(".kdev4/emptyproject.kdev4"));
+        createFile(file);
+        QTextStream stream(&file);
+        stream << "[Project]\n" << "VersionControlSupport=\n";
+    }
+    return loadProject(QDir::tempPath() + "/emptyproject/emptyproject.kdev4", "EmptyProject");
+}

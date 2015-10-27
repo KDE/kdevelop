@@ -97,8 +97,6 @@ CodeCompletionSettings ClangSettingsManager::codeCompletionSettings() const
 
 ParserSettings ClangSettingsManager::parserSettings(KDevelop::ProjectBaseItem* item) const
 {
-    Q_ASSERT(QThread::currentThread() == qApp->thread());
-
     return {IDefinesAndIncludesManager::manager()->parserArguments(item)};
 }
 

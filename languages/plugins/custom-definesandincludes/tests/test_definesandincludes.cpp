@@ -71,6 +71,9 @@ void TestDefinesAndIncludes::loadSimpleProject()
     defines.insert( "_DEBUG", "" );
     defines.insert( "VARIABLE", "VALUE" );
     QCOMPARE( actualDefines, defines );
+
+    QVERIFY(!manager->parserArguments(s_currentProject->projectItem()).isEmpty());
+    QVERIFY(!manager->parserArguments(nullptr).isEmpty());
 }
 
 void TestDefinesAndIncludes::loadMultiPathProject()
@@ -88,6 +91,7 @@ void TestDefinesAndIncludes::loadMultiPathProject()
 
     QCOMPARE( manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
+    QVERIFY(!manager->parserArguments(s_currentProject->projectItem()).isEmpty());
 
     ProjectBaseItem* mainfile = 0;
     for (const auto& file: s_currentProject->fileSet() ) {
@@ -106,6 +110,7 @@ void TestDefinesAndIncludes::loadMultiPathProject()
     qDebug() << mainfile << mainfile->path();
     QCOMPARE(manager->includes( mainfile, IDefinesAndIncludesManager::UserDefined ), includes);
     QCOMPARE(defines, manager->defines( mainfile, IDefinesAndIncludesManager::UserDefined ));
+    QVERIFY(!manager->parserArguments(mainfile).isEmpty());
 }
 
 void TestDefinesAndIncludes::testNoProjectIncludeDirectories()
@@ -127,6 +132,24 @@ void TestDefinesAndIncludes::testNoProjectIncludeDirectories()
     auto noProjectIncludes = manager->includes(s_currentProject->path().path() + "/src/main.cpp");
     QVERIFY(noProjectIncludes.contains(includePath1));
     QVERIFY(noProjectIncludes.contains(includePath2));
+    QVERIFY(!manager->parserArguments(s_currentProject->projectItem()).isEmpty());
+}
+
+void TestDefinesAndIncludes::testEmptyProject()
+{
+    s_currentProject = ProjectsGenerator::GenerateEmptyProject();
+    QVERIFY(s_currentProject);
+
+    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
+    QVERIFY(manager);
+
+    auto projectIncludes = manager->includes(s_currentProject->projectItem());
+    auto projectDefines = manager->defines(s_currentProject->projectItem());
+    auto parserArguments = manager->parserArguments(s_currentProject->projectItem());
+
+    QVERIFY(!projectIncludes.isEmpty());
+    QVERIFY(!projectDefines.isEmpty());
+    QVERIFY(!parserArguments.isEmpty());
 }
 
 QTEST_MAIN(TestDefinesAndIncludes)

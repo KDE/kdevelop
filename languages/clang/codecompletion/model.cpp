@@ -173,13 +173,11 @@ ClangCodeCompletionModel::~ClangCodeCompletionModel()
 bool ClangCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted,
                                                      bool userInsertion, const KTextEditor::Cursor& position)
 {
-    if ( inserted.isEmpty() || isSpaceOnly(inserted) ||
-        inserted.endsWith(QLatin1Char(';')) || inserted.endsWith(QLatin1Char('}')) ||
-        inserted.endsWith(QLatin1Char(']')) || inserted.endsWith(QLatin1Char(')')) ||
-        inserted.endsWith(QLatin1Char(' ')) )
-        {
-            return false;
-        }
+    static const QString noCompletionAfter = QStringLiteral(";{}]) ");
+
+    if (inserted.isEmpty() || isSpaceOnly(inserted) || noCompletionAfter.contains(inserted.at(inserted.size() - 1))) {
+        return false;
+    }
     return KDevelop::CodeCompletionModel::shouldStartCompletion(view, inserted, userInsertion, position);
 }
 

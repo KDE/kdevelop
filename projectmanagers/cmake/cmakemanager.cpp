@@ -193,6 +193,15 @@ CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
 {
     const CMakeJsonData & data = m_projects[item->project()].jsonData;
     QHash<KDevelop::Path, CMakeFile>::const_iterator it = data.files.constFind(item->path());
+
+    if (it == data.files.constEnd()) {
+        // if the item path contains a symlink, then we will not find it in the lookup table
+        // as that only only stores canonicalized paths. Thus, we fallback to
+        // to the canonicalized path and see if that brings up any matches
+        const auto canonicalized = Path(QFileInfo(item->path().toLocalFile()).canonicalFilePath());
+        it = data.files.constFind(canonicalized);
+    }
+
     if (it != data.files.constEnd()) {
         return *it;
     } else {

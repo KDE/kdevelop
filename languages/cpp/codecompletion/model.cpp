@@ -240,7 +240,8 @@ Range CodeCompletionModel::completionRange(View* view, const KTextEditor::Cursor
     return range;
 }
 
-void CodeCompletionModel::foundDeclarations(QList<CompletionTreeElementPointer> item, KDevelop::CodeCompletionContext::Ptr completionContext)
+void CodeCompletionModel::foundDeclarations(const QList<CompletionTreeElementPointer>& item,
+                                            const KDevelop::CodeCompletionContext::Ptr& completionContext)
 {
   TypeConversion::startCache();
   KDevelop::CodeCompletionModel::foundDeclarations(item, completionContext);

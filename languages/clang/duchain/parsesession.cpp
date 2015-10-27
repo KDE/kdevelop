@@ -53,20 +53,14 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
         return {QByteArrayLiteral("-xobjective-c++")};
     }
 
-    // this can happen for unit tests that use the ParseSession directly
     if (parserSettings.parserOptions.isEmpty()) {
-        return {
-            QByteArrayLiteral("-fspell-checking"),
-            QByteArrayLiteral("-Wdocumentation"),
-            QByteArrayLiteral("-std=c++11"),
-            QByteArrayLiteral("-xc++"),
-            QByteArrayLiteral("-Wall"),
-            QByteArrayLiteral("-Wunused-parameter"),
-            QByteArrayLiteral("-Wunreachable-code"),
-            QByteArrayLiteral("-nostdinc"),
-            QByteArrayLiteral("-nostdinc++"),
-            QByteArrayLiteral("-ferror-limit=100")
-        };
+        // The parserOptions can be empty for some unit tests that use ParseSession directly
+        auto defaultArguments = ClangSettingsManager::self()->parserSettings(nullptr).toClangAPI();
+        Q_ASSERT(!defaultArguments.isEmpty());
+        defaultArguments.append(QByteArrayLiteral("-nostdinc"));
+        defaultArguments.append(QByteArrayLiteral("-nostdinc++"));
+        defaultArguments.append(QByteArrayLiteral("-xc++"));
+        return defaultArguments;
     }
 
     auto result = parserSettings.toClangAPI();
@@ -289,13 +283,16 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         clang_disposeDiagnostic(diagnostic);
     }
 
-    const QString path = QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath();
-    const IndexedString indexedPath(path);
+    // other problem sources
 
     TodoExtractor extractor(unit(), file);
     problems << extractor.problems();
 
-    // other problem sources
+#if CINDEX_VERSION_MINOR > 30
+    // note that the below warning is triggered on every reparse when there is a precompiled preamble
+    // see also TestDUChain::testReparseIncludeGuard
+    const QString path = QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath();
+    const IndexedString indexedPath(path);
     if (ClangHelpers::isHeader(path) && !clang_isFileMultipleIncludeGuarded(unit(), file)
         && !clang_Location_isInSystemHeader(clang_getLocationForOffset(d->m_unit, file, 0)))
     {
@@ -309,6 +306,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         problems << problem;
         // TODO: Easy to add an assistant here that adds the guards -- any takers?
     }
+#endif
 
     return problems;
 }

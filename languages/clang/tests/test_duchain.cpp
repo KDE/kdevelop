@@ -860,10 +860,9 @@ void TestDUChain::testReparseWithAllDeclarationsContextsAndUses()
         QCOMPARE(file.topContext()->childContexts().size(), 2);
         QCOMPARE(file.topContext()->localDeclarations().size(), 2);
 
-        for (int i = 0; i < 2; ++i) {
-            auto dec = file.topContext()->localDeclarations().at(i);
-            QVERIFY(dec->uses().isEmpty());
-        }
+        auto dec = file.topContext()->localDeclarations().at(0);
+        QEXPECT_FAIL("", "Skipping of function bodies is disabled for now", Continue);
+        QVERIFY(dec->uses().isEmpty());
     }
 
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -892,16 +891,16 @@ void TestDUChain::testReparseOnDocumentActivated()
 
     {
         DUChainReadLocker lock;
-        QVERIFY(file.topContext());
-        QCOMPARE(file.topContext()->childContexts().size(), 2);
-        QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+        auto ctx = file.topContext();
+        QVERIFY(ctx);
+        QCOMPARE(ctx->childContexts().size(), 2);
+        QCOMPARE(ctx->localDeclarations().size(), 2);
 
-        for (int i = 0; i < 2; ++i) {
-            auto dec = file.topContext()->localDeclarations().at(i);
-            QVERIFY(dec->uses().isEmpty());
-        }
+        auto dec = ctx->localDeclarations().at(0);
+        QEXPECT_FAIL("", "Skipping of function bodies was disabled for now", Continue);
+        QVERIFY(dec->uses().isEmpty());
 
-        QVERIFY(!file.topContext()->ast());
+        QVERIFY(!ctx->ast());
     }
 
     auto backgroundParser = ICore::self()->languageController()->backgroundParser();
@@ -909,15 +908,16 @@ void TestDUChain::testReparseOnDocumentActivated()
 
     auto doc = ICore::self()->documentController()->openDocument(file.url().toUrl());
     QVERIFY(doc);
-
     QVERIFY(backgroundParser->isQueued(file.url()));
 
-    auto ctx = DUChain::self()->waitForUpdate(file.url(), TopDUContext::AllDeclarationsContextsAndUses);
-    QVERIFY(ctx);
+    QSignalSpy spy(backgroundParser, &BackgroundParser::parseJobFinished);
+    spy.wait();
+
     doc->close(KDevelop::IDocument::Discard);
+
     {
         DUChainReadLocker lock;
-        qDebug() << (quint64)ctx->features();
+        auto ctx = file.topContext();
         QCOMPARE(ctx->features() & TopDUContext::AllDeclarationsContextsAndUses, static_cast<int>(TopDUContext::AllDeclarationsContextsAndUses));
         QVERIFY(ctx->topContext()->ast());
     }
@@ -1271,7 +1271,6 @@ void TestDUChain::testUsesCreatedForDeclarations()
     QCOMPARE(functionDeclaration->uses().count(), 1);
 }
 
-
 void TestDUChain::testReparseIncludeGuard()
 {
     TestFile header("#ifndef GUARD\n#define GUARD\nint something;\n#endif\n", "h");
@@ -1289,4 +1288,81 @@ void TestDUChain::testReparseIncludeGuard()
         QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
             importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
     }
+}
+
+void TestDUChain::testExternC()
+{
+    auto code = R"(extern "C" { void foo(); })";
+    TestFile file(code, "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed());
+
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    QVERIFY(!top->findDeclarations(QualifiedIdentifier("foo")).isEmpty());
+}
+
+void TestDUChain::testReparseUnchanged_data()
+{
+    QTest::addColumn<QString>("headerCode");
+    QTest::addColumn<QString>("implCode");
+
+    QTest::newRow("include-guards") << R"(
+        #ifndef GUARD
+        #define GUARD
+        int something;
+        #endif
+    )" << R"(
+        #include "%1"
+    )";
+
+    QTest::newRow("template-default-parameters") << R"(
+        #ifndef TEST_H
+        #define TEST_H
+
+        template<unsigned T=123, unsigned... U>
+        class dummy;
+
+        template<unsigned T, unsigned... U>
+        class dummy {
+            int field[T];
+        };
+
+        #endif
+    )" << R"(
+        #include "%1"
+
+        int main(int, char **) {
+            dummy<> x;
+            (void)x;
+        }
+    )";
+}
+
+void TestDUChain::testReparseUnchanged()
+{
+    QFETCH(QString, headerCode);
+    QFETCH(QString, implCode);
+    TestFile header(headerCode, "h");
+    TestFile impl(implCode.arg(header.url().str()), "cpp", &header);
+
+    auto checkProblems = [&] (bool reparsed) {
+        DUChainReadLocker lock;
+        auto headerCtx = DUChain::self()->chainForDocument(header.url());
+        QVERIFY(headerCtx);
+        QVERIFY(headerCtx->problems().isEmpty());
+        auto implCtx = DUChain::self()->chainForDocument(impl.url());
+        QVERIFY(implCtx);
+        if (reparsed) {
+            QEXPECT_FAIL("template-default-parameters", "the precompiled preamble messes the default template paramters up", Continue);
+        }
+        QVERIFY(implCtx->problems().isEmpty());
+    };
+
+    impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST  ));
+    checkProblems(false);
+
+    impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+    checkProblems(true);
 }
