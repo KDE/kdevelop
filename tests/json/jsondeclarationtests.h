@@ -51,6 +51,7 @@
  *   targetType : TypeTestObject
  *   returnType : TypeTestObject
  *   isAbstract : bool
+ *   isMutable : bool
  *   isVirtual : bool
  *   isStatic : bool
  *   declaration : DeclTestObject
@@ -220,6 +221,17 @@ DeclarationTest(isStatic)
       return NOT_A_MEMBER;
 
   return compareValues(memberDecl->isStatic(), value, "Declaration's isStatic");
+}
+///JSON type: bool
+///@returns whether the (class-member) declaration's isMutable matches the given value
+DeclarationTest(isMutable)
+{
+  const QString NOT_A_MEMBER = "Non-class-member declaration cannot be mutable.";
+  auto memberDecl = dynamic_cast<ClassMemberDeclaration*>(decl);
+  if (!memberDecl)
+      return NOT_A_MEMBER;
+
+  return compareValues(memberDecl->isMutable(), value, "Declaration's isMutable");
 }
 ///JSON type: DeclTestObject
 ///@returns whether the tests for the function declaration's definition pass
