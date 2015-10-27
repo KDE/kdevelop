@@ -49,7 +49,7 @@ void TestFiles::initTestCase()
 
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
-    AutoTestShell::init();
+    AutoTestShell::init({"kdevclangsupport"});
     TestCore::initialize(Core::NoUi);
     DUChain::self()->disablePersistentStorage();
     Core::self()->languageController()->backgroundParser()->setDelay(0);
