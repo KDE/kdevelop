@@ -924,6 +924,10 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
         decl->setStatic(true);
     decl->setAccessPolicy(CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor)));
 
+#if CINDEX_VERSION_MINOR >= 31
+    decl->setMutable(clang_CXXField_isMutable(cursor));
+#endif
+
 #if CINDEX_VERSION_MINOR >= 30
     if (!s_jsonTestRun) {
         auto offset = clang_Cursor_getOffsetOfField(cursor);
