@@ -7,10 +7,20 @@
         ], 
         "Category": "Core", 
         "Description": "This plugin provides a browsable model of the currently parsed classes and other items.", 
+        "Description[de]": "Dieses Modul bietet eine Liste der aktuell eingelesenen Klassen und anderer Elemente.", 
+        "Description[sk]": "Tento plugin poskytuje prehliadateľný model aktuálne analyzovanej triedy a iných položiek.", 
+        "Description[sv]": "Insticksprogrammet tillhandahåller en bläddringsbar modell av klasser och andra objekt som för närvarande har tolkats.", 
+        "Description[uk]": "За допомогою цього додатка можна створити придатну для перегляду модель класів та інших елементів, над якими ви працюєте.", 
+        "Description[x-test]": "xxThis plugin provides a browsable model of the currently parsed classes and other items.xx", 
         "Icon": "code-class", 
         "Id": "kdevclassbrowser", 
         "License": "GPL", 
         "Name": "Class Browser", 
+        "Name[de]": "Klassen-Browser", 
+        "Name[sk]": "Prehliadač tried", 
+        "Name[sv]": "Klassbläddrare", 
+        "Name[uk]": "Переглядач класів", 
+        "Name[x-test]": "xxClass Browserxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

@@ -2,9 +2,19 @@
     "KPlugin": {
         "Category": "Utilities", 
         "Description": "Allows switching between buddy documents like implementation and header file.", 
+        "Description[de]": "Ermöglicht das Umschalten zwischen verwandten Dokumenten wie Implementations- und Header-Dateien.", 
+        "Description[sk]": "Umožňuje prepínanie medzi dokumentmi priateľov ako súbor implementácie a hlavičky.", 
+        "Description[sv]": "Tillåter byte mellan samhörande dokument som implementerings- och deklarationsfiler.", 
+        "Description[uk]": "Надає змогу перемикатися на споріднені документи, зокрема файли з реалізацією та файли заголовків.", 
+        "Description[x-test]": "xxAllows switching between buddy documents like implementation and header file.xx", 
         "Icon": "document-multiple", 
         "Id": "kdevswitchtobuddy", 
         "Name": "Switch to Buddy", 
+        "Name[de]": "Zu verwandtem Element wechseln", 
+        "Name[sk]": "Prepnúť na Buddy", 
+        "Name[sv]": "Byt till samhörande", 
+        "Name[uk]": "Перемикання на споріднений", 
+        "Name[x-test]": "xxSwitch to Buddyxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

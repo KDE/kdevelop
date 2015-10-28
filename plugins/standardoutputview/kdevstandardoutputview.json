@@ -2,9 +2,19 @@
     "KPlugin": {
         "Category": "Core", 
         "Description": "Provides a text output toolview for other plugins to use, to show things like compiler messages.", 
+        "Description[de]": "Stellt eine Textausgabe für andere Module zur Verfügung, um Dinge wie Compiler-Nachrichten anzuzeigen.", 
+        "Description[sk]": "Poskytuje textový výstup pohľadu nástrojov pre iné pluginy na použitie, na zobrazenie napríklad správy prekladača.", 
+        "Description[sv]": "Tillhandahåller en verktygsvy för textutmatning som andra insticksprogram kan använda för att visa saker som kompilatormeddelanden.", 
+        "Description[uk]": "Забезпечує роботу панелі показу текстових даних інших додатків, зокрема попереджень компілятора.", 
+        "Description[x-test]": "xxProvides a text output toolview for other plugins to use, to show things like compiler messages.xx", 
         "Icon": "gear", 
         "Id": "KDevStandardOutputView", 
         "Name": "Output View", 
+        "Name[de]": "Ausgabeansicht", 
+        "Name[sk]": "Pohľad na výstup", 
+        "Name[sv]": "Utmatningsvisning", 
+        "Name[uk]": "Перегляд виводу", 
+        "Name[x-test]": "xxOutput Viewxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

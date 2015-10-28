@@ -7,10 +7,20 @@
         ], 
         "Category": "Core", 
         "Description": "This plugin allows to open files with associated external applications.", 
+        "Description[de]": "Dies Modul ermöglicht das Öffnen von Dateien mit zugehörigen externen Anwendungen.", 
+        "Description[sk]": "Tento plugin umožňuje otvoriť súbory s asociovanými externými aplikáciami.", 
+        "Description[sv]": "Insticksprogrammet tillåter att öppna filer med tillhörande externa program.", 
+        "Description[uk]": "За допомогою цього додатка ви зможете відкривати файли у пов’язаній з ними зовнішній програмі.", 
+        "Description[x-test]": "xxThis plugin allows to open files with associated external applications.xx", 
         "Icon": "document-open", 
         "Id": "kdevopenwith", 
         "License": "GPL", 
         "Name": "Open With", 
+        "Name[de]": "Öffnen mit", 
+        "Name[sk]": "Otvoriť s", 
+        "Name[sv]": "Öppna med", 
+        "Name[uk]": "Відкриття у зовнішніх програмах", 
+        "Name[x-test]": "xxOpen Withxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

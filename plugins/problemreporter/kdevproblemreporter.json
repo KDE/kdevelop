@@ -7,10 +7,20 @@
         ], 
         "Category": "Utilities", 
         "Description": "This plugin shows errors in source code.", 
+        "Description[de]": "Dieses Modul zeigt Fehler im Quelltext an.", 
+        "Description[sk]": "Tento plugin ukáže chyby v zdrojovom kóde.", 
+        "Description[sv]": "Insticksprogrammet visar fel i källkod.", 
+        "Description[uk]": "За допомогою цього додатка можна переглянути повідомлення про помилки у коді.", 
+        "Description[x-test]": "xxThis plugin shows errors in source code.xx", 
         "Icon": "emblem-important", 
         "Id": "kdevproblemreporter", 
         "License": "LGPL", 
         "Name": "Problem Reporter View", 
+        "Name[de]": "Ansicht für Fehlerberichte", 
+        "Name[sk]": "Pohľad na zadávač problémov", 
+        "Name[sv]": "Problemrapporteringsvisning", 
+        "Name[uk]": "Перегляд інструмента звітування про проблеми", 
+        "Name[x-test]": "xxProblem Reporter Viewxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

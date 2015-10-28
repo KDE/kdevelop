@@ -2,9 +2,19 @@
     "KPlugin": {
         "Category": "Utilities", 
         "Description": "Collection of various utilities that increase productivity while programming.", 
+        "Description[de]": "Sammlung verschiedener Werkzeuge, die die Produktivität während des Programmierens erhöhen.", 
+        "Description[sk]": "Zbierka rôznych utilít, ktoré zvyšujú produktivitu počas programovania.", 
+        "Description[sv]": "Samling av diverse verktyg för att öka produktiviteten vid programmering.", 
+        "Description[uk]": "Збірка різноманітних допоміжних програм, яка підвищує продуктивність програмування.", 
+        "Description[x-test]": "xxCollection of various utilities that increase productivity while programming.xx", 
         "Icon": "help-hint", 
         "Id": "kdevcodeutils", 
         "Name": "Code Utilities", 
+        "Name[de]": "Quelltext-Werkzeuge", 
+        "Name[sk]": "Nástroje kódu", 
+        "Name[sv]": "Kodverktyg", 
+        "Name[uk]": "Допоміжні засоби", 
+        "Name[x-test]": "xxCode Utilitiesxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

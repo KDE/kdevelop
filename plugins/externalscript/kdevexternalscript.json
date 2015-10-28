@@ -7,10 +7,20 @@
         ], 
         "Category": "Utilities", 
         "Description": "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions.", 
+        "Description[de]": "Ausführung von externen Skripten oder Programmen zum Verändern des Editorinhalts oder für beliebige andere Aktionen.", 
+        "Description[sk]": "Spustí externé skripty alebo aplikácie na manipuláciu s obsahom editora alebo robí iné ľubovoľné akcie.", 
+        "Description[sv]": "Kör externa skript eller program för att behandla editorns innehåll eller utför andra godtyckliga åtgärder.", 
+        "Description[uk]": "Запускає зовнішні скрипти або програми для обробки текстових даних редактора або виконання інших потрібних дій.", 
+        "Description[x-test]": "xxRun external scripts or applications to manipulate the editor contents or do other arbitrary actions.xx", 
         "Icon": "system-run", 
         "Id": "kdevexternalscript", 
         "License": "GPL", 
         "Name": "External Scripts", 
+        "Name[de]": "Externe Skripte", 
+        "Name[sk]": "Externé skripty", 
+        "Name[sv]": "Externa skript", 
+        "Name[uk]": "Зовнішні скрипти", 
+        "Name[x-test]": "xxExternal Scriptsxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

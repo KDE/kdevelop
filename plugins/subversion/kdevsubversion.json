@@ -7,10 +7,20 @@
         ], 
         "Category": "Version Control", 
         "Description": "This plugin integrates subversion to KDevelop.", 
+        "Description[de]": "Dieses Modul integriert Subversion in KDevelop.", 
+        "Description[sk]": "Tento plugin integruje subversion do KDevelop.", 
+        "Description[sv]": "Insticksprogrammet integrerar Subversion i KDevelop.", 
+        "Description[uk]": "Цей додаток інтегрує Subversion із KDevelop", 
+        "Description[x-test]": "xxThis plugin integrates subversion to KDevelop.xx", 
         "Icon": "subversion", 
         "Id": "kdevsubversion", 
         "License": "GPL", 
         "Name": "Subversion Support", 
+        "Name[de]": "Subversion-Unterstützung", 
+        "Name[sk]": "Podpora subversion", 
+        "Name[sv]": "Stöd för Subversion", 
+        "Name[uk]": "Підтримка Subversion", 
+        "Name[x-test]": "xxSubversion Supportxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

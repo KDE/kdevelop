@@ -7,9 +7,19 @@
         ], 
         "Category": "Project Management", 
         "Description": "Configure which files and folders inside the project folder should be included or excluded.", 
+        "Description[de]": "Legt fest, welche Dateien und Ordner innerhalb des Projektordners ein- oder ausgeschlossen werden sollen.", 
+        "Description[sk]": "Nastaviť, ktoré súbory a priečinky v priečinku projektu majú byť zahrnuté alebo vylúčené.", 
+        "Description[sv]": "Anpassa vilka filer och kataloger inne i projektkatalogen som ska inkluderas eller exkluderas.", 
+        "Description[uk]": "За допомогою цього модуля можна визначити, які файли і теки у теці проекту має бути включено або виключено з його складу.", 
+        "Description[x-test]": "xxConfigure which files and folders inside the project folder should be included or excluded.xx", 
         "Icon": "view-filter", 
         "Id": "KDevProjectFilter", 
         "Name": "Project Filter", 
+        "Name[de]": "Projektfilter", 
+        "Name[sk]": "Filter projektu", 
+        "Name[sv]": "Projektfilter", 
+        "Name[uk]": "Фільтр проекту", 
+        "Name[x-test]": "xxProject Filterxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

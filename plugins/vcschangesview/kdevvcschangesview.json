@@ -8,10 +8,20 @@
         ], 
         "Category": "Version Control", 
         "Description": "This plugin provides integration between the projects and their VCS infrastructure", 
+        "Description[de]": "Dieses Modul stellt eine Integration zwischen Projekten und ihrer VCS-Infrastruktur her.", 
+        "Description[sk]": "Tento plugin poskytuje integráciu medzi projektami a ich VCS infraštruktúrou", 
+        "Description[sv]": "Det här insticksprogrammet tillhandahåller integrering mellan projekten och deras VCS infrastruktur", 
+        "Description[uk]": "За допомогою цього додатка забезпечується інтеграція між проектами та інфраструктурою системи керування версіями (VCS)", 
+        "Description[x-test]": "xxThis plugin provides integration between the projects and their VCS infrastructurexx", 
         "Icon": "git", 
         "Id": "kdevvcschangesviewplugin", 
         "License": "GPL", 
         "Name": "VCS Integration", 
+        "Name[de]": "VCS-Integration", 
+        "Name[sk]": "Integrácia VCS", 
+        "Name[sv]": "Integrering av VCS", 
+        "Name[uk]": "Інтеграція з системами керування версіями", 
+        "Name[x-test]": "xxVCS Integrationxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

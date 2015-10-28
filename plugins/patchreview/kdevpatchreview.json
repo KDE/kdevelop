@@ -7,10 +7,20 @@
         ], 
         "Category": "Utilities", 
         "Description": "This plugin allows reviewing patches directly in the editor.", 
+        "Description[de]": "Dieses Modul ermöglicht es, Patches direkt im Editor durchzusehen.", 
+        "Description[sk]": "Tento plugin umožňuje zhodnotenie záplat priamo v editore.", 
+        "Description[sv]": "Insticksprogrammet gör det möjligt att direkt granska programfixar i editorn.", 
+        "Description[uk]": "За допомогою цього додатка ви зможете рецензувати латки безпосередньо у редакторі.", 
+        "Description[x-test]": "xxThis plugin allows reviewing patches directly in the editor.xx", 
         "Icon": "applications-engineering", 
         "Id": "kdevpatchreview", 
         "License": "GPL", 
         "Name": "Patch Review", 
+        "Name[de]": "Patch-Durchsicht", 
+        "Name[sk]": "Zhodnotenie záplaty", 
+        "Name[sv]": "Granska programfixar", 
+        "Name[uk]": "Рецензування латки", 
+        "Name[x-test]": "xxPatch Reviewxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

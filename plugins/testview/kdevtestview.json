@@ -7,10 +7,20 @@
         ], 
         "Category": "Testing", 
         "Description": "Lets you see and run unit tests.", 
+        "Description[de]": "Unit-Tests anzeigen und ausführen.", 
+        "Description[sk]": "Umožní vám vidieť a spustiť unit testy.", 
+        "Description[sv]": "Låter dig titta på och köra enhetstester.", 
+        "Description[uk]": "Надає вам змогу переглядати і виконувати перевірки модулів.", 
+        "Description[x-test]": "xxLets you see and run unit tests.xx", 
         "Icon": "preflight-verifier", 
         "Id": "kdevtestview", 
         "License": "GPL", 
         "Name": "Unit Test View", 
+        "Name[de]": "Unit-Test-Ansicht", 
+        "Name[sk]": "Pohľad unit testov", 
+        "Name[sv]": "Visning av enhetstester", 
+        "Name[uk]": "Перегляд перевірок модулів", 
+        "Name[x-test]": "xxUnit Test Viewxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

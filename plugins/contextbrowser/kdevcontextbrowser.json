@@ -7,10 +7,20 @@
         ], 
         "Category": "Core", 
         "Description": "This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.", 
+        "Description[de]": "Dieses Modul zeigt Informationen über den aktuellen Sprachkontext an und hebt die wichtigen Deklarationen und Vorkommen hervor.", 
+        "Description[sk]": "Tento plugin zobrazuje informácie o aktuálnom jazykovom kontexte v božnom pohľade, a zvýrazní relevantné deklarácie a použitia.", 
+        "Description[sv]": "Insticksprogrammet visar information om nuvarande språksammanhang i en sidovy, och markerar relevanta deklarationer och användningar.", 
+        "Description[uk]": "За допомогою цього додатка можна переглянути у перегляді на бічній панелі відомості про поточний контекст мови, а також підсвітити пов’язані оголошення і випадки використання.", 
+        "Description[x-test]": "xxThis plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.xx", 
         "Icon": "code-context", 
         "Id": "kdevcontextbrowser", 
         "License": "GPL", 
         "Name": "Code Browser", 
+        "Name[de]": "Quelltext-Browser", 
+        "Name[sk]": "Prehliadač kódu", 
+        "Name[sv]": "Kodbläddrare", 
+        "Name[uk]": "Переглядач коду", 
+        "Name[x-test]": "xxCode Browserxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

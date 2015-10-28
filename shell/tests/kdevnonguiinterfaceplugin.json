@@ -36,9 +36,19 @@
     "GenericName[zh_TW]": "NonGuiInterface", 
     "KPlugin": {
         "Description": "This plugin is purely for unit-test", 
+        "Description[de]": "Dieses Modul dient nur für Unit-Tests.", 
+        "Description[sk]": "Tento plugin je čisto na unit testy", 
+        "Description[sv]": "Insticksprogrammet är enbart avsett för enhetstest", 
+        "Description[uk]": "Цей додаток призначено лише для тестування модулів", 
+        "Description[x-test]": "xxThis plugin is purely for unit-testxx", 
         "Id": "kdevnonguiinterface", 
         "License": "LGPL", 
         "Name": "KDevNonGuiInterface", 
+        "Name[de]": "KDevNonGuiInterface", 
+        "Name[sk]": "KDevNonGuiInterface", 
+        "Name[sv]": "KDevelop icke grafiskt användargränssnitt", 
+        "Name[uk]": "KDevNonGuiInterface", 
+        "Name[x-test]": "xxKDevNonGuiInterfacexx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

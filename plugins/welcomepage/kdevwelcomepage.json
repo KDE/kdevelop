@@ -1,9 +1,19 @@
 {
     "KPlugin": {
         "Description": "Configure which macros and include directories/files will be added to the parser during project parsing.", 
+        "Description[de]": "Einstellung der Makros und Include-Ordner/-Dateien, die für den Parser während des Einlesens des Projekts hinzugefügt werden.", 
+        "Description[sk]": "Nastaviť, ktoré makrá a zahrnuté adresáre/súbory sa pridajú do spracovača počas spracovania projektu.", 
+        "Description[sv]": "Anpassa vilka makron och filer eller kataloger att inkludera som läggs till i tolken under projekttolkning.", 
+        "Description[uk]": "Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.", 
+        "Description[x-test]": "xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx", 
         "Icon": "kdevelop", 
         "Id": "KDevWelcomePage", 
         "Name": "KDevelop Welcome Page", 
+        "Name[de]": "KDevelop-Startseite", 
+        "Name[sk]": "Uvítacia stránka KDevelop", 
+        "Name[sv]": "KDevelop välkomstsida", 
+        "Name[uk]": "Сторінка вітання KDevelop", 
+        "Name[x-test]": "xxKDevelop Welcome Pagexx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

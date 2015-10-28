@@ -6,10 +6,20 @@
             }
         ], 
         "Description": "This plugin allows running of scripts.", 
+        "Description[de]": "Dieses Modul ermöglicht das Ausführen von Skripten.", 
+        "Description[sk]": "Tento plugin povoľuje spúšťanie skriptov.", 
+        "Description[sv]": "Insticksprogrammet gör det möjligt att köra skript.", 
+        "Description[uk]": "За допомогою цього додатка можна запускати скрипти.", 
+        "Description[x-test]": "xxThis plugin allows running of scripts.xx", 
         "Icon": "system-run", 
         "Id": "kdevexecutescript", 
         "License": "GPL", 
         "Name": "Execute Scripts", 
+        "Name[de]": "Skripte ausführen", 
+        "Name[sk]": "Spustiť skripty", 
+        "Name[sv]": "Kör skript", 
+        "Name[uk]": "Виконання скриптів", 
+        "Name[x-test]": "xxExecute Scriptsxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

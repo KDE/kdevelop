@@ -7,10 +7,20 @@
         ], 
         "Category": "Core", 
         "Description": "Lets you manage the project contents.", 
+        "Description[de]": "Verwaltung des Inhalts von Projekten.", 
+        "Description[sk]": "Umožní vám spravovať obsah projektu.", 
+        "Description[sv]": "Låter dig hantera projektets innehåll.", 
+        "Description[uk]": "Надає вам змогу керувати вмістом проектів.", 
+        "Description[x-test]": "xxLets you manage the project contents.xx", 
         "Icon": "kdevelop", 
         "Id": "KDevProjectManagerView", 
         "License": "LGPL", 
         "Name": "Project Manager View", 
+        "Name[de]": "Ansicht für Projektverwaltung", 
+        "Name[sk]": "Pohľad na správcu projektu", 
+        "Name[sv]": "Projekthanteringsvisning", 
+        "Name[uk]": "Перегляд керування проектами", 
+        "Name[x-test]": "xxProject Manager Viewxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

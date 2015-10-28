@@ -7,9 +7,19 @@
         ], 
         "Category": "Project Management", 
         "Description": "Allow KDevelop to manage generic projects", 
+        "Description[de]": "Zum Verwalten allgemeiner Projekte in KDevelop", 
+        "Description[sk]": "Povoliť KDevelopu spravovať všeobecné projekty", 
+        "Description[sv]": "Tillåter att KDevelop hanterar generella projekt", 
+        "Description[uk]": "За допомогою цього додатка можна увімкнути керування загальними проектами у KDevelop", 
+        "Description[x-test]": "xxAllow KDevelop to manage generic projectsxx", 
         "Icon": "kdevelop", 
         "Id": "KDevGenericManager", 
         "Name": "Generic Project Manager", 
+        "Name[de]": "Allgemeine Projektverwaltung", 
+        "Name[sk]": "Všeobecný správca projektov", 
+        "Name[sv]": "Generell projekthantering", 
+        "Name[uk]": "Звичайний засіб керування проектом", 
+        "Name[x-test]": "xxGeneric Project Managerxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
