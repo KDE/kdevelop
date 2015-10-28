@@ -34,9 +34,11 @@ endif()
 if (LLVM_ROOT)
   find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config HINTS ${LLVM_ROOT}/bin DOC "llvm-config executable" NO_DEFAULT_PATH)
 else()
-  # find llvm-config, prefer the one with a version suffix, e.g. llvm-config-3.3
+  # find llvm-config, prefer the one with a version suffix, e.g. llvm-config-3.5
+  # note: FreeBSD installs llvm-config as llvm-config35 and so on
   # note: on some distributions, only 'llvm-config' is shipped, so let's always try to fallback on that
-  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} llvm-config DOC "llvm-config executable")
+  string(REPLACE "." "" LLVM_FIND_VERSION_CONCAT ${LLVM_FIND_VERSION})
+  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} llvm-config${LLVM_FIND_VERSION_CONCAT} llvm-config DOC "llvm-config executable")
 
   # other distributions don't ship llvm-config, but only some llvm-config-VERSION binary
   # try to deduce installed LLVM version by looking up llvm-nm in PATH and *then* find llvm-config-VERSION via that
