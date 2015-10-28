@@ -7,10 +7,20 @@
         ], 
         "Category": "Utilities", 
         "Description": "This plugin helps to obtain KDE projects", 
+        "Description[de]": "Dieses Modul hilft dabei KDE-Projekte zu beziehen", 
+        "Description[sk]": "Tento modul pomáha získavať KDE projekty", 
+        "Description[sv]": "Insticksprogrammet hjälper till att erhålla KDE-projekt", 
+        "Description[uk]": "За допомогою цього додатка можна отримувати проекти KDE", 
+        "Description[x-test]": "xxThis plugin helps to obtain KDE projectsxx", 
         "Icon": "kde", 
         "Id": "kdevkdeprovider", 
         "License": "GPL", 
         "Name": "KDE Provider", 
+        "Name[de]": "KDE-Provider", 
+        "Name[sk]": "Poskytovateľ KDE", 
+        "Name[sv]": "KDE-leverantör", 
+        "Name[uk]": "Надавач даних KDE", 
+        "Name[x-test]": "xxKDE Providerxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

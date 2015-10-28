@@ -7,10 +7,20 @@
         ], 
         "Category": "Documentation", 
         "Description": "This plugin provides QtHelp integration", 
+        "Description[de]": "Dieses Modul integriert QtHelp in KDevelop", 
+        "Description[sk]": "Tento modul poskytuje integráciu QtHelp", 
+        "Description[sv]": "Insticksprogrammet tillhandahåller integrering av QtHelp", 
+        "Description[uk]": "За допомогою цього додатка здійснюється інтеграція з QtHelp", 
+        "Description[x-test]": "xxThis plugin provides QtHelp integrationxx", 
         "Icon": "qtlogo", 
         "Id": "kdevqthelp", 
         "License": "GPL", 
         "Name": "Qt Documentation", 
+        "Name[de]": "Qt-Dokumentation", 
+        "Name[sk]": "Dokumentácia Qt", 
+        "Name[sv]": "Qt-dokumentation", 
+        "Name[uk]": "Документація з Qt", 
+        "Name[x-test]": "xxQt Documentationxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

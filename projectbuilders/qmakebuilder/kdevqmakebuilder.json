@@ -1,9 +1,19 @@
 {
     "KPlugin": {
         "Description": "Builds QMake Projects", 
+        "Description[de]": "Erstellt QMake-Projekte", 
+        "Description[sk]": "Prekladá projekty QMake", 
+        "Description[sv]": "Bygger QMake-projekt", 
+        "Description[uk]": "Збирає проекти QMake", 
+        "Description[x-test]": "xxBuilds QMake Projectsxx", 
         "Icon": "gear", 
         "Id": "KDevQMakeBuilder", 
         "Name": "QMake Project Builder", 
+        "Name[de]": "Ersteller für QMake-Projekte", 
+        "Name[sk]": "Prekladač projektov QMake", 
+        "Name[sv]": "QMake-projektbyggverktyg", 
+        "Name[uk]": "Засіб збирання проектів QMake", 
+        "Name[x-test]": "xxQMake Project Builderxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

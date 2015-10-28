@@ -7,10 +7,20 @@
         ], 
         "Category": "Utilities", 
         "Description": "A plugin for formatting C files using custom scripts", 
+        "Description[de]": "Ein Modul zum Formatieren von C-Dateien mit Hilfe von eigenen Skripten", 
+        "Description[sk]": "Modul pre formátovanie súborov C pomocou vlastných skriptov", 
+        "Description[sv]": "Ett insticksprogram för att formatera C-filer med egna skript", 
+        "Description[uk]": "Додаток для форматування файлів мовою C за допомогою нетипових скриптів", 
+        "Description[x-test]": "xxA plugin for formatting C files using custom scriptsxx", 
         "Icon": "kdevelop", 
         "Id": "kdevcustomscript", 
         "License": "LGPL", 
         "Name": "Custom Script Formatter Backend", 
+        "Name[de]": "Backend für einen Formatierer für eigene Skripte", 
+        "Name[sk]": "Backend formátovača vlastného skriptu", 
+        "Name[sv]": "Formateringsgränssnitt för eget skript", 
+        "Name[uk]": "Сервер скриптів нетипового форматування", 
+        "Name[x-test]": "xxCustom Script Formatter Backendxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

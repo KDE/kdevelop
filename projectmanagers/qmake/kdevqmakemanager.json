@@ -2,9 +2,19 @@
     "KPlugin": {
         "Category": "Project Management", 
         "Description": "Imports and edits QMake projects", 
+        "Description[de]": "Import und Bearbeitung von benutzerdefinierten QMake-Projekten", 
+        "Description[sk]": "Importuje a upravuje projekty QMake", 
+        "Description[sv]": "Importerar och redigerar QMake-projekt", 
+        "Description[uk]": "Імпортує і дає змогу редагувати проекти QMake", 
+        "Description[x-test]": "xxImports and edits QMake projectsxx", 
         "Icon": "qtlogo", 
         "Id": "KDevQMakeManager", 
         "Name": "QMake Project Manager", 
+        "Name[de]": "QMake-Projektverwaltung", 
+        "Name[sk]": "Správca projektov QMake", 
+        "Name[sv]": "QMake-projekthantering", 
+        "Name[uk]": "Керування проектами QMake", 
+        "Name[x-test]": "xxQMake Project Managerxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

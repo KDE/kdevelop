@@ -5,6 +5,11 @@
         "Id": "kdevqmljs", 
         "License": "GPL", 
         "Name": "QML Support", 
+        "Name[de]": "Unterstützung für QML", 
+        "Name[sk]": "Podpora QML", 
+        "Name[sv]": "QML-stöd", 
+        "Name[uk]": "Підтримка QML", 
+        "Name[x-test]": "xxQML Supportxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

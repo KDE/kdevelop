@@ -2,10 +2,20 @@
     "KPlugin": {
         "Category": "Debugging", 
         "Description": "This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.", 
+        "Description[de]": "Dieses Modul stellt eine Oberfläche für GDB zur Verfügung. GDB ist ein Debugger für C, C++ und weitere Sprachen.", 
+        "Description[sk]": "Tento modul poskytuje rozhranie pre GDB, zdrojový debuger pre C, C++ a ďalšie.", 
+        "Description[sv]": "Insticksprogrammet tillhandahåller ett gränssnitt till GDB, en källkodsavlusare för C, C++ med mera.", 
+        "Description[uk]": "Цей додаток надає можливість користуватися клієнтським інтерфейсом GDB, зневадника вихідного коду на C, C++ тощо.", 
+        "Description[x-test]": "xxThis plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.xx", 
         "Icon": "debugger", 
         "Id": "kdevgdb", 
         "License": "GPL", 
         "Name": "GDB Support", 
+        "Name[de]": "Unterstützung für GDB", 
+        "Name[sk]": "Podpora GDB", 
+        "Name[sv]": "GDB-stöd", 
+        "Name[uk]": "Підтримка GDB", 
+        "Name[x-test]": "xxGDB Supportxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

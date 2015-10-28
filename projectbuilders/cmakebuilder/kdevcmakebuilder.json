@@ -2,9 +2,19 @@
     "KPlugin": {
         "Category": "Project Management", 
         "Description": "Builds CMake Projects", 
+        "Description[de]": "Erstellt CMake-Projekte", 
+        "Description[sk]": "Prekladá projekty CMake", 
+        "Description[sv]": "Bygger CMake-projekt", 
+        "Description[uk]": "Збирає проекти CMake", 
+        "Description[x-test]": "xxBuilds CMake Projectsxx", 
         "Icon": "cmake", 
         "Id": "KDevCMakeBuilder", 
         "Name": "CMake Project Builder", 
+        "Name[de]": "Ersteller für CMake-Projekte", 
+        "Name[sk]": "Prekladač projektov CMake", 
+        "Name[sv]": "CMake-projektbyggverktyg", 
+        "Name[uk]": "Інструмент збирання проектів CMake", 
+        "Name[x-test]": "xxCMake Project Builderxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
