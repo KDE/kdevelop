@@ -269,7 +269,7 @@ int main( int argc, char *argv[] )
 
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", i18n( "KDevelop" ), QByteArray(VERSION), i18n(description), KAboutLicense::GPL,
-                          i18n("Copyright 1999-2014, The KDevelop developers"), QString(), "http://www.kdevelop.org/");
+                          i18n("Copyright 1999-2015, The KDevelop developers"), QString(), "http://www.kdevelop.org/");
     aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "Co-Maintainer, CMake Support, Run Support, Kross Support" ), "aleixpol@gmail.com" );
     aboutData.addAuthor( i18n("Milian Wolff"), i18n( "Co-Maintainer, C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), "mail@milianw.de" );
     aboutData.addAuthor( i18n("Kevin Funk"), i18n( "C++/Clang, General Improvements, QA, Windows Support" ), "kfunk@kde.org" );
