@@ -27,10 +27,55 @@ ProjectModelItemDelegate::ProjectModelItemDelegate(QObject* parent)
     : QItemDelegate(parent)
 {}
 
+static QIcon::Mode IconMode( QStyle::State state )
+{
+    if (!(state & QStyle::State_Enabled)) {
+        return QIcon::Disabled;
+    } else if (state & QStyle::State_Selected) {
+        return QIcon::Selected;
+    } else {
+        return QIcon::Normal;
+    }
+} 
+
+static QIcon::State IconState(QStyle::State state)
+{   
+    return  (state & QStyle::State_Open) ? QIcon::On : QIcon::Off; 
+}
+
+
 void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
-    QPixmap decoData = decoration(opt, index.data(Qt::DecorationRole));
-    QRect decorationRect = rect(opt, index, Qt::DecorationRole);
+    // Qt5.5 HiDPI Fix part (1/2)
+    // This fix is based on how Qt5.5's QItemDelegate::paint implementation deals with the same issue
+    // Unfortunately, there doesn't seem to be a clean way to use the base implementation
+    // and have the added functionality this class provides
+    QPixmap decoData;
+    QRect decorationRect;
+    QIcon icon; 
+    QIcon::Mode mode;
+    QIcon::State state;
+    {
+        QVariant value;
+        value = index.data(Qt::DecorationRole);
+        if (value.isValid()) {
+            decoData = decoration(opt, value);
+
+            if (value.type() == QVariant::Icon) {
+                icon = qvariant_cast<QIcon>(value);
+                mode = IconMode(opt.state);
+                state = IconState(opt.state);
+                QSize size = icon.actualSize( opt.decorationSize, mode, state );
+                decorationRect = QRect(QPoint(0, 0), size);
+            } else {
+                decorationRect = QRect(QPoint(0, 0), decoData.size());
+            }
+        } else {
+            decorationRect = QRect();
+        }
+    }
+
+
     QRect checkRect; //unused in practice
 
     QRect spaceLeft = opt.rect;
@@ -48,10 +93,19 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
 
     drawStyledBackground(painter, opt);
 //     drawCheck(painter, opt, checkRect, checkState);
-    drawDecoration(painter, opt, decorationRect, decoData);
+ 
+    // Qt5.5 HiDPI Fix part (2/2)
+    // use the QIcon from above if possible
+    if (!icon.isNull()) {
+        icon.paint(painter, decorationRect, opt.decorationAlignment, mode, state );
+    } else {
+        drawDecoration(painter, opt, decorationRect, decoData);
+    }
+
     drawDisplay(painter, opt, displayRect, displayData);
     drawBranchName(painter, opt, branchNameRect, branchNameData);
     drawFocus(painter, opt, displayRect);
+
 }
 
 void ProjectModelItemDelegate::drawBranchName(QPainter* painter, const QStyleOptionViewItem& option,
@@ -86,11 +140,13 @@ void ProjectModelItemDelegate::drawDisplay(QPainter* painter, const QStyleOption
         painter->restore();
     }
 
-    if(text.isEmpty())
+    if(text.isEmpty()) {
         return;
+    }
 
-    if (cg == QPalette::Normal && !(option.state & QStyle::State_Active))
+    if (cg == QPalette::Normal && !(option.state & QStyle::State_Active)) { 
         cg = QPalette::Inactive;
+    }
     if (option.state & QStyle::State_Selected) {
         painter->setPen(option.palette.color(cg, QPalette::HighlightedText));
     } else {
