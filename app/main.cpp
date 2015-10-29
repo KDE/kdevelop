@@ -233,8 +233,8 @@ static qint64 findSessionPid(const QString &sessionId)
 
 int main( int argc, char *argv[] )
 {
-    // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option (would be useful for OSX as well)
-#ifdef Q_OS_WIN
+    // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
     qputenv("KDE_FORK_SLAVES", "1"); // KIO slaves will be forked off instead of being started via DBus
 #endif
 
