@@ -80,6 +80,10 @@ void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
                  const Path::List& includes, const char* cliSwitch)
 {
     foreach (const Path& url, includes) {
+        if (url.isEmpty()) {
+            continue;
+        }
+        
         QFileInfo info(url.toLocalFile());
         QByteArray path = url.toLocalFile().toUtf8();
 

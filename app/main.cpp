@@ -233,8 +233,8 @@ static qint64 findSessionPid(const QString &sessionId)
 
 int main( int argc, char *argv[] )
 {
-    // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option (would be useful for OSX as well)
-#ifdef Q_OS_WIN
+    // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
     qputenv("KDE_FORK_SLAVES", "1"); // KIO slaves will be forked off instead of being started via DBus
 #endif
 
@@ -269,17 +269,19 @@ int main( int argc, char *argv[] )
 
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", i18n( "KDevelop" ), QByteArray(VERSION), i18n(description), KAboutLicense::GPL,
-                          i18n("Copyright 1999-2014, The KDevelop developers"), QString(), "http://www.kdevelop.org/");
+                          i18n("Copyright 1999-2015, The KDevelop developers"), QString(), "http://www.kdevelop.org/");
+    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "Co-Maintainer, CMake Support, Run Support, Kross Support" ), "aleixpol@gmail.com" );
+    aboutData.addAuthor( i18n("Milian Wolff"), i18n( "Co-Maintainer, C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), "mail@milianw.de" );
+    aboutData.addAuthor( i18n("Kevin Funk"), i18n( "C++/Clang, General Improvements, QA, Windows Support" ), "kfunk@kde.org" );
+    aboutData.addAuthor( i18n("Olivier JG"), i18n( "C++/Clang, DUChain, Bug Fixes" ), "olivier.jg@gmail.com" );
+    aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Python Support, User Interface improvements" ), "svenbrauch@gmail.com" );
     aboutData.addAuthor( i18n("Andreas Pakulat"), i18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( i18n("Alexander Dymo"), i18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( i18n("David Nolden"), i18n( "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding Assistance, Refactoring" ), "david.nolden.kdevelop@art-master.de" );
-    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "Co-Maintainer, CMake Support, Run Support, Kross Support" ), "aleixpol@gmail.com" );
     aboutData.addAuthor( i18n("Vladimir Prus"), i18n( "GDB integration" ), "ghost@cs.msu.su" );
     aboutData.addAuthor( i18n("Hamish Rodda"), i18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
     aboutData.addAuthor( i18n("Amilcar do Carmo Lucas"), i18n( "Website admin, API documentation, Doxygen and autoproject patches" ), "amilcar@kdevelop.org" );
     aboutData.addAuthor( i18n("Niko Sams"), i18n( "GDB integration, Webdevelopment Plugins" ), "niko.sams@gmail.com" );
-    aboutData.addAuthor( i18n("Milian Wolff"), i18n( "Co-Maintainer, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), "mail@milianw.de" );
-    aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Python Support, User Interface improvements" ), "svenbrauch@gmail.com" );
 
     aboutData.addCredit( i18n("Matt Rogers"), QString(), "mattr@kde.org");
     aboutData.addCredit( i18n("Cédric Pasteur"), i18n("astyle and indent support"), "cedric.pasteur@free.fr" );

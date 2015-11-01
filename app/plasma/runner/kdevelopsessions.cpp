@@ -38,7 +38,8 @@
 
 K_EXPORT_PLASMA_RUNNER(kdevelopsessions, KDevelopSessions)
 
-bool kdevelopsessions_runner_compare_sessions(const Session &s1, const Session &s2) {
+bool kdevelopsessions_runner_compare_sessions(const Session &s1, const Session &s2)
+{
     QCollator c;
     return c.compare(s1.name, s2.name) < 0;
 }
@@ -46,15 +47,16 @@ bool kdevelopsessions_runner_compare_sessions(const Session &s1, const Session &
 KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     : Plasma::AbstractRunner(parent, args)
 {
-    setObjectName(QLatin1String("KDevelop Sessions"));
+    setObjectName(QStringLiteral("KDevelop Sessions"));
     setIgnoredTypes(Plasma::RunnerContext::File | Plasma::RunnerContext::Directory | Plasma::RunnerContext::NetworkLocation);
-    m_icon = QIcon::fromTheme("kdevelop");
+    m_icon = QIcon::fromTheme(QStringLiteral("kdevelop"));
 
     loadSessions();
 
     // listen for changes to the list of kdevelop sessions
     KDirWatch *historyWatch = new KDirWatch(this);
-    const QStringList sessiondirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("kdevelop/sessions"));
+    const QStringList sessiondirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                              QStringLiteral("kdevelop/sessions"));
     foreach (const QString &dir, sessiondirs) {
         historyWatch->addDir(dir);
     }
@@ -62,26 +64,26 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     connect(historyWatch, &KDirWatch::created, this, &KDevelopSessions::loadSessions);
     connect(historyWatch, &KDirWatch::deleted, this, &KDevelopSessions::loadSessions);
 
-    Plasma::RunnerSyntax s(QLatin1String(":q:"), i18n("Finds KDevelop sessions matching :q:."));
-    s.addExampleQuery(QLatin1String("kdevelop :q:"));
+    Plasma::RunnerSyntax s(QStringLiteral(":q:"), i18n("Finds KDevelop sessions matching :q:."));
+    s.addExampleQuery(QStringLiteral("kdevelop :q:"));
     addSyntax(s);
 
-    setDefaultSyntax(Plasma::RunnerSyntax(QLatin1String("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
+    setDefaultSyntax(Plasma::RunnerSyntax(QStringLiteral("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
 }
 
-KDevelopSessions::~KDevelopSessions()
-{
-}
+KDevelopSessions::~KDevelopSessions() = default;
 
 QStringList findSessions()
 {
-    QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevelop/sessions", QStandardPaths::LocateDirectory);
+    QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                        QStringLiteral("kdevelop/sessions"),
+                                                        QStandardPaths::LocateDirectory);
     QStringList sessionrcs;
     Q_FOREACH(const QString& dir, sessionDirs) {
         QDir d(dir);
         Q_FOREACH(const QString& sessionDir, d.entryList(QDir::Dirs)) {
             QDir sd(d.absoluteFilePath(sessionDir));
-            QString path(sd.filePath("sessionrc"));
+            QString path(sd.filePath(QStringLiteral("sessionrc")));
             if(QFile::exists(path)) {
                 sessionrcs += path;
             }
@@ -121,12 +123,12 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
 
     bool listAll = false;
 
-    if (term.startsWith(QLatin1String("kdevelop"), Qt::CaseInsensitive)) {
-        if (term.trimmed().compare(QLatin1String("kdevelop"), Qt::CaseInsensitive) == 0) {
+    if (term.startsWith(QStringLiteral("kdevelop"), Qt::CaseInsensitive)) {
+        if (term.trimmed().compare(QStringLiteral("kdevelop"), Qt::CaseInsensitive) == 0) {
             listAll = true;
             term.clear();
         } else if (term.at(8) == QLatin1Char(' ') ) {
-            term.remove(QLatin1String("kdevelop"), Qt::CaseInsensitive);
+            term.remove(QStringLiteral("kdevelop"), Qt::CaseInsensitive);
             term = term.trimmed();
         } else {
             term.clear();
@@ -177,9 +179,8 @@ void KDevelopSessions::run(const Plasma::RunnerContext &context, const Plasma::Q
         return;
     }
     qDebug() << "Open KDevelop session" << sessionId;
-    QStringList args;
-    args << QLatin1String("--open-session") << sessionId;
-    KToolInvocation::kdeinitExec(QLatin1String("kdevelop"), args);
+    const QStringList args = {QStringLiteral("--open-session"), sessionId};
+    KToolInvocation::kdeinitExec(QStringLiteral("kdevelop"), args);
 }
 
 #include "kdevelopsessions.moc"

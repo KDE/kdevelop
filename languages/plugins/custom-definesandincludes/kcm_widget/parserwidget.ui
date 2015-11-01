@@ -85,7 +85,17 @@
           </item>
           <item>
            <property name="text">
+            <string>gnu99</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>c11</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>gnu11</string>
            </property>
           </item>
           <item>

@@ -1,25 +1,13 @@
-project(kdev-clang)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
-
 find_package(Clang 3.5 REQUIRED)
 
 add_definitions(${LLVM_CFLAGS})
 include_directories(${CLANG_INCLUDE_DIR})
-
-# Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
-# See discussion: http://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html
-if (CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers")
-endif()
 
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/version.h"
   @ONLY
 )
-
-enable_testing()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -63,5 +51,3 @@ target_link_libraries(kdevclangsupport
 )
 
 install(FILES kdevclangsupport.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangsupport)
-
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
