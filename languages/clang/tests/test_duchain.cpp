@@ -1335,8 +1335,8 @@ void TestDUChain::testReparseUnchanged()
         QVERIFY(headerCtx->problems().isEmpty());
         auto implCtx = DUChain::self()->chainForDocument(impl.url());
         QVERIFY(implCtx);
-        if (reparsed) {
-            QEXPECT_FAIL("template-default-parameters", "the precompiled preamble messes the default template paramters up", Continue);
+        if (reparsed && CINDEX_VERSION_MINOR > 29) {
+            QEXPECT_FAIL("template-default-parameters", "the precompiled preamble messes the default template parameters up in clang 3.7", Continue);
         }
         QVERIFY(implCtx->problems().isEmpty());
     };
