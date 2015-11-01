@@ -719,6 +719,31 @@ void UiController::showErrorMessage(const QString& message, int timeout)
     QMetaObject::invokeMethod(mw, "showErrorMessage", Q_ARG(QString, message), Q_ARG(int, timeout));
 }
 
+void UiController::showAssistant(const KDevelop::IAssistant::Ptr& assistant)
+{
+    if(!assistant)
+        return;
+
+    Sublime::View* view = d->activeSublimeWindow->activeView();
+    if( !view )
+    {
+        qCDebug(SHELL) << "no active view in mainwindow";
+        return;
+    }
+
+    auto editorView = qobject_cast<KTextEditor::View*>(view->widget());
+    Q_ASSERT(editorView);
+    if (editorView) {
+        // TODO: See if we can use CodeCompletionInterface::startCompletion for this
+        // See if we can split the assistant actions into their own model and use the model param as well
+        // That way we don't get unwanted completions when the assistant completions are shown
+        if (!assistant->actions().isEmpty()) {
+            // HACK: Internal, unexposed API -- do NOT git blame this line
+            QMetaObject::invokeMethod(editorView, "userInvokedCompletion");
+        }
+    }
+}
+
 const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const
 {
     return d->factoryDocuments;

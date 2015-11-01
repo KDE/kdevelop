@@ -136,7 +136,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
     CodeCompletionWorker* worker() const;
 
+    void updateAssistantItems();
+
   private:
+    QMetaObject::Connection m_connection;
     bool m_forceWaitForModel;
     bool m_fullCompletion;
     QMutex* m_mutex;
