@@ -53,7 +53,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   XmlGui
   WindowSystem
 )
-find_package(KDevelop-PG-Qt 1.9.90)
+find_package(KDevelop-PG-Qt 1.90.90)
 set_package_properties(KDevelop-PG-Qt PROPERTIES
     PURPOSE "KDevelop parser generator library. Required for the QMake Builder/Manager plugin."
 )
