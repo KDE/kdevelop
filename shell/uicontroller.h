@@ -85,7 +85,7 @@ public:
     /*! @p status must implement KDevelop::IStatus */
     virtual void registerStatus(QObject* status) override;
 
-    virtual void showAssistant(const KDevelop::IAssistant::Ptr& assistant) override;
+    virtual void popUpAssistant(const KDevelop::IAssistant::Ptr& assistant) override;
 
     virtual void showErrorMessage(const QString& message, int timeout) override;
 
@@ -111,6 +111,8 @@ private Q_SLOTS:
 
     void slotAreaChanged(Sublime::Area* area);
     void slotActiveToolViewChanged(Sublime::View* view);
+
+    void hideAssistant() override;
 
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,
