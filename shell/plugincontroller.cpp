@@ -271,11 +271,8 @@ PluginController::PluginController(Core *core)
 
     KTextEditorIntegration::initialize();
     const QVector<KPluginMetaData> katePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData & md) {
-        static const QVector<QString> whiteListedPlugins = {
-            QStringLiteral("katesnippetsplugin")
-        };
         return md.serviceTypes().contains(QStringLiteral("KTextEditor/Plugin"))
-            && whiteListedPlugins.contains(md.pluginId());
+            && md.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"));
     });
     foreach (const auto& info, katePlugins) {
         auto data = info.rawData();
