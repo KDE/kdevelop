@@ -1493,19 +1493,17 @@ bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const Abstrac
     }
 
     const auto bIntegral = IntegralType::Ptr::dynamicCast(b);
-    if (bIntegral && bIntegral->dataType() == IntegralType::TypeString) {
-        // In QML/JS, a string can be converted to nearly everything else
+    if (bIntegral && (bIntegral->dataType() == IntegralType::TypeString || bIntegral->dataType() == IntegralType::TypeMixed)) {
+        // In QML/JS, a string can be converted to nearly everything else, similarly ignore mixed types
         return true;
     }
 
     const auto aIntegral = IntegralType::Ptr::dynamicCast(a);
+    if (aIntegral && (aIntegral->dataType() == IntegralType::TypeString || aIntegral->dataType() == IntegralType::TypeMixed)) {
+        // In QML/JS, nearly everything can be to a string, similarly ignore mixed types
+        return true;
+    }
     if (aIntegral && bIntegral) {
-        if ((aIntegral->dataType() == IntegralType::TypeMixed) ||
-            (bIntegral->dataType() == IntegralType::TypeMixed)) {
-            // Mixed types, don't try to be clever
-            return true;
-        }
-
         if (isNumeric(aIntegral) && isNumeric(bIntegral)) {
             // Casts between integral types is possible
             return true;
