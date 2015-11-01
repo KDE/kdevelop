@@ -65,7 +65,10 @@ bool isIncludeFileNotFound(const QByteArray& description)
 bool isReplaceWithDotProblem(const QByteArray& description)
 {
     // TODO: The diagnostic message depends on LibClang version.
-    const QList<QByteArray> diagnosticMessages {QByteArrayLiteral("did you mean to use '.'?"), QByteArrayLiteral("maybe you meant to use '.'?")};
+    static const QByteArray diagnosticMessages[] = {
+        QByteArrayLiteral("did you mean to use '.'?"),
+        QByteArrayLiteral("maybe you meant to use '.'?")
+    };
 
     for (const auto& diagnStr : diagnosticMessages) {
         if (description.endsWith(diagnStr)) {
@@ -79,7 +82,10 @@ bool isReplaceWithDotProblem(const QByteArray& description)
 bool isReplaceWithArrowProblem(const QByteArray& description)
 {
     // TODO: The diagnostic message depends on LibClang version.
-    const QList<QByteArray> diagnosticMessages {QByteArrayLiteral("did you mean to use '->'?"), QByteArrayLiteral("maybe you meant to use '->'?")};
+    static const QByteArray diagnosticMessages[] = {
+        QByteArrayLiteral("did you mean to use '->'?"),
+        QByteArrayLiteral("maybe you meant to use '->'?")
+    };
 
     for (const auto& diagnStr : diagnosticMessages) {
         if (description.endsWith(diagnStr)) {
