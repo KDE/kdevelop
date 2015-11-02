@@ -162,7 +162,22 @@ bool KDevelop::renameUrl(const KDevelop::IProject* project, const QUrl& oldname,
     } else if (!wasVcsMoved) {
         // fallback for non-textdocuments (also folders e.g.)
         KIO::CopyJob* job = KIO::move(oldname, newname);
-        return job->exec();
+        bool success = job->exec();
+        if (success) {
+            // save files that where opened in this folder under the new name
+            Path oldBasePath(oldname);
+            Path newBasePath(newname);
+            foreach (auto doc, ICore::self()->documentController()->openDocuments()) {
+                auto textDoc = doc->textDocument();
+                if (textDoc && oldname.isParentOf(doc->url())) {
+                    const auto path = Path(textDoc->url());
+                    const auto relativePath = oldBasePath.relativePath(path);
+                    const auto newPath = Path(newBasePath, relativePath);
+                    textDoc->saveAs(newPath.toUrl());
+                }
+            }
+        }
+        return success;
     } else {
         return true;
     }
