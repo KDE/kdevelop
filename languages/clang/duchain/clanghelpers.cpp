@@ -122,6 +122,10 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     }
 
     const IndexedString path(QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath());
+    if (path.isEmpty()) {
+        // may happen when the file gets removed before the job is run
+        return {};
+    }
 
     const auto& environment = session.environment();
 

@@ -34,6 +34,7 @@ private slots:
     void testFiles_data();
     void testFiles();
     void testQMLTypes();
+    void testTypeMismatchFalsePositives();
 
 private:
     void parseAndCheck(const QString& fileName, bool check = true);

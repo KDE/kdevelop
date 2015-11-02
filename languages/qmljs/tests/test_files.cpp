@@ -73,6 +73,11 @@ void TestFiles::testQMLTypes()
     parseAndCheck(TEST_FILES_DIR "/qmltypes/AnItem.qml", true);
 }
 
+void TestFiles::testTypeMismatchFalsePositives()
+{
+    parseAndCheck(TEST_FILES_DIR "/type_mismatch_false_positives/code.js", true);
+}
+
 void TestFiles::testJSUsesBetweenFiles()
 {
     parseAndCheck(TEST_FILES_DIR "/js_cross_file_uses/js_variable_definition.js", false);
