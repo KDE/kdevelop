@@ -123,8 +123,10 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         flags |= CXTranslationUnit_ForSerialization;
     } else {
         flags |= CXTranslationUnit_CacheCompletionResults
-              |  CXTranslationUnit_PrecompiledPreamble
-              |  CXTranslationUnit_Incomplete;
+              |  CXTranslationUnit_PrecompiledPreamble;
+        if (environment.quality() == ClangParsingEnvironment::Unknown) {
+            flags |= CXTranslationUnit_Incomplete;
+        }
     }
 
     const auto tuUrl = environment.translationUnitUrl();
