@@ -7,6 +7,7 @@
         ], 
         "Category": "Testing", 
         "Description": "Lets you see and run unit tests.", 
+        "Description[ca@valencia]": "Vos permet veure i executar proves unitàries.", 
         "Description[ca]": "Us permet veure i executar proves unitàries.", 
         "Description[de]": "Unit-Tests anzeigen und ausführen.", 
         "Description[en_GB]": "Lets you see and run unit tests.", 

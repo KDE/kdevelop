@@ -8,6 +8,7 @@
         "Category": "Utilities", 
         "Description": "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions.", 
         "Description[ar]": "شغّل سكرِبتات أو تطبيقات خارجيّة للتّلاعب بمحتويات المحرّر أو عمل إجراءات اعتباطيّة أخرى.", 
+        "Description[ca@valencia]": "Executa scripts externs o aplicacions per a manipular el contingut de l'editor o altres accions arbitràries.", 
         "Description[ca]": "Executa scripts externs o aplicacions per a manipular el contingut de l'editor o altres accions arbitràries.", 
         "Description[de]": "Führen Sie externe Skripte oder Programme zum Verändern des Editorinhalts oder für beliebige andere Aktionen aus.", 
         "Description[en_GB]": "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions.", 
