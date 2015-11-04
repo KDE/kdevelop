@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Builds QMake Projects", 
+        "Description[ca@valencia]": "Construeix projectes QMake", 
         "Description[ca]": "Construeix projectes QMake", 
         "Description[de]": "Erstellt QMake-Projekte", 
         "Description[en_GB]": "Builds QMake Projects", 
@@ -17,6 +18,7 @@
         "Icon": "gear", 
         "Id": "KDevQMakeBuilder", 
         "Name": "QMake Project Builder", 
+        "Name[ca@valencia]": "Constructor de projecte QMake", 
         "Name[ca]": "Constructor de projecte QMake", 
         "Name[de]": "Ersteller für QMake-Projekte", 
         "Name[en_GB]": "QMake Project Builder", 

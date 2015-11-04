@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management", 
         "Description": "KDevelop Make Builder", 
+        "Description[ca@valencia]": "Constructor Make del KDevelop", 
         "Description[ca]": "Constructor Make del KDevelop", 
         "Description[de]": "Make-Builder von KDevelop", 
         "Description[en_GB]": "KDevelop Make Builder", 
@@ -18,6 +19,7 @@
         "Icon": "gear", 
         "Id": "KDevMakeBuilder", 
         "Name": "Make Project Builder", 
+        "Name[ca@valencia]": "Constructor de projecte Make", 
         "Name[ca]": "Constructor de projecte Make", 
         "Name[de]": "Ersteller für Make-Projekte", 
         "Name[en_GB]": "Make Project Builder", 

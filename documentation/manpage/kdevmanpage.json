@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Documentation", 
         "Description": "This plugin provides Manual Pages integration", 
+        "Description[ca@valencia]": "Este connector proporciona la integració de les pàgines del manual", 
         "Description[ca]": "Aquest connector proporciona la integració de les pàgines del manual", 
         "Description[de]": "Dieses Modul integriert Handbuch-Seiten", 
         "Description[en_GB]": "This plugin provides Manual Pages integration", 
@@ -20,6 +21,7 @@
         "Id": "KDevManPage", 
         "License": "GPL", 
         "Name": "Man Pages", 
+        "Name[ca@valencia]": "Pàgines man", 
         "Name[ca]": "Pàgines man", 
         "Name[de]": "Handbuch-Seiten", 
         "Name[en_GB]": "Man Pages", 

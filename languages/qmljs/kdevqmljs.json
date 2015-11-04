@@ -5,6 +5,7 @@
         "Id": "kdevqmljs", 
         "License": "GPL", 
         "Name": "QML Support", 
+        "Name[ca@valencia]": "Implementació del QML", 
         "Name[ca]": "Implementació del QML", 
         "Name[de]": "Unterstützung für QML", 
         "Name[en_GB]": "QML Support", 

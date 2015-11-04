@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management", 
         "Description": "Builds CMake Projects", 
+        "Description[ca@valencia]": "Construeix projectes CMake", 
         "Description[ca]": "Construeix projectes CMake", 
         "Description[de]": "Erstellt CMake-Projekte", 
         "Description[en_GB]": "Builds CMake Projects", 
@@ -18,6 +19,7 @@
         "Icon": "cmake", 
         "Id": "KDevCMakeBuilder", 
         "Name": "CMake Project Builder", 
+        "Name[ca@valencia]": "Constructor de projecte CMake", 
         "Name[ca]": "Constructor de projecte CMake", 
         "Name[de]": "Ersteller für CMake-Projekte", 
         "Name[en_GB]": "CMake Project Builder", 
