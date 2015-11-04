@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Utilities", 
         "Description": "Collection of various utilities that increase productivity while programming.", 
+        "Description[ca@valencia]": "Col·lecció de diverses utilitats que augmenten la productivitat durant la programació.", 
         "Description[ca]": "Col·lecció de diverses utilitats que augmenten la productivitat durant la programació.", 
         "Description[de]": "Sammlung verschiedener Werkzeuge, die die Produktivität während des Programmierens erhöhen.", 
         "Description[en_GB]": "Collection of various utilities that increase productivity while programming.", 
@@ -18,6 +19,7 @@
         "Icon": "help-hint", 
         "Id": "kdevcodeutils", 
         "Name": "Code Utilities", 
+        "Name[ca@valencia]": "Utilitats de codi", 
         "Name[ca]": "Utilitats de codi", 
         "Name[de]": "Quelltext-Werkzeuge", 
         "Name[en_GB]": "Code Utilities", 

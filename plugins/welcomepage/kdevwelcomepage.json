@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Configure which macros and include directories/files will be added to the parser during project parsing.", 
+        "Description[ca@valencia]": "Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.", 
         "Description[ca]": "Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.", 
         "Description[de]": "Einstellung der Makros und Include-Ordner/-Dateien, die für den Parser während des Einlesens des Projekts hinzugefügt werden.", 
         "Description[en_GB]": "Configure which macros and include directories/files will be added to the parser during project parsing.", 
@@ -17,6 +18,7 @@
         "Icon": "kdevelop", 
         "Id": "KDevWelcomePage", 
         "Name": "KDevelop Welcome Page", 
+        "Name[ca@valencia]": "Pàgina de benvinguda del KDevelop", 
         "Name[ca]": "Pàgina de benvinguda del KDevelop", 
         "Name[de]": "KDevelop-Startseite", 
         "Name[en_GB]": "KDevelop Welcome Page", 

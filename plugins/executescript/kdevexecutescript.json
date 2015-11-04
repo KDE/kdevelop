@@ -6,6 +6,7 @@
             }
         ], 
         "Description": "This plugin allows running of scripts.", 
+        "Description[ca@valencia]": "Este connector permet executar scripts.", 
         "Description[ca]": "Aquest connector permet executar scripts.", 
         "Description[de]": "Dieses Modul ermöglicht das Ausführen von Skripten.", 
         "Description[en_GB]": "This plugin allows running of scripts.", 
@@ -23,6 +24,7 @@
         "Id": "kdevexecutescript", 
         "License": "GPL", 
         "Name": "Execute Scripts", 
+        "Name[ca@valencia]": "Executa scripts", 
         "Name[ca]": "Executa scripts", 
         "Name[de]": "Skripte ausführen", 
         "Name[en_GB]": "Execute Scripts", 

@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Utilities", 
         "Description": "Allows switching between buddy documents like implementation and header file.", 
+        "Description[ca@valencia]": "Permet commutar entre documents associats com fitxers d'implementacions i de capçaleres.", 
         "Description[ca]": "Permet commutar entre documents associats com fitxers d'implementacions i de capçaleres.", 
         "Description[de]": "Ermöglicht das Umschalten zwischen verwandten Dokumenten wie Implementations- und Header-Dateien.", 
         "Description[en_GB]": "Allows switching between buddy documents like implementation and header file.", 
@@ -18,6 +19,7 @@
         "Icon": "document-multiple", 
         "Id": "kdevswitchtobuddy", 
         "Name": "Switch to Buddy", 
+        "Name[ca@valencia]": "Commuta a associat", 
         "Name[ca]": "Commuta a associat", 
         "Name[de]": "Zu verwandtem Element wechseln", 
         "Name[en_GB]": "Switch to Buddy", 
