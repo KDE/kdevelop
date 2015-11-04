@@ -6,6 +6,7 @@
   <name>KDevelop</name>
   <name xml:lang="bs">KDevelop</name>
   <name xml:lang="ca">KDevelop</name>
+  <name xml:lang="ca-valencia">KDevelop</name>
   <name xml:lang="cs">KDevelop</name>
   <name xml:lang="da">KDevelop</name>
   <name xml:lang="de">KDevelop</name>
@@ -29,6 +30,7 @@
   <name xml:lang="zh-CN">KDevelop</name>
   <summary>It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
   <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
+  <summary xml:lang="ca-valencia">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
   <summary xml:lang="de">KDevelop ist eine leistungsfähige integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann.</summary>
   <summary xml:lang="en-GB">It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
   <summary xml:lang="es">Es un entorno de desarrollo integrado para C/C++ y otros lenguajes de programación con múltiples funcionalidades y que se puede extender con complementos.</summary>
@@ -51,6 +53,7 @@
   <description>
     <p>Free and Open Source Integrated Development Environment for your different software projects.</p>
     <p xml:lang="ca">És un entorn de desenvolupament integrat lliure i de codi obert per als vostres diferents projectes de programari.</p>
+    <p xml:lang="ca-valencia">És un entorn de desenvolupament integrat lliure i de codi obert per als vostres diferents projectes de programari.</p>
     <p xml:lang="de">Integrierte Entwicklungsumgebung (Frei und Open Source) für Ihre verschiedenen Software-Projekte.</p>
     <p xml:lang="en-GB">Free and Open Source Integrated Development Environment for your different software projects.</p>
     <p xml:lang="es">Entorno de desarrollo integrado libre y de código abierto para sus distintos proyectos de software.</p>
