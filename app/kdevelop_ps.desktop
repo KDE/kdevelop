@@ -6,6 +6,7 @@ Icon=kdevelop
 Terminal=false
 Name=KDevelop (Pick Session)
 Name[ca]=KDevelop (Selecció de sessió)
+Name[ca@valencia]=KDevelop (Selecció de sessió)
 Name[cs]=KDevelop (Zvolte sezení)
 Name[de]=KDevelop (Sitzung auswählen)
 Name[en_GB]=KDevelop (Pick Session)

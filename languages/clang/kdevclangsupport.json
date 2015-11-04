@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "C/C++ Language Support (Clang-based)", 
+        "Description[ca@valencia]": "Implementació del llenguatge C/C++ (basat en Clang)", 
         "Description[ca]": "Implementació del llenguatge C/C++ (basat en Clang)", 
         "Description[de]": "Sprachunterstützung für C/C++ (Clang-basiert)", 
         "Description[en_GB]": "C/C++ Language Support (Clang-based)", 
@@ -20,6 +21,7 @@
         "Id": "kdevclangsupport", 
         "Name": "C++ Support", 
         "Name[bs]": "C++ Podrška", 
+        "Name[ca@valencia]": "Implementació del C++", 
         "Name[ca]": "Implementació del C++", 
         "Name[cs]": "Podpora C++", 
         "Name[de]": "Unterstützung für C++", 

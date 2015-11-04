@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management", 
         "Description": "Configure which macros and include directories/files will be added to the parser during project parsing.", 
+        "Description[ca@valencia]": "Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.", 
         "Description[ca]": "Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.", 
         "Description[de]": "Einstellung der Makros und Include-Ordner/-Dateien, die für den Parser während des Einlesens des Projekts hinzugefügt werden.", 
         "Description[en_GB]": "Configure which macros and include directories/files will be added to the parser during project parsing.", 
@@ -23,6 +24,7 @@
         "Icon": "kdevelop", 
         "Id": "KDevDefinesAndIncludesManager", 
         "Name": "Custom Defines And Includes Manager", 
+        "Name[ca@valencia]": "Gestor per personalitzar les definicions i inclusions", 
         "Name[ca]": "Gestor per personalitzar les definicions i inclusions", 
         "Name[de]": "Verwaltung benutzerdefinierter Definitionen und Includes", 
         "Name[en_GB]": "Custom Defines And Includes Manager", 
