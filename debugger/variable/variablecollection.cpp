@@ -491,10 +491,6 @@ VariableProvider::VariableProvider(VariableCollection* collection)
 
 QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::Cursor& cursor)
 {
-    // Don't do anything if there's already an open tooltip.
-    if (m_collection->activeTooltip_)
-        return QString();
-
     if (!hasStartedSession())
         return QString();
 
@@ -513,8 +509,14 @@ QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::C
 
     if (!expressionRange.isValid())
         return QString();
-
     QString expression = doc->text(expressionRange).trimmed();
+
+    // Don't do anything if there's already an open tooltip with matching range
+    if (m_collection->activeTooltip_ && m_collection->activeTooltip_->variable()->expression() == expression)
+        return QString();
+    if (expression.isEmpty())
+        return QString();
+
     QPoint local = view->cursorToCoordinate(cursor);
     QPoint global = view->mapToGlobal(local);
     QWidget* w = view->childAt(local);

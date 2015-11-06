@@ -40,10 +40,11 @@ namespace KDevelop
 
     class VariableToolTip : public ActiveToolTip
     {
-        Q_OBJECT
-        public:
+    Q_OBJECT
+    public:
         VariableToolTip(QWidget* parent, QPoint position, 
                         const QString& identifier);
+        Variable* variable() const { return var_; };
     private slots:
         void variableCreated(bool hasValue);
         void slotLinkActivated(const QString& link);
