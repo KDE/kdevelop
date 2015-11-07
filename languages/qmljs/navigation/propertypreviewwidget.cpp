@@ -154,7 +154,6 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEd
     //setup kdeclarative library
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(view->engine());
-    kdeclarative.initialize();
     kdeclarative.setupBindings();        //binds things like kconfig and icons
 
     // Configure layout
