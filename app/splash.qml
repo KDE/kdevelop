@@ -148,7 +148,7 @@ Rectangle {
                     style: Text.Raised;
                     styleColor: "black"
                     text: "KDevelop " + appVersionMajor + "." + appVersionMinor +
-                          "<span style='font-size:15px;'>&nbsp;." + appVersionPatch + "</span>"
+                          "<font size=\"1\">." + appVersionPatch + "</span>"
                 }
             }
         }

@@ -35,7 +35,7 @@
 KDevSplashScreen::KDevSplashScreen()
     : QQuickView()
 {
-    setFlags(Qt::FramelessWindowHint | Qt::Tool);
+    setFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     setResizeMode(QQuickView::SizeViewToRootObject);
 
     QString splashScript = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevelop/splash.qml");
