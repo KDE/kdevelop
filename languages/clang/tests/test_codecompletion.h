@@ -55,6 +55,9 @@ private slots:
     void testOverloadedFunctions();
     void testVariableScope();
     void testArgumentHintCompletionDefaultParameters();
+
+    void testCompleteFunction_data();
+    void testCompleteFunction();
 };
 
 #endif // TESTCODECOMPLETION_H

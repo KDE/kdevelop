@@ -240,7 +240,10 @@ public:
         }
 
         if(m_declaration->isFunctionDeclaration()) {
-            repl += QLatin1String("()");
+            auto doc = view->document();
+            if (doc->characterAt(word.end()) != QLatin1Char('(')) {
+                repl += QLatin1String("()");
+            }
             view->document()->replaceText(word, repl);
             auto f = m_declaration->type<FunctionType>();
             if (f && f->indexedArgumentsSize()) {
