@@ -37,6 +37,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
+#include <util/texteditorhelpers.h>
 
 #include <kcolorscheme.h>
 
@@ -119,6 +120,11 @@ QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
                     continue;
                 }
 
+                if (m_currentHintRange == range->toRange()) {
+                    continue;
+                }
+                m_currentHintRange = range->toRange();
+
                 KDevelop::AbstractNavigationWidget* widget = new KDevelop::AbstractNavigationWidget;
                 widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problem)));
 
@@ -126,6 +132,8 @@ QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
                     = new KDevelop::NavigationToolTip(view, QCursor::pos() + QPoint(20, 40), widget);
 
                 tooltip->resize(widget->sizeHint() + QSize(10, 10));
+                tooltip->setHandleRect(getItemBoundingRect(view, m_currentHintRange));
+                tooltip->connect(tooltip, &ActiveToolTip::destroyed, [&] () { m_currentHintRange = {}; });
                 ActiveToolTip::showToolTip(tooltip, 99, "problem-tooltip");
                 return QString();
             }

@@ -65,6 +65,7 @@ public:
 
 private:
     ProblemHighlighter* m_highlighter;
+    KTextEditor::Range m_currentHintRange;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H
