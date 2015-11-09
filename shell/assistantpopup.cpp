@@ -229,10 +229,12 @@ void AssistantPopup::setAssistant(const IAssistant::Ptr& assistant)
 
     if (m_assistant) {
         disconnect(m_assistant.data(), &IAssistant::hide, this, &AssistantPopup::hideAssistant);
+        disconnect(m_assistant.data(), &IAssistant::actionsChanged, this, &AssistantPopup::updateState);
     }
     m_assistant = assistant;
     if (m_assistant) {
         connect(m_assistant.data(), &IAssistant::hide, this, &AssistantPopup::hideAssistant);
+        connect(m_assistant.data(), &IAssistant::actionsChanged, this, &AssistantPopup::updateState);
     } else {
         hide();
     }
