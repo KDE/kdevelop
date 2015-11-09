@@ -159,18 +159,18 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
         if (supportedLanguage()->refactoring()->shouldRenameUses(declAtCursor)) {
             QMap< IndexedString, QList<RangeInRevision> > declUses = declAtCursor->uses();
             if (declUses.isEmpty()) {
-                // new declaration is use-less
+                // new declaration has no uses
                 return;
             }
 
             for(QMap< IndexedString, QList< RangeInRevision > >::const_iterator it = declUses.constBegin();
                 it != declUses.constEnd(); ++it)
             {
-                foreach(const RangeInRevision& range, it.value())
-                {
-                KTextEditor::Range currentRange = declAtCursor->transformFromLocalRevision(range);
-                if(currentRange.isEmpty() || view->document()->text(currentRange) != declAtCursor->identifier().identifier().str())
-                    return; // One of the uses is invalid. Maybe the replacement has already been performed.
+                foreach(const RangeInRevision& range, it.value()) {
+                    KTextEditor::Range currentRange = declAtCursor->transformFromLocalRevision(range);
+                    if(currentRange.isEmpty() || view->document()->text(currentRange) != declAtCursor->identifier().identifier().str()) {
+                        return; // One of the uses is invalid. Maybe the replacement has already been performed.
+                    }
                 }
             }
             d->m_oldDeclarationUses = RevisionedFileRanges::convert(declUses);
@@ -213,7 +213,7 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
     if (d->m_renameFile) {
         action = new RenameFileAction(supportedLanguage()->refactoring(), url, d->m_newDeclarationName);
     } else {
-        action =new RenameAction(d->m_oldDeclarationName, d->m_newDeclarationName, d->m_oldDeclarationUses);
+        action = new RenameAction(d->m_oldDeclarationName, d->m_newDeclarationName, d->m_oldDeclarationUses);
     }
     connect(action.data(), &IAssistantAction::executed, this, [&] { d->reset(); });
     addAction(action);

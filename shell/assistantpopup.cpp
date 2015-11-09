@@ -48,10 +48,6 @@ using namespace KDevelop;
 
 namespace {
 
-/// Interval after which the state of the popup is re-evaluated
-/// Used to avoid flickering caused when user is quickly inserting code
-const int UPDATE_STATE_INTERVAL = 300; // ms
-
 const int ASSISTANT_MODIFIER =
 #ifdef Q_OS_MAC
 Qt::CTRL;
