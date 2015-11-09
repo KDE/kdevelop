@@ -26,6 +26,7 @@
 
 #include <debugger/debuggerexport.h>
 
+class QSortFilterProxyModel;
 namespace KDevelop
 {
 class TreeModel;
@@ -34,7 +35,7 @@ class TreeModel;
     {
         Q_OBJECT
     public:
-        AsyncTreeView(TreeModel* model, QWidget *parent);
+        AsyncTreeView(TreeModel* model, QSortFilterProxyModel *proxy, QWidget *parent);
 
         virtual QSize sizeHint() const override;
         void resizeColumns();
@@ -47,6 +48,9 @@ class TreeModel;
         void slotCollapsed(const QModelIndex &index);
         void slotClicked(const QModelIndex &index);
         void slotExpandedDataReady();
+
+    private:
+        QSortFilterProxyModel *m_proxy;
     };
 
 }

@@ -25,12 +25,12 @@
 #include "variablecollection.h"
 
 class KHistoryComboBox;
-
+class QSortFilterProxyModel;
 namespace KDevelop
 {
 
 class IDebugController;
-
+class TreeModel;
 class VariableTree;
 class AbstractVariableItem;
 
@@ -57,6 +57,7 @@ private:
     VariableTree *varTree_;
     KHistoryComboBox *watchVarEditor_;
     VariablesRoot *variablesRoot_;
+    QSortFilterProxyModel *m_proxy;
 };
 
 /***************************************************************************/
@@ -67,7 +68,7 @@ class VariableTree : public KDevelop::AsyncTreeView
 {
     Q_OBJECT
 public:
-    VariableTree(IDebugController *controller, VariableWidget *parent);
+    VariableTree(IDebugController *controller, VariableWidget *parent, QSortFilterProxyModel *proxy);
     virtual ~VariableTree();
 
     VariableCollection* collection() const;
@@ -109,6 +110,8 @@ private:
     QAction *m_copyVariableValue;
     QAction *m_stopOnChange;
     QSignalMapper *m_signalMapper;
+    QSortFilterProxyModel *m_proxy;
+    TreeModel *m_model;
 };
 
 }

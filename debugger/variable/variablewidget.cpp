@@ -24,7 +24,9 @@
 
 #include <KHistoryComboBox>
 #include <KLocalizedString>
+#include <QSortFilterProxyModel>
 
+#include "../util/treemodel.h"
 #include "../../interfaces/icore.h"
 #include <interfaces/idebugcontroller.h>
 #include "../interfaces/ivariablecontroller.h"
@@ -74,7 +76,8 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
     setWindowIcon(QIcon::fromTheme("debugger"));
     setWindowTitle(i18n("Debugger Variables"));
 
-    varTree_ = new VariableTree(controller, this);
+    m_proxy = new QSortFilterProxyModel;
+    varTree_ = new VariableTree(controller, this, m_proxy);
     setFocusProxy(varTree_);
 
     watchVarEditor_ = new KHistoryComboBox( this );
@@ -149,8 +152,9 @@ void VariableWidget::showEvent(QShowEvent* e)
 // **************************************************************************
 
 VariableTree::VariableTree(IDebugController *controller,
-                           VariableWidget *parent)
-: AsyncTreeView(controller->variableCollection(), parent)
+                           VariableWidget *parent, QSortFilterProxyModel *proxy)
+    : AsyncTreeView(controller->variableCollection(), proxy, parent)
+    , m_proxy(proxy)
 #if 0
 ,
       activePopup_(0),
@@ -159,6 +163,12 @@ VariableTree::VariableTree(IDebugController *controller,
 {
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
+
+    // setting proxy model
+    m_model = static_cast<TreeModel *>(controller->variableCollection());
+    m_proxy->setSourceModel(m_model);
+    setModel(m_proxy);
+    setSortingEnabled(true);
 
     QModelIndex index = controller->variableCollection()->indexForItem(
         controller->variableCollection()->watches(), 0);
@@ -171,7 +181,7 @@ VariableTree::VariableTree(IDebugController *controller,
 
 VariableCollection* VariableTree::collection() const
 {
-    Q_ASSERT(qobject_cast<VariableCollection*>(model()));
+    Q_ASSERT(qobject_cast<VariableCollection*>(static_cast<QSortFilterProxyModel*>(model())->sourceModel()));
     return static_cast<VariableCollection*>(model());
 }
 
@@ -247,7 +257,7 @@ void VariableTree::setupActions()
 Variable* VariableTree::selectedVariable() const
 {
     if (selectionModel()->selectedRows().isEmpty()) return 0;
-    TreeItem* item = collection()->itemForIndex(selectionModel()->selectedRows().first());
+    auto item = selectionModel()->currentIndex().data(TreeModel::ItemRole).value<TreeItem*>();
     if (!item) return 0;
     return dynamic_cast<Variable*>(item);
 }
