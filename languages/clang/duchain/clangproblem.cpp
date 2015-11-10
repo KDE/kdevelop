@@ -33,13 +33,16 @@ using namespace KDevelop;
 
 namespace {
 
-IProblem::Severity diagnosticSeverityToSeverity(CXDiagnosticSeverity severity)
+IProblem::Severity diagnosticSeverityToSeverity(CXDiagnosticSeverity severity, const QString& optionName)
 {
     switch (severity) {
     case CXDiagnostic_Fatal:
     case CXDiagnostic_Error:
         return IProblem::Error;
     case CXDiagnostic_Warning:
+        if (optionName.startsWith(QLatin1String("-Wunused-"))) {
+            return IProblem::Hint;
+        }
         return IProblem::Warning;
         break;
     default:
@@ -93,11 +96,12 @@ QDebug operator<<(QDebug debug, const ClangFixit& fixit)
 
 ClangProblem::ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
 {
-    auto severity = diagnosticSeverityToSeverity(clang_getDiagnosticSeverity(diagnostic));
+    const QString diagnosticOption = ClangString(clang_getDiagnosticOption(diagnostic, nullptr)).toString();
+
+    auto severity = diagnosticSeverityToSeverity(clang_getDiagnosticSeverity(diagnostic), diagnosticOption);
     setSeverity(severity);
 
     QString description = ClangString(clang_getDiagnosticSpelling(diagnostic)).toString();
-    const QString diagnosticOption = ClangString(clang_getDiagnosticOption(diagnostic, nullptr)).toString();
     if (!diagnosticOption.isEmpty()) {
         description.append(QStringLiteral(" [%1]").arg(diagnosticOption));
     }

@@ -46,11 +46,23 @@ Q_DECLARE_METATYPE(KTextEditor::Cursor);
 Q_DECLARE_METATYPE(KTextEditor::Range);
 #endif
 
+Q_DECLARE_METATYPE(KDevelop::IProblem::Severity);
+
 using namespace KDevelop;
 
 namespace {
 
 const QString FileName = QStringLiteral("/tmp/stdin.cpp");
+
+QList<ProblemPointer> parse(const QByteArray& code)
+{
+    ClangIndex index;
+    ClangParsingEnvironment environment;
+    environment.setTranslationUnitUrl(IndexedString(FileName));
+    ParseSession session(ParseSessionData::Ptr(new ParseSessionData({UnsavedFile(FileName, {code})},
+                                                                    &index, environment)));
+    return session.problemsForFile(session.mainFile());
+}
 
 }
 
@@ -70,16 +82,6 @@ void TestProblems::initTestCase()
 void TestProblems::cleanupTestCase()
 {
     TestCore::shutdown();
-}
-
-QList<ProblemPointer> TestProblems::parse(const QByteArray& code)
-{
-    ClangIndex index;
-    ClangParsingEnvironment environment;
-    environment.setTranslationUnitUrl(IndexedString(FileName));
-    ParseSession session(ParseSessionData::Ptr(new ParseSessionData({UnsavedFile(FileName, {code})},
-                                                                    &index, environment)));
-    return session.problemsForFile(session.mainFile());
 }
 
 void TestProblems::testNoProblems()
@@ -387,9 +389,30 @@ void TestProblems::testRanges()
 
     const auto problems = parse(code);
     RangeList actualRanges;
-    foreach (auto problem, parse(code)) {
+    foreach (auto problem, problems) {
         actualRanges << problem->rangeInCurrentRevision();
     }
     qDebug() << actualRanges << ranges;
     QCOMPARE(actualRanges, ranges);
+}
+
+void TestProblems::testSeverity()
+{
+    QFETCH(QByteArray, code);
+    QFETCH(IProblem::Severity, severity);
+
+    const auto problems = parse(code);
+    QCOMPARE(problems.size(), 1);
+    QCOMPARE(problems.at(0)->severity(), severity);
+}
+
+void TestProblems::testSeverity_data()
+{
+    QTest::addColumn<QByteArray>("code");
+    QTest::addColumn<IProblem::Severity>("severity");
+
+    QTest::newRow("error") << QByteArray("class foo {}") << IProblem::Error;
+    QTest::newRow("warning") << QByteArray("int main() { int foo = 1 / 0; return foo; }") << IProblem::Warning;
+    QTest::newRow("hint-unused-variable") << QByteArray("int main() { int foo = 0; return 0; }") << IProblem::Hint;
+    QTest::newRow("hint-unused-parameter") << QByteArray("int main(int argc, char**) { return 0; }") << IProblem::Hint;
 }
