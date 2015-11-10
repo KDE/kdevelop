@@ -67,11 +67,6 @@ using namespace KDevelop;
 class ProblemReporterFactory : public KDevelop::IToolViewFactory
 {
 public:
-    ProblemReporterFactory(ProblemReporterPlugin* plugin)
-        : m_plugin(plugin)
-    {
-    }
-
     virtual QWidget* create(QWidget* parent = 0) override
     {
         Q_UNUSED(parent);
@@ -84,14 +79,11 @@ public:
     virtual Qt::DockWidgetArea defaultPosition() override { return Qt::BottomDockWidgetArea; }
 
     virtual QString id() const override { return "org.kdevelop.ProblemReporterView"; }
-
-private:
-    ProblemReporterPlugin* m_plugin;
 };
 
 ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin("kdevproblemreporter", parent)
-    , m_factory(new ProblemReporterFactory(this))
+    , m_factory(new ProblemReporterFactory)
     , m_model(new ProblemReporterModel(this))
 {
     KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
