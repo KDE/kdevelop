@@ -310,7 +310,7 @@ public:
         , m_arguments(arguments)
     {}
 
-     QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
+    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
     {
         if (role == CodeCompletionModel::CustomHighlight && index.column() == CodeCompletionModel::Arguments && argumentHintDepth()) {
             QList<QVariant> highlighting;
