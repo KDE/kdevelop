@@ -188,6 +188,28 @@ CXChildVisitResult findBaseVisitor(CXCursor cursor, CXCursor /*parent*/, CXClien
     return CXChildVisit_Continue;
 }
 
+// TODO: make sure we only skip this in classes that actually inherit QObject
+bool isQtMocFunction(CXCursor cursor)
+{
+    static const QByteArray mocFunctions[] = {
+        QByteArrayLiteral("metaObject"),
+        QByteArrayLiteral("qt_metacast"),
+        QByteArrayLiteral("qt_metacall"),
+        QByteArrayLiteral("qt_static_metacall"),
+    };
+    const ClangString function(clang_getCursorSpelling(cursor));
+    auto it = std::find(std::begin(mocFunctions), std::end(mocFunctions), function.toByteArray());
+    if (it != std::end(mocFunctions)) {
+        auto range = ClangRange(clang_getCursorExtent(cursor)).toRange();
+        // tokenizing the above range fails for some reason, but
+        // if the function comes from a range that happens to be just as wide
+        // as the expected Q_OBJECT macro, then we assume this is a moc function
+        // and skip it.
+        return range.onSingleLine() && range.columnWidth() == strlen("Q_OBJECT");
+    }
+    return false;
+}
+
 CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
 {
     CXCursorKind kind = clang_getCursorKind(cursor);
@@ -274,6 +296,11 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     if (ClangUtils::isExplicitlyDefaultedOrDeleted(cursor)) {
         return CXChildVisit_Continue;
     }
+
+    if (isQtMocFunction(cursor)) {
+        return CXChildVisit_Continue;
+    }
+
     //TODO Add support for pure virtual functions
 
     auto scope = data->scopePrefix;
