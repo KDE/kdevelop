@@ -183,31 +183,35 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     return context;
 }
 
-DeclarationPointer ClangHelpers::findDeclaration(CXCursor cursor, const IncludeFileContexts& includes)
+DeclarationPointer ClangHelpers::findDeclaration(CXSourceLocation location, const ReferencedTopDUContext& top)
 {
-    auto refLoc = clang_getCursorLocation(cursor);
-    CXFile file = nullptr;
-    clang_getFileLocation(refLoc, &file, nullptr, nullptr, nullptr);
-    if (!file) {
-        return {};
-    }
-    auto refCursor = CursorInRevision(ClangLocation(refLoc));
-
-    const auto& top = includes.value(file);
     if (!top) {
         // may happen for cyclic includes
         return {};
     }
 
+    auto cursor = CursorInRevision(ClangLocation(location));
     DUChainReadLocker lock;
     Q_ASSERT(top);
-    if (DUContext *local = top->findContextAt(refCursor)) {
-        if (local->owner() && local->owner()->range().contains(refCursor)) {
+    if (DUContext *local = top->findContextAt(cursor)) {
+        if (local->owner() && local->owner()->range().contains(cursor)) {
            return DeclarationPointer(local->owner());
         }
-        return DeclarationPointer(local->findDeclarationAt(refCursor));
+        return DeclarationPointer(local->findDeclarationAt(cursor));
     }
     return {};
+}
+
+DeclarationPointer ClangHelpers::findDeclaration(CXCursor cursor, const IncludeFileContexts& includes)
+{
+    auto location = clang_getCursorLocation(cursor);
+    CXFile file = nullptr;
+    clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
+    if (!file) {
+        return {};
+    }
+
+    return findDeclaration(location, includes.value(file));
 }
 
 DeclarationPointer ClangHelpers::findDeclaration(CXType type, const IncludeFileContexts& includes)

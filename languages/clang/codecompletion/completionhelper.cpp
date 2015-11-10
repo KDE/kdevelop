@@ -24,6 +24,7 @@
 #include "../duchain/cursorkindtraits.h"
 #include "../duchain/parsesession.h"
 #include "../duchain/documentfinderhelpers.h"
+#include "../duchain/clanghelpers.h"
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
 #include "../util/clangutils.h"
@@ -292,9 +293,14 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
 
     //TODO Add support for pure virtual functions
 
-    data->prototypes->append(FuncImplementInfo{kind == CXCursor_Constructor,
-                                               kind == CXCursor_Destructor,
-                                               data->templatePrefix, returnType, rest});
+    ReferencedTopDUContext top;
+    {
+        DUChainReadLocker lock;
+        top = DUChain::self()->chainForDocument(ClangString(clang_getFileName(file)).toIndexed());
+    }
+    DeclarationPointer declaration = ClangHelpers::findDeclaration(clang_getCursorLocation(cursor), top);
+    data->prototypes->append(FuncImplementInfo{kind == CXCursor_Constructor, kind == CXCursor_Destructor,
+                                               data->templatePrefix, returnType, rest, declaration});
 
     return CXChildVisit_Continue;
 }

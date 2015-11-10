@@ -166,44 +166,6 @@ private:
     QString m_returnType;
 };
 
-class ImplementsItem : public CompletionItem<CompletionTreeItem>
-{
-public:
-    ImplementsItem(const FuncImplementInfo& item)
-        : CompletionItem<KDevelop::CompletionTreeItem>(
-              item.prototype,
-              i18n("Implement %1", item.isConstructor ? QStringLiteral("<constructor>") :
-                                   item.isDestructor ? QStringLiteral("<destructor>") : item.returnType)
-          )
-        , m_item(item)
-    {
-    }
-
-    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
-    {
-        if (role == Qt::DecorationRole) {
-            if (index.column() == KTextEditor::CodeCompletionModel::Icon) {
-                static const QIcon icon = QIcon::fromTheme(QStringLiteral("CTsuppliers"));
-                return icon;
-            }
-        }
-        return CompletionItem<CompletionTreeItem>::data(index, role, model);
-    }
-
-    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
-    {
-        QString replacement = m_item.templatePrefix;
-        if (!m_item.isDestructor && !m_item.isConstructor) {
-            replacement += m_item.returnType + QLatin1Char(' ');
-        }
-        replacement += m_item.prototype + QLatin1String("\n{\n}\n");
-        view->document()->replaceText(word, replacement);
-    }
-
-private:
-    FuncImplementInfo m_item;
-};
-
 /**
  * Specialized completion item class for items which are represented by a Declaration
  */
@@ -290,12 +252,48 @@ public:
         m_depth = depth;
     }
 
-private:
+protected:
     int m_matchQuality = 0;
     int m_depth = 0;
     QString m_replacement;
 };
 
+class ImplementsItem : public DeclarationItem
+{
+public:
+    static QString replacement(const FuncImplementInfo& info)
+    {
+        QString replacement = info.templatePrefix;
+        if (!info.isDestructor && !info.isConstructor) {
+            replacement += info.returnType + QLatin1Char(' ');
+        }
+        replacement += info.prototype + QLatin1String("\n{\n}\n");
+        return replacement;
+    }
+
+    ImplementsItem(const FuncImplementInfo& item)
+        : DeclarationItem(item.declaration.data(), item.prototype,
+            i18n("Implement %1", item.isConstructor ? QStringLiteral("<constructor>") :
+                                   item.isDestructor ? QStringLiteral("<destructor>") : item.returnType),
+            replacement(item)
+          )
+    {
+    }
+
+    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
+    {
+        if (index.column() == CodeCompletionModel::Arguments) {
+            // our display string already contains the arguments
+            return {};
+        }
+        return DeclarationItem::data(index, role, model);
+    }
+
+    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
+    {
+        view->document()->replaceText(word, m_replacement);
+    }
+};
 
 class ArgumentHintItem : public DeclarationItem
 {
