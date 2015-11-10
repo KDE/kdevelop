@@ -76,13 +76,12 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     connect(m_document.data(), &Document::viewCreated, this, &ProblemHighlighter::viewCreated);
     connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this,
             &ProblemHighlighter::settingsChanged);
-    connect(m_document.data(), &Document::reloaded, this, &ProblemHighlighter::documentReloaded);
+    connect(m_document.data(), &Document::aboutToReload, this, &ProblemHighlighter::clearProblems);
     if (qobject_cast<MovingInterface*>(m_document)) {
         // can't use new signal/slot syntax here, MovingInterface is not a QObject
         connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
-                SLOT(aboutToInvalidateMovingInterfaceContent()));
+                SLOT(clearProblems()));
     }
-    // TODO: this depends on m_document being a KateDocument, should we rely on internals here?
     connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)), this,
             SLOT(aboutToRemoveText(KTextEditor::Range)));
 }
@@ -155,9 +154,6 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     if (!m_document)
         return;
 
-    KTextEditor::MovingInterface* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
-    Q_ASSERT(iface);
-
     const bool hadProblems = !m_problems.isEmpty();
     m_problems = problems;
 
@@ -183,9 +179,16 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
         }
     }
 
+    if (problems.isEmpty()) {
+        return;
+    }
+
     DUChainReadLocker lock;
 
     TopDUContext* top = DUChainUtils::standardContextForUrl(m_document->url());
+
+    KTextEditor::MovingInterface* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
+    Q_ASSERT(iface);
 
     foreach (const IProblem::Ptr problem, problems) {
         if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
@@ -232,13 +235,6 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     }
 }
 
-void ProblemHighlighter::aboutToInvalidateMovingInterfaceContent()
-{
-    qDeleteAll(m_topHLRanges);
-    m_topHLRanges.clear();
-    m_problemsForRanges.clear();
-}
-
 void ProblemHighlighter::aboutToRemoveText(const KTextEditor::Range& range)
 {
     if (range.onSingleLine()) { // no need to optimize this
@@ -257,7 +253,7 @@ void ProblemHighlighter::aboutToRemoveText(const KTextEditor::Range& range)
     }
 }
 
-void ProblemHighlighter::documentReloaded()
+void ProblemHighlighter::clearProblems()
 {
-    setProblems(m_problems);
+    setProblems({});
 }

@@ -40,9 +40,8 @@ public:
 
 private slots:
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);
-    void aboutToInvalidateMovingInterfaceContent();
     void aboutToRemoveText(const KTextEditor::Range& range);
-    void documentReloaded();
+    void clearProblems();
 
 private:
     QPointer<KTextEditor::Document> m_document;
