@@ -66,7 +66,7 @@ TransactionItemView::TransactionItemView( QWidget *parent, const char *name )
     layout->setMargin(0);
     setWidget( mBigBox );
     setWidgetResizable( true );
-    setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+    setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
 }
 
 TransactionItem *TransactionItemView::addTransactionItem( ProgressItem *item, bool first )
@@ -106,34 +106,29 @@ QSize TransactionItemView::minimumSizeHint() const
     int f = 2 * frameWidth();
     // Make room for a vertical scrollbar in all cases, to avoid a horizontal one
     int vsbExt = verticalScrollBar()->sizeHint().width();
-    int minw = topLevelWidget()->width() / 3;
-    int maxh = topLevelWidget()->height() / 2;
     QSize sz( mBigBox->minimumSizeHint() );
-    sz.setWidth( qMax( sz.width(), minw ) + f + vsbExt );
-    sz.setHeight( qMin( sz.height(), maxh ) + f );
+    sz.setWidth( sz.width() + f + vsbExt );
+    sz.setHeight( sz.height() + f );
     return sz;
 }
 
-void TransactionItemView::slotLayoutFirstItem()
+void TransactionItemView::slotItemCompleted(TransactionItem* item)
 {
+    // If completed item is the first, hide separator line for the one that will become first now
+    if (mBigBox->layout()->indexOf(item) == 0) {
+        auto *secondItem = mBigBox->layout()->itemAt(1);
+        if (secondItem) {
+            static_cast<TransactionItem *>(secondItem->widget())->hideHLine();
+        }
+    }
+
+    mBigBox->layout()->removeWidget(item);
+    delete item;
+
     //This slot is called whenever a TransactionItem is deleted, so this is a
     //good place to call updateGeometry(), so our parent takes the new size
     //into account and resizes.
     updateGeometry();
-
-    /*
-     The below relies on some details in Qt's behaviour regarding deleting
-     objects. This slot is called from the destroyed signal of an item just
-     going away. That item is at that point still in the  list of chilren, but
-     since the vtable is already gone, it will have type QObject. The first
-     one with both the right name and the right class therefor is what will
-     be the first item very shortly. That's the one we want to remove the
-     hline for.
-  */
-    TransactionItem *ti = mBigBox->findChild<KDevelop::TransactionItem*>( "TransactionItem" );
-    if ( ti ) {
-        ti->hideHLine();
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -323,10 +318,7 @@ void ProgressDialog::slotTransactionCompleted( ProgressItem *item )
         TransactionItem *ti = mTransactionsToListviewItems[ item ];
         mTransactionsToListviewItems.remove( item );
         ti->setItemComplete();
-        QTimer::singleShot( 3000, ti, SLOT(deleteLater()) );
-        // see the slot for comments as to why that works
-        connect ( ti, &TransactionItem::destroyed,
-                  mScrollView, &TransactionItemView::slotLayoutFirstItem );
+        QTimer::singleShot( 3000, mScrollView, [=] { mScrollView->slotItemCompleted(ti); } );
     }
     // This was the last item, hide.
     if ( mTransactionsToListviewItems.empty() ) {

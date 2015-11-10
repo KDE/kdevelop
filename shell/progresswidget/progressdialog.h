@@ -51,7 +51,7 @@ public:
     QSize minimumSizeHint() const override;
 
 public Q_SLOTS:
-    void slotLayoutFirstItem();
+    void slotItemCompleted(TransactionItem * item);
 
 protected:
     virtual void resizeEvent ( QResizeEvent *event ) override;

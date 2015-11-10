@@ -33,17 +33,22 @@
 #include <QHBoxLayout>
 #include <QResizeEvent>
 #include <QEvent>
+#include <QApplication>
 
 using namespace KDevelop;
 
 OverlayWidget::OverlayWidget( QWidget* alignWidget, QWidget* parent, const char* name )
-    : QWidget( parent ), mAlignWidget( 0 )
+    : QWidget( parent, Qt::Window | Qt::FramelessWindowHint ), mAlignWidget( 0 )
 {
     auto hboxHBoxLayout = new QHBoxLayout(this);
     hboxHBoxLayout->setMargin(0);
 
     setObjectName(name);
     setAlignWidget( alignWidget );
+
+    setWindowFlags(Qt::WindowDoesNotAcceptFocus | windowFlags());
+
+    qApp->installEventFilter(this);
 }
 
 OverlayWidget::~OverlayWidget()
@@ -59,12 +64,10 @@ void OverlayWidget::reposition()
     // We are always above the alignWidget, right-aligned with it.
     p.setX( mAlignWidget->width() - width() );
     p.setY( -height() );
-    // Position in the toplevelwidget's coordinates
-    QPoint pTopLevel = mAlignWidget->mapTo( topLevelWidget(), p );
-    // Position in the widget's parentWidget coordinates
-    QPoint pParent = parentWidget()->mapFrom( topLevelWidget(), pTopLevel );
+    // Position in the global coordinates
+    QPoint global = mAlignWidget->mapToGlobal( p );
     // Move 'this' to that position.
-    move( pParent );
+    move( global );
 }
 
 void OverlayWidget::setAlignWidget( QWidget * w )
@@ -72,23 +75,19 @@ void OverlayWidget::setAlignWidget( QWidget * w )
     if (w == mAlignWidget)
         return;
 
-    if (mAlignWidget)
-        mAlignWidget->removeEventFilter(this);
-
     mAlignWidget = w;
-
-    if (mAlignWidget)
-        mAlignWidget->installEventFilter(this);
 
     reposition();
 }
 
 bool OverlayWidget::eventFilter( QObject* o, QEvent* e)
 {
-    if ( o == mAlignWidget &&
-         ( e->type() == QEvent::Move || e->type() == QEvent::Resize ) ) {
+    if (e->type() == QEvent::Move || e->type() == QEvent::Resize) {
         reposition();
+    } else if (e->type() == QEvent::Close) {
+        close();
     }
+
     return QWidget::eventFilter(o,e);
 }
 
