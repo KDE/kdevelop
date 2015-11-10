@@ -1276,13 +1276,24 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
     }
     for (const auto &contextUses : m_uses) {
         for (const auto &cursor : contextUses.second) {
-            auto referenced = clang_getCanonicalCursor(referencedCursor(cursor));
+            auto referenced = referencedCursor(cursor);
             if (clang_Cursor_isNull(referenced)) {
                 continue;
             }
+            // first, try the canonical referenced cursor
+            // this is important to get the correct function declaration e.g.
+            auto canonicalReferenced = clang_getCanonicalCursor(referenced);
+            auto used = findDeclaration(canonicalReferenced);
 
-            auto used = findDeclaration(referenced);
             if (!used) {
+                // if the above failed, try the non-canonicalized version as a fallback
+                // this is required for friend declarations that occur before
+                // the real declaration. there, the canonical cursor points to
+                // the friend declaration which is not what we are looking for
+                used = findDeclaration(referenced);
+            }
+
+            if (!used) { // as a last resort, try to resolve the forward declaration
                 DUChainReadLocker lock;
                 DeclarationPointer decl = ClangHelpers::findForwardDeclaration(clang_getCursorType(referenced), contextUses.first, referenced);
                 used = decl;

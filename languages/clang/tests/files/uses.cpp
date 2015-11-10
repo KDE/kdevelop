@@ -102,3 +102,16 @@ void castUse(Bar bar)
 {
     static_cast<int>(bar.member);
 }
+
+/// "useCount" : 0
+struct FriendFoo
+{
+    friend class FriendBar;
+};
+
+/// "useCount" : 1
+class FriendBar
+{
+};
+
+FriendBar friendBar;
