@@ -105,6 +105,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/templatepage.ui
 )
 
+qt5_add_resources(KDevPlatformShell_LIB_SRCS kdevplatformshell.qrc)
 kdevplatform_add_library(KDevPlatformShell SOURCES ${KDevPlatformShell_LIB_SRCS})
 target_link_libraries(KDevPlatformShell
 LINK_PUBLIC
@@ -167,8 +168,3 @@ install(FILES
     filteredproblemstore.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/shell COMPONENT Devel
 )
-
-install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevdebugger )
-install( FILES kdevsessionui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevsession )
-install( FILES kdevsourceformatter.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevsourceformatter )
-

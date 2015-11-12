@@ -18,10 +18,7 @@ set(kdevclassbrowser_PART_SRCS
     classtree.cpp
 )
 
+qt5_add_resources(kdevclassbrowser_PART_SRCS kdevclassbrowser.qrc)
 kdevplatform_add_plugin(kdevclassbrowser JSON kdevclassbrowser.json SOURCES ${kdevclassbrowser_PART_SRCS})
 
 target_link_libraries(kdevclassbrowser KF5::TextEditor KDev::Util KDev::Language KDev::Interfaces KDev::Project)
-
-########### install files ###############
-
-install(FILES kdevclassbrowser.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevclassbrowser)

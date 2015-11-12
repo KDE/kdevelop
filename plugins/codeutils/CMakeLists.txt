@@ -9,6 +9,7 @@ set(kdevcodeutils_PART_SRCS
 
 include_directories(CMAKE_CURRENT_BINARY_DIR)
 
+qt5_add_resources(kdevcodeutils_PART_SRCS kdevcodeutils.qrc)
 kdevplatform_add_plugin(kdevcodeutils JSON kdevcodeutils.json SOURCES ${kdevcodeutils_PART_SRCS})
 
 target_link_libraries(kdevcodeutils
@@ -21,7 +22,3 @@ target_link_libraries(kdevcodeutils
 )
 
 add_subdirectory(doc_templates)
-
-########### install files ###############
-
-install( FILES kdevcodeutils.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevcodeutils )

@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/kxmlgui5/kdevcontextbrowser">
+        <file>kdevcontextbrowser.rc</file>
+    </qresource>
+</RCC>

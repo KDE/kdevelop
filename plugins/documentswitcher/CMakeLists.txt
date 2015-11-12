@@ -8,12 +8,7 @@ set(kdevdocumentswitcher_PART_SRCS
     documentswitchertreeview.cpp
 )
 
+qt5_add_resources(kdevdocumentswitcher_PART_SRCS kdevdocumentswitcher.qrc)
 kdevplatform_add_plugin(kdevdocumentswitcher JSON kdevdocumentswitcher.json SOURCES ${kdevdocumentswitcher_PART_SRCS})
 
 target_link_libraries(kdevdocumentswitcher KDev::Interfaces KDev::Sublime KDev::Interfaces )
-
-########### install files ###############
-
-install( FILES kdevdocumentswitcher.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevdocumentswitcher )
-
-
