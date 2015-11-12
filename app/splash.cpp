@@ -38,10 +38,9 @@ KDevSplashScreen::KDevSplashScreen()
     setFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     setResizeMode(QQuickView::SizeViewToRootObject);
 
-    QString splashScript = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevelop/splash.qml");
-    setSource(QUrl::fromLocalFile(splashScript));
+    setSource(QUrl(QStringLiteral("qrc:/kdevelop/splash.qml")));
     if (!rootObject()) {
-        qWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml" << splashScript;
+        qWarning() << "Could not load KDevelop splash screen";
         hide(); // hide instead of showing garbage
         return;
     }

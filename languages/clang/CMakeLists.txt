@@ -35,6 +35,8 @@ set(kdevclangsupport_SRCS
     clanghighlighting.cpp
 )
 
+qt5_add_resources(kdevclangsupport_SRCS kdevclangsupport.qrc)
+
 kdevplatform_add_plugin(kdevclangsupport JSON kdevclangsupport.json SOURCES ${kdevclangsupport_SRCS})
 
 target_link_libraries(kdevclangsupport
@@ -49,5 +51,3 @@ target_link_libraries(kdevclangsupport
     KDev::Util
     KDev::Project
 )
-
-install(FILES kdevclangsupport.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangsupport)

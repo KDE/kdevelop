@@ -103,6 +103,7 @@ set(kdevgdb_UI
 
 kde_enable_exceptions()
 ki18n_wrap_ui(kdevgdb_SRCS ${kdevgdb_UI})
+qt5_add_resources(kdevgdb_SRCS kdevgdb.qrc)
 kdevplatform_add_plugin(kdevgdb JSON kdevgdb.json SOURCES ${kdevgdb_SRCS})
 target_link_libraries(kdevgdb
     KDev::Sublime
@@ -136,7 +137,3 @@ ecm_add_test(${test_gdb_SRCS}
 if (HAVE_PATH_WITH_SPACES_TEST)
     set_target_properties(test_gdb PROPERTIES COMPILE_FLAGS "-DHAVE_PATH_WITH_SPACES_TEST")
 endif()
-
-########### install files ###############
-
-install( FILES kdevgdbui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevgdb )
