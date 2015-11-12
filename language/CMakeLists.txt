@@ -175,6 +175,7 @@ ki18n_wrap_ui(KDevPlatformLanguage_LIB_SRCS
     codegen/progressdialogs/refactoringdialog.ui)
 
 kdevplatform_add_library(KDevPlatformLanguage SOURCES ${KDevPlatformLanguage_LIB_SRCS})
+target_include_directories(KDevPlatformLanguage PRIVATE ${Boost_INCLUDE_DIRS})
 target_link_libraries(KDevPlatformLanguage LINK_PUBLIC
         KF5::ThreadWeaver
         KDev::Interfaces

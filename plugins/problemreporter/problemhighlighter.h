@@ -40,9 +40,8 @@ public:
 
 private slots:
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);
-    void aboutToInvalidateMovingInterfaceContent();
     void aboutToRemoveText(const KTextEditor::Range& range);
-    void documentReloaded();
+    void clearProblems();
 
 private:
     QPointer<KTextEditor::Document> m_document;
@@ -65,6 +64,7 @@ public:
 
 private:
     ProblemHighlighter* m_highlighter;
+    KTextEditor::Range m_currentHintRange;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H

@@ -31,6 +31,7 @@
 class QItemSelectionModel;
 class QString;
 class QResizeEvent;
+class QSortFilterProxyModel;
 
 namespace KDevelop
 {
@@ -56,6 +57,7 @@ namespace KDevelop
         QItemSelectionModel* selection_;
         int itemHeight_;
         AsyncTreeView* view_;
+        QSortFilterProxyModel* proxy_;
     };
 }
 

@@ -654,9 +654,9 @@ void TopDUContextDynamicData::store() {
     return;
   }
 
-    ///@todo Save the meta-data into a repository, and only the actual content data into a file.
-    ///      This will make saving+loading more efficient, and will reduce the disk-usage.
-    ///      Then we also won't need to load the data if only the meta-data changed.
+  ///@todo Save the meta-data into a repository, and only the actual content data into a file.
+  ///      This will make saving+loading more efficient, and will reduce the disk-usage.
+  ///      Then we also won't need to load the data if only the meta-data changed.
   if(!m_dataLoaded)
     loadData();
 
@@ -671,7 +671,7 @@ void TopDUContextDynamicData::store() {
   Q_ASSERT(m_topContext->d_func()->m_ownIndex == m_topContext->ownIndex());
 
   uint topContextDataSize = DUChainItemSystem::self().dynamicSize(*m_topContext->d_func());
-  m_topContextData.append( qMakePair(QByteArray(DUChainItemSystem::self().dynamicSize(*m_topContext->d_func()), topContextDataSize), (uint)0) );
+  m_topContextData.append( qMakePair(QByteArray(DUChainItemSystem::self().dynamicSize(*m_topContext->d_func()), topContextDataSize), 0u) );
   uint actualTopContextDataSize = 0;
 
   if (contentDataChanged) {
@@ -687,8 +687,7 @@ void TopDUContextDynamicData::store() {
     foreach(const ArrayWithPosition &array, oldData)
         newDataSize += array.second;
 
-    if(newDataSize < 10000)
-      newDataSize = 10000;
+    newDataSize = std::max(newDataSize, 10000u);
 
     //We always put 1 byte to the front, so we don't have zero data-offsets, since those are used for "invalid".
     uint currentDataOffset = 1;
@@ -743,12 +742,13 @@ void TopDUContextDynamicData::store() {
 TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(const ItemDataInfo& info, const DUChainBaseData* data, uint& totalDataOffset) {
   ItemDataInfo ret(info);
   Q_ASSERT(info.dataOffset);
-  int size = DUChainItemSystem::self().dynamicSize(*data);
+  const auto size = DUChainItemSystem::self().dynamicSize(*data);
   Q_ASSERT(size);
 
-  if(m_data.back().first.size() - int(m_data.back().second) < size)
+  if(m_data.back().first.size() - m_data.back().second < size) {
       //Create a new m_data item
-      m_data.append( qMakePair(QByteArray(size > 10000 ? size : 10000, 0), 0u) );
+      m_data.append( qMakePair(QByteArray(std::max(size, 10000u), 0), 0u) );
+  }
 
   ret.dataOffset = totalDataOffset;
 
@@ -756,11 +756,10 @@ TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(con
   m_data.back().second += size;
   totalDataOffset += size;
 
-  DUChainBaseData& target(*reinterpret_cast<DUChainBaseData*>(m_data.back().first.data() + pos));
-  memcpy(&target, data, size);
+  auto target = reinterpret_cast<DUChainBaseData*>(m_data.back().first.data() + pos);
+  memcpy(target, data, size);
 
   verifyDataInfo(ret, m_data);
-
   return ret;
 }
 

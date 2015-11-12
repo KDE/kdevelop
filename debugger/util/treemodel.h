@@ -50,6 +50,10 @@ public:
     void setEditable(bool);
     TreeItem* root() const;
 
+    enum {
+        ItemRole = Qt::UserRole,
+    };
+
 public: // QAbstractItemModel overrides
     QVariant data(const QModelIndex &index, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;

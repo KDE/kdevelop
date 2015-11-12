@@ -38,6 +38,7 @@
 #include <KTextEditor/View>
 #include <KLocalizedString>
 #include <QPainter>
+#include <QSortFilterProxyModel>
 
 #include "variablecollection.h"
 #include "../breakpoint/breakpointmodel.h"
@@ -110,7 +111,11 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
-    view_ = new AsyncTreeView(model_, this);
+    // setup proxy model
+    proxy_ = new QSortFilterProxyModel;
+    view_ = new AsyncTreeView(model_, proxy_, this);
+    proxy_->setSourceModel(model_);
+    view_->setModel(proxy_);
     view_->header()->resizeSection(0, 150);
     view_->header()->resizeSection(1, 90);
     view_->setSelectionBehavior(QAbstractItemView::SelectRows);
