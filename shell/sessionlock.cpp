@@ -79,7 +79,7 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
     const QString lockFilename = lockFileForSession( sessionId );
     QSharedPointer<QLockFile> lockFile(new QLockFile( lockFilename ));
 
-    bool canLockDBus = !connectionInterface->isServiceRegistered( service );
+    bool canLockDBus = connectionInterface && !connectionInterface->isServiceRegistered( service );
     bool lockedDBus = false;
 
     // Lock D-Bus if we can and we need to
