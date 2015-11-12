@@ -74,6 +74,7 @@ void CodeCompletion::viewCreated(KTextEditor::Document * document, KTextEditor::
   if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
     cc->registerCompletionModel(m_model);
     qCDebug(LANGUAGE) << "Registered completion model";
+    emit registeredToView(view);
   }
 }
 
@@ -96,9 +97,12 @@ void CodeCompletion::textDocumentCreated(KDevelop::IDocument* document)
 
 void CodeCompletion::unregisterDocument(Document* textDocument)
 {
-  foreach (KTextEditor::View* view, textDocument->views())
-    if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view))
+  foreach (KTextEditor::View* view, textDocument->views()) {
+    if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
       cc->unregisterCompletionModel(m_model);
+      emit unregisteredFromView(view);
+    }
+  }
 
   disconnect(textDocument, &Document::viewCreated, this, &CodeCompletion::viewCreated);
 }
