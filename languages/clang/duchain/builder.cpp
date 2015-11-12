@@ -356,7 +356,7 @@ struct Visitor
                 if (decl && decl->indexedIdentifier() == indexedId) {
                     decl->setRange(range);
                     setDeclData<CK>(cursor, decl);
-                    m_cursorToDeclarationCache[clang_hashCursor(cursor)] = decl;
+                    m_cursorToDeclarationCache[cursor] = decl;
                     m_parentContext->previousChildDeclarations.erase(it);
                     return decl;
                 }
@@ -365,7 +365,7 @@ struct Visitor
         }
         auto decl = new DeclType(range, nullptr);
         decl->setIdentifier(id);
-        m_cursorToDeclarationCache[clang_hashCursor(cursor)] = decl;
+        m_cursorToDeclarationCache[cursor] = decl;
         setDeclData<CK>(cursor, decl);
         {
             DUChainWriteLocker lock;
@@ -762,7 +762,7 @@ struct Visitor
     std::unordered_map<DUContext*, std::vector<CXCursor>> m_uses;
     /// At these location offsets (cf. @ref clang_getExpansionLocation) we encountered macro expansions
     QSet<unsigned int> m_macroExpansionLocations;
-    mutable QHash<unsigned int, DeclarationPointer> m_cursorToDeclarationCache;
+    mutable QHash<CXCursor, DeclarationPointer> m_cursorToDeclarationCache;
     CurrentContext *m_parentContext;
 
     const bool m_update;
@@ -1139,8 +1139,7 @@ CXChildVisitResult Visitor::buildCXXBaseSpecifier(CXCursor cursor)
 
 DeclarationPointer Visitor::findDeclaration(CXCursor cursor) const
 {
-    const auto cursorHash = clang_hashCursor(cursor);
-    const auto it = m_cursorToDeclarationCache.constFind(cursorHash);
+    const auto it = m_cursorToDeclarationCache.constFind(cursor);
     if (it != m_cursorToDeclarationCache.constEnd()) {
         return *it;
     }
@@ -1148,7 +1147,7 @@ DeclarationPointer Visitor::findDeclaration(CXCursor cursor) const
     // fallback, and cache result
     auto decl = ClangHelpers::findDeclaration(cursor, m_includes);
 
-    m_cursorToDeclarationCache.insert(cursorHash, decl);
+    m_cursorToDeclarationCache.insert(cursor, decl);
     return decl;
 }
 
@@ -1277,13 +1276,24 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
     }
     for (const auto &contextUses : m_uses) {
         for (const auto &cursor : contextUses.second) {
-            auto referenced = clang_getCanonicalCursor(referencedCursor(cursor));
+            auto referenced = referencedCursor(cursor);
             if (clang_Cursor_isNull(referenced)) {
                 continue;
             }
+            // first, try the canonical referenced cursor
+            // this is important to get the correct function declaration e.g.
+            auto canonicalReferenced = clang_getCanonicalCursor(referenced);
+            auto used = findDeclaration(canonicalReferenced);
 
-            auto used = findDeclaration(referenced);
             if (!used) {
+                // if the above failed, try the non-canonicalized version as a fallback
+                // this is required for friend declarations that occur before
+                // the real declaration. there, the canonical cursor points to
+                // the friend declaration which is not what we are looking for
+                used = findDeclaration(referenced);
+            }
+
+            if (!used) { // as a last resort, try to resolve the forward declaration
                 DUChainReadLocker lock;
                 DeclarationPointer decl = ClangHelpers::findForwardDeclaration(clang_getCursorType(referenced), contextUses.first, referenced);
                 used = decl;

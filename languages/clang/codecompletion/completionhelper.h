@@ -45,6 +45,7 @@ struct FuncImplementInfo
     QString templatePrefix;
     QString returnType;
     QString prototype;
+    KDevelop::DeclarationPointer declaration;
 };
 
 namespace KTextEditor {

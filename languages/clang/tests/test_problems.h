@@ -45,9 +45,8 @@ private slots:
     void testTodoProblems_data();
 
     void testMissingInclude();
-
-private:
-    QList<KDevelop::ProblemPointer> parse(const QByteArray& code);
+    void testSeverity();
+    void testSeverity_data();
 };
 
 #endif // TEST_PROBLEMS_H

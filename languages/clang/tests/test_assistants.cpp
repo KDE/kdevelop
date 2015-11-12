@@ -231,8 +231,11 @@ void TestAssistants::testRenameAssistant_data()
     QTest::newRow("Prepend Text")
         << "int foo(int i)\n { i = 0; return i; }"
         << "i"
-        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,12,0,12), "u", "ui"))
-        << "int foo(int ui)\n { ui = 0; return ui; }";
+        << QList<StateChange>{
+            StateChange(Testbed::CppDoc, Range(0,12,0,12), "u", "ui"),
+            StateChange(Testbed::CppDoc, Range(0,13,0,13), "z", "uzi"),
+        }
+        << "int foo(int uzi)\n { uzi = 0; return uzi; }";
 
     QTest::newRow("Append Text")
         << "int foo(int i)\n { i = 0; return i; }"

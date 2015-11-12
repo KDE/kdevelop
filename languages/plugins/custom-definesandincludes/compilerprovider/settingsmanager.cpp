@@ -55,7 +55,11 @@ const QString compilerNameKey = QLatin1String( "Name" );
 const QString compilerPathKey = QLatin1String( "Path" );
 const QString compilerTypeKey = QLatin1String( "Type" );
 
-QString parserArguments(){ return QStringLiteral("parserArguments"); }
+QString parserArguments()
+{
+    return QStringLiteral("parserArguments");
+}
+
 }
 
 // the grouplist is randomly sorted b/c it uses QSet internally
@@ -66,7 +70,10 @@ QStringList sorted(QStringList list)
     return list;
 }
 
-QString defaultArguments(){ return QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11"); }
+QString defaultArguments()
+{
+    return QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11");
+}
 
 CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
 {

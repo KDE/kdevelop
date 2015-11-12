@@ -44,6 +44,16 @@ class RangeInRevision;
 class IndexedString;
 }
 
+inline uint qHash(const CXCursor& cursor) noexcept
+{
+    return clang_hashCursor(cursor);
+}
+
+inline bool operator==(const CXCursor& lhs, const CXCursor& rhs) noexcept
+{
+    return clang_equalCursors(lhs, rhs);
+}
+
 class ClangString
 {
 public:

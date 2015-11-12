@@ -1242,7 +1242,7 @@ void TestDUChain::testUsesCreatedForDeclarations()
             using NS::Class;
 
             Class function();
-            NS::Class function(){}
+            NS::Class function() { return {}; }
 
             int main () {
                 functionTemplate(int());

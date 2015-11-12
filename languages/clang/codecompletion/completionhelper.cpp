@@ -24,6 +24,7 @@
 #include "../duchain/cursorkindtraits.h"
 #include "../duchain/parsesession.h"
 #include "../duchain/documentfinderhelpers.h"
+#include "../duchain/clanghelpers.h"
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
 #include "../util/clangutils.h"
@@ -149,7 +150,11 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
     switch(clang_getCursorKind(cursor)) {
     case CXCursor_TemplateTypeParameter:
         templateParam = ClangString(clang_getCursorSpelling(cursor)).toString();
-        info->templateTypeMap.insert(templateParam, info->templateTypes.at(info->templateTypeMap.size()));
+        // TODO: this is probably just a hotfix, find a proper solution to
+        //       https://bugs.kde.org/show_bug.cgi?id=355163
+        if (info->templateTypes.size() > info->templateTypeMap.size()) {
+            info->templateTypeMap.insert(templateParam, info->templateTypes.at(info->templateTypeMap.size()));
+        }
         return CXChildVisit_Continue;
     case CXCursor_CXXBaseSpecifier:
         processBaseClass(cursor, info->functions);
@@ -185,6 +190,28 @@ CXChildVisitResult findBaseVisitor(CXCursor cursor, CXCursor /*parent*/, CXClien
     }
 
     return CXChildVisit_Continue;
+}
+
+// TODO: make sure we only skip this in classes that actually inherit QObject
+bool isQtMocFunction(CXCursor cursor)
+{
+    static const QByteArray mocFunctions[] = {
+        QByteArrayLiteral("metaObject"),
+        QByteArrayLiteral("qt_metacast"),
+        QByteArrayLiteral("qt_metacall"),
+        QByteArrayLiteral("qt_static_metacall"),
+    };
+    const ClangString function(clang_getCursorSpelling(cursor));
+    auto it = std::find(std::begin(mocFunctions), std::end(mocFunctions), function.toByteArray());
+    if (it != std::end(mocFunctions)) {
+        auto range = ClangRange(clang_getCursorExtent(cursor)).toRange();
+        // tokenizing the above range fails for some reason, but
+        // if the function comes from a range that happens to be just as wide
+        // as the expected Q_OBJECT macro, then we assume this is a moc function
+        // and skip it.
+        return range.onSingleLine() && range.columnWidth() == strlen("Q_OBJECT");
+    }
+    return false;
 }
 
 CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
@@ -273,6 +300,11 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     if (ClangUtils::isExplicitlyDefaultedOrDeleted(cursor)) {
         return CXChildVisit_Continue;
     }
+
+    if (isQtMocFunction(cursor)) {
+        return CXChildVisit_Continue;
+    }
+
     //TODO Add support for pure virtual functions
 
     auto scope = data->scopePrefix;
@@ -292,9 +324,14 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
 
     //TODO Add support for pure virtual functions
 
-    data->prototypes->append(FuncImplementInfo{kind == CXCursor_Constructor,
-                                               kind == CXCursor_Destructor,
-                                               data->templatePrefix, returnType, rest});
+    ReferencedTopDUContext top;
+    {
+        DUChainReadLocker lock;
+        top = DUChain::self()->chainForDocument(ClangString(clang_getFileName(file)).toIndexed());
+    }
+    DeclarationPointer declaration = ClangHelpers::findDeclaration(clang_getCursorLocation(cursor), top);
+    data->prototypes->append(FuncImplementInfo{kind == CXCursor_Constructor, kind == CXCursor_Destructor,
+                                               data->templatePrefix, returnType, rest, declaration});
 
     return CXChildVisit_Continue;
 }

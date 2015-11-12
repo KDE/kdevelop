@@ -197,7 +197,10 @@ void PreprocessJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
             }
           } else if (fileFeaturesSatisfied && !slaveFeaturesSatisfied) {
             // This is strange, because importees should not require more features than the importer
-            qCDebug(CPP) << "Slaves require more features than file itself" << parentJob()->slaveMinimumFeatures() << updatingEnvironmentFile->features() << parentJob()->document().toUrl();
+            qCDebug(CPP) << "Slaves require more features than file itself"
+                         << static_cast<int>(parentJob()->slaveMinimumFeatures())
+                         << static_cast<int>(updatingEnvironmentFile->features())
+                         << parentJob()->document().toUrl();
           }
         }
     }

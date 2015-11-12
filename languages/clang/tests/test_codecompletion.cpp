@@ -53,6 +53,9 @@ Q_DECLARE_METATYPE(KTextEditor::Cursor);
 
 QTEST_MAIN(TestCodeCompletion);
 
+static const auto NoMacroOrBuiltin = ClangCodeCompletionContext::ContextFilters(
+    ClangCodeCompletionContext::NoBuiltins | ClangCodeCompletionContext::NoMacros);
+
 using namespace KDevelop;
 
 using ClangCodeCompletionItemTester = CodeCompletionItemTester<ClangCodeCompletionContext>;
@@ -118,10 +121,17 @@ void TestCodeCompletion::cleanupTestCase()
 
 namespace {
 
+struct NoopTestFunction
+{
+    void operator()(const ClangCodeCompletionItemTester& /*tester*/) const
+    {
+    }
+};
+
+template<typename CustomTestFunction = NoopTestFunction>
 void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionItems& expectedCompletionItems,
-                           const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
-                                ClangCodeCompletionContext::NoBuiltins |
-                                ClangCodeCompletionContext::NoMacros))
+                           const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin,
+                           CustomTestFunction customTestFunction = {})
 {
     DUChainReadLocker lock;
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
@@ -153,22 +163,22 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
         qDebug() << "different results:\nactual:" << tester.names << "\nexpected:" << expectedCompletionItems.completions;
     }
     QCOMPARE(tester.names, expectedCompletionItems.completions);
+
+    customTestFunction(tester);
 }
 
+template<typename CustomTestFunction = NoopTestFunction>
 void executeCompletionTest(const QString& code, const CompletionItems& expectedCompletionItems,
-                           const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
-                                ClangCodeCompletionContext::NoBuiltins |
-                                ClangCodeCompletionContext::NoMacros))
+                           const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin,
+                           CustomTestFunction customTestFunction = {})
 {
     TestFile file(code, "cpp");
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
-    executeCompletionTest(file.topContext(), expectedCompletionItems, filters);
+    executeCompletionTest(file.topContext(), expectedCompletionItems, filters, customTestFunction);
 }
 
 void executeCompletionPriorityTest(const QString& code, const CompletionPriorityItems& expectedCompletionItems,
-                           const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
-                                ClangCodeCompletionContext::NoBuiltins |
-                                ClangCodeCompletionContext::NoMacros))
+                           const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin)
 {
     TestFile file(code, "cpp");
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
@@ -205,9 +215,7 @@ void executeCompletionPriorityTest(const QString& code, const CompletionPriority
 }
 
 void executeMemberAccessReplacerTest(const QString& code, const CompletionItems& expectedCompletionItems,
-                                     const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
-                                            ClangCodeCompletionContext::NoBuiltins |
-                                            ClangCodeCompletionContext::NoMacros))
+                                     const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin)
 {
     TestFile file(code, "cpp");
 
@@ -447,7 +455,7 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "instance.itemT", "main",
             "pInstance", "pInstance->itemT",
         }};
-        QTest::newRow("look-ahead item access")
+    QTest::newRow("look-ahead item access")
         << "class Class { public: int publicInt; protected: int protectedInt; private: int privateInt;};"
            "int main() {Class cl; int i =\n "
         << CompletionItems{{1, 0}, {
@@ -456,7 +464,7 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "i", "main",
         }};
 
-        QTest::newRow("look-ahead auto item")
+    QTest::newRow("look-ahead auto item")
         << "struct LookAhead { int intItem; };"
            "int main() {auto instance = LookAhead(); int i = \n "
         << CompletionItems{{1, 0}, {
@@ -715,6 +723,21 @@ void TestCodeCompletion::testImplement_data()
            "  ~Foo() =default;\n"
            "};\n"
         << CompletionItems{{5,1}, {"Foo::Foo()"}};
+
+    QTest::newRow("bug355163")
+        << R"(
+                #include <type_traits>
+                namespace test {
+
+                template<typename T, typename U>
+                struct IsSafeConversion : public std::is_same<T, typename std::common_type<T, U>::type>
+                {
+
+                };
+
+                } // namespace test
+            )"
+        << CompletionItems{{7,0}, {}};
 }
 
 void TestCodeCompletion::testImplementOtherFile()
@@ -800,6 +823,30 @@ void TestCodeCompletion::testIncludePathCompletion_data()
                               << QString("bar/") << QString("#include \"foo/bar/\"");
 }
 
+struct DeleteDocument
+{
+    void operator()(KTextEditor::View* view) const
+    {
+        delete view->document();
+    }
+};
+
+static std::unique_ptr<KTextEditor::View, DeleteDocument> createView(const QUrl& url, QObject* parent)
+{
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
+    Q_ASSERT(editor);
+
+    auto doc = editor->createDocument(parent);
+    Q_ASSERT(doc);
+    bool opened = doc->openUrl(url);
+    Q_ASSERT(opened);
+    Q_UNUSED(opened);
+
+    auto view = doc->createView(nullptr);
+    Q_ASSERT(view);
+    return std::unique_ptr<KTextEditor::View, DeleteDocument>(view);
+}
+
 void TestCodeCompletion::testIncludePathCompletion()
 {
     QFETCH(QString, code);
@@ -818,16 +865,11 @@ void TestCodeCompletion::testIncludePathCompletion()
     auto item = tester.findItem(itemId);
     QVERIFY(item);
 
-    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
-    QVERIFY(editor);
-
-    auto doc = std::unique_ptr<KTextEditor::Document>(editor->createDocument(this));
-    QVERIFY(doc.get());
-    QVERIFY(doc->openUrl(file.url().toUrl()));
-
-    QWidget parent;
-    auto view = doc->createView(&parent);
-    item->execute(view, KTextEditor::Range(cursor, cursor));
+    auto view = createView(file.url().toUrl(), this);
+    qDebug() << view.get();
+    QVERIFY(view.get());
+    auto doc = view->document();
+    item->execute(view.get(), KTextEditor::Range(cursor, cursor));
     QCOMPARE(doc->text(), result);
 
     const auto newCursor = view->cursorPosition();
@@ -866,9 +908,7 @@ void TestCodeCompletion::testOverloadedFunctions()
     lock.unlock();
 
     const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 0}, QString());
-    context->setFilters(ClangCodeCompletionContext::ContextFilters(
-                            ClangCodeCompletionContext::NoBuiltins |
-                            ClangCodeCompletionContext::NoMacros));
+    context->setFilters(NoMacroOrBuiltin);
     lock.lock();
     const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
     QCOMPARE(tester.items.size(), 3);
@@ -957,9 +997,7 @@ void TestCodeCompletion::testVariableScope()
     lock.unlock();
 
     const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {2, 0}, QString());
-    context->setFilters(ClangCodeCompletionContext::ContextFilters(
-                            ClangCodeCompletionContext::NoBuiltins |
-                            ClangCodeCompletionContext::NoMacros));
+    context->setFilters(NoMacroOrBuiltin);
     lock.lock();
     const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
 
@@ -1045,9 +1083,7 @@ void TestCodeCompletion::testArgumentHintCompletionDefaultParameters()
     lock.unlock();
 
     const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 2}, QString());
-    context->setFilters(ClangCodeCompletionContext::ContextFilters(
-                            ClangCodeCompletionContext::NoBuiltins |
-                            ClangCodeCompletionContext::NoMacros));
+    context->setFilters(NoMacroOrBuiltin);
     lock.lock();
     const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
     QExplicitlySharedDataPointer<KDevelop::CompletionTreeItem> f;
@@ -1063,4 +1099,41 @@ void TestCodeCompletion::testArgumentHintCompletionDefaultParameters()
 
     const QString itemDisplay = tester.itemData(f).toString() + tester.itemData(f, KTextEditor:: CodeCompletionModel::Arguments).toString();
     QCOMPARE(QStringLiteral("f(int i, int j, double k)"), itemDisplay);
+}
+
+void TestCodeCompletion::testCompleteFunction()
+{
+    QFETCH(QString, code);
+    QFETCH(CompletionItems, expectedItems);
+    QFETCH(QString, itemToExecute);
+    QFETCH(QString, expectedCode);
+
+    auto executeItem = [=] (const ClangCodeCompletionItemTester& tester) {
+        auto item = tester.findItem(itemToExecute);
+        QVERIFY(item);
+        auto view = createView(tester.completionContext->duContext()->url().toUrl(), this);
+        item->execute(view.get(), view->document()->wordRangeAt(expectedItems.position));
+        QCOMPARE(view->document()->text(), expectedCode);
+    };
+    executeCompletionTest(code, expectedItems, NoMacroOrBuiltin, executeItem);
+}
+
+void TestCodeCompletion::testCompleteFunction_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionItems>("expectedItems");
+    QTest::addColumn<QString>("itemToExecute");
+    QTest::addColumn<QString>("expectedCode");
+
+    QTest::newRow("add-parens")
+        << "int foo();\nint main() {\n\n}"
+        << CompletionItems({2, 0}, {"foo", "main"})
+        << "foo"
+        << "int foo();\nint main() {\nfoo()\n}";
+
+    QTest::newRow("keep-parens")
+        << "int foo();\nint main() {\nfoo();\n}"
+        << CompletionItems({2, 0}, {"foo", "main"})
+        << "main"
+        << "int foo();\nint main() {\nmain();\n}";
 }
