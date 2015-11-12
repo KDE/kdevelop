@@ -565,8 +565,6 @@ bool TextDocument::close(DocumentSaveMode mode)
 Sublime::View* TextDocument::newView(Sublime::Document* doc)
 {
     Q_UNUSED(doc);
-
-    emit viewNumberChanged(this);
     return new TextView(this);
 }
 
