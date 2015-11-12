@@ -723,6 +723,21 @@ void TestCodeCompletion::testImplement_data()
            "  ~Foo() =default;\n"
            "};\n"
         << CompletionItems{{5,1}, {"Foo::Foo()"}};
+
+    QTest::newRow("bug355163")
+        << R"(
+                #include <type_traits>
+                namespace test {
+
+                template<typename T, typename U>
+                struct IsSafeConversion : public std::is_same<T, typename std::common_type<T, U>::type>
+                {
+
+                };
+
+                } // namespace test
+            )"
+        << CompletionItems{{7,0}, {}};
 }
 
 void TestCodeCompletion::testImplementOtherFile()

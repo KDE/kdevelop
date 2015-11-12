@@ -150,7 +150,11 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
     switch(clang_getCursorKind(cursor)) {
     case CXCursor_TemplateTypeParameter:
         templateParam = ClangString(clang_getCursorSpelling(cursor)).toString();
-        info->templateTypeMap.insert(templateParam, info->templateTypes.at(info->templateTypeMap.size()));
+        // TODO: this is probably just a hotfix, find a proper solution to
+        //       https://bugs.kde.org/show_bug.cgi?id=355163
+        if (info->templateTypes.size() > info->templateTypeMap.size()) {
+            info->templateTypeMap.insert(templateParam, info->templateTypes.at(info->templateTypeMap.size()));
+        }
         return CXChildVisit_Continue;
     case CXCursor_CXXBaseSpecifier:
         processBaseClass(cursor, info->functions);
