@@ -33,6 +33,7 @@ ecm_install_icons(ICONS ${kdevelop_ICONS}
 ecm_add_app_icon(kdevelop_SRCS ICONS
     ${kdevelop_ICONS})
 
+qt5_add_resources(kdevelop_SRCS kdevelop.qrc)
 add_executable(kdevelop ${kdevelop_SRCS} )
 
 target_link_libraries(kdevelop
@@ -80,9 +81,6 @@ endif (APPLE)
 
 install( PROGRAMS kdevelop.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
 install( PROGRAMS kdevelop_ps.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
-install( FILES kdeveloprc DESTINATION ${KDE_INSTALL_CONFDIR} )
-install( FILES kdevelopui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevelop )
 install( FILES kdevelop.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR} )
 install( FILES kdevelop.xml kdevelopinternal.xml DESTINATION ${KDE_INSTALL_MIMEDIR} )
-install( FILES splash.qml DESTINATION ${KDE_INSTALL_DATADIR}/kdevelop )
 update_xdg_mimetypes( ${KDE_INSTALL_MIMEDIR} )

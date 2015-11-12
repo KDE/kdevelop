@@ -45,6 +45,8 @@ if(BUILD_uiblocktester)
   add_definitions(-DDEBUG_UI_LOCKUP)
 endif()
 
+qt5_add_resources(kdevcpplanguagesupport_PART_SRCS kdevcppsupport.qrc)
+
 kdevplatform_add_plugin(kdevcpplanguagesupport JSON kdevcppsupport.json
 	SOURCES ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport
@@ -60,7 +62,3 @@ target_link_libraries(kdevcpplanguagesupport
     KF5::IconThemes
     KF5::TextEditor
 )
-
-########### install files ###############
-
-install(FILES kdevcppsupport.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppsupport)
