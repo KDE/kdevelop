@@ -67,6 +67,9 @@
 #include <KActionCollection>
 #include <KPluginFactory>
 
+#include <KTextEditor/View>
+#include <KTextEditor/ConfigInterface>
+
 #include <QAction>
 #include <QRegularExpression>
 
@@ -222,7 +225,12 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     m_refactoring = new BasicRefactoring(this);
     m_index.reset(new ClangIndex);
 
-    new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(m_index.data(), this), name() );
+    auto model = new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(m_index.data(), this), name() );
+    // TODO: use direct signal/slot connect syntax for 5.1
+    connect(model, SIGNAL(registeredToView(KTextEditor::View*)),
+            this, SLOT(disableKeywordCompletion(KTextEditor::View*)));
+    connect(model, SIGNAL(unregisteredFromView(KTextEditor::View*)),
+            this, SLOT(enableKeywordCompletion(KTextEditor::View*)));
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()){
         KDevelop::IBuddyDocumentFinder::addFinder(type, this);
     }
@@ -421,6 +429,23 @@ void ClangSupport::documentActivated(IDocument* doc)
         }
     }
     ICore::self()->languageController()->backgroundParser()->addDocument(indexedUrl, features);
+}
+
+static void setKeywordCompletion(KTextEditor::View* view, bool enabled)
+{
+    if (auto config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
+        config->setConfigValue(QStringLiteral("keyword-completion"), enabled);
+    }
+}
+
+void ClangSupport::disableKeywordCompletion(KTextEditor::View* view)
+{
+    setKeywordCompletion(view, false);
+}
+
+void ClangSupport::enableKeywordCompletion(KTextEditor::View* view)
+{
+    setKeywordCompletion(view, true);
 }
 
 #include "clangsupport.moc"
