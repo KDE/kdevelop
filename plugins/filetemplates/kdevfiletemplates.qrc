@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/kxmlgui5/kdevfiletemplates">
+        <file>kdevfiletemplates.rc</file>
+    </qresource>
+    <qresource prefix="/kconfig">
+        <file>kdevfiletemplates.knsrc</file>
+    </qresource>
+</RCC>

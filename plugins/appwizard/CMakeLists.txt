@@ -18,6 +18,7 @@ set(kdevappwizard_PART_UI
 
 ki18n_wrap_ui(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
 
+qt5_add_resources(kdevappwizard_PART_SRCS kdevappwizard.qrc)
 kdevplatform_add_plugin(kdevappwizard JSON kdevappwizard.json SOURCES ${kdevappwizard_PART_SRCS})
 
 target_link_libraries(kdevappwizard
@@ -29,7 +30,3 @@ target_link_libraries(kdevappwizard
 install(TARGETS kdevappwizard DESTINATION ${KDE_INSTALL_PLUGINDIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
-########### install files ###############
-
-install( FILES kdevappwizard.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevappwizard )
-install( FILES kdevappwizard.knsrc DESTINATION ${KDE_INSTALL_CONFDIR} )

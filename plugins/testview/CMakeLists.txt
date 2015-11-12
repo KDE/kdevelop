@@ -7,9 +7,6 @@ set(kdevtestview_PLUGIN_SRCS
     testviewdebug.cpp
 )
 
+qt5_add_resources(kdevtestview_PLUGIN_SRCS kdevtestview.qrc)
 kdevplatform_add_plugin(kdevtestview JSON kdevtestview.json SOURCES ${kdevtestview_PLUGIN_SRCS})
 target_link_libraries(kdevtestview KF5::ItemModels KDev::Interfaces KDev::Util KDev::Language)
-
-########### install files ###############
-
-install( FILES kdevtestview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevtestview )

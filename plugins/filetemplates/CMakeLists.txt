@@ -27,6 +27,7 @@ ki18n_wrap_ui(kdevfiletemplates_PART_SRCS
     ui/testcases.ui
 )
 
+qt5_add_resources(kdevfiletemplates_PART_SRCS kdevfiletemplates.qrc)
 kdevplatform_add_plugin(kdevfiletemplates JSON kdevfiletemplates.json SOURCES ${kdevfiletemplates_PART_SRCS})
 
 target_link_libraries(kdevfiletemplates
@@ -40,9 +41,6 @@ target_link_libraries(kdevfiletemplates
 )
 
 ########### install files ###############
-
-install( FILES kdevfiletemplates.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevfiletemplates )
-install( FILES kdevfiletemplates.knsrc DESTINATION ${KDE_INSTALL_CONFDIR} )
 
 install(FILES
 licenses/GPL\ v2

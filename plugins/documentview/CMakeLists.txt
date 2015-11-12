@@ -12,14 +12,10 @@ set(kdevdocumentview_PART_SRCS
     kdevdocumentselection.cpp
 )
 
+qt5_add_resources(kdevdocumentview_PART_SRCS kdevdocumentview.qrc)
 kdevplatform_add_plugin(kdevdocumentview JSON kdevdocumentview.json SOURCES ${kdevdocumentview_PART_SRCS})
 
 target_link_libraries(kdevdocumentview
     KDev::Interfaces
     KF5::TextEditor
 )
-
-########### install files ###############
-
-install( FILES kdevdocumentview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevdocumentview )
-

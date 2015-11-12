@@ -8,8 +8,7 @@ set(kdevcontextbrowser_PART_SRCS
     browsemanager.cpp
 )
 
+qt5_add_resources(kdevcontextbrowser_PART_SRCS kdevcontextbrowser.qrc)
 kdevplatform_add_plugin(kdevcontextbrowser JSON kdevcontextbrowser.json SOURCES ${kdevcontextbrowser_PART_SRCS})
 
 target_link_libraries(kdevcontextbrowser KDev::Interfaces KDev::Util KDev::Language KDev::Sublime KF5::TextEditor KF5::Parts)
-
-install(FILES kdevcontextbrowser.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevcontextbrowser)

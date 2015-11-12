@@ -13,6 +13,7 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
 
 ki18n_wrap_ui( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
 
+qt5_add_resources(kdevprojectmanagerview_PLUGIN_SRCS kdevprojectmanagerview.qrc)
 kdevplatform_add_plugin(kdevprojectmanagerview JSON kdevprojectmanagerview.json SOURCES ${kdevprojectmanagerview_PLUGIN_SRCS})
 
 target_link_libraries(kdevprojectmanagerview
@@ -20,8 +21,5 @@ target_link_libraries(kdevprojectmanagerview
     KF5::ThreadWeaver
     KDev::Interfaces KDev::Project KDev::Language KDev::Util KDev::Vcs KDev::Sublime )
 
-########### install files ###############
-
-install( FILES kdevprojectmanagerview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevprojectmanagerview )
 
 

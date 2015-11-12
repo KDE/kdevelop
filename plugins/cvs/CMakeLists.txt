@@ -32,6 +32,7 @@ set(kdevcvs_PART_UI
 
 ki18n_wrap_ui(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
 
+qt5_add_resources(kdevcvs_PART_SRCS kdevcvs.qrc)
 kdevplatform_add_plugin(kdevcvs JSON kdevcvs.json SOURCES ${kdevcvs_PART_SRCS})
 
 target_link_libraries(kdevcvs
@@ -43,7 +44,3 @@ target_link_libraries(kdevcvs
     KDev::Project
     KDev::Language
 )
-
-########### install files ###############
-
-install( FILES kdevcvs.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kdevcvs )
