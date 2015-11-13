@@ -115,4 +115,6 @@ public:
 
 }
 
+Q_DECLARE_METATYPE(KDevelop::IProblem::Ptr);
+
 #endif

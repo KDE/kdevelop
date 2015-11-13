@@ -33,6 +33,7 @@ class ProblemModel;
 }
 
 class ProblemReporterPlugin;
+class QSortFilterProxyModel;
 
 class ProblemTreeView : public QTreeView
 {
@@ -66,7 +67,7 @@ private slots:
 private:
     void resizeColumns();
     ProblemReporterPlugin* m_plugin;
-    ;
+    QSortFilterProxyModel* m_proxy;
 };
 
 #endif

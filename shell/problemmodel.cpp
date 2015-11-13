@@ -132,6 +132,12 @@ QVariant ProblemModel::data(const QModelIndex& index, int role) const
         return {};
     }
 
+    if (role == SeverityRole) {
+        return p->severity();
+    } else if (role == ProblemRole) {
+        return QVariant::fromValue(p);
+    }
+
     switch (role) {
     case Qt::DisplayRole:
         switch (index.column()) {
