@@ -25,6 +25,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
+#include <tests/testproject.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
@@ -83,7 +84,10 @@ void TestDUChain::initTestCase()
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init({QStringLiteral("kdevclangsupport")});
-    TestCore::initialize();
+    auto core = TestCore::initialize();
+    delete core->projectController();
+    m_projectController = new TestProjectController(core);
+    core->setProjectController(m_projectController);
 }
 
 void TestDUChain::cleanupTestCase()
@@ -1346,4 +1350,76 @@ void TestDUChain::testReparseUnchanged()
 
     impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
     checkProblems(true);
+}
+
+static bool containsErrors(const QList<Problem::Ptr>& problems)
+{
+    auto it = std::find_if(problems.begin(), problems.end(), [] (const Problem::Ptr& problem) {
+        return problem->severity() == Problem::Error;
+    });
+    return it != problems.end();
+}
+
+static bool expectedXmmintrinErrors(const QList<Problem::Ptr>& problems)
+{
+    foreach (const auto& problem, problems) {
+        if (problem->severity() == Problem::Error && !problem->description().contains("Cannot initialize a parameter of type")) {
+            return false;
+        }
+    }
+    return true;
+}
+
+static void verifyNoErrors(TopDUContext* top, QSet<TopDUContext*>& checked)
+{
+    const auto problems = top->problems();
+    if (containsErrors(problems)) {
+        qDebug() << top->url() << top->problems();
+        if (top->url().str().endsWith("xmmintrin.h") && expectedXmmintrinErrors(problems)) {
+            QEXPECT_FAIL("", "there are still some errors in xmmintrin.h b/c some clang provided intrinsincs are more strict than the GCC ones.", Continue);
+            QVERIFY(false);
+        } else {
+            QFAIL("parse error detected");
+        }
+    }
+    const auto imports = top->importedParentContexts();
+    foreach (const auto& import, imports) {
+        auto ctx = import.context(top);
+        QVERIFY(ctx);
+        auto importedTop = ctx->topContext();
+        if (checked.contains(importedTop)) {
+            continue;
+        }
+        checked.insert(importedTop);
+        verifyNoErrors(importedTop, checked);
+    }
+}
+
+void TestDUChain::testGccCompatibility()
+{
+    // TODO: make it easier to change the compiler provider for testing purposes
+    QTemporaryDir dir;
+    auto project = new TestProject(Path(dir.path()), this);
+    auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
+    auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
+    pathConfig.writeEntry("Path", ".");
+    pathConfig.group("Compiler").writeEntry("Name", "GCC");
+    m_projectController->addProject(project);
+
+    {
+        TestFile file(R"(
+            #include <x86intrin.h>
+
+            int main() { return 0; }
+        )", "c", project, dir.path());
+
+        file.parse();
+        QVERIFY(file.waitForParsed(5000));
+
+        DUChainReadLocker lock;
+        QSet<TopDUContext*> checked;
+        verifyNoErrors(file.topContext(), checked);
+    }
+
+    m_projectController->clearProjects();
 }

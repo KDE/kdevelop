@@ -22,6 +22,7 @@
 */
 
 #include "parsesession.h"
+#include <QStandardPaths>
 #include "clangproblem.h"
 #include "clangdiagnosticevaluator.h"
 #include "todoextractor.h"
@@ -107,6 +108,14 @@ QVector<CXUnsavedFile> toClangApi(const QVector<UnsavedFile>& unsavedFiles)
     return unsaved;
 }
 
+bool needGccCompatibility(const ClangParsingEnvironment& environment)
+{
+    const auto& defines = environment.defines();
+    // TODO: potentially do the same for the intel compiler?
+    return defines.contains(QStringLiteral("__GNUC__"))
+        && !environment.defines().contains(QStringLiteral("__clang__"));
+}
+
 }
 
 ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, ClangIndex* index,
@@ -155,6 +164,13 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         smartArgs << pchFile;
         clangArguments << pchFile.constData();
     }
+
+    if (needGccCompatibility(environment)) {
+        const auto compatFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kdevclangsupport/gcc_compat.h")).toUtf8();
+        smartArgs << compatFile;
+        clangArguments << "-include" << compatFile.constData();
+    }
+
     addIncludes(&clangArguments, &smartArgs, includes.system, "-isystem");
     addIncludes(&clangArguments, &smartArgs, includes.project, "-I");
 

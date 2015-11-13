@@ -25,6 +25,10 @@
 
 class TestEnvironmentProvider;
 
+namespace KDevelop {
+class TestProjectController;
+}
+
 class TestDUChain : public QObject
 {
     Q_OBJECT
@@ -79,9 +83,11 @@ private slots:
     void testReparseUnchanged();
 
     void benchDUChainBuilder();
+    void testGccCompatibility();
 
 private:
     QScopedPointer<TestEnvironmentProvider> m_provider;
+    KDevelop::TestProjectController* m_projectController;
 };
 
 #endif // DUCHAINTEST_H
