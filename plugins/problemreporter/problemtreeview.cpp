@@ -307,29 +307,8 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
 
 void ProblemTreeView::resizeColumns()
 {
-    // Do actual resizing only if the widget is visible and there are not too many items
-    const int ResizeRowLimit = 15;
-    if (isVisible() && model()->rowCount() > 0 && model()->rowCount() < ResizeRowLimit) {
-        const int columnCount = model()->columnCount();
-        QVector<int> widthArray(columnCount);
-        int totalWidth = 0;
-        for (int i = 0; i < columnCount; ++i) {
-            widthArray[i] = columnWidth(i);
-            totalWidth += widthArray[i];
-        }
-        for (int i = 0; i < columnCount; ++i) {
-            int columnWidthHint = qMax(sizeHintForColumn(i), header()->sectionSizeHint(i));
-            if (columnWidthHint - widthArray[i] > 0) {
-                if (columnWidthHint - widthArray[i] < width() - totalWidth) { // enough space to resize
-                    setColumnWidth(i, columnWidthHint);
-                    totalWidth += (columnWidthHint - widthArray[i]);
-                } else {
-                    setColumnWidth(i, widthArray[i] + width() - totalWidth);
-                    break;
-                }
-            }
-        }
-    }
+    for (int i = 0; i < model()->columnCount(); ++i)
+        resizeColumnToContents(i);
 }
 
 void ProblemTreeView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
@@ -386,9 +365,7 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
 void ProblemTreeView::showEvent(QShowEvent* event)
 {
     Q_UNUSED(event)
-
-    for (int i = 0; i < model()->columnCount(); ++i)
-        resizeColumnToContents(i);
+    resizeColumns();
 }
 
 #include "problemtreeview.moc"
