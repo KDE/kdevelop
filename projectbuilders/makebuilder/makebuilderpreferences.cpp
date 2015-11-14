@@ -36,8 +36,14 @@ MakeBuilderPreferences::MakeBuilderPreferences(IPlugin* plugin, const ProjectCon
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::MakeConfig;
     m_prefsUi->setupUi( w );
-    connect(m_prefsUi->makeBinary, &KUrlRequester::textChanged, this, &MakeBuilderPreferences::changed);
-    connect(m_prefsUi->makeBinary, &KUrlRequester::urlSelected, this, &MakeBuilderPreferences::changed);
+    connect(m_prefsUi->makeBinary, &KUrlRequester::textChanged,
+            this, &MakeBuilderPreferences::changed);
+    connect(m_prefsUi->makeBinary, &KUrlRequester::urlSelected,
+            this, &MakeBuilderPreferences::changed);
+    connect(m_prefsUi->configureEnvironment, &EnvironmentConfigureButton::environmentConfigured,
+            this, &MakeBuilderPreferences::changed);
+    connect(m_prefsUi->kcfg_environmentProfile, &EnvironmentSelectionWidget::currentProfileChanged,
+            this, &MakeBuilderPreferences::changed);
     l->addWidget( w );
 
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );

@@ -74,7 +74,10 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
     connect(m_prefsUi->addBuildDir, &QPushButton::pressed, this, &CMakePreferences::createBuildDir);
     connect(m_prefsUi->removeBuildDir, &QPushButton::pressed, this, &CMakePreferences::removeBuildDir);
     connect(m_prefsUi->showAdvanced, &QPushButton::toggled, this, &CMakePreferences::showAdvanced);
-    connect(m_prefsUi->environment, &KDevelop::EnvironmentSelectionWidget::currentProfileChanged, this, static_cast<void(CMakePreferences::*)()>(&CMakePreferences::changed));
+    connect(m_prefsUi->environment, &EnvironmentSelectionWidget::currentProfileChanged,
+            this, &CMakePreferences::changed);
+    connect(m_prefsUi->configureEnvironment, &EnvironmentConfigureButton::environmentConfigured,
+            this, &CMakePreferences::changed);
 
     showInternal(m_prefsUi->showInternal->checkState());
     m_subprojFolder = Path(options.projectTempFile).parent();
