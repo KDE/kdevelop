@@ -27,7 +27,9 @@
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"
 
-MakeBuilderPreferences::MakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+using namespace KDevelop;
+
+MakeBuilderPreferences::MakeBuilderPreferences(IPlugin* plugin, const ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<MakeBuilderSettings>(plugin, options, parent)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
@@ -70,9 +72,9 @@ MakeBuilderPreferences::~MakeBuilderPreferences()
 QString MakeBuilderPreferences::standardMakeComannd()
 {
 #ifdef _MSC_VER
-    return QLatin1String("nmake");
+    return QStringLiteral("nmake");
 #else
-    return QLatin1String("make");
+    return QStringLiteral("make");
 #endif
 }
 
@@ -88,5 +90,5 @@ QString MakeBuilderPreferences::fullName() const
 
 QIcon MakeBuilderPreferences::icon() const
 {
-    return QIcon::fromTheme("run-build");
+    return QIcon::fromTheme(QStringLiteral("run-build"));
 }

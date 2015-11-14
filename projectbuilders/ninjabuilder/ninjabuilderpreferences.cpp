@@ -30,8 +30,11 @@
 #include "ui_ninjaconfig.h"
 #include "ninjabuilderconfig.h"
 
-NinjaBuilderPreferences::NinjaBuilderPreferences(KDevelop::IPlugin* plugin,
-        const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+using namespace KDevelop;
+
+NinjaBuilderPreferences::NinjaBuilderPreferences(IPlugin* plugin,
+                                                 const ProjectConfigOptions& options,
+                                                 QWidget* parent)
     : ProjectConfigPage<NinjaBuilderSettings>(plugin, options, parent)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
@@ -60,5 +63,5 @@ QString NinjaBuilderPreferences::fullName() const
 
 QIcon NinjaBuilderPreferences::icon() const
 {
-    return QIcon::fromTheme("run-build");
+    return QIcon::fromTheme(QStringLiteral("run-build"));
 }
