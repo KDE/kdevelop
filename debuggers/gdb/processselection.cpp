@@ -19,8 +19,9 @@
  */
 
 #include "processselection.h"
-#include "ksysguard/ksysguardprocesslist.h"
-#include "ksysguard/process.h"
+#include <processui/ksysguardprocesslist.h>
+#include <processcore/process.h>
+#include <QDialogButtonBox>
 #include <QPushButton>
 #include <QAbstractItemView>
 #include <QVBoxLayout>
@@ -29,22 +30,35 @@
 #include <QTreeView>
 #include <QLineEdit>
 
+#include <KLocalizedString>
+#include <KSharedConfig>
+
 namespace GDBDebugger
 {
 
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
-    : KDialog(parent)
+    : QDialog(parent)
 {
-    setCaption(i18n("Attach to a process"));
+    setWindowTitle(i18n("Attach to a process"));
     m_processList = new KSysGuardProcessList(this);
-    setMainWidget(m_processList);
+    QVBoxLayout* mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(m_processList);
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    mainLayout->addWidget(buttonBox);
+
     connect(m_processList->treeView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
     m_processList->treeView()->setSelectionMode(QAbstractItemView::SingleSelection);
     m_processList->setState(ProcessFilter::UserProcesses);
     m_processList->setKillButtonVisible(false);
     m_processList->filterLineEdit()->setFocus();
     //m_processList->setPidFilter(qApp->pid());
-    button(Ok)->setEnabled(false);
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
+    m_okButton->setDefault(true);
+    m_okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    m_okButton->setEnabled(false);
 
     KConfigGroup config = KSharedConfig::openConfig()->group("GdbProcessSelectionDialog");
     m_processList->filterLineEdit()->setText(config.readEntry("filterText", QString()));
@@ -67,12 +81,17 @@ long int ProcessSelectionDialog::pidSelected()
     
     KSysGuard::Process* process=ps.first();
     
-    return process->pid;
+    return process->pid();
+}
+
+QSize ProcessSelectionDialog::sizeHint() const
+{
+    return QSize(740, 720);
 }
 
 void ProcessSelectionDialog::selectionChanged()
 {
-    button(Ok)->setEnabled(true);
+    m_okButton->setEnabled(true);
 }
 
 }

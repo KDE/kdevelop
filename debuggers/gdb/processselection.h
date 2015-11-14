@@ -21,25 +21,28 @@
 #ifndef PROCESSSELECTION_H
 #define PROCESSSELECTION_H
 
-#include <KDialog>
+#include <QDialog>
 
 class KSysGuardProcessList;
+class QPushButton;
 
 namespace GDBDebugger
 {
-class ProcessSelectionDialog : public KDialog
+class ProcessSelectionDialog : public QDialog
 {
     Q_OBJECT
     public:
         ProcessSelectionDialog( QWidget *parent=0 );
         ~ProcessSelectionDialog();
         long int pidSelected();
+        QSize sizeHint() const;
         
     private slots:
         void selectionChanged();
         
     private:
         KSysGuardProcessList* m_processList;
+        QPushButton* m_okButton;
 };
 
 }

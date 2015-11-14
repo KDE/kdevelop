@@ -1,6 +1,5 @@
 project(gdb)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgdb\")
-# TODO KF5 figure out how to get the process selection widget (ksysguardprocesslist.h)
 
 function(add_debuggable_executable target)
     cmake_parse_arguments(add_debuggable_executable "" "" "SRCS" ${ARGN})
@@ -14,19 +13,8 @@ function(add_debuggable_executable target)
     set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} ${_flags}")
 endfunction()
 
-if(NOT APPLE)
-# macro_optional_find_package( KDE4Workspace 4.2.0 )
-
-# macro_log_feature( KDE4WORKSPACE_FOUND
-# "KDE 4 Workspace" "KDE 4 Workspace libraries" "kdebase/workspace" FALSE
-# "" "Required for building the process selection dialog for attaching GDB to a running process."
-# )
-endif(NOT APPLE)
-
-if(KDE4WORKSPACE_FOUND)
-    include_directories(
-        ${KDE4WORKSPACE_INCLUDE_DIR}
-    )
+find_package(KF5SysGuard)
+if(KF5SysGuard_FOUND)
     add_definitions(
         -DKDEV_ENABLE_GDB_ATTACH_DIALOG
     )
@@ -86,12 +74,12 @@ if(OKTETA_FOUND)
 endif()
 
 
-if(KDE4WORKSPACE_FOUND)
+if(KF5SysGuard_FOUND)
     set(kdevgdb_SRCS
         ${kdevgdb_SRCS}
         processselection.cpp
     )
-endif(KDE4WORKSPACE_FOUND)
+endif(KF5SysGuard_FOUND)
 
 set(kdevgdb_UI
     debuggertracingdialog.ui
@@ -113,8 +101,10 @@ target_link_libraries(kdevgdb
     KDev::Project
     KDev::Util
     KF5::TextEditor
-    ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
+if(KF5SysGuard_FOUND)
+    target_link_libraries(kdevgdb KF5::ProcessUi)
+endif()
 
 set(test_gdb_SRCS unittests/test_gdb.cpp ${kdevgdb_SRCS})
 ecm_add_test(${test_gdb_SRCS}
@@ -130,8 +120,10 @@ ecm_add_test(${test_gdb_SRCS}
         KF5::KIOWidgets
         KF5::TextEditor
         KF5::Parts
-        ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
+if(KF5SysGuard_FOUND)
+    target_link_libraries(test_gdb KF5::ProcessUi)
+endif()
 
 if (HAVE_PATH_WITH_SPACES_TEST)
     set_target_properties(test_gdb PROPERTIES COMPILE_FLAGS "-DHAVE_PATH_WITH_SPACES_TEST")
