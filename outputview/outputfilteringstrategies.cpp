@@ -106,7 +106,7 @@ Path CompilerFilterStrategy::pathForFile(const QString& filename) const
 
 bool CompilerFilterStrategy::isMultiLineCase(KDevelop::ErrorFormat curErrFilter) const
 {
-    if(curErrFilter.compiler == "gfortran" || curErrFilter.compiler == "cmake") {
+    if(curErrFilter.compiler == QLatin1String("gfortran") || curErrFilter.compiler == QLatin1String("cmake")) {
         return true;
     }
     return false;
