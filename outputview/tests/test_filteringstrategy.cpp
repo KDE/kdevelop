@@ -23,36 +23,35 @@
 #include <outputview/filtereditem.h>
 #include <language/interfaces/quickopenfilter.h>
 
-QTEST_GUILESS_MAIN(KDevelop::TestFilteringStrategy)
+using namespace KDevelop;
+
+QTEST_GUILESS_MAIN(TestFilteringStrategy)
 
 namespace QTest {
 
 template<>
-inline char* toString(const KDevelop::FilteredItem::FilteredOutputItemType& type)
+inline char* toString(const FilteredItem::FilteredOutputItemType& type)
 {
     switch (type) {
-        case KDevelop::FilteredItem::ActionItem:
+        case FilteredItem::ActionItem:
             return qstrdup("ActionItem");
-        case KDevelop::FilteredItem::CustomItem:
+        case FilteredItem::CustomItem:
             return qstrdup("CustomItem");
-        case KDevelop::FilteredItem::ErrorItem:
+        case FilteredItem::ErrorItem:
             return qstrdup("ErrorItem");
-        case KDevelop::FilteredItem::InformationItem:
+        case FilteredItem::InformationItem:
             return qstrdup("InformationItem");
-        case KDevelop::FilteredItem::InvalidItem:
+        case FilteredItem::InvalidItem:
             return qstrdup("InvalidItem");
-        case KDevelop::FilteredItem::StandardItem:
+        case FilteredItem::StandardItem:
             return qstrdup("StandardItem");
-        case KDevelop::FilteredItem::WarningItem:
+        case FilteredItem::WarningItem:
             return qstrdup("WarningItem");
     }
     return qstrdup("unknown");
 }
 
 }
-
-namespace KDevelop
-{
 
 void TestFilteringStrategy::testNoFilterStrategy_data()
 {
@@ -476,10 +475,3 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn()
     QCOMPARE(item1.lineNo , lineNr);
     QCOMPARE(item1.columnNo , column);
 }
-
-
-
-
-}
-
-
