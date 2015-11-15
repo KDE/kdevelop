@@ -26,7 +26,7 @@ class TemplateTest
 template<typename T, typename... Targs>
 class VariadicTemplate {};
 
-/// "type" : { "toString" : "TypeAliasTemplate", "EXPECT_FAIL": {"toString": "TypeAliasTemplateDecl is not accessible through LibClang"} }
+/// "type" : { "toString" : "TypeAliasTemplate" }
 template <typename T>
 using TypeAliasTemplate = T;
 
