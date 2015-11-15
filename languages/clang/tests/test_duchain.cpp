@@ -411,14 +411,19 @@ void TestDUChain::testNamespace()
 
 void TestDUChain::testAutoTypeDeduction()
 {
-    TestFile file("const volatile auto foo = 5;\n", "cpp");
+    TestFile file(R"(
+        const volatile auto foo = 5;
+        template<class T> struct myTemplate {};
+        myTemplate<myTemplate<int>& > templRefParam;
+        auto autoTemplRefParam = templRefParam;
+    )", "cpp");
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
 
     DUContext* ctx = file.topContext().data();
     QVERIFY(ctx);
-    QCOMPARE(ctx->localDeclarations().size(), 1);
+    QCOMPARE(ctx->localDeclarations().size(), 4);
     QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
     Declaration* decl = ctx->findDeclarations(QualifiedIdentifier("foo"))[0];
     QCOMPARE(decl->identifier(), Identifier("foo"));
@@ -431,6 +436,14 @@ void TestDUChain::testAutoTypeDeduction()
 #else
     QCOMPARE(decl->toString(), QStringLiteral("const volatile int foo"));
 #endif
+
+    decl = ctx->findDeclarations(QualifiedIdentifier("autoTemplRefParam"))[0];
+    QVERIFY(decl);
+    QVERIFY(decl->abstractType());
+#if CINDEX_VERSION_MINOR < 31
+    QEXPECT_FAIL("", "Auto type is not exposed via LibClang", Continue);
+#endif
+    QCOMPARE(decl->abstractType()->toString(), QStringLiteral("myTemplate< myTemplate< int >& >"));
 }
 
 void TestDUChain::testTypeDeductionInTemplateInstantiation()
@@ -1350,6 +1363,22 @@ void TestDUChain::testReparseUnchanged()
 
     impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
     checkProblems(true);
+}
+
+void TestDUChain::testTypeAliasTemplate()
+{
+    TestFile file("template <typename T> using TypeAliasTemplate = T;", "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+
+    auto templateAlias = file.topContext()->localDeclarations().last();
+    QVERIFY(templateAlias);
+#if CINDEX_VERSION_MINOR < 31
+    QEXPECT_FAIL("", "TypeAliasTemplate is not exposed via LibClang", Continue);
+#endif
+    QCOMPARE(templateAlias->abstractType()->toString(), QStringLiteral("TypeAliasTemplate"));
 }
 
 static bool containsErrors(const QList<Problem::Ptr>& problems)

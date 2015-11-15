@@ -26,16 +26,9 @@ class TemplateTest
 template<typename T, typename... Targs>
 class VariadicTemplate {};
 
-/// "type" : { "toString" : "TypeAliasTemplate" }
-template <typename T>
-using TypeAliasTemplate = T;
-
 /// "type" : { "toString" : "Class_volatile_const< int >" }
 Class_volatile_const<int> instance;
 
-myTemplate<myTemplate<int>& > templRefParam;
-/// "type" : { "toString" : "myTemplate< myTemplate< int >& >" }
-auto autoTemplRefParam = templRefParam;
 /// "type" : { "toString" : "VariadicTemplate< int, double, bool >", "EXPECT_FAIL": {"toString": "No way to get variadic template arguments with LibClang"} }
 VariadicTemplate<int, double, bool> variadic;
 

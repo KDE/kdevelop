@@ -81,6 +81,7 @@ private slots:
     void testExternC();
     void testReparseUnchanged_data();
     void testReparseUnchanged();
+    void testTypeAliasTemplate();
 
     void benchDUChainBuilder();
     void testGccCompatibility();
