@@ -607,6 +607,17 @@ struct Visitor
         return makeType(clangType, cursor);
     }
 
+#if CINDEX_VERSION_MINOR >= 31
+    template<CXTypeKind TK, EnableIf<TK == CXType_Auto> = dummy>
+    AbstractType *createType(CXType type, CXCursor parent)
+    {
+        auto deducedType = clang_getCanonicalType(type);
+        bool isDeduced = deducedType.kind != CXType_Invalid && deducedType.kind != CXType_Auto;
+
+        return !isDeduced ? createDelayedType(type) : makeType(deducedType, parent);
+    }
+#endif
+
     /// @param declaration an optional declaration that will be associated with created type
     AbstractType* createClassTemplateSpecializationType(CXType type, const DeclarationPointer declaration = {})
     {
@@ -1206,6 +1217,9 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_ObjCClass);
     UseKind(CXType_ObjCSel);
     UseKind(CXType_NullPtr);
+#if CINDEX_VERSION_MINOR >= 31
+    UseKind(CXType_Auto);
+#endif
     case CXType_Invalid:
         return nullptr;
     default:

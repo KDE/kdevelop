@@ -34,7 +34,7 @@ using TypeAliasTemplate = T;
 Class_volatile_const<int> instance;
 
 myTemplate<myTemplate<int>& > templRefParam;
-/// "type" : { "toString" : "myTemplate< myTemplate< int >& >", "EXPECT_FAIL": {"toString": "For some reasons reference gets lost. Need to investigate it further."} }
+/// "type" : { "toString" : "myTemplate< myTemplate< int >& >" }
 auto autoTemplRefParam = templRefParam;
 /// "type" : { "toString" : "VariadicTemplate< int, double, bool >", "EXPECT_FAIL": {"toString": "No way to get variadic template arguments with LibClang"} }
 VariadicTemplate<int, double, bool> variadic;
