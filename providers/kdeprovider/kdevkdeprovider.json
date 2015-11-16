@@ -22,6 +22,7 @@
         "Description[sv]": "Insticksprogrammet hjälper till att erhålla KDE-projekt", 
         "Description[uk]": "За допомогою цього додатка можна отримувати проекти KDE", 
         "Description[x-test]": "xxThis plugin helps to obtain KDE projectsxx", 
+        "Description[zh_CN]": "此插件帮助您获取 KDE 项目", 
         "Icon": "kde", 
         "Id": "kdevkdeprovider", 
         "License": "GPL", 
@@ -41,6 +42,7 @@
         "Name[sv]": "KDE-leverantör", 
         "Name[uk]": "Надавач даних KDE", 
         "Name[x-test]": "xxKDE Providerxx", 
+        "Name[zh_CN]": "KDE 提供器", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

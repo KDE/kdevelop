@@ -16,6 +16,7 @@
         "Description[sv]": "Importerar och redigerar QMake-projekt", 
         "Description[uk]": "Імпортує і дає змогу редагувати проекти QMake", 
         "Description[x-test]": "xxImports and edits QMake projectsxx", 
+        "Description[zh_CN]": "导入并编辑 QMake 工程", 
         "Icon": "qtlogo", 
         "Id": "KDevQMakeManager", 
         "Name": "QMake Project Manager", 
@@ -34,6 +35,7 @@
         "Name[sv]": "QMake-projekthantering", 
         "Name[uk]": "Керування проектами QMake", 
         "Name[x-test]": "xxQMake Project Managerxx", 
+        "Name[zh_CN]": "QMake 工程管理器", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

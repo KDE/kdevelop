@@ -15,6 +15,7 @@
         "Description[sv]": "Bygger QMake-projekt", 
         "Description[uk]": "Збирає проекти QMake", 
         "Description[x-test]": "xxBuilds QMake Projectsxx", 
+        "Description[zh_CN]": "构建 QMake 工程", 
         "Icon": "gear", 
         "Id": "KDevQMakeBuilder", 
         "Name": "QMake Project Builder", 
@@ -33,6 +34,7 @@
         "Name[sv]": "QMake-projektbyggverktyg", 
         "Name[uk]": "Засіб збирання проектів QMake", 
         "Name[x-test]": "xxQMake Project Builderxx", 
+        "Name[zh_CN]": "QMake 工程构建器", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
