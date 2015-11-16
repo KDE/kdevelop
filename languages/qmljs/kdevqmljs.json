@@ -24,6 +24,7 @@
         "Name[tr]": "QML Desteği", 
         "Name[uk]": "Підтримка QML", 
         "Name[x-test]": "xxQML Supportxx", 
+        "Name[zh_CN]": "QML 支持", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

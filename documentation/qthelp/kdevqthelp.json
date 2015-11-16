@@ -23,6 +23,7 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller integrering av QtHelp", 
         "Description[uk]": "За допомогою цього додатка здійснюється інтеграція з QtHelp", 
         "Description[x-test]": "xxThis plugin provides QtHelp integrationxx", 
+        "Description[zh_CN]": "此插件提供了 QtHelp 整合", 
         "Icon": "qtlogo", 
         "Id": "kdevqthelp", 
         "License": "GPL", 
@@ -44,6 +45,7 @@
         "Name[sv]": "Qt-dokumentation", 
         "Name[uk]": "Документація з Qt", 
         "Name[x-test]": "xxQt Documentationxx", 
+        "Name[zh_CN]": "Qt 文档", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
