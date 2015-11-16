@@ -22,6 +22,7 @@
         "Description[sv]": "Insticksprogrammet integrerar Subversion i KDevelop.", 
         "Description[uk]": "Цей додаток інтегрує Subversion із KDevelop", 
         "Description[x-test]": "xxThis plugin integrates subversion to KDevelop.xx", 
+        "Description[zh_CN]": "此插件对 KDevelop 整合 subversion。", 
         "Icon": "subversion", 
         "Id": "kdevsubversion", 
         "License": "GPL", 
@@ -42,6 +43,7 @@
         "Name[sv]": "Stöd för Subversion", 
         "Name[uk]": "Підтримка Subversion", 
         "Name[x-test]": "xxSubversion Supportxx", 
+        "Name[zh_CN]": "Subversion 支持", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

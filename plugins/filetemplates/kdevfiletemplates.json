@@ -22,6 +22,7 @@
         "Description[sv]": "Hanterar mallar för källkodsfiler", 
         "Description[uk]": "Керування шаблонами для початкових файлів коду", 
         "Description[x-test]": "xxManages templates for source filesxx", 
+        "Description[zh_CN]": "管理源文件的模板", 
         "Icon": "code-class", 
         "Id": "kdevfiletemplates", 
         "License": "GPL", 
@@ -42,6 +43,7 @@
         "Name[sv]": "Inställning av filmallar", 
         "Name[uk]": "Налаштовування шаблонів файлів", 
         "Name[x-test]": "xxFile Templates Configurationxx", 
+        "Name[zh_CN]": "文件模板配置", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ], 

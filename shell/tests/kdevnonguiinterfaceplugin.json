@@ -50,6 +50,7 @@
         "Description[sv]": "Insticksprogrammet är enbart avsett för enhetstest", 
         "Description[uk]": "Цей додаток призначено лише для тестування модулів", 
         "Description[x-test]": "xxThis plugin is purely for unit-testxx", 
+        "Description[zh_CN]": "此插件只用于 unit 测试", 
         "Id": "kdevnonguiinterface", 
         "License": "LGPL", 
         "Name": "KDevNonGuiInterface", 
@@ -69,6 +70,7 @@
         "Name[sv]": "KDevelop icke grafiskt användargränssnitt", 
         "Name[uk]": "KDevNonGuiInterface", 
         "Name[x-test]": "xxKDevNonGuiInterfacexx", 
+        "Name[zh_CN]": "KDevNonGuiInterface", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
