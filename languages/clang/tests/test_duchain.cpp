@@ -584,6 +584,44 @@ void TestDUChain::testReparseBaseClassesTemplates()
     }
 }
 
+// TODO: Move this test to kdevplatform.
+void TestDUChain::testGetInheriters()
+{
+    TestFile file("class Base { class Inner {}; }; class Inherited : public Base, Base::Inner {};", "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    DUContext* top = file.topContext().data();
+    QVERIFY(top);
+
+    QCOMPARE(top->localDeclarations().count(), 2);
+    Declaration* baseDecl = top->localDeclarations().first();
+    QCOMPARE(baseDecl->identifier(), Identifier("Base"));
+
+    DUContext* baseCtx = baseDecl->internalContext();
+    QVERIFY(baseCtx);
+    QCOMPARE(baseCtx->localDeclarations().count(), 1);
+
+    Declaration* innerDecl = baseCtx->localDeclarations().first();
+    QCOMPARE(innerDecl->identifier(), Identifier("Inner"));
+
+    Declaration* inheritedDecl = top->localDeclarations()[1];
+    QVERIFY(inheritedDecl);
+    QCOMPARE(inheritedDecl->identifier(), Identifier("Inherited"));
+
+    uint maxAllowedSteps = uint(-1);
+    auto baseInheriters = DUChainUtils::getInheriters(baseDecl, maxAllowedSteps);
+    QCOMPARE(baseInheriters, QList<Declaration*>() << inheritedDecl);
+
+    maxAllowedSteps = uint(-1);
+    auto innerInheriters = DUChainUtils::getInheriters(innerDecl, maxAllowedSteps);
+    QCOMPARE(innerInheriters, QList<Declaration*>() << inheritedDecl);
+
+    maxAllowedSteps = uint(-1);
+    auto inheritedInheriters = DUChainUtils::getInheriters(inheritedDecl, maxAllowedSteps);
+    QCOMPARE(inheritedInheriters.count(), 0);
+}
+
 void TestDUChain::testGlobalFunctionDeclaration()
 {
     TestFile file("void foo(int arg1, char arg2);\n", "cpp");
