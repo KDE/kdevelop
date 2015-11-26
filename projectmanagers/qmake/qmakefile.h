@@ -22,7 +22,7 @@
 #define QMAKEFILE_H
 
 
-#include <util/stack.h>
+#include <QtCore/QStack>
 #include <QtCore/QStringList>
 
 #include "qmakefilevisitor.h"

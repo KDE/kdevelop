@@ -18,12 +18,9 @@
 
 #ifndef KDEPROJECTSREADER_H
 #define KDEPROJECTSREADER_H
-
 #include "kdeprojectsmodel.h"
-
-#include <util/stack.h>
-
 #include <QNetworkReply>
+#include <QStack>
 
 class KDEProjectsReader : public QObject
 {
@@ -41,7 +38,7 @@ class KDEProjectsReader : public QObject
         void downloadDone();
         
     private:
-        KDevelop::Stack<Source> m_current;
+        QStack<Source> m_current;
         QStringList m_errors;
         KDEProjectsModel* m_m;
 };

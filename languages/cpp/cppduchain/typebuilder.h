@@ -166,7 +166,7 @@ private:
 
   int m_currentEnumeratorValue;
   bool m_lastTypeWasInstance;
-  Stack<KDevelop::AbstractType::Ptr> m_typeStack;
+  QStack<KDevelop::AbstractType::Ptr> m_typeStack;
   KDevelop::AbstractType::Ptr m_lastType;
   bool m_lastTypeWasAuto;
 };

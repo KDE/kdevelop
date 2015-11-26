@@ -247,7 +247,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::nodeModuleCompletions()
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::functionCallTips()
 {
-    Stack<ExpressionStackEntry> stack = expressionStack(m_text);
+    QStack<ExpressionStackEntry> stack = expressionStack(m_text);
     QList<CompletionTreeItemPointer> items;
     int argumentHintDepth = 1;
     bool isTopOfStack = true;
@@ -407,9 +407,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
     }
 }
 
-Stack<CodeCompletionContext::ExpressionStackEntry> CodeCompletionContext::expressionStack(const QString& expression)
+QStack<CodeCompletionContext::ExpressionStackEntry> CodeCompletionContext::expressionStack(const QString& expression)
 {
-    Stack<CodeCompletionContext::ExpressionStackEntry> stack;
+    QStack<CodeCompletionContext::ExpressionStackEntry> stack;
     ExpressionStackEntry entry;
     QmlJS::Lexer lexer(nullptr);
     bool atEnd = false;

@@ -96,7 +96,7 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName) const
 QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const QString &exp)
 {
     QString name;
-    Stack<int> opened;
+    QStack<int> opened;
     QList< IntPair > pos;
     bool gotDollar=false;
     for(int i=exp.indexOf('$'); i<exp.size() && i>=0; i++)
@@ -392,7 +392,7 @@ int CMakeProjectVisitor::visit(const SubdirsAst *sdirs)
     return 1;
 }
 
-void CMakeProjectVisitor::printBacktrace(const Stack<VisitorState> &backtrace)
+void CMakeProjectVisitor::printBacktrace(const QStack<VisitorState> &backtrace)
 {
     int i=0;
     qCDebug(CMAKE) << "backtrace" << backtrace.count();
@@ -410,7 +410,7 @@ CMakeProjectVisitor::VisitorState CMakeProjectVisitor::stackTop() const
 {
     VisitorState p = {};
     QString filename=m_backtrace.front().code->at(m_backtrace.front().line).filePath;
-    Stack<VisitorState>::const_iterator it=m_backtrace.constBegin();
+    QStack<VisitorState>::const_iterator it=m_backtrace.constBegin();
 
     for(; it!=m_backtrace.constEnd(); ++it)
     {

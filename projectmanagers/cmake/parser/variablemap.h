@@ -25,7 +25,7 @@
 #include <QStringList>
 #include "cmakecommonexport.h"
 #include <QSet>
-#include <util/stack.h>
+#include <QStack>
 
 class KDEVCMAKECOMMON_EXPORT VariableMap : public QHash<QString, QStringList>
 {
@@ -56,7 +56,7 @@ class KDEVCMAKECOMMON_EXPORT VariableMap : public QHash<QString, QStringList>
         /** will create a variable without adding a scope on it */
         void insertGlobal(const QString& key, const QStringList& value);
     private:
-        KDevelop::Stack<QSet<QString> > m_scopes;
+        QStack<QSet<QString> > m_scopes;
 };
 
 #endif

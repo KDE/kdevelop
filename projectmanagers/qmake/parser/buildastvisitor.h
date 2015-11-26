@@ -22,7 +22,7 @@
 #define BUILDASTVISITOR_H
 
 #include "qmakedefaultvisitor.h"
-#include <util/stack.h>
+#include <QtCore/QStack>
 
 class QString;
 
@@ -61,7 +61,7 @@ private:
     template <typename T> T* stackPop();
     template <typename T> T* createAst( AstNode* node, AST* ast );
 
-    KDevelop::Stack<AST*> aststack;
+    QStack<AST*> aststack;
     Parser* m_parser;
 };
 

@@ -26,7 +26,7 @@
 
 #include <QtCore/QHash>
 
-#include <util/stack.h>
+#include <QtCore/QStack>
 #include "cpprppexport.h"
 
 #include <language/duchain/problem.h>
@@ -126,7 +126,7 @@ class KDEVCPPRPP_EXPORT pp
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;
   pp_skip_number skip_number;
-  KDevelop::Stack<KDevelop::IndexedString> m_files;
+  QStack<KDevelop::IndexedString> m_files;
   Preprocessor* m_preprocessor;
   QList<KDevelop::ProblemPointer> m_problems;
 

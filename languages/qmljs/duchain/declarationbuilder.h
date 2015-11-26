@@ -25,8 +25,6 @@
 
 #include "contextbuilder.h"
 
-#include <util/stack.h>
-
 namespace KDevelop
 {
     class ClassDeclaration;
@@ -171,7 +169,7 @@ private:
 
 private:
     bool m_prebuilding;
-    KDevelop::Stack<bool> m_skipEndVisit;
+    QStack<bool> m_skipEndVisit;
 };
 
 #endif // DECLARATIONBUILDER_H

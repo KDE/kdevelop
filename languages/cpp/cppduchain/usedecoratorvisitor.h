@@ -23,7 +23,7 @@
 #include <default_visitor.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/checks/dataaccessrepository.h>
-#include <util/stack.h>
+#include <QStack>
 
 namespace KDevelop {
 class DataAccessRepository;
@@ -65,8 +65,8 @@ class KDEVCPPDUCHAIN_EXPORT UseDecoratorVisitor : protected DefaultVisitor
     QString nodeToString(AST* node);
     
     const ParseSession* m_session;
-    KDevelop::Stack< QList<KDevelop::DataAccess::DataAccessFlags> > m_callStack;
-    KDevelop::Stack<int> m_argStack;
+    QStack< QList<KDevelop::DataAccess::DataAccessFlags> > m_callStack;
+    QStack<int> m_argStack;
     KDevelop::DataAccess::DataAccessFlags m_defaultFlags;
     KDevelop::DataAccessRepository* m_mods;
 };
