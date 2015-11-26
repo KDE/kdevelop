@@ -26,6 +26,8 @@
 #include "navigation/propertypreviewwidget.h"
 #include "duchain/helper.h"
 
+#include <qmljs/qmljsmodelmanagerinterface.h>
+
 #include <KPluginFactory>
 #include <KAboutData>
 
@@ -45,11 +47,27 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevQmlJsSupportFactory, "kdevqmljs.json", registerPl
 
 using namespace KDevelop;
 
+/// TODO: Extend? See qmljsmodelmanager.h in qt-creator.git
+class ModelManager: public QmlJS::ModelManagerInterface
+{
+    Q_OBJECT
+
+public:
+    explicit ModelManager(QObject *parent = nullptr);
+    ~ModelManager();
+};
+
+ModelManager::ModelManager(QObject* parent)
+    : QmlJS::ModelManagerInterface(parent) {}
+
+ModelManager::~ModelManager() {}
+
 KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
 : IPlugin(QLatin1String("kdevqmljssupport"), parent )
 , ILanguageSupport()
 , m_highlighting(new QmlJsHighlighting(this))
 , m_refactoring(new BasicRefactoring(this))
+, m_modelManager(new ModelManager(this))
 {
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
 
