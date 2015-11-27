@@ -34,11 +34,18 @@
 #include <QDebug>
 #include <KLocalizedString>
 
+using namespace KDevelop;
+
 QMakeJob::QMakeJob(QObject* parent)
     : OutputExecuteJob(parent)
     , m_killed(false)
 {
     setCapabilities(Killable);
+    setFilteringStrategy(OutputModel::CompilerFilter);
+    setProperties(NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint);
+    setToolTitle(i18n("QMake"));
+    setStandardToolView(IOutputView::BuildView);
+    setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll );
 }
 
 void QMakeJob::start()
@@ -49,19 +56,19 @@ void QMakeJob::start()
         return emitResult();
     }
 
-    setStandardToolView(KDevelop::IOutputView::BuildView);
-    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setModel(new KDevelop::OutputModel);
-    startOutput();
+    OutputExecuteJob::start();
+}
 
-    QString cmd = QMakeConfig::qmakeBinary(m_project);
-    m_cmd = new KDevelop::CommandExecutor(cmd, this);
-    connect(m_cmd, SIGNAL(receivedStandardError(const QStringList&)), model(), SLOT(appendLines(const QStringList&)));
-    connect(m_cmd, SIGNAL(receivedStandardOutput(const QStringList&)), model(), SLOT(appendLines(const QStringList&)));
-    m_cmd->setWorkingDirectory(m_project->path().toUrl().toLocalFile());
-    connect(m_cmd, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)));
-    connect(m_cmd, SIGNAL(completed(int)), this, SLOT(slotCompleted(int)));
-    m_cmd->start();
+QUrl QMakeJob::workingDirectory() const
+{
+    return m_project ? m_project->path().toUrl() : QUrl();
+}
+
+QStringList QMakeJob::commandLine() const
+{
+    QStringList args;
+    args << QMakeConfig::qmakeBinary(m_project);
+    return args;
 }
 
 void QMakeJob::setProject(KDevelop::IProject* project)
