@@ -1416,6 +1416,7 @@ void TestDUChain::testTypeAliasTemplate()
 #if CINDEX_VERSION_MINOR < 31
     QEXPECT_FAIL("", "TypeAliasTemplate is not exposed via LibClang", Continue);
 #endif
+    QVERIFY(templateAlias->abstractType());
     QCOMPARE(templateAlias->abstractType()->toString(), QStringLiteral("TypeAliasTemplate"));
 }
 
