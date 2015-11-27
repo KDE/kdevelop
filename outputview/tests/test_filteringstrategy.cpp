@@ -348,15 +348,15 @@ void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction_data()
     QString basepath = projectPath();
 
     QTest::newRow("cmake-line1")
-    << "[ 25%] Building CXX object /path/to/one/CMakeFiles/file.o" << QString( basepath + "/path/to/one" );
+    << "[ 25%] Building CXX object path/to/one/CMakeFiles/file.o" << QString( basepath + "/path/to/one" );
     QTest::newRow("cmake-line2")
-    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two");
+    << "[ 26%] Building CXX object path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two");
     QTest::newRow("cmake-line3")
-    << "[ 26%] Building CXX object /path/to/three/CMakeFiles/file.o" << QString( basepath + "/path/to/three");
+    << "[ 26%] Building CXX object path/to/three/CMakeFiles/file.o" << QString( basepath + "/path/to/three");
     QTest::newRow("cmake-line4")
-    << "[ 26%] Building CXX object /path/to/four/CMakeFiles/file.o" << QString( basepath + "/path/to/four");
+    << "[ 26%] Building CXX object path/to/four/CMakeFiles/file.o" << QString( basepath + "/path/to/four");
     QTest::newRow("cmake-line5")
-    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two");
+    << "[ 26%] Building CXX object path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two");
     QTest::newRow("cd-line6")
     << QString("make[4]: Entering directory '" + basepath + "/path/to/one/'") << QString( basepath + "/path/to/one");
     QTest::newRow("waf-cd")
