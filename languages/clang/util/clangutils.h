@@ -65,6 +65,11 @@ namespace ClangUtils
     QVector<QString> getDefaultArguments(CXCursor cursor, DefaultArgumentsMode mode = FixedSize);
 
     /**
+     * @return true when the cursor kind references a named scope.
+     */
+    bool isScopeKind(CXCursorKind kind);
+
+    /**
      * Given a cursor and destination context, returns the string representing the
      * cursor's scope at its current location.
      *

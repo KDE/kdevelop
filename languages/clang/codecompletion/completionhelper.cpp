@@ -56,13 +56,6 @@ struct ImplementsInfo
     QString scopePrefix;
 };
 
-constexpr bool canContainFunctionDecls(CXCursorKind kind)
-{
-    return kind == CXCursor_Namespace || kind == CXCursor_StructDecl ||
-           kind == CXCursor_UnionDecl || kind == CXCursor_ClassDecl  ||
-           kind == CXCursor_ClassTemplate || kind == CXCursor_ClassTemplatePartialSpecialization;
-}
-
 //TODO replace this with clang_Type_getTemplateArgumentAsType when that
 //function makes it into the mainstream libclang release.
 QStringList templateTypeArguments(CXCursor cursor)
@@ -233,7 +226,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     }
 
     //Recurse into cursors which could contain a function declaration
-    if (canContainFunctionDecls(kind)) {
+    if (ClangUtils::isScopeKind(kind)) {
 
         //Don't enter a scope that branches from the origin's scope
         if (data->depth < data->originScope.count() &&

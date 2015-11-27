@@ -153,7 +153,7 @@ bool ClangUtils::isFileEqual(CXFile file1, CXFile file2)
 #endif
 }
 
-constexpr bool isScopeKind(CXCursorKind kind)
+bool ClangUtils::isScopeKind(CXCursorKind kind)
 {
     return kind == CXCursor_Namespace || kind == CXCursor_StructDecl ||
            kind == CXCursor_UnionDecl || kind == CXCursor_ClassDecl  ||
