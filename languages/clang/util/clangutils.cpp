@@ -160,13 +160,16 @@ bool ClangUtils::isScopeKind(CXCursorKind kind)
            kind == CXCursor_ClassTemplate || kind == CXCursor_ClassTemplatePartialSpecialization;
 }
 
-QString ClangUtils::getScope(CXCursor cursor)
+QString ClangUtils::getScope(CXCursor cursor, CXCursor context)
 {
     QStringList scope;
-    CXCursor destContext = clang_getCanonicalCursor(clang_getCursorLexicalParent(cursor));
+    if (clang_Cursor_isNull(context)) {
+        context = clang_getCursorLexicalParent(cursor);
+    }
+    context = clang_getCanonicalCursor(context);
     CXCursor search = clang_getCursorSemanticParent(cursor);
-    while (isScopeKind(clang_getCursorKind(search)) && !clang_equalCursors(search, destContext)) {
-        scope.prepend(ClangString(clang_getCursorSpelling(search)).toString());
+    while (isScopeKind(clang_getCursorKind(search)) && !clang_equalCursors(search, context)) {
+        scope.prepend(ClangString(clang_getCursorDisplayName(search)).toString());
         search = clang_getCursorSemanticParent(search);
     }
     return scope.join(QStringLiteral("::"));

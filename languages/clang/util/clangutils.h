@@ -74,9 +74,11 @@ namespace ClangUtils
      * cursor's scope at its current location.
      *
      * @param cursor The cursor to examine
+     * @param context The destination context from which the cursor should be referenced.
+     *                By default this will be set to the cursors lexical parent.
      * @return the cursor's scope as a string
      */
-    QString getScope(CXCursor cursor);
+    QString getScope(CXCursor cursor, CXCursor context = clang_getNullCursor());
 
     /**
      * Given a cursor representing some sort of function, returns its signature. The
