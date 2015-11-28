@@ -92,5 +92,3 @@ void GenericConfigPage::reset()
 }
 
 }
-
-#include "genericconfigpage.moc"
