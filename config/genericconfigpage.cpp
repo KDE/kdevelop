@@ -48,7 +48,7 @@ GenericConfigPage::~GenericConfigPage(void)
 
 QString GenericConfigPage::name() const
 {
-    return QStringLiteral("cppcheck");
+    return i18n("Cppcheck");
 }
 
 void GenericConfigPage::apply()

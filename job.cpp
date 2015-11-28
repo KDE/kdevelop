@@ -203,7 +203,7 @@ void Job::processErrored(QProcess::ProcessError e)
 {
     switch (e) {
     case QProcess::FailedToStart:
-        KMessageBox::error(qApp->activeWindow(), i18n("Failed to start cppcheck from \"%1\".", m_process->property("executable").toString()), i18n("Failed to start Cppcheck"));
+        KMessageBox::error(qApp->activeWindow(), i18n("Failed to start Cppcheck from \"%1\".", m_process->property("executable").toString()), i18n("Failed to start Cppcheck"));
         break;
     case QProcess::Crashed:
         // if the process was killed by the user, the crash was expected
@@ -230,7 +230,7 @@ void Job::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qCDebug(KDEV_CPPCHECK) << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
 
-    QString tabname = i18n("cppcheck finished (pid=%1,exit=%2)", m_pid, exitCode);
+    QString tabname = i18n("Cppcheck finished (pid=%1,exit=%2)", m_pid, exitCode);
 
     if (exitCode != 0) {
         /*
