@@ -311,7 +311,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
-    {
+    if (context) {
         if (minimumFeatures() & TopDUContext::AST) {
             DUChainWriteLocker lock;
             context->setAst(IAstContainer::Ptr(session.data()));

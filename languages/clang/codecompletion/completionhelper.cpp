@@ -53,15 +53,7 @@ struct ImplementsInfo
     QVector<CXFile> fileFilter;
     int depth;
     QString templatePrefix;
-    QString scopePrefix;
 };
-
-constexpr bool canContainFunctionDecls(CXCursorKind kind)
-{
-    return kind == CXCursor_Namespace || kind == CXCursor_StructDecl ||
-           kind == CXCursor_UnionDecl || kind == CXCursor_ClassDecl  ||
-           kind == CXCursor_ClassTemplate || kind == CXCursor_ClassTemplatePartialSpecialization;
-}
 
 //TODO replace this with clang_Type_getTemplateArgumentAsType when that
 //function makes it into the mainstream libclang release.
@@ -233,7 +225,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     }
 
     //Recurse into cursors which could contain a function declaration
-    if (canContainFunctionDecls(kind)) {
+    if (ClangUtils::isScopeKind(kind)) {
 
         //Don't enter a scope that branches from the origin's scope
         if (data->depth < data->originScope.count() &&
@@ -241,19 +233,15 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
             return CXChildVisit_Continue;
         }
 
-        QString part, templatePrefix;
+        // we must not declare a function outside of its anonymous namespace, so
+        // don't recurse into anonymous namespaces if we are not in one already
+        if (kind == CXCursor_Namespace && !clang_equalCursors(data->origin, cursor) && ClangString(clang_getCursorDisplayName(cursor)).isEmpty()) {
+            return CXChildVisit_Continue;
+        }
+
+        QString templatePrefix;
         if (data->depth >= data->originScope.count()) {
-            QString name = ClangString(clang_getCursorDisplayName(cursor)).toString();
-
-            //This code doesn't play well with anonymous namespaces, so don't recurse
-            //into them at all. TODO improve support for anonymous namespaces
-            if (kind == CXCursor_Namespace && name.isEmpty()) {
-                return CXChildVisit_Continue;
-            }
-
             if (kind == CXCursor_ClassTemplate || kind == CXCursor_ClassTemplatePartialSpecialization) {
-                part = name + QLatin1String("::");
-
                 //If we're at a template, we need to construct the template<typename T1, typename T2>
                 //which goes at the front of the prototype
                 QStringList templateTypes = templateParams(kind == CXCursor_ClassTemplate ? cursor : clang_getSpecializedCursorTemplate(cursor));
@@ -263,16 +251,13 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
                     templatePrefix = templatePrefix + QLatin1String((i > 0) ? ", " : "") + QLatin1String("typename ") + templateTypes.at(i);
                 }
                 templatePrefix = templatePrefix + QLatin1String("> ");
-            } else {
-                part = name + QLatin1String("::");
             }
         }
 
         ImplementsInfo info{data->origin, data->top, data->prototypes, data->originScope,
                             data->fileFilter,
                             data->depth + 1,
-                            data->templatePrefix + templatePrefix,
-                            data->scopePrefix + part};
+                            data->templatePrefix + templatePrefix};
         clang_visitChildren(cursor, declVisitor, &info);
 
         return CXChildVisit_Continue;
@@ -307,10 +292,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
 
     //TODO Add support for pure virtual functions
 
-    auto scope = data->scopePrefix;
-    if (scope.endsWith(QLatin1String("::"))) {
-        scope.chop(2); // chop '::'
-    }
+    const auto scope = ClangUtils::getScope(cursor, data->origin);
     QString signature = ClangUtils::getCursorSignature(cursor, scope);
 
     QString returnType, rest;
@@ -391,7 +373,7 @@ void CompletionHelper::computeCompletions(const ParseSession& session, CXFile fi
             }
         }
 
-        ImplementsInfo info{currentCursor, topCursor, &m_implements, scopes, fileFilter, 0, QString(), QString()};
+        ImplementsInfo info{currentCursor, topCursor, &m_implements, scopes, fileFilter, 0, QString()};
         clang_visitChildren(topCursor, declVisitor, &info);
     }
 }

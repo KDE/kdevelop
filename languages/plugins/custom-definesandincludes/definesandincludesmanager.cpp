@@ -81,9 +81,7 @@ static ConfigEntry findConfigForItem(QList<ConfigEntry> paths, const KDevelop::P
     }
     ret.includes.removeDuplicates();
 
-    if (ret.parserArguments.isEmpty()) {
-        ret.parserArguments = SettingsManager::globalInstance()->defaultParserArguments();
-    }
+    Q_ASSERT(!ret.parserArguments.isEmpty());
 
     return ret;
 }

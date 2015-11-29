@@ -48,8 +48,8 @@
 
 using namespace KDevelop;
 
-CMakePreferences::CMakePreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
-    : KDevelop::ConfigPage(plugin, nullptr, parent), m_project(options.project), m_currentModel(0)
+CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& options, QWidget* parent)
+    : ConfigPage(plugin, nullptr, parent), m_project(options.project), m_currentModel(0)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -74,10 +74,13 @@ CMakePreferences::CMakePreferences(KDevelop::IPlugin* plugin, const KDevelop::Pr
     connect(m_prefsUi->addBuildDir, &QPushButton::pressed, this, &CMakePreferences::createBuildDir);
     connect(m_prefsUi->removeBuildDir, &QPushButton::pressed, this, &CMakePreferences::removeBuildDir);
     connect(m_prefsUi->showAdvanced, &QPushButton::toggled, this, &CMakePreferences::showAdvanced);
-    connect(m_prefsUi->environment, &KDevelop::EnvironmentSelectionWidget::currentProfileChanged, this, static_cast<void(CMakePreferences::*)()>(&CMakePreferences::changed));
+    connect(m_prefsUi->environment, &EnvironmentSelectionWidget::currentProfileChanged,
+            this, &CMakePreferences::changed);
+    connect(m_prefsUi->configureEnvironment, &EnvironmentConfigureButton::environmentConfigured,
+            this, &CMakePreferences::changed);
 
     showInternal(m_prefsUi->showInternal->checkState());
-    m_subprojFolder = KDevelop::Path(options.projectTempFile).parent();
+    m_subprojFolder = Path(options.projectTempFile).parent();
 
     qCDebug(CMAKE) << "Source folder: " << m_srcFolder << options.projectTempFile;
 //     foreach(const QVariant &v, args)
@@ -169,7 +172,7 @@ void CMakePreferences::configureCacheView()
     showInternal(m_prefsUi->showInternal->checkState());
 }
 
-void CMakePreferences::updateCache(const KDevelop::Path &newBuildDir)
+void CMakePreferences::updateCache(const Path &newBuildDir)
 {
     const Path file = newBuildDir.isValid() ? Path(newBuildDir, "CMakeCache.txt") : Path();
     if(QFile::exists(file.toLocalFile()))
@@ -223,7 +226,7 @@ void CMakePreferences::showInternal(int state)
 void CMakePreferences::buildDirChanged(int index)
 {
     CMake::setOverrideBuildDirIndex( m_project, index );
-    const KDevelop::Path buildDir = CMake::currentBuildDir(m_project);
+    const Path buildDir = CMake::currentBuildDir(m_project);
     m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment( m_project ) );
     updateCache(buildDir);
     qCDebug(CMAKE) << "builddir Changed" << buildDir;
@@ -232,7 +235,7 @@ void CMakePreferences::buildDirChanged(int index)
 
 void CMakePreferences::cacheUpdated()
 {
-    const KDevelop::Path buildDir = CMake::currentBuildDir(m_project);
+    const Path buildDir = CMake::currentBuildDir(m_project);
     updateCache(buildDir);
     qCDebug(CMAKE) << "cache updated for" << buildDir;
 }
@@ -248,7 +251,7 @@ void CMakePreferences::createBuildDir()
     // It may be '/' or '\', so maybe should we rely on CMake::allBuildDirs() for returning well-formed pathes?
     QStringList used = CMake::allBuildDirs( m_project );
     bdCreator.setAlreadyUsed(used);
-    bdCreator.setCMakeBinary(KDevelop::Path(CMake::findExecutable()));
+    bdCreator.setCMakeBinary(Path(CMake::findExecutable()));
 
     if(bdCreator.exec())
     {
@@ -289,7 +292,7 @@ void CMakePreferences::removeBuildDir()
     if(curr < 0)
         return;
 
-    KDevelop::Path removedPath = CMake::currentBuildDir( m_project );
+    Path removedPath = CMake::currentBuildDir( m_project );
     QString removed = removedPath.toLocalFile();
     if(QDir(removed).exists())
     {
@@ -322,7 +325,7 @@ void CMakePreferences::removeBuildDir()
 
 void CMakePreferences::configure()
 {
-    KDevelop::IProjectBuilder *b=m_project->buildSystemManager()->builder();
+    IProjectBuilder *b=m_project->buildSystemManager()->builder();
     KJob* job=b->configure(m_project);
     if( m_currentModel ) {
         QVariantMap map = m_currentModel->changedValues();
@@ -332,8 +335,8 @@ void CMakePreferences::configure()
         connect(job, &KJob::finished, this, &CMakePreferences::cacheUpdated);
     }
 
-    connect(job, &KJob::finished, m_project, &KDevelop::IProject::reloadModel);
-    KDevelop::ICore::self()->runController()->registerJob(job);
+    connect(job, &KJob::finished, m_project, &IProject::reloadModel);
+    ICore::self()->runController()->registerJob(job);
 }
 
 void CMakePreferences::showAdvanced(bool v)

@@ -23,6 +23,8 @@
 #include <interfaces/iplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
 
+class ModelManager;
+
 class KDevQmlJsPlugin : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
     Q_OBJECT
@@ -43,6 +45,8 @@ public:
 private:
     KDevelop::ICodeHighlighting* m_highlighting;
     KDevelop::BasicRefactoring* m_refactoring;
+
+    ModelManager* m_modelManager;
 };
 
 #endif // KDEVQMLJSPLUGIN_H

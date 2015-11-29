@@ -133,6 +133,7 @@ void TestFiles::parseAndCheck(const QString& fileName, bool check)
     }
     if (!QTest::currentDataTag() || strcmp("failparse.js", QTest::currentDataTag()) != 0) {
         QEXPECT_FAIL("plugins.qml", "not working properly yet", Continue);
+        QEXPECT_FAIL("qrc_import.qml", "just making sure it does not crash", Continue);
         QVERIFY(top->problems().isEmpty());
     }
   }

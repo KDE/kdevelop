@@ -27,15 +27,23 @@
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"
 
-MakeBuilderPreferences::MakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+using namespace KDevelop;
+
+MakeBuilderPreferences::MakeBuilderPreferences(IPlugin* plugin, const ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<MakeBuilderSettings>(plugin, options, parent)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::MakeConfig;
     m_prefsUi->setupUi( w );
-    connect(m_prefsUi->makeBinary, &KUrlRequester::textChanged, this, &MakeBuilderPreferences::changed);
-    connect(m_prefsUi->makeBinary, &KUrlRequester::urlSelected, this, &MakeBuilderPreferences::changed);
+    connect(m_prefsUi->makeBinary, &KUrlRequester::textChanged,
+            this, &MakeBuilderPreferences::changed);
+    connect(m_prefsUi->makeBinary, &KUrlRequester::urlSelected,
+            this, &MakeBuilderPreferences::changed);
+    connect(m_prefsUi->configureEnvironment, &EnvironmentConfigureButton::environmentConfigured,
+            this, &MakeBuilderPreferences::changed);
+    connect(m_prefsUi->kcfg_environmentProfile, &EnvironmentSelectionWidget::currentProfileChanged,
+            this, &MakeBuilderPreferences::changed);
     l->addWidget( w );
 
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
@@ -70,9 +78,9 @@ MakeBuilderPreferences::~MakeBuilderPreferences()
 QString MakeBuilderPreferences::standardMakeComannd()
 {
 #ifdef _MSC_VER
-    return QLatin1String("nmake");
+    return QStringLiteral("nmake");
 #else
-    return QLatin1String("make");
+    return QStringLiteral("make");
 #endif
 }
 
@@ -88,5 +96,5 @@ QString MakeBuilderPreferences::fullName() const
 
 QIcon MakeBuilderPreferences::icon() const
 {
-    return QIcon::fromTheme("run-build");
+    return QIcon::fromTheme(QStringLiteral("run-build"));
 }

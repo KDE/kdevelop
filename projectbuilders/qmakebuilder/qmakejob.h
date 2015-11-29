@@ -52,6 +52,9 @@ public:
     
     virtual void start() override;
 
+    QUrl workingDirectory() const override;
+    QStringList commandLine() const override;
+
 protected:
     bool doKill() override;
 

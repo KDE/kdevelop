@@ -25,6 +25,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
+#include <tests/testproject.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
@@ -83,7 +84,10 @@ void TestDUChain::initTestCase()
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init({QStringLiteral("kdevclangsupport")});
-    TestCore::initialize();
+    auto core = TestCore::initialize();
+    delete core->projectController();
+    m_projectController = new TestProjectController(core);
+    core->setProjectController(m_projectController);
 }
 
 void TestDUChain::cleanupTestCase()
@@ -407,14 +411,19 @@ void TestDUChain::testNamespace()
 
 void TestDUChain::testAutoTypeDeduction()
 {
-    TestFile file("const volatile auto foo = 5;\n", "cpp");
+    TestFile file(R"(
+        const volatile auto foo = 5;
+        template<class T> struct myTemplate {};
+        myTemplate<myTemplate<int>& > templRefParam;
+        auto autoTemplRefParam = templRefParam;
+    )", "cpp");
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
 
     DUContext* ctx = file.topContext().data();
     QVERIFY(ctx);
-    QCOMPARE(ctx->localDeclarations().size(), 1);
+    QCOMPARE(ctx->localDeclarations().size(), 4);
     QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
     Declaration* decl = ctx->findDeclarations(QualifiedIdentifier("foo"))[0];
     QCOMPARE(decl->identifier(), Identifier("foo"));
@@ -427,6 +436,14 @@ void TestDUChain::testAutoTypeDeduction()
 #else
     QCOMPARE(decl->toString(), QStringLiteral("const volatile int foo"));
 #endif
+
+    decl = ctx->findDeclarations(QualifiedIdentifier("autoTemplRefParam"))[0];
+    QVERIFY(decl);
+    QVERIFY(decl->abstractType());
+#if CINDEX_VERSION_MINOR < 31
+    QEXPECT_FAIL("", "Auto type is not exposed via LibClang", Continue);
+#endif
+    QCOMPARE(decl->abstractType()->toString(), QStringLiteral("myTemplate< myTemplate< int >& >"));
 }
 
 void TestDUChain::testTypeDeductionInTemplateInstantiation()
@@ -565,6 +582,45 @@ void TestDUChain::testReparseBaseClassesTemplates()
 
         file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
     }
+}
+
+// TODO: Move this test to kdevplatform.
+void TestDUChain::testGetInheriters()
+{
+    TestFile file("class Base { class Inner {}; }; class Inherited : public Base, Base::Inner {};", "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    DUContext* top = file.topContext().data();
+    QVERIFY(top);
+
+    QCOMPARE(top->localDeclarations().count(), 2);
+    Declaration* baseDecl = top->localDeclarations().first();
+    QCOMPARE(baseDecl->identifier(), Identifier("Base"));
+
+    DUContext* baseCtx = baseDecl->internalContext();
+    QVERIFY(baseCtx);
+    QCOMPARE(baseCtx->localDeclarations().count(), 1);
+
+    Declaration* innerDecl = baseCtx->localDeclarations().first();
+    QCOMPARE(innerDecl->identifier(), Identifier("Inner"));
+
+    Declaration* inheritedDecl = top->localDeclarations()[1];
+    QVERIFY(inheritedDecl);
+    QCOMPARE(inheritedDecl->identifier(), Identifier("Inherited"));
+
+    uint maxAllowedSteps = uint(-1);
+    auto baseInheriters = DUChainUtils::getInheriters(baseDecl, maxAllowedSteps);
+    QEXPECT_FAIL("", "not yet working properly, tentative fix is up for review for kdevplatform", Abort);
+    QCOMPARE(baseInheriters, QList<Declaration*>() << inheritedDecl);
+
+    maxAllowedSteps = uint(-1);
+    auto innerInheriters = DUChainUtils::getInheriters(innerDecl, maxAllowedSteps);
+    QCOMPARE(innerInheriters, QList<Declaration*>() << inheritedDecl);
+
+    maxAllowedSteps = uint(-1);
+    auto inheritedInheriters = DUChainUtils::getInheriters(inheritedDecl, maxAllowedSteps);
+    QCOMPARE(inheritedInheriters.count(), 0);
 }
 
 void TestDUChain::testGlobalFunctionDeclaration()
@@ -1365,4 +1421,93 @@ void TestDUChain::testReparseUnchanged()
 
     impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
     checkProblems(true);
+}
+
+void TestDUChain::testTypeAliasTemplate()
+{
+    TestFile file("template <typename T> using TypeAliasTemplate = T;", "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+
+    auto templateAlias = file.topContext()->localDeclarations().last();
+    QVERIFY(templateAlias);
+#if CINDEX_VERSION_MINOR < 31
+    QEXPECT_FAIL("", "TypeAliasTemplate is not exposed via LibClang", Abort);
+#endif
+    QVERIFY(templateAlias->abstractType());
+    QCOMPARE(templateAlias->abstractType()->toString(), QStringLiteral("TypeAliasTemplate"));
+}
+
+static bool containsErrors(const QList<Problem::Ptr>& problems)
+{
+    auto it = std::find_if(problems.begin(), problems.end(), [] (const Problem::Ptr& problem) {
+        return problem->severity() == Problem::Error;
+    });
+    return it != problems.end();
+}
+
+static bool expectedXmmintrinErrors(const QList<Problem::Ptr>& problems)
+{
+    foreach (const auto& problem, problems) {
+        if (problem->severity() == Problem::Error && !problem->description().contains("Cannot initialize a parameter of type")) {
+            return false;
+        }
+    }
+    return true;
+}
+
+static void verifyNoErrors(TopDUContext* top, QSet<TopDUContext*>& checked)
+{
+    const auto problems = top->problems();
+    if (containsErrors(problems)) {
+        qDebug() << top->url() << top->problems();
+        if (top->url().str().endsWith("xmmintrin.h") && expectedXmmintrinErrors(problems)) {
+            QEXPECT_FAIL("", "there are still some errors in xmmintrin.h b/c some clang provided intrinsincs are more strict than the GCC ones.", Continue);
+            QVERIFY(false);
+        } else {
+            QFAIL("parse error detected");
+        }
+    }
+    const auto imports = top->importedParentContexts();
+    foreach (const auto& import, imports) {
+        auto ctx = import.context(top);
+        QVERIFY(ctx);
+        auto importedTop = ctx->topContext();
+        if (checked.contains(importedTop)) {
+            continue;
+        }
+        checked.insert(importedTop);
+        verifyNoErrors(importedTop, checked);
+    }
+}
+
+void TestDUChain::testGccCompatibility()
+{
+    // TODO: make it easier to change the compiler provider for testing purposes
+    QTemporaryDir dir;
+    auto project = new TestProject(Path(dir.path()), this);
+    auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
+    auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
+    pathConfig.writeEntry("Path", ".");
+    pathConfig.group("Compiler").writeEntry("Name", "GCC");
+    m_projectController->addProject(project);
+
+    {
+        TestFile file(R"(
+            #include <x86intrin.h>
+
+            int main() { return 0; }
+        )", "c", project, dir.path());
+
+        file.parse();
+        QVERIFY(file.waitForParsed(5000));
+
+        DUChainReadLocker lock;
+        QSet<TopDUContext*> checked;
+        verifyNoErrors(file.topContext(), checked);
+    }
+
+    m_projectController->clearProjects();
 }

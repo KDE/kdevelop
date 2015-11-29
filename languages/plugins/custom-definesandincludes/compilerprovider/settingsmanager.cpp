@@ -142,6 +142,10 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
         path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
         path.parserArguments = pathgrp.readEntry(ConfigConstants::parserArguments(), defaultArguments());
 
+        if (path.parserArguments.isEmpty()) {
+            path.parserArguments = defaultArguments();
+        }
+
         { // defines
             // Backwards compatibility with old config style
             if(pathgrp.hasKey(ConfigConstants::definesKey)) {
@@ -194,6 +198,8 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
         if ( remove ) {
             pathgrp.deleteGroup();
         }
+
+        Q_ASSERT(!path.parserArguments.isEmpty());
         paths << path;
     }
 
@@ -351,4 +357,5 @@ QString SettingsManager::defaultParserArguments() const
 ConfigEntry::ConfigEntry(const QString& path)
     : path(path)
     , compiler(SettingsManager::globalInstance()->provider()->checkCompilerExists({}))
+    , parserArguments(defaultArguments())
 {}

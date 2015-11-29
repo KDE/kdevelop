@@ -38,6 +38,11 @@ class BasicRefactoring;
 class IDocument;
 }
 
+namespace KTextEditor
+{
+class View;
+}
+
 class ClangSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport, public KDevelop::IBuddyDocumentFinder
 {
     Q_OBJECT
@@ -82,6 +87,8 @@ public:
 
 private slots:
     void documentActivated(KDevelop::IDocument* doc);
+    void disableKeywordCompletion(KTextEditor::View* view);
+    void enableKeywordCompletion(KTextEditor::View* view);
 
 private:
     KDevelop::ICodeHighlighting *m_highlighting;

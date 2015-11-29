@@ -595,6 +595,22 @@ void TestCodeCompletion::testImplement_data()
            "}; \n"
         << CompletionItems{{2, 0}, {"bar(char c, int i)"}};
 
+    QTest::newRow("anonymous-namespace")
+        << R"(
+                namespace {
+                    int bar(char c, int i);
+                };
+            )"
+        << CompletionItems{{3, 0}, {"bar(char c, int i)"}};
+
+    QTest::newRow("anonymous-namespace2")
+        << R"(
+                namespace {
+                    int bar(char c, int i);
+                };
+           )"
+        << CompletionItems{{4, 0}, {}};
+
     QTest::newRow("namespace2")
         << "namespace Foo { \n"
            "int bar(char c, int i); \n\n"
@@ -738,6 +754,18 @@ void TestCodeCompletion::testImplement_data()
                 } // namespace test
             )"
         << CompletionItems{{7,0}, {}};
+
+    QTest::newRow("bug355954")
+        << R"(
+                struct Hello {
+                    struct Private;
+                };
+
+                struct Hello::Private {
+                    void test();
+                };
+            )"
+        << CompletionItems{{8,0}, {"Hello::Private::test()"}};
 }
 
 void TestCodeCompletion::testImplementOtherFile()
