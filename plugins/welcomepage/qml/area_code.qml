@@ -42,7 +42,7 @@ StandardBackground {
             iconSource: "project-development"
             text: i18n("Projects")
             onClicked: root.state = "projects"
-//             visible: projects.count != 0
+            visible: false //FIXME: removed until it makes sense
         }
         Link {
             iconSource: "help-contents"

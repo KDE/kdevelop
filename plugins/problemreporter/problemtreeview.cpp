@@ -29,6 +29,7 @@
 #include <QItemDelegate>
 #include <QMenu>
 #include <QSignalMapper>
+#include <QSortFilterProxyModel>
 
 #include <KActionMenu>
 #include <KLocalizedString>
@@ -79,16 +80,22 @@ void ProblemTreeViewItemDelegate::paint(QPainter* painter, const QStyleOptionVie
 
 ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     : QTreeView(parent)
+    , m_proxy(new QSortFilterProxyModel(this))
 {
-    ProblemModel* problemModel = dynamic_cast<ProblemModel*>(itemModel);
-    Q_ASSERT(problemModel);
 
     setObjectName("Problem Reporter Tree");
     setWhatsThis(i18n("Problems"));
     setItemDelegate(new ProblemTreeViewItemDelegate);
     setSelectionBehavior(QAbstractItemView::SelectRows);
 
+    m_proxy->setSortRole(ProblemModel::SeverityRole);
+    m_proxy->setDynamicSortFilter(true);
+    m_proxy->sort(0, Qt::AscendingOrder);
+
+    ProblemModel* problemModel = dynamic_cast<ProblemModel*>(itemModel);
+    Q_ASSERT(problemModel);
     setModel(problemModel);
+
     header()->setStretchLastSection(false);
 
     if (problemModel->features().testFlag(ProblemModel::CanDoFullUpdate)) {
@@ -294,7 +301,7 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
     {
         // TODO: is this really necessary?
         DUChainReadLocker lock(DUChain::lock());
-        IProblem::Ptr problem = model()->problemForIndex(index);
+        const auto problem = index.data(ProblemModel::ProblemRole).value<IProblem::Ptr>();
         if (!problem)
             return;
 
@@ -307,29 +314,8 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
 
 void ProblemTreeView::resizeColumns()
 {
-    // Do actual resizing only if the widget is visible and there are not too many items
-    const int ResizeRowLimit = 15;
-    if (isVisible() && model()->rowCount() > 0 && model()->rowCount() < ResizeRowLimit) {
-        const int columnCount = model()->columnCount();
-        QVector<int> widthArray(columnCount);
-        int totalWidth = 0;
-        for (int i = 0; i < columnCount; ++i) {
-            widthArray[i] = columnWidth(i);
-            totalWidth += widthArray[i];
-        }
-        for (int i = 0; i < columnCount; ++i) {
-            int columnWidthHint = qMax(sizeHintForColumn(i), header()->sectionSizeHint(i));
-            if (columnWidthHint - widthArray[i] > 0) {
-                if (columnWidthHint - widthArray[i] < width() - totalWidth) { // enough space to resize
-                    setColumnWidth(i, columnWidthHint);
-                    totalWidth += (columnWidthHint - widthArray[i]);
-                } else {
-                    setColumnWidth(i, widthArray[i] + width() - totalWidth);
-                    break;
-                }
-            }
-        }
-    }
+    for (int i = 0; i < model()->columnCount(); ++i)
+        resizeColumnToContents(i);
 }
 
 void ProblemTreeView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
@@ -346,39 +332,42 @@ void ProblemTreeView::reset()
 
 ProblemModel* ProblemTreeView::model() const
 {
-    return static_cast<ProblemModel*>(QTreeView::model());
+    return static_cast<ProblemModel*>(m_proxy->sourceModel());
 }
 
 void ProblemTreeView::setModel(QAbstractItemModel* model)
 {
     Q_ASSERT(qobject_cast<ProblemModel*>(model));
-    QTreeView::setModel(model);
+    m_proxy->setSourceModel(model);
+    QTreeView::setModel(m_proxy);
 }
 
 void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
 {
     QModelIndex index = indexAt(event->pos());
     if (index.isValid()) {
-        IProblem::Ptr problem = model()->problemForIndex(index);
-        if (problem) {
-            QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
-            if (solution) {
-                QList<QAction*> actions;
-                foreach (KDevelop::IAssistantAction::Ptr action, solution->actions()) {
-                    actions << action->toKAction();
-                }
-                if (!actions.isEmpty()) {
-                    QString title = solution->title();
-                    title = KDevelop::htmlToPlainText(title);
-                    title.replace("&apos;", "\'");
+        const auto problem = index.data(ProblemModel::ProblemRole).value<IProblem::Ptr>();
+        if (!problem) {
+            return;
+        }
+        QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
+        if (!solution) {
+            return;
+        }
+        QList<QAction*> actions;
+        foreach (KDevelop::IAssistantAction::Ptr action, solution->actions()) {
+            actions << action->toKAction();
+        }
+        if (!actions.isEmpty()) {
+            QString title = solution->title();
+            title = KDevelop::htmlToPlainText(title);
+            title.replace("&apos;", "\'");
 
-                    QPointer<QMenu> m = new QMenu(this);
-                    m->addSection(title);
-                    m->addActions(actions);
-                    m->exec(event->globalPos());
-                    delete m;
-                }
-            }
+            QPointer<QMenu> m = new QMenu(this);
+            m->addSection(title);
+            m->addActions(actions);
+            m->exec(event->globalPos());
+            delete m;
         }
     }
 }
@@ -386,9 +375,7 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
 void ProblemTreeView::showEvent(QShowEvent* event)
 {
     Q_UNUSED(event)
-
-    for (int i = 0; i < model()->columnCount(); ++i)
-        resizeColumnToContents(i);
+    resizeColumns();
 }
 
 #include "problemtreeview.moc"

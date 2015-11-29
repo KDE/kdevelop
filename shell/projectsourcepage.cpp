@@ -36,6 +36,9 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, QWidget* parent)
     m_ui = new Ui::ProjectSourcePage;
     m_ui->setupUi(this);
 
+    m_ui->status->setCloseButtonVisible(false);
+    m_ui->status->setMessageType(KMessageWidget::Error);
+
     m_ui->workingDir->setUrl(initial);
     m_ui->workingDir->setMode(KFile::Directory);
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
@@ -254,13 +257,13 @@ void ProjectSourcePage::projectChanged(const QString& name)
 
 void ProjectSourcePage::setStatus(const QString& message)
 {
-    KColorScheme scheme(QPalette::Normal);
-    m_ui->status->setText(QStringLiteral("<font color='%1'>%2</font>").arg(scheme.foreground(KColorScheme::NegativeText).color().name()).arg(message));
+    m_ui->status->setText(message);
+    m_ui->status->animatedShow();
 }
 
 void ProjectSourcePage::clearStatus()
 {
-    m_ui->status->clear();
+    m_ui->status->animatedHide();
 }
 
 QUrl ProjectSourcePage::workingDir() const

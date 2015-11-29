@@ -106,7 +106,7 @@ Path CompilerFilterStrategy::pathForFile(const QString& filename) const
 
 bool CompilerFilterStrategy::isMultiLineCase(KDevelop::ErrorFormat curErrFilter) const
 {
-    if(curErrFilter.compiler == "gfortran" || curErrFilter.compiler == "cmake") {
+    if(curErrFilter.compiler == QLatin1String("gfortran") || curErrFilter.compiler == QLatin1String("cmake")) {
         return true;
     }
     return false;
@@ -162,7 +162,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         ActionFormat( ki18nc("finished building a target: %1 target name", "built %1"), -1, 1,
                       QStringLiteral("\\[.+%\\] Built target (.*)") ),
         ActionFormat( ki18nc("compiling a file: %1 file %2 compiler", "compiling %1 (%2)"), QStringLiteral("cmake"),
-                      QStringLiteral("\\[.+%\\] Building .* object (.*)CMakeFiles/"), 1 ),
+                      QStringLiteral("\\[.+%\\] Building .* object (.*)"), 1 ),
         ActionFormat( ki18nc("generating a file: %1 file %2 generator tool", "generating %1 (%2)"), -1, 1,
                       QStringLiteral("\\[.+%\\] Generating (.*)") ),
         ActionFormat( ki18nc("Linking object files into a library or executable: %1 target", "linking %1"), -1, 1,
@@ -216,8 +216,11 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             // and use it to find out about the build paths encountered during a build.
             // They are later searched by pathForFile to find source files corresponding to
             // compiler errors.
+            // Note: CMake objectfile has the format: "/path/to/four/CMakeFiles/file.o"
             if ( curActFilter.fileGroup != -1 && curActFilter.tool == "cmake" && line.contains("Building")) {
-                putDirAtEnd(Path(m_buildDir, match.captured(curActFilter.fileGroup).mid(1)));
+                const auto objectFile = match.captured(curActFilter.fileGroup);
+                const auto dir = objectFile.section(QStringLiteral("CMakeFiles/"), 0, 0);
+                putDirAtEnd(Path(m_buildDir, dir));
             }
             break;
         }

@@ -225,15 +225,15 @@ NavigationContextPointer AbstractNavigationContext::registerChild( AbstractNavig
 
 NavigationContextPointer AbstractNavigationContext::registerChild(DeclarationPointer declaration) {
   //We create a navigation-widget here, and steal its context.. evil ;)
-  QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration.data());
-  NavigationContextPointer ret;
-  AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
-  if(abstractNavigationWidget)
-    ret = abstractNavigationWidget->context();
-  delete navigationWidget;
-  ret->setPreviousContext(this);
-  m_children << ret;
-  return ret;
+  QScopedPointer<QWidget> navigationWidget(declaration->context()->createNavigationWidget(declaration.data()));
+  if (AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget.data()) ) {
+    NavigationContextPointer ret = abstractNavigationWidget->context();
+    ret->setPreviousContext(this);
+    m_children << ret;
+    return ret;
+  } else {
+    return NavigationContextPointer(this);
+  }
 }
 
 const int lineJump = 3;

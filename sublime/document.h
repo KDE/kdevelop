@@ -115,9 +115,6 @@ public:
     virtual QIcon defaultIcon() const;
 
 Q_SIGNALS:
-    /**Emitted when the view is added or deleted. Use Document::views to find out
-    which views and how many of them are still there.*/
-    void viewNumberChanged(Sublime::Document *doc);
     /**Emitted when the document is about to be deleted but is still in valid state.*/
     void aboutToDelete(Sublime::Document *doc);
     /**Emitted when the document's title is changed.*/

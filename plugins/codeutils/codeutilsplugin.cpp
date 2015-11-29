@@ -101,6 +101,7 @@ void CodeUtilsPlugin::documentDeclaration()
     Cursor insertPos( line, 0 );
 
     TemplateRenderer renderer;
+    renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
     renderer.addVariable("brief", i18n( "..." ));
 
     /*

@@ -35,6 +35,7 @@ namespace KDevelop
 class IDocument;
 class ILanguage;
 
+// TODO: cleanup this class for 5.1
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
 {
   Q_OBJECT
@@ -58,6 +59,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
      * checkDocument() -> load lang plugin -> register CodeCompletion -> checkDocument() -> ...
      */
     void checkDocuments();
+
+  signals:
+    void registeredToView(KTextEditor::View* view);
+    void unregisteredFromView(KTextEditor::View* view);
 
   private:
     

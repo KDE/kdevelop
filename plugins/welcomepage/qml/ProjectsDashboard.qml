@@ -26,7 +26,10 @@ import "plugins"
 
 StandardPage {
     ScrollView {
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            margins: 30
+        }
         GridView {
             id: grid
             width: parent.width

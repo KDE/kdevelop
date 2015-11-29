@@ -99,7 +99,7 @@ public:
   QModelIndex index(ClassModelNodes::Node* a_node) const;
 
   inline void setFeatures(NodesModelInterface::Features features);
-  virtual inline NodesModelInterface::Features features() const { return m_features; }
+  virtual inline NodesModelInterface::Features features() const override { return m_features; }
 
 public Q_SLOTS:
   /// Call this to update the filter string for the search results folder.

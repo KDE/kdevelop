@@ -57,7 +57,7 @@ public:
     ProjectFileItem* fileAt( int ) const { return 0; }
     QList<ProjectFileItem*> files() const;
     virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const override { return QList< ProjectBaseItem* >(); }
-    virtual QList< ProjectFileItem* > filesForPath(const IndexedString&) const override { return QList<ProjectFileItem*>(); }
+    virtual QList< ProjectFileItem* > filesForPath(const IndexedString&) const override;
     virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const override { return QList<ProjectFolderItem*>(); }
     void reloadModel() override { }
     Path projectFile() const override;

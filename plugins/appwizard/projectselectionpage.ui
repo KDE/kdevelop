@@ -25,7 +25,7 @@
      <property name="title">
       <string>Properties</string>
      </property>
-     <layout class="QFormLayout">
+     <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="appNameLabel">
         <property name="text">
@@ -47,11 +47,7 @@
        <widget class="KUrlRequester" name="locationUrl"/>
       </item>
       <item row="2" column="0" colspan="2">
-       <widget class="KSqueezedTextLabel" name="locationValidLabel">
-        <property name="text">
-         <string>KSqueezedTextLabel</string>
-        </property>
-       </widget>
+       <widget class="KMessageWidget" name="locationValidWidget"/>
       </item>
      </layout>
     </widget>
@@ -89,7 +85,16 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -156,9 +161,10 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KSqueezedTextLabel</class>
-   <extends>QLabel</extends>
-   <header>ksqueezedtextlabel.h</header>
+   <class>KMessageWidget</class>
+   <extends>QFrame</extends>
+   <header location="global">kmessagewidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

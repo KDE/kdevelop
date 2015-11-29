@@ -109,7 +109,7 @@ public:
     bool bypassScopeFilter() const;
 
 private:
-    friend class FilteredProblemStorePrivate;
+    friend struct FilteredProblemStorePrivate;
     QScopedPointer<FilteredProblemStorePrivate> d;
 };
 

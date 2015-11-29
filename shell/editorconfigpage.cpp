@@ -41,9 +41,13 @@ public:
         : ConfigPage(nullptr, nullptr, parent), m_page(page)
     {
         page->setParent(this);
+
         QVBoxLayout* layout = new QVBoxLayout(this);
         layout->addWidget(page);
         setLayout(layout);
+
+        connect(page, &KTextEditor::ConfigPage::changed,
+                this, &ConfigPage::changed);
     }
 
     virtual ~KTextEditorConfigPageAdapter() {}

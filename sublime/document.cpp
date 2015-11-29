@@ -32,7 +32,6 @@ struct DocumentPrivate {
     void removeView(Sublime::View* view)
     {
         views.removeAll(view);
-        emit m_document->viewNumberChanged(m_document);
         //no need to keep empty document - we need to remove it
         if (views.count() == 0)
         {
@@ -113,7 +112,6 @@ View *Document::newView(Document *doc)
 {
     //first create View, second emit the signal
     View *newView = new View(doc);
-    emit viewNumberChanged(this);
     return newView;
 }
 

@@ -49,7 +49,7 @@ QIcon iconForSeverity(KDevelop::IProblem::Severity severity)
     case KDevelop::IProblem::Error:
         return QIcon::fromTheme(QStringLiteral("dialog-error"));
     }
-    return QIcon();
+    return {};
 }
 
 }
@@ -97,12 +97,13 @@ ProblemModel::~ ProblemModel()
 {
 }
 
-int ProblemModel::rowCount(const QModelIndex & parent) const
+int ProblemModel::rowCount(const QModelIndex& parent) const
 {
-    if(!parent.isValid())
+    if (!parent.isValid()) {
         return d->m_problems->count();
-    else
+    } else {
         return d->m_problems->count(reinterpret_cast<ProblemStoreNode*>(parent.internalPointer()));
+    }
 }
 
 static QString displayUrl(const QUrl &url, const QUrl &base)
@@ -114,25 +115,27 @@ static QString displayUrl(const QUrl &url, const QUrl &base)
     }
 }
 
-QVariant ProblemModel::data(const QModelIndex & index, int role) const
+QVariant ProblemModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
 
     QUrl baseDirectory = d->m_problems->currentDocument().toUrl().adjusted(QUrl::RemoveFilename);
     IProblem::Ptr p = problemForIndex(index);
-    if(p.constData() == NULL)
-    {
-        if((role == Qt::DisplayRole) && (index.column() == Error))
-        {
+    if (!p.constData()) {
+        if (role == Qt::DisplayRole && index.column() == Error) {
             ProblemStoreNode *node = reinterpret_cast<ProblemStoreNode*>(index.internalPointer());
-            if(node == NULL)
-                return QVariant();
-            else
+            if (node) {
                 return node->label();
+            }
         }
+        return {};
+    }
 
-        return QVariant();
+    if (role == SeverityRole) {
+        return p->severity();
+    } else if (role == ProblemRole) {
+        return QVariant::fromValue(p);
     }
 
     switch (role) {
@@ -145,18 +148,20 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
         case File:
             return displayUrl(p->finalLocation().document.toUrl(), baseDirectory);
         case Line:
-            if(p->finalLocation().isValid())
+            if (p->finalLocation().isValid()) {
                 return QString::number(p->finalLocation().start().line() + 1);
+            }
             break;
         case Column:
-            if(p->finalLocation().isValid())
+            if (p->finalLocation().isValid()) {
                 return QString::number(p->finalLocation().start().column() + 1);
+            }
             break;
         }
         break;
 
     case Qt::DecorationRole:
-        if (index.column() == 0) {
+        if (index.column() == Error) {
             return iconForSeverity(p->severity());
         }
         break;
@@ -167,52 +172,50 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
         break;
     }
 
-    return QVariant();
+    return {};
 }
 
 QModelIndex ProblemModel::parent(const QModelIndex& index) const
 {
     ProblemStoreNode *node = reinterpret_cast<ProblemStoreNode*>(index.internalPointer());
-    if(node == NULL)
-        return QModelIndex();
+    if (!node) {
+        return {};
+    }
 
     ProblemStoreNode *parent = node->parent();
-    if(parent == NULL)
-        return QModelIndex();
-
-    if(parent->isRoot())
-        return QModelIndex();
+    if (!parent || parent->isRoot()) {
+        return {};
+    }
 
     int idx = parent->index();
-
     return createIndex(idx, 0, parent);
-
 }
 
-QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent) const
+QModelIndex ProblemModel::index(int row, int column, const QModelIndex& parent) const
 {
-    if (row < 0 || row >= rowCount(parent) || column < 0 || column >= LastColumn)
+    if (row < 0 || row >= rowCount(parent) || column < 0 || column >= LastColumn) {
         return QModelIndex();
-
+    }
 
     ProblemStoreNode *parentNode = reinterpret_cast<ProblemStoreNode*>(parent.internalPointer());
     const ProblemStoreNode *node = d->m_problems->findNode(row, parentNode);
     return createIndex(row, column, (void*)node);
 }
 
-int ProblemModel::columnCount(const QModelIndex & parent) const
+int ProblemModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
     return LastColumn;
 }
 
-IProblem::Ptr ProblemModel::problemForIndex(const QModelIndex & index) const
+IProblem::Ptr ProblemModel::problemForIndex(const QModelIndex& index) const
 {
     ProblemStoreNode *node = reinterpret_cast<ProblemStoreNode*>(index.internalPointer());
-    if(node == NULL)
-        return IProblem::Ptr(NULL);
-    else
+    if (!node) {
+        return {};
+    } else {
         return node->problem();
+    }
 }
 
 ProblemModel::Features ProblemModel::features() const
@@ -253,7 +256,7 @@ QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int 
     Q_UNUSED(orientation);
 
     if (role != Qt::DisplayRole)
-        return QVariant();
+        return {};
 
     switch (section) {
         case Source:
@@ -268,7 +271,7 @@ QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int 
             return i18nc("@title:column column number with problem", "Column");
     }
 
-    return QVariant();
+    return {};
 }
 
 void ProblemModel::setCurrentDocument(IDocument* document)

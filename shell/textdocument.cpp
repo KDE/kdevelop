@@ -402,16 +402,7 @@ bool TextDocument::save(DocumentSaveMode mode)
         case IDocument::Clean:
             return true;
 
-        case IDocument::Modified: break;
-            if (!(mode & Silent))
-            {
-                int code = KMessageBox::warningYesNoCancel(
-                    Core::self()->uiController()->activeMainWindow(),
-                    i18n("The document \"%1\" has unsaved changes. Would you like to save them?", d->document->url().toLocalFile()),
-                    i18nc("@title:window", "Close Document"));
-                if (code != KMessageBox::Yes)
-                    return false;
-            }
+        case IDocument::Modified:
             break;
 
         case IDocument::Dirty:
@@ -565,8 +556,6 @@ bool TextDocument::close(DocumentSaveMode mode)
 Sublime::View* TextDocument::newView(Sublime::Document* doc)
 {
     Q_UNUSED(doc);
-
-    emit viewNumberChanged(this);
     return new TextView(this);
 }
 

@@ -36,6 +36,7 @@
 #include <KPluginFactory>
 #include <KRun>
 #include <KService>
+#include <KOpenWithDialog>
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
@@ -146,6 +147,17 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
         partActions += ext.actions(ContextMenuExtension::OpenEmbeddedGroup);
     }
 
+    {
+        auto other = new QAction(i18n("other..."), this);
+        connect(other, &QAction::triggered, this, [this] {
+            auto dialog = new KOpenWithDialog(m_urls, ICore::self()->uiController()->activeMainWindow());
+            if (dialog->exec() == QDialog::Accepted && dialog->service()) {
+                openService(dialog->service());
+            }
+        });
+        appActions << other;
+    }
+
     // Now setup a menu with actions for each part and app
     QMenu* menu = new QMenu( i18n("Open With" ) );
     menu->setIcon( QIcon::fromTheme( "document-open" ) );
@@ -232,12 +244,16 @@ void OpenWithPlugin::openDefault()
 
 void OpenWithPlugin::open( const QString& storageid )
 {
-    KService::Ptr svc = KService::serviceByStorageId( storageid );
-    if( svc->isApplication() ) {
-        KRun::runService( *svc, m_urls, ICore::self()->uiController()->activeMainWindow() );
+    openService(KService::serviceByStorageId( storageid ));
+}
+
+void OpenWithPlugin::openService(const KService::Ptr& service)
+{
+    if (service->isApplication()) {
+        KRun::runService( *service, m_urls, ICore::self()->uiController()->activeMainWindow() );
     } else {
-        QString prefName = svc->desktopEntryName();
-        if ( isTextEditor(svc) ) {
+        QString prefName = service->desktopEntryName();
+        if (isTextEditor(service)) {
             // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of
             // a PartDocument by passing no preferredpart to the documentcontroller
             // TODO: Solve this rather inside DocumentController
@@ -249,17 +265,17 @@ void OpenWithPlugin::open( const QString& storageid )
     }
 
     KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
-    if (storageid != config.readEntry(m_mimeType, QString())) {
+    if (service->storageId() != config.readEntry(m_mimeType, QString())) {
         int setDefault = KMessageBox::questionYesNo(
             qApp->activeWindow(),
             i18nc("%1: mime type name, %2: app/part name", "Do you want to open all '%1' files by default with %2?",
-                 m_mimeType, svc->name() ),
+                 m_mimeType, service->name() ),
             i18n("Set as default?"),
             KStandardGuiItem::yes(), KStandardGuiItem::no(),
             QStringLiteral("OpenWith-%1").arg(m_mimeType)
         );
         if (setDefault == KMessageBox::Yes) {
-            config.writeEntry(m_mimeType, storageid);
+            config.writeEntry(m_mimeType, service->storageId());
         }
     }
 }
