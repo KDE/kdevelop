@@ -43,7 +43,9 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
 
-    ui->locationValidLabel->setText(QStringLiteral(" "));
+    ui->locationValidWidget->hide();
+    ui->locationValidWidget->setMessageType(KMessageWidget::Error);
+    ui->locationValidWidget->setCloseButtonVisible(false);
 
     connect( ui->locationUrl->lineEdit(), &KLineEdit::textEdited,
              this, &ProjectSelectionPage::urlEdited);
@@ -168,28 +170,21 @@ void ProjectSelectionPage::urlEdited()
     emit locationChanged( location() );
 }
 
-void setForeground(QLabel* label, KColorScheme::ForegroundRole role)
-{
-    QPalette p = label->palette();
-    KColorScheme::adjustForeground(p, role, label->foregroundRole(), KColorScheme::Window);
-    label->setPalette(p);
-}
-
 void ProjectSelectionPage::validateData()
 {
     QUrl url = ui->locationUrl->url();
     if( !url.isLocalFile() || url.isEmpty() )
     {
-        ui->locationValidLabel->setText( i18n("Invalid location") );
-        setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
+        ui->locationValidWidget->setText( i18n("Invalid location") );
+        ui->locationValidWidget->animatedShow();
         emit invalid();
         return;
     }
 
     if( appName().isEmpty() )
     {
-        ui->locationValidLabel->setText( i18n("Empty project name") );
-        setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
+        ui->locationValidWidget->setText( i18n("Empty project name") );
+        ui->locationValidWidget->animatedShow();
         emit invalid();
         return;
     }
@@ -210,8 +205,7 @@ void ProjectSelectionPage::validateData()
         QRegExpValidator validator( regex );
         if( validator.validate(appname, pos) == QValidator::Invalid )
         {
-            ui->locationValidLabel->setText( i18n("Invalid project name") );
-            setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
+            ui->locationValidWidget->setText( i18n("Invalid project name") );
             emit invalid();
             return;
         }
@@ -229,9 +223,9 @@ void ProjectSelectionPage::validateData()
         QFileInfo tFileInfo(tDir.absolutePath());
         if (!tFileInfo.isWritable() || !tFileInfo.isExecutable())
         {
-            ui->locationValidLabel->setText( i18n("Unable to create subdirectories, "
+            ui->locationValidWidget->setText( i18n("Unable to create subdirectories, "
                                                   "missing permissions on: %1", tDir.absolutePath()) );
-            setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
+            ui->locationValidWidget->animatedShow();
             emit invalid();
             return;
         }
@@ -240,13 +234,12 @@ void ProjectSelectionPage::validateData()
     QStandardItem* item = getCurrentItem();
     if( item && !item->hasChildren() )
     {
-        ui->locationValidLabel->setText( QStringLiteral(" ") );
-        setForeground(ui->locationValidLabel, KColorScheme::NormalText);
+        ui->locationValidWidget->animatedHide();
         emit valid();
     } else
     {
-        ui->locationValidLabel->setText( i18n("Invalid project template, please choose a leaf item") );
-        setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
+        ui->locationValidWidget->setText( i18n("Invalid project template, please choose a leaf item") );
+        ui->locationValidWidget->animatedShow();
         emit invalid();
         return;
     }
@@ -258,8 +251,8 @@ void ProjectSelectionPage::validateData()
     {
         if( !QDir( fi.absoluteFilePath()).entryList( QDir::NoDotAndDotDot | QDir::AllEntries ).isEmpty() )
         {
-            ui->locationValidLabel->setText( i18n("Path already exists and contains files. Open it as a project.") );
-            setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
+            ui->locationValidWidget->setText( i18n("Path already exists and contains files. Open it as a project.") );
+            ui->locationValidWidget->animatedShow();
             emit invalid();
             return;
         }
