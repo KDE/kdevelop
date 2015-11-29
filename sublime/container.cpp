@@ -53,7 +53,10 @@ namespace Sublime {
 
 class ContainerTabBar : public KTabBar {
     public:
-    ContainerTabBar(Container* container) : KTabBar(container), m_container(container) {
+    ContainerTabBar(Container* container)
+        : KTabBar(container), m_container(container)
+    {
+        installEventFilter(this);
     }
     
     virtual bool event(QEvent* ev) {
@@ -79,6 +82,25 @@ class ContainerTabBar : public KTabBar {
             return;
         }
         KTabBar::mousePressEvent(event);
+    }
+
+    bool eventFilter(QObject* obj, QEvent* event) override
+    {
+        if (obj != this) {
+            return QObject::eventFilter(obj, event);
+        }
+
+        // TODO Qt6: Move to mouseDoubleClickEvent when fixme in qttabbar.cpp is resolved
+        // see "fixme Qt 6: move to mouseDoubleClickEvent(), here for BC reasons." in qtabbar.cpp
+        if (event->type() == QEvent::MouseButtonDblClick) {
+            // block tabBarDoubleClicked signals with RMB, see https://bugs.kde.org/show_bug.cgi?id=356016
+            auto mouseEvent = static_cast<const QMouseEvent*>(event);
+            if (mouseEvent->button() == Qt::MidButton) {
+                return true;
+            }
+        }
+
+        return QObject::eventFilter(obj, event);
     }
     Container* m_container;
 };
