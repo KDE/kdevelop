@@ -30,6 +30,7 @@
 #include <config.h>
 
 #include <KLocalizedString>
+#include <Kdelibs4ConfigMigrator>
 
 #include <kaboutdata.h>
 #include <kmessagebox.h>
@@ -244,6 +245,11 @@ int main( int argc, char *argv[] )
         qputenv("KDEV_DISABLE_WELCOMEPAGE", "1");
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
     }
+
+    Kdelibs4ConfigMigrator migrator(QLatin1String("kdevelop"));
+    migrator.setConfigFiles({QStringLiteral("kdeveloprc")});
+    migrator.setUiFiles({QStringLiteral("kdevelopui.rc")});
+    migrator.migrate();
 
     // Don't show any debug output by default.
     // If you need to enable additional logging for debugging use a rules file
