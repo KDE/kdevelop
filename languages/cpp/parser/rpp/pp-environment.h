@@ -25,7 +25,7 @@
 #include <QHash>
 #include <QMap>
 
-#include <QStack>
+#include <util/stack.h>
 #include "cpprppexport.h"
 #include "pp-macro.h"
 

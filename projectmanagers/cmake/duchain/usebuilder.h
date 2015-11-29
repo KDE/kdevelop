@@ -21,7 +21,7 @@
 #ifndef USEBUILDER_H
 #define USEBUILDER_H
 
-#include <QtCore/QStack>
+#include <util/stack.h>
 
 #include "contextbuilder.h"
 

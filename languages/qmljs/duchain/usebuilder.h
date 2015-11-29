@@ -20,7 +20,7 @@
 #define USEBUILDER_H
 
 #include <language/duchain/builders/abstractusebuilder.h>
-#include <QtCore/QStack>
+#include <util/stack.h>
 
 #include "contextbuilder.h"
 
@@ -50,7 +50,7 @@ private:
     void useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeInRevision &range = KDevelop::RangeInRevision::invalid());
 
 private:
-    QStack<QmlJS::AST::Node*> m_nodesThatOpenedContexts;
+    KDevelop::Stack<QmlJS::AST::Node*> m_nodesThatOpenedContexts;
 };
 
 #endif // USEBUILDER_H

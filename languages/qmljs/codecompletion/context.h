@@ -95,7 +95,7 @@ private:
     QList<KDevelop::CompletionTreeItemPointer> fieldCompletions(const QString &expression,
                                                                 CompletionItem::Decoration decoration);
 
-    QStack<ExpressionStackEntry> expressionStack(const QString& expression);    /*!< @see ExpressionStackEntry */
+    KDevelop::Stack<ExpressionStackEntry> expressionStack(const QString& expression);    /*!< @see ExpressionStackEntry */
     KDevelop::DeclarationPointer declarationAtEndOfString(const QString& expression);
     bool containsOnlySpaces(const QString &str);
 

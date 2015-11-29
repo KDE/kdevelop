@@ -24,7 +24,7 @@
 #include "astfactory.h"
 #include "../debug.h"
 
-#include <QStack>
+#include <util/stack.h>
 #include <QDir>
 
 QMap<QChar, QChar> whatToScape()

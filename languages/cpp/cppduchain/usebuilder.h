@@ -96,9 +96,9 @@ private:
 
   inline int& nextUseIndex() { return m_nextUseStack.top(); }
   inline QVector<int>& skippedUses() { return m_skippedUses.top(); }
-  QStack<int> m_nextUseStack;
-  QStack<QVector<int> > m_skippedUses;
-  QStack<DUContext*> m_contexts;
+  Stack<int> m_nextUseStack;
+  Stack<QVector<int> > m_skippedUses;
+  Stack<DUContext*> m_contexts;
 
   QList< QExplicitlySharedDataPointer< KDevelop::Problem > > m_problems;
 };

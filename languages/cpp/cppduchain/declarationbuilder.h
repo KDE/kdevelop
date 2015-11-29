@@ -27,6 +27,8 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/classdeclaration.h>
 
+#include <util/stack.h>
+
 namespace Cpp
 {
 class TemplateDeclaration;
@@ -164,11 +166,11 @@ private:
   void createFriendDeclaration(AST* range);
   void findDeclarationForDefinition(const QualifiedIdentifier &definitionSearchId);
 
-  QStack<KDevelop::Declaration::AccessPolicy> m_accessPolicyStack;
+  Stack<KDevelop::Declaration::AccessPolicy> m_accessPolicyStack;
 
-  QStack<KDevelop::AbstractFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
-  QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
-  QStack<uint> m_functionDefinedStack;
+  Stack<KDevelop::AbstractFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
+  Stack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
+  Stack<uint> m_functionDefinedStack;
 
   bool m_changeWasSignificant, m_ignoreDeclarators;
 
@@ -181,7 +183,7 @@ private:
   FunctionFlag m_functionFlag;
 
   //Ast Mapping members
-  QStack<AST *> m_mappedNodes;
+  Stack<AST *> m_mappedNodes;
 
   bool m_collectQtFunctionSignature;
   QByteArray m_qtFunctionSignature;
@@ -201,7 +203,7 @@ private:
   inline void clearComment() { m_lastComment.clear(); }
 
 private:
-  QStack<Declaration*> m_declarationStack;
+  Stack<Declaration*> m_declarationStack;
   Declaration* m_lastDeclaration;
   QByteArray m_lastComment;  
 };
