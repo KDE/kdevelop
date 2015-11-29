@@ -196,8 +196,12 @@ void PatchReviewPlugin::removeHighlighting( const QUrl& file ) {
 }
 
 void PatchReviewPlugin::notifyPatchChanged() {
-    qCDebug(PLUGIN_PATCHREVIEW) << "notifying patch change: " << m_patch->file();
-    m_updateKompareTimer->start( 500 );
+    if (m_patch) {
+        qCDebug(PLUGIN_PATCHREVIEW) << "notifying patch change: " << m_patch->file();
+        m_updateKompareTimer->start( 500 );
+    } else {
+        m_updateKompareTimer->stop();
+    }
 }
 
 void PatchReviewPlugin::forceUpdate() {
@@ -312,9 +316,8 @@ PatchReviewPlugin::~PatchReviewPlugin()
 
     // Tweak to work around a crash on OS X; see https://bugs.kde.org/show_bug.cgi?id=338829
     // and http://qt-project.org/forums/viewthread/38406/#162801
-    if (m_patch) {
-        m_patch->deleteLater();
-    }
+    // modified tweak: use setPatch() and deleteLater in that method.
+    setPatch(0);
 }
 
 void PatchReviewPlugin::clearPatch( QObject* _patch ) {
@@ -446,7 +449,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
         if ( qobject_cast<LocalPatchSource*>( m_patch ) ) {
             // make sure we don't leak this
             // TODO: what about other patch sources?
-            delete m_patch;
+            m_patch->deleteLater();
         }
     }
     m_patch = patch;
