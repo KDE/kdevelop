@@ -25,6 +25,8 @@
 #include "../duchain.h"
 #include "../duchainlock.h"
 
+#include <util/stack.h>
+
 namespace KDevelop {
 
 /**
@@ -206,8 +208,8 @@ protected:
 
 private:
   inline ContextUseTracker& currentUseTracker() { return m_trackerStack.top(); }
-  QStack<ContextUseTracker> m_trackerStack;
-  QStack<KDevelop::DUContext*> m_contexts;
+  Stack<ContextUseTracker> m_trackerStack;
+  Stack<KDevelop::DUContext*> m_contexts;
 
   //Whether not encountered uses should be deleted during closeContext()
   bool m_finishContext;

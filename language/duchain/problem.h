@@ -21,8 +21,6 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_PROBLEM_H
 
 
-#include <QtCore/QStack>
-
 #include <QExplicitlySharedDataPointer>
 
 #include "../editor/documentrange.h"

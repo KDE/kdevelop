@@ -260,7 +260,7 @@ protected:
   }
 
 private:
-  QStack<AbstractType::Ptr> m_typeStack;
+  Stack<AbstractType::Ptr> m_typeStack;
 
   AbstractType::Ptr m_lastType;
 

@@ -20,7 +20,6 @@
 #include <limits>
 #include <serialization/itemrepository.h>
 #include <QtCore/QMutex>
-#include <QtCore/QStack>
 #include <algorithm>
 
 //#define DEBUG

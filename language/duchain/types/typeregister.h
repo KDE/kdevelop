@@ -116,8 +116,6 @@ class TypeFactory : public AbstractTypeFactory {
     Q_ASSERT(data.typeClassId == T::Identity);
     return static_cast<const Data&>(data).dynamicSize();
   }
-/*  private:
-    QStack<void*> m_reUseTypes;*/
 };
 
 /**

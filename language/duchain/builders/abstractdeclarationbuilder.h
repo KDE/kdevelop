@@ -206,7 +206,7 @@ protected:
   }
 
 private:
-  QStack<Declaration*> m_declarationStack;
+  Stack<Declaration*> m_declarationStack;
   QByteArray m_lastComment;
 };
 

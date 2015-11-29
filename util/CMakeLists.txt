@@ -26,6 +26,7 @@ set(KDevPlatformUtil_LIB_SRCS
     path.cpp
     debug.cpp
     texteditorhelpers.cpp
+    stack.cpp
 )
 
 set (KDevPlatformUtil_LIB_UI
@@ -82,5 +83,6 @@ install( FILES
     projecttestjob.h
     widgetcolorizer.h
     path.h
+    stack.h
     ${CMAKE_CURRENT_BINARY_DIR}/utilexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/util COMPONENT Devel)

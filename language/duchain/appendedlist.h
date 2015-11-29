@@ -21,10 +21,10 @@
 
 #include <QMutex>
 #include <QVector>
-#include <QStack>
 #include <QString>
 
 #include <util/kdevvarlengtharray.h>
+#include <util/stack.h>
 
 #include <iostream>
 #include <time.h>
@@ -200,8 +200,8 @@ class TemporaryDataManager {
 
     uint m_itemsUsed, m_itemsSize;
     T** m_items;
-    QStack<uint> m_freeIndicesWithData;
-    QStack<uint> m_freeIndices;
+    Stack<uint> m_freeIndicesWithData;
+    Stack<uint> m_freeIndices;
     QMutex m_mutex;
     QByteArray m_id;
     QList<QPair<time_t, T**> > m_deleteLater;

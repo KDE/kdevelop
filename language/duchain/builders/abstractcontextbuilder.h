@@ -38,6 +38,7 @@
 #include "../parsingenvironment.h"
 
 #include <serialization/indexedstring.h>
+#include <util/stack.h>
 
 namespace KDevelop
 {
@@ -543,7 +544,7 @@ protected:
    * \todo Audit whether access to the context stack is still required, and provide
    *       replacement functionality if possible.
    */
-  const QStack<DUContext*>& contextStack() const
+  const Stack<DUContext*>& contextStack() const
   {
     return m_contextStack;
   }
@@ -658,11 +659,11 @@ private:
   QualifiedIdentifier m_qIdentifier;
   bool m_compilingContexts : 1;
   bool m_recompiling : 1;
-  QStack<int> m_nextContextStack;
+  Stack<int> m_nextContextStack;
   DUContext* m_lastContext;
   //Here all valid declarations/uses/... will be collected
   QSet<DUChainBase*> m_encountered;
-  QStack<DUContext*> m_contextStack;
+  Stack<DUContext*> m_contextStack;
 };
 
 }
