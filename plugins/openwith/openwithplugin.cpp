@@ -61,7 +61,7 @@ bool sortActions(QAction* left, QAction* right)
 
 bool isTextEditor(const KService::Ptr& service)
 {
-    return service->serviceTypes().contains( "KTextEditor/Document" );
+    return service->serviceTypes().contains( QStringLiteral("KTextEditor/Document") );
 }
 
 QString defaultForMimeType(const QString& mimeType)
@@ -78,7 +78,7 @@ QString defaultForMimeType(const QString& mimeType)
 
 bool canOpenDefault(const QString& mimeType)
 {
-    if (defaultForMimeType(mimeType).isEmpty() && mimeType == "inode/directory") {
+    if (defaultForMimeType(mimeType).isEmpty() && mimeType == QLatin1String("inode/directory")) {
         // potentially happens in non-kde environments apparently, see https://git.reviewboard.kde.org/r/122373
         return KMimeTypeTrader::self()->preferredService(mimeType);
     } else {
@@ -88,7 +88,7 @@ bool canOpenDefault(const QString& mimeType)
 }
 
 OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( "kdevopenwith", parent ),
+    : IPlugin ( QStringLiteral("kdevopenwith"), parent ),
     m_actionMap( 0 )
 {
     KDEV_USE_EXTENSION_INTERFACE( IOpenWith )
@@ -137,8 +137,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(m_urls.first());
     m_mimeType = mimetype.name();
 
-    QList<QAction*> partActions = actionsForServiceType("KParts/ReadOnlyPart");
-    QList<QAction*> appActions = actionsForServiceType("Application");
+    QList<QAction*> partActions = actionsForServiceType(QStringLiteral("KParts/ReadOnlyPart"));
+    QList<QAction*> appActions = actionsForServiceType(QStringLiteral("Application"));
 
     OpenWithContext subContext(m_urls, mimetype);
     QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &subContext );
@@ -160,7 +160,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
 
     // Now setup a menu with actions for each part and app
     QMenu* menu = new QMenu( i18n("Open With" ) );
-    menu->setIcon( QIcon::fromTheme( "document-open" ) );
+    auto documentOpenIcon = QIcon::fromTheme( QStringLiteral("document-open") );
+    menu->setIcon( documentOpenIcon );
 
     if (!partActions.isEmpty()) {
         menu->addSection(i18n("Embedded Editors"));
@@ -175,16 +176,12 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
 
     if (canOpenDefault(m_mimeType)) {
         QAction* openAction = new QAction( i18n( "Open" ), this );
-        openAction->setIcon( QIcon::fromTheme( "document-open" ) );
+        openAction->setIcon( documentOpenIcon );
         connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
         ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
     }
 
-    if (!menu->isEmpty()) {
-        ext.addAction(KDevelop::ContextMenuExtension::FileGroup, menu->menuAction());
-    } else {
-        delete menu;
-    }
+    ext.addAction(KDevelop::ContextMenuExtension::FileGroup, menu->menuAction());
     return ext;
 }
 
@@ -232,7 +229,7 @@ void OpenWithPlugin::openDefault()
     }
 
     // default handlers
-    if (m_mimeType == "inode/directory") {
+    if (m_mimeType == QLatin1String("inode/directory")) {
         KService::Ptr service = KMimeTypeTrader::self()->preferredService(m_mimeType);
         KRun::runService(*service, m_urls, ICore::self()->uiController()->activeMainWindow());
     } else {
