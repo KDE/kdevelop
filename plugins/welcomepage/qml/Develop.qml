@@ -51,7 +51,7 @@ StandardPage
                 text: i18n("Fetch Project")
                 onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
             }
-            
+
             Link {
                 iconSource: "document-open-recent"
                 text: i18n("Recent Projects")
