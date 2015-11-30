@@ -93,6 +93,15 @@ void MainWindow::applyMainWindowSettings(const KConfigGroup& config)
         KXmlGuiWindow::applyMainWindowSettings(config);
 }
 
+void MainWindow::createGUI(KParts::Part* part)
+{
+    Sublime::MainWindow::createGUI(part);
+
+    // Don't let the Part control the main window caption -- we take care of that
+    disconnect(part, SIGNAL(setWindowCaption(QString)),
+               this, SLOT(setCaption(QString)));
+}
+
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
         : Sublime::MainWindow( parent, flags )
 {

@@ -88,7 +88,7 @@ protected:
     void dragEnterEvent( QDragEnterEvent* ) override;
     void dropEvent( QDropEvent* ) override;
     void applyMainWindowSettings(const KConfigGroup& config) override;
-
+    void createGUI(KParts::Part* part);
 
 protected Q_SLOTS:
     virtual void tabContextMenuRequested(Sublime::View* , QMenu* ) override;
