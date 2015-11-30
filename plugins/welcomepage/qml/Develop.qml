@@ -42,16 +42,16 @@ StandardPage
 
             Link {
                 iconSource: "project-development-open"
-                text: i18n("Open project")
+                text: i18n("Open Project")
                 onClicked: ICore.projectController().openProject()
             }
 
             Link {
                 iconSource: "download"
-                text: i18n("Fetch project")
+                text: i18n("Fetch Project")
                 onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
             }
-            
+
             Link {
                 iconSource: "document-open-recent"
                 text: i18n("Recent Projects")
