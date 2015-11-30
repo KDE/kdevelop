@@ -246,7 +246,7 @@ int main( int argc, char *argv[] )
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
     }
 
-    Kdelibs4ConfigMigrator migrator(QLatin1String("kdevelop"));
+    Kdelibs4ConfigMigrator migrator(QStringLiteral("kdevelop"));
     migrator.setConfigFiles({QStringLiteral("kdeveloprc")});
     migrator.setUiFiles({QStringLiteral("kdevelopui.rc")});
     migrator.migrate();
