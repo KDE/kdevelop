@@ -7,10 +7,10 @@ target_link_libraries(clang-parser
     kdevclangduchain
 )
 
-add_executable(clang-minimal-visitor
+add_executable(clang-minimal-visitor WIN32
     minimal_visitor.cpp
 )
-
+ecm_mark_nongui_executable(clang-minimal-visitor)
 target_link_libraries(clang-minimal-visitor
     ${CLANG_LIBCLANG_LIB}
 )
