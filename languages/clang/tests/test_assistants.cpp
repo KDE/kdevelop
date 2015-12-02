@@ -343,6 +343,20 @@ void TestAssistants::testSignatureAssistant_data()
       << "class Foo {\nint bar(char a, char* b, int c = 10); \n};"
       << "int Foo::bar(char a, char* b, int c)\n{ a = c; b = new char; return a + *b; }";
 
+    QTest::newRow("prepend_arg_header")
+      << "class Foo { void bar(int i); };"
+      << "void Foo::bar(int i)\n{}"
+      << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(0, 21, 0, 21), "char c, ", SHOULD_ASSIST))
+      << "class Foo { void bar(char c, int i); };"
+      << "void Foo::bar(char c, int i)\n{}";
+
+    QTest::newRow("prepend_arg_cpp")
+      << "class Foo { void bar(int i); };"
+      << "void Foo::bar(int i)\n{}"
+      << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0, 14, 0, 14), "char c, ", SHOULD_ASSIST))
+      << "class Foo { void bar(char c, int i); };"
+      << "void Foo::bar(char c, int i)\n{}";
+
     QTest::newRow("change_default_parameter")
         << "class Foo {\nint bar(int a, char* b, int c = 10); \n};"
         << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }"
@@ -400,7 +414,6 @@ void TestAssistants::testSignatureAssistant()
         testbed.changeDocument(stateChange.document, stateChange.range, stateChange.newText, true);
 
         if (stateChange.result == SHOULD_ASSIST) {
-            QEXPECT_FAIL("swap_args_definition_side", "Parameters order is not tracked anywhere", Abort);
             QEXPECT_FAIL("change_function_type", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't parse the code...", Abort);
             QVERIFY(staticAssistantsManager()->activeAssistant() && !staticAssistantsManager()->activeAssistant()->actions().isEmpty());
         } else {
