@@ -25,7 +25,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 
-#include "ui_cmakebuildersettings.h"
+#include "ui_cmakebuilderpreferences.h"
 #include "cmakebuilderconfig.h"
 #include "cmakeutils.h"
 
@@ -34,7 +34,7 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWid
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
-    m_prefsUi = new Ui::CMakeBuilderConfig;
+    m_prefsUi = new Ui::CMakeBuilderPreferences;
     m_prefsUi->setupUi( w );
     l->addWidget( w );
 
