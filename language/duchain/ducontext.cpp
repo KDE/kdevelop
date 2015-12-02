@@ -20,6 +20,7 @@
 #include "ducontext.h"
 
 #include <limits>
+#include <algorithm>
 
 #include <QMutableLinkedListIterator>
 #include <QSet>
@@ -1667,6 +1668,39 @@ void DUContext::visit(DUChainVisitor& visitor)
   foreach (DUContext* childContext, m_dynamicData->m_childContexts) {
     childContext->visit(visitor);
   }
+}
+
+static bool sortByRange(const DUChainBase* lhs, const DUChainBase* rhs)
+{
+  return lhs->range() < rhs->range();
+}
+
+void DUContext::resortLocalDeclarations()
+{
+  ENSURE_CAN_WRITE
+
+  std::sort(m_dynamicData->m_localDeclarations.begin(), m_dynamicData->m_localDeclarations.end(), sortByRange);
+
+  auto top = topContext();
+  auto& declarations = d_func_dynamic()->m_localDeclarationsList();
+  std::sort(declarations.begin(), declarations.end(),
+            [top] (const LocalIndexedDeclaration& lhs, const LocalIndexedDeclaration& rhs) {
+              return lhs.data(top)->range() < rhs.data(top)->range();
+            });
+}
+
+void DUContext::resortChildContexts()
+{
+  ENSURE_CAN_WRITE
+
+  std::sort(m_dynamicData->m_childContexts.begin(), m_dynamicData->m_childContexts.end(), sortByRange);
+
+  auto top = topContext();
+  auto& contexts = d_func_dynamic()->m_childContextsList();
+  std::sort(contexts.begin(), contexts.end(),
+            [top] (const LocalIndexedDUContext& lhs, const LocalIndexedDUContext& rhs) {
+              return lhs.data(top)->range() < rhs.data(top)->range();
+            });
 }
 
 }

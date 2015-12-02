@@ -398,6 +398,14 @@ public:
   void deleteChildContextsRecursively();
 
   /**
+   * Resort the child contexts by their range.
+   *
+   * You must call this when you manually change the range of child contexts in a way
+   * that could break the internal range sorting.
+   */
+  void resortChildContexts();
+
+  /**
    * Returns true if this declaration is accessible through the du-chain,
    * and thus cannot be edited without a du-chain write lock
    */
@@ -508,6 +516,14 @@ public:
    *               If it is zero, that signalizes that missing members should not be instantiated.
    */
   virtual QVector<Declaration*> localDeclarations(const TopDUContext* source = 0) const;
+
+  /**
+   * Resort the local declarations by their range.
+   *
+   * You must call this when you manually change the range of declarations in a way
+   * that could break the internal range sorting.
+   */
+  void resortLocalDeclarations();
 
   /**
    * Searches for the most specific context for the given cursor @a position in the given @a url.
