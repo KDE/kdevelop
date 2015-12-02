@@ -21,6 +21,7 @@
 
 #include "qmakejob.h"
 
+#include "debug.h"
 #include "qmakeconfig.h"
 
 #include <interfaces/iproject.h>
@@ -31,7 +32,7 @@
 #include <util/commandexecutor.h>
 #include <util/path.h>
 
-#include <QDebug>
+#include <QDir>
 #include <KLocalizedString>
 
 using namespace KDevelop;
@@ -50,24 +51,40 @@ QMakeJob::QMakeJob(QObject* parent)
 
 void QMakeJob::start()
 {
+    qCDebug(KDEV_QMAKE) << "Running qmake in" << workingDirectory();
+
     if (!m_project) {
         setError(NoProjectError);
         setErrorText(i18n("No project specified."));
         return emitResult();
     }
 
+    // create build directory if it does not exist yet
+    QDir::temp().mkpath(workingDirectory().toLocalFile());
+
     OutputExecuteJob::start();
 }
 
 QUrl QMakeJob::workingDirectory() const
 {
-    return m_project ? m_project->path().toUrl() : QUrl();
+    if (!m_project) {
+        return QUrl();
+    }
+
+    return QMakeConfig::buildDirFromSrc(m_project, m_project->path()).toUrl();
 }
 
 QStringList QMakeJob::commandLine() const
 {
+    if (!m_project) {
+        return {};
+    }
+
     QStringList args;
     args << QMakeConfig::qmakeBinary(m_project);
+
+    args << m_project->path().toUrl().toLocalFile();
+
     return args;
 }
 

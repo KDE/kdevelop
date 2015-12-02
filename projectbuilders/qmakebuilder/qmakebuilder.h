@@ -23,6 +23,9 @@
 
 #include <interfaces/iplugin.h>
 #include "iqmakebuilder.h"
+
+#include <project/builderjob.h>
+
 #include <QtCore/QVariant>
 
 /**
@@ -58,6 +61,13 @@ Q_SIGNALS:
     void pruned(KDevelop::ProjectBaseItem*);
 
 private:
+    /**
+     * If @p dom needs a configure run, return a composite job consisting of configure job + @p job
+     *
+     * Otherwise just return @p job
+     */
+    KJob* maybePrependConfigureJob(KDevelop::ProjectBaseItem* project, KJob* job, KDevelop::BuilderJob::BuildType type);
+
     KDevelop::IPlugin* m_makeBuilder;
 };
 

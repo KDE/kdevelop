@@ -30,6 +30,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/duchain/classmemberdeclaration.h>
 
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -46,7 +47,16 @@ QString makeSignatureString(const Declaration* functionDecl, const Signature& si
         return {};
     }
 
-    QString ret = CodegenHelper::simplifiedTypeString(signature.returnType.abstractType(),
+    QString ret;
+
+    if (!editingDefinition) {
+        auto classMember = dynamic_cast<const ClassMemberDeclaration*>(functionDecl);
+        if (classMember && classMember->isStatic()) {
+            ret += QLatin1String("static ");
+        }
+    }
+
+    ret += CodegenHelper::simplifiedTypeString(signature.returnType.abstractType(),
                                                       visibilityFrom);
 
     ret += QLatin1Char(' ');

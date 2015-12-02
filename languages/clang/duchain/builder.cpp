@@ -255,6 +255,12 @@ struct CurrentContext
         DUChainWriteLocker lock;
         qDeleteAll(previousChildContexts);
         qDeleteAll(previousChildDeclarations);
+        if (resortChildContexts) {
+            context->resortChildContexts();
+        }
+        if (resortLocalDeclarations) {
+            context->resortLocalDeclarations();
+        }
     }
 
     DUContext* context;
@@ -262,6 +268,9 @@ struct CurrentContext
     QVector<DUContext*> previousChildContexts;
     // when updatig, this contains child declarations of the current parent context
     QVector<Declaration*> previousChildDeclarations;
+
+    bool resortChildContexts = false;
+    bool resortLocalDeclarations = false;
 };
 //END CurrentContext
 
@@ -355,6 +364,7 @@ struct Visitor
                 auto decl = dynamic_cast<DeclType*>(*it);
                 if (decl && decl->indexedIdentifier() == indexedId) {
                     decl->setRange(range);
+                    m_parentContext->resortLocalDeclarations = true;
                     setDeclData<CK>(cursor, decl);
                     m_cursorToDeclarationCache[cursor] = decl;
                     m_parentContext->previousChildDeclarations.erase(it);
@@ -402,6 +412,7 @@ struct Visitor
                 auto ctx = *it;
                 if (ctx->type() == Type && ctx->indexedLocalScopeIdentifier() == indexedScopeId) {
                     ctx->setRange(range);
+                    m_parentContext->resortChildContexts = true;
                     m_parentContext->previousChildContexts.erase(it);
                     return ctx;
                 }

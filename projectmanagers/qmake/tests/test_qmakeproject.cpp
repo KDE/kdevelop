@@ -29,6 +29,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectbuilder.h>
 #include <project/projectmodel.h>
 #include <serialization/indexedstring.h>
 
@@ -136,7 +137,12 @@ void TestQMakeProject::testBuildDirectory()
     QList<ProjectFolderItem*> buildItems = project->foldersForPath(IndexedString(buildUrl.pathOrUrl()));
     QCOMPARE(buildItems.size(), 1);
     IBuildSystemManager* buildManager = project->buildSystemManager();
-    const Path actual = buildManager->buildDirectory(buildItems.first());
+    const auto buildFolder = buildItems.first();
+
+    const Path actual = buildManager->buildDirectory(buildFolder);
 
     QCOMPARE(actual, expectedPath);
+
+    auto buildJob = buildManager->builder()->configure(project);
+    QVERIFY(buildJob->exec());
 }

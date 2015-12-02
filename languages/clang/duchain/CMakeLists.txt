@@ -38,7 +38,7 @@ LINK_PUBLIC
     KDev::Language
     KDev::Project
     KDev::Util
-    ${CLANG_CLANG_LIB}
+    ${CLANG_LIBCLANG_LIB}
 )
 
 install(FILES gcc_compat.h DESTINATION ${DATA_INSTALL_DIR}/kdevclangsupport PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)

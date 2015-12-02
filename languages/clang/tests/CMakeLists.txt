@@ -7,12 +7,12 @@ target_link_libraries(clang-parser
     kdevclangduchain
 )
 
-add_executable(clang-minimal-visitor
+add_executable(clang-minimal-visitor WIN32
     minimal_visitor.cpp
 )
-
+ecm_mark_nongui_executable(clang-minimal-visitor)
 target_link_libraries(clang-minimal-visitor
-    ${CLANG_CLANG_LIB}
+    ${CLANG_LIBCLANG_LIB}
 )
 
 ecm_add_test(test_buddies.cpp
@@ -45,7 +45,7 @@ ecm_add_test(test_clangutils.cpp
     LINK_LIBRARIES
         KDev::Tests
         Qt5::Test
-        ${CLANG_CLANG_LIB}
+        ${CLANG_LIBCLANG_LIB}
         kdevclangduchain
 )
 

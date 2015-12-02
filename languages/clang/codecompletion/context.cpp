@@ -52,6 +52,7 @@
 #include "../duchain/navigationwidget.h"
 #include "../clangsettings/clangsettingsmanager.h"
 
+#include <functional>
 #include <memory>
 
 #include <KTextEditor/Document>

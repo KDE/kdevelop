@@ -5,7 +5,8 @@
 #  CLANG_INCLUDE_DIR           - Where to find Clang includes
 #  CLANG_LIBRARY_DIR           - Where to find Clang libraries
 #
-#  CLANG_CLANG_LIB             - LibClang library
+#  CLANG_LIBCLANG_LIB          - Libclang C library
+#
 #  CLANG_CLANGFRONTEND_LIB     - Clang Frontend Library
 #  CLANG_CLANGDRIVER_LIB       - Clang Driver Library
 #  ...
@@ -15,7 +16,7 @@
 # See http://clang.llvm.org/docs/InternalsManual.html for full list of libraries
 
 #=============================================================================
-# Copyright 2014 Kevin Funk <kfunk@kde.org>
+# Copyright 2014-2015 Kevin Funk <kfunk@kde.org>
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.
@@ -43,7 +44,9 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIR)
     endif()
   endmacro(FIND_AND_ADD_CLANG_LIB)
 
-  FIND_AND_ADD_CLANG_LIB(clang) # LibClang: high-level C interface
+  # note: On Windows there's 'libclang.dll' instead of 'clang.dll' -> search for 'libclang', too
+  find_library(CLANG_LIBCLANG_LIB NAMES clang libclang HINTS ${LLVM_LIBRARY_DIR}) # LibClang: high-level C interface
+
   FIND_AND_ADD_CLANG_LIB(clangFrontend)
   FIND_AND_ADD_CLANG_LIB(clangDriver)
   FIND_AND_ADD_CLANG_LIB(clangCodeGen)
@@ -91,8 +94,9 @@ if(CLANG_FOUND)
   endif()
 
   message(STATUS "Found Clang (LLVM version: ${LLVM_VERSION})")
-  message(STATUS "  Include dirs:  ${CLANG_INCLUDE_DIR}")
-  message(STATUS "  Libraries:     ${CLANG_LIBS}")
+  message(STATUS "  Include dirs:       ${CLANG_INCLUDE_DIR}")
+  message(STATUS "  Clang libraries:    ${CLANG_LIBS}")
+  message(STATUS "  Libclang C library: ${CLANG_LIBCLANG_LIB}")
 else()
   if(Clang_FIND_REQUIRED)
     message(FATAL_ERROR "Could NOT find Clang")

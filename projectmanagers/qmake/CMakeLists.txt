@@ -19,6 +19,7 @@ set(qmakecommon_SRCS
     qmakeincludefile.cpp
     qmakemkspecs.cpp
     qmakeprojectfile.cpp
+    qmakeutils.cpp
     variablereferenceparser.cpp
 )
 ki18n_wrap_ui(qmakecommon_SRCS qmakebuilddirchooser.ui)

@@ -42,6 +42,7 @@
 #include <interfaces/context.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>
 #include <serialization/indexedstring.h>
@@ -55,8 +56,7 @@
 #include "qmakejob.h"
 #include "qmakebuilddirchooserdialog.h"
 #include "qmakeconfig.h"
-#include <KDirWatch>
-#include <interfaces/iprojectcontroller.h>
+#include "qmakeutils.h"
 #include "debug.h"
 
 using namespace KDevelop;
@@ -178,7 +178,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem(IProject* project, const
         projectfile = l.first();
     }
 
-    QHash<QString, QString> qmvars = queryQMake(project);
+    QHash<QString, QString> qmvars = QMakeUtils::queryQMake(project);
     const QString mkSpecFile = QMakeConfig::findBasicMkSpec(qmvars);
     Q_ASSERT(!mkSpecFile.isEmpty());
     QMakeMkSpecs* mkspecs = new QMakeMkSpecs(mkSpecFile, qmvars);
@@ -317,19 +317,10 @@ ProjectFolderItem* QMakeProjectManager::import(IProject* project)
         return nullptr;
     }
 
-    while (projectNeedsConfiguration(project)) {
-        QMakeBuildDirChooserDialog chooser(project);
-        if (chooser.exec() == QDialog::Rejected) {
-            qDebug() << "User stopped project import";
-            // TODO: return 0 has no effect.
-            return nullptr;
-        }
-    }
+    QMakeUtils::checkForNeedingConfigure(project);
 
     ProjectFolderItem* ret = AbstractFileManagerPlugin::import(project);
-
     connect(projectWatcher(project), SIGNAL(dirty(QString)), this, SLOT(slotDirty(QString)));
-
     return ret;
 }
 
@@ -460,14 +451,6 @@ bool QMakeProjectManager::hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) 
     return findQMakeFolderParent(item);
 }
 
-QHash<QString, QString> QMakeProjectManager::queryQMake(IProject* project) const
-{
-    if (!project->path().toUrl().isLocalFile() || !m_builder)
-        return QHash<QString, QString>();
-
-    return QMakeConfig::queryQMake(QMakeConfig::qmakeBinary(project));
-}
-
 QMakeCache* QMakeProjectManager::findQMakeCache(IProject* project, const Path& path) const
 {
     QDir curdir(QMakeConfig::buildDirFromSrc(project, !path.isValid() ? project->path() : path).toLocalFile());
@@ -521,28 +504,6 @@ void QMakeProjectManager::slotRunQMake()
     job->setExtraArguments(cg.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()));
 
     KDevelop::ICore::self()->runController()->registerJob(job);
-}
-
-bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
-{
-    if (!QMakeConfig::isConfigured(project)) {
-        return true;
-    }
-    const QString qmakeBinary = QMakeConfig::qmakeBinary(project);
-    if (qmakeBinary.isEmpty()) {
-        return true;
-    }
-    const QHash<QString, QString> vars = queryQMake(project);
-    if (vars.isEmpty()) {
-        return true;
-    }
-    if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
-        return true;
-    }
-    if (!QMakeConfig::buildDirFromSrc(project, project->path()).isValid()) {
-        return true;
-    }
-    return false;
 }
 
 #include "qmakemanager.moc"
