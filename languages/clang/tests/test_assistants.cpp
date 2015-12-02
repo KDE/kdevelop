@@ -372,6 +372,20 @@ void TestAssistants::testSignatureAssistant_data()
         << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,25,0,31), "", SHOULD_ASSIST))
         << "class Foo {\nvoid bar(const Foo&);\n};"
         << "void Foo::bar(const Foo&)\n{}";
+
+    // see https://bugs.kde.org/show_bug.cgi?id=356179
+    QTest::newRow("keep_static_cpp")
+        << "class Foo { static void bar(int i); };"
+        << "void Foo::bar(int i)\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0, 19, 0, 19), ", char c", SHOULD_ASSIST))
+        << "class Foo { static void bar(int i, char c); };"
+        << "void Foo::bar(int i, char c)\n{}";
+    QTest::newRow("keep_static_header")
+        << "class Foo { static void bar(int i); };"
+        << "void Foo::bar(int i)\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(0, 33, 0, 33), ", char c", SHOULD_ASSIST))
+        << "class Foo { static void bar(int i, char c); };"
+        << "void Foo::bar(int i, char c)\n{}";
 }
 
 void TestAssistants::testSignatureAssistant()
