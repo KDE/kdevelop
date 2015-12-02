@@ -19,7 +19,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="KUrlRequester" name="cmakeExe">
+    <widget class="KUrlRequester" name="kcfg_cmakeExe">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -36,7 +36,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QComboBox" name="generator"/>
+    <widget class="QComboBox" name="kcfg_generator"/>
    </item>
   </layout>
  </widget>
