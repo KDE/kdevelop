@@ -30,9 +30,9 @@ Rectangle {
 
     property int progress: 50
     property url appIcon
-    property string appVersionMajor: "2"
-    property string appVersionMinor: "0"
-    property string appVersionPatch: "0"
+    property string appVersionMajor: "01"
+    property string appVersionMinor: "23"
+    property string appVersionPatch: "45"
 
     // color for the non-colored rectangles
     readonly property string defaultColor: "#3E3E3E"
