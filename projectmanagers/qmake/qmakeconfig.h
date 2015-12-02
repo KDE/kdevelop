@@ -20,6 +20,7 @@
 #define QMAKECONFIG_H
 
 #include <QHash>
+#include <QStringList>
 
 namespace KDevelop {
 class IProject;
@@ -58,7 +59,7 @@ public:
     /**
      * Query QMake and return the thus obtained QMake variables.
      */
-    static QHash<QString, QString> queryQMake(const QString& qmakeBinary);
+    static QHash<QString, QString> queryQMake(const QString& qmakeBinary, const QStringList& args = {});
 
     /**
      * Given the QMake variables, try to find a basic MkSpec.
