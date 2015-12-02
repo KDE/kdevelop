@@ -91,9 +91,7 @@ private:
     KDevelop::ProjectFolderItem* projectRootItem( KDevelop::IProject* project, const KDevelop::Path& path );
     KDevelop::ProjectFolderItem* buildFolderItem( KDevelop::IProject* project, const KDevelop::Path& path,
                                                   KDevelop::ProjectBaseItem* parent );
-    QHash<QString,QString> queryQMake( KDevelop::IProject* ) const;
     QMakeCache* findQMakeCache( KDevelop::IProject* project, const KDevelop::Path &path = {} ) const;
-    bool projectNeedsConfiguration(KDevelop::IProject* project);
     
     IQMakeBuilder* m_builder;
     mutable QString m_qtIncludeDir;

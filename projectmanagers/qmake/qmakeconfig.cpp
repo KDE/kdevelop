@@ -68,7 +68,7 @@ Path QMakeConfig::buildDirFromSrc(const IProject* project, const Path& srcDir)
 {
     QMutexLocker lock(&s_buildDirMutex);
     KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    Path buildDir = Path(cg.readEntry(QMakeConfig::BUILD_FOLDER, project->path().toLocalFile()));
+    Path buildDir = Path(cg.readEntry(QMakeConfig::BUILD_FOLDER, QString()));
     lock.unlock();
 
     if (buildDir.isValid()) {

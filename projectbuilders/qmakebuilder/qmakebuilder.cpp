@@ -22,6 +22,7 @@
 
 #include "qmakebuilderpreferences.h"
 #include "qmakeconfig.h"
+#include "qmakeutils.h"
 
 #include <QtCore/QStringList>
 #include <QDebug>
@@ -92,7 +93,7 @@ KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem* dom)
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
         if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Building with make";
-            return builder->build(dom);
+            return maybePrependConfigureJob(dom, builder->build(dom), BuilderJob::Build);
         }
     }
     return nullptr;
@@ -112,7 +113,7 @@ KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem* dom)
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
         if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Cleaning with make";
-            return builder->clean(dom);
+            return maybePrependConfigureJob(dom, builder->clean(dom), BuilderJob::Clean);
         }
     }
     return nullptr;
@@ -125,7 +126,7 @@ KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem* dom, const QUrl& /* prefi
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
         if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Installing with make";
-            return builder->install(dom);
+            return maybePrependConfigureJob(dom, builder->install(dom), BuilderJob::Install);
         }
     }
     return nullptr;
@@ -157,4 +158,28 @@ QList<IProjectBuilder*> QMakeBuilder::additionalBuilderPlugins(KDevelop::IProjec
 
     return QList<IProjectBuilder*>();
 }
+
+KJob* QMakeBuilder::maybePrependConfigureJob(ProjectBaseItem* dom, KJob* job, BuilderJob::BuildType type)
+{
+    Q_ASSERT(dom);
+
+    if (!job) {
+        qCDebug(KDEV_QMAKEBUILDER) << "Null job passed";
+        return nullptr;
+    }
+
+    const bool needsConfigure = QMakeUtils::checkForNeedingConfigure(dom->project());
+    if (needsConfigure) {
+        qCDebug(KDEV_QMAKEBUILDER) << "Project" << dom->project()->name() << "needs configure";
+
+        auto builderJob = new BuilderJob;
+        builderJob->addCustomJob(BuilderJob::Configure, configure(dom->project()), dom);
+        builderJob->addCustomJob(type, job, dom);
+        builderJob->updateJobName();
+        return builderJob;
+    }
+
+    return job;
+}
+
 #include "qmakebuilder.moc"
