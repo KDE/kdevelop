@@ -77,17 +77,24 @@ StandardPage
         delegate: ListItem {
                     width: sessionsView.width
                     height: visible ? 30 : 0
-                    visible: projects.length>0
+                    visible: projects.length > 0
                     onClicked: sessions.loadSession(uuid)
                     enabled: true
-                    
-                    Label {
+
+                    Link {
                         width: parent.width
-                        text: (display=="" ?
-                                    projectNames.join(", ").replace(/.kdev4/g, "")
-                                  :
-                                  i18n("%1: %2", display, projectNames.join(", ").replace(/.kdev4/g, "")))
-                        elide: Text.ElideRight
+                        Label {
+                            anchors {
+                                fill: parent
+                                leftMargin: 5
+                                rightMargin: 5
+                            }
+                            text: (display=="" ?
+                                        projectNames.join(", ").replace(/.kdev4/g, "")
+                                    :
+                                    i18n("%1: %2", display, projectNames.join(", ").replace(/.kdev4/g, "")))
+                            elide: Text.ElideRight
+                        }
                     }
                 }
 
