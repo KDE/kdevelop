@@ -36,13 +36,12 @@ static QIcon::Mode IconMode( QStyle::State state )
     } else {
         return QIcon::Normal;
     }
-} 
-
-static QIcon::State IconState(QStyle::State state)
-{   
-    return  (state & QStyle::State_Open) ? QIcon::On : QIcon::Off; 
 }
 
+static QIcon::State IconState(QStyle::State state)
+{
+    return  (state & QStyle::State_Open) ? QIcon::On : QIcon::Off;
+}
 
 void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
@@ -52,7 +51,7 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     // and have the added functionality this class provides
     QPixmap decoData;
     QRect decorationRect;
-    QIcon icon; 
+    QIcon icon;
     QIcon::Mode mode;
     QIcon::State state;
     {
@@ -93,7 +92,7 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
 
     drawStyledBackground(painter, opt);
 //     drawCheck(painter, opt, checkRect, checkState);
- 
+
     // Qt5.5 HiDPI Fix part (2/2)
     // use the QIcon from above if possible
     if (!icon.isNull()) {
@@ -144,7 +143,7 @@ void ProjectModelItemDelegate::drawDisplay(QPainter* painter, const QStyleOption
         return;
     }
 
-    if (cg == QPalette::Normal && !(option.state & QStyle::State_Active)) { 
+    if (cg == QPalette::Normal && !(option.state & QStyle::State_Active)) {
         cg = QPalette::Inactive;
     }
     if (option.state & QStyle::State_Selected) {
