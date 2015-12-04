@@ -400,6 +400,32 @@ void TestAssistants::testSignatureAssistant_data()
         << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(0, 33, 0, 33), ", char c", SHOULD_ASSIST))
         << "class Foo { static void bar(int i, char c); };"
         << "void Foo::bar(int i, char c)\n{}";
+
+    // see https://bugs.kde.org/show_bug.cgi?id=356178
+    QTest::newRow("keep_default_args_cpp_before")
+        << "class Foo { void bar(bool b, int i = 0); };"
+        << "void Foo::bar(bool b, int i)\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0, 14, 0, 14), "char c, ", SHOULD_ASSIST))
+        << "class Foo { void bar(char c, bool b, int i = 0); };"
+        << "void Foo::bar(char c, bool b, int i)\n{}";
+    QTest::newRow("keep_default_args_cpp_after")
+        << "class Foo { void bar(bool b, int i = 0); };"
+        << "void Foo::bar(bool b, int i)\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0, 27, 0, 27), ", char c", SHOULD_ASSIST))
+        << "class Foo { void bar(bool b, int i = 0, char c = {} /* TODO */); };"
+        << "void Foo::bar(bool b, int i, char c)\n{}";
+    QTest::newRow("keep_default_args_header_before")
+        << "class Foo { void bar(bool b, int i = 0); };"
+        << "void Foo::bar(bool b, int i)\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(0, 29, 0, 29), "char c = 'A', ", SHOULD_ASSIST))
+        << "class Foo { void bar(bool b, char c = 'A', int i = 0); };"
+        << "void Foo::bar(bool b, char c, int i)\n{}";
+    QTest::newRow("keep_default_args_header_after")
+        << "class Foo { void bar(bool b, int i = 0); };"
+        << "void Foo::bar(bool b, int i)\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(0, 38, 0, 38), ", char c = 'A'", SHOULD_ASSIST))
+        << "class Foo { void bar(bool b, int i = 0, char c = 'A'); };"
+        << "void Foo::bar(bool b, int i, char c)\n{}";
 }
 
 void TestAssistants::testSignatureAssistant()
