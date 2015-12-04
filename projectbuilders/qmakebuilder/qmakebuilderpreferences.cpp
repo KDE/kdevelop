@@ -136,35 +136,12 @@ void QMakeBuilderPreferences::validate()
 void QMakeBuilderPreferences::loadOtherConfig(const QString& config)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Loading config " << config;
-    if (!verifyChanges()) {
-        return;
-    }
     m_chooserUi->loadConfig(config);
     apply(); // since current config has changed, it must be saved immediateley
 }
 
-bool QMakeBuilderPreferences::verifyChanges()
-{
-// changes must be saved before switch
-#pragma warning(Port me.Question is, do we need this code at all ? Milian ? )
-    // if (managedWidgetChangeState()) {
-    if (false) {
-        int ret = KMessageBox::questionYesNoCancel(this,
-                                                   i18n("Current changes will be lost. Would you want to save them?"));
-        if (ret == KMessageBox::Yes) {
-            apply();
-        } else if (ret == KMessageBox::Cancel) {
-            return false;
-        }
-    }
-    return true;
-}
-
 void QMakeBuilderPreferences::addBuildConfig()
 {
-    if (!verifyChanges()) {
-        return;
-    }
     qCDebug(KDEV_QMAKEBUILDER) << "Adding a new config.";
     // for more simpicity, just launch regular dialog
     auto dlg = new QMakeBuildDirChooserDialog(m_project);
