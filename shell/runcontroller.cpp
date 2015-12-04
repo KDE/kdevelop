@@ -439,6 +439,7 @@ void RunController::setupActions()
 
     action = new QAction(i18n("Configure Launches..."), this);
     ac->addAction("configure_launches", action);
+    action->setMenuRole(QAction::NoRole); // OSX: Be explicit about role, prevent hiding due to conflict with "Preferences..." menu item
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
     action->setToolTip(i18nc("@info:tooltip", "Open Launch Configuration Dialog"));
     action->setWhatsThis(i18nc("@info:whatsthis", "Opens a dialog to setup new launch configurations, or to change the existing ones."));

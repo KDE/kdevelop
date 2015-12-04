@@ -231,6 +231,7 @@ void MainWindowPrivate::setupActions()
 
     action = actionCollection()->addAction( "about_platform", this, SLOT(showAboutPlatform()) );
     action->setText( i18n("About KDevelop Platform") );
+    action->setMenuRole( QAction::NoRole ); // OSX: prevent QT from hiding this due to conflict with 'About KDevelop'
     action->setStatusTip( i18n("Show Information about KDevelop Platform") );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog with information about KDevelop Platform." ) );
 

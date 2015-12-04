@@ -315,6 +315,7 @@ SessionController::SessionController( QObject *parent )
 
     action = actionCollection()->addAction( "quit", this, SIGNAL(quitSession()) );
     action->setText( i18n("Quit") );
+    action->setMenuRole( QAction::NoRole ); // OSX: prevent QT from hiding this due to conflict with 'Quit KDevelop...'
     actionCollection()->setDefaultShortcut( action, Qt::CTRL | Qt::Key_Q );
     action->setIcon(QIcon::fromTheme("application-exit"));
 
