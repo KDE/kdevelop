@@ -75,7 +75,14 @@ namespace KDevelop
 {
 
 
-struct DocumentControllerPrivate {
+struct DocumentControllerPrivate
+{
+    struct OpenFileResult
+    {
+        QList<QUrl> urls;
+        QString encoding;
+    };
+
     DocumentControllerPrivate(DocumentController* c)
         : controller(c)
         , fileOpenRecent(0)
@@ -116,7 +123,7 @@ struct DocumentControllerPrivate {
         }
     }
 
-    KEncodingFileDialog::Result showOpenFile() const
+    OpenFileResult showOpenFile() const
     {
         QUrl dir;
         if ( controller->activeDocument() ) {
@@ -126,17 +133,29 @@ struct DocumentControllerPrivate {
             dir = cfg.readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
         }
 
-        return KEncodingFileDialog::getOpenUrlsAndEncoding( QString(), dir, i18n( "*|Text File\n" ),
-                                    Core::self()->uiControllerInternal()->defaultMainWindow(),
-                                    i18n( "Open File" ) );
+        const auto caption = i18n("Open File");
+        const auto filter = i18n("*|Text File\n");
+        auto parent = Core::self()->uiControllerInternal()->defaultMainWindow();
+
+        // use special dialogs in a KDE session, native dialogs elsewhere
+        if (qEnvironmentVariableIsSet("KDE_FULL_SESSION")) {
+            const auto result = KEncodingFileDialog::getOpenUrlsAndEncoding(QString(), dir,
+                filter, parent, caption);
+            return {result.URLs, result.encoding};
+        }
+
+        // note: can't just filter on text files using the native dialog, just display all files
+        // see https://phabricator.kde.org/D622#11679
+        const auto urls = QFileDialog::getOpenFileUrls(parent, caption, dir);
+        return {urls, QString()};
     }
 
     void chooseDocument()
     {
         const auto res = showOpenFile();
-        if( !res.URLs.isEmpty() ) {
+        if( !res.urls.isEmpty() ) {
             QString encoding = res.encoding;
-            foreach( const QUrl& u, res.URLs ) {
+            foreach( const QUrl& u, res.urls ) {
                 openDocumentInternal(u, QString(), KTextEditor::Range::invalid(), encoding  );
             }
         }
@@ -212,8 +231,8 @@ struct DocumentControllerPrivate {
         if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
         {
             const auto res = showOpenFile();
-            if( !res.URLs.isEmpty() )
-                url = res.URLs.first();
+            if( !res.urls.isEmpty() )
+                url = res.urls.first();
             _encoding = res.encoding;
             if ( url.isEmpty() )
                 //still no url
