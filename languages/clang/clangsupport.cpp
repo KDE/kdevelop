@@ -28,6 +28,7 @@
 
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"
+#include "util/clangutils.h"
 
 #include "codecompletion/model.h"
 
@@ -71,51 +72,12 @@
 #include <KTextEditor/ConfigInterface>
 
 #include <QAction>
-#include <QRegularExpression>
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevClangSupportFactory, "kdevclangsupport.json", registerPlugin<ClangSupport>(); )
 
 using namespace KDevelop;
 
 namespace {
-
-/**
- * Extract the range of the path-spec inside the include-directive in line @p line
- *
- * Example: line = "#include <vector>" => returns {0, 10, 0, 16}
- *
- * @param originalRange This is the range that the resulting range will be based on
- *
- * @return Range pointing to the path-spec of the include or invalid range if there is no #include directive on the line.
- */
-KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange = KTextEditor::Range())
-{
-    static const QRegularExpression pattern(QStringLiteral("^\\s*#include"));
-    if (!line.contains(pattern)) {
-        return KTextEditor::Range::invalid();
-    }
-
-    KTextEditor::Range range = originalRange;
-    int pos = 0;
-    for (; pos < line.size(); ++pos) {
-        if(line[pos] == QLatin1Char('"') || line[pos] == QLatin1Char('<')) {
-            range.setStart({range.start().line(), ++pos});
-            break;
-        }
-    }
-
-    for (; pos < line.size(); ++pos) {
-        if(line[pos] == QLatin1Char('"') || line[pos] == QLatin1Char('>')) {
-            range.setEnd({range.start().line(), pos});
-            break;
-        }
-    }
-
-    if(range.start() > range.end()) {
-        range.setStart(range.end());
-    }
-    return range;
-}
 
 QPair<QString, KTextEditor::Range> lineInDocument(const QUrl &url, const KTextEditor::Cursor& position)
 {
@@ -139,7 +101,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const 
     if (line.isEmpty())
         return {{}, KTextEditor::Range::invalid()};
 
-    KTextEditor::Range wordRange = rangeForIncludePathSpec(line, pair.second);
+    KTextEditor::Range wordRange = ClangUtils::rangeForIncludePathSpec(line, pair.second);
     if (!wordRange.isValid()) {
         return {{}, KTextEditor::Range::invalid()};
     }

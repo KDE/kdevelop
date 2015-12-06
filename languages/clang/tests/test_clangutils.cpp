@@ -212,3 +212,11 @@ void TestClangUtils::testGetRawContents_data()
         << KTextEditor::Range(0, 5, 0, 17)
         << " int         ";
 }
+
+void TestClangUtils::testRangeForIncludePathSpec()
+{
+    QCOMPARE(ClangUtils::rangeForIncludePathSpec("#include <vector>"), KTextEditor::Range(0, 10, 0, 16));
+    QCOMPARE(ClangUtils::rangeForIncludePathSpec("#include <foo\\\".h>"), KTextEditor::Range(0, 10, 0, 17));
+    QCOMPARE(ClangUtils::rangeForIncludePathSpec("#include \"foo\\\".h\""), KTextEditor::Range(0, 10, 0, 17));
+    QCOMPARE(ClangUtils::rangeForIncludePathSpec("#include \"foo<>.h\""), KTextEditor::Range(0, 10, 0, 17));
+}

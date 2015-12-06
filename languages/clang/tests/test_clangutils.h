@@ -35,6 +35,7 @@ private slots:
     void testGetScope_data();
     void testGetRawContents();
     void testGetRawContents_data();
+    void testRangeForIncludePathSpec();
 };
 
 #endif // TESTCLANGUTILS_H
