@@ -179,7 +179,8 @@ QPair<QString,FileType> basePathAndTypeForUrl(const QUrl &url)
 
 }
 
-QStringList DocumentFinderHelpers::mimeTypesList()
+namespace DocumentFinderHelpers {
+QStringList mimeTypesList()
 {
     static const QStringList mimeTypes = {
         QStringLiteral("text/x-chdr"),
@@ -191,7 +192,7 @@ QStringList DocumentFinderHelpers::mimeTypesList()
     return mimeTypes;
 }
 
-bool DocumentFinderHelpers::areBuddies(const QUrl &url1, const QUrl& url2)
+bool areBuddies(const QUrl &url1, const QUrl& url2)
 {
     auto type1 = basePathAndTypeForUrl(url1);
     auto type2 = basePathAndTypeForUrl(url2);
@@ -225,7 +226,7 @@ bool DocumentFinderHelpers::areBuddies(const QUrl &url1, const QUrl& url2)
     return false;
 }
 
-bool DocumentFinderHelpers::buddyOrder(const QUrl &url1, const QUrl& url2)
+bool buddyOrder(const QUrl &url1, const QUrl& url2)
 {
     auto type1 = basePathAndTypeForUrl(url1);
     auto type2 = basePathAndTypeForUrl(url2);
@@ -233,7 +234,7 @@ bool DocumentFinderHelpers::buddyOrder(const QUrl &url1, const QUrl& url2)
     return(type1.second == Header && type2.second == Source);
 }
 
-QVector< QUrl > DocumentFinderHelpers::getPotentialBuddies(const QUrl &url, bool checkDUChain)
+QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain)
 {
     auto type = basePathAndTypeForUrl(url);
     // Don't do anything for types we don't know
@@ -262,4 +263,6 @@ QVector< QUrl > DocumentFinderHelpers::getPotentialBuddies(const QUrl &url, bool
     }
 
     return buddies;
+}
+
 }
