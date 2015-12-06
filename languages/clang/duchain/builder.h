@@ -28,8 +28,6 @@
 #include "clanghelpers.h"
 
 namespace Builder {
-// TODO: Uh oh, this isn't nice. Can we make this better?
-KDEVCLANGDUCHAIN_EXPORT void enableJSONTestRun();
 
 /**
  * Visit the AST in @p tu and build declarations for cursors belonging to @p file.

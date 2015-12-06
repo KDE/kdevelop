@@ -82,5 +82,4 @@ LINK_LIBRARIES
     Qt5::Core
     KDev::Language
     KDev::Tests
-    kdevclangduchain
 )
