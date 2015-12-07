@@ -6,6 +6,7 @@
 #  LLVM_CFLAGS      - llvm compiler flags
 #  LLVM_LFLAGS      - llvm linker flags
 #  LLVM_MODULE_LIBS - list of llvm libs for working with modules.
+#  LLVM_LIBS        - list of all llvm libs.
 #  LLVM_FOUND       - True if llvm found.
 #  LLVM_VERSION     - Version string ("llvm-config --version")
 #
@@ -100,6 +101,12 @@ if (LLVM_FOUND)
   execute_process(
     COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs core bitreader asmparser analysis
     OUTPUT_VARIABLE LLVM_MODULE_LIBS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs
+    OUTPUT_VARIABLE LLVM_LIBS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 endif()
