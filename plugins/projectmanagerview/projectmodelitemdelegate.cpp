@@ -84,7 +84,6 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     displayRect.setLeft(spaceLeft.left());
 
     QRect branchNameRect(displayRect.topRight(), opt.rect.bottomRight());
-    QString branchNameData = index.data(VcsOverlayProxyModel::VcsStatusRole).toString();
 
     doLayout(opt, &checkRect, &decorationRect, &displayRect, false);
     branchNameRect.setLeft(branchNameRect.left() + displayRect.left());
@@ -102,6 +101,10 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     }
 
     drawDisplay(painter, opt, displayRect, displayData);
+
+    /// FIXME: this can apparently trigger a nested eventloop, see
+    ///        https://bugs.kde.org/show_bug.cgi?id=355099
+    QString branchNameData = index.data(VcsOverlayProxyModel::VcsStatusRole).toString();
     drawBranchName(painter, opt, branchNameRect, branchNameData);
     drawFocus(painter, opt, displayRect);
 
