@@ -37,7 +37,7 @@
 
 #define ifDebug(x)
 
-QHash<QString, QPair<QString, QString>> QMakeProjectFile::m_qmakeQueryCache = QHash<QString, QPair<QString, QString>>();
+QHash<QString, QHash<QString, QString>> QMakeProjectFile::m_qmakeQueryCache;
 
 const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
                                                                   << "RESOURCES"
@@ -100,30 +100,21 @@ bool QMakeProjectFile::read()
     m_variableValues["_PRO_FILE_PWD_"] = QStringList() << proFilePwd();
     m_variableValues["OUT_PWD"] = QStringList() << outPwd();
 
+    const QString qtInstallHeaders = QStringLiteral("QT_INSTALL_HEADERS");
+    const QString qtVersion = QStringLiteral("QT_VERSION");
+
     const QString binary = QMakeConfig::qmakeBinary(project());
     if (!m_qmakeQueryCache.contains(binary)) {
-        // Let's cache the Qt include dir
-        KProcess qtInc;
-        qtInc << binary << "-query"
-              << "QT_INSTALL_HEADERS"
-              << "QT_VERSION";
-        qtInc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
-        qtInc.start();
-        if (!qtInc.waitForFinished()) {
-            qCWarning(KDEV_QMAKE) << "Failed to query Qt header path using qmake, is qmake installed?";
-        } else {
-            const QStringList result
-                = QString::fromLocal8Bit(qtInc.readAll()).split(QRegExp("[:\n]"), QString::SkipEmptyParts);
-            if (result.size() != 4) {
-                qCWarning(KDEV_QMAKE) << "Failed to query qmake - bad qmake binary configured?" << binary;
-                m_qmakeQueryCache[binary] = qMakePair(QString(), QString());
-            } else {
-                m_qmakeQueryCache[binary] = qMakePair(result.at(1).trimmed(), result.at(3).trimmed());
-            }
+        const auto queryResult = QMakeConfig::queryQMake(binary, {qtInstallHeaders, qtVersion});
+        if (queryResult.isEmpty()) {
+            qCWarning(KDEV_QMAKE) << "Failed to query qmake - bad qmake binary configured?" << binary;
         }
+        m_qmakeQueryCache[binary] = queryResult;
     }
-    m_qtIncludeDir = m_qmakeQueryCache.value(binary).first;
-    m_qtVersion = m_qmakeQueryCache.value(binary).second;
+
+    const auto cachedQueryResult = m_qmakeQueryCache.value(binary);
+    m_qtIncludeDir = cachedQueryResult.value(qtInstallHeaders);
+    m_qtVersion = cachedQueryResult.value(qtVersion);
 
     return QMakeFile::read();
 }

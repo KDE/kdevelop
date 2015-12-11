@@ -28,24 +28,23 @@
 #include <QUrl>
 
 /// Helper class for handling @see IBuddyDocumentFinder features.
-class DocumentFinderHelpers
+namespace DocumentFinderHelpers
 {
-public:
-    /// @return All supported mime types
-    static QStringList mimeTypesList();
+/// @return All supported mime types
+QStringList mimeTypesList();
 
-    /**
-     * Considers the URLs as buddy documents if the base path (without extension)
-     * is the same, and one extension starts with h/H and the other one with c/C.
-     * For example, foo.hpp and foo.C are buddies.
-     */
-    static bool areBuddies(const QUrl &url1, const QUrl& url2);
+/**
+ * Considers the URLs as buddy documents if the base path (without extension)
+ * is the same, and one extension starts with h/H and the other one with c/C.
+ * For example, foo.hpp and foo.C are buddies.
+ */
+bool areBuddies(const QUrl &url1, const QUrl& url2);
 
-    /// @see KDevelop::IBuddyDocumentFinder
-    static bool buddyOrder(const QUrl &url1, const QUrl& url2);
+/// @see KDevelop::IBuddyDocumentFinder
+bool buddyOrder(const QUrl &url1, const QUrl& url2);
 
-    /// @see KDevelop::IBuddyDocumentFinder
-    static QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain = true);
+/// @see KDevelop::IBuddyDocumentFinder
+QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain = true);
 };
 
 #endif // DOCUMENTFINDERHELPERS_H

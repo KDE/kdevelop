@@ -45,7 +45,7 @@ QTEST_MAIN(TestFiles)
 
 void TestFiles::initTestCase()
 {
-    Builder::enableJSONTestRun();
+    qputenv("KDEV_CLANG_JSON_TEST_RUN", "1");
 
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));

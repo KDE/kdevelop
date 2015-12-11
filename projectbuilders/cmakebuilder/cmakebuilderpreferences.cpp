@@ -25,7 +25,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 
-#include "ui_cmakebuildersettings.h"
+#include "ui_cmakebuilderpreferences.h"
 #include "cmakebuilderconfig.h"
 #include "cmakeutils.h"
 
@@ -34,29 +34,26 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWid
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
-    m_prefsUi = new Ui::CMakeBuilderConfig;
+    m_prefsUi = new Ui::CMakeBuilderPreferences;
     m_prefsUi->setupUi( w );
     l->addWidget( w );
+
 #ifdef Q_OS_WIN
     // Visual Studio solution is the standard generator under windows, but we dont want to use
     // the VS IDE, so we need nmake makefiles
-    m_prefsUi->generator->addItem("NMake Makefiles");
+    m_prefsUi->kcfg_generator->addItem("NMake Makefiles");
     static_cast<KConfigSkeleton::ItemString *>(CMakeBuilderSettings::self()->findItem("generator"))->setDefaultValue("NMake Makefiles");
 
-    m_prefsUi->cmakeExe->setFilter("*.exe");
+    m_prefsUi->kcfg_cmakeExe->setFilter("*.exe");
 #else
-    m_prefsUi->generator->addItem("Unix Makefiles");
+    m_prefsUi->kcfg_generator->addItem("Unix Makefiles");
 #endif
+
     bool hasNinja = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder");
     if(hasNinja)
-        m_prefsUi->generator->addItem("Ninja");
-    
-    connect(m_prefsUi->cmakeExe, &KUrlRequester::textChanged, [=](const QString& exe)
-        {
-            if (CMakeBuilderSettings::self()->cmakeExe() != exe)
-                emit changed();
-        });
-    connect(m_prefsUi->generator, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuilderPreferences::generatorChanged);
+        m_prefsUi->kcfg_generator->addItem("Ninja");
+
+    connect(m_prefsUi->kcfg_generator, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuilderPreferences::generatorChanged);
 }
 
 CMakeBuilderPreferences::~CMakeBuilderPreferences()
@@ -66,24 +63,21 @@ CMakeBuilderPreferences::~CMakeBuilderPreferences()
 
 void CMakeBuilderPreferences::defaults()
 {
-    m_prefsUi->cmakeExe->setText(CMake::findExecutable());
-    m_prefsUi->generator->setCurrentIndex(0);
+    m_prefsUi->kcfg_generator->setCurrentIndex(0);
     KDevelop::ConfigPage::defaults();
 }
 
 void CMakeBuilderPreferences::apply()
 {
-    CMakeBuilderSettings::setCmakeExe(m_prefsUi->cmakeExe->text());
-    CMakeBuilderSettings::setGenerator(m_prefsUi->generator->currentText());
+    CMakeBuilderSettings::setGenerator(m_prefsUi->kcfg_generator->currentText());
     KDevelop::ConfigPage::apply();
     CMakeBuilderSettings::self()->save();
 }
 
 void CMakeBuilderPreferences::reset()
 {
-    m_prefsUi->cmakeExe->setText(CMakeBuilderSettings::self()->cmakeExe());
-    int idx = m_prefsUi->generator->findText(CMakeBuilderSettings::self()->generator());
-    m_prefsUi->generator->setCurrentIndex(idx);
+    int idx = m_prefsUi->kcfg_generator->findText(CMakeBuilderSettings::self()->generator());
+    m_prefsUi->kcfg_generator->setCurrentIndex(idx);
     KDevelop::ConfigPage::reset();
 }
 

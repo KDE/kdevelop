@@ -206,12 +206,17 @@ bool AdaptSignatureAssistant::getSignatureChanges(const Signature& newSignature,
 
 void AdaptSignatureAssistant::setDefaultParams(Signature& newSignature, const QList<int>& oldPositions) const
 {
-    for (int i = newSignature.parameters.size() - 1; i >= 0; --i) {
-        if (oldPositions[i] == -1) {
-            return;  //this param is new, no further defaults possible
-        }
-        if (i == newSignature.defaultParams.size() - 1 || !newSignature.defaultParams[i + 1].isEmpty()) {
-            newSignature.defaultParams[i] = m_oldSignature.defaultParams[oldPositions[i]];
+    bool hadDefaultParam = false;
+    for (int i = 0; i < newSignature.defaultParams.size(); ++i) {
+        const auto oldPos = oldPositions[i];
+        if (oldPos == -1) {
+            // default-initialize new argument if we encountered a previous default param
+            if (hadDefaultParam) {
+                newSignature.defaultParams[i] = QStringLiteral("{} /* TODO */");
+            }
+        } else {
+            newSignature.defaultParams[i] = m_oldSignature.defaultParams[oldPos];
+            hadDefaultParam = hadDefaultParam || !newSignature.defaultParams[i].isEmpty();
         }
     }
 }

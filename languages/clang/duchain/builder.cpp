@@ -62,7 +62,11 @@
 namespace {
 
 // TODO: this is ugly, can we find a better alternative?
-static bool s_jsonTestRun = false;
+bool jsonTestRun()
+{
+    static bool runningTest = qEnvironmentVariableIsSet("KDEV_CLANG_JSON_TEST_RUN");
+    return runningTest;
+}
 
 //BEGIN helpers
 /**
@@ -96,7 +100,7 @@ Identifier makeId(CXCursor cursor)
 
 QByteArray makeComment(CXComment comment)
 {
-    if (Q_UNLIKELY(s_jsonTestRun)) {
+    if (Q_UNLIKELY(jsonTestRun())) {
         auto kind = clang_Comment_getKind(comment);
         if (kind == CXComment_Text)
             return ClangString(clang_TextComment_getText(comment)).toByteArray();
@@ -951,7 +955,7 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
 #endif
 
 #if CINDEX_VERSION_MINOR >= 30
-    if (!s_jsonTestRun) {
+    if (!jsonTestRun()) {
         auto offset = clang_Cursor_getOffsetOfField(cursor);
         if (offset >= 0) { // don't add this info to the json tests, it invalidates the comment structure
             auto type = clang_getCursorType(cursor);
@@ -992,7 +996,7 @@ void Visitor::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
     if (clang_isCursorDefinition(cursor)) {
         decl->setDeclarationIsDefinition(true);
     }
-    if (!s_jsonTestRun) { // don't add this info to the json tests, it invalidates the comment structure
+    if (!jsonTestRun()) { // don't add this info to the json tests, it invalidates the comment structure
         auto type = clang_getCursorType(cursor);
         auto sizeOf = clang_Type_getSizeOf(type);
         auto alignOf = clang_Type_getAlignOf(type);
@@ -1431,11 +1435,6 @@ namespace Builder {
 void visit(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update)
 {
     Visitor visitor(tu, file, includes, update);
-}
-
-void enableJSONTestRun()
-{
-    s_jsonTestRun = true;
 }
 
 }

@@ -31,6 +31,7 @@
 #include <clang-c/Index.h>
 
 #include <QTextStream>
+#include <QRegularExpression>
 
 using namespace KDevelop;
 
@@ -50,6 +51,37 @@ CXCursor ClangUtils::getCXCursor(int line, int column, const CXTranslationUnit& 
     }
 
     return clang_getCursor(unit, location);
+}
+
+KTextEditor::Range ClangUtils::rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange)
+{
+    static const QRegularExpression pattern(QStringLiteral("^\\s*#include"));
+    if (!line.contains(pattern)) {
+        return KTextEditor::Range::invalid();
+    }
+
+    KTextEditor::Range range = originalRange;
+    int pos = 0;
+    char term_char = 0;
+    for (; pos < line.size(); ++pos) {
+        if (line[pos] == QLatin1Char('"') || line[pos] == QLatin1Char('<')) {
+            term_char = line[pos] == QLatin1Char('"') ? '"' : '>';
+            range.setStart({ range.start().line(), ++pos });
+            break;
+        }
+    }
+
+    for (; pos < line.size(); ++pos) {
+        if (line[pos] == QLatin1Char('\\')) {
+            ++pos;
+            continue;
+        } else if(line[pos] == QLatin1Char(term_char)) {
+            range.setEnd({ range.start().line(), pos });
+            break;
+        }
+    }
+
+    return range;
 }
 
 namespace {

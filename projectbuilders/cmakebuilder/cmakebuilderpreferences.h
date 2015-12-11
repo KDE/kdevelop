@@ -18,15 +18,15 @@
  * 02110-1301, USA.
  */
 
-#ifndef MAKEBUILDERPREFERENCES_H
-#define MAKEBUILDERPREFERENCES_H
+#ifndef CMAKEBUILDERPREFERENCES_H
+#define CMAKEBUILDERPREFERENCES_H
 
 #include <interfaces/configpage.h>
 
 class QWidget;
 class QStringList;
 class CMakeBuilderSettings;
-namespace Ui { class CMakeBuilderConfig; }
+namespace Ui { class CMakeBuilderPreferences; }
 
 class CMakeBuilderPreferences : public KDevelop::ConfigPage
 {
@@ -48,7 +48,7 @@ public slots:
     void generatorChanged(const QString& generator);
 
 private:
-    Ui::CMakeBuilderConfig* m_prefsUi;
+    Ui::CMakeBuilderPreferences* m_prefsUi;
 };
 
 #endif

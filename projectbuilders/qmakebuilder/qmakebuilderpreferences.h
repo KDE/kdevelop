@@ -55,8 +55,6 @@ public slots:
     void validate();
 
 private:
-    bool verifyChanges();
-
     KDevelop::IProject* m_project;
 
     Ui::QMakeConfig* m_prefsUi;

@@ -24,6 +24,8 @@
 
 #include <util/path.h>
 
+#include <KTextEditor/View>
+
 #include <clang-c/Index.h>
 
 namespace KDevelop {
@@ -121,6 +123,17 @@ namespace ClangUtils
      * such API in libclang so having one function to check both cases is more efficient (only tokenize once)
      */
     bool isExplicitlyDefaultedOrDeleted(CXCursor cursor);
+
+    /**
+    * Extract the range of the path-spec inside the include-directive in line @p line
+    *
+    * Example: line = "#include <vector>" => returns {0, 10, 0, 16}
+    *
+    * @param originalRange This is the range that the resulting range will be based on
+    *
+    * @return Range pointing to the path-spec of the include or invalid range if there is no #include directive on the line.
+    */
+    KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange = KTextEditor::Range());
 };
 
 #endif // CLANGUTILS_H

@@ -106,25 +106,30 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
     return exe;
 }
 
-QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeBinary)
+QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeBinary, const QStringList& args)
 {
     QHash<QString, QString> hash;
     KProcess p;
     p.setOutputChannelMode(KProcess::OnlyStdoutChannel);
-    p << qmakeBinary << "-query";
-    int execed = p.execute();
-    if (execed != 0) {
-        qWarning() << "failed to execute qmake query " << p.program().join(" ") << "return code was:" << execed;
+    p << qmakeBinary << "-query" << args;
+
+    const int rc = p.execute();
+    if (rc != 0) {
+        qCWarning(KDEV_QMAKE) << "failed to execute qmake query " << p.program().join(" ") << "return code was:" << rc;
         return QHash<QString, QString>();
     }
 
-    foreach (const QByteArray& line, p.readAllStandardOutput().split('\n')) {
+    // TODO: Qt 5.5: Use QTextStream::readLineInto
+    QTextStream stream(&p);
+    while (!stream.atEnd()) {
+        const QString line = stream.readLine();
         const int colon = line.indexOf(':');
         if (colon == -1) {
             continue;
         }
-        const QByteArray key = line.left(colon);
-        const QByteArray value = line.mid(colon + 1);
+
+        const auto key = line.left(colon);
+        const auto value = line.mid(colon + 1);
         hash.insert(key, value);
     }
     qCDebug(KDEV_QMAKE) << "Ran qmake (" << p.program().join(" ") << "), found:" << hash;

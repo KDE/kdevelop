@@ -246,11 +246,6 @@ int main( int argc, char *argv[] )
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
     }
 
-    Kdelibs4ConfigMigrator migrator(QStringLiteral("kdevelop"));
-    migrator.setConfigFiles({QStringLiteral("kdeveloprc")});
-    migrator.setUiFiles({QStringLiteral("kdevelopui.rc")});
-    migrator.migrate();
-
     // Don't show any debug output by default.
     // If you need to enable additional logging for debugging use a rules file
     // as explained in the QLoggingCategory documentation:
@@ -364,6 +359,11 @@ int main( int argc, char *argv[] )
     }
 
     KDevelopApplication app(argc, argv);
+
+    Kdelibs4ConfigMigrator migrator(QStringLiteral("kdevelop"));
+    migrator.setConfigFiles({QStringLiteral("kdeveloprc")});
+    migrator.setUiFiles({QStringLiteral("kdevelopui.rc")});
+    migrator.migrate();
 
     // High DPI support
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
