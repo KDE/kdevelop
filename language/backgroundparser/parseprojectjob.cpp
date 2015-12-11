@@ -17,17 +17,23 @@
 */
 
 #include "parseprojectjob.h"
+
 #include "util/debug.h"
+
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
-#include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/iproject.h>
-#include <klocalizedstring.h>
 #include <interfaces/icompletionsettings.h>
+
+#include <language/backgroundparser/backgroundparser.h>
+
+#include <KLocalizedString>
+
 #include <QApplication>
+#include <QPointer>
 
 using namespace KDevelop;
 
@@ -134,11 +140,16 @@ void ParseProjectJob::start() {
     // esp. noticeable when dealing with huge projects
     const int processAfter = 1000;
     int processed = 0;
+    // guard against reentrancy issues, see also bug 345480
+    auto crashGuard = QPointer<ParseProjectJob>{this};
     foreach(const IndexedString& url, m_filesToParse) {
         ICore::self()->languageController()->backgroundParser()->addDocument( url, processingLevel, BackgroundParser::InitialParsePriority, this );
         ++processed;
         if (processed == processAfter) {
             QApplication::processEvents();
+            if (!crashGuard) {
+                return;
+            }
             processed = 0;
         }
     }

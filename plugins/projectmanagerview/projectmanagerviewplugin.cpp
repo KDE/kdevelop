@@ -133,6 +133,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     connect( d->m_clean, &QAction::triggered, this, &ProjectManagerViewPlugin::cleanProjectItems );
     actionCollection()->addAction( "project_clean", d->m_clean );
     d->m_configure = new QAction( i18n("Configure Selection"), this );
+    d->m_configure->setMenuRole( QAction::NoRole ); // OSX: Be explicit about role, prevent hiding due to conflict with "Preferences..." menu item 
     d->m_configure->setIconText( i18n("Configure") );
     d->m_configure->setIcon(QIcon::fromTheme("run-build-configure"));
     d->m_configure->setEnabled( false );
