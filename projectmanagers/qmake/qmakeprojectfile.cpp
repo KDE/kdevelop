@@ -194,6 +194,8 @@ QStringList QMakeProjectFile::includeDirectories() const
             // for now, at least include core if we include any other module
             modules << "core";
         }
+
+        // TODO: This is all very fragile, should rather read QMake module .pri files (e.g. qt_lib_core_private.pri)
         foreach (const QString& module, modules) {
             QString pattern = module;
 
@@ -213,14 +215,18 @@ QStringList QMakeProjectFile::includeDirectories() const
                 pattern = "ActiveQt";
             } else if (pattern == "qaxserver") {
                 pattern = "ActiveQt";
-            } else if (pattern != "phonon" && pattern != "qt3support") {
-                pattern.prepend("Qt");
             }
-            const QFileInfoList match = incDir.entryInfoList(QStringList(pattern), QDir::Dirs);
+
+            QFileInfoList match = incDir.entryInfoList({QString("Qt%1").arg(pattern)}, QDir::Dirs);
             if (match.isEmpty()) {
-                qCWarning(KDEV_QMAKE) << "unhandled Qt module:" << module << pattern;
-                continue;
+                // try non-prefixed pattern
+                match = incDir.entryInfoList({pattern}, QDir::Dirs);
+                if (match.isEmpty()) {
+                    qCWarning(KDEV_QMAKE) << "unhandled Qt module:" << module << pattern;
+                    continue;
+                }
             }
+
             QString path = match.first().canonicalFilePath();
             if (isPrivate) {
                 path += '/' + m_qtVersion + '/' + match.first().fileName() + "/private/";
