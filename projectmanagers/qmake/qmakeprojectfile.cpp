@@ -196,10 +196,17 @@ QStringList QMakeProjectFile::includeDirectories() const
         }
         foreach (const QString& module, modules) {
             QString pattern = module;
-            const bool isPrivate = module.endsWith("-private");
-            if (isPrivate) {
+
+            bool isPrivate = false;
+            if (module.endsWith("-private")) {
                 pattern.chop(strlen("-private"));
+                isPrivate = true;
+            } else if (module.endsWith("_private")) {
+                // _private is less common, but still a valid suffix
+                pattern.chop(strlen("_private"));
+                isPrivate = true;
             }
+
             if (pattern == "qtestlib" || pattern == "testlib") {
                 pattern = "QtTest";
             } else if (pattern == "qaxcontainer") {
