@@ -104,21 +104,6 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/)
-
-# Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
-set(KDEVPLATFORM_SUBLIME_LIBRARIES KDev::Sublime)
-set(KDEVPLATFORM_INTERFACES_LIBRARIES KDev::Interfaces)
-set(KDEVPLATFORM_LANGUAGE_LIBRARIES KDev::Language)
-set(KDEVPLATFORM_PROJECT_LIBRARIES KDev::Project)
-set(KDEVPLATFORM_UTIL_LIBRARIES KDev::Util)
-set(KDEVPLATFORM_OUTPUTVIEW_LIBRARIES KDev::OutputView)
-set(KDEVPLATFORM_VCS_LIBRARIES KDev::Vcs)
-set(KDEVPLATFORM_SHELL_LIBRARIES KDev::Shell)
-set(KDEVPLATFORM_TESTS_LIBRARIES KDev::Tests)
-set(KDEVPLATFORM_DEBUGGER_LIBRARIES KDev::Debugger)
-set(KDEVPLATFORM_DOCUMENTATION_LIBRARIES KDev::Documentation)
-set(KDEVPLATFORM_SERIALIZATION_LIBRARIES KDev::Serialization)
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
 if(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug"
@@ -137,14 +122,11 @@ add_subdirectory(util)
 add_subdirectory(outputview)
 add_subdirectory(vcs)
 add_subdirectory(pics)
-#ecm_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
 add_subdirectory(documentation)
 add_subdirectory(serialization)
-
 add_subdirectory(template)
 add_subdirectory(tests)
-
 add_subdirectory(plugins)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")
