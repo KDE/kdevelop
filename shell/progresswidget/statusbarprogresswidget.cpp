@@ -64,6 +64,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     box->setSpacing(0);
 
     m_pButton = new QPushButton( this );
+    m_pButton->setAttribute(Qt::WA_MacMiniSize);
     m_pButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
                                            QSizePolicy::Minimum ) );
     QIcon smallIcon = QIcon::fromTheme( "go-up" );
@@ -86,7 +87,12 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     m_pLabel->installEventFilter( this );
     m_pLabel->setMinimumWidth( w );
     stack->insertWidget( 2, m_pLabel );
+
+#ifndef Q_OS_MAC
+    // Currently on OSX this causes the button to be cut-off
+    // It isn't necessary because on OSX the button's minimumSizeHint is small enough
     m_pButton->setMaximumHeight( maximumHeight );
+#endif
     setMinimumWidth( minimumSizeHint().width() );
 
     mode = None;
