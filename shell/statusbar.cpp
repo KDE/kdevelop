@@ -48,6 +48,14 @@ StatusBar::StatusBar(QWidget* parent)
     , m_currentView(0)
     , m_errorRemovalMapper(new QSignalMapper(this))
 {
+#ifdef Q_OS_MAC
+    /* At time of writing this is only required for OSX and only has effect on OSX. 
+       ifdef for robustness to future platform dependent theme/widget changes
+       https://phabricator.kde.org/D656 
+    */
+    setStyleSheet("QStatusBar{background:transparent;}");
+#endif
+
     m_timer->setSingleShot(true);
     connect(m_timer, &QTimer::timeout, this, &StatusBar::slotTimeout);
     connect(Core::self()->pluginController(), &IPluginController::pluginLoaded, this, &StatusBar::pluginLoaded);
