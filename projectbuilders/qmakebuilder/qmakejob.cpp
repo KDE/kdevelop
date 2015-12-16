@@ -28,7 +28,7 @@
 #include <outputview/ioutputview.h>
 #include <outputview/outputmodel.h>
 #include <project/projectmodel.h>
-#include <projectbuilders/makebuilder/imakebuilder.h>
+#include <makebuilder/imakebuilder.h>
 #include <util/commandexecutor.h>
 #include <util/path.h>
 

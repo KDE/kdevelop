@@ -40,14 +40,23 @@ option(BUILD_kdev_includepathsconverter "Build utility to modify include paths o
 if(BUILD_kdev_includepathsconverter)
     add_executable(kdev_includepathsconverter includepathsconverter.cpp)
     target_link_libraries(kdev_includepathsconverter LINK_PRIVATE
-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
+        KDev::Project
         kdevcompilerprovider
     )
     install(TARGETS kdev_includepathsconverter ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif(BUILD_kdev_includepathsconverter)
 
-
 install(FILES
     idefinesandincludesmanager.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/custom-definesandincludes COMPONENT Devel
 )
+
+add_library(KDev::DefinesAndIncludesManager ALIAS kdevdefinesandincludesmanager)
+target_include_directories(kdevdefinesandincludesmanager INTERFACE
+     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>"
+     "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevelop>"
+)
+set_target_properties(kdevdefinesandincludesmanager PROPERTIES
+    EXPORT_NAME DefinesAndIncludesManager
+)
+install(TARGETS kdevdefinesandincludesmanager EXPORT KDevelopTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

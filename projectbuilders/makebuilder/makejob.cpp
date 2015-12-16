@@ -24,6 +24,7 @@
 #include "makejob.h"
 
 #include <QtCore/QFileInfo>
+#include <QThread>
 
 #include <KShell>
 #include <KConfig>
@@ -171,6 +172,9 @@ QStringList MakeJob::commandLine() const
     KSharedConfigPtr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
 
+    // TODO: ifdefs for MSVC don't make sense, this is a runtime decision
+    // (we could as well use MinGW GCC as compiler kit on Windows, obviously)
+    // => We need a proper way to select the compiler kits in KDevelop
 #ifdef _MSC_VER
     QString makeBin = builderGroup.readEntry("Make Binary", "nmake");
 #else
@@ -183,7 +187,13 @@ QStringList MakeJob::commandLine() const
         cmdline << "-k";
     }
 
-    int jobnumber = builderGroup.readEntry("Number Of Jobs", 2);
+    const int defaultJobNumber =
+#ifdef _MSC_VER
+        1;
+#else
+        QThread::idealThreadCount();
+#endif
+    const int jobnumber = builderGroup.readEntry("Number Of Jobs", defaultJobNumber);
     if(jobnumber>1) {
         QString jobNumberArg = QString("-j%1").arg(jobnumber);
         cmdline << jobNumberArg;

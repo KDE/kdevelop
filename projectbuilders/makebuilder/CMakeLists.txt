@@ -24,9 +24,15 @@ target_link_libraries(kdevmakebuilder
         KDev::Shell
 )
 
+install(FILES imakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/makebuilder COMPONENT Devel)
 
-########### install files ###############
-#install(TARGETS kdevmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-install(FILES imakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/make COMPONENT Devel)
-#configure_file(kdevmakebuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevmakebuilder.desktop)
-#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+add_library(KDevIMakeBuilder INTERFACE)
+add_library(KDev::IMakeBuilder ALIAS KDevIMakeBuilder)
+target_include_directories(KDevIMakeBuilder INTERFACE
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>"
+    "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevelop>"
+)
+set_target_properties(KDevIMakeBuilder PROPERTIES
+    EXPORT_NAME IMakeBuilder
+)
+install(TARGETS KDevIMakeBuilder EXPORT KDevelopTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

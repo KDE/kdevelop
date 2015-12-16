@@ -32,7 +32,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/builderjob.h>
-#include <projectbuilders/makebuilder/imakebuilder.h>
+#include <makebuilder/imakebuilder.h>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>

@@ -201,11 +201,11 @@ QStringList QMakeProjectFile::includeDirectories() const
 
             bool isPrivate = false;
             if (module.endsWith("-private")) {
-                pattern.chop(strlen("-private"));
+                pattern.chop(qstrlen("-private"));
                 isPrivate = true;
             } else if (module.endsWith("_private")) {
                 // _private is less common, but still a valid suffix
-                pattern.chop(strlen("_private"));
+                pattern.chop(qstrlen("_private"));
                 isPrivate = true;
             }
 
