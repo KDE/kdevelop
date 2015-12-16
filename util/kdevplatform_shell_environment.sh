@@ -65,11 +65,11 @@ fi
 
 # Queries the session name from the running application instance
 function getSessionName {
-    echo "$(qdbus $KDEV_DBUS_ID /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionName)"
+    echo "$(qdbus $KDEV_DBUS_ID /org/kdevelop/SessionController org.kdevelop.SessionController.sessionName)"
 }
 
 function getSessionDir {
-    echo "$(qdbus $KDEV_DBUS_ID /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionDir)"
+    echo "$(qdbus $KDEV_DBUS_ID /org/kdevelop/SessionController org.kdevelop.SessionController.sessionDir)"
 }
 
 function getCurrentShellEnvPath {
