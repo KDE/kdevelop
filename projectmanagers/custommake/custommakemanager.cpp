@@ -15,7 +15,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
-#include "imakebuilder.h"
+#include <makebuilder/imakebuilder.h>
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
 #include <kpluginloader.h>

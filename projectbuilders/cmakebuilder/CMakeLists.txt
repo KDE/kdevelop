@@ -1,7 +1,5 @@
-project(cmakebuilder)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcmakebuilder\")
 include_directories(
-    ${cmakebuilder_SOURCE_DIR}
     ${KDevelop_SOURCE_DIR}/projectmanagers/cmake
     )
 
@@ -21,11 +19,13 @@ kdevplatform_add_plugin(kdevcmakebuilder JSON kdevcmakebuilder.json SOURCES ${cm
 target_link_libraries(
     kdevcmakebuilder
     kdevcmakecommon
-        KF5::KIOWidgets
 
-        KDev::Interfaces
-        KDev::OutputView
-        KDev::Util
-        KDev::Shell
-        KDev::Project
+    KF5::KIOWidgets
+
+    KDev::Interfaces
+    KDev::OutputView
+    KDev::Util
+    KDev::Shell
+    KDev::Project
+    KDev::IMakeBuilder
 )

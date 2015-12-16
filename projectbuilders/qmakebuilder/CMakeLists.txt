@@ -14,6 +14,7 @@ target_link_libraries(kdevqmakebuilder
     KDev::OutputView
     KDev::Util
     KDev::Project
+    KDev::IMakeBuilder
     kdevqmakecommon
 )
 

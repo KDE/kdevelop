@@ -32,7 +32,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <outputview/ioutputview.h>
-#include <projectbuilders/makebuilder/imakebuilder.h>
+#include <makebuilder/imakebuilder.h>
 #include <util/commandexecutor.h>
 
 #include <kpluginfactory.h>

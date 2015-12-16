@@ -19,7 +19,9 @@ include(ECMSetupVersion)
 include(ECMAddTests)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
+include(ECMPackageConfigHelpers)
 
+include(CTest)
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
@@ -80,7 +82,6 @@ include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR}  )
 # create config.h
 configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
-add_subdirectory(cmake)
 add_subdirectory(pics)
 add_subdirectory(app)
 add_subdirectory(formatters)
@@ -94,10 +95,27 @@ add_subdirectory(kdeintegration)
 add_subdirectory(utils)
 add_subdirectory(file_templates)
 add_subdirectory(providers)
-
 add_subdirectory(doc)
 
-include(CTest)
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevelop")
+ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevelopConfig.cmake.in"
+                                  "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfig.cmake"
+                                  INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+)
+ecm_setup_version(${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}
+                  VARIABLE_PREFIX KDEVELOP
+                  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdevelop_version.h"
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfigVersion.cmake"
+                  SOVERSION ${KDEVELOP_LIB_SOVERSION}
+)
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/kdevelop_version.h"
+        DESTINATION "${KDE_INSTALL_INCLUDEDIR}/kdevelop")
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfigVersion.cmake"
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}" )
+install(EXPORT KDevelopTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" NAMESPACE KDev:: FILE KDevelopTargets.cmake)
 
 # CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.
