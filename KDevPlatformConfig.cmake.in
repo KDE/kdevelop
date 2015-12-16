@@ -1,60 +1,6 @@
-#########################################################################
-#
-# KDevPlatform Configuration File 
-#
-# This file sets various CMake Variables
-#
-# KDEVPLATFORM_INCLUDE_DIR             - The Include Directory for all KDEVPLATFORM libraries
-# KDEVPLATFORM_INTERFACES_LIBRARIES      - the interfaces library
-# KDEVPLATFORM_LANGUAGE_LIBRARIES        - the language library
-# KDEVPLATFORM_OUTPUTVIEW_LIBRARIES      - the outputview library
-# KDEVPLATFORM_PROJECT_LIBRARIES         - the project library
-# KDEVPLATFORM_SUBLIME_LIBRARIES         - the sublime library
-# KDEVPLATFORM_SHELL_LIBRARIES           - the shell library
-# KDEVPLATFORM_TESTS_LIBRARIES           - the tests library
-# KDEVPLATFORM_UTIL_LIBRARIES            - the util library
-# KDEVPLATFORM_VCS_LIBRARIES             - the vcs library
-# KDEVPLATFORM_DEBUGGER_LIBRARIES        - debugger module library
-# KDEVPLATFORM_SERIALIZATION_LIBRARIES   - serialization module library
-#
-# Copyright 2008  Andreas Pakulat <apaku@gmx.de>
-# Redistribution and use is allowed according to the terms of the BSD license.
-######################################################################
+@PACKAGE_INIT@
 
-get_filename_component(_KDEVPLATFORM_CURRENT_DIR  "${CMAKE_CURRENT_LIST_FILE}" PATH)
-set( KDEV_PLUGIN_VERSION @KDEV_PLUGIN_VERSION@ )
+set(KDEV_PLUGIN_VERSION @KDEV_PLUGIN_VERSION@)
 
-if(NOT WIN32)
-    # This is needed on non-win32 platforms, as lib-install-dir might be in a
-    # totally different prefix than include-install-dir. So instead hardcode the
-    # absolute path during buildtime
-    set( KDEVPLATFORM_INCLUDE_DIR "@INCLUDE_INSTALL_DIR@/kdevplatform" )
-
-else(NOT WIN32)
-    set( KDEVPLATFORM_INCLUDE_DIR "${_KDEVPLATFORM_CURRENT_DIR}/../../../include/kdevplatform" )
-endif(NOT WIN32)
-
-if( NOT TARGET KDevPlatformImport__kdevplatforminterfaces )
-    include("${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformTargets.cmake")
-endif( NOT TARGET KDevPlatformImport__kdevplatforminterfaces )
-
-macro( _kdevplatform_set_lib_vars _lib )
-  string(TOUPPER ${_lib} upperLib )
-  set( KDEVPLATFORM_${upperLib}_LIBRARIES KDev::${_lib} )
-  mark_as_advanced(KDEVPLATFORM_${upperLib}_LIBRARIES)
-endmacro( _kdevplatform_set_lib_vars )
-
-_kdevplatform_set_lib_vars( Interfaces )
-_kdevplatform_set_lib_vars( Project )
-_kdevplatform_set_lib_vars( Language )
-_kdevplatform_set_lib_vars( Util )
-_kdevplatform_set_lib_vars( Shell )
-_kdevplatform_set_lib_vars( Sublime )
-_kdevplatform_set_lib_vars( Vcs )
-_kdevplatform_set_lib_vars( OutputView )
-_kdevplatform_set_lib_vars( Debugger )
-_kdevplatform_set_lib_vars( Documentation)
-_kdevplatform_set_lib_vars( Tests )
-_kdevplatform_set_lib_vars( Serialization )
-
-include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
+include("${CMAKE_CURRENT_LIST_DIR}/KDevPlatformTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/KDevPlatformMacros.cmake")
