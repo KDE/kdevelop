@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "runcontroller.h"
 
 #include <QDebug>
+#include <QDBusConnection>
 #include <QPalette>
 #include <QSignalMapper>
 
@@ -317,6 +318,10 @@ RunController::RunController(QObject *parent)
     , d(new RunControllerPrivate)
 {
     setObjectName("RunController");
+
+    QDBusConnection::sessionBus().registerObject("/org/kdevelop/RunController",
+        this, QDBusConnection::ExportScriptableSlots);
+
     // TODO: need to implement compile only if needed before execute
     // TODO: need to implement abort all running programs when project closed
 

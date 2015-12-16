@@ -75,6 +75,8 @@ struct TryLockSessionResult
 class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kdevelop.SessionController")
+
 public:
     explicit SessionController( QObject *parent = 0 );
     virtual ~SessionController();

@@ -295,7 +295,7 @@ SessionController::SessionController( QObject *parent )
 
     setXMLFile("kdevsessionui.rc");
 
-    QDBusConnection::sessionBus().registerObject( "/kdevelop/SessionController",
+    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/SessionController",
         this, QDBusConnection::ExportScriptableSlots );
 
     if (Core::self()->setupFlags() & Core::NoUi) return;

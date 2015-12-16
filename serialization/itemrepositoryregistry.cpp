@@ -24,6 +24,7 @@
 #include <QtDBus/QDBusConnection>
 #include <QtCore/QDebug>
 #include <QDataStream>
+#include <QStandardPaths>
 
 #include <KLocalizedString>
 
@@ -49,8 +50,9 @@ void setCrashCounter(QFile& crashesFile, int count)
 
 QString repositoryPathForSession(const KDevelop::ISessionLock::Ptr& session)
 {
-  QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value("XDG_CACHE_HOME", QDir::homePath() + "/.cache") + "/kdevduchain";
-  QString baseDir = QProcessEnvironment::systemEnvironment().value("KDEV_DUCHAIN_DIR", xdgCacheDir);
+  QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation);
+  cacheDir += QStringLiteral("/kdevduchain");
+  QString baseDir = QProcessEnvironment::systemEnvironment().value("KDEV_DUCHAIN_DIR", cacheDir);
   baseDir += QStringLiteral("/%1-%2").arg(qApp->applicationName()).arg(session->id());
   return baseDir;
 }

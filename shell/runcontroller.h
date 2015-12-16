@@ -46,6 +46,7 @@ class LaunchConfigurationType;
 class KDEVPLATFORMSHELL_EXPORT RunController : public IRunController
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kdevelop.RunController")
 
 public:
     explicit RunController(QObject *parent);
@@ -56,7 +57,6 @@ public:
     virtual QList<KJob*> currentJobs() const override;
 
     KJob* execute(const QString& launchMode, ILaunchConfiguration* launch) override;
-    LaunchConfiguration* defaultLaunch() const;
     QList<ILaunchMode*> launchModes() const override;
 
     /**
@@ -110,14 +110,16 @@ public:
                                                               IProject* project = 0,
                                                               const QString& name = QString() ) override;
 
-    virtual void executeDefaultLaunch(const QString& runMode) override;
 
     void setDefaultLaunch(ILaunchConfiguration* l);
+    LaunchConfiguration* defaultLaunch() const;
 
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:
-    virtual void stopAllProcesses() override;
+    virtual Q_SCRIPTABLE void executeDefaultLaunch(const QString& runMode) override;
+
+    virtual Q_SCRIPTABLE void stopAllProcesses() override;
 
 protected Q_SLOTS:
     virtual void finished(KJob *job) override;
