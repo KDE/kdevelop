@@ -46,8 +46,17 @@ if(BUILD_kdev_includepathsconverter)
     install(TARGETS kdev_includepathsconverter ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif(BUILD_kdev_includepathsconverter)
 
-
 install(FILES
     idefinesandincludesmanager.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/custom-definesandincludes COMPONENT Devel
 )
+
+add_library(KDev::DefinesAndIncludesManager ALIAS kdevdefinesandincludesmanager)
+target_include_directories(kdevdefinesandincludesmanager INTERFACE
+     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>"
+     "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevelop>"
+)
+set_target_properties(kdevdefinesandincludesmanager PROPERTIES
+    EXPORT_NAME DefinesAndIncludesManager
+)
+install(TARGETS kdevdefinesandincludesmanager EXPORT KDevelopTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
