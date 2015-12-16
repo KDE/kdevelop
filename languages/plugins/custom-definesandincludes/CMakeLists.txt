@@ -40,7 +40,7 @@ option(BUILD_kdev_includepathsconverter "Build utility to modify include paths o
 if(BUILD_kdev_includepathsconverter)
     add_executable(kdev_includepathsconverter includepathsconverter.cpp)
     target_link_libraries(kdev_includepathsconverter LINK_PRIVATE
-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
+        KDev::Project
         kdevcompilerprovider
     )
     install(TARGETS kdev_includepathsconverter ${INSTALL_TARGETS_DEFAULT_ARGS} )
