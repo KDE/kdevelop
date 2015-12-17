@@ -44,7 +44,8 @@
 #include <duchain/classdeclaration.h>
 
 namespace KDevelop {
-AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
+
+AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
   : AbstractNavigationContext((topContext ? topContext : TopDUContextPointer(decl ? decl->topContext() : 0)), previousContext), m_declaration(decl), m_fullBackwardSearch(false)
 {
   //Jump from definition to declaration if possible
@@ -133,7 +134,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         Declaration* resolved = forwardDec->resolve(m_topContext.data());
         if(resolved) {
           modifyHtml() += i18n("(resolved forward-declaration: ");
-          makeLink(resolved->identifier().toString(), KDevelop::DeclarationPointer(resolved), NavigationAction::NavigateDeclaration );
+          makeLink(resolved->identifier().toString(), DeclarationPointer(resolved), NavigationAction::NavigateDeclaration );
           modifyHtml() += i18n(") ");
         }else{
           modifyHtml() += i18n("(unresolved forward-declaration) ");
@@ -144,7 +145,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
           for(uint a = 0; a < count; ++a) {
             if(decls[a].isValid() && !decls[a].data()->isForwardDeclaration()) {
               modifyHtml() += "<br />";
-              makeLink(i18n("possible resolution from"), KDevelop::DeclarationPointer(decls[a].data()), NavigationAction::NavigateDeclaration);
+              makeLink(i18n("possible resolution from"), DeclarationPointer(decls[a].data()), NavigationAction::NavigateDeclaration);
               modifyHtml() += ' ' + decls[a].data()->url().str();
             }
           }
@@ -312,7 +313,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   return currentHtml();
 }
 
-KDevelop::AbstractType::Ptr AbstractDeclarationNavigationContext::typeToShow(KDevelop::AbstractType::Ptr type) {
+AbstractType::Ptr AbstractDeclarationNavigationContext::typeToShow(AbstractType::Ptr type) {
   return type;
 }
 
@@ -346,7 +347,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     int currentArgNum = 0;
 
     QVector<Declaration*> decls;
-    if (KDevelop::DUContext* argumentContext = DUChainUtils::getArgumentContext(m_declaration.data())) {
+    if (DUContext* argumentContext = DUChainUtils::getArgumentContext(m_declaration.data())) {
       decls = argumentContext->localDeclarations(m_topContext.data());
     }
     foreach(const AbstractType::Ptr& argType, type->arguments()) {
@@ -410,12 +411,12 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 
     if(overridden) {
         modifyHtml() += i18n("Overrides a ");
-        makeLink(i18n("function"), QStringLiteral("jump_to_overridden"), NavigationAction(DeclarationPointer(overridden), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(i18n("function"), QStringLiteral("jump_to_overridden"), NavigationAction(DeclarationPointer(overridden), NavigationAction::NavigateDeclaration));
         modifyHtml() += i18n(" from ");
         makeLink(prettyQualifiedName(DeclarationPointer(overridden->context()->owner())),
                  QStringLiteral("jump_to_overridden_container"),
                  NavigationAction(DeclarationPointer(overridden->context()->owner()),
-                                  KDevelop::NavigationAction::NavigateDeclaration));
+                                  NavigationAction::NavigateDeclaration));
 
         modifyHtml() += "<br />";
     }else{
@@ -430,12 +431,12 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
         modifyHtml() += i18n("Hides a ");
         makeLink(i18n("function"), QStringLiteral("jump_to_hide_%1").arg(num),
                  NavigationAction(DeclarationPointer(decl),
-                                  KDevelop::NavigationAction::NavigateDeclaration));
+                                  NavigationAction::NavigateDeclaration));
         modifyHtml() += i18n(" from ");
         makeLink(prettyQualifiedName(DeclarationPointer(decl->context()->owner())),
                  QStringLiteral("jump_to_hide_container_%1").arg(num),
                  NavigationAction(DeclarationPointer(decl->context()->owner()),
-                                  KDevelop::NavigationAction::NavigateDeclaration));
+                                  NavigationAction::NavigateDeclaration));
 
         modifyHtml() += "<br />";
         ++num;
@@ -535,7 +536,7 @@ void AbstractDeclarationNavigationContext::htmlClass()
     }
     eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
 
-    FOREACH_FUNCTION( const KDevelop::BaseClassInstance& base, classDecl->baseClasses ) {
+    FOREACH_FUNCTION( const BaseClassInstance& base, classDecl->baseClasses ) {
       modifyHtml() += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QStringLiteral("virtual") : QString()) + " ";
       eventuallyMakeTypeLinks(base.baseClass.abstractType());
     }
