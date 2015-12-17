@@ -26,6 +26,7 @@
 #include <interfaces/iplugincontroller.h>
 
 #include "ui_cmakebuilderpreferences.h"
+#include "cmakebuilder.h"
 #include "cmakebuilderconfig.h"
 #include "cmakeutils.h"
 
@@ -39,53 +40,16 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWid
     l->addWidget( w );
 
 #ifdef Q_OS_WIN
-    // Visual Studio solution is the standard generator under windows, but we dont want to use
-    // the VS IDE, so we need nmake makefiles
-    m_prefsUi->kcfg_generator->addItem("NMake Makefiles");
-    static_cast<KConfigSkeleton::ItemString *>(CMakeBuilderSettings::self()->findItem("generator"))->setDefaultValue("NMake Makefiles");
-
     m_prefsUi->kcfg_cmakeExe->setFilter("*.exe");
-#else
-    m_prefsUi->kcfg_generator->addItem("Unix Makefiles");
 #endif
 
-    bool hasNinja = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder");
-    if(hasNinja)
-        m_prefsUi->kcfg_generator->addItem("Ninja");
-
-    connect(m_prefsUi->kcfg_generator, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuilderPreferences::generatorChanged);
+    foreach(const QString& generator, CMakeBuilder::supportedGenerators())
+        m_prefsUi->kcfg_generator->addItem(generator);
 }
 
 CMakeBuilderPreferences::~CMakeBuilderPreferences()
 {
     delete m_prefsUi;
-}
-
-void CMakeBuilderPreferences::defaults()
-{
-    m_prefsUi->kcfg_generator->setCurrentIndex(0);
-    KDevelop::ConfigPage::defaults();
-}
-
-void CMakeBuilderPreferences::apply()
-{
-    CMakeBuilderSettings::setGenerator(m_prefsUi->kcfg_generator->currentText());
-    KDevelop::ConfigPage::apply();
-    CMakeBuilderSettings::self()->save();
-}
-
-void CMakeBuilderPreferences::reset()
-{
-    int idx = m_prefsUi->kcfg_generator->findText(CMakeBuilderSettings::self()->generator());
-    m_prefsUi->kcfg_generator->setCurrentIndex(idx);
-    KDevelop::ConfigPage::reset();
-}
-
-void CMakeBuilderPreferences::generatorChanged(const QString& generator)
-{
-    if (CMakeBuilderSettings::self()->generator() != generator) {
-        emit changed();
-    }
 }
 
 QString CMakeBuilderPreferences::name() const

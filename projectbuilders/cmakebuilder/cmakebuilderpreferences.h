@@ -40,13 +40,6 @@ public:
     QString fullName() const override;
     QIcon icon() const override;
 
-    void apply() override;
-    void reset() override;
-    void defaults() override;
-
-public slots:
-    void generatorChanged(const QString& generator);
-
 private:
     Ui::CMakeBuilderPreferences* m_prefsUi;
 };

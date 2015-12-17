@@ -60,6 +60,9 @@ public:
 
 //     bool updateConfig( KDevelop::IProject* project );
 
+    static QStringList supportedGenerators();
+    static QString defaultGenerator();
+
     int configPages() const override;
     KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
 

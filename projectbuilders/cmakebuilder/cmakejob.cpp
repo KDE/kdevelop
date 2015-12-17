@@ -23,6 +23,7 @@
 #include "cmakejob.h"
 
 #include <cmakebuilderconfig.h>
+#include <cmakebuilder.h>
 
 #include <QtCore/QFile>
 #include <QtCore/QDir>
@@ -107,7 +108,7 @@ QStringList CMakeJob::commandLine() const
     QDir builddir(CMake::currentBuildDir( m_project ).toLocalFile());
     if(!builddir.exists() || builddir.count()==2) {
         CMakeBuilderSettings::self()->load();
-        args << QString("-G") << CMakeBuilderSettings::self()->generator();
+        args << QString("-G") << CMakeBuilder::defaultGenerator();
     }
     QString cmakeargs = CMake::currentExtraArguments( m_project );
     if( !cmakeargs.isEmpty() ) {

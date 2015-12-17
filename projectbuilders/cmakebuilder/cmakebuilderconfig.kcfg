@@ -8,8 +8,8 @@
     <entry name="cmakeExe" key="cmakeExe" type="String">
         <default></default>
     </entry>
-    <entry name="generator" key="generator" type="String">
-        <default>Unix Makefiles</default>
+    <entry name="generator" key="generator" type="Int">
+        <default>0</default>
     </entry>
   </group>
 </kcfg>
