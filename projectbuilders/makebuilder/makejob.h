@@ -85,6 +85,8 @@ public:
     QString environmentProfile() const override;
 
 private:
+    static bool isNMake(const QString& makeBin);
+    
     QPersistentModelIndex m_idx;
     CommandType m_command;
     QStringList m_overrideTargets;

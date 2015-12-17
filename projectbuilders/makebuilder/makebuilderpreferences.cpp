@@ -77,7 +77,11 @@ MakeBuilderPreferences::~MakeBuilderPreferences()
 
 QString MakeBuilderPreferences::standardMakeCommand()
 {
-#ifdef _MSC_VER
+#ifdef Q_OS_WIN
+    if (!QStandardPaths::findExecutable("make").isEmpty())
+        return QStringLiteral("make");
+    if (!QStandardPaths::findExecutable("mingw32-make").isEmpty())
+        return QStringLiteral("mingw32-make");
     return QStringLiteral("nmake");
 #else
     return QStringLiteral("make");
