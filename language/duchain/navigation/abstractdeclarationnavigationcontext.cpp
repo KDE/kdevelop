@@ -298,7 +298,8 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
     if(!shorten && doc) {
       modifyHtml() += "<br />" + i18n("Show documentation for ");
-      makeLink( prettyQualifiedIdentifier(m_declaration).toString(), m_declaration, NavigationAction::ShowDocumentation );
+      makeLink(prettyQualifiedName(m_declaration),
+               m_declaration, NavigationAction::ShowDocumentation);
     }
 
 
@@ -388,6 +389,17 @@ QualifiedIdentifier AbstractDeclarationNavigationContext::prettyQualifiedIdentif
     return QualifiedIdentifier();
 }
 
+
+QString AbstractDeclarationNavigationContext::prettyQualifiedName(DeclarationPointer decl) const
+{
+  const auto qid = prettyQualifiedIdentifier(decl);
+  if (qid.isEmpty()) {
+    return i18nc("An anonymous declaration (class, function, etc.)", "<anonymous>");
+  }
+
+  return qid.toString();
+}
+
 void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 {
   ///Check if the function overrides or hides another one
@@ -400,7 +412,10 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
         modifyHtml() += i18n("Overrides a ");
         makeLink(i18n("function"), QStringLiteral("jump_to_overridden"), NavigationAction(DeclarationPointer(overridden), KDevelop::NavigationAction::NavigateDeclaration));
         modifyHtml() += i18n(" from ");
-        makeLink(prettyQualifiedIdentifier(DeclarationPointer(overridden->context()->owner())).toString(), QStringLiteral("jump_to_overridden_container"), NavigationAction(DeclarationPointer(overridden->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(prettyQualifiedName(DeclarationPointer(overridden->context()->owner())),
+                 QStringLiteral("jump_to_overridden_container"),
+                 NavigationAction(DeclarationPointer(overridden->context()->owner()),
+                                  KDevelop::NavigationAction::NavigateDeclaration));
 
         modifyHtml() += "<br />";
     }else{
@@ -413,9 +428,14 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
       uint num = 0;
       foreach(Declaration* decl, decls) {
         modifyHtml() += i18n("Hides a ");
-        makeLink(i18n("function"), QStringLiteral("jump_to_hide_%1").arg(num), NavigationAction(DeclarationPointer(decl), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(i18n("function"), QStringLiteral("jump_to_hide_%1").arg(num),
+                 NavigationAction(DeclarationPointer(decl),
+                                  KDevelop::NavigationAction::NavigateDeclaration));
         modifyHtml() += i18n(" from ");
-        makeLink(prettyQualifiedIdentifier(DeclarationPointer(decl->context()->owner())).toString(), QStringLiteral("jump_to_hide_container_%1").arg(num), NavigationAction(DeclarationPointer(decl->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(prettyQualifiedName(DeclarationPointer(decl->context()->owner())),
+                 QStringLiteral("jump_to_hide_container_%1").arg(num),
+                 NavigationAction(DeclarationPointer(decl->context()->owner()),
+                                  KDevelop::NavigationAction::NavigateDeclaration));
 
         modifyHtml() += "<br />";
         ++num;
@@ -437,7 +457,8 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
               modifyHtml() += ", ";
             first = false;
 
-            QString name = prettyQualifiedIdentifier(DeclarationPointer(overrider->context()->owner())).toString();
+            const auto owner = DeclarationPointer(overrider->context()->owner());
+            const QString name = prettyQualifiedName(owner);
             makeLink(name, name, NavigationAction(DeclarationPointer(overrider), NavigationAction::NavigateDeclaration));
           }
           modifyHtml() += "<br />";
@@ -460,8 +481,9 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
           modifyHtml() += ", ";
         first = false;
 
-        QString importerName = prettyQualifiedIdentifier(DeclarationPointer(importer)).toString();
-        makeLink(importerName, importerName, NavigationAction(DeclarationPointer(importer), KDevelop::NavigationAction::NavigateDeclaration));
+        const QString importerName = prettyQualifiedName(DeclarationPointer(importer));
+        makeLink(importerName, importerName,
+                 NavigationAction(DeclarationPointer(importer), NavigationAction::NavigateDeclaration));
       }
       modifyHtml() += "<br />";
   }

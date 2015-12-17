@@ -52,6 +52,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     virtual QualifiedIdentifier prettyQualifiedIdentifier(DeclarationPointer decl) const;
     ///Returns a stripped version of the declarations identifier, using prettyQualifiedIdentifier
     Identifier prettyIdentifier(DeclarationPointer decl) const;
+    /// @return String version of the qualified identifier of @p decl, '<anonymous>' on an invalid QID
+    QString prettyQualifiedName(DeclarationPointer decl) const;
 
     /**
      * Return a rich-text version of the identifier @p identifier representing the declaration @p decl
