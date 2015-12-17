@@ -344,7 +344,7 @@ public:
       if(opened)
       {
         Q_ASSERT( (f.size() % sizeof(uint)) == 0);
-        m_availableTopContextIndices.resize(f.size()/sizeof(uint));
+        m_availableTopContextIndices.resize(f.size()/(int)sizeof(uint));
         f.read((char*)m_availableTopContextIndices.data(), f.size());
       }
     }

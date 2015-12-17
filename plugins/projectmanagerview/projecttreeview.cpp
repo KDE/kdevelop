@@ -202,9 +202,9 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             }
             bool success = false;
             if (executedAction == copy) {
-                success =~ destItem->project()->projectFileManager()->copyFilesAndFolders(paths, folder);
+                success = destItem->project()->projectFileManager()->copyFilesAndFolders(paths, folder);
             } else if (executedAction == move) {
-                success =~ destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
+                success = destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
             }
 
             if (success) {
