@@ -50,7 +50,7 @@ add_library(kdevqtc-qmlsupport STATIC
 if (APPLE) 
     target_sources(kdevqtc-qmlsupport PRIVATE utils/fileutils_mac.mm)
     target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE "-framework Foundation" )
-endif(APPLE)
+endif()
 
 set_target_properties(kdevqtc-qmlsupport PROPERTIES COMPILE_FLAGS "-DLANGUAGEUTILS_BUILD_DIR\ -DQTCREATOR_UTILS_LIB")
 target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE

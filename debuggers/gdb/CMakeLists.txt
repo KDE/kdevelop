@@ -79,7 +79,7 @@ if(KF5SysGuard_FOUND)
         ${kdevgdb_SRCS}
         processselection.cpp
     )
-endif(KF5SysGuard_FOUND)
+endif()
 
 set(kdevgdb_UI
     debuggertracingdialog.ui

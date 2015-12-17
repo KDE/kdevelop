@@ -10,7 +10,7 @@
 if( LIBOKTETA_INCLUDE_DIRS AND LIBOKTETA_LIBRARIES AND LIBOKTETA_VERSION )
     # Already in cache, be silent
     set( Okteta_FIND_QUIETLY TRUE )
-endif( LIBOKTETA_INCLUDE_DIRS AND LIBOKTETA_LIBRARIES AND LIBOKTETA_VERSION )
+endif()
 
 if( LIBOKTETA_FIND_VERSION EQUAL 1 )
     find_library( LIBOKTETACORE1_LIBRARY
@@ -67,9 +67,9 @@ if( LIBOKTETA_FIND_VERSION EQUAL 1 )
             ${LIBOKTETACORE1_LIBRARY}
             ${LIBOKTETAGUI1_LIBRARY}
         )
-    endif( LIBOKTETA_FOUND )
+    endif()
 
-endif( LIBOKTETA_FIND_VERSION EQUAL 1 )
+endif()
 
 if( LIBOKTETA_FIND_VERSION EQUAL 0 )
     find_library( LIBOKTETACORE0_LIBRARY
@@ -125,19 +125,19 @@ if( LIBOKTETA_FIND_VERSION EQUAL 0 )
             ${LIBOKTETACORE0_LIBRARY}
             ${LIBOKTETAGUI0_LIBRARY}
         )
-    endif( LIBOKTETA_FOUND )
-endif( LIBOKTETA_FIND_VERSION EQUAL 0 )
+    endif()
+endif()
 
 
 if( LIBOKTETA_FOUND )
     if( NOT Okteta_FIND_QUIETLY )
         message( STATUS "Found Okteta libraries v${LIBOKTETA_VERSION}: ${LIBOKTETA_LIBRARIES}" )
-    endif( NOT Okteta_FIND_QUIETLY )
-else( LIBOKTETA_FOUND )
+    endif()
+else()
     if( LibOkteta_FIND_REQUIRED )
         message( FATAL_ERROR "Could not find Okteta libraries" )
-    endif( LibOkteta_FIND_REQUIRED )
-endif( LIBOKTETA_FOUND )
+    endif()
+endif()
 
 mark_as_advanced(
     LIBOKTETA_INCLUDE_DIRS

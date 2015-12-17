@@ -15,7 +15,7 @@ if(APPLE)
     #kde4_add_app_icon(kdevelop_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps/kdevelop.png")
 else()
     #kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
-endif(APPLE)
+endif()
 
 add_executable(kdevelop ${kdevelop_SRCS} )
 
@@ -40,7 +40,7 @@ if(APPLE)
     #kde4_add_app_icon(kdevelop_bin_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps/kdevelop.png")
 else()
     #kde4_add_app_icon(kdevelop_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
-endif(APPLE)
+endif()
 
 if (APPLE)
     # the MacOSX bundle display name property (CFBundleDisplayName) is not currently supported by cmake,

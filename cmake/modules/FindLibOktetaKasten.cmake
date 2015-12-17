@@ -69,7 +69,7 @@ if( LIBOKTETAKASTEN_FOUND )
     set( LIBOKTETAKASTEN_INCLUDE_DIRS
         ${LIBOKTETA1KASTEN2_INCLUDE_DIR}
     )
-endif( LIBOKTETAKASTEN_FOUND )
+endif()
 
 # Then search version 1
 if( NOT LIBOKTETAKASTEN_FOUND )
@@ -126,8 +126,8 @@ if( NOT LIBOKTETAKASTEN_FOUND )
         set( LIBOKTETAKASTEN_INCLUDE_DIRS
             ${LIBOKTETA1KASTEN1_INCLUDE_DIR}
         )
-    endif( LIBOKTETAKASTEN_FOUND )
-endif( NOT LIBOKTETAKASTEN_FOUND )
+    endif()
+endif()
 
 # Then search version 0
 if( NOT LIBOKTETAKASTEN_FOUND )
@@ -184,19 +184,19 @@ if( NOT LIBOKTETAKASTEN_FOUND )
             ${LIBOKTETAKASTENGUI0_LIBRARY}
             ${LIBOKTETAKASTENCONTROLLERS0_LIBRARY}
         )
-    endif( LIBOKTETAKASTEN_FOUND )
-endif( NOT LIBOKTETAKASTEN_FOUND )
+    endif()
+endif()
 
 
 if( LIBOKTETAKASTEN_FOUND )
     if( NOT OktetaKasten_FIND_QUIETLY )
         message( STATUS "Found Okteta Kasten libraries v${LIBOKTETAKASTEN_VERSION}: ${LIBOKTETAKASTEN_LIBRARIES}" )
-    endif( NOT OktetaKasten_FIND_QUIETLY )
-else( LIBOKTETAKASTEN_FOUND )
+    endif()
+else()
     if( LibKasten_FIND_REQUIRED )
         message( FATAL_ERROR "Could not find Okteta Kasten libraries" )
-    endif( LibKasten_FIND_REQUIRED )
-endif( LIBOKTETAKASTEN_FOUND )
+    endif()
+endif()
 
 mark_as_advanced(
     LIBOKTETAKASTEN_INCLUDE_DIRS

@@ -43,7 +43,7 @@ set(kdevcpplanguagesupport_PART_SRCS
 option(BUILD_uiblocktester "Build a debug thread into the plugin that checks for UI-thread lockups" OFF)
 if(BUILD_uiblocktester)
   add_definitions(-DDEBUG_UI_LOCKUP)
-endif(BUILD_uiblocktester)
+endif()
 
 kdevplatform_add_plugin(kdevcpplanguagesupport JSON kdevcppsupport.json
 	SOURCES ${kdevcpplanguagesupport_PART_SRCS})
