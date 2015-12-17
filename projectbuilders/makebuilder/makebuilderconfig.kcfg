@@ -20,7 +20,7 @@
         <default>2</default>
     </entry>
     <entry name="makeBinary" key="Make Binary" type="String">
-        <default code="true">MakeBuilderPreferences::standardMakeComannd()</default>
+        <default code="true">MakeBuilderPreferences::standardMakeCommand()</default>
     </entry>
     <entry name="defaultTarget" key="Default Target" type="String">
     </entry>

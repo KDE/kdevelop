@@ -75,7 +75,7 @@ MakeBuilderPreferences::~MakeBuilderPreferences()
     delete m_prefsUi;
 }
 
-QString MakeBuilderPreferences::standardMakeComannd()
+QString MakeBuilderPreferences::standardMakeCommand()
 {
 #ifdef _MSC_VER
     return QStringLiteral("nmake");

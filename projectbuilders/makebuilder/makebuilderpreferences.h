@@ -44,7 +44,7 @@ public:
     QString fullName() const override;
     QIcon icon() const override;
 
-    static QString standardMakeComannd();
+    static QString standardMakeCommand();
 
 private:
     Ui::MakeConfig* m_prefsUi;
