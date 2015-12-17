@@ -66,9 +66,6 @@ public:
     ParseWorker()
         : QObject(0)
         , m_filter(new NoFilterStrategy)
-        , m_preFilterFunctions {
-            &KDevelop::stripAnsiSequences
-        }
         , m_timer(new QTimer(this))
     {
         m_timer->setInterval(BATCH_AGGREGATE_TIME_DELAY);
@@ -116,11 +113,8 @@ private slots:
         filteredItems.reserve(qMin(BATCH_SIZE, m_cachedLines.size()));
 
         // apply pre-filtering functions
-        foreach (const auto filterFunction, m_preFilterFunctions) {
-            std::for_each(m_cachedLines.begin(), m_cachedLines.end(), [filterFunction](QString& in) {
-                in = filterFunction(in);
-            });
-        }
+        std::transform(m_cachedLines.constBegin(), m_cachedLines.constEnd(),
+                       m_cachedLines.begin(), &KDevelop::stripAnsiSequences);
 
         // apply filtering strategy
         foreach(const QString& line, m_cachedLines) {
@@ -147,7 +141,6 @@ private slots:
 
 private:
     QSharedPointer<IFilterStrategy> m_filter;
-    QVector<std::function<QString(const QString&)>> m_preFilterFunctions;
     QStringList m_cachedLines;
 
     QTimer* m_timer;
