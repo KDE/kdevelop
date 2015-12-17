@@ -27,19 +27,19 @@ public:
     };
 
     FileTemplatesPlugin(QObject* parent, const QVariantList& args);
-    virtual ~FileTemplatesPlugin();
-    virtual void unload() override;
+    ~FileTemplatesPlugin() override;
+    void unload() override;
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension (KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension (KDevelop::Context* context) override;
 
-    virtual QString name() const override;
-    virtual QIcon icon() const override;
-    virtual QAbstractItemModel* templatesModel() override;
-    virtual QString knsConfigurationFile() const override;
-    virtual QStringList supportedMimeTypes() const override;
+    QString name() const override;
+    QIcon icon() const override;
+    QAbstractItemModel* templatesModel() override;
+    QString knsConfigurationFile() const override;
+    QStringList supportedMimeTypes() const override;
 
-    virtual void reload() override;
-    virtual void loadTemplate(const QString& fileName) override;
+    void reload() override;
+    void loadTemplate(const QString& fileName) override;
 
     TemplateType determineTemplateType(const QUrl& url);
 

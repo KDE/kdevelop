@@ -101,7 +101,7 @@ public:
     {
     }
 
-    ~SessionControllerPrivate() {
+    ~SessionControllerPrivate() override {
     }
 
     Session* findSessionForName( const QString& name ) const

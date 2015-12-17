@@ -38,7 +38,7 @@ class TestView : public QWidget
     Q_OBJECT
 public:
     explicit TestView(TestViewPlugin* plugin, QWidget* parent = 0);
-    virtual ~TestView();
+    ~TestView() override;
 
 public slots:
     void runSelectedTests();

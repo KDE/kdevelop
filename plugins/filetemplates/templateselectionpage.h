@@ -40,7 +40,7 @@ class TemplateSelectionPage : public QWidget
 
 public:
     explicit TemplateSelectionPage (TemplateClassAssistant* parent, Qt::WindowFlags f = 0);
-    virtual ~TemplateSelectionPage();
+    ~TemplateSelectionPage() override;
 
     /**
      * @property selectedTemplate
@@ -50,7 +50,7 @@ public:
      **/
     QString selectedTemplate() const;
 
-    virtual QSize minimumSizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 public Q_SLOTS:
     /**

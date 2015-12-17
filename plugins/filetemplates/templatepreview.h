@@ -39,7 +39,7 @@ class TemplatePreviewRenderer : public KDevelop::TemplateRenderer
 {
 public:
     TemplatePreviewRenderer();
-    virtual ~TemplatePreviewRenderer();
+    ~TemplatePreviewRenderer() override;
 };
 
 /**
@@ -50,7 +50,7 @@ class TemplatePreview : public QWidget
     Q_OBJECT
 public:
     explicit TemplatePreview(QWidget* parent, Qt::WindowFlags f = 0);
-    virtual ~TemplatePreview();
+    ~TemplatePreview() override;
 
     /**
      * Set the template contents which will be rendered.

@@ -69,7 +69,7 @@ public:
     Q_DECLARE_FLAGS(JobProperties, JobProperty)
 
     OutputExecuteJob( QObject* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose );
-    virtual ~OutputExecuteJob();
+    ~OutputExecuteJob() override;
 
     /**
      * Get the job's status (associated with the process).
@@ -218,10 +218,10 @@ public:
      */
     void setEnvironmentProfile( const QString& profile );
 
-    virtual void start();
+    void start() override;
 
 protected:
-    virtual bool doKill();
+    bool doKill() override;
 
 protected slots:
     // Redefine these functions if you want to post-process the output somehow

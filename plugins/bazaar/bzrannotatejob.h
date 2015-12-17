@@ -43,13 +43,13 @@ public:
 
     explicit BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const QUrl& localLocation, KDevelop::IPlugin* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
 
-    virtual QVariant fetchResults() override;
-    virtual void start() override;
-    virtual JobStatus status() const override;
-    virtual KDevelop::IPlugin* vcsPlugin() const override;
+    QVariant fetchResults() override;
+    void start() override;
+    JobStatus status() const override;
+    KDevelop::IPlugin* vcsPlugin() const override;
 
 protected:
-    virtual bool doKill() override;
+    bool doKill() override;
 
 private slots:
     void parseBzrAnnotateOutput(KDevelop::DVcsJob* job);

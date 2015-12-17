@@ -69,15 +69,15 @@ class ProjectFileData : public KDevelop::QuickOpenDataBase
 public:
     explicit ProjectFileData( const ProjectFile& file );
 
-    virtual QString text() const override;
-    virtual QString htmlDescription() const override;
+    QString text() const override;
+    QString htmlDescription() const override;
 
     bool execute( QString& filterText ) override;
 
-    virtual bool isExpandable() const override;
-    virtual QWidget* expandingWidget() const override;
+    bool isExpandable() const override;
+    QWidget* expandingWidget() const override;
 
-    virtual QIcon icon() const override;
+    QIcon icon() const override;
 
     QList<QVariant> highlighting() const override;
 
@@ -92,10 +92,10 @@ class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public 
     Q_OBJECT
 public:
     BaseFileDataProvider();
-    virtual void setFilterText( const QString& text ) override;
-    virtual uint itemCount() const override;
-    virtual uint unfilteredItemCount() const override;
-    virtual KDevelop::QuickOpenDataPointer data( uint row ) const override;
+    void setFilterText( const QString& text ) override;
+    uint itemCount() const override;
+    uint unfilteredItemCount() const override;
+    KDevelop::QuickOpenDataPointer data( uint row ) const override;
 
     inline KDevelop::Path itemPath( const ProjectFile& data ) const
     {
@@ -113,8 +113,8 @@ class ProjectFileDataProvider : public BaseFileDataProvider
     Q_OBJECT
 public:
     ProjectFileDataProvider();
-    virtual void reset() override;
-    virtual QSet<KDevelop::IndexedString> files() const override;
+    void reset() override;
+    QSet<KDevelop::IndexedString> files() const override;
 
 private slots:
     void projectClosing( KDevelop::IProject* );
@@ -136,8 +136,8 @@ class OpenFilesDataProvider : public BaseFileDataProvider
 {
     Q_OBJECT
 public:
-    virtual void reset() override;
-    virtual QSet<KDevelop::IndexedString> files() const override;
+    void reset() override;
+    QSet<KDevelop::IndexedString> files() const override;
 };
 
 #endif

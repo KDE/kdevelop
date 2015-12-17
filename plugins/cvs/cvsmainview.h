@@ -37,7 +37,7 @@ class CvsMainView : public QWidget, private Ui::CvsMainViewBase {
     Q_OBJECT
 public:
     CvsMainView(CvsPlugin *plugin, QWidget* parent);
-    virtual ~CvsMainView();
+    ~CvsMainView() override;
 
 public slots:
     /**

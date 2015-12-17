@@ -38,7 +38,7 @@ class BranchManager : public QDialog
     Q_OBJECT
 public:
     BranchManager(const QString& repository, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent = 0);
-    ~BranchManager();
+    ~BranchManager() override;
 
 signals:
     void checkedOut(KJob*);

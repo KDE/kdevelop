@@ -33,7 +33,7 @@ class IdealDockWidget : public QDockWidget
 
 public:
     IdealDockWidget(IdealController *controller, Sublime::MainWindow *parent);
-    virtual ~IdealDockWidget();
+    ~IdealDockWidget() override;
 
     Area *area() const;
     void setArea(Area *area);

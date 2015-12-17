@@ -36,13 +36,13 @@ class ProjectPreferences : public ConfigPage
     Q_OBJECT
 public:
     explicit ProjectPreferences(QWidget *parent);
-    virtual ~ProjectPreferences();
+    ~ProjectPreferences() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
-    virtual void apply() override;
+    void apply() override;
 
 private slots:
     void slotSettingsChanged();

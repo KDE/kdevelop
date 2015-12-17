@@ -46,7 +46,7 @@ class KDEVPLATFORMSUBLIME_EXPORT Document: public QObject {
 public:
     /**Creates a document and adds it to a @p controller.*/
     Document(const QString &title, Controller *controller);
-    ~Document();
+    ~Document() override;
 
     /**@return the new view for this document.
     @note it will not create a widget, just return a view object.*/

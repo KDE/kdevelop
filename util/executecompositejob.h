@@ -33,20 +33,20 @@ class KDEVPLATFORMUTIL_EXPORT ExecuteCompositeJob : public KCompositeJob
 Q_OBJECT
 public:
     explicit ExecuteCompositeJob(QObject* parent = 0, const QList<KJob*>& jobs = {});
-    ~ExecuteCompositeJob();
+    ~ExecuteCompositeJob() override;
 
-    virtual void start() override;
+    void start() override;
     void setAbortOnError(bool abort);
 
 public Q_SLOTS:
-    virtual bool addSubjob(KJob* job) override;
-    virtual void slotResult(KJob* job) override;
+    bool addSubjob(KJob* job) override;
+    void slotResult(KJob* job) override;
 
 protected Q_SLOTS:
     virtual void slotPercent(KJob* job, unsigned long percent);
 
 protected:
-    virtual bool doKill() override;
+    bool doKill() override;
 
 private:
     class ExecuteCompositeJobPrivate* const d;

@@ -45,27 +45,27 @@ class KDEVPLATFORMSHELL_EXPORT UiController: public Sublime::Controller, public 
 
 public:
     explicit UiController(Core *core);
-    virtual ~UiController();
+    ~UiController() override;
 
     /** @return area for currently active sublime mainwindow or 0 if
     no sublime mainwindow is active.*/
-    virtual Sublime::Area *activeArea() override;
+    Sublime::Area *activeArea() override;
     /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
     virtual Sublime::MainWindow *activeSublimeWindow();
     /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
-    virtual KParts::MainWindow *activeMainWindow() override;
+    KParts::MainWindow *activeMainWindow() override;
 
     /** @return default main window - the main window for default area in the shell.
     No guarantee is given that it always exists so this method may return 0.*/
     MainWindow *defaultMainWindow();
 
-    virtual void switchToArea(const QString &areaName, SwitchMode switchMode) override;
+    void switchToArea(const QString &areaName, SwitchMode switchMode) override;
 
-    virtual void addToolView(const QString &name, IToolViewFactory *factory) override;
-    virtual void removeToolView(IToolViewFactory *factory) override;
+    void addToolView(const QString &name, IToolViewFactory *factory) override;
+    void removeToolView(IToolViewFactory *factory) override;
 
-    virtual QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags) override;
-    virtual void raiseToolView(QWidget* toolViewWidget) override;
+    QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags) override;
+    void raiseToolView(QWidget* toolViewWidget) override;
 
     void selectNewToolViewToAdd(MainWindow *mw);
 
@@ -83,11 +83,11 @@ public:
     void loadArea(Sublime::Area* area, const KConfigGroup & group);
 
     /*! @p status must implement KDevelop::IStatus */
-    virtual void registerStatus(QObject* status) override;
+    void registerStatus(QObject* status) override;
 
-    virtual void popUpAssistant(const KDevelop::IAssistant::Ptr& assistant) override;
+    void popUpAssistant(const KDevelop::IAssistant::Ptr& assistant) override;
 
-    virtual void showErrorMessage(const QString& message, int timeout) override;
+    void showErrorMessage(const QString& message, int timeout) override;
 
     /// Returns list of available view factories together with their ToolDocuments.
     /// @see addToolView(), removeToolView(), findToolView()
@@ -99,9 +99,9 @@ public:
 
     bool toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area);
 
-    virtual QWidget* activeToolViewActionListener() const override;
+    QWidget* activeToolViewActionListener() const override;
 
-    virtual QList<Sublime::Area*> allAreas() const override;
+    QList<Sublime::Area*> allAreas() const override;
 
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);

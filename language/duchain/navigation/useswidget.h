@@ -46,12 +46,12 @@ namespace KDevelop {
       Q_OBJECT
       public:
         OneUseWidget(IndexedDeclaration declaration, IndexedString document, KTextEditor::Range range, const CodeRepresentation& code);
-        ~OneUseWidget();
+        ~OneUseWidget() override;
         
       private slots:
         void jumpTo();
       private:
-        virtual void resizeEvent ( QResizeEvent * event ) override;
+        void resizeEvent ( QResizeEvent * event ) override;
         
         PersistentMovingRange::Ptr m_range;
         IndexedDeclaration m_declaration;
@@ -68,7 +68,7 @@ namespace KDevelop {
       Q_OBJECT
       public:
         explicit NavigatableWidgetList(bool allowScrolling = false, uint maxHeight = 0, bool vertical = true);
-        ~NavigatableWidgetList();
+        ~NavigatableWidgetList() override;
         void addItem(QWidget* widget, int pos = -1);
         void addHeaderItem(QWidget* widget, Qt::Alignment alignment = 0);
         ///Whether items were added to this list using addItem(..)
@@ -135,15 +135,15 @@ namespace KDevelop {
               public:
               void setWidget(UsesWidget* widget );
               UsesWidgetCollector(IndexedDeclaration decl);
-              virtual void processUses(KDevelop::ReferencedTopDUContext topContext) override;
-              virtual void maximumProgress(uint max) override;
-              virtual void progress(uint processed, uint total) override;
+              void processUses(KDevelop::ReferencedTopDUContext topContext) override;
+              void maximumProgress(uint max) override;
+              void progress(uint processed, uint total) override;
               UsesWidget* m_widget;
             };
-            virtual QSize sizeHint () const override;
+            QSize sizeHint () const override;
             ///@param customCollector allows specifying an own subclass of UsesWidgetCollector.
             explicit UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<UsesWidgetCollector> customCollector = {});
-            ~UsesWidget();
+            ~UsesWidget() override;
             void setAllExpanded(bool expanded);
             unsigned int countAllUses() const;
         Q_SIGNALS:

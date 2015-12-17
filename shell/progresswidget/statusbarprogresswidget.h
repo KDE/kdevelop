@@ -69,7 +69,7 @@ protected:
     void connectSingleItem();
     void activateSingleItemMode();
 
-    virtual bool eventFilter( QObject *, QEvent * ) override;
+    bool eventFilter( QObject *, QEvent * ) override;
 
 private:
     QProgressBar* m_pProgressBar;

@@ -37,7 +37,7 @@ class PatchReviewToolView : public QWidget
     Q_OBJECT
 public:
     PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin );
-    ~PatchReviewToolView();
+    ~PatchReviewToolView() override;
 
 signals:
     void dialogClosed( PatchReviewToolView* );
@@ -68,7 +68,7 @@ private slots:
     void fileItemChanged( QStandardItem* item );
 
 private:
-    virtual void resizeEvent(QResizeEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
 
     void activate( const QUrl& url, KDevelop::IDocument* buddy = 0 ) const;
 

@@ -50,7 +50,7 @@ class StandardOutputView : public KDevelop::IPlugin, public KDevelop::IOutputVie
 
 public:
     explicit StandardOutputView(QObject *parent = 0, const QVariantList &args = QVariantList());
-    virtual ~StandardOutputView();
+    ~StandardOutputView() override;
 
     int standardToolView( KDevelop::IOutputView::StandardToolView view ) override;
     int registerToolView( const QString& title,
@@ -70,11 +70,11 @@ public:
 
     OutputWidget* outputWidgetForId( int outputId ) const;
 
-    virtual void removeToolView( int toolviewId ) override;
-    virtual void removeOutput( int outputId ) override;
+    void removeToolView( int toolviewId ) override;
+    void removeOutput( int outputId ) override;
 
-    virtual void scrollOutputTo( int outputId, const QModelIndex& idx ) override;
-    virtual void setTitle(int outputId, const QString& title) override;
+    void scrollOutputTo( int outputId, const QModelIndex& idx ) override;
+    void setTitle(int outputId, const QString& title) override;
 
 public Q_SLOTS:
     void removeSublimeView( Sublime::View* );

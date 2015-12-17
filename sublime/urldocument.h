@@ -35,11 +35,11 @@ class KDEVPLATFORMSUBLIME_EXPORT UrlDocument: public Document
     Q_OBJECT
 public:
     UrlDocument(Controller *controller, const QUrl &url);
-    ~UrlDocument();
+    ~UrlDocument() override;
 
-    virtual QString documentType() const override;
+    QString documentType() const override;
 
-    virtual QString documentSpecifier() const override;
+    QString documentSpecifier() const override;
 
     QUrl url() const;
 
@@ -48,10 +48,10 @@ public:
      */
     QIcon defaultIcon() const override;
 
-    virtual QString title(TitleType type) const override;
+    QString title(TitleType type) const override;
 
 protected:
-    virtual QWidget *createViewWidget(QWidget *parent = 0) override;
+    QWidget *createViewWidget(QWidget *parent = 0) override;
     void setUrl(const QUrl& newUrl);
 
 private:

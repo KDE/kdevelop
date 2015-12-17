@@ -41,13 +41,13 @@ public:
 
     void initialize();
 
-    virtual QList<IDocumentationProvider*> documentationProviders() const override;
-    virtual IDocumentation::Ptr documentationForDeclaration(Declaration* declaration) override;
-    virtual void showDocumentation(const IDocumentation::Ptr& doc) override;
+    QList<IDocumentationProvider*> documentationProviders() const override;
+    IDocumentation::Ptr documentationForDeclaration(Declaration* declaration) override;
+    void showDocumentation(const IDocumentation::Ptr& doc) override;
     ContextMenuExtension contextMenuExtension( Context* context );
 
 public slots:
-    virtual void changedDocumentationProviders() override;
+    void changedDocumentationProviders() override;
 
 private slots:
     void doShowDocumentation();

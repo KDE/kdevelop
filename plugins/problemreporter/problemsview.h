@@ -49,7 +49,7 @@ class ProblemsView : public QMainWindow, public IToolViewActionListener
 
 public:
     explicit ProblemsView(QWidget* parent = NULL);
-    ~ProblemsView();
+    ~ProblemsView() override;
 
     /// Load all the current models and create tabs for them
     void load();

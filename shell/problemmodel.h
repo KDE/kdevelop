@@ -95,7 +95,7 @@ public:
     Q_DECLARE_FLAGS(Features, FeatureCode)
 
     explicit ProblemModel(QObject *parent, ProblemStore *store = NULL);
-    virtual ~ProblemModel();
+    ~ProblemModel() override;
 
     enum Columns {
         Error,
@@ -111,12 +111,12 @@ public:
         SeverityRole
     };
 
-    virtual int columnCount(const QModelIndex & parent = QModelIndex()) const override;
-    virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const override;
-    virtual QModelIndex parent(const QModelIndex & index) const override;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    virtual int rowCount(const QModelIndex & parent = QModelIndex()) const override;
-    virtual QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
+    int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+    QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex & index) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+    QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
 
     IProblem::Ptr problemForIndex(const QModelIndex& index) const;
 

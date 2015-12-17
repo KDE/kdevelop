@@ -47,11 +47,11 @@ class ProjectTreeView: public QTreeView
         Q_OBJECT
     public:
         explicit ProjectTreeView( QWidget *parent = 0 );
-        virtual ~ProjectTreeView();
+        ~ProjectTreeView() override;
 
         static QModelIndex mapFromSource(const QAbstractProxyModel* proxy, const QModelIndex& sourceIdx);
 
-        virtual bool event(QEvent* event) override;
+        bool event(QEvent* event) override;
 
     Q_SIGNALS:
         void activate( const KDevelop::Path &url );
@@ -65,9 +65,9 @@ class ProjectTreeView: public QTreeView
         void aboutToShutdown();
 
     protected:
-        virtual void keyPressEvent(QKeyEvent *event) override;
-        virtual void dropEvent(QDropEvent* event) override;
-        virtual void drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const override;
+        void keyPressEvent(QKeyEvent *event) override;
+        void dropEvent(QDropEvent* event) override;
+        void drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const override;
 
     private:
         QModelIndex mapFromItem(const KDevelop::ProjectBaseItem* item);

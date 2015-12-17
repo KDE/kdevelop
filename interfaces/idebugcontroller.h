@@ -42,7 +42,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IDebugController : public QObject
     Q_OBJECT
 public:
     explicit IDebugController(QObject *parent = 0);
-    virtual ~IDebugController();
+    ~IDebugController() override;
 
     /** Each plugin using the debugger actions needs to call this function to setup the gui */
     virtual void initializeUi() = 0;

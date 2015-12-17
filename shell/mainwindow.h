@@ -52,7 +52,7 @@ class KDEVPLATFORMSHELL_EXPORT MainWindow: public Sublime::MainWindow {
     Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.MainWindow" )
 public:
     explicit MainWindow( Sublime::Controller *parent = 0, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS );
-    virtual ~MainWindow();
+    ~MainWindow() override;
 
     /*! @p status must implement KDevelop::IStatus */
     void registerStatus(QObject* status);
@@ -69,32 +69,32 @@ public Q_SLOTS:
         return Sublime::MainWindow::windowTitle();
     }
 
-    virtual void setVisible( bool visible ) override;
+    void setVisible( bool visible ) override;
     void configureShortcuts();
-    virtual void loadSettings() override;
+    void loadSettings() override;
 
 Q_SIGNALS:
     void finishedLoading();
 
 protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
-    virtual bool queryClose() override;
+    bool queryClose() override;
     //reimplemented from KXMLGUIBuilder to support visible menubar separators
     QAction *createCustomElement(QWidget *parent, int index, const QDomElement &element) override;
 
     virtual void initialize();
     virtual void cleanup();
-    virtual void initializeStatusBar() override;
+    void initializeStatusBar() override;
     void dragEnterEvent( QDragEnterEvent* ) override;
     void dropEvent( QDropEvent* ) override;
     void applyMainWindowSettings(const KConfigGroup& config) override;
     void createGUI(KParts::Part* part);
 
 protected Q_SLOTS:
-    virtual void tabContextMenuRequested(Sublime::View* , QMenu* ) override;
-    virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab) override;
-    virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&) override;
-    virtual void newTabRequested() override;
+    void tabContextMenuRequested(Sublime::View* , QMenu* ) override;
+    void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab) override;
+    void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&) override;
+    void newTabRequested() override;
 
 private Q_SLOTS:
     void updateCaption();

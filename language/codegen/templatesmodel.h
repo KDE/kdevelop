@@ -73,7 +73,7 @@ public:
      * Destructor
      *
      **/
-    virtual ~TemplatesModel();
+    ~TemplatesModel() override;
 
     /**
      * Reloads all found templates

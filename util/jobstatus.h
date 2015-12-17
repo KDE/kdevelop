@@ -50,7 +50,7 @@ public:
      * @note As soon as @p job finished, this object will be auto-deleted
      */
     explicit JobStatus(KJob* job, const QString& statusName = QString(), QObject* parent = nullptr);
-    virtual ~JobStatus();
+    ~JobStatus() override;
 
     QString statusName() const override;
 

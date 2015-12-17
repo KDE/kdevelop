@@ -53,20 +53,20 @@ class DebugController : public IDebugController, public KXMLGUIClient
     Q_OBJECT
 public:
     explicit DebugController(QObject *parent = 0);
-    ~DebugController();
+    ~DebugController() override;
     void initialize();
     void cleanup();
 
     /// Must be called by debugger plugin that needs debugger actions and toolviews.
-    virtual void initializeUi() override;
+    void initializeUi() override;
 
-    virtual void addSession(IDebugSession* session) override;
-    virtual IDebugSession* currentSession() override;
+    void addSession(IDebugSession* session) override;
+    IDebugSession* currentSession() override;
 
     ContextMenuExtension contextMenuExtension( Context* context );
 
-    virtual BreakpointModel* breakpointModel() override;
-    virtual VariableCollection* variableCollection() override;
+    BreakpointModel* breakpointModel() override;
+    VariableCollection* variableCollection() override;
 
 private Q_SLOTS:
     //void restartDebugger();

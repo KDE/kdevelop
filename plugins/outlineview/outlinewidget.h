@@ -34,7 +34,7 @@ class OutlineWidget : public QWidget
 
 public:
     OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin);
-    virtual ~OutlineWidget();
+    ~OutlineWidget() override;
 
 private:
     OutlineViewPlugin* m_plugin;

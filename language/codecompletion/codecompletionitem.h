@@ -85,7 +85,7 @@ private:
 
 struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeNode : public CompletionTreeElement {
   CompletionTreeNode();
-  ~CompletionTreeNode();
+  ~CompletionTreeNode() override;
   
   KTextEditor::CodeCompletionModel::ExtraItemDataRoles role;
   QVariant roleValue;

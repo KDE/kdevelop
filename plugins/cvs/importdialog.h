@@ -29,10 +29,10 @@ class ImportDialog : public QDialog
     Q_OBJECT
 public:
     ImportDialog(CvsPlugin *plugin, const QUrl &url, QWidget* parent=0);
-    virtual ~ImportDialog();
+    ~ImportDialog() override;
 
 public slots:
-    virtual void accept() override;
+    void accept() override;
     void jobFinished(KJob* job);
 
 private:

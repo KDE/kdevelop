@@ -90,7 +90,7 @@ public:
     static QString styleSampleKey();
 
     explicit SourceFormatterController(QObject *parent = 0);
-    virtual ~SourceFormatterController();
+    ~SourceFormatterController() override;
     void initialize();
     void cleanup();
     //----------------- Public API defined in interfaces -------------------
@@ -129,8 +129,8 @@ public:
 
     void settingsChanged();
 
-    virtual void disableSourceFormatting(bool disable) override;
-    virtual bool sourceFormattingEnabled() override;
+    void disableSourceFormatting(bool disable) override;
+    bool sourceFormattingEnabled() override;
 
 private Q_SLOTS:
     void activeDocumentChanged(KDevelop::IDocument *doc);

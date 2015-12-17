@@ -35,7 +35,7 @@ class StashManagerDialog : public QDialog
     Q_OBJECT
     public:
         explicit StashManagerDialog(const QDir& stashed, GitPlugin* plugin, QWidget* parent);
-        virtual ~StashManagerDialog();
+        ~StashManagerDialog() override;
         
     public slots:
         void showStash();

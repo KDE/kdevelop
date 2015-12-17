@@ -37,12 +37,12 @@ class KDEVPLATFORMSHELL_EXPORT SelectionController : public ISelectionController
 public:
     ///Constructor.
     explicit SelectionController(QObject *parent);
-    ~SelectionController();
+    ~SelectionController() override;
 
     /**
      * Provides the current selection, note that this might be 0
      */
-    virtual Context* currentSelection() override;
+    Context* currentSelection() override;
 
 
     void initialize();
@@ -53,7 +53,7 @@ public Q_SLOTS:
      * updates the current selection
      * @param context the new selection
      */
-    virtual void updateSelection( Context* context ) override;
+    void updateSelection( Context* context ) override;
 private:
     class SelectionControllerPrivate* const d;
 

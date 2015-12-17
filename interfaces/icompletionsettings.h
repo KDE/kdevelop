@@ -30,7 +30,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ICompletionSettings : public QObject
     Q_OBJECT
 
 public:
-    virtual ~ICompletionSettings();
+    ~ICompletionSettings() override;
 
     enum CompletionLevel {
         Minimal,

@@ -47,7 +47,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
   Q_OBJECT
 
   public:
-    ~ColorCache();
+    ~ColorCache() override;
 
     /// access the global color cache
     static ColorCache* self();

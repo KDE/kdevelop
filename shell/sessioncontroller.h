@@ -79,7 +79,7 @@ class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject, public KXMLGU
 
 public:
     explicit SessionController( QObject *parent = 0 );
-    virtual ~SessionController();
+    ~SessionController() override;
     void initialize( const QString& session );
     void cleanup();
 

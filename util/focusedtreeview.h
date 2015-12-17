@@ -41,7 +41,7 @@ class KDEVPLATFORMUTIL_EXPORT FocusedTreeView : public QTreeView {
     Q_OBJECT
     public:
         explicit FocusedTreeView(QWidget* parent) ;
-        virtual ~FocusedTreeView();
+        ~FocusedTreeView() override;
 
         /**
          * When enabled, automatically scroll to bottom when new rows are inserted at the end
@@ -49,8 +49,8 @@ class KDEVPLATFORMUTIL_EXPORT FocusedTreeView : public QTreeView {
          */
         void setAutoScrollAtEnd(bool enable);
 
-        virtual void setModel(QAbstractItemModel* model) override;
-        virtual int sizeHintForColumn(int column) const override;
+        void setModel(QAbstractItemModel* model) override;
+        int sizeHintForColumn(int column) const override;
 
     private Q_SLOTS:
         void rowsAboutToBeInserted(const QModelIndex& parent, int first, int last);

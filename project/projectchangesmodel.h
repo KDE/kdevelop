@@ -36,7 +36,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectChangesModel : public VcsFileChangesMode
     public:
         enum Role { ProjectNameRole = LastItemRole+1 };
         explicit ProjectChangesModel(QObject* parent);
-        virtual ~ProjectChangesModel();
+        ~ProjectChangesModel() override;
         
         void updateState(KDevelop::IProject* p, const KDevelop::VcsStatusInfo& status);
 

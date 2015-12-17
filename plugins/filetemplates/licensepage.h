@@ -36,7 +36,7 @@ class LicensePage : public QWidget
 
 public:
     explicit LicensePage(QWidget* parent);
-    virtual ~LicensePage();
+    ~LicensePage() override;
 
     /**
      * @return the full license header, which might either be a pre-defined

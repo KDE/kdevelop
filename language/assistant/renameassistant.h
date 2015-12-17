@@ -39,12 +39,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT RenameAssistant : public StaticAssistant
 
 public:
     explicit RenameAssistant(ILanguageSupport* supportedLanguage);
-    virtual ~RenameAssistant();
+    ~RenameAssistant() override;
 
-    virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString()) override;
-    virtual bool isUseful() const override;
+    void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString()) override;
+    bool isUseful() const override;
 
-    virtual QString title() const override;
+    QString title() const override;
 
 private:
     struct Private;

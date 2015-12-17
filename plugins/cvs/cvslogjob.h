@@ -21,10 +21,10 @@ class CvsLogJob : public CvsJob
     Q_OBJECT
 public:
     explicit CvsLogJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    virtual ~CvsLogJob();
+    ~CvsLogJob() override;
 
     // Begin:  KDevelop::VcsJob
-    virtual QVariant fetchResults() override;
+    QVariant fetchResults() override;
     // End:  KDevelop::VcsJob
 
 private:

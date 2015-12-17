@@ -40,14 +40,14 @@ class ProjectFilterConfigPage : public ProjectConfigPage<ProjectFilterSettings>
     Q_OBJECT
 public:
     ProjectFilterConfigPage(ProjectFilterProvider* provider, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
-    virtual ~ProjectFilterConfigPage();
+    ~ProjectFilterConfigPage() override;
 
-    virtual QString name() const override;
-    virtual QIcon icon() const override;
-    virtual QString fullName() const override;
+    QString name() const override;
+    QIcon icon() const override;
+    QString fullName() const override;
 
 protected:
-    virtual bool eventFilter(QObject* object, QEvent* event) override;
+    bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
     void add();
@@ -58,9 +58,9 @@ private slots:
     void emitChanged();
 
 public Q_SLOTS:
-    virtual void apply() override;
-    virtual void reset() override;
-    virtual void defaults() override;
+    void apply() override;
+    void reset() override;
+    void defaults() override;
 
 private:
     void checkFilters();

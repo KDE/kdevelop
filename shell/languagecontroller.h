@@ -37,7 +37,7 @@ class KDEVPLATFORMSHELL_EXPORT LanguageController : public ILanguageController {
     Q_OBJECT
 public:
     explicit LanguageController(QObject *parent);
-    virtual ~LanguageController();
+    ~LanguageController() override;
 
     void initialize();
     
@@ -45,21 +45,21 @@ public:
     void cleanup();
 
     /** @copydoc ILanguageController::activeLanguages() */
-    virtual QList<ILanguageSupport*> activeLanguages() override;
+    QList<ILanguageSupport*> activeLanguages() override;
     /** @copydoc ILanguageController::language() */
-    virtual ILanguageSupport* language(const QString &name) const override;
+    ILanguageSupport* language(const QString &name) const override;
     /** @copydoc ILanguageController::languageForUrl() */
-    virtual QList<ILanguageSupport*> languagesForUrl(const QUrl &url) override;
+    QList<ILanguageSupport*> languagesForUrl(const QUrl &url) override;
     /** @copydoc ILanguageController::backgroundParser() */
-    Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const override;
+    Q_SCRIPTABLE BackgroundParser *backgroundParser() const override;
 
-    virtual StaticAssistantsManager *staticAssistantsManager() const override;
+    StaticAssistantsManager *staticAssistantsManager() const override;
 
-    virtual QList<ILanguageSupport*> loadedLanguages() const override;
+    QList<ILanguageSupport*> loadedLanguages() const override;
 
-    virtual ICompletionSettings *completionSettings() const override;
+    ICompletionSettings *completionSettings() const override;
 
-    virtual ProblemModelSet* problemModelSet() const override;
+    ProblemModelSet* problemModelSet() const override;
 
     QList<ILanguageSupport*> languagesForMimetype(const QString& mime);
     QList<QString> mimetypesForLanguageName(const QString& languageName);

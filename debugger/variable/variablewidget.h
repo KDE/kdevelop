@@ -50,8 +50,8 @@ public Q_SLOTS:
     void slotAddWatch(const QString &ident);
 
 protected:
-    virtual void showEvent(QShowEvent* e) override;
-    virtual void hideEvent(QHideEvent* e) override;
+    void showEvent(QShowEvent* e) override;
+    void hideEvent(QHideEvent* e) override;
 
 private:
     VariableTree *varTree_;
@@ -69,13 +69,13 @@ class VariableTree : public KDevelop::AsyncTreeView
     Q_OBJECT
 public:
     VariableTree(IDebugController *controller, VariableWidget *parent, QSortFilterProxyModel *proxy);
-    virtual ~VariableTree();
+    ~VariableTree() override;
 
     VariableCollection* collection() const;
 
 private:
     void setupActions();
-    virtual void contextMenuEvent(QContextMenuEvent* event) override;
+    void contextMenuEvent(QContextMenuEvent* event) override;
     Variable *selectedVariable() const;
 
 private slots:

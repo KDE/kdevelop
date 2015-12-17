@@ -48,7 +48,7 @@ class TemplatePreviewToolView : public QWidget
 
 public:
     explicit TemplatePreviewToolView(FileTemplatesPlugin* plugin, QWidget* parent, Qt::WindowFlags f = 0);
-    virtual ~TemplatePreviewToolView();
+    ~TemplatePreviewToolView() override;
 
 private:
     Ui::TemplatePreviewToolView* ui;
@@ -60,7 +60,7 @@ private slots:
     void sourceTextChanged(const QString& text);
 
 protected:
-    virtual void showEvent(QShowEvent*) override;
+    void showEvent(QShowEvent*) override;
 
 public slots:
     void documentActivated(KDevelop::IDocument* document);

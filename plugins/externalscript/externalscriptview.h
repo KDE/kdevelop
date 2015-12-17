@@ -38,7 +38,7 @@ class ExternalScriptView : public QWidget, Ui::ExternalScriptViewBase
 
 public:
   explicit ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent = 0 );
-  virtual ~ExternalScriptView();
+  ~ExternalScriptView() override;
 
   /// @return Currently selected script item.
   ExternalScriptItem* currentItem() const;
@@ -57,7 +57,7 @@ private slots:
 
 protected:
   /// insert snippet on double click
-  virtual bool eventFilter( QObject* obj, QEvent* event ) override;
+  bool eventFilter( QObject* obj, QEvent* event ) override;
 
 private:
   ExternalScriptPlugin* m_plugin;

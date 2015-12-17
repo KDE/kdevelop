@@ -37,14 +37,14 @@ class PluginPreferences : public ConfigPage
 public:
     explicit PluginPreferences(QWidget*);
 
-    virtual QString name() const override { return i18n("Plugins"); };
-    virtual QString fullName() const override { return i18n("Configure Plugins"); };
-    virtual QIcon icon() const override { return QIcon::fromTheme("preferences-plugin"); }
+    QString name() const override { return i18n("Plugins"); };
+    QString fullName() const override { return i18n("Configure Plugins"); };
+    QIcon icon() const override { return QIcon::fromTheme("preferences-plugin"); }
 
 public Q_SLOTS:
-    virtual void apply() override;
-    virtual void reset() override;
-    virtual void defaults() override;
+    void apply() override;
+    void reset() override;
+    void defaults() override;
 
 private:
     KPluginSelector* selector;

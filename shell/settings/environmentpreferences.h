@@ -30,15 +30,15 @@ class EnvironmentPreferences : public ConfigPage
     Q_OBJECT
 public:
     explicit EnvironmentPreferences(const QString& activeGroup = QString(), QWidget* parent = nullptr);
-    virtual ~EnvironmentPreferences();
+    ~EnvironmentPreferences() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
-    virtual void apply() override;
-    virtual void reset() override;
-    virtual void defaults() override;
+    void apply() override;
+    void reset() override;
+    void defaults() override;
 
 private:
     class EnvironmentPreferencesPrivate *const d;

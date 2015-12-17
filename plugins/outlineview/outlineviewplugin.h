@@ -31,7 +31,7 @@ class OutlineViewPlugin : public KDevelop::IPlugin
 
 public:
     explicit OutlineViewPlugin(QObject *parent, const QVariantList& args = QVariantList());
-    virtual ~OutlineViewPlugin();
+    ~OutlineViewPlugin() override;
 
 public: // KDevelop::Plugin overrides
     void unload() override;

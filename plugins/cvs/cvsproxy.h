@@ -52,7 +52,7 @@ class CvsProxy : public QObject
     Q_OBJECT
 public:
     explicit CvsProxy(KDevelop::IPlugin* parent = 0);
-    ~CvsProxy();
+    ~CvsProxy() override;
 
     bool isValidDirectory(QUrl dirPath) const;
     bool isVersionControlled(QUrl filePath) const;

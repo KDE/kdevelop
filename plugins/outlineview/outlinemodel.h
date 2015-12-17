@@ -40,7 +40,7 @@ class OutlineModel : public QAbstractItemModel
     Q_DISABLE_COPY(OutlineModel)
 public:
     explicit OutlineModel(QObject* parent = 0);
-    virtual ~OutlineModel();
+    ~OutlineModel() override;
 
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;

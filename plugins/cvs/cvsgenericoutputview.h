@@ -32,7 +32,7 @@ class CvsGenericOutputView : public QWidget, private Ui::CvsGenericOutputViewBas
     Q_OBJECT
 public:
     explicit CvsGenericOutputView(CvsJob* job = 0, QWidget* parent = 0);
-    virtual ~CvsGenericOutputView();
+    ~CvsGenericOutputView() override;
 
 public slots:
     void appendText(const QString& text);

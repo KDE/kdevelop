@@ -160,14 +160,14 @@ private:
 class UiToolViewFactory: public Sublime::ToolFactory {
 public:
     UiToolViewFactory(IToolViewFactory *factory): m_factory(factory) {}
-    ~UiToolViewFactory() { delete m_factory; }
-    virtual QWidget* create(Sublime::ToolDocument *doc, QWidget *parent = 0) override
+    ~UiToolViewFactory() override { delete m_factory; }
+    QWidget* create(Sublime::ToolDocument *doc, QWidget *parent = 0) override
     {
         Q_UNUSED( doc );
         return m_factory->create(parent);
     }
 
-    virtual QList< QAction* > contextMenuActions(QWidget* viewWidget) const override
+    QList< QAction* > contextMenuActions(QWidget* viewWidget) const override
     {
         return m_factory->contextMenuActions( viewWidget );
     }

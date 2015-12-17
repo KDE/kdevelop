@@ -45,9 +45,9 @@ class DocumentSwitcherPlugin: public KDevelop::IPlugin {
     Q_OBJECT
 public:
     explicit DocumentSwitcherPlugin( QObject *parent, const QVariantList &args = QVariantList() );
-    ~DocumentSwitcherPlugin();
+    ~DocumentSwitcherPlugin() override;
 
-    virtual void unload() override;
+    void unload() override;
 public slots:
     void itemActivated( const QModelIndex& );
     void switchToClicked(const QModelIndex& );

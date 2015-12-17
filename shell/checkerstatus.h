@@ -62,9 +62,9 @@ class KDEVPLATFORMSHELL_EXPORT CheckerStatus : public QObject, public KDevelop::
     Q_INTERFACES(KDevelop::IStatus)
 public:
     CheckerStatus();
-    ~CheckerStatus();
+    ~CheckerStatus() override;
 
-    virtual QString statusName() const override;
+    QString statusName() const override;
 
     /// Sets the name of the checker tool
     void setCheckerName(const QString &name);

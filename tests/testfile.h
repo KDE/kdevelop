@@ -89,7 +89,7 @@ public:
     /**
      * Removes temporary file and cleans up.
      */
-    ~TestFile();
+    ~TestFile() override;
 
     /**
      * Returns the URL to this file.

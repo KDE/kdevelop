@@ -38,7 +38,7 @@ class OverlayWidget : public QWidget
 
 public:
     OverlayWidget( QWidget* alignWidget, QWidget* parent, const char* name = 0 );
-    ~OverlayWidget();
+    ~OverlayWidget() override;
 
     QWidget * alignWidget() { return mAlignWidget; }
     void setAlignWidget( QWidget * alignWidget );

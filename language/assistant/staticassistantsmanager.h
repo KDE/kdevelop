@@ -55,7 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistantsManager : public QObject
 
 public:
     explicit StaticAssistantsManager(QObject* parent = 0);
-    virtual ~StaticAssistantsManager();
+    ~StaticAssistantsManager() override;
 
     QExplicitlySharedDataPointer<KDevelop::IAssistant> activeAssistant();
 

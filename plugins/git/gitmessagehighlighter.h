@@ -28,10 +28,10 @@ class GitMessageHighlighter : public Sonnet::Highlighter
     Q_OBJECT
 public:
     explicit GitMessageHighlighter(QTextEdit* parent);
-    virtual ~GitMessageHighlighter();
+    ~GitMessageHighlighter() override;
 
 protected:
-    virtual void highlightBlock(const QString& text) override;
+    void highlightBlock(const QString& text) override;
 
 private:
     void applyErrorFormat(GitMessageHighlighter* text, bool warning, const QString& tooltip, int startPos, int endPos);

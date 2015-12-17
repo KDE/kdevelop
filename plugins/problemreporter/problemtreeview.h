@@ -41,15 +41,15 @@ class ProblemTreeView : public QTreeView
 
 public:
     ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel);
-    virtual ~ProblemTreeView();
+    ~ProblemTreeView() override;
 
     KDevelop::ProblemModel* model() const;
-    virtual void setModel(QAbstractItemModel* model) override;
+    void setModel(QAbstractItemModel* model) override;
 
-    virtual void contextMenuEvent(QContextMenuEvent*) override;
-    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
+    void contextMenuEvent(QContextMenuEvent*) override;
+    void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
                              const QVector<int>& roles = QVector<int>()) override;
-    virtual void reset() override;
+    void reset() override;
 
 public slots:
     void openDocumentForCurrentProblem();
@@ -59,7 +59,7 @@ signals:
     void changed();
 
 protected:
-    virtual void showEvent(QShowEvent* event) override;
+    void showEvent(QShowEvent* event) override;
 
 private slots:
     void itemActivated(const QModelIndex& index);

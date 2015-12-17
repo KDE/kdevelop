@@ -46,7 +46,7 @@ public:
     void removeSubDir(ProjectFolderItem* item);
 
     void abort();
-    virtual void start() override;
+    void start() override;
 
 signals:
     void entries(FileManagerListJob* job, ProjectFolderItem* baseItem,

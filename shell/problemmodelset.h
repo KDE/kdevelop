@@ -62,7 +62,7 @@ class KDEVPLATFORMSHELL_EXPORT ProblemModelSet : public QObject
     Q_OBJECT
 public:
     explicit ProblemModelSet(QObject *parent = nullptr);
-    ~ProblemModelSet();
+    ~ProblemModelSet() override;
 
     /// Adds a model
     void addModel(const QString &name, ProblemModel *model);

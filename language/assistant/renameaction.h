@@ -55,10 +55,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT RenameAction : public KDevelop::IAssistantActi
 public:
     RenameAction(const KDevelop::Identifier& oldDeclarationName, const QString& newDeclarationName,
                  const QVector<RevisionedFileRanges>& oldDeclarationUses);
-    virtual ~RenameAction();
+    ~RenameAction() override;
 
-    virtual QString description() const override;
-    virtual void execute() override;
+    QString description() const override;
+    void execute() override;
 
     QString newDeclarationName() const;
     QString oldDeclarationName() const;

@@ -39,7 +39,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
 
   public:
     explicit ExecutePlugin(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~ExecutePlugin();
+    ~ExecutePlugin() override;
 
     static QString _nativeAppConfigTypeId;
     static QString workingDirEntry;
@@ -54,7 +54,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     static QString dependencyActionEntry;
     static QString projectTargetEntry;
     
-    virtual void unload() override;
+    void unload() override;
     
     QUrl executable( KDevelop::ILaunchConfiguration*, QString& err ) const override;
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const override;

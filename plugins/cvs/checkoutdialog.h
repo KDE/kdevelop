@@ -29,10 +29,10 @@ class CheckoutDialog : public QDialog, private Ui::CheckoutDialogBase
     Q_OBJECT
 public:
     explicit CheckoutDialog(CvsPlugin* plugin, QWidget *parent=0);
-    virtual ~CheckoutDialog();
+    ~CheckoutDialog() override;
 
 public slots:
-    virtual void accept() override;
+    void accept() override;
     void jobFinished(KJob* job);
 
 private:

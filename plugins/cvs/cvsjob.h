@@ -33,7 +33,7 @@ public:
 
     explicit CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
-    virtual ~CvsJob();
+    ~CvsJob() override;
 
     /**
      * @return The command that is executed when calling start()
@@ -51,7 +51,7 @@ public:
      * @note Default communication mode is KProcess::AllOutput.
      * @see Use setCommunicationMode() to override the default communication mode.
      */
-    virtual void start() override;
+    void start() override;
 
 private:
     class CvsJobPrivate* const d;

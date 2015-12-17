@@ -88,12 +88,12 @@ public:
      * Destructor
      *
      **/
-    virtual ~ProjectTestJob();
+    ~ProjectTestJob() override;
 
     /**
      * Start this job.
      **/
-    virtual void start() override;
+    void start() override;
 
     /**
      * @brief The result of this job
@@ -106,7 +106,7 @@ public:
     ProjectTestResult testResult();
 
 protected:
-    virtual bool doKill() override;
+    bool doKill() override;
 
 private:
     struct Private;

@@ -59,28 +59,28 @@ public:
      * @param parent The parent object for the plugin.
      */
     explicit Project(QObject *parent = 0);
-    virtual ~Project();
+    ~Project() override;
 
-    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const override;
-    virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const override;
-    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const override;
+    QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const override;
+    QList< ProjectFileItem* > filesForPath(const IndexedString& file) const override;
+    QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const override;
 
     QString projectTempFile() const;
     QString developerTempFile() const;
     Path developerFile() const;
-    virtual void reloadModel() override;
-    virtual Path projectFile() const override;
-    virtual KSharedConfigPtr projectConfiguration() const override;
+    void reloadModel() override;
+    Path projectFile() const override;
+    KSharedConfigPtr projectConfiguration() const override;
 
-    virtual void addToFileSet( ProjectFileItem* file ) override;
-    virtual void removeFromFileSet( ProjectFileItem* file ) override;
-    virtual QSet<IndexedString> fileSet() const override;
+    void addToFileSet( ProjectFileItem* file ) override;
+    void removeFromFileSet( ProjectFileItem* file ) override;
+    QSet<IndexedString> fileSet() const override;
 
-    virtual bool isReady() const override;
+    bool isReady() const override;
 
-    virtual Path path() const override;
+    Path path() const override;
 
-    virtual Q_SCRIPTABLE QString name() const override;
+    Q_SCRIPTABLE QString name() const override;
 
 public Q_SLOTS:
     /**
@@ -124,7 +124,7 @@ public Q_SLOTS:
      */
     bool inProject(const IndexedString &url) const override;
 
-    virtual void setReloadJob(KJob* job) override;
+    void setReloadJob(KJob* job) override;
 
 signals:
     /**

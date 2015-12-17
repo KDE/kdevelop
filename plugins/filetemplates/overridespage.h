@@ -37,7 +37,7 @@ class OverridesPage : public QWidget
 
 public:
     explicit OverridesPage(QWidget* parent);
-    virtual ~OverridesPage();
+    ~OverridesPage() override;
 
     /**
      * Default implementation populates the tree with all virtual functions in the base classes.

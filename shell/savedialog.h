@@ -35,7 +35,7 @@ class KSaveSelectDialog : public QDialog
 
 public:
     KSaveSelectDialog( const QList<IDocument*>& files, QWidget * parent );
-    virtual ~KSaveSelectDialog();
+    ~KSaveSelectDialog() override;
 
 private Q_SLOTS:
     void save();

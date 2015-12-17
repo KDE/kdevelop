@@ -60,7 +60,7 @@ public:
     using Ptr = QExplicitlySharedDataPointer<StaticAssistant>;
 
     explicit StaticAssistant(ILanguageSupport* supportedLanguage);
-    virtual ~StaticAssistant();
+    ~StaticAssistant() override;
 
     /**
      * Language this static assistant supports

@@ -46,7 +46,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IProjectController : public QObject
     Q_OBJECT
 public:
     explicit IProjectController( QObject *parent = 0 );
-    virtual ~IProjectController();
+    ~IProjectController() override;
 
     Q_SCRIPTABLE virtual KDevelop::IProject* projectAt( int ) const = 0;
     Q_SCRIPTABLE virtual int projectCount() const = 0;

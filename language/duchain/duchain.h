@@ -290,7 +290,7 @@ private:
   void addToEnvironmentManager( TopDUContext * chain );
   void removeFromEnvironmentManager( TopDUContext * chain );
   DUChain();
-  ~DUChain();
+  ~DUChain() override;
 
   friend class DUChainPrivate;
   friend class ReferencedTopDUContext;

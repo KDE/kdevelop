@@ -50,11 +50,11 @@ class ExternalScriptJob : public KDevelop::OutputJob
 
 public:
   ExternalScriptJob( ExternalScriptItem* item, const QUrl &url, ExternalScriptPlugin* parent );
-  virtual void start() override;
+  void start() override;
   KDevelop::OutputModel* model();
 
 protected:
-  virtual bool doKill() override;
+  bool doKill() override;
 
 private slots:
   void processError( QProcess::ProcessError );

@@ -45,29 +45,29 @@ class IdealButtonBarLayout: public QLayout
 public:
     explicit IdealButtonBarLayout(Qt::Orientation orientation, QWidget *parent = 0);
 
-    virtual ~IdealButtonBarLayout();
+    ~IdealButtonBarLayout() override;
 
     void setHeight(int height);
 
     inline Qt::Orientation orientation() const;
 
-    virtual Qt::Orientations expandingDirections() const override;
+    Qt::Orientations expandingDirections() const override;
 
-    virtual QSize minimumSize() const override;
+    QSize minimumSize() const override;
 
-    virtual QSize sizeHint() const override;
+    QSize sizeHint() const override;
 
-    virtual void setGeometry(const QRect &rect) override;
+    void setGeometry(const QRect &rect) override;
 
-    virtual void addItem(QLayoutItem *item) override;
+    void addItem(QLayoutItem *item) override;
 
-    virtual QLayoutItem* itemAt(int index) const override;
+    QLayoutItem* itemAt(int index) const override;
 
-    virtual QLayoutItem* takeAt(int index) override;
+    QLayoutItem* takeAt(int index) override;
 
-    virtual int count() const override;
+    int count() const override;
 
-    virtual void invalidate() override;
+    void invalidate() override;
 
 protected:
     int doVerticalLayout(const QRect &rect, bool updateGeometry = true) const;

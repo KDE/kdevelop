@@ -56,7 +56,7 @@ public:
     /**
      * Default destructor
      */
-    virtual ~MultiLevelListView();
+    ~MultiLevelListView() override;
 
     /**
      * @return the number of list view

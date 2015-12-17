@@ -44,7 +44,7 @@ Q_OBJECT
 public:
     VcsAnnotationModel( VcsJob* job, const QUrl&, QObject*,
                         const QColor& foreground = QColor(Qt::black), const QColor& background = QColor(Qt::white) );
-    virtual ~VcsAnnotationModel();
+    ~VcsAnnotationModel() override;
 
     VcsRevision revisionForLine(int line) const;
 

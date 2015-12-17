@@ -50,10 +50,10 @@ class SwitchToBuddyPlugin : public KDevelop::IPlugin
     Q_OBJECT
 public:
     explicit SwitchToBuddyPlugin( QObject *parent, const QVariantList & = QVariantList());
-    ~SwitchToBuddyPlugin();
+    ~SwitchToBuddyPlugin() override;
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
-    virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
 
 private slots:
     /**

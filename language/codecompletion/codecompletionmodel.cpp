@@ -75,11 +75,11 @@ public:
      Q_ASSERT(m_worker->thread() == this);
    }
 
-   ~CompletionWorkerThread() {
+   ~CompletionWorkerThread() override {
      delete m_worker;
    }
 
-   virtual void run () override {
+   void run () override {
      //We connect directly, so we can do the pre-grouping within the background thread
      connect(m_worker, &CodeCompletionWorker::foundDeclarationsReal, m_model, &CodeCompletionModel::foundDeclarations, Qt::QueuedConnection);
 

@@ -34,7 +34,7 @@ class ProblemHighlighter : public QObject
     Q_OBJECT
 public:
     explicit ProblemHighlighter(KTextEditor::Document* document);
-    virtual ~ProblemHighlighter();
+    ~ProblemHighlighter() override;
 
     void setProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
@@ -60,7 +60,7 @@ class ProblemTextHintProvider : public KTextEditor::TextHintProvider
 public:
     explicit ProblemTextHintProvider(ProblemHighlighter* highlighter);
 
-    virtual QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
+    QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
 
 private:
     ProblemHighlighter* m_highlighter;

@@ -26,7 +26,7 @@ class CommitDialog : public QDialog, private Ui::CommitDialogBase
 Q_OBJECT
 public:
     explicit CommitDialog(QDialog *parent = 0);
-    virtual ~CommitDialog();
+    ~CommitDialog() override;
 
     /**
      * @return The text entered by the user

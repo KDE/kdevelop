@@ -140,7 +140,7 @@ typedef QExplicitlySharedDataPointer<QuickOpenDataBase> QuickOpenDataPointer;
 class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
   Q_OBJECT
   public:
-    virtual ~QuickOpenDataProviderBase();
+    ~QuickOpenDataProviderBase() override;
 
     /**
      * For efficiency, all changes to the filter-text are provided by the following 3 difference-operations.

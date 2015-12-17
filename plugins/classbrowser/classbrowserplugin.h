@@ -41,13 +41,13 @@ class ClassBrowserPlugin : public KDevelop::IPlugin
 
 public:
   explicit ClassBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
-  virtual ~ClassBrowserPlugin();
+  ~ClassBrowserPlugin() override;
 
   void setActiveClassTree(ClassTree* a_classTree) { m_activeClassTree = a_classTree; }
 
 public: // KDevelop::Plugin overrides
-  virtual void unload() override;
-  virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
+  void unload() override;
+  KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
 
   // The duchain must not be locked when this is called!
   void showDefinition(KDevelop::DeclarationPointer declaration);

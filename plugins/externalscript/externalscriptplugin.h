@@ -41,9 +41,9 @@ class ExternalScriptPlugin : public KDevelop::IPlugin
 public:
   explicit ExternalScriptPlugin( QObject *parent, const QVariantList &args = QVariantList() );
 
-  virtual ~ExternalScriptPlugin();
-  virtual void unload() override;
-  virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+  ~ExternalScriptPlugin() override;
+  void unload() override;
+  KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
   static ExternalScriptPlugin* self();
 

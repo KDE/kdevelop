@@ -39,7 +39,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
 
   public:
     explicit ExecuteScriptPlugin(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~ExecuteScriptPlugin();
+    ~ExecuteScriptPlugin() override;
 
     static QString _scriptAppConfigTypeId;
     static QString interpreterEntry;
@@ -56,7 +56,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     static QString projectTargetEntry;
     static QString outputFilteringEntry;
     
-    virtual void unload() override;
+    void unload() override;
     
     QString interpreter( KDevelop::ILaunchConfiguration*, QString& err ) const override;
     QUrl script( KDevelop::ILaunchConfiguration*, QString& err ) const override;

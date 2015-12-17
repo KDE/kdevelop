@@ -51,7 +51,7 @@ class KDEVPLATFORMSHELL_EXPORT IProjectDialogProvider : public QObject
 Q_OBJECT
 public:
     IProjectDialogProvider();
-    virtual ~IProjectDialogProvider();
+    ~IProjectDialogProvider() override;
 
 public Q_SLOTS:
     /**
@@ -74,22 +74,22 @@ class KDEVPLATFORMSHELL_EXPORT ProjectController : public IProjectController
 
 public:
     explicit ProjectController( Core* core );
-    virtual ~ProjectController();
+    ~ProjectController() override;
 
-    virtual IProject* projectAt( int ) const override;
-    virtual int projectCount() const override;
-    virtual QList<IProject*> projects() const override;
+    IProject* projectAt( int ) const override;
+    int projectCount() const override;
+    QList<IProject*> projects() const override;
 
-    virtual ProjectBuildSetModel* buildSetModel() override;
-    virtual ProjectModel* projectModel() override;
-    virtual ProjectChangesModel* changesModel() override;
+    ProjectBuildSetModel* buildSetModel() override;
+    ProjectModel* projectModel() override;
+    ProjectChangesModel* changesModel() override;
     virtual QItemSelectionModel* projectSelectionModel();
-    virtual IProject* findProjectByName( const QString& name ) override;
+    IProject* findProjectByName( const QString& name ) override;
     IProject* findProjectForUrl( const QUrl& ) const override;
     void addProject(IProject*);
 //     IProject* currentProject() const;
 
-    virtual bool isProjectNameUsed( const QString& name ) const override;
+    bool isProjectNameUsed( const QString& name ) const override;
     void setDialogProvider(IProjectDialogProvider*);
 
     QUrl projectsBaseDirectory() const override;
@@ -99,15 +99,15 @@ public:
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:
-    virtual void openProjectForUrl( const QUrl &sourceUrl ) override;
+    void openProjectForUrl( const QUrl &sourceUrl ) override;
     virtual void fetchProject();
-    virtual void openProject( const QUrl &KDev4ProjectFile = QUrl() ) override;
+    void openProject( const QUrl &KDev4ProjectFile = QUrl() ) override;
     virtual void abortOpeningProject( IProject* );
     void projectImportingFinished( IProject* );
-    virtual void closeProject( IProject* ) override;
-    virtual void configureProject( IProject* ) override;
+    void closeProject( IProject* ) override;
+    void configureProject( IProject* ) override;
 
-    virtual void reparseProject( IProject* project, bool forceUpdate = false  ) override;
+    void reparseProject( IProject* project, bool forceUpdate = false  ) override;
 
     void eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList);
     void openProjectForUrlSlot(bool);
@@ -155,12 +155,12 @@ class ProjectDialogProvider : public IProjectDialogProvider
 Q_OBJECT
 public:
     explicit ProjectDialogProvider(ProjectControllerPrivate* const p);
-    virtual ~ProjectDialogProvider();
+    ~ProjectDialogProvider() override;
     ProjectControllerPrivate* const d;
 
 public Q_SLOTS:
-    virtual QUrl askProjectConfigLocation(bool fetch, const QUrl& sta) override;
-    virtual bool userWantsReopen() override;
+    QUrl askProjectConfigLocation(bool fetch, const QUrl& sta) override;
+    bool userWantsReopen() override;
 };
 
 

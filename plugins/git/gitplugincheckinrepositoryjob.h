@@ -29,8 +29,8 @@ class GitPluginCheckInRepositoryJob : public KDevelop::CheckInRepositoryJob
     Q_OBJECT
 public:
     GitPluginCheckInRepositoryJob(KTextEditor::Document* document, const QString& rootDirectory);
-    virtual ~GitPluginCheckInRepositoryJob();
-    virtual void start() override;
+    ~GitPluginCheckInRepositoryJob() override;
+    void start() override;
 
 private slots:
     void repositoryQueryFinished(int);

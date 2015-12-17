@@ -49,10 +49,10 @@ public:
 
 public:
     explicit ProjectManagerViewPlugin(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~ProjectManagerViewPlugin();
+    ~ProjectManagerViewPlugin() override;
 
     // Plugin methods
-    virtual void unload() override;
+    void unload() override;
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
 

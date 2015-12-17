@@ -28,9 +28,9 @@ class KDevDocumentViewDelegate: public QItemDelegate
     Q_OBJECT
 public:
     explicit KDevDocumentViewDelegate( QObject *parent = 0 );
-    virtual ~KDevDocumentViewDelegate();
+    ~KDevDocumentViewDelegate() override;
 
-    virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const override;
+    void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const override;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_KDEVCLASSVIEWDELEGATE_H

@@ -34,10 +34,10 @@ class RenameFileAction : public KDevelop::IAssistantAction
 
 public:
     RenameFileAction(KDevelop::BasicRefactoring* refactoring, const QUrl& file, const QString& newName);
-    virtual ~RenameFileAction();
+    ~RenameFileAction() override;
 
-    virtual QString description() const override;
-    virtual void execute() override;
+    QString description() const override;
+    void execute() override;
 
 private:
     struct Private;

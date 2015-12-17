@@ -52,8 +52,8 @@ class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchRevie
 
 public :
     explicit PatchReviewPlugin( QObject *parent, const QVariantList & = QVariantList() );
-    ~PatchReviewPlugin();
-    virtual void unload() override;
+    ~PatchReviewPlugin() override;
+    void unload() override;
 
     QWidget* createToolView( QWidget* parent );
 
@@ -69,7 +69,7 @@ public :
 
     void setPatch( KDevelop::IPatchSource* patch );
 
-    virtual void startReview( KDevelop::IPatchSource* patch, ReviewMode mode ) override;
+    void startReview( KDevelop::IPatchSource* patch, ReviewMode mode ) override;
 
     void finishReview( QList< QUrl > selection );
 

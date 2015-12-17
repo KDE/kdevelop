@@ -42,7 +42,7 @@ class Application : public QObject
     Q_OBJECT
 public:
     explicit Application(QObject *parent = nullptr);
-    ~Application();
+    ~Application() override;
 
 public slots:
     KTextEditor::MainWindow *activeMainWindow() const;
@@ -55,7 +55,7 @@ class MainWindow : public QObject
     Q_OBJECT
 public:
     explicit MainWindow(KDevelop::MainWindow *mainWindow);
-    ~MainWindow();
+    ~MainWindow() override;
 
 public slots:
     QWidget *createToolView(KTextEditor::Plugin *plugin, const QString &identifier,
@@ -89,7 +89,7 @@ class Plugin : public KDevelop::IPlugin
     Q_OBJECT
 public:
     explicit Plugin(KTextEditor::Plugin *plugin, QObject *parent = nullptr);
-    ~Plugin();
+    ~Plugin() override;
 
     KXMLGUIClient* createGUIForMainWindow(Sublime::MainWindow *window) override;
 

@@ -55,7 +55,7 @@ public:
 
     explicit OutputModel( const QUrl& builddir , QObject* parent = 0 );
     explicit OutputModel( QObject* parent = 0 );
-    virtual ~OutputModel();
+    ~OutputModel() override;
 
     /// IOutputViewModel interfaces
     void activate( const QModelIndex& index ) override;

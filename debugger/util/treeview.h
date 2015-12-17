@@ -37,7 +37,7 @@ class TreeModel;
     public:
         AsyncTreeView(TreeModel* model, QSortFilterProxyModel *proxy, QWidget *parent);
 
-        virtual QSize sizeHint() const override;
+        QSize sizeHint() const override;
         void resizeColumns();
 
         // Well, I really, really, need this.

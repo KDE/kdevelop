@@ -33,15 +33,15 @@ class TemplateConfig : public KDevelop::ConfigPage
     Q_OBJECT
 public:
     explicit TemplateConfig(QWidget* parent = 0);
-    virtual ~TemplateConfig();
+    ~TemplateConfig() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
-    virtual void reset() override;
-    virtual void apply() override;
-    virtual void defaults() override;
+    void reset() override;
+    void apply() override;
+    void defaults() override;
 private:
     Ui::TemplateConfig* ui;
 };

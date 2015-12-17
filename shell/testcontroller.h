@@ -32,20 +32,20 @@ class KDEVPLATFORMSHELL_EXPORT TestController : public KDevelop::ITestController
 
 public:
     explicit TestController(QObject *parent);
-    virtual ~TestController();
+    ~TestController() override;
 
     void initialize();
     void cleanup();
 
-    virtual void removeTestSuite(KDevelop::ITestSuite* suite) override;
-    virtual void addTestSuite(KDevelop::ITestSuite* suite) override;
+    void removeTestSuite(KDevelop::ITestSuite* suite) override;
+    void addTestSuite(KDevelop::ITestSuite* suite) override;
 
-    virtual QList< KDevelop::ITestSuite* > testSuites() const override;
-    virtual KDevelop::ITestSuite* findTestSuite(KDevelop::IProject* project, const QString& name) const override;
-    virtual QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const override;
+    QList< KDevelop::ITestSuite* > testSuites() const override;
+    KDevelop::ITestSuite* findTestSuite(KDevelop::IProject* project, const QString& name) const override;
+    QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const override;
 
-    virtual void notifyTestRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result) override;
-    virtual void notifyTestRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases) override;
+    void notifyTestRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result) override;
+    void notifyTestRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases) override;
 
 private:
     class TestControllerPrivate;

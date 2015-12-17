@@ -42,7 +42,7 @@ class ProblemReporterModel : public KDevelop::ProblemModel
     Q_OBJECT
 public:
     explicit ProblemReporterModel(QObject* parent);
-    ~ProblemReporterModel();
+    ~ProblemReporterModel() override;
 
     /**
      * Get problems for @ref url.
@@ -59,16 +59,16 @@ public Q_SLOTS:
      */
     void problemsUpdated(const KDevelop::IndexedString& url);
 
-    void setShowImports(bool showImports);
-    void forceFullUpdate();
+    void setShowImports(bool showImports) override;
+    void forceFullUpdate() override;
 
 protected Q_SLOTS:
     /// Triggered when the problemstore's problems have changed
-    void onProblemsChanged();
+    void onProblemsChanged() override;
 
 private Q_SLOTS:
     void timerExpired();
-    void setCurrentDocument(KDevelop::IDocument* doc);
+    void setCurrentDocument(KDevelop::IDocument* doc) override;
 
 private:
     void problemsInternal(KDevelop::TopDUContext* context, bool showImports,

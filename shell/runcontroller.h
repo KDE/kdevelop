@@ -50,11 +50,11 @@ class KDEVPLATFORMSHELL_EXPORT RunController : public IRunController
 
 public:
     explicit RunController(QObject *parent);
-    ~RunController();
+    ~RunController() override;
 
-    virtual void registerJob(KJob *job) override;
-    virtual void unregisterJob(KJob *job) override;
-    virtual QList<KJob*> currentJobs() const override;
+    void registerJob(KJob *job) override;
+    void unregisterJob(KJob *job) override;
+    QList<KJob*> currentJobs() const override;
 
     KJob* execute(const QString& launchMode, ILaunchConfiguration* launch) override;
     QList<ILaunchMode*> launchModes() const override;
@@ -62,17 +62,17 @@ public:
     /**
      * @copydoc IRunController::addLaunchMode
      */
-    virtual void addLaunchMode( ILaunchMode* mode ) override;
+    void addLaunchMode( ILaunchMode* mode ) override;
 
     /**
      * @copydoc IRunController::removeLaunchMode
      */
-    virtual void removeLaunchMode( ILaunchMode* mode ) override;
+    void removeLaunchMode( ILaunchMode* mode ) override;
 
     /**
      * @copydoc IRunController::launchModeForId()
      */
-    virtual KDevelop::ILaunchMode* launchModeForId(const QString& id) const override;
+    KDevelop::ILaunchMode* launchModeForId(const QString& id) const override;
 
     void initialize();
     void cleanup();
@@ -83,21 +83,21 @@ public:
     void removeLaunchConfiguration( LaunchConfiguration* l );
 
     QList<LaunchConfiguration*> launchConfigurationsInternal() const;
-    virtual QList<ILaunchConfiguration*> launchConfigurations() const override;
+    QList<ILaunchConfiguration*> launchConfigurations() const override;
     /**
      * @copydoc IRunController::launchConfigurationTypes()
      */
-    virtual QList<LaunchConfigurationType*> launchConfigurationTypes() const override;
+    QList<LaunchConfigurationType*> launchConfigurationTypes() const override;
 
     /**
      * @copydoc IRunController::addConfigurationType()
      */
-    virtual void addConfigurationType( LaunchConfigurationType* type ) override;
+    void addConfigurationType( LaunchConfigurationType* type ) override;
 
     /**
      * @copydoc IRunController::removeConfigurationType()
      */
-    virtual void removeConfigurationType( LaunchConfigurationType* type ) override;
+    void removeConfigurationType( LaunchConfigurationType* type ) override;
 
     /**
      * Find the launch configuration type for the given @p id.
@@ -105,7 +105,7 @@ public:
      */
     LaunchConfigurationType* launchConfigurationTypeForId( const QString& ) override;
 
-    virtual ILaunchConfiguration* createLaunchConfiguration ( LaunchConfigurationType* type,
+    ILaunchConfiguration* createLaunchConfiguration ( LaunchConfigurationType* type,
                                                               const QPair<QString,QString>& launcher,
                                                               IProject* project = 0,
                                                               const QString& name = QString() ) override;
@@ -117,14 +117,14 @@ public:
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:
-    virtual Q_SCRIPTABLE void executeDefaultLaunch(const QString& runMode) override;
+    Q_SCRIPTABLE void executeDefaultLaunch(const QString& runMode) override;
 
-    virtual Q_SCRIPTABLE void stopAllProcesses() override;
+    Q_SCRIPTABLE void stopAllProcesses() override;
 
 protected Q_SLOTS:
-    virtual void finished(KJob *job) override;
-    virtual void suspended(KJob *job) override;
-    virtual void resumed(KJob *job) override;
+    void finished(KJob *job) override;
+    void suspended(KJob *job) override;
+    void resumed(KJob *job) override;
 
 private Q_SLOTS:
     void slotRefreshProject(KDevelop::IProject* project);

@@ -48,25 +48,25 @@ class KDEVPLATFORMPROJECT_EXPORT AbstractFileManagerPlugin : public IPlugin, pub
 public:
     explicit AbstractFileManagerPlugin( const QString& componentName, QObject *parent = 0,
                                         const QVariantList &args = QVariantList() );
-    virtual ~AbstractFileManagerPlugin();
+    ~AbstractFileManagerPlugin() override;
 
 //
 // IProjectFileManager interface
 //
-    virtual Features features() const override;
+    Features features() const override;
 
-    virtual ProjectFolderItem* addFolder( const Path& folder, ProjectFolderItem *parent ) override;
-    virtual ProjectFileItem* addFile( const Path& file, ProjectFolderItem *parent ) override;
-    virtual bool removeFilesAndFolders( const QList<ProjectBaseItem*> &items ) override;
-    virtual bool moveFilesAndFolders(const QList< ProjectBaseItem* >& items, ProjectFolderItem* newParent) override;
-    virtual bool copyFilesAndFolders(const Path::List& items, ProjectFolderItem* newParent) override;
-    virtual bool renameFolder(ProjectFolderItem* folder, const Path& newPath) override;
-    virtual bool renameFile(ProjectFileItem* file, const Path& newPath) override;
+    ProjectFolderItem* addFolder( const Path& folder, ProjectFolderItem *parent ) override;
+    ProjectFileItem* addFile( const Path& file, ProjectFolderItem *parent ) override;
+    bool removeFilesAndFolders( const QList<ProjectBaseItem*> &items ) override;
+    bool moveFilesAndFolders(const QList< ProjectBaseItem* >& items, ProjectFolderItem* newParent) override;
+    bool copyFilesAndFolders(const Path::List& items, ProjectFolderItem* newParent) override;
+    bool renameFolder(ProjectFolderItem* folder, const Path& newPath) override;
+    bool renameFile(ProjectFileItem* file, const Path& newPath) override;
 
-    virtual QList<ProjectFolderItem*> parse( ProjectFolderItem *item ) override;
-    virtual ProjectFolderItem *import( IProject *project ) override;
-    virtual bool reload(ProjectFolderItem* item) override;
-    virtual KJob* createImportJob(ProjectFolderItem* item) override;
+    QList<ProjectFolderItem*> parse( ProjectFolderItem *item ) override;
+    ProjectFolderItem *import( IProject *project ) override;
+    bool reload(ProjectFolderItem* item) override;
+    KJob* createImportJob(ProjectFolderItem* item) override;
 
 protected:
 //

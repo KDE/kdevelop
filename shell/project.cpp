@@ -67,8 +67,8 @@ class ProjectProgress : public QObject, public IStatus
 
     public:
         ProjectProgress();
-        virtual ~ProjectProgress();
-        virtual QString statusName() const override;
+        ~ProjectProgress() override;
+        QString statusName() const override;
 
         /*! Show indeterminate mode progress bar */
         void setBuzzy();

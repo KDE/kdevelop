@@ -52,7 +52,7 @@ public:
 
 protected:
     /// Process the uses for the given TopDUContext.
-    virtual void processUses(KDevelop::ReferencedTopDUContext topContext) override;
+    void processUses(KDevelop::ReferencedTopDUContext topContext) override;
 
 private:
     QVector<IndexedTopDUContext> m_allUsingContexts;

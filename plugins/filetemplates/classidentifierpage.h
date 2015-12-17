@@ -31,7 +31,7 @@ class ClassIdentifierPage : public QWidget
 
 public:
     explicit ClassIdentifierPage(QWidget* parent);
-    virtual ~ClassIdentifierPage();
+    ~ClassIdentifierPage() override;
 
     /**
      * @return The full identifier of the new class, with namespaces,

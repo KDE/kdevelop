@@ -61,7 +61,7 @@ class ProjectManagerView: public QWidget
     Q_OBJECT
 public:
     ProjectManagerView( ProjectManagerViewPlugin*, QWidget *parent );
-    virtual ~ProjectManagerView();
+    ~ProjectManagerView() override;
 
     ProjectManagerViewPlugin* plugin() const { return m_plugin; }
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
@@ -69,7 +69,7 @@ public:
     void expandItem(KDevelop::ProjectBaseItem *item);
 
 protected:
-    virtual bool eventFilter(QObject* obj, QEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 private slots:
     void selectionChanged();

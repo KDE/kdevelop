@@ -42,7 +42,7 @@ class KDEVPLATFORMSUBLIME_EXPORT Container: public QWidget {
 Q_OBJECT
 public:
     explicit Container(QWidget *parent = 0);
-    ~Container();
+    ~Container() override;
 
     /**Adds the widget for given @p view to the container.*/
     void addWidget(Sublime::View* view, int position = -1);

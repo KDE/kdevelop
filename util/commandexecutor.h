@@ -57,7 +57,7 @@ public:
      * The process is not started immediately, instead start() has to be called.
      */
     explicit CommandExecutor( const QString& command, QObject* parent = 0 );
-    ~CommandExecutor();
+    ~CommandExecutor() override;
 
     /**
      * set additional arguments to be used when executing the command

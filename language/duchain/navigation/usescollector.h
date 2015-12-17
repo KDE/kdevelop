@@ -35,7 +35,7 @@ namespace KDevelop {
         Q_OBJECT
         public:
             explicit UsesCollector(IndexedDeclaration declaration);
-            virtual ~UsesCollector();
+            ~UsesCollector() override;
             
             ///@warning For most tasks, you should use declarations() instead, and respect all of them!
             IndexedDeclaration declaration() const;

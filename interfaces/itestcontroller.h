@@ -75,7 +75,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ITestController : public QObject
     Q_OBJECT
 public:
     explicit ITestController(QObject* parent = 0);
-    virtual ~ITestController();
+    ~ITestController() override;
 
     /**
      * Add a new test suite.

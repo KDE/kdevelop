@@ -37,7 +37,7 @@ class KDevDocumentItem: public QStandardItem
 {
 public:
     explicit KDevDocumentItem( const QString &name );
-    virtual ~KDevDocumentItem();
+    ~KDevDocumentItem() override;
 
     virtual KDevCategoryItem *categoryItem() const
     {
@@ -68,9 +68,9 @@ class KDevCategoryItem: public KDevDocumentItem
 {
 public:
     explicit KDevCategoryItem( const QString &name );
-    virtual ~KDevCategoryItem();
+    ~KDevCategoryItem() override;
 
-    virtual KDevCategoryItem *categoryItem() const override
+    KDevCategoryItem *categoryItem() const override
     {
         return const_cast<KDevCategoryItem*>( this );
     }
@@ -83,9 +83,9 @@ class KDevFileItem: public KDevDocumentItem
 {
 public:
     explicit KDevFileItem( const QUrl &url );
-    virtual ~KDevFileItem();
+    ~KDevFileItem() override;
 
-    virtual KDevFileItem *fileItem() const override
+    KDevFileItem *fileItem() const override
     {
         return const_cast<KDevFileItem*>( this );
     }
@@ -97,7 +97,7 @@ class KDevDocumentModel: public QStandardItemModel
 
 public:
     explicit KDevDocumentModel( QObject *parent = 0 );
-    virtual ~KDevDocumentModel();
+    ~KDevDocumentModel() override;
 
     QList<KDevCategoryItem*> categoryList() const;
     KDevCategoryItem* category( const QString& category ) const;

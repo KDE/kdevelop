@@ -78,7 +78,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       m_url = IndexedString(m_document->url());
   }
 
-  virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
+  QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
       QVector< KTextEditor::Range > ret;
 
       if (identifier.isEmpty())
@@ -90,7 +90,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       return ret;
   }
 
-  virtual KDevEditingTransaction::Ptr makeEditTransaction() override {
+  KDevEditingTransaction::Ptr makeEditTransaction() override {
     return KDevEditingTransaction::Ptr(new KDevEditingTransaction(m_document));
   }
 
@@ -100,7 +100,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
         return m_document->line(line);
   }
 
-  virtual int lines() const override {
+  int lines() const override {
       return m_document->lines();
   }
 
@@ -140,7 +140,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       return ret;
   }
 
-  virtual QString rangeText(const KTextEditor::Range& range) const override {
+  QString rangeText(const KTextEditor::Range& range) const override {
       return m_document->text(range);
   }
 
@@ -169,7 +169,7 @@ class FileCodeRepresentation : public CodeRepresentation {
       return lineData.at(line);
     }
 
-    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
+    QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
         QVector< KTextEditor::Range > ret;
 
         if (identifier.isEmpty())
@@ -181,7 +181,7 @@ class FileCodeRepresentation : public CodeRepresentation {
         return ret;
     }
 
-    virtual int lines() const override {
+    int lines() const override {
         return lineData.count();
     }
 
@@ -253,7 +253,7 @@ class StringCodeRepresentation : public CodeRepresentation {
       return data->lines().at(line);
     }
 
-    virtual int lines() const override {
+    int lines() const override {
         return data->lines().count();
     }
 
@@ -270,7 +270,7 @@ class StringCodeRepresentation : public CodeRepresentation {
         return false;
     }
 
-    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
+    QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
         QVector< KTextEditor::Range > ret;
 
         if (identifier.isEmpty())

@@ -35,7 +35,7 @@ class ClassMembersPage : public QWidget
 
 public:
     explicit ClassMembersPage(QWidget* parent);
-    virtual ~ClassMembersPage();
+    ~ClassMembersPage() override;
 
     /**
      * @return The list of data members, as entered by the user.

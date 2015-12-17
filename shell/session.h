@@ -50,23 +50,23 @@ public:
     static const QString cfgSessionOptionsGroup;
 
     explicit Session( const QString& id, QObject * parent = 0 );
-    virtual ~Session();
+    ~Session() override;
 
-    virtual QUrl pluginDataArea( const IPlugin* ) override;
-    virtual KSharedConfigPtr config() override;
+    QUrl pluginDataArea( const IPlugin* ) override;
+    KSharedConfigPtr config() override;
 
-    virtual QList<QUrl> containedProjects() const override;
-    virtual void setContainedProjects( const QList<QUrl>& projects ) override;
+    QList<QUrl> containedProjects() const override;
+    void setContainedProjects( const QList<QUrl>& projects ) override;
 
-    virtual QString name() const override;
+    QString name() const override;
     void setName( const QString& );
 
-    virtual QUuid id() const override;
+    QUuid id() const override;
 
-    virtual QString description() const override;
+    QString description() const override;
 
-    virtual bool isTemporary() const override;
-    virtual void setTemporary(bool temp) override;
+    bool isTemporary() const override;
+    void setTemporary(bool temp) override;
 
     QString path() const;
 

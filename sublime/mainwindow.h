@@ -52,7 +52,7 @@ Q_OBJECT
 public:
     /**Creates a mainwindow and adds it to the controller.*/
     explicit MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
-    ~MainWindow();
+    ~MainWindow() override;
 
     /**@return the list of dockwidgets that contain area's toolviews.*/
     QList<View*> toolDocks() const;
@@ -150,7 +150,7 @@ public: // FIXME?
     virtual void saveSettings();
 
     /**Reimplemented to save settings.*/
-    virtual bool queryClose() override;
+    bool queryClose() override;
     /** Allow connecting to activateView without the need for a lambda for the default parameter */
     void activateViewAndFocus(Sublime::View *view) { activateView(view, true); }
 
