@@ -32,6 +32,8 @@ private Q_SLOTS:
     void testHtmlToPlainText();
     void testHtmlToPlainText_data();
 
+    void testStripAnsiSequences();
+    void testStripAnsiSequences_data();
 };
 
 #endif // TESTSTRINGHANDLER_H
