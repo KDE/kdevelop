@@ -88,7 +88,7 @@ public:
         : CodeCompletionWorker(model)
         , m_index(index)
     {}
-    virtual ~ClangCodeCompletionWorker() = default;
+    ~ClangCodeCompletionWorker() override = default;
 
 public slots:
     void completionRequested(const QUrl &url, const KTextEditor::Cursor& position, const QString& text, const QString& followingText)

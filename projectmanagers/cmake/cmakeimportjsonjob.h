@@ -48,7 +48,7 @@ public:
 
     CMakeImportJob(KDevelop::IProject* project, QObject* parent);
 
-    virtual void start() override;
+    void start() override;
 
     KDevelop::IProject* project() const;
 

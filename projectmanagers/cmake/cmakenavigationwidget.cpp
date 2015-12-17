@@ -30,8 +30,8 @@ class CMakeNavigationContext: public AbstractNavigationContext
     public:
         CMakeNavigationContext(TopDUContextPointer top, const QString& name, const QString& html)
             : AbstractNavigationContext(top, 0), mName(name), mDescription(html) {}
-        virtual QString name() const override { return mName; }
-        virtual QString html(bool shorten = false) override
+        QString name() const override { return mName; }
+        QString html(bool shorten = false) override
         {
             Q_UNUSED(shorten);
             return mDescription;

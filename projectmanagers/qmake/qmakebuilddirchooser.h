@@ -40,7 +40,7 @@ class QMakeBuildDirChooser : public QWidget, public Ui::QMakeBuildDirChooser
 
 public:
     explicit QMakeBuildDirChooser(KDevelop::IProject* project, QWidget *parent = nullptr);
-    virtual ~QMakeBuildDirChooser();
+    ~QMakeBuildDirChooser() override;
 
     KDevelop::IProject* project() const;
 

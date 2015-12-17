@@ -35,11 +35,11 @@ class NinjaBuilderPreferences : public ProjectConfigPage<NinjaBuilderSettings>
 
 public:
     explicit NinjaBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
-    virtual ~NinjaBuilderPreferences();
+    ~NinjaBuilderPreferences() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
 private:
     Ui::NinjaConfig* m_prefsUi;

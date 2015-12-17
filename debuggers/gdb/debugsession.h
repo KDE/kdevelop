@@ -70,15 +70,15 @@ class DebugSession : public KDevelop::IDebugSession
     Q_OBJECT
 public:
     DebugSession();
-    ~DebugSession();
+    ~DebugSession() override;
 
-    virtual DebuggerState state() const override;
+    DebuggerState state() const override;
 
-    virtual bool restartAvaliable() const override;
+    bool restartAvaliable() const override;
 
-    virtual BreakpointController* breakpointController() const override;
-    virtual KDevelop::IVariableController* variableController() const override;
-    virtual KDevelop::IFrameStackModel* frameStackModel() const override;
+    BreakpointController* breakpointController() const override;
+    KDevelop::IVariableController* variableController() const override;
+    KDevelop::IFrameStackModel* frameStackModel() const override;
 
     using IDebugSession::event;
 Q_SIGNALS:
@@ -93,17 +93,17 @@ public Q_SLOTS:
      * Start the debugger, and execute the program specified by \a run.
      */
     bool startProgram(KDevelop::ILaunchConfiguration* run, IExecutePlugin* execute);
-    virtual void restartDebugger() override;
-    virtual void stopDebugger() override;
-    virtual void interruptDebugger() override;
-    virtual void run() override;
-    virtual void runToCursor() override;
-    virtual void jumpToCursor() override;
-    virtual void stepOver() override;
-    virtual void stepIntoInstruction() override;
-    virtual void stepInto() override;
-    virtual void stepOverInstruction() override;
-    virtual void stepOut() override;
+    void restartDebugger() override;
+    void stopDebugger() override;
+    void interruptDebugger() override;
+    void run() override;
+    void runToCursor() override;
+    void jumpToCursor() override;
+    void stepOver() override;
+    void stepIntoInstruction() override;
+    void stepInto() override;
+    void stepOverInstruction() override;
+    void stepOut() override;
 
     /**
      * Start the debugger and examine the core file given by \a coreFile.

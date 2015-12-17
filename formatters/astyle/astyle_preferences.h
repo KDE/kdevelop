@@ -34,10 +34,10 @@ public:
     enum Language { CPP, Java, CSharp};
 
     AStylePreferences(Language lang=CPP, QWidget *parent=0);
-    virtual ~AStylePreferences();
+    ~AStylePreferences() override;
 
-    virtual void load(const KDevelop::SourceFormatterStyle &style) override;
-    virtual QString save() override;
+    void load(const KDevelop::SourceFormatterStyle &style) override;
+    QString save() override;
 
 protected:
     void init();

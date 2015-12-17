@@ -35,14 +35,14 @@ class MakeBuilderPreferences : public ProjectConfigPage<MakeBuilderSettings>
 
 public:
     explicit MakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
-    ~MakeBuilderPreferences();
+    ~MakeBuilderPreferences() override;
     void reset() override;
     void apply() override;
     void defaults() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
     static QString standardMakeComannd();
 

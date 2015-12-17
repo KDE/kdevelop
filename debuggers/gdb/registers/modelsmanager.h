@@ -50,7 +50,7 @@ class ModelsManager : public QObject
 public:
     explicit ModelsManager(QObject* parent = 0);
 
-    virtual ~ModelsManager();
+    ~ModelsManager() override;
 
     ///Adds new @p view with @p name, if not yet registered.
     ///All views removed after debug session ended.

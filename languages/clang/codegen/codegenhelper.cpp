@@ -184,7 +184,7 @@ AbstractType::Ptr shortenTypeForViewing(const AbstractType::Ptr& type)
     struct ShortenAliasExchanger
         : public TypeExchanger
     {
-        virtual AbstractType::Ptr exchange(const AbstractType::Ptr& type) override {
+        AbstractType::Ptr exchange(const AbstractType::Ptr& type) override {
             if (!type) {
                 return type;
             }
@@ -231,7 +231,7 @@ AbstractType::Ptr stripType(const AbstractType::Ptr& type, DUContext* ctx)
             Q_ASSERT(ctx);
         }
 
-        virtual AbstractType::Ptr exchange(const AbstractType::Ptr& type) override {
+        AbstractType::Ptr exchange(const AbstractType::Ptr& type) override {
             if (!type) {
                 return type;
             }

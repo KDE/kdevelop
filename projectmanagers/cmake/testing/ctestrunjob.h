@@ -38,10 +38,10 @@ class CTestRunJob : public KJob
     Q_OBJECT
 public:
     CTestRunJob(CTestSuite* suite, const QStringList& cases, KDevelop::OutputJob::OutputJobVerbosity verbosity, bool expectFail, QObject* parent = 0);
-    virtual void start();
+    void start() override;
 
 protected:
-    virtual bool doKill();
+    bool doKill() override;
     
 private slots:
     void processFinished(KJob* job);

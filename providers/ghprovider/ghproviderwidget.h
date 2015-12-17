@@ -53,10 +53,10 @@ public:
     explicit ProviderWidget(QWidget *parent = nullptr);
 
     /// Re-implemented from KDevelop::IProjectProviderWidget.
-    virtual KDevelop::VcsJob * createWorkingCopy(const QUrl &dest) override;
+    KDevelop::VcsJob * createWorkingCopy(const QUrl &dest) override;
 
     /// Re-implemented from KDevelop::IProjectProviderWidget.
-    virtual bool isCorrect() const override;
+    bool isCorrect() const override;
 
 private slots:
     /// Fill the m_combo member.

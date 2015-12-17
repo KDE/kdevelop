@@ -33,7 +33,7 @@ class TestQMakeProject : public QObject {
 
 public:
     TestQMakeProject(QObject* parent = nullptr);
-    virtual ~TestQMakeProject();
+    ~TestQMakeProject() override;
 
 private slots:
     void initTestCase();

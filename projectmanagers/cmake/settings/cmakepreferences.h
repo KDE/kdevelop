@@ -41,15 +41,15 @@ class CMakePreferences : public KDevelop::ConfigPage
     Q_OBJECT
     public:
         explicit CMakePreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
-        ~CMakePreferences();
+        ~CMakePreferences() override;
 
-        virtual QString name() const override;
-        virtual QString fullName() const override;
-        virtual QIcon icon() const override;
+        QString name() const override;
+        QString fullName() const override;
+        QIcon icon() const override;
 
-        virtual void apply() override;
-        virtual void reset() override;
-        virtual void defaults() override;
+        void apply() override;
+        void reset() override;
+        void defaults() override;
 
     private slots:
         void listSelectionChanged ( const QModelIndex& current, const QModelIndex& );

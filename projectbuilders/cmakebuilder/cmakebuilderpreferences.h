@@ -34,15 +34,15 @@ class CMakeBuilderPreferences : public KDevelop::ConfigPage
 
 public:
     explicit CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWidget* parent = nullptr);
-    ~CMakeBuilderPreferences();
+    ~CMakeBuilderPreferences() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
-    virtual void apply() override;
-    virtual void reset() override;
-    virtual void defaults() override;
+    void apply() override;
+    void reset() override;
+    void defaults() override;
 
 public slots:
     void generatorChanged(const QString& generator);

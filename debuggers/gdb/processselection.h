@@ -33,9 +33,9 @@ class ProcessSelectionDialog : public QDialog
     Q_OBJECT
     public:
         ProcessSelectionDialog( QWidget *parent=0 );
-        ~ProcessSelectionDialog();
+        ~ProcessSelectionDialog() override;
         long int pidSelected();
-        QSize sizeHint() const;
+        QSize sizeHint() const override;
         
     private slots:
         void selectionChanged();

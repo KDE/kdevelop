@@ -50,7 +50,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
         Q_DECLARE_FLAGS( StatusTypes, StatusType )
 
         explicit CMakeBuildDirChooser(QWidget* parent = 0);
-        ~CMakeBuildDirChooser();
+        ~CMakeBuildDirChooser() override;
 
         KDevelop::Path cmakeBinary() const;
         KDevelop::Path installPrefix() const;

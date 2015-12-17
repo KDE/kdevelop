@@ -41,11 +41,11 @@ class ManPageDocumentation : public KDevelop::IDocumentation
     Q_OBJECT
     public:
         ManPageDocumentation(const QString& name, const QUrl& url);
-        virtual QString name() const override { return m_name; }
-        virtual QString description() const override;
+        QString name() const override { return m_name; }
+        QString description() const override;
         virtual bool providesWidget() const;
-        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0) override;
-        virtual KDevelop::IDocumentationProvider* provider() const override;
+        QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0) override;
+        KDevelop::IDocumentationProvider* provider() const override;
         static ManPagePlugin* s_provider;
 
     private slots:
@@ -62,10 +62,10 @@ class ManPageHomeDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
-        virtual KDevelop::IDocumentationProvider* provider() const override;
-        virtual QString name() const override;
-        virtual QString description() const override { return name(); }
-        virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 ) override;
+        KDevelop::IDocumentationProvider* provider() const override;
+        QString name() const override;
+        QString description() const override { return name(); }
+        QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 ) override;
 };
 
 

@@ -37,18 +37,18 @@ class QMakeJob : public KDevelop::OutputJob
 
 public:
     QMakeJob( QString  srcDir, QString buildDir, QObject* parent = nullptr );
-    virtual void start() override;
-    virtual ~QMakeJob();
+    void start() override;
+    ~QMakeJob() override;
     void setQMakePath(const QString& path);
     void setInstallPrefix(const QString& prefix);
     void setBuildType(int comboboxSelectedIndex); // --> qmakebuilddirchooser.ui
     void setExtraArguments(const QString& args);
     
 
-    virtual QString errorString() const override;
+    QString errorString() const override;
 
 protected:
-    virtual bool doKill() override;
+    bool doKill() override;
 
 private slots:
   void processError( QProcess::ProcessError error );

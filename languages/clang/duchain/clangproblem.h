@@ -61,7 +61,7 @@ public:
      */
     ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit);
 
-    virtual KDevelop::IAssistant::Ptr solutionAssistant() const override;
+    KDevelop::IAssistant::Ptr solutionAssistant() const override;
 
     ClangFixits fixits() const;
     void setFixits(const ClangFixits& fixits);
@@ -86,9 +86,9 @@ public:
     ClangFixitAssistant(const ClangFixits& fixits);
     ClangFixitAssistant(const QString& title, const ClangFixits& fixits);
 
-    virtual QString title() const override;
+    QString title() const override;
 
-    virtual void createActions() override;
+    void createActions() override;
 
     ClangFixits fixits() const;
 
@@ -104,10 +104,10 @@ class KDEVCLANGDUCHAIN_EXPORT ClangFixitAction : public KDevelop::IAssistantActi
 public:
     ClangFixitAction(const ClangFixit& fixit);
 
-    virtual QString description() const override;
+    QString description() const override;
 
 public Q_SLOTS:
-    virtual void execute() override;
+    void execute() override;
 
 private:
     ClangFixit m_fixit;

@@ -44,9 +44,9 @@ class AdaptSignatureAssistant : public KDevelop::StaticAssistant
 public:
     AdaptSignatureAssistant(KDevelop::ILanguageSupport* supportedLanguage);
 
-    virtual QString title() const override;
-    virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString()) override;
-    virtual bool isUseful() const override;
+    QString title() const override;
+    void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString()) override;
+    bool isUseful() const override;
 
 private:
     ///Compare @param newSignature to m_oldSignature and put differences in oldPositions

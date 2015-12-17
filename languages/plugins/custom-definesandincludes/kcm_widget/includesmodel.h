@@ -29,11 +29,11 @@ public:
     IncludesModel( QObject* parent = 0 );
     void setIncludes( const QStringList&  );
     QStringList includes() const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
-    virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
     void addInclude( const QString& );
 private:
     QStringList m_includes;

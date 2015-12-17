@@ -223,7 +223,7 @@ public:
         : AbstractIncludeFileCompletionItem<ClangNavigationWidget>(include)
     {}
 
-    virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
+    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
     {
         auto document = view->document();
         auto range = word;

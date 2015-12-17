@@ -451,7 +451,7 @@ class QMLJS_EXPORT Reference: public Value
 {
 public:
     Reference(ValueOwner *valueOwner);
-    ~Reference();
+    ~Reference() override;
 
     ValueOwner *valueOwner() const;
 
@@ -496,7 +496,7 @@ class QMLJS_EXPORT ObjectValue: public Value
 {
 public:
     ObjectValue(ValueOwner *valueOwner, const QString &originId = QString());
-    ~ObjectValue();
+    ~ObjectValue() override;
 
     ValueOwner *valueOwner() const;
 
@@ -577,7 +577,7 @@ class QMLJS_EXPORT QmlEnumValue: public NumberValue
 {
 public:
     QmlEnumValue(const CppComponentValue *owner, int index);
-    ~QmlEnumValue();
+    ~QmlEnumValue() override;
 
     const QmlEnumValue *asQmlEnumValue() const override;
 
@@ -600,7 +600,7 @@ public:
                    const QString &moduleName, const LanguageUtils::ComponentVersion &componentVersion,
                    const LanguageUtils::ComponentVersion &importVersion, int metaObjectRevision,
                    ValueOwner *valueOwner, const QString &originId);
-    ~CppComponentValue();
+    ~CppComponentValue() override;
 
     const CppComponentValue *asCppComponentValue() const override;
 
@@ -650,7 +650,7 @@ class QMLJS_EXPORT FunctionValue: public ObjectValue
 {
 public:
     FunctionValue(ValueOwner *valueOwner);
-    ~FunctionValue();
+    ~FunctionValue() override;
 
     virtual const Value *returnValue() const;
 
@@ -681,7 +681,7 @@ class QMLJS_EXPORT Function: public FunctionValue
 {
 public:
     Function(ValueOwner *valueOwner);
-    ~Function();
+    ~Function() override;
 
     void addArgument(const Value *argument, const QString &name = QString());
     void setReturnValue(const Value *returnValue);
@@ -875,7 +875,7 @@ class QMLJS_EXPORT QmlPrototypeReference: public Reference
 {
 public:
     QmlPrototypeReference(AST::UiQualifiedId *qmlTypeName, const Document *doc, ValueOwner *valueOwner);
-    ~QmlPrototypeReference();
+    ~QmlPrototypeReference() override;
 
     const QmlPrototypeReference *asQmlPrototypeReference() const override;
 
@@ -896,7 +896,7 @@ class QMLJS_EXPORT ASTVariableReference: public Reference
 
 public:
     ASTVariableReference(AST::VariableDeclaration *ast, const Document *doc, ValueOwner *valueOwner);
-    ~ASTVariableReference();
+    ~ASTVariableReference() override;
     const ASTVariableReference *asAstVariableReference() const override;
     const AST::VariableDeclaration *ast() const;
 private:
@@ -913,7 +913,7 @@ class QMLJS_EXPORT ASTFunctionValue: public FunctionValue
 
 public:
     ASTFunctionValue(AST::FunctionExpression *ast, const Document *doc, ValueOwner *valueOwner);
-    ~ASTFunctionValue();
+    ~ASTFunctionValue() override;
 
     AST::FunctionExpression *ast() const;
 
@@ -933,7 +933,7 @@ class QMLJS_EXPORT ASTPropertyReference: public Reference
 
 public:
     ASTPropertyReference(AST::UiPublicMember *ast, const Document *doc, ValueOwner *valueOwner);
-    ~ASTPropertyReference();
+    ~ASTPropertyReference() override;
 
     const ASTPropertyReference *asAstPropertyReference() const override;
 
@@ -955,7 +955,7 @@ class QMLJS_EXPORT ASTSignal: public FunctionValue
 
 public:
     ASTSignal(AST::UiPublicMember *ast, const Document *doc, ValueOwner *valueOwner);
-    ~ASTSignal();
+    ~ASTSignal() override;
 
     const ASTSignal *asAstSignal() const override;
 
@@ -986,7 +986,7 @@ public:
                    AST::UiObjectInitializer *initializer,
                    const Document *doc,
                    ValueOwner *valueOwner);
-    ~ASTObjectValue();
+    ~ASTObjectValue() override;
 
     const ASTObjectValue *asAstObjectValue() const override;
 
@@ -1062,7 +1062,7 @@ class QMLJS_EXPORT TypeScope: public ObjectValue
 public:
     TypeScope(const Imports *imports, ValueOwner *valueOwner);
 
-    virtual const Value *lookupMember(const QString &name, const Context *context,
+    const Value *lookupMember(const QString &name, const Context *context,
                                       const ObjectValue **foundInObject = 0,
                                       bool examinePrototypes = true) const override;
     using ObjectValue::lookupMember;
@@ -1077,7 +1077,7 @@ class QMLJS_EXPORT JSImportScope: public ObjectValue
 public:
     JSImportScope(const Imports *imports, ValueOwner *valueOwner);
 
-    virtual const Value *lookupMember(const QString &name, const Context *context,
+    const Value *lookupMember(const QString &name, const Context *context,
                                       const ObjectValue **foundInObject = 0,
                                       bool examinePrototypes = true) const override;
     using ObjectValue::lookupMember;
@@ -1136,7 +1136,7 @@ class QMLJS_EXPORT CustomImportsProvider : public QObject
     Q_OBJECT
 public:
     explicit CustomImportsProvider(QObject *parent = 0) : QObject(parent) {}
-    virtual ~CustomImportsProvider() {}
+    ~CustomImportsProvider() override {}
     virtual QList<Import> imports(ValueOwner *valueOwner, const Document *context) const = 0;
 };
 

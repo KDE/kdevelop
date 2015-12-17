@@ -42,12 +42,12 @@ class QMakeBuilderPreferences : public KDevelop::ConfigPage
 
 public:
     explicit QMakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = nullptr);
-    ~QMakeBuilderPreferences();
+    ~QMakeBuilderPreferences() override;
 
 public slots:
-    virtual void apply() override;
-    virtual void reset() override;
-    virtual QString name() const override;
+    void apply() override;
+    void reset() override;
+    QString name() const override;
 
     void loadOtherConfig(const QString &config);
     void addBuildConfig();

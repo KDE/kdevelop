@@ -51,7 +51,7 @@ class GDBOutputWidget : public QWidget
 
 public:
     GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent=0 );
-    ~GDBOutputWidget();
+    ~GDBOutputWidget() override;
 
     void savePartialProjectSession();
     void restorePartialProjectSession();
@@ -78,8 +78,8 @@ private Q_SLOTS:
     void updateColors();
 
 protected:
-    virtual void focusInEvent(QFocusEvent *e) override;
-    virtual void contextMenuEvent(QContextMenuEvent* e) override;
+    void focusInEvent(QFocusEvent *e) override;
+    void contextMenuEvent(QContextMenuEvent* e) override;
 
 Q_SIGNALS:
     void requestRaise();
@@ -149,7 +149,7 @@ public:
     OutputTextEdit(GDBOutputWidget* parent);
 
 protected:
-    virtual void contextMenuEvent(QContextMenuEvent* event) override;
+    void contextMenuEvent(QContextMenuEvent* event) override;
 };
 
 }

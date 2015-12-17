@@ -34,16 +34,16 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
     Q_INTERFACES( KDevelop::IDocumentationProviderProvider )
     public:
         QtHelpPlugin(QObject *parent, const QVariantList & args);
-        ~QtHelpPlugin();
+        ~QtHelpPlugin() override;
 
         static QtHelpPlugin *self() { return s_plugin; }
 
-        virtual QList<KDevelop::IDocumentationProvider*> providers() override;
+        QList<KDevelop::IDocumentationProvider*> providers() override;
         QList<QtHelpProvider*> qtHelpProviderLoaded();
         bool qtHelpQtDocLoaded();
 
-        virtual int configPages() const override;
-        virtual KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
+        int configPages() const override;
+        KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
 
     public slots:
         void readConfig();

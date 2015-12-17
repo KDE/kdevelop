@@ -34,7 +34,7 @@ class ParseTest : public QObject
         Q_OBJECT
     public:
         ParseTest( QObject* parent = nullptr );
-        ~ParseTest();
+        ~ParseTest() override;
     private slots:
         void init();
         void cleanup();

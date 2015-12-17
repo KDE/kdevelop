@@ -31,7 +31,7 @@ class LexerTest : public QObject
         Q_OBJECT
     public:
         LexerTest( QObject* parent = nullptr );
-        ~LexerTest();
+        ~LexerTest() override;
     private slots:
         void init();
         void cleanup();

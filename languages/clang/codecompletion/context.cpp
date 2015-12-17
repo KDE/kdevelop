@@ -116,7 +116,7 @@ public:
     {
     }
 
-    virtual ~CompletionItem() = default;
+    ~CompletionItem() override = default;
 
     QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* /*model*/) const override
     {

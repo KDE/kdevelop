@@ -39,16 +39,16 @@ class QMakeBuilder : public KDevelop::IPlugin, public IQMakeBuilder
 
 public:
     explicit QMakeBuilder(QObject *parent = nullptr, const QVariantList &args = QVariantList());
-    virtual ~QMakeBuilder();
+    ~QMakeBuilder() override;
 
-    virtual KJob* build(KDevelop::ProjectBaseItem *dom) override;
-    virtual KJob* clean(KDevelop::ProjectBaseItem *dom) override;
-    virtual KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl& /* prefix */) override;
-    virtual KJob* configure(KDevelop::IProject *dom) override;
-    virtual KJob* prune(KDevelop::IProject *dom) override;
+    KJob* build(KDevelop::ProjectBaseItem *dom) override;
+    KJob* clean(KDevelop::ProjectBaseItem *dom) override;
+    KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl& /* prefix */) override;
+    KJob* configure(KDevelop::IProject *dom) override;
+    KJob* prune(KDevelop::IProject *dom) override;
 
-    virtual int perProjectConfigPages() const override;
-    virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+    int perProjectConfigPages() const override;
+    KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 
     QList<IProjectBuilder*> additionalBuilderPlugins(KDevelop::IProject* project) const override;
 

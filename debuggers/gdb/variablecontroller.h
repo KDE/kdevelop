@@ -48,13 +48,13 @@ class VariableController : public KDevelop::IVariableController
 public:
     VariableController(DebugSession* parent);
 
-    virtual Variable* createVariable(TreeModel* model, TreeItem* parent, 
+    Variable* createVariable(TreeModel* model, TreeItem* parent, 
                                      const QString& expression,
                                      const QString& display = "") override;
-    virtual KTextEditor::Range expressionRangeUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) override;
-    virtual void addWatch(KDevelop::Variable* variable) override;
-    virtual void addWatchpoint(KDevelop::Variable* variable) override;
-    virtual void update() override;
+    KTextEditor::Range expressionRangeUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) override;
+    void addWatch(KDevelop::Variable* variable) override;
+    void addWatchpoint(KDevelop::Variable* variable) override;
+    void update() override;
 
 private slots:
     void programStopped(const GDBMI::AsyncRecord &r);

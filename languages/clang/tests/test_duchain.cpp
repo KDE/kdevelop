@@ -57,18 +57,18 @@ using namespace KDevelop;
 class TestEnvironmentProvider final : public IDefinesAndIncludesManager::BackgroundProvider
 {
 public:
-    virtual ~TestEnvironmentProvider() = default;
-    virtual QHash< QString, QString > definesInBackground(const QString& /*path*/) const override
+    ~TestEnvironmentProvider() override = default;
+    QHash< QString, QString > definesInBackground(const QString& /*path*/) const override
     {
         return defines;
     }
 
-    virtual Path::List includesInBackground(const QString& /*path*/) const override
+    Path::List includesInBackground(const QString& /*path*/) const override
     {
         return includes;
     }
 
-    virtual IDefinesAndIncludesManager::Type type() const override
+    IDefinesAndIncludesManager::Type type() const override
     {
         return IDefinesAndIncludesManager::UserDefined;
     }

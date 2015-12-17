@@ -48,12 +48,12 @@ class NinjaJob : public KDevelop::OutputExecuteJob
 
         KDevelop::ProjectBaseItem* item() const;
 
-        virtual QUrl workingDirectory() const override;
-        virtual QStringList privilegedExecutionCommand() const override;
+        QUrl workingDirectory() const override;
+        QStringList privilegedExecutionCommand() const override;
 
     protected slots:
-        virtual void postProcessStdout( const QStringList& lines ) override;
-        virtual void postProcessStderr( const QStringList& lines ) override;
+        void postProcessStdout( const QStringList& lines ) override;
+        void postProcessStderr( const QStringList& lines ) override;
 
     private slots:
         void emitProjectBuilderSignal(KJob* job);

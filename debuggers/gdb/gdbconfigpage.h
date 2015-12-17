@@ -48,7 +48,7 @@ class DebugSession;
 class GdbConfigPageFactory : public KDevelop::LaunchConfigurationPageFactory
 {
 public:
-    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
+    KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
 };
 
 class GdbConfigPage : public KDevelop::LaunchConfigurationPage
@@ -56,11 +56,11 @@ class GdbConfigPage : public KDevelop::LaunchConfigurationPage
 Q_OBJECT
 public:
     GdbConfigPage( QWidget* parent = 0 );
-    virtual ~GdbConfigPage();
-    virtual QIcon icon() const override;
-    virtual void loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* = 0) override;
-    virtual void saveToConfiguration(KConfigGroup, KDevelop::IProject* = 0 ) const override;
-    virtual QString title() const override;
+    ~GdbConfigPage() override;
+    QIcon icon() const override;
+    void loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* = 0) override;
+    void saveToConfiguration(KConfigGroup, KDevelop::IProject* = 0 ) const override;
+    QString title() const override;
 private:
     Ui::GdbConfigPage* ui;
 };
@@ -69,12 +69,12 @@ class GdbLauncher : public KDevelop::ILauncher
 {
 public:
     GdbLauncher( GDBDebugger::CppDebuggerPlugin* plugin, IExecutePlugin* execute );
-    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
-    virtual QString description() const override;
-    virtual QString id() override;
-    virtual QString name() const override;
-    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
-    virtual QStringList supportedModes() const override;
+    QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
+    QString description() const override;
+    QString id() override;
+    QString name() const override;
+    KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
+    QStringList supportedModes() const override;
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
     GDBDebugger::CppDebuggerPlugin* m_plugin;

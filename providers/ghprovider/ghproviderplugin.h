@@ -43,13 +43,13 @@ public:
     explicit ProviderPlugin(QObject *parent, const QList<QVariant> &args);
 
     /// Destructor.
-    virtual ~ProviderPlugin();
+    ~ProviderPlugin() override;
 
     /// @returns the name of this plugin.
-    virtual QString name() const override;
+    QString name() const override;
 
     /// @returns the main widget for this plugin.
-    virtual KDevelop::IProjectProviderWidget * providerWidget(QWidget *parent) override;
+    KDevelop::IProjectProviderWidget * providerWidget(QWidget *parent) override;
 };
 
 } // End of namespace gh

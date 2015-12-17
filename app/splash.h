@@ -33,7 +33,7 @@ class KDevSplashScreen : public QQuickView
     Q_OBJECT
 public:
     explicit KDevSplashScreen();
-    virtual ~KDevSplashScreen();
+    ~KDevSplashScreen() override;
 
 public slots:
     void progress(int progress);

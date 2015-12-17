@@ -38,7 +38,7 @@ class QMakeBuildDirChooserDialog : public QDialog
     
 public:
     explicit QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget *parent = nullptr);
-    virtual ~QMakeBuildDirChooserDialog();
+    ~QMakeBuildDirChooserDialog() override;
 
     void loadConfig();
     void saveConfig();
@@ -46,7 +46,7 @@ public:
     QString buildDir() const;
 
 public slots:
-    virtual void accept() override;
+    void accept() override;
 
 private slots:
     void validate();

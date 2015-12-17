@@ -71,7 +71,7 @@ public:
                                         Declaration* decl,
                                         const QString& key,
                                         const QString& value);
-    virtual ~PropertyPreviewWidget();
+    ~PropertyPreviewWidget() override;
 
 private:
     // private because you should use the static constructIfPossible function to create instances,
