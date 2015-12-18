@@ -35,16 +35,13 @@ NavigationWidget::NavigationWidget(KDevelop::Declaration* decl,
                                    const QString& htmlSuffix,
                                    KDevelop::AbstractNavigationWidget::DisplayHints hints)
 {
-    m_topContext = TopDUContextPointer(topContext);
-    m_startContext = NavigationContextPointer(new DeclarationNavigationContext(
+    auto context = new DeclarationNavigationContext(
         DeclarationPointer(decl),
-        m_topContext,
-        nullptr
-    ));
-
-    m_startContext->setPrefixSuffix(htmlPrefix, htmlSuffix);
-    m_hints = hints;
-    setContext(m_startContext);
+        TopDUContextPointer(topContext)
+    );
+    context->setPrefixSuffix(htmlPrefix, htmlSuffix);
+    setContext(NavigationContextPointer(context));
+    setDisplayHints(hints);
 }
 
 NavigationWidget::NavigationWidget(const KDevelop::IncludeItem& includeItem,
@@ -55,12 +52,12 @@ NavigationWidget::NavigationWidget(const KDevelop::IncludeItem& includeItem,
     : AbstractNavigationWidget()
 {
     setDisplayHints(hints);
-    m_topContext = topContext;
-
     initBrowser(200);
 
-    m_startContext = NavigationContextPointer(new KDevelop::AbstractIncludeNavigationContext(includeItem, m_topContext, StandardParsingEnvironment));
-    m_startContext->setPrefixSuffix(htmlPrefix, htmlSuffix);
-    setContext(m_startContext);
+    auto context = new AbstractIncludeNavigationContext(
+        includeItem, topContext,
+        StandardParsingEnvironment);
+    context->setPrefixSuffix(htmlPrefix, htmlSuffix);
+    setContext(NavigationContextPointer(context));
 }
 }

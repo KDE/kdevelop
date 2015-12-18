@@ -55,7 +55,7 @@ QString MacroNavigationContext::html(bool shorten)
     clear();
 
     modifyHtml() += QLatin1String("<html><body><p>") + fontSizePrefix(shorten);
-    addExternalHtml(m_prefix);
+    addExternalHtml(prefix());
 
     QStringList parameterList;
     FOREACH_FUNCTION(const auto& parameter, m_macro->parameters) {

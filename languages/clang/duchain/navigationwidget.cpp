@@ -34,10 +34,7 @@ using namespace KDevelop;
 class DeclarationNavigationContext : public AbstractDeclarationNavigationContext
 {
 public:
-    explicit DeclarationNavigationContext(const DeclarationPointer& decl, AbstractNavigationContext* previousContext = nullptr)
-        : AbstractDeclarationNavigationContext(decl, {}, previousContext)
-    {
-    }
+    using AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext;
 
     void htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType) override
     {
@@ -91,15 +88,11 @@ ClangNavigationWidget::ClangNavigationWidget(const DeclarationPointer& declarati
     if (auto macro = declaration.dynamicCast<MacroDefinition>()) {
         initBrowser(200);
 
-        //The first context is registered so it is kept alive by the shared-pointer mechanism
-        m_startContext = NavigationContextPointer(new MacroNavigationContext(macro));
-        setContext( m_startContext );
+        setContext(NavigationContextPointer(new MacroNavigationContext(macro)));
     } else {
         initBrowser(400);
 
-        //The first context is registered so it is kept alive by the shared-pointer mechanism
-        m_startContext = NavigationContextPointer(new DeclarationNavigationContext(declaration));
-        setContext( m_startContext );
+        setContext(NavigationContextPointer(new DeclarationNavigationContext(declaration, {})));
     }
 }
 
@@ -110,9 +103,7 @@ ClangNavigationWidget::ClangNavigationWidget(const MacroDefinition::Ptr& macro, 
     setDisplayHints(hints);
     initBrowser(400);
 
-    //The first context is registered so it is kept alive by the shared-pointer mechanism
-    m_startContext = NavigationContextPointer(new MacroNavigationContext(macro, expansionLocation));
-    setContext(m_startContext);
+    setContext(NavigationContextPointer(new MacroNavigationContext(macro, expansionLocation)));
 }
 
 ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext,
@@ -121,17 +112,16 @@ ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, KDe
     : AbstractNavigationWidget()
 {
     setDisplayHints(hints);
-    m_topContext = topContext;
-
     initBrowser(200);
 
     //The first context is registered so it is kept alive by the shared-pointer mechanism
-    m_startContext = NavigationContextPointer(new IncludeNavigationContext(includeItem, m_topContext));
-    m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );
-    setContext( m_startContext );
+    auto context = new IncludeNavigationContext(includeItem, topContext);
+    context->setPrefixSuffix(htmlPrefix, htmlSuffix);
+    setContext(NavigationContextPointer(context));
 }
 
-QString ClangNavigationWidget::shortDescription(const IncludeItem& includeItem) {
-  NavigationContextPointer ctx(new IncludeNavigationContext(includeItem, {}));
-  return ctx->html(true);
+QString ClangNavigationWidget::shortDescription(const IncludeItem& includeItem)
+{
+  IncludeNavigationContext ctx(includeItem, {});
+  return ctx.html(true);
 }

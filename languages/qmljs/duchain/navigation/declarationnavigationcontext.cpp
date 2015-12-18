@@ -32,20 +32,12 @@ using namespace KDevelop;
 
 namespace QmlJS {
 
-DeclarationNavigationContext::DeclarationNavigationContext(DeclarationPointer decl,
-                                                                  KDevelop::TopDUContextPointer topContext,
-                                                                  AbstractNavigationContext* previousContext)
-: AbstractDeclarationNavigationContext(decl, topContext, previousContext)
-{
-
-}
-
 void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType)
 {
     ClassDeclaration* classDecl;
     Declaration* decl;
 
-    if ((decl = idType->declaration(m_topContext.data())) &&
+    if ((decl = idType->declaration(topContext().data())) &&
         (classDecl = dynamic_cast<ClassDeclaration*>(decl)) &&
         classDecl->qualifiedIdentifier().isEmpty() &&
         classDecl->baseClassesSize() > 0) {

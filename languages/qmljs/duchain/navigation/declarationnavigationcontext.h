@@ -30,9 +30,7 @@ namespace QmlJS {
 class DeclarationNavigationContext : public KDevelop::AbstractDeclarationNavigationContext
 {
 public:
-    DeclarationNavigationContext(KDevelop::DeclarationPointer decl,
-                                 KDevelop::TopDUContextPointer topContext,
-                                 KDevelop::AbstractNavigationContext* previousContext = nullptr);
+    using KDevelop::AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext;
 
 protected:
     void htmlIdentifiedType(KDevelop::AbstractType::Ptr type, const KDevelop::IdentifiedType* idType) override;
