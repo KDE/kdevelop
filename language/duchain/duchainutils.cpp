@@ -474,8 +474,7 @@ QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
   return ret;
 }
 
-///For a class, returns all classes that inherit it
-QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
+static QList<Declaration*> getInheritersInternal(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
 {
   QList<Declaration*> ret;
   
@@ -513,7 +512,7 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& m
       ++maxAllowedSteps;
       
       if(allDeclarations[a].data() && allDeclarations[a].data() != decl) {
-        ret += getInheriters(allDeclarations[a].data(), maxAllowedSteps, false);
+        ret += getInheritersInternal(allDeclarations[a].data(), maxAllowedSteps, false);
       }
       
       if(maxAllowedSteps == 0)
@@ -522,6 +521,17 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& m
   }
   
   return ret;
+}
+
+QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
+{
+  auto inheriters = getInheritersInternal(decl, maxAllowedSteps, collectVersions);
+
+  // remove duplicates
+  std::sort(inheriters.begin(), inheriters.end());
+  inheriters.erase(std::unique(inheriters.begin(), inheriters.end()), inheriters.end());
+
+  return inheriters;
 }
 
 QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps) {
