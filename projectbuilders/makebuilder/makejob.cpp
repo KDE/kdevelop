@@ -242,5 +242,5 @@ QString MakeJob::environmentProfile() const
 
 bool MakeJob::isNMake(const QString& makeBin)
 {
-    return QFileInfo(makeBin).baseName().compare(QStringLiteral("nmake"), Qt::CaseInsensitive);
+    return !QFileInfo(makeBin).baseName().compare(QStringLiteral("nmake"), Qt::CaseInsensitive);
 }
