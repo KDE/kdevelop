@@ -1,7 +1,7 @@
 find_package(Clang 3.5 REQUIRED)
 
 add_definitions(${LLVM_CFLAGS})
-include_directories(${CLANG_INCLUDE_DIR})
+include_directories(${CLANG_INCLUDE_DIRS})
 
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
