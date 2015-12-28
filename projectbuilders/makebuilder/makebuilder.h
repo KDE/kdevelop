@@ -46,7 +46,7 @@ class MakeBuilder: public KDevelop::IPlugin, public IMakeBuilder
     Q_INTERFACES( KDevelop::IProjectBuilder )
 public:
     explicit MakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
-    virtual ~MakeBuilder();
+    ~MakeBuilder() override;
 
     /**
      * If argument is ProjectItem, invoke "make" in IBuildSystemManager::buildDirectory(), with
@@ -65,18 +65,18 @@ public:
      *
      * @TODO: Work on any project item, for fileitems you may find a target.
      */
-    virtual KJob* build(KDevelop::ProjectBaseItem *dom) override;
-    virtual KJob* clean(KDevelop::ProjectBaseItem *dom) override;
-    virtual KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath) override;
+    KJob* build(KDevelop::ProjectBaseItem *dom) override;
+    KJob* clean(KDevelop::ProjectBaseItem *dom) override;
+    KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath) override;
 
-    virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname ) override;
-    virtual KJob* executeMakeTargets(KDevelop::ProjectBaseItem* item, const QStringList& targetnames,
+    KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname ) override;
+    KJob* executeMakeTargets(KDevelop::ProjectBaseItem* item, const QStringList& targetnames,
                                      const MakeVariables& variables = MakeVariables() ) override;
     KJob* runMake( KDevelop::ProjectBaseItem*, MakeJob::CommandType, const QStringList& = QStringList(),
                    const MakeVariables& variables = MakeVariables() );
 
-    virtual int perProjectConfigPages() const override;
-    virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+    int perProjectConfigPages() const override;
+    KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 
 Q_SIGNALS:
     void built( KDevelop::ProjectBaseItem* );

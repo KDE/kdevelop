@@ -67,17 +67,17 @@ public:
     friend class DebugSession;
 
     CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
-    ~CppDebuggerPlugin();
+    ~CppDebuggerPlugin() override;
 
-    virtual void unload() override;
+    void unload() override;
     
-    virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
+    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
     
     DebugSession *createSession();
 
 public:
     //BEGIN IStatus
-    virtual QString statusName() const override;
+    QString statusName() const override;
 
 Q_SIGNALS:
     void clearMessage(KDevelop::IStatus*) override;
@@ -124,7 +124,7 @@ Q_SIGNALS:
     void jumpTo(const QUrl &url, int line);
 
 protected:
-    virtual void initializeGuiState() override;
+    void initializeGuiState() override;
 
 private:
     KConfigGroup config() const;

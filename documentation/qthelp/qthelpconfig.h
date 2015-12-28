@@ -41,12 +41,12 @@ public:
 
     public:
       explicit QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent = 0);
-      virtual ~QtHelpConfig();
+      ~QtHelpConfig() override;
 
       bool checkNamespace(const QString &filename, QTreeWidgetItem* modifiedItem);
 
-      virtual QString name() const override;
-      virtual QIcon icon() const override;
+      QString name() const override;
+      QIcon icon() const override;
 
     private slots:
       void add();
@@ -60,9 +60,9 @@ public:
       void searchDirChanged();
 
     public Q_SLOTS:
-      virtual void apply() override;
-      virtual void defaults() override;
-      virtual void reset() override;
+      void apply() override;
+      void defaults() override;
+      void reset() override;
     private:
       Ui::QtHelpConfigUI* m_configWidget;
 };

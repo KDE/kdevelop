@@ -33,17 +33,17 @@ class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuild
     Q_INTERFACES( KDevelop::IProjectBuilder )
     public:
         KDevNinjaBuilderPlugin(QObject* parent = 0, const QVariantList& args = QVariantList());
-        virtual bool hasError() const override;
+        bool hasError() const override;
         
-        virtual KJob* build(KDevelop::ProjectBaseItem* item) override;
-        virtual KJob* clean(KDevelop::ProjectBaseItem* item) override;
-        virtual KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath) override;
+        KJob* build(KDevelop::ProjectBaseItem* item) override;
+        KJob* clean(KDevelop::ProjectBaseItem* item) override;
+        KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath) override;
         KJob* install(KDevelop::ProjectBaseItem* item);
         
         NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal);
 
-        virtual int perProjectConfigPages() const override;
-        virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+        int perProjectConfigPages() const override;
+        KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 
     Q_SIGNALS:
         void built( KDevelop::ProjectBaseItem* item);

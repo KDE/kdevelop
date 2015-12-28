@@ -33,7 +33,7 @@ class TestDUChain : public QObject
 {
     Q_OBJECT
 public:
-    ~TestDUChain();
+    ~TestDUChain() override;
 
 private slots:
     void initTestCase();

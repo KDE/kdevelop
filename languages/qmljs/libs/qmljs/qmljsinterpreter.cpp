@@ -108,27 +108,27 @@ public:
 
     const Value *value() const { return m_value; }
 
-    virtual bool processProperty(const QString &name, const Value *value, const PropertyInfo &)
+    bool processProperty(const QString &name, const Value *value, const PropertyInfo &) override
     {
         return process(name, value);
     }
 
-    virtual bool processEnumerator(const QString &name, const Value *value)
+    bool processEnumerator(const QString &name, const Value *value) override
     {
         return process(name, value);
     }
 
-    virtual bool processSignal(const QString &name, const Value *value)
+    bool processSignal(const QString &name, const Value *value) override
     {
         return process(name, value);
     }
 
-    virtual bool processSlot(const QString &name, const Value *value)
+    bool processSlot(const QString &name, const Value *value) override
     {
         return process(name, value);
     }
 
-    virtual bool processGeneratedSlot(const QString &name, const Value *value)
+    bool processGeneratedSlot(const QString &name, const Value *value) override
     {
         return process(name, value);
     }
@@ -1985,7 +1985,7 @@ public:
     }
 
 protected:
-    bool visit(ArrayMemberExpression *ast)
+    bool visit(ArrayMemberExpression *ast) override
     {
         if (IdentifierExpression *idExp = cast<IdentifierExpression *>(ast->base)) {
             if (idExp->name == QLatin1String("arguments"))
@@ -1995,7 +1995,7 @@ protected:
     }
 
     // don't go into nested functions
-    bool visit(FunctionBody *) { return false; }
+    bool visit(FunctionBody *) override { return false; }
     using Visitor::visit;
 
 };
@@ -2560,31 +2560,31 @@ class MemberDumper: public MemberProcessor
 public:
     MemberDumper() {}
 
-    virtual bool processProperty(const QString &name, const Value *, const PropertyInfo &pInfo)
+    bool processProperty(const QString &name, const Value *, const PropertyInfo &pInfo) override
     {
         qCDebug(qmljsLog) << "property: " << name << " flags:" << pInfo.toString();
         return true;
     }
 
-    virtual bool processEnumerator(const QString &name, const Value *)
+    bool processEnumerator(const QString &name, const Value *) override
     {
         qCDebug(qmljsLog) << "enumerator: " << name;
         return true;
     }
 
-    virtual bool processSignal(const QString &name, const Value *)
+    bool processSignal(const QString &name, const Value *) override
     {
         qCDebug(qmljsLog) << "signal: " << name;
         return true;
     }
 
-    virtual bool processSlot(const QString &name, const Value *)
+    bool processSlot(const QString &name, const Value *) override
     {
         qCDebug(qmljsLog) << "slot: " << name;
         return true;
     }
 
-    virtual bool processGeneratedSlot(const QString &name, const Value *)
+    bool processGeneratedSlot(const QString &name, const Value *) override
     {
         qCDebug(qmljsLog) << "generated slot: " << name;
         return true;

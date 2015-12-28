@@ -45,13 +45,13 @@ class PlasmoidLauncher : public KDevelop::ILauncher
 {
 public:
     PlasmoidLauncher( ExecutePlasmoidPlugin* plugin );
-    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
-    virtual QString description() const override;
-    virtual QString id() override;
-    virtual QString name() const override;
-    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
+    QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
+    QString description() const override;
+    QString id() override;
+    QString name() const override;
+    KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
     virtual KJob* dependencies(KDevelop::ILaunchConfiguration* cfg);
-    virtual QStringList supportedModes() const override;
+    QStringList supportedModes() const override;
     
     static KJob* calculateDependencies(KDevelop::ILaunchConfiguration* cfg);
 private:
@@ -62,7 +62,7 @@ class PlasmoidPageFactory : public KDevelop::LaunchConfigurationPageFactory
 {
 public:
     PlasmoidPageFactory();
-    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
+    KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
 };
 
 /**
@@ -75,19 +75,19 @@ class PlasmoidExecutionConfigType : public KDevelop::LaunchConfigurationType
 Q_OBJECT
 public:
     PlasmoidExecutionConfigType();
-    virtual ~PlasmoidExecutionConfigType();
+    ~PlasmoidExecutionConfigType() override;
 
     static QString typeId();
     QString id() const override { return typeId(); }
     QString name() const override;
     QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const override;  
     QIcon icon() const override;
-    virtual bool canLaunch( const QUrl &file ) const override;
-    virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const override;
-    virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const override;
-    virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const override;
+    bool canLaunch( const QUrl &file ) const override;
+    bool canLaunch(KDevelop::ProjectBaseItem* item) const override;
+    void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const override;
+    void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const override;
     
-    virtual QMenu* launcherSuggestions() override;
+    QMenu* launcherSuggestions() override;
 
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;

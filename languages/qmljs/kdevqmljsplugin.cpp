@@ -54,7 +54,7 @@ class ModelManager: public QmlJS::ModelManagerInterface
 
 public:
     explicit ModelManager(QObject *parent = nullptr);
-    ~ModelManager();
+    ~ModelManager() override;
 };
 
 ModelManager::ModelManager(QObject* parent)

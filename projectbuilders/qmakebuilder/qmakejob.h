@@ -50,7 +50,7 @@ public:
 
     void setProject(KDevelop::IProject* project);
     
-    virtual void start() override;
+    void start() override;
 
     QUrl workingDirectory() const override;
     QStringList commandLine() const override;

@@ -63,7 +63,7 @@ public:
 
     bool checkQtHelpFile();
 
-    virtual void accept() override;
+    void accept() override;
 
 private:
     QTreeWidgetItem* m_modifiedItem;

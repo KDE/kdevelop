@@ -37,17 +37,17 @@ class CustomScriptPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFor
 
 	public:
 		explicit CustomScriptPlugin(QObject *parent, const QVariantList & = QVariantList());
-		~CustomScriptPlugin();
+		~CustomScriptPlugin() override;
 
-		virtual QString name() override;
-		virtual QString caption()  override;
-		virtual QString description() override;
+		QString name() override;
+		QString caption()  override;
+		QString description() override;
 
 		/** Formats using the current style.
 		*/
-		virtual QString formatSource(const QString &text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
+		QString formatSource(const QString &text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
 
-		virtual QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
+		QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
 											  const QUrl &url,
 											  const QMimeType& mime,
 											  const QString& leftContext = QString(),
@@ -55,19 +55,19 @@ class CustomScriptPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFor
 		
 		/** \return A map of predefined styles (a key and a caption for each type)
 		*/
-		virtual QList<KDevelop::SourceFormatterStyle> predefinedStyles() override;
+		QList<KDevelop::SourceFormatterStyle> predefinedStyles() override;
 
 		/** \return The widget to edit a style.
 		*/
-		virtual KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) override;
+		KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) override;
 
 		/** \return The text used in the config dialog to preview the current style.
 		*/
-		virtual QString previewText(const KDevelop::SourceFormatterStyle& style, const QMimeType& mime) override;
+		QString previewText(const KDevelop::SourceFormatterStyle& style, const QMimeType& mime) override;
 
 		/** \return The indentation of the currently selected style.
 		*/
-		virtual Indentation indentation(const QUrl &url) override;
+		Indentation indentation(const QUrl &url) override;
 
 	private:
 		QStringList computeIndentationFromSample(const QUrl &url);
@@ -82,9 +82,9 @@ Q_OBJECT
 public:
 	CustomScriptPreferences() ;
 		
-    virtual void load ( const KDevelop::SourceFormatterStyle& style ) override ;
+    void load ( const KDevelop::SourceFormatterStyle& style ) override ;
     
-    virtual QString save() override ;
+    QString save() override ;
 private:
 	QVBoxLayout* m_vLayout;
 	QLabel* m_captionLabel;

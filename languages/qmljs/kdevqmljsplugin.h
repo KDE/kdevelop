@@ -31,16 +31,16 @@ class KDevQmlJsPlugin : public KDevelop::IPlugin, public KDevelop::ILanguageSupp
     Q_INTERFACES( KDevelop::ILanguageSupport )
 public:
     explicit KDevQmlJsPlugin( QObject* parent, const QVariantList& args = QVariantList() );
-    virtual ~KDevQmlJsPlugin();
+    ~KDevQmlJsPlugin() override;
 
-    virtual KDevelop::ParseJob* createParseJob(const KDevelop::IndexedString& url) override;
-    virtual QString name() const override;
+    KDevelop::ParseJob* createParseJob(const KDevelop::IndexedString& url) override;
+    QString name() const override;
 
-    virtual KDevelop::ICodeHighlighting* codeHighlighting() const override;
-    virtual KDevelop::BasicRefactoring* refactoring() const override;
+    KDevelop::ICodeHighlighting* codeHighlighting() const override;
+    KDevelop::BasicRefactoring* refactoring() const override;
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
-    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    QWidget* specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
 
 private:
     KDevelop::ICodeHighlighting* m_highlighting;

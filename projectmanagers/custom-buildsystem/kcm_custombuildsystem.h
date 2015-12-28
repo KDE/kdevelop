@@ -35,15 +35,15 @@ class CustomBuildSystemKCModule : public ProjectConfigPage<CustomBuildSystemSett
 Q_OBJECT
 public:
     CustomBuildSystemKCModule(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
-    virtual ~CustomBuildSystemKCModule();
+    ~CustomBuildSystemKCModule() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 public Q_SLOTS:
-    virtual void defaults() override;
-    virtual void reset() override;
-    virtual void apply() override;
+    void defaults() override;
+    void reset() override;
+    void apply() override;
 private:
     class CustomBuildSystemConfigWidget* configWidget;
 };

@@ -48,20 +48,23 @@ class CMakeBuilder : public KDevelop::IPlugin, public KDevelop::IProjectBuilder
 
 public:
     explicit CMakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
-    virtual ~CMakeBuilder();
+    ~CMakeBuilder() override;
 
-    virtual KJob* build(KDevelop::ProjectBaseItem *dom) override;
-    virtual KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPrefix) override;
-    virtual KJob* clean(KDevelop::ProjectBaseItem *dom) override;
-    virtual KJob* configure(KDevelop::IProject*) override;
-    virtual KJob* prune(KDevelop::IProject*) override;
+    KJob* build(KDevelop::ProjectBaseItem *dom) override;
+    KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPrefix) override;
+    KJob* clean(KDevelop::ProjectBaseItem *dom) override;
+    KJob* configure(KDevelop::IProject*) override;
+    KJob* prune(KDevelop::IProject*) override;
 
-	virtual QList< KDevelop::IProjectBuilder* > additionalBuilderPlugins( KDevelop::IProject* project ) const override;
+	QList< KDevelop::IProjectBuilder* > additionalBuilderPlugins( KDevelop::IProject* project ) const override;
 
 //     bool updateConfig( KDevelop::IProject* project );
 
-    virtual int configPages() const override;
-    virtual KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
+    static QStringList supportedGenerators();
+    static QString defaultGenerator();
+
+    int configPages() const override;
+    KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
 
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);

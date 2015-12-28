@@ -10,7 +10,7 @@
 if( LIBKASTEN_INCLUDE_DIR AND LIBKASTEN_LIBRARIES AND LIBKASTEN_VERSION )
     # Already in cache, be silent
     set( Kasten_FIND_QUIETLY TRUE )
-endif( LIBKASTEN_INCLUDE_DIR AND LIBKASTEN_LIBRARIES AND LIBKASTEN_VERSION )
+endif()
 
 if( LIBKASTEN_FIND_VERSION EQUAL 1 OR LIBKASTEN_FIND_VERSION EQUAL 2)
     set( KV ${LIBKASTEN_FIND_VERSION} )
@@ -76,8 +76,8 @@ if( LIBKASTEN_FIND_VERSION EQUAL 1 OR LIBKASTEN_FIND_VERSION EQUAL 2)
             ${KASTEN1OR2_GUI_LIB}
             ${KASTEN1OR2_CONTROLLERS_LIB}
         )
-    endif( LIBKASTEN_FOUND )
-endif( LIBKASTEN_FIND_VERSION EQUAL 1 OR LIBKASTEN_FIND_VERSION EQUAL 2 )
+    endif()
+endif()
 
 if( LIBKASTEN_FIND_VERSION EQUAL 0 )
     find_library( LIBKASTENCORE0_LIBRARY
@@ -142,19 +142,19 @@ if( LIBKASTEN_FIND_VERSION EQUAL 0 )
             ${LIBKASTENGUI0_LIBRARY}
             ${LIBKASTENCONTROLLERS0_LIBRARY}
         )
-    endif( LIBKASTEN_FOUND )
-endif( LIBKASTEN_FIND_VERSION EQUAL 0 )
+    endif()
+endif()
 
 
 if( LIBKASTEN_FOUND )
     if( NOT Kasten_FIND_QUIETLY )
         message( STATUS "Found Kasten libraries v${LIBKASTEN_VERSION}: ${LIBKASTEN_LIBRARIES}" )
-    endif( NOT Kasten_FIND_QUIETLY )
-else( LIBKASTEN_FOUND )
+    endif()
+else()
     if( LibKasten_FIND_REQUIRED )
         message( FATAL_ERROR "Could not find Kasten libraries." )
-    endif( LibKasten_FIND_REQUIRED )
-endif( LIBKASTEN_FOUND )
+    endif()
+endif()
 
 mark_as_advanced(
     LIBKASTEN_INCLUDE_DIRS

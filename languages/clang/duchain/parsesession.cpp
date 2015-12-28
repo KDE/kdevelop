@@ -36,6 +36,8 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 
+#include <KShell>
+
 #include <QDir>
 #include <QFileInfo>
 #include <QMimeDatabase>
@@ -46,6 +48,22 @@
 using namespace KDevelop;
 
 namespace {
+
+QVector<QByteArray> extraArgs()
+{
+    const auto extraArgsString = QString::fromLatin1(qgetenv("KDEV_CLANG_EXTRA_ARGUMENTS"));
+    const auto extraArgs = KShell::splitArgs(extraArgsString);
+
+    // transform to list of QByteArrays
+    QVector<QByteArray> result;
+    result.reserve(extraArgs.size());
+    foreach (const QString& arg, extraArgs) {
+        result << arg.toLatin1();
+    }
+    clangDebug() << "Passing extra arguments to clang:" << result;
+
+    return result;
+}
 
 QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Options options, const ParserSettings& parserSettings)
 {
@@ -184,6 +202,12 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     definesStream.flush();
     smartArgs << m_definesFile.fileName().toUtf8();
     clangArguments << "-imacros" << smartArgs.last().constData();
+
+    // append extra args from environment variable
+    static const auto extraArgs = ::extraArgs();
+    foreach (const QByteArray& arg, extraArgs) {
+        clangArguments << arg.constData();
+    }
 
     QVector<CXUnsavedFile> unsaved;
     //For PrecompiledHeader, we don't want unsaved contents (and contents.isEmpty())

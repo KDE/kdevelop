@@ -28,8 +28,8 @@ class QtHelpQtDoc : public QtHelpProviderAbstract
     Q_OBJECT
 	public:
         QtHelpQtDoc(QObject *parent, const QVariantList &args);
-        virtual QIcon icon() const override;
-        virtual QString name() const override;
+        QIcon icon() const override;
+        QString name() const override;
         void registerDocumentations();
 
     private:

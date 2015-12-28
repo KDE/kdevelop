@@ -78,7 +78,7 @@ struct BreakpointController::Handler : public GDBCommandHandler
         breakpoint->dirty &= ~columns;
     }
 
-    virtual void handle(const ResultRecord& r) override
+    void handle(const ResultRecord& r) override
     {
         breakpoint->sent &= ~columns;
 
@@ -104,7 +104,7 @@ struct BreakpointController::Handler : public GDBCommandHandler
         }
     }
 
-    virtual bool handlesError() override
+    bool handlesError() override
     {
         return true;
     }
@@ -140,7 +140,7 @@ struct BreakpointController::InsertedHandler : public BreakpointController::Hand
     InsertedHandler(BreakpointController* c, const BreakpointDataPtr& b, BreakpointModel::ColumnFlags columns)
         : Handler(c, b, columns) {}
 
-    virtual void handle(const GDBMI::ResultRecord &r) override
+    void handle(const GDBMI::ResultRecord &r) override
     {
         Handler::handle(r);
 
@@ -185,7 +185,7 @@ struct BreakpointController::DeleteHandler : BreakpointController::Handler {
     DeleteHandler(BreakpointController* c, const BreakpointDataPtr& b)
         : Handler(c, b, 0) {}
 
-    virtual void handle(const ResultRecord&) override
+    void handle(const ResultRecord&) override
     {
         controller->m_pendingDeleted.removeAll(breakpoint);
     }

@@ -205,7 +205,7 @@ protected:
     QString numberForName(const QString& name) const;
 
 public:
-    virtual ~IRegisterController();
+    ~IRegisterController() override;
 
 private :
     ///Handles initialization of register's names.

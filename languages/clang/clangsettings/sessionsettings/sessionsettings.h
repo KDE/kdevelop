@@ -38,7 +38,7 @@ class SessionSettings: public KDevelop::ConfigPage
     Q_OBJECT
 public:
     explicit SessionSettings(QWidget* parent);
-    ~SessionSettings();
+    ~SessionSettings() override;
 
     QString name() const override;
     QString fullName() const override;

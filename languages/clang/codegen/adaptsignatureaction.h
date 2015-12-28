@@ -51,11 +51,11 @@ public:
                          bool editingDefinition,
                          QList<KDevelop::RenameAction*> renameActions
                          );
-    virtual ~AdaptSignatureAction();
+    ~AdaptSignatureAction() override;
 
-    virtual QString description() const override;
-    virtual QString toolTip() const override;
-    virtual void execute() override;
+    QString description() const override;
+    QString toolTip() const override;
+    void execute() override;
 
 private:
     KDevelop::DeclarationId m_otherSideId;

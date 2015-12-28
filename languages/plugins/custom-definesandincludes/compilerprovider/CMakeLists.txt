@@ -23,6 +23,6 @@ if(BUILD_kdev_msvcdefinehelper)
     add_executable(kdevmsvcdefinehelper ${kdevmsvcdefinehelper_SRCS})
     install(TARGETS kdevmsvcdefinehelper RUNTIME DESTINATION bin
                                          LIBRARY DESTINATION lib)
-endif(BUILD_kdev_msvcdefinehelper)
+endif()
 
 add_subdirectory(tests)

@@ -50,7 +50,7 @@ class ClangSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 
 public:
     explicit ClangSupport(QObject *parent, const QVariantList& args = QVariantList());
-    virtual ~ClangSupport();
+    ~ClangSupport() override;
 
     /** Name Of the Language */
     QString name() const override;
@@ -73,9 +73,9 @@ public:
 
     KDevelop::TopDUContext* standardContext(const QUrl &url, bool proxyContext = false) override;
 
-    virtual KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
+    KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
 
-    virtual int configPages() const override;
+    int configPages() const override;
 
     //BEGIN IBuddyDocumentFinder
 

@@ -25,6 +25,7 @@
 
 #include <QtCore/QFileInfo>
 #include <QThread>
+#include <QFileInfo>
 
 #include <KShell>
 #include <KConfig>
@@ -38,6 +39,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 
 #include "makebuilder.h"
+#include "makebuilderpreferences.h"
 #include "debug.h"
 
 using namespace KDevelop;
@@ -172,36 +174,23 @@ QStringList MakeJob::commandLine() const
     KSharedConfigPtr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
 
-    // TODO: ifdefs for MSVC don't make sense, this is a runtime decision
-    // (we could as well use MinGW GCC as compiler kit on Windows, obviously)
-    // => We need a proper way to select the compiler kits in KDevelop
-#ifdef _MSC_VER
-    QString makeBin = builderGroup.readEntry("Make Binary", "nmake");
-#else
-    QString makeBin = builderGroup.readEntry("Make Binary", "make");
-#endif
+    QString makeBin = builderGroup.readEntry("Make Binary", MakeBuilderPreferences::standardMakeCommand());
     cmdline << makeBin;
 
-    if( ! builderGroup.readEntry("Abort on First Error", true) )
+    if( ! builderGroup.readEntry("Abort on First Error", true))
     {
-        cmdline << "-k";
+        cmdline << (isNMake(makeBin) ? "/K" : "-k");
     }
 
-    const int defaultJobNumber =
-#ifdef _MSC_VER
-        1;
-#else
-        QThread::idealThreadCount();
-#endif
-    const int jobnumber = builderGroup.readEntry("Number Of Jobs", defaultJobNumber);
-    if(jobnumber>1) {
+    const int jobnumber = builderGroup.readEntry("Number Of Jobs", QThread::idealThreadCount());
+    if(jobnumber>1 && !isNMake(makeBin)) {
         QString jobNumberArg = QString("-j%1").arg(jobnumber);
         cmdline << jobNumberArg;
     }
 
     if( builderGroup.readEntry("Display Only", false) )
     {
-        cmdline << "-n";
+        cmdline << (isNMake(makeBin) ? "/N" : "-n");
     }
 
     QString extraOptions = builderGroup.readEntry("Additional Options", QString());
@@ -249,4 +238,9 @@ QString MakeJob::environmentProfile() const
     KSharedConfigPtr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
     return builderGroup.readEntry( "Default Make Environment Profile", QString() );
+}
+
+bool MakeJob::isNMake(const QString& makeBin)
+{
+    return !QFileInfo(makeBin).baseName().compare(QStringLiteral("nmake"), Qt::CaseInsensitive);
 }

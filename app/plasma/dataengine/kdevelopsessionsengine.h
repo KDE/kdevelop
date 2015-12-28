@@ -37,7 +37,7 @@ class KDevelopSessionsEngine : public Plasma::DataEngine
 
 public:
     KDevelopSessionsEngine(QObject *parent, const QVariantList &args);
-    ~KDevelopSessionsEngine();
+    ~KDevelopSessionsEngine() override;
 
     void init();
     Plasma::Service *serviceForSource(const QString &source) override;

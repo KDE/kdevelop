@@ -37,14 +37,14 @@ class CTestFindJob : public KJob
     
 public:
     explicit CTestFindJob(CTestSuite* suite, QObject* parent = 0);
-    virtual void start();
+    void start() override;
     
 private slots:
     void findTestCases();
     void updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
 
 protected:
-    virtual bool doKill();
+    bool doKill() override;
 private:
     CTestSuite* m_suite;
     QList<KDevelop::Path> m_pendingFiles;

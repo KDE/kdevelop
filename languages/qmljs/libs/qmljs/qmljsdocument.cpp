@@ -242,14 +242,14 @@ public:
 
     {}
 
-    virtual void pragmaLibrary() { isLibrary = true; }
-    virtual void importFile(const QString &jsfile, const QString &module)
+    void pragmaLibrary() override { isLibrary = true; }
+    void importFile(const QString &jsfile, const QString &module) override
     {
         imports += ImportInfo::pathImport(
                     documentPath, jsfile, LanguageUtils::ComponentVersion(), module);
     }
 
-    virtual void importModule(const QString &uri, const QString &version, const QString &module)
+    void importModule(const QString &uri, const QString &version, const QString &module) override
     {
         imports += ImportInfo::moduleImport(uri, LanguageUtils::ComponentVersion(version), module);
     }

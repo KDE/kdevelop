@@ -28,14 +28,14 @@ class DefinesAndIncludesConfigPage : public ProjectConfigPage<CustomDefinesAndIn
     Q_OBJECT
 public:
     DefinesAndIncludesConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
-    virtual ~DefinesAndIncludesConfigPage();
+    ~DefinesAndIncludesConfigPage() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
-    virtual void apply() override;
-    virtual void reset() override;
+    void apply() override;
+    void reset() override;
 private:
     class ProjectPathsWidget* configWidget;
     void loadFrom( KConfig* cfg );

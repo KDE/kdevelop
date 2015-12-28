@@ -44,7 +44,7 @@ if(BUILD_kdev_includepathsconverter)
         kdevcompilerprovider
     )
     install(TARGETS kdev_includepathsconverter ${INSTALL_TARGETS_DEFAULT_ARGS} )
-endif(BUILD_kdev_includepathsconverter)
+endif()
 
 install(FILES
     idefinesandincludesmanager.h

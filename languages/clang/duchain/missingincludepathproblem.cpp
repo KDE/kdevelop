@@ -45,12 +45,12 @@ public:
         : m_path(path)
     {}
 
-    virtual QString description() const override
+    QString description() const override
     {
         return i18n("Add Custom Include Path");
     }
 
-    virtual void execute() override
+    void execute() override
     {
         openConfigurationPage(m_path.str());
         emit executed(this);
@@ -67,12 +67,12 @@ public:
         : m_path(path)
     {}
 
-    virtual QString description() const override
+    QString description() const override
     {
         return i18n("Open Project");
     };
 
-    virtual void execute() override
+    void execute() override
     {
         KDevelop::ICore::self()->projectController()->openProjectForUrl(m_path.toUrl());
         emit executed(this);
@@ -90,7 +90,7 @@ public:
         , m_path(path)
     {}
 
-    virtual void createActions() override
+    void createActions() override
     {
         auto project = KDevelop::ICore::self()->projectController()->findProjectForUrl(m_path.toUrl());
 

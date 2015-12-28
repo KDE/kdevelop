@@ -39,7 +39,7 @@ class ClangCodeCompletionModel : public KDevelop::CodeCompletionModel
 
 public:
     explicit ClangCodeCompletionModel(ClangIndex* index, QObject* parent);
-    virtual ~ClangCodeCompletionModel();
+    ~ClangCodeCompletionModel() override;
 
     bool shouldStartCompletion(KTextEditor::View* view, const QString& inserted,
                                bool userInsertion, const KTextEditor::Cursor& position) override;

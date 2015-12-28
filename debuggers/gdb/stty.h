@@ -41,7 +41,7 @@ class STTY : public QObject
 
 public:
     STTY(bool ext=false, const QString &termAppName=QString());
-    ~STTY();
+    ~STTY() override;
 
     ///Call it if getSlave returns an empty string.
     QString lastError(){return m_lastError;}

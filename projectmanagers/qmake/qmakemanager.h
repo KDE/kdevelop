@@ -37,7 +37,7 @@ class QMakeProjectManager : public KDevelop::AbstractFileManagerPlugin, public K
 public:
     explicit QMakeProjectManager( QObject* parent = nullptr, const QVariantList& args = QVariantList() );
 
-    virtual ~QMakeProjectManager();
+    ~QMakeProjectManager() override;
 
     static QMakeProjectManager* self();
 

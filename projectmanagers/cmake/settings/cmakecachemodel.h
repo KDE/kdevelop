@@ -37,7 +37,7 @@ class CMakeCacheModel : public QStandardItemModel
     Q_OBJECT
     public:
         CMakeCacheModel(QObject* parent, const KDevelop::Path &path);
-        ~CMakeCacheModel() {}
+        ~CMakeCacheModel() override {}
 
         bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 

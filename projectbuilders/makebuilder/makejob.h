@@ -63,9 +63,9 @@ public:
     MakeJob( QObject* parent, KDevelop::ProjectBaseItem* item,
              CommandType command, const QStringList& overrideTargets = QStringList(),
              const MakeVariables& variables = MakeVariables() );
-    virtual ~MakeJob();
+    ~MakeJob() override;
 
-    virtual void start() override;
+    void start() override;
 
     KDevelop::ProjectBaseItem* item() const;
     CommandType commandType();
@@ -73,18 +73,20 @@ public:
 
 
     // This returns the build directory for registered item.
-    virtual QUrl workingDirectory() const override;
+    QUrl workingDirectory() const override;
 
     // This returns the "make" command line.
-    virtual QStringList commandLine() const override;
+    QStringList commandLine() const override;
 
     // This returns the configured privileged execution command (if specified by user).
-    virtual QStringList privilegedExecutionCommand() const override;
+    QStringList privilegedExecutionCommand() const override;
 
     // This returns the configured global environment profile.
-    virtual QString environmentProfile() const override;
+    QString environmentProfile() const override;
 
 private:
+    static bool isNMake(const QString& makeBin);
+    
     QPersistentModelIndex m_idx;
     CommandType m_command;
     QStringList m_overrideTargets;

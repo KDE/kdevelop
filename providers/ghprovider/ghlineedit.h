@@ -46,7 +46,7 @@ public:
     explicit LineEdit(QWidget *parent = nullptr);
 
     /// Destructor.
-    virtual ~LineEdit();
+    ~LineEdit() override;
 
     /// Overridden from QLineEdit.
     void keyPressEvent(QKeyEvent *e) override;

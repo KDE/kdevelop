@@ -55,14 +55,14 @@ public:
 
     // NOTE: Fixes build failures for GCC versions <4.8.
     // cf. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53613
-    virtual ~CustomMakeProvider() Q_DECL_NOEXCEPT;
+    ~CustomMakeProvider() Q_DECL_NOEXCEPT override;
 
-    virtual QHash< QString, QString > definesInBackground(const QString&) const override
+    QHash< QString, QString > definesInBackground(const QString&) const override
     {
         return {};
     }
 
-    virtual Path::List includesInBackground(const QString& path) const override
+    Path::List includesInBackground(const QString& path) const override
     {
         {
             QReadLocker lock(&m_lock);
@@ -80,7 +80,7 @@ public:
         return m_resolver->resolveIncludePath(path).paths;
     }
 
-    virtual IDefinesAndIncludesManager::Type type() const override
+    IDefinesAndIncludesManager::Type type() const override
     {
         return IDefinesAndIncludesManager::ProjectSpecific;
     }

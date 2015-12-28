@@ -41,8 +41,8 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
     public:
         explicit CMakeDocumentation( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
-        virtual bool hasError() const override;
-        virtual QString errorDescription() const override;
+        bool hasError() const override;
+        QString errorDescription() const override;
 
         KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const override;
         KDevelop::IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const override;
@@ -52,9 +52,9 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         QAbstractListModel* indexModel() const override;
         KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const override;
         
-        virtual QIcon icon() const override;
-        virtual QString name() const override;
-        virtual KDevelop::IDocumentation::Ptr homePage() const override;
+        QIcon icon() const override;
+        QString name() const override;
+        KDevelop::IDocumentation::Ptr homePage() const override;
         
         QString descriptionForIdentifier(const QString& identifier, Type t) const;
     public slots:

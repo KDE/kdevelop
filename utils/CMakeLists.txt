@@ -20,9 +20,9 @@ if( LIBOKTETAKASTEN_FOUND )
         PURPOSE "Required for building Okteta KDevelop plugin."
         URL "http://kde.org/"
         TYPE OPTIONAL)
-endif( LIBOKTETAKASTEN_FOUND )
+endif()
 
 
 if( LIBOKTETAKASTEN_FOUND AND LIBKASTEN_FOUND AND LIBOKTETA_FOUND )
     add_subdirectory(okteta)
-endif( LIBOKTETAKASTEN_FOUND AND LIBKASTEN_FOUND AND LIBOKTETA_FOUND )
+endif()

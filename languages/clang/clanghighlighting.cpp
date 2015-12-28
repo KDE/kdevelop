@@ -43,7 +43,7 @@ public:
         return CodeHighlightingInstance::typeForDeclaration(dec, context);
     }
 
-    virtual bool useRainbowColor(KDevelop::Declaration* dec) const override
+    bool useRainbowColor(KDevelop::Declaration* dec) const override
     {
         return dec->context()->type() == DUContext::Function || dec->context()->type() == DUContext::Other;
     }

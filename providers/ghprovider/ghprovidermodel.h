@@ -59,7 +59,7 @@ public:
     explicit ProviderItem(const Response &r);
 
     /// Re-implemented from QStandardItem.
-    virtual QVariant data(int role = Qt::UserRole + 1) const override;
+    QVariant data(int role = Qt::UserRole + 1) const override;
 
 private:
     Response m_data;

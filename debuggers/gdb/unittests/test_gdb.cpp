@@ -139,14 +139,14 @@ public:
         cfg.writeEntry("Executable", executable);
         cfg.writeEntry("Working Directory", workingDirectory);
     }
-    ~TestLaunchConfiguration() {
+    ~TestLaunchConfiguration() override {
         delete c;
     }
-    virtual const KConfigGroup config() const override { return cfg; }
-    virtual KConfigGroup config() override { return cfg; };
-    virtual QString name() const override { return QString("Test-Launch"); }
-    virtual KDevelop::IProject* project() const override { return 0; }
-    virtual KDevelop::LaunchConfigurationType* type() const override { return 0; }
+    const KConfigGroup config() const override { return cfg; }
+    KConfigGroup config() override { return cfg; };
+    QString name() const override { return QString("Test-Launch"); }
+    KDevelop::IProject* project() const override { return 0; }
+    KDevelop::LaunchConfigurationType* type() const override { return 0; }
 private:
     KConfigGroup cfg;
     KConfig *c;
@@ -161,13 +161,13 @@ public:
 
     int fetchFramesCalled;
     int fetchThreadsCalled;
-    virtual void fetchFrames(int threadNumber, int from, int to) override
+    void fetchFrames(int threadNumber, int from, int to) override
     {
         fetchFramesCalled++;
         GdbFrameStackModel::fetchFrames(threadNumber, from, to);
     }
 
-    virtual void fetchThreads() override
+    void fetchThreads() override
     {
         fetchThreadsCalled++;
         GdbFrameStackModel::fetchThreads();
@@ -188,7 +188,7 @@ public:
     QUrl url() { return currentUrl(); }
     int line() { return currentLine(); }
 
-    virtual TestFrameStackModel* frameStackModel() const override
+    TestFrameStackModel* frameStackModel() const override
     {
         return m_frameStackModel;
     }

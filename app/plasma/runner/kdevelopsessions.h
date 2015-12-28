@@ -37,7 +37,7 @@ class KDevelopSessions : public Plasma::AbstractRunner {
 
     public:
         KDevelopSessions( QObject *parent, const QVariantList& args );
-        ~KDevelopSessions();
+        ~KDevelopSessions() override;
 
         void match(Plasma::RunnerContext &context) override;
         void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match) override;

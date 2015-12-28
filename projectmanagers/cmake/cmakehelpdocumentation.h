@@ -43,11 +43,11 @@ class CMakeContentsModel : public QAbstractItemModel
 class CMakeHomeDocumentation : public KDevelop::IDocumentation
 {
     public:
-        virtual KDevelop::IDocumentationProvider* provider() const override;
-        virtual QString name() const override;
-        virtual QString description() const override { return name(); }
+        KDevelop::IDocumentationProvider* provider() const override;
+        QString name() const override;
+        QString description() const override { return name(); }
 
-        virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 ) override;
+        QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 ) override;
 };
 
 #endif

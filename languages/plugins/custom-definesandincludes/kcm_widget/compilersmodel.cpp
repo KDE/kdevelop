@@ -108,7 +108,7 @@ public:
         return m_compiler;
     }
 
-    virtual QVariant data(int column) const override
+    QVariant data(int column) const override
     {
         return !column ? m_compiler->name() : m_compiler->factoryName();
     }
