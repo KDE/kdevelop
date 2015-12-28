@@ -28,24 +28,24 @@ class LocalPatchSource : public KDevelop::IPatchSource
     friend class LocalPatchWidget;
 public:
     LocalPatchSource();
-    virtual ~LocalPatchSource();
+    ~LocalPatchSource() override;
 
-    virtual QString name() const override;
+    QString name() const override;
 
-    virtual QUrl baseDir() const override {
+    QUrl baseDir() const override {
         return m_baseDir;
     }
 
-    virtual QUrl file() const override {
+    QUrl file() const override {
         return m_filename;
     }
 
-    virtual uint depth() const override {
+    uint depth() const override {
         return m_depth;
     }
 
-    virtual void update() override;
-    virtual QIcon icon() const override;
+    void update() override;
+    QIcon icon() const override;
 
     void setFilename(const QUrl& filename) { m_filename = filename; }
     void setBaseDir(const QUrl& dir) { m_baseDir = dir; }
@@ -53,11 +53,11 @@ public:
 
     QString command() const { return m_command; }
 
-    virtual bool isAlreadyApplied() const override { return m_applied; }
+    bool isAlreadyApplied() const override { return m_applied; }
 
     void setAlreadyApplied( bool applied ) { m_applied = applied; }
 
-    virtual QWidget* customWidget() const override;
+    QWidget* customWidget() const override;
 
 private:
     QUrl m_filename;

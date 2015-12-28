@@ -38,7 +38,7 @@ class ClassWidget : public QWidget
 
 public:
   ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin);
-  virtual ~ClassWidget();
+  ~ClassWidget() override;
 
 private:
   ClassBrowserPlugin* m_plugin;

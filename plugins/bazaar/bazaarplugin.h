@@ -38,35 +38,35 @@ class BazaarPlugin : public KDevelop::IPlugin, public KDevelop::IDistributedVers
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
 public:
     explicit BazaarPlugin(QObject* parent, const QVariantList& args = QVariantList());
-    virtual ~BazaarPlugin();
+    ~BazaarPlugin() override;
 
-    virtual bool hasError() const override;
-    virtual QString errorDescription() const override;
+    bool hasError() const override;
+    QString errorDescription() const override;
 
-    virtual QString name() const override;
+    QString name() const override;
 
-    virtual KDevelop::VcsJob* add(const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
-    virtual KDevelop::VcsJob* annotate(const QUrl& localLocation, const KDevelop::VcsRevision& rev) override;
-    virtual KDevelop::VcsJob* commit(const QString& message, const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
-    virtual KDevelop::VcsJob* copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn) override;
-    virtual KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;
-    virtual KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation& sourceRepository, const QUrl& destinationDirectory, RecursionMode recursion=Recursive) override;
-    virtual KDevelop::VcsJob* diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision, KDevelop::VcsDiff::Type, RecursionMode recursion=Recursive) override;
-    virtual KDevelop::VcsJob* init(const QUrl& localRepositoryRoot) override;
-    virtual bool isVersionControlled(const QUrl& localLocation) override;
-    virtual KDevelop::VcsJob* log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, long unsigned int limit) override;
-    virtual KDevelop::VcsJob* log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit) override;
-    virtual KDevelop::VcsJob* move(const QUrl& localLocationSrc, const QUrl& localLocationDst) override;
-    virtual KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const QUrl& localRepositoryLocation) override;
-    virtual KDevelop::VcsJob* push(const QUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst) override;
-    virtual KDevelop::VcsJob* remove(const QList<QUrl>& localLocations) override;
-    virtual KDevelop::VcsJob* repositoryLocation(const QUrl& localLocation) override;
-    virtual KDevelop::VcsJob* resolve(const QList<QUrl>& localLocations, RecursionMode recursio=Recursive) override;
-    virtual KDevelop::VcsJob* revert(const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
-    virtual KDevelop::VcsJob* status(const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
-    virtual KDevelop::VcsJob* update(const QList<QUrl>& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion=Recursive) override;
-    virtual KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const override;
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::VcsJob* add(const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
+    KDevelop::VcsJob* annotate(const QUrl& localLocation, const KDevelop::VcsRevision& rev) override;
+    KDevelop::VcsJob* commit(const QString& message, const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
+    KDevelop::VcsJob* copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn) override;
+    KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;
+    KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation& sourceRepository, const QUrl& destinationDirectory, RecursionMode recursion=Recursive) override;
+    KDevelop::VcsJob* diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision, KDevelop::VcsDiff::Type, RecursionMode recursion=Recursive) override;
+    KDevelop::VcsJob* init(const QUrl& localRepositoryRoot) override;
+    bool isVersionControlled(const QUrl& localLocation) override;
+    KDevelop::VcsJob* log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, long unsigned int limit) override;
+    KDevelop::VcsJob* log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit) override;
+    KDevelop::VcsJob* move(const QUrl& localLocationSrc, const QUrl& localLocationDst) override;
+    KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const QUrl& localRepositoryLocation) override;
+    KDevelop::VcsJob* push(const QUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst) override;
+    KDevelop::VcsJob* remove(const QList<QUrl>& localLocations) override;
+    KDevelop::VcsJob* repositoryLocation(const QUrl& localLocation) override;
+    KDevelop::VcsJob* resolve(const QList<QUrl>& localLocations, RecursionMode recursio=Recursive) override;
+    KDevelop::VcsJob* revert(const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
+    KDevelop::VcsJob* status(const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
+    KDevelop::VcsJob* update(const QList<QUrl>& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion=Recursive) override;
+    KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
 private slots:
     void parseBzrStatus(KDevelop::DVcsJob* job);

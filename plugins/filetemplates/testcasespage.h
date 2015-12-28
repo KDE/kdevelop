@@ -41,7 +41,7 @@ class TestCasesPage : public QWidget
 
 public:
     explicit TestCasesPage(QWidget* parent = 0, Qt::WindowFlags f = 0);
-    virtual ~TestCasesPage();
+    ~TestCasesPage() override;
 
     /**
      * The name of the new test, as set by the user

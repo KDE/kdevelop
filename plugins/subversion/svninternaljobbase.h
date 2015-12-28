@@ -52,9 +52,9 @@ class SvnInternalJobBase : public QObject, public ThreadWeaver::Job, public svn:
     Q_OBJECT
 public:
     explicit SvnInternalJobBase( SvnJobBase* parent = 0 );
-    virtual ~SvnInternalJobBase();
+    ~SvnInternalJobBase() override;
 
-    virtual bool success() const override;
+    bool success() const override;
 
     bool contextGetLogin( const std::string& realm,
                           std::string& username, std::string& password,

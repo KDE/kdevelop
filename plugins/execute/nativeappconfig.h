@@ -46,19 +46,19 @@ class NativeAppLauncher : public KDevelop::ILauncher
 {
 public:
     NativeAppLauncher();
-    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
-    virtual QString description() const override;
-    virtual QString id() override;
-    virtual QString name() const override;
-    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
-    virtual QStringList supportedModes() const override;
+    QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
+    QString description() const override;
+    QString id() override;
+    QString name() const override;
+    KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
+    QStringList supportedModes() const override;
 };
 
 class NativeAppPageFactory : public KDevelop::LaunchConfigurationPageFactory
 {
 public:
     NativeAppPageFactory();
-    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
+    KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
 };
 
 /**
@@ -71,7 +71,7 @@ class NativeAppConfigType : public KDevelop::LaunchConfigurationType
 Q_OBJECT
 public:
     NativeAppConfigType();
-    virtual ~NativeAppConfigType();
+    ~NativeAppConfigType() override;
 
     QString id() const override;
     QString name() const override;

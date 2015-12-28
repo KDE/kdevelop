@@ -56,20 +56,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
   public:
     explicit CodeCompletionModel(QObject* parent);
-    virtual ~CodeCompletionModel();
+    ~CodeCompletionModel() override;
 
     ///This MUST be called after the creation of this completion-model.
     ///If you use use the KDevelop::CodeCompletion helper-class, that one cares about it.
     virtual void initialize();
 
     ///Entry-point for code-completion. This determines ome settings, clears the model, and then calls completionInvokedInternal for further processing.
-    virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType) override;
+    void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType) override;
 
-    virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const override;
+    QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const override;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const override;
-    virtual QModelIndex parent ( const QModelIndex & index ) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int rowCount ( const QModelIndex & parent = QModelIndex() ) const override;
+    QModelIndex parent ( const QModelIndex & index ) const override;
 
     ///Use this to set whether the code-completion widget should wait for this model until it's shown
     ///This makes sense when the model takes some time but not too much time, to make the UI less flickering and
@@ -95,9 +95,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     ///no expanding information, no type-information, etc.
     bool fullCompletion() const;
 
-    virtual MatchReaction matchingItem(const QModelIndex& matched) override;
+    MatchReaction matchingItem(const QModelIndex& matched) override;
 
-    virtual QString filterString(KTextEditor::View* view, const KTextEditor::Range& range, const KTextEditor::Cursor& position) override;
+    QString filterString(KTextEditor::View* view, const KTextEditor::Range& range, const KTextEditor::Cursor& position) override;
 
     void clear();
 
@@ -121,7 +121,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     ///The default-implementation does this completely, so if you don't need to do anything special, you can just leave it.
     virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType, const QUrl& url);
 
-    virtual void executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word, const QModelIndex& index) const override;
+    void executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word, const QModelIndex& index) const override;
 
     QExplicitlySharedDataPointer<CodeCompletionContext> m_completionContext;
     typedef QPair<KDevelop::DeclarationPointer, QExplicitlySharedDataPointer<CodeCompletionContext> > DeclarationContextPair;

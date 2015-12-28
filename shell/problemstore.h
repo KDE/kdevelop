@@ -74,7 +74,7 @@ class KDEVPLATFORMSHELL_EXPORT ProblemStore : public QObject
     Q_OBJECT
 public:
     explicit ProblemStore(QObject *parent = nullptr);
-    virtual ~ProblemStore();
+    ~ProblemStore() override;
 
     /// Adds a problem
     virtual void addProblem(const IProblem::Ptr &problem);

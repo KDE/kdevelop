@@ -41,7 +41,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT IDebugSession : public QObject
     Q_ENUMS(DebuggerState)
 public:
     IDebugSession();
-    virtual ~IDebugSession();
+    ~IDebugSession() override;
 
     enum DebuggerState {
         NotStartedState,

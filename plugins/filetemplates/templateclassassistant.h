@@ -53,7 +53,7 @@ public:
     /**
      * Destroys the assistant
      **/
-    virtual ~TemplateClassAssistant();
+    ~TemplateClassAssistant() override;
 
     /**
      * Sets up the template selection page
@@ -78,9 +78,9 @@ public:
     void templateChosen(const QString& templateDescription);
 
 public Q_SLOTS:
-    virtual void next() override;
-    virtual void back() override;
-    virtual void accept() override;
+    void next() override;
+    void back() override;
+    void accept() override;
 
     /**
      * Sets whether the current page is valid or not.

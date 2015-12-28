@@ -36,9 +36,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParseProjectJob : public KJob
     Q_OBJECT
 public:
     explicit ParseProjectJob(KDevelop::IProject* project, bool forceUpdate = false );
-    virtual ~ParseProjectJob();
-    virtual void start() override;
-    virtual bool doKill() override;
+    ~ParseProjectJob() override;
+    void start() override;
+    bool doKill() override;
 
 private Q_SLOTS:
     void deleteNow();

@@ -100,27 +100,27 @@ class DebugMode : public ILaunchMode
 {
 public:
     DebugMode() {}
-    virtual QIcon icon() const override { return QIcon::fromTheme("tools-report-bug"); }
-    virtual QString id() const override { return "debug"; }
-    virtual QString name() const override { return i18n("Debug"); }
+    QIcon icon() const override { return QIcon::fromTheme("tools-report-bug"); }
+    QString id() const override { return "debug"; }
+    QString name() const override { return i18n("Debug"); }
 };
 
 class ProfileMode : public ILaunchMode
 {
 public:
     ProfileMode() {}
-    virtual QIcon icon() const override { return QIcon::fromTheme("office-chart-area"); }
-    virtual QString id() const override { return "profile"; }
-    virtual QString name() const override { return i18n("Profile"); }
+    QIcon icon() const override { return QIcon::fromTheme("office-chart-area"); }
+    QString id() const override { return "profile"; }
+    QString name() const override { return i18n("Profile"); }
 };
 
 class ExecuteMode : public ILaunchMode
 {
 public:
     ExecuteMode() {}
-    virtual QIcon icon() const override { return QIcon::fromTheme("system-run"); }
-    virtual QString id() const override { return "execute"; }
-    virtual QString name() const override { return i18n("Execute"); }
+    QIcon icon() const override { return QIcon::fromTheme("system-run"); }
+    QString id() const override { return "execute"; }
+    QString name() const override { return i18n("Execute"); }
 };
 
 class RunController::RunControllerPrivate

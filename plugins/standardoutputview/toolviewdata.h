@@ -61,7 +61,7 @@ class ToolViewData : public QObject
 Q_OBJECT
 public:
     explicit ToolViewData( QObject* parent );
-    ~ToolViewData();
+    ~ToolViewData() override;
     OutputData* addOutput( int id, const QString& title, KDevelop::IOutputView::Behaviours behave );
     // If we would adhere to model-view-separation strictly, then this member would move into standardoutputview, but it is more convenient this way.
     // TODO: move into standardoutputview

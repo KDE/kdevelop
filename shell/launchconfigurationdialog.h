@@ -51,9 +51,9 @@ class LaunchConfigurationModelDelegate : public QStyledItemDelegate
 {
 public:
     LaunchConfigurationModelDelegate();
-    virtual QWidget* createEditor ( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
-    virtual void setEditorData ( QWidget* editor, const QModelIndex& index ) const override;
-    virtual void setModelData ( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const override;
+    QWidget* createEditor ( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
+    void setEditorData ( QWidget* editor, const QModelIndex& index ) const override;
+    void setModelData ( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const override;
 };
 
 
@@ -62,14 +62,14 @@ class LaunchConfigurationsModel : public QAbstractItemModel
 Q_OBJECT
 public:
     explicit LaunchConfigurationsModel(QObject* parent = 0);
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-    virtual QModelIndex parent(const QModelIndex& child) const override;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex& child) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
     void createConfiguration( const QModelIndex& );
     void deleteConfiguration( const QModelIndex& index );
     LaunchConfiguration* configForIndex( const QModelIndex& ) const;
@@ -135,7 +135,7 @@ class LaunchConfigurationDialog : public QDialog, public Ui::LaunchConfiguration
 Q_OBJECT
 public:
     explicit LaunchConfigurationDialog(QWidget* parent = 0 );
-    virtual QSize sizeHint() const override;
+    QSize sizeHint() const override;
 
 private slots:
     void deleteConfiguration();

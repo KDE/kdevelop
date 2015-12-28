@@ -43,11 +43,11 @@ public:
     };
 
     explicit ComboBoxDelegate(const QVector<Item>& items, QObject* parent = 0);
-    virtual ~ComboBoxDelegate();
+    ~ComboBoxDelegate() override;
 
-    virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
-    virtual void setEditorData(QWidget* editor, const QModelIndex& index) const override;
-    virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+    void setEditorData(QWidget* editor, const QModelIndex& index) const override;
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
 
 private:
     QVector<Item> m_items;

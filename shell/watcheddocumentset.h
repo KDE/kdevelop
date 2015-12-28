@@ -48,7 +48,7 @@ public:
     virtual DocumentSet get() const;
     virtual void setCurrentDocument(const IndexedString& url);
     virtual ProblemScope getScope() const = 0;
-    virtual ~WatchedDocumentSet() {}
+    ~WatchedDocumentSet() override {}
 
 signals:
     void changed();
@@ -66,8 +66,8 @@ class CurrentDocumentSet : public WatchedDocumentSet
     Q_OBJECT
 public:
     explicit CurrentDocumentSet(const IndexedString& document, QObject* parent);
-    virtual void setCurrentDocument(const IndexedString& url) override;
-    virtual ProblemScope getScope() const override;
+    void setCurrentDocument(const IndexedString& url) override;
+    ProblemScope getScope() const override;
 };
 
 /**
@@ -78,7 +78,7 @@ class OpenDocumentSet : public WatchedDocumentSet
     Q_OBJECT
 public:
     explicit OpenDocumentSet(QObject* parent);
-    virtual ProblemScope getScope() const override;
+    ProblemScope getScope() const override;
 
 private slots:
     void documentClosed(IDocument* doc);
@@ -112,8 +112,8 @@ class CurrentProjectSet : public ProjectSet
     Q_OBJECT
 public:
     explicit CurrentProjectSet(const IndexedString& document, QObject* parent);
-    virtual void setCurrentDocument(const IndexedString& url) override;
-    virtual ProblemScope getScope() const override;
+    void setCurrentDocument(const IndexedString& url) override;
+    ProblemScope getScope() const override;
 
 private:
     void setCurrentDocumentInternal(const IndexedString& url); // to avoid virtual in constructor
@@ -125,7 +125,7 @@ class AllProjectSet : public ProjectSet
     Q_OBJECT
 public:
     explicit AllProjectSet(QObject* parent);
-    virtual ProblemScope getScope() const override;
+    ProblemScope getScope() const override;
 };
 
 }

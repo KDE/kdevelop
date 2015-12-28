@@ -49,7 +49,7 @@ public:
     explicit ProcessLineMaker( QObject* parent = 0 );
     explicit ProcessLineMaker( QProcess* process, QObject* parent = 0 );
     
-    ~ProcessLineMaker();
+    ~ProcessLineMaker() override;
 
     /**
      * clears out the internal buffers, this drops any data without

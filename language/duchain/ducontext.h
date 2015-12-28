@@ -93,7 +93,7 @@ public:
    * Destructor. Will delete all child contexts which are defined within
    * the same file as this context.
    */
-  virtual ~DUContext();
+  ~DUContext() override;
 
   enum ContextType : quint8 {
     Global    /**< A context that declares functions, namespaces or classes */,
@@ -151,7 +151,7 @@ public:
   /**
    * Find the top context.
    */
-  virtual TopDUContext* topContext() const override;
+  TopDUContext* topContext() const override;
 
   /**
    * Visits all duchain objects in the whole duchain.

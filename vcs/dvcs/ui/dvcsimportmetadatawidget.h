@@ -48,14 +48,14 @@ class KDEVPLATFORMVCS_EXPORT DvcsImportMetadataWidget : public KDevelop::VcsImpo
     
 public:
     explicit DvcsImportMetadataWidget(QWidget* parent=0);
-    virtual ~DvcsImportMetadataWidget();
+    ~DvcsImportMetadataWidget() override;
 
-    virtual QUrl source() const override;
-    virtual KDevelop::VcsLocation destination() const override;
-    virtual QString message() const override; //Is not used, it returns an empty string
-    virtual void setSourceLocation( const KDevelop::VcsLocation& ) override;
-    virtual void setSourceLocationEditable( bool ) override;
-    virtual bool hasValidData() const override;
+    QUrl source() const override;
+    KDevelop::VcsLocation destination() const override;
+    QString message() const override; //Is not used, it returns an empty string
+    void setSourceLocation( const KDevelop::VcsLocation& ) override;
+    void setSourceLocationEditable( bool ) override;
+    bool hasValidData() const override;
 
 private:
     DvcsImportMetadataWidgetPrivate *const d_ptr;

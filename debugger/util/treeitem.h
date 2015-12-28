@@ -40,7 +40,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT TreeItem: public QObject
 {
     Q_OBJECT
 public:
-    virtual ~TreeItem();
+    ~TreeItem() override;
 
 // FIXME: should be protected
 public: // Methods that the derived classes should implement

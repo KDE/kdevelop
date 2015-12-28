@@ -90,7 +90,7 @@ class KDEVPLATFORMSUBLIME_EXPORT Controller: public QObject, public MainWindowOp
     Q_OBJECT
 public:
     explicit Controller(QObject *parent = 0);
-    ~Controller();
+    ~Controller() override;
 
     /** Add the area to the set of default areas in this controller. */
     void addDefaultArea(Area *area);

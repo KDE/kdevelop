@@ -55,7 +55,7 @@ public:
     };
 
     explicit ObjectListTracker(CleanupBehavior behavior = NoCleanupWhenDone, QObject* parent = 0);
-    virtual ~ObjectListTracker();
+    ~ObjectListTracker() override;
 
     /**
      * Append and track object @p object

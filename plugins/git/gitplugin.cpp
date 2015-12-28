@@ -1402,7 +1402,7 @@ class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
         GitVcsLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0)
             : StandardVcsLocationWidget(parent, f) {}
 
-        virtual bool isCorrect() const override
+        bool isCorrect() const override
         {
             return !url().isEmpty();
         }

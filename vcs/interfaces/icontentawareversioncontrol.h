@@ -37,7 +37,7 @@ class KDEVPLATFORMVCS_EXPORT CheckInRepositoryJob : public KJob
 Q_OBJECT
 public:
     explicit CheckInRepositoryJob(KTextEditor::Document* document);
-    virtual ~CheckInRepositoryJob();
+    ~CheckInRepositoryJob() override;
 
     KTextEditor::Document* document() const;
 

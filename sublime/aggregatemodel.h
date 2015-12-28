@@ -71,7 +71,7 @@ class KDEVPLATFORMSUBLIME_EXPORT AggregateModel: public QAbstractItemModel {
     Q_OBJECT
 public:
     explicit AggregateModel(QObject *parent = 0);
-    virtual ~AggregateModel();
+    ~AggregateModel() override;
 
     /**Adds the model and creates a parent item with given @p name
     in the aggregated model.*/
@@ -80,13 +80,13 @@ public:
     void removeModel(QStandardItemModel *model);
 
     //reimplemented methods from QAbstractItemModel
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const override;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    virtual QModelIndex parent(const QModelIndex &index) const override;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
 
 private:
     struct AggregateModelPrivate *d;

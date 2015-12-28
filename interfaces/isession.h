@@ -42,7 +42,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISession : public QObject
     Q_OBJECT
 public:
     explicit ISession( QObject* parent = 0 );
-    virtual ~ISession();
+    ~ISession() override;
 
     /**
      * A short string nicely identifying the session, including contained projects

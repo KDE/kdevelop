@@ -58,7 +58,7 @@ class MainWindowPrivate: public QObject {
     Q_OBJECT
 public:
     MainWindowPrivate(MainWindow *w, Controller* controller);
-    ~MainWindowPrivate();
+    ~MainWindowPrivate() override;
 
     /**Use this to create tool views for an area.*/
     class IdealToolViewCreator {

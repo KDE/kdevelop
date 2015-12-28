@@ -40,7 +40,7 @@ class SvnJobBase : public KDevelop::VcsJob
     Q_OBJECT
 public:
     explicit SvnJobBase( KDevSvnPlugin*, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
-    virtual ~SvnJobBase();
+    ~SvnJobBase() override;
     virtual SvnInternalJobBase* internalJob() const = 0;
     KDevelop::VcsJob::JobStatus status() const override;
     KDevelop::IPlugin* vcsPlugin() const override;
@@ -62,7 +62,7 @@ protected slots:
 
 protected:
     void startInternalJob();
-    virtual bool doKill() override;
+    bool doKill() override;
     KDevSvnPlugin* m_part;
 private:
     void outputMessage(const QString &message);

@@ -46,10 +46,10 @@ class StandardJob : public KDevelop::VcsJob
     public:
         StandardJob(KDevelop::IPlugin* parent, KJob* job, OutputJobVerbosity verbosity);
         
-        virtual QVariant fetchResults() override { return QVariant(); }
-        virtual void start() override;
-        virtual JobStatus status() const override { return m_status; }
-        virtual KDevelop::IPlugin* vcsPlugin() const override { return m_plugin; }
+        QVariant fetchResults() override { return QVariant(); }
+        void start() override;
+        JobStatus status() const override { return m_status; }
+        KDevelop::IPlugin* vcsPlugin() const override { return m_plugin; }
         
     public slots:
         void result(KJob*);
@@ -73,23 +73,23 @@ class GitPlugin: public KDevelop::DistributedVersionControlPlugin, public KDevel
     friend class GitInitTest;
 public:
     explicit GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
-    ~GitPlugin();
+    ~GitPlugin() override;
    
     QString name() const override;
 
     bool isVersionControlled(const QUrl &path) override;
     
-    virtual KDevelop::VcsJob* copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn) override;
-    virtual KDevelop::VcsJob* move(const QUrl& localLocationSrc, const QUrl& localLocationDst) override;
+    KDevelop::VcsJob* copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn) override;
+    KDevelop::VcsJob* move(const QUrl& localLocationSrc, const QUrl& localLocationDst) override;
     
     //TODO
-    virtual KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const QUrl& localRepositoryLocation) override;
-    virtual KDevelop::VcsJob* push(const QUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst) override;
-    virtual KDevelop::VcsJob* repositoryLocation(const QUrl& localLocation) override;
-    virtual KDevelop::VcsJob* resolve(const QList<QUrl>& localLocations, RecursionMode recursion) override;
-    virtual KDevelop::VcsJob* update(const QList<QUrl>& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion) override;
+    KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const QUrl& localRepositoryLocation) override;
+    KDevelop::VcsJob* push(const QUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst) override;
+    KDevelop::VcsJob* repositoryLocation(const QUrl& localLocation) override;
+    KDevelop::VcsJob* resolve(const QList<QUrl>& localLocations, RecursionMode recursion) override;
+    KDevelop::VcsJob* update(const QList<QUrl>& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion) override;
     KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const override;
-    virtual void setupCommitMessageEditor(const QUrl& localLocation, KTextEdit* editor) const override;
+    void setupCommitMessageEditor(const QUrl& localLocation, KTextEdit* editor) const override;
     //End of
 
     KDevelop::VcsJob* add(const QList<QUrl>& localLocations,
@@ -104,11 +104,11 @@ public:
                              const QList<QUrl>& localLocations,
                              KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive) override;
 
-    virtual KDevelop::VcsJob* diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
+    KDevelop::VcsJob* diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
                                    KDevelop::VcsDiff::Type, RecursionMode recursion) override;
 
-    virtual KDevelop::VcsJob* log( const QUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long limit) override;
-    virtual KDevelop::VcsJob* log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit) override;
+    KDevelop::VcsJob* log( const QUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long limit) override;
+    KDevelop::VcsJob* log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit) override;
     KDevelop::VcsJob* annotate(const QUrl &localLocation, const KDevelop::VcsRevision &rev) override;
     KDevelop::VcsJob* revert(const QList<QUrl>& localLocations, RecursionMode recursion) override;
 
@@ -131,7 +131,7 @@ public:
     void parseLogOutput(const KDevelop::DVcsJob * job,
                         QList<DVcsEvent>& commits) const override;
 
-    virtual void additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls) override;
+    void additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls) override;
     
     KDevelop::DVcsJob* gitStash(const QDir& repository, const QStringList& args, KDevelop::OutputJob::OutputJobVerbosity verbosity);
     
@@ -139,9 +139,9 @@ public:
     bool hasModifications(const QDir& repository);
     bool hasModifications(const QDir& repo, const QUrl& file);
 
-    virtual bool hasError() const override;
-    virtual QString errorDescription() const override;
-    virtual void registerRepositoryForCurrentBranchChanges(const QUrl& repository) override;
+    bool hasError() const override;
+    QString errorDescription() const override;
+    void registerRepositoryForCurrentBranchChanges(const QUrl& repository) override;
 
     KDevelop::CheckInRepositoryJob* isInRepository(KTextEditor::Document* document) override;
 

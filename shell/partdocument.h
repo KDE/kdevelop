@@ -43,34 +43,34 @@ class KDEVPLATFORMSHELL_EXPORT PartDocument: public Sublime::UrlDocument, public
     Q_OBJECT
 public:
     PartDocument(const QUrl &url, ICore* core, const QString& preferredPart = QString() );
-    virtual ~PartDocument();
+    ~PartDocument() override;
 
-    virtual QUrl url() const override;
+    QUrl url() const override;
     void setUrl(const QUrl& newUrl);
 
-    virtual QWidget *createViewWidget(QWidget *parent = 0) override;
-    virtual KParts::Part *partForView(QWidget *view) const override;
+    QWidget *createViewWidget(QWidget *parent = 0) override;
+    KParts::Part *partForView(QWidget *view) const override;
 
-    virtual QMimeType mimeType() const override;
-    virtual KTextEditor::Document* textDocument() const override;
-    virtual bool save(DocumentSaveMode mode = Default) override;
-    virtual void reload() override;
+    QMimeType mimeType() const override;
+    KTextEditor::Document* textDocument() const override;
+    bool save(DocumentSaveMode mode = Default) override;
+    void reload() override;
     ///Closes and deletes the document. Asks the user before if needed.
-    virtual bool close(DocumentSaveMode mode = Default) override;
-    virtual bool isActive() const override;
-    virtual DocumentState state() const override;
+    bool close(DocumentSaveMode mode = Default) override;
+    bool isActive() const override;
+    DocumentState state() const override;
 
-    virtual void setPrettyName(QString name) override;
+    void setPrettyName(QString name) override;
     
-    virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow) override;
+    void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow) override;
 
-    virtual KTextEditor::Cursor cursorPosition() const override;
-    virtual void setCursorPosition(const KTextEditor::Cursor &cursor) override;
-    virtual void setTextSelection(const KTextEditor::Range &range) override;
+    KTextEditor::Cursor cursorPosition() const override;
+    void setCursorPosition(const KTextEditor::Cursor &cursor) override;
+    void setTextSelection(const KTextEditor::Range &range) override;
 
     //Overridden from Sublime::Document
-    virtual bool closeDocument(bool silent) override;
-    virtual bool askForCloseFeedback() override;
+    bool closeDocument(bool silent) override;
+    bool askForCloseFeedback() override;
 protected:
     /** Gives us access to the KParts */
     QMap<QWidget*, KParts::Part*> partForView() const;

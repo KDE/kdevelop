@@ -27,7 +27,7 @@ class KDEVPLATFORMVCS_EXPORT VcsCommitDialog : public QDialog
     Q_OBJECT
 public:
     explicit VcsCommitDialog( IPatchSource *patchSource, QWidget *parent = 0 );
-    virtual ~VcsCommitDialog();
+    ~VcsCommitDialog() override;
     ///Sets the commit candidates
     void setCommitCandidates( const QList<KDevelop::VcsStatusInfo>& statuses );
     void setRecursive( bool );

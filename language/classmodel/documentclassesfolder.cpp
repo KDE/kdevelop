@@ -48,8 +48,8 @@ public:
   const KDevelop::QualifiedIdentifier& qualifiedIdentifier() const { return m_identifier; }
 
 public: // Node overrides
-  virtual bool getIcon(QIcon& a_resultIcon) override;
-  virtual int getScore() const override { return 101; }
+  bool getIcon(QIcon& a_resultIcon) override;
+  int getScore() const override { return 101; }
 
 private:
   /// The namespace identifier.

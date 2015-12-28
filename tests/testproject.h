@@ -46,7 +46,7 @@ public:
      * @p url Path to project directory.
      */
     TestProject(const Path& url = Path(), QObject* parent = 0);
-    virtual ~TestProject();
+    ~TestProject() override;
     IProjectFileManager* projectFileManager() const override { return 0; }
     IBuildSystemManager* buildSystemManager() const override { return 0; }
     IPlugin* managerPlugin() const override { return 0; }
@@ -56,9 +56,9 @@ public:
     int fileCount() const { return 0; }
     ProjectFileItem* fileAt( int ) const { return 0; }
     QList<ProjectFileItem*> files() const;
-    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const override { return QList< ProjectBaseItem* >(); }
-    virtual QList< ProjectFileItem* > filesForPath(const IndexedString&) const override;
-    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const override { return QList<ProjectFolderItem*>(); }
+    QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const override { return QList< ProjectBaseItem* >(); }
+    QList< ProjectFileItem* > filesForPath(const IndexedString&) const override;
+    QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const override { return QList<ProjectFolderItem*>(); }
     void reloadModel() override { }
     Path projectFile() const override;
     KSharedConfigPtr projectConfiguration() const override { return m_projectConfiguration; }
@@ -71,8 +71,8 @@ public:
 
     Path path() const override;
     QString name() const override { return "Test Project"; }
-    virtual bool inProject(const IndexedString& path) const override;
-    virtual void setReloadJob(KJob* ) override {}
+    bool inProject(const IndexedString& path) const override;
+    void setReloadJob(KJob* ) override {}
 private:
     QSet<IndexedString> m_fileSet;
     Path m_path;
@@ -95,9 +95,9 @@ public:
     void addProject(IProject* p);
     void takeProject(IProject* p);
     void clearProjects();
-    virtual void closeProject(IProject* p) override;
+    void closeProject(IProject* p) override;
 
-    virtual void initialize() override;
+    void initialize() override;
 private:
     QList<IProject*> m_projects;
 };

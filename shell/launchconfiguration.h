@@ -41,7 +41,7 @@ class KDEVPLATFORMSHELL_EXPORT LaunchConfiguration : public QObject, public ILau
 Q_OBJECT
 public:
     explicit LaunchConfiguration( KConfigGroup, IProject* = 0, QObject* = 0 );
-    virtual ~LaunchConfiguration();
+    ~LaunchConfiguration() override;
 
     static QString LaunchConfigurationNameEntry();
     static QString LaunchConfigurationTypeEntry();
@@ -62,22 +62,22 @@ public:
     /**
      * @copydoc KDevelop::ILaunchConfiguration::config()
      */
-    virtual const KConfigGroup config() const override;
+    const KConfigGroup config() const override;
     
     /**
      * @copydoc KDevelop::ILaunchConfiguration::type()
      */
-    virtual LaunchConfigurationType* type() const override;
+    LaunchConfigurationType* type() const override;
     
     /**
      * @copydoc KDevelop::ILaunchConfiguration::name()
      */
-    virtual QString name() const override;
+    QString name() const override;
     
     /**
      * @copydoc KDevelop::ILaunchConfiguration::project()
      */
-    virtual IProject* project() const override;
+    IProject* project() const override;
     void save();
     
     QString configGroupName() const;

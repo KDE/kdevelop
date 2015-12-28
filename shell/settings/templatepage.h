@@ -39,7 +39,7 @@ class TemplatePage : public QWidget
     Q_OBJECT
 public:
     explicit TemplatePage(KDevelop::ITemplateProvider* provider, QWidget* parent = 0);
-    virtual ~TemplatePage();
+    ~TemplatePage() override;
 
 private slots:
     void loadFromFile();

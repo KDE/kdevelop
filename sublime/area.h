@@ -68,7 +68,7 @@ public:
         This parameter can be omitted and then name will be used as title.*/
     Area(Controller *controller, const QString &name, const QString &title = {});
     Area(const Area &area);
-    ~Area();
+    ~Area() override;
 
     QString title() const;
     void setTitle(const QString &title);

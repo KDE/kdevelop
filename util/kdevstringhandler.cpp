@@ -166,3 +166,66 @@ namespace KDevelop
     }
 }
 
+QString KDevelop::stripAnsiSequences(const QString& str)
+{
+    if (str.isEmpty()) {
+        return QString(); // fast path
+    }
+
+    enum {
+        PLAIN,
+        ANSI_START,
+        ANSI_CSI,
+        ANSI_SEQUENCE,
+        ANSI_WAITING_FOR_ST,
+        ANSI_ST_STARTED
+    } state = PLAIN;
+
+    QString result;
+    result.reserve(str.count());
+
+    foreach (const QChar c, str) {
+        const auto val = c.unicode();
+        switch (state) {
+        case PLAIN:
+            if (val == 27) // 'ESC'
+                state = ANSI_START;
+            else if (val == 155) // equivalent to 'ESC'-'['
+                state = ANSI_CSI;
+            else
+                result.append(c);
+            break;
+        case ANSI_START:
+            if (val == 91) // [
+                state = ANSI_CSI;
+            else if (val == 80 || val == 93 || val == 94 || val == 95) // 'P', ']', '^' and '_'
+                state = ANSI_WAITING_FOR_ST;
+            else if (val >= 64 && val <= 95)
+                state = PLAIN;
+            else
+                state = ANSI_SEQUENCE;
+            break;
+        case ANSI_CSI:
+            if (val >= 64 && val <= 126) // Anything between '@' and '~'
+                state = PLAIN;
+            break;
+        case ANSI_SEQUENCE:
+            if (val >= 64 && val <= 95) // Anything between '@' and '_'
+                state = PLAIN;
+            break;
+        case ANSI_WAITING_FOR_ST:
+            if (val == 7) // 'BEL'
+                state = PLAIN;
+            else if (val == 27) // 'ESC'
+                state = ANSI_ST_STARTED;
+            break;
+        case ANSI_ST_STARTED:
+            if (val == 92) // '\'
+                state = PLAIN;
+            else
+                state = ANSI_WAITING_FOR_ST;
+            break;
+        }
+    }
+    return result;
+}

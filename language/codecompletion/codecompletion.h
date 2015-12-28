@@ -46,7 +46,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
       *  otherwise only for ones that contain the selected language.
     */
     CodeCompletion(QObject* parent, KTextEditor::CodeCompletionModel* aModel, const QString& language);
-    virtual ~CodeCompletion();
+    ~CodeCompletion() override;
 
   private Q_SLOTS:
     void textDocumentCreated(KDevelop::IDocument*);

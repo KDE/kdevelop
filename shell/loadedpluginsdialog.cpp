@@ -82,7 +82,7 @@ public:
         return m_plugins[index.row()];
     }
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override
     {
         KDevelop::IPlugin* plugin = pluginForIndex(index);
         if (!plugin)
@@ -100,7 +100,7 @@ public:
         };
     }
 
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override
     {
         if (!parent.isValid()) {
             return m_plugins.count();
@@ -125,12 +125,12 @@ public:
         pushButton->setIcon(QIcon::fromTheme("dialog-information")); // only for getting size matters
     }
 
-    ~LoadedPluginsDelegate()
+    ~LoadedPluginsDelegate() override
     {
         delete pushButton;
     }
 
-    virtual QList<QWidget *> createItemWidgets(const QModelIndex &/*index*/) const override
+    QList<QWidget *> createItemWidgets(const QModelIndex &/*index*/) const override
     {
         return QList<QWidget *>();
     }
@@ -268,7 +268,7 @@ public:
         setVerticalScrollMode(QListView::ScrollPerPixel);
     }
 
-    virtual ~PluginsView()
+    ~PluginsView() override
     {
         // explicitly delete the delegate here since otherwise
         // we get spammed by warnings that the QPushButton we return
@@ -277,7 +277,7 @@ public:
         delete itemDelegate();
     }
 
-    virtual QSize sizeHint() const override
+    QSize sizeHint() const override
     {
         QSize ret = QListView::sizeHint();
         ret.setWidth(qMax(ret.width(), sizeHintForColumn(0) + 30));

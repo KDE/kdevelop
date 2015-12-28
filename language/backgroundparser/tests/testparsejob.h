@@ -31,9 +31,9 @@ class TestParseJob : public KDevelop::ParseJob
 Q_OBJECT
 public:
     TestParseJob(const IndexedString& url, ILanguageSupport* languageSupport);
-    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
-    virtual ControlFlowGraph* controlFlowGraph() override;
-    virtual DataAccessRepository* dataAccessInformation() override;
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
+    ControlFlowGraph* controlFlowGraph() override;
+    DataAccessRepository* dataAccessInformation() override;
 
     int duration_ms;
 };

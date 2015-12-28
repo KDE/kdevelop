@@ -27,12 +27,12 @@ class KDevDocumentSelection: public QItemSelectionModel
     Q_OBJECT
 public:
     explicit KDevDocumentSelection( QAbstractItemModel* model );
-    virtual ~KDevDocumentSelection();
+    ~KDevDocumentSelection() override;
 
 public slots:
-    virtual void select( const QModelIndex & index,
+    void select( const QModelIndex & index,
                          QItemSelectionModel::SelectionFlags command ) override;
-    virtual void select( const QItemSelection & selection,
+    void select( const QItemSelection & selection,
                          QItemSelectionModel::SelectionFlags command ) override;
 };
 

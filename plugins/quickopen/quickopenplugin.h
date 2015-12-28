@@ -52,14 +52,14 @@ class QuickOpenPlugin : public KDevelop::IPlugin, public KDevelop::IQuickOpen
 
 public:
     explicit QuickOpenPlugin( QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~QuickOpenPlugin();
+    ~QuickOpenPlugin() override;
 
     static QuickOpenPlugin* self();
     
     // KDevelop::Plugin methods
-    virtual void unload() override;
+    void unload() override;
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
     enum ModelTypes {
       Files = 1,
@@ -76,20 +76,20 @@ public:
     void showQuickOpen( ModelTypes modes = All );
     void showQuickOpen( const QStringList &items ) override;
 
-    virtual void registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider ) override;
+    void registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider ) override;
 
-    virtual bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider ) override;
+    bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider ) override;
 
-    virtual QSet<KDevelop::IndexedString> fileSet() const override;
+    QSet<KDevelop::IndexedString> fileSet() const override;
 
     //Frees the model by closing active quickopen dialoags, and retuns whether successful.
     bool freeModel();
     
-    virtual void createActionsForMainWindow( Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions ) override;
+    void createActionsForMainWindow( Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions ) override;
 
     QuickOpenLineEdit* createQuickOpenLineWidget();
     
-    virtual KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind) override;
+    KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind) override;
 public slots:
     void quickOpen();
     void quickOpenFile();
@@ -148,7 +148,7 @@ class QuickOpenWidget : public QMenu {
    * @param noSearchFied when this is true, no search-line is shown.
    * */
   QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
-  ~QuickOpenWidget();
+  ~QuickOpenWidget() override;
   void setPreselectedText(const QString &text);
     void prepareShow();
 
@@ -176,9 +176,9 @@ class QuickOpenWidget : public QMenu {
   void applyFilter();
 
   private:
-  virtual void showEvent(QShowEvent *) override;
+  void showEvent(QShowEvent *) override;
   
-  virtual bool eventFilter ( QObject * watched, QEvent * event ) override;
+  bool eventFilter ( QObject * watched, QEvent * event ) override;
 
   QuickOpenModel* m_model;
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
@@ -198,7 +198,7 @@ class QuickOpenWidgetDialog : public QObject {
   Q_OBJECT
   public:
     QuickOpenWidgetDialog( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
-    ~QuickOpenWidgetDialog();
+    ~QuickOpenWidgetDialog() override;
     ///Shows the dialog
     void run();
     QuickOpenWidget* widget() const {
@@ -215,12 +215,12 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
   Q_OBJECT
   public:
     explicit QuickOpenLineEdit(QuickOpenWidgetCreator* creator) ;
-    ~QuickOpenLineEdit() ;
+    ~QuickOpenLineEdit() override ;
     
     bool insideThis(QObject* object);
     void showWithWidget(QuickOpenWidget* widget);
     
-    virtual void setDefaultText(const QString& text) override {
+    void setDefaultText(const QString& text) override {
       m_defaultText = text;
       setPlaceholderText(m_defaultText);
     }
@@ -230,9 +230,9 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     void checkFocus();
     void widgetDestroyed(QObject*);
   private:
-    virtual void focusInEvent(QFocusEvent* ev) override ;
-    virtual bool eventFilter(QObject* obj, QEvent* e) override ;
-    virtual void hideEvent(QHideEvent* ) override;
+    void focusInEvent(QFocusEvent* ev) override ;
+    bool eventFilter(QObject* obj, QEvent* e) override ;
+    void hideEvent(QHideEvent* ) override;
     
     QPointer<QuickOpenWidget> m_widget;
     bool m_forceUpdate;

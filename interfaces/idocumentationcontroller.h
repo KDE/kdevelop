@@ -37,7 +37,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController: public QObject
     Q_OBJECT
 public:
     IDocumentationController();
-    virtual ~IDocumentationController();
+    ~IDocumentationController() override;
 
     /** Return the documentation provider plugin instances. */
     virtual QList<IDocumentationProvider*> documentationProviders() const = 0;

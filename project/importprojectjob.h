@@ -34,11 +34,11 @@ class KDEVPLATFORMPROJECT_EXPORT ImportProjectJob: public KJob
     Q_OBJECT
 public:
     ImportProjectJob(ProjectFolderItem *folder, IProjectFileManager *importer);
-    virtual ~ImportProjectJob();
+    ~ImportProjectJob() override;
 
 public:
     void start() override;
-    virtual bool doKill() override;
+    bool doKill() override;
 
 private Q_SLOTS:
     void importDone();

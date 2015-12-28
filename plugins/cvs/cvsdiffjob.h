@@ -23,15 +23,15 @@ class CvsDiffJob : public CvsJob
     Q_OBJECT
 public:
     explicit CvsDiffJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    virtual ~CvsDiffJob();
+    ~CvsDiffJob() override;
 
     // Begin:  KDevelop::VcsJob
-    virtual QVariant fetchResults() override;
+    QVariant fetchResults() override;
     // End:  KDevelop::VcsJob
 
 private:
     // Begin: KDevelop::DVcsJob
-    virtual void slotProcessError(QProcess::ProcessError error) override;
+    void slotProcessError(QProcess::ProcessError error) override;
     // End: KDevelop::DVcsJob
 };
 

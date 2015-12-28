@@ -41,7 +41,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public AutoOrientedSplitter
     Q_OBJECT
     public:
         explicit FramestackWidget( IDebugController* controller, QWidget *parent=0 );
-        virtual ~FramestackWidget();
+        ~FramestackWidget() override;
     Q_SIGNALS:
         void requestRaise();
     private Q_SLOTS:

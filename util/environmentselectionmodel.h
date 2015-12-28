@@ -41,10 +41,10 @@ public:
 
     explicit EnvironmentSelectionModel( QObject* parent = 0 );
 
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
+    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
 
-    virtual QVariant data( const QModelIndex& index, int role ) const override;
-    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
+    QVariant data( const QModelIndex& index, int role ) const override;
+    bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
 
     /**
      * @returns The @ref EnvironmentGroupList which has bee used to populate this

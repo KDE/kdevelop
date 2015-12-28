@@ -34,7 +34,7 @@ public:
 
     GrepOutputItem(KDevelop::DocumentChangePointer change, const QString& text, bool checkable);
     GrepOutputItem(const QString &filename, const QString &text, bool checkable);
-    ~GrepOutputItem();
+    ~GrepOutputItem() override;
 
     QString filename() const ;
     int lineNumber() const ;
@@ -45,7 +45,7 @@ public:
     /// Check children to determine current state
     void refreshState() ;
 
-    virtual QVariant data ( int role = Qt::UserRole + 1 ) const override;
+    QVariant data ( int role = Qt::UserRole + 1 ) const override;
 
 private:
     KDevelop::DocumentChangePointer m_change;
@@ -59,7 +59,7 @@ class GrepOutputModel : public QStandardItemModel
 
 public:
     explicit GrepOutputModel( QObject *parent = 0 );
-    ~GrepOutputModel();
+    ~GrepOutputModel() override;
 
     void setRegExp(const QRegExp& re);
     void setReplacementTemplate(const QString &tmpl);

@@ -1087,7 +1087,7 @@ Declaration* TopDUContext::usedDeclarationForIndex(unsigned int declarationIndex
   ENSURE_CAN_READ
   if(declarationIndex & (1<<31)) {
     //We use the highest bit to mark direct indices into the local declarations
-    declarationIndex &= (0xffffffff - (1<<31)); //unset the highest bit
+    declarationIndex &= ~(1<<31); //unset the highest bit
     return m_dynamicData->getDeclarationForIndex(declarationIndex);
   }else if(declarationIndex < d_func()->m_usedDeclarationIdsSize())
     return d_func()->m_usedDeclarationIds()[declarationIndex].getDeclaration(this);

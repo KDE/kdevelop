@@ -71,7 +71,7 @@ public:
     explicit IProject(QObject *parent = 0);
 
     /// Destructor.
-    virtual ~IProject();
+    ~IProject() override;
 
     /**
      * Get the file manager for the project

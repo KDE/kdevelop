@@ -35,7 +35,7 @@ class KDEVPLATFORMTESTS_EXPORT TestLanguageController : public LanguageControlle
     Q_OBJECT
 public:
     TestLanguageController(QObject* parent);
-    virtual ~TestLanguageController();
+    ~TestLanguageController() override;
 
     void addTestLanguage(KDevelop::ILanguageSupport* languageSupport, const QStringList& mimetypes);
 };

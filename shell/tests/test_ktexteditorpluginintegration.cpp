@@ -66,7 +66,7 @@ public:
     {
     }
 
-    QObject *createView(KTextEditor::MainWindow * mainWindow)
+    QObject *createView(KTextEditor::MainWindow * mainWindow) override
     {
         return new QObject(mainWindow);
     }

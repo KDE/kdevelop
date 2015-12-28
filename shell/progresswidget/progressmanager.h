@@ -229,7 +229,7 @@ protected:
     /* Only to be used by our good friend the ProgressManager */
     ProgressItem( ProgressItem *parent, const QString &id, const QString &label,
                   const QString &status, bool isCancellable, bool usesCrypto );
-    virtual ~ProgressItem();
+    ~ProgressItem() override;
 
 private:
     QString mId;
@@ -278,7 +278,7 @@ class ProgressManager : public QObject
     friend struct ProgressManagerPrivate;
 
 public:
-    virtual ~ProgressManager();
+    ~ProgressManager() override;
 
     /**
      * @return The singleton instance of this class.

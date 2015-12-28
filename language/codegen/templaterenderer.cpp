@@ -46,8 +46,8 @@ public:
     NoEscapeStream();
     explicit NoEscapeStream (QTextStream* stream);
 
-    virtual QString escape (const QString& input) const override;
-    virtual QSharedPointer< OutputStream > clone (QTextStream* stream) const override;
+    QString escape (const QString& input) const override;
+    QSharedPointer< OutputStream > clone (QTextStream* stream) const override;
 };
 
 NoEscapeStream::NoEscapeStream() : OutputStream()

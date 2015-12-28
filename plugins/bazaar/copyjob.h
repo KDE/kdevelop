@@ -41,13 +41,13 @@ class CopyJob : public KDevelop::VcsJob
 public:
     CopyJob(const QUrl& localLocationSrc, const QUrl& localLocationDstn, BazaarPlugin* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
 
-    virtual KDevelop::IPlugin* vcsPlugin() const override;
-    virtual KDevelop::VcsJob::JobStatus status() const override;
-    virtual QVariant fetchResults() override;
-    virtual void start() override;
+    KDevelop::IPlugin* vcsPlugin() const override;
+    KDevelop::VcsJob::JobStatus status() const override;
+    QVariant fetchResults() override;
+    void start() override;
 
 protected:
-    virtual bool doKill() override;
+    bool doKill() override;
 
 private slots:
     void finish(KJob*);

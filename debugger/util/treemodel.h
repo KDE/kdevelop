@@ -41,7 +41,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT TreeModel : public QAbstractItemModel
 public:
     explicit TreeModel(const QVector<QString>& headers, QObject *parent = 0);
     void setRootItem(TreeItem *item);
-    ~TreeModel();
+    ~TreeModel() override;
 
     void expanded(const QModelIndex &index);
     void collapsed(const QModelIndex &index);
@@ -57,7 +57,7 @@ public:
 public: // QAbstractItemModel overrides
     QVariant data(const QModelIndex &index, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
-    virtual QVariant headerData(int section, Qt::Orientation orientation,
+    QVariant headerData(int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const override;
     QModelIndex index(int row, int column,
                       const QModelIndex &parent = QModelIndex()) const override;

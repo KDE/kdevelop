@@ -60,12 +60,12 @@ class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController
 
 public:
     PartController(Core *core, QWidget *toplevel);
-    virtual ~PartController();
+    ~PartController() override;
 
     bool showTextEditorStatusBar() const;
 
     KTextEditor::Document* createTextPart( const QString &encoding = QString() );
-    virtual KTextEditor::Editor* editorPart() const override;
+    KTextEditor::Editor* editorPart() const override;
 
     bool canCreatePart( const QUrl &url );
 

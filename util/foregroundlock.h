@@ -90,7 +90,7 @@ class KDEVPLATFORMUTIL_EXPORT DoInForeground : public QObject
 Q_OBJECT
 public:
     DoInForeground() ;
-    virtual ~DoInForeground() ;
+    ~DoInForeground() override ;
 
     void doIt() ;
 

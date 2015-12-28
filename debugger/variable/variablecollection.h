@@ -81,7 +81,7 @@ public:
 
     using TreeItem::model;
 
-    ~Variable();
+    ~Variable() override;
 
     /* Connects this variable to debugger, fetching the current value and
        otherwise preparing this variable to be displayed everywhere.  
@@ -201,7 +201,7 @@ class VariableProvider : public KTextEditor::TextHintProvider
 {
 public:
     explicit VariableProvider(VariableCollection* collection);
-    virtual QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
+    QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
 
 private:
     VariableCollection* m_collection;
@@ -219,7 +219,7 @@ public:
     };
 
     explicit VariableCollection(IDebugController* parent);
-    virtual ~VariableCollection();
+    ~VariableCollection() override;
 
     VariablesRoot* root() const { return universe_; }
     Watches* watches() const { return universe_->watches(); }

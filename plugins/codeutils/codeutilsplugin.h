@@ -33,7 +33,7 @@ class CodeUtilsPlugin : public KDevelop::IPlugin
 
 public:
     explicit CodeUtilsPlugin( QObject *parent, const QVariantList & = QVariantList() );
-    ~CodeUtilsPlugin();
+    ~CodeUtilsPlugin() override;
 
 private slots:
     void documentDeclaration();

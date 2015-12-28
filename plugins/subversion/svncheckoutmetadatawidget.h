@@ -24,7 +24,7 @@ class SvnCheckoutMetadataWidget : public QWidget
     Q_OBJECT
 public:
     explicit SvnCheckoutMetadataWidget( QWidget *parent );
-    virtual ~SvnCheckoutMetadataWidget();
+    ~SvnCheckoutMetadataWidget() override;
     void setDestinationLocation( const QUrl& );
     virtual KDevelop::VcsLocation source() const;
     virtual QUrl destination() const;

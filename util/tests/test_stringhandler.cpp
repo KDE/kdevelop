@@ -54,3 +54,22 @@ void TestStringHandler::testHtmlToPlainText_data()
         << "<p>bar() </p><dl><dt class=\"param-name-index-0\">a</dt><dd class=\"param-descr-index-0\"> foo</dd></dl>"
         << KDevelop::CompleteMode << "bar() \na\nfoo";
 }
+
+void TestStringHandler::testStripAnsiSequences()
+{
+    QFETCH(QString, input);
+    QFETCH(QString, expectedOutput);
+
+    const auto output = stripAnsiSequences(input);
+    QCOMPARE(output, expectedOutput);
+}
+
+void TestStringHandler::testStripAnsiSequences_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("expectedOutput");
+
+    QTest::newRow("simple")
+        << QStringLiteral("foo [31m[34mbar[0m:")
+        << "foo bar:";
+}

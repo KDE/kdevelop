@@ -25,11 +25,11 @@ class KDevKonsoleViewPlugin : public KDevelop::IPlugin
 
 public:
     KDevKonsoleViewPlugin( KPluginFactory*, QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~KDevKonsoleViewPlugin();
+    ~KDevKonsoleViewPlugin() override;
 
-    virtual void unload() override;
-    virtual bool hasError() const override;
-    virtual QString errorDescription() const override;
+    void unload() override;
+    bool hasError() const override;
+    QString errorDescription() const override;
 
     KPluginFactory* konsoleFactory() const;
 

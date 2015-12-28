@@ -40,13 +40,13 @@ class DiffJob : public KDevelop::VcsJob
 public:
     DiffJob(const QDir& workingDir, const QString& revisionSpecRange, const QUrl& fileOrDirectory, BazaarPlugin* parent = 0, OutputJobVerbosity verbosity = OutputJob::Silent);
 
-    virtual KDevelop::IPlugin* vcsPlugin() const override;
-    virtual KDevelop::VcsJob::JobStatus status() const override;
-    virtual QVariant fetchResults() override;
-    virtual void start() override;
+    KDevelop::IPlugin* vcsPlugin() const override;
+    KDevelop::VcsJob::JobStatus status() const override;
+    QVariant fetchResults() override;
+    void start() override;
 
 protected:
-    virtual bool doKill() override;
+    bool doKill() override;
 
 private slots:
     void prepareResult(KJob*);

@@ -34,7 +34,7 @@ class WelcomePageView : public Sublime::View
     public:
         explicit WelcomePageView(Sublime::Document* doc, WidgetOwnership ws = DoNotTakeOwnerShip);
 
-        virtual QWidget* createWidget(QWidget* parent) override;
+        QWidget* createWidget(QWidget* parent) override;
 };
 
 

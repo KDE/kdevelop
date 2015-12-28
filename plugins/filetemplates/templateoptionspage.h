@@ -58,7 +58,7 @@ public:
     /**
      * Destructor
      **/
-    virtual ~TemplateOptionsPage();
+    ~TemplateOptionsPage() override;
 
     /**
      * Parses the XML-formatted .kcfg file contents and creates the UI for setting template options. 

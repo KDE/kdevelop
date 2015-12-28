@@ -150,7 +150,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
   public:
 
     explicit CodeHighlighting(QObject* parent);
-    virtual ~CodeHighlighting();
+    ~CodeHighlighting() override;
 
     /// This function is thread-safe
     /// @warning The duchain must not be locked when this is called (->possible deadlock)

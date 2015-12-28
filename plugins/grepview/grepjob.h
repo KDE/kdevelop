@@ -62,11 +62,11 @@ public:
     void setCaseSensitive(bool caseSensitive);
     void setProjectFilesFlag(bool projectFilesFlag);
 
-    virtual void start() override;
+    void start() override;
 
-    virtual QString statusName() const override;
+    QString statusName() const override;
 protected:
-    virtual bool doKill() override;
+    bool doKill() override;
 
 //    GrepOutputModel* model() const;
 

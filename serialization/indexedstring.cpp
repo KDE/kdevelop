@@ -207,9 +207,10 @@ QUrl IndexedString::toUrl() const
   if (isEmpty()) {
     return {};
   }
-  QUrl ret = QUrl::fromUserInput( str() );
-  Q_ASSERT(!ret.isRelative());
-  return ret;
+
+  const QUrl url = QUrl::fromUserInput( str() );
+  Q_ASSERT(url.isEmpty() || !url.isRelative());
+  return url;
 }
 
 QString IndexedString::str() const {

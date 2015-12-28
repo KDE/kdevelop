@@ -44,7 +44,7 @@ class KDEVPLATFORMUTIL_EXPORT EnvironmentSelectionWidget : public QWidget
 
 public:
     explicit EnvironmentSelectionWidget( QWidget *parent = 0 );
-    ~EnvironmentSelectionWidget();
+    ~EnvironmentSelectionWidget() override;
 
     /**
      * @returns The currently selected environment profile name, as written to KConfigXT

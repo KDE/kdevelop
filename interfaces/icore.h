@@ -78,7 +78,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ICore: public QObject
     Q_OBJECT
 
 public:
-    virtual ~ICore();
+    ~ICore() override;
 
     /** @return the static ICore instance */
     static ICore *self();

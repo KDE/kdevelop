@@ -38,7 +38,7 @@ template <class Widget>
 class SpecialWidgetFactory: public SimpleToolWidgetFactory<Widget> {
 public:
     SpecialWidgetFactory(const QString &id): SimpleToolWidgetFactory<Widget>(id) {}
-    virtual QWidget* create(ToolDocument *doc, QWidget *parent = 0)
+    QWidget* create(ToolDocument *doc, QWidget *parent = 0) override
     {
         QWidget *w = new QWidget(parent);
         Widget *inner = new Widget(w);

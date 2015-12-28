@@ -85,7 +85,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassModel : public QAbstractItemModel, public
   Q_OBJECT
 public:
   ClassModel();
-  virtual ~ClassModel();
+  ~ClassModel() override;
 
 public:
   /// Retrieve the DU object related to the specified index.
@@ -99,7 +99,7 @@ public:
   QModelIndex index(ClassModelNodes::Node* a_node) const;
 
   inline void setFeatures(NodesModelInterface::Features features);
-  virtual inline NodesModelInterface::Features features() const override { return m_features; }
+  inline NodesModelInterface::Features features() const override { return m_features; }
 
 public Q_SLOTS:
   /// Call this to update the filter string for the search results folder.
@@ -111,11 +111,11 @@ public Q_SLOTS:
   void addProjectNode(KDevelop::IProject* project);
 
 private: // NodesModelInterface overrides
-  virtual void nodesLayoutAboutToBeChanged(ClassModelNodes::Node* a_parent) override;
-  virtual void nodesLayoutChanged(ClassModelNodes::Node* a_parent) override;
-  virtual void nodesRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last) override;
-  virtual void nodesAboutToBeAdded(ClassModelNodes::Node* a_parent, int a_pos, int a_size) override;
-  virtual void nodesAdded(ClassModelNodes::Node* a_parent) override;
+  void nodesLayoutAboutToBeChanged(ClassModelNodes::Node* a_parent) override;
+  void nodesLayoutChanged(ClassModelNodes::Node* a_parent) override;
+  void nodesRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last) override;
+  void nodesAboutToBeAdded(ClassModelNodes::Node* a_parent, int a_pos, int a_size) override;
+  void nodesAdded(ClassModelNodes::Node* a_parent) override;
 
 private:
   /// Main level node - it's usually invisible.
@@ -131,16 +131,16 @@ public Q_SLOTS:
   void expanded(const QModelIndex& index);
 
 public: // QAbstractItemModel overrides
-  virtual QFlags< Qt::ItemFlag > flags(const QModelIndex&) const override;
-  virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-  virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-  virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-  virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+  QFlags< Qt::ItemFlag > flags(const QModelIndex&) const override;
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+  int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
-  virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
+  bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
 
-  virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-  virtual QModelIndex parent(const QModelIndex& child) const override;
+  QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+  QModelIndex parent(const QModelIndex& child) const override;
 };
 
 inline void ClassModel::setFeatures(Features features)

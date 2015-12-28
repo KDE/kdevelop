@@ -84,7 +84,7 @@ public:
     {
     }
 
-    ~KeepAliveWidget();
+    ~KeepAliveWidget() override;
 
 private:
     ToolViewFactory *m_factory;
@@ -105,7 +105,7 @@ public:
         m_container->setLayout(new QVBoxLayout);
     }
 
-    ~ToolViewFactory()
+    ~ToolViewFactory() override
     {
         delete m_container;
     }
@@ -121,7 +121,7 @@ public:
         return widget;
     }
 
-    virtual Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() override
     {
         switch (m_pos) {
             case KTextEditor::MainWindow::Left:

@@ -45,7 +45,7 @@ class ClassModelNodesController : public QObject
   Q_OBJECT
 public:
   ClassModelNodesController();
-  ~ClassModelNodesController();
+  ~ClassModelNodesController() override;
 
   static ClassModelNodesController& self();
 

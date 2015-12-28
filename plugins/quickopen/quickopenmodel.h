@@ -81,7 +81,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
     //The expandingwidgetmodel needs access to the tree-view
     void setTreeView( QTreeView* view );
     
-    virtual QTreeView* treeView() const override;
+    QTreeView* treeView() const override;
 
     virtual QSet<KDevelop::IndexedString> fileSet() const;
 
@@ -96,9 +96,9 @@ class QuickOpenModel : public ExpandingWidgetModel {
     void restart_internal( bool keepFilterText );
   
   private:
-    virtual bool indexIsItem(const QModelIndex& index) const override;
+    bool indexIsItem(const QModelIndex& index) const override;
     
-    virtual int contextMatchQuality(const QModelIndex & index) const override;
+    int contextMatchQuality(const QModelIndex & index) const override;
 
     KDevelop::QuickOpenDataPointer getItem( int row, bool noReset = false ) const;
     

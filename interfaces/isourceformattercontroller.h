@@ -41,7 +41,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 
 	public:
 		explicit ISourceFormatterController(QObject *parent = 0);
-		virtual ~ISourceFormatterController();
+		~ISourceFormatterController() override;
 
 		/** \return The formatter corresponding to the language
 		* of the document corresponding to the \arg url.

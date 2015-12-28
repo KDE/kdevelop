@@ -24,15 +24,15 @@ class SvnImportMetadataWidget : public KDevelop::VcsImportMetadataWidget
     Q_OBJECT
 public:
     explicit SvnImportMetadataWidget( QWidget *parent );
-    virtual ~SvnImportMetadataWidget();
+    ~SvnImportMetadataWidget() override;
 
-    virtual void setSourceLocation( const KDevelop::VcsLocation& ) override;
-    virtual void setSourceLocationEditable( bool ) override;
-    virtual QUrl source() const override;
-    virtual KDevelop::VcsLocation destination() const override;
-    virtual QString message() const override;
-    virtual void setUseSourceDirForDestination( bool ) override;
-    virtual bool hasValidData() const override;
+    void setSourceLocation( const KDevelop::VcsLocation& ) override;
+    void setSourceLocationEditable( bool ) override;
+    QUrl source() const override;
+    KDevelop::VcsLocation destination() const override;
+    QString message() const override;
+    void setUseSourceDirForDestination( bool ) override;
+    bool hasValidData() const override;
 private:
     Ui::SvnImportMetadataWidget *m_ui;
     bool useSourceDirForDestination;

@@ -46,7 +46,7 @@ class ContextBrowserView : public QWidget {
     Q_OBJECT
     public:
         ContextBrowserView( ContextBrowserPlugin*, QWidget* parent );
-        ~ContextBrowserView();
+        ~ContextBrowserView() override;
 
         //duchain must be locked
         void setContext(KDevelop::DUContext* context);
@@ -84,11 +84,11 @@ class ContextBrowserView : public QWidget {
         void navigationContextChanged(bool wasInitial, bool isInitial);
 
     private:
-        virtual void showEvent(QShowEvent* event) override;
-        virtual bool event(QEvent* event) override;
+        void showEvent(QShowEvent* event) override;
+        bool event(QEvent* event) override;
         
-        virtual void focusInEvent(QFocusEvent* event) override;
-        virtual void focusOutEvent(QFocusEvent* event) override;
+        void focusInEvent(QFocusEvent* event) override;
+        void focusOutEvent(QFocusEvent* event) override;
         void resetWidget();
 
     private:

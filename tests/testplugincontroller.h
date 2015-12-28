@@ -38,16 +38,16 @@ class KDEVPLATFORMTESTS_EXPORT TestPluginController : public PluginController
 
 public:
     TestPluginController(KDevelop::Core* core);
-    virtual QList< KDevelop::IPlugin* > allPluginsForExtension(const QString& extension,
+    QList< KDevelop::IPlugin* > allPluginsForExtension(const QString& extension,
                                                                const QVariantMap& constraints = QVariantMap()) override;
-    virtual QList< KDevelop::IPlugin* > loadedPlugins() const override;
-    virtual KDevelop::IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) override;
-    virtual KDevelop::IPlugin* loadPlugin(const QString& pluginName) override;
-    virtual KPluginMetaData pluginInfo(const KDevelop::IPlugin*) const override;
-    virtual QList< KDevelop::ContextMenuExtension > queryPluginsForContextMenuExtensions(KDevelop::Context* context)const override ;
-    virtual QVector<KPluginMetaData> queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = QVariantMap()) const override;
-    virtual bool unloadPlugin(const QString& plugin) override;
-    virtual void initialize() override;
+    QList< KDevelop::IPlugin* > loadedPlugins() const override;
+    KDevelop::IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) override;
+    KDevelop::IPlugin* loadPlugin(const QString& pluginName) override;
+    KPluginMetaData pluginInfo(const KDevelop::IPlugin*) const override;
+    QList< KDevelop::ContextMenuExtension > queryPluginsForContextMenuExtensions(KDevelop::Context* context)const override ;
+    QVector<KPluginMetaData> queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = QVariantMap()) const override;
+    bool unloadPlugin(const QString& plugin) override;
+    void initialize() override;
 };
 
 }

@@ -50,33 +50,33 @@ public:
                 this, &ConfigPage::changed);
     }
 
-    virtual ~KTextEditorConfigPageAdapter() {}
+    ~KTextEditorConfigPageAdapter() override {}
 
-    virtual QString name() const override
+    QString name() const override
     {
         return m_page->name();
     }
 
-    virtual QIcon icon() const override
+    QIcon icon() const override
     {
         return m_page->icon();
     }
 
-    virtual QString fullName() const override
+    QString fullName() const override
     {
         return m_page->fullName();
     }
 
 public Q_SLOTS:
-    virtual void apply() override
+    void apply() override
     {
         m_page->apply();
     }
-    virtual void defaults() override
+    void defaults() override
     {
         m_page->defaults();
     }
-    virtual void reset() override
+    void reset() override
     {
         m_page->reset();
     }

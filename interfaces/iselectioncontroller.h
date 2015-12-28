@@ -51,7 +51,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISelectionController : public QObject
 public:
     ///Constructor.
     explicit ISelectionController(QObject *parent);
-    ~ISelectionController();
+    ~ISelectionController() override;
 
     /**
      * Provides the current selection, note that this might be 0

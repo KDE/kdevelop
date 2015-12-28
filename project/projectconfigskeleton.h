@@ -43,7 +43,7 @@ public:
      */
     explicit ProjectConfigSkeleton( const QString & configname );
 
-    virtual ~ProjectConfigSkeleton();
+    ~ProjectConfigSkeleton() override;
 
     void setDeveloperTempFile( const QString& );
     void setProjectTempFile( const QString& );

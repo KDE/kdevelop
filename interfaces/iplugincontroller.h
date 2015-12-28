@@ -76,7 +76,7 @@ public:
 
     explicit IPluginController( QObject* parent = 0 );
 
-    virtual ~IPluginController();
+    ~IPluginController() override;
 
     /**
      * Get the plugin info for a loaded plugin

@@ -60,15 +60,15 @@ class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
 public:
   ExternalScriptViewFactory( ExternalScriptPlugin *plugin ): m_plugin( plugin ) {}
 
-  virtual QWidget* create( QWidget *parent = 0 ) override {
+  QWidget* create( QWidget *parent = 0 ) override {
     return new ExternalScriptView( m_plugin, parent );
   }
 
-  virtual Qt::DockWidgetArea defaultPosition() override {
+  Qt::DockWidgetArea defaultPosition() override {
     return Qt::RightDockWidgetArea;
   }
 
-  virtual QString id() const override {
+  QString id() const override {
     return "org.kdevelop.ExternalScriptView";
   }
 
@@ -261,7 +261,7 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   public:
     ExternalScriptJobOwningItem( ExternalScriptItem* item, const QUrl &url, ExternalScriptPlugin* parent ) : ExternalScriptJob(item, url, parent), m_item(item) {
     }
-    ~ExternalScriptJobOwningItem() {
+    ~ExternalScriptJobOwningItem() override {
       delete m_item;
     }
   private:

@@ -38,7 +38,7 @@ class OutputPage : public QWidget
 
 public:
     explicit OutputPage(QWidget* parent);
-    virtual ~OutputPage();
+    ~OutputPage() override;
 
     /**
      * Creates form widgets according to the number of output files of the template @p fileTemplate.

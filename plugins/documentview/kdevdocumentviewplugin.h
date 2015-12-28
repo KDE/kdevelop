@@ -38,8 +38,8 @@ public:
 
 public:
     KDevDocumentViewPlugin( QObject *parent, const QVariantList& args );
-    virtual ~KDevDocumentViewPlugin();
-    virtual void unload() override;
+    ~KDevDocumentViewPlugin() override;
+    void unload() override;
 
 private:
     KDevDocumentViewPluginFactory* factory;

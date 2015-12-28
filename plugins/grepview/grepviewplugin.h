@@ -28,11 +28,11 @@ class GrepViewPlugin : public KDevelop::IPlugin
 
 public:
     explicit GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
-    ~GrepViewPlugin();
-    virtual void unload() override;
+    ~GrepViewPlugin() override;
+    void unload() override;
 
     void rememberSearchDirectory(QString const & directory);
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
     void showDialog(bool setLastUsed = false, QString pattern = QString(), bool showOptions = true);
     
     /**

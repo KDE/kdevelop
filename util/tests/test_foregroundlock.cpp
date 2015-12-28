@@ -33,7 +33,7 @@ using namespace KDevelop;
 class TryLockThread : public QThread {
     Q_OBJECT
 public:
-    virtual void run() override {
+    void run() override {
         ForegroundLock lock(false);
         for(int i = 0; i < 1000; ++i) {
             if (lock.tryLock()) {

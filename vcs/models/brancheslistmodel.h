@@ -41,11 +41,11 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
         enum Roles { CurrentRole = Qt::UserRole+1 };
 
         explicit BranchesListModel(QObject* parent = 0);
-        ~BranchesListModel();
+        ~BranchesListModel() override;
 
         void initialize(KDevelop::IBranchingVersionControl* dvcsplugin, const QUrl& repo);
 
-        virtual QHash<int, QByteArray> roleNames() const override;
+        QHash<int, QByteArray> roleNames() const override;
 
         Q_INVOKABLE void createBranch(const QString& baseBranch, const QString& newBranch);
         Q_INVOKABLE void removeBranch(const QString& branch);

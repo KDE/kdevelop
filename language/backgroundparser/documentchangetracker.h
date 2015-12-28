@@ -129,7 +129,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearerPrivate : public QObje
     Q_OBJECT
 public:
     RevisionLockerAndClearerPrivate(DocumentChangeTracker* tracker, qint64 revision);
-    ~RevisionLockerAndClearerPrivate();
+    ~RevisionLockerAndClearerPrivate() override;
     inline qint64 revision() const {
         return m_revision;
     }
@@ -144,7 +144,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeTracker : public QObject
     Q_OBJECT
 public:
     explicit DocumentChangeTracker( KTextEditor::Document* document );
-    virtual ~DocumentChangeTracker();
+    ~DocumentChangeTracker() override;
 
     /**
      * Completions of the users current edits that are supposed to complete

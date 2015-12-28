@@ -44,7 +44,7 @@ class TransactionItemView : public QScrollArea
 public:
     explicit TransactionItemView( QWidget * parent = 0, const char * name = 0 );
 
-    virtual ~TransactionItemView() {}
+    ~TransactionItemView() override {}
     TransactionItem *addTransactionItem( ProgressItem *item, bool first );
 
     QSize sizeHint() const override;
@@ -54,7 +54,7 @@ public Q_SLOTS:
     void slotItemCompleted(TransactionItem * item);
 
 protected:
-    virtual void resizeEvent ( QResizeEvent *event ) override;
+    void resizeEvent ( QResizeEvent *event ) override;
 
 private:
     QWidget *mBigBox;
@@ -66,7 +66,7 @@ class TransactionItem : public QWidget
 public:
     TransactionItem( QWidget *parent, ProgressItem *item, bool first );
 
-    ~TransactionItem();
+    ~TransactionItem() override;
 
     void hideHLine();
 
@@ -104,7 +104,7 @@ class ProgressDialog : public OverlayWidget
     Q_OBJECT
 public:
     ProgressDialog( QWidget *alignWidget, QWidget *parent, const char *name = 0 );
-    ~ProgressDialog();
+    ~ProgressDialog() override;
     void setVisible( bool b ) override;
 
 public Q_SLOTS:
@@ -127,7 +127,7 @@ Q_SIGNALS:
     void visibilityChanged( bool );
 
 protected:
-    virtual void closeEvent( QCloseEvent * ) override;
+    void closeEvent( QCloseEvent * ) override;
 
     TransactionItemView *mScrollView;
     QMap<const ProgressItem *, TransactionItem *> mTransactionsToListviewItems;

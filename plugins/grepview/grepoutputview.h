@@ -32,9 +32,9 @@ class GrepOutputViewFactory: public KDevelop::IToolViewFactory
 {
 public:
     explicit GrepOutputViewFactory(GrepViewPlugin* plugin);
-    virtual QWidget* create(QWidget* parent = 0) override;
-    virtual Qt::DockWidgetArea defaultPosition() override;
-    virtual QString id() const override;
+    QWidget* create(QWidget* parent = 0) override;
+    Qt::DockWidgetArea defaultPosition() override;
+    QString id() const override;
 private:
     GrepViewPlugin* m_plugin;
 };
@@ -51,7 +51,7 @@ public:
     };
 
     GrepOutputView(QWidget* parent, GrepViewPlugin* plugin);
-    ~GrepOutputView();
+    ~GrepOutputView() override;
     GrepOutputModel* model();
     
     /**

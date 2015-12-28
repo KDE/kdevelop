@@ -57,7 +57,7 @@ class SessionDialog : public QDialog
     Q_OBJECT
 public:
     explicit SessionDialog( QWidget* = 0 );
-    virtual ~SessionDialog();
+    ~SessionDialog() override;
 private Q_SLOTS:
     void createSession();
     void deleteSession();

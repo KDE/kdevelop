@@ -50,7 +50,7 @@ class KDEVPLATFORMINTERFACES_EXPORT LaunchConfigurationType : public QObject
 Q_OBJECT
 public:
     LaunchConfigurationType();
-    virtual ~LaunchConfigurationType();
+    ~LaunchConfigurationType() override;
 
     /**
      * Provide a unique identifier for the type

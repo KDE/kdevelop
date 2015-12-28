@@ -41,66 +41,66 @@ class CvsPlugin : public KDevelop::IPlugin, public KDevelop::ICentralizedVersion
 
 public:
     explicit CvsPlugin(QObject *parent, const QVariantList & args = QVariantList());
-    virtual ~CvsPlugin();
+    ~CvsPlugin() override;
 
-    virtual void unload() override;
+    void unload() override;
 
-    virtual QString name() const override;
-    virtual KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;
+    QString name() const override;
+    KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;
 
     // From KDevelop::IPlugin
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*) override;
 
     // Begin:  KDevelop::IBasicVersionControl
-    virtual bool isVersionControlled(const QUrl& localLocation) override;
-    virtual KDevelop::VcsJob* repositoryLocation(const QUrl& localLocation) override;
-    virtual KDevelop::VcsJob* add(const QList<QUrl>& localLocations,
+    bool isVersionControlled(const QUrl& localLocation) override;
+    KDevelop::VcsJob* repositoryLocation(const QUrl& localLocation) override;
+    KDevelop::VcsJob* add(const QList<QUrl>& localLocations,
                                   KDevelop::IBasicVersionControl::RecursionMode recursion) override;
-    virtual KDevelop::VcsJob* remove(const QList<QUrl>& localLocations) override;
-    virtual KDevelop::VcsJob* copy(const QUrl& localLocationSrc,
+    KDevelop::VcsJob* remove(const QList<QUrl>& localLocations) override;
+    KDevelop::VcsJob* copy(const QUrl& localLocationSrc,
                                    const QUrl& localLocationDstn) override;
-    virtual KDevelop::VcsJob* move(const QUrl& localLocationSrc,
+    KDevelop::VcsJob* move(const QUrl& localLocationSrc,
                                    const QUrl& localLocationDst) override;
-    virtual KDevelop::VcsJob* status(const QList<QUrl>& localLocations,
+    KDevelop::VcsJob* status(const QList<QUrl>& localLocations,
                                      KDevelop::IBasicVersionControl::RecursionMode recursion) override;
-    virtual KDevelop::VcsJob* revert(const QList<QUrl>& localLocations,
+    KDevelop::VcsJob* revert(const QList<QUrl>& localLocations,
                                      KDevelop::IBasicVersionControl::RecursionMode recursion) override;
-    virtual KDevelop::VcsJob* update(const QList<QUrl>& localLocations,
+    KDevelop::VcsJob* update(const QList<QUrl>& localLocations,
                                      const KDevelop::VcsRevision& rev,
                                      KDevelop::IBasicVersionControl::RecursionMode recursion) override;
-    virtual KDevelop::VcsJob* commit(const QString& message,
+    KDevelop::VcsJob* commit(const QString& message,
                                      const QList<QUrl>& localLocations,
                                      KDevelop::IBasicVersionControl::RecursionMode recursion) override;
-    virtual KDevelop::VcsJob* diff(const QUrl& fileOrDirectory,
+    KDevelop::VcsJob* diff(const QUrl& fileOrDirectory,
                                    const KDevelop::VcsRevision& srcRevision,
                                    const KDevelop::VcsRevision& dstRevision,
                                    KDevelop::VcsDiff::Type,
                                    KDevelop::IBasicVersionControl::RecursionMode = KDevelop::IBasicVersionControl::Recursive) override;
-    virtual KDevelop::VcsJob* log(const QUrl& localLocation,
+    KDevelop::VcsJob* log(const QUrl& localLocation,
                                   const KDevelop::VcsRevision& rev,
                                   unsigned long limit) override;
-    virtual KDevelop::VcsJob* log(const QUrl& localLocation,
+    KDevelop::VcsJob* log(const QUrl& localLocation,
                                   const KDevelop::VcsRevision& rev,
                                   const KDevelop::VcsRevision& limit) override;
-    virtual KDevelop::VcsJob* annotate(const QUrl& localLocation,
+    KDevelop::VcsJob* annotate(const QUrl& localLocation,
                                        const KDevelop::VcsRevision& rev) override;
-    virtual KDevelop::VcsJob* resolve(const QList<QUrl>& localLocations,
+    KDevelop::VcsJob* resolve(const QList<QUrl>& localLocations,
                                       KDevelop::IBasicVersionControl::RecursionMode recursion) override;
-    virtual KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive) override;
+    KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive) override;
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::ICentralizedVersionControl
-    virtual KDevelop::VcsJob* edit(const QUrl& localLocation) override;
-    virtual KDevelop::VcsJob* unedit(const QUrl& localLocation) override;
-    virtual KDevelop::VcsJob* localRevision(const QUrl& localLocation,
+    KDevelop::VcsJob* edit(const QUrl& localLocation) override;
+    KDevelop::VcsJob* unedit(const QUrl& localLocation) override;
+    KDevelop::VcsJob* localRevision(const QUrl& localLocation,
                                             KDevelop::VcsRevision::RevisionType) override;
-    virtual KDevelop::VcsJob* import(const QString& commitMessage, const QUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository) override;
+    KDevelop::VcsJob* import(const QString& commitMessage, const QUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository) override;
 // End:  KDevelop::ICentralizedVersionControl
 
     CvsProxy* proxy();
 
     const QUrl urlFocusedDocument() const;
-    virtual KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const override;
+    KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const override;
 public slots:
     // slots for context menu
     void ctxEdit();

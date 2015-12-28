@@ -27,6 +27,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
+#include <util/kdevstringhandler.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
@@ -35,6 +36,7 @@
 #include <QApplication>
 #include <QFontDatabase>
 
+#include <functional>
 #include <set>
 
 Q_DECLARE_METATYPE(QVector<KDevelop::FilteredItem>)
@@ -63,7 +65,7 @@ class ParseWorker : public QObject
 public:
     ParseWorker()
         : QObject(0)
-        , m_filter( new NoFilterStrategy )
+        , m_filter(new NoFilterStrategy)
         , m_timer(new QTimer(this))
     {
         m_timer->setInterval(BATCH_AGGREGATE_TIME_DELAY);
@@ -110,6 +112,11 @@ private slots:
         QVector<KDevelop::FilteredItem> filteredItems;
         filteredItems.reserve(qMin(BATCH_SIZE, m_cachedLines.size()));
 
+        // apply pre-filtering functions
+        std::transform(m_cachedLines.constBegin(), m_cachedLines.constEnd(),
+                       m_cachedLines.begin(), &KDevelop::stripAnsiSequences);
+
+        // apply filtering strategy
         foreach(const QString& line, m_cachedLines) {
             FilteredItem item = m_filter->errorInLine(line);
             if( item.type == FilteredItem::InvalidItem ) {

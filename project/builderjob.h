@@ -59,7 +59,7 @@ public:
      */
     BuilderJob();
 
-    virtual ~BuilderJob();
+    ~BuilderJob() override;
 
     /**
      * Allows to easily schedule building a couple of @p items using the

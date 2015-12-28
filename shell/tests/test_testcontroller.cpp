@@ -44,18 +44,18 @@ class FakeTestSuite : public KDevelop::ITestSuite
 {
 public:
     FakeTestSuite(const QString& name, IProject* project, const QStringList& cases = QStringList()) : m_name(name), m_project(project), m_cases(cases) {}
-    virtual ~FakeTestSuite() {}
+    ~FakeTestSuite() override {}
 
-    virtual IProject* project() const override {return m_project;}
-    virtual QString name() const override {return m_name;}
-    virtual QStringList cases() const override {return m_cases;}
+    IProject* project() const override {return m_project;}
+    QString name() const override {return m_name;}
+    QStringList cases() const override {return m_cases;}
 
-    virtual IndexedDeclaration declaration() const override;
-    virtual IndexedDeclaration caseDeclaration(const QString& testCase) const override;
+    IndexedDeclaration declaration() const override;
+    IndexedDeclaration caseDeclaration(const QString& testCase) const override;
 
-    virtual KJob* launchAllCases(TestJobVerbosity verbosity) override;
-    virtual KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity) override;
-    virtual KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity) override;
+    KJob* launchAllCases(TestJobVerbosity verbosity) override;
+    KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity) override;
+    KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity) override;
 
 private:
     QString m_name;

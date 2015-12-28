@@ -35,18 +35,18 @@ class EditorConfigPage : public ConfigPage
     Q_OBJECT
 public:
     explicit EditorConfigPage(QWidget* parent);
-    virtual ~EditorConfigPage();
+    ~EditorConfigPage() override;
 
-    virtual QString name() const override;
-    virtual QIcon icon() const override;
-    virtual QString fullName() const override;
-    virtual int childPages() const override;
-    virtual ConfigPage* childPage(int number) override;
+    QString name() const override;
+    QIcon icon() const override;
+    QString fullName() const override;
+    int childPages() const override;
+    ConfigPage* childPage(int number) override;
 public Q_SLOTS:
     // nothing to edit on this page, only subpages have actual configuration
-    virtual void apply() override {};
-    virtual void reset() override {};
-    virtual void defaults() override {};
+    void apply() override {};
+    void reset() override {};
+    void defaults() override {};
 };
 }
 

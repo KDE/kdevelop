@@ -34,7 +34,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevFileManagerFactory, "kdevfilemanager.json", regis
 class KDevFileManagerViewFactory: public KDevelop::IToolViewFactory{
 public:
     KDevFileManagerViewFactory(KDevFileManagerPlugin *plugin): m_plugin(plugin) {}
-    virtual QWidget* create(QWidget *parent = 0) override
+    QWidget* create(QWidget *parent = 0) override
     {
         Q_UNUSED(parent)
         return new FileManager(m_plugin,parent);
@@ -48,17 +48,17 @@ public:
         return KDevelop::IToolViewFactory::toolBarActions( w );
     }
 
-    virtual Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() override
     {
         return Qt::LeftDockWidgetArea;
     }
 
-    virtual QString id() const override
+    QString id() const override
     {
         return "org.kdevelop.FileManagerView";
     }
 
-    virtual bool allowMultiple() const override
+    bool allowMultiple() const override
     {
         return true;
     }

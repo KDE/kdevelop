@@ -22,9 +22,9 @@ macro(kdevplatform_create_template_archive _templateName)
     get_filename_component(_baseName ${_tmp_file} NAME_WE)
     if(WIN32)
         set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.zip)
-    else(WIN32)
+    else()
         set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
-    endif(WIN32)
+    endif()
 
 
     file(GLOB _files "${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}/*")
@@ -35,9 +35,9 @@ macro(kdevplatform_create_template_archive _templateName)
         string(REGEX MATCH "\\.svn" _v2 ${_fileName} )
         if(WIN32)
             string(REGEX MATCH "_svn" _v3 ${_fileName} )
-        else(WIN32)
+        else()
             set(_v3 FALSE)
-        endif(WIN32)
+        endif()
         if ( _v1 AND NOT _v2 AND NOT _v3 )
             set(_deps ${_deps} ${_file})
         endif ( _v1 AND NOT _v2 AND NOT _v3 )
@@ -51,7 +51,7 @@ macro(kdevplatform_create_template_archive _templateName)
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
             DEPENDS ${_deps}
         )
-    else(WIN32)
+    else()
 
         if(APPLE)
             add_custom_command(OUTPUT ${_template}
@@ -60,16 +60,16 @@ macro(kdevplatform_create_template_archive _templateName)
                     -j -f ${_template} .
                 DEPENDS ${_deps}
             )
-        else(APPLE)
+        else()
             add_custom_command(OUTPUT ${_template}
                 COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
                     --exclude .kdev_ignore --exclude .svn --owner=root --group=root --numeric-owner
                     -j -f ${_template} .
                 DEPENDS ${_deps}
             )
-        endif(APPLE)
+        endif()
 
-    endif(WIN32)
+    endif()
 
 
 endmacro(kdevplatform_create_template_archive _templateName)
@@ -82,9 +82,9 @@ macro(kdevplatform_add_template _installDirectory _templateName)
     get_filename_component(_baseName ${_tmp_file} NAME_WE)
     if(WIN32)
         set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.zip)
-    else(WIN32)
+    else()
         set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
-    endif(WIN32)
+    endif()
 
     install( FILES ${_template} DESTINATION ${_installDirectory})
     GET_DIRECTORY_PROPERTY(_tmp_DIR_PROPS ADDITIONAL_MAKE_CLEAN_FILES )

@@ -39,7 +39,7 @@ public:
 
     typedef QExplicitlySharedDataPointer<IAssistantAction> Ptr;
 
-    virtual ~IAssistantAction();
+    ~IAssistantAction() override;
 
     ///Creates a QAction that represents this exact assistant action.
     ///The caller owns the action, and is responsible for deleting it.
@@ -85,15 +85,15 @@ public:
     /**
      * @return the label contents.
      */
-    virtual QString description() const override;
+    QString description() const override;
     /**
      * The label cannot be executed.
      */
-    virtual void execute() override;
+    void execute() override;
     /**
      * No action is returned.
      */
-    virtual QAction* toKAction() const override;
+    QAction* toKAction() const override;
 
 private:
     QString m_description;
@@ -106,7 +106,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KSharedO
     Q_OBJECT
 public:
     IAssistant();
-    virtual ~IAssistant();
+    ~IAssistant() override;
 
     typedef QExplicitlySharedDataPointer<IAssistant> Ptr;
 

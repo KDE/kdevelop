@@ -23,13 +23,13 @@ class KDevKonsoleView : public QWidget
     Q_OBJECT
 public:
     explicit KDevKonsoleView( KDevKonsoleViewPlugin* plugin, QWidget *parent = 0 );
-    virtual ~KDevKonsoleView();
+    ~KDevKonsoleView() override;
 
 public slots:
     void setDirectory( const QUrl &dirUrl );
 
 protected:
-    virtual bool eventFilter( QObject *obj, QEvent *e ) override;
+    bool eventFilter( QObject *obj, QEvent *e ) override;
 
 private :
     class KDevKonsoleViewPrivate* const d;

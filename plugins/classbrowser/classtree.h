@@ -39,7 +39,7 @@ class ClassTree : public QTreeView
 
 public:
   ClassTree(QWidget* parent, ClassBrowserPlugin* plugin);
-  virtual ~ClassTree();
+  ~ClassTree() override;
 
 public:
   /// Find the given a_id in the tree and highlight it.
@@ -48,9 +48,9 @@ public:
   static bool populatingClassBrowserContextMenu();
   
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent* e) override;
+  void contextMenuEvent(QContextMenuEvent* e) override;
   ClassModel* model();
-  virtual bool event(QEvent* event) override;
+  bool event(QEvent* event) override;
 
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);

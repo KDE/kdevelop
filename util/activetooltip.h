@@ -42,7 +42,7 @@ public:
     ///@param parent Parent widget. Must not be zero, else the widget won't be shown.
     /// @param position Position where to show the tooltip, in global coordinates.
     ActiveToolTip(QWidget *parent, const QPoint& position);
-    ~ActiveToolTip();
+    ~ActiveToolTip() override;
 
     ///Shows and registers the given tool-tip.
     ///This should be used instead of just calling show() to make multiple different
@@ -83,7 +83,7 @@ Q_SIGNALS:
     // Emitted whenever mouse-activity is noticed outside of the tooltip area
     void mouseOut();
 private:
-    virtual void closeEvent(QCloseEvent* ) override;
+    void closeEvent(QCloseEvent* ) override;
 
     class ActiveToolTipPrivate* const d;
 };

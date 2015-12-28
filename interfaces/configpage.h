@@ -46,7 +46,7 @@ public:
      * However this means that you will have to manually implement the apply(), defaults() and reset() slots
      */
     explicit ConfigPage(IPlugin* plugin, KCoreConfigSkeleton* config = nullptr, QWidget* parent = nullptr);
-    virtual ~ConfigPage();
+    ~ConfigPage() override;
 
     /**
      * Get the number of subpages of this page
@@ -97,9 +97,9 @@ public:
     void setConfigSkeleton(KCoreConfigSkeleton* skel);
 
 public Q_SLOTS:
-    virtual void apply() override;
-    virtual void defaults() override;
-    virtual void reset() override;
+    void apply() override;
+    void defaults() override;
+    void reset() override;
 
 private:
     QScopedPointer<ConfigPagePrivate> d;

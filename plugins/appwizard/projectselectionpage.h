@@ -31,7 +31,7 @@ class ProjectSelectionPage : public AppWizardPageWidget {
 Q_OBJECT
 public:
     explicit ProjectSelectionPage(ProjectTemplatesModel *templatesModel, AppWizardDialog *wizardDialog);
-    ~ProjectSelectionPage();
+    ~ProjectSelectionPage() override;
 
     bool shouldContinue() override;
 

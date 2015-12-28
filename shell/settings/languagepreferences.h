@@ -37,13 +37,13 @@ class LanguagePreferences : public ConfigPage
     Q_OBJECT
 public:
     explicit LanguagePreferences(QWidget* parent);
-    virtual ~LanguagePreferences();
+    ~LanguagePreferences() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
-    virtual void apply() override;
+    void apply() override;
 
     void notifySettingsChanged();
 

@@ -67,9 +67,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public ISta
 
 public:
     explicit BackgroundParser(ILanguageController *languageController);
-    ~BackgroundParser();
+    ~BackgroundParser() override;
 
-    virtual QString statusName() const override;
+    QString statusName() const override;
 
     enum {
         BestPriority = -10000,  ///Best possible job-priority. No jobs should actually have this.

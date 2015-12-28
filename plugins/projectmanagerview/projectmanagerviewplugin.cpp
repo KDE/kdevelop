@@ -63,15 +63,15 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
     public:
         KDevProjectManagerViewFactory( ProjectManagerViewPlugin *plugin ): mplugin( plugin )
         {}
-        virtual QWidget* create( QWidget *parent = 0 ) override
+        QWidget* create( QWidget *parent = 0 ) override
         {
             return new ProjectManagerView( mplugin, parent );
         }
-        virtual Qt::DockWidgetArea defaultPosition() override
+        Qt::DockWidgetArea defaultPosition() override
         {
             return Qt::LeftDockWidgetArea;
         }
-        virtual QString id() const override
+        QString id() const override
         {
             return "org.kdevelop.ProjectsView";
         }

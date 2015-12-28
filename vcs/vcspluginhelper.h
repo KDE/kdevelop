@@ -46,7 +46,7 @@ class KDEVPLATFORMVCS_EXPORT VcsPluginHelper
     Q_OBJECT
 public:
     VcsPluginHelper(IPlugin * parent, IBasicVersionControl * vcs);
-    virtual ~VcsPluginHelper();
+    ~VcsPluginHelper() override;
 
     void setupFromContext(KDevelop::Context*);
     void addContextDocument(const QUrl& url);

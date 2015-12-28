@@ -103,7 +103,7 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 
 	public:
 		explicit SettingsWidget(QWidget *parent = 0);
-		virtual ~SettingsWidget();
+		~SettingsWidget() override;
 
 		/** This function is called after the creation of the dialog.
 		* it should initialise the widgets with the values corresponding to

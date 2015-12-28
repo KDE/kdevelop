@@ -64,30 +64,30 @@ public:
     /**Constructor.
     @param parent The parent object.*/
     explicit DocumentController( QObject *parent = 0 );
-    virtual ~DocumentController();
+    ~DocumentController() override;
 
     /**Finds the first document object corresponding to a given url.
     @param url The Url of the document.
     @return The corresponding document, or null if not found.*/
-    virtual IDocument* documentForUrl( const QUrl & url ) const override;
+    IDocument* documentForUrl( const QUrl & url ) const override;
 
     /**@return The list of open documents*/
-    virtual QList<IDocument*> openDocuments() const override;
+    QList<IDocument*> openDocuments() const override;
 
     /**Refers to the document currently active or focused.
     @return The active document.*/
-    virtual IDocument* activeDocument() const override;
+    IDocument* activeDocument() const override;
 
-    virtual KTextEditor::View* activeTextDocumentView() const override;
+    KTextEditor::View* activeTextDocumentView() const override;
     
-    virtual void activateDocument( IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() ) override;
+    void activateDocument( IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() ) override;
 
-    virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) override;
+    void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) override;
 
     /// Request the document controller to save all documents.
     /// If the \a mode is not IDocument::Silent, ask the user which documents to save.
     /// Returns false if the user cancels the save dialog.
-    virtual bool saveAllDocuments(IDocument::DocumentSaveMode mode) override;
+    bool saveAllDocuments(IDocument::DocumentSaveMode mode) override;
     bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false) override;
 
     void initialize();
@@ -104,15 +104,15 @@ public:
     static bool isEmptyDocumentUrl(const QUrl &url);
     static QUrl nextEmptyDocumentUrl();
     
-    virtual IDocumentFactory* factory(const QString& mime) const override;
+    IDocumentFactory* factory(const QString& mime) const override;
 
     
-    virtual bool openDocument(IDocument* doc,
+    bool openDocument(IDocument* doc,
                               const KTextEditor::Range& range = KTextEditor::Range::invalid(),
                               DocumentActivationParams activationParams = 0,
                               IDocument* buddy = 0) override;
 
-    virtual KTextEditor::Document* globalTextEditorInstance() override;
+    KTextEditor::Document* globalTextEditorInstance() override;
     
 public Q_SLOTS:
     /**Opens a new or existing document.
@@ -122,20 +122,20 @@ public Q_SLOTS:
     @param buddy The buddy document
     @return The opened document
     */
-    virtual Q_SCRIPTABLE IDocument* openDocument( const QUrl &url,
+    Q_SCRIPTABLE IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
             const QString& encoding = {},
             IDocument* buddy = 0 ) override;
 
-    virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data ) override;
+    Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data ) override;
     
-    virtual KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefname ) override;
+    KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefname ) override;
 
     virtual void closeDocument( const QUrl &url );
     void fileClose();
     void slotSaveAllDocuments();
-    virtual bool closeAllDocuments() override;
+    bool closeAllDocuments() override;
     void closeAllOtherDocuments();
     void reloadAllDocuments();
 

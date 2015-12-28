@@ -60,7 +60,7 @@ class MainWindowPrivate: public QObject {
     Q_OBJECT
 public:
     explicit MainWindowPrivate(MainWindow *mainWindow);
-    ~MainWindowPrivate();
+    ~MainWindowPrivate() override;
 
     QPointer<QWidget> centralPlugin;
 

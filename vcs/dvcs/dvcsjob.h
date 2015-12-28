@@ -89,7 +89,7 @@ class KDEVPLATFORMVCS_EXPORT DVcsJob : public KDevelop::VcsJob
     Q_OBJECT
 public:
     explicit DVcsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    virtual ~DVcsJob();
+    ~DVcsJob() override;
 
     /**
      * Returns current working directory.
@@ -132,7 +132,7 @@ public:
      * @note Default communication mode is KProcess::AllOutput.
      * @see Use setCommunicationMode() to override the default communication mode.
      */
-    virtual void start() override;
+    void start() override;
 
     /**
      * In some cases it's needed to specify the communication mode between the
@@ -183,18 +183,18 @@ public:
      * Mostly used in vcscommitdialog.
      * @see setResults(const QVariant &res)
      */
-    virtual QVariant fetchResults() override;
+    QVariant fetchResults() override;
 
     /**
      * Returns JobStatus
      * @see KDevelop::VcsJob::JobStatus
      */
-    virtual KDevelop::VcsJob::JobStatus status() const override;
+    KDevelop::VcsJob::JobStatus status() const override;
 
     /**
      * Returns pointer to IPlugin (which was used to create a job).
      */
-    virtual KDevelop::IPlugin* vcsPlugin() const override;
+    KDevelop::IPlugin* vcsPlugin() const override;
     // End:  KDevelop::VcsJob
     
     KProcess *process();
@@ -218,7 +218,7 @@ private Q_SLOTS:
     void slotReceivedStdout();
 
 protected:
-    virtual bool doKill() override;
+    bool doKill() override;
 
 private:
     void jobIsReady();

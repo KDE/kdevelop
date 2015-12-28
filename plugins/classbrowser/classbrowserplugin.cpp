@@ -61,17 +61,17 @@ class ClassBrowserFactory: public KDevelop::IToolViewFactory
 public:
   ClassBrowserFactory(ClassBrowserPlugin *plugin): m_plugin(plugin) {}
 
-  virtual QWidget* create(QWidget *parent = 0) override
+  QWidget* create(QWidget *parent = 0) override
   {
     return new ClassWidget(parent, m_plugin);
   }
 
-  virtual Qt::DockWidgetArea defaultPosition() override
+  Qt::DockWidgetArea defaultPosition() override
   {
     return Qt::LeftDockWidgetArea;
   }
 
-  virtual QString id() const override
+  QString id() const override
   {
     return "org.kdevelop.ClassBrowserView";
   }

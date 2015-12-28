@@ -28,8 +28,8 @@ class ProjectModelItemDelegate : public QItemDelegate
 public:
     explicit ProjectModelItemDelegate(QObject* parent = 0);
 
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
-    virtual void drawDisplay(QPainter *painter, const QStyleOptionViewItem &option,
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+    void drawDisplay(QPainter *painter, const QStyleOptionViewItem &option,
                              const QRect &rect, const QString &text) const override;
 
 private:

@@ -38,7 +38,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public QDialog
     Q_OBJECT
     public:
         explicit ApplyChangesWidget(QWidget* parent=0);
-        ~ApplyChangesWidget();
+        ~ApplyChangesWidget() override;
         
         void setInformation(const QString& info);
 

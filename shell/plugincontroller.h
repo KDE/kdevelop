@@ -53,7 +53,7 @@ public:
 
     explicit PluginController(Core *core);
 
-    virtual ~PluginController();
+    ~PluginController() override;
 
     /**
      * Get the plugin instance based on the ID. The ID should be whatever is

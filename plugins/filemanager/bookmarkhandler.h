@@ -36,17 +36,17 @@ Q_OBJECT
 
 public:
     explicit BookmarkHandler( FileManager *parent, QMenu *kpopupmenu = 0 );
-    ~BookmarkHandler();
+    ~BookmarkHandler() override;
 
     // KBookmarkOwner interface:
-    virtual QUrl currentUrl() const override;
-    virtual QString currentTitle() const override;
+    QUrl currentUrl() const override;
+    QString currentTitle() const override;
 
     QMenu *menu() const
     {
       return m_menu;
     }
-    virtual void openBookmark( const KBookmark &, Qt::MouseButtons, Qt::KeyboardModifiers ) override;
+    void openBookmark( const KBookmark &, Qt::MouseButtons, Qt::KeyboardModifiers ) override;
 
 Q_SIGNALS:
     void openUrl( const QUrl& url );

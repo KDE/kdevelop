@@ -54,7 +54,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectFilterManager : public QObject
 
 public:
     explicit ProjectFilterManager(QObject* parent = 0);
-    virtual ~ProjectFilterManager();
+    ~ProjectFilterManager() override;
 
     /**
      * @copydoc IProjectFilter::isValid

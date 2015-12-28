@@ -34,7 +34,7 @@ class EditExternalScript : public QDialog, private Ui::EditExternalScriptBase
 
 public:
   explicit EditExternalScript( ExternalScriptItem* item, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-  virtual ~EditExternalScript();
+  ~EditExternalScript() override;
 
 private slots:
   void save();

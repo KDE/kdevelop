@@ -60,6 +60,12 @@ namespace KDevelop
      * @return String no longer containing any HTML tags
      */
     KDEVPLATFORMUTIL_EXPORT QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode = FastMode);
+
+    /**
+     * Strip ANSI sequences from string @p str
+     */
+    KDEVPLATFORMUTIL_EXPORT QString stripAnsiSequences(const QString& str);
+
 }
 
 #endif // KDEVPLATFORM_KDEVSTRINGHANDLER_H

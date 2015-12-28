@@ -50,7 +50,7 @@ public:
         TakeOwnership,
         DoNotTakeOwnerShip
     };
-    ~View();
+    ~View() override;
 
     /**@return the toolbar actions for this view, this needs to be called _after_ the first call to widget() */
     QList<QAction*> toolBarActions() const;

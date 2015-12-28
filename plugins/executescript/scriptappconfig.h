@@ -45,12 +45,12 @@ class ScriptAppLauncher : public KDevelop::ILauncher
 {
 public:
     explicit ScriptAppLauncher( ExecuteScriptPlugin* );
-    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
-    virtual QString description() const override;
-    virtual QString id() override;
-    virtual QString name() const override;
-    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
-    virtual QStringList supportedModes() const override;
+    QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
+    QString description() const override;
+    QString id() override;
+    QString name() const override;
+    KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
+    QStringList supportedModes() const override;
 private:
     ExecuteScriptPlugin* m_plugin;
 };
@@ -59,7 +59,7 @@ class ScriptAppPageFactory : public KDevelop::LaunchConfigurationPageFactory
 {
 public:
     ScriptAppPageFactory();
-    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
+    KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
 };
 
 /**
@@ -71,16 +71,16 @@ class ScriptAppConfigType : public KDevelop::LaunchConfigurationType
 {
 public:
     ScriptAppConfigType();
-    virtual ~ScriptAppConfigType();
+    ~ScriptAppConfigType() override;
 
     QString id() const override;
     QString name() const override;
     QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const override;
     QIcon icon() const override;
-    virtual bool canLaunch( const QUrl& file ) const override;
-    virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const override;
-    virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const override;
-    virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const override;
+    bool canLaunch( const QUrl& file ) const override;
+    bool canLaunch(KDevelop::ProjectBaseItem* item) const override;
+    void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const override;
+    void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const override;
 
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;

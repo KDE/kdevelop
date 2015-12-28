@@ -46,7 +46,7 @@ class KDevDocumentView: public QTreeView
     Q_OBJECT
 public:
     explicit KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *parent );
-    virtual ~KDevDocumentView();
+    ~KDevDocumentView() override;
 
     KDevDocumentViewPlugin *plugin() const;
 
@@ -72,8 +72,8 @@ private slots:
     void closeUnselected();
 
 protected:
-    virtual void mousePressEvent( QMouseEvent * event ) override;
-    virtual void contextMenuEvent( QContextMenuEvent * event ) override;
+    void mousePressEvent( QMouseEvent * event ) override;
+    void contextMenuEvent( QContextMenuEvent * event ) override;
 
 private:
     template<typename F> void visitItems(F, bool selectedItems);

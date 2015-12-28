@@ -151,7 +151,7 @@ public:
     IPlugin(const QString &componentName, QObject *parent);
 
     /**Destructs a plugin.*/
-    virtual ~IPlugin();
+    ~IPlugin() override;
 
     /**
      * Signal the plugin that it should cleanup since it will be unloaded soon.

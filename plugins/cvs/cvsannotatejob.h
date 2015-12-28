@@ -23,10 +23,10 @@ class CvsAnnotateJob : public CvsJob
     Q_OBJECT
 public:
     explicit CvsAnnotateJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    virtual ~CvsAnnotateJob();
+    ~CvsAnnotateJob() override;
 
     // Begin:  KDevelop::VcsJob
-    virtual QVariant fetchResults() override;
+    QVariant fetchResults() override;
     // End:  KDevelop::VcsJob
 
 private:

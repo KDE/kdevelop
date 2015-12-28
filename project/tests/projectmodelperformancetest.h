@@ -35,7 +35,7 @@ class ProjectModelPerformanceTest : public QWidget
 Q_OBJECT
 public:
     ProjectModelPerformanceTest(QWidget* parent = 0);
-    virtual ~ProjectModelPerformanceTest();
+    ~ProjectModelPerformanceTest() override;
 private slots:
     void init();
     void addSmallTree();

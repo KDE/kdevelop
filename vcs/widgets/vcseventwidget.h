@@ -40,7 +40,7 @@ class KDEVPLATFORMVCS_EXPORT VcsEventWidget : public QWidget
     Q_OBJECT
 public:
     VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent = 0 );
-    virtual ~VcsEventWidget();
+    ~VcsEventWidget() override;
 
 private:
     Q_PRIVATE_SLOT(d, void diffToPrevious())
