@@ -1177,10 +1177,10 @@ class ItemRepository : public AbstractItemRepository {
           m_buckets.resize(m_buckets.size() + 10);
         }
       }
-      MyBucket* bucketPtr = m_buckets[useBucket];
+      MyBucket* bucketPtr = m_buckets.at(useBucket);
       if(!bucketPtr) {
         initializeBucket(useBucket);
-        bucketPtr = m_buckets[useBucket];
+        bucketPtr = m_buckets.at(useBucket);
       }
 
       ENSURE_REACHABLE(useBucket);
@@ -1444,10 +1444,10 @@ class ItemRepository : public AbstractItemRepository {
 
     unsigned short bucket = (index >> 16);
 
-    MyBucket* bucketPtr = m_buckets[bucket];
+    MyBucket* bucketPtr = m_buckets.at(bucket);
     if(!bucketPtr) {
       initializeBucket(bucket);
-      bucketPtr = m_buckets[bucket];
+      bucketPtr = m_buckets.at(bucket);
     }
     bucketPtr->prepareChange();
     unsigned short indexInBucket = index & 0xffff;
@@ -1468,10 +1468,10 @@ class ItemRepository : public AbstractItemRepository {
 
     unsigned short bucket = (index >> 16);
 
-    MyBucket* bucketPtr = m_buckets[bucket];
+    MyBucket* bucketPtr = m_buckets.at(bucket);
     if(!bucketPtr) {
       initializeBucket(bucket);
-      bucketPtr = m_buckets[bucket];
+      bucketPtr = m_buckets.at(bucket);
     }
     bucketPtr->prepareChange();
     unsigned short indexInBucket = index & 0xffff;
@@ -1487,10 +1487,10 @@ class ItemRepository : public AbstractItemRepository {
 
     unsigned short bucket = (index >> 16);
 
-    const MyBucket* bucketPtr = m_buckets[bucket];
+    const MyBucket* bucketPtr = m_buckets.at(bucket);
     if(!bucketPtr) {
       initializeBucket(bucket);
-      bucketPtr = m_buckets[bucket];
+      bucketPtr = m_buckets.at(bucket);
     }
     unsigned short indexInBucket = index & 0xffff;
     return bucketPtr->itemFromIndex(indexInBucket);
@@ -1669,7 +1669,7 @@ class ItemRepository : public AbstractItemRepository {
   void visitAllItems(Visitor& visitor, bool onlyInMemory = false) const {
     ThisLocker lock(m_mutex);
     for(int a = 1; a <= m_currentBucket; ++a) {
-      if(!onlyInMemory || m_buckets[a]) {
+      if(!onlyInMemory || m_buckets.at(a)) {
         if(bucketForIndex(a) && !bucketForIndex(a)->visitAllItems(visitor))
           return;
       }
@@ -1775,10 +1775,10 @@ class ItemRepository : public AbstractItemRepository {
     unsigned short bucketIndex = m_firstBucketForHash[hash % bucketHashSize];
 
     while (bucketIndex) {
-      auto* bucketPtr = m_buckets[bucketIndex];
+      auto* bucketPtr = m_buckets.at(bucketIndex);
       if (!bucketPtr) {
         initializeBucket(bucketIndex);
-        bucketPtr = m_buckets[bucketIndex];
+        bucketPtr = m_buckets.at(bucketIndex);
       }
 
       if (auto visitResult = visitor(bucketIndex, bucketPtr)) {
@@ -1846,10 +1846,10 @@ class ItemRepository : public AbstractItemRepository {
   ///              When it is nonzero, it is converted to a monster-bucket.
   MyBucket* convertMonsterBucket(int bucketNumber, int extent) {
     Q_ASSERT(bucketNumber);
-    MyBucket* bucketPtr = m_buckets[bucketNumber];
+    MyBucket* bucketPtr = m_buckets.at(bucketNumber);
     if(!bucketPtr) {
       initializeBucket(bucketNumber);
-      bucketPtr = m_buckets[bucketNumber];
+      bucketPtr = m_buckets.at(bucketNumber);
     }
 
     if(extent) {
@@ -1893,10 +1893,10 @@ class ItemRepository : public AbstractItemRepository {
   }
 
   MyBucket* bucketForIndex(short unsigned int index) const {
-    MyBucket* bucketPtr = m_buckets[index];
+    MyBucket* bucketPtr = m_buckets.at(index);
     if(!bucketPtr) {
       initializeBucket(index);
-      bucketPtr = m_buckets[index];
+      bucketPtr = m_buckets.at(index);
     }
     return bucketPtr;
   }
