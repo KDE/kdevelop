@@ -613,7 +613,8 @@ void DUContext::findLocalDeclarationsInternal( const IndexedIdentifier& identifi
 {
   Checker checker(flags, dataType, position, type());
 
-  if (d_func()->m_inSymbolTable && !d_func()->m_scopeIdentifier.isEmpty() && !identifier.isEmpty()) {
+  DUCHAIN_D(DUContext);
+  if (d->m_inSymbolTable && !d->m_scopeIdentifier.isEmpty() && !identifier.isEmpty()) {
     //This context is in the symbol table, use the symbol-table to speed up the search
     QualifiedIdentifier id(scopeIdentifier(true) + identifier);
 
@@ -668,7 +669,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   }
 
   DUCHAIN_D(DUContext);
-  if (d_func()->m_contextType != Namespace) {
+  if (d->m_contextType != Namespace) {
     // If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
     for (int a = 0; a < baseIdentifiers.size(); ++a) {
       if (!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) {
