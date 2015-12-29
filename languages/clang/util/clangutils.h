@@ -111,7 +111,17 @@ namespace ClangUtils
      *
      * @see clang_File_isEqual
      */
-    bool isFileEqual(CXFile file1, CXFile file2);
+    inline bool isFileEqual(CXFile file1, CXFile file2)
+    {
+#if CINDEX_VERSION_MINOR >= 28
+        return clang_File_isEqual(file1, file2);
+#else
+        // note: according to the implementation of clang_File_isEqual, file1 and file2 can still be equal,
+        // regardless of whether file1 == file2 is true or not
+        // however, we didn't see any problems with pure pointer comparisions until now, so fall back to that
+        return file1 == file2;
+#endif
+    }
 
     /**
      * @brief Return true if the cursor @p cursor refers to an explicitly deleted/defaulted function
