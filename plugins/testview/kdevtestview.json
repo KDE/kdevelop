@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Miha Čančula"
+                "Name": "Miha Čančula", 
+                "Name[x-test]": "xxMiha Čančulaxx"
             }
         ], 
         "Category": "Testing", 

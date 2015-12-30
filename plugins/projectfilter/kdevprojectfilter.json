@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Milian Wolff"
+                "Name": "Milian Wolff", 
+                "Name[x-test]": "xxMilian Wolffxx"
             }
         ], 
         "Category": "Project Management", 

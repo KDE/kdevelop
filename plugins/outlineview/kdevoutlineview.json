@@ -3,7 +3,8 @@
         "Authors": [
             {
                 "Email": "arichardson.kde@gmail.com", 
-                "Name": "Alex Richardson"
+                "Name": "Alex Richardson", 
+                "Name[x-test]": "xxAlex Richardsonxx"
             }
         ], 
         "Category": "Core", 

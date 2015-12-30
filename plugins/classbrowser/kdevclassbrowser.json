@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Hamish Rodda"
+                "Name": "Hamish Rodda", 
+                "Name[x-test]": "xxHamish Roddaxx"
             }
         ], 
         "Category": "Core", 

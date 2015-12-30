@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Adam Treat"
+                "Name": "Adam Treat", 
+                "Name[x-test]": "xxAdam Treatxx"
             }
         ], 
         "Category": "Utilities", 

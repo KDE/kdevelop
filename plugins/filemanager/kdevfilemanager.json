@@ -2,7 +2,9 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Alexander Dymo"
+                "Name": "Alexander Dymo", 
+                "Name[uk]": "Олександр Димо", 
+                "Name[x-test]": "xxAlexander Dymoxx"
             }
         ], 
         "Category": "Core", 

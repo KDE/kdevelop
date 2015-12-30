@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Dukju Ahn"
+                "Name": "Dukju Ahn", 
+                "Name[x-test]": "xxDukju Ahnxx"
             }
         ], 
         "Category": "Version Control", 

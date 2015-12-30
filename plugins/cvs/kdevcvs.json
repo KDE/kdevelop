@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Robert Gruber"
+                "Name": "Robert Gruber", 
+                "Name[x-test]": "xxRobert Gruberxx"
             }
         ], 
         "Category": "Version Control", 

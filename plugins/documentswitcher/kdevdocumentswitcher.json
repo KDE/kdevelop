@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Andreas Pakulat"
+                "Name": "Andreas Pakulat", 
+                "Name[x-test]": "xxAndreas Pakulatxx"
             }
         ], 
         "Category": "Utilities", 

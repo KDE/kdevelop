@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Roberto Raggi"
+                "Name": "Roberto Raggi", 
+                "Name[x-test]": "xxRoberto Raggixx"
             }
         ], 
         "Category": "Core", 

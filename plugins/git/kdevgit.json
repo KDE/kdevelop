@@ -3,7 +3,8 @@
         "Authors": [
             {
                 "Email": "powerfox@kde.ru", 
-                "Name": "Evgeniy Ivanov"
+                "Name": "Evgeniy Ivanov", 
+                "Name[x-test]": "xxEvgeniy Ivanovxx"
             }
         ], 
         "Category": "Version Control", 

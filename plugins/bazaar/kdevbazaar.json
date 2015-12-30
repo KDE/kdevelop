@@ -4,7 +4,8 @@
         "Authors": [
             {
                 "Email": "d82ks8djf82msd83hf8sc02lqb5gh5@gmail.com", 
-                "Name": "Maciej Poleski"
+                "Name": "Maciej Poleski", 
+                "Name[x-test]": "xxMaciej Poleskixx"
             }
         ], 
         "Category": "Version Control", 
