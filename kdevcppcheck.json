@@ -19,7 +19,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Christoph Thielecke"
+                "Name": "Christoph Thielecke", 
+                "Name[x-test]": "xxChristoph Thieleckexx"
             }
         ], 
         "Description": "Cppcheck is a tool that helps you find syntax problems in programs. http://cppcheck.sf.net/", 
