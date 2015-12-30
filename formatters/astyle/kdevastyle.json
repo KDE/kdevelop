@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Cedric Pasteur, Matthias Hölzer-Klüpfel"
+                "Name": "Cedric Pasteur, Matthias Hölzer-Klüpfel", 
+                "Name[x-test]": "xxCedric Pasteur, Matthias Hölzer-Klüpfelxx"
             }
         ], 
         "Category": "Utilities", 

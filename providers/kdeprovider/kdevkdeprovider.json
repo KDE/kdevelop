@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Aleix Pol"
+                "Name": "Aleix Pol", 
+                "Name[x-test]": "xxAleix Polxx"
             }
         ], 
         "Category": "Utilities", 

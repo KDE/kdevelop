@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Aleix Pol Gonzalez"
+                "Name": "Aleix Pol Gonzalez", 
+                "Name[x-test]": "xxAleix Pol Gonzalezxx"
             }
         ], 
         "Description": "Lets you view a plasmoid", 

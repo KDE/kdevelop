@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Miquel Sabaté"
+                "Name": "Miquel Sabaté", 
+                "Name[x-test]": "xxMiquel Sabatéxx"
             }
         ], 
         "Category": "Utilities", 

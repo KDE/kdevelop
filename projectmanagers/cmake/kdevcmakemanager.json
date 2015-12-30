@@ -3,7 +3,8 @@
         "Authors": [
             {
                 "Email": "mattr@kde.org", 
-                "Name": "Matt Rogers"
+                "Name": "Matt Rogers", 
+                "Name[x-test]": "xxMatt Rogersxx"
             }
         ], 
         "Category": "Project Management", 
