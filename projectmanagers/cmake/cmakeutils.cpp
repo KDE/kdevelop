@@ -24,6 +24,7 @@
 #include <QtCore/QDir>
 #include <QProcess>
 #include <QTemporaryDir>
+#include <QRegularExpression>
 
 #include <kconfig.h>
 #include <KLocalizedString>
@@ -230,6 +231,28 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
         return true;
     }
     return false;
+}
+
+QHash<KDevelop::Path, QStringList> enumerateTargets(const KDevelop::Path& targetsFilePath, const QString& sourceDir, const KDevelop::Path &buildDir)
+{
+    const QString buildPath = buildDir.toLocalFile();
+    QHash<KDevelop::Path, QStringList> targets;
+    QFile targetsFile(targetsFilePath.toLocalFile());
+    if (!targetsFile.open(QIODevice::ReadOnly)) {
+        qCDebug(CMAKE) << "Couldn't find the Targets file in" << targetsFile.fileName();
+    }
+
+    QTextStream targetsFileStream(&targetsFile);
+    const QRegularExpression rx(QStringLiteral("^(.*)/CMakeFiles/(.*).dir$"));
+    while (!targetsFileStream.atEnd()) {
+        const QString line = targetsFileStream.readLine();
+        auto match = rx.match(line);
+        if (!match.isValid())
+            qCDebug(CMAKE) << "invalid match for" << line;
+        const QString sourcePath = match.captured(1).replace(buildPath, sourceDir);
+        targets[KDevelop::Path(sourcePath)].append(match.captured(2));
+    }
+    return targets;
 }
 
 KDevelop::Path projectRoot(KDevelop::IProject* project)
