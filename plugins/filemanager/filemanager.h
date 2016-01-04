@@ -37,6 +37,8 @@ class FileManager: public QWidget {
     Q_OBJECT
 public:
     FileManager(KDevFileManagerPlugin *plugin, QWidget* parent);
+    ~FileManager();
+
     QList<QAction*> toolBarActions() const;
     KActionCollection* actionCollection() const;
     KDirOperator* dirOperator() const;
