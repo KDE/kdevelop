@@ -17,6 +17,8 @@
 #include <QObject>
 #include <QPointer>
 
+#include <kaction.h>
+
 #include <interfaces/iplugin.h>
 #include <interfaces/ipatchsource.h>
 
@@ -74,7 +76,7 @@ public :
     void finishReview( QList< KUrl > selection );
 
     KUrl urlForFileModel( const Diff2::DiffModel* model );
-    QAction* finishReviewAction() const { return m_finishReview; }
+    KAction* finishReviewAction() const { return m_finishReview; }
 
 Q_SIGNALS:
     void startingNewReview();
@@ -118,7 +120,7 @@ private:
     QTimer* m_updateKompareTimer;
 
     PatchReviewToolViewFactory* m_factory;
-    QAction* m_finishReview;
+    KAction* m_finishReview;
 
     #if 0
     void determineState();

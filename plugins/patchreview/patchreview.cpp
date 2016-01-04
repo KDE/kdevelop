@@ -517,7 +517,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     m_updateKompareTimer->setSingleShot( true );
     connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
 
-    m_finishReview = new QAction(this);
+    m_finishReview = new KAction(this);
     m_finishReview->setIcon( KIcon( "dialog-ok" ) );
     m_finishReview->setShortcut( Qt::CTRL|Qt::Key_Return );
     actionCollection()->addAction("commit_or_finish_review", m_finishReview);
