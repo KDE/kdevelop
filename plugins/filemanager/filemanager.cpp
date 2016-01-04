@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright 2006-2007 Alexander Dymo <adymo@kdevelop.org>               *
  *   Copyright 2006 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2016 Imran Tatriev <itatriev@gmail.com>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,9 +34,10 @@
 #include <KXmlGui/KActionCollection>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KActionMenu>
-
+#include <KConfigGroup>
 
 #include <interfaces/icore.h>
+#include <interfaces/isession.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -57,14 +59,18 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     setWindowIcon(QIcon::fromTheme(QStringLiteral("folder-sync")));
     setWindowTitle(i18n("File System"));
 
+    KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group( "Filesystem" );
+
     QVBoxLayout *l = new QVBoxLayout(this);
     l->setMargin(0);
     l->setSpacing(0);
     KFilePlacesModel* model = new KFilePlacesModel( this );
-    urlnav = new KUrlNavigator(model, QUrl::fromLocalFile(QDir::homePath()), this );
+    urlnav = new KUrlNavigator(model, QUrl(cg.readEntry( "LastLocation", QUrl::fromLocalFile( QDir::homePath() ) )), this );
+
     connect(urlnav, &KUrlNavigator::urlChanged, this, &FileManager::gotoUrl);
+
     l->addWidget(urlnav);
-    dirop = new KDirOperator(QUrl::fromLocalFile(QDir::homePath()), this);
+    dirop = new KDirOperator( urlnav->url(), this);
     dirop->setView( KFile::Tree );
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
     connect(dirop, &KDirOperator::urlEntered, this, &FileManager::updateNav);
@@ -83,6 +89,14 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     // Connect the bookmark handler
     connect(m_bookmarkHandler, &BookmarkHandler::openUrl, this, &FileManager::gotoUrl);
     connect(m_bookmarkHandler, &BookmarkHandler::openUrl, this, &FileManager::updateNav);
+}
+
+FileManager::~FileManager()
+{
+    KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group( "Filesystem" );
+
+    cg.writeEntry( "LastLocation", urlnav->url() );
+    cg.sync();
 }
 
 void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
