@@ -1,5 +1,5 @@
 /*
-   Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2016 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,58 +19,23 @@
 #ifndef KDEVPLATFORM_PUSHVALUE_H
 #define KDEVPLATFORM_PUSHVALUE_H
 
-/**
- * A simple helper-class that does the following:
- * Backup the given reference-value given through @param ptr,
- * replace it with the value given through @param push,
- * restore the backed up value back on destruction.
- *
- * TODO: Replace by QScopedValueRollback as soon as we depend on Qt 5.4
- * */
-template<class Value>
-class PushValue
+#include <QScopedValueRollback>
+
+template<class T>
+using PushValue = QScopedValueRollback<T>;
+
+/// Only difference to PushValue: The value is only replaced if the new value is positive
+template<class T>
+class PushPositiveValue : QScopedValueRollback<T>
 {
 public:
-    PushValue( Value& ref, const Value& newValue = Value() )
-    : m_ref(ref)
+    PushPositiveValue(T& ref, const T& newValue = T())
+        : QScopedValueRollback<T>(ref)
     {
-        m_oldValue = m_ref;
-        m_ref = newValue;
-    }
-
-    ~PushValue()
-    {
-        m_ref = m_oldValue;
-    }
-
-private:
-    Value& m_ref;
-    Value m_oldValue;
-};
-
-///Only difference to PushValue: The value is only replaced if the new value is positive
-template<class Value>
-class PushPositiveValue
-{
-public:
-    PushPositiveValue( Value& ref, const Value& newValue = Value()  )
-    : m_ref(ref)
-    {
-        m_oldValue = m_ref;
-
-        if( newValue ) {
-            m_ref = newValue;
+        if (newValue) {
+            ref = newValue;
         }
     }
-
-    ~PushPositiveValue()
-    {
-        m_ref = m_oldValue;
-    }
-
-private:
-    Value& m_ref;
-    Value m_oldValue;
 };
 
 #endif
