@@ -49,6 +49,7 @@ private slots:
     void testQt5App();
     void testQt5AppOld();
     void testKF5App();
+    void testEnumerateTargets();
     void testFaultyTarget();
 };
 

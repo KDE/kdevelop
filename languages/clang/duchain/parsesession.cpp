@@ -215,6 +215,16 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         unsaved = toClangApi(unsavedFiles);
     }
 
+    // debugging: print hypothetical clang invocation including args (for easy c&p for local testing)
+    {
+        auto dbg = qDebug(KDEV_CLANG);
+        dbg << "Invocation: clang";
+        foreach (const auto& arg, clangArguments) {
+            dbg << arg;
+        }
+        dbg << tuUrl.byteArray().constData();
+    }
+
     const CXErrorCode code = clang_parseTranslationUnit2(
         index->index(), tuUrl.byteArray().constData(),
         clangArguments.constData(), clangArguments.size(),

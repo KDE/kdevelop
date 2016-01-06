@@ -269,7 +269,9 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     }
 
     foreach (const QString& name, dirTargets) {
-        if (!name.endsWith("_automoc"))
+        if (!name.endsWith("_automoc")
+            && name != QLatin1String("edit_cache")
+            && name != QLatin1String("rebuild_cache"))
             new CMakeTargetItem(folder, name);
     }
 

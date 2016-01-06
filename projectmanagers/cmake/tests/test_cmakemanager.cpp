@@ -20,6 +20,7 @@
 #include "test_cmakemanager.h"
 #include "testhelpers.h"
 #include "cmakemodelitems.h"
+#include "cmakeutils.h"
 #include <icmakemanager.h>
 
 #include <qtest.h>
@@ -298,6 +299,33 @@ void TestCMakeManager::testConditionsInSubdirectoryBasedOnRootVariables()
 
     QEXPECT_FAIL("", "files aren't being added to the target", Continue);
     QCOMPARE(subdirectoryFooItems.size(), 4); // three items for the targets, one item for the plain file
+}
+
+void TestCMakeManager::testEnumerateTargets()
+{
+    QString tempDir = QDir::tempPath();
+
+    QTemporaryFile targetDirectoriesFile;
+    QTemporaryDir subdir;
+
+    auto opened = targetDirectoriesFile.open();
+    QVERIFY(opened);
+    QVERIFY(subdir.isValid());
+
+    const QString targetDirectoriesContent = tempDir + "/CMakeFiles/first_target.dir\n" +
+                                             tempDir + "/CMakeFiles/second_target.dir\r\n" +
+                                             tempDir + "/" + subdir.path() + "/CMakeFiles/third_target.dir";
+
+    targetDirectoriesFile.write(targetDirectoriesContent.toLatin1());
+    targetDirectoriesFile.close();
+
+    QHash<KDevelop::Path, QStringList> targets = 
+        CMake::enumerateTargets(Path(targetDirectoriesFile.fileName()),
+            tempDir, Path(tempDir));
+
+    QCOMPARE(targets.value(Path(tempDir)).value(0), QStringLiteral("first_target"));
+    QCOMPARE(targets.value(Path(tempDir)).value(1), QStringLiteral("second_target"));
+    QCOMPARE(targets.value(Path(tempDir + "/" + subdir.path())).value(0), QStringLiteral("third_target"));
 }
 
 void TestCMakeManager::testFaultyTarget()

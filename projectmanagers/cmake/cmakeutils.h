@@ -101,6 +101,11 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT bool hasProjectRootRelative( KDevelop::IProject* project );
     
     /**
+    * Extracts target names from builddir/CMakeFiles/TargetDirectories.txt and maps corresponding source locations to them.
+    */
+
+    KDEVCMAKECOMMON_EXPORT QHash<KDevelop::Path, QStringList> enumerateTargets(const KDevelop::Path& targetsFilePath, const QString& sourceDir, const KDevelop::Path &buildDir);
+    /**
      * Convenience function to get the project root.
      */
     KDEVCMAKECOMMON_EXPORT KDevelop::Path projectRoot( KDevelop::IProject* project );

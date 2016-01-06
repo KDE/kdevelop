@@ -1469,7 +1469,7 @@ static bool enumContainsEnumerator(const AbstractType::Ptr& a, const AbstractTyp
     Q_ASSERT(a->whichType() == AbstractType::TypeEnumeration);
     auto aEnum = EnumerationType::Ptr::staticCast(a);
     Q_ASSERT(b->whichType() == AbstractType::TypeEnumerator);
-    auto bEnumerator = EnumeratorType::Ptr::staticCast(a);
+    auto bEnumerator = EnumeratorType::Ptr::staticCast(b);
     return bEnumerator->qualifiedIdentifier().beginsWith(aEnum->qualifiedIdentifier());
 }
 

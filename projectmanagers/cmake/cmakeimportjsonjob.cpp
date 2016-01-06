@@ -103,26 +103,6 @@ CMakeJsonData importCommands(const Path& commandsFile)
     return data;
 }
 
-QHash<KDevelop::Path, QStringList> importTargets(const Path& targetsFilePath, const QString& sourceDir, const KDevelop::Path &buildDir)
-{
-    const QString buildPath = buildDir.toLocalFile();
-    QHash<KDevelop::Path, QStringList> targets;
-    QFile targetsFile(targetsFilePath.toLocalFile());
-    if (!targetsFile.open(QIODevice::ReadOnly)) {
-        qCDebug(CMAKE) << "Couldn't find the Targets file in" << targetsFile.fileName();
-    }
-    const QRegularExpression rx(QStringLiteral("^(.*)/CMakeFiles/(.*).dir$"));
-    for(; !targetsFile.atEnd(); ) {
-        const QByteArray line = targetsFile.readLine();
-        auto match = rx.match(QString::fromUtf8(line));
-        if (!match.isValid())
-            qCDebug(CMAKE) << "invalid match for" << line;
-        const QString sourcePath = match.captured(1).replace(buildPath, sourceDir);
-        targets[KDevelop::Path(sourcePath)].append(match.captured(2));
-    }
-    return targets;
-}
-
 QVector<Test> importTestSuites(const Path &buildDir)
 {
     QVector<Test> ret;
@@ -159,7 +139,7 @@ ImportData import(const Path& commandsFile, const Path &targetsFilePath, const Q
 {
     return ImportData {
         importCommands(commandsFile),
-        importTargets(targetsFilePath, sourceDir, buildPath),
+        CMake::enumerateTargets(targetsFilePath, sourceDir, buildPath),
         importTestSuites(buildPath)
     };
 }
