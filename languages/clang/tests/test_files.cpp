@@ -22,6 +22,7 @@
 #include "duchain/builder.h"
 
 #include <language/duchain/duchain.h>
+#include <language/duchain/problem.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/backgroundparser/backgroundparser.h>
 
@@ -82,4 +83,11 @@ void TestFiles::testFiles()
     DeclarationValidator validator;
     top->visit(validator);
     QVERIFY(validator.testsPassed());
+
+    foreach(auto problem, top->problems()) {
+        qDebug() << problem;
+    }
+
+    // FIXME: too many warnings inside the test files, fix this first
+    //QVERIFY(top->problems().isEmpty());
 }
