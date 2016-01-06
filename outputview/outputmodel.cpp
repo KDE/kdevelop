@@ -307,6 +307,21 @@ void OutputModel::activate( const QModelIndex& index )
     }
 }
 
+QModelIndex OutputModel::firstHighlightIndex()
+{
+    if( !d->m_errorItems.empty() ) {
+        return index( *d->m_errorItems.begin(), 0, QModelIndex() );
+    }
+
+    for( int row = 0; row < rowCount(); ++row ) {
+        if( d->m_filteredItems.at( row ).isActivatable ) {
+            return index( row, 0, QModelIndex() );
+        }
+    }
+
+    return QModelIndex();
+}
+
 QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 {
     int startrow = d->isValidIndex(currentIdx, rowCount()) ? currentIdx.row() + 1 : 0;
@@ -361,6 +376,21 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
             return index( currow, 0, QModelIndex() );
         }
     }
+    return QModelIndex();
+}
+
+QModelIndex OutputModel::lastHighlightIndex()
+{
+    if( !d->m_errorItems.empty() ) {
+        return index( *d->m_errorItems.rbegin(), 0, QModelIndex() );
+    }
+
+    for( int row = rowCount()-1; row >=0; --row ) {
+        if( d->m_filteredItems.at( row ).isActivatable ) {
+            return index( row, 0, QModelIndex() );
+        }
+    }
+
     return QModelIndex();
 }
 
