@@ -60,8 +60,10 @@ public:
 
     /// IOutputViewModel interfaces
     void activate( const QModelIndex& index ) override;
+    QModelIndex firstHighlightIndex() override;
     QModelIndex nextHighlightIndex( const QModelIndex &current ) override;
     QModelIndex previousHighlightIndex( const QModelIndex &current ) override;
+    QModelIndex lastHighlightIndex() override;
 
     /// QAbstractItemModel interfaces
     QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const override;

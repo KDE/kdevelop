@@ -118,12 +118,20 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 
     QAction* action;
 
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-first")), i18n("First Item"), this);
+    connect(action, &QAction::triggered, this, &OutputWidget::selectFirstItem);
+    addAction(action);
+
     action = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("Previous Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectPreviousItem);
     addAction(action);
 
     action = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("Next Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectNextItem);
+    addAction(action);
+
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-last")), i18n("Last Item"), this);
+    connect(action, &QAction::triggered, this, &OutputWidget::selectLastItem);
     addAction(action);
 
     QAction* selectAllAction = KStandardAction::selectAll(this, SLOT(selectAll()), this);
@@ -385,6 +393,11 @@ void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *vi
     }
 }
 
+void OutputWidget::selectFirstItem()
+{
+    selectItem(First);
+}
+
 void OutputWidget::selectNextItem()
 {
     selectItem(Next);
@@ -395,7 +408,12 @@ void OutputWidget::selectPreviousItem()
     selectItem(Previous);
 }
 
-void OutputWidget::selectItem(Direction direction)
+void OutputWidget::selectLastItem()
+{
+    selectItem(Last);
+}
+
+void OutputWidget::selectItem(SelectionMode selectionMode)
 {
     auto view = outputView();
     auto iface = outputViewModel();
@@ -412,9 +430,21 @@ void OutputWidget::selectItem(Direction direction)
         }
     }
 
-    const auto newIndex = direction == Previous
-        ? iface->previousHighlightIndex( index )
-        : iface->nextHighlightIndex( index );
+    QModelIndex newIndex;
+    switch (selectionMode) {
+        case First:
+            newIndex = iface->firstHighlightIndex();
+            break;
+        case Next:
+            newIndex = iface->nextHighlightIndex( index );
+            break;
+        case Previous:
+            newIndex = iface->previousHighlightIndex( index );
+            break;
+        case Last:
+            newIndex = iface->lastHighlightIndex();
+            break;
+    }
 
     qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "old:" << index << "- new:" << newIndex;
     activateIndex(newIndex, view, iface);

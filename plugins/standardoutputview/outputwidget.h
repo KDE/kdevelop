@@ -61,8 +61,10 @@ public Q_SLOTS:
     void changeDelegate( int id );
     void closeActiveView();
     void closeOtherViews();
+    void selectFirstItem();
     void selectNextItem() override;
     void selectPreviousItem() override;
+    void selectLastItem();
     void activate(const QModelIndex&);
     void scrollToIndex( const QModelIndex& );
     void setTitle(int outputId, const QString& title);
@@ -79,11 +81,13 @@ private slots:
     void updateFilter(int index);
 
 private:
-    enum Direction {
+    enum SelectionMode {
+        Last,
         Next,
-        Previous
+        Previous,
+        First
     };
-    void selectItem(Direction direction);
+    void selectItem(SelectionMode selectionMode);
 
     QTreeView* createListView(int id);
     void setCurrentWidget( QTreeView* view );
