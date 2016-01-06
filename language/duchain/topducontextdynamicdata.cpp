@@ -358,15 +358,15 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
     if(index == 0 || index > uint(temporaryItems.size()))
       return {};
     else
-      return temporaryItems[index-1];
+      return temporaryItems.at(index-1);
   }
 
   if (index == 0 || index > static_cast<uint>(items.size())) {
     qCWarning(LANGUAGE) << "item index out of bounds:" << index << "count:" << items.size();
     return {};
   }
-  const uint realIndex = index - 1;
-  Item& item = items[realIndex];
+  const uint realIndex = index - 1;;
+  const auto& item = items.at(realIndex);
   if (item) {
     //Shortcut, because this is the most common case
     return item;
@@ -381,6 +381,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
       reinterpret_cast<const DUChainBaseData*>(data->pointerInData(offsets[realIndex].dataOffset))
     );
 
+    auto& item = items[realIndex];
     item = dynamic_cast<typename PtrType<Item>::value>(DUChainItemSystem::self().create(itemData));
     if (!item) {
       //When this happens, the item has not been registered correctly.

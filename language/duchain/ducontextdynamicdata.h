@@ -100,21 +100,19 @@ public:
       toValidPosition();
     }
 
-    Declaration* operator*() const
+    inline Declaration* operator*() const
     {
-      return current.data && current.index < current.data->m_localDeclarations.size()
-              ? current.data->m_localDeclarations[current.index]
-              : nullptr;
+      return current.data ? current.data->m_localDeclarations.value(current.index) : nullptr;
     }
 
-    VisibleDeclarationIterator& operator++()
+    inline VisibleDeclarationIterator& operator++()
     {
       ++current.index;
       toValidPosition();
       return *this;
     }
 
-    operator bool() const
+    inline operator bool() const
     {
       return current.data && !current.data->m_localDeclarations.isEmpty();
     }
@@ -166,5 +164,7 @@ public:
 };
 
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::DUContextDynamicData::VisibleDeclarationIterator::StackEntry, Q_MOVABLE_TYPE);
 
 #endif

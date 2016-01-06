@@ -45,6 +45,7 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
     qRegisterMetaType<QObject*>("KDevelop::IProjectController*");
     qRegisterMetaType<QObject*>("KDevelop::IPluginController*");
     qRegisterMetaType<QObject*>("PatchReviewPlugin*");
+    qRegisterMetaType<QAction*>();
     qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
 
     //setup kdeclarative library

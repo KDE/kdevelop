@@ -30,36 +30,10 @@
 template<class T, int Prealloc = 256>
 class KDevVarLengthArray : public QVarLengthArray<T, Prealloc>
 {
-    typedef QVarLengthArray<T, Prealloc> Base;
+    using Base = QVarLengthArray<T, Prealloc>;
 
 public:
-    inline explicit KDevVarLengthArray(int size = 0)
-        : Base(size)
-    {
-    }
-
-    inline KDevVarLengthArray(const KDevVarLengthArray<T, Prealloc> &other)
-        : Base(other)
-    {
-    }
-
-    ///Returns the index of the given item in this array, or -1
-    int indexOf(const T& t) const
-    {
-        const T* const end = Base::end();
-        for(const T* it = Base::begin(); it != end; ++it) {
-            if(t == *it) {
-                return (it - Base::begin());
-            }
-        }
-        return -1;
-    }
-
-    ///Returns whether the given item is contained in this array
-    inline bool contains(const T& value) const
-    {
-        return indexOf(value) != -1;
-    }
+    using Base::QVarLengthArray;
 
     ///Removes exactly one occurrence of the given value from the array. Returns false if none was found.
     inline bool removeOne(const T& value);
@@ -74,7 +48,7 @@ public:
 template <class T, int Prealloc>
 Q_INLINE_TEMPLATE bool KDevVarLengthArray<T, Prealloc>::removeOne(const T& value)
 {
-    const int idx = indexOf(value);
+    const int idx = Base::indexOf(value);
     if (idx == -1) {
         return false;
     }
