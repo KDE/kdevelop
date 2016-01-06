@@ -52,7 +52,12 @@ using namespace KDevelop;
 
 namespace {
 
-const QString FileName = QStringLiteral("/tmp/stdin.cpp");
+const QString FileName = 
+#ifdef Q_OS_WIN
+    QStringLiteral("C:/tmp/stdin.cpp");
+#else
+    QStringLiteral("/tmp/stdin.cpp");
+#endif
 
 QList<ProblemPointer> parse(const QByteArray& code)
 {
