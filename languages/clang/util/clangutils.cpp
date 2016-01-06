@@ -288,7 +288,7 @@ QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange rang
     }
     // Clang always appends the full range of the last token, even if this exceeds the end of the requested range.
     // Fix this.
-    result.chop((result.size() - 1) - (end - start));
+    result.chop(result.size() - (end - start));
 
     return result;
 }
