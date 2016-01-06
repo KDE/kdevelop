@@ -382,7 +382,7 @@ FilteredItem NativeAppErrorFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
 {
-    static const ErrorFormat QT_APPLICATION_ERROR_FILTERS[] = {
+    static const ErrorFormat NATIVE_APPLICATION_ERROR_FILTERS[] = {
         // QObject::connect related errors, also see err_method_notfound() in qobject.cpp
         // QObject::connect: No such slot Foo::bar() in /foo/bar.cpp:313
         ErrorFormat(QStringLiteral("^QObject::connect: (?:No such|Parentheses expected,) (?:slot|signal) [^ ]* in (.*):([0-9]+)$"), 1, 2, -1),
@@ -399,10 +399,12 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
         // Do *not* catch:
         //    ...
         //    Loc: [Unknown file(0)]
-        ErrorFormat(QStringLiteral("^   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]$"), 1, 2, -1)
+        ErrorFormat(QStringLiteral("^   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]$"), 1, 2, -1),
+        // a.out: test.cpp:5: int main(): Assertion `false' failed.
+        ErrorFormat(QStringLiteral("^.+: (.+):([1-9][0-9]*): .*: Assertion `.*' failed\\.$"), 1, 2, -1)
     };
 
-    return match(QT_APPLICATION_ERROR_FILTERS, line);
+    return match(NATIVE_APPLICATION_ERROR_FILTERS, line);
 }
 
 /// --- Static Analysis filter strategy ---

@@ -263,6 +263,10 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
         << "QObject::connect: Parentheses expected, signal Foo::bar() in /foo/bar.cpp:313"
         << "/foo/bar.cpp"
         << 312 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("cassert")
+        << "a.out: /foo/bar/test.cpp:5: int main(): Assertion `false' failed."
+        << "/foo/bar/test.cpp"
+        << 4 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("qt-assert")
         << "ASSERT: \"errors().isEmpty()\" in file /tmp/foo/bar.cpp, line 49"
         << "/tmp/foo/bar.cpp"
