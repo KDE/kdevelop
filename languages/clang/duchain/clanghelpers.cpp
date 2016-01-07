@@ -41,18 +41,6 @@ using namespace KDevelop;
 
 namespace {
 
-// TODO: Use it once clang_getInclusions _does_ returns imports on reparse with CXTranslationUnit_PrecompiledPreamble flag.
-// void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, CXClientData d)
-// {
-//     if (stackDepth) {
-//         auto imports = static_cast<Imports*>(d);
-//         CXFile parentFile;
-//         uint line, column;
-//         clang_getFileLocation(stack[0], &parentFile, &line, &column, nullptr);
-//         imports->insert(parentFile, {file, CursorInRevision(line-1, column-1)});
-//     }
-// }
-
 CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
 {
     if (cursor.kind != CXCursor_InclusionDirective) {
@@ -96,9 +84,9 @@ ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangPa
 Imports ClangHelpers::tuImports(CXTranslationUnit tu)
 {
     Imports imports;
-    // TODO: Use it once clang_getInclusions _does_ returns imports on reparse with CXTranslationUnit_PrecompiledPreamble flag.
-    //clang_getInclusions(tu, &::visitInclusions, &imports);
 
+    // Intentionally don't use clang_getInclusions here, as it skips already visited inclusions
+    // which makes TestDUChain::testNestedImports fail
     CXCursor tuCursor = clang_getTranslationUnitCursor(tu);
     clang_visitChildren(tuCursor, &visitCursor, &imports);
 
