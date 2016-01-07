@@ -22,12 +22,10 @@ namespace KDevelop
 struct ActionFormat
 {
     ActionFormat() = default;
-    ActionFormat( const KLocalizedString& label, const QString& _tool, const QString& regExp, int file );
-    ActionFormat( const KLocalizedString& label, int tool, int file, const QString& regExp );
-    KLocalizedString label;
+    ActionFormat( const QString& _tool, const QString& regExp, int file );
+    ActionFormat( int file, const QString& regExp );
     QRegularExpression expression;
     QString tool;
-    int toolGroup;
     int fileGroup;
 };
 

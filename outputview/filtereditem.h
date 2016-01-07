@@ -56,7 +56,6 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 
     QString originalLine;
     FilteredOutputItemType type;
-    QString shortenedText;
     bool isActivatable;
     QUrl url;
     /// lineNo starts with 0

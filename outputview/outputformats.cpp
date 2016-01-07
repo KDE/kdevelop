@@ -34,19 +34,15 @@ ErrorFormat::ErrorFormat( const QString& regExp, int file, int line, int text, c
     , compiler( comp )
 {}
 
-ActionFormat::ActionFormat( const KLocalizedString& label, const QString& _tool, const QString& regExp, int file )
-    : label( label )
-    , expression( regExp )
+ActionFormat::ActionFormat(const QString& _tool, const QString& regExp, int file )
+    : expression( regExp )
     , tool( _tool )
-    , toolGroup(-1)
     , fileGroup( file )
 {
 }
 
-ActionFormat::ActionFormat( const KLocalizedString& label, int tool, int file, const QString& regExp)
-    : label( label )
-    , expression( regExp )
-    , toolGroup( tool )
+ActionFormat::ActionFormat(int file, const QString& regExp)
+    : expression( regExp )
     , fileGroup( file )
 {
 }

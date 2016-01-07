@@ -250,7 +250,7 @@ QVariant OutputModel::data(const QModelIndex& idx , int role ) const
         switch( role )
         {
             case Qt::DisplayRole:
-                return d->m_filteredItems.at( idx.row() ).shortenedText;
+                return d->m_filteredItems.at( idx.row() ).originalLine;
                 break;
             case OutputModel::OutputItemTypeRole:
                 return static_cast<int>(d->m_filteredItems.at( idx.row() ).type);
