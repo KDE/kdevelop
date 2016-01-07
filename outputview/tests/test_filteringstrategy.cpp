@@ -283,6 +283,18 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
         << "   Loc: [Unknown file(0)]"
         << ""
         << -1 << -1 << FilteredItem::InvalidItem;
+    QTest::newRow("qml-import-unix")
+        << "file:///path/to/foo.qml:7:1: Bar is not a type"
+        << "/path/to/foo.qml"
+        << 6 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qml-import-unix1")
+        << "file:///path/to/foo.qml:7:1: Bar is ambiguous. Found in A and in B"
+        << "/path/to/foo.qml"
+        << 6 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qml-import-unix2")
+        << "file:///path/to/foo.qml:7:1: Bar is instantiated recursively"
+        << "/path/to/foo.qml"
+        << 6 << 0 << FilteredItem::ErrorItem;
 }
 
 void TestFilteringStrategy::testNativeAppErrorFilterStrategy()

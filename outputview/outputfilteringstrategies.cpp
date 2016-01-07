@@ -401,7 +401,9 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
         //    Loc: [Unknown file(0)]
         ErrorFormat(QStringLiteral("^   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]$"), 1, 2, -1),
         // a.out: test.cpp:5: int main(): Assertion `false' failed.
-        ErrorFormat(QStringLiteral("^.+: (.+):([1-9][0-9]*): .*: Assertion `.*' failed\\.$"), 1, 2, -1)
+        ErrorFormat(QStringLiteral("^.+: (.+):([1-9][0-9]*): .*: Assertion `.*' failed\\.$"), 1, 2, -1),
+        // file:///path/to/foo.qml:7:1: Bar is not a type
+        ErrorFormat(QStringLiteral("^(file:\\/\\/(?:.+)):([1-9][0-9]*):([1-9][0-9]*): (.+) (?:is not a type|is ambiguous\\..*|is instantiated recursively)$"), 1, 2, -1, 3)
     };
 
     return match(NATIVE_APPLICATION_ERROR_FILTERS, line);
