@@ -220,7 +220,7 @@ void Sublime::MainWindow::setActiveToolView(View *view)
 void MainWindow::saveSettings()
 {
     d->disableConcentrationMode();
-    QString group = "MainWindow";
+    QString group = QStringLiteral("MainWindow");
     if (area())
         group += '_' + area()->objectName();
     KConfigGroup cg = KSharedConfig::openConfig()->group(group);
@@ -230,7 +230,7 @@ void MainWindow::saveSettings()
 
     //debugToolBar visibility is stored separately to allow a area dependent default value
     foreach (KToolBar* toolbar, toolBars()) {
-        if (toolbar->objectName() == "debugToolBar") {
+        if (toolbar->objectName() == QLatin1String("debugToolBar")) {
             cg.writeEntry("debugToolBarVisibility", toolbar->isVisibleTo(this));
         }
     }
@@ -242,8 +242,8 @@ void MainWindow::loadSettings()
 {
     HoldUpdates hu(this);
 
-    qCDebug(SUBLIME) << "loading settings for " << (area() ? area()->objectName() : "");
-    QString group = "MainWindow";
+    qCDebug(SUBLIME) << "loading settings for " << (area() ? area()->objectName() : QLatin1String(""));
+    QString group = QStringLiteral("MainWindow");
     if (area())
         group += '_' + area()->objectName();
     KConfigGroup cg = KSharedConfig::openConfig()->group(group);
@@ -254,7 +254,7 @@ void MainWindow::loadSettings()
     QStatusBar* sb = findChild<QStatusBar *>();
     if (sb) {
         QString entry = cg.readEntry("StatusBar", "Enabled");
-        if ( entry == "Disabled" )
+        if ( entry == QLatin1String("Disabled") )
            sb->hide();
         else
            sb->show();
@@ -263,7 +263,7 @@ void MainWindow::loadSettings()
     QMenuBar* mb = findChild<QMenuBar *>();
     if (mb) {
         QString entry = cg.readEntry ("MenuBar", "Enabled");
-        if ( entry == "Disabled" )
+        if ( entry == QLatin1String("Disabled") )
            mb->hide();
         else
            mb->show();
@@ -271,7 +271,7 @@ void MainWindow::loadSettings()
 
     if ( !autoSaveSettings() || cg.name() == autoSaveGroup() ) {
         QString entry = cg.readEntry ("ToolBarsMovable", "Enabled");
-        if ( entry == "Disabled" )
+        if ( entry == QLatin1String("Disabled") )
             KToolBar::setToolBarsLocked(true);
         else
             KToolBar::setToolBarsLocked(false);
@@ -293,13 +293,13 @@ void MainWindow::loadSettings()
         // Resize only when showing "code" area. If we do that for other areas,
         // then we'll hit bug https://bugs.kde.org/show_bug.cgi?id=207990
         // TODO: adymo: this is more like a hack, we need a proper first-start initialization
-        if (area() && area()->objectName() == "code")
+        if (area() && area()->objectName() == QLatin1String("code"))
             resize(870,650);
     }
 
     int n = 1; // Toolbar counter. toolbars are counted from 1,
     foreach (KToolBar* toolbar, toolBars()) {
-        QString group("Toolbar");
+        QString group(QStringLiteral("Toolbar"));
         // Give a number to the toolbar, but prefer a name if there is one,
         // because there's no real guarantee on the ordering of toolbars
         group += (toolbar->objectName().isEmpty() ? QString::number(n) : QStringLiteral(" ")+toolbar->objectName());
@@ -307,9 +307,9 @@ void MainWindow::loadSettings()
         KConfigGroup toolbarGroup(&cg, group);
         toolbar->applySettings(toolbarGroup);
 
-        if (toolbar->objectName() == "debugToolBar") {
+        if (toolbar->objectName() == QLatin1String("debugToolBar")) {
             //debugToolBar visibility is stored separately to allow a area dependent default value
-            bool visibility = cg.readEntry("debugToolBarVisibility", area()->objectName() == "debug");
+            bool visibility = cg.readEntry("debugToolBarVisibility", area()->objectName() == QLatin1String("debug"));
             toolbar->setVisible(visibility);
         }
         n++;
@@ -347,7 +347,7 @@ void MainWindow::saveGeometry(KConfigGroup &config)
     if (QApplication::desktop()->isVirtualDesktop())
         desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
 
-    QString key = QString::fromLatin1("Desktop %1 %2")
+    QString key = QStringLiteral("Desktop %1 %2")
         .arg(desk.width()).arg(desk.height());
     config.writeEntry(key, geometry());
 
@@ -366,7 +366,7 @@ void MainWindow::loadGeometry(const KConfigGroup &config)
     if (QApplication::desktop()->isVirtualDesktop())
         desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
 
-    QString key = QString::fromLatin1("Desktop %1 %2")
+    QString key = QStringLiteral("Desktop %1 %2")
         .arg(desk.width()).arg(desk.height());
     QRect g = config.readEntry(key, QRect());
     if (!g.isEmpty())

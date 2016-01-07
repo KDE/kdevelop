@@ -60,6 +60,7 @@ IToolViewFactory *findToolView(const QString &id)
 
 class TestPlugin : public KTextEditor::Plugin
 {
+    Q_OBJECT
 public:
     TestPlugin(QObject *parent)
         : Plugin(parent)
@@ -76,7 +77,7 @@ public:
 void TestKTextEditorPluginIntegration::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
-    AutoTestShell::init({"katesnippetsplugin"});
+    AutoTestShell::init({QStringLiteral("katesnippetsplugin")});
     TestCore::initialize();
     QVERIFY(KTextEditor::Editor::instance());
 }
@@ -193,3 +194,5 @@ void TestKTextEditorPluginIntegration::testPluginUnload()
 }
 
 QTEST_MAIN(TestKTextEditorPluginIntegration);
+
+#include <test_ktexteditorpluginintegration.moc>

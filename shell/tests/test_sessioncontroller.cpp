@@ -97,7 +97,7 @@ void TestSessionController::createSession_data()
     QTest::addColumn<QString>( "sessionName" );
     QTest::newRow("SimpleName") << "TestSession";
     QTest::newRow("NonLetterChars") << "Test%$Session";
-    QTest::newRow("NonAsciiChars") << QString::fromUtf8("TöstSession");
+    QTest::newRow("NonAsciiChars") << QStringLiteral("TöstSession");
 }
 
 void TestSessionController::createSession()
@@ -112,8 +112,8 @@ void TestSessionController::createSession()
 
 void TestSessionController::renameSession()
 {
-    const QString sessionName = "TestSession4";
-    const QString newSessionName = "TestOtherSession4";
+    const QString sessionName = QStringLiteral("TestSession4");
+    const QString newSessionName = QStringLiteral("TestOtherSession4");
     KDevelop::Session *s = m_sessionCtrl->createSession( sessionName );
     QCOMPARE( sessionName, s->name() );
     verifySessionDir( s );
@@ -127,8 +127,8 @@ void TestSessionController::renameSession()
 
 void TestSessionController::canRenameActiveSession()
 {
-    const QString sessionName = "TestSession5";
-    const QString newSessionName = "TestOtherSession5";
+    const QString sessionName = QStringLiteral("TestSession5");
+    const QString newSessionName = QStringLiteral("TestOtherSession5");
     KDevelop::Session *s = m_sessionCtrl->createSession( sessionName );
     QCOMPARE( sessionName, s->name() );
     m_sessionCtrl->loadSession( sessionName );
@@ -142,7 +142,7 @@ void TestSessionController::canRenameActiveSession()
 
 void TestSessionController::deleteSession()
 {
-    const QString sessionName = "TestSession3";
+    const QString sessionName = QStringLiteral("TestSession3");
     int sessionCount = m_sessionCtrl->sessionNames().count();
     QPointer<Session> s = m_sessionCtrl->createSession( sessionName );
     QString sessionId = s->id().toString();
@@ -170,10 +170,10 @@ void TestSessionController::deleteSession()
 
 void TestSessionController::cloneSession()
 {
-    QString sessionName = "CloneableSession";
-    QString testgrp = "TestGroup";
-    QString testentry = "TestEntry";
-    QString testval = "TestValue";
+    QString sessionName = QStringLiteral("CloneableSession");
+    QString testgrp = QStringLiteral("TestGroup");
+    QString testentry = QStringLiteral("TestEntry");
+    QString testval = QStringLiteral("TestValue");
     int sessionCount = m_sessionCtrl->sessionNames().count();
     m_sessionCtrl->createSession( sessionName );
     Session* s = m_sessionCtrl->session( sessionName );

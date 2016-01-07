@@ -65,7 +65,7 @@ void WorkingSetController::initialize()
         getWorkingSet(set);
     }
 
-    m_emptyWorkingSet = new WorkingSet("empty");
+    m_emptyWorkingSet = new WorkingSet(QStringLiteral("empty"));
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         setupActions();

@@ -56,23 +56,23 @@ void TestViewActivation::initTestCase()
 void TestViewActivation::init()
 {
     controller = new Controller(this);
-    doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>("doc1"));
+    doc1 = new ToolDocument(QStringLiteral("doc1"), controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("doc1")));
     //this document will create special widgets - QListView nested in QWidget
-    doc2 = new ToolDocument("doc2", controller, new SpecialWidgetFactory<QListView>("doc2"));
-    doc3 = new ToolDocument("doc3", controller, new SimpleToolWidgetFactory<QListView>("doc3"));
-    doc4 = new ToolDocument("doc4", controller, new SimpleToolWidgetFactory<QListView>("doc4"));
+    doc2 = new ToolDocument(QStringLiteral("doc2"), controller, new SpecialWidgetFactory<QListView>(QStringLiteral("doc2")));
+    doc3 = new ToolDocument(QStringLiteral("doc3"), controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("doc3")));
+    doc4 = new ToolDocument(QStringLiteral("doc4"), controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("doc4")));
 
-    tool1 = new ToolDocument("tool1", controller, new SimpleToolWidgetFactory<QListView>("tool1"));
-    tool2 = new ToolDocument("tool2", controller, new SimpleToolWidgetFactory<QTextEdit>("tool2"));
-    tool3 = new ToolDocument("tool3", controller, new SimpleToolWidgetFactory<QTextEdit>("tool3"));
+    tool1 = new ToolDocument(QStringLiteral("tool1"), controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("tool1")));
+    tool2 = new ToolDocument(QStringLiteral("tool2"), controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool2")));
+    tool3 = new ToolDocument(QStringLiteral("tool3"), controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool3")));
 
-    area = new Area(controller, "Area");
+    area = new Area(controller, QStringLiteral("Area"));
 
     view211 = doc1->createView();
-    view211->setObjectName("view211");
+    view211->setObjectName(QStringLiteral("view211"));
     area->addView(view211);
     view212 = doc1->createView();
-    view212->setObjectName("view212");
+    view212->setObjectName(QStringLiteral("view212"));
     area->addView(view212);
     view221 = doc2->createView();
     area->addView(view221, view211, Qt::Vertical);
@@ -98,8 +98,8 @@ void TestViewActivation::cleanup()
 void TestViewActivation::signalsOnViewCreationAndDeletion()
 {
     Controller *controller = new Controller(this);
-    ToolDocument *doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>("doc1"));
-    Area *area = new Area(controller, "Area");
+    ToolDocument *doc1 = new ToolDocument(QStringLiteral("doc1"), controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("doc1")));
+    Area *area = new Area(controller, QStringLiteral("Area"));
 
     QSignalSpy spy(controller, SIGNAL(viewAdded(Sublime::View*)));
     View *v = doc1->createView();
@@ -134,9 +134,9 @@ void TestViewActivation::viewActivation()
 
     //add some widgets that are not in layout
     QTextEdit *breaker = new QTextEdit(mw);
-    breaker->setObjectName("breaker");
+    breaker->setObjectName(QStringLiteral("breaker"));
     QTextEdit *toolBreaker = new QTextEdit(mw);
-    toolBreaker->setObjectName("toolBreaker");
+    toolBreaker->setObjectName(QStringLiteral("toolBreaker"));
 
     QDockWidget *dock = new QDockWidget(mw);
     dock->setWidget(toolBreaker);
@@ -146,7 +146,7 @@ void TestViewActivation::viewActivation()
     //activate view
     qApp->sendEvent(view212->widget(), new QFocusEvent(QEvent::FocusIn));
     QString failMsg = QStringLiteral("\nWas expecting %1 to be active but got %2").
-                      arg(view212->objectName()).arg(mw->activeView()->objectName());
+                      arg(view212->objectName(), mw->activeView()->objectName());
     QVERIFY2(mw->activeView() == view212, failMsg.toLatin1().data());
 
     //activate toolview and check that both view and toolview are active
@@ -170,7 +170,7 @@ void TestViewActivation::viewActivation()
     QCOMPARE(mw->activeToolView(), viewT31);
 
     //focus inner widget for view221
-    QListView *inner = mw->findChild<QListView*>("doc2_inner");
+    QListView *inner = mw->findChild<QListView*>(QStringLiteral("doc2_inner"));
     QVERIFY(inner);
     qApp->sendEvent(inner, new QFocusEvent(QEvent::FocusIn));
     QCOMPARE(mw->activeView(), view221);
@@ -211,7 +211,7 @@ void TestViewActivation::activationAfterRemovalSimplestCase()
 {
     //we don't have split views - just two views in one area index
     MainWindow mw(controller);
-    Area *area = new Area(controller, "Area");
+    Area *area = new Area(controller, QStringLiteral("Area"));
     View *v1 = doc1->createView();
     View *v2 = doc2->createView();
     area->addView(v1);

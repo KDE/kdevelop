@@ -116,7 +116,7 @@ void TestDetectedProblem::testSeverity()
 
 void TestDetectedProblem::testDescription()
 {
-    QString TESTDESCRIPTION = "Just a test description";
+    QString TESTDESCRIPTION = QStringLiteral("Just a test description");
 
     m_problem->setDescription(TESTDESCRIPTION);
     QCOMPARE(TESTDESCRIPTION, m_problem->description());
@@ -124,7 +124,7 @@ void TestDetectedProblem::testDescription()
 
 void TestDetectedProblem::testExplanation()
 {
-    QString TESTEXPLANATION = "Just a test explanation";
+    QString TESTEXPLANATION = QStringLiteral("Just a test explanation");
 
     m_problem->setExplanation(TESTEXPLANATION);
     QCOMPARE(TESTEXPLANATION, m_problem->explanation());
@@ -132,7 +132,7 @@ void TestDetectedProblem::testExplanation()
 
 void TestDetectedProblem::testFinalLocation()
 {
-    QString TESTPATH = "/just/a/bogus/path/to/a/fake/document";
+    QString TESTPATH = QStringLiteral("/just/a/bogus/path/to/a/fake/document");
     int TESTLINE     = 9001;
     int TESTCOLUMN   = 1337;
 

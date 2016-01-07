@@ -42,7 +42,7 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     , m_mainWindow(parent)
 {
     setLayout(new QHBoxLayout);
-    m_separator = new QLabel("|", this);
+    m_separator = new QLabel(QStringLiteral("|"), this);
     m_separator->setEnabled(false);
     m_separator->setVisible(false);
     layout()->addWidget(m_separator);
@@ -75,10 +75,10 @@ void AreaDisplay::newArea(Sublime::Area* area)
 
     QMenu* m = new QMenu(m_button);
     m->addActions(area->actions());
-    if(currentArea->objectName() != "code") {
+    if(currentArea->objectName() != QStringLiteral("code")) {
         if(!m->actions().isEmpty())
             m->addSeparator();
-        m->addAction(QIcon::fromTheme("document-edit"), i18n("Back to code"), this, SLOT(backToCode()), QKeySequence(Qt::AltModifier | Qt::Key_Backspace));
+        m->addAction(QIcon::fromTheme(QStringLiteral("document-edit")), i18n("Back to code"), this, SLOT(backToCode()), QKeySequence(Qt::AltModifier | Qt::Key_Backspace));
     }
     m_button->setMenu(m);
 
@@ -107,7 +107,7 @@ bool AreaDisplay::eventFilter(QObject* obj, QEvent* event)
 
 void AreaDisplay::backToCode()
 {
-    ICore::self()->uiController()->switchToArea("code", IUiController::ThisWindow);
+    ICore::self()->uiController()->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
 }
 
 QSize AreaDisplay::minimumSizeHint() const

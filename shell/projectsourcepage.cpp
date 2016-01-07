@@ -43,17 +43,19 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, QWidget* parent)
     m_ui->workingDir->setMode(KFile::Directory);
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
 
-    m_ui->sources->addItem(QIcon::fromTheme("folder"), i18n("From File System"));
+    m_ui->sources->addItem(QIcon::fromTheme(QStringLiteral("folder")), i18n("From File System"));
     m_plugins.append(0);
 
     IPluginController* pluginManager = ICore::self()->pluginController();
-    foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
+    QList<IPlugin*> plugins = pluginManager->allPluginsForExtension( QStringLiteral("org.kdevelop.IBasicVersionControl") );
+    foreach( IPlugin* p, plugins )
     {
         m_plugins.append(p);
         m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).iconName()), p->extension<IBasicVersionControl>()->name());
     }
 
-    foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IProjectProvider" ) )
+    plugins = pluginManager->allPluginsForExtension( QStringLiteral("org.kdevelop.IProjectProvider") );
+    foreach( IPlugin* p, plugins )
     {
         m_plugins.append(p);
         m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).iconName()), p->extension<IProjectProvider>()->name());
@@ -193,7 +195,7 @@ void ProjectSourcePage::projectReceived(KJob* job)
     }
 
     reevaluateCorrection();
-    m_ui->creationProgress->setFormat("%p%");
+    m_ui->creationProgress->setFormat(QStringLiteral("%p%"));
 }
 
 void ProjectSourcePage::reevaluateCorrection()

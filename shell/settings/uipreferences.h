@@ -33,6 +33,7 @@ namespace Ui{
 
 class UiPreferences : public KDevelop::ConfigPage
 {
+    Q_OBJECT
 public:
     explicit UiPreferences(QWidget* parent = nullptr);
 

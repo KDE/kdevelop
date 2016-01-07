@@ -54,84 +54,84 @@ struct ViewCounter {
 void TestAreaOperation::init()
 {
     m_controller = new Controller(this);
-    Document *doc1 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/foo.cpp"));
-    Document *doc2 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/boo.cpp"));
-    Document *doc3 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/moo.cpp"));
-    Document *doc4 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/zoo.cpp"));
+    Document *doc1 = new UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/foo.cpp")));
+    Document *doc2 = new UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/boo.cpp")));
+    Document *doc3 = new UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/moo.cpp")));
+    Document *doc4 = new UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/zoo.cpp")));
 
     //documents for toolviews
-    Document *tool1 = new ToolDocument("tool1", m_controller, new SimpleToolWidgetFactory<QListView>("tool1"));
-    Document *tool2 = new ToolDocument("tool2", m_controller, new SimpleToolWidgetFactory<QTextEdit>("tool2"));
-    Document *tool3 = new ToolDocument("tool3", m_controller, new SimpleToolWidgetFactory<QTextEdit>("tool3"));
+    Document *tool1 = new ToolDocument(QStringLiteral("tool1"), m_controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("tool1")));
+    Document *tool2 = new ToolDocument(QStringLiteral("tool2"), m_controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool2")));
+    Document *tool3 = new ToolDocument(QStringLiteral("tool3"), m_controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool3")));
 
     //areas (aka perspectives)
     //view object names are in form AreaNumber.DocumentNumber.ViewNumber
     //"tool" prefix is there for tooldocument views
-    m_area1 = new Area(m_controller, "Area 1");
+    m_area1 = new Area(m_controller, QStringLiteral("Area 1"));
     m_pView111 = doc1->createView();
-    m_pView111->setObjectName("view1.1.1");
+    m_pView111->setObjectName(QStringLiteral("view1.1.1"));
     m_area1->addView(m_pView111);
     m_pView121 = doc2->createView();
-    m_pView121->setObjectName("view1.2.1");
+    m_pView121->setObjectName(QStringLiteral("view1.2.1"));
     m_area1->addView(m_pView121);
     m_pView122 = doc2->createView();
-    m_pView122->setObjectName("view1.2.2");
+    m_pView122->setObjectName(QStringLiteral("view1.2.2"));
     m_area1->addView(m_pView122);
     m_pView131 = doc3->createView();
-    m_pView131->setObjectName("view1.3.1");
+    m_pView131->setObjectName(QStringLiteral("view1.3.1"));
     m_area1->addView(m_pView131);
 
     View *view = tool1->createView();
-    view->setObjectName("toolview1.1.1");
+    view->setObjectName(QStringLiteral("toolview1.1.1"));
     m_area1->addToolView(view, Sublime::Left);
     view = tool2->createView();
-    view->setObjectName("toolview1.2.1");
+    view->setObjectName(QStringLiteral("toolview1.2.1"));
     m_area1->addToolView(view, Sublime::Bottom);
     view = tool2->createView();
-    view->setObjectName("toolview1.2.2");
+    view->setObjectName(QStringLiteral("toolview1.2.2"));
     m_area1->addToolView(view, Sublime::Bottom);
 
-    m_area2 = new Area(m_controller, "Area 2");
+    m_area2 = new Area(m_controller, QStringLiteral("Area 2"));
     View *view211 = doc1->createView();
-    view211->setObjectName("view2.1.1");
+    view211->setObjectName(QStringLiteral("view2.1.1"));
     m_area2->addView(view211);
     View *view212 = doc1->createView();
-    view212->setObjectName("view2.1.2");
+    view212->setObjectName(QStringLiteral("view2.1.2"));
     m_area2->addView(view212);
     View *view221 = doc2->createView();
-    view221->setObjectName("view2.2.1");
+    view221->setObjectName(QStringLiteral("view2.2.1"));
     m_area2->addView(view221, view211, Qt::Vertical);
     View *view231 = doc3->createView();
-    view231->setObjectName("view2.3.1");
+    view231->setObjectName(QStringLiteral("view2.3.1"));
     m_area2->addView(view231, view221, Qt::Horizontal);
     View *view241 = doc4->createView();
-    view241->setObjectName("view2.4.1");
+    view241->setObjectName(QStringLiteral("view2.4.1"));
     m_area2->addView(view241, view212, Qt::Vertical);
     view = tool1->createView();
-    view->setObjectName("toolview2.1.1");
+    view->setObjectName(QStringLiteral("toolview2.1.1"));
     m_area2->addToolView(view, Sublime::Bottom);
     view = tool2->createView();
-    view->setObjectName("toolview2.2.1");
+    view->setObjectName(QStringLiteral("toolview2.2.1"));
     m_area2->addToolView(view, Sublime::Right);
     view = tool3->createView();
-    view->setObjectName("toolview2.3.1");
+    view->setObjectName(QStringLiteral("toolview2.3.1"));
     m_area2->addToolView(view, Sublime::Top);
     view = tool3->createView();
-    view->setObjectName("toolview2.3.2");
+    view->setObjectName(QStringLiteral("toolview2.3.2"));
     m_area2->addToolView(view, Sublime::Top);
 
-    m_area3 = new Area(m_controller, "Area 3");
+    m_area3 = new Area(m_controller, QStringLiteral("Area 3"));
     View *view0 = doc1->createView();
-    view0->setObjectName("view3.1.1");
+    view0->setObjectName(QStringLiteral("view3.1.1"));
     m_area3->addView(view0);
     View *view1 = doc2->createView();
-    view1->setObjectName("view3.1.2");
+    view1->setObjectName(QStringLiteral("view3.1.2"));
     m_area3->addView(view1, view0);
     View *view2 = doc3->createView();
-    view2->setObjectName("view3.1.3");
+    view2->setObjectName(QStringLiteral("view3.1.3"));
     m_area3->addView(view2, view1);
     View *view3 = doc4->createView();
-    view3->setObjectName("view3.1.4");
+    view3->setObjectName(QStringLiteral("view3.1.4"));
     m_area3->addView(view3, view1);
 
     m_controller->addDefaultArea(m_area1);
@@ -315,7 +315,7 @@ void TestAreaOperation::areaCloning()
     Walks all Views and checks if they got a widget.
     hasWidget will be set to false if any View lacks a widget.*/
 struct AreaWidgetChecker {
-    AreaWidgetChecker(): foundViewWithoutWidget(false), failureMessage("") {}
+    AreaWidgetChecker(): foundViewWithoutWidget(false), failureMessage(QLatin1String("")) {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
         foreach (View *view, index->views())
@@ -376,21 +376,21 @@ void TestAreaOperation::simpleViewAdditionAndDeletion()
     m_controller->showArea(m_area1, &mw);
     checkArea1(&mw);
 
-    Document *doc5 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/new.cpp"));
+    Document *doc5 = new UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/new.cpp")));
     View *view = doc5->createView();
-    view->setObjectName("view1.5.1");
+    view->setObjectName(QStringLiteral("view1.5.1"));
     m_area1->addView(view);
 
     checkAreaViewsDisplay(&mw, m_area1,
         QStringLiteral("\n[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 view1.5.1 ]\n"),
-        1, 1, "Added an url view (view1.5.1)");
+        1, 1, QStringLiteral("Added an url view (view1.5.1)"));
 
     //now remove view and check that area is valid
     delete m_area1->removeView(view);
 
     checkAreaViewsDisplay(&mw, m_area1,
         QStringLiteral("\n[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n"),
-        1, 1, "Removed the url view (view1.5.1)");
+        1, 1, QStringLiteral("Removed the url view (view1.5.1)"));
 
     //now remove all other views one by one and leave an empty container
     QList<View*> list(m_area1->views());
@@ -399,16 +399,16 @@ void TestAreaOperation::simpleViewAdditionAndDeletion()
 
     checkAreaViewsDisplay(&mw, m_area1,
         QStringLiteral("\n[ horizontal splitter ]\n"),
-        0, 1, "Removed all views. Only horizontal splitter should remain.");
+        0, 1, QStringLiteral("Removed all views. Only horizontal splitter should remain."));
 
     //add a view again and check that mainwindow is correctly reconstructed
     view = doc5->createView();
-    view->setObjectName("view1.5.1");
+    view->setObjectName(QStringLiteral("view1.5.1"));
     m_area1->addView(view);
 
     checkAreaViewsDisplay(&mw, m_area1,
         QStringLiteral("\n[ view1.5.1 ]\n"),
-        1, 1, "Added a single view to previously emptied mainwindow.");
+        1, 1, QStringLiteral("Added a single view to previously emptied mainwindow."));
 
     {
         KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
@@ -426,11 +426,11 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
 
     m_controller->showArea(m_area2, &mw);
 
-    Document *doc5 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/new.cpp"));
+    Document *doc5 = new UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/new.cpp")));
     View *view = doc5->createView();
-    view->setObjectName("view2.5.1");
+    view->setObjectName(QStringLiteral("view2.5.1"));
 
-    View *view221 = findNamedView(area, "view2.2.1");
+    View *view221 = findNamedView(area, QStringLiteral("view2.2.1"));
     QVERIFY(view221);
     area->addView(view, view221, Qt::Vertical);
 
@@ -460,7 +460,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
 "), 4, 6+1);
 
     //remove one more view, this time the one inside non-empty container
-    View *view211 = findNamedView(area, "view2.1.1");
+    View *view211 = findNamedView(area, QStringLiteral("view2.1.1"));
     delete m_area2->removeView(view211);
 
     checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
@@ -474,7 +474,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
 "), 4, 6+1);
 
     //and now remove all remaining views one by one
-    delete m_area2->removeView(findNamedView(area, "view2.1.2"));
+    delete m_area2->removeView(findNamedView(area, QStringLiteral("view2.1.2")));
     checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ vertical splitter ]\n\
     [ view2.4.1 ]\n\
@@ -483,19 +483,19 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
         [ view2.3.1 ]\n\
 "), 3, 4+1);
 
-    delete m_area2->removeView(findNamedView(area, "view2.4.1"));
+    delete m_area2->removeView(findNamedView(area, QStringLiteral("view2.4.1")));
     checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ horizontal splitter ]\n\
     [ view2.5.1 ]\n\
     [ view2.3.1 ]\n\
 "), 2, 2+1);
 
-    delete m_area2->removeView(findNamedView(area, "view2.5.1"));
+    delete m_area2->removeView(findNamedView(area, QStringLiteral("view2.5.1")));
     checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ view2.3.1 ]\n\
 "), 1, 1);
 
-    delete m_area2->removeView(findNamedView(area, "view2.3.1"));
+    delete m_area2->removeView(findNamedView(area, QStringLiteral("view2.3.1")));
     checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ horizontal splitter ]\n\
 "), 0, 1);
@@ -507,9 +507,9 @@ void TestAreaOperation::toolViewAdditionAndDeletion()
     m_controller->showArea(m_area1, &mw);
     checkArea1(&mw);
 
-    Document *tool4 = new ToolDocument("tool4", m_controller, new SimpleToolWidgetFactory<QTextEdit>("tool4"));
+    Document *tool4 = new ToolDocument(QStringLiteral("tool4"), m_controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool4")));
     View *view = tool4->createView();
-    view->setObjectName("toolview1.4.1");
+    view->setObjectName(QStringLiteral("toolview1.4.1"));
     m_area1->addToolView(view, Sublime::Right);
 
     //check that area is in valid state
@@ -691,7 +691,7 @@ void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
 
     //check containers
     QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
-    QString failMsg = QString("\nFailure while checking area contents @ %1\n"
+    QString failMsg = QStringLiteral("\nFailure while checking area contents @ %1\n"
                               "Expected %2 containers in central splitter but got %3 \n").
                       arg(location).arg(containerCount).arg(containers.count());
     QVERIFY2(containers.count() == containerCount, failMsg.toLatin1().data());

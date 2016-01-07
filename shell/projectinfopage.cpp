@@ -26,7 +26,8 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
              this, &ProjectInfoPage::projectNameChanged );
     connect( page_ui->managerCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
              this, &ProjectInfoPage::changeProjectManager );
-    for (auto&& info : Core::self()->pluginControllerInternal()->queryExtensionPlugins("org.kdevelop.IProjectFileManager")) {
+    QVector<KPluginMetaData> data = Core::self()->pluginControllerInternal()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
+    foreach (auto&& info, data) {
         page_ui->managerCombo->addItem(QIcon::fromTheme(info.iconName()), info.name(), info.pluginId());
     }
 }

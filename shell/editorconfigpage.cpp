@@ -90,7 +90,7 @@ private:
 EditorConfigPage::EditorConfigPage(QWidget* parent)
     : ConfigPage(nullptr, nullptr, parent)
 {
-    setObjectName("editorconfig");
+    setObjectName(QStringLiteral("editorconfig"));
 }
 
 EditorConfigPage::~EditorConfigPage() {};

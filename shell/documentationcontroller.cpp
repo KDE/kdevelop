@@ -99,7 +99,7 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
         }
 
         Qt::DockWidgetArea defaultPosition() override { return Qt::RightDockWidgetArea; }
-        QString id() const override { return "org.kdevelop.DocumentationView"; }
+        QString id() const override { return QStringLiteral("org.kdevelop.DocumentationView"); }
 
     private:
         ProvidersModel* providers() {
@@ -115,9 +115,9 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
 DocumentationController::DocumentationController(Core* core)
     : m_factory(new DocumentationViewFactory)
 {
-    m_showDocumentation = core->uiController()->activeMainWindow()->actionCollection()->addAction("showDocumentation");
+    m_showDocumentation = core->uiController()->activeMainWindow()->actionCollection()->addAction(QStringLiteral("showDocumentation"));
     m_showDocumentation->setText(i18n("Show Documentation"));
-    m_showDocumentation->setIcon(QIcon::fromTheme("documentation"));
+    m_showDocumentation->setIcon(QIcon::fromTheme(QStringLiteral("documentation")));
     connect(m_showDocumentation, &QAction::triggered, this, &DocumentationController::doShowDocumentation);
 }
 
@@ -184,8 +184,8 @@ IDocumentation::Ptr DocumentationController::documentationForDeclaration(Declara
 
 QList< IDocumentationProvider* > DocumentationController::documentationProviders() const
 {
-    QList<IPlugin*> plugins=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProvider");
-    QList<IPlugin*> pluginsProvider=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProviderProvider");
+    QList<IPlugin*> plugins=ICore::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IDocumentationProvider"));
+    QList<IPlugin*> pluginsProvider=ICore::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IDocumentationProviderProvider"));
 
     QList<IDocumentationProvider*> ret;
     foreach(IPlugin* p, pluginsProvider)

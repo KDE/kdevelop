@@ -99,7 +99,7 @@ void WorkingSetToolButton::duplicateSet()
 
     if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
         return;
-    WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet("clone");
+    WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(QStringLiteral("clone"));
     set->setPersistent(true);
     set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
     mainWindow()->area()->setWorkingSet(set->id());

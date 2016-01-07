@@ -49,6 +49,7 @@ class IProject;
 
 class LaunchConfigurationModelDelegate : public QStyledItemDelegate
 {
+Q_OBJECT
 public:
     LaunchConfigurationModelDelegate();
     QWidget* createEditor ( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;

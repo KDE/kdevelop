@@ -62,6 +62,7 @@ bool sortPlugins(KDevelop::IPlugin* l, KDevelop::IPlugin* r)
 
 class PluginsModel : public QAbstractListModel
 {
+    Q_OBJECT
 public:
     enum ExtraRoles {
         DescriptionRole = Qt::UserRole+1
@@ -122,7 +123,7 @@ public:
         : KWidgetItemDelegate(itemView, parent)
         , pushButton(new QPushButton)
     {
-        pushButton->setIcon(QIcon::fromTheme("dialog-information")); // only for getting size matters
+        pushButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information"))); // only for getting size matters
     }
 
     ~LoadedPluginsDelegate() override
@@ -199,7 +200,7 @@ public:
     QList<QWidget*> createItemWidgets() const
     {
         QPushButton *button = new QPushButton();
-        button->setIcon(QIcon::fromTheme("dialog-information"));
+        button->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
         setBlockedEventTypes(button, QList<QEvent::Type>() << QEvent::MouseButtonPress
                              << QEvent::MouseButtonRelease << QEvent::MouseButtonDblClick);
 
@@ -259,6 +260,7 @@ private:
 
 class PluginsView : public QListView
 {
+    Q_OBJECT
 public:
     PluginsView(QWidget* parent = 0)
         :QListView(parent)

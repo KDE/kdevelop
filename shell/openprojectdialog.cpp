@@ -115,8 +115,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
         KColorScheme scheme(palette().currentColorGroup());
         const QString errorMsg = i18n("Selected URL is invalid");
         openPage->setHeader(QStringLiteral("<font color='%1'>%2</font>")
-            .arg(scheme.foreground(KColorScheme::NegativeText).color().name())
-            .arg(errorMsg)
+            .arg(scheme.foreground(KColorScheme::NegativeText).color().name(), errorMsg)
         );
         setAppropriate( projectInfoPage, false );
         setAppropriate( openPage, true );
@@ -139,7 +138,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
             if( page2 )
             {
                 // Default manager
-                page->setProjectManager( "Generic Project Manager" );
+                page->setProjectManager( QStringLiteral("Generic Project Manager") );
                 // clear the filelist
                 m_fileList.clear();
 
@@ -158,7 +157,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                 bool managerFound = false;
                 foreach( const QString& manager, page2->projectFilters().keys() )
                 {
-                    foreach( const QString& filterexp, page2->projectFilters()[manager] )
+                    foreach( const QString& filterexp, page2->projectFilters().value(manager) )
                     {
                         if( !m_fileList.filter( QRegExp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard ) ).isEmpty() )
                         {
@@ -228,7 +227,7 @@ void OpenProjectDialog::storeFileList(KIO::Job*, const KIO::UDSEntryList& list)
     foreach( const KIO::UDSEntry& entry, list )
     {
         QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
-        if( name != "." && name != ".." && !entry.isDir() )
+        if( name != QLatin1String(".") && name != QLatin1String("..") && !entry.isDir() )
         {
             m_fileList << name;
         }

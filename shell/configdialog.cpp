@@ -74,7 +74,7 @@ ConfigDialog::ConfigDialog(const QVector<ConfigPage*>& pages, QWidget* parent, Q
 
 KPageWidgetItem* ConfigDialog::itemForPage(ConfigPage* page) const
 {
-    for (auto item : m_pages) {
+    for (auto& item : m_pages) {
         if (item->widget() == page) {
             return item;
         }
@@ -134,7 +134,7 @@ void ConfigDialog::removeConfigPage(ConfigPage* page)
 void ConfigDialog::removePagesForPlugin(IPlugin* plugin)
 {
     Q_ASSERT(plugin);
-    for (auto&& item : m_pages) {
+    foreach (auto&& item, m_pages) {
         if (!item) {
             continue;
         }

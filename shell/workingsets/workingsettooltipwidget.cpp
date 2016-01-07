@@ -92,7 +92,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         topLayout->addWidget(m_openButton);
 
         m_deleteButton = new QPushButton;
-        m_deleteButton->setIcon(QIcon::fromTheme("edit-delete"));
+        m_deleteButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
         m_deleteButton->setText(i18n("Delete"));
         m_deleteButton->setToolTip(i18n("Remove this working set. The contained documents are not affected."));
         m_deleteButton->setFlat(true);
@@ -127,7 +127,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         actionsLayout->addStretch();
 
         m_mergeButton = new QPushButton;
-        m_mergeButton->setIcon(QIcon::fromTheme("list-add"));
+        m_mergeButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
         m_mergeButton->setText(i18n("Add All"));
         m_mergeButton->setToolTip(i18n("Add all documents that are part of this working set to the currently active working set."));
         m_mergeButton->setFlat(true);
@@ -135,7 +135,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         actionsLayout->addWidget(m_mergeButton);
 
         m_subtractButton = new QPushButton;
-        m_subtractButton->setIcon(QIcon::fromTheme("list-remove"));
+        m_subtractButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
         m_subtractButton->setText(i18n("Remove All"));
         m_subtractButton->setToolTip(i18n("Remove all documents that are part of this working set from the currently active working set."));
         m_subtractButton->setFlat(true);
@@ -281,12 +281,12 @@ void WorkingSetToolTipWidget::updateFileButtons()
         if(openFiles.contains(it.key())) {
             noneOpen = false;
             (*it)->m_button->setToolTip(i18n("Remove this file from the current working set"));
-            (*it)->m_button->setIcon(QIcon::fromTheme("list-remove"));
+            (*it)->m_button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
             (*it)->show();
         }else{
             allOpen = false;
             (*it)->m_button->setToolTip(i18n("Add this file to the current working set"));
-            (*it)->m_button->setIcon(QIcon::fromTheme("list-add"));
+            (*it)->m_button->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
             if(currentWorkingSet == m_set)
             {
                 (*it)->hide();
@@ -313,13 +313,13 @@ void WorkingSetToolTipWidget::updateFileButtons()
         disconnect(m_openButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::loadSet);
         connect(m_openButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::closeSet);
         connect(m_openButton, &QPushButton::clicked, this, &WorkingSetToolTipWidget::shouldClose);
-        m_openButton->setIcon(QIcon::fromTheme("project-development-close"));
+        m_openButton->setIcon(QIcon::fromTheme(QStringLiteral("project-development-close")));
         m_openButton->setText(i18n("Stash"));
     }else{
         disconnect(m_openButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::closeSet);
         connect(m_openButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::loadSet);
         disconnect(m_openButton, &QPushButton::clicked, this, &WorkingSetToolTipWidget::shouldClose);
-        m_openButton->setIcon(QIcon::fromTheme("project-open"));
+        m_openButton->setIcon(QIcon::fromTheme(QStringLiteral("project-open")));
         m_openButton->setText(i18n("Load"));
     }
 

@@ -55,21 +55,21 @@ PluginPreferences::PluginPreferences(QWidget* parent)
         { "Other", i18nc("@title:group", "Other") }
     };
     foreach (const KPluginMetaData& info, Core::self()->pluginControllerInternal()->allPluginInfos()) {
-        const QString loadMode = info.value("X-KDevelop-LoadMode");
-        if( loadMode.isEmpty() || loadMode == "UserSelectable" )
+        const QString loadMode = info.value(QStringLiteral("X-KDevelop-LoadMode"));
+        if( loadMode.isEmpty() || loadMode == QLatin1String("UserSelectable") )
         {
             QString category = info.category();
             if (!categories.contains(category)) {
                 if (!category.isEmpty()) {
                     qWarning() << "unknown category for plugin" << info.name() << ":" << info.category();
                 }
-                category = "Other";
+                category = QStringLiteral("Other");
             }
             KPluginInfo kpi(info);
             kpi.setPluginEnabled(Core::self()->pluginControllerInternal()->isEnabled(info));
             plugins[category] << kpi;
         } else
-            qDebug() << "skipping..." << info.pluginId() << info.value("X-KDevelop-Category") << loadMode;
+            qDebug() << "skipping..." << info.pluginId() << info.value(QStringLiteral("X-KDevelop-Category")) << loadMode;
     }
 
     for (auto it = plugins.constBegin(), end = plugins.constEnd(); it != end; ++it) {

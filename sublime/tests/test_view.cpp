@@ -30,7 +30,7 @@ using namespace Sublime;
 void TestView::widgetDeletion()
 {
     Controller controller;
-    Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
+    Document *doc = new ToolDocument(QStringLiteral("tool"), &controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool")));
 
     View *view = doc->createView();
     //create the widget
@@ -44,14 +44,16 @@ void TestView::widgetDeletion()
 }
 
 class Test: public View {
+Q_OBJECT
 public:
     Test(Document *doc): View(doc) {}
 };
 
 class TestDocument: public Document {
+Q_OBJECT
 public:
-    TestDocument(Controller *controller): Document("TestDocument", controller) {}
-    QString documentType() const override { return "Test"; }
+    TestDocument(Controller *controller): Document(QStringLiteral("TestDocument"), controller) {}
+    QString documentType() const override { return QStringLiteral("Test"); }
     QString documentSpecifier() const override { return QString(); }
 protected:
     QWidget *createViewWidget(QWidget *parent = 0) override { return new QWidget(parent); }
@@ -67,3 +69,5 @@ void TestView::viewReimplementation()
 }
 
 QTEST_MAIN(TestView)
+
+#include "test_view.moc"

@@ -238,7 +238,7 @@ public:
 
         // developerfile == dirname(projectFileUrl) ."/.kdev4/". basename(projectfileUrl)
         developerFile = projectFile;
-        developerFile.setLastPathSegment( ".kdev4" );
+        developerFile.setLastPathSegment( QStringLiteral(".kdev4") );
         developerFile.addPath( projectFile.lastPathSegment() );
 
         statJob = KIO::stat( developerFile.toUrl(), KIO::HideProgressInfo );
@@ -334,7 +334,7 @@ public:
 
         //Get our importer
         IPluginController* pluginManager = Core::self()->pluginController();
-        manager = pluginManager->pluginForExtension( "org.kdevelop.IProjectFileManager", managerSetting );
+        manager = pluginManager->pluginForExtension( QStringLiteral("org.kdevelop.IProjectFileManager"), managerSetting );
         IProjectFileManager* iface = 0;
         if ( manager )
             iface = manager->extension<IProjectFileManager>();
@@ -365,11 +365,12 @@ public:
             QString vcsPluginName = projectGroup.readEntry("VersionControlSupport", "");
             if( !vcsPluginName.isEmpty() )
             {
-                vcsPlugin = pluginManager->pluginForExtension( "org.kdevelop.IBasicVersionControl", vcsPluginName );
+                vcsPlugin = pluginManager->pluginForExtension( QStringLiteral( "org.kdevelop.IBasicVersionControl" ), vcsPluginName );
             }
         } else
         {
-            foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
+            QList<IPlugin*> plugins = pluginManager->allPluginsForExtension( QStringLiteral( "org.kdevelop.IBasicVersionControl" ) );
+            foreach( IPlugin* p, plugins )
             {
                 IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
                 if( iface && iface->isVersionControlled( topItem->path().toUrl() ) )
@@ -406,7 +407,7 @@ Project::Project( QObject *parent )
         : IProject( parent )
         , d( new ProjectPrivate )
 {
-    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/Project", this, QDBusConnection::ExportScriptableSlots );
+    QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/Project"), this, QDBusConnection::ExportScriptableSlots );
 
     d->project = this;
     d->manager = 0;

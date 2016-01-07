@@ -137,7 +137,7 @@ public:
         options.projectTempFile = proj->projectTempFile();
         options.project = proj;
 
-        for (IPlugin* plugin : findPluginsForProject(proj)) {
+        foreach (IPlugin* plugin, findPluginsForProject(proj)) {
             for (int i = 0; i < plugin->perProjectConfigPages(); ++i) {
                 configPages.append(plugin->perProjectConfigPage(i, options, mainWindow));
             }
@@ -199,7 +199,7 @@ public:
             collectBuilders( buildersForKcm, buildSystemManager->builder(), project );
         }
 
-        for(auto plugin : plugins) {
+        foreach(auto plugin, plugins) {
             auto info = m_core->pluginController()->pluginInfo(plugin);
             IProjectFileManager* manager = plugin->extension<KDevelop::IProjectFileManager>();
             if( manager && manager != project->projectFileManager() )
@@ -310,8 +310,8 @@ public:
 
     void areaChanged(Sublime::Area* area) {
         KActionCollection* ac = m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
-        ac->action("commit_current_project")->setEnabled(area->objectName() == "code");
-        ac->action("commit_current_project")->setVisible(area->objectName() == "code");
+        ac->action(QStringLiteral("commit_current_project"))->setEnabled(area->objectName() == QLatin1String("code"));
+        ac->action(QStringLiteral("commit_current_project"))->setVisible(area->objectName() == QLatin1String("code"));
     }
 };
 
@@ -474,7 +474,7 @@ ProjectController::ProjectController( Core* core )
 {
     qRegisterMetaType<QList<QUrl>>();
 
-    setObjectName("ProjectController");
+    setObjectName(QStringLiteral("ProjectController"));
 
     d->m_core = core;
     d->model = new ProjectModel();
@@ -494,7 +494,7 @@ void ProjectController::setupActions()
 
     QAction*action;
 
-    d->m_openProject = action = ac->addAction( "project_open" );
+    d->m_openProject = action = ac->addAction( QStringLiteral("project_open") );
     action->setText(i18nc( "@action", "Open / Import Project..." ) );
     action->setToolTip( i18nc( "@info:tooltip", "Open or import project" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Open an existing KDevelop 4 project or import "
@@ -504,12 +504,12 @@ void ProjectController::setupActions()
                                                     "When opening an existing directory that does "
                                                     "not yet have a KDevelop4 project file, the file "
                                                     "will be created." ) );
-    action->setIcon(QIcon::fromTheme("project-open"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("project-open")));
     connect(action, &QAction::triggered, this, [&] { openProject(); });
 
-    d->m_fetchProject = action = ac->addAction( "project_fetch" );
+    d->m_fetchProject = action = ac->addAction( QStringLiteral("project_fetch") );
     action->setText(i18nc( "@action", "Fetch Project..." ) );
-    action->setIcon( QIcon::fromTheme( "edit-download" ) );
+    action->setIcon( QIcon::fromTheme( QStringLiteral("edit-download") ) );
     action->setToolTip( i18nc( "@info:tooltip", "Fetch project" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Guides the user through the project fetch "
                                                     "and then imports it into KDevelop 4." ) );
@@ -523,39 +523,39 @@ void ProjectController::setupActions()
 //    action->setWhatsThis( i18n( "Closes the current project." ) );
 //    action->setEnabled( false );
 
-    d->m_closeProject = action = ac->addAction( "project_close" );
+    d->m_closeProject = action = ac->addAction( QStringLiteral("project_close") );
     connect( action, &QAction::triggered, this, [&] { d->closeSelectedProjects(); } );
     action->setText( i18nc( "@action", "Close Project(s)" ) );
-    action->setIcon( QIcon::fromTheme( "project-development-close" ) );
+    action->setIcon( QIcon::fromTheme( QStringLiteral("project-development-close") ) );
     action->setToolTip( i18nc( "@info:tooltip", "Closes all currently selected projects" ) );
     action->setEnabled( false );
 
-    d->m_openConfig = action = ac->addAction( "project_open_config" );
+    d->m_openConfig = action = ac->addAction( QStringLiteral("project_open_config") );
     connect( action, &QAction::triggered, this, [&] { d->openProjectConfig(); } );
     action->setText( i18n( "Open Configuration..." ) );
-    action->setIcon( QIcon::fromTheme("configure") );
+    action->setIcon( QIcon::fromTheme(QStringLiteral("configure")) );
     action->setEnabled( false );
 
-    action = ac->addAction( "commit_current_project" );
+    action = ac->addAction( QStringLiteral("commit_current_project") );
     connect( action, &QAction::triggered, this, &ProjectController::commitCurrentProject );
     action->setText( i18n( "Commit Current Project..." ) );
     action->setIconText( i18n( "Commit..." ) );
-    action->setIcon( QIcon::fromTheme("svn-commit") );
+    action->setIcon( QIcon::fromTheme(QStringLiteral("svn-commit")) );
     connect(d->m_core->uiControllerInternal()->defaultMainWindow(), &MainWindow::areaChanged,
             this, [&] (Sublime::Area* area) { d->areaChanged(area); });
-    d->m_core->uiControllerInternal()->area(0, "code")->addAction(action);
+    d->m_core->uiControllerInternal()->area(0, QStringLiteral("code"))->addAction(action);
 
     KSharedConfig * config = KSharedConfig::openConfig().data();
 //     KConfigGroup group = config->group( "General Options" );
 
     d->m_recentAction = KStandardAction::openRecent(this, SLOT(openProject(QUrl)), this);
-    ac->addAction( "project_open_recent", d->m_recentAction );
+    ac->addAction( QStringLiteral("project_open_recent"), d->m_recentAction );
     d->m_recentAction->setText( i18n( "Open Recent Project" ) );
     d->m_recentAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
 
     QAction* openProjectForFileAction = new QAction( this );
-    ac->addAction("project_open_for_file", openProjectForFileAction);
+    ac->addAction(QStringLiteral("project_open_for_file"), openProjectForFileAction);
     openProjectForFileAction->setText(i18n("Open Project for Current File"));
     connect( openProjectForFileAction, &QAction::triggered, this, &ProjectController::openProjectForUrlSlot);
 }
@@ -599,7 +599,7 @@ void ProjectController::initialize()
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d);
 
-    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ProjectController",
+    QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/ProjectController"),
         this, QDBusConnection::ExportScriptableSlots );
 
     KSharedConfigPtr config = Core::self()->activeSession()->config();
@@ -655,7 +655,7 @@ void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, KIO::UDSEntryL
         if(!entry.isDir()) {
             QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
 
-            if(name.endsWith(".kdev4")) {
+            if(name.endsWith(QLatin1String(".kdev4"))) {
                 //We have found a project-file, open it
                 openProject(Path(Path(job->url()), name).toUrl());
                 d->m_foundProjectFile = true;
@@ -1020,7 +1020,7 @@ QString ProjectController::prettyFilePath(const QUrl& url, FormattingOptions for
             prefixText = project->name() + ':';
         }
         QString relativePath = project->path().relativePath(parent);
-        if(relativePath.startsWith("./")) {
+        if(relativePath.startsWith(QLatin1String("./"))) {
             relativePath = relativePath.mid(2);
         }
         if (!relativePath.isEmpty()) {

@@ -91,7 +91,7 @@ public:
 
     /// Returns list of available view factories together with their ToolDocuments.
     /// @see addToolView(), removeToolView(), findToolView()
-    const QMap<IToolViewFactory*, Sublime::ToolDocument*>& factoryDocuments() const;
+    const QHash<IToolViewFactory*, Sublime::ToolDocument*>& factoryDocuments() const;
 
     /// Adds a tool view in the active area to the dock area @p area.
     /// @see activeArea()

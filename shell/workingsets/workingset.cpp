@@ -85,7 +85,7 @@ QIcon generateIcon(const WorkingSetIconParameters& params)
         brightColor = brightColor.lighter(120 + (params.setId*13) % 55);
     }
     int at = 0;
-    foreach ( const QRect& rect, rects ) {
+    foreach ( const QRect rect, rects ) {
         QColor currentColor;
         // pick the colored squares; you can get different patterns by re-ordering the "rects" list
         if ( (at + params.setId*7) % 4 < coloredCount ) {
@@ -193,14 +193,14 @@ void loadFileList(QStringList& ret, KConfigGroup group)
     if (group.hasKey("Orientation")) {
         QStringList subgroups = group.groupList();
 
-        if (subgroups.contains("0")) {
+        if (subgroups.contains(QStringLiteral("0"))) {
 
             {
                 KConfigGroup subgroup(&group, "0");
                 loadFileList(ret, subgroup);
             }
 
-            if (subgroups.contains("1")) {
+            if (subgroups.contains(QStringLiteral("1"))) {
                 KConfigGroup subgroup(&group, "1");
                 loadFileList(ret, subgroup);
             }
@@ -254,7 +254,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
 
     // Delete views which were not recycled
     qCDebug(SHELL) << "deleting " << recycle.size() << " old views";
-    qDeleteAll( recycle.values() );
+    qDeleteAll( recycle );
 
     area->setActiveView(0);
 
@@ -268,8 +268,8 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
         }
     }
 
-    if( !area->activeView() && area->views().size() )
-        area->setActiveView( area->views()[0] );
+    if( !area->activeView() && !area->views().isEmpty() )
+        area->setActiveView( area->views().at(0) );
 
     if( area->activeView() ) {
         foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
@@ -287,10 +287,10 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         QStringList subgroups = setGroup.groupList();
         /// @todo also save and restore the ratio
 
-        if (subgroups.contains("0") && subgroups.contains("1")) {
+        if (subgroups.contains(QStringLiteral("0")) && subgroups.contains(QStringLiteral("1"))) {
 //             qCDebug(SHELL) << "has zero, split:" << split;
 
-            Qt::Orientation orientation = setGroup.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal;
+            Qt::Orientation orientation = setGroup.readEntry("Orientation", "Horizontal") == QLatin1String("Vertical") ? Qt::Vertical : Qt::Horizontal;
             if(!areaIndex->isSplit()){
                 areaIndex->split(orientation);
             }else{
@@ -316,7 +316,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
             if (specifier.isEmpty()) {
                 continue;
             }
-            Sublime::View* previousView = area->views().empty() ? 0 : area->views().back();
+            Sublime::View* previousView = area->views().empty() ? 0 : area->views().at(area->views().size());
 
             QMultiMap<QString, Sublime::View*>::iterator it = recycle.find( specifier );
             if( it != recycle.end() )
@@ -341,7 +341,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         for (int i = 0; i < viewCount; ++i)
         {
             QString state = areaGroup.readEntry(QStringLiteral("View %1 State").arg(i));
-            if (state.length() && createdViews.contains(i))
+            if (!state.isEmpty() && createdViews.contains(i))
                 createdViews[i]->setState(state);
         }
     }

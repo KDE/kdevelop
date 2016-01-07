@@ -45,8 +45,8 @@ namespace {
 // This has to be a slow value, so that we don't fill our file extension cache with crap
 const int maximumCacheExtensionLength = 3;
 
-const QString KEY_SupportedMimeTypes = QStringLiteral("X-KDevelop-SupportedMimeTypes");
-const QString KEY_ILanguageSupport = QStringLiteral("ILanguageSupport");
+QString KEY_SupportedMimeTypes() { return QStringLiteral("X-KDevelop-SupportedMimeTypes"); }
+QString KEY_ILanguageSupport() { return QStringLiteral("ILanguageSupport"); }
 }
 
 #if QT_VERSION < 0x050600
@@ -83,7 +83,7 @@ struct LanguageControllerPrivate
         activeLanguages.clear();
 
         QList<ILanguageSupport*> languages = m_controller->languagesForUrl(url);
-        foreach (const auto& lang, languages) {
+        foreach (const auto lang, languages) {
             activeLanguages << lang;
         }
     }
@@ -139,14 +139,14 @@ void LanguageControllerPrivate::addLanguageSupport(KDevelop::ILanguageSupport* l
     Q_ASSERT(dynamic_cast<IPlugin*>(languageSupport));
 
     KPluginMetaData info = Core::self()->pluginController()->pluginInfo(dynamic_cast<IPlugin*>(languageSupport));
-    QStringList mimetypes = KPluginMetaData::readStringList(info.rawData(), KEY_SupportedMimeTypes);
+    QStringList mimetypes = KPluginMetaData::readStringList(info.rawData(), KEY_SupportedMimeTypes());
     addLanguageSupport(languageSupport, mimetypes);
 }
 
 LanguageController::LanguageController(QObject *parent)
     : ILanguageController(parent)
 {
-    setObjectName("LanguageController");
+    setObjectName(QStringLiteral("LanguageController"));
     d = new LanguageControllerPrivate(this);
 }
 
@@ -219,8 +219,8 @@ ILanguageSupport* LanguageController::language(const QString &name) const
         return d->languages[name];
 
     QVariantMap constraints;
-    constraints.insert("X-KDevelop-Language", name);
-    QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport, constraints);
+    constraints.insert(QStringLiteral("X-KDevelop-Language"), name);
+    QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport(), constraints);
     if(!supports.isEmpty()) {
         ILanguageSupport *languageSupport = supports[0]->extension<ILanguageSupport>();
         if(languageSupport) {
@@ -350,8 +350,8 @@ QList<ILanguageSupport*> LanguageController::languagesForMimetype(const QString&
         languages = it.value();
     } else {
         QVariantMap constraints;
-        constraints.insert(KEY_SupportedMimeTypes, mimetype);
-        QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport, constraints);
+        constraints.insert(KEY_SupportedMimeTypes(), mimetype);
+        QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport(), constraints);
 
         if (supports.isEmpty()) {
             qCDebug(SHELL) << "no languages for mimetype:" << mimetype;

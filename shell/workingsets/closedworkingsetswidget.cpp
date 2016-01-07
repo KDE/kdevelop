@@ -71,7 +71,7 @@ void ClosedWorkingSetsWidget::areaChanged( Sublime::Area* area )
             this, &ClosedWorkingSetsWidget::changedWorkingSet);
 
     // clear layout
-    qDeleteAll(m_buttons.values());
+    qDeleteAll(m_buttons);
     m_buttons.clear();
 
     // add sets from new area

@@ -60,10 +60,10 @@ class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
         if (name1.at(1) == name2.at(1)) {
             return false;
         }
-        if (name1.at(1) != "l" && name1.at(1) != "r") {
+        if (name1.at(1) != QLatin1String("l") && name1.at(1) != QLatin1String("r")) {
             return false;
         }
-        if (name2.at(1) != "l" && name2.at(1) != "r") {
+        if (name2.at(1) != QLatin1String("l") && name2.at(1) != QLatin1String("r")) {
             return false;
         }
         qDebug() << "found buddies: " << url1 << url2;
@@ -72,7 +72,7 @@ class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
     bool buddyOrder(const QUrl& url1, const QUrl& /*url2*/) override
     {
         const QStringList name1 = url1.fileName().split('.');
-        return name1.at(1) == "l";
+        return name1.at(1) == QLatin1String("l");
     }
 
     QVector<QUrl> getPotentialBuddies(const QUrl& url) const override
@@ -90,12 +90,12 @@ void TestShellBuddy::initTestCase()
     m_uiController = Core::self()->uiControllerInternal();
 
     m_finder = new TestBuddyFinder;
-    KDevelop::IBuddyDocumentFinder::addFinder("text/plain", m_finder);
+    KDevelop::IBuddyDocumentFinder::addFinder(QStringLiteral("text/plain"), m_finder);
 }
 
 void TestShellBuddy::cleanupTestCase()
 {
-    KDevelop::IBuddyDocumentFinder::removeFinder("text/plain");
+    KDevelop::IBuddyDocumentFinder::removeFinder(QStringLiteral("text/plain"));
     delete m_finder;
     m_finder = 0;
     TestCore::shutdown();
@@ -107,7 +107,7 @@ void TestShellBuddy::cleanupTestCase()
     { \
         Sublime::UrlDocument *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document()); \
         QVERIFY(urlDoc); \
-        QVERIFY(urlDoc->url().toLocalFile().endsWith(endOfFilename)); \
+        QVERIFY(urlDoc->url().toLocalFile().endsWith(QStringLiteral(endOfFilename))); \
     }
 
 void TestShellBuddy::createFile(const QTemporaryDir& dir, const QString& filename)
@@ -152,12 +152,12 @@ void TestShellBuddy::testDeclarationDefinitionOrder()
     enableOpenAfterCurrent();
 
     QTemporaryDir dirA;
-    createFile(dirA, "a.r.txt");
-    createFile(dirA, "b.r.txt");
-    createFile(dirA, "c.r.txt");
-    createFile(dirA, "a.l.txt");
-    createFile(dirA, "b.l.txt");
-    createFile(dirA, "c.l.txt");
+    createFile(dirA, QStringLiteral("a.r.txt"));
+    createFile(dirA, QStringLiteral("b.r.txt"));
+    createFile(dirA, QStringLiteral("c.r.txt"));
+    createFile(dirA, QStringLiteral("a.l.txt"));
+    createFile(dirA, QStringLiteral("b.l.txt"));
+    createFile(dirA, QStringLiteral("c.l.txt"));
 
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.r.txt"));
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "b.l.txt"));
@@ -181,7 +181,7 @@ void TestShellBuddy::testDeclarationDefinitionOrder()
     verifyFilename(areaIndex->views().value(5), "c.r.txt");
 
     for(int i = 0; i < 6; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
+        m_documentController->openDocuments().at(0)->close(IDocument::Discard);
     QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
@@ -193,9 +193,9 @@ void TestShellBuddy::testActivation()
     enableOpenAfterCurrent();
 
     QTemporaryDir dirA;
-    createFile(dirA, "a.l.txt");
-    createFile(dirA, "a.r.txt");
-    createFile(dirA, "b.r.txt");
+    createFile(dirA, QStringLiteral("a.l.txt"));
+    createFile(dirA, QStringLiteral("a.r.txt"));
+    createFile(dirA, QStringLiteral("b.r.txt"));
 
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.r.txt"));
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.l.txt"));
@@ -206,7 +206,7 @@ void TestShellBuddy::testActivation()
 
     QCOMPARE(m_documentController->openDocuments().count(), 3);
     for(int i = 0; i < 3; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
+        m_documentController->openDocuments().at(0)->close(IDocument::Discard);
     QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
@@ -225,9 +225,9 @@ void TestShellBuddy::testDisableBuddies()
     enableOpenAfterCurrent();
 
     QTemporaryDir dirA;
-    createFile(dirA, "a.l.txt");
-    createFile(dirA, "a.r.txt");
-    createFile(dirA, "b.r.txt");
+    createFile(dirA, QStringLiteral("a.l.txt"));
+    createFile(dirA, QStringLiteral("a.r.txt"));
+    createFile(dirA, QStringLiteral("b.r.txt"));
 
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.r.txt"));
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.l.txt"));
@@ -251,7 +251,7 @@ void TestShellBuddy::testDisableBuddies()
 
     QCOMPARE(m_documentController->openDocuments().count(), 3);
     for(int i = 0; i < 3; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
+        m_documentController->openDocuments().at(0)->close(IDocument::Discard);
     QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
@@ -270,10 +270,10 @@ void TestShellBuddy::testDisableOpenAfterCurrent()
     enableOpenAfterCurrent(false);
 
     QTemporaryDir dirA;
-    createFile(dirA, "foo.l.txt");
-    createFile(dirA, "bar.r.txt");
-    createFile(dirA, "foo.r.txt");
-    createFile(dirA, "x.r.txt");
+    createFile(dirA, QStringLiteral("foo.l.txt"));
+    createFile(dirA, QStringLiteral("bar.r.txt"));
+    createFile(dirA, QStringLiteral("foo.r.txt"));
+    createFile(dirA, QStringLiteral("x.r.txt"));
 
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "foo.l.txt"));
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "bar.r.txt"));
@@ -296,7 +296,7 @@ void TestShellBuddy::testDisableOpenAfterCurrent()
 
     QCOMPARE(m_documentController->openDocuments().count(), 4);
     for(int i = 0; i < 4; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
+        m_documentController->openDocuments().at(0)->close(IDocument::Discard);
     QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
@@ -314,10 +314,10 @@ void TestShellBuddy::testDisableAll()
     enableOpenAfterCurrent(false);
 
     QTemporaryDir dirA;
-    createFile(dirA, "foo.l.txt");
-    createFile(dirA, "foo.r.txt");
-    createFile(dirA, "bar.l.txt");
-    createFile(dirA, "bar.r.txt");
+    createFile(dirA, QStringLiteral("foo.l.txt"));
+    createFile(dirA, QStringLiteral("foo.r.txt"));
+    createFile(dirA, QStringLiteral("bar.l.txt"));
+    createFile(dirA, QStringLiteral("bar.r.txt"));
 
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "foo.r.txt"));
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "bar.l.txt"));
@@ -338,7 +338,7 @@ void TestShellBuddy::testDisableAll()
 
     QCOMPARE(m_documentController->openDocuments().count(), 4);
     for(int i = 0; i < 4; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
+        m_documentController->openDocuments().at(0)->close(IDocument::Discard);
     QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
@@ -354,9 +354,9 @@ void TestShellBuddy::testsplitViewBuddies()
 
     QTemporaryDir dirA;
 
-    createFile(dirA, "classA.r.txt");
-    createFile(dirA, "classA.l.txt");
-    createFile(dirA, "foo.txt");
+    createFile(dirA, QStringLiteral("classA.r.txt"));
+    createFile(dirA, QStringLiteral("classA.l.txt"));
+    createFile(dirA, QStringLiteral("foo.txt"));
 
     Sublime::Area *pCodeArea = m_uiController->activeArea();
     QVERIFY(pCodeArea);
@@ -364,7 +364,7 @@ void TestShellBuddy::testsplitViewBuddies()
     IDocument *pClassAHeader = m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "classA.l.txt"));
     QVERIFY(pClassAHeader);
     Sublime::View *pClassAHeaderView = pMainWindow->activeView();
-    pClassAHeaderView->setObjectName("classA.l.txt");
+    pClassAHeaderView->setObjectName(QStringLiteral("classA.l.txt"));
 
     // now, create a split view of the active view (pClassAHeader)
     Sublime::View *pClassAHeaderSplitView = dynamic_cast<Sublime::Document*>(pClassAHeader)->createView();
@@ -393,7 +393,7 @@ void TestShellBuddy::testsplitViewBuddies()
     // now open the correponding definition file, classA.r.txt
     IDocument *pClassAImplem = m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "classA.r.txt"));
     QVERIFY(pClassAImplem);
-    pMainWindow->activeView()->setObjectName("classA.r.txt");
+    pMainWindow->activeView()->setObjectName(QStringLiteral("classA.r.txt"));
 
     // and check its presence alongside pClassAHeaderSplitView in pRightContainer
     QVERIFY(pRightContainer->hasWidget(pClassAHeaderSplitView->widget()));
@@ -405,7 +405,7 @@ void TestShellBuddy::testsplitViewBuddies()
     // open another file
     IDocument *pLeftSideCpp = m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "foo.txt"));
     QVERIFY(pLeftSideCpp);
-    pMainWindow->activeView()->setObjectName("foo.txt");
+    pMainWindow->activeView()->setObjectName(QStringLiteral("foo.txt"));
 
     // and close left side ClassAHeaderview
     pCodeArea->closeView(pClassAHeaderView);
@@ -414,7 +414,7 @@ void TestShellBuddy::testsplitViewBuddies()
     // but this time it should open on the left
     bool successfullyReOpened = m_documentController->openDocument(pClassAImplem);
     QVERIFY(successfullyReOpened);
-    pMainWindow->activeView()->setObjectName("classA.r.txt");
+    pMainWindow->activeView()->setObjectName(QStringLiteral("classA.r.txt"));
 
     // and check if it correctly opened on the left side
     QVERIFY(pLeftContainer->hasWidget(pMainWindow->activeView()->widget()));

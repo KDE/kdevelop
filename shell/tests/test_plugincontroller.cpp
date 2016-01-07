@@ -38,7 +38,7 @@ void TestPluginController::initTestCase()
 {
     qApp->addLibraryPath(QStringLiteral(TEST_PLUGIN_DIR));
 
-    AutoTestShell::init({"kdevnonguiinterface"});
+    AutoTestShell::init({QStringLiteral("kdevnonguiinterface")});
     TestCore::initialize( Core::NoUi );
     m_pluginCtrl = Core::self()->pluginControllerInternal();
 }
@@ -58,7 +58,7 @@ void TestPluginController::cleanup()
 
 void TestPluginController::pluginInfo()
 {
-    IPlugin* plugin = m_pluginCtrl->loadPlugin( "kdevnonguiinterface" );
+    IPlugin* plugin = m_pluginCtrl->loadPlugin( QStringLiteral("kdevnonguiinterface") );
     QVERIFY(plugin);
     KPluginMetaData pluginInfo = m_pluginCtrl->pluginInfo(plugin);
     QCOMPARE(pluginInfo.pluginId(), QStringLiteral("kdevnonguiinterface"));
@@ -70,8 +70,8 @@ void TestPluginController::loadUnloadPlugin()
     QSignalSpy spyloading(m_pluginCtrl, SIGNAL(loadingPlugin(QString)));
     QVERIFY(spy.isValid());
     QVERIFY(spyloading.isValid());
-    m_pluginCtrl->loadPlugin( "kdevnonguiinterface" );
-    QVERIFY( m_pluginCtrl->plugin( "kdevnonguiinterface" ) );
+    m_pluginCtrl->loadPlugin( QStringLiteral( "kdevnonguiinterface" ) );
+    QVERIFY( m_pluginCtrl->plugin( QStringLiteral( "kdevnonguiinterface" ) ) );
 
     QCOMPARE(spy.size(), 1);
     QCOMPARE(spyloading.size(), 1);
@@ -83,8 +83,8 @@ void TestPluginController::loadUnloadPlugin()
     QSignalSpy spy3(m_pluginCtrl, SIGNAL(unloadingPlugin(KDevelop::IPlugin*)) );
     QVERIFY(spy2.isValid());
     QVERIFY(spy3.isValid());
-    m_pluginCtrl->unloadPlugin( "kdevnonguiinterface" );
-    QVERIFY( !m_pluginCtrl->plugin( "kdevnonguiinterface" ) );
+    m_pluginCtrl->unloadPlugin( QStringLiteral("kdevnonguiinterface") );
+    QVERIFY( !m_pluginCtrl->plugin( QStringLiteral( "kdevnonguiinterface" ) ) );
 
     QCOMPARE(spy2.size(), 1);
     QCOMPARE(spy3.size(), 1);
@@ -92,7 +92,7 @@ void TestPluginController::loadUnloadPlugin()
 
 void TestPluginController::loadFromExtension()
 {
-    IPlugin* plugin = m_pluginCtrl->pluginForExtension( "org.kdevelop.ITestNonGuiInterface" );
+    IPlugin* plugin = m_pluginCtrl->pluginForExtension( QStringLiteral("org.kdevelop.ITestNonGuiInterface") );
     QVERIFY( plugin );
     QCOMPARE( plugin->extensions(), QVector<QByteArray>() << "org.kdevelop.ITestNonGuiInterface" );
 }
@@ -100,7 +100,7 @@ void TestPluginController::loadFromExtension()
 void TestPluginController::benchPluginForExtension()
 {
     QBENCHMARK {
-        IPlugin* plugin = m_pluginCtrl->pluginForExtension( "org.kdevelop.ITestNonGuiInterface" );
+        IPlugin* plugin = m_pluginCtrl->pluginForExtension( QStringLiteral("org.kdevelop.ITestNonGuiInterface") );
         QVERIFY( plugin );
     }
 }

@@ -166,6 +166,7 @@ struct ContainerPrivate {
 };
 
 class UnderlinedLabel: public KSqueezedTextLabel {
+Q_OBJECT
 public:
     UnderlinedLabel(QTabBar *tabBar, QWidget* parent = 0)
         :KSqueezedTextLabel(parent), m_tabBar(tabBar)
@@ -207,6 +208,7 @@ protected:
 
 
 class StatusLabel: public UnderlinedLabel {
+Q_OBJECT
 public:
     StatusLabel(QTabBar *tabBar, QWidget* parent = 0):
         UnderlinedLabel(tabBar, parent)
@@ -240,7 +242,7 @@ Container::Container(QWidget *parent)
 
     d->documentListMenu = new QMenu(this);
     d->documentListButton = new QToolButton(this);
-    d->documentListButton->setIcon(QIcon::fromTheme("format-list-unordered"));
+    d->documentListButton->setIcon(QIcon::fromTheme(QStringLiteral("format-list-unordered")));
     d->documentListButton->setMenu(d->documentListMenu);
     d->documentListButton->setPopupMode(QToolButton::InstantPopup);
     d->documentListButton->setAutoRaise(true);
@@ -547,12 +549,12 @@ void Container::contextMenu( const QPoint& pos )
     QAction* closeTabAction = nullptr;
     QAction* closeOtherTabsAction = nullptr;
     if (view) {
-        closeTabAction = menu.addAction(QIcon::fromTheme("document-close"),
+        closeTabAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
                                         i18n("Close File"));
-        closeOtherTabsAction = menu.addAction(QIcon::fromTheme("document-close"),
+        closeOtherTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
                                               i18n("Close Other Files"));
     }
-    QAction* closeAllTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close All Files" ) );
+    QAction* closeAllTabsAction = menu.addAction( QIcon::fromTheme(QStringLiteral("document-close")), i18n( "Close All Files" ) );
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(pos));
 

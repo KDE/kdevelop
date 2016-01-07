@@ -55,11 +55,11 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
 
     ui.variableTable->setModel( topProxyModel );
     ui.variableTable->horizontalHeader()->setSectionResizeMode( 1, QHeaderView::Stretch );
-    ui.addgrpBtn->setIcon(QIcon::fromTheme("list-add"));
-    ui.removegrpBtn->setIcon(QIcon::fromTheme("list-remove"));
-    ui.deleteButton->setIcon(QIcon::fromTheme("list-remove"));
+    ui.addgrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+    ui.removegrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+    ui.deleteButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     ui.deleteButton->setShortcut(Qt::Key_Delete);
-    ui.newMultipleButton->setIcon(QIcon::fromTheme("format-list-unordered"));
+    ui.newMultipleButton->setIcon(QIcon::fromTheme(QStringLiteral("format-list-unordered")));
 
     connect( ui.deleteButton, &QPushButton::clicked,
              this, &EnvironmentWidget::deleteButtonClicked );
@@ -153,7 +153,7 @@ void EnvironmentWidget::newMultipleButtonClicked()
     QVBoxLayout *layout = new QVBoxLayout(dialog);
 
     QTextEdit *edit = new QTextEdit;
-    edit->setPlaceholderText("VARIABLE1=VALUE1\nVARIABLE2=VALUE2");
+    edit->setPlaceholderText(QStringLiteral("VARIABLE1=VALUE1\nVARIABLE2=VALUE2"));
     layout->addWidget( edit );
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
@@ -168,7 +168,7 @@ void EnvironmentWidget::newMultipleButtonClicked()
         return;
     }
 
-    QStringList lines = edit->toPlainText().split( "\n", QString::SkipEmptyParts );
+    QStringList lines = edit->toPlainText().split( QStringLiteral("\n"), QString::SkipEmptyParts );
 
     foreach(const QString &line, lines) {
         QString name = line.section('=', 0, 0);

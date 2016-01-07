@@ -138,6 +138,7 @@ public:
 
 class FakePluginController : public PluginController
 {
+    Q_OBJECT
 public:
     FakePluginController(Core* core)
         : PluginController(core)
@@ -147,7 +148,7 @@ public:
 
     IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) override
     {
-        if (extension == m_fakeFileManager->extensions().first())
+        if (extension == m_fakeFileManager->extensions().at(0))
             return m_fakeFileManager;
         return PluginController::pluginForExtension(extension, pluginName, constraints);
     }
@@ -167,8 +168,8 @@ void TestProjectController::initTestCase()
     qRegisterMetaType<KDevelop::IProject*>();
     m_core = Core::self();
     m_scratchDir = QDir(QDir::tempPath());
-    m_scratchDir.mkdir("prjctrltest");
-    m_scratchDir.cd("prjctrltest");
+    m_scratchDir.mkdir(QStringLiteral("prjctrltest"));
+    m_scratchDir.cd(QStringLiteral("prjctrltest"));
 }
 
 void TestProjectController::cleanupTestCase()
@@ -178,7 +179,7 @@ void TestProjectController::cleanupTestCase()
 
 void TestProjectController::init()
 {
-    m_projName = "foo";
+    m_projName = QStringLiteral("foo");
     m_projFilePath = writeProjectConfig(m_projName);
     m_projCtrl = m_core->projectControllerInternal();
     m_tmpConfigs << m_projFilePath;
@@ -291,7 +292,7 @@ void TestProjectController::reopenWhileLoading()
 
 void TestProjectController::openMultiple()
 {
-    QString secondProj("bar");
+    QString secondProj(QStringLiteral("bar"));
     Path secondCfgUrl = writeProjectConfig(secondProj);
     QSignalSpy* spy = createOpenedSpy();
     m_projCtrl->openProject(m_projFilePath.toUrl());
@@ -305,7 +306,7 @@ void TestProjectController::openMultiple()
     assertProjectOpened(secondProj, proj2);
 
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
-    QVERIFY(m_projCtrl->isProjectNameUsed("bar"));
+    QVERIFY(m_projCtrl->isProjectNameUsed(QStringLiteral("bar")));
 
     QCOMPARE(spy->size(), 2);
     IProject* emittedProj1 = (*spy)[0][0].value<IProject*>();
@@ -336,10 +337,10 @@ void TestProjectController::openMultiple()
 {\
     QCOMPARE(item->rowCount(), 1);\
     QCOMPARE(item->folderList().size(), 1);\
-    ProjectFolderItem* fo = item->folderList()[0];\
+    ProjectFolderItem* fo = item->folderList().at(0);\
     QVERIFY(fo);\
     QCOMPARE(fo->path(), path__);\
-    QCOMPARE(fo->folderName(), QString(name));\
+    QCOMPARE(fo->folderName(), QStringLiteral(name));\
     subFolder = fo;\
 } void(0)
 
@@ -347,10 +348,10 @@ void TestProjectController::openMultiple()
 {\
     QCOMPARE(rootFolder->rowCount(), 1);\
     QCOMPARE(rootFolder->fileList().size(), 1);\
-    fileItem = rootFolder->fileList()[0];\
+    fileItem = rootFolder->fileList().at(0);\
     QVERIFY(fileItem);\
     QCOMPARE(fileItem->path(), path__);\
-    QCOMPARE(fileItem->fileName(), QString(name));\
+    QCOMPARE(fileItem->fileName(), QStringLiteral(name));\
 } void(0)
 
 // command
@@ -396,7 +397,7 @@ void TestProjectController::singleFile()
     FakeFileManager* fileMng = createFileManager();
     proj->setManagerPlugin(fileMng);
 
-    Path filePath = Path(m_projFolder, QString::fromLatin1("foobar"));
+    Path filePath = Path(m_projFolder, QStringLiteral("foobar"));
     fileMng->addFileToFolder(m_projFolder, filePath);
 
     proj->reloadModel();
@@ -423,7 +424,7 @@ void TestProjectController::singleDirectory()
     Project* proj;
     assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
 
-    Path folderPath = Path(m_projFolder, QString::fromLatin1("foobar/"));
+    Path folderPath = Path(m_projFolder, QStringLiteral("foobar/"));
     FakeFileManager* fileMng = createFileManager();
     fileMng->addSubFolderTo(m_projFolder, folderPath);
 
@@ -451,10 +452,10 @@ void TestProjectController::fileInSubdirectory()
     Project* proj;
     assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
 
-    Path folderPath = Path(m_projFolder, QString::fromLatin1("foobar/"));
+    Path folderPath = Path(m_projFolder, QStringLiteral("foobar/"));
     FakeFileManager* fileMng = createFileManager();
     fileMng->addSubFolderTo(m_projFolder, folderPath);
-    Path filePath = Path(folderPath, "zoo");
+    Path filePath = Path(folderPath, QStringLiteral("zoo"));
     fileMng->addFileToFolder(folderPath, filePath);
 
     proj->setManagerPlugin(fileMng);

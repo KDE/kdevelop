@@ -105,7 +105,7 @@ void MainWindow::createGUI(KParts::Part* part)
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
-    QDBusConnection::sessionBus().registerObject( "/kdevelop/MainWindow",
+    QDBusConnection::sessionBus().registerObject( QStringLiteral("/kdevelop/MainWindow"),
         this, QDBusConnection::ExportScriptableSlots );
 
     setAcceptDrops( true );
@@ -126,7 +126,7 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
     else if( bottomright == 1 )
         setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
 
-    setObjectName( "MainWindow" );
+    setObjectName( QStringLiteral("MainWindow") );
     d = new MainWindowPrivate(this);
 
     setStandardToolBarMenuEnabled( true );
@@ -177,9 +177,9 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
     //are always shown in the menubar. For those, we create special disabled actions
     //instead of calling QMenuBar::addSeparator() because menubar separators are ignored
     if (element.tagName().toLower() == QLatin1String("separator")
-            && element.attribute("style") == QLatin1String("visible")) {
+            && element.attribute(QStringLiteral("style")) == QLatin1String("visible")) {
         if ( QMenuBar* bar = qobject_cast<QMenuBar*>( parent ) ) {
-            QAction *separatorAction = new QAction("|", this);
+            QAction *separatorAction = new QAction(QStringLiteral("|"), this);
             bar->insertAction( before, separatorAction );
             separatorAction->setDisabled(true);
             return separatorAction;
@@ -191,7 +191,7 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
 
 void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
 {
-    if( ev->mimeData()->hasFormat( "text/uri-list" ) && ev->mimeData()->hasUrls() )
+    if( ev->mimeData()->hasFormat( QStringLiteral("text/uri-list") ) && ev->mimeData()->hasUrls() )
     {
         ev->acceptProposedAction();
     }
@@ -365,7 +365,7 @@ void MainWindow::updateCaption()
     if(area()->activeView())
     {
         if(!title.isEmpty())
-            title += " - [ ";
+            title += QLatin1String(" - [ ");
 
         Sublime::Document* doc = area()->activeView()->document();
         Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(doc);
@@ -374,7 +374,7 @@ void MainWindow::updateCaption()
         else
             title += doc->title();
 
-        title += " ]";
+        title += QLatin1String(" ]");
     }
 
     setCaption(title);

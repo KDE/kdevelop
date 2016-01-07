@@ -67,7 +67,7 @@ PartController::PartController(Core *core, QWidget *toplevel)
         : IPartController( toplevel ), d(new PartControllerPrivate)
 
 {
-    setObjectName("PartController");
+    setObjectName(QStringLiteral("PartController"));
     d->m_core = core;
     //Cache this as it is too expensive when creating parts
     //     KConfig * config = Config::standard();
@@ -133,9 +133,9 @@ bool PartController::isTextType(const QMimeType& mimeType)
 
     // is this regular text - open in editor
     return ( isTextType
-             || mimeType.inherits("text/plain")
-             || mimeType.inherits("text/html")
-             || mimeType.inherits("application/x-zerosize"));
+             || mimeType.inherits(QStringLiteral("text/plain"))
+             || mimeType.inherits(QStringLiteral("text/html"))
+             || mimeType.inherits(QStringLiteral("application/x-zerosize")));
 }
 
 KTextEditor::Editor* PartController::editorPart() const
@@ -150,7 +150,7 @@ KTextEditor::Document* PartController::createTextPart(const QString &encoding)
     if ( !encoding.isNull() )
     {
         KParts::OpenUrlArguments args = doc->arguments();
-        args.setMimeType( QString::fromLatin1( "text/plain;" ) + encoding );
+        args.setMimeType( QLatin1String( "text/plain;" ) + encoding );
         doc->setArguments( args );
     }
 
@@ -184,13 +184,13 @@ bool PartController::canCreatePart(const QUrl& url)
 
     QString mimeType;
     if ( url.isEmpty() )
-        mimeType = QString::fromLatin1("text/plain");
+        mimeType = QStringLiteral("text/plain");
     else
         mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
 
     KService::List offers = KMimeTypeTrader::self()->query(
                                 mimeType,
-                                "KParts/ReadOnlyPart" );
+                                QStringLiteral("KParts/ReadOnlyPart") );
 
     return offers.count() > 0;
 }
@@ -201,7 +201,7 @@ KParts::Part* PartController::createPart( const QUrl & url, const QString& prefe
     QString mimeType;
     if ( url.isEmpty() )
         //create a part for empty text file
-        mimeType = QString::fromLatin1("text/plain");
+        mimeType = QStringLiteral("text/plain");
     else if ( !url.isValid() )
         return 0;
     else

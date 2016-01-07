@@ -90,8 +90,8 @@ SourceFormatterSettings::SourceFormatterSettings(QWidget* parent)
     KTextEditor::ConfigInterface *iface =
     qobject_cast<KTextEditor::ConfigInterface*>(m_view);
     if (iface) {
-        iface->setConfigValue("dynamic-word-wrap", false);
-        iface->setConfigValue("icon-bar", false);
+        iface->setConfigValue(QStringLiteral("dynamic-word-wrap"), false);
+        iface->setConfigValue(QStringLiteral("icon-bar"), false);
     }
 }
 
@@ -108,7 +108,8 @@ void selectAvailableStyle(LanguageSettings& lang) {
 void SourceFormatterSettings::reset()
 {
     SourceFormatterController* fmtctrl = Core::self()->sourceFormatterControllerInternal();
-    foreach( KDevelop::IPlugin* plugin, KDevelop::ICore::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) )
+    QList<KDevelop::IPlugin*> plugins = KDevelop::ICore::self()->pluginController()->allPluginsForExtension( QStringLiteral("org.kdevelop.ISourceFormatter") );
+    foreach( KDevelop::IPlugin* plugin, plugins )
     {
         KDevelop::ISourceFormatter* ifmt = plugin->extension<ISourceFormatter>();
         auto info = KDevelop::Core::self()->pluginControllerInternal()->pluginInfo( plugin );
@@ -120,8 +121,8 @@ void SourceFormatterSettings::reset()
         } else {
             formatter = iter.value();
         }
-        for( const SourceFormatterStyle* style: formatter->styles ) {
-            for ( const SourceFormatterStyle::MimeHighlightPair& item: style->mimeTypes() ) {
+        foreach ( const SourceFormatterStyle* style, formatter->styles ) {
+            foreach ( const SourceFormatterStyle::MimeHighlightPair& item, style->mimeTypes() ) {
                 QMimeType mime = QMimeDatabase().mimeTypeForName(item.mimeType);
                 if (!mime.isValid()) {
                     qWarning() << "plugin" << info.name() << "supports unknown mimetype entry" << item.mimeType;
@@ -138,7 +139,7 @@ void SourceFormatterSettings::reset()
     // Sort the languages, preferring firstly active, then loaded languages
     QList<QString> sortedLanguages;
 
-    foreach(const auto& language,
+    foreach(const auto language,
                 KDevelop::ICore::self()->languageController()->activeLanguages() +
                 KDevelop::ICore::self()->languageController()->loadedLanguages())
     {
@@ -156,8 +157,9 @@ void SourceFormatterSettings::reset()
         // Pick the first appropriate mimetype for this language
         KConfigGroup grp = fmtctrl->sessionConfig();
         LanguageSettings& l = languages[name];
-        foreach (const QMimeType& mimetype, l.mimetypes) {
-            QStringList formatterAndStyleName = grp.readEntry(mimetype.name(), QString()).split("||", QString::KeepEmptyParts);
+        const QList<QMimeType> mimetypes = l.mimetypes;
+        foreach (const QMimeType& mimetype, mimetypes) {
+            QStringList formatterAndStyleName = grp.readEntry(mimetype.name(), QString()).split(QStringLiteral("||"), QString::KeepEmptyParts);
             FormatterMap::const_iterator formatterIter = formatters.constFind(formatterAndStyleName.first());
             if (formatterIter == formatters.constEnd()) {
                 qCDebug(SHELL) << "Reference to unknown formatter" << formatterAndStyleName.first();
@@ -248,7 +250,7 @@ void SourceFormatterSettings::apply()
     KConfigGroup sessionConfig = Core::self()->sourceFormatterControllerInternal()->sessionConfig();
     for ( LanguageMap::const_iterator iter = languages.constBegin(); iter != languages.constEnd(); ++iter ) {
         foreach(const QMimeType& mime, iter.value().mimetypes) {
-            sessionConfig.writeEntry(mime.name(), QStringLiteral("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg(iter.value().selectedStyle->name()));
+            sessionConfig.writeEntry(mime.name(), QStringLiteral("%1||%2").arg(iter.value().selectedFormatter->formatter->name(), iter.value().selectedStyle->name()));
         }
     }
     sessionConfig.writeEntry( SourceFormatterController::kateModeLineConfigKey(), chkKateModelines->isChecked() );
@@ -378,7 +380,7 @@ void SourceFormatterSettings::deleteStyle()
     if (!otherLanguageNames.empty() &&
         KMessageBox::warningContinueCancel(this,
         i18n("The style %1 is also used for the following languages:\n%2.\nAre you sure you want to delete it?",
-        styleIter.value()->caption(), otherLanguageNames.join("\n")), i18n("Style being deleted")) != KMessageBox::Continue) {
+        styleIter.value()->caption(), otherLanguageNames.join(QStringLiteral("\n"))), i18n("Style being deleted")) != KMessageBox::Continue) {
         return;
     }
     styleList->takeItem( styleList->currentRow() );
@@ -420,9 +422,9 @@ void SourceFormatterSettings::newStyle()
     for( int i = 0; i < styleList->count(); i++ )
     {
         QString name = styleList->item( i )->data( STYLE_ROLE ).toString();
-        if( name.startsWith( Strings::userStylePrefix() ) && name.mid( Strings::userStylePrefix().length() ).toInt() >= idx )
+        if( name.startsWith( Strings::userStylePrefix() ) && name.midRef( Strings::userStylePrefix().length() ).toInt() >= idx )
         {
-            idx = name.mid( Strings::userStylePrefix().length() ).toInt();
+            idx = name.midRef( Strings::userStylePrefix().length() ).toInt();
         }
     }
     // Increase number for next style
@@ -494,14 +496,14 @@ void SourceFormatterSettings::updatePreview()
             KTextEditor::ConfigInterface* iface = qobject_cast<KTextEditor::ConfigInterface*>(m_document);
             QVariant oldReplaceTabs;
             if (iface) {
-                oldReplaceTabs = iface->configValue("replace-tabs");
-                iface->setConfigValue("replace-tabs", false);
+                oldReplaceTabs = iface->configValue(QStringLiteral("replace-tabs"));
+                iface->setConfigValue(QStringLiteral("replace-tabs"), false);
             }
 
             m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( *style, mime ), QUrl(), mime ) );
 
             if (iface) {
-                iface->setConfigValue("replace-tabs", oldReplaceTabs);
+                iface->setConfigValue(QStringLiteral("replace-tabs"), oldReplaceTabs);
             }
 
             previewLabel->show();

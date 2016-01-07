@@ -401,7 +401,7 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
             return;
         }
 
-        if (barForDockArea(area)->actions().count())
+        if (!barForDockArea(area)->actions().isEmpty())
             barForDockArea(area)->actions().first()->setChecked(show);
     }
 }

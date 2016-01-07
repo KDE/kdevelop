@@ -27,7 +27,7 @@ using namespace Sublime;
 
 AreaViewsPrinter::AreaViewsPrinter()
 {
-    result = "\n";
+    result = QStringLiteral("\n");
 }
 
 Area::WalkerMode AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
@@ -40,24 +40,24 @@ Area::WalkerMode AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
         foreach (View *view, index->views())
             result += view->objectName() + ' ';
     }
-    result += "]\n";
+    result += QLatin1String("]\n");
     return Area::ContinueWalker;
 }
 
 QString AreaViewsPrinter::printIndentation(Sublime::AreaIndex *index) const
 {
-    QString i = "";
+    QString i = QLatin1String("");
     while ((index = index->parent()))
-        i += "    ";
+        i += QLatin1String("    ");
     return i;
 }
 
 QString AreaViewsPrinter::printOrientation(Qt::Orientation o) const
 {
     if (o == Qt::Vertical)
-        return "vertical splitter";
+        return QStringLiteral("vertical splitter");
     else
-        return "horizontal splitter";
+        return QStringLiteral("horizontal splitter");
 }
 
 
@@ -66,7 +66,7 @@ QString AreaViewsPrinter::printOrientation(Qt::Orientation o) const
 
 AreaToolViewsPrinter::AreaToolViewsPrinter()
 {
-    result = "\n";
+    result = QStringLiteral("\n");
 }
 
 Area::WalkerMode AreaToolViewsPrinter::operator()(Sublime::View *view, Sublime::Position position)
@@ -79,11 +79,11 @@ QString AreaToolViewsPrinter::printPosition(Sublime::Position position)
 {
     switch (position)
     {
-        case Sublime::Left: return "left";
-        case Sublime::Right: return "right";
-        case Sublime::Bottom: return "bottom";
-        case Sublime::Top: return "top";
-        default: return "wrong position";
+        case Sublime::Left: return QStringLiteral("left");
+        case Sublime::Right: return QStringLiteral("right");
+        case Sublime::Bottom: return QStringLiteral("bottom");
+        case Sublime::Top: return QStringLiteral("top");
+        default: return QStringLiteral("wrong position");
     }
 }
 

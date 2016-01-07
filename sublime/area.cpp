@@ -109,7 +109,7 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
     setObjectName(name);
     d->title = title;
     d->controller = controller;
-    d->iconName = "kdevelop";
+    d->iconName = QStringLiteral("kdevelop");
     d->workingSet.clear();
     qCDebug(SUBLIME) << "initial working-set:" << d->workingSet;
     initialize();
@@ -332,7 +332,7 @@ void Area::load(const KConfigGroup& group)
         if (i != -1)
         {
             QString id = s.left(i);
-            int pos_i = s.mid(i+1).toInt();
+            int pos_i = s.midRef(i+1).toInt();
             Sublime::Position pos = static_cast<Sublime::Position>(pos_i);
             if (pos != Sublime::Left && pos != Sublime::Right && pos != Sublime::Top && pos != Sublime::Bottom)
             {
@@ -391,7 +391,7 @@ void Area::setThickness(Sublime::Position pos, int thickness)
 
 int Area::thickness(Sublime::Position pos) const
 {
-    if (!d->thickness.count(pos))
+    if (!d->thickness.contains(pos))
         return -1;
     return (d->thickness)[pos];
 }

@@ -100,8 +100,8 @@ class DebugMode : public ILaunchMode
 {
 public:
     DebugMode() {}
-    QIcon icon() const override { return QIcon::fromTheme("tools-report-bug"); }
-    QString id() const override { return "debug"; }
+    QIcon icon() const override { return QIcon::fromTheme(QStringLiteral("tools-report-bug")); }
+    QString id() const override { return QStringLiteral("debug"); }
     QString name() const override { return i18n("Debug"); }
 };
 
@@ -109,8 +109,8 @@ class ProfileMode : public ILaunchMode
 {
 public:
     ProfileMode() {}
-    QIcon icon() const override { return QIcon::fromTheme("office-chart-area"); }
-    QString id() const override { return "profile"; }
+    QIcon icon() const override { return QIcon::fromTheme(QStringLiteral("office-chart-area")); }
+    QString id() const override { return QStringLiteral("profile"); }
     QString name() const override { return i18n("Profile"); }
 };
 
@@ -118,8 +118,8 @@ class ExecuteMode : public ILaunchMode
 {
 public:
     ExecuteMode() {}
-    QIcon icon() const override { return QIcon::fromTheme("system-run"); }
-    QString id() const override { return "execute"; }
+    QIcon icon() const override { return QIcon::fromTheme(QStringLiteral("system-run")); }
+    QString id() const override { return QStringLiteral("execute"); }
     QString name() const override { return i18n("Execute"); }
 };
 
@@ -160,7 +160,7 @@ public:
         {
             KConfigGroup grp = Core::self()->activeSession()->config()->group( Strings::LaunchConfigurationsGroup() );
             LaunchConfiguration* l = static_cast<LaunchConfiguration*>( currentTargetAction->currentAction()->data().value<void*>() );
-            grp.writeEntry( Strings::CurrentLaunchConfigProjectEntry(), l->project() ? l->project()->name() : "" );
+            grp.writeEntry( Strings::CurrentLaunchConfigProjectEntry(), l->project() ? l->project()->name() : QLatin1String("") );
             grp.writeEntry( Strings::CurrentLaunchConfigNameEntry(), l->configGroupName() );
             grp.sync();
         }
@@ -177,7 +177,7 @@ public:
         QString label;
         if( l->project() )
         {
-            label = QStringLiteral("%1 : %2").arg( l->project()->name()).arg(l->name());
+            label = QStringLiteral("%1 : %2").arg( l->project()->name(), l->name());
         } else
         {
             label = l->name();
@@ -271,7 +271,7 @@ public:
             qCDebug(SHELL) << "oops no current action, using first if list is non-empty";
             if( !currentTargetAction->actions().isEmpty() )
             {
-                currentTargetAction->actions().first()->setChecked( true );
+                currentTargetAction->actions().at(0)->setChecked( true );
             }
         }
     }
@@ -317,9 +317,9 @@ RunController::RunController(QObject *parent)
     : IRunController(parent)
     , d(new RunControllerPrivate)
 {
-    setObjectName("RunController");
+    setObjectName(QStringLiteral("RunController"));
 
-    QDBusConnection::sessionBus().registerObject("/org/kdevelop/RunController",
+    QDBusConnection::sessionBus().registerObject(QStringLiteral("/org/kdevelop/RunController"),
         this, QDBusConnection::ExportScriptableSlots);
 
     // TODO: need to implement compile only if needed before execute
@@ -426,7 +426,7 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
         KMessageBox::error(
             qApp->activeWindow(),
             i18n("The current launch configuration does not support the '%1' mode.", runMode),
-            "");
+            QLatin1String(""));
         return 0;
     }
 
@@ -443,31 +443,31 @@ void RunController::setupActions()
     KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
     action = new QAction(i18n("Configure Launches..."), this);
-    ac->addAction("configure_launches", action);
+    ac->addAction(QStringLiteral("configure_launches"), action);
     action->setMenuRole(QAction::NoRole); // OSX: Be explicit about role, prevent hiding due to conflict with "Preferences..." menu item
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
     action->setToolTip(i18nc("@info:tooltip", "Open Launch Configuration Dialog"));
     action->setWhatsThis(i18nc("@info:whatsthis", "Opens a dialog to setup new launch configurations, or to change the existing ones."));
     connect(action, &QAction::triggered, this, [&] { d->configureLaunches(); });
 
-    d->runAction = new QAction( QIcon::fromTheme("system-run"), i18n("Execute Launch"), this);
+    d->runAction = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18n("Execute Launch"), this);
     d->runAction->setIconText( i18nc("Short text for 'Execute launch' used in the toolbar", "Execute") );
     ac->setDefaultShortcut( d->runAction, Qt::SHIFT + Qt::Key_F9);
     d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current launch"));
     d->runAction->setStatusTip(i18n("Execute current launch"));
     d->runAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration."));
-    ac->addAction("run_execute", d->runAction);
+    ac->addAction(QStringLiteral("run_execute"), d->runAction);
     connect(d->runAction, &QAction::triggered, this, &RunController::slotExecute);
 
-    d->dbgAction = new QAction( QIcon::fromTheme("debug-run"), i18n("Debug Launch"), this);
+    d->dbgAction = new QAction( QIcon::fromTheme(QStringLiteral("debug-run")), i18n("Debug Launch"), this);
     ac->setDefaultShortcut( d->dbgAction, Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("Short text for 'Debug launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
     d->dbgAction->setStatusTip(i18n("Debug current launch"));
     d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Debugger."));
-    ac->addAction("run_debug", d->dbgAction);
+    ac->addAction(QStringLiteral("run_debug"), d->dbgAction);
     connect(d->dbgAction, &QAction::triggered, this, &RunController::slotDebug);
-    Core::self()->uiControllerInternal()->area(0, "code")->addAction(d->dbgAction);
+    Core::self()->uiControllerInternal()->area(0, QStringLiteral("code"))->addAction(d->dbgAction);
 
 //     TODO: at least get a profile target, it's sad to have the menu entry without a profiler
 //     QAction* profileAction = new QAction( QIcon::fromTheme(""), i18n("Profile Launch"), this);
@@ -477,29 +477,29 @@ void RunController::setupActions()
 //     ac->addAction("run_profile", profileAction);
 //     connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
-    action = d->stopAction = new QAction( QIcon::fromTheme("process-stop"), i18n("Stop All Jobs"), this);
+    action = d->stopAction = new QAction( QIcon::fromTheme(QStringLiteral("process-stop")), i18n("Stop All Jobs"), this);
     action->setIconText(i18nc("Short text for 'Stop All Jobs' used in the toolbar", "Stop All"));
     // Ctrl+Escape would be nicer, but thats taken by the ksysguard desktop shortcut
-    ac->setDefaultShortcut( action, QKeySequence("Ctrl+Shift+Escape"));
+    ac->setDefaultShortcut( action, QKeySequence(QStringLiteral("Ctrl+Shift+Escape")));
     action->setToolTip(i18nc("@info:tooltip", "Stop all currently running jobs"));
     action->setWhatsThis(i18nc("@info:whatsthis", "Requests that all running jobs are stopped."));
     action->setEnabled(false);
-    ac->addAction("run_stop_all", action);
+    ac->addAction(QStringLiteral("run_stop_all"), action);
     connect(action, &QAction::triggered, this, &RunController::stopAllProcesses);
-    Core::self()->uiControllerInternal()->area(0, "debug")->addAction(action);
+    Core::self()->uiControllerInternal()->area(0, QStringLiteral("debug"))->addAction(action);
 
-    action = d->stopJobsMenu = new KActionMenu( QIcon::fromTheme("process-stop"), i18n("Stop"), this);
+    action = d->stopJobsMenu = new KActionMenu( QIcon::fromTheme(QStringLiteral("process-stop")), i18n("Stop"), this);
     action->setIconText(i18nc("Short text for 'Stop' used in the toolbar", "Stop"));
     action->setToolTip(i18nc("@info:tooltip", "Menu allowing to stop individual jobs"));
     action->setWhatsThis(i18nc("@info:whatsthis", "List of jobs that can be stopped individually."));
     action->setEnabled(false);
-    ac->addAction("run_stop_menu", action);
+    ac->addAction(QStringLiteral("run_stop_menu"), action);
 
     d->currentTargetAction = new KSelectAction( i18n("Current Launch Configuration"), this);
     d->currentTargetAction->setToolTip(i18nc("@info:tooltip", "Current launch configuration"));
     d->currentTargetAction->setStatusTip(i18n("Current launch Configuration"));
     d->currentTargetAction->setWhatsThis(i18nc("@info:whatsthis", "Select which launch configuration to run when run is invoked."));
-    ac->addAction("run_default_target", d->currentTargetAction);
+    ac->addAction(QStringLiteral("run_default_target"), d->currentTargetAction);
 }
 
 LaunchConfigurationType* RunController::launchConfigurationTypeForId( const QString& id )
@@ -526,7 +526,7 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
             bool wasSelected = action->isChecked();
             delete action;
             if (wasSelected && !d->currentTargetAction->actions().isEmpty())
-                d->currentTargetAction->actions().first()->setChecked(true);
+                d->currentTargetAction->actions().at(0)->setChecked(true);
         }
     }
 }
@@ -545,7 +545,7 @@ void RunController::slotDebug()
     }
 
     if(!d->launchConfigurations.isEmpty())
-        executeDefaultLaunch( "debug" );
+        executeDefaultLaunch( QStringLiteral("debug") );
 }
 
 void RunController::slotProfile()
@@ -556,7 +556,7 @@ void RunController::slotProfile()
     }
 
     if(!d->launchConfigurations.isEmpty())
-        executeDefaultLaunch( "profile" );
+        executeDefaultLaunch( QStringLiteral("profile") );
 }
 
 void RunController::slotExecute()
@@ -568,7 +568,7 @@ void RunController::slotExecute()
     }
 
     if(!d->launchConfigurations.isEmpty())
-        executeDefaultLaunch( "execute" );
+        executeDefaultLaunch( QStringLiteral("execute") );
 }
 
 LaunchConfiguration* KDevelop::RunController::defaultLaunch() const
@@ -812,7 +812,7 @@ void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfigurati
         {
             if( !d->currentTargetAction->actions().isEmpty() )
             {
-                d->currentTargetAction->actions().first()->setChecked( true );
+                d->currentTargetAction->actions().at(0)->setChecked( true );
             }
         }
         connect( l, &LaunchConfiguration::nameChanged, this, &RunController::launchChanged );
@@ -841,7 +841,7 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
             d->currentTargetAction->removeAction( a );
             if( wasSelected && !d->currentTargetAction->actions().isEmpty() )
             {
-                d->currentTargetAction->actions().first()->setChecked( true );
+                d->currentTargetAction->actions().at(0)->setChecked( true );
             }
             break;
         }
@@ -913,7 +913,7 @@ ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigura
     }
     QStringList configs = launchGroup.readEntry( Strings::LaunchConfigurationsListEntry(), QStringList() );
     uint num = 0;
-    QString baseName = "Launch Configuration";
+    QString baseName = QStringLiteral("Launch Configuration");
     while( configs.contains( QStringLiteral( "%1 %2" ).arg( baseName ).arg( num ) ) )
     {
         num++;

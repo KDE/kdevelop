@@ -26,7 +26,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevnonguiinterfaceplugin.json", registerPlugin<NonGuiInterfacePlugin>();)
 
 NonGuiInterfacePlugin::NonGuiInterfacePlugin( QObject* parent, const QVariantList& )
-    : IPlugin( "kdevnonguiinterfaceplugin", parent )
+    : IPlugin( QStringLiteral("kdevnonguiinterfaceplugin"), parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( ITestNonGuiInterface )
 }
