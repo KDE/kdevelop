@@ -401,8 +401,6 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
         ErrorFormat(QStringLiteral("QObject::connect: (?:No such|Parentheses expected,) (?:slot|signal) [^ ]* in (.*):([0-9]+)"), 1, 2, -1),
         // ASSERT: "errors().isEmpty()" in file /foo/bar.cpp, line 49
         ErrorFormat(QStringLiteral("ASSERT: \"(.*)\" in file (.*), line ([0-9]+)"), 2, 3, -1),
-        // QFATAL : FooTest::testBar() ASSERT: "index.isValid()" in file /foo/bar.cpp, line 32
-        ErrorFormat(QStringLiteral("QFATAL : (.*) ASSERT: \"(.*)\" in file (.*), line ([0-9]+)"), 3, 4, -1),
         // Catch:
         // FAIL!  : FooTest::testBar() Compared pointers are not the same
         //    Actual   ...
