@@ -251,6 +251,10 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 
     // A list of filters for possible compiler, linker, and make errors
     static const ErrorFormat ERROR_FILTERS[] = {
+#ifdef Q_OS_WIN
+        // MSVC
+        ErrorFormat( QStringLiteral("^([a-zA-Z]:\\\\.+)\\(([1-9][0-9]*)\\): ((?:error|warning) .+\\:).*$"), 1, 2, 3 ),
+#endif
         // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
         ErrorFormat( QStringLiteral("^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)"), 1, 2, 4, 3 ),
         // GCC
