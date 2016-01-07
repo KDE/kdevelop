@@ -1490,5 +1490,5 @@ void TestDUChain::testGccCompatibility()
         verifyNoErrors(file.topContext(), checked);
     }
 
-    m_projectController->clearProjects();
+    m_projectController->closeAllProjects();
 }
