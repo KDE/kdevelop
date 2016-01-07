@@ -1129,5 +1129,23 @@ void  __builtin_ia32_xsaveopt(...);
 void  __builtin_ia32_xsaveopt64(...);
 void  __builtin_ia32_xsaves(...);
 void  __builtin_ia32_xsaves64(...);
-
+__m128i  __builtin_ia32_pbroadcastd128(...);
+__m128i  __builtin_ia32_pbroadcastq128(...);
+__m256i  __builtin_ia32_pbroadcastq256(...);
+__m128i __builtin_ia32_pmovsxbd128(...);
+__m128i __builtin_ia32_pmovsxbq128(...);
+__m128i __builtin_ia32_pmovsxbw128(...);
+__m128i __builtin_ia32_pmovsxdq128(...);
+__m128i __builtin_ia32_pmovsxwd128(...);
+__m128i __builtin_ia32_pmovsxwq128(...);
+__m128i __builtin_ia32_pmovzxbd128(...);
+__m128i __builtin_ia32_pmovzxbq128(...);
+__m128i __builtin_ia32_pmovzxbw128(...);
+__m128i __builtin_ia32_pmovzxdq128(...);
+__m128i __builtin_ia32_pmovzxwd128(...);
+__m128i __builtin_ia32_pmovzxwq128(...);
+__m256d __builtin_ia32_vbroadcastf128_pd256(...);
+__m256 __builtin_ia32_vbroadcastf128_ps256(...);
+__m256d  __builtin_ia32_vbroadcastsd_pd256(...);
+__m256  __builtin_ia32_vbroadcastss_ps256(...);
 }
