@@ -452,6 +452,14 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn_data()
     QTest::addColumn<int>("column");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("itemtype");
 
+#ifdef Q_OS_WIN
+    QTest::newRow("msvc-compiler-error-line")
+        << "Z:\\kderoot\\download\\git\\kcoreaddons\\src\\lib\\jobs\\kjob.cpp(3): error C2065: 'dadsads': undeclared identifier"
+        << "Z:/kderoot/download/git/kcoreaddons/src/lib/jobs/kjob.cpp" << 2 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("msvc-compiler-warning-line")
+        << "c:\\program files\\microsoft visual studio 10.0\\vc\\include\\crtdefs.h(527): warning C4229: anachronism used : modifiers on data are ignored"
+        << "c:/program files/microsoft visual studio 10.0/vc/include/crtdefs.h" << 526 << 0 << FilteredItem::WarningItem;
+#else
     QTest::newRow("gcc-with-col")
         << "/path/to/file.cpp:123:45: fatal error: ..."
         << "/path/to/file.cpp" << 122 << 44 << FilteredItem::ErrorItem;
@@ -479,6 +487,7 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn_data()
     QTest::newRow("gfortranError2")
         << "/path/flib.f90:3567.22:"
         << "/path/flib.f90" << 3566 << 21 << FilteredItem::ErrorItem;
+#endif
 }
 
 void TestFilteringStrategy::testExtractionOfLineAndColumn()
@@ -492,7 +501,7 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn()
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type , itemtype);
-    QCOMPARE(item1.url.path(), file);
+    QCOMPARE(KDevelop::toUrlOrLocalFile(item1.url), file);
     QCOMPARE(item1.lineNo , lineNr);
     QCOMPARE(item1.columnNo , column);
 }
