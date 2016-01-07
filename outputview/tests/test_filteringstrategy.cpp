@@ -245,6 +245,14 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
     QTest::addColumn<int>("column");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("itemtype");
 
+    // BEGIN: C++
+    QTest::newRow("cassert")
+        << "a.out: /foo/bar/test.cpp:5: int main(): Assertion `false' failed."
+        << "/foo/bar/test.cpp"
+        << 4 << 0 << FilteredItem::ErrorItem;
+    // END: C++
+
+    // BEGIN: Qt
     // TODO: qt-connect-* and friends shouldn't be error items but warnings items instead
     // this needs refactoring in outputfilteringstrategies, though...
     QTest::newRow("qt-connect-nosuch-slot")
@@ -263,10 +271,6 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
         << "QObject::connect: Parentheses expected, signal Foo::bar() in /foo/bar.cpp:313"
         << "/foo/bar.cpp"
         << 312 << 0 << FilteredItem::ErrorItem;
-    QTest::newRow("cassert")
-        << "a.out: /foo/bar/test.cpp:5: int main(): Assertion `false' failed."
-        << "/foo/bar/test.cpp"
-        << 4 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("qt-assert")
         << "ASSERT: \"errors().isEmpty()\" in file /tmp/foo/bar.cpp, line 49"
         << "/tmp/foo/bar.cpp"
@@ -295,6 +299,7 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
         << "file:///path/to/foo.qml:7:1: Bar is instantiated recursively"
         << "/path/to/foo.qml"
         << 6 << 0 << FilteredItem::ErrorItem;
+    // END: Qt
 }
 
 void TestFilteringStrategy::testNativeAppErrorFilterStrategy()

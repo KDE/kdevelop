@@ -383,13 +383,26 @@ FilteredItem NativeAppErrorFilterStrategy::actionInLine(const QString& line)
 FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
 {
     static const ErrorFormat NATIVE_APPLICATION_ERROR_FILTERS[] = {
+        // BEGIN: C++
+
+        // a.out: test.cpp:5: int main(): Assertion `false' failed.
+        ErrorFormat(QStringLiteral("^.+: (.+):([1-9][0-9]*): .*: Assertion `.*' failed\\.$"), 1, 2, -1),
+
+        // END: C++
+
+        // BEGIN: Qt
+
+        // Note: Scan the whole line for catching Qt runtime warnings (-> no ^$)
+        // Reasoning: With QT_MESSAGE_PATTERN you can configure the output to your desire,
+        // which means the output could be arbitrarily prefixed or suffixed with other content
+
         // QObject::connect related errors, also see err_method_notfound() in qobject.cpp
         // QObject::connect: No such slot Foo::bar() in /foo/bar.cpp:313
-        ErrorFormat(QStringLiteral("^QObject::connect: (?:No such|Parentheses expected,) (?:slot|signal) [^ ]* in (.*):([0-9]+)$"), 1, 2, -1),
+        ErrorFormat(QStringLiteral("QObject::connect: (?:No such|Parentheses expected,) (?:slot|signal) [^ ]* in (.*):([0-9]+)"), 1, 2, -1),
         // ASSERT: "errors().isEmpty()" in file /foo/bar.cpp, line 49
-        ErrorFormat(QStringLiteral("^ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$"), 2, 3, -1),
+        ErrorFormat(QStringLiteral("ASSERT: \"(.*)\" in file (.*), line ([0-9]+)"), 2, 3, -1),
         // QFATAL : FooTest::testBar() ASSERT: "index.isValid()" in file /foo/bar.cpp, line 32
-        ErrorFormat(QStringLiteral("^QFATAL : (.*) ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$"), 3, 4, -1),
+        ErrorFormat(QStringLiteral("QFATAL : (.*) ASSERT: \"(.*)\" in file (.*), line ([0-9]+)"), 3, 4, -1),
         // Catch:
         // FAIL!  : FooTest::testBar() Compared pointers are not the same
         //    Actual   ...
@@ -399,11 +412,11 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
         // Do *not* catch:
         //    ...
         //    Loc: [Unknown file(0)]
-        ErrorFormat(QStringLiteral("^   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]$"), 1, 2, -1),
-        // a.out: test.cpp:5: int main(): Assertion `false' failed.
-        ErrorFormat(QStringLiteral("^.+: (.+):([1-9][0-9]*): .*: Assertion `.*' failed\\.$"), 1, 2, -1),
+        ErrorFormat(QStringLiteral("   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]"), 1, 2, -1),
         // file:///path/to/foo.qml:7:1: Bar is not a type
-        ErrorFormat(QStringLiteral("^(file:\\/\\/(?:.+)):([1-9][0-9]*):([1-9][0-9]*): (.+) (?:is not a type|is ambiguous\\..*|is instantiated recursively)$"), 1, 2, -1, 3)
+        ErrorFormat(QStringLiteral("(file:\\/\\/(?:.+)):([1-9][0-9]*):([1-9][0-9]*): (.+) (?:is not a type|is ambiguous\\.|is instantiated recursively)"), 1, 2, -1, 3)
+
+        // END: Qt
     };
 
     return match(NATIVE_APPLICATION_ERROR_FILTERS, line);
