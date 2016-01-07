@@ -60,6 +60,7 @@ public:
     QList< ProjectFileItem* > filesForPath(const IndexedString&) const override;
     QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const override { return QList<ProjectFolderItem*>(); }
     void reloadModel() override { }
+    void close() override {}
     Path projectFile() const override;
     KSharedConfigPtr projectConfiguration() const override { return m_projectConfiguration; }
     void addToFileSet( ProjectFileItem* file) override;
@@ -86,18 +87,19 @@ private:
 class KDEVPLATFORMTESTS_EXPORT TestProjectController : public ProjectController
 {
     Q_OBJECT
+
 public:
     TestProjectController(Core* core) : ProjectController(core) {}
     IProject* projectAt( int i ) const override { return m_projects.at(i); }
     int projectCount() const override { return m_projects.count(); }
     QList<IProject*> projects() const override { return m_projects; }
+
 public:
-    void addProject(IProject* p);
-    void takeProject(IProject* p);
-    void clearProjects();
-    void closeProject(IProject* p) override;
+    using ProjectController::addProject;
+    using ProjectController::takeProject;
 
     void initialize() override;
+
 private:
     QList<IProject*> m_projects;
 };

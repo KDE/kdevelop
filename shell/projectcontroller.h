@@ -86,8 +86,6 @@ public:
     virtual QItemSelectionModel* projectSelectionModel();
     IProject* findProjectByName( const QString& name ) override;
     IProject* findProjectForUrl( const QUrl& ) const override;
-    void addProject(IProject*);
-//     IProject* currentProject() const;
 
     bool isProjectNameUsed( const QString& name ) const override;
     void setDialogProvider(IProjectDialogProvider*);
@@ -105,6 +103,7 @@ public Q_SLOTS:
     virtual void abortOpeningProject( IProject* );
     void projectImportingFinished( IProject* );
     void closeProject( IProject* ) override;
+    void closeAllProjects() override;
     void configureProject( IProject* ) override;
 
     void reparseProject( IProject* project, bool forceUpdate = false  ) override;
@@ -122,6 +121,22 @@ public Q_SLOTS:
     Q_SCRIPTABLE QString mapSourceBuild( const QString& path, bool reverse = false, bool fallbackRoot = true ) const;
 
 protected:
+    /**
+     * Add the existing project @p project to the controller
+     *
+     * @note Method is used for testing objectives, consider using openProject() instead!
+     * @note takes ownership over the project
+     *
+     * @sa openProject()
+     */
+    void addProject(IProject* proj);
+    /**
+     * Remove the project @p project from the controller
+     *
+     * @note Ownership is passed on to the caller
+     */
+    void takeProject(IProject* proj);
+
     virtual void loadSettings( bool projectIsLoaded );
     virtual void saveSettings( bool projectIsLoaded );
 

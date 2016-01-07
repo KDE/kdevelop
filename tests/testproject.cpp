@@ -126,36 +126,6 @@ void TestProject::removeFromFileSet(ProjectFileItem* file)
     }
 }
 
-void TestProjectController::addProject(IProject* p)
-{
-    emit projectAboutToBeOpened(p);
-    p->setParent(this);
-    m_projects << p;
-    emit projectOpened(p);
-}
-
-void TestProjectController::clearProjects()
-{
-    foreach(IProject* p, m_projects) {
-        closeProject(p);
-    }
-}
-
-void TestProjectController::closeProject(IProject* p)
-{
-    emit projectClosing(p);
-    delete p;
-    m_projects.removeOne(p);
-    emit projectClosed(p);
-}
-
-void KDevelop::TestProjectController::takeProject(KDevelop::IProject* p)
-{
-    emit projectClosing(p);
-    m_projects.removeOne(p);
-    emit projectClosed(p);
-}
-
 void TestProjectController::initialize()
 {
 }

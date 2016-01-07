@@ -20,6 +20,9 @@
 
 #include "bench_quickopen.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+
 #include <QIcon>
 #include <QtTest/QTest>
 
