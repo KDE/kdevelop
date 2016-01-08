@@ -12,8 +12,6 @@ set( kdevdefinesandincludesmanager_SRCS
         kcm_widget/defineswidget.cpp
         kcm_widget/projectpathswidget.cpp
         kcm_widget/definesandincludesconfigpage.cpp
-        kcm_widget/compilersmodel.cpp
-        kcm_widget/compilerswidget.cpp
         kcm_widget/parserwidget.cpp
         compilerprovider/icompiler.cpp # TODO: is this really neccessary
     )
@@ -23,7 +21,6 @@ ki18n_wrap_ui(kdevdefinesandincludesmanager_SRCS
     kcm_widget/includeswidget.ui
     kcm_widget/defineswidget.ui
     kcm_widget/projectpathswidget.ui
-    kcm_widget/compilerswidget.ui
     kcm_widget/parserwidget.ui
 )
 kconfig_add_kcfg_files( kdevdefinesandincludesmanager_SRCS kcm_widget/customdefinesandincludes.kcfgc)

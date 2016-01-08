@@ -132,8 +132,7 @@
          </property>
          <property name="icon">
           <iconset theme="list-add">
-           <normaloff/>
-          </iconset>
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -150,8 +149,7 @@
          </property>
          <property name="icon">
           <iconset theme="list-remove">
-           <normaloff/>
-          </iconset>
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -171,7 +169,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="includePathsPage">
       <attribute name="title">
@@ -234,38 +232,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="compilersPage">
-      <attribute name="title">
-       <string>Compilers</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="CompilersWidget" name="compilersWidget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>8</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="parserPage">
       <attribute name="title">
        <string>C/C++ parser</string>
@@ -295,11 +261,6 @@
    <class>IncludesWidget</class>
    <extends>QWidget</extends>
    <header>kcm_widget/includeswidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>CompilersWidget</class>
-   <extends>QWidget</extends>
-   <header>kcm_widget/compilerswidget.h</header>
   </customwidget>
   <customwidget>
    <class>ParserWidget</class>

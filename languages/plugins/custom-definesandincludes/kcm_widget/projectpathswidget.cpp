@@ -32,8 +32,6 @@
 
 #include "../compilerprovider/compilerprovider.h"
 
-#include "compilerswidget.h"
-
 #include "ui_projectpathswidget.h"
 #include "ui_batchedit.h"
 #include "projectpathsmodel.h"
@@ -46,7 +44,6 @@ namespace
 enum PageType {
     IncludesPage,
     DefinesPage,
-    CompilerPage,
     ParserArgumentsPage
 };
 }
@@ -77,17 +74,14 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( ui->compiler, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ProjectPathsWidget::changed );
     connect( ui->compiler, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ProjectPathsWidget::changeCompilerForPath );
 
-    connect(ui->compilersWidget, &CompilersWidget::compilerChanged, this, &ProjectPathsWidget::changed);
-
     connect( ui->includesWidget, static_cast<void(IncludesWidget::*)(const QStringList&)>(&IncludesWidget::includesChanged), this, &ProjectPathsWidget::includesChanged );
     connect( ui->definesWidget, static_cast<void(DefinesWidget::*)(const KDevelop::Defines&)>(&DefinesWidget::definesChanged), this, &ProjectPathsWidget::definesChanged );
-
-    connect(ui->compilersWidget, &CompilersWidget::compilerChanged,
-            this, &ProjectPathsWidget::userDefinedCompilerChanged);
 
     connect(ui->languageParameters, &QTabWidget::currentChanged, this, &ProjectPathsWidget::tabChanged);
 
     connect(ui->parserWidget, &ParserWidget::changed, this, &ProjectPathsWidget::parserArgumentsChanged);
+
+    tabChanged(IncludesPage);
 }
 
 QList<ConfigEntry> ProjectPathsWidget::paths() const
@@ -105,6 +99,20 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
     projectPathSelected(0);
     ui->languageParameters->setCurrentIndex(0);
     updateEnablements();
+
+    // Set compilers
+    ui->compiler->clear();
+    auto settings = SettingsManager::globalInstance();
+    auto compilers = settings->provider()->compilers();
+    for (int i = 0 ; i < compilers.count(); ++i) {
+        Q_ASSERT(compilers[i]);
+        if (!compilers[i]) {
+            continue;
+        }
+        ui->compiler->addItem(compilers[i]->name());
+        QVariant val; val.setValue(compilers[i]);
+        ui->compiler->setItemData(i, val);
+    }
 }
 
 void ProjectPathsWidget::definesChanged( const Defines& defines )
@@ -273,40 +281,9 @@ CompilerPointer ProjectPathsWidget::currentCompiler() const
     return ui->compiler->itemData(ui->compiler->currentIndex()).value<CompilerPointer>();
 }
 
-void ProjectPathsWidget::setCompilers(const QVector< CompilerPointer >& compilers, bool updateCompilersModel)
-{
-    ui->compiler->clear();
-    for (int i = 0 ; i < compilers.count(); ++i) {
-        Q_ASSERT(compilers[i]);
-        if (!compilers[i]) {
-            continue;
-        }
-        ui->compiler->addItem(compilers[i]->name());
-        QVariant val; val.setValue(compilers[i]);
-        ui->compiler->setItemData(i, val);
-    }
-
-    if (updateCompilersModel) {
-        ui->compilersWidget->setCompilers(compilers);
-    }
-}
-
-QVector< CompilerPointer > ProjectPathsWidget::compilers() const
-{
-    return ui->compilersWidget->compilers();
-}
-
-void ProjectPathsWidget::userDefinedCompilerChanged()
-{
-    //TODO: if some compiler was deleted remove it from the pathsModel too.
-    auto current = currentCompiler()->name();
-    setCompilers(ui->compilersWidget->compilers(), false);
-    setCurrentCompiler(current);
-}
-
 void ProjectPathsWidget::tabChanged(int idx)
 {
-    if (idx == CompilerPage || idx == ParserArgumentsPage) {
+    if (idx == ParserArgumentsPage) {
         ui->batchEdit->setVisible(false);
         ui->compilerBox->setVisible(true);
     } else {

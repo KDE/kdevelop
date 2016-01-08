@@ -6,7 +6,13 @@ set( compilerprovider_SRCS
         compilerfactories.cpp
         settingsmanager.cpp
         ../debugarea.cpp
+        widget/compilersmodel.cpp
+        widget/compilerswidget.cpp
     )
+
+ki18n_wrap_ui(compilerprovider_SRCS
+    widget/compilerswidget.ui
+)
 
 add_library(kdevcompilerprovider STATIC
         ${compilerprovider_SRCS})
