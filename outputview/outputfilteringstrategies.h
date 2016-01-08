@@ -27,12 +27,7 @@
 
 #include "ifilterstrategy.h"
 #include "outputformats.h"
-
-#include <util/path.h>
-
 #include <outputview/outputviewexport.h>
-
-#define KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT KDEVPLATFORMOUTPUTVIEW_EXPORT
 
 #include <QList>
 #include <QVector>
@@ -42,11 +37,13 @@
 namespace KDevelop
 {
 
+struct CompilerFilterStrategyPrivate;
+
 /**
  * This filter strategy is for not applying any filtering at all. Implementation of the
  * interface methods are basically noops
  **/
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT NoFilterStrategy final : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_EXPORT NoFilterStrategy : public IFilterStrategy
 {
 
 public:
@@ -62,11 +59,12 @@ public:
  * This filter stategy checks if a given line contains output
  * that is defined as an error (or an action) from a compiler.
  **/
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT CompilerFilterStrategy final : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrategy
 {
 
 public:
     CompilerFilterStrategy(const QUrl& buildDir);
+    virtual ~CompilerFilterStrategy();
 
     virtual FilteredItem errorInLine(const QString& line) override;
 
@@ -75,21 +73,13 @@ public:
     QVector<QString> getCurrentDirs();
 
 private:
-    KDevelop::Path pathForFile( const QString& ) const;
-    bool isMultiLineCase(ErrorFormat curErrFilter) const;
-    void putDirAtEnd(const KDevelop::Path& pathToInsert);
-
-    QVector<KDevelop::Path> m_currentDirs;
-    KDevelop::Path m_buildDir;
-
-    using PositionMap = QHash<KDevelop::Path, int>;
-    PositionMap m_positionInCurrentDirs;
+    CompilerFilterStrategyPrivate* const d;
 };
 
 /**
  * This filter stategy filters out errors (no actions) from Python and PHP scripts.
  **/
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT ScriptErrorFilterStrategy final : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_EXPORT ScriptErrorFilterStrategy : public IFilterStrategy
 {
 
 public:
@@ -107,7 +97,7 @@ public:
  * This is especially useful for runtime output of Qt applications, for example lines such as:
  * "ASSERT: "errors().isEmpty()" in file /tmp/foo/bar.cpp", line 49"
  */
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT NativeAppErrorFilterStrategy final : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_EXPORT NativeAppErrorFilterStrategy : public IFilterStrategy
 {
 public:
     NativeAppErrorFilterStrategy();
@@ -119,7 +109,7 @@ public:
 /**
  * This filter stategy filters out errors (no actions) from Static code analysis tools (Cppcheck,)
  **/
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT StaticAnalysisFilterStrategy final : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_EXPORT StaticAnalysisFilterStrategy : public IFilterStrategy
 {
 
 public:
