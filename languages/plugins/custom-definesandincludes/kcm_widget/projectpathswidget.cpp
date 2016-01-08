@@ -286,9 +286,11 @@ void ProjectPathsWidget::tabChanged(int idx)
     if (idx == ParserArgumentsPage) {
         ui->batchEdit->setVisible(false);
         ui->compilerBox->setVisible(true);
+        ui->configureLabel->setText(i18n("Configure C/C++ parser"));
     } else {
         ui->batchEdit->setVisible(true);
         ui->compilerBox->setVisible(false);
+        ui->configureLabel->setText(i18n("Configure which macros and include directories/files will be added to the parser during project parsing:"));
     }
 }
 

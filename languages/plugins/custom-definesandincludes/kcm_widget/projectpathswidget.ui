@@ -24,7 +24,7 @@
     <number>9</number>
    </property>
    <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="configureLabel">
      <property name="text">
       <string>Configure which macros and include directories/files will be added to the parser during project parsing:</string>
      </property>
