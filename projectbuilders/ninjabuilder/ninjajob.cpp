@@ -22,6 +22,7 @@
 
 #include <interfaces/iproject.h>
 #include <outputview/outputmodel.h>
+#include <outputview/outputfilteringstrategies.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
@@ -37,6 +38,36 @@
 #include <QStandardPaths>
 #include <QUrl>
 
+using namespace KDevelop;
+
+class NinjaJobCompilerFilterStrategy : public CompilerFilterStrategy
+{
+public:
+    using CompilerFilterStrategy::CompilerFilterStrategy;
+
+    IFilterStrategy::Progress progressInLine(const QString& line) override;
+};
+
+IFilterStrategy::Progress NinjaJobCompilerFilterStrategy::progressInLine(const QString& line)
+{
+    // example string: [87/88] Building CXX object projectbuilders/ninjabuilder/CMakeFiles/kdevninja.dir/ninjajob.cpp.o
+    static const QRegularExpression re("^\\[([0-9]+)\\/([0-9]+)\\] (.*)");
+
+    QRegularExpressionMatch match = re.match(line);
+    if (match.hasMatch()) {
+        const int current = match.capturedRef(1).toInt();
+        const int total = match.capturedRef(2).toInt();
+        if (current && total) {
+            // this is output from ninja
+            const QString action = match.captured(3);
+            const int percent = qRound((float)current / total * 100);
+            return {action, percent};
+        }
+    }
+
+    return {};
+}
+
 NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent)
     : OutputExecuteJob(parent)
     , m_isInstalling(false)
@@ -44,11 +75,14 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
     , m_signal(signal)
     , m_plugin(parent)
 {
+    auto bsm = item->project()->buildSystemManager();
+    auto buildDir = bsm->buildDirectory(item);
+
     setToolTitle(i18n("Ninja"));
     setCapabilities(Killable);
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-    setFilteringStrategy( KDevelop::OutputModel::CompilerFilter );
+    setFilteringStrategy(new NinjaJobCompilerFilterStrategy(buildDir.toUrl()));
     setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint | PostProcessOutput );
 
     // hardcode the ninja output format so we can parse it reliably
@@ -168,7 +202,6 @@ void NinjaJob::appendLines(const QStringList& lines)
     bool prev = false;
     for(QStringList::iterator it=ret.end(); it!=ret.begin(); ) {
         --it;
-        parseProgress(*it);
         bool curr = it->startsWith('[');
         if((prev && curr) || it->endsWith("] "))
             it = ret.erase(it);
@@ -181,28 +214,4 @@ void NinjaJob::appendLines(const QStringList& lines)
 KDevelop::ProjectBaseItem* NinjaJob::item() const
 {
     return KDevelop::ICore::self()->projectController()->projectModel()->itemFromIndex(m_idx);
-}
-
-void NinjaJob::parseProgress(const QString& line)
-{
-    // TODO: Probably more clever to move this into the output filtering (which is being performed in a separate thread)
-    // example string: [87/88] Building CXX object projectbuilders/ninjabuilder/CMakeFiles/kdevninja.dir/ninjajob.cpp.o
-    static const QRegularExpression re("^\\[([0-9]+)\\/([0-9]+)\\] (.*)");
-
-    QRegularExpressionMatch match = re.match(line);
-    if (match.hasMatch()) {
-        const int current = match.captured(1).toInt();
-        const int total = match.captured(2).toInt();
-        if (current && total) {
-            // this is output from ninja
-            emitPercent(current, total);
-
-            if (current == total) {
-                emit infoMessage(this, i18n("Build finished"));
-            } else {
-                const QString action = match.captured(3);
-                emit infoMessage(this, action);
-            }
-        }
-    }
 }
