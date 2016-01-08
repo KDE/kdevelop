@@ -23,7 +23,8 @@
 
 #include "makejob.h"
 
-#include <QtCore/QFileInfo>
+#include <QFileInfo>
+#include <QRegularExpression>
 #include <QThread>
 #include <QFileInfo>
 
@@ -37,12 +38,40 @@
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <outputview/outputfilteringstrategies.h>
 
 #include "makebuilder.h"
 #include "makebuilderpreferences.h"
 #include "debug.h"
 
 using namespace KDevelop;
+
+class MakeJobCompilerFilterStrategy : public CompilerFilterStrategy
+{
+public:
+    using CompilerFilterStrategy::CompilerFilterStrategy;
+
+    IFilterStrategy::Progress progressInLine(const QString& line) override;
+};
+
+IFilterStrategy::Progress MakeJobCompilerFilterStrategy::progressInLine(const QString& line)
+{
+    // example string: [ 97%] Built target clang-parser
+    static const QRegularExpression re("^\\[([\\d ][\\d ]\\d)%\\] (.*)");
+
+    QRegularExpressionMatch match = re.match(line);
+    if (match.hasMatch()) {
+        bool ok;
+        const int percent = match.capturedRef(1).toInt(&ok);
+        if (ok) {
+            // this is output from make, likely
+            const QString action = match.captured(2);
+            return {action, percent};
+        }
+    }
+
+    return {};
+}
 
 MakeJob::MakeJob(QObject* parent, KDevelop::ProjectBaseItem* item,
                  CommandType c,  const QStringList& overrideTargets,
@@ -53,9 +82,12 @@ MakeJob::MakeJob(QObject* parent, KDevelop::ProjectBaseItem* item,
     , m_overrideTargets(overrideTargets)
     , m_variables(variables)
 {
+    auto bsm = item->project()->buildSystemManager();
+    auto buildDir = bsm->buildDirectory(item);
+
     Q_ASSERT(item && item->model() && m_idx.isValid() && this->item() == item);
     setCapabilities( Killable );
-    setFilteringStrategy( OutputModel::CompilerFilter );
+    setFilteringStrategy(new MakeJobCompilerFilterStrategy(buildDir.toUrl()));
     setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint );
 
     QString title;
