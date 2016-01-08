@@ -56,6 +56,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     ui.variableTable->setModel( topProxyModel );
     ui.variableTable->horizontalHeader()->setSectionResizeMode( 1, QHeaderView::Stretch );
     ui.addgrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+    ui.clonegrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("edit-clone")));
     ui.removegrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     ui.deleteButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     ui.deleteButton->setShortcut(Qt::Key_Delete);
@@ -66,6 +67,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     connect( ui.batchModeEditButton, &QPushButton::clicked,
              this, &EnvironmentWidget::batchModeEditButtonClicked );
 
+    connect( ui.clonegrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::cloneGroupClicked );
     connect( ui.addgrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::addGroupClicked );
     connect( ui.addgrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::changed );
     connect( ui.removegrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::removeGroupClicked );
@@ -195,6 +197,21 @@ void EnvironmentWidget::addGroupClicked()
     }
     ui.activeCombo->addItem( curText );
     ui.activeCombo->setCurrentItem( curText );
+}
+
+void EnvironmentWidget::cloneGroupClicked()
+{
+    QString newGroup = ui.activeCombo->currentText();
+    if( !groupModel->cloneCurrentGroup( newGroup ) ) {
+        int id = 1;
+        newGroup = i18nc("a copy of the existing environment was created", "%1 (Cloned %2)", newGroup, id);
+        while( !groupModel->cloneCurrentGroup( newGroup.arg( id ) ) ) {
+            ++id;
+        }
+        newGroup = newGroup.arg( id );
+    }
+    ui.activeCombo->addItem( newGroup );
+    ui.activeCombo->setCurrentItem( newGroup );
 }
 
 void EnvironmentWidget::removeGroupClicked()

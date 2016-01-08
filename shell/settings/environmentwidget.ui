@@ -41,6 +41,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="clonegrpBtn">
+       <property name="text">
+        <string>Clone Group</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="removegrpBtn">
        <property name="text">
         <string>Remove Group</string>

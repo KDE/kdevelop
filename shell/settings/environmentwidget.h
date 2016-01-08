@@ -60,6 +60,7 @@ private Q_SLOTS:
     void deleteButtonClicked();
     void batchModeEditButtonClicked();
     void addGroupClicked();
+    void cloneGroupClicked();
     void removeGroupClicked();
     void activeGroupChanged( int );
     void enableDeleteButton();

@@ -184,6 +184,21 @@ void EnvironmentGroupModel::setCurrentGroup( const QString& group )
     endResetModel();
 }
 
+bool EnvironmentGroupModel::cloneCurrentGroup( const QString& newGroup )
+{
+    if( newGroup.isEmpty() || groups().contains( newGroup ) ) {
+        return false;
+    }
+
+    beginResetModel();
+    foreach( const QString &key, m_varsByIndex ) {
+        variables( newGroup ).insert( key, variables( m_currentGroup ).value( key ) );
+    }
+    m_currentGroup = newGroup;
+    endResetModel();
+    return true;
+}
+
 void EnvironmentGroupModel::changeDefaultGroup( const QString& grp )
 {
     if( !grp.isEmpty() )
