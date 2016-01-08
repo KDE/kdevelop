@@ -35,7 +35,8 @@ TemplateConfig::TemplateConfig(QWidget* parent)
     ui = new Ui::TemplateConfig;
     ui->setupUi(this);
 
-    foreach (KDevelop::IPlugin* plugin, KDevelop::ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.ITemplateProvider")) {
+    QList<KDevelop::IPlugin*> plugins = KDevelop::ICore::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.ITemplateProvider"));
+    foreach (KDevelop::IPlugin* plugin, plugins) {
         if (KDevelop::ITemplateProvider* provider = plugin->extension<KDevelop::ITemplateProvider>()) {
             ui->tabWidget->addTab(new TemplatePage(provider), provider->icon(), provider->name());
         }

@@ -183,7 +183,7 @@ void TestTestController::findByProject()
     QCOMPARE(m_testController->testSuites().size(), 2);
     QCOMPARE(m_testController->testSuitesForProject(m_project).size(), 1);
 
-    QCOMPARE(m_testController->testSuitesForProject(m_project).first(), suiteOne);
+    QCOMPARE(m_testController->testSuitesForProject(m_project).at(0), suiteOne);
 
     m_testController->removeTestSuite(suiteOne);
     m_testController->removeTestSuite(suiteTwo);
@@ -204,7 +204,7 @@ void TestTestController::testResults()
     QList<TestResult::TestCaseResult> results;
     results << TestResult::Passed << TestResult::Failed << TestResult::Error << TestResult::Skipped << TestResult::NotRun;
 
-    foreach (const TestResult::TestCaseResult& result, results)
+    foreach (const TestResult::TestCaseResult result, results)
     {
         emitTestResult(suite, result);
         QCOMPARE(spy.size(), 1);

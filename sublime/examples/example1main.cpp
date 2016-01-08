@@ -40,19 +40,19 @@ Example1Main::Example1Main()
 {
     //documents
     m_controller = new Sublime::Controller(this);
-    Sublime::Document *doc1 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile("~/foo.cpp"));
-    Sublime::Document *doc2 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile("~/boo.cpp"));
-    Sublime::Document *doc3 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile("~/moo.cpp"));
+    Sublime::Document *doc1 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/foo.cpp")));
+    Sublime::Document *doc2 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/boo.cpp")));
+    Sublime::Document *doc3 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/moo.cpp")));
 
     //documents for toolviews
-    Sublime::Document *tool1 = new Sublime::ToolDocument("ListView", m_controller,
-        new Sublime::SimpleToolWidgetFactory<QListView>("ListView"));
-    Sublime::Document *tool2 = new Sublime::ToolDocument("TextEdit", m_controller,
-        new Sublime::SimpleToolWidgetFactory<QTextEdit>("TextEdit"));
+    Sublime::Document *tool1 = new Sublime::ToolDocument(QStringLiteral("ListView"), m_controller,
+        new Sublime::SimpleToolWidgetFactory<QListView>(QStringLiteral("ListView")));
+    Sublime::Document *tool2 = new Sublime::ToolDocument(QStringLiteral("TextEdit"), m_controller,
+        new Sublime::SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("TextEdit")));
 
     //areas (aka perspectives)
     qDebug() << "constructing area 1";
-    m_area1 = new Sublime::Area(m_controller, "Area 1");
+    m_area1 = new Sublime::Area(m_controller, QStringLiteral("Area 1"));
     m_controller->addDefaultArea(m_area1);
     m_area1->addView(doc1->createView());
     m_area1->addView(doc2->createView());
@@ -61,7 +61,7 @@ Example1Main::Example1Main()
     m_area1->addToolView(tool2->createView(), Sublime::Bottom);
 
     qDebug() << "constructing area 2";
-    m_area2 = new Sublime::Area(m_controller, "Area 2");
+    m_area2 = new Sublime::Area(m_controller, QStringLiteral("Area 2"));
     m_controller->addDefaultArea(m_area2);
     Sublime::View *view1 = doc1->createView();
     m_area2->addView(view1);
@@ -75,13 +75,13 @@ Example1Main::Example1Main()
     QWidget *w = new QWidget(this);
     setCentralWidget(w);
     QVBoxLayout *l = new QVBoxLayout(w);
-    QMenu *areaMenu = menuBar()->addMenu("Areas");
-    areaMenu->addAction("Area 1", this, SLOT(selectArea1()));
-    areaMenu->addAction("Area 2", this, SLOT(selectArea2()));
-    QPushButton *b1 = new QPushButton("Area 1", this);
+    QMenu *areaMenu = menuBar()->addMenu(QStringLiteral("Areas"));
+    areaMenu->addAction(QStringLiteral("Area 1"), this, SLOT(selectArea1()));
+    areaMenu->addAction(QStringLiteral("Area 2"), this, SLOT(selectArea2()));
+    QPushButton *b1 = new QPushButton(QStringLiteral("Area 1"), this);
     connect(b1, &QPushButton::clicked, this, &Example1Main::selectArea1);
     l->addWidget(b1);
-    QPushButton *b2 = new QPushButton("Area 2", this);
+    QPushButton *b2 = new QPushButton(QStringLiteral("Area 2"), this);
     connect(b2, &QPushButton::clicked, this, &Example1Main::selectArea2);
     l->addWidget(b2);
 }

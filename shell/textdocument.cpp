@@ -107,15 +107,15 @@ struct TextDocumentPrivate {
         if (document->isModified())
             if (dirty) {
                 state = IDocument::DirtyAndModified;
-                statusIcon = QIcon::fromTheme("edit-delete");
+                statusIcon = QIcon::fromTheme(QStringLiteral("edit-delete"));
             } else {
                 state = IDocument::Modified;
-                statusIcon = QIcon::fromTheme("document-save");
+                statusIcon = QIcon::fromTheme(QStringLiteral("document-save"));
             }
         else
             if (dirty) {
                 state = IDocument::Dirty;
-                statusIcon = QIcon::fromTheme("document-revert");
+                statusIcon = QIcon::fromTheme(QStringLiteral("document-revert"));
             } else {
                 state = IDocument::Clean;
             }
@@ -168,7 +168,7 @@ struct TextDocumentPrivate {
             return;
         }
 
-        document->readSessionConfig(docConfigGroup(), {"SkipUrl"});
+        document->readSessionConfig(docConfigGroup(), {QStringLiteral("SkipUrl")});
     }
 
     // Determines whether the current contents of this document in the editor
@@ -356,8 +356,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         cc->setAutomaticInvocationEnabled(core()->languageController()->completionSettings()->automaticCompletionEnabled());
 
     if (KTextEditor::ConfigInterface *config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
-        config->setConfigValue("allow-mark-menu", false);
-        config->setConfigValue("default-mark-type", KTextEditor::MarkInterface::BreakpointActive);
+        config->setConfigValue(QStringLiteral("allow-mark-menu"), false);
+        config->setConfigValue(QStringLiteral("default-mark-type"), KTextEditor::MarkInterface::BreakpointActive);
     }
 
     return view;
@@ -633,7 +633,7 @@ void KDevelop::TextView::setState(const QString & state)
 
 QString KDevelop::TextDocument::documentType() const
 {
-    return "Text";
+    return QStringLiteral("Text");
 }
 
 QIcon KDevelop::TextDocument::defaultIcon() const

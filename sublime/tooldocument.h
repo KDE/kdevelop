@@ -64,6 +64,7 @@ private:
 @short Document to represent and manage widgets as toolviews
 */
 class KDEVPLATFORMSUBLIME_EXPORT ToolDocument: public Document {
+Q_OBJECT
 public:
     /**Initializes tool document with given @p factory. Document takes
     ownership over the factory and deletes it together with itself*/

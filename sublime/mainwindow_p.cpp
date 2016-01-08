@@ -106,51 +106,51 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     m_concentrationModeAction->setChecked(false);
     ac->setDefaultShortcut(m_concentrationModeAction, Qt::META | Qt::Key_C);
     connect(m_concentrationModeAction, &QAction::toggled, this, &MainWindowPrivate::restoreConcentrationMode);
-    ac->addAction("toggle_concentration_mode", m_concentrationModeAction);
+    ac->addAction(QStringLiteral("toggle_concentration_mode"), m_concentrationModeAction);
 
     QAction* action = new QAction(i18n("Show Left Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Left);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showLeftDock);
 
-    ac->addAction("show_left_dock", action);
+    ac->addAction(QStringLiteral("show_left_dock"), action);
 
     action = new QAction(i18n("Show Right Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Right);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showRightDock);
-    ac->addAction("show_right_dock", action);
+    ac->addAction(QStringLiteral("show_right_dock"), action);
 
     action = new QAction(i18n("Show Bottom Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Down);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showBottomDock);
-    ac->addAction("show_bottom_dock", action);
+    ac->addAction(QStringLiteral("show_bottom_dock"), action);
 
     action = new QAction(i18nc("@action", "Focus Editor"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_E);
     connect(action, &QAction::triggered, this, &MainWindowPrivate::focusEditor);
-    ac->addAction("focus_editor", action);
+    ac->addAction(QStringLiteral("focus_editor"), action);
 
     action = new QAction(i18n("Hide/Restore Docks"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Up);
     connect(action, &QAction::triggered, this, &MainWindowPrivate::toggleDocksShown);
-    ac->addAction("hide_all_docks", action);
+    ac->addAction(QStringLiteral("hide_all_docks"), action);
 
     action = new QAction(i18n("Next Tool View"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_N);
-    action->setIcon(QIcon::fromTheme("go-next"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     connect(action, &QAction::triggered, this, &MainWindowPrivate::selectNextDock);
-    ac->addAction("select_next_dock", action);
+    ac->addAction(QStringLiteral("select_next_dock"), action);
 
     action = new QAction(i18n("Previous Tool View"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_P);
-    action->setIcon(QIcon::fromTheme("go-previous"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
     connect(action, &QAction::triggered, this, &MainWindowPrivate::selectPreviousDock);
-    ac->addAction("select_previous_dock", action);
+    ac->addAction(QStringLiteral("select_previous_dock"), action);
 
     action = new KActionMenu(i18n("Tool Views"), this);
-    ac->addAction("docks_submenu", action);
+    ac->addAction(QStringLiteral("docks_submenu"), action);
 
     idealController = new IdealController(m_mainWindow);
 
@@ -227,7 +227,7 @@ void MainWindowPrivate::restoreConcentrationMode()
 
     if (concentrationModeOn) {
         m_concentrateToolBar = new QToolBar(m_mainWindow);
-        m_concentrateToolBar->setObjectName("concentrateToolBar");
+        m_concentrateToolBar->setObjectName(QStringLiteral("concentrateToolBar"));
         m_concentrateToolBar->addAction(m_concentrationModeAction);
         QWidgetAction *action = new QWidgetAction(this);
 

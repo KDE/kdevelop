@@ -252,11 +252,11 @@ public:
 PluginController::PluginController(Core *core)
     : IPluginController(), d(new PluginControllerPrivate)
 {
-    setObjectName("PluginController");
+    setObjectName(QStringLiteral("PluginController"));
     d->core = core;
 
     QSet<QString> foundPlugins;
-    auto newPlugins = KPluginLoader::findPlugins("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION), [&](const KPluginMetaData& meta) {
+    auto newPlugins = KPluginLoader::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)), [&](const KPluginMetaData& meta) {
         if (meta.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"))) {
             foundPlugins.insert(meta.pluginId());
             return true;
@@ -497,7 +497,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if ( !hasUnresolvedDependencies( info, missingInterfaces ) ) {
         qWarning() << "Can't load plugin" << pluginId
                    << "some of its required dependencies could not be fulfilled:"
-                   << missingInterfaces.join(",");
+                   << missingInterfaces.join(QStringLiteral(","));
         return nullptr;
     }
 

@@ -35,22 +35,23 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, QWidget* parent )
     QStringList filters;
     QStringList allEntry;
     allEntry << "*."+ShellExtension::getInstance()->projectFileExtension();
-    filters << QStringLiteral( "%1|%2 (%1)").arg("*."+ShellExtension::getInstance()->projectFileExtension()).arg(ShellExtension::getInstance()->projectFileDescription());
-    foreach(const KPluginMetaData& info, ICore::self()->pluginController()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
+    filters << QStringLiteral( "%1|%2 (%1)").arg("*."+ShellExtension::getInstance()->projectFileExtension(), ShellExtension::getInstance()->projectFileDescription());
+    QVector<KPluginMetaData> plugins = ICore::self()->pluginController()->queryExtensionPlugins( QStringLiteral( "org.kdevelop.IProjectFileManager" ) );
+    foreach(const KPluginMetaData& info, plugins)
     {
-        QStringList filter = KPluginMetaData::readStringList(info.rawData(), "X-KDevelop-ProjectFilesFilter");
-	    QString desc = info.value("X-KDevelop-ProjectFilesFilterDescription");
+        QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
+	    QString desc = info.value(QStringLiteral("X-KDevelop-ProjectFilesFilterDescription"));
         QString filterline;
         if(!filter.isEmpty() && !desc.isEmpty()) {
             m_projectFilters.insert(info.name(), filter);
             allEntry += filter;
-            filters << QStringLiteral("%1|%2 (%1)").arg(filter.join(" ")).arg(desc);
+            filters << QStringLiteral("%1|%2 (%1)").arg(filter.join(QStringLiteral(" ")), desc);
         }
     }
 
-    filters.prepend( i18n( "%1|All Project Files (%1)", allEntry.join(" ") ) );
+    filters.prepend( i18n( "%1|All Project Files (%1)", allEntry.join( QStringLiteral(" ") ) ) );
 
-    fileWidget->setFilter( filters.join("\n") );
+    fileWidget->setFilter( filters.join(QStringLiteral("\n")) );
 
     fileWidget->setMode( KFile::Modes( KFile::File | KFile::Directory | KFile::ExistingOnly ) );
 

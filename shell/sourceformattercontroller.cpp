@@ -100,25 +100,25 @@ QString SourceFormatterController::styleSampleKey()
 SourceFormatterController::SourceFormatterController(QObject *parent)
         : ISourceFormatterController(parent), m_enabled(true)
 {
-    setObjectName("SourceFormatterController");
-    setComponentName("kdevsourceformatter", "kdevsourceformatter");
-    setXMLFile("kdevsourceformatter.rc");
+    setObjectName(QStringLiteral("SourceFormatterController"));
+    setComponentName(QStringLiteral("kdevsourceformatter"), QStringLiteral("kdevsourceformatter"));
+    setXMLFile(QStringLiteral("kdevsourceformatter.rc"));
 
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
-    m_formatTextAction = actionCollection()->addAction("edit_reformat_source");
+    m_formatTextAction = actionCollection()->addAction(QStringLiteral("edit_reformat_source"));
     m_formatTextAction->setText(i18n("&Reformat Source"));
     m_formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
     m_formatTextAction->setWhatsThis(i18n("Source reformatting functionality using <b>astyle</b> library."));
     connect(m_formatTextAction, &QAction::triggered, this, &SourceFormatterController::beautifySource);
 
-    m_formatLine = actionCollection()->addAction("edit_reformat_line");
+    m_formatLine = actionCollection()->addAction(QStringLiteral("edit_reformat_line"));
     m_formatLine->setText(i18n("Reformat Line"));
     m_formatLine->setToolTip(i18n("Reformat current line using AStyle"));
     m_formatLine->setWhatsThis(i18n("Source reformatting of line under cursor using <b>astyle</b> library."));
     connect(m_formatLine, &QAction::triggered, this, &SourceFormatterController::beautifyLine);
 
-    m_formatFilesAction = actionCollection()->addAction("tools_astyle");
+    m_formatFilesAction = actionCollection()->addAction(QStringLiteral("tools_astyle"));
     m_formatFilesAction->setText(i18n("Format Files"));
     m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
     m_formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
@@ -179,7 +179,8 @@ ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const
     if (knownFormatters.contains(mime.name()))
         return knownFormatters[mime.name()];
 
-    foreach( IPlugin* p, Core::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) ) {
+    QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension( QStringLiteral("org.kdevelop.ISourceFormatter") );
+    foreach( IPlugin* p, plugins) {
         ISourceFormatter *iformatter = p->extension<ISourceFormatter>();
         QSharedPointer<SourceFormatter> formatter(createFormatterForPlugin(iformatter));
         if( formatter->supportedMimeTypes().contains(mime.name()) ) {
@@ -233,14 +234,14 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const QMimeTyp
         return findFirstFormatterForMimeType( mime );
     }
 
-    QStringList formatterinfo = formatter.split( "||", QString::SkipEmptyParts );
+    QStringList formatterinfo = formatter.split( QStringLiteral("||"), QString::SkipEmptyParts );
 
     if( formatterinfo.size() != 2 ) {
         qCDebug(SHELL) << "Broken formatting entry for mime:" << mime.name() << "current value:" << formatter;
         return 0;
     }
 
-    return Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( "org.kdevelop.ISourceFormatter", formatterinfo.at(0) );
+    return Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( QStringLiteral("org.kdevelop.ISourceFormatter"), formatterinfo.at(0) );
 }
 
 bool SourceFormatterController::isMimeTypeSupported(const QMimeType& mime)
@@ -253,12 +254,12 @@ bool SourceFormatterController::isMimeTypeSupported(const QMimeType& mime)
 
 QString SourceFormatterController::indentationMode(const QMimeType& mime)
 {
-    if (mime.inherits("text/x-c++src") || mime.inherits("text/x-chdr") ||
-        mime.inherits("text/x-c++hdr") || mime.inherits("text/x-csrc") ||
-        mime.inherits("text/x-java") || mime.inherits("text/x-csharp")) {
-        return "cstyle";
+    if (mime.inherits(QStringLiteral("text/x-c++src")) || mime.inherits(QStringLiteral("text/x-chdr")) ||
+        mime.inherits(QStringLiteral("text/x-c++hdr")) || mime.inherits(QStringLiteral("text/x-csrc")) ||
+        mime.inherits(QStringLiteral("text/x-java")) || mime.inherits(QStringLiteral("text/x-csharp"))) {
+        return QStringLiteral("cstyle");
     }
-    return "none";
+    return QStringLiteral("none");
 }
 
 QString SourceFormatterController::addModelineForCurrentLang(QString input, const QUrl& url, const QMimeType& mime)
@@ -287,7 +288,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
     Q_ASSERT(fmt);
 
 
-    QString modeline("// kate: ");
+    QString modeline(QStringLiteral("// kate: "));
     QString indentLength = QString::number(indentation.indentWidth);
     QString tabLength = QString::number(indentation.indentationTabWidth);
     // add indentation style
@@ -298,7 +299,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 
     if(indentation.indentationTabWidth != 0) // We know something about tab-usage
     {
-        modeline.append(QStringLiteral("replace-tabs %1; ").arg((indentation.indentationTabWidth == -1) ? "on" : "off"));
+        modeline.append(QStringLiteral("replace-tabs %1; ").arg(QLatin1String((indentation.indentationTabWidth == -1) ? "on" : "off")));
         if(indentation.indentationTabWidth > 0)
             modeline.append(QStringLiteral("tab-width %1; ").arg(indentation.indentationTabWidth));
     }
@@ -616,7 +617,7 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
 
 SourceFormatterStyle SourceFormatterController::styleForMimeType(const QMimeType& mime)
 {
-    QStringList formatter = sessionConfig().readEntry( mime.name(), QString() ).split( "||", QString::SkipEmptyParts );
+    QStringList formatter = sessionConfig().readEntry( mime.name(), QString() ).split( QStringLiteral("||"), QString::SkipEmptyParts );
     if( formatter.count() == 2 )
     {
         SourceFormatterStyle s( formatter.at( 1 ) );

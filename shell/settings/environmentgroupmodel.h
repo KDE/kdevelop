@@ -40,6 +40,11 @@ public:
         ValueRole
     };
 
+    enum Column {
+        VariableColumn,
+        ValueColumn
+    };
+
     EnvironmentGroupModel();
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     int columnCount( const QModelIndex &parent = QModelIndex()  ) const override;
@@ -48,6 +53,7 @@ public:
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     bool setData( const QModelIndex& idx, const QVariant&, int role = Qt::EditRole) override;
     void setCurrentGroup( const QString& group );
+    bool cloneCurrentGroup( const QString& newGroup );
     void loadFromConfig( KConfig* );
     void saveToConfig( KConfig* );
     QModelIndex addVariable( const QString& var, const QString& value );

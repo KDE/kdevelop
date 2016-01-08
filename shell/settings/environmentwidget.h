@@ -58,8 +58,9 @@ Q_SIGNALS:
 private Q_SLOTS:
     void handleVariableInserted(int column, const QVariant& value);
     void deleteButtonClicked();
-    void newMultipleButtonClicked();
+    void batchModeEditButtonClicked();
     void addGroupClicked();
+    void cloneGroupClicked();
     void removeGroupClicked();
     void activeGroupChanged( int );
     void enableDeleteButton();

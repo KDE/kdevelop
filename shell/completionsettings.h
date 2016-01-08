@@ -29,6 +29,7 @@ namespace KDevelop
 
 class CompletionSettings : public KDevelop::ICompletionSettings
 {
+    Q_OBJECT
 public:
     virtual CompletionLevel completionLevel() const override;
 

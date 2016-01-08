@@ -58,7 +58,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
       mDelayTimer( 0 ), mBusyTimer( 0 ), mCleanTimer( 0 )
 {
     m_bShowButton = button;
-    int w = fontMetrics().width( " 999.9 kB/s 00:00:01 " ) + 8;
+    int w = fontMetrics().width( QStringLiteral(" 999.9 kB/s 00:00:01 ") ) + 8;
     box = new QHBoxLayout( this );
     box->setMargin(0);
     box->setSpacing(0);
@@ -67,7 +67,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     m_pButton->setAttribute(Qt::WA_MacMiniSize);
     m_pButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
                                            QSizePolicy::Minimum ) );
-    QIcon smallIcon = QIcon::fromTheme( "go-up" );
+    QIcon smallIcon = QIcon::fromTheme( QStringLiteral("go-up") );
     m_pButton->setIcon( smallIcon );
     box->addWidget( m_pButton  );
     stack = new QStackedWidget( this );
@@ -287,11 +287,11 @@ void StatusbarProgressWidget::slotProgressDialogVisible( bool b )
 {
     // Update the hide/show button when the detailed one is shown/hidden
     if ( b ) {
-        m_pButton->setIcon( QIcon::fromTheme( "go-down" ) );
+        m_pButton->setIcon( QIcon::fromTheme( QStringLiteral("go-down") ) );
         m_pButton->setToolTip( i18n("Hide detailed progress window") );
         setMode();
     } else {
-        m_pButton->setIcon( QIcon::fromTheme( "go-up" ) );
+        m_pButton->setIcon( QIcon::fromTheme( QStringLiteral("go-up") ) );
         m_pButton->setToolTip( i18n("Show detailed progress window") );
     }
 }

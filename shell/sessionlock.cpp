@@ -151,9 +151,9 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
         static const int timeout_ms = 1000;
 
         QDBusMessage message = QDBusMessage::createMethodCall( dBusServiceNameForSession(sessionId),
-                                                                "/kdevelop/MainWindow",
-                                                                "org.kdevelop.MainWindow",
-                                                                "ensureVisible" );
+                                                                QStringLiteral("/kdevelop/MainWindow"),
+                                                                QStringLiteral("org.kdevelop.MainWindow"),
+                                                                QStringLiteral("ensureVisible") );
         QDBusMessage reply = QDBusConnection::sessionBus().call( message,
                                                                     QDBus::Block,
                                                                     timeout_ms );

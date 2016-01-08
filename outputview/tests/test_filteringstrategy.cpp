@@ -245,6 +245,14 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
     QTest::addColumn<int>("column");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("itemtype");
 
+    // BEGIN: C++
+    QTest::newRow("cassert")
+        << "a.out: /foo/bar/test.cpp:5: int main(): Assertion `false' failed."
+        << "/foo/bar/test.cpp"
+        << 4 << 0 << FilteredItem::ErrorItem;
+    // END: C++
+
+    // BEGIN: Qt
     // TODO: qt-connect-* and friends shouldn't be error items but warnings items instead
     // this needs refactoring in outputfilteringstrategies, though...
     QTest::newRow("qt-connect-nosuch-slot")
@@ -279,6 +287,19 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
         << "   Loc: [Unknown file(0)]"
         << ""
         << -1 << -1 << FilteredItem::InvalidItem;
+    QTest::newRow("qml-import-unix")
+        << "file:///path/to/foo.qml:7:1: Bar is not a type"
+        << "/path/to/foo.qml"
+        << 6 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qml-import-unix1")
+        << "file:///path/to/foo.qml:7:1: Bar is ambiguous. Found in A and in B"
+        << "/path/to/foo.qml"
+        << 6 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qml-import-unix2")
+        << "file:///path/to/foo.qml:7:1: Bar is instantiated recursively"
+        << "/path/to/foo.qml"
+        << 6 << 0 << FilteredItem::ErrorItem;
+    // END: Qt
 }
 
 void TestFilteringStrategy::testNativeAppErrorFilterStrategy()

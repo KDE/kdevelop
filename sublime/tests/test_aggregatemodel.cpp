@@ -30,8 +30,8 @@ using namespace Sublime;
 void TestAggregateModel::modelAggregationInASingleView()
 {
     AggregateModel *model = new AggregateModel(this);
-    model->addModel("First Model", newModel());
-    model->addModel("Second Model", newModel());
+    model->addModel(QStringLiteral("First Model"), newModel());
+    model->addModel(QStringLiteral("Second Model"), newModel());
 
     //this will assert in case of model problems and the test will fail
     //for detailed explanation why the test failed refer to test/modeltest.cpp

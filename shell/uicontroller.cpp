@@ -75,40 +75,40 @@ public:
 
         QMap<QString, Sublime::Position> desired;
 
-        desired["org.kdevelop.ClassBrowserView"] = Sublime::Left;
-        desired["org.kdevelop.DocumentsView"] = Sublime::Left;
-        desired["org.kdevelop.ProjectsView"] = Sublime::Left;
-        desired["org.kdevelop.FileManagerView"] = Sublime::Left;
-        desired["org.kdevelop.ProblemReporterView"] = Sublime::Bottom;
-        desired["org.kdevelop.OutputView"] = Sublime::Bottom;
-        desired["org.kdevelop.ContextBrowser"] = Sublime::Bottom;
-        desired["org.kdevelop.KonsoleView"] = Sublime::Bottom;
-        desired["org.kdevelop.SnippetView"] = Sublime::Right;
-        desired["org.kdevelop.ExternalScriptView"] = Sublime::Right;
+        desired[QStringLiteral("org.kdevelop.ClassBrowserView")] = Sublime::Left;
+        desired[QStringLiteral("org.kdevelop.DocumentsView")] = Sublime::Left;
+        desired[QStringLiteral("org.kdevelop.ProjectsView")] = Sublime::Left;
+        desired[QStringLiteral("org.kdevelop.FileManagerView")] = Sublime::Left;
+        desired[QStringLiteral("org.kdevelop.ProblemReporterView")] = Sublime::Bottom;
+        desired[QStringLiteral("org.kdevelop.OutputView")] = Sublime::Bottom;
+        desired[QStringLiteral("org.kdevelop.ContextBrowser")] = Sublime::Bottom;
+        desired[QStringLiteral("org.kdevelop.KonsoleView")] = Sublime::Bottom;
+        desired[QStringLiteral("org.kdevelop.SnippetView")] = Sublime::Right;
+        desired[QStringLiteral("org.kdevelop.ExternalScriptView")] = Sublime::Right;
         Sublime::Area* a =
-            new Sublime::Area(m_controller, "code", i18n("Code"));
+            new Sublime::Area(m_controller, QStringLiteral("code"), i18n("Code"));
         a->setDesiredToolViews(desired);
-        a->setIconName("document-edit");
+        a->setIconName(QStringLiteral("document-edit"));
         m_controller->addDefaultArea(a);
 
         desired.clear();
-        desired["org.kdevelop.debugger.VariablesView"] = Sublime::Left;
-        desired["org.kdevelop.debugger.BreakpointsView"] = Sublime::Bottom;
-        desired["org.kdevelop.debugger.StackView"] = Sublime::Bottom;
-        desired["org.kdevelop.debugger.ConsoleView"] = Sublime::Bottom;
-        desired["org.kdevelop.KonsoleView"] = Sublime::Bottom;
-        a = new Sublime::Area(m_controller, "debug", i18n("Debug"));
+        desired[QStringLiteral("org.kdevelop.debugger.VariablesView")] = Sublime::Left;
+        desired[QStringLiteral("org.kdevelop.debugger.BreakpointsView")] = Sublime::Bottom;
+        desired[QStringLiteral("org.kdevelop.debugger.StackView")] = Sublime::Bottom;
+        desired[QStringLiteral("org.kdevelop.debugger.ConsoleView")] = Sublime::Bottom;
+        desired[QStringLiteral("org.kdevelop.KonsoleView")] = Sublime::Bottom;
+        a = new Sublime::Area(m_controller, QStringLiteral("debug"), i18n("Debug"));
         a->setDesiredToolViews(desired);
-        a->setIconName("tools-report-bug");
+        a->setIconName(QStringLiteral("tools-report-bug"));
         m_controller->addDefaultArea(a);
 
         desired.clear();
-        desired["org.kdevelop.ProjectsView"] = Sublime::Left;
-        desired["org.kdevelop.PatchReview"] = Sublime::Bottom;
+        desired[QStringLiteral("org.kdevelop.ProjectsView")] = Sublime::Left;
+        desired[QStringLiteral("org.kdevelop.PatchReview")] = Sublime::Bottom;
 
-        a = new Sublime::Area(m_controller, "review", i18n("Review"));
+        a = new Sublime::Area(m_controller, QStringLiteral("review"), i18n("Review"));
         a->setDesiredToolViews(desired);
-        a->setIconName("applications-engineering");
+        a->setIconName(QStringLiteral("applications-engineering"));
         m_controller->addDefaultArea(a);
 
         if(!(Core::self()->setupFlags() & Core::NoUi))
@@ -140,7 +140,7 @@ public:
     Core *core;
     QPointer<MainWindow> defaultMainWindow;
 
-    QMap<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
+    QHash<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
 
     QPointer<Sublime::MainWindow> activeSublimeWindow;
     bool areasRestored;
@@ -217,7 +217,7 @@ private:
 UiController::UiController(Core *core)
     :Sublime::Controller(0), IUiController(), d(new UiControllerPrivate(this))
 {
-    setObjectName("UiController");
+    setObjectName(QStringLiteral("UiController"));
     d->core = core;
 
     if (!defaultMainWindow() || (Core::self()->setupFlags() & Core::NoUi))
@@ -445,7 +445,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
 
     list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     list->setSortingEnabled(true);
-    for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.constBegin();
+    for (QHash<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.constBegin();
         it != d->factoryDocuments.constEnd(); ++it)
     {
         ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), list);
@@ -521,7 +521,7 @@ void UiController::showSettingsDialog()
 
     cfgDlg.addConfigPage(languageConfigPage, configPages[5]);
 
-    for (IPlugin* plugin : ICore::self()->pluginController()->loadedPlugins()) {
+    foreach (IPlugin* plugin, ICore::self()->pluginController()->loadedPlugins()) {
         addPluginPages(plugin);
     }
     // TODO: only load settings if a UI related page was changed?
@@ -602,7 +602,7 @@ void UiController::loadAllAreas(KSharedConfigPtr config)
     /* Offer all toolviews to the default areas.  */
     foreach (Sublime::Area *area, defaultAreas())
     {
-        QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
+        QHash<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
         for (i = d->factoryDocuments.constBegin(),
                  e = d->factoryDocuments.constEnd(); i != e; ++i)
         {
@@ -644,7 +644,7 @@ void UiController::loadAllAreas(KSharedConfigPtr config)
 
             // At this point we know which toolviews the area wants.
             // Tender all tool views we have.
-            QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
+            QHash<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
             for (i = d->factoryDocuments.constBegin(),
                      e = d->factoryDocuments.constEnd(); i != e; ++i)
             {
@@ -719,7 +719,7 @@ void UiController::showErrorMessage(const QString& message, int timeout)
     QMetaObject::invokeMethod(mw, "showErrorMessage", Q_ARG(QString, message), Q_ARG(int, timeout));
 }
 
-const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const
+const QHash< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const
 {
     return d->factoryDocuments;
 }

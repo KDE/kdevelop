@@ -32,7 +32,7 @@ using namespace Sublime;
 void TestController::documentDeletion()
 {
     Controller controller;
-    Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
+    Document *doc = new ToolDocument(QStringLiteral("tool"), &controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool")));
     QCOMPARE(controller.documents().count(), 1);
     delete doc;
     QCOMPARE(controller.documents().count(), 0);
@@ -41,19 +41,19 @@ void TestController::documentDeletion()
 void TestController::areaDeletion()
 {
     Controller* controller = new Controller;
-    Document *doc = new ToolDocument("tool", controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
+    Document *doc = new ToolDocument(QStringLiteral("tool"), controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool")));
     //create a view which does not belong to an area
     View* view1 = doc->createView();
     Q_UNUSED(view1);
     //create an area and two views in it
-    Area *area = new Area(controller, "MyArea");
+    Area *area = new Area(controller, QStringLiteral("MyArea"));
     controller->addDefaultArea(area);
     QCOMPARE(controller->defaultAreas().count(), 1);
     View* view2 = doc->createView();
-    view2->setObjectName("VIEW2");
+    view2->setObjectName(QStringLiteral("VIEW2"));
     area->addView(view2);
     View* view3 = doc->createView();
-    view3->setObjectName("VIEW3");
+    view3->setObjectName(QStringLiteral("VIEW3"));
     area->addView(view3);
     QCOMPARE(doc->views().count(), 3);
     QCOMPARE(area->views().count(), 2);
@@ -75,13 +75,13 @@ void TestController::areaDeletion()
 void TestController::namedAreas()
 {
     Controller controller;
-    Area *area1 = new Area(&controller, "1");
+    Area *area1 = new Area(&controller, QStringLiteral("1"));
     controller.addDefaultArea(area1);
-    Area *area2 = new Area(&controller, "2");
+    Area *area2 = new Area(&controller, QStringLiteral("2"));
     controller.addDefaultArea(area2);
 
-    QCOMPARE(controller.defaultArea("1"), area1);
-    QCOMPARE(controller.defaultArea("2"), area2);
+    QCOMPARE(controller.defaultArea(QStringLiteral("1")), area1);
+    QCOMPARE(controller.defaultArea(QStringLiteral("2")), area2);
 }
 
 QTEST_MAIN(TestController)

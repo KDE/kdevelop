@@ -92,8 +92,8 @@ void EditStyleDialog::init()
     KTextEditor::ConfigInterface* iface =
         qobject_cast<KTextEditor::ConfigInterface*>(m_view);
     if (iface) {
-        iface->setConfigValue("dynamic-word-wrap", false);
-        iface->setConfigValue("icon-bar", false);
+        iface->setConfigValue(QStringLiteral("dynamic-word-wrap"), false);
+        iface->setConfigValue(QStringLiteral("icon-bar"), false);
     }
 
     if (m_sourceFormatter) {

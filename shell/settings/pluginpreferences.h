@@ -39,7 +39,7 @@ public:
 
     QString name() const override { return i18n("Plugins"); };
     QString fullName() const override { return i18n("Configure Plugins"); };
-    QIcon icon() const override { return QIcon::fromTheme("preferences-plugin"); }
+    QIcon icon() const override { return QIcon::fromTheme(QStringLiteral("preferences-plugin")); }
 
 public Q_SLOTS:
     void apply() override;

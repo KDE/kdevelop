@@ -47,7 +47,7 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     connect(view, &QListView::entered, this, &SessionChooserDialog::itemEntered);
 
     m_deleteButton = new QPushButton(view->viewport());
-    m_deleteButton->setIcon(QIcon::fromTheme("edit-delete"));
+    m_deleteButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
     m_deleteButton->setToolTip(i18nc("@info", "Delete session"));
     m_deleteButton->hide();
     connect(m_deleteButton, &QPushButton::clicked, this, &SessionChooserDialog::deleteButtonPressed);
@@ -75,7 +75,7 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     connect(m_buttonBox, &QDialogButtonBox::rejected, this, &SessionChooserDialog::reject);
     mainLayout->addWidget(m_buttonBox);
     okButton->setText(i18n("Run"));
-    okButton->setIcon(QIcon::fromTheme("media-playback-start"));
+    okButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
 }
 
 void SessionChooserDialog::filterTextChanged()
@@ -112,7 +112,7 @@ void SessionChooserDialog::updateState() {
         }
 
         m_model->setData(m_model->index(row, 1),
-                         !info.isRunning ? QIcon::fromTheme("") : QIcon::fromTheme("media-playback-start"),
+                         !info.isRunning ? QIcon::fromTheme(QLatin1String("")) : QIcon::fromTheme(QStringLiteral("media-playback-start")),
                          Qt::DecorationRole);
         m_model->setData(m_model->index(row, 1), tooltip, Qt::ToolTipRole);
         m_model->setData(m_model->index(row, 2), state, Qt::DisplayRole);

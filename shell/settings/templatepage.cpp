@@ -67,7 +67,7 @@ TemplatePage::~TemplatePage()
 
 void TemplatePage::loadFromFile()
 {
-    QString filename = QFileDialog::getOpenFileName(this, QString(), QString(), m_provider->supportedMimeTypes().join(" "));
+    QString filename = QFileDialog::getOpenFileName(this, QString(), QString(), m_provider->supportedMimeTypes().join(QStringLiteral(" ")));
     if (!filename.isEmpty())
     {
         m_provider->loadTemplate(filename);

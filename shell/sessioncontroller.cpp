@@ -80,7 +80,7 @@ static QStringList standardArguments()
     for(int a = 0; a < argc; ++a)
     {
         QString arg = QString::fromLocal8Bit(argv[a]);
-        if(arg.startsWith("-graphicssystem") || arg.startsWith("-style"))
+        if(arg.startsWith(QLatin1String("-graphicssystem")) || arg.startsWith(QLatin1String("-style")))
         {
             ret << '-' + arg;
             if(a+1 < argc)
@@ -128,10 +128,10 @@ public:
 
     void newSession()
     {
-        qsrand(QDateTime::currentDateTime().toTime_t());
+        qsrand(QDateTime::currentDateTimeUtc().toTime_t());
         Session* session = new Session( QUuid::createUuid().toString() );
 
-        KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << session->id().toString() << standardArguments());
+        KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << QStringLiteral("-s") << session->id().toString() << standardArguments());
         delete session;
 #if 0
         //Terminate this instance of kdevelop if the user agrees
@@ -191,7 +191,7 @@ public:
     bool loadSessionExternally( Session* s )
     {
         Q_ASSERT( s );
-        KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << s->id().toString() << standardArguments());
+        KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << QStringLiteral("-s") << s->id().toString() << standardArguments());
         return true;
     }
 
@@ -252,8 +252,8 @@ public:
 
         sessionActions[s] = a;
         q->actionCollection()->addAction( "session_"+s->id().toString(), a );
-        q->unplugActionList( "available_sessions" );
-        q->plugActionList( "available_sessions", grp->actions() );
+        q->unplugActionList( QStringLiteral("available_sessions") );
+        q->plugActionList( QStringLiteral("available_sessions"), grp->actions() );
 
         connect( s, &Session::sessionUpdated, this, &SessionControllerPrivate::sessionUpdated );
         sessionUpdated( s );
@@ -290,34 +290,34 @@ private slots:
 SessionController::SessionController( QObject *parent )
         : QObject( parent ), d(new SessionControllerPrivate(this))
 {
-    setObjectName("SessionController");
+    setObjectName(QStringLiteral("SessionController"));
     setComponentName(QStringLiteral("kdevsession"), QStringLiteral("KDevSession"));
 
-    setXMLFile("kdevsessionui.rc");
+    setXMLFile(QStringLiteral("kdevsessionui.rc"));
 
-    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/SessionController",
+    QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/SessionController"),
         this, QDBusConnection::ExportScriptableSlots );
 
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
-    QAction* action = actionCollection()->addAction( "new_session", this, SLOT(newSession()) );
+    QAction* action = actionCollection()->addAction( QStringLiteral("new_session"), this, SLOT(newSession()) );
     action->setText( i18nc("@action:inmenu", "Start New Session") );
     action->setToolTip( i18nc("@info:tooltip", "Start a new KDevelop instance with an empty session") );
-    action->setIcon(QIcon::fromTheme("window-new"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
 
-    action = actionCollection()->addAction( "rename_session", this, SLOT(renameSession()) );
+    action = actionCollection()->addAction( QStringLiteral("rename_session"), this, SLOT(renameSession()) );
     action->setText( i18n("Rename Current Session...") );
-    action->setIcon(QIcon::fromTheme("edit-rename"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
 
-    action = actionCollection()->addAction( "delete_session", this, SLOT(deleteCurrentSession()) );
+    action = actionCollection()->addAction( QStringLiteral("delete_session"), this, SLOT(deleteCurrentSession()) );
     action->setText( i18n("Delete Current Session...") );
-    action->setIcon(QIcon::fromTheme("edit-delete"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
 
-    action = actionCollection()->addAction( "quit", this, SIGNAL(quitSession()) );
+    action = actionCollection()->addAction( QStringLiteral("quit"), this, SIGNAL(quitSession()) );
     action->setText( i18n("Quit") );
     action->setMenuRole( QAction::NoRole ); // OSX: prevent QT from hiding this due to conflict with 'Quit KDevelop...'
     actionCollection()->setDefaultShortcut( action, Qt::CTRL | Qt::Key_Q );
-    action->setIcon(QIcon::fromTheme("application-exit"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("application-exit")));
 
     #if 0
     action = actionCollection()->addAction( "configure_sessions", this, SLOT(configureSessions()) );
@@ -427,7 +427,7 @@ Session* SessionController::createSession( const QString& name )
     {
         s = new Session( QUuid(name).toString() );
     }else{
-        qsrand(QDateTime::currentDateTime().toTime_t());
+        qsrand(QDateTime::currentDateTimeUtc().toTime_t());
         s = new Session( QUuid::createUuid().toString() );
         s->setName( name );
     }
@@ -442,11 +442,11 @@ void SessionController::deleteSession( const ISessionLock::Ptr& lock )
     QHash<Session*,QAction*>::iterator it = d->sessionActions.find(s);
     Q_ASSERT( it != d->sessionActions.end() );
 
-    unplugActionList( "available_sessions" );
+    unplugActionList( QStringLiteral("available_sessions") );
     actionCollection()->removeAction(*it);
     if (d->grp) { // happens in unit tests
         d->grp->removeAction(*it);
-        plugActionList( "available_sessions", d->grp->actions() );
+        plugActionList( QStringLiteral("available_sessions"), d->grp->actions() );
     }
 
     if (s == d->activeSession) {
@@ -506,7 +506,7 @@ Session* SessionController::session( const QString& nameOrId ) const
 QString SessionController::cloneSession( const QString& nameOrid )
 {
     Session* origSession = session( nameOrid );
-    qsrand(QDateTime::currentDateTime().toTime_t());
+    qsrand(QDateTime::currentDateTimeUtc().toTime_t());
     QUuid id = QUuid::createUuid();
     auto copyJob = KIO::copy(QUrl::fromLocalFile(sessionDirectory(origSession->id().toString())),
                              QUrl::fromLocalFile(sessionDirectory( id.toString())));
@@ -521,13 +521,13 @@ QString SessionController::cloneSession( const QString& nameOrid )
 
 void SessionController::plugActions()
 {
-    unplugActionList( "available_sessions" );
-    plugActionList( "available_sessions", d->grp->actions() );
+    unplugActionList( QStringLiteral("available_sessions") );
+    plugActionList( QStringLiteral("available_sessions"), d->grp->actions() );
 }
 
 
-QString SessionController::cfgSessionGroup() { return "Sessions"; }
-QString SessionController::cfgActiveSessionEntry() { return "Active Session ID"; }
+QString SessionController::cfgSessionGroup() { return QStringLiteral("Sessions"); }
+QString SessionController::cfgActiveSessionEntry() { return QStringLiteral("Active Session ID"); }
 
 QList< SessionInfo > SessionController::availableSessionInfo()
 {
@@ -628,7 +628,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
 
     if(!onlyRunning) {
         model->setItem(row, 0, new QStandardItem);
-        model->setItem(row, 1, new QStandardItem(QIcon::fromTheme("window-new"), i18n("Create New Session")));
+        model->setItem(row, 1, new QStandardItem(QIcon::fromTheme(QStringLiteral("window-new")), i18n("Create New Session")));
     }
 
     dialog.updateState();
@@ -652,7 +652,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     const QString selectedSessionId = selected.sibling(selected.row(), 0).data().toString();
     if (selectedSessionId.isEmpty()) {
         // "Create New Session" item selected, return a fresh UUID
-        qsrand(QDateTime::currentDateTime().toTime_t());
+        qsrand(QDateTime::currentDateTimeUtc().toTime_t());
         return QUuid::createUuid().toString();
     }
     return selectedSessionId;

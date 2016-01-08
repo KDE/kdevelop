@@ -59,8 +59,9 @@ StatusBar::StatusBar(QWidget* parent)
     m_timer->setSingleShot(true);
     connect(m_timer, &QTimer::timeout, this, &StatusBar::slotTimeout);
     connect(Core::self()->pluginController(), &IPluginController::pluginLoaded, this, &StatusBar::pluginLoaded);
+    QList<IPlugin*> plugins = Core::self()->pluginControllerInternal()->allPluginsForExtension(QStringLiteral("IStatus"));
 
-    foreach (IPlugin* plugin, Core::self()->pluginControllerInternal()->allPluginsForExtension("IStatus"))
+    foreach (IPlugin* plugin, plugins)
         registerStatus(plugin);
 
     registerStatus(Core::self()->languageController()->backgroundParser());
@@ -190,7 +191,7 @@ void StatusBar::updateMessage()
 
     foreach (const Message& m, m_messages) {
         if (!ret.isEmpty())
-            ret += "; ";
+            ret += QLatin1String("; ");
 
         ret += m.text;
 

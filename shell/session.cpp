@@ -39,10 +39,10 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-const QString Session::cfgSessionNameEntry = "SessionName";
-const QString Session::cfgSessionDescriptionEntry = "SessionPrettyContents";
-const QString Session::cfgSessionProjectsEntry = "Open Projects";
-const QString Session::cfgSessionOptionsGroup = "General Options";
+const QString Session::cfgSessionNameEntry = QStringLiteral("SessionName");
+const QString Session::cfgSessionDescriptionEntry = QStringLiteral("SessionPrettyContents");
+const QString Session::cfgSessionProjectsEntry = QStringLiteral("Open Projects");
+const QString Session::cfgSessionOptionsGroup = QStringLiteral("General Options");
 
 class SessionPrivate
 {
@@ -175,7 +175,7 @@ QString SessionPrivate::generatePrettyContents( const SessionInfo& info )
     if( projectNames.isEmpty() ) {
         return i18n("(no projects)");
     } else {
-        return projectNames.join( ", " );
+        return projectNames.join( QStringLiteral(", ") );
     }
 }
 

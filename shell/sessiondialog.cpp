@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-const QString newSessionName = "New Session";
+QString newSessionName() { return QStringLiteral("New Session"); }
 
 SessionModel::SessionModel( QObject* parent )
     : QAbstractListModel( parent )
@@ -111,7 +111,7 @@ bool SessionModel::setData( const QModelIndex& idx, const QVariant& value, int r
 void SessionModel::addSession()
 {
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-    Core::self()->sessionController()->createSession( newSessionName );
+    Core::self()->sessionController()->createSession( (newSessionName()) );
     endInsertRows();
 }
 

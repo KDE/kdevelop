@@ -18,7 +18,9 @@
  ***************************************************************************/
 #include "container.h"
 
+#include <QApplication>
 #include <QBoxLayout>
+#include <QClipboard>
 #include <QEvent>
 #include <QLabel>
 #include <QMap>
@@ -166,6 +168,7 @@ struct ContainerPrivate {
 };
 
 class UnderlinedLabel: public KSqueezedTextLabel {
+Q_OBJECT
 public:
     UnderlinedLabel(QTabBar *tabBar, QWidget* parent = 0)
         :KSqueezedTextLabel(parent), m_tabBar(tabBar)
@@ -207,6 +210,7 @@ protected:
 
 
 class StatusLabel: public UnderlinedLabel {
+Q_OBJECT
 public:
     StatusLabel(QTabBar *tabBar, QWidget* parent = 0):
         UnderlinedLabel(tabBar, parent)
@@ -240,7 +244,7 @@ Container::Container(QWidget *parent)
 
     d->documentListMenu = new QMenu(this);
     d->documentListButton = new QToolButton(this);
-    d->documentListButton->setIcon(QIcon::fromTheme("format-list-unordered"));
+    d->documentListButton->setIcon(QIcon::fromTheme(QStringLiteral("format-list-unordered")));
     d->documentListButton->setMenu(d->documentListMenu);
     d->documentListButton->setPopupMode(QToolButton::InstantPopup);
     d->documentListButton->setAutoRaise(true);
@@ -544,15 +548,19 @@ void Container::contextMenu( const QPoint& pos )
     emit tabContextMenuRequested(view, &menu);
 
     menu.addSeparator();
+    QAction* copyPathAction = nullptr;
     QAction* closeTabAction = nullptr;
     QAction* closeOtherTabsAction = nullptr;
     if (view) {
-        closeTabAction = menu.addAction(QIcon::fromTheme("document-close"),
+        copyPathAction = menu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")),
+                                        i18n("Copy Filename"));
+        menu.addSeparator();
+        closeTabAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
                                         i18n("Close File"));
-        closeOtherTabsAction = menu.addAction(QIcon::fromTheme("document-close"),
+        closeOtherTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
                                               i18n("Close Other Files"));
     }
-    QAction* closeAllTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close All Files" ) );
+    QAction* closeAllTabsAction = menu.addAction( QIcon::fromTheme(QStringLiteral("document-close")), i18n( "Close All Files" ) );
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(pos));
 
@@ -580,6 +588,12 @@ void Container::contextMenu( const QPoint& pos )
             // close all
             for ( int i = 0; i < count(); ++i ) {
                 requestClose(widget(i));
+            }
+        } else if( triggered == copyPathAction ) {
+            auto view = viewForWidget( widget( currentTab ) );
+            auto urlDocument = qobject_cast<UrlDocument*>( view->document() );
+            if( urlDocument ) {
+                QApplication::clipboard()->setText( urlDocument->url().toString() );
             }
         } // else the action was handled by someone else
     }

@@ -69,10 +69,10 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     mainLayout->setContentsMargins( 0, 0, 0, 0 );
     splitter->setSizes(QList<int>() << 260 << 620);
 
-    addConfig->setIcon( QIcon::fromTheme("list-add") );
+    addConfig->setIcon( QIcon::fromTheme(QStringLiteral("list-add")) );
     addConfig->setEnabled( false );
     addConfig->setToolTip(i18nc("@info:tooltip", "Add a new launch configuration."));
-    deleteConfig->setIcon( QIcon::fromTheme("list-remove") );
+    deleteConfig->setIcon( QIcon::fromTheme(QStringLiteral("list-remove")) );
     deleteConfig->setEnabled( false );
     deleteConfig->setToolTip(i18nc("@info:tooltip", "Delete selected launch configuration."));
 
@@ -159,7 +159,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     }
     // Simplify menu structure to get rid of 1-entry levels
     while (m->actions().count() == 1) {
-        QMenu* subMenu = m->actions().first()->menu();
+        QMenu* subMenu = m->actions().at(0)->menu();
         if (subMenu && subMenu->isEnabled() && subMenu->actions().count()<5) {
             m = subMenu;
         } else {
@@ -169,7 +169,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     if(!m->isEmpty()) {
         QAction* separator = new QAction(m);
         separator->setSeparator(true);
-        m->insertAction(m->actions().first(), separator);
+        m->insertAction(m->actions().at(0), separator);
     }
 
     foreach(LaunchConfigurationType* type, types) {
@@ -178,7 +178,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
         connect(action, &QAction::triggered, this, &LaunchConfigurationDialog::createEmptyLauncher);
 
         if(!m->actions().isEmpty())
-            m->insertAction(m->actions().first(), action);
+            m->insertAction(m->actions().at(0), action);
         else
             m->addAction(action);
     }
@@ -202,8 +202,8 @@ void LaunchConfigurationDialog::doTreeContextMenu(QPoint point)
         if ( selected.parent().isValid() && ! selected.parent().parent().isValid() ) {
             // only display the menu if a launch config is clicked
             QMenu menu;
-            QAction* rename = new QAction(QIcon::fromTheme("edit-rename"), i18n("Rename configuration"), &menu);
-            QAction* delete_ = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete configuration"), &menu);
+            QAction* rename = new QAction(QIcon::fromTheme(QStringLiteral("edit-rename")), i18n("Rename configuration"), &menu);
+            QAction* delete_ = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("Delete configuration"), &menu);
             connect(rename, &QAction::triggered, this, &LaunchConfigurationDialog::renameSelected);
             connect(delete_, &QAction::triggered, this, &LaunchConfigurationDialog::deleteConfiguration);
             menu.addAction(rename);
@@ -622,10 +622,10 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                 if ( index.column() == 0 && !index.parent().isValid() ) {
                     if (index.row() == 0) {
                         // global item
-                        return QIcon::fromTheme("folder");
+                        return QIcon::fromTheme(QStringLiteral("folder"));
                     } else {
                         // project item
-                        return QIcon::fromTheme("folder-development");
+                        return QIcon::fromTheme(QStringLiteral("folder-development"));
                     }
                 }
             }

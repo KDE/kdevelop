@@ -52,22 +52,22 @@ void TestToolViewToolBar::init()
 {
     // this is starting to become a GeneralFixture
     controller = new Controller(this);
-    area = new Area( controller, "Area" );
+    area = new Area( controller, QStringLiteral("Area") );
     MainWindow* mw = new MainWindow(controller);
 
     // a horizontal tool with toolbar
-    ToolViewToolBarFactory* factoryT1 = new ToolViewToolBarFactory("tool1factory");
-    actionTextT1 = "Tool1Action";
+    ToolViewToolBarFactory* factoryT1 = new ToolViewToolBarFactory(QStringLiteral("tool1factory"));
+    actionTextT1 = QStringLiteral("Tool1Action");
     factoryT1->actionText = actionTextT1;
-    tool1 = new ToolDocument( "tool1", controller, factoryT1 );
+    tool1 = new ToolDocument( QStringLiteral("tool1"), controller, factoryT1 );
     viewT11 = tool1->createView();
     area->addToolView( viewT11, Sublime::Bottom );
 
     // a vertical tool with toolbar
-    ToolViewToolBarFactory* factoryT2 = new ToolViewToolBarFactory("tool2factory");
-    actionTextT2 = "Tool2Action";
+    ToolViewToolBarFactory* factoryT2 = new ToolViewToolBarFactory(QStringLiteral("tool2factory"));
+    actionTextT2 = QStringLiteral("Tool2Action");
     factoryT2->actionText = actionTextT2;
-    tool2 = new ToolDocument( "tool2", controller, factoryT2 );
+    tool2 = new ToolDocument( QStringLiteral("tool2"), controller, factoryT2 );
     viewT21 = tool2->createView();
     area->addToolView( viewT21, Sublime::Left );
 

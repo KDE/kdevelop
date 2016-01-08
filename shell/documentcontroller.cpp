@@ -258,7 +258,7 @@ struct DocumentControllerPrivate
 
             if (DocumentController::isEmptyDocumentUrl(url))
             {
-                mimeType = QMimeDatabase().mimeTypeForName("text/plain");
+                mimeType = QMimeDatabase().mimeTypeForName(QStringLiteral("text/plain"));
             }
             else if (!url.isValid())
             {
@@ -271,12 +271,12 @@ struct DocumentControllerPrivate
             else if (KProtocolInfo::isKnownProtocol(url.scheme()) && !fileExists(url))
             {
                 //Don't create a new file if we are not in the code mode.
-                if (ICore::self()->uiController()->activeArea()->objectName() != "code") {
+                if (ICore::self()->uiController()->activeArea()->objectName() != QLatin1String("code")) {
                     return 0;
                 }
                 // enfore text mime type in order to create a kate part editor which then can be used to create the file
                 // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
-                mimeType = QMimeDatabase().mimeTypeForName("text/plain");
+                mimeType = QMimeDatabase().mimeTypeForName(QStringLiteral("text/plain"));
             }
             else
             {
@@ -289,7 +289,7 @@ struct DocumentControllerPrivate
                     // this function without it having returned in the first place
                     // and this function is *not* reentrant, see assert below:
                     // Q_ASSERT(!documents.contains(url) || documents[url]==doc);
-                    mimeType = QMimeDatabase().mimeTypeForName("text/plain");
+                    mimeType = QMimeDatabase().mimeTypeForName(QStringLiteral("text/plain"));
                 }
             }
 
@@ -304,7 +304,7 @@ struct DocumentControllerPrivate
             {
                 // Try to find a plugin that handles this mimetype
                 QVariantMap constraints;
-                constraints.insert("X-KDevelop-SupportedMimeTypes", mimeType.name());
+                constraints.insert(QStringLiteral("X-KDevelop-SupportedMimeTypes"), mimeType.name());
                 Core::self()->pluginController()->pluginForExtension(QString(), QString(), constraints);
             }
 
@@ -326,7 +326,7 @@ struct DocumentControllerPrivate
                 } else
                 {
                     int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType.name()), i18nc("@title:window", "Could Not Find Editor"),
-                                                                KStandardGuiItem::yes(), KStandardGuiItem::no(), "AskOpenWithTextEditor");
+                                                                KStandardGuiItem::yes(), KStandardGuiItem::no(), QStringLiteral("AskOpenWithTextEditor"));
                     if (openAsText == KMessageBox::Yes)
                         doc = new TextDocument(url, Core::self(), _encoding);
                     else
@@ -568,9 +568,9 @@ struct DocumentControllerPrivate
 DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )
 {
-    setObjectName("DocumentController");
+    setObjectName(QStringLiteral("DocumentController"));
     d = new DocumentControllerPrivate(this);
-    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/DocumentController",
+    QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/DocumentController"),
         this, QDBusConnection::ExportScriptableSlots );
 
     connect(this, &DocumentController::documentUrlChanged, this, [&] (IDocument* document) { d->changeDocumentUrl(document); });
@@ -604,8 +604,8 @@ void DocumentController::setupActions()
 
     QAction* action;
 
-    action = ac->addAction( "file_open" );
-    action->setIcon(QIcon::fromTheme("document-open"));
+    action = ac->addAction( QStringLiteral("file_open") );
+    action->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_O );
     action->setText(i18n( "&Open..." ) );
     connect( action, &QAction::triggered, this, [&] { d->chooseDocument(); } );
@@ -617,8 +617,8 @@ void DocumentController::setupActions()
     d->fileOpenRecent->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
     d->fileOpenRecent->loadEntries( KConfigGroup(KSharedConfig::openConfig(), "Recent Files" ) );
 
-    action = d->saveAll = ac->addAction( "file_save_all" );
-    action->setIcon(QIcon::fromTheme("document-save"));
+    action = d->saveAll = ac->addAction( QStringLiteral("file_save_all") );
+    action->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
     action->setText(i18n( "Save Al&l" ) );
     connect( action, &QAction::triggered, this, &DocumentController::slotSaveAllDocuments );
     action->setToolTip( i18n( "Save all open documents" ) );
@@ -626,16 +626,16 @@ void DocumentController::setupActions()
     ac->setDefaultShortcut(action, QKeySequence(Qt::CTRL + Qt::Key_L) );
     action->setEnabled(false);
 
-    action = d->revertAll = ac->addAction( "file_revert_all" );
-    action->setIcon(QIcon::fromTheme("document-revert"));
+    action = d->revertAll = ac->addAction( QStringLiteral("file_revert_all") );
+    action->setIcon(QIcon::fromTheme(QStringLiteral("document-revert")));
     action->setText(i18n( "Reload All" ) );
     connect( action, &QAction::triggered, this, &DocumentController::reloadAllDocuments );
     action->setToolTip( i18n( "Revert all open documents" ) );
     action->setWhatsThis( i18n( "Revert all open documents, returning to the previously saved state." ) );
     action->setEnabled(false);
 
-    action = d->close = ac->addAction( "file_close" );
-    action->setIcon(QIcon::fromTheme("window-close"));
+    action = d->close = ac->addAction( QStringLiteral("file_close") );
+    action->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close" ) );
     connect( action, &QAction::triggered, this, &DocumentController::fileClose );
@@ -643,16 +643,16 @@ void DocumentController::setupActions()
     action->setWhatsThis( i18n( "Closes current file." ) );
     action->setEnabled(false);
 
-    action = d->closeAll = ac->addAction( "file_close_all" );
-    action->setIcon(QIcon::fromTheme("window-close"));
+    action = d->closeAll = ac->addAction( QStringLiteral("file_close_all") );
+    action->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
     action->setText(i18n( "Clos&e All" ) );
     connect( action, &QAction::triggered, this, &DocumentController::closeAllDocuments );
     action->setToolTip( i18n( "Close all open documents" ) );
     action->setWhatsThis( i18n( "Close all open documents, prompting for additional information when necessary." ) );
     action->setEnabled(false);
 
-    action = d->closeAllOthers = ac->addAction( "file_closeother" );
-    action->setIcon(QIcon::fromTheme("window-close"));
+    action = d->closeAllOthers = ac->addAction( QStringLiteral("file_closeother") );
+    action->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_W );
     action->setText(i18n( "Close All Ot&hers" ) );
     connect( action, &QAction::triggered, this, &DocumentController::closeAllOtherDocuments );
@@ -660,11 +660,11 @@ void DocumentController::setupActions()
     action->setWhatsThis( i18n( "Close all open documents, with the exception of the currently active document." ) );
     action->setEnabled(false);
 
-    action = ac->addAction( "vcsannotate_current_document" );
+    action = ac->addAction( QStringLiteral("vcsannotate_current_document") );
     connect( action, &QAction::triggered, this, &DocumentController::vcsAnnotateCurrentDocument );
     action->setText( i18n( "Show Annotate on current document") );
     action->setIconText( i18n( "Annotate" ) );
-    action->setIcon( QIcon::fromTheme("user-properties") );
+    action->setIcon( QIcon::fromTheme(QStringLiteral("user-properties")) );
 }
 
 void DocumentController::slotOpenDocument(const QUrl &url)
@@ -700,7 +700,7 @@ IDocument* DocumentController::openDocument( const QUrl & inputUrl,
         DocumentActivationParams activationParams,
         const QString& encoding, IDocument* buddy)
 {
-    return d->openDocumentInternal( inputUrl, "", range, encoding, activationParams, buddy);
+    return d->openDocumentInternal( inputUrl, QLatin1String(""), range, encoding, activationParams, buddy);
 }
 
 
@@ -966,7 +966,7 @@ KTextEditor::View* DocumentController::activeTextDocumentView() const
 
 QString DocumentController::activeDocumentPath( QString target ) const
 {
-    if(target.size()) {
+    if(!target.isEmpty()) {
         foreach(IProject* project, Core::self()->projectController()->projects()) {
             if(project->name().startsWith(target, Qt::CaseInsensitive)) {
                 return project->path().pathOrUrl() + "/.";
@@ -974,14 +974,14 @@ QString DocumentController::activeDocumentPath( QString target ) const
         }
     }
     IDocument* doc = activeDocument();
-    if(!doc || target == "[selection]")
+    if(!doc || target == QStringLiteral("[selection]"))
     {
         Context* selection = ICore::self()->selectionController()->currentSelection();
-        if(selection && selection->type() == Context::ProjectItemContext && static_cast<ProjectItemContext*>(selection)->items().size())
+        if(selection && selection->type() == Context::ProjectItemContext && !static_cast<ProjectItemContext*>(selection)->items().isEmpty())
         {
-            QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->path().pathOrUrl();
-            if(static_cast<ProjectItemContext*>(selection)->items()[0]->folder())
-                ret += "/.";
+            QString ret = static_cast<ProjectItemContext*>(selection)->items().at(0)->path().pathOrUrl();
+            if(static_cast<ProjectItemContext*>(selection)->items().at(0)->folder())
+                ret += QStringLiteral("/.");
             return  ret;
         }
         return QString();
@@ -1010,7 +1010,7 @@ void DocumentController::registerDocumentForMimetype( const QString& mimetype,
 
 QStringList DocumentController::documentTypes() const
 {
-    return QStringList() << "Text";
+    return QStringList() << QStringLiteral("Text");
 }
 
 static const QRegularExpression& emptyDocumentPattern()
@@ -1094,7 +1094,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     Sublime::Area* area = Core::self()->uiControllerInternal()->activeArea();
 
     QList<int> topLevelSeparators; // Indices of the top-level separators (with groups skipped)
-    QStringList separators = QStringList() << "/" << "-";
+    QStringList separators = QStringList() << QStringLiteral("/") << QStringLiteral("-");
     QList<QStringList> groups;
 
     bool ret = true;
@@ -1109,13 +1109,13 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
             {
                 if(parenDepth == 0)
                     topLevelSeparators << pos;
-            }else if(item == "[")
+            }else if(item == QLatin1String("["))
             {
                 if(parenDepth == 0)
                     groupStart = pos+1;
                 ++parenDepth;
             }
-            else if(item == "]")
+            else if(item == QLatin1String("]"))
             {
                 if(parenDepth > 0)
                 {
@@ -1175,7 +1175,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
         activeViewToSecondChild = true;
     }else{
         QStringList separatorsAndParens = separators;
-        separatorsAndParens << "[" << "]";
+        separatorsAndParens << QStringLiteral("[") << QStringLiteral("]");
         // Check if the second child-set contains an unterminated separator, which means that the active views should end up there
         for(int pos = pickSeparator+1; pos < urlsWithSeparators.size(); ++pos)
             if( separators.contains(urlsWithSeparators[pos]) && (pos == urlsWithSeparators.size()-1 ||
@@ -1184,7 +1184,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
                     activeViewToSecondChild = true;
     }
 
-    Qt::Orientation orientation = urlsWithSeparators[pickSeparator] == "/" ? Qt::Horizontal : Qt::Vertical;
+    Qt::Orientation orientation = urlsWithSeparators[pickSeparator] == QLatin1String("/") ? Qt::Horizontal : Qt::Vertical;
 
     if(!index->isSplit())
     {

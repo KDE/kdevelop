@@ -51,7 +51,7 @@ IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindo
     connect(this, &IdealDockWidget::customContextMenuRequested,
             this, &IdealDockWidget::contextMenuRequested);
 
-    QAbstractButton *closeButton = findChild<QAbstractButton *>(QLatin1String("qt_dockwidget_closebutton"));
+    QAbstractButton *closeButton = findChild<QAbstractButton *>(QStringLiteral("qt_dockwidget_closebutton"));
     if (closeButton) {
     disconnect(closeButton, &QAbstractButton::clicked, 0, 0);
 
@@ -136,11 +136,11 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
     menu.addSeparator();
 
-    QAction *setShortcut = menu.addAction(QIcon::fromTheme("configure-shortcuts"), i18n("Assign Shortcut..."));
+    QAction *setShortcut = menu.addAction(QIcon::fromTheme(QStringLiteral("configure-shortcuts")), i18n("Assign Shortcut..."));
     setShortcut->setToolTip(i18n("Use this shortcut to trigger visibility of the toolview."));
 
     menu.addSeparator();
-    QAction* remove = menu.addAction(QIcon::fromTheme("dialog-close"), i18n("Remove Toolview"));
+    QAction* remove = menu.addAction(QIcon::fromTheme(QStringLiteral("dialog-close")), i18n("Remove Toolview"));
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));
 

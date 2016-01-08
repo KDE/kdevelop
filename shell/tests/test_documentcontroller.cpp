@@ -87,7 +87,7 @@ void TestDocumentController::testOpeningNewDocumentFromText()
     QSignalSpy openedSpy(m_subject, SIGNAL(documentOpened(KDevelop::IDocument*)));
     QVERIFY(openedSpy.isValid());
 
-    IDocument* document = m_subject->openDocumentFromText("");
+    IDocument* document = m_subject->openDocumentFromText(QLatin1String(""));
     QVERIFY(document != 0);
 
     QCOMPARE(createdSpy.count(), 1);
@@ -109,14 +109,14 @@ void TestDocumentController::testSaveSomeDocuments()
 {
     // create documents
     QTemporaryDir dir;
-    IDocument *document1 = m_subject->openDocument(createFile(dir, "foo"));
-    IDocument *document2 = m_subject->openDocument(createFile(dir, "bar"));
+    IDocument *document1 = m_subject->openDocument(createFile(dir, QStringLiteral("foo")));
+    IDocument *document2 = m_subject->openDocument(createFile(dir, QStringLiteral("bar")));
     QCOMPARE(document1->state(), IDocument::Clean);
     QCOMPARE(document2->state(), IDocument::Clean);
 
     // edit both documents
-    document1->textDocument()->insertText(KTextEditor::Cursor(), "some text");
-    document2->textDocument()->insertText(KTextEditor::Cursor(), "some text");
+    document1->textDocument()->insertText(KTextEditor::Cursor(), QStringLiteral("some text"));
+    document2->textDocument()->insertText(KTextEditor::Cursor(), QStringLiteral("some text"));
     QCOMPARE(document1->state(), IDocument::Modified);
     QCOMPARE(document2->state(), IDocument::Modified);
 
@@ -130,14 +130,14 @@ void TestDocumentController::testSaveAllDocuments()
 {
     // create documents
     QTemporaryDir dir;
-    IDocument *document1 = m_subject->openDocument(createFile(dir, "foo"));
-    IDocument *document2 = m_subject->openDocument(createFile(dir, "bar"));
+    IDocument *document1 = m_subject->openDocument(createFile(dir, QStringLiteral("foo")));
+    IDocument *document2 = m_subject->openDocument(createFile(dir, QStringLiteral("bar")));
     QCOMPARE(document1->state(), IDocument::Clean);
     QCOMPARE(document2->state(), IDocument::Clean);
 
     // edit documents
-    document1->textDocument()->insertText(KTextEditor::Cursor(), "some text");
-    document2->textDocument()->insertText(KTextEditor::Cursor(), "some text");
+    document1->textDocument()->insertText(KTextEditor::Cursor(), QStringLiteral("some text"));
+    document2->textDocument()->insertText(KTextEditor::Cursor(), QStringLiteral("some text"));
     QCOMPARE(document1->state(), IDocument::Modified);
     QCOMPARE(document2->state(), IDocument::Modified);
 
@@ -151,8 +151,8 @@ void TestDocumentController::testSaveAllDocuments()
 void TestDocumentController::testCloseAllDocuments()
 {
     // create documents
-    m_subject->openDocumentFromText("");
-    m_subject->openDocumentFromText("");
+    m_subject->openDocumentFromText(QLatin1String(""));
+    m_subject->openDocumentFromText(QLatin1String(""));
     QVERIFY(!m_subject->openDocuments().empty());
 
     m_subject->closeAllDocuments();
@@ -188,10 +188,10 @@ void TestDocumentController::testEmptyUrl()
     QVERIFY(DocumentController::isEmptyDocumentUrl(second));
 
     QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl()));
-    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl("http://foo.org")));
-    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl("http://foo.org/test")));
-    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl::fromLocalFile("/")));
-    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl::fromLocalFile("/test")));
+    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl(QStringLiteral("http://foo.org"))));
+    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl(QStringLiteral("http://foo.org/test"))));
+    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl::fromLocalFile(QStringLiteral("/"))));
+    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl::fromLocalFile(QStringLiteral("/test"))));
 }
 
 QTEST_MAIN(TestDocumentController);
