@@ -97,8 +97,7 @@ public Q_SLOTS:
      */
     bool open(const Path &projectFile);
 
-    /** This method is invoked when the project needs to be closed. */
-    void close();
+    void close() override;
 
     IProjectFileManager* projectFileManager() const override;
     IBuildSystemManager* buildSystemManager() const override;

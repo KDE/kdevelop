@@ -141,51 +141,41 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
     // A list of filters for possible compiler, linker, and make actions
     static const ActionFormat ACTION_FILTERS[] = {
-        ActionFormat( ki18nc("compiling a file: %1 file %2 compiler", "compiling %1 (%2)"), 1, 2,
+        ActionFormat( 2,
                       QStringLiteral("(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|java|hpf|f|F|f90|F90|f95|F95))")),
         //moc and uic
-        ActionFormat( ki18nc("generating a file: %1 file %2 generator tool", "generating %1 (%2)"), 1, 2,
-                      QStringLiteral("/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)")),
+        ActionFormat( 2, QStringLiteral("/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)")),
         //libtool linking
-        ActionFormat( ki18nc("Linking object files into a library or executable: %1 target, %2 linker", "linking %1 (%2)"),
-                      QStringLiteral("libtool"), QStringLiteral("/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)"), 1 ),
+        ActionFormat( QStringLiteral("libtool"), QStringLiteral("/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)"), 1 ),
         //unsermake
-        ActionFormat( ki18nc("compiling a file: %1 file %2 compiler", "compiling %1 (%2)"), 1, 1,
-                      QStringLiteral("^compiling (.*)") ),
-        ActionFormat( ki18nc("generating a file: %1 file %2 generator tool", "generating %1 (%2)"), 1, 2,
-                      QStringLiteral("^generating (.*)") ),
-        ActionFormat( ki18nc("Linking object files into a library or executable: %1 file, %2 linker", "linking %1 (%2)"), 1, 2,
-                      QStringLiteral("(gcc|cc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)")),
-        ActionFormat( ki18nc("Linking object files into a library or executable: %1 file, %2 compiler", "linking %1 (%2)"), 1, 2,
-                      QStringLiteral("^linking (.*)") ),
+        ActionFormat( 1, QStringLiteral("^compiling (.*)") ),
+        ActionFormat( 2, QStringLiteral("^generating (.*)") ),
+        ActionFormat( 2, QStringLiteral("(gcc|cc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)")),
+        ActionFormat( 2, QStringLiteral("^linking (.*)") ),
         //cmake
-        ActionFormat( ki18nc("finished building a target: %1 target name", "built %1"), -1, 1,
-                      QStringLiteral("\\[.+%\\] Built target (.*)") ),
-        ActionFormat( ki18nc("compiling a file: %1 file %2 compiler", "compiling %1 (%2)"), QStringLiteral("cmake"),
+        ActionFormat( 1, QStringLiteral("\\[.+%\\] Built target (.*)") ),
+        ActionFormat( QStringLiteral("cmake"),
                       QStringLiteral("\\[.+%\\] Building .* object (.*)"), 1 ),
-        ActionFormat( ki18nc("generating a file: %1 file %2 generator tool", "generating %1 (%2)"), -1, 1,
-                      QStringLiteral("\\[.+%\\] Generating (.*)") ),
-        ActionFormat( ki18nc("Linking object files into a library or executable: %1 target", "linking %1"), -1, 1,
-                      QStringLiteral("^Linking (.*)") ),
-        ActionFormat( ki18nc("configuring a project: %1 tool", "configuring (%1)"), QStringLiteral("cmake"),
+        ActionFormat( 1, QStringLiteral("\\[.+%\\] Generating (.*)") ),
+        ActionFormat( 1, QStringLiteral("^Linking (.*)") ),
+        ActionFormat( QStringLiteral("cmake"),
                       QStringLiteral("(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)"), -1 ),
-        ActionFormat( ki18nc("installing a file: %1 file", "installing %1"), -1, 1,
-                      QStringLiteral("-- Installing (.*)") ),
+        ActionFormat( 1, QStringLiteral("-- Installing (.*)") ),
         //libtool install
-        ActionFormat( ki18nc("creating a folder: %1 path", "creating %1"), {},
+        ActionFormat( {},
                       QStringLiteral("/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)"), 1 ),
-        ActionFormat( ki18nc("installing a file: %1 file", "installing %1"), {},
+        ActionFormat( {},
                       QStringLiteral("/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)"), 1 ),
         //dcop
-        ActionFormat( ki18nc("generating a file: %1 file %2 generator tool", "generating %1 (%2)"), QStringLiteral("dcopidl"),
+        ActionFormat( QStringLiteral("dcopidl"),
                       QStringLiteral("dcopidl .* > ([^\\s;]+)"), 1 ),
-        ActionFormat( ki18nc("compiling a file: %1 file %2 compiler", "compiling %1 (%2)"), QStringLiteral("dcopidl2cpp"),
+        ActionFormat( QStringLiteral("dcopidl2cpp"),
                       QStringLiteral("dcopidl2cpp (?:\\S* )*([^\\s;]+)"), 1 ),
         // match against Entering directory to update current build dir
-        ActionFormat( ki18nc("change directory: %1: path", "entering %1 (%2)"), QStringLiteral("cd"),
+        ActionFormat( QStringLiteral("cd"),
                       QStringLiteral("make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'"), 2),
         // waf and scons use the same basic convention as make
-        ActionFormat( ki18nc("change directory: %1: path", "entering %1 (%2)"), QStringLiteral("cd"),
+        ActionFormat( QStringLiteral("cd"),
                       QStringLiteral("(Waf|scons): Entering directory (\\`|\\')(.+)'"), 3)
     };
 
@@ -194,17 +184,6 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         const auto match = curActFilter.expression.match(line);
         if( match.hasMatch() ) {
             item.type = FilteredItem::ActionItem;
-            KLocalizedString shortened = curActFilter.label;
-            if (curActFilter.fileGroup != -1) {
-                shortened = shortened.subs(match.captured(curActFilter.fileGroup));
-            }
-            if (curActFilter.toolGroup != -1 ) {
-                shortened = shortened.subs(match.captured(curActFilter.toolGroup));
-            } else if (!curActFilter.tool.isEmpty()) {
-                shortened = shortened.subs(curActFilter.tool);
-            }
-
-            item.shortenedText = shortened.toString();
 
             if( curActFilter.tool == "cd" ) {
                 const Path path(match.captured(curActFilter.fileGroup));

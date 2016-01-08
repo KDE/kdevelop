@@ -174,6 +174,9 @@ Q_SIGNALS:
 public Q_SLOTS:
     /** Make the model to reload */
     virtual void reloadModel() = 0;
+
+    /** This method is invoked when the project needs to be closed. */
+    virtual void close() = 0;
 };
 
 }

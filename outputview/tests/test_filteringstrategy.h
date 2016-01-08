@@ -33,8 +33,6 @@ private slots:
     void testCompilerFilterStrategy();
     void testCompilerFilterstrategyMultipleKeywords_data();
     void testCompilerFilterstrategyMultipleKeywords();
-    void testCompilerFilterStrategyShortenedText();
-    void testCompilerFilterStrategyShortenedText_data();
     void testCompilerFilterstrategyUrlFromAction_data();
     void testCompilerFilterstrategyUrlFromAction();
     void testScriptErrorFilterStrategy_data();

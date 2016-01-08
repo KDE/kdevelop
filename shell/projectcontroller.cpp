@@ -70,6 +70,7 @@ Boston, MA 02110-1301, USA.
 #include <vcs/widgets/vcscommitdialog.h>
 
 #include "core.h"
+// TODO: Should get rid off this include (should depend on IProject only)
 #include "project.h"
 #include "mainwindow.h"
 #include "shellextension.h"
@@ -578,9 +579,7 @@ void ProjectController::cleanup()
         buildSetModel()->storeToSession( Core::self()->activeSession() );
     }
 
-    foreach( IProject* project, d->m_projects ) {
-        closeProject( project );
-    }
+    closeAllProjects();
 }
 
 void ProjectController::initialize()
@@ -887,22 +886,14 @@ void ProjectController::initializePluginCleanup(IProject* proj)
     connect(proj, &IProject::destroyed, this, [&] { d->unloadAllProjectPlugins(); });
 }
 
-void ProjectController::closeProject(IProject* proj_)
+void ProjectController::takeProject(IProject* proj)
 {
-    if (!proj_)
-    {
+    if (!proj) {
         return;
     }
 
     // loading might have failed
-    d->m_currentlyOpening.removeAll(proj_->projectFile().toUrl());
-
-    Project* proj = dynamic_cast<KDevelop::Project*>( proj_ );
-    if( !proj )
-    {
-        qWarning() << "Unknown Project subclass found!";
-        return;
-    }
+    d->m_currentlyOpening.removeAll(proj->projectFile().toUrl());
     d->m_projects.removeAll(proj);
     emit projectClosing(proj);
     //Core::self()->saveSettings();     // The project file is being closed.
@@ -911,7 +902,6 @@ void ProjectController::closeProject(IProject* proj_)
     unloadUnusedProjectPlugins(proj);
     closeAllOpenedFiles(proj);
     proj->close();
-    proj->deleteLater();                //be safe when deleting
     if (d->m_projects.isEmpty())
     {
         initializePluginCleanup(proj);
@@ -921,7 +911,19 @@ void ProjectController::closeProject(IProject* proj_)
         d->saveListOfOpenedProjects();
 
     emit projectClosed(proj);
-    return;
+}
+
+void ProjectController::closeProject(IProject* proj)
+{
+    takeProject(proj);
+    proj->deleteLater(); // be safe when deleting
+}
+
+void ProjectController::closeAllProjects()
+{
+    foreach (auto project, d->m_projects) {
+        closeProject(project);
+    }
 }
 
 void ProjectController::abortOpeningProject(IProject* proj)
@@ -968,7 +970,17 @@ void ProjectController::configureProject( IProject* project )
 
 void ProjectController::addProject(IProject* project)
 {
-    d->m_projects.append( project );
+    Q_ASSERT(project);
+    if (d->m_projects.contains(project)) {
+        qWarning() << "Project already tracked by this project controller:" << project;
+        return;
+    }
+
+    // fake-emit signals so listeners are aware of a new project being added
+    emit projectAboutToBeOpened(project);
+    project->setParent(this);
+    d->m_projects.append(project);
+    emit projectOpened(project);
 }
 
 QItemSelectionModel* ProjectController::projectSelectionModel()

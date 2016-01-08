@@ -1,5 +1,5 @@
 /*
-   Copyright 2016 Kevin Funk <kfunk@kde.org>
+   Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,16 +21,36 @@
 
 #include <QScopedValueRollback>
 
-template<class T>
-using PushValue = QScopedValueRollback<T>;
-
-/// Only difference to PushValue: The value is only replaced if the new value is positive
-template<class T>
-class PushPositiveValue : QScopedValueRollback<T>
+/**
+ * A simple helper-class that does the following:
+ * Backup the given reference-value given through @param ptr,
+ * replace it with the value given through @param push,
+ * restore the backed up value back on destruction.
+ *
+ * NOTE: This is _not_ a direct alias of QScopedValueRollback,
+ *       the behavior of the constructor is different:
+ *       PushValue will *always* push, PushPositiveValue will only
+ *       push if the value evaluates to true. QScopedValueRollback
+ *       will *always* push with the ctor that takes a new value,
+ *       and *never* with the ctor that just takes a ref.
+ **/
+template<class Value>
+class PushValue : public QScopedValueRollback<Value>
 {
 public:
-    PushPositiveValue(T& ref, const T& newValue = T())
-        : QScopedValueRollback<T>(ref)
+    PushValue(Value& ref, const Value& newValue = Value())
+        : QScopedValueRollback<Value>(ref, newValue)
+    {
+    }
+};
+
+///Only difference to PushValue: The value is only replaced if the new value is positive
+template<class Value>
+class PushPositiveValue : public QScopedValueRollback<Value>
+{
+public:
+    PushPositiveValue(Value& ref, const Value& newValue = Value())
+        : QScopedValueRollback<Value>(ref)
     {
         if (newValue) {
             ref = newValue;

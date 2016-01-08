@@ -141,6 +141,15 @@ public Q_SLOTS:
      * @returns true if the project could be closed, false otherwise
      */
     virtual void closeProject( IProject* ) = 0;
+
+    /**
+     * Close all projects
+     *
+     * This usually calls closeProject() on all controlled projects
+     * @sa closeProject()
+     */
+    virtual void closeAllProjects() = 0;
+
     virtual void configureProject( IProject* ) = 0;
 
     /// Schedules all files of the @p project for reparsing by @see BackgroundParser
