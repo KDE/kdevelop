@@ -94,7 +94,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="newMultipleButton">
+      <widget class="QPushButton" name="batchModeEditButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -102,7 +102,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Add Multiple Variables</string>
+        <string>Batch Edit Mode</string>
        </property>
       </widget>
      </item>

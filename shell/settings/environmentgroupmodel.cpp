@@ -73,7 +73,7 @@ QVariant EnvironmentGroupModel::data( const QModelIndex& idx, int role ) const
     } else if (role == ValueRole) {
         return variables( m_currentGroup ).value(variable);
     } else if (role == Qt::DisplayRole || role == Qt::EditRole) {
-        if(idx.column() == 0) {
+        if(idx.column() == VariableColumn) {
             return variable;
         } else {
             return variables( m_currentGroup ).value(variable);
@@ -89,7 +89,7 @@ QVariant EnvironmentGroupModel::headerData( int section, Qt::Orientation orienta
     {
         return QVariant();
     }
-    if( section == 0 )
+    if( section == VariableColumn )
     {
         return i18n( "Variable" );
     } else
@@ -108,7 +108,7 @@ bool EnvironmentGroupModel::setData( const QModelIndex& idx, const QVariant& dat
     }
 
     if (role == Qt::EditRole) {
-        if (idx.column() == 0) {
+        if (idx.column() == VariableColumn) {
             const QString oldVariable = m_varsByIndex[idx.row()];
             const QString value = variables(m_currentGroup).take(oldVariable);
             const QString newVariable = data.toString();

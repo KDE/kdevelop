@@ -40,6 +40,11 @@ public:
         ValueRole
     };
 
+    enum Column {
+        VariableColumn,
+        ValueColumn
+    };
+
     EnvironmentGroupModel();
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     int columnCount( const QModelIndex &parent = QModelIndex()  ) const override;

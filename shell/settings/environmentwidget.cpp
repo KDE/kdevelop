@@ -59,12 +59,12 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     ui.removegrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     ui.deleteButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     ui.deleteButton->setShortcut(Qt::Key_Delete);
-    ui.newMultipleButton->setIcon(QIcon::fromTheme(QStringLiteral("format-list-unordered")));
+    ui.batchModeEditButton->setIcon(QIcon::fromTheme(QStringLiteral("format-list-unordered")));
 
     connect( ui.deleteButton, &QPushButton::clicked,
              this, &EnvironmentWidget::deleteButtonClicked );
-    connect( ui.newMultipleButton, &QPushButton::clicked,
-             this, &EnvironmentWidget::newMultipleButtonClicked );
+    connect( ui.batchModeEditButton, &QPushButton::clicked,
+             this, &EnvironmentWidget::batchModeEditButtonClicked );
 
     connect( ui.addgrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::addGroupClicked );
     connect( ui.addgrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::changed );
@@ -145,15 +145,22 @@ void EnvironmentWidget::handleVariableInserted(int /*column*/, const QVariant& v
     groupModel->addVariable(value.toString(), QString());
 }
 
-void EnvironmentWidget::newMultipleButtonClicked()
+void EnvironmentWidget::batchModeEditButtonClicked()
 {
     QDialog * dialog = new QDialog( this );
-    dialog->setWindowTitle( i18n( "New Environment Variables" ) );
+    dialog->setWindowTitle( i18n( "Batch Edit Mode" ) );
 
     QVBoxLayout *layout = new QVBoxLayout(dialog);
 
     QTextEdit *edit = new QTextEdit;
     edit->setPlaceholderText(QStringLiteral("VARIABLE1=VALUE1\nVARIABLE2=VALUE2"));
+    QString text;
+    for (int i = 0; i < proxyModel->rowCount(); ++i) {
+        const auto variable = proxyModel->index(i, EnvironmentGroupModel::VariableColumn).data().toString();
+        const auto value = proxyModel->index(i, EnvironmentGroupModel::ValueColumn).data().toString();
+        text.append(QStringLiteral("%1=%2\n").arg(variable, value));
+    }
+    edit->setText(text);
     layout->addWidget( edit );
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
