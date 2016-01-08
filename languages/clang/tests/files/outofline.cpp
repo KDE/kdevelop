@@ -9,4 +9,4 @@ class foo
     int bar();
 };
 
-int foo::bar() {}
+int foo::bar() { return 0; }

@@ -50,7 +50,7 @@ void (foo::*f2)(int a, int b);
 /// "type" : { "toString" : "function void (int)" }
 void STDCALL bar3(int a);
 /// "definition" : { "internalContext" : { "type" : "Function", "localDeclarationCount" : 1 } }
-void STDCALL bar3(int a); {}
+void STDCALL bar3(int a);
 /// "type" : { "toString" : "function void ()" }
 void __pascal bar4();
 
