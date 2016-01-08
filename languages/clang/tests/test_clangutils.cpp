@@ -197,20 +197,24 @@ void TestClangUtils::testGetRawContents_data()
 
     QTest::newRow("complete")
         << QByteArray("void; int foo = 42; void;")
-        << KTextEditor::Range(0, 6, 0, 18)
+        << KTextEditor::Range(0, 6, 0, 19)
         << "int foo = 42;";
     QTest::newRow("cut-off-at-start")
         << QByteArray("void; int foo = 42; void;")
-        << KTextEditor::Range(0, 7, 0, 18)
+        << KTextEditor::Range(0, 7, 0, 19)
         << "nt foo = 42;";
     QTest::newRow("cut-off-at-end")
         << QByteArray("void; int foo = 42; void;")
-        << KTextEditor::Range(0, 6, 0, 16)
+        << KTextEditor::Range(0, 6, 0, 17)
         << "int foo = 4";
     QTest::newRow("whitespace")
         << QByteArray("void; int         ; void;")
-        << KTextEditor::Range(0, 5, 0, 17)
+        << KTextEditor::Range(0, 5, 0, 18)
         << " int         ";
+    QTest::newRow("empty-range")
+        << QByteArray("void;")
+        << KTextEditor::Range(0, 0, 0, 0)
+        << "";
 }
 
 void TestClangUtils::testRangeForIncludePathSpec()
