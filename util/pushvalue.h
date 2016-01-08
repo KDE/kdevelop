@@ -19,58 +19,43 @@
 #ifndef KDEVPLATFORM_PUSHVALUE_H
 #define KDEVPLATFORM_PUSHVALUE_H
 
+#include <QScopedValueRollback>
+
 /**
  * A simple helper-class that does the following:
  * Backup the given reference-value given through @param ptr,
  * replace it with the value given through @param push,
  * restore the backed up value back on destruction.
  *
- * TODO: Replace by QScopedValueRollback as soon as we depend on Qt 5.4
- * */
+ * NOTE: This is _not_ a direct alias of QScopedValueRollback,
+ *       the behavior of the constructor is different:
+ *       PushValue will *always* push, PushPositiveValue will only
+ *       push if the value evaluates to true. QScopedValueRollback
+ *       will *always* push with the ctor that takes a new value,
+ *       and *never* with the ctor that just takes a ref.
+ **/
 template<class Value>
-class PushValue
+class PushValue : public QScopedValueRollback<Value>
 {
 public:
-    PushValue( Value& ref, const Value& newValue = Value() )
-    : m_ref(ref)
+    PushValue(Value& ref, const Value& newValue = Value())
+        : QScopedValueRollback<Value>(ref, newValue)
     {
-        m_oldValue = m_ref;
-        m_ref = newValue;
     }
-
-    ~PushValue()
-    {
-        m_ref = m_oldValue;
-    }
-
-private:
-    Value& m_ref;
-    Value m_oldValue;
 };
 
 ///Only difference to PushValue: The value is only replaced if the new value is positive
 template<class Value>
-class PushPositiveValue
+class PushPositiveValue : public QScopedValueRollback<Value>
 {
 public:
-    PushPositiveValue( Value& ref, const Value& newValue = Value()  )
-    : m_ref(ref)
+    PushPositiveValue(Value& ref, const Value& newValue = Value())
+        : QScopedValueRollback<Value>(ref)
     {
-        m_oldValue = m_ref;
-
-        if( newValue ) {
-            m_ref = newValue;
+        if (newValue) {
+            ref = newValue;
         }
     }
-
-    ~PushPositiveValue()
-    {
-        m_ref = m_oldValue;
-    }
-
-private:
-    Value& m_ref;
-    Value m_oldValue;
 };
 
 #endif
