@@ -316,7 +316,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
             if (specifier.isEmpty()) {
                 continue;
             }
-            Sublime::View* previousView = area->views().empty() ? 0 : area->views().at(area->views().size());
+            Sublime::View* previousView = area->views().empty() ? 0 : area->views().at(area->views().size() - 1);
 
             QMultiMap<QString, Sublime::View*>::iterator it = recycle.find( specifier );
             if( it != recycle.end() )
