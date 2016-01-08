@@ -40,6 +40,8 @@ public:
     void childProcessStdout();
     void childProcessStderr();
 
+    void emitProgress(const IFilterStrategy::Progress& progress);
+
     QString joinCommandLine() const;
     QString getJobName();
 
@@ -224,6 +226,10 @@ void OutputExecuteJob::start()
     model()->setFilteringStrategy( d->m_filteringStrategy );
     setDelegate( new OutputDelegate );
 
+    connect(model(), &OutputModel::progress, this, [&](const IFilterStrategy::Progress& progress) {
+        d->emitProgress(progress);
+    });
+
     // Slots hasRawStdout() and hasRawStderr() are responsible
     // for feeding raw data to the line maker; so property-based channel filtering is implemented there.
     if( d->m_properties.testFlag( PostProcessOutput ) ) {
@@ -365,6 +371,17 @@ void OutputExecuteJobPrivate::childProcessStderr()
     QByteArray err = m_process->readAllStandardError();
     if( m_properties.testFlag( OutputExecuteJob::DisplayStderr ) ) {
         m_lineMaker->slotReceivedStderr( err );
+    }
+}
+
+void OutputExecuteJobPrivate::emitProgress(const IFilterStrategy::Progress& progress)
+{
+    m_owner->emitPercent(progress.percent, 100);
+
+    if (progress.percent == 100) {
+        m_owner->infoMessage(m_owner, i18n("Build finished"));
+    } else {
+        m_owner->infoMessage(m_owner, progress.status);
     }
 }
 

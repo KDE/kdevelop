@@ -24,6 +24,7 @@
 
 #include "outputviewexport.h"
 #include "ioutputviewmodel.h"
+#include "ifilterstrategy.h"
 
 #include <QtCore/QAbstractListModel>
 #include <QUrl>
@@ -75,6 +76,8 @@ public Q_SLOTS:
     void ensureAllDone();
 
 signals:
+    /// If the current filter strategy supports it, reports progress information
+    void progress(const KDevelop::IFilterStrategy::Progress& progress);
     void allDone();
 
 private:

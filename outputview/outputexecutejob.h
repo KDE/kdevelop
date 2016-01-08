@@ -237,6 +237,7 @@ protected slots:
     virtual void childProcessError( QProcess::ProcessError processError );
 
 private:
+    friend class OutputExecuteJobPrivate;
     OutputExecuteJobPrivate* d;
 
     Q_PRIVATE_SLOT(d, void childProcessStdout());

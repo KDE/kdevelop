@@ -30,7 +30,8 @@
 namespace KDevelop
 {
 
-FilteredItem match(const QVector<ErrorFormat>& errorFormats, const QString& line)
+template<typename ErrorFormats>
+FilteredItem match(const ErrorFormats& errorFormats, const QString& line)
 {
     FilteredItem item(line);
     for( const ErrorFormat& curErrFilter : errorFormats ) {
@@ -253,7 +254,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
     };
 
     // A list of filters for possible compiler, linker, and make errors
-    static const QVector<ErrorFormat> ERROR_FILTERS = {
+    static const ErrorFormat ERROR_FILTERS[] = {
 #ifdef Q_OS_WIN
         // MSVC
         ErrorFormat( QStringLiteral("^([a-zA-Z]:\\\\.+)\\(([1-9][0-9]*)\\): ((?:error|warning) .+\\:).*$"), 1, 2, 3 ),
@@ -367,7 +368,7 @@ FilteredItem ScriptErrorFilterStrategy::actionInLine(const QString& line)
 FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 {
     // A list of filters for possible Python and PHP errors
-    static const QVector<ErrorFormat> SCRIPT_ERROR_FILTERS = {
+    static const ErrorFormat SCRIPT_ERROR_FILTERS[] = {
         ErrorFormat( QStringLiteral("^  File \"(.*)\", line ([0-9]+)(.*$|, in(.*)$)"), 1, 2, -1 ),
         ErrorFormat( QStringLiteral("^.*(/.*):([0-9]+).*$"), 1, 2, -1 ),
         ErrorFormat( QStringLiteral("^.* in (/.*) on line ([0-9]+).*$"), 1, 2, -1 )
@@ -389,7 +390,7 @@ FilteredItem NativeAppErrorFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
 {
-    static const QVector<ErrorFormat> NATIVE_APPLICATION_ERROR_FILTERS = {
+    static const ErrorFormat NATIVE_APPLICATION_ERROR_FILTERS[] = {
         // BEGIN: C++
 
         // a.out: test.cpp:5: int main(): Assertion `false' failed.
@@ -441,7 +442,7 @@ FilteredItem StaticAnalysisFilterStrategy::actionInLine(const QString& line)
 FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
 {
     // A list of filters for static analysis tools (krazy2, cppcheck)
-    static const QVector<ErrorFormat> STATIC_ANALYSIS_FILTERS = {
+    static const ErrorFormat STATIC_ANALYSIS_FILTERS[] = {
         // CppCheck
         ErrorFormat( QStringLiteral("^\\[(.*):([0-9]+)\\]:(.*)"), 1, 2, 3 ),
         // krazy2
