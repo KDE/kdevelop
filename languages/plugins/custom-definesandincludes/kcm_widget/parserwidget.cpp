@@ -29,6 +29,9 @@
 
 #include <util/path.h>
 
+namespace
+{
+
 QString languageStandard(const QString& arguments)
 {
     int idx = arguments.indexOf("-std=");
@@ -41,6 +44,25 @@ QString languageStandard(const QString& arguments)
     return arguments.mid(idx, end - idx);
 }
 
+bool isCustomParserArguments(const QString& arguments, const QStringList& standards)
+{
+    const auto defaultArguments = SettingsManager::globalInstance()->defaultParserArguments();
+
+    auto standard = languageStandard(arguments);
+
+    auto tmpArgs(arguments);
+    tmpArgs.replace(standard, "c++11");
+
+    if (tmpArgs == defaultArguments && standards.contains(standard)) {
+        return false;
+    }
+
+    return true;
+}
+
+const int customProfileIdx = 0;
+}
+
 ParserWidget::ParserWidget(QWidget* parent)
     : QWidget(parent)
     , m_ui(new Ui::ParserWidget())
@@ -51,8 +73,6 @@ ParserWidget::ParserWidget(QWidget* parent)
     connect(m_ui->languageStandards, static_cast<void(QComboBox::*)(const
 QString&)>(&QComboBox::activated), this,
 &ParserWidget::languageStandardChanged);
-    connect(m_ui->kcfg_useProfile, &QRadioButton::toggled, this,
-&ParserWidget::updateEnablements);
 
     updateEnablements();
 }
@@ -61,27 +81,38 @@ ParserWidget::~ParserWidget() = default;
 
 void ParserWidget::textEdited()
 {
-    const auto parserOptions = m_ui->parserOptions->text();
-    m_ui->languageStandards->setCurrentText(languageStandard(m_ui->parserOptions->text()));
-
     emit changed();
 }
 
 void ParserWidget::languageStandardChanged(const QString& standard)
 {
-    auto text = m_ui->parserOptions->text();
-
-    auto currentStandard = languageStandard(text);
-
-    m_ui->parserOptions->setText(text.replace(currentStandard, standard));
+    if (m_ui->languageStandards->currentIndex() == customProfileIdx) {
+        m_ui->parserOptions->setText(SettingsManager::globalInstance()->defaultParserArguments());
+    } else {
+        auto text = SettingsManager::globalInstance()->defaultParserArguments();
+        auto currentStandard = languageStandard(text);
+        m_ui->parserOptions->setText(text.replace(currentStandard, standard));
+    }
 
     textEdited();
+    updateEnablements();
 }
 
 void ParserWidget::setParserArguments(const QString& arguments)
 {
+    QStringList standards;
+    for (int i = 1; i < m_ui->languageStandards->count(); i++) {
+        standards << m_ui->languageStandards->itemText(i);
+    }
+
+    if (isCustomParserArguments(arguments, standards)) {
+        m_ui->languageStandards->setCurrentIndex(customProfileIdx);
+    } else {
+        m_ui->languageStandards->setCurrentText(languageStandard(arguments));
+    }
+
     m_ui->parserOptions->setText(arguments);
-    m_ui->languageStandards->setCurrentText(languageStandard(arguments));
+    updateEnablements();
 }
 
 QString ParserWidget::parserArguments() const
@@ -91,12 +122,11 @@ QString ParserWidget::parserArguments() const
 
 void ParserWidget::updateEnablements()
 {
-    if (m_ui->kcfg_useProfile->isChecked()) {
-        m_ui->languageStandards->setHidden(false);
-        m_ui->parserOptions->setHidden(true);
-        setParserArguments(SettingsManager::globalInstance()->defaultParserArguments());
-    } else {
-        m_ui->languageStandards->setHidden(true);
+    if (m_ui->languageStandards->currentIndex() == customProfileIdx) {
         m_ui->parserOptions->setHidden(false);
+        m_ui->argumentsLabel->setHidden(false);
+    } else {
+        m_ui->parserOptions->setHidden(true);
+        m_ui->argumentsLabel->setHidden(true);
     }
 }
