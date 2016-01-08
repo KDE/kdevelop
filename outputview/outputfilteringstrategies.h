@@ -26,12 +26,11 @@
 
 
 #include "ifilterstrategy.h"
-#include "outputformats.h"
 #include <outputview/outputviewexport.h>
 
 #include <QList>
 #include <QVector>
-#include <QtCore/QMap>
+#include <QHash>
 #include <QUrl>
 
 namespace KDevelop

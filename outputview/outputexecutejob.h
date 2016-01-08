@@ -155,9 +155,14 @@ public:
     void setJobName( const QString& name );
 
     /**
-     * Set the filtering strategy for the output model.
+     * Set one of the standard filtering strategies for the output model.
      */
     void setFilteringStrategy( OutputModel::OutputFilterStrategy strategy );
+
+    /**
+     * Set the filtering strategy for the output model.
+     */
+    void setFilteringStrategy(IFilterStrategy* filterStrategy);
 
     /**
      * Get the current properties of the job.

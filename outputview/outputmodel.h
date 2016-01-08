@@ -69,6 +69,7 @@ public:
     QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const override;
 
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
+    void setFilteringStrategy(IFilterStrategy* filterStrategy);
 
 public Q_SLOTS:
     void appendLine( const QString& );

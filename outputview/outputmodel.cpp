@@ -407,6 +407,12 @@ void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrate
                               Q_ARG(KDevelop::IFilterStrategy*, filter));
 }
 
+void OutputModel::setFilteringStrategy(IFilterStrategy* filterStrategy)
+{
+    QMetaObject::invokeMethod(d->worker, "changeFilterStrategy",
+                              Q_ARG(KDevelop::IFilterStrategy*, filterStrategy));
+}
+
 void OutputModel::appendLines( const QStringList& lines )
 {
     if( lines.isEmpty() )

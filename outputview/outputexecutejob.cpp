@@ -57,6 +57,7 @@ public:
     OutputExecuteJob::JobStatus m_status;
     OutputExecuteJob::JobProperties m_properties;
     OutputModel::OutputFilterStrategy m_filteringStrategy;
+    QScopedPointer<IFilterStrategy> m_filteringStrategyPtr;
     QStringList m_arguments;
     QStringList m_privilegedExecutionCommand;
     QUrl m_workingDirectory;
@@ -223,7 +224,12 @@ void OutputExecuteJob::start()
     }
     Q_ASSERT( model() );
 
-    model()->setFilteringStrategy( d->m_filteringStrategy );
+    if (d->m_filteringStrategy != OutputModel::NoFilter) {
+        model()->setFilteringStrategy(d->m_filteringStrategy);
+    } else {
+        model()->setFilteringStrategy(d->m_filteringStrategyPtr.take());
+    }
+
     setDelegate( new OutputDelegate );
 
     connect(model(), &OutputModel::progress, this, [&](const IFilterStrategy::Progress& progress) {
@@ -398,6 +404,17 @@ void OutputExecuteJob::postProcessStderr( const QStringList& lines )
 void OutputExecuteJob::setFilteringStrategy( OutputModel::OutputFilterStrategy strategy )
 {
     d->m_filteringStrategy = strategy;
+
+    // clear the other
+    d->m_filteringStrategyPtr.reset(nullptr);
+}
+
+void OutputExecuteJob::setFilteringStrategy(IFilterStrategy* filterStrategy)
+{
+    d->m_filteringStrategyPtr.reset(filterStrategy);
+
+    // clear the other
+    d->m_filteringStrategy = OutputModel::NoFilter;
 }
 
 OutputExecuteJob::JobProperties OutputExecuteJob::properties() const
