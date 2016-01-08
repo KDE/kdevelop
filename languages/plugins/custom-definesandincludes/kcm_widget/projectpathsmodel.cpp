@@ -157,8 +157,9 @@ void ProjectPathsModel::setPaths(const QList< ConfigEntry >& paths )
     foreach( const ConfigEntry& existingPathConfig, paths ) {
         // Sanitize the path of loaded config
         ConfigEntry config = existingPathConfig;
-        config.path = sanitizePath( config.path == "." ? QString() : config.path );
-        addPathInternal( config, false );
+        bool rootPath = config.path == "." ? true : false;
+        config.path = sanitizePath(rootPath ? QString() : config.path );
+        addPathInternal(config, rootPath);
     }
     addPathInternal( sanitizePath( QString() ), true ); // add an empty "root" config entry if one does not exist
     endResetModel();
