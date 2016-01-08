@@ -32,14 +32,15 @@
 
 #include "../ui_compilerswidget.h"
 #include "compilersmodel.h"
-#include "debugarea.h"
+#include "../../debugarea.h"
 #include "../compilerprovider/settingsmanager.h"
 #include "../compilerprovider/compilerprovider.h"
 
 using namespace KDevelop;
 
 CompilersWidget::CompilersWidget(QWidget* parent)
-    : QWidget(parent), m_ui(new Ui::CompilersWidget)
+    : ConfigPage(nullptr, nullptr, parent)
+    , m_ui(new Ui::CompilersWidget)
     , m_compilersModel(new CompilersModel(this))
 {
     m_ui->setupUi(this);
@@ -109,6 +110,8 @@ void CompilersWidget::deleteCompiler()
             compilerSelected(selectedCompiler.isEmpty() ? QModelIndex() : selectedCompiler.first());
         }
     }
+
+    emit changed();
 }
 
 void CompilersWidget::addCompiler(const QString& factoryName)
@@ -125,6 +128,8 @@ void CompilersWidget::addCompiler(const QString& factoryName)
             break;
         }
     }
+
+    emit changed();
 }
 
 QVector< CompilerPointer > CompilersWidget::compilers() const
@@ -158,6 +163,8 @@ void CompilersWidget::compilerEdited()
     compiler.value<CompilerPointer>()->setPath(m_ui->compilerPath->text());
 
     m_compilersModel->updateCompiler(m_ui->compilers->selectionModel()->selection());
+
+    emit changed();
 }
 
 void CompilersWidget::selectCompilerPathDialog()
@@ -180,4 +187,56 @@ void CompilersWidget::enableItems(bool enable)
         m_ui->compilerName->clear();
         m_ui->compilerPath->clear();
     }
+}
+
+void CompilersWidget::reset()
+{
+    auto settings = SettingsManager::globalInstance();
+    setCompilers(settings->provider()->compilers());
+}
+
+void CompilersWidget::apply()
+{
+    auto settings = SettingsManager::globalInstance();
+    auto provider = settings->provider();
+
+    settings->writeUserDefinedCompilers(compilers());
+
+    const auto& providerCompilers = provider->compilers();
+    const auto& widgetCompilers = compilers();
+    for (auto compiler: providerCompilers) {
+        if (!widgetCompilers.contains(compiler)) {
+            provider->unregisterCompiler(compiler);
+        }
+    }
+
+    for (auto compiler: widgetCompilers) {
+        if (!providerCompilers.contains(compiler)) {
+            provider->registerCompiler(compiler);
+        }
+    }
+}
+
+void CompilersWidget::defaults()
+{
+}
+
+QString CompilersWidget::name() const
+{
+    return i18n("Compilers");
+}
+
+QString CompilersWidget::fullName() const
+{
+    return i18n("Configure Compilers");
+}
+
+QIcon CompilersWidget::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("kdevelop"));
+}
+
+KDevelop::ConfigPage::ConfigPageType CompilersWidget::configPageType() const
+{
+    return ConfigPage::LanguageConfigPage;
 }

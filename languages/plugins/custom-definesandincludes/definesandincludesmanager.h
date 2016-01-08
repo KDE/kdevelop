@@ -69,6 +69,9 @@ public:
     KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options,
                                                        QWidget* parent) override;
 
+    KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
+    int configPages() const override;
+
 private:
     QVector<Provider*> m_providers;
     QVector<BackgroundProvider*> m_backgroundProviders;

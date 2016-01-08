@@ -57,9 +57,7 @@ void DefinesAndIncludesConfigPage::loadFrom( KConfig* cfg )
     configWidget->clear();
 
     auto settings = SettingsManager::globalInstance();
-    auto provider = settings->provider();
 
-    configWidget->setCompilers(provider->compilers());
     configWidget->setPaths( settings->readPaths( cfg ) );
 }
 
@@ -67,23 +65,6 @@ void DefinesAndIncludesConfigPage::saveTo(KConfig* cfg, KDevelop::IProject*)
 {
     auto settings = SettingsManager::globalInstance();
     settings->writePaths( cfg, configWidget->paths() );
-
-    auto provider = settings->provider();
-    settings->writeUserDefinedCompilers(configWidget->compilers());
-
-    const auto& providerCompilers = provider->compilers();
-    const auto& widgetCompilers = configWidget->compilers();
-    for (auto compiler: providerCompilers) {
-        if (!widgetCompilers.contains(compiler)) {
-            provider->unregisterCompiler(compiler);
-        }
-    }
-
-    for (auto compiler: widgetCompilers) {
-        if (!providerCompilers.contains(compiler)) {
-            provider->registerCompiler(compiler);
-        }
-    }
 
     if ( settings->needToReparseCurrentProject( cfg ) ) {
         KDevelop::ICore::self()->projectController()->reparseProject(project(), true);

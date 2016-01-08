@@ -23,6 +23,7 @@
 
 #include "kcm_widget/definesandincludesconfigpage.h"
 #include "compilerprovider/compilerprovider.h"
+#include "compilerprovider/widget/compilerswidget.h"
 #include "noprojectincludesanddefines/noprojectincludepathsmanager.h"
 
 #include <interfaces/icore.h>
@@ -287,6 +288,16 @@ ConfigPage* DefinesAndIncludesManager::perProjectConfigPage(int number, const Pr
         return new DefinesAndIncludesConfigPage(this, options, parent);
     }
     return nullptr;
+}
+
+KDevelop::ConfigPage* DefinesAndIncludesManager::configPage(int number, QWidget* parent)
+{
+    return number == 0 ? new CompilersWidget(parent) : nullptr;
+}
+
+int DefinesAndIncludesManager::configPages() const
+{
+    return 1;
 }
 
 #include "definesandincludesmanager.moc"

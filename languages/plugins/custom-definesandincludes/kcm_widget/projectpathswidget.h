@@ -50,10 +50,6 @@ public:
     QList<ConfigEntry> paths() const;
     void clear();
 
-    void setCompilers(const QVector<CompilerPointer>& compilers, bool updateCompilersModel = true);
-
-    QVector<CompilerPointer> compilers() const;
-
 signals:
     void changed();
 
@@ -76,8 +72,6 @@ private slots:
 
     // Forward defines model changes into the pathsModel
     void definesChanged( const KDevelop::Defines& defines );
-
-    void userDefinedCompilerChanged();
 
     void parserArgumentsChanged();
 

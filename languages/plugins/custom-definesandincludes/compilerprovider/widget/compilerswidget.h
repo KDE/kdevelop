@@ -28,6 +28,8 @@
 #include <QVector>
 #include <QWidget>
 
+#include <interfaces/configpage.h>
+
 #include "../compilerprovider/icompiler.h"
 
 namespace Ui
@@ -39,15 +41,25 @@ class CompilersModel;
 class QMenu;
 class QSignalMapper;
 
-class CompilersWidget : public QWidget
+class CompilersWidget : public KDevelop::ConfigPage
 {
     Q_OBJECT
 
 public:
-    CompilersWidget( QWidget* parent = 0 );
-    void setCompilers( const QVector<CompilerPointer>& compilers );
+    explicit CompilersWidget(QWidget* parent = 0);
+    void setCompilers(const QVector<CompilerPointer>& compilers);
     QVector<CompilerPointer> compilers() const;
     void clear();
+
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
+
+    KDevelop::ConfigPage::ConfigPageType configPageType() const override;
+
+    void apply() override;
+    void reset() override;
+    void defaults() override;
 
 private slots:
     void deleteCompiler();
