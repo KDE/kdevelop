@@ -17,6 +17,11 @@ ecm_add_test(test_identifier.cpp
 
 ########### next target ###############
 
+ecm_add_test(test_stringhelpers.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
+
+########### next target ###############
+
 if(NOT COMPILER_OPTIMIZATIONS_DISABLED)
     ecm_add_test(bench_hashes.cpp
         LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)

@@ -50,7 +50,7 @@ int strip_impl(const T& str, T& from)
   }
 
   if( ip ) {
-    from = from.mid( ip );
+    from.remove(0, ip);
   }
   return s - from.length();
 }
@@ -99,10 +99,15 @@ T formatComment_impl(const T& comment)
 
     // remove common leading chars from the beginning of lines
     for( ; it != eit; ++it ) {
-        strip_impl<T>( "///", *it );
-        strip_impl<T>( "//", *it );
-        strip_impl<T>( "**", *it );
-        rStrip_impl<T>( "/**", *it );
+        // don't trigger repeated temporary allocations here
+        static const T tripleSlash("///");
+        static const T doubleSlash("//");
+        static const T doubleStar("**");
+        static const T slashDoubleStar("/**");
+        strip_impl( tripleSlash, *it );
+        strip_impl( doubleSlash, *it );
+        strip_impl( doubleStar, *it );
+        rStrip_impl( slashDoubleStar, *it );
     }
 
     foreach(const T& line, lines) {
