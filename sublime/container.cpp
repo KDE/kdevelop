@@ -18,7 +18,9 @@
  ***************************************************************************/
 #include "container.h"
 
+#include <QApplication>
 #include <QBoxLayout>
+#include <QClipboard>
 #include <QEvent>
 #include <QLabel>
 #include <QMap>
@@ -546,9 +548,13 @@ void Container::contextMenu( const QPoint& pos )
     emit tabContextMenuRequested(view, &menu);
 
     menu.addSeparator();
+    QAction* copyPathAction = nullptr;
     QAction* closeTabAction = nullptr;
     QAction* closeOtherTabsAction = nullptr;
     if (view) {
+        copyPathAction = menu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")),
+                                        i18n("Copy Filename"));
+        menu.addSeparator();
         closeTabAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
                                         i18n("Close File"));
         closeOtherTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
@@ -582,6 +588,12 @@ void Container::contextMenu( const QPoint& pos )
             // close all
             for ( int i = 0; i < count(); ++i ) {
                 requestClose(widget(i));
+            }
+        } else if( triggered == copyPathAction ) {
+            auto view = viewForWidget( widget( currentTab ) );
+            auto urlDocument = qobject_cast<UrlDocument*>( view->document() );
+            if( urlDocument ) {
+                QApplication::clipboard()->setText( urlDocument->url().toString() );
             }
         } // else the action was handled by someone else
     }
