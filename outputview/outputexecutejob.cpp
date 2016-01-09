@@ -40,6 +40,8 @@ public:
     void childProcessStdout();
     void childProcessStderr();
 
+    void emitProgress(const IFilterStrategy::Progress& progress);
+
     QString joinCommandLine() const;
     QString getJobName();
 
@@ -55,6 +57,7 @@ public:
     OutputExecuteJob::JobStatus m_status;
     OutputExecuteJob::JobProperties m_properties;
     OutputModel::OutputFilterStrategy m_filteringStrategy;
+    QScopedPointer<IFilterStrategy> m_filteringStrategyPtr;
     QStringList m_arguments;
     QStringList m_privilegedExecutionCommand;
     QUrl m_workingDirectory;
@@ -221,8 +224,17 @@ void OutputExecuteJob::start()
     }
     Q_ASSERT( model() );
 
-    model()->setFilteringStrategy( d->m_filteringStrategy );
+    if (d->m_filteringStrategy != OutputModel::NoFilter) {
+        model()->setFilteringStrategy(d->m_filteringStrategy);
+    } else {
+        model()->setFilteringStrategy(d->m_filteringStrategyPtr.take());
+    }
+
     setDelegate( new OutputDelegate );
+
+    connect(model(), &OutputModel::progress, this, [&](const IFilterStrategy::Progress& progress) {
+        d->emitProgress(progress);
+    });
 
     // Slots hasRawStdout() and hasRawStderr() are responsible
     // for feeding raw data to the line maker; so property-based channel filtering is implemented there.
@@ -368,6 +380,17 @@ void OutputExecuteJobPrivate::childProcessStderr()
     }
 }
 
+void OutputExecuteJobPrivate::emitProgress(const IFilterStrategy::Progress& progress)
+{
+    m_owner->emitPercent(progress.percent, 100);
+
+    if (progress.percent == 100) {
+        m_owner->infoMessage(m_owner, i18n("Build finished"));
+    } else {
+        m_owner->infoMessage(m_owner, progress.status);
+    }
+}
+
 void OutputExecuteJob::postProcessStdout( const QStringList& lines )
 {
     model()->appendLines( lines );
@@ -381,6 +404,17 @@ void OutputExecuteJob::postProcessStderr( const QStringList& lines )
 void OutputExecuteJob::setFilteringStrategy( OutputModel::OutputFilterStrategy strategy )
 {
     d->m_filteringStrategy = strategy;
+
+    // clear the other
+    d->m_filteringStrategyPtr.reset(nullptr);
+}
+
+void OutputExecuteJob::setFilteringStrategy(IFilterStrategy* filterStrategy)
+{
+    d->m_filteringStrategyPtr.reset(filterStrategy);
+
+    // clear the other
+    d->m_filteringStrategy = OutputModel::NoFilter;
 }
 
 OutputExecuteJob::JobProperties OutputExecuteJob::properties() const

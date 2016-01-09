@@ -70,7 +70,6 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     splitter->setSizes(QList<int>() << 260 << 620);
 
     addConfig->setIcon( QIcon::fromTheme(QStringLiteral("list-add")) );
-    addConfig->setEnabled( false );
     addConfig->setToolTip(i18nc("@info:tooltip", "Add a new launch configuration."));
     deleteConfig->setIcon( QIcon::fromTheme(QStringLiteral("list-remove")) );
     deleteConfig->setEnabled( false );
@@ -183,6 +182,12 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
             m->addAction(action);
     }
     addConfig->setMenu(m);
+    addConfig->setEnabled( !m->isEmpty() );
+
+    messageWidget->setCloseButtonVisible( false );
+    messageWidget->setMessageType( KMessageWidget::Warning );
+    messageWidget->setText( i18n("No launch configurations available. (Is any of the Execute plugins loaded?)") );
+    messageWidget->setVisible( m->isEmpty() );
 
     connect(debugger, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LaunchConfigurationDialog::launchModeChanged);
 
@@ -361,14 +366,14 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                 tab->setLaunchConfiguration( l );
                 stack->setCurrentWidget( tab );
 
-                addConfig->setEnabled( true );
+                addConfig->setEnabled( addConfig->menu() && !addConfig->menu()->isEmpty() );
                 deleteConfig->setEnabled( true );
                 debugger->setVisible( false );
                 debugLabel->setVisible( false );
             }
         } else
         {
-            addConfig->setEnabled( true );
+            addConfig->setEnabled( addConfig->menu() && !addConfig->menu()->isEmpty() );
             deleteConfig->setEnabled( false );
             stack->setCurrentIndex( 0 );
             QLabel* l = new QLabel(i18n("<i>Select a configuration to edit from the left,<br>"

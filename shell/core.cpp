@@ -152,6 +152,17 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     if( !pluginController )
     {
         pluginController = new PluginController(m_core);
+        const auto pluginInfos = pluginController->allPluginInfos();
+        if (pluginInfos.isEmpty()) {
+            QMessageBox::critical(nullptr,
+                                  i18n("Could not find any plugins"),
+                                  i18n("<p>Could not find any plugins during startup.<br/>"
+                                  "Please make sure QT_PLUGIN_PATH is set correctly.</p>"
+                                  "Refer to <a href=\"https://community.kde.org/Frameworks/Building#Runtime_setup\">this article</a> for more information."),
+                                  QMessageBox::Abort, QMessageBox::Abort);
+            qWarning() << "Could not find any plugins, aborting";
+            return false;
+        }
     }
     if( !partController && !(mode & Core::NoUi))
     {

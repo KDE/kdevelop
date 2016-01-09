@@ -140,6 +140,7 @@ private Q_SLOTS:
 private:
     void setupActions();
     void checkState();
+    void removeLaunchConfigurationInternal( LaunchConfiguration* l );
 
     Q_PRIVATE_SLOT(d, void configureLaunches())
     Q_PRIVATE_SLOT(d, void launchAs(int))

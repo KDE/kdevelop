@@ -767,8 +767,7 @@ void RunController::removeConfigurationType( LaunchConfigurationType* type )
     {
         if( l->type() == type )
         {
-            d->launchConfigurations.removeAll( l );
-            delete l;
+            removeLaunchConfigurationInternal( l );
         }
     }
     d->launchConfigurationTypes.remove( type->id() );
@@ -833,14 +832,16 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
     launcherGroup.writeEntry( Strings::LaunchConfigurationsListEntry(), configs );
     launcherGroup.sync();
 
-    foreach( QAction* a, d->currentTargetAction->actions() )
-    {
-        if( static_cast<LaunchConfiguration*>( a->data().value<void*>() ) == l )
-        {
+    removeLaunchConfigurationInternal( l );
+}
+
+void RunController::removeLaunchConfigurationInternal(LaunchConfiguration *l)
+{
+    foreach( QAction* a, d->currentTargetAction->actions() ) {
+        if( static_cast<LaunchConfiguration*>( a->data().value<void*>() ) == l ) {
             bool wasSelected = a->isChecked();
             d->currentTargetAction->removeAction( a );
-            if( wasSelected && !d->currentTargetAction->actions().isEmpty() )
-            {
+            if( wasSelected && !d->currentTargetAction->actions().isEmpty() ) {
                 d->currentTargetAction->actions().at(0)->setChecked( true );
             }
             break;

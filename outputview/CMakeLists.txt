@@ -24,6 +24,7 @@ install(FILES
     filtereditem.h
     outputmodel.h
     outputdelegate.h
+    outputfilteringstrategies.h
     ioutputviewmodel.h
     ifilterstrategy.h
     outputjob.h

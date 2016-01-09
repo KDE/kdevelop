@@ -27,9 +27,9 @@
 
 #include <algorithm>
 
-using namespace KDevelop;
+namespace KDevelop
+{
 
-namespace {
 template<typename ErrorFormats>
 FilteredItem match(const ErrorFormats& errorFormats, const QString& line)
 {
@@ -58,7 +58,6 @@ FilteredItem match(const ErrorFormats& errorFormats, const QString& line)
     }
     return item;
 }
-}
 
 /// --- No filter strategy ---
 
@@ -78,12 +77,28 @@ FilteredItem NoFilterStrategy::errorInLine(const QString& line)
 
 /// --- Compiler error filter strategy ---
 
-CompilerFilterStrategy::CompilerFilterStrategy(const QUrl& buildDir)
+/// Impl. of CompilerFilterStrategy.
+struct CompilerFilterStrategyPrivate
+{
+    CompilerFilterStrategyPrivate(const QUrl& buildDir);
+    Path pathForFile( const QString& ) const;
+    bool isMultiLineCase(ErrorFormat curErrFilter) const;
+    void putDirAtEnd(const Path& pathToInsert);
+
+    QVector<Path> m_currentDirs;
+    Path m_buildDir;
+
+    using PositionMap = QHash<Path, int>;
+    PositionMap m_positionInCurrentDirs;
+};
+
+
+CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const QUrl& buildDir)
     : m_buildDir(buildDir)
 {
 }
 
-Path CompilerFilterStrategy::pathForFile(const QString& filename) const
+Path CompilerFilterStrategyPrivate::pathForFile(const QString& filename) const
 {
     QFileInfo fi( filename );
     Path currentPath;
@@ -104,7 +119,7 @@ Path CompilerFilterStrategy::pathForFile(const QString& filename) const
     return currentPath;
 }
 
-bool CompilerFilterStrategy::isMultiLineCase(KDevelop::ErrorFormat curErrFilter) const
+bool CompilerFilterStrategyPrivate::isMultiLineCase(KDevelop::ErrorFormat curErrFilter) const
 {
     if(curErrFilter.compiler == QLatin1String("gfortran") || curErrFilter.compiler == QLatin1String("cmake")) {
         return true;
@@ -112,9 +127,9 @@ bool CompilerFilterStrategy::isMultiLineCase(KDevelop::ErrorFormat curErrFilter)
     return false;
 }
 
-void CompilerFilterStrategy::putDirAtEnd(const Path& pathToInsert)
+void CompilerFilterStrategyPrivate::putDirAtEnd(const Path& pathToInsert)
 {
-    auto it = m_positionInCurrentDirs.find( pathToInsert );
+    CompilerFilterStrategyPrivate::PositionMap::iterator it = m_positionInCurrentDirs.find( pathToInsert );
     // Encountered new build directory?
     if (it == m_positionInCurrentDirs.end()) {
         m_currentDirs.push_back( pathToInsert );
@@ -127,11 +142,21 @@ void CompilerFilterStrategy::putDirAtEnd(const Path& pathToInsert)
     }
 }
 
+CompilerFilterStrategy::CompilerFilterStrategy(const QUrl& buildDir)
+: d(new CompilerFilterStrategyPrivate( buildDir ))
+{
+}
+
+CompilerFilterStrategy::~CompilerFilterStrategy()
+{
+    delete d;
+}
+
 QVector<QString> CompilerFilterStrategy::getCurrentDirs()
 {
     QVector<QString> ret;
-    ret.reserve(m_currentDirs.size());
-    for (const auto& path : m_currentDirs) {
+    ret.reserve(d->m_currentDirs.size());
+    for (const auto& path : d->m_currentDirs) {
         ret << path.pathOrUrl();
     }
     return ret;
@@ -187,8 +212,8 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 
             if( curActFilter.tool == "cd" ) {
                 const Path path(match.captured(curActFilter.fileGroup));
-                m_currentDirs.push_back( path );
-                m_positionInCurrentDirs.insert( path , m_currentDirs.size() - 1 );
+                d->m_currentDirs.push_back( path );
+                d->m_positionInCurrentDirs.insert( path , d->m_currentDirs.size() - 1 );
             }
 
             // Special case for cmake: we parse the "Compiling <objectfile>" expression
@@ -199,7 +224,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             if ( curActFilter.fileGroup != -1 && curActFilter.tool == "cmake" && line.contains("Building")) {
                 const auto objectFile = match.captured(curActFilter.fileGroup);
                 const auto dir = objectFile.section(QStringLiteral("CMakeFiles/"), 0, 0);
-                putDirAtEnd(Path(m_buildDir, dir));
+                d->putDirAtEnd(Path(d->m_buildDir, dir));
             }
             break;
         }
@@ -282,11 +307,11 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         {
             if(curErrFilter.fileGroup > 0) {
                 if( curErrFilter.compiler == "cmake" ) { // Unfortunately we cannot know if an error or an action comes first in cmake, and therefore we need to do this
-                    if( m_currentDirs.empty() ) {
-                        putDirAtEnd( m_buildDir.parent() );
+                    if( d->m_currentDirs.empty() ) {
+                        d->putDirAtEnd( d->m_buildDir.parent() );
                     }
                 }
-                item.url = pathForFile( match.captured( curErrFilter.fileGroup ) ).toUrl();
+                item.url = d->pathForFile( match.captured( curErrFilter.fileGroup ) ).toUrl();
             }
             item.lineNo = match.captured( curErrFilter.lineGroup ).toInt() - 1;
             if(curErrFilter.columnGroup >= 0) {
@@ -313,7 +338,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
                 if(item.type == FilteredItem::InvalidItem) {
                     // If there are no error indicators in the line
                     // maybe this is a multiline case
-                    if(isMultiLineCase(curErrFilter)) {
+                    if(d->isMultiLineCase(curErrFilter)) {
                         item.type = FilteredItem::ErrorItem;
                     } else {
                         // Okay so we couldn't find anything to indicate an error, but we have file and lineGroup
@@ -427,4 +452,6 @@ FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
     };
 
     return match(STATIC_ANALYSIS_FILTERS, line);
+}
+
 }

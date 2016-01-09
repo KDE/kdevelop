@@ -24,6 +24,7 @@
 
 #include "outputviewexport.h"
 #include "ioutputviewmodel.h"
+#include "ifilterstrategy.h"
 
 #include <QtCore/QAbstractListModel>
 #include <QUrl>
@@ -70,6 +71,7 @@ public:
     QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const override;
 
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
+    void setFilteringStrategy(IFilterStrategy* filterStrategy);
 
 public Q_SLOTS:
     void appendLine( const QString& );
@@ -77,6 +79,8 @@ public Q_SLOTS:
     void ensureAllDone();
 
 signals:
+    /// If the current filter strategy supports it, reports progress information
+    void progress(const KDevelop::IFilterStrategy::Progress& progress);
     void allDone();
 
 private:

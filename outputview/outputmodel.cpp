@@ -40,7 +40,6 @@
 #include <set>
 
 Q_DECLARE_METATYPE(QVector<KDevelop::FilteredItem>)
-Q_DECLARE_METATYPE(KDevelop::IFilterStrategy*)
 
 namespace KDevelop
 {
@@ -101,6 +100,7 @@ public slots:
 
 signals:
     void parsedBatch(const QVector<KDevelop::FilteredItem>& filteredItems);
+    void progress(const KDevelop::IFilterStrategy::Progress& progress);
     void allDone();
 
 private slots:
@@ -125,6 +125,12 @@ private slots:
 
             filteredItems << item;
 
+            auto progress = m_filter->progressInLine(line);
+            if (progress.percent >= 0 && m_progress.percent != progress.percent) {
+                m_progress = progress;
+                emit this->progress(m_progress);
+            }
+
             if( filteredItems.size() == BATCH_SIZE ) {
                 emit parsedBatch(filteredItems);
                 filteredItems.clear();
@@ -144,6 +150,7 @@ private:
     QStringList m_cachedLines;
 
     QTimer* m_timer;
+    IFilterStrategy::Progress m_progress;
 };
 
 class ParsingThread
@@ -209,11 +216,15 @@ OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const QUrl& builddi
 {
     qRegisterMetaType<QVector<KDevelop::FilteredItem> >();
     qRegisterMetaType<KDevelop::IFilterStrategy*>();
+    qRegisterMetaType<KDevelop::IFilterStrategy::Progress>();
+
     s_parsingThread->addWorker(worker);
     model->connect(worker, &ParseWorker::parsedBatch,
                    model, [=] (const QVector<KDevelop::FilteredItem>& items) { linesParsed(items); });
     model->connect(worker, &ParseWorker::allDone,
                    model, &OutputModel::allDone);
+    model->connect(worker, &ParseWorker::progress,
+                   model, &OutputModel::progress);
 }
 
 bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCount ) const
@@ -424,6 +435,12 @@ void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrate
 
     QMetaObject::invokeMethod(d->worker, "changeFilterStrategy",
                               Q_ARG(KDevelop::IFilterStrategy*, filter));
+}
+
+void OutputModel::setFilteringStrategy(IFilterStrategy* filterStrategy)
+{
+    QMetaObject::invokeMethod(d->worker, "changeFilterStrategy",
+                              Q_ARG(KDevelop::IFilterStrategy*, filterStrategy));
 }
 
 void OutputModel::appendLines( const QStringList& lines )

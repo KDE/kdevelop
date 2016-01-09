@@ -1,6 +1,7 @@
 /*
     Interface description for KDevelop OutputView Filter strategies
     Copyright (C) 2012  Morten Danielsen Volden mvolden2@gmail.com
+    Copyright (C) 2016  Kevin Funk <kfunk@kde.org>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,6 +30,12 @@ IFilterStrategy::IFilterStrategy()
 
 IFilterStrategy::~IFilterStrategy()
 {
+}
+
+IFilterStrategy::Progress IFilterStrategy::progressInLine(const QString& line)
+{
+    Q_UNUSED(line);
+    return {};
 }
 
 }
