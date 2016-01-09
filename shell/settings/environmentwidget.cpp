@@ -173,6 +173,8 @@ void EnvironmentWidget::batchModeEditButtonClicked()
     dialog->connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
     layout->addWidget(buttonBox);
 
+    dialog->resize(600, 400);
+
     if ( dialog->exec() != QDialog::Accepted ) {
         return;
     }
