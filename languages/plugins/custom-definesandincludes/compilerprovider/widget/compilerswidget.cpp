@@ -47,6 +47,9 @@ CompilersWidget::CompilersWidget(QWidget* parent)
     m_ui->compilers->setModel(m_compilersModel);
     m_ui->compilers->header()->setSectionResizeMode(QHeaderView::Stretch);
 
+    m_ui->addButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+    m_ui->removeButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+
     m_addMenu = new QMenu(m_ui->addButton);
     m_mapper = new QSignalMapper(m_addMenu);
     connect(m_mapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &CompilersWidget::addCompiler);
