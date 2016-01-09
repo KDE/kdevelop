@@ -466,13 +466,16 @@ void OutputExecuteJobPrivate::mergeEnvironment( QProcessEnvironment& dest, const
 
 QProcessEnvironment OutputExecuteJobPrivate::effectiveEnvironment() const
 {
-    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
     const EnvironmentGroupList environmentGroup( KSharedConfig::openConfig() );
     QString environmentProfile = m_owner->environmentProfile();
     if( environmentProfile.isEmpty() ) {
         environmentProfile = environmentGroup.defaultGroup();
     }
-    OutputExecuteJobPrivate::mergeEnvironment( environment, environmentGroup.variables( environmentProfile ) );
+    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+    auto userEnv = environmentGroup.variables(environmentProfile);
+    expandVariables(userEnv, environment);
+
+    OutputExecuteJobPrivate::mergeEnvironment( environment, userEnv );
     OutputExecuteJobPrivate::mergeEnvironment( environment, m_environmentOverrides );
     if( m_properties.testFlag( OutputExecuteJob::PortableMessages ) ) {
         environment.remove( "LC_ALL" );

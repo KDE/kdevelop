@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 
 #include <KSharedConfig>
 
+class QProcessEnvironment;
 class KConfig;
 template <typename T1, typename T2> class QMap;
 class QString;
@@ -139,6 +140,8 @@ private:
     class EnvironmentGroupListPrivate* const d;
 
 };
+
+KDEVPLATFORMUTIL_EXPORT void expandVariables(QMap<QString, QString>& variables, const QProcessEnvironment& environment);
 
 }
 

@@ -25,6 +25,8 @@ Boston, MA 02110-1301, USA.
 
 #include <KConfigGroup>
 
+#include <QRegularExpression>
+#include <QProcessEnvironment>
 
 namespace KDevelop {
 class EnvironmentGroupListPrivate
@@ -200,4 +202,22 @@ QStringList EnvironmentGroupList::createEnvironment( const QString & group, cons
     }
 
     return env;
+}
+
+void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcessEnvironment& environment)
+{
+    QRegularExpression rVar("(?<!\\\\)(\\$\\w+)");
+    QRegularExpression rNotVar("\\\\\\$");
+    for (auto it = variables.begin(); it != variables.end(); ++it) {
+        QRegularExpressionMatch m;
+        while ((m=rVar.match(it.value())).hasMatch()) {
+            if (environment.contains(m.captured(1).midRef(1).toString())) {
+                it.value().replace(m.capturedStart(0), m.capturedLength(0), environment.value(m.captured(0).midRef(1).toString()));
+            } else {
+                //TODO: an warning
+                it.value().replace(m.capturedStart(0), m.capturedLength(0), "");
+            }
+        }
+        it.value().replace(rNotVar,"$");
+    }
 }
