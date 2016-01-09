@@ -290,7 +290,7 @@ bool OutputExecuteJob::doKill()
     }
     d->m_lineMaker->flushBuffers();
     if( terminated ) {
-        model()->appendLine( i18n( "*** Aborted ***" ) );
+        model()->appendLine( i18n( "*** Killed process ***" ) );
     } else {
         // It survived SIGKILL, leave it alone...
         model()->appendLine( i18n( "*** Warning: could not kill the process ***" ) );
@@ -359,7 +359,7 @@ void OutputExecuteJob::childProcessExited( int exitCode, QProcess::ExitStatus ex
     } else {
         d->m_status = JobSucceeded;
         d->m_lineMaker->flushBuffers();
-        model()->appendLine( i18n("*** Finished ***") );
+        model()->appendLine( i18n("*** Finished with exit code 0 ***") );
         emitResult();
     }
 }
