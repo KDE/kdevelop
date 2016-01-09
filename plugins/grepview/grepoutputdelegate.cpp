@@ -177,7 +177,5 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
         if(newSize.height() > ret.height())
             ret.setHeight(newSize.height());
     }
-
-    ret.setHeight(ret.height()+2); // We slightly increase the vertical size, else the view looks too crowded
     return ret;
 }
