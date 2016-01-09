@@ -22,16 +22,13 @@
 #ifndef TESTCODECOMPLETION_H
 #define TESTCODECOMPLETION_H
 
-#include <QObject>
+#include "codecompletiontestbase.h"
 
-class TestCodeCompletion : public QObject
+class TestCodeCompletion : public CodeCompletionTestBase
 {
     Q_OBJECT
 
 private slots:
-    void initTestCase();
-    void cleanupTestCase();
-
     void testIncludePathCompletion_data();
     void testIncludePathCompletion();
     void testIncludePathCompletionLocal();

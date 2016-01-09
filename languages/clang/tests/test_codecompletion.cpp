@@ -46,11 +46,6 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
-#include <ktexteditor_version.h>
-#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(5, 10, 0)
-Q_DECLARE_METATYPE(KTextEditor::Cursor);
-#endif
-
 QTEST_MAIN(TestCodeCompletion);
 
 static const auto NoMacroOrBuiltin = ClangCodeCompletionContext::ContextFilters(
@@ -103,21 +98,6 @@ struct CompletionPriorityItems : public CompletionItems
 
 Q_DECLARE_TYPEINFO(CompletionPriorityItems, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(CompletionPriorityItems);
-
-void TestCodeCompletion::initTestCase()
-{
-    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
-    QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
-    AutoTestShell::init({QStringLiteral("kdevclangsupport")});
-    TestCore::initialize();
-
-    ClangSettingsManager::self()->m_enableTesting = true;
-}
-
-void TestCodeCompletion::cleanupTestCase()
-{
-    TestCore::shutdown();
-}
 
 namespace {
 
@@ -849,30 +829,6 @@ void TestCodeCompletion::testIncludePathCompletion_data()
                               << QString("foo/") << QString("#include \"foo/\"");
     QTest::newRow("local-7") << QString("#include \"foo/asdf\"") << KTextEditor::Cursor(0, 14)
                               << QString("bar/") << QString("#include \"foo/bar/\"");
-}
-
-struct DeleteDocument
-{
-    void operator()(KTextEditor::View* view) const
-    {
-        delete view->document();
-    }
-};
-
-static std::unique_ptr<KTextEditor::View, DeleteDocument> createView(const QUrl& url, QObject* parent)
-{
-    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
-    Q_ASSERT(editor);
-
-    auto doc = editor->createDocument(parent);
-    Q_ASSERT(doc);
-    bool opened = doc->openUrl(url);
-    Q_ASSERT(opened);
-    Q_UNUSED(opened);
-
-    auto view = doc->createView(nullptr);
-    Q_ASSERT(view);
-    return std::unique_ptr<KTextEditor::View, DeleteDocument>(view);
 }
 
 void TestCodeCompletion::testIncludePathCompletion()

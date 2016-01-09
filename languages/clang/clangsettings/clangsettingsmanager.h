@@ -70,7 +70,7 @@ private:
     ClangSettingsManager();
 
     bool m_enableTesting = false;
-    friend class TestCodeCompletion;
+    friend class CodeCompletionTestBase;
 };
 
 #endif // CLANGSETTINGSMANAGER_H
