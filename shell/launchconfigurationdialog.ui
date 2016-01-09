@@ -133,6 +133,9 @@
     </widget>
    </item>
    <item>
+    <widget class="KMessageWidget" name="messageWidget"/>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
@@ -141,6 +144,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+   <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QFrame</extends>
+   <header location="global">kmessagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
