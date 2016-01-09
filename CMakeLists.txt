@@ -79,6 +79,14 @@ endif()
 
 include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR}  )
 
+string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
+if(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug"
+  OR CMAKE_BUILD_TYPE_TOLOWER STREQUAL "")
+  set(COMPILER_OPTIMIZATIONS_DISABLED TRUE)
+else()
+  set(COMPILER_OPTIMIZATIONS_DISABLED FALSE)
+endif()
+
 # create config.h
 configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 

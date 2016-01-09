@@ -88,7 +88,7 @@ namespace bar
          * "internalContext" : { "type" : "Function", "range" : "[(89, 8), (91, 9)]" }
          */
         foostruct& operator=(const foostruct& other)
-        {
+        { return *this;
         }
     };
 }

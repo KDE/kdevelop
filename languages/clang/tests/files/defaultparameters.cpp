@@ -26,7 +26,7 @@ struct Foo
 int foo(int a = 1);
 
 /// "internalContext" : { "localDeclarationCount" : 1, "findDeclarations" : { "a" : { "defaultParameter" : "1" } } }
-int foodef(int a = 1) {}
+int foodef(int a = 1);
 
 /// "internalContext" : { "localDeclarationCount" : 3, "findDeclarations" : {
 ///    "a" : { "defaultParameter" : "4" },

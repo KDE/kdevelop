@@ -1,5 +1,5 @@
 /// "useCount" : 1, "useRanges" : "[(21, 4), (21, 4)]"
-static int counter = 0; /// FIXME: There should be two uses. This seems to be a problem in the JSON test suite
+static int counter = 0; /// FIX_ME: There should be two uses. This seems to be a problem in the JSON test suite
 
 #define INC(i) counter += i; counter += 4;
 

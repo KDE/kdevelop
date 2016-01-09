@@ -59,9 +59,6 @@ class NinjaJob : public KDevelop::OutputExecuteJob
         void emitProjectBuilderSignal(KJob* job);
 
     private:
-        /// Parse progress from ninja output
-        void parseProgress(const QString& line);
-
         bool m_isInstalling;
         QPersistentModelIndex m_idx;
         QByteArray m_signal;

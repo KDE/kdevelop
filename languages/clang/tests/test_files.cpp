@@ -47,6 +47,7 @@ QTEST_MAIN(TestFiles)
 void TestFiles::initTestCase()
 {
     qputenv("KDEV_CLANG_JSON_TEST_RUN", "1");
+    qputenv("KDEV_CLANG_EXTRA_ARGUMENTS", "-Wno-unused-variable -Wno-unused-parameter -Wno-unused-comparison -Wno-unused-value -Wno-unused-private-field -Wno-ignored-attributes");
 
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
@@ -88,6 +89,8 @@ void TestFiles::testFiles()
         qDebug() << problem;
     }
 
-    // FIXME: too many warnings inside the test files, fix this first
-    //QVERIFY(top->problems().isEmpty());
+    if (!QTest::currentDataTag() || strcmp("invalid.cpp", QTest::currentDataTag()) != 0) {
+        QEXPECT_FAIL("purec.c", "not working properly yet", Continue);
+        QVERIFY(top->problems().isEmpty());
+    }
 }

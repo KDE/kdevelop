@@ -7,6 +7,14 @@ target_link_libraries(clang-parser
     kdevclangduchain
 )
 
+add_library(codecompletiontestbase STATIC codecompletiontestbase.cpp)
+target_link_libraries(codecompletiontestbase PUBLIC
+    KDev::Tests
+    Qt5::Test
+    kdevclangcodecompletion
+    kdevclangduchain
+)
+
 add_executable(clang-minimal-visitor WIN32
     minimal_visitor.cpp
 )
@@ -25,10 +33,7 @@ ecm_add_test(test_buddies.cpp
 ecm_add_test(test_codecompletion.cpp
     TEST_NAME test_codecompletion
     LINK_LIBRARIES
-        KDev::Tests
-        Qt5::Test
-        kdevclangcodecompletion
-        kdevclangduchain
+        codecompletiontestbase
 )
 
 ecm_add_test(test_assistants.cpp
@@ -83,3 +88,12 @@ LINK_LIBRARIES
     KDev::Language
     KDev::Tests
 )
+
+if(NOT COMPILER_OPTIMIZATIONS_DISABLED)
+    ecm_add_test(bench_codecompletion.cpp
+        TEST_NAME bench_codecompletion
+        LINK_LIBRARIES
+            codecompletiontestbase
+    )
+    set_tests_properties(bench_codecompletion PROPERTIES TIMEOUT 30)
+endif()

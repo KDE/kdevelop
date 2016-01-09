@@ -123,10 +123,8 @@ QString ParserWidget::parserArguments() const
 void ParserWidget::updateEnablements()
 {
     if (m_ui->languageStandards->currentIndex() == customProfileIdx) {
-        m_ui->parserOptions->setHidden(false);
-        m_ui->argumentsLabel->setHidden(false);
+        m_ui->parserOptions->setEnabled(true);
     } else {
-        m_ui->parserOptions->setHidden(true);
-        m_ui->argumentsLabel->setHidden(true);
+        m_ui->parserOptions->setEnabled(false);
     }
 }
