@@ -359,7 +359,7 @@ void OutputExecuteJob::childProcessExited( int exitCode, QProcess::ExitStatus ex
     } else {
         d->m_status = JobSucceeded;
         d->m_lineMaker->flushBuffers();
-        model()->appendLine( i18n("*** Finished with exit code 0 ***") );
+        model()->appendLine( i18n("*** Finished ***") );
         emitResult();
     }
 }
