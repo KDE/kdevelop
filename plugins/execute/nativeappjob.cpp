@@ -155,7 +155,7 @@ void NativeAppJob::start()
         NativeAppJob* job = findNativeJob(j);
         if (job && job != this && job->m_cfgname == m_cfgname) {
             QMessageBox::StandardButton button = QMessageBox::question(Q_NULLPTR, i18n("Job already running"), i18n("'%1' is already being executed. Should we kill the previous instance?", m_cfgname));
-            if (button != QMessageBox::NoButton)
+            if (button != QMessageBox::No)
                 j->kill();
         }
     }
