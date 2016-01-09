@@ -19,110 +19,95 @@
      <property name="title">
       <string/>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="1" column="0">
-       <layout class="QHBoxLayout" name="profileLayout">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Profile</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="languageStandards">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>Custom</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>c99</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>gnu99</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>c11</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>gnu11</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>c++03</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>c++11</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>c++14</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Profi&amp;le:</string>
+        </property>
+        <property name="buddy">
+         <cstring>languageStandards</cstring>
+        </property>
+       </widget>
       </item>
-      <item row="2" column="0">
-       <layout class="QGridLayout" name="argumentsLayout">
-        <item row="0" column="0" colspan="2">
-         <widget class="QLabel" name="argumentsLabel">
-          <property name="text">
-           <string>Command-line arguments:</string>
-          </property>
-         </widget>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="languageStandards">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Custom</string>
+         </property>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="parserOptions">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
+        <item>
+         <property name="text">
+          <string>c99</string>
+         </property>
         </item>
-       </layout>
+        <item>
+         <property name="text">
+          <string>gnu99</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>gnu11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c++03</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c++11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c++14</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="argumentsLabel">
+        <property name="text">
+         <string>Command-line ar&amp;guments:</string>
+        </property>
+        <property name="buddy">
+         <cstring>parserOptions</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="parserOptions">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

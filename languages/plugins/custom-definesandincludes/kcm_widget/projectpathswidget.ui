@@ -234,7 +234,7 @@
      </widget>
      <widget class="QWidget" name="parserPage">
       <attribute name="title">
-       <string>C/C++ parser</string>
+       <string>C/C++ Parser</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
