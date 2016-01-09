@@ -109,6 +109,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   m_sourceLine = code.line(m_range->range().start().line());
 
   m_layout = new QHBoxLayout(this);
+  m_layout->setContentsMargins(0, 0, 0, 0);
   setLayout(m_layout);
 
   m_label = new QLabel(this);
@@ -207,6 +208,7 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
     m_itemLayout = new QVBoxLayout;
   else
     m_itemLayout = new QHBoxLayout;
+  m_itemLayout->setContentsMargins(0, 0, 0, 0);
 
   m_itemLayout->setMargin(0);
   m_itemLayout->setSpacing(0);
@@ -409,6 +411,7 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList
     setUpdatesEnabled(false);
     DUChainReadLocker lock(DUChain::lock());
     QHBoxLayout * labelLayout = new QHBoxLayout;
+    labelLayout->setContentsMargins(0, -1, 0, 0); // let's keep the spacing *above* the line
     QWidget* headerWidget = new QWidget;
     headerWidget->setLayout(labelLayout);
     headerWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
