@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <QDebug>
 #include <QElapsedTimer>
 #include <QMap>
+#include <QMessageBox>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -266,7 +267,18 @@ PluginController::PluginController(Core *core)
             return false;
         }
     });
+
+    if (newPlugins.isEmpty()) {
+        QMessageBox::critical(nullptr,
+                              i18n("Could not find any plugins"),
+                              i18n("<p>Could not find any plugins during startup.<br/>"
+                              "Please make sure QT_PLUGIN_PATH is set correctly.</p>"
+                              "Refer to <a href=\"https://community.kde.org/Frameworks/Building#Runtime_setup\">this article</a> for more information."),
+                              QMessageBox::Abort, QMessageBox::Abort);
+    }
+
     qCDebug(SHELL) << "Found" << newPlugins.size() << " plugins:" << foundPlugins;
+
     d->plugins = newPlugins;
 
     KTextEditorIntegration::initialize();
