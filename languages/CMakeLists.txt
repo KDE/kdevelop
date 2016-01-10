@@ -8,7 +8,7 @@ if(LEGACY_CPP_SUPPORT)
 else()
     find_package(Clang 3.5)
     set_package_properties(Clang PROPERTIES
-        PURPOSE "Clang libraries. Used for KDevelop's C++/C support plugin"
+        PURPOSE "Clang libraries. Used for KDevelop's C++/C support plugin. Please install a package providing libclang."
         TYPE REQUIRED
     )
 
