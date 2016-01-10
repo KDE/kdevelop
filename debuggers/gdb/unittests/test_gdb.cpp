@@ -242,10 +242,10 @@ private:
 };
 
 #define WAIT_FOR_STATE(session, state) \
-    waitForState((session), (state), __FILE__, __LINE__)
+    do { if (!waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
 
 #define WAIT_FOR_STATE_AND_IDLE(session, state) \
-    waitForState((session), (state), __FILE__, __LINE__, true)
+    do { if (!waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
 
 #define WAIT_FOR(session, condition) \
     do { \
@@ -255,6 +255,7 @@ private:
 
 #define COMPARE_DATA(index, expected) \
     compareData((index), (expected), __FILE__, __LINE__)
+
 void compareData(QModelIndex index, QString expected, const char *file, int line)
 {
     QString s = index.model()->data(index, Qt::DisplayRole).toString();
@@ -1990,7 +1991,7 @@ void GdbTest::testPathWithSpace()
 #endif
 }
 
-void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
+bool GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line, bool waitForIdle)
 {
     QPointer<GDBDebugger::DebugSession> s(session); //session can get deleted in DebugController
@@ -2001,7 +2002,7 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
             qWarning() << "current state" << s.data()->state() << "waiting for" << state;
             QTest::qFail(qPrintable(QString("Timeout before reaching state %0").arg(state)),
                 file, line);
-            return;
+            return false;
         }
         QTest::qWait(20);
         if (!s) {
@@ -2009,7 +2010,7 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
                 break;
             QTest::qFail(qPrintable(QString("Session ended before reaching state %0").arg(state)),
                 file, line);
-            return;
+            return false;
         }
     }
     if (!waitForIdle && state != DebugSession::EndedState) {
@@ -2019,6 +2020,7 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
     }
 
     qDebug() << "Reached state " << state << " in " << file << ':' << line;
+    return true;
 }
 
 }

@@ -97,7 +97,7 @@ private Q_SLOTS:
     void testPathWithSpace();
 
 private:
-    void waitForState(GDBDebugger::DebugSession *session,
+    bool waitForState(GDBDebugger::DebugSession *session,
                       KDevelop::IDebugSession::DebuggerState state,
                       const char *file, int line,
                       bool waitForIdle = false);
