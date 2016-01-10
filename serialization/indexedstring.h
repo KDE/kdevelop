@@ -1,15 +1,20 @@
-/***************************************************************************
-   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
-***************************************************************************/
+/* This file is part of KDevelop
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License as
+   published by the Free Software Foundation; either version 2 of
+   the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef KDEVPLATFORM_INDEXED_STRING_H
 #define KDEVPLATFORM_INDEXED_STRING_H
