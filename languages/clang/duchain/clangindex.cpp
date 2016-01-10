@@ -36,7 +36,7 @@ using namespace KDevelop;
 
 ClangIndex::ClangIndex()
     // NOTE: We don't exclude PCH declarations. That way we could retrieve imports manually, as clang_getInclusions returns nothing on reparse with CXTranslationUnit_PrecompiledPreamble flag.
-    : m_index(clang_createIndex(0 /*Exclude PCH Decls*/, qgetenv("KDEV_CLANG_DISPLAY_DIAGS") == "1" /*Display diags*/))
+    : m_index(clang_createIndex(0 /*Exclude PCH Decls*/, qEnvironmentVariableIsSet("KDEV_CLANG_DISPLAY_DIAGS") /*Display diags*/))
 {
 }
 

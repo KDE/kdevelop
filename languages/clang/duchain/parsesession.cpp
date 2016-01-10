@@ -234,6 +234,9 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     );
     if (code != CXError_Success) {
         qWarning() << "clang_parseTranslationUnit2 return with error code" << code;
+        if (!qEnvironmentVariableIsSet("KDEV_CLANG_DISPLAY_DIAGS")) {
+            qWarning() << "  (start KDevelop with `KDEV_CLANG_DISPLAY_DIAGS=1 kdevelop` to see more diagnostics)";
+        }
     }
 
     if (m_unit) {
