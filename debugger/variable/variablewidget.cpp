@@ -31,6 +31,7 @@
 #include <interfaces/idebugcontroller.h>
 #include "../interfaces/ivariablecontroller.h"
 #include "variablecollection.h"
+#include "variablesortmodel.h"
 #include "util/debug.h"
 
 /** The variables widget is passive, and is invoked by the rest of the
@@ -76,7 +77,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
     setWindowIcon(QIcon::fromTheme("debugger"));
     setWindowTitle(i18n("Debugger Variables"));
 
-    m_proxy = new QSortFilterProxyModel;
+    m_proxy = new VariableSortProxyModel;
     varTree_ = new VariableTree(controller, this, m_proxy);
     setFocusProxy(varTree_);
 
