@@ -35,7 +35,7 @@ include(KDECompilerSettings)
 
 set(QT_MIN_VERSION "5.4.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets WebKitWidgets Script Test)
-set(KF5_DEP_VERSION "5.3.0")
+set(KF5_DEP_VERSION "5.4.0") # we need https://git.reviewboard.kde.org/r/120099/
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Config
   Declarative
