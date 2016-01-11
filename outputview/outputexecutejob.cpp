@@ -224,10 +224,10 @@ void OutputExecuteJob::start()
     }
     Q_ASSERT( model() );
 
-    if (d->m_filteringStrategy != OutputModel::NoFilter) {
-        model()->setFilteringStrategy(d->m_filteringStrategy);
-    } else {
+    if (d->m_filteringStrategyPtr) {
         model()->setFilteringStrategy(d->m_filteringStrategyPtr.take());
+    } else {
+        model()->setFilteringStrategy(d->m_filteringStrategy);
     }
 
     setDelegate( new OutputDelegate );
