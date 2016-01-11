@@ -145,10 +145,21 @@ void TemplateSelectionPagePrivate::getMoreClicked()
 
 void TemplateSelectionPagePrivate::loadFileClicked()
 {
-    QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
-    QString fileName = QFileDialog::getOpenFileName(page, QString(), QString(), filter);
+    const QStringList filters{
+        QStringLiteral("application/x-desktop"),
+        QStringLiteral("application/x-bzip-compressed-tar"),
+        QStringLiteral("application/zip")
+    };
+    QFileDialog dlg(page);
+    dlg.setMimeTypeFilters(filters);
+    dlg.setFileMode(QFileDialog::ExistingFiles);
 
-    if (!fileName.isEmpty())
+    if (!dlg.exec())
+    {
+        return;
+    }
+    
+    foreach(const QString& fileName, dlg.selectedFiles())
     {
         QString destination = model->loadTemplateFile(fileName);
         QModelIndexList indexes = model->templateIndexes(destination);
