@@ -25,6 +25,7 @@
 #include <QMimeDatabase>
 
 #include <KLocalizedString>
+#include <KColorScheme>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
@@ -38,6 +39,7 @@ FrameStackModel::FrameStackModel(IDebugSession *session)
     : IFrameStackModel(session)
     , m_currentThread(-1)
     , m_currentFrame(-1)
+    , m_crashedThreadIndex(-1)
     , m_subsequentFrameFetchOperations(0)
     , m_updateCurrentFrameOnNextFetch(false)
 {
@@ -145,6 +147,11 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
         if (index.column() == 0) {
             if (role == Qt::DisplayRole) {
                 return i18nc("#thread-id at function-name or address", "#%1 at %2", thread.nr, thread.name);
+            } else if (role == Qt::TextColorRole) {
+                if (thread.nr == m_crashedThreadIndex) {
+                    KColorScheme scheme(QPalette::Active);
+                    return scheme.foreground(KColorScheme::NegativeText).color();
+                }
             }
         }
     } else {
@@ -263,6 +270,15 @@ void FrameStackModel::setCurrentThread(const QModelIndex& index)
     setCurrentThread(m_threads[index.row()].nr);
 }
 
+void FrameStackModel::setCrashedThreadIndex(int index)
+{
+    m_crashedThreadIndex = index;
+}
+
+int FrameStackModel::crashedThreadIndex() const
+{
+    return m_crashedThreadIndex;
+}
 
 int FrameStackModel::currentThread() const
 {
