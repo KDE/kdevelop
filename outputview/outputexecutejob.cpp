@@ -267,11 +267,21 @@ void OutputExecuteJob::start()
     if( !effectiveWorkingDirectory.isEmpty() ) {
         d->m_process->setWorkingDirectory( effectiveWorkingDirectory.toLocalFile() );
     }
-    d->m_process->setProcessEnvironment( d->effectiveEnvironment() );
-    d->m_process->setProgram( d->effectiveCommandLine() );
 
-    qCDebug(OUTPUTVIEW) << "Starting:" << d->m_process->program().join(" ") << "in" << d->m_process->workingDirectory();
-    d->m_process->start();
+    d->m_process->setProcessEnvironment( d->effectiveEnvironment() );
+    if (!d->effectiveCommandLine().isEmpty()) {
+        d->m_process->setProgram( d->effectiveCommandLine() );
+
+        qCDebug(OUTPUTVIEW) << "Starting:" << d->m_process->program().join(" ") << "in" << d->m_process->workingDirectory();
+        d->m_process->start();
+    } else {
+        QString errorMessage = i18n("Failed to specify program to start");
+        model()->appendLine( i18n( "*** %1 ***", errorMessage) );
+        setErrorText(errorMessage);
+        setError( FailedShownError );
+        emitResult();
+        return;
+    }
 }
 
 bool OutputExecuteJob::doKill()
