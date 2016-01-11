@@ -77,6 +77,7 @@ DebugSession::DebugSession()
     , state_(s_dbgNotStarted | s_appNotStarted)
     , state_reload_needed(false)
     , stateReloadInProgress_(false)
+    , m_isCrashed(false)
 {
     configure();
 
@@ -731,6 +732,8 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
             // Continuing from SIG FPE/SEGV will cause a "Cannot ..." and
             // that'll end the program.
             programFinished(i18n("Program received signal %1 (%2)", name, user_name));
+
+            m_isCrashed = true;
         }
     }
 
@@ -770,6 +773,10 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
         setStateOff(s_automaticContinue);
 }
 
+bool DebugSession::isCrashed() const
+{
+    return m_isCrashed;
+}
 
 void DebugSession::processNotification(const GDBMI::AsyncRecord & async)
 {

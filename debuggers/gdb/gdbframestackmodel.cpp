@@ -79,10 +79,16 @@ void GdbFrameStackModel::handleThreadInfo(const GDBMI::ResultRecord& r)
         threadsList << i;
     }
     setThreads(threadsList);
-    if (r.hasField("current-thread-id"))
-        setCurrentThread(r["current-thread-id"].toInt());
-}
+    if (r.hasField("current-thread-id")) {
+        int currentThreadId = r["current-thread-id"].toInt();
 
+        setCurrentThread(currentThreadId);
+
+        if (session()->isCrashed()) {
+            setCrashedThreadIndex(currentThreadId);
+        }
+    }
+}
 
 struct FrameListHandler : public GDBCommandHandler
 {

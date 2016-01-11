@@ -80,6 +80,8 @@ public:
     KDevelop::IVariableController* variableController() const override;
     KDevelop::IFrameStackModel* frameStackModel() const override;
 
+    bool isCrashed() const;
+
     using IDebugSession::event;
 Q_SIGNALS:
     void applicationStandardOutputLines(const QStringList& lines);
@@ -296,6 +298,8 @@ private:
 
     ///Exit code of the last inferior(in format: exit normally, with code "number" e.t.c)
     QString m_inferiorExitCode;
+
+    bool m_isCrashed;
 };
 
 }
