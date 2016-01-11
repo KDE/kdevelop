@@ -68,7 +68,7 @@ void TestSpecialCompletion::cleanupTestCase()
 
 void TestSpecialCompletion::cleanup()
 {
-    m_projects->clearProjects();
+    m_projects->closeAllProjects();
 }
 
 void TestSpecialCompletion::testMissingInclude()
