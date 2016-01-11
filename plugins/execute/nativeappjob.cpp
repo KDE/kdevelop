@@ -24,20 +24,15 @@
 #include <QMessageBox>
 
 #include <KLocalizedString>
-#include <KProcess>
 #include <KShell>
 #include <KSharedConfig>
-#include <KCompositeJob>
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iruncontroller.h>
 #include <outputview/outputmodel.h>
-#include <outputview/outputdelegate.h>
-#include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 
 #include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>
 
@@ -47,7 +42,7 @@
 using namespace KDevelop;
 
 NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
-    : KDevelop::OutputJob( parent ), proc(0)
+    : KDevelop::OutputExecuteJob( parent )
     , m_cfgname(cfg->name())
 {
     setCapabilities(Killable);
@@ -75,6 +70,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
                        "Using default environment group.", cfg->name() );
         envgrp = l.defaultGroup();
     }
+    setEnvironmentProfile(envgrp);
 
     QStringList arguments = iface->arguments( cfg, err );
     if( !err.isEmpty() )
@@ -89,35 +85,20 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         return;
     }
 
-    proc = new KProcess( this );
-
-    lineMaker = new KDevelop::ProcessLineMaker( proc, this );
-
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    OutputModel* m = new OutputModel;
-    m->setFilteringStrategy(OutputModel::NativeAppErrorFilter);
-    setModel(m);
-    setDelegate( new KDevelop::OutputDelegate );
-
-    connect( lineMaker, &ProcessLineMaker::receivedStdoutLines, model(), &OutputModel::appendLines );
-    connect( proc, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error), this, &NativeAppJob::processError );
-    connect( proc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &NativeAppJob::processFinished );
+    setFilteringStrategy(OutputModel::NativeAppErrorFilter);
+    setProperties(DisplayStdout | DisplayStderr);
 
     // Now setup the process parameters
 
-    proc->setEnvironment( l.createEnvironment( envgrp, proc->systemEnvironment()) );
     QUrl wc = iface->workingDirectory( cfg );
-    if( !wc.isValid() || wc.isEmpty() )
-    {
+    if( !wc.isValid() || wc.isEmpty() ) {
         wc = QUrl::fromLocalFile( QFileInfo( executable.toLocalFile() ).absolutePath() );
     }
-    proc->setWorkingDirectory( wc.toLocalFile() );
-    proc->setProperty( "executable", executable );
+    setWorkingDirectory( wc );
 
     qCDebug(PLUGIN_EXECUTE) << "setting app:" << executable << arguments;
-
-    proc->setOutputChannelMode(KProcess::MergedChannels);
 
     if (iface->useTerminal(cfg)) {
         QStringList args = KShell::splitArgs(iface->terminal(cfg));
@@ -129,12 +110,13 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
             }
         }
         args.append( arguments );
-        proc->setProgram( args );
+        *this << args;
     } else {
-        proc->setProgram( executable.toLocalFile(), arguments );
+        *this << executable.toLocalFile();
+        *this << arguments;
     }
 
-    setObjectName(cfg->name());
+    setJobName(cfg->name());
 }
 
 NativeAppJob* findNativeJob(KJob* j)
@@ -154,90 +136,11 @@ void NativeAppJob::start()
     foreach(KJob* j, ICore::self()->runController()->currentJobs()) {
         NativeAppJob* job = findNativeJob(j);
         if (job && job != this && job->m_cfgname == m_cfgname) {
-            QMessageBox::StandardButton button = QMessageBox::question(Q_NULLPTR, i18n("Job already running"), i18n("'%1' is already being executed. Should we kill the previous instance?", m_cfgname));
-            if (button != QMessageBox::NoButton)
+            QMessageBox::StandardButton button = QMessageBox::question(nullptr, i18n("Job already running"), i18n("'%1' is already being executed. Should we kill the previous instance?", m_cfgname));
+            if (button != QMessageBox::No)
                 j->kill();
         }
     }
 
-    qCDebug(PLUGIN_EXECUTE) << "launching?" << proc;
-    if( proc )
-    {
-        startOutput();
-        appendLine( i18n("Starting: %1", proc->program().join(" ") ) );
-        proc->start();
-    } else
-    {
-        qWarning() << "No process, something went wrong when creating the job";
-        // No process means we've returned early on from the constructor, some bad error happened
-        emitResult();
-    }
+    OutputExecuteJob::start();
 }
-
-bool NativeAppJob::doKill()
-{
-    if( proc ) {
-        proc->kill();
-        appendLine( i18n( "*** Killed Application ***" ) );
-    }
-    return true;
-}
-
-void NativeAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
-{
-    if (!model()) {
-        outputDone();
-        return;
-    }
-
-    connect(model(), &OutputModel::allDone, this, &NativeAppJob::outputDone);
-    lineMaker->flushBuffers();
-
-    if (exitCode == 0 && status == QProcess::NormalExit) {
-        appendLine( i18n("*** Exited normally ***") );
-    } else if (status == QProcess::NormalExit) {
-        appendLine( i18n("*** Exited with return code: %1 ***", QString::number(exitCode)) );
-        setError(OutputJob::FailedShownError);
-    } else if (error() == KJob::KilledJobError) {
-        appendLine( i18n("*** Process aborted ***") );
-        setError(KJob::KilledJobError);
-    } else {
-        appendLine( i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)) );
-        setError(OutputJob::FailedShownError);
-    }
-
-    model()->ensureAllDone();
-}
-
-void NativeAppJob::outputDone()
-{
-    emitResult();
-}
-
-void NativeAppJob::processError( QProcess::ProcessError error )
-{
-    if( error == QProcess::FailedToStart )
-    {
-        setError( FailedShownError );
-        QString errmsg =  i18n("*** Could not start program '%1'. Make sure that the "
-                           "path is specified correctly ***", proc->program().join(" ") );
-        appendLine( errmsg );
-        setErrorText( errmsg );
-        emitResult();
-    }
-    qCDebug(PLUGIN_EXECUTE) << "Process error";
-}
-
-void NativeAppJob::appendLine(const QString& l)
-{
-    if (KDevelop::OutputModel* m = model()) {
-        m->appendLine(l);
-    }
-}
-
-KDevelop::OutputModel* NativeAppJob::model()
-{
-    return dynamic_cast<KDevelop::OutputModel*>( OutputJob::model() );
-}
-
-

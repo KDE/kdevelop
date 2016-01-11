@@ -20,36 +20,27 @@
 #ifndef KDEVPLATFORM_PLUGIN_NATIVEAPPJOB_H
 #define KDEVPLATFORM_PLUGIN_NATIVEAPPJOB_H
 
+#include <outputview/outputexecutejob.h>
+
 #include <QtCore/QProcess>
-#include <outputview/outputjob.h>
 
 namespace KDevelop
 {
 class ILaunchConfiguration;
-class ProcessLineMaker;
-class OutputModel;
 }
 
 class KProcess;
 
-class NativeAppJob : public KDevelop::OutputJob
+class NativeAppJob : public KDevelop::OutputExecuteJob
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     NativeAppJob( QObject* parent, KDevelop::ILaunchConfiguration* cfg );
+
     void start() override;
-    bool doKill() override;
-    KDevelop::OutputModel* model();
-private slots:
-    void processError(QProcess::ProcessError);
-    void processFinished(int,QProcess::ExitStatus);
-    void outputDone();
 
 private:
-    void appendLine(const QString &l);
-
-    KProcess* proc;
-    KDevelop::ProcessLineMaker* lineMaker;
     QString m_cfgname;
 };
 

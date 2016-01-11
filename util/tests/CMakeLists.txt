@@ -18,3 +18,6 @@ ecm_add_test(test_foregroundlock.cpp
 
 ecm_add_test(test_executecompositejob.cpp
     LINK_LIBRARIES Qt5::Test KDev::Util)
+
+ecm_add_test(test_environment.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Util)

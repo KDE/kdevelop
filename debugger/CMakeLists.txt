@@ -17,6 +17,7 @@ set(KDevPlatformDebugger_LIB_SRCS
     variable/variablewidget.cpp
     variable/variablecollection.cpp
     variable/variabletooltip.cpp
+    variable/variablesortmodel.cpp
     framestack/framestackmodel.cpp
     framestack/framestackwidget.cpp
 )

@@ -204,7 +204,7 @@ void MainWindowPrivate::disableConcentrationMode()
 void MainWindowPrivate::restoreConcentrationMode()
 {
     const bool concentrationModeOn = m_concentrationModeAction->isChecked();
-    QWidget* cornerWidget = Q_NULLPTR;
+    QWidget* cornerWidget = nullptr;
     if (m_concentrateToolBar) {
         QLayout* l = m_concentrateToolBar->layout();
         QLayoutItem* li = l->takeAt(1); //ensure the cornerWidget isn't destroyed with the toolbar
