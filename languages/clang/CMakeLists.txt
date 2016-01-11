@@ -1,5 +1,3 @@
-find_package(Clang 3.5 REQUIRED)
-
 add_definitions(${LLVM_CFLAGS})
 include_directories(${CLANG_INCLUDE_DIRS})
 
