@@ -29,14 +29,14 @@ namespace {
 struct IndexedStringData
 {
     unsigned short length;
-    unsigned int refCount;
+    uint refCount;
 
-    unsigned int itemSize() const
+    uint itemSize() const
     {
         return sizeof(IndexedStringData) + length;
     }
 
-    unsigned int hash() const
+    uint hash() const
     {
         IndexedString::RunningHash running;
         const char* str = ((const char*)this) + sizeof(IndexedStringData);
@@ -61,7 +61,7 @@ inline void decrease(uint& val)
 struct IndexedStringRepositoryItemRequest
 {
     //The text is supposed to be utf8 encoded
-    IndexedStringRepositoryItemRequest(const char* text, unsigned int hash, unsigned short length)
+    IndexedStringRepositoryItemRequest(const char* text, uint hash, unsigned short length)
         : m_hash(hash)
         , m_length(length)
         , m_text(text)
@@ -72,7 +72,7 @@ struct IndexedStringRepositoryItemRequest
         AverageSize = 10 //This should be the approximate average size of an Item
     };
 
-    typedef unsigned int HashType;
+    typedef uint HashType;
 
     //Should return the hash-value associated with this request(For example the hash of a string)
     HashType hash() const
@@ -113,7 +113,7 @@ struct IndexedStringRepositoryItemRequest
         return item->length == m_length && (memcmp(++item, m_text, m_length) == 0);
     }
 
-    unsigned int m_hash;
+    uint m_hash;
     unsigned short m_length;
     const char* m_text;
 };
@@ -134,6 +134,22 @@ inline QByteArray arrayFromItem(const IndexedStringData* item)
     return QByteArray(c_strFromItem(item), item->length);
 }
 
+inline bool isSingleCharIndex(uint index)
+{
+    return (index & 0xffff0000) == 0xffff0000;
+}
+
+inline uint charToIndex(char c)
+{
+    return 0xffff0000 | c;
+}
+
+inline char indexToChar(uint index)
+{
+    Q_ASSERT(isSingleCharIndex(index));
+    return static_cast<char>(index & 0xff);
+}
+
 using IndexedStringRepository = ItemRepository<IndexedStringData, IndexedStringRepositoryItemRequest, false, true>;
 using GlobalIndexedStringRepository = RepositoryManager<IndexedStringRepository>;
 GlobalIndexedStringRepository& getGlobalIndexedStringRepository()
@@ -151,12 +167,12 @@ IndexedString::IndexedString()
 
 ///@param str must be a utf8 encoded string, does not need to be 0-terminated.
 ///@param length must be its length in bytes.
-IndexedString::IndexedString(const char* str, unsigned short length, unsigned int hash)
+IndexedString::IndexedString(const char* str, unsigned short length, uint hash)
 {
     if (!length) {
         m_index = 0;
     } else if (length == 1) {
-        m_index = 0xffff0000 | str[0];
+        m_index = charToIndex(str[0]);
     } else {
         QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
 
@@ -168,7 +184,7 @@ IndexedString::IndexedString(const char* str, unsigned short length, unsigned in
 }
 
 IndexedString::IndexedString(char c)
-    : m_index(0xffff0000 | c)
+    : m_index(charToIndex(c))
 {}
 
 IndexedString::IndexedString(const QUrl& url)
@@ -191,7 +207,7 @@ IndexedString::IndexedString(const QByteArray& str)
 
 IndexedString::~IndexedString()
 {
-    if (m_index && (m_index & 0xffff0000) != 0xffff0000) {
+    if (m_index && !isSingleCharIndex(m_index)) {
         if (shouldDoDUChainReferenceCounting(this)) {
             QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
 
@@ -203,7 +219,7 @@ IndexedString::~IndexedString()
 IndexedString::IndexedString(const IndexedString& rhs)
     : m_index(rhs.m_index)
 {
-    if (m_index && (m_index & 0xffff0000) != 0xffff0000) {
+    if (m_index && !isSingleCharIndex(m_index)) {
         if (shouldDoDUChainReferenceCounting(this)) {
             QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
             increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
@@ -217,7 +233,7 @@ IndexedString& IndexedString::operator=(const IndexedString& rhs)
         return *this;
     }
 
-    if (m_index && (m_index & 0xffff0000) != 0xffff0000) {
+    if (m_index && !isSingleCharIndex(m_index)) {
 
         if (shouldDoDUChainReferenceCounting(this)) {
             QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
@@ -227,7 +243,7 @@ IndexedString& IndexedString::operator=(const IndexedString& rhs)
 
     m_index = rhs.m_index;
 
-    if (m_index && (m_index & 0xffff0000) != 0xffff0000) {
+    if (m_index && !isSingleCharIndex(m_index)) {
         if (shouldDoDUChainReferenceCounting(this)) {
             QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
             increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
@@ -251,8 +267,8 @@ QString IndexedString::str() const
 {
     if (!m_index) {
         return QString();
-    } else if ((m_index & 0xffff0000) == 0xffff0000) {
-        return QString(QChar((char)m_index & 0xff));
+    } else if (isSingleCharIndex(m_index)) {
+        return QString(QLatin1Char(indexToChar(m_index)));
     } else {
         return stringFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
     }
@@ -263,11 +279,11 @@ int IndexedString::length() const
     return lengthFromIndex(m_index);
 }
 
-int IndexedString::lengthFromIndex(unsigned int index)
+int IndexedString::lengthFromIndex(uint index)
 {
     if (!index) {
         return 0;
-    } else if ((index & 0xffff0000) == 0xffff0000) {
+    } else if (isSingleCharIndex(index)) {
         return 1;
     } else {
         return getGlobalIndexedStringRepository()->itemFromIndex(index)->length;
@@ -278,7 +294,7 @@ const char* IndexedString::c_str() const
 {
     if (!m_index) {
         return 0;
-    } else if ((m_index & 0xffff0000) == 0xffff0000) {
+    } else if (isSingleCharIndex(m_index)) {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
         const uint offset = 0;
 #else
@@ -295,14 +311,14 @@ QByteArray IndexedString::byteArray() const
 {
     if (!m_index) {
         return QByteArray();
-    } else if ((m_index & 0xffff0000) == 0xffff0000) {
-        return QString(QChar((char)m_index & 0xff)).toUtf8();
+    } else if (isSingleCharIndex(m_index)) {
+        return QByteArray(1, indexToChar(m_index));
     } else {
         return arrayFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
     }
 }
 
-unsigned int IndexedString::hashString(const char* str, unsigned short length)
+uint IndexedString::hashString(const char* str, unsigned short length)
 {
     RunningHash running;
     for (int a = length - 1; a >= 0; --a) {
@@ -317,7 +333,7 @@ uint IndexedString::indexForString(const char* str, short unsigned length, uint 
     if (!length) {
         return 0;
     } else if (length == 1) {
-        return 0xffff0000 | str[0];
+        return charToIndex(str[0]);
     } else {
         QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
         return getGlobalIndexedStringRepository()->index(IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
