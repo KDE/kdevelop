@@ -150,12 +150,29 @@ inline char indexToChar(uint index)
     return static_cast<char>(index & 0xff);
 }
 
-using IndexedStringRepository = ItemRepository<IndexedStringData, IndexedStringRepositoryItemRequest, false, true>;
+using IndexedStringRepository = ItemRepository<IndexedStringData, IndexedStringRepositoryItemRequest, false, false>;
 using GlobalIndexedStringRepository = RepositoryManager<IndexedStringRepository>;
-GlobalIndexedStringRepository& getGlobalIndexedStringRepository()
+
+IndexedStringRepository* globalIndexedStringRepository()
 {
-    static GlobalIndexedStringRepository globalIndexedStringRepository("String Index");
-    return globalIndexedStringRepository;
+    static GlobalIndexedStringRepository globalIndexedStringRepository(QStringLiteral("String Index"));
+    return globalIndexedStringRepository.repository();
+}
+
+template<typename ReadAction>
+auto readRepo(ReadAction action) -> decltype(action(globalIndexedStringRepository()))
+{
+    const auto* repo = globalIndexedStringRepository();
+    QMutexLocker lock(repo->mutex());
+    return action(repo);
+}
+
+template<typename EditAction>
+auto editRepo(EditAction action) -> decltype(action(globalIndexedStringRepository()))
+{
+    auto* repo = globalIndexedStringRepository();
+    QMutexLocker lock(repo->mutex());
+    return action(repo);
 }
 
 inline void ref(IndexedString* string)
@@ -163,9 +180,9 @@ inline void ref(IndexedString* string)
     const uint index = string->index();
     if (index && !isSingleCharIndex(index)) {
         if (shouldDoDUChainReferenceCounting(string)) {
-            QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
-
-            increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(index)->refCount);
+            editRepo([index] (IndexedStringRepository* repo) {
+                increase(repo->dynamicItemFromIndexSimple(index)->refCount);
+            });
         }
     }
 }
@@ -175,9 +192,9 @@ inline void deref(IndexedString* string)
     const uint index = string->index();
     if (index && !isSingleCharIndex(index)) {
         if (shouldDoDUChainReferenceCounting(string)) {
-            QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
-
-            decrease(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(index)->refCount);
+            editRepo([index] (IndexedStringRepository* repo) {
+                decrease(repo->dynamicItemFromIndexSimple(index)->refCount);
+            });
         }
     }
 }
@@ -198,12 +215,15 @@ IndexedString::IndexedString(const char* str, unsigned short length, uint hash)
     } else if (length == 1) {
         m_index = charToIndex(str[0]);
     } else {
-        QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
-
-        m_index = getGlobalIndexedStringRepository()->index(IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
-
-        if (shouldDoDUChainReferenceCounting(this))
-            increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
+        const auto request = IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length);
+        bool refcount = shouldDoDUChainReferenceCounting(this);
+        m_index = editRepo([request, refcount] (IndexedStringRepository* repo) {
+            auto index = repo->index(request);
+            if (refcount) {
+                increase(repo->dynamicItemFromIndexSimple(index)->refCount);
+            }
+            return index;
+        });
     }
 }
 
@@ -272,7 +292,10 @@ QString IndexedString::str() const
     } else if (isSingleCharIndex(m_index)) {
         return QString(QLatin1Char(indexToChar(m_index)));
     } else {
-        return stringFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
+        const uint index = m_index;
+        return readRepo([index] (const IndexedStringRepository* repo) {
+            return stringFromItem(repo->itemFromIndex(index));
+        });
     }
 }
 
@@ -288,7 +311,9 @@ int IndexedString::lengthFromIndex(uint index)
     } else if (isSingleCharIndex(index)) {
         return 1;
     } else {
-        return getGlobalIndexedStringRepository()->itemFromIndex(index)->length;
+        return readRepo([index] (const IndexedStringRepository* repo) {
+            return repo->itemFromIndex(index)->length;
+        });
     }
 }
 
@@ -304,7 +329,10 @@ const char* IndexedString::c_str() const
 #endif
         return reinterpret_cast<const char*>(&m_index) + offset;
     } else {
-        return c_strFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
+        const uint index = m_index;
+        return readRepo([index] (const IndexedStringRepository* repo) {
+            return c_strFromItem(repo->itemFromIndex(index));
+        });
     }
 
 }
@@ -316,7 +344,10 @@ QByteArray IndexedString::byteArray() const
     } else if (isSingleCharIndex(m_index)) {
         return QByteArray(1, indexToChar(m_index));
     } else {
-        return arrayFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
+        const uint index = m_index;
+        return readRepo([index] (const IndexedStringRepository* repo) {
+            return arrayFromItem(repo->itemFromIndex(index));
+        });
     }
 }
 
@@ -337,8 +368,10 @@ uint IndexedString::indexForString(const char* str, short unsigned length, uint 
     } else if (length == 1) {
         return charToIndex(str[0]);
     } else {
-        QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
-        return getGlobalIndexedStringRepository()->index(IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
+        const auto request = IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length);
+        return editRepo([request] (IndexedStringRepository* repo) {
+            return repo->index(request);
+        });
     }
 }
 
