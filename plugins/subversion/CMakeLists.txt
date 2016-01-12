@@ -95,5 +95,4 @@ target_link_libraries(kdevsubversion
     KDev::Vcs
     KDev::OutputView
     KDev::Project
-    KDev::Language
 )

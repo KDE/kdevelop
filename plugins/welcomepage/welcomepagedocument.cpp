@@ -21,12 +21,14 @@
 
 #include <QMimeDatabase>
 
+#include <KLocalizedString>
+#include <KTextEditor/Cursor>
+
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/isession.h>
 #include "welcomepageview.h"
-#include <KLocalizedString>
 
 using namespace KDevelop;
 

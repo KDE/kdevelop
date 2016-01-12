@@ -8,7 +8,7 @@ set(kdevtestview_PLUGIN_SRCS
 )
 
 kdevplatform_add_plugin(kdevtestview JSON kdevtestview.json SOURCES ${kdevtestview_PLUGIN_SRCS})
-target_link_libraries(kdevtestview KF5::ItemModels KDev::Interfaces KDev::Project KDev::Util KDev::Language)
+target_link_libraries(kdevtestview KF5::ItemModels KDev::Interfaces KDev::Util KDev::Language)
 
 ########### install files ###############
 

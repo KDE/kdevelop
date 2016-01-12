@@ -23,19 +23,19 @@
 
 #include <QUrl>
 
-#include <KTextEditor/Cursor>
-#include <KTextEditor/Range>
-
 #include "interfacesexport.h"
 
 namespace KParts { class Part; class MainWindow; }
 namespace KTextEditor {
-    class Document;
-    class View;
+class Cursor;
+class Document;
+class Range;
+class View;
 }
 namespace Sublime{ class View; }
 
 class QMimeType;
+class QWidget;
 
 namespace KDevelop {
 class ICore;

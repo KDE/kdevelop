@@ -15,7 +15,6 @@ target_link_libraries(kdevcodeutils
     KF5::Parts
     KF5::TextEditor
     KDev::Interfaces
-    KDev::Project
     KDev::Util
     KDev::Language
 )
