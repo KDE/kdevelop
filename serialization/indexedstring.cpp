@@ -112,34 +112,33 @@ struct IndexedStringRepositoryItemRequest
     {
         return item->length == m_length && (memcmp(++item, m_text, m_length) == 0);
     }
+
     unsigned int m_hash;
     unsigned short m_length;
     const char* m_text;
 };
 
-typedef ItemRepository<IndexedStringData, IndexedStringRepositoryItemRequest, false, true> IndexedStringRepository;
+inline const char* c_strFromItem(const IndexedStringData* item)
+{
+    return reinterpret_cast<const char*>(item + 1);
+}
 
 ///@param item must be valid(nonzero)
 inline QString stringFromItem(const IndexedStringData* item)
 {
-    const unsigned short* textPos = (unsigned short*)(item + 1);
-    return QString::fromUtf8((char*)textPos, item->length);
+    return QString::fromUtf8(c_strFromItem(item), item->length);
 }
 
 inline QByteArray arrayFromItem(const IndexedStringData* item)
 {
-    const unsigned short* textPos = (unsigned short*)(item + 1);
-    return QByteArray((char*)textPos, item->length);
+    return QByteArray(c_strFromItem(item), item->length);
 }
 
-inline const char* c_strFromItem(const IndexedStringData* item)
+using IndexedStringRepository = ItemRepository<IndexedStringData, IndexedStringRepositoryItemRequest, false, true>;
+using GlobalIndexedStringRepository = RepositoryManager<IndexedStringRepository>;
+GlobalIndexedStringRepository& getGlobalIndexedStringRepository()
 {
-    return (const char*)(item + 1);
-}
-
-RepositoryManager< IndexedStringRepository >& getGlobalIndexedStringRepository()
-{
-    static RepositoryManager< IndexedStringRepository > globalIndexedStringRepository("String Index");
+    static GlobalIndexedStringRepository globalIndexedStringRepository("String Index");
     return globalIndexedStringRepository;
 }
 
@@ -201,7 +200,8 @@ IndexedString::~IndexedString()
     }
 }
 
-IndexedString::IndexedString(const IndexedString& rhs) : m_index(rhs.m_index)
+IndexedString::IndexedString(const IndexedString& rhs)
+    : m_index(rhs.m_index)
 {
     if (m_index && (m_index & 0xffff0000) != 0xffff0000) {
         if (shouldDoDUChainReferenceCounting(this)) {
