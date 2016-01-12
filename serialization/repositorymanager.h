@@ -46,6 +46,8 @@ public:
   ~RepositoryManager() {
   }
 
+  Q_DISABLE_COPY(RepositoryManager);
+
   inline ItemRepositoryType* operator->() const {
     if(!m_repository) {
       createRepository();
