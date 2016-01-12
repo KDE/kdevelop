@@ -45,11 +45,11 @@ ki18n_wrap_ui(KDevPlatformUtil_LIB_SRCS ${KDevPlatformUtil_LIB_US})
 kdevplatform_add_library(KDevPlatformUtil SOURCES ${KDevPlatformUtil_LIB_SRCS})
 target_link_libraries(KDevPlatformUtil
 LINK_PUBLIC
-    KF5::ConfigWidgets
+    KDev::Interfaces
     KF5::ItemModels
 LINK_PRIVATE
-    KF5::KCMUtils
-    KDev::Interfaces
+    KF5::ConfigWidgets
+    KF5::TextEditor
 )
 
 install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)

@@ -50,7 +50,6 @@
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/documentchangeset.h>
 #include <language/interfaces/ilanguagesupport.h>
-#include <project/projectmodel.h>
 
 Q_LOGGING_CATEGORY(PLUGIN_CODEUTILS, "kdevplatform.plugins.codeutils")
 

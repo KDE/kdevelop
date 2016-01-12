@@ -113,7 +113,6 @@ LINK_PUBLIC
 
     KDev::Sublime
     KDev::OutputView
-    KDev::Debugger
     KDev::Interfaces
 LINK_PRIVATE
     KF5::GuiAddons
@@ -132,6 +131,7 @@ LINK_PRIVATE
     KF5::NewStuff # template config page
     KF5::Archive # template config page
 
+    KDev::Debugger
     KDev::Project
     KDev::Vcs
     KDev::Language
