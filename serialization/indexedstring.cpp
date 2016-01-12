@@ -158,6 +158,30 @@ GlobalIndexedStringRepository& getGlobalIndexedStringRepository()
     return globalIndexedStringRepository;
 }
 
+inline void ref(IndexedString* string)
+{
+    const uint index = string->index();
+    if (index && !isSingleCharIndex(index)) {
+        if (shouldDoDUChainReferenceCounting(string)) {
+            QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+
+            increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(index)->refCount);
+        }
+    }
+}
+
+inline void deref(IndexedString* string)
+{
+    const uint index = string->index();
+    if (index && !isSingleCharIndex(index)) {
+        if (shouldDoDUChainReferenceCounting(string)) {
+            QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+
+            decrease(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(index)->refCount);
+        }
+    }
+}
+
 }
 
 IndexedString::IndexedString()
@@ -207,24 +231,13 @@ IndexedString::IndexedString(const QByteArray& str)
 
 IndexedString::~IndexedString()
 {
-    if (m_index && !isSingleCharIndex(m_index)) {
-        if (shouldDoDUChainReferenceCounting(this)) {
-            QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
-
-            decrease(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
-        }
-    }
+    deref(this);
 }
 
 IndexedString::IndexedString(const IndexedString& rhs)
     : m_index(rhs.m_index)
 {
-    if (m_index && !isSingleCharIndex(m_index)) {
-        if (shouldDoDUChainReferenceCounting(this)) {
-            QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
-            increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
-        }
-    }
+    ref(this);
 }
 
 IndexedString& IndexedString::operator=(const IndexedString& rhs)
@@ -233,22 +246,11 @@ IndexedString& IndexedString::operator=(const IndexedString& rhs)
         return *this;
     }
 
-    if (m_index && !isSingleCharIndex(m_index)) {
-
-        if (shouldDoDUChainReferenceCounting(this)) {
-            QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
-            decrease(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
-        }
-    }
+    deref(this);
 
     m_index = rhs.m_index;
 
-    if (m_index && !isSingleCharIndex(m_index)) {
-        if (shouldDoDUChainReferenceCounting(this)) {
-            QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
-            increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
-        }
-    }
+    ref(this);
 
     return *this;
 }
