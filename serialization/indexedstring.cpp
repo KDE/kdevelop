@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
 
    Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2016 Milian Wolff <mail@milianw.de>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
@@ -278,7 +279,12 @@ const char* IndexedString::c_str() const
     if (!m_index) {
         return 0;
     } else if ((m_index & 0xffff0000) == 0xffff0000) {
-        return ((char*)&m_index) + 3; //The last byte contains the character
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+        const uint offset = 0;
+#else
+        const uint offset = 3;
+#endif
+        return reinterpret_cast<const char*>(&m_index) + offset;
     } else {
         return c_strFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
     }
