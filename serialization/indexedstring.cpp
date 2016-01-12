@@ -151,12 +151,25 @@ inline char indexToChar(uint index)
 }
 
 using IndexedStringRepository = ItemRepository<IndexedStringData, IndexedStringRepositoryItemRequest, false, false>;
-using GlobalIndexedStringRepository = RepositoryManager<IndexedStringRepository>;
+using IndexedStringRepositoryManagerBase = RepositoryManager<IndexedStringRepository, true, false>;
+class IndexedStringRepositoryManager : public IndexedStringRepositoryManagerBase
+{
+public:
+    IndexedStringRepositoryManager()
+      : IndexedStringRepositoryManagerBase(QStringLiteral("String Index"))
+    {
+        repository()->setMutex(&m_mutex);
+    }
+
+private:
+    // non-recursive mutex to increase speed
+    QMutex m_mutex;
+};
 
 IndexedStringRepository* globalIndexedStringRepository()
 {
-    static GlobalIndexedStringRepository globalIndexedStringRepository(QStringLiteral("String Index"));
-    return globalIndexedStringRepository.repository();
+    static IndexedStringRepositoryManager manager;
+    return manager.repository();
 }
 
 template<typename ReadAction>
