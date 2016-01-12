@@ -22,6 +22,7 @@
 #ifndef KDEVPLATFORM_VARIABLESORTMODEL_H
 #define KDEVPLATFORM_VARIABLESORTMODEL_H
 
+#include <QCollator>
 #include <QSortFilterProxyModel>
 
 class QModelIndex;
@@ -38,6 +39,8 @@ public:
 
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+private:
+    QCollator m_collator;
 };
 
 }

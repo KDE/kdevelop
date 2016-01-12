@@ -21,25 +21,21 @@
 
 #include "variablesortmodel.h"
 
-#include <QSortFilterProxyModel>
-#include <QCollator>
-
 namespace KDevelop
 {
 
 VariableSortProxyModel::VariableSortProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
+    m_collator.setNumericMode(true);
+    m_collator.setCaseSensitivity(Qt::CaseInsensitive);
 }
 
 bool VariableSortProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    QCollator collator;
-    collator.setNumericMode(true);
-    collator.setCaseSensitivity(Qt::CaseInsensitive);
     const QString leftString = sourceModel()->data(left).toString();
     const QString rightString = sourceModel()->data(right).toString();
-    int result = collator.compare(leftString, rightString);
+    int result = m_collator.compare(leftString, rightString);
     return result < 0;
 }
 
