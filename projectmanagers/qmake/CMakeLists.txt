@@ -25,7 +25,7 @@ set(qmakecommon_SRCS
 ki18n_wrap_ui(qmakecommon_SRCS qmakebuilddirchooser.ui)
 add_library(kdevqmakecommon STATIC ${qmakecommon_SRCS})
 target_link_libraries(kdevqmakecommon
-    KDev::Interfaces KDev::Project KDev::Util KDev::Language
+    KDev::Interfaces KDev::Project KDev::Util
     kdevqmakeparser)
 
 set(kdevqmakemanager_PART_SRCS

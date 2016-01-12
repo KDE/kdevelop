@@ -41,6 +41,7 @@ add_executable(kdevelop ${kdevelop_SRCS} )
 target_link_libraries(kdevelop
     KDev::Interfaces
     KDev::Shell
+    KDev::Util
 
     KF5::Declarative
     KF5::IconThemes

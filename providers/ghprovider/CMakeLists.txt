@@ -19,7 +19,6 @@ target_link_libraries(kdevghprovider
   KF5::KIOWidgets
   KDev::Interfaces
   KDev::Vcs
-  KDev::Language
   KDev::OutputView
   KDev::Util
 )
