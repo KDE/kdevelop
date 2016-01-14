@@ -29,6 +29,8 @@
 #include <QtCore/QString>
 
 namespace KDevelop {
+
+    class IFrameStackModelPrivate;
     
     class KDEVPLATFORMDEBUGGER_EXPORT IFrameStackModel : public QAbstractItemModel
     {
@@ -45,10 +47,10 @@ namespace KDevelop {
             int line;
         };
         
-        explicit IFrameStackModel(IDebugSession *session) 
-        : QAbstractItemModel(session), m_session(session) {}
+        explicit IFrameStackModel(IDebugSession *session);
+        ~IFrameStackModel() override;
         
-        IDebugSession* session() const { return m_session; }
+        IDebugSession* session() const;
         
         /** Sets the current thread to the specified number,
            and sets the current frame to 0.  
@@ -84,11 +86,10 @@ namespace KDevelop {
         void currentFrameChanged(int frame);
         
     private:
+        friend class IDebugSession;
+        QScopedPointer<IFrameStackModelPrivate> d;
 
         virtual void handleEvent(IDebugSession::event_t event) = 0;
-        friend class IDebugSession;
-
-        IDebugSession *m_session;
     };
 }
 
