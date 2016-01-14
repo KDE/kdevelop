@@ -84,7 +84,7 @@ void GdbFrameStackModel::handleThreadInfo(const GDBMI::ResultRecord& r)
 
         setCurrentThread(currentThreadId);
 
-        if (session()->isCrashed()) {
+        if (session()->hasCrashed()) {
             setCrashedThreadIndex(currentThreadId);
         }
     }

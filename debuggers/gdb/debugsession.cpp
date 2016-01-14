@@ -77,7 +77,7 @@ DebugSession::DebugSession()
     , state_(s_dbgNotStarted | s_appNotStarted)
     , state_reload_needed(false)
     , stateReloadInProgress_(false)
-    , m_isCrashed(false)
+    , m_hasCrashed(false)
 {
     configure();
 
@@ -733,7 +733,7 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
             // that'll end the program.
             programFinished(i18n("Program received signal %1 (%2)", name, user_name));
 
-            m_isCrashed = true;
+            m_hasCrashed = true;
         }
     }
 
@@ -773,9 +773,9 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
         setStateOff(s_automaticContinue);
 }
 
-bool DebugSession::isCrashed() const
+bool DebugSession::hasCrashed() const
 {
-    return m_isCrashed;
+    return m_hasCrashed;
 }
 
 void DebugSession::processNotification(const GDBMI::AsyncRecord & async)

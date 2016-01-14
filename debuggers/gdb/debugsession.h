@@ -80,7 +80,7 @@ public:
     KDevelop::IVariableController* variableController() const override;
     KDevelop::IFrameStackModel* frameStackModel() const override;
 
-    bool isCrashed() const;
+    bool hasCrashed() const;
 
     using IDebugSession::event;
 Q_SIGNALS:
@@ -290,16 +290,15 @@ private:
 
     /**When program stops and all commands from queue are executed and this variable is true, program state shown to the user is updated.*/
     bool state_reload_needed;
+    /**True if program has stopped and all stuff like breakpoints is being updated.*/
+    bool stateReloadInProgress_;
+    /**True if process crashed*/
+    bool m_hasCrashed;
 
     QTime commandExecutionTime;
 
-    /**True if program has stopped and all stuff like breakpoints is being updated.*/
-    bool stateReloadInProgress_;
-
     ///Exit code of the last inferior(in format: exit normally, with code "number" e.t.c)
     QString m_inferiorExitCode;
-
-    bool m_isCrashed;
 };
 
 }
