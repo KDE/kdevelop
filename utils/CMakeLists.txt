@@ -1,11 +1,10 @@
-find_package( OktetaKastenControllers )
-
-set_package_properties( OktetaKastenControllers PROPERTIES
+find_package(OktetaKastenControllers 0.3.1)
+set_package_properties(OktetaKastenControllers PROPERTIES
     PURPOSE "Required for building Okteta KDevelop plugin."
     URL "http://kde.org/"
     TYPE OPTIONAL)
 
-if( OktetaKastenControllers_FOUND )
+if (OktetaKastenControllers_FOUND)
     find_package( KastenControllers )
 
     set_package_properties(KastenControllers PROPERTIES
@@ -14,6 +13,6 @@ if( OktetaKastenControllers_FOUND )
         TYPE OPTIONAL)
 endif()
 
-if( OktetaKastenControllers_FOUND AND KastenControllers_FOUND)
+if (OktetaKastenControllers_FOUND AND KastenControllers_FOUND)
     add_subdirectory(okteta)
 endif()
