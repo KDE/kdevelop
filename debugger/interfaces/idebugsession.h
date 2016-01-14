@@ -54,24 +54,25 @@ public:
         EndedState
     };
 
-    enum event_t { program_state_changed = 1, 
-                   program_exited, 
-                   debugger_exited,
-                   // Emitted when the thread or frame that is selected in UI
-                   // changes.
-                   thread_or_frame_changed, 
-                   debugger_busy, 
-                   debugger_ready,
-                   // Raised when debugger believe that program start running.
-                   // Can be used to hide current line indicator.
-                   // Don't count on this being raise in all cases where
-                   // program is running.
-                   program_running,
-                   // Raise when the debugger is in touch with the program,
-                   // and should have access to its debug symbols. The program
-                   // is not necessary running yet, or might already exited,
-                   // or be otherwise dead.
-                   connected_to_program
+    enum event_t {
+        program_state_changed = 1,
+        program_exited,
+        debugger_exited,
+        // Emitted when the thread or frame that is selected in UI
+        // changes.
+        thread_or_frame_changed,
+        debugger_busy,
+        debugger_ready,
+        // Raised when debugger believe that program start running.
+        // Can be used to hide current line indicator.
+        // Don't count on this being raise in all cases where
+        // program is running.
+        program_running,
+        // Raise when the debugger is in touch with the program,
+        // and should have access to its debug symbols. The program
+        // is not necessary running yet, or might already exited,
+        // or be otherwise dead.
+        connected_to_program
     };
 
 public:
