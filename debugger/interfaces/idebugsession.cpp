@@ -30,10 +30,26 @@
 
 namespace KDevelop {
 
+class IDebugSessionPrivate
+{
+public:
+    IDebugSessionPrivate(IDebugSession* q) : q(q) {}
+
+    void slotStateChanged(IDebugSession::DebuggerState state);
+
+    IDebugSession* q;
+
+    /// Current position in debugged program, gets set when the state changes
+    QUrl m_url;
+    int m_line;
+    QString m_addr;
+};
 
 IDebugSession::IDebugSession()
+    : d(new IDebugSessionPrivate(this))
 {
-    connect(this, &IDebugSession::stateChanged, this, &IDebugSession::slotStateChanged);
+    connect(this, &IDebugSession::stateChanged,
+            this, [&](IDebugSession::DebuggerState state) { d->slotStateChanged(state); });
 }
 
 IDebugSession::~IDebugSession()
@@ -71,9 +87,9 @@ QPair<QUrl, int> IDebugSession::convertToRemoteUrl(const QPair<QUrl, int>& local
 void IDebugSession::clearCurrentPosition()
 {
     qCDebug(DEBUGGER);
-    m_url.clear();
-    m_addr = "";
-    m_line = -1;
+    d->m_url.clear();
+    d->m_addr.clear();
+    d->m_line = -1;
     emit clearExecutionPoint();
 }
 
@@ -83,38 +99,38 @@ void IDebugSession::setCurrentPosition(const QUrl& url, int line, const QString&
 
     if (url.isEmpty() || !QFileInfo(convertToLocalUrl(qMakePair(url,line)).first.path()).exists()) {
         clearCurrentPosition();
-        m_addr = addr;
+        d->m_addr = addr;
         emit showStepInDisassemble(addr);
     } else {
-        m_url = url;
-        m_line = line;
-        m_addr = addr;
+        d->m_url = url;
+        d->m_line = line;
+        d->m_addr = addr;
         emit showStepInSource(url, line, addr);
     }
 }
 
 QUrl IDebugSession::currentUrl() const
 {
-    return m_url;
+    return d->m_url;
 }
 
 int IDebugSession::currentLine() const
 {
-    return m_line;
+    return d->m_line;
 }
 
 QString IDebugSession::currentAddr() const
 {
-    return m_addr;
+    return d->m_addr;
 }
 
-void IDebugSession::slotStateChanged(IDebugSession::DebuggerState state)
+void IDebugSessionPrivate::slotStateChanged(IDebugSession::DebuggerState state)
 {
-    if (state != PausedState) {
-        clearCurrentPosition();
+    if (state != IDebugSession::PausedState) {
+        q->clearCurrentPosition();
     }
 }
 
-
 }
 
+#include "moc_idebugsession.cpp"

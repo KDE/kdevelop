@@ -29,6 +29,7 @@
 
 namespace KDevelop {
 
+class IDebugSessionPrivate;
 class IVariableController;
 class IBreakpointController;
 class IFrameStackModel;
@@ -185,15 +186,12 @@ protected:
     */
     virtual void raiseEvent(event_t e);
     friend class FrameStackModel;
-    
-private Q_SLOTS:
-    void slotStateChanged(KDevelop::IDebugSession::DebuggerState state);
 
-private: //TODO use d-pointer
-    // Current position in debugged program, gets set when the state changes
-    QUrl m_url;
-    int m_line;
-    QString m_addr;
+private:
+    friend IDebugSessionPrivate;
+    QScopedPointer<IDebugSessionPrivate> d;
+
+    Q_PRIVATE_SLOT(d, void slotStateChanged(KDevelop::IDebugSession::DebuggerState state))
 };
 
 }
