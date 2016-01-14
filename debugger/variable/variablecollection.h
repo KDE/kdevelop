@@ -108,10 +108,10 @@ protected:
     bool topLevel() const { return topLevel_; }
 
 private: // TreeItem overrides
-
     QVariant data(int column, int role) const override;
 
 private:
+    bool isPotentialProblematicValue() const;
 
     QString expression_;
     bool inScope_;
