@@ -54,11 +54,11 @@ static const QString interpreterForUrl(const QUrl& url) {
     auto mimetype = QMimeDatabase().mimeTypeForUrl(url);
     static QHash<QString, QString> knownMimetypes;
     if ( knownMimetypes.isEmpty() ) {
-        knownMimetypes["text/x-python"] = "python";
-        knownMimetypes["application/x-php"] = "php";
-        knownMimetypes["application/x-ruby"] = "ruby";
-        knownMimetypes["application/x-shellscript"] = "bash";
-        knownMimetypes["application/x-perl"] = "perl -e";
+        knownMimetypes[QStringLiteral("text/x-python")] = "python";
+        knownMimetypes[QStringLiteral("application/x-php")] = "php";
+        knownMimetypes[QStringLiteral("application/x-ruby")] = "ruby";
+        knownMimetypes[QStringLiteral("application/x-shellscript")] = "bash";
+        knownMimetypes[QStringLiteral("application/x-perl")] = "perl -e";
     }
     const QString& interp = knownMimetypes.value(mimetype.name());
     return interp;
@@ -66,7 +66,7 @@ static const QString interpreterForUrl(const QUrl& url) {
 
 QIcon ScriptAppConfigPage::icon() const
 {
-    return QIcon::fromTheme("system-run");
+    return QIcon::fromTheme(QStringLiteral("system-run"));
 }
 
 void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project )
@@ -179,7 +179,7 @@ KJob* ScriptAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
 
 QStringList ScriptAppLauncher::supportedModes() const
 {
-    return QStringList() << "execute";
+    return QStringList() << QStringLiteral("execute");
 }
 
 KDevelop::LaunchConfigurationPage* ScriptAppPageFactory::createWidget(QWidget* parent)
@@ -220,7 +220,7 @@ QString ScriptAppConfigType::id() const
 
 QIcon ScriptAppConfigType::icon() const
 {
-    return QIcon::fromTheme("preferences-plugin-script");
+    return QIcon::fromTheme(QStringLiteral("preferences-plugin-script"));
 }
 
 bool ScriptAppConfigType::canLaunch(const QUrl& file) const

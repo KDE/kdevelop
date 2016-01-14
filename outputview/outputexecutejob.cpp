@@ -319,11 +319,11 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
     QString errorValue;
     switch( processError ) {
         case QProcess::FailedToStart:
-            errorValue = i18n("%1 has failed to start", commandLine().first());
+            errorValue = i18n("%1 has failed to start", commandLine().at(0));
             break;
 
         case QProcess::Crashed:
-            errorValue = i18n("%1 has crashed", commandLine().first());
+            errorValue = i18n("%1 has crashed", commandLine().at(0));
             break;
 
         case QProcess::ReadError:
@@ -488,8 +488,8 @@ QProcessEnvironment OutputExecuteJobPrivate::effectiveEnvironment() const
     OutputExecuteJobPrivate::mergeEnvironment( environment, userEnv );
     OutputExecuteJobPrivate::mergeEnvironment( environment, m_environmentOverrides );
     if( m_properties.testFlag( OutputExecuteJob::PortableMessages ) ) {
-        environment.remove( "LC_ALL" );
-        environment.insert( "LC_MESSAGES", "C" );
+        environment.remove( QStringLiteral( "LC_ALL" ) );
+        environment.insert( QStringLiteral( "LC_MESSAGES" ), QStringLiteral( "C" ) );
     }
     return environment;
 }
@@ -505,7 +505,7 @@ QStringList OutputExecuteJobPrivate::effectiveCommandLine() const
     // "helper -- our command line".
     QStringList privilegedCommand = m_owner->privilegedExecutionCommand();
     if( !privilegedCommand.isEmpty() ) {
-        return QStringList() << m_owner->privilegedExecutionCommand() << "--" << m_owner->commandLine();
+        return QStringList() << m_owner->privilegedExecutionCommand() << QStringLiteral("--") << m_owner->commandLine();
     } else {
         return m_owner->commandLine();
     }

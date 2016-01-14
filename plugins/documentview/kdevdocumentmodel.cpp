@@ -40,11 +40,11 @@ QIcon KDevDocumentItem::icon() const
     case IDocument::Clean:
         return QIcon::fromTheme(m_fileIcon);
     case IDocument::Modified:
-        return QIcon::fromTheme("document-save");
+        return QIcon::fromTheme(QStringLiteral("document-save"));
     case IDocument::Dirty:
-        return QIcon::fromTheme("document-revert");
+        return QIcon::fromTheme(QStringLiteral("document-revert"));
     case IDocument::DirtyAndModified:
-        return QIcon::fromTheme("edit-delete");
+        return QIcon::fromTheme(QStringLiteral("edit-delete"));
     default:
         return QIcon();
     }
@@ -76,7 +76,7 @@ KDevCategoryItem::KDevCategoryItem( const QString &name )
 {
     setFlags(Qt::ItemIsEnabled);
     setToolTip( name );
-    setIcon( QIcon::fromTheme("folder") );
+    setIcon( QIcon::fromTheme( QStringLiteral( "folder") ) );
 }
 
 KDevCategoryItem::~KDevCategoryItem()

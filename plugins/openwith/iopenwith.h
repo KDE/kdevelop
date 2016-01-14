@@ -44,7 +44,7 @@ public:
      */
     static void openFiles(const QList<QUrl> &files)
     {
-        IPlugin* i = ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IOpenWith" );
+        IPlugin* i = ICore::self()->pluginController()->pluginForExtension( QStringLiteral( "org.kdevelop.IOpenWith" ) );
         if (i) {
             KDevelop::IOpenWith* openWith = i->extension<KDevelop::IOpenWith>();
             Q_ASSERT(openWith);

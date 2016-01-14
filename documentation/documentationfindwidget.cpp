@@ -29,9 +29,9 @@ DocumentationFindWidget::DocumentationFindWidget(QWidget* parent)
     m_ui = new Ui::FindWidget;
     m_ui->setupUi(this);
 
-    m_ui->hideButton->setIcon(QIcon::fromTheme("dialog-close"));
-    m_ui->nextButton->setIcon(QIcon::fromTheme("go-down-search"));
-    m_ui->previousButton->setIcon(QIcon::fromTheme("go-up-search"));
+    m_ui->hideButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-close")));
+    m_ui->nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-down-search")));
+    m_ui->previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-up-search")));
 
     connect(m_ui->findText, &QLineEdit::returnPressed,
             this, &DocumentationFindWidget::searchNext);

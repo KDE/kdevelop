@@ -62,20 +62,20 @@ static QIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
     switch(state)
     {
         case KDevelop::VcsStatusInfo::ItemAdded:
-            return QIcon::fromTheme("vcs-added");
+            return QIcon::fromTheme(QStringLiteral("vcs-added"));
         case KDevelop::VcsStatusInfo::ItemDeleted:
-            return QIcon::fromTheme("vcs-removed");
+            return QIcon::fromTheme(QStringLiteral("vcs-removed"));
         case KDevelop::VcsStatusInfo::ItemHasConflicts:
-            return QIcon::fromTheme("vcs-conflicting");
+            return QIcon::fromTheme(QStringLiteral("vcs-conflicting"));
         case KDevelop::VcsStatusInfo::ItemModified:
-            return QIcon::fromTheme("vcs-locally-modified");
+            return QIcon::fromTheme(QStringLiteral("vcs-locally-modified"));
         case KDevelop::VcsStatusInfo::ItemUpToDate:
-            return QIcon::fromTheme("vcs-normal");
+            return QIcon::fromTheme(QStringLiteral("vcs-normal"));
         case KDevelop::VcsStatusInfo::ItemUnknown:
         case KDevelop::VcsStatusInfo::ItemUserState:
-            return QIcon::fromTheme("unknown");
+            return QIcon::fromTheme(QStringLiteral("unknown"));
     }
-    return QIcon::fromTheme("dialog-error");
+    return QIcon::fromTheme(QStringLiteral("dialog-error"));
 }
 
 class VcsStatusInfoItem : public QStandardItem

@@ -29,7 +29,7 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY_WITH_JSON(GenericSupportFactory, "kdevgenericmanager.json", registerPlugin<GenericProjectManager>();)
 
 GenericProjectManager::GenericProjectManager( QObject* parent, const QVariantList& args )
-    : AbstractFileManagerPlugin( "kdevgenericmanager", parent, args )
+    : AbstractFileManagerPlugin( QStringLiteral( "kdevgenericmanager" ), parent, args )
 {
 }
 

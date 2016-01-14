@@ -139,17 +139,17 @@ QVariant Breakpoint::data(int column, int role) const
     {
         if (role == Qt::DecorationRole) {
             if (!errorText().isEmpty()) {
-                return QIcon::fromTheme("dialog-warning");
+                return QIcon::fromTheme(QStringLiteral("dialog-warning"));
             }
             switch (state()) {
                 case NotStartedState:
                     return QVariant();
                 case DirtyState:
-                    return QIcon::fromTheme("system-switch-user");
+                    return QIcon::fromTheme(QStringLiteral("system-switch-user"));
                 case PendingState:
-                    return QIcon::fromTheme("help-contents");
+                    return QIcon::fromTheme(QStringLiteral("help-contents"));
                 case CleanState:
-                    return QIcon::fromTheme("dialog-ok-apply");
+                    return QIcon::fromTheme(QStringLiteral("dialog-ok-apply"));
             }
         } else if (role == Qt::ToolTipRole) {
             if (!errorText().isEmpty()) {

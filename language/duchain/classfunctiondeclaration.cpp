@@ -28,7 +28,7 @@
 namespace KDevelop
 {
 static Identifier& conversionIdentifier() {
-  static Identifier conversionIdentifierObject("operator{...cast...}");
+  static Identifier conversionIdentifierObject(QStringLiteral("operator{...cast...}"));
   return conversionIdentifierObject;
 }
 
@@ -91,7 +91,7 @@ QString ClassFunctionDeclaration::toString() const {
 
   TypePtr<FunctionType> function = type<FunctionType>();
   if(function) {
-    return QStringLiteral("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+    return QStringLiteral("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn ), identifier().toString(), function->partToString( FunctionType::SignatureArguments ));
   } else {
     QString type = abstractType() ? abstractType()->toString() : QStringLiteral("<notype>");
     qCDebug(LANGUAGE) << "A function has a bad type attached:" << type;

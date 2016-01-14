@@ -47,7 +47,7 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY_WITH_JSON(ProjectFilterProviderFactory, "kdevprojectfilter.json", registerPlugin<ProjectFilterProvider>();)
 
 ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantList& /*args*/ )
-    : IPlugin( "kdevprojectfilter", parent )
+    : IPlugin( QStringLiteral( "kdevprojectfilter" ), parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( IProjectFilterProvider )
 
@@ -90,7 +90,7 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
         return ret;
     }
 
-    QAction* action = new QAction(QIcon::fromTheme("view-filter"),
+    QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("view-filter")),
                                   i18np("Exclude Item From Project",
                                         "Exclude Items From Project",
                                         items.size()), this);
@@ -131,7 +131,7 @@ void ProjectFilterProvider::addFilterFromContextMenu()
     KMessageBox::information(ICore::self()->uiController()->activeMainWindow(),
                              i18np("A filter for the item was added. To undo, use the project filter settings.",
                                    "A filter for the items was added. To undo, use the project filter settings.",
-                                   items.size()), i18n("Project Filter Added"), "projectfilter-addfromctxmenu");
+                                   items.size()), i18n("Project Filter Added"), QStringLiteral("projectfilter-addfromctxmenu"));
 }
 
 void ProjectFilterProvider::updateProjectFilters(IProject* project)

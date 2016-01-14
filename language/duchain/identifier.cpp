@@ -164,7 +164,7 @@ struct IdentifierItemRequest
 using IdentifierRepository = RepositoryManager< ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest>, false>;
 static IdentifierRepository& identifierRepository()
 {
-  static IdentifierRepository identifierRepositoryObject("Identifier Repository");
+  static IdentifierRepository identifierRepositoryObject(QStringLiteral("Identifier Repository"));
   return identifierRepositoryObject;
 }
 

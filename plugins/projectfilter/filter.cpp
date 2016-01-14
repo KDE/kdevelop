@@ -72,12 +72,12 @@ SerializedFilters defaultFilters()
     SerializedFilters ret;
 
     // filter hidden files
-    ret << SerializedFilter(".*", Filter::Targets(Filter::Files | Filter::Folders));
+    ret << SerializedFilter(QStringLiteral(".*"), Filter::Targets(Filter::Files | Filter::Folders));
 
     // common vcs folders which we want to hide
     static const QVector<QString> invalidFolders = QVector<QString>()
-        << ".git" << "CVS" << ".svn" << "_svn"
-        << "SCCS" << "_darcs" << ".hg" << ".bzr" << "__pycache__";
+        << QStringLiteral(".git") << QStringLiteral("CVS") << QStringLiteral(".svn") << QStringLiteral("_svn")
+        << QStringLiteral("SCCS") << QStringLiteral("_darcs") << QStringLiteral(".hg") << QStringLiteral(".bzr") << QStringLiteral("__pycache__");
     foreach(const QString& folder, invalidFolders) {
         ret << SerializedFilter(folder, Filter::Folders);
     }
@@ -85,13 +85,13 @@ SerializedFilters defaultFilters()
     // common files which we want to hide
     static const QVector<QString> filePatterns = QVector<QString>()
         // binary files
-        << "*.o" << "*.a" << "*.so" << "*.so.*"
+        << QStringLiteral("*.o") << QStringLiteral("*.a") << QStringLiteral("*.so") << QStringLiteral("*.so.*")
         // generated files
-        << "moc_*.cpp" << "*.moc" << "ui_*.h" << "qrc_*.cpp"
+        << QStringLiteral("moc_*.cpp") << QStringLiteral("*.moc") << QStringLiteral("ui_*.h") << QStringLiteral("qrc_*.cpp")
         // backup files
-        << "*~" << "*.orig" << ".*.kate-swp" << ".*.swp"
+        << QStringLiteral("*~") << QStringLiteral("*.orig") << QStringLiteral(".*.kate-swp") << QStringLiteral(".*.swp")
         // python cache and object files
-        << "*.pyc" << "*.pyo";
+        << QStringLiteral("*.pyc") << QStringLiteral("*.pyo");
     foreach(const QString& filePattern, filePatterns) {
         ret << SerializedFilter(filePattern, Filter::Files);
     }

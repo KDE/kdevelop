@@ -216,15 +216,15 @@ bool KDevelop::copyPath(const KDevelop::IProject* project, const KDevelop::Path&
 Path KDevelop::proposedBuildFolder(const Path& sourceFolder)
 {
     Path proposedBuildFolder;
-    if (sourceFolder.path().contains("/src/")) {
-        const QString srcBuildPath = sourceFolder.path().replace("/src/", "/build/");
+    if (sourceFolder.path().contains(QStringLiteral("/src/"))) {
+        const QString srcBuildPath = sourceFolder.path().replace(QStringLiteral("/src/"), QStringLiteral("/build/"));
         Q_ASSERT(!srcBuildPath.isEmpty());
         if (QDir(srcBuildPath).exists()) {
             proposedBuildFolder = Path(srcBuildPath);
         }
     }
     if (!proposedBuildFolder.isValid()) {
-        proposedBuildFolder = Path( sourceFolder, "build" );
+        proposedBuildFolder = Path(sourceFolder, QStringLiteral("build"));
     }
 
     return proposedBuildFolder;

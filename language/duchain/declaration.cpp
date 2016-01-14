@@ -86,7 +86,7 @@ m_isExplicitlyDeleted(rhs.m_isExplicitlyDeleted)
 
 ///@todo Use reference counting
 static Repositories::StringRepository& commentRepository() {
-    static Repositories::StringRepository commentRepositoryObject("Comment Repository");
+    static Repositories::StringRepository commentRepositoryObject(QStringLiteral("Comment Repository"));
     return commentRepositoryObject;
 }
 

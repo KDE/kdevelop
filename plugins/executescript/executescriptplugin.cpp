@@ -60,7 +60,7 @@ Q_LOGGING_CATEGORY(PLUGIN_EXECUTESCRIPT, "kdevplatform.plugins.executescript")
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecutescript.json", registerPlugin<ExecuteScriptPlugin>();)
 
 ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin("kdevexecutescript", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevexecutescript"), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecuteScriptPlugin )
     m_configType = new ScriptAppConfigType();

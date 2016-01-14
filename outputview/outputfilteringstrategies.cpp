@@ -221,7 +221,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             // They are later searched by pathForFile to find source files corresponding to
             // compiler errors.
             // Note: CMake objectfile has the format: "/path/to/four/CMakeFiles/file.o"
-            if ( curActFilter.fileGroup != -1 && curActFilter.tool == "cmake" && line.contains("Building")) {
+            if ( curActFilter.fileGroup != -1 && curActFilter.tool == "cmake" && line.contains(QStringLiteral("Building"))) {
                 const auto objectFile = match.captured(curActFilter.fileGroup);
                 const auto dir = objectFile.section(QStringLiteral("CMakeFiles/"), 0, 0);
                 d->putDirAtEnd(Path(d->m_buildDir, dir));

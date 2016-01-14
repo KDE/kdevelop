@@ -74,7 +74,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 : QWidget(parent), variablesRoot_(controller->variableCollection()->root())
 {
   //setWindowIcon(QIcon::fromTheme("math_brace"));
-    setWindowIcon(QIcon::fromTheme("debugger"));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("debugger")));
     setWindowTitle(i18n("Debugger Variables"));
 
     m_proxy = new VariableSortProxyModel;
@@ -239,7 +239,7 @@ void VariableTree::setupActions()
     connect(m_signalMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), this, &VariableTree::changeVariableFormat);
 
     m_watchDelete = new QAction(
-        QIcon::fromTheme("edit-delete"), i18n( "Remove Watch Variable" ), this);
+        QIcon::fromTheme(QStringLiteral("edit-delete")), i18n( "Remove Watch Variable" ), this);
 
     m_watchDelete->setShortcut(Qt::Key_Delete);
     m_watchDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);

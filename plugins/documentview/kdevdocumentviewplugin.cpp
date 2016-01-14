@@ -84,7 +84,7 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
 
 
 KDevDocumentViewPlugin::KDevDocumentViewPlugin( QObject *parent, const QVariantList& args )
-        : KDevelop::IPlugin( "kdevdocumentview", parent )
+        : KDevelop::IPlugin( QStringLiteral( "kdevdocumentview" ), parent )
 {
     Q_UNUSED( args );
 
@@ -92,7 +92,7 @@ KDevDocumentViewPlugin::KDevDocumentViewPlugin( QObject *parent, const QVariantL
 
     core()->uiController()->addToolView( i18n("Documents"), factory );
 
-    setXMLFile( "kdevdocumentview.rc" );
+    setXMLFile( QStringLiteral( "kdevdocumentview.rc" ) );
 }
 
 KDevDocumentViewPlugin::~KDevDocumentViewPlugin()

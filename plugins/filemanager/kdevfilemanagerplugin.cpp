@@ -68,9 +68,9 @@ private:
 };
 
 KDevFileManagerPlugin::KDevFileManagerPlugin(QObject *parent, const QVariantList &/*args*/)
-    :KDevelop::IPlugin("kdevfilemanager", parent)
+    :KDevelop::IPlugin(QStringLiteral("kdevfilemanager"), parent)
 {
-    setXMLFile("kdevfilemanager.rc");
+    setXMLFile(QStringLiteral("kdevfilemanager.rc"));
 
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 }

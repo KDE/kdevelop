@@ -35,7 +35,7 @@ QDir BazaarUtils::toQDir(const QUrl& url)
 QDir BazaarUtils::workingCopy(const QUrl& path)
 {
     QDir dir = BazaarUtils::toQDir(path);
-    while (!dir.exists(".bzr") && dir.cdUp());
+    while (!dir.exists(QStringLiteral(".bzr")) && dir.cdUp());
 
     return dir;
 }
@@ -120,7 +120,7 @@ bool BazaarUtils::isValidDirectory(const QUrl& dirPath)
 {
     QDir dir = BazaarUtils::workingCopy(dirPath);
 
-    return dir.cd(".bzr") && dir.exists("branch");
+    return dir.cd(QStringLiteral(".bzr")) && dir.exists(QStringLiteral("branch"));
 }
 
 KDevelop::VcsStatusInfo BazaarUtils::parseVcsStatusInfoLine(const QString& line)
@@ -164,23 +164,23 @@ KDevelop::VcsEvent BazaarUtils::parseBzrLogPart(const QString& output)
     KDevelop::VcsItemEvent::Action currentAction;
     for (const QString &line : outputLines) {
         if (!atMessage) {
-            if (line.startsWith("revno")) {
+            if (line.startsWith(QStringLiteral("revno"))) {
                 QString revno = line.mid(QStringLiteral("revno: ").length());
                 revno = revno.left(revno.indexOf(' '));
                 KDevelop::VcsRevision revision;
                 revision.setRevisionValue(revno.toLongLong(), KDevelop::VcsRevision::GlobalNumber);
                 commitInfo.setRevision(revision);
-            } else if (line.startsWith("committer: ")) {
+            } else if (line.startsWith(QStringLiteral("committer: "))) {
                 QString commiter = line.mid(QStringLiteral("committer: ").length());
                 commitInfo.setAuthor(commiter);     // Author goes after commiter, but only if is different
-            } else if (line.startsWith("author")) {
+            } else if (line.startsWith(QStringLiteral("author"))) {
                 QString author = line.mid(QStringLiteral("author: ").length());
                 commitInfo.setAuthor(author);       // It may override commiter (In fact commiter is not supported by VcsEvent)
-            } else if (line.startsWith("timestamp")) {
+            } else if (line.startsWith(QStringLiteral("timestamp"))) {
                 const QString formatString = "yyyy-MM-dd hh:mm:ss";
                 QString timestamp = line.mid(QStringLiteral("timestamp: ddd ").length(), formatString.length());
                 commitInfo.setDate(QDateTime::fromString(timestamp, formatString));
-            } else if (line.startsWith("message")) {
+            } else if (line.startsWith(QStringLiteral("message"))) {
                 atMessage = true;
             }
         } else if (atMessage && !afterMessage) {
@@ -220,7 +220,7 @@ KDevelop::VcsItemEvent::Action BazaarUtils::parseActionDescription(const QString
         return KDevelop::VcsItemEvent::Deleted;
     } else if (action == "kind changed:") {
         return KDevelop::VcsItemEvent::Replaced; // Best approximation
-    } else if (action.startsWith("renamed")) {
+    } else if (action.startsWith(QStringLiteral("renamed"))) {
         return KDevelop::VcsItemEvent::Modified; // Best approximation
     } else {
         qCritical("Unsupported action: %s", action.toLocal8Bit().constData());

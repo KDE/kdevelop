@@ -73,7 +73,7 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     setObjectName( i18n( "Documents" ) );
 
-    setWindowIcon( QIcon::fromTheme( "document-multiple" ) );
+    setWindowIcon( QIcon::fromTheme( QStringLiteral( "document-multiple" ) ) );
     setWindowTitle( i18n( "Documents" ) );
 
     setFocusPolicy( Qt::NoFocus );
@@ -200,12 +200,12 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
         QAction* save = KStandardAction::save(this, SLOT(saveSelected()), ctxMenu);
         save->setEnabled(selectedDocHasChanges());
         ctxMenu->addAction(save);
-        ctxMenu->addAction(QIcon::fromTheme("view-refresh"), i18n( "Reload" ), this, SLOT(reloadSelected()));
+        ctxMenu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n( "Reload" ), this, SLOT(reloadSelected()));
 
         appendActions(ctxMenu, editActions);
 
         ctxMenu->addAction(KStandardAction::close(this, SLOT(closeSelected()), ctxMenu));
-        QAction* closeUnselected = ctxMenu->addAction(QIcon::fromTheme("document-close"), i18n( "Close Other Files" ), this, SLOT(closeUnselected()));
+        QAction* closeUnselected = ctxMenu->addAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n( "Close Other Files" ), this, SLOT(closeUnselected()));
         closeUnselected->setEnabled(!m_unselectedDocs.isEmpty());
 
         appendActions(ctxMenu, vcsActions);

@@ -297,7 +297,7 @@ class DUChainPrivate
       DUChainPrivate* m_data;
   };
 public:
-  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), m_cleanupMutex(QMutex::Recursive), instance(0), m_cleanupDisabled(false), m_destroyed(false), m_environmentListInfo("Environment Lists"), m_environmentInfo("Environment Information")
+  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), m_cleanupMutex(QMutex::Recursive), instance(0), m_cleanupDisabled(false), m_destroyed(false), m_environmentListInfo(QStringLiteral("Environment Lists")), m_environmentInfo(QStringLiteral("Environment Information"))
   {
 #if defined(TEST_NO_CLEANUP)
     m_cleanupDisabled = true;
@@ -1605,7 +1605,7 @@ uint DUChain::newTopContextIndex() {
       return ret;
     }
   }
-  static QAtomicInt& currentId( globalItemRepositoryRegistry().getCustomCounter("Top-Context Counter", 1) );
+  static QAtomicInt& currentId( globalItemRepositoryRegistry().getCustomCounter(QStringLiteral("Top-Context Counter"), 1) );
   return currentId.fetchAndAddRelaxed(1);
 }
 

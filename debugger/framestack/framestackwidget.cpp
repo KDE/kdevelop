@@ -67,7 +67,7 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
                       "program. By clicking on an item you "
                       "can see the values in any of the "
                       "previous calling functions."));
-    setWindowIcon(QIcon::fromTheme("view-list-text"));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("view-list-text")));
     m_threadsWidget = new QWidget(this);
     m_threads = new QListView(m_threadsWidget);
     m_frames = new QTreeView(this);

@@ -256,7 +256,7 @@ Variable *Watches::addFinishResult(const QString& convenienceVarible)
         removeFinishResult();
     }
     finishResult_ = currentSession()->variableController()->createVariable(
-        model(), this, convenienceVarible, "$ret");
+        model(), this, convenienceVarible, QStringLiteral("$ret"));
     appendChild(finishResult_);
     finishResult_->attachMaybe();
     if (childCount() == 1 && !isExpanded()) {

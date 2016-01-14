@@ -44,11 +44,11 @@
 using namespace KDevelop;
 
 BazaarPlugin::BazaarPlugin(QObject* parent, const QVariantList& args) :
-    IPlugin("kdevbazaar", parent),
+    IPlugin(QStringLiteral("kdevbazaar"), parent),
     m_vcsPluginHelper(new KDevelop::VcsPluginHelper(this, this)), m_hasError(false)
 {
     Q_UNUSED(args); // What is this?
-    if (QStandardPaths::findExecutable("bzr").isEmpty()) {
+    if (QStandardPaths::findExecutable(QStringLiteral("bzr")).isEmpty()) {
         m_hasError = true;
         m_errorDescription = i18n("Bazaar is not installed (bzr executable not"
                                  " found)");
@@ -58,7 +58,7 @@ BazaarPlugin::BazaarPlugin(QObject* parent, const QVariantList& args) :
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IDistributedVersionControl)
 
-    setObjectName("Bazaar");
+    setObjectName(QStringLiteral("Bazaar"));
 }
 
 BazaarPlugin::~BazaarPlugin()
@@ -175,7 +175,7 @@ VcsJob* BazaarPlugin::log(const QUrl& localLocation, const VcsRevision& rev, con
 void BazaarPlugin::parseBzrLog(DVcsJob* job)
 {
     QVariantList result;
-    for (QString part : job->output().split("------------------------------------------------------------", QString::SkipEmptyParts)) {
+    for (QString part : job->output().split(QStringLiteral("------------------------------------------------------------"), QString::SkipEmptyParts)) {
         auto event = BazaarUtils::parseBzrLogPart(part);
         if (event.revision().revisionType() != VcsRevision::Invalid)
             result.append(QVariant::fromValue(event));
@@ -282,7 +282,7 @@ void BazaarPlugin::parseBzrStatus(DVcsJob* job)
     }
 
     QStringList command = job->dvcsCommand();
-    for (auto it = command.constBegin() + command.indexOf("--no-classify") + 1, itEnd = command.constEnd(); it != itEnd; ++it) {
+    for (auto it = command.constBegin() + command.indexOf(QStringLiteral("--no-classify")) + 1, itEnd = command.constEnd(); it != itEnd; ++it) {
         QString path = QFileInfo(*it).absoluteFilePath();
         if (!filesWithStatus.contains(path)) {
             filesWithStatus.insert(path);

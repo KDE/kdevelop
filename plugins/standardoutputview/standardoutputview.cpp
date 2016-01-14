@@ -64,11 +64,11 @@ private:
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin("kdevstandardoutputview", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevstandardoutputview"), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
 
-    setXMLFile("kdevstandardoutputview.rc");
+    setXMLFile(QStringLiteral("kdevstandardoutputview.rc"));
 
     connect(KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::aboutToRemoveView,
             this, &StandardOutputView::removeSublimeView);
@@ -109,27 +109,27 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
     {
         case KDevelop::IOutputView::BuildView:
         {
-            ret = registerToolView( i18nc("@title:window", "Build"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme("run-build"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18nc("@title:window", "Build"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("run-build")), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::RunView:
         {
-            ret = registerToolView( i18nc("@title:window", "Run"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme("system-run"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18nc("@title:window", "Run"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme(QStringLiteral("system-run")), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::DebugView:
         {
-            ret = registerToolView( i18nc("@title:window", "Debug"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme("debug-step-into"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18nc("@title:window", "Debug"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme(QStringLiteral("debug-step-into")), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::TestView:
         {
-            ret = registerToolView( i18nc("@title:window", "Test"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme("system-run"));
+            ret = registerToolView( i18nc("@title:window", "Test"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
             break;
         }
         case KDevelop::IOutputView::VcsView:
         {
-            ret = registerToolView( i18nc("@title:window", "Version Control"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme("system-run"));
+            ret = registerToolView( i18nc("@title:window", "Version Control"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
             break;
         }
     }

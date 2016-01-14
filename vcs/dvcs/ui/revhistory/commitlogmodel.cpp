@@ -28,7 +28,7 @@
 CommitLogModel::CommitLogModel(KDevelop::DistributedVersionControlPlugin* plugin, const QString& repo, QObject* parent)
     : QAbstractItemModel(parent), m_repo(repo), m_plugin(plugin)
 {
-    headerInfo << "Graph" << "Short Log" << "Author" << "Date";
+    headerInfo << QStringLiteral("Graph") << QStringLiteral("Short Log") << QStringLiteral("Author") << QStringLiteral("Date");
     QMetaObject::invokeMethod(this, "initializeModel", Qt::QueuedConnection);
 }
 

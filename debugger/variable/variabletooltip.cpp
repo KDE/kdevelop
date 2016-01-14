@@ -144,9 +144,9 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 
     QSignalMapper* mapper = new QSignalMapper(this);
     connect(watchThisButton, &QPushButton::clicked, mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    mapper->setMapping(watchThisButton, "add_watch");
+    mapper->setMapping(watchThisButton, QStringLiteral("add_watch"));
     connect(stopOnChangeButton, &QPushButton::clicked, mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    mapper->setMapping(stopOnChangeButton, "add_watchpoint");
+    mapper->setMapping(stopOnChangeButton, QStringLiteral("add_watchpoint"));
     connect(mapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &VariableToolTip::slotLinkActivated);
 
     QHBoxLayout* inner = new QHBoxLayout();
