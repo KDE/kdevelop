@@ -96,7 +96,9 @@ void DebugJob::start()
 
     setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::Behaviours(KDevelop::IOutputView::AllowUserClose) | KDevelop::IOutputView::AutoScroll);
-    setModel( new KDevelop::OutputModel );
+    auto model = new KDevelop::OutputModel;
+    model->setFilteringStrategy(OutputModel::NativeAppErrorFilter);
+    setModel(model);
     setTitle(m_launchcfg->name());
 
     QString startWith = grp.readEntry(GDBDebugger::startWithEntry, QString("ApplicationOutput"));
