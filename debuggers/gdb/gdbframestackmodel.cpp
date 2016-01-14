@@ -92,8 +92,8 @@ void GdbFrameStackModel::handleThreadInfo(const GDBMI::ResultRecord& r)
 
 struct FrameListHandler : public GDBCommandHandler
 {
-    FrameListHandler(GdbFrameStackModel* frames, int thread, int to)
-        : m_frames(frames), m_thread(thread) , m_to(to) {}
+    FrameListHandler(GdbFrameStackModel* model, int thread, int to)
+        : model(model), m_thread(thread) , m_to(to) {}
 
     void handle(const GDBMI::ResultRecord &r) override
     {
@@ -118,14 +118,14 @@ struct FrameListHandler : public GDBCommandHandler
             }
         }
         if (first == 0) {
-            m_frames->setFrames(m_thread, frames);
+            model->setFrames(m_thread, frames);
         } else {
-            m_frames->insertFrames(m_thread, frames);
+            model->insertFrames(m_thread, frames);
         }
-        m_frames->setHasMoreFrames(m_thread, hasMore);
+        model->setHasMoreFrames(m_thread, hasMore);
     }
 private:
-    GdbFrameStackModel* m_frames;
+    GdbFrameStackModel* model;
     int m_thread;
     int m_to;
 };
