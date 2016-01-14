@@ -310,9 +310,11 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
 
 void ProblemTreeView::setScope(int scope)
 {
-    foreach (auto action, actions())
-        if (action->objectName() == QLatin1String("scopeMenu"))
-            action->setText(i18n("Scope: %1").arg(action->menu()->actions().at(scope)->text()));
+    foreach (auto action, actions()) {
+        if (action->objectName() == QLatin1String("scopeMenu")) {
+            action->setText(i18n("Scope: %1", action->menu()->actions().at(scope)->text()));
+        }
+    }
 
     model()->setScope(scope);
 }
