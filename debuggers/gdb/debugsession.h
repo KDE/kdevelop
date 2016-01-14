@@ -145,7 +145,7 @@ public:
     /**
      * Run currently executing program to the given \a address
      */
-    void runUntil(QString& address);
+    void runUntil(const QString& address);
     /**
      * Move the execution point of the currently executing program to the given \a url and \a line.
      */
@@ -155,7 +155,7 @@ public:
      * Move the execution point of the currently executing program to the given \a address.
      *Note: It can be really very dangerous, so use jumpTo instead.
      */
-    void jumpToMemoryAddress(QString& address);
+    void jumpToMemoryAddress(const QString& address);
 
     /** Adds a command to the end of queue of commands to be executed
         by gdb. The command will be actually sent to gdb only when

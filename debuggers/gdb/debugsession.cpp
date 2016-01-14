@@ -1189,7 +1189,8 @@ void DebugSession::runUntil(const QUrl& url, int line)
                 CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
-void DebugSession::runUntil(QString& address){
+void DebugSession::runUntil(const QString& address)
+{
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
@@ -1200,7 +1201,8 @@ void DebugSession::runUntil(QString& address){
 }
 // **************************************************************************
 
-void DebugSession::jumpToMemoryAddress(QString& address){
+void DebugSession::jumpToMemoryAddress(const QString& address)
+{
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
