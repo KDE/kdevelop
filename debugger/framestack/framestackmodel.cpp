@@ -280,7 +280,6 @@ void FrameStackModel::setCurrentThread(int threadNumber)
     }
     if (threadNumber != d->m_currentThread) {
         d->m_currentFrame = 0;
-        qCDebug(DEBUGGER) << "currentFrame" << d->m_currentFrame;
         d->m_currentThread = threadNumber;
         emit currentFrameChanged(d->m_currentFrame);
     }
