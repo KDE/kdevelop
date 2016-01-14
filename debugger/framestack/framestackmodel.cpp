@@ -169,7 +169,11 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
         const ThreadItem &thread = d->m_threads.at(index.row());
         if (index.column() == 0) {
             if (role == Qt::DisplayRole) {
-                return i18nc("#thread-id at function-name or address", "#%1 at %2", thread.nr, thread.name);
+                if (thread.nr == d->m_crashedThreadIndex) {
+                    return i18nc("#thread-id at function-name or address", "#%1 at %2 (crashed)", thread.nr, thread.name);
+                } else {
+                    return i18nc("#thread-id at function-name or address", "#%1 at %2", thread.nr, thread.name);
+                }
             } else if (role == Qt::TextColorRole) {
                 if (thread.nr == d->m_crashedThreadIndex) {
                     KColorScheme scheme(QPalette::Active);
