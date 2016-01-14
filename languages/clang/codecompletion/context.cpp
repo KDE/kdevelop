@@ -517,6 +517,11 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
             continue;
         }
 
+        const auto& file = declaration->topContext()->parsingEnvironmentFile();
+        if (!file || file->language() != ParseSession::languageString()) {
+            continue;
+        }
+
         if (declaration->kind() == Declaration::Instance && !declaration->isFunctionDeclaration()) {
             break;
         }
