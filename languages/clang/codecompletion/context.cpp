@@ -510,6 +510,13 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
 
     for (auto it = decl.iterator(); it; ++it) {
         auto declaration = it->declaration();
+        if (!declaration) {
+            // Mitigate problems such as: Cannot load a top-context from file "/home/kfunk/.cache/kdevduchain/kdevelop-{foo}/topcontexts/6085"
+            //  - the required language-support for handling ID 55 is probably not loaded
+            qCWarning(KDEV_CLANG) << "Detected an invalid declaration for" << qid;
+            continue;
+        }
+
         if (declaration->kind() == Declaration::Instance && !declaration->isFunctionDeclaration()) {
             break;
         }
