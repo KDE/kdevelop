@@ -31,6 +31,7 @@
 namespace KDevelop {
 
 class DebugController;
+class FrameStackModelPrivate;
 
 /** FIXME: This class needs rework, since at present it is not true model.
     Client cannot just obtain frames by grabbing a thread and listing
@@ -45,6 +46,7 @@ class DebugController;
 class KDEVPLATFORMDEBUGGER_EXPORT FrameStackModel : public IFrameStackModel
 {
     Q_OBJECT
+
 public:
     explicit FrameStackModel(IDebugSession* session);
     ~FrameStackModel() override;
@@ -53,6 +55,7 @@ public:
         int nr;
         QString name;
     };
+
     void setThreads(const QList<ThreadItem> &threads);
     /**
      * Update frames for thread @p threadNumber
@@ -92,25 +95,9 @@ private Q_SLOTS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
 
 private:
+    QScopedPointer<FrameStackModelPrivate> d;
+
     void handleEvent(IDebugSession::event_t event) override;
-
-    void update();
-    QModelIndex indexForThreadNumber(int threadNumber);
-
-    int m_currentThread;
-    int m_currentFrame;
-
-    int m_crashedThreadIndex;
-
-    // used to count how often a user has scrolled down and more frames needed to be fetched;
-    // this way, the number of frames fetched in each chunk can be increased if the user wants
-    // to scroll far
-    int m_subsequentFrameFetchOperations;
-    bool m_updateCurrentFrameOnNextFetch;
-
-    QList<ThreadItem> m_threads;
-    QHash<int, QList<FrameItem> > m_frames;
-    QHash<int, bool> m_hasMoreFrames;
 };
 
 }
