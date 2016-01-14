@@ -23,12 +23,10 @@
 #ifndef OKTETATOOLVIEWFACTORY_H
 #define OKTETATOOLVIEWFACTORY_H
 
-// Plugin
-#include "oktetaglobal.h"
 // KDev
 #include <interfaces/iuicontroller.h>
 
-namespace KASTEN_NAMESPACE {
+namespace Kasten {
 class AbstractToolViewFactory;
 class AbstractToolFactory;
 }

@@ -27,30 +27,28 @@
 #include "oktetatoolviewfactory.h"
 #include "oktetadocument.h"
 // Okteta Kasten tools
-#include <stringsextracttoolviewfactory.h>
-#include <stringsextracttoolfactory.h>
-#include <infotoolviewfactory.h>
-#include <infotoolfactory.h>
-#include <filtertoolviewfactory.h>
-#include <filtertoolfactory.h>
-#include <checksumtoolviewfactory.h>
-#include <checksumtoolfactory.h>
+#include <kasten/okteta/stringsextracttoolviewfactory.h>
+#include <kasten/okteta/stringsextracttoolfactory.h>
+#include <kasten/okteta/infotoolviewfactory.h>
+#include <kasten/okteta/infotoolfactory.h>
+#include <kasten/okteta/filtertoolviewfactory.h>
+#include <kasten/okteta/filtertoolfactory.h>
+#include <kasten/okteta/checksumtoolviewfactory.h>
+#include <kasten/okteta/checksumtoolfactory.h>
 // #include <documentinfotoolview.h>
 // #include <documentinfotool.h>
-#include <poddecodertoolviewfactory.h>
-#include <poddecodertoolfactory.h>
-#include <bytetabletoolviewfactory.h>
-#include <bytetabletoolfactory.h>
-#include <bookmarkstoolviewfactory.h>
-#include <bookmarkstoolfactory.h>
+#include <kasten/okteta/poddecodertoolviewfactory.h>
+#include <kasten/okteta/poddecodertoolfactory.h>
+#include <kasten/okteta/bytetabletoolviewfactory.h>
+#include <kasten/okteta/bytetabletoolfactory.h>
+#include <kasten/okteta/bookmarkstoolviewfactory.h>
+#include <kasten/okteta/bookmarkstoolfactory.h>
 #ifndef BIG_ENDIAN
-#include <structurestoolviewfactory.h>
-#include <structurestoolfactory.h>
+#include <kasten/okteta/structurestoolviewfactory.h>
+#include <kasten/okteta/structurestoolfactory.h>
 #endif
 // Okteta Kasten
-#if KASTEN_VERSION == 2
-#include <bytearrayviewprofilemanager.h>
-#endif
+#include <kasten/okteta/bytearrayviewprofilemanager.h>
 // KDev
 #include <project/projectmodel.h>
 #include <interfaces/icore.h>
@@ -61,10 +59,11 @@
 // KDE
 #include <KAboutData>
 #include <KPluginFactory>
+#include <KLocalizedString>
 
 #include <QAction>
 
-K_PLUGIN_FACTORY(OktetaPluginFactory, registerPlugin<KDevelop::OktetaPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(OktetaPluginFactory, "kdevokteta.json", registerPlugin<KDevelop::OktetaPlugin>(); )
 
 namespace KDevelop
 {
@@ -84,18 +83,9 @@ void addTool( IUiController* uiController,
 OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
   : IPlugin( "kdevokteta", parent )
   , mDocumentFactory( new OktetaDocumentFactory(this) )
-#if KASTEN_VERSION == 2
   , mViewProfileManager( new Kasten::ByteArrayViewProfileManager() )
-#endif
 {
     Q_UNUSED(args)
-
-#if KASTEN_VERSION == 0 || KASTEN_VERSION == 1
-    KLocale* globalLocale = KGlobal::locale();
-    globalLocale->insertCatalog( QString::fromLatin1("liboktetacore") );
-    globalLocale->insertCatalog( QString::fromLatin1("libkasten") );
-    globalLocale->insertCatalog( QString::fromLatin1("liboktetakasten") );
-#endif
 
     IUiController* uiController = core()->uiController();
     addTool( uiController, new Kasten::ChecksumToolViewFactory(), new Kasten::ChecksumToolFactory() );
@@ -118,12 +108,12 @@ ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
 {
     OpenWithContext* openWithContext = dynamic_cast<OpenWithContext*>( context );
 
-    if( openWithContext && !openWithContext->mimeType()->is("inode/directory"))
+    if( openWithContext && !openWithContext->mimeType().inherits("inode/directory"))
     {
         QAction* openAction = new QAction( i18n("Hex Editor"), this );
         openAction->setIcon( QIcon::fromTheme("document-open") );
-        openAction->setData( openWithContext->urls() );
-        connect( openAction, SIGNAL(triggered()), SLOT(onOpenTriggered()) );
+        openAction->setData( QVariant::fromValue(openWithContext->urls()) );
+        connect( openAction, &QAction::triggered, this, &OktetaPlugin::onOpenTriggered );
 
         KDevelop::ContextMenuExtension contextMenuExtension;
         contextMenuExtension.addAction( KDevelop::ContextMenuExtension::OpenEmbeddedGroup, openAction );
@@ -160,3 +150,5 @@ OktetaPlugin::~OktetaPlugin()
 }
 
 }
+
+#include "oktetaplugin.moc"

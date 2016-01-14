@@ -23,12 +23,10 @@
 #ifndef OKTETAVIEW_H
 #define OKTETAVIEW_H
 
-// Plugin
-#include "oktetaglobal.h"
 // KDevPlatform
 #include <sublime/view.h>
 
-namespace KASTEN_NAMESPACE {
+namespace Kasten {
 class ByteArrayViewProfileSynchronizer;
 class ByteArrayView;
 }
@@ -44,11 +42,7 @@ class OktetaView : public Sublime::View
   Q_OBJECT
 
   public:
-#if KASTEN_VERSION == 2
     OktetaView( OktetaDocument* document, Kasten::ByteArrayViewProfileSynchronizer* viewProfileSynchronizer );
-#else
-    explicit OktetaView( OktetaDocument* document );
-#endif
     virtual ~OktetaView();
 
   public:

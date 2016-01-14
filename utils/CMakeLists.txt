@@ -1,28 +1,19 @@
-# TODO KF5: Port me, currently the find script picks up the wrong okteta lib
-#find_package( LibOktetaKasten )
+find_package( OktetaKastenControllers )
 
-set_package_properties(LibOktetaKasten PROPERTIES
+set_package_properties( OktetaKastenControllers PROPERTIES
     PURPOSE "Required for building Okteta KDevelop plugin."
     URL "http://kde.org/"
     TYPE OPTIONAL)
 
-if( LIBOKTETAKASTEN_FOUND )
-    set( LIBOKTETA_FIND_VERSION ${LIBOKTETAKASTEN_NEEDS_OKTETA_VERSION} )
-    set( LIBKASTEN_FIND_VERSION ${LIBOKTETAKASTEN_NEEDS_KASTEN_VERSION} )
-    find_package( LibOkteta )
-    find_package( LibKasten )
+if( OktetaKastenControllers_FOUND )
+    find_package( KastenControllers )
 
-    set_package_properties(LibOkteta PROPERTIES
-        PURPOSE "Required for building Okteta KDevelop plugin."
-        URL "http://kde.org/"
-        TYPE OPTIONAL)
-    set_package_properties(LibKasten PROPERTIES
+    set_package_properties(KastenControllers PROPERTIES
         PURPOSE "Required for building Okteta KDevelop plugin."
         URL "http://kde.org/"
         TYPE OPTIONAL)
 endif()
 
-
-if( LIBOKTETAKASTEN_FOUND AND LIBKASTEN_FOUND AND LIBOKTETA_FOUND )
+if( OktetaKastenControllers_FOUND AND KastenControllers_FOUND)
     add_subdirectory(okteta)
 endif()
