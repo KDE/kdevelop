@@ -99,6 +99,8 @@ public:
                 return stateToIcon(m_info.state());
             case VcsFileChangesModel::VcsStatusInfoRole:
                 return QVariant::fromValue(m_info);
+            case VcsFileChangesModel::UrlRole:
+                return m_info.url();
         }
         return {};
     }
@@ -157,9 +159,8 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
 
 QVariant VcsFileChangesModel::data(const QModelIndex &index, int role) const
 {
-    switch(role) {
-        case UrlRole:
-            return statusInfo(index.row(), index.parent()).url();
+    if (role == UrlRole && index.column()==0) {
+        return QStandardItemModel::data(index.sibling(index.row(), 1), role);
     }
     return QStandardItemModel::data(index, role);
 }
