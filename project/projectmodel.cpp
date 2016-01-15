@@ -1012,6 +1012,8 @@ ProjectModel::ProjectModel( QObject *parent )
 
 ProjectModel::~ProjectModel()
 {
+    d->rootItem->setModel(nullptr);
+    delete d->rootItem;
     delete d;
 }
 

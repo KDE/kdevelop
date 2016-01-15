@@ -77,7 +77,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
     setWindowIcon(QIcon::fromTheme(QStringLiteral("debugger"), windowIcon()));
     setWindowTitle(i18n("Debugger Variables"));
 
-    m_proxy = new VariableSortProxyModel;
+    m_proxy = new VariableSortProxyModel(this);
     varTree_ = new VariableTree(controller, this, m_proxy);
     setFocusProxy(varTree_);
 
