@@ -20,6 +20,7 @@
 
 #include "framestackmodel.h"
 
+#include <QFileInfo>
 #include <QIcon>
 #include <QMimeType>
 #include <QMimeDatabase>
@@ -60,6 +61,9 @@ public:
     QList<FrameStackModel::ThreadItem> m_threads;
     QHash<int, QList<FrameStackModel::FrameItem> > m_frames;
     QHash<int, bool> m_hasMoreFrames;
+
+    // Caches
+    QHash<QString, bool> m_fileExistsCache;
 };
 
 FrameStackModel::FrameStackModel(IDebugSession *session)
@@ -123,6 +127,8 @@ void FrameStackModel::setFrames(int threadNumber, QList<FrameItem> frames)
         d->m_currentFrame = 0;
         d->m_updateCurrentFrameOnNextFetch = false;
     }
+
+    d->m_fileExistsCache.clear();
 
     session()->raiseEvent(IDebugSession::thread_or_frame_changed);
 
@@ -206,6 +212,17 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
             } else if (role == Qt::DecorationRole) {
                 QMimeType mime = QMimeDatabase().mimeTypeForUrl(frame.file);
                 return QIcon::fromTheme(mime.iconName());
+            } else if (role == Qt::TextColorRole) {
+                const auto fileName = frame.file.toLocalFile();
+                auto cacheIt = d->m_fileExistsCache.find(fileName);
+                if (cacheIt == d->m_fileExistsCache.end()) {
+                    cacheIt = d->m_fileExistsCache.insert(fileName, QFileInfo(fileName).exists());
+                }
+                const bool fileExists = cacheIt.value();
+                if (!fileExists) {
+                    KColorScheme scheme(QPalette::Active);
+                    return scheme.foreground(KColorScheme::InactiveText).color();
+                }
             }
         }
     }
