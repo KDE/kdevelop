@@ -57,7 +57,7 @@ QWidget* OktetaToolViewFactory::create( QWidget* parent )
     Kasten::AbstractToolView* toolView = mToolViewFactory->create( tool );
 
     QWidget* widget = new KastenToolViewWidget( toolView, parent );
-    widget->setWindowIcon( QIcon::fromTheme(mToolViewFactory->iconName()) );
+    widget->setWindowIcon( QIcon::fromTheme(mToolViewFactory->iconName(), windowIcon()) );
     return widget;
 }
 
