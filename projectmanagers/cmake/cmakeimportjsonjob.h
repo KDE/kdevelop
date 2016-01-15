@@ -26,6 +26,8 @@
 
 #include <KJob>
 
+#include <QFutureWatcher>
+
 template<class T> class QFutureWatcher;
 class CMakeFolderItem;
 struct ImportData;
@@ -66,7 +68,7 @@ private Q_SLOTS:
 
 private:
     KDevelop::IProject* m_project;
-    QFutureWatcher<ImportData>* m_futureWatcher;
+    QFutureWatcher<ImportData> m_futureWatcher;
 
     CMakeJsonData m_data;
     QHash<KDevelop::Path, QStringList> m_targets;
