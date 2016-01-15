@@ -199,7 +199,7 @@ namespace {
 void GDBOutputWidget::newStdoutLine(const QString& line,
                                     bool internal)
 {
-    QString s = html_escape(line);
+    QString s = line.toHtmlEscaped();
     if (s.startsWith("(gdb)"))
     {
         s = colorify(s, gdbColor_);
@@ -273,7 +273,7 @@ void GDBOutputWidget::setShowInternalCommands(bool show)
 
 void GDBOutputWidget::slotReceivedStderr(const char* line)
 {
-    QString colored = colorify(html_escape(line), errorColor_);
+    QString colored = colorify(QString::fromLatin1(line).toHtmlEscaped(), errorColor_);
     // Errors are shown inside user commands too.
     allCommands_.append(colored);
     trimList(allCommands_, maxLines_);
@@ -360,14 +360,6 @@ void GDBOutputWidget::focusInEvent(QFocusEvent */*e*/)
 {
     m_gdbView->verticalScrollBar()->setValue(m_gdbView->verticalScrollBar()->maximum());
     m_userGDBCmdEditor->setFocus();
-}
-
-QString GDBOutputWidget::html_escape(const QString& s)
-{
-    QString r(s);
-    r.replace('<', "&lt;");
-    r.replace('>', "&gt;");
-    return r;
 }
 
 void GDBOutputWidget::savePartialProjectSession()
