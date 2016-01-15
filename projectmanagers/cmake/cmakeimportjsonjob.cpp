@@ -149,9 +149,8 @@ ImportData import(const Path& commandsFile, const Path &targetsFilePath, const Q
 CMakeImportJob::CMakeImportJob(IProject* project, QObject* parent)
     : KJob(parent)
     , m_project(project)
-    , m_futureWatcher(new QFutureWatcher<ImportData>)
 {
-    connect(m_futureWatcher, &QFutureWatcher<ImportData>::finished, this, &CMakeImportJob::importFinished);
+    connect(&m_futureWatcher, &QFutureWatcher<ImportData>::finished, this, &CMakeImportJob::importFinished);
 }
 
 void CMakeImportJob::start()
@@ -170,15 +169,15 @@ void CMakeImportJob::start()
     const QString sourceDir = m_project->path().toLocalFile();
 
     auto future = QtConcurrent::run(import, commandsFile, targetsFilePath, sourceDir, currentBuildDir);
-    m_futureWatcher->setFuture(future);
+    m_futureWatcher.setFuture(future);
 }
 
 void CMakeImportJob::importFinished()
 {
     Q_ASSERT(m_project->thread() == QThread::currentThread());
-    Q_ASSERT(m_futureWatcher->isFinished());
+    Q_ASSERT(m_futureWatcher.isFinished());
 
-    auto future = m_futureWatcher->future();
+    auto future = m_futureWatcher.future();
     auto data = future.result();
     if (!data.json.isValid) {
         qCWarning(CMAKE) << "Could not import CMake project ('compile_commands.json' invalid)";
@@ -201,7 +200,7 @@ IProject* CMakeImportJob::project() const
 
 CMakeJsonData CMakeImportJob::jsonData() const
 {
-    Q_ASSERT(!m_futureWatcher->isRunning());
+    Q_ASSERT(!m_futureWatcher.isRunning());
     return m_data;
 }
 
