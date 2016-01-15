@@ -168,7 +168,7 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
     } else {
         QFileInfo info(archiveFileName);
 
-        if (info.suffix() == ".zip") {
+        if (info.suffix() == "zip") {
             d->archive = new KZip(archiveFileName);
         } else {
             d->archive = new KTar(archiveFileName);
