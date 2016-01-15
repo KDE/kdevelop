@@ -412,11 +412,11 @@ void GDBOutputWidget::copyAll()
 {
     /* See comments for allCommandRaw_ for explanations of
        this complex logic, as opposed to calling text(). */
-    QStringList& raw = showInternalCommands_ ?
+    const QStringList& raw = showInternalCommands_ ?
         allCommandsRaw_ : userCommandsRaw_;
     QString text;
     for (int i = 0; i < raw.size(); ++i)
-        text += raw[i];
+        text += raw.at(i);
 
     // Make sure the text is pastable both with Ctrl-C and with
     // middle click.
