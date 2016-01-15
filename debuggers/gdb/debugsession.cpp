@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QRegExp>
 #include <QStandardPaths>
+#include <QRegularExpression>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -77,6 +78,7 @@ DebugSession::DebugSession()
     , state_(s_dbgNotStarted | s_appNotStarted)
     , state_reload_needed(false)
     , stateReloadInProgress_(false)
+    , m_hasCrashed(false)
 {
     configure();
 
@@ -731,6 +733,8 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
             // Continuing from SIG FPE/SEGV will cause a "Cannot ..." and
             // that'll end the program.
             programFinished(i18n("Program received signal %1 (%2)", name, user_name));
+
+            m_hasCrashed = true;
         }
     }
 
@@ -770,6 +774,10 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
         setStateOff(s_automaticContinue);
 }
 
+bool DebugSession::hasCrashed() const
+{
+    return m_hasCrashed;
+}
 
 void DebugSession::processNotification(const GDBMI::AsyncRecord & async)
 {
@@ -868,12 +876,10 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     // It's better to do this right away so that the state bit is always
     // correct.
 
-    /** FIXME: connect ttyStdout. It takes QByteArray, so
-        I'm not sure what to do.  */
-#if 0
-    connect(gdb, SIGNAL(applicationOutput(QString)),
-            this, SIGNAL(ttyStdout(QString)));
-#endif
+    connect(gdb, &GDB::applicationOutput,
+            this, [this](const QString& output) {
+        emit applicationStandardOutputLines(output.split(QRegularExpression("[\r\n]"),QString::SkipEmptyParts));
+    });
     connect(gdb, &GDB::userCommandOutput, this,
             &DebugSession::gdbUserCommandStdout);
     connect(gdb, &GDB::internalCommandOutput, this,
@@ -1182,7 +1188,8 @@ void DebugSession::runUntil(const QUrl& url, int line)
                 CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
-void DebugSession::runUntil(QString& address){
+void DebugSession::runUntil(const QString& address)
+{
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
@@ -1193,7 +1200,8 @@ void DebugSession::runUntil(QString& address){
 }
 // **************************************************************************
 
-void DebugSession::jumpToMemoryAddress(QString& address){
+void DebugSession::jumpToMemoryAddress(const QString& address)
+{
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 

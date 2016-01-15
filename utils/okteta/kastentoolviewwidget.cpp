@@ -25,18 +25,10 @@
 // plugin
 #include "oktetaview.h"
 // Okteta Kasten
-#include <bytearrayview.h>
+#include "kasten/okteta/bytearrayview.h"
 // Kasten
-#if KASTEN_VERSION == 2
-#include <Kasten2/AbstractToolView>
-#include <Kasten2/AbstractTool>
-#elif KASTEN_VERSION == 1
-#include <Kasten1/AbstractToolView>
-#include <Kasten1/AbstractTool>
-#else
 #include <Kasten/AbstractToolView>
 #include <Kasten/AbstractTool>
-#endif
 // KDev
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -54,8 +46,8 @@ KastenToolViewWidget::KastenToolViewWidget( Kasten::AbstractToolView* toolView, 
     mToolView( toolView )
 {
     Sublime::Controller* controller = ICore::self()->uiController()->controller();
-    connect( controller, SIGNAL(mainWindowAdded(Sublime::MainWindow*)),
-             SLOT(onMainWindowAdded(Sublime::MainWindow*)) );
+    connect( controller, &Sublime::Controller::mainWindowAdded,
+             this, &KastenToolViewWidget::onMainWindowAdded );
     const QList<Sublime::MainWindow*>& mainWindows = controller->mainWindows();
     foreach( Sublime::MainWindow* mainWindow, mainWindows )
         onMainWindowAdded( mainWindow );
@@ -67,8 +59,8 @@ KastenToolViewWidget::KastenToolViewWidget( Kasten::AbstractToolView* toolView, 
 
 void KastenToolViewWidget::onMainWindowAdded( Sublime::MainWindow* mainWindow )
 {
-    connect( mainWindow, SIGNAL(activeViewChanged(Sublime::View*)),
-             SLOT(onActiveViewChanged(Sublime::View*)) );
+    connect( mainWindow, &Sublime::MainWindow::activeViewChanged,
+             this, &KastenToolViewWidget::onActiveViewChanged );
     onActiveViewChanged( mainWindow->activeView() );
 }
 

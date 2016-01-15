@@ -87,9 +87,6 @@ Q_SIGNALS:
     void breakInto();
 
 private:
-
-    QString html_escape(const QString& s);
-
     void newStdoutLine(const QString& line, bool internal);
 
     /** Arranges for 'line' to be shown to the user.

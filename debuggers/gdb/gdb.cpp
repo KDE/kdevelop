@@ -311,8 +311,11 @@ void GDB::processLine(const QByteArray& line)
             } else {
                 if (currentCmd_ && currentCmd_->isUserCommand())
                     emit userCommandOutput(s.message);
-                else
+                else if (s.subkind == GDBMI::StreamRecord::Console) {
+                    emit applicationOutput(s.message);
+                } else {
                     emit internalCommandOutput(s.message);
+                }
 
                 if (currentCmd_)
                     currentCmd_->newOutput(s.message);

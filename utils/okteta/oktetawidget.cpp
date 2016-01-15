@@ -26,35 +26,33 @@
 #include "oktetadocument.h"
 #include "oktetaplugin.h"
 // Okteta Kasten
-#include <bytearrayview.h>
-#include <bytearrayrawfilesynchronizerfactory.h>
-#include <overwriteonlycontroller.h>
-#include <overwritemodecontroller.h>
-#include <gotooffsetcontroller.h>
-#include <selectrangecontroller.h>
-#include <searchcontroller.h>
-#include <replacecontroller.h>
-#include <bookmarkscontroller.h>
-#include <printcontroller.h>
-#include <viewconfigcontroller.h>
-#include <viewmodecontroller.h>
-#include <viewstatuscontroller.h>
-#if KASTEN_VERSION == 2
-#include <viewprofilecontroller.h>
-#include <viewprofilesmanagecontroller.h>
-#endif
+#include <kasten/okteta/bytearrayview.h>
+//#include <kasten/okteta/bytearrayrafilesynchronizerfactory.h>
+//#include <kasten/okteta/overwriteonlycontroller.h>
+#include <kasten/okteta/overwritemodecontroller.h>
+#include <kasten/okteta/gotooffsetcontroller.h>
+#include <kasten/okteta/selectrangecontroller.h>
+#include <kasten/okteta/searchcontroller.h>
+#include <kasten/okteta/replacecontroller.h>
+#include <kasten/okteta/bookmarkscontroller.h>
+#include <kasten/okteta/printcontroller.h>
+#include <kasten/okteta/viewconfigcontroller.h>
+#include <kasten/okteta/viewmodecontroller.h>
+#include <kasten/okteta/viewstatuscontroller.h>
+#include <kasten/okteta/viewprofilecontroller.h>
+#include <kasten/okteta/viewprofilesmanagecontroller.h>
 // Kasten
-#include <readonlycontroller.h>
+#include <kasten/readonlycontroller.h>
 // #include <document/readonly/readonlybarcontroller.h>
 // #include <io/synchronize/synchronizecontroller.h>
-#include <clipboardcontroller.h>
-#include <insertcontroller.h>
-#include <copyascontroller.h>
-#include <exportcontroller.h>
-#include <versioncontroller.h>
-#include <zoomcontroller.h>
-#include <zoombarcontroller.h>
-#include <selectcontroller.h>
+#include <kasten/clipboardcontroller.h>
+#include <kasten/insertcontroller.h>
+#include <kasten/copyascontroller.h>
+#include <kasten/exportcontroller.h>
+#include <kasten/versioncontroller.h>
+#include <kasten/zoomcontroller.h>
+#include <kasten/zoombarcontroller.h>
+#include <kasten/selectcontroller.h>
 // KDevelop
 #include <sublime/view.h>
 // KDE
@@ -74,7 +72,7 @@ OktetaWidget::OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayVie
     KXMLGUIClient(),
     mByteArrayView( byteArrayView )
 {
-    setComponentData( plugin->componentData() );
+    setComponentName( "kdevokteta" , "KDevelop Okteta");
     setXMLFile( "kdevokteta.rc" );
 
     setupActions(plugin);
@@ -107,7 +105,6 @@ void OktetaWidget::setupActions(OktetaPlugin* plugin)
     mControllers.append( new Kasten::PrintController( this ) );
     mControllers.append( new Kasten::ViewConfigController(this) );
     mControllers.append( new Kasten::ViewModeController(this) );
-#if KASTEN_VERSION == 2
     Kasten::ByteArrayViewProfileManager* viewProfileManager = plugin->viewProfileManager();
     mControllers.append( new Kasten::ViewProfileController(viewProfileManager, mByteArrayView->widget(), this) );
     mControllers.append( new Kasten::ViewProfilesManageController(this, viewProfileManager, mByteArrayView->widget()) );
@@ -115,7 +112,6 @@ void OktetaWidget::setupActions(OktetaPlugin* plugin)
     QAction* viewprofilesManageAction = actionCollection()->action(QLatin1String("settings_viewprofiles_manage"));
     viewprofilesManageAction->setText( i18nc("@action:inmenu",
                                              "Manage Byte Array View Profiles...") );
-#endif
 
 //     Kasten::StatusBar* bottomBar = static_cast<Kasten::StatusBar*>( statusBar() );
 //     mControllers.append( new ViewStatusController(bottomBar) );
