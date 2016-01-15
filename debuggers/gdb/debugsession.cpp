@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QRegExp>
 #include <QStandardPaths>
+#include <QRegularExpression>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -875,12 +876,10 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     // It's better to do this right away so that the state bit is always
     // correct.
 
-    /** FIXME: connect ttyStdout. It takes QByteArray, so
-        I'm not sure what to do.  */
-#if 0
-    connect(gdb, SIGNAL(applicationOutput(QString)),
-            this, SIGNAL(ttyStdout(QString)));
-#endif
+    connect(gdb, &GDB::applicationOutput,
+            this, [this](const QString& output) {
+        emit applicationStandardOutputLines(output.split(QRegularExpression("[\r\n]"),QString::SkipEmptyParts));
+    });
     connect(gdb, &GDB::userCommandOutput, this,
             &DebugSession::gdbUserCommandStdout);
     connect(gdb, &GDB::internalCommandOutput, this,
