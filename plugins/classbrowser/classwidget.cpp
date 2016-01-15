@@ -46,7 +46,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 {
   setObjectName("Class Browser Tree");
   setWindowTitle(i18n("Classes"));
-  setWindowIcon(QIcon::fromTheme("code-class"));
+  setWindowIcon(QIcon::fromTheme("code-class", windowIcon()));
 
   // Set tree in the plugin
   m_plugin->setActiveClassTree(m_tree);

@@ -39,7 +39,7 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   Ui::ExternalScriptViewBase::setupUi( this );
 
   setWindowTitle( i18n( "External Scripts" ) );
-  setWindowIcon( QIcon::fromTheme("dialog-scripts") );
+  setWindowIcon( QIcon::fromTheme("dialog-scripts", windowIcon()) );
 
   m_model = new QSortFilterProxyModel( this );
   m_model->setSourceModel( m_plugin->model() );

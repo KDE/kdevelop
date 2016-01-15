@@ -69,7 +69,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 , m_tree(new QTreeView(this))
 , m_filter(new KRecursiveFilterProxyModel(this))
 {
-    setWindowIcon(QIcon::fromTheme("preflight-verifier"));
+    setWindowIcon(QIcon::fromTheme("preflight-verifier", windowIcon()));
     setWindowTitle(i18n("Unit Tests"));
 
     QVBoxLayout* layout = new QVBoxLayout(this);

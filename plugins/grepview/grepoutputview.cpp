@@ -70,7 +70,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     Ui::GrepOutputView::setupUi(this);
 
     setWindowTitle(i18nc("@title:window", "Find/Replace Output View"));
-    setWindowIcon(QIcon::fromTheme("edit-find"));
+    setWindowIcon(QIcon::fromTheme("edit-find", windowIcon()));
 
     m_prev = new QAction(QIcon::fromTheme("go-previous"), i18n("&Previous Item"), this);
     m_prev->setEnabled(false);
