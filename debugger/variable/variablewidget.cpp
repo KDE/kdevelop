@@ -170,6 +170,7 @@ VariableTree::VariableTree(IDebugController *controller,
     m_proxy->setSourceModel(m_model);
     setModel(m_proxy);
     setSortingEnabled(true);
+    sortByColumn(VariableCollection::NameColumn, Qt::AscendingOrder);
 
     QModelIndex index = controller->variableCollection()->indexForItem(
         controller->variableCollection()->watches(), 0);
