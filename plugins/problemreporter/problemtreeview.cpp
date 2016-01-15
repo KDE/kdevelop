@@ -85,7 +85,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
 
     setObjectName("Problem Reporter Tree");
     setWhatsThis(i18n("Problems"));
-    setItemDelegate(new ProblemTreeViewItemDelegate);
+    setItemDelegate(new ProblemTreeViewItemDelegate(this));
     setSelectionBehavior(QAbstractItemView::SelectRows);
 
     m_proxy->setSortRole(ProblemModel::SeverityRole);

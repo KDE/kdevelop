@@ -77,10 +77,6 @@ TemplatePreviewToolView::~TemplatePreviewToolView()
 
 void TemplatePreviewToolView::documentActivated(KDevelop::IDocument* document)
 {
-    if (!isVisible()) {
-        return;
-    }
-
     documentChanged(document->textDocument());
 }
 
@@ -136,12 +132,10 @@ void TemplatePreviewToolView::showEvent(QShowEvent*)
 
 void TemplatePreviewToolView::documentClosed(IDocument* document)
 {
-    if (!isVisible()) {
-        return;
-    }
+    m_original = nullptr;
 
     if (document && document->textDocument() == m_original) {
-        documentChanged(0);
+        documentChanged(nullptr);
     }
 }
 

@@ -51,7 +51,16 @@ OutlineModel::OutlineModel(QObject* parent)
     // and also when we switch the current document
     connect(docController, &IDocumentController::documentActivated,
             this, &OutlineModel::rebuildOutline);
-    connect(docController, &IDocumentController::documentUrlChanged, this, [this](IDocument* doc) {
+    connect(docController, &IDocumentController::documentClosed,
+            this, [this](IDocument* doc) {
+        if (doc == m_lastDoc) {
+            m_lastDoc = nullptr;
+            m_lastUrl = IndexedString();
+            rebuildOutline(nullptr);
+        }
+    });
+    connect(docController, &IDocumentController::documentUrlChanged,
+            this, [this](IDocument* doc) {
         if (doc == m_lastDoc) {
             m_lastUrl = IndexedString(doc->url());
         }

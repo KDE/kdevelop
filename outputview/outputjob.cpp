@@ -130,7 +130,15 @@ void KDevelop::OutputJob::setKillJobOnOutputClose(bool killJobOnOutputClose)
 
 void KDevelop::OutputJob::setModel(QAbstractItemModel * model)
 {
+    if (m_outputModel) {
+        delete m_outputModel;
+    }
+
     m_outputModel = model;
+
+    if (m_outputModel) {
+        m_outputModel->setParent(this);
+    }
 }
 
 void KDevelop::OutputJob::setDelegate(QAbstractItemDelegate * delegate)

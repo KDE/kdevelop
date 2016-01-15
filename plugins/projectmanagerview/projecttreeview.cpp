@@ -382,11 +382,10 @@ void ProjectTreeView::restoreState(IProject* project)
 {
     KConfigGroup configGroup( ICore::self()->activeSession()->config(), settingsConfigGroup );
 
-    // Saver will delete itself when it is complete.
-    ProjectModelSaver *saver = new ProjectModelSaver;
-    saver->setProject( project );
-    saver->setView( this );
-    saver->restoreState( configGroup );
+    ProjectModelSaver saver;
+    saver.setProject( project );
+    saver.setView( this );
+    saver.restoreState( configGroup );
 }
 
 void ProjectTreeView::aboutToShutdown()

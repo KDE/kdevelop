@@ -81,7 +81,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     tree->setSelectionBehavior( QAbstractItemView::SelectRows );
     tree->setSelectionMode( QAbstractItemView::SingleSelection );
     tree->setUniformRowHeights( true );
-    tree->setItemDelegate( new LaunchConfigurationModelDelegate() );
+    tree->setItemDelegate( new LaunchConfigurationModelDelegate(this) );
     tree->setColumnHidden(1, true);
     for(int row=0; row<model->rowCount(); row++) {
         tree->setExpanded(model->index(row, 0), true);
@@ -980,10 +980,6 @@ QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const
         return box;
     }
     return QStyledItemDelegate::createEditor ( parent, option, index );
-}
-
-LaunchConfigurationModelDelegate::LaunchConfigurationModelDelegate()
-{
 }
 
 void LaunchConfigurationModelDelegate::setEditorData ( QWidget* editor, const QModelIndex& index ) const
