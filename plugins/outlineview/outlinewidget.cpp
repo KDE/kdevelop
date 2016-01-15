@@ -48,7 +48,7 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     setObjectName("Outline View");
     setWindowTitle(i18n("Outline"));
     setWhatsThis(i18n("Outline View"));
-    setWindowIcon(QIcon::fromTheme("code-class")); //TODO: better icon?
+    setWindowIcon(QIcon::fromTheme("code-class", windowIcon())); //TODO: better icon?
 
     m_proxy->setSourceModel(m_model);
     m_proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);

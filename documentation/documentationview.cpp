@@ -48,7 +48,7 @@ using namespace KDevelop;
 DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
     : QWidget(parent), mProvidersModel(model)
 {
-    setWindowIcon(QIcon::fromTheme(QStringLiteral("documentation")));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("documentation"), windowIcon()));
     setWindowTitle(i18n("Documentation"));
 
     setLayout(new QVBoxLayout(this));

@@ -57,7 +57,7 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
                                           "breakpoint item allows you to change "
                                           "the breakpoint and will take you "
                                           "to the source in the editor window."));
-    setWindowIcon( QIcon::fromTheme( QStringLiteral( "media-playback-pause") ) );
+    setWindowIcon( QIcon::fromTheme( QStringLiteral( "media-playback-pause"), windowIcon() ) );
 
     m_breakpointsView = new QTableView(this);
     m_breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);

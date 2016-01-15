@@ -74,7 +74,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 : QWidget(parent), variablesRoot_(controller->variableCollection()->root())
 {
   //setWindowIcon(QIcon::fromTheme("math_brace"));
-    setWindowIcon(QIcon::fromTheme(QStringLiteral("debugger")));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("debugger"), windowIcon()));
     setWindowTitle(i18n("Debugger Variables"));
 
     m_proxy = new VariableSortProxyModel;

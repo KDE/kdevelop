@@ -56,7 +56,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     : QWidget(parent), m_plugin(plugin)
 {
     setObjectName(QStringLiteral("FileManager"));
-    setWindowIcon(QIcon::fromTheme(QStringLiteral("folder-sync")));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("folder-sync"), windowIcon()));
     setWindowTitle(i18n("File System"));
 
     KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group( "Filesystem" );
