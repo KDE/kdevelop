@@ -183,7 +183,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 
     setLayout(topLayout);
 
-    setWindowIcon( QIcon::fromTheme("system-run") );
+    setWindowIcon( QIcon::fromTheme("system-run", windowIcon()) );
     setWindowTitle(i18n("Disassemble/Registers View"));
 
     KDevelop::IDebugController* pDC=KDevelop::ICore::self()->debugController();
