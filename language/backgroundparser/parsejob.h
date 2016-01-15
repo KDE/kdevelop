@@ -183,8 +183,6 @@ public:
     /// It's up to the caller to remove the returned instance
     virtual KDevelop::ControlFlowGraph* controlFlowGraph();
 
-    ThreadWeaver::QObjectDecorator* decorator() const;
-
 Q_SIGNALS:
     /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%
      * @param text may be a text that describes the current state of parsing

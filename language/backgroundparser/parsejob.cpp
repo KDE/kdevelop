@@ -26,7 +26,6 @@
 #include <QByteArray>
 #include <QMutex>
 #include <QMutexLocker>
-#include <threadweaver/qobjectdecorator.h>
 #include <QApplication>
 #include <QDebug>
 
@@ -99,14 +98,12 @@ public:
 
     int parsePriority;
     ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
-    ThreadWeaver::QObjectDecorator* decorator;
 };
 
 ParseJob::ParseJob( const IndexedString& url, KDevelop::ILanguageSupport* languageSupport )
         : ThreadWeaver::Sequence(),
         d(new ParseJobPrivate(url, languageSupport))
 {
-    d->decorator = new ThreadWeaver::QObjectDecorator(this);
 }
 
 ParseJob::~ParseJob()
@@ -518,11 +515,6 @@ DataAccessRepository* ParseJob::dataAccessInformation()
 bool ParseJob::hasTracker() const
 {
     return d->tracker;
-}
-
-ThreadWeaver::QObjectDecorator* ParseJob::decorator() const
-{
-    return d->decorator;
 }
 
 }
