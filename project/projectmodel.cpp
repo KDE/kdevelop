@@ -625,7 +625,7 @@ QString ProjectFolderItem::folderName() const
 void ProjectFolderItem::propagateRename( const Path& newBase ) const
 {
     Path path = newBase;
-    path.addPath("dummy");
+    path.addPath(QStringLiteral("dummy"));
     foreach( KDevelop::ProjectBaseItem* child, children() )
     {
         path.setLastPathSegment( child->text() );

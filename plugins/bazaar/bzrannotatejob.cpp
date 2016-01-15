@@ -139,7 +139,7 @@ void BzrAnnotateJob::parseBzrLog(KDevelop::DVcsJob* job)
     QString message;
     for (const QString &line : outputLines) {
         if (!atMessage) {
-            if (line.startsWith("revno")) {
+            if (line.startsWith(QStringLiteral("revno"))) {
                 QString revno = line.mid(QStringLiteral("revno: ").length());
                 // In future there is possibility that "revno: " will change to
                 // "revno??". If that's all, then we recover matching only
@@ -153,17 +153,17 @@ void BzrAnnotateJob::parseBzrLog(KDevelop::DVcsJob* job)
                 KDevelop::VcsRevision revision;
                 revision.setRevisionValue(revno.toLongLong(), KDevelop::VcsRevision::GlobalNumber);
                 commitInfo.setRevision(revision);
-            } else if (line.startsWith("committer: ")) {
+            } else if (line.startsWith(QStringLiteral("committer: "))) {
                 QString commiter = line.mid(QStringLiteral("committer: ").length());
                 commitInfo.setAuthor(commiter);     // Author goes after commiter, but only if is different
-            } else if (line.startsWith("author")) {
+            } else if (line.startsWith(QStringLiteral("author"))) {
                 QString author = line.mid(QStringLiteral("author: ").length());
                 commitInfo.setAuthor(author);       // It may override commiter (In fact commiter is not supported by VcsEvent)
-            } else if (line.startsWith("timestamp")) {
+            } else if (line.startsWith(QStringLiteral("timestamp"))) {
                 const QString formatString = "yyyy-MM-dd hh:mm:ss";
                 QString timestamp = line.mid(QStringLiteral("timestamp: ddd ").length(), formatString.length());
                 commitInfo.setDate(QDateTime::fromString(timestamp, formatString));
-            } else if (line.startsWith("message")) {
+            } else if (line.startsWith(QStringLiteral("message"))) {
                 atMessage = true;
             }
         } else {

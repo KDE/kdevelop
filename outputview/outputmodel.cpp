@@ -158,7 +158,7 @@ class ParsingThread
 public:
     ParsingThread()
     {
-        m_thread.setObjectName("OutputFilterThread");
+        m_thread.setObjectName(QStringLiteral("OutputFilterThread"));
     }
     virtual ~ParsingThread()
     {

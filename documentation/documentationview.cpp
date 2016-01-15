@@ -67,11 +67,11 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
     mFindDoc = new DocumentationFindWidget;
     mFindDoc->hide();
 
-    mBack = mActions->addAction(QIcon::fromTheme("go-previous"), i18n("Back"));
-    mForward = mActions->addAction(QIcon::fromTheme("go-next"), i18n("Forward"));
-    mFind = mActions->addAction(QIcon::fromTheme("edit-find"), i18n("Find"), mFindDoc, SLOT(startSearch()));
+    mBack = mActions->addAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("Back"));
+    mForward = mActions->addAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("Forward"));
+    mFind = mActions->addAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("Find"), mFindDoc, SLOT(startSearch()));
     mActions->addSeparator();
-    mActions->addAction(QIcon::fromTheme("go-home"), i18n("Home"), this, SLOT(showHome()));
+    mActions->addAction(QIcon::fromTheme(QStringLiteral("go-home")), i18n("Home"), this, SLOT(showHome()));
     mProviders = new QComboBox(mActions);
 
     mIdentifiers = new QLineEdit(mActions);

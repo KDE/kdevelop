@@ -20,3 +20,28 @@
 
 #include "iframestackmodel.h"
 
+namespace KDevelop {
+
+class IFrameStackModelPrivate
+{
+public:
+    IDebugSession *m_session = nullptr;
+};
+
+IFrameStackModel::IFrameStackModel(KDevelop::IDebugSession* session)
+    : QAbstractItemModel(session)
+    , d(new IFrameStackModelPrivate)
+{
+    d->m_session = session;
+}
+
+IFrameStackModel::~IFrameStackModel()
+{
+}
+
+IDebugSession* IFrameStackModel::session() const
+{
+    return d->m_session;
+}
+
+}

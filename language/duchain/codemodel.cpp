@@ -155,7 +155,7 @@ class CodeModelRequestItem {
 class CodeModelPrivate {
 public:
 
-  CodeModelPrivate() : m_repository("Code Model") {
+  CodeModelPrivate() : m_repository(QStringLiteral("Code Model")) {
   }
   //Maps declaration-ids to items
   ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem> m_repository;

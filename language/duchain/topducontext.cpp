@@ -48,7 +48,7 @@ namespace KDevelop
 {
 
 Utils::BasicSetRepository* RecursiveImportRepository::repository() {
-  static Utils::BasicSetRepository recursiveImportRepositoryObject("Recursive Imports", &KDevelop::globalItemRepositoryRegistry());
+  static Utils::BasicSetRepository recursiveImportRepositoryObject(QStringLiteral("Recursive Imports"), &KDevelop::globalItemRepositoryRegistry());
   return &recursiveImportRepositoryObject;
 }
 

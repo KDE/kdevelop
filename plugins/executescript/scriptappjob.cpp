@@ -157,8 +157,8 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
 
     QStringList program;
     if (!remoteHost.isEmpty()) {
-        program << "ssh";
-        QStringList parts = remoteHost.split(":");
+        program << QStringLiteral("ssh");
+        QStringList parts = remoteHost.split(QLatin1Char(':'));
         program << parts.first();
         if (parts.length() > 1) {
             program << "-p "+parts.at(1);
@@ -184,7 +184,7 @@ void ScriptAppJob::start()
     if( proc )
     {
         startOutput();
-        appendLine( i18n("Starting: %1", proc->program().join(" ") ) );
+        appendLine( i18n("Starting: %1", proc->program().join(QLatin1Char( ' ' ) ) ) );
         proc->start();
     } else
     {
@@ -233,7 +233,7 @@ void ScriptAppJob::processError( QProcess::ProcessError error )
     {
         setError( FailedShownError );
         QString errmsg =  i18n("*** Could not start program '%1'. Make sure that the "
-                           "path is specified correctly ***", proc->program().join(" ") );
+                           "path is specified correctly ***", proc->program().join(QLatin1Char( ' ' ) ) );
         appendLine( errmsg );
         setErrorText( errmsg );
         emitResult();

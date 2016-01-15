@@ -62,20 +62,20 @@ static QIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
     switch(state)
     {
         case KDevelop::VcsStatusInfo::ItemAdded:
-            return QIcon::fromTheme("vcs-added");
+            return QIcon::fromTheme(QStringLiteral("vcs-added"));
         case KDevelop::VcsStatusInfo::ItemDeleted:
-            return QIcon::fromTheme("vcs-removed");
+            return QIcon::fromTheme(QStringLiteral("vcs-removed"));
         case KDevelop::VcsStatusInfo::ItemHasConflicts:
-            return QIcon::fromTheme("vcs-conflicting");
+            return QIcon::fromTheme(QStringLiteral("vcs-conflicting"));
         case KDevelop::VcsStatusInfo::ItemModified:
-            return QIcon::fromTheme("vcs-locally-modified");
+            return QIcon::fromTheme(QStringLiteral("vcs-locally-modified"));
         case KDevelop::VcsStatusInfo::ItemUpToDate:
-            return QIcon::fromTheme("vcs-normal");
+            return QIcon::fromTheme(QStringLiteral("vcs-normal"));
         case KDevelop::VcsStatusInfo::ItemUnknown:
         case KDevelop::VcsStatusInfo::ItemUserState:
-            return QIcon::fromTheme("unknown");
+            return QIcon::fromTheme(QStringLiteral("unknown"));
     }
-    return QIcon::fromTheme("dialog-error");
+    return QIcon::fromTheme(QStringLiteral("dialog-error"));
 }
 
 class VcsStatusInfoItem : public QStandardItem
@@ -99,6 +99,8 @@ public:
                 return stateToIcon(m_info.state());
             case VcsFileChangesModel::VcsStatusInfoRole:
                 return QVariant::fromValue(m_info);
+            case VcsFileChangesModel::UrlRole:
+                return m_info.url();
         }
         return {};
     }
@@ -157,9 +159,8 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
 
 QVariant VcsFileChangesModel::data(const QModelIndex &index, int role) const
 {
-    switch(role) {
-        case UrlRole:
-            return statusInfo(index.row(), index.parent()).url();
+    if (role == UrlRole && index.column()==0) {
+        return QStandardItemModel::data(index.sibling(index.row(), 1), role);
     }
     return QStandardItemModel::data(index, role);
 }

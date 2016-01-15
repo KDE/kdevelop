@@ -129,7 +129,7 @@ void TreeItem::deleteChildren()
 
 void TreeItem::clear()
 {
-    if (childItems.size() || more_)
+    if (!childItems.isEmpty() || more_)
     {
         QModelIndex index = model_->indexForItem(this, 0);
         model_->beginRemoveRows(index, 0, childItems.size()-1+more_);

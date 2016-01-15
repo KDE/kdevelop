@@ -262,7 +262,7 @@ bool VCSCommitDiffPatchSource::finishReview(QList< QUrl > selection) {
 
     int res = KMessageBox::warningContinueCancel(0, text, i18n("About to commit to repository"),
                                                  KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
-                                                 "ShouldAskConfirmCommit");
+                                                 QStringLiteral("ShouldAskConfirmCommit"));
     if (res != KMessageBox::Continue) {
         return false;
     }
@@ -284,7 +284,7 @@ static KDevelop::IPatchSource::Ptr currentShownDiff;
 
 bool showVcsDiff(IPatchSource* vcsDiff)
 {
-    KDevelop::IPatchReview* patchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>("org.kdevelop.IPatchReview");
+    KDevelop::IPatchReview* patchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>(QStringLiteral("org.kdevelop.IPatchReview"));
 
     //Only give one VCS diff at a time to the patch review plugin
     delete currentShownDiff;

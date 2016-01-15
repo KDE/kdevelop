@@ -64,6 +64,8 @@ protected:
 private slots:
     void itemActivated(const QModelIndex& index);
 
+    void setScope(int scope);
+
 private:
     void resizeColumns();
     ProblemReporterPlugin* m_plugin;

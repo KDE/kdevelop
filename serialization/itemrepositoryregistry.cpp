@@ -52,8 +52,8 @@ QString repositoryPathForSession(const KDevelop::ISessionLock::Ptr& session)
 {
   QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation);
   cacheDir += QStringLiteral("/kdevduchain");
-  QString baseDir = QProcessEnvironment::systemEnvironment().value("KDEV_DUCHAIN_DIR", cacheDir);
-  baseDir += QStringLiteral("/%1-%2").arg(qApp->applicationName()).arg(session->id());
+  QString baseDir = QProcessEnvironment::systemEnvironment().value(QStringLiteral("KDEV_DUCHAIN_DIR"), cacheDir);
+  baseDir += QStringLiteral("/%1-%2").arg(qApp->applicationName(), session->id());
   return baseDir;
 }
 
@@ -70,7 +70,7 @@ bool shouldClear(const QString& path)
     return true;
   }
 
-  if (dir.exists("is_writing")) {
+  if (dir.exists(QStringLiteral("is_writing"))) {
     qWarning() << "repository" << path << "was write-locked, it probably is inconsistent";
     return true;
   }

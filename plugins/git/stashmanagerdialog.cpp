@@ -100,12 +100,12 @@ void StashManagerDialog::showStash()
 
 void StashManagerDialog::applyClicked()
 {
-    runStash(QStringList("apply") << selection());
+    runStash(QStringList(QStringLiteral("apply")) << selection());
 }
 
 void StashManagerDialog::popClicked()
 {
-    runStash(QStringList("pop") << selection());
+    runStash(QStringList(QStringLiteral("pop")) << selection());
 }
 
 void StashManagerDialog::dropClicked()
@@ -130,7 +130,7 @@ void StashManagerDialog::branchClicked()
 StashModel::StashModel(const QDir& dir, GitPlugin* git, QObject* parent)
     : QStandardItemModel(parent)
 {
-    VcsJob* job=git->gitStash(dir, QStringList("list"), OutputJob::Silent);
+    VcsJob* job=git->gitStash(dir, QStringList(QStringLiteral("list")), OutputJob::Silent);
     connect(job, &VcsJob::finished, this, &StashModel::stashListReady);
 
     ICore::self()->runController()->registerJob(job);

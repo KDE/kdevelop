@@ -74,7 +74,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 : QWidget(parent), variablesRoot_(controller->variableCollection()->root())
 {
   //setWindowIcon(QIcon::fromTheme("math_brace"));
-    setWindowIcon(QIcon::fromTheme("debugger"));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("debugger")));
     setWindowTitle(i18n("Debugger Variables"));
 
     m_proxy = new VariableSortProxyModel;
@@ -170,6 +170,7 @@ VariableTree::VariableTree(IDebugController *controller,
     m_proxy->setSourceModel(m_model);
     setModel(m_proxy);
     setSortingEnabled(true);
+    sortByColumn(VariableCollection::NameColumn, Qt::AscendingOrder);
 
     QModelIndex index = controller->variableCollection()->indexForItem(
         controller->variableCollection()->watches(), 0);
@@ -239,7 +240,7 @@ void VariableTree::setupActions()
     connect(m_signalMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), this, &VariableTree::changeVariableFormat);
 
     m_watchDelete = new QAction(
-        QIcon::fromTheme("edit-delete"), i18n( "Remove Watch Variable" ), this);
+        QIcon::fromTheme(QStringLiteral("edit-delete")), i18n( "Remove Watch Variable" ), this);
 
     m_watchDelete->setShortcut(Qt::Key_Delete);
     m_watchDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);

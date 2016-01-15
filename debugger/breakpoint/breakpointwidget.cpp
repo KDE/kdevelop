@@ -57,7 +57,7 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
                                           "breakpoint item allows you to change "
                                           "the breakpoint and will take you "
                                           "to the source in the editor window."));
-    setWindowIcon( QIcon::fromTheme("media-playback-pause") );
+    setWindowIcon( QIcon::fromTheme( QStringLiteral( "media-playback-pause") ) );
 
     m_breakpointsView = new QTableView(this);
     m_breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -102,7 +102,7 @@ void BreakpointWidget::setupPopupMenu()
     m_popup = new QMenu(this);
 
     QMenu* newBreakpoint = m_popup->addMenu( i18nc("New breakpoint", "&New") );
-    newBreakpoint->setIcon(QIcon::fromTheme("list-add"));
+    newBreakpoint->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
     QAction* action = newBreakpoint->addAction(
         i18nc("Code breakpoint", "&Code"),
@@ -124,7 +124,7 @@ void BreakpointWidget::setupPopupMenu()
         this, SLOT(slotAddBlankAccessWatchpoint()));
 
     QAction* breakpointDelete = m_popup->addAction(
-        QIcon::fromTheme("edit-delete"),
+        QIcon::fromTheme(QStringLiteral("edit-delete")),
         i18n( "&Delete" ),
         this,
         SLOT(slotRemoveBreakpoint()));

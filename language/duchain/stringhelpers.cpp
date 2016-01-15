@@ -281,18 +281,18 @@ QString reverse( const QString& str ) {
 
 ///@todo this hackery sucks
 QString escapeForBracketMatching(QString str) {
-  str.replace("<<", "$&");
-  str.replace(">>", "$$");
-  str.replace("\\\"", "$!");
-  str.replace("->", "$?");
+  str.replace(QStringLiteral("<<"), QStringLiteral("$&"));
+  str.replace(QStringLiteral(">>"), QStringLiteral("$$"));
+  str.replace(QStringLiteral("\\\""), QStringLiteral("$!"));
+  str.replace(QStringLiteral("->"), QStringLiteral("$?"));
   return str;
 }
 
 QString escapeFromBracketMatching(QString str) {
-  str.replace("$&", "<<");
-  str.replace("$$", ">>");
-  str.replace("$!", "\\\"");
-  str.replace("$?", "->");
+  str.replace(QStringLiteral("$&"), QStringLiteral("<<"));
+  str.replace(QStringLiteral("$$"), QStringLiteral(">>"));
+  str.replace(QStringLiteral("$!"), QStringLiteral("\\\""));
+  str.replace(QStringLiteral("$?"), QStringLiteral("->"));
   return str;
 }
 
@@ -385,7 +385,7 @@ QString clearComments( QString str, QChar replacement ) {
     else if (withoutStrings[pos + 1] == '*')
     {
       //CPP style comment
-      endCommentPos = withoutStrings.indexOf("*/", pos + 2);
+      endCommentPos = withoutStrings.indexOf(QStringLiteral("*/"), pos + 2);
       if (endCommentPos != -1)
         endCommentPos += 2;
 

@@ -76,7 +76,6 @@ void ProjectChangesModel::addProject(IProject* p)
 
         it->setIcon(QIcon::fromTheme(info.iconName()));
         it->setToolTip(vcs->name());
-        reload(QList<IProject*>() << p);
 
         IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
         if(branchingExtension) {
@@ -85,7 +84,8 @@ void ProjectChangesModel::addProject(IProject* p)
             // can't use new signal slot syntax here, IBranchingVersionControl is not a QObject
             connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), this, SLOT(repositoryBranchChanged(QUrl)));
             repositoryBranchChanged(pathUrl);
-        }
+        } else
+            reload(QList<IProject*>() << p);
     } else {
         it->setEnabled(false);
     }

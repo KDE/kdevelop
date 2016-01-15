@@ -240,7 +240,7 @@ void BuilderJob::updateJobName()
         foreach( ProjectBaseItem* item, registeredItems ) {
             itemNamesList << item->text();
         }
-        itemNames = itemNamesList.join(", ");
+        itemNames = itemNamesList.join(QStringLiteral(", "));
     } else {
         itemNames = i18nc( "Unspecified set of build items (e. g. projects, targets)", "Various items" );
     }
@@ -250,9 +250,9 @@ void BuilderJob::updateJobName()
     foreach( BuildType type, buildTypes ) {
         methodNamesList << d->buildTypeToString( type );
     }
-    methodNames = methodNamesList.join( ", " );
+    methodNames = methodNamesList.join( QStringLiteral( ", " ) );
 
-    QString jobName = QStringLiteral( "%1: %2" ).arg( itemNames ).arg( methodNames );
+    QString jobName = QStringLiteral( "%1: %2" ).arg( itemNames, methodNames );
     setObjectName( jobName );
 }
 

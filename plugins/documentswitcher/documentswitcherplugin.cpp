@@ -51,24 +51,24 @@ K_PLUGIN_FACTORY_WITH_JSON(DocumentSwitcherFactory, "kdevdocumentswitcher.json",
 //TODO: Make the widget transparent
 
 DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantList &/*args*/)
-    :KDevelop::IPlugin("kdevdocumentswitcher", parent), view(0)
+    :KDevelop::IPlugin(QStringLiteral("kdevdocumentswitcher"), parent), view(0)
 {
-    setXMLFile("kdevdocumentswitcher.rc");
+    setXMLFile(QStringLiteral("kdevdocumentswitcher.rc"));
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "Adding active mainwindow from constructor" << KDevelop::ICore::self()->uiController()->activeMainWindow();
     addMainWindow( qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
     connect( KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::mainWindowAdded, this, &DocumentSwitcherPlugin::addMainWindow );
 
-    forwardAction = actionCollection()->addAction ( "last_used_views_forward" );
+    forwardAction = actionCollection()->addAction ( QStringLiteral( "last_used_views_forward" ) );
     forwardAction->setText( i18n( "Last Used Views" ) );
-    forwardAction->setIcon( QIcon::fromTheme("go-next-view-page") );
+    forwardAction->setIcon( QIcon::fromTheme( QStringLiteral( "go-next-view-page") ) );
     actionCollection()->setDefaultShortcut( forwardAction, Qt::CTRL | Qt::Key_Tab );
     forwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views." ) );
     forwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( forwardAction, &QAction::triggered, this, &DocumentSwitcherPlugin::walkForward );
 
-    backwardAction = actionCollection()->addAction ( "last_used_views_backward" );
+    backwardAction = actionCollection()->addAction ( QStringLiteral( "last_used_views_backward" ) );
     backwardAction->setText( i18n( "Last Used Views (Reverse)" ) );
-    backwardAction->setIcon( QIcon::fromTheme("go-previous-view-page") );
+    backwardAction->setIcon( QIcon::fromTheme( QStringLiteral( "go-previous-view-page") ) );
     actionCollection()->setDefaultShortcut( backwardAction, Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
     backwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views in reverse." ) );
     backwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
@@ -168,15 +168,16 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
             }
             if( isPartOfOpenProject )
             {
-                const int projectNameSize = path.indexOf(":");
+                const int projectNameSize = path.indexOf(QLatin1Char(':'));
 
                 // first: project name, second: path to file in project (might be just '/' when the file is in the project root dir)
                 const QPair<QString, QString> fileInProjectInfo = (projectNameSize < 0)
                     ? qMakePair(path, QStringLiteral("/"))
                     : qMakePair(path.left(projectNameSize), path.mid(projectNameSize + 1));
 
-                itemText = QStringLiteral("%1 (%2:%3)").arg(itemText).arg(fileInProjectInfo.first)
-                                .arg(fileInProjectInfo.second);
+                itemText = QStringLiteral("%1 (%2:%3)").arg(itemText,
+                                                            fileInProjectInfo.first,
+                                                            fileInProjectInfo.second);
             } else
             {
                 itemText = itemText + " (" + path + ')';

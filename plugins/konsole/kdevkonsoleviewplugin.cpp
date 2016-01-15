@@ -24,7 +24,7 @@ Q_LOGGING_CATEGORY(PLUGIN_KONSOLE, "kdevplatform.plugins.konsole")
 
 QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 {
-    KService::Ptr service = KService::serviceByDesktopName("konsolepart");
+    KService::Ptr service = KService::serviceByDesktopName(QStringLiteral("konsolepart"));
     KPluginFactory* factory = nullptr;
     if (service) {
         factory = KPluginLoader(*service.data()).factory();
@@ -63,7 +63,7 @@ KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( KPluginFactory* konsoleFactory, QO
     , m_viewFactory(konsoleFactory ? new KDevKonsoleViewFactory(this) : nullptr)
 {
     if (m_viewFactory) {
-        core()->uiController()->addToolView("Konsole", m_viewFactory);
+        core()->uiController()->addToolView(QStringLiteral("Konsole"), m_viewFactory);
     }
 }
 

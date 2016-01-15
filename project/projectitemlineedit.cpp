@@ -156,7 +156,7 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     setValidator( m_validator );
     setPlaceholderText( i18n("Enter the path to an item from the projects tree" ) );
 
-    QAction* selectItemAction = new QAction(QIcon::fromTheme("folder-document"), i18n("Select..."), this);
+    QAction* selectItemAction = new QAction(QIcon::fromTheme(QStringLiteral("folder-document")), i18n("Select..."), this);
     connect(selectItemAction, &QAction::triggered, this, &ProjectItemLineEdit::selectItemDialog);
     addAction(selectItemAction);
 

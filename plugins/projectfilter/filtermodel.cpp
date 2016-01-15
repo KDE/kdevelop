@@ -135,17 +135,17 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         }
         if (filter.targets & Filter::Files && filter.targets & Filter::Folders) {
             if (role == Qt::DecorationRole) {
-                return QIcon::fromTheme("document-open");
+                return QIcon::fromTheme(QStringLiteral("document-open"));
             }
             return i18n("Files and Folders");
         } else if (filter.targets & Filter::Folders) {
             if (role == Qt::DecorationRole) {
-                return QIcon::fromTheme("folder");
+                return QIcon::fromTheme(QStringLiteral("folder"));
             }
             return i18n("Folders");
         } else {
             if (role == Qt::DecorationRole) {
-                return QIcon::fromTheme("text-plain");
+                return QIcon::fromTheme(QStringLiteral("text-plain"));
             }
             return i18n("Files");
         }
@@ -157,12 +157,12 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         }
         if (filter.type == Filter::Inclusive) {
             if (role == Qt::DecorationRole) {
-                return QIcon::fromTheme("list-add");
+                return QIcon::fromTheme(QStringLiteral("list-add"));
             }
             return i18n("Include");
         } else {
             if (role == Qt::DecorationRole) {
-                return QIcon::fromTheme("list-remove");
+                return QIcon::fromTheme(QStringLiteral("list-remove"));
             }
             return i18n("Exclude");
         }

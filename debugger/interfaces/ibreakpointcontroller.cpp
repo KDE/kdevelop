@@ -82,13 +82,13 @@ void IBreakpointController::notifyHit(int row, const QString& msg)
     KNotification* ev = 0;
     switch(breakpoint->kind()) {
         case Breakpoint::CodeBreakpoint:
-            ev = new KNotification("BreakpointHit", ICore::self()->uiController()->activeMainWindow());
+            ev = new KNotification(QStringLiteral("BreakpointHit"), ICore::self()->uiController()->activeMainWindow());
             ev->setText(i18n("Breakpoint hit: %1", breakpoint->location()) + msg);
             break;
         case Breakpoint::WriteBreakpoint:
         case Breakpoint::ReadBreakpoint:
         case Breakpoint::AccessBreakpoint:
-            ev = new KNotification("WatchpointHit", ICore::self()->uiController()->activeMainWindow());
+            ev = new KNotification(QStringLiteral("WatchpointHit"), ICore::self()->uiController()->activeMainWindow());
             ev->setText(i18n("Watchpoint hit: %1", breakpoint->location()) + msg);
             break;
         default:
@@ -96,7 +96,7 @@ void IBreakpointController::notifyHit(int row, const QString& msg)
             break;
     }
     if (ev) {
-        ev->setPixmap(QIcon::fromTheme("script-error").pixmap(QSize(22,22)));
+        ev->setPixmap(QIcon::fromTheme(QStringLiteral("script-error")).pixmap(QSize(22,22)));
         // TODO: Port
         //ev->setComponentName(ICore::self()->aboutData().componentName());
         ev->sendEvent();

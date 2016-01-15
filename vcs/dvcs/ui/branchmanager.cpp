@@ -74,13 +74,13 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
         m_ui->branchView->setCurrentIndex(items.first()->index());
     }
 
-    m_ui->newButton->setIcon(QIcon::fromTheme("list-add"));
+    m_ui->newButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
     connect(m_ui->newButton, &QPushButton::clicked, this, &BranchManager::createBranch);
-    m_ui->deleteButton->setIcon(QIcon::fromTheme("list-remove"));
+    m_ui->deleteButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     connect(m_ui->deleteButton, &QPushButton::clicked, this, &BranchManager::deleteBranch);
-    m_ui->renameButton->setIcon(QIcon::fromTheme("edit-rename"));
+    m_ui->renameButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
     connect(m_ui->renameButton, &QPushButton::clicked, this, &BranchManager::renameBranch);
-    m_ui->checkoutButton->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+    m_ui->checkoutButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
     connect(m_ui->checkoutButton, &QPushButton::clicked, this, &BranchManager::checkoutBranch);
 
     // checkout branch on double-click

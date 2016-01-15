@@ -42,7 +42,7 @@ OutputJob::OutputJob(QObject* parent, OutputJobVerbosity verbosity)
 
 void OutputJob::startOutput()
 {
-    IPlugin* i = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    IPlugin* i = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
     if( i )
     {
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
@@ -101,7 +101,7 @@ void KDevelop::OutputJob::setTitle(const QString & title)
 {
     m_title = title;
     if (m_outputId >= 0 && m_standardToolView >= 0) {
-        IPlugin* i = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+        IPlugin* i = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
         if( i )
         {
             KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();

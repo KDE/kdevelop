@@ -122,8 +122,8 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     if (problemModel->features().testFlag(ProblemModel::ScopeFilter)) {
         KActionMenu* scopeMenu = new KActionMenu(this);
         scopeMenu->setDelayed(false);
-        scopeMenu->setText(i18n("Scope"));
         scopeMenu->setToolTip(i18nc("@info:tooltip", "Which files to display the problems for"));
+        scopeMenu->setObjectName(QStringLiteral("scopeMenu"));
 
         QActionGroup* scopeActions = new QActionGroup(this);
 
@@ -162,6 +162,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
             scopeMenu->addAction(action);
         }
         addAction(scopeMenu);
+        setScope(CurrentDocument);
 
         // Show All should be default if it's supported. It helps with error messages that are otherwise invisible
         if (problemModel->features().testFlag(ProblemModel::CanByPassScopeFilter)) {
@@ -192,25 +193,21 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
                     static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
         }
 
-        connect(scopeMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(),
-                &ProblemModel::setScope);
+        connect(scopeMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped), this,
+                &ProblemTreeView::setScope);
     }
 
     if (problemModel->features().testFlag(ProblemModel::SeverityFilter)) {
-        KActionMenu* severityMenu = new KActionMenu(i18n("Severity"), this);
-        severityMenu->setDelayed(false);
-        severityMenu->setToolTip(i18nc("@info:tooltip", "Select the lowest level of problem severity to be displayed"));
         QActionGroup* severityActions = new QActionGroup(this);
-
-        auto errorSeverityAction = new QAction(i18n("Error"), this);
+        auto errorSeverityAction = new QAction(this);
         errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display only errors"));
         errorSeverityAction->setIcon(QIcon::fromTheme("dialog-error"));
 
-        auto warningSeverityAction = new QAction(i18n("Warning"), this);
+        auto warningSeverityAction = new QAction(this);
         warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors and warnings"));
         warningSeverityAction->setIcon(QIcon::fromTheme("dialog-warning"));
 
-        auto hintSeverityAction = new QAction(i18n("Hint"), this);
+        auto hintSeverityAction = new QAction(this);
         hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
         hintSeverityAction->setIcon(QIcon::fromTheme("dialog-information"));
 
@@ -218,9 +215,8 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
         for (int i = 0; i < 3; ++i) {
             severityActionArray[i]->setCheckable(true);
             severityActions->addAction(severityActionArray[i]);
-            severityMenu->addAction(severityActionArray[i]);
+            addAction(severityActionArray[i]);
         }
-        addAction(severityMenu);
 
         hintSeverityAction->setChecked(true);
         model()->setSeverity(IProblem::Hint);
@@ -310,6 +306,17 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
     }
 
     ICore::self()->documentController()->openDocument(url, start);
+}
+
+void ProblemTreeView::setScope(int scope)
+{
+    foreach (auto action, actions()) {
+        if (action->objectName() == QLatin1String("scopeMenu")) {
+            action->setText(i18n("Scope: %1", action->menu()->actions().at(scope)->text()));
+        }
+    }
+
+    model()->setScope(scope);
 }
 
 void ProblemTreeView::resizeColumns()

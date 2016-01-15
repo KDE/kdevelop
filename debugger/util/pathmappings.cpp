@@ -56,9 +56,9 @@ static QUrl rebaseMatchingUrl(const QUrl& toRebase, const KConfigGroup& config, 
 
 namespace KDevelop {
 
-const QString PathMappings::pathMappingsEntry("Path Mappings");
-const QString PathMappings::pathMappingRemoteEntry("Remote");
-const QString PathMappings::pathMappingLocalEntry("Local");
+const QString PathMappings::pathMappingsEntry(QStringLiteral("Path Mappings"));
+const QString PathMappings::pathMappingRemoteEntry(QStringLiteral("Remote"));
+const QString PathMappings::pathMappingLocalEntry(QStringLiteral("Local"));
 
 QUrl PathMappings::convertToLocalUrl(const KConfigGroup& config, const QUrl& remoteUrl)
 {
@@ -225,7 +225,7 @@ PathMappingsWidget::PathMappingsWidget(QWidget* parent): QWidget(parent)
     connect(m_pathMappingTable->model(), &QAbstractItemModel::rowsInserted, this, &PathMappingsWidget::changed);
 
     QAction* deletePath = new QAction(
-        QIcon::fromTheme("edit-delete"),
+        QIcon::fromTheme(QStringLiteral("edit-delete")),
         i18n( "Delete" ),
         this
     );

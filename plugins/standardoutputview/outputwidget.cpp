@@ -75,12 +75,12 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         layout->addWidget( tabwidget );
         m_closeButton = new QToolButton( this );
         connect( m_closeButton, &QToolButton::clicked, this, &OutputWidget::closeActiveView );
-        m_closeButton->setIcon( QIcon::fromTheme("tab-close") );
+        m_closeButton->setIcon( QIcon::fromTheme( QStringLiteral( "tab-close") ) );
         m_closeButton->setToolTip( i18n( "Close the currently active output view") );
 
         m_closeOthersAction = new QAction( this );
         connect(m_closeOthersAction, &QAction::triggered, this, &OutputWidget::closeOtherViews);
-        m_closeOthersAction->setIcon(QIcon::fromTheme("tab-close-other"));
+        m_closeOthersAction->setIcon(QIcon::fromTheme(QStringLiteral("tab-close-other")));
         m_closeOthersAction->setToolTip( i18n( "Close all other output views" ) );
         m_closeOthersAction->setText( m_closeOthersAction->toolTip() );
         addAction(m_closeOthersAction);
@@ -91,16 +91,16 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         stackwidget = new QStackedWidget( this );
         layout->addWidget( stackwidget );
 
-        previousAction = new QAction( QIcon::fromTheme( "arrow-left" ), i18n("Previous Output"), this );
+        previousAction = new QAction( QIcon::fromTheme( QStringLiteral( "arrow-left" ) ), i18n("Previous Output"), this );
         connect(previousAction, &QAction::triggered, this, &OutputWidget::previousOutput);
         addAction(previousAction);
-        nextAction = new QAction( QIcon::fromTheme( "arrow-right" ), i18n("Next Output"), this );
+        nextAction = new QAction( QIcon::fromTheme( QStringLiteral( "arrow-right" ) ), i18n("Next Output"), this );
         connect(nextAction, &QAction::triggered, this, &OutputWidget::nextOutput);
         addAction(nextAction);
     }
 
-    addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action("prev_error")));
-    addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action("next_error")));
+    addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action(QStringLiteral("prev_error"))));
+    addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action(QStringLiteral("next_error"))));
 
     activateOnSelect = new KToggleAction( QIcon(), i18n("Select activated Item"), this );
     activateOnSelect->setChecked( true );

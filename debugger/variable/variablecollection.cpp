@@ -26,6 +26,7 @@
 #include <QFont>
 #include <QApplication>
 
+#include <KColorScheme>
 #include <KLocalizedString>
 #include <KTextEditor/TextHintInterface>
 #include <KTextEditor/Document>
@@ -202,6 +203,12 @@ void Variable::formatChanged()
 {
 }
 
+bool Variable::isPotentialProblematicValue() const
+{
+    const auto value = data(VariableCollection::ValueColumn, Qt::DisplayRole).toString();
+    return value == QLatin1String("0x0");
+}
+
 QVariant Variable::data(int column, int role) const
 {
     if (showError_) {
@@ -214,13 +221,16 @@ QVariant Variable::data(int column, int role) const
             return i18n("Error");
         }
     }
-    if (column == 1 && role == Qt::ForegroundRole)
+    if (column == 1 && role == Qt::TextColorRole)
     {
-        // FIXME: returning hardcoded gray is bad,
-        // but we don't have access to any widget, or pallette
-        // thereof, at this point.
-        if(!inScope_) return QColor(128, 128, 128);
-        if(changed_) return QColor(255, 0, 0);
+        KColorScheme scheme(QPalette::Active);
+        if (!inScope_) {
+            return scheme.foreground(KColorScheme::InactiveText).color();
+        } else if (isPotentialProblematicValue()) {
+            return scheme.foreground(KColorScheme::NegativeText).color();
+        } else if (changed_) {
+            return scheme.foreground(KColorScheme::NeutralText).color();
+        }
     }
     if (role == Qt::ToolTipRole) {
         return TreeItem::data(column, Qt::DisplayRole);
@@ -256,7 +266,7 @@ Variable *Watches::addFinishResult(const QString& convenienceVarible)
         removeFinishResult();
     }
     finishResult_ = currentSession()->variableController()->createVariable(
-        model(), this, convenienceVarible, "$ret");
+        model(), this, convenienceVarible, QStringLiteral("$ret"));
     appendChild(finishResult_);
     finishResult_->attachMaybe();
     if (childCount() == 1 && !isExpanded()) {

@@ -78,17 +78,17 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     QAction* pullAction;
 
     void createActions(VcsPluginHelper* parent) {
-        commitAction = new QAction(QIcon::fromTheme("svn-commit"), i18n("Commit..."), parent);
-        updateAction = new QAction(QIcon::fromTheme("svn-update"), i18n("Update"), parent);
-        addAction = new QAction(QIcon::fromTheme("list-add"), i18n("Add"), parent);
-        diffToBaseAction = new QAction(QIcon::fromTheme("text-x-patch"), i18n("Show Differences..."), parent);
-        revertAction = new QAction(QIcon::fromTheme("archive-remove"), i18n("Revert"), parent);
-        historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("History..."), parent);
-        annotationAction = new QAction(QIcon::fromTheme("user-properties"), i18n("Annotation..."), parent);
-        diffForRevAction = new QAction(QIcon::fromTheme("text-x-patch"), i18n("Show Diff..."), parent);
-        diffForRevGlobalAction = new QAction(QIcon::fromTheme("text-x-patch"), i18n("Show Diff (all files)..."), parent);
-        pushAction = new QAction(QIcon::fromTheme("arrow-up-double"), i18n("Push"), parent);
-        pullAction = new QAction(QIcon::fromTheme("arrow-down-double"), i18n("Pull"), parent);
+        commitAction = new QAction(QIcon::fromTheme(QStringLiteral("svn-commit")), i18n("Commit..."), parent);
+        updateAction = new QAction(QIcon::fromTheme(QStringLiteral("svn-update")), i18n("Update"), parent);
+        addAction = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18n("Add"), parent);
+        diffToBaseAction = new QAction(QIcon::fromTheme(QStringLiteral("text-x-patch")), i18n("Show Differences..."), parent);
+        revertAction = new QAction(QIcon::fromTheme(QStringLiteral("archive-remove")), i18n("Revert"), parent);
+        historyAction = new QAction(QIcon::fromTheme(QStringLiteral("view-history")), i18n("History..."), parent);
+        annotationAction = new QAction(QIcon::fromTheme(QStringLiteral("user-properties")), i18n("Annotation..."), parent);
+        diffForRevAction = new QAction(QIcon::fromTheme(QStringLiteral("text-x-patch")), i18n("Show Diff..."), parent);
+        diffForRevGlobalAction = new QAction(QIcon::fromTheme(QStringLiteral("text-x-patch")), i18n("Show Diff (all files)..."), parent);
+        pushAction = new QAction(QIcon::fromTheme(QStringLiteral("arrow-up-double")), i18n("Push"), parent);
+        pullAction = new QAction(QIcon::fromTheme(QStringLiteral("arrow-down-double")), i18n("Pull"), parent);
 
         connect(commitAction, &QAction::triggered, parent, &VcsPluginHelper::commit);
         connect(addAction, &QAction::triggered, parent, &VcsPluginHelper::add);
@@ -448,8 +448,8 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
     menu->addSeparator();
     menu->addAction(d->diffForRevAction);
     menu->addAction(d->diffForRevGlobalAction);
-    menu->addAction(new FlexibleAction(QIcon::fromTheme("edit-copy"), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
-    menu->addAction(new FlexibleAction(QIcon::fromTheme("view-history"), i18n("History..."), new HistoryFunction(this, rev), menu));
+    menu->addAction(new FlexibleAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
+    menu->addAction(new FlexibleAction(QIcon::fromTheme(QStringLiteral("view-history")), i18n("History..."), new HistoryFunction(this, rev), menu));
 }
 
 void VcsPluginHelper::update()

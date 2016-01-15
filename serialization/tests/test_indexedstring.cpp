@@ -214,11 +214,17 @@ void TestIndexedString::test()
 
   IndexedString indexed(data);
   QCOMPARE(indexed.str(), data);
+  QCOMPARE(indexed.index(), IndexedString::indexForString(data));
+  const auto byteArrayData = data.toUtf8();
   QEXPECT_FAIL("char-utf8", "UTF-8 gets decoded and the char data is stored internally", Continue);
   QEXPECT_FAIL("string-utf8", "UTF-8 gets decoded and the char data is stored internally", Continue);
   QCOMPARE(indexed.length(), data.length());
   // fallback until we rely on internal utf8 encoding
-  QCOMPARE(indexed.length(), data.toUtf8().length());
+  QCOMPARE(indexed.length(), byteArrayData.length());
+
+  QCOMPARE(indexed.byteArray(), byteArrayData);
+  QVERIFY(!strncmp(indexed.c_str(), byteArrayData.data(), byteArrayData.length()));
+  QCOMPARE(indexed.index(), IndexedString::indexForString(byteArrayData.data(), byteArrayData.length()));
 
   IndexedString moved = std::move(indexed);
   QCOMPARE(indexed, IndexedString());

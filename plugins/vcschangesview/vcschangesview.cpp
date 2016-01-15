@@ -51,14 +51,14 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
     setContextMenuPolicy(Qt::CustomContextMenu);
     setTextElideMode(Qt::ElideLeft);
     setWordWrap(true);
-    setWindowIcon(QIcon::fromTheme("exchange-positions"));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("exchange-positions")));
     
     connect(this, &VcsChangesView::customContextMenuRequested, this, &VcsChangesView::popupContextMenu);
     
     foreach(QAction* action, plugin->actionCollection()->actions())
         addAction(action);
     
-    QAction* action = plugin->actionCollection()->action("locate_document");
+    QAction* action = plugin->actionCollection()->action(QStringLiteral("locate_document"));
     connect(action, &QAction::triggered, this, &VcsChangesView::selectCurrentDocument);
     connect(this, &VcsChangesView::doubleClicked, this, &VcsChangesView::openSelected);
 }
@@ -88,7 +88,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     }
 
     QPointer<QMenu> menu = new QMenu;
-    QAction* refreshAction = menu->addAction(QIcon::fromTheme("view-refresh"), i18n("Refresh"));
+    QAction* refreshAction = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Refresh"));
     QList<ContextMenuExtension> extensions;
     if(!urls.isEmpty()) {
         KDevelop::FileContext context(urls);

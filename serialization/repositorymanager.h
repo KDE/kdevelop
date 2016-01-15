@@ -46,12 +46,19 @@ public:
   ~RepositoryManager() {
   }
 
-  inline ItemRepositoryType* operator->() const {
+  Q_DISABLE_COPY(RepositoryManager);
+
+  ItemRepositoryType* repository() const
+  {
     if(!m_repository) {
       createRepository();
     }
 
     return static_cast<ItemRepositoryType*>(m_repository);
+  }
+
+  inline ItemRepositoryType* operator->() const {
+    return repository();
   }
 
   QMutex* repositoryMutex() const override {

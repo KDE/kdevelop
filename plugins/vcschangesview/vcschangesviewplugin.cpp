@@ -73,19 +73,19 @@ private:
 };
 
 VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin("kdevvcsprojectintegration", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevvcsprojectintegration"), parent)
     , m_model(0)
 {
     ICore::self()->uiController()->addToolView(i18n("Project Changes"), new VCSProjectToolViewFactory(this));
 
-    QAction* synaction = actionCollection()->addAction( "locate_document" );
+    QAction* synaction = actionCollection()->addAction(QStringLiteral("locate_document"));
     synaction->setText(i18n("Locate Current Document"));
-    synaction->setIcon(QIcon::fromTheme("dirsync"));
+    synaction->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
     synaction->setToolTip(i18n("Locates the current document and selects it."));
 
-    QAction* reloadaction = actionCollection()->addAction( "reload_view" );
+    QAction* reloadaction = actionCollection()->addAction(QStringLiteral("reload_view"));
     reloadaction->setText(i18n("Reload View"));
-    reloadaction->setIcon(QIcon::fromTheme("view-refresh"));
+    reloadaction->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
     reloadaction->setToolTip(i18n("Refreshes the view for all projects, in case anything changed."));
 }
 
@@ -98,7 +98,7 @@ ProjectChangesModel* VcsProjectIntegrationPlugin::model()
 {
     if(!m_model) {
         m_model = ICore::self()->projectController()->changesModel();
-        connect(actionCollection()->action("reload_view"), &QAction::triggered, m_model, &ProjectChangesModel::reloadAll);
+        connect(actionCollection()->action(QStringLiteral("reload_view")), &QAction::triggered, m_model, &ProjectChangesModel::reloadAll);
     }
 
     return m_model;

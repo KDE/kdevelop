@@ -115,7 +115,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
         m_urls = filectx->urls();
     } else if ( projctx && projctx->items().count() > 0 ) {
         // For now, let's handle *either* files only *or* directories only
-        const int wantedType = projctx->items().first()->type();
+        const int wantedType = projctx->items().at(0)->type();
         foreach( ProjectBaseItem* item, projctx->items() ) {
             if (wantedType == ProjectBaseItem::File && item->file()) {
                 m_urls << item->file()->path().toUrl();

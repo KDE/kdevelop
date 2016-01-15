@@ -55,8 +55,8 @@ Q_LOGGING_CATEGORY(PLUGIN_FILEMANAGER, "kdevplatform.plugins.filemanager")
 FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     : QWidget(parent), m_plugin(plugin)
 {
-    setObjectName("FileManager");
-    setWindowIcon(QIcon::fromTheme("folder-sync"));
+    setObjectName(QStringLiteral("FileManager"));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("folder-sync")));
     setWindowTitle(i18n("File System"));
 
     KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group( "Filesystem" );
@@ -137,7 +137,7 @@ void FileManager::updateNav( const QUrl& url )
 
 void FileManager::setupActions()
 {
-    KActionMenu *acmBookmarks = new KActionMenu(QIcon::fromTheme("bookmarks"), i18n("Bookmarks"), this);
+    KActionMenu *acmBookmarks = new KActionMenu(QIcon::fromTheme(QStringLiteral("bookmarks")), i18n("Bookmarks"), this);
     acmBookmarks->setDelayed(false);
     m_bookmarkHandler = new BookmarkHandler(this, acmBookmarks->menu());
     acmBookmarks->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -145,21 +145,21 @@ void FileManager::setupActions()
     QAction* action = new QAction(this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
-    action->setIcon(QIcon::fromTheme("dirsync"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
     connect(action, &QAction::triggered, this, &FileManager::syncCurrentDocumentDirectory);
-    tbActions << (dirop->actionCollection()->action("back"));
-    tbActions << (dirop->actionCollection()->action("up"));
-    tbActions << (dirop->actionCollection()->action("home"));
-    tbActions << (dirop->actionCollection()->action("forward"));
-    tbActions << (dirop->actionCollection()->action("reload"));
+    tbActions << (dirop->actionCollection()->action(QStringLiteral("back")));
+    tbActions << (dirop->actionCollection()->action(QStringLiteral("up")));
+    tbActions << (dirop->actionCollection()->action(QStringLiteral("home")));
+    tbActions << (dirop->actionCollection()->action(QStringLiteral("forward")));
+    tbActions << (dirop->actionCollection()->action(QStringLiteral("reload")));
     tbActions << acmBookmarks;
     tbActions << action;
-    tbActions << (dirop->actionCollection()->action("sorting menu"));
-    tbActions << (dirop->actionCollection()->action("show hidden"));
+    tbActions << (dirop->actionCollection()->action(QStringLiteral("sorting menu")));
+    tbActions << (dirop->actionCollection()->action(QStringLiteral("show hidden")));
 
     newFileAction = new QAction(this);
     newFileAction->setText(i18n("New File..."));
-    newFileAction->setIcon(QIcon::fromTheme("document-new"));
+    newFileAction->setIcon(QIcon::fromTheme(QStringLiteral("document-new")));
     connect(newFileAction, &QAction::triggered, this, &FileManager::createNewFile);
 }
 
