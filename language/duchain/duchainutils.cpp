@@ -41,6 +41,8 @@
 #include "classdeclaration.h"
 #include "parsingenvironment.h"
 
+#include <QStandardPaths>
+
 using namespace KDevelop;
 using namespace KTextEditor;
 
@@ -148,85 +150,88 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
  * and for some reason will be loaded every time it's used(this function returns a QIcon marked "load on demand"
  * each time this is called). And the loading is very slow. Seems like a bug somewhere, it cannot be ment to be that slow.
  */
-#define RETURN_CACHED_ICON(name) {static QIcon icon(QIcon::fromTheme(name).pixmap(QSize(16, 16))); return icon;}
+#define RETURN_CACHED_ICON(name) {static QIcon icon(QIcon( \
+      QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/pics/" name ".png"))\
+    ).pixmap(QSize(16, 16)));\
+    return icon;}
 
 QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p)
 {
 
   if( (p & CodeCompletionModel::Variable) )
     if( (p & CodeCompletionModel::Protected) )
-      RETURN_CACHED_ICON(QStringLiteral("CVprotected_var"))
+      RETURN_CACHED_ICON("CVprotected_var")
     else if( p & CodeCompletionModel::Private )
-      RETURN_CACHED_ICON(QStringLiteral("CVprivate_var"))
+      RETURN_CACHED_ICON("CVprivate_var")
     else
-      RETURN_CACHED_ICON(QStringLiteral("CVpublic_var"))
+      RETURN_CACHED_ICON("CVpublic_var")
   else
   if( (p & CodeCompletionModel::Union) && (p & CodeCompletionModel::Protected) )
-    RETURN_CACHED_ICON(QStringLiteral("protected_union"))
+    RETURN_CACHED_ICON("protected_union")
 
   else if( p & CodeCompletionModel::Enum )
     if( p & CodeCompletionModel::Protected )
-      RETURN_CACHED_ICON(QStringLiteral("protected_enum"))
+      RETURN_CACHED_ICON("protected_enum")
     else if( p & CodeCompletionModel::Private )
-      RETURN_CACHED_ICON(QStringLiteral("private_enum"))
+      RETURN_CACHED_ICON("private_enum")
     else
-      RETURN_CACHED_ICON(QStringLiteral("enum"))
+      RETURN_CACHED_ICON("enum")
 
   else if( p & CodeCompletionModel::Struct )
     if( p & CodeCompletionModel::Private )
-      RETURN_CACHED_ICON(QStringLiteral("private_struct"))
+      RETURN_CACHED_ICON("private_struct")
     else
-      RETURN_CACHED_ICON(QStringLiteral("struct"))
+      RETURN_CACHED_ICON("struct")
 
   else if( p & CodeCompletionModel::Slot )
     if( p & CodeCompletionModel::Protected )
-      RETURN_CACHED_ICON(QStringLiteral("CVprotected_slot"))
+      RETURN_CACHED_ICON("CVprotected_slot")
     else if( p & CodeCompletionModel::Private )
-      RETURN_CACHED_ICON(QStringLiteral("CVprivate_slot"))
+      RETURN_CACHED_ICON("CVprivate_slot")
     else if(p & CodeCompletionModel::Public )
-      RETURN_CACHED_ICON(QStringLiteral("CVpublic_slot"))
-    else RETURN_CACHED_ICON(QStringLiteral("slot"))
+      RETURN_CACHED_ICON("CVpublic_slot")
+    else RETURN_CACHED_ICON("slot")
   else if( p & CodeCompletionModel::Signal )
     if( p & CodeCompletionModel::Protected )
-      RETURN_CACHED_ICON(QStringLiteral("CVprotected_signal"))
+      RETURN_CACHED_ICON("CVprotected_signal")
     else
-      RETURN_CACHED_ICON(QStringLiteral("signal"))
+      RETURN_CACHED_ICON("signal")
 
   else if( p & CodeCompletionModel::Class )
     if( (p & CodeCompletionModel::Class) && (p & CodeCompletionModel::Protected) )
-      RETURN_CACHED_ICON(QStringLiteral("protected_class"))
+      RETURN_CACHED_ICON("protected_class")
     else if( (p & CodeCompletionModel::Class) && (p & CodeCompletionModel::Private) )
-      RETURN_CACHED_ICON(QStringLiteral("private_class"))
+      RETURN_CACHED_ICON("private_class")
     else
-      RETURN_CACHED_ICON(QStringLiteral("code-class"))
+      RETURN_CACHED_ICON("code-class")
 
   else if( p & CodeCompletionModel::Union )
     if( p & CodeCompletionModel::Private )
-      RETURN_CACHED_ICON(QStringLiteral("private_union"))
+      RETURN_CACHED_ICON("private_union")
     else
-      RETURN_CACHED_ICON(QStringLiteral("union"))
+      RETURN_CACHED_ICON("union")
 
   else if( p & CodeCompletionModel::TypeAlias )
     if ((p & CodeCompletionModel::Const) /*||  (p & CodeCompletionModel::Volatile)*/)
-      RETURN_CACHED_ICON(QStringLiteral("CVtypedef"))
+      RETURN_CACHED_ICON("CVtypedef")
     else
-      RETURN_CACHED_ICON(QStringLiteral("typedef"))
+      RETURN_CACHED_ICON("typedef")
 
   else if( p & CodeCompletionModel::Function ) {
     if( p & CodeCompletionModel::Protected )
-      RETURN_CACHED_ICON(QStringLiteral("protected_function"))
+      RETURN_CACHED_ICON("protected_function")
     else if( p & CodeCompletionModel::Private )
-      RETURN_CACHED_ICON(QStringLiteral("private_function"))
+      RETURN_CACHED_ICON("private_function")
     else
-      RETURN_CACHED_ICON(QStringLiteral("code-function"))
+      RETURN_CACHED_ICON("code-function")
   }
 
   if( p & CodeCompletionModel::Protected )
-    RETURN_CACHED_ICON(QStringLiteral("protected_field"))
+    RETURN_CACHED_ICON("protected_field")
   else if( p & CodeCompletionModel::Private )
-    RETURN_CACHED_ICON(QStringLiteral("private_field"))
+    RETURN_CACHED_ICON("private_field")
   else
-    RETURN_CACHED_ICON(QStringLiteral("field"))
+    RETURN_CACHED_ICON("field")
 
   return QIcon();
 }
