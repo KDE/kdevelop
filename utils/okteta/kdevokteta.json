@@ -36,15 +36,32 @@
         "Authors": [
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ], 
         "Category": "Utilities", 
         "Description": "KDevelop Hex Editor based on Okteta", 
+        "Description[ca@valencia]": "Editor hexadecimal del KDevelop basat en l'Okteta", 
+        "Description[ca]": "Editor hexadecimal del KDevelop basat en l'Okteta", 
+        "Description[gl]": "Editor hexadecimal do KDevelop baseado no Okteta", 
+        "Description[nl]": "KDevelop hex-bewerker gebaseerd op Okteta", 
+        "Description[pt]": "Editor Hexadecimal do KDevelop, baseado no Okteta", 
+        "Description[pt_BR]": "Editor hexadecimal do KDevelop, baseado no Okteta", 
+        "Description[uk]": "Шістнадцятковий редактор KDevelop на основі Okteta", 
+        "Description[x-test]": "xxKDevelop Hex Editor based on Oktetaxx", 
         "Icon": "okteta", 
         "Id": "kdevokteta", 
         "License": "GPL", 
         "Name": "Okteta Integration", 
+        "Name[ca@valencia]": "Integració de l'Okteta", 
+        "Name[ca]": "Integració de l'Okteta", 
+        "Name[gl]": "Integración do Okteta", 
+        "Name[nl]": "Okteta-integratie", 
+        "Name[pt]": "Integração com o Okteta", 
+        "Name[pt_BR]": "Integração com o Okteta", 
+        "Name[uk]": "Інтеграція із Okteta", 
+        "Name[x-test]": "xxOkteta Integrationxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ], 
