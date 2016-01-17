@@ -38,7 +38,7 @@ if(Boost_FOUND)
 endif(Boost_FOUND)
 
 find_package(SubversionLibrary)
-macro_log_feature( SUBVERSION_FOUND "Subversion" "Support for Subversion integration" "http://subversion.tigris.org" FALSE "1.3.0" "The subversion libraries are needed for the Subversion support" )
+macro_log_feature( SubversionLibrary_FOUND "Subversion" "Support for Subversion integration" "http://subversion.tigris.org" FALSE "1.3.0" "The subversion libraries are needed for the Subversion support" )
 
 if(SubversionLibrary_FOUND)
     macro_optional_add_subdirectory(subversion)
