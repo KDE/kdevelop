@@ -50,8 +50,8 @@ class ProfileEngine;
  * at the extension interface if necessary.
  *
  * If you have the need to load a specific plugin for a given extension both
- * functions have an optional second parameter that allows to specify the name
- * of the plugin as declared in the \c .desktop file under the
+ * functions have an optional second parameter that allows one to specify the
+ * name of the plugin as declared in the \c .desktop file under the
  * \c X-KDE-PluginInfo-Name property. This should be used only very seldomly in
  * real code and is mostly meant for testing and for implementation in the
  * shell as it makes the code dependent on the plugin name which may change and

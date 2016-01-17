@@ -36,9 +36,9 @@ class ILaunchConfiguration;
 class LaunchConfigurationPageFactory;
 
 /**
- * The ILauncher interface allows to actually run launch configurations.
- * Additionally it allows to provide configuration pages specific to the launcher
- * and to identify for which modes this launcher may be used
+ * The ILauncher interface allows one to actually run launch configurations.
+ * Additionally it allows one to provide configuration pages specific to the
+ * launcher and to identify for which modes this launcher may be used
  */
 class KDEVPLATFORMINTERFACES_EXPORT ILauncher
 {

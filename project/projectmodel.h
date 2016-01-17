@@ -191,7 +191,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          */
         ProjectBaseItem* takeRow( int row );
 
-        /** @returns RTTI info, allows to know the type of item */
+        /** @returns RTTI info, allows one to know the type of item */
         virtual int type() const;
 
         /** @returns a string to pass to QIcon::fromTheme() as icon-name suitable to represent this item. */

@@ -54,7 +54,7 @@ class UiController;
  * }
  * \endcode
  *
- * This class also allows to replace certain or all parts of the
+ * This class also allows one to replace certain or all parts of the
  * shell library with custom implementation to make it possible
  * to write plugin tests more easily.
  *

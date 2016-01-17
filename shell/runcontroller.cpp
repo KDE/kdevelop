@@ -479,7 +479,7 @@ void RunController::setupActions()
 
     action = d->stopAction = new QAction( QIcon::fromTheme(QStringLiteral("process-stop")), i18n("Stop All Jobs"), this);
     action->setIconText(i18nc("Short text for 'Stop All Jobs' used in the toolbar", "Stop All"));
-    // Ctrl+Escape would be nicer, but thats taken by the ksysguard desktop shortcut
+    // Ctrl+Escape would be nicer, but that is taken by the ksysguard desktop shortcut
     ac->setDefaultShortcut( action, QKeySequence(QStringLiteral("Ctrl+Shift+Escape")));
     action->setToolTip(i18nc("@info:tooltip", "Stop all currently running jobs"));
     action->setWhatsThis(i18nc("@info:whatsthis", "Requests that all running jobs are stopped."));

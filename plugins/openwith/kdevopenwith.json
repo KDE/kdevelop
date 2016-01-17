@@ -7,7 +7,7 @@
             }
         ], 
         "Category": "Core", 
-        "Description": "This plugin allows to open files with associated external applications.", 
+        "Description": "This plugin allows one to open files with associated external applications.",
         "Description[ar]": "تسمح هذه الملحقة بفتح الملفّات بالتّطبيقات الخارجيّة المرتبطة.", 
         "Description[ca@valencia]": "Este connector permet obrir fitxers amb les aplicacions externes associades.", 
         "Description[ca]": "Aquest connector permet obrir fitxers amb les aplicacions externes associades.", 
