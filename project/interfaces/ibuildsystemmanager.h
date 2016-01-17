@@ -53,7 +53,7 @@ public:
 
     /**
      * Provide access to the builder. This method never returns
-     * null, if it does thats a bug in the plugin. A BuildSystemManager
+     * null, if it does that is a bug in the plugin. A BuildSystemManager
      * always has a project builder associated with it.
      */
     virtual IProjectBuilder* builder() const = 0;

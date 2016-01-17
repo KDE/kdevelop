@@ -500,8 +500,8 @@ void ProjectController::setupActions()
     action->setToolTip( i18nc( "@info:tooltip", "Open or import project" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Open an existing KDevelop 4 project or import "
                                                     "an existing Project into KDevelop 4. This entry "
-                                                    "allows to select a KDevelop4 project file or an "
-                                                    "existing directory to open it in KDevelop. "
+                                                    "allows one to select a KDevelop4 project file "
+                                                    "or an existing directory to open it in KDevelop. "
                                                     "When opening an existing directory that does "
                                                     "not yet have a KDevelop4 project file, the file "
                                                     "will be created." ) );
