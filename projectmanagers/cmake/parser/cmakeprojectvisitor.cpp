@@ -2590,7 +2590,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
         path += '/';
     foreach(const QString& dirName, matchedDirs)
     {
-        qCDebug(CMAKE) << "Going resursive into " << path + dirName << " and glob " << rightExpression;
+        qCDebug(CMAKE) << "Going recursive into " << path + dirName << " and glob " << rightExpression;
         matches.append(traverseGlob(path + dirName, rightExpression, recursive, followSymlinks));
     }
     return matches;
