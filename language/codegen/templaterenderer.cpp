@@ -268,7 +268,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
     for (QHash<QString,QUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it)
     {
         QString cleanName = it.key().toLower();
-        cleanName.replace(nonAlphaNumeric, QLatin1Char('_'));
+        cleanName.replace(nonAlphaNumeric, QStringLiteral("_"));
         const QString path = it.value().toLocalFile();
         addVariable("output_file_" + cleanName, baseDir.relativeFilePath(path));
         addVariable("output_file_" + cleanName + "_absolute", path);

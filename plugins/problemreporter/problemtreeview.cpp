@@ -368,7 +368,7 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
         if (!actions.isEmpty()) {
             QString title = solution->title();
             title = KDevelop::htmlToPlainText(title);
-            title.replace(QLatin1String("&apos;"), QLatin1Char('\''));
+            title.replace(QLatin1String("&apos;"), QLatin1String("\'"));
 
             QPointer<QMenu> m = new QMenu(this);
             m->addSection(title);

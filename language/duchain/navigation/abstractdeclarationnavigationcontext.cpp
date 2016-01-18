@@ -249,7 +249,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       modifyHtml() += labelHighlight(i18n( "Decl.: " ));
 
     makeLink( QStringLiteral("%1 :%2").arg( m_declaration->url().toUrl().fileName() ).arg( m_declaration->rangeInCurrentRevision().start().line()+1 ), m_declaration, NavigationAction::JumpToSource );
-    modifyHtml() += QLatin1Char(' ');
+    modifyHtml() += QStringLiteral(" ");
     //modifyHtml() += "<br />";
     if(!dynamic_cast<FunctionDefinition*>(m_declaration.data())) {
       if( FunctionDefinition* definition = FunctionDefinition::definition(m_declaration.data()) ) {
@@ -265,7 +265,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       }
     }
 
-    modifyHtml() += QLatin1Char(' '); //The action name _must_ stay "show_uses", since that is also used from outside
+    modifyHtml() += QStringLiteral(" "); //The action name _must_ stay "show_uses", since that is also used from outside
     makeLink(i18n("Show uses"), QStringLiteral("show_uses"), NavigationAction(m_declaration, NavigationAction::NavigateUses));
   }
 
@@ -288,7 +288,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       if (!Qt::mightBeRichText(comment)) {
         // still might contain extra html tags for line breaks (this is the case for doxygen-style comments sometimes)
         // let's protect them from being removed completely
-        comment.replace(QRegExp("<br */>"), QLatin1Char('\n'));
+        comment.replace(QRegExp("<br */>"), QStringLiteral("\n"));
         comment = comment.toHtmlEscaped();
         comment.replace('\n', QLatin1String("<br />")); //Replicate newlines in html
       }
@@ -545,7 +545,7 @@ void AbstractDeclarationNavigationContext::htmlClass()
     modifyHtml() += QStringLiteral("class ");
     eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
   }
-  modifyHtml() += QLatin1Char(' ');
+  modifyHtml() += QStringLiteral(" ");
 }
 
 void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType)

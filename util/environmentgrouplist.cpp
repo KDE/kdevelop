@@ -218,6 +218,6 @@ void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcess
                 it.value().replace(m.capturedStart(0), m.capturedLength(0), QString());
             }
         }
-        it.value().replace(rNotVar, QLatin1Char('$'));
+        it.value().replace(rNotVar, QStringLiteral("$"));
     }
 }
