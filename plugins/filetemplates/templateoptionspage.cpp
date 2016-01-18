@@ -47,9 +47,9 @@ TemplateOptionsPage::TemplateOptionsPage(QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , d(new TemplateOptionsPagePrivate)
 {
-    d->typeProperties.insert("String", "text");
-    d->typeProperties.insert("Int", "value");
-    d->typeProperties.insert("Bool", "checked");
+    d->typeProperties.insert(QStringLiteral("String"), "text");
+    d->typeProperties.insert(QStringLiteral("Int"), "value");
+    d->typeProperties.insert(QStringLiteral("Bool"), "checked");
 }
 
 TemplateOptionsPage::~TemplateOptionsPage()
@@ -78,11 +78,11 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             QLabel* label = new QLabel(entry.label, box);
             QWidget* control = 0;
             const QString type = entry.type;
-            if (type == "String")
+            if (type == QLatin1String("String"))
             {
                 control = new QLineEdit(entry.value.toString(), box);
             }
-            else if (type == "Int")
+            else if (type == QLatin1String("Int"))
             {
                 auto input = new QSpinBox(box);
                 input->setValue(entry.value.toInt());
@@ -96,9 +96,9 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
                 }
                 control = input;
             }
-            else if (type == "Bool")
+            else if (type == QLatin1String("Bool"))
             {
-                bool checked = (QString::compare(entry.value.toString(), "true", Qt::CaseInsensitive) == 0);
+                bool checked = (QString::compare(entry.value.toString(), QStringLiteral("true"), Qt::CaseInsensitive) == 0);
                 QCheckBox* checkBox = new QCheckBox(entry.label, box);
                 checkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
             }

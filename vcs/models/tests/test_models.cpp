@@ -48,10 +48,10 @@ void TestModels::testVcsFileChangesModel()
 
     // Pull some files into
     QUrl filenames[] = {
-        QUrl::fromLocalFile("foo"),
-        QUrl::fromLocalFile("bar"),
-        QUrl::fromLocalFile("pew"),
-        QUrl::fromLocalFile("trash")
+        QUrl::fromLocalFile(QStringLiteral("foo")),
+        QUrl::fromLocalFile(QStringLiteral("bar")),
+        QUrl::fromLocalFile(QStringLiteral("pew")),
+        QUrl::fromLocalFile(QStringLiteral("trash"))
     };
     VcsStatusInfo::State states[] = {VcsStatusInfo::ItemAdded, VcsStatusInfo::ItemModified, VcsStatusInfo::ItemDeleted, VcsStatusInfo::ItemUpToDate};
     VcsStatusInfo status;

@@ -303,7 +303,7 @@ public:
     }
 
     QString id() const override {
-        return "org.kdevelop.PatchReview";
+        return QStringLiteral("org.kdevelop.PatchReview");
     }
 
 private:
@@ -343,9 +343,9 @@ void PatchReviewPlugin::closeReview()
             emit patchChanged();
 
         Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
-        if( w->area()->objectName() == "review" ) {
+        if( w->area()->objectName() == QLatin1String("review") ) {
             if( ICore::self()->documentController()->saveAllDocuments() )
-                ICore::self()->uiController()->switchToArea( "code", KDevelop::IUiController::ThisWindow );
+                ICore::self()->uiController()->switchToArea( QStringLiteral("code"), KDevelop::IUiController::ThisWindow );
         }
     }
 }
@@ -373,13 +373,13 @@ void PatchReviewPlugin::startReview( IPatchSource* patch, IPatchReview::ReviewMo
 void PatchReviewPlugin::switchToEmptyReviewArea()
 {
     foreach(Sublime::Area* area, ICore::self()->uiController()->allAreas()) {
-        if (area->objectName() == "review") {
+        if (area->objectName() == QLatin1String("review")) {
             emit area->clearDocuments();
         }
     }
 
-    if ( ICore::self()->uiController()->activeArea()->objectName() != "review" )
-        ICore::self()->uiController()->switchToArea( "review", KDevelop::IUiController::ThisWindow );
+    if ( ICore::self()->uiController()->activeArea()->objectName() != QLatin1String("review") )
+        ICore::self()->uiController()->switchToArea( QStringLiteral("review"), KDevelop::IUiController::ThisWindow );
 }
 
 QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
@@ -419,9 +419,9 @@ void PatchReviewPlugin::updateReview()
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
             QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
 
-            if( QFileInfo( absoluteUrl.toLocalFile() ).exists() && absoluteUrl.toLocalFile() != "/dev/null" )
+            if( QFileInfo( absoluteUrl.toLocalFile() ).exists() && absoluteUrl.toLocalFile() != QLatin1String("/dev/null") )
             {
-                buddyDoc = ICore::self()->documentController()->openDocument( absoluteUrl, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate, "", buddyDoc );
+                buddyDoc = ICore::self()->documentController()->openDocument( absoluteUrl, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate, QLatin1String(""), buddyDoc );
 
                 seekHunk( true, absoluteUrl ); //Jump to the first changed position
             }else{
@@ -468,12 +468,12 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
 }
 
 PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( "kdevpatchreview", parent ),
+    : KDevelop::IPlugin( QStringLiteral("kdevpatchreview"), parent ),
     m_patch( 0 ), m_factory( new PatchReviewToolViewFactory( this ) ) {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
     qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
 
-    setXMLFile( "kdevpatchreview.rc" );
+    setXMLFile( QStringLiteral("kdevpatchreview.rc") );
 
     connect( ICore::self()->documentController(), &IDocumentController::documentClosed, this, &PatchReviewPlugin::documentClosed );
     connect( ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &PatchReviewPlugin::textDocumentCreated );
@@ -484,12 +484,12 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     connect( m_updateKompareTimer, &QTimer::timeout, this, &PatchReviewPlugin::updateKompareModel );
 
     m_finishReview = new QAction(i18n("Finish Review"), this);
-    m_finishReview->setIcon( QIcon::fromTheme( "dialog-ok" ) );
+    m_finishReview->setIcon( QIcon::fromTheme( QStringLiteral("dialog-ok") ) );
     actionCollection()->setDefaultShortcut( m_finishReview, Qt::CTRL|Qt::Key_Return );
-    actionCollection()->addAction("commit_or_finish_review", m_finishReview);
+    actionCollection()->addAction(QStringLiteral("commit_or_finish_review"), m_finishReview);
 
     foreach(Sublime::Area* area, ICore::self()->uiController()->allAreas()) {
-        if (area->objectName() == "review")
+        if (area->objectName() == QLatin1String("review"))
             area->addAction(m_finishReview);
     }
 
@@ -528,7 +528,7 @@ QWidget* PatchReviewPlugin::createToolView( QWidget* parent ) {
 
 void PatchReviewPlugin::areaChanged(Sublime::Area* area)
 {
-    bool reviewing = area->objectName() == "review";
+    bool reviewing = area->objectName() == QLatin1String("review");
     m_finishReview->setEnabled(reviewing);
     if(!reviewing) {
         closeReview();

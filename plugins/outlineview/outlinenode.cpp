@@ -140,7 +140,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         case AbstractType::TypeStructure: {
             //this seems to be the way it has to be done (after grepping through source code)
             //TODO shouldn't there be some kind of isFriend() functionality?
-            static IndexedIdentifier friendIdentifier(Identifier("friend"));
+            static IndexedIdentifier friendIdentifier(Identifier(QStringLiteral("friend")));
             const bool isFriend = decl->indexedIdentifier() == friendIdentifier;
             if (isFriend) {
                 //FIXME There seems to be no way of finding out whether the friend is class/struct/etc

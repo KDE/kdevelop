@@ -35,7 +35,7 @@ UsesNavigationContext::~UsesNavigationContext() {
 }
 
 QString UsesNavigationContext::name() const {
-  return "Uses";
+  return QStringLiteral("Uses");
 }
 
 QString UsesNavigationContext::html(bool shorten) {

@@ -44,9 +44,9 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   , m_tree(new ClassTree(this, plugin))
   , m_searchLine(new QLineEdit(this))
 {
-  setObjectName("Class Browser Tree");
+  setObjectName(QStringLiteral("Class Browser Tree"));
   setWindowTitle(i18n("Classes"));
-  setWindowIcon(QIcon::fromTheme("code-class", windowIcon()));
+  setWindowIcon(QIcon::fromTheme(QStringLiteral("code-class"), windowIcon()));
 
   // Set tree in the plugin
   m_plugin->setActiveClassTree(m_tree);

@@ -42,7 +42,7 @@ void CvsDiffJob::slotProcessError(QProcess::ProcessError error) {
     // Do not blindly raise an error on non-zero return code of "cvs diff".
     // If its output contains the "Index:" mark, the diff is probably intact,
     // and non-zero return code indicates just that there are changes.
-    if (error == QProcess::UnknownError && output().contains("Index:"))
+    if (error == QProcess::UnknownError && output().contains(QStringLiteral("Index:")))
         return;
 
     KDevelop::DVcsJob::slotProcessError(error);

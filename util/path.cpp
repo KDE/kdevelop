@@ -105,7 +105,7 @@ Path::Path(const QUrl& url)
         // handle remote urls
         QString urlPrefix;
         urlPrefix += url.scheme();
-        urlPrefix += "://";
+        urlPrefix += QLatin1String("://");
         const QString user = url.userName();
         if (!user.isEmpty()) {
             urlPrefix += user;

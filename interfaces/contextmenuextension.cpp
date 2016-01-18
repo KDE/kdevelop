@@ -30,17 +30,17 @@
 namespace KDevelop
 {
 
-const QString ContextMenuExtension::FileGroup     = "FileGroup";
-const QString ContextMenuExtension::RefactorGroup = "RefactorGroup";
-const QString ContextMenuExtension::BuildGroup    = "BuildGroup";
-const QString ContextMenuExtension::RunGroup      = "RunGroup";
-const QString ContextMenuExtension::DebugGroup    = "DebugGroup";
-const QString ContextMenuExtension::EditGroup     = "EditGroup";
-const QString ContextMenuExtension::VcsGroup      = "VcsGroup";
-const QString ContextMenuExtension::ProjectGroup  = "ProjectGroup";
-const QString ContextMenuExtension::OpenEmbeddedGroup  = "OpenEmbeddedGroup";
-const QString ContextMenuExtension::OpenExternalGroup  = "OpenExternalGroup";
-const QString ContextMenuExtension::ExtensionGroup  = "ExtensionGroup";
+const QString ContextMenuExtension::FileGroup     = QStringLiteral("FileGroup");
+const QString ContextMenuExtension::RefactorGroup = QStringLiteral("RefactorGroup");
+const QString ContextMenuExtension::BuildGroup    = QStringLiteral("BuildGroup");
+const QString ContextMenuExtension::RunGroup      = QStringLiteral("RunGroup");
+const QString ContextMenuExtension::DebugGroup    = QStringLiteral("DebugGroup");
+const QString ContextMenuExtension::EditGroup     = QStringLiteral("EditGroup");
+const QString ContextMenuExtension::VcsGroup      = QStringLiteral("VcsGroup");
+const QString ContextMenuExtension::ProjectGroup  = QStringLiteral("ProjectGroup");
+const QString ContextMenuExtension::OpenEmbeddedGroup  = QStringLiteral("OpenEmbeddedGroup");
+const QString ContextMenuExtension::OpenExternalGroup  = QStringLiteral("OpenExternalGroup");
+const QString ContextMenuExtension::ExtensionGroup  = QStringLiteral("ExtensionGroup");
 
 
 class ContextMenuExtensionPrivate

@@ -45,11 +45,11 @@ QString accessPolicyName(const DeclarationPointer& declaration)
         switch (member->accessPolicy())
         {
             case Declaration::Private:
-                return "private";
+                return QStringLiteral("private");
             case Declaration::Protected:
-                return "protected";
+                return QStringLiteral("protected");
             case Declaration::Public:
-                return "public";
+                return QStringLiteral("public");
             default:
                 break;
         }

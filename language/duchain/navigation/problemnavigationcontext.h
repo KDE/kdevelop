@@ -28,6 +28,7 @@ namespace KDevelop {
 
 class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavigationContext
 {
+  Q_OBJECT
   public:
     explicit ProblemNavigationContext(KDevelop::ProblemPointer problem);
     ~ProblemNavigationContext();

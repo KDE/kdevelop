@@ -64,14 +64,14 @@ Q_LOGGING_CATEGORY(PLUGIN_APPWIZARD, "kdevplatform.plugins.appwizard")
 K_PLUGIN_FACTORY_WITH_JSON(AppWizardFactory, "kdevappwizard.json", registerPlugin<AppWizardPlugin>();)
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin("kdevappwizard", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevappwizard"), parent)
     , m_templatesModel(0)
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::ITemplateProvider);
-    setXMLFile("kdevappwizard.rc");
+    setXMLFile(QStringLiteral("kdevappwizard.rc"));
 
-    m_newFromTemplate = actionCollection()->addAction("project_new");
-    m_newFromTemplate->setIcon(QIcon::fromTheme("project-development-new-template"));
+    m_newFromTemplate = actionCollection()->addAction(QStringLiteral("project_new"));
+    m_newFromTemplate->setIcon(QIcon::fromTheme(QStringLiteral("project-development-new-template")));
     m_newFromTemplate->setText(i18n("New From Template..."));
     connect(m_newFromTemplate, &QAction::triggered, this, &AppWizardPlugin::slotNewProject);
     m_newFromTemplate->setToolTip( i18n("Generate a new project from a template") );
@@ -201,7 +201,7 @@ QString generateIdentifier( const QString& appname )
 {
     QString tmp = appname;
     QRegExp re("[^a-zA-Z0-9_]");
-    return tmp.replace(re, "_");
+    return tmp.replace(re, QStringLiteral("_"));
 }
 
 } // end anonymous namespace
@@ -234,24 +234,24 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
     //prepare variable substitution hash
     m_variables.clear();
-    m_variables["APPNAME"] = info.name;
-    m_variables["APPNAMEUC"] = info.name.toUpper();
-    m_variables["APPNAMELC"] = info.name.toLower();
-    m_variables["APPNAMEID"] = generateIdentifier(info.name);
-    m_variables["PROJECTDIR"] = dest.toLocalFile();
+    m_variables[QStringLiteral("APPNAME")] = info.name;
+    m_variables[QStringLiteral("APPNAMEUC")] = info.name.toUpper();
+    m_variables[QStringLiteral("APPNAMELC")] = info.name.toLower();
+    m_variables[QStringLiteral("APPNAMEID")] = generateIdentifier(info.name);
+    m_variables[QStringLiteral("PROJECTDIR")] = dest.toLocalFile();
     // backwards compatibility
-    m_variables["dest"] = m_variables["PROJECTDIR"];
-    m_variables["PROJECTDIRNAME"] = dest.fileName();
-    m_variables["VERSIONCONTROLPLUGIN"] = info.vcsPluginName;
+    m_variables[QStringLiteral("dest")] = m_variables[QStringLiteral("PROJECTDIR")];
+    m_variables[QStringLiteral("PROJECTDIRNAME")] = dest.fileName();
+    m_variables[QStringLiteral("VERSIONCONTROLPLUGIN")] = info.vcsPluginName;
 
     KArchive* arch = 0;
-    if( templateArchive.endsWith(".zip") )
+    if( templateArchive.endsWith(QLatin1String(".zip")) )
     {
         arch = new KZip(templateArchive);
     }
     else
     {
-        arch = new KTar(templateArchive, "application/x-bzip");
+        arch = new KTar(templateArchive, QStringLiteral("application/x-bzip"));
     }
     if (arch->open(QIODevice::ReadOnly))
     {
@@ -307,8 +307,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             {
                 if (KMessageBox::Continue ==
                     KMessageBox::warningContinueCancel(0,
-                    "Failed to initialize version control system, "
-                    "plugin is neither VCS nor DVCS."))
+                    QStringLiteral("Failed to initialize version control system, "
+                    "plugin is neither VCS nor DVCS.")))
                     success = true;
             }
             if (!success) return QString();
@@ -325,7 +325,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     // Loop through the new project directory and try to detect the first .kdev4 file.
     // If one is found this file will be used. So .kdev4 file can be stored in any subdirectory and the
     // project templates can be more complex.
-    QDirIterator it(QDir::cleanPath( dest.toLocalFile()), QStringList() << "*.kdev4", QDir::NoFilter, QDirIterator::Subdirectories);
+    QDirIterator it(QDir::cleanPath( dest.toLocalFile()), QStringList() << QStringLiteral("*.kdev4"), QDir::NoFilter, QDirIterator::Subdirectories);
     if(it.hasNext() == true)
     {
         projectFileName = it.next();
@@ -339,11 +339,12 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         KSharedConfigPtr cfg = KSharedConfig::openConfig( projectFileName, KConfig::SimpleConfig );
         KConfigGroup project = cfg->group( "Project" );
         project.writeEntry( "Name", info.name );
-        QString manager = "KDevGenericManager";
+        QString manager = QStringLiteral("KDevGenericManager");
 
         QDir d( dest.toLocalFile() );
-        foreach(const KPluginMetaData& info, ICore::self()->pluginController()->queryExtensionPlugins("org.kdevelop.IProjectFileManager")) {
-            QStringList filter = KPluginMetaData::readStringList(info.rawData(), "X-KDevelop-ProjectFilesFilter");
+        auto data = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
+        foreach(const KPluginMetaData& info, data) {
+            QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
             if (!filter.isEmpty()) {
                 if (!d.entryList(filter).isEmpty()) {
                     manager = info.pluginId();
@@ -365,7 +366,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 {
     qCDebug(PLUGIN_APPWIZARD) << "unpacking dir:" << dir->name() << "to" << dest;
     const QStringList entries = dir->entries();
-    qCDebug(PLUGIN_APPWIZARD) << "entries:" << entries.join(",");
+    qCDebug(PLUGIN_APPWIZARD) << "entries:" << entries.join(QStringLiteral(","));
 
     //This extra tempdir is needed just for the files files have special names,
     //which may contain macros also files contain content with macros. So the
@@ -379,7 +380,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 
     foreach (const QString& entry, entries)
     {
-        if (entry.endsWith(".kdevtemplate"))
+        if (entry.endsWith(QLatin1String(".kdevtemplate")))
             continue;
         if (dir->entry(entry)->isDirectory())
         {
@@ -413,7 +414,7 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
     qCDebug(PLUGIN_APPWIZARD) << "copy:" << source << "to" << dest;
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForFile(source);
-    if( !mime.inherits("text/plain") )
+    if( !mime.inherits(QStringLiteral("text/plain")) )
     {
         KIO::CopyJob* job = KIO::copy( QUrl::fromUserInput(source), QUrl::fromUserInput(dest), KIO::HideProgressInfo );
         if( !job->exec() )
@@ -479,21 +480,21 @@ QAbstractItemModel* AppWizardPlugin::templatesModel()
 
 QString AppWizardPlugin::knsConfigurationFile() const
 {
-    return "kdevappwizard.knsrc";
+    return QStringLiteral("kdevappwizard.knsrc");
 }
 
 QStringList AppWizardPlugin::supportedMimeTypes() const
 {
     QStringList types;
-    types << "application/x-desktop";
-    types << "application/x-bzip-compressed-tar";
-    types << "application/zip";
+    types << QStringLiteral("application/x-desktop");
+    types << QStringLiteral("application/x-bzip-compressed-tar");
+    types << QStringLiteral("application/zip");
     return types;
 }
 
 QIcon AppWizardPlugin::icon() const
 {
-    return QIcon::fromTheme("project-development-new-template");
+    return QIcon::fromTheme(QStringLiteral("project-development-new-template"));
 }
 
 QString AppWizardPlugin::name() const

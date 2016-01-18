@@ -820,7 +820,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
               return false;
           }else{
             //Create an identifiers where namespace-alias part is replaced with the alias target
-            for (const SearchItem::Ptr& item : identifier->next)
+            foreach (const SearchItem::Ptr& item, identifier->next)
               if(!applyAliases(importIdentifier, item, accept, position, canBeNamespace, &info, recursionDepth+1))
                 return false;
           }
@@ -834,7 +834,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
       if(!accept(id)) //We're at the end of a qualified identifier, accept it
         return false;
     } else {
-      for (const SearchItem::Ptr& next : identifier->next)
+      foreach (const SearchItem::Ptr& next, identifier->next)
         if(!applyAliases(id, next, accept, position, canBeNamespace, 0, recursionDepth+1))
           return false;
     }
@@ -1043,7 +1043,7 @@ void TopDUContext::removeImportedParentContext(DUContext* context) {
 void TopDUContext::addImportedParentContexts(const QList<QPair<TopDUContext*, CursorInRevision> >& contexts, bool temporary) {
   typedef QPair<TopDUContext*, CursorInRevision> Pair;
 
-  foreach(const Pair &pair, contexts)
+  foreach(const Pair pair, contexts)
     addImportedParentContext(pair.first, pair.second, false, temporary);
 }
 

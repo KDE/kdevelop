@@ -166,9 +166,9 @@ void TestBackgroundparser::initTestCase()
   TestLanguageSupport* testLang = new TestLanguageSupport();
   connect(testLang, &TestLanguageSupport::parseJobCreated,
           &m_jobPlan, &JobPlan::parseJobCreated);
-  langController->addTestLanguage(testLang, QStringList() << "text/plain");
+  langController->addTestLanguage(testLang, QStringList() << QStringLiteral("text/plain"));
 
-  const auto languages = langController->languagesForUrl(QUrl::fromLocalFile("/foo.txt"));
+  const auto languages = langController->languagesForUrl(QUrl::fromLocalFile(QStringLiteral("/foo.txt")));
   QCOMPARE(languages.size(), 1);
   QCOMPARE(languages.first(), testLang);
 }
@@ -190,7 +190,7 @@ void TestBackgroundparser::testParseOrdering_foregroundThread()
     // foreground thread (active document being edited, ...) running all the time.
 
     // the long-running high-prio job
-    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_fgt_hp.txt"), -500, ParseJob::IgnoresSequentialProcessing, 630));
+    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_fgt_hp.txt")), -500, ParseJob::IgnoresSequentialProcessing, 630));
 
     // several small background jobs
     for ( int i = 0; i < 10; i++ ) {
@@ -223,7 +223,7 @@ void TestBackgroundparser::testParseOrdering_lockup()
         m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test" + QString::number(i) + ".txt"), i, ParseJob::IgnoresSequentialProcessing, 200));
     }
     // add one job which requires sequential processing with high priority
-    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_hp.txt"), -200, ParseJob::FullSequentialProcessing, 200));
+    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_hp.txt")), -200, ParseJob::FullSequentialProcessing, 200));
     // verify that the low-priority nonsequential jobs are run simultaneously with the other one.
     QVERIFY(m_jobPlan.runJobs(700));
 }
@@ -283,14 +283,14 @@ void TestBackgroundparser::benchmarkDocumentChanges()
 
     DocumentChangeTracker tracker(doc);
 
-    doc->setText("hello world");
+    doc->setText(QStringLiteral("hello world"));
     // required for proper benchmark results
     doc->createView(0);
     QBENCHMARK {
         for ( int i = 0; i < 5000; i++ ) {
             {
                 KTextEditor::Document::EditingTransaction t(doc);
-                doc->insertText(KTextEditor::Cursor(0, 0), "This is a test line.\n");
+                doc->insertText(KTextEditor::Cursor(0, 0), QStringLiteral("This is a test line.\n"));
             }
             QApplication::processEvents();
         }

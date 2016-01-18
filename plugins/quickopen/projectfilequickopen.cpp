@@ -234,7 +234,7 @@ ProjectFileDataProvider::ProjectFileDataProvider()
             this, &ProjectFileDataProvider::projectClosing);
     connect(projectController, &IProjectController::projectOpened,
             this, &ProjectFileDataProvider::projectOpened);
-    foreach (const auto& project, projectController->projects()) {
+    foreach (const auto project, projectController->projects()) {
         projectOpened(project);
     }
 }

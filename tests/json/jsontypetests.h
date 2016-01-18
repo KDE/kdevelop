@@ -62,7 +62,7 @@ TypeTest(isConst)
     return typeIsConst ? "Type is constant, but test data expects non-const." :
                          "Type is non-const, but test data expects constant.";
 
-  return SUCCESS;
+  return SUCCESS();
 }
 
 ///JSON type: qint64

@@ -116,7 +116,7 @@ inline QString rangeText(const KTextEditor::Range& range, const QStringList& tex
         }
         ret << lineText.mid(startColumn, endColumn - startColumn);
     }
-    return ret.join("\n");
+    return ret.join(QStringLiteral("\n"));
 }
 
 // need to have it as otherwise the arguments can exceed the maximum of 10
@@ -384,10 +384,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             ((encountered = rangeText(change.m_range, textLines)) == change.m_oldText || change.m_ignoreOldText))
         {
             ///Problem: This does not work if the other changes significantly alter the context @todo Use the changed context
-            QString leftContext = QStringList(textLines.mid(0, change.m_range.start().line()+1)).join("\n");
+            QString leftContext = QStringList(textLines.mid(0, change.m_range.start().line()+1)).join(QStringLiteral("\n"));
             leftContext.chop(textLines[change.m_range.start().line()].length() - change.m_range.start().column());
 
-            QString rightContext = QStringList(textLines.mid(change.m_range.end().line())).join("\n").mid(change.m_range.end().column());
+            QString rightContext = QStringList(textLines.mid(change.m_range.end().line())).join(QStringLiteral("\n")).mid(change.m_range.end().column());
 
             if(formatter && (formatPolicy == DocumentChangeSet::AutoFormatChanges
                                 || formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation))
@@ -424,7 +424,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
                             newLines[line].replace(0, newIndentationLength, oldIndentation);
                         }
-                        change.m_newText = newLines.join("\n");
+                        change.m_newText = newLines.join(QStringLiteral("\n"));
                     } else {
                         qCDebug(LANGUAGE) << "Cannot keep the indentation because the line count has changed" << oldNewText;
                     }
@@ -476,7 +476,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             ++offset;
         }
     }
-    output = textLines.join("\n");
+    output = textLines.join(QStringLiteral("\n"));
     return true;
 }
 

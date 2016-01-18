@@ -138,7 +138,7 @@ void TestPath::bench_fromLocalPath()
 {
     QFETCH(int, variant);
 
-    const QString input("/foo/bar/asdf/bla/blub.h");
+    const QString input(QStringLiteral("/foo/bar/asdf/bla/blub.h"));
     const int repeat = 1000;
     if (variant == 1) {
         QBENCHMARK {
@@ -169,7 +169,7 @@ void TestPath::bench_fromLocalPath_data()
 
 void TestPath::bench_hash()
 {
-    const Path path("/my/very/long/path/to/a/file.cpp");
+    const Path path(QStringLiteral("/my/very/long/path/to/a/file.cpp"));
     QBENCHMARK {
         auto hash = qHash(path);
         Q_UNUSED(hash);
@@ -238,7 +238,7 @@ void TestPath::testPath()
     QCOMPARE(optUrl, Path(optUrl));
     QVERIFY(optUrl != Path(input + "/asdf"));
 
-    if (url.isLocalFile() && !input.startsWith("file://")) {
+    if (url.isLocalFile() && !input.startsWith(QLatin1String("file://"))) {
         QCOMPARE(optUrl, Path(QUrl::fromLocalFile(input)));
     }
 
@@ -247,23 +247,23 @@ void TestPath::testPath()
     if (url.isValid()) {
         QVERIFY(optUrl.relativePath(optUrl).isEmpty());
 
-        Path relativePath(optUrl, "foo/bar");
+        Path relativePath(optUrl, QStringLiteral("foo/bar"));
         QCOMPARE(optUrl.relativePath(relativePath), QLatin1String("foo/bar"));
         QCOMPARE(relativePath.relativePath(optUrl), QLatin1String("../../"));
         QVERIFY(optUrl.isParentOf(relativePath));
         QVERIFY(!relativePath.isParentOf(optUrl));
 
 #ifndef Q_OS_WIN
-        Path absolutePath(optUrl, "/laa/loo");
+        Path absolutePath(optUrl, QStringLiteral("/laa/loo"));
         QCOMPARE(absolutePath.path(), QLatin1String("/laa/loo"));
-        QCOMPARE(url.resolved(QUrl("/laa/loo")).path(), QLatin1String("/laa/loo"));
+        QCOMPARE(url.resolved(QUrl(QStringLiteral("/laa/loo"))).path(), QLatin1String("/laa/loo"));
 
-        Path absolutePath2(optUrl, "/");
+        Path absolutePath2(optUrl, QStringLiteral("/"));
         QCOMPARE(absolutePath2.path(), QLatin1String("/"));
-        QCOMPARE(url.resolved(QUrl("/")).path(), QLatin1String("/"));
+        QCOMPARE(url.resolved(QUrl(QStringLiteral("/"))).path(), QLatin1String("/"));
 #endif
 
-        Path unrelatedPath("https://test@blubasdf.com:12345/");
+        Path unrelatedPath(QStringLiteral("https://test@blubasdf.com:12345/"));
         QCOMPARE(optUrl.relativePath(unrelatedPath), unrelatedPath.pathOrUrl());
         QCOMPARE(unrelatedPath.relativePath(optUrl), optUrl.pathOrUrl());
         QVERIFY(!unrelatedPath.isParentOf(optUrl));
@@ -283,15 +283,15 @@ void TestPath::testPath()
 
     url.setPath(url.path() + "/test/foo/bar");
     if (url.scheme().isEmpty()) {
-        url.setScheme("file");
+        url.setScheme(QStringLiteral("file"));
     }
-    optUrl.addPath("test/foo/bar");
+    optUrl.addPath(QStringLiteral("test/foo/bar"));
     QCOMPARE(optUrl.lastPathSegment(), url.fileName());
     QCOMPARE(optUrl.path(), url.isLocalFile() ? url.toLocalFile() : url.path());
 
     url = url.adjusted(QUrl::RemoveFilename);
     url.setPath(url.path() + "lalalala_adsf.txt");
-    optUrl.setLastPathSegment("lalalala_adsf.txt");
+    optUrl.setLastPathSegment(QStringLiteral("lalalala_adsf.txt"));
     QCOMPARE(optUrl.lastPathSegment(), url.fileName());
     QCOMPARE(optUrl.path(), url.isLocalFile() ? url.toLocalFile() : url.path());
 
@@ -301,10 +301,10 @@ void TestPath::testPath()
     QVERIFY(!optUrl.parent().parent().isDirectParentOf(optUrl));
 
 #ifndef Q_OS_WIN
-    Path a("/foo/bar/asdf/");
-    Path b("/foo/bar/");
+    Path a(QStringLiteral("/foo/bar/asdf/"));
+    Path b(QStringLiteral("/foo/bar/"));
     QVERIFY(b.isDirectParentOf(a));
-    Path c("/foo/bar");
+    Path c(QStringLiteral("/foo/bar"));
     QVERIFY(c.isDirectParentOf(a));
 #endif
 
@@ -393,12 +393,12 @@ void TestPath::testPathOperators_data()
     QTest::addColumn<bool>("equal");
     QTest::addColumn<bool>("less");
 
-    Path a("/tmp/a");
-    Path b("/tmp/b");
-    Path c("/tmp/ac");
-    Path d("/d");
-    Path e("/tmp");
-    Path f("/tmp/");
+    Path a(QStringLiteral("/tmp/a"));
+    Path b(QStringLiteral("/tmp/b"));
+    Path c(QStringLiteral("/tmp/ac"));
+    Path d(QStringLiteral("/d"));
+    Path e(QStringLiteral("/tmp"));
+    Path f(QStringLiteral("/tmp/"));
     Path invalid;
 
     QTest::newRow("a-b") << a << b << false << true;
@@ -415,15 +415,15 @@ void TestPath::testPathAddData()
 
     const QStringList bases = {
 #ifndef Q_OS_WIN
-        "/",
-        "/foo/bar/asdf/",
-        "file:///foo/bar/asdf/",
+        QStringLiteral("/"),
+        QStringLiteral("/foo/bar/asdf/"),
+        QStringLiteral("file:///foo/bar/asdf/"),
 #else
         "C:/",
         "C:/foo/bar/asdf/",
         "file:///C:/foo/bar/asdf/",
 #endif
-        "http://www.asdf.com/foo/bar/asdf/",
+        QStringLiteral("http://www.asdf.com/foo/bar/asdf/"),
     };
 
     foreach(const QString& base, bases) {
@@ -453,19 +453,19 @@ void TestPath::testPathAddData_data()
     QTest::addColumn<QString>("pathToAdd");
 
     const QStringList paths = QStringList()
-        << "file.txt"
-        << "path/file.txt"
-        << "path//file.txt"
-        << "/absolute"
-        << "../"
-        << ".."
-        << "../../../"
-        << "./foo"
-        << "../relative"
-        << "../../relative"
-        << "../foo/../bar"
-        << "../foo/./bar"
-        << "../../../../../../../invalid";
+        << QStringLiteral("file.txt")
+        << QStringLiteral("path/file.txt")
+        << QStringLiteral("path//file.txt")
+        << QStringLiteral("/absolute")
+        << QStringLiteral("../")
+        << QStringLiteral("..")
+        << QStringLiteral("../../../")
+        << QStringLiteral("./foo")
+        << QStringLiteral("../relative")
+        << QStringLiteral("../../relative")
+        << QStringLiteral("../foo/../bar")
+        << QStringLiteral("../foo/./bar")
+        << QStringLiteral("../../../../../../../invalid");
     foreach(const QString &path, paths) {
         QTest::newRow(qstrdup(path.toUtf8().constData())) << path;
     }
@@ -550,13 +550,13 @@ void TestPath::testPathCd_data()
     QTest::addColumn<QString>("change");
 
     const QVector<QString> bases{
-        "",
+        QLatin1String(""),
 #ifndef Q_OS_WIN
-        "/foo", "/foo/bar/asdf",
+        QStringLiteral("/foo"), QStringLiteral("/foo/bar/asdf"),
 #else
         "C:/foo", "C:/foo/bar/asdf",
 #endif
-        "http://foo.com/", "http://foo.com/foo", "http://foo.com/foo/bar/asdf"
+        QStringLiteral("http://foo.com/"), QStringLiteral("http://foo.com/foo"), QStringLiteral("http://foo.com/foo/bar/asdf")
     };
     foreach (const QString& base, bases) {
         QTest::newRow(qstrdup(qPrintable(base + "-"))) << base << "";
@@ -607,19 +607,19 @@ void TestPath::testHasParent()
 
 void TestPath::QUrl_acceptance()
 {
-    const QUrl baseLocal = QUrl("file:///foo.h");
+    const QUrl baseLocal = QUrl(QStringLiteral("file:///foo.h"));
     QCOMPARE(baseLocal.isValid(), true);
     QCOMPARE(baseLocal.isRelative(), false);
-    QCOMPARE(baseLocal, QUrl::fromLocalFile("/foo.h"));
-    QCOMPARE(baseLocal, QUrl::fromUserInput("/foo.h"));
+    QCOMPARE(baseLocal, QUrl::fromLocalFile(QStringLiteral("/foo.h")));
+    QCOMPARE(baseLocal, QUrl::fromUserInput(QStringLiteral("/foo.h")));
 
-    QUrl relative("bar.h");
+    QUrl relative(QStringLiteral("bar.h"));
     QCOMPARE(relative.isRelative(), true);
-    QCOMPARE(baseLocal.resolved(relative), QUrl("file:///bar.h"));
-    QUrl relative2("/foo/bar.h");
+    QCOMPARE(baseLocal.resolved(relative), QUrl(QStringLiteral("file:///bar.h")));
+    QUrl relative2(QStringLiteral("/foo/bar.h"));
     QCOMPARE(relative2.isRelative(), true);
-    QCOMPARE(baseLocal.resolved(relative2), QUrl("file:///foo/bar.h"));
+    QCOMPARE(baseLocal.resolved(relative2), QUrl(QStringLiteral("file:///foo/bar.h")));
 
-    const QUrl baseRemote = QUrl("http://foo.org/asdf/foo/asdf");
-    QCOMPARE(baseRemote.resolved(relative), QUrl("http://foo.org/asdf/foo/bar.h"));
+    const QUrl baseRemote = QUrl(QStringLiteral("http://foo.org/asdf/foo/asdf"));
+    QCOMPARE(baseRemote.resolved(relative), QUrl(QStringLiteral("http://foo.org/asdf/foo/bar.h")));
 }

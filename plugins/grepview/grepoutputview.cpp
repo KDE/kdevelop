@@ -51,7 +51,7 @@ Qt::DockWidgetArea GrepOutputViewFactory::defaultPosition()
 
 QString GrepOutputViewFactory::id() const
 {
-    return "org.kdevelop.GrepOutputView";
+    return QStringLiteral("org.kdevelop.GrepOutputView");
 }
 
 
@@ -70,20 +70,20 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     Ui::GrepOutputView::setupUi(this);
 
     setWindowTitle(i18nc("@title:window", "Find/Replace Output View"));
-    setWindowIcon(QIcon::fromTheme("edit-find", windowIcon()));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("edit-find"), windowIcon()));
 
-    m_prev = new QAction(QIcon::fromTheme("go-previous"), i18n("&Previous Item"), this);
+    m_prev = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("&Previous Item"), this);
     m_prev->setEnabled(false);
-    m_next = new QAction(QIcon::fromTheme("go-next"), i18n("&Next Item"), this);
+    m_next = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("&Next Item"), this);
     m_next->setEnabled(false);
-    m_collapseAll = new QAction(QIcon::fromTheme("arrow-left-double"), i18n("C&ollapse All"), this); // TODO change icon
+    m_collapseAll = new QAction(QIcon::fromTheme(QStringLiteral("arrow-left-double")), i18n("C&ollapse All"), this); // TODO change icon
     m_collapseAll->setEnabled(false);
-    m_expandAll = new QAction(QIcon::fromTheme("arrow-right-double"), i18n("&Expand All"), this); // TODO change icon
+    m_expandAll = new QAction(QIcon::fromTheme(QStringLiteral("arrow-right-double")), i18n("&Expand All"), this); // TODO change icon
     m_expandAll->setEnabled(false);
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
-    QAction *newSearchAction = new QAction(QIcon::fromTheme("edit-find"), i18n("New &Search"), this);
-    m_clearSearchHistory = new QAction(QIcon::fromTheme("edit-clear-list"), i18n("Clear Search History"), this);
+    QAction *newSearchAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("New &Search"), this);
+    m_clearSearchHistory = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear Search History"), this);
 
     addAction(m_prev);
     addAction(m_next);
@@ -123,7 +123,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
-    applyButton->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+    applyButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
 
     connect(replacementCombo, &KComboBox::editTextChanged, this, &GrepOutputView::replacementTextChanged);
     connect(replacementCombo, static_cast<void(KComboBox::*)()>(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
@@ -176,7 +176,7 @@ GrepOutputModel* GrepOutputView::renewModel(const QString& name, const QString& 
     connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepOutputView::updateScrollArea);
 
     // appends new model to history
-    const QString displayName = i18n("Search \"%1\" in %2 (at time %3)", name, description, QTime::currentTime().toString("hh:mm"));
+    const QString displayName = i18n("Search \"%1\" in %2 (at time %3)", name, description, QTime::currentTime().toString(QStringLiteral("hh:mm")));
     modelSelector->insertItem(0, displayName, qVariantFromValue<QObject*>(newModel));
 
     modelSelector->setCurrentIndex(0);//setCurrentItem(displayName);

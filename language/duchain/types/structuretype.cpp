@@ -83,7 +83,7 @@ QString StructureType::toString() const
     return AbstractType::toString() + id.toString();
   }
 
-  QString type = "class";
+  QString type = QStringLiteral("class");
 
   return QStringLiteral("<%1>").arg(type) + AbstractType::toString(true);
 }

@@ -70,7 +70,7 @@ CodeHighlighting::CodeHighlighting( QObject * parent )
 
 CodeHighlighting::~CodeHighlighting( )
 {
-  qDeleteAll(m_highlights.values());
+  qDeleteAll(m_highlights);
 }
 
 void CodeHighlighting::adaptToColorChanges()

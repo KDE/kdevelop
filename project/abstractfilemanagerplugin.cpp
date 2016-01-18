@@ -144,7 +144,7 @@ void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
     } else {
         // job emitted its finished signal from its destructor
         // ensure we don't keep a dangling point in our list
-        for (auto& jobs : m_projectJobs) {
+        foreach (auto jobs, m_projectJobs) {
             if (jobs.removeOne(reinterpret_cast<FileManagerListJob*>(job))) {
                 break;
             }
@@ -168,7 +168,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
     Path::List folders;
     foreach ( const KIO::UDSEntry& entry, entries ) {
         QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
-        if (name == "." || name == "..") {
+        if (name == QLatin1String(".") || name == QLatin1String("..")) {
             continue;
         }
 
@@ -348,7 +348,7 @@ bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const Pat
         int cancel = KMessageBox::warningContinueCancel( qApp->activeWindow(),
             i18n("You tried to rename '%1' to '%2', but the latter is filtered and will be hidden.\n"
                  "Do you want to continue?", item->text(), newPath.lastPathSegment()),
-            QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "GenericManagerRenameToFiltered"
+            QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), QStringLiteral("GenericManagerRenameToFiltered")
         );
         if ( cancel == KMessageBox::Cancel ) {
             return false;

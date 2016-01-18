@@ -117,16 +117,16 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
         case VcsRevision::Special:
             switch(rev.revisionValue().value<VcsRevision::RevisionSpecialType>()) {
                 case VcsRevision::Head:
-                    return "^HEAD";
+                    return QStringLiteral("^HEAD");
                 case VcsRevision::Base:
-                    return "";
+                    return QString();
                 case VcsRevision::Working:
-                    return "";
+                    return QString();
                 case VcsRevision::Previous:
                     Q_ASSERT(!currentRevision.isEmpty());
                     return currentRevision + "^1";
                 case VcsRevision::Start:
-                    return "";
+                    return QString();
                 case VcsRevision::UserSpecialType: //Not used
                     Q_ASSERT(false && "i don't know how to do that");
             }
@@ -269,7 +269,7 @@ DVcsJob* GitPlugin::errorsFound(const QString& error, KDevelop::OutputJob::Outpu
 
 QString GitPlugin::name() const
 {
-    return QLatin1String("Git");
+    return QStringLiteral("Git");
 }
 
 QUrl GitPlugin::repositoryRoot(const QUrl& path)
@@ -586,18 +586,18 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         QString name = it->left(it->indexOf(' '));
         QString value = it->right(it->size()-name.size()-1);
 
-        if(name=="author")
+        if(name==QLatin1String("author"))
             annotation->setAuthor(value);
-        else if(name=="author-mail") {} //TODO: do smth with the e-mail?
-        else if(name=="author-tz") {} //TODO: does it really matter?
-        else if(name=="author-time")
+        else if(name==QLatin1String("author-mail")) {} //TODO: do smth with the e-mail?
+        else if(name==QLatin1String("author-tz")) {} //TODO: does it really matter?
+        else if(name==QLatin1String("author-time"))
             annotation->setDate(QDateTime::fromTime_t(value.toUInt()));
-        else if(name=="summary")
+        else if(name==QLatin1String("summary"))
             annotation->setCommitMessage(value);
         else if(name.startsWith(QStringLiteral("committer"))) {} //We will just store the authors
-        else if(name=="previous") {} //We don't need that either
-        else if(name=="filename") { skipNext=true; }
-        else if(name=="boundary") {
+        else if(name==QLatin1String("previous")) {} //We don't need that either
+        else if(name==QLatin1String("filename")) { skipNext=true; }
+        else if(name==QLatin1String("boundary")) {
             definedRevisions.insert(QStringLiteral("boundary"), VcsAnnotationLine());
         }
         else
@@ -1044,13 +1044,13 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
             message.clear();
         } else if (infoRegex.exactMatch(line)) {
             QString cap1 = infoRegex.cap(1);
-            if (cap1 == "Author") {
+            if (cap1 == QLatin1String("Author")) {
                 item.setAuthor(infoRegex.cap(2).trimmed());
-            } else if (cap1 == "Date") {
+            } else if (cap1 == QLatin1String("Date")) {
                 item.setDate(QDateTime::fromTime_t(infoRegex.cap(2).trimmed().split(' ')[0].toUInt()));
             }
         } else if (modificationsRegex.exactMatch(line)) {
-            VcsItemEvent::Actions a = actionsFromString(modificationsRegex.cap(1)[0].toLatin1());
+            VcsItemEvent::Actions a = actionsFromString(modificationsRegex.cap(1).at(0).toLatin1());
             QString filenameA = modificationsRegex.cap(2);
 
             VcsItemEvent itemEvent;
@@ -1062,7 +1062,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
             }
 
             item.addItem(itemEvent);
-        } else if (line.startsWith("    ")) {
+        } else if (line.startsWith(QLatin1String("    "))) {
             message += line.remove(0, 4);
             message += '\n';
         }
@@ -1245,7 +1245,7 @@ VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
     Q_ASSERT(msg.size()==1 || msg.size()==2);
     VcsStatusInfo::State ret = VcsStatusInfo::ItemUnknown;
 
-    if(msg.contains('U') || msg == "AA" || msg == "DD")
+    if(msg.contains('U') || msg == QLatin1String("AA") || msg == QLatin1String("DD"))
         ret = VcsStatusInfo::ItemHasConflicts;
     else switch(msg[0].toLatin1())
     {
@@ -1384,7 +1384,7 @@ VcsJob* GitPlugin::update(const QList<QUrl>& localLocations, const KDevelop::Vcs
 void GitPlugin::setupCommitMessageEditor(const QUrl& localLocation, KTextEdit* editor) const
 {
     new GitMessageHighlighter(editor);
-    QFile mergeMsgFile(dotGitDirectory(localLocation).filePath(".git/MERGE_MSG"));
+    QFile mergeMsgFile(dotGitDirectory(localLocation).filePath(QStringLiteral(".git/MERGE_MSG")));
     // Some limit on the file size should be set since whole content is going to be read into
     // the memory. 1Mb seems to be good value since it's rather strange to have so huge commit
     // message.
@@ -1398,6 +1398,7 @@ void GitPlugin::setupCommitMessageEditor(const QUrl& localLocation, KTextEdit* e
 
 class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
 {
+    Q_OBJECT
     public:
         GitVcsLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0)
             : StandardVcsLocationWidget(parent, f) {}
@@ -1432,7 +1433,7 @@ void GitPlugin::registerRepositoryForCurrentBranchChanges(const QUrl& repository
 
 void GitPlugin::fileChanged(const QString& file)
 {
-    Q_ASSERT(file.endsWith("HEAD"));
+    Q_ASSERT(file.endsWith(QStringLiteral("HEAD")));
     //SMTH/.git/HEAD -> SMTH/
     const QUrl fileUrl = Path(file).parent().parent().toUrl();
 
@@ -1460,3 +1461,5 @@ DVcsJob* GitPlugin::setConfigOption(const QUrl& repository, const QString& key, 
     *job << "git" << "config" << key << value;
     return job;
 }
+
+#include "gitplugin.moc"

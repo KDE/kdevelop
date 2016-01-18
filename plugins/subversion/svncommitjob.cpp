@@ -132,7 +132,7 @@ QVariant SvnCommitJob::fetchResults()
 
 void SvnCommitJob::start()
 {
-    setTitle("commit");
+    setTitle(QStringLiteral("commit"));
     setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
     startOutput();
 

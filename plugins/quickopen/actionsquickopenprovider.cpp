@@ -81,10 +81,10 @@ void ActionsQuickOpenProvider::setFilterText(const QString& text)
     }
     m_results.clear();
     const QList<KActionCollection*> collections = KActionCollection::allCollections();
-    QRegularExpression mnemonicRx("^(.*)&(.+)$");
+    QRegularExpression mnemonicRx(QStringLiteral("^(.*)&(.+)$"));
     for (KActionCollection* c : collections) {
         QList<QAction*> actions = c->actions();
-        for(QAction* action : actions) {
+        foreach(QAction* action, actions) {
             if (!action->isEnabled())
                 continue;
 

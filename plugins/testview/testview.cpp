@@ -69,7 +69,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 , m_tree(new QTreeView(this))
 , m_filter(new KRecursiveFilterProxyModel(this))
 {
-    setWindowIcon(QIcon::fromTheme("preflight-verifier", windowIcon()));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("preflight-verifier"), windowIcon()));
     setWindowTitle(i18n("Unit Tests"));
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -91,14 +91,14 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_filter->setSourceModel(m_model);
     m_tree->setModel(m_filter);
 
-    QAction* showSource = new QAction( QIcon::fromTheme("code-context"), i18n("Show Source"), this );
+    QAction* showSource = new QAction( QIcon::fromTheme(QStringLiteral("code-context")), i18n("Show Source"), this );
     connect (showSource, &QAction::triggered, this, &TestView::showSource);
     m_contextMenuActions << showSource;
 
-    addAction(plugin->actionCollection()->action("run_all_tests"));
-    addAction(plugin->actionCollection()->action("stop_running_tests"));
+    addAction(plugin->actionCollection()->action(QStringLiteral("run_all_tests")));
+    addAction(plugin->actionCollection()->action(QStringLiteral("stop_running_tests")));
 
-    QAction* runSelected = new QAction( QIcon::fromTheme("system-run"), i18n("Run Selected Tests"), this );
+    QAction* runSelected = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18n("Run Selected Tests"), this );
     connect (runSelected, &QAction::triggered, this, &TestView::runSelectedTests);
     addAction(runSelected);
 
@@ -179,7 +179,7 @@ void TestView::notifyTestCaseStarted(ITestSuite* suite, const QStringList& test_
     qCDebug(PLUGIN_TESTVIEW) << "Notify a test of the suite " << suite->name() << " has started";
 
     // Global test suite icon
-    item->setIcon(QIcon::fromTheme("process-idle"));
+    item->setIcon(QIcon::fromTheme(QStringLiteral("process-idle")));
 
     for (int i = 0; i < item->rowCount(); ++i)
     {
@@ -188,7 +188,7 @@ void TestView::notifyTestCaseStarted(ITestSuite* suite, const QStringList& test_
         if (test_cases.contains(caseItem->text()))
         {
             // Each test case icon
-            caseItem->setIcon(QIcon::fromTheme("process-idle"));
+            caseItem->setIcon(QIcon::fromTheme(QStringLiteral("process-idle")));
         }
     }
 }
@@ -199,29 +199,29 @@ QIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
     switch (result)
     {
         case TestResult::NotRun:
-            return QIcon::fromTheme("code-function");
+            return QIcon::fromTheme(QStringLiteral("code-function"));
 
         case TestResult::Skipped:
-            return QIcon::fromTheme("task-delegate");
+            return QIcon::fromTheme(QStringLiteral("task-delegate"));
 
         case TestResult::Passed:
-            return QIcon::fromTheme("dialog-ok-apply");
+            return QIcon::fromTheme(QStringLiteral("dialog-ok-apply"));
 
         case TestResult::UnexpectedPass:
             // This is a very rare occurrence, so the icon should stand out
-            return QIcon::fromTheme("dialog-warning");
+            return QIcon::fromTheme(QStringLiteral("dialog-warning"));
 
         case TestResult::Failed:
-            return QIcon::fromTheme("edit-delete");
+            return QIcon::fromTheme(QStringLiteral("edit-delete"));
 
         case TestResult::ExpectedFail:
-            return QIcon::fromTheme("dialog-ok");
+            return QIcon::fromTheme(QStringLiteral("dialog-ok"));
 
         case TestResult::Error:
-            return QIcon::fromTheme("dialog-cancel");
+            return QIcon::fromTheme(QStringLiteral("dialog-cancel"));
 
         default:
-            return QIcon::fromTheme("");
+            return QIcon::fromTheme(QLatin1String(""));
     }
 }
 
@@ -368,7 +368,7 @@ void TestView::addTestSuite(ITestSuite* suite)
     QStandardItem* projectItem = itemForProject(suite->project());
     Q_ASSERT(projectItem);
 
-    QStandardItem* suiteItem = new QStandardItem(QIcon::fromTheme("view-list-tree"), suite->name());
+    QStandardItem* suiteItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("view-list-tree")), suite->name());
 
     suiteItem->setData(suite->name(), SuiteRole);
     foreach (const QString& caseName, suite->cases())
@@ -388,7 +388,7 @@ void TestView::removeTestSuite(ITestSuite* suite)
 
 QStandardItem* TestView::addProject(IProject* project)
 {
-    QStandardItem* projectItem = new QStandardItem(QIcon::fromTheme("project-development"), project->name());
+    QStandardItem* projectItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("project-development")), project->name());
     projectItem->setData(project->name(), ProjectRole);
     m_model->appendRow(projectItem);
     return projectItem;

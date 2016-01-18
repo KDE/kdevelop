@@ -248,7 +248,7 @@ TopDUContext* DUChainUtils::contentContextFromProxyContext(TopDUContext* top)
   if(top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) {
     if(!top->importedParentContexts().isEmpty())
     {
-      DUContext* ctx = top->importedParentContexts()[0].context(0);
+      DUContext* ctx = top->importedParentContexts().at(0).context(0);
       if(!ctx)
         return 0;
       TopDUContext* ret = ctx->topContext();
@@ -272,7 +272,7 @@ TopDUContext* DUChainUtils::standardContextForUrl(const QUrl& url, bool preferPr
 
   auto languages = ICore::self()->languageController()->languagesForUrl(url);
 
-  foreach(const auto& language, languages)
+  foreach(const auto language, languages)
   {
     if(!chosen)
     {
@@ -493,7 +493,7 @@ static QList<Declaration*> getInheritersInternal(const Declaration* decl, uint& 
     return ret;
 
   if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class)
-    for (const IndexedDUContext& importer : decl->internalContext()->indexedImporters()) {
+    foreach (const IndexedDUContext importer, decl->internalContext()->indexedImporters()) {
 
       DUContext* imp = importer.data();
 

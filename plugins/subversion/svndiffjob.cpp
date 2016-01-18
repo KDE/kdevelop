@@ -48,12 +48,12 @@ QString repairDiff(QString diff) {
     QStringList lines = diff.split('\n');
     QMap<QString, QString> headers;
     for(int a = 0; a < lines.size()-1; ++a) {
-        if(lines[a].startsWith("Index: ") && lines[a+1].startsWith("=====")) {
+        if(lines[a].startsWith(QLatin1String("Index: ")) && lines[a+1].startsWith(QLatin1String("====="))) {
             QString fileName = lines[a].mid(strlen("Index: ")).trimmed();
             headers[fileName] = lines[a];
             qCDebug(PLUGIN_SVN) << "found header for" << fileName;
             lines[a] = QString();
-            if(lines[a+1].startsWith("======")) {
+            if(lines[a+1].startsWith(QLatin1String("======"))) {
                 headers[fileName] += '\n' + lines[a+1];
             lines[a+1] = QString();
             }
@@ -63,7 +63,7 @@ QString repairDiff(QString diff) {
     QRegExp spaceRegExp("\\s");
 
     for(int a = 0; a < lines.size()-1; ++a) {
-        if(lines[a].startsWith("--- ")) {
+        if(lines[a].startsWith(QLatin1String("--- "))) {
             QString tail = lines[a].mid(strlen("--- "));
             if(tail.indexOf(spaceRegExp) != -1) {
                 QString file = tail.left(tail.indexOf(spaceRegExp));
@@ -75,7 +75,7 @@ QString repairDiff(QString diff) {
             }
         }
     }
-    QString ret = lines.join("\n");
+    QString ret = lines.join(QLatin1Char('\n'));
     qCDebug(PLUGIN_SVN) << "repaired diff:" << ret;
     return ret;
 }
@@ -338,7 +338,7 @@ void SvnDiffJob::setNoDiffOnDelete( bool noDiffOnDelete )
 void SvnDiffJob::setDiff( const QString& diff )
 {
     m_diff = KDevelop::VcsDiff();
-    m_diff.setBaseDiff(QUrl::fromLocalFile("/"));
+    m_diff.setBaseDiff(QUrl::fromLocalFile(QStringLiteral("/")));
     m_diff.setType( KDevelop::VcsDiff::DiffUnified );
 
     m_diff.setContentType( KDevelop::VcsDiff::Text );

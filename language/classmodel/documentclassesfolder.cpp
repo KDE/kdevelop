@@ -65,7 +65,7 @@ StaticNamespaceFolderNode::StaticNamespaceFolderNode(const KDevelop::QualifiedId
 
 bool StaticNamespaceFolderNode::getIcon(QIcon& a_resultIcon)
 {
-  static QIcon folderIcon = QIcon::fromTheme("namespace");
+  static QIcon folderIcon = QIcon::fromTheme(QStringLiteral("namespace"));
   a_resultIcon = folderIcon;
   return true;
 }
@@ -359,7 +359,7 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
     removeEmptyNamespace(id);
 
   // Clear erased classes.
-  foreach( const FileIterator& item, removedClasses )
+  foreach( const FileIterator item, removedClasses )
   {
     if ( item->nodeItem )
       removeClassNode(item->nodeItem);

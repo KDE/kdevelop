@@ -79,7 +79,7 @@ QString ConstantIntegralType::toString() const
 
   switch(dataType()) {
     case TypeNone:
-      ret += "none";
+      ret += QStringLiteral("none");
       break;
     case TypeChar:
       ret += QStringLiteral("char");
@@ -94,7 +94,7 @@ QString ConstantIntegralType::toString() const
       ret += QStringLiteral("char32_t");
       break;
     case TypeBoolean:
-      ret += d_func()->m_value ? "true" : "false";
+      ret += d_func()->m_value ? QStringLiteral("true") : QStringLiteral("false");
       break;
     case TypeInt:
       ret += (modifiers() & UnsignedModifier) ? QStringLiteral("unsigned") : QStringLiteral("int");
@@ -106,10 +106,10 @@ QString ConstantIntegralType::toString() const
       ret += QStringLiteral("double");
       break;
     case TypeVoid:
-      ret += "void";
+      ret += QStringLiteral("void");
       break;
     default:
-      ret += "<unknown_value>";
+      ret += QStringLiteral("<unknown_value>");
       break;
   }
 
@@ -120,7 +120,7 @@ QString ConstantIntegralType::valueAsString() const
 {
   switch(dataType()) {
     case TypeNone:
-      return "none";
+      return QStringLiteral("none");
     case TypeChar:
       return QString::number((char)d_func()->m_value);
     case TypeWchar_t:
@@ -130,7 +130,7 @@ QString ConstantIntegralType::valueAsString() const
     case TypeChar32_t:
       return QString::number((char32_t)d_func()->m_value);
     case TypeBoolean:
-      return d_func()->m_value ? "true" : "false";
+      return d_func()->m_value ? QStringLiteral("true") : QStringLiteral("false");
     case TypeInt:
       return (modifiers() & UnsignedModifier) ?
         QString::number((uint)d_func()->m_value) :

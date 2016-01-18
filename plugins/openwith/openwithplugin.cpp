@@ -254,7 +254,7 @@ void OpenWithPlugin::openService(const KService::Ptr& service)
             // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of
             // a PartDocument by passing no preferredpart to the documentcontroller
             // TODO: Solve this rather inside DocumentController
-            prefName = "";
+            prefName.clear();
         }
         foreach( const QUrl& u, m_urls ) {
             ICore::self()->documentController()->openDocument( u, prefName );

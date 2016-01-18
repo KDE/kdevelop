@@ -71,7 +71,7 @@ QString NormalDeclarationCompletionItem::declarationName() const
 {
   QString ret = m_declaration->identifier().toString();
   if (ret.isEmpty())
-    return "<unknown>";
+    return QStringLiteral("<unknown>");
   else
     return ret;
 }

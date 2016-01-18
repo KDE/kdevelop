@@ -477,7 +477,7 @@ bool Declaration::operator ==(const Declaration & other) const
 
 QString Declaration::toString() const
 {
-  return QStringLiteral("%3 %4").arg(abstractType() ? abstractType()->toString() : QStringLiteral("<notype>")).arg(identifier().toString());
+  return QStringLiteral("%3 %4").arg(abstractType() ? abstractType()->toString() : QStringLiteral("<notype>"), identifier().toString());
 }
 
 
@@ -680,17 +680,17 @@ QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
   //First, search for uses within the own context
   {
     QMap<RangeInRevision, bool>& ranges(tempUses[topContext()->url()]);
-    foreach(const RangeInRevision& range, allUses(topContext(), const_cast<Declaration*>(this)))
+    foreach(const RangeInRevision range, allUses(topContext(), const_cast<Declaration*>(this)))
       ranges[range] = true;
   }
 
   KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
 
-  for (const IndexedTopDUContext& indexedContext : useContexts) {
+  foreach (const IndexedTopDUContext indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
     if(context) {
       QMap<RangeInRevision, bool>& ranges(tempUses[context->url()]);
-      foreach(const RangeInRevision& range, allUses(context, const_cast<Declaration*>(this)))
+      foreach(const RangeInRevision range, allUses(context, const_cast<Declaration*>(this)))
         ranges[range] = true;
     }
   }
@@ -744,7 +744,7 @@ QMap<IndexedString, QList<KTextEditor::Range> > Declaration::usesCurrentRevision
   //First, search for uses within the own context
   {
     QMap<KTextEditor::Range, bool>& ranges(tempUses[topContext()->url()]);
-    foreach(const RangeInRevision& range, allUses(topContext(), const_cast<Declaration*>(this)))
+    foreach(const RangeInRevision range, allUses(topContext(), const_cast<Declaration*>(this)))
     {
       ranges[topContext()->transformFromLocalRevision(range)] = true;
     }
@@ -752,11 +752,11 @@ QMap<IndexedString, QList<KTextEditor::Range> > Declaration::usesCurrentRevision
 
   KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
 
-  for (const IndexedTopDUContext& indexedContext : useContexts) {
+  foreach (const IndexedTopDUContext indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
     if(context) {
       QMap<KTextEditor::Range, bool>& ranges(tempUses[context->url()]);
-      foreach(const RangeInRevision& range, allUses(context, const_cast<Declaration*>(this)))
+      foreach(const RangeInRevision range, allUses(context, const_cast<Declaration*>(this)))
         ranges[context->transformFromLocalRevision(range)] = true;
     }
   }

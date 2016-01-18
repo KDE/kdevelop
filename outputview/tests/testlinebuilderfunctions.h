@@ -30,13 +30,13 @@ namespace KDevelop
 static QString projectPath()
 {
     /// Use existing directory with one file
-    return QFileInfo(__FILE__).absolutePath() + QLatin1String("/onefileproject");
+    return QFileInfo(QStringLiteral(__FILE__)).absolutePath() + QLatin1String("/onefileproject");
 }
 
 QString buildCppCheckErrorLine()
 {
     /// Test CPP check output
-    QString outputline("[");
+    QString outputline(QStringLiteral("["));
     outputline.append(projectPath());
     outputline.append("main.cpp:26]: (error) Memory leak: str");
     return outputline;
@@ -45,7 +45,7 @@ QString buildCppCheckErrorLine()
 QString buildKrazyErrorLine()
 {
     /// Test krazy2 output
-    QString outputline("\t");
+    QString outputline(QStringLiteral("\t"));
     outputline.append(projectPath());
     outputline.append("main.cpp: line#22 (1)");
     return outputline;
@@ -54,7 +54,7 @@ QString buildKrazyErrorLine()
 QString buildKrazyErrorLine2()
 {
     /// Test krazy2 output
-    QString outputline("\t");
+    QString outputline(QStringLiteral("\t"));
     outputline.append(projectPath());
     outputline.append("main.cpp: missing tags: email address line#2  (1)");
     return outputline;
@@ -63,7 +63,7 @@ QString buildKrazyErrorLine2()
 QString buildKrazyErrorLine3()
 {
     /// Test krazy2 output
-    QString outputline("\t");
+    QString outputline(QStringLiteral("\t"));
     outputline.append(projectPath());
     outputline.append("main.cpp: non-const ref iterator line#451 (1)");
     return outputline;
@@ -72,7 +72,7 @@ QString buildKrazyErrorLine3()
 QString buildKrazyErrorLineNoLineInfo()
 {
     /// Test krazy2 output
-    QString outputline("\t");
+    QString outputline(QStringLiteral("\t"));
     outputline.append(projectPath());
     outputline.append("main.cpp: missing license");
     return outputline;
@@ -105,7 +105,7 @@ QString buildCompilerInformationLine()
 
 QString buildInfileIncludedFromFirstLine()
 {
-    QString outputline("In file included from ");
+    QString outputline(QStringLiteral("In file included from "));
     outputline.append(projectPath());
     outputline.append("PriorityFactory.h:52:0,");
     return outputline;
@@ -113,7 +113,7 @@ QString buildInfileIncludedFromFirstLine()
 
 QString buildInfileIncludedFromSecondLine()
 {
-    QString outputline("    from ");
+    QString outputline(QStringLiteral("    from "));
     outputline.append(projectPath());
     outputline.append("PatchBasedInpainting.hxx:29,");
     return outputline;
@@ -140,7 +140,7 @@ QString buildLinkerErrorLine()
 
 QString buildPythonErrorLine()
 {
-    QString outputline("File \"");
+    QString outputline(QStringLiteral("File \""));
     outputline.append(projectPath());
     outputline.append("pythonExample.py\", line 10");
     return outputline;

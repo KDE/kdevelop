@@ -46,14 +46,14 @@ QDebug fromTextStream(const QTextStream& out) { if (out.device()) return {out.de
 QString typeToString(DUContext::ContextType type)
 {
   switch(type) {
-    case DUContext::Global: return "Global";
-    case DUContext::Namespace: return "Namespace";
-    case DUContext::Class: return "Class";
-    case DUContext::Function: return "Function";
-    case DUContext::Template: return "Template";
-    case DUContext::Enum: return "Enum";
-    case DUContext::Helper: return "Helper";
-    case DUContext::Other: return "Other";
+    case DUContext::Global: return QStringLiteral("Global");
+    case DUContext::Namespace: return QStringLiteral("Namespace");
+    case DUContext::Class: return QStringLiteral("Class");
+    case DUContext::Function: return QStringLiteral("Function");
+    case DUContext::Template: return QStringLiteral("Template");
+    case DUContext::Enum: return QStringLiteral("Enum");
+    case DUContext::Helper: return QStringLiteral("Helper");
+    case DUContext::Other: return QStringLiteral("Other");
   }
   Q_ASSERT(false);
   return QString();
@@ -149,7 +149,7 @@ void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool is
       QMap<IndexedString, QList<RangeInRevision> > uses = dec->uses();
       for(QMap<IndexedString, QList<RangeInRevision> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
         qout << Indent((m_indent+3) * 2) << "File:" << it.key().str() << endl;
-        foreach (const RangeInRevision& range, *it)
+        foreach (const RangeInRevision range, *it)
           qout << Indent((m_indent+4) * 2) << "Use:" << range.castToSimpleRange() << endl;
       }
     }

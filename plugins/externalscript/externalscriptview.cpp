@@ -39,7 +39,7 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   Ui::ExternalScriptViewBase::setupUi( this );
 
   setWindowTitle( i18n( "External Scripts" ) );
-  setWindowIcon( QIcon::fromTheme("dialog-scripts", windowIcon()) );
+  setWindowIcon( QIcon::fromTheme(QStringLiteral("dialog-scripts"), windowIcon()) );
 
   m_model = new QSortFilterProxyModel( this );
   m_model->setSourceModel( m_plugin->model() );
@@ -55,13 +55,13 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   connect(scriptTree, &QTreeView::customContextMenuRequested,
           this, &ExternalScriptView::contextMenu);
 
-  m_addScriptAction = new QAction(QIcon::fromTheme("document-new"), i18n("Add External Script"), this);
+  m_addScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("Add External Script"), this);
   connect(m_addScriptAction, &QAction::triggered, this, &ExternalScriptView::addScript);
   addAction(m_addScriptAction);
-  m_editScriptAction = new QAction(QIcon::fromTheme("document-edit"), i18n("Edit External Script"), this);
+  m_editScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-edit")), i18n("Edit External Script"), this);
   connect(m_editScriptAction, &QAction::triggered, this, &ExternalScriptView::editScript);
   addAction(m_editScriptAction);
-  m_removeScriptAction = new QAction(QIcon::fromTheme("document-close"), i18n("Remove External Script"), this);
+  m_removeScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n("Remove External Script"), this);
   connect(m_removeScriptAction, &QAction::triggered, this, &ExternalScriptView::removeScript);
   addAction(m_removeScriptAction);
 

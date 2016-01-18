@@ -122,7 +122,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
   QString workingDir = item->workingDirectory();
 
   if(item->performParameterReplacement())
-    command.replace( "%i", QString::number( QCoreApplication::applicationPid() ) );
+    command.replace( QLatin1String("%i"), QString::number( QCoreApplication::applicationPid() ) );
 
   if ( !m_url.isEmpty() ) {
     const QUrl url = m_url;
@@ -144,10 +144,10 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
       ///TODO: make those placeholders escapeable
       if(item->performParameterReplacement())
       {
-        command.replace( "%d", KShell::quoteArg( m_url.toString(QUrl::PreferLocalFile) ) );
+        command.replace( QLatin1String("%d"), KShell::quoteArg( m_url.toString(QUrl::PreferLocalFile) ) );
 
         if ( KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( m_url ) ) {
-          command.replace( "%p", project->path().pathOrUrl() );
+          command.replace( QLatin1String("%p"), project->path().pathOrUrl() );
         }
       }
     } else {
@@ -159,22 +159,22 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
       ///TODO: make those placeholders escapeable
       if(item->performParameterReplacement())
       {
-        command.replace( "%u", KShell::quoteArg( m_url.toString() ) );
+        command.replace( QLatin1String("%u"), KShell::quoteArg( m_url.toString() ) );
 
         ///TODO: does that work with remote files?
         QFileInfo info( m_url.toString(QUrl::PreferLocalFile) );
 
-        command.replace( "%f", KShell::quoteArg( info.filePath() ) );
-        command.replace( "%b", KShell::quoteArg( info.baseName() ) );
-        command.replace( "%n", KShell::quoteArg( info.fileName() ) );
-        command.replace( "%d", KShell::quoteArg( info.path() ) );
+        command.replace( QLatin1String("%f"), KShell::quoteArg( info.filePath() ) );
+        command.replace( QLatin1String("%b"), KShell::quoteArg( info.baseName() ) );
+        command.replace( QLatin1String("%n"), KShell::quoteArg( info.fileName() ) );
+        command.replace( QLatin1String("%d"), KShell::quoteArg( info.path() ) );
 
         if ( view->document() && view->selection() ) {
-          command.replace( "%s", KShell::quoteArg( view->selectionText() ) );
+          command.replace( QLatin1String("%s"), KShell::quoteArg( view->selectionText() ) );
         }
 
         if ( KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( m_url ) ) {
-          command.replace( "%p", project->path().pathOrUrl() );
+          command.replace( QLatin1String("%p"), project->path().pathOrUrl() );
         }
       }
     }
@@ -219,7 +219,7 @@ void ExternalScriptJob::start()
     if ( m_showOutput ) {
       startOutput();
     }
-    appendLine( i18n( "Running external script: %1", m_proc->program().join( " " ) ) );
+    appendLine( i18n( "Running external script: %1", m_proc->program().join( QStringLiteral( " " ) ) ) );
     m_proc->start();
 
     if ( m_inputMode != ExternalScriptItem::InputNone ) {
@@ -276,7 +276,7 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
   if ( exitCode == 0 && status == QProcess::NormalExit ) {
     if ( m_outputMode != ExternalScriptItem::OutputNone ) {
       if ( !m_stdout.isEmpty() ) {
-        QString output = m_stdout.join( "\n" );
+        QString output = m_stdout.join( QStringLiteral("\n") );
         switch ( m_outputMode ) {
           case ExternalScriptItem::OutputNone:
             // do nothing;
@@ -308,7 +308,7 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
       }
     }
     if ( m_errorMode != ExternalScriptItem::ErrorNone && m_errorMode != ExternalScriptItem::ErrorMergeOutput ) {
-      QString output = m_stderr.join( "\n" );
+      QString output = m_stderr.join( QStringLiteral("\n") );
 
       if ( !output.isEmpty() ) {
         switch ( m_errorMode ) {
@@ -364,7 +364,7 @@ void ExternalScriptJob::processError( QProcess::ProcessError error )
   if ( error == QProcess::FailedToStart ) {
     setError( -1 );
     QString errmsg =  i18n("*** Could not start program '%1'. Make sure that the "
-                           "path is specified correctly ***", m_proc->program().join(" ") );
+                           "path is specified correctly ***", m_proc->program().join( QLatin1Char(' ') ) );
     appendLine( errmsg );
     setErrorText( errmsg );
     emitResult();

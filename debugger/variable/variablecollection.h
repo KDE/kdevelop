@@ -124,6 +124,7 @@ private:
 
 class KDEVPLATFORMDEBUGGER_EXPORT TooltipRoot : public TreeItem
 {
+    Q_OBJECT
 public:
     explicit TooltipRoot(TreeModel* model)
     : TreeItem(model)
@@ -139,6 +140,7 @@ public:
 
 class KDEVPLATFORMDEBUGGER_EXPORT Watches : public TreeItem
 {
+    Q_OBJECT
     friend class GDBDebugger::GdbTest;
 public:
     Watches(TreeModel* model, TreeItem* parent);
@@ -164,6 +166,7 @@ private:
 
 class KDEVPLATFORMDEBUGGER_EXPORT Locals : public TreeItem
 {
+    Q_OBJECT
 public:
     Locals(TreeModel* model, TreeItem* parent, const QString &name);
     QList<Variable*> updateLocals(QStringList locals);
@@ -181,11 +184,12 @@ private:
 
 class KDEVPLATFORMDEBUGGER_EXPORT VariablesRoot : public TreeItem
 {
+    Q_OBJECT
 public:
     explicit VariablesRoot(TreeModel* model);
 
     Watches *watches() const { return watches_; }
-    Locals *locals(const QString &name = QLatin1String("Locals"));
+    Locals *locals(const QString &name = QStringLiteral("Locals"));
     QHash<QString, Locals*> allLocals() const;
 
     void fetchMoreChildren() override {}

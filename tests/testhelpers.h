@@ -61,9 +61,9 @@ template<>
 inline char* toString(const KDevelop::Declaration& dec)
 {
     QString s = QStringLiteral("Declaration %1 (%2): %3")
-        .arg(dec.identifier().toString())
-        .arg(dec.qualifiedIdentifier().toString())
-        .arg(reinterpret_cast<qint64>(&dec));
+        .arg(dec.identifier().toString(),
+        dec.qualifiedIdentifier().toString(),
+        QString::number(reinterpret_cast<qint64>(&dec), 10));
     return qstrdup(s.toLatin1().constData());
 }
 

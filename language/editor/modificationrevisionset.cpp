@@ -92,7 +92,7 @@ struct FileModificationPairRequest {
 typedef KDevelop::ItemRepository<FileModificationPair, FileModificationPairRequest, true, false> FileModificationPairRepository;
 
 static FileModificationPairRepository& fileModificationPairRepository() {
-  static FileModificationPairRepository rep("file modification repository");
+  static FileModificationPairRepository rep(QStringLiteral("file modification repository"));
   rep.setMutex(&modificationRevisionSetMutex);
   return rep;
 }
@@ -110,7 +110,7 @@ void ModificationRevisionSet::clearCache() {
 }
 
 struct FileModificationSetRepository : public Utils::BasicSetRepository {
-  FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", &globalItemRepositoryRegistry(), true) {
+  FileModificationSetRepository() : Utils::BasicSetRepository(QStringLiteral("file modification sets"), &globalItemRepositoryRegistry(), true) {
   }
   void itemRemovedFromSets(uint index) override;
 };
@@ -247,13 +247,13 @@ static bool nodeNeedsUpdate(uint index) {
 QString ModificationRevisionSet::toString() const
 {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  QString ret = "["; // krazy:exclude=doublequote_chars
+  QString ret = QStringLiteral("["); // krazy:exclude=doublequote_chars
   Utils::Set set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set::Iterator it = set.iterator();
   bool first = true;
   while(it) {
     if(!first)
-      ret += ", ";
+      ret += QLatin1String(", ");
     first = false;
 
     const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);

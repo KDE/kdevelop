@@ -166,7 +166,7 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
             for(QMap< IndexedString, QList< RangeInRevision > >::const_iterator it = declUses.constBegin();
                 it != declUses.constEnd(); ++it)
             {
-                foreach(const RangeInRevision& range, it.value()) {
+                foreach(const RangeInRevision range, it.value()) {
                     KTextEditor::Range currentRange = declAtCursor->transformFromLocalRevision(range);
                     if(currentRange.isEmpty() || view->document()->text(currentRange) != declAtCursor->identifier().identifier().str()) {
                         return; // One of the uses is invalid. Maybe the replacement has already been performed.

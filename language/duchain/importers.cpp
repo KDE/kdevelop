@@ -106,7 +106,7 @@ class ImportersPrivate
 {
 public:
 
-  ImportersPrivate() : m_importers("Importer Map") {
+  ImportersPrivate() : m_importers(QStringLiteral("Importer Map")) {
   }
   //Maps declaration-ids to Importers
   ItemRepository<ImportersItem, ImportersRequestItem> m_importers;

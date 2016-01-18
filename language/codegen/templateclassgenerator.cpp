@@ -46,7 +46,7 @@ InheritanceDescription descriptionFromString(const QString& base)
 {
     QStringList splitBase = base.split(' ');
     QString identifier = splitBase.takeLast();
-    QString inheritanceMode = splitBase.join(" ");
+    QString inheritanceMode = splitBase.join(QStringLiteral(" "));
 
     InheritanceDescription desc;
     desc.baseType = identifier;
@@ -210,7 +210,7 @@ QString TemplateClassGenerator::name() const
 void TemplateClassGenerator::setName(const QString& newName)
 {
     d->name = newName;
-    d->renderer.addVariable("name", newName);
+    d->renderer.addVariable(QStringLiteral("name"), newName);
 }
 
 QString TemplateClassGenerator::identifier() const
@@ -220,9 +220,9 @@ QString TemplateClassGenerator::identifier() const
 
 void TemplateClassGenerator::setIdentifier(const QString& identifier)
 {
-    d->renderer.addVariable("identifier", identifier);;
+    d->renderer.addVariable(QStringLiteral("identifier"), identifier);;
     QStringList separators;
-    separators << "::" << "." << ":" << "\\" << "/";
+    separators << QStringLiteral("::") << QStringLiteral(".") << QStringLiteral(":") << QStringLiteral("\\") << QStringLiteral("/");
     QStringList ns;
     foreach (const QString& separator, separators)
     {
@@ -244,7 +244,7 @@ QStringList TemplateClassGenerator::namespaces() const
 void TemplateClassGenerator::setNamespaces(const QStringList& namespaces) const
 {
     d->namespaces = namespaces;
-    d->renderer.addVariable("namespaces", namespaces);
+    d->renderer.addVariable(QStringLiteral("namespaces"), namespaces);
 }
 
 
@@ -253,7 +253,7 @@ void TemplateClassGenerator::setLicense(const QString& license)
 {
     qCDebug(LANGUAGE) << "New Class: " << d->name << "Set license: " << d->license;
     d->license = license;
-    d->renderer.addVariable("license", license);
+    d->renderer.addVariable(QStringLiteral("license"), license);
 }
 
 /// Get the license specified for this classes
@@ -267,10 +267,10 @@ void TemplateClassGenerator::setDescription(const ClassDescription& description)
     d->description = description;
 
     QVariantHash variables;
-    variables["description"] = QVariant::fromValue(description);
-    variables["members"] = CodeDescription::toVariantList(description.members);
-    variables["functions"] = CodeDescription::toVariantList(description.methods);
-    variables["base_classes"] = CodeDescription::toVariantList(description.baseClasses);
+    variables[QStringLiteral("description")] = QVariant::fromValue(description);
+    variables[QStringLiteral("members")] = CodeDescription::toVariantList(description.members);
+    variables[QStringLiteral("functions")] = CodeDescription::toVariantList(description.methods);
+    variables[QStringLiteral("base_classes")] = CodeDescription::toVariantList(description.baseClasses);
     d->renderer.addVariables(variables);
 }
 

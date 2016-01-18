@@ -72,7 +72,7 @@ public:
         if (! projectCount)
             reverse = IPlugin::StateReverse;
 
-        q->stateChanged(QLatin1String("has_project"), reverse);
+        q->stateChanged(QStringLiteral("has_project"), reverse);
     }
 
     IPlugin *q;

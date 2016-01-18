@@ -45,7 +45,7 @@ CvsJob::~CvsJob()
 
 QString CvsJob::cvsCommand()
 {
-    return dvcsCommand().join(" ");
+    return dvcsCommand().join(QLatin1Char(' '));
 }
 
 void CvsJob::clear()
@@ -76,11 +76,11 @@ void CvsJob::setServer(const QString& server)
 void CvsJob::start()
 {
     if( !d->rsh.isEmpty() ) {
-        process()->setEnv("CVS_RSH", d->rsh);
+        process()->setEnv(QStringLiteral("CVS_RSH"), d->rsh);
     }
 
     if( !d->server.isEmpty() ) {
-        process()->setEnv("CVS_SERVER", d->server);
+        process()->setEnv(QStringLiteral("CVS_SERVER"), d->server);
     }
 
     DVcsJob::start();

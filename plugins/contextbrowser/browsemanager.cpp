@@ -192,7 +192,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
             QPair<QUrl, KTextEditor::Cursor> jumpTo;
 
             //Step 1: Look for a special language object(Macro, included header, etc.)
-            foreach (const auto& language, languages) {
+            foreach (const auto language, languages) {
                 jumpTo = language->specialLanguageObjectJumpCursor(viewUrl, KTextEditor::Cursor(textCursor));
                 if(jumpTo.first.isValid() && jumpTo.second.isValid())
                     break; //Found a special object to jump to
@@ -305,7 +305,7 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
     connect(view, SIGNAL(navigateBack()), m_plugin, SLOT(navigateBack()));
 }
 
-void BrowseManager::Watcher::viewAdded(KTextEditor::View* view) {
+void Watcher::viewAdded(KTextEditor::View* view) {
     m_manager->viewAdded(view);
 }
 
@@ -325,7 +325,7 @@ void BrowseManager::setBrowsing(bool enabled) {
     }
 }
 
-BrowseManager::Watcher::Watcher(BrowseManager* manager)
+Watcher::Watcher(BrowseManager* manager)
     : EditorViewWatcher(manager), m_manager(manager) {
     foreach(KTextEditor::View* view, allViews())
         m_manager->applyEventFilter(view, true);

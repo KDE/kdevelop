@@ -121,26 +121,26 @@ QString AbstractType::toString(bool spaceOnLeft) const
   if(!spaceOnLeft) {
     if(modifiers() & ConstModifier) {
       if(modifiers() & VolatileModifier) {
-        return "const volatile ";
+        return QStringLiteral("const volatile ");
       }else{
-        return "const ";
+        return QStringLiteral("const ");
       }
     }else{
       if(modifiers() & VolatileModifier)
-        return "volatile ";
+        return QStringLiteral("volatile ");
       else
         return QString();
     }
   }else{
     if(modifiers() & ConstModifier) {
       if(modifiers() & VolatileModifier) {
-        return " const volatile";
+        return QStringLiteral(" const volatile");
       }else{
-        return " const";
+        return QStringLiteral(" const");
       }
     }else{
       if(modifiers() & VolatileModifier)
-        return " volatile";
+        return QStringLiteral(" volatile");
       else
         return QString();
     }

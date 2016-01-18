@@ -70,8 +70,8 @@ void TestEnvironment::testExpandVariables()
     QFETCH(ProcEnv, expectedEnv);
 
     QProcessEnvironment fakeSysEnv;
-    fakeSysEnv.insert("PATH","/bin:/usr/bin");
-    fakeSysEnv.insert("HOME","/home/tom");
+    fakeSysEnv.insert(QStringLiteral("PATH"),QStringLiteral("/bin:/usr/bin"));
+    fakeSysEnv.insert(QStringLiteral("HOME"),QStringLiteral("/home/tom"));
 
     KDevelop::expandVariables(env, fakeSysEnv);
 

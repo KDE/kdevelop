@@ -181,7 +181,7 @@ QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ParsingEnvironment
   }
 
   QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ret;
-  foreach(const IndexedDUContext &ctx, imp) {
+  foreach(const IndexedDUContext ctx, imp) {
     QExplicitlySharedDataPointer<ParsingEnvironmentFile> item = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
     if(item) {
       ret << item;
@@ -206,7 +206,7 @@ QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ParsingEnvironment
   }
 
   QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ret;
-  foreach(const IndexedDUContext &ctx, imp) {
+  foreach(const IndexedDUContext ctx, imp) {
     QExplicitlySharedDataPointer<ParsingEnvironmentFile> f = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
     if(f)
       ret << f;

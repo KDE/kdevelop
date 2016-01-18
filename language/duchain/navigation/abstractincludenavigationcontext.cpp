@@ -83,7 +83,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
   QUrl u = m_item.url();
   NavigationAction action(u, KTextEditor::Cursor(0,0));
   makeLink(u.toDisplayString(QUrl::PreferLocalFile), u.toString(), action);
-  modifyHtml() += "<br />";
+  modifyHtml() += QStringLiteral("<br />");
   
   QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
   //Pick the one duchain for this document that has the most child-contexts/declarations.
@@ -111,7 +111,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
 void AbstractIncludeNavigationContext::getFileInfo(TopDUContext* duchain)
 {
     modifyHtml() += QStringLiteral("%1: %2 %3: %4").arg(labelHighlight(i18nc("Files included into this file", "Includes"))).arg(duchain->importedParentContexts().count()).arg(labelHighlight(i18nc("Count of files this file was included into", "Included by"))).arg(duchain->importers().count());
-    modifyHtml() += "<br />";
+    modifyHtml() += QStringLiteral("<br />");
 }
 
 QString AbstractIncludeNavigationContext::name() const

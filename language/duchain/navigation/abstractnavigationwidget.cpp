@@ -157,7 +157,7 @@ void AbstractNavigationWidget::update() {
     }
 
     m_browser->verticalScrollBar()->setValue(scrollPos);
-    m_browser->scrollToAnchor("currentPosition");
+    m_browser->scrollToAnchor(QStringLiteral("currentPosition"));
     m_browser->show();
   }else{
     m_browser->hide();

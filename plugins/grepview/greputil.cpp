@@ -21,7 +21,7 @@ QString substitudePattern(const QString& pattern, const QString& searchString)
     QString subst = searchString;
     QString result;
     bool expectEscape = false;
-    foreach(const QChar &ch, pattern)
+    foreach(const QChar ch, pattern)
     {
         if(expectEscape)
         {

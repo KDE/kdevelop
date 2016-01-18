@@ -44,18 +44,18 @@
 #include <project/builderjob.h>
 #include <util/kdevstringhandler.h>
 
-QString ExecutePlugin::_nativeAppConfigTypeId = "Native Application";
-QString ExecutePlugin::workingDirEntry = "Working Directory";
-QString ExecutePlugin::executableEntry = "Executable";
-QString ExecutePlugin::argumentsEntry = "Arguments";
-QString ExecutePlugin::isExecutableEntry = "isExecutable";
-QString ExecutePlugin::dependencyEntry = "Dependencies";
-QString ExecutePlugin::environmentGroupEntry = "EnvironmentGroup";
-QString ExecutePlugin::useTerminalEntry = "Use External Terminal";
-QString ExecutePlugin::terminalEntry = "External Terminal";
-QString ExecutePlugin::userIdToRunEntry = "User Id to Run";
-QString ExecutePlugin::dependencyActionEntry = "Dependency Action";
-QString ExecutePlugin::projectTargetEntry = "Project Target";
+QString ExecutePlugin::_nativeAppConfigTypeId = QStringLiteral("Native Application");
+QString ExecutePlugin::workingDirEntry = QStringLiteral("Working Directory");
+QString ExecutePlugin::executableEntry = QStringLiteral("Executable");
+QString ExecutePlugin::argumentsEntry = QStringLiteral("Arguments");
+QString ExecutePlugin::isExecutableEntry = QStringLiteral("isExecutable");
+QString ExecutePlugin::dependencyEntry = QStringLiteral("Dependencies");
+QString ExecutePlugin::environmentGroupEntry = QStringLiteral("EnvironmentGroup");
+QString ExecutePlugin::useTerminalEntry = QStringLiteral("Use External Terminal");
+QString ExecutePlugin::terminalEntry = QStringLiteral("External Terminal");
+QString ExecutePlugin::userIdToRunEntry = QStringLiteral("User Id to Run");
+QString ExecutePlugin::dependencyActionEntry = QStringLiteral("Dependency Action");
+QString ExecutePlugin::projectTargetEntry = QStringLiteral("Project Target");
 
 using namespace KDevelop;
 
@@ -63,7 +63,7 @@ Q_LOGGING_CATEGORY(PLUGIN_EXECUTE, "kdevplatform.plugins.execute")
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecute.json", registerPlugin<ExecutePlugin>();)
 
 ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin("kdevexecute", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevexecute"), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
     m_configType = new NativeAppConfigType();
@@ -117,7 +117,7 @@ KJob* ExecutePlugin::dependencyJob( KDevelop::ILaunchConfiguration* cfg ) const
 {
     QVariantList deps = KDevelop::stringToQVariant( cfg->config().readEntry( dependencyEntry, QString() ) ).toList();
     QString depAction = cfg->config().readEntry( dependencyActionEntry, "Nothing" );
-    if( depAction != "Nothing" && !deps.isEmpty() )
+    if( depAction != QLatin1String("Nothing") && !deps.isEmpty() )
     {
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         QList<KDevelop::ProjectBaseItem*> items;
@@ -135,10 +135,10 @@ KJob* ExecutePlugin::dependencyJob( KDevelop::ILaunchConfiguration* cfg ) const
             }
         }
         KDevelop::BuilderJob* job = new KDevelop::BuilderJob();
-        if( depAction == "Build" )
+        if( depAction == QLatin1String("Build") )
         {
             job->addItems( KDevelop::BuilderJob::Build, items );
-        } else if( depAction == "Install" )
+        } else if( depAction == QLatin1String("Install") )
         {
             job->addItems( KDevelop::BuilderJob::Install, items );
         }
@@ -153,7 +153,7 @@ QString ExecutePlugin::environmentGroup( KDevelop::ILaunchConfiguration* cfg ) c
 {
     if( !cfg )
     {
-        return "";
+        return QLatin1String("");
     }
 
     return cfg->config().readEntry( ExecutePlugin::environmentGroupEntry, "" );

@@ -304,9 +304,9 @@ void TemplateClassAssistant::setup()
     d->templateSelectionPageWidget = new TemplateSelectionPage(this);
     connect(this, &TemplateClassAssistant::accepted, d->templateSelectionPageWidget, &TemplateSelectionPage::saveConfig);
     d->templateSelectionPage = addPage(d->templateSelectionPageWidget, i18n("Language and Template"));
-    d->templateSelectionPage->setIcon(QIcon::fromTheme("project-development-new-template"));
+    d->templateSelectionPage->setIcon(QIcon::fromTheme(QStringLiteral("project-development-new-template")));
 
-    d->dummyPage = addPage(new QWidget(this), QLatin1String("Dummy Page"));
+    d->dummyPage = addPage(new QWidget(this), QStringLiteral("Dummy Page"));
 //     showButton(QDialog::Help, false);
 }
 
@@ -336,22 +336,22 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         setWindowTitle(xi18n("Create Files from Template <filename>%1</filename>", d->fileTemplate.name()));
     }
 
-    if (d->type == "Class")
+    if (d->type == QLatin1String("Class"))
     {
         d->classIdentifierPageWidget = new ClassIdentifierPage(this);
         d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18n("Class Basics"));
-        d->classIdentifierPage->setIcon(QIcon::fromTheme("classnew"));
+        d->classIdentifierPage->setIcon(QIcon::fromTheme(QStringLiteral("classnew")));
         connect(d->classIdentifierPageWidget, &ClassIdentifierPage::isValid, this, &TemplateClassAssistant::setCurrentPageValid);
         setValid(d->classIdentifierPage, false);
 
         d->overridesPageWidget = new OverridesPage(this);
         d->overridesPage = addPage(d->overridesPageWidget, i18n("Override Methods"));
-        d->overridesPage->setIcon(QIcon::fromTheme("code-class"));
+        d->overridesPage->setIcon(QIcon::fromTheme(QStringLiteral("code-class")));
         setValid(d->overridesPage, true);
 
         d->membersPageWidget = new ClassMembersPage(this);
         d->membersPage = addPage(d->membersPageWidget, i18n("Class Members"));
-        d->membersPage->setIcon(QIcon::fromTheme("field"));
+        d->membersPage->setIcon(QIcon::fromTheme(QStringLiteral("field")));
         setValid(d->membersPage, true);
 
         d->helper = 0;
@@ -375,7 +375,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     }
     else
     {
-        if (d->type == "Test")
+        if (d->type == QLatin1String("Test"))
         {
             d->testCasesPageWidget = new TestCasesPage(this);
             d->testCasesPage = addPage(d->testCasesPageWidget, i18n("Test Cases"));
@@ -389,13 +389,13 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
     d->licensePageWidget = new LicensePage(this);
     d->licensePage = addPage(d->licensePageWidget, i18n("License"));
-    d->licensePage->setIcon(QIcon::fromTheme("text-x-copying"));
+    d->licensePage->setIcon(QIcon::fromTheme(QStringLiteral("text-x-copying")));
     setValid(d->licensePage, true);
 
     d->outputPageWidget = new OutputPage(this);
     d->outputPageWidget->prepareForm(d->fileTemplate);
     d->outputPage = addPage(d->outputPageWidget, i18n("Output"));
-    d->outputPage->setIcon(QIcon::fromTheme("document-save"));
+    d->outputPage->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
     connect(d->outputPageWidget, &OutputPage::isValid, this, &TemplateClassAssistant::setCurrentPageValid);
     setValid(d->outputPage, false);
 
@@ -453,7 +453,7 @@ void TemplateClassAssistant::next()
         }
         else
         {
-            d->renderer->addVariable("license", d->licensePageWidget->license());
+            d->renderer->addVariable(QStringLiteral("license"), d->licensePageWidget->license());
         }
     }
     else if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
@@ -469,8 +469,8 @@ void TemplateClassAssistant::next()
     }
     else if (currentPage() == d->testCasesPage)
     {
-        d->renderer->addVariable("name", d->testCasesPageWidget->name());
-        d->renderer->addVariable("testCases", d->testCasesPageWidget->testCases());
+        d->renderer->addVariable(QStringLiteral("name"), d->testCasesPageWidget->name());
+        d->renderer->addVariable(QStringLiteral("testCases"), d->testCasesPageWidget->testCases());
     }
 
     KAssistantDialog::next();
@@ -536,7 +536,7 @@ void TemplateClassAssistant::back()
         {
             setWindowTitle(i18n("Create Files from Template"));
         }
-        d->dummyPage = addPage(new QWidget(this), QLatin1String("Dummy Page"));
+        d->dummyPage = addPage(new QWidget(this), QStringLiteral("Dummy Page"));
     }
 }
 

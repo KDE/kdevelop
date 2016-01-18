@@ -165,7 +165,7 @@ QString FunctionType::partToString( SignaturePart sigPart ) const {
   if( sigPart == SignatureArguments )
     return args;
   else if( sigPart == SignatureWhole )
-    return QStringLiteral("function %1 %2").arg(returnType() ? returnType()->toString() : QStringLiteral("<notype>")).arg(args);
+    return QStringLiteral("function %1 %2").arg(returnType() ? returnType()->toString() : QStringLiteral("<notype>"), args);
   else if( sigPart == SignatureReturn )
     return returnType() ? returnType()->toString() : QString();
 

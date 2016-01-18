@@ -35,9 +35,9 @@ using namespace KDevelop;
 
 #define COMPARE_FILES(name)                                                 \
 do {                                                                        \
-QFile actualFile(Path(Path(baseUrl), name).toLocalFile());                        \
+QFile actualFile(Path(Path(baseUrl), QStringLiteral(name)).toLocalFile());                        \
 QVERIFY(actualFile.open(QIODevice::ReadOnly));                              \
-QFile expectedFile(TESTS_EXPECTED_DIR "/" name);                  \
+QFile expectedFile(QStringLiteral(TESTS_EXPECTED_DIR "/" name));                  \
 QVERIFY(expectedFile.open(QIODevice::ReadOnly));                            \
 QCOMPARE(actualFile.size(), expectedFile.size());                           \
 QCOMPARE(QString(actualFile.readAll()), QString(expectedFile.readAll()));   \
@@ -53,19 +53,19 @@ void TestGenerationTest::initTestCase()
     AutoTestShell::init();
     TestCore::initialize (Core::NoUi);
 
-    TemplatesModel model("testgenerationtest");
+    TemplatesModel model(QStringLiteral("testgenerationtest"));
     model.refresh();
 
     renderer = new TemplateRenderer;
     renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
-    renderer->addVariable("name", "TestName");
-    renderer->addVariable("license", "Test license header\nIn two lines");
+    renderer->addVariable(QStringLiteral("name"), "TestName");
+    renderer->addVariable(QStringLiteral("license"), "Test license header\nIn two lines");
 
     QStringList testCases;
-    testCases << "firstTestCase";
-    testCases << "secondTestCase";
-    testCases << "thirdTestCase";
-    renderer->addVariable("testCases", testCases);
+    testCases << QStringLiteral("firstTestCase");
+    testCases << QStringLiteral("secondTestCase");
+    testCases << QStringLiteral("thirdTestCase");
+    renderer->addVariable(QStringLiteral("testCases"), testCases);
 }
 
 void TestGenerationTest::cleanupTestCase()
@@ -82,10 +82,10 @@ void TestGenerationTest::init()
 
 void TestGenerationTest::yamlTemplate()
 {
-    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "testgenerationtest/template_descriptions/test_yaml2.desktop");
+    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("testgenerationtest/template_descriptions/test_yaml2.desktop"));
     QVERIFY(!description.isEmpty());
     SourceFileTemplate file;
-    file.addAdditionalSearchLocation(TESTS_DATA_DIR "/testgenerationtest/templates");
+    file.addAdditionalSearchLocation(QStringLiteral(TESTS_DATA_DIR "/testgenerationtest/templates"));
     file.setTemplateDescription(description);
     QCOMPARE(file.name(), QStringLiteral("Testing YAML Template"));
 
@@ -97,10 +97,10 @@ void TestGenerationTest::yamlTemplate()
 
 void TestGenerationTest::cppTemplate()
 {
-    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "testgenerationtest/template_descriptions/test_qtestlib.desktop");
+    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("testgenerationtest/template_descriptions/test_qtestlib.desktop"));
     QVERIFY(!description.isEmpty());
     SourceFileTemplate file;
-    file.addAdditionalSearchLocation(TESTS_DATA_DIR "/testgenerationtest/templates");
+    file.addAdditionalSearchLocation(QStringLiteral(TESTS_DATA_DIR "/testgenerationtest/templates"));
     file.setTemplateDescription(description);
 
     QCOMPARE(file.name(), QStringLiteral("Testing C++ Template"));

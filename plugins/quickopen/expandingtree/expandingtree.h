@@ -26,6 +26,7 @@
 
 //A tree that allows drawing additional information
 class ExpandingTree : public QTreeView {
+   Q_OBJECT
  public:
    explicit ExpandingTree(QWidget* parent);
   protected:

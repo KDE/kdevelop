@@ -42,7 +42,7 @@ QDebug fromTextStream(const QTextStream& out) { if (out.device()) return {out.de
 namespace KDevelop {
 
 Utils::BasicSetRepository* RecursiveImportCacheRepository::repository() {
-  static Utils::BasicSetRepository recursiveImportCacheRepositoryObject("Recursive Imports Cache", 0, false);
+  static Utils::BasicSetRepository recursiveImportCacheRepositoryObject(QStringLiteral("Recursive Imports Cache"), 0, false);
   return &recursiveImportCacheRepositoryObject;
 }
 
@@ -133,7 +133,7 @@ class PersistentSymbolTablePrivate
 {
 public:
 
-  PersistentSymbolTablePrivate() : m_declarations("Persistent Declaration Table") {
+  PersistentSymbolTablePrivate() : m_declarations(QStringLiteral("Persistent Declaration Table")) {
   }
   //Maps declaration-ids to declarations
   ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem, true, false> m_declarations;

@@ -70,19 +70,19 @@ ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
     // This is used so the treeview layout performance is not influencing the test
     view->setUniformRowHeights( true );
 
-    QPushButton* b = new QPushButton( "Expand All", this );
+    QPushButton* b = new QPushButton( QStringLiteral("Expand All"), this );
     connect( b, &QPushButton::clicked, view, &QTreeView::expandAll );
     l->addWidget( b, 0, 0 );
-    b = new QPushButton( "Collapse All", this );
+    b = new QPushButton( QStringLiteral("Collapse All"), this );
     connect( b, &QPushButton::clicked, view, &QTreeView::collapseAll );
     l->addWidget( b, 0, 1 );
-    b = new QPushButton( "Add Small Subtree", this );
+    b = new QPushButton( QStringLiteral("Add Small Subtree"), this );
     connect( b, &QPushButton::clicked, this, &ProjectModelPerformanceTest::addSmallTree );
     l->addWidget( b, 0, 2 );
-    b = new QPushButton( "Add Big Subtree", this );
+    b = new QPushButton( QStringLiteral("Add Big Subtree"), this );
     connect( b, &QPushButton::clicked, this, &ProjectModelPerformanceTest::addBigTree );
     l->addWidget( b, 0, 3 );
-    b = new QPushButton( "Add Big Subtree in Chunks", this );
+    b = new QPushButton( QStringLiteral("Add Big Subtree in Chunks"), this );
     connect( b, &QPushButton::clicked, this, &ProjectModelPerformanceTest::addBigTreeDelayed );
     l->addWidget( b, 0, 4 );
 

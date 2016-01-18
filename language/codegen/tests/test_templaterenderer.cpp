@@ -35,8 +35,8 @@ void TestTemplateRenderer::initTestCase()
     renderer = new KDevelop::TemplateRenderer();
 
     QVariantHash variables;
-    variables["name"] = "Tester";
-    variables["age"] = 23;
+    variables[QStringLiteral("name")] = "Tester";
+    variables[QStringLiteral("age")] = 23;
     renderer->addVariables(variables);
 }
 
@@ -69,18 +69,18 @@ void TestTemplateRenderer::simpleVariables()
 
 void TestTemplateRenderer::includeTemplates()
 {
-    renderer->addVariable("namespaces", QStringList() << "Entity" << "Human" << "ComputerPerson");
-    QString result = renderer->render("HELLO {% include 'include_guard_cpp.txt' %}", QString());
-    QString expected = "HELLO ENTITY_HUMAN_COMPUTERPERSON_TESTER_H";
+    renderer->addVariable(QStringLiteral("namespaces"), QStringList() << QStringLiteral("Entity") << QStringLiteral("Human") << QStringLiteral("ComputerPerson"));
+    QString result = renderer->render(QStringLiteral("HELLO {% include 'include_guard_cpp.txt' %}"), QString());
+    QString expected = QStringLiteral("HELLO ENTITY_HUMAN_COMPUTERPERSON_TESTER_H");
 
     QCOMPARE(result, expected);
 }
 
 void TestTemplateRenderer::kdevFilters()
 {
-    renderer->addVariable("activity", QStringLiteral("testing"));
-    QString result = renderer->render("{% load kdev_filters %}I am {{ activity }} software. {{ activity|upper_first }} is a very rewarding task. ", QString());
-    QString expected = "I am testing software. Testing is a very rewarding task. ";
+    renderer->addVariable(QStringLiteral("activity"), QStringLiteral("testing"));
+    QString result = renderer->render(QStringLiteral("{% load kdev_filters %}I am {{ activity }} software. {{ activity|upper_first }} is a very rewarding task. "), QString());
+    QString expected = QStringLiteral("I am testing software. Testing is a very rewarding task. ");
 
     QCOMPARE(result, expected);
 }
@@ -88,12 +88,12 @@ void TestTemplateRenderer::kdevFilters()
 void TestTemplateRenderer::kdevFiltersWithLookup()
 {
     VariableDescription description;
-    description.type = "int";
-    description.name = "number";
+    description.type = QStringLiteral("int");
+    description.name = QStringLiteral("number");
     
-    renderer->addVariable("var", QVariant::fromValue(description));
-    QString result = renderer->render("{% load kdev_filters %}void set{{ var.name|upper_first }}({{ var.type }} {{ var.name }});", QString());
-    QString expected = "void setNumber(int number);";
+    renderer->addVariable(QStringLiteral("var"), QVariant::fromValue(description));
+    QString result = renderer->render(QStringLiteral("{% load kdev_filters %}void set{{ var.name|upper_first }}({{ var.type }} {{ var.name }});"), QString());
+    QString expected = QStringLiteral("void setNumber(int number);");
     
     QCOMPARE(result, expected);
 }

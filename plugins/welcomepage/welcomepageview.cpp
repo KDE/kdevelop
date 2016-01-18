@@ -56,11 +56,11 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
     setResizeMode(QQuickWidget::SizeRootObjectToView);
 
     UiHelper* helper = new UiHelper(this);
-    rootContext()->setContextProperty("kdev", helper);
-    rootContext()->setContextProperty("ICore", KDevelop::ICore::self());
+    rootContext()->setContextProperty(QStringLiteral("kdev"), helper);
+    rootContext()->setContextProperty(QStringLiteral("ICore"), KDevelop::ICore::self());
     areaChanged(ICore::self()->uiController()->activeArea());
 
-    setSource(QUrl("qrc:/qml/main.qml"));
+    setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     if(!errors().isEmpty()) {
         qWarning() << "welcomepage errors:" << errors();
     }
@@ -70,7 +70,7 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
 
 void WelcomePageWidget::areaChanged(Sublime::Area* area)
 {
-    rootContext()->setContextProperty("area", area->objectName());
+    rootContext()->setContextProperty(QStringLiteral("area"), area->objectName());
 }
 
 WelcomePageView::WelcomePageView(Sublime::Document* doc, Sublime::View::WidgetOwnership ws)

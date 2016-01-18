@@ -49,7 +49,7 @@ ClassModel::ClassModel()
                NodesModelInterface::BaseAndDerivedClasses |
                NodesModelInterface::ClassInternals)
 {
-  m_topNode = new FolderNode("Top Node", this);
+  m_topNode = new FolderNode(QStringLiteral("Top Node"), this);
 
   if ( features().testFlag(NodesModelInterface::AllProjectsClasses) )
   {

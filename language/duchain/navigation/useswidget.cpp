@@ -114,7 +114,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
 
   m_label = new QLabel(this);
   m_icon = new QLabel(this);
-  m_icon->setPixmap(QIcon::fromTheme("code-function").pixmap(16));
+  m_icon->setPixmap(QIcon::fromTheme(QStringLiteral("code-function")).pixmap(16));
 
   connect(m_label, &QLabel::linkActivated, this, &OneUseWidget::jumpTo);
 
@@ -138,7 +138,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
         toolTipText += lineText + "<br>";
       }
     }
-    if ( toolTipText.endsWith("<br>") ) {
+    if ( toolTipText.endsWith(QLatin1String("<br>")) ) {
       toolTipText.remove(toolTipText.length() - 4, 4);
     }
     setToolTip(QStringLiteral("<html><body><pre>") + toolTipText + QStringLiteral("</pre></body></html>"));
@@ -222,10 +222,10 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
 
   if(m_useArrows) {
     m_previousButton = new QToolButton();
-    m_previousButton->setIcon(QIcon::fromTheme("go-previous"));
+    m_previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
 
     m_nextButton = new QToolButton();
-    m_nextButton->setIcon(QIcon::fromTheme("go-next"));
+    m_nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
 
     m_headerLayout->addWidget(m_previousButton);
     m_headerLayout->addWidget(m_nextButton);
@@ -344,12 +344,12 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
       else {
         headerText = ctx->scopeIdentifier(true).toString();
         if(ctx->type() == DUContext::Function || (ctx->owner() && ctx->owner()->isFunctionDeclaration()))
-          headerText += "(...)";
+          headerText += QLatin1String("(...)");
       }
 
       QSet<int> hadIndices;
 
-      foreach(const IndexedDeclaration &usedDeclaration, usedDeclarations) {
+      foreach(const IndexedDeclaration usedDeclaration, usedDeclarations) {
         int usedDeclarationIndex = ctx->topContext()->indexForUsedDeclaration(usedDeclaration.data(), false);
         if(hadIndices.contains(usedDeclarationIndex))
           continue;
@@ -371,7 +371,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
 }
 
 void ContextUsesWidget::linkWasActivated(QString link) {
-  if ( link == "navigateToFunction" ) {
+  if ( link == QLatin1String("navigateToFunction") ) {
     DUChainReadLocker lock(DUChain::lock());
     DUContext* context = m_context.context();
     if(context) {
@@ -419,7 +419,7 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList
     QLabel* label = new QLabel(this);
     m_icon = new QLabel(this);
     m_toggleButton = new QLabel(this);
-    m_icon->setPixmap(QIcon::fromTheme("code-class").pixmap(16));
+    m_icon->setPixmap(QIcon::fromTheme(QStringLiteral("code-class")).pixmap(16));
     labelLayout->addWidget(m_icon);
     labelLayout->addWidget(label);
     labelLayout->addWidget(m_toggleButton);
@@ -525,7 +525,7 @@ UsesWidget::UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<Use
     addHeaderItem(m_progressBar);
 
     if (!customCollector) {
-        m_collector = QSharedPointer<UsesWidgetCollector>(new UsesWidgetCollector(declaration));
+        m_collector = QSharedPointer<UsesWidgetCollector>(new UsesWidget::UsesWidgetCollector(declaration));
     } else {
         m_collector = customCollector;
     }
@@ -571,10 +571,10 @@ void UsesWidget::setAllExpanded(bool expanded)
 
 void UsesWidget::headerLinkActivated(QString linkName)
 {
-  if(linkName == "expandAll") {
+  if(linkName == QLatin1String("expandAll")) {
     setAllExpanded(true);
   }
-  else if(linkName == "collapseAll") {
+  else if(linkName == QLatin1String("collapseAll")) {
     setAllExpanded(false);
   }
 }
@@ -653,5 +653,3 @@ QSize KDevelop::UsesWidget::sizeHint() const {
     ret.setHeight(300);
   return ret;
 }
-
-

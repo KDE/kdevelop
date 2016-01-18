@@ -51,7 +51,7 @@ public:
     }
     QString id() const override
     {
-        return "org.kdevelop.KonsoleView";
+        return QStringLiteral("org.kdevelop.KonsoleView");
     }
 private:
     KDevKonsoleViewPlugin *mplugin;

@@ -83,7 +83,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     , m_proxy(new QSortFilterProxyModel(this))
 {
 
-    setObjectName("Problem Reporter Tree");
+    setObjectName(QStringLiteral("Problem Reporter Tree"));
     setWhatsThis(i18n("Problems"));
     setItemDelegate(new ProblemTreeViewItemDelegate(this));
     setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -103,7 +103,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
         fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         fullUpdateAction->setText(i18n("Force Full Update"));
         fullUpdateAction->setToolTip(i18nc("@info:tooltip", "Re-parse all watched documents"));
-        fullUpdateAction->setIcon(QIcon::fromTheme("view-refresh"));
+        fullUpdateAction->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         connect(fullUpdateAction, &QAction::triggered, model(), &ProblemModel::forceFullUpdate);
         addAction(fullUpdateAction);
     }
@@ -201,15 +201,15 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
         QActionGroup* severityActions = new QActionGroup(this);
         auto errorSeverityAction = new QAction(this);
         errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display only errors"));
-        errorSeverityAction->setIcon(QIcon::fromTheme("dialog-error"));
+        errorSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-error")));
 
         auto warningSeverityAction = new QAction(this);
         warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors and warnings"));
-        warningSeverityAction->setIcon(QIcon::fromTheme("dialog-warning"));
+        warningSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-warning")));
 
         auto hintSeverityAction = new QAction(this);
         hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
-        hintSeverityAction->setIcon(QIcon::fromTheme("dialog-information"));
+        hintSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
 
         QAction* severityActionArray[] = { errorSeverityAction, warningSeverityAction, hintSeverityAction };
         for (int i = 0; i < 3; ++i) {
@@ -368,7 +368,7 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
         if (!actions.isEmpty()) {
             QString title = solution->title();
             title = KDevelop::htmlToPlainText(title);
-            title.replace("&apos;", "\'");
+            title.replace(QLatin1String("&apos;"), QLatin1Char('\''));
 
             QPointer<QMenu> m = new QMenu(this);
             m->addSection(title);

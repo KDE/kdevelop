@@ -61,6 +61,16 @@ private:
 };
 
 class ContextBrowserPlugin;
+class BrowseManager;
+
+class Watcher : public EditorViewWatcher {
+    Q_OBJECT
+    public:
+        explicit Watcher(BrowseManager* manager);
+        void viewAdded(KTextEditor::View*) override;
+    private:
+        BrowseManager* m_manager;
+};
 
 /**
  * Integrates the context-browser with the editor views, by listening for navigation events, and implementing html-like source browsing
@@ -70,6 +80,11 @@ class BrowseManager : public QObject {
     Q_OBJECT
     public:
         explicit BrowseManager(ContextBrowserPlugin* controller);
+
+        void viewAdded(KTextEditor::View* view);
+
+        //Installs/uninstalls the event-filter
+        void applyEventFilter(QWidget* object, bool install);
     Q_SIGNALS:
         //Emitted when browsing was started using the magic-modifier
         void startDelayedBrowsing(KTextEditor::View* view);
@@ -80,20 +95,9 @@ class BrowseManager : public QObject {
     private slots:
         void eventuallyStartDelayedBrowsing();
     private:
-        void viewAdded(KTextEditor::View* view);
-        class Watcher : public EditorViewWatcher {
-            public:
-                explicit Watcher(BrowseManager* manager);
-                void viewAdded(KTextEditor::View*) override;
-            private:
-                BrowseManager* m_manager;
-        };
-
         void resetChangedCursor();
         void setHandCursor(QWidget* widget);
 
-        //Installs/uninstalls the event-filter
-        void applyEventFilter(QWidget* object, bool install);
         bool eventFilter(QObject * watched, QEvent * event) override ;
         ContextBrowserPlugin* m_plugin;
         bool m_browsing;

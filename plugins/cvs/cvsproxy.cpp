@@ -42,7 +42,7 @@ bool CvsProxy::isValidDirectory(QUrl dirPath) const
     const QFileInfo fsObject( dirPath.toLocalFile() );
     QDir dir = fsObject.isDir() ? fsObject.absoluteDir() : fsObject.dir();
 
-    return dir.exists("CVS");
+    return dir.exists(QStringLiteral("CVS"));
 }
 
 bool CvsProxy::isVersionControlled(QUrl filePath) const
@@ -50,13 +50,13 @@ bool CvsProxy::isVersionControlled(QUrl filePath) const
     const QFileInfo fsObject( filePath.toLocalFile() );
     QDir dir = fsObject.isDir() ? fsObject.absoluteDir() : fsObject.dir();
 
-    if( !dir.cd("CVS") )
+    if( !dir.cd(QStringLiteral("CVS")) )
         return false;
 
     if( fsObject.isDir() )
         return true;
 
-    QFile cvsEntries( dir.absoluteFilePath("Entries") );
+    QFile cvsEntries( dir.absoluteFilePath(QStringLiteral("Entries")) );
     cvsEntries.open( QIODevice::ReadOnly );
     QString cvsEntriesData = cvsEntries.readAll();
     cvsEntries.close();
@@ -141,16 +141,16 @@ QString CvsProxy::convertRevisionToPrevious(const KDevelop::VcsRevision& rev)
 
                 // First we need to find the base (aka branch-part) of the revision number which will not change
                 QString base(orig);
-                base.truncate(orig.lastIndexOf("."));
+                base.truncate(orig.lastIndexOf(QLatin1Char('.')));
 
                 // next we need to cut off the last part of the revision number
                 // this number is a count of revisions with a branch
                 // so if we want to diff to the previous we just need to lower it by one
-                int number = orig.mid(orig.lastIndexOf(".")+1).toInt();
+                int number = orig.midRef(orig.lastIndexOf(QLatin1Char('.'))+1).toInt();
                 if (number > 1) // of course this is only possible if our revision is not the first on the branch
                     number--;
 
-                str = QString("-r") + base + '.' + QString::number(number);
+                str = QStringLiteral("-r") + base + '.' + QString::number(number);
                 qCDebug(PLUGIN_CVS) << "Converted revision "<<orig<<" to previous revision "<<str;
             }
             break;
@@ -175,7 +175,7 @@ CvsJob* CvsProxy::log(const QUrl &url, const KDevelop::VcsRevision& rev)
 
         QString convRev = convertVcsRevisionToString(rev);
         if (!convRev.isEmpty()) {
-            convRev.replace("-D", "-d");
+            convRev.replace(QLatin1String("-D"), QLatin1String("-d"));
             *job << convRev;
         }
 
@@ -426,7 +426,7 @@ CvsJob * CvsProxy::checkout(const QUrl& targetDir,
     CvsJob* job = new CvsJob(vcsplugin);
     ///@todo when doing a checkout we don't have the targetdir yet,
     ///      for now it'll work to just run the command from the root
-    if ( prepareJob(job, "/", CvsProxy::CheckOut) ) {
+    if ( prepareJob(job, QStringLiteral("/"), CvsProxy::CheckOut) ) {
         *job << "cvs";
         *job << "-q"; // don't print directory changes
         *job << "-d" << server;

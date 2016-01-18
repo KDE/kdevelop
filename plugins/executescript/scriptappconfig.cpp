@@ -54,11 +54,11 @@ static const QString interpreterForUrl(const QUrl& url) {
     auto mimetype = QMimeDatabase().mimeTypeForUrl(url);
     static QHash<QString, QString> knownMimetypes;
     if ( knownMimetypes.isEmpty() ) {
-        knownMimetypes[QStringLiteral("text/x-python")] = "python";
-        knownMimetypes[QStringLiteral("application/x-php")] = "php";
-        knownMimetypes[QStringLiteral("application/x-ruby")] = "ruby";
-        knownMimetypes[QStringLiteral("application/x-shellscript")] = "bash";
-        knownMimetypes[QStringLiteral("application/x-perl")] = "perl -e";
+        knownMimetypes[QStringLiteral("text/x-python")] = QStringLiteral("python");
+        knownMimetypes[QStringLiteral("application/x-php")] = QStringLiteral("php");
+        knownMimetypes[QStringLiteral("application/x-ruby")] = QStringLiteral("ruby");
+        knownMimetypes[QStringLiteral("application/x-shellscript")] = QStringLiteral("bash");
+        knownMimetypes[QStringLiteral("application/x-perl")] = QStringLiteral("perl -e");
     }
     const QString& interp = knownMimetypes.value(mimetype.name());
     return interp;
@@ -79,7 +79,7 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
 
     auto doc = KDevelop::ICore::self()->documentController()->activeDocument();
     interpreter->lineEdit()->setText( cfg.readEntry( ExecuteScriptPlugin::interpreterEntry,
-                                                     doc ? interpreterForUrl(doc->url()) : "" ) );
+                                                     doc ? interpreterForUrl(doc->url()) : QString() ) );
     executablePath->setUrl( QUrl::fromLocalFile(cfg.readEntry( ExecuteScriptPlugin::executableEntry, QString() )) );
     remoteHostCheckbox->setChecked( cfg.readEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, false ) );
     remoteHost->setText( cfg.readEntry( ExecuteScriptPlugin::remoteHostEntry, "" ) );
@@ -149,7 +149,7 @@ QString ScriptAppLauncher::description() const
 
 QString ScriptAppLauncher::id()
 {
-    return "scriptAppLauncher";
+    return QStringLiteral("scriptAppLauncher");
 }
 
 QString ScriptAppLauncher::name() const
@@ -169,7 +169,7 @@ KJob* ScriptAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     {
         return 0;
     }
-    if( launchMode == "execute" )
+    if( launchMode == QLatin1String("execute") )
     {
         return new ScriptAppJob( m_plugin, cfg);
     }

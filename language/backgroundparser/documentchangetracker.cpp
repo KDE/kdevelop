@@ -70,7 +70,7 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
 
     // Check whether a language plugin is tracking the document which belongs to a
     // whitespace-sensitive language (e.g. python)
-    foreach (const auto& lang, ICore::self()->languageController()->languagesForUrl(document->url())) {
+    foreach (const auto lang, ICore::self()->languageController()->languagesForUrl(document->url())) {
         if (!lang) {
             continue;
         }
@@ -141,7 +141,7 @@ bool DocumentChangeTracker::checkMergeTokens(const KTextEditor::Range& range)
     ///@todo Improve this so that it really checks whether some merge-able tokens have been moved together
     if(m_document->documentRange().contains(range))
     {
-        if(range.start().column() == 0 || m_document->text(KTextEditor::Range(range.start().line(), range.start().column()-1, range.start().line(), range.start().column()))[0].isSpace())
+        if(range.start().column() == 0 || m_document->text(KTextEditor::Range(range.start().line(), range.start().column()-1, range.start().line(), range.start().column())).at(0).isSpace())
             return true;
         if(range.end().column() >= m_document->lineLength(range.end().line()) || m_document->text(KTextEditor::Range(range.end().line(), range.end().column(), range.end().line(), range.end().column()+1))[0].isSpace())
             return true;

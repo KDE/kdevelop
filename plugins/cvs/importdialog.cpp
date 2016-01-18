@@ -76,7 +76,7 @@ void ImportDialog::jobFinished(KJob * job)
             // line that tell us that a file has been added are OK
             continue;
             // this normaly should be the last line
-        } else if (line.contains("No conflicts created by this import")) {
+        } else if (line.contains(QStringLiteral("No conflicts created by this import"))) {
             continue;
         } else {
             // any other line must mean that an error occurred

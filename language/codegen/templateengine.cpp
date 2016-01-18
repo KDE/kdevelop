@@ -45,7 +45,7 @@ TemplateEngine::TemplateEngine()
 {
     d->engine.setSmartTrimEnabled(true);
 
-    addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevcodegen/templates", QStandardPaths::LocateDirectory));
+    addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevcodegen/templates"), QStandardPaths::LocateDirectory));
 
     Grantlee::registerMetaType<KDevelop::VariableDescription>();
     Grantlee::registerMetaType<KDevelop::FunctionDescription>();

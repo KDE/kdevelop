@@ -219,26 +219,26 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
 
     QString errorValue;
     //if trolls add Q_ENUMS for QProcess, then we can use better solution than switch:
-    //QMetaObject::indexOfEnumerator(char*), QLatin1String(QMetaEnum::valueToKey())...
+    //QMetaObject::indexOfEnumerator(char*), QQStringLiteral(QMetaEnum::valueToKey())...
     switch (err)
     {
     case QProcess::FailedToStart:
-        errorValue = "FailedToStart";
+        errorValue = QStringLiteral("FailedToStart");
         break;
     case QProcess::Crashed:
-        errorValue = "Crashed";
+        errorValue = QStringLiteral("Crashed");
         break;
     case QProcess::Timedout:
-        errorValue = "Timedout";
+        errorValue = QStringLiteral("Timedout");
         break;
     case QProcess::WriteError:
-        errorValue = "WriteError";
+        errorValue = QStringLiteral("WriteError");
         break;
     case QProcess::ReadError:
-        errorValue = "ReadError";
+        errorValue = QStringLiteral("ReadError");
         break;
     case QProcess::UnknownError:
-        errorValue = "UnknownError";
+        errorValue = QStringLiteral("UnknownError");
         break;
     }
     qCDebug(VCS) << "Found an error while running" << displayCommand << ":" << errorValue

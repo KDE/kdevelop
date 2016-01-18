@@ -186,6 +186,7 @@ int TreeItem::row() const
 
 class EllipsisItem : public TreeItem
 {
+    Q_OBJECT
 public:
     EllipsisItem(TreeModel *model, TreeItem *parent)
     : TreeItem(model, parent)
@@ -261,3 +262,4 @@ void KDevelop::TreeItem::setExpanded(bool b)
     }
 }
 
+#include "treeitem.moc"

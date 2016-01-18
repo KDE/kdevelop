@@ -69,7 +69,7 @@ const bool separateThreadForHighPriority = true;
 static QString elidedPathLeft(const QString& path, int width)
 {
     static const QChar separator = QDir::separator();
-    static const QString placeholder = "...";
+    static const QString placeholder = QStringLiteral("...");
 
     if (path.size() <= width) {
         return path;
@@ -244,7 +244,7 @@ public:
 
         // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
 
-        foreach (ThreadWeaver::JobPointer job, jobs)
+        foreach (const ThreadWeaver::JobPointer& job, jobs)
             m_weaver.enqueue(job);
 
         m_parser->updateProgressBar();
@@ -262,7 +262,7 @@ public:
         ///FIXME: use IndexedString in the other APIs as well! Esp. for createParseJob!
         QUrl qUrl = url.toUrl();
         auto languages = m_languageController->languagesForUrl(qUrl);
-        foreach (const auto& language, languages) {
+        foreach (const auto language, languages) {
             if(!language) {
                 qCWarning(LANGUAGE) << "got zero language for" << qUrl;
                 continue;

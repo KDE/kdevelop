@@ -133,7 +133,7 @@ QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
                 tooltip->resize(widget->sizeHint() + QSize(10, 10));
                 tooltip->setHandleRect(getItemBoundingRect(view, m_currentHintRange));
                 tooltip->connect(tooltip, &ActiveToolTip::destroyed, [&] () { m_currentHintRange = {}; });
-                ActiveToolTip::showToolTip(tooltip, 99, "problem-tooltip");
+                ActiveToolTip::showToolTip(tooltip, 99, QStringLiteral("problem-tooltip"));
                 return QString();
             }
         }
@@ -190,7 +190,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     KTextEditor::MovingInterface* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
     Q_ASSERT(iface);
 
-    foreach (const IProblem::Ptr problem, problems) {
+    foreach (const IProblem::Ptr& problem, problems) {
         if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
             continue;
 

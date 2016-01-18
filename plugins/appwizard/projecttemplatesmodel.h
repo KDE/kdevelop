@@ -18,6 +18,7 @@
 class AppWizardPlugin;
 
 class ProjectTemplatesModel: public KDevelop::TemplatesModel {
+    Q_OBJECT
 public:
     explicit ProjectTemplatesModel(AppWizardPlugin *parent);
 };

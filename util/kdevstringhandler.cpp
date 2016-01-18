@@ -95,7 +95,7 @@ namespace KDevelop
                         state = SeenEscape;
                     } else if( input[i] == splitchar ) {
                         result << currentstring;
-                        currentstring = "";
+                        currentstring.clear();
                     } else {
                         currentstring += input[i];
                     }
@@ -141,7 +141,7 @@ namespace KDevelop
             s << variant;
         }
         
-        QString result = QLatin1String("@Variant(");
+        QString result = QStringLiteral("@Variant(");
         result += QString::fromLatin1(a.constData(), a.size());
         result += QLatin1Char(')');
         return result;

@@ -32,6 +32,7 @@ class QualifiedIdentifier;
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public AbstractNavigationContext
 {
+  Q_OBJECT
   public:
     AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext = 0 );
 

@@ -122,19 +122,19 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
 
                 if (kind == svn_node_file) {
                     if (contentState == svn_wc_notify_state_conflicted)
-                        notifyString = "Conflict On File";
+                        notifyString = QStringLiteral("Conflict On File");
                     else if (contentState == svn_wc_notify_state_merged)
-                        notifyString = "File Merged";
+                        notifyString = QStringLiteral("File Merged");
                     else if (contentState == svn_wc_notify_state_changed)
-                        notifyString = "File Updated";
+                        notifyString = QStringLiteral("File Updated");
                 }
 
                 if (propState == svn_wc_notify_state_conflicted)
-                    notifyString += " Conflict On Property";
+                    notifyString += QLatin1String(" Conflict On Property");
                 else if (propState == svn_wc_notify_state_merged)
-                    notifyString += " Properties Merged";
+                    notifyString += QLatin1String(" Properties Merged");
                 else if (propState == svn_wc_notify_state_changed)
-                    notifyString += " Properties Updated";
+                    notifyString += QLatin1String(" Properties Updated");
                 else
                     notifyString += ' ';
 

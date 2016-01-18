@@ -25,10 +25,10 @@
 #include <grantlee/metatype.h>
 
 #define GRANTLEE_LOOKUP_PROPERTY(name)          \
-if (property == #name) return QVariant::fromValue(object.name);
+if (property == QStringLiteral(#name)) return QVariant::fromValue(object.name);
 
 #define GRANTLEE_LOOKUP_LIST_PROPERTY(name)     \
-if (property == #name) return QVariant::fromValue(KDevelop::CodeDescription::toVariantList(object.name));
+if (property == QStringLiteral(#name)) return QVariant::fromValue(KDevelop::CodeDescription::toVariantList(object.name));
 
 GRANTLEE_BEGIN_LOOKUP(KDevelop::VariableDescription)
     GRANTLEE_LOOKUP_PROPERTY(name)
@@ -49,7 +49,7 @@ GRANTLEE_BEGIN_LOOKUP(KDevelop::FunctionDescription)
     GRANTLEE_LOOKUP_PROPERTY(isConst)
     GRANTLEE_LOOKUP_PROPERTY(isSignal)
     GRANTLEE_LOOKUP_PROPERTY(isSlot)
-    if (property == "returnType")
+    if (property == QLatin1String("returnType"))
     {
         return object.returnType();
     }

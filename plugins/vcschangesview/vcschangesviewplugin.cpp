@@ -65,7 +65,7 @@ public:
 
     QString id() const override
     {
-        return "org.kdevelop.VCSProject";
+        return QStringLiteral("org.kdevelop.VCSProject");
     }
 
 private:

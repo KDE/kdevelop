@@ -107,7 +107,7 @@ public:
 
         m_filtered.clear();
 
-        QStringList typedFragments = text.split("::", QString::SkipEmptyParts);
+        QStringList typedFragments = text.split(QStringLiteral("::"), QString::SkipEmptyParts);
         if (typedFragments.isEmpty()) {
             clearFilter();
             return;

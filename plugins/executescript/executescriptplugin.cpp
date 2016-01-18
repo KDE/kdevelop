@@ -39,20 +39,20 @@
 #include <project/builderjob.h>
 #include <util/kdevstringhandler.h>
 
-QString ExecuteScriptPlugin::_scriptAppConfigTypeId = "Script Application";
-QString ExecuteScriptPlugin::interpreterEntry = "Interpreter";
-QString ExecuteScriptPlugin::workingDirEntry = "Working Directory";
-QString ExecuteScriptPlugin::executableEntry = "Executable";
-QString ExecuteScriptPlugin::executeOnRemoteHostEntry = "Execute on Remote Host";
-QString ExecuteScriptPlugin::runCurrentFileEntry = "Run current file";
-QString ExecuteScriptPlugin::remoteHostEntry = "Remote Host";
-QString ExecuteScriptPlugin::argumentsEntry = "Arguments";
-QString ExecuteScriptPlugin::isExecutableEntry = "isExecutable";
-QString ExecuteScriptPlugin::environmentGroupEntry = "EnvironmentGroup";
+QString ExecuteScriptPlugin::_scriptAppConfigTypeId = QStringLiteral("Script Application");
+QString ExecuteScriptPlugin::interpreterEntry = QStringLiteral("Interpreter");
+QString ExecuteScriptPlugin::workingDirEntry = QStringLiteral("Working Directory");
+QString ExecuteScriptPlugin::executableEntry = QStringLiteral("Executable");
+QString ExecuteScriptPlugin::executeOnRemoteHostEntry = QStringLiteral("Execute on Remote Host");
+QString ExecuteScriptPlugin::runCurrentFileEntry = QStringLiteral("Run current file");
+QString ExecuteScriptPlugin::remoteHostEntry = QStringLiteral("Remote Host");
+QString ExecuteScriptPlugin::argumentsEntry = QStringLiteral("Arguments");
+QString ExecuteScriptPlugin::isExecutableEntry = QStringLiteral("isExecutable");
+QString ExecuteScriptPlugin::environmentGroupEntry = QStringLiteral("EnvironmentGroup");
 //QString ExecuteScriptPlugin::useTerminalEntry = "Use External Terminal";
-QString ExecuteScriptPlugin::userIdToRunEntry = "User Id to Run";
-QString ExecuteScriptPlugin::projectTargetEntry = "Project Target";
-QString ExecuteScriptPlugin::outputFilteringEntry = "Output Filtering Mode";
+QString ExecuteScriptPlugin::userIdToRunEntry = QStringLiteral("User Id to Run");
+QString ExecuteScriptPlugin::projectTargetEntry = QStringLiteral("Project Target");
+QString ExecuteScriptPlugin::outputFilteringEntry = QStringLiteral("Output Filtering Mode");
 
 using namespace KDevelop;
 
@@ -167,7 +167,7 @@ QString ExecuteScriptPlugin::environmentGroup( KDevelop::ILaunchConfiguration* c
 {
     if( !cfg )
     {
-        return "";
+        return QString();
     }
 
     return cfg->config().readEntry( ExecuteScriptPlugin::environmentGroupEntry, "" );

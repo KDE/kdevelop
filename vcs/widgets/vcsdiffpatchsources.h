@@ -61,6 +61,7 @@ private:
 
 
 class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource {
+    Q_OBJECT
     public:
     /// The ownership of the updater is taken
     explicit VCSDiffPatchSource(VCSDiffUpdater* updater);

@@ -26,6 +26,7 @@
 
 class GrepOutputDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
 public:
     explicit GrepOutputDelegate(QObject* parent);
     virtual ~GrepOutputDelegate();

@@ -46,7 +46,7 @@ void CvsStatusJob::addInfoToList(QList<QVariant>& infos,
     if (cvsState == KDevelop::VcsStatusInfo::ItemDeleted) {
         // cvs status writes "no file" in front of the filename
         // in case the file was locally removed
-        correctedFilename.remove("no file ");
+        correctedFilename.remove(QStringLiteral("no file "));
     }
 
     // join the current directory (if any) and the found filename ...
@@ -109,7 +109,7 @@ void CvsStatusJob::parseOutput(const QString& jobOutput, QList<QVariant>& infos)
             reporev = re_reporev.cap(1);
         } else if ( re_dirchange.exactMatch(s) ) {
             currentDir = re_dirchange.cap(1);
-            if (currentDir == ".")
+            if (currentDir == QLatin1String("."))
                 currentDir.clear();
         }
     }
@@ -127,17 +127,17 @@ KDevelop::VcsStatusInfo::State CvsStatusJob::String2EnumState(const QString& sta
 {
     KDevelop::VcsStatusInfo::State state;
 
-    if (stateAsString == "Up-to-date")
+    if (stateAsString == QLatin1String("Up-to-date"))
         return KDevelop::VcsStatusInfo::ItemUpToDate;
-    else if (stateAsString == "Locally Modified")
+    else if (stateAsString == QLatin1String("Locally Modified"))
         return KDevelop::VcsStatusInfo::ItemModified;
-    else if (stateAsString == "Locally Added")
+    else if (stateAsString == QLatin1String("Locally Added"))
         return KDevelop::VcsStatusInfo::ItemAdded;
-    else if (stateAsString == "Locally Removed")
+    else if (stateAsString == QLatin1String("Locally Removed"))
         return KDevelop::VcsStatusInfo::ItemDeleted;
-    else if (stateAsString == "Unresolved Conflict")
+    else if (stateAsString == QLatin1String("Unresolved Conflict"))
         return KDevelop::VcsStatusInfo::ItemHasConflicts;
-    else if (stateAsString == "Needs Patch")
+    else if (stateAsString == QLatin1String("Needs Patch"))
         return KDevelop::VcsStatusInfo::ItemUpToDate;
     else
         return KDevelop::VcsStatusInfo::ItemUnknown;

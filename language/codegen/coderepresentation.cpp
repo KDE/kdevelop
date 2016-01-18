@@ -327,7 +327,7 @@ void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)
 QString CodeRepresentation::artificialPath(const QString& name)
 {
     QUrl url = QUrl::fromLocalFile(name);
-    return QString::fromLatin1("/kdev-artificial/") + url.adjusted(QUrl::NormalizePathSegments).path();
+    return QLatin1String("/kdev-artificial/") + url.adjusted(QUrl::NormalizePathSegments).path();
 }
 
 InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(const IndexedString& file,

@@ -25,6 +25,7 @@
 namespace KDevelop {
   class UsesWidget;
   class KDEVPLATFORMLANGUAGE_EXPORT UsesNavigationContext : public AbstractNavigationContext {
+    Q_OBJECT
     public:
       explicit UsesNavigationContext( KDevelop::IndexedDeclaration declaration, AbstractNavigationContext* previousContext = 0 );
       

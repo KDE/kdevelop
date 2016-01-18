@@ -64,7 +64,7 @@ public:
         return Qt::BottomDockWidgetArea;
     }
     QString id() const override {
-        return "org.kdevelop.CVSView";
+        return QStringLiteral("org.kdevelop.CVSView");
     }
 
 private:
@@ -85,7 +85,7 @@ public:
 };
 
 CvsPlugin::CvsPlugin(QObject *parent, const QVariantList &)
-        : KDevelop::IPlugin("kdevcvs", parent)
+        : KDevelop::IPlugin(QStringLiteral("kdevcvs"), parent)
         , d(new CvsPluginPrivate(this))
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
@@ -93,7 +93,7 @@ CvsPlugin::CvsPlugin(QObject *parent, const QVariantList &)
 
     core()->uiController()->addToolView(i18n("CVS"), d->m_factory);
 
-    setXMLFile("kdevcvs.rc");
+    setXMLFile(QStringLiteral("kdevcvs.rc"));
     setupActions();
 }
 
@@ -117,15 +117,15 @@ void CvsPlugin::setupActions()
 {
     QAction *action;
 
-    action = actionCollection()->addAction("cvs_import");
+    action = actionCollection()->addAction(QStringLiteral("cvs_import"));
     action->setText(i18n("Import Directory..."));
     connect(action, &QAction::triggered, this, &CvsPlugin::slotImport);
 
-    action = actionCollection()->addAction("cvs_checkout");
+    action = actionCollection()->addAction(QStringLiteral("cvs_checkout"));
     action->setText(i18n("Checkout..."));
     connect(action, &QAction::triggered, this, &CvsPlugin::slotCheckout);
 
-    action = actionCollection()->addAction("cvs_status");
+    action = actionCollection()->addAction(QStringLiteral("cvs_status"));
     action->setText(i18n("Status..."));
     connect(action, &QAction::triggered, this, &CvsPlugin::slotStatus);
 }
@@ -355,7 +355,7 @@ KDevelop::VcsJob * CvsPlugin::revert(const QList<QUrl> & localLocations, KDevelo
     CvsJob* job = d->m_proxy->update(findWorkingDir(localLocations[0]),
                                      localLocations,
                                      rev,
-                                     "-C",
+                                     QStringLiteral("-C"),
                                      (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false,
                                      false, false);
     return job;
@@ -366,7 +366,7 @@ KDevelop::VcsJob * CvsPlugin::update(const QList<QUrl> & localLocations, const K
     CvsJob* job = d->m_proxy->update(findWorkingDir(localLocations[0]),
                                      localLocations,
                                      rev,
-                                     "",
+                                     QString(),
                                      (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false,
                                      false, false);
     return job;
@@ -391,7 +391,7 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const QList<QUrl> 
 
 KDevelop::VcsJob * CvsPlugin::diff(const QUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode)
 {
-    CvsJob* job = d->m_proxy->diff(fileOrDirectory, srcRevision, dstRevision, "-uN"/*always unified*/);
+    CvsJob* job = d->m_proxy->diff(fileOrDirectory, srcRevision, dstRevision, QStringLiteral("-uN")/*always unified*/);
     return job;
 }
 
@@ -463,7 +463,7 @@ KDevelop::VcsJob * CvsPlugin::createWorkingCopy(const KDevelop::VcsLocation & so
     CvsJob* job = d->m_proxy->checkout(destinationDirectory,
                                        sourceRepository.repositoryServer(),
                                        sourceRepository.repositoryModule(),
-                                       "",
+                                       QString(),
                                        sourceRepository.repositoryBranch(),
                                        true, true);
     return job;

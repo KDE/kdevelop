@@ -43,6 +43,7 @@ typedef QMap<uint, QList<KDevelop::QuickOpenDataPointer> > AddedItems;
 
 class ProjectItemDataProvider : public KDevelop::QuickOpenDataProviderBase
 {
+  Q_OBJECT
 public:
   enum ItemTypes {
     NoItems = 0,

@@ -83,46 +83,46 @@ QString IntegralType::toString() const
 
   switch (d->m_dataType) {
     case TypeChar:
-      name = "char";
+      name = QStringLiteral("char");
       break;
     case TypeChar16_t:
-      name = "char16_t";
+      name = QStringLiteral("char16_t");
       break;
     case TypeChar32_t:
-      name = "char32_t";
+      name = QStringLiteral("char32_t");
       break;
     case TypeWchar_t:
-      name = "wchar_t";
+      name = QStringLiteral("wchar_t");
       break;
     case TypeBoolean:
-      name = "bool";
+      name = QStringLiteral("bool");
       break;
     case TypeInt:
-      name = "int";
+      name = QStringLiteral("int");
       break;
     case TypeFloat:
-      name = "float";
+      name = QStringLiteral("float");
       break;
     case TypeDouble:
-      name = "double";
+      name = QStringLiteral("double");
       break;
     case TypeVoid:
-      name = "void";
+      name = QStringLiteral("void");
       break;
     case TypeMixed:
-      name = "mixed";
+      name = QStringLiteral("mixed");
       break;
     case TypeString:
-      name = "string";
+      name = QStringLiteral("string");
       break;
     case TypeArray:
-      name = "array";
+      name = QStringLiteral("array");
       break;
     case TypeNull:
-      name = "null";
+      name = QStringLiteral("null");
       break;
     default:
-      name = "<unknown>";
+      name = QStringLiteral("<unknown>");
       break;
   }
 

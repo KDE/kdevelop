@@ -37,6 +37,6 @@ ParseJob* TestLanguageSupport::createParseJob(const IndexedString& url)
 
 QString TestLanguageSupport::name() const
 {
-    return "TestLanguageSupport";
+    return QStringLiteral("TestLanguageSupport");
 }
 

@@ -70,7 +70,7 @@ private:
     void walk(const int from, const int to);
     // Need to use QObject here as we only have a QObject* in
     // the removeMainWindow method and cannot cast it to the mainwindow anymore
-    QMap<QObject*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;
+    QMap<QObject*, QHash<Sublime::Area*, QList<Sublime::View*> > > documentLists;
     QListView* view;
     QStandardItemModel* model;
     QAction* forwardAction;

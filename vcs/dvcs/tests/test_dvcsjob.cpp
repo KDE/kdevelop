@@ -48,11 +48,11 @@ void TestDVcsJob::testJob()
     //try the command like "echo -n test"
     //should fail, because command and arg are in one string. We can change opearator<<(QString) to split,
     //but it will be a wrong style to work with jobs.
-    const QString echoCommand("echo -n test");
+    const QString echoCommand(QStringLiteral("echo -n test"));
     *job << echoCommand;
     QVERIFY(!job->exec());
     QVERIFY(job->status() == KDevelop::VcsJob::JobFailed);
-    QCOMPARE(job->dvcsCommand().join(";;"), echoCommand);
+    QCOMPARE(job->dvcsCommand().join(QStringLiteral(";;")), echoCommand);
 }
 
 

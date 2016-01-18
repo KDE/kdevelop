@@ -96,7 +96,7 @@ void TestDUChain::testStringSets() {
   const unsigned int choiceCount = 40;
   const unsigned int itemCount = 120;
 
-  BasicSetRepository rep("test repository");
+  BasicSetRepository rep(QStringLiteral("test repository"));
 
 //  qDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
 
@@ -145,12 +145,12 @@ void TestDUChain::testStringSets() {
     std::set<Index> tempSet = sets[a].stdSet();
 
     if(tempSet != realSets[a]) {
-      QString dbg = "created set: ";
+      QString dbg = QStringLiteral("created set: ");
       for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
         dbg += QStringLiteral("%1 ").arg(*it);
       qDebug() << dbg;
 
-      dbg = "repo.   set: ";
+      dbg = QStringLiteral("repo.   set: ");
       for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
         dbg += QStringLiteral("%1 ").arg(*it);
       qDebug() << dbg;
@@ -185,7 +185,7 @@ void TestDUChain::testStringSets() {
         {
           {
             qDebug() << "SET a:";
-            QString dbg = "";
+            QString dbg = QLatin1String("");
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -194,7 +194,7 @@ void TestDUChain::testStringSets() {
           }
           {
             qDebug() << "SET b:";
-            QString dbg = "";
+            QString dbg = QLatin1String("");
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -206,12 +206,12 @@ void TestDUChain::testStringSets() {
             std::set<Index> tempSet = _difference.stdSet();
 
             qDebug() << "SET difference:";
-            QString dbg = "real    set: ";
+            QString dbg = QStringLiteral("real    set: ");
             for(std::set<Index>::const_iterator it = _realDifference.begin(); it != _realDifference.end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
-            dbg = "repo.   set: ";
+            dbg = QStringLiteral("repo.   set: ");
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -242,7 +242,7 @@ void TestDUChain::testStringSets() {
         {
           {
             qDebug() << "SET a:";
-            QString dbg = "";
+            QString dbg;
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -251,7 +251,7 @@ void TestDUChain::testStringSets() {
           }
           {
             qDebug() << "SET b:";
-            QString dbg = "";
+            QString dbg;
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -263,12 +263,12 @@ void TestDUChain::testStringSets() {
             std::set<Index> tempSet = _union.stdSet();
 
             qDebug() << "SET union:";
-            QString dbg = "real    set: ";
+            QString dbg = QStringLiteral("real    set: ");
             for(std::set<Index>::const_iterator it = _realUnion.begin(); it != _realUnion.end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
-            dbg = "repo.   set: ";
+            dbg = QStringLiteral("repo.   set: ");
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -313,7 +313,7 @@ void TestDUChain::testStringSets() {
         {
           {
             qDebug() << "SET a:";
-            QString dbg = "";
+            QString dbg;
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -322,7 +322,7 @@ void TestDUChain::testStringSets() {
           }
           {
             qDebug() << "SET b:";
-            QString dbg = "";
+            QString dbg;
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -334,12 +334,12 @@ void TestDUChain::testStringSets() {
             std::set<Index> tempSet = _intersection.stdSet();
 
             qDebug() << "SET intersection:";
-            QString dbg = "real    set: ";
+            QString dbg = QStringLiteral("real    set: ");
             for(std::set<Index>::const_iterator it = _realIntersection.begin(); it != _realIntersection.end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
-            dbg = "repo.   set: ";
+            dbg = QStringLiteral("repo.   set: ");
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -576,7 +576,7 @@ void TestDUChain::testImportStructure()
         int removeCount = rand() % 3;
         QSet<TestContext*> removeImports;
         for(int i = 0; i < removeCount; ++i)
-          if(allContexts[a]->imports.count())
+          if(!allContexts[a]->imports.isEmpty())
             removeImports.insert(allContexts[a]->imports[rand() % allContexts[a]->imports.count()]);
         allContexts[a]->unImport(removeImports.toList());
 
@@ -715,10 +715,10 @@ void TestDUChain::testProblemSerialization()
   DUChain::self()->disablePersistentStorage(false);
 
   auto parent = ProblemPointer{new Problem};
-  parent->setDescription("parent");
+  parent->setDescription(QStringLiteral("parent"));
 
   auto child = ProblemPointer{new Problem};
-  child->setDescription("child");
+  child->setDescription(QStringLiteral("child"));
   parent->addDiagnostic(child);
 
   const IndexedString url("/my/test/file");
@@ -732,7 +732,7 @@ void TestDUChain::testProblemSerialization()
 
     top->addProblem(parent);
     QCOMPARE(top->problems().size(), 1);
-    auto p = top->problems().first();
+    auto p = top->problems().at(0);
     QCOMPARE(p->description(), QStringLiteral("parent"));
     QCOMPARE(p->diagnostics().size(), 1);
     auto c = p->diagnostics().first();
@@ -755,7 +755,7 @@ void TestDUChain::testProblemSerialization()
     QVERIFY(top);
     smartTop = top;
     QCOMPARE(top->problems().size(), 1);
-    parent_deserialized = top->problems().first();
+    parent_deserialized = top->problems().at(0);
     QCOMPARE(parent_deserialized->diagnostics().size(), 1);
     child_deserialized = parent_deserialized->diagnostics().first();
 
@@ -789,27 +789,27 @@ void TestDUChain::testProblemSerialization()
 
 void TestDUChain::testIdentifiers()
 {
-  QualifiedIdentifier aj("::Area::jump");
+  QualifiedIdentifier aj(QStringLiteral("::Area::jump"));
   QCOMPARE(aj.count(), 2);
   QCOMPARE(aj.explicitlyGlobal(), true);
-  QCOMPARE(aj.at(0), Identifier("Area"));
-  QCOMPARE(aj.at(1), Identifier("jump"));
+  QCOMPARE(aj.at(0), Identifier(QStringLiteral("Area")));
+  QCOMPARE(aj.at(1), Identifier(QStringLiteral("jump")));
 
-  QualifiedIdentifier aj2 = QualifiedIdentifier("Area::jump");
+  QualifiedIdentifier aj2 = QualifiedIdentifier(QStringLiteral("Area::jump"));
   QCOMPARE(aj2.count(), 2);
   QCOMPARE(aj2.explicitlyGlobal(), false);
-  QCOMPARE(aj2.at(0), Identifier("Area"));
-  QCOMPARE(aj2.at(1), Identifier("jump"));
+  QCOMPARE(aj2.at(0), Identifier(QStringLiteral("Area")));
+  QCOMPARE(aj2.at(1), Identifier(QStringLiteral("jump")));
   QVERIFY(aj != aj2);
 
-  QVERIFY(QualifiedIdentifier("") == QualifiedIdentifier());
-  QVERIFY(QualifiedIdentifier("").index() == QualifiedIdentifier().index());
+  QVERIFY(QualifiedIdentifier(QLatin1String("")) == QualifiedIdentifier());
+  QVERIFY(QualifiedIdentifier(QLatin1String("")).index() == QualifiedIdentifier().index());
 
-  QualifiedIdentifier ajt("Area::jump::test");
-  QualifiedIdentifier jt("jump::test");
-  QualifiedIdentifier ajt2("Area::jump::tes");
+  QualifiedIdentifier ajt(QStringLiteral("Area::jump::test"));
+  QualifiedIdentifier jt(QStringLiteral("jump::test"));
+  QualifiedIdentifier ajt2(QStringLiteral("Area::jump::tes"));
 
-  QualifiedIdentifier t(" Area<A,B>::jump <F> ::tes<C>");
+  QualifiedIdentifier t(QStringLiteral(" Area<A,B>::jump <F> ::tes<C>"));
   QCOMPARE(t.count(), 3);
   QCOMPARE(t.at(0).templateIdentifiersCount(), 2u);
   QCOMPARE(t.at(1).templateIdentifiersCount(), 1u);
@@ -818,12 +818,12 @@ void TestDUChain::testIdentifiers()
   QCOMPARE(t.at(1).identifier().str(), QStringLiteral("jump"));
   QCOMPARE(t.at(2).identifier().str(), QStringLiteral("tes"));
 
-  QualifiedIdentifier op1("operator<");
-  QualifiedIdentifier op2("operator<=");
-  QualifiedIdentifier op3("operator>");
-  QualifiedIdentifier op4("operator>=");
-  QualifiedIdentifier op5("operator()");
-  QualifiedIdentifier op6("operator( )");
+  QualifiedIdentifier op1(QStringLiteral("operator<"));
+  QualifiedIdentifier op2(QStringLiteral("operator<="));
+  QualifiedIdentifier op3(QStringLiteral("operator>"));
+  QualifiedIdentifier op4(QStringLiteral("operator>="));
+  QualifiedIdentifier op5(QStringLiteral("operator()"));
+  QualifiedIdentifier op6(QStringLiteral("operator( )"));
   QCOMPARE(op1.count(), 1);
   QCOMPARE(op2.count(), 1);
   QCOMPARE(op3.count(), 1);
@@ -836,22 +836,22 @@ void TestDUChain::testIdentifiers()
   QCOMPARE(op2.toString(), QStringLiteral("operator<="));
   QCOMPARE(op5.toString(), QStringLiteral("operator()"));
   QCOMPARE(op6.toString(), QStringLiteral("operator( )"));
-  QCOMPARE(QualifiedIdentifier("Area<A,B>::jump <F> ::tes<C>").index(), t.index());
-  QCOMPARE(op4.index(), QualifiedIdentifier("operator>=").index());
+  QCOMPARE(QualifiedIdentifier(QStringLiteral("Area<A,B>::jump <F> ::tes<C>")).index(), t.index());
+  QCOMPARE(op4.index(), QualifiedIdentifier(QStringLiteral("operator>=")).index());
 
-  QualifiedIdentifier pushTest("foo");
+  QualifiedIdentifier pushTest(QStringLiteral("foo"));
   QCOMPARE(pushTest.count(), 1);
   QCOMPARE(pushTest.toString(), QStringLiteral("foo"));
-  pushTest.push(Identifier("bar"));
+  pushTest.push(Identifier(QStringLiteral("bar")));
   QCOMPARE(pushTest.count(), 2);
   QCOMPARE(pushTest.toString(), QStringLiteral("foo::bar"));
-  pushTest.push(QualifiedIdentifier("baz::asdf"));
+  pushTest.push(QualifiedIdentifier(QStringLiteral("baz::asdf")));
   QCOMPARE(pushTest.count(), 4);
   QCOMPARE(pushTest.toString(), QStringLiteral("foo::bar::baz::asdf"));
-  QualifiedIdentifier mergeTest = pushTest.merge(QualifiedIdentifier("meh::muh"));
+  QualifiedIdentifier mergeTest = pushTest.merge(QualifiedIdentifier(QStringLiteral("meh::muh")));
   QCOMPARE(mergeTest.count(), 6);
   QCOMPARE(mergeTest.toString(), QStringLiteral("meh::muh::foo::bar::baz::asdf"));
-  QualifiedIdentifier plusTest = QualifiedIdentifier("la::lu") + QualifiedIdentifier("ba::bu");
+  QualifiedIdentifier plusTest = QualifiedIdentifier(QStringLiteral("la::lu")) + QualifiedIdentifier(QStringLiteral("ba::bu"));
   QCOMPARE(plusTest.count(), 4);
   QCOMPARE(plusTest.toString(), QStringLiteral("la::lu::ba::bu"));
   ///@todo create a big randomized test for the identifier repository(check that indices are the same)

@@ -23,14 +23,14 @@
 
 #define VERIFY_NOT_NULL(ptr)\
 if (!ptr) \
-    return JsonTestHelpers::INVALID_POINTER
+    return JsonTestHelpers::INVALID_POINTER()
 
 #define VERIFY_TYPE(qvariantType)\
 if (!value.canConvert<qvariantType>())\
-    return JsonTestHelpers::INVALID_JSON_TYPE.arg(#qvariantType, QVariant::typeToName(value.type()))
+    return JsonTestHelpers::INVALID_JSON_TYPE().arg(QStringLiteral(#qvariantType), QVariant::typeToName(value.type()))
 
 #define __AddTest(testName, objType)\
-bool testName##Added = KDevelop::TestSuite<objType>::get().addTest(#testName, &testName)
+bool testName##Added = KDevelop::TestSuite<objType>::get().addTest(QStringLiteral(#testName), &testName)
 
 #define __DefineTest(testName, objType, objName)\
 QString testName(const QVariant&, objType);\
@@ -47,25 +47,25 @@ namespace KDevelop
 namespace JsonTestHelpers
 {
 
-const QString SUCCESS = QString();
-const QString INVALID_JSON_TYPE = QStringLiteral("Incorrect JSON type provided for test. Actual: %1, Expected: %2");
-const QString INVALID_POINTER = QStringLiteral("Null pointer passed to test.");
+inline QString SUCCESS() { return QString(); }
+inline QString INVALID_JSON_TYPE() { return QStringLiteral("Incorrect JSON type provided for test. Actual: %1, Expected: %2"); }
+inline QString INVALID_POINTER() { return QStringLiteral("Null pointer passed to test."); }
 
 template <class Type>
 inline QString compareValues(Type realValue, const QVariant &value, const QString &errorDesc)
 {
   VERIFY_TYPE(Type);
-  const QString ERROR_MESSAGE = "%1 (\"%2\") doesn't match test data (\"%3\").";
+  const QString ERROR_MESSAGE = QStringLiteral("%1 (\"%2\") doesn't match test data (\"%3\").");
   return realValue == value.value<Type>() ?
-      SUCCESS : ERROR_MESSAGE.arg(errorDesc).arg(realValue).arg(value.value<Type>());
+      SUCCESS() : ERROR_MESSAGE.arg(errorDesc).arg(realValue).arg(value.value<Type>());
 }
 
 template <class Object>
 inline QString testObject(Object obj, const QVariant &value, const QString &errorDesc)
 {
   VERIFY_TYPE(QVariantMap);
-  const QString ERROR_MESSAGE = "%1 did not pass tests.";
-  return KDevelop::TestSuite<Object>::get().runTests(value.toMap(), obj) ? SUCCESS : ERROR_MESSAGE.arg(errorDesc);
+  const QString ERROR_MESSAGE = QStringLiteral("%1 did not pass tests.");
+  return KDevelop::TestSuite<Object>::get().runTests(value.toMap(), obj) ? SUCCESS() : ERROR_MESSAGE.arg(errorDesc);
 }
 
 inline QString rangeStr(const KDevelop::RangeInRevision &range)

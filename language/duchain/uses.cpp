@@ -106,7 +106,7 @@ class UsesPrivate
 {
 public:
 
-  UsesPrivate() : m_uses("Use Map") {
+  UsesPrivate() : m_uses(QStringLiteral("Use Map")) {
   }
   //Maps declaration-ids to Uses
   ItemRepository<UsesItem, UsesRequestItem> m_uses;

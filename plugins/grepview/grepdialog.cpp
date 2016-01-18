@@ -48,58 +48,63 @@ using namespace KDevelop;
 
 namespace {
 
-QString allOpenFilesString = i18n("All Open Files");
-QString allOpenProjectsString = i18n("All Open Projects");
+inline QString allOpenFilesString() { return i18n("All Open Files"); }
+inline QString allOpenProjectsString() { return i18n("All Open Projects"); }
 
-const QStringList template_desc = QStringList()
-    << "verbatim"
-    << "word"
-    << "assignment"
-    << "->MEMBER("
-    << "class::MEMBER("
-    << "OBJECT->member(";
+inline QStringList template_desc() { return QStringList()
+    << QStringLiteral("verbatim")
+    << QStringLiteral("word")
+    << QStringLiteral("assignment")
+    << QStringLiteral("->MEMBER(")
+    << QStringLiteral("class::MEMBER(")
+    << QStringLiteral("OBJECT->member(");
+}
 
-const QStringList template_str = QStringList()
-    << "%s"
-    << "\\b%s\\b"
-    << "\\b%s\\b\\s*=[^=]"
-    << "\\->\\s*\\b%s\\b\\s*\\("
-    << "([a-z0-9_$]+)\\s*::\\s*\\b%s\\b\\s*\\("
-    << "\\b%s\\b\\s*\\->\\s*([a-z0-9_$]+)\\s*\\(";
+inline QStringList template_str() { return QStringList()
+    << QStringLiteral("%s")
+    << QStringLiteral("\\b%s\\b")
+    << QStringLiteral("\\b%s\\b\\s*=[^=]")
+    << QStringLiteral("\\->\\s*\\b%s\\b\\s*\\(")
+    << QStringLiteral("([a-z0-9_$]+)\\s*::\\s*\\b%s\\b\\s*\\(")
+    << QStringLiteral("\\b%s\\b\\s*\\->\\s*([a-z0-9_$]+)\\s*\\("); 
+}
 
-const QStringList repl_template = QStringList()
-    << "%s"
-    << "%s"
-    << "%s = "
-    << "->%s("
-    << "\\1::%s("
-    << "%s->\\1(";
+inline QStringList repl_template() { return QStringList()
+    << QStringLiteral("%s")
+    << QStringLiteral("%s")
+    << QStringLiteral("%s = ")
+    << QStringLiteral("->%s(")
+    << QStringLiteral("\\1::%s(")
+    << QStringLiteral("%s->\\1(");
+}
 
-const QStringList filepatterns = QStringList()
-    << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M,*.y,*.ypp,*.yxx,*.y++,*.l"
-    << "*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M"
-    << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl"
-    << "*.adb"
-    << "*.cs"
-    << "*.f"
-    << "*.html,*.htm"
-    << "*.hs"
-    << "*.java"
-    << "*.js"
-    << "*.php,*.php3,*.php4"
-    << "*.pl"
-    << "*.pp,*.pas"
-    << "*.py"
-    << "*.js,*.css,*.yml,*.rb,*.rhtml,*.html.erb,*.rjs,*.js.rjs,*.rxml,*.xml.builder"
-    << "CMakeLists.txt,*.cmake"
-    << "*";
+inline QStringList filepatterns() { return QStringList()
+    << QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M,*.y,*.ypp,*.yxx,*.y++,*.l")
+    << QStringLiteral("*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M")
+    << QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl")
+    << QStringLiteral("*.adb")
+    << QStringLiteral("*.cs")
+    << QStringLiteral("*.f")
+    << QStringLiteral("*.html,*.htm")
+    << QStringLiteral("*.hs")
+    << QStringLiteral("*.java")
+    << QStringLiteral("*.js")
+    << QStringLiteral("*.php,*.php3,*.php4")
+    << QStringLiteral("*.pl")
+    << QStringLiteral("*.pp,*.pas")
+    << QStringLiteral("*.py")
+    << QStringLiteral("*.js,*.css,*.yml,*.rb,*.rhtml,*.html.erb,*.rjs,*.js.rjs,*.rxml,*.xml.builder")
+    << QStringLiteral("CMakeLists.txt,*.cmake")
+    << QStringLiteral("*");
+}
 
-const QStringList excludepatterns = QStringList()
-    << "/CVS/,/SCCS/,/.svn/,/_darcs/,/build/,/.git/"
-    << "";
+inline QStringList excludepatterns() { return QStringList()
+    << QStringLiteral("/CVS/,/SCCS/,/.svn/,/_darcs/,/build/,/.git/")
+    << QLatin1String("");
+}
 
 ///Separator used to separate search paths.
-const QString pathsSeparator(";");
+inline QString pathsSeparator() { return (QStringLiteral(";")); }
 
 ///Max number of items in paths combo box.
 const int pathsMaxCount = 25;
@@ -116,7 +121,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     auto searchButton = buttonBox->button(QDialogButtonBox::Ok);
     Q_ASSERT(searchButton);
     searchButton->setText(tr("Search..."));
-    searchButton->setIcon(QIcon::fromTheme("edit-find"));
+    searchButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-find")));
     connect(searchButton, &QPushButton::clicked, this, &GrepDialog::startSearch);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &GrepDialog::reject);
 
@@ -125,16 +130,16 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
     patternCombo->setInsertPolicy(QComboBox::InsertAtTop);
 
-    templateTypeCombo->addItems(template_desc);
+    templateTypeCombo->addItems(template_desc());
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
-    templateEdit->addItems( cg.readEntry("LastUsedTemplateString", template_str) );
+    templateEdit->addItems( cg.readEntry("LastUsedTemplateString", template_str()) );
     templateEdit->setEditable(true);
     templateEdit->setCompletionMode(KCompletion::CompletionPopup);
     KCompletion* comp = templateEdit->completionObject();
     connect(templateEdit, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::returnPressed), comp, static_cast<void(KCompletion::*)(const QString&)>(&KCompletion::addItem));
     for(int i=0; i<templateEdit->count(); i++)
         comp->addItem(templateEdit->itemText(i));
-    replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template) );
+    replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template()) );
     replacementTemplateEdit->setEditable(true);
     replacementTemplateEdit->setCompletionMode(KCompletion::CompletionPopup);
     comp = replacementTemplateEdit->completionObject();
@@ -151,17 +156,17 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     QList<IProject*> projects = m_plugin->core()->projectController()->projects();
 
-    searchPaths->addItems(cg.readEntry("SearchPaths", QStringList(!projects.isEmpty() ? allOpenProjectsString : QDir::homePath() ) ));
+    searchPaths->addItems(cg.readEntry("SearchPaths", QStringList(!projects.isEmpty() ? allOpenProjectsString() : QDir::homePath() ) ));
     searchPaths->setInsertPolicy(QComboBox::InsertAtTop);
 
-    syncButton->setIcon(QIcon::fromTheme("dirsync"));
+    syncButton->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
     syncButton->setMenu(createSyncButtonMenu());
 
     depthSpin->setValue(cg.readEntry("depth", -1));
     limitToProjectCheck->setChecked(cg.readEntry("search_project_files", true));
 
-    filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
-    excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns) );
+    filesCombo->addItems(cg.readEntry("file_patterns", filepatterns()));
+    excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns()) );
 
     connect(templateTypeCombo, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated),
             this, &GrepDialog::templateTypeComboActivated);
@@ -172,7 +177,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     connect(searchPaths, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::activated), this, &GrepDialog::setSearchLocations);
 
-    directorySelector->setIcon(QIcon::fromTheme("document-open"));
+    directorySelector->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     connect(directorySelector, &QPushButton::clicked, this, &GrepDialog::selectDirectoryDialog );
     directoryChanged(directorySelector->text());
 }
@@ -204,7 +209,7 @@ void GrepDialog::synchronizeDirActionTriggered(bool)
 {
     QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
-    setSearchLocations(action->data().value<QString>());
+    setSearchLocations(action->data().toString());
 }
 
 QMenu* GrepDialog::createSyncButtonMenu()
@@ -241,8 +246,8 @@ QMenu* GrepDialog::createSyncButtonMenu()
         }
     }
 
-    addStringToMenu(ret, allOpenFilesString);
-    addStringToMenu(ret, allOpenProjectsString);
+    addStringToMenu(ret, allOpenFilesString());
+    addStringToMenu(ret, allOpenProjectsString());
     return ret;
 }
 
@@ -286,8 +291,8 @@ GrepDialog::~GrepDialog()
 
 void GrepDialog::templateTypeComboActivated(int index)
 {
-    templateEdit->setCurrentItem( template_str[index], true );
-    replacementTemplateEdit->setCurrentItem( repl_template[index], true );
+    templateEdit->setCurrentItem( template_str().at(index), true );
+    replacementTemplateEdit->setCurrentItem( repl_template().at(index), true );
 }
 
 void GrepDialog::setEnableProjectBox(bool enable)
@@ -331,7 +336,7 @@ QString GrepDialog::patternString() const
 
 QString GrepDialog::templateString() const
 {
-    return templateEdit->currentText().isEmpty() ? "%s" : templateEdit->currentText();
+    return templateEdit->currentText().isEmpty() ? QStringLiteral("%s") : templateEdit->currentText();
 }
 
 QString GrepDialog::replacementTemplateString() const
@@ -379,16 +384,16 @@ QList< QUrl > GrepDialog::getDirectoryChoice() const
 {
     QList< QUrl > ret;
     QString text = searchPaths->currentText();
-    if(text == allOpenFilesString)
+    if(text == allOpenFilesString())
     {
         foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
             ret << doc->url();
-    }else if(text == allOpenProjectsString)
+    }else if(text == allOpenProjectsString())
     {
         foreach(IProject* project, ICore::self()->projectController()->projects())
             ret << project->path().toUrl();
     }else{
-        QStringList semicolonSeparatedFileList = text.split(pathsSeparator);
+        QStringList semicolonSeparatedFileList = text.split(pathsSeparator());
         if(!semicolonSeparatedFileList.isEmpty() && QFileInfo(semicolonSeparatedFileList[0]).exists())
         {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
@@ -440,7 +445,7 @@ void GrepDialog::startSearch()
     const QString descriptionOrUrl(searchPaths->currentText());
     QString description = descriptionOrUrl;
     // Shorten the description
-    if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString) {
+    if(descriptionOrUrl != allOpenFilesString() && descriptionOrUrl != allOpenProjectsString()) {
         auto prettyFileName = [](const QUrl& url) {
             return ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
         };

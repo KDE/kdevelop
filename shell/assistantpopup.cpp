@@ -65,7 +65,7 @@ Qt::Key_Alt;
 QWidget* findByClassname(const KTextEditor::View* view, const QString& klass)
 {
     auto children = view->findChildren<QWidget*>();
-    for ( auto child: children ) {
+    foreach ( auto child, children ) {
         if ( child->metaObject()->className() == klass ) {
             return child;
         }
@@ -80,12 +80,12 @@ QRect textWidgetGeometry(const KTextEditor::View *view)
 {
     // Subtract the width of the right scrollbar
     int scrollbarWidth = 0;
-    if ( auto scrollbar = findByClassname(view, "KateScrollBar") ) {
+    if ( auto scrollbar = findByClassname(view, QStringLiteral("KateScrollBar")) ) {
         scrollbarWidth = scrollbar->width();
     }
     // Subtract the width of the bottom scrollbar
     int bottomScrollbarWidth = 0;
-    if ( auto bottom = findByClassname(view, "QScrollBar") ) {
+    if ( auto bottom = findByClassname(view, QStringLiteral("QScrollBar")) ) {
         bottomScrollbarWidth = bottom->height();
     }
     auto geom = view->geometry();
@@ -106,9 +106,9 @@ void AssistantPopupConfig::setColorsFromView(QObject *view)
 {
     auto iface = dynamic_cast<KTextEditor::ConfigInterface*>(view);
     Q_ASSERT(iface);
-    m_foreground = iface->configValue("line-number-color").value<QColor>();
-    m_background = iface->configValue("icon-border-color").value<QColor>();
-    m_highlight = iface->configValue("folding-marker-color").value<QColor>();
+    m_foreground = iface->configValue(QStringLiteral("line-number-color")).value<QColor>();
+    m_background = iface->configValue(QStringLiteral("icon-border-color")).value<QColor>();
+    m_highlight = iface->configValue(QStringLiteral("folding-marker-color")).value<QColor>();
     if ( KColorUtils::luma(m_background) < 0.3 ) {
         m_foreground = KColorUtils::lighten(m_foreground, 0.7);
     }
@@ -174,9 +174,9 @@ AssistantPopup::AssistantPopup()
 {
     setAttribute(Qt::WA_ShowWithoutActivating);
 
-    rootContext()->setContextProperty("config", m_config);
+    rootContext()->setContextProperty(QStringLiteral("config"), m_config);
 
-    setSource(QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevelop/assistantpopup.qml")));
+    setSource(QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/assistantpopup.qml"))));
     if (!rootObject()) {
         qWarning() << "Failed to load assistant markup! The assistant will not work.";
     } else {
@@ -243,7 +243,7 @@ void AssistantPopup::setAssistant(const IAssistant::Ptr& assistant)
 void AssistantPopup::setActive(bool active)
 {
     m_config->setActive(active);
-    for (auto shortcut : m_shortcuts) {
+    foreach (auto shortcut, m_shortcuts) {
         shortcut->setEnabled(active);
     }
 }

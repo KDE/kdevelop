@@ -126,7 +126,7 @@ void BreakpointDetails::setItem(Breakpoint *b)
         }
 
         if (b->hitCount() == -1)
-            m_hits->setText("");
+            m_hits->clear();
         else if (b->hitCount())
             m_hits->setText(i18np("Hit %1 time", "Hit %1 times", b->hitCount()));
         else
@@ -140,7 +140,7 @@ void BreakpointDetails::setItem(Breakpoint *b)
 void BreakpointDetails::showExplanation(const QString& link)
 {
     QPoint pos = m_status->mapToGlobal(m_status->geometry().topLeft());
-    if (link == "pending")
+    if (link == QLatin1String("pending"))
     {
         QWhatsThis::showText(pos,
                                 i18n("<b>Breakpoint is pending</b>"
@@ -153,7 +153,7 @@ void BreakpointDetails::showExplanation(const QString& link)
                                 "breakpoint only when the library is loaded.</p>"),
                                 m_status);
     }
-    else if (link == "dirty")
+    else if (link == QLatin1String("dirty"))
     {
         QWhatsThis::showText(pos,
                                 i18n("<b>Breakpoint is dirty</b>"

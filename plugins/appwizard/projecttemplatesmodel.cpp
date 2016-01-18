@@ -11,7 +11,7 @@
 #include "appwizardplugin.h"
 
 ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
-: KDevelop::TemplatesModel("kdevappwizard", parent)
+: KDevelop::TemplatesModel(QStringLiteral("kdevappwizard"), parent)
 {
     refresh();
 }

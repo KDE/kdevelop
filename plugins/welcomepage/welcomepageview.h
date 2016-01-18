@@ -31,6 +31,7 @@ namespace KDevelop { class IProject; }
 
 class WelcomePageView : public Sublime::View
 {
+    Q_OBJECT
     public:
         explicit WelcomePageView(Sublime::Document* doc, WidgetOwnership ws = DoNotTakeOwnerShip);
 

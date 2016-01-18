@@ -45,10 +45,10 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     , m_proxy(new KRecursiveFilterProxyModel(this))
     , m_filter(new QLineEdit(this))
 {
-    setObjectName("Outline View");
+    setObjectName(QStringLiteral("Outline View"));
     setWindowTitle(i18n("Outline"));
     setWhatsThis(i18n("Outline View"));
-    setWindowIcon(QIcon::fromTheme("code-class", windowIcon())); //TODO: better icon?
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("code-class"), windowIcon())); //TODO: better icon?
 
     m_proxy->setSourceModel(m_model);
     m_proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -65,7 +65,7 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     QHBoxLayout* filterLayout = new QHBoxLayout();
 
     m_filter->setPlaceholderText(i18n("Filter..."));
-    m_sortAlphabetically = new QPushButton(QIcon::fromTheme("view-sort-ascending"), QString(), this);
+    m_sortAlphabetically = new QPushButton(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), QString(), this);
     m_sortAlphabetically->setToolTip(i18n("Sort alphabetically"));
     m_sortAlphabetically->setCheckable(true);
     connect(m_sortAlphabetically, &QPushButton::toggled, this, [this](bool sort) {

@@ -88,7 +88,7 @@ void PointerType::setBaseType(AbstractType::Ptr type)
 
 QString PointerType::toString() const
 {
-  QString baseString = (baseType() ? baseType()->toString() : "<notype>");
+  QString baseString = (baseType() ? baseType()->toString() : QStringLiteral("<notype>"));
   return QStringLiteral("%1*").arg(baseString) + AbstractType::toString(true);
 }
 

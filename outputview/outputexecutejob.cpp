@@ -272,7 +272,7 @@ void OutputExecuteJob::start()
     if (!d->effectiveCommandLine().isEmpty()) {
         d->m_process->setProgram( d->effectiveCommandLine() );
 
-        qCDebug(OUTPUTVIEW) << "Starting:" << d->m_process->program().join(" ") << "in" << d->m_process->workingDirectory();
+        qCDebug(OUTPUTVIEW) << "Starting:" << d->m_process->program().join(QStringLiteral(" ")) << "in" << d->m_process->workingDirectory();
         d->m_process->start();
     } else {
         QString errorMessage = i18n("Failed to specify program to start");
