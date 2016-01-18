@@ -392,11 +392,10 @@ void OutputExecuteJobPrivate::childProcessStderr()
 
 void OutputExecuteJobPrivate::emitProgress(const IFilterStrategy::Progress& progress)
 {
-    m_owner->emitPercent(progress.percent, 100);
-
-    if (progress.percent == 100) {
-        m_owner->infoMessage(m_owner, i18n("Build finished"));
-    } else {
+    if (progress.percent != -1) {
+        m_owner->emitPercent(progress.percent, 100);
+    }
+    if (!progress.status.isEmpty()) {
         m_owner->infoMessage(m_owner, progress.status);
     }
 }
