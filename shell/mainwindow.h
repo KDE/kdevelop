@@ -98,6 +98,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     void updateCaption();
+    void updateActiveDocumentConnection(IDocument* document);
 
     void updateTabColor(IDocument* doc);
     void updateAllTabColors();

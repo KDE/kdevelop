@@ -327,6 +327,7 @@ void MainWindow::initialize()
 
     //Queued so we process it with some delay, to make sure the rest of the UI has already adapted
     connect(Core::self()->documentController(), &IDocumentController::documentActivated, this, &MainWindow::updateCaption, Qt::QueuedConnection);
+    connect(Core::self()->documentController(), &IDocumentController::documentActivated, this, &MainWindow::updateActiveDocumentConnection, Qt::QueuedConnection);
     connect(Core::self()->documentController(), &IDocumentController::documentClosed, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->sessionController()->activeSession(), &ISession::sessionUpdated, this, &MainWindow::updateCaption);
@@ -357,6 +358,12 @@ bool MainWindow::queryClose()
     return Sublime::MainWindow::queryClose();
 }
 
+void MainWindow::updateActiveDocumentConnection(IDocument* document)
+{
+    disconnect(d->activeDocumentReadWriteConnection);
+    d->activeDocumentReadWriteConnection = connect(document->textDocument(), &KTextEditor::Document::readWriteChanged, this, &MainWindow::updateCaption);
+}
+
 void MainWindow::updateCaption()
 {
     const auto activeSession = Core::self()->sessionController()->activeSession();
@@ -373,6 +380,10 @@ void MainWindow::updateCaption()
             title += Core::self()->projectController()->prettyFileName(urlDoc->url(), KDevelop::IProjectController::FormatPlain);
         else
             title += doc->title();
+
+        auto activeDocument = Core::self()->documentController()->activeDocument();
+        if (activeDocument && activeDocument->textDocument() && !activeDocument->textDocument()->isReadWrite())
+            title += i18n(" (read only)");
 
         title += QLatin1String(" ]");
     }
