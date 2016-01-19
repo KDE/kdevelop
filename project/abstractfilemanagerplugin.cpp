@@ -74,13 +74,10 @@ struct AbstractFileManagerPlugin::Private {
 
     AbstractFileManagerPlugin* q;
 
-    /// @p forceRecursion if true, existing folders will be re-read no matter what
-    KIO::Job* eventuallyReadFolder( ProjectFolderItem* item,
-                                const bool forceRecursion = false );
+    KIO::Job* eventuallyReadFolder( ProjectFolderItem* item );
     void addJobItems(FileManagerListJob* job,
                      ProjectFolderItem* baseItem,
-                     const KIO::UDSEntryList& entries,
-                     const bool forceRecursion);
+                     const KIO::UDSEntryList& entries);
 
     void deleted(const QString &path);
     void created(const QString &path);
@@ -118,10 +115,9 @@ void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
     m_filters.remove(project);
 }
 
-KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderItem* item,
-                                                                const bool forceRecursion )
+KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderItem* item )
 {
-    FileManagerListJob* listJob = new FileManagerListJob( item, forceRecursion );
+    FileManagerListJob* listJob = new FileManagerListJob( item );
     m_projectJobs[ item->project() ] << listJob;
     qCDebug(FILEMANAGER) << "adding job" << listJob << item << item->path() << "for project" << item->project();
 
@@ -129,8 +125,8 @@ KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolde
                 q, [&] (KJob* job) { jobFinished(job); } );
 
     q->connect( listJob, &FileManagerListJob::entries,
-                q, [&] (FileManagerListJob* job, ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, bool forceRecursion) {
-                    addJobItems(job, baseItem, entries, forceRecursion); } );
+                q, [&] (FileManagerListJob* job, ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries) {
+                    addJobItems(job, baseItem, entries); } );
 
     return listJob;
 }
@@ -154,8 +150,7 @@ void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
 
 void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
                                                      ProjectFolderItem* baseItem,
-                                                     const KIO::UDSEntryList& entries,
-                                                     const bool forceRecursion)
+                                                     const KIO::UDSEntryList& entries)
 {
     if ( entries.empty() ) {
         return;
@@ -210,10 +205,8 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
             } else {
                 // this folder already exists in the view
                 folders.remove( index );
-                if ( forceRecursion ) {
-                    //no need to add this item, but we still want to recurse into it
-                    job->addSubDir( f );
-                }
+                // no need to add this item, but we still want to recurse into it
+                job->addSubDir( f );
                 emit q->reloadedFolderItem( f );
             }
         } else if ( ProjectFileItem* f =  baseItem->child(j)->file() ) {
@@ -273,7 +266,7 @@ void AbstractFileManagerPlugin::Private::created(const QString &path_)
                 // exists already in this project, happens e.g. when we restart the dirwatcher
                 // or if we delete and remove folders consecutively https://bugs.kde.org/show_bug.cgi?id=260741
                 qCDebug(FILEMANAGER) << "force reload of" << path << folder;
-                eventuallyReadFolder( folder, true );
+                eventuallyReadFolder( folder );
                 found = true;
             }
             if ( found ) {
@@ -494,7 +487,7 @@ KJob* AbstractFileManagerPlugin::createImportJob(ProjectFolderItem* item)
 bool AbstractFileManagerPlugin::reload( ProjectFolderItem* item )
 {
     qCDebug(FILEMANAGER) << "reloading item" << item->path();
-    d->eventuallyReadFolder( item->folder(), true );
+    d->eventuallyReadFolder( item->folder() );
     return true;
 }
 
