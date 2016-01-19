@@ -39,7 +39,7 @@ class FileManagerListJob : public KIO::Job
     Q_OBJECT
 
 public:
-    FileManagerListJob(ProjectFolderItem* item, const bool forceRecursion);
+    FileManagerListJob(ProjectFolderItem* item);
     ProjectFolderItem* item() const;
 
     void addSubDir(ProjectFolderItem* item);
@@ -50,7 +50,7 @@ public:
 
 signals:
     void entries(FileManagerListJob* job, ProjectFolderItem* baseItem,
-                 const KIO::UDSEntryList& entries, const bool forceRecursion);
+                 const KIO::UDSEntryList& entries);
     void nextJob();
 
 private slots:
@@ -63,7 +63,6 @@ private:
     /// current base dir
     ProjectFolderItem* m_item;
     KIO::UDSEntryList entryList;
-    const bool m_forceRecursion;
     // kill does not delete the job instantaniously
     bool m_aborted;
 
