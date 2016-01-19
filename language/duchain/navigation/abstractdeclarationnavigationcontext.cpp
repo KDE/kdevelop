@@ -139,15 +139,25 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         }else{
           modifyHtml() += i18n("(unresolved forward-declaration) ");
           QualifiedIdentifier id = forwardDec->qualifiedIdentifier();
+          const auto& forwardDecFile = forwardDec->topContext()->parsingEnvironmentFile();
           uint count;
           const IndexedDeclaration* decls;
           PersistentSymbolTable::self().declarations(id, count, decls);
           for(uint a = 0; a < count; ++a) {
-            if(decls[a].isValid() && !decls[a].data()->isForwardDeclaration()) {
-              modifyHtml() += QStringLiteral("<br />");
-              makeLink(i18n("possible resolution from"), DeclarationPointer(decls[a].data()), NavigationAction::NavigateDeclaration);
-              modifyHtml() += ' ' + decls[a].data()->url().str();
+            auto dec = decls[a].data();
+            if (!dec || dec->isForwardDeclaration()) {
+                continue;
             }
+            const auto& decFile = forwardDec->topContext()->parsingEnvironmentFile();
+            if ((static_cast<bool>(decFile) != static_cast<bool>(forwardDecFile)) ||
+                (decFile && forwardDecFile && decFile->language() != forwardDecFile->language()))
+            {
+                // the language of the declarations must match
+                continue;
+            }
+            modifyHtml() += QStringLiteral("<br />");
+            makeLink(i18n("possible resolution from"), DeclarationPointer(dec), NavigationAction::NavigateDeclaration);
+            modifyHtml() += ' ' + dec->url().str();
           }
         }
       }
