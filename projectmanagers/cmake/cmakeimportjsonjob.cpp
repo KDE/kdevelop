@@ -40,12 +40,6 @@
 
 using namespace KDevelop;
 
-struct ImportData {
-    CMakeJsonData json;
-    QHash<KDevelop::Path, QStringList> targets;
-    QVector<Test> testSuites;
-};
-
 namespace {
 
 CMakeJsonData importCommands(const Path& commandsFile)
@@ -151,6 +145,10 @@ CMakeImportJob::CMakeImportJob(IProject* project, QObject* parent)
     , m_project(project)
 {
     connect(&m_futureWatcher, &QFutureWatcher<ImportData>::finished, this, &CMakeImportJob::importFinished);
+}
+
+CMakeImportJob::~CMakeImportJob()
+{
 }
 
 void CMakeImportJob::start()

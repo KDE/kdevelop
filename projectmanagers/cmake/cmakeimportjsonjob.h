@@ -28,9 +28,13 @@
 
 #include <QFutureWatcher>
 
-template<class T> class QFutureWatcher;
 class CMakeFolderItem;
-struct ImportData;
+
+struct ImportData {
+    CMakeJsonData json;
+    QHash<KDevelop::Path, QStringList> targets;
+    QVector<Test> testSuites;
+};
 
 namespace KDevelop
 {
@@ -49,6 +53,7 @@ public:
     };
 
     CMakeImportJob(KDevelop::IProject* project, QObject* parent);
+    ~CMakeImportJob();
 
     void start() override;
 
