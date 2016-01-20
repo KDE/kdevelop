@@ -23,6 +23,7 @@
 #include "unknowndeclarationproblem.h"
 
 #include "clanghelpers.h"
+#include "parsesession.h"
 #include "../util/clangdebug.h"
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
@@ -286,6 +287,13 @@ QStringList duchainCandidates( const QualifiedIdentifier& identifier, const KDev
             if( !decl ) {
                 continue;
             }
+
+            // skip declarations that don't belong to us
+            const auto& file = decl->topContext()->parsingEnvironmentFile();
+            if (!file || file->language() != ParseSession::languageString()) {
+                continue;
+            }
+
             if( dynamic_cast<KDevelop::AliasDeclaration*>( decl ) ) {
                 continue;
             }
@@ -301,7 +309,7 @@ QStringList duchainCandidates( const QualifiedIdentifier& identifier, const KDev
                 clangDebug() << "Adding" << filepath << "determined from candidate" << declaration;
             }
 
-            for( const auto importer : decl->topContext()->parsingEnvironmentFile()->importers() ) {
+            for( const auto importer : file->importers() ) {
                 if( importer->imports().count() != 1 && !isBlacklisted( filepath ) ) {
                     continue;
                 }

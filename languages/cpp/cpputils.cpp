@@ -139,7 +139,7 @@ QString sourceOrHeaderCandidate( const QString &path_, bool fast )
   for ( it = candidates.constBegin(); it != candidates.constEnd(); ++it )
   {
 //     qCDebug(CPP) << "Trying " << ( *it ) << endl;
-    if ( QFileInfo( *it ).exists() )
+    if ( QFileInfo::exists( *it ) )
     {
 //       qCDebug(CPP) << "using: " << *it << endl;
       return * it;

@@ -40,12 +40,6 @@
 
 using namespace KDevelop;
 
-struct ImportData {
-    CMakeJsonData json;
-    QHash<KDevelop::Path, QStringList> targets;
-    QVector<Test> testSuites;
-};
-
 namespace {
 
 CMakeJsonData importCommands(const Path& commandsFile)
@@ -153,10 +147,14 @@ CMakeImportJob::CMakeImportJob(IProject* project, QObject* parent)
     connect(&m_futureWatcher, &QFutureWatcher<ImportData>::finished, this, &CMakeImportJob::importFinished);
 }
 
+CMakeImportJob::~CMakeImportJob()
+{
+}
+
 void CMakeImportJob::start()
 {
     auto commandsFile = CMake::commandsFile(project());
-    if (!QFileInfo(commandsFile.toLocalFile()).exists()) {
+    if (!QFileInfo::exists(commandsFile.toLocalFile())) {
         qCWarning(CMAKE) << "Could not import CMake project" << project()->path() << "('compile_commands.json' missing)";
         emitResult();
         return;

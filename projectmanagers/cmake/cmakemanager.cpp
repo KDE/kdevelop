@@ -154,7 +154,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
 
     // create the JSON file if it doesn't exist
     auto commandsFile = CMake::commandsFile(project);
-    if (!QFileInfo(commandsFile.toLocalFile()).exists()) {
+    if (!QFileInfo::exists(commandsFile.toLocalFile())) {
         qCDebug(CMAKE) << "couldn't find commands file:" << commandsFile << "- now trying to reconfigure";
         jobs << builder()->configure(project);
     }

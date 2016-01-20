@@ -132,7 +132,7 @@ void IncludesWidget::setProject(KDevelop::IProject* w_project)
 
 void IncludesWidget::updateEnablements() {
     // Disable removal of the project root entry which is always first in the list
-    ui->addIncludePath->setEnabled( QFileInfo(makeIncludeDirAbsolute(ui->includePathRequester->url())).exists() && !ui->includePathRequester->text().isEmpty() );
+    ui->addIncludePath->setEnabled( QFileInfo::exists(makeIncludeDirAbsolute(ui->includePathRequester->url())) && !ui->includePathRequester->text().isEmpty() );
     ui->removeIncludePath->setEnabled( ui->includePaths->currentIndex().isValid() );
 }
 
