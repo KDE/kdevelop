@@ -38,7 +38,7 @@
         "Description": "This plugin is purely for unit-test", 
         "Description[ca@valencia]": "Este connector és exclusivament per a unitats de proves", 
         "Description[ca]": "Aquest connector és exclusivament per a unitats de proves", 
-        "Description[de]": "Dieses Modul dient nur für Unit-Tests.", 
+        "Description[de]": "Die ist eine Modul nur für Unit-Tests", 
         "Description[en_GB]": "This plugin is purely for unit-test", 
         "Description[es]": "Este complemento es exclusivamente para pruebas unitarias", 
         "Description[fi]": "Tämä liitännäinen on puhtaasti yksikkötestausta varten", 
