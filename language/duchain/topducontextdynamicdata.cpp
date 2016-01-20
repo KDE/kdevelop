@@ -158,20 +158,25 @@ QString pathForTopContext(const uint topContextIndex)
   return basePath() + QString::number(topContextIndex);
 }
 
+enum LoadType {
+  PartialLoad, ///< Only load the direct member data
+  FullLoad     ///< Load everything, including appended lists
+};
 template<typename F>
-void loadPartialData(const uint topContextIndex, F callback)
+void loadTopDUContextData(const uint topContextIndex, LoadType loadType, F callback)
 {
   QFile file(pathForTopContext(topContextIndex));
-  if (file.open(QIODevice::ReadOnly)) {
-     uint readValue;
-     file.read((char*)&readValue, sizeof(uint));
-     // now readValue is filled with the top-context data size
-
-     // We only read the most needed stuff, not the whole top-context data
-     QByteArray data = file.read(sizeof(TopDUContextData));
-     const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
-     callback(topData);
+  if (!file.open(QIODevice::ReadOnly)) {
+    return;
   }
+
+  uint readValue;
+  file.read((char*)&readValue, sizeof(uint));
+  // now readValue is filled with the top-context data size
+  Q_ASSERT(readValue >= sizeof(TopDUContextData));
+  const QByteArray data = file.read(loadType == FullLoad ? readValue : sizeof(TopDUContextData));
+  const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
+  callback(topData);
 }
 
 template<typename T>
@@ -494,7 +499,7 @@ bool TopDUContextDynamicData::fileExists(uint topContextIndex)
 
 QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIndex) {
   QList<IndexedDUContext> ret;
-  loadPartialData(topContextIndex, [&ret] (const TopDUContextData* topData) {
+  loadTopDUContextData(topContextIndex, FullLoad, [&ret] (const TopDUContextData* topData) {
     ret.reserve(topData->m_importersSize());
     FOREACH_FUNCTION(const IndexedDUContext& importer, topData->m_importers)
       ret << importer;
@@ -504,7 +509,7 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIn
 
 QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextIndex) {
   QList<IndexedDUContext> ret;
-  loadPartialData(topContextIndex, [&ret] (const TopDUContextData* topData) {
+  loadTopDUContextData(topContextIndex, FullLoad, [&ret] (const TopDUContextData* topData) {
     ret.reserve(topData->m_importedContextsSize());
     FOREACH_FUNCTION(const DUContext::Import& import, topData->m_importedContexts)
       ret << import.indexedContext();
@@ -514,7 +519,7 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextInde
 
 IndexedString TopDUContextDynamicData::loadUrl(uint topContextIndex) {
   IndexedString url;
-  loadPartialData(topContextIndex, [&url] (const TopDUContextData* topData) {
+  loadTopDUContextData(topContextIndex, PartialLoad, [&url] (const TopDUContextData* topData) {
     Q_ASSERT(topData->m_url.isEmpty() || topData->m_url.index() >> 16);
     url = topData->m_url;
   });
