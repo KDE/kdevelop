@@ -110,7 +110,7 @@ Path CompilerFilterStrategyPrivate::pathForFile(const QString& filename) const
         auto it = m_currentDirs.constEnd() - 1;
         do {
             currentPath = Path(*it, filename);
-        } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo(currentPath.toLocalFile()).exists() );
+        } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo::exists(currentPath.toLocalFile()) );
 
         return currentPath;
     } else {
@@ -156,7 +156,7 @@ QVector<QString> CompilerFilterStrategy::getCurrentDirs()
 {
     QVector<QString> ret;
     ret.reserve(d->m_currentDirs.size());
-    for (const auto& path : d->m_currentDirs) {
+    foreach (const auto& path, d->m_currentDirs) {
         ret << path.pathOrUrl();
     }
     return ret;
@@ -210,7 +210,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         if( match.hasMatch() ) {
             item.type = FilteredItem::ActionItem;
 
-            if( curActFilter.tool == "cd" ) {
+            if( curActFilter.tool == QLatin1String("cd") ) {
                 const Path path(match.captured(curActFilter.fileGroup));
                 d->m_currentDirs.push_back( path );
                 d->m_positionInCurrentDirs.insert( path , d->m_currentDirs.size() - 1 );
@@ -221,7 +221,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             // They are later searched by pathForFile to find source files corresponding to
             // compiler errors.
             // Note: CMake objectfile has the format: "/path/to/four/CMakeFiles/file.o"
-            if ( curActFilter.fileGroup != -1 && curActFilter.tool == "cmake" && line.contains(QStringLiteral("Building"))) {
+            if ( curActFilter.fileGroup != -1 && curActFilter.tool == QLatin1String("cmake") && line.contains(QStringLiteral("Building"))) {
                 const auto objectFile = match.captured(curActFilter.fileGroup);
                 const auto dir = objectFile.section(QStringLiteral("CMakeFiles/"), 0, 0);
                 d->putDirAtEnd(Path(d->m_buildDir, dir));
@@ -306,7 +306,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
                                || line.contains( QLatin1String("for each function it appears in.") ) ) )
         {
             if(curErrFilter.fileGroup > 0) {
-                if( curErrFilter.compiler == "cmake" ) { // Unfortunately we cannot know if an error or an action comes first in cmake, and therefore we need to do this
+                if( curErrFilter.compiler == QLatin1String("cmake") ) { // Unfortunately we cannot know if an error or an action comes first in cmake, and therefore we need to do this
                     if( d->m_currentDirs.empty() ) {
                         d->putDirAtEnd( d->m_buildDir.parent() );
                     }

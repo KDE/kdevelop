@@ -51,6 +51,7 @@ namespace KDevelop {
 
 class SizeGrip : public QWidget
 {
+    Q_OBJECT
 public:
     SizeGrip(QWidget* parent) : QWidget(parent) {
         m_parent = parent;
@@ -190,9 +191,9 @@ void VariableToolTip::slotLinkActivated(const QString& link)
 
     IDebugSession *session = ICore::self()->debugController()->currentSession();
     if (session && session->state() != IDebugSession::NotStartedState && session->state() != IDebugSession::EndedState) {
-        if (link == "add_watch") {
+        if (link == QLatin1String("add_watch")) {
             session->variableController()->addWatch(v);
-        } else if (link == "add_watchpoint") {
+        } else if (link == QLatin1String("add_watchpoint")) {
             session->variableController()->addWatchpoint(v);
         }
     }
@@ -216,3 +217,4 @@ void VariableToolTip::slotRangeChanged(int min, int max)
 
 }
 
+#include "variabletooltip.moc"

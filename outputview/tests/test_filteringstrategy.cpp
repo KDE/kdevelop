@@ -361,7 +361,8 @@ void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction()
     QUrl projecturl = QUrl::fromLocalFile( projectPath() );
     static CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.actionInLine(line);
-    QCOMPARE(testee.getCurrentDirs().last(), expectedLastDir);
+    int last = testee.getCurrentDirs().size() - 1;
+    QCOMPARE(testee.getCurrentDirs().at(last), expectedLastDir);
 }
 
 void TestFilteringStrategy::benchMarkCompilerFilterAction()
@@ -395,7 +396,7 @@ void TestFilteringStrategy::benchMarkCompilerFilterAction()
     totalTime.start();
 
     static CompilerFilterStrategy testee(QUrl::fromLocalFile(projecturl));
-    FilteredItem item1("dummyline", FilteredItem::InvalidItem);
+    FilteredItem item1(QStringLiteral("dummyline"), FilteredItem::InvalidItem);
     QBENCHMARK {
         for(int i = 0; i < outputlines.size(); ++i) {
             item1 = testee.actionInLine(outputlines.at(i));

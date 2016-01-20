@@ -68,14 +68,14 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, &ProjectSelectionPage::templateChanged );
 
     QPushButton* getMoreButton = new QPushButton(i18n("Get More Templates"), m_listView);
-    getMoreButton->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
+    getMoreButton->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
     connect (getMoreButton, &QPushButton::clicked,
              this, &ProjectSelectionPage::moreTemplatesClicked);
     m_listView->addWidget(0, getMoreButton);
 
     QPushButton* loadButton = new QPushButton(m_listView);
     loadButton->setText(i18n("Load Template From File"));
-    loadButton->setIcon(QIcon::fromTheme("application-x-archive"));
+    loadButton->setIcon(QIcon::fromTheme(QStringLiteral("application-x-archive")));
     connect (loadButton, &QPushButton::clicked, this, &ProjectSelectionPage::loadFileClicked);
     m_listView->addWidget(0, loadButton);
 
@@ -124,7 +124,7 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
     QString picPath = current.data( KDevelop::TemplatesModel::IconNameRole ).toString();
     if( picPath.isEmpty() ) {
-        QIcon icon("kdevelop");
+        QIcon icon(QStringLiteral("kdevelop"));
         ui->icon->setPixmap(icon.pixmap(128, 128));
         ui->icon->setFixedHeight(128);
     } else {
@@ -149,7 +149,7 @@ QString ProjectSelectionPage::selectedTemplate()
     if (item)
         return item->data().toString();
     else
-        return "";
+        return QString();
 }
 
 QUrl ProjectSelectionPage::location()
@@ -306,7 +306,7 @@ bool ProjectSelectionPage::shouldContinue()
 
 void ProjectSelectionPage::loadFileClicked()
 {
-    QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
+    QString filter = QStringLiteral("application/x-desktop application/x-bzip-compressed-tar application/zip");
     const QString fileName = QFileDialog::getOpenFileName(this, i18n("Load Template From File"), QString(), filter);
     if (!fileName.isEmpty())
     {
@@ -322,7 +322,7 @@ void ProjectSelectionPage::loadFileClicked()
 
 void ProjectSelectionPage::moreTemplatesClicked()
 {
-    KNS3::DownloadDialog dialog("kdevappwizard.knsrc", this);
+    KNS3::DownloadDialog dialog(QStringLiteral("kdevappwizard.knsrc"), this);
     dialog.exec();
 
     auto entries = dialog.changedEntries();
@@ -338,7 +338,7 @@ void ProjectSelectionPage::moreTemplatesClicked()
         if (!entry.installedFiles().isEmpty())
         {
             updated = true;
-            setCurrentTemplate(entry.installedFiles().first());
+            setCurrentTemplate(entry.installedFiles().at(0));
             break;
         }
     }

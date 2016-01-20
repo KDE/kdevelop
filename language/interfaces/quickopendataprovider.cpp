@@ -63,7 +63,7 @@ namespace KDevelop {
         lineNumber = 0;
       } else {
         bool ok;
-        uint number = from.mid(colonIndex + 1).toUInt(&ok);
+        uint number = from.midRef(colonIndex + 1).toUInt(&ok);
         if (ok) {
           path = from.mid(0, colonIndex);
           lineNumber = number;

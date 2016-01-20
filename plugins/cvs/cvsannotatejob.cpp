@@ -72,7 +72,7 @@ void CvsAnnotateJob::parseOutput(const QString& jobOutput, const QString& workin
             // cvs annotate always prints the date with english month names.
             // Using QDate::fromString() directly would fail as it works with
             // localized month names. So we let QLocale do the work .
-            QDate date(QLocale::c().toDate(re.cap(3), QLatin1String("dd-MMM-yy")));
+            QDate date(QLocale::c().toDate(re.cap(3), QStringLiteral("dd-MMM-yy")));
             if (date.year() < 1970)
                 date = date.addYears(100);
             item.setDate( QDateTime(date, QTime(), Qt::UTC) );

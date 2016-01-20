@@ -55,7 +55,7 @@ void setupLocalRepository( const QString& name, VcsLocation & reposLoc )
 {
     KProcess cmd;
     cmd.setWorkingDirectory(name);
-    cmd << "svnadmin" << "create" << name;
+    cmd << QStringLiteral("svnadmin") << QStringLiteral("create") << name;
     QCOMPARE(cmd.execute(10000), 0);
 
     reposLoc.setRepositoryServer("file://" + name );
@@ -75,13 +75,13 @@ void SvnImport::initTestCase()
     AutoTestShell::init({QStringLiteral("kdevsubversion")});
     TestCore::initialize();
 
-    QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
+    QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
     foreach(IPlugin* p,  plugins) {
         qDebug() << "checking plugin" << p;
         ICentralizedVersionControl* icentr = p->extension<ICentralizedVersionControl>();
         if (!icentr)
             continue;
-        if (icentr->name() == "Subversion") {
+        if (icentr->name() == QLatin1String("Subversion")) {
             vcs = icentr;
             break;
         }
@@ -102,10 +102,10 @@ void SvnImport::testBasic()
     setupLocalRepository( reposDir.path(), reposLoc );
 
     QTemporaryDir projectDir;
-    QString origcontent = "This is a Test";
+    QString origcontent = QStringLiteral("This is a Test");
     setupSampleProject( projectDir.path(), origcontent );
 
-    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.path() ), reposLoc );
+    VcsJob* job = vcs->import( QStringLiteral("import test"), QUrl::fromLocalFile( projectDir.path() ), reposLoc );
     validatingExecJob(job);
 
     QTemporaryDir checkoutDir;
@@ -119,11 +119,11 @@ void SvnImport::testImportWithMissingDirs()
     setupLocalRepository( reposDir.path(), reposLoc );
 
     QTemporaryDir projectDir;
-    QString origcontent = "This is a Test";
+    QString origcontent = QStringLiteral("This is a Test");
     setupSampleProject( projectDir.path(), origcontent );
 
     reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/foobar/" + QDir( projectDir.path() ).dirName() );
-    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.path() ), reposLoc );
+    VcsJob* job = vcs->import( QStringLiteral("import test"), QUrl::fromLocalFile( projectDir.path() ), reposLoc );
     validatingExecJob(job);
 
     QTemporaryDir checkoutDir;
@@ -137,11 +137,11 @@ void SvnImport::testImportIntoDir()
     setupLocalRepository( reposDir.path(), reposLoc );
 
     QTemporaryDir projectDir;
-    QString origcontent = "This is a Test";
+    QString origcontent = QStringLiteral("This is a Test");
     setupSampleProject( projectDir.path(), origcontent );
 
     reposLoc.setRepositoryServer( reposLoc.repositoryServer() + '/' + QDir( projectDir.path() ).dirName() );
-    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.path() ), reposLoc );
+    VcsJob* job = vcs->import( QStringLiteral("import test"), QUrl::fromLocalFile( projectDir.path() ), reposLoc );
     validatingExecJob(job);
 
     QTemporaryDir checkoutDir;

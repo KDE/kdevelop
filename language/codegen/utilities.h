@@ -39,6 +39,7 @@ namespace CodeGenUtils
  */
 class KDEVPLATFORMLANGUAGE_EXPORT IdentifierValidator : public QValidator
 {
+    Q_OBJECT
   public:
     explicit IdentifierValidator( DUContext * context);
     ~IdentifierValidator();

@@ -70,7 +70,7 @@ QString InstantiationInformation::toString(bool local) const {
     ret += '<';
     for(uint a = 0; a < templateParametersSize(); ++a) {
         if(a)
-            ret += ", ";
+            ret += QLatin1String(", ");
         if(templateParameters()[a].abstractType())
           ret += templateParameters()[a].abstractType()->toString();
     }
@@ -116,7 +116,7 @@ AbstractRepositoryManager* returnTypeRepository() {
 }
 
 static KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > >& instantiationInformationRepository() {
-    static KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > > instantiationInformationRepositoryObject("Instantiation Information Repository", 1, &returnTypeRepository);
+    static KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > > instantiationInformationRepositoryObject(QStringLiteral("Instantiation Information Repository"), 1, &returnTypeRepository);
     return instantiationInformationRepositoryObject;
 }
 

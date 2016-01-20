@@ -34,21 +34,21 @@
 
 #define PATHETIC    // A little motivator to make things work right :)
 #if defined(PATHETIC)
-const QString vcsTestDir0("testdir0");
-const QString vcsTestDir1("testdir1");
-const QString vcsTest_FileName0("foo");
-const QString vcsTest_FileName1("bar");
-const QString keywordText("text");
+inline QString vcsTestDir0() { return QStringLiteral("testdir0"); }
+inline QString vcsTestDir1() { return QStringLiteral("testdir1"); }
+inline QString vcsTest_FileName0() { return QStringLiteral("foo"); }
+inline QString vcsTest_FileName1() { return QStringLiteral("bar"); }
+inline QString keywordText() { return QStringLiteral("text"); }
 #else
-const QString vcsTestDir0("dvcs\t testdir");   // Directory containing whitespaces
-const QString vcsTestDir1("--help");           // Starting with hyphen for command-line tools
-const QString vcsTest_FileName0("foo\t bar");
-const QString vcsTest_FileName1("--help");
-const QString keywordText("Author:\nDate:\nCommit:\n------------------------------------------------------------------------\nr999999 | ehrman | 1989-11-09 18:53:00 +0100 (Thu, 09 Nov 1989) | 1 lines\nthe line\n");  // Text containing keywords of the various vcs-programs
+inline QString vcsTestDir0() { return QStringLiteral("dvcs\t testdir"); }   // Directory containing whitespaces
+inline QString vcsTestDir1() { return QStringLiteral("--help"); }           // Starting with hyphen for command-line tools
+inline QString vcsTest_FileName0() { return QStringLiteral("foo\t bar"); }
+inline QString vcsTest_FileName1() { return QStringLiteral("--help"); }
+inline QString keywordText() { return QStringLiteral("Author:\nDate:\nCommit:\n------------------------------------------------------------------------\nr999999 | ehrman | 1989-11-09 18:53:00 +0100 (Thu, 09 Nov 1989) | 1 lines\nthe line\n"); }  // Text containing keywords of the various vcs-programs
 #endif
 
-const QString simpleText("It's foo!\n");
-const QString simpleAltText("No, foo()! It's bar()!\n");
+inline QString simpleText() { return QStringLiteral("It's foo!\n"); }
+inline QString simpleAltText() { return QStringLiteral("No, foo()! It's bar()!\n"); }
 
 #define VERBOSE
 #if defined(VERBOSE)
@@ -98,14 +98,14 @@ void fillWorkingDirectory(QString const & dirname)
 {
     QDir dir(dirname);
     //we start it after repoInit, so we still have empty dvcs repo
-    QVERIFY(dir.mkdir(vcsTestDir0));
-    QVERIFY(dir.cd(vcsTestDir0));
-    QUrl file0 = QUrl::fromLocalFile(dir.absoluteFilePath(vcsTest_FileName0));
-    QVERIFY(dir.mkdir(vcsTestDir1));
-    QVERIFY(dir.cd(vcsTestDir1));
-    QUrl file1 = QUrl::fromLocalFile(dir.absoluteFilePath(vcsTest_FileName1));
-    verifiedWrite(file0, simpleText);
-    verifiedWrite(file1, keywordText);
+    QVERIFY(dir.mkdir(vcsTestDir0()));
+    QVERIFY(dir.cd(vcsTestDir0()));
+    QUrl file0 = QUrl::fromLocalFile(dir.absoluteFilePath(vcsTest_FileName0()));
+    QVERIFY(dir.mkdir(vcsTestDir1()));
+    QVERIFY(dir.cd(vcsTestDir1()));
+    QUrl file1 = QUrl::fromLocalFile(dir.absoluteFilePath(vcsTest_FileName1()));
+    verifiedWrite(file0, simpleText());
+    verifiedWrite(file1, keywordText());
 }
 
 void SvnRecursiveAdd::initTestCase()
@@ -124,16 +124,16 @@ void SvnRecursiveAdd::test()
     QTemporaryDir reposDir;
     KProcess cmd;
     cmd.setWorkingDirectory(reposDir.path());
-    cmd << "svnadmin" << "create" << reposDir.path();
+    cmd << QStringLiteral("svnadmin") << QStringLiteral("create") << reposDir.path();
     QCOMPARE(cmd.execute(10000), 0);
-    QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
+    QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
     IBasicVersionControl* vcs = NULL;
     foreach(IPlugin* p,  plugins) {
         qDebug() << "checking plugin" << p;
         ICentralizedVersionControl* icentr = p->extension<ICentralizedVersionControl>();
         if (!icentr)
             continue;
-        if (icentr->name() == "Subversion") {
+        if (icentr->name() == QLatin1String("Subversion")) {
             vcs = icentr;
             break;
         }
@@ -150,7 +150,7 @@ void SvnRecursiveAdd::test()
     validatingExecJob(job);
     qDebug() << "filling wc";
     fillWorkingDirectory(checkoutDir.path());
-    QUrl addUrl = QUrl::fromLocalFile( checkoutDir.path() + '/' + vcsTestDir0 );
+    QUrl addUrl = QUrl::fromLocalFile( checkoutDir.path() + '/' + vcsTestDir0() );
     qDebug() << "Recursively adding files at " << addUrl;
     validatingExecJob(vcs->add({addUrl}, IBasicVersionControl::Recursive));
     qDebug() << "Recursively reverting changes at " << addUrl;

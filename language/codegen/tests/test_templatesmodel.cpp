@@ -32,8 +32,8 @@ void TestTemplatesModel::initTestCase()
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 
-    model = new TemplatesModel("kdevcodegentest", this);
-    model->addDataPath(QString(CODEGEN_TESTS_DATA_DIR) + "/");
+    model = new TemplatesModel(QStringLiteral("kdevcodegentest"), this);
+    model->addDataPath(QStringLiteral(CODEGEN_TESTS_DATA_DIR) + "/");
     model->refresh();
 }
 
@@ -60,7 +60,7 @@ void TestTemplatesModel::descriptionExtraction()
 
 void TestTemplatesModel::descriptionParsing()
 {
-    QList<QStandardItem*> items = model->findItems("Testing YAML template", Qt::MatchRecursive);
+    QList<QStandardItem*> items = model->findItems(QStringLiteral("Testing YAML template"), Qt::MatchRecursive);
     QCOMPARE(items.size(), 1);
     QStandardItem* item = items.first();
 
@@ -75,7 +75,7 @@ void TestTemplatesModel::descriptionParsing()
 
 void TestTemplatesModel::templateIndexes()
 {
-    QModelIndexList indexes = model->templateIndexes("test_yaml.tar.bz2");
+    QModelIndexList indexes = model->templateIndexes(QStringLiteral("test_yaml.tar.bz2"));
     QCOMPARE(indexes.size(), 3);
 
     QCOMPARE(model->data(indexes[0]).toString(), QStringLiteral("Testing"));

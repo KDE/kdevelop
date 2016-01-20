@@ -60,11 +60,11 @@ using namespace KTextEditor;
 K_PLUGIN_FACTORY_WITH_JSON(CodeUtilsPluginFactory, "kdevcodeutils.json", registerPlugin<CodeUtilsPlugin>(); )
 
 CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( "kdevcodeutils", parent )
+    : IPlugin ( QStringLiteral("kdevcodeutils"), parent )
 {
-    setXMLFile( "kdevcodeutils.rc" );
+    setXMLFile( QStringLiteral("kdevcodeutils.rc") );
 
-    QAction* action = actionCollection()->addAction( "document_declaration" );
+    QAction* action = actionCollection()->addAction( QStringLiteral("document_declaration") );
     // i18n: action name; 'Document' is a verb
     action->setText( i18n( "Document Declaration" ) );
     actionCollection()->setDefaultShortcut(action, i18n( "Alt+Shift+d" ));
@@ -74,7 +74,7 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     action->setWhatsThis( i18n( "Adds a basic Doxygen comment skeleton in front of "
                                 "the declaration under the cursor, e.g. with all the "
                                 "parameter of a function." ) );
-    action->setIcon( QIcon::fromTheme( "documentinfo" ) );
+    action->setIcon( QIcon::fromTheme( QStringLiteral("documentinfo") ) );
 }
 
 void CodeUtilsPlugin::documentDeclaration()
@@ -101,7 +101,7 @@ void CodeUtilsPlugin::documentDeclaration()
 
     TemplateRenderer renderer;
     renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
-    renderer.addVariable("brief", i18n( "..." ));
+    renderer.addVariable(QStringLiteral("brief"), i18n( "..." ));
 
     /*
     QString indentation = textDoc->line( insertPos.line() );
@@ -117,25 +117,25 @@ void CodeUtilsPlugin::documentDeclaration()
     if (dec->isFunctionDeclaration())
     {
         FunctionDescription description = FunctionDescription(DeclarationPointer(dec));
-        renderer.addVariable("function", QVariant::fromValue(description));
+        renderer.addVariable(QStringLiteral("function"), QVariant::fromValue(description));
         qCDebug(PLUGIN_CODEUTILS) << "Found function" << description.name << "with" << description.arguments.size() << "arguments";
     }
 
     lock.unlock();
 
     // TODO: Choose the template based on the language
-    QString templateName = "doxygen_cpp";
+    QString templateName = QStringLiteral("doxygen_cpp");
     auto languages = core()->languageController()->languagesForUrl(view->document()->url());
     if (!languages.isEmpty())
     {
         QString languageName = languages.first()->name();
-        if (languageName == "Php")
+        if (languageName == QLatin1String("Php"))
         {
-            templateName = "phpdoc_php";
+            templateName = QStringLiteral("phpdoc_php");
         }
-        else if (languageName == "Python")
+        else if (languageName == QLatin1String("Python"))
         {
-            templateName = "rest_python";
+            templateName = QStringLiteral("rest_python");
             // Python docstrings appear inside functions and classes, not above them
             insertPos = Cursor(line+1, 0);
         }

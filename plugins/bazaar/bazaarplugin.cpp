@@ -67,7 +67,7 @@ BazaarPlugin::~BazaarPlugin()
 
 QString BazaarPlugin::name() const
 {
-    return QString::fromUtf8("Bazaar");
+    return QStringLiteral("Bazaar");
 }
 
 VcsJob* BazaarPlugin::add(const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
@@ -142,7 +142,7 @@ bool BazaarPlugin::isVersionControlled(const QUrl& localLocation)
     job->exec();
     if (job->status() == VcsJob::JobSucceeded) {
         QList<QFileInfo> filesAndDirectoriesList;
-        for (QString fod : job->output().split('\n')) {
+        foreach (const QString& fod, job->output().split('\n')) {
             filesAndDirectoriesList.append(QFileInfo(workCopy.absolutePath() + QDir::separator() + fod));
         }
         QFileInfo fi(localLocation.toLocalFile());
@@ -175,7 +175,8 @@ VcsJob* BazaarPlugin::log(const QUrl& localLocation, const VcsRevision& rev, con
 void BazaarPlugin::parseBzrLog(DVcsJob* job)
 {
     QVariantList result;
-    for (QString part : job->output().split(QStringLiteral("------------------------------------------------------------"), QString::SkipEmptyParts)) {
+    auto parts = job->output().split(QStringLiteral("------------------------------------------------------------"), QString::SkipEmptyParts);
+    foreach (const QString& part, parts) {
         auto event = BazaarUtils::parseBzrLogPart(part);
         if (event.revision().revisionType() != VcsRevision::Invalid)
             result.append(QVariant::fromValue(event));
@@ -237,7 +238,7 @@ VcsJob* BazaarPlugin::repositoryLocation(const QUrl& localLocation)
 
 void BazaarPlugin::parseBzrRoot(DVcsJob* job)
 {
-    QString filename = job->dvcsCommand()[2];
+    QString filename = job->dvcsCommand().at(2);
     QString rootDirectory = job->output();
     QString localFilename = QFileInfo(QUrl::fromLocalFile(filename).toLocalFile()).absoluteFilePath();
     QString localRootDirectory = QFileInfo(rootDirectory).absolutePath();
@@ -275,7 +276,7 @@ void BazaarPlugin::parseBzrStatus(DVcsJob* job)
     QVariantList result;
     QSet<QString> filesWithStatus;
     QDir workingCopy = job->directory();
-    for (QString line : job->output().split('\n')) {
+    foreach (const QString& line, job->output().split('\n')) {
         auto status = BazaarUtils::parseVcsStatusInfoLine(line);
         result.append(QVariant::fromValue(status));
         filesWithStatus.insert(BazaarUtils::concatenatePath(workingCopy, status.url()));

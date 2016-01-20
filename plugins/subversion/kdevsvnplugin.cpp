@@ -72,7 +72,7 @@ Q_LOGGING_CATEGORY(PLUGIN_SVN, "kdevplatform.plugins.svn")
 K_PLUGIN_FACTORY_WITH_JSON(KDevSvnFactory, "kdevsubversion.json", registerPlugin<KDevSvnPlugin>();)
 
 KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)
-        : KDevelop::IPlugin("kdevsubversion", parent)
+        : KDevelop::IPlugin(QStringLiteral("kdevsubversion"), parent)
         , m_common(new KDevelop::VcsPluginHelper(this, this))
         , copy_action( 0 )
         , move_action( 0 )

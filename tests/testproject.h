@@ -71,7 +71,7 @@ public:
     void setPath(const Path& path);
 
     Path path() const override;
-    QString name() const override { return "Test Project"; }
+    QString name() const override { return QStringLiteral("Test Project"); }
     bool inProject(const IndexedString& path) const override;
     void setReloadJob(KJob* ) override {}
 private:

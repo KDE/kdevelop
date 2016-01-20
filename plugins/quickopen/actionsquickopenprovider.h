@@ -27,6 +27,7 @@
 
 class ActionsQuickOpenProvider : public KDevelop::QuickOpenDataProviderBase
 {
+    Q_OBJECT
 public:
     ActionsQuickOpenProvider();
 

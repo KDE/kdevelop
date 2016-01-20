@@ -73,7 +73,7 @@ static QString functionPropertiesToString(ClassFunctionDeclaration* decl)
     } else if (decl->isAbstract()) {
         properties << i18n("Abstract function");
     }
-    return properties.join(", ");
+    return properties.join(QStringLiteral(", "));
 }
 
 struct KDevelop::OverridesPagePrivate
@@ -192,7 +192,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
     qCDebug(PLUGIN_FILETEMPLATES) << childDeclaration->toString();
     if (d->overriddenFunctions.contains(childDeclaration->identifier()))
     {
-        foreach (DeclarationPointer decl, d->overriddenFunctions.values(childDeclaration->identifier()))
+        foreach (const DeclarationPointer& decl, d->overriddenFunctions.values(childDeclaration->identifier()))
         {
             if (decl->indexedType() == childDeclaration->indexedType())
             {
@@ -213,7 +213,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
     overrideItem->setText(PropertiesColumn, functionPropertiesToString(function));
 
     if (function->isAbstract()) {
-        overrideItem->setIcon(ClassOrFunctionColumn, QIcon::fromTheme("flag-red"));
+        overrideItem->setIcon(ClassOrFunctionColumn, QIcon::fromTheme(QStringLiteral("flag-red")));
         overrideItem->setCheckState(ClassOrFunctionColumn, Qt::Checked);
         classItem->removeChild(overrideItem);
         classItem->insertChild(0, overrideItem);

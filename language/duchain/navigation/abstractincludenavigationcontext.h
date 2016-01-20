@@ -47,6 +47,7 @@ namespace KDevelop {
  * \endcode
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractIncludeNavigationContext : public AbstractNavigationContext {
+  Q_OBJECT
 public:
   AbstractIncludeNavigationContext(const IncludeItem& item, TopDUContextPointer topContext, 
                                    const ParsingEnvironmentType& type);

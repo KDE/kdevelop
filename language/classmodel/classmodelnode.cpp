@@ -77,7 +77,7 @@ EnumNode::EnumNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model)
 {
   // Set display name for anonymous enums
   if ( m_displayName.isEmpty() )
-    m_displayName = "*Anonymous*";
+    m_displayName = QStringLiteral("*Anonymous*");
 }
 
 bool EnumNode::getIcon(QIcon& a_resultIcon)
@@ -87,24 +87,24 @@ bool EnumNode::getIcon(QIcon& a_resultIcon)
   ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(getDeclaration());
   if ( decl == 0 )
   {
-    static QIcon Icon = QIcon::fromTheme("enum");
+    static QIcon Icon = QIcon::fromTheme(QStringLiteral("enum"));
     a_resultIcon = Icon;
   }
   else
   {
     if ( decl->accessPolicy() == Declaration::Protected )
     {
-      static QIcon Icon = QIcon::fromTheme("protected_enum");
+      static QIcon Icon = QIcon::fromTheme(QStringLiteral("protected_enum"));
       a_resultIcon = Icon;
     }
     else if ( decl->accessPolicy() == Declaration::Private )
     {
-      static QIcon Icon = QIcon::fromTheme("private_enum");
+      static QIcon Icon = QIcon::fromTheme(QStringLiteral("private_enum"));
       a_resultIcon = Icon;
     }
     else
     {
-      static QIcon Icon = QIcon::fromTheme("enum");
+      static QIcon Icon = QIcon::fromTheme(QStringLiteral("enum"));
       a_resultIcon = Icon;
     }
   }
@@ -327,22 +327,22 @@ bool ClassMemberNode::getIcon(QIcon& a_resultIcon)
 
   if ( decl->isTypeAlias() )
   {
-    static QIcon Icon = QIcon::fromTheme("typedef");
+    static QIcon Icon = QIcon::fromTheme(QStringLiteral("typedef"));
     a_resultIcon = Icon;
   }
   else if ( decl->accessPolicy() == Declaration::Protected )
   {
-    static QIcon Icon = QIcon::fromTheme("protected_field");
+    static QIcon Icon = QIcon::fromTheme(QStringLiteral("protected_field"));
     a_resultIcon = Icon;
   }
   else if ( decl->accessPolicy() == Declaration::Private )
   {
-    static QIcon Icon = QIcon::fromTheme("private_field");
+    static QIcon Icon = QIcon::fromTheme(QStringLiteral("private_field"));
     a_resultIcon = Icon;
   }
   else
   {
-    static QIcon Icon = QIcon::fromTheme("field");
+    static QIcon Icon = QIcon::fromTheme(QStringLiteral("field"));
     a_resultIcon = Icon;
   }
 
@@ -359,7 +359,7 @@ DynamicFolderNode::DynamicFolderNode(const QString& a_displayName, NodesModelInt
 
 bool DynamicFolderNode::getIcon(QIcon& a_resultIcon)
 {
-  static QIcon folderIcon = QIcon::fromTheme("folder");
+  static QIcon folderIcon = QIcon::fromTheme(QStringLiteral("folder"));
   a_resultIcon = folderIcon;
   return true;
 }
@@ -374,7 +374,7 @@ FolderNode::FolderNode(const QString& a_displayName, NodesModelInterface* a_mode
 
 bool FolderNode::getIcon(QIcon& a_resultIcon)
 {
-  static QIcon folderIcon = QIcon::fromTheme("folder");
+  static QIcon folderIcon = QIcon::fromTheme(QStringLiteral("folder"));
   a_resultIcon = folderIcon;
   return true;
 }

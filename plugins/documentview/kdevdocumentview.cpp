@@ -246,7 +246,7 @@ void KDevDocumentView::updateSelectedDocs()
     m_selectedDocs.clear();
     m_unselectedDocs.clear();
 
-    QList<QStandardItem*> allItems = m_documentModel->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
+    QList<QStandardItem*> allItems = m_documentModel->findItems(QStringLiteral("*"), Qt::MatchWildcard | Qt::MatchRecursive);
     foreach (QStandardItem* item, allItems)
     {
         if (KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>(item)->fileItem())

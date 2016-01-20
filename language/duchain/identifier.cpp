@@ -335,7 +335,7 @@ using QualifiedIdentifierRepository = RepositoryManager< ItemRepository<Constant
 
 static QualifiedIdentifierRepository& qualifiedidentifierRepository()
 {
-  static QualifiedIdentifierRepository repo("Qualified Identifier Repository", 1, [] () -> AbstractRepositoryManager* { return &identifierRepository(); });
+  static QualifiedIdentifierRepository repo(QStringLiteral("Qualified Identifier Repository"), 1, [] () -> AbstractRepositoryManager* { return &identifierRepository(); });
   return repo;
 }
 
@@ -1251,19 +1251,19 @@ QString IndexedTypeIdentifier::toString(bool ignoreExplicitlyGlobal) const
 {
   QString ret;
   if(isConstant())
-    ret += "const ";
+    ret += QLatin1String("const ");
   if(isVolatile())
-    ret += "volatile ";
+    ret += QLatin1String("volatile ");
 
   ret += m_identifier.identifier().toString(ignoreExplicitlyGlobal);
   for(int a = 0; a < pointerDepth(); ++a) {
     ret += '*';
     if( isConstPointer(a) )
-      ret += "const";
+      ret += QLatin1String("const");
   }
 
   if(isRValue())
-    ret += "&&";
+    ret += QLatin1String("&&");
   else if(isReference())
     ret += '&';
   return ret;

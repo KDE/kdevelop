@@ -166,7 +166,7 @@ void ParseJob::setMinimumFeatures(TopDUContext::Features features)
 bool ParseJob::hasStaticMinimumFeatures()
 {
     QMutexLocker lock(&minimumFeaturesMutex);
-    return ::staticMinimumFeatures.size();
+    return !::staticMinimumFeatures.isEmpty();
 }
 
 TopDUContext::Features ParseJob::staticMinimumFeatures(const IndexedString& url)
@@ -175,7 +175,7 @@ TopDUContext::Features ParseJob::staticMinimumFeatures(const IndexedString& url)
     TopDUContext::Features features = (TopDUContext::Features)0;
 
     if(::staticMinimumFeatures.contains(url))
-        foreach(const TopDUContext::Features &f, ::staticMinimumFeatures[url])
+        foreach(const TopDUContext::Features f, ::staticMinimumFeatures[url])
             features = (TopDUContext::Features)(features | f);
 
     return features;

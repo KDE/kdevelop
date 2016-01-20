@@ -118,19 +118,19 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 
     QAction* action;
 
-    action = new QAction(QIcon::fromTheme("go-first"), i18n("First Item"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-first")), i18n("First Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectFirstItem);
     addAction(action);
 
-    action = new QAction(QIcon::fromTheme("go-previous"), i18n("Previous Item"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("Previous Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectPreviousItem);
     addAction(action);
 
-    action = new QAction(QIcon::fromTheme("go-next"), i18n("Next Item"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("Next Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectNextItem);
     addAction(action);
 
-    action = new QAction(QIcon::fromTheme("go-last"), i18n("Last Item"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-last")), i18n("Last Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectLastItem);
     addAction(action);
 

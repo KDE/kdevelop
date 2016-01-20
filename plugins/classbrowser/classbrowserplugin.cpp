@@ -73,7 +73,7 @@ public:
 
   QString id() const override
   {
-    return "org.kdevelop.ClassBrowserView";
+    return QStringLiteral("org.kdevelop.ClassBrowserView");
   }
 
 private:
@@ -81,12 +81,12 @@ private:
 };
 
 ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin("kdevclassbrowser", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevclassbrowser"), parent)
     , m_factory(new ClassBrowserFactory(this))
     , m_activeClassTree(0)
 {
   core()->uiController()->addToolView(i18n("Classes"), m_factory);
-  setXMLFile( "kdevclassbrowser.rc" );
+  setXMLFile( QStringLiteral("kdevclassbrowser.rc") );
 
   m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
   connect(m_findInBrowser, &QAction::triggered, this, &ClassBrowserPlugin::findInClassBrowser);

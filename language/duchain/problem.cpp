@@ -129,7 +129,7 @@ void Problem::setDiagnostics(const QVector<IProblem::Ptr> &diagnostics)
 {
     clearDiagnostics();
 
-    foreach(IProblem::Ptr problem, diagnostics)
+    foreach(const IProblem::Ptr& problem, diagnostics)
     {
         addDiagnostic(problem);
     }

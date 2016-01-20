@@ -146,22 +146,22 @@ QString VcsRevision::prettyValue() const
             switch( revisionValue().value<KDevelop::VcsRevision::RevisionSpecialType>(  ) )
             {
                 case VcsRevision::Head:
-                    return "Head";
+                    return QStringLiteral("Head");
                     break;
                 case VcsRevision::Base:
-                    return "Base";
+                    return QStringLiteral("Base");
                     break;
                 case VcsRevision::Working:
-                    return "Working";
+                    return QStringLiteral("Working");
                     break;
                 case VcsRevision::Previous:
-                    return "Previous";
+                    return QStringLiteral("Previous");
                     break;
                 case VcsRevision::Start:
-                    return "Start";
+                    return QStringLiteral("Start");
                     break;
                 default:
-                    return "User";
+                    return QStringLiteral("User");
                     break;
             }
             break;

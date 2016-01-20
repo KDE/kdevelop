@@ -149,27 +149,27 @@ QString ClassDeclaration::toString() const
       //nothing
       break;
     case ClassDeclarationData::Abstract:
-      ret += "abstract ";
+      ret += QLatin1String("abstract ");
       break;
     case ClassDeclarationData::Final:
-      ret += "final ";
+      ret += QLatin1String("final ");
       break;
   }
   switch ( classType() ) {
     case ClassDeclarationData::Class:
-      ret += "class ";
+      ret += QLatin1String("class ");
       break;
     case ClassDeclarationData::Interface:
-      ret += "interface ";
+      ret += QLatin1String("interface ");
       break;
     case ClassDeclarationData::Trait:
-      ret += "trait ";
+      ret += QLatin1String("trait ");
       break;
     case ClassDeclarationData::Union:
-      ret += "union ";
+      ret += QLatin1String("union ");
       break;
     case ClassDeclarationData::Struct:
-      ret += "struct ";
+      ret += QLatin1String("struct ");
       break;
   }
   return ret + identifier().toString();

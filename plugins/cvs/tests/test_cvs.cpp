@@ -60,7 +60,7 @@ void TestCvs::init()
 
 void TestCvs::cleanup()
 {
-    if ( QFileInfo(CVSTEST_BASEDIR).exists() )
+    if ( QFileInfo::exists(CVSTEST_BASEDIR) )
         KIO::del(QUrl::fromLocalFile(QString(CVSTEST_BASEDIR)))->exec();
 }
 
@@ -76,7 +76,7 @@ void TestCvs::repoInit()
     QVERIFY( j->exec() );
 
     //check if the CVSROOT directory in the new local repository exists now
-    QVERIFY( QFileInfo(QString(CVS_REPO "/CVSROOT")).exists() );
+    QVERIFY( QFileInfo::exists(QString(CVS_REPO "/CVSROOT")) );
 }
 
 void TestCvs::importTestData()
@@ -100,11 +100,11 @@ void TestCvs::importTestData()
 
     //check if the directory has been added to the repository
     QString testdir(CVS_REPO "/test");
-    QVERIFY( QFileInfo(testdir).exists() );
+    QVERIFY( QFileInfo::exists(testdir) );
 
     //check if the file has been added to the repository
     QString testfile(CVS_REPO "/test/" CVS_TESTFILE_NAME ",v");
-    QVERIFY( QFileInfo(testfile).exists() );
+    QVERIFY( QFileInfo::exists(testfile) );
 }
 
 
@@ -118,11 +118,11 @@ void TestCvs::checkoutTestData()
 
     //check if the directory is there
     QString testdir(CVS_CHECKOUT);
-    QVERIFY( QFileInfo(testdir).exists() );
+    QVERIFY( QFileInfo::exists(testdir) );
 
     //check if the file is there
     QString testfile(CVS_CHECKOUT "" CVS_TESTFILE_NAME);
-    QVERIFY( QFileInfo(testfile).exists() );
+    QVERIFY( QFileInfo::exists(testfile) );
 }
 
 

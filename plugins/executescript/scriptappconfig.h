@@ -69,6 +69,7 @@ public:
  */
 class ScriptAppConfigType : public KDevelop::LaunchConfigurationType
 {
+    Q_OBJECT
 public:
     ScriptAppConfigType();
     ~ScriptAppConfigType() override;

@@ -119,7 +119,7 @@ public:
     auto allDefinitions = definitions->definitions(id);
 
     qout << "Definitions for" << id.qualifiedIdentifier() << endl;
-    for (const IndexedDeclaration& decl : allDefinitions) {
+    foreach (const IndexedDeclaration decl, allDefinitions) {
       if(decl.data()) {
         qout << " " << decl.data()->qualifiedIdentifier() << "in" << decl.data()->url().byteArray() << "at" << decl.data()->rangeInCurrentRevision() << endl;
       }
@@ -137,7 +137,7 @@ class DefinitionsPrivate
 {
 public:
 
-  DefinitionsPrivate() : m_definitions("Definition Map") {
+  DefinitionsPrivate() : m_definitions(QStringLiteral("Definition Map")) {
   }
   //Maps declaration-ids to definitions
   ItemRepository<DefinitionsItem, DefinitionsRequestItem> m_definitions;

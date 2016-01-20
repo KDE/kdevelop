@@ -114,7 +114,7 @@ void StashManagerDialog::dropClicked()
     int ret = KMessageBox::questionYesNo(this, i18n("Are you sure you want to drop the stash '%1'?", sel));
 
     if(ret == KMessageBox::Yes)
-        runStash(QStringList("drop") << sel);
+        runStash(QStringList(QStringLiteral("drop")) << sel);
 }
 
 void StashManagerDialog::branchClicked()
@@ -122,7 +122,7 @@ void StashManagerDialog::branchClicked()
     QString branchName = QInputDialog::getText(this, i18n("KDevelop - Git Stash"), i18n("Select a name for the new branch:"));
 
     if(!branchName.isEmpty())
-        runStash(QStringList("branch") << branchName << selection());
+        runStash(QStringList(QStringLiteral("branch")) << branchName << selection());
 }
 
 //////////////////StashModel

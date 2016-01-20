@@ -59,7 +59,7 @@ void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor&
     //We need to insert an opening paren
     QString openingParen;
     if( spaceBeforeParen )
-      openingParen = " (";
+      openingParen = QStringLiteral(" (");
     else
       openingParen = '(';
 
@@ -68,7 +68,7 @@ void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor&
 
     QString closingParen;
     if( spaceBetweenParens && (haveArguments) ) {
-      closingParen = " )";
+      closingParen = QStringLiteral(" )");
     } else
       closingParen = ')';
 

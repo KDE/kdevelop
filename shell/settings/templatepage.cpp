@@ -96,7 +96,7 @@ void TemplatePage::shareTemplates()
 void TemplatePage::currentIndexChanged(const QModelIndex& index)
 {
     QString archive = ui->treeView->model()->data(index, KDevelop::TemplatesModel::ArchiveFileRole).toString();
-    ui->extractButton->setEnabled(QFileInfo(archive).exists());
+    ui->extractButton->setEnabled(QFileInfo::exists(archive));
 }
 
 void TemplatePage::extractTemplate()

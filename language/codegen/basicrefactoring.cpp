@@ -107,7 +107,7 @@ void BasicRefactoring::fillContextMenu(ContextMenuExtension &extension, Context 
         if (finfo.isWritable()) {
             QAction *action = new QAction(i18n("Rename \"%1\"...", declaration->qualifiedIdentifier().toString()), 0);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-            action->setIcon(QIcon::fromTheme("edit-rename"));
+            action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
             connect(action, &QAction::triggered, this, &BasicRefactoring::executeRenameAction);
             extension.addAction(ContextMenuExtension::RefactorGroup, action);
         }
@@ -191,7 +191,7 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(con
                                                                              DocumentChangeSet &changes,
                                                                              const QList<IndexedDeclaration> &declarations)
 {
-    foreach (const IndexedDeclaration &decl, declarations) {
+    foreach (const IndexedDeclaration decl, declarations) {
         Declaration *declaration = decl.data();
         if (!declaration)
             continue;
@@ -316,9 +316,9 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
     DocumentChangeSet changes;
     DUChainReadLocker lock;
 
-    foreach (const KDevelop::IndexedTopDUContext& collected, collector->allUsingContexts()) {
+    foreach (const KDevelop::IndexedTopDUContext collected, collector->allUsingContexts()) {
         QSet<int> hadIndices;
-        foreach (const IndexedDeclaration& decl, collector->declarations()) {
+        foreach (const IndexedDeclaration decl, collector->declarations()) {
             uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(decl.data(), false);
             if (hadIndices.contains(usedDeclarationIndex))
                 continue;

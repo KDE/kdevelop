@@ -197,7 +197,7 @@ void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
 
     qCDebug(VCS) << "using file" << m_file << vcsdiff.diff() << "base" << vcsdiff.baseDiff();
 
-    m_name = "VCS Diff";
+    m_name = QStringLiteral("VCS Diff");
     m_base = vcsdiff.baseDiff();
     m_depth = vcsdiff.depth();
 
@@ -280,19 +280,12 @@ bool VCSCommitDiffPatchSource::finishReview(QList< QUrl > selection) {
     return true;
 }
 
-static KDevelop::IPatchSource::Ptr currentShownDiff;
-
 bool showVcsDiff(IPatchSource* vcsDiff)
 {
     KDevelop::IPatchReview* patchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>(QStringLiteral("org.kdevelop.IPatchReview"));
 
-    //Only give one VCS diff at a time to the patch review plugin
-    delete currentShownDiff;
-
-    currentShownDiff = vcsDiff;
-
     if( patchReview ) {
-        patchReview->startReview(currentShownDiff);
+        patchReview->startReview(vcsDiff);
         return true;
     } else {
         qWarning() << "Patch review plugin not found";

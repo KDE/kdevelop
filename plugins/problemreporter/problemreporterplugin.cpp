@@ -78,18 +78,18 @@ public:
 
     Qt::DockWidgetArea defaultPosition() override { return Qt::BottomDockWidgetArea; }
 
-    QString id() const override { return "org.kdevelop.ProblemReporterView"; }
+    QString id() const override { return QStringLiteral("org.kdevelop.ProblemReporterView"); }
 };
 
 ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin("kdevproblemreporter", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevproblemreporter"), parent)
     , m_factory(new ProblemReporterFactory)
     , m_model(new ProblemReporterModel(this))
 {
     KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->addModel("Parser", m_model);
+    pms->addModel(QStringLiteral("Parser"), m_model);
     core()->uiController()->addToolView(i18n("Problems"), m_factory);
-    setXMLFile("kdevproblemreporter.rc");
+    setXMLFile(QStringLiteral("kdevproblemreporter.rc"));
 
     connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this,
             &ProblemReporterPlugin::documentClosed);
@@ -112,7 +112,7 @@ ProblemReporterModel* ProblemReporterPlugin::model() const
 void ProblemReporterPlugin::unload()
 {
     KDevelop::ProblemModelSet* pms = KDevelop::ICore::self()->languageController()->problemModelSet();
-    pms->removeModel("Parser");
+    pms->removeModel(QStringLiteral("Parser"));
 
     core()->uiController()->removeToolView(m_factory);
 }

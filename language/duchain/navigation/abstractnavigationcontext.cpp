@@ -57,7 +57,7 @@ void AbstractNavigationContext::addExternalHtml( const QString& text )
 {
   int lastPos = 0;
   int pos = 0;
-  QString fileMark = "KDEV_FILE_LINK{";
+  QString fileMark = QStringLiteral("KDEV_FILE_LINK{");
   while( pos < text.length() && (pos = text.indexOf( fileMark, pos)) != -1 ) {
     modifyHtml() +=  text.mid(lastPos, pos-lastPos);
 
@@ -475,14 +475,14 @@ QString Colorizer::operator() ( const QString& str ) const
   return ret;
 }
 
-const Colorizer AbstractNavigationContext::typeHighlight("006000");
-const Colorizer AbstractNavigationContext::errorHighlight("990000");
-const Colorizer AbstractNavigationContext::labelHighlight("000000");
-const Colorizer AbstractNavigationContext::codeHighlight("005000");
-const Colorizer AbstractNavigationContext::propertyHighlight("009900");
-const Colorizer AbstractNavigationContext::navigationHighlight("000099");
-const Colorizer AbstractNavigationContext::importantHighlight("000000", Colorizer::Bold | Colorizer::Italic);
-const Colorizer AbstractNavigationContext::commentHighlight("303030");
-const Colorizer AbstractNavigationContext::nameHighlight("000000", Colorizer::Bold);
+const Colorizer AbstractNavigationContext::typeHighlight(QStringLiteral("006000"));
+const Colorizer AbstractNavigationContext::errorHighlight(QStringLiteral("990000"));
+const Colorizer AbstractNavigationContext::labelHighlight(QStringLiteral("000000"));
+const Colorizer AbstractNavigationContext::codeHighlight(QStringLiteral("005000"));
+const Colorizer AbstractNavigationContext::propertyHighlight(QStringLiteral("009900"));
+const Colorizer AbstractNavigationContext::navigationHighlight(QStringLiteral("000099"));
+const Colorizer AbstractNavigationContext::importantHighlight(QStringLiteral("000000"), Colorizer::Bold | Colorizer::Italic);
+const Colorizer AbstractNavigationContext::commentHighlight(QStringLiteral("303030"));
+const Colorizer AbstractNavigationContext::nameHighlight(QStringLiteral("000000"), Colorizer::Bold);
 
 }

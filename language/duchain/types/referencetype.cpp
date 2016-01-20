@@ -101,8 +101,8 @@ void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
 QString ReferenceType::toString() const
 {
   AbstractType::Ptr base = baseType();
-  QString baseString = (base ? base->toString() : "<notype>");
-  const QString ampersands = d_func()->m_isRValue ? "&&" : "&";
+  QString baseString = (base ? base->toString() : QStringLiteral("<notype>"));
+  const QString ampersands = d_func()->m_isRValue ? QStringLiteral("&&") : QStringLiteral("&");
   if(base.cast<IntegralType>() || base.cast<StructureType>())
     return AbstractType::toString(false) + baseString + ampersands;
   else

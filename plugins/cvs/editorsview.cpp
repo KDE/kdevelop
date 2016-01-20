@@ -67,9 +67,9 @@ void EditorsView::slotJobFinished(KJob* job)
                 html += "<b>"+i18n("Date")+":</b> "+item.date+"<br>";
                 html += "<b>"+i18n("Machine")+":</b> "+item.machine+"<br>";
                 html += "<b>"+i18n("Repository")+":</b> "+item.localrepo+"<br>";
-                html += "<br>";
+                html += QLatin1String("<br>");
             }
-            html += "<br>";
+            html += QLatin1String("<br>");
         }
 
         textbrowser->setHtml( html );

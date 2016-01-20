@@ -44,13 +44,13 @@ QString BazaarUtils::getRevisionSpec(const KDevelop::VcsRevision& revision)
 {
     if (revision.revisionType() == KDevelop::VcsRevision::Special) {
         if (revision.specialType() == KDevelop::VcsRevision::Head)
-            return "-rlast:1";
+            return QStringLiteral("-rlast:1");
         else if (revision.specialType() == KDevelop::VcsRevision::Base)
             return QString();  // Workaround strange KDevelop behaviour
         else if (revision.specialType() == KDevelop::VcsRevision::Working)
             return QString();
         else if (revision.specialType() == KDevelop::VcsRevision::Start)
-            return "-r1";
+            return QStringLiteral("-r1");
         else
             return QString(); // Don't know how to handle this situation
     } else if (revision.revisionType() == KDevelop::VcsRevision::GlobalNumber)
@@ -63,13 +63,13 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& end)
 {
     if (end.revisionType() == KDevelop::VcsRevision::Special) {
         if (end.specialType() == KDevelop::VcsRevision::Head) {
-            return "-r..last:1";
+            return QStringLiteral("-r..last:1");
         } else if (end.specialType() == KDevelop::VcsRevision::Base) {
-            return "-r..last:1"; // Workaround strange KDevelop behaviour
+            return QStringLiteral("-r..last:1"); // Workaround strange KDevelop behaviour
         } else if (end.specialType() == KDevelop::VcsRevision::Working) {
             return QString();
         } else if (end.specialType() == KDevelop::VcsRevision::Start) {
-            return "-..r1";
+            return QStringLiteral("-..r1");
         } else {
             return QString(); // Don't know how to handle this situation
         }
@@ -88,11 +88,11 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
             if (end.revisionType() == KDevelop::VcsRevision::Special) {
                 if (end.specialType() == KDevelop::VcsRevision::Base ||
                         end.specialType() == KDevelop::VcsRevision::Head)
-                    return "-rlast:2..last:1";
+                    return QStringLiteral("-rlast:2..last:1");
                 else if (end.specialType() == KDevelop::VcsRevision::Working)
                     return QString();
                 else if (end.specialType() == KDevelop::VcsRevision::Start)
-                    return "-r0..1";        // That's wrong revision range
+                    return QStringLiteral("-r0..1");        // That's wrong revision range
             } else if (end.revisionType() == KDevelop::VcsRevision::GlobalNumber)
                 return QStringLiteral("-r") +
                        QString::number(end.revisionValue().toLongLong() - 1)
@@ -130,15 +130,15 @@ KDevelop::VcsStatusInfo BazaarUtils::parseVcsStatusInfoLine(const QString& line)
     if (tokens.size() < 2) // Don't know how to handle this situation (it is an error)
         return result;
     result.setUrl(QUrl::fromLocalFile(tokens.back()));
-    if (tokens[0] == "M") {
+    if (tokens[0] == QLatin1String("M")) {
         result.setState(KDevelop::VcsStatusInfo::ItemModified);
-    } else if (tokens[0] == "C") {
+    } else if (tokens[0] == QLatin1String("C")) {
         result.setState(KDevelop::VcsStatusInfo::ItemHasConflicts);
-    } else if (tokens[0] == "+N") {
+    } else if (tokens[0] == QLatin1String("+N")) {
         result.setState(KDevelop::VcsStatusInfo::ItemAdded);
-    } else if (tokens[0] == "?") {
+    } else if (tokens[0] == QLatin1String("?")) {
         result.setState(KDevelop::VcsStatusInfo::ItemUnknown);
-    } else if (tokens[0] == "D") {
+    } else if (tokens[0] == QLatin1String("D")) {
         result.setState(KDevelop::VcsStatusInfo::ItemDeleted);
     } else {
         result.setState(KDevelop::VcsStatusInfo::ItemUserState);
@@ -177,7 +177,7 @@ KDevelop::VcsEvent BazaarUtils::parseBzrLogPart(const QString& output)
                 QString author = line.mid(QStringLiteral("author: ").length());
                 commitInfo.setAuthor(author);       // It may override commiter (In fact commiter is not supported by VcsEvent)
             } else if (line.startsWith(QStringLiteral("timestamp"))) {
-                const QString formatString = "yyyy-MM-dd hh:mm:ss";
+                const QString formatString = QStringLiteral("yyyy-MM-dd hh:mm:ss");
                 QString timestamp = line.mid(QStringLiteral("timestamp: ddd ").length(), formatString.length());
                 commitInfo.setDate(QDateTime::fromString(timestamp, formatString));
             } else if (line.startsWith(QStringLiteral("message"))) {
@@ -212,13 +212,13 @@ KDevelop::VcsEvent BazaarUtils::parseBzrLogPart(const QString& output)
 
 KDevelop::VcsItemEvent::Action BazaarUtils::parseActionDescription(const QString& action)
 {
-    if (action == "added:") {
+    if (action == QLatin1String("added:")) {
         return KDevelop::VcsItemEvent::Added;
-    } else if (action == "modified:") {
+    } else if (action == QLatin1String("modified:")) {
         return KDevelop::VcsItemEvent::Modified;
-    } else if (action == "removed:") {
+    } else if (action == QLatin1String("removed:")) {
         return KDevelop::VcsItemEvent::Deleted;
-    } else if (action == "kind changed:") {
+    } else if (action == QLatin1String("kind changed:")) {
         return KDevelop::VcsItemEvent::Replaced; // Best approximation
     } else if (action.startsWith(QStringLiteral("renamed"))) {
         return KDevelop::VcsItemEvent::Modified; // Best approximation
@@ -234,7 +234,7 @@ QList<QUrl> BazaarUtils::handleRecursion(const QList<QUrl>& listOfUrls, KDevelop
         return listOfUrls;      // Nothing to do
     } else {
         QList<QUrl> result;
-        for (const auto url : listOfUrls) {
+        foreach (const auto& url, listOfUrls) {
             if (url.isLocalFile() && QFileInfo(url.toLocalFile()).isFile()) {
                 result.push_back(url);
             }

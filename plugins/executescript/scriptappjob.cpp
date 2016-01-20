@@ -52,7 +52,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     qCDebug(PLUGIN_EXECUTESCRIPT) << "creating script app job";
     setCapabilities(Killable);
 
-    IExecuteScriptPlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecuteScriptPlugin")->extension<IExecuteScriptPlugin>();
+    IExecuteScriptPlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecuteScriptPlugin"))->extension<IExecuteScriptPlugin>();
     Q_ASSERT(iface);
 
     KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());

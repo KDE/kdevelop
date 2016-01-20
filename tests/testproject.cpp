@@ -31,7 +31,7 @@ TestProject::TestProject(const Path& path, QObject* parent)
 , m_root(0)
 , m_projectConfiguration(KSharedConfig::openConfig())
 {
-    m_path = path.isValid() ? path : Path("/tmp/kdev-testproject/");
+    m_path = path.isValid() ? path : Path(QStringLiteral("/tmp/kdev-testproject/"));
     m_root = new ProjectFolderItem(this, m_path);
     ICore::self()->projectController()->projectModel()->appendRow( m_root );
 }

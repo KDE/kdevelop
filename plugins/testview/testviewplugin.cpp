@@ -58,7 +58,7 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
         }
         QString id() const override
         {
-            return "org.kdevelop.TestView";
+            return QStringLiteral("org.kdevelop.TestView");
         }
         QList< QAction* > contextMenuActions(QWidget* viewWidget) const override
         {
@@ -69,19 +69,19 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
 };
 
 TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args)
-    : IPlugin("kdevtestview", parent)
+    : IPlugin(QStringLiteral("kdevtestview"), parent)
 {
     Q_UNUSED(args)
 
-    QAction* runAll = new QAction( QIcon::fromTheme("system-run"), i18n("Run All Tests"), this );
+    QAction* runAll = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18n("Run All Tests"), this );
     connect(runAll, &QAction::triggered, this, &TestViewPlugin::runAllTests);
-    actionCollection()->addAction("run_all_tests", runAll);
+    actionCollection()->addAction(QStringLiteral("run_all_tests"), runAll);
     
-    QAction* stopTest = new QAction( QIcon::fromTheme("process-stop"), i18n("Stop Running Tests"), this );
+    QAction* stopTest = new QAction( QIcon::fromTheme(QStringLiteral("process-stop")), i18n("Stop Running Tests"), this );
     connect(stopTest, &QAction::triggered, this, &TestViewPlugin::stopRunningTests);
-    actionCollection()->addAction("stop_running_tests", stopTest);
+    actionCollection()->addAction(QStringLiteral("stop_running_tests"), stopTest);
 
-    setXMLFile("kdevtestview.rc");
+    setXMLFile(QStringLiteral("kdevtestview.rc"));
 
     m_viewFactory = new TestToolViewFactory(this);
     core()->uiController()->addToolView(i18n("Unit Tests"), m_viewFactory);
@@ -148,8 +148,8 @@ void TestViewPlugin::jobStateChanged()
             break;
         }
     }
-    actionCollection()->action("run_all_tests")->setEnabled(!found);
-    actionCollection()->action("stop_running_tests")->setEnabled(found);
+    actionCollection()->action(QStringLiteral("run_all_tests"))->setEnabled(!found);
+    actionCollection()->action(QStringLiteral("stop_running_tests"))->setEnabled(found);
 }
 
 #include "testviewplugin.moc"

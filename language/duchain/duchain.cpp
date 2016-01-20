@@ -516,7 +516,7 @@ public:
 
       //Process the indices in a separate step after copying them from the array, so we don't need m_environmentListInfo.mutex locked,
       //and can call loadInformation(..) safely, which else might lead to a deadlock.
-      for (uint topContextIndex : topContextIndices) {
+      foreach (uint topContextIndex, topContextIndices) {
         QExplicitlySharedDataPointer< ParsingEnvironmentFile > p = ParsingEnvironmentFilePointer(loadInformation(topContextIndex));
         if(p) {
          ret << p;
@@ -529,7 +529,7 @@ public:
     QMutexLocker l(&m_chainsMutex);
 
     //Add those information that have not been added to the stored lists yet
-    foreach(ParsingEnvironmentFilePointer file, m_fileEnvironmentInformations.values(url))
+    foreach(const ParsingEnvironmentFilePointer& file, m_fileEnvironmentInformations.values(url))
       if(!ret.contains(file))
         ret << file;
 
@@ -714,7 +714,7 @@ public:
       writeLock.unlock();
 
       //Here we wait for all parsing-threads to stop their processing
-      foreach(const auto& language, lockedParseMutexes) {
+      foreach(const auto language, lockedParseMutexes) {
         language->parseLock()->lockForWrite();
         locked << language->parseLock();
       }
@@ -1494,7 +1494,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
         if(allImportsLoaded) {
           l.unlock();
           lock.unlock();
-          foreach(const auto& language, languages) {
+          foreach(const auto language, languages) {
             if(language->codeHighlighting()) {
               language->codeHighlighting()->highlightDUChain(standardContext);
             }

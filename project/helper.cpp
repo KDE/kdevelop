@@ -72,7 +72,7 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, con
     //if we didn't find a VCS, we remove using KIO (if the file still exists, the vcs plugin might have simply deleted the url without returning a job
     auto deleteJob = KIO::del(url);
     KJobWidgets::setWindow(deleteJob, window);
-    if (!deleteJob->exec() && url.isLocalFile() && (QFileInfo(url.toLocalFile())).exists()) {
+    if (!deleteJob->exec() && url.isLocalFile() && (QFileInfo::exists(url.toLocalFile()))) {
         KMessageBox::error( window,
             isFolder ? i18n( "Cannot remove folder <i>%1</i>.", url.toDisplayString(QUrl::PreferLocalFile) )
                         : i18n( "Cannot remove file <i>%1</i>.", url.toDisplayString(QUrl::PreferLocalFile) ) );

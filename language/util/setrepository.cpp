@@ -306,22 +306,22 @@ QString SetRepositoryAlgorithms::dumpDotGraphInternal(uint nodeIndex, bool maste
 
   const SetNodeData& node(*repository.itemFromIndex(nodeIndex));
 
-  QString color = "blue";
+  QString color = QStringLiteral("blue");
   if(master)
-    color = "red";
+    color = QStringLiteral("red");
 
   QString label = QStringLiteral("%1 -> %2").arg(node.start()).arg(node.end());
   if(!node.contiguous())
-    label += ", with gaps";
+    label += QLatin1String(", with gaps");
 
-  QString ret = QStringLiteral("%1[label=\"%2\", color=\"%3\"];\n").arg(shortLabel(node)).arg(label).arg(color);
+  QString ret = QStringLiteral("%1[label=\"%2\", color=\"%3\"];\n").arg(shortLabel(node), label, color);
 
   if(node.leftNode()) {
     const SetNodeData& left(*repository.itemFromIndex(node.leftNode()));
     const SetNodeData& right(*repository.itemFromIndex(node.rightNode()));
     Q_ASSERT(node.rightNode());
-    ret += QStringLiteral("%1 -> %2;\n").arg(shortLabel(node)).arg(shortLabel(left));
-    ret += QStringLiteral("%1 -> %2;\n").arg(shortLabel(node)).arg(shortLabel(right));
+    ret += QStringLiteral("%1 -> %2;\n").arg(shortLabel(node), shortLabel(left));
+    ret += QStringLiteral("%1 -> %2;\n").arg(shortLabel(node), shortLabel(right));
     ret += dumpDotGraphInternal(node.leftNode());
     ret += dumpDotGraphInternal(node.rightNode());
   }
@@ -330,9 +330,9 @@ QString SetRepositoryAlgorithms::dumpDotGraphInternal(uint nodeIndex, bool maste
 }
 
 QString SetRepositoryAlgorithms::dumpDotGraph(uint nodeIndex) const {
-  QString ret = "digraph Repository {\n";
+  QString ret = QStringLiteral("digraph Repository {\n");
   ret += dumpDotGraphInternal(nodeIndex, true);
-  ret += "}\n";
+  ret += QLatin1String("}\n");
   return ret;
 }
 

@@ -49,7 +49,7 @@ class QStandardItemModel;
 
 QTEST_MAIN(StandardOutputViewTest)
 
-const QString StandardOutputViewTest::toolviewTitle = "my_toolview";
+const QString StandardOutputViewTest::toolviewTitle = QStringLiteral("my_toolview");
 
 void StandardOutputViewTest::initTestCase()
 {
@@ -67,7 +67,7 @@ void StandardOutputViewTest::initTestCase()
 
     QList<KDevelop::IPlugin*> plugins = plugin_controller->loadedPlugins();
     // make sure KDevStandardOutputView is loaded
-    KDevelop::IPlugin* plugin = plugin_controller->loadPlugin("KDevStandardOutputView");
+    KDevelop::IPlugin* plugin = plugin_controller->loadPlugin(QStringLiteral("KDevStandardOutputView"));
     QVERIFY(plugin);
     m_stdOutputView =  dynamic_cast<KDevelop::IOutputView*>(plugin);
     QVERIFY(m_stdOutputView);
@@ -118,8 +118,8 @@ void StandardOutputViewTest::testActions()
     QVERIFY(!toolviewPointer(toolviewTitle));
 
     QList<QAction*> addedActions;
-    addedActions.append(new QAction("Action1", 0));
-    addedActions.append(new QAction("Action2", 0));
+    addedActions.append(new QAction(QStringLiteral("Action1"), 0));
+    addedActions.append(new QAction(QStringLiteral("Action2"), 0));
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView,
                                                    QIcon(),
                                                    KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction,
@@ -196,7 +196,7 @@ void StandardOutputViewTest::testSetModelAndDelegate()
     QAbstractItemDelegate* delegate = new QItemDelegate;
     QPointer<QAbstractItemDelegate> checkDelegate(delegate);
 
-    outputId[0] = m_stdOutputView->registerOutputInToolView(toolviewId, "output");
+    outputId[0] = m_stdOutputView->registerOutputInToolView(toolviewId, QStringLiteral("output"));
     m_stdOutputView->setModel(outputId[0], model);
     m_stdOutputView->setDelegate(outputId[0], delegate);
 

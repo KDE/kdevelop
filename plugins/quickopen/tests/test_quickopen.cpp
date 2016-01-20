@@ -72,9 +72,9 @@ void TestQuickOpen::testDuchainFilter_data()
     };
 
     auto items = ItemList()
-        << i("KTextEditor::Cursor")
-        << i("void KTextEditor::Cursor::explode()")
-        << i("QVector<int> SomeNamespace::SomeClass::func(int)");
+        << i(QStringLiteral("KTextEditor::Cursor"))
+        << i(QStringLiteral("void KTextEditor::Cursor::explode()"))
+        << i(QStringLiteral("QVector<int> SomeNamespace::SomeClass::func(int)"));
 
     QTest::newRow("prefix") << items << "KTE" << ( ItemList() << items.at(0) << items.at(1) );
     QTest::newRow("prefix_mismatch") << items << "KTEY" << ( ItemList() );
@@ -109,9 +109,9 @@ void TestQuickOpen::testAbbreviations_data()
     QTest::addColumn<QStringList>("filtered");
 
     const QStringList items = QStringList()
-        << "/foo/bar/caz/a.h"
-        << "/KateThing/CMakeLists.txt"
-        << "/FooBar/FooBar/Footestfoo.h";
+        << QStringLiteral("/foo/bar/caz/a.h")
+        << QStringLiteral("/KateThing/CMakeLists.txt")
+        << QStringLiteral("/FooBar/FooBar/Footestfoo.h");
 
     QTest::newRow("path_segments") << items << "fbc" << ( QStringList() );
     QTest::newRow("path_segment_abbrev") << items << "cmli" << ( QStringList() << items.at(1) );
@@ -139,16 +139,16 @@ void TestQuickOpen::testSorting_data()
     QTest::addColumn<QStringList>("filtered");
 
     const QStringList items = QStringList()
-        << "/foo/a.h"
-        << "/foo/ab.h"
-        << "/foo/bc.h"
-        << "/bar/a.h";
+        << QStringLiteral("/foo/a.h")
+        << QStringLiteral("/foo/ab.h")
+        << QStringLiteral("/foo/bc.h")
+        << QStringLiteral("/bar/a.h");
 
     {
         QTest::newRow("no-filter") << items << QString() << items;
     }
     {
-        const QStringList filtered = QStringList() << "/bar/a.h";
+        const QStringList filtered = QStringList() << QStringLiteral("/bar/a.h");
         QTest::newRow("bar1") << items << QStringLiteral("bar") << filtered;
         QTest::newRow("bar2") << items << QStringLiteral("/bar") << filtered;
         QTest::newRow("bar3") << items << QStringLiteral("/bar/") << filtered;
@@ -161,38 +161,38 @@ void TestQuickOpen::testSorting_data()
         QTest::newRow("bar10") << items << QStringLiteral("b/a.") << filtered;
     }
     {
-        const QStringList filtered = QStringList() << "/foo/a.h" << "/foo/ab.h";
+        const QStringList filtered = QStringList() << QStringLiteral("/foo/a.h") << QStringLiteral("/foo/ab.h");
         QTest::newRow("foo_a1") << items << QStringLiteral("foo/a") << filtered;
         QTest::newRow("foo_a2") << items << QStringLiteral("/f/a") << filtered;
     }
     {
         // now matches ab.h too because of abbreviation matching, but should be sorted last
-        const QStringList filtered = QStringList() << "/foo/a.h" << "/bar/a.h" << "/foo/ab.h";
+        const QStringList filtered = QStringList() << QStringLiteral("/foo/a.h") << QStringLiteral("/bar/a.h") << QStringLiteral("/foo/ab.h");
         QTest::newRow("a_h") << items << QStringLiteral("a.h") << filtered;
     }
     {
-        const QStringList base = QStringList() << "/foo/a_test" << "/foo/test_b_1" << "/foo/test_b";
-        const QStringList sorted = QStringList() << "/foo/test_b" << "/foo/test_b_1";
+        const QStringList base = QStringList() << QStringLiteral("/foo/a_test") << QStringLiteral("/foo/test_b_1") << QStringLiteral("/foo/test_b");
+        const QStringList sorted = QStringList() << QStringLiteral("/foo/test_b") << QStringLiteral("/foo/test_b_1");
         QTest::newRow("prefer_exact") << base << QStringLiteral("test_b") << sorted;
     }
     {
         // from commit: 769491f06a4560a4798592ff060675ffb0d990a6
-        const QString file = "/myProject/someStrangePath/anItem.cpp";
-        const QStringList base = QStringList() << "/foo/a" << file;
+        const QString file = QStringLiteral("/myProject/someStrangePath/anItem.cpp");
+        const QStringList base = QStringList() << QStringLiteral("/foo/a") << file;
         const QStringList filtered = QStringList() << file;
         QTest::newRow("strange") << base << QStringLiteral("strange/item") << filtered;
     }
     {
-        const QStringList base = QStringList() << "/foo/a_test" << "/foo/test_b_1"
-                                               << "/foo/test_b" << "/foo/test/a";
-        const QStringList sorted = QStringList() << "/foo/test_b_1" << "/foo/test_b"
-                                                 << "/foo/a_test" << "/foo/test/a";
+        const QStringList base = QStringList() << QStringLiteral("/foo/a_test") << QStringLiteral("/foo/test_b_1")
+                                               << QStringLiteral("/foo/test_b") << QStringLiteral("/foo/test/a");
+        const QStringList sorted = QStringList() << QStringLiteral("/foo/test_b_1") << QStringLiteral("/foo/test_b")
+                                                 << QStringLiteral("/foo/a_test") << QStringLiteral("/foo/test/a");
         QTest::newRow("prefer_start1") << base << QStringLiteral("test") << sorted;
         QTest::newRow("prefer_start2") << base << QStringLiteral("foo/test") << sorted;
     }
     {
-        const QStringList base = QStringList() << "/muh/kuh/asdf/foo" << "/muh/kuh/foo/asdf";
-        const QStringList reverse = QStringList() << "/muh/kuh/foo/asdf" << "/muh/kuh/asdf/foo";
+        const QStringList base = QStringList() << QStringLiteral("/muh/kuh/asdf/foo") << QStringLiteral("/muh/kuh/foo/asdf");
+        const QStringList reverse = QStringList() << QStringLiteral("/muh/kuh/foo/asdf") << QStringLiteral("/muh/kuh/asdf/foo");
         QTest::newRow("prefer_start3") << base << QStringLiteral("f") << base;
         QTest::newRow("prefer_start4") << base << QStringLiteral("/fo") << base;
         QTest::newRow("prefer_start5") << base << QStringLiteral("/foo") << base;
@@ -202,7 +202,7 @@ void TestQuickOpen::testSorting_data()
         QTest::newRow("prefer_start9") << base << QStringLiteral("asdf") << reverse;
     }
     {
-        QTest::newRow("duplicate") << (QStringList() << "/muh/kuh/asdf/foo") << QStringLiteral("kuh/kuh") << QStringList();
+        QTest::newRow("duplicate") << (QStringList() << QStringLiteral("/muh/kuh/asdf/foo")) << QStringLiteral("kuh/kuh") << QStringList();
     }
 }
 
@@ -210,17 +210,17 @@ void TestQuickOpen::testProjectFileFilter()
 {
     QTemporaryDir dir;
     TestProject* project = new TestProject(Path(dir.path()));
-    ProjectFolderItem* foo = createChild<ProjectFolderItem>(project->projectItem(), "foo");
-    createChild<ProjectFileItem>(foo, "bar");
-    createChild<ProjectFileItem>(foo, "asdf");
-    createChild<ProjectFileItem>(foo, "space bar");
-    ProjectFolderItem* asdf = createChild<ProjectFolderItem>(project->projectItem(), "asdf");
-    createChild<ProjectFileItem>(asdf, "bar");
+    ProjectFolderItem* foo = createChild<ProjectFolderItem>(project->projectItem(), QStringLiteral("foo"));
+    createChild<ProjectFileItem>(foo, QStringLiteral("bar"));
+    createChild<ProjectFileItem>(foo, QStringLiteral("asdf"));
+    createChild<ProjectFileItem>(foo, QStringLiteral("space bar"));
+    ProjectFolderItem* asdf = createChild<ProjectFolderItem>(project->projectItem(), QStringLiteral("asdf"));
+    createChild<ProjectFileItem>(asdf, QStringLiteral("bar"));
 
     QTemporaryFile tmpFile;
     tmpFile.setFileName(dir.path() + "/aaaa");
     QVERIFY(tmpFile.open());
-    ProjectFileItem* aaaa = new ProjectFileItem("aaaa", project->projectItem());
+    ProjectFileItem* aaaa = new ProjectFileItem(QStringLiteral("aaaa"), project->projectItem());
     QCOMPARE(project->fileSet().size(), 5);
 
     ProjectFileDataProvider provider;
@@ -228,7 +228,7 @@ void TestQuickOpen::testProjectFileFilter()
     projectController->addProject(project);
 
     const QStringList original = QStringList()
-        << "aaaa" << "asdf/bar" << "foo/asdf" << "foo/bar" << "foo/space bar";
+        << QStringLiteral("aaaa") << QStringLiteral("asdf/bar") << QStringLiteral("foo/asdf") << QStringLiteral("foo/bar") << QStringLiteral("foo/space bar");
 
     // lazy load
     QCOMPARE(provider.itemCount(), 0u);
@@ -243,24 +243,24 @@ void TestQuickOpen::testProjectFileFilter()
     // lazy load again
     QCOMPARE(items(provider), original);
     provider.reset();
-    QCOMPARE(items(provider), QStringList() << "asdf/bar" << "foo/asdf" << "foo/bar" << "foo/space bar");
+    QCOMPARE(items(provider), QStringList() << QStringLiteral("asdf/bar") << QStringLiteral("foo/asdf") << QStringLiteral("foo/bar") << QStringLiteral("foo/space bar"));
 
     // prefer files starting with filter
-    provider.setFilterText("as");
+    provider.setFilterText(QStringLiteral("as"));
     qDebug() << items(provider);
-    QCOMPARE(items(provider), QStringList() << "foo/asdf" << "asdf/bar");
+    QCOMPARE(items(provider), QStringList() << QStringLiteral("foo/asdf") << QStringLiteral("asdf/bar"));
 
     // clear filter
     provider.reset();
-    QCOMPARE(items(provider), QStringList() << "asdf/bar" << "foo/asdf" << "foo/bar" << "foo/space bar");
+    QCOMPARE(items(provider), QStringList() << QStringLiteral("asdf/bar") << QStringLiteral("foo/asdf") << QStringLiteral("foo/bar") << QStringLiteral("foo/space bar"));
 
     // update on document close, lazy load again
     core->documentController()->closeAllDocuments();
-    QCOMPARE(items(provider), QStringList() << "asdf/bar" << "foo/asdf" << "foo/bar" << "foo/space bar");
+    QCOMPARE(items(provider), QStringList() << QStringLiteral("asdf/bar") << QStringLiteral("foo/asdf") << QStringLiteral("foo/bar") << QStringLiteral("foo/space bar"));
     provider.reset();
     QCOMPARE(items(provider), original);
 
-    ProjectFileItem* blub = createChild<ProjectFileItem>(project->projectItem(), "blub");
+    ProjectFileItem* blub = createChild<ProjectFileItem>(project->projectItem(), QStringLiteral("blub"));
     // lazy load
     QCOMPARE(provider.itemCount(), 5u);
     provider.reset();
@@ -286,13 +286,13 @@ void TestQuickOpen::testProjectFileFilter()
     provider.setFilterText(dir.path());
     QCOMPARE(items(provider), original);
 
-    Path buildFolderItem(project->path().parent(), ".build/generated.h");
+    Path buildFolderItem(project->path().parent(), QStringLiteral(".build/generated.h"));
     new ProjectFileItem(project, buildFolderItem, project->projectItem());
     // lazy load
     QCOMPARE(items(provider), original);
     provider.reset();
-    QCOMPARE(items(provider), QStringList() << "aaaa" << "asdf/bar" << "foo/asdf"
-                                            << "foo/bar" << "foo/space bar" << "../.build/generated.h");
+    QCOMPARE(items(provider), QStringList() << QStringLiteral("aaaa") << QStringLiteral("asdf/bar") << QStringLiteral("foo/asdf")
+                                            << QStringLiteral("foo/bar") << QStringLiteral("foo/space bar") << QStringLiteral("../.build/generated.h"));
 
     projectController->closeProject(project);
     provider.reset();

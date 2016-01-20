@@ -53,6 +53,7 @@ using namespace KDevelop;
 
 class PatchFilesModel : public VcsFileChangesModel
 {
+    Q_OBJECT
 public:
     PatchFilesModel( QObject *parent, bool allowSelection ) : VcsFileChangesModel( parent, allowSelection ) { };
     enum ItemRoles { HunksNumberRole = LastItemRole+1 };
@@ -207,13 +208,13 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.filesList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_editPatch.filesList, &QTreeView::customContextMenuRequested, this, &PatchReviewToolView::customContextMenuRequested);
     connect(m_fileModel, &PatchFilesModel::itemChanged, this, &PatchReviewToolView::fileItemChanged);
-    m_editPatch.previousFile->setIcon( QIcon::fromTheme( "arrow-left" ) );
-    m_editPatch.previousHunk->setIcon( QIcon::fromTheme( "arrow-up" ) );
-    m_editPatch.nextHunk->setIcon( QIcon::fromTheme( "arrow-down" ) );
-    m_editPatch.nextFile->setIcon( QIcon::fromTheme( "arrow-right" ) );
-    m_editPatch.cancelReview->setIcon( QIcon::fromTheme( "dialog-cancel" ) );
-    m_editPatch.updateButton->setIcon( QIcon::fromTheme( "view-refresh" ) );
-    m_editPatch.testsButton->setIcon( QIcon::fromTheme( "preflight-verifier" ) );
+    m_editPatch.previousFile->setIcon( QIcon::fromTheme( QStringLiteral("arrow-left") ) );
+    m_editPatch.previousHunk->setIcon( QIcon::fromTheme( QStringLiteral("arrow-up") ) );
+    m_editPatch.nextHunk->setIcon( QIcon::fromTheme( QStringLiteral("arrow-down") ) );
+    m_editPatch.nextFile->setIcon( QIcon::fromTheme( QStringLiteral("arrow-right") ) );
+    m_editPatch.cancelReview->setIcon( QIcon::fromTheme( QStringLiteral("dialog-cancel") ) );
+    m_editPatch.updateButton->setIcon( QIcon::fromTheme( QStringLiteral("view-refresh") ) );
+    m_editPatch.testsButton->setIcon( QIcon::fromTheme( QStringLiteral("preflight-verifier") ) );
     m_editPatch.finishReview->setDefaultAction(m_plugin->finishReviewAction());
 
 #ifdef WITH_PURPOSE
@@ -247,7 +248,7 @@ void PatchReviewToolView::showEditDialog() {
 
     connect( m_editPatch.testsButton, &QPushButton::clicked, this, &PatchReviewToolView::runTests );
 
-    m_selectAllAction = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this );
+    m_selectAllAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-select-all")), i18n("Select All"), this );
     connect( m_selectAllAction, &QAction::triggered, this, &PatchReviewToolView::selectAll );
     m_deselectAllAction = new QAction( i18n("Deselect All"), this );
     connect( m_deselectAllAction, &QAction::triggered, this, &PatchReviewToolView::deselectAll );
@@ -369,7 +370,7 @@ void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
     }
 
     // If the document is not open yet, open it in the correct order
-    IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range(), IDocumentController::DefaultMode, "", buddy);
+    IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range(), IDocumentController::DefaultMode, QString(), buddy);
     KTextEditor::View* view = 0;
     if(newDoc)
         view= newDoc->activeTextView();
@@ -567,3 +568,5 @@ void PatchReviewToolView::testJobResult(KJob* job)
     // Needed because some test jobs may raise their own output views
     ICore::self()->uiController()->raiseToolView(this);
 }
+
+#include "patchreviewtoolview.moc"

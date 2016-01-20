@@ -73,7 +73,7 @@ void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item, bool exec)
     }
     
     foreach(const QString& item, walker.paths())
-        addItem(QIcon::fromTheme("system-run"), item);
+        addItem(QIcon::fromTheme(QStringLiteral("system-run")), item);
     
 }
 

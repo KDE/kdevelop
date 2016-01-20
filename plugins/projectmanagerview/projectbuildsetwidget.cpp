@@ -56,27 +56,27 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
 {
     m_ui->setupUi( this );
 
-    m_ui->addItemButton->setIcon( QIcon::fromTheme( "list-add" ) );
+    m_ui->addItemButton->setIcon( QIcon::fromTheme( QStringLiteral("list-add") ) );
     connect( m_ui->addItemButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::addItems );
 
-    m_ui->removeItemButton->setIcon( QIcon::fromTheme( "list-remove" ) );
+    m_ui->removeItemButton->setIcon( QIcon::fromTheme( QStringLiteral("list-remove") ) );
     connect( m_ui->removeItemButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::removeItems );
 
-    m_ui->upButton->setIcon( QIcon::fromTheme( "go-up" ) );
+    m_ui->upButton->setIcon( QIcon::fromTheme( QStringLiteral("go-up") ) );
     connect( m_ui->upButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::moveUp );
 
-    m_ui->downButton->setIcon( QIcon::fromTheme( "go-down" ) );
+    m_ui->downButton->setIcon( QIcon::fromTheme( QStringLiteral("go-down") ) );
     connect( m_ui->downButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::moveDown );
 
-    m_ui->topButton->setIcon( QIcon::fromTheme( "go-top" ) );
+    m_ui->topButton->setIcon( QIcon::fromTheme( QStringLiteral("go-top") ) );
     connect( m_ui->topButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::moveToTop );
 
-    m_ui->bottomButton->setIcon( QIcon::fromTheme( "go-bottom" ) );
+    m_ui->bottomButton->setIcon( QIcon::fromTheme( QStringLiteral("go-bottom") ) );
     connect( m_ui->bottomButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::moveToBottom );
 
@@ -138,7 +138,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
         int row = m_ui->itemView->selectionModel()->selectedRows()[0].row();
         if(row < buildSet->items().size())
         {
-            KDevelop::ProjectBaseItem* item = buildSet->items()[row].findItem();
+            KDevelop::ProjectBaseItem* item = buildSet->items().at(row).findItem();
             if(item)
                 itemlist << item;
         }
@@ -147,7 +147,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
 
     QMenu m;
     m.setTitle( i18n("Build Set") );
-    m.addAction( QIcon::fromTheme("list-remove"), i18n( "Remove From Build Set" ), this, SLOT(removeItems()) );
+    m.addAction( QIcon::fromTheme(QStringLiteral("list-remove")), i18n( "Remove From Build Set" ), this, SLOT(removeItems()) );
 
     if( !itemlist.isEmpty() )
     {

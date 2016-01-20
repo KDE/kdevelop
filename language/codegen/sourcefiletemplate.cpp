@@ -54,34 +54,34 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
 {
     ConfigOption entry;
 
-    entry.name = element.attribute("name");
-    entry.type = element.attribute("type", "String");
+    entry.name = element.attribute(QStringLiteral("name"));
+    entry.type = element.attribute(QStringLiteral("type"), QStringLiteral("String"));
 
     for (QDomElement e = element.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
     {
         QString tag = e.tagName();
 
-        if (tag == "label")
+        if (tag == QLatin1String("label"))
         {
             entry.label = e.text();
         }
-        else if (tag == "tooltip")
+        else if (tag == QLatin1String("tooltip"))
         {
             entry.label = e.text();
         }
-        else if (tag == "whatsthis")
+        else if (tag == QLatin1String("whatsthis"))
         {
             entry.label = e.text();
         }
-        else if ( tag == "min" )
+        else if ( tag == QLatin1String("min") )
         {
             entry.minValue = e.text();
         }
-        else if ( tag == "max" )
+        else if ( tag == QLatin1String("max") )
         {
             entry.maxValue = e.text();
         }
-        else if ( tag == "default" )
+        else if ( tag == QLatin1String("default") )
         {
             entry.value = renderer->render(e.text(), entry.name);
         }
@@ -126,7 +126,7 @@ SourceFileTemplate& SourceFileTemplate::operator=(const SourceFileTemplate& othe
 
     delete d->archive;
     if (other.d->archive) {
-        if (other.d->archive->fileName().endsWith(".zip")) {
+        if (other.d->archive->fileName().endsWith(QLatin1String(".zip"))) {
             d->archive = new KZip(other.d->archive->fileName());
         } else {
             d->archive = new KTar(other.d->archive->fileName());
@@ -148,7 +148,7 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
 
     const QString templateBaseName = QFileInfo(templateDescription).baseName();
 
-    d->searchLocations.append(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "/kdevfiletemplates/templates/", QStandardPaths::LocateDirectory));
+    d->searchLocations.append(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("/kdevfiletemplates/templates/"), QStandardPaths::LocateDirectory));
 
     foreach(const QString& dir, d->searchLocations) {
         qDebug() << "search in:" << dir << "look for:" << templateBaseName;
@@ -162,13 +162,13 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
         }
     }
 
-    if (archiveFileName.isEmpty() || !QFileInfo(archiveFileName).exists()) {
+    if (archiveFileName.isEmpty() || !QFileInfo::exists(archiveFileName)) {
         qCWarning(LANGUAGE) << "Could not find a template archive for description" << templateDescription << ", archive file" << archiveFileName;
         d->archive = 0;
     } else {
         QFileInfo info(archiveFileName);
 
-        if (info.suffix() == "zip") {
+        if (info.suffix() == QLatin1String("zip")) {
             d->archive = new KZip(archiveFileName);
         } else {
             d->archive = new KTar(archiveFileName);
@@ -293,14 +293,14 @@ QHash< QString, QList<ConfigOption> > SourceFileTemplate::customOptions(Template
         return options;
     }
 
-    QDomNodeList groups = cfgElement.elementsByTagName("group");
+    QDomNodeList groups = cfgElement.elementsByTagName(QStringLiteral("group"));
     for (int i = 0; i < groups.size(); ++i)
     {
         QDomElement group = groups.at(i).toElement();
         QList<ConfigOption> optionGroup;
-        QString groupName = group.attribute("name");
+        QString groupName = group.attribute(QStringLiteral("name"));
 
-        QDomNodeList entries = group.elementsByTagName("entry");
+        QDomNodeList entries = group.elementsByTagName(QStringLiteral("entry"));
         for (int j = 0; j < entries.size(); ++j)
         {
             QDomElement entry = entries.at(j).toElement();

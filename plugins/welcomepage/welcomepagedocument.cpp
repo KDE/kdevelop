@@ -32,7 +32,8 @@
 
 using namespace KDevelop;
 
-Q_GLOBAL_STATIC_WITH_ARGS(QUrl, s_welcomePageUrl, (QUrl("kdev:///awesome.kdevinternal")));
+inline QString awesome() { return QStringLiteral("kdev:///awesome.kdevinternal"); }
+Q_GLOBAL_STATIC_WITH_ARGS(QUrl, s_welcomePageUrl, (QUrl(awesome())));
 
 WelcomePageDocument::WelcomePageDocument()
     : Sublime::UrlDocument(ICore::self()->uiController()->controller(), *s_welcomePageUrl), IDocument(ICore::self())
@@ -86,7 +87,7 @@ KParts::Part* WelcomePageDocument::partForView(QWidget* /*view*/) const
 
 QMimeType WelcomePageDocument::mimeType() const
 {
-    return QMimeDatabase().mimeTypeForName("text/x-kdevelopinternal");
+    return QMimeDatabase().mimeTypeForName(QStringLiteral("text/x-kdevelopinternal"));
 }
 
 Sublime::View* WelcomePageDocument::newView(Sublime::Document* doc)

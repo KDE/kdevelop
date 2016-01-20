@@ -181,7 +181,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     CodeRepresentation::Ptr repr = createCodeRepresentation(file);
     if(!repr->fileExists())
     {
-        const auto templateName = QDir::tempPath() + QLatin1Char('/') + url.fileName().split('.').last();
+        const QString templateName = QDir::tempPath() + QLatin1Char('/') + url.fileName().split('.').last();
         QTemporaryFile * temp(new QTemporaryFile(templateName));
         temp->open();
         temp->write(repr->text().toUtf8());

@@ -44,7 +44,7 @@ public:
 
     QString id() const override
     {
-        return "org.kdevelop.TemplateFilePreview";
+        return QStringLiteral("org.kdevelop.TemplateFilePreview");
     }
 
     Qt::DockWidgetArea defaultPosition() override
@@ -57,16 +57,16 @@ private:
 };
 
 FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& args)
-    : IPlugin("kdevfiletemplates", parent)
+    : IPlugin(QStringLiteral("kdevfiletemplates"), parent)
     , m_model(0)
 {
     Q_UNUSED(args);
     KDEV_USE_EXTENSION_INTERFACE(ITemplateProvider)
 
-    setXMLFile("kdevfiletemplates.rc");
-    QAction* action = actionCollection()->addAction("new_from_template");
+    setXMLFile(QStringLiteral("kdevfiletemplates.rc"));
+    QAction* action = actionCollection()->addAction(QStringLiteral("new_from_template"));
     action->setText( i18n( "New From Template" ) );
-    action->setIcon( QIcon::fromTheme( "code-class" ) );
+    action->setIcon( QIcon::fromTheme( QStringLiteral("code-class") ) );
     action->setWhatsThis( i18n( "Allows you to create new source code files, such as classes or unit tests, using templates." ) );
     action->setStatusTip( i18n( "Create new files from a template" ) );
     connect (action, &QAction::triggered, this, &FileTemplatesPlugin::createFromTemplate);
@@ -112,7 +112,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
         if (url.isValid())
         {
             QAction* action = new QAction(i18n("Create From Template"), this);
-            action->setIcon(QIcon::fromTheme("code-class"));
+            action->setIcon(QIcon::fromTheme(QStringLiteral("code-class")));
             action->setData(url);
             connect(action, &QAction::triggered, this, &FileTemplatesPlugin::createFromTemplate);
             ext.addAction(ContextMenuExtension::FileGroup, action);
@@ -132,7 +132,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
     if (fileUrl.isValid() && determineTemplateType(fileUrl) != NoTemplate)
     {
         QAction* action = new QAction(i18n("Show Template Preview"), this);
-        action->setIcon(QIcon::fromTheme("document-preview"));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("document-preview")));
         action->setData(fileUrl);
         connect(action, &QAction::triggered, this, &FileTemplatesPlugin::previewTemplate);
         ext.addAction(ContextMenuExtension::ExtensionGroup, action);
@@ -148,28 +148,28 @@ QString FileTemplatesPlugin::name() const
 
 QIcon FileTemplatesPlugin::icon() const
 {
-    return QIcon::fromTheme("code-class");
+    return QIcon::fromTheme(QStringLiteral("code-class"));
 }
 
 QAbstractItemModel* FileTemplatesPlugin::templatesModel()
 {
     if(!m_model) {
-        m_model = new TemplatesModel("kdevfiletemplates", this);
+        m_model = new TemplatesModel(QStringLiteral("kdevfiletemplates"), this);
     }
     return m_model;
 }
 
 QString FileTemplatesPlugin::knsConfigurationFile() const
 {
-    return "kdevfiletemplates.knsrc";
+    return QStringLiteral("kdevfiletemplates.knsrc");
 }
 
 QStringList FileTemplatesPlugin::supportedMimeTypes() const
 {
     QStringList types;
-    types << "application/x-desktop";
-    types << "application/x-bzip-compressed-tar";
-    types << "application/zip";
+    types << QStringLiteral("application/x-desktop");
+    types << QStringLiteral("application/x-bzip-compressed-tar");
+    types << QStringLiteral("application/zip");
     return types;
 }
 
@@ -190,7 +190,7 @@ void FileTemplatesPlugin::createFromTemplate()
     QUrl baseUrl;
     if (QAction* action = qobject_cast<QAction*>(sender()))
     {
-        baseUrl = action->data().value<QUrl>();
+        baseUrl = action->data().toUrl();
     }
     if (!baseUrl.isValid()) {
         // fall-back to currently active document's parent directory
@@ -216,7 +216,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
     while (dir.cdUp() && level < 5)
     {
         QStringList filters;
-        filters << "*.kdevtemplate" << "*.desktop";
+        filters << QStringLiteral("*.kdevtemplate") << QStringLiteral("*.desktop");
         foreach (const QString& entry, dir.entryList(filters))
         {
             qCDebug(PLUGIN_FILETEMPLATES) << "Trying entry" << entry;
@@ -231,7 +231,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
             * Fortunately, those explicitly list input and output files, so we
             * only match the explicitly listed files
             */
-            if (entry.endsWith(".kdevtemplate"))
+            if (entry.endsWith(QLatin1String(".kdevtemplate")))
             {
                 return ProjectTemplate;
             }
@@ -273,7 +273,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
 void FileTemplatesPlugin::previewTemplate()
 {
     QAction* action = qobject_cast<QAction*>(sender());
-    if (!action || !action->data().value<QUrl>().isValid())
+    if (!action || !action->data().toUrl().isValid())
     {
         return;
     }
@@ -283,7 +283,7 @@ void FileTemplatesPlugin::previewTemplate()
         return;
     }
 
-    core()->documentController()->activateDocument(core()->documentController()->openDocument(action->data().value<QUrl>()));
+    core()->documentController()->activateDocument(core()->documentController()->openDocument(action->data().toUrl()));
 }
 
 #include "filetemplatesplugin.moc"

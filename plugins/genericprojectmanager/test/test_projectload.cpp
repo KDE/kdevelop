@@ -109,14 +109,14 @@ TestProject makeProject()
 
     QStringList projectFileContents;
     projectFileContents
-    << "[Project]"
+    << QStringLiteral("[Project]")
     << QStringLiteral("Name=") + ret.name
-    << "Manager=KDevGenericManager";
+    << QStringLiteral("Manager=KDevGenericManager");
 
     QUrl projecturl = QUrl::fromLocalFile( dir.absoluteFilePath() + "/simpleproject.kdev4" );
     QFile projectFile(projecturl.toLocalFile());
     projectFile.open(QIODevice::WriteOnly);
-    projectFile.write(projectFileContents.join("\n").toLatin1());
+    projectFile.write(projectFileContents.join(QStringLiteral("\n")).toLatin1());
     projectFile.close();
     ret.file = projecturl;
 
@@ -155,7 +155,7 @@ void TestProjectLoad::addRemoveFiles()
 
     QUrl url = QUrl::fromLocalFile(p.dir->path()+"/blub"+QString::number(50)).adjusted(QUrl::NormalizePathSegments);
     QCOMPARE(project->filesForPath(IndexedString(url)).count(), 1);
-    ProjectFileItem* file = project->filesForPath(IndexedString(url)).first();
+    ProjectFileItem* file = project->filesForPath(IndexedString(url)).at(0);
     project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
     for (int i=51; i<100; ++i) {
         QFile f2(p.dir->path()+"/blub"+QString::number(i));
@@ -176,7 +176,7 @@ void TestProjectLoad::removeDirRecursive()
         f.close();
     }
     {
-        QDir(p.dir->path()).mkdir("blub");
+        QDir(p.dir->path()).mkdir(QStringLiteral("blub"));
         for (int i=0; i<10; ++i) {
             QFile f(p.dir->path()+"/blub/file"+QString::number(i));
             f.open(QIODevice::WriteOnly);
@@ -202,7 +202,7 @@ void TestProjectLoad::removeDirRecursive()
         QUrl url = QUrl::fromLocalFile(p.dir->path()+"/blub").adjusted(QUrl::NormalizePathSegments);
         QCOMPARE(project->foldersForPath(IndexedString(url)).count(), 1);
 
-        ProjectFolderItem* file = project->foldersForPath(IndexedString(url)).first();
+        ProjectFolderItem* file = project->foldersForPath(IndexedString(url)).at(0);
         project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file );
     }
 
@@ -298,7 +298,7 @@ void TestProjectLoad::raceJob()
     // - remove dir foo while listjob is still running
     TestProject p = makeProject();
     QDir dir(p.dir->path());
-    QVERIFY(dir.mkpath("test/zzzzz"));
+    QVERIFY(dir.mkpath(QStringLiteral("test/zzzzz")));
     for(int i = 0; i < 1000; ++i) {
         createFile(QString(p.dir->path() + "/test/zzzzz/%1").arg(i));
         createFile(QString(p.dir->path() + "/test/%1").arg(i));
@@ -317,13 +317,14 @@ void TestProjectLoad::raceJob()
     QVERIFY(testItem->folder());
     QCOMPARE(testItem->baseName(), QStringLiteral("test"));
     QCOMPARE(testItem->rowCount(), 1001);
-    ProjectBaseItem* asdfItem = testItem->children().last();
+    int last = testItem->children().size() - 1;
+    ProjectBaseItem* asdfItem = testItem->children().at(last);
     QVERIFY(asdfItem->folder());
 
     // move dir
-    dir.rename("test", "test2");
+    dir.rename(QStringLiteral("test"), QStringLiteral("test2"));
     // move sub dir
-    dir.rename("test2/zzzzz", "test2/bla");
+    dir.rename(QStringLiteral("test2/zzzzz"), QStringLiteral("test2/bla"));
 
     QTest::qWait(500);
     QCOMPARE(root->rowCount(), 1);
@@ -340,7 +341,7 @@ void TestProjectLoad::addDuringImport()
     // the import action
     TestProject p = makeProject();
     QDir dir(p.dir->path());
-    QVERIFY(dir.mkpath("test/zzzzz"));
+    QVERIFY(dir.mkpath(QStringLiteral("test/zzzzz")));
     for(int i = 0; i < 1000; ++i) {
         createFile(QString(p.dir->path() + "/test/zzzzz/%1").arg(i));
         createFile(QString(p.dir->path() + "/test/%1").arg(i));
@@ -353,10 +354,10 @@ void TestProjectLoad::addDuringImport()
     QCOMPARE(ICore::self()->projectController()->projectCount(), 0);
     // but about to be opened
     QCOMPARE(spy.count(), 1);
-    IProject* project = spy.value(0).first().value<IProject*>();
+    IProject* project = spy.value(0).at(0).value<IProject*>();
     QVERIFY(project);
     QCOMPARE(project->path(), Path(KIO::upUrl(p.file)));
-    QUrl file = p.file.resolved(QUrl("test/zzzzz/999"));
+    QUrl file = p.file.resolved(QUrl(QStringLiteral("test/zzzzz/999")));
     QVERIFY(QFile::exists(file.toLocalFile()));
     // this most probably is not yet loaded
     // and this should not crash

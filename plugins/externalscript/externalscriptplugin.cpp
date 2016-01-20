@@ -69,7 +69,7 @@ public:
   }
 
   QString id() const override {
-    return "org.kdevelop.ExternalScriptView";
+    return QStringLiteral("org.kdevelop.ExternalScriptView");
   }
 
 private:
@@ -79,15 +79,15 @@ private:
 ExternalScriptPlugin* ExternalScriptPlugin::m_self = 0;
 
 ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList& /*args*/ )
-    : IPlugin( "kdevexternalscript", parent ),
+    : IPlugin( QStringLiteral("kdevexternalscript"), parent ),
     m_model( new QStandardItemModel( this ) ), m_factory( new ExternalScriptViewFactory( this ) )
 {
   Q_ASSERT( !m_self );
   m_self = this;
 
-  QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ExternalScriptPlugin", this, QDBusConnection::ExportScriptableSlots );
+  QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/ExternalScriptPlugin"), this, QDBusConnection::ExportScriptableSlots );
 
-  setXMLFile( "kdevexternalscript.rc" );
+  setXMLFile( QStringLiteral("kdevexternalscript.rc") );
 
   //BEGIN load config
   KConfigGroup config = getConfig();
@@ -121,18 +121,18 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
     // some example scripts
     ExternalScriptItem* item = new ExternalScriptItem;
     item->setText( i18n("Quick Compile") );
-    item->setCommand( "g++ -o %b %f && ./%b" );
+    item->setCommand( QStringLiteral("g++ -o %b %f && ./%b") );
     m_model->appendRow( item );
 
     item = new ExternalScriptItem;
     item->setText( i18n("Google Selection") );
-    item->setCommand( "xdg-open \"http://www.google.de/search?q=%s\"" );
+    item->setCommand( QStringLiteral("xdg-open \"http://www.google.de/search?q=%s\"") );
     item->setShowOutput( false );
     m_model->appendRow( item );
 
     item = new ExternalScriptItem;
     item->setText( i18n("Sort Selection") );
-    item->setCommand( "sort" );
+    item->setCommand( QStringLiteral("sort") );
     item->setInputMode( ExternalScriptItem::InputSelectionOrDocument );
     item->setOutputMode( ExternalScriptItem::OutputReplaceSelectionOrDocument );
     item->setShowOutput( false );
@@ -189,7 +189,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
       if (context->type() != KDevelop::Context::EditorContext) {
         // filter scripts that depend on an opened document
         // if the context menu was not requested inside the editor
-        if (item->performParameterReplacement() && item->command().contains("%s")) {
+        if (item->performParameterReplacement() && item->command().contains(QStringLiteral("%s"))) {
           continue;
         } else if (item->inputMode() == ExternalScriptItem::InputSelectionOrNone) {
           continue;
@@ -199,12 +199,12 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
       if ( folderCount == m_urls.count() ) {
         // when only folders filter items that don't have %d parameter (or another parameter)
         if (item->performParameterReplacement() &&
-          (!item->command().contains("%d") ||
-            item->command().contains("%s") ||
-            item->command().contains("%u") ||
-            item->command().contains("%f") ||
-            item->command().contains("%b") ||
-            item->command().contains("%n")
+          (!item->command().contains(QStringLiteral("%d")) ||
+            item->command().contains(QStringLiteral("%s")) ||
+            item->command().contains(QStringLiteral("%u")) ||
+            item->command().contains(QStringLiteral("%f")) ||
+            item->command().contains(QStringLiteral("%b")) ||
+            item->command().contains(QStringLiteral("%n"))
           )
         ) {
           continue;

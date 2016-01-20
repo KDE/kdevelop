@@ -90,7 +90,7 @@ DeclarationTest(useCount)
   foreach(const QList<RangeInRevision>& useRanges, decl->uses()) {
     uses += useRanges.size();
   }
-  return compareValues(uses, value, "Declaration's use count ");
+  return compareValues(uses, value, QStringLiteral("Declaration's use count "));
 }
 ///JSON type: string array
 ///@returns whether the declaration's ranges match the given value
@@ -98,44 +98,44 @@ DeclarationTest(useRanges)
 {
   QStringList ranges;
   foreach(const QList<RangeInRevision>& useRanges, decl->uses()) {
-    foreach(const RangeInRevision &range, useRanges) {
+    foreach(const RangeInRevision range, useRanges) {
       ranges << rangeStr(range);
     }
   }
   const QStringList testValues = value.toStringList();
-  return ranges == testValues ? SUCCESS
-    : QStringLiteral("Declaration's use ranges (\"%1\") don't match test data (\"%2\").").arg(ranges.join(", ")).arg(testValues.join(", "));
+  return ranges == testValues ? SUCCESS()
+    : QStringLiteral("Declaration's use ranges (\"%1\") don't match test data (\"%2\").").arg(ranges.join(QStringLiteral(", ")), testValues.join(QStringLiteral(", ")));
 }
 ///JSON type: string
 ///@returns whether the declaration's identifier matches the given value
 DeclarationTest(identifier)
 {
   VERIFY_NOT_NULL(decl);
-  return compareValues(decl->identifier().toString(), value, "Declaration's identifier");
+  return compareValues(decl->identifier().toString(), value, QStringLiteral("Declaration's identifier"));
 }
 ///JSON type: string
 ///@returns whether the declaration's qualified identifier matches the given value
 DeclarationTest(qualifiedIdentifier)
 {
   VERIFY_NOT_NULL(decl);
-  return compareValues(decl->qualifiedIdentifier().toString(), value, "Declaration's qualified identifier");
+  return compareValues(decl->qualifiedIdentifier().toString(), value, QStringLiteral("Declaration's qualified identifier"));
 }
 ///JSON type: CtxtTestObject
 ///@returns whether the tests for the declaration's internal context pass
 DeclarationTest(internalContext)
 {
   VERIFY_NOT_NULL(decl);
-  return testObject(decl->internalContext(), value, "Declaration's internal context");
+  return testObject(decl->internalContext(), value, QStringLiteral("Declaration's internal context"));
 }
 ///JSON type: CtxtTestObject
 ///@returns whether the tests for the declaration's internal function context pass
 DeclarationTest(internalFunctionContext)
 {
-  const QString NO_INTERNAL_CTXT = "%1 has no internal function context.";
+  const QString NO_INTERNAL_CTXT = QStringLiteral("%1 has no internal function context.");
   AbstractFunctionDeclaration *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
   if (!absFuncDecl || !absFuncDecl->internalFunctionContext())
     return NO_INTERNAL_CTXT.arg(decl->qualifiedIdentifier().toString());
-  return testObject(absFuncDecl->internalFunctionContext(), value, "Declaration's internal function context");
+  return testObject(absFuncDecl->internalFunctionContext(), value, QStringLiteral("Declaration's internal function context"));
 }
 /*FIXME: The type functions need some renaming and moving around
  * Some (all?) functions from cpp's TypeUtils should be moved to the kdevplatform type utils
@@ -148,21 +148,21 @@ DeclarationTest(internalFunctionContext)
 DeclarationTest(type)
 {
   VERIFY_NOT_NULL(decl);
-  return testObject(decl->abstractType(), value, "Declaration's type");
+  return testObject(decl->abstractType(), value, QStringLiteral("Declaration's type"));
 }
 ///JSON type: TypeTestObject
 ///@returns whether the tests for the declaration's unaliased type pass (TypeUtils::unaliasedType)
 DeclarationTest(unaliasedType)
 {
   VERIFY_NOT_NULL(decl);
-  return testObject(TypeUtils::unAliasedType(decl->abstractType()), value, "Declaration's unaliased type");
+  return testObject(TypeUtils::unAliasedType(decl->abstractType()), value, QStringLiteral("Declaration's unaliased type"));
 }
 ///JSON type: TypeTestObject
 ///@returns whether the tests for the declaration's target type pass (TypeUtils::targetType)
 DeclarationTest(targetType)
 {
   VERIFY_NOT_NULL(decl);
-  return testObject(TypeUtils::targetType(decl->abstractType(), decl->topContext()), value, "Declaration's target type");
+  return testObject(TypeUtils::targetType(decl->abstractType(), decl->topContext()), value, QStringLiteral("Declaration's target type"));
 }
 ///JSON type: TestTypeObject
 ///@returns the
@@ -173,65 +173,65 @@ DeclarationTest(returnType)
   if (functionType) {
     returnType = functionType->returnType();
   }
-  return testObject(returnType, value, "Declaration's return type");
+  return testObject(returnType, value, QStringLiteral("Declaration's return type"));
 }
 ///JSON type: DeclTestObject
 ///@returns The IdentifiedType's declaration
 DeclarationTest(identifiedTypeDeclaration)
 {
-  const QString UN_ID_ERROR = "Unable to identify declaration of type \"%1\".";
+  const QString UN_ID_ERROR = QStringLiteral("Unable to identify declaration of type \"%1\".");
   AbstractType::Ptr type = TypeUtils::targetType(decl->abstractType(), decl->topContext());
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
   Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : 0;
   if (!idDecl)
     return UN_ID_ERROR.arg(type->toString());
 
-  return testObject(idDecl, value, "IdentifiedType's declaration");
+  return testObject(idDecl, value, QStringLiteral("IdentifiedType's declaration"));
 }
 ///JSON type: bool
 ///@returns whether the (function) declaration's isVirtual matches the given value
 DeclarationTest(isVirtual)
 {
-  const QString NOT_A_FUNCTION = "Non-function declaration cannot be virtual.";
+  const QString NOT_A_FUNCTION = QStringLiteral("Non-function declaration cannot be virtual.");
   AbstractFunctionDeclaration *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
   if (!absFuncDecl)
       return NOT_A_FUNCTION;
 
-  return compareValues(absFuncDecl->isVirtual(), value, "Declaration's isVirtual");
+  return compareValues(absFuncDecl->isVirtual(), value, QStringLiteral("Declaration's isVirtual"));
 }
 
 ///JSON type: bool
 ///@returns whether the (function) declaration's isAbstract matches the given value
 DeclarationTest(isAbstract)
 {
-  const QString NOT_A_FUNCTION = "Non-class-member declaration cannot be abstract.";
+  const QString NOT_A_FUNCTION = QStringLiteral("Non-class-member declaration cannot be abstract.");
   auto *absFuncDecl = dynamic_cast<ClassMemberDeclaration*>(decl);
   if (!absFuncDecl)
       return NOT_A_FUNCTION;
 
-  return compareValues(absFuncDecl->isAbstract(), value, "Declaration's isAbstract");
+  return compareValues(absFuncDecl->isAbstract(), value, QStringLiteral("Declaration's isAbstract"));
 }
 ///JSON type: bool
 ///@returns whether the (class-member) declaration's isStatic matches the given value
 DeclarationTest(isStatic)
 {
-  const QString NOT_A_MEMBER = "Non-class-member declaration cannot be static.";
+  const QString NOT_A_MEMBER = QStringLiteral("Non-class-member declaration cannot be static.");
   auto memberDecl = dynamic_cast<ClassMemberDeclaration*>(decl);
   if (!memberDecl)
       return NOT_A_MEMBER;
 
-  return compareValues(memberDecl->isStatic(), value, "Declaration's isStatic");
+  return compareValues(memberDecl->isStatic(), value, QStringLiteral("Declaration's isStatic"));
 }
 ///JSON type: bool
 ///@returns whether the (class-member) declaration's isMutable matches the given value
 DeclarationTest(isMutable)
 {
-  const QString NOT_A_MEMBER = "Non-class-member declaration cannot be mutable.";
+  const QString NOT_A_MEMBER = QStringLiteral("Non-class-member declaration cannot be mutable.");
   auto memberDecl = dynamic_cast<ClassMemberDeclaration*>(decl);
   if (!memberDecl)
       return NOT_A_MEMBER;
 
-  return compareValues(memberDecl->isMutable(), value, "Declaration's isMutable");
+  return compareValues(memberDecl->isMutable(), value, QStringLiteral("Declaration's isMutable"));
 }
 ///JSON type: DeclTestObject
 ///@returns whether the tests for the function declaration's definition pass
@@ -239,9 +239,9 @@ DeclarationTest(definition)
 {
   KDevVarLengthArray<IndexedDeclaration> definitions = DUChain::definitions()->definitions(decl->id());
   Declaration *declDef  = 0;
-  if (definitions.size())
+  if (!definitions.isEmpty())
     declDef = definitions.at(0).declaration();
-  return testObject(declDef, value, "Declaration's definition");
+  return testObject(declDef, value, QStringLiteral("Declaration's definition"));
 }
 ///JSON type: DeclTestObject
 ///@returns whether the tests for the function definition's declaration pass
@@ -251,20 +251,20 @@ DeclarationTest(declaration)
   Declaration *defDecl = nullptr;
   if (def)
     defDecl = def->declaration(decl->topContext());
-  return testObject(defDecl, value, "Definition's declaration");
+  return testObject(defDecl, value, QStringLiteral("Definition's declaration"));
 }
 ///JSON type: bool
 ///@returns whether the declaration's nullity matches the given value
 DeclarationTest(null)
 {
-  return compareValues(decl == 0, value, "Declaration's nullity");
+  return compareValues(decl == 0, value, QStringLiteral("Declaration's nullity"));
 }
 ///JSON type: bool
 ///@returns whether the declaration's default parameter matches the given value
 DeclarationTest(defaultParameter)
 {
-  const QString NOT_IN_FUNC_CTXT = "Asked for a default parameter for a declaration outside of a function context.";
-  const QString OWNER_NOT_FUNC = "Function context not owned by function declaration (what on earth did you do?).";
+  const QString NOT_IN_FUNC_CTXT = QStringLiteral("Asked for a default parameter for a declaration outside of a function context.");
+  const QString OWNER_NOT_FUNC = QStringLiteral("Function context not owned by function declaration (what on earth did you do?).");
   DUContext *context = decl->context();
   if (!context || context->type() != DUContext::Function)
     return NOT_IN_FUNC_CTXT;
@@ -272,7 +272,7 @@ DeclarationTest(defaultParameter)
   if (!funcDecl)
     return OWNER_NOT_FUNC;
   int argIndex = context->localDeclarations().indexOf(decl);
-  return compareValues(funcDecl->defaultParameterForArgument(argIndex).str(), value, "Declaration's default parameter");
+  return compareValues(funcDecl->defaultParameterForArgument(argIndex).str(), value, QStringLiteral("Declaration's default parameter"));
 }
 
 ///JSON type: string
@@ -280,7 +280,7 @@ DeclarationTest(defaultParameter)
 DeclarationTest(toString)
 {
   VERIFY_NOT_NULL(decl);
-  return compareValues(decl->toString(), value, "Declaration's toString");
+  return compareValues(decl->toString(), value, QStringLiteral("Declaration's toString"));
 }
 
 ///JSON type: string
@@ -288,7 +288,7 @@ DeclarationTest(toString)
 DeclarationTest(range)
 {
   VERIFY_NOT_NULL(decl);
-  return compareValues(rangeStr(decl->range()), value, "Declaration's range");
+  return compareValues(rangeStr(decl->range()), value, QStringLiteral("Declaration's range"));
 }
 
 ///JSON type: string
@@ -299,28 +299,28 @@ DeclarationTest(kind)
   QString kind;
   switch (decl->kind()) {
     case KDevelop::Declaration::Alias:
-      kind = "Alias";
+      kind = QStringLiteral("Alias");
       break;
     case KDevelop::Declaration::Import:
-      kind = "Import";
+      kind = QStringLiteral("Import");
       break;
     case KDevelop::Declaration::Instance:
-      kind = "Instance";
+      kind = QStringLiteral("Instance");
       break;
     case KDevelop::Declaration::Namespace:
-      kind = "Namespace";
+      kind = QStringLiteral("Namespace");
       break;
     case KDevelop::Declaration::NamespaceAlias:
-      kind = "NamespaceAlias";
+      kind = QStringLiteral("NamespaceAlias");
       break;
     case KDevelop::Declaration::Type:
-      kind = "Type";
+      kind = QStringLiteral("Type");
       break;
     case KDevelop::Declaration::Macro:
-      kind = "Macro";
+      kind = QStringLiteral("Macro");
       break;
   }
-  return compareValues(kind, value, "Declaration's kind");
+  return compareValues(kind, value, QStringLiteral("Declaration's kind"));
 }
 
 ///JSON type: bool
@@ -328,7 +328,7 @@ DeclarationTest(kind)
 DeclarationTest(isDeprecated)
 {
   VERIFY_NOT_NULL(decl);
-  return compareValues(decl->isDeprecated(), value, "Declaration's isDeprecated");
+  return compareValues(decl->isDeprecated(), value, QStringLiteral("Declaration's isDeprecated"));
 }
 
 ///JSON type: bool
@@ -336,7 +336,7 @@ DeclarationTest(isDeprecated)
 DeclarationTest(isDefinition)
 {
   VERIFY_NOT_NULL(decl);
-  return compareValues(decl->isDefinition(), value, "Declaration's isDefinition");
+  return compareValues(decl->isDefinition(), value, QStringLiteral("Declaration's isDefinition"));
 }
 
 }

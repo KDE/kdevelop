@@ -47,7 +47,7 @@ QString LocalPatchSource::name() const
 
 QIcon LocalPatchSource::icon() const
 {
-    return QIcon::fromTheme("text-x-patch");
+    return QIcon::fromTheme(QStringLiteral("text-x-patch"));
 }
 
 void LocalPatchSource::update()

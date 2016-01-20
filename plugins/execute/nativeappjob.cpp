@@ -47,7 +47,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
 {
     setCapabilities(Killable);
 
-    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
+    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
     Q_ASSERT(iface);
 
     KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
@@ -103,9 +103,9 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     if (iface->useTerminal(cfg)) {
         QStringList args = KShell::splitArgs(iface->terminal(cfg));
         for (QStringList::iterator it = args.begin(); it != args.end(); ++it) {
-            if (*it == "%exe") {
+            if (*it == QLatin1String("%exe")) {
                 *it = KShell::quoteArg(executable.toLocalFile());
-            } else if (*it == "%workdir") {
+            } else if (*it == QLatin1String("%workdir")) {
                 *it = KShell::quoteArg(wc.toLocalFile());
             }
         }

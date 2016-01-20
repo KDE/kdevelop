@@ -27,6 +27,7 @@
 
 class DocumentationQuickOpenProvider : public KDevelop::QuickOpenDataProviderBase
 {
+    Q_OBJECT
 public:
     DocumentationQuickOpenProvider();
 

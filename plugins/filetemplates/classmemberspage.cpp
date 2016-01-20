@@ -66,7 +66,7 @@ void ClassMembersPage::setMembers(const VariableDescriptionList& members)
             items << variable.type;
         }
         items << variable.name;
-        memberItems << items.join(" ");
+        memberItems << items.join(QLatin1Char(' '));
     }
     d->editListWidget->setItems(memberItems);
 }

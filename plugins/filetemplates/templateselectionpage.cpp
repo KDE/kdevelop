@@ -139,7 +139,7 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
 
 void TemplateSelectionPagePrivate::getMoreClicked()
 {
-    KNS3::DownloadDialog("kdevfiletemplates.knsrc", ui->view).exec();
+    KNS3::DownloadDialog(QStringLiteral("kdevfiletemplates.knsrc"), ui->view).exec();
     model->refresh();
 }
 
@@ -197,7 +197,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->ui = new Ui::TemplateSelection;
     d->ui->setupUi(this);
 
-    d->model = new TemplatesModel("kdevfiletemplates", this);
+    d->model = new TemplatesModel(QStringLiteral("kdevfiletemplates"), this);
     d->model->refresh();
 
     d->ui->view->setLevels(3);
@@ -237,11 +237,11 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->ui->view->setCurrentIndex(templateIndex);
 
     QPushButton* getMoreButton = new QPushButton(i18n("Get More Templates..."), d->ui->view);
-    getMoreButton->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
+    getMoreButton->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
     connect (getMoreButton, &QPushButton::clicked, this, [&] { d->getMoreClicked(); });
     d->ui->view->addWidget(0, getMoreButton);
 
-    QPushButton* loadButton = new QPushButton(QIcon::fromTheme("application-x-archive"), i18n("Load Template From File"), d->ui->view);
+    QPushButton* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18n("Load Template From File"), d->ui->view);
     connect (loadButton, &QPushButton::clicked, this, [&] { d->loadFileClicked(); });
     d->ui->view->addWidget(0, loadButton);
 

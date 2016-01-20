@@ -51,7 +51,7 @@ void SvnSSLTrustDialog::setCertInfos( const QString& hostname,
                                       const QString& realm,
                                       const QStringList& failures )
 {
-    QString txt = "<ul>";
+    QString txt = QStringLiteral("<ul>");
     foreach( const QString &fail, failures )
     {
         txt += "<li>"+fail+"</li>";

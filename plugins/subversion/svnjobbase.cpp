@@ -32,7 +32,7 @@ SvnJobBase::SvnJobBase( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVer
       m_status( KDevelop::VcsJob::JobNotStarted )
 {
     setCapabilities( KJob::Killable );
-    setTitle( "Subversion" );
+    setTitle( QStringLiteral("Subversion") );
 }
 
 SvnJobBase::~SvnJobBase()
@@ -194,11 +194,11 @@ void SvnJobBase::outputMessage(const QString& message)
 
     QStandardItemModel *m = qobject_cast<QStandardItemModel*>(model());
     QStandardItem *previous = m->item(m->rowCount()-1);
-    if (message == "." && previous && previous->text().contains(QRegExp("\\.+")))
+    if (message == QLatin1String(".") && previous && previous->text().contains(QRegExp("\\.+")))
         previous->setText(previous->text() + message);
     else
         m->appendRow(new QStandardItem(message));
-    KDevelop::IPlugin* i = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    KDevelop::IPlugin* i = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
     if( i )
     {
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();

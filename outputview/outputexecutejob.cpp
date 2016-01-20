@@ -272,7 +272,7 @@ void OutputExecuteJob::start()
     if (!d->effectiveCommandLine().isEmpty()) {
         d->m_process->setProgram( d->effectiveCommandLine() );
 
-        qCDebug(OUTPUTVIEW) << "Starting:" << d->m_process->program().join(" ") << "in" << d->m_process->workingDirectory();
+        qCDebug(OUTPUTVIEW) << "Starting:" << d->m_process->program().join(QStringLiteral(" ")) << "in" << d->m_process->workingDirectory();
         d->m_process->start();
     } else {
         QString errorMessage = i18n("Failed to specify program to start");
@@ -392,11 +392,10 @@ void OutputExecuteJobPrivate::childProcessStderr()
 
 void OutputExecuteJobPrivate::emitProgress(const IFilterStrategy::Progress& progress)
 {
-    m_owner->emitPercent(progress.percent, 100);
-
-    if (progress.percent == 100) {
-        m_owner->infoMessage(m_owner, i18n("Build finished"));
-    } else {
+    if (progress.percent != -1) {
+        m_owner->emitPercent(progress.percent, 100);
+    }
+    if (!progress.status.isEmpty()) {
         m_owner->infoMessage(m_owner, progress.status);
     }
 }

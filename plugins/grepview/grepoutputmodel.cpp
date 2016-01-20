@@ -369,7 +369,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     
     if(rowCount() == 0)
     {
-        m_rootItem = new GrepOutputItem("", "", m_itemsCheckable);
+        m_rootItem = new GrepOutputItem(QString(), QString(), m_itemsCheckable);
         appendRow(m_rootItem);
     }
     

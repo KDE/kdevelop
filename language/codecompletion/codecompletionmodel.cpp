@@ -65,6 +65,7 @@ namespace KDevelop {
 
 class CompletionWorkerThread : public QThread
 {
+   Q_OBJECT
 public:
 
    CompletionWorkerThread(CodeCompletionModel* model)
@@ -450,3 +451,4 @@ QString CodeCompletionModel::filterString(KTextEditor::View* view, const KTextEd
 }
 
 #include "moc_codecompletionmodel.cpp"
+#include "codecompletionmodel.moc"

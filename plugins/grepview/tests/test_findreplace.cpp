@@ -104,39 +104,39 @@ void FindReplaceTest::testReplace_data()
     QTest::addColumn<FileList>("result");
 
     QTest::newRow("Raw replace")
-        << (FileList() << File("myfile.txt", "some text\nreplacement\nsome other test\n")
-                       << File("otherfile.txt", "some replacement text\n\n"))
+        << (FileList() << File(QStringLiteral("myfile.txt"), QStringLiteral("some text\nreplacement\nsome other test\n"))
+                       << File(QStringLiteral("otherfile.txt"), QStringLiteral("some replacement text\n\n")))
         << "replacement" << "%s"
         << "dummy"       << "%s"
-        << (FileList() << File("myfile.txt", "some text\ndummy\nsome other test\n")
-                       << File("otherfile.txt", "some dummy text\n\n"));
+        << (FileList() << File(QStringLiteral("myfile.txt"), QStringLiteral("some text\ndummy\nsome other test\n"))
+                       << File(QStringLiteral("otherfile.txt"), QStringLiteral("some dummy text\n\n")));
 
     // see bug: https://bugs.kde.org/show_bug.cgi?id=301362
     QTest::newRow("LF character replace")
-        << (FileList() << File("somefile.txt", "hello world\\n"))
+        << (FileList() << File(QStringLiteral("somefile.txt"), QStringLiteral("hello world\\n")))
         << "\\\\n" << "%s"
         << "\\n\\n" << "%s"
-        << (FileList() << File("somefile.txt", "hello world\\n\\n"));
+        << (FileList() << File(QStringLiteral("somefile.txt"), QStringLiteral("hello world\\n\\n")));
 
     QTest::newRow("Template replace")
-        << (FileList() << File("somefile.h",   "struct Foo {\n  void setFoo(int foo);\n};")
-                       << File("somefile.cpp", "instance->setFoo(0);\n setFoo(0); /*not replaced*/"))
+        << (FileList() << File(QStringLiteral("somefile.h"),   QStringLiteral("struct Foo {\n  void setFoo(int foo);\n};"))
+                       << File(QStringLiteral("somefile.cpp"), QStringLiteral("instance->setFoo(0);\n setFoo(0); /*not replaced*/")))
         << "setFoo" << "\\->\\s*\\b%s\\b\\s*\\("
         << "setBar" << "->%s("
-        << (FileList() << File("somefile.h",   "struct Foo {\n  void setFoo(int foo);\n};")
-                       << File("somefile.cpp", "instance->setBar(0);\n setFoo(0); /*not replaced*/"));
+        << (FileList() << File(QStringLiteral("somefile.h"),   QStringLiteral("struct Foo {\n  void setFoo(int foo);\n};"))
+                       << File(QStringLiteral("somefile.cpp"), QStringLiteral("instance->setBar(0);\n setFoo(0); /*not replaced*/")));
 
     QTest::newRow("Template with captures")
-        << (FileList() << File("somefile.cpp", "inst::func(1, 2)\n otherInst :: func (\"foo\")\n func()"))
+        << (FileList() << File(QStringLiteral("somefile.cpp"), QStringLiteral("inst::func(1, 2)\n otherInst :: func (\"foo\")\n func()")))
         << "func" << "([a-z0-9_$]+)\\s*::\\s*\\b%s\\b\\s*\\("
         << "REPL" << "\\1::%s("
-        << (FileList() << File("somefile.cpp", "inst::REPL(1, 2)\n otherInst::REPL(\"foo\")\n func()"));
+        << (FileList() << File(QStringLiteral("somefile.cpp"), QStringLiteral("inst::REPL(1, 2)\n otherInst::REPL(\"foo\")\n func()")));
 
     QTest::newRow("Regexp pattern")
-        << (FileList() << File("somefile.txt", "foobar\n foooobar\n fake"))
+        << (FileList() << File(QStringLiteral("somefile.txt"), QStringLiteral("foobar\n foooobar\n fake")))
         << "f\\w*o" << "%s"
         << "FOO" << "%s"
-        << (FileList() << File("somefile.txt", "FOObar\n FOObar\n fake"));
+        << (FileList() << File(QStringLiteral("somefile.txt"), QStringLiteral("FOObar\n FOObar\n fake")));
 }
 
 
@@ -167,8 +167,8 @@ void FindReplaceTest::testReplace()
     job->setPatternString(searchPattern);
     job->setTemplateString(searchTemplate);
     job->setReplacementTemplateString(replaceTemplate);
-    job->setFilesString("*");
-    job->setExcludeString("");
+    job->setFilesString(QStringLiteral("*"));
+    job->setExcludeString(QString());
     job->setDirectoryChoice(QList<QUrl>() << QUrl::fromLocalFile(dir.path()));
     job->setDepth(-1); // fully recursive
     job->setRegexpFlag(true);

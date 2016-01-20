@@ -63,6 +63,7 @@ public:
     ~MainWindowPrivate() override;
 
     QPointer<QWidget> centralPlugin;
+    QMetaObject::Connection activeDocumentReadWriteConnection;
 
     void setupActions();
     void setupGui();

@@ -30,6 +30,7 @@ namespace KDevelop
 // Navigation context for IProblem
 class ProblemNavigationContext : public AbstractNavigationContext
 {
+    Q_OBJECT
 public:
     explicit ProblemNavigationContext(const IProblem::Ptr& problem);
     ~ProblemNavigationContext();

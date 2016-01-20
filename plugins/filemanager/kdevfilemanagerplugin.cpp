@@ -55,7 +55,7 @@ public:
 
     QString id() const override
     {
-        return "org.kdevelop.FileManagerView";
+        return QStringLiteral("org.kdevelop.FileManagerView");
     }
 
     bool allowMultiple() const override

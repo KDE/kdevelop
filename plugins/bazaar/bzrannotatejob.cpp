@@ -86,7 +86,7 @@ void BzrAnnotateJob::parseNextLine()
             continue;
         }
         bool revOk;
-        auto revision = currentLine.left(currentLine.indexOf(' ')).toULong(&revOk);
+        auto revision = currentLine.leftRef(currentLine.indexOf(' ')).toULong(&revOk);
         if (!revOk) {
             // Future compatibility - not a revision yet
             ++m_currentLine;
@@ -137,7 +137,7 @@ void BzrAnnotateJob::parseBzrLog(KDevelop::DVcsJob* job)
     int revision=-1;
     bool atMessage = false;
     QString message;
-    for (const QString &line : outputLines) {
+    foreach (const QString &line, outputLines) {
         if (!atMessage) {
             if (line.startsWith(QStringLiteral("revno"))) {
                 QString revno = line.mid(QStringLiteral("revno: ").length());
@@ -160,7 +160,7 @@ void BzrAnnotateJob::parseBzrLog(KDevelop::DVcsJob* job)
                 QString author = line.mid(QStringLiteral("author: ").length());
                 commitInfo.setAuthor(author);       // It may override commiter (In fact commiter is not supported by VcsEvent)
             } else if (line.startsWith(QStringLiteral("timestamp"))) {
-                const QString formatString = "yyyy-MM-dd hh:mm:ss";
+                const QString formatString = QStringLiteral("yyyy-MM-dd hh:mm:ss");
                 QString timestamp = line.mid(QStringLiteral("timestamp: ddd ").length(), formatString.length());
                 commitInfo.setDate(QDateTime::fromString(timestamp, formatString));
             } else if (line.startsWith(QStringLiteral("message"))) {

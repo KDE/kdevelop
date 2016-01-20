@@ -75,7 +75,7 @@ QString TypeAliasType::toString() const
   if (type())
     return AbstractType::toString(false) + type()->toString();
 
-  return "typedef <notype>";
+  return QStringLiteral("typedef <notype>");
 }
 
 void TypeAliasType::accept0 (KDevelop::TypeVisitor *v) const

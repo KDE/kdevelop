@@ -84,16 +84,16 @@ QString ProblemNavigationContext::html(bool shorten)
 {
     clear();
     m_shorten = shorten;
-    modifyHtml() += "<html><body><p>";
+    modifyHtml() += QStringLiteral("<html><body><p>");
 
     modifyHtml() += i18n("Problem in <b>%1</b>:<br/>", m_problem->sourceString());
     modifyHtml() += m_problem->description().toHtmlEscaped();
-    modifyHtml() += "<br/>";
+    modifyHtml() += QStringLiteral("<br/>");
     modifyHtml() += "<i style=\"white-space:pre-wrap\">" + m_problem->explanation().toHtmlEscaped() + "</i>";
 
     const QVector<IProblem::Ptr>& diagnostics = m_problem->diagnostics();
     if (!diagnostics.isEmpty()) {
-        modifyHtml() += "<br/>";
+        modifyHtml() += QStringLiteral("<br/>");
 
         DUChainReadLocker lock;
         for (auto diagnostic : diagnostics) {
@@ -104,7 +104,7 @@ QString ProblemNavigationContext::html(bool shorten)
             modifyHtml() += diagnostic->description();
 
             if (declaration) {
-                modifyHtml() += "<br/>";
+                modifyHtml() += QStringLiteral("<br/>");
                 makeLink(declaration->toString(), KDevelop::DeclarationPointer(declaration),
                          NavigationAction::NavigateDeclaration);
                 modifyHtml() += i18n(" in ");
@@ -113,10 +113,10 @@ QString ProblemNavigationContext::html(bool shorten)
                              .arg(declaration->rangeInCurrentRevision().start().line() + 1),
                          KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
             }
-            modifyHtml() += "<br/>";
+            modifyHtml() += QStringLiteral("<br/>");
         }
     }
 
-    modifyHtml() += "</p></body></html>";
+    modifyHtml() += QStringLiteral("</p></body></html>");
     return currentHtml();
 }

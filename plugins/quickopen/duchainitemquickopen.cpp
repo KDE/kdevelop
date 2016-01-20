@@ -62,7 +62,7 @@ QString DUChainItemData::text() const
   if(!decl->abstractType()) {
     //With simplified representation, still mark functions as such by adding parens
     if(dynamic_cast<AbstractFunctionDeclaration*>(decl)) {
-      text += "(...)";
+      text += QLatin1String("(...)");
     }
   }else if(TypePtr<FunctionType> function = decl->type<FunctionType>()) {
     text += function->partToString( FunctionType::SignatureArguments );

@@ -45,26 +45,26 @@ void TestDocumentchangeset::cleanupTestCase()
 
 void TestDocumentchangeset::testReplaceSameLine()
 {
-    TestFile file("abc def ghi", "cpp");
+    TestFile file(QStringLiteral("abc def ghi"), QStringLiteral("cpp"));
     qDebug() << file.fileContents();
     DocumentChangeSet changes;
     changes.addChange(
         DocumentChange(
             file.url(),
             KTextEditor::Range(0, 0, 0, 3),
-            "abc", "foobar"
+            QStringLiteral("abc"), QStringLiteral("foobar")
     ));
     changes.addChange(
         DocumentChange(
             file.url(),
             KTextEditor::Range(0, 4, 0, 7),
-            "def", "foobar"
+            QStringLiteral("def"), QStringLiteral("foobar")
     ));
     changes.addChange(
         DocumentChange(
             file.url(),
             KTextEditor::Range(0, 8, 0, 11),
-            "ghi", "foobar"
+            QStringLiteral("ghi"), QStringLiteral("foobar")
     ));
 
     DocumentChangeSet::ChangeResult result = changes.applyAllChanges();

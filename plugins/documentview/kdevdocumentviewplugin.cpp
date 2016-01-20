@@ -75,7 +75,7 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
 
         QString id() const override
         {
-            return "org.kdevelop.DocumentsView";
+            return QStringLiteral("org.kdevelop.DocumentsView");
         }
 
     private:

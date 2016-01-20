@@ -45,7 +45,7 @@ VcsOverlayProxyModel::VcsOverlayProxyModel(QObject* parent): QIdentityProxyModel
     connect(ICore::self()->projectController(), &IProjectController::projectClosing,
                                               this, &VcsOverlayProxyModel::removeProject);
 
-    foreach (const auto& project, ICore::self()->projectController()->projects()) {
+    foreach (const auto project, ICore::self()->projectController()->projects()) {
         addProject(project);
     }
 }

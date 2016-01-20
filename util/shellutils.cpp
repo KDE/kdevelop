@@ -48,9 +48,9 @@ bool askUser( const QString& mainText,
             input = in.readLine().trimmed();
             if( input.isEmpty() ) {
                 return ttyDefaultToYes;
-            } else if( input.toLower() == "y" ) {
+            } else if( input.toLower() == QLatin1String("y") ) {
                 return true;
-            } else if( input.toLower() == "n" ) {
+            } else if( input.toLower() == QLatin1String("n") ) {
                 return false;
             }
         }

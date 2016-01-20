@@ -111,9 +111,9 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   if( isMaster )
     stream << "Digraph chain {\n";
 
-  QString shape = "parallelogram";
+  QString shape = QStringLiteral("parallelogram");
   //QString shape = "box";
-  QString label = "unknown";
+  QString label = QStringLiteral("unknown");
 
   if( dynamic_cast<TopDUContext*>(context) )
   {
@@ -123,7 +123,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       const QString fileName = url.fileName();
       QString file = url.toDisplayString(QUrl::PreferLocalFile);
       if(topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext())
-        url.setPath(url.path() + QString::fromLatin1("/_[proxy]_"));
+        url.setPath(url.path() + QLatin1String("/_[proxy]_"));
 
       //Find the context this one is derived from. If there is one, connect it with a line, and shorten the url.
       if( m_hadVersions.contains(url) ) {
@@ -138,7 +138,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       if( topCtx->importers().count() != 0 )
         label += QStringLiteral(" imported by %1").arg(topCtx->importers().count());
     } else {
-      label = "unknown file";
+      label = QStringLiteral("unknown file");
     }
     if(topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext())
       label = "Proxy-context " + label;
@@ -158,7 +158,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   foreach (const DUContext::Import &parent, context->importedParentContexts()) {
     if( parent.context(m_topContext) ) {
       stream << dotGraphInternal(parent.context(m_topContext), false, true);
-      QString label = "imports";
+      QString label = QStringLiteral("imports");
       if( (!dynamic_cast<TopDUContext*>(parent.context(m_topContext)) || !dynamic_cast<TopDUContext*>(context)) && !(parent.context(m_topContext)->url() == context->url()) ) {
         label += " from " + parent.context(m_topContext)->url().toUrl().fileName()
                + " to " + context->url().toUrl().fileName();

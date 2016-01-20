@@ -42,6 +42,7 @@ struct OutputDelegatePrivate
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputDelegate : public QItemDelegate
 {
+    Q_OBJECT
 public:
     explicit OutputDelegate( QObject* parent = 0 );
     virtual ~OutputDelegate();

@@ -69,7 +69,7 @@ ContextTest(findDeclarations)
     if (!runTests(it.value().toMap(), ret.first()))
       return DECL_ERROR.arg(it.key());
   }
-  return SUCCESS;
+  return SUCCESS();
 }
 ///JSON type: IndexDeclObject
 ///@returns whether a declaration exists at each index and each declaration passes its tests
@@ -92,7 +92,7 @@ ContextTest(declarations)
     if (!runTests(it.value().toMap(), decls.at(index)))
       return DECL_ERROR.arg(it.key());
   }
-  return SUCCESS;
+  return SUCCESS();
 }
 ///JSON type: int
 ///@returns whether the number of child contexts matches the given value
@@ -159,7 +159,7 @@ ContextTest(importedParents)
         if (!runTests(it.value().toMap(), imports.at(index).context(ctxt->topContext())))
             return CONTEXT_ERROR.arg(it.key());
     }
-    return SUCCESS;
+    return SUCCESS();
 }
 
 ///JSON type: string

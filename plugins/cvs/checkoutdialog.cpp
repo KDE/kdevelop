@@ -39,7 +39,7 @@ void CheckoutDialog::accept()
                     localWorkingDir->url(),
                     serverPath->text(),
                     module->currentText(),
-                    "",
+                    QString(),
                     tag->text());
     if (job) {
         connect(job, &CvsJob::result,

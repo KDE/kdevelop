@@ -201,7 +201,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
         it.toBack();
         it.insert(QString());
 
-        output = lines.join("\n");
+        output = lines.join(QStringLiteral("\n"));
     }
     else if (d->emptyLinesPolicy == RemoveEmptyLines)
     {
@@ -219,7 +219,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
         {
             it.insert(QString());
         }
-        output = lines.join("\n");
+        output = lines.join(QStringLiteral("\n"));
     }
 
     return output;
@@ -268,7 +268,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
     for (QHash<QString,QUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it)
     {
         QString cleanName = it.key().toLower();
-        cleanName.replace(nonAlphaNumeric, "_");
+        cleanName.replace(nonAlphaNumeric, QStringLiteral("_"));
         const QString path = it.value().toLocalFile();
         addVariable("output_file_" + cleanName, baseDir.relativeFilePath(path));
         addVariable("output_file_" + cleanName + "_absolute", path);

@@ -216,7 +216,7 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
                 const auto fileName = frame.file.toLocalFile();
                 auto cacheIt = d->m_fileExistsCache.find(fileName);
                 if (cacheIt == d->m_fileExistsCache.end()) {
-                    cacheIt = d->m_fileExistsCache.insert(fileName, QFileInfo(fileName).exists());
+                    cacheIt = d->m_fileExistsCache.insert(fileName, QFileInfo::exists(fileName));
                 }
                 const bool fileExists = cacheIt.value();
                 if (!fileExists) {

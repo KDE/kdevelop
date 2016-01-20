@@ -112,7 +112,7 @@ void TestIdentifier::testIdentifier_data()
 void TestIdentifier::testQualifiedIdentifier()
 {
   QFETCH(QString, stringId);
-  const QStringList list = stringId.split("::", QString::SkipEmptyParts);
+  const QStringList list = stringId.split(QStringLiteral("::"), QString::SkipEmptyParts);
 
   QualifiedIdentifier id(stringId);
   QCOMPARE(id.isEmpty(), stringId.isEmpty());
@@ -173,7 +173,7 @@ void TestIdentifier::testQualifiedIdentifier()
   copy.push(moved);
   QCOMPARE(copy, moved);
 
-  copy.push(Identifier("lalala"));
+  copy.push(Identifier(QStringLiteral("lalala")));
   QCOMPARE(copy.count(), moved.count() + 1);
 }
 

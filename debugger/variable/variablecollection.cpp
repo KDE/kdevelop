@@ -170,10 +170,10 @@ void Variable::resetChanged()
 
 Variable::format_t Variable::str2format(const QString& str)
 {
-    if(str=="Binary" || str=="binary")          return Binary;
-    if(str=="Octal" || str=="octal")            return Octal;
-    if(str=="Decimal" || str=="decimal")        return Decimal;
-    if(str=="Hexadecimal" || str=="hexadecimal")return Hexadecimal;
+    if(str==QLatin1String("Binary") || str==QLatin1String("binary"))          return Binary;
+    if(str==QLatin1String("Octal") || str==QLatin1String("octal"))            return Octal;
+    if(str==QLatin1String("Decimal") || str==QLatin1String("decimal"))        return Decimal;
+    if(str==QLatin1String("Hexadecimal") || str==QLatin1String("hexadecimal"))return Hexadecimal;
 
     return Natural; // maybe most reasonable default
 }
@@ -181,12 +181,12 @@ Variable::format_t Variable::str2format(const QString& str)
 QString Variable::format2str(format_t format)
 {
     switch(format) {
-        case Natural:       return "natural";
-        case Binary:        return "binary";
-        case Octal:         return "octal";
-        case Decimal:       return "decimal";
-        case Hexadecimal:   return "hexadecimal";
-        default:            return "";
+        case Natural:       return QStringLiteral("natural");
+        case Binary:        return QStringLiteral("binary");
+        case Octal:         return QStringLiteral("octal");
+        case Decimal:       return QStringLiteral("decimal");
+        case Hexadecimal:   return QStringLiteral("hexadecimal");
+        default:            return QString();
     }
 }
 
@@ -504,7 +504,7 @@ QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::C
     if (!hasStartedSession())
         return QString();
 
-    if (ICore::self()->uiController()->activeArea()->objectName() != "debug")
+    if (ICore::self()->uiController()->activeArea()->objectName() != QLatin1String("debug"))
         return QString();
 
     //TODO: These keyboardModifiers should also hide already opened tooltip, and show another one for code area.

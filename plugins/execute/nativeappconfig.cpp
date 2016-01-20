@@ -57,7 +57,7 @@ using namespace KDevelop;
 
 QIcon NativeAppConfigPage::icon() const
 {
-    return QIcon::fromTheme("system-run");
+    return QIcon::fromTheme(QStringLiteral("system-run"));
 }
 
 static KDevelop::ProjectBaseItem* itemForPath(const QStringList& path, KDevelop::ProjectModel* model)
@@ -79,7 +79,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     }else{
         KDevelop::IProjectController* pc = KDevelop::ICore::self()->projectController();
         if( pc ){
-            executablePath->setUrl( pc->projects().count() ? pc->projects().first()->path().toUrl() : QUrl() );
+            executablePath->setUrl( pc->projects().isEmpty() ? QUrl() : pc->projects().at(0)->path().toUrl() );
         }
     }
     dependencies->setSuggestion(project);
@@ -138,7 +138,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
 
 void NativeAppConfigPage::activateDeps( int idx )
 {
-    dependencies->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
+    dependencies->setEnabled( dependencyAction->itemData( idx ).toString() != QLatin1String("Nothing") );
 }
 
 void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
@@ -174,7 +174,7 @@ QString NativeAppLauncher::description() const
 
 QString NativeAppLauncher::id()
 {
-    return "nativeAppLauncher";
+    return QStringLiteral("nativeAppLauncher");
 }
 
 QString NativeAppLauncher::name() const
@@ -193,9 +193,9 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     {
         return 0;
     }
-    if( launchMode == "execute" )
+    if( launchMode == QLatin1String("execute") )
     {
-        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
+        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
         Q_ASSERT(iface);
         KJob* depjob = iface->dependencyJob( cfg );
         QList<KJob*> l;
@@ -213,7 +213,7 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
 
 QStringList NativeAppLauncher::supportedModes() const
 {
-    return QStringList() << "execute";
+    return QStringList() << QStringLiteral("execute");
 }
 
 KDevelop::LaunchConfigurationPage* NativeAppPageFactory::createWidget(QWidget* parent)
@@ -254,7 +254,7 @@ QString NativeAppConfigType::id() const
 
 QIcon NativeAppConfigType::icon() const
 {
-    return QIcon::fromTheme("application-x-executable");
+    return QIcon::fromTheme(QStringLiteral("application-x-executable"));
 }
 
 bool NativeAppConfigType::canLaunch ( KDevelop::ProjectBaseItem* item ) const
@@ -322,7 +322,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
         if(project->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets) {
             QList<KDevelop::ProjectTargetItem*> targets=targetsInFolder(project->projectItem());
             QHash<KDevelop::ProjectBaseItem*, QList<QAction*> > targetsContainer;
-            QMenu* projectMenu = ret->addMenu(QIcon::fromTheme("project-development"), project->name());
+            QMenu* projectMenu = ret->addMenu(QIcon::fromTheme(QStringLiteral("project-development")), project->name());
             foreach(KDevelop::ProjectTargetItem* target, targets) {
                 if(target->executable()) {
                     QStringList path = model->pathFromIndex(target->index());
@@ -331,8 +331,8 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                         act->setData(KDevelop::joinWithEscaping(path, '/','\\'));
                         act->setProperty("name", target->text());
                         path.removeFirst();
-                        act->setText(path.join("/"));
-                        act->setIcon(QIcon::fromTheme("system-run"));
+                        act->setText(path.join(QStringLiteral("/")));
+                        act->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
                         connect(act, &QAction::triggered, this, &NativeAppConfigType::suggestionTriggered);
                         targetsContainer[target->parent()].append(act);
                     }
@@ -351,7 +351,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                     }
                     QStringList path = model->pathFromIndex(folder->index());
                     path.removeFirst();
-                    QMenu* submenu = new QMenu(path.join("/"));
+                    QMenu* submenu = new QMenu(path.join(QStringLiteral("/")));
                     std::sort(actions.begin(), actions.end(), actionLess);
                     submenu->addActions(actions);
                     submenus += submenu;

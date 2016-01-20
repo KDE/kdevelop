@@ -25,6 +25,7 @@ class DocumentSwitcherPlugin;
 
 class DocumentSwitcherTreeView : public QListView
 {
+    Q_OBJECT
 public:
     explicit DocumentSwitcherTreeView( DocumentSwitcherPlugin* );
 

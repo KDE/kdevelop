@@ -68,7 +68,7 @@ struct LicensePagePrivate
 void LicensePagePrivate::initializeLicenses()
 {
     qCDebug(PLUGIN_FILETEMPLATES) << "Searching for available licenses";
-    QStringList licenseDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevcodegen/licenses", QStandardPaths::LocateDirectory);
+    QStringList licenseDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevcodegen/licenses"), QStandardPaths::LocateDirectory);
 
     //Iterate through the possible directories that contain licenses, and load their names
     foreach(const QString& currentDir, licenseDirs)
@@ -118,7 +118,7 @@ QString LicensePagePrivate::readLicense(int licenseIndex)
                 newLicense.close();
             }
             else
-                licenseText = "Error, could not open license file.\n Was it deleted?";
+                licenseText = QStringLiteral("Error, could not open license file.\n Was it deleted?");
         }
 
         availableLicenses[licenseIndex].contents = licenseText;
@@ -248,24 +248,24 @@ QString LicensePage::license() const
 {
     QString licenseText = d->license->licenseTextEdit->document()->toPlainText();
     /* Add date, name and email to license text */
-    licenseText.replace("<year>", QDate::currentDate().toString("yyyy"));
-    licenseText.replace("<month>", QDate::currentDate().toString("MM"));
-    licenseText.replace("<day>", QDate::currentDate().toString("dd"));
-    QString developer("%1 <%2>");
+    licenseText.replace(QLatin1String("<year>"), QDate::currentDate().toString(QStringLiteral("yyyy")));
+    licenseText.replace(QLatin1String("<month>"), QDate::currentDate().toString(QStringLiteral("MM")));
+    licenseText.replace(QLatin1String("<day>"), QDate::currentDate().toString(QStringLiteral("dd")));
+    QString developer(QStringLiteral("%1 <%2>"));
     KEMailSettings emailSettings;
     QString name = emailSettings.getSetting(KEMailSettings::RealName);
     if (name.isEmpty())
     {
-        name = "<copyright holder>";
+        name = QStringLiteral("<copyright holder>");
     }
     developer = developer.arg(name);
     QString email = emailSettings.getSetting(KEMailSettings::EmailAddress);
     if (email.isEmpty())
     {
-        email = "email"; //no < > as they are already through the email field
+        email = QStringLiteral("email"); //no < > as they are already through the email field
     }
     developer = developer.arg(email);
-    licenseText.replace("<copyright holder>", developer);
+    licenseText.replace(QLatin1String("<copyright holder>"), developer);
 
     return licenseText;
 }

@@ -206,8 +206,8 @@ QStringList EnvironmentGroupList::createEnvironment( const QString & group, cons
 
 void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcessEnvironment& environment)
 {
-    QRegularExpression rVar("(?<!\\\\)(\\$\\w+)");
-    QRegularExpression rNotVar("\\\\\\$");
+    QRegularExpression rVar(QStringLiteral("(?<!\\\\)(\\$\\w+)"));
+    QRegularExpression rNotVar(QStringLiteral("\\\\\\$"));
     for (auto it = variables.begin(); it != variables.end(); ++it) {
         QRegularExpressionMatch m;
         while ((m=rVar.match(it.value())).hasMatch()) {
@@ -215,9 +215,9 @@ void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcess
                 it.value().replace(m.capturedStart(0), m.capturedLength(0), environment.value(m.captured(0).midRef(1).toString()));
             } else {
                 //TODO: an warning
-                it.value().replace(m.capturedStart(0), m.capturedLength(0), "");
+                it.value().replace(m.capturedStart(0), m.capturedLength(0), QString());
             }
         }
-        it.value().replace(rNotVar,"$");
+        it.value().replace(rNotVar, QStringLiteral("$"));
     }
 }

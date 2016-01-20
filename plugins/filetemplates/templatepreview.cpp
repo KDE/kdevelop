@@ -41,38 +41,38 @@ using namespace KDevelop;
 TemplatePreviewRenderer::TemplatePreviewRenderer()
 {
     QVariantHash vars;
-    vars["name"] = "Example";
-    vars["license"] = "This file is licensed under the ExampleLicense 3.0";
+    vars[QStringLiteral("name")] = "Example";
+    vars[QStringLiteral("license")] = "This file is licensed under the ExampleLicense 3.0";
     // TODO: More variables, preferably the ones from TemplateClassGenerator
 
     VariableDescriptionList publicMembers;
     VariableDescriptionList protectedMembers;
     VariableDescriptionList privateMembers;
-    publicMembers    << VariableDescription("int",    "number");
-    protectedMembers << VariableDescription("string", "name");
-    privateMembers   << VariableDescription("float",  "variable");
-    vars["members"] = CodeDescription::toVariantList(publicMembers + protectedMembers + privateMembers);
-    vars["public_members"]    = CodeDescription::toVariantList(publicMembers);
-    vars["protected_members"] = CodeDescription::toVariantList(protectedMembers);
-    vars["private_members"]   = CodeDescription::toVariantList(privateMembers);
+    publicMembers    << VariableDescription(QStringLiteral("int"),    QStringLiteral("number"));
+    protectedMembers << VariableDescription(QStringLiteral("string"), QStringLiteral("name"));
+    privateMembers   << VariableDescription(QStringLiteral("float"),  QStringLiteral("variable"));
+    vars[QStringLiteral("members")] = CodeDescription::toVariantList(publicMembers + protectedMembers + privateMembers);
+    vars[QStringLiteral("public_members")]    = CodeDescription::toVariantList(publicMembers);
+    vars[QStringLiteral("protected_members")] = CodeDescription::toVariantList(protectedMembers);
+    vars[QStringLiteral("private_members")]   = CodeDescription::toVariantList(privateMembers);
 
     FunctionDescriptionList publicFunctions;
     FunctionDescriptionList protectedFunctions;
     FunctionDescriptionList privateFunctions;
 
-    FunctionDescription complexFunction("doBar", VariableDescriptionList(), VariableDescriptionList());
-    complexFunction.arguments << VariableDescription("bool", "really");
-    complexFunction.arguments << VariableDescription("int", "howMuch");
-    complexFunction.returnArguments << VariableDescription("double", QString());
+    FunctionDescription complexFunction(QStringLiteral("doBar"), VariableDescriptionList(), VariableDescriptionList());
+    complexFunction.arguments << VariableDescription(QStringLiteral("bool"), QStringLiteral("really"));
+    complexFunction.arguments << VariableDescription(QStringLiteral("int"), QStringLiteral("howMuch"));
+    complexFunction.returnArguments << VariableDescription(QStringLiteral("double"), QString());
 
-    publicFunctions << FunctionDescription("doFoo", VariableDescriptionList(), VariableDescriptionList());
+    publicFunctions << FunctionDescription(QStringLiteral("doFoo"), VariableDescriptionList(), VariableDescriptionList());
     publicFunctions << complexFunction;
-    protectedFunctions << FunctionDescription("onUpdate", VariableDescriptionList(), VariableDescriptionList());
+    protectedFunctions << FunctionDescription(QStringLiteral("onUpdate"), VariableDescriptionList(), VariableDescriptionList());
 
-    vars["functions"] = CodeDescription::toVariantList(publicFunctions + protectedFunctions + privateFunctions);
-    vars["public_functions"]    = CodeDescription::toVariantList(publicFunctions);
-    vars["protected_functions"] = CodeDescription::toVariantList(protectedFunctions);
-    vars["private_functions"]   = CodeDescription::toVariantList(privateFunctions);
+    vars[QStringLiteral("functions")] = CodeDescription::toVariantList(publicFunctions + protectedFunctions + privateFunctions);
+    vars[QStringLiteral("public_functions")]    = CodeDescription::toVariantList(publicFunctions);
+    vars[QStringLiteral("protected_functions")] = CodeDescription::toVariantList(protectedFunctions);
+    vars[QStringLiteral("private_functions")]   = CodeDescription::toVariantList(privateFunctions);
 
     addVariables(vars);
 }
@@ -85,14 +85,14 @@ TemplatePreviewRenderer::~TemplatePreviewRenderer()
 TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 {
-    m_variables["APPNAME"] = "Example";
-    m_variables["APPNAMELC"] = "example";
-    m_variables["APPNAMEUC"] = "EXAMPLE";
-    m_variables["APPNAMEID"] = "Example";
+    m_variables[QStringLiteral("APPNAME")] = QStringLiteral("Example");
+    m_variables[QStringLiteral("APPNAMELC")] = QStringLiteral("example");
+    m_variables[QStringLiteral("APPNAMEUC")] = QStringLiteral("EXAMPLE");
+    m_variables[QStringLiteral("APPNAMEID")] = QStringLiteral("Example");
 
-    m_variables["PROJECTDIR"] = QDir::homePath() + "/projects/ExampleProjectDir";
-    m_variables["PROJECTDIRNAME"] = "ExampleProjectDir";
-    m_variables["VERSIONCONTROLPLUGIN"] = "kdevgit";
+    m_variables[QStringLiteral("PROJECTDIR")] = QDir::homePath() + "/projects/ExampleProjectDir";
+    m_variables[QStringLiteral("PROJECTDIRNAME")] = QStringLiteral("ExampleProjectDir");
+    m_variables[QStringLiteral("VERSIONCONTROLPLUGIN")] = QStringLiteral("kdevgit");
 
     KTextEditor::Document* doc = KTextEditor::Editor::instance()->createDocument(this);
     m_preview.reset(doc);
@@ -104,10 +104,10 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
     m_view = m_preview->createView(this);
     m_view->setStatusBarEnabled(false);
     if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(m_view)) {
-        config->setConfigValue("icon-bar", false);
-        config->setConfigValue("folding-bar", false);
-        config->setConfigValue("line-numbers", false);
-        config->setConfigValue("dynamic-word-wrap", true);
+        config->setConfigValue(QStringLiteral("icon-bar"), false);
+        config->setConfigValue(QStringLiteral("folding-bar"), false);
+        config->setConfigValue(QStringLiteral("line-numbers"), false);
+        config->setConfigValue(QStringLiteral("dynamic-word-wrap"), true);
     }
     layout->addWidget(m_view);
 }

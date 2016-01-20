@@ -52,7 +52,7 @@ QStringList generateLongLine()
     const int objects = 100; // *.o files
     const int libs = 20; // -l...
     const int libPaths = 20; // -L...
-    QString line = "g++ -m64 -Wl,-rpath,/home/gabo/md/qt/lib -o bin/flap_ui";
+    QString line = QStringLiteral("g++ -m64 -Wl,-rpath,/home/gabo/md/qt/lib -o bin/flap_ui");
     for(int i = 0; i < objects; ++i) {
         line += QStringLiteral(" .obj/file%1.o").arg(i);
     }
@@ -70,7 +70,7 @@ void TestOutputModel::bench()
     QFETCH(KDevelop::OutputModel::OutputFilterStrategy, strategy);
     QFETCH(QStringList, lines);
 
-    OutputModel testee(QUrl::fromLocalFile("/tmp/build-foo"));
+    OutputModel testee(QUrl::fromLocalFile(QStringLiteral("/tmp/build-foo")));
     testee.setFilteringStrategy(strategy);
 
     quint64 processEventsCounter = 1;

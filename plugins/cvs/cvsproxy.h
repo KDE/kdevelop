@@ -65,7 +65,7 @@ public:
     CvsJob* diff(const QUrl &url,
                  const KDevelop::VcsRevision& revA, 
                  const KDevelop::VcsRevision& revB,
-                 const QString& diffOptions="");
+                 const QString& diffOptions=QString());
     CvsJob* annotate(const QUrl &url, const KDevelop::VcsRevision& rev);
     CvsJob* edit(const QString& repo, const QList<QUrl>& files);
     CvsJob* unedit(const QString& repo, const QList<QUrl>& files);
@@ -82,8 +82,8 @@ public:
 
     CvsJob* checkout(const QUrl &targetDir,
                 const QString & server, const QString& module,
-                const QString& checkoutOptions="",
-                const QString& revision="",
+                const QString& checkoutOptions=QString(),
+                const QString& revision=QString(),
                 bool recursive = true,
                 bool pruneDirs = true);
 

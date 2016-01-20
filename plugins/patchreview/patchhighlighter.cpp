@@ -86,7 +86,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
 
     Diff2::DifferenceStringList lines;
 
-    html += "<b>";
+    html += QLatin1String("<b>");
     if( diff->applied() ) {
         if( !m_plugin->patch()->isAlreadyApplied() )
             html += i18n( "Applied.<br/>" );
@@ -114,7 +114,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
             lines = diff->destinationLines();
         }
     }
-    html += "</b>";
+    html += QLatin1String("</b>");
 
     for( int a = 0; a < lines.size(); ++a ) {
         Diff2::DifferenceString* line = lines[a];
@@ -135,7 +135,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
         }
 
         html += string.mid( currentPos, string.length()-currentPos ).toHtmlEscaped();
-        html += "<br/>";
+        html += QLatin1String("<br/>");
     }
 
     auto browser = new QTextBrowser;
@@ -358,11 +358,11 @@ void PatchHighlighter::highlightFromScratch(KTextEditor::Document* doc)
 
     KColorScheme scheme( QPalette::Active );
 
-    QImage tintedInsertion = QIcon::fromTheme( "insert-text" ).pixmap( 16, 16 ).toImage();
+    QImage tintedInsertion = QIcon::fromTheme( QStringLiteral("insert-text") ).pixmap( 16, 16 ).toImage();
     KIconEffect::colorize( tintedInsertion, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
-    QImage tintedRemoval = QIcon::fromTheme( "edit-delete" ).pixmap( 16, 16 ).toImage();
+    QImage tintedRemoval = QIcon::fromTheme( QStringLiteral("edit-delete") ).pixmap( 16, 16 ).toImage();
     KIconEffect::colorize( tintedRemoval, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
-    QImage tintedChange = QIcon::fromTheme( "text-field" ).pixmap( 16, 16 ).toImage();
+    QImage tintedChange = QIcon::fromTheme( QStringLiteral("text-field") ).pixmap( 16, 16 ).toImage();
     KIconEffect::colorize( tintedChange, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
 
     markIface->setMarkDescription( KTextEditor::MarkInterface::markType22, i18n( "Insertion" ) );
@@ -373,11 +373,11 @@ void PatchHighlighter::highlightFromScratch(KTextEditor::Document* doc)
     markIface->setMarkPixmap( KTextEditor::MarkInterface::markType24, QPixmap::fromImage( tintedChange ) );
 
     markIface->setMarkDescription( KTextEditor::MarkInterface::markType25, i18n( "Insertion" ) );
-    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType25, QIcon::fromTheme( "insert-text" ).pixmap( 16, 16 ) );
+    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType25, QIcon::fromTheme( QStringLiteral("insert-text") ).pixmap( 16, 16 ) );
     markIface->setMarkDescription( KTextEditor::MarkInterface::markType26, i18n( "Removal" ) );
-    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType26, QIcon::fromTheme( "edit-delete" ).pixmap( 16, 16 ) );
+    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType26, QIcon::fromTheme( QStringLiteral("edit-delete") ).pixmap( 16, 16 ) );
     markIface->setMarkDescription( KTextEditor::MarkInterface::markType27, i18n( "Change" ) );
-    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType27, QIcon::fromTheme( "text-field" ).pixmap( 16, 16 ) );
+    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType27, QIcon::fromTheme( QStringLiteral("text-field") ).pixmap( 16, 16 ) );
 
     for ( Diff2::DifferenceList::const_iterator it = m_model->differences()->constBegin(); it != m_model->differences()->constEnd(); ++it ) {
         Diff2::Difference* diff = *it;

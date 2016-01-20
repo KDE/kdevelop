@@ -72,6 +72,7 @@ private:
 class DUChainItemDataProvider : public KDevelop::QuickOpenDataProviderBase,
                                 public KDevelop::Filter<DUChainItem>
 {
+    Q_OBJECT
 public:
     typedef KDevelop::Filter<DUChainItem> Base;
 

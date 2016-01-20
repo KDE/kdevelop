@@ -66,7 +66,7 @@ QString ProjectModelSaver::indexToConfigString(const QModelIndex& index) const
         return QString();
     }
 
-    return ICore::self()->projectController()->projectModel()->pathFromIndex( item->index() ).join("/");
+    return ICore::self()->projectController()->projectModel()->pathFromIndex( item->index() ).join(QLatin1Char('/'));
 }
 
 }

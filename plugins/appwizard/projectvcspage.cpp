@@ -38,7 +38,7 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
     : AppWizardPageWidget( parent ), m_ui( new Ui::ProjectVcsPage )
 {
     m_ui->setupUi( this );
-    QList<KDevelop::IPlugin*> vcsplugins = controller->allPluginsForExtension ( "org.kdevelop.IBasicVersionControl" );
+    QList<KDevelop::IPlugin*> vcsplugins = controller->allPluginsForExtension ( QStringLiteral("org.kdevelop.IBasicVersionControl") );
     int idx = 1;
     m_ui->vcsImportOptions->insertWidget( 0, new QWidget(this) );
     m_ui->vcsTypes->insertItem( 0, i18nc("No Version Control Support chosen", "None") );
@@ -106,8 +106,9 @@ QString ProjectVcsPage::pluginName() const
 {
     int idx = m_ui->vcsTypes->currentIndex() - 1;
     if ( idx < 0 || idx >= vcsPlugins.size())
-    return "";
+    return QString();
 
+    // FIXME: Two return statements
     return vcsPlugins[idx].first;
 }
 

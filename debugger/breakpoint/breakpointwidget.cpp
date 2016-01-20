@@ -276,7 +276,7 @@ void BreakpointWidget::breakpointError(int row, const QString& msg)
     pop->setPopupStyle(KPassivePopup::Boxed);
     pop->setAutoDelete(true);
     // FIXME: the icon, too.
-    pop->setView("", msg);
+    pop->setView(QString(), msg);
     pop->setTimeout(-1);
     pop->show(p);
 }

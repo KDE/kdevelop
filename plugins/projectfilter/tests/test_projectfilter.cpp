@@ -74,7 +74,7 @@ void addTests(const QString& tag, const TestProject& project, const TestFilter& 
 }
 
 ///FIXME: remove once we can use c++11
-#define ADD_TESTS(tag, project, filter, tests) addTests(tag, project, filter, tests, sizeof(tests) / sizeof(tests[0]))
+#define ADD_TESTS(tag, project, filter, tests) addTests(QStringLiteral(tag), project, filter, tests, sizeof(tests) / sizeof(tests[0]))
 
 struct BenchData
 {
@@ -132,36 +132,36 @@ void TestProjectFilter::match_data()
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
-            {".kdev4", Folder, Invalid},
+            {QStringLiteral(".kdev4"), Folder, Invalid},
 
-            {"folder", Folder, Valid},
-            {"folder/folder", Folder, Valid},
-            {"file", File, Valid},
-            {"folder/file", File, Valid},
-            {".file", File, Invalid},
-            {".folder", Folder, Invalid},
-            {"folder/.folder", Folder, Invalid},
-            {"folder/.file", File, Invalid},
+            {QStringLiteral("folder"), Folder, Valid},
+            {QStringLiteral("folder/folder"), Folder, Valid},
+            {QStringLiteral("file"), File, Valid},
+            {QStringLiteral("folder/file"), File, Valid},
+            {QStringLiteral(".file"), File, Invalid},
+            {QStringLiteral(".folder"), Folder, Invalid},
+            {QStringLiteral("folder/.folder"), Folder, Invalid},
+            {QStringLiteral("folder/.file"), File, Invalid},
 
-            {".git", Folder, Invalid},
-            {"_darcs", Folder, Invalid},
-            {"_svn", Folder, Invalid},
-            {".svn", Folder, Invalid},
-            {"CVS", Folder, Invalid},
-            {"SCCS", Folder, Invalid},
-            {".hg", Folder, Invalid},
-            {".bzr", Folder, Invalid},
+            {QStringLiteral(".git"), Folder, Invalid},
+            {QStringLiteral("_darcs"), Folder, Invalid},
+            {QStringLiteral("_svn"), Folder, Invalid},
+            {QStringLiteral(".svn"), Folder, Invalid},
+            {QStringLiteral("CVS"), Folder, Invalid},
+            {QStringLiteral("SCCS"), Folder, Invalid},
+            {QStringLiteral(".hg"), Folder, Invalid},
+            {QStringLiteral(".bzr"), Folder, Invalid},
 
-            {"foo.o", File, Invalid},
-            {"foo.so", File, Invalid},
-            {"foo.so.1", File, Invalid},
-            {"foo.a", File, Invalid},
-            {"moc_foo.cpp", File, Invalid},
-            {"ui_foo.h", File, Invalid},
-            {"qrc_foo.cpp", File, Invalid},
-            {"foo.cpp~", File, Invalid},
-            {".foo.cpp.kate-swp", File, Invalid},
-            {".foo.cpp.swp", File, Invalid}
+            {QStringLiteral("foo.o"), File, Invalid},
+            {QStringLiteral("foo.so"), File, Invalid},
+            {QStringLiteral("foo.so.1"), File, Invalid},
+            {QStringLiteral("foo.a"), File, Invalid},
+            {QStringLiteral("moc_foo.cpp"), File, Invalid},
+            {QStringLiteral("ui_foo.h"), File, Invalid},
+            {QStringLiteral("qrc_foo.cpp"), File, Invalid},
+            {QStringLiteral("foo.cpp~"), File, Invalid},
+            {QStringLiteral(".foo.cpp.kate-swp"), File, Invalid},
+            {QStringLiteral(".foo.cpp.swp"), File, Invalid}
         };
         ADD_TESTS("default", project, filter, tests);
     }
@@ -169,7 +169,7 @@ void TestProjectFilter::match_data()
         // test exclude files, basename
         const TestProject project;
         const Filters filters = Filters()
-            << Filter(SerializedFilter("*.cpp", Filter::Files));
+            << Filter(SerializedFilter(QStringLiteral("*.cpp"), Filter::Files));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
@@ -177,14 +177,14 @@ void TestProjectFilter::match_data()
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
-            {".kdev4", Folder, Invalid},
+            {QStringLiteral(".kdev4"), Folder, Invalid},
 
-            {"folder", Folder, Valid},
-            {"file", File, Valid},
-            {"file.cpp", File, Invalid},
-            {"folder.cpp", Folder, Valid},
-            {"folder/file.cpp", File, Invalid},
-            {"folder/folder.cpp", Folder, Valid}
+            {QStringLiteral("folder"), Folder, Valid},
+            {QStringLiteral("file"), File, Valid},
+            {QStringLiteral("file.cpp"), File, Invalid},
+            {QStringLiteral("folder.cpp"), Folder, Valid},
+            {QStringLiteral("folder/file.cpp"), File, Invalid},
+            {QStringLiteral("folder/folder.cpp"), Folder, Valid}
         };
         ADD_TESTS("exclude:*.cpp", project, filter, tests);
     }
@@ -192,7 +192,7 @@ void TestProjectFilter::match_data()
         // test excludes on folders
         const TestProject project;
         const Filters filters = Filters()
-            << Filter(SerializedFilter("foo", Filter::Folders));
+            << Filter(SerializedFilter(QStringLiteral("foo"), Filter::Folders));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
@@ -200,14 +200,14 @@ void TestProjectFilter::match_data()
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
-            {".kdev4", Folder, Invalid},
+            {QStringLiteral(".kdev4"), Folder, Invalid},
 
-            {"folder", Folder, Valid},
-            {"file", File, Valid},
-            {"foo", Folder, Invalid},
-            {"folder/file", File, Valid},
-            {"folder/foo", Folder, Invalid},
-            {"folder/foo", File, Valid}
+            {QStringLiteral("folder"), Folder, Valid},
+            {QStringLiteral("file"), File, Valid},
+            {QStringLiteral("foo"), Folder, Invalid},
+            {QStringLiteral("folder/file"), File, Valid},
+            {QStringLiteral("folder/foo"), Folder, Invalid},
+            {QStringLiteral("folder/foo"), File, Valid}
         };
         ADD_TESTS("exclude:foo", project, filter, tests);
     }
@@ -215,8 +215,8 @@ void TestProjectFilter::match_data()
         // test includes
         const TestProject project;
         const Filters filters = Filters()
-            << Filter(SerializedFilter("*", Filter::Files))
-            << Filter(SerializedFilter("*.cpp", Filter::Files, Filter::Inclusive));
+            << Filter(SerializedFilter(QStringLiteral("*"), Filter::Files))
+            << Filter(SerializedFilter(QStringLiteral("*.cpp"), Filter::Files, Filter::Inclusive));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
@@ -224,14 +224,14 @@ void TestProjectFilter::match_data()
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
-            {".kdev4", Folder, Invalid},
+            {QStringLiteral(".kdev4"), Folder, Invalid},
 
-            {"folder", Folder, Valid},
-            {"file", File, Invalid},
-            {"file.cpp", File, Valid},
-            {".file.cpp", File, Valid},
-            {"folder/file.cpp", File, Valid},
-            {"folder/.file.cpp", File, Valid}
+            {QStringLiteral("folder"), Folder, Valid},
+            {QStringLiteral("file"), File, Invalid},
+            {QStringLiteral("file.cpp"), File, Valid},
+            {QStringLiteral(".file.cpp"), File, Valid},
+            {QStringLiteral("folder/file.cpp"), File, Valid},
+            {QStringLiteral("folder/.file.cpp"), File, Valid}
         };
         ADD_TESTS("include:*.cpp", project, filter, tests);
         project.projectConfiguration();
@@ -240,10 +240,10 @@ void TestProjectFilter::match_data()
         // test mixed stuff
         const TestProject project;
         const Filters filters = Filters()
-            << Filter(SerializedFilter("*", Filter::Files, Filter::Exclusive))
-            << Filter(SerializedFilter("*.inc", Filter::Files, Filter::Inclusive))
-            << Filter(SerializedFilter("*ex.inc", Filter::Files, Filter::Exclusive))
-            << Filter(SerializedFilter("bar", Filter::Folders, Filter::Exclusive));
+            << Filter(SerializedFilter(QStringLiteral("*"), Filter::Files, Filter::Exclusive))
+            << Filter(SerializedFilter(QStringLiteral("*.inc"), Filter::Files, Filter::Inclusive))
+            << Filter(SerializedFilter(QStringLiteral("*ex.inc"), Filter::Files, Filter::Exclusive))
+            << Filter(SerializedFilter(QStringLiteral("bar"), Filter::Folders, Filter::Exclusive));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
@@ -251,16 +251,16 @@ void TestProjectFilter::match_data()
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
-            {".kdev4", Folder, Invalid},
+            {QStringLiteral(".kdev4"), Folder, Invalid},
 
-            {"folder", Folder, Valid},
-            {"file", File, Invalid},
-            {"file.inc", File, Valid},
-            {"file.ex.inc", File, Invalid},
-            {"folder/file", File, Invalid},
-            {"folder/file.inc", File, Valid},
-            {"folder/file.ex.inc", File, Invalid},
-            {"bar", Folder, Invalid},
+            {QStringLiteral("folder"), Folder, Valid},
+            {QStringLiteral("file"), File, Invalid},
+            {QStringLiteral("file.inc"), File, Valid},
+            {QStringLiteral("file.ex.inc"), File, Invalid},
+            {QStringLiteral("folder/file"), File, Invalid},
+            {QStringLiteral("folder/file.inc"), File, Valid},
+            {QStringLiteral("folder/file.ex.inc"), File, Invalid},
+            {QStringLiteral("bar"), Folder, Invalid},
         };
         ADD_TESTS("mixed", project, filter, tests);
     }
@@ -268,7 +268,7 @@ void TestProjectFilter::match_data()
         // relative path
         const TestProject project;
         const Filters filters = Filters()
-            << Filter(SerializedFilter("/foo/*bar", Filter::Targets(Filter::Files | Filter::Folders)));
+            << Filter(SerializedFilter(QStringLiteral("/foo/*bar"), Filter::Targets(Filter::Files | Filter::Folders)));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
@@ -276,18 +276,18 @@ void TestProjectFilter::match_data()
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
-            {".kdev4", Folder, Invalid},
+            {QStringLiteral(".kdev4"), Folder, Invalid},
 
-            {"foo", Folder, Valid},
-            {"bar", File, Valid},
-            {"foo/bar", Folder, Invalid},
-            {"foo/bar", File, Invalid},
-            {"foo/asdf/bar", Folder, Invalid},
-            {"foo/asdf/bar", File, Invalid},
-            {"foo/asdf_bar", Folder, Invalid},
-            {"foo/asdf_bar", File, Invalid},
-            {"asdf/bar", File, Valid},
-            {"asdf/foo/bar", File, Valid},
+            {QStringLiteral("foo"), Folder, Valid},
+            {QStringLiteral("bar"), File, Valid},
+            {QStringLiteral("foo/bar"), Folder, Invalid},
+            {QStringLiteral("foo/bar"), File, Invalid},
+            {QStringLiteral("foo/asdf/bar"), Folder, Invalid},
+            {QStringLiteral("foo/asdf/bar"), File, Invalid},
+            {QStringLiteral("foo/asdf_bar"), Folder, Invalid},
+            {QStringLiteral("foo/asdf_bar"), File, Invalid},
+            {QStringLiteral("asdf/bar"), File, Valid},
+            {QStringLiteral("asdf/foo/bar"), File, Valid},
         };
         ADD_TESTS("relative", project, filter, tests);
     }
@@ -295,7 +295,7 @@ void TestProjectFilter::match_data()
         // trailing slash
         const TestProject project;
         const Filters filters = Filters()
-            << Filter(SerializedFilter("bar/", Filter::Targets(Filter::Files | Filter::Folders)));
+            << Filter(SerializedFilter(QStringLiteral("bar/"), Filter::Targets(Filter::Files | Filter::Folders)));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
@@ -303,13 +303,13 @@ void TestProjectFilter::match_data()
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
-            {".kdev4", Folder, Invalid},
+            {QStringLiteral(".kdev4"), Folder, Invalid},
 
-            {"foo", Folder, Valid},
-            {"bar", File, Valid},
-            {"bar", Folder, Invalid},
-            {"foo/bar", File, Valid},
-            {"foo/bar", Folder, Invalid}
+            {QStringLiteral("foo"), Folder, Valid},
+            {QStringLiteral("bar"), File, Valid},
+            {QStringLiteral("bar"), Folder, Invalid},
+            {QStringLiteral("foo/bar"), File, Valid},
+            {QStringLiteral("foo/bar"), Folder, Invalid}
         };
         ADD_TESTS("trailingslash", project, filter, tests);
     }
@@ -317,7 +317,7 @@ void TestProjectFilter::match_data()
         // escaping
         const TestProject project;
         const Filters filters = Filters()
-            << Filter(SerializedFilter("foo\\*bar", Filter::Files));
+            << Filter(SerializedFilter(QStringLiteral("foo\\*bar"), Filter::Files));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
@@ -325,12 +325,12 @@ void TestProjectFilter::match_data()
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
-            {".kdev4", Folder, Invalid},
+            {QStringLiteral(".kdev4"), Folder, Invalid},
 
-            {"foobar", Folder, Valid},
-            {"fooasdfbar", File, Valid},
-            {"foo*bar", File, Invalid},
-            {"foo/bar", Folder, Valid}
+            {QStringLiteral("foobar"), Folder, Valid},
+            {QStringLiteral("fooasdfbar"), File, Valid},
+            {QStringLiteral("foo*bar"), File, Invalid},
+            {QStringLiteral("foo/bar"), Folder, Valid}
         };
         ADD_TESTS("escaping", project, filter, tests);
     }

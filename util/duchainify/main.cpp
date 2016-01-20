@@ -94,30 +94,30 @@ void Manager::init()
     }
 
     uint features = TopDUContext::VisibleDeclarationsAndContexts;
-    if(m_args->isSet("features"))
+    if(m_args->isSet(QStringLiteral("features")))
     {
-        QString featuresStr = m_args->value("features");
-        if(featuresStr == "visible-declarations")
+        QString featuresStr = m_args->value(QStringLiteral("features"));
+        if(featuresStr == QLatin1String("visible-declarations"))
         {
             features = TopDUContext::VisibleDeclarationsAndContexts;
         }
-        else if(featuresStr == "all-declarations")
+        else if(featuresStr == QLatin1String("all-declarations"))
         {
             features = TopDUContext::AllDeclarationsAndContexts;
         }
-        else if(featuresStr == "all-declarations-and-uses")
+        else if(featuresStr == QLatin1String("all-declarations-and-uses"))
         {
             features = TopDUContext::AllDeclarationsContextsAndUses;
         }
-        else if(featuresStr == "all-declarations-and-uses-and-AST")
+        else if(featuresStr == QLatin1String("all-declarations-and-uses-and-AST"))
         {
             features = TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST;
         }
-        else if(featuresStr == "empty")
+        else if(featuresStr == QLatin1String("empty"))
         {
             features = TopDUContext::Empty;
         }
-        else if(featuresStr == "simplified-visible-declarations")
+        else if(featuresStr == QLatin1String("simplified-visible-declarations"))
         {
             features = TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
         }
@@ -127,15 +127,15 @@ void Manager::init()
             return;
         }
     }
-    if(m_args->isSet("force-update"))
+    if(m_args->isSet(QStringLiteral("force-update")))
         features |= TopDUContext::ForceUpdate;
-    if(m_args->isSet("force-update-recursive"))
+    if(m_args->isSet(QStringLiteral("force-update-recursive")))
         features |= TopDUContext::ForceUpdateRecursive;
 
-    if(m_args->isSet("threads"))
+    if(m_args->isSet(QStringLiteral("threads")))
     {
         bool ok = false;
-        int count = m_args->value("threads").toInt(&ok);
+        int count = m_args->value(QStringLiteral("threads")).toInt(&ok);
         ICore::self()->languageController()->backgroundParser()->setThreadCount(count);
         if(!ok) {
             std::cerr << "bad thread count\n";
@@ -188,14 +188,14 @@ void Manager::dump(const ReferencedTopDUContext& topContext)
 
     std::cerr << "\n";
 
-    if (m_args->isSet("dump-definitions")) {
+    if (m_args->isSet(QStringLiteral("dump-definitions"))) {
         DUChainReadLocker lock;
         std::cerr << "Definitions:" << std::endl;
         DUChain::definitions()->dump(stream);
         std::cerr << std::endl;
     }
 
-    if (m_args->isSet("dump-symboltable")) {
+    if (m_args->isSet(QStringLiteral("dump-symboltable"))) {
         DUChainReadLocker lock;
         std::cerr << "PersistentSymbolTable:" << std::endl;
         PersistentSymbolTable::self().dump(stream);
@@ -203,28 +203,28 @@ void Manager::dump(const ReferencedTopDUContext& topContext)
     }
 
     DUChainDumper::Features features;
-    if (m_args->isSet("dump-context")) {
+    if (m_args->isSet(QStringLiteral("dump-context"))) {
         features |= DUChainDumper::DumpContext;
     }
-    if (m_args->isSet("dump-errors")) {
+    if (m_args->isSet(QStringLiteral("dump-errors"))) {
         features |= DUChainDumper::DumpProblems;
     }
 
-    if (auto depth = m_args->value("dump-depth").toInt()) {
+    if (auto depth = m_args->value(QStringLiteral("dump-depth")).toInt()) {
         DUChainReadLocker lock;
         std::cerr << "Context:" << std::endl;
         DUChainDumper dumpChain(features);
         dumpChain.dump(topContext, depth);
     }
 
-    if (m_args->isSet("dump-graph")) {
+    if (m_args->isSet(QStringLiteral("dump-graph"))) {
         DUChainReadLocker lock;
         DumpDotGraph dumpGraph;
         const QString dotOutput = dumpGraph.dotGraph(topContext);
         std::cout << qPrintable(dotOutput) << std::endl;
     }
 
-    if (m_args->isSet("dump-imported-errors")) {
+    if (m_args->isSet(QStringLiteral("dump-imported-errors"))) {
         DUChainReadLocker lock;
         foreach(const auto& import, topContext->importedParentContexts()) {
             auto top = dynamic_cast<TopDUContext*>(import.indexedContext().context());
@@ -276,9 +276,9 @@ using namespace KDevelop;
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData( "duchainify", i18n( "duchainify" ),
-                          "1", i18n("DUChain builder application"), KAboutLicense::GPL,
-                          i18n( "(c) 2009 David Nolden" ), QString(), "http://www.kdevelop.org" );
+    KAboutData aboutData( QStringLiteral("duchainify"), i18n( "duchainify" ),
+                          QStringLiteral("1"), i18n("DUChain builder application"), KAboutLicense::GPL,
+                          i18n( "(c) 2009 David Nolden" ), QString(), QStringLiteral("http://www.kdevelop.org") );
 
     QApplication app(argc, argv);
     KAboutData::setApplicationData(aboutData);
@@ -289,33 +289,33 @@ int main(int argc, char** argv)
     parser.addVersionOption();
     parser.addHelpOption();
 
-    parser.addPositionalArgument("paths", i18n("file or directory"), "[PATH...]");
+    parser.addPositionalArgument(QStringLiteral("paths"), i18n("file or directory"), QStringLiteral("[PATH...]"));
 
-    parser.addOption(QCommandLineOption{QStringList{"w", "warnings"}, i18n("Show warnings")});
-    parser.addOption(QCommandLineOption{QStringList{"V", "verbose"}, i18n("Show warnings and debug output")});
-    parser.addOption(QCommandLineOption{QStringList{"u", "force-update"}, i18n("Enforce an update of the top-contexts corresponding to the given files")});
-    parser.addOption(QCommandLineOption{QStringList{"r", "force-update-recursive"}, i18n("Enforce an update of the top-contexts corresponding to the given files and all included files")});
-    parser.addOption(QCommandLineOption{QStringList{"t", "threads"}, i18n("Number of threads to use"), "count"});
-    parser.addOption(QCommandLineOption{QStringList{"f", "features"}, i18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"), "features"});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("w"), QStringLiteral("warnings")}, i18n("Show warnings")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("V"), QStringLiteral("verbose")}, i18n("Show warnings and debug output")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("u"), QStringLiteral("force-update")}, i18n("Enforce an update of the top-contexts corresponding to the given files")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("r"), QStringLiteral("force-update-recursive")}, i18n("Enforce an update of the top-contexts corresponding to the given files and all included files")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("t"), QStringLiteral("threads")}, i18n("Number of threads to use"), QStringLiteral("count")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("f"), QStringLiteral("features")}, i18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"), QStringLiteral("features")});
 
-    parser.addOption(QCommandLineOption{QStringList{"dump-context"}, i18n("Print complete Definition-Use Chain on successful parse")});
-    parser.addOption(QCommandLineOption{QStringList{"dump-definitions"}, i18n("Print complete DUChain Definitions repository on successful parse")});
-    parser.addOption(QCommandLineOption{QStringList{"dump-symboltable"}, i18n("Print complete DUChain PersistentSymbolTable repository on successful parse")});
-    parser.addOption(QCommandLineOption{QStringList{"dump-depth"}, i18n("Number defining the maximum depth where declaration details are printed"), "depth"});
-    parser.addOption(QCommandLineOption{QStringList{"dump-graph"}, i18n("Dump DUChain graph (in .dot format)")});
-    parser.addOption(QCommandLineOption{QStringList{"d", "dump-errors"}, i18n("Print problems encountered during parsing")});
-    parser.addOption(QCommandLineOption{QStringList{"dump-imported-errors"}, i18n("Recursively dump errors from imported contexts.")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-context")}, i18n("Print complete Definition-Use Chain on successful parse")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-definitions")}, i18n("Print complete DUChain Definitions repository on successful parse")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-symboltable")}, i18n("Print complete DUChain PersistentSymbolTable repository on successful parse")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-depth")}, i18n("Number defining the maximum depth where declaration details are printed"), QStringLiteral("depth")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-graph")}, i18n("Dump DUChain graph (in .dot format)")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("d"), QStringLiteral("dump-errors")}, i18n("Print problems encountered during parsing")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-imported-errors")}, i18n("Recursively dump errors from imported contexts.")});
 
     parser.process(app);
 
     aboutData.processCommandLine(&parser);
 
-    verbose = parser.isSet("verbose");
-    warnings = parser.isSet("warnings");
+    verbose = parser.isSet(QStringLiteral("verbose"));
+    warnings = parser.isSet(QStringLiteral("warnings"));
     qInstallMessageHandler(messageOutput);
 
     AutoTestShell::init();
-    TestCore::initialize(Core::NoUi, "duchainify");
+    TestCore::initialize(Core::NoUi, QStringLiteral("duchainify"));
     Manager manager(&parser);
 
     QTimer::singleShot(0, &manager, SLOT(init()));

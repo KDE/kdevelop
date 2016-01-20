@@ -31,11 +31,11 @@ class DUContext;
 
 class Declaration;
 
-const QString EXPECT_FAIL =    "EXPECT_FAIL";
-const QString FAILED_TO_FAIL = "\"%1\" FAILED TO FAIL AS EXPECTED: \"%2\" %3";
-const QString EXPECTED_FAIL =  "\"%1\" FAILED (expected): %2 %3";
-const QString FAIL =           "\"%1\" FAILED: %2 %3";
-const QString TEST_NOT_FOUND = "Test not found";
+inline QString EXPECT_FAIL()    { return QStringLiteral("EXPECT_FAIL"); }
+inline QString FAILED_TO_FAIL() { return QStringLiteral("\"%1\" FAILED TO FAIL AS EXPECTED: \"%2\" %3"); }
+inline QString EXPECTED_FAIL()  { return QStringLiteral("\"%1\" FAILED (expected): %2 %3"); }
+inline QString FAIL()           { return QStringLiteral("\"%1\" FAILED: %2 %3"); }
+inline QString TEST_NOT_FOUND() { return QStringLiteral("Test not found"); }
 
 template<class T> class TestSuite;
 
@@ -61,36 +61,36 @@ public:
     DelayedOutput::Delay delay(&DelayedOutput::self());
     for (it = testData.begin(); it != testData.end(); ++it)
     {
-      if (it.key() == EXPECT_FAIL)
+      if (it.key() == EXPECT_FAIL())
         continue;
 
       QString result = m_testFunctions.value(it.key(), &TestSuite<T>::noSuchTest)(it.value(), object);
       QString expectedFailure = expectedFails.value(it.key(), QString()).toString();
 
       //Either ("expected failure" & "no result failure") or ("no expected failure" & "result failure")
-      if ((bool)expectedFailure.size() ^ (bool)result.size())
+      if (expectedFailure.isEmpty() ^ result.isEmpty())
       {
-        DelayedOutput::self().push(result.size() ? FAIL.arg(it.key(), result, objectInformation(object)) :
-                                   FAILED_TO_FAIL.arg(it.key(), expectedFailure, objectInformation(object)));
+        DelayedOutput::self().push(result.isEmpty() ? FAILED_TO_FAIL().arg(it.key(), expectedFailure, objectInformation(object)) :
+                                   FAIL().arg(it.key(), result, objectInformation(object)));
         return false;
       }
 
-      if (expectedFailure.size())
-        qDebug() << EXPECTED_FAIL.arg(it.key(), expectedFailure, objectInformation(object)).toUtf8().data();
+      if (!expectedFailure.isEmpty())
+        qDebug() << EXPECTED_FAIL().arg(it.key(), expectedFailure, objectInformation(object)).toUtf8().data();
     }
     return true;
   }
 private:
   QVariantMap expectedFailures(const QVariantMap &testData)
   {
-    if (!testData.contains(EXPECT_FAIL))
+    if (!testData.contains(EXPECT_FAIL()))
       return QVariantMap();
 
-    return testData[EXPECT_FAIL].toMap();
+    return testData[EXPECT_FAIL()].toMap();
   }
   static QString noSuchTest(const QVariant&, T)
   {
-    return TEST_NOT_FOUND;
+    return TEST_NOT_FOUND();
   }
   static QString objectInformation(T)
   {

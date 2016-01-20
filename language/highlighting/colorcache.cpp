@@ -254,7 +254,7 @@ void ColorCache::updateInternal()
 
   // rehighlight open documents
   foreach (IDocument* doc, ICore::self()->documentController()->openDocuments()) {
-    foreach (const auto& lang, ICore::self()->languageController()->languagesForUrl(doc->url())) {
+    foreach (const auto lang, ICore::self()->languageController()->languagesForUrl(doc->url())) {
       ReferencedTopDUContext top;
       {
         DUChainReadLocker lock;

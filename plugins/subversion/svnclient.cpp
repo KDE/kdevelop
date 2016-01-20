@@ -289,7 +289,9 @@ kdev_logReceiver (void *baton,
                     break;
             }
             
-            ev.items().append( iev );
+            auto items = ev.items();
+            items.append( iev );
+            ev.setItems( items );
         }
     }
     client->emitLogEventReceived( ev );

@@ -100,7 +100,7 @@ void SourceFormatterStyle::setMimeTypes(const SourceFormatterStyle::MimeList& ty
 
 void SourceFormatterStyle::setMimeTypes(const QStringList& types)
 {
-	for ( auto t: types ) {
+	foreach ( auto& t, types ) {
 		auto items = t.split('|');
 		if ( items.size() != 2 ) {
 			continue;
@@ -145,7 +145,7 @@ bool SourceFormatterStyle::supportsLanguage(const QString &language) const
 
 QString SourceFormatterStyle::modeForMimetype(const QMimeType& mime) const
 {
-	for (const auto& item : mimeTypes()) {
+	foreach (const auto& item, mimeTypes()) {
 		if (mime.inherits(item.mimeType)) {
 			return item.highlightMode;
 		}

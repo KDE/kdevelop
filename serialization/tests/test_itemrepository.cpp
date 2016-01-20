@@ -107,7 +107,7 @@ class TestItemRepository : public QObject {
         KDevelop::TestCore::shutdown();
     }
     void testItemRepository() {
-      KDevelop::ItemRepository<TestItem, TestItemRequest> repository("TestItemRepository");
+      KDevelop::ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
       uint itemId = 0;
       QHash<uint, TestItem*> realItemsByIndex;
       QHash<uint, TestItem*> realItemsById;
@@ -190,7 +190,7 @@ class TestItemRepository : public QObject {
     }
     void testLeaks()
     {
-      KDevelop::ItemRepository<TestItem, TestItemRequest> repository("TestItemRepository");
+      KDevelop::ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
       QList<TestItem*> items;
       for(int i = 0; i < 10000; ++i) {
         TestItem* item = createItem(i, (rand() % 1000) + sizeof(TestItem));
@@ -216,7 +216,7 @@ class TestItemRepository : public QObject {
     }
     void deleteClashingMonsterBucket()
     {
-      KDevelop::ItemRepository<TestItem, TestItemRequest> repository("TestItemRepository");
+      KDevelop::ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
       const uint hash = 1235;
 
       QScopedArrayPointer<TestItem> monsterItem(createItem(hash, KDevelop::ItemRepositoryBucketSize + 10));
@@ -247,7 +247,7 @@ class TestItemRepository : public QObject {
     }
     void usePermissiveModuloWhenRemovingClashLinks()
     {
-      KDevelop::ItemRepository<TestItem, TestItemRequest> repository("PermissiveModulo");
+      KDevelop::ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("PermissiveModulo"));
 
       const uint bucketHashSize = decltype(repository)::bucketHashSize;
       const uint nextBucketHashSize = decltype(repository)::MyBucket::NextBucketHashSize;

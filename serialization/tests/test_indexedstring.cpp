@@ -50,11 +50,11 @@ void TestIndexedString::testUrl_data()
   QTest::addColumn<QUrl>("url");
   QTest::addColumn<QString>("string");
   QTest::newRow("empty") << QUrl() << QString();
-  QTest::newRow("/") << QUrl::fromLocalFile("/") << QStringLiteral("/");
-  QTest::newRow("/foo/bar") << QUrl::fromLocalFile("/foo/bar") << QStringLiteral("/foo/bar");
-  QTest::newRow("http://foo.com/") << QUrl("http://foo.com/") << QStringLiteral("http://foo.com/");
-  QTest::newRow("http://foo.com/bar/asdf") << QUrl("http://foo.com/bar/asdf") << QStringLiteral("http://foo.com/bar/asdf");
-  QTest::newRow("file:///bar/asdf") << QUrl("file:///bar/asdf") << QStringLiteral("/bar/asdf");
+  QTest::newRow("/") << QUrl::fromLocalFile(QStringLiteral("/")) << QStringLiteral("/");
+  QTest::newRow("/foo/bar") << QUrl::fromLocalFile(QStringLiteral("/foo/bar")) << QStringLiteral("/foo/bar");
+  QTest::newRow("http://foo.com/") << QUrl(QStringLiteral("http://foo.com/")) << QStringLiteral("http://foo.com/");
+  QTest::newRow("http://foo.com/bar/asdf") << QUrl(QStringLiteral("http://foo.com/bar/asdf")) << QStringLiteral("http://foo.com/bar/asdf");
+  QTest::newRow("file:///bar/asdf") << QUrl(QStringLiteral("file:///bar/asdf")) << QStringLiteral("/bar/asdf");
 
 #ifdef Q_OS_WIN
   // Make sure we're not running into https://bugreports.qt.io/browse/QTBUG-41729
@@ -142,7 +142,7 @@ void TestIndexedString::bench_qhashQString()
   QVector<QString> data = generateData();
   quint64 sum = 0;
   QBENCHMARK {
-    for (const auto& string : data) {
+    foreach (const auto& string, data) {
       sum += qHash(string);
     }
   }
@@ -166,13 +166,13 @@ void TestIndexedString::bench_hashString()
   QVector<QString> strings = generateData();
   QVector<QByteArray> byteArrays;
   byteArrays.reserve(strings.size());
-  for (const auto& string : strings) {
+  foreach (const auto& string, strings) {
     byteArrays << string.toUtf8();
   }
 
   quint64 sum = 0;
   QBENCHMARK {
-    for (const auto& array : byteArrays) {
+    foreach (const auto& array, byteArrays) {
       sum += IndexedString::hashString(array.constData(), array.length());
     }
   }
@@ -184,13 +184,13 @@ void TestIndexedString::bench_kdevhash()
   QVector<QString> strings = generateData();
   QVector<QByteArray> byteArrays;
   byteArrays.reserve(strings.size());
-  for (const auto& string : strings) {
+  foreach (const auto& string, strings) {
     byteArrays << string.toUtf8();
   }
 
   quint64 sum = 0;
   QBENCHMARK {
-    for (const auto& array : byteArrays) {
+    foreach (const auto& array, byteArrays) {
       sum += KDevHash() << array;
     }
   }
@@ -238,9 +238,9 @@ void TestIndexedString::test_data()
 
   QTest::newRow("empty") << QString();
   QTest::newRow("char-ascii") << QStringLiteral("a");
-  QTest::newRow("char-utf8") << QString::fromUtf8("ä");
-  QTest::newRow("string-ascii") << QString::fromLatin1("asdf()?=");
-  QTest::newRow("string-utf8") << QString::fromUtf8("æſðđäöü");
+  QTest::newRow("char-utf8") << QStringLiteral("ä");
+  QTest::newRow("string-ascii") << QStringLiteral("asdf()?=");
+  QTest::newRow("string-utf8") << QStringLiteral("æſðđäöü");
 }
 
 void TestIndexedString::testCString()

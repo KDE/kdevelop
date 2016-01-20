@@ -63,7 +63,7 @@ void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* curren
   if(checker(current))
     collected.insert(current);
 
-  foreach(ParsingEnvironmentFilePointer importer, current->importers())
+  foreach(const ParsingEnvironmentFilePointer& importer, current->importers())
     if(importer.data())
       collectImporters(checker, importer.data(), visited, collected);
     else
@@ -185,7 +185,7 @@ void UsesCollector::startCollecting() {
 
         ///Collect definitions for declarations
         if(m_collectDefinitions) {
-          foreach(const IndexedDeclaration &d, allDeclarations) {
+          foreach(const IndexedDeclaration d, allDeclarations) {
             Declaration* definition = FunctionDefinition::definition(d.data());
             if(definition) {
                 qCDebug(LANGUAGE) << "adding definition";
@@ -198,7 +198,7 @@ void UsesCollector::startCollecting() {
 
         ///Step 4: Copy allDeclarations into m_declarations, build top-context list, etc.
         QList<ReferencedTopDUContext> candidateTopContexts;
-        foreach(const IndexedDeclaration &d, allDeclarations) {
+        foreach(const IndexedDeclaration d, allDeclarations) {
           m_declarations << d;
           m_declarationTopContexts.insert(d.indexedTopContext());
           //We only collect declarations with the same type here..
@@ -225,7 +225,7 @@ void UsesCollector::startCollecting() {
               //the header that contains the declaration. That header may be parsed empty due to header-guards,
               //but we still need to pick it up here.
               QList<ParsingEnvironmentFilePointer> allVersions = DUChain::self()->allEnvironmentFiles(top->url());
-              foreach(ParsingEnvironmentFilePointer version, allVersions)
+              foreach(const ParsingEnvironmentFilePointer& version, allVersions)
                 collectImporters(checker, version.data(), visited, collected);
             }
           }

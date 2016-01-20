@@ -494,7 +494,7 @@ void ProjectBaseItem::setFlags(Qt::ItemFlags flags)
 
 QString ProjectBaseItem::iconName() const
 {
-    return "";
+    return QLatin1String("");
 }
 
 ProjectFolderItem *ProjectBaseItem::folder() const
@@ -674,7 +674,7 @@ ProjectBuildFolderItem::ProjectBuildFolderItem( const QString& name, ProjectBase
 
 QString ProjectFolderItem::iconName() const
 {
-    return "folder";
+    return QStringLiteral("folder");
 }
 
 int ProjectBuildFolderItem::type() const
@@ -684,7 +684,7 @@ int ProjectBuildFolderItem::type() const
 
 QString ProjectBuildFolderItem::iconName() const
 {
-    return "folder-development";
+    return QStringLiteral("folder-development");
 }
 
 ProjectFileItem::ProjectFileItem( IProject* project, const Path& path, ProjectBaseItem* parent )
@@ -836,7 +836,7 @@ ProjectTargetItem::ProjectTargetItem( IProject* project, const QString &name, Pr
 
 QString ProjectTargetItem::iconName() const
 {
-    return "system-run";
+    return QStringLiteral("system-run");
 }
 
 void ProjectTargetItem::setPath( const Path& path )
@@ -1006,7 +1006,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 ProjectModel::ProjectModel( QObject *parent )
         : QAbstractItemModel( parent ), d( new ProjectModelPrivate( this ) )
 {
-    d->rootItem = new ProjectBaseItem( 0, "", 0 );
+    d->rootItem = new ProjectBaseItem( 0, QString(), 0 );
     d->rootItem->setModel( this );
 }
 

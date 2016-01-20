@@ -94,10 +94,10 @@ QString findSwitchCandidate(const QUrl& docUrl)
 K_PLUGIN_FACTORY_WITH_JSON(SwitchToBuddyPluginFactory, "kdevswitchtobuddy.json", registerPlugin<SwitchToBuddyPlugin>(); )
 
 SwitchToBuddyPlugin::SwitchToBuddyPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( "kdevswitchtobuddy", parent )
+    : IPlugin ( QStringLiteral("kdevswitchtobuddy"), parent )
     , m_signalMapper(0)
 {
-    setXMLFile("kdevswitchtobuddy.rc");
+    setXMLFile(QStringLiteral("kdevswitchtobuddy.rc"));
 }
 
 SwitchToBuddyPlugin::~SwitchToBuddyPlugin()
@@ -147,7 +147,7 @@ void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* /*wind
 {
     xmlFile = this->xmlFile();
 
-    QAction* switchDefinitionDeclaration = actions.addAction("switch_definition_declaration");
+    QAction* switchDefinitionDeclaration = actions.addAction(QStringLiteral("switch_definition_declaration"));
     switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
     actions.setDefaultShortcut( switchDefinitionDeclaration, Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, &QAction::triggered, this, &SwitchToBuddyPlugin::switchDefinitionDeclaration);

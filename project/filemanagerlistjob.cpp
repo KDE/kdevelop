@@ -28,8 +28,8 @@
 
 using namespace KDevelop;
 
-FileManagerListJob::FileManagerListJob(ProjectFolderItem* item, const bool forceRecursion)
-    : KIO::Job(), m_item(item), m_forceRecursion(forceRecursion), m_aborted(false)
+FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
+    : KIO::Job(), m_item(item), m_aborted(false)
 {
     /* the following line is not an error in judgment, apparently starting a
      * listJob while the previous one hasn't self-destructed takes a lot of time,
@@ -87,7 +87,7 @@ void FileManagerListJob::slotResult(KJob* job)
         return;
     }
 
-    emit entries(this, m_item, entryList, m_forceRecursion);
+    emit entries(this, m_item, entryList);
     entryList.clear();
 
     if( job->error() ) {

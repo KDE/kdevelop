@@ -250,7 +250,7 @@ void DocumentSwitcherPlugin::storeAreaViewList( Sublime::MainWindow* mainwindow,
 {
     if( !documentLists.contains( mainwindow ) || !documentLists[mainwindow].contains(area) )
     {
-        QMap<Sublime::Area*, QList<Sublime::View*> > areas;
+        QHash<Sublime::Area*, QList<Sublime::View*> > areas;
         qCDebug(PLUGIN_DOCUMENTSWITCHER) << "adding area views for area:" << area << area->title() << "mainwindow:" << mainwindow << mainwindow->windowTitle();
         foreach( Sublime::View* v, area->views() ) {
             qCDebug(PLUGIN_DOCUMENTSWITCHER) << "view:" << v  << v->document()->title();

@@ -180,14 +180,14 @@ QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QStr
     foreach (const QString& entry, path)
     {
         currentPath << entry;
-        if (!templateItems.contains(currentPath.join("/"))) {
+        if (!templateItems.contains(currentPath.join(QLatin1Char('/')))) {
             QStandardItem *item = new QStandardItem(entry);
             item->setEditable(false);
             parent->appendRow(item);
-            templateItems[currentPath.join("/")] = item;
+            templateItems[currentPath.join(QLatin1Char('/'))] = item;
             parent = item;
         } else {
-            parent = templateItems[currentPath.join("/")];
+            parent = templateItems[currentPath.join(QLatin1Char('/'))];
         }
     }
 
@@ -205,7 +205,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
     foreach(const QString &archivePath, searchPaths) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
         foreach(const QString& file, files) {
-            if(file.endsWith(".zip") || file.endsWith(".tar.bz2")) {
+            if(file.endsWith(QLatin1String(".zip")) || file.endsWith(QLatin1String(".tar.bz2"))) {
                 QString archfile = archivePath + file;
                 templateArchives.append(archfile);
             }
@@ -216,14 +216,14 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
 
     QDir dir(localDescriptionsDir);
     if(!dir.exists())
-        dir.mkpath(".");
+        dir.mkpath(QStringLiteral("."));
 
     foreach (const QString &archName, templateArchives)
     {
         qCDebug(LANGUAGE) << "processing template" << archName;
 
         QScopedPointer<KArchive> templateArchive;
-        if (QFileInfo(archName).completeSuffix() == "zip")
+        if (QFileInfo(archName).completeSuffix() == QLatin1String("zip"))
         {
             templateArchive.reset(new KZip(archName));
         }
@@ -259,7 +259,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                  */
                 foreach (const QString& entryName, templateArchive->directory()->entries())
                 {
-                    if (entryName.endsWith(".kdevtemplate"))
+                    if (entryName.endsWith(QLatin1String(".kdevtemplate")))
                     {
                         templateEntry = templateArchive->directory()->entry(entryName);
                         break;
@@ -276,7 +276,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
             {
                 foreach (const QString& entryName, templateArchive->directory()->entries())
                 {
-                    if (entryName.endsWith(".desktop"))
+                    if (entryName.endsWith(QLatin1String(".desktop")))
                     {
                         templateEntry = templateArchive->directory()->entry(entryName);
                         break;
@@ -383,7 +383,7 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
 
     QDir dir(saveLocation);
     if(!dir.exists())
-        dir.mkpath(".");
+        dir.mkpath(QStringLiteral("."));
 
     QFileInfo info(fileName);
     QString destination = saveLocation + info.baseName();
@@ -391,15 +391,15 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
     QMimeType mimeType = QMimeDatabase().mimeTypeForFile(fileName);
     qCDebug(LANGUAGE) << "Loaded file" << fileName << "with type" << mimeType.name();
 
-    if (mimeType.name() == "application/x-desktop")
+    if (mimeType.name() == QLatin1String("application/x-desktop"))
     {
         qCDebug(LANGUAGE) << "Loaded desktop file" << info.absoluteFilePath() << ", compressing";
 #ifdef Q_WS_WIN
         destination += ".zip";
         KZip archive(destination);
 #else
-        destination += ".tar.bz2";
-        KTar archive(destination, "application/x-bzip");
+        destination += QLatin1String(".tar.bz2");
+        KTar archive(destination, QStringLiteral("application/x-bzip"));
 #endif //Q_WS_WIN
 
         archive.open(QIODevice::WriteOnly);

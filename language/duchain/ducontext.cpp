@@ -757,7 +757,7 @@ QList< QualifiedIdentifier > DUContext::fullyApplyAliases(const QualifiedIdentif
   }
 
   QList<QualifiedIdentifier> ret;
-  for (const SearchItem::Ptr& item : identifiers)
+  foreach (const SearchItem::Ptr& item, identifiers)
     ret += item->toList();
 
   return ret;
@@ -876,7 +876,7 @@ QVector<DUContext*> DUContext::importers() const
   if(owner()) {
     //Add indirect importers to the list
     KDevVarLengthArray<IndexedDUContext> indirect = Importers::self().importers(owner()->id());
-    for (const IndexedDUContext& ctx : indirect) {
+    foreach (const IndexedDUContext ctx, indirect) {
       ret << ctx.context();
     }
   }
@@ -1205,7 +1205,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
       if( !imports.isEmpty() )
       {
         //We have namespace-imports.
-        for ( Declaration* importDecl : imports )
+        foreach ( Declaration* importDecl, imports )
         {
           //Search for the identifier with the import-identifier prepended
           if(dynamic_cast<NamespaceAliasDeclaration*>(importDecl))
@@ -1226,7 +1226,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
         if(!aliases.isEmpty()) {
           //The first part of the identifier has been found as a namespace-alias.
           //In c++, we only need the first alias. However, just to be correct, follow them all for now.
-          for ( Declaration* aliasDecl : aliases )
+          foreach ( Declaration* aliasDecl, aliases )
           {
             if(!dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl))
               continue;

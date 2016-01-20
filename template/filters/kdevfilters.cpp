@@ -100,7 +100,7 @@ QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& /
 QVariant UnderscoreFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
                                     bool /*autoescape*/) const
 {
-    QString ret = words(input).join("_");
+    QString ret = words(input).join(QStringLiteral("_"));
     return Grantlee::SafeString(ret);
 }
 
@@ -170,12 +170,12 @@ QHash< QString, Grantlee::Filter* > KDevFilters::filters(const QString& name)
     Q_UNUSED(name);
     QHash< QString, Grantlee::Filter* > filters;
 
-    filters["camel_case"] = new CamelCaseFilter();
-    filters["camel_case_lower"] = new LowerCamelCaseFilter();
-    filters["underscores"] = new UnderscoreFilter();
-    filters["lines_prepend"] = new SplitLinesFilter();
-    filters["upper_first"] = new UpperFirstFilter();
-    filters["arg_type"] = new ArgumentTypeFilter();
+    filters[QStringLiteral("camel_case")] = new CamelCaseFilter();
+    filters[QStringLiteral("camel_case_lower")] = new LowerCamelCaseFilter();
+    filters[QStringLiteral("underscores")] = new UnderscoreFilter();
+    filters[QStringLiteral("lines_prepend")] = new SplitLinesFilter();
+    filters[QStringLiteral("upper_first")] = new UpperFirstFilter();
+    filters[QStringLiteral("arg_type")] = new ArgumentTypeFilter();
 
     return filters;
 }

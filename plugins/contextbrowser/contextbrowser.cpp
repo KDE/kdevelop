@@ -149,7 +149,7 @@ public:
 
     QString id() const override
     {
-        return "org.kdevelop.ContextBrowser";
+        return QStringLiteral("org.kdevelop.ContextBrowser");
     }
 
 private:
@@ -167,7 +167,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_previousButton = new QToolButton();
     m_previousButton->setToolTip(i18n("Go back in context history"));
     m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
-    m_previousButton->setIcon(QIcon::fromTheme("go-previous"));
+    m_previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
     m_previousButton->setEnabled(false);
     m_previousButton->setFocusPolicy(Qt::NoFocus);
     m_previousMenu = new QMenu();
@@ -178,7 +178,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_nextButton = new QToolButton();
     m_nextButton->setToolTip(i18n("Go forward in context history"));
     m_nextButton->setPopupMode(QToolButton::MenuButtonPopup);
-    m_nextButton->setIcon(QIcon::fromTheme("go-next"));
+    m_nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     m_nextButton->setEnabled(false);
     m_nextButton->setFocusPolicy(Qt::NoFocus);
     m_nextMenu = new QMenu();
@@ -187,7 +187,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     connect(m_nextMenu.data(), &QMenu::aboutToShow, this, &ContextBrowserPlugin::nextMenuAboutToShow);
 
     m_browseButton = new QToolButton();
-    m_browseButton->setIcon(QIcon::fromTheme("games-hint"));
+    m_browseButton->setIcon(QIcon::fromTheme(QStringLiteral("games-hint")));
     m_browseButton->setToolTip(i18n("Enable/disable source browse mode"));
     m_browseButton->setWhatsThis(i18n("When this is enabled, you can browse the source-code by clicking in the editor."));
     m_browseButton->setCheckable(true);
@@ -195,7 +195,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
 
     connect(m_browseButton.data(), &QToolButton::clicked, m_browseManager, &BrowseManager::setBrowsing);
 
-    IQuickOpen* quickOpen = KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
+    IQuickOpen* quickOpen = KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>(QStringLiteral("org.kdevelop.IQuickOpen"));
 
     if(quickOpen) {
       m_outlineLine = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n("Outline"), IQuickOpen::Outline);
@@ -237,29 +237,29 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
 void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile,
                                                       KActionCollection& actions)
 {
-    xmlFile = "kdevcontextbrowser.rc" ;
+    xmlFile = QStringLiteral("kdevcontextbrowser.rc") ;
 
-    QAction* previousContext = actions.addAction("previous_context");
+    QAction* previousContext = actions.addAction(QStringLiteral("previous_context"));
     previousContext->setText( i18n("&Previous Visited Context") );
-    previousContext->setIcon( QIcon::fromTheme("go-previous-context" ) );
+    previousContext->setIcon( QIcon::fromTheme(QStringLiteral("go-previous-context") ) );
     actions.setDefaultShortcut( previousContext, Qt::META | Qt::Key_Left );
     QObject::connect(previousContext, &QAction::triggered, this, &ContextBrowserPlugin::previousContextShortcut);
 
-    QAction* nextContext = actions.addAction("next_context");
+    QAction* nextContext = actions.addAction(QStringLiteral("next_context"));
     nextContext->setText( i18n("&Next Visited Context") );
-    nextContext->setIcon( QIcon::fromTheme("go-next-context" ) );
+    nextContext->setIcon( QIcon::fromTheme(QStringLiteral("go-next-context") ) );
     actions.setDefaultShortcut( nextContext, Qt::META | Qt::Key_Right );
     QObject::connect(nextContext, &QAction::triggered, this, &ContextBrowserPlugin::nextContextShortcut);
 
-    QAction* previousUse = actions.addAction("previous_use");
+    QAction* previousUse = actions.addAction(QStringLiteral("previous_use"));
     previousUse->setText( i18n("&Previous Use") );
-    previousUse->setIcon( QIcon::fromTheme("go-previous-use") );
+    previousUse->setIcon( QIcon::fromTheme(QStringLiteral("go-previous-use")) );
     actions.setDefaultShortcut( previousUse, Qt::META | Qt::SHIFT |  Qt::Key_Left );
     QObject::connect(previousUse, &QAction::triggered, this, &ContextBrowserPlugin::previousUseShortcut);
 
-    QAction* nextUse = actions.addAction("next_use");
+    QAction* nextUse = actions.addAction(QStringLiteral("next_use"));
     nextUse->setText( i18n("&Next Use") );
-    nextUse->setIcon( QIcon::fromTheme("go-next-use") );
+    nextUse->setIcon( QIcon::fromTheme(QStringLiteral("go-next-use")) );
     actions.setDefaultShortcut( nextUse, Qt::META | Qt::SHIFT | Qt::Key_Right );
     QObject::connect(nextUse, &QAction::triggered, this, &ContextBrowserPlugin::nextUseShortcut);
 
@@ -268,9 +268,9 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     QWidget* w = toolbarWidgetForMainWindow(window);
     w->setHidden(false);
     outline->setDefaultWidget(w);
-    actions.addAction("outline_line", outline);
+    actions.addAction(QStringLiteral("outline_line"), outline);
     // Add to the actioncollection so one can set global shortcuts for the action
-    actions.addAction("find_uses", m_findUses);
+    actions.addAction(QStringLiteral("find_uses"), m_findUses);
 }
 
 void ContextBrowserPlugin::nextContextShortcut()
@@ -288,7 +288,7 @@ void ContextBrowserPlugin::previousContextShortcut()
 K_PLUGIN_FACTORY_WITH_JSON(ContextBrowserFactory, "kdevcontextbrowser.json", registerPlugin<ContextBrowserPlugin>();)
 
 ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin("kdevcontextbrowser", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevcontextbrowser"), parent)
     , m_viewFactory(new ContextBrowserViewFactory(this))
     , m_nextHistoryIndex(0)
 {
@@ -439,7 +439,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
   QWidget* navigationWidget = 0;
   {
     DUChainReadLocker lock(DUChain::lock());
-    foreach (const auto& language, languages) {
+    foreach (const auto language, languages) {
       auto widget = language->specialLanguageObjectNavigationWidget(viewUrl, KTextEditor::Cursor(position));
       navigationWidget = qobject_cast<AbstractNavigationWidget*>(widget);
       if(navigationWidget)
@@ -1122,8 +1122,8 @@ QString ContextBrowserPlugin::actionTextFor(int historyIndex) const
     if(actionText.isEmpty())
         actionText = entry.alternativeString;
     if(actionText.isEmpty())
-        actionText = "<unnamed>";
-    actionText += " @ ";
+        actionText = QStringLiteral("<unnamed>");
+    actionText += QLatin1String(" @ ");
     QString fileName = entry.absoluteCursorPosition.document.toUrl().fileName();
     actionText += QStringLiteral("%1:%2").arg(fileName).arg(entry.absoluteCursorPosition.line()+1);
     return actionText;
