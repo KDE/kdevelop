@@ -419,7 +419,7 @@ void PatchReviewPlugin::updateReview()
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
             QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
 
-            if( QFileInfo( absoluteUrl.toLocalFile() ).exists() && absoluteUrl.toLocalFile() != QLatin1String("/dev/null") )
+            if( QFileInfo::exists( absoluteUrl.toLocalFile() ) && absoluteUrl.toLocalFile() != QLatin1String("/dev/null") )
             {
                 buddyDoc = ICore::self()->documentController()->openDocument( absoluteUrl, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate, QLatin1String(""), buddyDoc );
 

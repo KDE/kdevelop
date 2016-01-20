@@ -65,7 +65,7 @@ void SvnImportInternalJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
 
 bool SvnImportInternalJob::isValid() const
 {
-    return !m_message.isEmpty() && m_sourceDirectory.isLocalFile() && QFileInfo( m_sourceDirectory.toLocalFile() ).exists() && !m_destinationRepository.repositoryServer().isEmpty();
+    return !m_message.isEmpty() && m_sourceDirectory.isLocalFile() && QFileInfo::exists( m_sourceDirectory.toLocalFile() ) && !m_destinationRepository.repositoryServer().isEmpty();
 }
 
 QUrl SvnImportInternalJob::source() const

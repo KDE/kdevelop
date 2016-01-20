@@ -93,7 +93,7 @@ void TestBazaar::repoInit()
     VERIFYJOB(j);
 
     //check if the .bzr directory in the new local repository exists now
-    QVERIFY(QFileInfo(bazaarRepo).exists());
+    QVERIFY(QFileInfo::exists(bazaarRepo));
 }
 
 void TestBazaar::addFiles()
@@ -185,7 +185,7 @@ void TestBazaar::commitFiles()
     //since we committed the file to the "pure" repository, .bzr/repository/indices should exist
     //TODO: maybe other method should be used
     QString headRefName(bazaarRepo + "/repository/indices");
-    QVERIFY(QFileInfo(headRefName).exists());
+    QVERIFY(QFileInfo::exists(headRefName));
 
     //Test the results of the "bzr add"
     DVcsJob* jobLs = new DVcsJob(bazaarTest_BaseDir, m_plugin);
@@ -350,11 +350,11 @@ void TestBazaar::testRemoveFolderContainingUnversionedFiles()
 
 void TestBazaar::removeTempDirs()
 {
-    if (QFileInfo(bazaarTest_BaseDir).exists())
+    if (QFileInfo::exists(bazaarTest_BaseDir))
         if (!(KIO::del(QUrl::fromLocalFile(bazaarTest_BaseDir))->exec()))
             qDebug() << "KIO::del(" << bazaarTest_BaseDir << ") returned false";
 
-    if (QFileInfo(bazaarTest_BaseDir2).exists())
+    if (QFileInfo::exists(bazaarTest_BaseDir2))
         if (!(KIO::del(QUrl::fromLocalFile(bazaarTest_BaseDir2))->exec()))
             qDebug() << "KIO::del(" << bazaarTest_BaseDir2 << ") returned false";
 }

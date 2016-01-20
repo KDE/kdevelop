@@ -367,7 +367,7 @@ bool projectFileExists( const QUrl& u )
 {
     if( u.isLocalFile() )
     {
-        return QFileInfo( u.toLocalFile() ).exists();
+        return QFileInfo::exists( u.toLocalFile() );
     } else
     {
         auto statJob = KIO::stat(u, KIO::StatJob::DestinationSide, 0);

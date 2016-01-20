@@ -394,7 +394,7 @@ QList< QUrl > GrepDialog::getDirectoryChoice() const
             ret << project->path().toUrl();
     }else{
         QStringList semicolonSeparatedFileList = text.split(pathsSeparator());
-        if(!semicolonSeparatedFileList.isEmpty() && QFileInfo(semicolonSeparatedFileList[0]).exists())
+        if(!semicolonSeparatedFileList.isEmpty() && QFileInfo::exists(semicolonSeparatedFileList[0]))
         {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
             // a semicolon in the name.

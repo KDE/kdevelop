@@ -110,7 +110,7 @@ Path CompilerFilterStrategyPrivate::pathForFile(const QString& filename) const
         auto it = m_currentDirs.constEnd() - 1;
         do {
             currentPath = Path(*it, filename);
-        } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo(currentPath.toLocalFile()).exists() );
+        } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo::exists(currentPath.toLocalFile()) );
 
         return currentPath;
     } else {

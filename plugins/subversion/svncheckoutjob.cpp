@@ -42,7 +42,7 @@ SvnInternalCheckoutJob::SvnInternalCheckoutJob( SvnJobBase* parent )
 bool SvnInternalCheckoutJob::isValid() const
 {
     QMutexLocker l( &m_mutex );
-    return m_sourceRepository.isValid() && m_destinationDirectory.isLocalFile() && QFileInfo(KIO::upUrl(m_destinationDirectory).toLocalFile()).exists();
+    return m_sourceRepository.isValid() && m_destinationDirectory.isLocalFile() && QFileInfo::exists(KIO::upUrl(m_destinationDirectory).toLocalFile());
 }
 
 void SvnInternalCheckoutJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)

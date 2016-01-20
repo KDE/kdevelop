@@ -100,7 +100,7 @@ void GitInitTest::repoInit()
     VERIFYJOB(j);
 
     //check if the CVSROOT directory in the new local repository exists now
-    QVERIFY(QFileInfo(gitRepo()).exists());
+    QVERIFY(QFileInfo::exists(gitRepo()));
 
     //check if isValidDirectory works
     QVERIFY(m_plugin->isValidDirectory(QUrl::fromLocalFile(gitTest_BaseDir())));
@@ -179,7 +179,7 @@ void GitInitTest::commitFiles()
     //since we committed the file to the "pure" repository, .git/refs/heads/master should exist
     //TODO: maybe other method should be used
     QString headRefName(gitRepo() + "/refs/heads/master");
-    QVERIFY(QFileInfo(headRefName).exists());
+    QVERIFY(QFileInfo::exists(headRefName));
 
     //Test the results of the "git add"
     DVcsJob* jobLs = new DVcsJob(gitTest_BaseDir(), m_plugin);

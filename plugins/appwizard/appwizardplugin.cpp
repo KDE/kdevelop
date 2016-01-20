@@ -260,7 +260,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
         if( info.vcsPluginName.isEmpty() || ( plugin && plugin->extension<KDevelop::IDistributedVersionControl>() ) )
         {
-            if( !QFileInfo( dest.toLocalFile() ).exists() )
+            if( !QFileInfo::exists( dest.toLocalFile() ) )
             {
                 QDir::root().mkpath( dest.toLocalFile() );
             }
@@ -269,7 +269,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         else
         {
             QUrl url = KIO::upUrl(dest);
-            if(!QFileInfo(url.toLocalFile()).exists()) {
+            if(!QFileInfo::exists(url.toLocalFile())) {
                 QDir::root().mkpath(url.toLocalFile());
             }
         }
@@ -331,9 +331,9 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         projectFileName = it.next();
     }
 
-    qCDebug(PLUGIN_APPWIZARD) << "Returning" << projectFileName << QFileInfo( projectFileName ).exists() ;
+    qCDebug(PLUGIN_APPWIZARD) << "Returning" << projectFileName << QFileInfo::exists( projectFileName ) ;
 
-    if( ! QFileInfo( projectFileName ).exists() )
+    if( ! QFileInfo::exists( projectFileName ) )
     {
         qCDebug(PLUGIN_APPWIZARD) << "creating .kdev4 file";
         KSharedConfigPtr cfg = KSharedConfig::openConfig( projectFileName, KConfig::SimpleConfig );
@@ -386,7 +386,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
         {
             const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
             QString newdest = dest + '/' + KMacroExpander::expandMacros(file->name(), m_variables);
-            if( !QFileInfo( newdest ).exists() )
+            if( !QFileInfo::exists( newdest ) )
             {
                 QDir::root().mkdir( newdest  );
             }

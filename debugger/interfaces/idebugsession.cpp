@@ -97,7 +97,7 @@ void IDebugSession::setCurrentPosition(const QUrl& url, int line, const QString&
 {
     qCDebug(DEBUGGER) << url << line << addr;
 
-    if (url.isEmpty() || !QFileInfo(convertToLocalUrl(qMakePair(url,line)).first.path()).exists()) {
+    if (url.isEmpty() || !QFileInfo::exists(convertToLocalUrl(qMakePair(url,line)).first.path())) {
         clearCurrentPosition();
         d->m_addr = addr;
         emit showStepInDisassemble(addr);
