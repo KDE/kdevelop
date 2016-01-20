@@ -154,7 +154,7 @@ CMakeImportJob::~CMakeImportJob()
 void CMakeImportJob::start()
 {
     auto commandsFile = CMake::commandsFile(project());
-    if (!QFileInfo(commandsFile.toLocalFile()).exists()) {
+    if (!QFileInfo::exists(commandsFile.toLocalFile())) {
         qCWarning(CMAKE) << "Could not import CMake project" << project()->path() << "('compile_commands.json' missing)";
         emitResult();
         return;

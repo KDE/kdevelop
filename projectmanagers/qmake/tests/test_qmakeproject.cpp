@@ -103,7 +103,7 @@ void TestQMakeProject::testBuildDirectory()
             = QString("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName);
 
         qDebug() << "WRITING" << fileName;
-        QVERIFY(QFileInfo(fileName).exists());
+        QVERIFY(QFileInfo::exists(fileName));
         KConfig cfg(fileName);
         KConfigGroup group(&cfg, QMakeConfig::CONFIG_GROUP);
 
