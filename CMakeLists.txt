@@ -50,6 +50,7 @@ endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     # in Qt 4, clang support is lacking...
+    add_definitions("-Wno-inconsistent-missing-override -Wno-macro-redefined")
     add_definitions("-DQ_COMPILER_INITIALIZER_LISTS=1")
 endif()
 
