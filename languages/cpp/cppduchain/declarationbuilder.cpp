@@ -813,6 +813,8 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
 
 void DeclarationBuilder::closeDeclaration(bool forceInstance)
 {
+  bool assignInternalContext = false;
+
   {
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -860,15 +862,16 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
           ctx->deleteAllInstantiations();
       }
     }
+
+    if (lastContext() && !m_onlyComputeSimplified && currentDeclaration()->isFunctionDeclaration()) {
+      currentDeclaration<AbstractFunctionDeclaration>()->setInternalFunctionContext(lastContext());
+    }
+
+    assignInternalContext = lastContext()) && (lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration());
   }
 
-  if (lastContext())
-  {
-    if (!m_onlyComputeSimplified && currentDeclaration()->isFunctionDeclaration())
-      currentDeclaration<AbstractFunctionDeclaration>()->setInternalFunctionContext(lastContext());
-
-    if(lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration())
-      eventuallyAssignInternalContext();
+  if (assignInternalContext) {
+    eventuallyAssignInternalContext();
   }
 
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); qCDebug(CPPDUCHAIN) << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
