@@ -441,10 +441,10 @@ QWidget* ExpandingWidgetModel::expandingWidget(const QModelIndex& idx_) const
 
 void ExpandingWidgetModel::cacheIcons() const {
     if( m_expandedIcon.isNull() )
-      m_expandedIcon = KIconLoader::global()->loadIcon(QStringLiteral("arrow-down"), KIconLoader::Small, 10);
+      m_expandedIcon = QIcon::fromTheme(QStringLiteral("arrow-down"));
 
     if( m_collapsedIcon.isNull() )
-      m_collapsedIcon = KIconLoader::global()->loadIcon(QStringLiteral("arrow-right"), KIconLoader::Small, 10);
+      m_collapsedIcon = QIcon::fromTheme(QStringLiteral("arrow-right"));
 }
 
 QList<QVariant> mergeCustomHighlighting( int leftSize, const QList<QVariant>& left, int rightSize, const QList<QVariant>& right )
