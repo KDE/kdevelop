@@ -866,7 +866,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
       currentDeclaration<AbstractFunctionDeclaration>()->setInternalFunctionContext(lastContext());
     }
 
-    assignInternalContext = lastContext()) && (lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration());
+    assignInternalContext = lastContext() && (lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration());
   }
 
   if (assignInternalContext) {
