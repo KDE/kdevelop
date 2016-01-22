@@ -1,7 +1,7 @@
 # kdevplatform version
 set(KDEVPLATFORM_VERSION_MAJOR 1)
 set(KDEVPLATFORM_VERSION_MINOR 7)
-set(KDEVPLATFORM_VERSION_PATCH 2)
+set(KDEVPLATFORM_VERSION_PATCH 3)
 
 # plugin versions listed in the .desktop files
 set(KDEV_PLUGIN_VERSION 17)
