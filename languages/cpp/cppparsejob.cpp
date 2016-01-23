@@ -844,6 +844,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
       parentJob()->masterJob()->setWasUpdated(proxyContext);
 
     parentJob()->setDuChain(proxyContext ? proxyContext : contentContext);
+    DUChain::self()->emitUpdateReady(document(), duChain());
 
     //Indicate progress
     parentJob()->setLocalProgress(1, i18n("Ready"));

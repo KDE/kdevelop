@@ -174,6 +174,8 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
     Builder::visit(session.unit(), file, includedFiles, update);
 
+    DUChain::self()->emitUpdateReady(path, context);
+
     return context;
 }
 

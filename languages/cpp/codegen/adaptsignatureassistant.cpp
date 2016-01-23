@@ -22,8 +22,6 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <language/assistant/renameaction.h>
 #include <language/duchain/duchainutils.h>
-#include <language/backgroundparser/backgroundparser.h>
-#include <language/backgroundparser/parsejob.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/types/functiontype.h>
 
@@ -75,9 +73,8 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
 AdaptSignatureAssistant::AdaptSignatureAssistant(ILanguageSupport* supportedLanguage)
   : StaticAssistant(supportedLanguage)
 {
-  connect(ICore::self()->languageController()->backgroundParser(),
-          &BackgroundParser::parseJobFinished,
-          this, &AdaptSignatureAssistant::parseJobFinished);
+  connect(DUChain::self(), &DUChain::updateReady,
+          this, &AdaptSignatureAssistant::updateReady);
 }
 
 QString AdaptSignatureAssistant::title() const
@@ -248,9 +245,9 @@ QList< RenameAction* > AdaptSignatureAssistant::getRenameActions(const Signature
   return renameActions;
 }
 
-void AdaptSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
+void AdaptSignatureAssistant::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& /*context*/)
 {
-  if (job->document().toUrl() != m_document || !m_view)
+  if (document.toUrl() != m_document || !m_view)
     return;
 
   clearActions();

@@ -33,7 +33,6 @@ namespace KDevelop {
   class Declaration;
   class CodeCompletionContext;
   class CompletionTreeElement;
-  class ParseJob;
 }
 
 namespace Cpp {
@@ -66,7 +65,7 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
                                    const QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext>& completionContext) override;
 
   private slots:
-    void parseJobFinished(KDevelop::ParseJob* job);
+    void updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
 
   private:
     static CodeCompletionModel* s_self;

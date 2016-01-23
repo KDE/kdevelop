@@ -56,8 +56,8 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   Q_ASSERT(!s_self);
   s_self = this;
 
-  connect(ICore::self()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished,
-          this, &CodeCompletionModel::parseJobFinished);
+  connect(DUChain::self(), &DUChain::updateReady,
+          this, &CodeCompletionModel::updateReady);
 }
 
 CodeCompletionModel::~CodeCompletionModel()
@@ -75,9 +75,9 @@ void CodeCompletionModel::startCompletionAfterParsing(const IndexedString& path)
   m_awaitDocument = path;
 }
 
-void CodeCompletionModel::parseJobFinished(ParseJob* job)
+void CodeCompletionModel::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
-  if (job->document() != m_awaitDocument || ICore::self()->languageController()->backgroundParser()->isQueued(m_awaitDocument)) {
+  if (document != m_awaitDocument || ICore::self()->languageController()->backgroundParser()->isQueued(m_awaitDocument)) {
     return;
   }
 

@@ -147,4 +147,5 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
     }
     highlightDUChain();
 
+    DUChain::self()->emitUpdateReady(document(), duChain());
 }

@@ -190,6 +190,8 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
     }
     highlightDUChain();
 
+    DUChain::self()->emitUpdateReady(document(), duChain());
+
     if (session.isParsedCorrectly()) {
         qCDebug(KDEV_QMLJS) << "===Success===" << document().str();
     } else {

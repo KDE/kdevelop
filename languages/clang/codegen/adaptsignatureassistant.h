@@ -33,10 +33,6 @@ namespace KTextEditor {
 class View;
 }
 
-namespace KDevelop {
-class ParseJob;
-}
-
 class AdaptSignatureAssistant : public KDevelop::StaticAssistant
 {
     Q_OBJECT
@@ -70,7 +66,7 @@ private:
     QPointer<KTextEditor::View> m_view;
 
 private slots:
-    void parseJobFinished(KDevelop::ParseJob*);
+    void updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
     void reset();
 };
 
