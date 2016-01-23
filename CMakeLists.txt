@@ -1,7 +1,7 @@
 # KDevelop version
 set( KDEVELOP_VERSION_MAJOR 4 )
 set( KDEVELOP_VERSION_MINOR 90 )
-set( KDEVELOP_VERSION_PATCH 90 )
+set( KDEVELOP_VERSION_PATCH 91 )
 set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
 
 ################################################################################
