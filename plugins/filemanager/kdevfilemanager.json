@@ -9,6 +9,7 @@
         "Description": "This plugin brings a filemanager to KDevelop.", 
         "Description[ca@valencia]": "Este connector proporciona un gestor de fitxers al KDevelop.", 
         "Description[ca]": "Aquest connector proporciona un gestor de fitxers al KDevelop.", 
+        "Description[cs]": "Tento modul do KDevelop přináší správce souborů.", 
         "Description[de]": "Dieses Modul integriert einen Datei-Browser in KDevelop.", 
         "Description[en_GB]": "This plugin brings a filemanager to KDevelop.", 
         "Description[es]": "Este complemento proporciona un gestor de archivos a KDevelop.", 
