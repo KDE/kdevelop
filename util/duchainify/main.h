@@ -26,10 +26,6 @@
 
 #include <language/duchain/topducontext.h>
 
-namespace KDevelop {
-class ParseJob;
-}
-
 class QCommandLineParser;
 
 class Manager : public QObject {

@@ -26,7 +26,6 @@
 
 namespace KDevelop
 {
-class ParseJob;
 class TopDUContext;
 class IDocument;
 class ProblemModel;

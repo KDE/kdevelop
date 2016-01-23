@@ -35,8 +35,6 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainutils.h>
 
-#include <language/backgroundparser/backgroundparser.h>
-#include <language/backgroundparser/parsejob.h>
 #include <language/duchain/problem.h>
 
 using namespace KDevelop;
@@ -47,9 +45,9 @@ struct StaticAssistantsManager::Private
     Private(StaticAssistantsManager* qq)
         : q(qq)
     {
-        connect(KDevelop::ICore::self()->languageController()->backgroundParser(),
-                &BackgroundParser::parseJobFinished, q, [this] (ParseJob* job) {
-                    parseJobFinished(job);
+        connect(DUChain::self(), &DUChain::updateReady,
+                q, [this] (const IndexedString& url, const ReferencedTopDUContext& topContext) {
+                    updateReady(url, topContext);
                 });
     }
 
@@ -60,7 +58,7 @@ struct StaticAssistantsManager::Private
     void documentLoaded(KDevelop::IDocument*);
     void textInserted(Document* document, const Cursor& cursor, const QString& text);
     void textRemoved(Document* document, const Range& cursor, const QString& removedText);
-    void parseJobFinished(KDevelop::ParseJob*);
+    void updateReady(const IndexedString& document, const ReferencedTopDUContext& topContext);
     void documentActivated(KDevelop::IDocument*);
     void cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&);
     void timeout();
@@ -230,9 +228,9 @@ void StaticAssistantsManager::Private::startAssistant(IAssistant::Ptr assistant)
     emit q->activeAssistantChanged();
 }
 
-void StaticAssistantsManager::Private::parseJobFinished(ParseJob* job)
+void StaticAssistantsManager::Private::updateReady(const IndexedString& url, const ReferencedTopDUContext& topContext)
 {
-    if (job->document() != m_currentDocument) {
+    if (url != m_currentDocument) {
         return;
     }
 
@@ -249,8 +247,8 @@ void StaticAssistantsManager::Private::parseJobFinished(ParseJob* job)
         return;
     }
 
-    if (job->duChain()) {
-        checkAssistantForProblems(job->duChain());
+    if (topContext) {
+        checkAssistantForProblems(topContext);
     }
 }
 

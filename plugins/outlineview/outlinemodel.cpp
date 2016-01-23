@@ -46,8 +46,12 @@ OutlineModel::OutlineModel(QObject* parent)
     Q_ASSERT(m_rootNode);
 
     // we want to rebuild the outline whenever the current document has been reparsed
-    connect(ICore::self()->languageController()->backgroundParser(),
-            &BackgroundParser::parseJobFinished, this, &OutlineModel::onParseJobFinished);
+    connect(DUChain::self(), &DUChain::updateReady,
+            this, [this] (const IndexedString& document, const ReferencedTopDUContext& /*topContext*/) {
+                if (document == m_lastUrl) {
+                    rebuildOutline(m_lastDoc);
+                }
+            });
     // and also when we switch the current document
     connect(docController, &IDocumentController::documentActivated,
             this, &OutlineModel::rebuildOutline);
@@ -168,13 +172,6 @@ QModelIndex OutlineModel::parent(const QModelIndex& index) const
     Q_ASSERT(parentNode);
     const int row = parentParentNode->indexOf(parentNode);
     return createIndex(row, 0, const_cast<OutlineNode*>(parentNode));
-}
-
-void OutlineModel::onParseJobFinished(KDevelop::ParseJob* job)
-{
-    if (job->document() == m_lastUrl) {
-        rebuildOutline(m_lastDoc);
-    }
 }
 
 void OutlineModel::rebuildOutline(IDocument* doc)

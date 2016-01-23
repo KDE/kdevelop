@@ -34,7 +34,6 @@ namespace KDevelop
 {
   class TopDUContext;
   class IDocument;
-  class ParseJob;
   class DUContext;
   class IProject;
   class DUChainBase;

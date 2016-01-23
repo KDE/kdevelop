@@ -1170,15 +1170,17 @@ QList<TopDUContext*> DUChain::allChains() const
   return sdDUChainPrivate->m_chainsByUrl.values();
 }
 
-void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file ) {
+void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file )
+{
+  {
+    QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
-  QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
+    removeFromEnvironmentManager( context );
 
-  removeFromEnvironmentManager( context );
+    context->setParsingEnvironmentFile( file );
 
-  context->setParsingEnvironmentFile( file );
-
-  addToEnvironmentManager( context );
+    addToEnvironmentManager( context );
+  }
 }
 
 void DUChain::removeDocumentChain( TopDUContext* context )
@@ -1227,13 +1229,13 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
   addToEnvironmentManager(chain);
 
+  ReferencedTopDUContext ctx(chain);
   // This function might be called during shutdown by stale parse jobs
   // Make sure we don't access null-pointers here
   if (ICore::self() && ICore::self()->languageController() &&
       ICore::self()->languageController()->backgroundParser()->trackerForUrl(chain->url()))
   {
     //Make sure the context stays alive at least as long as the context is open
-    ReferencedTopDUContext ctx(chain);
     sdDUChainPrivate->m_openDocumentContexts.insert(ctx);
   }
 }
@@ -1635,6 +1637,11 @@ void DUChain::refCountDown(TopDUContext* top) {
 void DUChain::emitDeclarationSelected(const DeclarationPointer& decl)
 {
   emit declarationSelected(decl);
+}
+
+void DUChain::emitUpdateReady(const IndexedString& url, const ReferencedTopDUContext& topContext)
+{
+  emit updateReady(url, topContext);
 }
 
 KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures, bool proxyContext) {

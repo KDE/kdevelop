@@ -40,7 +40,6 @@ class Document;
 namespace KDevelop
 {
 class IDocument;
-class ParseJob;
 }
 
 class ProblemHighlighter;
@@ -62,10 +61,8 @@ public:
     ProblemReporterModel* model() const;
 
 private Q_SLOTS:
-    void updateReady(const KDevelop::IndexedString& url,
-                     const KDevelop::ReferencedTopDUContext& = KDevelop::ReferencedTopDUContext());
+    void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext&);
     void textDocumentCreated(KDevelop::IDocument* document);
-    void parseJobFinished(KDevelop::ParseJob* parseJob);
 
 private:
     class ProblemReporterFactory* m_factory;

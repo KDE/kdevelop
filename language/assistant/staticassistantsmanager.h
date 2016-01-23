@@ -38,7 +38,6 @@ typedef QPointer<KTextEditor::Document> SafeDocumentPointer;
 namespace KDevelop {
 
 class IDocument;
-class ParseJob;
 class DUContext;
 class TopDUContext;
 
