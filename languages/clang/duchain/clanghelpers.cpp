@@ -133,7 +133,13 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         if (update) {
             auto envFile = ClangParsingEnvironmentFile::Ptr(dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data()));
             Q_ASSERT(envFile);
-            if (!envFile->needsUpdate(&environment) && envFile->featuresSatisfied(features)) {
+            /* NOTE: When we are here, then either the translation unit or one of its headers was changed.
+             *       Thus we must always update the translation unit to propagate the change(s).
+             *       See also: https://bugs.kde.org/show_bug.cgi?id=356327
+             *       This assumes that headers are independent, we may need to improve that in the future
+             *       and also update header files more often when other files included therein got updated.
+             */
+            if (path != environment.translationUnitUrl() && !envFile->needsUpdate(&environment) && envFile->featuresSatisfied(features)) {
                 return context;
             } else {
                 //TODO: don't attempt to update if this environment is worse quality than the outdated one
