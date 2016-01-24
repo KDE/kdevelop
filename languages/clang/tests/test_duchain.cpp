@@ -37,6 +37,7 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -1488,6 +1489,67 @@ void TestDUChain::testGccCompatibility()
         DUChainReadLocker lock;
         QSet<TopDUContext*> checked;
         verifyNoErrors(file.topContext(), checked);
+    }
+
+    m_projectController->closeAllProjects();
+}
+
+void TestDUChain::testQtIntegration()
+{
+    // TODO: make it easier to change the compiler provider for testing purposes
+    QTemporaryDir includeDir;
+    {
+        QDir dir(includeDir.path());
+        dir.mkdir("QtCore");
+    }
+    QTemporaryDir dir;
+    auto project = new TestProject(Path(dir.path()), this);
+    auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
+    auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
+    pathConfig.writeEntry("Path", ".");
+    pathConfig.group("Includes").writeEntry("1", QString(includeDir.path() + "/QtCore"));
+    m_projectController->addProject(project);
+
+    {
+        TestFile file(R"(
+            #define slots
+            #define signals
+            #define Q_SLOTS
+            #define Q_SIGNALS
+            #include <QtCore/qobjectdefs.h>
+
+            struct MyObject {
+            public:
+              void other1();
+            public slots:
+              void slot1();
+            signals:
+              void signal1();
+            private Q_SLOTS:
+              void slot2();
+            Q_SIGNALS:
+              void signal2();
+            public:
+              void other2();
+            };
+        )", "cpp", project, dir.path());
+
+        file.parse();
+        QVERIFY(file.waitForParsed(5000));
+
+        DUChainReadLocker lock;
+        auto top = file.topContext();
+        QVERIFY(top);
+        QVERIFY(top->problems().isEmpty());
+        const auto methods = top->childContexts().last()->localDeclarations();
+        QCOMPARE(methods.size(), 6);
+        foreach(auto method, methods) {
+            auto classFunction = dynamic_cast<ClassFunctionDeclaration*>(method);
+            QVERIFY(classFunction);
+            auto id = classFunction->identifier().toString();
+            QCOMPARE(classFunction->isSignal(), id.startsWith(QLatin1String("signal")));
+            QCOMPARE(classFunction->isSlot(), id.startsWith(QLatin1String("slot")));
+        }
     }
 
     m_projectController->closeAllProjects();

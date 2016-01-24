@@ -134,6 +134,13 @@ bool needGccCompatibility(const ClangParsingEnvironment& environment)
         && !environment.defines().contains(QStringLiteral("__clang__"));
 }
 
+bool hasQtIncludes(const Path::List& includePaths)
+{
+    return std::find_if(includePaths.begin(), includePaths.end(), [] (const Path& path) {
+        return path.lastPathSegment() == QLatin1String("QtCore");
+    }) != includePaths.end();
+}
+
 }
 
 ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, ClangIndex* index,
@@ -185,8 +192,23 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
 
     if (needGccCompatibility(environment)) {
         const auto compatFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kdevclangsupport/gcc_compat.h")).toUtf8();
-        smartArgs << compatFile;
-        clangArguments << "-include" << compatFile.constData();
+        if (!compatFile.isEmpty()) {
+            smartArgs << compatFile;
+            clangArguments << "-include" << compatFile.constData();
+        }
+    }
+
+    if (hasQtIncludes(includes.system)) {
+        const auto wrappedQtHeaders = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                             QStringLiteral("kdevclangsupport/wrappedQtHeaders"),
+                                                             QStandardPaths::LocateDirectory).toUtf8();
+        if (!wrappedQtHeaders.isEmpty()) {
+            smartArgs << wrappedQtHeaders;
+            clangArguments << "-isystem" << wrappedQtHeaders.constData();
+            const auto qtCore = wrappedQtHeaders + "/QtCore";
+            smartArgs << qtCore;
+            clangArguments << "-isystem" << qtCore.constData();
+        }
     }
 
     addIncludes(&clangArguments, &smartArgs, includes.system, "-isystem");

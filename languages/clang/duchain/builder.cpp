@@ -1023,6 +1023,12 @@ void Visitor::setDeclData(CXCursor cursor, AbstractFunctionDeclaration* decl) co
     }
 }
 
+enum SpecialQtAttributes {
+    NoQtAttribute,
+    QtSignalAttribute,
+    QtSlotAttribute
+};
+
 template<CXCursorKind CK>
 void Visitor::setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
 {
@@ -1031,6 +1037,24 @@ void Visitor::setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
     decl->setAbstract(clang_CXXMethod_isPureVirtual(cursor));
     decl->setStatic(clang_CXXMethod_isStatic(cursor));
     decl->setVirtual(clang_CXXMethod_isVirtual(cursor));
+
+    // check for our injected attributes to detect Qt signals and slots
+    // see also the contents of wrappedQtHeaders/QtCore/qobjectdefs.h
+    SpecialQtAttributes qtAttribute = NoQtAttribute;
+    clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor /*parent*/, CXClientData data) -> CXChildVisitResult {
+        if (cursor.kind == CXCursor_AnnotateAttr) {
+            auto retVal = static_cast<SpecialQtAttributes*>(data);
+            ClangString attribute(clang_getCursorDisplayName(cursor));
+            if (attribute.c_str() == QByteArrayLiteral("qt_signal")) {
+                *retVal = QtSignalAttribute;
+            } else if (attribute.c_str() == QByteArrayLiteral("qt_slot")) {
+                *retVal = QtSlotAttribute;
+            }
+        }
+        return CXChildVisit_Break;
+    }, &qtAttribute);
+    decl->setIsSignal(qtAttribute == QtSignalAttribute);
+    decl->setIsSlot(qtAttribute == QtSlotAttribute);
 }
 
 template<CXCursorKind CK>
