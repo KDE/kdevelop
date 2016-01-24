@@ -356,3 +356,25 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
     }
     return false;
 }
+
+ClangUtils::SpecialQtAttributes ClangUtils::specialQtAttributes(CXCursor cursor)
+{
+    // check for our injected attributes to detect Qt signals and slots
+    // see also the contents of wrappedQtHeaders/QtCore/qobjectdefs.h
+    SpecialQtAttributes qtAttribute = NoQtAttribute;
+    if (cursor.kind == CXCursor_CXXMethod) {
+        clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor /*parent*/, CXClientData data) -> CXChildVisitResult {
+            if (cursor.kind == CXCursor_AnnotateAttr) {
+                auto retVal = static_cast<SpecialQtAttributes*>(data);
+                ClangString attribute(clang_getCursorDisplayName(cursor));
+                if (attribute.c_str() == QByteArrayLiteral("qt_signal")) {
+                    *retVal = QtSignalAttribute;
+                } else if (attribute.c_str() == QByteArrayLiteral("qt_slot")) {
+                    *retVal = QtSlotAttribute;
+                }
+            }
+            return CXChildVisit_Break;
+        }, &qtAttribute);
+    }
+    return qtAttribute;
+}
