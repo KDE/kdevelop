@@ -47,23 +47,23 @@ public:
             qerr << "File to parse does not exist: " << fileName << endl;
             return;
         }
-        ClangParsingEnvironment environment;
-        environment.setTranslationUnitUrl(IndexedString(fileName));
-        m_session.setData(ParseSessionData::Ptr(new ParseSessionData({}, &m_index, environment)));
+        m_session.setData(ParseSessionData::Ptr(new ParseSessionData({}, &m_index, environment(fileName))));
         runSession();
     }
 
     /// parse code directly
     void parseCode( const QString &code )
     {
-        ClangParsingEnvironment environment;
         const QString fileName = QStringLiteral("stdin.cpp");
-        environment.setTranslationUnitUrl(IndexedString(fileName));
         m_session.setData(ParseSessionData::Ptr(new ParseSessionData({UnsavedFile(fileName, {code})},
-                                                                     &m_index, environment)));
+                                                                     &m_index, environment(fileName))));
         runSession();
     }
 
+    void setIncludePaths(const QStringList& paths)
+    {
+        m_includePaths = paths;
+    }
 private:
     /**
      * actually run the parse session
@@ -110,11 +110,33 @@ private:
         }
     }
 
+    ClangParsingEnvironment environment(const QString& fileName) const
+    {
+        ClangParsingEnvironment environment;
+        environment.setTranslationUnitUrl(IndexedString(fileName));
+        environment.addIncludes(toPathList(m_includePaths));
+        return environment;
+    }
     ParseSession m_session;
     const bool m_printAst;
     const bool m_printTokens;
     ClangIndex m_index;
+    QStringList m_includePaths;
 };
+
+namespace KDevelopUtils {
+template<>
+void setupCustomArgs<ClangParser>(QCommandLineParser* args)
+{
+    args->addOption(QCommandLineOption{QStringList{"I", "include"}, i18n("add include path"), "include"});
+}
+
+template<>
+void setCustomArgs<ClangParser>(ClangParser* parser, QCommandLineParser* args)
+{
+    parser->setIncludePaths(args->values("include"));
+}
+}
 
 int main(int argc, char* argv[])
 {
