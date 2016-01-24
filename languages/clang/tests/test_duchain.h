@@ -87,6 +87,7 @@ private slots:
 
     void benchDUChainBuilder();
     void testGccCompatibility();
+    void testQtIntegration();
 
 private:
     QScopedPointer<TestEnvironmentProvider> m_provider;

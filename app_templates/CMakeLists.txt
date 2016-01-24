@@ -1,7 +1,9 @@
 kdevplatform_add_app_templates(
-    cpp/CMake/cmake_qt4core
-    cpp/CMake/cmake_qt4gui
-    cpp/CMake/cmake_qt4core_qtest
     cpp/CMake/cmake_plaincpp
+    cpp/CMake/cmake_qt4core
+    cpp/CMake/cmake_qt4core_qtest
+    cpp/CMake/cmake_qt4gui
+    cpp/CMake/cmake_qt5guiapp
     cpp/QMake/qmake_qt4guiapp
+    cpp/QMake/qt5-qml2
 )
