@@ -151,9 +151,7 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
     d->searchLocations.append(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("/kdevfiletemplates/templates/"), QStandardPaths::LocateDirectory));
 
     foreach(const QString& dir, d->searchLocations) {
-        qDebug() << "search in:" << dir << "look for:" << templateBaseName;
         foreach(const auto& entry, QDir(dir).entryInfoList(QDir::Files)) {
-            qDebug() << entry.baseName();
             if (entry.baseName() == templateBaseName) {
                 archiveFileName = entry.absoluteFilePath();
                 qCDebug(LANGUAGE) << "Found template archive" << archiveFileName;
