@@ -1,0 +1,17 @@
+How To Build This Template (don't forget to remove this file from your released project)
+-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+--- On Unix:
+
+cd <project_name_path>
+qmake
+make
+make install or su -c 'make install'
+
+This template needs Qt5.
+
+Please send all comments to:
+Anne-Marie Mahfouf
+annma@kde.org
+
+Last update: April 2013
