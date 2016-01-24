@@ -100,7 +100,7 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
 
     QTemporaryDir dir;
-    QUrl base = QUrl::fromLocalFile(dir.path());
+    QUrl base = QUrl::fromLocalFile(dir.path() + QLatin1Char('/'));
     QHash<QString, QUrl> fileUrls;
     foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
         QUrl url = base.resolved(QUrl(renderer.render(out.outputName)));
