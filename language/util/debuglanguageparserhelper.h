@@ -162,6 +162,14 @@ private:
     const bool m_printTokens;
 };
 
+template<class ParserT>
+void setupCustomArgs(QCommandLineParser* parser)
+{}
+
+template<class ParserT>
+void setCustomArgs(ParserT* parser, QCommandLineParser* commandLineParser)
+{}
+
 /// call this after setting up @p aboutData in your @c main() function.
 template<class ParserT>
 int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
@@ -184,6 +192,7 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
     parser.addOption(QCommandLineOption{QStringList{"a", "print-ast"}, i18n("print generated AST tree")});
     parser.addOption(QCommandLineOption{QStringList{"t", "print-tokens"}, i18n("print generated token stream")});
     parser.addOption(QCommandLineOption{QStringList{"c", "code"}, i18n("code to parse"), "code"});
+    setupCustomArgs<ParserT>(&parser);
 
     parser.process(app);
     aboutData.processCommandLine(&parser);
@@ -199,6 +208,7 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
     KDevelop::CodeRepresentation::setDiskChangesForbidden(true);
 
     ParserT parserT(printAst, printTokens);
+    setCustomArgs(&parserT, &parser);
 
     if (parser.isSet("code")) {
         parserT.parseCode(parser.value("code"));
