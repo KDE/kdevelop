@@ -36,6 +36,9 @@ private slots:
     void testSignatureAssistant();
     void testUnknownDeclarationAssistant_data();
     void testUnknownDeclarationAssistant();
+
+    void testMoveIntoSource_data();
+    void testMoveIntoSource();
 };
 
 #endif

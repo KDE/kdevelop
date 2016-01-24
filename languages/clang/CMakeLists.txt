@@ -56,6 +56,8 @@ set(kdevclangprivate_SRCS
     codegen/adaptsignatureaction.cpp
     codegen/adaptsignatureassistant.cpp
     codegen/codegenhelper.cpp
+    codegen/simplerefactoring.cpp
+    codegen/sourcemanipulation.cpp
 
     duchain/builder.cpp
     duchain/clangdiagnosticevaluator.cpp
