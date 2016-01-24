@@ -628,4 +628,9 @@ void TestAssistants::testMoveIntoSource_data()
                                     << QString("class a {\n    int foo() const;\n};\n")
                                     << QString("\nint a::foo() const {\n        return 0;\n    }\n")
                                     << aFooId;
+    QTest::newRow("elaborated-type") << QString("namespace NS{class C{};} class a {\nint foo(const NS::C c) const{\nreturn 0;\n}\n};\n")
+                                    << QString()
+                                    << QString("namespace NS{class C{};} class a {\nint foo(const NS::C c) const;\n};\n")
+                                    << QString("\nint a::foo(const NS::C c) const {\nreturn 0;\n}\n")
+                                    << aFooId;
 }

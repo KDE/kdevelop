@@ -384,9 +384,6 @@ IndexedTypeIdentifier shortenedTypeIdentifier(const AbstractType::Ptr& type_, DU
 
     IndexedTypeIdentifier identifier = identifierForType(type, ctx ? ctx->topContext() : 0);
 
-    if (type.cast<DelayedType>()) {
-        identifier = type.cast<DelayedType>()->identifier();
-    }
     identifier = stripPrefixIdentifiers(identifier, stripPrefix);
 
     if (isReference) {
