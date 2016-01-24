@@ -36,9 +36,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 
-#include <language/backgroundparser/parsejob.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <util/kdevstringhandler.h>
@@ -95,8 +93,8 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList
             &ProblemReporterPlugin::documentClosed);
     connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this,
             &ProblemReporterPlugin::textDocumentCreated);
-    connect(ICore::self()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished, this,
-            &ProblemReporterPlugin::parseJobFinished, Qt::DirectConnection);
+    connect(DUChain::self(), &DUChain::updateReady,
+            this, &ProblemReporterPlugin::updateReady);
 }
 
 ProblemReporterPlugin::~ProblemReporterPlugin()
@@ -143,12 +141,6 @@ void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop
         QVector<IProblem::Ptr> allProblems = m_model->problems(url, false);
         ph->setProblems(allProblems);
     }
-}
-
-void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
-{
-    if (parseJob->duChain())
-        updateReady(parseJob->document());
 }
 
 KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context)

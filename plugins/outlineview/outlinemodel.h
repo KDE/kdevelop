@@ -31,7 +31,6 @@ class IDocument;
 class DUContext;
 class TopDUContext;
 class Declaration;
-class ParseJob;
 }
 
 class OutlineModel : public QAbstractItemModel
@@ -53,7 +52,6 @@ public:
 public slots:
     void activate(const QModelIndex& realIndex);
 private slots:
-    void onParseJobFinished(KDevelop::ParseJob* job);
     void rebuildOutline(KDevelop::IDocument* doc);
 private:
     std::unique_ptr<OutlineNode> m_rootNode;

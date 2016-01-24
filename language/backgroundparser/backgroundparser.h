@@ -124,6 +124,12 @@ Q_SIGNALS:
 	 *
 	 * The job is deleted after this signal has been emitted.  Receivers should not hold
 	 * references to it.
+     *
+     * Note that if you want to be get updated for all DUChain updates, use
+     * DUChain::updateReady instead, as a single ParseJob may update multiple
+     * DUChain top contexts.
+     *
+     * @sa DUChain::updateReady
 	 */
     void parseJobFinished(KDevelop::ParseJob* job);
 

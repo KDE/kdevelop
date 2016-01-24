@@ -254,11 +254,25 @@ Q_SIGNALS:
   ///Is emitted when the declaration has been selected somewhere in the user-interface, for example in the completion-list
   void declarationSelected(const KDevelop::DeclarationPointer& decl);
 
+  /**
+   * This signal is emitted whenever the DUChain data associated with @p url was updated.
+   *
+   * You can connect to this signal to get notified when the DUChain for a given file was updated.
+   */
+  void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
+
 public Q_SLOTS:
   ///Removes the given top-context from the duchain, and deletes it.
   void removeDocumentChain(KDevelop::TopDUContext* document);
   ///Emits the declarationSelected signal, so other parties can notice it.
   void emitDeclarationSelected(const KDevelop::DeclarationPointer& decl);
+
+  /**
+   * Call this after you have modified the DUChain data associated with the file @p url.
+   *
+   * This triggers an emit of the @c updateReady signal.
+   */
+  void emitUpdateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
 
   /**
    * Shutdown and cleanup the DUChain.

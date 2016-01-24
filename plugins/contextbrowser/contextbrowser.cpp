@@ -68,9 +68,6 @@
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 
-#include <language/backgroundparser/backgroundparser.h>
-#include <language/backgroundparser/parsejob.h>
-
 #include <language/util/navigationtooltip.h>
 
 #include <util/texteditorhelpers.h>
@@ -297,7 +294,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   core()->uiController()->addToolView(i18n("Code Browser"), m_viewFactory);
 
   connect( core()->documentController(), &IDocumentController::textDocumentCreated, this, &ContextBrowserPlugin::textDocumentCreated );
-  connect( core()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished, this, &ContextBrowserPlugin::parseJobFinished);
+  connect( DUChain::self(), &DUChain::updateReady, this, &ContextBrowserPlugin::updateReady);
 
   connect( DUChain::self(), &DUChain::declarationSelected,
            this, &ContextBrowserPlugin::declarationSelectedInUI );
@@ -720,10 +717,11 @@ void ContextBrowserPlugin::declarationSelectedInUI(const DeclarationPointer& dec
     m_updateTimer->start(highlightingTimeout); // triggers updateViews()
 }
 
-void ContextBrowserPlugin::parseJobFinished(KDevelop::ParseJob* job)
+void ContextBrowserPlugin::updateReady(const IndexedString& file, const ReferencedTopDUContext& /*topContext*/)
 {
+  const auto url = file.toUrl();
   for(QMap< View*, ViewHighlights >::iterator it = m_highlightedRanges.begin(); it != m_highlightedRanges.end(); ++it) {
-    if(it.key()->document()->url() == job->document().toUrl()) {
+    if(it.key()->document()->url() == url) {
 
       if(!m_updateViews.contains(it.key())) {
         qCDebug(PLUGIN_CONTEXTBROWSER) << "adding view for update";

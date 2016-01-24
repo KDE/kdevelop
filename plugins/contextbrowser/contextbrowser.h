@@ -51,9 +51,9 @@ namespace Sublime {
 
 namespace KDevelop {
   class IDocument;
-  class ParseJob;
   class DUContext;
   class TopDUContext;
+  class ReferencedTopDUContext;
   class DUChainBase;
   class AbstractNavigationWidget;
 }
@@ -121,7 +121,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
 
     void declarationSelectedInUI(const KDevelop::DeclarationPointer& decl);
 
-    void parseJobFinished(KDevelop::ParseJob* job);
+    void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
     void textDocumentCreated( KDevelop::IDocument* document );
     void documentActivated( KDevelop::IDocument* );
     void viewDestroyed( QObject* obj );

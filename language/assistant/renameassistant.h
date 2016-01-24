@@ -31,7 +31,6 @@ class View;
 }
 
 namespace KDevelop {
-class ParseJob;
 
 class KDEVPLATFORMLANGUAGE_EXPORT RenameAssistant : public StaticAssistant
 {
