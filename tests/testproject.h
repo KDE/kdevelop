@@ -90,18 +90,12 @@ class KDEVPLATFORMTESTS_EXPORT TestProjectController : public ProjectController
 
 public:
     TestProjectController(Core* core) : ProjectController(core) {}
-    IProject* projectAt( int i ) const override { return m_projects.at(i); }
-    int projectCount() const override { return m_projects.count(); }
-    QList<IProject*> projects() const override { return m_projects; }
 
 public:
     using ProjectController::addProject;
     using ProjectController::takeProject;
 
     void initialize() override;
-
-private:
-    QList<IProject*> m_projects;
 };
 
 }
