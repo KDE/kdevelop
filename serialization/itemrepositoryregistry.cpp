@@ -21,7 +21,6 @@
 #include <QtCore/QDir>
 #include <QtCore/QProcessEnvironment>
 #include <QtCore/QCoreApplication>
-#include <QtDBus/QDBusConnection>
 #include <QtCore/QDebug>
 #include <QDataStream>
 #include <QStandardPaths>
