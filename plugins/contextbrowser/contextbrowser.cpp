@@ -183,15 +183,6 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     connect(m_nextButton.data(), &QToolButton::clicked, this, &ContextBrowserPlugin::historyNext);
     connect(m_nextMenu.data(), &QMenu::aboutToShow, this, &ContextBrowserPlugin::nextMenuAboutToShow);
 
-    m_browseButton = new QToolButton();
-    m_browseButton->setIcon(QIcon::fromTheme(QStringLiteral("games-hint")));
-    m_browseButton->setToolTip(i18n("Enable/disable source browse mode"));
-    m_browseButton->setWhatsThis(i18n("When this is enabled, you can browse the source-code by clicking in the editor."));
-    m_browseButton->setCheckable(true);
-    m_browseButton->setFocusPolicy(Qt::NoFocus);
-
-    connect(m_browseButton.data(), &QToolButton::clicked, m_browseManager, &BrowseManager::setBrowsing);
-
     IQuickOpen* quickOpen = KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>(QStringLiteral("org.kdevelop.IQuickOpen"));
 
     if(quickOpen) {
@@ -210,7 +201,6 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_toolbarWidgetLayout->setSizeConstraint(QLayout::SetMaximumSize);
     m_previousButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_nextButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_browseButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_toolbarWidgetLayout->setMargin(0);
 
     m_toolbarWidgetLayout->addWidget(m_previousButton);
@@ -220,7 +210,6 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
       connect(ICore::self()->documentController(), &IDocumentController::documentClosed, m_outlineLine.data(), &IQuickOpenLine::clear);
     }
     m_toolbarWidgetLayout->addWidget(m_nextButton);
-    m_toolbarWidgetLayout->addWidget(m_browseButton);
 
     if(m_toolbarWidget->children().isEmpty())
         m_toolbarWidget->setLayout(m_toolbarWidgetLayout);
@@ -318,7 +307,6 @@ ContextBrowserPlugin::~ContextBrowserPlugin()
   delete m_previousButton;
   delete m_outlineLine;
   delete m_nextButton;
-  delete m_browseButton;
 }
 
 void ContextBrowserPlugin::unload()
@@ -1203,10 +1191,6 @@ void ContextBrowserPlugin::updateHistory(KDevelop::DUContext* context, const KTe
             m_nextHistoryIndex = m_history.size();
         }
     }
-}
-
-void ContextBrowserPlugin::setAllowBrowsing(bool allow) {
-    m_browseButton->setChecked(allow);
 }
 
 void ContextBrowserPlugin::updateDeclarationListBox(DUContext* context) {

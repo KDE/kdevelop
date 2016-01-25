@@ -92,7 +92,12 @@ void BrowseManager::eventuallyStartDelayedBrowsing() {
         emit startDelayedBrowsing(m_browingStartedInView);
 }
 
-BrowseManager::BrowseManager(ContextBrowserPlugin* controller) : QObject(controller), m_plugin(controller), m_browsing(false), m_browsingByKey(0), m_watcher(this) {
+BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
+    : QObject(controller)
+    , m_plugin(controller)
+    , m_browsingByKey(0)
+    , m_watcher(this)
+{
     m_delayedBrowsingTimer = new QTimer(this);
     m_delayedBrowsingTimer->setSingleShot(true);
 
@@ -137,18 +142,12 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 m_browingStartedInView = view;
             }
         }
-
-        if(!m_browsing)
-            m_plugin->setAllowBrowsing(true);
-
     }
 
     QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(event);
     //Eventually stop key-browsing
     if((keyEvent && m_browsingByKey && keyEvent->key() == m_browsingByKey && keyEvent->type() == QEvent::KeyRelease)
         || (focusEvent && focusEvent->lostFocus())) {
-        if(!m_browsing)
-            m_plugin->setAllowBrowsing(false);
         m_browsingByKey = 0;
         emit stopDelayedBrowsing();
     }
@@ -166,7 +165,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         }
     }
 
-    if(!m_browsing && !m_browsingByKey) {
+    if(!m_browsingByKey) {
         resetChangedCursor();
         return false;
     }
@@ -307,22 +306,6 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
 
 void Watcher::viewAdded(KTextEditor::View* view) {
     m_manager->viewAdded(view);
-}
-
-void BrowseManager::setBrowsing(bool enabled) {
-    if(m_browsingByKey)
-        return;
-    if(enabled == m_browsing)
-        return;
-    m_browsing = enabled;
-
-    //This collects all the views
-    if(enabled) {
-        qCDebug(PLUGIN_CONTEXTBROWSER) << "Enabled browsing-mode";
-    }else{
-        qCDebug(PLUGIN_CONTEXTBROWSER) << "Disabled browsing-mode";
-        resetChangedCursor();
-    }
 }
 
 Watcher::Watcher(BrowseManager* manager)
