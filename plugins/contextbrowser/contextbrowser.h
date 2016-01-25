@@ -104,7 +104,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
                        bool force = false);
 
     void updateDeclarationListBox(KDevelop::DUContext* context);
-    void setAllowBrowsing(bool allow);
 
     void showUses(const KDevelop::DeclarationPointer& declaration) override;
 
@@ -245,7 +244,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     QPointer<QToolButton> m_previousButton;
     QPointer<QToolButton> m_nextButton;
     QPointer<QMenu> m_previousMenu, m_nextMenu;
-    QPointer<QToolButton> m_browseButton;
     QList<KDevelop::IndexedDeclaration> m_listDeclarations;
     KDevelop::IndexedString m_listUrl;
     BrowseManager* m_browseManager;

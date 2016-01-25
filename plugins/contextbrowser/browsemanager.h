@@ -89,9 +89,6 @@ class BrowseManager : public QObject {
         //Emitted when browsing was started using the magic-modifier
         void startDelayedBrowsing(KTextEditor::View* view);
         void stopDelayedBrowsing();
-    public slots:
-        ///Enabled/disables the browsing mode
-        void setBrowsing(bool);
     private slots:
         void eventuallyStartDelayedBrowsing();
     private:
@@ -100,7 +97,6 @@ class BrowseManager : public QObject {
 
         bool eventFilter(QObject * watched, QEvent * event) override ;
         ContextBrowserPlugin* m_plugin;
-        bool m_browsing;
         int m_browsingByKey; //Whether the browsing was started because of a key
         Watcher m_watcher;
         //Maps widgets to their previously set cursors
