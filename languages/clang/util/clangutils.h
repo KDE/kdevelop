@@ -144,6 +144,16 @@ namespace ClangUtils
     * @return Range pointing to the path-spec of the include or invalid range if there is no #include directive on the line.
     */
     KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange = KTextEditor::Range());
+
+    enum SpecialQtAttributes {
+        NoQtAttribute,
+        QtSignalAttribute,
+        QtSlotAttribute
+    };
+    /**
+     * Given a cursor representing a CXXmethod
+     */
+    SpecialQtAttributes specialQtAttributes(CXCursor cursor);
 };
 
 #endif // CLANGUTILS_H
