@@ -163,11 +163,8 @@ public:
         QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, 0);
 
         int iconSize = option.rect.height() - MARGIN * 2;
-        QPixmap pixmap = KIconLoader::global()->loadIcon(index.model()->data(index, Qt::DecorationRole).toString(),
-                                                        KIconLoader::Desktop, iconSize, KIconLoader::DefaultState);
-
-        painter->drawPixmap(QRect(dependantLayoutValue(MARGIN + option.rect.left(), iconSize, option.rect.width()), MARGIN + option.rect.top(), iconSize, iconSize), pixmap, QRect(0, 0, iconSize, iconSize));
-
+        QIcon icon = QIcon::fromTheme(index.model()->data(index, Qt::DecorationRole).toString());
+        icon.paint(painter, QRect(dependantLayoutValue(MARGIN + option.rect.left(), iconSize, option.rect.width()), MARGIN + option.rect.top(), iconSize, iconSize));
         QRect contentsRect(dependantLayoutValue(MARGIN * 2 + iconSize + option.rect.left(), option.rect.width() - MARGIN * 3 - iconSize, option.rect.width()), MARGIN + option.rect.top(), option.rect.width() - MARGIN * 3 - iconSize, option.rect.height() - MARGIN * 2);
 
         int lessHorizontalSpace = MARGIN * 2 + pushButton->sizeHint().width();
