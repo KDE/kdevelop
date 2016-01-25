@@ -85,6 +85,8 @@ public:
     /*! @p status must implement KDevelop::IStatus */
     void registerStatus(QObject* status) override;
 
+    void popUpAssistant(const KDevelop::IAssistant::Ptr& assistant) override;
+
     void showErrorMessage(const QString& message, int timeout) override;
 
     /// Returns list of available view factories together with their ToolDocuments.
@@ -109,6 +111,8 @@ private Q_SLOTS:
 
     void slotAreaChanged(Sublime::Area* area);
     void slotActiveToolViewChanged(Sublime::View* view);
+
+    void hideAssistant() override;
 
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,
