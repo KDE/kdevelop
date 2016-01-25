@@ -155,6 +155,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
     static DUChainItemSystem& self();
 
   private:
+    ~DUChainItemSystem();
+
     QVector<DUChainBaseFactory*> m_factories;
     QVector<uint> m_dataClassSizes;
 };

@@ -25,6 +25,12 @@
   qFatal("Invalid class id: %i", id);
 
 namespace KDevelop {
+
+DUChainItemSystem::~DUChainItemSystem()
+{
+  qDeleteAll(m_factories);
+}
+
 DUChainBase* DUChainItemSystem::create(DUChainBaseData* data) const {
   if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == 0)
     return 0;
@@ -77,4 +83,5 @@ DUChainItemSystem& DUChainItemSystem::self() {
   static DUChainItemSystem system;
   return system;
 }
+
 }
