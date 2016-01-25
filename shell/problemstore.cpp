@@ -57,6 +57,8 @@ ProblemStore::ProblemStore(QObject *parent)
 ProblemStore::~ProblemStore()
 {
     clear();
+
+    delete d->m_rootNode;
 }
 
 void ProblemStore::addProblem(const IProblem::Ptr &problem)
