@@ -86,12 +86,12 @@ DUChainVisitor::~DUChainVisitor()
  * of Identifier is not safe to be called after the duchain has been destroyed
  */
 const Identifier& globalImportIdentifier() {
-  static const Identifier globalImportIdentifierObject(*new Identifier(QStringLiteral("{...import...}")));
+  static const Identifier globalImportIdentifierObject(QStringLiteral("{...import...}"));
   return globalImportIdentifierObject;
 }
 
 const Identifier& globalAliasIdentifier() {
-  static const Identifier globalAliasIdentifierObject(*new Identifier(QStringLiteral("{...alias...}")));
+  static const Identifier globalAliasIdentifierObject(QStringLiteral("{...alias...}"));
   return globalAliasIdentifierObject;
 }
 
