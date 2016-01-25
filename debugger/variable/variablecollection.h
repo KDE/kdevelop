@@ -246,6 +246,7 @@ private:
     bool m_widgetVisible;
 
     friend class VariableProvider;
+    VariableProvider m_textHintProvider;
 };
 
 }

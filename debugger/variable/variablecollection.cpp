@@ -415,7 +415,9 @@ void VariablesRoot::resetChanged()
 }
 
 VariableCollection::VariableCollection(IDebugController* controller)
-: TreeModel(QVector<QString>() << i18n( "Name" ) << i18n( "Value" ) << i18n("Type"), controller), m_widgetVisible(false)
+    : TreeModel({i18n("Name"), i18n("Value"), i18n("Type")}, controller)
+    , m_widgetVisible(false)
+    , m_textHintProvider(this)
 {
     universe_ = new VariablesRoot(this);
     setRootItem(universe_);
@@ -490,7 +492,7 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
     if( !iface )
         return;
 
-    iface->registerTextHintProvider(new VariableProvider(this));
+    iface->registerTextHintProvider(&m_textHintProvider);
 }
 
 VariableProvider::VariableProvider(VariableCollection* collection)

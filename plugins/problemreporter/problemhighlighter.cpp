@@ -67,6 +67,7 @@ QColor colorForSeverity(IProblem::Severity severity)
 
 ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     : m_document(document)
+    , m_textHintProvider(this)
 {
     Q_ASSERT(m_document);
 
@@ -98,7 +99,7 @@ void ProblemHighlighter::viewCreated(Document*, View* view)
     if (!iface)
         return;
 
-    iface->registerTextHintProvider(new ProblemTextHintProvider(this));
+    iface->registerTextHintProvider(&m_textHintProvider);
 }
 
 ProblemTextHintProvider::ProblemTextHintProvider(ProblemHighlighter* highlighter)
