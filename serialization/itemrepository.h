@@ -2030,10 +2030,7 @@ class ItemRepository : public AbstractItemRepository {
     delete m_dynamicFile;
     m_dynamicFile = 0;
 
-
-    // FIXME: We don't delete the buckets here, as their contained memory may be referenced
-    // in static variables e.g.
-//  qDeleteAll(m_buckets);
+    qDeleteAll(m_buckets);
     m_buckets.clear();
 
     memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
