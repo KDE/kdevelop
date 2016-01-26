@@ -214,17 +214,6 @@ void StatusbarProgressWidget::setMode() {
         stack->setCurrentWidget( m_pLabel );
         break;
 
-#if 0
-    case Label:
-        if ( m_bShowButton ) {
-            m_pButton->show();
-        }
-        m_sslLabel->setState( m_sslLabel->lastState() );
-        stack->show();
-        stack->raiseWidget( m_pLabel );
-        break;
-#endif
-
     case Progress:
         stack->show();
         stack->setCurrentWidget( m_pProgressBar );
