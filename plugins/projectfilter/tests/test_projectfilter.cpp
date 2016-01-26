@@ -144,6 +144,8 @@ void TestProjectFilter::match_data()
             {QStringLiteral("folder/.file"), File, Invalid},
 
             {QStringLiteral(".git"), Folder, Invalid},
+            {QStringLiteral(".gitignore"), File, Valid},
+            {QStringLiteral(".gitmodules"), File, Valid},
             {QStringLiteral("_darcs"), Folder, Invalid},
             {QStringLiteral("_svn"), Folder, Invalid},
             {QStringLiteral(".svn"), Folder, Invalid},
