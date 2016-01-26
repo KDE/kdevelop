@@ -37,6 +37,7 @@ LaunchConfigurationType::LaunchConfigurationType()
 
 LaunchConfigurationType::~LaunchConfigurationType()
 {
+    qDeleteAll(d->starters);
     delete d;
 }
 
