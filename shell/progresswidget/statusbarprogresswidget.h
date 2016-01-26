@@ -61,7 +61,6 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void slotProgressDialogVisible( bool );
     void slotShowItemDelayed();
-    void slotBusyIndicator();
     void updateBusyMode();
 
 protected:
@@ -86,7 +85,6 @@ private:
     ProgressItem *mCurrentItem;
     ProgressDialog* mProgressDialog;
     QTimer *mDelayTimer;
-    QTimer *mBusyTimer;
     QTimer *mCleanTimer;
 };
 
