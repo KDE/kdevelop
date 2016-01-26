@@ -117,6 +117,7 @@ void TestProblemModel::testNoGrouping()
 
 
     // Check if filtering works
+    // old-style setSeverity
     // Error filter
     m_model->setSeverity(IProblem::Error);
     QCOMPARE(m_model->rowCount(), 1);
@@ -134,6 +135,31 @@ void TestProblemModel::testNoGrouping()
     QVERIFY(checkIsSame(0, QModelIndex(), m_problems[0]));
     QVERIFY(checkIsSame(1, QModelIndex(), m_problems[1]));
     QVERIFY(checkIsSame(2, QModelIndex(), m_problems[2]));
+
+    // Check if filtering works
+    // new style
+    // Error filter
+    m_model->setSeverities(IProblem::Error);
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkIsSame(0, QModelIndex(), m_problems[0]));
+
+    // Warning filter
+    m_model->setSeverities(IProblem::Warning);
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkIsSame(0, QModelIndex(), m_problems[1]));
+
+    // Hint filter
+    m_model->setSeverities(IProblem::Hint);
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkIsSame(0, QModelIndex(), m_problems[2]));
+
+    // Error + Hint filter
+    m_model->setSeverities(IProblem::Error | IProblem::Hint);
+    QCOMPARE(m_model->rowCount(), 2);
+    QVERIFY(checkIsSame(0, QModelIndex(), m_problems[0]));
+    QVERIFY(checkIsSame(1, QModelIndex(), m_problems[2]));
+
+    m_model->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
 
     // Check if diagnostics are added properly
     m_model->clearProblems();
@@ -190,6 +216,7 @@ void TestProblemModel::testPathGrouping()
     }
 
     // Check if filtering works
+    // old-style setSeverity
     // Error filtering
     m_model->setSeverity(IProblem::Error);
     QCOMPARE(m_model->rowCount(), 1);
@@ -207,6 +234,31 @@ void TestProblemModel::testPathGrouping()
     QVERIFY(checkPathGroup(0, m_problems[0]));
     QVERIFY(checkPathGroup(1, m_problems[1]));
     QVERIFY(checkPathGroup(2, m_problems[2]));
+
+    // Check if filtering works
+    // new style
+    // Error filtering
+    m_model->setSeverities(IProblem::Error);
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkPathGroup(0, m_problems[0]));
+
+    // Warning filtering
+    m_model->setSeverities(IProblem::Warning);
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkPathGroup(0, m_problems[1]));
+
+    // Hint filtering
+    m_model->setSeverities(IProblem::Hint);
+    QCOMPARE(m_model->rowCount(), 1);;
+    QVERIFY(checkPathGroup(0, m_problems[2]));
+
+    // Error + Hint filtering
+    m_model->setSeverities(IProblem::Error | IProblem::Hint);
+    QCOMPARE(m_model->rowCount(), 2);
+    QVERIFY(checkPathGroup(0, m_problems[0]));
+    QVERIFY(checkPathGroup(1, m_problems[2]));
+
+    m_model->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
 
     // Check if diagnostics get to the right place
     m_model->clearProblems();
@@ -254,6 +306,7 @@ void TestProblemModel::testSeverityGrouping()
     }
 
     // Check if filtering works
+    // old-style setSeverity
     // Error filtering
     m_model->setSeverity(IProblem::Error);
     QCOMPARE(m_model->rowCount(), 3);
@@ -271,6 +324,30 @@ void TestProblemModel::testSeverityGrouping()
     checkSeverityGroup(0, m_problems[0]);
     checkSeverityGroup(1, m_problems[1]);
     checkSeverityGroup(2, m_problems[2]);
+
+    // Check if filtering works
+    // Error filtering
+    m_model->setSeverities(IProblem::Error);
+    QCOMPARE(m_model->rowCount(), 3);
+    checkSeverityGroup(0, m_problems[0]);
+
+    // Warning filtering
+    m_model->setSeverities(IProblem::Warning);
+    QCOMPARE(m_model->rowCount(), 3);
+    checkSeverityGroup(1, m_problems[1]);
+
+    // Hint filtering
+    m_model->setSeverities(IProblem::Hint);
+    QCOMPARE(m_model->rowCount(), 3);
+    checkSeverityGroup(2, m_problems[2]);
+
+    // Error + Hint filtering
+    m_model->setSeverities(IProblem::Error | IProblem::Hint);
+    QCOMPARE(m_model->rowCount(), 3);
+    checkSeverityGroup(0, m_problems[0]);
+    checkSeverityGroup(2, m_problems[2]);
+
+    m_model->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
 
     // Check if diagnostics get to the right place
     m_model->clearProblems();

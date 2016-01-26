@@ -52,11 +52,12 @@ public:
 
     /// Severity of the problem. That is, how serious is the found problem.
     enum Severity {
-        Error,
-        Warning,
-        Hint
+        NoSeverity = 0,
+        Error = 1,
+        Warning = 2,
+        Hint = 4
     };
-
+    Q_DECLARE_FLAGS(Severities, Severity)
 
     IProblem(){}
     virtual ~IProblem(){}
@@ -112,6 +113,8 @@ public:
     /// Returns a solution assistant for the problem, if applicable that is.
     virtual QExplicitlySharedDataPointer<KDevelop::IAssistant> solutionAssistant() const = 0;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(IProblem::Severities)
 
 }
 

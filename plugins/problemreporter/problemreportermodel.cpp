@@ -34,7 +34,7 @@
 #include <serialization/indexedstring.h>
 
 #include <shell/watcheddocumentset.h>
-#include <shell/problemstore.h>
+#include <shell/filteredproblemstore.h>
 
 #include <interfaces/idocument.h>
 
@@ -44,7 +44,7 @@ const int ProblemReporterModel::MinTimeout = 1000;
 const int ProblemReporterModel::MaxTimeout = 5000;
 
 ProblemReporterModel::ProblemReporterModel(QObject* parent)
-    : ProblemModel(parent, new ProblemStore())
+    : ProblemModel(parent, new FilteredProblemStore())
     , m_showImports(false)
 {
     setFeatures(CanDoFullUpdate | CanShowImports | ScopeFilter | SeverityFilter);
@@ -57,7 +57,7 @@ ProblemReporterModel::ProblemReporterModel(QObject* parent)
     m_maxTimer->setInterval(MaxTimeout);
     m_maxTimer->setSingleShot(true);
     connect(m_maxTimer, &QTimer::timeout, this, &ProblemReporterModel::timerExpired);
-    connect(store(), &ProblemStore::changed, this, &ProblemReporterModel::onProblemsChanged);
+    connect(store(), &FilteredProblemStore::changed, this, &ProblemReporterModel::onProblemsChanged);
 }
 
 ProblemReporterModel::~ProblemReporterModel()

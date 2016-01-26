@@ -95,10 +95,14 @@ public:
     virtual void rebuild();
 
     /// Specifies the severity filter
-    virtual void setSeverity(int severity);
+    virtual void setSeverity(int severity);///old-style severity access
+
+    virtual void setSeverities(KDevelop::IProblem::Severities severities);///new-style severity access
 
     /// Retrives the severity filter settings
-    int severity() const;
+    int severity() const;///old-style severity access
+
+    KDevelop::IProblem::Severities severities() const;//new-style severity access
 
     /// Retrieves the currently watched document set
     WatchedDocumentSet* documents() const;

@@ -143,7 +143,9 @@ public slots:
     virtual void setScope(int scope);
 
     /// Sets the severity filter. Uses int to be able to use QSignalMapper
-    virtual void setSeverity(int severity);
+    virtual void setSeverity(int severity);///old-style severity filtering
+
+    virtual void setSeverities(KDevelop::IProblem::Severities severities);///new-style severity filtering
 
     void setGrouping(int grouping);
 

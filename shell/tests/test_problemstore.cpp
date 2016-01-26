@@ -42,6 +42,7 @@ private slots:
     void testSetProblems();
     void testFindNode();
     void testSeverity();
+    void testSeverities();
     void testScope();
 
 private:
@@ -116,6 +117,19 @@ void TestProblemStore::testSeverity()
     m_store->setSeverity(severity);
 
     QVERIFY(m_store->severity() == severity);
+    QCOMPARE(spy.count(), 1);
+}
+
+void TestProblemStore::testSeverities()
+{
+    IProblem::Severities severities = IProblem::Error | IProblem::Hint;
+
+    QVERIFY(severities != m_store->severities());
+
+    QSignalSpy spy(m_store.data(), &ProblemStore::changed);
+    m_store->setSeverities(severities);
+
+    QVERIFY(m_store->severities() == severities);
     QCOMPARE(spy.count(), 1);
 }
 

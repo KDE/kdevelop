@@ -303,10 +303,25 @@ void ProblemModel::setScope(int scope)
 
 void ProblemModel::setSeverity(int severity)
 {
-    Q_ASSERT(thread() == QThread::currentThread());
+    switch (severity)
+    {
+        case KDevelop::IProblem::Error:
+            setSeverities(KDevelop::IProblem::Error);
+            break;
+        case KDevelop::IProblem::Warning:
+            setSeverities(KDevelop::IProblem::Error | KDevelop::IProblem::Warning);
+            break;
+        case KDevelop::IProblem::Hint:
+            setSeverities(KDevelop::IProblem::Error | KDevelop::IProblem::Warning | KDevelop::IProblem::Hint);
+            break;
+    }
+}
 
+void ProblemModel::setSeverities(KDevelop::IProblem::Severities severities)
+{
+    Q_ASSERT(thread() == QThread::currentThread());
     /// Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
-    d->m_problems->setSeverity(severity);
+    d->m_problems->setSeverities(severities);
 }
 
 void ProblemModel::setGrouping(int grouping)
