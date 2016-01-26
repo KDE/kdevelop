@@ -73,6 +73,10 @@ void FileManagerListJob::startNextJob()
         return;
     }
 
+#ifdef TIME_IMPORT_JOB
+    m_subTimer.start();
+#endif
+
     m_item = m_listQueue.dequeue();
     KIO::ListJob* job = KIO::listDir( m_item->path().toUrl(), KIO::HideProgressInfo );
     job->setParentJob( this );
@@ -87,6 +91,14 @@ void FileManagerListJob::slotResult(KJob* job)
         return;
     }
 
+#ifdef TIME_IMPORT_JOB
+    {
+        auto waited = m_subTimer.elapsed();
+        m_subWaited += waited;
+        qDebug() << "TIME FOR SUB JOB:" << waited << m_subWaited;
+    }
+#endif
+
     emit entries(this, m_item, entryList);
     entryList.clear();
 
@@ -98,7 +110,7 @@ void FileManagerListJob::slotResult(KJob* job)
         emitResult();
 
 #ifdef TIME_IMPORT_JOB
-        qCDebug(FILEMANAGER) << "TIME FOR LISTJOB:" << m_timer.elapsed();
+        qDebug() << "TIME FOR LISTJOB:" << m_timer.elapsed();
 #endif
     } else {
         emit nextJob();

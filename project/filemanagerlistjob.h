@@ -68,6 +68,8 @@ private:
 
 #ifdef TIME_IMPORT_JOB
     QElapsedTimer m_timer;
+    QElapsedTimer m_subTimer;
+    qint64 m_subWaited = 0;
 #endif
 };
 
