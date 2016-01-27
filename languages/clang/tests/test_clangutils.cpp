@@ -173,6 +173,63 @@ void TestClangUtils::testGetScope_data()
         << "klass";
 }
 
+void TestClangUtils::testTemplateArgumentTypes()
+{
+    QFETCH(QByteArray, code);
+    QFETCH(int, cursorIndex);
+    QFETCH(QStringList, expectedTypes);
+
+    CursorCollectorVisitor visitor;
+    runVisitor(code, visitor);
+    QVERIFY(cursorIndex < visitor.cursors.size());
+    const auto cursor = visitor.cursors[cursorIndex];
+    const QStringList types = ClangUtils::templateArgumentTypes(cursor);
+
+    QCOMPARE(types, expectedTypes);
+}
+
+void TestClangUtils::testTemplateArgumentTypes_data()
+{
+    QTest::addColumn<QByteArray>("code");
+    QTest::addColumn<int>("cursorIndex");
+    QTest::addColumn<QStringList>("expectedTypes");
+
+    QTest::newRow("template-spec")
+        << QByteArray(
+            "template<typename T>\n"
+            "struct is_void\n"
+            "{ };\n"
+            "template<>\n"
+            "struct is_void<void>\n"
+            "{ };\n")
+        << 2
+        << QStringList({"void"});
+
+    // Partially specialise one
+    QTest::newRow("template-partial-spec")
+        << QByteArray(
+            "template<typename T, unsigned N>\n"
+            "struct is_void\n"
+            "{ };\n"
+            "template<typename T>\n"
+            "struct is_void<T, 3>\n"
+            "{ };\n")
+        << 3
+        << QStringList({"type-parameter-0-0", ""});
+
+    // Fully specialise 3 args
+    QTest::newRow("template-full-spec")
+        << QByteArray(
+            "template<typename T, typename R, unsigned N>\n"
+            "struct is_void\n"
+            "{ };\n"
+            "template<>\n"
+            "struct is_void<unsigned, void, 5>\n"
+            "{ };\n")
+        << 4
+        << QStringList({"unsigned int", "void", ""});
+}
+
 void TestClangUtils::testGetRawContents()
 {
     QFETCH(QByteArray, code);

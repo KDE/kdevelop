@@ -93,6 +93,15 @@ namespace ClangUtils
     QString getCursorSignature(CXCursor cursor, const QString& scope, const QVector<QString>& defaultArgs = QVector<QString>());
 
     /**
+     * Given a cursor representing the template argument list, return a
+     * list of the argument types.
+     *
+     * @param cursor The cursor to work with
+     * @return A QStringList of the template's arguments
+     */
+    QStringList templateArgumentTypes(CXCursor cursor);
+
+    /**
      * Extract the raw contents of the range @p range
      *
      * @note This will return the exact textual representation of the code,

@@ -43,6 +43,8 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/contextmenuextension.h>
 
+#include <QReadWriteLock>
+
 K_PLUGIN_FACTORY_WITH_JSON(KDevQmlJsSupportFactory, "kdevqmljs.json", registerPlugin<KDevQmlJsPlugin>(); )
 
 using namespace KDevelop;
@@ -82,6 +84,10 @@ KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
 
 KDevQmlJsPlugin::~KDevQmlJsPlugin()
 {
+    parseLock()->lockForWrite();
+    // By locking the parse-mutexes, we make sure that parse jobs get a chance to finish in a good state
+    parseLock()->unlock();
+
     QmlJS::unregisterDUChainItems();
 }
 

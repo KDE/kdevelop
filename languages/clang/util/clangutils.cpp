@@ -27,6 +27,7 @@
 
 #include <serialization/indexedstring.h>
 #include <language/editor/documentrange.h>
+#include <language/duchain/stringhelpers.h>
 
 #include <clang-c/Index.h>
 
@@ -262,6 +263,20 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
     }
 
     return ret;
+}
+
+QStringList ClangUtils::templateArgumentTypes(CXCursor cursor)
+{
+    CXType typeList = clang_getCursorType(cursor);
+    int templateArgCount = clang_Type_getNumTemplateArguments(typeList);
+    QStringList types;
+    types.reserve(templateArgCount);
+    for (int i = 0; i < templateArgCount; ++i) {
+        ClangString clangString(clang_getTypeSpelling(clang_Type_getTemplateArgumentAsType(typeList, i)));
+        types.append(clangString.toString());
+    }
+
+    return types;
 }
 
 QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange range)

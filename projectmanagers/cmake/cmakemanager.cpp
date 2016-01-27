@@ -35,6 +35,7 @@
 #include "testing/ctestutils.h"
 
 #include <QDir>
+#include <QReadWriteLock>
 #include <QThread>
 #include <QFileSystemWatcher>
 #include <QTimer>
@@ -116,7 +117,11 @@ QString CMakeManager::errorDescription() const
 }
 
 CMakeManager::~CMakeManager()
-{}
+{
+    parseLock()->lockForWrite();
+    // By locking the parse-mutexes, we make sure that parse jobs get a chance to finish in a good state
+    parseLock()->unlock();
+}
 
 bool CMakeManager::hasIncludesOrDefines(ProjectBaseItem* item) const
 {
