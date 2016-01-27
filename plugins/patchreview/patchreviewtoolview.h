@@ -31,6 +31,7 @@ class KJob;
 class PatchReviewPlugin;
 class LocalPatchSource;
 class QModelIndex;
+class QSortFilterProxyModel;
 
 class PatchReviewToolView : public QWidget
 {
@@ -98,6 +99,8 @@ private:
     Purpose::Menu* m_exportMenu;
 
     class PatchFilesModel* m_fileModel;
+    QSortFilterProxyModel* m_fileSortProxyModel;
+
 public slots:
     void documentActivated( KDevelop::IDocument* );
     void customContextMenuRequested(const QPoint& p);

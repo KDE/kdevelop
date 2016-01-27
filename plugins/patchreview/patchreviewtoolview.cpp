@@ -204,7 +204,11 @@ void PatchReviewToolView::showEditDialog() {
 
     bool allowSelection = m_plugin->patch() && m_plugin->patch()->canSelectFiles();
     m_fileModel = new PatchFilesModel( this, allowSelection );
-    m_editPatch.filesList->setModel( m_fileModel );
+    m_fileSortProxyModel = new VcsFileChangesSortProxyModel(this);
+    m_fileSortProxyModel->setSourceModel(m_fileModel);
+    m_fileSortProxyModel->sort(1);
+    m_fileSortProxyModel->setDynamicSortFilter(true);
+    m_editPatch.filesList->setModel( m_fileSortProxyModel );
     m_editPatch.filesList->header()->hide();
     m_editPatch.filesList->setRootIsDecorated( false );
     m_editPatch.filesList->setContextMenuPolicy(Qt::CustomContextMenu);

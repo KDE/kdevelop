@@ -32,7 +32,6 @@
 
 #include <vcs/vcsstatusinfo.h>
 
-
 namespace KDevelop
 {
 
@@ -78,6 +77,24 @@ static QIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
     return QIcon::fromTheme(QStringLiteral("dialog-error"));
 }
 
+VcsFileChangesSortProxyModel::VcsFileChangesSortProxyModel(QObject* parent)
+    : QSortFilterProxyModel(parent)
+{
+}
+
+bool VcsFileChangesSortProxyModel::lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const
+{
+    const auto leftStatus = source_left.data(VcsFileChangesModel::StateRole).value<VcsStatusInfo::State>();
+    const auto rightStatus = source_right.data(VcsFileChangesModel::StateRole).value<VcsStatusInfo::State>();
+    if (leftStatus != rightStatus) {
+        return leftStatus < rightStatus;
+    }
+
+    const QString leftPath = source_left.data(VcsFileChangesModel::UrlRole).toString();
+    const QString rightPath = source_right.data(VcsFileChangesModel::UrlRole).toString();
+    return QString::localeAwareCompare(leftPath, rightPath) < 0;
+}
+
 class VcsStatusInfoItem : public QStandardItem
 {
 public:
@@ -101,6 +118,8 @@ public:
                 return QVariant::fromValue(m_info);
             case VcsFileChangesModel::UrlRole:
                 return m_info.url();
+            case VcsFileChangesModel::StateRole:
+                return QVariant::fromValue(m_info.state());
         }
         return {};
     }

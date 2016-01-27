@@ -23,6 +23,7 @@
 #ifndef KDEVPLATFORM_VCSFILECHANGESMODEL_H
 #define KDEVPLATFORM_VCSFILECHANGESMODEL_H
 
+#include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 
 #include <vcs/vcsstatusinfo.h>
@@ -34,6 +35,16 @@ class QUrl;
 namespace KDevelop
 {
 class VcsStatusInfo;
+
+class KDEVPLATFORMVCS_EXPORT VcsFileChangesSortProxyModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+
+public:
+    VcsFileChangesSortProxyModel(QObject* parent = nullptr);
+
+    bool lessThan(const QModelIndex& rLeft, const QModelIndex& rRight) const override;
+};
 
 /**
  * This class holds and represents information about changes in files.
@@ -48,7 +59,8 @@ class KDEVPLATFORMVCS_EXPORT VcsFileChangesModel : public QStandardItemModel
     Q_OBJECT
 
 public:
-    enum ItemRoles { VcsStatusInfoRole = Qt::UserRole+1, UrlRole, LastItemRole };
+    enum ItemRoles { VcsStatusInfoRole = Qt::UserRole+1, UrlRole, StateRole, LastItemRole };
+    enum Column { PathColumn = 0, StatusColumn = 1 };
 
     /**
      * Constructor for class.
@@ -142,5 +154,7 @@ private:
     QScopedPointer<VcsFileChangesModelPrivate> const d;
 };
 }
+
+Q_DECLARE_METATYPE(KDevelop::VcsStatusInfo::State)
 
 #endif // KDEVPLATFORM_VCSFILECHANGESMODEL_H
