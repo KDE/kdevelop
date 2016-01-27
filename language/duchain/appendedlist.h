@@ -73,58 +73,51 @@ template<class T, bool threadSafe = true>
 class TemporaryDataManager {
   public:
     TemporaryDataManager(const QByteArray& id = {})
-        : m_itemsUsed(0)
-        , m_itemsSize(0)
-        , m_items(0)
-        , m_id(id)
+        : m_id(id)
     {
-      uint first = alloc();  //Allocate the zero item, just to reserve that index
-      Q_ASSERT(first == (uint)DynamicAppendedListMask);
+      int first = alloc();  //Allocate the zero item, just to reserve that index
+      Q_ASSERT(first == (int)DynamicAppendedListMask);
       Q_UNUSED(first);
     }
     ~TemporaryDataManager() {
       free(DynamicAppendedListMask); //Free the zero index, so we don't get wrong warnings
-      uint cnt = usedItemCount();
+      int cnt = usedItemCount();
       if(cnt) //Don't use qDebug, because that may not work during destruction
         std::cout << m_id.constData() << " There were items left on destruction: " << usedItemCount() << "\n";
 
-      for(uint a = 0; a < m_itemsUsed; ++a)
-        delete m_items[a];
+      for (int a = 0; a < m_items.size(); ++a)
+        delete m_items.at(a);
     }
 
-    inline T& getItem(uint index) {
+    inline T& getItem(int index) {
       //For performance reasons this function does not lock the mutex, it's called too often and must be
       //extremely fast. There is special measures in alloc() to make this safe.
       Q_ASSERT(index & DynamicAppendedListMask);
 
-      return *m_items[index & KDevelop::DynamicAppendedListRevertMask];
+      return *m_items.at(index & KDevelop::DynamicAppendedListRevertMask);
     }
 
     ///Allocates an item index, which from now on you can get using getItem, until you call free(..) on the index.
     ///The returned item is not initialized and may contain random older content, so you should clear it after getting it for the first time
-    uint alloc() {
+    int alloc() {
 
       if(threadSafe)
         m_mutex.lock();
 
-      uint ret;
+      int ret;
       if(!m_freeIndicesWithData.isEmpty()) {
         ret = m_freeIndicesWithData.pop();
       }else if(!m_freeIndices.isEmpty()) {
         ret = m_freeIndices.pop();
-        Q_ASSERT(!m_items[ret]);
+        Q_ASSERT(!m_items.at(ret));
         m_items[ret] = new T;
       }else{
-
-        if(m_itemsUsed >= m_itemsSize) {
+        if(m_items.size() >= m_items.capacity()) {
           //We need to re-allocate
-          uint newItemsSize = m_itemsSize + 20 + (m_itemsSize/3);
-          T** newItems = new T*[newItemsSize];
-          memcpy(newItems, m_items, sizeof(T*) * m_itemsSize);
+          const int newItemsSize = m_items.capacity() + 20 + (m_items.capacity()/3);
+          const QVector<T*> oldItems = m_items; // backup
+          m_items.reserve(newItemsSize); // detach, grow container
 
-          T** oldItems = m_items;
-          m_items = newItems;
-          m_itemsSize = newItemsSize;
           //The only function that does not lock the mutex is getItem(..), because that function must be very efficient.
           //Since it's only a few instructions from the moment m_items is read to the moment it's used,
           //deleting the old data after a few seconds should be safe.
@@ -136,7 +129,6 @@ class TemporaryDataManager {
             while(!m_deleteLater.isEmpty()) {
               //We delete after 5 seconds
               if(time(0) - m_deleteLater.first().first > 5) {
-                delete[] m_deleteLater.first().second;
                 m_deleteLater.removeFirst();
               }else{
                 break;
@@ -145,10 +137,9 @@ class TemporaryDataManager {
           }
         }
 
-        ret = m_itemsUsed;
-        m_items[m_itemsUsed] = new T;
-        ++m_itemsUsed;
-        Q_ASSERT(m_itemsUsed <= m_itemsSize);
+        ret = m_items.size();
+        m_items.append(new T);
+        Q_ASSERT(m_items.size() <= m_items.capacity());
       }
 
       if(threadSafe)
@@ -159,23 +150,23 @@ class TemporaryDataManager {
       return ret | DynamicAppendedListMask;
     }
 
-    void free(uint index) {
+    void free(int index) {
       Q_ASSERT(index & DynamicAppendedListMask);
       index &= KDevelop::DynamicAppendedListRevertMask;
 
       if(threadSafe)
         m_mutex.lock();
 
-      freeItem(m_items[index]);
+      freeItem(m_items.at(index));
 
       m_freeIndicesWithData.push(index);
 
       //Hold the amount of free indices with data between 100 and 200
       if(m_freeIndicesWithData.size() > 200) {
         for(int a = 0; a < 100; ++a) {
-          uint deleteIndexData = m_freeIndicesWithData.pop();
-          delete m_items[deleteIndexData];
-          m_items[deleteIndexData] = 0;
+          int deleteIndexData = m_freeIndicesWithData.pop();
+          delete m_items.at(deleteIndexData);
+          m_items[deleteIndexData] = nullptr;
           m_freeIndices.push(deleteIndexData);
         }
       }
@@ -184,10 +175,10 @@ class TemporaryDataManager {
         m_mutex.unlock();
     }
 
-    uint usedItemCount() const {
-      uint ret = 0;
-      for(uint a = 0; a < m_itemsUsed; ++a)
-        if(m_items[a])
+    int usedItemCount() const {
+      int ret = 0;
+      for(int a = 0; a < m_items.size(); ++a)
+        if(m_items.at(a))
           ++ret;
       return ret - m_freeIndicesWithData.size();
     }
@@ -198,13 +189,12 @@ class TemporaryDataManager {
       item->clear(); ///@todo make this a template specialization that only does this for containers
     }
 
-    uint m_itemsUsed, m_itemsSize;
-    T** m_items;
-    QStack<uint> m_freeIndicesWithData;
-    QStack<uint> m_freeIndices;
+    QVector<T*> m_items; /// note: non-shared, ref count of 1 when accessed with non-const methods => no detach
+    QStack<int> m_freeIndicesWithData;
+    QStack<int> m_freeIndices;
     QMutex m_mutex;
     QByteArray m_id;
-    QList<QPair<time_t, T**> > m_deleteLater;
+    QList<QPair<time_t, const QVector<T*> > > m_deleteLater;
 };
 
 ///Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the length returned by the function-name with "Size" appended.
