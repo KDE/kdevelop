@@ -55,22 +55,6 @@ struct ImplementsInfo
     QString templatePrefix;
 };
 
-//TODO replace this with clang_Type_getTemplateArgumentAsType when that
-//function makes it into the mainstream libclang release.
-QStringList templateTypeArguments(CXCursor cursor)
-{
-    QStringList types;
-    QString tStr = ClangString(clang_getTypeSpelling(clang_getCursorType(cursor))).toString();
-    ParamIterator iter(QStringLiteral("<>"), tStr);
-
-    while (iter) {
-        types.append(*iter);
-        ++iter;
-    }
-
-    return types;
-}
-
 CXChildVisitResult templateParamsHelper(CXCursor cursor, CXCursor /*parent*/, CXClientData data)
 {
     CXCursorKind kind = clang_getCursorKind(cursor);
@@ -126,7 +110,7 @@ void processBaseClass(CXCursor cursor, FunctionOverrideList* functionList)
     CXCursor ref = clang_getCursorReferenced(cursor);
     CXCursor isTemplate = clang_getSpecializedCursorTemplate(ref);
     if (!clang_Cursor_isNull(isTemplate)) {
-        concrete = templateTypeArguments(ref);
+        concrete = ClangUtils::templateArgumentTypes(ref);
         ref = isTemplate;
     }
 

@@ -33,6 +33,8 @@ private slots:
 
     void testGetScope();
     void testGetScope_data();
+    void testTemplateArgumentTypes();
+    void testTemplateArgumentTypes_data();
     void testGetRawContents();
     void testGetRawContents_data();
     void testRangeForIncludePathSpec();
