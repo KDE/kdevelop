@@ -46,7 +46,10 @@ class VcsFileChangesModelPrivate;
 class KDEVPLATFORMVCS_EXPORT VcsFileChangesModel : public QStandardItemModel
 {
     Q_OBJECT
+
 public:
+    enum ItemRoles { VcsStatusInfoRole = Qt::UserRole+1, UrlRole, LastItemRole };
+
     /**
      * Constructor for class.
      * @param isCheckable if true, model will show checkboxes on items.
