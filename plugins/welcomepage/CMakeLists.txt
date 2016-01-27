@@ -2,7 +2,9 @@ add_subdirectory(declarative)
 
 set(welcomepage_SRCS
     welcomepageplugin.cpp
-    welcomepagedocument.cpp sessionsmodel.cpp welcomepageview.cpp uihelper.cpp)
+    sessionsmodel.cpp
+    welcomepageview.cpp
+    uihelper.cpp)
 
 qt5_add_resources(welcomepage_SRCS welcomepage.qrc)
 
