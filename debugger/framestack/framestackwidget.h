@@ -59,9 +59,9 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public AutoOrientedSplitter
 
     private:
         IDebugSession *m_session;
-        QListView *m_threads;
+        QListView *m_threadsListView;
         QWidget *m_threadsWidget;
-        QTreeView *m_frames;
+        QTreeView *m_framesTreeView;
         QMenu *m_framesContextMenu;
 };
 
