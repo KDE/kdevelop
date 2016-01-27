@@ -74,7 +74,11 @@ struct AbstractFileManagerPlugin::Private {
 
     AbstractFileManagerPlugin* q;
 
-    KIO::Job* eventuallyReadFolder( ProjectFolderItem* item );
+    /**
+     * The just returned must be started in one way or another for this method
+     * to have any affect. The job will then auto-delete itself upon completion.
+     */
+    KIO::Job* eventuallyReadFolder( ProjectFolderItem* item ) Q_REQUIRED_RESULT;
     void addJobItems(FileManagerListJob* job,
                      ProjectFolderItem* baseItem,
                      const KIO::UDSEntryList& entries);
@@ -266,7 +270,8 @@ void AbstractFileManagerPlugin::Private::created(const QString &path_)
                 // exists already in this project, happens e.g. when we restart the dirwatcher
                 // or if we delete and remove folders consecutively https://bugs.kde.org/show_bug.cgi?id=260741
                 qCDebug(FILEMANAGER) << "force reload of" << path << folder;
-                eventuallyReadFolder( folder );
+                auto job = eventuallyReadFolder( folder );
+                job->start();
                 found = true;
             }
             if ( found ) {
@@ -281,7 +286,8 @@ void AbstractFileManagerPlugin::Private::created(const QString &path_)
                 ProjectFolderItem* folder = q->createFolderItem( p, path, parentItem );
                 if (folder) {
                     emit q->folderAdded( folder );
-                    eventuallyReadFolder( folder );
+                    auto job = eventuallyReadFolder( folder );
+                    job->start();
                 }
             } else {
                 ProjectFileItem* file = q->createFileItem( p, path, parentItem );
@@ -487,7 +493,8 @@ KJob* AbstractFileManagerPlugin::createImportJob(ProjectFolderItem* item)
 bool AbstractFileManagerPlugin::reload( ProjectFolderItem* item )
 {
     qCDebug(FILEMANAGER) << "reloading item" << item->path();
-    d->eventuallyReadFolder( item->folder() );
+    auto job = d->eventuallyReadFolder( item->folder() );
+    job->start();
     return true;
 }
 

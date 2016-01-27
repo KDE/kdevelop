@@ -10,6 +10,7 @@
         "Description": "This plugin allows one to open files with associated external applications.", 
         "Description[ca]": "Aquest connector permet obrir fitxers amb les aplicacions externes associades.", 
         "Description[de]": "Mit diesem Modul können Dateien mit ihnen zugewiesenen externen Anwendungen gestartet werden.", 
+        "Description[en_GB]": "This plugin allows one to open files with associated external applications.", 
         "Description[es]": "Este complemento permite abrir archivos con las aplicaciones externas asociadas.", 
         "Description[fi]": "Tämä liitännäinen mahdollistaa ulkoisiin sovelluksiin liitettyjen tiedostojen avaamisen.", 
         "Description[gl]": "Este complemento permítelle abrir ficheiros cos programas externos asociados.", 

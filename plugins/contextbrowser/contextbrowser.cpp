@@ -277,6 +277,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevcontextbrowser"), parent)
     , m_viewFactory(new ContextBrowserViewFactory(this))
     , m_nextHistoryIndex(0)
+    , m_textHintProvider(this)
 {
   KDEV_USE_EXTENSION_INTERFACE( IContextBrowser )
 
@@ -796,7 +797,7 @@ void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
       return;
 
   iface->setTextHintDelay(highlightingTimeout);
-  iface->registerTextHintProvider(new ContextBrowserHintProvider(this));
+  iface->registerTextHintProvider(&m_textHintProvider);
 }
 
 void ContextBrowserPlugin::registerToolView(ContextBrowserView* view)

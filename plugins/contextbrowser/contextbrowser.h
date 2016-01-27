@@ -65,7 +65,18 @@ namespace KTextEditor {
 
 class ContextBrowserViewFactory;
 class ContextBrowserView;
+class ContextBrowserPlugin;
 class BrowseManager;
+
+class ContextBrowserHintProvider : public KTextEditor::TextHintProvider
+{
+public:
+  explicit ContextBrowserHintProvider(ContextBrowserPlugin* plugin);
+  QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
+
+private:
+  ContextBrowserPlugin* m_plugin;
+};
 
 QWidget* masterWidget(QWidget* w);
 
@@ -252,16 +263,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     int m_nextHistoryIndex;
 
     friend class ContextBrowserHintProvider;
-};
-
-class ContextBrowserHintProvider : public KTextEditor::TextHintProvider
-{
-public:
-  explicit ContextBrowserHintProvider(ContextBrowserPlugin* plugin);
-  QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
-
-private:
-  ContextBrowserPlugin* m_plugin;
+    ContextBrowserHintProvider m_textHintProvider;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_CONTEXTBROWSERPLUGIN_H

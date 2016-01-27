@@ -27,7 +27,7 @@ struct ProblemStorePrivate
 {
     ProblemStorePrivate()
         : m_documents(nullptr)
-        , m_severity(KDevelop::IProblem::Hint)
+        , m_severities(KDevelop::IProblem::Error | KDevelop::IProblem::Warning | KDevelop::IProblem::Hint)
         , m_rootNode(new KDevelop::ProblemStoreNode())
     {
     }
@@ -36,7 +36,7 @@ struct ProblemStorePrivate
     KDevelop::WatchedDocumentSet *m_documents;
 
     /// The severity filter setting
-    int m_severity;
+    KDevelop::IProblem::Severities m_severities;
 
     /// The problems list
     KDevelop::ProblemStoreNode *m_rootNode;
@@ -104,9 +104,25 @@ void ProblemStore::rebuild()
 
 void ProblemStore::setSeverity(int severity)
 {
-    if(severity != d->m_severity)
+    switch (severity)
     {
-        d->m_severity = severity;
+        case KDevelop::IProblem::Error:
+            setSeverities(KDevelop::IProblem::Error);
+            break;
+        case KDevelop::IProblem::Warning:
+            setSeverities(KDevelop::IProblem::Error | KDevelop::IProblem::Warning);
+            break;
+        case KDevelop::IProblem::Hint:
+            setSeverities(KDevelop::IProblem::Error | KDevelop::IProblem::Warning | KDevelop::IProblem::Hint);
+            break;
+    }
+}
+
+void ProblemStore::setSeverities(KDevelop::IProblem::Severities severities)
+{
+    if(severities != d->m_severities)
+    {
+        d->m_severities = severities;
         rebuild();
         emit changed();
     }
@@ -114,7 +130,18 @@ void ProblemStore::setSeverity(int severity)
 
 int ProblemStore::severity() const
 {
-    return d->m_severity;
+    if (d->m_severities.testFlag(KDevelop::IProblem::Hint))
+        return KDevelop::IProblem::Hint;
+    if (d->m_severities.testFlag(KDevelop::IProblem::Warning))
+        return KDevelop::IProblem::Warning;
+    if (d->m_severities.testFlag(KDevelop::IProblem::Error))
+        return KDevelop::IProblem::Error;
+    return 0;
+}
+
+KDevelop::IProblem::Severities ProblemStore::severities() const
+{
+    return d->m_severities;
 }
 
 WatchedDocumentSet* ProblemStore::documents() const

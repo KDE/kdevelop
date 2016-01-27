@@ -32,8 +32,9 @@
 namespace
 {
 const int ErrorCount = 1;
-const int WarningCount = 1;
-const int HintCount = 1;
+const int WarningCount = 2;
+const int HintCount = 3;
+const int ProblemsCount = ErrorCount + WarningCount + HintCount;
 
 const int ErrorFilterProblemCount = ErrorCount;
 const int WarningFilterProblemCount = ErrorCount + WarningCount;
@@ -51,6 +52,7 @@ private slots:
 
     void testBypass();
     void testSeverity();
+    void testSeverities();
     void testGrouping();
 
     void testNoGrouping();
@@ -130,6 +132,25 @@ void TestFilteredProblemStore::testSeverity()
     m_store->setSeverity(IProblem::Hint);
 }
 
+void TestFilteredProblemStore::testSeverities()
+{
+    QVERIFY(m_store->severities() == (IProblem::Error | IProblem::Warning | IProblem::Hint));
+
+    QSignalSpy changedSpy(m_store.data(), &FilteredProblemStore::changed);
+    QSignalSpy beginRebuildSpy(m_store.data(), &FilteredProblemStore::beginRebuild);
+    QSignalSpy endRebuildSpy(m_store.data(), &FilteredProblemStore::endRebuild);
+
+    m_store->setSeverities(IProblem::Error | IProblem::Hint);
+
+    QVERIFY(m_store->severities() == (IProblem::Error | IProblem::Hint));
+
+    QCOMPARE(changedSpy.count(), 1);
+    QCOMPARE(beginRebuildSpy.count(), 1);
+    QCOMPARE(endRebuildSpy.count(), 1);
+
+    m_store->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
+}
+
 void TestFilteredProblemStore::testGrouping()
 {
     QVERIFY(m_store->grouping() == NoGrouping);
@@ -202,15 +223,15 @@ void TestFilteredProblemStore::testNoGrouping()
         QCOMPARE(node->problem()->description(), m_problems[i]->description());
     }
 
-    // Check severity filtering
+    // Check old style severity filtering
+    // old-style setSeverity
     // Error filter
     m_store->setSeverity(IProblem::Error);
     QCOMPARE(m_store->count(), ErrorFilterProblemCount);
-
-    {
+    for (int i = 0; i < ErrorFilterProblemCount; i++) {
         const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(0));
         QVERIFY(node != nullptr);
-        QCOMPARE(node->problem()->description(), m_problems[0]->description());
+        QCOMPARE(node->problem()->description(), m_problems[i]->description());
     }
 
     // Warning filter
@@ -233,6 +254,53 @@ void TestFilteredProblemStore::testNoGrouping()
         QCOMPARE(node->problem()->description(), m_problems[i]->description());
     }
 
+    // Check new severity filtering
+    // Error filter
+    m_store->setSeverities(IProblem::Error);
+    QCOMPARE(m_store->count(), ErrorCount);
+    for (int i = 0; i < ErrorCount; i++) {
+        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        QVERIFY(node != nullptr);
+        QCOMPARE(node->problem()->description(), m_problems[i]->description());
+    }
+
+    // Warning filter
+    m_store->setSeverities(IProblem::Warning);
+    QCOMPARE(m_store->count(), WarningCount);
+    for (int i = 0; i < WarningCount; i++) {
+        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        QVERIFY(node != nullptr);
+
+        QCOMPARE(node->problem()->description(), m_problems[i+ErrorCount]->description());
+    }
+
+    // Hint filter
+    m_store->setSeverities(IProblem::Hint);
+    QCOMPARE(m_store->count(), HintCount);
+    for (int i = 0; i < HintCount; i++) {
+        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        QVERIFY(node != nullptr);
+
+        QCOMPARE(node->problem()->description(), m_problems[i+ErrorCount+WarningCount]->description());
+    }
+
+    //Error + Hint filter
+    m_store->setSeverities(IProblem::Error | IProblem::Hint);
+    QCOMPARE(m_store->count(), HintCount + ErrorCount);
+    for (int i = 0; i < ErrorCount; i++) {
+        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        QVERIFY(node != nullptr);
+
+        QCOMPARE(node->problem()->description(), m_problems[i]->description());
+    }
+    for (int i = ErrorCount; i < ErrorCount+HintCount; i++) {
+        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        QVERIFY(node != nullptr);
+
+        QCOMPARE(node->problem()->description(), m_problems[i+WarningCount]->description());
+    }
+
+    m_store->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
     m_store->clear();
 
     // Check if diagnostics are added properly
@@ -274,7 +342,7 @@ void TestFilteredProblemStore::testPathGrouping()
         m_store->addProblem(p);
     }
 
-    QCOMPARE(m_store->count(), 3);
+    QCOMPARE(m_store->count(), ProblemsCount);
 
     for (int i = 0; i < 3; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
@@ -291,7 +359,7 @@ void TestFilteredProblemStore::testPathGrouping()
     p->setFinalLocation(m_problems[2]->finalLocation());
     m_store->addProblem(p);
 
-    QCOMPARE(m_store->count(), 3);
+    QCOMPARE(m_store->count(), ProblemsCount);
 
     // Check the first 2 top-nodes
     for (int i = 0; i < 2; i++) {
@@ -315,13 +383,14 @@ void TestFilteredProblemStore::testPathGrouping()
     m_store->setProblems(m_problems);
 
     // Check filters
+    // old-style setSeverity
     // Error filter
     m_store->setSeverity(IProblem::Error);
     QCOMPARE(m_store->count(), ErrorFilterProblemCount);
     {
         const ProblemStoreNode *node = m_store->findNode(0);
         checkNodeLabel(node, m_problems[0]->finalLocation().document.str());
-        QCOMPARE(node->count(), ErrorCount);
+        QCOMPARE(node->count(), 1);
         checkNodeDescription(node->child(0), m_problems[0]->description());
     }
 
@@ -331,7 +400,7 @@ void TestFilteredProblemStore::testPathGrouping()
     for (int i = 0; i < WarningFilterProblemCount; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
         checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
-        QCOMPARE(node->count(), WarningCount);
+        QCOMPARE(node->count(), 1);
         checkNodeDescription(node->child(0), m_problems[i]->description());
     }
 
@@ -341,9 +410,55 @@ void TestFilteredProblemStore::testPathGrouping()
     for (int i = 0; i < HintFilterProblemCount; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
         checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
-        QCOMPARE(node->count(), HintCount);
+        QCOMPARE(node->count(), 1);
         checkNodeDescription(node->child(0), m_problems[i]->description());
     }
+
+    // Check new severity filtering
+    // Error filter
+    m_store->setSeverities(IProblem::Error);
+    for (int i = 0; i < ErrorCount; i++) {
+        const ProblemStoreNode *node = m_store->findNode(i);
+        checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
+        QCOMPARE(node->count(), 1);
+        checkNodeDescription(node->child(0), m_problems[i]->description());
+    }
+
+    // Warning filter
+    m_store->setSeverities(IProblem::Warning);
+    for (int i = 0; i < WarningCount; i++) {
+        const ProblemStoreNode *node = m_store->findNode(i);
+        checkNodeLabel(node, m_problems[i+ErrorCount]->finalLocation().document.str());
+        QCOMPARE(node->count(), 1);
+        checkNodeDescription(node->child(0), m_problems[i+ErrorCount]->description());
+    }
+
+    // Hint filter
+    m_store->setSeverities(IProblem::Hint);
+    for (int i = 0; i < HintCount; i++) {
+        const ProblemStoreNode *node = m_store->findNode(i);
+        checkNodeLabel(node, m_problems[i+ErrorCount+WarningCount]->finalLocation().document.str());
+        QCOMPARE(node->count(), 1);
+        checkNodeDescription(node->child(0), m_problems[i+ErrorCount+WarningCount]->description());
+    }
+
+    //Error + Hint filter
+    m_store->setSeverities(IProblem::Error | IProblem::Hint);
+    QCOMPARE(m_store->count(), HintCount + ErrorCount);
+    for (int i = 0; i < ErrorCount; i++) {
+        const ProblemStoreNode *node = m_store->findNode(i);
+        checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
+        QCOMPARE(node->count(), 1);
+        checkNodeDescription(node->child(0), m_problems[i]->description());
+    }
+    for (int i = ErrorCount; i < ErrorCount+HintCount; i++) {
+        const ProblemStoreNode *node = m_store->findNode(i);
+        checkNodeLabel(node, m_problems[i+WarningCount]->finalLocation().document.str());
+        QCOMPARE(node->count(), 1);
+        checkNodeDescription(node->child(0), m_problems[i+WarningCount]->description());
+    }
+
+    m_store->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
 
     m_store->clear();
     // Check if the diagnostics are added properly
@@ -365,18 +480,29 @@ void TestFilteredProblemStore::testSeverityGrouping()
     const ProblemStoreNode *hintNode = m_store->findNode(2);
 
     // Add problems
-    int c = 0;
-    foreach (const IProblem::Ptr &p, m_problems) {
-        m_store->addProblem(p);
-
-        QCOMPARE(m_store->findNode(c)->count(), 1);
-        c++;
+    for (int i=0;i<ProblemsCount;i++)
+    {
+        m_store->addProblem(m_problems[i]);
+        int severityType = 0; //error
+        int addedCountOfCurrentSeverityType = i + 1;
+        if (i>=ErrorCount)
+        {
+            severityType = 1; //warning
+            addedCountOfCurrentSeverityType = i - ErrorCount + 1;
+        }
+        if (i>=ErrorCount+WarningCount)
+        {
+            severityType = 2; //hint
+            addedCountOfCurrentSeverityType = i - (ErrorCount + WarningCount) + 1;
+        }
+        QCOMPARE(m_store->findNode(severityType)->count(), addedCountOfCurrentSeverityType);
     }
+
     QVERIFY(checkNodeLabels());
     QVERIFY(checkCounts(ErrorCount, WarningCount, HintCount));
     checkNodeDescription(errorNode->child(0), m_problems[0]->description());
     checkNodeDescription(warningNode->child(0), m_problems[1]->description());
-    checkNodeDescription(hintNode->child(0), m_problems[2]->description());
+    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
 
     // Clear
     m_store->clear();
@@ -390,9 +516,10 @@ void TestFilteredProblemStore::testSeverityGrouping()
     QVERIFY(checkCounts(ErrorCount, WarningCount, HintCount));
     checkNodeDescription(errorNode->child(0), m_problems[0]->description());
     checkNodeDescription(warningNode->child(0), m_problems[1]->description());
-    checkNodeDescription(hintNode->child(0), m_problems[2]->description());
+    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
 
     // Check severity filter
+    // old-style setSeverity
     // Error filter
     m_store->setSeverity(IProblem::Error);
     QCOMPARE(m_store->count(), 3);
@@ -415,7 +542,39 @@ void TestFilteredProblemStore::testSeverityGrouping()
     QVERIFY(checkCounts(ErrorCount, WarningCount, HintCount));
     checkNodeDescription(errorNode->child(0), m_problems[0]->description());
     checkNodeDescription(warningNode->child(0), m_problems[1]->description());
-    checkNodeDescription(hintNode->child(0), m_problems[2]->description());
+    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
+
+    // Check severity filter
+    // Error filter
+    m_store->setSeverities(IProblem::Error);
+    QCOMPARE(m_store->count(), 3);
+    QVERIFY(checkNodeLabels());
+    QVERIFY(checkCounts(ErrorCount, 0, 0));
+    checkNodeDescription(errorNode->child(0), m_problems[0]->description());
+
+    // Warning filter
+    m_store->setSeverities(IProblem::Warning);
+    QCOMPARE(m_store->count(), 3);
+    QVERIFY(checkNodeLabels());
+    QVERIFY(checkCounts(0, WarningCount, 0));
+    checkNodeDescription(warningNode->child(0), m_problems[1]->description());
+
+    // Hint filter
+    m_store->setSeverities(IProblem::Hint);
+    QCOMPARE(m_store->count(), 3);
+    QVERIFY(checkNodeLabels());
+    QVERIFY(checkCounts(0, 0, HintCount));
+    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
+
+    // Error + Hint filter
+    m_store->setSeverities(IProblem::Error | IProblem::Hint);
+    QCOMPARE(m_store->count(), 3);
+    QVERIFY(checkNodeLabels());
+    QVERIFY(checkCounts(ErrorCount, 0, HintCount));
+    checkNodeDescription(errorNode->child(0), m_problems[0]->description());
+    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
+
+    m_store->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
 
     m_store->clear();
     // Check if diagnostics are added properly
@@ -462,6 +621,9 @@ void TestFilteredProblemStore::generateProblems()
     IProblem::Ptr p1(new DetectedProblem());
     IProblem::Ptr p2(new DetectedProblem());
     IProblem::Ptr p3(new DetectedProblem());
+    IProblem::Ptr p4(new DetectedProblem());
+    IProblem::Ptr p5(new DetectedProblem());
+    IProblem::Ptr p6(new DetectedProblem());
 
     DocumentRange r1;
     r1.document = IndexedString("/just/a/random/path");
@@ -478,15 +640,40 @@ void TestFilteredProblemStore::generateProblems()
     p2->setFinalLocation(r2);
 
     DocumentRange r3;
-    r3.document = IndexedString("/yet/another/test/path");
+    r3.document = IndexedString("/just/another/pathy/patha");
 
-    p2->setDescription(QStringLiteral("PROBLEM3"));
-    p3->setSeverity(IProblem::Hint);
+    p3->setDescription(QStringLiteral("PROBLEM3"));
+    p3->setSeverity(IProblem::Warning);
     p3->setFinalLocation(r3);
+
+    DocumentRange r4;
+    r4.document = IndexedString("/yet/another/test/path");
+
+    p4->setDescription(QStringLiteral("PROBLEM4"));
+    p4->setSeverity(IProblem::Hint);
+    p4->setFinalLocation(r4);
+
+    DocumentRange r5;
+    r5.document = IndexedString("/yet/another/pathy/test/path");
+
+    p5->setDescription(QStringLiteral("PROBLEM5"));
+    p5->setSeverity(IProblem::Hint);
+    p5->setFinalLocation(r5);
+
+    DocumentRange r6;
+    r6.document = IndexedString("/yet/another/test/pathy/path");
+
+    p6->setDescription(QStringLiteral("PROBLEM6"));
+    p6->setSeverity(IProblem::Hint);
+    p6->setFinalLocation(r6);
+
 
     m_problems.push_back(p1);
     m_problems.push_back(p2);
     m_problems.push_back(p3);
+    m_problems.push_back(p4);
+    m_problems.push_back(p5);
+    m_problems.push_back(p6);
 
     // Problem for diagnostic testing
     IProblem::Ptr p(new DetectedProblem());

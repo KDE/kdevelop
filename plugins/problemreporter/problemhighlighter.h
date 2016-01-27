@@ -29,6 +29,20 @@
 #include <KTextEditor/TextHintInterface>
 #include <interfaces/iproblem.h>
 
+class ProblemHighlighter;
+
+class ProblemTextHintProvider : public KTextEditor::TextHintProvider
+{
+public:
+    explicit ProblemTextHintProvider(ProblemHighlighter* highlighter);
+
+    QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
+
+private:
+    ProblemHighlighter* m_highlighter;
+    KTextEditor::Range m_currentHintRange;
+};
+
 class ProblemHighlighter : public QObject
 {
     Q_OBJECT
@@ -50,21 +64,10 @@ private:
     QMap<KTextEditor::MovingRange*, KDevelop::IProblem::Ptr> m_problemsForRanges;
 
     friend class ProblemTextHintProvider;
+    ProblemTextHintProvider m_textHintProvider;
 
 public slots:
     void settingsChanged();
-};
-
-class ProblemTextHintProvider : public KTextEditor::TextHintProvider
-{
-public:
-    explicit ProblemTextHintProvider(ProblemHighlighter* highlighter);
-
-    QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
-
-private:
-    ProblemHighlighter* m_highlighter;
-    KTextEditor::Range m_currentHintRange;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H

@@ -308,10 +308,18 @@ bool FilteredProblemStore::bypassScopeFilter() const
 
 bool FilteredProblemStorePrivate::match(const IProblem::Ptr &problem) const
 {
-    /// If the problem is less severe than our filter criterion then it's discarded
-    if(problem->severity() > q->severity())
-        return false;
 
+    if(problem->severity()!=IProblem::NoSeverity)
+    {
+        /// If the problem severity isn't in the filter severities it's discarded
+        if(!q->severities().testFlag(problem->severity()))
+            return false;
+    }
+    else
+    {
+        if(!q->severities().testFlag(IProblem::Hint))//workaround for problems wothout correctly set severity
+            return false;
+    }
     /// If we have bypass on, don't check the scope
     if (!m_bypassScopeFilter) {
         /// If the problem isn't in a file that's in the watched document set, it's discarded

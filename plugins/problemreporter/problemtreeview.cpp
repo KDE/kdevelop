@@ -81,8 +81,10 @@ void ProblemTreeViewItemDelegate::paint(QPainter* painter, const QStyleOptionVie
 ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     : QTreeView(parent)
     , m_proxy(new QSortFilterProxyModel(this))
+    , errorSeverityAction(nullptr)
+    , warningSeverityAction(nullptr)
+    , hintSeverityAction(nullptr)
 {
-
     setObjectName(QStringLiteral("Problem Reporter Tree"));
     setWhatsThis(i18n("Problems"));
     setItemDelegate(new ProblemTreeViewItemDelegate(this));
@@ -199,16 +201,17 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
 
     if (problemModel->features().testFlag(ProblemModel::SeverityFilter)) {
         QActionGroup* severityActions = new QActionGroup(this);
-        auto errorSeverityAction = new QAction(this);
-        errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display only errors"));
+
+        errorSeverityAction = new QAction(this);
+        errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors"));
         errorSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-error")));
 
-        auto warningSeverityAction = new QAction(this);
-        warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors and warnings"));
+        warningSeverityAction = new QAction(this);
+        warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display warnings"));
         warningSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-warning")));
 
-        auto hintSeverityAction = new QAction(this);
-        hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
+        hintSeverityAction = new QAction(this);
+        hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display hints"));
         hintSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
 
         QAction* severityActionArray[] = { errorSeverityAction, warningSeverityAction, hintSeverityAction };
@@ -217,21 +220,16 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
             severityActions->addAction(severityActionArray[i]);
             addAction(severityActionArray[i]);
         }
+        severityActions->setExclusive(false);
 
         hintSeverityAction->setChecked(true);
-        model()->setSeverity(IProblem::Hint);
-        QSignalMapper* severityMapper = new QSignalMapper(this);
-        severityMapper->setMapping(errorSeverityAction, IProblem::Error);
-        severityMapper->setMapping(warningSeverityAction, IProblem::Warning);
-        severityMapper->setMapping(hintSeverityAction, IProblem::Hint);
-        connect(errorSeverityAction, &QAction::triggered, severityMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(warningSeverityAction, &QAction::triggered, severityMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(hintSeverityAction, &QAction::triggered, severityMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(severityMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(),
-                &ProblemModel::setSeverity);
+        warningSeverityAction->setChecked(true);
+        errorSeverityAction->setChecked(true);
+
+        model()->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
+        connect(errorSeverityAction, &QAction::toggled, this, &ProblemTreeView::handleSeverityActionToggled);
+        connect(warningSeverityAction, &QAction::toggled, this, &ProblemTreeView::handleSeverityActionToggled);
+        connect(hintSeverityAction, &QAction::toggled, this, &ProblemTreeView::handleSeverityActionToggled);
     }
 
     if (problemModel->features().testFlag(ProblemModel::Grouping)) {
@@ -306,6 +304,13 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
     }
 
     ICore::self()->documentController()->openDocument(url, start);
+}
+
+void ProblemTreeView::handleSeverityActionToggled()
+{
+    model()->setSeverities( (errorSeverityAction->isChecked() ? IProblem::Error : IProblem::Severities()) |
+                            (warningSeverityAction->isChecked() ? IProblem::Warning : IProblem::Severities()) |
+                            (hintSeverityAction->isChecked() ? IProblem::Hint : IProblem::Severities()) );
 }
 
 void ProblemTreeView::setScope(int scope)
