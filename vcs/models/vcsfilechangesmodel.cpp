@@ -123,6 +123,10 @@ VcsFileChangesModel::VcsFileChangesModel(QObject *parent, bool allowSelection)
     setHeaderData(1, Qt::Horizontal, i18n("Status"));
 }
 
+VcsFileChangesModel::~VcsFileChangesModel()
+{
+}
+
 int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsStatusInfo &status)
 {
     if(status.state()==VcsStatusInfo::ItemUnknown || status.state()==VcsStatusInfo::ItemUpToDate) {

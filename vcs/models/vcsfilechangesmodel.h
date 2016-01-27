@@ -41,6 +41,8 @@ class VcsStatusInfo;
  * All stuff should be pulled in by @p updateState.
  */
 
+class VcsFileChangesModelPrivate;
+
 class KDEVPLATFORMVCS_EXPORT VcsFileChangesModel : public QStandardItemModel
 {
     Q_OBJECT
@@ -50,7 +52,7 @@ public:
      * @param isCheckable if true, model will show checkboxes on items.
      */
     explicit VcsFileChangesModel(QObject *parent, bool isCheckable = false);
-    enum ItemRoles { VcsStatusInfoRole = Qt::UserRole+1, UrlRole, LastItemRole };
+    ~VcsFileChangesModel() override;
 
     QVariant data(const QModelIndex &index, int role) const override;
 
@@ -142,7 +144,7 @@ protected:
     QModelIndex indexForUrl(const QModelIndex& parent, const QUrl &url) const;
 
 private:
-    class VcsFileChangesModelPrivate *const d;
+    QScopedPointer<VcsFileChangesModelPrivate> const d;
 };
 }
 
