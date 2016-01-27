@@ -27,6 +27,7 @@
 #include <QHeaderView>
 #include <QScrollBar>
 #include <QListView>
+#include <QItemDelegate>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QTreeView>
@@ -48,6 +49,25 @@
 #include "framestackmodel.h"
 
 namespace KDevelop {
+
+class FrameStackItemDelegate : public QItemDelegate
+{
+    Q_OBJECT
+
+public:
+    using QItemDelegate::QItemDelegate;
+
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+};
+
+void FrameStackItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
+                                        const QModelIndex& index) const
+{
+    QStyleOptionViewItem newOption(option);
+    newOption.textElideMode = index.column() == 2 ? Qt::ElideMiddle : Qt::ElideRight;
+
+    QItemDelegate::paint(painter, newOption, index);
+}
 
 FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent)
     : AutoOrientedSplitter(Qt::Horizontal, parent), m_session(0)
@@ -72,6 +92,7 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     m_threads = new QListView(m_threadsWidget);
     m_frames = new QTreeView(this);
     m_frames->setRootIsDecorated(false);
+    m_frames->setItemDelegate(new FrameStackItemDelegate(this));
     m_frames->setSelectionMode(QAbstractItemView::ContiguousSelection);
     m_frames->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_frames->setAllColumnsShowFocus(true);
@@ -239,3 +260,4 @@ void FramestackWidget::sessionStateChanged(KDevelop::IDebugSession::DebuggerStat
 
 }
 
+#include "framestackwidget.moc"
