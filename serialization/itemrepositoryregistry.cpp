@@ -70,12 +70,12 @@ bool shouldClear(const QString& path)
   }
 
   if (dir.exists(QStringLiteral("is_writing"))) {
-    qWarning() << "repository" << path << "was write-locked, it probably is inconsistent";
+    qCWarning(SERIALIZATION) << "repository" << path << "was write-locked, it probably is inconsistent";
     return true;
   }
 
   if (!dir.exists(QStringLiteral("version_%1").arg(staticItemRepositoryVersion()))) {
-    qWarning() << "version-hint not found, seems to be an old version";
+    qCWarning(SERIALIZATION) << "version-hint not found, seems to be an old version";
     return true;
   }
 
@@ -286,7 +286,7 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
 
   // Check if the repository shall be cleared
   if (shouldClear(path)) {
-    qWarning() << QStringLiteral("The data-repository at %1 has to be cleared.").arg(m_path);
+    qCWarning(SERIALIZATION) << QStringLiteral("The data-repository at %1 has to be cleared.").arg(path);
     deleteDataDirectory(path);
   }
 
@@ -330,7 +330,7 @@ void ItemRepositoryRegistry::store()
   if(versionFile.open(QIODevice::WriteOnly)) {
     versionFile.close();
   } else {
-    qWarning() << "Could not open version file for writing";
+    qCWarning(SERIALIZATION) << "Could not open version file for writing";
   }
 
   //Store all custom counter values
@@ -345,7 +345,7 @@ void ItemRepositoryRegistry::store()
       stream << it.value()->fetchAndAddRelaxed(0);
     }
   } else {
-    qWarning() << "Could not open counter file for writing";
+    qCWarning(SERIALIZATION) << "Could not open counter file for writing";
   }
 }
 
