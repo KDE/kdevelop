@@ -266,7 +266,7 @@ private:
     bool m_shouldScanImports;
     QSet<QString> m_scannedPaths;
 
-    QTimer *m_updateCppQmlTypesTimer;
+//     QTimer *m_updateCppQmlTypesTimer;
     QTimer *m_asyncResetTimer;
 //     QHash<QString, QPair<CPlusPlus::Document::Ptr, bool> > /*m_queuedCppDocuments*/;
     QFuture<void> m_cppQmlTypesUpdater;

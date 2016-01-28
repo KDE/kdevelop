@@ -107,10 +107,10 @@ ModelManagerInterface::ModelManagerInterface(QObject *parent)
     m_indexerEnabled = qgetenv("QTC_NO_CODE_INDEXER") != "1";
     m_synchronizer.setCancelOnWait(true);
 
-    m_updateCppQmlTypesTimer = new QTimer(this);
-    m_updateCppQmlTypesTimer->setInterval(1000);
-    m_updateCppQmlTypesTimer->setSingleShot(true);
-    connect(m_updateCppQmlTypesTimer, SIGNAL(timeout()), SLOT(startCppQmlTypeUpdate()));
+//     m_updateCppQmlTypesTimer = new QTimer(this);
+//     m_updateCppQmlTypesTimer->setInterval(1000);
+//     m_updateCppQmlTypesTimer->setSingleShot(true);
+//     connect(m_updateCppQmlTypesTimer, SIGNAL(timeout()), SLOT(startCppQmlTypeUpdate()));
 
     m_asyncResetTimer = new QTimer(this);
     m_asyncResetTimer->setInterval(15000);
