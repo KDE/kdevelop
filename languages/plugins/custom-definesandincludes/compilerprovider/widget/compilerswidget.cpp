@@ -88,6 +88,10 @@ CompilersWidget::CompilersWidget(QWidget* parent)
     enableItems(false);
 }
 
+CompilersWidget::~CompilersWidget()
+{
+}
+
 void CompilersWidget::setCompilers(const QVector< CompilerPointer >& compilers)
 {
     m_compilersModel->setCompilers(compilers);
