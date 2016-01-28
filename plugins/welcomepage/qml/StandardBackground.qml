@@ -29,9 +29,10 @@ Rectangle
     property real margins: 5
     
     PlasmaCore.FrameSvgItem {
-        imagePath: "widgets/tooltip"
-        prefix: "base"
         id: toolbar
+
+        imagePath: "dialogs/background"
+
         anchors {
             top: parent.top
             left: parent.left
