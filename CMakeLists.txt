@@ -35,7 +35,7 @@ include(CheckFunctionExists)
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(KDECompilerSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 include(KDevPlatformMacros)
 
 set(QT_MIN_VERSION "5.4.0")
