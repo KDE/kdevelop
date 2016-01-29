@@ -55,6 +55,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   ThreadWeaver
   XmlGui
   WindowSystem
+  Crash
 )
 find_package(KDevelop-PG-Qt 1.90.90)
 set_package_properties(KDevelop-PG-Qt PROPERTIES
