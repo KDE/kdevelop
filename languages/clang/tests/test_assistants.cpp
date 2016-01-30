@@ -430,6 +430,14 @@ void TestAssistants::testSignatureAssistant_data()
         << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(0, 38, 0, 38), ", char c = 'A'", SHOULD_ASSIST))
         << "class Foo { void bar(bool b, int i = 0, char c = 'A'); };"
         << "void Foo::bar(bool b, int i, char c)\n{}";
+
+    // see https://bugs.kde.org/show_bug.cgi?id=355356
+    QTest::newRow("no_retval_on_ctor")
+        << "class Foo { Foo(); };"
+        << "Foo::Foo()\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(0, 16, 0, 16), "char c", SHOULD_ASSIST))
+        << "class Foo { Foo(char c); };"
+        << "Foo::Foo(char c)\n{}";
 }
 
 void TestAssistants::testSignatureAssistant()

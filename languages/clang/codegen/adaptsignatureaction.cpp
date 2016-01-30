@@ -56,10 +56,12 @@ QString makeSignatureString(const Declaration* functionDecl, const Signature& si
         }
     }
 
-    ret += CodegenHelper::simplifiedTypeString(signature.returnType.abstractType(),
-                                                      visibilityFrom);
-
-    ret += QLatin1Char(' ');
+    // constructors don't have a return type
+    if (signature.returnType.isValid()) {
+        ret += CodegenHelper::simplifiedTypeString(signature.returnType.abstractType(),
+                                                        visibilityFrom);
+        ret += QLatin1Char(' ');
+    }
 
     ret += editingDefinition ? functionDecl->qualifiedIdentifier().toString() : functionDecl->identifier().toString();
 
