@@ -5,10 +5,12 @@ Name[ca]=Una aplicació en QML2 per a les Qt5
 Name[ca@valencia]=Una aplicació en QML2 per a les Qt5
 Name[es]=Aplicación QML2 Qt5
 Name[et]=Qt5 QML2 rakendus
+Name[fi]=Qt5 QML2 -sovellus
 Name[nb]=Qt5 QML2-program
 Name[nl]=Qt5-QML2-toepassing
 Name[pt]=Aplicação em QML2 do Qt5
 Name[pt_BR]=Aplicativo em QML2 do Qt5
+Name[sl]=Program Qt5 QML2
 Name[uk]=Програма мовою QML2 для Qt5
 Name[x-test]=xxQt5 QML2 Applicationxx
 
@@ -17,10 +19,12 @@ Comment[ca]=Una aplicació bàsica en QML2 i les Qt5 usant el QMake. Avís: Cale
 Comment[ca@valencia]=Una aplicació bàsica en QML2 i les Qt5 usant el QMake. Avís: Calen les Qt5, no les Qt4.
 Comment[es]=Una aplicación básica QML2 y Qt5 que usa QMake. Advertencia: necesita Qt5 para ella (no Qt4).
 Comment[et]=Qt5 ja QML2 põhine rakendus QMake'i abil. Hoiatus: selleks on vajalik Qt5, mitte enam Qt4.
+Comment[fi]=Yksinkertainen QMakea käyttävä Qt5- ja QML2-sovellus. Varoitus: Qt5 tarvitaan, ei Qt4.
 Comment[nb]=Et enkelt program med Qt5 og QML2 som bruker QMake. Pass på, du trenger Qt5 for dette, ikke Qt4.
 Comment[nl]=Een Qt5 en QML2 basistoepassing met QMake. Waarschuwing, u hebt er Qt5 voor nodug, niet Qt4.
 Comment[pt]=Uma aplicação básica em Qt5 e QML2, usando o QMake. Atenção, é necessário o Qt5 para tal, não o Qt4.
 Comment[pt_BR]=Aplicativo básico em Qt5 e QML2 que usa o QMake. Atenção, para isso é necessário o Qt5, não o Qt4.
+Comment[sl]=Osnovni program Qt5 in QML2 z uporabo QMake. Opozorilo: potrebujete Qt5 in ne Qt4.
 Comment[uk]=Базова програма мовою QML2 для Qt5 з використанням QMake. Зауваження: для працездатності цієї програми слід встановити Qt5, а не Qt4.
 Comment[x-test]=xxA Qt5 and QML2 basic application using QMake. Warning, you need Qt5 for it, not Qt4.xx
 
