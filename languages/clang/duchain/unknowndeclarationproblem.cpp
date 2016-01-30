@@ -91,16 +91,12 @@ QStringList scanIncludePaths( const QString& identifier, const QDir& dir, int ma
         return {};
     }
 
-    /* Make this search case-insensitive? */
-    for( const auto ext : { "", ".h", ".hpp", ".H", ".hh", "hxx", "tlh", "h++" } ) {
-        const QString file = identifier + QLatin1String(ext);
-        if ( !dir.exists( file ) ) {
-            continue;
+    for (const auto& file : dir.entryList({identifier + QLatin1Char('*')}, QDir::Files)) {
+        if (identifier.compare(file, Qt::CaseInsensitive) == 0 || ClangHelpers::isHeader(file)) {
+            const QString filePath = path + QLatin1Char('/') + file;
+            clangDebug() << "Found candidate file" << filePath;
+            candidates.append( filePath );
         }
-
-        const QString filePath = path + QLatin1Char('/') + file;
-        clangDebug() << "Found candidate file" << filePath;
-        candidates.append( filePath );
     }
 
     maxDepth--;
