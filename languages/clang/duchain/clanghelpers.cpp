@@ -285,14 +285,14 @@ QStringList ClangHelpers::sourceExtensions()
 
 bool ClangHelpers::isSource(const QString& path)
 {
-    auto extensions = sourceExtensions();
+    const auto& extensions = sourceExtensions();
     return std::any_of(extensions.constBegin(), extensions.constEnd(),
                        [&](const QString& ext) { return path.endsWith(ext); });
 }
 
 bool ClangHelpers::isHeader(const QString& path)
 {
-    auto extensions = headerExtensions();
+    const auto& extensions = headerExtensions();
     return std::any_of(extensions.constBegin(), extensions.constEnd(),
                        [&](const QString& ext) { return path.endsWith(ext); });
 }
