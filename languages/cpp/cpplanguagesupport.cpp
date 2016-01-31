@@ -638,8 +638,13 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const QUrl &u
       int foundClosingBrace = findClose( tail, 0 );
       KDevelop::IDocument* doc = core()->documentController()->documentForUrl(url);
       if(doc && doc->activeTextView() && foundClosingBrace < 0) {
+        // this causes quadratic effort in worst-case,
+        // so limit the number of expanded lines
+        const int limit = 50;
         const int lines = doc->textDocument()->lines();
-        for (int lineNumber = position.line() + 1; foundClosingBrace < 0 && lineNumber < lines; lineNumber++) {
+        for (int lineNumber = position.line() + 1;
+             foundClosingBrace < 0 && lineNumber < std::min(lines, position.line()+limit);
+             lineNumber++) {
           tail += doc->textDocument()->line(lineNumber).trimmed();
           if(tail.endsWith('\\'))
             tail.truncate(tail.length() - 1);
