@@ -380,6 +380,7 @@ void ProgressDialog::slotHide()
     if ( mTransactionsToListviewItems.isEmpty() ) {
         setVisible( false );
     }
+    mWasLastShown = false;
 }
 
 void ProgressDialog::slotClose()
