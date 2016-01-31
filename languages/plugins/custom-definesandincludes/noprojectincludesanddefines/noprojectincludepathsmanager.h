@@ -32,7 +32,7 @@ class NoProjectIncludePathsManager
 {
 public:
     /// @return list of include directories for @p oath
-    Path::List includes( const QString& path );
+    std::pair<Path::List, QHash<QString, QString>> includesAndDefines( const QString& path );
 
     /// Opens the configuration page for file with the @p path
     void openConfigurationDialog( const QString& path );
