@@ -42,6 +42,7 @@ class MainWindow;
 class Core;
 
 class WorkingSet;
+class WorkingSetToolTipWidget;
 
 class WorkingSetController : public QObject
 {
@@ -107,6 +108,7 @@ private slots:
     void clearWorkingSet(Sublime::Area* area);
 
 private:
+    WorkingSetToolTipWidget* workingSetToolTip();
     void setupActions();
     const QString makeSetId(const QString& prefix) const;
 

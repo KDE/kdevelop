@@ -366,6 +366,15 @@ void IdealController::showRightDock(bool show)
     showDock(Qt::RightDockWidgetArea, show);
 }
 
+void IdealController::hideDocks(IdealButtonBarWidget *bar)
+{
+    foreach (QAction *action, bar->actions()) {
+        if (action->isChecked())
+            action->setChecked(false);
+    }
+    focusEditor();
+}
+
 void IdealController::showDock(Qt::DockWidgetArea area, bool show)
 {
     IdealButtonBarWidget *bar = barForDockArea(area);
@@ -385,12 +394,7 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
     }
 
     if (!show) {
-        // close all toolviews
-        foreach (QAction *action, bar->actions()) {
-            if (action->isChecked())
-                action->setChecked(false);
-        }
-        focusEditor();
+        hideDocks(bar);
     } else {
         // open the last opened toolview (or the first one) and focus it
         if (lastDock) {
@@ -471,11 +475,7 @@ void IdealController::toggleDocksShown()
 void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)
 {
     if (!show) {
-        foreach (QAction *action, bar->actions()) {
-            if (action->isChecked())
-                action->setChecked(false);
-        }
-        focusEditor();
+        hideDocks(bar);
     } else {
         IdealDockWidget *lastDock = lastDockWidget[bar->area()].data();
         if (lastDock)

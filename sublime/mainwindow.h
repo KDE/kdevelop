@@ -164,6 +164,8 @@ private:
     Q_PRIVATE_SLOT(d, void aboutToRemoveToolView(Sublime::View*, Sublime::Position))
     Q_PRIVATE_SLOT(d, void toolViewMoved(Sublime::View*, Sublime::Position))
 
+    QString screenKey() const;
+
     //Inherit MainWindowOperator to access four methods below
     /**Unsets the area clearing main window.*/
     void clearArea();

@@ -102,16 +102,11 @@ void MainWindow::createGUI(KParts::Part* part)
                this, SLOT(setCaption(QString)));
 }
 
-MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
-        : Sublime::MainWindow( parent, flags )
+void MainWindow::initializeCorners()
 {
-    QDBusConnection::sessionBus().registerObject( QStringLiteral("/kdevelop/MainWindow"),
-        this, QDBusConnection::ExportScriptableSlots );
-
-    setAcceptDrops( true );
-    KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
-    int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
-    int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
+    const KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
+    const int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
+    const int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
     qCDebug(SHELL) << "Bottom Left:" << bottomleft;
     qCDebug(SHELL) << "Bottom Right:" << bottomright;
 
@@ -125,6 +120,16 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
         setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
     else if( bottomright == 1 )
         setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
+}
+
+MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
+        : Sublime::MainWindow( parent, flags )
+{
+    QDBusConnection::sessionBus().registerObject( QStringLiteral("/kdevelop/MainWindow"),
+        this, QDBusConnection::ExportScriptableSlots );
+
+    setAcceptDrops( true );
+    initializeCorners();
 
     setObjectName( QStringLiteral("MainWindow") );
     d = new MainWindowPrivate(this);
@@ -213,24 +218,7 @@ void MainWindow::dropEvent( QDropEvent* ev )
 void MainWindow::loadSettings()
 {
     qCDebug(SHELL) << "Loading Settings";
-    KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
-
-    // dock widget corner layout
-    int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
-    int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
-    qCDebug(SHELL) << "Bottom Left:" << bottomleft;
-    qCDebug(SHELL) << "Bottom Right:" << bottomright;
-
-    // 0 means vertical dock (left, right), 1 means horizontal dock( top, bottom )
-    if( bottomleft == 0 )
-        setCorner( Qt::BottomLeftCorner, Qt::LeftDockWidgetArea );
-    else if( bottomleft == 1 )
-        setCorner( Qt::BottomLeftCorner, Qt::BottomDockWidgetArea );
-
-    if( bottomright == 0 )
-        setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
-    else if( bottomright == 1 )
-        setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
+    initializeCorners();
 
     updateAllTabColors();
 

@@ -39,6 +39,8 @@ struct ErrorFormat
     int lineGroup, columnGroup;
     int textGroup;
     QString compiler;
+
+    int columnNumber(const QRegularExpressionMatch& match) const;
 };
 
 }

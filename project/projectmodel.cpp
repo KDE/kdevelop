@@ -1108,30 +1108,7 @@ void ProjectVisitor::visit ( IProject* prj )
 
 void ProjectVisitor::visit ( ProjectBuildFolderItem* folder )
 {
-    foreach( ProjectFileItem* item, folder->fileList() )
-    {
-        visit( item );
-    }
-    foreach( ProjectTargetItem* item, folder->targetList() )
-    {
-        if( item->type() == ProjectBaseItem::LibraryTarget )
-        {
-            visit( dynamic_cast<ProjectLibraryTargetItem*>( item ) );
-        } else if( item->type() == ProjectBaseItem::ExecutableTarget )
-        {
-            visit( dynamic_cast<ProjectExecutableTargetItem*>( item ) );
-        }
-    }
-    foreach( ProjectFolderItem* item, folder->folderList() )
-    {
-        if( item->type() == ProjectBaseItem::BuildFolder )
-        {
-            visit( dynamic_cast<ProjectBuildFolderItem*>( item ) );
-        } else if( item->type() == ProjectBaseItem::Folder )
-        {
-            visit( dynamic_cast<ProjectFolderItem*>( item ) );
-        }
-    }
+    visit(static_cast<ProjectFolderItem*>(folder));
 }
 
 void ProjectVisitor::visit ( ProjectExecutableTargetItem* exec )
@@ -1169,7 +1146,6 @@ void ProjectVisitor::visit ( ProjectFolderItem* folder )
         }
     }
 }
-
 
 void ProjectVisitor::visit ( ProjectFileItem* )
 {

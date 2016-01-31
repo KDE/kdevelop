@@ -106,6 +106,8 @@ private Q_SLOTS:
     void shortcutsChanged();
 
 private:
+    void initializeCorners();
+
     class MainWindowPrivate *d;
     friend class MainWindowPrivate;
 };

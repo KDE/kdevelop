@@ -213,7 +213,7 @@ void WorkingSetController::showGlobalToolTip()
     connect(m_tooltip.data(), &ActiveToolTip::mouseOut, m_hideToolTipTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
 }
 
-void WorkingSetController::nextDocument()
+WorkingSetToolTipWidget* WorkingSetController::workingSetToolTip()
 {
     if(!m_tooltip)
         showGlobalToolTip();
@@ -225,22 +225,23 @@ void WorkingSetController::nextDocument()
     {
         WorkingSetToolTipWidget* widget = m_tooltip->findChild<WorkingSetToolTipWidget*>();
         Q_ASSERT(widget);
+        return widget;
+    }
+    return nullptr;
+}
+
+void WorkingSetController::nextDocument()
+{
+    auto widget = workingSetToolTip();
+    if (widget) {
         widget->nextDocument();
     }
 }
 
 void WorkingSetController::previousDocument()
 {
-    if(!m_tooltip)
-        showGlobalToolTip();
-
-    m_hideToolTipTimer->stop();
-    m_hideToolTipTimer->start(toolTipTimeout);
-
-    if(m_tooltip)
-    {
-        WorkingSetToolTipWidget* widget = m_tooltip->findChild<WorkingSetToolTipWidget*>();
-        Q_ASSERT(widget);
+    auto widget = workingSetToolTip();
+    if (widget) {
         widget->previousDocument();
     }
 }
