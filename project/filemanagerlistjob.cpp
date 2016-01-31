@@ -79,6 +79,7 @@ void FileManagerListJob::startNextJob()
 
     m_item = m_listQueue.dequeue();
     KIO::ListJob* job = KIO::listDir( m_item->path().toUrl(), KIO::HideProgressInfo );
+    job->addMetaData(QStringLiteral("details"), QStringLiteral("0"));
     job->setParentJob( this );
     connect( job, &KIO::ListJob::entries,
              this, &FileManagerListJob::slotEntries );
