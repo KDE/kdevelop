@@ -514,7 +514,11 @@ struct Visitor
         }
 
         auto t = new StructureType;
-        t->setDeclaration(decl.data());
+        if (decl) {
+            t->setDeclaration(decl.data());
+        } else {    // fallback, at least give the spelling to the user
+            t->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString()))));
+        }
         return t;
     }
 
@@ -680,7 +684,13 @@ struct Visitor
         auto decl = declaration ? declaration : findDeclaration(typeDecl);
 
         DUChainReadLocker lock;
-        cst->setDeclaration(decl.data());
+        if (decl) {
+            cst->setDeclaration(decl.data());
+        } else { // fallback, at least give the spelling to the user
+            Identifier id(tStr);
+            id.clearTemplateIdentifiers();
+            cst->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(id))));
+        }
 
         return cst;
     }
