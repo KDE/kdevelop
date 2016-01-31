@@ -144,6 +144,8 @@ Defines DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) 
         merge(&defines, findConfigForItem(m_settings->readPaths(cfg), item).defines);
     }
 
+    merge(&defines, m_noProjectIPM->includesAndDefines(item->path().path()).second);
+
     return defines;
 }
 
@@ -176,6 +178,8 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
         }
     }
 
+    includes += m_noProjectIPM->includesAndDefines(item->path().path()).first;
+
     return includes;
 }
 
@@ -200,14 +204,17 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
     m_providers.push_back(provider);
 }
 
-Defines DefinesAndIncludesManager::defines(const QString&) const
+Defines DefinesAndIncludesManager::defines(const QString& path) const
 {
-    return m_settings->provider()->defines(nullptr);
+    Defines ret = m_settings->provider()->defines(nullptr);
+    merge(&ret, m_noProjectIPM->includesAndDefines(path).second);
+    return ret;
 }
 
 Path::List DefinesAndIncludesManager::includes(const QString& path) const
 {
-    return m_settings->provider()->includes(nullptr) + m_noProjectIPM->includes(path);
+    return m_settings->provider()->includes(nullptr) 
+           + m_noProjectIPM->includesAndDefines(path).first;
 }
 
 void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFile)
@@ -240,6 +247,8 @@ Defines DefinesAndIncludesManager::definesInBackground(const QString& path) cons
             defines[it.key()] = it.value();
         }
     }
+
+    merge(&defines, m_noProjectIPM->includesAndDefines(path).second);
 
     return defines;
 }

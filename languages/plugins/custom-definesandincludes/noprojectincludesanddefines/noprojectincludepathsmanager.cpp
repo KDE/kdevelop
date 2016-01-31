@@ -41,7 +41,7 @@ const QString includePathsFile = ".kdev_include_paths";
 
 bool removeSettings(const QString& storageDirectory)
 {
-    auto file = storageDirectory + QDir::separator() + includePathsFile;
+    QString file = storageDirectory + QDir::separator() + includePathsFile;
     return QFile::remove(file);
 }
 
@@ -71,7 +71,8 @@ QString NoProjectIncludePathsManager::findConfigurationFile(const QString& path)
     return {};
 }
 
-Path::List NoProjectIncludePathsManager::includes(const QString& path)
+std::pair<Path::List, QHash<QString, QString>> 
+    NoProjectIncludePathsManager::includesAndDefines(const QString& path)
 {
     QFileInfo fi(path);
 
@@ -79,7 +80,8 @@ Path::List NoProjectIncludePathsManager::includes(const QString& path)
     if (pathToFile.isEmpty()) {
         return {};
     }
-    Path::List ret;
+    Path::List includes;
+    QHash<QString, QString> defines;
 
     QFile f(pathToFile);
     if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -87,18 +89,28 @@ Path::List NoProjectIncludePathsManager::includes(const QString& path)
         QFileInfo dir(pathToFile);
         for (const auto& line : lines) {
             auto textLine = line.trimmed();
+            if (textLine.startsWith("#define ")) {
+                QStringList items = textLine.split(' ');
+                if (items.length() > 1)
+                {
+                    defines[items[1]] = QStringList(items.mid(2)).join(' ');
+                }else{
+                    qWarning() << i18n("Bad #define directive in %1: %1", pathToFile, textLine);
+                }
+                continue;
+            }
             if (!textLine.isEmpty()) {
                 QFileInfo pathInfo(textLine);
                 if (pathInfo.isRelative()) {
-                    ret << Path(dir.canonicalPath() + QDir::separator() + textLine);
+                    includes << Path(dir.canonicalPath() + QDir::separator() + textLine);
                 } else {
-                    ret << Path(textLine);
+                    includes << Path(textLine);
                 }
             }
         }
         f.close();
     }
-    return ret;
+    return std::make_pair(includes, defines);
 }
 
 bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirectory, const QStringList& includePaths)
@@ -128,7 +140,7 @@ void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
     auto dir = fi.absoluteDir().absolutePath();
     cip.setStorageDirectory(dir);
 
-    auto paths = includes(path);
+    auto paths = includesAndDefines(path).first;
 
     cip.setCustomIncludePaths(pathListToStringList(paths));
 
