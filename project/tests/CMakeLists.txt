@@ -1,10 +1,9 @@
 ecm_add_test(test_projectmodel.cpp
     LINK_LIBRARIES Qt5::Test KDev::Interfaces KDev::Project KDev::Language KDev::Tests)
 
-set( projectmodelperformancetest_SRCS
+add_executable(projectmodelperformancetest
     projectmodelperformancetest.cpp
 )
-add_executable(projectmodelperformancetest ${projectmodelperformancetest_SRCS})
 target_link_libraries(projectmodelperformancetest
     Qt5::Test
     Qt5::Gui
@@ -12,4 +11,13 @@ target_link_libraries(projectmodelperformancetest
     KDev::Project
     KDev::Language
     KDev::Tests
+)
+
+add_executable(abstractfilemanagerpluginimporttest
+    abstractfilemanagerpluginimporttest.cpp
+)
+target_link_libraries(abstractfilemanagerpluginimporttest
+    KDev::Project
+    KDev::Tests
+    Qt5::QuickWidgets
 )
