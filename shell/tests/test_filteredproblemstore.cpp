@@ -50,7 +50,6 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void testBypass();
     void testSeverity();
     void testSeverities();
     void testGrouping();
@@ -95,22 +94,6 @@ void TestFilteredProblemStore::initTestCase()
 void TestFilteredProblemStore::cleanupTestCase()
 {
     TestCore::shutdown();
-}
-
-void TestFilteredProblemStore::testBypass()
-{
-    QSignalSpy changedSpy(m_store.data(), &FilteredProblemStore::changed);
-    QSignalSpy beginRebuildSpy(m_store.data(), &FilteredProblemStore::beginRebuild);
-    QSignalSpy endRebuildSpy(m_store.data(), &FilteredProblemStore::endRebuild);
-
-    QVERIFY(!m_store->bypassScopeFilter());
-
-    m_store->setBypassScopeFilter(true);
-
-    QVERIFY(m_store->bypassScopeFilter());
-    QCOMPARE(changedSpy.count(), 1);
-    QCOMPARE(beginRebuildSpy.count(), 1);
-    QCOMPARE(endRebuildSpy.count(), 1);
 }
 
 void TestFilteredProblemStore::testSeverity()
