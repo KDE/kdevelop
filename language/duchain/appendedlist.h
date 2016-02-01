@@ -194,7 +194,7 @@ class TemporaryDataManager {
     QStack<int> m_freeIndices;
     QMutex m_mutex;
     QByteArray m_id;
-    QList<QPair<time_t, const QVector<T*> > > m_deleteLater;
+    QList<QPair<time_t, QVector<T*> > > m_deleteLater;
 };
 
 ///Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the length returned by the function-name with "Size" appended.
