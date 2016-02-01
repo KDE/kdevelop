@@ -25,12 +25,18 @@
 #include "path.h"
 #include "debug.h"
 
+#include <QtConcurrentRun>
+#include <QDir>
 
 using namespace KDevelop;
 
 FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
     : KIO::Job(), m_item(item), m_aborted(false)
 {
+    qRegisterMetaType<KIO::UDSEntryList>("KIO::UDSEntryList");
+    qRegisterMetaType<KIO::Job*>();
+    qRegisterMetaType<KJob*>();
+
     /* the following line is not an error in judgment, apparently starting a
      * listJob while the previous one hasn't self-destructed takes a lot of time,
      * so we give the job a chance to selfdestruct first */
@@ -78,15 +84,57 @@ void FileManagerListJob::startNextJob()
 #endif
 
     m_item = m_listQueue.dequeue();
-    KIO::ListJob* job = KIO::listDir( m_item->path().toUrl(), KIO::HideProgressInfo );
-    job->addMetaData(QStringLiteral("details"), QStringLiteral("0"));
-    job->setParentJob( this );
-    connect( job, &KIO::ListJob::entries,
-             this, &FileManagerListJob::slotEntries );
-    connect( job, &KIO::ListJob::result, this, &FileManagerListJob::slotResult );
+    if (m_item->path().isLocalFile()) {
+        // optimized version for local projects using QDir directly
+        QtConcurrent::run([this] (const Path& path) {
+            if (m_aborted) {
+                return;
+            }
+            QDir dir(path.toLocalFile());
+            const auto entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
+            if (m_aborted) {
+                return;
+            }
+            KIO::UDSEntryList results;
+            std::transform(entries.begin(), entries.end(), std::back_inserter(results), [] (const QFileInfo& info) -> KIO::UDSEntry {
+                KIO::UDSEntry entry;
+                entry.insert(KIO::UDSEntry::UDS_NAME, info.fileName());
+                if (info.isDir()) {
+                    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, QT_STAT_DIR);
+                }
+                if (info.isSymLink()) {
+                    entry.insert(KIO::UDSEntry::UDS_LINK_DEST, info.symLinkTarget());
+                }
+                return entry;
+            });
+            QMetaObject::invokeMethod(this, "handleResults", Q_ARG(KIO::UDSEntryList, results));
+        }, m_item->path());
+    } else {
+        KIO::ListJob* job = KIO::listDir( m_item->path().toUrl(), KIO::HideProgressInfo );
+        job->addMetaData(QStringLiteral("details"), QStringLiteral("0"));
+        job->setParentJob( this );
+        connect( job, &KIO::ListJob::entries,
+                this, &FileManagerListJob::slotEntries );
+        connect( job, &KIO::ListJob::result, this, &FileManagerListJob::slotResult );
+    }
 }
 
 void FileManagerListJob::slotResult(KJob* job)
+{
+    if (m_aborted) {
+        return;
+    }
+
+    if( job && job->error() ) {
+        qCDebug(FILEMANAGER) << "error in list job:" << job->error() << job->errorString();
+    }
+
+    handleResults(entryList);
+    entryList.clear();
+}
+
+
+void KDevelop::FileManagerListJob::handleResults(const KIO::UDSEntryList& entriesIn)
 {
     if (m_aborted) {
         return;
@@ -100,12 +148,7 @@ void FileManagerListJob::slotResult(KJob* job)
     }
 #endif
 
-    emit entries(this, m_item, entryList);
-    entryList.clear();
-
-    if( job->error() ) {
-        qCDebug(FILEMANAGER) << "error in list job:" << job->error() << job->errorString();
-    }
+    emit entries(this, m_item, entriesIn);
 
     if( m_listQueue.isEmpty() ) {
         emitResult();
@@ -120,11 +163,11 @@ void FileManagerListJob::slotResult(KJob* job)
 
 void FileManagerListJob::abort()
 {
+    m_aborted = true;
+
     bool killed = kill();
     Q_ASSERT(killed);
     Q_UNUSED(killed);
-
-    m_aborted = true;
 }
 
 void FileManagerListJob::start()
