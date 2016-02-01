@@ -102,17 +102,17 @@ public:
         NewWindow  /**< indicates that the area switch should be using a new window */
     };
 
-    virtual void switchToArea(const QString &areaName, SwitchMode switchMode) = 0;
-
-    virtual void addToolView(const QString &name, IToolViewFactory *factory) = 0;
-    virtual void removeToolView(IToolViewFactory *factory) = 0;
-    
     enum FindFlags {
         None = 0,
         Create = 1, ///The tool-view is created if it doesn't exist in the current area yet
         Raise = 2,  ///The tool-view is raised if it was found/created
         CreateAndRaise = Create | Raise ///The tool view is created and raised
     };
+
+    virtual void switchToArea(const QString &areaName, SwitchMode switchMode) = 0;
+
+    virtual void addToolView(const QString &name, IToolViewFactory *factory, FindFlags state = Create) = 0;
+    virtual void removeToolView(IToolViewFactory *factory) = 0;
     
     /**  Makes sure that this tool-view exists in the current area, raises it, and returns the contained widget
        * Returns zero on failure */

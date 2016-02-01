@@ -494,7 +494,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
             area->addAction(m_finishReview);
     }
 
-    core()->uiController()->addToolView( i18n( "Patch Review" ), m_factory );
+    core()->uiController()->addToolView( i18n( "Patch Review" ), m_factory, IUiController::None );
 
     areaChanged(ICore::self()->uiController()->activeArea());
 }
