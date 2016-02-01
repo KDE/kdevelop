@@ -1125,12 +1125,12 @@ QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, b
     IProject* sourceDirProject = 0, *buildDirProject = 0;
     Q_FOREACH(IProject* proj, d->m_projects)
     {
-        if(proj->path().isParentOf(path))
+        if(proj->path().isParentOf(path) || proj->path() == path)
             sourceDirProject = proj;
         if(proj->buildSystemManager())
         {
             Path buildDir = proj->buildSystemManager()->buildDirectory(proj->projectItem());
-            if(buildDir.isValid() && buildDir.isParentOf(path))
+            if(buildDir.isValid() && (buildDir.isParentOf(path) || buildDir == path))
                 buildDirProject = proj;
         }
     }
