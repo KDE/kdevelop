@@ -32,6 +32,7 @@
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/problem.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
@@ -237,6 +238,50 @@ void TestDUChain::testInclude()
     QCOMPARE(foo->uses().begin().key(), impl.url());
     QCOMPARE(foo->uses().begin()->size(), 1);
     QCOMPARE(foo->uses().begin()->first(), RangeInRevision(1, 20, 1, 23));
+}
+
+void TestDUChain::testMissingInclude()
+{
+    auto code = R"(
+#include "missing1.h"
+
+template<class T>
+class A
+{
+    T a;
+};
+
+#include "missing2.h"
+
+class B : public A<int>
+{
+};
+    )";
+
+    // NOTE: This fails and needs fixing. If the include of "missing2.h"
+    //       above is commented out, then it doesn't fail. Maybe
+    //       clang stops processing when it encounters the second missing
+    //       header, or similar.
+
+    TestFile impl(code, "cpp");
+    impl.parse(TopDUContext::AllDeclarationsContextsAndUses);
+
+    auto top = impl.topContext();
+    QVERIFY(top);
+
+    DUChainReadLocker lock;
+    QCOMPARE(top->localDeclarations().size(), 2);
+    // should have 2 "missing header" problems
+    QEXPECT_FAIL("", "Second missing header isn't reported", Continue);
+    QCOMPARE(top->problems().count(), 2);
+    auto type = top->localDeclarations()[1]->abstractType();
+    StructureType* sType = dynamic_cast<StructureType*>(type.data());
+    QVERIFY(sType);
+    ClassDeclaration* cDecl = dynamic_cast<ClassDeclaration*>(sType->declaration(top));
+    QVERIFY(cDecl);
+    QEXPECT_FAIL("", "Base class isn't assigned correctly", Continue);
+    QCOMPARE(cDecl->baseClassesSize(), 1u);
+    qDebug() << "TYPE: " << type->toString() << "base classes: " << cDecl->baseClassesSize();
 }
 
 QByteArray createCode(const QByteArray& prefix, const int functions)
