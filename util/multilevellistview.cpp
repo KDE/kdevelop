@@ -39,6 +39,15 @@ public:
     {
         m_label = label;
     }
+
+    QVariant header(QAbstractItemModel* model, int section, Qt::Orientation orientation, int role) const
+    {
+        if (model && section == 0 && orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+            return m_label;
+        } else {
+            return QVariant();
+        }
+    }
 protected:
     QString m_label;
 };
@@ -59,14 +68,9 @@ public:
     {
         return !source_parent.isValid();
     }
-    QVariant headerData( int section, Qt::Orientation orientation,
-                                 int role = Qt::DisplayRole ) const override
+    QVariant headerData( int section, Qt::Orientation orientation, int role ) const override
     {
-        if (sourceModel() && section == 0 && orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-            return m_label;
-        } else {
-            return QVariant();
-        }
+        return header(sourceModel(), section, orientation, role);
     }
 };
 
@@ -81,14 +85,9 @@ public:
     explicit SubTreeProxyModel( QItemSelectionModel* selectionModel, QObject* parent = 0 )
     : KSelectionProxyModel( selectionModel, parent )
     {}
-    QVariant headerData( int section, Qt::Orientation orientation,
-                                 int role = Qt::DisplayRole ) const override
+    QVariant headerData( int section, Qt::Orientation orientation, int role ) const override
     {
-        if (sourceModel() && section == 0 && orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-            return m_label;
-        } else {
-            return QVariant();
-        }
+        return header(sourceModel(), section, orientation, role);
     }
     Qt::ItemFlags flags(const QModelIndex& index) const override
     {

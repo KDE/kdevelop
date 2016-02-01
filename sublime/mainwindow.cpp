@@ -338,18 +338,22 @@ bool MainWindow::queryClose()
     return KParts::MainWindow::queryClose();
 }
 
-void MainWindow::saveGeometry(KConfigGroup &config)
+QString MainWindow::screenKey() const
 {
-    int scnum = QApplication::desktop()->screenNumber(parentWidget());
+    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
     QRect desk = QApplication::desktop()->screenGeometry(scnum);
 
     // if the desktop is virtual then use virtual screen size
     if (QApplication::desktop()->isVirtualDesktop())
         desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
 
-    QString key = QStringLiteral("Desktop %1 %2")
+    return QStringLiteral("Desktop %1 %2")
         .arg(desk.width()).arg(desk.height());
-    config.writeEntry(key, geometry());
+}
+
+void MainWindow::saveGeometry(KConfigGroup &config)
+{
+    config.writeEntry(screenKey(), geometry());
 
 }
 void MainWindow::loadGeometry(const KConfigGroup &config)
@@ -359,16 +363,7 @@ void MainWindow::loadGeometry(const KConfigGroup &config)
     // as per http://permalink.gmane.org/gmane.comp.kde.devel.core/52423
     // so we implement a less theoretically correct, but working, version
     // below
-    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
-
-    // if the desktop is virtual then use virtual screen size
-    if (QApplication::desktop()->isVirtualDesktop())
-        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
-
-    QString key = QStringLiteral("Desktop %1 %2")
-        .arg(desk.width()).arg(desk.height());
-    QRect g = config.readEntry(key, QRect());
+    QRect g = config.readEntry(screenKey(), QRect());
     if (!g.isEmpty())
         setGeometry(g);
 }

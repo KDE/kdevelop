@@ -1,7 +1,7 @@
 # kdevplatform version
 set(KDEVPLATFORM_VERSION_MAJOR 4)
 set(KDEVPLATFORM_VERSION_MINOR 90)
-set(KDEVPLATFORM_VERSION_PATCH 91)
+set(KDEVPLATFORM_VERSION_PATCH 92)
 
 # plugin versions listed in the .desktop files
 set(KDEV_PLUGIN_VERSION 24)
@@ -35,7 +35,7 @@ include(CheckFunctionExists)
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(KDECompilerSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 include(KDevPlatformMacros)
 
 set(QT_MIN_VERSION "5.4.0")

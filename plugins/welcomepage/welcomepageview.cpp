@@ -20,7 +20,6 @@
 
 #include "uihelper.h"
 #include "sessionsmodel.h"
-#include "welcomepagedocument.h"
 
 #include <QQmlContext>
 #include <QQmlComponent>
@@ -71,14 +70,4 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
 void WelcomePageWidget::areaChanged(Sublime::Area* area)
 {
     rootContext()->setContextProperty(QStringLiteral("area"), area->objectName());
-}
-
-WelcomePageView::WelcomePageView(Sublime::Document* doc, Sublime::View::WidgetOwnership ws)
-    : View(doc, ws)
-{
-}
-
-QWidget* WelcomePageView::createWidget(QWidget* parent)
-{
-    return new WelcomePageWidget(QList<IProject*>(), parent);
 }

@@ -56,18 +56,22 @@ signals:
 private slots:
     void slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn );
     void slotResult(KJob* job) override;
+    void handleResults(const KIO::UDSEntryList& entries);
     void startNextJob();
 
 private:
+
     QQueue<ProjectFolderItem*> m_listQueue;
     /// current base dir
     ProjectFolderItem* m_item;
     KIO::UDSEntryList entryList;
     // kill does not delete the job instantaniously
-    bool m_aborted;
+    QAtomicInt m_aborted;
 
 #ifdef TIME_IMPORT_JOB
     QElapsedTimer m_timer;
+    QElapsedTimer m_subTimer;
+    qint64 m_subWaited = 0;
 #endif
 };
 

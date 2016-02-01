@@ -27,9 +27,6 @@ class KDevWelcomePagePlugin : public KDevelop::IPlugin
     Q_OBJECT
 public:
     KDevWelcomePagePlugin( QObject* parent, const QList<QVariant>& );
-
-public slots:
-    void openWelcomePage();
 };
 
 #endif

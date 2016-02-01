@@ -123,37 +123,41 @@ VcsFileChangesModel::VcsFileChangesModel(QObject *parent, bool allowSelection)
     setHeaderData(1, Qt::Horizontal, i18n("Status"));
 }
 
+VcsFileChangesModel::~VcsFileChangesModel()
+{
+}
+
 int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsStatusInfo &status)
 {
     if(status.state()==VcsStatusInfo::ItemUnknown || status.state()==VcsStatusInfo::ItemUpToDate) {
         removeUrl(status.url());
         return -1;
     } else {
-        QStandardItem* it1 = fileItemForUrl(parent, status.url());
-        if(!it1) {
+        QStandardItem* item = fileItemForUrl(parent, status.url());
+        if(!item) {
             QString path = ICore::self()->projectController()->prettyFileName(status.url(), KDevelop::IProjectController::FormatPlain);
             QMimeType mime = status.url().isLocalFile()
                 ? QMimeDatabase().mimeTypeForFile(status.url().toLocalFile(), QMimeDatabase::MatchExtension)
                 : QMimeDatabase().mimeTypeForUrl(status.url());
             QIcon icon = QIcon::fromTheme(mime.iconName());
-            it1 = new QStandardItem(icon, path);
+            item = new QStandardItem(icon, path);
             auto itStatus = new VcsStatusInfoItem(status);
 
             if(d->allowSelection) {
-                it1->setCheckable(true);
-                it1->setCheckState(status.state() == VcsStatusInfo::ItemUnknown ? Qt::Unchecked : Qt::Checked);
+                item->setCheckable(true);
+                item->setCheckState(status.state() == VcsStatusInfo::ItemUnknown ? Qt::Unchecked : Qt::Checked);
             }
 
-            parent->appendRow({ it1, itStatus });
+            parent->appendRow({ item, itStatus });
         } else {
-            QStandardItem *parent = it1->parent();
+            QStandardItem *parent = item->parent();
             if(parent == 0)
                 parent = invisibleRootItem();
-            auto itStatus = static_cast<VcsStatusInfoItem*>(parent->child(it1->row(), 1));
-            itStatus->setStatus(status);
+            auto statusInfoItem = static_cast<VcsStatusInfoItem*>(parent->child(item->row(), 1));
+            statusInfoItem->setStatus(status);
         }
 
-        return it1->row();
+        return item->row();
     }
 }
 

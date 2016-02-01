@@ -61,7 +61,7 @@ public:
 
     void switchToArea(const QString &areaName, SwitchMode switchMode) override;
 
-    void addToolView(const QString &name, IToolViewFactory *factory) override;
+    void addToolView(const QString &name, IToolViewFactory *factory, FindFlags state) override;
     void removeToolView(IToolViewFactory *factory) override;
 
     QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags) override;

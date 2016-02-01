@@ -106,6 +106,7 @@ private Q_SLOTS:
     void loadSettings();
 
 private:
+    void hideDocks(IdealButtonBarWidget *bar);
     void showDock(Qt::DockWidgetArea area, bool show);
     void toggleDocksShown(IdealButtonBarWidget *bar, bool show);
 

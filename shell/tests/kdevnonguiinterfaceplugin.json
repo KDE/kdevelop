@@ -40,6 +40,7 @@
         "Description[ca]": "Aquest connector és exclusivament per a unitats de proves", 
         "Description[de]": "Die ist eine Modul nur für Unit-Tests", 
         "Description[es]": "Este complemento es exclusivamente para pruebas unitarias", 
+        "Description[et]": "See plugin on ainult ühiktesti jaoks", 
         "Description[fi]": "Tämä liitännäinen on puhtaasti yksikkötestausta varten", 
         "Description[gl]": "Este complemento é soamente para probas unitarias.", 
         "Description[nl]": "Deze plugin is alleen voor eenheid-testen", 
@@ -58,6 +59,7 @@
         "Name": "KDevNonGuiInterface", 
         "Name[bs]": "KDevNonGUI sučelje", 
         "Name[nds]": "KDevKeenBöversiet", 
+        "Name[et]": "KDevNonGuiInterface", 
         "Name[sv]": "KDevelop icke grafiskt användargränssnitt", 
         "Name[x-test]": "xxKDevNonGuiInterfacexx", 
         "ServiceTypes": [

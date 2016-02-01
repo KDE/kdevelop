@@ -55,7 +55,7 @@ using namespace KDevelop;
 //-----------------------------------------------------------------------------
 StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog, QWidget* parent, bool button )
     : QFrame( parent ), mCurrentItem( 0 ), mProgressDialog( progressDialog ),
-      mDelayTimer( 0 ), mBusyTimer( 0 ), mCleanTimer( 0 )
+      mDelayTimer( 0 ), mCleanTimer( 0 )
 {
     m_bShowButton = button;
     int w = fontMetrics().width( QStringLiteral(" 999.9 kB/s 00:00:01 ") ) + 8;
@@ -130,18 +130,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
 void StatusbarProgressWidget::updateBusyMode()
 {
     connectSingleItem(); // if going to 1 item
-    if ( mCurrentItem ) { // Exactly one item
-        delete mBusyTimer;
-        mBusyTimer = 0;
-        mDelayTimer->start( 1000 );
-    } else { // N items
-        if ( !mBusyTimer ) {
-            mBusyTimer = new QTimer( this );
-            connect( mBusyTimer, &QTimer::timeout,
-                     this, &StatusbarProgressWidget::slotBusyIndicator );
-            mDelayTimer->start( 1000 );
-        }
-    }
+    mDelayTimer->start( 1000 );
 }
 
 void StatusbarProgressWidget::slotProgressItemAdded( ProgressItem *item )
@@ -166,8 +155,6 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
         // Done. In 5s the progress-widget will close, then we can clean up the statusbar
         mCleanTimer->start( 5000 );
     } else if ( mCurrentItem ) { // Exactly one item
-        delete mBusyTimer;
-        mBusyTimer = 0;
         activateSingleItemMode();
     }
 }
@@ -201,21 +188,12 @@ void StatusbarProgressWidget::slotShowItemDelayed()
     } else if ( !noItems ) { // N items
         m_pProgressBar->setMaximum( 0 );
         m_pProgressBar->setTextVisible( false );
-        Q_ASSERT( mBusyTimer );
-        if ( mBusyTimer )
-            mBusyTimer->start( 100 );
     }
 
     if ( !noItems && mode == None ) {
         mode = Progress;
         setMode();
     }
-}
-
-void StatusbarProgressWidget::slotBusyIndicator()
-{
-    int p = m_pProgressBar->value();
-    m_pProgressBar->setValue( p + 10 );
 }
 
 void StatusbarProgressWidget::slotProgressItemProgress( ProgressItem *item, unsigned int value )
@@ -235,17 +213,6 @@ void StatusbarProgressWidget::setMode() {
         stack->show();
         stack->setCurrentWidget( m_pLabel );
         break;
-
-#if 0
-    case Label:
-        if ( m_bShowButton ) {
-            m_pButton->show();
-        }
-        m_sslLabel->setState( m_sslLabel->lastState() );
-        stack->show();
-        stack->raiseWidget( m_pLabel );
-        break;
-#endif
 
     case Progress:
         stack->show();

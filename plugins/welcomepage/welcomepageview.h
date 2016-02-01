@@ -20,24 +20,14 @@
 #define WELCOMEPAGEVIEW_H
 
 #include <QQuickWidget>
-#include <sublime/view.h>
 
-namespace Sublime
-{
+namespace Sublime {
 class Area;
 }
 
-namespace KDevelop { class IProject; }
-
-class WelcomePageView : public Sublime::View
-{
-    Q_OBJECT
-    public:
-        explicit WelcomePageView(Sublime::Document* doc, WidgetOwnership ws = DoNotTakeOwnerShip);
-
-        QWidget* createWidget(QWidget* parent) override;
-};
-
+namespace KDevelop {
+class IProject;
+}
 
 class WelcomePageWidget : public QQuickWidget
 {
@@ -48,7 +38,5 @@ public:
 public slots:
     void areaChanged(Sublime::Area* a);
 };
-
-void trySetupWelcomePageView();
 
 #endif // WELCOMEPAGEVIEW_H

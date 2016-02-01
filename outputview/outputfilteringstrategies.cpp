@@ -29,6 +29,12 @@
 
 namespace KDevelop
 {
+void initializeFilteredItem(FilteredItem& item, const ErrorFormat& filter, const QRegularExpressionMatch& match)
+{
+    item.lineNo = match.captured( filter.lineGroup ).toInt() - 1;
+    item.columnNo = filter.columnNumber(match);
+}
+
 
 template<typename ErrorFormats>
 FilteredItem match(const ErrorFormats& errorFormats, const QString& line)
@@ -37,15 +43,8 @@ FilteredItem match(const ErrorFormats& errorFormats, const QString& line)
     for( const ErrorFormat& curErrFilter : errorFormats ) {
         const auto match = curErrFilter.expression.match(line);
         if( match.hasMatch() ) {
+            initializeFilteredItem(item, curErrFilter, match);
             item.url = QUrl::fromUserInput(match.captured( curErrFilter.fileGroup ));
-            item.lineNo = match.captured( curErrFilter.lineGroup ).toInt() - 1;
-            if(curErrFilter.columnGroup >= 0) {
-                item.columnNo = match.captured( curErrFilter.columnGroup ).toInt() - 1;
-            } else {
-                item.columnNo = 0;
-            }
-
-            QString txt = match.captured(curErrFilter.textGroup);
 
             item.type = FilteredItem::ErrorItem;
 
@@ -313,14 +312,9 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
                 }
                 item.url = d->pathForFile( match.captured( curErrFilter.fileGroup ) ).toUrl();
             }
-            item.lineNo = match.captured( curErrFilter.lineGroup ).toInt() - 1;
-            if(curErrFilter.columnGroup >= 0) {
-                item.columnNo = match.captured( curErrFilter.columnGroup ).toInt() - 1;
-            } else {
-                item.columnNo = 0;
-            }
+            initializeFilteredItem(item, curErrFilter, match);
 
-            QString txt = match.captured(curErrFilter.textGroup);
+            const QString txt = match.captured(curErrFilter.textGroup);
 
             // Find the indicator which happens most early.
             int earliestIndicatorIdx = txt.length();

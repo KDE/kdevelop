@@ -327,7 +327,7 @@ void UiController::raiseToolView(QWidget* toolViewWidget)
     }
 }
 
-void UiController::addToolView(const QString & name, IToolViewFactory *factory)
+void UiController::addToolView(const QString & name, IToolViewFactory *factory, FindFlags state)
 {
     if (!factory)
         return;
@@ -338,7 +338,7 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 
     /* Until areas are restored, we don't know which views should be really
        added, and which not, so we just record view availability.  */
-    if (d->areasRestored) {
+    if (d->areasRestored && state != None) {
          foreach (Sublime::Area* area, allAreas()) {
              addToolViewToArea(factory, doc, area);
          }

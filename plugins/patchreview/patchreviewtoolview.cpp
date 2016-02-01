@@ -80,9 +80,11 @@ public slots:
 
 private:
     void setFileInfo( QStandardItem *item, unsigned int hunksNum ) {
-        QString newText = i18ncp( "%1: number of changed hunks, %2: file name",
+        const auto url = item->index().data(VcsFileChangesModel::UrlRole).toUrl();
+        const QString path = ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
+        const QString newText = i18ncp( "%1: number of changed hunks, %2: file name",
             "%2 (1 hunk)", "%2 (%1 hunks)", hunksNum,
-            item->index().data(VcsFileChangesModel::UrlRole).toUrl().toDisplayString(QUrl::PreferLocalFile) );
+            path);
         item->setText( newText );
     }
 };

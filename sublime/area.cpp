@@ -229,10 +229,8 @@ RootAreaIndex *Area::rootIndex() const
 void Area::addToolView(View *view, Position defaultPosition)
 {
     d->toolViews.append(view);
-    QString id = view->document()->documentSpecifier();
-    Position position = defaultPosition;
-    if (d->desiredToolViews.contains(id))
-        position = d->desiredToolViews[id];
+    const QString id = view->document()->documentSpecifier();
+    const Position position = d->desiredToolViews.value(id, defaultPosition);
     d->desiredToolViews[id] = position;
     d->toolViewPositions[view] = position;
     emit toolViewAdded(view, position);

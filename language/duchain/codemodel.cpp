@@ -72,6 +72,17 @@ class CodeModelItemHandler {
 };
 
 
+static void testReferenceCounting(const KDevelop::IndexedString& file)
+{
+#ifdef TEST_REFERENCE_COUNTING_2
+  uint count = 0;
+  const CodeModelItem* i;
+  this->items(file, count, i);
+  for(int a = 0; a < count; ++a)
+    Q_ASSERT(i[a].id.hasReferenceCount());
+#endif
+}
+
 DEFINE_LIST_MEMBER_HASH(CodeModelRepositoryItem, items, CodeModelItem)
 
 class CodeModelRepositoryItem {
@@ -187,15 +198,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
   newItem.kind = kind;
   newItem.referenceCount = 1;
 
-  #ifdef TEST_REFERENCE_COUNTING_2
-  {
-  uint count = 0;
-  const CodeModelItem* i;
-  this->items(file, count, i);
-  for(int a = 0; a < count; ++a)
-    Q_ASSERT(i[a].id.hasReferenceCount());
-  }
-  #endif
+  testReferenceCounting(file);
 
   if(index) {
     const CodeModelRepositoryItem* oldItem = d->m_repository.itemFromIndex(index);
@@ -226,15 +229,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
         d->m_repository.deleteItem(index);
       }else{
         //We're fine: The item fits into the existing list.
-#ifdef TEST_REFERENCE_COUNTING_2
-        {
-        uint count = 0;
-        const CodeModelItem* i;
-        this->items(file, count, i);
-        for(int a = 0; a < count; ++a)
-          Q_ASSERT(i[a].id.hasReferenceCount());
-        }
-#endif
+        testReferenceCounting(file);
         return;
       }
     }
@@ -243,15 +238,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     item.itemsList().append(newItem);
   }
 
-#ifdef TEST_REFERENCE_COUNTING_2
-  {
-  uint count = 0;
-  const CodeModelItem* i;
-  this->items(file, count, i);
-  for(int a = 0; a < count; ++a)
-    Q_ASSERT(i[a].id.hasReferenceCount());
-  }
-#endif
+  testReferenceCounting(file);
 
   Q_ASSERT(!d->m_repository.findIndex(request));
 
@@ -260,15 +247,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
   Q_UNUSED(newIndex);
   ifDebug( qCDebug(LANGUAGE) << "new index" << newIndex; )
 
-#ifdef TEST_REFERENCE_COUNTING_2
-  {
-  uint count = 0;
-  const CodeModelItem* i;
-  this->items(file, count, i);
-  for(int a = 0; a < count; ++a)
-    Q_ASSERT(i[a].id.hasReferenceCount());
-  }
-#endif
+  testReferenceCounting(file);
 
   Q_ASSERT(d->m_repository.findIndex(request));
 }
@@ -280,15 +259,7 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
   if(!id.isValid())
     return;
 
-#ifdef TEST_REFERENCE_COUNTING_2
-  {
-  uint count = 0;
-  const CodeModelItem* i;
-  this->items(file, count, i);
-  for(int a = 0; a < count; ++a)
-    Q_ASSERT(i[a].id.hasReferenceCount());
-  }
-#endif
+  testReferenceCounting(file);
 
   CodeModelRepositoryItem item;
   item.file = file;
@@ -315,15 +286,7 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
     Q_ASSERT(items[listIndex].id == id);
     items[listIndex].kind = kind;
 
-#ifdef TEST_REFERENCE_COUNTING_2
-    {
-    uint count = 0;
-    const CodeModelItem* i;
-    this->items(file, count, i);
-    for(int a = 0; a < count; ++a)
-      Q_ASSERT(i[a].id.hasReferenceCount());
-    }
-#endif
+    testReferenceCounting(file);
 
     return;
   }
@@ -336,15 +299,8 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
 {
   if(!id.isValid())
     return;
-#ifdef TEST_REFERENCE_COUNTING_2
-  {
-  uint count = 0;
-  const CodeModelItem* i;
-  this->items(file, count, i);
-  for(int a = 0; a < count; ++a)
-    Q_ASSERT(i[a].id.hasReferenceCount());
-  }
-#endif
+
+  testReferenceCounting(file);
   ifDebug( qCDebug(LANGUAGE) << "removeItem" << file.str() << id.identifier().toString(); )
   CodeModelRepositoryItem item;
   item.file = file;
@@ -382,15 +338,7 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
       if(newItemCount == 0) {
         //Has become empty, delete the item
         d->m_repository.deleteItem(index);
-#ifdef TEST_REFERENCE_COUNTING_2
-  {
-  uint count = 0;
-  const CodeModelItem* i;
-  this->items(file, count, i);
-  for(int a = 0; a < count; ++a)
-    Q_ASSERT(i[a].id.hasReferenceCount());
-  }
-#endif
+        testReferenceCounting(file);
 
         return;
       }else{
@@ -402,28 +350,12 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
         d->m_repository.deleteItem(index);
         //Add the new list
         d->m_repository.index(request);
-#ifdef TEST_REFERENCE_COUNTING_2
-  {
-  uint count = 0;
-  const CodeModelItem* i;
-  this->items(file, count, i);
-  for(int a = 0; a < count; ++a)
-    Q_ASSERT(i[a].id.hasReferenceCount());
-  }
-#endif
+        testReferenceCounting(file);
         return;
       }
     }
   }
-#ifdef TEST_REFERENCE_COUNTING_2
-  {
-  uint count = 0;
-  const CodeModelItem* i;
-  this->items(file, count, i);
-  for(int a = 0; a < count; ++a)
-    Q_ASSERT(i[a].id.hasReferenceCount());
-  }
-#endif
+  testReferenceCounting(file);
 }
 
 void CodeModel::items(const IndexedString& file, uint& count, const CodeModelItem*& items) const

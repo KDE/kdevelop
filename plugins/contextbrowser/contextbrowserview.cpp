@@ -185,8 +185,14 @@ bool ContextBrowserView::event(QEvent* event) {
     return QWidget::event(event);
 }
 
-void ContextBrowserView::showEvent(QShowEvent* event) {
-    DUChainReadLocker lock(DUChain::lock());
+void ContextBrowserView::showEvent(QShowEvent* event)
+{
+    DUChainReadLocker lock(DUChain::lock(), 200);
+    if (!lock.locked()) {
+        QWidget::showEvent(event);
+        return;
+    }
+
     TopDUContext* top = m_lastUsedTopContext.data();
     if(top && m_navigationWidgetDeclaration.isValid() && m_navigationWidgetDeclaration.getDeclaration(top)) {
         if(top) {

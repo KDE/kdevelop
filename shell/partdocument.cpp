@@ -98,28 +98,23 @@ bool PartDocument::save(DocumentSaveMode /*mode*/)
 
 bool PartDocument::askForCloseFeedback()
 {
+    int code = -1;
     if (state() == IDocument::Modified) {
-        int code = KMessageBox::warningYesNoCancel(
+        code = KMessageBox::warningYesNoCancel(
             Core::self()->uiController()->activeMainWindow(),
             i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
             i18n("Close Document"));
 
-        if (code == KMessageBox::Yes) {
-            if (!save(Default))
-                return false;
-
-        } else if (code == KMessageBox::Cancel) {
-            return false;
-        }
-
     /// @todo Is this behavior right?
     } else if (state() == IDocument::DirtyAndModified) {
-        int code = KMessageBox::warningYesNoCancel(
+        code = KMessageBox::warningYesNoCancel(
             Core::self()->uiController()->activeMainWindow(),
             i18n("The document \"%1\" has unsaved changes and was modified by an external process.\n"
                  "Do you want to override the external changes?", url().toLocalFile()),
             i18n("Close Document"));
+    }
 
+    if (code >= 0) {
         if (code == KMessageBox::Yes) {
             if (!save(Default))
                 return false;
@@ -127,8 +122,8 @@ bool PartDocument::askForCloseFeedback()
         } else if (code == KMessageBox::Cancel) {
             return false;
         }
-
     }
+
     return true;
 }
 

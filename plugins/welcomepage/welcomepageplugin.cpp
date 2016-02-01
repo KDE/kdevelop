@@ -18,60 +18,23 @@
 */
 
 #include "welcomepageplugin.h"
-#include <qlabel.h>
 #include "welcomepageview.h"
 
-#include <QAction>
-
 #include <KPluginFactory>
-#include <KPluginLoader>
-#include <KAboutData>
-#include <KActionCollection>
 
-#include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
-#include <interfaces/context.h>
-#include <interfaces/contextmenuextension.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iproject.h>
-#include <project/projectmodel.h>
+#include <interfaces/iuicontroller.h>
 #include <sublime/mainwindow.h>
-#include <QTimer>
-#include "welcomepagedocument.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevWelcomePagePluginFactory, "kdevwelcomepage.json", registerPlugin<KDevWelcomePagePlugin>();)
 
 using namespace KDevelop;
 
-class WelcomePageFactory : public KDevelop::IDocumentFactory
-{
-public:
-    IDocument* create(const QUrl& /*url*/, ICore*) override
-    {
-        return new WelcomePageDocument();
-    }
-};
-
 KDevWelcomePagePlugin::KDevWelcomePagePlugin( QObject* parent, const QVariantList& )
     : IPlugin(QStringLiteral("kdevwelcomepage"), parent )
 {
-//     ICore::self()->documentController()->registerDocumentForMimetype("text/x-kdevelop-internal", new WelcomePageFactory);
-//
-//     //FIXME: When and where to open the welcome page?
-//     //QTimer::singleShot(500, this, SLOT(openWelcomePage()));
-//
-//     QAction* action = actionCollection()->addAction("show-welcomepage");
-//     action->setText("Show Welcome Page");
-//     action->setIcon(QIcon::fromTheme("meeting-organizer"));
-
     Sublime::MainWindow* mw = qobject_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     mw->setBackgroundCentralWidget(new WelcomePageWidget(QList<IProject*>(), mw));
-}
-
-void KDevWelcomePagePlugin::openWelcomePage()
-{
-    ICore::self()->documentController()->openDocument(WelcomePageDocument::welcomePageUrl());
 }
 
 #include "welcomepageplugin.moc"
