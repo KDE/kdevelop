@@ -48,6 +48,7 @@ private slots:
     void testElaboratedType_data();
 
     void testInclude();
+    void testMissingInclude();
     void testIncludeLocking();
     void testReparse();
     void testReparseError();
