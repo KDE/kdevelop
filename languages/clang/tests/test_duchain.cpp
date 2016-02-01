@@ -243,6 +243,7 @@ void TestDUChain::testInclude()
 void TestDUChain::testMissingInclude()
 {
     auto code = R"(
+#pragma once
 #include "missing1.h"
 
 template<class T>
@@ -273,20 +274,15 @@ class B : public A<int>
     DUChainReadLocker lock;
     QCOMPARE(top->importedParentContexts().count(), 1);
     TopDUContext* headerCtx = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context(top));
-    QEXPECT_FAIL("", "Second missing header isn't reported", Continue);
     QCOMPARE(headerCtx->problems().count(), 2);
-    QEXPECT_FAIL("", "Second missing header isn't reported", Continue);
     QCOMPARE(headerCtx->localDeclarations().count(), 2);
     auto type = headerCtx->localDeclarations()[1]->abstractType();
     StructureType* sType = dynamic_cast<StructureType*>(type.data());
     QVERIFY(sType);
     ClassDeclaration* cDecl = dynamic_cast<ClassDeclaration*>(sType->declaration(headerCtx));
     QVERIFY(cDecl);
-    QEXPECT_FAIL("", "Base class isn't assigned correctly", Continue);
     QCOMPARE(cDecl->baseClassesSize(), 1u);
     QCOMPARE(top->problems().count(), 2);
-    // at least the one problem we have should have been propagated
-    QCOMPARE(top->problems().count(), 1);
 }
 
 QByteArray createCode(const QByteArray& prefix, const int functions)
