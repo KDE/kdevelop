@@ -33,6 +33,12 @@ UnsavedFile::UnsavedFile(const QString& fileName, const QStringList& contents)
 {
 }
 
+UnsavedFile::UnsavedFile(const QString& fileName, const QByteArray& contents)
+    : m_fileName(fileName)
+    , m_contentsUtf8(contents)
+{
+}
+
 CXUnsavedFile UnsavedFile::toClangApi() const
 {
     if (m_fileNameUtf8.isEmpty()) {
@@ -50,9 +56,11 @@ CXUnsavedFile UnsavedFile::toClangApi() const
 void UnsavedFile::convertToUtf8()
 {
     m_fileNameUtf8 = m_fileName.toUtf8();
-    m_contentsUtf8.clear();
-    foreach(const QString& line, m_contents) {
-        m_contentsUtf8 += line.toUtf8();
-        m_contentsUtf8 += '\n';
+    if (m_contentsUtf8.isEmpty())
+    {
+        foreach(const QString& line, m_contents) {
+            m_contentsUtf8 += line.toUtf8();
+            m_contentsUtf8 += '\n';
+        }
     }
 }

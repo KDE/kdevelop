@@ -147,6 +147,8 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
                     index->pinTranslationUnitForUrl(environment.translationUnitUrl(), path);
                 }
                 envFile->setEnvironment(environment);
+                // TODO: This is wrong! The modification revision will be set later!
+                //       Actually, we should upgrade the old duchain to the new modification revision.
                 envFile->setModificationRevision(ModificationRevision::revisionForFile(context->url()));
             }
 

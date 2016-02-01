@@ -33,6 +33,7 @@ class UnsavedFile
 {
 public:
     UnsavedFile(const QString& fileName = {}, const QStringList& contents = {});
+    UnsavedFile(const QString& fileName, const QByteArray& contents);
 
     CXUnsavedFile toClangApi() const;
 
