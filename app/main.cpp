@@ -391,7 +391,13 @@ int main( int argc, char *argv[] )
                      "The binary that should be debugged must follow - including arguments.\n"
                      "Example: kdevelop --debug gdb myapp --foo bar"), "debugger"});
 
-    // TODO: What does that do?
+    // this is used by the 'kdevelop!' script to retrieve the pid of a KDEVELOP
+    // instance. When this is called, then we should just print the PID on the
+    // standard-output. If a session is specified through open-session, then
+    // we should return the PID of that session. Otherwise, if only a single
+    // session is running, then we should just return the PID of that session.
+    // Otherwise, we should print a command-line session-chooser dialog ("--pss"),
+    // which only shows the running sessions, and the user can pick one.
     parser.addOption(QCommandLineOption{QStringList{"pid"}});
 
     parser.addPositionalArgument("files", i18n( "Files to load" ), "[FILE...]");
@@ -449,7 +455,14 @@ int main( int argc, char *argv[] )
     // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
     QString session;
 
-    if(parser.isSet("pss"))
+    uint nRunningSessions = 0;
+    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+        if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
+            ++nRunningSessions;
+
+    // also show the picker dialog when a pid shall be retrieved and multiple
+    // sessions are running.
+    if(parser.isSet("pss") || (parser.isSet("pid") && !parser.isSet("open-session") && !parser.isSet("ps") && nRunningSessions > 1))
     {
         QTextStream qerr(stderr);
         QList<KDevelop::SessionInfo> candidates;
@@ -518,10 +531,16 @@ int main( int argc, char *argv[] )
         }
     }
 
-    QList<KDevelop::SessionInfo> sessions = KDevelop::SessionController::availableSessionInfo();
-    const KDevelop::SessionInfo* sessionData = findSessionInList( sessions, session );
-
     if(parser.isSet("pid")) {
+        if (session.isEmpty())
+        {   // just pick the first running session
+            foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+                if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
+                    session = si.uuid.toString();
+        }
+        QList<KDevelop::SessionInfo> sessions = KDevelop::SessionController::availableSessionInfo();
+        const KDevelop::SessionInfo* sessionData = findSessionInList( sessions, session );
+
         if( !sessionData ) {
             qCritical() << "session not given or does not exist";
             return 5;
