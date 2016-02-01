@@ -463,6 +463,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
     if( m_patch && !m_patch->finishReviewCustomText().isEmpty() )
       finishText = m_patch->finishReviewCustomText();
     m_finishReview->setText( finishText );
+    m_finishReview->setEnabled( patch );
 
     notifyPatchChanged();
 }
