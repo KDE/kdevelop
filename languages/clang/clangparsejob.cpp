@@ -190,20 +190,18 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     foreach(auto document, ICore::self()->documentController()->openDocuments()) {
         auto textDocument = document->textDocument();
         if (!textDocument || !textDocument->isModified() || !textDocument->url().isLocalFile()
-            || !DocumentFinderHelpers::mimeTypesList().contains(textDocument->mimeType())
-            || textDocument->url().toLocalFile() == url.toUrl().toLocalFile())
+            || !DocumentFinderHelpers::mimeTypesList().contains(textDocument->mimeType()))
         {
             continue;
-        }   // TODO: The revisions of these files are not locked! Bad!
+        }
         m_unsavedFiles << UnsavedFile(textDocument->url().toLocalFile(), textDocument->textLines(textDocument->documentRange()));
         const IndexedString indexedUrl(textDocument->url());
         m_unsavedRevisions.insert(indexedUrl, ModificationRevision::revisionForFile(indexedUrl));
     }
 
-    // read this file and lock revision etc.:
-    readContents();
-    m_unsavedFiles << UnsavedFile(url.toUrl().toLocalFile(), contents().contents);
-    m_unsavedRevisions.insert(url, contents().modification);
+    if (auto tracker = trackerForUrl(url)) {
+        tracker->reset();
+    }
 }
 
 ClangSupport* ClangParseJob::clang() const
