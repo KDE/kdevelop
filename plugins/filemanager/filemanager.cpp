@@ -70,7 +70,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     connect(urlnav, &KUrlNavigator::urlChanged, this, &FileManager::gotoUrl);
 
     l->addWidget(urlnav);
-    dirop = new KDirOperator( urlnav->url(), this);
+    dirop = new KDirOperator( urlnav->locationUrl(), this);
     dirop->setView( KFile::Tree );
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
     connect(dirop, &KDirOperator::urlEntered, this, &FileManager::updateNav);
@@ -94,8 +94,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 FileManager::~FileManager()
 {
     KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group( "Filesystem" );
-
-    cg.writeEntry( "LastLocation", urlnav->url() );
+    cg.writeEntry( "LastLocation", urlnav->locationUrl() );
     cg.sync();
 }
 
