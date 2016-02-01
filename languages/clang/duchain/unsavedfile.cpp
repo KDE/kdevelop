@@ -33,6 +33,17 @@ UnsavedFile::UnsavedFile(const QString& fileName, const QStringList& contents)
 {
 }
 
+QStringList UnsavedFile::contents() const
+{
+    Q_ASSERT(m_contentsUtf8.isEmpty() || !m_contents.isEmpty());
+    return m_contents;
+}
+
+QString UnsavedFile::filename() const
+{
+    return m_fileName;
+}
+
 CXUnsavedFile UnsavedFile::toClangApi() const
 {
     if (m_fileNameUtf8.isEmpty()) {
