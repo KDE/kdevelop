@@ -102,12 +102,6 @@ public:
     /// Tells which grouping strategy is currently in use
     int grouping() const;
 
-    /// Sets whether we should bypass the scope filter
-    void setBypassScopeFilter(bool bypass) override;
-
-    /// Tells whether the scope filter bypass is on
-    bool bypassScopeFilter() const;
-
 private:
     friend struct FilteredProblemStorePrivate;
     QScopedPointer<FilteredProblemStorePrivate> d;

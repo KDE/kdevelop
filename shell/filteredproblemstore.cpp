@@ -205,7 +205,6 @@ struct FilteredProblemStorePrivate
         : q(q)
         , m_strategy(new NoGroupingStrategy(q->rootNode()))
         , m_grouping(NoGrouping)
-        , m_bypassScopeFilter(false)
     {
     }
 
@@ -215,7 +214,6 @@ struct FilteredProblemStorePrivate
     FilteredProblemStore* q;
     QScopedPointer<GroupingStrategy> m_strategy;
     GroupingMethod m_grouping;
-    bool m_bypassScopeFilter;
 };
 
 FilteredProblemStore::FilteredProblemStore(QObject *parent)
@@ -291,21 +289,6 @@ int FilteredProblemStore::grouping() const
     return d->m_grouping;
 }
 
-void FilteredProblemStore::setBypassScopeFilter(bool bypass)
-{
-    if (d->m_bypassScopeFilter != bypass) {
-        d->m_bypassScopeFilter = bypass;
-        rebuild();
-        emit changed();
-    }
-}
-
-bool FilteredProblemStore::bypassScopeFilter() const
-{
-    return d->m_bypassScopeFilter;
-}
-
-
 bool FilteredProblemStorePrivate::match(const IProblem::Ptr &problem) const
 {
 
@@ -320,16 +303,8 @@ bool FilteredProblemStorePrivate::match(const IProblem::Ptr &problem) const
         if(!q->severities().testFlag(IProblem::Hint))//workaround for problems wothout correctly set severity
             return false;
     }
-    /// If we have bypass on, don't check the scope
-    if (!m_bypassScopeFilter) {
-        /// If the problem isn't in a file that's in the watched document set, it's discarded
-        const WatchedDocumentSet::DocumentSet &docs = q->documents()->get();
-        if(!docs.contains(problem->finalLocation().document))
-            return false;
-    }
 
     return true;
 }
 
 }
-
