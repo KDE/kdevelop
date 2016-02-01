@@ -60,9 +60,6 @@ enum CustomRoles {
     CaseRole
 };
 
-static const char sessionConfigGroup[] = "TestView";
-static const char filterConfigKey[] = "filter";
-
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 : QWidget(parent)
 , m_plugin(plugin)

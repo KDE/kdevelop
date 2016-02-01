@@ -713,8 +713,8 @@ void KDevelop::TextDocument::populateContextMenu( KTextEditor::View* v, QMenu* m
 
     d->m_addedContextMenu = new QMenu();
 
-    Context* c = new EditorContext( v, v->cursorPosition() );
-    QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
+    EditorContext c(v, v->cursorPosition());
+    auto extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions(&c);
 
     ContextMenuExtension::populateMenu(d->m_addedContextMenu, extensions);
 
