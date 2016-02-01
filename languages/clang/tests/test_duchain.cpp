@@ -263,25 +263,30 @@ class B : public A<int>
     //       clang stops processing when it encounters the second missing
     //       header, or similar.
 
-    TestFile impl(code, "cpp");
+    TestFile header(code, "h");
+    TestFile impl("#include \"" + header.url().byteArray() + "\"\n", "cpp", &header);
     impl.parse(TopDUContext::AllDeclarationsContextsAndUses);
 
     auto top = impl.topContext();
     QVERIFY(top);
 
     DUChainReadLocker lock;
-    QCOMPARE(top->localDeclarations().size(), 2);
-    // should have 2 "missing header" problems
+    QCOMPARE(top->importedParentContexts().count(), 1);
+    TopDUContext* headerCtx = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context(top));
     QEXPECT_FAIL("", "Second missing header isn't reported", Continue);
-    QCOMPARE(top->problems().count(), 2);
-    auto type = top->localDeclarations()[1]->abstractType();
+    QCOMPARE(headerCtx->problems().count(), 2);
+    QEXPECT_FAIL("", "Second missing header isn't reported", Continue);
+    QCOMPARE(headerCtx->localDeclarations().count(), 2);
+    auto type = headerCtx->localDeclarations()[1]->abstractType();
     StructureType* sType = dynamic_cast<StructureType*>(type.data());
     QVERIFY(sType);
-    ClassDeclaration* cDecl = dynamic_cast<ClassDeclaration*>(sType->declaration(top));
+    ClassDeclaration* cDecl = dynamic_cast<ClassDeclaration*>(sType->declaration(headerCtx));
     QVERIFY(cDecl);
     QEXPECT_FAIL("", "Base class isn't assigned correctly", Continue);
     QCOMPARE(cDecl->baseClassesSize(), 1u);
-    qDebug() << "TYPE: " << type->toString() << "base classes: " << cDecl->baseClassesSize();
+    QCOMPARE(top->problems().count(), 2);
+    // at least the one problem we have should have been propagated
+    QCOMPARE(top->problems().count(), 1);
 }
 
 QByteArray createCode(const QByteArray& prefix, const int functions)
