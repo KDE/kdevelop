@@ -30,7 +30,7 @@ using namespace KDevelop;
 
 void TestModels::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({"dummy"});
     TestCore::initialize();
 }
 
@@ -41,6 +41,14 @@ void TestModels::cleanupTestCase()
 
 void TestModels::testVcsFileChangesModel()
 {
+    const auto indexForUrl = [](const VcsFileChangesModel* model, const QUrl& url) {
+        return model->match(model->index(0, 0), VcsFileChangesModel::UrlRole,
+                            url, 1, Qt::MatchExactly).value(0);
+    };
+    const auto statusInfo = [](const QModelIndex& idx) {
+        return idx.data(VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>();
+    };
+
     VcsFileChangesModel *model = new VcsFileChangesModel(this);
 
     // Newly created model should be empty
@@ -73,9 +81,9 @@ void TestModels::testVcsFileChangesModel()
 
     // Check that all OK
     for(int i = 0; i < 3; i++) {
-        QModelIndex idx = model->indexForUrl(filenames[i]);
+        QModelIndex idx = indexForUrl(model, filenames[i]);
         QVERIFY(idx.isValid());
-        VcsStatusInfo info = model->statusInfo(idx);
+        VcsStatusInfo info = statusInfo(idx);
         QVERIFY(info.url().isValid());
         QCOMPARE(info.url(), filenames[i]);
         QCOMPARE(info.state(), states[i]);
@@ -91,9 +99,9 @@ void TestModels::testVcsFileChangesModel()
 
     // Check that all OK
     for(int i = 0; i < 3; i++) {
-        QModelIndex item = model->indexForUrl(filenames[i]);
+        QModelIndex item = indexForUrl(model, filenames[i]);
         QVERIFY(item.isValid());
-        VcsStatusInfo info = model->statusInfo(item);
+        VcsStatusInfo info = statusInfo(item);
         QCOMPARE(info.url(), filenames[i]);
         QCOMPARE(info.state(), states[i]);
     }
@@ -110,9 +118,9 @@ void TestModels::testVcsFileChangesModel()
     // Check them all
     for(int i = 0; i < 3; i++) {
         if(states[i] != VcsStatusInfo::ItemUpToDate && states[i] != VcsStatusInfo::ItemUnknown) {
-            QModelIndex item = model->indexForUrl(filenames[i]);
+            QModelIndex item = indexForUrl(model, filenames[i]);
             QVERIFY(item.isValid());
-            VcsStatusInfo info = model->statusInfo(item);
+            VcsStatusInfo info = statusInfo(item);
             QCOMPARE(info.url(), filenames[i]);
             QCOMPARE(info.state(), states[i]);
         }

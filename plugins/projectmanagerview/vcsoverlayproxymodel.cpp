@@ -59,7 +59,7 @@ QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) con
         } else {
             ProjectChangesModel* model = ICore::self()->projectController()->changesModel();
             const QUrl url = proxyIndex.data(ProjectModel::UrlRole).toUrl();
-            const QModelIndex idx = model->indexForUrl(url);
+            const auto idx = model->match(model->index(0, 0), ProjectChangesModel::UrlRole, url, 1, Qt::MatchExactly).value(0);
             return idx.sibling(idx.row(), 1).data(Qt::DisplayRole);
         }
     } else

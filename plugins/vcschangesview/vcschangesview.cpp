@@ -146,13 +146,10 @@ void VcsChangesView::selectCurrentDocument()
     
     QUrl url = doc->url();
     IProject* p = ICore::self()->projectController()->findProjectForUrl(url);
-    QModelIndex idx;
-    
-    if(p) {
-        ProjectChangesModel* pcmodel = static_cast<ProjectChangesModel*>(model());
-        idx = pcmodel->indexForUrl(url);
-    }
-    
+    QModelIndex idx = (p ?
+        model()->match(model()->index(0, 0), ProjectChangesModel::UrlRole,
+                       url, 1, Qt::MatchExactly).value(0) :
+        QModelIndex());
     if(idx.isValid()) {
         expand(idx.parent());
         setCurrentIndex(idx);

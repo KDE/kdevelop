@@ -386,7 +386,7 @@ void PatchReviewToolView::fileItemChanged( QStandardItem* item )
     if (item->column()!=0)
         return;
 
-    QUrl url = m_fileModel->statusInfo(item->index()).url();
+    QUrl url = item->index().data(VcsFileChangesModel::UrlRole).toUrl();
     if (url.isEmpty())
         return;
 
@@ -436,10 +436,9 @@ void PatchReviewToolView::finishReview() {
     m_plugin->finishReview( selectedUrls );
 }
 
-void PatchReviewToolView::fileDoubleClicked( const QModelIndex& idx ) {
-    QModelIndex i = idx.sibling(idx.row(), 0);
-    QUrl file = m_fileModel->statusInfo( i ).url();
-
+void PatchReviewToolView::fileDoubleClicked( const QModelIndex& idx )
+{
+    const QUrl file = idx.data(VcsFileChangesModel::UrlRole).toUrl();
     activate( file );
 }
 
@@ -501,12 +500,10 @@ void PatchReviewToolView::documentActivated( IDocument* doc ) {
     if ( !m_plugin->modelList() )
         return;
 
-    QModelIndex idx = m_fileModel->indexForUrl( doc->url() );
-    if ( idx.isValid() ) {
-        m_editPatch.filesList->setCurrentIndex( idx );
-    } else {
-        m_editPatch.filesList->setCurrentIndex( QModelIndex() );
-    }
+    const auto matches = m_fileSortProxyModel->match(
+        m_fileSortProxyModel->index(0, 0), VcsFileChangesModel::UrlRole,
+        doc->url(), 1, Qt::MatchExactly);
+    m_editPatch.filesList->setCurrentIndex(matches.value(0));
 }
 
 void PatchReviewToolView::runTests()

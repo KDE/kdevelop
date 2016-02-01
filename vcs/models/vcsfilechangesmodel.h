@@ -92,16 +92,9 @@ public:
      * */
     void setAllChecked(bool checked);
 
-    /**
-     * Simple helper to get VcsStatusInfo.
-     */
-    VcsStatusInfo statusInfo(int row, const QModelIndex &parent) const;
-    VcsStatusInfo statusInfo(const QModelIndex &idx) const { return statusInfo(idx.row(), idx.parent()); }
-
     void setIsCheckbable(bool checkable);
     bool isCheckable() const;
 
-    QModelIndex indexForUrl(const QUrl& url) const;
     bool removeUrl(const QUrl& url);
 
 public slots:
@@ -144,7 +137,6 @@ protected:
      * Returns item for particular url.
      */
     QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url) const;
-    QModelIndex indexForUrl(const QModelIndex& parent, const QUrl &url) const;
 
 private:
     QScopedPointer<VcsFileChangesModelPrivate> const d;
