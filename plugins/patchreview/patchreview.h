@@ -55,8 +55,6 @@ public :
     ~PatchReviewPlugin() override;
     void unload() override;
 
-    QWidget* createToolView( QWidget* parent );
-
     KDevelop::IPatchSource::Ptr patch() const {
         return m_patch;
     }

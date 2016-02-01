@@ -295,7 +295,7 @@ public:
     PatchReviewToolViewFactory( PatchReviewPlugin *plugin ) : m_plugin( plugin ) {}
 
     QWidget* create( QWidget *parent = 0 ) override {
-        return m_plugin->createToolView( parent );
+        return new PatchReviewToolView( parent, m_plugin );
     }
 
     Qt::DockWidgetArea defaultPosition() override {
@@ -520,10 +520,6 @@ void PatchReviewPlugin::unload() {
     core()->uiController()->removeToolView( m_factory );
 
     KDevelop::IPlugin::unload();
-}
-
-QWidget* PatchReviewPlugin::createToolView( QWidget* parent ) {
-    return new PatchReviewToolView( parent, this );
 }
 
 void PatchReviewPlugin::areaChanged(Sublime::Area* area)
