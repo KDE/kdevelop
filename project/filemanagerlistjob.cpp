@@ -134,7 +134,7 @@ void FileManagerListJob::slotResult(KJob* job)
 }
 
 
-void KDevelop::FileManagerListJob::handleResults(const KIO::UDSEntryList& entriesIn)
+void FileManagerListJob::handleResults(const KIO::UDSEntryList& entriesIn)
 {
     if (m_aborted) {
         return;
