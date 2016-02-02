@@ -233,6 +233,35 @@ void GitInitTest::testInit()
     repoInit();
 }
 
+void GitInitTest::testLocalConfig()
+{
+    repoInit();
+
+    qDebug() << "read notexisting.asdads";
+    QString pluginRead1 = m_plugin->readConfigOption(QUrl::fromLocalFile(gitTest_BaseDir()), QStringLiteral("notexisting.asdads"));
+    QCOMPARE(pluginRead1, QStringLiteral(""));
+
+    qDebug() << "write user.name = \"John Tester\"";
+    auto job = m_plugin->setConfigOption(QUrl::fromLocalFile(gitTest_BaseDir()), QStringLiteral("user.name"), QStringLiteral("John Tester"));
+    VERIFYJOB(job);
+    QProcess myRead1;
+    myRead1.setWorkingDirectory(gitTest_BaseDir());
+    myRead1.start("git", QStringList() << "config" << "--get" << QStringLiteral("user.name"));
+    myRead1.waitForFinished();
+    QString myRead1result = myRead1.readAllStandardOutput().trimmed();
+    QCOMPARE(myRead1result, QStringLiteral("John Tester"));
+
+    qDebug() << "read user.name";
+    QString pluginRead2 = m_plugin->readConfigOption(QUrl::fromLocalFile(gitTest_BaseDir()), QStringLiteral("user.name"));
+    QProcess myRead2;
+    myRead2.setWorkingDirectory(gitTest_BaseDir());
+    myRead2.start("git", QStringList() << "config" << "--get" << QStringLiteral("user.name"));
+    myRead2.waitForFinished();
+    QCOMPARE(pluginRead2, QStringLiteral("John Tester"));
+    QString myRead2result = myRead2.readAllStandardOutput().trimmed();
+    QCOMPARE(myRead2result, QStringLiteral("John Tester"));
+}
+
 void GitInitTest::testAdd()
 {
     repoInit();

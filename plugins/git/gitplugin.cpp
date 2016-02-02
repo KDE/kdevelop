@@ -56,6 +56,7 @@
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
 #include "gitplugincheckinrepositoryjob.h"
+#include "gitnameemaildialog.h"
 #include "debug.h"
 
 Q_LOGGING_CATEGORY(PLUGIN_GIT, "kdevplatform.plugins.git")
@@ -420,8 +421,23 @@ VcsJob* GitPlugin::commit(const QString& message,
 {
     if (localLocations.empty() || message.isEmpty())
         return errorsFound(i18n("No files or message specified"));
-
     QDir dir = dotGitDirectory(localLocations.front());
+    QUrl url = QUrl::fromLocalFile(dir.absolutePath());
+    {
+        QString name = readConfigOption(url, QStringLiteral("user.name"));
+        QString email = readConfigOption(url, QStringLiteral("user.email"));
+        if (email.isEmpty() || name.isEmpty()) {
+            GitNameEmailDialog dialog;
+            dialog.setName(name);
+            dialog.setEmail(email);
+            if (dialog.exec()) {
+                setConfigOption(url, QStringLiteral("user.name"), dialog.name(), dialog.isGlobal())->exec();
+                setConfigOption(url, QStringLiteral("user.email"), dialog.email(), dialog.isGlobal())->exec();
+            } else {
+                return errorsFound(i18n("Email or name for git not specified"));
+            }
+        }
+    }
     DVcsJob* job = new DVcsJob(dir, this);
     job->setType(VcsJob::Commit);
     QList<QUrl> files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
@@ -1455,11 +1471,25 @@ CheckInRepositoryJob* GitPlugin::isInRepository(KTextEditor::Document* document)
     return job;
 }
 
-DVcsJob* GitPlugin::setConfigOption(const QUrl& repository, const QString& key, const QString& value)
+DVcsJob* GitPlugin::setConfigOption(const QUrl& repository, const QString& key, const QString& value, bool global)
 {
     auto job = new DVcsJob(urlDir(repository), this);
-    *job << "git" << "config" << key << value;
+    QStringList args;
+    args << "git" << "config";
+    if(global)
+        args << "--global";
+    args << key << value;
+    *job << args;
     return job;
+}
+
+QString GitPlugin::readConfigOption(const QUrl& repository, const QString& key)
+{
+    QProcess exec;
+    exec.setWorkingDirectory(urlDir(repository).absolutePath());
+    exec.start("git", QStringList() << "config" << "--get" << key);
+    exec.waitForFinished();
+    return exec.readAllStandardOutput().trimmed();
 }
 
 #include "gitplugin.moc"
