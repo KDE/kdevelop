@@ -82,6 +82,7 @@ ProblemModel::ProblemModel(QObject * parent, ProblemStore *store)
     setScope(CurrentDocument);
 
     connect(ICore::self()->documentController(), &IDocumentController::documentActivated, this, &ProblemModel::setCurrentDocument);
+    connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &ProblemModel::closedDocument);
     /// CompletionSettings include a list of todo markers we care for, so need to update
     connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this, &ProblemModel::forceFullUpdate);
 
@@ -281,6 +282,14 @@ void ProblemModel::setCurrentDocument(IDocument* document)
     QUrl currentDocument = document->url();
     /// Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
     d->m_problems->setCurrentDocument(IndexedString(currentDocument));
+}
+
+void ProblemModel::closedDocument(IDocument* document)
+{
+    if (IndexedString(document->url()) == d->m_problems->currentDocument())
+    {   // reset current document
+        d->m_problems->setCurrentDocument(IndexedString());
+    }
 }
 
 void ProblemModel::onBeginRebuild()
