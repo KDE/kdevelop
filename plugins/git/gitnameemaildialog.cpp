@@ -1,5 +1,6 @@
  /**************************************************************************
  *   Copyright 2016 Artur Puzio <cytadela88@gmail.com>                     *
+ *   Copyright 2016 Kevin Funk <kfunk@kde.org>                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -20,9 +21,12 @@
 #include "gitnameemaildialog.h"
 #include "ui_gitnameemaildialog.h"
 
-#include <QDialog>
-#include <KLocalizedString>
 #include "gitplugin.h"
+
+#include <KLocalizedString>
+
+#include <QDialog>
+#include <QPushButton>
 
 using namespace KDevelop;
 
@@ -32,10 +36,10 @@ GitNameEmailDialog::GitNameEmailDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->submitButton->setDisabled(true);
+    ui->buttonBox->button(QDialogButtonBox::Save)->setDisabled(true);
 
-    connect(ui->submitButton, &QPushButton::clicked, this, &GitNameEmailDialog::accept);
-    connect(ui->cancelButton, &QPushButton::clicked, this, &GitNameEmailDialog::reject);
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &GitNameEmailDialog::accept);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &GitNameEmailDialog::reject);
 
     QRegularExpression rx(".+");
     auto validator = new QRegularExpressionValidator(rx, this);
@@ -50,8 +54,8 @@ GitNameEmailDialog::~GitNameEmailDialog() = default;
 
 void GitNameEmailDialog::updateUi()
 {
-    ui->submitButton->setDisabled(!ui->nameEdit->hasAcceptableInput() or
-                                  !ui->emailEdit->hasAcceptableInput());
+    ui->buttonBox->button(QDialogButtonBox::Save)->setDisabled(
+        !ui->nameEdit->hasAcceptableInput() || !ui->emailEdit->hasAcceptableInput());
 }
 
 void GitNameEmailDialog::setName(const QString& name)
@@ -78,5 +82,3 @@ bool GitNameEmailDialog::isGlobal() const
 {
     return ui->globalCheckBox->isChecked();
 }
-
-#include "gitnameemaildialog.moc"

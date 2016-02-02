@@ -1,5 +1,6 @@
  /**************************************************************************
  *   Copyright 2016 Artur Puzio <cytadela88@gmail.com>                     *
+ *   Copyright 2016 Kevin Funk <kfunk@kde.org>                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -20,16 +21,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_GIT_NAMEEMAILDIALOG_H
 #define KDEVPLATFORM_PLUGIN_GIT_NAMEEMAILDIALOG_H
 
-#include <QtWidgets>
 #include <QDialog>
 
-
-class QCheckBox;
-class QDialogButtonBox;
-class QGroupBox;
-class QLabel;
-class QLineEdit;
-class QPushButton;
 namespace Ui { class GitNameEmailDialog; }
 
 class GitNameEmailDialog : public QDialog
@@ -37,16 +30,19 @@ class GitNameEmailDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit GitNameEmailDialog(QWidget *parent = 0);
+    explicit GitNameEmailDialog(QWidget *parent = nullptr);
     ~GitNameEmailDialog() override;
-    void setName(const QString& name);
-    void setEmail(const QString& email);
+
     QString name() const;
+    void setName(const QString& name);
     QString email() const;
+    void setEmail(const QString& email);
+
     bool isGlobal() const;
 
 private slots:
     void updateUi();
+
 private:
     QScopedPointer<Ui::GitNameEmailDialog> ui;
 };

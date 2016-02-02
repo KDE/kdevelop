@@ -421,23 +421,12 @@ VcsJob* GitPlugin::commit(const QString& message,
 {
     if (localLocations.empty() || message.isEmpty())
         return errorsFound(i18n("No files or message specified"));
-    QDir dir = dotGitDirectory(localLocations.front());
-    QUrl url = QUrl::fromLocalFile(dir.absolutePath());
-    {
-        QString name = readConfigOption(url, QStringLiteral("user.name"));
-        QString email = readConfigOption(url, QStringLiteral("user.email"));
-        if (email.isEmpty() || name.isEmpty()) {
-            GitNameEmailDialog dialog;
-            dialog.setName(name);
-            dialog.setEmail(email);
-            if (dialog.exec()) {
-                setConfigOption(url, QStringLiteral("user.name"), dialog.name(), dialog.isGlobal())->exec();
-                setConfigOption(url, QStringLiteral("user.email"), dialog.email(), dialog.isGlobal())->exec();
-            } else {
-                return errorsFound(i18n("Email or name for git not specified"));
-            }
-        }
+
+    const QDir dir = dotGitDirectory(localLocations.front());
+    if (!ensureValidGitIdentity(dir)) {
+        return errorsFound(i18n("Email or name for Git not specified"));
     }
+
     DVcsJob* job = new DVcsJob(dir, this);
     job->setType(VcsJob::Commit);
     QList<QUrl> files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
@@ -446,6 +435,28 @@ VcsJob* GitPlugin::commit(const QString& message,
     *job << "git" << "commit" << "-m" << message;
     *job << "--" << files;
     return job;
+}
+
+bool GitPlugin::ensureValidGitIdentity(const QDir& dir)
+{
+    const QUrl url = QUrl::fromLocalFile(dir.absolutePath());
+
+    const QString name = readConfigOption(url, QStringLiteral("user.name"));
+    const QString email = readConfigOption(url, QStringLiteral("user.email"));
+    if (!email.isEmpty() && !name.isEmpty()) {
+        return true; // already okay
+    }
+
+    GitNameEmailDialog dialog;
+    dialog.setName(name);
+    dialog.setEmail(email);
+    if (!dialog.exec()) {
+        return false;
+    }
+
+    runSynchronously(setConfigOption(url, QStringLiteral("user.name"), dialog.name(), dialog.isGlobal()));
+    runSynchronously(setConfigOption(url, QStringLiteral("user.email"), dialog.email(), dialog.isGlobal()));
+    return true;
 }
 
 void GitPlugin::addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files)

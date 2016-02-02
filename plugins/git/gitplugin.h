@@ -197,6 +197,7 @@ signals:
     void repositoryBranchChanged(const QUrl& repository);
 
 private:
+    bool ensureValidGitIdentity(const QDir& dir);
     void addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files);
     
     //commit dialog "main" helper
