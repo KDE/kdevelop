@@ -82,18 +82,23 @@ void AbstractNavigationContext::addExternalHtml( const QString& text )
 void AbstractNavigationContext::makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType )
 {
   NavigationAction action( declaration, actionType );
-  QString targetId = QString::number((quint64)declaration.data() * actionType);
-  makeLink(name, targetId, action);
+  makeLink(name, QString(), action);
 }
 
-QString AbstractNavigationContext::createLink(const QString& name, QString targetId, const NavigationAction& action)
+QString AbstractNavigationContext::createLink(const QString& name, QString, const NavigationAction& action)
 {
   if(m_shorten) {
     //Do not create links in shortened mode, it's only for viewing
     return typeHighlight(name.toHtmlEscaped());
   }
 
-  m_links[ targetId ] = action;
+  // NOTE: Since the by definition in the HTML standard some uri components
+  //       are case-insensitive, we define a new lowercase link-id for each
+  //       link. Otherwise Qt 5 seems to mess up the casing and the link
+  //       cannot be matched when it's executed.
+  QString hrefId = QString("link_%1").arg(m_links.count());
+
+  m_links[ hrefId ] = action;
   m_intLinks[ m_linkCount ] = action;
   m_linkLines[ m_linkCount ] = m_currentLine;
   if(m_currentPositionLine == m_currentLine) {
@@ -105,7 +110,7 @@ QString AbstractNavigationContext::createLink(const QString& name, QString targe
   if( m_linkCount == m_selectedLink )
     str = "<font style=\"background-color:#f1f1f1;\" color=\"#880088\">" + str + "</font>";
 
-  QString ret =  "<a href=\"" + targetId + "\"" + ((m_linkCount == m_selectedLink && m_currentPositionLine == -1) ? QStringLiteral(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
+  QString ret =  "<a href=\"" + hrefId + "\"" + ((m_linkCount == m_selectedLink && m_currentPositionLine == -1) ? QStringLiteral(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
 
   if( m_selectedLink == m_linkCount )
     m_selectedLinkAction = action;
