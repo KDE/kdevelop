@@ -7,7 +7,7 @@ set(kdevproblemreporter_PART_SRCS
     problemtreeview.cpp
     problemhighlighter.cpp
     problemsview.cpp
-    problemnavigationcontext.cpp
+    #problemnavigationcontext.cpp
     problemreportermodel.cpp
 )
 

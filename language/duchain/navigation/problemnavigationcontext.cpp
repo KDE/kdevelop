@@ -32,10 +32,10 @@
 
 using namespace KDevelop;
 
-ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_problem(problem)
+ProblemNavigationContext::ProblemNavigationContext(const IProblem::Ptr& problem)
+  : m_problem(problem)
+  , m_widget(nullptr)
 {
-  m_widget = 0;
-
   QExplicitlySharedDataPointer< IAssistant > solution = problem->solutionAssistant();
   if(solution && !solution->actions().isEmpty()) {
     m_widget = new QWidget;
