@@ -180,6 +180,8 @@ class QuickOpenWidget : public QMenu {
   
   bool eventFilter ( QObject * watched, QEvent * event ) override;
 
+  void avoidMenuAltFocus();
+
   QuickOpenModel* m_model;
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
   QTime m_altDownTime;

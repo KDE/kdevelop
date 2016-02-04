@@ -94,7 +94,7 @@ class BrowseManager : public QObject {
     private:
         void resetChangedCursor();
         void setHandCursor(QWidget* widget);
-
+        void avoidMenuAltFocus();
         bool eventFilter(QObject * watched, QEvent * event) override ;
         ContextBrowserPlugin* m_plugin;
         int m_browsingByKey; //Whether the browsing was started because of a key

@@ -32,6 +32,9 @@
 #include <QCheckBox>
 #include <QMetaObject>
 #include <QWidgetAction>
+#include <QMenuBar>
+#include <kparts/mainwindow.h>
+
 
 #include <KLocalizedString>
 #include <kpluginfactory.h>
@@ -45,6 +48,8 @@
 #include <kactioncollection.h>
 #include <QAction>
 
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -529,6 +534,16 @@ void QuickOpenWidget::doubleClicked ( const QModelIndex & index ) {
   QMetaObject::invokeMethod(this, "ready", Qt::QueuedConnection);
 }
 
+void QuickOpenWidget::avoidMenuAltFocus() {
+    // send an invalid key event to the main menu bar. The menu bar will
+    // stop listening when observing another key than ALT between the press
+    // and the release.
+    QKeyEvent event1(QEvent::KeyPress, 0, Qt::NoModifier);
+    QApplication::sendEvent(ICore::self()->uiController()->activeMainWindow()->menuBar(), &event1);
+    QKeyEvent event2(QEvent::KeyRelease, 0, Qt::NoModifier);
+    QApplication::sendEvent(ICore::self()->uiController()->activeMainWindow()->menuBar(), &event2);
+}
+
 bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
 {
   QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
@@ -551,6 +566,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
   if( event->type() == QEvent::KeyPress  ) {
     m_hadNoCommandSinceAlt = false;
     if(keyEvent->key() == Qt::Key_Alt) {
+      avoidMenuAltFocus();
       m_hadNoCommandSinceAlt = true;
       //Expand
       QModelIndex row = o.list->selectionModel()->currentIndex();
