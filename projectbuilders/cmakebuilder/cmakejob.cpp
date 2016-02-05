@@ -70,11 +70,6 @@ void CMakeJob::start()
     OutputExecuteJob::start();
 }
 
-QString CMakeJob::cmakeBinary( KDevelop::IProject* project )
-{
-    return CMake::currentCMakeBinary( project ).toLocalFile();
-}
-
 QUrl CMakeJob::workingDirectory() const
 {
     KDevelop::Path path = CMake::currentBuildDir( m_project );
