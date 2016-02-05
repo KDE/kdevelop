@@ -48,12 +48,13 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/custom-definesandincludes COMPONENT Devel
 )
 
-add_library(KDev::DefinesAndIncludesManager ALIAS kdevdefinesandincludesmanager)
-target_include_directories(kdevdefinesandincludesmanager INTERFACE
+add_library(kdevdefinesandincludesmanager_interface INTERFACE)
+add_library(KDev::DefinesAndIncludesManager ALIAS kdevdefinesandincludesmanager_interface)
+target_include_directories(kdevdefinesandincludesmanager_interface INTERFACE
      "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>"
      "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevelop>"
 )
-set_target_properties(kdevdefinesandincludesmanager PROPERTIES
+set_target_properties(kdevdefinesandincludesmanager_interface PROPERTIES
     EXPORT_NAME DefinesAndIncludesManager
 )
-install(TARGETS kdevdefinesandincludesmanager EXPORT KDevelopTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdevdefinesandincludesmanager_interface EXPORT KDevelopTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
