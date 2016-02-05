@@ -38,10 +38,6 @@ public:
 
     CXUnsavedFile toClangApi() const;
 
-    QStringList contents() const;
-
-    QString filename() const;
-
 private:
     QString m_fileName;
     QStringList m_contents;

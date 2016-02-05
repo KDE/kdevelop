@@ -80,7 +80,6 @@ private:
     /// TODO: share this file for all TUs that use the same defines (probably most in a project)
     ///       best would be a PCH, if possible
     QTemporaryFile m_definesFile;
-    QMap<QString, QList<KDevelop::ProblemPointer>> m_staticProblems;
 };
 
 /**
@@ -127,14 +126,6 @@ public:
     CXTranslationUnit unit() const;
 
     bool reparse(const QVector<UnsavedFile>& unsavedFiles, const ClangParsingEnvironment& environment);
-
-    /**
-     * If an #include was not found, then this adapts the unsaved-file data
-     * so that the problematic #include code line is removed.
-     * @return The corresponding problem-pointer. The problem-pointer is invalid
-     * if no problem as found.
-     */
-    void annihilateMissingIncludes(QVector<UnsavedFile>& unsavedFiles, const ClangParsingEnvironment& environment);
 
     ClangParsingEnvironment environment() const;
 
