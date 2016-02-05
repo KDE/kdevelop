@@ -152,7 +152,7 @@ struct UrlInfo
 
 /// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid
 /// Returns the exit status
-static int openFilesInRunningInstance(const QVector<UrlInfo>& files, int pid)
+static int openFilesInRunningInstance(const QVector<UrlInfo>& files, qint64 pid)
 {
     const QString service = QString("org.kdevelop.kdevelop-%1").arg(pid);
     QDBusInterface iface(service, "/org/kdevelop/DocumentController", "org.kdevelop.DocumentController");
@@ -176,7 +176,7 @@ static int openFilesInRunningInstance(const QVector<UrlInfo>& files, int pid)
 
 /// Gets the PID of a running KDevelop instance, eventually asking the user if there is more than one.
 /// Returns -1 in case there are no running sessions.
-static int getRunningSessionPid()
+static qint64 getRunningSessionPid()
 {
     QList<KDevelop::SessionInfo> candidates;
     foreach( const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo() ) {
@@ -435,7 +435,7 @@ int main( int argc, char *argv[] )
     }
     if ( ! initialFiles.isEmpty() && ! parser.isSet("new-session") )
     {
-        int pid = -1;
+        qint64 pid = -1;
         if (parser.isSet("open-session")) {
             const QString session = findSessionId(parser.value("open-session"));
             if (session.isEmpty()) {
