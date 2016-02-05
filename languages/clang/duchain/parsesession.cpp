@@ -4,7 +4,6 @@
     Copyright 2013 Olivier de Gaalon <olivier.jg@gmail.com>
     Copyright 2013 Milian Wolff <mail@milianw.de>
     Copyright 2013 Kevin Funk <kfunk@kde.org>
-    Copyright 2016 David Nolden <david.nolden.kdevelop@art-master.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -338,81 +337,13 @@ IndexedString ParseSession::languageString()
     return lang;
 }
 
-void ParseSession::annihilateMissingIncludes(
-    QVector<UnsavedFile>& unsavedFiles, const ClangParsingEnvironment& environment)
-{
-    d->m_staticProblems.clear();
-
-    // unfortunately clang dumps just 1 missing include per parse, so we can
-    // do only one correction per iteration
-    const int maxReparse = 20;
-    for (uint iReparse = 0; iReparse < maxReparse; ++iReparse)
-    {
-        bool fixedMissing = false;
-        const uint numDiagnostics = clang_getNumDiagnostics(d->m_unit);
-        for (uint i = 0; i < numDiagnostics; ++i)
-        {
-            auto diagnostic = clang_getDiagnostic(d->m_unit, i);
-
-            CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
-            // missing-include problems are so severe in clang that we always propagate
-            // them to this document, to ensure that the user will see the error.
-            if (ClangDiagnosticEvaluator::diagnosticType(diagnostic) == ClangDiagnosticEvaluator::IncludeFileNotFoundProblem)
-            {
-                CXFile diagnosticFile;
-                uint line = 0;
-                clang_getFileLocation(location, &diagnosticFile, &line, nullptr, nullptr);
-                QString fileName = ClangString(clang_getFileName(diagnosticFile)).toString();
-                QStringList fileContents;
-                for (int i = 0; i < unsavedFiles.count(); ++i)
-                {
-                    if (unsavedFiles[i].filename() == fileName)
-                    {
-                        fileContents = unsavedFiles[i].contents();
-                        unsavedFiles.removeAt(i);
-                        break;
-                    }
-                }
-                if (fileContents.isEmpty())
-                {   // need to read the file contents from disk
-                    QFile file(fileName);
-                    if (file.open(QIODevice::ReadOnly))
-                    {
-                        fileContents = QString::fromLocal8Bit(file.readAll()).split(QChar::fromLatin1('\n'));
-                    }
-                }
-                line -= 1; // clang seems to start counting at 1
-                if (line < (uint)fileContents.count() && fileContents[line].simplified().contains(QLatin1String("#include ")))
-                {
-                    fileContents[line] = QString::fromLatin1("// REMOVED BY ANNIHILATION: ")+fileContents[line];
-                    unsavedFiles << UnsavedFile(fileName, fileContents);
-                    fixedMissing = true;
-                    ProblemPointer problem = ProblemPointer(ClangDiagnosticEvaluator::createProblem(diagnostic, d->m_unit));
-                    d->m_staticProblems[fileName] << problem;
-                    d->m_staticProblems[ClangString(clang_getFileName(d->m_file)).toString()] << problem;
-                    qDebug(KDEV_CLANG) << "annihilated missing include: " << problem->toString();
-                }
-            }
-        }
-        if (!fixedMissing) {
-            break;
-        }
-        qDebug(KDEV_CLANG) << "reparsing to fix missing includes";
-
-        if (!reparse(unsavedFiles, environment))
-        {
-            break;
-        }
-    }
-}
-
 QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 {
     if (!d) {
         return {};
     }
 
-    QList<ProblemPointer> problems = d->m_staticProblems[ClangString(clang_getFileName(file)).toString()];
+    QList<ProblemPointer> problems;
 
     // extra clang diagnostics
     const uint numDiagnostics = clang_getNumDiagnostics(d->m_unit);
@@ -423,7 +354,9 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
         CXFile diagnosticFile;
         clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
-        if (diagnosticFile != file) {
+        // missing-include problems are so severe in clang that we always propagate
+        // them to this document, to ensure that the user will see the error.
+        if (diagnosticFile != file && ClangDiagnosticEvaluator::diagnosticType(diagnostic) != ClangDiagnosticEvaluator::IncludeFileNotFoundProblem) {
             continue;
         }
 

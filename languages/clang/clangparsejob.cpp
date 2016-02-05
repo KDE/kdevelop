@@ -276,8 +276,6 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
         return;
     }
 
-    session.annihilateMissingIncludes(m_unsavedFiles, m_environment);
-
     if (!clang_getFile(session.unit(), document().byteArray().constData())) {
         // this parse job's document does not exist in the pinned translation unit
         // so we need to unpin and re-add this document
