@@ -72,13 +72,6 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
     /**
-     * Returns list of currently checked statuses.
-     */
-    QList<VcsStatusInfo> checkedStatuses() const {
-        return checkedStatuses(invisibleRootItem());
-    }
-
-    /**
      * Returns list of currently checked urls.
      */
     QList<QUrl> checkedUrls() const {
@@ -124,11 +117,6 @@ protected:
      * @return changed row or -1 if row is deleted
      */
     int updateState(QStandardItem *parent, const KDevelop::VcsStatusInfo &status);
-
-    /**
-     * Returns list of currently checked statuses.
-     */
-    QList<VcsStatusInfo> checkedStatuses(QStandardItem *parent) const;
 
     /**
      * Returns list of currently checked urls.

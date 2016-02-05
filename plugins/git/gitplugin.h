@@ -145,7 +145,8 @@ public:
 
     KDevelop::CheckInRepositoryJob* isInRepository(KTextEditor::Document* document) override;
 
-    KDevelop::DVcsJob* setConfigOption(const QUrl& repository, const QString& key, const QString& value);
+    KDevelop::DVcsJob* setConfigOption(const QUrl& repository, const QString& key, const QString& value, bool global = false);
+    QString readConfigOption(const QUrl& repository, const QString& key);
 
     // this indicates whether the diff() function will generate a diff (patch) which
     // includes the working copy directory name or not (in which case git diff is called
@@ -196,6 +197,7 @@ signals:
     void repositoryBranchChanged(const QUrl& repository);
 
 private:
+    bool ensureValidGitIdentity(const QDir& dir);
     void addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files);
     
     //commit dialog "main" helper

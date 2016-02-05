@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H
 #define KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H
 
+#include <interfaces/iproblem.h>
 #include <language/duchain/navigation/abstractnavigationcontext.h>
-#include <language/duchain/problem.h>
 #include <language/languageexport.h>
 #include <qpointer.h>
 
@@ -30,15 +30,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavi
 {
   Q_OBJECT
   public:
-    explicit ProblemNavigationContext(KDevelop::ProblemPointer problem);
+    explicit ProblemNavigationContext(const IProblem::Ptr& problem);
     ~ProblemNavigationContext();
+
     virtual QString name() const override;  
     virtual QString html(bool shorten = false) override;    
     virtual QWidget* widget() const override;
     virtual bool isWidgetMaximized() const override;
+
   private:
+    IProblem::Ptr m_problem;
+
     QPointer<QWidget> m_widget;
-    ProblemPointer m_problem;
 };
 
 }

@@ -37,12 +37,12 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
+#include <language/duchain/navigation/problemnavigationcontext.h>
 #include <util/texteditorhelpers.h>
 
 #include <kcolorscheme.h>
 
 #include <shell/problem.h>
-#include "problemnavigationcontext.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;

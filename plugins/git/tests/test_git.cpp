@@ -233,6 +233,45 @@ void GitInitTest::testInit()
     repoInit();
 }
 
+static QString runCommand(const QString& cmd, const QStringList& args)
+{
+    QProcess proc;
+    proc.setWorkingDirectory(gitTest_BaseDir());
+    proc.start(cmd, args);
+    proc.waitForFinished();
+    return proc.readAllStandardOutput().trimmed();
+}
+
+void GitInitTest::testReadAndSetConfigOption()
+{
+    repoInit();
+
+    {
+        qDebug() << "read non-existing config option";
+        QString nameFromPlugin = m_plugin->readConfigOption(QUrl::fromLocalFile(gitTest_BaseDir()),
+                                                            QStringLiteral("notexisting.asdads"));
+        QVERIFY(nameFromPlugin.isEmpty());
+    }
+
+    {
+        qDebug() << "write user.name = \"John Tester\"";
+        auto job = m_plugin->setConfigOption(QUrl::fromLocalFile(gitTest_BaseDir()),
+                                             QStringLiteral("user.name"), QStringLiteral("John Tester"));
+        VERIFYJOB(job);
+        const auto name = runCommand("git", {"config", "--get", QStringLiteral("user.name")});
+        QCOMPARE(name, QStringLiteral("John Tester"));
+    }
+
+    {
+        qDebug() << "read user.name";
+        const QString nameFromPlugin = m_plugin->readConfigOption(QUrl::fromLocalFile(gitTest_BaseDir()),
+                                                               QStringLiteral("user.name"));
+        QCOMPARE(nameFromPlugin, QStringLiteral("John Tester"));
+        const auto name = runCommand("git", {"config", "--get", QStringLiteral("user.name")});
+        QCOMPARE(name, QStringLiteral("John Tester"));
+    }
+}
+
 void GitInitTest::testAdd()
 {
     repoInit();

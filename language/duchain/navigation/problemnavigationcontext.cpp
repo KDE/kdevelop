@@ -32,10 +32,10 @@
 
 using namespace KDevelop;
 
-ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_problem(problem)
+ProblemNavigationContext::ProblemNavigationContext(const IProblem::Ptr& problem)
+  : m_problem(problem)
+  , m_widget(nullptr)
 {
-  m_widget = 0;
-
   QExplicitlySharedDataPointer< IAssistant > solution = problem->solutionAssistant();
   if(solution && !solution->actions().isEmpty()) {
     m_widget = new QWidget;
@@ -98,17 +98,26 @@ QString ProblemNavigationContext::html(bool shorten)
 
     DUChainReadLocker lock;
     for (auto diagnostic : diagnostics) {
-      const DocumentRange range = diagnostic->finalLocation();
-      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start());
-
       modifyHtml() += labelHighlight(QStringLiteral("%1: ").arg(diagnostic->severityString()));
       modifyHtml() += diagnostic->description();
 
+      const DocumentRange range = diagnostic->finalLocation();
+      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start());
       if (declaration) {
-        modifyHtml() += QStringLiteral("<br/>");
-        makeLink(declaration->toString(), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+        modifyHtml() += i18n("<br/>See: ");
+        makeLink(declaration->toString(), DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
         modifyHtml() += i18n(" in ");
-        makeLink(QStringLiteral("%1 :%2").arg(declaration->url().toUrl().fileName()).arg(declaration->rangeInCurrentRevision().start().line()+1), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+        makeLink(QStringLiteral("%1 :%2")
+                  .arg(declaration->url().toUrl().fileName())
+                  .arg(declaration->rangeInCurrentRevision().start().line() + 1),
+                 DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+      } else if (range.start().isValid()) {
+        modifyHtml() += i18n("<br/>See: ");
+        const auto url = range.document.toUrl();
+        makeLink(QStringLiteral("%1 :%2")
+                   .arg(url.fileName())
+                   .arg(range.start().line() + 1),
+                 url.toDisplayString(QUrl::PreferLocalFile), NavigationAction(url, range.start()));
       }
       modifyHtml() += QStringLiteral("<br/>");
     }

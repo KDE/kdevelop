@@ -51,6 +51,7 @@ private slots:
     void cleanup();
 
     void testInit();
+    void testReadAndSetConfigOption();
     void testAdd();
     void testCommit();
     void testBranching();

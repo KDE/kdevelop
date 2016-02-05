@@ -23,7 +23,6 @@
 #include "identifier.h"
 #include "instantiationinformation.h"
 #include <language/util/kdevhash.h>
-#include <functional>
 
 //krazy:excludeall=dpointer
 
@@ -178,8 +177,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
     QualifiedIdentifier qualifiedIdentifier() const;
 
   private:
-    void iterateDeclarations(const TopDUContext* top, std::function<bool(Declaration* d)> func) const;
-
     /// An indirect reference to the declaration, which uses the symbol-table for lookup. Should be preferred for all
     /// declarations that are in the symbol-table
     struct Indirect {

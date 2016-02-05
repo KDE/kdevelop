@@ -164,6 +164,8 @@ private slots:
     /// Triggered when the current document changes
     virtual void setCurrentDocument(IDocument* doc);
 
+    virtual void closedDocument(IDocument* doc);
+
     /// Triggered before the problems are rebuilt
     void onBeginRebuild();
 
