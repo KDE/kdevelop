@@ -1,7 +1,7 @@
 # KDevelop version
 set( KDEVELOP_VERSION_MAJOR 4 )
 set( KDEVELOP_VERSION_MINOR 90 )
-set( KDEVELOP_VERSION_PATCH 91 )
+set( KDEVELOP_VERSION_PATCH 92 )
 set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
 
 ################################################################################
@@ -31,7 +31,7 @@ include(CheckFunctionExists)
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(KDECompilerSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 
 set(QT_MIN_VERSION "5.4.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets WebKitWidgets Script Test)
@@ -55,6 +55,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   ThreadWeaver
   XmlGui
   WindowSystem
+  Crash
 )
 find_package(KDevelop-PG-Qt 1.90.90)
 set_package_properties(KDevelop-PG-Qt PROPERTIES

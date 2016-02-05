@@ -35,6 +35,7 @@
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <ktexteditor/cursor.h>
+#include <kcrash.h>
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -359,6 +360,8 @@ int main( int argc, char *argv[] )
     }
 
     KDevelopApplication app(argc, argv);
+
+    KCrash::initialize();
 
     Kdelibs4ConfigMigrator migrator(QStringLiteral("kdevelop"));
     migrator.setConfigFiles({QStringLiteral("kdeveloprc")});

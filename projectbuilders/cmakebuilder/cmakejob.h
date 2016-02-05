@@ -63,7 +63,6 @@ public:
 private:
     QStringList cmakeArguments( KDevelop::IProject* project );
     KDevelop::Path buildDir( KDevelop::IProject* project );
-    QString cmakeBinary( KDevelop::IProject* project );
 
     KDevelop::IProject* m_project;
 };

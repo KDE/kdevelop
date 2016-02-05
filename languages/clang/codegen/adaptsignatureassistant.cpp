@@ -24,6 +24,7 @@
 #include <language/assistant/renameaction.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/types/functiontype.h>
 
 #include <KTextEditor/Document>
@@ -46,6 +47,12 @@ Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const QUr
     return context->type() == DUContext::Function ? context->owner() : nullptr;
 }
 
+bool isConstructor(const Declaration *functionDecl)
+{
+    auto classFun = dynamic_cast<const ClassFunctionDeclaration*>(functionDecl);
+    return classFun && classFun->isConstructor();
+}
+
 Signature getDeclarationSignature(const Declaration *functionDecl, const DUContext *functionCtxt, bool includeDefaults)
 {
     ENSURE_CHAIN_READ_LOCKED
@@ -59,9 +66,10 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
     }
     signature.isConst = functionDecl->abstractType() && functionDecl->abstractType()->modifiers() & AbstractType::ConstModifier;
 
-    FunctionType::Ptr funType = functionDecl->type<FunctionType>();
-    if (funType) {
-        signature.returnType = funType->returnType()->indexed();
+    if (!isConstructor(functionDecl)) {
+        if (auto funType = functionDecl->type<FunctionType>()) {
+            signature.returnType = funType->returnType()->indexed();
+        }
     }
     return signature;
 }

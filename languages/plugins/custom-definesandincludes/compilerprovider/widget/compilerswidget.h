@@ -47,6 +47,8 @@ class CompilersWidget : public KDevelop::ConfigPage
 
 public:
     explicit CompilersWidget(QWidget* parent = 0);
+    ~CompilersWidget() override;
+
     void setCompilers(const QVector<CompilerPointer>& compilers);
     QVector<CompilerPointer> compilers() const;
     void clear();
@@ -74,7 +76,7 @@ signals:
 private:
     void enableItems(bool enable);
 
-    Ui::CompilersWidget* m_ui;
+    QScopedPointer<Ui::CompilersWidget> m_ui;
     CompilersModel* m_compilersModel;
     QMenu *m_addMenu;
     QSignalMapper *m_mapper;

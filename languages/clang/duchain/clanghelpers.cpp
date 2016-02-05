@@ -133,6 +133,9 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         if (update) {
             auto envFile = ClangParsingEnvironmentFile::Ptr(dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data()));
             Q_ASSERT(envFile);
+            if (!envFile)
+                return context;
+
             /* NOTE: When we are here, then either the translation unit or one of its headers was changed.
              *       Thus we must always update the translation unit to propagate the change(s).
              *       See also: https://bugs.kde.org/show_bug.cgi?id=356327
@@ -285,14 +288,14 @@ QStringList ClangHelpers::sourceExtensions()
 
 bool ClangHelpers::isSource(const QString& path)
 {
-    auto extensions = sourceExtensions();
+    const auto& extensions = sourceExtensions();
     return std::any_of(extensions.constBegin(), extensions.constEnd(),
                        [&](const QString& ext) { return path.endsWith(ext); });
 }
 
 bool ClangHelpers::isHeader(const QString& path)
 {
-    auto extensions = headerExtensions();
+    const auto& extensions = headerExtensions();
     return std::any_of(extensions.constBegin(), extensions.constEnd(),
                        [&](const QString& ext) { return path.endsWith(ext); });
 }

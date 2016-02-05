@@ -423,7 +423,9 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
         CXFile diagnosticFile;
         clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
-        if (diagnosticFile != file) {
+        // missing-include problems are so severe in clang that we always propagate
+        // them to this document, to ensure that the user will see the error.
+        if (diagnosticFile != file && ClangDiagnosticEvaluator::diagnosticType(diagnostic) != ClangDiagnosticEvaluator::IncludeFileNotFoundProblem) {
             continue;
         }
 
