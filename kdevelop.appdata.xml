@@ -13,7 +13,6 @@
   <name xml:lang="de">KDevelop</name>
   <name xml:lang="en-GB">KDevelop</name>
   <name xml:lang="es">KDevelop</name>
-  <name xml:lang="et">KDevelop</name>
   <name xml:lang="fi">KDevelop</name>
   <name xml:lang="fr">KDevelop</name>
   <name xml:lang="gl">KDevelop</name>
@@ -36,7 +35,6 @@
   <summary xml:lang="de">KDevelop ist eine leistungsfähige integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann.</summary>
   <summary xml:lang="en-GB">It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
   <summary xml:lang="es">Es un entorno de desarrollo integrado para C/C++ y otros lenguajes de programación con múltiples funcionalidades y que se puede extender con complementos.</summary>
-  <summary xml:lang="et">See on võimalusterohke ja pluginatega laiendatav arenduskeskkond C/C++ ja muudele programmeerimiskeeltele.</summary>
   <summary xml:lang="fi">Kaikkien ominaisuuksien liitännäisillä laajennettava IDE C/C++:lle ja muille ohjelmointikielille.</summary>
   <summary xml:lang="fr">Il s'agit d'un environnement de développement complet et extensible pour le C/C++ et d'autres langages de programmation.</summary>
   <summary xml:lang="gl">É un potente ambiente de desenvolvemento integrado para C, C++ e outras linguaxes de programación. As súas funcionalidades poden estenderse mediante complementos.</summary>
@@ -60,7 +58,6 @@
     <p xml:lang="de">Integrierte Entwicklungsumgebung (Frei und Open Source) für Ihre verschiedenen Software-Projekte.</p>
     <p xml:lang="en-GB">Free and Open Source Integrated Development Environment for your different software projects.</p>
     <p xml:lang="es">Entorno de desarrollo integrado libre y de código abierto para sus distintos proyectos de software.</p>
-    <p xml:lang="et">Vaba ja avatud lähtekoodiga integreeritud arenduskeskkond mitmesuguste tarkvaraprojektide tarbeks.</p>
     <p xml:lang="fi">Vapaan ohjelmiston ja avoimen lähdekoodin integroitu kehitysympäristö erilaisille ohjelmistoprojekteille.</p>
     <p xml:lang="fr">Environnement de développement intégré (IDE) libre et open source pour vos différents projets logiciels.</p>
     <p xml:lang="gl">Ambiente de desenvolvemento integrado libre para os seus proxectos de software.</p>
