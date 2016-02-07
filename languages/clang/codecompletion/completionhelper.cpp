@@ -330,6 +330,8 @@ void CompletionHelper::computeCompletions(const ParseSession& session, CXFile fi
     CXCursor currentCursor = clang_getCursor(unit, location);
     if (clang_getCursorKind(currentCursor) == CXCursor_NoDeclFound) {
         currentCursor = topCursor;
+    } else if (KTextEditor::Cursor(ClangLocation(clang_getCursorLocation(currentCursor))) >= ClangLocation(location)) {
+        currentCursor = clang_getCursorSemanticParent(currentCursor);
     }
 
     clang_visitChildren(currentCursor, findBaseVisitor, &m_overrides);

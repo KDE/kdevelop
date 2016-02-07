@@ -746,6 +746,10 @@ void TestCodeCompletion::testImplement_data()
                 };
             )"
         << CompletionItems{{8,0}, {"Hello::Private::test()"}};
+
+    QTest::newRow("lineOfNextFunction")
+        << "void foo();\nvoid bar() {}"
+        << CompletionItems{{1,0}, {"foo()"}};
 }
 
 void TestCodeCompletion::testImplementOtherFile()
