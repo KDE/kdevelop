@@ -40,6 +40,7 @@ private slots:
     void testImplement();
     void testImplement_data();
     void testImplementOtherFile();
+    void testImplementAfterEdit();
     void testInvalidCompletions();
     void testInvalidCompletions_data();
     void testCompletionPriority();

@@ -117,8 +117,12 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
     lock.unlock();
+    QString text;
+    if (auto doc = ICore::self()->documentController()->documentForUrl(top->url().toUrl())) {
+        text = doc->textDocument()->text({{0, 0}, expectedCompletionItems.position});
+    }
     // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
-    auto context = new ClangCodeCompletionContext(DUContextPointer(top), sessionData, top->url().toUrl(), expectedCompletionItems.position, QString());
+    auto context = new ClangCodeCompletionContext(DUContextPointer(top), sessionData, top->url().toUrl(), expectedCompletionItems.position, text);
     context->setFilters(filters);
     lock.lock();
 
@@ -139,6 +143,9 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
     QEXPECT_FAIL("look-ahead function primary type argument", "No API in LibClang to determine expected code completion type", Continue);
     QEXPECT_FAIL("look-ahead template parameter substitution", "No parameters substitution so far", Continue);
     QEXPECT_FAIL("look-ahead auto item", "Auto type, like many other types, is not exposed through LibClang. We assign DelayedType to it instead of IdentifiedType", Continue);
+    if (QTest::currentTestFunction() == QByteArrayLiteral("testImplementAfterEdit") && expectedCompletionItems.position.line() == 3) {
+        QEXPECT_FAIL("", "TU is not properly updated after edit", Continue);
+    }
     if (tester.names.size() != expectedCompletionItems.completions.size()) {
         qDebug() << "different results:\nactual:" << tester.names << "\nexpected:" << expectedCompletionItems.completions;
     }
@@ -768,6 +775,30 @@ void TestCodeCompletion::testImplementOtherFile()
     CompletionItems expectedItems{{3,1}, {"asdf()", "foo()"}};
     QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
     executeCompletionTest(impl.topContext(), expectedItems);
+}
+
+void TestCodeCompletion::testImplementAfterEdit()
+{
+    TestFile header1("void foo();", "h");
+    QVERIFY(header1.parseAndWait());
+    TestFile impl(QString("#include \"%1\"\n"
+                          "void asdf() {}\nvoid bar() {}")
+                    .arg(header1.url().str()),
+                  "cpp", &header1);
+
+    auto document = ICore::self()->documentController()->openDocument(impl.url().toUrl());
+
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+
+    CompletionItems expectedItems{{2,0}, {"foo()"}};
+    executeCompletionTest(impl.topContext(), expectedItems);
+
+    document->textDocument()->insertText(expectedItems.position, "\n");
+    expectedItems.position.setLine(3);
+
+    executeCompletionTest(impl.topContext(), expectedItems);
+
+    document->close(IDocument::Discard);
 }
 
 void TestCodeCompletion::testInvalidCompletions()
