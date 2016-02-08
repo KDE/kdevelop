@@ -54,6 +54,7 @@
         "Description[pt_BR]": "Editor hexadecimal do KDevelop, baseado no Okteta", 
         "Description[sk]": "Hex editor KDevelop založený na Okteta", 
         "Description[sl]": "Šestnajstiški urejevalnik, ki temelji na Okteti", 
+        "Description[sv]": "KDevelop hexeditor baserad på Okteta", 
         "Description[uk]": "Шістнадцятковий редактор KDevelop на основі Okteta", 
         "Description[x-test]": "xxKDevelop Hex Editor based on Oktetaxx", 
         "Icon": "okteta", 
@@ -73,6 +74,7 @@
         "Name[pt_BR]": "Integração com o Okteta", 
         "Name[sk]": "Integrácia Okteta", 
         "Name[sl]": "Vgradnja Oktete", 
+        "Name[sv]": "Integrering med Okteta", 
         "Name[uk]": "Інтеграція із Okteta", 
         "Name[x-test]": "xxOkteta Integrationxx", 
         "ServiceTypes": [
