@@ -757,6 +757,16 @@ void TestCodeCompletion::testImplement_data()
     QTest::newRow("lineOfNextFunction")
         << "void foo();\nvoid bar() {}"
         << CompletionItems{{1,0}, {"foo()"}};
+
+    QTest::newRow("pure")
+        << R"(
+                struct Hello {
+                    virtual void foo() = 0;
+                    virtual void bar();
+                };
+            )"
+        << CompletionItems{{5, 0}, {"Hello::bar()"}};
+
 }
 
 void TestCodeCompletion::testImplementOtherFile()

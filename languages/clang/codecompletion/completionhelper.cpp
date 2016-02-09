@@ -258,6 +258,11 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
         return CXChildVisit_Continue;
     }
 
+    // don't try to implement pure virtual functions
+    if (clang_CXXMethod_isPureVirtual(cursor)) {
+        return CXChildVisit_Continue;
+    }
+
     CXCursor origin = data->origin;
 
     //Don't try to redefine class/structure/union members
@@ -273,8 +278,6 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     if (isQtMocFunction(cursor) || ClangUtils::specialQtAttributes(cursor) == ClangUtils::QtSignalAttribute) {
         return CXChildVisit_Continue;
     }
-
-    //TODO Add support for pure virtual functions
 
     const auto scope = ClangUtils::getScope(cursor, data->origin);
     QString signature = ClangUtils::getCursorSignature(cursor, scope);
