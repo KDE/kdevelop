@@ -477,7 +477,7 @@ struct Visitor
         return ref;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_FunctionProto> = dummy>
+    template<CXTypeKind TK, EnableIf<TK == CXType_FunctionProto || TK == CXType_FunctionNoProto> = dummy>
     AbstractType *createType(CXType type, CXCursor parent)
     {
         auto func = new FunctionType;
@@ -1202,7 +1202,7 @@ void Visitor::setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const
 
 AbstractType *Visitor::makeType(CXType type, CXCursor parent)
 {
-    #define UseKind(TypeKind) case TypeKind: return dispatchType<TypeKind>(type, parent)
+#define UseKind(TypeKind) case TypeKind: return dispatchType<TypeKind>(type, parent)
     switch (type.kind) {
     UseKind(CXType_Void);
     UseKind(CXType_Bool);
@@ -1232,6 +1232,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_DependentSizedArray);
     UseKind(CXType_LValueReference);
     UseKind(CXType_RValueReference);
+    UseKind(CXType_FunctionNoProto);
     UseKind(CXType_FunctionProto);
     UseKind(CXType_Record);
     UseKind(CXType_Enum);
@@ -1255,6 +1256,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
         qCWarning(KDEV_CLANG) << "Unhandled type:" << type.kind << clang_getTypeSpelling(type);
         return nullptr;
     }
+#undef UseKind
 }
 
 RangeInRevision rangeInRevisionForUse(CXCursor cursor, CXCursorKind referencedCursorKind, CXSourceRange useRange, const QSet<unsigned int>& macroExpansionLocations)
