@@ -39,6 +39,7 @@ struct SessionInfo
     QString path;
     KSharedConfigPtr config;
 };
+using SessionInfos = QVector<SessionInfo>;
 
 class KDEVPLATFORMSHELL_EXPORT Session : public ISession
 {

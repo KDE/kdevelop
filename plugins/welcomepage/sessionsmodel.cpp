@@ -24,7 +24,7 @@ using namespace KDevelop;
 
 SessionsModel::SessionsModel(QObject* parent)
     : QAbstractListModel(parent)
-    , m_sessions(KDevelop::SessionController::availableSessionInfo())
+    , m_sessions(KDevelop::SessionController::availableSessionInfos())
 {
     connect(Core::self()->sessionController(), &SessionController::sessionDeleted, this, &SessionsModel::sessionDeleted);
 }

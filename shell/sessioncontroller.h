@@ -126,7 +126,8 @@ public:
     static QString cfgSessionGroup();
     static QString cfgActiveSessionEntry();
 
-    static QList< SessionInfo > availableSessionInfo();
+    static QT_DEPRECATED QList<SessionInfo> availableSessionInfo(); // use availableSessionInfos()
+    static SessionInfos availableSessionInfos();
 
     /**
      * Shows a dialog where the user can choose the session

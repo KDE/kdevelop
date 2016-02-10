@@ -34,7 +34,7 @@ class SessionsModel : public QAbstractListModel
 
         Q_SCRIPTABLE void loadSession(const QString& nameOrId) const;
     private:
-        QList<KDevelop::SessionInfo> m_sessions;
+        KDevelop::SessionInfos m_sessions;
 
     private slots:
         void sessionDeleted(const QString& id);
