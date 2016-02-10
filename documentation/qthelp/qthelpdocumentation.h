@@ -29,6 +29,7 @@
 #include <interfaces/idocumentation.h>
 
 class QModelIndex;
+class QNetworkAccessManager;
 class QWebView;
 class QtHelpProviderAbstract;
 class QTemporaryFile;
@@ -40,6 +41,7 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info);
 
         QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key);
+        ~QtHelpDocumentation() override;
 
         QString name() const override { return m_name; }
 
@@ -66,8 +68,10 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         const QString m_name;
         const QMap<QString, QUrl> m_info;
         const QMap<QString, QUrl>::const_iterator m_current;
+
         QWebView* lastView;
         QPointer<QTemporaryFile> m_lastStyleSheet;
+        QScopedPointer<QNetworkAccessManager> m_sharedQNAM;
 };
 
 class HomeDocumentation : public KDevelop::IDocumentation
