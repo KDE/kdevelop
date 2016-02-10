@@ -50,7 +50,7 @@ ProblemNavigationContext::ProblemNavigationContext(const IProblem::Ptr& problem)
     QMenu* menu = new QMenu;
     menu->setFocusPolicy(Qt::NoFocus);
     foreach(IAssistantAction::Ptr action, solution->actions()) {
-      menu->addAction(action->toKAction());
+      menu->addAction(action->toKAction(this));
     }
     button->setMenu(menu);
 

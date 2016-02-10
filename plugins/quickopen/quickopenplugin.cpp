@@ -286,7 +286,7 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
     QStringList allTypes = m_model->allTypes();
     QStringList allScopes = m_model->allScopes();
 
-    QMenu* itemsMenu = new QMenu;
+    QMenu* itemsMenu = new QMenu(this);
 
     foreach( const QString &type, allTypes )
     {
@@ -299,7 +299,7 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
 
     o.itemsButton->setMenu(itemsMenu);
 
-    QMenu* scopesMenu = new QMenu;
+    QMenu* scopesMenu = new QMenu(this);
 
     foreach( const QString &scope, allScopes )
     {
