@@ -18,6 +18,7 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "environmentgroupmodel.h"
+
 #include <QtCore/QVariant>
 #include <QtCore/QStringList>
 #include <QtCore/QModelIndex>
@@ -203,6 +204,26 @@ void EnvironmentGroupModel::changeDefaultGroup( const QString& grp )
 {
     if( !grp.isEmpty() )
         setDefaultGroup( grp );
+}
+
+void EnvironmentGroupModel::loadEnvironmentFromString(const QString& plainText)
+{
+    beginResetModel();
+
+    m_varsByIndex.clear();
+    variables(m_currentGroup).clear();
+
+    const QStringList lines = plainText.split(QLatin1Char('\n'), QString::SkipEmptyParts);
+    foreach (const auto& line, lines) {
+        const QString var = line.section('=', 0, 0);
+        const QString value = line.section('=', 1, -1).trimmed();
+        if (!var.isEmpty()) {
+            m_varsByIndex << var;
+            variables(m_currentGroup).insert(var, value);
+        }
+    }
+
+    endResetModel();
 }
 
 void EnvironmentGroupModel::loadFromConfig( KConfig* cfg )

@@ -54,6 +54,14 @@ public:
     bool setData( const QModelIndex& idx, const QVariant&, int role = Qt::EditRole) override;
     void setCurrentGroup( const QString& group );
     bool cloneCurrentGroup( const QString& newGroup );
+
+    /**
+     * Load a set of environment variables from a string.
+     *
+     * @p plainText In the form "FOO=1\nBAR=2"
+     */
+    void loadEnvironmentFromString(const QString& plainText);
+
     void loadFromConfig( KConfig* );
     void saveToConfig( KConfig* );
     QModelIndex addVariable( const QString& var, const QString& value );

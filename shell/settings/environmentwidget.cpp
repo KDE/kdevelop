@@ -179,15 +179,7 @@ void EnvironmentWidget::batchModeEditButtonClicked()
         return;
     }
 
-    QStringList lines = edit->toPlainText().split( QStringLiteral("\n"), QString::SkipEmptyParts );
-
-    foreach(const QString &line, lines) {
-        QString name = line.section('=', 0, 0);
-        QString value = line.section('=', 1, -1).trimmed();
-        if (!name.isEmpty() && !value.isEmpty()) {
-            groupModel->addVariable( name, value );
-        }
-    }
+    groupModel->loadEnvironmentFromString(edit->toPlainText());
 }
 
 void EnvironmentWidget::addGroupClicked()
