@@ -489,7 +489,7 @@ void QuickOpenPlugin::showQuickOpenWidget(const QStringList& items, const QStrin
   connect( dialog->widget(), &QuickOpenWidget::scopesChanged, this, &QuickOpenPlugin::storeScopes );
   //Not connecting itemsChanged to storeItems, as showQuickOpen doesn't use lastUsedItems and so shouldn't store item changes
   //connect( dialog->widget(), SIGNAL(itemsChanged(QStringList)), this, SLOT(storeItems(QStringList)) );
-  dialog->widget()->o.itemsButton->setEnabled(false);
+  dialog->widget()->ui.itemsButton->setEnabled(false);
 
   if(quickOpenLine()) {
     quickOpenLine()->showWithWidget(dialog->widget());
@@ -804,8 +804,8 @@ struct CreateOutlineDialog {
       int num = 0;
       foreach(const DUChainItem& item, items) {
         if(item.m_item.data() == cursorDecl) {
-          dialog->widget()->o.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
-          dialog->widget()->o.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
+          dialog->widget()->ui.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
+          dialog->widget()->ui.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
         }
         ++num;
       }
@@ -968,7 +968,7 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
 
     connect( m_widget.data(), &QuickOpenWidget::scopesChanged, QuickOpenPlugin::self(), &QuickOpenPlugin::storeScopes );
     connect( m_widget.data(), &QuickOpenWidget::itemsChanged, QuickOpenPlugin::self(), &QuickOpenPlugin::storeItems );
-    Q_ASSERT(m_widget->o.searchLine == this);
+    Q_ASSERT(m_widget->ui.searchLine == this);
     m_widget->prepareShow();
     QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));
     widgetGeometry.setWidth(700); ///@todo Waste less space

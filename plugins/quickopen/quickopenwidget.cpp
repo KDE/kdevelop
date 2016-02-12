@@ -58,16 +58,16 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   connect(&m_filterTimer, &QTimer::timeout, this, &QuickOpenWidget::applyFilter);
 
   Q_UNUSED( title );
-  o.setupUi( this );
-  o.list->header()->hide();
-  o.list->setRootIsDecorated( false );
-  o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
+  ui.setupUi( this );
+  ui.list->header()->hide();
+  ui.list->setRootIsDecorated( false );
+  ui.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
 
-  connect(o.list->verticalScrollBar(), &QScrollBar::valueChanged, m_model, &QuickOpenModel::placeExpandingWidgets);
+  connect(ui.list->verticalScrollBar(), &QScrollBar::valueChanged, m_model, &QuickOpenModel::placeExpandingWidgets);
 
-  o.searchLine->setFocus();
+  ui.searchLine->setFocus();
 
-  o.list->setItemDelegate( new QuickOpenDelegate( m_model, o.list ) );
+  ui.list->setItemDelegate( new QuickOpenDelegate( m_model, ui.list ) );
 
   if(!listOnly) {
     QStringList allTypes = m_model->allTypes();
@@ -84,7 +84,7 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
       itemsMenu->addAction(action);
     }
 
-    o.itemsButton->setMenu(itemsMenu);
+    ui.itemsButton->setMenu(itemsMenu);
 
     QMenu* scopesMenu = new QMenu(this);
 
@@ -98,34 +98,34 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
       scopesMenu->addAction(action);
     }
 
-    o.scopesButton->setMenu(scopesMenu);
+    ui.scopesButton->setMenu(scopesMenu);
 
   }else{
-    o.list->setFocusPolicy(Qt::StrongFocus);
-    o.scopesButton->hide();
-    o.itemsButton->hide();
-    o.label->hide();
-    o.label_2->hide();
+    ui.list->setFocusPolicy(Qt::StrongFocus);
+    ui.scopesButton->hide();
+    ui.itemsButton->hide();
+    ui.label->hide();
+    ui.label_2->hide();
   }
 
   showSearchField(!noSearchField);
 
-  o.okButton->hide();
-  o.cancelButton->hide();
+  ui.okButton->hide();
+  ui.cancelButton->hide();
 
-  o.searchLine->installEventFilter( this );
-  o.list->installEventFilter( this );
-  o.list->setFocusPolicy(Qt::NoFocus);
-  o.scopesButton->setFocusPolicy(Qt::NoFocus);
-  o.itemsButton->setFocusPolicy(Qt::NoFocus);
+  ui.searchLine->installEventFilter( this );
+  ui.list->installEventFilter( this );
+  ui.list->setFocusPolicy(Qt::NoFocus);
+  ui.scopesButton->setFocusPolicy(Qt::NoFocus);
+  ui.itemsButton->setFocusPolicy(Qt::NoFocus);
 
-  connect( o.searchLine, &QLineEdit::textChanged, this, &QuickOpenWidget::textChanged );
+  connect( ui.searchLine, &QLineEdit::textChanged, this, &QuickOpenWidget::textChanged );
 
-  connect( o.list, &ExpandingTree::doubleClicked, this, &QuickOpenWidget::doubleClicked );
+  connect( ui.list, &ExpandingTree::doubleClicked, this, &QuickOpenWidget::doubleClicked );
 
-  connect(o.okButton, &QPushButton::clicked, this, &QuickOpenWidget::accept);
-  connect(o.okButton, &QPushButton::clicked, this, &QuickOpenWidget::ready);
-  connect(o.cancelButton, &QPushButton::clicked, this, &QuickOpenWidget::ready);
+  connect(ui.okButton, &QPushButton::clicked, this, &QuickOpenWidget::accept);
+  connect(ui.okButton, &QPushButton::clicked, this, &QuickOpenWidget::ready);
+  connect(ui.cancelButton, &QPushButton::clicked, this, &QuickOpenWidget::ready);
 
   updateProviders();
   updateTimerInterval(true);
@@ -137,11 +137,11 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
 void QuickOpenWidget::showStandardButtons(bool show)
 {
   if(show) {
-    o.okButton->show();
-    o.cancelButton->show();
+    ui.okButton->show();
+    ui.cancelButton->show();
   }else{
-    o.okButton->hide();
-    o.cancelButton->hide();
+    ui.okButton->hide();
+    ui.cancelButton->hide();
   }
 }
 
@@ -167,49 +167,49 @@ void QuickOpenWidget::showEvent(QShowEvent* e)
     QWidget::showEvent(e);
 
     // The column width only has an effect _after_ the widget has been shown
-    o.list->setColumnWidth( 0, 20 );
+    ui.list->setColumnWidth( 0, 20 );
 }
 
 void QuickOpenWidget::setAlternativeSearchField(QLineEdit* alterantiveSearchField)
 {
-    o.searchLine = alterantiveSearchField;
-    o.searchLine->installEventFilter( this );
-    connect( o.searchLine, &QLineEdit::textChanged, this, &QuickOpenWidget::textChanged );
+    ui.searchLine = alterantiveSearchField;
+    ui.searchLine->installEventFilter( this );
+    connect( ui.searchLine, &QLineEdit::textChanged, this, &QuickOpenWidget::textChanged );
 }
 
 
 void QuickOpenWidget::showSearchField(bool b)
 {
-    if(b){
-      o.searchLine->show();
-      o.searchLabel->show();
-    }else{
-      o.searchLine->hide();
-      o.searchLabel->hide();
-    }
+  if(b){
+    ui.searchLine->show();
+    ui.searchLabel->show();
+  }else{
+    ui.searchLine->hide();
+    ui.searchLabel->hide();
+  }
 }
 
 void QuickOpenWidget::prepareShow()
 {
-  o.list->setModel( 0 );
-  o.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-  m_model->setTreeView( o.list );
-  o.list->setModel( m_model );
+  ui.list->setModel( 0 );
+  ui.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+  m_model->setTreeView( ui.list );
+  ui.list->setModel( m_model );
 
   m_filterTimer.stop();
   m_filter = QString();
 
   if (!m_preselectedText.isEmpty())
   {
-    o.searchLine->setText(m_preselectedText);
-    o.searchLine->selectAll();
+    ui.searchLine->setText(m_preselectedText);
+    ui.searchLine->selectAll();
   }
 
   m_model->restart(false);
 
-  connect( o.list->selectionModel(), &QItemSelectionModel::currentRowChanged,
+  connect( ui.list->selectionModel(), &QItemSelectionModel::currentRowChanged,
            this, &QuickOpenWidget::callRowSelected );
-  connect( o.list->selectionModel(), &QItemSelectionModel::selectionChanged,
+  connect( ui.list->selectionModel(), &QItemSelectionModel::selectionChanged,
            this, &QuickOpenWidget::callRowSelected );
 }
 
@@ -262,23 +262,23 @@ void QuickOpenWidget::updateProviders() {
 
   QStringList checkedItems;
 
-  if(o.itemsButton->menu()) {
+  if(ui.itemsButton->menu()) {
 
-    foreach( QObject* obj, o.itemsButton->menu()->children() ) {
+    foreach( QObject* obj, ui.itemsButton->menu()->children() ) {
       QAction* box = qobject_cast<QAction*>( obj );
       if( box ) {
         if( box->isChecked() )
           checkedItems << box->text().remove('&');
       }
     }
-    o.itemsButton->setText(checkedItems.join(QStringLiteral(", ")));
+        ui.itemsButton->setText(checkedItems.join(QStringLiteral(", ")));
   }
 
   QStringList checkedScopes;
 
-  if(o.scopesButton->menu()) {
+  if(ui.scopesButton->menu()) {
 
-    foreach( QObject* obj, o.scopesButton->menu()->children() ) {
+    foreach( QObject* obj, ui.scopesButton->menu()->children() ) {
       QAction* box = qobject_cast<QAction*>( obj );
       if( box ) {
         if( box->isChecked() )
@@ -286,7 +286,7 @@ void QuickOpenWidget::updateProviders() {
       }
     }
 
-    o.scopesButton->setText(checkedScopes.join(QStringLiteral(", ")));
+    ui.scopesButton->setText(checkedScopes.join(QStringLiteral(", ")));
   }
 
   emit itemsChanged( checkedItems );
@@ -307,13 +307,13 @@ void QuickOpenWidget::applyFilter()
   m_model->textChanged( m_filter );
 
   QModelIndex currentIndex = m_model->index(0, 0, QModelIndex());
-  o.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );
+    ui.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );
 
   callRowSelected();
 }
 
 void QuickOpenWidget::callRowSelected() {
-  QModelIndex currentIndex = o.list->selectionModel()->currentIndex();
+  QModelIndex currentIndex = ui.list->selectionModel()->currentIndex();
   if( currentIndex.isValid() )
     m_model->rowSelected( currentIndex );
   else
@@ -321,13 +321,13 @@ void QuickOpenWidget::callRowSelected() {
 }
 
 void QuickOpenWidget::accept() {
-  QString filterText = o.searchLine->text();
-  m_model->execute( o.list->currentIndex(), filterText );
+  QString filterText = ui.searchLine->text();
+  m_model->execute( ui.list->currentIndex(), filterText );
 }
 
 void QuickOpenWidget::doubleClicked ( const QModelIndex & index ) {
   // crash guard: https://bugs.kde.org/show_bug.cgi?id=297178
-  o.list->setCurrentIndex(index);
+    ui.list->setCurrentIndex(index);
   QMetaObject::invokeMethod(this, "accept", Qt::QueuedConnection);
   QMetaObject::invokeMethod(this, "ready", Qt::QueuedConnection);
 }
@@ -350,7 +350,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
     if(keyEvent->key() == Qt::Key_Alt) {
       if((m_expandedTemporary && m_altDownTime.msecsTo( QTime::currentTime() ) > 300) || (!m_expandedTemporary && m_altDownTime.msecsTo( QTime::currentTime() ) < 300 && m_hadNoCommandSinceAlt)) {
         //Unexpand the item
-        QModelIndex row = o.list->selectionModel()->currentIndex();
+        QModelIndex row = ui.list->selectionModel()->currentIndex();
         if( row.isValid() ) {
           row = row.sibling( row.row(), 0 );
           if(m_model->isExpanded( row ))
@@ -367,7 +367,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
       avoidMenuAltFocus();
       m_hadNoCommandSinceAlt = true;
       //Expand
-      QModelIndex row = o.list->selectionModel()->currentIndex();
+      QModelIndex row = ui.list->selectionModel()->currentIndex();
       if( row.isValid() ) {
         row = row.sibling( row.row(), 0 );
         m_altDownTime = QTime::currentTime();
@@ -382,16 +382,16 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
       case Qt::Key_Tab:
         if ( keyEvent->modifiers() == Qt::NoModifier ) {
           // Tab should work just like Down
-          QCoreApplication::sendEvent(o.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier));
-          QCoreApplication::sendEvent(o.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Down, Qt::NoModifier));
+          QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier));
+          QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Down, Qt::NoModifier));
           return true;
         }
         break;
       case Qt::Key_Backtab:
          if ( keyEvent->modifiers() == Qt::ShiftModifier ) {
           // Shift + Tab should work just like Up
-          QCoreApplication::sendEvent(o.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier));
-          QCoreApplication::sendEvent(o.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Up, Qt::NoModifier));
+          QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier));
+          QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Up, Qt::NoModifier));
           return true;
         }
         break;
@@ -399,7 +399,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
       case Qt::Key_Up:
       {
         if( keyEvent->modifiers() == Qt::AltModifier ) {
-          QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
+          QWidget* w = m_model->expandingWidget(ui.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             if( keyEvent->key() == Qt::Key_Down )
@@ -413,9 +413,9 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
       }
       case Qt::Key_PageUp:
       case Qt::Key_PageDown:
-        if(watched == o.list )
+        if(watched == ui.list )
           return false;
-        QApplication::sendEvent( o.list, event );
+        QApplication::sendEvent( ui.list, event );
       //callRowSelected();
         return true;
 
@@ -423,14 +423,14 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
         //Expand/unexpand
         if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
-          QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
+          QWidget* w = m_model->expandingWidget(ui.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->previous();
             return true;
           }
         } else {
-          QModelIndex row = o.list->selectionModel()->currentIndex();
+          QModelIndex row = ui.list->selectionModel()->currentIndex();
           if( row.isValid() ) {
             row = row.sibling( row.row(), 0 );
 
@@ -446,14 +446,14 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
         //Expand/unexpand
         if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
-          QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
+          QWidget* w = m_model->expandingWidget(ui.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->next();
             return true;
           }
         } else {
-          QModelIndex row = o.list->selectionModel()->currentIndex();
+          QModelIndex row = ui.list->selectionModel()->currentIndex();
           if( row.isValid() ) {
             row = row.sibling( row.row(), 0 );
 
@@ -473,20 +473,20 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
         }
         if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
-          QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
+          QWidget* w = m_model->expandingWidget(ui.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->accept();
             return true;
           }
         } else {
-          QString filterText = o.searchLine->text();
+          QString filterText = ui.searchLine->text();
 
           //Safety: Track whether this object is deleted. When execute() is called, a dialog may be opened,
           //which kills the quickopen widget.
           QPointer<QObject> stillExists(this);
 
-          if( m_model->execute( o.list->currentIndex(), filterText ) ) {
+          if( m_model->execute( ui.list->currentIndex(), filterText ) ) {
 
             if(!stillExists)
               return true;
@@ -495,8 +495,8 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
               emit ready();
           } else {
             //Maybe the filter-text was changed:
-            if( filterText != o.searchLine->text() ) {
-              o.searchLine->setText( filterText );
+            if( filterText != ui.searchLine->text() ) {
+              ui.searchLine->setText( filterText );
             }
           }
         }

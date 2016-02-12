@@ -85,7 +85,7 @@ class QuickOpenWidget : public QMenu {
   QTimer m_filterTimer;
   QString m_filter;
   public:
-  Ui::QuickOpenWidget o;
+  Ui::QuickOpenWidget ui;
 
   friend class QuickOpenWidgetDialog;
   friend class QuickOpenPlugin;
