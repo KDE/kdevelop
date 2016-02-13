@@ -105,6 +105,7 @@ add_subdirectory(kdeintegration)
 add_subdirectory(utils)
 add_subdirectory(file_templates)
 add_subdirectory(providers)
+add_subdirectory(shortcuts)
 add_subdirectory(doc)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevelop")
