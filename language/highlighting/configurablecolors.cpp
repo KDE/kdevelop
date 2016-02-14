@@ -83,12 +83,6 @@ CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : Configurable
   ADD_COLOR(ForwardDeclarationType, 0x5C5C5C) //Gray
   ADD_COLOR(MacroType, 0xA41239)
   ADD_COLOR(MacroFunctionLikeType, 0x008080)
-
-/*      case ScopeType:
-    case TemplateType:
-    case TemplateParameterType:
-    case CodeType:
-    case FileType:*/
 }
 
 }
