@@ -29,6 +29,7 @@ set(KDevPlatformShell_LIB_SRCS
     languagecontroller.cpp
     statusbar.cpp
     runcontroller.cpp
+    unitylauncher.cpp
     sessioncontroller.cpp
     session.cpp
     sessionlock.cpp
