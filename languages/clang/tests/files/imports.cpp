@@ -4,7 +4,7 @@ class Base
     /// "definition" : { "internalContext" : { "importedParents" : { "0" : { "owner" : { "identifier" : "Base" } } } } }
     int member();
 
-    /// "internalContext" : { "importedParents" : { "0" : { "owner" : { "identifier" : "Base" } } } }
+    /// "internalContext" : { "importedParents" : { } }
     int member2()
     {
         return field;

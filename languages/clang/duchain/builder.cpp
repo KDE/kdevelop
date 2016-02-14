@@ -432,7 +432,9 @@ struct Visitor
 
         if (CK == CXCursor_CXXMethod || CursorKindTraits::isClass(CK)) {
             CXCursor semParent = clang_getCursorSemanticParent(cursor);
-            if (!clang_Cursor_isNull(semParent)) {
+            // only import the semantic parent if it differs from the lexical parent
+            // this fixes some issues that would otherwise crop up for nested classes
+            if (!clang_Cursor_isNull(semParent) && !clang_equalCursors(semParent, clang_getCursorLexicalParent(cursor))) {
                 auto semParentDecl = findDeclaration(semParent);
                 if (semParentDecl) {
                     contextImportDecl(context, semParentDecl);

@@ -642,7 +642,6 @@ void TestDUChain::testReparseBaseClassesTemplates()
     }
 }
 
-// TODO: Move this test to kdevplatform.
 void TestDUChain::testGetInheriters()
 {
     TestFile file("class Base { class Inner {}; }; class Inherited : public Base, Base::Inner {};", "cpp");
@@ -669,7 +668,6 @@ void TestDUChain::testGetInheriters()
 
     uint maxAllowedSteps = uint(-1);
     auto baseInheriters = DUChainUtils::getInheriters(baseDecl, maxAllowedSteps);
-    QEXPECT_FAIL("", "not yet working properly, tentative fix is up for review for kdevplatform", Abort);
     QCOMPARE(baseInheriters, QList<Declaration*>() << inheritedDecl);
 
     maxAllowedSteps = uint(-1);
