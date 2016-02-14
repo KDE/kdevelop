@@ -26,6 +26,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
+#include <tests/testproject.h>
 
 #include "duchain/parsesession.h"
 #include "util/clangtypes.h"
@@ -45,6 +46,8 @@
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+
+#include <KConfigGroup>
 
 QTEST_MAIN(TestCodeCompletion);
 
@@ -1165,4 +1168,24 @@ void TestCodeCompletion::testCompleteFunction_data()
         << CompletionItems({2, 0}, {"foo", "main"})
         << "main"
         << "int foo();\nint main() {\nmain();\n}";
+}
+
+void TestCodeCompletion::testIgnoreGccBuiltins()
+{
+    // TODO: make it easier to change the compiler provider for testing purposes
+    QTemporaryDir dir;
+    auto project = new TestProject(Path(dir.path()), this);
+    auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
+    auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
+    pathConfig.writeEntry("Path", ".");
+    pathConfig.group("Compiler").writeEntry("Name", "GCC");
+    m_projectController->addProject(project);
+
+    {
+        TestFile file("", "cpp", project, dir.path());
+
+        QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+
+        executeCompletionTest(file.topContext(), {});
+    }
 }

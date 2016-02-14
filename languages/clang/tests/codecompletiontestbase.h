@@ -31,6 +31,11 @@ namespace KTextEditor {
 class View;
 }
 
+namespace KDevelop
+{
+class TestProjectController;
+};
+
 struct DeleteDocument
 {
     void operator()(KTextEditor::View* view) const;
@@ -46,6 +51,10 @@ public:
 private slots:
     void initTestCase();
     void cleanupTestCase();
+    void init();
+
+protected:
+    KDevelop::TestProjectController* m_projectController;
 };
 
 #endif // CODECOMPLETIONTESTBASE_H

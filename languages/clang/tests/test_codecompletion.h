@@ -56,6 +56,8 @@ private slots:
 
     void testCompleteFunction_data();
     void testCompleteFunction();
+
+    void testIgnoreGccBuiltins();
 };
 
 #endif // TESTCODECOMPLETION_H
