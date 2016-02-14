@@ -22,6 +22,7 @@
  */
 
 #include "test_codecompletion.h"
+#include <language/backgroundparser/backgroundparser.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -231,7 +232,15 @@ void executeMemberAccessReplacerTest(const QString& code, const CompletionItems&
 
     QApplication::processEvents();
     document->close(KDevelop::IDocument::Silent);
+
     // The previous ClangCodeCompletionContext call should replace member access.
+    // That triggers an update request in the duchain which we are not interested in,
+    // so let's stop that request.
+    if (QTest::currentDataTag() != QByteArrayLiteral("no replacement needed")) {
+        QVERIFY(ICore::self()->languageController()->backgroundParser()->isQueued(file.url()));
+        ICore::self()->languageController()->backgroundParser()->removeDocument(file.url());
+    }
+
     context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
     context->setFilters(filters);
     lock.lock();
