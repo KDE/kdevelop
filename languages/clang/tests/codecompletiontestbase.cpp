@@ -27,6 +27,8 @@
 #include <tests/autotestshell.h>
 #include <tests/testproject.h>
 
+#include <interfaces/idocumentcontroller.h>
+
 #include "clangsettings/clangsettingsmanager.h"
 
 #include <language/codecompletion/codecompletiontesthelper.h>
@@ -70,6 +72,7 @@ void CodeCompletionTestBase::initTestCase()
     delete core->projectController();
     m_projectController = new TestProjectController(core);
     core->setProjectController(m_projectController);
+    ICore::self()->documentController()->closeAllDocuments();
 
     ClangSettingsManager::self()->m_enableTesting = true;
 }
