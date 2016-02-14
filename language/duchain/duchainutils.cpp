@@ -492,7 +492,7 @@ static QList<Declaration*> getInheritersInternal(const Declaration* decl, uint& 
   if(maxAllowedSteps == 0)
     return ret;
 
-  if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class)
+  if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class) {
     foreach (const IndexedDUContext importer, decl->internalContext()->indexedImporters()) {
 
       DUContext* imp = importer.data();
@@ -508,9 +508,7 @@ static QList<Declaration*> getInheritersInternal(const Declaration* decl, uint& 
       if(maxAllowedSteps == 0)
         return ret;
     }
-
-    if(maxAllowedSteps == 0)
-      return ret;
+  }
 
   if(collectVersions && decl->inSymbolTable()) {
     uint count;
