@@ -90,6 +90,12 @@ target_link_libraries( kdevcmakecommon
 generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
 
 ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
+add_library( kdevcmakemanagernosettings STATIC ${cmakemanager_SRCS})
+target_link_libraries( kdevcmakemanagernosettings KF5::KIOWidgets KDev::Util
+                        KDev::Interfaces kdevcmakecommon kdevmakefileresolver
+                        KDev::Project KDev::Language
+                        KDev::OutputView KF5::TextEditor Qt5::Concurrent)
+
 kdevplatform_add_plugin(kdevcmakemanager JSON kdevcmakemanager.json SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
 target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
                         KDev::Interfaces kdevcmakecommon kdevmakefileresolver
