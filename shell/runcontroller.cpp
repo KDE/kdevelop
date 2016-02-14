@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QPalette>
 #include <QSignalMapper>
 
+#include <KAboutData>
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KColorScheme>
@@ -51,6 +52,7 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "launchconfiguration.h"
 #include "launchconfigurationdialog.h"
+#include "unitylauncher.h"
 #include "debug.h"
 #include <interfaces/isession.h>
 
@@ -148,6 +150,8 @@ public:
     DebugMode* debugMode;
     ExecuteMode* executeMode;
     ProfileMode* profileMode;
+    UnityLauncher* unityLauncher;
+
     bool hasLaunchConfigType( const QString& typeId )
     {
         return launchConfigurationTypes.contains( typeId );
@@ -335,6 +339,10 @@ RunController::RunController(QObject *parent)
     d->executeMode = 0;
     d->debugMode = 0;
     d->profileMode = 0;
+
+    d->unityLauncher = new UnityLauncher(this);
+    // desktopFileName() reports itself as "org.kdevelop.kdevelop" which is rubbish
+    d->unityLauncher->setLauncherId(KAboutData::applicationData().componentName() + QLatin1String(".desktop"));
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         // Note that things like registerJob() do not work without the actions, it'll simply crash.
@@ -605,6 +613,9 @@ void KDevelop::RunController::registerJob(KJob * job)
         connect( job, &KJob::finished, this, &RunController::finished );
         connect( job, &KJob::destroyed, this, &RunController::jobDestroyed );
 
+        // FIXME percent is a private signal and thus we cannot use new connext syntax
+        connect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(jobPercentChanged()));
+
         IRunController::registerJob(job);
 
         emit jobRegistered(job);
@@ -635,11 +646,25 @@ void KDevelop::RunController::checkState()
 {
     bool running = false;
 
-    foreach (KJob* job, d->jobs.keys()) {
+    int jobCount = 0;
+    int totalProgress = 0;
+
+    for (auto it = d->jobs.constBegin(), end = d->jobs.constEnd(); it != end; ++it) {
+        KJob *job = it.key();
+
         if (!job->isSuspended()) {
             running = true;
-            break;
+
+            ++jobCount;
+            totalProgress += job->percent();
         }
+    }
+
+    d->unityLauncher->setProgressVisible(running);
+    if (jobCount > 0) {
+        d->unityLauncher->setProgress((totalProgress + 1) / jobCount);
+    } else {
+        d->unityLauncher->setProgress(0);
     }
 
     if ( ( d->state != Running ? false : true ) == running ) {
@@ -714,6 +739,11 @@ void RunController::jobDestroyed(QObject* job)
         qWarning() << "job destroyed without emitting finished signal!";
         unregisterJob(kjob);
     }
+}
+
+void RunController::jobPercentChanged()
+{
+    checkState();
 }
 
 void KDevelop::RunController::suspended(KJob * job)

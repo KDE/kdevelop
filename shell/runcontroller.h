@@ -136,6 +136,7 @@ private Q_SLOTS:
     void slotKillJob();
     void launchChanged(LaunchConfiguration*);
     void jobDestroyed(QObject* job);
+    void jobPercentChanged();
 
 private:
     void setupActions();
