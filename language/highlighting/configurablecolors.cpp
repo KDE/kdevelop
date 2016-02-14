@@ -60,7 +60,7 @@ ConfigurableHighlightingColors::ConfigurableHighlightingColors(QString highlight
     KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute); \
     a->setForeground(QColor(cache->blendGlobalColor(color_)));  \
     addAttribute(CodeHighlighting::type, a);  \
-    ifDebug(qCDebug(LANGUAGE) << #type << "color: " << ((void*) color_) << "->" << a->foreground().color().name();) \
+    ifDebug(qCDebug(LANGUAGE) << #type << "color: " << #color_ << "->" << a->foreground().color().name();) \
   }
 
 CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : ConfigurableHighlightingColors(QStringLiteral("KDev Semantic Highlighting"))
