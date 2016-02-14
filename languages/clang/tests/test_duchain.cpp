@@ -1577,6 +1577,9 @@ void TestDUChain::testQtIntegration()
     {
         QDir dir(includeDir.path());
         dir.mkdir("QtCore");
+        // create the file but don't put anything in it
+        QFile header(includeDir.path() + "/QtCore/qobjectdefs.h");
+        QVERIFY(header.open(QIODevice::WriteOnly | QIODevice::Text));
     }
     QTemporaryDir dir;
     auto project = new TestProject(Path(dir.path()), this);
