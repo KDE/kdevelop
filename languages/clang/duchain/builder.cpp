@@ -430,10 +430,9 @@ struct Visitor
         if (Type == DUContext::Other || Type == DUContext::Function)
             context->setInSymbolTable(false);
 
-        if (CK == CXCursor_CXXMethod || CursorKindTraits::isClass(CK)) {
+        if (CK == CXCursor_CXXMethod) {
             CXCursor semParent = clang_getCursorSemanticParent(cursor);
             // only import the semantic parent if it differs from the lexical parent
-            // this fixes some issues that would otherwise crop up for nested classes
             if (!clang_Cursor_isNull(semParent) && !clang_equalCursors(semParent, clang_getCursorLexicalParent(cursor))) {
                 auto semParentDecl = findDeclaration(semParent);
                 if (semParentDecl) {

@@ -39,6 +39,7 @@
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/forwarddeclaration.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -642,14 +643,24 @@ void TestDUChain::testReparseBaseClassesTemplates()
     }
 }
 
+void TestDUChain::testGetInheriters_data()
+{
+    QTest::addColumn<QString>("code");
+
+    QTest::newRow("inline") << "struct Base { struct Inner {}; }; struct Inherited : Base, Base::Inner {};";
+    QTest::newRow("outline") << "struct Base { struct Inner; }; struct Base::Inner {}; struct Inherited : Base, Base::Inner {};";
+}
+
 void TestDUChain::testGetInheriters()
 {
-    TestFile file("class Base { class Inner {}; }; class Inherited : public Base, Base::Inner {};", "cpp");
+    QFETCH(QString, code);
+    TestFile file(code, "cpp");
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
-    DUContext* top = file.topContext().data();
+    auto top = file.topContext();
     QVERIFY(top);
+    QVERIFY(top->problems().isEmpty());
 
     QCOMPARE(top->localDeclarations().count(), 2);
     Declaration* baseDecl = top->localDeclarations().first();
@@ -661,8 +672,12 @@ void TestDUChain::testGetInheriters()
 
     Declaration* innerDecl = baseCtx->localDeclarations().first();
     QCOMPARE(innerDecl->identifier(), Identifier("Inner"));
+    if (auto forward = dynamic_cast<ForwardDeclaration*>(innerDecl)) {
+        innerDecl = forward->resolve(top);
+    }
+    QVERIFY(dynamic_cast<ClassDeclaration*>(innerDecl));
 
-    Declaration* inheritedDecl = top->localDeclarations()[1];
+    Declaration* inheritedDecl = top->localDeclarations().last();
     QVERIFY(inheritedDecl);
     QCOMPARE(inheritedDecl->identifier(), Identifier("Inherited"));
 
