@@ -36,14 +36,14 @@
 #include <language/duchain/problem.h>
 #include <language/interfaces/iastcontainer.h>
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include "clangparsingenvironment.h"
 #include "unsavedfile.h"
 
 class ClangIndex;
 
-class KDEVCLANGDUCHAIN_EXPORT ParseSessionData : public KDevelop::IAstContainer
+class KDEVCLANGPRIVATE_EXPORT ParseSessionData : public KDevelop::IAstContainer
 {
 public:
     using Ptr = QExplicitlySharedDataPointer<ParseSessionData>;
@@ -88,7 +88,7 @@ private:
  * It will lock the mutex of the currently set ParseSessionData and thereby ensure
  * only one ParseSession can operate on a given CXTranslationUnit stored therein.
  */
-class KDEVCLANGDUCHAIN_EXPORT ParseSession
+class KDEVCLANGPRIVATE_EXPORT ParseSession
 {
 public:
     /**

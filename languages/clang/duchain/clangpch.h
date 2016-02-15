@@ -29,7 +29,7 @@
 
 class ClangParsingEnvironment;
 
-class KDEVCLANGDUCHAIN_EXPORT ClangPCH
+class KDEVCLANGPRIVATE_EXPORT ClangPCH
 {
 public:
     ClangPCH(const ClangParsingEnvironment& environment, ClangIndex* index);

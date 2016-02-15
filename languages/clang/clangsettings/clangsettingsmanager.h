@@ -27,6 +27,8 @@
 #include <QString>
 #include <QMetaType>
 
+#include "clangprivateexport.h"
+
 class KConfig;
 
 namespace KDevelop
@@ -55,7 +57,7 @@ struct AssistantsSettings
     bool forwardDeclare = true;
 };
 
-class ClangSettingsManager
+class KDEVCLANGPRIVATE_EXPORT ClangSettingsManager
 {
 public:
     static ClangSettingsManager* self();

@@ -31,8 +31,9 @@
 #include <memory>
 
 #include "completionhelper.h"
+#include "clangprivateexport.h"
 
-class ClangCodeCompletionContext : public KDevelop::CodeCompletionContext
+class KDEVCLANGPRIVATE_EXPORT ClangCodeCompletionContext : public KDevelop::CodeCompletionContext
 {
 public:
     enum ContextFilter

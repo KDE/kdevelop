@@ -27,6 +27,8 @@
 
 #include <util/path.h>
 
+#include "clangprivateexport.h"
+
 #include <iterator>
 
 class QTextStream;
@@ -98,7 +100,7 @@ private:
     CXSourceLocation location;
 };
 
-class ClangRange
+class KDEVCLANGPRIVATE_EXPORT ClangRange
 {
 public:
     ClangRange(CXSourceRange range);
@@ -120,7 +122,7 @@ private:
     CXSourceRange m_range;
 };
 
-class ClangTokens
+class KDEVCLANGPRIVATE_EXPORT ClangTokens
 {
 public:
     ClangTokens(CXTranslationUnit unit, CXSourceRange range);

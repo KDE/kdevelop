@@ -54,7 +54,7 @@
 #include "util/clangtypes.h"
 
 #include "clangsupport.h"
-#include "documentfinderhelpers.h"
+#include "duchain/documentfinderhelpers.h"
 
 #include <QFile>
 #include <QStringList>

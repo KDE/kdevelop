@@ -26,7 +26,7 @@
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/topducontext.h>
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 class ParseSession;
 class ClangIndex;
@@ -62,7 +62,7 @@ KDevelop::RangeInRevision cursorSpellingNameRange(CXCursor cursor, const KDevelo
 /**
  * @returns all the Imports for each file in the @param tu
  */
-KDEVCLANGDUCHAIN_EXPORT Imports tuImports(CXTranslationUnit tu);
+KDEVCLANGPRIVATE_EXPORT Imports tuImports(CXTranslationUnit tu);
 
 /**
  * Recursively builds a duchain with the specified @param features for the
@@ -70,7 +70,7 @@ KDEVCLANGDUCHAIN_EXPORT Imports tuImports(CXTranslationUnit tu);
  * The resulting contexts are placed in @param includedFiles.
  * @returns the context created for @param file
  */
-KDEVCLANGDUCHAIN_EXPORT KDevelop::ReferencedTopDUContext buildDUChain(
+KDEVCLANGPRIVATE_EXPORT KDevelop::ReferencedTopDUContext buildDUChain(
     CXFile file, const Imports& imports, const ParseSession& session,
     KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles,
     ClangIndex* index = nullptr);
@@ -88,12 +88,12 @@ QStringList sourceExtensions();
 /**
  * @return True if the given file @p path has the extension of a C++ source file
  */
-bool isSource(const QString& path);
+KDEVCLANGPRIVATE_EXPORT bool isSource(const QString& path);
 
 /**
  * @return True if the given file @p path has the extension of a C++ header file
  */
-bool isHeader(const QString& path);
+KDEVCLANGPRIVATE_EXPORT bool isHeader(const QString& path);
 
 }
 

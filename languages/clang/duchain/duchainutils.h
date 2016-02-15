@@ -21,7 +21,7 @@
 #ifndef DUCHAINUTILS_H
 #define DUCHAINUTILS_H
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include "duchain/parsesession.h"
 
@@ -37,17 +37,17 @@ namespace ClangIntegration {
 namespace DUChainUtils
 {
 
-KDEVCLANGDUCHAIN_EXPORT KTextEditor::Range functionSignatureRange(const KDevelop::Declaration* decl);
+KDEVCLANGPRIVATE_EXPORT KTextEditor::Range functionSignatureRange(const KDevelop::Declaration* decl);
 
-KDEVCLANGDUCHAIN_EXPORT void registerDUChainItems();
-KDEVCLANGDUCHAIN_EXPORT void unregisterDUChainItems();
+KDEVCLANGPRIVATE_EXPORT void registerDUChainItems();
+KDEVCLANGPRIVATE_EXPORT void unregisterDUChainItems();
 
 /**
  * Finds attached parse session data (aka AST) to the @p file
  *
  * If no session data found, then @p tuFile asked for the attached session data
  */
-ParseSessionData::Ptr findParseSessionData(const KDevelop::IndexedString &file, const KDevelop::IndexedString &tufile);
+KDEVCLANGPRIVATE_EXPORT ParseSessionData::Ptr findParseSessionData(const KDevelop::IndexedString &file, const KDevelop::IndexedString &tufile);
 
 };
 

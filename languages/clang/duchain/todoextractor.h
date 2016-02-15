@@ -22,13 +22,13 @@
 #ifndef TODOEXTRACTOR_H
 #define TODOEXTRACTOR_H
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include <language/duchain/problem.h>
 
 #include <clang-c/Index.h>
 
-class KDEVCLANGDUCHAIN_EXPORT TodoExtractor
+class KDEVCLANGPRIVATE_EXPORT TodoExtractor
 {
 public:
     TodoExtractor(CXTranslationUnit unit, CXFile file);

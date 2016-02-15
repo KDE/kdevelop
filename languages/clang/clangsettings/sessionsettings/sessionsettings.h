@@ -25,6 +25,7 @@
 #define SESSIONSETTINGS_H
 
 #include <interfaces/configpage.h>
+#include "clangprivateexport.h"
 
 #include <QScopedPointer>
 
@@ -33,7 +34,7 @@ namespace Ui
     class SessionSettings;
 }
 
-class SessionSettings: public KDevelop::ConfigPage
+class KDEVCLANGPRIVATE_EXPORT SessionSettings: public KDevelop::ConfigPage
 {
     Q_OBJECT
 public:

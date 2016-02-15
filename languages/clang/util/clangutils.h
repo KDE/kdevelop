@@ -28,6 +28,8 @@
 
 #include <clang-c/Index.h>
 
+#include "clangprivateexport.h"
+
 namespace KDevelop {
     class IndexedString;
 }
@@ -80,7 +82,7 @@ namespace ClangUtils
      *                By default this will be set to the cursors lexical parent.
      * @return the cursor's scope as a string
      */
-    QString getScope(CXCursor cursor, CXCursor context = clang_getNullCursor());
+    KDEVCLANGPRIVATE_EXPORT QString getScope(CXCursor cursor, CXCursor context = clang_getNullCursor());
 
     /**
      * Given a cursor representing some sort of function, returns its signature. The
@@ -99,7 +101,7 @@ namespace ClangUtils
      * @param cursor The cursor to work with
      * @return A QStringList of the template's arguments
      */
-    QStringList templateArgumentTypes(CXCursor cursor);
+    KDEVCLANGPRIVATE_EXPORT QStringList templateArgumentTypes(CXCursor cursor);
 
     /**
      * Extract the raw contents of the range @p range
@@ -113,7 +115,7 @@ namespace ClangUtils
      *
      * @param unit Translation unit this range is part of
      */
-    QByteArray getRawContents(CXTranslationUnit unit, CXSourceRange range);
+    KDEVCLANGPRIVATE_EXPORT QByteArray getRawContents(CXTranslationUnit unit, CXSourceRange range);
 
     /**
      * @brief Return true if file @p file1 and file @p file2 are equal
@@ -152,7 +154,7 @@ namespace ClangUtils
     *
     * @return Range pointing to the path-spec of the include or invalid range if there is no #include directive on the line.
     */
-    KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange = KTextEditor::Range());
+    KDEVCLANGPRIVATE_EXPORT KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange = KTextEditor::Range());
 
     enum SpecialQtAttributes {
         NoQtAttribute,

@@ -27,24 +27,26 @@
 
 #include <QUrl>
 
+#include "clangprivateexport.h"
+
 /// Helper class for handling @see IBuddyDocumentFinder features.
 namespace DocumentFinderHelpers
 {
 /// @return All supported mime types
-QStringList mimeTypesList();
+KDEVCLANGPRIVATE_EXPORT QStringList mimeTypesList();
 
 /**
  * Considers the URLs as buddy documents if the base path (without extension)
  * is the same, and one extension starts with h/H and the other one with c/C.
  * For example, foo.hpp and foo.C are buddies.
  */
-bool areBuddies(const QUrl &url1, const QUrl& url2);
+KDEVCLANGPRIVATE_EXPORT bool areBuddies(const QUrl &url1, const QUrl& url2);
 
 /// @see KDevelop::IBuddyDocumentFinder
-bool buddyOrder(const QUrl &url1, const QUrl& url2);
+KDEVCLANGPRIVATE_EXPORT bool buddyOrder(const QUrl &url1, const QUrl& url2);
 
 /// @see KDevelop::IBuddyDocumentFinder
-QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain = true);
+KDEVCLANGPRIVATE_EXPORT QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain = true);
 };
 
 #endif // DOCUMENTFINDERHELPERS_H
