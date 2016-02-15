@@ -61,6 +61,7 @@ void TestAssistants::initTestCase()
         kdevelop.plugins.clang.debug=true
     )"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
+    QVERIFY(qputenv("KDEV_CLANG_DISPLAY_DIAGS", "1"));
     AutoTestShell::init({QStringLiteral("kdevclangsupport")});
     TestCore::initialize();
     DUChain::self()->disablePersistentStorage();
