@@ -87,6 +87,9 @@ return ext;
 class KDEVPLATFORMINTERFACES_EXPORT Context
 {
 public:
+    /**Destructor.*/
+    virtual ~Context();
+
     /**Pre-defined context types. More may be added so it is possible to add custom
         contexts. <strong>We reserve enum values until 1000 (yeah, it is one thousand )
         for kdevplatform official context types.</strong>*/
@@ -117,8 +120,6 @@ protected:
     /**Constructor.*/
     Context();
 
-    /**Destructor.*/
-    virtual ~Context();
 private:
     class ContextPrivate* const d;
     Q_DISABLE_COPY(Context)

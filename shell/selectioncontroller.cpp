@@ -27,13 +27,12 @@ namespace KDevelop
 class SelectionControllerPrivate
 {
 public:
-    Context* currentSelection;
+    QScopedPointer<Context> currentSelection;
 };
 
 SelectionController::SelectionController( QObject* o )
     : ISelectionController( o ), d(new SelectionControllerPrivate)
 {
-    d->currentSelection = 0;
 }
 
 SelectionController::~SelectionController()
@@ -43,13 +42,13 @@ SelectionController::~SelectionController()
 
 Context* SelectionController::currentSelection()
 {
-    return d->currentSelection;
+    return d->currentSelection.data();
 }
 
 void SelectionController::updateSelection( Context* ctx )
 {
-    d->currentSelection = ctx;
-    emit selectionChanged( d->currentSelection );
+    d->currentSelection.reset(ctx);
+    emit selectionChanged(d->currentSelection.data());
 }
 
 void SelectionController::initialize()
@@ -61,4 +60,3 @@ void SelectionController::cleanup()
 }
 
 }
-

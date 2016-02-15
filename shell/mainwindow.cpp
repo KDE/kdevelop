@@ -97,9 +97,11 @@ void MainWindow::createGUI(KParts::Part* part)
 {
     Sublime::MainWindow::createGUI(part);
 
-    // Don't let the Part control the main window caption -- we take care of that
-    disconnect(part, SIGNAL(setWindowCaption(QString)),
-               this, SLOT(setCaption(QString)));
+    if (part) {
+        // Don't let the Part control the main window caption -- we take care of that
+        disconnect(part, SIGNAL(setWindowCaption(QString)),
+                   this, SLOT(setCaption(QString)));
+    }
 }
 
 void MainWindow::initializeCorners()

@@ -149,10 +149,10 @@ void EnvironmentWidget::handleVariableInserted(int /*column*/, const QVariant& v
 
 void EnvironmentWidget::batchModeEditButtonClicked()
 {
-    QDialog * dialog = new QDialog( this );
-    dialog->setWindowTitle( i18n( "Batch Edit Mode" ) );
+    QDialog dialog(this);
+    dialog.setWindowTitle( i18n( "Batch Edit Mode" ) );
 
-    QVBoxLayout *layout = new QVBoxLayout(dialog);
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
 
     QTextEdit *edit = new QTextEdit;
     edit->setPlaceholderText(QStringLiteral("VARIABLE1=VALUE1\nVARIABLE2=VALUE2"));
@@ -169,25 +169,17 @@ void EnvironmentWidget::batchModeEditButtonClicked()
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    dialog->connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
-    dialog->connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
+    dialog.connect(buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    dialog.connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
     layout->addWidget(buttonBox);
 
-    dialog->resize(600, 400);
+    dialog.resize(600, 400);
 
-    if ( dialog->exec() != QDialog::Accepted ) {
+    if ( dialog.exec() != QDialog::Accepted ) {
         return;
     }
 
-    QStringList lines = edit->toPlainText().split( QStringLiteral("\n"), QString::SkipEmptyParts );
-
-    foreach(const QString &line, lines) {
-        QString name = line.section('=', 0, 0);
-        QString value = line.section('=', 1, -1).trimmed();
-        if (!name.isEmpty() && !value.isEmpty()) {
-            groupModel->addVariable( name, value );
-        }
-    }
+    groupModel->loadEnvironmentFromString(edit->toPlainText());
 }
 
 void EnvironmentWidget::addGroupClicked()

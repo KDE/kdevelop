@@ -529,15 +529,20 @@ void SessionController::plugActions()
 QString SessionController::cfgSessionGroup() { return QStringLiteral("Sessions"); }
 QString SessionController::cfgActiveSessionEntry() { return QStringLiteral("Active Session ID"); }
 
-QList< SessionInfo > SessionController::availableSessionInfo()
+QList<SessionInfo> SessionController::availableSessionInfo()
 {
-    QList< SessionInfo > available;
+    return availableSessionInfos().toList();
+}
+
+SessionInfos SessionController::availableSessionInfos()
+{
+    SessionInfos sessionInfos;
     foreach( const QString& sessionId, QDir( SessionControllerPrivate::sessionBaseDirectory() ).entryList( QDir::AllDirs ) ) {
         if( !QUuid( sessionId ).isNull() ) {
-            available << Session::parse( sessionId );
+            sessionInfos << Session::parse( sessionId );
         }
     }
-    return available;
+    return sessionInfos;
 }
 
 QString SessionController::sessionDirectory(const QString& sessionId)
@@ -607,7 +612,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
 
     QString defaultSession = KSharedConfig::openConfig()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
 
-    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfos())
     {
         if ( si.name.isEmpty() && si.projects.isEmpty() ) {
             continue;

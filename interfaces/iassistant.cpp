@@ -34,12 +34,12 @@ void IAssistant::createActions()
 {
 }
 
-QAction* IAssistantAction::toKAction() const
+QAction* IAssistantAction::toKAction(QObject* parent) const
 {
     Q_ASSERT(QThread::currentThread() == ICore::self()->thread() && "Actions must be created in the application main thread"
                                                     "(implement createActions() to create your actions)");
 
-    QAction* ret = new QAction(icon(), description(), 0);
+    QAction* ret = new QAction(icon(), description(), parent);
     ret->setToolTip(toolTip());
 
     //Add the data as a QExplicitlySharedDataPointer to the action, so this assistant stays alive at least as long as the QAction
@@ -93,9 +93,10 @@ void AssistantLabelAction::execute()
     // do nothing
 }
 
-QAction* AssistantLabelAction::toKAction() const
+QAction* AssistantLabelAction::toKAction(QObject* parent) const
 {
-    return 0;
+    Q_UNUSED(parent);
+    return nullptr;
 }
 
 //END AssistantLabelAction

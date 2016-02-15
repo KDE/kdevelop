@@ -217,6 +217,8 @@ QModelIndex QuickOpenModel::index( int row, int column, const QModelIndex& /*par
 {
   if( column >= columnCount() || row >= rowCount(QModelIndex()) )
     return QModelIndex();
+  if (row < 0 || column < 0)
+    return QModelIndex();
   return createIndex( row, column );
 }
 

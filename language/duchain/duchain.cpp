@@ -1634,11 +1634,17 @@ void DUChain::refCountDown(TopDUContext* top) {
 
 void DUChain::emitDeclarationSelected(const DeclarationPointer& decl)
 {
+  if(sdDUChainPrivate->m_destroyed)
+    return;
+
   emit declarationSelected(decl);
 }
 
 void DUChain::emitUpdateReady(const IndexedString& url, const ReferencedTopDUContext& topContext)
 {
+  if(sdDUChainPrivate->m_destroyed)
+    return;
+
   emit updateReady(url, topContext);
 }
 

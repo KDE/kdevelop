@@ -1372,7 +1372,7 @@ VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, con
 {
     DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
     job->setCommunicationMode(KProcess::MergedChannels);
-    *job << "git" << "-c" << "color.diff=false" << "pull";
+    *job << "git" << "pull";
     if(!localOrRepoLocationSrc.localUrl().isEmpty())
         *job << localOrRepoLocationSrc.localUrl().url();
     return job;

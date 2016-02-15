@@ -66,7 +66,8 @@ void DeclarationValidator::visit(DUContext*) { }
 void DeclarationValidator::visit(Declaration* declaration)
 {
   QJsonParseError error;
-  QJsonDocument doc = QJsonDocument::fromJson(preprocess(declaration->comment()), &error);
+  const auto json = preprocess(declaration->comment());
+  QJsonDocument doc = QJsonDocument::fromJson(json, &error);
 
   if (error.error == 0)
   {
@@ -78,8 +79,8 @@ void DeclarationValidator::visit(Declaration* declaration)
   else
   {
     d->testsPassed = false;
-    qDebug() << "Error parsing test data for declaration on line" << declaration->range().start.line + 1;
-    qDebug() << "Parser error on comment line" << error.errorString();
+    QMessageLogger logger(declaration->topContext()->url().byteArray().constData(), declaration->range().start.line, nullptr);
+    logger.warning() << "Error parsing JSON test data:" << error.errorString() << "at offset" << error.offset << "JSON input was:\n" << json;
   }
 }
 

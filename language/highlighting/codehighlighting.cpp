@@ -338,8 +338,13 @@ KDevelop::Declaration* CodeHighlightingInstance::localClassFromCodeContext(KDeve
 
   DUContext* startContext = context;
 
-  while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
-  { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
+  while( context->type() == DUContext::Other )
+  {
+    //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
+    auto parent = context->parentContext();
+    if (!parent || (parent->type() != DUContext::Other && parent->type() != DUContext::Function)) {
+      break;
+    }
     context = context->parentContext();
   }
 
@@ -403,7 +408,7 @@ CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Dec
     if(klass) {
       if (klass->internalContext() == dec->context())
         type = LocalClassMemberType; //Using Member of the local class
-      else if (dec->context()->type() == DUContext::Class && klass->internalContext() && klass->internalContext()->imports(dec->context()))
+      else if (klass->internalContext() && klass->internalContext()->imports(dec->context()))
         type = InheritedClassMemberType; //Using Member of an inherited class
     }
   }
