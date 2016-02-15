@@ -28,8 +28,6 @@
 
 #include "clangprivateexport.h"
 
-//TODO: FIXME
-//Q_DECLARE_LOGGING_CATEGORY(KDEV_CLANG)
 extern KDEVCLANGPRIVATE_EXPORT const QLoggingCategory &KDEV_CLANG();
 #define clangDebug() qCDebug(KDEV_CLANG)
 
