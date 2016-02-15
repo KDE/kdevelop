@@ -39,6 +39,7 @@
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/forwarddeclaration.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -265,26 +266,33 @@ class B : public A<int>
 
     TestFile header(code, "h");
     TestFile impl("#include \"" + header.url().byteArray() + "\"\n", "cpp", &header);
-    impl.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses));
+
+    DUChainReadLocker lock;
 
     auto top = impl.topContext();
     QVERIFY(top);
 
-    DUChainReadLocker lock;
     QCOMPARE(top->importedParentContexts().count(), 1);
-    TopDUContext* headerCtx = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context(top));
+
+    TopDUContext* headerCtx = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().context(top));
+    QVERIFY(headerCtx);
+    QCOMPARE(headerCtx->url(), header.url());
+
     QEXPECT_FAIL("", "Second missing header isn't reported", Continue);
     QCOMPARE(headerCtx->problems().count(), 2);
-    QEXPECT_FAIL("", "Second missing header isn't reported", Continue);
+
     QCOMPARE(headerCtx->localDeclarations().count(), 2);
-    auto type = headerCtx->localDeclarations()[1]->abstractType();
-    StructureType* sType = dynamic_cast<StructureType*>(type.data());
-    QVERIFY(sType);
-    ClassDeclaration* cDecl = dynamic_cast<ClassDeclaration*>(sType->declaration(headerCtx));
-    QVERIFY(cDecl);
+
+    auto a = dynamic_cast<ClassDeclaration*>(headerCtx->localDeclarations().first());
+    QVERIFY(a);
+
+    auto b = dynamic_cast<ClassDeclaration*>(headerCtx->localDeclarations().last());
+    QVERIFY(b);
+
     QEXPECT_FAIL("", "Base class isn't assigned correctly", Continue);
-    QCOMPARE(cDecl->baseClassesSize(), 1u);
-    QCOMPARE(top->problems().count(), 2);
+    QCOMPARE(b->baseClassesSize(), 1u);
+
     // at least the one problem we have should have been propagated
     QCOMPARE(top->problems().count(), 1);
 }
@@ -635,15 +643,24 @@ void TestDUChain::testReparseBaseClassesTemplates()
     }
 }
 
-// TODO: Move this test to kdevplatform.
+void TestDUChain::testGetInheriters_data()
+{
+    QTest::addColumn<QString>("code");
+
+    QTest::newRow("inline") << "struct Base { struct Inner {}; }; struct Inherited : Base, Base::Inner {};";
+    QTest::newRow("outline") << "struct Base { struct Inner; }; struct Base::Inner {}; struct Inherited : Base, Base::Inner {};";
+}
+
 void TestDUChain::testGetInheriters()
 {
-    TestFile file("class Base { class Inner {}; }; class Inherited : public Base, Base::Inner {};", "cpp");
+    QFETCH(QString, code);
+    TestFile file(code, "cpp");
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
-    DUContext* top = file.topContext().data();
+    auto top = file.topContext();
     QVERIFY(top);
+    QVERIFY(top->problems().isEmpty());
 
     QCOMPARE(top->localDeclarations().count(), 2);
     Declaration* baseDecl = top->localDeclarations().first();
@@ -655,14 +672,17 @@ void TestDUChain::testGetInheriters()
 
     Declaration* innerDecl = baseCtx->localDeclarations().first();
     QCOMPARE(innerDecl->identifier(), Identifier("Inner"));
+    if (auto forward = dynamic_cast<ForwardDeclaration*>(innerDecl)) {
+        innerDecl = forward->resolve(top);
+    }
+    QVERIFY(dynamic_cast<ClassDeclaration*>(innerDecl));
 
-    Declaration* inheritedDecl = top->localDeclarations()[1];
+    Declaration* inheritedDecl = top->localDeclarations().last();
     QVERIFY(inheritedDecl);
     QCOMPARE(inheritedDecl->identifier(), Identifier("Inherited"));
 
     uint maxAllowedSteps = uint(-1);
     auto baseInheriters = DUChainUtils::getInheriters(baseDecl, maxAllowedSteps);
-    QEXPECT_FAIL("", "not yet working properly, tentative fix is up for review for kdevplatform", Abort);
     QCOMPARE(baseInheriters, QList<Declaration*>() << inheritedDecl);
 
     maxAllowedSteps = uint(-1);
@@ -1570,6 +1590,9 @@ void TestDUChain::testQtIntegration()
     {
         QDir dir(includeDir.path());
         dir.mkdir("QtCore");
+        // create the file but don't put anything in it
+        QFile header(includeDir.path() + "/QtCore/qobjectdefs.h");
+        QVERIFY(header.open(QIODevice::WriteOnly | QIODevice::Text));
     }
     QTemporaryDir dir;
     auto project = new TestProject(Path(dir.path()), this);

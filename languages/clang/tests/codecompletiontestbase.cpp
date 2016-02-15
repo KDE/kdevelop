@@ -25,6 +25,9 @@
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/testproject.h>
+
+#include <interfaces/idocumentcontroller.h>
 
 #include "clangsettings/clangsettingsmanager.h"
 
@@ -65,7 +68,11 @@ void CodeCompletionTestBase::initTestCase()
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init({QStringLiteral("kdevclangsupport")});
-    TestCore::initialize();
+    auto core = TestCore::initialize();
+    delete core->projectController();
+    m_projectController = new TestProjectController(core);
+    core->setProjectController(m_projectController);
+    ICore::self()->documentController()->closeAllDocuments();
 
     ClangSettingsManager::self()->m_enableTesting = true;
 }
@@ -73,4 +80,9 @@ void CodeCompletionTestBase::initTestCase()
 void CodeCompletionTestBase::cleanupTestCase()
 {
     TestCore::shutdown();
+}
+
+void CodeCompletionTestBase::init()
+{
+    m_projectController->closeAllProjects();
 }

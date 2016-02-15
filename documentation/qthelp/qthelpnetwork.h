@@ -69,7 +69,7 @@ qint64 HelpNetworkReply::readData(char *buffer, qint64 maxlen)
 class HelpNetworkAccessManager : public QNetworkAccessManager
 {
 	public:
-		HelpNetworkAccessManager(QHelpEngineCore *engine, QObject *parent)
+		HelpNetworkAccessManager(QHelpEngineCore *engine, QObject *parent = nullptr)
 			: QNetworkAccessManager(parent), m_helpEngine(engine) {}
 
 	protected:

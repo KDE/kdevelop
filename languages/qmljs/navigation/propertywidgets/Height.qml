@@ -19,6 +19,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2 as QtControls
 
 PropertyWidget {
+    id: root
     width: 150
     height: 220
     value: sliderToValue(slider.value)

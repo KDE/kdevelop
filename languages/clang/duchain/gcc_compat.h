@@ -19,12 +19,14 @@
     Boston, MA 02110-1301, USA.
 */
 
+#pragma clang system_header
+
 // this file is automatically included by our clang backend for C/C++ projects
 // to increase compatibility with GCC by adding some __m64rinsics etc.
 // this is required to remove parse errors in GCC headers when using a
 // GCC toolchain
 
-inline namespace KDevelopClangGccCompat {
+inline namespace __KDevelopClangGccCompat {
 
 typedef int __m64 __attribute__ ((__vector_size__ (8), __may_alias__));
 

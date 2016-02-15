@@ -22,10 +22,12 @@
  */
 
 #include "test_codecompletion.h"
+#include <language/backgroundparser/backgroundparser.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
+#include <tests/testproject.h>
 
 #include "duchain/parsesession.h"
 #include "util/clangtypes.h"
@@ -45,6 +47,8 @@
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+
+#include <KConfigGroup>
 
 QTEST_MAIN(TestCodeCompletion);
 
@@ -117,8 +121,12 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
     lock.unlock();
+    QString text;
+    if (auto doc = ICore::self()->documentController()->documentForUrl(top->url().toUrl())) {
+        text = doc->textDocument()->text({{0, 0}, expectedCompletionItems.position});
+    }
     // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
-    auto context = new ClangCodeCompletionContext(DUContextPointer(top), sessionData, top->url().toUrl(), expectedCompletionItems.position, QString());
+    auto context = new ClangCodeCompletionContext(DUContextPointer(top), sessionData, top->url().toUrl(), expectedCompletionItems.position, text);
     context->setFilters(filters);
     lock.lock();
 
@@ -139,6 +147,9 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
     QEXPECT_FAIL("look-ahead function primary type argument", "No API in LibClang to determine expected code completion type", Continue);
     QEXPECT_FAIL("look-ahead template parameter substitution", "No parameters substitution so far", Continue);
     QEXPECT_FAIL("look-ahead auto item", "Auto type, like many other types, is not exposed through LibClang. We assign DelayedType to it instead of IdentifiedType", Continue);
+    if (QTest::currentTestFunction() == QByteArrayLiteral("testImplementAfterEdit") && expectedCompletionItems.position.line() == 3) {
+        QEXPECT_FAIL("", "TU is not properly updated after edit", Continue);
+    }
     if (tester.names.size() != expectedCompletionItems.completions.size()) {
         qDebug() << "different results:\nactual:" << tester.names << "\nexpected:" << expectedCompletionItems.completions;
     }
@@ -221,7 +232,15 @@ void executeMemberAccessReplacerTest(const QString& code, const CompletionItems&
 
     QApplication::processEvents();
     document->close(KDevelop::IDocument::Silent);
+
     // The previous ClangCodeCompletionContext call should replace member access.
+    // That triggers an update request in the duchain which we are not interested in,
+    // so let's stop that request.
+    if (QTest::currentDataTag() != QByteArrayLiteral("no replacement needed")) {
+        QVERIFY(ICore::self()->languageController()->backgroundParser()->isQueued(file.url()));
+        ICore::self()->languageController()->backgroundParser()->removeDocument(file.url());
+    }
+
     context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
     context->setFilters(filters);
     lock.lock();
@@ -746,6 +765,20 @@ void TestCodeCompletion::testImplement_data()
                 };
             )"
         << CompletionItems{{8,0}, {"Hello::Private::test()"}};
+
+    QTest::newRow("lineOfNextFunction")
+        << "void foo();\nvoid bar() {}"
+        << CompletionItems{{1,0}, {"foo()"}};
+
+    QTest::newRow("pure")
+        << R"(
+                struct Hello {
+                    virtual void foo() = 0;
+                    virtual void bar();
+                };
+            )"
+        << CompletionItems{{5, 0}, {"Hello::bar()"}};
+
 }
 
 void TestCodeCompletion::testImplementOtherFile()
@@ -764,6 +797,30 @@ void TestCodeCompletion::testImplementOtherFile()
     CompletionItems expectedItems{{3,1}, {"asdf()", "foo()"}};
     QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
     executeCompletionTest(impl.topContext(), expectedItems);
+}
+
+void TestCodeCompletion::testImplementAfterEdit()
+{
+    TestFile header1("void foo();", "h");
+    QVERIFY(header1.parseAndWait());
+    TestFile impl(QString("#include \"%1\"\n"
+                          "void asdf() {}\nvoid bar() {}")
+                    .arg(header1.url().str()),
+                  "cpp", &header1);
+
+    auto document = ICore::self()->documentController()->openDocument(impl.url().toUrl());
+
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+
+    CompletionItems expectedItems{{2,0}, {"foo()"}};
+    executeCompletionTest(impl.topContext(), expectedItems);
+
+    document->textDocument()->insertText(expectedItems.position, "\n");
+    expectedItems.position.setLine(3);
+
+    executeCompletionTest(impl.topContext(), expectedItems);
+
+    document->close(IDocument::Discard);
 }
 
 void TestCodeCompletion::testInvalidCompletions()
@@ -1120,4 +1177,24 @@ void TestCodeCompletion::testCompleteFunction_data()
         << CompletionItems({2, 0}, {"foo", "main"})
         << "main"
         << "int foo();\nint main() {\nmain();\n}";
+}
+
+void TestCodeCompletion::testIgnoreGccBuiltins()
+{
+    // TODO: make it easier to change the compiler provider for testing purposes
+    QTemporaryDir dir;
+    auto project = new TestProject(Path(dir.path()), this);
+    auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
+    auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
+    pathConfig.writeEntry("Path", ".");
+    pathConfig.group("Compiler").writeEntry("Name", "GCC");
+    m_projectController->addProject(project);
+
+    {
+        TestFile file("", "cpp", project, dir.path());
+
+        QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+
+        executeCompletionTest(file.topContext(), {});
+    }
 }

@@ -21,6 +21,7 @@
 #include "testhelpers.h"
 #include "cmakemodelitems.h"
 #include "cmakeutils.h"
+#include "cmakeimportjsonjob.h"
 #include <icmakemanager.h>
 
 #include <qtest.h>
@@ -331,4 +332,16 @@ void TestCMakeManager::testEnumerateTargets()
 void TestCMakeManager::testFaultyTarget()
 {
     loadProject("faulty_target");
+}
+
+void TestCMakeManager::testParenthesesInTestArguments()
+{
+    IProject* project = loadProject("parentheses_in_test_arguments");
+
+    Path sourceDir = project->path();
+    Path buildDir(sourceDir, "build/");
+
+    CMakeImportJob* job = new CMakeImportJob(project, this);
+    job->start();
+
 }

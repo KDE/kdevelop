@@ -61,6 +61,7 @@ private slots:
     void testReparseBaseClasses();
     void testReparseBaseClassesTemplates();
     void testGetInheriters();
+    void testGetInheriters_data();
     void testGlobalFunctionDeclaration();
     void testFunctionDefinitionVsDeclaration();
     void testEnsureNoDoubleVisit();

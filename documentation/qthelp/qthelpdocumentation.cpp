@@ -108,6 +108,10 @@ QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString
     : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(0)
 { Q_ASSERT(m_current!=m_info.constEnd()); }
 
+QtHelpDocumentation::~QtHelpDocumentation()
+{
+}
+
 QString QtHelpDocumentation::description() const
 {
     QUrl url(m_current.value());
@@ -246,7 +250,10 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
     } else {
         StandardDocumentationView* view = new StandardDocumentationView(findWidget, parent);
         view->settings()->setAttribute(QWebSettings::JavascriptEnabled, false);
-        view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_provider->engine(), 0));
+        if (!m_sharedQNAM) {
+            m_sharedQNAM.reset(new HelpNetworkAccessManager(m_provider->engine()));
+        }
+        view->page()->setNetworkAccessManager(m_sharedQNAM.data());
         view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
         view->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(view, &StandardDocumentationView::customContextMenuRequested, this, &QtHelpDocumentation::viewContextMenuRequested);

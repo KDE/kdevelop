@@ -50,9 +50,9 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
     if ( supportedProperties.isEmpty() ) {
         QString base = QStandardPaths::locate(
             QStandardPaths::GenericDataLocation,
-            QLatin1String("propertywidgets"),
+            QLatin1String("kdevqmljssupport/propertywidgets"),
             QStandardPaths::LocateDirectory
-        ) + QDir::separator();
+        ) + '/';
 
         // Positioning
         PROP("width", "Width.qml", QString(), QString())
