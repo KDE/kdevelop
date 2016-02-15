@@ -49,7 +49,7 @@ void TestModels::testVcsFileChangesModel()
         return idx.data(VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>();
     };
 
-    VcsFileChangesModel *model = new VcsFileChangesModel(this);
+    QScopedPointer<VcsFileChangesModel> model(new VcsFileChangesModel);
 
     // Newly created model should be empty
     QVERIFY(model->rowCount() == 0);
@@ -81,7 +81,7 @@ void TestModels::testVcsFileChangesModel()
 
     // Check that all OK
     for(int i = 0; i < 3; i++) {
-        QModelIndex idx = indexForUrl(model, filenames[i]);
+        QModelIndex idx = indexForUrl(model.data(), filenames[i]);
         QVERIFY(idx.isValid());
         VcsStatusInfo info = statusInfo(idx);
         QVERIFY(info.url().isValid());
@@ -99,7 +99,7 @@ void TestModels::testVcsFileChangesModel()
 
     // Check that all OK
     for(int i = 0; i < 3; i++) {
-        QModelIndex item = indexForUrl(model, filenames[i]);
+        QModelIndex item = indexForUrl(model.data(), filenames[i]);
         QVERIFY(item.isValid());
         VcsStatusInfo info = statusInfo(item);
         QCOMPARE(info.url(), filenames[i]);
@@ -118,7 +118,7 @@ void TestModels::testVcsFileChangesModel()
     // Check them all
     for(int i = 0; i < 3; i++) {
         if(states[i] != VcsStatusInfo::ItemUpToDate && states[i] != VcsStatusInfo::ItemUnknown) {
-            QModelIndex item = indexForUrl(model, filenames[i]);
+            QModelIndex item = indexForUrl(model.data(), filenames[i]);
             QVERIFY(item.isValid());
             VcsStatusInfo info = statusInfo(item);
             QCOMPARE(info.url(), filenames[i]);
