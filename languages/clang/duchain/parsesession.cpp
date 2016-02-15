@@ -219,6 +219,12 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     Q_ASSERT(m_definesFile.isWritable());
     const auto& defines = environment.defines();
     for (auto it = defines.begin(); it != defines.end(); ++it) {
+        if (it.key() == QLatin1String("__VERSION__") || it.key() == QLatin1String("__clang_minor__")
+            || it.key() == QLatin1String("__clang_patchlevel__") || it.key() == QLatin1String("__clang_version__"))
+        {
+            // don't emit tons of "macro redefined" errors for these macros
+            continue;
+        }
         definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
     }
     definesStream.flush();
