@@ -65,7 +65,6 @@
 #include <serialization/indexedstring.h>
 #include <language/duchain/types/functiontype.h>
 
-#include "ui_quickopen.h"
 #include "quickopenmodel.h"
 #include "projectfilequickopen.h"
 #include "projectitemquickopen.h"
