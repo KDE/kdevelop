@@ -104,10 +104,15 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
 
 CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientData data);
 
-void processBaseClass(CXCursor cursor, FunctionOverrideList* functionList)
+void processBaseClass(CXCursor cursor, CXCursor parent, FunctionOverrideList* functionList)
 {
     QStringList concrete;
     CXCursor ref = clang_getCursorReferenced(cursor);
+
+    if (clang_equalCursors(ref, parent)) {
+        return;
+    }
+
     CXCursor isTemplate = clang_getSpecializedCursorTemplate(ref);
     if (!clang_Cursor_isNull(isTemplate)) {
         concrete = ClangUtils::templateArgumentTypes(ref);
@@ -118,7 +123,7 @@ void processBaseClass(CXCursor cursor, FunctionOverrideList* functionList)
     clang_visitChildren(ref, baseClassVisitor, &info);
 }
 
-CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientData data)
+CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor parent, CXClientData data)
 {
     QString templateParam;
     OverrideInfo* info = static_cast<OverrideInfo*>(data);
@@ -133,7 +138,7 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
         }
         return CXChildVisit_Continue;
     case CXCursor_CXXBaseSpecifier:
-        processBaseClass(cursor, info->functions);
+        processBaseClass(cursor, parent, info->functions);
         return CXChildVisit_Continue;
     case CXCursor_CXXMethod:
         if (clang_CXXMethod_isVirtual(cursor)) {
@@ -145,11 +150,11 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
     }
 }
 
-CXChildVisitResult findBaseVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientData data)
+CXChildVisitResult findBaseVisitor(CXCursor cursor, CXCursor parent, CXClientData data)
 {
     auto cursorKind = clang_getCursorKind(cursor);
     if (cursorKind == CXCursor_CXXBaseSpecifier) {
-        processBaseClass(cursor, static_cast<FunctionOverrideList*>(data));
+        processBaseClass(cursor, parent, static_cast<FunctionOverrideList*>(data));
     } else if (cursorKind == CXCursor_CXXMethod)   {
         if (!clang_CXXMethod_isVirtual(cursor)) {
             return CXChildVisit_Continue;

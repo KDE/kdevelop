@@ -469,6 +469,15 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "instance",
             "instance.intItem"
         }};
+
+    QTest::newRow("variadic template recursive class")
+        << R"(
+template <typename Head, typename ...Tail>
+struct my_class : Head, my_class<Tail...>
+{
+    using base = Head;
+};)"
+        << CompletionItems{{3, 17}, { "Head", "Tail", "my_class" }};
 }
 
 void TestCodeCompletion::testReplaceMemberAccess()
