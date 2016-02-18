@@ -150,7 +150,7 @@ void VcsEventModel::fetchMore(const QModelIndex& parent)
     Q_ASSERT(!parent.isValid());
     Q_UNUSED(parent);
     VcsJob* job = d->m_iface->log(d->m_url, d->m_rev, qMax(rowCount(), 100));
-    connect(this, &VcsEventModel::destroyed, job, [&] { job->kill(); });
+    connect(this, &VcsEventModel::destroyed, job, [job] { job->kill(); });
     connect(job, &VcsJob::finished, this, &VcsEventModel::jobReceivedResults);
     ICore::self()->runController()->registerJob( job );
 }

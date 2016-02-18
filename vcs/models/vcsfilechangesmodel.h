@@ -66,7 +66,7 @@ public:
      * Constructor for class.
      * @param isCheckable if true, model will show checkboxes on items.
      */
-    explicit VcsFileChangesModel(QObject *parent, bool isCheckable = false);
+    explicit VcsFileChangesModel(QObject *parent = nullptr, bool isCheckable = false);
     ~VcsFileChangesModel() override;
 
     QVariant data(const QModelIndex &index, int role) const override;
