@@ -25,11 +25,11 @@
 #include <util/path.h>
 #include <language/duchain/parsingenvironment.h>
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include "clangsettings/clangsettingsmanager.h"
 
-class KDEVCLANGDUCHAIN_EXPORT ClangParsingEnvironment : public KDevelop::ParsingEnvironment
+class KDEVCLANGPRIVATE_EXPORT ClangParsingEnvironment : public KDevelop::ParsingEnvironment
 {
 public:
     virtual ~ClangParsingEnvironment() = default;

@@ -4,15 +4,14 @@ add_executable(clang-parser
 
 target_link_libraries(clang-parser
     KDev::Tests
-    kdevclangduchain
+    KDevClangPrivate
 )
 
 add_library(codecompletiontestbase STATIC codecompletiontestbase.cpp)
 target_link_libraries(codecompletiontestbase PUBLIC
     KDev::Tests
     Qt5::Test
-    kdevclangcodecompletion
-    kdevclangduchain
+    KDevClangPrivate
 )
 
 add_executable(clang-minimal-visitor WIN32
@@ -41,8 +40,7 @@ ecm_add_test(test_assistants.cpp
     LINK_LIBRARIES
         KDev::Tests
         Qt5::Test
-        kdevclangduchain
-        kdevclangutil
+        KDevClangPrivate
 )
 
 ecm_add_test(test_clangutils.cpp
@@ -51,7 +49,7 @@ ecm_add_test(test_clangutils.cpp
         KDev::Tests
         Qt5::Test
         ${CLANG_LIBCLANG_LIB}
-        kdevclangduchain
+        KDevClangPrivate
 )
 
 ecm_add_test(test_duchain.cpp
@@ -59,7 +57,7 @@ ecm_add_test(test_duchain.cpp
     LINK_LIBRARIES
         KDev::Tests
         Qt5::Test
-        kdevclangduchain
+        KDevClangPrivate
 )
 
 ecm_add_test(test_duchainutils.cpp
@@ -67,8 +65,7 @@ ecm_add_test(test_duchainutils.cpp
     LINK_LIBRARIES
         KDev::Tests
         Qt5::Test
-        kdevclangcodecompletion
-        kdevclangduchain
+        KDevClangPrivate
 )
 
 ecm_add_test(test_problems.cpp
@@ -76,7 +73,7 @@ ecm_add_test(test_problems.cpp
     LINK_LIBRARIES
         KDev::Tests
         Qt5::Test
-        kdevclangduchain
+        KDevClangPrivate
 )
 
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)

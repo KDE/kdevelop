@@ -24,12 +24,14 @@
 
 #include <QStringList>
 
+#include "clangprivateexport.h"
+
 struct CXUnsavedFile;
 
 /**
  * Wrapper API to map unsaved editor contents to the CXUnsavedFile API for clang.
  */
-class UnsavedFile
+class KDEVCLANGPRIVATE_EXPORT UnsavedFile
 {
 public:
     UnsavedFile(const QString& fileName = {}, const QStringList& contents = {});

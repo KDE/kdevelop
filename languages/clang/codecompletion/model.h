@@ -26,6 +26,8 @@
 
 #include <QMetaType>
 
+#include "clangprivateexport.h"
+
 #include <ktexteditor_version.h>
 #if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(5, 10, 0)
 Q_DECLARE_METATYPE(KTextEditor::Cursor)
@@ -33,7 +35,7 @@ Q_DECLARE_METATYPE(KTextEditor::Cursor)
 
 class ClangIndex;
 
-class ClangCodeCompletionModel : public KDevelop::CodeCompletionModel
+class KDEVCLANGPRIVATE_EXPORT ClangCodeCompletionModel : public KDevelop::CodeCompletionModel
 {
     Q_OBJECT
 

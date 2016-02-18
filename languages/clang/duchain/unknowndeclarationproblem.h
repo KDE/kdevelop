@@ -24,12 +24,12 @@
 #ifndef UNKNOWNDECLARATION_H
 #define UNKNOWNDECLARATION_H
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 #include "clangproblem.h"
 
 #include <language/duchain/identifier.h>
 
-class KDEVCLANGDUCHAIN_EXPORT UnknownDeclarationProblem : public ClangProblem
+class KDEVCLANGPRIVATE_EXPORT UnknownDeclarationProblem : public ClangProblem
 {
 public:
     using Ptr = QExplicitlySharedDataPointer<UnknownDeclarationProblem>;

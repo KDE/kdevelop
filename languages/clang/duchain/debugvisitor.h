@@ -23,9 +23,9 @@
 #define DEBUGVISITOR_H
 
 #include "parsesession.h"
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
-class KDEVCLANGDUCHAIN_EXPORT DebugVisitor
+class KDEVCLANGPRIVATE_EXPORT DebugVisitor
 {
 public:
     DebugVisitor(ParseSession* session);

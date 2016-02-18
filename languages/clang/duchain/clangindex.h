@@ -24,7 +24,7 @@
 
 #include "clanghelpers.h"
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 #include <serialization/indexedstring.h>
 
 #include <util/path.h>
@@ -37,7 +37,7 @@
 class ClangParsingEnvironment;
 class ClangPCH;
 
-class KDEVCLANGDUCHAIN_EXPORT ClangIndex
+class KDEVCLANGPRIVATE_EXPORT ClangIndex
 {
 public:
     ClangIndex();

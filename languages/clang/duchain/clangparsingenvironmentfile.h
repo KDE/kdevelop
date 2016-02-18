@@ -26,11 +26,11 @@
 #include "clangparsingenvironment.h"
 
 #include <language/duchain/duchainregister.h>
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 class ClangParsingEnvironmentFileData;
 
-class KDEVCLANGDUCHAIN_EXPORT ClangParsingEnvironmentFile : public KDevelop::ParsingEnvironmentFile
+class KDEVCLANGPRIVATE_EXPORT ClangParsingEnvironmentFile : public KDevelop::ParsingEnvironmentFile
 {
 public:
     using Ptr = QExplicitlySharedDataPointer<ClangParsingEnvironmentFile>;

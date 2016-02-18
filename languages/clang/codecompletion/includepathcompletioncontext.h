@@ -23,11 +23,12 @@
 #define INCLUDEPATHCOMPLETIONCONTEXT_H
 
 #include "duchain/parsesession.h"
+#include "clangprivateexport.h"
 
 #include <language/codecompletion/codecompletioncontext.h>
 #include <language/util/includeitem.h>
 
-class IncludePathCompletionContext : public KDevelop::CodeCompletionContext
+class KDEVCLANGPRIVATE_EXPORT IncludePathCompletionContext : public KDevelop::CodeCompletionContext
 {
 public:
     IncludePathCompletionContext(const KDevelop::DUContextPointer& context,

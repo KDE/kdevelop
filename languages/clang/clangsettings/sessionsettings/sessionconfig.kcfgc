@@ -2,4 +2,5 @@ File=sessionconfig.kcfg
 ClassName=SessionConfig
 Singleton=true
 Inherits=SessionConfigSkeleton
-IncludeFiles="sessionsettings/sessionconfigskeleton.h"
+IncludeFiles=clangsettings/sessionsettings/sessionconfigskeleton.h,clangprivateexport.h
+Visibility=KDEVCLANGPRIVATE_EXPORT

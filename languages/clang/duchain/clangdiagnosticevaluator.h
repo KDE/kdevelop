@@ -22,14 +22,14 @@
 #ifndef CLANGDIAGNOSTICEVALUATOR_H
 #define CLANGDIAGNOSTICEVALUATOR_H
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include <clang-c/Index.h>
 
 class ClangProblem;
 
 namespace ClangDiagnosticEvaluator {
-KDEVCLANGDUCHAIN_EXPORT ClangProblem* createProblem(CXDiagnostic diagnostic, CXTranslationUnit unit);
+KDEVCLANGPRIVATE_EXPORT ClangProblem* createProblem(CXDiagnostic diagnostic, CXTranslationUnit unit);
 
 enum DiagnosticType {
     Unknown,
@@ -43,7 +43,7 @@ enum DiagnosticType {
  * @return Type of @p diagnostic
  * @sa DiagnosticType
  */
-KDEVCLANGDUCHAIN_EXPORT DiagnosticType diagnosticType(CXDiagnostic diagnostic);
+KDEVCLANGPRIVATE_EXPORT DiagnosticType diagnosticType(CXDiagnostic diagnostic);
 }
 
 #endif // CLANGDIAGNOSTICEVALUATOR_H

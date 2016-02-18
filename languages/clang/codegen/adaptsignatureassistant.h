@@ -21,6 +21,7 @@
 #define SIGNATUREASSISTANT_H
 
 #include "adaptsignatureaction.h"
+#include "clangprivateexport.h"
 
 #include <language/assistant/staticassistant.h>
 #include <language/duchain/identifier.h>
@@ -33,7 +34,7 @@ namespace KTextEditor {
 class View;
 }
 
-class AdaptSignatureAssistant : public KDevelop::StaticAssistant
+class KDEVCLANGPRIVATE_EXPORT AdaptSignatureAssistant : public KDevelop::StaticAssistant
 {
     Q_OBJECT
 

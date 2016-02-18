@@ -20,7 +20,7 @@
 #ifndef MACRONAVIGATIONCONTEXT_H
 #define MACRONAVIGATIONCONTEXT_H
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include "macrodefinition.h"
 
@@ -29,7 +29,7 @@
 
 #include <QPointer>
 
-class KDEVCLANGDUCHAIN_EXPORT MacroNavigationContext : public KDevelop::AbstractNavigationContext
+class KDEVCLANGPRIVATE_EXPORT MacroNavigationContext : public KDevelop::AbstractNavigationContext
 {
 public:
     MacroNavigationContext(const MacroDefinition::Ptr& macro,

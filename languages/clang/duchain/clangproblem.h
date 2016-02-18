@@ -23,14 +23,14 @@
 #ifndef CLANGPROBLEM_H
 #define CLANGPROBLEM_H
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include <language/duchain/problem.h>
 #include <interfaces/iassistant.h>
 
 #include <clang-c/Index.h>
 
-struct KDEVCLANGDUCHAIN_EXPORT ClangFixit
+struct KDEVCLANGPRIVATE_EXPORT ClangFixit
 {
     QString replacementText;
     KDevelop::DocumentRange range;
@@ -44,11 +44,11 @@ struct KDEVCLANGDUCHAIN_EXPORT ClangFixit
     }
 };
 
-QDebug KDEVCLANGDUCHAIN_EXPORT operator<<(QDebug debug, const ClangFixit& fixit);
+QDebug KDEVCLANGPRIVATE_EXPORT operator<<(QDebug debug, const ClangFixit& fixit);
 
 using ClangFixits = QVector<ClangFixit>;
 
-class KDEVCLANGDUCHAIN_EXPORT ClangProblem : public KDevelop::Problem
+class KDEVCLANGPRIVATE_EXPORT ClangProblem : public KDevelop::Problem
 {
 public:
     using Ptr = QExplicitlySharedDataPointer<ClangProblem>;
@@ -78,7 +78,7 @@ private:
 };
 
 
-class KDEVCLANGDUCHAIN_EXPORT ClangFixitAssistant : public KDevelop::IAssistant
+class KDEVCLANGPRIVATE_EXPORT ClangFixitAssistant : public KDevelop::IAssistant
 {
     Q_OBJECT
 
@@ -97,7 +97,7 @@ private:
     ClangFixits m_fixits;
 };
 
-class KDEVCLANGDUCHAIN_EXPORT ClangFixitAction : public KDevelop::IAssistantAction
+class KDEVCLANGPRIVATE_EXPORT ClangFixitAction : public KDevelop::IAssistantAction
 {
     Q_OBJECT
 

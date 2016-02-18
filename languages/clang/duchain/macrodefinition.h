@@ -21,7 +21,7 @@
 #ifndef MACRODEFINITION_H
 #define MACRODEFINITION_H
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainregister.h>
@@ -41,7 +41,7 @@ class MacroDefinitionData;
  *
  * @note API designed after of http://clang.llvm.org/doxygen/classclang_1_1MacroInfo.html
  */
-class KDEVCLANGDUCHAIN_EXPORT MacroDefinition : public KDevelop::Declaration
+class KDEVCLANGPRIVATE_EXPORT MacroDefinition : public KDevelop::Declaration
 {
 public:
     using Ptr = KDevelop::DUChainPointer<MacroDefinition>;

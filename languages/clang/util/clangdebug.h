@@ -26,11 +26,13 @@
 
 #include <clang-c/Index.h>
 
-Q_DECLARE_LOGGING_CATEGORY(KDEV_CLANG)
+#include "clangprivateexport.h"
+
+extern KDEVCLANGPRIVATE_EXPORT const QLoggingCategory &KDEV_CLANG();
 #define clangDebug() qCDebug(KDEV_CLANG)
 
-QDebug operator<<(QDebug dbg, CXString string);
-QDebug operator<<(QDebug dbg, CXSourceLocation location);
-QDebug operator<<(QDebug dbg, CXSourceRange range);
+KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXString string);
+KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXSourceLocation location);
+KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXSourceRange range);
 
 #endif // CLANGDEBUG_H

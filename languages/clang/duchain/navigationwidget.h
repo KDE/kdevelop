@@ -23,7 +23,7 @@
 #ifndef NAVIGATIONWIDGET_H
 #define NAVIGATIONWIDGET_H
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include "macrodefinition.h"
 
@@ -35,7 +35,7 @@ class DocumentCursor;
 class IncludeItem;
 }
 
-class KDEVCLANGDUCHAIN_EXPORT ClangNavigationWidget : public KDevelop::AbstractNavigationWidget
+class KDEVCLANGPRIVATE_EXPORT ClangNavigationWidget : public KDevelop::AbstractNavigationWidget
 {
 public:
     ClangNavigationWidget(const KDevelop::DeclarationPointer& declaration);

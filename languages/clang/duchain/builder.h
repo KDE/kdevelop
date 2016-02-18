@@ -23,7 +23,7 @@
 #ifndef BUILDER_H
 #define BUILDER_H
 
-#include <duchain/clangduchainexport.h>
+#include "clangprivateexport.h"
 
 #include "clanghelpers.h"
 
@@ -34,7 +34,7 @@ namespace Builder {
  * 
  * @param update Set to true when an existing DUChain cache is getting updated.
  */
-KDEVCLANGDUCHAIN_EXPORT void visit(CXTranslationUnit tu, CXFile file,
+KDEVCLANGPRIVATE_EXPORT void visit(CXTranslationUnit tu, CXFile file,
                                    const IncludeFileContexts& includes, const bool update);
 
 }

@@ -77,6 +77,7 @@ void TestProblems::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
+    QVERIFY(qputenv("KDEV_CLANG_DISPLAY_DIAGS", "1"));
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
     DUChain::self()->disablePersistentStorage();
