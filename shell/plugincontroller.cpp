@@ -336,6 +336,9 @@ bool PluginController::isEnabled( const KPluginMetaData& info ) const
 
 void PluginController::initialize()
 {
+    QElapsedTimer timer;
+    timer.start();
+
     QMap<QString, bool> pluginMap;
     if( ShellExtension::getInstance()->defaultPlugins().isEmpty() )
     {
@@ -393,6 +396,8 @@ void PluginController::initialize()
     }
     // Synchronize so we're writing out to the file.
     grp.sync();
+
+    qCDebug(SHELL) << "Done loading plugins - took:" << timer.elapsed() << "ms";
 }
 
 QList<IPlugin *> PluginController::loadedPlugins() const
