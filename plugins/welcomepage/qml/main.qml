@@ -22,5 +22,10 @@ import QtQuick 2.0
 
 Loader {
     source: "qrc:/qml/area_"+area+".qml"
+    asynchronous: true
+    visible: status == Loader.Ready
+    Behavior on opacity {
+        PropertyAnimation {}
+    }
 }
 
