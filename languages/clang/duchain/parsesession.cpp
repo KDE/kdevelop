@@ -286,11 +286,13 @@ ParseSessionData::~ParseSessionData()
 
 void ParseSessionData::setUnit(CXTranslationUnit unit)
 {
-    Q_ASSERT(!m_unit || unit == m_unit);
-
     m_unit = unit;
-    const ClangString unitFile(clang_getTranslationUnitSpelling(unit));
-    m_file = clang_getFile(m_unit, unitFile.c_str());
+    if (m_unit) {
+        const ClangString unitFile(clang_getTranslationUnitSpelling(unit));
+        m_file = clang_getFile(m_unit, unitFile.c_str());
+    } else {
+        m_file = nullptr;
+    }
 }
 
 ClangParsingEnvironment ParseSessionData::environment() const
@@ -423,12 +425,19 @@ bool ParseSession::reparse(const QVector<UnsavedFile>& unsavedFiles, const Clang
 
     auto unsaved = toClangApi(unsavedFiles);
 
-    if (clang_reparseTranslationUnit(d->m_unit, unsaved.size(), unsaved.data(), clang_defaultReparseOptions(d->m_unit)) == 0) {
-        d->setUnit(d->m_unit);
-        return true;
-    } else {
+    const auto code = clang_reparseTranslationUnit(d->m_unit, unsaved.size(), unsaved.data(),
+                                                   clang_defaultReparseOptions(d->m_unit));
+    if (code != CXError_Success) {
+        qWarning() << "clang_reparseTranslationUnit return with error code" << code;
+        // if error code != 0 => clang_reparseTranslationUnit invalidates the old translation unit => clean up
+        clang_disposeTranslationUnit(d->m_unit);
+        d->setUnit(nullptr);
         return false;
     }
+
+    // update state
+    d->setUnit(d->m_unit);
+    return true;
 }
 
 ClangParsingEnvironment ParseSession::environment() const
