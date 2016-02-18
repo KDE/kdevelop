@@ -18,14 +18,15 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.2
 
 Loader {
     source: "qrc:/qml/area_"+area+".qml"
     asynchronous: true
-    visible: status == Loader.Ready
+    opacity: status == Loader.Ready
+
     Behavior on opacity {
-        PropertyAnimation {}
+        OpacityAnimator {}
     }
 }
 
