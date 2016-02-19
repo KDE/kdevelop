@@ -20,13 +20,28 @@
 
 import QtQuick 2.2
 
-Loader {
-    source: "qrc:/qml/area_"+area+".qml"
-    asynchronous: true
-    opacity: status == Loader.Ready
+Rectangle {
+    id: root
 
-    Behavior on opacity {
-        OpacityAnimator {}
+    SystemPalette {
+        id: myPalette
     }
-}
 
+    color: myPalette.window
+    visible: loader.opacity < 1
+
+    Loader {
+        id: loader
+
+        anchors.fill: parent
+
+        source: "qrc:/qml/area_"+area+".qml"
+        asynchronous: true
+        opacity: status == Loader.Ready
+
+        Behavior on opacity {
+            OpacityAnimator {}
+        }
+    }
+
+}
