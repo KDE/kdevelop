@@ -75,8 +75,6 @@ Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 
 #include <iostream>
 
-#include "splash.h"
-
 #ifdef Q_OS_MAC
 #include <CoreFoundation/CoreFoundation.h>
 #endif
@@ -271,7 +269,6 @@ int main( int argc, char *argv[] )
 
     // Useful for valgrind runs, just `export KDEV_DISABLE_JIT=1`
     if (qEnvironmentVariableIsSet("KDEV_DISABLE_JIT")) {
-        qputenv("KDEV_DISABLE_SPLASH", "1");
         qputenv("KDEV_DISABLE_WELCOMEPAGE", "1");
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
     }
@@ -612,13 +609,7 @@ int main( int argc, char *argv[] )
 
     KDevIDEExtension::init();
 
-    KDevSplashScreen* splash = nullptr;
-    if (!QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_SPLASH")) {
-        splash = new KDevSplashScreen;
-        splash->show();
-    }
-
-    if(!Core::initialize(splash, Core::Default, session))
+    if(!Core::initialize(nullptr, Core::Default, session))
         return 5;
 
     // register a DBUS service for this process, so that we can open files in it from other invocations
