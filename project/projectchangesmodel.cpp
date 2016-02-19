@@ -150,8 +150,9 @@ void ProjectChangesModel::statusReady(KJob* job)
         return;
 
     QSet<QUrl> foundUrls;
+    foundUrls.reserve(states.size());
     foreach(const QVariant& state, states) {
-        VcsStatusInfo st = state.value<VcsStatusInfo>();
+        const VcsStatusInfo st = state.value<VcsStatusInfo>();
         foundUrls += st.url();
 
         updateState(project, st);
@@ -268,7 +269,8 @@ void ProjectChangesModel::branchNameReady(VcsJob* job)
 {
     IProject* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
     if(job->status()==VcsJob::JobSucceeded) {
-        QString branchName = job->fetchResults().toString().isEmpty() ? i18n("no branch") : job->fetchResults().toString();
+        QString name = job->fetchResults().toString();
+        QString branchName = name.isEmpty() ? i18n("no branch") : name;
         projectItem(project)->setText(i18nc("project name (branch name)", "%1 (%2)", project->name(), branchName));
     } else {
         projectItem(project)->setText(project->name());
