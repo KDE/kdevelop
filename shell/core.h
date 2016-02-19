@@ -72,97 +72,41 @@ public:
 
     virtual ~Core();
 
-    /** @copydoc ICore::uiController() */
     virtual IUiController *uiController() override;
-
-    /** @copydoc ICore::pluginController() */
     virtual IPluginController *pluginController() override;
-
-    /** @copydoc ICore::projectController() */
     virtual IProjectController *projectController() override;
-
-    /** @copydoc ICore::languageController() */
     virtual ILanguageController *languageController() override;
-
-    /** @copydoc ICore::partController() */
     virtual IPartController *partController() override;
-
-    /** @copydoc ICore::documentController() */
     virtual IDocumentController *documentController() override;
-
-    /** @copydoc ICore::runController() */
     virtual IRunController *runController() override;
-
-    /** @copydoc ICore::sourceFormatterController() */
     virtual ISourceFormatterController* sourceFormatterController() override;
-
-    /** @copydoc ICore::selectionController() */
     virtual ISelectionController* selectionController() override;
-
-    /** @copydoc ICore::documentationController() */
     virtual IDocumentationController* documentationController() override;
-
-    /** @copydoc ICore::debugController() */
     virtual IDebugController* debugController() override;
-
-    /** @copydoc ICore::testController() */
     virtual ITestController* testController() override;
-
-    /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession() override;
-
-    /** @copydoc ICore::activeSessionLock() */
     virtual ISessionLock::Ptr activeSessionLock() override;
 
     virtual KAboutData aboutData() const override;
 
     /// The following methods may only be used within the shell.
 
-    /** @return ui controller */
     UiController *uiControllerInternal();
-
-    /** @return plugin controller */
     PluginController *pluginControllerInternal();
-
-    /** @return project controller */
     ProjectController *projectControllerInternal();
-
-    /** @return language controller */
     LanguageController *languageControllerInternal();
-
-    /** @return part manager */
     PartController *partControllerInternal();
-
-    /** @return document controller */
     DocumentController *documentControllerInternal();
-
-    /** @return run controller */
     RunController *runControllerInternal();
-
-    /** @return documentation controller */
     DocumentationController *documentationControllerInternal();
-
-    /** @return debug controller */
     DebugController *debugControllerInternal();
-
-    /** @return working set controller */
     WorkingSetController* workingSetControllerInternal();
-
-    /** @return the real source formatter controller */
     SourceFormatterController* sourceFormatterControllerInternal();
-
-    /** @return test controller */
     TestController* testControllerInternal();
 
-    /**
-     * @return session controller
-     * @internal
-     */
+    /// @internal
     SessionController *sessionController();
-
-    /**
-     * @internal
-     */
+    /// @internal
     ProgressManager *progressController();
 
     void cleanup();
