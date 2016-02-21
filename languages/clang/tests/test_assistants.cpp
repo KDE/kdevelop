@@ -681,4 +681,10 @@ void TestAssistants::testMoveIntoSource_data()
             << QString("namespace std { template<typename _CharT> class basic_string; \ntypedef basic_string<char> string;}\n void move(std::string i);")
             << QString("void move(std::string i) {}\n")
             << QualifiedIdentifier("move");
+        QTest::newRow("move-constructor")
+            << QString("class Class{Class(){}\n};")
+            << QString("")
+            << QString("class Class{Class();\n};")
+            << QString("Class::Class() {}\n")
+            << QualifiedIdentifier("Class::Class");
 }

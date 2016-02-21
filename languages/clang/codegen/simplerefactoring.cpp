@@ -30,6 +30,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/types/functiontype.h>
@@ -207,7 +208,14 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
     clangDebug() << "id:" << id;
 
     auto funcType = decl->type<FunctionType>();
-    if (!ins.insertFunctionDeclaration(id, funcType->returnType(), signature,
+    auto returnType = funcType->returnType();
+    if (auto classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl)) {
+        if (classFunDecl->isConstructor() || classFunDecl->isDestructor()) {
+            returnType = nullptr;
+        }
+    }
+
+    if (!ins.insertFunctionDeclaration(id, returnType, signature,
                                        funcType->modifiers() & AbstractType::ConstModifier, body)) {
         return i18n("Insertion failed");
     }
