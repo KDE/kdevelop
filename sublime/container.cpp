@@ -23,7 +23,6 @@
 #include <QClipboard>
 #include <QEvent>
 #include <QLabel>
-#include <QMap>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPointer>
@@ -121,7 +120,7 @@ bool sortViews(const View* const lhs, const View* const rhs)
 
 struct ContainerPrivate {
     QBoxLayout* layout;
-    QMap<QWidget*, View*> viewForWidget;
+    QHash<QWidget*, View*> viewForWidget;
 
     ContainerTabBar *tabBar;
     QStackedWidget *stack;
@@ -131,7 +130,7 @@ struct ContainerPrivate {
     QPointer<QWidget> leftCornerWidget;
     QToolButton* documentListButton;
     QMenu* documentListMenu;
-    QMap<View*, QAction*> documentListActionForView;
+    QHash<View*, QAction*> documentListActionForView;
 
     /**
      * Updates the context menu which is shown when
@@ -370,7 +369,7 @@ void Container::statusChanged(Sublime::View* view)
 
 void Container::statusIconChanged(Document* doc)
 {
-    QMapIterator<QWidget*, View*> it = d->viewForWidget;
+    QHashIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         if (it.next().value()->document() == doc) {
             d->fileStatus->setPixmap( doc->statusIcon().pixmap( QSize( 16,16 ) ) );
@@ -390,7 +389,7 @@ void Container::statusIconChanged(Document* doc)
 
 void Container::documentTitleChanged(Sublime::Document* doc)
 {
-    QMapIterator<QWidget*, View*> it = d->viewForWidget;
+    QHashIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         Sublime::View* view = it.next().value();
         if (view->document() == doc) {
