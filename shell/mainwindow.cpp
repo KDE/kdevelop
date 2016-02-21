@@ -351,7 +351,10 @@ bool MainWindow::queryClose()
 void MainWindow::updateActiveDocumentConnection(IDocument* document)
 {
     disconnect(d->activeDocumentReadWriteConnection);
-    d->activeDocumentReadWriteConnection = connect(document->textDocument(), &KTextEditor::Document::readWriteChanged, this, &MainWindow::updateCaption);
+    if (auto textDocument = document->textDocument()) {
+        d->activeDocumentReadWriteConnection = connect(textDocument, &KTextEditor::Document::readWriteChanged,
+                                                       this, &MainWindow::updateCaption);
+    }
 }
 
 void MainWindow::updateCaption()
