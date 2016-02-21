@@ -197,6 +197,9 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         m_unsavedFiles << UnsavedFile(textDocument->url().toLocalFile(), textDocument->textLines(textDocument->documentRange()));
         const IndexedString indexedUrl(textDocument->url());
         m_unsavedRevisions.insert(indexedUrl, ModificationRevision::revisionForFile(indexedUrl));
+        if (indexedUrl == tuUrl) {
+            m_tuDocumentIsUnsaved = true;
+        }
     }
 
     if (auto tracker = trackerForUrl(url)) {
@@ -219,6 +222,13 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
 
     {
         const auto tuUrlStr = m_environment.translationUnitUrl().str();
+        if (!m_tuDocumentIsUnsaved && !QFile::exists(tuUrlStr)) {
+            // maybe we requested a parse job some time ago but now the file
+            // does not exist anymore. return early then
+            clang()->index()->unpinTranslationUnitForUrl(document());
+            return;
+        }
+
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includesInBackground(tuUrlStr));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->definesInBackground(tuUrlStr));
         m_environment.setPchInclude(userDefinedPchIncludeForFile(tuUrlStr));

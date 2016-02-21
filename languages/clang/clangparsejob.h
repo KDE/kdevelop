@@ -56,6 +56,7 @@ private:
 
     ClangParsingEnvironment m_environment;
     QVector<UnsavedFile> m_unsavedFiles;
+    bool m_tuDocumentIsUnsaved = false;
     QHash<KDevelop::IndexedString, KDevelop::ModificationRevision> m_unsavedRevisions;
 };
 
