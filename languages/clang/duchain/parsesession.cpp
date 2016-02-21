@@ -214,21 +214,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     addIncludes(&clangArguments, &smartArgs, includes.system, "-isystem");
     addIncludes(&clangArguments, &smartArgs, includes.project, "-I");
 
-    m_definesFile.open();
-    QTextStream definesStream(&m_definesFile);
-    Q_ASSERT(m_definesFile.isWritable());
-    const auto& defines = environment.defines();
-    for (auto it = defines.begin(); it != defines.end(); ++it) {
-        if (it.key() == QLatin1String("__VERSION__") || it.key() == QLatin1String("__clang_minor__")
-            || it.key() == QLatin1String("__clang_patchlevel__") || it.key() == QLatin1String("__clang_version__"))
-        {
-            // don't emit tons of "macro redefined" errors for these macros
-            continue;
-        }
-        definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
-    }
-    definesStream.flush();
-    smartArgs << m_definesFile.fileName().toUtf8();
+    smartArgs << writeDefinesFile(environment.defines());
     clangArguments << "-imacros" << smartArgs.last().constData();
 
     // append extra args from environment variable
@@ -282,6 +268,21 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
 ParseSessionData::~ParseSessionData()
 {
     clang_disposeTranslationUnit(m_unit);
+}
+
+QByteArray ParseSessionData::writeDefinesFile(const QMap<QString, QString>& defines)
+{
+    m_definesFile.open();
+    Q_ASSERT(m_definesFile.isWritable());
+
+    QTextStream definesStream(&m_definesFile);
+    // don't show warnings about redefined macros
+    definesStream << "#pragma clang system_header\n";
+    for (auto it = defines.begin(); it != defines.end(); ++it) {
+        definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
+    }
+
+    return m_definesFile.fileName().toUtf8();
 }
 
 void ParseSessionData::setUnit(CXTranslationUnit unit)
