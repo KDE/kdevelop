@@ -52,6 +52,11 @@ public:
 
     virtual ~SessionLock();
 
+    /**
+     * Release the lock file and remove the session directory from disk.
+     */
+    void removeFromDisk();
+
 private:
     SessionLock(const QString& sessionId, const QSharedPointer<QLockFile>& lockFile);
     QString m_sessionId;

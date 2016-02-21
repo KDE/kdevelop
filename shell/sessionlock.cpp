@@ -29,6 +29,7 @@
 
 #include <QDBusConnectionInterface>
 #include <QFile>
+#include <QDir>
 
 using namespace KDevelop;
 
@@ -135,6 +136,14 @@ SessionLock::~SessionLock()
     bool unregistered = QDBusConnection::sessionBus().unregisterService( dBusServiceNameForSession(m_sessionId) );
     Q_ASSERT(unregistered);
     Q_UNUSED(unregistered);
+}
+
+void SessionLock::removeFromDisk()
+{
+    Q_ASSERT(m_lockFile->isLocked());
+    // unlock first to prevent warnings: "Could not remove our own lock file ..."
+    m_lockFile->unlock();
+    QDir(SessionController::sessionDirectory(m_sessionId)).removeRecursively();
 }
 
 QString SessionLock::handleLockedSession(const QString& sessionName, const QString& sessionId,
