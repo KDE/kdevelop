@@ -103,24 +103,14 @@ uint buildIdentifierForType(const AbstractType::Ptr& type, IndexedTypeIdentifier
         return maxPointerLevel;
     }
 
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
-    if (idType) {
-        Declaration* decl = idType->declaration(top);
-        if (decl) {
-            id.setIdentifier(decl->qualifiedIdentifier());
-        } else {
-            id.setIdentifier(idType->qualifiedIdentifier());
-        }
-    } else {
-        //Just create it as an expression
-        AbstractType::Ptr useTypeText = type;
-        if (type->modifiers() & AbstractType::ConstModifier) {
-            //Remove the 'const' modifier, as it will be added to the type-identifier below
-            useTypeText = type->indexed().abstractType();
-            useTypeText->setModifiers(useTypeText->modifiers() & (~AbstractType::ConstModifier));
-        }
-        id.setIdentifier(QualifiedIdentifier(useTypeText->toString(), true));
+    AbstractType::Ptr useTypeText = type;
+    if (type->modifiers() & AbstractType::ConstModifier) {
+        //Remove the 'const' modifier, as it will be added to the type-identifier below
+        useTypeText = type->indexed().abstractType();
+        useTypeText->setModifiers(useTypeText->modifiers() & (~AbstractType::ConstModifier));
     }
+    id.setIdentifier(QualifiedIdentifier(useTypeText->toString(), true));
+
     if (type->modifiers() & AbstractType::ConstModifier) {
         id.setIsConstant(true);
     }

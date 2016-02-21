@@ -638,4 +638,40 @@ void TestAssistants::testMoveIntoSource_data()
                                     << QString("namespace NS{class a {\nint foo() const;\n};\n}")
                                     << QString("namespace NS{\n\nint a::foo() const {\nreturn 0;\n}\n}")
                                     << QualifiedIdentifier("NS::a::foo");
+    QTest::newRow("class-template-parameter")
+        << QString(R"(
+            namespace first {
+            template <typename T>
+            class Test{};
+
+            namespace second {
+                template <typename T>
+                class List;
+            }
+
+            class MoveIntoSource
+            {
+            public:
+                void f(const second::List<const volatile Test<first::second::List<int*>>*>& param){}
+            };}
+        )")
+        << QString("")
+        << QString(R"(
+            namespace first {
+            template <typename T>
+            class Test{};
+
+            namespace second {
+                template <typename T>
+                class List;
+            }
+
+            class MoveIntoSource
+            {
+            public:
+                void f(const second::List<const volatile Test<first::second::List<int*>>*>& param);
+            };}
+        )")
+        << QString("namespace first {\nvoid MoveIntoSource::f(const first::second::List< const volatile first::Test< first::second::List< int* > >* >& param) {}}\n\n")
+        << QualifiedIdentifier("first::MoveIntoSource::f");
 }
