@@ -674,4 +674,11 @@ void TestAssistants::testMoveIntoSource_data()
         )")
         << QString("namespace first {\nvoid MoveIntoSource::f(const first::second::List< const volatile first::Test< first::second::List< int* > >* >& param) {}}\n\n")
         << QualifiedIdentifier("first::MoveIntoSource::f");
+
+        QTest::newRow("move-unexposed-type")
+            << QString("namespace std { template<typename _CharT> class basic_string; \ntypedef basic_string<char> string;}\n void move(std::string i){}")
+            << QString("")
+            << QString("namespace std { template<typename _CharT> class basic_string; \ntypedef basic_string<char> string;}\n void move(std::string i);")
+            << QString("void move(std::string i) {}\n")
+            << QualifiedIdentifier("move");
 }
