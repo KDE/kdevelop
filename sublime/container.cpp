@@ -527,6 +527,17 @@ void Container::setTabColor(const View* view, const QColor& color)
     }
 }
 
+void Container::setTabColors(const QHash<const View*, QColor>& colors)
+{
+    for (int i = 0; i < count(); i++) {
+        auto view = viewForWidget(widget(i));
+        auto color = colors[view];
+        if (color.isValid()) {
+            d->tabBar->setTabTextColor(i, color);
+        }
+    }
+}
+
 void Container::tabMoved(int from, int to)
 {
     QWidget *w = d->stack->widget(from);

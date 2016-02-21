@@ -76,11 +76,11 @@ QColor defaultColor(const QPalette& palette)
     return scheme.foreground(KColorScheme::NormalText).color();
 }
 
-QColor colorForDocument(const QUrl& url, const QPalette& palette)
+QColor colorForDocument(const QUrl& url, const QPalette& palette, const QColor& defaultColor)
 {
     auto project = Core::self()->projectController()->findProjectForUrl(url);
     if (!project)
-        return QColor();
+        return defaultColor;
 
     return WidgetColorizer::colorForId(qHash(project->path()), palette);
 }
@@ -391,15 +391,19 @@ void MainWindow::updateAllTabColors()
         return;
 
     const auto defaultColor = ::defaultColor(palette());
-    if (UiConfig::colorizeByProject()){
+    if (UiConfig::colorizeByProject()) {
+        QHash<const Sublime::View*, QColor> viewColors;
         foreach (auto container, containers()) {
-            foreach (auto view, container->views()) {
+            auto views = container->views();
+            viewColors.reserve(views.size());
+            viewColors.clear();
+            foreach (auto view, views) {
                 const auto urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
                 if (urlDoc) {
-                    const auto color = colorForDocument(urlDoc->url(), palette());
-                    container->setTabColor(view, color.isValid() ? color : defaultColor);
+                    viewColors[view] = colorForDocument(urlDoc->url(), palette(), defaultColor);
                 }
             }
+            container->setTabColors(viewColors);
         }
     } else {
         foreach (auto container, containers()) {
@@ -413,13 +417,12 @@ void MainWindow::updateTabColor(IDocument* doc)
     if (!UiConfig::self()->colorizeByProject())
         return;
 
-    const auto defaultColor = ::defaultColor(palette());
-    const auto color = colorForDocument(doc->url(), palette());
+    const auto color = colorForDocument(doc->url(), palette(), defaultColor(palette()));
     foreach (auto container, containers()) {
         foreach (auto view, container->views()) {
             const auto urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
             if (urlDoc && urlDoc->url() == doc->url()) {
-                container->setTabColor(view, color.isValid() ? color : defaultColor);
+                container->setTabColor(view, color);
             }
         }
     }
