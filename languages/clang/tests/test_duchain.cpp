@@ -245,6 +245,7 @@ void TestDUChain::testInclude()
 void TestDUChain::testMissingInclude()
 {
     auto code = R"(
+#pragma once
 #include "missing1.h"
 
 template<class T>
