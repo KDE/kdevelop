@@ -35,7 +35,6 @@ class OutputModel;
 class CommandExecutor;
 }
 
-class KProcess;
 
 class PlasmoidExecutionJob : public KDevelop::OutputJob
 {

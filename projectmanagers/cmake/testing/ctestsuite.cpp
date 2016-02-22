@@ -21,7 +21,6 @@
 #include "ctestrunjob.h"
 #include "../debug.h"
 
-#include <KProcess>
 #include <QFileInfo>
 
 #include <interfaces/itestcontroller.h>

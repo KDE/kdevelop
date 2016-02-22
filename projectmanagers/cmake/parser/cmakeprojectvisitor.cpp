@@ -35,7 +35,7 @@
 #include <language/duchain/types/delayedtype.h>
 #include <language/duchain/problem.h>
 
-#include <KProcess>
+#include <QProcess>
 #include <KLocalizedString>
 #include <QHash>
 #include <QQueue>
@@ -1469,11 +1469,12 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
     }
     qCDebug(CMAKE) << "Executing:" << execName << "::" << args << "in" << exec->workingDirectory();
 
-    KProcess p;
+    QProcess p;
     if(!exec->workingDirectory().isEmpty())
         p.setWorkingDirectory(exec->workingDirectory());
-    p.setOutputChannelMode(KProcess::MergedChannels);
-    p.setProgram(execName, args);
+    p.setProcessChannelMode(QProcess::MergedChannels);
+    p.setProgram(execName);
+    p.setArguments(args);
     p.start();
 
     if(!p.waitForFinished())
@@ -1501,7 +1502,7 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
 {
     qCDebug(CMAKE) << "executing... " << exec->commands();
-    QList<KProcess*> procs;
+    QList<QProcess*> procs;
     foreach(const QStringList& _args, exec->commands())
     {
         if(_args.isEmpty())
@@ -1526,15 +1527,16 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
             workingDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
         }
         QStringList args(_args);
-        KProcess *p=new KProcess(), *prev=0;
+        QProcess *p=new QProcess(), *prev=0;
         if(!procs.isEmpty())
         {
             prev=procs.last();
         }
         p->setWorkingDirectory(workingDir);
-        p->setOutputChannelMode(KProcess::MergedChannels);
+        p->setProcessChannelMode(QProcess::MergedChannels);
         QString execName=args.takeFirst();
-        p->setProgram(execName, args);
+        p->setProgram(execName);
+        p->setArguments(args);
         p->start();
         procs.append(p);
         qCDebug(CMAKE) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
@@ -1545,7 +1547,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
         }
     }
 
-    foreach(KProcess* p, procs)
+    foreach(QProcess* p, procs)
     {
         if(!p->waitForFinished())
         {

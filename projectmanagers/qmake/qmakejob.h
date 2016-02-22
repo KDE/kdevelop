@@ -30,7 +30,7 @@ namespace KDevelop {
 class OutputModel;
 }
 
-class KProcess;
+class QProcess;
 class QMakeJob : public KDevelop::OutputJob
 {
     Q_OBJECT
@@ -61,7 +61,7 @@ private:
     QString m_installPrefix;
     int m_buildType;
     QString m_extraArguments;
-    KProcess* m_process;
+    QProcess* m_process;
     KDevelop::OutputModel* m_model;
 };
 

@@ -29,7 +29,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 
-#include <KProcess>
 #include <KLocalizedString>
 #include <KConfigGroup>
 
