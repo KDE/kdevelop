@@ -190,10 +190,13 @@ void TestDUChain::testElaboratedType()
     auto functionType = function->type<FunctionType>();
     QVERIFY(functionType);
 
+#if CINDEX_VERSION_MINOR < 34
     QEXPECT_FAIL("namespace", "The ElaboratedType is not exposed through the libclang interface, not much we can do here", Abort);
+#endif
     QVERIFY(functionType->returnType()->whichType() != AbstractType::TypeDelayed);
-
+#if CINDEX_VERSION_MINOR < 34
     QEXPECT_FAIL("typedef", "After using clang_getCanonicalType on ElaboratedType all typedef information get's stripped away", Continue);
+#endif
     QCOMPARE(functionType->returnType()->whichType(), type);
 }
 

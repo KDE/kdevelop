@@ -638,6 +638,15 @@ struct Visitor
     }
 #endif
 
+#if CINDEX_VERSION_MINOR >= 34
+    template<CXTypeKind TK, EnableIf<TK == CXType_Elaborated> = dummy>
+    AbstractType *createType(CXType type, CXCursor parent)
+    {
+        auto underyingType = clang_Type_getNamedType(type);
+        return makeType(underyingType, parent);
+    }
+#endif
+
     /// @param declaration an optional declaration that will be associated with created type
     AbstractType* createClassTemplateSpecializationType(CXType type, const DeclarationPointer declaration = {})
     {
@@ -1259,6 +1268,9 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_NullPtr);
 #if CINDEX_VERSION_MINOR >= 31
     UseKind(CXType_Auto);
+#endif
+#if CINDEX_VERSION_MINOR >= 34
+    UseKind(CXType_Elaborated);
 #endif
     case CXType_Invalid:
         return nullptr;
