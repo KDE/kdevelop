@@ -45,8 +45,8 @@ public:
 
     /// @param body function-body, including parens
     bool insertFunctionDeclaration(const KDevelop::Identifier& name, const KDevelop::AbstractType::Ptr& returnType,
-                                           const QList<SourceCodeInsertion::SignatureItem>& signature,
-                                           bool isConstant = false, const QString& body = QString());
+                                   const QVector<SourceCodeInsertion::SignatureItem>& signature,
+                                   bool isConstant = false, const QString& body = QString());
 
     KDevelop::DocumentChangeSet changes();
 
@@ -69,9 +69,9 @@ private:
 
 private:
     KDevelop::DocumentChangeSet m_changeSet;
-    KDevelop::DUContext* m_context;
+    KDevelop::DUContextPointer m_context;
     KDevelop::QualifiedIdentifier m_scope;
-    KDevelop::TopDUContext* m_topContext;
+    KDevelop::TopDUContextPointer m_topContext;
     // Represents the whole code of the manipulated top-context for reading.
     // Must be checked for zero before using. It is zero if the file could not be read.
     const KDevelop::CodeRepresentation::Ptr m_codeRepresentation;

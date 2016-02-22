@@ -560,7 +560,7 @@ struct Visitor
     AbstractType *createType(CXType type, CXCursor parent)
     {
         auto numTA = clang_Type_getNumTemplateArguments(type);
-        // TODO: We should really expose more types!
+        // TODO: We should really expose more types to libclang!
         if (numTA != -1 && ClangString(clang_getTypeSpelling(type)).toString().contains(QLatin1Char('<'))) {
             return createClassTemplateSpecializationType(type);
         }

@@ -19,7 +19,7 @@
 
 #include "test_assistants.h"
 
-#include "codegen/simplerefactoring.h"
+#include "codegen/clangrefactoring.h"
 
 #include <QtTest/QtTest>
 #include <QTemporaryDir>
@@ -562,7 +562,7 @@ void TestAssistants::testMoveIntoSource()
         QVERIFY(declaration.isValid());
     }
     CodeRepresentation::setDiskChangesForbidden(false);
-    SimpleRefactoring refactoring;
+    ClangRefactoring refactoring;
     QCOMPARE(refactoring.moveIntoSource(declaration), QString());
     CodeRepresentation::setDiskChangesForbidden(true);
 

@@ -39,7 +39,7 @@ using namespace KDevelop;
 
 namespace
 {
-QualifiedIdentifier stripPrefixes(DUContext* ctx, const QualifiedIdentifier& id)
+QualifiedIdentifier stripPrefixes(const DUContextPointer& ctx, const QualifiedIdentifier& id)
 {
     if (!ctx) {
         return id;
@@ -74,7 +74,7 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, const QualifiedIdentifier& id)
     return result;
 }
 
-QString makeSignatureString(const QList<SourceCodeInsertion::SignatureItem>& signature, DUContext* context)
+QString makeSignatureString(const QVector<SourceCodeInsertion::SignatureItem>& signature, const DUContextPointer& context)
 {
     QString ret;
     foreach (const auto& item, signature) {
@@ -82,7 +82,7 @@ QString makeSignatureString(const QList<SourceCodeInsertion::SignatureItem>& sig
             ret += QStringLiteral(", ");
         }
 
-        ret += CodegenHelper::simplifiedTypeString(item.type, context);
+        ret += CodegenHelper::simplifiedTypeString(item.type, context.data());
 
         if (!item.name.isEmpty()) {
             ret += QStringLiteral(" ") + item.name;
@@ -193,7 +193,7 @@ SourceCodeInsertion::~SourceCodeInsertion()
 KTextEditor::Cursor SourceCodeInsertion::end() const
 {
     auto ret = m_context->rangeInCurrentRevision().end();
-    if (m_codeRepresentation && m_codeRepresentation->lines() && dynamic_cast<TopDUContext*>(m_context)) {
+    if (m_codeRepresentation && m_codeRepresentation->lines() && dynamic_cast<TopDUContext*>(m_context.data())) {
         ret.setLine(m_codeRepresentation->lines() - 1);
         ret.setColumn(m_codeRepresentation->line(ret.line()).size());
     }
@@ -202,12 +202,12 @@ KTextEditor::Cursor SourceCodeInsertion::end() const
 
 QString SourceCodeInsertion::indentation() const
 {
-    if (!m_codeRepresentation || !m_context || m_context->localDeclarations(m_topContext).isEmpty()) {
+    if (!m_codeRepresentation || !m_context || m_context->localDeclarations().isEmpty()) {
         clangDebug() << "cannot do indentation";
         return QString();
     }
 
-    foreach (Declaration* decl, m_context->localDeclarations(m_topContext)) {
+    foreach (Declaration* decl, m_context->localDeclarations()) {
         if (decl->range().isEmpty() || decl->range().start.column == 0) {
             continue; // Skip declarations with empty range, that were expanded from macros
         }
@@ -265,8 +265,8 @@ KTextEditor::Range SourceCodeInsertion::insertionRange(int line)
 }
 
 bool SourceCodeInsertion::insertFunctionDeclaration(const Identifier& name, const AbstractType::Ptr& _returnType,
-                                                              const QList<SignatureItem>& signature, bool isConstant,
-                                                              const QString& body)
+                                                    const QVector<SignatureItem>& signature, bool isConstant,
+                                                    const QString& body)
 {
     if (!m_context) {
         return false;
@@ -275,7 +275,7 @@ bool SourceCodeInsertion::insertFunctionDeclaration(const Identifier& name, cons
     auto returnType = _returnType;
 
     QString decl
-        = (returnType ? (CodegenHelper::simplifiedTypeString(returnType, m_context) + QStringLiteral(" ")) : QString())
+        = (returnType ? (CodegenHelper::simplifiedTypeString(returnType, m_context.data()) + QStringLiteral(" ")) : QString())
         + name.toString() + QStringLiteral("(") + makeSignatureString(signature, m_context) + QStringLiteral(")");
 
     if (isConstant) {
@@ -302,14 +302,18 @@ int SourceCodeInsertion::findInsertionPoint() const
 {
     int line = end().line();
 
-    foreach (Declaration* decl, m_context->localDeclarations()) {
-        if (m_context->type() != DUContext::Class) {
-            if (dynamic_cast<AbstractFunctionDeclaration*>(decl)) {
-                line = decl->range().end.line + 1;
-                if (decl->internalContext()) {
-                   line = decl->internalContext()->range().end.line + 1;
-                }
-            }
+    foreach (auto decl, m_context->localDeclarations()) {
+        if (m_context->type() == DUContext::Class) {
+            continue;
+        }
+
+        if (!dynamic_cast<AbstractFunctionDeclaration*>(decl)) {
+            continue;
+        }
+
+        line = decl->range().end.line + 1;
+        if (decl->internalContext()) {
+            line = decl->internalContext()->range().end.line + 1;
         }
     }
 

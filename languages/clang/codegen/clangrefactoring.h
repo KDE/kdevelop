@@ -35,12 +35,12 @@ class ContextMenuExtension;
 class Declaration;
 }
 
-class KDEVCLANGPRIVATE_EXPORT SimpleRefactoring : public KDevelop::BasicRefactoring
+class KDEVCLANGPRIVATE_EXPORT ClangRefactoring : public KDevelop::BasicRefactoring
 {
     Q_OBJECT
 
 public:
-    explicit SimpleRefactoring(QObject* parent = 0);
+    explicit ClangRefactoring(QObject* parent = 0);
 
     void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) override;
 

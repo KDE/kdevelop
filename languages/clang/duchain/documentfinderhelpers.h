@@ -47,6 +47,13 @@ KDEVCLANGPRIVATE_EXPORT bool buddyOrder(const QUrl &url1, const QUrl& url2);
 
 /// @see KDevelop::IBuddyDocumentFinder
 KDEVCLANGPRIVATE_EXPORT QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain = true);
+
+/**
+ * Returns path of associated source file for given @p headerPath
+ *
+ * If no source exists or @p headerPath is not a header empty sting is returned
+ */
+KDEVCLANGPRIVATE_EXPORT QString sourceForHeader(const QString& headerPath);
 };
 
 #endif // DOCUMENTFINDERHELPERS_H

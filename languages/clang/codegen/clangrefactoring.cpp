@@ -21,7 +21,7 @@
  *
  */
 
-#include "simplerefactoring.h"
+#include "clangrefactoring.h"
 
 #include <QAction>
 #include <QIcon>
@@ -48,44 +48,50 @@
 
 using namespace KDevelop;
 
-SimpleRefactoring::SimpleRefactoring(QObject* parent)
+ClangRefactoring::ClangRefactoring(QObject* parent)
     : BasicRefactoring(parent)
 {
     qRegisterMetaType<IndexedDeclaration>();
 }
 
-void SimpleRefactoring::fillContextMenu(ContextMenuExtension& extension, Context* context)
+void ClangRefactoring::fillContextMenu(ContextMenuExtension& extension, Context* context)
 {
-    if (auto declContext = dynamic_cast<DeclarationContext*>(context)) {
-        DUChainReadLocker lock;
-
-        if (auto declaration = declContext->declaration().data()) {
-            QFileInfo fileInfo(declaration->topContext()->url().str());
-            if (!fileInfo.isWritable()) {
-                return;
-            }
-
-            auto action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
-            action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-            action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
-            connect(action, &QAction::triggered, this, &SimpleRefactoring::executeRenameAction);
-
-            extension.addAction(ContextMenuExtension::RefactorGroup, action);
-
-            if (!validCandidateToMoveIntoSource(declaration)) {
-                return;
-            }
-
-            action = new QAction(
-                i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
-            action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-            connect(action, &QAction::triggered, this, &SimpleRefactoring::executeMoveIntoSourceAction);
-            extension.addAction(ContextMenuExtension::RefactorGroup, action);
-        }
+    auto declContext = dynamic_cast<DeclarationContext*>(context);
+    if (!declContext) {
+        return;
     }
+
+    DUChainReadLocker lock;
+
+    auto declaration = declContext->declaration().data();
+    if (!declaration) {
+        return;
+    }
+
+    QFileInfo fileInfo(declaration->topContext()->url().str());
+    if (!fileInfo.isWritable()) {
+        return;
+    }
+
+    auto action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
+    action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
+    connect(action, &QAction::triggered, this, &ClangRefactoring::executeRenameAction);
+
+    extension.addAction(ContextMenuExtension::RefactorGroup, action);
+
+    if (!validCandidateToMoveIntoSource(declaration)) {
+        return;
+    }
+
+    action = new QAction(
+        i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
+    action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
+    connect(action, &QAction::triggered, this, &ClangRefactoring::executeMoveIntoSourceAction);
+    extension.addAction(ContextMenuExtension::RefactorGroup, action);
 }
 
-bool SimpleRefactoring::validCandidateToMoveIntoSource(Declaration* decl)
+bool ClangRefactoring::validCandidateToMoveIntoSource(Declaration* decl)
 {
     if (!decl || !decl->isFunctionDeclaration() || !decl->type<FunctionType>()) {
         return false;
@@ -106,7 +112,6 @@ bool SimpleRefactoring::validCandidateToMoveIntoSource(Declaration* decl)
     }
 
     auto functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
-
     if (!functionDecl || functionDecl->isInline()) {
         return false;
     }
@@ -114,7 +119,7 @@ bool SimpleRefactoring::validCandidateToMoveIntoSource(Declaration* decl)
     return true;
 }
 
-QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
+QString ClangRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
 {
     DUChainReadLocker lock;
     auto decl = iDecl.data();
@@ -123,18 +128,7 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
     }
 
     const auto headerUrl = decl->url();
-    auto targetUrl = headerUrl.str();
-
-    if (ClangHelpers::headerExtensions().contains(QFileInfo(targetUrl).suffix())) {
-        auto buddies = DocumentFinderHelpers::getPotentialBuddies(headerUrl.toUrl());
-        for (const auto& buddy : buddies) {
-            const auto local = buddy.toLocalFile();
-            if (QFileInfo::exists(local)) {
-                targetUrl = local;
-                break;
-            }
-        }
-    }
+    auto targetUrl = DocumentFinderHelpers::sourceForHeader(headerUrl.str());
 
     if (targetUrl.isEmpty() || targetUrl == headerUrl.str()) {
         // TODO: Create source file if it doesn't exist
@@ -195,14 +189,14 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
 
     ins.setSubScope(parentId);
 
-    QList<SourceCodeInsertion::SignatureItem> signature;
+    QVector<SourceCodeInsertion::SignatureItem> signature;
+    const auto localDeclarations = funcCtx->localDeclarations();
+    signature.reserve(localDeclarations.count());
+    std::transform(localDeclarations.begin(), localDeclarations.end(),
+                   std::back_inserter(signature),
+                   [] (Declaration* argument) -> SourceCodeInsertion::SignatureItem
+                   { return {argument->abstractType(), argument->identifier().toString()}; });
 
-    foreach (auto argument, funcCtx->localDeclarations()) {
-        SourceCodeInsertion::SignatureItem item;
-        item.name = argument->identifier().toString();
-        item.type = argument->abstractType();
-        signature.append(item);
-    }
 
     Identifier id(IndexedString(decl->qualifiedIdentifier().mid(parentId.count()).toString()));
     clangDebug() << "id:" << id;
@@ -240,7 +234,7 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
     return {};
 }
 
-void SimpleRefactoring::executeMoveIntoSourceAction()
+void ClangRefactoring::executeMoveIntoSourceAction()
 {
     auto action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
@@ -255,5 +249,3 @@ void SimpleRefactoring::executeMoveIntoSourceAction()
         KMessageBox::error(nullptr, error);
     }
 }
-
-#include "moc_simplerefactoring.cpp"

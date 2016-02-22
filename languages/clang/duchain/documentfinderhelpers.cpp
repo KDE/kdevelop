@@ -265,4 +265,23 @@ QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain)
     return buddies;
 }
 
+QString sourceForHeader(const QString& headerPath)
+{
+    if (!ClangHelpers::isHeader(headerPath)) {
+        return {};
+    }
+
+    QString targetUrl;
+    auto buddies = DocumentFinderHelpers::getPotentialBuddies(QUrl::fromLocalFile(headerPath));
+    for (const auto& buddy : buddies) {
+        const auto local = buddy.toLocalFile();
+        if (QFileInfo::exists(local)) {
+            targetUrl = local;
+            break;
+        }
+    }
+
+    return targetUrl;
+}
+
 }
