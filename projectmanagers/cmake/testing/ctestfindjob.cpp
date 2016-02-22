@@ -28,7 +28,6 @@
 #include <language/backgroundparser/backgroundparser.h>
 
 #include <QFileInfo>
-#include <KProcess>
 #include <KLocalizedString>
 
 CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)

@@ -26,7 +26,6 @@
 #include <project/helper.h>
 
 #include <KColorScheme>
-#include <KProcess>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KSharedConfig>

@@ -22,7 +22,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 #include <QDebug>
-#include <KProcess>
+#include <QProcess>
 #include <KLocalizedString>
 #include <KShell>
 #include <util/processlinemaker.h>
@@ -83,7 +83,6 @@ void QMakeJob::start()
     startOutput();
 
     QStringList args;
-    args << m_qmakePath;
     if (m_buildType < 2)
         args << QString("CONFIG+=") + BUILD_TYPES[m_buildType];
     if (!m_installPrefix.isEmpty())
@@ -111,10 +110,11 @@ void QMakeJob::start()
         build.mkpath(build.absolutePath());
     }
 
-    m_process = new KProcess(this);
+    m_process = new QProcess(this);
     m_process->setWorkingDirectory(m_buildDir);
-    m_process->setProgram(args);
-    m_process->setOutputChannelMode(KProcess::MergedChannels);
+    m_process->setProgram(m_qmakePath);
+    m_process->setArguments(args);
+    m_process->setProcessChannelMode(QProcess::MergedChannels);
     auto lineMaker = new KDevelop::ProcessLineMaker(m_process, this);
 
     connect(lineMaker, SIGNAL(receivedStdoutLines(QStringList)), m_model, SLOT(appendLines(QStringList)));

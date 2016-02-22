@@ -35,7 +35,6 @@
 #include <outputview/outputmodel.h>
 
 #include <KConfigGroup>
-#include <KProcess>
 #include <KLocalizedString>
 #include <KCompositeJob>
 

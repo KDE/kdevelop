@@ -25,7 +25,6 @@
 #include <interfaces/itestcontroller.h>
 
 class CTestSuite;
-class KProcess;
 
 namespace KDevelop {
 class ILaunchConfiguration;

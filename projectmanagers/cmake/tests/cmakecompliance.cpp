@@ -25,7 +25,7 @@
 #include "cmake-test-paths.h"
 #include "../debug.h"
 
-#include <KProcess>
+#include <QProcess>
 #include <QFile>
 
 #include <cmakeparserutils.h>
@@ -43,8 +43,8 @@ QString CMakeCompliance::output;
 //Copied from CMakeManager
 QString executeProcess(const QString& execName, const QStringList& args=QStringList())
 {
-    KProcess p;
-    p.setOutputChannelMode(KProcess::MergedChannels);
+    QProcess p;
+    p.setProcessChannelMode(QProcess::MergedChannels);
     p.setProgram(execName, args);
     p.start();
 

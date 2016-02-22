@@ -30,7 +30,6 @@ namespace KDevelop {
 
 class KDevNinjaBuilderPlugin;
 
-class KProcess;
 class QUrl;
 
 class NinjaJob : public KDevelop::OutputExecuteJob

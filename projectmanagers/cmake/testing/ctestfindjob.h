@@ -28,7 +28,6 @@ class IndexedString;
 class ReferencedTopDUContext;
 }
 
-class KProcess;
 class CTestSuite;
 
 class CTestFindJob : public KJob

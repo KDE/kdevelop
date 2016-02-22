@@ -41,7 +41,6 @@
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <KLocalizedString>
-#include <KProcess>
 #include <kjob.h>
 #include <QUrl>
 

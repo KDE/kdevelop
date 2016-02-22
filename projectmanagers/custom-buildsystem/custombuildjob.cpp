@@ -20,7 +20,6 @@
 #include "custombuildjob.h"
 
 #include <KLocalizedString>
-#include <KProcess>
 #include <KConfigGroup>
 #include <KShell>
 
