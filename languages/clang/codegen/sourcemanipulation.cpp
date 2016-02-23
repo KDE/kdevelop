@@ -23,16 +23,24 @@
  */
 
 #include "sourcemanipulation.h"
+
+#include <QMimeDatabase>
+
+#include <interfaces/icore.h>
+#include <interfaces/isourceformattercontroller.h>
+#include <interfaces/isourceformatter.h>
+
 #include <language/codegen/coderepresentation.h>
-#include <language/duchain/parsingenvironment.h>
-#include <language/duchain/stringhelpers.h>
 
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/classdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/types/enumeratortype.h>
+#include <language/duchain/types/functiontype.h>
 
 #include "codegenhelper.h"
+#include "adaptsignatureaction.h"
 #include "util/clangdebug.h"
 
 using namespace KDevelop;
@@ -72,23 +80,6 @@ QualifiedIdentifier stripPrefixes(const DUContextPointer& ctx, const QualifiedId
     }
 
     return result;
-}
-
-QString makeSignatureString(const QVector<SourceCodeInsertion::SignatureItem>& signature, const DUContextPointer& context)
-{
-    QString ret;
-    foreach (const auto& item, signature) {
-        if (!ret.isEmpty()) {
-            ret += QStringLiteral(", ");
-        }
-
-        ret += CodegenHelper::simplifiedTypeString(item.type, context.data());
-
-        if (!item.name.isEmpty()) {
-            ret += QStringLiteral(" ") + item.name;
-        }
-    }
-    return ret;
 }
 
 // Re-indents the code so the leftmost line starts at zero
@@ -200,50 +191,6 @@ KTextEditor::Cursor SourceCodeInsertion::end() const
     return ret;
 }
 
-QString SourceCodeInsertion::indentation() const
-{
-    if (!m_codeRepresentation || !m_context || m_context->localDeclarations().isEmpty()) {
-        clangDebug() << "cannot do indentation";
-        return QString();
-    }
-
-    foreach (Declaration* decl, m_context->localDeclarations()) {
-        if (decl->range().isEmpty() || decl->range().start.column == 0) {
-            continue; // Skip declarations with empty range, that were expanded from macros
-        }
-        int spaces = 0;
-
-        QString textLine = m_codeRepresentation->line(decl->range().start.line);
-
-        for (int a = 0; a < textLine.size(); ++a) {
-            if (textLine.at(a).isSpace()) {
-                ++spaces;
-            } else {
-                break;
-            }
-        }
-
-        return textLine.left(spaces);
-    }
-
-    return {};
-}
-
-QString SourceCodeInsertion::applyIndentation(const QString& decl) const
-{
-    QStringList lines = decl.split(QLatin1Char('\n'));
-    QString ind = indentation();
-    QStringList ret;
-    foreach (const QString& line, lines) {
-        if (!line.isEmpty()) {
-            ret << ind + line;
-        } else {
-            ret << line;
-        }
-    }
-    return ret.join(QStringLiteral("\n"));
-}
-
 KTextEditor::Range SourceCodeInsertion::insertionRange(int line)
 {
     if (line == 0 || !m_codeRepresentation) {
@@ -264,23 +211,32 @@ KTextEditor::Range SourceCodeInsertion::insertionRange(int line)
     return range;
 }
 
-bool SourceCodeInsertion::insertFunctionDeclaration(const Identifier& name, const AbstractType::Ptr& _returnType,
-                                                    const QVector<SignatureItem>& signature, bool isConstant,
-                                                    const QString& body)
+bool SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Declaration* declaration, const Identifier& id, const QString& body)
 {
     if (!m_context) {
         return false;
     }
 
-    auto returnType = _returnType;
+    Signature signature;
+    const auto localDeclarations = declaration->internalContext()->localDeclarations();
+    signature.parameters.reserve(localDeclarations.count());
+    std::transform(localDeclarations.begin(), localDeclarations.end(),
+                   std::back_inserter(signature.parameters),
+                   [] (Declaration* argument) -> ParameterItem
+                   { return {IndexedType(argument->indexedType()), argument->identifier().toString()}; });
 
-    QString decl
-        = (returnType ? (CodegenHelper::simplifiedTypeString(returnType, m_context.data()) + QStringLiteral(" ")) : QString())
-        + name.toString() + QStringLiteral("(") + makeSignatureString(signature, m_context) + QStringLiteral(")");
-
-    if (isConstant) {
-        decl += QStringLiteral(" const");
+    auto funcType = declaration->type<FunctionType>();
+    auto returnType = funcType->returnType();
+    if (auto classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(declaration)) {
+        if (classFunDecl->isConstructor() || classFunDecl->isDestructor()) {
+            returnType = nullptr;
+        }
     }
+    signature.returnType = returnType->indexed();
+    signature.isConst = funcType->modifiers() & AbstractType::ConstModifier;
+
+    QString decl = CodegenHelper::makeSignatureString(declaration, signature, true);
+    decl.replace(declaration->qualifiedIdentifier().toString(), id.toString());
 
     if (body.isEmpty()) {
         decl += QStringLiteral(";");
@@ -293,7 +249,13 @@ bool SourceCodeInsertion::insertFunctionDeclaration(const Identifier& name, cons
 
     int line = findInsertionPoint();
 
-    decl = QStringLiteral("\n\n") + applyIndentation(applySubScope(decl));
+    decl = QStringLiteral("\n\n") + applySubScope(decl);
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForFile(declaration->url().str());
+    auto i = ICore::self()->sourceFormatterController()->formatterForMimeType(mime);
+    if (i) {
+        decl = i->formatSource(decl, declaration->url().toUrl(), mime);
+    }
 
     return m_changeSet.addChange(DocumentChange(m_context->url(), insertionRange(line), QString(), decl));
 }

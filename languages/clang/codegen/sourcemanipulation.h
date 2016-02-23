@@ -38,15 +38,8 @@ public:
     /// Set optional sub-scope into which the code should be inserted, under 'context'
     void setSubScope(const KDevelop::QualifiedIdentifier& scope);
 
-    struct SignatureItem {
-        KDevelop::AbstractType::Ptr type;
-        QString name;
-    };
-
     /// @param body function-body, including parens
-    bool insertFunctionDeclaration(const KDevelop::Identifier& name, const KDevelop::AbstractType::Ptr& returnType,
-                                   const QVector<SourceCodeInsertion::SignatureItem>& signature,
-                                   bool isConstant = false, const QString& body = QString());
+    bool insertFunctionDeclaration(KDevelop::Declaration* decl, const KDevelop::Identifier& id, const QString& body = QString());
 
     KDevelop::DocumentChangeSet changes();
 

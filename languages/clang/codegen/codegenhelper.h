@@ -23,6 +23,8 @@
 #include <language/duchain/identifier.h>
 #include <language/duchain/types/abstracttype.h>
 
+struct Signature;
+
 namespace CodegenHelper {
 ///Returns the type that should be used for shortened printing of the same.
 KDevelop::AbstractType::Ptr typeForShortenedString(KDevelop::Declaration* decl);
@@ -39,6 +41,8 @@ KDevelop::IndexedTypeIdentifier shortenedTypeIdentifier(const KDevelop::Abstract
 
 ///Returns a simplified string version of the given type: Template default-parameters are stripped away, qualified identifiers are simplified so they are as short as possible, while staying visible from the given context.
 QString simplifiedTypeString(const KDevelop::AbstractType::Ptr& type, KDevelop::DUContext* visibilityFrom);
+
+QString makeSignatureString(const KDevelop::Declaration* functionDecl, const Signature& signature, const bool editingDefinition);
 };
 
 #endif // CODEGENHELPER_H

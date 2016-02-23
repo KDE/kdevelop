@@ -30,7 +30,6 @@
 #include <interfaces/contextmenuextension.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/types/functiontype.h>
@@ -158,7 +157,6 @@ QString ClangRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
     }
 
     auto otherCtx = decl->internalContext()->childContexts().first();
-    auto funcCtx = decl->internalContext();
 
     auto code = createCodeRepresentation(headerUrl);
     if (!code) {
@@ -189,28 +187,10 @@ QString ClangRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
 
     ins.setSubScope(parentId);
 
-    QVector<SourceCodeInsertion::SignatureItem> signature;
-    const auto localDeclarations = funcCtx->localDeclarations();
-    signature.reserve(localDeclarations.count());
-    std::transform(localDeclarations.begin(), localDeclarations.end(),
-                   std::back_inserter(signature),
-                   [] (Declaration* argument) -> SourceCodeInsertion::SignatureItem
-                   { return {argument->abstractType(), argument->identifier().toString()}; });
-
-
     Identifier id(IndexedString(decl->qualifiedIdentifier().mid(parentId.count()).toString()));
     clangDebug() << "id:" << id;
 
-    auto funcType = decl->type<FunctionType>();
-    auto returnType = funcType->returnType();
-    if (auto classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl)) {
-        if (classFunDecl->isConstructor() || classFunDecl->isDestructor()) {
-            returnType = nullptr;
-        }
-    }
-
-    if (!ins.insertFunctionDeclaration(id, returnType, signature,
-                                       funcType->modifiers() & AbstractType::ConstModifier, body)) {
+    if (!ins.insertFunctionDeclaration(decl, id, body)) {
         return i18n("Insertion failed");
     }
     lock.unlock();
