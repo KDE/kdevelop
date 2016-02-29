@@ -207,7 +207,7 @@ private:
 
     void initBranchHash(const QString &repo);
 
-    static KDevelop::VcsStatusInfo::State messageToState(const QString& ch);
+    static KDevelop::VcsStatusInfo::State messageToState(const QStringRef& ch);
 
     QList<QStringList> branchesShas;
     QList<QUrl> m_urls;
