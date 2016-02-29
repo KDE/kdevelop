@@ -20,6 +20,7 @@
 
 #include "vcsstatusinfo.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QMap>
 #include <QtCore/QPair>
 #include <QtCore/QString>
@@ -102,6 +103,10 @@ VcsStatusInfo::State VcsStatusInfo::state() const
     return VcsStatusInfo::State(d->state);
 }
 
-
 }
 
+QDebug operator<<(QDebug s, const KDevelop::VcsStatusInfo& statusInfo)
+{
+    s.nospace() << statusInfo.state() << "@" << statusInfo.url();
+    return s.space();
+}

@@ -96,5 +96,7 @@ private:
 
 Q_DECLARE_METATYPE( KDevelop::VcsStatusInfo )
 
+KDEVPLATFORMVCS_EXPORT QDebug operator<<(QDebug s, const KDevelop::VcsStatusInfo& statusInfo);
+
 #endif
 
