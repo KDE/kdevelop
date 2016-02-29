@@ -83,7 +83,6 @@ public:
 private:
     QVector<QString> headers_;
     TreeItem *root_;
-    bool editable_;
 };
 
 }

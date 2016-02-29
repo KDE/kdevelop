@@ -221,10 +221,10 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
   m_headerLayout->setSpacing(0);
 
   if(m_useArrows) {
-    m_previousButton = new QToolButton();
+    auto m_previousButton = new QToolButton();
     m_previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
 
-    m_nextButton = new QToolButton();
+    auto m_nextButton = new QToolButton();
     m_nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
 
     m_headerLayout->addWidget(m_previousButton);
