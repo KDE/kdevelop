@@ -92,10 +92,11 @@ void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor&
 
 
     lock.unlock();
-    view->document()->insertText( pos, openingParen + closingParen );
-    if(!jumpForbidden) {
-      if( view )
-        view->setCursorPosition( jumpPos );
+    if(view) {
+      view->document()->insertText( pos, openingParen + closingParen );
+      if(!jumpForbidden) {
+          view->setCursorPosition( jumpPos );
+      }
     }
   }
 
