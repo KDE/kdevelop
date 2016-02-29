@@ -13,6 +13,7 @@
 
 #include "patchreview.h"
 
+#include <QDir>
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QTimer>
@@ -385,7 +386,7 @@ void PatchReviewPlugin::switchToEmptyReviewArea()
 QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
 {
     QUrl file = m_patch->baseDir();
-    file.setPath(file.toLocalFile() + '/' + model->destinationPath() + '/' + model->destinationFile());
+    file.setPath(QDir::cleanPath(file.toLocalFile() + '/' + model->destinationPath() + '/' + model->destinationFile()));
     return file;
 }
 
