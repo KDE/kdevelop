@@ -31,8 +31,9 @@
 #define QMLJSDOCUMENT_H
 
 #include <QList>
-#include <QSharedPointer>
+#include <QStack>
 #include <QString>
+#include <QSharedPointer>
 
 #include <languageutils/fakemetaobject.h>
 
