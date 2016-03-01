@@ -807,8 +807,9 @@ struct CreateOutlineDialog {
           // Need to invoke the scrolling later. If we did it now, then it wouldn't have any effect,
           // apparently because the widget internals aren't initialized yet properly (although we've
           // already called 'widget->show()'.
-          QMetaObject::invokeMethod(dialog->widget()->o.list, "setCurrentIndex", Qt::QueuedConnection, Q_ARG(QModelIndex, index));
-          QMetaObject::invokeMethod(dialog->widget()->o.list, "scrollTo", Qt::QueuedConnection, Q_ARG(QModelIndex, index), Q_ARG(QAbstractItemView::ScrollHint, QAbstractItemView::PositionAtCenter));
+          auto list = dialog->widget()->ui.list;
+          QMetaObject::invokeMethod(list, "setCurrentIndex", Qt::QueuedConnection, Q_ARG(QModelIndex, index));
+          QMetaObject::invokeMethod(list, "scrollTo", Qt::QueuedConnection, Q_ARG(QModelIndex, index), Q_ARG(QAbstractItemView::ScrollHint, QAbstractItemView::PositionAtCenter));
         }
         ++num;
       }
