@@ -28,6 +28,7 @@
 #include <QFileInfo>
 #include <QMenu>
 #include <QTimer>
+#include <QRegularExpression>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -593,11 +594,12 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
 {
     QVariantList results;
     VcsAnnotationLine* annotation = 0;
-    QStringList lines = job->output().split('\n');
+    const auto output = job->output();
+    const auto lines = output.splitRef('\n');
 
     bool skipNext=false;
     QMap<QString, VcsAnnotationLine> definedRevisions;
-    for(QStringList::const_iterator it=lines.constBegin(), itEnd=lines.constEnd();
+    for(QVector<QStringRef>::const_iterator it=lines.constBegin(), itEnd=lines.constEnd();
         it!=itEnd; ++it)
     {
         if(skipNext) {
@@ -610,17 +612,17 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         if(it->isEmpty())
             continue;
 
-        QString name = it->left(it->indexOf(' '));
-        QString value = it->right(it->size()-name.size()-1);
+        QStringRef name = it->left(it->indexOf(' '));
+        QStringRef value = it->right(it->size()-name.size()-1);
 
         if(name==QLatin1String("author"))
-            annotation->setAuthor(value);
+            annotation->setAuthor(value.toString());
         else if(name==QLatin1String("author-mail")) {} //TODO: do smth with the e-mail?
         else if(name==QLatin1String("author-tz")) {} //TODO: does it really matter?
         else if(name==QLatin1String("author-time"))
             annotation->setDate(QDateTime::fromTime_t(value.toUInt()));
         else if(name==QLatin1String("summary"))
-            annotation->setCommitMessage(value);
+            annotation->setCommitMessage(value.toString());
         else if(name.startsWith(QStringLiteral("committer"))) {} //We will just store the authors
         else if(name==QLatin1String("previous")) {} //We don't need that either
         else if(name==QLatin1String("filename")) { skipNext=true; }
@@ -629,17 +631,17 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         }
         else
         {
-            QStringList values = value.split(' ');
+            const auto values = value.split(' ');
 
             VcsRevision rev;
-            rev.setRevisionValue(name.left(8), KDevelop::VcsRevision::GlobalNumber);
+            rev.setRevisionValue(name.left(8).toString(), KDevelop::VcsRevision::GlobalNumber);
 
-            skipNext = definedRevisions.contains(name);
+            skipNext = definedRevisions.contains(name.toString());
 
             if(!skipNext)
-                definedRevisions.insert(name, VcsAnnotationLine());
+                definedRevisions.insert(name.toString(), VcsAnnotationLine());
 
-            annotation = &definedRevisions[name];
+            annotation = &definedRevisions[name.toString()];
             annotation->setLineNumber(values[1].toInt() - 1);
             annotation->setRevision(rev);
         }
@@ -740,10 +742,11 @@ VcsJob* GitPlugin::branches(const QUrl &repository)
 
 void GitPlugin::parseGitBranchOutput(DVcsJob* job)
 {
-    QStringList branchListDirty = job->output().split('\n', QString::SkipEmptyParts);
+    const auto output = job->output();
+    const auto branchListDirty = output.splitRef('\n', QString::SkipEmptyParts);
 
     QStringList branchList;
-    foreach(QString branch, branchListDirty)
+    foreach(const auto & branch, branchListDirty)
     {
         // Skip pointers to another branches (one example of this is "origin/HEAD -> origin/master");
         // "git rev-list" chokes on these entries and we do not need duplicate branches altogether.
@@ -754,10 +757,11 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
         if (branch.contains(QStringLiteral("(no branch)")))
             continue;
 
-        if (branch.startsWith('*'))
-            branch = branch.right(branch.size()-2);
+        QStringRef name = branch;
+        if (name.startsWith('*'))
+            name = branch.right(branch.size()-2);
 
-        branchList<<branch.trimmed();
+        branchList << name.trimmed().toString();
     }
 
     job->setResults(branchList);
@@ -990,31 +994,29 @@ void GitPlugin::parseLogOutput(const DVcsJob * job, QList<DVcsEvent>& commits) c
 //     static QRegExp rx_sep( "[-=]+" );
 //     static QRegExp rx_date( "date:\\s+([^;]*);\\s+author:\\s+([^;]*).*" );
 
-    static QRegExp rx_com( "commit \\w{1,40}" );
+    static QRegularExpression rx_com( "commit \\w{1,40}" );
 
-    QStringList lines = job->output().split('\n', QString::SkipEmptyParts);
+    const auto output = job->output();
+    const auto lines = output.splitRef('\n', QString::SkipEmptyParts);
 
     DVcsEvent item;
     QString commitLog;
 
     for (int i=0; i<lines.count(); ++i) {
-        QString s = lines[i];
-        qCDebug(PLUGIN_GIT) << "line:" << s ;
+//         qCDebug(PLUGIN_GIT) << "line:" << s;
 
-        if (rx_com.exactMatch(s)) {
-            qCDebug(PLUGIN_GIT) << "MATCH COMMIT";
-            item.setCommit(s);
-            s = lines[++i];
-            item.setAuthor(s);
-            s = lines[++i];
-            item.setDate(s);
+        if (rx_com.match(lines[i]).hasMatch()) {
+//             qCDebug(PLUGIN_GIT) << "MATCH COMMIT";
+            item.setCommit(lines[++i].toString());
+            item.setAuthor(lines[++i].toString());
+            item.setDate(lines[++i].toString());
             item.setLog(commitLog);
             commits.append(item);
         }
         else
         {
             //FIXME: add this in a loop to the if, like in getAllCommits()
-            commitLog += s +'\n';
+            commitLog += lines[i].toString() +'\n';
         }
     }
 }
@@ -1155,22 +1157,23 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
-    QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
+    const auto output = job->output();
+    const auto outputLines = output.splitRef('\n', QString::SkipEmptyParts);
     QDir workingDir = job->directory();
     QDir dotGit = dotGitDirectory(QUrl::fromLocalFile(workingDir.absolutePath()));
 
     QVariantList statuses;
     QList<QUrl> processedFiles;
 
-    foreach(const QString& line, outputLines) {
+    foreach(const QStringRef& line, outputLines) {
         //every line is 2 chars for the status, 1 space then the file desc
-        QString curr=line.right(line.size()-3);
-        QString state = line.left(2);
+        QStringRef curr=line.right(line.size()-3);
+        QStringRef state = line.left(2);
 
         int arrow = curr.indexOf(QStringLiteral(" -> "));
         if(arrow>=0) {
             VcsStatusInfo status;
-            status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.left(arrow))));
+            status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.toString().left(arrow))));
             status.setState(VcsStatusInfo::ItemDeleted);
             statuses.append(qVariantFromValue<VcsStatusInfo>(status));
             processedFiles += status.url();
@@ -1183,11 +1186,12 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         }
 
         VcsStatusInfo status;
-        status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr)));
+        status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.toString())));
+        qDebug() << "lalala" << line << state;
         status.setState(messageToState(state));
         processedFiles.append(status.url());
 
-        qCDebug(PLUGIN_GIT) << "Checking git status for " << line << curr << messageToState(state);
+        qCDebug(PLUGIN_GIT) << "Checking git status for " << line << curr << status.state();
 
         statuses.append(qVariantFromValue<VcsStatusInfo>(status));
     }
@@ -1215,7 +1219,8 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 
 void GitPlugin::parseGitVersionOutput(DVcsJob* job)
 {
-    QStringList versionString = job->output().trimmed().split(' ').last().split('.');
+    const auto output = job->output().trimmed();
+    auto versionString = output.midRef(output.lastIndexOf(' ')).split('.');
     static const QList<int> minimumVersion = QList<int>() << 1 << 7;
     qCDebug(PLUGIN_GIT) << "checking git version" << versionString << "against" << minimumVersion;
     m_oldVersion = false;
@@ -1225,7 +1230,7 @@ void GitPlugin::parseGitVersionOutput(DVcsJob* job)
         return;
     }
     foreach(int num, minimumVersion) {
-        QString curr = versionString.takeFirst();
+        QStringRef curr = versionString.takeFirst();
         int valcurr = curr.toInt();
         if (valcurr < num) {
             m_oldVersion = true;
@@ -1267,14 +1272,14 @@ DVcsJob* GitPlugin::gitRevList(const QString& directory, const QStringList& args
     }
 }
 
-VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
+VcsStatusInfo::State GitPlugin::messageToState(const QStringRef& msg)
 {
     Q_ASSERT(msg.size()==1 || msg.size()==2);
     VcsStatusInfo::State ret = VcsStatusInfo::ItemUnknown;
 
     if(msg.contains('U') || msg == QLatin1String("AA") || msg == QLatin1String("DD"))
         ret = VcsStatusInfo::ItemHasConflicts;
-    else switch(msg[0].toLatin1())
+    else switch(msg.at(0).toLatin1())
     {
         case 'M':
             ret = VcsStatusInfo::ItemModified;
@@ -1289,7 +1294,7 @@ VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
             ret = VcsStatusInfo::ItemHasConflicts;
             break;
         case ' ':
-            ret = msg[1] == 'M' ? VcsStatusInfo::ItemModified : VcsStatusInfo::ItemDeleted;
+            ret = msg.at(1) == 'M' ? VcsStatusInfo::ItemModified : VcsStatusInfo::ItemDeleted;
             break;
         case 'D':
             ret = VcsStatusInfo::ItemDeleted;

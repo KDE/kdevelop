@@ -131,10 +131,8 @@ bool MapType::equals(const AbstractType* rhs) const
         return false;
     }
     auto c = dynamic_cast<const MapType*>(rhs);
-    if ( c->keyType() != d_func()->m_keyType ) {
-        return false;
-    }
-    return true;
+
+    return c && c->keyType() == d_func()->m_keyType;
 }
 
 uint ListType::hash() const

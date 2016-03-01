@@ -82,7 +82,6 @@ namespace KDevelop {
         QVBoxLayout* m_layout;
       private:
         QHBoxLayout* m_headerLayout;
-        QToolButton *m_previousButton, *m_nextButton;
         bool m_allowScrolling, m_useArrows;
     };
     

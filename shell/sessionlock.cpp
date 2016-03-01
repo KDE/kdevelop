@@ -29,6 +29,7 @@
 
 #include <QDBusConnectionInterface>
 #include <QFile>
+#include <QDir>
 
 using namespace KDevelop;
 
@@ -36,14 +37,14 @@ namespace {
 
 QString lockFileForSession( const QString& id )
 {
-    return SessionController::sessionDirectory( id ) + "/lock";
+    return SessionController::sessionDirectory( id ) + QLatin1String("/lock");
 }
 
 QString dBusServiceNameForSession( const QString& id )
 {
     // We remove starting "{" and ending "}" from the string UUID representation
     // as D-Bus apparently doesn't allow them in service names
-    return QStringLiteral( "org.kdevelop.kdevplatform-lock-" ) + QString( id ).mid( 1, id.size() - 2 );
+    return QStringLiteral( "org.kdevelop.kdevplatform-lock-" ) + id.midRef( 1, id.size() - 2 );
 }
 
 /// Force-removes the lock-file.
@@ -135,6 +136,14 @@ SessionLock::~SessionLock()
     bool unregistered = QDBusConnection::sessionBus().unregisterService( dBusServiceNameForSession(m_sessionId) );
     Q_ASSERT(unregistered);
     Q_UNUSED(unregistered);
+}
+
+void SessionLock::removeFromDisk()
+{
+    Q_ASSERT(m_lockFile->isLocked());
+    // unlock first to prevent warnings: "Could not remove our own lock file ..."
+    m_lockFile->unlock();
+    QDir(SessionController::sessionDirectory(m_sessionId)).removeRecursively();
 }
 
 QString SessionLock::handleLockedSession(const QString& sessionName, const QString& sessionId,

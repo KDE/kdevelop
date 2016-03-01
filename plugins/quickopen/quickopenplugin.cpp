@@ -803,8 +803,13 @@ struct CreateOutlineDialog {
       int num = 0;
       foreach(const DUChainItem& item, items) {
         if(item.m_item.data() == cursorDecl) {
-          dialog->widget()->ui.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
-          dialog->widget()->ui.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
+          QModelIndex index(model->index(num,0,QModelIndex()));
+          // Need to invoke the scrolling later. If we did it now, then it wouldn't have any effect,
+          // apparently because the widget internals aren't initialized yet properly (although we've
+          // already called 'widget->show()'.
+          auto list = dialog->widget()->ui.list;
+          QMetaObject::invokeMethod(list, "setCurrentIndex", Qt::QueuedConnection, Q_ARG(QModelIndex, index));
+          QMetaObject::invokeMethod(list, "scrollTo", Qt::QueuedConnection, Q_ARG(QModelIndex, index), Q_ARG(QAbstractItemView::ScrollHint, QAbstractItemView::PositionAtCenter));
         }
         ++num;
       }

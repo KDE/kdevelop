@@ -467,8 +467,8 @@ void PatchReviewToolView::kompareModelChanged() {
             if ( diffs )
                 cnt = diffs->count();
 
-            QUrl file = m_plugin->urlForFileModel( *it );
-            if( !QFileInfo( file.toLocalFile() ).isReadable() )
+            const QUrl file = m_plugin->urlForFileModel( *it );
+            if( file.isLocalFile() && !QFileInfo( file.toLocalFile() ).isReadable() )
                 continue;
 
             VcsStatusInfo status;

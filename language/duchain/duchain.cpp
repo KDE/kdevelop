@@ -286,7 +286,7 @@ class DUChainPrivate
           //Just to make sure the cache is cleared periodically
           ModificationRevisionSet::clearCache();
 
-          m_data->doMoreCleanup(SOFT_CLEANUP_STEPS);
+          m_data->doMoreCleanup(SOFT_CLEANUP_STEPS, TryLock);
           if(m_stopRunning)
             break;
         }
@@ -680,11 +680,20 @@ public:
     return m_cleanupMutex;
   }
 
+  /// defines how we interact with the ongoing language parse jobs
+  enum LockFlag {
+    /// no locking required, only used when we locked previously
+    NoLock = 0,
+    /// lock all parse jobs and block until we succeeded. required at shutdown
+    BlockingLock = 1,
+    /// only try to lock and abort on failure, good for the intermittent cleanups
+    TryLock = 2,
+  };
   ///@param retries When this is nonzero, then doMoreCleanup will do the specified amount of cycles
   ///doing the cleanup without permanently locking the du-chain. During these steps the consistency
   ///of the disk-storage is not guaranteed, but only few changes will be done during these steps,
   ///so the final step where the duchain is permanently locked is much faster.
-  void doMoreCleanup(int retries = 0, bool needLockRepository = true) {
+  void doMoreCleanup(int retries = 0, LockFlag lockFlag = BlockingLock) {
 
     if(m_cleanupDisabled)
       return;
@@ -697,25 +706,33 @@ public:
 
     Q_ASSERT(!instance->lock()->currentThreadHasReadLock() && !instance->lock()->currentThreadHasWriteLock());
     DUChainWriteLocker writeLock(instance->lock());
-    PersistentSymbolTable::self().clearCache();
 
     //This is used to stop all parsing before starting to do the cleanup. This way less happens during the
     //soft cleanups, and we have a good chance that during the "hard" cleanup only few data has to be written.
-    QList<ILanguageSupport*> lockedParseMutexes;
-
     QList<QReadWriteLock*> locked;
 
-    if(needLockRepository) {
-
+    if (lockFlag != NoLock) {
+      QList<ILanguageSupport*> languages;
       if (ICore* core = ICore::self())
         if (ILanguageController* lc = core->languageController())
-          lockedParseMutexes = lc->loadedLanguages();
+          languages = lc->loadedLanguages();
 
       writeLock.unlock();
 
       //Here we wait for all parsing-threads to stop their processing
-      foreach(const auto language, lockedParseMutexes) {
-        language->parseLock()->lockForWrite();
+      foreach(const auto language, languages) {
+        if (lockFlag == TryLock) {
+          if (!language->parseLock()->tryLockForWrite()) {
+            qCDebug(LANGUAGE) << "Aborting cleanup because language plugin is still parsing:" << language->name();
+            // some language is still parsing, don't interfere with the cleanup
+            foreach(auto* lock, locked) {
+              lock->unlock();
+            }
+            return;
+          }
+        } else {
+          language->parseLock()->lockForWrite();
+        }
         locked << language->parseLock();
       }
 
@@ -726,6 +743,7 @@ public:
     }
 
     QTime startTime = QTime::currentTime();
+    PersistentSymbolTable::self().clearCache();
 
     storeAllInformation(!retries, writeLock); //Puts environment-information into a repository
 
@@ -874,11 +892,11 @@ public:
 
 
       if(retries) {
-        doMoreCleanup(retries-1, false);
+        doMoreCleanup(retries-1, NoLock);
         writeLock.lock();
       }
 
-      if(needLockRepository) {
+      if(lockFlag != NoLock) {
         globalItemRepositoryRegistry().unlockForWriting();
 
         int elapsedSeconds = startTime.secsTo(QTime::currentTime());

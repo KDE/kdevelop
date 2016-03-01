@@ -494,7 +494,7 @@ void ProjectBaseItem::setFlags(Qt::ItemFlags flags)
 
 QString ProjectBaseItem::iconName() const
 {
-    return QLatin1String("");
+    return QString();
 }
 
 ProjectFolderItem *ProjectBaseItem::folder() const

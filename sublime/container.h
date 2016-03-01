@@ -64,6 +64,7 @@ public:
     void setTabBarHidden(bool hide);
 
     void setTabColor(const View* view, const QColor& color);
+    void setTabColors(const QHash<const View*, QColor>& colors);
     void resetTabColors(const QColor& color);
 
     /** Adds a corner widget to the left of this containers tab-bar. To remove it again, just delete it.
