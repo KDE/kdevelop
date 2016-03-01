@@ -32,9 +32,9 @@
 #include <QVariantList>
 
 class ClangIndex;
+class ClangRefactoring;
 namespace KDevelop
 {
-class BasicRefactoring;
 class IDocument;
 }
 
@@ -92,7 +92,7 @@ private slots:
 
 private:
     KDevelop::ICodeHighlighting *m_highlighting;
-    KDevelop::BasicRefactoring *m_refactoring;
+    ClangRefactoring *m_refactoring;
     QScopedPointer<ClangIndex> m_index;
 };
 

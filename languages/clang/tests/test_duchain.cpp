@@ -245,6 +245,7 @@ void TestDUChain::testInclude()
 void TestDUChain::testMissingInclude()
 {
     auto code = R"(
+#pragma once
 #include "missing1.h"
 
 template<class T>
@@ -1482,7 +1483,7 @@ void TestDUChain::testReparseUnchanged()
         QVERIFY(headerCtx->problems().isEmpty());
         auto implCtx = DUChain::self()->chainForDocument(impl.url());
         QVERIFY(implCtx);
-        if (reparsed && CINDEX_VERSION_MINOR > 29) {
+        if (reparsed && CINDEX_VERSION_MINOR > 29 && CINDEX_VERSION_MINOR < 33) {
             QEXPECT_FAIL("template-default-parameters", "the precompiled preamble messes the default template parameters up in clang 3.7", Continue);
         }
         QVERIFY(implCtx->problems().isEmpty());

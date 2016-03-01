@@ -25,88 +25,15 @@
 
 #include <language/assistant/renameaction.h>
 #include <language/codegen/documentchangeset.h>
-#include <language/duchain/types/arraytype.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/functiondefinition.h>
-#include <language/duchain/classmemberdeclaration.h>
 
 #include <KLocalizedString>
 #include <KMessageBox>
 
 using namespace KDevelop;
-
-QString makeSignatureString(const Declaration* functionDecl, const Signature& signature, const bool editingDefinition)
-{
-    if (!functionDecl || !functionDecl->internalContext()) {
-        return {};
-    }
-    const auto visibilityFrom = functionDecl->internalContext()->parentContext();
-    if (!visibilityFrom) {
-        return {};
-    }
-
-    QString ret;
-
-    if (!editingDefinition) {
-        auto classMember = dynamic_cast<const ClassMemberDeclaration*>(functionDecl);
-        if (classMember && classMember->isStatic()) {
-            ret += QLatin1String("static ");
-        }
-    }
-
-    // constructors don't have a return type
-    if (signature.returnType.isValid()) {
-        ret += CodegenHelper::simplifiedTypeString(signature.returnType.abstractType(),
-                                                        visibilityFrom);
-        ret += QLatin1Char(' ');
-    }
-
-    ret += editingDefinition ? functionDecl->qualifiedIdentifier().toString() : functionDecl->identifier().toString();
-
-    ret += QLatin1Char('(');
-    int pos = 0;
-
-    foreach(const ParameterItem &item, signature.parameters)
-    {
-        if (pos != 0) {
-            ret += QLatin1String(", ");
-        }
-
-        ///TODO: merge common code with helpers.cpp::createArgumentList
-        AbstractType::Ptr type = item.first.abstractType();
-
-        QString arrayAppendix;
-        ArrayType::Ptr arrayType;
-        while ((arrayType = type.cast<ArrayType>())) {
-            type = arrayType->elementType();
-            //note: we have to prepend since we iterate from outside, i.e. from right to left.
-            if (arrayType->dimension()) {
-                arrayAppendix.prepend(QStringLiteral("[%1]").arg(arrayType->dimension()));
-            } else {
-                // dimensionless
-                arrayAppendix.prepend(QLatin1String("[]"));
-            }
-        }
-        ret += CodegenHelper::simplifiedTypeString(type,
-                                                   visibilityFrom);
-
-        if (!item.second.isEmpty()) {
-            ret += QLatin1Char(' ') + item.second;
-        }
-        ret += arrayAppendix;
-        if (signature.defaultParams.size() > pos && !signature.defaultParams[pos].isEmpty()) {
-            ret += QLatin1String(" = ") + signature.defaultParams[pos];
-        }
-        ++pos;
-    }
-    ret += QLatin1Char(')');
-    if (signature.isConst) {
-        ret += QLatin1String(" const");
-    }
-    return ret;
-}
 
 AdaptSignatureAction::AdaptSignatureAction(const DeclarationId& definitionId,
                                            ReferencedTopDUContext definitionContext,
@@ -141,8 +68,8 @@ QString AdaptSignatureAction::toolTip() const
     }
     return i18n("Update %1 signature\nfrom: %2\nto: %3",
                 m_editingDefinition ? i18n("declaration") : i18n("definition"),
-                makeSignatureString(declaration, m_oldSignature, m_editingDefinition),
-                makeSignatureString(declaration, m_newSignature, !m_editingDefinition));
+                CodegenHelper::makeSignatureString(declaration, m_oldSignature, m_editingDefinition),
+                CodegenHelper::makeSignatureString(declaration, m_newSignature, !m_editingDefinition));
 }
 
 void AdaptSignatureAction::execute()
@@ -175,7 +102,7 @@ void AdaptSignatureAction::execute()
 
     DocumentChangeSet changes;
     KTextEditor::Range parameterRange = ClangIntegration::DUChainUtils::functionSignatureRange(otherSide);
-    QString newText = makeSignatureString(otherSide, m_newSignature, !m_editingDefinition);
+    QString newText = CodegenHelper::makeSignatureString(otherSide, m_newSignature, !m_editingDefinition);
     if (!m_editingDefinition) {
         // append a newline after the method signature in case the method definition follows
         newText += QLatin1Char('\n');

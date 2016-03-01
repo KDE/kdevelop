@@ -19,6 +19,8 @@
 
 #include "test_assistants.h"
 
+#include "codegen/clangrefactoring.h"
+
 #include <QtTest/QtTest>
 #include <QTemporaryDir>
 
@@ -27,6 +29,7 @@
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <tests/testfile.h>
 
 #include <util/foregroundlock.h>
 
@@ -40,6 +43,7 @@
 #include <language/assistant/renameaction.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/codegen/coderepresentation.h>
 
@@ -531,4 +535,156 @@ void TestAssistants::testUnknownDeclarationAssistant()
         const bool hasMissingInclude = actionDescriptions.contains(description);
         QCOMPARE(hasMissingInclude, static_cast<bool>(actions & MissingInclude));
     }
+}
+
+void TestAssistants::testMoveIntoSource()
+{
+    QFETCH(QString, origHeader);
+    QFETCH(QString, origImpl);
+    QFETCH(QString, newHeader);
+    QFETCH(QString, newImpl);
+    QFETCH(QualifiedIdentifier, id);
+
+    TestFile header(origHeader, "h");
+    TestFile impl("#include \"" + header.url().byteArray() + "\"\n" + origImpl, "cpp", &header);
+
+    impl.parse(KDevelop::TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(impl.waitForParsed());
+
+    IndexedDeclaration declaration;
+    {
+        DUChainReadLocker lock;
+        auto headerCtx = DUChain::self()->chainForDocument(header.url());
+        QVERIFY(headerCtx);
+        auto decls = headerCtx->findDeclarations(id);
+        Q_ASSERT(!decls.isEmpty());
+        declaration = IndexedDeclaration(decls.first());
+        QVERIFY(declaration.isValid());
+    }
+    CodeRepresentation::setDiskChangesForbidden(false);
+    ClangRefactoring refactoring;
+    QCOMPARE(refactoring.moveIntoSource(declaration), QString());
+    CodeRepresentation::setDiskChangesForbidden(true);
+
+    QCOMPARE(header.fileContents(), newHeader);
+    QVERIFY(impl.fileContents().endsWith(newImpl));
+}
+
+void TestAssistants::testMoveIntoSource_data()
+{
+    QTest::addColumn<QString>("origHeader");
+    QTest::addColumn<QString>("origImpl");
+    QTest::addColumn<QString>("newHeader");
+    QTest::addColumn<QString>("newImpl");
+    QTest::addColumn<QualifiedIdentifier>("id");
+
+    const QualifiedIdentifier fooId("foo");
+
+    QTest::newRow("globalfunction") << QString("int foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                    << QString()
+                                    << QString("int foo();\n")
+                                    << QString("\nint foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                    << fooId;
+
+    QTest::newRow("staticfunction") << QString("static int foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                    << QString()
+                                    << QString("static int foo();\n")
+                                    << QString("\nint foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                    << fooId;
+
+    QTest::newRow("funcsameline") << QString("int foo() {\n    int i = 0;\n    return 0;\n}\n")
+                                    << QString()
+                                    << QString("int foo();\n")
+                                    << QString("\nint foo() {\n    int i = 0;\n    return 0;\n}\n")
+                                    << fooId;
+
+    QTest::newRow("func-comment") << QString("int foo()\n/* foobar */ {\n    int i = 0;\n    return 0;\n}\n")
+                                    << QString()
+                                    << QString("int foo()\n/* foobar */;\n")
+                                    << QString("\nint foo() {\n    int i = 0;\n    return 0;\n}\n")
+                                    << fooId;
+
+    QTest::newRow("func-comment2") << QString("int foo()\n/*asdf*/\n{\n    int i = 0;\n    return 0;\n}\n")
+                                    << QString()
+                                    << QString("int foo()\n/*asdf*/;\n")
+                                    << QString("\nint foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                    << fooId;
+
+    const QualifiedIdentifier aFooId("a::foo");
+    QTest::newRow("class-method") << QString("class a {\n    int foo(){\n        return 0;\n    }\n};\n")
+                                    << QString()
+                                    << QString("class a {\n    int foo();\n};\n")
+                                    << QString("\nint a::foo() {\n        return 0;\n    }\n")
+                                    << aFooId;
+
+    QTest::newRow("class-method-const") << QString("class a {\n    int foo() const\n    {\n        return 0;\n    }\n};\n")
+                                    << QString()
+                                    << QString("class a {\n    int foo() const;\n};\n")
+                                    << QString("\nint a::foo() const\n    {\n        return 0;\n    }\n")
+                                    << aFooId;
+
+    QTest::newRow("class-method-const-sameline") << QString("class a {\n    int foo() const{\n        return 0;\n    }\n};\n")
+                                    << QString()
+                                    << QString("class a {\n    int foo() const;\n};\n")
+                                    << QString("\nint a::foo() const {\n        return 0;\n    }\n")
+                                    << aFooId;
+    QTest::newRow("elaborated-type") << QString("namespace NS{class C{};} class a {\nint foo(const NS::C c) const{\nreturn 0;\n}\n};\n")
+                                    << QString()
+                                    << QString("namespace NS{class C{};} class a {\nint foo(const NS::C c) const;\n};\n")
+                                    << QString("\nint a::foo(const NS::C c) const {\nreturn 0;\n}\n")
+                                    << aFooId;
+    QTest::newRow("add-into-namespace") << QString("namespace NS{class a {\nint foo() const {\nreturn 0;\n}\n};\n}")
+                                    << QString("namespace NS{\n}")
+                                    << QString("namespace NS{class a {\nint foo() const;\n};\n}")
+                                    << QString("namespace NS{\n\nint a::foo() const {\nreturn 0;\n}\n}")
+                                    << QualifiedIdentifier("NS::a::foo");
+    QTest::newRow("class-template-parameter")
+        << QString(R"(
+            namespace first {
+            template <typename T>
+            class Test{};
+
+            namespace second {
+                template <typename T>
+                class List;
+            }
+
+            class MoveIntoSource
+            {
+            public:
+                void f(const second::List<const volatile Test<first::second::List<int*>>*>& param){}
+            };}
+        )")
+        << QString("")
+        << QString(R"(
+            namespace first {
+            template <typename T>
+            class Test{};
+
+            namespace second {
+                template <typename T>
+                class List;
+            }
+
+            class MoveIntoSource
+            {
+            public:
+                void f(const second::List<const volatile Test<first::second::List<int*>>*>& param);
+            };}
+        )")
+        << QString("namespace first {\nvoid MoveIntoSource::f(const first::second::List< const volatile first::Test< first::second::List< int* > >* >& param) {}}\n\n")
+        << QualifiedIdentifier("first::MoveIntoSource::f");
+
+        QTest::newRow("move-unexposed-type")
+            << QString("namespace std { template<typename _CharT> class basic_string; \ntypedef basic_string<char> string;}\n void move(std::string i){}")
+            << QString("")
+            << QString("namespace std { template<typename _CharT> class basic_string; \ntypedef basic_string<char> string;}\n void move(std::string i);")
+            << QString("void move(std::string i) {}\n")
+            << QualifiedIdentifier("move");
+        QTest::newRow("move-constructor")
+            << QString("class Class{Class(){}\n};")
+            << QString("")
+            << QString("class Class{Class();\n};")
+            << QString("Class::Class() {}\n")
+            << QualifiedIdentifier("Class::Class");
 }

@@ -69,8 +69,8 @@ public:
 
 private:
     friend class ParseSession;
-
     void setUnit(CXTranslationUnit unit);
+    QByteArray writeDefinesFile(const QMap<QString, QString>& defines);
 
     QMutex m_mutex;
 

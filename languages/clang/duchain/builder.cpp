@@ -560,8 +560,8 @@ struct Visitor
     AbstractType *createType(CXType type, CXCursor parent)
     {
         auto numTA = clang_Type_getNumTemplateArguments(type);
-        if (numTA != -1) {
-            // This is a class template specialization.
+        // TODO: We should really expose more types to libclang!
+        if (numTA != -1 && ClangString(clang_getTypeSpelling(type)).toString().contains(QLatin1Char('<'))) {
             return createClassTemplateSpecializationType(type);
         }
 
@@ -972,10 +972,16 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
             auto type = clang_getCursorType(cursor);
             auto sizeOf = clang_Type_getSizeOf(type);
             auto alignedTo = clang_Type_getAlignOf(type);
+            const auto byteOffset = offset / 8;
+            const auto bitOffset = offset % 8;
+            const QString byteOffsetStr = i18np("1 Byte", "%1 Bytes", byteOffset);
+            const QString bitOffsetStr = bitOffset ? i18np("1 Bit", "%1 Bits", bitOffset) : QString();
+            const QString offsetStr = bitOffset ? i18nc("%1: bytes, %2: bits", "%1, %2", byteOffsetStr, bitOffsetStr) : byteOffsetStr;
+
             decl->setComment(decl->comment()
-                                + i18n("<br/>offset in parent: %1 Bit<br/>"
+                                + i18n("<br/>offset in parent: %1<br/>"
                                     "size: %2 Bytes<br/>"
-                                    "aligned to: %3 Bytes", offset, sizeOf, alignedTo).toUtf8());
+                                    "aligned to: %3 Bytes", offsetStr, sizeOf, alignedTo).toUtf8());
         }
     }
 #endif

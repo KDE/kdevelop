@@ -38,6 +38,11 @@ ClangIndex::ClangIndex()
     // NOTE: We don't exclude PCH declarations. That way we could retrieve imports manually, as clang_getInclusions returns nothing on reparse with CXTranslationUnit_PrecompiledPreamble flag.
     : m_index(clang_createIndex(0 /*Exclude PCH Decls*/, qEnvironmentVariableIsSet("KDEV_CLANG_DISPLAY_DIAGS") /*Display diags*/))
 {
+    // demote the priority of the clang parse threads to reduce potential UI lockups
+    // but the code completion threads still retain their normal priority to return
+    // the results as quickly as possible
+    clang_CXIndex_setGlobalOptions(m_index, clang_CXIndex_getGlobalOptions(m_index)
+        | CXGlobalOpt_ThreadBackgroundPriorityForIndexing);
 }
 
 CXIndex ClangIndex::index() const

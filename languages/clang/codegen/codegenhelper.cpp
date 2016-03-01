@@ -18,6 +18,10 @@
 
 #include "codegenhelper.h"
 
+#include "adaptsignatureaction.h"
+
+#include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/types/arraytype.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/typealiastype.h>
 #include <language/duchain/types/typesystem.h>
@@ -103,24 +107,14 @@ uint buildIdentifierForType(const AbstractType::Ptr& type, IndexedTypeIdentifier
         return maxPointerLevel;
     }
 
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
-    if (idType) {
-        Declaration* decl = idType->declaration(top);
-        if (decl) {
-            id.setIdentifier(decl->qualifiedIdentifier());
-        } else {
-            id.setIdentifier(idType->qualifiedIdentifier());
-        }
-    } else {
-        //Just create it as an expression
-        AbstractType::Ptr useTypeText = type;
-        if (type->modifiers() & AbstractType::ConstModifier) {
-            //Remove the 'const' modifier, as it will be added to the type-identifier below
-            useTypeText = type->indexed().abstractType();
-            useTypeText->setModifiers(useTypeText->modifiers() & (~AbstractType::ConstModifier));
-        }
-        id.setIdentifier(QualifiedIdentifier(useTypeText->toString(), true));
+    AbstractType::Ptr useTypeText = type;
+    if (type->modifiers() & AbstractType::ConstModifier) {
+        //Remove the 'const' modifier, as it will be added to the type-identifier below
+        useTypeText = type->indexed().abstractType();
+        useTypeText->setModifiers(useTypeText->modifiers() & (~AbstractType::ConstModifier));
     }
+    id.setIdentifier(QualifiedIdentifier(useTypeText->toString(), true));
+
     if (type->modifiers() & AbstractType::ConstModifier) {
         id.setIsConstant(true);
     }
@@ -384,9 +378,6 @@ IndexedTypeIdentifier shortenedTypeIdentifier(const AbstractType::Ptr& type_, DU
 
     IndexedTypeIdentifier identifier = identifierForType(type, ctx ? ctx->topContext() : 0);
 
-    if (type.cast<DelayedType>()) {
-        identifier = type.cast<DelayedType>()->identifier();
-    }
     identifier = stripPrefixIdentifiers(identifier, stripPrefix);
 
     if (isReference) {
@@ -403,6 +394,76 @@ IndexedTypeIdentifier shortenedTypeIdentifier(const AbstractType::Ptr& type_, DU
         identifier = removeTemplateParameters(identifier, removeTemplateParametersFrom);
     }
     return identifier;
+}
+
+QString makeSignatureString(const KDevelop::Declaration* functionDecl, const Signature& signature, const bool editingDefinition)
+{
+    if (!functionDecl || !functionDecl->internalContext()) {
+        return {};
+    }
+    const auto visibilityFrom = functionDecl->internalContext()->parentContext();
+    if (!visibilityFrom) {
+        return {};
+    }
+
+    QString ret;
+
+    if (!editingDefinition) {
+        auto classMember = dynamic_cast<const ClassMemberDeclaration*>(functionDecl);
+        if (classMember && classMember->isStatic()) {
+            ret += QLatin1String("static ");
+        }
+    }
+
+    // constructors don't have a return type
+    if (signature.returnType.isValid()) {
+        ret += CodegenHelper::simplifiedTypeString(signature.returnType.abstractType(),
+                                                        visibilityFrom);
+        ret += QLatin1Char(' ');
+    }
+
+    ret += editingDefinition ? functionDecl->qualifiedIdentifier().toString() : functionDecl->identifier().toString();
+
+    ret += QLatin1Char('(');
+    int pos = 0;
+
+    foreach(const ParameterItem &item, signature.parameters)
+    {
+        if (pos != 0) {
+            ret += QLatin1String(", ");
+        }
+
+        AbstractType::Ptr type = item.first.abstractType();
+
+        QString arrayAppendix;
+        ArrayType::Ptr arrayType;
+        while ((arrayType = type.cast<ArrayType>())) {
+            type = arrayType->elementType();
+            //note: we have to prepend since we iterate from outside, i.e. from right to left.
+            if (arrayType->dimension()) {
+                arrayAppendix.prepend(QStringLiteral("[%1]").arg(arrayType->dimension()));
+            } else {
+                // dimensionless
+                arrayAppendix.prepend(QLatin1String("[]"));
+            }
+        }
+        ret += CodegenHelper::simplifiedTypeString(type,
+                                                   visibilityFrom);
+
+        if (!item.second.isEmpty()) {
+            ret += QLatin1Char(' ') + item.second;
+        }
+        ret += arrayAppendix;
+        if (signature.defaultParams.size() > pos && !signature.defaultParams[pos].isEmpty()) {
+            ret += QLatin1String(" = ") + signature.defaultParams[pos];
+        }
+        ++pos;
+    }
+    ret += QLatin1Char(')');
+    if (signature.isConst) {
+        ret += QLatin1String(" const");
+    }
+    return ret;
 }
 
 }
