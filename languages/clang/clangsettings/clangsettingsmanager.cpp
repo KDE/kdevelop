@@ -100,6 +100,11 @@ ParserSettings ClangSettingsManager::parserSettings(KDevelop::ProjectBaseItem* i
     return {IDefinesAndIncludesManager::manager()->parserArguments(item)};
 }
 
+ParserSettings ClangSettingsManager::parserSettings(const QString& path) const
+{
+    return {IDefinesAndIncludesManager::manager()->parserArguments(path)};
+}
+
 ClangSettingsManager::ClangSettingsManager()
 {}
 

@@ -53,7 +53,7 @@ bool isCustomParserArguments(const QString& arguments, const QStringList& standa
     auto tmpArgs(arguments);
     tmpArgs.replace(standard, "c++11");
 
-    if (tmpArgs == defaultArguments && standards.contains(standard)) {
+    if (tmpArgs == defaultArguments.cppArguments && standards.contains(standard)) {
         return false;
     }
 
@@ -69,10 +69,15 @@ ParserWidget::ParserWidget(QWidget* parent)
 {
     m_ui->setupUi(this);
 
-    connect(m_ui->parserOptions, &QLineEdit::textEdited, this, &ParserWidget::textEdited);
-    connect(m_ui->languageStandards, static_cast<void(QComboBox::*)(const
+    connect(m_ui->parserOptionsC, &QLineEdit::textEdited, this, &ParserWidget::textEdited);
+    connect(m_ui->parserOptionsCpp, &QLineEdit::textEdited, this, &ParserWidget::textEdited);
+    connect(m_ui->parseHeadersInPlainC, &QCheckBox::stateChanged, this, &ParserWidget::textEdited);
+    connect(m_ui->languageStandardsC, static_cast<void(QComboBox::*)(const
 QString&)>(&QComboBox::activated), this,
-&ParserWidget::languageStandardChanged);
+&ParserWidget::languageStandardChangedC);
+    connect(m_ui->languageStandardsCpp, static_cast<void(QComboBox::*)(const
+QString&)>(&QComboBox::activated), this,
+&ParserWidget::languageStandardChangedCpp);
 
     updateEnablements();
 }
@@ -84,47 +89,75 @@ void ParserWidget::textEdited()
     emit changed();
 }
 
-void ParserWidget::languageStandardChanged(const QString& standard)
+void ParserWidget::languageStandardChangedC(const QString& standard)
 {
-    if (m_ui->languageStandards->currentIndex() == customProfileIdx) {
-        m_ui->parserOptions->setText(SettingsManager::globalInstance()->defaultParserArguments());
+    if (m_ui->languageStandardsC->currentIndex() == customProfileIdx) {
+        m_ui->parserOptionsC->setText(SettingsManager::globalInstance()->defaultParserArguments().cArguments);
     } else {
-        auto text = SettingsManager::globalInstance()->defaultParserArguments();
+        auto text = SettingsManager::globalInstance()->defaultParserArguments().cArguments;
         auto currentStandard = languageStandard(text);
-        m_ui->parserOptions->setText(text.replace(currentStandard, standard));
+        m_ui->parserOptionsC->setText(text.replace(currentStandard, standard));
     }
 
     textEdited();
     updateEnablements();
 }
 
-void ParserWidget::setParserArguments(const QString& arguments)
+void ParserWidget::languageStandardChangedCpp(const QString& standard)
 {
-    QStringList standards;
-    for (int i = 1; i < m_ui->languageStandards->count(); i++) {
-        standards << m_ui->languageStandards->itemText(i);
-    }
-
-    if (isCustomParserArguments(arguments, standards)) {
-        m_ui->languageStandards->setCurrentIndex(customProfileIdx);
+    if (m_ui->languageStandardsCpp->currentIndex() == customProfileIdx) {
+        m_ui->parserOptionsCpp->setText(SettingsManager::globalInstance()->defaultParserArguments().cppArguments);
     } else {
-        m_ui->languageStandards->setCurrentText(languageStandard(arguments));
+        auto text = SettingsManager::globalInstance()->defaultParserArguments().cppArguments;
+        auto currentStandard = languageStandard(text);
+        m_ui->parserOptionsCpp->setText(text.replace(currentStandard, standard));
     }
 
-    m_ui->parserOptions->setText(arguments);
+    textEdited();
     updateEnablements();
 }
 
-QString ParserWidget::parserArguments() const
+void ParserWidget::setParserArguments(const ParserArguments& arguments)
 {
-    return m_ui->parserOptions->text();
+    auto setArguments = [this](QComboBox* languageStandards, QLineEdit* parserOptions, const QString& arguments) {
+        QStringList standards;
+        for (int i = 1; i < languageStandards->count(); i++) {
+            standards << languageStandards->itemText(i);
+        }
+
+        if (isCustomParserArguments(arguments, standards)) {
+            languageStandards->setCurrentIndex(customProfileIdx);
+        } else {
+            languageStandards->setCurrentText(languageStandard(arguments));
+        }
+
+        parserOptions->setText(arguments);
+    };
+
+    setArguments(m_ui->languageStandardsCpp, m_ui->parserOptionsCpp, arguments.cppArguments);
+    setArguments(m_ui->languageStandardsC, m_ui->parserOptionsC, arguments.cArguments);
+
+    m_ui->parseHeadersInPlainC->setChecked(!arguments.parseAmbiguousAsCPP);
+
+    updateEnablements();
+}
+
+ParserArguments ParserWidget::parserArguments() const
+{
+    return {m_ui->parserOptionsC->text(), m_ui->parserOptionsCpp->text(), !m_ui->parseHeadersInPlainC->isChecked()};
 }
 
 void ParserWidget::updateEnablements()
 {
-    if (m_ui->languageStandards->currentIndex() == customProfileIdx) {
-        m_ui->parserOptions->setEnabled(true);
+    if (m_ui->languageStandardsCpp->currentIndex() == customProfileIdx) {
+        m_ui->parserOptionsCpp->setEnabled(true);
     } else {
-        m_ui->parserOptions->setEnabled(false);
+        m_ui->parserOptionsCpp->setEnabled(false);
+    }
+
+    if (m_ui->languageStandardsC->currentIndex() == customProfileIdx) {
+        m_ui->parserOptionsC->setEnabled(true);
+    } else {
+        m_ui->parserOptionsC->setEnabled(false);
     }
 }

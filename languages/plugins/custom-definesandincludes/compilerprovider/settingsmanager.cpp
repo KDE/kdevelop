@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QCoreApplication>
+#include <QMimeDatabase>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -55,11 +56,20 @@ const QString compilerNameKey = QLatin1String( "Name" );
 const QString compilerPathKey = QLatin1String( "Path" );
 const QString compilerTypeKey = QLatin1String( "Type" );
 
-QString parserArguments()
+QString parserArgumentsCPP()
 {
     return QStringLiteral("parserArguments");
 }
 
+QString parserArgumentsC()
+{
+    return QStringLiteral("parserArgumentsC");
+}
+
+QString parseAmbiguousAsCPP()
+{
+    return QStringLiteral("parseAmbiguousAsCPP");
+}
 }
 
 // the grouplist is randomly sorted b/c it uses QSet internally
@@ -70,9 +80,16 @@ QStringList sorted(QStringList list)
     return list;
 }
 
-QString defaultArguments()
+ParserArguments defaultArguments()
 {
-    return QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11");
+    const static ParserArguments arguments
+    {
+        QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c99"),
+        QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11"),
+        true
+    };
+
+    return arguments;
 }
 
 CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
@@ -108,7 +125,9 @@ void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
     for ( const auto& path : paths ) {
         KConfigGroup pathgrp = grp.group( ConfigConstants::projectPathPrefix + QString::number( pathIndex++ ) );
         pathgrp.writeEntry(ConfigConstants::projectPathKey, path.path);
-        pathgrp.writeEntry(ConfigConstants::parserArguments(), path.parserArguments);
+        pathgrp.writeEntry(ConfigConstants::parserArgumentsCPP(), path.parserArguments.cppArguments);
+        pathgrp.writeEntry(ConfigConstants::parserArgumentsC(), path.parserArguments.cArguments);
+        pathgrp.writeEntry(ConfigConstants::parseAmbiguousAsCPP(), path.parserArguments.parseAmbiguousAsCPP);
 
         {
             int index = 0;
@@ -140,10 +159,16 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
 
         ConfigEntry path;
         path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
-        path.parserArguments = pathgrp.readEntry(ConfigConstants::parserArguments(), defaultArguments());
+        path.parserArguments.cppArguments = pathgrp.readEntry(ConfigConstants::parserArgumentsCPP(), defaultArguments().cppArguments);
+        path.parserArguments.cArguments = pathgrp.readEntry(ConfigConstants::parserArgumentsC(), defaultArguments().cArguments);
+        path.parserArguments.parseAmbiguousAsCPP = pathgrp.readEntry(ConfigConstants::parseAmbiguousAsCPP(), defaultArguments().parseAmbiguousAsCPP);
 
-        if (path.parserArguments.isEmpty()) {
-            path.parserArguments = defaultArguments();
+        if (path.parserArguments.cppArguments.isEmpty()) {
+            path.parserArguments.cppArguments = defaultArguments().cppArguments;
+        }
+
+        if (path.parserArguments.cArguments.isEmpty()) {
+            path.parserArguments.cArguments = defaultArguments().cArguments;
         }
 
         { // defines
@@ -199,7 +224,8 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
             pathgrp.deleteGroup();
         }
 
-        Q_ASSERT(!path.parserArguments.isEmpty());
+        Q_ASSERT(!path.parserArguments.cppArguments.isEmpty());
+        Q_ASSERT(!path.parserArguments.cArguments.isEmpty());
         paths << path;
     }
 
@@ -349,7 +375,7 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
     return compilers;
 }
 
-QString SettingsManager::defaultParserArguments() const
+ParserArguments SettingsManager::defaultParserArguments() const
 {
     return defaultArguments();
 }
@@ -359,3 +385,32 @@ ConfigEntry::ConfigEntry(const QString& path)
     , compiler(SettingsManager::globalInstance()->provider()->checkCompilerExists({}))
     , parserArguments(defaultArguments())
 {}
+
+namespace Utils {
+LanguageType languageType(const KDevelop::Path& path, bool treatAmbiguousAsCPP)
+{
+    QMimeDatabase db;
+    const auto mimeType = db.mimeTypeForFile(path.path()).name();
+    if (mimeType == QStringLiteral("text/x-csrc") ||
+        mimeType == QStringLiteral("text/x-chdr") ) {
+        if (treatAmbiguousAsCPP) {
+            if (path.lastPathSegment().endsWith(QLatin1String(".h"), Qt::CaseInsensitive)) {
+                return Cpp;
+            }
+        }
+
+        return C;
+    }
+
+    if (mimeType == QStringLiteral("text/x-c++src") ||
+        mimeType == QStringLiteral("text/x-c++hdr") ) {
+        return Cpp;
+    }
+
+    if (mimeType == QStringLiteral("text/x-objcsrc")) {
+        return ObjC;
+    }
+
+    return Other;
+}
+}

@@ -91,7 +91,6 @@ void TestFiles::testFiles()
     }
 
     if (!QTest::currentDataTag() || strcmp("invalid.cpp", QTest::currentDataTag()) != 0) {
-        QEXPECT_FAIL("purec.c", "not working properly yet", Continue);
         QVERIFY(top->problems().isEmpty());
     }
 }

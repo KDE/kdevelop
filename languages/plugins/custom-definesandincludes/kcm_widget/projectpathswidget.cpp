@@ -31,6 +31,7 @@
 #include <interfaces/iplugincontroller.h>
 
 #include "../compilerprovider/compilerprovider.h"
+#include "../compilerprovider/settingsmanager.h"
 
 #include "ui_projectpathswidget.h"
 #include "ui_batchedit.h"
@@ -130,7 +131,7 @@ void ProjectPathsWidget::includesChanged( const QStringList& includes )
 
 void ProjectPathsWidget::parserArgumentsChanged()
 {
-    updatePathsModel(ui->parserWidget->parserArguments(), ProjectPathsModel::ParserArgumentsRole);
+    updatePathsModel(QVariant::fromValue(ui->parserWidget->parserArguments()), ProjectPathsModel::ParserArgumentsRole);
 }
 
 void ProjectPathsWidget::updatePathsModel(const QVariant& newData, int role)
@@ -158,7 +159,7 @@ void ProjectPathsWidget::projectPathSelected( int index )
 
     ui->compiler->setCurrentText(pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>()->name());
 
-    ui->parserWidget->setParserArguments(pathsModel->data(midx, ProjectPathsModel::ParserArgumentsRole ).toString());
+    ui->parserWidget->setParserArguments(pathsModel->data(midx, ProjectPathsModel::ParserArgumentsRole).value<ParserArguments>());
 
     updateEnablements();
 }

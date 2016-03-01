@@ -37,6 +37,8 @@ namespace KDevelop
 class IProject;
 }
 
+struct ParserArguments;
+
 class ParserWidget : public QWidget
 {
     Q_OBJECT
@@ -44,15 +46,16 @@ public:
     ParserWidget(QWidget* parent);
     ~ParserWidget() override;
 
-    void setParserArguments(const QString& arguments);
-    QString parserArguments() const;
+    void setParserArguments(const ParserArguments& arguments);
+    ParserArguments parserArguments() const;
 
 signals:
     void changed();
 
 private slots:
     void textEdited();
-    void languageStandardChanged(const QString& standard);
+    void languageStandardChangedC(const QString& standard);
+    void languageStandardChangedCpp(const QString& standard);
     void updateEnablements();
 
 private:

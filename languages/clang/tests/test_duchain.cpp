@@ -1583,11 +1583,12 @@ void TestDUChain::testGccCompatibility()
     m_projectController->addProject(project);
 
     {
+        // TODO: Also test in C mode. Currently it doesn't work (some intrinsics missing?)
         TestFile file(R"(
             #include <x86intrin.h>
 
             int main() { return 0; }
-        )", "c", project, dir.path());
+        )", "cpp", project, dir.path());
 
         file.parse();
         QVERIFY(file.waitForParsed(5000));

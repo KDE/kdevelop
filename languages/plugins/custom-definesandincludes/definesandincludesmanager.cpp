@@ -74,7 +74,7 @@ static ConfigEntry findConfigForItem(QList<ConfigEntry> paths, const KDevelop::P
                 }
             }
 
-            if (ret.parserArguments.isEmpty() || targetDirectory.segments().size() > closestPath.segments().size()) {
+            if (targetDirectory.segments().size() > closestPath.segments().size()) {
                 ret.parserArguments = entry.parserArguments;
                 closestPath = targetDirectory;
             }
@@ -82,7 +82,8 @@ static ConfigEntry findConfigForItem(QList<ConfigEntry> paths, const KDevelop::P
     }
     ret.includes.removeDuplicates();
 
-    Q_ASSERT(!ret.parserArguments.isEmpty());
+    Q_ASSERT(!ret.parserArguments.cppArguments.isEmpty());
+    Q_ASSERT(!ret.parserArguments.cArguments.isEmpty());
 
     return ret;
 }
@@ -276,14 +277,22 @@ void DefinesAndIncludesManager::registerBackgroundProvider(IDefinesAndIncludesMa
 
 QString DefinesAndIncludesManager::parserArguments(KDevelop::ProjectBaseItem* item) const
 {
-    if(!item){
-        return m_settings->defaultParserArguments();
-    }
+    Q_ASSERT(item);
 
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     auto cfg = item->project()->projectConfiguration().data();
-    return findConfigForItem(m_settings->readPaths(cfg), item).parserArguments;
+    const auto arguments = findConfigForItem(m_settings->readPaths(cfg), item).parserArguments;
+    auto languageType = Utils::languageType(item->path(), arguments.parseAmbiguousAsCPP);
+
+    return languageType == Utils::C ? arguments.cArguments : arguments.cppArguments;
+}
+
+QString DefinesAndIncludesManager::parserArguments(const QString& path) const
+{
+    const auto args = m_settings->defaultParserArguments();
+    auto languageType = Utils::languageType(Path(path));
+    return languageType == Utils::C ? args.cArguments : args.cppArguments;
 }
 
 int DefinesAndIncludesManager::perProjectConfigPages() const
