@@ -124,6 +124,43 @@ KTextEditor::View* viewFromWidget(QWidget* widget) {
         return viewFromWidget(widget->parentWidget());
 }
 
+BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor textCursor, const QUrl& viewUrl) const {
+    // @todo find out why this is needed, fix the code in kate
+    if (textCursor.column() > 0) {
+        textCursor.setColumn(textCursor.column() - 1);
+    }
+
+    // Step 1: Look for a special language object(Macro, included header, etc.)
+    for (const auto& language: ICore::self()->languageController()->languagesForUrl(viewUrl)) {
+        auto jumpTo = language->specialLanguageObjectJumpCursor(viewUrl, textCursor);
+        if (jumpTo.first.isValid() && jumpTo.second.isValid()) {
+            return {jumpTo};
+        }
+    }
+
+    // Step 2: Look for a declaration/use
+    DUChainReadLocker lock;
+    // Jump to definition by default, unless a definition itself was selected,
+    // in which case jump to declaration.
+    if (auto selectedDeclaration = DUChainUtils::itemUnderCursor(viewUrl, textCursor)) {
+        auto jumpDestination = selectedDeclaration;
+        if (selectedDeclaration->isDefinition()) {
+            // A definition was clicked directly - jump to declaration instead.
+            if (auto declaration = DUChainUtils::declarationForDefinition(selectedDeclaration)) {
+                jumpDestination = declaration;
+            }
+        } else if (selectedDeclaration == DUChainUtils::declarationForDefinition(selectedDeclaration)) {
+            // Clicked the declaration - jump to definition
+            if (auto definition = FunctionDefinition::definition(selectedDeclaration)) {
+                jumpDestination = definition;
+            }
+        }
+        return {{jumpDestination->url().toUrl(), jumpDestination->rangeInCurrentRevision().start()}};
+    }
+
+    return {};
+}
+
 bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     QWidget* widget = qobject_cast<QWidget*>(watched);
     Q_ASSERT(widget);
@@ -195,73 +232,16 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         QPoint coordinatesInView = widget->mapTo(view, mouseEvent->pos());
 
         KTextEditor::Cursor textCursor = iface->coordinatesToCursor(coordinatesInView);
-        if(textCursor.isValid()) {
-            ///@todo find out why this is needed, fix the code in kate
-            if(textCursor.column() > 0)
-                textCursor.setColumn(textCursor.column()-1);
-
-            QUrl viewUrl = view->document()->url();
-            auto languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
-
-            QPair<QUrl, KTextEditor::Cursor> jumpTo;
-
-            //Step 1: Look for a special language object(Macro, included header, etc.)
-            foreach (const auto language, languages) {
-                jumpTo = language->specialLanguageObjectJumpCursor(viewUrl, KTextEditor::Cursor(textCursor));
-                if(jumpTo.first.isValid() && jumpTo.second.isValid())
-                    break; //Found a special object to jump to
-            }
-
-            //Step 2: Look for a declaration/use
-            if(!jumpTo.first.isValid() || !jumpTo.second.isValid()) {
-                Declaration* foundDeclaration = 0;
-                KDevelop::DUChainReadLocker lock( DUChain::lock() );
-                foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(textCursor)) );
-
-                if(foundDeclaration && (foundDeclaration->url().toUrl() == view->document()->url()) && foundDeclaration->range().contains( foundDeclaration->transformToLocalRevision(KTextEditor::Cursor(textCursor)))) {
-                    ///A declaration was clicked directly. Jumping to it is useless, so jump to the definition or something useful
-
-                    bool foundBetter = false;
-
-                    Declaration* definition = FunctionDefinition::definition(foundDeclaration);
-                    if(definition) {
-                        foundDeclaration = definition;
-                        foundBetter = true;
-                    }
-                    ForwardDeclaration* forward = dynamic_cast<ForwardDeclaration*>(foundDeclaration);
-                    if(forward) {
-                        TopDUContext* standardContext = DUChainUtils::standardContextForUrl(view->document()->url());
-                        if(standardContext) {
-                            Declaration* resolved = forward->resolve(standardContext);
-                            if(resolved) {
-                                foundDeclaration = resolved; //This probably won't work
-                                foundBetter = true;
-                            }
-                        }
-                    }
-                    //This will do a search without visibility-restriction, and that search will prefer non forward declarations
-                    if(!foundBetter) {
-                        Declaration* betterDecl = foundDeclaration->id().getDeclaration(0);
-                        if(betterDecl) {
-                            foundDeclaration = betterDecl;
-                            foundBetter = true;
-                        }
-                    }
-                }
-
-                if( foundDeclaration ) {
-                    jumpTo.first = foundDeclaration->url().toUrl();
-                    jumpTo.second = foundDeclaration->rangeInCurrentRevision().start();
-                }
-            }
-            if(jumpTo.first.isValid() && jumpTo.second.isValid()) {
+        if (textCursor.isValid()) {
+            JumpLocation jumpTo = determineJumpLoc(textCursor, view->document()->url());
+            if (jumpTo.isValid()) {
                 if(mouseEvent->button() == Qt::LeftButton) {
                     if(mouseEvent->type() == QEvent::MouseButtonPress) {
                         m_buttonPressPosition = textCursor;
 //                         view->setCursorPosition(textCursor);
 //                         return false;
                     }else if(mouseEvent->type() == QEvent::MouseButtonRelease && textCursor == m_buttonPressPosition) {
-                        ICore::self()->documentController()->openDocument(jumpTo.first, jumpTo.second);
+                        ICore::self()->documentController()->openDocument(jumpTo.url, jumpTo.cursor);
 //                         event->accept();
 //                         return true;
                     }

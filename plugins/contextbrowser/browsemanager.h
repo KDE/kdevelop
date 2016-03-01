@@ -27,6 +27,7 @@
 #include <QMap>
 #include <QObject>
 #include <QPointer>
+#include <QUrl>
 #include <KTextEditor/Cursor>
 
 
@@ -92,7 +93,18 @@ class BrowseManager : public QObject {
     private slots:
         void eventuallyStartDelayedBrowsing();
     private:
+        struct JumpLocation
+        {
+            QUrl url;
+            KTextEditor::Cursor cursor;
+            JumpLocation(const QPair<QUrl, KTextEditor::Cursor>& pair = {})
+                : url(pair.first)
+                , cursor(pair.second)
+            {}
+            bool isValid() const { return url.isValid() && cursor.isValid(); }
+        };
         void resetChangedCursor();
+        JumpLocation determineJumpLoc(KTextEditor::Cursor textCursor, const QUrl& viewUrl) const;
         void setHandCursor(QWidget* widget);
         void avoidMenuAltFocus();
         bool eventFilter(QObject * watched, QEvent * event) override ;
