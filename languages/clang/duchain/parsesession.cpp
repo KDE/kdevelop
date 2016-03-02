@@ -149,7 +149,11 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     , m_unit(nullptr)
 {
     unsigned int flags = CXTranslationUnit_CXXChainedPCH
-        | CXTranslationUnit_DetailedPreprocessingRecord;
+        | CXTranslationUnit_DetailedPreprocessingRecord
+#if CINDEX_VERSION_MINOR >= 34
+        | CXTranslationUnit_KeepGoing
+#endif
+    ;
     if (options.testFlag(SkipFunctionBodies)) {
         flags |= CXTranslationUnit_SkipFunctionBodies;
     }
