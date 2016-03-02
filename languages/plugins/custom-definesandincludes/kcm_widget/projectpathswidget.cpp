@@ -96,9 +96,7 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
     pathsModel->setPaths( paths );
     blockSignals( b );
     ui->projectPaths->setCurrentIndex(0); // at least a project root item is present
-    projectPathSelected(0);
     ui->languageParameters->setCurrentIndex(0);
-    updateEnablements();
 
     // Set compilers
     ui->compiler->clear();
@@ -113,6 +111,9 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
         QVariant val; val.setValue(compilers[i]);
         ui->compiler->setItemData(i, val);
     }
+
+    projectPathSelected(0);
+    updateEnablements();
 }
 
 void ProjectPathsWidget::definesChanged( const Defines& defines )
