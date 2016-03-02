@@ -221,14 +221,14 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
   m_headerLayout->setSpacing(0);
 
   if(m_useArrows) {
-    auto m_previousButton = new QToolButton();
-    m_previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
+    auto previousButton = new QToolButton();
+    previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
 
-    auto m_nextButton = new QToolButton();
-    m_nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
+    auto nextButton = new QToolButton();
+    nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
 
-    m_headerLayout->addWidget(m_previousButton);
-    m_headerLayout->addWidget(m_nextButton);
+    m_headerLayout->addWidget(previousButton);
+    m_headerLayout->addWidget(nextButton);
   }
 
   //hide these buttons for now, they're senseless
