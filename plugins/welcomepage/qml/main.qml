@@ -28,7 +28,6 @@ Rectangle {
     }
 
     color: myPalette.window
-    visible: loader.opacity < 1
 
     Loader {
         id: loader
@@ -37,10 +36,10 @@ Rectangle {
 
         source: "qrc:/qml/area_"+area+".qml"
         asynchronous: true
-        opacity: status == Loader.Ready
+        opacity: status === Loader.Ready
 
         Behavior on opacity {
-            OpacityAnimator {}
+            PropertyAnimation {}
         }
     }
 
