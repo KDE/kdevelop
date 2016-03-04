@@ -152,12 +152,12 @@ void GrepFindFilesThread::run()
             m_files += thread_findFiles(directory.toLocalFile(), m_depth, include, exclude, m_tryAbort);
         }
     }
-
-    qSort(m_files);
 }
 
 KUrl::List GrepFindFilesThread::files() const {
-    return m_files;
+    KUrl::List tmpList = KUrl::List::fromSet(m_files.toSet());
+    qSort(tmpList);
+    return tmpList;
 }
 
 QStringList GrepFindFilesThread::parseExclude(QString excl)
