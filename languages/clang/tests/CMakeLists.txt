@@ -5,7 +5,6 @@ add_executable(clang-parser
 target_link_libraries(clang-parser
     KDev::Tests
     KDevClangPrivate
-    ${CLANG_LIBCLANG_LIB}
 )
 
 add_library(codecompletiontestbase STATIC codecompletiontestbase.cpp)
