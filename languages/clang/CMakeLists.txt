@@ -103,11 +103,11 @@ LINK_PRIVATE
     KF5::TextEditor
     KF5::ThreadWeaver
     KDev::Util
+    ${CLANG_LIBCLANG_LIB}
 LINK_PUBLIC
     KDev::Language
     KDev::Project
     KDev::Util
-    ${CLANG_LIBCLANG_LIB}
 )
 
 install(FILES duchain/gcc_compat.h DESTINATION ${DATA_INSTALL_DIR}/kdevclangsupport PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
