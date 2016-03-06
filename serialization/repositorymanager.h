@@ -46,7 +46,7 @@ public:
   ~RepositoryManager() {
   }
 
-  Q_DISABLE_COPY(RepositoryManager);
+  Q_DISABLE_COPY(RepositoryManager)
 
   ItemRepositoryType* repository() const
   {

@@ -46,7 +46,7 @@ public:
   void push(const QString &output);
 private:
   DelayedOutput();
-  Q_DISABLE_COPY(DelayedOutput);
+  Q_DISABLE_COPY(DelayedOutput)
   const QScopedPointer<DelayedOutputPrivate> d;
 };
 
