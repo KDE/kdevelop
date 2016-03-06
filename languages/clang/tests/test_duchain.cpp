@@ -906,7 +906,11 @@ void TestDUChain::testActiveDocumentHasASTAttached()
         url = ctx->url().toUrl();
     }
 
-    // Here the file is already deleted, so clang_parseTranslationUnit2 will fail, but we still get ParseSessionData attached.
+    QVERIFY(!QFileInfo::exists(url.toLocalFile()));
+    QFile file(url.toLocalFile());
+    file.open(QIODevice::WriteOnly);
+    Q_ASSERT(file.isOpen());
+
     auto document = ICore::self()->documentController()->openDocument(url);
     QVERIFY(document);
     ICore::self()->documentController()->activateDocument(document);
