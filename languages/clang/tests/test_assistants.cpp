@@ -548,6 +548,22 @@ void TestAssistants::testMoveIntoSource()
     TestFile header(origHeader, "h");
     TestFile impl("#include \"" + header.url().byteArray() + "\"\n" + origImpl, "cpp", &header);
 
+    {
+        TopDUContext* headerCtx = nullptr;
+        {
+            DUChainReadLocker lock;
+            headerCtx = DUChain::self()->chainForDocument(header.url());
+        }
+        // Here is a problem: when launching tests one by one, we can reuse the same tmp file for headers.
+        // But because of document chain for header wasn't unloaded properly in previous run we reuse it here
+        // Therefore when using headerCtx->findDeclarations below we find declarations from the previous launch -> tests fail
+        if (headerCtx) {
+            // TODO: Investigate why this chain doesn't get updated when parsing source file
+            DUChainWriteLocker lock;
+            DUChain::self()->removeDocumentChain(headerCtx);
+        }
+    }
+
     impl.parse(KDevelop::TopDUContext::AllDeclarationsContextsAndUses);
     QVERIFY(impl.waitForParsed());
 
