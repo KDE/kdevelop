@@ -36,7 +36,7 @@ struct Model {
 
     QString name;
     QSharedPointer<QStandardItemModel> model;
-    QAbstractItemView* view;
+    QAbstractItemView* view = nullptr;
 };
 
 class Models
