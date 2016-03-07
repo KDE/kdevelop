@@ -56,10 +56,10 @@ public:
         p << "python"
           << "import sys"
           << "sys.path.insert(0, '"+printersDir.path().toLatin1()+"')"
-          << "from qt4 import register_qt4_printers"
-          << "register_qt4_printers (None)"
-          << "from kde4 import register_kde4_printers"
-          << "register_kde4_printers (None)"
+          << "from qt import register_qt_printers"
+          << "register_qt_printers (None)"
+          << "from kde import register_kde_printers"
+          << "register_kde_printers (None)"
           << "end";
         foreach (const QByteArray &i, p) {
             write(i + "\n");
@@ -238,14 +238,25 @@ void QtPrintersTest::testQListContainer()
     gdb.execute("next");
     out = gdb.execute("print pairList");
     QVERIFY(out.contains(QString("%1<QPair<int, int>>").arg(container).toLocal8Bit()));
-    QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
-    QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
+    if (container != "QSet") {
+        QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
+        QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
+    } else { // order is undefined in QSet
+        QVERIFY(out.contains("] = {\n    first = 1, \n    second = 2\n  }"));
+        QVERIFY(out.contains("] = {\n    first = 2, \n    second = 3\n  }"));
+    }
     QVERIFY(!out.contains("[2] = "));
     gdb.execute("next");
     out = gdb.execute("print pairList");
-    QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
-    QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
-    QVERIFY(out.contains("[2] = {\n    first = 4, \n    second = 5\n  }"));
+    if (container != "QSet") {
+        QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
+        QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
+        QVERIFY(out.contains("[2] = {\n    first = 4, \n    second = 5\n  }"));
+    } else { // order is undefined in QSet
+        QVERIFY(out.contains("] = {\n    first = 1, \n    second = 2\n  }"));
+        QVERIFY(out.contains("] = {\n    first = 2, \n    second = 3\n  }"));
+        QVERIFY(out.contains("] = {\n    first = 4, \n    second = 5\n  }"));
+    }
     }
 }
 
@@ -316,7 +327,7 @@ void QtPrintersTest::testQDateTime()
     gdb.execute("break qdatetime.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print dt");
-    QVERIFY(out.contains("2010-01-20 15:31:13"));
+    QVERIFY(out.contains("Wed Jan 20 15:31:13 2010"));
 }
 
 void QtPrintersTest::testQUrl()
@@ -344,7 +355,7 @@ void QtPrintersTest::testQHashInt()
 void QtPrintersTest::testQHashString()
 {
     GdbProcess gdb("qhashstring");
-    gdb.execute("break qhashstring.cpp:7");
+    gdb.execute("break qhashstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print h");
     QVERIFY(out.contains("[\"10\"] = \"100\""));
@@ -370,7 +381,7 @@ void QtPrintersTest::testQSetInt()
 void QtPrintersTest::testQSetString()
 {
     GdbProcess gdb("qsetstring");
-    gdb.execute("break qsetstring.cpp:7");
+    gdb.execute("break qsetstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print s");
     QVERIFY(out.contains("] = \"10\""));
