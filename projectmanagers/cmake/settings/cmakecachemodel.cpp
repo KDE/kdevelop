@@ -185,11 +185,7 @@ bool CMakeCacheModel::isAdvanced(int i) const
         isAdv = p->text()=="INTERNAL" || p->text()=="STATIC";
     }
 
-    if(!isAdv)
-    {
-        m_internal.contains(item(i,0)->text());
-    }
-    return isAdv;
+    return isAdv || m_internal.contains(item(i,0)->text());
 }
 
 bool CMakeCacheModel::isInternal(int i) const
