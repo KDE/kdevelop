@@ -1,7 +1,9 @@
 [General]
 Name=Google Test
 Name[ca]=Google Test
+Name[ca@valencia]=Google Test
 Name[de]=Google-Test
+Name[en_GB]=Google Test
 Name[nl]=Google Test
 Name[pl]=Google Test
 Name[pt]=Teste do Google
@@ -11,7 +13,9 @@ Name[uk]=Google Test
 Name[x-test]=xxGoogle Testxx
 Comment=A unit test using the Google Test library
 Comment[ca]=Una prova unitària utilitzant la biblioteca Test de Google
+Comment[ca@valencia]=Una prova unitària utilitzant la biblioteca Test de Google
 Comment[de]=Ein Unit-Test, der die Google-Test-Bibliothek verwendet
+Comment[en_GB]=A unit test using the Google Test library
 Comment[nl]=Een test van een eenheid met gebruik van de bibliotheek Google Test
 Comment[pl]=Jednostkowy test wykorzystujący bibliotekę Google Test
 Comment[pt]=Um teste unitário que usa a plataforma de testes do Google
