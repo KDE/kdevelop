@@ -78,7 +78,6 @@ private slots:
 private:
     Ui::ProjectPathsWidget* ui;
     ProjectPathsModel* pathsModel;
-    KDevelop::IProject* m_project;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();
     void updatePathsModel( const QVariant& newData, int role );

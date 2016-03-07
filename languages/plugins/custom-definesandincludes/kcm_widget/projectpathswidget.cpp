@@ -196,9 +196,8 @@ void ProjectPathsWidget::deleteProjectPath()
 
 void ProjectPathsWidget::setProject(KDevelop::IProject* w_project)
 {
-    m_project = w_project;
-    pathsModel->setProject( m_project );
-    ui->includesWidget->setProject( m_project );
+    pathsModel->setProject( w_project );
+    ui->includesWidget->setProject( w_project );
 }
 
 void ProjectPathsWidget::updateEnablements() {
