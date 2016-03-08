@@ -48,6 +48,8 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->enableAction, &QCheckBox::toggled, this, &ConfigWidget::toggleActionEnablement );
     connect( ui->actionArguments, &QLineEdit::textEdited, this, &ConfigWidget::actionArgumentsEdited );
     connect( ui->actionEnvironment, &EnvironmentSelectionWidget::currentProfileChanged, this, &ConfigWidget::actionEnvironmentChanged );
+    connect( ui->buildDir, &KUrlRequester::urlSelected, this, static_cast<void(ConfigWidget::*)()>(&ConfigWidget::changed) );
+    connect( ui->buildDir->lineEdit(), &KLineEdit::textEdited, this, static_cast<void(ConfigWidget::*)()>(&ConfigWidget::changed) );
     connect( ui->actionExecutable, &KUrlRequester::urlSelected, this, static_cast<void(ConfigWidget::*)(const QUrl&)>(&ConfigWidget::actionExecutableChanged) );
     connect( ui->actionExecutable->lineEdit(), &KLineEdit::textEdited, this, static_cast<void(ConfigWidget::*)(const QString&)>(&ConfigWidget::actionExecutableChanged) );
 }
