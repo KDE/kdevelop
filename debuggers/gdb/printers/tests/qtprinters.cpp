@@ -92,7 +92,9 @@ public:
     QByteArray execute(const QByteArray &cmd)
     {
         write(cmd + "\n");
-        return waitForPrompt();
+        auto out = waitForPrompt();
+        qDebug() << cmd << " = " << out;
+        return out;
     }
 };
 
