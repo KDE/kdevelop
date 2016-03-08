@@ -1072,11 +1072,14 @@ template<CXCursorKind CK>
 void Visitor::setDeclData(CXCursor cursor, NamespaceAliasDeclaration *decl) const
 {
     setDeclData<CK>(cursor, static_cast<Declaration*>(decl));
-    clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor /*parent*/, CXClientData data) -> CXChildVisitResult {
-        Q_ASSERT(clang_getCursorKind(cursor) == CXCursor_NamespaceRef);
-        const auto id = QualifiedIdentifier(ClangString(clang_getCursorSpelling(cursor)).toString());
-        reinterpret_cast<NamespaceAliasDeclaration*>(data)->setImportIdentifier(id);
-        return CXChildVisit_Break;
+    clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor parent, CXClientData data) -> CXChildVisitResult {
+        if (clang_getCursorKind(cursor) == CXCursor_NamespaceRef) {
+            const auto id = QualifiedIdentifier(ClangString(clang_getCursorSpelling(cursor)).toString());
+            reinterpret_cast<NamespaceAliasDeclaration*>(data)->setImportIdentifier(id);
+            return CXChildVisit_Break;
+        } else {
+            return visitCursor(cursor, parent, data);
+        }
     }, decl);
 }
 //END setDeclData
