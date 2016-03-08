@@ -46,8 +46,6 @@ public:
 
     QString moveIntoSource(const KDevelop::IndexedDeclaration& iDecl);
 
-    using KDevelop::BasicRefactoring::executeRenameAction;
-
 public slots:
     void executeMoveIntoSourceAction();
 

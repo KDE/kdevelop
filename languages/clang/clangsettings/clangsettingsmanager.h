@@ -68,6 +68,8 @@ public:
 
     ParserSettings parserSettings(KDevelop::ProjectBaseItem* item) const;
 
+    ParserSettings parserSettings(const QString& path) const;
+
 private:
     ClangSettingsManager();
 

@@ -34,19 +34,50 @@ class IProject;
 class ProjectBaseItem;
 }
 
+struct ParserArguments
+{
+    ParserArguments(const QString& cArguments, const QString& cppArguments, bool parseAmbiguousAsCPP)
+        : cArguments(cArguments)
+        , cppArguments(cppArguments)
+        , parseAmbiguousAsCPP(parseAmbiguousAsCPP)
+    {}
+
+    ParserArguments() = default;
+
+    QString cArguments;
+    QString cppArguments;
+    bool parseAmbiguousAsCPP = true;
+};
+
+Q_DECLARE_METATYPE(ParserArguments);
+
 struct ConfigEntry
 {
     QString path;
     QStringList includes;
     KDevelop::Defines defines;
     CompilerPointer compiler;
-    QString parserArguments;
+    ParserArguments parserArguments;
 
     ConfigEntry( const QString& path = QString() );
 
     // FIXME: get rid of this but stay backwards compatible
     void setDefines(const QHash<QString, QVariant>& defines);
 };
+
+namespace Utils
+{
+enum LanguageType
+{
+    C,
+    Cpp,
+    ObjC,
+
+    Other = 100
+};
+
+LanguageType languageType(const KDevelop::Path& path, bool treatAmbiguousAsCPP = true);
+}
 
 class SettingsManager
 {
@@ -61,7 +92,7 @@ public:
 
     bool needToReparseCurrentProject( KConfig* cfg ) const;
 
-    QString defaultParserArguments() const;
+    ParserArguments defaultParserArguments() const;
 
     CompilerProvider* provider();
     const CompilerProvider* provider() const;

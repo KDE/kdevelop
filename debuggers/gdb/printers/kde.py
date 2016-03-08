@@ -21,7 +21,7 @@ import gdb
 import itertools
 import re
 
-import qt4
+import qt
 
 from helper import *
 
@@ -30,7 +30,7 @@ class KDevelop_Path:
         self.val = val
 
     def to_string(self):
-        iterator = qt4.QVectorPrinter(self.val['m_data'], 'QVector').children()
+        iterator = qt.QVectorPrinter(self.val['m_data'], 'QVector').children()
         pathSegments = [str(it[1]) for it in iterator]
         return "(" + ", ".join(pathSegments) + ")" if pathSegments else None
 
@@ -55,7 +55,7 @@ class KTextEditor_RangePrinter:
 
 pretty_printers_dict = {}
 
-def register_kde4_printers (obj):
+def register_kde_printers (obj):
     if obj == None:
         obj = gdb
 

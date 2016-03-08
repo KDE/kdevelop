@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-# Pretty-printers for Qt4.
+# Pretty-printers for Qt 4 and Qt 5.
 
 # Copyright (C) 2009 Niko Sams <niko.sams@gmail.com>
 
@@ -19,6 +19,7 @@
 import gdb
 import itertools
 import re
+import time
 
 from helper import *
 
@@ -48,11 +49,12 @@ class QStringPrinter:
     def display_hint (self):
         return 'string'
 
-
 class QByteArrayPrinter:
 
     def __init__(self, val):
         self.val = val
+        # Qt4 has 'data', Qt5 doesn't
+        self.isQt4 = has_field(self.val['d'], 'data')
 
     class _iterator(Iterator):
         def __init__(self, data, size):
@@ -70,12 +72,18 @@ class QByteArrayPrinter:
             self.count = self.count + 1
             return ('[%d]' % count, self.data[count])
 
+    def stringData(self):
+        if self.isQt4:
+            return self.val['d']['data']
+        else:
+            return self.val['d'].cast(gdb.lookup_type("char").const().pointer()) + self.val['d']['offset']
+
     def children(self):
-        return self._iterator(self.val['d']['data'], self.val['d']['size'])
+        return self._iterator(self.stringData(), self.val['d']['size'])
 
     def to_string(self):
         #todo: handle charset correctly
-        return self.val['d']['data'].string()
+        return self.stringData()
 
     def display_hint (self):
         return 'string'
@@ -109,7 +117,7 @@ class QListPrinter:
             movableTypes = ['QRect', 'QRectF', 'QString', 'QMargins', 'QLocale', 'QChar', 'QDate', 'QTime', 'QDateTime', 'QVector',
                'QRegExpr', 'QPoint', 'QPointF', 'QByteArray', 'QSize', 'QSizeF', 'QBitArray', 'QLine', 'QLineF', 'QModelIndex', 'QPersitentModelIndex',
                'QVariant', 'QFileInfo', 'QUrl', 'QXmlStreamAttribute', 'QXmlStreamNamespaceDeclaration', 'QXmlStreamNotationDeclaration',
-               'QXmlStreamEntityDeclaration']
+               'QXmlStreamEntityDeclaration', 'QPair<int, int>']
             #this list of types that use Q_DECLARE_TYPEINFO(T, Q_PRIMITIVE_TYPE) (from qglobal.h)
             primitiveTypes = ['bool', 'char', 'signed char', 'unsigned char', 'short', 'unsigned short', 'int', 'unsigned int', 'long', 'unsigned long', 'long long', 'unsigned long long', 'float', 'double']
 
@@ -148,22 +156,22 @@ class QVectorPrinter:
     "Print a QVector"
 
     class _iterator(Iterator):
-        def __init__(self, nodetype, d, p):
+        def __init__(self, nodetype, data, size):
             self.nodetype = nodetype
-            self.d = d
-            self.p = p
+            self.data = data
+            self.size = size
             self.count = 0
 
         def __iter__(self):
             return self
 
         def __next__(self):
-            if self.count >= self.p['size']:
+            if self.count >= self.size:
                 raise StopIteration
             count = self.count
 
             self.count = self.count + 1
-            return ('[%d]' % count, self.p['array'][count])
+            return ('[%d]' % count, self.data[count])
 
     def __init__(self, val, container):
         self.val = val
@@ -171,7 +179,12 @@ class QVectorPrinter:
         self.itype = self.val.type.template_argument(0)
 
     def children(self):
-        return self._iterator(self.itype, self.val['d'], self.val['p'])
+        isQt4 = has_field(self.val['d'], 'p') # Qt4 has 'p', Qt5 doesn't
+        if isQt4:
+            return self._iterator(self.itype, self.val['p']['array'], self.val['p']['size'])
+        else:
+            data = self.val['d'].cast(gdb.lookup_type("char").const().pointer()) + self.val['d']['offset']
+            return self._iterator(self.itype, data.cast(self.itype.pointer()), self.val['d']['size'])
 
     def to_string(self):
         if self.val['d']['size'] == 0:
@@ -222,7 +235,7 @@ class QLinkedListPrinter:
 class QMapPrinter:
     "Print a QMap"
 
-    class _iterator(Iterator):
+    class _iteratorQt4(Iterator):
         def __init__(self, val):
             self.val = val
             self.ktype = self.val.type.template_argument(0)
@@ -277,18 +290,79 @@ class QMapPrinter:
             self.count = self.count + 1
             return result
 
+    class _iteratorQt5:
+        def __init__(self, val):
+            realtype = val.type.strip_typedefs()
+            keytype = realtype.template_argument(0)
+            valtype = realtype.template_argument(1)
+            node_type = gdb.lookup_type('QMapData<' + keytype.name + ',' + valtype.name + '>::Node')
+            self.node_p_type = node_type.pointer()
+            self.root = val['d']['header']
+            self.current = None
+            self.next_is_key = True
+            self.i = -1
+            # we store the path here to avoid keeping re-fetching
+            # values from the inferior (also, skips the pointer
+            # arithmetic involved in using the parent pointer)
+            self.path = []
+
+        def __iter__(self):
+            return self
+
+        def moveToNextNode(self):
+            if self.current is None:
+                # find the leftmost node
+                if not self.root['left']:
+                    return False
+                self.current = self.root
+                while self.current['left']:
+                    self.path.append(self.current)
+                    self.current = self.current['left']
+            elif self.current['right']:
+                self.path.append(self.current)
+                self.current = self.current['right']
+                while self.current['left']:
+                    self.path.append(self.current)
+                    self.current = self.current['left']
+            else:
+                last = self.current
+                self.current = self.path.pop()
+                while self.current['right'] == last:
+                    last = self.current
+                    self.current = self.path.pop()
+                # if there are no more parents, we are at the root
+                if len(self.path) == 0:
+                    return False
+            return True
+
+        def __next__(self):
+            if self.next_is_key:
+                if not self.moveToNextNode():
+                    raise StopIteration
+                self.current_typed = self.current.reinterpret_cast(self.node_p_type)
+                self.next_is_key = False
+                self.i += 1
+                return ('key' + str(self.i), self.current_typed['key'])
+            else:
+                self.next_is_key = True
+                return ('value' + str(self.i), self.current_typed['value'])
+
+        def next(self):
+            return self.__next__()
 
     def __init__(self, val, container):
         self.val = val
         self.container = container
 
     def children(self):
+        if self.val['d']['size'] == 0:
+            return []
+
         isQt4 = has_field(self.val, 'e') # Qt4 has 'e', Qt5 doesn't
         if isQt4:
-            return self._iterator(self.val)
+            return self._iteratorQt4(self.val)
         else:
-            # TODO: Add proper iterator for Qt5-based QMap
-            return default_iterator(self.val)
+            return self._iteratorQt5(self.val)
 
     def to_string(self):
         if self.val['d']['size'] == 0:
@@ -477,16 +551,7 @@ class QDateTimePrinter:
         self.val = val
 
     def to_string(self):
-        #val['d'] is a QDateTimePrivate, but for some reason casting to that doesn't work
-        #so work around by manually adjusting the pointer
-        date = self.val['d'].cast(gdb.lookup_type('char').pointer());
-        date += gdb.lookup_type('int').sizeof #increment for QAtomicInt ref;
-        date = date.cast(gdb.lookup_type('QDate').pointer()).dereference();
-
-        time = self.val['d'].cast(gdb.lookup_type('char').pointer());
-        time += gdb.lookup_type('int').sizeof + gdb.lookup_type('QDate').sizeof #increment for QAtomicInt ref; and QDate date;
-        time = time.cast(gdb.lookup_type('QTime').pointer()).dereference();
-        return "%s %s" % (date, time)
+        return time.ctime(gdb.parse_and_eval("reinterpret_cast<const QDateTime*>(%s)->toTime_t()" % self.val.address))
 
 class QUrlPrinter:
 
@@ -494,6 +559,11 @@ class QUrlPrinter:
         self.val = val
 
     def to_string(self):
+        try:
+            return gdb.parse_and_eval("reinterpret_cast<const QUrl*>(%s)->toString((QUrl::FormattingOptions)QUrl::PrettyDecoded)" % self.val.address)
+        except:
+            pass
+        # TODO: the below code is only valid for Qt 4
         try:
             return self.val['d']['encodedOriginal']
         except RuntimeError:
@@ -566,18 +636,18 @@ class QUuidPrinter:
         self.val = val
 
     def to_string(self):
-        return "QUuid({%x-%x-%x-%x%x-%x%x%x%x%x%x})" % (self.val['data1'], self.val['data2'], self.val['data3'],
-                                            self.val['data4'][0], self.val['data4'][1],
-                                            self.val['data4'][2], self.val['data4'][3],
-                                            self.val['data4'][4], self.val['data4'][5],
-                                            self.val['data4'][6], self.val['data4'][7])
+        return "QUuid({%x-%x-%x-%x%x-%x%x%x%x%x%x})" % (int(self.val['data1']), int(self.val['data2']), int(self.val['data3']),
+                                            int(self.val['data4'][0]), int(self.val['data4'][1]),
+                                            int(self.val['data4'][2]), int(self.val['data4'][3]),
+                                            int(self.val['data4'][4]), int(self.val['data4'][5]),
+                                            int(self.val['data4'][6]), int(self.val['data4'][7]))
 
     def display_hint (self):
         return 'string'
 
 pretty_printers_dict = {}
 
-def register_qt4_printers (obj):
+def register_qt_printers (obj):
     if obj == None:
         obj = gdb
 

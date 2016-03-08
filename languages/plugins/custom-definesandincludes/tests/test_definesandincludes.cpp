@@ -73,7 +73,7 @@ void TestDefinesAndIncludes::loadSimpleProject()
     QCOMPARE( actualDefines, defines );
 
     QVERIFY(!manager->parserArguments(s_currentProject->projectItem()).isEmpty());
-    QVERIFY(!manager->parserArguments(nullptr).isEmpty());
+    QVERIFY(!manager->parserArguments(QStringLiteral("/some/path/to/file.cpp")).isEmpty());
 }
 
 void TestDefinesAndIncludes::loadMultiPathProject()

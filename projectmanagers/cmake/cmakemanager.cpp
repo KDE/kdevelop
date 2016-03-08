@@ -90,6 +90,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     KDEV_USE_EXTENSION_INTERFACE( ICMakeManager)
 
     if (hasError()) {
+        m_highlight = nullptr;
         return;
     }
 

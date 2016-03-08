@@ -74,7 +74,7 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
 
     if (parserSettings.parserOptions.isEmpty()) {
         // The parserOptions can be empty for some unit tests that use ParseSession directly
-        auto defaultArguments = ClangSettingsManager::self()->parserSettings(nullptr).toClangAPI();
+        auto defaultArguments = ClangSettingsManager::self()->parserSettings(path).toClangAPI();
         Q_ASSERT(!defaultArguments.isEmpty());
         defaultArguments.append(QByteArrayLiteral("-nostdinc"));
         defaultArguments.append(QByteArrayLiteral("-nostdinc++"));
@@ -149,7 +149,11 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     , m_unit(nullptr)
 {
     unsigned int flags = CXTranslationUnit_CXXChainedPCH
-        | CXTranslationUnit_DetailedPreprocessingRecord;
+        | CXTranslationUnit_DetailedPreprocessingRecord
+#if CINDEX_VERSION_MINOR >= 34
+        | CXTranslationUnit_KeepGoing
+#endif
+    ;
     if (options.testFlag(SkipFunctionBodies)) {
         flags |= CXTranslationUnit_SkipFunctionBodies;
     }

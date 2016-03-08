@@ -64,7 +64,7 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
         return QVariant::fromValue(pathConfig.compiler);
         break;
     case ParserArgumentsRole:
-        return pathConfig.parserArguments;
+        return QVariant::fromValue(pathConfig.parserArguments);
         break;
     default:
         break;
@@ -122,7 +122,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         pathConfig.compiler = value.value<CompilerPointer>();
         break;
     case ParserArgumentsRole:
-        pathConfig.parserArguments = value.toString();
+        pathConfig.parserArguments = value.value<ParserArguments>();
         break;
     default:
         return false;
@@ -196,7 +196,8 @@ void ProjectPathsModel::addPath( const QUrl &url )
 
 void ProjectPathsModel::addPathInternal( const ConfigEntry& config, bool prepend )
 {
-    Q_ASSERT(!config.parserArguments.isEmpty());
+    Q_ASSERT(!config.parserArguments.cppArguments.isEmpty());
+    Q_ASSERT(!config.parserArguments.cArguments.isEmpty());
 
     // Do not allow duplicates
     foreach( const ConfigEntry& existingConfig, projectPaths ) {

@@ -133,13 +133,23 @@ CompilerProvider::~CompilerProvider() = default;
 QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
 {
     auto config = configForItem(item);
-    return config.compiler->defines(config.parserArguments);
+    auto languageType = Utils::Cpp;
+    if (item) {
+        languageType = Utils::languageType(item->path(), config.parserArguments.parseAmbiguousAsCPP);
+    }
+
+    return config.compiler->defines(languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
 }
 
 Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
 {
     auto config = configForItem(item);
-    return config.compiler->includes(config.parserArguments);
+    auto languageType = Utils::Cpp;
+    if (item) {
+        languageType = Utils::languageType(item->path(), config.parserArguments.parseAmbiguousAsCPP);
+    }
+
+    return config.compiler->includes(languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
 }
 
 IDefinesAndIncludesManager::Type CompilerProvider::type() const

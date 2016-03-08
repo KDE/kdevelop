@@ -39,7 +39,7 @@ using namespace KDevelop;
 
 ManPageModel::ManPageModel(QObject* parent)
     : QAbstractItemModel(parent)
-    , m_indexModel(new QStringListModel)
+    , m_indexModel(new QStringListModel(this))
     , m_loaded(false)
     , m_nbSectionLoaded(0)
 {
@@ -48,7 +48,6 @@ ManPageModel::ManPageModel(QObject* parent)
 
 ManPageModel::~ManPageModel()
 {
-    delete m_indexModel;
 }
 
 QModelIndex ManPageModel::parent(const QModelIndex& child) const

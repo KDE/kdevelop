@@ -36,7 +36,7 @@ struct Source
     Source() {}
     Source(const SourceType & aType, const QString& anIcon, const QString& aName, const QPair< QString, QString >& aUrl);
     
-    SourceType type;
+    SourceType type = Project;
     QString name;
     QString icon;
     QString identifier;

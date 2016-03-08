@@ -31,6 +31,7 @@
 #include <interfaces/iplugincontroller.h>
 
 #include "../compilerprovider/compilerprovider.h"
+#include "../compilerprovider/settingsmanager.h"
 
 #include "ui_projectpathswidget.h"
 #include "ui_batchedit.h"
@@ -96,9 +97,7 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
     pathsModel->setPaths( paths );
     blockSignals( b );
     ui->projectPaths->setCurrentIndex(0); // at least a project root item is present
-    projectPathSelected(0);
     ui->languageParameters->setCurrentIndex(0);
-    updateEnablements();
 
     // Set compilers
     ui->compiler->clear();
@@ -113,6 +112,9 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
         QVariant val; val.setValue(compilers[i]);
         ui->compiler->setItemData(i, val);
     }
+
+    projectPathSelected(0);
+    updateEnablements();
 }
 
 void ProjectPathsWidget::definesChanged( const Defines& defines )
@@ -129,7 +131,7 @@ void ProjectPathsWidget::includesChanged( const QStringList& includes )
 
 void ProjectPathsWidget::parserArgumentsChanged()
 {
-    updatePathsModel(ui->parserWidget->parserArguments(), ProjectPathsModel::ParserArgumentsRole);
+    updatePathsModel(QVariant::fromValue(ui->parserWidget->parserArguments()), ProjectPathsModel::ParserArgumentsRole);
 }
 
 void ProjectPathsWidget::updatePathsModel(const QVariant& newData, int role)
@@ -157,7 +159,7 @@ void ProjectPathsWidget::projectPathSelected( int index )
 
     ui->compiler->setCurrentText(pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>()->name());
 
-    ui->parserWidget->setParserArguments(pathsModel->data(midx, ProjectPathsModel::ParserArgumentsRole ).toString());
+    ui->parserWidget->setParserArguments(pathsModel->data(midx, ProjectPathsModel::ParserArgumentsRole).value<ParserArguments>());
 
     updateEnablements();
 }
@@ -195,9 +197,8 @@ void ProjectPathsWidget::deleteProjectPath()
 
 void ProjectPathsWidget::setProject(KDevelop::IProject* w_project)
 {
-    m_project = w_project;
-    pathsModel->setProject( m_project );
-    ui->includesWidget->setProject( m_project );
+    pathsModel->setProject( w_project );
+    ui->includesWidget->setProject( w_project );
 }
 
 void ProjectPathsWidget::updateEnablements() {
