@@ -123,6 +123,8 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
         return;
     }
 
+    m_selected = url;
+
     if( isDir || extension != ShellExtension::getInstance()->projectFileExtension() )
     {
         setAppropriate( projectInfoPage, true );
@@ -207,17 +209,22 @@ void OpenProjectDialog::validateProjectManager( const QString& manager )
     validateProjectInfo();
 }
 
-QUrl OpenProjectDialog::projectFileUrl()
+QUrl OpenProjectDialog::projectFileUrl() const
 {
     return m_url;
 }
 
-QString OpenProjectDialog::projectName()
+QUrl OpenProjectDialog::selectedUrl() const
+{
+    return m_selected;
+}
+
+QString OpenProjectDialog::projectName() const
 {
     return m_projectName;
 }
 
-QString OpenProjectDialog::projectManager()
+QString OpenProjectDialog::projectManager() const
 {
     return m_projectManager;
 }

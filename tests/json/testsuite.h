@@ -99,7 +99,7 @@ private:
   QHash<QString, TestFunction> m_testFunctions;
 
   TestSuite() { }
-  Q_DISABLE_COPY(TestSuite);
+  Q_DISABLE_COPY(TestSuite)
 
   friend TestSuite<Declaration*>& declarationTestSuite();
   friend TestSuite<DUContext*>& contextTestSuite();

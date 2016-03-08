@@ -44,7 +44,7 @@ protected:
     void removeLocation(ArchiveTemplateLocation* location);
 
 private:
-    Q_DISABLE_COPY(ArchiveTemplateLoader);
+    Q_DISABLE_COPY(ArchiveTemplateLoader)
     ArchiveTemplateLoader();
 
     class ArchiveTemplateLoaderPrivate* const d;

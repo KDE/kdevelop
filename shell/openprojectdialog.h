@@ -33,9 +33,19 @@ class OpenProjectDialog : public KAssistantDialog
 
 public:
     OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget* parent = 0 );
-    QUrl projectFileUrl();
-    QString projectName();
-    QString projectManager();
+
+    /**
+    * Return a QUrl pointing to the project's .kdev file.
+    */
+    QUrl projectFileUrl() const;
+    /**
+    * Return a QUrl pointing to the file, that was selected by the user.
+    * Unlike projectFileUrl(), this can be a .kdev file, as well
+    * as build system file (e.g. CMakeLists.txt).
+    */
+    QUrl selectedUrl() const;
+    QString projectName() const;
+    QString projectManager() const;
 
 private slots:
     void validateSourcePage( bool );
@@ -48,6 +58,7 @@ private slots:
 private:
     void validateProjectInfo();
     QUrl m_url;
+    QUrl m_selected;
     QString m_projectName;
     QString m_projectManager;
     KPageWidgetItem* sourcePage;

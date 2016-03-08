@@ -328,7 +328,7 @@ ProjectDialogProvider::ProjectDialogProvider(ProjectControllerPrivate* const p) 
 ProjectDialogProvider::~ProjectDialogProvider()
 {}
 
-bool writeNewProjectFile( const QString& localConfigFile, const QString& name, const QString& manager )
+bool writeNewProjectFile( const QString& localConfigFile, const QString& name, const QString& createdFrom, const QString& manager )
 {
     KSharedConfigPtr cfg = KSharedConfig::openConfig( localConfigFile, KConfig::SimpleConfig );
     if (!cfg->isConfigWritable(true)) {
@@ -337,19 +337,20 @@ bool writeNewProjectFile( const QString& localConfigFile, const QString& name, c
     }
     KConfigGroup grp = cfg->group( "Project" );
     grp.writeEntry( "Name", name );
+    grp.writeEntry( "CreatedFrom", createdFrom );
     grp.writeEntry( "Manager", manager );
     cfg->sync();
     return true;
 }
 
-bool writeProjectSettingsToConfigFile(const QUrl& projectFileUrl, const QString& projectName, const QString& projectManager)
+bool writeProjectSettingsToConfigFile(const QUrl& projectFileUrl, OpenProjectDialog* dlg)
 {
     if ( !projectFileUrl.isLocalFile() ) {
         QTemporaryFile tmp;
         if ( !tmp.open() ) {
             return false;
         }
-        if ( !writeNewProjectFile( tmp.fileName(), projectName, projectManager ) ) {
+        if ( !writeNewProjectFile( tmp.fileName(), dlg->projectName(), dlg->selectedUrl().fileName(), dlg->projectManager() ) ) {
             return false;
         }
         // explicitly close file before uploading it, see also: https://bugs.kde.org/show_bug.cgi?id=254519
@@ -359,7 +360,9 @@ bool writeProjectSettingsToConfigFile(const QUrl& projectFileUrl, const QString&
         KJobWidgets::setWindow(uploadJob, Core::self()->uiControllerInternal()->defaultMainWindow());
         return uploadJob->exec();
     }
-    return writeNewProjectFile( projectFileUrl.toLocalFile(),projectName, projectManager );
+    // Here and above we take .filename() part of the selectedUrl() to make it relative to the project root,
+    // thus keeping .kdev file relocatable
+    return writeNewProjectFile( projectFileUrl.toLocalFile(), dlg->projectName(), dlg->selectedUrl().fileName(), dlg->projectManager() );
 }
 
 
@@ -401,18 +404,21 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
     {
         // check whether config is equal
         bool shouldAsk = true;
-        if( projectFileUrl.isLocalFile() )
+        if( projectFileUrl == dlg.selectedUrl() )
         {
-            shouldAsk = !equalProjectFile( projectFileUrl.toLocalFile(), &dlg );
-        } else {
-            shouldAsk = false;
+            if( projectFileUrl.isLocalFile() )
+            {
+                shouldAsk = !equalProjectFile( projectFileUrl.toLocalFile(), &dlg );
+            } else {
+                shouldAsk = false;
 
-            QTemporaryFile tmpFile;
-            if (tmpFile.open()) {
-                auto downloadJob = KIO::file_copy(projectFileUrl, QUrl::fromLocalFile(tmpFile.fileName()));
-                KJobWidgets::setWindow(downloadJob, qApp->activeWindow());
-                if (downloadJob->exec()) {
-                    shouldAsk = !equalProjectFile(tmpFile.fileName(), &dlg);
+                QTemporaryFile tmpFile;
+                if (tmpFile.open()) {
+                    auto downloadJob = KIO::file_copy(projectFileUrl, QUrl::fromLocalFile(tmpFile.fileName()));
+                    KJobWidgets::setWindow(downloadJob, qApp->activeWindow());
+                    if (downloadJob->exec()) {
+                        shouldAsk = !equalProjectFile(tmpFile.fileName(), &dlg);
+                    }
                 }
             }
         }
@@ -446,7 +452,7 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
     }
 
     if (writeProjectConfigToFile) {
-        if (!writeProjectSettingsToConfigFile(projectFileUrl, dlg.projectName(), dlg.projectManager())) {
+        if (!writeProjectSettingsToConfigFile(projectFileUrl, &dlg)) {
             KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
                 i18n("Unable to create configuration file %1", projectFileUrl.url()));
             return QUrl();

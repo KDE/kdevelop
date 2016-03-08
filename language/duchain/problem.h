@@ -221,7 +221,7 @@ public:
 private:
     void rebuildDynamicData(DUContext* parent, uint ownIndex) override;
 
-    Q_DISABLE_COPY(Problem);
+    Q_DISABLE_COPY(Problem)
 
     DUCHAIN_DECLARE_DATA(Problem)
     friend class TopDUContext;
