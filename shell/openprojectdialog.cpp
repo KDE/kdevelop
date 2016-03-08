@@ -209,7 +209,7 @@ void OpenProjectDialog::validateProjectManager( const QString& manager )
     validateProjectInfo();
 }
 
-QUrl OpenProjectDialog::projectFileUrl()
+QUrl OpenProjectDialog::projectFileUrl() const
 {
     return m_url;
 }
@@ -219,12 +219,12 @@ QUrl OpenProjectDialog::selectedUrl() const
     return m_selected;
 }
 
-QString OpenProjectDialog::projectName()
+QString OpenProjectDialog::projectName() const
 {
     return m_projectName;
 }
 
-QString OpenProjectDialog::projectManager()
+QString OpenProjectDialog::projectManager() const
 {
     return m_projectManager;
 }

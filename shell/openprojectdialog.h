@@ -37,15 +37,15 @@ public:
     /**
     * Return a QUrl pointing to the project's .kdev file.
     */
-    QUrl projectFileUrl();
+    QUrl projectFileUrl() const;
     /**
     * Return a QUrl pointing to the file, that was selected by the user.
     * Unlike projectFileUrl(), this can be a .kdev file, as well
     * as build system file (e.g. CMakeLists.txt).
     */
     QUrl selectedUrl() const;
-    QString projectName();
-    QString projectManager();
+    QString projectName() const;
+    QString projectManager() const;
 
 private slots:
     void validateSourcePage( bool );
