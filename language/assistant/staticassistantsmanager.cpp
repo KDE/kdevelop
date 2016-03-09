@@ -230,6 +230,10 @@ void StaticAssistantsManager::Private::startAssistant(IAssistant::Ptr assistant)
 
 void StaticAssistantsManager::Private::updateReady(const IndexedString& url, const ReferencedTopDUContext& topContext)
 {
+    if (ICore::self()->shuttingDown()) {
+        return;
+    }
+
     if (url != m_currentDocument) {
         return;
     }
