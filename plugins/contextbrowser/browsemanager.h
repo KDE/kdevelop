@@ -114,7 +114,7 @@ class BrowseManager : public QObject {
         //Maps widgets to their previously set cursors
         QMap<QPointer<QWidget>, QCursor> m_oldCursors;
         QTimer* m_delayedBrowsingTimer;
-        QPointer<KTextEditor::View> m_browingStartedInView;
+        QPointer<KTextEditor::View> m_browsingStartedInView;
         KTextEditor::Cursor m_buttonPressPosition;
 };
 
