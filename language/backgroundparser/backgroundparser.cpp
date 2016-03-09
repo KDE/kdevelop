@@ -136,12 +136,6 @@ public:
 
     ~BackgroundParserPrivate()
     {
-        // Release dequeued jobs
-        QHashIterator<IndexedString, ThreadWeaver::QObjectDecorator*> it = m_parseJobs;
-        while (it.hasNext()) {
-            it.next();
-            delete it.value();
-        }
     }
 
     // Non-mutex guarded functions, only call with m_mutex acquired.
