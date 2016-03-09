@@ -293,9 +293,15 @@ QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange rang
         const auto location = ClangLocation(clang_getTokenLocation(unit, token));
         unsigned int offset;
         clang_getFileLocation(location, nullptr, nullptr, nullptr, &offset);
-        Q_ASSERT(offset >= start);
+        Q_ASSERT(offset >= start); // TODO: Sometimes hit, see bug 357585
+        if (offset < start)
+            return {};
+
         const int fillCharacters = offset - start - result.size();
         Q_ASSERT(fillCharacters >= 0);
+        if (fillCharacters < 0)
+            return {};
+
         result.append(QByteArray(fillCharacters, ' '));
         const auto spelling = clang_getTokenSpelling(unit, token);
         result.append(clang_getCString(spelling));

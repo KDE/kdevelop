@@ -97,15 +97,6 @@ class QListPrinter:
             self.d = d
             self.count = 0
 
-        def __iter__(self):
-            return self
-
-        def __next__(self):
-            if self.count >= self.d['end'] - self.d['begin']:
-                raise StopIteration
-            count = self.count
-            array = self.d['array'][self.d['begin'] + count]
-
             #from QTypeInfo::isLarge
             isLarge = self.nodetype.sizeof > gdb.lookup_type('void').pointer().sizeof
 
@@ -124,14 +115,25 @@ class QListPrinter:
             if movableTypes.count(self.nodetype.tag) or primitiveTypes.count(str(self.nodetype)):
                isStatic = False
             else:
-                isStatic = not isPointer
+               isStatic = not isPointer
 
-            if isLarge or isStatic: #see QList::Node::t()
-                node = array.cast(gdb.lookup_type('QList<%s>::Node' % self.nodetype).pointer())
+            self.externalStorage = isLarge or isStatic #see QList::Node::t()
+
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.count >= self.d['end'] - self.d['begin']:
+                raise StopIteration
+            count = self.count
+            array = self.d['array'].address + self.d['begin'] + count
+            if self.externalStorage:
+                value = array.cast(gdb.lookup_type('QList<%s>::Node' % self.nodetype).pointer())['v']
             else:
-                node = array.cast(gdb.lookup_type('QList<%s>::Node' % self.nodetype))
+                value = array
             self.count = self.count + 1
-            return ('[%d]' % count, node['v'].cast(self.nodetype))
+            return ('[%d]' % count, value.cast(self.nodetype.pointer()).dereference())
 
     def __init__(self, val, container, itype):
         self.val = val

@@ -92,7 +92,9 @@ public:
     QByteArray execute(const QByteArray &cmd)
     {
         write(cmd + "\n");
-        return waitForPrompt();
+        auto out = waitForPrompt();
+        qDebug() << cmd << " = " << out;
+        return out;
     }
 };
 
@@ -140,7 +142,8 @@ void QtPrintersTest::testQListContainer()
     gdb.execute(QString("break 'doStuff<%1>()'").arg(container).toLocal8Bit());
     gdb.execute("cont");
     { // <int>
-    gdb.execute("next");
+    gdb.execute("break qlistcontainer.cpp:34");
+    gdb.execute("cont");
     QByteArray out = gdb.execute("print intList");
     QVERIFY(out.contains(QString("empty %1<int>").arg(container).toLocal8Bit()));
     gdb.execute("next");
@@ -306,7 +309,7 @@ void QtPrintersTest::testQMapStringBool()
 void QtPrintersTest::testQDate()
 {
     GdbProcess gdb("qdate");
-    gdb.execute("break qdate.cpp:5");
+    gdb.execute("break qdate.cpp:6");
     gdb.execute("run");
     QByteArray out = gdb.execute("print d");
     QVERIFY(out.contains("2010-01-20"));
@@ -315,7 +318,7 @@ void QtPrintersTest::testQDate()
 void QtPrintersTest::testQTime()
 {
     GdbProcess gdb("qtime");
-    gdb.execute("break qtime.cpp:5");
+    gdb.execute("break qtime.cpp:6");
     gdb.execute("run");
     QByteArray out = gdb.execute("print t");
     QVERIFY(out.contains("15:30:10.123"));

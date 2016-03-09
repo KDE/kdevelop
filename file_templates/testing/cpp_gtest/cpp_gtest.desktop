@@ -1,6 +1,8 @@
 [General]
 Name=Google Test
+Name[sl]=Google Test
 Comment=A unit test using the Google Test library
+Comment[sl]=Preizkus enote z uporabo knjižnice Google Test
 Category=C++/Basic
 Language=C++
 Language[bs]=C++
