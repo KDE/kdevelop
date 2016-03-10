@@ -1,8 +1,20 @@
 [General]
 Name=Google Test
+Name[nl]=Google Test
+Name[pt]=Teste do Google
+Name[pt_BR]=Google Test
 Name[sl]=Google Test
+Name[sv]=Google Test
+Name[uk]=Google Test
+Name[x-test]=xxGoogle Testxx
 Comment=A unit test using the Google Test library
+Comment[nl]=Een test van een eenheid met gebruik van de bibliotheek Google Test
+Comment[pt]=Um teste unitário que usa a plataforma de testes da Google
+Comment[pt_BR]=Teste unitário que usa a biblioteca Google Test
 Comment[sl]=Preizkus enote z uporabo knjižnice Google Test
+Comment[sv]=En enhetstest som använder biblioteket Google Test
+Comment[uk]=Перевірка модулів за допомогою бібліотеки Google Test
+Comment[x-test]=xxA unit test using the Google Test libraryxx
 Category=C++/Basic
 Language=C++
 Language[bs]=C++
