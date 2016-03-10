@@ -26,10 +26,10 @@ class CppCheckPreferences: public KDevelop::ConfigPage {
 Q_OBJECT
 public:
     explicit CppCheckPreferences(KDevelop::IPlugin *plugin = nullptr, QWidget* parent = nullptr);
-    virtual ~CppCheckPreferences();
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    ~CppCheckPreferences() override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
 };
 

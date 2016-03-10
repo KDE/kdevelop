@@ -50,17 +50,17 @@ class Plugin : public KDevelop::IPlugin
 public:
     Plugin(QObject *parent, const QVariantList & = QVariantList());
 
-    ~Plugin();
+    ~Plugin() override;
 
-    void unload();
+    void unload() override;
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
-    virtual int configPages() const override { return 1; }
-    virtual KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
+    int configPages() const override { return 1; }
+    KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
 
-    virtual int perProjectConfigPages() const override { return 1; }
-    virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions &options, QWidget *parent) override;
+    int perProjectConfigPages() const override { return 1; }
+    KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions &options, QWidget *parent) override;
 
 private slots:
     void loadOutput();

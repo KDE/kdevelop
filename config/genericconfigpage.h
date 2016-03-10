@@ -47,16 +47,16 @@ class GenericConfigPage : public KDevelop::ConfigPage
 public:
 
     GenericConfigPage(KDevelop::IProject *project, QWidget* parent);
-    ~GenericConfigPage();
+    ~GenericConfigPage() override;
 
-    virtual QString name() const override;
+    QString name() const override;
 
 signals:
 
 public slots:
-    virtual void apply() override;
-    virtual void defaults() override;
-    virtual void reset() override;
+    void apply() override;
+    void defaults() override;
+    void reset() override;
 
 private:
     KDevelop::IProject *m_project;

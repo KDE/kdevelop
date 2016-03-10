@@ -76,10 +76,10 @@ public:
     };
 
     Job(const Parameters &params, QObject* parent = 0);
-    ~Job();
+    ~Job() override;
     KDevelop::OutputModel* model();
-    void start();
-    bool doKill();
+    void start() override;
+    bool doKill() override;
 
     QVector<KDevelop::IProblem::Ptr> problems() const;
 
@@ -134,7 +134,7 @@ class KProcessOutputToParser : public QObject
     Q_OBJECT
 public:
     KProcessOutputToParser(Parser* inst);
-    ~KProcessOutputToParser();
+    ~KProcessOutputToParser() override;
 
     bool execute(QString execPath, QStringList args);
 

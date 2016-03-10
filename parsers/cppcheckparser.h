@@ -40,7 +40,7 @@ class CppcheckParser : public Parser
 public:
 
     CppcheckParser(QObject* parent = 0);
-    ~CppcheckParser();
+    ~CppcheckParser() override;
 
     QVector<KDevelop::IProblem::Ptr> problems() const override{ return m_problems; }
 
@@ -49,7 +49,7 @@ signals:
 
 public slots:
 
-    void parse();
+    void parse() override;
 
 
 private:
