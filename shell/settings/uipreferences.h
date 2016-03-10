@@ -37,15 +37,15 @@ class UiPreferences : public KDevelop::ConfigPage
 public:
     explicit UiPreferences(QWidget* parent = nullptr);
 
-    ~UiPreferences();
+    ~UiPreferences() override;
 
-    virtual QString name() const override;
-    virtual QString fullName() const override;
-    virtual QIcon icon() const override;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 
 public Q_SLOTS:
     // need to customize behaviour
-    virtual void apply() override;
+    void apply() override;
 private:
     Ui::UiConfig* m_uiconfigUi;
 };

@@ -29,11 +29,11 @@ class GrepOutputDelegate : public QStyledItemDelegate
     Q_OBJECT
 public:
     explicit GrepOutputDelegate(QObject* parent);
-    virtual ~GrepOutputDelegate();
+    ~GrepOutputDelegate() override;
 
     static GrepOutputDelegate* self();
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const override;
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 private:
     static GrepOutputDelegate* m_self;
     QColor blendColor(QColor color1, QColor color2, double blend) const;

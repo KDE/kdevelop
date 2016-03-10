@@ -48,13 +48,13 @@ template <class Widget>
 class SimpleToolWidgetFactory: public ToolFactory {
 public:
     SimpleToolWidgetFactory(const QString &id): ToolFactory(), m_id(id) {}
-    virtual QWidget* create(ToolDocument * /*doc*/, QWidget *parent = 0) override
+    QWidget* create(ToolDocument * /*doc*/, QWidget *parent = 0) override
     {
         return new Widget(parent);
     }
-    virtual QList<QAction*> toolBarActions( QWidget* ) const override { return QList<QAction*>(); }
-    virtual QList< QAction* > contextMenuActions(QWidget* /*viewWidget*/) const override { return QList<QAction*>(); }
-    virtual QString id() const override { return m_id; }
+    QList<QAction*> toolBarActions( QWidget* ) const override { return QList<QAction*>(); }
+    QList< QAction* > contextMenuActions(QWidget* /*viewWidget*/) const override { return QList<QAction*>(); }
+    QString id() const override { return m_id; }
     virtual bool viewsWantProgressIndicator() const { return false; }
 private:
     QString m_id;
@@ -69,14 +69,14 @@ public:
     /**Initializes tool document with given @p factory. Document takes
     ownership over the factory and deletes it together with itself*/
     ToolDocument(const QString &title, Controller *controller, ToolFactory *factory);
-    ~ToolDocument();
+    ~ToolDocument() override;
 
-    virtual QString documentType() const override;
+    QString documentType() const override;
 
-    virtual QString documentSpecifier() const override;
+    QString documentSpecifier() const override;
 
 protected:
-    virtual QWidget *createViewWidget(QWidget *parent = 0) override;
+    QWidget *createViewWidget(QWidget *parent = 0) override;
     ToolFactory *factory() const;
 
 private:

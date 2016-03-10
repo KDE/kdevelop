@@ -31,11 +31,11 @@ class ActionsQuickOpenProvider : public KDevelop::QuickOpenDataProviderBase
 public:
     ActionsQuickOpenProvider();
 
-    virtual KDevelop::QuickOpenDataPointer data(uint row) const override;
-    virtual uint unfilteredItemCount() const override;
-    virtual uint itemCount() const override;
-    virtual void reset() override;
-    virtual void setFilterText(const QString& text) override;
+    KDevelop::QuickOpenDataPointer data(uint row) const override;
+    uint unfilteredItemCount() const override;
+    uint itemCount() const override;
+    void reset() override;
+    void setFilterText(const QString& text) override;
 
 private:
     QVector<KDevelop::QuickOpenDataPointer> m_results;

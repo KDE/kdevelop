@@ -45,7 +45,7 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputDelegate : public QItemDelegate
     Q_OBJECT
 public:
     explicit OutputDelegate( QObject* parent = 0 );
-    virtual ~OutputDelegate();
+    ~OutputDelegate() override;
     void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const override;
 
 private:

@@ -42,9 +42,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifierValidator : public QValidator
     Q_OBJECT
   public:
     explicit IdentifierValidator( DUContext * context);
-    ~IdentifierValidator();
+    ~IdentifierValidator() override;
     
-    virtual State validate(QString & input, int &) const override;
+    State validate(QString & input, int &) const override;
       
   private:
     
