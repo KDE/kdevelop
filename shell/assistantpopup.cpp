@@ -327,13 +327,14 @@ void AssistantPopup::hideAssistant()
 
 void AssistantPopup::updateLayout()
 {
-    if ( !m_view ) {
+    auto root = rootObject();
+    if (!m_view || !root) {
         return;
     }
 
     m_config->setViewSize(m_view->size());
     // https://bugreports.qt.io/browse/QTBUG-44876
-    resize(rootObject()->width(), rootObject()->height());
+    resize(root->width(), root->height());
     updatePosition(m_view, KTextEditor::Cursor::invalid());
 
     // HACK: QQuickWidget is corrupted due to above resize on the first show
