@@ -189,7 +189,7 @@ bool Job::doKill()
     if (m_process && m_process->pid()) {
         m_process->kill();
         m_killed = true;
-        m_process = 0;
+        m_process = nullptr;
     }
     return true;
 }
@@ -294,12 +294,12 @@ KProcessOutputToParser::KProcessOutputToParser(Parser* parser)
     m_parser = parser;
     m_device = new QBuffer();
     m_device->open(QIODevice::WriteOnly);
-    m_process = 0L;
+    m_process = nullptr;
 }
 
 KProcessOutputToParser::~KProcessOutputToParser()
 {
-    if (m_device != 0)
+    if (m_device != nullptr)
         delete m_device;
     if (m_process)
         delete m_process;

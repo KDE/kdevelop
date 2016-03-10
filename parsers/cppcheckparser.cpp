@@ -81,7 +81,7 @@ bool CppcheckParser::startElement()
             /* get project path */
             ProjectPath = "";
             for (int i = 0; i < KDevelop::ICore::self()->projectController()->projects().count(); i++) {
-                if (KDevelop::ICore::self()->projectController()->findProjectForUrl(QUrl::fromLocalFile(ErrorFile)) != 0) {
+                if (KDevelop::ICore::self()->projectController()->findProjectForUrl(QUrl::fromLocalFile(ErrorFile)) != nullptr) {
                     ProjectPath = KDevelop::ICore::self()->projectController()->projects().at(i)->path().toUrl().toLocalFile();
                 }
             }

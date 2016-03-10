@@ -75,7 +75,7 @@ public:
         QString executable;
     };
 
-    Job(const Parameters &params, QObject* parent = 0);
+    Job(const Parameters &params, QObject* parent = nullptr);
     ~Job() override;
     KDevelop::OutputModel* model();
     void start() override;
