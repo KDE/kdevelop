@@ -38,11 +38,7 @@ namespace cppcheck {
 
 CppcheckParser::CppcheckParser(QObject* parent) :
     ErrorLine(0),
-    ErrorFile(""),
-    Message(""),
-    MessageVerbose(""),
-    Severity(Unknown),
-    ProjectPath("")
+    Severity(Unknown)
 {
     Q_UNUSED(parent)
 }
@@ -90,10 +86,10 @@ bool CppcheckParser::startElement()
     } else if (name() == "error") {
         newState = Error;
         ErrorLine = -1;
-        ErrorFile = "";
-        Message = "";
-        MessageVerbose = "";
-        ProjectPath = "";
+        ErrorFile.clear();
+        Message.clear();
+        MessageVerbose.clear();
+        ProjectPath.clear();
         Severity = "unknown";
         if (attributes().hasAttribute("msg"))
             Message = attributes().value("msg").toString();
