@@ -120,7 +120,7 @@ protected:
     QBuffer* string_device;
     QString stdout_output;
     QString stderr_output;
-    Parameters parameters;
+    Parameters m_parameters;
 
 private:
 };

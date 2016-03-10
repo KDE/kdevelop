@@ -69,7 +69,7 @@ Job::Job(const Parameters &params, QObject* parent)
     , m_parser(new cppcheck::CppcheckParser())
     , m_applicationOutput(new KDevelop::ProcessLineMaker(this))
     , m_killed(false)
-    , parameters(params)
+    , m_parameters(params)
 {
     setCapabilities(KJob::Killable);
     m_process->setProcessChannelMode(QProcess::SeparateChannels);
@@ -115,38 +115,38 @@ QStringList Job::buildCommandLine() const
     args.append("--xml-version=2");
 
     /* extra parameters */
-    QString cppcheckParameters(parameters.parameters);
+    QString cppcheckParameters(m_parameters.parameters);
     if (!cppcheckParameters.isEmpty())
         args.append(KShell::splitArgs(cppcheckParameters));
 
-    if (parameters.checkStyle)
+    if (m_parameters.checkStyle)
         args.append("--enable=style");
 
-    if (parameters.checkPerformance)
+    if (m_parameters.checkPerformance)
         args.append("--enable=performance");
 
 
-    if (parameters.checkPortability)
+    if (m_parameters.checkPortability)
         args.append("--enable=portability");
 
-    if (parameters.checkInformation)
+    if (m_parameters.checkInformation)
         args.append("--enable=information");
 
-    if (parameters.checkUnusedFunction)
+    if (m_parameters.checkUnusedFunction)
         args.append("--enable=unusedFunction");
 
-    if (parameters.checkMissingInclude)
+    if (m_parameters.checkMissingInclude)
         args.append("--enable=missingInclude");
 
-    qCDebug(KDEV_CPPCHECK) << "checking paht" << parameters.path;
-    args.append(parameters.path);
+    qCDebug(KDEV_CPPCHECK) << "checking paht" << m_parameters.path;
+    args.append(m_parameters.path);
 
     return args;
 }
 
 void Job::start()
 {
-    QUrl cppcheckExecutable(QUrl::fromLocalFile(parameters.executable));
+    QUrl cppcheckExecutable(QUrl::fromLocalFile(m_parameters.executable));
 
     QString envgrp = "";
     KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
