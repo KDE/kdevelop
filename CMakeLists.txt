@@ -21,19 +21,12 @@ find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
-
 include_directories(
     ${cppcheck_BINARY_DIR}
     ${cppcheck_SOURCE_DIR}
     ${cppcheck_SOURCE_DIR}/config
     ${cppcheck_SOURCE_DIR}/parsers
 )
-
-
-########### next target ###############
 
 set(kdevcppcheck_PART_SRCS
     debug.cpp
@@ -45,19 +38,9 @@ set(kdevcppcheck_PART_SRCS
     parsers/cppcheckparser.cpp
 )
 
-set(kdevcppcheck_CONFIG_SRCS
-
-)
-
-set(kdevcppcheck_PART_UI
-)
-
 ki18n_wrap_ui(kdevcppcheck_PART_SRCS  ${kdevcppcheck_PART_UI} config/ui/genericconfig.ui config/ui/cppchecksettings.ui)
-
 kconfig_add_kcfg_files(kdevcppcheck_PART_SRCS config/cppcheckconfig.kcfgc)
-
 kdevplatform_add_plugin(kdevcppcheck JSON kdevcppcheck.json SOURCES ${kdevcppcheck_PART_SRCS} ${kdevcppcheck_CONFIG_SRCS})
-
 target_link_libraries(kdevcppcheck
     KDev::Interfaces
     KDev::Project
@@ -71,8 +54,5 @@ target_link_libraries(kdevcppcheck
     KF5::WidgetsAddons
     KF5::TextEditor
     Qt5::Network)
-
-install(TARGETS kdevcppcheck DESTINATION ${PLUGIN_INSTALL_DIR} )
-########### install files ###############
 
 install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
