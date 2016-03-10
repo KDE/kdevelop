@@ -41,11 +41,11 @@ public:
 
     virtual KDevCategoryItem *categoryItem() const
     {
-        return 0;
+        return nullptr;
     }
     virtual KDevFileItem *fileItem() const
     {
-        return 0;
+        return nullptr;
     }
 
     QIcon icon() const;
@@ -96,7 +96,7 @@ class KDevDocumentModel: public QStandardItemModel
     Q_OBJECT
 
 public:
-    explicit KDevDocumentModel( QObject *parent = 0 );
+    explicit KDevDocumentModel( QObject *parent = nullptr );
     ~KDevDocumentModel() override;
 
     QList<KDevCategoryItem*> categoryList() const;

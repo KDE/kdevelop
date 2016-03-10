@@ -52,7 +52,7 @@ class DebugController : public IDebugController, public KXMLGUIClient
 {
     Q_OBJECT
 public:
-    explicit DebugController(QObject *parent = 0);
+    explicit DebugController(QObject *parent = nullptr);
     ~DebugController() override;
     void initialize();
     void cleanup();

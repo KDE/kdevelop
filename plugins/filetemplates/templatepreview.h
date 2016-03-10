@@ -49,7 +49,7 @@ class TemplatePreview : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TemplatePreview(QWidget* parent, Qt::WindowFlags f = 0);
+    explicit TemplatePreview(QWidget* parent, Qt::WindowFlags f = nullptr);
     ~TemplatePreview() override;
 
     /**

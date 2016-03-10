@@ -35,7 +35,7 @@ class ToolDocument;
 class KDEVPLATFORMSUBLIME_EXPORT ToolFactory {
 public:
     virtual ~ToolFactory() {}
-    virtual QWidget* create(ToolDocument *doc, QWidget *parent = 0) = 0;
+    virtual QWidget* create(ToolDocument *doc, QWidget *parent = nullptr) = 0;
     virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const = 0;
     virtual QList<QAction*> contextMenuActions( QWidget* viewWidget ) const = 0;
     virtual QString id() const = 0;
@@ -48,7 +48,7 @@ template <class Widget>
 class SimpleToolWidgetFactory: public ToolFactory {
 public:
     SimpleToolWidgetFactory(const QString &id): ToolFactory(), m_id(id) {}
-    QWidget* create(ToolDocument * /*doc*/, QWidget *parent = 0) override
+    QWidget* create(ToolDocument * /*doc*/, QWidget *parent = nullptr) override
     {
         return new Widget(parent);
     }
@@ -76,7 +76,7 @@ public:
     QString documentSpecifier() const override;
 
 protected:
-    QWidget *createViewWidget(QWidget *parent = 0) override;
+    QWidget *createViewWidget(QWidget *parent = nullptr) override;
     ToolFactory *factory() const;
 
 private:

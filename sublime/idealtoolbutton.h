@@ -30,7 +30,7 @@ class IdealToolButton: public QToolButton
     Q_OBJECT
 
 public:
-    explicit IdealToolButton(Qt::DockWidgetArea area, QWidget *parent = 0);
+    explicit IdealToolButton(Qt::DockWidgetArea area, QWidget *parent = nullptr);
 
     Qt::Orientation orientation() const;
 

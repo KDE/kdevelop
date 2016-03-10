@@ -50,7 +50,7 @@ public:
     static const QString cfgSessionProjectsEntry;
     static const QString cfgSessionOptionsGroup;
 
-    explicit Session( const QString& id, QObject * parent = 0 );
+    explicit Session( const QString& id, QObject * parent = nullptr );
     ~Session() override;
 
     QUrl pluginDataArea( const IPlugin* ) override;

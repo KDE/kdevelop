@@ -136,7 +136,7 @@ public:
      */
     virtual ILaunchConfiguration* createLaunchConfiguration( LaunchConfigurationType* type,
                                                              const QPair<QString,QString>& launcher,
-                                                             KDevelop::IProject* project = 0,
+                                                             KDevelop::IProject* project = nullptr,
                                                              const QString& name = QString() ) = 0;
 
 public Q_SLOTS:

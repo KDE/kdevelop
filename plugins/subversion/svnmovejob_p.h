@@ -27,7 +27,7 @@ class SvnInternalMoveJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    explicit SvnInternalMoveJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalMoveJob( SvnJobBase* parent = nullptr );
     void setSourceLocation( const QUrl& );
     void setDestinationLocation( const QUrl& );
     void setForce( bool );

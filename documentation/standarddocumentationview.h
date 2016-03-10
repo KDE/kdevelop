@@ -36,7 +36,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWebVi
 {
     Q_OBJECT
 public:
-    explicit StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent = 0 );
+    explicit StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent = nullptr );
     void setDocumentation(const IDocumentation::Ptr& doc);
 
 public slots:

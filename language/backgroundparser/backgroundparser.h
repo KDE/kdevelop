@@ -166,14 +166,14 @@ public Q_SLOTS:
      *                    The notification is guaranteed to be called once for each call to addDocument. The given top-context
      *                    may be invalid if the update failed.
      */
-    void addDocument(const IndexedString& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0, QObject* notifyWhenReady = 0, ParseJob::SequentialProcessingFlags flags = ParseJob::IgnoresSequentialProcessing);
+    void addDocument(const IndexedString& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0, QObject* notifyWhenReady = nullptr, ParseJob::SequentialProcessingFlags flags = ParseJob::IgnoresSequentialProcessing);
 
     /**
      * Removes the @p url that is registered for the given notification from the url.
      *
      * @param notifyWhenReady Notifier the document was added with.
      */
-    void removeDocument(const IndexedString& url, QObject* notifyWhenReady = 0);
+    void removeDocument(const IndexedString& url, QObject* notifyWhenReady = nullptr);
 
     /**
      * Forces the current queue to be parsed.

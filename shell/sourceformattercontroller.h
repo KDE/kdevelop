@@ -89,7 +89,7 @@ public:
     static QString styleMimeTypesKey();
     static QString styleSampleKey();
 
-    explicit SourceFormatterController(QObject *parent = 0);
+    explicit SourceFormatterController(QObject *parent = nullptr);
     ~SourceFormatterController() override;
     void initialize();
     void cleanup();

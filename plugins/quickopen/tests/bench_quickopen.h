@@ -27,7 +27,7 @@ class BenchQuickOpen : public QuickOpenTestBase
 {
     Q_OBJECT
 public:
-    explicit BenchQuickOpen(QObject* parent = 0);
+    explicit BenchQuickOpen(QObject* parent = nullptr);
 private:
     void getData();
 private slots:

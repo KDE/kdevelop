@@ -28,7 +28,7 @@ class SvnImportInternalJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    explicit SvnImportInternalJob( SvnJobBase* parent = 0 );
+    explicit SvnImportInternalJob( SvnJobBase* parent = nullptr );
     void setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
     void setMessage( const QString& );
 

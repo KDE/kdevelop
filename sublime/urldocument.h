@@ -51,7 +51,7 @@ public:
     QString title(TitleType type) const override;
 
 protected:
-    QWidget *createViewWidget(QWidget *parent = 0) override;
+    QWidget *createViewWidget(QWidget *parent = nullptr) override;
     void setUrl(const QUrl& newUrl);
 
 private:

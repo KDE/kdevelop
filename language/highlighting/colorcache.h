@@ -127,7 +127,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     bool tryActiveDocument();
 
   private:
-    ColorCache(QObject *parent = 0);
+    ColorCache(QObject *parent = nullptr);
     static ColorCache* m_self;
 
     /// get @p totalGeneratedColors colors from the color wheel and adapt them to the current color scheme

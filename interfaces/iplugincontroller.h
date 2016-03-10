@@ -74,7 +74,7 @@ public:
         Project ///< Indicates that the plugin is loaded with the first opened project
     };
 
-    explicit IPluginController( QObject* parent = 0 );
+    explicit IPluginController( QObject* parent = nullptr );
 
     ~IPluginController() override;
 

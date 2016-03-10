@@ -30,7 +30,7 @@ class ICoreObject : public QObject
     Q_OBJECT
     Q_PROPERTY(QObject* self READ self CONSTANT)
     public:
-        explicit ICoreObject(QObject* parent = 0);
+        explicit ICoreObject(QObject* parent = nullptr);
         
         QObject* self() const;
 };

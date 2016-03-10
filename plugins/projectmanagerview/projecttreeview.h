@@ -46,7 +46,7 @@ class ProjectTreeView: public QTreeView
 {
         Q_OBJECT
     public:
-        explicit ProjectTreeView( QWidget *parent = 0 );
+        explicit ProjectTreeView( QWidget *parent = nullptr );
         ~ProjectTreeView() override;
 
         static QModelIndex mapFromSource(const QAbstractProxyModel* proxy, const QModelIndex& sourceIdx);
@@ -61,7 +61,7 @@ class ProjectTreeView: public QTreeView
         void popupContextMenu( const QPoint &pos );
         void openProjectConfig();
         void saveState();
-        void restoreState(KDevelop::IProject* project = 0);
+        void restoreState(KDevelop::IProject* project = nullptr);
         void aboutToShutdown();
 
     protected:

@@ -47,7 +47,7 @@ class TemplatePreviewToolView : public QWidget
     Q_OBJECT
 
 public:
-    explicit TemplatePreviewToolView(FileTemplatesPlugin* plugin, QWidget* parent, Qt::WindowFlags f = 0);
+    explicit TemplatePreviewToolView(FileTemplatesPlugin* plugin, QWidget* parent, Qt::WindowFlags f = nullptr);
     ~TemplatePreviewToolView() override;
 
 private:

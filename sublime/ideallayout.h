@@ -43,7 +43,7 @@ class IdealButtonBarLayout: public QLayout
     Q_OBJECT
 
 public:
-    explicit IdealButtonBarLayout(Qt::Orientation orientation, QWidget *parent = 0);
+    explicit IdealButtonBarLayout(Qt::Orientation orientation, QWidget *parent = nullptr);
 
     ~IdealButtonBarLayout() override;
 

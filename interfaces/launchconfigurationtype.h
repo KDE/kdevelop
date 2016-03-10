@@ -137,7 +137,7 @@ public:
      * Returns a menu that will be added to the UI where the interface will be
      * able to add any suggestion it needs, like default targets.
      */
-    virtual QMenu* launcherSuggestions() { return 0; }
+    virtual QMenu* launcherSuggestions() { return nullptr; }
 
 signals:
     void signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration* launch);

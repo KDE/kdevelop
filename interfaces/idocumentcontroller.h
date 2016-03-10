@@ -112,7 +112,7 @@ public Q_SLOTS:
      */
     KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Cursor& cursor,
-            DocumentActivationParams activationParams = 0,
+            DocumentActivationParams activationParams = nullptr,
             const QString& encoding = {});
 
     /**
@@ -130,9 +130,9 @@ public Q_SLOTS:
      */
     virtual KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-            DocumentActivationParams activationParams = 0,
+            DocumentActivationParams activationParams = nullptr,
             const QString& encoding = {},
-            IDocument* buddy = 0) = 0;
+            IDocument* buddy = nullptr) = 0;
 
     /**
      * Opens a document from the IDocument instance.
@@ -147,8 +147,8 @@ public Q_SLOTS:
      */
     virtual Q_SCRIPTABLE bool openDocument(IDocument* doc,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-            DocumentActivationParams activationParams = 0,
-            IDocument* buddy = 0) = 0;
+            DocumentActivationParams activationParams = nullptr,
+            IDocument* buddy = nullptr) = 0;
 
     /**
      * Opens a new or existing document.

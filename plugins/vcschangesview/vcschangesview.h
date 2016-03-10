@@ -31,7 +31,7 @@ class VcsChangesView : public QTreeView
 {
     Q_OBJECT
     public:
-        explicit VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* parent = 0);
+        explicit VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* parent = nullptr);
         
         void setModel(QAbstractItemModel* model) override;
         

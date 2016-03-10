@@ -54,8 +54,8 @@ public:
         StaticAnalysisFilter
     };
 
-    explicit OutputModel( const QUrl& builddir , QObject* parent = 0 );
-    explicit OutputModel( QObject* parent = 0 );
+    explicit OutputModel( const QUrl& builddir , QObject* parent = nullptr );
+    explicit OutputModel( QObject* parent = nullptr );
     ~OutputModel() override;
 
     /// IOutputViewModel interfaces

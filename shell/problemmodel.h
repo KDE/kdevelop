@@ -94,7 +94,7 @@ public:
 
     Q_DECLARE_FLAGS(Features, FeatureCode)
 
-    explicit ProblemModel(QObject *parent, ProblemStore *store = NULL);
+    explicit ProblemModel(QObject *parent, ProblemStore *store = nullptr);
     ~ProblemModel() override;
 
     enum Columns {

@@ -74,7 +74,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ITestController : public QObject
 {
     Q_OBJECT
 public:
-    explicit ITestController(QObject* parent = 0);
+    explicit ITestController(QObject* parent = nullptr);
     ~ITestController() override;
 
     /**

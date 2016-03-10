@@ -39,7 +39,7 @@ public:
         EffectiveNameRole = Qt::UserRole + 1
     };
 
-    explicit EnvironmentSelectionModel( QObject* parent = 0 );
+    explicit EnvironmentSelectionModel( QObject* parent = nullptr );
 
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
 

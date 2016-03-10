@@ -67,7 +67,7 @@ public:
      * @param typePrefix the type prefix used to determine resource locations.
      * @param parent parent object, defaults to 0.
      **/
-    explicit TemplatesModel(const QString& typePrefix, QObject* parent = 0);
+    explicit TemplatesModel(const QString& typePrefix, QObject* parent = nullptr);
 
     /**
      * Destructor

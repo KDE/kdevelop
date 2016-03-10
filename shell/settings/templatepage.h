@@ -38,7 +38,7 @@ class TemplatePage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TemplatePage(KDevelop::ITemplateProvider* provider, QWidget* parent = 0);
+    explicit TemplatePage(KDevelop::ITemplateProvider* provider, QWidget* parent = nullptr);
     ~TemplatePage() override;
 
 private slots:

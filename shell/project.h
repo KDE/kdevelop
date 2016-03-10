@@ -58,7 +58,7 @@ public:
      *
      * @param parent The parent object for the plugin.
      */
-    explicit Project(QObject *parent = 0);
+    explicit Project(QObject *parent = nullptr);
     ~Project() override;
 
     QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const override;

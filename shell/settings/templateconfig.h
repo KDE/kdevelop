@@ -32,7 +32,7 @@ class TemplateConfig : public KDevelop::ConfigPage
 {
     Q_OBJECT
 public:
-    explicit TemplateConfig(QWidget* parent = 0);
+    explicit TemplateConfig(QWidget* parent = nullptr);
     ~TemplateConfig() override;
 
     QString name() const override;

@@ -85,10 +85,10 @@ public:
     If @p after == 0  &&  !controller()->openAfterCurrent():
         @p view is inserted at the last position.
     */
-    void addView(View *view, AreaIndex *index, View *after = 0);
+    void addView(View *view, AreaIndex *index, View *after = nullptr);
 
     /**Adds the @p view to the list of views at the current area index.*/
-    void addView(View *view, View *after = 0);
+    void addView(View *view, View *after = nullptr);
     /**Adds the @p view to the area splitting the @p viewToSplit using
     given @p orientation.
     @p view Will be in the second child index of the area-index containing the view.

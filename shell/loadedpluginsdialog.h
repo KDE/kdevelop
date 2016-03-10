@@ -26,7 +26,7 @@ class LoadedPluginsDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit LoadedPluginsDialog( QWidget* parent = 0 );
+    explicit LoadedPluginsDialog( QWidget* parent = nullptr );
 };
 
 #endif // KDEVPLATFORM_LOADEDPLUGINSDIALOG_H

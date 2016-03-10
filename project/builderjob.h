@@ -96,7 +96,7 @@ public:
      * @param job The job to add to the list
      * @param item The item which is build by the @p job
      */
-    void addCustomJob( BuildType type, KJob* job, ProjectBaseItem* item = 0 );
+    void addCustomJob( BuildType type, KJob* job, ProjectBaseItem* item = nullptr );
 
     /**
      * Updates the job's name.

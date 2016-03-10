@@ -40,7 +40,7 @@ class ConfigDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    explicit ConfigDialog(const QVector<ConfigPage*>& pages, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    explicit ConfigDialog(const QVector<ConfigPage*>& pages, QWidget* parent = nullptr, Qt::WindowFlags flags = nullptr);
 
 public Q_SLOTS:
     /**

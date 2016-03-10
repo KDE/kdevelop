@@ -36,7 +36,7 @@ class VcsOverlayProxyModel : public QIdentityProxyModel
         enum Roles {
             VcsStatusRole = KDevelop::ProjectModel::LastRole
         };
-        explicit VcsOverlayProxyModel(QObject* parent = 0);
+        explicit VcsOverlayProxyModel(QObject* parent = nullptr);
 
         QVariant data(const QModelIndex& proxyIndex, int role = Qt::DisplayRole) const override;
 

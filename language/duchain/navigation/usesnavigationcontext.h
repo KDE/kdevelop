@@ -27,7 +27,7 @@ namespace KDevelop {
   class KDEVPLATFORMLANGUAGE_EXPORT UsesNavigationContext : public AbstractNavigationContext {
     Q_OBJECT
     public:
-      explicit UsesNavigationContext( KDevelop::IndexedDeclaration declaration, AbstractNavigationContext* previousContext = 0 );
+      explicit UsesNavigationContext( KDevelop::IndexedDeclaration declaration, AbstractNavigationContext* previousContext = nullptr );
       
       ~UsesNavigationContext() override;
       

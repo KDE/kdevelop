@@ -39,7 +39,7 @@ class KDEVPLATFORMVCS_EXPORT VcsEventWidget : public QWidget
 {
     Q_OBJECT
 public:
-    VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent = 0 );
+    VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent = nullptr );
     ~VcsEventWidget() override;
 
 private:

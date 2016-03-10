@@ -34,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
 {
   Q_OBJECT
   public:
-    AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext = 0 );
+    AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext = nullptr );
 
     QString name() const override;
 

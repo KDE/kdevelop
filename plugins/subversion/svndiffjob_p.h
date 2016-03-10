@@ -29,7 +29,7 @@ class SvnInternalDiffJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    explicit SvnInternalDiffJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalDiffJob( SvnJobBase* parent = nullptr );
     void setSource( const KDevelop::VcsLocation& );
     void setDestination( const KDevelop::VcsLocation& );
     void setSrcRevision( const KDevelop::VcsRevision& );

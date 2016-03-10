@@ -36,7 +36,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectItemLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
-    explicit ProjectItemLineEdit(QWidget* parent=0);
+    explicit ProjectItemLineEdit(QWidget* parent=nullptr);
     
     /**
      * Sets this lineedit to show the given @p path, eventually removing

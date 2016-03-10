@@ -59,7 +59,7 @@ class StashModel : public QStandardItemModel
 {
     Q_OBJECT
     public:
-        explicit StashModel(const QDir& dir, GitPlugin* git, QObject* parent = 0);
+        explicit StashModel(const QDir& dir, GitPlugin* git, QObject* parent = nullptr);
         
     private slots:
         void stashListReady(KJob*);

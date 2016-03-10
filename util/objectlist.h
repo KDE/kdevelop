@@ -54,7 +54,7 @@ public:
         CleanupWhenDone     ///< Delete list of items when this object is destructed
     };
 
-    explicit ObjectListTracker(CleanupBehavior behavior = NoCleanupWhenDone, QObject* parent = 0);
+    explicit ObjectListTracker(CleanupBehavior behavior = NoCleanupWhenDone, QObject* parent = nullptr);
     ~ObjectListTracker() override;
 
     /**

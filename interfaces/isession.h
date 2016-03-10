@@ -41,7 +41,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISession : public QObject
 {
     Q_OBJECT
 public:
-    explicit ISession( QObject* parent = 0 );
+    explicit ISession( QObject* parent = nullptr );
     ~ISession() override;
 
     /**

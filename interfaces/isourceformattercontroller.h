@@ -40,7 +40,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		Q_OBJECT
 
 	public:
-		explicit ISourceFormatterController(QObject *parent = 0);
+		explicit ISourceFormatterController(QObject *parent = nullptr);
 		~ISourceFormatterController() override;
 
 		/** \return The formatter corresponding to the language

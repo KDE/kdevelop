@@ -37,7 +37,7 @@ class OverlayWidget : public QWidget
     Q_OBJECT
 
 public:
-    OverlayWidget( QWidget* alignWidget, QWidget* parent, const char* name = 0 );
+    OverlayWidget( QWidget* alignWidget, QWidget* parent, const char* name = nullptr );
     ~OverlayWidget() override;
 
     QWidget * alignWidget() { return mAlignWidget; }

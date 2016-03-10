@@ -51,7 +51,7 @@ class SvnInternalJobBase : public QObject, public ThreadWeaver::Job, public svn:
 {
     Q_OBJECT
 public:
-    explicit SvnInternalJobBase( SvnJobBase* parent = 0 );
+    explicit SvnInternalJobBase( SvnJobBase* parent = nullptr );
     ~SvnInternalJobBase() override;
 
     bool success() const override;

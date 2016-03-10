@@ -29,7 +29,7 @@ class GrepDialog : public QDialog, private Ui::GrepWidget
     Q_OBJECT
 
 public:
-    explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=0 );
+    explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=nullptr );
     ~GrepDialog() override;
 
     void setPattern(const QString &pattern);

@@ -18,7 +18,7 @@ class SvnSSLTrustDialog: public QDialog
 {
     Q_OBJECT
 public:
-    explicit SvnSSLTrustDialog( QWidget *parent = 0 );
+    explicit SvnSSLTrustDialog( QWidget *parent = nullptr );
     ~SvnSSLTrustDialog() override;
 
     void setCertInfos( const QString& hostname, const QString& fingerPrint,

@@ -46,7 +46,7 @@ class GrepJob : public KJob, public KDevelop::IStatus
 
 private:
     ///Job can only be instanciated by plugin
-    explicit GrepJob( QObject *parent = 0 );
+    explicit GrepJob( QObject *parent = nullptr );
 
 public:
 

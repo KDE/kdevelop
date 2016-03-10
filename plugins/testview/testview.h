@@ -37,7 +37,7 @@ class TestView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TestView(TestViewPlugin* plugin, QWidget* parent = 0);
+    explicit TestView(TestViewPlugin* plugin, QWidget* parent = nullptr);
     ~TestView() override;
 
 public slots:

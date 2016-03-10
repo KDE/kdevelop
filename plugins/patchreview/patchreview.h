@@ -102,7 +102,7 @@ private:
     /// Makes sure that this working set is active only in the @p area, and that its name starts with "review".
     void setUniqueEmptyWorkingSet(Sublime::Area* area);
 
-    void addHighlighting( const QUrl& file, KDevelop::IDocument* document = 0 );
+    void addHighlighting( const QUrl& file, KDevelop::IDocument* document = nullptr );
     void removeHighlighting( const QUrl& file = QUrl() );
 
     KDevelop::IPatchSource::Ptr m_patch;

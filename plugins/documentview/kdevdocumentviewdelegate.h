@@ -27,7 +27,7 @@ class KDevDocumentViewDelegate: public QItemDelegate
 {
     Q_OBJECT
 public:
-    explicit KDevDocumentViewDelegate( QObject *parent = 0 );
+    explicit KDevDocumentViewDelegate( QObject *parent = nullptr );
     ~KDevDocumentViewDelegate() override;
 
     void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const override;

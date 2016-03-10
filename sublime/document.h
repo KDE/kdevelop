@@ -129,7 +129,7 @@ protected:
     /**Reimplement this to create and return the new widget to display
     this document in the view. This method is used by View class when it
     is asked for its widget.*/
-    virtual QWidget *createViewWidget(QWidget *parent = 0) = 0;
+    virtual QWidget *createViewWidget(QWidget *parent = nullptr) = 0;
     /** Closes all views associated to this document */
     virtual void closeViews();
 

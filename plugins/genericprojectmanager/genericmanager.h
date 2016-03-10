@@ -27,7 +27,7 @@ class GenericProjectManager: public KDevelop::AbstractFileManagerPlugin
     Q_OBJECT
 
 public:
-    explicit GenericProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
+    explicit GenericProjectManager( QObject* parent = nullptr, const QVariantList& args = QVariantList() );
 };
 
 #endif // KDEVPLATFORM_PLUGIN_GENERICIMPORTER_H

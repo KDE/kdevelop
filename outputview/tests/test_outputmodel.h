@@ -29,7 +29,7 @@ class TestOutputModel : public QObject
 {
 Q_OBJECT
 public:
-    explicit TestOutputModel(QObject* parent = 0);
+    explicit TestOutputModel(QObject* parent = nullptr);
 
 private slots:
     void bench();

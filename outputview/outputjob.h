@@ -45,7 +45,7 @@ public:
     };
     enum OutputJobVerbosity { Silent, Verbose };
 
-    OutputJob(QObject* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
+    OutputJob(QObject* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Verbose);
 
     void startOutput();
 

@@ -70,7 +70,7 @@ namespace KDevelop {
         explicit NavigatableWidgetList(bool allowScrolling = false, uint maxHeight = 0, bool vertical = true);
         ~NavigatableWidgetList() override;
         void addItem(QWidget* widget, int pos = -1);
-        void addHeaderItem(QWidget* widget, Qt::Alignment alignment = 0);
+        void addHeaderItem(QWidget* widget, Qt::Alignment alignment = nullptr);
         ///Whether items were added to this list using addItem(..)
         bool hasItems() const;
         ///Deletes all items that were added using addItem

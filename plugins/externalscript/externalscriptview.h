@@ -37,7 +37,7 @@ class ExternalScriptView : public QWidget, Ui::ExternalScriptViewBase
   Q_OBJECT
 
 public:
-  explicit ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent = 0 );
+  explicit ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent = nullptr );
   ~ExternalScriptView() override;
 
   /// @return Currently selected script item.

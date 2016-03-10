@@ -49,7 +49,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT PathMappingsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PathMappingsWidget(QWidget* parent = 0);
+    explicit PathMappingsWidget(QWidget* parent = nullptr);
 
     void loadFromConfiguration(const KConfigGroup& cfg);
     void saveToConfiguration(KConfigGroup cfg) const;

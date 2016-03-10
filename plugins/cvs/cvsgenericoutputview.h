@@ -31,7 +31,7 @@ class CvsJob;
 class CvsGenericOutputView : public QWidget, private Ui::CvsGenericOutputViewBase {
     Q_OBJECT
 public:
-    explicit CvsGenericOutputView(CvsJob* job = 0, QWidget* parent = 0);
+    explicit CvsGenericOutputView(CvsJob* job = nullptr, QWidget* parent = nullptr);
     ~CvsGenericOutputView() override;
 
 public slots:

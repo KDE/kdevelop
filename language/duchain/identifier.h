@@ -142,7 +142,7 @@ public:
    * @warning The identifier is parsed in a C++-similar way, and the result may not be what you expect.
    *          If you want to prevent that parsing, use the constructor that takes IndexedString.
    */
-  explicit Identifier(const QString& str, uint start = 0, uint* takenRange = 0);
+  explicit Identifier(const QString& str, uint start = 0, uint* takenRange = nullptr);
   /**
    * Preferred constructor, use this if you already have an IndexedString available. This does not decompose the given string.
    */
