@@ -41,12 +41,12 @@ CppCheckPreferences::~CppCheckPreferences()
 
 QString CppCheckPreferences::name() const
 {
-    return i18n("CppCheck");
+    return i18n("Cppcheck");
 }
 
 QString CppCheckPreferences::fullName() const
 {
-   return i18n("Configure CppCheck settings");
+   return i18n("Configure Cppcheck settings");
 }
 
 QIcon CppCheckPreferences::icon() const

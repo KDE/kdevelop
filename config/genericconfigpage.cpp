@@ -54,7 +54,7 @@ QString GenericConfigPage::name() const
 void GenericConfigPage::apply()
 {
     KSharedConfigPtr ptr = m_project->projectConfiguration();
-    KConfigGroup group = ptr->group("CppCheck");
+    KConfigGroup group = ptr->group("Cppcheck");
 
     group.writeEntry("cppcheckParameters", ui->cppcheckParameters->text());
     group.writeEntry("AdditionalCheckStyle", ui->styleCheckBox->isChecked());
@@ -73,7 +73,7 @@ void GenericConfigPage::defaults()
 void GenericConfigPage::reset()
 {
     KSharedConfigPtr ptr = m_project->projectConfiguration();
-    KConfigGroup group = ptr->group("CppCheck");
+    KConfigGroup group = ptr->group("Cppcheck");
     if (!group.isValid())
         return;
 

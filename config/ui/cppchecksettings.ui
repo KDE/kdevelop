@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>CppCheck Settings</string>
+   <string>Cppcheck Settings</string>
   </property>
   <layout class="QVBoxLayout" name="settingsLayout">
    <item>
@@ -25,7 +25,7 @@
         <item>
          <widget class="QLabel" name="cppcheckLabel">
           <property name="text">
-           <string>CppChec&amp;k executable</string>
+           <string>Cppchec&amp;k executable</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

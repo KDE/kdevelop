@@ -95,13 +95,13 @@ Plugin::Plugin(QObject *parent, const QVariantList&)
     Q_ASSERT(iface);
 
     ProblemModelSet *pms = core()->languageController()->problemModelSet();
-    pms->addModel(QStringLiteral("CppCheck"), m_model.data());
+    pms->addModel(QStringLiteral("Cppcheck"), m_model.data());
 }
 
 void Plugin::unload()
 {
     ProblemModelSet *pms = core()->languageController()->problemModelSet();
-    pms->removeModel(QStringLiteral("CppCheck"));
+    pms->removeModel(QStringLiteral("Cppcheck"));
 }
 
 Plugin::~Plugin()
@@ -113,7 +113,7 @@ void Plugin::runCppcheck(bool allFiles)
     KDevelop::IDocument *doc = core()->documentController()->activeDocument();
     if (!doc) {
         QMessageBox::critical(nullptr,
-                              i18n("Error starting CppCheck"),
+                              i18n("Error starting Cppcheck"),
                               i18n("No active file, unable to deduce project."));
         return;
     }
@@ -121,22 +121,22 @@ void Plugin::runCppcheck(bool allFiles)
     KDevelop::IProject *project = core()->projectController()->findProjectForUrl(doc->url());
     if (!project) {
         QMessageBox::critical(nullptr,
-                              i18n("Error starting CppCheck"),
+                              i18n("Error starting Cppcheck"),
                               i18n("Active file isn't in a project"));
         return;
     }
 
     KSharedConfigPtr ptr = project->projectConfiguration();
-    KConfigGroup group = ptr->group("CppCheck");
+    KConfigGroup group = ptr->group("Cppcheck");
     if (!group.isValid()) {
         QMessageBox::critical(nullptr,
-                              i18n("Error starting CppCheck"),
+                              i18n("Error starting Cppcheck"),
                               i18n("Can't load parameters. They must be set in the project settings."));
         return;
     }
 
-    KConfigGroup group2 = KSharedConfig::openConfig()->group("CppCheck");
-    QUrl cppcheckPath = group2.readEntry("CppCheck Path");
+    KConfigGroup group2 = KSharedConfig::openConfig()->group("Cppcheck");
+    QUrl cppcheckPath = group2.readEntry("Cppcheck Path");
 
 
     Job::Parameters params;

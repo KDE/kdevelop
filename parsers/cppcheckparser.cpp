@@ -117,7 +117,7 @@ bool CppcheckParser::endElement()
     switch (state) {
     case CppCheck:
         if (attributes().hasAttribute("version"))
-            qCDebug(KDEV_CPPCHECK) << "CppCheck report version: " << attributes().value("version");
+            qCDebug(KDEV_CPPCHECK) << "Cppcheck report version: " << attributes().value("version");
         break;
     case Errors:
         // errors finished
