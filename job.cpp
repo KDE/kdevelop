@@ -117,7 +117,7 @@ QStringList Job::buildCommandLine() const
     /* extra parameters */
     QString cppcheckParameters(parameters.parameters);
     if (!cppcheckParameters.isEmpty())
-        args.append(cppcheckParameters);
+        args.append(KShell::splitArgs(cppcheckParameters));
 
     if (parameters.checkStyle)
         args.append("--enable=style");
