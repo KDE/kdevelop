@@ -21,10 +21,9 @@
 #define _CPPCHECKPARSER_H_
 
 #include <QXmlStreamReader>
-#include <QApplication>
 #include <QStack>
 
-#include "iparser.h"
+#include <interfaces/iproblem.h>
 
 namespace cppcheck
 {
@@ -33,23 +32,17 @@ namespace cppcheck
  * A class which parses cppcheck's XML output
  * and emits signals when items are parsed
  */
-class CppcheckParser : public Parser
+class CppcheckParser : public QXmlStreamReader
 {
-    Q_OBJECT
-
 public:
 
     CppcheckParser(QObject* parent = nullptr);
-    ~CppcheckParser() override;
+    ~CppcheckParser();
 
-    QVector<KDevelop::IProblem::Ptr> problems() const override{ return m_problems; }
+    QVector<KDevelop::IProblem::Ptr> problems() const { return m_problems; }
 
-signals:
-    void reset();
-
-public slots:
-
-    void parse() override;
+public:
+    void parse();
 
 
 private:

@@ -17,17 +17,19 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "cppcheckparser.h"
+
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 
+#include <QApplication>
 #include <QDir>
 
 #include <KLocalizedString>
 #include <KMessageBox>
 
 #include "debug.h"
-#include "cppcheckparser.h"
 
 #include <util/path.h>
 

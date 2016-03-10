@@ -33,8 +33,7 @@
 #include <QUrl>
 
 #include <outputview/outputjob.h>
-
-#include "iparser.h"
+#include <interfaces/iproblem.h>
 
 class KJob;
 class KConfigGroup;
@@ -48,13 +47,14 @@ namespace KDevelop
 {
 class ProcessLineMaker;
 class ILaunchConfiguration;
+class IProblem;
 class OutputModel;
 class LaunchConfiguration;
 }
 
 namespace cppcheck
 {
-class Parser;
+class CppcheckParser;
 
 class Job : public KDevelop::OutputJob
 {
@@ -109,7 +109,7 @@ protected:
     QUrl m_workingDir;
     int m_pid;
 
-    cppcheck::Parser* m_parser;
+    cppcheck::CppcheckParser* m_parser;
 
     KDevelop::ProcessLineMaker* m_applicationOutput;
     KDevelop::ILaunchConfiguration* m_launchcfg;
@@ -133,7 +133,7 @@ class KProcessOutputToParser : public QObject
 {
     Q_OBJECT
 public:
-    KProcessOutputToParser(Parser* inst);
+    KProcessOutputToParser(CppcheckParser* inst);
     ~KProcessOutputToParser() override;
 
     bool execute(QString execPath, QStringList args);
@@ -145,7 +145,7 @@ private slots:
 private:
     QProcess*  m_process;
     QIODevice* m_device;
-    Parser*    m_parser;
+    CppcheckParser* m_parser;
 
 };
 }

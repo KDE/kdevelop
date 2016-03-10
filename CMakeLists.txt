@@ -31,7 +31,6 @@ include_directories(
 set(kdevcppcheck_PART_SRCS
     debug.cpp
     job.cpp
-    iparser.cpp
     plugin.cpp
     config/genericconfigpage.cpp
     config/cppcheckpreferences.cpp

@@ -289,7 +289,7 @@ KDevelop::OutputModel* Job::model()
 /*
  * KProcessOutputToParser implementation
  */
-KProcessOutputToParser::KProcessOutputToParser(Parser* parser)
+KProcessOutputToParser::KProcessOutputToParser(CppcheckParser* parser)
 {
     m_parser = parser;
     m_device = new QBuffer();
