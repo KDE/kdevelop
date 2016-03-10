@@ -45,7 +45,7 @@ class KastenToolViewWidget : public QWidget
   public:
     KastenToolViewWidget( Kasten::AbstractToolView* toolView, QWidget* parent );
 
-    virtual ~KastenToolViewWidget();
+    ~KastenToolViewWidget() override;
 
   protected Q_SLOTS:
     void onMainWindowAdded( Sublime::MainWindow* mainWindow );

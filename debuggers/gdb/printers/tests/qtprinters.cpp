@@ -66,7 +66,7 @@ public:
         }
         waitForPrompt();
     }
-    ~GdbProcess()
+    ~GdbProcess() override
     {
         write("q\n");
         waitForFinished();

@@ -49,26 +49,26 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
   public:
     OktetaDocument( const QUrl &url, ICore* core );
 
-    virtual ~OktetaDocument();
+    ~OktetaDocument() override;
 
   public: // KDevelop::IDocument API
-    virtual KTextEditor::Cursor cursorPosition() const;
-    virtual bool isActive() const;
-    virtual QMimeType mimeType() const;
-    virtual KParts::Part* partForView( QWidget* widget ) const;
-    virtual DocumentState state() const;
-    virtual KTextEditor::Document* textDocument() const;
-    virtual QUrl url() const;
+    KTextEditor::Cursor cursorPosition() const override;
+    bool isActive() const override;
+    QMimeType mimeType() const override;
+    KParts::Part* partForView( QWidget* widget ) const override;
+    DocumentState state() const override;
+    KTextEditor::Document* textDocument() const override;
+    QUrl url() const override;
 
-    virtual void activate( Sublime::View* view, KParts::MainWindow* mainWindow );
-    virtual bool close( IDocument::DocumentSaveMode = IDocument::Default );
-    virtual void reload();
-    virtual bool save( IDocument::DocumentSaveMode = IDocument::Default );
-    virtual void setCursorPosition( const KTextEditor::Cursor& cursor );
-    virtual void setTextSelection( const KTextEditor::Range& range );
+    void activate( Sublime::View* view, KParts::MainWindow* mainWindow ) override;
+    bool close( IDocument::DocumentSaveMode = IDocument::Default ) override;
+    void reload() override;
+    bool save( IDocument::DocumentSaveMode = IDocument::Default ) override;
+    void setCursorPosition( const KTextEditor::Cursor& cursor ) override;
+    void setTextSelection( const KTextEditor::Range& range ) override;
 
   public: // Sublime::Document API
-    virtual bool closeDocument(bool silent);
+    bool closeDocument(bool silent) override;
 
   public:
     OktetaPlugin* plugin() const;
@@ -78,7 +78,7 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
     void setPlugin( OktetaPlugin* plugin );
 
   protected Q_SLOTS: // Sublime::Document API
-    virtual Sublime::View* newView( Sublime::Document* document );
+    Sublime::View* newView( Sublime::Document* document ) override;
 
   protected Q_SLOTS:
     void onByteArrayDocumentChanged();

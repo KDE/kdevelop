@@ -32,7 +32,7 @@ class BenchCodeCompletion : public CodeCompletionTestBase
 
 public:
     BenchCodeCompletion();
-    ~BenchCodeCompletion();
+    ~BenchCodeCompletion() override;
 
 private slots:
     void benchCodeCompletion_data();
