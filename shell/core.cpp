@@ -25,6 +25,7 @@
 
 #include <KLocalizedString>
 
+#include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 
 #include "mainwindow.h"
@@ -426,6 +427,10 @@ void Core::cleanup()
     emit aboutToShutdown();
 
     if (!d->m_cleanedUp) {
+        // first of all: stop background jobs
+        d->languageController->backgroundParser()->abortAllJobs();
+        d->languageController->backgroundParser()->suspend();
+
         d->debugController.data()->cleanup();
         d->selectionController.data()->cleanup();
         // Save the layout of the ui here, so run it first

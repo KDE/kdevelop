@@ -337,10 +337,13 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     void suspend()
     {
+        qCDebug(LANGUAGE) << "Suspending background parser";
+
         bool s = m_weaver.state()->stateId() == ThreadWeaver::Suspended ||
                  m_weaver.state()->stateId() == ThreadWeaver::Suspending;
 
         if (s) { // Already suspending
+            qCWarning(LANGUAGE) << "Already suspended or suspending";
             return;
         }
 
@@ -661,6 +664,13 @@ void BackgroundParser::setNeededPriority(int priority)
     QMutexLocker lock(&d->m_mutex);
     d->m_neededPriority = priority;
     d->startTimerThreadSafe();
+}
+
+void BackgroundParser::abortAllJobs()
+{
+    qCDebug(LANGUAGE) << "Aborting all parse jobs";
+
+    d->m_weaver.requestAbort();
 }
 
 void BackgroundParser::suspend()

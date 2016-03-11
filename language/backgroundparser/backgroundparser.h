@@ -141,6 +141,10 @@ Q_SIGNALS:
     void showErrorMessage( const QString&, int ) override;
 
 public Q_SLOTS:
+    /**
+     * Aborts all parse jobs
+     */
+    void abortAllJobs();
 
     /**
      * Suspends execution of the background parser
