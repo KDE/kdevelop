@@ -88,28 +88,23 @@ Declaration* usefulDeclaration(Declaration* decl)
 
 class DocumentationViewFactory: public KDevelop::IToolViewFactory
 {
-    public:
-        DocumentationViewFactory()
-            : mProvidersModel(0)
-        {}
+public:
+    DocumentationViewFactory()
+    {}
 
-        QWidget* create( QWidget *parent = 0 ) override
-        {
-            return new DocumentationView( parent, providers() );
+    QWidget* create(QWidget *parent = nullptr) override
+    {
+        if (!m_providersModel) {
+            m_providersModel.reset(new ProvidersModel);
         }
+        return new DocumentationView(parent, m_providersModel.data());
+    }
 
-        Qt::DockWidgetArea defaultPosition() override { return Qt::RightDockWidgetArea; }
-        QString id() const override { return QStringLiteral("org.kdevelop.DocumentationView"); }
+    Qt::DockWidgetArea defaultPosition() override { return Qt::RightDockWidgetArea; }
+    QString id() const override { return QStringLiteral("org.kdevelop.DocumentationView"); }
 
-    private:
-        ProvidersModel* providers() {
-            if(!mProvidersModel)
-                mProvidersModel = new ProvidersModel;
-
-            return mProvidersModel;
-        }
-
-        ProvidersModel* mProvidersModel;
+private:
+    QScopedPointer<ProvidersModel> m_providersModel;
 };
 
 DocumentationController::DocumentationController(Core* core)
@@ -121,10 +116,14 @@ DocumentationController::DocumentationController(Core* core)
     connect(m_showDocumentation, &QAction::triggered, this, &DocumentationController::doShowDocumentation);
 }
 
+DocumentationController::~DocumentationController()
+{
+}
+
 void DocumentationController::initialize()
 {
     if(!documentationProviders().isEmpty() && !(Core::self()->setupFlags() & Core::NoUi)) {
-        Core::self()->uiController()->addToolView( i18n("Documentation"), m_factory );
+        Core::self()->uiController()->addToolView(i18n("Documentation"), m_factory);
     }
 }
 

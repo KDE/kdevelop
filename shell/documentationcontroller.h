@@ -38,6 +38,7 @@ class DocumentationController : public IDocumentationController
     Q_OBJECT
 public:
     explicit DocumentationController(Core* core);
+    ~DocumentationController() override;
 
     void initialize();
 
