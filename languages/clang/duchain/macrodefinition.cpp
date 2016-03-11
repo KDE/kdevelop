@@ -119,4 +119,9 @@ void MacroDefinition::clearParameters()
     d_func_dynamic()->parametersList().clear();
 }
 
+QString MacroDefinition::toString() const
+{
+    return i18n("Macro %1", identifier().toString());
+}
+
 DUCHAIN_DEFINE_TYPE(MacroDefinition)

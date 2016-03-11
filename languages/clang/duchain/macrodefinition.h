@@ -81,6 +81,8 @@ public:
     void addParameter(const KDevelop::IndexedString& str);
     void clearParameters();
 
+    QString toString() const override;
+
     enum {
         Identity = 143
     };
