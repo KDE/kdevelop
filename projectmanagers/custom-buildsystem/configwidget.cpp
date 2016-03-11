@@ -98,7 +98,7 @@ void ConfigWidget::changeAction( int idx )
         emptyTool.enabled = false;
         setTool(emptyTool);
     } else {
-        CustomBuildSystemTool& selectedTool = m_tools[idx];
+        const CustomBuildSystemTool& selectedTool = m_tools[idx];
         setTool(selectedTool);
     }
 }
