@@ -95,9 +95,13 @@ Imports ClangHelpers::tuImports(CXTranslationUnit tu)
 
 ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& imports, const ParseSession& session,
                                                   TopDUContext::Features features, IncludeFileContexts& includedFiles,
-                                                  ClangIndex* index)
+                                                  ClangIndex* index, const std::function<bool()>& abortFunction)
 {
     if (includedFiles.contains(file)) {
+        return {};
+    }
+
+    if (abortFunction && abortFunction()) {
         return {};
     }
 
@@ -106,7 +110,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
     // ensure DUChain for imports are build properly
     foreach(const auto& import, imports.values(file)) {
-        buildDUChain(import.file, imports, session, features, includedFiles, index);
+        buildDUChain(import.file, imports, session, features, includedFiles, index, abortFunction);
     }
 
     const IndexedString path(QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath());

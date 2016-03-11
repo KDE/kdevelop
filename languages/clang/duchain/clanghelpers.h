@@ -22,11 +22,14 @@
 #ifndef CLANGHELPERS_H
 #define CLANGHELPERS_H
 
-#include <clang-c/Index.h>
+#include "clangprivateexport.h"
+
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/topducontext.h>
 
-#include "clangprivateexport.h"
+#include <clang-c/Index.h>
+
+#include <functional>
 
 class ParseSession;
 class ClangIndex;
@@ -73,7 +76,7 @@ KDEVCLANGPRIVATE_EXPORT Imports tuImports(CXTranslationUnit tu);
 KDEVCLANGPRIVATE_EXPORT KDevelop::ReferencedTopDUContext buildDUChain(
     CXFile file, const Imports& imports, const ParseSession& session,
     KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles,
-    ClangIndex* index = nullptr);
+    ClangIndex* index = nullptr, const std::function<bool()>& abortFunction = {});
 
 /**
  * @return List of possible header extensions used for definition/declaration fallback switching
