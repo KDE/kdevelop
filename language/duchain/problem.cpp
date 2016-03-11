@@ -269,6 +269,10 @@ QDebug operator<<(QDebug s, const Problem& problem)
 
 QDebug operator<<(QDebug s, const ProblemPointer& problem)
 {
-    s.nospace() << problem->toString();
+    if (!problem) {
+        s.nospace() << "<invalid problem>";
+    } else {
+        s.nospace() << problem->toString();
+    }
     return s.space();
 }
