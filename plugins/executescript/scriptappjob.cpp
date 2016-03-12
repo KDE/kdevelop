@@ -47,7 +47,7 @@
 using namespace KDevelop;
 
 ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg)
-    : KDevelop::OutputJob( parent ), proc(0)
+    : KDevelop::OutputJob( parent ), proc(new KProcess( this )), lineMaker(new KDevelop::ProcessLineMaker( proc, this ))
 {
     qCDebug(PLUGIN_EXECUTESCRIPT) << "creating script app job";
     setCapabilities(Killable);
@@ -128,10 +128,6 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     }
 
     KDevelop::OutputModel::OutputFilterStrategy currentFilterMode = static_cast<KDevelop::OutputModel::OutputFilterStrategy>( iface->outputFilterModeId( cfg ) );
-
-    proc = new KProcess( this );
-
-    lineMaker = new KDevelop::ProcessLineMaker( proc, this );
 
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);

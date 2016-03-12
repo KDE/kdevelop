@@ -84,8 +84,9 @@ int CompletionTreeElement::columnInParent() const {
   return 0;
 }
 
-CompletionTreeNode::CompletionTreeNode() : CompletionTreeElement() {
-}
+CompletionTreeNode::CompletionTreeNode() : CompletionTreeElement(), role((KTextEditor::CodeCompletionModel::ExtraItemDataRoles)Qt::DisplayRole)
+{}
+
 CompletionTreeNode::~CompletionTreeNode() {
 }
 

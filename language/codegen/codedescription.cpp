@@ -83,8 +83,8 @@ VariableDescription::VariableDescription(const DeclarationPointer& declaration)
 }
 
 FunctionDescription::FunctionDescription()
+    : FunctionDescription::FunctionDescription({}, {}, {})
 {
-
 }
 
 FunctionDescription::FunctionDescription(const QString& name, const VariableDescriptionList& arguments,
@@ -92,11 +92,18 @@ FunctionDescription::FunctionDescription(const QString& name, const VariableDesc
 : name(name)
 , arguments(arguments)
 , returnArguments(returnArguments)
+, isConstructor(false)
+, isDestructor(false)
+, isVirtual(false)
+, isStatic(false)
+, isSlot(false)
+, isSignal(false)
+, isConst(false)
 {
-
 }
 
 FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
+    : FunctionDescription::FunctionDescription({}, {}, {})
 {
     DUChainReadLocker lock;
 
