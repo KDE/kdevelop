@@ -55,3 +55,7 @@ target_link_libraries(kdevcppcheck
     Qt5::Network)
 
 install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
+
+ecm_add_test(parsers/test_cppcheckparser.cpp parsers/cppcheckparser.cpp debug.cpp
+    TEST_NAME test_cppcheckparser
+    LINK_LIBRARIES Qt5::Test KDev::Tests)

@@ -74,24 +74,14 @@ bool CppcheckParser::startElement()
         newState = Location;
         if (attributes().hasAttribute("line"))
             ErrorLine = attributes().value("line").toString().toInt();
-        if (attributes().hasAttribute("file")) {
+        if (attributes().hasAttribute("file"))
             ErrorFile = attributes().value("file").toString();
-            /* get project path */
-            ProjectPath = "";
-            for (int i = 0; i < KDevelop::ICore::self()->projectController()->projects().count(); i++) {
-                if (KDevelop::ICore::self()->projectController()->findProjectForUrl(QUrl::fromLocalFile(ErrorFile)) != nullptr) {
-                    ProjectPath = KDevelop::ICore::self()->projectController()->projects().at(i)->path().toUrl().toLocalFile();
-                }
-            }
-            ErrorFile.remove(ProjectPath);
-        }
     } else if (name() == "error") {
         newState = Error;
         ErrorLine = -1;
         ErrorFile.clear();
         Message.clear();
         MessageVerbose.clear();
-        ProjectPath.clear();
         Severity = "unknown";
         if (attributes().hasAttribute("msg"))
             Message = attributes().value("msg").toString();
@@ -186,7 +176,7 @@ void CppcheckParser::storeError()
    problem->setExplanation(MessageVerbose);
 
    KDevelop::DocumentRange range;
-   range.document = KDevelop::IndexedString(ProjectPath + ErrorFile);
+   range.document = KDevelop::IndexedString(ErrorFile);
    range.setBothLines(ErrorLine - 1);
 
    problem->setFinalLocation(range);
