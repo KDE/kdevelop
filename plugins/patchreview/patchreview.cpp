@@ -375,7 +375,7 @@ void PatchReviewPlugin::switchToEmptyReviewArea()
 {
     foreach(Sublime::Area* area, ICore::self()->uiController()->allAreas()) {
         if (area->objectName() == QLatin1String("review")) {
-            emit area->clearDocuments();
+            area->clearDocuments();
         }
     }
 
