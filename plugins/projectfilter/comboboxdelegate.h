@@ -42,7 +42,7 @@ public:
         QVariant data;
     };
 
-    explicit ComboBoxDelegate(const QVector<Item>& items, QObject* parent = 0);
+    explicit ComboBoxDelegate(const QVector<Item>& items, QObject* parent = nullptr);
     ~ComboBoxDelegate() override;
 
     QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;

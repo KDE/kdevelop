@@ -45,16 +45,16 @@ public:
     /**
      * @p url Path to project directory.
      */
-    TestProject(const Path& url = Path(), QObject* parent = 0);
+    TestProject(const Path& url = Path(), QObject* parent = nullptr);
     ~TestProject() override;
-    IProjectFileManager* projectFileManager() const override { return 0; }
-    IBuildSystemManager* buildSystemManager() const override { return 0; }
-    IPlugin* managerPlugin() const override { return 0; }
-    IPlugin* versionControlPlugin() const override { return 0; }
+    IProjectFileManager* projectFileManager() const override { return nullptr; }
+    IBuildSystemManager* buildSystemManager() const override { return nullptr; }
+    IPlugin* managerPlugin() const override { return nullptr; }
+    IPlugin* versionControlPlugin() const override { return nullptr; }
     ProjectFolderItem* projectItem() const override;
     void setProjectItem(ProjectFolderItem* item);
     int fileCount() const { return 0; }
-    ProjectFileItem* fileAt( int ) const { return 0; }
+    ProjectFileItem* fileAt( int ) const { return nullptr; }
     QList<ProjectFileItem*> files() const;
     QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const override { return QList< ProjectBaseItem* >(); }
     QList< ProjectFileItem* > filesForPath(const IndexedString&) const override;

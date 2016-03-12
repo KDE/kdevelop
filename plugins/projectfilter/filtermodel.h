@@ -33,7 +33,7 @@ class FilterModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit FilterModel(QObject* parent = 0);
+    explicit FilterModel(QObject* parent = nullptr);
     ~FilterModel() override;
 
     SerializedFilters filters() const;

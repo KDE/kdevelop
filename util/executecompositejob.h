@@ -32,7 +32,7 @@ class KDEVPLATFORMUTIL_EXPORT ExecuteCompositeJob : public KCompositeJob
 {
 Q_OBJECT
 public:
-    explicit ExecuteCompositeJob(QObject* parent = 0, const QList<KJob*>& jobs = {});
+    explicit ExecuteCompositeJob(QObject* parent = nullptr, const QList<KJob*>& jobs = {});
     ~ExecuteCompositeJob() override;
 
     void start() override;

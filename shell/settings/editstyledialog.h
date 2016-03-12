@@ -45,7 +45,7 @@ class EditStyleDialog
 
 public:
     EditStyleDialog(KDevelop::ISourceFormatter* formatter, const QMimeType& mime,
-                    const KDevelop::SourceFormatterStyle&, QWidget* parent = 0);
+                    const KDevelop::SourceFormatterStyle&, QWidget* parent = nullptr);
     ~EditStyleDialog() override;
 
     /** \return The string representing the style given by the \ref SettingsWidget.

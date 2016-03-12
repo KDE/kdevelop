@@ -31,12 +31,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavi
   Q_OBJECT
   public:
     explicit ProblemNavigationContext(const IProblem::Ptr& problem);
-    ~ProblemNavigationContext();
+    ~ProblemNavigationContext() override;
 
-    virtual QString name() const override;  
-    virtual QString html(bool shorten = false) override;    
-    virtual QWidget* widget() const override;
-    virtual bool isWidgetMaximized() const override;
+    QString name() const override;
+    QString html(bool shorten = false) override;
+    QWidget* widget() const override;
+    bool isWidgetMaximized() const override;
 
   private:
     IProblem::Ptr m_problem;

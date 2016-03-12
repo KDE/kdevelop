@@ -63,7 +63,7 @@ class LaunchConfigurationsModel : public QAbstractItemModel
 {
 Q_OBJECT
 public:
-    explicit LaunchConfigurationsModel(QObject* parent = 0);
+    explicit LaunchConfigurationsModel(QObject* parent = nullptr);
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
@@ -84,7 +84,7 @@ private:
     class TreeItem
     {
     public:
-        TreeItem() : parent(0) {}
+        TreeItem() : parent(nullptr) {}
         virtual ~TreeItem() {}
         TreeItem* parent;
         int row;
@@ -122,7 +122,7 @@ class LaunchConfigPagesContainer : public QWidget
 {
 Q_OBJECT
 public:
-    explicit LaunchConfigPagesContainer( const QList<LaunchConfigurationPageFactory*> &, QWidget* parent = 0 );
+    explicit LaunchConfigPagesContainer( const QList<LaunchConfigurationPageFactory*> &, QWidget* parent = nullptr );
     void setLaunchConfiguration( LaunchConfiguration* );
     void save();
 signals:
@@ -136,7 +136,7 @@ class LaunchConfigurationDialog : public QDialog, public Ui::LaunchConfiguration
 {
 Q_OBJECT
 public:
-    explicit LaunchConfigurationDialog(QWidget* parent = 0 );
+    explicit LaunchConfigurationDialog(QWidget* parent = nullptr );
     QSize sizeHint() const override;
 
 private slots:

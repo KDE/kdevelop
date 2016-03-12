@@ -42,7 +42,7 @@ class TransactionItemView : public QScrollArea
 {
     Q_OBJECT
 public:
-    explicit TransactionItemView( QWidget * parent = 0, const char * name = 0 );
+    explicit TransactionItemView( QWidget * parent = nullptr, const char * name = nullptr );
 
     ~TransactionItemView() override {}
     TransactionItem *addTransactionItem( ProgressItem *item, bool first );
@@ -85,7 +85,7 @@ public:
 
     // The progressitem is deleted immediately, we take 5s to go out,
     // so better not use mItem during this time.
-    void setItemComplete() { mItem = 0; }
+    void setItemComplete() { mItem = nullptr; }
 
 public Q_SLOTS:
     void slotItemCanceled();
@@ -103,7 +103,7 @@ class ProgressDialog : public OverlayWidget
 {
     Q_OBJECT
 public:
-    ProgressDialog( QWidget *alignWidget, QWidget *parent, const char *name = 0 );
+    ProgressDialog( QWidget *alignWidget, QWidget *parent, const char *name = nullptr );
     ~ProgressDialog() override;
     void setVisible( bool b ) override;
 

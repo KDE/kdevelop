@@ -40,7 +40,7 @@ class TestCasesPage : public QWidget
     Q_PROPERTY(QStringList testCases READ testCases WRITE setTestCases)
 
 public:
-    explicit TestCasesPage(QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit TestCasesPage(QWidget* parent = nullptr, Qt::WindowFlags f = nullptr);
     ~TestCasesPage() override;
 
     /**

@@ -101,7 +101,7 @@ public:
 class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 {
     public:
-        ProjectBaseItem( IProject*, const QString &name, ProjectBaseItem *parent = 0 );
+        ProjectBaseItem( IProject*, const QString &name, ProjectBaseItem *parent = nullptr );
         virtual ~ProjectBaseItem();
 
 
@@ -267,7 +267,7 @@ public:
      * Create a new ProjectFolderItem with the given @p path and an optional @p parent
      * in the given @p project.
      */
-    ProjectFolderItem( IProject* project, const Path& path, ProjectBaseItem* parent = 0 );
+    ProjectFolderItem( IProject* project, const Path& path, ProjectBaseItem* parent = nullptr );
 
     /**
      * Create a child ProjectFolderItem of @p parent with @p name.
@@ -311,7 +311,7 @@ public:
      * Create a new ProjectBuildFolderItem with the given @p path with the optional
      * parent @p parent in the given @p project.
      */
-    ProjectBuildFolderItem( IProject* project, const Path &path, ProjectBaseItem* parent = 0 );
+    ProjectBuildFolderItem( IProject* project, const Path &path, ProjectBaseItem* parent = nullptr );
     /**
      * Create a child ProjectBuildFolderItem of @p parent with @p name.
      *
@@ -332,7 +332,7 @@ public:
 class KDEVPLATFORMPROJECT_EXPORT ProjectTargetItem: public ProjectBaseItem
 {
 public:
-    ProjectTargetItem( IProject*, const QString &name, ProjectBaseItem *parent = 0 );
+    ProjectTargetItem( IProject*, const QString &name, ProjectBaseItem *parent = nullptr );
 
     ///Reimplemented from QStandardItem
     int type() const override;
@@ -350,7 +350,7 @@ public:
 class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTargetItem
 {
     public:
-        ProjectExecutableTargetItem( IProject*, const QString &name, ProjectBaseItem *parent = 0 );
+        ProjectExecutableTargetItem( IProject*, const QString &name, ProjectBaseItem *parent = nullptr );
 
         ProjectExecutableTargetItem *executable() const override;
         int type() const override;
@@ -367,7 +367,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
 class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetItem
 {
     public:
-        ProjectLibraryTargetItem(IProject* project, const QString &name, ProjectBaseItem *parent = 0 );
+        ProjectLibraryTargetItem(IProject* project, const QString &name, ProjectBaseItem *parent = nullptr );
 
         int type() const override;
 };
@@ -382,7 +382,7 @@ public:
      * Create a new ProjectFileItem with the given @p path and an optional @p parent
      * in the given @p project.
      */
-    ProjectFileItem( IProject* project, const Path& path, ProjectBaseItem* parent = 0 );
+    ProjectFileItem( IProject* project, const Path& path, ProjectBaseItem* parent = nullptr );
 
     /**
      * Create a child ProjectFileItem of @p parent with the given @p name.
@@ -429,7 +429,7 @@ public:
         , LastRole
     };
 
-    explicit ProjectModel( QObject *parent = 0 );
+    explicit ProjectModel( QObject *parent = nullptr );
     ~ProjectModel() override;
 
     void clear();

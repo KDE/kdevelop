@@ -145,7 +145,7 @@ Q_SIGNALS:
     void shutdownCompleted();
 
 protected:
-    ICore(QObject *parent = 0);
+    ICore(QObject *parent = nullptr);
     static ICore *m_self;
 };
 

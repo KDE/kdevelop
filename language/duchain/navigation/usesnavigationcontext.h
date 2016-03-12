@@ -27,13 +27,13 @@ namespace KDevelop {
   class KDEVPLATFORMLANGUAGE_EXPORT UsesNavigationContext : public AbstractNavigationContext {
     Q_OBJECT
     public:
-      explicit UsesNavigationContext( KDevelop::IndexedDeclaration declaration, AbstractNavigationContext* previousContext = 0 );
+      explicit UsesNavigationContext( KDevelop::IndexedDeclaration declaration, AbstractNavigationContext* previousContext = nullptr );
       
-      ~UsesNavigationContext();
+      ~UsesNavigationContext() override;
       
-      virtual QString name() const override;
-      virtual QWidget* widget() const override;
-      virtual QString html(bool shorten) override;
+      QString name() const override;
+      QWidget* widget() const override;
+      QString html(bool shorten) override;
     private:
       KDevelop::IndexedDeclaration m_declaration;
       UsesWidget* m_widget;

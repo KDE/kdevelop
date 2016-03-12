@@ -63,7 +63,7 @@ public:
 
     /**Constructor.
     @param parent The parent object.*/
-    explicit DocumentController( QObject *parent = 0 );
+    explicit DocumentController( QObject *parent = nullptr );
     ~DocumentController() override;
 
     /**Finds the first document object corresponding to a given url.
@@ -109,8 +109,8 @@ public:
     
     bool openDocument(IDocument* doc,
                               const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-                              DocumentActivationParams activationParams = 0,
-                              IDocument* buddy = 0) override;
+                              DocumentActivationParams activationParams = nullptr,
+                              IDocument* buddy = nullptr) override;
 
     KTextEditor::Document* globalTextEditorInstance() override;
     
@@ -124,9 +124,9 @@ public Q_SLOTS:
     */
     Q_SCRIPTABLE IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-            DocumentActivationParams activationParams = 0,
+            DocumentActivationParams activationParams = nullptr,
             const QString& encoding = {},
-            IDocument* buddy = 0 ) override;
+            IDocument* buddy = nullptr ) override;
 
     Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data ) override;
     

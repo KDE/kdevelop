@@ -28,7 +28,7 @@ class CheckoutDialog : public QDialog, private Ui::CheckoutDialogBase
 {
     Q_OBJECT
 public:
-    explicit CheckoutDialog(CvsPlugin* plugin, QWidget *parent=0);
+    explicit CheckoutDialog(CvsPlugin* plugin, QWidget *parent=nullptr);
     ~CheckoutDialog() override;
 
 public slots:

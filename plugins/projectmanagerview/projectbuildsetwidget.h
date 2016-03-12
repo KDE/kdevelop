@@ -44,7 +44,7 @@ class ProjectBuildSetWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ProjectBuildSetWidget( QWidget* parent = 0 );
+    explicit ProjectBuildSetWidget( QWidget* parent = nullptr );
     ~ProjectBuildSetWidget() override;
     void setProjectView( ProjectManagerView* view );
 public slots:

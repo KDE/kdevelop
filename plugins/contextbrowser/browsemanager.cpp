@@ -95,8 +95,8 @@ QList<KTextEditor::View*> EditorViewWatcher::allViews() {
 void BrowseManager::eventuallyStartDelayedBrowsing() {
     avoidMenuAltFocus();
 
-    if(m_browsingByKey && m_browingStartedInView)
-        emit startDelayedBrowsing(m_browingStartedInView);
+    if(m_browsingByKey && m_browsingStartedInView)
+        emit startDelayedBrowsing(m_browsingStartedInView);
 }
 
 BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
@@ -187,7 +187,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 //Completion is active.
                 avoidMenuAltFocus();
             }else{
-                m_browingStartedInView = view;
+                m_browsingStartedInView = view;
             }
         }
     }

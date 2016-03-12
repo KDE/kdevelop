@@ -51,7 +51,7 @@ class CvsProxy : public QObject
 {
     Q_OBJECT
 public:
-    explicit CvsProxy(KDevelop::IPlugin* parent = 0);
+    explicit CvsProxy(KDevelop::IPlugin* parent = nullptr);
     ~CvsProxy() override;
 
     bool isValidDirectory(QUrl dirPath) const;

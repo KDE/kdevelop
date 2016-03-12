@@ -34,7 +34,7 @@ class PersistentMovingRangePrivate : public QObject
 {
   Q_OBJECT
   public:
-  PersistentMovingRangePrivate() : m_valid(false), m_shouldExpand(false), m_movingRange(0), m_tracker(0), m_zDepth(0) {
+  PersistentMovingRangePrivate() : m_valid(false), m_shouldExpand(false), m_movingRange(nullptr), m_tracker(nullptr), m_zDepth(0) {
     moveToThread(QApplication::instance()->thread());
   }
   

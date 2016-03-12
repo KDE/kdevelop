@@ -48,7 +48,7 @@ public:
     QUrl url() const override;
     void setUrl(const QUrl& newUrl);
 
-    QWidget *createViewWidget(QWidget *parent = 0) override;
+    QWidget *createViewWidget(QWidget *parent = nullptr) override;
     KParts::Part *partForView(QWidget *view) const override;
 
     QMimeType mimeType() const override;

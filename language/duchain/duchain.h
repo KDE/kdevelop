@@ -84,7 +84,7 @@ public:
    * @param priority An optional priority for the job. The lower the value, the higher it's priority.
    * @note The duchain must _not_ be locked when this is called!
    */
-   Q_SCRIPTABLE void updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = 0, int priority = 1) const;
+   Q_SCRIPTABLE void updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = nullptr, int priority = 1) const;
   
    /**
     * Convenience-function similar to updateContextForUrl that blocks this thread until the update of the given document is ready,
@@ -169,7 +169,7 @@ public:
   Q_SCRIPTABLE inline TopDUContext* chainForIndex(uint index)
   {
     if(m_deleted)
-      return 0;
+      return nullptr;
 
     {
       QMutexLocker lock(&chainsByIndexLock);

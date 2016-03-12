@@ -43,7 +43,7 @@ class EditorsView : public QWidget, private Ui::EditorsViewBase
 {
 Q_OBJECT
 public:
-    explicit EditorsView(CvsJob* job=0, QWidget *parent = 0);
+    explicit EditorsView(CvsJob* job=nullptr, QWidget *parent = nullptr);
     ~EditorsView() override;
 
     /**

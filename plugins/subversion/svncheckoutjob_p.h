@@ -29,7 +29,7 @@ class SvnInternalCheckoutJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    explicit SvnInternalCheckoutJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalCheckoutJob( SvnJobBase* parent = nullptr );
     void setMapping(const KDevelop::VcsLocation & sourceRepository, const QUrl &destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion);
 
     bool isValid() const;

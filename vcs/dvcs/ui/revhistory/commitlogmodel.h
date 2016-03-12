@@ -38,7 +38,7 @@ class CommitLogModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    CommitLogModel(KDevelop::DistributedVersionControlPlugin* plugin, const QString& repo, QObject* parent = 0);
+    CommitLogModel(KDevelop::DistributedVersionControlPlugin* plugin, const QString& repo, QObject* parent = nullptr);
     ~CommitLogModel() override {};
 
     QVariant data(const QModelIndex &index, int role) const override;

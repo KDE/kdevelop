@@ -31,27 +31,27 @@ class CompletionSettings : public KDevelop::ICompletionSettings
 {
     Q_OBJECT
 public:
-    virtual CompletionLevel completionLevel() const override;
+    CompletionLevel completionLevel() const override;
 
-    virtual bool automaticCompletionEnabled() const override;
+    bool automaticCompletionEnabled() const override;
 
     void emitChanged() { emit settingsChanged(this); }
 
-    virtual int localColorizationLevel() const override;
+    int localColorizationLevel() const override;
 
-    virtual int globalColorizationLevel() const override;
+    int globalColorizationLevel() const override;
 
-    virtual bool highlightSemanticProblems() const override;
+    bool highlightSemanticProblems() const override;
 
-    virtual bool highlightProblematicLines() const override;
+    bool highlightProblematicLines() const override;
 
-    virtual bool boldDeclarations() const override;
+    bool boldDeclarations() const override;
 
-    virtual bool showMultiLineSelectionInformation() const override;
+    bool showMultiLineSelectionInformation() const override;
 
-    virtual int minFilesForSimplifiedParsing() const override;
+    int minFilesForSimplifiedParsing() const override;
 
-    virtual QStringList todoMarkerWords() const override;
+    QStringList todoMarkerWords() const override;
 
     static CompletionSettings& self();
 

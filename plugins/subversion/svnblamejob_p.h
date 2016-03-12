@@ -36,7 +36,7 @@ class SvnInternalBlameJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    explicit SvnInternalBlameJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalBlameJob( SvnJobBase* parent = nullptr );
 
     void setLocation( const QUrl &location );
     void setEndRevision( const KDevelop::VcsRevision& rev );

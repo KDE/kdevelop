@@ -37,7 +37,7 @@ class ProjectFilterProvider: public IPlugin, public IProjectFilterProvider
     Q_INTERFACES( KDevelop::IProjectFilterProvider )
 
 public:
-    explicit ProjectFilterProvider( QObject* parent = 0, const QVariantList& args = QVariantList() );
+    explicit ProjectFilterProvider( QObject* parent = nullptr, const QVariantList& args = QVariantList() );
 
     QSharedPointer<IProjectFilter> createFilter(IProject* project) const override;
 

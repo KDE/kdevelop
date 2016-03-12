@@ -45,7 +45,7 @@ class EnvironmentWidget: public QWidget
     Q_OBJECT
 
 public:
-    explicit EnvironmentWidget( QWidget *parent = 0 );
+    explicit EnvironmentWidget( QWidget *parent = nullptr );
 
     void loadSettings( KConfig* config );
     void saveSettings( KConfig* config );

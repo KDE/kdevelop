@@ -39,7 +39,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT TreeModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit TreeModel(const QVector<QString>& headers, QObject *parent = 0);
+    explicit TreeModel(const QVector<QString>& headers, QObject *parent = nullptr);
     void setRootItem(TreeItem *item);
     ~TreeModel() override;
 

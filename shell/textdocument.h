@@ -49,7 +49,7 @@ public:
     TextDocument(const QUrl &url, ICore*, const QString& encoding );
     ~TextDocument() override;
 
-    QWidget *createViewWidget(QWidget *parent = 0) override;
+    QWidget *createViewWidget(QWidget *parent = nullptr) override;
     KParts::Part *partForView(QWidget *view) const override;
     bool close(DocumentSaveMode mode = Default) override;
 
@@ -103,7 +103,7 @@ public:
     explicit TextView(TextDocument* doc);
     ~TextView() override;
 
-    QWidget *createWidget(QWidget *parent = 0) override;
+    QWidget *createWidget(QWidget *parent = nullptr) override;
 
     KTextEditor::View *textView() const;
 

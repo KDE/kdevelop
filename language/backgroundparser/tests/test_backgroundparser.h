@@ -95,6 +95,8 @@ private slots:
     void cleanupTestCase();
     void init();
 
+    void testShutdownWithRunningJobs();
+
     void testParseOrdering_simple();
     void testParseOrdering_lockup();
     void testParseOrdering_foregroundThread();

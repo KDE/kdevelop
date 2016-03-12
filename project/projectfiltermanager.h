@@ -53,7 +53,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectFilterManager : public QObject
     Q_OBJECT
 
 public:
-    explicit ProjectFilterManager(QObject* parent = 0);
+    explicit ProjectFilterManager(QObject* parent = nullptr);
     ~ProjectFilterManager() override;
 
     /**

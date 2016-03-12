@@ -44,7 +44,7 @@ class ExpandingDelegate : public QItemDelegate
   Q_OBJECT
 
   public:
-    explicit ExpandingDelegate(ExpandingWidgetModel* model, QObject* parent = 0L);
+    explicit ExpandingDelegate(ExpandingWidgetModel* model, QObject* parent = nullptr);
 
 
     // Overridden to create highlighting for current index

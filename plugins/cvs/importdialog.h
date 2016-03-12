@@ -28,7 +28,7 @@ class ImportDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ImportDialog(CvsPlugin *plugin, const QUrl &url, QWidget* parent=0);
+    ImportDialog(CvsPlugin *plugin, const QUrl &url, QWidget* parent=nullptr);
     ~ImportDialog() override;
 
 public slots:

@@ -39,7 +39,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT VariableWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit VariableWidget( IDebugController *controller, QWidget *parent=0 );
+    explicit VariableWidget( IDebugController *controller, QWidget *parent=nullptr );
 
 Q_SIGNALS:
     void requestRaise();

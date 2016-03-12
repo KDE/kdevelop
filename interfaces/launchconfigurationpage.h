@@ -44,13 +44,13 @@ public:
      * Allows the page to load values from an existing launch configuration
      * @param cfg the configuration to load from
      */
-    virtual void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 ) = 0;
+    virtual void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = nullptr ) = 0;
     
     /**
      * Allows the page to save values to an existing launch configuration
      * @param cfg the configuration to save to
      */
-    virtual void saveToConfiguration( KConfigGroup, KDevelop::IProject* project = 0 ) const = 0;
+    virtual void saveToConfiguration( KConfigGroup, KDevelop::IProject* project = nullptr ) const = 0;
     
     /**
      * A title for displaying in the GUI

@@ -82,8 +82,12 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
             if(idx.parent().isValid())
                 urls += idx.data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
             else {
-                projects += ICore::self()->projectController()->findProjectByName(idx.data(ProjectChangesModel::ProjectNameRole).toString());
-                Q_ASSERT(projects.last());
+                IProject* project = ICore::self()->projectController()->findProjectByName(idx.data(ProjectChangesModel::ProjectNameRole).toString());
+                if (project) {
+                    projects += project;
+                } else {
+                    qWarning() << "Couldn't find a project for project: " << idx.data(ProjectChangesModel::ProjectNameRole).toString();
+                }
             }
         }
     }

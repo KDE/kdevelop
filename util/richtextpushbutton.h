@@ -31,7 +31,7 @@ class KDEVPLATFORMUTIL_EXPORT RichTextPushButton : public QPushButton
 {
 Q_OBJECT
 public:
-    explicit RichTextPushButton(QWidget *parent = 0);
+    explicit RichTextPushButton(QWidget *parent = nullptr);
  
     void setHtml(const QString &text);
     void setText(const QString &text);

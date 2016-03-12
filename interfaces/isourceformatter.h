@@ -102,7 +102,7 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 		Q_OBJECT
 
 	public:
-		explicit SettingsWidget(QWidget *parent = 0);
+		explicit SettingsWidget(QWidget *parent = nullptr);
 		~SettingsWidget() override;
 
 		/** This function is called after the creation of the dialog.

@@ -29,7 +29,7 @@ class ProjectSourcePage : public QWidget
 {
     Q_OBJECT
     public:
-        explicit ProjectSourcePage(const QUrl& initial, QWidget* parent = 0);
+        explicit ProjectSourcePage(const QUrl& initial, QWidget* parent = nullptr);
         ~ProjectSourcePage() override;
 
         QUrl workingDir() const;

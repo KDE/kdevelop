@@ -88,7 +88,7 @@ public:
        The attempt may fail, for example if the expression is invalid.
        Calls slot 'callbackMethod' in 'callback' to notify of the result.
        The slot should be taking 'bool ok' parameter.  */
-    virtual void attachMaybe(QObject *callback = 0, const char *callbackMethod = 0) = 0;
+    virtual void attachMaybe(QObject *callback = nullptr, const char *callbackMethod = nullptr) = 0;
 
     virtual bool canSetFormat() const { return false; }
 
@@ -235,7 +235,7 @@ public Q_SLOTS:
     void variableWidgetHidden();
 
 private Q_SLOTS:
-    void updateAutoUpdate(KDevelop::IDebugSession* session = 0);
+    void updateAutoUpdate(KDevelop::IDebugSession* session = nullptr);
 
     void textDocumentCreated( KDevelop::IDocument*);
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);

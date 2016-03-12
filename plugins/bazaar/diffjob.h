@@ -38,7 +38,7 @@ class DiffJob : public KDevelop::VcsJob
     Q_OBJECT
 
 public:
-    DiffJob(const QDir& workingDir, const QString& revisionSpecRange, const QUrl& fileOrDirectory, BazaarPlugin* parent = 0, OutputJobVerbosity verbosity = OutputJob::Silent);
+    DiffJob(const QDir& workingDir, const QString& revisionSpecRange, const QUrl& fileOrDirectory, BazaarPlugin* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Silent);
 
     KDevelop::IPlugin* vcsPlugin() const override;
     KDevelop::VcsJob::JobStatus status() const override;

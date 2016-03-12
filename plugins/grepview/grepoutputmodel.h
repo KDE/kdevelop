@@ -58,7 +58,7 @@ class GrepOutputModel : public QStandardItemModel
     Q_OBJECT
 
 public:
-    explicit GrepOutputModel( QObject *parent = 0 );
+    explicit GrepOutputModel( QObject *parent = nullptr );
     ~GrepOutputModel() override;
 
     void setRegExp(const QRegExp& re);

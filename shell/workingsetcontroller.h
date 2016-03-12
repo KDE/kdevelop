@@ -69,7 +69,7 @@ public:
     QList<WorkingSet*> allWorkingSets() const;
 
     //The returned widget is owned by the caller
-    QWidget* createSetManagerWidget(MainWindow* parent, Sublime::Area* fixedArea = 0);
+    QWidget* createSetManagerWidget(MainWindow* parent, Sublime::Area* fixedArea = nullptr);
 
     void initializeController(UiController* controller);
 

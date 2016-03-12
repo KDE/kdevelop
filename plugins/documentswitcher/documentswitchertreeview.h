@@ -30,8 +30,8 @@ public:
     explicit DocumentSwitcherTreeView( DocumentSwitcherPlugin* );
 
 protected:
-virtual void keyPressEvent(QKeyEvent* event) override;
-virtual void keyReleaseEvent(QKeyEvent* ) override;
+void keyPressEvent(QKeyEvent* event) override;
+void keyReleaseEvent(QKeyEvent* ) override;
 private:
     DocumentSwitcherPlugin* plugin;
 };

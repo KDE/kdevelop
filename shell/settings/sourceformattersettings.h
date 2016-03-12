@@ -61,7 +61,7 @@ class SourceFormatterSettings : public KDevelop::ConfigPage, public Ui::SourceFo
 Q_OBJECT
 
 public:
-    explicit SourceFormatterSettings(QWidget* parent = 0);
+    explicit SourceFormatterSettings(QWidget* parent = nullptr);
     ~SourceFormatterSettings() override;
 
     QString name() const override;

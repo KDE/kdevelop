@@ -27,7 +27,7 @@ class TestQuickOpen : public QuickOpenTestBase
 {
     Q_OBJECT
 public:
-    explicit TestQuickOpen(QObject* parent = 0);
+    explicit TestQuickOpen(QObject* parent = nullptr);
 private slots:
     void testSorting();
     void testSorting_data();

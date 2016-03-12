@@ -29,9 +29,9 @@ class CvsJob : public KDevelop::DVcsJob
 {
     Q_OBJECT
 public:
-    explicit CvsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    explicit CvsJob(const QDir& workingDir, KDevelop::IPlugin* parent=nullptr, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
-    explicit CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    explicit CvsJob(KDevelop::IPlugin* parent = nullptr, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     ~CvsJob() override;
 

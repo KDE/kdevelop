@@ -48,7 +48,7 @@ class ProblemsView : public QMainWindow, public IToolViewActionListener
     Q_INTERFACES(KDevelop::IToolViewActionListener)
 
 public:
-    explicit ProblemsView(QWidget* parent = NULL);
+    explicit ProblemsView(QWidget* parent = nullptr);
     ~ProblemsView() override;
 
     /// Load all the current models and create tabs for them

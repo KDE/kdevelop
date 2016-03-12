@@ -32,7 +32,7 @@ class OpenProjectDialog : public KAssistantDialog
     Q_OBJECT
 
 public:
-    OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget* parent = 0 );
+    OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget* parent = nullptr );
 
     /**
     * Return a QUrl pointing to the project's .kdev file.

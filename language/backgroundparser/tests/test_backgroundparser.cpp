@@ -163,7 +163,7 @@ void TestBackgroundparser::initTestCase()
   core->setLanguageController(langController);
   langController->backgroundParser()->setThreadCount(4);
 
-  TestLanguageSupport* testLang = new TestLanguageSupport();
+  auto testLang = new TestLanguageSupport(this);
   connect(testLang, &TestLanguageSupport::parseJobCreated,
           &m_jobPlan, &JobPlan::parseJobCreated);
   langController->addTestLanguage(testLang, QStringList() << QStringLiteral("text/plain"));
@@ -181,6 +181,33 @@ void TestBackgroundparser::cleanupTestCase()
 void TestBackgroundparser::init()
 {
     m_jobPlan.clear();
+}
+
+void TestBackgroundparser::testShutdownWithRunningJobs()
+{
+    m_jobPlan.clear();
+    // prove that background parsing happens with sequential flags although there is a high-priority
+    // foreground thread (active document being edited, ...) running all the time.
+
+    // the long-running high-prio job
+    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_fgt_hp.txt")),
+                                  -500, ParseJob::IgnoresSequentialProcessing, 1000));
+
+    // add parse jobs
+    foreach(const JobPrototype& job, m_jobPlan.m_jobs) {
+        ICore::self()->languageController()->backgroundParser()->addDocument(
+            job.m_url, TopDUContext::Empty, job.m_priority, this, job.m_flags
+        );
+    }
+
+    ICore::self()->languageController()->backgroundParser()->parseDocuments();
+    QTest::qWait(50);
+
+    // shut down with running jobs, make sure we don't crash
+    cleanupTestCase();
+
+    // restart again to restore invariant (core always running in test functions)
+    initTestCase();
 }
 
 void TestBackgroundparser::testParseOrdering_foregroundThread()

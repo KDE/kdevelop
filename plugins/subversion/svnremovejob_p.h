@@ -27,7 +27,7 @@ class SvnInternalRemoveJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    explicit SvnInternalRemoveJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalRemoveJob( SvnJobBase* parent = nullptr );
     void setLocations( const QList<QUrl>& );
     void setForce( bool );
 

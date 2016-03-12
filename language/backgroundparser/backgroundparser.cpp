@@ -136,12 +136,6 @@ public:
 
     ~BackgroundParserPrivate()
     {
-        // Release dequeued jobs
-        QHashIterator<IndexedString, ThreadWeaver::QObjectDecorator*> it = m_parseJobs;
-        while (it.hasNext()) {
-            it.next();
-            delete it.value();
-        }
     }
 
     // Non-mutex guarded functions, only call with m_mutex acquired.
@@ -323,7 +317,14 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
         m_delay = BACKWARDS_COMPATIBLE_ENTRY("Delay", 500);
         m_timer.setInterval(m_delay);
         m_threads = 0;
-        m_parser->setThreadCount(BACKWARDS_COMPATIBLE_ENTRY("Number of Threads", QThread::idealThreadCount()));
+
+        bool maxThreadsOverrideOk;
+        const int maxThreadsOverride = qgetenv("KDEV_BACKGROUNDPARSER_MAXTHREADS").toInt(&maxThreadsOverrideOk);
+        if (maxThreadsOverrideOk) {
+            m_parser->setThreadCount(maxThreadsOverride);
+        } else {
+            m_parser->setThreadCount(BACKWARDS_COMPATIBLE_ENTRY("Number of Threads", QThread::idealThreadCount()));
+        }
 
         resume();
 
@@ -336,10 +337,13 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     void suspend()
     {
+        qCDebug(LANGUAGE) << "Suspending background parser";
+
         bool s = m_weaver.state()->stateId() == ThreadWeaver::Suspended ||
                  m_weaver.state()->stateId() == ThreadWeaver::Suspending;
 
         if (s) { // Already suspending
+            qCWarning(LANGUAGE) << "Already suspended or suspending";
             return;
         }
 
@@ -660,6 +664,13 @@ void BackgroundParser::setNeededPriority(int priority)
     QMutexLocker lock(&d->m_mutex);
     d->m_neededPriority = priority;
     d->startTimerThreadSafe();
+}
+
+void BackgroundParser::abortAllJobs()
+{
+    qCDebug(LANGUAGE) << "Aborting all parse jobs";
+
+    d->m_weaver.requestAbort();
 }
 
 void BackgroundParser::suspend()

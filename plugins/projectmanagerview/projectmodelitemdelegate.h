@@ -26,7 +26,7 @@ class ProjectModelItemDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    explicit ProjectModelItemDelegate(QObject* parent = 0);
+    explicit ProjectModelItemDelegate(QObject* parent = nullptr);
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
     void drawDisplay(QPainter *painter, const QStyleOptionViewItem &option,

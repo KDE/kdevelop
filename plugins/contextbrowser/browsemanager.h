@@ -46,7 +46,7 @@ class EditorViewWatcher : public QObject {
     Q_OBJECT
 public:
     ///@param sameWindow If this is true, only views that are child of the same window as the given widget are registered
-    explicit EditorViewWatcher(QObject* parent = 0);
+    explicit EditorViewWatcher(QObject* parent = nullptr);
     QList<KTextEditor::View*> allViews();
 private:
     ///Called for every added view. Reimplement this to catch them.
@@ -114,7 +114,7 @@ class BrowseManager : public QObject {
         //Maps widgets to their previously set cursors
         QMap<QPointer<QWidget>, QCursor> m_oldCursors;
         QTimer* m_delayedBrowsingTimer;
-        QPointer<KTextEditor::View> m_browingStartedInView;
+        QPointer<KTextEditor::View> m_browsingStartedInView;
         KTextEditor::Cursor m_buttonPressPosition;
 };
 

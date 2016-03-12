@@ -107,7 +107,7 @@ public:
 
     ILaunchConfiguration* createLaunchConfiguration ( LaunchConfigurationType* type,
                                                               const QPair<QString,QString>& launcher,
-                                                              IProject* project = 0,
+                                                              IProject* project = nullptr,
                                                               const QString& name = QString() ) override;
 
 
@@ -154,7 +154,7 @@ class RunDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    explicit RunDelegate( QObject* = 0 );
+    explicit RunDelegate( QObject* = nullptr );
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const override;
 private:
     KStatefulBrush runProviderBrush;

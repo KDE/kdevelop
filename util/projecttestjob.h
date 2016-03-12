@@ -82,7 +82,7 @@ public:
      * @param parent This job's parent object, or 0 for no parent.
      *
      **/
-    explicit ProjectTestJob(IProject* project, QObject* parent = 0);
+    explicit ProjectTestJob(IProject* project, QObject* parent = nullptr);
 
     /**
      * Destructor

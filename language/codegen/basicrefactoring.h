@@ -67,7 +67,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT BasicRefactoring : public QObject
     Q_OBJECT
 
 public:
-    explicit BasicRefactoring(QObject *parent = NULL);
+    explicit BasicRefactoring(QObject *parent = nullptr);
 
     /// Update the context menu with the "Rename" action.
     virtual void fillContextMenu(KDevelop::ContextMenuExtension &extension, KDevelop::Context *context);

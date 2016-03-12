@@ -78,7 +78,7 @@ class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject, public KXMLGU
     Q_CLASSINFO("D-Bus Interface", "org.kdevelop.SessionController")
 
 public:
-    explicit SessionController( QObject *parent = 0 );
+    explicit SessionController( QObject *parent = nullptr );
     ~SessionController() override;
     void initialize( const QString& session );
     void cleanup();

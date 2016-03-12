@@ -59,7 +59,7 @@ protected: // Interface for derived classes
         FIXME: do we actually have to have the model 
         pointer.
      */
-    TreeItem(TreeModel* model, TreeItem *parent = 0);
+    TreeItem(TreeModel* model, TreeItem *parent = nullptr);
 
     /** Set the data to be shown for the item itself.  */
     void setData(const QVector<QVariant> &data);

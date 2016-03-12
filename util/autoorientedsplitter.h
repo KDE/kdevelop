@@ -40,8 +40,8 @@ class KDEVPLATFORMUTIL_EXPORT AutoOrientedSplitter : public QSplitter
     Q_OBJECT
 
 public:
-    explicit AutoOrientedSplitter(QWidget* parent = 0);
-    explicit AutoOrientedSplitter(Qt::Orientation orientation, QWidget* parent = 0);
+    explicit AutoOrientedSplitter(QWidget* parent = nullptr);
+    explicit AutoOrientedSplitter(Qt::Orientation orientation, QWidget* parent = nullptr);
 
 protected:
     void resizeEvent(QResizeEvent*) override;

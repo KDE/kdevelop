@@ -27,7 +27,7 @@ class SessionsModel : public QAbstractListModel
     Q_OBJECT
     public:
         enum Roles { Uuid = Qt::UserRole+1, Projects, ProjectNames, VisibleIdentifier };
-        explicit SessionsModel(QObject* parent = 0);
+        explicit SessionsModel(QObject* parent = nullptr);
         QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
         int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         QHash< int, QByteArray > roleNames() const override;

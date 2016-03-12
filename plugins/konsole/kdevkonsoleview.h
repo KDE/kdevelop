@@ -22,7 +22,7 @@ class KDevKonsoleView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KDevKonsoleView( KDevKonsoleViewPlugin* plugin, QWidget *parent = 0 );
+    explicit KDevKonsoleView( KDevKonsoleViewPlugin* plugin, QWidget *parent = nullptr );
     ~KDevKonsoleView() override;
 
 public slots:

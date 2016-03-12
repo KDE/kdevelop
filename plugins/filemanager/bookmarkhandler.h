@@ -35,7 +35,7 @@ class BookmarkHandler : public QObject, public KBookmarkOwner
 Q_OBJECT
 
 public:
-    explicit BookmarkHandler( FileManager *parent, QMenu *kpopupmenu = 0 );
+    explicit BookmarkHandler( FileManager *parent, QMenu *kpopupmenu = nullptr );
     ~BookmarkHandler() override;
 
     // KBookmarkOwner interface:

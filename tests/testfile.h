@@ -67,7 +67,7 @@ public:
      * file.topContext()->...
      * @endcode
      */
-    TestFile(const QString& contents, const QString& fileExtension, KDevelop::TestProject *project = 0,
+    TestFile(const QString& contents, const QString& fileExtension, KDevelop::TestProject *project = nullptr,
              const QString& dir = QString());
 
     /**

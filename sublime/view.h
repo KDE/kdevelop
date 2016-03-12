@@ -61,7 +61,7 @@ public:
     /**@return the document for this view.*/
     Document *document() const;
     /**@return widget for this view (creates it if it's not yet created).*/
-    QWidget *widget(QWidget *parent = 0);
+    QWidget *widget(QWidget *parent = nullptr);
     /**@return true if this view has an initialized widget.*/
     bool hasWidget() const;
 

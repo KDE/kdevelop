@@ -33,6 +33,8 @@ class TestLanguageSupport : public QObject, public KDevelop::ILanguageSupport
     Q_OBJECT
     Q_INTERFACES(KDevelop::ILanguageSupport)
 public:
+    using QObject::QObject;
+
     KDevelop::ParseJob* createParseJob(const IndexedString& url) override;
     QString name() const override;
 

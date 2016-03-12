@@ -65,7 +65,7 @@ class KDEVPLATFORMUTIL_EXPORT PlaceholderItemProxyModel : public QIdentityProxyM
     Q_OBJECT
 
 public:
-    explicit PlaceholderItemProxyModel(QObject* parent = 0);
+    explicit PlaceholderItemProxyModel(QObject* parent = nullptr);
     ~PlaceholderItemProxyModel() override;
 
     QVariant columnHint(int column) const;

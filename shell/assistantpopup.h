@@ -45,7 +45,7 @@ class AssistantPopupConfig : public QObject
     Q_PROPERTY(QSize viewSize READ viewSize WRITE setViewSize NOTIFY viewSizeChanged)
 
 public:
-    explicit AssistantPopupConfig(QObject *parent = 0);
+    explicit AssistantPopupConfig(QObject *parent = nullptr);
 
     QColor foreground() const { return m_foreground; }
     QColor background() const { return m_background; }

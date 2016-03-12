@@ -46,7 +46,7 @@ class KDEVPLATFORMPROJECT_EXPORT AbstractFileManagerPlugin : public IPlugin, pub
     Q_INTERFACES( KDevelop::IProjectFileManager )
 
 public:
-    explicit AbstractFileManagerPlugin( const QString& componentName, QObject *parent = 0,
+    explicit AbstractFileManagerPlugin( const QString& componentName, QObject *parent = nullptr,
                                         const QVariantList &args = QVariantList() );
     ~AbstractFileManagerPlugin() override;
 
@@ -88,7 +88,7 @@ protected:
      * The default implementation will return a simple @c ProjectFolderItem
      */
     virtual ProjectFolderItem* createFolderItem( IProject* project, const Path& path,
-                                                 ProjectBaseItem* parent = 0);
+                                                 ProjectBaseItem* parent = nullptr);
 
     /**
      * Customization hook enabling you to create custom FileItems if required.

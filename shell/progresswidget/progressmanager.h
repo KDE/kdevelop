@@ -303,7 +303,7 @@ public:
       */
     static ProgressItem *createProgressItem( const QString &label )
     {
-        return instance()->createProgressItemImpl( 0, getUniqueID(), label,
+        return instance()->createProgressItemImpl( nullptr, getUniqueID(), label,
                                                    QString(), true, false );
     }
 
@@ -356,7 +356,7 @@ public:
                                              bool canBeCanceled = true,
                                              bool usesCrypto = false )
     {
-        return instance()->createProgressItemImpl( 0, id, label, status,
+        return instance()->createProgressItemImpl( nullptr, id, label, status,
                                                    canBeCanceled, usesCrypto );
     }
 

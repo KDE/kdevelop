@@ -70,7 +70,7 @@ they will look as:
 class KDEVPLATFORMSUBLIME_EXPORT AggregateModel: public QAbstractItemModel {
     Q_OBJECT
 public:
-    explicit AggregateModel(QObject *parent = 0);
+    explicit AggregateModel(QObject *parent = nullptr);
     ~AggregateModel() override;
 
     /**Adds the model and creates a parent item with given @p name

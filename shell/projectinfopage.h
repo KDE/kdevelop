@@ -25,7 +25,7 @@ class ProjectInfoPage : public QWidget
 {
 Q_OBJECT
 public:
-    explicit ProjectInfoPage( QWidget* parent = 0 );
+    explicit ProjectInfoPage( QWidget* parent = nullptr );
     ~ProjectInfoPage() override;
     void setProjectName( const QString& );
     void setProjectManager( const QString& );

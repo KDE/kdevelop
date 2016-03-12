@@ -86,7 +86,7 @@ public:
    *
    * If the parent is in the symbol table and the context is not anonymous, it will also be added to the symbol table. You nead a write-lock to the DUChain then
    */
-  explicit DUContext(const RangeInRevision& range, DUContext* parent = 0, bool anonymous = false);
+  explicit DUContext(const RangeInRevision& range, DUContext* parent = nullptr, bool anonymous = false);
   explicit DUContext(DUContextData&);
 
   /**
@@ -443,7 +443,7 @@ public:
   QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier,
                                        const CursorInRevision& position = CursorInRevision::invalid(),
                                        const AbstractType::Ptr& dataType = AbstractType::Ptr(),
-                                       const TopDUContext* topContext = 0,
+                                       const TopDUContext* topContext = nullptr,
                                        SearchFlags flags = NoSearchFlags) const;
 
   /**
@@ -463,7 +463,7 @@ public:
    */
   QList<Declaration*> findDeclarations(const IndexedIdentifier& identifier,
                                        const CursorInRevision& position = CursorInRevision::invalid(),
-                                       const TopDUContext* topContext = 0,
+                                       const TopDUContext* topContext = nullptr,
                                        SearchFlags flags = NoSearchFlags) const;
 
   /**
@@ -471,7 +471,7 @@ public:
    */
   QList<Declaration*> findDeclarations(const Identifier& identifier,
                                        const CursorInRevision& position = CursorInRevision::invalid(),
-                                       const TopDUContext* topContext = 0,
+                                       const TopDUContext* topContext = nullptr,
                                        SearchFlags flags = NoSearchFlags) const;
 
   /**
@@ -482,7 +482,7 @@ public:
    */
   QList<Declaration*> findLocalDeclarations(const IndexedIdentifier& identifier,
                                             const CursorInRevision& position = CursorInRevision::invalid(),
-                                            const TopDUContext* topContext = 0,
+                                            const TopDUContext* topContext = nullptr,
                                             const AbstractType::Ptr& dataType = AbstractType::Ptr(),
                                             SearchFlags flags = NoSearchFlags) const;
 
@@ -491,7 +491,7 @@ public:
    */
   QList<Declaration*> findLocalDeclarations(const Identifier& identifier,
                                             const CursorInRevision& position = CursorInRevision::invalid(),
-                                            const TopDUContext* topContext = 0,
+                                            const TopDUContext* topContext = nullptr,
                                             const AbstractType::Ptr& dataType = AbstractType::Ptr(),
                                             SearchFlags flags = NoSearchFlags) const;
 
@@ -515,7 +515,7 @@ public:
    * @param source A source-context that is needed to instantiate template-declarations in some cases.
    *               If it is zero, that signalizes that missing members should not be instantiated.
    */
-  virtual QVector<Declaration*> localDeclarations(const TopDUContext* source = 0) const;
+  virtual QVector<Declaration*> localDeclarations(const TopDUContext* source = nullptr) const;
 
   /**
    * Resort the local declarations by their range.
@@ -534,7 +534,7 @@ public:
    *
    * @returns the requested context if one was found, otherwise null.
    */
-  DUContext* findContext(const CursorInRevision& position, DUContext* parent = 0) const;
+  DUContext* findContext(const CursorInRevision& position, DUContext* parent = nullptr) const;
 
   /**
    * Iterates the tree to see if the provided @a context is a subcontext of this context.
@@ -671,7 +671,7 @@ public:
    * then the widget will not close when the cursor moves in the document, which
    * enables you to change the document contents from the widget without immediately closing the widget.
    */
-  virtual QWidget* createNavigationWidget(Declaration* decl = 0, TopDUContext* topContext = 0,
+  virtual QWidget* createNavigationWidget(Declaration* decl = nullptr, TopDUContext* topContext = nullptr,
                                           const QString& htmlPrefix = QString(),
                                           const QString& htmlSuffix = QString()) const;
 
@@ -855,7 +855,7 @@ protected:
    */
   virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopDUContext* source) const;
 
-  DUContext(DUContextData& dd, const RangeInRevision& range, DUContext* parent = 0, bool anonymous = false);
+  DUContext(DUContextData& dd, const RangeInRevision& range, DUContext* parent = nullptr, bool anonymous = false);
 
   /**
    * Just uses the data from the given context. Doesn't copy or change anything,

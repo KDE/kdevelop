@@ -32,7 +32,7 @@ class SvnInternalCommitJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
-    explicit SvnInternalCommitJob( SvnJobBase* parent = 0 );
+    explicit SvnInternalCommitJob( SvnJobBase* parent = nullptr );
     void setRecursive( bool );
     void setCommitMessage( const QString& );
     void setUrls( const QList<QUrl>& );
