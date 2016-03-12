@@ -37,7 +37,13 @@ class ProjectBaseItem;
 
 @short IProjectBuilder Base class for the Project Builders
 
-Describes a <b>Project Builder</b> to KDevelop's Project Manager.
+Provides an interface that will bre useful to perform tasks upon projects,
+inspired on the unix-style way to build projects:
+
+configure -> make -> make install
+
+It will provide a job for each of the tasks and a signal to make sure it
+completed successfully.
 */
 class KDEVPLATFORMPROJECT_EXPORT IProjectBuilder
 {
