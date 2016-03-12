@@ -3,10 +3,12 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <include>cmakeutils.h</include>
   <kcfgfile name="kdeveloprc"/>
   <group name="CMakeBuilder">
     <entry name="cmakeExe" key="cmakeExe" type="String">
-        <default></default>
+        <default code="true">CMake::findExecutable()</default>
+        <whatsthis>The path to the default CMake executable.</whatsthis>
     </entry>
     <entry name="generator" key="generator" type="Int">
         <default>0</default>
