@@ -443,6 +443,20 @@ void TestAssistants::testSignatureAssistant_data()
         << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(0, 16, 0, 16), "char c", SHOULD_ASSIST))
         << "class Foo { Foo(char c); };"
         << "Foo::Foo(char c)\n{}";
+
+    // see https://bugs.kde.org/show_bug.cgi?id=298511
+    QTest::newRow("change_return_type_header")
+        << "struct Foo { int bar(); };"
+        << "int Foo::bar()\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(0, 13, 0, 16), "char", SHOULD_ASSIST))
+        << "struct Foo { char bar(); };"
+        << "char Foo::bar()\n{}";
+    QTest::newRow("change_return_type_impl")
+        << "struct Foo { int bar(); };"
+        << "int Foo::bar()\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0, 0, 0, 3), "char", SHOULD_ASSIST))
+        << "struct Foo { char bar(); };"
+        << "char Foo::bar()\n{}";
 }
 
 void TestAssistants::testSignatureAssistant()
@@ -458,6 +472,7 @@ void TestAssistants::testSignatureAssistant()
 
         if (stateChange.result == SHOULD_ASSIST) {
             QEXPECT_FAIL("change_function_type", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't parse the code...", Abort);
+            QEXPECT_FAIL("change_return_type_impl", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't include the function's AST and thus we never get updated about the new return type...", Abort);
             QVERIFY(staticAssistantsManager()->activeAssistant() && !staticAssistantsManager()->activeAssistant()->actions().isEmpty());
         } else {
             QVERIFY(!staticAssistantsManager()->activeAssistant() || staticAssistantsManager()->activeAssistant()->actions().isEmpty());
