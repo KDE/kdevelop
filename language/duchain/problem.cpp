@@ -193,6 +193,8 @@ void Problem::setSeverity(Severity severity)
 QString Problem::severityString() const
 {
     switch(severity()) {
+        case IProblem::NoSeverity:
+            return {};
         case IProblem::Error:
             return i18n("Error");
         case IProblem::Warning:
