@@ -268,9 +268,9 @@ struct CurrentContext
     }
 
     DUContext* context;
-    // when updatig, this contains child contexts of the current parent context
+    // when updating, this contains child contexts of the current parent context
     QVector<DUContext*> previousChildContexts;
-    // when updatig, this contains child declarations of the current parent context
+    // when updating, this contains child declarations of the current parent context
     QVector<Declaration*> previousChildDeclarations;
 
     bool resortChildContexts = false;
