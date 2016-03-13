@@ -39,14 +39,15 @@ AdaptSignatureAction::AdaptSignatureAction(const DeclarationId& definitionId,
                                            ReferencedTopDUContext definitionContext,
                                            const Signature& oldSignature,
                                            const Signature& newSignature,
-                                           bool editingDefinition, QList<RenameAction*> renameActions
-                                           )
+                                           bool editingDefinition,
+                                           const QList<RenameAction*>& renameActions)
     : m_otherSideId(definitionId)
     , m_otherSideTopContext(definitionContext)
     , m_oldSignature(oldSignature)
     , m_newSignature(newSignature)
     , m_editingDefinition(editingDefinition)
-    , m_renameActions(renameActions) {
+    , m_renameActions(renameActions)
+{
 }
 
 AdaptSignatureAction::~AdaptSignatureAction()

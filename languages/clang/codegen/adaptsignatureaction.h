@@ -44,13 +44,12 @@ class AdaptSignatureAction
     Q_OBJECT
 
 public:
-    AdaptSignatureAction(const KDevelop::DeclarationId&   definitionId,
+    AdaptSignatureAction(const KDevelop::DeclarationId& definitionId,
                          KDevelop::ReferencedTopDUContext definitionContext,
                          const Signature& oldSignature,
                          const Signature& newSignature,
                          bool editingDefinition,
-                         QList<KDevelop::RenameAction*> renameActions
-                         );
+                         const QList<KDevelop::RenameAction*>& renameActions);
     ~AdaptSignatureAction() override;
 
     QString description() const override;
