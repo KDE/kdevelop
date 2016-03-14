@@ -241,13 +241,13 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     }
 
     if ( needsCreateFile ) {
-        QAction* action = new QAction( i18n( "Create File" ), this );
+        QAction* action = new QAction( i18n( "Create File..." ), this );
         action->setIcon(QIcon::fromTheme(QStringLiteral("document-new")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::createFileFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsCreateFolder ) {
-        QAction* action = new QAction( i18n( "Create Folder" ), this );
+        QAction* action = new QAction( i18n( "Create Folder..." ), this );
         action->setIcon(QIcon::fromTheme(QStringLiteral("folder-new")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::createFolderFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
@@ -289,7 +289,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         remove->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
         connect( remove, &QAction::triggered, this, &ProjectManagerViewPlugin::removeFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
-        QAction* rename = new QAction( i18n( "Rename" ), this );
+        QAction* rename = new QAction( i18n( "Rename..." ), this );
         rename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
         connect( rename, &QAction::triggered, this, &ProjectManagerViewPlugin::renameItemFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, rename );

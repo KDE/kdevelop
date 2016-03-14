@@ -127,7 +127,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         QList<KDevelop::ProjectBaseItem*> items = ctx->items();
         // verify if there is only one folder selected
         if ((items.count() == 1) && (items.first()->folder())) {
-            QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
+            QAction* action = new QAction( i18n( "Find/Replace in This Folder..." ), this );
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-find")));
             m_contextMenuDirectory = items.at(0)->folder()->path().toLocalFile();
             connect( action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromProject);
@@ -138,7 +138,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     if ( context->type() == KDevelop::Context::EditorContext ) {
         KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
-            QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Find/Replace in Files"), this);
+            QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Find/Replace in Files..."), this);
             connect(action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromMenu);
             extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
         }
@@ -150,7 +150,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(fcontext->urls().at(0));
         static const QMimeType directoryMime = QMimeDatabase().mimeTypeForName(QStringLiteral("inode/directory"));
         if (mimetype == directoryMime) {
-            QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
+            QAction* action = new QAction( i18n( "Find/Replace in This Folder..." ), this );
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-find")));
             m_contextMenuDirectory = fcontext->urls().at(0).toLocalFile();
             connect( action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromProject);
