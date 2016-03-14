@@ -228,7 +228,9 @@ void executeMemberAccessReplacerTest(const QString& code, const CompletionItems&
 
     lock.unlock();
 
-    auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, code);
+    QExplicitlySharedDataPointer<ClangCodeCompletionContext> context(
+        new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(),
+                                       expectedCompletionItems.position, code));
 
     QApplication::processEvents();
     document->close(KDevelop::IDocument::Silent);
@@ -238,10 +240,11 @@ void executeMemberAccessReplacerTest(const QString& code, const CompletionItems&
     // so let's stop that request.
     ICore::self()->languageController()->backgroundParser()->removeDocument(file.url());
 
-    context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
+    context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(),
+                                             expectedCompletionItems.position, QString());
     context->setFilters(filters);
     lock.lock();
-    auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    auto tester = ClangCodeCompletionItemTester(context);
 
     tester.names.sort();
     QCOMPARE(tester.names, expectedCompletionItems.completions);
