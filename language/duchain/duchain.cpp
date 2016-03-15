@@ -1454,14 +1454,28 @@ void DUChain::documentActivated(KDevelop::IDocument* doc)
 {
   if(sdDUChainPrivate->m_destroyed)
     return;
-  //Check whether the document has an attached environment-manager, and whether that one thinks the document needs to be updated.
-  //If yes, update it.
+
   DUChainReadLocker lock( DUChain::lock() );
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
+
+  auto backgroundParser = ICore::self()->languageController()->backgroundParser();
+  auto addWithHighPriority = [backgroundParser, doc]() {
+    backgroundParser->addDocument(IndexedString(doc->url()),
+                                  TopDUContext::VisibleDeclarationsAndContexts,
+                                  BackgroundParser::BestPriority);
+  };
+
   TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url(), true);
-  if(ctx && ctx->parsingEnvironmentFile())
-    if(ctx->parsingEnvironmentFile()->needsUpdate())
-      ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()));
+  //Check whether the document has an attached environment-manager, and whether that one thinks the document needs to be updated.
+  //If yes, update it.
+  if (ctx && ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->needsUpdate()) {
+    qCDebug(LANGUAGE) << "Document needs update, using best priority since it just got activated:" << doc->url();
+    addWithHighPriority();
+  } else if (backgroundParser->managedDocuments().contains(IndexedString(doc->url()))) {
+    // increase priority if there's already parse job of this document in the queue
+    qCDebug(LANGUAGE) << "Prioritizing activated document:" << doc->url();
+    addWithHighPriority();
+  }
 }
 
 void DUChain::documentClosed(IDocument* document)
