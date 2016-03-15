@@ -80,6 +80,7 @@ private slots:
     void testGotoStatement();
     void testRangesOfOperatorsInsideMacro();
     void testActiveDocumentHasASTAttached();
+    void testActiveDocumentsGetBestPriority();
     void testUsesCreatedForDeclarations();
     void testReparseIncludeGuard();
     void testExternC();
