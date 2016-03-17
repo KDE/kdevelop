@@ -81,6 +81,7 @@ main.cpp
 )
 
 kde4_add_executable(testfiletemplates ${test_srcs})
+add_dependencies(testfiletemplates kdevfiletemplates)
 
 target_link_libraries(testfiletemplates
     ${KDE4_KDECORE_LIBS}
