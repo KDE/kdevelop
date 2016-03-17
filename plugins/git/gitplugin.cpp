@@ -1190,7 +1190,6 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 
         VcsStatusInfo status;
         status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.toString())));
-        qDebug() << "lalala" << line << state;
         status.setState(messageToState(state));
         processedFiles.append(status.url());
 

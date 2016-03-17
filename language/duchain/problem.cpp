@@ -193,6 +193,8 @@ void Problem::setSeverity(Severity severity)
 QString Problem::severityString() const
 {
     switch(severity()) {
+        case IProblem::NoSeverity:
+            return {};
         case IProblem::Error:
             return i18n("Error");
         case IProblem::Warning:
@@ -269,6 +271,10 @@ QDebug operator<<(QDebug s, const Problem& problem)
 
 QDebug operator<<(QDebug s, const ProblemPointer& problem)
 {
-    s.nospace() << problem->toString();
+    if (!problem) {
+        s.nospace() << "<invalid problem>";
+    } else {
+        s.nospace() << problem->toString();
+    }
     return s.space();
 }

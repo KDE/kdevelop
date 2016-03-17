@@ -206,7 +206,7 @@ protected:
     const DUContext* m_context;
     AbstractType::Ptr m_lastType;
     DeclarationPointer m_lastDeclaration;
-    bool m_isConfident;
+    bool m_isConfident = true;
     DynamicLanguageExpressionVisitor* m_parentVisitor;
 };
 

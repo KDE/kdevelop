@@ -78,6 +78,7 @@ main.cpp
 )
 
 add_executable(testfiletemplates ${test_srcs})
+add_dependencies(testfiletemplates kdevfiletemplates)
 
 target_link_libraries(testfiletemplates
     KDev::Interfaces
