@@ -44,7 +44,7 @@ class OktetaWidget : public QWidget, public KXMLGUIClient
 
   public:
     OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayView, OktetaPlugin* plugin );
-    virtual ~OktetaWidget();
+    ~OktetaWidget() override;
 #if 0
     private slots:
         void save();

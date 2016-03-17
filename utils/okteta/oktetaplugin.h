@@ -47,10 +47,10 @@ class OktetaPlugin: public IPlugin
   public:
     explicit OktetaPlugin( QObject* parent, const QVariantList& args = QVariantList() );
 
-    virtual ~OktetaPlugin();
+    ~OktetaPlugin() override;
 
   public: // KDevelop::IPlugin API
-    virtual ContextMenuExtension contextMenuExtension( Context* context );
+    ContextMenuExtension contextMenuExtension( Context* context ) override;
 
   public:
     Kasten::ByteArrayViewProfileManager* viewProfileManager() const { return mViewProfileManager; }

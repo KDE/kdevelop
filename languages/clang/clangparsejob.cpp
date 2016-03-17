@@ -314,7 +314,8 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
     }
 
     auto context = ClangHelpers::buildDUChain(session.mainFile(), imports, session,
-                                              minimumFeatures(), includedFiles, clang()->index());
+                                              minimumFeatures(), includedFiles,
+                                              clang()->index(), [this] { return abortRequested(); });
     setDuChain(context);
 
     if (abortRequested()) {

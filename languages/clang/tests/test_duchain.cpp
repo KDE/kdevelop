@@ -931,6 +931,42 @@ void TestDUChain::testActiveDocumentHasASTAttached()
     DUChain::self()->removeDocumentChain(indexed.data());
 }
 
+void TestDUChain::testActiveDocumentsGetBestPriority()
+{
+    // note: this test would make more sense in kdevplatform, but we don't have a language plugin available there
+    // (required for background parsing)
+    // TODO: Create a fake-language plugin in kdevplatform for testing purposes, use that.
+
+    TestFile file1("int main() {}\n", "cpp");
+    TestFile file2("int main() {}\n", "cpp");
+    TestFile file3("int main() {}\n", "cpp");
+
+    DUChain::self()->storeToDisk();
+
+    auto backgroundParser = ICore::self()->languageController()->backgroundParser();
+    QVERIFY(!backgroundParser->isQueued(file1.url()));
+
+    auto documentController = ICore::self()->documentController();
+
+    // open first document (no activation)
+    auto doc = documentController->openDocument(file1.url().toUrl(), KTextEditor::Range::invalid(), {IDocumentController::DoNotActivate});
+    QVERIFY(doc);
+    QVERIFY(backgroundParser->isQueued(file1.url()));
+    QCOMPARE(backgroundParser->priorityForDocument(file1.url()), (int)BackgroundParser::NormalPriority);
+
+    // open second document, activate
+    doc = documentController->openDocument(file2.url().toUrl());
+    QVERIFY(doc);
+    QVERIFY(backgroundParser->isQueued(file2.url()));
+    QCOMPARE(backgroundParser->priorityForDocument(file2.url()), (int)BackgroundParser::BestPriority);
+
+    // open third document, activate, too
+    doc = documentController->openDocument(file3.url().toUrl());
+    QVERIFY(doc);
+    QVERIFY(backgroundParser->isQueued(file3.url()));
+    QCOMPARE(backgroundParser->priorityForDocument(file3.url()), (int)BackgroundParser::BestPriority);
+}
+
 void TestDUChain::testSystemIncludes()
 {
     ClangParsingEnvironment env;

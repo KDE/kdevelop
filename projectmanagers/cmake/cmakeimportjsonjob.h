@@ -53,7 +53,7 @@ public:
     };
 
     CMakeImportJob(KDevelop::IProject* project, QObject* parent);
-    ~CMakeImportJob();
+    ~CMakeImportJob() override;
 
     void start() override;
 

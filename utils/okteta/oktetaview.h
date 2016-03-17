@@ -43,13 +43,13 @@ class OktetaView : public Sublime::View
 
   public:
     OktetaView( OktetaDocument* document, Kasten::ByteArrayViewProfileSynchronizer* viewProfileSynchronizer );
-    virtual ~OktetaView();
+    ~OktetaView() override;
 
   public:
     Kasten::ByteArrayView* byteArrayView() const;
 
   protected: // Sublime::View API
-    QWidget* createWidget( QWidget* parent = 0 );
+    QWidget* createWidget( QWidget* parent = 0 ) override;
 
   protected:
     Kasten::ByteArrayView* mByteArrayView;
