@@ -119,7 +119,6 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(m_expandAll, &QAction::triggered, this, &GrepOutputView::expandAllItems);
     connect(applyButton, &QPushButton::clicked,  this, &GrepOutputView::onApply);
     connect(m_clearSearchHistory, &QAction::triggered, this, &GrepOutputView::clearSearchHistory);
-
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
@@ -129,6 +128,8 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(replacementCombo, static_cast<void(KComboBox::*)()>(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
+
+    resultsTreeView->header()->setStretchLastSection(true);
 
     resultsTreeView->header()->setStretchLastSection(true);
 
