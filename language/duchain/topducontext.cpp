@@ -726,7 +726,6 @@ struct TopDUContext::ApplyAliasesBuddyInfo {
       m_predecessor = 0;
   }
 
-  //May also be called when this is zero.
   bool alreadyImporting(IndexedQualifiedIdentifier id) {
     ApplyAliasesBuddyInfo* current = this;
     while(current) {
@@ -809,7 +808,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
             continue;
           }
 
-          if(buddy->alreadyImporting( importIdentifier ))
+          if(buddy && buddy->alreadyImporting( importIdentifier ))
             continue; //This import has already been applied to this search
 
           ApplyAliasesBuddyInfo info(1, buddy, importIdentifier);
@@ -885,7 +884,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
             continue;
           }
 
-          if(buddy->alreadyImporting( importIdentifier ))
+          if(buddy && buddy->alreadyImporting( importIdentifier ))
             continue; //This import has already been applied to this search
 
           ApplyAliasesBuddyInfo info(2, buddy, importIdentifier);
