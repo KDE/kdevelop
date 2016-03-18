@@ -222,7 +222,7 @@ static QString findSessionId(const QString& session)
 
     if (projectAsSession.isEmpty())  {
         QTextStream qerr(stderr);
-        qerr << endl << i18n("Cannot open unknown session %1. See --sessions switch for available sessions or use -cs to create a new one.",
+        qerr << endl << i18n("Cannot open unknown session %1. See `--list-sessions` switch for available sessions or use `-n` to create a new one.",
                              session) << endl;
     }
     return projectAsSession;
