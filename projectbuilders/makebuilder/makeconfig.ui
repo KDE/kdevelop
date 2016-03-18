@@ -57,7 +57,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="label_31">
      <property name="text">
-      <string>Install as &amp;root:</string>
+      <string>Insta&amp;ll as root:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -76,6 +76,9 @@
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="rootinstallationcommandLabel">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string>Root installation &amp;command:</string>
      </property>
@@ -106,8 +109,11 @@
      </item>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="label">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string>&amp;Number of simultaneous jobs:</string>
      </property>
@@ -119,14 +125,17 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="5" column="1">
     <widget class="QSpinBox" name="kcfg_numberOfJobs">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="minimum">
       <number>1</number>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>&amp;Make executable:</string>
@@ -139,7 +148,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="6" column="1">
     <widget class="KUrlRequester" name="makeBinary">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -149,7 +158,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="7" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
       <string>Default make &amp;target:</string>
@@ -162,17 +171,17 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="7" column="1">
     <widget class="QLineEdit" name="kcfg_defaultTarget">
      <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Additional make &amp;options:</string>
+      <string>Additional ma&amp;ke options:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -182,14 +191,14 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="8" column="1">
     <widget class="QLineEdit" name="kcfg_additionalOptions">
      <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
+   <item row="10" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Active environment &amp;profile:</string>
@@ -202,10 +211,19 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="1">
+   <item row="10" column="1">
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -219,9 +237,26 @@
        </widget>
       </item>
       <item>
-       <widget class="KDevelop::EnvironmentConfigureButton" name="configureEnvironment" />
+       <widget class="KDevelop::EnvironmentConfigureButton" name="configureEnvironment"/>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Override number of &amp;jobs:</string>
+     </property>
+     <property name="buddy">
+      <cstring>kcfg_overrideNumberOfJobs</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QCheckBox" name="kcfg_overrideNumberOfJobs">
+     <property name="text">
+      <string/>
+     </property>
     </widget>
    </item>
   </layout>
@@ -231,11 +266,7 @@
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>
@@ -257,7 +288,7 @@
  <connections>
   <connection>
    <sender>kcfg_installAsRoot</sender>
-   <signal>toggled(bool)</signal>
+   <signal>clicked(bool)</signal>
    <receiver>kcfg_suCommand</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -284,6 +315,38 @@
     <hint type="destinationlabel">
      <x>195</x>
      <y>97</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_overrideNumberOfJobs</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>kcfg_numberOfJobs</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>411</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_overrideNumberOfJobs</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>label</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>411</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>204</x>
+     <y>157</y>
     </hint>
    </hints>
   </connection>
