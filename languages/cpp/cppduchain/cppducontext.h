@@ -341,7 +341,9 @@ class CppDUContext : public BaseContext {
               DelayedType::Ptr delayed( new DelayedType() );
               delayed->setIdentifier( i );
 
-              res.type = Cpp::resolveDelayedTypes( delayed.cast<AbstractType>(), this, source, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags )->indexed();
+              auto resolved = Cpp::resolveDelayedTypes( delayed.cast<AbstractType>(), this,
+                source, basicFlags & DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags );
+              res.type = IndexedType(resolved);
 
               if( basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) {
                 AbstractType::Ptr targetTypePtr = TypeUtils::unAliasedType(TypeUtils::targetType(res.type.abstractType(), 0));

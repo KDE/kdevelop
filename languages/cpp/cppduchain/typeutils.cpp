@@ -235,7 +235,7 @@ KDevelop::AbstractType::Ptr matchingClassPointer(const KDevelop::AbstractType::P
       foreach(Declaration* decl, internal->findDeclarations(Cpp::castIdentifier(), CursorInRevision::invalid(), topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
         FunctionType::Ptr funType = decl->type<FunctionType>();
         if(funType && funType->returnType()) {
-          if(conversion.implicitConversion(funType->returnType()->indexed(), matchTo->indexed(), true)) {
+          if(conversion.implicitConversion(IndexedType(funType->returnType()), IndexedType(matchTo), true)) {
             return funType->returnType();
           }
         }
@@ -294,7 +294,7 @@ IndexedType removeConstModifier(const IndexedType& indexedType)
 {
     AbstractType::Ptr type = indexedType.abstractType();
     removeConstModifier(type);
-    return type->indexed();
+    return IndexedType(type);
 }
 
 void removeConstModifier(AbstractType::Ptr& type)

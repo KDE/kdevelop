@@ -166,7 +166,7 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
     if( m_visitor->lastType() ) {
       LOCKDUCHAIN;
 
-      res.type = m_visitor->lastType()->indexed();
+      res.type = IndexedType(m_visitor->lastType());
       foreach(const DeclarationPointer &decl, m_visitor->lastDeclarations())
         if(decl)
           res.allDeclarationsList().append(decl->id());
@@ -197,7 +197,7 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
       return ExpressionEvaluationResult();
     }
 
-    res.type = v.type()->indexed();
+    res.type = IndexedType(v.type());
 
     if( res.type ) {
       LOCKDUCHAIN;

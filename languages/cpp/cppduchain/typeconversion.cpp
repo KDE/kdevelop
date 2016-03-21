@@ -207,7 +207,7 @@ uint TypeConversion::implicitConversion( const IndexedType& _from, const Indexed
 
       if( realTo->modifiers() & AbstractType::ConstModifier ) {
         //For constant references, the compiler can create a temporary object holding the converted value. So just forget whether the types are references.
-        conv = implicitConversion( realType(from, m_topContext)->indexed(), realType(to, m_topContext)->indexed(), fromLValue, noUserDefinedConversion );
+        conv = implicitConversion( IndexedType(realType(from, m_topContext)), IndexedType(realType(to, m_topContext)), fromLValue, noUserDefinedConversion );
         goto ready;
       }
     }
@@ -362,7 +362,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     if( isReferenceType(from) ) {
       ///Transform lvalue to rvalue. Iso c++ draft 4.1 modeled roughly
 
-      AbstractType::Ptr fromNonConstant = realType(from, m_topContext)->indexed().abstractType();
+      AbstractType::Ptr fromNonConstant = IndexedType(realType(from, m_topContext)).abstractType();
 
       //When copying, the type becomes non-constant
       if(fromNonConstant && fromNonConstant->modifiers() & AbstractType::ConstModifier)
@@ -389,7 +389,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
       maximizeRank( bestRank, worseRank(rank, ExactMatch ) );
     }else if(from->modifiers() & AbstractType::ConstModifier) {
       ///We can transform a constant lvalue to a non-constant rvalue
-      AbstractType::Ptr fromNonConstant = from->indexed().abstractType();
+      AbstractType::Ptr fromNonConstant = IndexedType(from).abstractType();
       fromNonConstant->setModifiers(fromNonConstant->modifiers() & ~(AbstractType::ConstModifier));
       ConversionRank ret = standardConversion( fromNonConstant, to, removeCategories(categories,LValueTransformationCategory), maxCategories-1 );
       maximizeRank( bestRank, ret );

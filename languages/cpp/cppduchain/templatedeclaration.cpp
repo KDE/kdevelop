@@ -924,7 +924,7 @@ void applyDefaultParameters(const DUContext* templateContext, const TopDUContext
       Q_ASSERT(!templateDecl->defaultParameter().isEmpty());
       DelayedType::Ptr delayed( new DelayedType() );
       delayed->setIdentifier( IndexedTypeIdentifier(templateDecl->defaultParameter()) );
-      type = resolveDelayedTypes( delayed.cast<AbstractType>(), surroundingContext, source)->indexed();
+      type = IndexedType(resolveDelayedTypes(delayed.cast<AbstractType>(), surroundingContext, source));
     } // else the parameter is missing
 
     //TODO: why is this neccessary?
@@ -1049,7 +1049,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       UnAliasExchanger exchanger(source);
 
       for(uint a = 0; a < templateArguments.templateParametersSize(); ++a)
-        newTemplateArguments.templateParametersList().append(exchanger.exchange(templateArguments.templateParameters()[a].abstractType())->indexed());
+        newTemplateArguments.templateParametersList().append(IndexedType(exchanger.exchange(templateArguments.templateParameters()[a].abstractType())));
 
       templateArguments = newTemplateArguments;
     }
