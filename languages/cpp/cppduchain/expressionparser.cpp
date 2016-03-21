@@ -204,7 +204,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSessio
 
   DUChainReadLocker lock(DUChain::lock());
 
-  ret.type = v.lastType()->indexed();
+  ret.type = v.lastType() ? v.lastType()->indexed() : IndexedType();
   ret.isInstance = v.lastInstance().isInstance;
 
   if(v.lastInstance().declaration)

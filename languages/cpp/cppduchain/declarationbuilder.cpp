@@ -371,10 +371,10 @@ void DeclarationBuilder::findDeclarationForDefinition(const QualifiedIdentifier 
   foreach (Declaration* dec, declarations) {
     if (dec->isForwardDeclaration() || dec->isDefinition())
       continue;
-    if (dec->abstractType()->indexed() == lastType()->indexed()) {
+    if (IndexedType(dec->abstractType()) == IndexedType(lastType())) {
       //If this declaration is already assigned to a partial match, unassign it
       if (FunctionDefinition* oldDef = FunctionDefinition::definition(dec)) {
-        if (oldDef->abstractType()->indexed() != dec->abstractType()->indexed())
+        if (IndexedType(oldDef->abstractType()) != IndexedType(dec->abstractType()))
           oldDef->setDeclaration(0);
       }
       funDef->setDeclaration(dec);
@@ -1173,7 +1173,7 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
       instance.virtualInheritance = (bool)node->virt;
 
       //TypeUtils::unAliasedType(
-      instance.baseClass = TypeUtils::unAliasedType(lastType())->indexed();
+      instance.baseClass = IndexedType(TypeUtils::unAliasedType(lastType()));
       if(currentClass->classType() == ClassDeclarationData::Struct)
         instance.access = KDevelop::Declaration::Public;
       else
