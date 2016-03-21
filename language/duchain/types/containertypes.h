@@ -99,7 +99,7 @@ public:
     void addContentType(AbstractType::Ptr typeToAdd) {
         auto newContentType = TypeUtils::mergeTypes<LanguageUnsureType>(contentType().abstractType(), typeToAdd);
         DUChainWriteLocker lock;
-        d_func_dynamic()->m_contentType = newContentType->indexed();
+        d_func_dynamic()->m_contentType = IndexedType(newContentType);
     }
 
     /**
@@ -175,7 +175,7 @@ public:
     {
         auto newKeyType = TypeUtils::mergeTypes<LanguageUnsureType>(keyType().abstractType(), typeToAdd);
         DUChainWriteLocker lock;
-        d_func_dynamic()->m_keyType = newKeyType->indexed();
+        d_func_dynamic()->m_keyType = IndexedType(newKeyType);
     }
 
     /**

@@ -69,7 +69,7 @@ void PointerType::accept0 (TypeVisitor *v) const
 }
 
 void PointerType::exchangeTypes( TypeExchanger* exchanger ) {
-  d_func_dynamic()->m_baseType = exchanger->exchange( d_func()->m_baseType.abstractType() )->indexed();
+  d_func_dynamic()->m_baseType = IndexedType(exchanger->exchange( d_func()->m_baseType.abstractType()));
 }
 
 PointerType::~PointerType()
@@ -83,7 +83,7 @@ AbstractType::Ptr PointerType::baseType () const
 
 void PointerType::setBaseType(AbstractType::Ptr type)
 {
-  d_func_dynamic()->m_baseType = type->indexed();
+  d_func_dynamic()->m_baseType = IndexedType(type);
 }
 
 QString PointerType::toString() const

@@ -60,7 +60,7 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
 }
 
 void InstantiationInformation::addTemplateParameter(KDevelop::AbstractType::Ptr type) {
-  templateParametersList().append(type->indexed());
+  templateParametersList().append(IndexedType(type));
 }
 
 QString InstantiationInformation::toString(bool local) const {
