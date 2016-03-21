@@ -266,7 +266,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(Declaration);
 
-  d->m_type = type->indexed();
+  d->m_type = type ? type->indexed() : IndexedType();
 
   updateCodeModel();
 }
