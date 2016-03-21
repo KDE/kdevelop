@@ -24,6 +24,13 @@
 namespace KDevelop
 {
 
+IndexedType::IndexedType(const AbstractType::Ptr& type)
+  : m_index(TypeRepository::indexForType(type))
+{
+  if(m_index && shouldDoDUChainReferenceCounting(this))
+    TypeRepository::increaseReferenceCount(m_index, this);
+}
+
 IndexedType::IndexedType(uint index) : m_index(index) {
   if(m_index && shouldDoDUChainReferenceCounting(this))
     TypeRepository::increaseReferenceCount(m_index, this);

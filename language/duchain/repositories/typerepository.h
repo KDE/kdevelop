@@ -29,7 +29,7 @@ class AbstractRepositoryManager;
 class TypeRepository
 {
 public:
-    static uint indexForType(AbstractType::Ptr input);
+    static uint indexForType(const AbstractType::Ptr input);
     static AbstractType::Ptr typeForIndex(uint index);
     static void increaseReferenceCount(uint index);
     static void decreaseReferenceCount(uint index);

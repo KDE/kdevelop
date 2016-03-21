@@ -83,7 +83,7 @@ AbstractType::Ptr ArrayType::elementType () const
 
 void ArrayType::setElementType(AbstractType::Ptr type)
 {
-  d_func_dynamic()->m_elementType = type->indexed();
+  d_func_dynamic()->m_elementType = IndexedType(type);
 }
 
 QString ArrayType::toString() const
@@ -107,7 +107,7 @@ void ArrayType::accept0 (TypeVisitor *v) const
 void ArrayType::exchangeTypes( TypeExchanger* exchanger )
 {
   TYPE_D_DYNAMIC(ArrayType);
-  d->m_elementType = exchanger->exchange( d->m_elementType.abstractType() )->indexed();
+  d->m_elementType = IndexedType(exchanger->exchange(d->m_elementType.abstractType()));
 }
 
 AbstractType::WhichType ArrayType::whichType() const

@@ -85,9 +85,9 @@ FunctionType::~FunctionType()
 void FunctionType::addArgument(AbstractType::Ptr argument, int index)
 {
   if ( index == -1 )
-    d_func_dynamic()->m_argumentsList().append(argument->indexed());
+    d_func_dynamic()->m_argumentsList().append(IndexedType(argument));
   else
-    d_func_dynamic()->m_argumentsList().insert(index, argument->indexed());
+    d_func_dynamic()->m_argumentsList().insert(index, IndexedType(argument));
 }
 
 void FunctionType::removeArgument(int i)
@@ -97,7 +97,7 @@ void FunctionType::removeArgument(int i)
 
 void FunctionType::setReturnType(AbstractType::Ptr returnType)
 {
-  d_func_dynamic()->m_returnType = returnType->indexed();
+  d_func_dynamic()->m_returnType = IndexedType(returnType);
 }
 
 AbstractType::Ptr FunctionType::returnType () const
@@ -142,8 +142,8 @@ void FunctionType::exchangeTypes( TypeExchanger* exchanger )
 {
   TYPE_D_DYNAMIC(FunctionType);
   for (uint i = 0; i < d->m_argumentsSize (); ++i)
-    d->m_argumentsList()[i] = exchanger->exchange( d->m_arguments()[i].abstractType() )->indexed();
-  d->m_returnType = exchanger->exchange(d->m_returnType.abstractType())->indexed();
+    d->m_argumentsList()[i] = IndexedType(exchanger->exchange(d->m_arguments()[i].abstractType()));
+  d->m_returnType = IndexedType(exchanger->exchange(d->m_returnType.abstractType()));
 }
 
 QString FunctionType::partToString( SignaturePart sigPart ) const {
