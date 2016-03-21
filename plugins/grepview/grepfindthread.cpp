@@ -156,7 +156,7 @@ void GrepFindFilesThread::run()
 
 QList<QUrl> GrepFindFilesThread::files() const {
     auto tmpList = QList<QUrl>::fromSet(m_files.toSet());
-    std::sort(tmpList.end(), tmpList.end());
+    std::sort(tmpList.begin(), tmpList.end());
     return tmpList;
 }
 
