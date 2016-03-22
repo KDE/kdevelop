@@ -50,7 +50,6 @@ public:
   // cache of unserialized local declarations
   QVector<Declaration*> m_localDeclarations;
 
-  mutable bool m_rangesChanged : 1;
    /**
    * Adds a child context.
    *
