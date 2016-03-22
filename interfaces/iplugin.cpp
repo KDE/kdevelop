@@ -91,6 +91,7 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
     // so we know the parent is always a Core* pointer.
     // This is the only way to pass the Core pointer to the plugin during its
     // creation so plugins have access to ICore during their creation.
+    Q_ASSERT(qobject_cast<KDevelop::ICore*>(parent));
     d->core = static_cast<KDevelop::ICore*>(parent);
 
     setComponentName(componentName, componentName);
