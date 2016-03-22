@@ -41,6 +41,7 @@
 #include "../backgroundparser/backgroundparser.h"
 #include "util/debug.h"
 
+#include "language-features.h"
 #include "topducontext.h"
 #include "topducontextdata.h"
 #include "topducontextdynamicdata.h"
@@ -57,7 +58,7 @@
 #include "waitforupdate.h"
 #include "importers.h"
 
-#ifdef HAVE_MALLOC_TRIM
+#if HAVE_MALLOC_TRIM
 #include "malloc.h"
 #endif
 
@@ -910,12 +911,12 @@ public:
       foreach(QReadWriteLock* lock, locked)
         lock->unlock();
 
-    #ifdef HAVE_MALLOC_TRIM
+#if HAVE_MALLOC_TRIM
     // trim unused memory but keep a pad buffer of about 50 MB
     // this can greatly decrease the perceived memory consumption of kdevelop
     // see: https://sourceware.org/bugzilla/show_bug.cgi?id=14827
     malloc_trim(50 * 1024 * 1024);
-    #endif
+#endif
   }
 
   ///Checks whether the information is already loaded.
