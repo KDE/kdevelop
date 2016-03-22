@@ -232,7 +232,7 @@ bool SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Declaration* decla
             returnType = nullptr;
         }
     }
-    signature.returnType = returnType->indexed();
+    signature.returnType = IndexedType(returnType);
     signature.isConst = funcType->modifiers() & AbstractType::ConstModifier;
 
     QString decl = CodegenHelper::makeSignatureString(declaration, signature, true);
