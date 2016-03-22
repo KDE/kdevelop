@@ -1429,7 +1429,7 @@ AbstractType::Ptr DeclarationBuilder::typeFromClassName(const QString& name)
 
 void DeclarationBuilder::addBaseClass(ClassDeclaration* classDecl, const QString& name)
 {
-    addBaseClass(classDecl, typeFromClassName(name)->indexed());
+    addBaseClass(classDecl, IndexedType(typeFromClassName(name)));
 }
 
 void DeclarationBuilder::addBaseClass(ClassDeclaration* classDecl, const IndexedType& type)
