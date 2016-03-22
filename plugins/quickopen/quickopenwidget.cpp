@@ -53,7 +53,11 @@ public:
 
 };
 
-QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
+QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField )
+  : m_model(model)
+  , m_expandedTemporary(false)
+  , m_hadNoCommandSinceAlt(true)
+{
   m_filterTimer.setSingleShot(true);
   connect(&m_filterTimer, &QTimer::timeout, this, &QuickOpenWidget::applyFilter);
 
