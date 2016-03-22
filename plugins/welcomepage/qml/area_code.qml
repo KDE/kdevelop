@@ -19,7 +19,7 @@
  */
 
 import QtQuick 2.0
-import org.kde.plasma.components 2.0
+import QtQuick.Layouts 1.2
 
 StandardBackground {
     id: root
@@ -30,22 +30,25 @@ StandardBackground {
     
     state: "develop"
 
-    tools: ButtonColumn {
+    tools: ColumnLayout {
         spacing: 10
 
         Link {
-            iconSource: "applications-development"
+            Layout.fillWidth: true
+            iconName: "applications-development"
             text: i18n("Develop")
             onClicked: root.state = "develop"
         }
         Link {
-            iconSource: "project-development"
+            Layout.fillWidth: true
+            iconName: "project-development"
             text: i18n("Projects")
             onClicked: root.state = "projects"
             visible: false //FIXME: removed until it makes sense
         }
         Link {
-            iconSource: "help-contents"
+            Layout.fillWidth: true
+            iconName: "help-contents"
             text: i18n("Getting Started")
             onClicked: root.state = "gettingstarted"
         }

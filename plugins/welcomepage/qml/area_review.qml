@@ -19,7 +19,6 @@
  */
 
 import QtQuick 2.0
-import org.kde.plasma.components 2.0
 
 StandardBackground
 {
@@ -31,7 +30,7 @@ StandardBackground
     tools: Link {
             id: goCode
 
-            iconSource: "go-previous"
+            iconName: "go-previous"
             text: i18n("Back to code")
             onClicked: kdev.setArea("code")
         }
@@ -50,10 +49,10 @@ StandardBackground
             anchors.fill: parent
             spacing: 30
             
-            ToolBar {
+            Item {
                 tools: Flow {
                     Link {
-                        iconSource: "kompare"
+                        iconName: "kompare"
                         text: i18n("Review a Patch")
                         onClicked: {
                             kdev.raiseToolView("EditPatch")

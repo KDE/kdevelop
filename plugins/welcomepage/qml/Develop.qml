@@ -19,13 +19,13 @@
  */
 
 import QtQuick 2.0
-import org.kde.plasma.components 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick.Layouts 1.2
+import QtQuick.Controls 1.3
 import org.kdevelop.welcomepage 4.3
 
 StandardPage
 {
-    ToolBar {
+    RowLayout {
         id: toolBar
         anchors {
             top: parent.top
@@ -33,37 +33,35 @@ StandardPage
             right: parent.right
             margins: 25
         }
-        tools: Flow {
-            Link {
-                iconSource: "project-development-new-template"
-                text: i18n("New Project")
-                onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
-            }
+        Link {
+            iconName: "project-development-new-template"
+            text: i18n("New Project")
+            onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
+        }
 
-            Link {
-                iconSource: "project-development-open"
-                text: i18n("Open Project")
-                onClicked: ICore.projectController().openProject()
-            }
+        Link {
+            text: i18n("Open Project")
+            iconName: "project-development-open"
+            onClicked: ICore.projectController().openProject()
+        }
 
-            Link {
-                iconSource: "download"
-                text: i18n("Fetch Project")
-                onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
-            }
+        Link {
+            text: i18n("Fetch Project")
+            iconName: "download"
+            onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
+        }
 
-            Link {
-                iconSource: "document-open-recent"
-                text: i18n("Recent Projects")
-                onClicked: kdev.showMenu("project/project_open_recent")
-            }
+        Link {
+            iconName: "document-open-recent"
+            text: i18n("Recent Projects")
+            onClicked: kdev.showMenu("project/project_open_recent")
+        }
+        Item {
+            Layout.fillWidth: true
         }
     }
 
-    ListView {
-        id: sessionsView
-        clip: true
-        boundsBehavior: Flickable.StopAtBounds
+    ScrollView {
         anchors {
             left: parent.left
             top: toolBar.bottom
@@ -73,40 +71,33 @@ StandardPage
             leftMargin: 30
             rightMargin: 30
         }
+        ListView {
+            id: sessionsView
+            clip: true
 
-        delegate: ListItem {
-                    width: sessionsView.width
-                    height: visible ? 30 : 0
-                    visible: projects.length > 0
-                    onClicked: sessions.loadSession(uuid)
-                    enabled: true
+            delegate: MouseArea {
+                        width: sessionsView.width
+                        height: visible ? 30 : 0
+                        visible: projects.length > 0
+                        onClicked: sessions.loadSession(uuid)
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
 
-                    Link {
-                        width: parent.width
                         Label {
-                            anchors {
-                                fill: parent
-                                leftMargin: 5
-                                rightMargin: 5
-                            }
-                            text: (display=="" ?
-                                        projectNames.join(", ").replace(/.kdev4/g, "")
-                                    :
-                                    i18n("%1: %2", display, projectNames.join(", ").replace(/.kdev4/g, "")))
+                            width: parent.width
+                            readonly property string projectNamesString: projectNames.join(", ").replace(/.kdev4/g, "")
+                            text: display=="" ? projectNamesString : i18n("%1: %2", display, projectNamesString)
                             elide: Text.ElideRight
+                            opacity: parent.containsMouse ? 0.8 : 1
                         }
                     }
-                }
 
-        model: PlasmaCore.SortFilterModel {
-            sourceModel: SessionsModel { id: sessions }
-            sortRole: "identifier"
-            sortOrder: Qt.AscendingOrder
-        }
-        
-        header: Heading {
-            text: i18n("Sessions")
-            height: implicitHeight*2
+            model: SessionsModel { id: sessions }
+
+            header: Heading {
+                height: 1.25*implicitHeight
+                text: i18n("Sessions")
+            }
         }
     }
 }

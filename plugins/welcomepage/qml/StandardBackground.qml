@@ -19,19 +19,20 @@
  */
 
 import QtQuick 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
 
 Rectangle
 {
+    id: bg
     property Component tools: null
-    property alias pageIcon: theIcon.source
+    property string pageIcon
     property real marginLeft: toolbar.x+toolbar.width
     property real margins: 5
     
-    PlasmaCore.FrameSvgItem {
+    Rectangle {
         id: toolbar
 
-        imagePath: "dialogs/background"
+        radius: 5
+        color: Qt.rgba(0.8, 0.8, 0.8, 0.4)
 
         anchors {
             top: parent.top
@@ -54,13 +55,14 @@ Rectangle
         }
     }
     
-    PlasmaCore.IconItem {
+    Image {
         id: theIcon
         anchors {
             bottom: parent.bottom
             left: parent.left
             margins: 5
         }
+        source: "image://icon/" + bg.pageIcon
         width: 64
         height: width
     }

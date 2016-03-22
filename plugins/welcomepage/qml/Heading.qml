@@ -18,8 +18,9 @@
  * 02110-1301, USA.
  */
 
-import org.kde.plasma.components 2.0
+import QtQuick.Controls 1.3
 
 Label {
-    font.pointSize: theme.defaultFont.pointSize*1.5
+    Label { id: instance }
+    font.pointSize: instance.font.pointSize*2
 }

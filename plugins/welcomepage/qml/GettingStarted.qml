@@ -19,11 +19,12 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Layouts 1.2
+import QtQuick.Controls 1.2
 import QtWebKit 3.0
-import org.kde.plasma.components 2.0
 
 StandardPage {
-    Column {
+    ColumnLayout {
         id: options
         anchors.top: parent.top
         anchors.left: parent.left
@@ -32,10 +33,26 @@ StandardPage {
         spacing: 10
         
         width: 200
-        Link { text: i18n("Official Website"); onClicked: info.state="kdevelop.org" }
-        Link { text: i18n("Userbase"); onClicked: info.state="userbase" }
-        Link { text: i18n("Techbase"); onClicked: info.state="techbase" }
-        Link { text: i18n("Handbook"); onClicked: kdev.retrieveMenuAction("help/help_contents").trigger() }
+        Link {
+            Layout.fillWidth: true
+            text: i18n("Official Website")
+            onClicked: info.state="kdevelop.org"
+        }
+        Link {
+            Layout.fillWidth: true
+            text: i18n("Userbase")
+            onClicked: info.state="userbase"
+        }
+        Link {
+            Layout.fillWidth: true
+            text: i18n("Techbase")
+            onClicked: info.state="techbase"
+        }
+        Link {
+            Layout.fillWidth: true
+            text: i18n("Handbook")
+            onClicked: kdev.retrieveMenuAction("help/help_contents").trigger()
+        }
     }
     
     Column {
