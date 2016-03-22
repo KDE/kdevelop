@@ -237,11 +237,6 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     }
 }
 
-MainWindow* IdealButtonBarWidget::parentWidget() const
-{
-    return static_cast<Sublime::MainWindow*>(QWidget::parentWidget());
-}
-
 IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *action) const
 {
     return _widgets.value(action);
