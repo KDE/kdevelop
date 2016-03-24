@@ -26,6 +26,7 @@
 #include <QSet>
 
 #include <serialization/indexedstring.h>
+#include <shell/shellexport.h>
 
 #include "problemconstants.h"
 
@@ -39,7 +40,7 @@ class Path;
 /**
  * Helper class that tracks set of documents and notifies its owner whenever this set changes. Derived classes implement different tracking strategies.
  */
-class WatchedDocumentSet : public QObject
+class KDEVPLATFORMSHELL_EXPORT WatchedDocumentSet : public QObject
 {
     Q_OBJECT
 public:
