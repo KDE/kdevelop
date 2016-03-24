@@ -55,18 +55,18 @@ KTextEditor::Cursor KTextEditorHelpers::extractCursor(const QString& input, int*
 {
     static const QRegularExpression pattern(QStringLiteral(":(\\d+)(?::(\\d+))?$"));
     const auto match = pattern.match(input);
-    if (!match.isValid()) {
+    if (!match.hasMatch()) {
         if (pathLength)
             *pathLength = input.length();
-        return {};
+        return KTextEditor::Cursor::invalid();
     }
 
-    int line = match.captured(1).toInt() - 1;
+    int line = match.capturedRef(1).toInt() - 1;
     // don't use an invalid column when the line is valid
     int column = qMax(0, match.captured(2).toInt() - 1);
 
     if (pathLength)
-        *pathLength = match.capturedLength();
+        *pathLength = match.capturedStart(0);
     return {line, column};
 }
 
