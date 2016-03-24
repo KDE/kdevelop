@@ -132,7 +132,7 @@ QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
                     = new KDevelop::NavigationToolTip(view, QCursor::pos() + QPoint(20, 40), widget);
 
                 tooltip->resize(widget->sizeHint() + QSize(10, 10));
-                tooltip->setHandleRect(getItemBoundingRect(view, m_currentHintRange));
+                tooltip->setHandleRect(KTextEditorHelpers::getItemBoundingRect(view, m_currentHintRange));
                 tooltip->connect(tooltip, &ActiveToolTip::destroyed, [&] () { m_currentHintRange = {}; });
                 ActiveToolTip::showToolTip(tooltip, 99, QStringLiteral("problem-tooltip"));
                 return QString();
