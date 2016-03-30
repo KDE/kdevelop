@@ -1172,7 +1172,7 @@ CursorInRevision DUContext::importPosition(const DUContext* target) const
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
     if(d->m_importedContexts()[a] == import)
       return d->m_importedContexts()[a].position;
-    return CursorInRevision::invalid();
+  return CursorInRevision::invalid();
 }
 
 QVector<DUContext::Import> DUContext::importedParentContexts() const

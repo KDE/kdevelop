@@ -1054,9 +1054,9 @@ void Set::staticRef() {
   if(!m_tree)
     return;
 
-    QMutexLocker lock(m_repository->m_mutex);
-    SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndexSimple(m_tree);
-    ++data->m_refCount;
+  QMutexLocker lock(m_repository->m_mutex);
+  SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndexSimple(m_tree);
+  ++data->m_refCount;
 }
 
 ///Mutex must be locked
@@ -1089,9 +1089,9 @@ void Set::staticUnref() {
   if(!m_tree)
     return;
 
-    QMutexLocker lock(m_repository->m_mutex);
+  QMutexLocker lock(m_repository->m_mutex);
 
-    unrefNode(m_tree);
+  unrefNode(m_tree);
 }
 
 StringSetRepository::StringSetRepository(QString name) : Utils::BasicSetRepository(name) {

@@ -860,16 +860,16 @@ void ContextBrowserPlugin::switchUse(bool forward)
           //Try jumping from declaration to definition
           target = FunctionDefinition::definition(decl);
 
-          if(target && target != decl) {
-            KTextEditor::Cursor jumpTo = target->rangeInCurrentRevision().start();
-            QUrl document = target->url().toUrl();
-            lock.unlock();
-            core()->documentController()->openDocument( document, cursorToRange(jumpTo)  );
-            return;
-          }else{
-            //Always work with the declaration instead of the definition
-            decl = DUChainUtils::declarationForDefinition(decl, chosen);
-          }
+        if(target && target != decl) {
+          KTextEditor::Cursor jumpTo = target->rangeInCurrentRevision().start();
+          QUrl document = target->url().toUrl();
+          lock.unlock();
+          core()->documentController()->openDocument( document, cursorToRange(jumpTo)  );
+          return;
+        }else{
+          //Always work with the declaration instead of the definition
+          decl = DUChainUtils::declarationForDefinition(decl, chosen);
+        }
       }
 
       if(!decl) {
