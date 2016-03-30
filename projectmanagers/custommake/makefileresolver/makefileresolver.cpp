@@ -367,9 +367,10 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
     else if (workingDirectory.startsWith("./"))
       workingDirectory = workingDirectory.mid(2);
 
-    if (!workingDirectory.isEmpty())
+    if (!workingDirectory.isEmpty()) {
       u = u.adjusted(QUrl::StripTrailingSlash);
       u.setPath(u.path() + '/' + workingDirectory);
+    }
     workingDirectory = u.toLocalFile();
   } else
     workingDirectory = _workingDirectory;
@@ -486,9 +487,10 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
   res.includePathDependency = dependency;
 
-  if (res.paths.isEmpty())
+  if (res.paths.isEmpty()) {
       res.paths = cachedPaths; //We failed, maybe there is an old cached result, use that.
       res.defines = cachedDefines;
+  }
 
   {
     QMutexLocker l(&s_cacheMutex);
