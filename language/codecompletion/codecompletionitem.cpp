@@ -57,8 +57,8 @@ void CompletionTreeElement::setParent(CompletionTreeElement* parent) {
     Q_ASSERT(m_parent == 0);
 
     m_parent = parent;
-    CompletionTreeNode* node = parent->asNode();
-    if( node ) {
+    auto node = parent ? parent->asNode() : nullptr;
+    if (node) {
       m_rowInParent = node->children.count();
     }
 }

@@ -51,12 +51,12 @@ MapType::MapType(const MapType& rhs)
 
 void ListType::replaceContentType(AbstractType::Ptr newType)
 {
-    d_func_dynamic()->m_contentType = newType->indexed();
+    d_func_dynamic()->m_contentType = IndexedType(newType);
 }
 
 void MapType::replaceKeyType(AbstractType::Ptr newType)
 {
-    d_func_dynamic()->m_keyType = newType->indexed();
+    d_func_dynamic()->m_keyType = IndexedType(newType);
 }
 
 IndexedType ListType::contentType() const

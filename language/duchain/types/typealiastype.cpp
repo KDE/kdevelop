@@ -58,7 +58,7 @@ AbstractType::Ptr TypeAliasType::type() const
 
 void TypeAliasType::setType(AbstractType::Ptr type)
 {
-  d_func_dynamic()->m_type = type->indexed();
+  d_func_dynamic()->m_type = IndexedType(type);
 }
 
 uint TypeAliasType::hash() const
@@ -91,7 +91,7 @@ KDevelop::AbstractType::WhichType TypeAliasType::whichType() const {
 }
 
 void TypeAliasType::exchangeTypes(KDevelop::TypeExchanger* exchanger) {
-  d_func_dynamic()->m_type = exchanger->exchange( d_func()->m_type.abstractType() )->indexed();
+  d_func_dynamic()->m_type = IndexedType(exchanger->exchange(d_func()->m_type.abstractType()));
 }
 
 

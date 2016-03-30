@@ -19,12 +19,12 @@
  */
 
 import QtQuick 2.1
-import org.kde.plasma.core 2.0 as PlasmaCore
 
-PlasmaCore.FrameSvgItem {
-    imagePath: "dialogs/background"
+Rectangle {
+    radius: 5
+    color: Qt.rgba(0.8, 0.8, 0.8, 0.4)
 
-    PlasmaCore.IconItem {
+    Image {
         anchors {
             bottom: parent.bottom
             right: parent.right
@@ -33,6 +33,6 @@ PlasmaCore.FrameSvgItem {
         opacity: 0.3
         width: 128
         height: width
-        source: "kdevelop"
+        source: "image://icon/kdevelop"
     }
 }

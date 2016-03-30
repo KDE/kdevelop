@@ -101,7 +101,7 @@ AbstractRepositoryManager* typeRepositoryManager() {
   return &typeRepository();
 }
 
-uint TypeRepository::indexForType(AbstractType::Ptr input) {
+uint TypeRepository::indexForType(const AbstractType::Ptr input) {
   if(!input)
     return 0;
 

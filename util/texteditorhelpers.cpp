@@ -21,7 +21,9 @@
 
 #include "texteditorhelpers.h"
 
-#include "KTextEditor/View"
+#include <KTextEditor/View>
+
+#include <QRegularExpression>
 
 namespace KDevelop {
 
@@ -41,12 +43,31 @@ int getLineHeight(const KTextEditor::View* view, int curLine)
 
 }
 
-QRect getItemBoundingRect(const KTextEditor::View* view, KTextEditor::Range itemRange)
+QRect KTextEditorHelpers::getItemBoundingRect(const KTextEditor::View* view, const KTextEditor::Range& itemRange)
 {
   QPoint startPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.start()));
   QPoint endPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.end()));
   endPoint.ry() += getLineHeight(view, itemRange.start().line());
   return QRect(startPoint, endPoint);
+}
+
+KTextEditor::Cursor KTextEditorHelpers::extractCursor(const QString& input, int* pathLength)
+{
+    static const QRegularExpression pattern(QStringLiteral(":(\\d+)(?::(\\d+))?$"));
+    const auto match = pattern.match(input);
+    if (!match.hasMatch()) {
+        if (pathLength)
+            *pathLength = input.length();
+        return KTextEditor::Cursor::invalid();
+    }
+
+    int line = match.capturedRef(1).toInt() - 1;
+    // don't use an invalid column when the line is valid
+    int column = qMax(0, match.captured(2).toInt() - 1);
+
+    if (pathLength)
+        *pathLength = match.capturedStart(0);
+    return {line, column};
 }
 
 }

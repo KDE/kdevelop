@@ -35,6 +35,7 @@
 #include <language/duchain/duchainlock.h>
 #include <serialization/indexedstring.h>
 #include <language/duchain/parsingenvironment.h>
+#include <util/texteditorhelpers.h>
 
 #include <project/projectmodel.h>
 #include <project/projectutils.h>
@@ -89,12 +90,12 @@ bool ProjectFileData::execute( QString& filterText )
 {
     const QUrl url = m_file.path.toUrl();
     IOpenWith::openFiles(QList<QUrl>() << url);
-    QString path;
-    uint lineNumber;
-    if (extractLineNumber(filterText, path, lineNumber)) {
+
+    auto cursor = KTextEditorHelpers::extractCursor(filterText);
+    if (cursor.isValid()) {
         IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
         if (doc) {
-            doc->setCursorPosition(KTextEditor::Cursor(lineNumber - 1, 0));
+            doc->setCursorPosition(cursor);
         }
     }
     return true;
@@ -199,9 +200,9 @@ BaseFileDataProvider::BaseFileDataProvider()
 
 void BaseFileDataProvider::setFilterText( const QString& text )
 {
-    QString path(text);
-    uint lineNumber;
-    extractLineNumber(text, path, lineNumber);
+    int pathLength;
+    KTextEditorHelpers::extractCursor(text, &pathLength);
+    QString path(text.mid(0, pathLength));
     if ( path.startsWith(QLatin1String("./")) || path.startsWith(QLatin1String("../")) ) {
         // assume we want to filter relative to active document's url
         IDocument* doc = ICore::self()->documentController()->activeDocument();

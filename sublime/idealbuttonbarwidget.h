@@ -70,8 +70,6 @@ protected:
     void actionEvent(QActionEvent *event) override;
 
 private:
-    Sublime::MainWindow* parentWidget() const;
-
     Qt::DockWidgetArea _area;
     IdealController *_controller;
     QHash<QAction *, IdealToolButton*> _buttons;

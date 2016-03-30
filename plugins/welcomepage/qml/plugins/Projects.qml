@@ -18,7 +18,6 @@
 
 import QtQuick 2.1
 import org.kde.kdevplatform 1.0
-import org.kde.plasma.components 2.0
 import org.kde.plasma.extras 2.0
 
 Column

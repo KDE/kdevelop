@@ -164,7 +164,6 @@ DUContextDynamicData::DUContextDynamicData(DUContext* d)
   : m_topContext(0)
   , m_indexInTopContext(0)
   , m_context(d)
-  , m_rangesChanged(true)
 {
 }
 

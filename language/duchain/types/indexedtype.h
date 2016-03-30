@@ -37,11 +37,9 @@ namespace KDevelop
  */
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedType : public ReferenceCountManager {
   public:
-    /// Constructor.
     IndexedType(const IndexedType& rhs);
+    explicit IndexedType(const AbstractType::Ptr& type);
     explicit IndexedType(uint index = 0);
-    // prevent upcasting
-    IndexedType(bool) = delete;
     
     ~IndexedType();
     

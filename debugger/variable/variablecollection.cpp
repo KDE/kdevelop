@@ -536,7 +536,7 @@ QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::C
         w = view;
 
     m_collection->activeTooltip_ = new VariableToolTip(w, global+QPoint(30,30), expression);
-    m_collection->activeTooltip_->setHandleRect(getItemBoundingRect(view, expressionRange));
+    m_collection->activeTooltip_->setHandleRect(KTextEditorHelpers::getItemBoundingRect(view, expressionRange));
     return QString();
 }
 

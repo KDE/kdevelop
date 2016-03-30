@@ -532,7 +532,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     auto plugin = factory->create<IPlugin>(d->core);
     if (!plugin) {
         if (auto katePlugin = factory->create<KTextEditor::Plugin>(d->core, QVariantList() << info.pluginId())) {
-            plugin = new KTextEditorIntegration::Plugin(katePlugin, this);
+            plugin = new KTextEditorIntegration::Plugin(katePlugin, d->core);
         } else {
             qWarning() << "Creating plugin" << pluginId << "failed.";
             return nullptr;

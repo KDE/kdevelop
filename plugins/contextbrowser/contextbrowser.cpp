@@ -468,7 +468,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
       DUChainReadLocker lock;
       itemRange = DUChainUtils::itemRangeUnderCursor(viewUrl, KTextEditor::Cursor(position));
     }
-    tooltip->setHandleRect(getItemBoundingRect(view, itemRange));
+    tooltip->setHandleRect(KTextEditorHelpers::getItemBoundingRect(view, itemRange));
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
     qCDebug(PLUGIN_CONTEXTBROWSER) << "tooltip size" << tooltip->size();
     m_currentToolTip = tooltip;

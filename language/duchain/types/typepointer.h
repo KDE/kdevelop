@@ -43,15 +43,7 @@ class TypePtr : public QExplicitlySharedDataPointer<T>
     using Base = QExplicitlySharedDataPointer<T>;
 
 public:
-    // Note: No inheriting ctors for MSVC => We cannot use them here
-    TypePtr()
-      : QExplicitlySharedDataPointer<T>() {}
-    explicit TypePtr(T* data)
-      : QExplicitlySharedDataPointer<T>(data) {}
-    template<class X>
-    inline TypePtr(const TypePtr<X> &o)
-      : QExplicitlySharedDataPointer<T>(o) {}
-
+    using Base::QExplicitlySharedDataPointer;
     using Base::operator=;
 
     ///Uses dynamic_cast to cast this pointer to the given type
@@ -92,9 +84,5 @@ public:
 };
 
 }
-
-// TODO: Remove once we depend on Qt 5.4, also see https://codereview.qt-project.org/#/c/88665/
-template <class T>
-Q_DECL_CONSTEXPR uint qHash(const KDevelop::TypePtr<T>& type) { return qHash(type.data()); }
 
 #endif

@@ -19,7 +19,8 @@
  */
 
 import QtQuick 2.0
-import org.kde.plasma.components 2.0
+import QtQuick.Layouts 1.1
+import QtQuick.Controls 1.2
 
 StandardBackground
 {
@@ -31,7 +32,7 @@ StandardBackground
     tools: Link {
             id: goCode
 
-            iconSource: "go-previous"
+            iconName: "go-previous"
             text: i18n("Back to code")
             onClicked: kdev.setArea("code")
         }
@@ -50,12 +51,10 @@ StandardBackground
             anchors.fill: parent
             spacing: 30
             
-            ToolBar {
-                tools: Flow {
-                    Link { iconSource: "configure"; text: i18n("Configure a new Launcher"); onClicked: kdev.retrieveMenuAction("run/configure_launches").trigger() }
-                    Link { iconSource: "audio-input-line"; text: i18n("Attach to Process"); onClicked: kdev.retrieveMenuAction("run/debug_attach").trigger() }
-                    Link { iconSource: "debug-run"; text: i18n("Debug your program"); onClicked: kdev.retrieveMenuAction("run/run_debug").trigger() }
-                }
+            RowLayout {
+                Link { iconName: "configure"; text: i18n("Configure a new Launcher"); onClicked: kdev.retrieveMenuAction("run/configure_launches").trigger() }
+                Link { iconName: "audio-input-line"; text: i18n("Attach to Process"); onClicked: kdev.retrieveMenuAction("run/debug_attach").trigger() }
+                Link { iconName: "debug-run"; text: i18n("Debug your program"); onClicked: kdev.retrieveMenuAction("run/run_debug").trigger() }
             }
             Heading { text: i18n("Debug Area") }
             Label {
