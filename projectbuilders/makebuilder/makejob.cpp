@@ -214,10 +214,17 @@ QStringList MakeJob::commandLine() const
         cmdline << (isNMake(makeBin) ? "/K" : "-k");
     }
 
-    const int jobnumber = builderGroup.readEntry("Number Of Jobs", QThread::idealThreadCount());
-    if(jobnumber>1 && !isNMake(makeBin)) {
-        QString jobNumberArg = QString("-j%1").arg(jobnumber);
-        cmdline << jobNumberArg;
+    // note: nmake does not support the -j flag
+    if (!isNMake(makeBin)) {
+        if (builderGroup.readEntry("Override Number Of Jobs", false)) {
+            int jobCount = builderGroup.readEntry("Number Of Jobs", 1);
+            if (jobCount > 0) {
+                cmdline << QString("-j%1").arg(jobCount);
+            }
+        } else {
+            // use the ideal thread count by default
+            cmdline << QString("-j%1").arg(QThread::idealThreadCount());
+        }
     }
 
     if( builderGroup.readEntry("Display Only", false) )

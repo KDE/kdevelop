@@ -68,7 +68,7 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
 
     if (!isConstructor(functionDecl)) {
         if (auto funType = functionDecl->type<FunctionType>()) {
-            signature.returnType = funType->returnType()->indexed();
+            signature.returnType = IndexedType(funType->returnType());
         }
     }
     return signature;

@@ -110,7 +110,7 @@ uint buildIdentifierForType(const AbstractType::Ptr& type, IndexedTypeIdentifier
     AbstractType::Ptr useTypeText = type;
     if (type->modifiers() & AbstractType::ConstModifier) {
         //Remove the 'const' modifier, as it will be added to the type-identifier below
-        useTypeText = type->indexed().abstractType();
+        useTypeText = IndexedType(type).abstractType();
         useTypeText->setModifiers(useTypeText->modifiers() & (~AbstractType::ConstModifier));
     }
     id.setIdentifier(QualifiedIdentifier(useTypeText->toString(), true));
@@ -293,7 +293,7 @@ AbstractType::Ptr stripType(const AbstractType::Ptr& type, DUContext* ctx)
                     if (decls.isEmpty()) {
                         continue; // type aliases might be available for nested sub scopes, hence we must not break early
                     }
-                    if (decls[0]->kind() != Declaration::Type || removeConstModifier(decls[0]->indexedType()) != removeConstModifier(type->indexed())) {
+                    if (decls[0]->kind() != Declaration::Type || removeConstModifier(decls[0]->indexedType()) != removeConstModifier(IndexedType(type))) {
                         break;
                     }
                     newTypeName = candidate;

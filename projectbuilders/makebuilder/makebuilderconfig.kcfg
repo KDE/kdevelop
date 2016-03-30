@@ -16,6 +16,9 @@
     </entry>
     <entry name="suCommand" key="Su Command" type="Int">
     </entry>
+    <entry name="overrideNumberOfJobs" key="Override Number Of Jobs" type="Bool">
+        <default>false</default>
+    </entry>
     <entry name="numberOfJobs" key="Number Of Jobs" type="UInt">
         <default>2</default>
     </entry>

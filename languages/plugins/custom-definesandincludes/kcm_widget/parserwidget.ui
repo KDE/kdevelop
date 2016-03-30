@@ -64,26 +64,6 @@
         </item>
         <item>
          <property name="text">
-          <string>c99</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>gnu99</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>c11</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>gnu11</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>c++03</string>
          </property>
         </item>
@@ -95,6 +75,11 @@
         <item>
          <property name="text">
           <string>c++14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c99</string>
          </property>
         </item>
        </widget>
@@ -173,17 +158,7 @@
         </item>
         <item>
          <property name="text">
-          <string>c++03</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>c++11</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>c++14</string>
          </property>
         </item>
        </widget>
