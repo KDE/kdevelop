@@ -30,12 +30,6 @@
 
 #include "../debugarea.h"
 
-#ifdef _WIN32
-#define NULL_DEVICE "NUL"
-#else
-#define NULL_DEVICE "/dev/null"
-#endif
-
 using namespace KDevelop;
 
 namespace
@@ -72,7 +66,7 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     auto compilerArguments = languageOptions(arguments);
     compilerArguments.append("-dM");
     compilerArguments.append("-E");
-    compilerArguments.append(NULL_DEVICE);
+    compilerArguments.append(QProcess::nullDevice());
 
     proc.start(path(), compilerArguments);
 
@@ -117,7 +111,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     auto compilerArguments = languageOptions(arguments);
     compilerArguments.append("-E");
     compilerArguments.append("-v");
-    compilerArguments.append(NULL_DEVICE);
+    compilerArguments.append(QProcess::nullDevice());
 
     proc.start(path(), compilerArguments);
 
