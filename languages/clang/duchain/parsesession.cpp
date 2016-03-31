@@ -84,7 +84,9 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
 
     auto result = parserSettings.toClangAPI();
     result.append(QByteArrayLiteral("-nostdinc"));
-    result.append(QByteArrayLiteral("-nostdinc++"));
+    if (parserSettings.isCpp()) {
+        result.append(QByteArrayLiteral("-nostdinc++"));
+    }
 
     if (options & ParseSessionData::PrecompiledHeader) {
         result.append(parserSettings.isCpp() ? QByteArrayLiteral("-xc++-header") : QByteArrayLiteral("-xc-header"));
