@@ -34,18 +34,43 @@ using namespace KDevelop;
 
 namespace
 {
+// compilers don't deduplicate QStringLiteral
+QString minusXC() { return QStringLiteral("-xc"); }
+QString minusXCPlusPlus() { return QStringLiteral("-xc++"); }
+
 QStringList languageOptions(const QString& arguments)
 {
-    const QRegularExpression regexp("-std=(c|c\\+\\+)[0-9]{2}");
 
+    // TODO: handle -ansi flag: In C mode, this is equivalent to -std=c90. In C++ mode, it is equivalent to -std=c++98.
+    // TODO: check for -x flag on command line
+    const QRegularExpression regexp("-std=(\\S+)");
+    // see gcc manpage or llvm/tools/clang/include/clang/Frontend/LangStandards.def for list of valid language options
     auto result = regexp.match(arguments);
     if(result.hasMatch()){
         auto standard = result.captured(0);
-        auto language = result.captured(1) == QStringLiteral("c++") ? QStringLiteral("-xc++") : QStringLiteral("-xc");
+        QString mode = result.captured(1);
+        QString language;
+        if (mode.startsWith(QLatin1String("c++")) || mode.startsWith(QLatin1String("gnu++"))) {
+            language = minusXCPlusPlus();
+        } else if (mode.startsWith(QLatin1String("iso9899:"))) {
+            // all iso9899:xxxxx modes are C standards
+            language = minusXC();
+        } else {
+            // check for c11, gnu99, etc: all of them have a digit after the c/gnu
+            const QRegularExpression cRegexp("(c|gnu)\\d.*");
+            if (cRegexp.match(mode).hasMatch()) {
+                language = minusXC();
+            }
+        }
+        if (language.isEmpty()) {
+            qCWarning(DEFINESANDINCLUDES) << "Failed to determine language from -std= flag:" << arguments;
+            language = minusXCPlusPlus();
+        }
         return {standard, language};
-    }
 
-    return {QStringLiteral("--std=c++11"), QStringLiteral("-xc++")};
+    }
+    // no -std= flag passed -> assume c++11
+    return {QStringLiteral("-std=c++11"), minusXCPlusPlus()};
 }
 
 }
@@ -63,6 +88,7 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     QProcess proc;
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
+    // TODO: what about -mXXX or -target= flags, some of these change search paths/defines
     auto compilerArguments = languageOptions(arguments);
     compilerArguments.append("-dM");
     compilerArguments.append("-E");
