@@ -260,6 +260,8 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 #endif
         // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
         ErrorFormat( QStringLiteral("^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)"), 1, 2, 4, 3 ),
+        // ant
+        ErrorFormat( QStringLiteral("\\[javac\\][\\s]+([^:\t]+):([0-9]+): (warning: .*|error: .*)"), 1, 2, 3, QStringLiteral("javac")),
         // GCC
         ErrorFormat( QStringLiteral("^([^:\t]+):([0-9]+):([^0-9]+)"), 1, 2, 3 ),
         // GCC
