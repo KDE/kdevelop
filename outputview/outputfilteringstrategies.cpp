@@ -117,6 +117,8 @@ const QVector<Indicator> INDICATORS {
 const QVector<ErrorFormat> ERROR_FILTERS {
     // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
     ErrorFormat( "^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)", 1, 2, 4, 3 ),
+    // ant
+    ErrorFormat("\\[javac\\][\\s]+([^:\t]+):([0-9]+): (warning: .*|error: .*)", 1, 2, 3, "javac"),
     // GCC
     ErrorFormat( "^([^:\t]+):([0-9]+):([^0-9]+)", 1, 2, 3 ),
     // GCC
