@@ -17,6 +17,7 @@
 #include <KIO/UDSEntry>
 
 class KPageWidgetItem;
+class QFileDialog;
 namespace KIO
 {
 class Job;
@@ -47,6 +48,8 @@ public:
     QString projectName() const;
     QString projectManager() const;
 
+    int exec() override;
+
 private slots:
     void validateSourcePage( bool );
     void validateOpenUrl( const QUrl& );
@@ -56,19 +59,22 @@ private slots:
     void openPageAccepted();
 
 private:
+    bool execNativeDialog();
     void validateProjectInfo();
     QUrl m_url;
     QUrl m_selected;
     QString m_projectName;
     QString m_projectManager;
+    /// Used to select files when we aren't in KDE
+    QFileDialog* nativeDialog = nullptr;
     KPageWidgetItem* sourcePage;
     KPageWidgetItem* openPage;
     KPageWidgetItem* projectInfoPage;
     QStringList m_fileList;
     QMap<QString, QStringList> m_projectFilters;
 
-    KDevelop::OpenProjectPage* openPageWidget;
-    KDevelop::ProjectSourcePage* sourcePageWidget;
+    KDevelop::OpenProjectPage* openPageWidget = nullptr;
+    KDevelop::ProjectSourcePage* sourcePageWidget = nullptr;
 };
 
 }
