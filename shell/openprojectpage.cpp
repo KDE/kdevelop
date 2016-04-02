@@ -20,36 +20,17 @@
 
 #include "shellextension.h"
 #include "core.h"
-#include "plugincontroller.h"
 
 namespace KDevelop
 {
 
-OpenProjectPage::OpenProjectPage( const QUrl& startUrl, QWidget* parent )
+OpenProjectPage::OpenProjectPage( const QUrl& startUrl, const QStringList& filters,
+    QWidget* parent )
         : QWidget( parent )
 {
     QHBoxLayout* layout = new QHBoxLayout( this );
 
     fileWidget = new KFileWidget( startUrl, this);
-
-    QStringList filters;
-    QStringList allEntry;
-    allEntry << "*."+ShellExtension::getInstance()->projectFileExtension();
-    filters << QStringLiteral( "%1|%2 (%1)").arg("*."+ShellExtension::getInstance()->projectFileExtension(), ShellExtension::getInstance()->projectFileDescription());
-    QVector<KPluginMetaData> plugins = ICore::self()->pluginController()->queryExtensionPlugins( QStringLiteral( "org.kdevelop.IProjectFileManager" ) );
-    foreach(const KPluginMetaData& info, plugins)
-    {
-        QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
-	    QString desc = info.value(QStringLiteral("X-KDevelop-ProjectFilesFilterDescription"));
-        QString filterline;
-        if(!filter.isEmpty() && !desc.isEmpty()) {
-            m_projectFilters.insert(info.name(), filter);
-            allEntry += filter;
-            filters << QStringLiteral("%1|%2 (%1)").arg(filter.join(QStringLiteral(" ")), desc);
-        }
-    }
-
-    filters.prepend( i18n( "%1|All Project Files (%1)", allEntry.join( QStringLiteral(" ") ) ) );
 
     fileWidget->setFilter( filters.join(QStringLiteral("\n")) );
 
@@ -118,11 +99,6 @@ void OpenProjectPage::opsEntered(const QUrl& url)
 void OpenProjectPage::comboTextChanged( const QString& file )
 {
     emit urlSelected( getAbsoluteUrl( file ) );
-}
-
-QMap<QString,QStringList> OpenProjectPage::projectFilters() const
-{
-    return m_projectFilters;
 }
 
 }

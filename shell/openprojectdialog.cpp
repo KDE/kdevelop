@@ -22,6 +22,7 @@
 
 #include "core.h"
 #include "uicontroller.h"
+#include "plugincontroller.h"
 #include "mainwindow.h"
 #include "shellextension.h"
 #include "projectsourcepage.h"
@@ -38,6 +39,24 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
 {
     resize(QSize(700, 500));
 
+    QStringList filters, allEntry;
+    allEntry << "*." + ShellExtension::getInstance()->projectFileExtension();
+    filters << QStringLiteral("%1|%2 (%1)").arg("*." + ShellExtension::getInstance()->projectFileExtension(), ShellExtension::getInstance()->projectFileDescription());
+    QVector<KPluginMetaData> plugins = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
+    foreach(const KPluginMetaData& info, plugins)
+    {
+        QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
+        QString desc = info.value(QStringLiteral("X-KDevelop-ProjectFilesFilterDescription"));
+
+        if (!filter.isEmpty() && !desc.isEmpty()) {
+            m_projectFilters.insert(info.name(), filter);
+            allEntry += filter;
+            filters << QStringLiteral("%1|%2 (%1)").arg(filter.join(QStringLiteral(" ")), desc);
+        }
+    }
+
+    filters.prepend(i18n("%1|All Project Files (%1)", allEntry.join(QStringLiteral(" "))));
+
     QUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
     start = start.adjusted(QUrl::NormalizePathSegments);
     KPageWidgetItem* currentPage = 0;
@@ -49,7 +68,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
         currentPage = sourcePage;
     }
 
-    openPageWidget = new OpenProjectPage( start, this );
+    openPageWidget = new OpenProjectPage( start, filters, this );
     connect( openPageWidget, &OpenProjectPage::urlSelected, this, &OpenProjectDialog::validateOpenUrl );
     connect( openPageWidget, &OpenProjectPage::accepted, this, &OpenProjectDialog::openPageAccepted );
     openPage = addPage( openPageWidget, i18n("Select a build system setup file, existing KDevelop project, "
@@ -136,42 +155,38 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
         if( page )
         {
             page->setProjectName( m_url.fileName() );
-            OpenProjectPage* page2 = qobject_cast<OpenProjectPage*>( openPage->widget() );
-            if( page2 )
-            {
-                // Default manager
-                page->setProjectManager( QStringLiteral("Generic Project Manager") );
-                // clear the filelist
-                m_fileList.clear();
+            // Default manager
+            page->setProjectManager( QStringLiteral("Generic Project Manager") );
+            // clear the filelist
+            m_fileList.clear();
 
-                if( isDir ) {
-                    // If a dir was selected fetch all files in it
-                    KIO::ListJob* job = KIO::listDir( m_url );
-                    connect( job, &KIO::ListJob::entries,
-                                  this, &OpenProjectDialog::storeFileList);
-                    KJobWidgets::setWindow(job, Core::self()->uiController()->activeMainWindow());
-                    job->exec();
-                } else {
-                    // Else we'lll just take the given file
-                    m_fileList << url.fileName();
-                }
-                // Now find a manager for the file(s) in our filelist.
-                bool managerFound = false;
-                foreach( const QString& manager, page2->projectFilters().keys() )
+            if( isDir ) {
+                // If a dir was selected fetch all files in it
+                KIO::ListJob* job = KIO::listDir( m_url );
+                connect( job, &KIO::ListJob::entries,
+                                this, &OpenProjectDialog::storeFileList);
+                KJobWidgets::setWindow(job, Core::self()->uiController()->activeMainWindow());
+                job->exec();
+            } else {
+                // Else we'lll just take the given file
+                m_fileList << url.fileName();
+            }
+            // Now find a manager for the file(s) in our filelist.
+            bool managerFound = false;
+            foreach( const QString& manager, m_projectFilters.keys() )
+            {
+                foreach( const QString& filterexp, m_projectFilters.value(manager) )
                 {
-                    foreach( const QString& filterexp, page2->projectFilters().value(manager) )
+                    if( !m_fileList.filter( QRegExp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard ) ).isEmpty() )
                     {
-                        if( !m_fileList.filter( QRegExp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard ) ).isEmpty() )
-                        {
-                            managerFound = true;
-                            break;
-                        }
-                    }
-                    if( managerFound )
-                    {
-                        page->setProjectManager( manager );
+                        managerFound = true;
                         break;
                     }
+                }
+                if( managerFound )
+                {
+                    page->setProjectManager( manager );
+                    break;
                 }
             }
         }

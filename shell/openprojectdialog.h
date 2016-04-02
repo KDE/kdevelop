@@ -65,6 +65,7 @@ private:
     KPageWidgetItem* openPage;
     KPageWidgetItem* projectInfoPage;
     QStringList m_fileList;
+    QMap<QString, QStringList> m_projectFilters;
 
     KDevelop::OpenProjectPage* openPageWidget;
     KDevelop::ProjectSourcePage* sourcePageWidget;

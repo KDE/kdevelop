@@ -25,8 +25,8 @@ class OpenProjectPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit OpenProjectPage( const QUrl& startUrl, QWidget* parent = nullptr );
-    QMap<QString,QStringList> projectFilters() const;
+    explicit OpenProjectPage( const QUrl& startUrl, const QStringList& filters,
+        QWidget* parent = nullptr );
     void setUrl(const QUrl& url);
 
 signals:
@@ -45,7 +45,6 @@ private slots:
 private:
     QUrl getAbsoluteUrl(const QString&) const;
     KFileWidget* fileWidget;
-    QMap<QString,QStringList> m_projectFilters;
 };
 
 }
