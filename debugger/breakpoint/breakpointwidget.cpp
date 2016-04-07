@@ -23,6 +23,7 @@
 #include "breakpointwidget.h"
 
 #include <QIcon>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QSplitter>
 #include <QTreeView>
@@ -63,7 +64,11 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     m_breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_breakpointsView->setSelectionMode(QAbstractItemView::SingleSelection);
     m_breakpointsView->setRootIsDecorated(false);
-    m_details = new BreakpointDetails(this);
+
+    auto detailsContainer = new QGroupBox(i18n("Breakpoint Details"), this);
+    auto detailsLayout = new QVBoxLayout(detailsContainer);
+    m_details = new BreakpointDetails(detailsContainer);
+    detailsLayout->addWidget(m_details);
 
     setStretchFactor(0, 2);
 

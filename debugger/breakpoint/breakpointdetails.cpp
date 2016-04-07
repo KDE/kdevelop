@@ -41,7 +41,6 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     : QWidget(parent), m_currentBreakpoint(0)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(11, 0, 0, 11);
 
     m_status = new QLabel(this);
     connect(m_status, &QLabel::linkActivated,
@@ -56,10 +55,6 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     m_hits = new QLabel(i18n("Not hit yet"), this);
     m_hits->setWordWrap(true);
     hitsLayout->addWidget(m_hits, 0, 0, 1, 3);
-
-    QFrame* frame = new QFrame(this);
-    frame->setFrameShape(QFrame::HLine);
-    hitsLayout->addWidget(frame, 1, 0, 1, 3);
 
     QLabel *l2 = new QLabel(i18n("Ignore"), this);
     hitsLayout->addWidget(l2, 2, 0);
