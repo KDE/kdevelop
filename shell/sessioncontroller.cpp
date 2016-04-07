@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <QApplication>
 #include <QDBusConnectionInterface>
 #include <QGroupBox>
+#include <QInputDialog>
 #include <QLabel>
 #include <QLineEdit>
 #include <QListView>
@@ -159,32 +160,12 @@ public:
 
     void renameSession()
     {
-        QDialog dialog;
-        dialog.setWindowTitle(i18n("Rename Session"));
-
-        auto mainLayout = new QVBoxLayout(&dialog);
-
-        QGroupBox box;
-        QHBoxLayout layout(&box);
-        box.setTitle(i18n("New Session Name"));
-        QLineEdit edit;
-        layout.addWidget(&edit);
-        mainLayout->addWidget(&box);
-
-        auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-        auto okButton = buttonBox->button(QDialogButtonBox::Ok);
-        okButton->setDefault(true);
-        okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-        connect(buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
-        connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
-        mainLayout->addWidget(buttonBox);
-
-        edit.setText(q->activeSession()->name());
-        edit.setFocus();
-
-        if(dialog.exec() == QDialog::Accepted)
-        {
-            static_cast<Session*>(q->activeSession())->setName(edit.text());
+        bool ok;
+        auto newSessionName = QInputDialog::getText(Core::self()->uiController()->activeMainWindow(),
+                                                    i18n("Rename Session"), i18n("New Session Name:"),
+                                                    QLineEdit::Normal, q->activeSession()->name(), &ok);
+        if (ok) {
+            static_cast<Session*>(q->activeSession())->setName(newSessionName);
         }
     }
 
