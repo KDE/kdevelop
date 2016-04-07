@@ -149,7 +149,7 @@ public:
     /// @return new session GUID to try or an empty string if application startup shall be aborted
     static QString handleLockedSession( const QString& sessionName, const QString& currentSessionId, const SessionRunInfo& runInfo );
 
-    void plugActions();
+    void updateXmlGuiActionList();
 
     void emitQuitSession()
     {

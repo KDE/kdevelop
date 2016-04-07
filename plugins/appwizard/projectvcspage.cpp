@@ -119,7 +119,7 @@ QString ProjectVcsPage::commitMessage() const
     if ( idx < 0 || idx >= importWidgets.size())
         return QString();
 
-        return importWidgets[idx]->message();
+    return importWidgets[idx]->message();
 }
 
 QUrl ProjectVcsPage::source() const

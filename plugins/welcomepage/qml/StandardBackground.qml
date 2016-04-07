@@ -62,7 +62,7 @@ Rectangle
             left: parent.left
             margins: 5
         }
-        source: "image://icon/" + bg.pageIcon
+        source: bg.pageIcon !== "" ? "image://icon/" + bg.pageIcon : ""
         width: 64
         height: width
     }

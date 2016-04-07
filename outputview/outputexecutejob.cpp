@@ -271,7 +271,8 @@ void OutputExecuteJob::start()
     d->m_process->setProcessEnvironment( d->effectiveEnvironment() );
     if (!d->effectiveCommandLine().isEmpty()) {
         d->m_process->setProgram( d->effectiveCommandLine() );
-
+        // there is no way to input data in the output view so redirect stdin to the null device
+        d->m_process->setStandardInputFile(QProcess::nullDevice());
         qCDebug(OUTPUTVIEW) << "Starting:" << d->m_process->program().join(QStringLiteral(" ")) << "in" << d->m_process->workingDirectory();
         d->m_process->start();
     } else {

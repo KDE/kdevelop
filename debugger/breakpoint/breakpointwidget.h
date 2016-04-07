@@ -30,7 +30,7 @@
 class QAbstractProxyModel;
 class QModelIndex;
 class QItemSelection;
-class QTableView;
+class QTreeView;
 class QMenu;
 class QSplitter;
 
@@ -71,7 +71,7 @@ private Q_SLOTS:
     void slotPopupMenuAboutToShow();
     
 private:
-    QTableView* m_breakpointsView;
+    QTreeView* m_breakpointsView;
     BreakpointDetails* m_details;
     QMenu* m_popup;
     bool m_firstShow;

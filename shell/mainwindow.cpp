@@ -310,9 +310,11 @@ void MainWindow::initialize()
 
     guiFactory()->addClient(Core::self()->sessionController());
     guiFactory()->addClient(Core::self()->sourceFormatterControllerInternal());
+
     // Needed to re-plug the actions from the sessioncontroller as xmlguiclients don't
     // seem to remember which actions where plugged in.
-    Core::self()->sessionController()->plugActions();
+    Core::self()->sessionController()->updateXmlGuiActionList();
+
     d->setupGui();
 
     //Queued so we process it with some delay, to make sure the rest of the UI has already adapted

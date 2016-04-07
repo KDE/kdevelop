@@ -41,7 +41,6 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     : QWidget(parent), m_currentBreakpoint(0)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(11, 0, 0, 11);
 
     m_status = new QLabel(this);
     connect(m_status, &QLabel::linkActivated,
@@ -56,10 +55,6 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     m_hits = new QLabel(i18n("Not hit yet"), this);
     m_hits->setWordWrap(true);
     hitsLayout->addWidget(m_hits, 0, 0, 1, 3);
-
-    QFrame* frame = new QFrame(this);
-    frame->setFrameShape(QFrame::HLine);
-    hitsLayout->addWidget(frame, 1, 0, 1, 3);
 
     QLabel *l2 = new QLabel(i18n("Ignore"), this);
     hitsLayout->addWidget(l2, 2, 0);
@@ -85,20 +80,20 @@ void KDevelop::BreakpointDetails::setIgnoreHits(int ignoreHits)
 }
 
 
-void BreakpointDetails::setItem(Breakpoint *b)
+void BreakpointDetails::setItem(Breakpoint *breakpoint)
 {
-    m_currentBreakpoint = b;
+    m_currentBreakpoint = breakpoint;
 
-    if (!b) {
+    if (!breakpoint) {
         m_status->hide();
         m_hits->hide();
         m_ignore->setEnabled(false);
         return;
     }
 
-    m_ignore->setValue(b->ignoreHits());
+    m_ignore->setValue(breakpoint->ignoreHits());
 
-    if (b->state() == Breakpoint::NotStartedState) {
+    if (breakpoint->state() == Breakpoint::NotStartedState) {
         m_status->hide();
         m_hits->hide();
         m_ignore->setEnabled(true);
@@ -109,8 +104,8 @@ void BreakpointDetails::setItem(Breakpoint *b)
     m_hits->show();
     m_ignore->setEnabled(true);
 
-    if (b->errorText().isEmpty()) {
-        switch (b->state()) {
+    if (breakpoint->errorText().isEmpty()) {
+        switch (breakpoint->state()) {
             case Breakpoint::NotStartedState:
                 Q_ASSERT(0);
                 break;
@@ -125,15 +120,15 @@ void BreakpointDetails::setItem(Breakpoint *b)
                 break;
         }
 
-        if (b->hitCount() == -1)
+        if (breakpoint->hitCount() == -1)
             m_hits->clear();
-        else if (b->hitCount())
-            m_hits->setText(i18np("Hit %1 time", "Hit %1 times", b->hitCount()));
+        else if (breakpoint->hitCount())
+            m_hits->setText(i18np("Hit %1 time", "Hit %1 times", breakpoint->hitCount()));
         else
             m_hits->setText(i18n("Not hit yet"));
     } else {
         m_status->setText(i18n("Breakpoint has errors"));
-        m_hits->setText(b->errorText());
+        m_hits->setText(breakpoint->errorText());
     }
 }
 
