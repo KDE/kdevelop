@@ -25,10 +25,6 @@ import QtQuick.Controls 1.2
 StandardBackground
 {
     id: root
-    gradient: Gradient {
-         GradientStop { position: 0.0; color: "#21257C" }
-         GradientStop { position: 1.0; color: "#62B6F1" }
-    }
     tools: Link {
             id: goCode
 

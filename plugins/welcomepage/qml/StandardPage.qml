@@ -22,7 +22,7 @@ import QtQuick 2.1
 
 Rectangle {
     radius: 5
-    color: Qt.rgba(0.8, 0.8, 0.8, 0.4)
+    color: Qt.rgba(0.8, 0.9, 0.8, 0.4)
 
     Image {
         anchors {

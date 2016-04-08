@@ -23,10 +23,6 @@ import QtQuick 2.0
 StandardBackground
 {
     id: root
-    gradient: Gradient {
-         GradientStop { position: 0.0; color: "#B85B5B" }
-         GradientStop { position: 1.0; color: "#EEBABA" }
-    }
     tools: Link {
             id: goCode
 

@@ -23,10 +23,6 @@ import QtQuick.Layouts 1.2
 
 StandardBackground {
     id: root
-    gradient: Gradient {
-         GradientStop { position: 0.0; color: "#61B056" }
-         GradientStop { position: 1.0; color: "#A3D69B" }
-    }
     
     state: "develop"
 

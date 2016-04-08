@@ -27,6 +27,9 @@ Rectangle
     property string pageIcon
     property real marginLeft: toolbar.x+toolbar.width
     property real margins: 5
+    color: pal.base
+
+    SystemPalette { id: pal }
     
     Rectangle {
         id: toolbar
