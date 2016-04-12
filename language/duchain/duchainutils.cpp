@@ -24,6 +24,8 @@
 
 #include <kiconloader.h>
 
+#include <algorithm>
+
 #include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
