@@ -91,6 +91,8 @@ struct CompilerFilterStrategyPrivate
     PositionMap m_positionInCurrentDirs;
 };
 
+    // ant
+    ErrorFormat("\\[javac\\][\\s]+([^:\t]+):([0-9]+): (warning: .*|error: .*)", 1, 2, 3, "javac"),
 
 CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const QUrl& buildDir)
     : m_buildDir(buildDir)

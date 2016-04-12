@@ -456,6 +456,12 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn_data()
     QTest::newRow("gfortranError2")
         << "/path/flib.f90:3567.22:"
         << "/path/flib.f90" << 3566 << 21 << FilteredItem::ErrorItem;
+    QTest::newRow("ant-javac-Warning")
+        << "    [javac] /path/class.java:383: warning: [deprecation] ..."
+        << "/path/class.java" << 382 << 0 << FilteredItem::WarningItem;
+    QTest::newRow("ant-javac-Error")
+        << "    [javac] /path/class.java:447: error: cannot find symbol"
+        << "/path/class.java" << 446 << 0 << FilteredItem::ErrorItem;
 #endif
 }
 

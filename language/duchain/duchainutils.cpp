@@ -22,6 +22,8 @@
 
 #include "duchainutils.h"
 
+#include <algorithm>
+
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 
@@ -527,6 +529,17 @@ static QList<Declaration*> getInheritersInternal(const Declaration* decl, uint& 
   }
 
   return ret;
+}
+
+QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
+{
+  auto inheriters = getInheritersInternal(decl, maxAllowedSteps, collectVersions);
+
+  // remove duplicates
+  std::sort(inheriters.begin(), inheriters.end());
+  inheriters.erase(std::unique(inheriters.begin(), inheriters.end()), inheriters.end());
+
+  return inheriters;
 }
 
 QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
