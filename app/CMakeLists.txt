@@ -22,12 +22,6 @@ set(kdevelop_SRCS  main.cpp kdevideextension.cpp splash.cpp)
 if(KDEVELOP_SINGLE_APP)
     set(kdevelop_SRCS ${kdevelop_SRCS} ${singleapp_SRCS})
 endif()
-# kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
-if(APPLE)
-    #kde4_add_app_icon(kdevelop_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps/kdevelop.png")
-else()
-    #kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
-endif()
 
 #TODO: remove CMAKE_CURRENT_SOURCE_DIR prefix when ECM is fixed
 set(kdevelop_ICONS
