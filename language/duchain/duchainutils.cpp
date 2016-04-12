@@ -542,17 +542,6 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& m
   return inheriters;
 }
 
-QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
-{
-  auto inheriters = getInheritersInternal(decl, maxAllowedSteps, collectVersions);
-
-  // remove duplicates
-  std::sort(inheriters.begin(), inheriters.end());
-  inheriters.erase(std::unique(inheriters.begin(), inheriters.end()), inheriters.end());
-
-  return inheriters;
-}
-
 QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps) {
   QList<Declaration*> ret;
 

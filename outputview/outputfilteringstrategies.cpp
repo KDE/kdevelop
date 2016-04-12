@@ -91,9 +91,6 @@ struct CompilerFilterStrategyPrivate
     PositionMap m_positionInCurrentDirs;
 };
 
-    // ant
-    ErrorFormat("\\[javac\\][\\s]+([^:\t]+):([0-9]+): (warning: .*|error: .*)", 1, 2, 3, "javac"),
-
 CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const QUrl& buildDir)
     : m_buildDir(buildDir)
 {
@@ -262,6 +259,8 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 #endif
         // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
         ErrorFormat( QStringLiteral("^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)"), 1, 2, 4, 3 ),
+        // ant
+        ErrorFormat("\\[javac\\][\\s]+([^:\t]+):([0-9]+): (warning: .*|error: .*)", 1, 2, 3, "javac"),
         // GCC
         ErrorFormat( QStringLiteral("^([^:\t]+):([0-9]+):([^0-9]+)"), 1, 2, 3 ),
         // GCC
