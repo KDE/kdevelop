@@ -503,13 +503,15 @@ void SessionController::updateXmlGuiActionList()
 {
     unplugActionList( QStringLiteral("available_sessions") );
 
-    auto actions = d->grp->actions();
-    std::sort(actions.begin(), actions.end(), [](const QAction* lhs, const QAction* rhs) {
-        auto s1 = lhs->data().value<Session*>();
-        auto s2 = rhs->data().value<Session*>();
-        return QString::localeAwareCompare(s1->description(), s2->description()) < 0;
-    });
-    plugActionList(QStringLiteral("available_sessions"), actions);
+    if (d->grp) {
+        auto actions = d->grp->actions();
+        std::sort(actions.begin(), actions.end(), [](const QAction* lhs, const QAction* rhs) {
+            auto s1 = lhs->data().value<Session*>();
+            auto s2 = rhs->data().value<Session*>();
+            return QString::localeAwareCompare(s1->description(), s2->description()) < 0;
+        });
+        plugActionList(QStringLiteral("available_sessions"), actions);
+    }
 }
 
 
