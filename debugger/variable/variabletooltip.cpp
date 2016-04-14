@@ -183,7 +183,7 @@ void VariableToolTip::slotLinkActivated(const QString& link)
         TreeItem *item = model_->itemForIndex(index);
         if (item)
         {
-            Variable* v2 = dynamic_cast<Variable*>(item);
+            Variable* v2 = qobject_cast<Variable*>(item);
             if (v2)
                 v = v2;
         }

@@ -121,7 +121,7 @@ void Variable::setInScope(bool v)
 {
     inScope_ = v;
     for (int i=0; i < childCount(); ++i) {
-        if (Variable *var = dynamic_cast<Variable*>(child(i))) {
+        if (Variable *var = qobject_cast<Variable*>(child(i))) {
             var->setInScope(v);
         }
     }
@@ -162,7 +162,7 @@ void Variable::resetChanged()
     setChanged(false);
     for (int i=0; i<childCount(); ++i) {
         TreeItem* childItem = child(i);
-        if (dynamic_cast<Variable*>(childItem)) {
+        if (qobject_cast<Variable*>(childItem)) {
             static_cast<Variable*>(childItem)->resetChanged();
         }
     }
@@ -288,7 +288,7 @@ void Watches::resetChanged()
 {
     for (int i=0; i<childCount(); ++i) {
         TreeItem* childItem = child(i);
-        if (dynamic_cast<Variable*>(childItem)) {
+        if (qobject_cast<Variable*>(childItem)) {
             static_cast<Variable*>(childItem)->resetChanged();
         }
     }
@@ -328,7 +328,7 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
     QSet<QString> existing, current;
     for (int i = 0; i < childItems.size(); i++)
     {
-        Q_ASSERT(dynamic_cast<KDevelop::Variable*>(child(i)));
+        Q_ASSERT(qobject_cast<KDevelop::Variable*>(child(i)));
         Variable* var= static_cast<KDevelop::Variable*>(child(i));
         existing << var->expression();
     }
@@ -368,7 +368,7 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
 
     QList<Variable*> ret;
     foreach (TreeItem *i, childItems) {
-        Q_ASSERT(dynamic_cast<Variable*>(i));
+        Q_ASSERT(qobject_cast<Variable*>(i));
         ret << static_cast<Variable*>(i);
     }
     return ret;
@@ -378,7 +378,7 @@ void Locals::resetChanged()
 {
     for (int i=0; i<childCount(); ++i) {
         TreeItem* childItem = child(i);
-        if (dynamic_cast<Variable*>(childItem)) {
+        if (qobject_cast<Variable*>(childItem)) {
             static_cast<Variable*>(childItem)->resetChanged();
         }
     }

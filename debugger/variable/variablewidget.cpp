@@ -261,7 +261,7 @@ Variable* VariableTree::selectedVariable() const
     if (selectionModel()->selectedRows().isEmpty()) return 0;
     auto item = selectionModel()->currentIndex().data(TreeModel::ItemRole).value<TreeItem*>();
     if (!item) return 0;
-    return dynamic_cast<Variable*>(item);
+    return qobject_cast<Variable*>(item);
 }
 
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)
@@ -281,7 +281,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
             act->setChecked(true);
     }
 
-    if (dynamic_cast<Watches*>(selectedVariable()->parent())) {
+    if (qobject_cast<Watches*>(selectedVariable()->parent())) {
         contextMenu.addAction(m_watchDelete);
     }
 
@@ -301,7 +301,7 @@ void VariableTree::changeVariableFormat(int format)
 void VariableTree::watchDelete()
 {
     if (!selectedVariable()) return;
-    if (!dynamic_cast<Watches*>(selectedVariable()->parent())) return;
+    if (!qobject_cast<Watches*>(selectedVariable()->parent())) return;
     selectedVariable()->die();
 }
 
