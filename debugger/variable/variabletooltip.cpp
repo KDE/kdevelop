@@ -180,7 +180,8 @@ void VariableToolTip::slotLinkActivated(const QString& link)
     if (!s.empty())
     {
         QModelIndex index = s.front().topLeft();
-        TreeItem *item = m_model->itemForIndex(index);
+        const auto sourceIndex = m_proxy->mapToSource(index);
+        TreeItem *item = m_model->itemForIndex(sourceIndex);
         if (item)
         {
             Variable* v2 = qobject_cast<Variable*>(item);
