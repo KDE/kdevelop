@@ -54,9 +54,9 @@ protected:
     void hideEvent(QHideEvent* e) override;
 
 private:
-    VariableTree *varTree_;
-    KHistoryComboBox *watchVarEditor_;
-    VariablesRoot *variablesRoot_;
+    VariableTree *m_varTree;
+    KHistoryComboBox *m_watchVarEditor;
+    VariablesRoot *m_variablesRoot;
     QSortFilterProxyModel *m_proxy;
 };
 

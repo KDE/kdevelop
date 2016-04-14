@@ -69,9 +69,9 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
                    const QString& expression,
                    const QString& display)
   : TreeItem(model, parent),
-    inScope_(true), topLevel_(true), changed_(false), showError_(false), m_format(Natural)
+      m_inScope(true), m_topLevel(true), m_changed(false), m_showError(false), m_format(Natural)
 {
-    expression_ = expression;
+    m_expression = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
     // and return expression_ directly.
     if (display.isEmpty())
@@ -82,12 +82,12 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
 
 QString Variable::expression() const
 {
-    return expression_;
+    return m_expression;
 }
 
 bool Variable::inScope() const
 {
-    return inScope_;
+    return m_inScope;
 }
 
 void Variable::setValue(const QString& v)
@@ -114,12 +114,12 @@ QString Variable::type() const
 
 void Variable::setTopLevel(bool v)
 {
-    topLevel_ = v;
+    m_topLevel = v;
 }
 
 void Variable::setInScope(bool v)
 {
-    inScope_ = v;
+    m_inScope = v;
     for (int i=0; i < childCount(); ++i) {
         if (Variable *var = qobject_cast<Variable*>(child(i))) {
             var->setInScope(v);
@@ -130,13 +130,13 @@ void Variable::setInScope(bool v)
 
 void Variable::setShowError (bool v)
 {
-    showError_ = v;
+    m_showError = v;
     reportChange();
 }
 
 bool Variable::showError()
 {
-    return showError_;
+    return m_showError;
 }
 
 
@@ -153,7 +153,7 @@ void Variable::die()
 
 void Variable::setChanged(bool c)
 {
-    changed_=c;
+    m_changed=c;
     reportChange();
 }
 
@@ -211,7 +211,7 @@ bool Variable::isPotentialProblematicValue() const
 
 QVariant Variable::data(int column, int role) const
 {
-    if (showError_) {
+    if (m_showError) {
         if (role == Qt::FontRole) {
             QVariant ret = TreeItem::data(column, role);
             QFont font = ret.value<QFont>();
@@ -224,11 +224,11 @@ QVariant Variable::data(int column, int role) const
     if (column == 1 && role == Qt::TextColorRole)
     {
         KColorScheme scheme(QPalette::Active);
-        if (!inScope_) {
+        if (!m_inScope) {
             return scheme.foreground(KColorScheme::InactiveText).color();
         } else if (isPotentialProblematicValue()) {
             return scheme.foreground(KColorScheme::NegativeText).color();
-        } else if (changed_) {
+        } else if (m_changed) {
             return scheme.foreground(KColorScheme::NeutralText).color();
         }
     }
@@ -385,31 +385,31 @@ void Locals::resetChanged()
 }
 
 VariablesRoot::VariablesRoot(TreeModel* model)
-: TreeItem(model)
+    : TreeItem(model)
+    , m_watches(new Watches(model, this))
 {
-    watches_ = new Watches(model, this);
-    appendChild(watches_, true);
+    appendChild(m_watches, true);
 }
 
 
 Locals* VariablesRoot::locals(const QString& name)
 {
-    if (!locals_.contains(name)) {
-        locals_[name] = new Locals(model(), this, name);
-        appendChild(locals_[name]);
+    if (!m_locals.contains(name)) {
+        m_locals[name] = new Locals(model(), this, name);
+        appendChild(m_locals[name]);
     }
-    return locals_[name];
+    return m_locals[name];
 }
 
 QHash<QString, Locals*> VariablesRoot::allLocals() const
 {
-    return locals_;
+    return m_locals;
 }
 
 void VariablesRoot::resetChanged()
 {
-    watches_->resetChanged();
-    foreach (Locals *l, locals_) {
+    m_watches->resetChanged();
+    foreach (Locals *l, m_locals) {
         l->resetChanged();
     }
 }
@@ -419,8 +419,8 @@ VariableCollection::VariableCollection(IDebugController* controller)
     , m_widgetVisible(false)
     , m_textHintProvider(this)
 {
-    universe_ = new VariablesRoot(this);
-    setRootItem(universe_);
+    m_universe = new VariablesRoot(this);
+    setRootItem(m_universe);
 
     //new ModelTest(this);
 
@@ -524,7 +524,7 @@ QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::C
     QString expression = doc->text(expressionRange).trimmed();
 
     // Don't do anything if there's already an open tooltip with matching range
-    if (m_collection->activeTooltip_ && m_collection->activeTooltip_->variable()->expression() == expression)
+    if (m_collection->m_activeTooltip && m_collection->m_activeTooltip->variable()->expression() == expression)
         return QString();
     if (expression.isEmpty())
         return QString();
@@ -535,8 +535,8 @@ QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::C
     if (!w)
         w = view;
 
-    m_collection->activeTooltip_ = new VariableToolTip(w, global+QPoint(30,30), expression);
-    m_collection->activeTooltip_->setHandleRect(KTextEditorHelpers::getItemBoundingRect(view, expressionRange));
+    m_collection->m_activeTooltip = new VariableToolTip(w, global+QPoint(30,30), expression);
+    m_collection->m_activeTooltip->setHandleRect(KTextEditorHelpers::getItemBoundingRect(view, expressionRange));
     return QString();
 }
 
