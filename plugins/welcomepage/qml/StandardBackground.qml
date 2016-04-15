@@ -19,23 +19,24 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.3
+import QtQuick.Layouts 1.2
 
-Rectangle
+GroupBox
 {
     id: bg
     property Component tools: null
     property string pageIcon
     property real marginLeft: toolbar.x+toolbar.width
     property real margins: 5
-    color: pal.base
 
     SystemPalette { id: pal }
     
-    Rectangle {
+    Item {
         id: toolbar
 
-        radius: 5
-        color: Qt.rgba(0.8, 0.8, 0.8, 0.4)
+        //radius: 5
+        //color: pal.window//Qt.rgba(0.8, 0.8, 0.8, 0.4)
 
         anchors {
             top: parent.top

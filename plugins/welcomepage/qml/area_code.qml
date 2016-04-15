@@ -19,6 +19,7 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.2
 
 StandardBackground {
@@ -26,27 +27,47 @@ StandardBackground {
     
     state: "develop"
 
-    tools: ColumnLayout {
+    tools: Column {
         spacing: 10
 
-        Link {
+        Button {
             Layout.fillWidth: true
             iconName: "applications-development"
             text: i18n("Develop")
+            checkable: true
+            checked: root.state === "develop"
             onClicked: root.state = "develop"
         }
-        Link {
-            Layout.fillWidth: true
-            iconName: "project-development"
-            text: i18n("Projects")
-            onClicked: root.state = "projects"
-            visible: false //FIXME: removed until it makes sense
-        }
-        Link {
-            Layout.fillWidth: true
-            iconName: "help-contents"
-            text: i18n("Getting Started")
-            onClicked: root.state = "gettingstarted"
+
+        GroupBox {
+            flat: true
+
+            ColumnLayout {
+                Heading {
+                    text: i18n("Need Help?")
+                }
+
+                Link {
+                    text: i18n("Official Website")
+                    iconName: "applications-webbrowsers"
+                    onClicked: info.state="kdevelop.org"
+                }
+                Link {
+                    text: i18n("Userbase")
+                    iconName: "applications-webbrowsers"
+                    onClicked: info.state="userbase"
+                }
+                Link {
+                    text: i18n("Techbase")
+                    iconName: "applications-webbrowsers"
+                    onClicked: info.state="techbase"
+                }
+                Link {
+                    text: i18n("Handbook")
+                    iconName: "applications-webbrowsers"
+                    onClicked: kdev.retrieveMenuAction("help/help_contents").trigger()
+                }
+            }
         }
     }
 
@@ -55,7 +76,7 @@ StandardBackground {
         anchors {
             fill: parent
             leftMargin: root.marginLeft+root.margins
-            margins: root.margins
+            //margins: root.margins
         }
     }
     states: [
