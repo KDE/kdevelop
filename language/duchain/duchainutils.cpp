@@ -22,6 +22,8 @@
 
 #include "duchainutils.h"
 
+#include <algorithm>
+
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 

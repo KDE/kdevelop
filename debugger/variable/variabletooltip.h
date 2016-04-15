@@ -45,19 +45,19 @@ namespace KDevelop
     public:
         VariableToolTip(QWidget* parent, QPoint position, 
                         const QString& identifier);
-        Variable* variable() const { return var_; };
+        Variable* variable() const { return m_var; };
     private slots:
         void variableCreated(bool hasValue);
         void slotLinkActivated(const QString& link);
         void slotRangeChanged(int min, int max);
 
     private:
-        TreeModel* model_;
-        Variable* var_;
-        QItemSelectionModel* selection_;
-        int itemHeight_;
-        AsyncTreeView* view_;
-        QSortFilterProxyModel* proxy_;
+        TreeModel* m_model;
+        Variable* m_var;
+        QItemSelectionModel* m_selection;
+        int m_itemHeight;
+        AsyncTreeView* m_view;
+        QSortFilterProxyModel* m_proxy;
     };
 }
 

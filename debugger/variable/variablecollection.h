@@ -97,7 +97,7 @@ public:
     virtual void formatChanged();
 
     // get/set 'changed' state, if the variable changed it will be highlighted
-    bool isChanged() const { return changed_; }
+    bool isChanged() const { return m_changed; }
     void setChanged(bool c);
     void resetChanged();
 
@@ -105,7 +105,7 @@ public slots:
     void die();
 
 protected:
-    bool topLevel() const { return topLevel_; }
+    bool topLevel() const { return m_topLevel; }
 
 private: // TreeItem overrides
     QVariant data(int column, int role) const override;
@@ -113,11 +113,11 @@ private: // TreeItem overrides
 private:
     bool isPotentialProblematicValue() const;
 
-    QString expression_;
-    bool inScope_;
-    bool topLevel_;
-    bool changed_;
-    bool showError_;
+    QString m_expression;
+    bool m_inScope;
+    bool m_topLevel;
+    bool m_changed;
+    bool m_showError;
 
     format_t m_format;
 };
@@ -188,7 +188,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT VariablesRoot : public TreeItem
 public:
     explicit VariablesRoot(TreeModel* model);
 
-    Watches *watches() const { return watches_; }
+    Watches *watches() const { return m_watches; }
     Locals *locals(const QString &name = QStringLiteral("Locals"));
     QHash<QString, Locals*> allLocals() const;
 
@@ -197,8 +197,8 @@ public:
     void resetChanged();
 
 private:
-    Watches *watches_;
-    QHash<QString, Locals*> locals_;
+    Watches *m_watches;
+    QHash<QString, Locals*> m_locals;
 };
 
 class VariableProvider : public KTextEditor::TextHintProvider
@@ -225,10 +225,10 @@ public:
     explicit VariableCollection(IDebugController* parent);
     ~VariableCollection() override;
 
-    VariablesRoot* root() const { return universe_; }
-    Watches* watches() const { return universe_->watches(); }
-    Locals* locals(const QString &name = i18n("Locals")) const { return universe_->locals(name); }
-    QHash<QString, Locals*> allLocals() const { return universe_->allLocals(); }
+    VariablesRoot* root() const { return m_universe; }
+    Watches* watches() const { return m_universe->watches(); }
+    Locals* locals(const QString &name = i18n("Locals")) const { return m_universe->locals(name); }
+    QHash<QString, Locals*> allLocals() const { return m_universe->allLocals(); }
 
 public Q_SLOTS:
     void variableWidgetShown();
@@ -241,8 +241,8 @@ private Q_SLOTS:
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);
 
 private:
-    VariablesRoot* universe_;
-    QPointer<VariableToolTip> activeTooltip_;
+    VariablesRoot* m_universe;
+    QPointer<VariableToolTip> m_activeTooltip;
     bool m_widgetVisible;
 
     friend class VariableProvider;

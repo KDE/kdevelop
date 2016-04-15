@@ -56,7 +56,7 @@ void KDevelop::PersistentMovingRangePrivate::disconnectTracker()
   disconnect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent()));
   
   delete m_movingRange;
-  m_tracker = 0;
+  m_tracker.clear();
   m_movingRange = 0;
 }
 
@@ -79,7 +79,7 @@ void KDevelop::PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent
 {
   // The whole document is being closed. Map the range back to the last saved revision, and use that.
   updateRangeFromMoving();
-  if(m_tracker->diskRevision())
+  if(m_tracker && m_tracker->diskRevision())
   {
     if(m_movingRange)
       m_range = m_tracker->diskRevision()->transformFromCurrentRevision(m_range).castToSimpleRange();
@@ -91,5 +91,5 @@ void KDevelop::PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent
   // No need to disconnect, as the document is being deleted. Simply set the referenes to zero.
   delete m_movingRange;
   m_movingRange = 0;
-  m_tracker = 0;
+  m_tracker.clear();
 }

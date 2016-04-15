@@ -83,6 +83,7 @@ StandardPage {
             text: i18n("Go!")
             onClicked: Qt.openUrlExternally(webview.url)
         }
+        state: "kdevelop.org"
         states: [
             State {
                 name: "userbase"
@@ -101,6 +102,4 @@ StandardPage {
             }
         ]
     }
-    
-    Component.onCompleted: info.state="kdevelop.org"
 }

@@ -71,24 +71,24 @@ VariableCollection *variableCollection()
 
 
 VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
-: QWidget(parent), variablesRoot_(controller->variableCollection()->root())
+: QWidget(parent), m_variablesRoot(controller->variableCollection()->root())
 {
   //setWindowIcon(QIcon::fromTheme("math_brace"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("debugger"), windowIcon()));
     setWindowTitle(i18n("Debugger Variables"));
 
     m_proxy = new VariableSortProxyModel(this);
-    varTree_ = new VariableTree(controller, this, m_proxy);
-    setFocusProxy(varTree_);
+    m_varTree = new VariableTree(controller, this, m_proxy);
+    setFocusProxy(m_varTree);
 
-    watchVarEditor_ = new KHistoryComboBox( this );
+    m_watchVarEditor = new KHistoryComboBox( this );
 
     QVBoxLayout *topLayout = new QVBoxLayout(this);
-    topLayout->addWidget(varTree_, 10);
-    topLayout->addWidget(watchVarEditor_);
+    topLayout->addWidget(m_varTree, 10);
+    topLayout->addWidget(m_watchVarEditor);
     topLayout->setMargin(0);
 
-    connect(watchVarEditor_, static_cast<void(KHistoryComboBox::*)(const QString&)>(&KHistoryComboBox::returnPressed),
+    connect(m_watchVarEditor, static_cast<void(KHistoryComboBox::*)(const QString&)>(&KHistoryComboBox::returnPressed),
             this, &VariableWidget::slotAddWatch);
 
     //TODO
@@ -110,7 +110,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
         "To change the value of a variable or an expression, "
         "click on the value.<br />"));
 
-    watchVarEditor_->setWhatsThis(
+    m_watchVarEditor->setWhatsThis(
                     i18n("<b>Expression entry</b>"
                          "Type in expression to watch."));
 
@@ -120,9 +120,9 @@ void VariableWidget::slotAddWatch(const QString &expression)
 {
     if (!expression.isEmpty())
     {
-        watchVarEditor_->addToHistory(expression);
+        m_watchVarEditor->addToHistory(expression);
         qCDebug(DEBUGGER) << "Trying to add watch";
-        Variable* v = variablesRoot_->watches()->add(expression);
+        Variable* v = m_variablesRoot->watches()->add(expression);
         if (v) {
             /* For watches on structures, we really do want them to be shown
             expanded.  Except maybe for structure with custom pretty printing,
@@ -132,7 +132,7 @@ void VariableWidget::slotAddWatch(const QString &expression)
             //QModelIndex index = variableCollection()->indexForItem(v, 0);
             //varTree_->setExpanded(index, true);
         }
-        watchVarEditor_->clearEditText();
+        m_watchVarEditor->clearEditText();
     }
 }
 
@@ -261,7 +261,7 @@ Variable* VariableTree::selectedVariable() const
     if (selectionModel()->selectedRows().isEmpty()) return 0;
     auto item = selectionModel()->currentIndex().data(TreeModel::ItemRole).value<TreeItem*>();
     if (!item) return 0;
-    return dynamic_cast<Variable*>(item);
+    return qobject_cast<Variable*>(item);
 }
 
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)
@@ -281,7 +281,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
             act->setChecked(true);
     }
 
-    if (dynamic_cast<Watches*>(selectedVariable()->parent())) {
+    if (qobject_cast<Watches*>(selectedVariable()->parent())) {
         contextMenu.addAction(m_watchDelete);
     }
 
@@ -301,7 +301,7 @@ void VariableTree::changeVariableFormat(int format)
 void VariableTree::watchDelete()
 {
     if (!selectedVariable()) return;
-    if (!dynamic_cast<Watches*>(selectedVariable()->parent())) return;
+    if (!qobject_cast<Watches*>(selectedVariable()->parent())) return;
     selectedVariable()->die();
 }
 

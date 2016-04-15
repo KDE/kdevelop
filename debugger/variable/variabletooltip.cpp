@@ -99,40 +99,40 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 {
     setPalette( QApplication::palette() );
 
-    model_ = new TreeModel(QVector<QString>() << i18n("Name") << i18n("Value") << i18n("Type"),
+    m_model = new TreeModel(QVector<QString>() << i18n("Name") << i18n("Value") << i18n("Type"),
                            this);
 
-    TooltipRoot* tr = new TooltipRoot(model_);
-    model_->setRootItem(tr);
-    var_ = ICore::self()->debugController()->currentSession()->
+    TooltipRoot* tr = new TooltipRoot(m_model);
+    m_model->setRootItem(tr);
+    m_var = ICore::self()->debugController()->currentSession()->
         variableController()->createVariable(
-            model_, tr, identifier);
-    tr->init(var_);
-    var_->attachMaybe(this, "variableCreated");
+               m_model, tr, identifier);
+    tr->init(m_var);
+    m_var->attachMaybe(this, "variableCreated");
 
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
     // setup proxy model
-    proxy_ = new QSortFilterProxyModel;
-    view_ = new AsyncTreeView(model_, proxy_, this);
-    proxy_->setSourceModel(model_);
-    view_->setModel(proxy_);
-    view_->header()->resizeSection(0, 150);
-    view_->header()->resizeSection(1, 90);
-    view_->setSelectionBehavior(QAbstractItemView::SelectRows);
-    view_->setSelectionMode(QAbstractItemView::SingleSelection);
-    view_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view_->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
-    l->addWidget(view_);
+    m_proxy = new QSortFilterProxyModel;
+    m_view = new AsyncTreeView(m_model, m_proxy, this);
+    m_proxy->setSourceModel(m_model);
+    m_view->setModel(m_proxy);
+    m_view->header()->resizeSection(0, 150);
+    m_view->header()->resizeSection(1, 90);
+    m_view->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_view->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+    l->addWidget(m_view);
 
-    itemHeight_ = view_->indexRowSizeHint(model_->indexForItem(var_, 0));
-    connect(view_->verticalScrollBar(),
+    m_itemHeight = m_view->indexRowSizeHint(m_model->indexForItem(m_var, 0));
+    connect(m_view->verticalScrollBar(),
             &QScrollBar::rangeChanged,
             this,
             &VariableToolTip::slotRangeChanged);
 
-    selection_ = view_->selectionModel();
-    selection_->select(model_->indexForItem(var_, 0), 
+    m_selection = m_view->selectionModel();
+    m_selection->select(m_model->indexForItem(m_var, 0),
                        QItemSelectionModel::Rows
                        | QItemSelectionModel::ClearAndSelect);
 
@@ -165,7 +165,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 
 void VariableToolTip::variableCreated(bool hasValue)
 {
-    view_->resizeColumns();
+    m_view->resizeColumns();
     if (hasValue) {
         ActiveToolTip::showToolTip(this, 0.0);
     } else {
@@ -175,15 +175,16 @@ void VariableToolTip::variableCreated(bool hasValue)
 
 void VariableToolTip::slotLinkActivated(const QString& link)
 {
-    Variable* v = var_;
-    QItemSelection s = selection_->selection();
+    Variable* v = m_var;
+    QItemSelection s = m_selection->selection();
     if (!s.empty())
     {
         QModelIndex index = s.front().topLeft();
-        TreeItem *item = model_->itemForIndex(index);
+        const auto sourceIndex = m_proxy->mapToSource(index);
+        TreeItem *item = m_model->itemForIndex(sourceIndex);
         if (item)
         {
-            Variable* v2 = dynamic_cast<Variable*>(item);
+            Variable* v2 = qobject_cast<Variable*>(item);
             if (v2)
                 v = v2;
         }
@@ -205,13 +206,13 @@ void VariableToolTip::slotRangeChanged(int min, int max)
     Q_ASSERT(min == 0);
     Q_UNUSED(min);
     QRect rect = QApplication::desktop()->screenGeometry(this);
-    if (pos().y() + height() + max*itemHeight_ < rect.bottom())
-        resize(width(), height() + max*itemHeight_);    
+    if (pos().y() + height() + max*m_itemHeight < rect.bottom())
+        resize(width(), height() + max*m_itemHeight);
     else
     {
         // Oh, well, I'm sorry, but here's the scrollbar you was
         // longing to see
-        view_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);        
+        m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
 }
 
