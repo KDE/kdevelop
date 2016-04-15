@@ -23,7 +23,7 @@
 
 #include "projectexport.h"
 
-#include <context.h>
+#include <interfaces/context.h>
 
 #include <QList>
 
