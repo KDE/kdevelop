@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="138" name="kdevelop" translationDomain="kdevelop">
+<kpartgui version="139" name="kdevelop" translationDomain="kdevelop">
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -53,7 +53,7 @@
     <text context="@title:menu">&amp;Navigation</text>
     <DefineGroup name="navigation_file"/>
     <Separator />
-    <Action name="previous_error" />
+    <Action name="prev_error" />
     <Action name="next_error" />
     <Separator />
     <DefineGroup name="navigation_code"/>
@@ -141,7 +141,7 @@
     <Separator/>
     <Merge/>
   </Menu>
-  
+
   <Menu name="settings">
     <text context="@title:menu">Settings</text>
     <DefineGroup append="show_toolbar_merge" name="show_toolbar_merge"/>
