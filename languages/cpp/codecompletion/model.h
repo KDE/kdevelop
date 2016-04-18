@@ -29,10 +29,11 @@
 #include <language/codecompletion/codecompletioncontext.h>
 
 namespace KDevelop {
-  class DUContext;
-  class Declaration;
-  class CodeCompletionContext;
-  class CompletionTreeElement;
+class DUContext;
+class Declaration;
+class CodeCompletionContext;
+class CompletionTreeElement;
+class ReferencedTopDUContext;
 }
 
 namespace Cpp {
