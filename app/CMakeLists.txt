@@ -9,12 +9,18 @@ endif()
 
 find_package(SharedMimeInfo REQUIRED)
 
-set(kdevelop_SRCS  main.cpp kdevideextension.cpp splash.cpp)
-# kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
-if(APPLE)
-    #kde4_add_app_icon(kdevelop_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps/kdevelop.png")
+option(KDEVELOP_SINGLE_APP "Use QtSingleApplication as KDevelop's base" OFF)
+
+set(singleapp_SRCS qtlocalpeer.cpp qtsingleapplication.cpp qtlockedfile.cpp)
+if(WIN32)
+    set(singleapp_SRCS ${singleapp_SRCS} qtlockedfile_win.cpp)
 else()
-    #kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
+    set(singleapp_SRCS ${singleapp_SRCS} qtlockedfile_unix.cpp)
+endif()
+
+set(kdevelop_SRCS  main.cpp kdevideextension.cpp splash.cpp)
+if(KDEVELOP_SINGLE_APP)
+    set(kdevelop_SRCS ${kdevelop_SRCS} ${singleapp_SRCS})
 endif()
 
 qt5_add_resources(kdevelop_SRCS kdevelop.qrc)

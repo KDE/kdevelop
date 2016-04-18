@@ -68,6 +68,9 @@ Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 #include <util/path.h>
 
 #include "kdevideextension.h"
+#if KDEVELOP_SINGLE_APP
+#include "qtsingleapplication.h"
+#endif
 
 #include <iostream>
 
@@ -79,11 +82,20 @@ Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 
 using namespace KDevelop;
 
-class KDevelopApplication: public QApplication
+class KDevelopApplication: 
+#if KDEVELOP_SINGLE_APP
+    public SharedTools::QtSingleApplication
+#else
+    public QApplication
+#endif
 {
 public:
     explicit KDevelopApplication(int &argc, char **argv, bool GUIenabled = true)
+#if KDEVELOP_SINGLE_APP
+        : SharedTools::QtSingleApplication(QStringLiteral("KDevelop"), argc, argv)
+#else
         : QApplication(argc, argv, GUIenabled)
+#endif
         {
             connect(this, &QGuiApplication::saveStateRequest, this, &KDevelopApplication::saveState);
         }
