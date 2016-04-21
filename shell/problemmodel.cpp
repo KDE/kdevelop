@@ -48,6 +48,8 @@ QIcon iconForSeverity(KDevelop::IProblem::Severity severity)
         return QIcon::fromTheme(QStringLiteral("dialog-warning"));
     case KDevelop::IProblem::Error:
         return QIcon::fromTheme(QStringLiteral("dialog-error"));
+    case KDevelop::IProblem::NoSeverity:
+        return {};
     }
     return {};
 }

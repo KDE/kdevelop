@@ -288,11 +288,8 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
     Q_ASSERT(fmt);
 
 
-    QString modeline(QStringLiteral("// kate: "));
-    QString indentLength = QString::number(indentation.indentWidth);
-    QString tabLength = QString::number(indentation.indentationTabWidth);
-    // add indentation style
-    modeline.append("indent-mode ").append(indentationMode(mime).append("; "));
+    QString modeline(QStringLiteral("// kate: ")
+                   + QStringLiteral("indent-mode ") + indentationMode(mime) + QStringLiteral("; "));
 
     if(indentation.indentWidth) // We know something about indentation-width
         modeline.append(QStringLiteral("indent-width %1; ").arg(indentation.indentWidth));

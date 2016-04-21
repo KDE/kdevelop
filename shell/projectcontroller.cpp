@@ -692,7 +692,6 @@ void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
     d->m_foundProjectFile = false;
 
     while(!testAt.path().isEmpty()) {
-        QUrl testProjectFile(testAt);
         KIO::ListJob* job = KIO::listDir(testAt);
 
         connect(job, &KIO::ListJob::entries, this, &ProjectController::eventuallyOpenProjectFile);
