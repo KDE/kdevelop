@@ -398,6 +398,8 @@ int main( int argc, char *argv[] )
     parser.addOption(QCommandLineOption{QStringList{"n", "new-session"}, i18n("Open KDevelop with a new session using the given name."), "name"});
     parser.addOption(QCommandLineOption{QStringList{"s", "open-session"}, i18n("Open KDevelop with the given session.\n"
                      "You can pass either hash or the name of the session." ), "session"});
+    parser.addOption(QCommandLineOption{QStringList{"rm", "remove-session"}, i18n("Delete the given session.\n"
+                     "You can pass either hash or the name of the session." ), "session"});
     parser.addOption(QCommandLineOption{QStringList{"ps", "pick-session"}, i18n("Shows all available sessions and lets you select one to open.")});
     parser.addOption(QCommandLineOption{QStringList{"pss", "pick-session-shell"}, i18n("List all available sessions on shell and lets you select one to open.")});
     parser.addOption(QCommandLineOption{QStringList{"l", "list-sessions"}, i18n("List available sessions and quit.")});
@@ -545,6 +547,26 @@ int main( int argc, char *argv[] )
         if (session.isEmpty()) {
             return 1;
         }
+    } else if ( parser.isSet("remove-session") )
+    {
+        session = parser.value("remove-session");
+        auto si = findSessionInList(KDevelop::SessionController::availableSessionInfos(), session);
+        if (!si) {
+            QTextStream qerr(stderr);
+            qerr << endl << i18n("No session with the name %1 exists.", session) << endl;
+            return 1;
+        }
+
+        auto sessionLock = KDevelop::SessionController::tryLockSession(si->uuid.toString());
+        if (!sessionLock.lock) {
+            QTextStream qerr(stderr);
+            qerr << endl << i18n("Could not lock session %1 for deletion.", session) << endl;
+            return 1;
+        }
+        KDevelop::SessionController::deleteSessionFromDisk(sessionLock.lock);
+        QTextStream qout(stdout);
+        qout << endl << i18n("Session with name %1 was successfully removed.", session) << endl;
+        return 0;
     }
 
     if(parser.isSet("pid")) {
