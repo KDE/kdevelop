@@ -225,7 +225,6 @@ void SessionChooserDialog::deleteButtonPressed()
 
     if(KMessageBox::warningYesNo(this, text, caption, deleteItem, cancelItem) == KMessageBox::Yes) {
         QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
-        const QString uuid = m_model->data(index, Qt::DisplayRole).toString();
 
         SessionController::deleteSessionFromDisk(result.lock);
 

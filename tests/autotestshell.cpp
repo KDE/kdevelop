@@ -26,5 +26,9 @@ KDevelop::AutoTestShell::AutoTestShell(const QStringList& plugins)
 
 void KDevelop::AutoTestShell::init(const QStringList& plugins)
 {
+    // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+    qputenv("KDE_FORK_SLAVES", "1"); // KIO slaves will be forked off instead of being started via DBus
+#endif
     s_instance = new AutoTestShell(plugins);
 }

@@ -1039,7 +1039,6 @@ errorBrush( KColorScheme::View, KColorScheme::NegativeText )
 void RunDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QStyleOptionViewItem opt = option;
-    QVariant status = index.data(Qt::UserRole+1);
 //     if( status.isValid() && status.canConvert<KDevelop::IRunProvider::OutputTypes>() )
 //     {
 //         IRunProvider::OutputTypes type = status.value<KDevelop::IRunProvider::OutputTypes>();

@@ -111,7 +111,6 @@ void GitInitTest::repoInit()
     DVcsJob * j2 = m_plugin->gitRevParse(gitRepo(), QStringList(QStringLiteral("--branches")));
     QVERIFY(j2);
     QVERIFY(j2->exec());
-    QString out = j2->output();
     QVERIFY(j2->output().isEmpty());
 
     // Make sure to set the Git identity so unit tests don't depend on that

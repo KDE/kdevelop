@@ -241,7 +241,6 @@ void BazaarPlugin::parseBzrRoot(DVcsJob* job)
     QString filename = job->dvcsCommand().at(2);
     QString rootDirectory = job->output();
     QString localFilename = QFileInfo(QUrl::fromLocalFile(filename).toLocalFile()).absoluteFilePath();
-    QString localRootDirectory = QFileInfo(rootDirectory).absolutePath();
     QString result = localFilename.mid(localFilename.indexOf(rootDirectory) + rootDirectory.length());
     job->setResults(QVariant::fromValue(result));
 }

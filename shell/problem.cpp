@@ -130,6 +130,7 @@ QString DetectedProblem::severityString() const
     case Hint: s = i18n("Hint"); break;
     case Warning: s = i18n("Warning"); break;
     case Error: s = i18n("Error"); break;
+    default: break;
     }
 
     return s;

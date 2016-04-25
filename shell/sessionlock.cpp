@@ -80,7 +80,8 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
     const QString lockFilename = lockFileForSession( sessionId );
     QSharedPointer<QLockFile> lockFile(new QLockFile( lockFilename ));
 
-    bool canLockDBus = connectionInterface && !connectionInterface->isServiceRegistered( service );
+    const bool haveDBus = connection.isConnected();
+    const bool canLockDBus = haveDBus && connectionInterface && !connectionInterface->isServiceRegistered( service );
     bool lockedDBus = false;
 
     // Lock D-Bus if we can and we need to
@@ -94,14 +95,15 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
     SessionRunInfo runInfo;
     if (lockResult) {
         // Unlock immediately if we shouldn't have locked it
-        if( !lockedDBus ) {
+        if( haveDBus && !lockedDBus ) {
             lockFile->unlock();
         }
     } else {
         // If locking failed, retrieve the lock's metadata
         lockFile->getLockInfo(&runInfo.holderPid, &runInfo.holderHostname, &runInfo.holderApp );
+        runInfo.isRunning = !haveDBus || !canLockDBus;
 
-        if( lockedDBus ) {
+        if( haveDBus && lockedDBus ) {
             // Since the lock-file is secondary, try to force-lock it if D-Bus locking succeeded
             forceRemoveLockfile(lockFilename);
             lockResult = lockFile->tryLock();
@@ -110,10 +112,9 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
     }
 
     // Set the result by D-Bus status
-    if (doLocking && lockedDBus) {
+    if (doLocking && (haveDBus ? lockedDBus : lockResult)) {
         return TryLockSessionResult(QSharedPointer<ISessionLock>(new SessionLock(sessionId, lockFile)));
     } else {
-        runInfo.isRunning = !canLockDBus;
         return TryLockSessionResult(runInfo);
     }
 }
@@ -134,7 +135,6 @@ SessionLock::~SessionLock()
 {
     m_lockFile->unlock();
     bool unregistered = QDBusConnection::sessionBus().unregisterService( dBusServiceNameForSession(m_sessionId) );
-    Q_ASSERT(unregistered);
     Q_UNUSED(unregistered);
 }
 

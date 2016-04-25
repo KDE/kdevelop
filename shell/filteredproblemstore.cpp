@@ -177,6 +177,7 @@ public:
             case IProblem::Error: parent = m_groupedRootNode->child(GroupError); break;
             case IProblem::Warning: parent = m_groupedRootNode->child(GroupWarning); break;
             case IProblem::Hint: parent = m_groupedRootNode->child(GroupHint); break;
+            default: break;
         }
 
         ProblemNode *node = new ProblemNode(m_groupedRootNode.data(), problem);
