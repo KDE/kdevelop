@@ -106,7 +106,7 @@ DeclarationTest(instantiations)
     if (!runTests(testInstantiations[instStr].toMap(), dynamic_cast<Declaration*>(it.value())))
       return DECL_ERROR.arg(instStr);
   }
-  return SUCCESS;
+  return SUCCESS();
 }
 ///JSON type: TypeTestObject
 ///@returns whether the tests for the declaration's real type pass (see TypeUtils::realType)
