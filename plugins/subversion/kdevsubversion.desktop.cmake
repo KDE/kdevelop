@@ -42,6 +42,7 @@ Name[bg]=Поддръжка на Subversion
 Name[bs]=Podrška za subversion
 Name[ca]=Implementació del «subversion»
 Name[ca@valencia]=Implementació del «subversion»
+Name[cs]=Podpora subversion
 Name[da]=Subversion-understøttelse
 Name[de]=Subversion-Unterstützung
 Name[el]=Υποστήριξη Subversion

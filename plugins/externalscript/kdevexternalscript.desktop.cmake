@@ -37,6 +37,7 @@ Name[bg]=Външни скриптове
 Name[bs]=Spoljnje skripte
 Name[ca]=Scripts externs
 Name[ca@valencia]=Scripts externs
+Name[cs]=Externí skripty
 Name[da]=Eksterne scripts
 Name[de]=Externe Skripte
 Name[el]=Εξωτερικά σενάρια
