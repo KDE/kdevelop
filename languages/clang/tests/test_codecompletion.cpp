@@ -736,8 +736,6 @@ void TestCodeCompletion::testImplement_data()
         << "int x();\n"
            "int x(int)=  delete;\n"
         << CompletionItems{{2,1}, {"x()"}};
-    // FIXME: the rage seems to be wrong here (stops after =), but I don't know how to fix that
-    // QDEBUG : TestCodeCompletion::testImplement(deleted-overload-global) default: "int x(int)=" contains "=\\s*delete\\s*;" = false
     QTest::newRow("defaulted-copy-ctor")
         << "struct S { S(); S(const S&) = default; };"
         << CompletionItems{{1,1}, {"S::S()"}};
