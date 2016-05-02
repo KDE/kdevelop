@@ -40,6 +40,7 @@
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/use.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -1565,6 +1566,37 @@ void TestDUChain::testTypeAliasTemplate()
 #endif
     QVERIFY(templateAlias->abstractType());
     QCOMPARE(templateAlias->abstractType()->toString(), QStringLiteral("TypeAliasTemplate"));
+}
+
+void TestDUChain::testDeclarationsInsideMacroExpansion()
+{
+    TestFile header("#define DECLARE(a) typedef struct a##__ {int var;} *a\nDECLARE(D);\n", "h");
+    TestFile file("#include \"" + header.url().byteArray() + "\"\nint main(){\nD d; d->var;}\n", "cpp");
+
+    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST));
+    QVERIFY(file.waitForParsed(5000));
+
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+    }
+
+    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    QVERIFY(file.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+
+    auto context = file.topContext()->childContexts().first()->childContexts().first();
+    QVERIFY(context);
+    QCOMPARE(context->localDeclarations().size(), 1);
+    QEXPECT_FAIL("", "Clang assigns the same range for all declarations inside a macro expansion. Therefore we can't find their uses", Abort);
+    QCOMPARE(context->usesCount(), 3);
+
+    QCOMPARE(context->uses()[0].m_range, RangeInRevision({2, 0}, {2, 1}));
+    QCOMPARE(context->uses()[1].m_range, RangeInRevision({2, 5}, {2, 6}));
+    QCOMPARE(context->uses()[2].m_range, RangeInRevision({2, 8}, {2, 11}));
 }
 
 static bool containsErrors(const QList<Problem::Ptr>& problems)
