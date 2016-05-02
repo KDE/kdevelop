@@ -1674,7 +1674,6 @@ void TestDUChain::testGccCompatibility()
 
 void TestDUChain::testQtIntegration()
 {
-    // TODO: make it easier to change the compiler provider for testing purposes
     QTemporaryDir includeDir;
     {
         QDir dir(includeDir.path());
@@ -1685,10 +1684,9 @@ void TestDUChain::testQtIntegration()
     }
     QTemporaryDir dir;
     auto project = new TestProject(Path(dir.path()), this);
-    auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
-    auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
-    pathConfig.writeEntry("Path", ".");
-    pathConfig.group("Includes").writeEntry("1", QString(includeDir.path() + "/QtCore"));
+    m_provider->defines.clear();
+    m_provider->includes = {Path(includeDir.path() + "/QtCore")};
+
     m_projectController->addProject(project);
 
     {
