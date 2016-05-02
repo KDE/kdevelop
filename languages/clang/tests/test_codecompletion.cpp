@@ -146,7 +146,9 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
     tester.names.sort();
     QEXPECT_FAIL("look-ahead function primary type argument", "No API in LibClang to determine expected code completion type", Continue);
     QEXPECT_FAIL("look-ahead template parameter substitution", "No parameters substitution so far", Continue);
+#if CINDEX_VERSION_MINOR < 30
     QEXPECT_FAIL("look-ahead auto item", "Auto type, like many other types, is not exposed through LibClang. We assign DelayedType to it instead of IdentifiedType", Continue);
+#endif
     if (QTest::currentTestFunction() == QByteArrayLiteral("testImplementAfterEdit") && expectedCompletionItems.position.line() == 3) {
         QEXPECT_FAIL("", "TU is not properly updated after edit", Continue);
     }
@@ -470,7 +472,8 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "LookAhead",
             "i",
             "instance",
-            "instance.intItem"
+            "instance.intItem",
+            "main"
         }};
 
     QTest::newRow("variadic template recursive class")
