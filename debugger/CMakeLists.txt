@@ -62,3 +62,5 @@ install(FILES
     framestack/framestackmodel.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/debugger/framestack COMPONENT Devel
 )
+
+add_subdirectory(tests)
