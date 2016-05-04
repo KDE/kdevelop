@@ -7,6 +7,10 @@ set(kdevtests_LIB_SRCS
     testlanguagecontroller.cpp
     testhelpers.cpp
     testplugincontroller.cpp
+    testdebugsession.cpp
+    testvariablecontroller.cpp
+    testbreakpointcontroller.cpp
+    testframestackmodel.cpp
     modeltest.cpp
 
     json/delayedoutput.cpp
@@ -19,6 +23,7 @@ target_link_libraries(KDevPlatformTests LINK_PUBLIC
     KDev::Shell
     KDev::Language
     KDev::Project
+    KDev::Debugger
 )
 target_link_libraries(KDevPlatformTests LINK_PRIVATE
     Qt5::Core
@@ -35,6 +40,10 @@ install(FILES
     testlanguagecontroller.h
     testhelpers.h
     testplugincontroller.h
+    testdebugsession.h
+    testvariablecontroller.h
+    testbreakpointcontroller.h
+    testframestackmodel.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/tests/
     COMPONENT Devel
 )
