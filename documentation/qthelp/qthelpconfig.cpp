@@ -377,10 +377,10 @@ void QtHelpConfig::searchDirChanged()
 
 QString QtHelpConfig::name() const
 {
-    return i18n("QtHelp Documentation");
+    return i18n("API Documentation");
 }
 
 QIcon QtHelpConfig::icon() const
 {
-    return QIcon::fromTheme(QStringLiteral("qtlogo"));
+    return QIcon::fromTheme(QStringLiteral("help-contents"));
 }

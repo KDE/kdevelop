@@ -17,7 +17,7 @@
    <item>
     <widget class="QGroupBox" name="qchManage">
      <property name="title">
-      <string>Manage QtHelp Documentation</string>
+      <string>Manage API Documentation</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
@@ -152,7 +152,7 @@
       <item>
        <widget class="QCheckBox" name="loadQtDocsCheckBox">
         <property name="text">
-         <string>Load Qt documentation</string>
+         <string>Load Qt API Documentation</string>
         </property>
        </widget>
       </item>
@@ -174,13 +174,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
