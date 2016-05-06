@@ -24,9 +24,9 @@
 #include <QRegExp>
 
 
+#include "mi/gdbmi.h"
 #include "../debugsession.h"
 #include "../gdbcommand.h"
-#include "../mi/gdbmi.h"
 #include "../debug.h"
 #include "converters.h"
 

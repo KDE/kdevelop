@@ -35,8 +35,6 @@ include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
 ########### next target ###############
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
-
 set(kdevgdb_SRCS
     debuggerplugin.cpp
     gdb.cpp
@@ -47,9 +45,6 @@ set(kdevgdb_SRCS
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
-    mi/gdbmi.cpp
-    mi/milexer.cpp
-    mi/miparser.cpp
     stringhelpers.cpp
     debugsession.cpp
     gdbconfigpage.cpp
@@ -102,6 +97,7 @@ target_link_libraries(kdevgdb
     KDev::Project
     KDev::Util
     KF5::TextEditor
+    kdevdebuggercommon
 )
 if(KF5SysGuard_FOUND)
     target_link_libraries(kdevgdb KF5::ProcessUi)
@@ -121,6 +117,7 @@ ecm_add_test(${test_gdb_SRCS}
         KF5::KIOWidgets
         KF5::TextEditor
         KF5::Parts
+        kdevdebuggercommon
 )
 if(KF5SysGuard_FOUND)
     target_link_libraries(test_gdb KF5::ProcessUi)
