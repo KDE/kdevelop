@@ -57,6 +57,7 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         static QtHelpPlugin *s_plugin;
         QList<QtHelpProvider*> m_qtHelpProviders;
         QtHelpQtDoc* m_qtDoc;
+        bool m_loadSystemQtDoc;
 };
 
 #endif // QTHELPPLUGIN_H

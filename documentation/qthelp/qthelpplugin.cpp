@@ -38,7 +38,8 @@ K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugi
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin("kdevqthelp", parent)
     , m_qtHelpProviders()
-    , m_qtDoc(0)
+    , m_qtDoc(new QtHelpQtDoc(this, QVariantList()))
+    , m_loadSystemQtDoc(false)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProviderProvider )
 
@@ -56,24 +57,22 @@ QtHelpPlugin::~QtHelpPlugin()
 void QtHelpPlugin::readConfig()
 {
     QStringList iconList, nameList, pathList, ghnsList;
-    bool loadQtDoc;
     QString searchDir;
-    qtHelpReadConfig(iconList, nameList, pathList, ghnsList, searchDir, loadQtDoc);
+    qtHelpReadConfig(iconList, nameList, pathList, ghnsList, searchDir, m_loadSystemQtDoc);
 
     searchHelpDirectory(pathList, nameList, iconList, searchDir);
     loadQtHelpProvider(pathList, nameList, iconList);
-    loadQtDocumentation(loadQtDoc);
+    loadQtDocumentation(m_loadSystemQtDoc);
 
     emit changedProvidersList();
 }
 
 void QtHelpPlugin::loadQtDocumentation(bool loadQtDoc)
 {
-    if(m_qtDoc && !loadQtDoc){
-        delete m_qtDoc;
-        m_qtDoc = 0;
-    } else if(!m_qtDoc && loadQtDoc) {
-        m_qtDoc = new QtHelpQtDoc(this, QVariantList());
+    if(!loadQtDoc){
+        m_qtDoc->unloadDocumentation();
+    } else if(loadQtDoc) {
+        m_qtDoc->loadDocumentation();
     }
 }
 
@@ -147,7 +146,7 @@ QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
     foreach(QtHelpProvider* provider, m_qtHelpProviders) {
         list.append(provider);
     }
-    if(m_qtDoc){
+    if(m_loadSystemQtDoc){
         list.append(m_qtDoc);
     }
     return list;
@@ -159,7 +158,7 @@ QList<QtHelpProvider*> QtHelpPlugin::qtHelpProviderLoaded()
 }
 
 bool QtHelpPlugin::qtHelpQtDocLoaded(){
-    return m_qtDoc;
+    return m_loadSystemQtDoc;
 }
 
 KDevelop::ConfigPage* QtHelpPlugin::configPage(int number, QWidget* parent)

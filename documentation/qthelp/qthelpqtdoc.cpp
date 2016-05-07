@@ -2,6 +2,7 @@
     Copyright 2009 Aleix Pol <aleixpol@kde.org>
     Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
     Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
+    Copyright 2016 Andreas Cord-Landwehr <cordlandwehr@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -47,6 +48,7 @@ QString qmakeCandidate()
 
 QtHelpQtDoc::QtHelpQtDoc(QObject *parent, const QVariantList &args)
     : QtHelpProviderAbstract(parent, "qthelpcollection.qhc", args)
+    , m_path(QString())
 {
     Q_UNUSED(args);
     registerDocumentations();
@@ -69,36 +71,58 @@ void QtHelpQtDoc::lookupDone(int code)
     if(code==0) {
         KProcess* p = qobject_cast<KProcess*>(sender());
 
-        QString path = QDir::fromNativeSeparators(QString::fromLatin1(p->readAllStandardOutput().trimmed()));
-        qCDebug(QTHELP) << "Detected doc path:" << path;
-
-        if (!path.isEmpty()) {
-            loadDirectory(path);
-            loadDirectory(path+"/qch/");
-        }
+        m_path = QDir::fromNativeSeparators(QString::fromLatin1(p->readAllStandardOutput().trimmed()));
+        qCDebug(QTHELP) << "Detected doc path:" << m_path;
     }
     sender()->deleteLater();
 }
 
-void QtHelpQtDoc::loadDirectory(const QString& path)
+void QtHelpQtDoc::loadDocumentation()
 {
-    QDir d(path);
-    if(path.isEmpty() || !d.exists()) {
-        qCDebug(QTHELP) << "no QtHelp found at all";
+    if(m_path.isEmpty()) {
         return;
     }
 
-    foreach(const QString& file, d.entryList(QDir::Files)) {
-        QString fileName=path+'/'+file;
-        QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
+    QString fileName = qchFile();
+    if(fileName.isEmpty()) {
+        qCWarning(QTHELP) << "could not find QCH file in directory" << m_path;
+        return;
+    }
 
-        if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
-            qCDebug(QTHELP) << "loading doc" << fileName << fileNamespace;
-            if(!m_engine.registerDocumentation(fileName))
-                qCDebug(QTHELP) << "error >> " << fileName << m_engine.error();
+    QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
+    if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
+        qCDebug(QTHELP) << "loading doc" << fileName << fileNamespace;
+        if(!m_engine.registerDocumentation(fileName))
+            qCCritical(QTHELP) << "error >> " << fileName << m_engine.error();
+    }
+}
+
+void QtHelpQtDoc::unloadDocumentation()
+{
+    QString fileName = qchFile();
+    QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
+    if(!fileName.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
+        m_engine.unregisterDocumentation(fileName);
+    }
+}
+
+QString QtHelpQtDoc::qchFile() const
+{
+    QVector<QString> paths;
+    paths << m_path << m_path+"/qch/";
+    foreach (const auto &path, paths) {
+        QDir d(path);
+        if(path.isEmpty() || !d.exists()) {
+            continue;
+        }
+
+        foreach(const QString& file, d.entryList(QDir::Files)) {
+            QString fileName=path+'/'+file;
+            return fileName;
         }
     }
-    qCDebug(QTHELP) << "registered" << m_engine.error() << m_engine.registeredDocumentations();
+    qCDebug(QTHELP) << "no QCH file found at all";
+    return QString();
 }
 
 QIcon QtHelpQtDoc::icon() const
