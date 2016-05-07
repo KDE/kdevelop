@@ -25,7 +25,7 @@
 #include "disassemblewidget.h"
 
 #include "debuggerplugin.h"
-#include "debug.h"
+#include "debuglog.h"
 #include "debugsession.h"
 #include "mi/micommand.h"
 #include "registers/registersmanager.h"

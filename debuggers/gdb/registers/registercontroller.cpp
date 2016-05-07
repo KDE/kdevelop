@@ -21,10 +21,10 @@
 #include "registercontroller.h"
 
 #include "converters.h"
+#include "debuglog.h"
 #include "mi/mi.h"
 #include "mi/micommand.h"
 #include "../debugsession.h"
-#include "../debug.h"
 
 #include <QRegExp>
 #include <QtMath>

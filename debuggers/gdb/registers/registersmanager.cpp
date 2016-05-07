@@ -24,10 +24,10 @@
 #include "registercontroller_x86.h"
 #include "registersview.h"
 
+#include "debuglog.h"
 #include "mi/micommand.h"
 #include "modelsmanager.h"
 #include "../debugsession.h"
-#include "../debug.h"
 
 using namespace KDevDebugger::MI;
 using namespace KDevDebugger::GDB;

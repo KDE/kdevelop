@@ -23,19 +23,20 @@
 
 #include "debugjob.h"
 #include "debuggerplugin.h"
-#include <interfaces/ilaunchconfiguration.h>
-#include <util/environmentgrouplist.h>
+#include "debuglog.h"
+#include "debugsession.h"
+
+#include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
-#include <klocalizedstring.h>
+#include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>
-#include <execute/iexecuteplugin.h>
-#include "debugsession.h"
-#include "debug.h"
+#include <util/environmentgrouplist.h>
+
+#include <KLocalizedString>
 
 #include <QFileInfo>
-#include <KI18n/KLocalizedString>
 
 using namespace KDevDebugger::GDB;
 using namespace KDevelop;

@@ -26,7 +26,7 @@
 #include "debugsession.h"
 
 #include "breakpointcontroller.h"
-#include "debug.h"
+#include "debuglog.h"
 #include "gdb.h"
 #include "gdbframestackmodel.h"
 #include "mi/micommandqueue.h"

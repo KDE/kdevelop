@@ -19,19 +19,22 @@
  */
 
 #include "processselection.h"
+
 #include <processui/ksysguardprocesslist.h>
 #include <processcore/process.h>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QAbstractItemView>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QTimer>
-#include <QTreeView>
-#include <QLineEdit>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
+
+#include <QAbstractItemView>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QTimer>
+#include <QTreeView>
+#include <QVBoxLayout>
+
 
 using namespace KDevDebugger::GDB;
 

@@ -25,11 +25,11 @@
 
 #include "dbgglobal.h"
 
+#include <QFocusEvent>
+#include <QTextEdit>
 #include <QTimer>
 #include <QStringList>
-#include <QFocusEvent>
 #include <QStringList>
-#include <QTextEdit>
 
 namespace KDevelop {
 class IDebugSession;

@@ -23,7 +23,7 @@
 
 #include "variablecontroller.h"
 
-#include "debug.h"
+#include "debuglog.h"
 #include "debugsession.h"
 #include "gdbvariable.h"
 #include "mi/mi.h"

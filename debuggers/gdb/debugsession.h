@@ -26,16 +26,17 @@
 #ifndef GDB_DEBUGSESSION_H
 #define GDB_DEBUGSESSION_H
 
-#include <QPointer>
-#include <QScopedPointer>
-
-#include <KConfigGroup>
-
-#include <debugger/interfaces/idebugsession.h>
-
 #include "breakpointcontroller.h"
 #include "dbgglobal.h"
 #include "mi/mi.h"
+
+#include <debugger/interfaces/idebugsession.h>
+
+#include <KConfigGroup>
+
+#include <QPointer>
+#include <QScopedPointer>
+
 
 class IExecutePlugin;
 class KToolBar;

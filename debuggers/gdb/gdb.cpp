@@ -21,8 +21,9 @@
  */
 
 #include "gdb.h"
+
+#include "debuglog.h"
 #include "debugsession.h"
-#include "debug.h"
 
 #include <KConfig>
 #include <KConfigGroup>

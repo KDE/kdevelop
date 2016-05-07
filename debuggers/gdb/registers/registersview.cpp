@@ -20,9 +20,9 @@
 
 #include "registersview.h"
 
-#include "modelsmanager.h"
 #include "converters.h"
-#include "../debug.h"
+#include "debuglog.h"
+#include "modelsmanager.h"
 
 #include <QMenu>
 #include <QContextMenuEvent>

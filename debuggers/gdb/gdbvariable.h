@@ -26,7 +26,7 @@
 
 #include <debugger/variable/variablecollection.h>
 
-#include <QtCore/QMap>
+#include <QMap>
 
 
 class CreateVarobjHandler;

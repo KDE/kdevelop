@@ -19,7 +19,7 @@
  */
 
 #include "registercontroller_arm.h"
-#include "../debug.h"
+#include "debuglog.h"
 
 #include <KLocalizedString>
 

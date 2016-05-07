@@ -19,7 +19,7 @@
  */
 
 #include "registercontroller_x86.h"
-#include "../debug.h"
+#include "debuglog.h"
 
 #include <KLocalizedString>
 

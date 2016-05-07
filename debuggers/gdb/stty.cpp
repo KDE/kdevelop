@@ -71,7 +71,7 @@
 #include <QStandardPaths>
 
 #include "stty.h"
-#include "debug.h"
+#include "debuglog.h"
 
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"

@@ -27,7 +27,6 @@
 #include "mi/mi.h"
 
 #include <QTreeWidget>
-
 #include <QUrl>
 
 #include <KConfigGroup>

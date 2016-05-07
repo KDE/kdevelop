@@ -23,29 +23,29 @@
 
 #include "gdboutputwidget.h"
 
-#include <kcombobox.h>
-#include <KLocalizedString>
-#include <kcolorscheme.h>
-
-#include <QLabel>
-#include <QLayout>
-#include <QToolButton>
-#include <QToolTip>
-#include <QApplication>
-#include <QClipboard>
-#include <QFocusEvent>
-#include <QMenu>
-#include <khistorycombobox.h>
-#include <QScrollBar>
-#include <QScopedPointer>
+#include "dbgglobal.h"
+#include "debuggerplugin.h"
+#include "debuglog.h"
+#include "debugsession.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 
-#include "dbgglobal.h"
-#include "debuggerplugin.h"
-#include "debugsession.h"
-#include "debug.h"
+#include <KColorScheme>
+#include <KComboBox>
+#include <KHistoryComboBox>
+#include <KLocalizedString>
+
+#include <QApplication>
+#include <QClipboard>
+#include <QFocusEvent>
+#include <QMenu>
+#include <QLabel>
+#include <QLayout>
+#include <QToolButton>
+#include <QToolTip>
+#include <QScrollBar>
+#include <QScopedPointer>
 
 using namespace KDevDebugger::GDB;
 

@@ -23,7 +23,7 @@
 
 #include "breakpointcontroller.h"
 
-#include "debug.h"
+#include "debuglog.h"
 #include "debugsession.h"
 #include "mi/micommand.h"
 
