@@ -1,5 +1,5 @@
 set(debuggercommon_SRCS
-    mi/gdbmi.cpp
+    mi/mi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
 )

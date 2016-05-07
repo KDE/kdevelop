@@ -22,7 +22,7 @@
 #include <QStringList>
 #include <QPointer>
 
-#include "mi/gdbmi.h"
+#include "mi/mi.h"
 
 namespace GDBDebugger
 {
@@ -65,7 +65,7 @@ class GDBCommandHandler
 {
 public:
     virtual ~GDBCommandHandler() {}
-    virtual void handle(const GDBMI::ResultRecord&) = 0;
+    virtual void handle(const MI::ResultRecord&) = 0;
     virtual bool handlesError() { return false; }
 
     /**
@@ -76,11 +76,11 @@ public:
 
 class FunctionCommandHandler : public GDBCommandHandler {
 public:
-    typedef std::function<void (const GDBMI::ResultRecord&)> Function;
+    typedef std::function<void (const MI::ResultRecord&)> Function;
 
     FunctionCommandHandler(const Function& callback, CommandFlags flags = 0);
 
-    virtual void handle(const GDBMI::ResultRecord&) override;
+    virtual void handle(const MI::ResultRecord&) override;
     virtual bool handlesError() override;
 
 private:
@@ -95,25 +95,25 @@ private:
 class GDBCommand
 {
 public:
-    GDBCommand(GDBMI::CommandType type, const QString& arguments = QString(), CommandFlags flags = 0);
+    GDBCommand(MI::CommandType type, const QString& arguments = QString(), CommandFlags flags = 0);
 
     template<class Handler>
-    GDBCommand(GDBMI::CommandType type, const QString& arguments,
+    GDBCommand(MI::CommandType type, const QString& arguments,
                Handler* handler_this,
-               void (Handler::* handler_method)(const GDBMI::ResultRecord&),
+               void (Handler::* handler_method)(const MI::ResultRecord&),
                CommandFlags flags = 0);
 
-    GDBCommand(GDBMI::CommandType type, const QString& arguments, GDBCommandHandler* handler,
+    GDBCommand(MI::CommandType type, const QString& arguments, GDBCommandHandler* handler,
                CommandFlags flags = 0);
 
     GDBCommand(
-        GDBMI::CommandType type, const QString& arguments,
+        MI::CommandType type, const QString& arguments,
         const FunctionCommandHandler::Function& callback,
         CommandFlags flags = 0);
 
     virtual ~GDBCommand();
 
-    GDBMI::CommandType type() const;
+    MI::CommandType type() const;
     QString gdbCommand() const;
 
     CommandFlags flags() const {return flags_;}
@@ -179,7 +179,7 @@ public:
 
     // If there's a handler for this command, invokes it and returns true.
     // Otherwise, returns false.
-    bool invokeHandler(const GDBMI::ResultRecord& r);
+    bool invokeHandler(const MI::ResultRecord& r);
 
     // Returns 'true' if 'invokeHandler' should be invoked even
     // on MI errors.
@@ -199,7 +199,7 @@ public:
     bool stateReloading() const;
 
 private:
-    GDBMI::CommandType type_;
+    MI::CommandType type_;
     CommandFlags flags_;
     uint32_t token_ = 0;
     QString command_;
@@ -215,7 +215,7 @@ private:
 class UserCommand : public GDBCommand
 {
 public:
-    UserCommand(GDBMI::CommandType type, const QString& s);
+    UserCommand(MI::CommandType type, const QString& s);
 
     bool isUserCommand() const override;
 };
@@ -228,7 +228,7 @@ class CliCommand : public GDBCommand
 {
 public:
     template<class Handler>
-    CliCommand(GDBMI::CommandType type, const QString& command,
+    CliCommand(MI::CommandType type, const QString& command,
                Handler* handler_this,
                void (Handler::* handler_method)(const QStringList&),
                CommandFlags flags = 0);
@@ -247,7 +247,7 @@ public:
     SentinelCommand(Handler* handler_this,
                     void (Handler::* handler_method)(),
                     CommandFlags flags = 0)
-        : GDBCommand(GDBMI::NonMI, QString(), flags)
+        : GDBCommand(MI::NonMI, QString(), flags)
     {
         QPointer<Handler> guarded_this(handler_this);
         handler = [guarded_this, handler_method]() {
@@ -258,7 +258,7 @@ public:
     }
 
     SentinelCommand(const Function& handler, CommandFlags flags = 0)
-        : GDBCommand(GDBMI::NonMI, QString(), flags)
+        : GDBCommand(MI::NonMI, QString(), flags)
         , handler(handler)
     {
     }
@@ -288,13 +288,13 @@ public:
         const QString& expression,
         Handler* handler_this,
         void (Handler::* handler_method)(const QString&))
-    : GDBCommand(GDBMI::DataEvaluateExpression, expression, this,
+    : GDBCommand(MI::DataEvaluateExpression, expression, this,
                  &ExpressionValueCommand::handleResponse),
       handler_this(handler_this),
       handler_method(static_cast<handler_method_t>(handler_method))
     {}
 
-    void handleResponse(const GDBMI::ResultRecord& r)
+    void handleResponse(const MI::ResultRecord& r)
     {
         (handler_this.data()->*handler_method)(r["value"].literal());
     }
@@ -307,10 +307,10 @@ private:
 
 template<class Handler>
 GDBCommand::GDBCommand(
-    GDBMI::CommandType type,
+    MI::CommandType type,
     const QString& command,
     Handler* handler_this,
-    void (Handler::* handler_method)(const GDBMI::ResultRecord&),
+    void (Handler::* handler_method)(const MI::ResultRecord&),
     CommandFlags flags)
 : type_(type),
   flags_(flags & ~CmdHandlesError),
@@ -321,7 +321,7 @@ GDBCommand::GDBCommand(
   m_frame(-1)
 {
     QPointer<Handler> guarded_this(handler_this);
-    setHandler(new FunctionCommandHandler([guarded_this, handler_method](const GDBMI::ResultRecord& r) {
+    setHandler(new FunctionCommandHandler([guarded_this, handler_method](const MI::ResultRecord& r) {
         if (guarded_this) {
             (guarded_this.data()->*handler_method)(r);
         }
@@ -330,7 +330,7 @@ GDBCommand::GDBCommand(
 
 template<class Handler>
 CliCommand::CliCommand(
-    GDBMI::CommandType type,
+    MI::CommandType type,
     const QString& command,
     Handler* handler_this,
     void (Handler::* handler_method)(const QStringList&),
@@ -338,7 +338,7 @@ CliCommand::CliCommand(
 : GDBCommand(type, command)
 {
     QPointer<Handler> guarded_this(handler_this);
-    setHandler(new FunctionCommandHandler([this, guarded_this, handler_method](const GDBMI::ResultRecord&) {
+    setHandler(new FunctionCommandHandler([this, guarded_this, handler_method](const MI::ResultRecord&) {
         if (guarded_this) {
             (guarded_this.data()->*handler_method)(this->allStreamOutput());
         }

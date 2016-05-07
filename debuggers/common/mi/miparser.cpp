@@ -22,7 +22,7 @@
 #include "miparser.h"
 #include "tokens.h"
 
-using namespace GDBMI;
+using namespace MI;
 
 #define MATCH(tok) \
   do { \
@@ -291,7 +291,7 @@ bool MIParser::parseCSV(TupleValue** value,
     return true;
 }
 
-bool MIParser::parseCSV(GDBMI::TupleValue& value,
+bool MIParser::parseCSV(TupleValue& value,
                         char start, char end)
 {
    if (start)
@@ -321,7 +321,6 @@ bool MIParser::parseCSV(GDBMI::TupleValue& value,
     return true;
 }
 
-                        
 QString MIParser::parseStringLiteral()
 {
     QByteArray messageByteArray = m_lex->currentTokenText();

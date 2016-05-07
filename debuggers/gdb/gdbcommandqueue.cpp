@@ -17,11 +17,11 @@
 
 #include "gdbcommandqueue.h"
 
-#include "mi/gdbmi.h"
+#include "mi/mi.h"
 #include "gdbcommand.h"
 
 using namespace GDBDebugger;
-using namespace GDBMI;
+using namespace MI;
 
 CommandQueue::CommandQueue()
     : m_tokenCounter(0)

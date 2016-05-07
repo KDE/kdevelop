@@ -22,8 +22,8 @@
 
 #include <memory>
 
+#include "mi.h"
 #include "milexer.h"
-#include "gdbmi.h"
 
 #include <QString>
 
@@ -36,17 +36,17 @@ public:
     MIParser();
     ~MIParser();
 
-    std::unique_ptr<GDBMI::Record> parse(FileSymbol *file);
+    std::unique_ptr<MI::Record> parse(FileSymbol *file);
 
 protected: // rules
-    std::unique_ptr<GDBMI::Record> parseResultOrAsyncRecord();
-    std::unique_ptr<GDBMI::Record> parsePrompt();
-    std::unique_ptr<GDBMI::Record> parseStreamRecord();
+    std::unique_ptr<MI::Record> parseResultOrAsyncRecord();
+    std::unique_ptr<MI::Record> parsePrompt();
+    std::unique_ptr<MI::Record> parseStreamRecord();
 
-    bool parseResult(GDBMI::Result *&result);
-    bool parseValue(GDBMI::Value *&value);
-    bool parseTuple(GDBMI::Value *&value);
-    bool parseList(GDBMI::Value *&value);
+    bool parseResult(MI::Result *&result);
+    bool parseValue(MI::Value *&value);
+    bool parseTuple(MI::Value *&value);
+    bool parseList(MI::Value *&value);
 
     /** Creates new TupleValue object, writes its address
         into *value, parses a comma-separated set of values,
@@ -56,15 +56,14 @@ protected: // rules
         Parsing stops when we see 'end' character, or, if
         'end' is zero, at the end of input.
     */
-    bool parseCSV(GDBMI::TupleValue** value,
+    bool parseCSV(MI::TupleValue** value,
                   char start = 0, char end = 0);
 
     /** @overload
         Same as above, but writes into existing tuple.
     */
-    bool parseCSV(GDBMI::TupleValue& value,
+    bool parseCSV(MI::TupleValue& value,
                   char start = 0, char end = 0);
-
 
     /** Parses a string literal and returns it. Advances
         the lexer past the literal. Processes C escape sequences

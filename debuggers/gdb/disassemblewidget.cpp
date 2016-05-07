@@ -51,7 +51,7 @@
 #include "registers/registersmanager.h"
 #include "debug.h"
 
-using namespace GDBMI;
+using namespace MI;
 
 namespace GDBDebugger
 {
@@ -299,10 +299,10 @@ void DisassembleWidget::slotShowStepInSource(const QUrl&, int,
     update(currentAddress);
 }
 
-void DisassembleWidget::updateExecutionAddressHandler(const GDBMI::ResultRecord& r)
+void DisassembleWidget::updateExecutionAddressHandler(const ResultRecord& r)
 {
-    const GDBMI::Value& content = r["asm_insns"];
-    const GDBMI::Value& pc = content[0];
+    const Value& content = r["asm_insns"];
+    const Value& pc = content[0];
     if( pc.hasField("address") ){
         QString addr = pc["address"].literal();
         address_ = addr.toULong(&ok,16);
@@ -336,16 +336,16 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
 
 /***************************************************************************/
 
-void DisassembleWidget::disassembleMemoryHandler(const GDBMI::ResultRecord& r)
+void DisassembleWidget::disassembleMemoryHandler(const ResultRecord& r)
 {
-    const GDBMI::Value& content = r["asm_insns"];
+    const Value& content = r["asm_insns"];
     QString currentFunction;
 
     m_disassembleWindow->clear();
 
     for(int i = 0; i < content.size(); ++i)
     {
-        const GDBMI::Value& line = content[i];
+        const Value& line = content[i];
 
         QString addr, fct, offs, inst;
 

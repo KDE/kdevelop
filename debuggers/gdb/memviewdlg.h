@@ -16,7 +16,7 @@
 #ifndef _MEMVIEW_H_
 #define _MEMVIEW_H_
 
-#include "mi/gdbmi.h"
+#include "mi/mi.h"
 
 #include <QContextMenuEvent>
 
@@ -72,7 +72,7 @@ namespace GDBDebugger
     private: // Callbacks
         void sizeComputed(const QString& value);
 
-        void memoryRead(const GDBMI::ResultRecord& r);
+        void memoryRead(const MI::ResultRecord& r);
 
     private Q_SLOTS:
         void memoryEdited(int start, int end);

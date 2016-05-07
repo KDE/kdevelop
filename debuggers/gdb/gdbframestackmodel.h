@@ -27,7 +27,7 @@
 #include "debugsession.h"
 using namespace GDBDebugger;
 
-namespace GDBMI { struct ResultRecord; }
+namespace MI { struct ResultRecord; }
 
 namespace KDevelop {
     
@@ -44,7 +44,7 @@ namespace KDevelop {
         void fetchFrames(int threadNumber, int from, int to) override;
         
     private:        
-        void handleThreadInfo(const GDBMI::ResultRecord& r);
+        void handleThreadInfo(const MI::ResultRecord& r);
     };
 }
 

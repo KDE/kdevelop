@@ -27,7 +27,7 @@
 #include <QStringList>
 #include <QString>
 
-namespace GDBMI
+namespace MI
 {
 struct ResultRecord;
 }
@@ -209,15 +209,15 @@ public:
 
 private :
     ///Handles initialization of register's names.
-    void registerNamesHandler(const GDBMI::ResultRecord& r);
+    void registerNamesHandler(const MI::ResultRecord& r);
 
     ///Parses new values for general registers from @p r and updates it in m_registers.
     ///Emits registersChanged signal.
-    void generalRegistersHandler(const GDBMI::ResultRecord& r);
+    void generalRegistersHandler(const MI::ResultRecord& r);
 
     ///Parses new values for structured registers from @p r and updates it in m_registers.
     ///Emits registersChanged signal.
-    virtual void structuredRegistersHandler(const GDBMI::ResultRecord& r);
+    virtual void structuredRegistersHandler(const MI::ResultRecord& r);
 
 private:
 

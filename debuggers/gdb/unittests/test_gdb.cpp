@@ -443,7 +443,7 @@ void GdbTest::testUpdateBreakpoint()
     session->startProgram(&cfg, m_iface);
 
     //insert custom command as user might do it using GDB console
-    session->addCommand(new UserCommand(GDBMI::NonMI, "break "+debugeeFileName+":28"));
+    session->addCommand(new UserCommand(MI::NonMI, "break "+debugeeFileName+":28"));
 
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(100);
@@ -711,22 +711,22 @@ void GdbTest::testManualBreakpoint()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
-    session->addCommand(GDBMI::NonMI, "break debugee.cpp:23");
+    session->addCommand(MI::NonMI, "break debugee.cpp:23");
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
     Breakpoint* b = breakpoints()->breakpoint(0);
     QCOMPARE(b->line(), 22);
 
-    session->addCommand(GDBMI::NonMI, "disable 2");
-    session->addCommand(GDBMI::NonMI, "condition 2 i == 1");
-    session->addCommand(GDBMI::NonMI, "ignore 2 1");
+    session->addCommand(MI::NonMI, "disable 2");
+    session->addCommand(MI::NonMI, "condition 2 i == 1");
+    session->addCommand(MI::NonMI, "ignore 2 1");
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(b->enabled(), false);
     QCOMPARE(b->condition(), QString("i == 1"));
     QCOMPARE(b->ignoreHits(), 1);
 
-    session->addCommand(GDBMI::NonMI, "delete 2");
+    session->addCommand(MI::NonMI, "delete 2");
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
@@ -985,7 +985,7 @@ void GdbTest::testManualAttach()
     cfg.config().writeEntry(GDBDebugger::remoteGdbRunEntry, QUrl::fromLocalFile(findSourceFile("gdb_script_empty")));
     QVERIFY(session->startProgram(&cfg, m_iface));
 
-    session->addCommand(GDBMI::NonMI, QString("attach %0").arg(debugeeProcess.pid()));
+    session->addCommand(MI::NonMI, QString("attach %0").arg(debugeeProcess.pid()));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     session->run();
@@ -1445,7 +1445,7 @@ void GdbTest::testPickupManuallyInsertedBreakpoint()
 
     breakpoints()->addCodeBreakpoint("main");
     QVERIFY(session->startProgram(&cfg, m_iface));
-    session->addCommand(GDBMI::NonMI, "break debugee.cpp:32");
+    session->addCommand(MI::NonMI, "break debugee.cpp:32");
     session->stepInto();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000); //wait for breakpoints update
@@ -1748,7 +1748,7 @@ void GdbTest::testCatchpoint()
     QCOMPARE(fsModel->currentFrame(), 0);
     QCOMPARE(session->line(), 29);
 
-    session->addCommand(new GDBCommand(GDBMI::NonMI, "catch throw"));
+    session->addCommand(new GDBCommand(MI::NonMI, "catch throw"));
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
@@ -1782,8 +1782,8 @@ void GdbTest::testThreadAndFrameInfo()
     QSignalSpy outputSpy(session, SIGNAL(gdbUserCommandStdout(QString)));
 
     session->addCommand(
-                new UserCommand(GDBMI::ThreadInfo,""));
-    session->addCommand(new UserCommand(GDBMI::StackListLocals, QLatin1String("0")));
+                new UserCommand(MI::ThreadInfo,""));
+    session->addCommand(new UserCommand(MI::StackListLocals, QLatin1String("0")));
     QTest::qWait(1000);
     QCOMPARE(outputSpy.count(), 2);
     QVERIFY(outputSpy.last().at(0).toString().contains(QLatin1String("--thread 1")));
@@ -1816,7 +1816,7 @@ void GdbTest::parseBug304730()
 
     MIParser parser;
 
-    std::unique_ptr<GDBMI::Record> record(parser.parse(&file));
+    std::unique_ptr<MI::Record> record(parser.parse(&file));
     QVERIFY(record.get() != nullptr);
 }
 
@@ -1907,13 +1907,13 @@ void GdbTest::testRegularExpressionBreakpoint()
         breakpoints()->addCodeBreakpoint("main");
         session->startProgram(&c, m_iface);
         WAIT_FOR_STATE(session, DebugSession::PausedState);
-        session->addCommand(new GDBCommand(GDBMI::NonMI, "rbreak .*aPl.*B"));
+        session->addCommand(new GDBCommand(MI::NonMI, "rbreak .*aPl.*B"));
         QTest::qWait(100);
         session->run();
         WAIT_FOR_STATE(session, DebugSession::PausedState);
         QCOMPARE(breakpoints()->breakpoints().count(), 3);
 
-        session->addCommand(new GDBCommand(GDBMI::BreakDelete, ""));
+        session->addCommand(new GDBCommand(MI::BreakDelete, ""));
         session->run();
         WAIT_FOR_STATE(session, DebugSession::EndedState);
 }

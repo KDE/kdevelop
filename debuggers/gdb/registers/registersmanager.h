@@ -25,7 +25,7 @@
 #include <QStringList>
 #include <QScopedPointer>
 
-namespace GDBMI
+namespace MI
 {
 struct ResultRecord;
 }
@@ -58,7 +58,7 @@ Q_SIGNALS:
 
 private:
 
-    void registerNamesHandler(const GDBMI::ResultRecord& r);
+    void registerNamesHandler(const MI::ResultRecord& r);
     void parseArchitecture();
 
     QStringList m_registerNames;

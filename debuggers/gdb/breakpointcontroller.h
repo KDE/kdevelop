@@ -31,7 +31,7 @@
 
 class QModelIndex;
 
-namespace GDBMI {
+namespace MI {
 struct AsyncRecord;
 struct ResultRecord;
 struct Value;
@@ -72,12 +72,12 @@ public:
     virtual void breakpointAboutToBeDeleted(int row) override;
     virtual void debuggerStateChanged(IDebugSession::DebuggerState) override;
 
-    void notifyBreakpointCreated(const GDBMI::AsyncRecord& r);
-    void notifyBreakpointModified(const GDBMI::AsyncRecord& r);
-    void notifyBreakpointDeleted(const GDBMI::AsyncRecord& r);
+    void notifyBreakpointCreated(const MI::AsyncRecord& r);
+    void notifyBreakpointModified(const MI::AsyncRecord& r);
+    void notifyBreakpointDeleted(const MI::AsyncRecord& r);
 
 private Q_SLOTS:
-    void programStopped(const GDBMI::AsyncRecord &r);
+    void programStopped(const MI::AsyncRecord &r);
 
 private:
     DebugSession* debugSession() const;
@@ -89,8 +89,8 @@ private:
 
     virtual void sendMaybe(KDevelop::Breakpoint *breakpoint) override;
 
-    void createFromGdb(const GDBMI::Value& miBkpt);
-    void updateFromGdb(int row, const GDBMI::Value& miBkpt, BreakpointModel::ColumnFlags lockedColumns = 0);
+    void createFromGdb(const MI::Value& miBkpt);
+    void updateFromGdb(int row, const MI::Value& miBkpt, BreakpointModel::ColumnFlags lockedColumns = 0);
 
     int rowFromGdbId(int gdbId) const;
 

@@ -3,6 +3,8 @@
  *   roberto@kdevelop.org                                                  *
  *   Copyright (C) 2005-2006 by Vladimir Prus                              *
  *   ghost@cs.msu.su                                                       *
+ *   Copyright (C) 2016 by Aetf                                            *
+ *   aetf@unlimitedcodeworks.xyz                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -23,7 +25,7 @@
 #define GDBMI_H
 
 #include <QString>
-#include <qmap.h>
+#include <QMap>
 
 #include <stdexcept>
 
@@ -31,7 +33,7 @@
 @author Roberto Raggi
 @author Vladimir Prus
 */
-namespace GDBMI
+namespace MI
 {
     enum CommandType {
         NonMI,
@@ -254,7 +256,7 @@ namespace GDBMI
             converted to int, throws type_error.
         */
         virtual int toInt(int base = 10) const;
-            
+
         /** If this value is a tuple, returns true if the tuple
             has a field named 'variable'. Otherwise,
             throws type_error.
@@ -306,7 +308,7 @@ namespace GDBMI
 
         QString literal() const override;
         int toInt(int base) const override;
-     
+
     private:
         QString literal_;
     };
@@ -322,7 +324,7 @@ namespace GDBMI
         const Value& operator[](const QString& variable) const override;
 
         QList<Result*> results;
-        QMap<QString, GDBMI::Result*> results_by_name;
+        QMap<QString, Result*> results_by_name;
     };
 
     struct ListValue : public Value
@@ -360,7 +362,7 @@ namespace GDBMI
         {
             Record::kind = Result;
         }
-        
+
         uint32_t token;
         QString reason;
     };

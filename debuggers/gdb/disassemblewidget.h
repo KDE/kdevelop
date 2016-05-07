@@ -24,7 +24,7 @@
 #ifndef _DISASSEMBLEWIDGET_H_
 #define _DISASSEMBLEWIDGET_H_
 
-#include "mi/gdbmi.h"
+#include "mi/mi.h"
 
 #include <QTreeWidget>
 
@@ -136,8 +136,8 @@ private:
         const QString& to=QString() );
 
     /// callbacks for GDBCommands
-    void disassembleMemoryHandler(const GDBMI::ResultRecord& r);
-    void updateExecutionAddressHandler(const GDBMI::ResultRecord& r);
+    void disassembleMemoryHandler(const MI::ResultRecord& r);
+    void updateExecutionAddressHandler(const MI::ResultRecord& r);
 
     //for str to uint conversion.
     bool ok;

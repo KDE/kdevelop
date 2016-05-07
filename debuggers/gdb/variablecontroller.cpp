@@ -29,6 +29,7 @@
 #include <interfaces/idebugcontroller.h>
 #include <debugger/interfaces/iframestackmodel.h>
 
+#include "mi/mi.h"
 #include "gdbcommand.h"
 #include "debugsession.h"
 #include "stringhelpers.h"
@@ -53,7 +54,7 @@ DebugSession *VariableController::debugSession() const
     return static_cast<DebugSession*>(const_cast<QObject*>(QObject::parent()));
 }
 
-void VariableController::programStopped(const GDBMI::AsyncRecord& r)
+void VariableController::programStopped(const MI::AsyncRecord& r)
 {
     if (debugSession()->stateIsOn(s_shuttingDown)) return;
 
@@ -81,17 +82,17 @@ void VariableController::update()
        ((autoUpdate() & UpdateWatches) && variableCollection()->watches()->childCount() > 0))
     {
         debugSession()->addCommand(
-            new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
+            new GDBCommand(MI::VarUpdate, "--all-values *", this,
                        &VariableController::handleVarUpdate));
     }
 }
 
-void VariableController::handleVarUpdate(const GDBMI::ResultRecord& r)
+void VariableController::handleVarUpdate(const MI::ResultRecord& r)
 {
-    const GDBMI::Value& changed = r["changelist"];
+    const MI::Value& changed = r["changelist"];
     for (int i = 0; i < changed.size(); ++i)
     {
-        const GDBMI::Value& var = changed[i];
+        const MI::Value& var = changed[i];
         GdbVariable* v = GdbVariable::findByVarobjName(var["name"].literal());
         // v can be NULL here if we've already removed locals after step,
         // but the corresponding -var-delete command is still in the queue.
@@ -107,12 +108,12 @@ public:
         : m_localsName(localsName)
     {}
 
-    void handle(const GDBMI::ResultRecord &r) override
+    void handle(const MI::ResultRecord &r) override
     {
         if (!KDevelop::ICore::self()->debugController()) return; //happens on shutdown
 
         // FIXME: handle error.
-        const GDBMI::Value& locals = r["stack-args"][0]["args"];
+        const MI::Value& locals = r["stack-args"][0]["args"];
 
         for (int i = 0; i < locals.size(); i++) {
             m_localsName << locals[i].literal();
@@ -135,20 +136,20 @@ public:
         : m_session(session)
     {}
 
-    void handle(const GDBMI::ResultRecord &r) override
+    void handle(const MI::ResultRecord &r) override
     {
         // FIXME: handle error.
 
-        const GDBMI::Value& locals = r["locals"];
+        const MI::Value& locals = r["locals"];
 
         QStringList localsName;
         for (int i = 0; i < locals.size(); i++) {
-            const GDBMI::Value& var = locals[i];
+            const MI::Value& var = locals[i];
             localsName << var["name"].literal();
         }
         int frame = m_session->frameStackModel()->currentFrame();
         m_session->addCommand(                    //dont'show value, low-frame, high-frame
-            new GDBCommand(GDBMI::StackListArguments, QString("0 %1 %2").arg(frame).arg(frame),
+            new GDBCommand(MI::StackListArguments, QString("0 %1 %2").arg(frame).arg(frame),
                         new StackListArgumentsHandler(localsName)));
     }
 
@@ -159,7 +160,7 @@ private:
 void VariableController::updateLocals()
 {
     debugSession()->addCommand(
-        new GDBCommand(GDBMI::StackListLocals, "--simple-values",
+        new GDBCommand(MI::StackListLocals, "--simple-values",
                         new StackListLocalsHandler(debugSession())));
 }
 
@@ -195,7 +196,7 @@ void VariableController::addWatch(KDevelop::Variable* variable)
     if (GdbVariable *gv = dynamic_cast<GdbVariable*>(variable))
     {
         debugSession()->addCommand(
-            new GDBCommand(GDBMI::VarInfoPathExpression,
+            new GDBCommand(MI::VarInfoPathExpression,
                            gv->varobj(),
                            this,
                            &VariableController::addWatch));
@@ -211,14 +212,14 @@ void VariableController::addWatchpoint(KDevelop::Variable* variable)
     if (GdbVariable *gv = dynamic_cast<GdbVariable*>(variable))
     {
         debugSession()->addCommand(
-            new GDBCommand(GDBMI::VarInfoPathExpression,
+            new GDBCommand(MI::VarInfoPathExpression,
                            gv->varobj(),
                            this,
                            &VariableController::addWatchpoint));
     }
 }
 
-void VariableController::addWatch(const GDBMI::ResultRecord& r)
+void VariableController::addWatch(const MI::ResultRecord& r)
 {
     // FIXME: handle error.
     if (r.reason == "done" &&  !r["path_expr"].literal().isEmpty()) {
@@ -226,7 +227,7 @@ void VariableController::addWatch(const GDBMI::ResultRecord& r)
     }
 }
 
-void VariableController::addWatchpoint(const GDBMI::ResultRecord& r)
+void VariableController::addWatchpoint(const MI::ResultRecord& r)
 {
     if (r.reason == "done" && !r["path_expr"].literal().isEmpty()) {
         KDevelop::ICore::self()->debugController()->breakpointModel()->addWatchpoint(r["path_expr"].literal());

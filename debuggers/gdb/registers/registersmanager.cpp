@@ -55,13 +55,13 @@ void ArchitectureParser::parseArchitecture()
     emit architectureParsed(arch);
 }
 
-void ArchitectureParser::registerNamesHandler(const GDBMI::ResultRecord& r)
+void ArchitectureParser::registerNamesHandler(const MI::ResultRecord& r)
 {
-    const GDBMI::Value& names = r["register-names"];
+    const MI::Value& names = r["register-names"];
 
     m_registerNames.clear();
     for (int i = 0; i < names.size(); ++i) {
-        const GDBMI::Value& entry = names[i];
+        const MI::Value& entry = names[i];
         if (!entry.literal().isEmpty()) {
             m_registerNames << entry.literal();
         }
@@ -77,7 +77,7 @@ void ArchitectureParser::determineArchitecture(DebugSession* debugSession)
     }
 
     debugSession->addCommand(
-        new GDBCommand(GDBMI::DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler));
+        new GDBCommand(MI::DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler));
 }
 
 RegistersManager::RegistersManager(QWidget* parent)

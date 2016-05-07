@@ -30,7 +30,7 @@
 
 using namespace KDevelop;
 
-namespace GDBMI {
+namespace MI {
 struct AsyncRecord;
 struct ResultRecord;
 struct Value;
@@ -57,7 +57,7 @@ public:
     void update() override;
 
 private slots:
-    void programStopped(const GDBMI::AsyncRecord &r);
+    void programStopped(const MI::AsyncRecord &r);
     void stateChanged(KDevelop::IDebugSession::DebuggerState);
 
 private:
@@ -65,9 +65,9 @@ private:
 
     void updateLocals();
 
-    void handleVarUpdate(const GDBMI::ResultRecord& r);
-    void addWatch(const GDBMI::ResultRecord& r);
-    void addWatchpoint(const GDBMI::ResultRecord& r);
+    void handleVarUpdate(const MI::ResultRecord& r);
+    void addWatch(const MI::ResultRecord& r);
+    void addWatchpoint(const MI::ResultRecord& r);
 
     void handleEvent(IDebugSession::event_t event) override;
 };

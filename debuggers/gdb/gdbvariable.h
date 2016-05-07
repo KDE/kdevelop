@@ -22,7 +22,7 @@
 #ifndef GDBVARIABLE_H
 #define GDBVARIABLE_H
 
-#include "mi/gdbmi.h"
+#include "mi/mi.h"
 
 #include <debugger/variable/variablecollection.h>
 
@@ -46,7 +46,7 @@ namespace KDevelop
         /* FIXME: should eventually remove, so that existance of
            varobjs is fully encapsulalated inside GdbVariable.  */
         const QString& varobj() const;
-        void handleUpdate(const GDBMI::Value& var);
+        void handleUpdate(const MI::Value& var);
 
         static GdbVariable *findByVarobjName(const QString& varobjName);
 

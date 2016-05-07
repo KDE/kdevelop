@@ -242,7 +242,7 @@ namespace GDBDebugger
             KDevelop::ICore::self()->debugController()->currentSession());
         if (!session) return;
 
-        session->addCommand(new GDBCommand(GDBMI::DataReadMemory,
+        session->addCommand(new GDBCommand(MI::DataReadMemory,
                 QString("%1 x 1 1 %2")
                     .arg(rangeSelector_->startAddressLineEdit->text())
                     .arg(size),
@@ -250,9 +250,9 @@ namespace GDBDebugger
                 &MemoryView::memoryRead));
     }
 
-    void MemoryView::memoryRead(const GDBMI::ResultRecord& r)
+    void MemoryView::memoryRead(const MI::ResultRecord& r)
     {
-        const GDBMI::Value& content = r["memory"][0]["data"];
+        const MI::Value& content = r["memory"][0]["data"];
         bool startStringConverted;
         start_ = r["addr"].literal().toULongLong(&startStringConverted, 16);
         amount_ = content.size();
@@ -287,7 +287,7 @@ namespace GDBDebugger
 
         for(int i = start; i <= end; ++i)
         {
-            session->addCommand(new GDBCommand(GDBMI::GdbSet,
+            session->addCommand(new GDBCommand(MI::GdbSet,
                     QString("*(char*)(%1 + %2) = %3")
                         .arg(start_)
                         .arg(i)
@@ -417,7 +417,7 @@ namespace GDBDebugger
             DebugSession *session = qobject_cast<DebugSession*>(
                 KDevelop::ICore::self()->debugController()->currentSession());
             if (session) {
-                session->addCommand(new GDBCommand(GDBMI::DataReadMemory,
+                session->addCommand(new GDBCommand(MI::DataReadMemory,
                         QString("%1 x 1 1 %2").arg(start_).arg(amount_),
                         this,
                         &MemoryView::memoryRead));

@@ -15,7 +15,7 @@
 
 #include "gdbcommand.h"
 
-using namespace GDBMI;
+using namespace MI;
 
 namespace GDBDebugger
 {
@@ -37,7 +37,7 @@ void FunctionCommandHandler::handle(const ResultRecord& r)
 }
 
 
-GDBCommand::GDBCommand(GDBMI::CommandType type, const QString& command, CommandFlags flags)
+GDBCommand::GDBCommand(CommandType type, const QString& command, CommandFlags flags)
 : type_(type), flags_(flags & ~CmdHandlesError), command_(command), commandHandler_(0),
   stateReloading_(false), m_thread(-1), m_frame(-1)
 {
@@ -110,7 +110,7 @@ void GDBCommand::setHandler(GDBCommandHandler* handler)
 }
 
 bool
-GDBCommand::invokeHandler(const GDBMI::ResultRecord& r)
+GDBCommand::invokeHandler(const ResultRecord& r)
 {
     if (commandHandler_) {
         bool autoDelete = commandHandler_->autoDelete(); //ask before calling handler as it might deleted itself in handler
@@ -140,7 +140,7 @@ bool GDBCommand::handlesError() const
     return commandHandler_ ? commandHandler_->handlesError() : false;
 }
 
-UserCommand::UserCommand(GDBMI::CommandType type, const QString& s)
+UserCommand::UserCommand(CommandType type, const QString& s)
 : GDBCommand(type, s, CmdMaybeStartsRunning)
 {
 }
@@ -572,7 +572,7 @@ QString GDBCommand::gdbCommand() const
     return '-' + command;
 }
 
-GDBMI::CommandType GDBCommand::type() const
+CommandType GDBCommand::type() const
 {
     return type_;
 }

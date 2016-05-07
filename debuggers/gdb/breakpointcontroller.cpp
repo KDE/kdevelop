@@ -34,7 +34,7 @@
 #include "debugsession.h"
 #include "debug.h"
 
-using namespace GDBMI;
+using namespace MI;
 
 namespace GDBDebugger {
 
@@ -119,7 +119,7 @@ struct BreakpointController::UpdateHandler : public BreakpointController::Handle
     UpdateHandler(BreakpointController* c, const BreakpointDataPtr& b, BreakpointModel::ColumnFlags columns)
         : Handler(c, b, columns) {}
 
-    void handle(const GDBMI::ResultRecord &r) override
+    void handle(const ResultRecord &r) override
     {
         Handler::handle(r);
 
@@ -140,7 +140,7 @@ struct BreakpointController::InsertedHandler : public BreakpointController::Hand
     InsertedHandler(BreakpointController* c, const BreakpointDataPtr& b, BreakpointModel::ColumnFlags columns)
         : Handler(c, b, columns) {}
 
-    void handle(const GDBMI::ResultRecord &r) override
+    void handle(const ResultRecord &r) override
     {
         Handler::handle(r);
 
@@ -745,7 +745,7 @@ void BreakpointController::updateFromGdb(int row, const Value& miBkpt, Breakpoin
     recalculateState(row);
 }
 
-void BreakpointController::programStopped(const GDBMI::AsyncRecord& r)
+void BreakpointController::programStopped(const AsyncRecord& r)
 {
     if (!r.hasField("reason"))
         return;

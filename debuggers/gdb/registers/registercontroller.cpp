@@ -24,7 +24,7 @@
 #include <QRegExp>
 
 
-#include "mi/gdbmi.h"
+#include "mi/mi.h"
 #include "../debugsession.h"
 #include "../gdbcommand.h"
 #include "../debug.h"
@@ -106,23 +106,23 @@ void IRegisterController::updateRegisters(const GroupsName& group)
         return;
     }
 
-    void (IRegisterController::* handler)(const GDBMI::ResultRecord&);
+    void (IRegisterController::* handler)(const MI::ResultRecord&);
     if (group.type() == structured && currentFormat != Raw) {
         handler = &IRegisterController::structuredRegistersHandler;
     } else {
         handler = &IRegisterController::generalRegistersHandler;
     }
 
-    m_debugSession->addCommand(new GDBCommand(GDBMI::DataListRegisterValues, registers, this, handler));
+    m_debugSession->addCommand(new GDBCommand(MI::DataListRegisterValues, registers, this, handler));
 }
 
-void IRegisterController::registerNamesHandler(const GDBMI::ResultRecord& r)
+void IRegisterController::registerNamesHandler(const MI::ResultRecord& r)
 {
-    const GDBMI::Value& names = r["register-names"];
+    const MI::Value& names = r["register-names"];
 
     m_rawRegisterNames.clear();
     for (int i = 0; i < names.size(); ++i) {
-        const GDBMI::Value& entry = names[i];
+        const MI::Value& entry = names[i];
         m_rawRegisterNames.push_back(entry.literal());
     }
 
@@ -130,15 +130,15 @@ void IRegisterController::registerNamesHandler(const GDBMI::ResultRecord& r)
     updateRegisters();
 }
 
-void IRegisterController::generalRegistersHandler(const GDBMI::ResultRecord& r)
+void IRegisterController::generalRegistersHandler(const MI::ResultRecord& r)
 {
     Q_ASSERT(!m_rawRegisterNames.isEmpty());
 
     QString registerName;
 
-    const GDBMI::Value& values = r["register-values"];
+    const MI::Value& values = r["register-values"];
     for (int i = 0; i < values.size(); ++i) {
-        const GDBMI::Value& entry = values[i];
+        const MI::Value& entry = values[i];
         int number = entry["number"].literal().toInt();
         Q_ASSERT(m_rawRegisterNames.size() >  number);
 
@@ -187,7 +187,7 @@ bool IRegisterController::initializeRegisters()
     }
 
     m_debugSession->addCommand(
-        new GDBCommand(GDBMI::DataListRegisterNames, "", this, &IRegisterController::registerNamesHandler));
+        new GDBCommand(MI::DataListRegisterNames, "", this, &IRegisterController::registerNamesHandler));
     return true;
 }
 
@@ -242,7 +242,7 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
     const QString command = QString("set var $%1=%2").arg(reg.name).arg(reg.value);
     qCDebug(DEBUGGERGDB) << "Setting register: " << command;
 
-    m_debugSession->addCommand(new GDBCommand(GDBMI::NonMI, command));
+    m_debugSession->addCommand(new GDBCommand(MI::NonMI, command));
     updateRegisters(group);
 }
 
@@ -331,7 +331,7 @@ void IRegisterController::setStructuredRegister(const Register& reg, const Group
     setGeneralRegister(r, group);
 }
 
-void IRegisterController::structuredRegistersHandler(const GDBMI::ResultRecord& r)
+void IRegisterController::structuredRegistersHandler(const MI::ResultRecord& r)
 {
     //Parsing records in format like:
     //{u8 = {0, 0, 128, 146, 0, 48, 197, 65}, u16 = {0, 37504, 12288, 16837}, u32 = {2457862144, 1103441920}, u64 = 4739246961893310464, f32 = {-8.07793567e-28, 24.6484375}, f64 = 710934821}
@@ -343,12 +343,12 @@ void IRegisterController::structuredRegistersHandler(const GDBMI::ResultRecord& 
     QString registerName;
     Mode currentMode = LAST_MODE;
     GroupsName group;
-    const GDBMI::Value& values = r["register-values"];
+    const MI::Value& values = r["register-values"];
 
     Q_ASSERT(!m_rawRegisterNames.isEmpty());
 
     for (int i = 0; i < values.size(); ++i) {
-        const GDBMI::Value& entry = values[i];
+        const MI::Value& entry = values[i];
         int number = entry["number"].literal().toInt();
         registerName = m_rawRegisterNames[number];
         if (currentMode == LAST_MODE) {

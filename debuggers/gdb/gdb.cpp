@@ -202,7 +202,7 @@ void GDB::processLine(const QByteArray& line)
     FileSymbol file;
     file.contents = line;
 
-    std::unique_ptr<GDBMI::Record> r(mi_parser_.parse(&file));
+    std::unique_ptr<MI::Record> r(mi_parser_.parse(&file));
 
     if (!r)
     {
@@ -224,8 +224,8 @@ void GDB::processLine(const QByteArray& line)
     #endif
         switch(r->kind)
         {
-        case GDBMI::Record::Result: {
-            GDBMI::ResultRecord& result = static_cast<GDBMI::ResultRecord&>(*r);
+        case MI::Record::Result: {
+            MI::ResultRecord& result = static_cast<MI::ResultRecord&>(*r);
 
             emit internalCommandOutput(QString::fromUtf8(line) + '\n');
 
@@ -263,11 +263,11 @@ void GDB::processLine(const QByteArray& line)
             break;
         }
 
-        case GDBMI::Record::Async: {
-            GDBMI::AsyncRecord& async = dynamic_cast<GDBMI::AsyncRecord&>(*r);
+        case MI::Record::Async: {
+            MI::AsyncRecord& async = dynamic_cast<MI::AsyncRecord&>(*r);
 
             switch (async.subkind) {
-            case GDBMI::AsyncRecord::Exec: {
+            case MI::AsyncRecord::Exec: {
                 // Prefix '*'; asynchronous state changes of the target
                 if (async.reason == "stopped")
                 {
@@ -284,13 +284,13 @@ void GDB::processLine(const QByteArray& line)
                 break;
             }
 
-            case GDBMI::AsyncRecord::Notify: {
+            case MI::AsyncRecord::Notify: {
                 // Prefix '='; supplementary information that we should handle (new breakpoint etc.)
                 emit notification(async);
                 break;
             }
 
-            case GDBMI::AsyncRecord::Status: {
+            case MI::AsyncRecord::Status: {
                 // Prefix '+'; GDB documentation:
                 // On-going status information about progress of a slow operation; may be ignored
                 break;
@@ -302,16 +302,16 @@ void GDB::processLine(const QByteArray& line)
             break;
         }
 
-        case GDBMI::Record::Stream: {
+        case MI::Record::Stream: {
 
-            GDBMI::StreamRecord& s = dynamic_cast<GDBMI::StreamRecord&>(*r);
+            MI::StreamRecord& s = dynamic_cast<MI::StreamRecord&>(*r);
 
-            if (s.subkind == GDBMI::StreamRecord::Target) {
+            if (s.subkind == MI::StreamRecord::Target) {
                 emit applicationOutput(s.message);
             } else {
                 if (currentCmd_ && currentCmd_->isUserCommand())
                     emit userCommandOutput(s.message);
-                else if (s.subkind == GDBMI::StreamRecord::Console) {
+                else if (s.subkind == MI::StreamRecord::Console) {
                     emit applicationOutput(s.message);
                 } else {
                     emit internalCommandOutput(s.message);
@@ -326,7 +326,7 @@ void GDB::processLine(const QByteArray& line)
             break;
         }
 
-        case GDBMI::Record::Prompt:
+        case MI::Record::Prompt:
             break;
         }
     #ifndef DEBUG_NO_TRY

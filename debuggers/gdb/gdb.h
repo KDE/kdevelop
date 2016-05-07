@@ -22,7 +22,7 @@
 #ifndef GDB_H_d5c9cb274cbad688fe7a507a84f6633b
 #define GDB_H_d5c9cb274cbad688fe7a507a84f6633b
 
-#include "mi/gdbmi.h"
+#include "mi/mi.h"
 #include "mi/miparser.h"
 #include "gdbcommand.h"
 
@@ -82,7 +82,7 @@ Q_SIGNALS:
 
     /** Emitted when GDB reports stop, with 'r' being the
         data provided by GDB. */
-    void programStopped(const GDBMI::AsyncRecord& r);
+    void programStopped(const MI::AsyncRecord& r);
     
     /** Emitted when GDB believes that the program is running.  */
     void programRunning();
@@ -92,14 +92,14 @@ Q_SIGNALS:
     has died. 
     FIXME: connect to parseCliLine
     */
-    void streamRecord(const GDBMI::StreamRecord& s);
+    void streamRecord(const MI::StreamRecord& s);
 
     /** Reports an async notification record.  */
-    void notification(const GDBMI::AsyncRecord& n);
+    void notification(const MI::AsyncRecord& n);
     
     /** Emitted for error that is not handled by the
         command being executed. */
-    void error(const GDBMI::ResultRecord& s);
+    void error(const MI::ResultRecord& s);
 
     /** Reports output from the running application.
         Generally output will only be available when

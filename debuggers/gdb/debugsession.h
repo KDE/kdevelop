@@ -35,7 +35,7 @@
 
 #include "breakpointcontroller.h"
 #include "gdbglobal.h"
-#include "mi/gdbmi.h"
+#include "mi/mi.h"
 
 class IExecutePlugin;
 class KToolBar;
@@ -88,7 +88,7 @@ Q_SIGNALS:
     void applicationStandardErrorLines(const QStringList& lines);
     void showMessage(const QString& message, int timeout);
     void reset();
-    void programStopped(const GDBMI::AsyncRecord& mi_record);
+    void programStopped(const MI::AsyncRecord& mi_record);
 
 public Q_SLOTS:
     /**
@@ -170,7 +170,7 @@ public:
 
     /** Same as above, but internally constructs new GDBCommand
        instance from the string. */
-    void addCommand(GDBMI::CommandType type, const QString& cmd = QString());
+    void addCommand(MI::CommandType type, const QString& cmd = QString());
 
     bool stateIsOn(DBGStateFlags state) const;
     DBGStateFlags debuggerState() const;
@@ -211,19 +211,19 @@ private Q_SLOTS:
 
     void gdbExited();
 
-    void slotProgramStopped(const GDBMI::AsyncRecord& mi_record);
+    void slotProgramStopped(const MI::AsyncRecord& mi_record);
 
     /** Default handler for errors.
         Tries to guess is the error message is telling that target is
         gone, if so, informs the user.
         Otherwise, shows a dialog box and reloads view state.  */
-    void defaultErrorHandler(const GDBMI::ResultRecord& result);
+    void defaultErrorHandler(const MI::ResultRecord& result);
 
     /**Triggered every time program begins/continues it's execution.*/
     void programRunning();
 
     /** Handle MI async notifications. */
-    void processNotification(const GDBMI::AsyncRecord& n);
+    void processNotification(const MI::AsyncRecord& n);
 
     // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
     void queueCmd(GDBCommand *cmd);
@@ -238,9 +238,9 @@ private Q_SLOTS:
     void slotKillGdb();
 
     void handleVersion(const QStringList& s);
-    void handleFileExecAndSymbols(const GDBMI::ResultRecord& r);
-    void handleTargetAttach(const GDBMI::ResultRecord& r);
-    void handleCoreFile(const GDBMI::ResultRecord& r);
+    void handleFileExecAndSymbols(const MI::ResultRecord& r);
+    void handleTargetAttach(const MI::ResultRecord& r);
+    void handleCoreFile(const MI::ResultRecord& r);
 
 public Q_SLOTS:
     void slotKill();
