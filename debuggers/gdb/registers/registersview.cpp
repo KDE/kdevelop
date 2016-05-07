@@ -30,7 +30,7 @@
 
 #include <KLocalizedString>
 
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 
 namespace
 {

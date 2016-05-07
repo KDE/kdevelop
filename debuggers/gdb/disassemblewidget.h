@@ -44,7 +44,7 @@ namespace KDevelop {
     class IDebugSession;
 }
 
-namespace KDevDebugger { namespace GDBDebugger {
+namespace KDevDebugger { namespace GDB {
 
 class RegistersManager;
 
@@ -155,7 +155,7 @@ private:
     QSplitter *m_splitter;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 /***************************************************************************/

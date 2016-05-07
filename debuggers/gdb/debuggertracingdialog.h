@@ -17,7 +17,7 @@
 #include <QDialog>
 
 namespace KDevDebugger {
-namespace GDBDebugger
+namespace GDB
 {
     class Breakpoint;
 
@@ -38,7 +38,7 @@ namespace GDBDebugger
         Breakpoint* bp_;
     };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif

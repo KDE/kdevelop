@@ -50,7 +50,7 @@
 #include <QHeaderView>
 #include <QFontDatabase>
 
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 using namespace KDevDebugger::MI;
 
 

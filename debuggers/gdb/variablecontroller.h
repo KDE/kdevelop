@@ -36,7 +36,7 @@ struct ResultRecord;
 struct Value;
 }
 
-namespace GDBDebugger {
+namespace GDB {
 
 class GDBController;
 class DebugSession;
@@ -72,7 +72,7 @@ private:
     void handleEvent(KDevelop::IDebugSession::event_t event) override;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif // GDBDEBUGGER_VARIABLECONTROLLER_H

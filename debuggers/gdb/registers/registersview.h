@@ -29,7 +29,7 @@ class QMenu;
 class QSignalMapper;
 
 namespace KDevDebugger {
-namespace GDBDebugger
+namespace GDB
 {
 
 class ModelsManager;
@@ -90,7 +90,7 @@ private:
     QVector<QAction*> m_actions;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif

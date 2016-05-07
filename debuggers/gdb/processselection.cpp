@@ -33,7 +33,7 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     : QDialog(parent)

@@ -41,7 +41,7 @@ class QToolButton;
 
 namespace KDevDebugger
 {
-namespace GDBDebugger
+namespace GDB
 {
 
 class GDBController;
@@ -151,7 +151,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent* event) override;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif

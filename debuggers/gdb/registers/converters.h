@@ -24,7 +24,7 @@
 
 namespace KDevDebugger
 {
-namespace GDBDebugger
+namespace GDB
 {
 
 class Converters
@@ -37,6 +37,6 @@ public:
     static QString modeToString(Mode mode);
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 #endif // CONVERTERS_H

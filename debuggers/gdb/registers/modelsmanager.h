@@ -36,7 +36,7 @@ class QStandardItem;
 class QModelIndex;
 
 namespace KDevDebugger {
-namespace GDBDebugger
+namespace GDB
 {
 class Models;
 class IRegisterController;
@@ -99,6 +99,6 @@ private:
     KConfigGroup m_config;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 #endif // MODELSMANAGER_H

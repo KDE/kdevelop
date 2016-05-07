@@ -47,7 +47,7 @@
 #include "debugsession.h"
 #include "debug.h"
 
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 
 /***************************************************************************/
 

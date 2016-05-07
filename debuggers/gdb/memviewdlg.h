@@ -32,7 +32,7 @@ class QToolBox;
 
 namespace KDevDebugger
 {
-namespace GDBDebugger
+namespace GDB
 {
     class CppDebuggerPlugin;
     class MemoryView;
@@ -117,7 +117,7 @@ namespace GDBDebugger
         void currentSessionChanged(KDevelop::IDebugSession* session);
     };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif

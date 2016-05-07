@@ -55,7 +55,7 @@ class MICommand;
 class CommandQueue;
 }
 
-namespace GDBDebugger {
+namespace GDB {
 
 class STTY;
 class GDB;
@@ -306,7 +306,7 @@ private:
     QString m_inferiorExitCode;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif

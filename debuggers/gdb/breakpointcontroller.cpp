@@ -34,7 +34,7 @@
 
 #include <KLocalizedString>
 
-namespace KDevDebugger { namespace GDBDebugger {
+namespace KDevDebugger { namespace GDB {
 
 struct BreakpointData {
     int gdbId;
@@ -49,11 +49,11 @@ struct BreakpointData {
     {}
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 using namespace KDevDebugger::MI;
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 
 QString quoteExpression(QString expr)
 {

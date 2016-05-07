@@ -31,7 +31,7 @@
 /* WARNING: this code was not yet ported to KDevelop4 and is unused, but is 
    intended to be ported.  */
 
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 
 DebuggerTracingDialog
 ::DebuggerTracingDialog(Breakpoint* bp,

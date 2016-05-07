@@ -41,7 +41,7 @@ class IProject;
 
 namespace KDevDebugger
 {
-namespace GDBDebugger
+namespace GDB
 {
 class CppDebuggerPlugin;
 class DebugSession;
@@ -71,7 +71,7 @@ private:
 class GdbLauncher : public KDevelop::ILauncher
 {
 public:
-    GdbLauncher( KDevDebugger::GDBDebugger::CppDebuggerPlugin* plugin, IExecutePlugin* execute );
+    GdbLauncher( KDevDebugger::GDB::CppDebuggerPlugin* plugin, IExecutePlugin* execute );
     QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
     QString description() const override;
     QString id() override;
@@ -80,7 +80,7 @@ public:
     QStringList supportedModes() const override;
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
-    KDevDebugger::GDBDebugger::CppDebuggerPlugin* m_plugin;
+    KDevDebugger::GDB::CppDebuggerPlugin* m_plugin;
     IExecutePlugin* m_execute;
 };
 

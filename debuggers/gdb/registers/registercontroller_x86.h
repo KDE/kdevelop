@@ -25,7 +25,7 @@
 
 namespace KDevDebugger
 {
-namespace GDBDebugger
+namespace GDB
 {
 
 class DebugSession;
@@ -90,7 +90,7 @@ private:
     void initRegisterNames();
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif // REGISTERCONTROLLER_X86_H

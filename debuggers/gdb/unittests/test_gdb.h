@@ -27,7 +27,7 @@ namespace KDevelop {
 class TestCore;
 }
 namespace KDevDebugger {
-namespace GDBDebugger {
+namespace GDB {
 
 class GdbTest : public QObject
 {
@@ -98,14 +98,14 @@ private Q_SLOTS:
     void testPathWithSpace();
 
 private:
-    bool waitForState(GDBDebugger::DebugSession *session,
+    bool waitForState(DebugSession *session,
                       KDevelop::IDebugSession::DebuggerState state,
                       const char *file, int line,
                       bool waitForIdle = false);
     IExecutePlugin* m_iface;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif // GDBTEST_H

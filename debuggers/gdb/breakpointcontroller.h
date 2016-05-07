@@ -39,7 +39,7 @@ struct ResultRecord;
 struct Value;
 }
 
-namespace GDBDebugger
+namespace GDB
 {
 using namespace KDevelop;
 
@@ -108,7 +108,7 @@ private:
     bool m_deleteDuplicateBreakpoints = false;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif

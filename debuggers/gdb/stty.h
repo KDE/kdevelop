@@ -33,7 +33,7 @@ class QProcess;
 #include <QScopedPointer>
 
 namespace KDevDebugger {
-namespace GDBDebugger
+namespace GDB
 {
 
 class STTY : public QObject
@@ -72,7 +72,7 @@ private:
     char tty_slave[50];   // "/dev/ttyxx" | "/dev/pts/########..."
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif

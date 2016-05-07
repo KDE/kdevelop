@@ -31,7 +31,7 @@ namespace MI
 struct ResultRecord;
 }
 
-namespace GDBDebugger
+namespace GDB
 {
 
 class RegistersView;
@@ -98,6 +98,6 @@ private:
     bool m_needToCheckArch;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 #endif // REGISTERSMANAGER_H

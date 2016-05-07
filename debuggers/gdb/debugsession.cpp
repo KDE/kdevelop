@@ -64,7 +64,7 @@
 
 using namespace KDevelop;
 using namespace KDevDebugger;
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 using namespace KDevDebugger::MI;
 
 DebugSession::DebugSession()
@@ -1002,11 +1002,11 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
 
     // Configuration values
-    bool    config_displayStaticMembers_ = grp.readEntry( GDBDebugger::staticMembersEntry, false );
-    bool    config_asmDemangle_ = grp.readEntry( GDBDebugger::demangleNamesEntry, true );
-    QUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, QUrl() );
-    QUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, QUrl() );
-    QUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, QUrl() );
+    bool    config_displayStaticMembers_ = grp.readEntry( staticMembersEntry, false );
+    bool    config_asmDemangle_ = grp.readEntry( demangleNamesEntry, true );
+    QUrl config_configGdbScript_ = grp.readEntry( remoteGdbConfigEntry, QUrl() );
+    QUrl config_runShellScript_ = grp.readEntry( remoteGdbShellEntry, QUrl() );
+    QUrl config_runGdbScript_ = grp.readEntry( remoteGdbRunEntry, QUrl() );
 
     Q_ASSERT(iface);
     bool config_useExternalTerminal = iface->useTerminal( cfg );
@@ -1121,7 +1121,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     }
 
     {
-        QString startWith = grp.readEntry(GDBDebugger::startWithEntry, QString("ApplicationOutput"));
+        QString startWith = grp.readEntry(startWithEntry, QString("ApplicationOutput"));
         if (startWith == "GdbConsole") {
             emit raiseGdbConsoleViews();
         } else if (startWith == "FrameStack") {

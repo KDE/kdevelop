@@ -28,7 +28,7 @@
 #include <interfaces/icore.h>
 
 using namespace KDevelop;
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 using namespace KDevDebugger::MI;
 
 QMap<QString, GdbVariable*> GdbVariable::allVariables_;

@@ -23,7 +23,7 @@
 
 #include <KLocalizedString>
 
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 
 QVector<QStringList> RegisterController_Arm::m_registerNames;
 FlagRegister RegisterController_Arm::m_cpsr;

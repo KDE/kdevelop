@@ -21,9 +21,6 @@
 
 #include <QObject>
 
-namespace GDBDebugger
-{
-
 class QtPrintersTest : public QObject
 {
     Q_OBJECT
@@ -49,7 +46,5 @@ private Q_SLOTS:
     void testKTextEditorTypes();
     void testKDevelopTypes();
 };
-
-}
 
 #endif

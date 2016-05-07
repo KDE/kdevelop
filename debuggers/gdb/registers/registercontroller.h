@@ -33,7 +33,7 @@ namespace MI
 struct ResultRecord;
 }
 
-namespace GDBDebugger
+namespace GDB
 {
 
 class DebugSession;
@@ -239,13 +239,13 @@ protected:
     DebugSession* m_debugSession;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
-Q_DECLARE_TYPEINFO(KDevDebugger::GDBDebugger::Register, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevDebugger::GDBDebugger::RegistersGroup, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevDebugger::GDBDebugger::FlagRegister, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevDebugger::GDBDebugger::GroupsName, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevDebugger::GDBDebugger::FormatsModes, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevDebugger::GDB::Register, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevDebugger::GDB::RegistersGroup, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevDebugger::GDB::FlagRegister, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevDebugger::GDB::GroupsName, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevDebugger::GDB::FormatsModes, Q_MOVABLE_TYPE);
 
 #endif

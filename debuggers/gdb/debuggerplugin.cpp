@@ -79,7 +79,7 @@
 #include "debugjob.h"
 
 
-namespace KDevDebugger { namespace GDBDebugger {
+namespace KDevDebugger { namespace GDB {
 
 template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory
@@ -124,10 +124,10 @@ private:
   Qt::DockWidgetArea m_defaultArea;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 
 K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<CppDebuggerPlugin>(); )
 

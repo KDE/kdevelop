@@ -30,7 +30,7 @@
 #include "../debug.h"
 
 using namespace KDevDebugger::MI;
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 
 void ArchitectureParser::parseArchitecture()
 {

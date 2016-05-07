@@ -37,10 +37,10 @@
 #include <QFileInfo>
 #include <KI18n/KLocalizedString>
 
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 using namespace KDevelop;
 
-DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* execute, QObject* parent)
+DebugJob::DebugJob(CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* execute, QObject* parent)
     : KDevelop::OutputJob(parent)
     , m_launchcfg( launchcfg )
     , m_execute( execute )
@@ -101,7 +101,7 @@ void DebugJob::start()
     setModel(model);
     setTitle(m_launchcfg->name());
 
-    QString startWith = grp.readEntry(GDBDebugger::startWithEntry, QString("ApplicationOutput"));
+    QString startWith = grp.readEntry(startWithEntry, QString("ApplicationOutput"));
     if (startWith == "GdbConsole") {
         setVerbosity(Silent);
     } else if (startWith == "FrameStack") {

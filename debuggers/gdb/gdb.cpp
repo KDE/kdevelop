@@ -42,7 +42,7 @@
 
 Q_LOGGING_CATEGORY(DEBUGGERGDB, "kdevelop.debuggers.gdb")
 
-using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::GDB;
 using namespace KDevDebugger::MI;
 
 GDB::GDB(QObject* parent)
@@ -64,7 +64,7 @@ GDB::~GDB()
 void GDB::start(KConfigGroup& config, const QStringList& extraArguments)
 {
     // FIXME: verify that default value leads to something sensible
-    QUrl gdbUrl = config.readEntry(GDBDebugger::gdbPathEntry, QUrl());
+    QUrl gdbUrl = config.readEntry(gdbPathEntry, QUrl());
     if (gdbUrl.isEmpty()) {
         gdbBinary_ = "gdb";
     } else {
@@ -87,7 +87,7 @@ void GDB::start(KConfigGroup& config, const QStringList& extraArguments)
     QStringList arguments = extraArguments;
     arguments << "--interpreter=mi2" << "-quiet";
 
-    QUrl shell = config.readEntry(GDBDebugger::debuggerShellEntry, QUrl());
+    QUrl shell = config.readEntry(debuggerShellEntry, QUrl());
     if( !shell.isEmpty() )
     {
         qCDebug(DEBUGGERGDB) << "have shell" << shell;

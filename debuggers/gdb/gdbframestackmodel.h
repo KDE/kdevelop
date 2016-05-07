@@ -32,7 +32,7 @@ namespace MI {
 struct ResultRecord;
 }
 
-namespace GDBDebugger {
+namespace GDB {
 
 class GdbFrameStackModel : public KDevelop::FrameStackModel
 {
@@ -50,7 +50,7 @@ private:
     void handleThreadInfo(const MI::ResultRecord& r);
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif

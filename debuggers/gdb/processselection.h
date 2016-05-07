@@ -28,7 +28,7 @@ class QPushButton;
 
 namespace KDevDebugger
 {
-namespace GDBDebugger
+namespace GDB
 {
 class ProcessSelectionDialog : public QDialog
 {
@@ -47,7 +47,7 @@ class ProcessSelectionDialog : public QDialog
         QPushButton* m_okButton;
 };
 
-} // end of namespace GDBDebugger
+} // end of namespace GDB
 } // end of namespace KDevDebugger
 
 #endif

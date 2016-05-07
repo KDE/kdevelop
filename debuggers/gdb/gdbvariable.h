@@ -32,7 +32,7 @@
 class CreateVarobjHandler;
 class FetchMoreChildrenHandler;
 
-namespace KDevDebugger { namespace GDBDebugger {
+namespace KDevDebugger { namespace GDB {
     class GdbVariable : public KDevelop::Variable
     {
     public:
