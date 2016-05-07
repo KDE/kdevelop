@@ -63,8 +63,8 @@
 #include "debug.h"
 
 using namespace KDevelop;
-
-namespace GDBDebugger {
+using namespace MI;
+using namespace GDBDebugger;
 
 DebugSession::DebugSession()
     : m_breakpointController(nullptr)
@@ -224,8 +224,8 @@ void DebugSession::examineCoreFile(const QUrl& debugee, const QUrl& coreFile)
       startDebugger(0);
 
     // TODO support non-local URLs
-    queueCmd(new GDBCommand(MI::FileExecAndSymbols, debugee.toLocalFile()));
-    queueCmd(new GDBCommand(MI::NonMI, "core " + coreFile.toLocalFile(), this, &DebugSession::handleCoreFile, CmdHandlesError));
+    queueCmd(new MICommand(MI::FileExecAndSymbols, debugee.toLocalFile()));
+    queueCmd(new MICommand(MI::NonMI, "core " + coreFile.toLocalFile(), this, &DebugSession::handleCoreFile, CmdHandlesError));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -265,9 +265,9 @@ void DebugSession::attachToProcess(int pid)
     // We can't omit application name from gdb invocation
     // because for libtool binaries, we have no way to guess
     // real binary name.
-    queueCmd(new GDBCommand(MI::FileExecAndSymbols));
+    queueCmd(new MICommand(MI::FileExecAndSymbols));
 
-    queueCmd(new GDBCommand(MI::TargetAttach, QString::number(pid), this, &DebugSession::handleTargetAttach, CmdHandlesError));
+    queueCmd(new MICommand(MI::TargetAttach, QString::number(pid), this, &DebugSession::handleTargetAttach, CmdHandlesError));
 
     queueCmd(new SentinelCommand(breakpointController(), &BreakpointController::initSendBreakpoints));
 
@@ -281,7 +281,7 @@ void DebugSession::run()
     if (stateIsOn(s_appNotStarted|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
+    queueCmd(new MICommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
 }
 
 void DebugSession::stepOut()
@@ -289,7 +289,7 @@ void DebugSession::stepOut()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(MI::ExecFinish, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
+    queueCmd(new MICommand(MI::ExecFinish, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::restartDebugger()
@@ -331,12 +331,12 @@ void DebugSession::stopDebugger()
     // the app running.
     if (stateIsOn(s_attached))
     {
-        queueCmd(new GDBCommand(MI::TargetDetach));
+        queueCmd(new MICommand(MI::TargetDetach));
         emit gdbUserCommandStdout("(gdb) detach\n");
     }
 
     // Now try to stop gdb running.
-    queueCmd(new GDBCommand(MI::GdbExit));
+    queueCmd(new MICommand(MI::GdbExit));
     emit gdbUserCommandStdout("(gdb) quit");
 
     // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
@@ -355,7 +355,7 @@ void DebugSession::interruptDebugger()
     // Explicitly send the interrupt in case something went wrong with the usual
     // ensureGdbListening logic.
     m_gdb->interrupt();
-    queueCmd(new GDBCommand(MI::ExecInterrupt, QString(), CmdInterrupt));
+    queueCmd(new MICommand(MI::ExecInterrupt, QString(), CmdInterrupt));
 }
 
 void DebugSession::runToCursor()
@@ -381,7 +381,7 @@ void DebugSession::stepOver()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(MI::ExecNext, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
+    queueCmd(new MICommand(MI::ExecNext, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::stepOverInstruction()
@@ -389,7 +389,7 @@ void DebugSession::stepOverInstruction()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(MI::ExecNextInstruction, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
+    queueCmd(new MICommand(MI::ExecNextInstruction, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::stepInto()
@@ -397,7 +397,7 @@ void DebugSession::stepInto()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(MI::ExecStep, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
+    queueCmd(new MICommand(MI::ExecStep, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::stepIntoInstruction()
@@ -405,7 +405,7 @@ void DebugSession::stepIntoInstruction()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(MI::ExecStepInstruction, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
+    queueCmd(new MICommand(MI::ExecStepInstruction, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::slotDebuggerAbnormalExit()
@@ -477,22 +477,22 @@ void DebugSession::configure()
 //         if (old_displayStatic != config_displayStaticMembers_)
 //         {
 //             if (config_displayStaticMembers_)
-//                 queueCmd(new GDBCommand(MI::GdbSet, "print static-members on"));
+//                 queueCmd(new MICommand(MI::GdbSet, "print static-members on"));
 //             else
-//                 queueCmd(new GDBCommand(MI::GdbSet, "print static-members off"));
+//                 queueCmd(new MICommand(MI::GdbSet, "print static-members off"));
 //         }
 //         if (old_asmDemangle != config_asmDemangle_)
 //         {
 //             if (config_asmDemangle_)
-//                 queueCmd(new GDBCommand(MI::GdbSet, "print asm-demangle on"));
+//                 queueCmd(new MICommand(MI::GdbSet, "print asm-demangle on"));
 //             else
-//                 queueCmd(new GDBCommand(MI::GdbSet, "print asm-demangle off"));
+//                 queueCmd(new MICommand(MI::GdbSet, "print asm-demangle off"));
 //         }
 //
 //         // Disabled for MI port.
 //         if (old_outputRadix != config_outputRadix_)
 //         {
-//             queueCmd(new GDBCommand(MI::GdbSet, QString().sprintf("output-radix %d",
+//             queueCmd(new MICommand(MI::GdbSet, QString().sprintf("output-radix %d",
 //                                 config_outputRadix_)));
 //
 //             // FIXME: should do this in variable widget anyway.
@@ -502,24 +502,24 @@ void DebugSession::configure()
 //         }
 //
 //         if (config_configGdbScript_.isValid())
-//           queueCmd(new GDBCommand(MI::NonMI, "source " + config_configGdbScript_.toLocalFile()));
+//           queueCmd(new MICommand(MI::NonMI, "source " + config_configGdbScript_.toLocalFile()));
 //
 //
 //         if (restart)
-//             queueCmd(new GDBCommand(MI::ExecContinue));
+//             queueCmd(new MICommand(MI::ExecContinue));
 //     }
 }
 
 // **************************************************************************
 
-void DebugSession::addCommand(GDBCommand* cmd)
+void DebugSession::addCommand(MICommand* cmd)
 {
     queueCmd(cmd);
 }
 
 void DebugSession::addCommand(MI::CommandType type, const QString& str)
 {
-    queueCmd(new GDBCommand(type, str));
+    queueCmd(new MICommand(type, str));
 }
 
 // Fairly obvious that we'll add whatever command you give me to a queue
@@ -527,7 +527,7 @@ void DebugSession::addCommand(MI::CommandType type, const QString& str)
 // information requests become redundent and must be removed.
 // We also try and run whatever command happens to be at the head of
 // the queue.
-void DebugSession::queueCmd(GDBCommand *cmd)
+void DebugSession::queueCmd(MICommand *cmd)
 {
     if (stateIsOn(s_dbgNotStarted))
     {
@@ -582,7 +582,7 @@ void DebugSession::executeCmd()
     if (!m_gdb.data()->isReady())
         return;
 
-    GDBCommand* currentCmd = commandQueue_->nextCommand();
+    MICommand* currentCmd = commandQueue_->nextCommand();
     if (!currentCmd)
         return;
 
@@ -707,7 +707,7 @@ void DebugSession::slotProgramStopped(const MI::AsyncRecord& r)
         // watchpoinst on program exit is the right thing to
         // do.
 
-        queueCmd(new GDBCommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
+        queueCmd(new MICommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
 
         state_reload_needed = false;
         return;
@@ -923,31 +923,31 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     // Initialise gdb. At this stage gdb is sitting wondering what to do,
     // and to whom. Organise a few things, then set up the tty for the application,
     // and the application itself
-    //queueCmd(new GDBCommand(MI::EnableTimings, "yes"));
+    //queueCmd(new MICommand(MI::EnableTimings, "yes"));
 
     queueCmd(new CliCommand(MI::GdbShow, "version", this, &DebugSession::handleVersion));
 
     // This makes gdb pump a variable out on one line.
-    queueCmd(new GDBCommand(MI::GdbSet, "width 0"));
-    queueCmd(new GDBCommand(MI::GdbSet, "height 0"));
+    queueCmd(new MICommand(MI::GdbSet, "width 0"));
+    queueCmd(new MICommand(MI::GdbSet, "height 0"));
 
-    queueCmd(new GDBCommand(MI::SignalHandle, "SIG32 pass nostop noprint"));
-    queueCmd(new GDBCommand(MI::SignalHandle, "SIG41 pass nostop noprint"));
-    queueCmd(new GDBCommand(MI::SignalHandle, "SIG42 pass nostop noprint"));
-    queueCmd(new GDBCommand(MI::SignalHandle, "SIG43 pass nostop noprint"));
+    queueCmd(new MICommand(MI::SignalHandle, "SIG32 pass nostop noprint"));
+    queueCmd(new MICommand(MI::SignalHandle, "SIG41 pass nostop noprint"));
+    queueCmd(new MICommand(MI::SignalHandle, "SIG42 pass nostop noprint"));
+    queueCmd(new MICommand(MI::SignalHandle, "SIG43 pass nostop noprint"));
 
-    queueCmd(new GDBCommand(MI::EnablePrettyPrinting));
+    queueCmd(new MICommand(MI::EnablePrettyPrinting));
 
-    queueCmd(new GDBCommand(MI::GdbSet, "charset UTF-8"));
-    queueCmd(new GDBCommand(MI::GdbSet, "print sevenbit-strings off"));
+    queueCmd(new MICommand(MI::GdbSet, "charset UTF-8"));
+    queueCmd(new MICommand(MI::GdbSet, "print sevenbit-strings off"));
 
     QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevgdb/printers/gdbinit");
     if (!fileName.isEmpty()) {
         QFileInfo fileInfo(fileName);
         QString quotedPrintersPath = fileInfo.dir().path().replace('\\', "\\\\").replace('"', "\\\"");
-        queueCmd(new GDBCommand(MI::NonMI,
+        queueCmd(new MICommand(MI::NonMI,
             QString("python sys.path.insert(0, \"%0\")").arg(quotedPrintersPath)));
-        queueCmd(new GDBCommand(MI::NonMI, "source " + fileName));
+        queueCmd(new MICommand(MI::NonMI, "source " + fileName));
     }
 
     return true;
@@ -1031,7 +1031,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         return false;
     }
 
-    queueCmd(new GDBCommand(MI::InferiorTtySet, tty));
+    queueCmd(new MICommand(MI::InferiorTtySet, tty));
 
     // Only dummy err here, actual erros have been checked already in the job and we don't get here if there were any
     QString err;
@@ -1044,15 +1044,15 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         dir = QFileInfo(executable).absolutePath();
     }
 
-    queueCmd(new GDBCommand(MI::EnvironmentCd, '"' + dir + '"'));
+    queueCmd(new MICommand(MI::EnvironmentCd, '"' + dir + '"'));
 
     // Set the run arguments
     if (!arguments.isEmpty())
         queueCmd(
-            new GDBCommand(MI::ExecArguments, KShell::joinArgs( arguments )));
+            new MICommand(MI::ExecArguments, KShell::joinArgs( arguments )));
 
     foreach (const QString& envvar, l.createEnvironment(envgrp, QStringList()))
-        queueCmd(new GDBCommand(MI::GdbSet, "environment " + envvar));
+        queueCmd(new MICommand(MI::GdbSet, "environment " + envvar));
 
     // Needed so that breakpoint widget has a chance to insert breakpoints.
     // FIXME: a bit hacky, as we're really not ready for new commands.
@@ -1061,16 +1061,16 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
 
     if (config_displayStaticMembers_)
-        queueCmd(new GDBCommand(MI::GdbSet, "print static-members on"));
+        queueCmd(new MICommand(MI::GdbSet, "print static-members on"));
     else
-        queueCmd(new GDBCommand(MI::GdbSet, "print static-members off"));
+        queueCmd(new MICommand(MI::GdbSet, "print static-members off"));
     if (config_asmDemangle_)
-        queueCmd(new GDBCommand(MI::GdbSet, "print asm-demangle on"));
+        queueCmd(new MICommand(MI::GdbSet, "print asm-demangle on"));
     else
-        queueCmd(new GDBCommand(MI::GdbSet, "print asm-demangle off"));
+        queueCmd(new MICommand(MI::GdbSet, "print asm-demangle off"));
 
     if (config_configGdbScript_.isValid())
-        queueCmd(new GDBCommand(MI::NonMI, "source " + KShell::quoteArg(config_configGdbScript_.toLocalFile())));
+        queueCmd(new MICommand(MI::NonMI, "source " + KShell::quoteArg(config_configGdbScript_.toLocalFile())));
 
 
     if (!config_runShellScript_.isEmpty()) {
@@ -1101,7 +1101,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
             breakpointController()->setDeleteDuplicateBreakpoints(true);
             qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(config_runGdbScript_.toLocalFile());
-            queueCmd(new GDBCommand(MI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile()),
+            queueCmd(new MICommand(MI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile()),
                                     [this](const MI::ResultRecord&) {breakpointController()->setDeleteDuplicateBreakpoints(false);},
                                     CmdMaybeStartsRunning));
             raiseEvent(connected_to_program);
@@ -1110,12 +1110,12 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     }
     else
     {
-        queueCmd(new GDBCommand(MI::FileExecAndSymbols, KShell::quoteArg(executable), this, &DebugSession::handleFileExecAndSymbols, CmdHandlesError));
+        queueCmd(new MICommand(MI::FileExecAndSymbols, KShell::quoteArg(executable), this, &DebugSession::handleFileExecAndSymbols, CmdHandlesError));
         raiseEvent(connected_to_program);
 
         queueCmd(new SentinelCommand([this]() {
             breakpointController()->initSendBreakpoints();
-            queueCmd(new GDBCommand(MI::ExecRun, QString(), CmdMaybeStartsRunning));
+            queueCmd(new MICommand(MI::ExecRun, QString(), CmdMaybeStartsRunning));
         }, CmdMaybeStartsRunning));
     }
 
@@ -1168,8 +1168,8 @@ void DebugSession::slotKill()
     }
 
     // The -exec-abort is not implemented in gdb
-    // queueCmd(new GDBCommand(MI::ExecAbort));
-    queueCmd(new GDBCommand(MI::NonMI, "kill"));
+    // queueCmd(new MICommand(MI::ExecAbort));
+    queueCmd(new MICommand(MI::NonMI, "kill"));
 }
 
 // **************************************************************************
@@ -1180,10 +1180,10 @@ void DebugSession::runUntil(const QUrl& url, int line)
         return;
 
     if (!url.isValid())
-        queueCmd(new GDBCommand(MI::ExecUntil, QString::number(line),
+        queueCmd(new MICommand(MI::ExecUntil, QString::number(line),
                                 CmdMaybeStartsRunning | CmdTemporaryRun));
     else
-        queueCmd(new GDBCommand(MI::ExecUntil,
+        queueCmd(new MICommand(MI::ExecUntil,
                 QString("%1:%2").arg(url.toLocalFile()).arg(line),
                 CmdMaybeStartsRunning | CmdTemporaryRun));
 }
@@ -1194,7 +1194,7 @@ void DebugSession::runUntil(const QString& address)
         return;
 
     if (!address.isEmpty()) {
-        queueCmd(new GDBCommand(MI::ExecUntil, QString("*%1").arg(address),
+        queueCmd(new MICommand(MI::ExecUntil, QString("*%1").arg(address),
                                 CmdMaybeStartsRunning | CmdTemporaryRun));
     }
 }
@@ -1206,8 +1206,8 @@ void DebugSession::jumpToMemoryAddress(const QString& address)
         return;
 
     if (!address.isEmpty()) {
-        queueCmd(new GDBCommand(MI::NonMI, QString("tbreak *%1").arg(address)));
-        queueCmd(new GDBCommand(MI::NonMI, QString("jump *%1").arg(address)));
+        queueCmd(new MICommand(MI::NonMI, QString("tbreak *%1").arg(address)));
+        queueCmd(new MICommand(MI::NonMI, QString("jump *%1").arg(address)));
     }
 }
 
@@ -1217,8 +1217,8 @@ void DebugSession::jumpTo(const QUrl& url, int line)
         return;
 
     if (url.isValid()) {
-        queueCmd(new GDBCommand(MI::NonMI, QString("tbreak %1:%2").arg(url.toLocalFile()).arg(line)));
-        queueCmd(new GDBCommand(MI::NonMI, QString("jump %1:%2").arg(url.toLocalFile()).arg(line)));
+        queueCmd(new MICommand(MI::NonMI, QString("tbreak %1:%2").arg(url.toLocalFile()).arg(line)));
+        queueCmd(new MICommand(MI::NonMI, QString("jump %1:%2").arg(url.toLocalFile()).arg(line)));
     }
 }
 
@@ -1271,7 +1271,7 @@ void DebugSession::gdbReady()
         if (stateIsOn(s_automaticContinue)) {
             if (!stateIsOn(s_appRunning)) {
                 qCDebug(DEBUGGERGDB) << "Posting automatic continue";
-                queueCmd(new GDBCommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
+                queueCmd(new MICommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
             }
             setStateOff(s_automaticContinue);
             return;
@@ -1357,7 +1357,7 @@ void DebugSession::slotUserGDBCmd(const QString& cmd)
 
 void DebugSession::explainDebuggerStatus()
 {
-    GDBCommand* currentCmd_ = m_gdb.data()->currentCommand();
+    MICommand* currentCmd_ = m_gdb.data()->currentCommand();
     QString information =
         i18np("1 command in queue\n", "%1 commands in queue\n", commandQueue_->count()) +
         i18ncp("Only the 0 and 1 cases need to be translated", "1 command being processed by gdb\n", "%1 commands being processed by gdb\n", (currentCmd_ ? 1 : 0)) +
@@ -1514,7 +1514,3 @@ void DebugSession::handleTargetAttach(const MI::ResultRecord& r)
         stopDebugger();
     }
 }
-
-}
-
-

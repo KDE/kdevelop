@@ -18,7 +18,7 @@
 #include "gdbcommandqueue.h"
 
 #include "mi/mi.h"
-#include "gdbcommand.h"
+#include "mi/micommand.h"
 
 using namespace GDBDebugger;
 using namespace MI;
@@ -33,7 +33,7 @@ CommandQueue::~CommandQueue()
     qDeleteAll(m_commandList);
 }
 
-void CommandQueue::enqueue(GDBCommand* command)
+void CommandQueue::enqueue(MICommand* command)
 {
     ++m_tokenCounter;
     if (m_tokenCounter == 0)
@@ -48,7 +48,7 @@ void CommandQueue::enqueue(GDBCommand* command)
     rationalizeQueue(command);
 }
 
-void CommandQueue::rationalizeQueue(GDBCommand * command)
+void CommandQueue::rationalizeQueue(MICommand * command)
 {
     if (command->type() >= ExecAbort && command->type() <= ExecUntil)
       // Changing execution location, abort any variable updates
@@ -57,10 +57,10 @@ void CommandQueue::rationalizeQueue(GDBCommand * command)
 
 void CommandQueue::removeVariableUpdates()
 {
-    QMutableListIterator<GDBCommand*> it = m_commandList;
+    QMutableListIterator<MICommand*> it = m_commandList;
 
     while (it.hasNext()) {
-        GDBCommand* command = it.next();
+        MICommand* command = it.next();
         CommandType type = command->type();
         if ((type >= VarEvaluateExpression && type <= VarListChildren) || type == VarUpdate) {
             if (command->flags() & (CmdImmediately | CmdInterrupt))
@@ -93,12 +93,12 @@ bool CommandQueue::haveImmediateCommand() const
     return m_immediatelyCounter > 0;
 }
 
-GDBCommand* CommandQueue::nextCommand()
+MICommand* CommandQueue::nextCommand()
 {
     if (m_commandList.isEmpty())
         return nullptr;
 
-    GDBCommand* command = m_commandList.takeAt(0);
+    MICommand* command = m_commandList.takeAt(0);
 
     if (command->flags() & (CmdImmediately | CmdInterrupt))
         --m_immediatelyCounter;

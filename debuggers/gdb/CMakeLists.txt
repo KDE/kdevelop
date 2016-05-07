@@ -39,7 +39,6 @@ set(kdevgdb_SRCS
     debuggerplugin.cpp
     gdb.cpp
     gdbcommandqueue.cpp
-    gdbcommand.cpp
     stty.cpp
     disassemblewidget.cpp
     gdboutputwidget.cpp

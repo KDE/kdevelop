@@ -19,38 +19,38 @@
 
 #include "test_gdb.h"
 
-#include <QtTest/QTest>
-#include <QSignalSpy>
-#include <QDebug>
-#include <QApplication>
-#include <QFileInfo>
-#include <QDir>
-#include <QTemporaryFile>
-
-#include <KSharedConfig>
-#include <KProcess>
-#include <KIO/Global>
-
-#include <tests/testcore.h>
-#include <shell/shellextension.h>
-#include <debugger/breakpoint/breakpointmodel.h>
-#include <interfaces/idebugcontroller.h>
-#include <debugger/breakpoint/breakpoint.h>
-#include <debugger/interfaces/ibreakpointcontroller.h>
-#include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/iplugincontroller.h>
-#include <debugger/variable/variablecollection.h>
-#include <debugger/interfaces/ivariablecontroller.h>
-#include <debugger/framestack/framestackmodel.h>
-#include <tests/autotestshell.h>
-#include <execute/iexecuteplugin.h>
-
-#include "gdbcommand.h"
 #include "debugsession.h"
 #include "gdbframestackmodel.h"
-#include <mi/milexer.h>
-#include <mi/miparser.h>
+#include "mi/micommand.h"
+#include "mi/milexer.h"
+#include "mi/miparser.h"
+
+#include <execute/iexecuteplugin.h>
+#include <debugger/breakpoint/breakpoint.h>
+#include <debugger/breakpoint/breakpointmodel.h>
+#include <debugger/framestack/framestackmodel.h>
+#include <debugger/interfaces/ibreakpointcontroller.h>
+#include <debugger/interfaces/ivariablecontroller.h>
+#include <debugger/variable/variablecollection.h>
+#include <interfaces/idebugcontroller.h>
+#include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/iplugincontroller.h>
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
+#include <shell/shellextension.h>
+
+#include <KIO/Global>
+#include <KProcess>
+#include <KSharedConfig>
+
+#include <QApplication>
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
 #include <QStandardPaths>
+#include <QSignalSpy>
+#include <QtTest/QTest>
+#include <QTemporaryFile>
 
 using KDevelop::AutoTestShell;
 
@@ -443,7 +443,7 @@ void GdbTest::testUpdateBreakpoint()
     session->startProgram(&cfg, m_iface);
 
     //insert custom command as user might do it using GDB console
-    session->addCommand(new UserCommand(MI::NonMI, "break "+debugeeFileName+":28"));
+    session->addCommand(new MI::UserCommand(MI::NonMI, "break "+debugeeFileName+":28"));
 
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(100);
@@ -1748,7 +1748,7 @@ void GdbTest::testCatchpoint()
     QCOMPARE(fsModel->currentFrame(), 0);
     QCOMPARE(session->line(), 29);
 
-    session->addCommand(new GDBCommand(MI::NonMI, "catch throw"));
+    session->addCommand(new MI::MICommand(MI::NonMI, "catch throw"));
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
@@ -1782,8 +1782,8 @@ void GdbTest::testThreadAndFrameInfo()
     QSignalSpy outputSpy(session, SIGNAL(gdbUserCommandStdout(QString)));
 
     session->addCommand(
-                new UserCommand(MI::ThreadInfo,""));
-    session->addCommand(new UserCommand(MI::StackListLocals, QLatin1String("0")));
+                new MI::UserCommand(MI::ThreadInfo,""));
+    session->addCommand(new MI::UserCommand(MI::StackListLocals, QLatin1String("0")));
     QTest::qWait(1000);
     QCOMPARE(outputSpy.count(), 2);
     QVERIFY(outputSpy.last().at(0).toString().contains(QLatin1String("--thread 1")));
@@ -1907,13 +1907,13 @@ void GdbTest::testRegularExpressionBreakpoint()
         breakpoints()->addCodeBreakpoint("main");
         session->startProgram(&c, m_iface);
         WAIT_FOR_STATE(session, DebugSession::PausedState);
-        session->addCommand(new GDBCommand(MI::NonMI, "rbreak .*aPl.*B"));
+        session->addCommand(new MI::MICommand(MI::NonMI, "rbreak .*aPl.*B"));
         QTest::qWait(100);
         session->run();
         WAIT_FOR_STATE(session, DebugSession::PausedState);
         QCOMPARE(breakpoints()->breakpoints().count(), 3);
 
-        session->addCommand(new GDBCommand(MI::BreakDelete, ""));
+        session->addCommand(new MI::MICommand(MI::BreakDelete, ""));
         session->run();
         WAIT_FOR_STATE(session, DebugSession::EndedState);
 }

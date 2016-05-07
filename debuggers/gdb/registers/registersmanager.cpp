@@ -20,20 +20,17 @@
 
 #include "registersmanager.h"
 
-#include "registercontroller_x86.h"
 #include "registercontroller_arm.h"
+#include "registercontroller_x86.h"
 #include "registersview.h"
 
+#include "mi/micommand.h"
 #include "modelsmanager.h"
-
-#include "../gdbcommand.h"
 #include "../debugsession.h"
 #include "../debug.h"
 
-
-
-namespace GDBDebugger
-{
+using namespace MI;
+using namespace GDBDebugger;
 
 void ArchitectureParser::parseArchitecture()
 {
@@ -55,13 +52,13 @@ void ArchitectureParser::parseArchitecture()
     emit architectureParsed(arch);
 }
 
-void ArchitectureParser::registerNamesHandler(const MI::ResultRecord& r)
+void ArchitectureParser::registerNamesHandler(const ResultRecord& r)
 {
-    const MI::Value& names = r["register-names"];
+    const Value& names = r["register-names"];
 
     m_registerNames.clear();
     for (int i = 0; i < names.size(); ++i) {
-        const MI::Value& entry = names[i];
+        const Value& entry = names[i];
         if (!entry.literal().isEmpty()) {
             m_registerNames << entry.literal();
         }
@@ -77,7 +74,7 @@ void ArchitectureParser::determineArchitecture(DebugSession* debugSession)
     }
 
     debugSession->addCommand(
-        new GDBCommand(MI::DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler));
+        new MICommand(DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler));
 }
 
 RegistersManager::RegistersManager(QWidget* parent)
@@ -171,6 +168,4 @@ void RegistersManager::setController(IRegisterController* c)
     m_modelsManager->setController(c);
 
     m_registersView->enable(c ? true : false);
-}
-
 }

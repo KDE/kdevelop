@@ -48,11 +48,14 @@ class ProcessLineMaker;
 class ILaunchConfiguration;
 }
 
+namespace MI {
+class MICommand;
+}
+
 namespace GDBDebugger {
 
 class STTY;
 class CommandQueue;
-class GDBCommand;
 class GDB;
 
 static const char gdbPathEntry[] = "GDB Path";
@@ -166,9 +169,9 @@ public:
         command, so it's possible to use results of prior commands when
         computing the exact command to send.
     */
-    void addCommand(GDBCommand* cmd);
+    void addCommand(MI::MICommand* cmd);
 
-    /** Same as above, but internally constructs new GDBCommand
+    /** Same as above, but internally constructs new MI::MICommand
        instance from the string. */
     void addCommand(MI::CommandType type, const QString& cmd = QString());
 
@@ -226,7 +229,7 @@ private Q_SLOTS:
     void processNotification(const MI::AsyncRecord& n);
 
     // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
-    void queueCmd(GDBCommand *cmd);
+    void queueCmd(MI::MICommand *cmd);
 
     void configure();
 

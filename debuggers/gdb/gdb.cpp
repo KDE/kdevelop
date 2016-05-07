@@ -43,6 +43,7 @@
 Q_LOGGING_CATEGORY(DEBUGGERGDB, "kdevelop.debuggers.gdb")
 
 using namespace GDBDebugger;
+using namespace MI;
 
 GDB::GDB(QObject* parent)
 : QObject(parent), process_(0), currentCmd_(0)
@@ -125,7 +126,7 @@ void GDB::start(KConfigGroup& config, const QStringList& extraArguments)
 }
 
 
-void GDB::execute(GDBCommand* command)
+void GDB::execute(MICommand* command)
 {
     currentCmd_ = command;
     QString commandText = currentCmd_->cmdToSend();
@@ -160,7 +161,7 @@ void GDB::interrupt()
     }
 }
 
-GDBCommand* GDB::currentCommand() const
+MICommand* GDB::currentCommand() const
 {
     return currentCmd_;
 }

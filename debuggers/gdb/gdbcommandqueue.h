@@ -22,10 +22,13 @@
 
 #include "gdbglobal.h"
 
+namespace MI
+{
+class MICommand;
+}
+
 namespace GDBDebugger
 {
-
-class GDBCommand;
 
 class CommandQueue
 {
@@ -33,7 +36,7 @@ public:
     CommandQueue();
     ~CommandQueue();
 
-    void enqueue(GDBCommand* command);
+    void enqueue(MI::MICommand* command);
 
     bool isEmpty() const;
     int count() const;
@@ -45,13 +48,13 @@ public:
     /**
      * Retrieve and remove the next command from the list.
      */
-    GDBCommand* nextCommand();
+    MI::MICommand* nextCommand();
 
 private:
-    void rationalizeQueue(GDBCommand* command);
+    void rationalizeQueue(MI::MICommand* command);
     void removeVariableUpdates();
   
-    QList<GDBCommand*> m_commandList;
+    QList<MI::MICommand*> m_commandList;
     int m_immediatelyCounter = 0;
     uint32_t m_tokenCounter;
 };

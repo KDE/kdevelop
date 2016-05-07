@@ -2,6 +2,8 @@
     begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
     email                : jbb@kdevelop.org
+    copyright            : (C) 2016 by Aetf
+    email                : aetf@unlimitedcodeworks.xyz
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,20 +15,19 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _GDBCOMMAND_H_
-#define _GDBCOMMAND_H_
+#ifndef _MICOMMAND_H_
+#define _MICOMMAND_H_
 
-#include <functional>
+#include "mi/mi.h"
 
 #include <QString>
 #include <QStringList>
 #include <QPointer>
 
-#include "mi/mi.h"
+#include <functional>
 
-namespace GDBDebugger
+namespace MI
 {
-
 
 class VarItem;
 class ValueCallback;
@@ -61,11 +62,11 @@ enum CommandFlag {
 Q_DECLARE_FLAGS(CommandFlags, CommandFlag)
 
 //base class for handlers
-class GDBCommandHandler
+class MICommandHandler
 {
 public:
-    virtual ~GDBCommandHandler() {}
-    virtual void handle(const MI::ResultRecord&) = 0;
+    virtual ~MICommandHandler() {}
+    virtual void handle(const ResultRecord&) = 0;
     virtual bool handlesError() { return false; }
 
     /**
@@ -74,13 +75,13 @@ public:
     virtual bool autoDelete() { return true; }
 };
 
-class FunctionCommandHandler : public GDBCommandHandler {
+class FunctionCommandHandler : public MICommandHandler {
 public:
-    typedef std::function<void (const MI::ResultRecord&)> Function;
+    typedef std::function<void (const ResultRecord&)> Function;
 
     FunctionCommandHandler(const Function& callback, CommandFlags flags = 0);
 
-    virtual void handle(const MI::ResultRecord&) override;
+    virtual void handle(const ResultRecord&) override;
     virtual bool handlesError() override;
 
 private:
@@ -92,29 +93,28 @@ private:
  * @author John Birch
  */
 
-class GDBCommand
+class MICommand
 {
 public:
-    GDBCommand(MI::CommandType type, const QString& arguments = QString(), CommandFlags flags = 0);
+    MICommand(CommandType type, const QString& arguments = QString(), CommandFlags flags = 0);
 
     template<class Handler>
-    GDBCommand(MI::CommandType type, const QString& arguments,
-               Handler* handler_this,
-               void (Handler::* handler_method)(const MI::ResultRecord&),
-               CommandFlags flags = 0);
+    MICommand(CommandType type, const QString& arguments,
+              Handler* handler_this,
+              void (Handler::* handler_method)(const ResultRecord&),
+              CommandFlags flags = 0);
 
-    GDBCommand(MI::CommandType type, const QString& arguments, GDBCommandHandler* handler,
-               CommandFlags flags = 0);
+    MICommand(CommandType type, const QString& arguments, MICommandHandler* handler,
+              CommandFlags flags = 0);
 
-    GDBCommand(
-        MI::CommandType type, const QString& arguments,
-        const FunctionCommandHandler::Function& callback,
-        CommandFlags flags = 0);
+    MICommand(CommandType type, const QString& arguments,
+              const FunctionCommandHandler::Function& callback,
+              CommandFlags flags = 0);
 
-    virtual ~GDBCommand();
+    virtual ~MICommand();
 
-    MI::CommandType type() const;
-    QString gdbCommand() const;
+    CommandType type() const;
+    QString miCommand() const;
 
     CommandFlags flags() const {return flags_;}
 
@@ -125,7 +125,7 @@ public:
     uint32_t token() const {return token_;}
 
     /**
-     * Set the MI token. This is done by \ref GDBCommandQueue.
+     * Set the MI token. This is done by \ref MICommandQueue.
      */
     void setToken(uint32_t token) {token_ = token;}
 
@@ -156,9 +156,9 @@ public:
      *
      * The command object assumes ownership of @p handler.
      */
-    void setHandler(GDBCommandHandler* handler);
-    
-    /* The command that should be sent to gdb.
+    void setHandler(MICommandHandler* handler);
+
+    /* The command that should be sent to debugger.
        This method is virtual so the command can compute this
        dynamically, possibly using results of the previous
        commands.
@@ -179,14 +179,14 @@ public:
 
     // If there's a handler for this command, invokes it and returns true.
     // Otherwise, returns false.
-    bool invokeHandler(const MI::ResultRecord& r);
+    bool invokeHandler(const ResultRecord& r);
 
     // Returns 'true' if 'invokeHandler' should be invoked even
     // on MI errors.
     bool handlesError() const;
 
-    // Called by gdbcontroller for each new output string
-    // gdb emits for this command. In MI mode, this includes
+    // Called by debuggercontroller for each new output string
+    // debugger emits for this command. In MI mode, this includes
     // all "stream" messages, but does not include MI responses.
     void newOutput(const QString&);
 
@@ -199,11 +199,11 @@ public:
     bool stateReloading() const;
 
 private:
-    MI::CommandType type_;
+    CommandType type_;
     CommandFlags flags_;
     uint32_t token_ = 0;
     QString command_;
-    GDBCommandHandler *commandHandler_;
+    MICommandHandler *commandHandler_;
     QStringList lines;
     bool stateReloading_;
 
@@ -212,10 +212,10 @@ private:
     int m_frame;
 };
 
-class UserCommand : public GDBCommand
+class UserCommand : public MICommand
 {
 public:
-    UserCommand(MI::CommandType type, const QString& s);
+    UserCommand(CommandType type, const QString& s);
 
     bool isUserCommand() const override;
 };
@@ -224,11 +224,11 @@ public:
     user provided hook with MI response, it invokes the a hook
     with lists of strings.
 */
-class CliCommand : public GDBCommand
+class CliCommand : public MICommand
 {
 public:
     template<class Handler>
-    CliCommand(MI::CommandType type, const QString& command,
+    CliCommand(CommandType type, const QString& command,
                Handler* handler_this,
                void (Handler::* handler_method)(const QStringList&),
                CommandFlags flags = 0);
@@ -238,7 +238,7 @@ public:
     a user provided handler when all preceeding commands are
     executed.
 */
-class SentinelCommand : public GDBCommand
+class SentinelCommand : public MICommand
 {
 public:
     typedef std::function<void ()> Function;
@@ -247,7 +247,7 @@ public:
     SentinelCommand(Handler* handler_this,
                     void (Handler::* handler_method)(),
                     CommandFlags flags = 0)
-        : GDBCommand(MI::NonMI, QString(), flags)
+        : MICommand(NonMI, QString(), flags)
     {
         QPointer<Handler> guarded_this(handler_this);
         handler = [guarded_this, handler_method]() {
@@ -258,12 +258,12 @@ public:
     }
 
     SentinelCommand(const Function& handler, CommandFlags flags = 0)
-        : GDBCommand(MI::NonMI, QString(), flags)
+        : MICommand(NonMI, QString(), flags)
         , handler(handler)
     {
     }
 
-    using GDBCommand::invokeHandler;
+    using MICommand::invokeHandler;
     void invokeHandler()
     {
         handler();
@@ -278,7 +278,7 @@ private:
     Function handler;
 };
 
-class ExpressionValueCommand : public QObject, public GDBCommand
+class ExpressionValueCommand : public QObject, public MICommand
 {
 public:
     typedef void (QObject::*handler_method_t)(const QString&);
@@ -288,13 +288,13 @@ public:
         const QString& expression,
         Handler* handler_this,
         void (Handler::* handler_method)(const QString&))
-    : GDBCommand(MI::DataEvaluateExpression, expression, this,
+    : MICommand(DataEvaluateExpression, expression, this,
                  &ExpressionValueCommand::handleResponse),
       handler_this(handler_this),
       handler_method(static_cast<handler_method_t>(handler_method))
     {}
 
-    void handleResponse(const MI::ResultRecord& r)
+    void handleResponse(const ResultRecord& r)
     {
         (handler_this.data()->*handler_method)(r["value"].literal());
     }
@@ -306,11 +306,11 @@ private:
 
 
 template<class Handler>
-GDBCommand::GDBCommand(
-    MI::CommandType type,
+MICommand::MICommand(
+    CommandType type,
     const QString& command,
     Handler* handler_this,
-    void (Handler::* handler_method)(const MI::ResultRecord&),
+    void (Handler::* handler_method)(const ResultRecord&),
     CommandFlags flags)
 : type_(type),
   flags_(flags & ~CmdHandlesError),
@@ -321,7 +321,7 @@ GDBCommand::GDBCommand(
   m_frame(-1)
 {
     QPointer<Handler> guarded_this(handler_this);
-    setHandler(new FunctionCommandHandler([guarded_this, handler_method](const MI::ResultRecord& r) {
+    setHandler(new FunctionCommandHandler([guarded_this, handler_method](const ResultRecord& r) {
         if (guarded_this) {
             (guarded_this.data()->*handler_method)(r);
         }
@@ -330,23 +330,23 @@ GDBCommand::GDBCommand(
 
 template<class Handler>
 CliCommand::CliCommand(
-    MI::CommandType type,
+    CommandType type,
     const QString& command,
     Handler* handler_this,
     void (Handler::* handler_method)(const QStringList&),
     CommandFlags flags)
-: GDBCommand(type, command)
+: MICommand(type, command)
 {
     QPointer<Handler> guarded_this(handler_this);
-    setHandler(new FunctionCommandHandler([this, guarded_this, handler_method](const MI::ResultRecord&) {
+    setHandler(new FunctionCommandHandler([this, guarded_this, handler_method](const ResultRecord&) {
         if (guarded_this) {
             (guarded_this.data()->*handler_method)(this->allStreamOutput());
         }
     }, flags));
 }
 
-}
+} // end of namespace MI
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GDBDebugger::CommandFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(MI::CommandFlags)
 
 #endif

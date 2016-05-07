@@ -24,7 +24,7 @@
 
 #include "mi/mi.h"
 #include "mi/miparser.h"
-#include "gdbcommand.h"
+#include "mi/micommand.h"
 
 #include <KProcess>
 
@@ -53,13 +53,13 @@ public:
         for 'ready' as well.  
 
         The ownership of 'command' is transferred to GDB.  */
-    void execute(GDBCommand* command);
+    void execute(MI::MICommand* command);
 
     /** Returns true if 'execute' can be called immediately.  */
     bool isReady() const;
 
     /** FIXME: temporary, to be eliminated.  */
-    GDBCommand* currentCommand() const;
+    MI::MICommand* currentCommand() const;
     
     /** Arrange to gdb to stop doing whatever it's doing,
         and start waiting for a command.  
@@ -130,7 +130,7 @@ private:
     QString gdbBinary_;
     KProcess* process_;
 
-    GDBCommand* currentCmd_;
+    MI::MICommand* currentCmd_;
 
     MIParser mi_parser_;
 

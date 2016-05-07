@@ -20,14 +20,16 @@
  */
 
 #include "gdbvariable.h"
-#include "gdbcommand.h"
-#include "debugsession.h"
 
-#include <interfaces/icore.h>
+#include "debugsession.h"
+#include "mi/micommand.h"
+
 #include <debugger/interfaces/ivariablecontroller.h>
+#include <interfaces/icore.h>
 
 using namespace KDevelop;
 using namespace GDBDebugger;
+using namespace MI;
 
 QMap<QString, GdbVariable*> GdbVariable::allVariables_;
 
@@ -59,7 +61,7 @@ GdbVariable::~GdbVariable()
             if (hasStartedSession()) {
                 IDebugSession* is = ICore::self()->debugController()->currentSession();
                 DebugSession* s = static_cast<DebugSession*>(is);
-                s->addCommand(new GDBCommand(MI::VarDelete,
+                s->addCommand(new MICommand(VarDelete,
                                              QString("\"%1\"").arg(varobj_)));
             }
         }
@@ -89,14 +91,14 @@ void GdbVariable::setVarobj(const QString& v)
 
 static int nextId = 0;
 
-class CreateVarobjHandler : public GDBCommandHandler
+class CreateVarobjHandler : public MICommandHandler
 {
 public:
     CreateVarobjHandler(GdbVariable *variable, QObject *callback, const char *callbackMethod)
     : m_variable(variable), m_callback(callback), m_callbackMethod(callbackMethod)
     {}
 
-    void handle(const MI::ResultRecord &r) override
+    void handle(const ResultRecord &r) override
     {
         if (!m_variable) return;
         bool hasValue = false;
@@ -156,8 +158,8 @@ void GdbVariable::attachMaybe(QObject *callback, const char *callbackMethod)
         IDebugSession* is = ICore::self()->debugController()->currentSession();
         DebugSession* s = static_cast<DebugSession*>(is);
         s->addCommand(
-            new GDBCommand(
-                MI::VarCreate,
+            new MICommand(
+                VarCreate,
                 QString("var%1 @ %2").arg(nextId++).arg(enquotedExpression()),
                 new CreateVarobjHandler(this, callback, callbackMethod)));
     }
@@ -173,14 +175,14 @@ void GdbVariable::markAllDead()
     allVariables_.clear();
 }
 
-class FetchMoreChildrenHandler : public GDBCommandHandler
+class FetchMoreChildrenHandler : public MICommandHandler
 {
 public:
     FetchMoreChildrenHandler(GdbVariable *variable, DebugSession *session)
         : m_variable(variable), m_session(session), m_activeCommands(1)
     {}
 
-    void handle(const MI::ResultRecord &r) override
+    void handle(const ResultRecord &r) override
     {
         if (!m_variable) return;
         --m_activeCommands;
@@ -189,14 +191,14 @@ public:
 
         if (r.hasField("children"))
         {
-            const MI::Value& children = r["children"];
+            const Value& children = r["children"];
             for (int i = 0; i < children.size(); ++i) {
-                const MI::Value& child = children[i];
+                const Value& child = children[i];
                 const QString& exp = child["exp"].literal();
                 if (exp == "public" || exp == "protected" || exp == "private") {
                     ++m_activeCommands;
                     m_session->addCommand(
-                        new GDBCommand(MI::VarListChildren,
+                        new MICommand(VarListChildren,
                                        QString("--all-values \"%1\"")
                                        .arg(child["name"].literal()),
                                        this/*use again as handler*/));
@@ -254,14 +256,14 @@ void GdbVariable::fetchMoreChildren()
         IDebugSession* is = ICore::self()->debugController()->currentSession();
         DebugSession* s = static_cast<DebugSession*>(is);
         s->addCommand(
-            new GDBCommand(MI::VarListChildren,
+            new MICommand(VarListChildren,
                            QString("--all-values \"%1\" %2 %3").arg(varobj_)
                            .arg( c ).arg( c + fetchStep ),  // fetch from .. to ..
                            new FetchMoreChildrenHandler(this, s)));
     }
 }
 
-void GdbVariable::handleUpdate(const MI::Value& var)
+void GdbVariable::handleUpdate(const Value& var)
 {
     if (var.hasField("type_changed")
         && var["type_changed"].literal() == "true")
@@ -297,9 +299,9 @@ void GdbVariable::handleUpdate(const MI::Value& var)
         // itself from MI output directly, and relay to that.
         if (var.hasField("new_children"))
         {                  
-            const MI::Value& children = var["new_children"];
+            const Value& children = var["new_children"];
             for (int i = 0; i < children.size(); ++i) {
-                const MI::Value& child = children[i];
+                const Value& child = children[i];
                 const QString& exp = child["exp"].literal();
 
                 IDebugSession* is = ICore::self()->debugController()->currentSession();
@@ -341,14 +343,14 @@ QString GdbVariable::enquotedExpression() const
 }
 
 
-class SetFormatHandler : public GDBCommandHandler
+class SetFormatHandler : public MICommandHandler
 {
 public:
     SetFormatHandler(GdbVariable *var)
         : m_variable(var)
     {}
 
-    void handle(const MI::ResultRecord &r) override
+    void handle(const ResultRecord &r) override
     {
         if(r.hasField("value"))
             m_variable.data()->setValue(r["value"].literal());
@@ -373,7 +375,7 @@ void GdbVariable::formatChanged()
             IDebugSession* is = ICore::self()->debugController()->currentSession();
             DebugSession* s = static_cast<DebugSession*>(is);
             s->addCommand(
-                new GDBCommand(MI::VarSetFormat,
+                new MICommand(VarSetFormat,
                             QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format())),
                             new SetFormatHandler(this)
                             )

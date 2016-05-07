@@ -20,13 +20,15 @@
  */
 
 #include "gdbframestackmodel.h"
-#include "gdbcommand.h"
+
+#include "mi/micommand.h"
 
 #include <KLocalizedString>
 
 using namespace KDevelop;
+using namespace MI;
 
-QString getFunctionOrAddress(const MI::Value &frame)
+QString getFunctionOrAddress(const Value &frame)
 {
     if (frame.hasField("func"))
         return frame["func"].literal();
@@ -34,7 +36,7 @@ QString getFunctionOrAddress(const MI::Value &frame)
         return frame["addr"].literal();
 }
 
-QPair<QString, int> getSource(const MI::Value &frame)
+QPair<QString, int> getSource(const Value &frame)
 {
     QPair<QString, int> ret(QString(), -1);
     if (frame.hasField("fullname"))
@@ -50,14 +52,14 @@ QPair<QString, int> getSource(const MI::Value &frame)
 void GdbFrameStackModel::fetchThreads()
 {
     session()->addCommand(
-        new GDBCommand(MI::ThreadInfo, "",
+        new MICommand(ThreadInfo, "",
                     this,
                     &GdbFrameStackModel::handleThreadInfo));    
 }
 
-void GdbFrameStackModel::handleThreadInfo(const MI::ResultRecord& r)
+void GdbFrameStackModel::handleThreadInfo(const ResultRecord& r)
 {
-    const MI::Value& threads = r["threads"];
+    const Value& threads = r["threads"];
 
     // Traverse GDB threads in backward order -- since GDB
     // reports them in backward order. We want UI to
@@ -69,7 +71,7 @@ void GdbFrameStackModel::handleThreadInfo(const MI::ResultRecord& r)
     int gidx = threads.size()-1;
     for (; gidx >= 0; --gidx) {
         KDevelop::FrameStackModel::ThreadItem i;
-        const MI::Value & threadMI = threads[gidx];
+        const Value & threadMI = threads[gidx];
         i.nr = threadMI["id"].toInt();
         if (threadMI["state"].literal() == "stopped") {
             i.name = getFunctionOrAddress(threads[gidx]["frame"]);
@@ -90,18 +92,18 @@ void GdbFrameStackModel::handleThreadInfo(const MI::ResultRecord& r)
     }
 }
 
-struct FrameListHandler : public GDBCommandHandler
+struct FrameListHandler : public MICommandHandler
 {
     FrameListHandler(GdbFrameStackModel* model, int thread, int to)
         : model(model), m_thread(thread) , m_to(to) {}
 
-    void handle(const MI::ResultRecord &r) override
+    void handle(const ResultRecord &r) override
     {
-        const MI::Value& stack = r["stack"];
+        const Value& stack = r["stack"];
         int first = stack[0]["level"].toInt();
         QList<KDevelop::FrameStackModel::FrameItem> frames;
         for (int i = 0; i< stack.size(); ++i) {
-            const MI::Value& frame = stack[i];
+            const Value& frame = stack[i];
             KDevelop::FrameStackModel::FrameItem f;
             f.nr = frame["level"].toInt();
             f.name = getFunctionOrAddress(frame);
@@ -134,7 +136,7 @@ void GdbFrameStackModel::fetchFrames(int threadNumber, int from, int to)
 {
     //to+1 so we know if there are more
     QString arg = QString("%1 %2").arg(from).arg(to+1);
-    GDBCommand *c = new GDBCommand(MI::StackListFrames, arg,
+    MICommand *c = new MICommand(StackListFrames, arg,
                                    new FrameListHandler(this, threadNumber, to));
     c->setThread(threadNumber);
     session()->addCommand(c);

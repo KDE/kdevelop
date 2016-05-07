@@ -23,16 +23,16 @@
 
 #include "breakpointcontroller.h"
 
-#include <KLocalizedString>
+#include "debug.h"
+#include "debugsession.h"
+#include "mi/micommand.h"
 
+#include <debugger/breakpoint/breakpoint.h>
+#include <debugger/breakpoint/breakpointmodel.h>
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
-#include <debugger/breakpoint/breakpointmodel.h>
-#include <debugger/breakpoint/breakpoint.h>
 
-#include "gdbcommand.h"
-#include "debugsession.h"
-#include "debug.h"
+#include <KLocalizedString>
 
 using namespace MI;
 
@@ -67,7 +67,7 @@ struct BreakpointData {
     {}
 };
 
-struct BreakpointController::Handler : public GDBCommandHandler
+struct BreakpointController::Handler : public MICommandHandler
 {
     Handler(BreakpointController* controller, const BreakpointDataPtr& b, BreakpointModel::ColumnFlags columns)
         : controller(controller)
@@ -170,7 +170,7 @@ struct BreakpointController::InsertedHandler : public BreakpointController::Hand
             } else {
                 // breakpoint was deleted while insertion was in flight
                 controller->debugSession()->addCommand(
-                    new GDBCommand(BreakDelete, QString::number(breakpoint->gdbId),
+                    new MICommand(BreakDelete, QString::number(breakpoint->gdbId),
                                    CmdImmediately));
             }
         }
@@ -309,7 +309,7 @@ void BreakpointController::breakpointAboutToBeDeleted(int row)
         return;
 
     debugSession()->addCommand(
-        new GDBCommand(
+        new MICommand(
             BreakDelete, QString::number(breakpoint->gdbId),
             new DeleteHandler(this, breakpoint), CmdImmediately));
     m_pendingDeleted << breakpoint;
@@ -357,7 +357,7 @@ void BreakpointController::createGdbBreakpoint(int row)
             location = "exception throw";
         }
 
-        // Note: We rely on '-f' to be automatically added by the GDBCommand logic
+        // Note: We rely on '-f' to be automatically added by the MICommand logic
         QString arguments;
         if (!modelBreakpoint->enabled())
             arguments += "-d ";
@@ -373,7 +373,7 @@ void BreakpointController::createGdbBreakpoint(int row)
             BreakpointModel::IgnoreHitsColumnFlag |
             BreakpointModel::LocationColumnFlag;
         debugSession()->addCommand(
-            new GDBCommand(BreakInsert, arguments,
+            new MICommand(BreakInsert, arguments,
                 new InsertedHandler(this, breakpoint, sent),
                 CmdImmediately));
     } else {
@@ -384,7 +384,7 @@ void BreakpointController::createGdbBreakpoint(int row)
             opt = "-a ";
 
         debugSession()->addCommand(
-            new GDBCommand(
+            new MICommand(
                 BreakWatch,
                 opt + quoteExpression(modelBreakpoint->location()),
                 new InsertedHandler(this, breakpoint, BreakpointModel::LocationColumnFlag),
@@ -407,7 +407,7 @@ void BreakpointController::sendUpdates(int row)
     if (breakpoint->dirty & BreakpointModel::LocationColumnFlag) {
         // Gdb considers locations as fixed, so delete and re-create the breakpoint
         debugSession()->addCommand(
-            new GDBCommand(BreakDelete, QString::number(breakpoint->gdbId), CmdImmediately));
+            new MICommand(BreakDelete, QString::number(breakpoint->gdbId), CmdImmediately));
         breakpoint->gdbId = -1;
         createGdbBreakpoint(row);
         return;
@@ -415,21 +415,21 @@ void BreakpointController::sendUpdates(int row)
 
     if (breakpoint->dirty & BreakpointModel::EnableColumnFlag) {
         debugSession()->addCommand(
-            new GDBCommand(modelBreakpoint->enabled() ? BreakEnable : BreakDisable,
+            new MICommand(modelBreakpoint->enabled() ? BreakEnable : BreakDisable,
                 QString::number(breakpoint->gdbId),
                 new UpdateHandler(this, breakpoint, BreakpointModel::EnableColumnFlag),
                 CmdImmediately));
     }
     if (breakpoint->dirty & BreakpointModel::IgnoreHitsColumnFlag) {
         debugSession()->addCommand(
-            new GDBCommand(BreakAfter,
+            new MICommand(BreakAfter,
                 QString("%0 %1").arg(breakpoint->gdbId).arg(modelBreakpoint->ignoreHits()),
                 new UpdateHandler(this, breakpoint, BreakpointModel::IgnoreHitsColumnFlag),
                 CmdImmediately));
     }
     if (breakpoint->dirty & BreakpointModel::ConditionColumnFlag) {
         debugSession()->addCommand(
-            new GDBCommand(BreakCondition,
+            new MICommand(BreakCondition,
                 QString("%0 %1").arg(breakpoint->gdbId).arg(modelBreakpoint->condition()),
                 new UpdateHandler(this, breakpoint, BreakpointModel::ConditionColumnFlag),
                 CmdImmediately));

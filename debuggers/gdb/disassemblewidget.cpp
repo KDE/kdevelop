@@ -23,8 +23,21 @@
  */
 
 #include "disassemblewidget.h"
-#include "gdbcommand.h"
+
 #include "debuggerplugin.h"
+#include "debug.h"
+#include "debugsession.h"
+#include "mi/micommand.h"
+#include "registers/registersmanager.h"
+
+#include <debugger/interfaces/idebugsession.h>
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <util/autoorientedsplitter.h>
+
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KTextEdit>
 
 #include <QShowEvent>
 #include <QHideEvent>
@@ -36,20 +49,6 @@
 #include <QSplitter>
 #include <QHeaderView>
 #include <QFontDatabase>
-
-#include <KLocalizedString>
-#include <KSharedConfig>
-#include <KTextEdit>
-
-#include <util/autoorientedsplitter.h>
-
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
-#include <debugger/interfaces/idebugsession.h>
-#include "debugsession.h"
-
-#include "registers/registersmanager.h"
-#include "debug.h"
 
 using namespace MI;
 
@@ -322,7 +321,7 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
     //only get $pc
     if (from.isEmpty()){
         s->addCommand(
-                    new GDBCommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0", this, &DisassembleWidget::updateExecutionAddressHandler ) );
+                    new MICommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0", this, &DisassembleWidget::updateExecutionAddressHandler ) );
     }else{
 
         QString cmd = (to.isEmpty())?
@@ -330,7 +329,7 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
         QString("-s %1 -e %2+1 -- 0").arg(from).arg(to); // if both addr set
 
         s->addCommand(
-            new GDBCommand(DataDisassemble, cmd, this, &DisassembleWidget::disassembleMemoryHandler ) );
+            new MICommand(DataDisassemble, cmd, this, &DisassembleWidget::disassembleMemoryHandler ) );
    }
 }
 

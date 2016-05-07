@@ -20,18 +20,17 @@
 
 #include "registercontroller.h"
 
-#include <qmath.h>
-#include <QRegExp>
-
-
-#include "mi/mi.h"
-#include "../debugsession.h"
-#include "../gdbcommand.h"
-#include "../debug.h"
 #include "converters.h"
+#include "mi/mi.h"
+#include "mi/micommand.h"
+#include "../debugsession.h"
+#include "../debug.h"
 
-namespace GDBDebugger
-{
+#include <QRegExp>
+#include <QtMath>
+
+using namespace MI;
+using namespace GDBDebugger;
 
 void IRegisterController::setSession(DebugSession* debugSession)
 {
@@ -106,23 +105,23 @@ void IRegisterController::updateRegisters(const GroupsName& group)
         return;
     }
 
-    void (IRegisterController::* handler)(const MI::ResultRecord&);
+    void (IRegisterController::* handler)(const ResultRecord&);
     if (group.type() == structured && currentFormat != Raw) {
         handler = &IRegisterController::structuredRegistersHandler;
     } else {
         handler = &IRegisterController::generalRegistersHandler;
     }
 
-    m_debugSession->addCommand(new GDBCommand(MI::DataListRegisterValues, registers, this, handler));
+    m_debugSession->addCommand(new MICommand(DataListRegisterValues, registers, this, handler));
 }
 
-void IRegisterController::registerNamesHandler(const MI::ResultRecord& r)
+void IRegisterController::registerNamesHandler(const ResultRecord& r)
 {
-    const MI::Value& names = r["register-names"];
+    const Value& names = r["register-names"];
 
     m_rawRegisterNames.clear();
     for (int i = 0; i < names.size(); ++i) {
-        const MI::Value& entry = names[i];
+        const Value& entry = names[i];
         m_rawRegisterNames.push_back(entry.literal());
     }
 
@@ -130,15 +129,15 @@ void IRegisterController::registerNamesHandler(const MI::ResultRecord& r)
     updateRegisters();
 }
 
-void IRegisterController::generalRegistersHandler(const MI::ResultRecord& r)
+void IRegisterController::generalRegistersHandler(const ResultRecord& r)
 {
     Q_ASSERT(!m_rawRegisterNames.isEmpty());
 
     QString registerName;
 
-    const MI::Value& values = r["register-values"];
+    const Value& values = r["register-values"];
     for (int i = 0; i < values.size(); ++i) {
-        const MI::Value& entry = values[i];
+        const Value& entry = values[i];
         int number = entry["number"].literal().toInt();
         Q_ASSERT(m_rawRegisterNames.size() >  number);
 
@@ -187,7 +186,7 @@ bool IRegisterController::initializeRegisters()
     }
 
     m_debugSession->addCommand(
-        new GDBCommand(MI::DataListRegisterNames, "", this, &IRegisterController::registerNamesHandler));
+        new MICommand(DataListRegisterNames, "", this, &IRegisterController::registerNamesHandler));
     return true;
 }
 
@@ -242,7 +241,7 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
     const QString command = QString("set var $%1=%2").arg(reg.name).arg(reg.value);
     qCDebug(DEBUGGERGDB) << "Setting register: " << command;
 
-    m_debugSession->addCommand(new GDBCommand(MI::NonMI, command));
+    m_debugSession->addCommand(new MICommand(NonMI, command));
     updateRegisters(group);
 }
 
@@ -331,7 +330,7 @@ void IRegisterController::setStructuredRegister(const Register& reg, const Group
     setGeneralRegister(r, group);
 }
 
-void IRegisterController::structuredRegistersHandler(const MI::ResultRecord& r)
+void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
 {
     //Parsing records in format like:
     //{u8 = {0, 0, 128, 146, 0, 48, 197, 65}, u16 = {0, 37504, 12288, 16837}, u32 = {2457862144, 1103441920}, u64 = 4739246961893310464, f32 = {-8.07793567e-28, 24.6484375}, f64 = 710934821}
@@ -343,12 +342,12 @@ void IRegisterController::structuredRegistersHandler(const MI::ResultRecord& r)
     QString registerName;
     Mode currentMode = LAST_MODE;
     GroupsName group;
-    const MI::Value& values = r["register-values"];
+    const Value& values = r["register-values"];
 
     Q_ASSERT(!m_rawRegisterNames.isEmpty());
 
     for (int i = 0; i < values.size(); ++i) {
-        const MI::Value& entry = values[i];
+        const Value& entry = values[i];
         int number = entry["number"].literal().toInt();
         registerName = m_rawRegisterNames[number];
         if (currentMode == LAST_MODE) {
@@ -405,6 +404,4 @@ void IRegisterController::setMode(Mode m, const GroupsName& group)
             }
         }
     }
-}
-
 }

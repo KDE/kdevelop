@@ -14,38 +14,37 @@
  ***************************************************************************/
 
 #include "memviewdlg.h"
-#include "gdbcommand.h"
+
+#include "debugsession.h"
+#include "mi/micommand.h"
 #include "gdbglobal.h"
 
-#include <QAction>
-#include <QLineEdit>
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+
 #include <KLocalizedString>
-
-#include <QLabel>
-#include <QLayout>
-#include <QPushButton>
-#include <QVariant>
-#include <QMenu>
-
-#include <qtoolbox.h>
-#include <QTextEdit>
-#include <QHBoxLayout>
-#include <QContextMenuEvent>
-#include <QGridLayout>
-#include <QVBoxLayout>
-
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <khexedit/byteseditinterface.h>
 #include <khexedit/charcolumninterface.h>
 #include <khexedit/valuecolumninterface.h>
 
-#include <ctype.h>
+#include <QAction>
+#include <QContextMenuEvent>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
+#include <QMenu>
+#include <QPushButton>
+#include <QTextEdit>
+#include <QToolBox>
+#include <QVariant>
+#include <QVBoxLayout>
 
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
+#include <cctype>
 
-#include "debugsession.h"
 
 namespace GDBDebugger
 {

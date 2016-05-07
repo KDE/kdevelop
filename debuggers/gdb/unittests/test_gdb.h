@@ -20,8 +20,8 @@
 #ifndef GDBTEST_H
 #define GDBTEST_H
 
-#include <QtCore/QObject>
 #include <debugsession.h>
+#include <QObject>
 
 namespace KDevelop {
 class TestCore;
