@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>560</width>
-    <height>404</height>
+    <height>443</height>
    </rect>
   </property>
   <property name="locale">
@@ -149,10 +149,29 @@
         </item>
        </layout>
       </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Manage QtHelp Documentation</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
        <widget class="QCheckBox" name="loadQtDocsCheckBox">
         <property name="text">
          <string>Load Qt API Documentation</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelAvailabilityQtDocs">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>

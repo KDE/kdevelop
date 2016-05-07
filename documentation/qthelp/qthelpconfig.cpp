@@ -120,6 +120,15 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled, this, static_cast<void(QtHelpConfig::*)()>(&QtHelpConfig::changed));
     connect(m_configWidget->qchSearchDirButton, &QPushButton::clicked, this, &QtHelpConfig::chooseSearchDir);
     connect(m_configWidget->qchSearchDir,&QLineEdit::textChanged, this, &QtHelpConfig::searchDirChanged);
+
+    // Set availability information for QtHelp
+    if(plugin->qtHelpAvailable()) {
+        m_configWidget->labelAvailabilityQtDocs->setVisible(false);
+    } else {
+        m_configWidget->labelAvailabilityQtDocs->setText(
+            i18n("The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."));
+        m_configWidget->loadQtDocsCheckBox->setEnabled(false);
+    }
     l->addWidget( w );
     reset();
     selectionChanged();

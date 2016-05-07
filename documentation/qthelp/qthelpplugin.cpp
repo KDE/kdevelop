@@ -157,8 +157,14 @@ QList<QtHelpProvider*> QtHelpPlugin::qtHelpProviderLoaded()
     return m_qtHelpProviders;
 }
 
-bool QtHelpPlugin::qtHelpQtDocLoaded(){
+bool QtHelpPlugin::qtHelpQtDocLoaded() const
+{
     return m_loadSystemQtDoc;
+}
+
+bool QtHelpPlugin::qtHelpAvailable() const
+{
+    return !m_qtDoc->qchFile().isEmpty();
 }
 
 KDevelop::ConfigPage* QtHelpPlugin::configPage(int number, QWidget* parent)
