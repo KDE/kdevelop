@@ -31,8 +31,7 @@
 /* WARNING: this code was not yet ported to KDevelop4 and is unused, but is 
    intended to be ported.  */
 
-namespace GDBDebugger
-{
+using namespace KDevDebugger::GDBDebugger;
 
     DebuggerTracingDialog
     ::DebuggerTracingDialog(Breakpoint* bp,
@@ -44,7 +43,7 @@ namespace GDBDebugger
         expressions->setButtons(KEditListBox::Add | KEditListBox::Remove);
 
         connect(enable, SIGNAL(stateChanged(int)),
-                this, SLOT(enableOrDisable(int)));        
+                this, SLOT(enableOrDisable(int)));
 
         connect(enableCustomFormat, SIGNAL(stateChanged(int)),
                 this, SLOT(enableOrDisableCustomFormat(int)));
@@ -126,5 +125,3 @@ namespace GDBDebugger
             QDialog::accept();
         }
     }
-
-}

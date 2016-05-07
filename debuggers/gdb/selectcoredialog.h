@@ -27,6 +27,7 @@
 
 #include "ui_selectcoredialog.h"
 
+namespace KDevDebugger {
 namespace GDBDebugger {
 
 class SelectCoreDialog : public QDialog
@@ -40,6 +41,7 @@ private:
     Ui::SelectCoreDialog m_ui;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif

@@ -16,11 +16,11 @@
 #ifndef _MEMVIEW_H_
 #define _MEMVIEW_H_
 
+#include "dbgglobal.h"
 #include "mi/mi.h"
 
 #include <QContextMenuEvent>
 
-#include "gdbglobal.h"
 
 namespace KDevelop {
 class IDebugSession;
@@ -29,6 +29,8 @@ class IDebugSession;
 class QLineEdit;
 class QToolBox;
 
+namespace KDevDebugger
+{
 namespace GDBDebugger
 {
     class CppDebuggerPlugin;
@@ -113,6 +115,8 @@ namespace GDBDebugger
     private slots:
         void currentSessionChanged(KDevelop::IDebugSession* session);
     };
-}
+
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif

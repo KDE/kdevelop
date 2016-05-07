@@ -33,8 +33,7 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 
-namespace GDBDebugger
-{
+using namespace KDevDebugger::GDBDebugger;
 
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     : QDialog(parent)
@@ -78,9 +77,9 @@ long int ProcessSelectionDialog::pidSelected()
 {
     QList<KSysGuard::Process*> ps=m_processList->selectedProcesses();
     Q_ASSERT(ps.count()==1);
-    
+
     KSysGuard::Process* process=ps.first();
-    
+
     return process->pid();
 }
 
@@ -92,6 +91,4 @@ QSize ProcessSelectionDialog::sizeHint() const
 void ProcessSelectionDialog::selectionChanged()
 {
     m_okButton->setEnabled(true);
-}
-
 }

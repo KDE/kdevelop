@@ -22,12 +22,12 @@
 #ifndef BREAKPOINTCONTROLLER_H
 #define BREAKPOINTCONTROLLER_H
 
-#include <QObject>
+#include "dbgglobal.h"
 
 #include <debugger/interfaces/ibreakpointcontroller.h>
 #include <debugger/interfaces/idebugsession.h>
 
-#include "gdbglobal.h"
+#include <QObject>
 
 class QModelIndex;
 
@@ -37,6 +37,7 @@ struct ResultRecord;
 struct Value;
 }
 
+namespace KDevDebugger {
 namespace GDBDebugger
 {
 using namespace KDevelop;
@@ -106,6 +107,7 @@ private:
     bool m_deleteDuplicateBreakpoints = false;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif

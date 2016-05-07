@@ -25,7 +25,7 @@
 #include <debugger/framestack/framestackmodel.h>
 
 #include "debugsession.h"
-using namespace GDBDebugger;
+using namespace KDevDebugger::GDBDebugger;
 
 namespace MI { struct ResultRecord; }
 

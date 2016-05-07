@@ -23,6 +23,8 @@
 
 #include "registercontroller.h"
 
+namespace KDevDebugger
+{
 namespace GDBDebugger
 {
 
@@ -87,6 +89,8 @@ public:
 private:
     void initRegisterNames();
 };
-}
+
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif // REGISTERCONTROLLER_X86_H

@@ -33,6 +33,8 @@
 
 class KConfigGroup;
 
+namespace KDevDebugger
+{
 namespace GDBDebugger
 {
 
@@ -139,6 +141,7 @@ private:
     QByteArray buffer_;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif

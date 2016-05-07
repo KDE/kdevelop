@@ -25,46 +25,46 @@
 
 #include "debugsession.h"
 
-#include <typeinfo>
+#include "breakpointcontroller.h"
+#include "debug.h"
+#include "gdb.h"
+#include "gdbframestackmodel.h"
+#include "mi/micommandqueue.h"
+#include "stty.h"
+#include "variablecontroller.h"
 
-#include <QtCore/QFileInfo>
-#include <QApplication>
-#include <QRegExp>
-#include <QStandardPaths>
-#include <QRegularExpression>
-
-#include <KMessageBox>
-#include <KLocalizedString>
-#include <KToolBar>
-#include <KParts/MainWindow>
-#include <KSharedConfig>
-#include <KShell>
-#include <QUrl>
-#include <QDir>
-
-#include <interfaces/idocument.h>
-#include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
-#include <interfaces/idocumentcontroller.h>
-#include <util/processlinemaker.h>
-#include <util/environmentgrouplist.h>
+#include <debugger/breakpoint/breakpointmodel.h>
 #include <execute/iexecuteplugin.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idebugcontroller.h>
-#include <debugger/breakpoint/breakpointmodel.h>
+#include <util/processlinemaker.h>
+#include <util/environmentgrouplist.h>
 
-#include "breakpointcontroller.h"
-#include "variablecontroller.h"
-#include "gdb.h"
-#include "gdbcommandqueue.h"
-#include "stty.h"
-#include "gdbframestackmodel.h"
-#include "debug.h"
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KParts/MainWindow>
+#include <KSharedConfig>
+#include <KShell>
+#include <KToolBar>
+
+#include <QApplication>
+#include <QDir>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QRegularExpression>
+#include <QStandardPaths>
+#include <QUrl>
+
+#include <typeinfo>
 
 using namespace KDevelop;
 using namespace MI;
-using namespace GDBDebugger;
+using namespace KDevDebugger::GDBDebugger;
 
 DebugSession::DebugSession()
     : m_breakpointController(nullptr)

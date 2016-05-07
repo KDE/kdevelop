@@ -3,6 +3,7 @@ set(debuggercommon_SRCS
     mi/milexer.cpp
     mi/miparser.cpp
     mi/micommand.cpp
+    mi/micommandqueue.cpp
 )
 #ki18n_wrap_ui(debuggercommon_SRCS something.ui)
 

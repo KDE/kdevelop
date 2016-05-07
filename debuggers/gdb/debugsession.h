@@ -34,7 +34,7 @@
 #include <debugger/interfaces/idebugsession.h>
 
 #include "breakpointcontroller.h"
-#include "gdbglobal.h"
+#include "dbgglobal.h"
 #include "mi/mi.h"
 
 class IExecutePlugin;
@@ -50,12 +50,12 @@ class ILaunchConfiguration;
 
 namespace MI {
 class MICommand;
+class CommandQueue;
 }
 
-namespace GDBDebugger {
+namespace KDevDebugger { namespace GDBDebugger {
 
 class STTY;
-class CommandQueue;
 class GDB;
 
 static const char gdbPathEntry[] = "GDB Path";
@@ -283,7 +283,7 @@ private:
     QPointer<GDB> m_gdb;
     bool m_testing;
 
-    CommandQueue*   commandQueue_;
+    MI::CommandQueue*   commandQueue_;
 
     QScopedPointer<STTY> m_tty;
     QString           badCore_;
@@ -304,6 +304,7 @@ private:
     QString m_inferiorExitCode;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif

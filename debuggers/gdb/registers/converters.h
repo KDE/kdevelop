@@ -22,6 +22,8 @@
 
 #include "registercontroller.h"
 
+namespace KDevDebugger
+{
 namespace GDBDebugger
 {
 
@@ -35,5 +37,6 @@ public:
     static QString modeToString(Mode mode);
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 #endif // CONVERTERS_H

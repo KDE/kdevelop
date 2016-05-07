@@ -70,7 +70,7 @@
 #endif
 #include "memviewdlg.h"
 #include "gdboutputwidget.h"
-#include "gdbglobal.h"
+#include "dbgglobal.h"
 #include "debugsession.h"
 #include "selectcoredialog.h"
 
@@ -79,10 +79,7 @@
 #include "debugjob.h"
 
 
-namespace GDBDebugger
-{
-
-K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<CppDebuggerPlugin>(); )
+namespace KDevDebugger { namespace GDBDebugger {
 
 template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory
@@ -126,6 +123,13 @@ private:
   QString m_id;
   Qt::DockWidgetArea m_defaultArea;
 };
+
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
+
+using namespace KDevDebugger::GDBDebugger;
+
+K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<CppDebuggerPlugin>(); )
 
 CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDevelop::IPlugin( "kdevgdb", parent ),
@@ -405,8 +409,6 @@ void CppDebuggerPlugin::slotFinished()
 void CppDebuggerPlugin::controllerMessage( const QString& msg, int timeout )
 {
     emit showMessage(this, msg, timeout);
-}
-
 }
 
 #include "debuggerplugin.moc"

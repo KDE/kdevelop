@@ -30,7 +30,7 @@
 #include <QtMath>
 
 using namespace MI;
-using namespace GDBDebugger;
+using namespace KDevDebugger::GDBDebugger;
 
 void IRegisterController::setSession(DebugSession* debugSession)
 {

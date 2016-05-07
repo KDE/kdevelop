@@ -23,8 +23,7 @@
 
 #include <KLocalizedString>
 
-namespace GDBDebugger
-{
+using namespace KDevDebugger::GDBDebugger;
 
 QVector<QStringList> RegisterControllerGeneral_x86::m_registerNames;
 FlagRegister RegisterControllerGeneral_x86::m_eflags;
@@ -204,6 +203,4 @@ QStringList RegisterControllerGeneral_x86::registerNamesForGroup(const GroupsNam
     }
 
     return QStringList();
-}
-
 }

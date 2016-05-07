@@ -1,5 +1,5 @@
 // *************************************************************************
-//                          gdbcommandqueue.cpp
+//                          micommandqueue.cpp
 //                             -------------------
 //    begin                : Wed Dec 5, 2007
 //    copyright            : (C) 2007 by Hamish Rodda
@@ -15,20 +15,17 @@
 // *                                                                        *
 // **************************************************************************
 
-#ifndef GDBCOMMANDQUEUE_H
-#define GDBCOMMANDQUEUE_H
+#ifndef MICOMMANDQUEUE_H
+#define MICOMMANDQUEUE_H
+
+#include "dbgglobal.h"
 
 #include <QList>
 
-#include "gdbglobal.h"
-
 namespace MI
 {
-class MICommand;
-}
 
-namespace GDBDebugger
-{
+class MICommand;
 
 class CommandQueue
 {
@@ -36,7 +33,7 @@ public:
     CommandQueue();
     ~CommandQueue();
 
-    void enqueue(MI::MICommand* command);
+    void enqueue(MICommand* command);
 
     bool isEmpty() const;
     int count() const;
@@ -48,17 +45,17 @@ public:
     /**
      * Retrieve and remove the next command from the list.
      */
-    MI::MICommand* nextCommand();
+    MICommand* nextCommand();
 
 private:
-    void rationalizeQueue(MI::MICommand* command);
+    void rationalizeQueue(MICommand* command);
     void removeVariableUpdates();
-  
-    QList<MI::MICommand*> m_commandList;
+
+    QList<MICommand*> m_commandList;
     int m_immediatelyCounter = 0;
     uint32_t m_tokenCounter;
 };
 
 }
 
-#endif // GDBCOMMANDQUEUE_H
+#endif // MICOMMANDQUEUE_H

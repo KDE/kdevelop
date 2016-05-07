@@ -26,6 +26,7 @@
 namespace KDevelop {
 class TestCore;
 }
+namespace KDevDebugger {
 namespace GDBDebugger {
 
 class GdbTest : public QObject
@@ -104,6 +105,7 @@ private:
     IExecutePlugin* m_iface;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif // GDBTEST_H

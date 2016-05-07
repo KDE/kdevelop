@@ -42,13 +42,12 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 
-#include "gdbglobal.h"
+#include "dbgglobal.h"
 #include "debuggerplugin.h"
 #include "debugsession.h"
 #include "debug.h"
 
-namespace GDBDebugger
-{
+using namespace KDevDebugger::GDBDebugger;
 
 /***************************************************************************/
 
@@ -450,11 +449,3 @@ bool GDBOutputWidget::showInternalCommands() const
 {
     return showInternalCommands_;
 }
-
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-}
-
-
-

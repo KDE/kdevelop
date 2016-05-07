@@ -15,9 +15,9 @@
 
 #include "memviewdlg.h"
 
+#include "dbgglobal.h"
 #include "debugsession.h"
 #include "mi/micommand.h"
-#include "gdbglobal.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
@@ -45,9 +45,8 @@
 
 #include <cctype>
 
+using namespace KDevDebugger::GDBDebugger;
 
-namespace GDBDebugger
-{
     /** Container for controls that select memory range.
 
         The memory range selection is embedded into memory view widget,
@@ -524,6 +523,3 @@ namespace GDBDebugger
             }
         }
     }
-
-}
-

@@ -42,7 +42,7 @@
 
 Q_LOGGING_CATEGORY(DEBUGGERGDB, "kdevelop.debuggers.gdb")
 
-using namespace GDBDebugger;
+using namespace KDevDebugger::GDBDebugger;
 using namespace MI;
 
 GDB::GDB(QObject* parent)

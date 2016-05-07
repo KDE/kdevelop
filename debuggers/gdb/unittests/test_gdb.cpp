@@ -54,7 +54,7 @@
 
 using KDevelop::AutoTestShell;
 
-namespace GDBDebugger {
+namespace KDevDebugger { namespace GDBDebugger {
 
 QUrl findExecutable(const QString& name)
 {
@@ -2022,10 +2022,10 @@ bool GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
     qDebug() << "Reached state " << state << " in " << file << ':' << line;
     return true;
 }
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
-}
-
-QTEST_MAIN(GDBDebugger::GdbTest)
+QTEST_MAIN(KDevDebugger::GDBDebugger::GdbTest)
 
 
 #include "test_gdb.moc"

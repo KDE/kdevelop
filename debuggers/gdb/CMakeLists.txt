@@ -38,7 +38,6 @@ include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 set(kdevgdb_SRCS
     debuggerplugin.cpp
     gdb.cpp
-    gdbcommandqueue.cpp
     stty.cpp
     disassemblewidget.cpp
     gdboutputwidget.cpp

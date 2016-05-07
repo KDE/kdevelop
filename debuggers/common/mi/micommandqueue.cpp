@@ -15,12 +15,11 @@
 // *                                                                        *
 // **************************************************************************
 
-#include "gdbcommandqueue.h"
+#include "micommandqueue.h"
 
-#include "mi/mi.h"
-#include "mi/micommand.h"
+#include "mi.h"
+#include "micommand.h"
 
-using namespace GDBDebugger;
 using namespace MI;
 
 CommandQueue::CommandQueue()

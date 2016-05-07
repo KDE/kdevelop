@@ -26,6 +26,8 @@
 class KSysGuardProcessList;
 class QPushButton;
 
+namespace KDevDebugger
+{
 namespace GDBDebugger
 {
 class ProcessSelectionDialog : public QDialog
@@ -36,15 +38,16 @@ class ProcessSelectionDialog : public QDialog
         ~ProcessSelectionDialog() override;
         long int pidSelected();
         QSize sizeHint() const override;
-        
+
     private slots:
         void selectionChanged();
-        
+
     private:
         KSysGuardProcessList* m_processList;
         QPushButton* m_okButton;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif

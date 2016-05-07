@@ -1,5 +1,5 @@
 /***************************************************************************
-                          gdbglobal.h
+                          dbgglobal.h
                              -------------------
     begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
@@ -15,12 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _GDBGLOBAL_H_
-#define _GDBGLOBAL_H_
+#ifndef _DBGGLOBAL_H_
+#define _DBGGLOBAL_H_
 
 #include <QFlags>
 
-namespace GDBDebugger
+namespace KDevDebugger
 {
 
 enum DBGStateFlag
@@ -52,6 +52,6 @@ enum DataType { typeUnknown, typeValue, typePointer, typeReference,
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GDBDebugger::DBGStateFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevDebugger::DBGStateFlags)
 
-#endif
+#endif // _DBGGLOBAL_H_

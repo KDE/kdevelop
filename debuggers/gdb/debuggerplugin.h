@@ -49,6 +49,7 @@ class Context;
 class ProcessLineMaker;
 }
 
+namespace KDevDebugger {
 namespace GDBDebugger
 {
 class DisassembleWidget;
@@ -145,6 +146,7 @@ private:
     DebuggerToolFactory< MemoryViewerWidget >* memoryviewerfactory;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif

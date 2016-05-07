@@ -24,6 +24,7 @@
 
 #include "registercontroller.h"
 
+namespace KDevDebugger {
 namespace GDBDebugger
 {
 
@@ -68,5 +69,7 @@ private:
     bool m_registerNamesInitialized;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
+
 #endif // REGISTERCONTROLLER_ARM_H

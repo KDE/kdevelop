@@ -24,11 +24,12 @@
 #ifndef GDBDEBUGGER_VARIABLECONTROLLER_H
 #define GDBDEBUGGER_VARIABLECONTROLLER_H
 
+#include "dbgglobal.h"
+
 #include <debugger/interfaces/ivariablecontroller.h>
 
-#include "gdbglobal.h"
-
 using namespace KDevelop;
+using namespace KDevDebugger;
 
 namespace MI {
 struct AsyncRecord;
@@ -36,6 +37,7 @@ struct ResultRecord;
 struct Value;
 }
 
+namespace KDevDebugger {
 namespace GDBDebugger {
 
 class GDBController;
@@ -72,6 +74,7 @@ private:
     void handleEvent(IDebugSession::event_t event) override;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif // GDBDEBUGGER_VARIABLECONTROLLER_H

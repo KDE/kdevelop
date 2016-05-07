@@ -37,7 +37,7 @@
 #include <QFileInfo>
 #include <KI18n/KLocalizedString>
 
-using namespace GDBDebugger;
+using namespace KDevDebugger::GDBDebugger;
 using namespace KDevelop;
 
 DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* execute, QObject* parent)

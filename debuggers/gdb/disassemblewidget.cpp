@@ -50,10 +50,9 @@
 #include <QHeaderView>
 #include <QFontDatabase>
 
+using namespace KDevDebugger::GDBDebugger;
 using namespace MI;
 
-namespace GDBDebugger
-{
 
 SelectAddressDialog::SelectAddressDialog(QWidget* parent)
     : QDialog(parent)
@@ -436,6 +435,3 @@ void DisassembleWidget::update(const QString &address)
     }
     m_registersManager->updateRegisters();
 }
-
-}
-

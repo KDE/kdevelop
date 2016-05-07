@@ -32,6 +32,7 @@ class OutputModel;
 class ILaunchConfiguration;
 }
 
+namespace KDevDebugger {
 namespace GDBDebugger
 {
 class CppDebuggerPlugin;
@@ -73,6 +74,7 @@ private slots:
     void sessionFinished();
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif

@@ -34,10 +34,26 @@
 
 #include <KLocalizedString>
 
+namespace KDevDebugger { namespace GDBDebugger {
+
+struct BreakpointData {
+    int gdbId;
+    BreakpointModel::ColumnFlags dirty;
+    BreakpointModel::ColumnFlags sent;
+    BreakpointModel::ColumnFlags errors;
+    bool pending;
+
+    BreakpointData()
+        : gdbId(-1)
+        , pending(false)
+    {}
+};
+
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
+
 using namespace MI;
-
-namespace GDBDebugger {
-
+using namespace KDevDebugger::GDBDebugger;
 
 QString quoteExpression(QString expr)
 {
@@ -53,19 +69,6 @@ QString unquoteExpression(QString expr)
     }
     return expr;
 }
-
-struct BreakpointData {
-    int gdbId;
-    BreakpointModel::ColumnFlags dirty;
-    BreakpointModel::ColumnFlags sent;
-    BreakpointModel::ColumnFlags errors;
-    bool pending;
-
-    BreakpointData()
-        : gdbId(-1)
-        , pending(false)
-    {}
-};
 
 struct BreakpointController::Handler : public MICommandHandler
 {
@@ -781,6 +784,4 @@ void BreakpointController::programStopped(const AsyncRecord& r)
     }
 
     notifyHit(row, msg);
-}
-
 }

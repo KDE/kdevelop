@@ -23,8 +23,7 @@
 
 #include <KLocalizedString>
 
-namespace GDBDebugger
-{
+using namespace KDevDebugger::GDBDebugger;
 
 QVector<QStringList> RegisterController_Arm::m_registerNames;
 FlagRegister RegisterController_Arm::m_cpsr;
@@ -183,6 +182,4 @@ QStringList RegisterController_Arm::registerNamesForGroup(const GroupsName& grou
     }
 
     return QStringList();
-}
-
 }

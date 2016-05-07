@@ -30,6 +30,7 @@ namespace MI
 struct ResultRecord;
 }
 
+namespace KDevDebugger {
 namespace GDBDebugger
 {
 
@@ -97,5 +98,6 @@ private:
     bool m_needToCheckArch;
 };
 
-}
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 #endif // REGISTERSMANAGER_H
