@@ -228,7 +228,7 @@ bool MIParser::parseValue(Value *&value)
 bool MIParser::parseTuple(Value *&value)
 {
     TupleValue* val;
-    
+
     if (!parseCSV(&val, '{', '}'))
         return false;
 
@@ -368,7 +368,7 @@ QString MIParser::parseStringLiteral()
         else
         {
             message2[target_index++] = message[i];
-        }        
+        }
     }
 
     m_lex->nextToken();

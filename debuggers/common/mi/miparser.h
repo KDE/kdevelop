@@ -72,8 +72,6 @@ protected: // rules
     */
     QString parseStringLiteral();
 
-
-
 private:
     MILexer m_lexer;
     TokenStream *m_lex;
