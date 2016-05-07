@@ -52,7 +52,7 @@ struct BreakpointData {
 } // end of namespace GDBDebugger
 } // end of namespace KDevDebugger
 
-using namespace MI;
+using namespace KDevDebugger::MI;
 using namespace KDevDebugger::GDBDebugger;
 
 QString quoteExpression(QString expr)

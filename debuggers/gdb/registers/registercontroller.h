@@ -27,12 +27,12 @@
 #include <QStringList>
 #include <QString>
 
+namespace KDevDebugger {
 namespace MI
 {
 struct ResultRecord;
 }
 
-namespace KDevDebugger {
 namespace GDBDebugger
 {
 

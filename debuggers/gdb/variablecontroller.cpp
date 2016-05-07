@@ -39,9 +39,8 @@
 #include <KTextEditor/Document>
 
 using namespace KDevelop;
-using namespace KDevDebugger;
 using namespace KDevDebugger::GDBDebugger;
-using namespace MI;
+using namespace KDevDebugger::MI;
 
 VariableController::VariableController(DebugSession* parent)
     : KDevelop::IVariableController(parent)

@@ -33,8 +33,7 @@
 @author Roberto Raggi
 @author Vladimir Prus
 */
-namespace MI
-{
+namespace KDevDebugger { namespace MI {
     enum CommandType {
         NonMI,
 
@@ -417,6 +416,7 @@ namespace MI
         Subkind subkind;
         QString message;
     };
-}
+} // end of namespace MI
+} // end of namespace KDevDebugger
 
 #endif

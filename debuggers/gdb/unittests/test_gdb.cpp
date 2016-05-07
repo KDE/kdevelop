@@ -152,7 +152,7 @@ private:
     KConfig *c;
 };
 
-class TestFrameStackModel : public KDevelop::GdbFrameStackModel
+class TestFrameStackModel : public GdbFrameStackModel
 {
 public:
 
@@ -1794,7 +1794,7 @@ void GdbTest::testThreadAndFrameInfo()
 
 void GdbTest::parseBug304730()
 {
-    FileSymbol file;
+    MI::FileSymbol file;
     file.contents = QByteArray("^done,bkpt={"
         "number=\"1\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"<MULTIPLE>\",times=\"0\","
         "original-location=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp:231\"},"
@@ -1814,7 +1814,7 @@ void GdbTest::parseBug304730()
         "file=\"/media/portable/Projects/BDSInpainting/Drivers/../PatchMatch/PatchMatch.hpp\","
         "fullname=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp\",line=\"231\"}");
 
-    MIParser parser;
+    MI::MIParser parser;
 
     std::unique_ptr<MI::Record> record(parser.parse(&file));
     QVERIFY(record.get() != nullptr);

@@ -25,12 +25,12 @@
 #include <QStringList>
 #include <QScopedPointer>
 
+namespace KDevDebugger {
 namespace MI
 {
 struct ResultRecord;
 }
 
-namespace KDevDebugger {
 namespace GDBDebugger
 {
 

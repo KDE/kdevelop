@@ -28,8 +28,7 @@
 
 #include <debugger/interfaces/ivariablecontroller.h>
 
-using namespace KDevelop;
-using namespace KDevDebugger;
+namespace KDevDebugger {
 
 namespace MI {
 struct AsyncRecord;
@@ -37,7 +36,6 @@ struct ResultRecord;
 struct Value;
 }
 
-namespace KDevDebugger {
 namespace GDBDebugger {
 
 class GDBController;
@@ -50,9 +48,9 @@ class VariableController : public KDevelop::IVariableController
 public:
     VariableController(DebugSession* parent);
 
-    Variable* createVariable(TreeModel* model, TreeItem* parent, 
-                                     const QString& expression,
-                                     const QString& display = "") override;
+    KDevelop::Variable* createVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
+                                       const QString& expression,
+                                       const QString& display = "") override;
     KTextEditor::Range expressionRangeUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) override;
     void addWatch(KDevelop::Variable* variable) override;
     void addWatchpoint(KDevelop::Variable* variable) override;
@@ -71,7 +69,7 @@ private:
     void addWatch(const MI::ResultRecord& r);
     void addWatchpoint(const MI::ResultRecord& r);
 
-    void handleEvent(IDebugSession::event_t event) override;
+    void handleEvent(KDevelop::IDebugSession::event_t event) override;
 };
 
 } // end of namespace GDBDebugger

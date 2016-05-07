@@ -32,12 +32,11 @@
 class CreateVarobjHandler;
 class FetchMoreChildrenHandler;
 
-namespace KDevelop
-{
-    class GdbVariable : public Variable
+namespace KDevDebugger { namespace GDBDebugger {
+    class GdbVariable : public KDevelop::Variable
     {
     public:
-        GdbVariable(TreeModel* model, TreeItem* parent,
+        GdbVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                     const QString& expression,
                     const QString& display = "");
 
@@ -76,6 +75,7 @@ namespace KDevelop
            FIXME: eventually, should be per-session map.  */
         static QMap<QString, GdbVariable*> allVariables_;
     };
-}
+} // end of GDBDebugger
+} // end of KDevDebugger
 
 #endif

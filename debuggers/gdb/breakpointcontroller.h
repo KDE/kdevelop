@@ -31,13 +31,14 @@
 
 class QModelIndex;
 
+namespace KDevDebugger {
+
 namespace MI {
 struct AsyncRecord;
 struct ResultRecord;
 struct Value;
 }
 
-namespace KDevDebugger {
 namespace GDBDebugger
 {
 using namespace KDevelop;

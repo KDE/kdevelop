@@ -23,6 +23,8 @@
 #include <cctype>
 #include <iostream>
 
+using namespace KDevDebugger::MI;
+
 bool MILexer::s_initialized = false;
 scan_fun_ptr MILexer::s_scan_table[];
 

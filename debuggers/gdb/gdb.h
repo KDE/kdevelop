@@ -134,7 +134,7 @@ private:
 
     MI::MICommand* currentCmd_;
 
-    MIParser mi_parser_;
+    MI::MIParser mi_parser_;
 
     /** The unprocessed output from gdb. Output is
         processed as soon as we see newline. */

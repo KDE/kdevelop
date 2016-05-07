@@ -20,7 +20,7 @@
 #include "mi.h"
 #include "micommand.h"
 
-using namespace MI;
+using namespace KDevDebugger::MI;
 
 CommandQueue::CommandQueue()
     : m_tokenCounter(0)

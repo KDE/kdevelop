@@ -22,7 +22,7 @@
 #include "miparser.h"
 #include "tokens.h"
 
-using namespace MI;
+using namespace KDevDebugger::MI;
 
 #define MATCH(tok) \
   do { \

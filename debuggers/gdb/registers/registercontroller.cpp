@@ -29,7 +29,7 @@
 #include <QRegExp>
 #include <QtMath>
 
-using namespace MI;
+using namespace KDevDebugger::MI;
 using namespace KDevDebugger::GDBDebugger;
 
 void IRegisterController::setSession(DebugSession* debugSession)

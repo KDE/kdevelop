@@ -29,7 +29,7 @@
 #include "../debugsession.h"
 #include "../debug.h"
 
-using namespace MI;
+using namespace KDevDebugger::MI;
 using namespace KDevDebugger::GDBDebugger;
 
 void ArchitectureParser::parseArchitecture()

@@ -22,8 +22,7 @@
 
 #include <QList>
 
-namespace MI
-{
+namespace KDevDebugger { namespace MI {
 
 class MICommand;
 
@@ -56,6 +55,7 @@ private:
     uint32_t m_tokenCounter;
 };
 
-}
+} // end of namespace MI
+} // end of namespace KDevDebugger
 
 #endif // MICOMMANDQUEUE_H

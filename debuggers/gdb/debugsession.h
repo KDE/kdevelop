@@ -48,12 +48,14 @@ class ProcessLineMaker;
 class ILaunchConfiguration;
 }
 
+namespace KDevDebugger {
+
 namespace MI {
 class MICommand;
 class CommandQueue;
 }
 
-namespace KDevDebugger { namespace GDBDebugger {
+namespace GDBDebugger {
 
 class STTY;
 class GDB;

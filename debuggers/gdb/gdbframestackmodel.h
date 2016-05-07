@@ -22,30 +22,35 @@
 #ifndef KDEVELOP_GDB_FRAMESTACKMODEL_H
 #define KDEVELOP_GDB_FRAMESTACKMODEL_H
 
+#include "debugsession.h"
+
 #include <debugger/framestack/framestackmodel.h>
 
-#include "debugsession.h"
-using namespace KDevDebugger::GDBDebugger;
 
-namespace MI { struct ResultRecord; }
-
-namespace KDevelop {
-    
-    class GdbFrameStackModel : public FrameStackModel
-    {
-    public:
-        GdbFrameStackModel(DebugSession* session) : FrameStackModel(session) {}
-        
-    public:
-        DebugSession* session() { return static_cast<DebugSession *>(FrameStackModel::session()); }    
-        
-    protected: // FrameStackModel overrides
-        void fetchThreads() override;
-        void fetchFrames(int threadNumber, int from, int to) override;
-        
-    private:        
-        void handleThreadInfo(const MI::ResultRecord& r);
-    };
+namespace KDevDebugger {
+namespace MI {
+struct ResultRecord;
 }
+
+namespace GDBDebugger {
+
+class GdbFrameStackModel : public KDevelop::FrameStackModel
+{
+public:
+    GdbFrameStackModel(DebugSession* session) : FrameStackModel(session) {}
+
+public:
+    DebugSession* session() { return static_cast<DebugSession *>(FrameStackModel::session()); }
+
+protected: // FrameStackModel overrides
+    void fetchThreads() override;
+    void fetchFrames(int threadNumber, int from, int to) override;
+
+private:
+    void handleThreadInfo(const MI::ResultRecord& r);
+};
+
+} // end of namespace GDBDebugger
+} // end of namespace KDevDebugger
 
 #endif

@@ -26,8 +26,7 @@
 
 #include <functional>
 
-namespace MI
-{
+namespace KDevDebugger { namespace MI {
 
 class VarItem;
 class ValueCallback;
@@ -346,7 +345,8 @@ CliCommand::CliCommand(
 }
 
 } // end of namespace MI
+} // end of namespace KDevDebugger
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(MI::CommandFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevDebugger::MI::CommandFlags)
 
 #endif

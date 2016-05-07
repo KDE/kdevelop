@@ -29,7 +29,7 @@
 
 using namespace KDevelop;
 using namespace KDevDebugger::GDBDebugger;
-using namespace MI;
+using namespace KDevDebugger::MI;
 
 QMap<QString, GdbVariable*> GdbVariable::allVariables_;
 

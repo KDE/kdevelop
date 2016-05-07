@@ -26,7 +26,8 @@
 #include <KLocalizedString>
 
 using namespace KDevelop;
-using namespace MI;
+using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::MI;
 
 QString getFunctionOrAddress(const Value &frame)
 {

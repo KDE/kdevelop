@@ -63,8 +63,9 @@
 #include <typeinfo>
 
 using namespace KDevelop;
-using namespace MI;
+using namespace KDevDebugger;
 using namespace KDevDebugger::GDBDebugger;
+using namespace KDevDebugger::MI;
 
 DebugSession::DebugSession()
     : m_breakpointController(nullptr)

@@ -51,7 +51,7 @@
 #include <QFontDatabase>
 
 using namespace KDevDebugger::GDBDebugger;
-using namespace MI;
+using namespace KDevDebugger::MI;
 
 
 SelectAddressDialog::SelectAddressDialog(QWidget* parent)

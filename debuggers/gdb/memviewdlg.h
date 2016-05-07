@@ -20,6 +20,7 @@
 #include "mi/mi.h"
 
 #include <QContextMenuEvent>
+#include <QWidget>
 
 
 namespace KDevelop {
