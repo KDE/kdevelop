@@ -166,7 +166,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="labelAvailabilityQtDocs">
+       <widget class="KMessageWidget" name="messageAvailabilityQtDocs">
         <property name="enabled">
          <bool>true</bool>
         </property>

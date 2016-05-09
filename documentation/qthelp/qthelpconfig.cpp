@@ -25,6 +25,7 @@
 #include <QFileDialog>
 
 #include <KMessageBox>
+#include <KMessageWidget>
 #include <KLocalizedString>
 #include <KNS3/Button>
 
@@ -122,10 +123,11 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     connect(m_configWidget->qchSearchDir,&QLineEdit::textChanged, this, &QtHelpConfig::searchDirChanged);
 
     // Set availability information for QtHelp
+    m_configWidget->messageAvailabilityQtDocs->setCloseButtonVisible(false);
     if(plugin->qtHelpAvailable()) {
-        m_configWidget->labelAvailabilityQtDocs->setVisible(false);
+        m_configWidget->messageAvailabilityQtDocs->setVisible(false);
     } else {
-        m_configWidget->labelAvailabilityQtDocs->setText(
+        m_configWidget->messageAvailabilityQtDocs->setText(
             i18n("The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."));
         m_configWidget->loadQtDocsCheckBox->setEnabled(false);
     }
