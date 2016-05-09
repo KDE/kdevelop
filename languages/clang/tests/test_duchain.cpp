@@ -40,6 +40,7 @@
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/use.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -190,10 +191,13 @@ void TestDUChain::testElaboratedType()
     auto functionType = function->type<FunctionType>();
     QVERIFY(functionType);
 
+#if CINDEX_VERSION_MINOR < 34
     QEXPECT_FAIL("namespace", "The ElaboratedType is not exposed through the libclang interface, not much we can do here", Abort);
+#endif
     QVERIFY(functionType->returnType()->whichType() != AbstractType::TypeDelayed);
-
+#if CINDEX_VERSION_MINOR < 34
     QEXPECT_FAIL("typedef", "After using clang_getCanonicalType on ElaboratedType all typedef information get's stripped away", Continue);
+#endif
     QCOMPARE(functionType->returnType()->whichType(), type);
 }
 
@@ -1564,6 +1568,37 @@ void TestDUChain::testTypeAliasTemplate()
     QCOMPARE(templateAlias->abstractType()->toString(), QStringLiteral("TypeAliasTemplate"));
 }
 
+void TestDUChain::testDeclarationsInsideMacroExpansion()
+{
+    TestFile header("#define DECLARE(a) typedef struct a##__ {int var;} *a\nDECLARE(D);\n", "h");
+    TestFile file("#include \"" + header.url().byteArray() + "\"\nint main(){\nD d; d->var;}\n", "cpp");
+
+    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST));
+    QVERIFY(file.waitForParsed(5000));
+
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+    }
+
+    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    QVERIFY(file.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+
+    auto context = file.topContext()->childContexts().first()->childContexts().first();
+    QVERIFY(context);
+    QCOMPARE(context->localDeclarations().size(), 1);
+    QEXPECT_FAIL("", "Clang assigns the same range for all declarations inside a macro expansion. Therefore we can't find their uses", Abort);
+    QCOMPARE(context->usesCount(), 3);
+
+    QCOMPARE(context->uses()[0].m_range, RangeInRevision({2, 0}, {2, 1}));
+    QCOMPARE(context->uses()[1].m_range, RangeInRevision({2, 5}, {2, 6}));
+    QCOMPARE(context->uses()[2].m_range, RangeInRevision({2, 8}, {2, 11}));
+}
+
 static bool containsErrors(const QList<Problem::Ptr>& problems)
 {
     auto it = std::find_if(problems.begin(), problems.end(), [] (const Problem::Ptr& problem) {
@@ -1639,7 +1674,6 @@ void TestDUChain::testGccCompatibility()
 
 void TestDUChain::testQtIntegration()
 {
-    // TODO: make it easier to change the compiler provider for testing purposes
     QTemporaryDir includeDir;
     {
         QDir dir(includeDir.path());
@@ -1650,10 +1684,9 @@ void TestDUChain::testQtIntegration()
     }
     QTemporaryDir dir;
     auto project = new TestProject(Path(dir.path()), this);
-    auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
-    auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
-    pathConfig.writeEntry("Path", ".");
-    pathConfig.group("Includes").writeEntry("1", QString(includeDir.path() + "/QtCore"));
+    m_provider->defines.clear();
+    m_provider->includes = {Path(includeDir.path() + "/QtCore")};
+
     m_projectController->addProject(project);
 
     {

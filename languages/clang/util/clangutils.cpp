@@ -320,8 +320,11 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
         return true;
     }
 
-    // TODO: expose clang::FunctionDecl::isExplicitlyDefaulted() in libclang
-    // For symmetry we should probably also expose clang::FunctionDecl::isDeleted()
+#if CINDEX_VERSION_MINOR >= 34
+    if (clang_CXXMethod_isDefaulted(cursor)) {
+        return true;
+    }
+#else
     auto declCursor = clang_getCanonicalCursor(cursor);
     CXTranslationUnit tu = clang_Cursor_getTranslationUnit(declCursor);
     ClangTokens tokens(tu, clang_getCursorExtent(declCursor));
@@ -375,6 +378,7 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
             }
         }
     }
+#endif
     return false;
 }
 

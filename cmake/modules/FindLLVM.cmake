@@ -115,6 +115,7 @@ if (LLVM_FOUND)
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
   
+  if (NOT ${LLVM_VERSION} VERSION_LESS "3.8.0") 
     execute_process(
         COMMAND ${LLVM_CONFIG_EXECUTABLE} --shared-mode
         OUTPUT_VARIABLE _LLVM_SHARED_MODE
@@ -125,6 +126,9 @@ if (LLVM_FOUND)
     else()
         set(LLVM_SHARED_MODE OFF)
     endif()
+  else()
+    set(LLVM_SHARED_MODE OFF)
+  endif()
 
   # potentially add include dir from binary dir for non-installed LLVM
   execute_process(
