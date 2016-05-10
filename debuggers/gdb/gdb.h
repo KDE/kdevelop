@@ -2,6 +2,7 @@
  * Low level GDB interface.
  *
  * Copyright 2007 Vladimir Prus <ghost@cs.msu.su>
+ * Copyright 2016 Aetf <aetf@unlimitedcodeworks.xyz>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,123 +23,19 @@
 #ifndef GDB_H_d5c9cb274cbad688fe7a507a84f6633b
 #define GDB_H_d5c9cb274cbad688fe7a507a84f6633b
 
-#include "mi/mi.h"
-#include "mi/miparser.h"
-#include "mi/micommand.h"
+#include "debuggerbase.h"
 
-#include <KProcess>
+namespace KDevDebugger { namespace GDB {
 
-#include <QObject>
-#include <QByteArray>
-
-class KConfigGroup;
-
-namespace KDevDebugger
-{
-namespace GDB
-{
-
-class GDB : public QObject
+class GDB : public DebuggerBase
 {
     Q_OBJECT
 public:
     explicit GDB(QObject* parent = 0);
     ~GDB() override;
 
-    /** Starts GDB.  This should be done after connecting to all
-        signals the client is interested in.  */
-    void start(KConfigGroup& config, const QStringList& extraArguments = {});
-
-    /** Executes a command.  This method may be called at
-        most once each time 'ready' is emitted.  When the
-        GDB instance is just constructed, one should wait
-        for 'ready' as well.  
-
-        The ownership of 'command' is transferred to GDB.  */
-    void execute(MI::MICommand* command);
-
-    /** Returns true if 'execute' can be called immediately.  */
-    bool isReady() const;
-
-    /** FIXME: temporary, to be eliminated.  */
-    MI::MICommand* currentCommand() const;
-    
-    /** Arrange to gdb to stop doing whatever it's doing,
-        and start waiting for a command.  
-        FIXME: probably should make sure that 'ready' is
-        emitted, or something.  */
-    void interrupt();
-
-    /** Kills GDB.  */
-    void kill();
-
-Q_SIGNALS:
-    /** Emitted when debugger becomes ready -- i.e. when
-        isReady call will return true.  */
-    void ready();
-
-    /** Emitted when GDB itself exits.  This could happen because
-        it just crashed due to internal bug, or we killed it
-        explicitly.  */
-    void gdbExited();
-
-    /** Emitted when GDB reports stop, with 'r' being the
-        data provided by GDB. */
-    void programStopped(const MI::AsyncRecord& r);
-    
-    /** Emitted when GDB believes that the program is running.  */
-    void programRunning();
-
-    /** Emitted for each MI stream record found.  Presently only
-     used to recognize some CLI messages that mean that the program
-    has died. 
-    FIXME: connect to parseCliLine
-    */
-    void streamRecord(const MI::StreamRecord& s);
-
-    /** Reports an async notification record.  */
-    void notification(const MI::AsyncRecord& n);
-    
-    /** Emitted for error that is not handled by the
-        command being executed. */
-    void error(const MI::ResultRecord& s);
-
-    /** Reports output from the running application.
-        Generally output will only be available when
-        using remote GDB targets. When running locally,
-        the output will either appear on GDB stdout, and
-        ignored, or routed via pty.  */
-    void applicationOutput(const QString& s);
-
-    /** Reports output of a command explicitly typed by
-        the user, or output from .gdbinit commands.  */
-    void userCommandOutput(const QString& s);
-
-    /** Reports output of a command issued internally
-        by KDevelop.  At the moment, stderr output from
-        GDB and the 'log' MI channel will be also routed here.  */
-    void internalCommandOutput(const QString& s);
-
-private Q_SLOTS:
-    void readyReadStandardOutput();
-    void readyReadStandardError();
-    void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void processErrored(QProcess::ProcessError);
-
-private:
-    void processLine(const QByteArray& line);
-
-private:
-    QString gdbBinary_;
-    KProcess* process_;
-
-    MI::MICommand* currentCmd_;
-
-    MI::MIParser mi_parser_;
-
-    /** The unprocessed output from gdb. Output is
-        processed as soon as we see newline. */
-    QByteArray buffer_;
+protected:
+    QString defaultBinary() override;
 };
 
 } // end of namespace GDB

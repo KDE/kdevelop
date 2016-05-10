@@ -88,27 +88,27 @@ QIcon GdbConfigPage::icon() const
 void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject*  )
 {
     bool block = blockSignals( true );
-    ui->kcfg_gdbPath->setUrl( cfg.readEntry( KDevDebugger::GDB::gdbPathEntry, QUrl() ) );
-    ui->kcfg_debuggingShell->setUrl( cfg.readEntry( KDevDebugger::GDB::debuggerShellEntry, QUrl() ) );
-    ui->kcfg_configGdbScript->setUrl( cfg.readEntry( KDevDebugger::GDB::remoteGdbConfigEntry, QUrl() ) );
-    ui->kcfg_runShellScript->setUrl( cfg.readEntry( KDevDebugger::GDB::remoteGdbShellEntry, QUrl() ) );
-    ui->kcfg_runGdbScript->setUrl( cfg.readEntry( KDevDebugger::GDB::remoteGdbRunEntry, QUrl() ) );
-    ui->kcfg_displayStaticMembers->setChecked( cfg.readEntry(KDevDebugger::GDB::staticMembersEntry, false) );
-    ui->kcfg_asmDemangle->setChecked( cfg.readEntry( KDevDebugger::GDB::demangleNamesEntry, true) );
-    ui->kcfg_startWith->setCurrentIndex( ui->kcfg_startWith->findData( cfg.readEntry( KDevDebugger::GDB::startWithEntry, "ApplicationOutput" ) ) );
+    ui->kcfg_gdbPath->setUrl( cfg.readEntry( KDevDebugger::gdbPathEntry, QUrl() ) );
+    ui->kcfg_debuggingShell->setUrl( cfg.readEntry( KDevDebugger::debuggerShellEntry, QUrl() ) );
+    ui->kcfg_configGdbScript->setUrl( cfg.readEntry( KDevDebugger::remoteGdbConfigEntry, QUrl() ) );
+    ui->kcfg_runShellScript->setUrl( cfg.readEntry( KDevDebugger::remoteGdbShellEntry, QUrl() ) );
+    ui->kcfg_runGdbScript->setUrl( cfg.readEntry( KDevDebugger::remoteGdbRunEntry, QUrl() ) );
+    ui->kcfg_displayStaticMembers->setChecked( cfg.readEntry(KDevDebugger::staticMembersEntry, false) );
+    ui->kcfg_asmDemangle->setChecked( cfg.readEntry( KDevDebugger::demangleNamesEntry, true) );
+    ui->kcfg_startWith->setCurrentIndex( ui->kcfg_startWith->findData( cfg.readEntry( KDevDebugger::startWithEntry, "ApplicationOutput" ) ) );
     blockSignals( block );
 }
 
 void GdbConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* ) const
 {
-    cfg.writeEntry(KDevDebugger::GDB::gdbPathEntry, ui->kcfg_gdbPath->url() );
-    cfg.writeEntry(KDevDebugger::GDB::debuggerShellEntry, ui->kcfg_debuggingShell->url() );
-    cfg.writeEntry(KDevDebugger::GDB::remoteGdbConfigEntry, ui->kcfg_configGdbScript->url() );
-    cfg.writeEntry(KDevDebugger::GDB::remoteGdbShellEntry, ui->kcfg_runShellScript->url() );
-    cfg.writeEntry(KDevDebugger::GDB::remoteGdbRunEntry, ui->kcfg_runGdbScript->url() );
-    cfg.writeEntry(KDevDebugger::GDB::staticMembersEntry, ui->kcfg_displayStaticMembers->isChecked() );
-    cfg.writeEntry(KDevDebugger::GDB::demangleNamesEntry, ui->kcfg_asmDemangle->isChecked() );
-    cfg.writeEntry(KDevDebugger::GDB::startWithEntry, ui->kcfg_startWith->itemData( ui->kcfg_startWith->currentIndex() ).toString() );
+    cfg.writeEntry(KDevDebugger::gdbPathEntry, ui->kcfg_gdbPath->url() );
+    cfg.writeEntry(KDevDebugger::debuggerShellEntry, ui->kcfg_debuggingShell->url() );
+    cfg.writeEntry(KDevDebugger::remoteGdbConfigEntry, ui->kcfg_configGdbScript->url() );
+    cfg.writeEntry(KDevDebugger::remoteGdbShellEntry, ui->kcfg_runShellScript->url() );
+    cfg.writeEntry(KDevDebugger::remoteGdbRunEntry, ui->kcfg_runGdbScript->url() );
+    cfg.writeEntry(KDevDebugger::staticMembersEntry, ui->kcfg_displayStaticMembers->isChecked() );
+    cfg.writeEntry(KDevDebugger::demangleNamesEntry, ui->kcfg_asmDemangle->isChecked() );
+    cfg.writeEntry(KDevDebugger::startWithEntry, ui->kcfg_startWith->itemData( ui->kcfg_startWith->currentIndex() ).toString() );
 }
 
 QString GdbConfigPage::title() const

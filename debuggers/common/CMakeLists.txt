@@ -4,11 +4,15 @@ set(debuggercommon_SRCS
     mi/miparser.cpp
     mi/micommand.cpp
     mi/micommandqueue.cpp
+    debuglog.cpp
+    debuggerbase.cpp
 )
 #ki18n_wrap_ui(debuggercommon_SRCS something.ui)
 
 add_library(kdevdebuggercommon STATIC ${debuggercommon_SRCS})
 target_link_libraries(kdevdebuggercommon
+    PUBLIC
+    KDev::Debugger
     PRIVATE
     Qt5::Core
 )

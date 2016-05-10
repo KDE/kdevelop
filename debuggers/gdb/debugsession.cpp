@@ -887,7 +887,7 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
             &DebugSession::gdbInternalCommandStdout);
 
     connect(gdb, &GDB::ready, this, &DebugSession::gdbReady);
-    connect(gdb, &GDB::gdbExited, this, &DebugSession::gdbExited);
+    connect(gdb, &GDB::exited, this, &DebugSession::gdbExited);
     connect(gdb, &GDB::programStopped,
             this, &DebugSession::slotProgramStopped);
     connect(gdb, &GDB::programStopped,
