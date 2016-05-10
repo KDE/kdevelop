@@ -164,7 +164,7 @@ bool QtHelpPlugin::qtHelpQtDocLoaded() const
 
 bool QtHelpPlugin::qtHelpAvailable() const
 {
-    return !m_qtDoc->qchFile().isEmpty();
+    return !m_qtDoc->qchFiles().isEmpty();
 }
 
 KDevelop::ConfigPage* QtHelpPlugin::configPage(int number, QWidget* parent)

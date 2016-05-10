@@ -34,8 +34,8 @@ class QtHelpQtDoc : public QtHelpProviderAbstract
         void registerDocumentations();
         void loadDocumentation();
         void unloadDocumentation();
-        /** @return local path to QCH file if it exists, otherwise returns an empty string **/
-        QString qchFile() const;
+        /** @return local paths to all QCH files found in QT_INSTALL_DOCS directory **/
+        QStringList qchFiles() const;
 
     private:
         QString m_path;

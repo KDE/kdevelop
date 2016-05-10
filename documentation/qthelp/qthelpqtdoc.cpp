@@ -83,46 +83,52 @@ void QtHelpQtDoc::loadDocumentation()
         return;
     }
 
-    QString fileName = qchFile();
-    if(fileName.isEmpty()) {
+    QStringList files = qchFiles();
+    if(files.isEmpty()) {
         qCWarning(QTHELP) << "could not find QCH file in directory" << m_path;
         return;
     }
 
-    QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
-    if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
-        qCDebug(QTHELP) << "loading doc" << fileName << fileNamespace;
-        if(!m_engine.registerDocumentation(fileName))
-            qCCritical(QTHELP) << "error >> " << fileName << m_engine.error();
+    foreach(const QString &fileName, files) {
+        QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
+        if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
+            qCDebug(QTHELP) << "loading doc" << fileName << fileNamespace;
+            if(!m_engine.registerDocumentation(fileName))
+                qCCritical(QTHELP) << "error >> " << fileName << m_engine.error();
+        }
     }
 }
 
 void QtHelpQtDoc::unloadDocumentation()
 {
-    QString fileName = qchFile();
-    QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
-    if(!fileName.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
-        m_engine.unregisterDocumentation(fileName);
+    foreach(const QString &fileName, qchFiles()) {
+        QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
+        if(!fileName.isEmpty() && m_engine.registeredDocumentations().contains(fileNamespace)) {
+            m_engine.unregisterDocumentation(fileName);
+        }
     }
 }
 
-QString QtHelpQtDoc::qchFile() const
+QStringList QtHelpQtDoc::qchFiles() const
 {
-    QVector<QString> paths;
+    QStringList files;
+
+    QVector<QString> paths; // test directories
     paths << m_path << m_path+"/qch/";
+
     foreach (const auto &path, paths) {
         QDir d(path);
         if(path.isEmpty() || !d.exists()) {
             continue;
         }
-
         foreach(const QString& file, d.entryList(QDir::Files)) {
-            QString fileName=path+'/'+file;
-            return fileName;
+            files << path+'/'+file;
         }
     }
-    qCDebug(QTHELP) << "no QCH file found at all";
-    return QString();
+    if (files.isEmpty()) {
+        qCDebug(QTHELP) << "no QCH file found at all";
+    }
+    return files;
 }
 
 QIcon QtHelpQtDoc::icon() const
