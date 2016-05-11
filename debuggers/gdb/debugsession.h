@@ -41,9 +41,6 @@
 class IExecutePlugin;
 class KToolBar;
 
-namespace KTextEditor {
-class Cursor;
-}
 namespace KDevelop {
 class ProcessLineMaker;
 class ILaunchConfiguration;
