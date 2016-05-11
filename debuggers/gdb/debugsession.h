@@ -51,6 +51,8 @@ class ILaunchConfiguration;
 
 namespace KDevDebugger {
 
+class STTY;
+
 namespace MI {
 class MICommand;
 class CommandQueue;
@@ -58,7 +60,6 @@ class CommandQueue;
 
 namespace GDB {
 
-class STTY;
 class GDB;
 
 class DebugSession : public KDevelop::IDebugSession

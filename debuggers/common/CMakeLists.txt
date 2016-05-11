@@ -6,6 +6,7 @@ set(debuggercommon_SRCS
     mi/micommandqueue.cpp
     debuglog.cpp
     debuggerbase.cpp
+    stty.cpp
 )
 #ki18n_wrap_ui(debuggercommon_SRCS something.ui)
 
