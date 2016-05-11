@@ -40,7 +40,8 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
 
         QList<KDevelop::IDocumentationProvider*> providers() override;
         QList<QtHelpProvider*> qtHelpProviderLoaded();
-        bool qtHelpQtDocLoaded();
+        bool isQtHelpQtDocLoaded() const;
+        bool isQtHelpAvailable() const;
 
         int configPages() const override;
         KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
@@ -57,6 +58,7 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         static QtHelpPlugin *s_plugin;
         QList<QtHelpProvider*> m_qtHelpProviders;
         QtHelpQtDoc* m_qtDoc;
+        bool m_loadSystemQtDoc;
 };
 
 #endif // QTHELPPLUGIN_H
