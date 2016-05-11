@@ -121,8 +121,8 @@ QStringList QtHelpQtDoc::qchFiles() const
         if(path.isEmpty() || !d.exists()) {
             continue;
         }
-        foreach(const QString& file, d.entryList(QDir::Files)) {
-            files << path+'/'+file;
+        foreach(const auto& file, d.entryInfoList(QDir::Files)) {
+            files << file.absoluteFilePath();
         }
     }
     if (files.isEmpty()) {

@@ -15,9 +15,35 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Documentation Files from System Location</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QCheckBox" name="loadQtDocsCheckBox">
+        <property name="text">
+         <string>Load Qt API Documentation</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KMessageWidget" name="messageAvailabilityQtDocs" native="true">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text" stdset="0">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="qchManage">
      <property name="title">
-      <string>Manage API Documentation</string>
+      <string>Additional Documentation Files</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
@@ -153,32 +179,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Manage QtHelp Documentation</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <widget class="QCheckBox" name="loadQtDocsCheckBox">
-        <property name="text">
-         <string>Load Qt API Documentation</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="KMessageWidget" name="messageAvailabilityQtDocs">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -193,6 +193,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QWidget</extends>
+   <header>kmessagewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

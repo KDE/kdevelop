@@ -157,12 +157,12 @@ QList<QtHelpProvider*> QtHelpPlugin::qtHelpProviderLoaded()
     return m_qtHelpProviders;
 }
 
-bool QtHelpPlugin::qtHelpQtDocLoaded() const
+bool QtHelpPlugin::isQtHelpQtDocLoaded() const
 {
     return m_loadSystemQtDoc;
 }
 
-bool QtHelpPlugin::qtHelpAvailable() const
+bool QtHelpPlugin::isQtHelpAvailable() const
 {
     return !m_qtDoc->qchFiles().isEmpty();
 }

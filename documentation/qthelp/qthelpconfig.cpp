@@ -124,7 +124,7 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
 
     // Set availability information for QtHelp
     m_configWidget->messageAvailabilityQtDocs->setCloseButtonVisible(false);
-    if(plugin->qtHelpAvailable()) {
+    if(plugin->isQtHelpAvailable()) {
         m_configWidget->messageAvailabilityQtDocs->setVisible(false);
     } else {
         m_configWidget->messageAvailabilityQtDocs->setText(
@@ -380,7 +380,6 @@ void QtHelpConfig::chooseSearchDir()
     m_configWidget->qchSearchDir->setText(QFileDialog::getExistingDirectory(this));
 }
 
-
 void QtHelpConfig::searchDirChanged()
 {
     emit changed();
@@ -388,7 +387,7 @@ void QtHelpConfig::searchDirChanged()
 
 QString QtHelpConfig::name() const
 {
-    return i18n("API Documentation");
+    return i18n("QtHelp Documentation");
 }
 
 QIcon QtHelpConfig::icon() const

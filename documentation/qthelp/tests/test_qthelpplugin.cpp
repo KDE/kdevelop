@@ -73,7 +73,7 @@ void TestQtHelpPlugin::cleanupTestCase()
 
 void TestQtHelpPlugin::testDefaultValue()
 {
-    QCOMPARE(m_plugin->qtHelpQtDocLoaded(), true);
+    QCOMPARE(m_plugin->isQtHelpQtDocLoaded(), true);
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 0);
     QCOMPARE(m_plugin->providers().size(), 1);
 }
