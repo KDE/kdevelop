@@ -237,6 +237,7 @@ void DebuggerBase::processLine(const QByteArray& line)
                 if (!currentCmd_) {
                     qCDebug(DEBUGGERCOMMON) << "Received a result without a pending command";
                 } else {
+                    qCDebug(DEBUGGERCOMMON) << "Result token is" << result.token;
                     Q_ASSERT(currentCmd_->token() == result.token);
                     currentCmd_->invokeHandler(result);
                 }
