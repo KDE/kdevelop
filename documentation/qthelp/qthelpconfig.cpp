@@ -2,6 +2,7 @@
 
     Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
     Copyright 2014 Kevin Funk <kfunk@kde.org>
+    Copyright 2016 Andreas Cord-Landwehr <cordlandwehr@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -166,12 +167,8 @@ void QtHelpConfig::reset()
 
     const int size = qMin(qMin(iconList.size(), nameList.size()), pathList.size());
     for(int i = 0; i < size; ++i) {
-        QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
-        item->setIcon(NameColumn, QIcon(iconList.at(i)));
-        item->setText(NameColumn, nameList.at(i));
-        item->setText(PathColumn, pathList.at(i));
-        item->setText(IconColumn, iconList.at(i));
-        item->setText(GhnsColumn, ghnsList.size()>i ? ghnsList.at(i) : "0");
+        QString ghnsPath = ghnsList.size()>i ? ghnsList.at(i) : "0";
+        addTableItem(iconList.at(i), nameList.at(i), pathList.at(i), ghnsPath);
     }
     m_configWidget->qchSearchDir->setText(searchDir);
     m_configWidget->loadQtDocsCheckBox->setChecked(loadQtDoc);
@@ -221,12 +218,7 @@ void QtHelpConfig::add()
     if (!dialog.exec())
         return;
 
-    QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
-    item->setIcon(NameColumn, QIcon(dialog.qchIcon->icon()));
-    item->setText(NameColumn, dialog.qchName->text());
-    item->setText(PathColumn, dialog.qchRequester->text());
-    item->setText(IconColumn, dialog.qchIcon->icon());
-    item->setText(GhnsColumn, "0");
+    QTreeWidgetItem* item = addTableItem(dialog.qchIcon->icon(), dialog.qchName->text(), dialog.qchRequester->text(), "0");
     m_configWidget->qchTable->setCurrentItem(item);
     emit changed();
 }
@@ -302,12 +294,7 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
             if(e.installedFiles().size() == 1) {
                 QString filename = e.installedFiles().at(0);
                 if(checkNamespace(filename, nullptr)){
-                    QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
-                    item->setIcon(NameColumn, QIcon("documentation"));
-                    item->setText(NameColumn, e.name());
-                    item->setText(PathColumn, filename);
-                    item->setText(IconColumn, "documentation");
-                    item->setText(GhnsColumn, "1");
+                    QTreeWidgetItem* item = addTableItem("documentation", e.name(), filename, "1");
                     m_configWidget->qchTable->setCurrentItem(item);
                 } else {
                     qCDebug(QTHELP) << "namespace error";
@@ -346,4 +333,16 @@ QString QtHelpConfig::name() const
 QIcon QtHelpConfig::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("help-contents"));
+}
+
+QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString &name,
+                                             const QString &path, const QString &ghnsStatus)
+{
+    QTreeWidgetItem *item = new QTreeWidgetItem(m_configWidget->qchTable);
+    item->setIcon(NameColumn, QIcon(icon));
+    item->setText(NameColumn, name);
+    item->setText(PathColumn, path);
+    item->setText(IconColumn, icon);
+    item->setText(GhnsColumn, ghnsStatus);
+    return item;
 }

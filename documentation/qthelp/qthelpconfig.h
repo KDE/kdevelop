@@ -62,6 +62,8 @@ public:
       void defaults() override;
       void reset() override;
     private:
+      QTreeWidgetItem * addTableItem(const QString &icon, const QString &name,
+                                     const QString &path, const QString &ghnsStatus);
       Ui::QtHelpConfigUI* m_configWidget;
 };
 
