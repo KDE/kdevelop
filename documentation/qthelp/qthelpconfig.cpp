@@ -115,7 +115,7 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     m_configWidget->qchTable->header()->setStretchLastSection(true);
 
     // Add GHNS button
-    KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), "kdevelop-qthelp.knsrc", m_configWidget->qchManage);
+    KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), "kdevelop-qthelp.knsrc", m_configWidget->boxQchManage);
     m_configWidget->verticalLayout->insertWidget(1, knsButton);
     connect(knsButton, &KNS3::Button::dialogFinished, this, &QtHelpConfig::knsUpdate);
     connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled, this, static_cast<void(QtHelpConfig::*)()>(&QtHelpConfig::changed));
@@ -129,7 +129,7 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     } else {
         m_configWidget->messageAvailabilityQtDocs->setText(
             i18n("The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."));
-        m_configWidget->loadQtDocsCheckBox->setEnabled(false);
+        m_configWidget->loadQtDocsCheckBox->setVisible(false);
     }
     l->addWidget( w );
     reset();
