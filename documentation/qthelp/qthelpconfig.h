@@ -51,8 +51,6 @@ public:
     private slots:
       void add();
       void remove();
-      void up();
-      void down();
       void modify();
       void selectionChanged();
       void knsUpdate(KNS3::Entry::List list);

@@ -104,10 +104,7 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     connect(m_configWidget->editButton, &QPushButton::clicked, this, &QtHelpConfig::modify);
     m_configWidget->removeButton->setIcon(QIcon::fromTheme("list-remove"));
     connect(m_configWidget->removeButton, &QPushButton::clicked, this, &QtHelpConfig::remove);
-    m_configWidget->upButton->setIcon(QIcon::fromTheme("arrow-up"));
-    connect(m_configWidget->upButton, &QPushButton::clicked, this, &QtHelpConfig::up);
-    m_configWidget->downButton->setIcon(QIcon::fromTheme("arrow-down"));
-    connect(m_configWidget->downButton, &QPushButton::clicked, this, &QtHelpConfig::down);
+
     // Table
     connect(m_configWidget->qchTable, &QTreeWidget::itemSelectionChanged, this, &QtHelpConfig::selectionChanged);
     m_configWidget->qchTable->setColumnHidden(IconColumn, true);
@@ -204,12 +201,8 @@ void QtHelpConfig::selectionChanged()
     if (m_configWidget->qchTable->selectedItems().isEmpty()) {
         m_configWidget->removeButton->setEnabled(false);
         m_configWidget->editButton->setEnabled(false);
-        m_configWidget->upButton->setEnabled(false);
-        m_configWidget->downButton->setEnabled(false);
     } else {
         QTreeWidgetItem* selectedItem = m_configWidget->qchTable->selectedItems().at(0);
-        const int selectedRow = m_configWidget->qchTable->indexOfTopLevelItem(selectedItem);
-        int rowCount = m_configWidget->qchTable->topLevelItemCount();
         if (selectedItem->text(GhnsColumn) != "0") {
             // TODO: Can't we just remove the file even if it has been installed via GHNS?
             m_configWidget->removeButton->setEnabled(false);
@@ -219,16 +212,6 @@ void QtHelpConfig::selectionChanged()
             m_configWidget->removeButton->setToolTip(QString());
         }
         m_configWidget->editButton->setEnabled(true);
-        if (selectedRow == 0) {
-            m_configWidget->upButton->setEnabled(false);
-        } else {
-            m_configWidget->upButton->setEnabled(true);
-        }
-        if (rowCount > selectedRow + 1) {
-            m_configWidget->downButton->setEnabled(true);
-        } else {
-            m_configWidget->downButton->setEnabled(false);
-        }
     }
 }
 
@@ -306,36 +289,6 @@ void QtHelpConfig::remove()
         return;
 
     delete selectedItem;
-    emit changed();
-}
-
-void QtHelpConfig::up()
-{
-    QTreeWidgetItem* item = m_configWidget->qchTable->currentItem();
-    if (!item)
-        return;
-    const int row = m_configWidget->qchTable->indexOfTopLevelItem(item);
-    if (row == 0)
-        return;
-
-    m_configWidget->qchTable->takeTopLevelItem(row);
-    m_configWidget->qchTable->insertTopLevelItem(row - 1, item);
-    m_configWidget->qchTable->setCurrentItem(item);
-    emit changed();
-}
-
-void QtHelpConfig::down()
-{
-    QTreeWidgetItem* item = m_configWidget->qchTable->currentItem();
-    if (!item)
-        return;
-    const int row = m_configWidget->qchTable->indexOfTopLevelItem(item);
-    if (row + 1 >= m_configWidget->qchTable->topLevelItemCount())
-        return;
-
-    m_configWidget->qchTable->takeTopLevelItem(row);
-    m_configWidget->qchTable->insertTopLevelItem(row + 1, item);
-    m_configWidget->qchTable->setCurrentItem(item);
     emit changed();
 }
 
