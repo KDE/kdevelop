@@ -64,10 +64,6 @@ public:
         }
 
         qCDebug(VCS) << "diff:" << diff.leftTexts().count();
-        foreach( const KDevelop::VcsLocation &l, diff.leftTexts().keys() )
-        {
-            qCDebug(VCS) << "diff:" << l.localUrl() << l.repositoryServer();
-        }
         qCDebug(VCS) << "diff:" << diff.diff();
         qCDebug(VCS) << "diff:" << diff.type();
         qCDebug(VCS) << "diff:" << diff.contentType();

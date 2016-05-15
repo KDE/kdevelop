@@ -79,7 +79,7 @@ bool DiffJob::doKill()
 
 void DiffJob::prepareResult(KJob*)
 {
-    if (m_job->process()->exitStatus() <= 2) {
+    if (m_job->process()->exitStatus() == QProcess::NormalExit) {
         KDevelop::VcsDiff diff;
         diff.setDiff(m_job->output());
         diff.setBaseDiff(QUrl::fromLocalFile(m_job->directory().absolutePath()));

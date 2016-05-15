@@ -151,7 +151,7 @@ bool OpenProjectDialog::execNativeDialog()
     while (true)
     {
         if (nativeDialog->exec()) {
-            QUrl selectedUrl = nativeDialog->selectedUrls()[0];
+            QUrl selectedUrl = nativeDialog->selectedUrls().at(0);
             if (getUrlInfo(selectedUrl).isValid) {
                 // validate directory first to populate m_projectName and m_projectManager
                 validateOpenUrl(selectedUrl.adjusted(QUrl::RemoveFilename));
