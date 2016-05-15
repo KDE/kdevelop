@@ -72,7 +72,7 @@ void ProblemStore::setProblems(const QVector<IProblem::Ptr> &problems)
 {
     clear();
 
-    foreach (IProblem::Ptr problem, problems) {
+    foreach (const IProblem::Ptr &problem, problems) {
         d->m_rootNode->addChild(new ProblemNode(d->m_rootNode, problem));
     }
 

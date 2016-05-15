@@ -121,9 +121,9 @@ void CommandExecutor::setUseShell( bool shell )
 
 void CommandExecutor::start()
 {
-    Q_FOREACH( const QString &s, d->m_env.keys() )
+    for(auto it = d->m_env.constBegin(), itEnd = d->m_env.constEnd(); it!=itEnd; ++it)
     {
-        d->m_process->setEnv( s, d->m_env[s] );
+        d->m_process->setEnv( it.key(), it.value() );
     }
     d->m_process->setWorkingDirectory( d->m_workDir );
     if( !d->m_useShell ) {

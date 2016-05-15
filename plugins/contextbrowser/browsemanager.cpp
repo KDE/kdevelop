@@ -131,7 +131,7 @@ BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor 
     }
 
     // Step 1: Look for a special language object(Macro, included header, etc.)
-    for (const auto& language: ICore::self()->languageController()->languagesForUrl(viewUrl)) {
+    foreach (const auto& language, ICore::self()->languageController()->languagesForUrl(viewUrl)) {
         auto jumpTo = language->specialLanguageObjectJumpCursor(viewUrl, textCursor);
         if (jumpTo.first.isValid() && jumpTo.second.isValid()) {
             return {jumpTo};

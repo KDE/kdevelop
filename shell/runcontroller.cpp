@@ -959,7 +959,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
         {
             ProjectBaseItem* itm = prjctx->items().at( 0 );
             int i = 0;
-            foreach( ILaunchMode* mode, d->launchModes.values() )
+            foreach( ILaunchMode* mode, d->launchModes )
             {
                 KActionMenu* menu = new KActionMenu( i18n("%1 As...", mode->name() ), this );
                 foreach( LaunchConfigurationType* type, launchConfigurationTypes() )

@@ -103,10 +103,10 @@ IndexedString fetchImplementationFileForClass(const Declaration & targetClass)
     if(sortedFiles.size() == 1)
         return sortedFiles[0];
 
-    if(sorter.values(sorter.end().key()).size() > 1)
+    const QList<IndexedString> tiedFiles = sorter.values(sorter.end().key());
+    if(tiedFiles.size() > 1)
     {
         //Return the file that has the most uses
-        QList<IndexedString> tiedFiles = sorter.values(sorter.end().key());
         QMap<IndexedString, QList<RangeInRevision> > uses = realClass->uses();
 
         IndexedString mostUsesFile;

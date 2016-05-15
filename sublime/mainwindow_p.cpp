@@ -805,7 +805,7 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
     if(splitter) {
         c = qobject_cast<Container*>(splitter->widget(0));
     }else{
-        c = viewContainers.values()[0];
+        c = *viewContainers.constBegin();
     }
     Q_ASSERT(c);
 

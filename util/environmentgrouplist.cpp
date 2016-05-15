@@ -72,18 +72,20 @@ void encode( KConfig* config, EnvironmentGroupListPrivate* d )
     cfg.writeEntry( Strings::groupListKey(), d->m_groups.keys() );
     foreach( const QString &group, cfg.groupList() )
     {
-        if( !d->m_groups.keys().contains( group ) )
+        if( !d->m_groups.contains( group ) )
         {
             cfg.deleteGroup( group );
         }
     }
-    foreach( const QString &group, d->m_groups.keys() )
+    for(auto it = d->m_groups.cbegin(), itEnd = d->m_groups.cend(); it!=itEnd; ++it)
     {
-        KConfigGroup envgrp( &cfg, group );
+        KConfigGroup envgrp( &cfg, it.key() );
         envgrp.deleteGroup();
-        foreach( const QString &var, d->m_groups[group].keys() )
+
+        const auto val = it.value();
+        for(auto it2 = val.cbegin(), it2End = val.cend(); it2!=it2End; ++it2)
         {
-            envgrp.writeEntry( var, d->m_groups[group][var] );
+            envgrp.writeEntry( it2.key(), *it2 );
         }
     }
     cfg.sync();

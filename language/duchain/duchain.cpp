@@ -367,7 +367,7 @@ public:
 
     QMutexLocker l(&m_chainsMutex);
 
-    foreach(TopDUContext* top, m_chainsByUrl.values())
+    foreach(TopDUContext* top, m_chainsByUrl)
       removeDocumentChainFromMemory(top);
 
     m_indexEnvironmentInformations.clear();
@@ -754,7 +754,8 @@ public:
     {
       QMutexLocker l(&m_chainsMutex);
 
-      foreach(TopDUContext* top, m_chainsByUrl.values()) {
+      workOnContexts.reserve(m_chainsByUrl.size());
+      foreach(TopDUContext* top, m_chainsByUrl) {
         workOnContexts << top;
         Q_ASSERT(hasChainForIndex(top->ownIndex()));
       }
@@ -1432,7 +1433,8 @@ QList<QUrl> DUChain::documents() const
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
   QList<QUrl> ret;
-  foreach(TopDUContext* top, sdDUChainPrivate->m_chainsByUrl.values()) {
+  ret.reserve(sdDUChainPrivate->m_chainsByUrl.count());
+  foreach(TopDUContext* top, sdDUChainPrivate->m_chainsByUrl) {
     ret << top->url().toUrl();
   }
 
@@ -1444,7 +1446,8 @@ QList<IndexedString> DUChain::indexedDocuments() const
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
   QList<IndexedString> ret;
-  foreach(TopDUContext* top, sdDUChainPrivate->m_chainsByUrl.values()) {
+  ret.reserve(sdDUChainPrivate->m_chainsByUrl.count());
+  foreach(TopDUContext* top, sdDUChainPrivate->m_chainsByUrl) {
     ret << top->url();
   }
 
