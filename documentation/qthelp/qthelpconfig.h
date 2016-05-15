@@ -50,9 +50,8 @@ public:
 
     private slots:
       void add();
-      void remove();
-      void modify();
-      void selectionChanged();
+      void remove(QTreeWidgetItem* item);
+      void modify(QTreeWidgetItem* item);
       void knsUpdate(KNS3::Entry::List list);
       void chooseSearchDir();
       void searchDirChanged();

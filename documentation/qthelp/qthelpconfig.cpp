@@ -24,6 +24,8 @@
 
 #include <QHelpEngineCore>
 #include <QFileDialog>
+#include <QToolButton>
+#include <QHeaderView>
 
 #include <KMessageBox>
 #include <KMessageWidget>
@@ -41,7 +43,8 @@ enum Column
     NameColumn,
     PathColumn,
     IconColumn,
-    GhnsColumn
+    GhnsColumn,
+    ConfigColumn
 };
 
 class QtHelpConfigEditDialog : public QDialog, public Ui_QtHelpConfigEditDialog
@@ -101,16 +104,16 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     m_configWidget->setupUi( w );
     m_configWidget->addButton->setIcon(QIcon::fromTheme("list-add"));
     connect(m_configWidget->addButton, &QPushButton::clicked, this, &QtHelpConfig::add);
-    m_configWidget->editButton->setIcon(QIcon::fromTheme("document-edit"));
-    connect(m_configWidget->editButton, &QPushButton::clicked, this, &QtHelpConfig::modify);
-    m_configWidget->removeButton->setIcon(QIcon::fromTheme("list-remove"));
-    connect(m_configWidget->removeButton, &QPushButton::clicked, this, &QtHelpConfig::remove);
 
     // Table
-    connect(m_configWidget->qchTable, &QTreeWidget::itemSelectionChanged, this, &QtHelpConfig::selectionChanged);
     m_configWidget->qchTable->setColumnHidden(IconColumn, true);
     m_configWidget->qchTable->setColumnHidden(GhnsColumn, true);
-    m_configWidget->qchTable->header()->setStretchLastSection(true);
+    m_configWidget->qchTable->model()->setHeaderData(ConfigColumn, Qt::Horizontal, QVariant());
+    m_configWidget->qchTable->header()->setSectionsMovable(false);
+    m_configWidget->qchTable->header()->setStretchLastSection(false);
+    m_configWidget->qchTable->header()->setSectionResizeMode(NameColumn, QHeaderView::Stretch);
+    m_configWidget->qchTable->header()->setSectionResizeMode(PathColumn, QHeaderView::Stretch);
+    m_configWidget->qchTable->header()->setSectionResizeMode(ConfigColumn, QHeaderView::Fixed);
 
     // Add GHNS button
     KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), "kdevelop-qthelp.knsrc", m_configWidget->boxQchManage);
@@ -129,9 +132,8 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
             i18n("The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."));
         m_configWidget->loadQtDocsCheckBox->setVisible(false);
     }
-    l->addWidget( w );
+    l->addWidget(w);
     reset();
-    selectionChanged();
 }
 
 QtHelpConfig::~QtHelpConfig()
@@ -167,8 +169,8 @@ void QtHelpConfig::reset()
 
     const int size = qMin(qMin(iconList.size(), nameList.size()), pathList.size());
     for(int i = 0; i < size; ++i) {
-        QString ghnsPath = ghnsList.size()>i ? ghnsList.at(i) : "0";
-        addTableItem(iconList.at(i), nameList.at(i), pathList.at(i), ghnsPath);
+        QString ghnsStatus = ghnsList.size()>i ? ghnsList.at(i) : "0";
+        addTableItem(iconList.at(i), nameList.at(i), pathList.at(i), ghnsStatus);
     }
     m_configWidget->qchSearchDir->setText(searchDir);
     m_configWidget->loadQtDocsCheckBox->setChecked(loadQtDoc);
@@ -193,25 +195,6 @@ void QtHelpConfig::defaults()
     }
 }
 
-void QtHelpConfig::selectionChanged()
-{
-    if (m_configWidget->qchTable->selectedItems().isEmpty()) {
-        m_configWidget->removeButton->setEnabled(false);
-        m_configWidget->editButton->setEnabled(false);
-    } else {
-        QTreeWidgetItem* selectedItem = m_configWidget->qchTable->selectedItems().at(0);
-        if (selectedItem->text(GhnsColumn) != "0") {
-            // TODO: Can't we just remove the file even if it has been installed via GHNS?
-            m_configWidget->removeButton->setEnabled(false);
-            m_configWidget->removeButton->setToolTip(tr("Please uninstall this via GHNS"));
-        } else {
-            m_configWidget->removeButton->setEnabled(true);
-            m_configWidget->removeButton->setToolTip(QString());
-        }
-        m_configWidget->editButton->setEnabled(true);
-    }
-}
-
 void QtHelpConfig::add()
 {
     QtHelpConfigEditDialog dialog(0, this);
@@ -223,9 +206,8 @@ void QtHelpConfig::add()
     emit changed();
 }
 
-void QtHelpConfig::modify()
+void QtHelpConfig::modify(QTreeWidgetItem* item)
 {
-    QTreeWidgetItem* item = m_configWidget->qchTable->currentItem();
     if (!item)
         return;
 
@@ -274,13 +256,12 @@ bool QtHelpConfig::checkNamespace(const QString& filename, QTreeWidgetItem* modi
     return true;
 }
 
-void QtHelpConfig::remove()
+void QtHelpConfig::remove(QTreeWidgetItem* item)
 {
-    QTreeWidgetItem* selectedItem = m_configWidget->qchTable->currentItem();
-    if (!selectedItem)
+    if (!item)
         return;
 
-    delete selectedItem;
+    delete item;
     emit changed();
 }
 
@@ -339,10 +320,38 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
                                              const QString &path, const QString &ghnsStatus)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(m_configWidget->qchTable);
-    item->setIcon(NameColumn, QIcon(icon));
+    item->setIcon(NameColumn, QIcon::fromTheme(icon));
     item->setText(NameColumn, name);
+    item->setToolTip(NameColumn, name);
     item->setText(PathColumn, path);
+    item->setToolTip(PathColumn, path);
     item->setText(IconColumn, icon);
     item->setText(GhnsColumn, ghnsStatus);
+
+    QWidget *ctrlWidget = new QWidget(item->treeWidget());
+    ctrlWidget->setLayout(new QHBoxLayout(ctrlWidget));
+
+    QToolButton *modifyBtn = new QToolButton(item->treeWidget());
+    modifyBtn->setIcon(QIcon::fromTheme("document-edit"));
+    modifyBtn->setToolTip(ki18n("Modify").toString());
+    connect(modifyBtn, &QPushButton::clicked, this, [=](){
+        modify(item);
+    });
+    QToolButton *removeBtn = new QToolButton(item->treeWidget());
+    removeBtn->setIcon(QIcon::fromTheme("list-remove"));
+    removeBtn->setToolTip(ki18n("Delete").toString());
+    if (item->text(GhnsColumn) != "0") {
+        // TODO: Can't we just remove the file even if it has been installed via GHNS?
+        removeBtn->setEnabled(false);
+        removeBtn->setToolTip(tr("Please uninstall this via GHNS"));
+    } else {
+        connect(removeBtn, &QPushButton::clicked, this, [=](){
+            remove(item);
+        });
+    }
+    ctrlWidget->layout()->addWidget(modifyBtn);
+    ctrlWidget->layout()->addWidget(removeBtn);
+    m_configWidget->qchTable->setItemWidget(item, ConfigColumn, ctrlWidget);
+
     return item;
 }

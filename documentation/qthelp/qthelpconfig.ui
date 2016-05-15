@@ -150,6 +150,9 @@
             <property name="wordWrap">
              <bool>false</bool>
             </property>
+            <property name="columnCount">
+             <number>5</number>
+            </property>
             <property name="showGrid" stdset="0">
              <bool>false</bool>
             </property>
@@ -176,6 +179,11 @@
               <string notr="true">Ghns</string>
              </property>
             </column>
+            <column>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </column>
            </widget>
           </item>
           <item>
@@ -193,20 +201,6 @@
            <widget class="QPushButton" name="addButton">
             <property name="text">
              <string>Add</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="editButton">
-            <property name="text">
-             <string>Modify</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="removeButton">
-            <property name="text">
-             <string>Remove</string>
             </property>
            </widget>
           </item>
