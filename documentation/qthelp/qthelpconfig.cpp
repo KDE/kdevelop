@@ -338,10 +338,12 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
         modify(item);
     });
     QToolButton *removeBtn = new QToolButton(item->treeWidget());
-    removeBtn->setIcon(QIcon::fromTheme("list-remove"));
+    removeBtn->setIcon(QIcon::fromTheme("entry-delete"));
     removeBtn->setToolTip(ki18n("Delete").toString());
     if (item->text(GhnsColumn) != "0") {
-        // TODO: Can't we just remove the file even if it has been installed via GHNS?
+        // KNS3 currently does not provide API to uninstall entries
+        // just removing the files results in wrong installed states in the KNS3 dialog
+        // TODO: add API to KNS to remove files without UI interaction
         removeBtn->setEnabled(false);
         removeBtn->setToolTip(tr("Please uninstall this via GHNS"));
     } else {
