@@ -49,7 +49,6 @@ Boston, MA 02110-1301, USA.
 #include "session.h"
 #include "core.h"
 #include "uicontroller.h"
-#include "sessiondialog.h"
 #include "shellextension.h"
 #include "sessionlock.h"
 #include "sessionchooserdialog.h"
@@ -139,12 +138,6 @@ public:
         foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
             window->close();
 #endif
-    }
-
-    void configureSessions()
-    {
-        SessionDialog dlg(ICore::self()->uiController()-> activeMainWindow());
-        dlg.exec();
     }
 
     void deleteCurrentSession()
@@ -293,13 +286,6 @@ SessionController::SessionController( QObject *parent )
     action->setMenuRole( QAction::NoRole ); // OSX: prevent QT from hiding this due to conflict with 'Quit KDevelop...'
     actionCollection()->setDefaultShortcut( action, Qt::CTRL | Qt::Key_Q );
     action->setIcon(QIcon::fromTheme(QStringLiteral("application-exit")));
-
-    #if 0
-    action = actionCollection()->addAction( "configure_sessions", this, SLOT(configureSessions()) );
-    action->setText( i18n("Configure Sessions...") );
-    action->setToolTip( i18n("Create/Delete/Activate Sessions") );
-    action->setWhatsThis( i18n( "Shows a dialog to Create/Delete Sessions and set a new active session." ) );
-    #endif
 
     d->grp = new QActionGroup( this );
     connect( d->grp, &QActionGroup::triggered, this, [&] (QAction* a) { d->loadSessionFromAction(a); } );

@@ -34,7 +34,6 @@ Boston, MA 02110-1301, USA.
 #include "core.h"
 #include "documentcontroller.h"
 #include "mainwindow_p.h"
-#include "sessiondialog.h"
 #include "uicontroller.h"
 
 #include "mainwindow.h"

@@ -168,7 +168,6 @@ Q_SIGNALS:
     void quitSession();
 private:
     Q_PRIVATE_SLOT( d, void newSession() )
-    Q_PRIVATE_SLOT( d, void configureSessions() )
     Q_PRIVATE_SLOT( d, void deleteCurrentSession() )
     Q_PRIVATE_SLOT( d, void renameSession() )
     Q_PRIVATE_SLOT( d, void loadSessionFromAction( QAction* ) )
