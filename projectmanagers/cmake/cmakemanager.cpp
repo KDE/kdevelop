@@ -274,10 +274,19 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
         }
     }
 
+    static QSet<QString> standardTargets = {
+        QStringLiteral("edit_cache"), QStringLiteral("rebuild_cache"),
+        QStringLiteral("list_install_components"),
+        QStringLiteral("test"), //not really standard, but applicable for make and ninja
+        QStringLiteral("install")
+
+    };
+
     foreach (const QString& name, dirTargets) {
-        if (!name.endsWith("_automoc")
-            && name != QLatin1String("edit_cache")
-            && name != QLatin1String("rebuild_cache"))
+        if (!name.endsWith(QLatin1String("_automoc"))
+            && !standardTargets.contains(name)
+            && !name.startsWith(QLatin1String("install/"))
+        )
             new CMakeTargetItem(folder, name);
     }
 
