@@ -57,7 +57,9 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
         idType = TypePtr<StructureType>::dynamicCast(type).constData();
     }
 
-    KDevelop::AbstractDeclarationNavigationContext::htmlIdentifiedType(type, idType);
+    if (type) {
+        KDevelop::AbstractDeclarationNavigationContext::htmlIdentifiedType(type, idType);
+    }
 }
 
 void DeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType::Ptr type)
