@@ -36,6 +36,8 @@ private slots:
 
     void testQMLId();
     void testProperty();
+
+    void testQMLtypesImportPaths();
 };
 
 #endif // TESTCONTEXTS_H
