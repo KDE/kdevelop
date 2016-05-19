@@ -220,10 +220,6 @@ void MainWindowPrivate::restoreConcentrationMode()
     m_bottomToolBar->setVisible(!concentrationModeOn);
     m_leftToolBar->setVisible(!concentrationModeOn);
     m_rightToolBar->setVisible(!concentrationModeOn);
-    const bool hideToolBar = concentrationModeOn || !Container::configTabBarVisible();
-    foreach(Container* c, viewContainers) {
-        c->setTabBarHidden(hideToolBar);
-    }
 
     if (concentrationModeOn) {
         m_concentrateToolBar = new QToolBar(m_mainWindow);
@@ -809,7 +805,7 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
     if(splitter) {
         c = qobject_cast<Container*>(splitter->widget(0));
     }else{
-        c = viewContainers.values()[0];
+        c = *viewContainers.constBegin();
     }
     Q_ASSERT(c);
 

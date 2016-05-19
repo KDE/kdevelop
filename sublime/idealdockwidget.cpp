@@ -96,7 +96,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     Q_ASSERT(senderWidget);
 
     QMenu menu;
-    menu.addSection(windowIcon(), windowTitle());
+    menu.addSection(windowIcon(), m_view->document()->title());
 
     QList< QAction* > viewActions = m_view->contextMenuActions();
     if(!viewActions.isEmpty()) {

@@ -48,9 +48,9 @@ int main(int argc, char** argv)
     auto root = plugin->import(project);
     auto import = plugin->createImportJob(root);
     QObject::connect(import, &KJob::finished,
-                     &app, [&] {
+                     &app, [project] {
                         qDebug() << "loaded project with" << project->fileSet().size() << "files";
-                        app.quit();
+                        QCoreApplication::instance()->quit();
                      });
     import->start();
 

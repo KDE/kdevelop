@@ -396,7 +396,7 @@ void MultiLevelListView::setCurrentIndex(const QModelIndex& index)
     const QModelIndex previous = currentIndex();
 
     QModelIndex idx(index);
-    QModelIndexList indexes;
+    QVector<QModelIndex> indexes;
 
     while (idx.isValid())
     {

@@ -173,7 +173,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>(m_document.data());
     if (markIface && hadProblems) {
         // clear previously added marks
-        foreach (KTextEditor::Mark* mark, markIface->marks().values()) {
+        foreach (KTextEditor::Mark* mark, markIface->marks()) {
             if (mark->type == errorMarkType || mark->type == warningMarkType) {
                 markIface->removeMark(mark->line, mark->type);
             }

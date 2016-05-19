@@ -318,10 +318,8 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
         m_timer.setInterval(m_delay);
         m_threads = 0;
 
-        bool maxThreadsOverrideOk;
-        const int maxThreadsOverride = qgetenv("KDEV_BACKGROUNDPARSER_MAXTHREADS").toInt(&maxThreadsOverrideOk);
-        if (maxThreadsOverrideOk) {
-            m_parser->setThreadCount(maxThreadsOverride);
+        if (qEnvironmentVariableIsSet("KDEV_BACKGROUNDPARSER_MAXTHREADS")) {
+            m_parser->setThreadCount(qEnvironmentVariableIntValue("KDEV_BACKGROUNDPARSER_MAXTHREADS"));
         } else {
             m_parser->setThreadCount(BACKWARDS_COMPATIBLE_ENTRY("Number of Threads", QThread::idealThreadCount()));
         }
