@@ -25,6 +25,7 @@
 #include <QFileDialog>
 
 #include <KMessageBox>
+#include <KMessageWidget>
 #include <KLocalizedString>
 #include <KNS3/Button>
 
@@ -120,6 +121,16 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled, this, static_cast<void(QtHelpConfig::*)()>(&QtHelpConfig::changed));
     connect(m_configWidget->qchSearchDirButton, &QPushButton::clicked, this, &QtHelpConfig::chooseSearchDir);
     connect(m_configWidget->qchSearchDir,&QLineEdit::textChanged, this, &QtHelpConfig::searchDirChanged);
+
+    // Set availability information for QtHelp
+    m_configWidget->messageAvailabilityQtDocs->setCloseButtonVisible(false);
+    if(plugin->isQtHelpAvailable()) {
+        m_configWidget->messageAvailabilityQtDocs->setVisible(false);
+    } else {
+        m_configWidget->messageAvailabilityQtDocs->setText(
+            i18n("The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."));
+        m_configWidget->loadQtDocsCheckBox->setEnabled(false);
+    }
     l->addWidget( w );
     reset();
     selectionChanged();
@@ -369,7 +380,6 @@ void QtHelpConfig::chooseSearchDir()
     m_configWidget->qchSearchDir->setText(QFileDialog::getExistingDirectory(this));
 }
 
-
 void QtHelpConfig::searchDirChanged()
 {
     emit changed();
@@ -382,5 +392,5 @@ QString QtHelpConfig::name() const
 
 QIcon QtHelpConfig::icon() const
 {
-    return QIcon::fromTheme(QStringLiteral("qtlogo"));
+    return QIcon::fromTheme(QStringLiteral("help-contents"));
 }

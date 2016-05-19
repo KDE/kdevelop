@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>560</width>
-    <height>404</height>
+    <height>443</height>
    </rect>
   </property>
   <property name="locale">
@@ -15,9 +15,35 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Documentation Files from System Location</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QCheckBox" name="loadQtDocsCheckBox">
+        <property name="text">
+         <string>Load Qt API Documentation</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KMessageWidget" name="messageAvailabilityQtDocs" native="true">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text" stdset="0">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="qchManage">
      <property name="title">
-      <string>Manage QtHelp Documentation</string>
+      <string>Additional Documentation Files</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
@@ -149,13 +175,6 @@
         </item>
        </layout>
       </item>
-      <item>
-       <widget class="QCheckBox" name="loadQtDocsCheckBox">
-        <property name="text">
-         <string>Load Qt documentation</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -176,9 +195,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
+   <class>KMessageWidget</class>
+   <extends>QWidget</extends>
+   <header>kmessagewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

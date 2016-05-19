@@ -1,6 +1,7 @@
 /*  This file is part of KDevelop
     Copyright 2009 Aleix Pol <aleixpol@kde.org>
     Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
+    Copyright 2016 Andreas Cord-Landwehr <cordlandwehr@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -26,14 +27,18 @@
 class QtHelpQtDoc : public QtHelpProviderAbstract
 {
     Q_OBJECT
-	public:
+    public:
         QtHelpQtDoc(QObject *parent, const QVariantList &args);
         QIcon icon() const override;
         QString name() const override;
         void registerDocumentations();
+        void loadDocumentation();
+        void unloadDocumentation();
+        /** @return local paths to all QCH files found in QT_INSTALL_DOCS directory **/
+        QStringList qchFiles() const;
 
     private:
-        void loadDirectory(const QString& path);
+        QString m_path;
 
     private slots:
         void lookupDone(int code);
