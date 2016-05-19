@@ -81,12 +81,10 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
     bool isVersion1 = version.startsWith(QLatin1String("1."));
     bool isQtQuick = (uri == QLatin1String("QtQuick"));
 
-    QStringList modulesWithoutVersionSuffix =
-        QStringList()
-        << "QtQml"
-        << "QtMultimedia"
-        << "QtQuick.LocalStorage"
-        << "QtQuick.XmlListModel";
+    const QStringList modulesWithoutVersionSuffix{"QtQml",
+                                                  "QtMultimedia",
+                                                  "QtQuick.LocalStorage",
+                                                  "QtQuick.XmlListModel"};
 
     if (!version.isEmpty() && !isVersion1 && !modulesWithoutVersionSuffix.contains(uri)) {
         // Modules having a version greater or equal to 2 are stored in a directory
@@ -104,11 +102,7 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
                 path = p.path();
                 break;
             }
-        } else if (QFile::exists(pathString)) {
-            QStringList nameFilter("*.qmltypes");
-            if (QDir(pathString).entryList(nameFilter).isEmpty()) {
-                continue;
-            }
+        } else if (QFile::exists(pathString + QLatin1String("/plugins.qmltypes"))) {
             path = pathString;
             break;
         }
