@@ -1,8 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevContextBrowser" version="11" translationDomain="kdevcontextbrowser">
+<kpartgui name="KDevContextBrowser" version="12" translationDomain="kdevcontextbrowser">
 <MenuBar>
   <Menu name="navigation">
     <text context="@title:menu">Navigation</text>
+
+    <Action name="source_browse_mode"/>
 
     <Action name="previous_context"
 	    group="navigation_cxt"/>
