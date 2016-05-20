@@ -31,6 +31,7 @@
 #include <debugger/interfaces/idebugsession.h>
 
 #include "dbgglobal.h"
+#include "breakpointcontrollerbase.h"
 #include "mi/mi.h"
 
 #include <memory>
@@ -48,6 +49,7 @@ class CommandQueue;
 class MICommand;
 }
 
+class BreakpointControllerBase;
 class DebuggerBase;
 class STTY;
 class DebugSessionBase : public KDevelop::IDebugSession
@@ -58,7 +60,7 @@ public:
      * The ownership of \a breakpointController, \a variableController, and \a frameStackModel
      * are taken by DebugSessionBase.
      */
-    DebugSessionBase(KDevelop::IBreakpointController *breakpointController,
+    DebugSessionBase(BreakpointControllerBase *breakpointController,
                      KDevelop::IVariableController *variableController,
                      KDevelop::IFrameStackModel *frameStackModel);
     ~DebugSessionBase() override;
@@ -129,7 +131,7 @@ public:
     DebuggerState state() const override;
     bool restartAvaliable() const override;
 
-    KDevelop::IBreakpointController * breakpointController() const override;
+    BreakpointControllerBase * breakpointController() const override;
     KDevelop::IVariableController * variableController() const override;
     KDevelop::IFrameStackModel * frameStackModel() const override;
 
@@ -296,7 +298,7 @@ private Q_SLOTS:
     void explainDebuggerStatus();
 
 protected:
-    KDevelop::IBreakpointController *m_breakpointController;
+    BreakpointControllerBase *m_breakpointController;
     KDevelop::IVariableController *m_variableController;
     KDevelop::IFrameStackModel *m_frameStackModel;
 

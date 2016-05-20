@@ -26,8 +26,8 @@
 #ifndef GDB_DEBUGSESSION_H
 #define GDB_DEBUGSESSION_H
 
-#include "breakpointcontroller.h"
 #include "dbgglobal.h"
+#include "gdbbreakpointcontroller.h"
 #include "mi/mi.h"
 
 #include <debugger/interfaces/idebugsession.h>

@@ -41,9 +41,8 @@ set(kdevgdb_SRCS
     disassemblewidget.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
-    breakpointcontroller.cpp
-    stringhelpers.cpp
     debugsession.cpp
+    gdbbreakpointcontroller.cpp
     gdbconfigpage.cpp
     debugjob.cpp
     selectcoredialog.cpp

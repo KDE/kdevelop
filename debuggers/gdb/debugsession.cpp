@@ -25,9 +25,9 @@
 
 #include "debugsession.h"
 
-#include "breakpointcontroller.h"
 #include "debuglog.h"
 #include "gdb.h"
+#include "gdbbreakpointcontroller.h"
 #include "gdbframestackmodel.h"
 #include "mi/micommandqueue.h"
 #include "stty.h"
@@ -270,7 +270,7 @@ void DebugSession::attachToProcess(int pid)
 
     queueCmd(new MICommand(MI::TargetAttach, QString::number(pid), this, &DebugSession::handleTargetAttach, CmdHandlesError));
 
-    queueCmd(new SentinelCommand(breakpointController(), &BreakpointController::initSendBreakpoints));
+//     queueCmd(new SentinelCommand(breakpointController(), &BreakpointController::initSendBreakpoints));
 
     raiseEvent(connected_to_program);
 

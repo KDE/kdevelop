@@ -36,7 +36,6 @@
 #include "stty.h"
 
 #include <debugger/breakpoint/breakpointmodel.h>
-#include <debugger/interfaces/ibreakpointcontroller.h>
 #include <debugger/interfaces/ivariablecontroller.h>
 #include <debugger/interfaces/iframestackmodel.h>
 #include <execute/iexecuteplugin.h>
@@ -63,7 +62,7 @@ using namespace KDevelop;
 using namespace KDevDebugger;
 using namespace KDevDebugger::MI;
 
-DebugSessionBase::DebugSessionBase(KDevelop::IBreakpointController *breakpointController,
+DebugSessionBase::DebugSessionBase(BreakpointControllerBase *breakpointController,
                                    KDevelop::IVariableController *variableController,
                                    KDevelop::IFrameStackModel *frameStackModel)
     : m_breakpointController(breakpointController)
@@ -137,7 +136,7 @@ bool DebugSessionBase::restartAvaliable() const
     }
 }
 
-IBreakpointController * DebugSessionBase::breakpointController() const
+BreakpointControllerBase * DebugSessionBase::breakpointController() const
 {
     return m_breakpointController;
 }
@@ -331,9 +330,8 @@ bool DebugSessionBase::attachToProcess(int pid)
                            this, &DebugSessionBase::handleTargetAttach,
                            CmdHandlesError));
 
-    // TODO: Common breakpoint controller
-//     queueCmd(new SentinelCommand(breakpointController(),
-//                                  &BreakpointController::initSendBreakpoints));
+    queueCmd(new SentinelCommand(breakpointController(),
+                                 &BreakpointControllerBase::initSendBreakpoints));
 
     raiseEvent(connected_to_program);
 
@@ -372,6 +370,22 @@ bool DebugSessionBase::examineCoreFile(const QUrl &debugee, const QUrl &coreFile
     raiseEvent(program_state_changed);
 
     return true;
+}
+
+void DebugSessionBase::handleCoreFile(const MI::ResultRecord& r)
+{
+    if (r.reason != "error") {
+        setDebuggerStateOn(s_programExited|s_core);
+    } else {
+        KMessageBox::information(
+            qApp->activeWindow(),
+            i18n("<b>Failed to load core file</b>"
+                "<p>Debugger reported the following error:"
+                "<p><tt>%1", r["msg"].literal()),
+            i18n("Debugger error"));
+
+        // FIXME: How should we proceed at this point? Stop the debugger?
+    }
 }
 
 #define ENUM_NAME(o,e,v) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).valueToKey((v)))
@@ -1076,14 +1090,11 @@ void DebugSessionBase::processNotification(const MI::AsyncRecord & async)
     } else if (async.reason == "library-loaded") {
         // do nothing
     } else if (async.reason == "breakpoint-created") {
-        // TODO: common breakpoint controller
-//         breakpointController()->notifyBreakpointCreated(async);
+        breakpointController()->notifyBreakpointCreated(async);
     } else if (async.reason == "breakpoint-modified") {
-        // TODO: common breakpoint controller
-//         breakpointController()->notifyBreakpointModified(async);
+        breakpointController()->notifyBreakpointModified(async);
     } else if (async.reason == "breakpoint-deleted") {
-        // TODO: common breakpoint controller
-//         breakpointController()->notifyBreakpointDeleted(async);
+        breakpointController()->notifyBreakpointDeleted(async);
     } else {
         qCDebug(DEBUGGERCOMMON) << "Unhandled notification: " << async.reason;
     }
@@ -1214,4 +1225,39 @@ void DebugSessionBase::handleInferiorFinished(const QString& msg)
     /* Also show message in gdb window, so that users who
        prefer to look at gdb window know what's up.  */
     emit debuggerUserCommandStdout(m);
+}
+
+// FIXME: connect to debugger's slot.
+void DebugSessionBase::defaultErrorHandler(const MI::ResultRecord& result)
+{
+    QString msg = result["msg"].literal();
+
+    if (msg.contains("No such process"))
+    {
+        setDebuggerState(s_appNotStarted|s_programExited);
+        raiseEvent(program_exited);
+        return;
+    }
+
+    KMessageBox::information(
+        qApp->activeWindow(),
+        i18n("<b>Debugger error</b>"
+             "<p>Debugger reported the following error:"
+             "<p><tt>%1", result["msg"].literal()),
+        i18n("Debugger error"));
+
+    // Error most likely means that some change made in GUI
+    // was not communicated to the gdb, so GUI is now not
+    // in sync with gdb. Resync it.
+    //
+    // Another approach is to make each widget reload it content
+    // on errors from commands that it sent, but that's too complex.
+    // Errors are supposed to happen rarely, so full reload on error
+    // is not a big deal. Well, maybe except for memory view, but
+    // it's no auto-reloaded anyway.
+    //
+    // Also, don't reload state on errors appeared during state
+    // reloading!
+    if (!m_debugger->currentCommand()->stateReloading())
+        raiseEvent(program_state_changed);
 }

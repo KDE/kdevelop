@@ -715,7 +715,7 @@ void GdbTest::testManualBreakpoint()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
-    Breakpoint* b = breakpoints()->breakpoint(0);
+    KDevelop::Breakpoint* b = breakpoints()->breakpoint(0);
     QCOMPARE(b->line(), 22);
 
     session->addCommand(MI::NonMI, "disable 2");

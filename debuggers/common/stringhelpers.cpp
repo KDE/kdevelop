@@ -165,5 +165,20 @@ int expressionAt( const QString& text, int index ) {
   return index;
 }
 
-
+QString quoteExpression(QString expr)
+{
+    expr.replace('"', "\\\"");
+    expr = expr.prepend('"').append('"');
+    return expr;
 }
+
+QString unquoteExpression(QString expr)
+{
+    if (expr.left(1) == QString('"') && expr.right(1) == QString('"')) {
+        expr = expr.mid(1, expr.length()-2);
+        expr.replace("\\\"", "\"");
+    }
+    return expr;
+}
+
+} // end of namespace Utils
