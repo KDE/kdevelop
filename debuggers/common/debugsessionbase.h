@@ -284,6 +284,8 @@ protected:
     */
     void reloadProgramState();
 
+    void programNoApp(const QString &msg);
+    void programFinished(const QString &msg);
 
 private Q_SLOTS:
     void handleTargetAttach(const MI::ResultRecord& r);
