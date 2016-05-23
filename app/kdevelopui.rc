@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="139" name="kdevelop" translationDomain="kdevelop">
+<kpartgui version="140" name="kdevelop" translationDomain="kdevelop">
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -65,6 +65,8 @@
     <DefineGroup name="navigation_use"/>
     <Separator />
     <DefineGroup name="navigation_cxt"/>
+    <Separator />
+    <Action name="source_browse_mode"/>
     <Separator />
     <Merge />
   </Menu>
