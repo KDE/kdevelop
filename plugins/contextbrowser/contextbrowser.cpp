@@ -155,9 +155,9 @@ private:
 
 KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow* window )
 {
-    KXMLGUIClient* ret = KDevelop::IPlugin::createGUIForMainWindow( window );
-
     m_browseManager = new BrowseManager(this);
+
+    KXMLGUIClient* ret = KDevelop::IPlugin::createGUIForMainWindow(window);
 
     connect(ICore::self()->documentController(), &IDocumentController::documentJumpPerformed, this, &ContextBrowserPlugin::documentJumpPerformed);
 
@@ -223,7 +223,13 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
 void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile,
                                                       KActionCollection& actions)
 {
-    xmlFile = QStringLiteral("kdevcontextbrowser.rc") ;
+    xmlFile = QStringLiteral("kdevcontextbrowser.rc");
+
+    QAction* sourceBrowseMode = actions.addAction(QStringLiteral("source_browse_mode"));
+    sourceBrowseMode->setText( i18n("Source &Browse Mode") );
+    sourceBrowseMode->setIcon( QIcon::fromTheme(QStringLiteral("arrow-up")) );
+    sourceBrowseMode->setCheckable(true);
+    connect(sourceBrowseMode, &QAction::triggered, m_browseManager, &BrowseManager::setBrowsing);
 
     QAction* previousContext = actions.addAction(QStringLiteral("previous_context"));
     previousContext->setText( i18n("&Previous Visited Context") );

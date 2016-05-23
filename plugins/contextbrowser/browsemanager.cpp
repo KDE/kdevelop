@@ -102,6 +102,7 @@ void BrowseManager::eventuallyStartDelayedBrowsing() {
 BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
     : QObject(controller)
     , m_plugin(controller)
+    , m_browsing(false)
     , m_browsingByKey(0)
     , m_watcher(this)
 {
@@ -217,7 +218,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         }
     }
 
-    if(!m_browsingByKey) {
+    if(!m_browsing && !m_browsingByKey) {
         resetChangedCursor();
         return false;
     }
@@ -311,6 +312,20 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
 
 void Watcher::viewAdded(KTextEditor::View* view) {
     m_manager->viewAdded(view);
+}
+
+void BrowseManager::setBrowsing(bool enabled) {
+    if(enabled == m_browsing)
+        return;
+    m_browsing = enabled;
+
+    //This collects all the views
+    if(enabled) {
+        qCDebug(PLUGIN_CONTEXTBROWSER) << "Enabled browsing-mode";
+    }else{
+        qCDebug(PLUGIN_CONTEXTBROWSER) << "Disabled browsing-mode";
+        resetChangedCursor();
+    }
 }
 
 Watcher::Watcher(BrowseManager* manager)
