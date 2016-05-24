@@ -25,7 +25,6 @@
 
 #include "mi/mi.h"
 #include "mi/miparser.h"
-#include "mi/micommand.h"
 
 #include <KProcess>
 
@@ -33,9 +32,14 @@
 #include <QObject>
 
 class KConfigGroup;
+class KProcess;
 
-namespace KDevDebugger
-{
+namespace KDevDebugger {
+
+namespace MI {
+class MICommand;
+}
+
 
 class DebuggerBase : public QObject
 {
@@ -46,7 +50,7 @@ public:
 
     /** Starts the debugger.  This should be done after connecting to all
         signals the client is interested in.  */
-    void start(KConfigGroup& config, const QStringList& extraArguments = {});
+    virtual void start(KConfigGroup& config, const QStringList& extraArguments = {}) = 0;
 
     /** Executes a command.  This method may be called at
         most once each time 'ready' is emitted.  When the
@@ -79,7 +83,7 @@ Q_SIGNALS:
     /** Emitted when the debugger itself exits. This could happen because
         it just crashed due to internal bug, or we killed it
         explicitly.  */
-    void exited();
+    void exited(bool abnormal, const QString &msg);
 
     /** Emitted when debugger reports stop, with 'r' being the
         data provided by the debugger. */
@@ -126,11 +130,6 @@ protected Q_SLOTS:
 
 protected:
     void processLine(const QByteArray& line);
-
-    /**
-     * The default binary file to user when user doesn't supply a custom one.
-     */
-    virtual QString defaultBinary() = 0;
 
 protected:
     QString debuggerBinary_;

@@ -23,21 +23,17 @@
 
 #include "debuggerbase.h"
 
-#include "dbgglobal.h"
 #include "debuglog.h"
+#include "mi/micommand.h"
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KMessageBox>
-#include <KShell>
+#include "sys/signal.h"
+
 #include <KLocalizedString>
+#include <KMessageBox>
 
 #include <QApplication>
-#include <QFileInfo>
-#include <QUrl>
-
-#include <sys/types.h>
-#include <signal.h>
+#include <QString>
+#include <QStringList>
 
 #include <memory>
 
@@ -47,8 +43,21 @@ using namespace KDevDebugger;
 using namespace KDevDebugger::MI;
 
 DebuggerBase::DebuggerBase(QObject* parent)
-: QObject(parent), process_(0), currentCmd_(0)
+    : QObject(parent)
+    , process_(nullptr)
+    , currentCmd_(nullptr)
 {
+    process_ = new KProcess(this);
+    process_->setOutputChannelMode(KProcess::SeparateChannels);
+    connect(process_, &KProcess::readyReadStandardOutput,
+            this, &DebuggerBase::readyReadStandardOutput);
+    connect(process_, &KProcess::readyReadStandardError,
+            this, &DebuggerBase::readyReadStandardError);
+    connect(process_,
+            static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
+            this, &DebuggerBase::processFinished);
+    connect(process_, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+            this, &DebuggerBase::processErrored);
 }
 
 DebuggerBase::~DebuggerBase()
@@ -61,71 +70,6 @@ DebuggerBase::~DebuggerBase()
         process_->waitForFinished(10);
     }
 }
-
-void DebuggerBase::start(KConfigGroup& config, const QStringList& extraArguments)
-{
-    // FIXME: verify that default value leads to something sensible
-    QUrl gdbUrl = config.readEntry(gdbPathEntry, QUrl());
-    if (gdbUrl.isEmpty()) {
-        debuggerBinary_ = defaultBinary();
-    } else {
-        // FIXME: verify its' a local path.
-        debuggerBinary_ = gdbUrl.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
-    }
-    process_ = new KProcess(this);
-    process_->setOutputChannelMode( KProcess::SeparateChannels );
-    connect(process_, &KProcess::readyReadStandardOutput,
-            this, &DebuggerBase::readyReadStandardOutput);
-    connect(process_, &KProcess::readyReadStandardError,
-            this, &DebuggerBase::readyReadStandardError);
-    connect(process_,
-            static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
-            this, &DebuggerBase::processFinished);
-    connect(process_, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
-            this, &DebuggerBase::processErrored);
-
-
-    QStringList arguments = extraArguments;
-    arguments << "--interpreter=mi2";
-
-    QUrl shell = config.readEntry(debuggerShellEntry, QUrl());
-    if( !shell.isEmpty() )
-    {
-        qCDebug(DEBUGGERCOMMON) << "have shell" << shell;
-        QString shell_without_args = shell.toLocalFile().split(QChar(' ')).first();
-
-        QFileInfo info( shell_without_args );
-        /*if( info.isRelative() )
-        {
-            shell_without_args = build_dir + "/" + shell_without_args;
-            info.setFile( shell_without_args );
-        }*/
-        if( !info.exists() )
-        {
-            KMessageBox::information(
-                qApp->activeWindow(),
-                i18n("Could not locate the debugging shell '%1'.", shell_without_args ),
-                i18n("Debugging Shell Not Found") );
-            // FIXME: throw, or set some error message.
-            return;
-        }
-
-        arguments.insert(0, debuggerBinary_);
-        arguments.insert(0, shell.toLocalFile());
-        process_->setShellCommand( KShell::joinArgs( arguments ) );
-    }
-    else
-    {
-        process_->setProgram( debuggerBinary_, arguments );
-    }
-
-    process_->start();
-
-    qCDebug(DEBUGGERCOMMON) << "STARTING GDB\n";
-    emit userCommandOutput(shell.toLocalFile() + ' ' + debuggerBinary_
-                           + " --interpreter=mi2 -quiet\n" );
-}
-
 
 void DebuggerBase::execute(MICommand* command)
 {
@@ -199,7 +143,7 @@ void DebuggerBase::readyReadStandardError()
 
 void DebuggerBase::processLine(const QByteArray& line)
 {
-    qCDebug(DEBUGGERCOMMON) << "GDB output: " << line;
+    qCDebug(DEBUGGERCOMMON) << "Debugger output: " << line;
 
     FileSymbol file;
     file.contents = line;
@@ -353,30 +297,11 @@ void DebuggerBase::processLine(const QByteArray& line)
 
 void DebuggerBase::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    Q_UNUSED(exitCode);
-    Q_UNUSED(exitStatus);
     qCDebug(DEBUGGERCOMMON) << "GDB FINISHED\n";
-    /* FIXME: return the status? */
-    emit exited();
 
-
-/* FIXME: revive. Need to arrange for controller to delete us.
     bool abnormal = exitCode != 0 || exitStatus != QProcess::NormalExit;
-    deleteLater();
-    delete tty_;
-    tty_ = 0;
-
-    if (abnormal)
-        emit debuggerAbnormalExit();
-
-    raiseEvent(debugger_exited);
-
-    destroyCmds();
-    setState(s_dbgNotStarted|s_appNotStarted|s_programExited);
-    emit showMessage(i18n("Process exited"), 3000);
-
-    emit gdbUserCommandStdout("(gdb) Process exited\n");
-*/
+    emit userCommandOutput("(gdb) Process exited\n");
+    emit exited(abnormal, i18n("Process exited"));
 }
 
 void DebuggerBase::processErrored(QProcess::ProcessError error)
@@ -392,18 +317,9 @@ void DebuggerBase::processErrored(QProcess::ProcessError error)
                  debuggerBinary_),
             i18n("Could not start debugger"));
 
-        /* FIXME: make sure the controller gets rids of GDB instance
-        emit debuggerAbnormalExit();
-
-        raiseEvent(debugger_exited); */
-
-        /* Used to be before, GDB controller might want to do
-           the same.
-        destroyCmds();
-        setState(s_dbgNotStarted|s_appNotStarted|s_programExited);
-        emit showMessage(i18n("Process didn't start"), 3000);
-        */
         emit userCommandOutput("(gdb) didn't start\n");
+        emit exited(true, i18n("Process didn't start'"));
+
     } else if (error == QProcess::Crashed) {
         KMessageBox::error(
             qApp->activeWindow(),
@@ -411,5 +327,8 @@ void DebuggerBase::processErrored(QProcess::ProcessError error)
                  "<p>Because of that the debug session has to be ended.<br>"
                  "Try to reproduce the crash with plain gdb and report a bug.<br>"),
             i18n("Gdb crashed"));
+
+        emit userCommandOutput("(gdb) Process crashed\n");
+        emit exited(true, i18n("Process crashed"));
     }
 }

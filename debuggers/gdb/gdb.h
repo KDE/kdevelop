@@ -34,8 +34,8 @@ public:
     explicit GDB(QObject* parent = 0);
     ~GDB() override;
 
-protected:
-    QString defaultBinary() override;
+    void start(KConfigGroup& config, const QStringList& extraArguments = {}) override;
+
 };
 
 } // end of namespace GDB

@@ -23,7 +23,18 @@
 
 #include "gdb.h"
 
+#include "dbgglobal.h"
 #include "debuglog.h"
+
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KShell>
+
+#include <QApplication>
+#include <QFileInfo>
+#include <QUrl>
 
 using namespace KDevDebugger::GDB;
 using namespace KDevDebugger::MI;
@@ -37,7 +48,51 @@ GDB::~GDB()
 {
 }
 
-QString GDB::defaultBinary()
+void GDB::start(KConfigGroup& config, const QStringList& extraArguments)
 {
-    return "gdb";
+    // FIXME: verify that default value leads to something sensible
+    QUrl gdbUrl = config.readEntry(gdbPathEntry, QUrl());
+    if (gdbUrl.isEmpty()) {
+        debuggerBinary_ = "gdb";
+    } else {
+        // FIXME: verify its' a local path.
+        debuggerBinary_ = gdbUrl.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
+    }
+
+    QStringList arguments = extraArguments;
+    arguments << "--interpreter=mi2" << "-quiet";
+
+    QUrl shell = config.readEntry(debuggerShellEntry, QUrl());
+    if(!shell.isEmpty()) {
+        qCDebug(DEBUGGERGDB) << "have shell" << shell;
+        QString shell_without_args = shell.toLocalFile().split(QChar(' ')).first();
+
+        QFileInfo info(shell_without_args);
+        /*if( info.isRelative() )
+        {
+            shell_without_args = build_dir + "/" + shell_without_args;
+            info.setFile( shell_without_args );
+        }*/
+        if(!info.exists()) {
+            KMessageBox::information(
+                qApp->activeWindow(),
+                i18n("Could not locate the debugging shell '%1'.", shell_without_args ),
+                i18n("Debugging Shell Not Found") );
+            // FIXME: throw, or set some error message.
+            return;
+        }
+
+        arguments.insert(0, debuggerBinary_);
+        arguments.insert(0, shell.toLocalFile());
+        process_->setShellCommand(KShell::joinArgs(arguments));
+    } else {
+        process_->setProgram(debuggerBinary_, arguments);
+    }
+
+    process_->start();
+
+    qCDebug(DEBUGGERGDB) << "Starting GDB with command" << shell.toLocalFile() + ' ' + debuggerBinary_
+                           + ' ' + arguments.join(' ');
+    emit userCommandOutput(shell.toLocalFile() + ' ' + debuggerBinary_
+                           + ' ' + arguments.join(' ') + '\n');
 }
