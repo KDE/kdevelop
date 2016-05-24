@@ -437,22 +437,25 @@ void GdbTest::testUpdateBreakpoint()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
+    // breakpoint 1: line 29
     KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 28);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
     session->startDebugging(&cfg, m_iface);
 
+    // breakpoint 2: line 28
     //insert custom command as user might do it using GDB console
     session->addCommand(new MI::UserCommand(MI::NonMI, "break "+debugeeFileName+":28"));
 
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QTest::qWait(100);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop at line 28
     session->stepInto();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop after step
     QCOMPARE(breakpoints()->rowCount(), 2);
     b = breakpoints()->breakpoint(1);
     QCOMPARE(b->url(), QUrl::fromLocalFile(debugeeFileName));
     QCOMPARE(b->line(), 27);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState); // stop at line 29
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
