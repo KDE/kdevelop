@@ -716,6 +716,16 @@ VcsJob* GitPlugin::renameBranch(const QUrl& repository, const QString& oldBranch
     return job;
 }
 
+VcsJob* GitPlugin::mergeBranch(const QUrl& repository, const QString& branchName)
+{
+    Q_ASSERT(!branchName.isEmpty());
+
+    DVcsJob* job = new DVcsJob(urlDir(repository), this);
+    *job << "git" << "merge" << branchName;
+
+    return job;
+}
+
 VcsJob* GitPlugin::currentBranch(const QUrl& repository)
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
