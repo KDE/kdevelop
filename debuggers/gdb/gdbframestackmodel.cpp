@@ -21,6 +21,7 @@
 
 #include "gdbframestackmodel.h"
 
+#include "debugsession.h"
 #include "mi/micommand.h"
 
 #include <KLocalizedString>
@@ -48,6 +49,16 @@ QPair<QString, int> getSource(const Value &frame)
         ret.first=frame["from"].literal();
 
     return ret;
+}
+
+GdbFrameStackModel::GdbFrameStackModel(DebugSession* session)
+    : FrameStackModel(session)
+{
+}
+
+DebugSession* GdbFrameStackModel::session()
+{
+    return static_cast<DebugSession *>(FrameStackModel::session());
 }
 
 void GdbFrameStackModel::fetchThreads()

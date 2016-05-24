@@ -27,7 +27,6 @@
 using namespace KDevDebugger::GDB;
 
 BreakpointController::BreakpointController(DebugSession* parent)
-    // XXX: DebugSession does not inherit from DebugSessionBase yet
-    : BreakpointControllerBase(nullptr)
+    : BreakpointControllerBase(parent)
 {
 }

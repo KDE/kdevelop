@@ -60,6 +60,7 @@ static const char staticMembersEntry[] = "Display Static Members";
 static const char demangleNamesEntry[] = "Display Demangle Names";
 static const char allowForcedBPEntry[] = "Allow Forced Breakpoint Set";
 static const char startWithEntry[] = "Start With";
+static const char breakOnStartEntry[] = "Break on Start";
 
 } // end of namespace KDevDebugger
 

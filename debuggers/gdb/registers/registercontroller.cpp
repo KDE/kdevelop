@@ -39,7 +39,7 @@ void IRegisterController::setSession(DebugSession* debugSession)
 
 void IRegisterController::updateRegisters(const GroupsName& group)
 {
-    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (!m_debugSession || m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
     }
 
@@ -181,7 +181,7 @@ QString IRegisterController::registerValue(const QString& name) const
 
 bool IRegisterController::initializeRegisters()
 {
-    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (!m_debugSession || m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return false;
     }
 
@@ -234,7 +234,7 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
 
 void IRegisterController::setGeneralRegister(const Register& reg, const GroupsName& group)
 {
-    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (!m_debugSession || m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
     }
 

@@ -69,7 +69,7 @@ void ArchitectureParser::registerNamesHandler(const ResultRecord& r)
 
 void ArchitectureParser::determineArchitecture(DebugSession* debugSession)
 {
-    if (!debugSession || debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (!debugSession || debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
     }
 
@@ -138,7 +138,7 @@ void RegistersManager::setSession(DebugSession* debugSession)
 
 void RegistersManager::updateRegisters()
 {
-    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (!m_debugSession || m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
     }
 

@@ -329,7 +329,8 @@ DebugSession* CppDebuggerPlugin::createSession()
     connect(session, &DebugSession::showMessage, this, &CppDebuggerPlugin::controllerMessage);
     connect(session, &DebugSession::reset, this, &CppDebuggerPlugin::reset);
     connect(session, &DebugSession::finished, this, &CppDebuggerPlugin::slotFinished);
-    connect(session, &DebugSession::raiseGdbConsoleViews, this, &CppDebuggerPlugin::raiseGdbConsoleViews);
+    connect(session, &DebugSession::raiseDebuggerConsoleViews,
+            this, &CppDebuggerPlugin::raiseGdbConsoleViews);
     return session;
 }
 

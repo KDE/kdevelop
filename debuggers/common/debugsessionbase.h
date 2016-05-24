@@ -30,8 +30,8 @@
 
 #include <debugger/interfaces/idebugsession.h>
 
-#include "dbgglobal.h"
 #include "breakpointcontrollerbase.h"
+#include "dbgglobal.h"
 #include "mi/mi.h"
 
 #include <memory>
@@ -49,20 +49,13 @@ class CommandQueue;
 class MICommand;
 }
 
-class BreakpointControllerBase;
 class DebuggerBase;
 class STTY;
 class DebugSessionBase : public KDevelop::IDebugSession
 {
     Q_OBJECT
 public:
-    /**
-     * The ownership of \a breakpointController, \a variableController, and \a frameStackModel
-     * are taken by DebugSessionBase.
-     */
-    DebugSessionBase(BreakpointControllerBase *breakpointController,
-                     KDevelop::IVariableController *variableController,
-                     KDevelop::IFrameStackModel *frameStackModel);
+    DebugSessionBase();
     ~DebugSessionBase() override;
 
 Q_SIGNALS:
@@ -83,12 +76,12 @@ Q_SIGNALS:
     /**
      * Emits when received standard output from debugger for user commands
      */
-    void debuggerUserCommandStdout(const QString &output);
+    void debuggerUserCommandOutput(const QString &output);
 
     /**
      * Emits when received standard output from debugger for internal commands
      */
-    void debuggerInternalCommandStdout(const QString &output);
+    void debuggerInternalCommandOutput(const QString &output);
 
     /**
      * Emits when received standard output from inferior's tty
@@ -131,9 +124,7 @@ public:
     DebuggerState state() const override;
     bool restartAvaliable() const override;
 
-    BreakpointControllerBase * breakpointController() const override;
-    KDevelop::IVariableController * variableController() const override;
-    KDevelop::IFrameStackModel * frameStackModel() const override;
+    BreakpointControllerBase * breakpointController() const override = 0;
 
 public Q_SLOTS:
     void restartDebugger() override;
@@ -205,7 +196,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     virtual void slotDebuggerReady();
-    virtual void slotDebuggerExited();
+    virtual void slotDebuggerExited(bool abnormal, const QString &msg);
     virtual void slotInferiorStopped(const MI::AsyncRecord &r);
     /**
      * Triggered every time program begins/continues it's execution.
@@ -241,17 +232,15 @@ protected:
     void ensureDebuggerListening();
     void destroyCmds();
 
-    virtual void configure() = 0;
-
     /**
      * Start the debugger instance
      */
     bool startDebugger(KDevelop::ILaunchConfiguration *cfg);
 
     /**
-     * DebugSessionBase takes the ownership of the created debugger instance.
+     * DebugSessionBase takes the ownership of the created instance.
      */
-    virtual DebuggerBase *createDebugger() = 0;
+    virtual DebuggerBase *createDebugger() const = 0;
 
     /**
      * Initialize debugger and set default configurations.
@@ -261,7 +250,7 @@ protected:
     /**
      * Further config the debugger and start the inferior program (either local or remote).
      */
-    virtual void execInferior(KDevelop::ILaunchConfiguration *cfg) = 0;
+    virtual bool execInferior(KDevelop::ILaunchConfiguration *cfg, const QString &executable) = 0;
 
     /**
      * Manipulate debugger instance state
@@ -289,6 +278,11 @@ protected:
     void programNoApp(const QString &msg);
     void programFinished(const QString &msg);
 
+    // FIXME: Whether let the debugger source init files when starting,
+    // only used in unit test currently, potentially could be made a user
+    // configurable option
+    void setSourceInitFile(bool enable);
+
 private Q_SLOTS:
     void handleTargetAttach(const MI::ResultRecord& r);
     void handleCoreFile(const MI::ResultRecord& r);
@@ -298,10 +292,6 @@ private Q_SLOTS:
     void explainDebuggerStatus();
 
 protected:
-    BreakpointControllerBase *m_breakpointController;
-    KDevelop::IVariableController *m_variableController;
-    KDevelop::IFrameStackModel *m_frameStackModel;
-
     KDevelop::ProcessLineMaker *m_procLineMaker;
 
     std::unique_ptr<MI::CommandQueue> m_commandQueue;
@@ -319,6 +309,7 @@ protected:
     std::unique_ptr<STTY> m_tty;
 
     bool m_hasCrashed;
+    bool m_sourceInitFile;
 };
 
 } // end of namespace KDevDebugger

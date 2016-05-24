@@ -46,7 +46,7 @@ VariableController::VariableController(DebugSession* parent)
     : KDevelop::IVariableController(parent)
 {
     Q_ASSERT(parent);
-    connect(parent, &DebugSession::programStopped, this, &VariableController::programStopped);
+    connect(parent, &DebugSession::inferiorStopped, this, &VariableController::programStopped);
     connect(parent, &DebugSession::stateChanged, this, &VariableController::stateChanged);
 }
 
@@ -57,7 +57,7 @@ DebugSession *VariableController::debugSession() const
 
 void VariableController::programStopped(const AsyncRecord& r)
 {
-    if (debugSession()->stateIsOn(s_shuttingDown)) return;
+    if (debugSession()->debuggerStateIsOn(s_shuttingDown)) return;
 
     if (r.hasField("reason") && r["reason"].literal() == "function-finished"
         && r.hasField("gdb-result-var"))

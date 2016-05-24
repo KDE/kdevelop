@@ -22,10 +22,7 @@
 #ifndef KDEVELOP_GDB_FRAMESTACKMODEL_H
 #define KDEVELOP_GDB_FRAMESTACKMODEL_H
 
-#include "debugsession.h"
-
 #include <debugger/framestack/framestackmodel.h>
-
 
 namespace KDevDebugger {
 namespace MI {
@@ -34,13 +31,13 @@ struct ResultRecord;
 
 namespace GDB {
 
+class DebugSession;
 class GdbFrameStackModel : public KDevelop::FrameStackModel
 {
 public:
-    GdbFrameStackModel(DebugSession* session) : FrameStackModel(session) {}
+    GdbFrameStackModel(DebugSession* session);
 
-public:
-    DebugSession* session() { return static_cast<DebugSession *>(FrameStackModel::session()); }
+    DebugSession* session();
 
 protected: // FrameStackModel overrides
     void fetchThreads() override;

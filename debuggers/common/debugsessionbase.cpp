@@ -62,13 +62,8 @@ using namespace KDevelop;
 using namespace KDevDebugger;
 using namespace KDevDebugger::MI;
 
-DebugSessionBase::DebugSessionBase(BreakpointControllerBase *breakpointController,
-                                   KDevelop::IVariableController *variableController,
-                                   KDevelop::IFrameStackModel *frameStackModel)
-    : m_breakpointController(breakpointController)
-    , m_variableController(variableController)
-    , m_frameStackModel(frameStackModel)
-    , m_procLineMaker(new ProcessLineMaker(this))
+DebugSessionBase::DebugSessionBase()
+    : m_procLineMaker(new ProcessLineMaker(this))
     , m_commandQueue(new CommandQueue)
     , m_sessionState(NotStartedState)
     , m_debugger(nullptr)
@@ -77,22 +72,15 @@ DebugSessionBase::DebugSessionBase(BreakpointControllerBase *breakpointControlle
     , m_stateReloadNeeded(false)
     , m_tty(nullptr)
     , m_hasCrashed(false)
+    , m_sourceInitFile(true)
 {
-    Q_ASSERT(m_breakpointController);
-    Q_ASSERT(m_variableController);
-    Q_ASSERT(m_frameStackModel);
-
-    // take ownership of controllers
-    m_breakpointController->setParent(this);
-    m_variableController->setParent(this);
-    m_frameStackModel->setParent(this);
-
     // setup signals
-    // FIXME: figure out procLineMaker
     connect(m_procLineMaker, &ProcessLineMaker::receivedStdoutLines,
             this, &DebugSessionBase::inferiorStdoutLines);
     connect(m_procLineMaker, &ProcessLineMaker::receivedStderrLines,
             this, &DebugSessionBase::inferiorStderrLines);
+
+    // forward tty output to process line maker
     connect(this, &DebugSessionBase::inferiorTtyStdout,
             m_procLineMaker, &ProcessLineMaker::slotReceivedStdout);
     connect(this, &DebugSessionBase::inferiorTtyStderr,
@@ -115,11 +103,9 @@ DebugSessionBase::~DebugSessionBase()
     // can continue running as it was before being attached. gdb is quite slow to
     // detach from a process, so we must process events within here to get a "clean"
     // shutdown.
-    stopDebugger();
-}
-
-void DebugSessionBase::configure()
-{
+    if (!debuggerStateIsOn(s_dbgNotStarted)) {
+        stopDebugger();
+    }
 }
 
 IDebugSession::DebuggerState DebugSessionBase::state() const
@@ -134,21 +120,6 @@ bool DebugSessionBase::restartAvaliable() const
     } else {
         return true;
     }
-}
-
-BreakpointControllerBase * DebugSessionBase::breakpointController() const
-{
-    return m_breakpointController;
-}
-
-IVariableController * DebugSessionBase::variableController() const
-{
-    return m_variableController;
-}
-
-IFrameStackModel * DebugSessionBase::frameStackModel() const
-{
-    return m_frameStackModel;
 }
 
 bool DebugSessionBase::startDebugger(ILaunchConfiguration *cfg)
@@ -167,8 +138,8 @@ bool DebugSessionBase::startDebugger(ILaunchConfiguration *cfg)
             this, [this](const QString &output) {
                 emit inferiorStdoutLines(output.split(QRegularExpression("[\r\n]"), QString::SkipEmptyParts));
             });
-    connect(m_debugger, &DebuggerBase::userCommandOutput, this, &DebugSessionBase::debuggerUserCommandStdout);
-    connect(m_debugger, &DebuggerBase::internalCommandOutput, this, &DebugSessionBase::debuggerInternalCommandStdout);
+    connect(m_debugger, &DebuggerBase::userCommandOutput, this, &DebugSessionBase::debuggerUserCommandOutput);
+    connect(m_debugger, &DebuggerBase::internalCommandOutput, this, &DebugSessionBase::debuggerInternalCommandOutput);
 
     // state signals
     connect(m_debugger, &DebuggerBase::programStopped, this, &DebugSessionBase::inferiorStopped);
@@ -184,15 +155,16 @@ bool DebugSessionBase::startDebugger(ILaunchConfiguration *cfg)
 
     // start the debugger. Do this after connecting all signals so that initial
     // debugger output, and important events like the debugger died are reported.
-    if (cfg) {
-        KConfigGroup config = cfg->config();
-        m_debugger->start(config);
-    } else {
-        // FIXME: this is only used when attachToProcess or examineCoreFile.
-        // Change to use a global launch configuration when calling
-        KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
-        m_debugger->start(config);
-    }
+    QStringList extraArguments;
+    if (!m_sourceInitFile)
+        extraArguments << "--nx";
+
+    auto config = cfg ? cfg->config()
+                // FIXME: this is only used when attachToProcess or examineCoreFile.
+                // Change to use a global launch configuration when calling
+                : KConfigGroup(KSharedConfig::openConfig(), "GDB Config");
+
+    m_debugger->start(config, extraArguments);
 
     // FIXME: here, we should wait until the debugger is up and waiting for input.
     // Then, clear s_dbgNotStarted
@@ -201,10 +173,9 @@ bool DebugSessionBase::startDebugger(ILaunchConfiguration *cfg)
 
     // Initialise debugger. At this stage debugger is sitting wondering what to do,
     // and to whom.
-    //queueCmd(new MICommand(MI::EnableTimings, "yes"));
-    // TODO: implement initialize debugger in derived class
     initializeDebugger();
 
+    qCDebug(DEBUGGERCOMMON) << "Debugger instance started";
     return true;
 }
 
@@ -279,15 +250,10 @@ bool DebugSessionBase::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin*
     if (!arguments.isEmpty())
         queueCmd(new MICommand(MI::ExecArguments, KShell::joinArgs(arguments)));
 
-    // Needed so that breakpoint widget has a chance to insert breakpoints.
-    // FIXME: a bit hacky, as we're really not ready for new commands.
-    setDebuggerStateOn(s_dbgBusy);
-    raiseEvent(debugger_ready);
-
-    // Other config options and actually start the inferior program
-    // TODO: implement configDebugger in derived class
-    // static member, asm-demangle, config script, remote debugging handle, exec run
-    execInferior(cfg);
+    // Do other debugger specific config options and actually start the inferior program
+    if (!execInferior(cfg, executable)) {
+        return false;
+    }
 
     QString config_startWith = cfg->config().readEntry(startWithEntry, QStringLiteral("ApplicationOutput"));
     if (config_startWith == "GdbConsole") {
@@ -391,8 +357,9 @@ void DebugSessionBase::handleCoreFile(const MI::ResultRecord& r)
 #define ENUM_NAME(o,e,v) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).valueToKey((v)))
 void DebugSessionBase::setSessionState(DebuggerState state)
 {
-    qCDebug(DEBUGGERGDB) << "STATE CHANGED" << this
-                         << state << ENUM_NAME(IDebugSession, DebuggerState, state);
+    qCDebug(DEBUGGERCOMMON) << "Session state changed to"
+                            << ENUM_NAME(IDebugSession, DebuggerState, state)
+                            << "(" << state << ")";
     if (state != m_sessionState) {
         m_sessionState = state;
         emit stateChanged(state);
@@ -444,7 +411,7 @@ void DebugSessionBase::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags
     int delta = oldState ^ newState;
     if (delta)
     {
-        QString out = "STATE:";
+        QString out;
 #define STATE_CHECK(name) \
     do { \
         if (delta & name) { \
@@ -472,7 +439,7 @@ void DebugSessionBase::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags
                 out += QString::number(i);
             }
         }
-        qCDebug(DEBUGGERGDB) << out;
+        qCDebug(DEBUGGERCOMMON) << "Debugger state change:" << out;
     }
 }
 
@@ -518,7 +485,7 @@ void DebugSessionBase::handleDebuggerStateChange(DBGStateFlags oldState, DBGStat
     }
 
     // And now? :-)
-    qCDebug(DEBUGGERGDB) << "state: " << newState << message;
+    qCDebug(DEBUGGERCOMMON) << "Debugger state changed to: " << newState << message;
 
     if (!message.isEmpty())
         emit showMessage(message, 3000);
@@ -544,7 +511,7 @@ void DebugSessionBase::restartDebugger()
     // Had we used plain 'run' command, restart for remote debugging simply
     // would not work.
     if (!debuggerStateIsOn(s_dbgNotStarted|s_shuttingDown)) {
-        // FIXME: s_dbgBusy or m_debugger->isRead()?
+        // FIXME: s_dbgBusy or m_debugger->isReady()?
         if (debuggerStateIsOn(s_dbgBusy)) {
             interruptDebugger();
         }
@@ -577,18 +544,18 @@ void DebugSessionBase::stopDebugger()
     // the app running.
     if (debuggerStateIsOn(s_attached)) {
         queueCmd(new MICommand(MI::TargetDetach));
-        emit debuggerUserCommandStdout("(gdb) detach\n");
+        emit debuggerUserCommandOutput("(gdb) detach\n");
     }
 
     // Now try to stop debugger running.
     queueCmd(new MICommand(MI::GdbExit));
-    emit debuggerUserCommandStdout("(gdb) quit");
+    emit debuggerUserCommandOutput("(gdb) quit");
 
     // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
     QTimer::singleShot(5000, [this](){
         if (!debuggerStateIsOn(s_programExited)
             && debuggerStateIsOn(s_shuttingDown)) {
-            qCDebug(DEBUGGERGDB) << "debugger not shutdown - killing";
+            qCDebug(DEBUGGERCOMMON) << "debugger not shutdown - killing";
             m_debugger->kill();
             setDebuggerState(s_dbgNotStarted | s_appNotStarted);
             raiseEvent(debugger_exited);
@@ -783,10 +750,10 @@ void DebugSessionBase::queueCmd(MICommand *cmd)
 
     if (varCommandWithContext || stackCommandWithContext) {
         if (cmd->thread() == -1)
-            qCDebug(DEBUGGERGDB) << "\t--thread will be added on execution";
+            qCDebug(DEBUGGERCOMMON) << "\t--thread will be added on execution";
 
         if (cmd->frame() == -1)
-            qCDebug(DEBUGGERGDB) << "\t--frame will be added on execution";
+            qCDebug(DEBUGGERCOMMON) << "\t--frame will be added on execution";
     }
 
     setDebuggerStateOn(s_dbgBusy);
@@ -887,7 +854,11 @@ void DebugSessionBase::executeCmd()
 void DebugSessionBase::ensureDebuggerListening()
 {
     Q_ASSERT(m_debugger);
-    interruptDebugger();
+
+    // Note: we don't use interruptDebugger() here since
+    // we don't want to queue more commands before queuing a command
+    m_debugger->interrupt();
+
     setDebuggerStateOn(s_interruptSent);
     if (debuggerStateIsOn(s_appRunning))
         setDebuggerStateOn(s_automaticContinue);
@@ -958,7 +929,7 @@ void DebugSessionBase::slotDebuggerReady()
     }
 }
 
-void DebugSessionBase::slotDebuggerExited()
+void DebugSessionBase::slotDebuggerExited(bool abnormal, const QString &msg)
 {
     /* Technically speaking, GDB is likely not to kill the application, and
        we should have some backup mechanism to make sure the application is
@@ -966,7 +937,32 @@ void DebugSessionBase::slotDebuggerExited()
        can control it in any way, so mark it as exited.  */
     setDebuggerStateOn(s_appNotStarted);
     setDebuggerStateOn(s_dbgNotStarted);
+    setDebuggerStateOn(s_programExited);
     setDebuggerStateOff(s_shuttingDown);
+
+    if (!msg.isEmpty())
+        emit showMessage(msg, 3000);
+
+    if (abnormal) {
+        /* The error is reported to user in DebuggerBase now.
+        KMessageBox::information(
+            KDevelop::ICore::self()->uiController()->activeMainWindow(),
+            i18n("<b>Debugger exited abnormally</b>"
+                "<p>This is likely a bug in GDB. "
+                "Examine the gdb output window and then stop the debugger"),
+            i18n("Debugger exited abnormally"));
+        */
+        // FIXME: not sure if the following still applies.
+        // Note: we don't stop the debugger here, becuse that will hide gdb
+        // window and prevent the user from finding the exact reason of the
+        // problem.
+    }
+
+    /* FIXME: raiseEvent is handled across multiple places where we explicitly
+     * stop/kill the debugger, a better way is to let the debugger itself report
+     * its exited event.
+     */
+    // raiseEvent(debugger_exited);
 }
 
 void DebugSessionBase::slotInferiorStopped(const MI::AsyncRecord& r)
@@ -1152,7 +1148,7 @@ void DebugSessionBase::programFinished(const QString& msg)
 
     /* Also show message in gdb window, so that users who
        prefer to look at gdb window know what's up.  */
-    emit debuggerUserCommandStdout(m);
+    emit debuggerUserCommandOutput(m);
 }
 
 void DebugSessionBase::explainDebuggerStatus()
@@ -1224,7 +1220,7 @@ void DebugSessionBase::handleInferiorFinished(const QString& msg)
 
     /* Also show message in gdb window, so that users who
        prefer to look at gdb window know what's up.  */
-    emit debuggerUserCommandStdout(m);
+    emit debuggerUserCommandOutput(m);
 }
 
 // FIXME: connect to debugger's slot.
@@ -1260,4 +1256,9 @@ void DebugSessionBase::defaultErrorHandler(const MI::ResultRecord& result)
     // reloading!
     if (!m_debugger->currentCommand()->stateReloading())
         raiseEvent(program_state_changed);
+}
+
+void DebugSessionBase::setSourceInitFile(bool enable)
+{
+    m_sourceInitFile = enable;
 }

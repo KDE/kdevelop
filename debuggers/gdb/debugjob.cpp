@@ -49,8 +49,8 @@ DebugJob::DebugJob(CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchc
     setCapabilities(Killable);
 
     m_session = p->createSession();
-    connect(m_session, &DebugSession::applicationStandardOutputLines, this, &DebugJob::stderrReceived);
-    connect(m_session, &DebugSession::applicationStandardErrorLines, this, &DebugJob::stdoutReceived);
+    connect(m_session, &DebugSession::inferiorStdoutLines, this, &DebugJob::stderrReceived);
+    connect(m_session, &DebugSession::inferiorStderrLines, this, &DebugJob::stdoutReceived);
     connect(m_session, &DebugSession::finished, this, &DebugJob::done );
 
     if (launchcfg->project()) {
@@ -113,7 +113,7 @@ void DebugJob::start()
 
     startOutput();
 
-    if (!m_session->startProgram( m_launchcfg, m_execute )) {
+    if (!m_session->startDebugging(m_launchcfg, m_execute)) {
         done();
     }
 }

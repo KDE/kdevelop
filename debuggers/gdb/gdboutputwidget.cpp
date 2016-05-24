@@ -128,16 +128,16 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     DebugSession *session = qobject_cast<DebugSession*>(s);
     if (!session) return;
      connect(this, &GDBOutputWidget::userGDBCmd,
-             session, &DebugSession::slotUserGDBCmd);
+             session, &DebugSession::addUserCommand);
      connect(this, &GDBOutputWidget::breakInto,
              session, &DebugSession::interruptDebugger);
 
-     connect(session, &DebugSession::gdbInternalCommandStdout,
+     connect(session, &DebugSession::debuggerInternalCommandOutput,
              this, &GDBOutputWidget::slotInternalCommandStdout);
-     connect(session, &DebugSession::gdbUserCommandStdout,
+     connect(session, &DebugSession::debuggerUserCommandOutput,
              this, &GDBOutputWidget::slotUserCommandStdout);
 
-     connect(session, &DebugSession::gdbStateChanged,
+     connect(session, &DebugSession::debuggerStateChanged,
              this, &GDBOutputWidget::slotStateChanged);
 
      slotStateChanged(s_none, session->debuggerState());
