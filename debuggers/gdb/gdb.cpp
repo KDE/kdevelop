@@ -93,6 +93,7 @@ void GDB::start(KConfigGroup& config, const QStringList& extraArguments)
 
     qCDebug(DEBUGGERGDB) << "Starting GDB with command" << shell.toLocalFile() + ' ' + debuggerBinary_
                            + ' ' + arguments.join(' ');
+    qCDebug(DEBUGGERGDB) << "GDB process pid:" << process_->pid();
     emit userCommandOutput(shell.toLocalFile() + ' ' + debuggerBinary_
                            + ' ' + arguments.join(' ') + '\n');
 }

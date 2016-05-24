@@ -143,7 +143,7 @@ void DebuggerBase::readyReadStandardError()
 
 void DebuggerBase::processLine(const QByteArray& line)
 {
-    qCDebug(DEBUGGERCOMMON) << "Debugger output: " << line;
+    qCDebug(DEBUGGERCOMMON) << "Debugger (" << process_->pid() <<") output: " << line;
 
     FileSymbol file;
     file.contents = line;
