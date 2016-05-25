@@ -104,7 +104,7 @@ CMakeFileContent readCMakeFile(const QString & _fileName)
     cmListFileLexer* lexer = cmListFileLexer_New();
     if ( !lexer )
         return CMakeFileContent();
-    if ( !cmListFileLexer_SetFileName( lexer, qPrintable( _fileName ) ) ) {
+    if ( !cmListFileLexer_SetFileName( lexer, qPrintable( _fileName ), nullptr ) ) {
         qCDebug(CMAKE) << "cmake read error. could not read " << _fileName;
         cmListFileLexer_Delete(lexer);
         return CMakeFileContent();
