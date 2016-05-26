@@ -8,6 +8,7 @@ set(debuggercommon_SRCS
     debuggerbase.cpp
     debugsessionbase.cpp
     breakpointcontrollerbase.cpp
+    miframestackmodel.cpp
     stringhelpers.cpp
     stty.cpp
 )
