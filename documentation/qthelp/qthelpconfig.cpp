@@ -117,7 +117,7 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
 
     // Add GHNS button
     KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), "kdevelop-qthelp.knsrc", m_configWidget->boxQchManage);
-    m_configWidget->verticalLayout->insertWidget(1, knsButton);
+    m_configWidget->tableCtrlLayout->insertWidget(1, knsButton);
     connect(knsButton, &KNS3::Button::dialogFinished, this, &QtHelpConfig::knsUpdate);
     connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled, this, static_cast<void(QtHelpConfig::*)()>(&QtHelpConfig::changed));
     connect(m_configWidget->qchSearchDirButton, &QPushButton::clicked, this, &QtHelpConfig::chooseSearchDir);
