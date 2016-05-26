@@ -50,11 +50,8 @@ public:
 
     private slots:
       void add();
-      void remove();
-      void up();
-      void down();
-      void modify();
-      void selectionChanged();
+      void remove(QTreeWidgetItem* item);
+      void modify(QTreeWidgetItem* item);
       void knsUpdate(KNS3::Entry::List list);
       void chooseSearchDir();
       void searchDirChanged();
@@ -64,6 +61,8 @@ public:
       void defaults() override;
       void reset() override;
     private:
+      QTreeWidgetItem * addTableItem(const QString &icon, const QString &name,
+                                     const QString &path, const QString &ghnsStatus);
       Ui::QtHelpConfigUI* m_configWidget;
 };
 
