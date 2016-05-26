@@ -30,7 +30,7 @@ Modify cmListFileLexer.c:
 
 */
 
-// #include "cmStandardLexer.h"
+/* #include "cmStandardLexer.h" */
 #ifdef WIN32
 #include <cmsys/Encoding.h>
 #endif
