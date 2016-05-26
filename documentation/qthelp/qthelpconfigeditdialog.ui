@@ -44,7 +44,7 @@
    <item row="1" column="1">
     <widget class="QLineEdit" name="qchName">
      <property name="toolTip">
-      <string>Select a name</string>
+      <string>Enter a name</string>
      </property>
      <property name="placeholderText">
       <string>Select a name</string>
