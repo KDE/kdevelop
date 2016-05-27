@@ -7,7 +7,7 @@ set(debuggercommon_SRCS
     debuglog.cpp
     midebugger.cpp
     midebugsession.cpp
-    breakpointcontrollerbase.cpp
+    mibreakpointcontroller.cpp
     miframestackmodel.cpp
     mivariablecontroller.cpp
     mivariable.cpp

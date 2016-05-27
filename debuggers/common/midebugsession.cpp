@@ -298,7 +298,7 @@ bool MIDebugSession::attachToProcess(int pid)
                            CmdHandlesError));
 
     queueCmd(new SentinelCommand(breakpointController(),
-                                 &BreakpointControllerBase::initSendBreakpoints));
+                                 &MIBreakpointController::initSendBreakpoints));
 
     raiseEvent(connected_to_program);
 

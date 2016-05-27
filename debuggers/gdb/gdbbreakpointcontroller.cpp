@@ -27,6 +27,6 @@
 using namespace KDevDebugger::GDB;
 
 BreakpointController::BreakpointController(DebugSession* parent)
-    : BreakpointControllerBase(parent)
+    : MIBreakpointController(parent)
 {
 }

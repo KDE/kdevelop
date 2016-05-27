@@ -23,12 +23,12 @@
 #ifndef GDBBREAKPOINTCONTROLLER_H
 #define GDBBREAKPOINTCONTROLLER_H
 
-#include "breakpointcontrollerbase.h"
+#include "mibreakpointcontroller.h"
 
 namespace KDevDebugger { namespace GDB {
 
 class DebugSession;
-class BreakpointController : public BreakpointControllerBase
+class BreakpointController : public MIBreakpointController
 {
     Q_OBJECT
 

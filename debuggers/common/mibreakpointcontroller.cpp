@@ -21,7 +21,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "breakpointcontrollerbase.h"
+#include "mibreakpointcontroller.h"
 
 #include "debuglog.h"
 #include "midebugsession.h"
@@ -39,9 +39,9 @@ using namespace KDevDebugger;
 using namespace KDevDebugger::MI;
 using namespace KDevelop;
 
-struct BreakpointControllerBase::Handler : public MICommandHandler
+struct MIBreakpointController::Handler : public MICommandHandler
 {
-    Handler(BreakpointControllerBase* controller, const BreakpointDataPtr& b,
+    Handler(MIBreakpointController* controller, const BreakpointDataPtr& b,
             BreakpointModel::ColumnFlags columns)
         : controller(controller)
         , breakpoint(b)
@@ -82,14 +82,14 @@ struct BreakpointControllerBase::Handler : public MICommandHandler
         return true;
     }
 
-    BreakpointControllerBase* controller;
+    MIBreakpointController* controller;
     BreakpointDataPtr breakpoint;
     BreakpointModel::ColumnFlags columns;
 };
 
-struct BreakpointControllerBase::UpdateHandler : public BreakpointControllerBase::Handler
+struct MIBreakpointController::UpdateHandler : public MIBreakpointController::Handler
 {
-    UpdateHandler(BreakpointControllerBase* c, const BreakpointDataPtr& b,
+    UpdateHandler(MIBreakpointController* c, const BreakpointDataPtr& b,
                   BreakpointModel::ColumnFlags columns)
         : Handler(c, b, columns) {}
 
@@ -109,9 +109,9 @@ struct BreakpointControllerBase::UpdateHandler : public BreakpointControllerBase
     }
 };
 
-struct BreakpointControllerBase::InsertedHandler : public BreakpointControllerBase::Handler
+struct MIBreakpointController::InsertedHandler : public MIBreakpointController::Handler
 {
-    InsertedHandler(BreakpointControllerBase* c, const BreakpointDataPtr& b,
+    InsertedHandler(MIBreakpointController* c, const BreakpointDataPtr& b,
                     BreakpointModel::ColumnFlags columns)
         : Handler(c, b, columns) {}
 
@@ -156,8 +156,8 @@ struct BreakpointControllerBase::InsertedHandler : public BreakpointControllerBa
     }
 };
 
-struct BreakpointControllerBase::DeleteHandler : BreakpointControllerBase::Handler {
-    DeleteHandler(BreakpointControllerBase* c, const BreakpointDataPtr& b)
+struct MIBreakpointController::DeleteHandler : MIBreakpointController::Handler {
+    DeleteHandler(MIBreakpointController* c, const BreakpointDataPtr& b)
         : Handler(c, b, 0) {}
 
     void handle(const ResultRecord&) override
@@ -166,8 +166,8 @@ struct BreakpointControllerBase::DeleteHandler : BreakpointControllerBase::Handl
     }
 };
 
-struct BreakpointControllerBase::IgnoreChanges {
-    IgnoreChanges(BreakpointControllerBase& controller)
+struct MIBreakpointController::IgnoreChanges {
+    IgnoreChanges(MIBreakpointController& controller)
         : controller(controller)
     {
         ++controller.m_ignoreChanges;
@@ -178,38 +178,38 @@ struct BreakpointControllerBase::IgnoreChanges {
         --controller.m_ignoreChanges;
     }
 
-    BreakpointControllerBase& controller;
+    MIBreakpointController& controller;
 };
 
-BreakpointControllerBase::BreakpointControllerBase(MIDebugSession * parent)
+MIBreakpointController::MIBreakpointController(MIDebugSession * parent)
     : IBreakpointController(parent)
 {
     Q_ASSERT(parent);
     connect(parent, &MIDebugSession::inferiorStopped,
-            this, &BreakpointControllerBase::programStopped);
+            this, &MIBreakpointController::programStopped);
 
     int numBreakpoints = breakpointModel()->breakpoints().size();
     for (int row = 0; row < numBreakpoints; ++row)
         breakpointAdded(row);
 }
 
-MIDebugSession *BreakpointControllerBase::debugSession() const
+MIDebugSession *MIBreakpointController::debugSession() const
 {
     Q_ASSERT(QObject::parent());
     return static_cast<MIDebugSession *>(const_cast<QObject*>(QObject::parent()));
 }
 
-int BreakpointControllerBase::breakpointRow(const BreakpointDataPtr& breakpoint)
+int MIBreakpointController::breakpointRow(const BreakpointDataPtr& breakpoint)
 {
     return m_breakpoints.indexOf(breakpoint);
 }
 
-void BreakpointControllerBase::setDeleteDuplicateBreakpoints(bool enable)
+void MIBreakpointController::setDeleteDuplicateBreakpoints(bool enable)
 {
     m_deleteDuplicateBreakpoints = enable;
 }
 
-void BreakpointControllerBase::initSendBreakpoints()
+void MIBreakpointController::initSendBreakpoints()
 {
     for (int row = 0; row < m_breakpoints.size(); ++row) {
         BreakpointDataPtr breakpoint = m_breakpoints[row];
@@ -219,7 +219,7 @@ void BreakpointControllerBase::initSendBreakpoints()
     }
 }
 
-void BreakpointControllerBase::breakpointAdded(int row)
+void MIBreakpointController::breakpointAdded(int row)
 {
     if (m_ignoreChanges > 0)
         return;
@@ -240,7 +240,7 @@ void BreakpointControllerBase::breakpointAdded(int row)
     createBreakpoint(row);
 }
 
-void BreakpointControllerBase::breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns)
+void MIBreakpointController::breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns)
 {
     if (m_ignoreChanges > 0)
         return;
@@ -264,7 +264,7 @@ void BreakpointControllerBase::breakpointModelChanged(int row, BreakpointModel::
     }
 }
 
-void BreakpointControllerBase::breakpointAboutToBeDeleted(int row)
+void MIBreakpointController::breakpointAboutToBeDeleted(int row)
 {
     if (m_ignoreChanges > 0)
         return;
@@ -292,7 +292,7 @@ void BreakpointControllerBase::breakpointAboutToBeDeleted(int row)
 }
 
 // Note: despite the name, this is in fact session state changed.
-void BreakpointControllerBase::debuggerStateChanged(IDebugSession::DebuggerState state)
+void MIBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState state)
 {
     IgnoreChanges ignoreChanges(*this);
     if (state == IDebugSession::EndedState ||
@@ -307,7 +307,7 @@ void BreakpointControllerBase::debuggerStateChanged(IDebugSession::DebuggerState
     }
 }
 
-void BreakpointControllerBase::createBreakpoint(int row)
+void MIBreakpointController::createBreakpoint(int row)
 {
     if (debugSession()->debuggerStateIsOn(s_dbgNotStarted))
         return;
@@ -371,7 +371,7 @@ void BreakpointControllerBase::createBreakpoint(int row)
     recalculateState(row);
 }
 
-void BreakpointControllerBase::sendUpdates(int row)
+void MIBreakpointController::sendUpdates(int row)
 {
     if (debugSession()->debuggerStateIsOn(s_dbgNotStarted))
         return;
@@ -415,7 +415,7 @@ void BreakpointControllerBase::sendUpdates(int row)
     recalculateState(row);
 }
 
-void BreakpointControllerBase::recalculateState(int row)
+void MIBreakpointController::recalculateState(int row)
 {
     BreakpointDataPtr breakpoint = m_breakpoints.at(row);
 
@@ -441,7 +441,7 @@ void BreakpointControllerBase::recalculateState(int row)
     updateState(row, newState);
 }
 
-int BreakpointControllerBase::rowFromDebuggerId(int gdbId) const
+int MIBreakpointController::rowFromDebuggerId(int gdbId) const
 {
     for (int row = 0; row < m_breakpoints.size(); ++row) {
         if (gdbId == m_breakpoints[row]->debuggerId)
@@ -450,7 +450,7 @@ int BreakpointControllerBase::rowFromDebuggerId(int gdbId) const
     return -1;
 }
 
-void BreakpointControllerBase::notifyBreakpointCreated(const AsyncRecord& r)
+void MIBreakpointController::notifyBreakpointCreated(const AsyncRecord& r)
 {
     const Value& miBkpt = r["bkpt"];
 
@@ -466,7 +466,7 @@ void BreakpointControllerBase::notifyBreakpointCreated(const AsyncRecord& r)
     createFromDebugger(miBkpt);
 }
 
-void BreakpointControllerBase::notifyBreakpointModified(const AsyncRecord& r)
+void MIBreakpointController::notifyBreakpointModified(const AsyncRecord& r)
 {
     const Value& miBkpt = r["bkpt"];
     const int gdbId = miBkpt["number"].toInt();
@@ -488,7 +488,7 @@ void BreakpointControllerBase::notifyBreakpointModified(const AsyncRecord& r)
     }
 }
 
-void BreakpointControllerBase::notifyBreakpointDeleted(const AsyncRecord& r)
+void MIBreakpointController::notifyBreakpointDeleted(const AsyncRecord& r)
 {
     const int gdbId = r["id"].toInt();
     const int row = rowFromDebuggerId(gdbId);
@@ -503,7 +503,7 @@ void BreakpointControllerBase::notifyBreakpointDeleted(const AsyncRecord& r)
     m_breakpoints.removeAt(row);
 }
 
-void BreakpointControllerBase::createFromDebugger(const Value& miBkpt)
+void MIBreakpointController::createFromDebugger(const Value& miBkpt)
 {
     const QString type = miBkpt["type"].literal();
     Breakpoint::BreakpointKind gdbKind;
@@ -641,12 +641,12 @@ void BreakpointControllerBase::createFromDebugger(const Value& miBkpt)
 }
 
 // This method is required for the legacy interface which will be removed
-void BreakpointControllerBase::sendMaybe(KDevelop::Breakpoint*)
+void MIBreakpointController::sendMaybe(KDevelop::Breakpoint*)
 {
     Q_ASSERT(false);
 }
 
-void BreakpointControllerBase::updateFromDebugger(int row, const Value& miBkpt, BreakpointModel::ColumnFlags lockedColumns)
+void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, BreakpointModel::ColumnFlags lockedColumns)
 {
     IgnoreChanges ignoreChanges(*this);
     BreakpointDataPtr breakpoint = m_breakpoints[row];
@@ -723,7 +723,7 @@ void BreakpointControllerBase::updateFromDebugger(int row, const Value& miBkpt, 
     recalculateState(row);
 }
 
-void BreakpointControllerBase::programStopped(const AsyncRecord& r)
+void MIBreakpointController::programStopped(const AsyncRecord& r)
 {
     if (!r.hasField("reason"))
         return;

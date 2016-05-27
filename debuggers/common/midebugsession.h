@@ -30,8 +30,8 @@
 
 #include <debugger/interfaces/idebugsession.h>
 
-#include "breakpointcontrollerbase.h"
 #include "dbgglobal.h"
+#include "mibreakpointcontroller.h"
 #include "mi/mi.h"
 
 #include <memory>
@@ -124,7 +124,7 @@ public:
     DebuggerState state() const override;
     bool restartAvaliable() const override;
 
-    BreakpointControllerBase * breakpointController() const override = 0;
+    MIBreakpointController * breakpointController() const override = 0;
 
 public Q_SLOTS:
     void restartDebugger() override;

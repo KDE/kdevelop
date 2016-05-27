@@ -19,8 +19,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef BREAKPOINTCONTROLLERBASE_H
-#define BREAKPOINTCONTROLLERBASE_H
+#ifndef MIBREAKPOINTCONTROLLER_H
+#define MIBREAKPOINTCONTROLLER_H
 
 #include "dbgglobal.h"
 
@@ -60,11 +60,11 @@ class MIDebugSession;
 * point of the debugger.
 * We may change, add or remove breakpoints in this class.
 */
-class BreakpointControllerBase : public KDevelop::IBreakpointController
+class MIBreakpointController : public KDevelop::IBreakpointController
 {
     Q_OBJECT
 public:
-    BreakpointControllerBase( MIDebugSession* parent);
+    MIBreakpointController( MIDebugSession* parent);
 
     using IBreakpointController::breakpointModel;
 
@@ -120,4 +120,4 @@ private:
 
 } // end of namespace KDevDebugger
 
-#endif // BREAKPOINTCONTROLLERBASE_H
+#endif // MIBREAKPOINTCONTROLLER_H
