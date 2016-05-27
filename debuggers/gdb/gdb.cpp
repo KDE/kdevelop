@@ -39,16 +39,16 @@
 using namespace KDevDebugger::GDB;
 using namespace KDevDebugger::MI;
 
-GDB::GDB(QObject* parent)
+GdbDebugger::GdbDebugger(QObject* parent)
     : MIDebugger(parent)
 {
 }
 
-GDB::~GDB()
+GdbDebugger::~GdbDebugger()
 {
 }
 
-void GDB::start(KConfigGroup& config, const QStringList& extraArguments)
+void GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
 {
     // FIXME: verify that default value leads to something sensible
     QUrl gdbUrl = config.readEntry(gdbPathEntry, QUrl());

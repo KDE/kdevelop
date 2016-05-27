@@ -73,7 +73,7 @@ public:
     GdbFrameStackModel * frameStackModel() const override;
 
 protected:
-    GDB *createDebugger() const override;
+    GdbDebugger *createDebugger() const override;
     void initializeDebugger() override;
     bool execInferior(KDevelop::ILaunchConfiguration *cfg, const QString &executable) override;
 

@@ -83,9 +83,9 @@ GdbFrameStackModel *DebugSession::frameStackModel() const
     return m_frameStackModel;
 }
 
-GDB *DebugSession::createDebugger() const
+GdbDebugger *DebugSession::createDebugger() const
 {
-    return new GDB;
+    return new GdbDebugger;
 }
 
 void DebugSession::initializeDebugger()

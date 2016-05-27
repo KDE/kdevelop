@@ -27,12 +27,12 @@
 
 namespace KDevDebugger { namespace GDB {
 
-class GDB : public MIDebugger
+class GdbDebugger : public MIDebugger
 {
     Q_OBJECT
 public:
-    explicit GDB(QObject* parent = 0);
-    ~GDB() override;
+    explicit GdbDebugger(QObject* parent = 0);
+    ~GdbDebugger() override;
 
     void start(KConfigGroup& config, const QStringList& extraArguments = {}) override;
 
