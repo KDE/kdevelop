@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "variablecontrollerbase.h"
+#include "mivariablecontroller.h"
 
 #include "debuglog.h"
 #include "midebugsession.h"
@@ -45,22 +45,22 @@ using KTextEditor::Cursor;
 using KTextEditor::Document;
 using KTextEditor::Range;
 
-VariableControllerBase::VariableControllerBase(MIDebugSession *parent)
+MIVariableController::MIVariableController(MIDebugSession *parent)
     : IVariableController(parent)
 {
     Q_ASSERT(parent);
     connect(parent, &MIDebugSession::inferiorStopped,
-            this, &VariableControllerBase::programStopped);
+            this, &MIVariableController::programStopped);
     connect(parent, &MIDebugSession::stateChanged,
-            this, &VariableControllerBase::stateChanged);
+            this, &MIVariableController::stateChanged);
 }
 
-MIDebugSession *VariableControllerBase::debugSession() const
+MIDebugSession *MIVariableController::debugSession() const
 {
     return static_cast<MIDebugSession *>(const_cast<QObject*>(QObject::parent()));
 }
 
-void VariableControllerBase::programStopped(const AsyncRecord& r)
+void MIVariableController::programStopped(const AsyncRecord& r)
 {
     if (debugSession()->debuggerStateIsOn(s_shuttingDown)) return;
 
@@ -73,7 +73,7 @@ void VariableControllerBase::programStopped(const AsyncRecord& r)
     }
 }
 
-void VariableControllerBase::update()
+void MIVariableController::update()
 {
     qCDebug(DEBUGGERGDB) << autoUpdate();
     if (autoUpdate() & UpdateWatches) {
@@ -89,11 +89,11 @@ void VariableControllerBase::update()
     {
         debugSession()->addCommand(
             new MICommand(VarUpdate, "--all-values *", this,
-                       &VariableControllerBase::handleVarUpdate));
+                       &MIVariableController::handleVarUpdate));
     }
 }
 
-void VariableControllerBase::handleVarUpdate(const ResultRecord& r)
+void MIVariableController::handleVarUpdate(const ResultRecord& r)
 {
     const Value& changed = r["changelist"];
     for (int i = 0; i < changed.size(); ++i)
@@ -164,14 +164,14 @@ private:
     MIDebugSession *m_session;
 };
 
-void VariableControllerBase::updateLocals()
+void MIVariableController::updateLocals()
 {
     debugSession()->addCommand(
         new MICommand(StackListLocals, "--simple-values",
                       new StackListLocalsHandler(debugSession())));
 }
 
-Range VariableControllerBase::expressionRangeUnderCursor(Document* doc, const Cursor& cursor)
+Range MIVariableController::expressionRangeUnderCursor(Document* doc, const Cursor& cursor)
 {
     QString line = doc->line(cursor.line());
     int index = cursor.column();
@@ -194,7 +194,7 @@ Range VariableControllerBase::expressionRangeUnderCursor(Document* doc, const Cu
 }
 
 
-void VariableControllerBase::addWatch(KDevelop::Variable* variable)
+void MIVariableController::addWatch(KDevelop::Variable* variable)
 {
     // FIXME: should add async 'get full expression' method
     // to MIVariable, not poke at varobj. In that case,
@@ -206,11 +206,11 @@ void VariableControllerBase::addWatch(KDevelop::Variable* variable)
             new MICommand(VarInfoPathExpression,
                            gv->varobj(),
                            this,
-                           &VariableControllerBase::addWatch));
+                           &MIVariableController::addWatch));
     }
 }
 
-void VariableControllerBase::addWatchpoint(KDevelop::Variable* variable)
+void MIVariableController::addWatchpoint(KDevelop::Variable* variable)
 {
     // FIXME: should add async 'get full expression' method
     // to MIVariable, not poke at varobj. In that case,
@@ -222,11 +222,11 @@ void VariableControllerBase::addWatchpoint(KDevelop::Variable* variable)
             new MICommand(VarInfoPathExpression,
                            gv->varobj(),
                            this,
-                           &VariableControllerBase::addWatchpoint));
+                           &MIVariableController::addWatchpoint));
     }
 }
 
-void VariableControllerBase::addWatch(const ResultRecord& r)
+void MIVariableController::addWatch(const ResultRecord& r)
 {
     // FIXME: handle error.
     if (r.reason == "done" &&  !r["path_expr"].literal().isEmpty()) {
@@ -234,25 +234,25 @@ void VariableControllerBase::addWatch(const ResultRecord& r)
     }
 }
 
-void VariableControllerBase::addWatchpoint(const ResultRecord& r)
+void MIVariableController::addWatchpoint(const ResultRecord& r)
 {
     if (r.reason == "done" && !r["path_expr"].literal().isEmpty()) {
         KDevelop::ICore::self()->debugController()->breakpointModel()->addWatchpoint(r["path_expr"].literal());
     }
 }
 
-Variable* VariableControllerBase::createVariable(TreeModel* model, TreeItem* parent,
+Variable* MIVariableController::createVariable(TreeModel* model, TreeItem* parent,
                                                  const QString& expression, const QString& display)
 {
     return new MIVariable(model, parent, expression, display);
 }
 
-void VariableControllerBase::handleEvent(IDebugSession::event_t event)
+void MIVariableController::handleEvent(IDebugSession::event_t event)
 {
     IVariableController::handleEvent(event);
 }
 
-void VariableControllerBase::stateChanged(IDebugSession::DebuggerState state)
+void MIVariableController::stateChanged(IDebugSession::DebuggerState state)
 {
     if (state == IDebugSession::EndedState) {
         MIVariable::markAllDead();

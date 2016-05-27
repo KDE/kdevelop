@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef VARIABLECONTROLLERBASE_H
-#define VARIABLECONTROLLERBASE_H
+#ifndef MIVARIABLECONTROLLER_H
+#define MIVARIABLECONTROLLER_H
 
 #include "dbgglobal.h"
 
@@ -37,12 +37,12 @@ struct Value;
 }
 
 class MIDebugSession;
-class VariableControllerBase : public KDevelop::IVariableController
+class MIVariableController : public KDevelop::IVariableController
 {
     Q_OBJECT
 
 public:
-    VariableControllerBase( MIDebugSession* parent);
+    MIVariableController( MIDebugSession* parent);
 
     KDevelop::Variable* createVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                                        const QString& expression,
@@ -73,4 +73,4 @@ private:
 
 } // end of namespace KDevDebugger
 
-#endif // VARIABLECONTROLLERBASE_H
+#endif // MIVARIABLECONTROLLER_H

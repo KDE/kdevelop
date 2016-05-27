@@ -9,7 +9,7 @@ set(debuggercommon_SRCS
     midebugsession.cpp
     breakpointcontrollerbase.cpp
     miframestackmodel.cpp
-    variablecontrollerbase.cpp
+    mivariablecontroller.cpp
     mivariable.cpp
     stringhelpers.cpp
     stty.cpp

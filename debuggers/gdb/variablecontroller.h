@@ -23,12 +23,12 @@
 #ifndef VARIABLECONTROLLER_H
 #define VARIABLECONTROLLER_H
 
-#include "variablecontrollerbase.h"
+#include "mivariablecontroller.h"
 
 namespace KDevDebugger { namespace GDB {
 
 class DebugSession;
-class VariableController : public VariableControllerBase
+class VariableController : public MIVariableController
 {
     Q_OBJECT
 

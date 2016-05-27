@@ -27,7 +27,7 @@
 using namespace KDevDebugger::GDB;
 
 VariableController::VariableController(DebugSession *parent)
-    : VariableControllerBase(parent)
+    : MIVariableController(parent)
 {
 }
 
