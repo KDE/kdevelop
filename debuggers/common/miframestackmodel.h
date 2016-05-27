@@ -30,13 +30,13 @@ namespace MI {
 struct ResultRecord;
 }
 
-class DebugSessionBase;
+class MIDebugSession;
 class MIFrameStackModel : public KDevelop::FrameStackModel
 {
 public:
-    MIFrameStackModel(DebugSessionBase* session);
+    MIFrameStackModel( MIDebugSession* session);
 
-    DebugSessionBase* session();
+    MIDebugSession* session();
 
 protected: // FrameStackModel overrides
     void fetchThreads() override;

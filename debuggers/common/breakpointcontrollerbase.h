@@ -54,7 +54,7 @@ struct BreakpointData {
 
 typedef QSharedPointer<BreakpointData> BreakpointDataPtr;
 
-class DebugSessionBase;
+class MIDebugSession;
 /**
 * Handles signals from the editor that relate to breakpoints and the execution
 * point of the debugger.
@@ -64,7 +64,7 @@ class BreakpointControllerBase : public KDevelop::IBreakpointController
 {
     Q_OBJECT
 public:
-    BreakpointControllerBase(DebugSessionBase* parent);
+    BreakpointControllerBase( MIDebugSession* parent);
 
     using IBreakpointController::breakpointModel;
 
@@ -90,7 +90,7 @@ private Q_SLOTS:
     void programStopped(const MI::AsyncRecord &r);
 
 private:
-    DebugSessionBase* debugSession() const;
+    MIDebugSession* debugSession() const;
 
     int breakpointRow(const BreakpointDataPtr& breakpoint);
     void createBreakpoint(int row);

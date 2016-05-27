@@ -26,7 +26,7 @@
  *
  */
 
-#include "debugsessionbase.h"
+#include "midebugsession.h"
 
 #include "debuglog.h"
 #include "midebugger.h"
@@ -63,7 +63,7 @@ using namespace KDevelop;
 using namespace KDevDebugger;
 using namespace KDevDebugger::MI;
 
-DebugSessionBase::DebugSessionBase()
+MIDebugSession::MIDebugSession()
     : m_procLineMaker(new ProcessLineMaker(this))
     , m_commandQueue(new CommandQueue)
     , m_sessionState(NotStartedState)
@@ -77,14 +77,14 @@ DebugSessionBase::DebugSessionBase()
 {
     // setup signals
     connect(m_procLineMaker, &ProcessLineMaker::receivedStdoutLines,
-            this, &DebugSessionBase::inferiorStdoutLines);
+            this, &MIDebugSession::inferiorStdoutLines);
     connect(m_procLineMaker, &ProcessLineMaker::receivedStderrLines,
-            this, &DebugSessionBase::inferiorStderrLines);
+            this, &MIDebugSession::inferiorStderrLines);
 
     // forward tty output to process line maker
-    connect(this, &DebugSessionBase::inferiorTtyStdout,
+    connect(this, &MIDebugSession::inferiorTtyStdout,
             m_procLineMaker, &ProcessLineMaker::slotReceivedStdout);
-    connect(this, &DebugSessionBase::inferiorTtyStderr,
+    connect(this, &MIDebugSession::inferiorTtyStderr,
             m_procLineMaker, &ProcessLineMaker::slotReceivedStderr);
 
     // FIXME: see if this still works
@@ -96,9 +96,9 @@ DebugSessionBase::DebugSessionBase()
     //connect(this, SIGNAL(evaluateExpression(QString)), controller->variables(), SLOT(slotEvaluateExpression(QString)));
 }
 
-DebugSessionBase::~DebugSessionBase()
+MIDebugSession::~MIDebugSession()
 {
-    qCDebug(DEBUGGERCOMMON) << "Destroying DebugSessionBase";
+    qCDebug(DEBUGGERCOMMON) << "Destroying MIDebugSession";
     // Deleting the session involves shutting down gdb nicely.
     // When were attached to a process, we must first detach so that the process
     // can continue running as it was before being attached. gdb is quite slow to
@@ -109,12 +109,12 @@ DebugSessionBase::~DebugSessionBase()
     }
 }
 
-IDebugSession::DebuggerState DebugSessionBase::state() const
+IDebugSession::DebuggerState MIDebugSession::state() const
 {
     return m_sessionState;
 }
 
-bool DebugSessionBase::restartAvaliable() const
+bool MIDebugSession::restartAvaliable() const
 {
     if (debuggerStateIsOn(s_attached) || debuggerStateIsOn(s_core)) {
         return false;
@@ -123,7 +123,7 @@ bool DebugSessionBase::restartAvaliable() const
     }
 }
 
-bool DebugSessionBase::startDebugger(ILaunchConfiguration *cfg)
+bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
 {
     qCDebug(DEBUGGERCOMMON) << "Starting new debugger instance";
     if (m_debugger) {
@@ -139,19 +139,19 @@ bool DebugSessionBase::startDebugger(ILaunchConfiguration *cfg)
             this, [this](const QString &output) {
                 emit inferiorStdoutLines(output.split(QRegularExpression("[\r\n]"), QString::SkipEmptyParts));
             });
-    connect(m_debugger, &MIDebugger::userCommandOutput, this, &DebugSessionBase::debuggerUserCommandOutput);
-    connect(m_debugger, &MIDebugger::internalCommandOutput, this, &DebugSessionBase::debuggerInternalCommandOutput);
+    connect(m_debugger, &MIDebugger::userCommandOutput, this, &MIDebugSession::debuggerUserCommandOutput);
+    connect(m_debugger, &MIDebugger::internalCommandOutput, this, &MIDebugSession::debuggerInternalCommandOutput);
 
     // state signals
-    connect(m_debugger, &MIDebugger::programStopped, this, &DebugSessionBase::inferiorStopped);
-    connect(m_debugger, &MIDebugger::programRunning, this, &DebugSessionBase::inferiorRunning);
+    connect(m_debugger, &MIDebugger::programStopped, this, &MIDebugSession::inferiorStopped);
+    connect(m_debugger, &MIDebugger::programRunning, this, &MIDebugSession::inferiorRunning);
 
     // internal handlers
-    connect(m_debugger, &MIDebugger::ready, this, &DebugSessionBase::slotDebuggerReady);
-    connect(m_debugger, &MIDebugger::exited, this, &DebugSessionBase::slotDebuggerExited);
-    connect(m_debugger, &MIDebugger::programStopped, this, &DebugSessionBase::slotInferiorStopped);
-    connect(m_debugger, &MIDebugger::programRunning, this, &DebugSessionBase::slotInferiorRunning);
-    connect(m_debugger, &MIDebugger::notification, this, &DebugSessionBase::processNotification);
+    connect(m_debugger, &MIDebugger::ready, this, &MIDebugSession::slotDebuggerReady);
+    connect(m_debugger, &MIDebugger::exited, this, &MIDebugSession::slotDebuggerExited);
+    connect(m_debugger, &MIDebugger::programStopped, this, &MIDebugSession::slotInferiorStopped);
+    connect(m_debugger, &MIDebugger::programRunning, this, &MIDebugSession::slotInferiorRunning);
+    connect(m_debugger, &MIDebugger::notification, this, &MIDebugSession::processNotification);
 
 
     // start the debugger. Do this after connecting all signals so that initial
@@ -180,7 +180,7 @@ bool DebugSessionBase::startDebugger(ILaunchConfiguration *cfg)
     return true;
 }
 
-bool DebugSessionBase::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* iexec)
+bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* iexec)
 {
     qCDebug(DEBUGGERCOMMON) << "Starting new debug session";
     Q_ASSERT(cfg);
@@ -211,8 +211,8 @@ bool DebugSessionBase::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin*
 
     m_tty.reset(new STTY(config_useExternalTerminal, config_ternimalName));
     if (!config_useExternalTerminal) {
-        connect(m_tty.get(), &STTY::OutOutput, this, &DebugSessionBase::inferiorTtyStdout);
-        connect(m_tty.get(), &STTY::ErrOutput, this, &DebugSessionBase::inferiorTtyStderr);
+        connect(m_tty.get(), &STTY::OutOutput, this, &MIDebugSession::inferiorTtyStdout);
+        connect(m_tty.get(), &STTY::ErrOutput, this, &MIDebugSession::inferiorTtyStderr);
     }
     QString tty(m_tty->getSlave());
     if (tty.isEmpty()) {
@@ -269,7 +269,7 @@ bool DebugSessionBase::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin*
 }
 
 // FIXME: use same configuration process as startDebugging
-bool DebugSessionBase::attachToProcess(int pid)
+bool MIDebugSession::attachToProcess(int pid)
 {
     qCDebug(DEBUGGERCOMMON) << "Attach to process" << pid;
 
@@ -294,7 +294,7 @@ bool DebugSessionBase::attachToProcess(int pid)
     queueCmd(new MICommand(MI::FileExecAndSymbols));
 
     queueCmd(new MICommand(MI::TargetAttach, QString::number(pid),
-                           this, &DebugSessionBase::handleTargetAttach,
+                           this, &MIDebugSession::handleTargetAttach,
                            CmdHandlesError));
 
     queueCmd(new SentinelCommand(breakpointController(),
@@ -307,7 +307,7 @@ bool DebugSessionBase::attachToProcess(int pid)
     return true;
 }
 
-void DebugSessionBase::handleTargetAttach(const MI::ResultRecord& r)
+void MIDebugSession::handleTargetAttach(const MI::ResultRecord& r)
 {
     if (r.reason == "error") {
         KMessageBox::error(
@@ -319,7 +319,7 @@ void DebugSessionBase::handleTargetAttach(const MI::ResultRecord& r)
     }
 }
 
-bool DebugSessionBase::examineCoreFile(const QUrl &debugee, const QUrl &coreFile)
+bool MIDebugSession::examineCoreFile(const QUrl &debugee, const QUrl &coreFile)
 {
     if (debuggerStateIsOn(s_dbgNotStarted)) {
         // FIXME: use global launch configuration rather than nullptr
@@ -331,7 +331,7 @@ bool DebugSessionBase::examineCoreFile(const QUrl &debugee, const QUrl &coreFile
     // FIXME: support non-local URLs
     queueCmd(new MICommand(MI::FileExecAndSymbols, debugee.toLocalFile()));
     queueCmd(new MICommand(MI::NonMI, "core " + coreFile.toLocalFile(),
-                           this, &DebugSessionBase::handleCoreFile, CmdHandlesError));
+                           this, &MIDebugSession::handleCoreFile, CmdHandlesError));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -339,7 +339,7 @@ bool DebugSessionBase::examineCoreFile(const QUrl &debugee, const QUrl &coreFile
     return true;
 }
 
-void DebugSessionBase::handleCoreFile(const MI::ResultRecord& r)
+void MIDebugSession::handleCoreFile(const MI::ResultRecord& r)
 {
     if (r.reason != "error") {
         setDebuggerStateOn(s_programExited|s_core);
@@ -356,7 +356,7 @@ void DebugSessionBase::handleCoreFile(const MI::ResultRecord& r)
 }
 
 #define ENUM_NAME(o,e,v) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).valueToKey((v)))
-void DebugSessionBase::setSessionState(DebuggerState state)
+void MIDebugSession::setSessionState(DebuggerState state)
 {
     qCDebug(DEBUGGERCOMMON) << "Session state changed to"
                             << ENUM_NAME(IDebugSession, DebuggerState, state)
@@ -367,17 +367,17 @@ void DebugSessionBase::setSessionState(DebuggerState state)
     }
 }
 
-bool DebugSessionBase::debuggerStateIsOn(DBGStateFlags state) const
+bool MIDebugSession::debuggerStateIsOn(DBGStateFlags state) const
 {
     return m_debuggerState & state;
 }
 
-DBGStateFlags DebugSessionBase::debuggerState() const
+DBGStateFlags MIDebugSession::debuggerState() const
 {
     return m_debuggerState;
 }
 
-void DebugSessionBase::setDebuggerStateOn(DBGStateFlags stateOn)
+void MIDebugSession::setDebuggerStateOn(DBGStateFlags stateOn)
 {
     DBGStateFlags oldState = m_debuggerState;
 
@@ -387,7 +387,7 @@ void DebugSessionBase::setDebuggerStateOn(DBGStateFlags stateOn)
     handleDebuggerStateChange(oldState, m_debuggerState);
 }
 
-void DebugSessionBase::setDebuggerStateOff(DBGStateFlags stateOff)
+void MIDebugSession::setDebuggerStateOff(DBGStateFlags stateOff)
 {
     DBGStateFlags oldState = m_debuggerState;
 
@@ -397,7 +397,7 @@ void DebugSessionBase::setDebuggerStateOff(DBGStateFlags stateOff)
     handleDebuggerStateChange(oldState, m_debuggerState);
 }
 
-void DebugSessionBase::setDebuggerState(DBGStateFlags newState)
+void MIDebugSession::setDebuggerState(DBGStateFlags newState)
 {
     DBGStateFlags oldState = m_debuggerState;
 
@@ -407,7 +407,7 @@ void DebugSessionBase::setDebuggerState(DBGStateFlags newState)
     handleDebuggerStateChange(oldState, m_debuggerState);
 }
 
-void DebugSessionBase::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags newState)
+void MIDebugSession::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags newState)
 {
     int delta = oldState ^ newState;
     if (delta)
@@ -444,7 +444,7 @@ void DebugSessionBase::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags
     }
 }
 
-void DebugSessionBase::handleDebuggerStateChange(DBGStateFlags oldState, DBGStateFlags newState)
+void MIDebugSession::handleDebuggerStateChange(DBGStateFlags oldState, DBGStateFlags newState)
 {
     QString message;
 
@@ -499,7 +499,7 @@ void DebugSessionBase::handleDebuggerStateChange(DBGStateFlags oldState, DBGStat
     }
 }
 
-void DebugSessionBase::restartDebugger()
+void MIDebugSession::restartDebugger()
 {
     // We implement restart as kill + slotRun, as opposed as plain "run"
     // command because kill + slotRun allows any special logic in slotRun
@@ -523,7 +523,7 @@ void DebugSessionBase::restartDebugger()
     run();
 }
 
-void DebugSessionBase::stopDebugger()
+void MIDebugSession::stopDebugger()
 {
     m_commandQueue->clear();
 
@@ -553,7 +553,7 @@ void DebugSessionBase::stopDebugger()
     emit debuggerUserCommandOutput("(gdb) quit");
 
     // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
-    QPointer<DebugSessionBase> guarded_this(this);
+    QPointer<MIDebugSession> guarded_this(this);
     QTimer::singleShot(5000, [guarded_this](){
         if (guarded_this) {
             if (!guarded_this->debuggerStateIsOn(s_programExited)
@@ -569,7 +569,7 @@ void DebugSessionBase::stopDebugger()
     emit reset();
 }
 
-void DebugSessionBase::interruptDebugger()
+void MIDebugSession::interruptDebugger()
 {
     Q_ASSERT(m_debugger);
 
@@ -579,7 +579,7 @@ void DebugSessionBase::interruptDebugger()
     queueCmd(new MICommand(MI::ExecInterrupt, QString(), CmdInterrupt));
 }
 
-void DebugSessionBase::run()
+void MIDebugSession::run()
 {
     if (debuggerStateIsOn(s_appNotStarted|s_dbgNotStarted|s_shuttingDown))
         return;
@@ -587,7 +587,7 @@ void DebugSessionBase::run()
     queueCmd(new MICommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
 }
 
-void DebugSessionBase::runToCursor()
+void MIDebugSession::runToCursor()
 {
     if (IDocument* doc = ICore::self()->documentController()->activeDocument()) {
         KTextEditor::Cursor cursor = doc->cursorPosition();
@@ -596,7 +596,7 @@ void DebugSessionBase::runToCursor()
     }
 }
 
-void DebugSessionBase::jumpToCursor()
+void MIDebugSession::jumpToCursor()
 {
     if (IDocument* doc = ICore::self()->documentController()->activeDocument()) {
         KTextEditor::Cursor cursor = doc->cursorPosition();
@@ -605,7 +605,7 @@ void DebugSessionBase::jumpToCursor()
     }
 }
 
-void DebugSessionBase::stepOver()
+void MIDebugSession::stepOver()
 {
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
@@ -613,7 +613,7 @@ void DebugSessionBase::stepOver()
     queueCmd(new MICommand(MI::ExecNext, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
-void DebugSessionBase::stepIntoInstruction()
+void MIDebugSession::stepIntoInstruction()
 {
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
@@ -622,7 +622,7 @@ void DebugSessionBase::stepIntoInstruction()
                            CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
-void DebugSessionBase::stepInto()
+void MIDebugSession::stepInto()
 {
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
@@ -630,7 +630,7 @@ void DebugSessionBase::stepInto()
     queueCmd(new MICommand(MI::ExecStep, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
-void DebugSessionBase::stepOverInstruction()
+void MIDebugSession::stepOverInstruction()
 {
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
@@ -639,7 +639,7 @@ void DebugSessionBase::stepOverInstruction()
                            CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
-void DebugSessionBase::stepOut()
+void MIDebugSession::stepOut()
 {
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
@@ -647,7 +647,7 @@ void DebugSessionBase::stepOut()
     queueCmd(new MICommand(MI::ExecFinish, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
-void DebugSessionBase::runUntil(const QUrl& url, int line)
+void MIDebugSession::runUntil(const QUrl& url, int line)
 {
     if (debuggerStateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
@@ -662,7 +662,7 @@ void DebugSessionBase::runUntil(const QUrl& url, int line)
     }
 }
 
-void DebugSessionBase::runUntil(const QString& address)
+void MIDebugSession::runUntil(const QString& address)
 {
     if (debuggerStateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
@@ -673,7 +673,7 @@ void DebugSessionBase::runUntil(const QString& address)
     }
 }
 
-void DebugSessionBase::jumpTo(const QUrl& url, int line)
+void MIDebugSession::jumpTo(const QUrl& url, int line)
 {
     if (debuggerStateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
@@ -686,7 +686,7 @@ void DebugSessionBase::jumpTo(const QUrl& url, int line)
     }
 }
 
-void DebugSessionBase::jumpToMemoryAddress(const QString& address)
+void MIDebugSession::jumpToMemoryAddress(const QString& address)
 {
     if (debuggerStateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
@@ -697,7 +697,7 @@ void DebugSessionBase::jumpToMemoryAddress(const QString& address)
     }
 }
 
-void DebugSessionBase::addUserCommand(const QString& cmd)
+void MIDebugSession::addUserCommand(const QString& cmd)
 {
     queueCmd(new UserCommand(MI::NonMI, cmd));
 
@@ -711,12 +711,12 @@ void DebugSessionBase::addUserCommand(const QString& cmd)
         raiseEvent(program_state_changed);
 }
 
-void DebugSessionBase::addCommand(MICommand* cmd)
+void MIDebugSession::addCommand(MICommand* cmd)
 {
     queueCmd(cmd);
 }
 
-void DebugSessionBase::addCommand(MI::CommandType type, const QString& str)
+void MIDebugSession::addCommand(MI::CommandType type, const QString& str)
 {
     queueCmd(new MICommand(type, str));
 }
@@ -726,7 +726,7 @@ void DebugSessionBase::addCommand(MI::CommandType type, const QString& str)
 // information requests become redundent and must be removed.
 // We also try and run whatever command happens to be at the head of
 // the queue.
-void DebugSessionBase::queueCmd(MICommand *cmd)
+void MIDebugSession::queueCmd(MICommand *cmd)
 {
     if (debuggerStateIsOn(s_dbgNotStarted)) {
         KMessageBox::information(
@@ -766,7 +766,7 @@ void DebugSessionBase::queueCmd(MICommand *cmd)
     executeCmd();
 }
 
-void DebugSessionBase::executeCmd()
+void MIDebugSession::executeCmd()
 {
     Q_ASSERT(m_debugger);
 
@@ -855,7 +855,7 @@ void DebugSessionBase::executeCmd()
     m_debugger->execute(currentCmd);
 }
 
-void DebugSessionBase::ensureDebuggerListening()
+void MIDebugSession::ensureDebuggerListening()
 {
     Q_ASSERT(m_debugger);
 
@@ -869,7 +869,7 @@ void DebugSessionBase::ensureDebuggerListening()
     setDebuggerStateOff(s_dbgNotListening);
 }
 
-void DebugSessionBase::destroyCmds()
+void MIDebugSession::destroyCmds()
 {
     m_commandQueue->clear();
 }
@@ -877,7 +877,7 @@ void DebugSessionBase::destroyCmds()
 // FIXME: I don't fully remember what is the business with
 // m_stateReloadInProgress and whether we can lift it to the
 // generic level.
-void DebugSessionBase::raiseEvent(event_t e)
+void MIDebugSession::raiseEvent(event_t e)
 {
     if (e == program_exited || e == debugger_exited) {
         m_stateReloadInProgress = false;
@@ -895,12 +895,12 @@ void DebugSessionBase::raiseEvent(event_t e)
     }
 }
 
-bool KDevDebugger::DebugSessionBase::hasCrashed() const
+bool KDevDebugger::MIDebugSession::hasCrashed() const
 {
     return m_hasCrashed;
 }
 
-void DebugSessionBase::slotDebuggerReady()
+void MIDebugSession::slotDebuggerReady()
 {
     Q_ASSERT(m_debugger);
 
@@ -933,7 +933,7 @@ void DebugSessionBase::slotDebuggerReady()
     }
 }
 
-void DebugSessionBase::slotDebuggerExited(bool abnormal, const QString &msg)
+void MIDebugSession::slotDebuggerExited(bool abnormal, const QString &msg)
 {
     /* Technically speaking, GDB is likely not to kill the application, and
        we should have some backup mechanism to make sure the application is
@@ -948,7 +948,7 @@ void DebugSessionBase::slotDebuggerExited(bool abnormal, const QString &msg)
         emit showMessage(msg, 3000);
 
     if (abnormal) {
-        /* The error is reported to user in DebuggerBase now.
+        /* The error is reported to user in MIDebugger now.
         KMessageBox::information(
             KDevelop::ICore::self()->uiController()->activeMainWindow(),
             i18n("<b>Debugger exited abnormally</b>"
@@ -969,7 +969,7 @@ void DebugSessionBase::slotDebuggerExited(bool abnormal, const QString &msg)
     // raiseEvent(debugger_exited);
 }
 
-void DebugSessionBase::slotInferiorStopped(const MI::AsyncRecord& r)
+void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
 {
     /* By default, reload all state on program stop.  */
     m_stateReloadNeeded = true;
@@ -1068,7 +1068,7 @@ void DebugSessionBase::slotInferiorStopped(const MI::AsyncRecord& r)
         setDebuggerStateOff(s_automaticContinue);
 }
 
-void DebugSessionBase::slotInferiorRunning()
+void MIDebugSession::slotInferiorRunning()
 {
     setDebuggerStateOn(s_appRunning);
     raiseEvent(program_running);
@@ -1081,7 +1081,7 @@ void DebugSessionBase::slotInferiorRunning()
     }
 }
 
-void DebugSessionBase::processNotification(const MI::AsyncRecord & async)
+void MIDebugSession::processNotification(const MI::AsyncRecord & async)
 {
     if (async.reason == "thread-group-started") {
         setDebuggerStateOff(s_appNotStarted | s_programExited);
@@ -1100,7 +1100,7 @@ void DebugSessionBase::processNotification(const MI::AsyncRecord & async)
     }
 }
 
-void DebugSessionBase::reloadProgramState()
+void MIDebugSession::reloadProgramState()
 {
     raiseEvent(program_state_changed);
     m_stateReloadNeeded = false;
@@ -1110,7 +1110,7 @@ void DebugSessionBase::reloadProgramState()
 // an invalid program specified or ...
 // gdb is still running though, but only the run command (may) make sense
 // all other commands are disabled.
-void DebugSessionBase::programNoApp(const QString& msg)
+void MIDebugSession::programNoApp(const QString& msg)
 {
     qCDebug(DEBUGGERCOMMON) << msg;
 
@@ -1145,7 +1145,7 @@ void DebugSessionBase::programNoApp(const QString& msg)
     programFinished(msg);
 }
 
-void DebugSessionBase::programFinished(const QString& msg)
+void MIDebugSession::programFinished(const QString& msg)
 {
     QString m = QString("*** %0 ***").arg(msg.trimmed());
     emit inferiorStderrLines(QStringList(m));
@@ -1155,7 +1155,7 @@ void DebugSessionBase::programFinished(const QString& msg)
     emit debuggerUserCommandOutput(m);
 }
 
-void DebugSessionBase::explainDebuggerStatus()
+void MIDebugSession::explainDebuggerStatus()
 {
     MICommand* currentCmd_ = m_debugger->currentCommand();
     QString information =
@@ -1182,7 +1182,7 @@ void DebugSessionBase::explainDebuggerStatus()
 // an invalid program specified or ...
 // gdb is still running though, but only the run command (may) make sense
 // all other commands are disabled.
-void DebugSessionBase::handleNoInferior(const QString& msg)
+void MIDebugSession::handleNoInferior(const QString& msg)
 {
     qCDebug(DEBUGGERCOMMON) << msg;
 
@@ -1217,7 +1217,7 @@ void DebugSessionBase::handleNoInferior(const QString& msg)
     handleInferiorFinished(msg);
 }
 
-void DebugSessionBase::handleInferiorFinished(const QString& msg)
+void MIDebugSession::handleInferiorFinished(const QString& msg)
 {
     QString m = QStringLiteral("*** %0 ***").arg(msg.trimmed());
     emit inferiorStderrLines(QStringList(m));
@@ -1228,7 +1228,7 @@ void DebugSessionBase::handleInferiorFinished(const QString& msg)
 }
 
 // FIXME: connect to debugger's slot.
-void DebugSessionBase::defaultErrorHandler(const MI::ResultRecord& result)
+void MIDebugSession::defaultErrorHandler(const MI::ResultRecord& result)
 {
     QString msg = result["msg"].literal();
 
@@ -1262,7 +1262,7 @@ void DebugSessionBase::defaultErrorHandler(const MI::ResultRecord& result)
         raiseEvent(program_state_changed);
 }
 
-void DebugSessionBase::setSourceInitFile(bool enable)
+void MIDebugSession::setSourceInitFile(bool enable)
 {
     m_sourceInitFile = enable;
 }

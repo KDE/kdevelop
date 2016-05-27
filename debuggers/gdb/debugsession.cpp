@@ -54,7 +54,7 @@ using namespace KDevDebugger::MI;
 using namespace KDevelop;
 
 DebugSession::DebugSession()
-    : DebugSessionBase()
+    : MIDebugSession()
     , m_breakpointController(nullptr)
     , m_variableController(nullptr)
     , m_frameStackModel(nullptr)

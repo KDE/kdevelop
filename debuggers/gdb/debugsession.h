@@ -26,7 +26,8 @@
 #ifndef GDB_DEBUGSESSION_H
 #define GDB_DEBUGSESSION_H
 
-#include "debugsessionbase.h"
+#include "midebugsession.h"
+
 #include "dbgglobal.h"
 #include "gdb.h"
 #include "gdbbreakpointcontroller.h"
@@ -60,7 +61,7 @@ class CommandQueue;
 
 namespace GDB {
 
-class DebugSession : public DebugSessionBase
+class DebugSession : public MIDebugSession
 {
     Q_OBJECT
 public:

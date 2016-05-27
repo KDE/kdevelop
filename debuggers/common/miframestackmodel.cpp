@@ -21,7 +21,7 @@
 
 #include "miframestackmodel.h"
 
-#include "debugsessionbase.h"
+#include "midebugsession.h"
 #include "mi/micommand.h"
 
 #include <KLocalizedString>
@@ -51,14 +51,14 @@ QPair<QString, int> getSource(const Value &frame)
     return ret;
 }
 
-MIFrameStackModel::MIFrameStackModel(DebugSessionBase* session)
+MIFrameStackModel::MIFrameStackModel(MIDebugSession * session)
     : FrameStackModel(session)
 {
 }
 
-DebugSessionBase* MIFrameStackModel::session()
+MIDebugSession * MIFrameStackModel::session()
 {
-    return static_cast<DebugSessionBase *>(FrameStackModel::session());
+    return static_cast<MIDebugSession *>(FrameStackModel::session());
 }
 
 void MIFrameStackModel::fetchThreads()

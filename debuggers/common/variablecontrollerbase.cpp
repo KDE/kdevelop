@@ -24,7 +24,7 @@
 #include "variablecontrollerbase.h"
 
 #include "debuglog.h"
-#include "debugsessionbase.h"
+#include "midebugsession.h"
 #include "mivariable.h"
 #include "mi/mi.h"
 #include "mi/micommand.h"
@@ -45,19 +45,19 @@ using KTextEditor::Cursor;
 using KTextEditor::Document;
 using KTextEditor::Range;
 
-VariableControllerBase::VariableControllerBase(DebugSessionBase *parent)
+VariableControllerBase::VariableControllerBase(MIDebugSession *parent)
     : IVariableController(parent)
 {
     Q_ASSERT(parent);
-    connect(parent, &DebugSessionBase::inferiorStopped,
+    connect(parent, &MIDebugSession::inferiorStopped,
             this, &VariableControllerBase::programStopped);
-    connect(parent, &DebugSessionBase::stateChanged,
+    connect(parent, &MIDebugSession::stateChanged,
             this, &VariableControllerBase::stateChanged);
 }
 
-DebugSessionBase *VariableControllerBase::debugSession() const
+MIDebugSession *VariableControllerBase::debugSession() const
 {
-    return static_cast<DebugSessionBase*>(const_cast<QObject*>(QObject::parent()));
+    return static_cast<MIDebugSession *>(const_cast<QObject*>(QObject::parent()));
 }
 
 void VariableControllerBase::programStopped(const AsyncRecord& r)
@@ -139,7 +139,7 @@ private:
 class StackListLocalsHandler : public MICommandHandler
 {
 public:
-    StackListLocalsHandler(DebugSessionBase *session)
+    StackListLocalsHandler(MIDebugSession *session)
         : m_session(session)
     {}
 
@@ -161,7 +161,7 @@ public:
     }
 
 private:
-    DebugSessionBase *m_session;
+    MIDebugSession *m_session;
 };
 
 void VariableControllerBase::updateLocals()

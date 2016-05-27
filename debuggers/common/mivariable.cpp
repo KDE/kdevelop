@@ -21,7 +21,7 @@
 
 #include "mivariable.h"
 
-#include "debugsessionbase.h"
+#include "midebugsession.h"
 #include "mi/micommand.h"
 
 #include <debugger/interfaces/ivariablecontroller.h>
@@ -60,7 +60,7 @@ MIVariable::~MIVariable()
         if (topLevel()) {
             if (hasStartedSession()) {
                 IDebugSession* is = ICore::self()->debugController()->currentSession();
-                DebugSessionBase* s = static_cast<DebugSessionBase*>(is);
+                MIDebugSession * s = static_cast<MIDebugSession *>(is);
                 s->addCommand(new MICommand(VarDelete,
                                             QString("\"%1\"").arg(varobj_)));
             }
@@ -156,7 +156,7 @@ void MIVariable::attachMaybe(QObject *callback, const char *callbackMethod)
 
     if (hasStartedSession()) {
         IDebugSession* is = ICore::self()->debugController()->currentSession();
-        DebugSessionBase* s = static_cast<DebugSessionBase*>(is);
+        MIDebugSession * s = static_cast<MIDebugSession *>(is);
         s->addCommand(
             new MICommand(
                 VarCreate,
@@ -178,7 +178,7 @@ void MIVariable::markAllDead()
 class FetchMoreChildrenHandler : public MICommandHandler
 {
 public:
-    FetchMoreChildrenHandler(MIVariable *variable, DebugSessionBase *session)
+    FetchMoreChildrenHandler(MIVariable *variable, MIDebugSession *session)
         : m_variable(variable), m_session(session), m_activeCommands(1)
     {}
 
@@ -243,7 +243,7 @@ public:
 
 private:
     QPointer<MIVariable> m_variable;
-    DebugSessionBase *m_session;
+    MIDebugSession *m_session;
     int m_activeCommands;
 };
 
@@ -254,7 +254,7 @@ void MIVariable::fetchMoreChildren()
     // Probably need to disable open, or something
     if (hasStartedSession()) {
         IDebugSession* is = ICore::self()->debugController()->currentSession();
-        DebugSessionBase* s = static_cast<DebugSessionBase*>(is);
+        MIDebugSession * s = static_cast<MIDebugSession *>(is);
         s->addCommand(
             new MICommand(VarListChildren,
                           QString("--all-values \"%1\" %2 %3").arg(varobj_)
@@ -305,7 +305,7 @@ void MIVariable::handleUpdate(const Value& var)
                 const QString& exp = child["exp"].literal();
 
                 IDebugSession* is = ICore::self()->debugController()->currentSession();
-                DebugSessionBase* s = static_cast<DebugSessionBase*>(is);
+                MIDebugSession * s = static_cast<MIDebugSession *>(is);
                 KDevelop::Variable* xvar = s->variableController()->
                     createVariable(model(), this, exp);
                 MIVariable* var = static_cast<MIVariable*>(xvar);
@@ -373,7 +373,7 @@ void MIVariable::formatChanged()
     {
         if (hasStartedSession()) {
             IDebugSession* is = ICore::self()->debugController()->currentSession();
-            DebugSessionBase* s = static_cast<DebugSessionBase*>(is);
+            MIDebugSession * s = static_cast<MIDebugSession *>(is);
             s->addCommand(
                 new MICommand(VarSetFormat,
                             QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format())),

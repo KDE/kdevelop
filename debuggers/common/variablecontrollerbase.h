@@ -36,13 +36,13 @@ struct ResultRecord;
 struct Value;
 }
 
-class DebugSessionBase;
+class MIDebugSession;
 class VariableControllerBase : public KDevelop::IVariableController
 {
     Q_OBJECT
 
 public:
-    VariableControllerBase(DebugSessionBase* parent);
+    VariableControllerBase( MIDebugSession* parent);
 
     KDevelop::Variable* createVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                                        const QString& expression,
@@ -60,7 +60,7 @@ private slots:
     void stateChanged(KDevelop::IDebugSession::DebuggerState);
 
 private:
-    DebugSessionBase* debugSession() const;
+    MIDebugSession* debugSession() const;
 
     void updateLocals();
 

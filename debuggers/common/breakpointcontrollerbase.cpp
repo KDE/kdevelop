@@ -24,7 +24,7 @@
 #include "breakpointcontrollerbase.h"
 
 #include "debuglog.h"
-#include "debugsessionbase.h"
+#include "midebugsession.h"
 #include "mi/micommand.h"
 #include "stringhelpers.h"
 
@@ -181,11 +181,11 @@ struct BreakpointControllerBase::IgnoreChanges {
     BreakpointControllerBase& controller;
 };
 
-BreakpointControllerBase::BreakpointControllerBase(DebugSessionBase* parent)
+BreakpointControllerBase::BreakpointControllerBase(MIDebugSession * parent)
     : IBreakpointController(parent)
 {
     Q_ASSERT(parent);
-    connect(parent, &DebugSessionBase::inferiorStopped,
+    connect(parent, &MIDebugSession::inferiorStopped,
             this, &BreakpointControllerBase::programStopped);
 
     int numBreakpoints = breakpointModel()->breakpoints().size();
@@ -193,10 +193,10 @@ BreakpointControllerBase::BreakpointControllerBase(DebugSessionBase* parent)
         breakpointAdded(row);
 }
 
-DebugSessionBase *BreakpointControllerBase::debugSession() const
+MIDebugSession *BreakpointControllerBase::debugSession() const
 {
     Q_ASSERT(QObject::parent());
-    return static_cast<DebugSessionBase*>(const_cast<QObject*>(QObject::parent()));
+    return static_cast<MIDebugSession *>(const_cast<QObject*>(QObject::parent()));
 }
 
 int BreakpointControllerBase::breakpointRow(const BreakpointDataPtr& breakpoint)

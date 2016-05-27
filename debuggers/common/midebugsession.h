@@ -25,8 +25,8 @@
  *
  */
 
-#ifndef DEBUGSESSIONBASE_H
-#define DEBUGSESSIONBASE_H
+#ifndef MIDEBUGSESSION_H
+#define MIDEBUGSESSION_H
 
 #include <debugger/interfaces/idebugsession.h>
 
@@ -51,12 +51,12 @@ class MICommand;
 
 class MIDebugger;
 class STTY;
-class DebugSessionBase : public KDevelop::IDebugSession
+class MIDebugSession : public KDevelop::IDebugSession
 {
     Q_OBJECT
 public:
-    DebugSessionBase();
-    ~DebugSessionBase() override;
+    MIDebugSession();
+    ~MIDebugSession() override;
 
 Q_SIGNALS:
     /**
@@ -238,7 +238,7 @@ protected:
     bool startDebugger(KDevelop::ILaunchConfiguration *cfg);
 
     /**
-     * DebugSessionBase takes the ownership of the created instance.
+     * MIDebugSession takes the ownership of the created instance.
      */
     virtual MIDebugger *createDebugger() const = 0;
 
@@ -314,4 +314,4 @@ protected:
 
 } // end of namespace KDevDebugger
 
-#endif // DEBUGSESSIONBASE_H
+#endif // MIDEBUGSESSION_H
