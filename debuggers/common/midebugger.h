@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DEBUGGERBASE_H
-#define DEBUGGERBASE_H
+#ifndef MIDEBUGGER_H
+#define MIDEBUGGER_H
 
 #include "mi/mi.h"
 #include "mi/miparser.h"
@@ -41,12 +41,12 @@ class MICommand;
 }
 
 
-class DebuggerBase : public QObject
+class MIDebugger : public QObject
 {
     Q_OBJECT
 public:
-    explicit DebuggerBase(QObject* parent = 0);
-    ~DebuggerBase() override;
+    explicit MIDebugger(QObject* parent = 0);
+    ~MIDebugger() override;
 
     /** Starts the debugger.  This should be done after connecting to all
         signals the client is interested in.  */

@@ -5,7 +5,7 @@ set(debuggercommon_SRCS
     mi/micommand.cpp
     mi/micommandqueue.cpp
     debuglog.cpp
-    debuggerbase.cpp
+    midebugger.cpp
     debugsessionbase.cpp
     breakpointcontrollerbase.cpp
     miframestackmodel.cpp

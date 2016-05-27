@@ -23,11 +23,11 @@
 #ifndef GDB_H_d5c9cb274cbad688fe7a507a84f6633b
 #define GDB_H_d5c9cb274cbad688fe7a507a84f6633b
 
-#include "debuggerbase.h"
+#include "midebugger.h"
 
 namespace KDevDebugger { namespace GDB {
 
-class GDB : public DebuggerBase
+class GDB : public MIDebugger
 {
     Q_OBJECT
 public:

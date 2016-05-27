@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "debuggerbase.h"
+#include "midebugger.h"
 
 #include "debuglog.h"
 #include "mi/micommand.h"
@@ -42,7 +42,7 @@
 using namespace KDevDebugger;
 using namespace KDevDebugger::MI;
 
-DebuggerBase::DebuggerBase(QObject* parent)
+MIDebugger::MIDebugger(QObject* parent)
     : QObject(parent)
     , process_(nullptr)
     , currentCmd_(nullptr)
@@ -50,28 +50,28 @@ DebuggerBase::DebuggerBase(QObject* parent)
     process_ = new KProcess(this);
     process_->setOutputChannelMode(KProcess::SeparateChannels);
     connect(process_, &KProcess::readyReadStandardOutput,
-            this, &DebuggerBase::readyReadStandardOutput);
+            this, &MIDebugger::readyReadStandardOutput);
     connect(process_, &KProcess::readyReadStandardError,
-            this, &DebuggerBase::readyReadStandardError);
+            this, &MIDebugger::readyReadStandardError);
     connect(process_,
             static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
-            this, &DebuggerBase::processFinished);
+            this, &MIDebugger::processFinished);
     connect(process_, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
-            this, &DebuggerBase::processErrored);
+            this, &MIDebugger::processErrored);
 }
 
-DebuggerBase::~DebuggerBase()
+MIDebugger::~MIDebugger()
 {
     // prevent Qt warning: QProcess: Destroyed while process is still running.
     if (process_ && process_->state() == QProcess::Running) {
         disconnect(process_, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
-                    this, &DebuggerBase::processErrored);
+                    this, &MIDebugger::processErrored);
         process_->kill();
         process_->waitForFinished(10);
     }
 }
 
-void DebuggerBase::execute(MICommand* command)
+void MIDebugger::execute(MICommand* command)
 {
     currentCmd_ = command;
     QString commandText = currentCmd_->cmdToSend();
@@ -92,12 +92,12 @@ void DebuggerBase::execute(MICommand* command)
         emit internalCommandOutput(prettyCmd);
 }
 
-bool DebuggerBase::isReady() const
+bool MIDebugger::isReady() const
 {
     return currentCmd_ == 0;
 }
 
-void DebuggerBase::interrupt()
+void MIDebugger::interrupt()
 {
     //TODO:win32 Porting needed
     int pid = process_->pid();
@@ -106,17 +106,17 @@ void DebuggerBase::interrupt()
     }
 }
 
-MICommand* DebuggerBase::currentCommand() const
+MICommand* MIDebugger::currentCommand() const
 {
     return currentCmd_;
 }
 
-void DebuggerBase::kill()
+void MIDebugger::kill()
 {
     process_->kill();
 }
 
-void DebuggerBase::readyReadStandardOutput()
+void MIDebugger::readyReadStandardOutput()
 {
     process_->setReadChannel(QProcess::StandardOutput);
 
@@ -135,13 +135,13 @@ void DebuggerBase::readyReadStandardOutput()
     }
 }
 
-void DebuggerBase::readyReadStandardError()
+void MIDebugger::readyReadStandardError()
 {
     process_->setReadChannel(QProcess::StandardOutput);
     emit internalCommandOutput(QString::fromUtf8(process_->readAll()));
 }
 
-void DebuggerBase::processLine(const QByteArray& line)
+void MIDebugger::processLine(const QByteArray& line)
 {
     qCDebug(DEBUGGERCOMMON) << "Debugger (" << process_->pid() <<") output: " << line;
 
@@ -295,7 +295,7 @@ void DebuggerBase::processLine(const QByteArray& line)
 
 // **************************************************************************
 
-void DebuggerBase::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void MIDebugger::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qCDebug(DEBUGGERCOMMON) << "GDB FINISHED\n";
 
@@ -304,7 +304,7 @@ void DebuggerBase::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     emit exited(abnormal, i18n("Process exited"));
 }
 
-void DebuggerBase::processErrored(QProcess::ProcessError error)
+void MIDebugger::processErrored(QProcess::ProcessError error)
 {
     qCDebug(DEBUGGERCOMMON) << "GDB ERRORED" << error;
     if( error == QProcess::FailedToStart )

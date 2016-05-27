@@ -40,7 +40,7 @@ using namespace KDevDebugger::GDB;
 using namespace KDevDebugger::MI;
 
 GDB::GDB(QObject* parent)
-    : DebuggerBase(parent)
+    : MIDebugger(parent)
 {
 }
 

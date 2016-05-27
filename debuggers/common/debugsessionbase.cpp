@@ -28,8 +28,8 @@
 
 #include "debugsessionbase.h"
 
-#include "debuggerbase.h"
 #include "debuglog.h"
+#include "midebugger.h"
 #include "mi/mi.h"
 #include "mi/micommand.h"
 #include "mi/micommandqueue.h"
@@ -135,23 +135,23 @@ bool DebugSessionBase::startDebugger(ILaunchConfiguration *cfg)
     m_debugger->setParent(this);
 
     // output signals
-    connect(m_debugger, &DebuggerBase::applicationOutput,
+    connect(m_debugger, &MIDebugger::applicationOutput,
             this, [this](const QString &output) {
                 emit inferiorStdoutLines(output.split(QRegularExpression("[\r\n]"), QString::SkipEmptyParts));
             });
-    connect(m_debugger, &DebuggerBase::userCommandOutput, this, &DebugSessionBase::debuggerUserCommandOutput);
-    connect(m_debugger, &DebuggerBase::internalCommandOutput, this, &DebugSessionBase::debuggerInternalCommandOutput);
+    connect(m_debugger, &MIDebugger::userCommandOutput, this, &DebugSessionBase::debuggerUserCommandOutput);
+    connect(m_debugger, &MIDebugger::internalCommandOutput, this, &DebugSessionBase::debuggerInternalCommandOutput);
 
     // state signals
-    connect(m_debugger, &DebuggerBase::programStopped, this, &DebugSessionBase::inferiorStopped);
-    connect(m_debugger, &DebuggerBase::programRunning, this, &DebugSessionBase::inferiorRunning);
+    connect(m_debugger, &MIDebugger::programStopped, this, &DebugSessionBase::inferiorStopped);
+    connect(m_debugger, &MIDebugger::programRunning, this, &DebugSessionBase::inferiorRunning);
 
     // internal handlers
-    connect(m_debugger, &DebuggerBase::ready, this, &DebugSessionBase::slotDebuggerReady);
-    connect(m_debugger, &DebuggerBase::exited, this, &DebugSessionBase::slotDebuggerExited);
-    connect(m_debugger, &DebuggerBase::programStopped, this, &DebugSessionBase::slotInferiorStopped);
-    connect(m_debugger, &DebuggerBase::programRunning, this, &DebugSessionBase::slotInferiorRunning);
-    connect(m_debugger, &DebuggerBase::notification, this, &DebugSessionBase::processNotification);
+    connect(m_debugger, &MIDebugger::ready, this, &DebugSessionBase::slotDebuggerReady);
+    connect(m_debugger, &MIDebugger::exited, this, &DebugSessionBase::slotDebuggerExited);
+    connect(m_debugger, &MIDebugger::programStopped, this, &DebugSessionBase::slotInferiorStopped);
+    connect(m_debugger, &MIDebugger::programRunning, this, &DebugSessionBase::slotInferiorRunning);
+    connect(m_debugger, &MIDebugger::notification, this, &DebugSessionBase::processNotification);
 
 
     // start the debugger. Do this after connecting all signals so that initial

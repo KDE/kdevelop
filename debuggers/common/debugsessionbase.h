@@ -49,7 +49,7 @@ class CommandQueue;
 class MICommand;
 }
 
-class DebuggerBase;
+class MIDebugger;
 class STTY;
 class DebugSessionBase : public KDevelop::IDebugSession
 {
@@ -240,7 +240,7 @@ protected:
     /**
      * DebugSessionBase takes the ownership of the created instance.
      */
-    virtual DebuggerBase *createDebugger() const = 0;
+    virtual MIDebugger *createDebugger() const = 0;
 
     /**
      * Initialize debugger and set default configurations.
@@ -300,7 +300,7 @@ protected:
     // see m_debuggerState for debugger instance state
     DebuggerState m_sessionState;
 
-    DebuggerBase *m_debugger;
+    MIDebugger *m_debugger;
     DBGStateFlags m_debuggerState;
 
     bool m_stateReloadInProgress;
