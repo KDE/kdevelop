@@ -25,12 +25,13 @@
 #include <QStringList>
 #include <QScopedPointer>
 
-namespace GDBMI
+namespace KDevMI {
+namespace MI
 {
 struct ResultRecord;
 }
 
-namespace GDBDebugger
+namespace GDB
 {
 
 class RegistersView;
@@ -58,7 +59,7 @@ Q_SIGNALS:
 
 private:
 
-    void registerNamesHandler(const GDBMI::ResultRecord& r);
+    void registerNamesHandler(const MI::ResultRecord& r);
     void parseArchitecture();
 
     QStringList m_registerNames;
@@ -97,5 +98,6 @@ private:
     bool m_needToCheckArch;
 };
 
-}
+} // end of namespace GDB
+} // end of namespace KDevMI
 #endif // REGISTERSMANAGER_H

@@ -32,7 +32,8 @@ class OutputModel;
 class ILaunchConfiguration;
 }
 
-namespace GDBDebugger
+namespace KDevMI {
+namespace GDB
 {
 class CppDebuggerPlugin;
 class DebugSession;
@@ -42,7 +43,7 @@ class DebugJob : public KDevelop::OutputJob
 {
 Q_OBJECT
 public:
-    DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg,
+    DebugJob( CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg,
               IExecutePlugin* plugin, QObject* parent = 0 );
     void start() override;
 protected:
@@ -73,6 +74,7 @@ private slots:
     void sessionFinished();
 };
 
-}
+} // end of namespace GDB
+} // end of namespace KDevMI
 
 #endif

@@ -23,32 +23,31 @@
 
 #include "gdboutputwidget.h"
 
-#include <kcombobox.h>
-#include <KLocalizedString>
-#include <kcolorscheme.h>
-
-#include <QLabel>
-#include <QLayout>
-#include <QToolButton>
-#include <QToolTip>
-#include <QApplication>
-#include <QClipboard>
-#include <QFocusEvent>
-#include <QMenu>
-#include <khistorycombobox.h>
-#include <QScrollBar>
-#include <QScopedPointer>
+#include "dbgglobal.h"
+#include "debuggerplugin.h"
+#include "debuglog.h"
+#include "debugsession.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 
-#include "gdbglobal.h"
-#include "debuggerplugin.h"
-#include "debugsession.h"
-#include "debug.h"
+#include <KColorScheme>
+#include <KComboBox>
+#include <KHistoryComboBox>
+#include <KLocalizedString>
 
-namespace GDBDebugger
-{
+#include <QApplication>
+#include <QClipboard>
+#include <QFocusEvent>
+#include <QMenu>
+#include <QLabel>
+#include <QLayout>
+#include <QToolButton>
+#include <QToolTip>
+#include <QScrollBar>
+#include <QScopedPointer>
+
+using namespace KDevMI::GDB;
 
 /***************************************************************************/
 
@@ -129,16 +128,16 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     DebugSession *session = qobject_cast<DebugSession*>(s);
     if (!session) return;
      connect(this, &GDBOutputWidget::userGDBCmd,
-             session, &DebugSession::slotUserGDBCmd);
+             session, &DebugSession::addUserCommand);
      connect(this, &GDBOutputWidget::breakInto,
              session, &DebugSession::interruptDebugger);
 
-     connect(session, &DebugSession::gdbInternalCommandStdout,
+     connect(session, &DebugSession::debuggerInternalCommandOutput,
              this, &GDBOutputWidget::slotInternalCommandStdout);
-     connect(session, &DebugSession::gdbUserCommandStdout,
+     connect(session, &DebugSession::debuggerUserCommandOutput,
              this, &GDBOutputWidget::slotUserCommandStdout);
 
-     connect(session, &DebugSession::gdbStateChanged,
+     connect(session, &DebugSession::debuggerStateChanged,
              this, &GDBOutputWidget::slotStateChanged);
 
      slotStateChanged(s_none, session->debuggerState());
@@ -450,11 +449,3 @@ bool GDBOutputWidget::showInternalCommands() const
 {
     return showInternalCommands_;
 }
-
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-}
-
-
-

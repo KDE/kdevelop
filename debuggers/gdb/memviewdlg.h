@@ -16,11 +16,12 @@
 #ifndef _MEMVIEW_H_
 #define _MEMVIEW_H_
 
-#include "mi/gdbmi.h"
+#include "dbgglobal.h"
+#include "mi/mi.h"
 
 #include <QContextMenuEvent>
+#include <QWidget>
 
-#include "gdbglobal.h"
 
 namespace KDevelop {
 class IDebugSession;
@@ -29,7 +30,9 @@ class IDebugSession;
 class QLineEdit;
 class QToolBox;
 
-namespace GDBDebugger
+namespace KDevMI
+{
+namespace GDB
 {
     class CppDebuggerPlugin;
     class MemoryView;
@@ -72,7 +75,7 @@ namespace GDBDebugger
     private: // Callbacks
         void sizeComputed(const QString& value);
 
-        void memoryRead(const GDBMI::ResultRecord& r);
+        void memoryRead(const MI::ResultRecord& r);
 
     private Q_SLOTS:
         void memoryEdited(int start, int end);
@@ -113,6 +116,8 @@ namespace GDBDebugger
     private slots:
         void currentSessionChanged(KDevelop::IDebugSession* session);
     };
-}
+
+} // end of namespace GDB
+} // end of namespace KDevMI
 
 #endif

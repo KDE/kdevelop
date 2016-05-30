@@ -22,7 +22,9 @@
 
 #include "registercontroller.h"
 
-namespace GDBDebugger
+namespace KDevMI
+{
+namespace GDB
 {
 
 class Converters
@@ -35,5 +37,6 @@ public:
     static QString modeToString(Mode mode);
 };
 
-}
+} // end of namespace GDB
+} // end of namespace KDevMI
 #endif // CONVERTERS_H

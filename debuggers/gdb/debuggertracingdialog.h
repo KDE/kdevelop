@@ -16,7 +16,8 @@
 #include "ui_debuggertracingdialog.h"
 #include <QDialog>
 
-namespace GDBDebugger
+namespace KDevMI {
+namespace GDB
 {
     class Breakpoint;
 
@@ -36,6 +37,8 @@ namespace GDBDebugger
     private:
         Breakpoint* bp_;
     };
-}
+
+} // end of namespace GDB
+} // end of namespace KDevMI
 
 #endif

@@ -20,20 +20,17 @@
 
 #include "registersmanager.h"
 
-#include "registercontroller_x86.h"
 #include "registercontroller_arm.h"
+#include "registercontroller_x86.h"
 #include "registersview.h"
 
+#include "debuglog.h"
+#include "mi/micommand.h"
 #include "modelsmanager.h"
-
-#include "../gdbcommand.h"
 #include "../debugsession.h"
-#include "../debug.h"
 
-
-
-namespace GDBDebugger
-{
+using namespace KDevMI::MI;
+using namespace KDevMI::GDB;
 
 void ArchitectureParser::parseArchitecture()
 {
@@ -55,13 +52,13 @@ void ArchitectureParser::parseArchitecture()
     emit architectureParsed(arch);
 }
 
-void ArchitectureParser::registerNamesHandler(const GDBMI::ResultRecord& r)
+void ArchitectureParser::registerNamesHandler(const ResultRecord& r)
 {
-    const GDBMI::Value& names = r["register-names"];
+    const Value& names = r["register-names"];
 
     m_registerNames.clear();
     for (int i = 0; i < names.size(); ++i) {
-        const GDBMI::Value& entry = names[i];
+        const Value& entry = names[i];
         if (!entry.literal().isEmpty()) {
             m_registerNames << entry.literal();
         }
@@ -72,12 +69,12 @@ void ArchitectureParser::registerNamesHandler(const GDBMI::ResultRecord& r)
 
 void ArchitectureParser::determineArchitecture(DebugSession* debugSession)
 {
-    if (!debugSession || debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (!debugSession || debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
     }
 
     debugSession->addCommand(
-        new GDBCommand(GDBMI::DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler));
+        new MICommand(DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler));
 }
 
 RegistersManager::RegistersManager(QWidget* parent)
@@ -141,7 +138,7 @@ void RegistersManager::setSession(DebugSession* debugSession)
 
 void RegistersManager::updateRegisters()
 {
-    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (!m_debugSession || m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
     }
 
@@ -171,6 +168,4 @@ void RegistersManager::setController(IRegisterController* c)
     m_modelsManager->setController(c);
 
     m_registersView->enable(c ? true : false);
-}
-
 }

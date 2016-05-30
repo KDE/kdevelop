@@ -22,7 +22,7 @@
 #include "selectcoredialog.h"
 #include <KLocalizedString>
 
-namespace GDBDebugger {
+using namespace KDevMI::GDB;
 
 SelectCoreDialog::SelectCoreDialog(QWidget* parent)
     : QDialog(parent)
@@ -40,7 +40,4 @@ QUrl SelectCoreDialog::binary() const
 QUrl SelectCoreDialog::core() const
 {
     return m_ui.coreFile->url();
-}
-
-
 }

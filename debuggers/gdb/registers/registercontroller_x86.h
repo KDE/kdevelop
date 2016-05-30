@@ -23,7 +23,9 @@
 
 #include "registercontroller.h"
 
-namespace GDBDebugger
+namespace KDevMI
+{
+namespace GDB
 {
 
 class DebugSession;
@@ -87,6 +89,8 @@ public:
 private:
     void initRegisterNames();
 };
-}
+
+} // end of namespace GDB
+} // end of namespace KDevMI
 
 #endif // REGISTERCONTROLLER_X86_H

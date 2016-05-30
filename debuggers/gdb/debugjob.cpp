@@ -23,24 +23,25 @@
 
 #include "debugjob.h"
 #include "debuggerplugin.h"
-#include <interfaces/ilaunchconfiguration.h>
-#include <util/environmentgrouplist.h>
+#include "debuglog.h"
+#include "debugsession.h"
+
+#include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
-#include <klocalizedstring.h>
+#include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>
-#include <execute/iexecuteplugin.h>
-#include "debugsession.h"
-#include "debug.h"
+#include <util/environmentgrouplist.h>
+
+#include <KLocalizedString>
 
 #include <QFileInfo>
-#include <KI18n/KLocalizedString>
 
-using namespace GDBDebugger;
+using namespace KDevMI::GDB;
 using namespace KDevelop;
 
-DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* execute, QObject* parent)
+DebugJob::DebugJob(CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* execute, QObject* parent)
     : KDevelop::OutputJob(parent)
     , m_launchcfg( launchcfg )
     , m_execute( execute )
@@ -48,8 +49,8 @@ DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfigur
     setCapabilities(Killable);
 
     m_session = p->createSession();
-    connect(m_session, &DebugSession::applicationStandardOutputLines, this, &DebugJob::stderrReceived);
-    connect(m_session, &DebugSession::applicationStandardErrorLines, this, &DebugJob::stdoutReceived);
+    connect(m_session, &DebugSession::inferiorStdoutLines, this, &DebugJob::stderrReceived);
+    connect(m_session, &DebugSession::inferiorStderrLines, this, &DebugJob::stdoutReceived);
     connect(m_session, &DebugSession::finished, this, &DebugJob::done );
 
     if (launchcfg->project()) {
@@ -101,7 +102,7 @@ void DebugJob::start()
     setModel(model);
     setTitle(m_launchcfg->name());
 
-    QString startWith = grp.readEntry(GDBDebugger::startWithEntry, QString("ApplicationOutput"));
+    QString startWith = grp.readEntry(startWithEntry, QString("ApplicationOutput"));
     if (startWith == "GdbConsole") {
         setVerbosity(Silent);
     } else if (startWith == "FrameStack") {
@@ -112,7 +113,7 @@ void DebugJob::start()
 
     startOutput();
 
-    if (!m_session->startProgram( m_launchcfg, m_execute )) {
+    if (!m_session->startDebugging(m_launchcfg, m_execute)) {
         done();
     }
 }

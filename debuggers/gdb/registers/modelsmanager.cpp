@@ -26,8 +26,7 @@
 
 #include <KSharedConfig>
 
-namespace GDBDebugger
-{
+namespace KDevMI { namespace GDB {
 
 struct Model {
     Model();
@@ -61,6 +60,11 @@ private:
     ///All models
     QVector<Model> m_models;
 };
+
+} // end of namespace GDB
+} // end of namespace KDevMI
+
+using namespace KDevMI::GDB;
 
 ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(0), m_config(KSharedConfig::openConfig()->group("Register models")) {}
 
@@ -349,6 +353,4 @@ void ModelsManager::setMode(const QString& group, Mode mode)
             break;
         }
     }
-}
-
 }

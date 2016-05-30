@@ -1,7 +1,0 @@
-#ifndef KDEVELOP_GDB_DEBUG_H
-#define KDEVELOP_GDB_DEBUG_H
-
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(DEBUGGERGDB)
-
-#endif

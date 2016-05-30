@@ -21,8 +21,7 @@
 
 #include <KLocalizedString>
 
-namespace GDBDebugger
-{
+using namespace KDevMI::GDB;
 
 QString Converters::formatToString(Format format)
 {
@@ -60,6 +59,4 @@ QString Converters::modeToString(Mode mode)
 
     static const QString modes[LAST_MODE] = {"natural", "v4_float", "v2_double", "v4_int32", "v2_int64", "u32", "u64", "f32", "f64"};
     return modes[mode];
-}
-
 }

@@ -1,5 +1,6 @@
 /*
- * GDB-specific variable
+ * KDevelop debugger logging facilities
+ *
  * Copyright 2016  Aetf <aetf@unlimitedcodeworks.xyz>
  *
  * This program is free software; you can redistribute it and/or
@@ -20,28 +21,13 @@
  *
  */
 
-#ifndef GDBVARIABLE_H
-#define GDBVARIABLE_H
+#ifndef KDEVELOP_DEBUG_LOG_H
+#define KDEVELOP_DEBUG_LOG_H
 
-#include "mivariable.h"
+#include <QLoggingCategory>
 
-namespace KDevelop {
-class TreeModel;
-class TreeItem;
-}
+Q_DECLARE_LOGGING_CATEGORY(DEBUGGERCOMMON)
+Q_DECLARE_LOGGING_CATEGORY(DEBUGGERGDB)
+Q_DECLARE_LOGGING_CATEGORY(DEBUGGERLLDB)
 
-namespace KDevMI { namespace GDB {
-
-class GdbVariable : public KDevMI::MIVariable
-{
-    Q_OBJECT
-
-public:
-    GdbVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
-                const QString& expression, const QString& display = "");
-};
-
-} // end of namespace GDB
-} // end of namespace KDevMI
-
-#endif // GDBVARIABLE_H
+#endif

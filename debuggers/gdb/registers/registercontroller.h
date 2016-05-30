@@ -27,12 +27,13 @@
 #include <QStringList>
 #include <QString>
 
-namespace GDBMI
+namespace KDevMI {
+namespace MI
 {
 struct ResultRecord;
 }
 
-namespace GDBDebugger
+namespace GDB
 {
 
 class DebugSession;
@@ -209,15 +210,15 @@ public:
 
 private :
     ///Handles initialization of register's names.
-    void registerNamesHandler(const GDBMI::ResultRecord& r);
+    void registerNamesHandler(const MI::ResultRecord& r);
 
     ///Parses new values for general registers from @p r and updates it in m_registers.
     ///Emits registersChanged signal.
-    void generalRegistersHandler(const GDBMI::ResultRecord& r);
+    void generalRegistersHandler(const MI::ResultRecord& r);
 
     ///Parses new values for structured registers from @p r and updates it in m_registers.
     ///Emits registersChanged signal.
-    virtual void structuredRegistersHandler(const GDBMI::ResultRecord& r);
+    virtual void structuredRegistersHandler(const MI::ResultRecord& r);
 
 private:
 
@@ -238,12 +239,13 @@ protected:
     DebugSession* m_debugSession;
 };
 
-}
+} // end of namespace GDB
+} // end of namespace KDevMI
 
-Q_DECLARE_TYPEINFO(GDBDebugger::Register, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(GDBDebugger::RegistersGroup, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(GDBDebugger::FlagRegister, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(GDBDebugger::GroupsName, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(GDBDebugger::FormatsModes, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::Register, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::RegistersGroup, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::FlagRegister, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::GroupsName, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::FormatsModes, Q_MOVABLE_TYPE);
 
 #endif

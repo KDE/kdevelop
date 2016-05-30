@@ -23,8 +23,21 @@
  */
 
 #include "disassemblewidget.h"
-#include "gdbcommand.h"
+
 #include "debuggerplugin.h"
+#include "debuglog.h"
+#include "debugsession.h"
+#include "mi/micommand.h"
+#include "registers/registersmanager.h"
+
+#include <debugger/interfaces/idebugsession.h>
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <util/autoorientedsplitter.h>
+
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KTextEdit>
 
 #include <QShowEvent>
 #include <QHideEvent>
@@ -37,24 +50,9 @@
 #include <QHeaderView>
 #include <QFontDatabase>
 
-#include <KLocalizedString>
-#include <KSharedConfig>
-#include <KTextEdit>
+using namespace KDevMI::GDB;
+using namespace KDevMI::MI;
 
-#include <util/autoorientedsplitter.h>
-
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
-#include <debugger/interfaces/idebugsession.h>
-#include "debugsession.h"
-
-#include "registers/registersmanager.h"
-#include "debug.h"
-
-using namespace GDBMI;
-
-namespace GDBDebugger
-{
 
 SelectAddressDialog::SelectAddressDialog(QWidget* parent)
     : QDialog(parent)
@@ -299,10 +297,10 @@ void DisassembleWidget::slotShowStepInSource(const QUrl&, int,
     update(currentAddress);
 }
 
-void DisassembleWidget::updateExecutionAddressHandler(const GDBMI::ResultRecord& r)
+void DisassembleWidget::updateExecutionAddressHandler(const ResultRecord& r)
 {
-    const GDBMI::Value& content = r["asm_insns"];
-    const GDBMI::Value& pc = content[0];
+    const Value& content = r["asm_insns"];
+    const Value& pc = content[0];
     if( pc.hasField("address") ){
         QString addr = pc["address"].literal();
         address_ = addr.toULong(&ok,16);
@@ -322,7 +320,7 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
     //only get $pc
     if (from.isEmpty()){
         s->addCommand(
-                    new GDBCommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0", this, &DisassembleWidget::updateExecutionAddressHandler ) );
+                    new MICommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0", this, &DisassembleWidget::updateExecutionAddressHandler ) );
     }else{
 
         QString cmd = (to.isEmpty())?
@@ -330,22 +328,22 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
         QString("-s %1 -e %2+1 -- 0").arg(from).arg(to); // if both addr set
 
         s->addCommand(
-            new GDBCommand(DataDisassemble, cmd, this, &DisassembleWidget::disassembleMemoryHandler ) );
+            new MICommand(DataDisassemble, cmd, this, &DisassembleWidget::disassembleMemoryHandler ) );
    }
 }
 
 /***************************************************************************/
 
-void DisassembleWidget::disassembleMemoryHandler(const GDBMI::ResultRecord& r)
+void DisassembleWidget::disassembleMemoryHandler(const ResultRecord& r)
 {
-    const GDBMI::Value& content = r["asm_insns"];
+    const Value& content = r["asm_insns"];
     QString currentFunction;
 
     m_disassembleWindow->clear();
 
     for(int i = 0; i < content.size(); ++i)
     {
-        const GDBMI::Value& line = content[i];
+        const Value& line = content[i];
 
         QString addr, fct, offs, inst;
 
@@ -437,6 +435,3 @@ void DisassembleWidget::update(const QString &address)
     }
     m_registersManager->updateRegisters();
 }
-
-}
-

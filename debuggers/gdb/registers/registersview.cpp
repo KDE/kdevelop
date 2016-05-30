@@ -20,9 +20,9 @@
 
 #include "registersview.h"
 
-#include "modelsmanager.h"
 #include "converters.h"
-#include "../debug.h"
+#include "debuglog.h"
+#include "modelsmanager.h"
 
 #include <QMenu>
 #include <QContextMenuEvent>
@@ -30,8 +30,8 @@
 
 #include <KLocalizedString>
 
-namespace GDBDebugger
-{
+using namespace KDevMI::GDB;
+
 namespace
 {
 const int TABLES_COUNT = 5;
@@ -245,6 +245,4 @@ void RegistersView::insertAction(const QString& name, Qt::Key k)
 
     m_mapper->setMapping(a, a->text());
     connect(a, &QAction::triggered, m_mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-}
-
 }

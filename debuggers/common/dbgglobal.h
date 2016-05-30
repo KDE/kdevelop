@@ -1,5 +1,5 @@
 /***************************************************************************
-                          gdbglobal.h
+                          dbgglobal.h
                              -------------------
     begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
@@ -15,12 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _GDBGLOBAL_H_
-#define _GDBGLOBAL_H_
+#ifndef _DBGGLOBAL_H_
+#define _DBGGLOBAL_H_
 
 #include <QFlags>
 
-namespace GDBDebugger
+namespace KDevMI
 {
 
 enum DBGStateFlag
@@ -50,8 +50,20 @@ enum DataType { typeUnknown, typeValue, typePointer, typeReference,
             typeStruct, typeArray, typeQString, typeWhitespace,
             typeName };
 
-}
+// FIXME: find a more appropriate place for these strings. Possibly a place specific to debugger backend
+static const char gdbPathEntry[] = "GDB Path";
+static const char debuggerShellEntry[] = "Debugger Shell";
+static const char remoteGdbConfigEntry[] = "Remote GDB Config Script";
+static const char remoteGdbShellEntry[] = "Remote GDB Shell Script";
+static const char remoteGdbRunEntry[] = "Remote GDB Run Script";
+static const char staticMembersEntry[] = "Display Static Members";
+static const char demangleNamesEntry[] = "Display Demangle Names";
+static const char allowForcedBPEntry[] = "Allow Forced Breakpoint Set";
+static const char startWithEntry[] = "Start With";
+static const char breakOnStartEntry[] = "Break on Start";
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GDBDebugger::DBGStateFlags)
+} // end of namespace KDevMI
 
-#endif
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevMI::DBGStateFlags)
+
+#endif // _DBGGLOBAL_H_

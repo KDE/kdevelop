@@ -19,22 +19,24 @@
  */
 
 #include "processselection.h"
+
 #include <processui/ksysguardprocesslist.h>
 #include <processcore/process.h>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QAbstractItemView>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QTimer>
-#include <QTreeView>
-#include <QLineEdit>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
 
-namespace GDBDebugger
-{
+#include <QAbstractItemView>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QTimer>
+#include <QTreeView>
+#include <QVBoxLayout>
+
+
+using namespace KDevMI::GDB;
 
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     : QDialog(parent)
@@ -78,9 +80,9 @@ long int ProcessSelectionDialog::pidSelected()
 {
     QList<KSysGuard::Process*> ps=m_processList->selectedProcesses();
     Q_ASSERT(ps.count()==1);
-    
+
     KSysGuard::Process* process=ps.first();
-    
+
     return process->pid();
 }
 
@@ -92,6 +94,4 @@ QSize ProcessSelectionDialog::sizeHint() const
 void ProcessSelectionDialog::selectionChanged()
 {
     m_okButton->setEnabled(true);
-}
-
 }

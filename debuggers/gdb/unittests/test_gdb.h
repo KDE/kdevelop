@@ -20,13 +20,14 @@
 #ifndef GDBTEST_H
 #define GDBTEST_H
 
-#include <QtCore/QObject>
 #include <debugsession.h>
+#include <QObject>
 
 namespace KDevelop {
 class TestCore;
 }
-namespace GDBDebugger {
+namespace KDevMI {
+namespace GDB {
 
 class GdbTest : public QObject
 {
@@ -97,13 +98,14 @@ private Q_SLOTS:
     void testPathWithSpace();
 
 private:
-    bool waitForState(GDBDebugger::DebugSession *session,
+    bool waitForState(DebugSession *session,
                       KDevelop::IDebugSession::DebuggerState state,
                       const char *file, int line,
                       bool waitForIdle = false);
     IExecutePlugin* m_iface;
 };
 
-}
+} // end of namespace GDB
+} // end of namespace KDevMI
 
 #endif // GDBTEST_H

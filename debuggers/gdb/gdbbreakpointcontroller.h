@@ -1,5 +1,5 @@
 /*
- * GDB-specific variable
+ * <one line to give the program's name and a brief idea of what it does.>
  * Copyright 2016  Aetf <aetf@unlimitedcodeworks.xyz>
  *
  * This program is free software; you can redistribute it and/or
@@ -20,28 +20,24 @@
  *
  */
 
-#ifndef GDBVARIABLE_H
-#define GDBVARIABLE_H
+#ifndef GDBBREAKPOINTCONTROLLER_H
+#define GDBBREAKPOINTCONTROLLER_H
 
-#include "mivariable.h"
-
-namespace KDevelop {
-class TreeModel;
-class TreeItem;
-}
+#include "mibreakpointcontroller.h"
 
 namespace KDevMI { namespace GDB {
 
-class GdbVariable : public KDevMI::MIVariable
+class DebugSession;
+class BreakpointController : public MIBreakpointController
 {
     Q_OBJECT
 
 public:
-    GdbVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
-                const QString& expression, const QString& display = "");
+    BreakpointController(DebugSession *parent);
+private:
 };
 
 } // end of namespace GDB
 } // end of namespace KDevMI
 
-#endif // GDBVARIABLE_H
+#endif // GDBBREAKPOINTCONTROLLER_H

@@ -71,13 +71,12 @@
 #include <QStandardPaths>
 
 #include "stty.h"
-#include "debug.h"
+#include "debuglog.h"
 
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
 
-namespace GDBDebugger
-{
+using namespace KDevMI;
 
 static int chownpty(int fd, int grant)
 // param fd: the fd of a master pty.
@@ -342,6 +341,5 @@ bool STTY::findExternalTTY(const QString& termApp)
         m_lastError = i18n("Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\"", appName, file.fileName());
     }
     return true;
-}
 }
 // **************************************************************************

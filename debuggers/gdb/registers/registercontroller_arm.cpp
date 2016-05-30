@@ -19,12 +19,11 @@
  */
 
 #include "registercontroller_arm.h"
-#include "../debug.h"
+#include "debuglog.h"
 
 #include <KLocalizedString>
 
-namespace GDBDebugger
-{
+using namespace KDevMI::GDB;
 
 QVector<QStringList> RegisterController_Arm::m_registerNames;
 FlagRegister RegisterController_Arm::m_cpsr;
@@ -183,6 +182,4 @@ QStringList RegisterController_Arm::registerNamesForGroup(const GroupsName& grou
     }
 
     return QStringList();
-}
-
 }

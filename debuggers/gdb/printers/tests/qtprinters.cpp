@@ -28,9 +28,6 @@
 
 const QString BINARY_PATH(PRINTER_BIN_DIR);
 
-namespace GDBDebugger
-{
-
 class GdbProcess : private QProcess
 {
 public:
@@ -453,6 +450,4 @@ void QtPrintersTest::testKDevelopTypes()
     QVERIFY(gdb.execute("print path2").contains("(\"http://www.test.com\", \"tmp\", \"asdf.txt\")"));
 }
 
-}
-QTEST_MAIN(GDBDebugger::QtPrintersTest)
-
+QTEST_MAIN(QtPrintersTest)

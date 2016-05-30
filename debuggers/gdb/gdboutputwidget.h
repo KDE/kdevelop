@@ -23,13 +23,13 @@
 #ifndef _GDBOUTPUTWIDGET_H_
 #define _GDBOUTPUTWIDGET_H_
 
+#include "dbgglobal.h"
+
+#include <QFocusEvent>
+#include <QTextEdit>
 #include <QTimer>
 #include <QStringList>
-#include <QFocusEvent>
 #include <QStringList>
-#include <QTextEdit>
-
-#include "gdbglobal.h"
 
 namespace KDevelop {
 class IDebugSession;
@@ -39,7 +39,9 @@ class KHistoryComboBox;
 class QTextEdit;
 class QToolButton;
 
-namespace GDBDebugger
+namespace KDevMI
+{
+namespace GDB
 {
 
 class GDBController;
@@ -149,6 +151,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent* event) override;
 };
 
-}
+} // end of namespace GDB
+} // end of namespace KDevMI
 
 #endif

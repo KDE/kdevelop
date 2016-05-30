@@ -1,8 +1,7 @@
 /*
- * Low level GDB interface.
- *
- * Copyright 2007 Vladimir Prus <ghost@cs.msu.su>
- * Copyright 2016 Aetf <aetf@unlimitedcodeworks.xyz>
+ * Implementation of thread and frame model that are common to debuggers using MI.
+ * 
+ * Copyright 2009 Vladimir Prus <ghost@cs.msu.su>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -20,25 +19,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef GDB_H_d5c9cb274cbad688fe7a507a84f6633b
-#define GDB_H_d5c9cb274cbad688fe7a507a84f6633b
+#ifndef KDEVELOP_MI_FRAMESTACKMODEL_H
+#define KDEVELOP_MI_FRAMESTACKMODEL_H
 
-#include "midebugger.h"
+#include <debugger/framestack/framestackmodel.h>
 
-namespace KDevMI { namespace GDB {
+namespace KDevMI {
 
-class GdbDebugger : public MIDebugger
+namespace MI {
+struct ResultRecord;
+}
+
+class MIDebugSession;
+class MIFrameStackModel : public KDevelop::FrameStackModel
 {
-    Q_OBJECT
 public:
-    explicit GdbDebugger(QObject* parent = 0);
-    ~GdbDebugger() override;
+    MIFrameStackModel( MIDebugSession* session);
 
-    void start(KConfigGroup& config, const QStringList& extraArguments = {}) override;
+    MIDebugSession* session();
 
+protected: // FrameStackModel overrides
+    void fetchThreads() override;
+    void fetchFrames(int threadNumber, int from, int to) override;
+
+private:
+    void handleThreadInfo(const MI::ResultRecord& r);
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
 
 #endif

@@ -19,11 +19,7 @@
 #ifndef __STRINGHELPERS_H__
 #define __STRINGHELPERS_H__
 
-#include <language/duchain/stringhelpers.h>
-
-class QString;
-class QChar;
-class QStringList;
+#include <QString>
 
 namespace Utils {
 
@@ -33,5 +29,10 @@ namespace Utils {
  * */
 int expressionAt( const QString& contents, int index );
 
-}
-#endif 
+QString quoteExpression(QString expr);
+
+QString unquoteExpression(QString expr);
+
+} // end of namespace Utils
+
+#endif // __STRINGHELPERS_H__

@@ -19,47 +19,54 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef BREAKPOINTCONTROLLER_H
-#define BREAKPOINTCONTROLLER_H
+#ifndef MIBREAKPOINTCONTROLLER_H
+#define MIBREAKPOINTCONTROLLER_H
 
-#include <QObject>
+#include "dbgglobal.h"
 
 #include <debugger/interfaces/ibreakpointcontroller.h>
 #include <debugger/interfaces/idebugsession.h>
 
-#include "gdbglobal.h"
+#include <QObject>
 
 class QModelIndex;
 
-namespace GDBMI {
+namespace KDevMI {
+
+namespace MI {
 struct AsyncRecord;
 struct ResultRecord;
 struct Value;
 }
 
-namespace GDBDebugger
-{
-using namespace KDevelop;
+struct BreakpointData {
+    int debuggerId;
+    KDevelop::BreakpointModel::ColumnFlags dirty;
+    KDevelop::BreakpointModel::ColumnFlags sent;
+    KDevelop::BreakpointModel::ColumnFlags errors;
+    bool pending;
 
-class DebugSession;
-struct BreakpointData;
+    BreakpointData()
+        : debuggerId(-1)
+        , pending(false)
+    {}
+};
 
 typedef QSharedPointer<BreakpointData> BreakpointDataPtr;
 
+class MIDebugSession;
 /**
 * Handles signals from the editor that relate to breakpoints and the execution
 * point of the debugger.
 * We may change, add or remove breakpoints in this class.
 */
-class BreakpointController : public IBreakpointController
+class MIBreakpointController : public KDevelop::IBreakpointController
 {
     Q_OBJECT
 public:
-    BreakpointController(DebugSession* parent);
+    MIBreakpointController( MIDebugSession* parent);
 
     using IBreakpointController::breakpointModel;
-
-    void initSendBreakpoints();
 
     /**
      * Controls whether when duplicate breakpoints are received via async notification from GDB,
@@ -67,32 +74,37 @@ public:
      */
     void setDeleteDuplicateBreakpoints(bool enable);
 
-    virtual void breakpointAdded(int row) override;
-    virtual void breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns) override;
-    virtual void breakpointAboutToBeDeleted(int row) override;
-    virtual void debuggerStateChanged(IDebugSession::DebuggerState) override;
+    void breakpointAdded(int row) override;
+    void breakpointModelChanged(int row, KDevelop::BreakpointModel::ColumnFlags columns) override;
+    void breakpointAboutToBeDeleted(int row) override;
+    void debuggerStateChanged(KDevelop::IDebugSession::DebuggerState) override;
 
-    void notifyBreakpointCreated(const GDBMI::AsyncRecord& r);
-    void notifyBreakpointModified(const GDBMI::AsyncRecord& r);
-    void notifyBreakpointDeleted(const GDBMI::AsyncRecord& r);
+    void notifyBreakpointCreated(const MI::AsyncRecord& r);
+    void notifyBreakpointModified(const MI::AsyncRecord& r);
+    void notifyBreakpointDeleted(const MI::AsyncRecord& r);
+
+public Q_SLOTS:
+    void initSendBreakpoints();
 
 private Q_SLOTS:
-    void programStopped(const GDBMI::AsyncRecord &r);
+    void programStopped(const MI::AsyncRecord &r);
 
 private:
-    DebugSession* debugSession() const;
+    MIDebugSession* debugSession() const;
 
     int breakpointRow(const BreakpointDataPtr& breakpoint);
-    void createGdbBreakpoint(int row);
+    void createBreakpoint(int row);
     void sendUpdates(int row);
     void recalculateState(int row);
 
-    virtual void sendMaybe(KDevelop::Breakpoint *breakpoint) override;
+    void sendMaybe(KDevelop::Breakpoint *breakpoint) override;
 
-    void createFromGdb(const GDBMI::Value& miBkpt);
-    void updateFromGdb(int row, const GDBMI::Value& miBkpt, BreakpointModel::ColumnFlags lockedColumns = 0);
+    // TODO: what's this
+    void createFromDebugger(const MI::Value& miBkpt);
+    void updateFromDebugger(int row, const MI::Value& miBkpt,
+                       KDevelop::BreakpointModel::ColumnFlags lockedColumns = 0);
 
-    int rowFromGdbId(int gdbId) const;
+    int rowFromDebuggerId(int gdbId) const;
 
     struct Handler;
     struct InsertedHandler;
@@ -106,6 +118,6 @@ private:
     bool m_deleteDuplicateBreakpoints = false;
 };
 
-}
+} // end of namespace KDevMI
 
-#endif
+#endif // MIBREAKPOINTCONTROLLER_H
