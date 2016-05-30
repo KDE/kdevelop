@@ -42,7 +42,7 @@ class ILaunchConfiguration;
 class ProcessLineMaker;
 }
 
-namespace KDevDebugger {
+namespace KDevMI {
 
 namespace MI {
 class CommandQueue;
@@ -312,6 +312,6 @@ protected:
     bool m_sourceInitFile;
 };
 
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif // MIDEBUGSESSION_H

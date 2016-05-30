@@ -25,10 +25,10 @@
 
 #include "miframestackmodel.h"
 
-namespace KDevDebugger { namespace GDB {
+namespace KDevMI { namespace GDB {
 
 class DebugSession;
-class GdbFrameStackModel : public KDevDebugger::MIFrameStackModel
+class GdbFrameStackModel : public KDevMI::MIFrameStackModel
 {
     Q_OBJECT
 public:
@@ -38,6 +38,6 @@ public:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif // FRAMESTACKMODEL_H

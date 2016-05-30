@@ -24,7 +24,7 @@
 #include <QString>
 #include <QVector>
 
-namespace KDevDebugger { namespace MI {
+namespace KDevMI { namespace MI {
 
 class MILexer;
 struct TokenStream;
@@ -146,6 +146,6 @@ inline FileSymbol::~FileSymbol()
 }
 
 } // end of MI
-} // end of KDevDebugger
+} // end of KDevMI
 
 #endif

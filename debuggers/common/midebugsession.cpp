@@ -60,8 +60,8 @@
 #include <QUrl>
 
 using namespace KDevelop;
-using namespace KDevDebugger;
-using namespace KDevDebugger::MI;
+using namespace KDevMI;
+using namespace KDevMI::MI;
 
 MIDebugSession::MIDebugSession()
     : m_procLineMaker(new ProcessLineMaker(this))
@@ -895,7 +895,7 @@ void MIDebugSession::raiseEvent(event_t e)
     }
 }
 
-bool KDevDebugger::MIDebugSession::hasCrashed() const
+bool KDevMI::MIDebugSession::hasCrashed() const
 {
     return m_hasCrashed;
 }

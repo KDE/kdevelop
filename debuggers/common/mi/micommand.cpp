@@ -15,7 +15,7 @@
 
 #include "micommand.h"
 
-using namespace KDevDebugger::MI;
+using namespace KDevMI::MI;
 
 FunctionCommandHandler::FunctionCommandHandler(const FunctionCommandHandler::Function& callback, CommandFlags flags)
     : _flags(flags)

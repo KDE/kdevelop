@@ -34,7 +34,7 @@
 class KConfigGroup;
 class KProcess;
 
-namespace KDevDebugger {
+namespace KDevMI {
 
 namespace MI {
 class MICommand;

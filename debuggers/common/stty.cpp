@@ -76,7 +76,7 @@
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
 
-using namespace KDevDebugger;
+using namespace KDevMI;
 
 static int chownpty(int fd, int grant)
 // param fd: the fd of a master pty.

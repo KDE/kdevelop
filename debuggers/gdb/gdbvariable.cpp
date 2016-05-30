@@ -23,7 +23,7 @@
 #include "gdbvariable.h"
 
 using namespace KDevelop;
-using namespace KDevDebugger::GDB;
+using namespace KDevMI::GDB;
 
 GdbVariable::GdbVariable(TreeModel *model, TreeItem *parent,
                          const QString& expression, const QString& display)

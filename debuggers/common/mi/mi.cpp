@@ -21,7 +21,7 @@
  ***************************************************************************/
 #include "mi.h"
 
-using namespace KDevDebugger::MI;
+using namespace KDevMI::MI;
 
 
 type_error::type_error()

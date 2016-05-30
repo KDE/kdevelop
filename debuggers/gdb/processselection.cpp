@@ -36,7 +36,7 @@
 #include <QVBoxLayout>
 
 
-using namespace KDevDebugger::GDB;
+using namespace KDevMI::GDB;
 
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     : QDialog(parent)

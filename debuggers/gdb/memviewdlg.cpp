@@ -45,8 +45,8 @@
 
 #include <cctype>
 
-using namespace KDevDebugger::GDB;
-using KDevDebugger::MI::CommandType;
+using namespace KDevMI::GDB;
+using KDevMI::MI::CommandType;
 
 /** Container for controls that select memory range.
 

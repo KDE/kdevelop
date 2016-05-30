@@ -29,8 +29,8 @@
 #include <QRegExp>
 #include <QtMath>
 
-using namespace KDevDebugger::MI;
-using namespace KDevDebugger::GDB;
+using namespace KDevMI::MI;
+using namespace KDevMI::GDB;
 
 void IRegisterController::setSession(DebugSession* debugSession)
 {

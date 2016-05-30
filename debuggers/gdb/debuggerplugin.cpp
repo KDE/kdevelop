@@ -79,7 +79,7 @@
 #include "debugjob.h"
 
 
-namespace KDevDebugger { namespace GDB {
+namespace KDevMI { namespace GDB {
 
 template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory
@@ -125,9 +125,9 @@ private:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
-using namespace KDevDebugger::GDB;
+using namespace KDevMI::GDB;
 
 K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<CppDebuggerPlugin>(); )
 

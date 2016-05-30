@@ -35,8 +35,8 @@
 
 #include <KLocalizedString>
 
-using namespace KDevDebugger;
-using namespace KDevDebugger::MI;
+using namespace KDevMI;
+using namespace KDevMI::MI;
 using namespace KDevelop;
 
 struct MIBreakpointController::Handler : public MICommandHandler

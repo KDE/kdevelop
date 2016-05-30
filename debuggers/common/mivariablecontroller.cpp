@@ -39,8 +39,8 @@
 #include <KTextEditor/Document>
 
 using namespace KDevelop;
-using namespace KDevDebugger;
-using namespace KDevDebugger::MI;
+using namespace KDevMI;
+using namespace KDevMI::MI;
 using KTextEditor::Cursor;
 using KTextEditor::Document;
 using KTextEditor::Range;

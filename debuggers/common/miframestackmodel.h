@@ -24,7 +24,7 @@
 
 #include <debugger/framestack/framestackmodel.h>
 
-namespace KDevDebugger {
+namespace KDevMI {
 
 namespace MI {
 struct ResultRecord;
@@ -46,6 +46,6 @@ private:
     void handleThreadInfo(const MI::ResultRecord& r);
 };
 
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif

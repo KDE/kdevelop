@@ -24,7 +24,7 @@
 
 #include "debugsession.h"
 
-using namespace KDevDebugger::GDB;
+using namespace KDevMI::GDB;
 
 BreakpointController::BreakpointController(DebugSession* parent)
     : MIBreakpointController(parent)

@@ -25,7 +25,7 @@
 
 #include "mivariablecontroller.h"
 
-namespace KDevDebugger { namespace GDB {
+namespace KDevMI { namespace GDB {
 
 class DebugSession;
 class VariableController : public MIVariableController
@@ -40,6 +40,6 @@ private:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif // VARIABLECONTROLLER_H

@@ -22,7 +22,7 @@
 
 #include <QList>
 
-namespace KDevDebugger { namespace MI {
+namespace KDevMI { namespace MI {
 
 class MICommand;
 
@@ -56,6 +56,6 @@ private:
 };
 
 } // end of namespace MI
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif // MICOMMANDQUEUE_H

@@ -25,7 +25,7 @@
 
 #include "midebugger.h"
 
-namespace KDevDebugger { namespace GDB {
+namespace KDevMI { namespace GDB {
 
 class GdbDebugger : public MIDebugger
 {
@@ -39,6 +39,6 @@ public:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif

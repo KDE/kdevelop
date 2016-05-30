@@ -20,7 +20,7 @@
 
 #include <QFlags>
 
-namespace KDevDebugger
+namespace KDevMI
 {
 
 enum DBGStateFlag
@@ -62,8 +62,8 @@ static const char allowForcedBPEntry[] = "Allow Forced Breakpoint Set";
 static const char startWithEntry[] = "Start With";
 static const char breakOnStartEntry[] = "Break on Start";
 
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevDebugger::DBGStateFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevMI::DBGStateFlags)
 
 #endif // _DBGGLOBAL_H_

@@ -39,8 +39,8 @@
 
 // #define DEBUG_NO_TRY //to get a backtrace to where the exception was thrown
 
-using namespace KDevDebugger;
-using namespace KDevDebugger::MI;
+using namespace KDevMI;
+using namespace KDevMI::MI;
 
 MIDebugger::MIDebugger(QObject* parent)
     : QObject(parent)

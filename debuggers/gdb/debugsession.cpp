@@ -49,8 +49,8 @@
 #include <QStandardPaths>
 #include <QGuiApplication>
 
-using namespace KDevDebugger::GDB;
-using namespace KDevDebugger::MI;
+using namespace KDevMI::GDB;
+using namespace KDevMI::MI;
 using namespace KDevelop;
 
 DebugSession::DebugSession()
@@ -127,9 +127,9 @@ void DebugSession::configure(ILaunchConfiguration *cfg)
 {
     // Read Configuration values
     KConfigGroup grp = cfg->config();
-    bool breakOnStart = grp.readEntry(KDevDebugger::breakOnStartEntry, false);
-    bool displayStaticMembers = grp.readEntry(KDevDebugger::staticMembersEntry, false);
-    bool asmDemangle = grp.readEntry(KDevDebugger::demangleNamesEntry, true);
+    bool breakOnStart = grp.readEntry(KDevMI::breakOnStartEntry, false);
+    bool displayStaticMembers = grp.readEntry(KDevMI::staticMembersEntry, false);
+    bool asmDemangle = grp.readEntry(KDevMI::demangleNamesEntry, true);
 
     if (breakOnStart) {
         BreakpointModel* m = ICore::self()->debugController()->breakpointModel();
@@ -172,9 +172,9 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, const QString &execut
     configure(cfg);
 
     KConfigGroup grp = cfg->config();
-    QUrl configGdbScript = grp.readEntry(KDevDebugger::remoteGdbConfigEntry, QUrl());
-    QUrl runShellScript = grp.readEntry(KDevDebugger::remoteGdbShellEntry, QUrl());
-    QUrl runGdbScript = grp.readEntry(KDevDebugger::remoteGdbRunEntry, QUrl());
+    QUrl configGdbScript = grp.readEntry(KDevMI::remoteGdbConfigEntry, QUrl());
+    QUrl runShellScript = grp.readEntry(KDevMI::remoteGdbShellEntry, QUrl());
+    QUrl runGdbScript = grp.readEntry(KDevMI::remoteGdbRunEntry, QUrl());
 
     // handle remote debug
     if (configGdbScript.isValid()) {

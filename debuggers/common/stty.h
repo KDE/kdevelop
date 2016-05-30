@@ -32,7 +32,7 @@ class QProcess;
 #include <QString>
 #include <QScopedPointer>
 
-namespace KDevDebugger {
+namespace KDevMI {
 
 class STTY : public QObject
 {
@@ -70,6 +70,6 @@ private:
     char tty_slave[50];   // "/dev/ttyxx" | "/dev/pts/########..."
 };
 
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif

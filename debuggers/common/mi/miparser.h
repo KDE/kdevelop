@@ -27,7 +27,7 @@
 
 #include <QString>
 
-namespace KDevDebugger { namespace MI {
+namespace KDevMI { namespace MI {
 
 /**
 @author Roberto Raggi
@@ -80,6 +80,6 @@ private:
 };
 
 } // end of namespace MI
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif

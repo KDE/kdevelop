@@ -38,7 +38,7 @@
 
 #include <QFileInfo>
 
-using namespace KDevDebugger::GDB;
+using namespace KDevMI::GDB;
 using namespace KDevelop;
 
 DebugJob::DebugJob(CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* execute, QObject* parent)

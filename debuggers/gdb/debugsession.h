@@ -50,7 +50,7 @@ class ProcessLineMaker;
 class ILaunchConfiguration;
 }
 
-namespace KDevDebugger {
+namespace KDevMI {
 
 class STTY;
 
@@ -92,6 +92,6 @@ private:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif

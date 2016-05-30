@@ -29,8 +29,8 @@
 #include "modelsmanager.h"
 #include "../debugsession.h"
 
-using namespace KDevDebugger::MI;
-using namespace KDevDebugger::GDB;
+using namespace KDevMI::MI;
+using namespace KDevMI::GDB;
 
 void ArchitectureParser::parseArchitecture()
 {

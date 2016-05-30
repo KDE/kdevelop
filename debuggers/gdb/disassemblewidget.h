@@ -43,7 +43,7 @@ namespace KDevelop {
     class IDebugSession;
 }
 
-namespace KDevDebugger { namespace GDB {
+namespace KDevMI { namespace GDB {
 
 class RegistersManager;
 
@@ -155,7 +155,7 @@ private:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 /***************************************************************************/
 /***************************************************************************/

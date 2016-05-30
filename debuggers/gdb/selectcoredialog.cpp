@@ -22,7 +22,7 @@
 #include "selectcoredialog.h"
 #include <KLocalizedString>
 
-using namespace KDevDebugger::GDB;
+using namespace KDevMI::GDB;
 
 SelectCoreDialog::SelectCoreDialog(QWidget* parent)
     : QDialog(parent)

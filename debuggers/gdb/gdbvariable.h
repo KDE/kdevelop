@@ -30,9 +30,9 @@ class TreeModel;
 class TreeItem;
 }
 
-namespace KDevDebugger { namespace GDB {
+namespace KDevMI { namespace GDB {
 
-class GdbVariable : public KDevDebugger::MIVariable
+class GdbVariable : public KDevMI::MIVariable
 {
     Q_OBJECT
 
@@ -42,6 +42,6 @@ public:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif // GDBVARIABLE_H

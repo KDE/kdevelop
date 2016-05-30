@@ -28,7 +28,7 @@
 
 #include <debugger/interfaces/ivariablecontroller.h>
 
-namespace KDevDebugger {
+namespace KDevMI {
 
 namespace MI {
 struct AsyncRecord;
@@ -71,6 +71,6 @@ private:
     void handleEvent(KDevelop::IDebugSession::event_t event) override;
 };
 
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif // MIVARIABLECONTROLLER_H

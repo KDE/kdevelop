@@ -27,7 +27,7 @@
 #include <QStringList>
 #include <QString>
 
-namespace KDevDebugger {
+namespace KDevMI {
 namespace MI
 {
 struct ResultRecord;
@@ -240,12 +240,12 @@ protected:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
-Q_DECLARE_TYPEINFO(KDevDebugger::GDB::Register, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevDebugger::GDB::RegistersGroup, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevDebugger::GDB::FlagRegister, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevDebugger::GDB::GroupsName, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevDebugger::GDB::FormatsModes, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::Register, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::RegistersGroup, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::FlagRegister, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::GroupsName, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GDB::FormatsModes, Q_MOVABLE_TYPE);
 
 #endif

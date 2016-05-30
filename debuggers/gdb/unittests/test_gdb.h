@@ -26,7 +26,7 @@
 namespace KDevelop {
 class TestCore;
 }
-namespace KDevDebugger {
+namespace KDevMI {
 namespace GDB {
 
 class GdbTest : public QObject
@@ -106,6 +106,6 @@ private:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif // GDBTEST_H

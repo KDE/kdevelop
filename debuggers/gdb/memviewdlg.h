@@ -30,7 +30,7 @@ class IDebugSession;
 class QLineEdit;
 class QToolBox;
 
-namespace KDevDebugger
+namespace KDevMI
 {
 namespace GDB
 {
@@ -118,6 +118,6 @@ namespace GDB
     };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif

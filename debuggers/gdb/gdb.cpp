@@ -36,8 +36,8 @@
 #include <QFileInfo>
 #include <QUrl>
 
-using namespace KDevDebugger::GDB;
-using namespace KDevDebugger::MI;
+using namespace KDevMI::GDB;
+using namespace KDevMI::MI;
 
 GdbDebugger::GdbDebugger(QObject* parent)
     : MIDebugger(parent)

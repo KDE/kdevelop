@@ -31,7 +31,7 @@
 
 class CreateVarobjHandler;
 class FetchMoreChildrenHandler;
-namespace KDevDebugger {
+namespace KDevMI {
 
 class MIVariable : public KDevelop::Variable
 {
@@ -74,6 +74,6 @@ private: // Internal
         FIXME: eventually, should be per-session map.  */
     static QMap<QString, MIVariable*> allVariables_;
 };
-} // end of KDevDebugger
+} // end of KDevMI
 
 #endif

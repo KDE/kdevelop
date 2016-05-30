@@ -28,7 +28,7 @@
 class QMenu;
 class QSignalMapper;
 
-namespace KDevDebugger {
+namespace KDevMI {
 namespace GDB
 {
 
@@ -91,6 +91,6 @@ private:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif

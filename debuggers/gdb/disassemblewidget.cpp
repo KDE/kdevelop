@@ -50,8 +50,8 @@
 #include <QHeaderView>
 #include <QFontDatabase>
 
-using namespace KDevDebugger::GDB;
-using namespace KDevDebugger::MI;
+using namespace KDevMI::GDB;
+using namespace KDevMI::MI;
 
 
 SelectAddressDialog::SelectAddressDialog(QWidget* parent)

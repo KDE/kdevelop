@@ -25,7 +25,7 @@
 
 #include "mibreakpointcontroller.h"
 
-namespace KDevDebugger { namespace GDB {
+namespace KDevMI { namespace GDB {
 
 class DebugSession;
 class BreakpointController : public MIBreakpointController
@@ -38,6 +38,6 @@ private:
 };
 
 } // end of namespace GDB
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif // GDBBREAKPOINTCONTROLLER_H

@@ -31,7 +31,7 @@
 
 class QModelIndex;
 
-namespace KDevDebugger {
+namespace KDevMI {
 
 namespace MI {
 struct AsyncRecord;
@@ -118,6 +118,6 @@ private:
     bool m_deleteDuplicateBreakpoints = false;
 };
 
-} // end of namespace KDevDebugger
+} // end of namespace KDevMI
 
 #endif // MIBREAKPOINTCONTROLLER_H

@@ -24,7 +24,7 @@
 
 #include "debugsession.h"
 
-using namespace KDevDebugger::GDB;
+using namespace KDevMI::GDB;
 
 GdbFrameStackModel::GdbFrameStackModel(DebugSession *session)
     : MIFrameStackModel(session)
