@@ -39,6 +39,7 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/stringhelpers.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/problem.h>
 
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
@@ -246,8 +247,9 @@ struct DeclType<CK, isDefinition, isInClass,
 //BEGIN CurrentContext
 struct CurrentContext
 {
-    CurrentContext(DUContext* context)
+    CurrentContext(DUContext* context, QSet<DUContext*> keepAliveContexts)
         : context(context)
+        , keepAliveContexts(keepAliveContexts)
     {
         DUChainReadLocker lock;
         previousChildContexts = context->childContexts();
@@ -257,7 +259,11 @@ struct CurrentContext
     ~CurrentContext()
     {
         DUChainWriteLocker lock;
-        qDeleteAll(previousChildContexts);
+        foreach (auto childContext, previousChildContexts) {
+            if (!keepAliveContexts.contains(childContext)) {
+                delete childContext;
+            }
+        }
         qDeleteAll(previousChildDeclarations);
         if (resortChildContexts) {
             context->resortChildContexts();
@@ -268,9 +274,11 @@ struct CurrentContext
     }
 
     DUContext* context;
-    // when updatig, this contains child contexts of the current parent context
+    // when updating, this contains child contexts of the current parent context
     QVector<DUContext*> previousChildContexts;
-    // when updatig, this contains child declarations of the current parent context
+    // when updating, this contains contexts that must not be deleted
+    QSet<DUContext*> keepAliveContexts;
+    // when updating, this contains child declarations of the current parent context
     QVector<Declaration*> previousChildDeclarations;
 
     bool resortChildContexts = false;
@@ -1115,7 +1123,7 @@ CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
         if (isOutOfLine) {
             const QString scope = ClangUtils::getScope(cursor);
             auto context = createContext<CK, DUContext::Helper>(cursor, QualifiedIdentifier(scope));
-            helperContext.reset(new CurrentContext(context));
+            helperContext.reset(new CurrentContext(context, m_parentContext->keepAliveContexts));
         }
     }
 
@@ -1125,7 +1133,7 @@ CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
     if (hasContext) {
         auto context = createContext<CK, CursorKindTraits::contextType(CK)>(cursor, QualifiedIdentifier(id));
         createDeclaration<CK, DeclType>(cursor, id, context);
-        CurrentContext newParent(context);
+        CurrentContext newParent(context, m_parentContext->keepAliveContexts);
         PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
         clang_visitChildren(cursor, &visitCursor, this);
         return CXChildVisit_Continue;
@@ -1163,7 +1171,7 @@ CXChildVisitResult Visitor::buildCompoundStatement(CXCursor cursor)
     if (m_parentContext->context->type() == DUContext::Function)
     {
         auto context = createContext<CXCursor_CompoundStmt, DUContext::Other>(cursor);
-        CurrentContext newParent(context);
+        CurrentContext newParent(context, m_parentContext->keepAliveContexts);
         PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
         clang_visitChildren(cursor, &visitCursor, this);
         return CXChildVisit_Continue;
@@ -1332,11 +1340,33 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
     , m_update(update)
 {
     CXCursor tuCursor = clang_getTranslationUnitCursor(tu);
-    CurrentContext parent(includes[file]);
+    auto top = includes[file];
+
+    // when updating, this contains child contexts that should be kept alive
+    // even when they are not part of the AST anymore
+    // this is required for some assistants, such as the signature assistant
+    QSet<DUContext*> keepAliveContexts;
+    {
+        DUChainReadLocker lock;
+        foreach (const auto& problem, top->problems()) {
+            const auto& desc = problem->description();
+            if (desc.startsWith(QLatin1String("Return type of out-of-line definition of '"))
+                && desc.endsWith(QLatin1String("' differs from that in the declaration"))) {
+                auto ctx = top->findContextAt(problem->range().start);
+                // keep the context and its parents alive
+                // this also keeps declarations in this context alive
+                while (ctx) {
+                    keepAliveContexts << ctx;
+                    ctx = ctx->parentContext();
+                }
+            }
+        }
+    }
+
+    CurrentContext parent(top, keepAliveContexts);
     m_parentContext = &parent;
     clang_visitChildren(tuCursor, &visitCursor, this);
 
-    TopDUContext *top = m_parentContext->context->topContext();
     if (m_update) {
         DUChainWriteLocker lock;
         top->deleteUsesRecursively();

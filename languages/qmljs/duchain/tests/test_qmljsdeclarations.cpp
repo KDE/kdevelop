@@ -24,6 +24,7 @@
 #include "../helper.h"
 #include "../parsesession.h"
 #include "../declarationbuilder.h"
+#include "../cache.h"
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -238,4 +239,59 @@ void TestDeclarations::testProperty()
     QVERIFY(foo->abstractType());
     QCOMPARE(foo->abstractType()->toString(), QString("int"));
     QCOMPARE(QString::fromUtf8(foo->comment()), QString("some comment"));
+}
+
+/**
+ * Test that all qmltypes files for built-in QtQuick modules are found on the system.
+ * These files are also available on CI machines, since an installed Qt5 is assumed
+ */
+void TestDeclarations::testQMLtypesImportPaths()
+{
+    KDevelop::IndexedString stubPath;
+    QString path;
+
+    // QtQuick QML modules
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick", "2.0");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtTest", "1.1");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Layouts", "1.1");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Controls", "1.1");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Dialogs", "1.1");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Extras", "1.1");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.LocalStorage", "2.0");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Particles", "2.0");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Window", "2.2");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.XmlListModel", "2.0");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    // QtQml QML modules
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQml", "2.2");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQml.Models", "2.3");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQml.StateMachine", "1.0");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
+
+    // QtMultimedia QML modules
+    path = QmlJS::Cache::instance().modulePath(stubPath, "QtMultimedia", "5.6");
+    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 }
