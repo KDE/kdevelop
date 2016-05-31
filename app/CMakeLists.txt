@@ -87,8 +87,8 @@ endif (APPLE)
 
 ########### install files ###############
 
-install( PROGRAMS kdevelop.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
-install( PROGRAMS kdevelop_ps.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
+install( PROGRAMS org.kde.kdevelop.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
+install( PROGRAMS org.kde.kdevelop_ps.desktop  DESTINATION  ${KDE_INSTALL_APPDIR} )
 install( FILES kdevelop.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR} )
 install( FILES kdevelop.xml kdevelopinternal.xml DESTINATION ${KDE_INSTALL_MIMEDIR} )
 update_xdg_mimetypes( ${KDE_INSTALL_MIMEDIR} )
