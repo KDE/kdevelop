@@ -38,8 +38,9 @@
 #include "../interfaces/idebugsession.h"
 #include "../../interfaces/idebugcontroller.h"
 
-namespace GDBDebugger {
+namespace KDevMI { namespace GDB {
     class GdbTest;
+}
 }
 
 namespace KDevelop
@@ -49,7 +50,7 @@ class VariableToolTip;
 class KDEVPLATFORMDEBUGGER_EXPORT Variable : public TreeItem
 {
     Q_OBJECT
-    friend class GDBDebugger::GdbTest;
+    friend class KDevMI::GDB::GdbTest;
 public:
 protected:
     Variable(TreeModel* model, TreeItem* parent,
@@ -141,7 +142,7 @@ public:
 class KDEVPLATFORMDEBUGGER_EXPORT Watches : public TreeItem
 {
     Q_OBJECT
-    friend class GDBDebugger::GdbTest;
+    friend class KDevMI::GDB::GdbTest;
 public:
     Watches(TreeModel* model, TreeItem* parent);
     Variable* add(const QString& expression);
