@@ -316,6 +316,104 @@ void GitInitTest::testBranch(const QString& newBranch)
     QVERIFY(!runSynchronously(m_plugin->branches(baseUrl)).toStringList().contains(oldBranch));
 }
 
+void GitInitTest::testMerge()
+{
+    const QString branchNames[] = {QStringLiteral("aBranchToBeMergedIntoMaster"), QStringLiteral("AnotherBranch")};
+
+    const QString files[]={QStringLiteral("First File to Appear after merging"),QStringLiteral("Second File to Appear after merging"), QStringLiteral("Another_File.txt")};
+
+    const QString content=QStringLiteral("Testing merge.");
+
+    repoInit();
+    addFiles();
+    commitFiles();
+
+    const QUrl baseUrl = QUrl::fromLocalFile(gitTest_BaseDir());
+    VcsJob* j = m_plugin->branches(baseUrl);
+    VERIFYJOB(j);
+    QString curBranch = runSynchronously(m_plugin->currentBranch(baseUrl)).toString();
+    QCOMPARE(curBranch, QStringLiteral("master"));
+
+    VcsRevision rev;
+    rev.setRevisionValue("master", KDevelop::VcsRevision::GlobalNumber);
+
+    j = m_plugin->branch(baseUrl, rev, branchNames[0]);
+    VERIFYJOB(j);
+
+    qDebug() << "Adding files to the new branch";
+
+    //we start it after repoInit, so we still have empty git repo
+    QVERIFY(writeFile(gitTest_BaseDir() + files[0], content));
+    QVERIFY(writeFile(gitTest_BaseDir() + files[1], content));
+
+    QList<QUrl> listOfAddedFiles{QUrl::fromLocalFile(gitTest_BaseDir() + files[0]),
+        QUrl::fromLocalFile(gitTest_BaseDir() + files[1])};
+
+    j = m_plugin->add(listOfAddedFiles);
+    VERIFYJOB(j);
+
+    j = m_plugin->commit("Commiting to the new branch", QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir()));
+    VERIFYJOB(j);
+
+    j = m_plugin->switchBranch(baseUrl, QStringLiteral("master"));
+    VERIFYJOB(j);
+
+    j = m_plugin->mergeBranch(baseUrl, branchNames[0]);
+    VERIFYJOB(j);
+
+    auto jobLs = new DVcsJob(gitTest_BaseDir(), m_plugin);
+    *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD" ;
+
+    if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {
+        QStringList files = jobLs->output().split('\n');
+        qDebug() << "Files in this Branch: " << files;
+        QVERIFY(files.contains(files[0]));
+        QVERIFY(files.contains(files[1]));
+    }
+
+    //Testing one more time.
+    j = m_plugin->switchBranch(baseUrl, branchNames[0]);
+    VERIFYJOB(j);
+    rev.setRevisionValue(branchNames[0], KDevelop::VcsRevision::GlobalNumber);
+    j = m_plugin->branch(baseUrl, rev, branchNames[1]);
+    VERIFYJOB(j);
+    QVERIFY(writeFile(gitTest_BaseDir() + files[2], content));
+    j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir() + files[2]));
+    VERIFYJOB(j);
+    j = m_plugin->commit(QStringLiteral("Commiting to AnotherBranch"), QList<QUrl>() << baseUrl);
+    VERIFYJOB(j);
+    j = m_plugin->switchBranch(baseUrl, branchNames[0]);
+    VERIFYJOB(j);
+    j = m_plugin->mergeBranch(baseUrl, branchNames[1]);
+    VERIFYJOB(j);
+    qDebug() << j->errorString() ;
+
+    jobLs = new DVcsJob(gitTest_BaseDir(), m_plugin);
+    *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD" ;
+
+    if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {
+        QStringList files = jobLs->output().split('\n');
+        QVERIFY(files.contains(files[2]));
+        qDebug() << "Files in this Branch: " << files;
+    }
+
+    j = m_plugin->switchBranch(baseUrl, QStringLiteral("master"));
+    VERIFYJOB(j);
+    j = m_plugin->mergeBranch(baseUrl, branchNames[1]);
+    VERIFYJOB(j);
+    qDebug() << j->errorString() ;
+
+    jobLs = new DVcsJob(gitTest_BaseDir(), m_plugin);
+    *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD" ;
+
+    if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {
+        QStringList files = jobLs->output().split('\n');
+        QVERIFY(files.contains(files[2]));
+        qDebug() << "Files in this Branch: " << files;
+    }
+
+}
+
 void GitInitTest::testBranching()
 {
     repoInit();

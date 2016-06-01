@@ -36,7 +36,7 @@ class IBranchingVersionControl
 {
 public:
     virtual ~IBranchingVersionControl() {}
-    
+
     /**
      * Creates a branch from the given mapping information
      *
@@ -63,7 +63,7 @@ public:
                          const QString& commitMessage,
                          const VcsRevision& rev,
                          const QString& tagName ) = 0;
-                         
+
    /**
     * Switches to the desired branch inside the specified repository
     *
@@ -95,7 +95,14 @@ public:
     * @param branchName The branch name that will be deleted inside the specified repository
     */
    virtual VcsJob* deleteBranch(const QUrl &repository, const QString &branchName) = 0;
-   
+
+   /**
+    * Merges the selected branch into the current one.
+    * @param repository The repository path where the current branch will be merged into.
+    * @param branchName The name of the selected branch to be merged into the current one.
+    */
+   virtual VcsJob* mergeBranch(const QUrl &repository, const QString &branchName) = 0;
+
    /**
     * Deletes the desired branch inside the specified repository
     *

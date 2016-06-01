@@ -123,6 +123,7 @@ public:
     KDevelop::VcsJob* deleteBranch(const QUrl& repository, const QString& branchName) override;
     KDevelop::VcsJob* switchBranch(const QUrl& repository, const QString& branchName) override;
     KDevelop::VcsJob* renameBranch(const QUrl& repository, const QString& oldBranchName, const QString& newBranchName) override;
+    KDevelop::VcsJob* mergeBranch(const QUrl& repository, const QString& branchName) override;
 
     //graph helpers
     QList<DVcsEvent> getAllCommits(const QString &repo) override;

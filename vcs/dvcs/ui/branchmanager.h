@@ -48,6 +48,7 @@ private slots:
     void deleteBranch();
     void renameBranch();
     void checkoutBranch();
+    void mergeBranch();
 
 private:
     QString m_repository;

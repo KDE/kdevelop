@@ -47,18 +47,23 @@ public:
         processStdOut();
     }
 
-    void processStdOut()
+    static QStringList streamToStrings(QByteArray &data)
     {
         QStringList lineList;
         int pos;
-        while ( (pos = stdoutbuf.indexOf('\n')) != -1) {
-            if (pos > 0 && stdoutbuf.at(pos - 1) == '\r')
-                lineList << QString::fromLocal8Bit(stdoutbuf, pos - 1);
+        while ( (pos = data.indexOf('\n')) != -1) {
+            if (pos > 0 && data.at(pos - 1) == '\r')
+                lineList << QString::fromLocal8Bit(data, pos - 1);
             else
-                lineList << QString::fromLocal8Bit(stdoutbuf, pos);
-            stdoutbuf.remove(0, pos+1);
+                lineList << QString::fromLocal8Bit(data, pos);
+            data.remove(0, pos+1);
         }
-        emit p->receivedStdoutLines(lineList);
+        return lineList;
+    }
+
+    void processStdOut()
+    {
+        emit p->receivedStdoutLines(streamToStrings(stdoutbuf));
     }
 
     void slotReadyReadStderr()
@@ -69,16 +74,7 @@ public:
 
     void processStdErr()
     {
-        QStringList lineList;
-        int pos;
-        while ( (pos = stderrbuf.indexOf('\n')) != -1) {
-            if (pos > 0 && stderrbuf.at(pos - 1) == '\r')
-                lineList << QString::fromLocal8Bit(stderrbuf, pos - 1);
-            else
-                lineList << QString::fromLocal8Bit(stderrbuf, pos);
-            stderrbuf.remove(0, pos+1);
-        }
-        emit p->receivedStderrLines(lineList);
+        emit p->receivedStderrLines(streamToStrings(stderrbuf));
     }
 
 };

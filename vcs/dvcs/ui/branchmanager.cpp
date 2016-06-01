@@ -85,6 +85,9 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
 
     // checkout branch on double-click
     connect(m_ui->branchView, &QListView::doubleClicked, this, &BranchManager::checkoutBranch);
+
+    m_ui->mergeButton->setIcon(QIcon::fromTheme(QStringLiteral("merge")));
+    connect(m_ui->mergeButton, &QPushButton::clicked, this, &BranchManager::mergeBranch);
 }
 
 BranchManager::~BranchManager()
@@ -163,4 +166,26 @@ void BranchManager::checkoutBranch()
 
     ICore::self()->runController()->registerJob(branchJob);
     close();
+}
+
+void BranchManager::mergeBranch()
+{
+    const QModelIndex branchToMergeIdx = m_ui->branchView->currentIndex();
+
+    if (branchToMergeIdx.isValid()) {
+        QString branchToMerge = branchToMergeIdx.data().toString();
+
+        if (m_model->findItems(branchToMerge).isEmpty()) {
+            KMessageBox::messageBox(this, KMessageBox::Sorry, i18n("Branch \"%1\" doesn't exists.\n"
+                                                                   "Please, choose another name.",
+                                                                   branchToMerge));
+        } else {
+            KDevelop::VcsJob* branchJob = m_dvcPlugin->mergeBranch(QUrl::fromLocalFile(m_repository), branchToMerge);
+            ICore::self()->runController()->registerJob(branchJob);
+            close();
+        }
+    } else {
+        KMessageBox::messageBox(this, KMessageBox::Error,
+                                i18n("You must select a branch to merge into current one from the list."));
+    }
 }

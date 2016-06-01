@@ -56,6 +56,7 @@ private slots:
     void testCommit();
     void testBranching();
     void testBranch(const QString &branchName);
+    void testMerge();
     void revHistory();
     void testAnnotation();
     void testRemoveEmptyFolder();
