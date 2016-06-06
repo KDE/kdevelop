@@ -61,8 +61,7 @@ MIVariable::~MIVariable()
             if (hasStartedSession()) {
                 IDebugSession* is = ICore::self()->debugController()->currentSession();
                 MIDebugSession * s = static_cast<MIDebugSession *>(is);
-                s->addCommand(new MICommand(VarDelete,
-                                            QString("\"%1\"").arg(varobj_)));
+                s->addCommand(VarDelete, QString("\"%1\"").arg(varobj_));
             }
         }
         allVariables_.remove(varobj_);
@@ -157,11 +156,9 @@ void MIVariable::attachMaybe(QObject *callback, const char *callbackMethod)
     if (hasStartedSession()) {
         IDebugSession* is = ICore::self()->debugController()->currentSession();
         MIDebugSession * s = static_cast<MIDebugSession *>(is);
-        s->addCommand(
-            new MICommand(
-                VarCreate,
-                QString("var%1 @ %2").arg(nextId++).arg(enquotedExpression()),
-                new CreateVarobjHandler(this, callback, callbackMethod)));
+        s->addCommand(VarCreate,
+                      QString("var%1 @ %2").arg(nextId++).arg(enquotedExpression()),
+                      new CreateVarobjHandler(this, callback, callbackMethod));
     }
 }
 
@@ -197,11 +194,9 @@ public:
                 const QString& exp = child["exp"].literal();
                 if (exp == "public" || exp == "protected" || exp == "private") {
                     ++m_activeCommands;
-                    m_session->addCommand(
-                        new MICommand(VarListChildren,
-                                       QString("--all-values \"%1\"")
-                                       .arg(child["name"].literal()),
-                                       this/*use again as handler*/));
+                    m_session->addCommand(VarListChildren,
+                                          QString("--all-values \"%1\"").arg(child["name"].literal()),
+                                          this/*use again as handler*/);
                 } else {
                     KDevelop::Variable* xvar = m_session->variableController()->
                         createVariable(variable->model(), variable,
@@ -255,11 +250,10 @@ void MIVariable::fetchMoreChildren()
     if (hasStartedSession()) {
         IDebugSession* is = ICore::self()->debugController()->currentSession();
         MIDebugSession * s = static_cast<MIDebugSession *>(is);
-        s->addCommand(
-            new MICommand(VarListChildren,
-                          QString("--all-values \"%1\" %2 %3").arg(varobj_)
-                              .arg( c ).arg( c + fetchStep ),  // fetch from .. to ..
-                          new FetchMoreChildrenHandler(this, s)));
+        s->addCommand(VarListChildren,
+                      QString("--all-values \"%1\" %2 %3")
+                          .arg(varobj_).arg( c ).arg( c + fetchStep ),  // fetch from .. to ..
+                      new FetchMoreChildrenHandler(this, s));
     }
 }
 
@@ -374,12 +368,9 @@ void MIVariable::formatChanged()
         if (hasStartedSession()) {
             IDebugSession* is = ICore::self()->debugController()->currentSession();
             MIDebugSession * s = static_cast<MIDebugSession *>(is);
-            s->addCommand(
-                new MICommand(VarSetFormat,
-                            QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format())),
-                            new SetFormatHandler(this)
-                            )
-                        );
+            s->addCommand(VarSetFormat,
+                          QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format())),
+                          new SetFormatHandler(this));
         }
     }
 }

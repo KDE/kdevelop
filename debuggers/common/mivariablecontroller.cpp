@@ -87,9 +87,8 @@ void MIVariableController::update()
    if ((autoUpdate() & UpdateLocals) ||
        ((autoUpdate() & UpdateWatches) && variableCollection()->watches()->childCount() > 0))
     {
-        debugSession()->addCommand(
-            new MICommand(VarUpdate, "--all-values *", this,
-                       &MIVariableController::handleVarUpdate));
+        debugSession()->addCommand(VarUpdate, "--all-values *", this,
+                                   &MIVariableController::handleVarUpdate);
     }
 }
 
@@ -155,9 +154,10 @@ public:
             localsName << var["name"].literal();
         }
         int frame = m_session->frameStackModel()->currentFrame();
-        m_session->addCommand(                    //dont'show value, low-frame, high-frame
-            new MICommand(StackListArguments, QString("0 %1 %2").arg(frame).arg(frame),
-                          new StackListArgumentsHandler(localsName)));
+        m_session->addCommand(StackListArguments,
+                              //dont'show value, low-frame, high-frame
+                              QString("0 %1 %2").arg(frame).arg(frame),
+                              new StackListArgumentsHandler(localsName));
     }
 
 private:
@@ -166,9 +166,8 @@ private:
 
 void MIVariableController::updateLocals()
 {
-    debugSession()->addCommand(
-        new MICommand(StackListLocals, "--simple-values",
-                      new StackListLocalsHandler(debugSession())));
+    debugSession()->addCommand(StackListLocals, "--simple-values",
+                               new StackListLocalsHandler(debugSession()));
 }
 
 Range MIVariableController::expressionRangeUnderCursor(Document* doc, const Cursor& cursor)
@@ -202,11 +201,9 @@ void MIVariableController::addWatch(KDevelop::Variable* variable)
     // gdb-specific one.
     if (MIVariable *gv = dynamic_cast<MIVariable*>(variable))
     {
-        debugSession()->addCommand(
-            new MICommand(VarInfoPathExpression,
-                           gv->varobj(),
-                           this,
-                           &MIVariableController::addWatch));
+        debugSession()->addCommand(VarInfoPathExpression,
+                                   gv->varobj(),
+                                   this, &MIVariableController::addWatch);
     }
 }
 
@@ -218,11 +215,9 @@ void MIVariableController::addWatchpoint(KDevelop::Variable* variable)
     // gdb-specific one.
     if (MIVariable *gv = dynamic_cast<MIVariable*>(variable))
     {
-        debugSession()->addCommand(
-            new MICommand(VarInfoPathExpression,
-                           gv->varobj(),
-                           this,
-                           &MIVariableController::addWatchpoint));
+        debugSession()->addCommand(VarInfoPathExpression,
+                                   gv->varobj(),
+                                   this, &MIVariableController::addWatchpoint);
     }
 }
 

@@ -64,7 +64,7 @@ class MIBreakpointController : public KDevelop::IBreakpointController
 {
     Q_OBJECT
 public:
-    MIBreakpointController( MIDebugSession* parent);
+    MIBreakpointController(MIDebugSession* parent);
 
     using IBreakpointController::breakpointModel;
 
@@ -99,7 +99,6 @@ private:
 
     void sendMaybe(KDevelop::Breakpoint *breakpoint) override;
 
-    // TODO: what's this
     void createFromDebugger(const MI::Value& miBkpt);
     void updateFromDebugger(int row, const MI::Value& miBkpt,
                        KDevelop::BreakpointModel::ColumnFlags lockedColumns = 0);

@@ -137,7 +137,7 @@ void MIDebugger::readyReadStandardOutput()
 
 void MIDebugger::readyReadStandardError()
 {
-    process_->setReadChannel(QProcess::StandardOutput);
+    process_->setReadChannel(QProcess::StandardError);
     emit internalCommandOutput(QString::fromUtf8(process_->readAll()));
 }
 

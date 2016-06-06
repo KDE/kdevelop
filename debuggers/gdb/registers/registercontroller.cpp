@@ -112,7 +112,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
         handler = &IRegisterController::generalRegistersHandler;
     }
 
-    m_debugSession->addCommand(new MICommand(DataListRegisterValues, registers, this, handler));
+    m_debugSession->addCommand(DataListRegisterValues, registers, this, handler);
 }
 
 void IRegisterController::registerNamesHandler(const ResultRecord& r)
@@ -185,8 +185,7 @@ bool IRegisterController::initializeRegisters()
         return false;
     }
 
-    m_debugSession->addCommand(
-        new MICommand(DataListRegisterNames, "", this, &IRegisterController::registerNamesHandler));
+    m_debugSession->addCommand(DataListRegisterNames, "", this, &IRegisterController::registerNamesHandler);
     return true;
 }
 
@@ -241,7 +240,7 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
     const QString command = QString("set var $%1=%2").arg(reg.name).arg(reg.value);
     qCDebug(DEBUGGERGDB) << "Setting register: " << command;
 
-    m_debugSession->addCommand(new MICommand(NonMI, command));
+    m_debugSession->addCommand(NonMI, command);
     updateRegisters(group);
 }
 

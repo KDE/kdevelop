@@ -67,9 +67,7 @@ void MIFrameStackModel::fetchThreads()
     // that's causing std::logic_error when executing -thread-info with
     // more than one threads. Find a workaround for this (and report bug
     // if it truely is).
-    session()->addCommand(
-        new MICommand(ThreadInfo, "",
-                      this, &MIFrameStackModel::handleThreadInfo));
+    session()->addCommand(ThreadInfo, "", this, &MIFrameStackModel::handleThreadInfo);
 }
 
 void MIFrameStackModel::handleThreadInfo(const ResultRecord& r)
@@ -151,8 +149,8 @@ void MIFrameStackModel::fetchFrames(int threadNumber, int from, int to)
 {
     //to+1 so we know if there are more
     QString arg = QString("%1 %2").arg(from).arg(to+1);
-    MICommand *c = new MICommand(StackListFrames, arg,
-                                 new FrameListHandler(this, threadNumber, to));
+    MICommand *c = session()->createCommand(StackListFrames, arg);
+    c->setHandler(new FrameListHandler(this, threadNumber, to));
     c->setThread(threadNumber);
     session()->addCommand(c);
 }

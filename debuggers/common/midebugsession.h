@@ -33,6 +33,7 @@
 #include "dbgglobal.h"
 #include "mibreakpointcontroller.h"
 #include "mi/mi.h"
+#include "mi/micommand.h"
 
 #include <memory>
 
@@ -46,7 +47,6 @@ namespace KDevMI {
 
 namespace MI {
 class CommandQueue;
-class MICommand;
 }
 
 class MIDebugger;
@@ -177,6 +177,9 @@ public Q_SLOTS:
      */
     bool attachToProcess(int pid);
 
+public:
+    virtual MI::MICommand *createCommand(MI::CommandType type, const QString& arguments,
+                                         MI::CommandFlags flags = 0) const;
     /** Adds a command to the end of queue of commands to be executed
         by gdb. The command will be actually sent to gdb only when
         replies from all previous commands are received and full processed.
@@ -186,13 +189,27 @@ public Q_SLOTS:
         command, so it's possible to use results of prior commands when
         computing the exact command to send.
     */
+    void addUserCommand(const QString &cmd);
+
     void addCommand(MI::MICommand* cmd);
 
-    /** Same as above, but internally constructs new MI::MICommand
-       instance from the string. */
-    void addCommand(MI::CommandType type, const QString& cmd = QString());
+    /** Same as above, but internally constructs MICommand using createCommand() */
+    void addCommand(MI::CommandType type, const QString& arguments = QString(),
+                    MI::CommandFlags flags = 0);
 
-    void addUserCommand(const QString &cmd);
+    void addCommand(MI::CommandType type, const QString& arguments,
+                    MI::MICommandHandler* handler,
+                    MI::CommandFlags flags = 0);
+
+    void addCommand(MI::CommandType type, const QString& arguments,
+                    const MI::FunctionCommandHandler::Function& callback,
+                    MI::CommandFlags flags = 0);
+
+    template<class Handler>
+    void addCommand(MI::CommandType type, const QString& arguments,
+                    Handler* handler_this,
+                    void (Handler::* handler_method)(const MI::ResultRecord&),
+                    MI::CommandFlags flags = 0);
 
 protected Q_SLOTS:
     virtual void slotDebuggerReady();
@@ -311,6 +328,17 @@ protected:
     bool m_hasCrashed;
     bool m_sourceInitFile;
 };
+
+template<class Handler>
+void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
+                                Handler* handler_this,
+                                void (Handler::* handler_method)(const MI::ResultRecord&),
+                                MI::CommandFlags flags)
+{
+    auto cmd = createCommand(type, arguments, flags);
+    cmd->setHandler(handler_this, handler_method);
+    queueCmd(cmd);
+}
 
 } // end of namespace KDevMI
 

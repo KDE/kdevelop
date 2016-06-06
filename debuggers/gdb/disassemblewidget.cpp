@@ -319,16 +319,16 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
 
     //only get $pc
     if (from.isEmpty()){
-        s->addCommand(
-                    new MICommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0", this, &DisassembleWidget::updateExecutionAddressHandler ) );
+        s->addCommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0",
+                      this, &DisassembleWidget::updateExecutionAddressHandler);
     }else{
 
         QString cmd = (to.isEmpty())?
         QString("-s %1 -e \"%1 + 256\" -- 0").arg(from ):
         QString("-s %1 -e %2+1 -- 0").arg(from).arg(to); // if both addr set
 
-        s->addCommand(
-            new MICommand(DataDisassemble, cmd, this, &DisassembleWidget::disassembleMemoryHandler ) );
+        s->addCommand(DataDisassemble, cmd,
+                      this, &DisassembleWidget::disassembleMemoryHandler);
    }
 }
 

@@ -96,23 +96,23 @@ GdbDebugger *DebugSession::createDebugger() const
 
 void DebugSession::initializeDebugger()
 {
-    //queueCmd(new GDBCommand(GDBMI::EnableTimings, "yes"));
+    //addCommand(new GDBCommand(GDBMI::EnableTimings, "yes"));
 
-    queueCmd(new CliCommand(MI::GdbShow, "version", this, &DebugSession::handleVersion));
+    addCommand(new CliCommand(MI::GdbShow, "version", this, &DebugSession::handleVersion));
 
     // This makes gdb pump a variable out on one line.
-    queueCmd(new MICommand(MI::GdbSet, "width 0"));
-    queueCmd(new MICommand(MI::GdbSet, "height 0"));
+    addCommand(MI::GdbSet, "width 0");
+    addCommand(MI::GdbSet, "height 0");
 
-    queueCmd(new MICommand(MI::SignalHandle, "SIG32 pass nostop noprint"));
-    queueCmd(new MICommand(MI::SignalHandle, "SIG41 pass nostop noprint"));
-    queueCmd(new MICommand(MI::SignalHandle, "SIG42 pass nostop noprint"));
-    queueCmd(new MICommand(MI::SignalHandle, "SIG43 pass nostop noprint"));
+    addCommand(MI::SignalHandle, "SIG32 pass nostop noprint");
+    addCommand(MI::SignalHandle, "SIG41 pass nostop noprint");
+    addCommand(MI::SignalHandle, "SIG42 pass nostop noprint");
+    addCommand(MI::SignalHandle, "SIG43 pass nostop noprint");
 
-    queueCmd(new MICommand(MI::EnablePrettyPrinting));
+    addCommand(MI::EnablePrettyPrinting);
 
-    queueCmd(new MICommand(MI::GdbSet, "charset UTF-8"));
-    queueCmd(new MICommand(MI::GdbSet, "print sevenbit-strings off"));
+    addCommand(MI::GdbSet, "charset UTF-8");
+    addCommand(MI::GdbSet, "print sevenbit-strings off");
 
     QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                               "kdevgdb/printers/gdbinit");
@@ -121,9 +121,9 @@ void DebugSession::initializeDebugger()
         QString quotedPrintersPath = fileInfo.dir().path()
                                              .replace('\\', "\\\\")
                                              .replace('"', "\\\"");
-        queueCmd(new MICommand(MI::NonMI,
-            QString("python sys.path.insert(0, \"%0\")").arg(quotedPrintersPath)));
-        queueCmd(new MICommand(MI::NonMI, "source " + fileName));
+        addCommand(MI::NonMI,
+                   QString("python sys.path.insert(0, \"%0\")").arg(quotedPrintersPath));
+        addCommand(MI::NonMI, "source " + fileName);
     }
 
     qCDebug(DEBUGGERGDB) << "Initialized GDB";
@@ -156,15 +156,15 @@ void DebugSession::configure(ILaunchConfiguration *cfg)
     raiseEvent(debugger_ready);
 
     if (displayStaticMembers) {
-        queueCmd(new MICommand(MI::GdbSet, "print static-members on"));
+        addCommand(MI::GdbSet, "print static-members on");
     } else {
-        queueCmd(new MICommand(MI::GdbSet, "print static-members off"));
+        addCommand(MI::GdbSet, "print static-members off");
     }
 
     if (asmDemangle) {
-        queueCmd(new MICommand(MI::GdbSet, "print asm-demangle on"));
+        addCommand(MI::GdbSet, "print asm-demangle on");
     } else {
-        queueCmd(new MICommand(MI::GdbSet, "print asm-demangle off"));
+        addCommand(MI::GdbSet, "print asm-demangle off");
     }
 
     qCDebug(DEBUGGERGDB) << "Per inferior configuration done";
@@ -184,7 +184,7 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, const QString &execut
 
     // handle remote debug
     if (configGdbScript.isValid()) {
-        queueCmd(new MICommand(MI::NonMI, "source " + KShell::quoteArg(configGdbScript.toLocalFile())));
+        addCommand(MI::NonMI, "source " + KShell::quoteArg(configGdbScript.toLocalFile()));
     }
 
     // FIXME: have a check box option that controls remote debugging
@@ -215,29 +215,29 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, const QString &execut
         // Future: the shell script should be able to pass info (like pid)
         // to the gdb script...
 
-        queueCmd(new SentinelCommand([this, runGdbScript]() {
+        addCommand(new SentinelCommand([this, runGdbScript]() {
             breakpointController()->initSendBreakpoints();
 
             breakpointController()->setDeleteDuplicateBreakpoints(true);
             qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(runGdbScript.toLocalFile());
 
-            queueCmd(new MICommand(MI::NonMI, "source " + KShell::quoteArg(runGdbScript.toLocalFile()),
-                                    [this](const MI::ResultRecord&) {
-                                        breakpointController()->setDeleteDuplicateBreakpoints(false);
-                                    },
-                                    CmdMaybeStartsRunning));
+            addCommand(MI::NonMI, "source " + KShell::quoteArg(runGdbScript.toLocalFile()),
+                       [this](const MI::ResultRecord&) {
+                           breakpointController()->setDeleteDuplicateBreakpoints(false);
+                       },
+                       CmdMaybeStartsRunning);
             raiseEvent(connected_to_program);
         }, CmdMaybeStartsRunning));
     } else {
         // normal local debugging
-        queueCmd(new MICommand(MI::FileExecAndSymbols, KShell::quoteArg(executable),
-                               this, &DebugSession::handleFileExecAndSymbols,
-                               CmdHandlesError));
+        addCommand(MI::FileExecAndSymbols, KShell::quoteArg(executable),
+                   this, &DebugSession::handleFileExecAndSymbols,
+                   CmdHandlesError);
         raiseEvent(connected_to_program);
 
-        queueCmd(new SentinelCommand([this]() {
+        addCommand(new SentinelCommand([this]() {
             breakpointController()->initSendBreakpoints();
-            queueCmd(new MICommand(MI::ExecRun, QString(), CmdMaybeStartsRunning));
+            addCommand(MI::ExecRun, QString(), CmdMaybeStartsRunning);
         }, CmdMaybeStartsRunning));
     }
     return true;

@@ -221,7 +221,7 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
         m_tty.reset(nullptr);
         return false;
     }
-    queueCmd(new MICommand(InferiorTtySet, tty));
+    addCommand(InferiorTtySet, tty);
 
     // Only dummy err here, actual erros have been checked already in the job and we don't get here if there were any
     QString err;
@@ -232,7 +232,7 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
     if (dir.isEmpty()) {
         dir = QFileInfo(executable).absolutePath();
     }
-    queueCmd(new MICommand(MI::EnvironmentCd, '"' + dir + '"'));
+    addCommand(EnvironmentCd, '"' + dir + '"');
 
     // Set the environment variables
     EnvironmentGroupList l(KSharedConfig::openConfig());
@@ -244,12 +244,12 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
         envgrp = l.defaultGroup();
     }
     for (const auto &envvar : l.createEnvironment(envgrp, {})) {
-        queueCmd(new MICommand(MI::GdbSet, "environment " + envvar));
+        addCommand(GdbSet, "environment " + envvar);
     }
 
     // Set the run arguments
     if (!arguments.isEmpty())
-        queueCmd(new MICommand(MI::ExecArguments, KShell::joinArgs(arguments)));
+        addCommand(ExecArguments, KShell::joinArgs(arguments));
 
     // Do other debugger specific config options and actually start the inferior program
     if (!execInferior(cfg, executable)) {
@@ -291,14 +291,14 @@ bool MIDebugSession::attachToProcess(int pid)
     // We can't omit application name from gdb invocation
     // because for libtool binaries, we have no way to guess
     // real binary name.
-    queueCmd(new MICommand(MI::FileExecAndSymbols));
+    addCommand(MI::FileExecAndSymbols);
 
-    queueCmd(new MICommand(MI::TargetAttach, QString::number(pid),
-                           this, &MIDebugSession::handleTargetAttach,
-                           CmdHandlesError));
+    addCommand(TargetAttach, QString::number(pid),
+               this, &MIDebugSession::handleTargetAttach,
+               CmdHandlesError);
 
-    queueCmd(new SentinelCommand(breakpointController(),
-                                 &MIBreakpointController::initSendBreakpoints));
+    addCommand(new SentinelCommand(breakpointController(),
+                                   &MIBreakpointController::initSendBreakpoints));
 
     raiseEvent(connected_to_program);
 
@@ -329,9 +329,10 @@ bool MIDebugSession::examineCoreFile(const QUrl &debugee, const QUrl &coreFile)
     }
 
     // FIXME: support non-local URLs
-    queueCmd(new MICommand(MI::FileExecAndSymbols, debugee.toLocalFile()));
-    queueCmd(new MICommand(MI::NonMI, "core " + coreFile.toLocalFile(),
-                           this, &MIDebugSession::handleCoreFile, CmdHandlesError));
+    addCommand(FileExecAndSymbols, debugee.toLocalFile());
+    addCommand(NonMI, "core " + coreFile.toLocalFile(),
+               this, &MIDebugSession::handleCoreFile,
+               CmdHandlesError);
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -517,8 +518,8 @@ void MIDebugSession::restartDebugger()
             interruptDebugger();
         }
         // The -exec-abort is not implemented in gdb
-        // queueCmd(new MICommand(MI::ExecAbort));
-        queueCmd(new MICommand(MI::NonMI, "kill"));
+        // addCommand(ExecAbort);
+        addCommand(NonMI, "kill");
     }
     run();
 }
@@ -544,12 +545,12 @@ void MIDebugSession::stopDebugger()
     // If the app is attached then we release it here. This doesn't stop
     // the app running.
     if (debuggerStateIsOn(s_attached)) {
-        queueCmd(new MICommand(MI::TargetDetach));
+        addCommand(TargetDetach);
         emit debuggerUserCommandOutput("(gdb) detach\n");
     }
 
     // Now try to stop debugger running.
-    queueCmd(new MICommand(MI::GdbExit));
+    addCommand(GdbExit);
     emit debuggerUserCommandOutput("(gdb) quit");
 
     // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
@@ -576,7 +577,7 @@ void MIDebugSession::interruptDebugger()
     // Explicitly send the interrupt in case something went wrong with the usual
     // ensureGdbListening logic.
     m_debugger->interrupt();
-    queueCmd(new MICommand(MI::ExecInterrupt, QString(), CmdInterrupt));
+    addCommand(ExecInterrupt, QString(), CmdInterrupt);
 }
 
 void MIDebugSession::run()
@@ -584,7 +585,7 @@ void MIDebugSession::run()
     if (debuggerStateIsOn(s_appNotStarted|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new MICommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
+    addCommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning);
 }
 
 void MIDebugSession::runToCursor()
@@ -610,7 +611,7 @@ void MIDebugSession::stepOver()
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new MICommand(MI::ExecNext, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
+    addCommand(ExecNext, QString(), CmdMaybeStartsRunning | CmdTemporaryRun);
 }
 
 void MIDebugSession::stepIntoInstruction()
@@ -618,8 +619,8 @@ void MIDebugSession::stepIntoInstruction()
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new MICommand(MI::ExecStepInstruction, QString(),
-                           CmdMaybeStartsRunning | CmdTemporaryRun));
+    addCommand(ExecStepInstruction, QString(),
+               CmdMaybeStartsRunning | CmdTemporaryRun);
 }
 
 void MIDebugSession::stepInto()
@@ -627,7 +628,7 @@ void MIDebugSession::stepInto()
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new MICommand(MI::ExecStep, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
+    addCommand(ExecStep, QString(), CmdMaybeStartsRunning | CmdTemporaryRun);
 }
 
 void MIDebugSession::stepOverInstruction()
@@ -635,8 +636,8 @@ void MIDebugSession::stepOverInstruction()
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new MICommand(MI::ExecNextInstruction, QString(),
-                           CmdMaybeStartsRunning | CmdTemporaryRun));
+    addCommand(ExecNextInstruction, QString(),
+               CmdMaybeStartsRunning | CmdTemporaryRun);
 }
 
 void MIDebugSession::stepOut()
@@ -644,7 +645,7 @@ void MIDebugSession::stepOut()
     if (debuggerStateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new MICommand(MI::ExecFinish, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
+    addCommand(ExecFinish, QString(), CmdMaybeStartsRunning | CmdTemporaryRun);
 }
 
 void MIDebugSession::runUntil(const QUrl& url, int line)
@@ -653,12 +654,12 @@ void MIDebugSession::runUntil(const QUrl& url, int line)
         return;
 
     if (!url.isValid()) {
-        queueCmd(new MICommand(MI::ExecUntil, QString::number(line),
-                               CmdMaybeStartsRunning | CmdTemporaryRun));
+        addCommand(ExecUntil, QString::number(line),
+                   CmdMaybeStartsRunning | CmdTemporaryRun);
     } else {
-        queueCmd(new MICommand(MI::ExecUntil,
-                 QString("%1:%2").arg(url.toLocalFile()).arg(line),
-                 CmdMaybeStartsRunning | CmdTemporaryRun));
+        addCommand(ExecUntil,
+                   QString("%1:%2").arg(url.toLocalFile()).arg(line),
+                   CmdMaybeStartsRunning | CmdTemporaryRun);
     }
 }
 
@@ -668,8 +669,8 @@ void MIDebugSession::runUntil(const QString& address)
         return;
 
     if (!address.isEmpty()) {
-        queueCmd(new MICommand(MI::ExecUntil, QString("*%1").arg(address),
-                               CmdMaybeStartsRunning | CmdTemporaryRun));
+        addCommand(ExecUntil, QString("*%1").arg(address),
+                   CmdMaybeStartsRunning | CmdTemporaryRun);
     }
 }
 
@@ -679,10 +680,8 @@ void MIDebugSession::jumpTo(const QUrl& url, int line)
         return;
 
     if (url.isValid()) {
-        queueCmd(new MICommand(MI::NonMI,
-                               QString("tbreak %1:%2").arg(url.toLocalFile()).arg(line)));
-        queueCmd(new MICommand(MI::NonMI,
-                               QString("jump %1:%2").arg(url.toLocalFile()).arg(line)));
+        addCommand(NonMI, QString("tbreak %1:%2").arg(url.toLocalFile()).arg(line));
+        addCommand(NonMI, QString("jump %1:%2").arg(url.toLocalFile()).arg(line));
     }
 }
 
@@ -692,8 +691,8 @@ void MIDebugSession::jumpToMemoryAddress(const QString& address)
         return;
 
     if (!address.isEmpty()) {
-        queueCmd(new MICommand(MI::NonMI, QString("tbreak *%1").arg(address)));
-        queueCmd(new MICommand(MI::NonMI, QString("jump *%1").arg(address)));
+        addCommand(NonMI, QString("tbreak *%1").arg(address));
+        addCommand(NonMI, QString("jump *%1").arg(address));
     }
 }
 
@@ -711,14 +710,38 @@ void MIDebugSession::addUserCommand(const QString& cmd)
         raiseEvent(program_state_changed);
 }
 
+MICommand *MIDebugSession::createCommand(CommandType type, const QString& arguments,
+                                         CommandFlags flags) const
+{
+    return new MICommand(type, arguments, flags);
+}
+
 void MIDebugSession::addCommand(MICommand* cmd)
 {
     queueCmd(cmd);
 }
 
-void MIDebugSession::addCommand(MI::CommandType type, const QString& str)
+void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments, MI::CommandFlags flags)
 {
-    queueCmd(new MICommand(type, str));
+    queueCmd(createCommand(type, arguments, flags));
+}
+
+void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
+                MI::MICommandHandler *handler,
+                MI::CommandFlags flags)
+{
+    auto cmd = createCommand(type, arguments, flags);
+    cmd->setHandler(handler);
+    queueCmd(cmd);
+}
+
+void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
+                const MI::FunctionCommandHandler::Function& callback,
+                MI::CommandFlags flags)
+{
+    auto cmd = createCommand(type, arguments, flags);
+    cmd->setHandler(callback);
+    queueCmd(cmd);
 }
 
 // Fairly obvious that we'll add whatever command you give me to a queue
@@ -912,7 +935,7 @@ void MIDebugSession::slotDebuggerReady()
         if (debuggerStateIsOn(s_automaticContinue)) {
             if (!debuggerStateIsOn(s_appRunning)) {
                 qCDebug(DEBUGGERCOMMON) << "Posting automatic continue";
-                queueCmd(new MICommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
+                addCommand(ExecContinue, QString(), CmdMaybeStartsRunning);
             }
             setDebuggerStateOff(s_automaticContinue);
             return;
@@ -1003,7 +1026,7 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
         // watchpoinst on program exit is the right thing to
         // do.
 
-        queueCmd(new MICommand(MI::ExecContinue, QString(), CmdMaybeStartsRunning));
+        addCommand(ExecContinue, QString(), CmdMaybeStartsRunning);
 
         m_stateReloadNeeded = false;
         return;

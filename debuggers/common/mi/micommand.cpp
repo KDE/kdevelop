@@ -36,33 +36,9 @@ void FunctionCommandHandler::handle(const ResultRecord& r)
 
 MICommand::MICommand(CommandType type, const QString& command, CommandFlags flags)
     : type_(type)
-    , flags_(flags & ~CmdHandlesError)
-    , command_(command)
-    , commandHandler_(0)
-    , stateReloading_(false)
-    , m_thread(-1)
-    , m_frame(-1)
-{
-}
-
-MICommand::MICommand(CommandType type, const QString& arguments, MICommandHandler* handler,
-                       CommandFlags flags)
-    : type_(type)
     , flags_(flags)
-    , command_(arguments)
-    , commandHandler_(handler)
-    , stateReloading_(false)
-    , m_thread(-1)
-    , m_frame(-1)
-{
-}
-
-MICommand::MICommand(CommandType type, const QString& arguments,
-                       const FunctionCommandHandler::Function& callback, CommandFlags flags)
-    : type_(type)
-    , flags_(flags & ~CmdHandlesError)
-    , command_(arguments)
-    , commandHandler_(new FunctionCommandHandler(callback, flags))
+    , command_(command)
+    , commandHandler_(nullptr)
     , stateReloading_(false)
     , m_thread(-1)
     , m_frame(-1)
@@ -114,6 +90,15 @@ void MICommand::setHandler(MICommandHandler* handler)
     if (commandHandler_ && commandHandler_->autoDelete())
         delete commandHandler_;
     commandHandler_ = handler;
+
+    if (!commandHandler_) {
+        flags_ = flags_ & ~CmdHandlesError;
+    }
+}
+
+void MICommand::setHandler(const FunctionCommandHandler::Function& callback)
+{
+    setHandler(new FunctionCommandHandler(callback, flags()));
 }
 
 bool MICommand::invokeHandler(const ResultRecord& r)
@@ -169,7 +154,7 @@ QString MICommand::miCommand() const
         case BreakAfter:
             command = "break-after";//"ignore"
             break;
-        case BreakCatch:
+        case BreakCatch: // FIXME: non-exist command
             command = "break-catch";
             break;
         case BreakCommands:

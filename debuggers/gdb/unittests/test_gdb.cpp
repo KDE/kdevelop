@@ -1751,7 +1751,7 @@ void GdbTest::testCatchpoint()
     QCOMPARE(fsModel->currentFrame(), 0);
     QCOMPARE(session->line(), 29);
 
-    session->addCommand(new MI::MICommand(MI::NonMI, "catch throw"));
+    session->addCommand(MI::NonMI, "catch throw");
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
@@ -1910,13 +1910,13 @@ void GdbTest::testRegularExpressionBreakpoint()
         breakpoints()->addCodeBreakpoint("main");
         session->startDebugging(&c, m_iface);
         WAIT_FOR_STATE(session, DebugSession::PausedState);
-        session->addCommand(new MI::MICommand(MI::NonMI, "rbreak .*aPl.*B"));
+        session->addCommand(MI::NonMI, "rbreak .*aPl.*B");
         QTest::qWait(100);
         session->run();
         WAIT_FOR_STATE(session, DebugSession::PausedState);
         QCOMPARE(breakpoints()->breakpoints().count(), 3);
 
-        session->addCommand(new MI::MICommand(MI::BreakDelete, ""));
+        session->addCommand(MI::BreakDelete, "");
         session->run();
         WAIT_FOR_STATE(session, DebugSession::EndedState);
 }

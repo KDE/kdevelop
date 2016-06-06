@@ -26,7 +26,11 @@
 
 #include <functional>
 
-namespace KDevMI { namespace MI {
+namespace KDevMI {
+
+class MIDebugSession;
+
+namespace MI {
 
 class VarItem;
 class ValueCallback;
@@ -94,26 +98,15 @@ private:
 
 class MICommand
 {
-public:
+protected:
     MICommand(CommandType type, const QString& arguments = QString(), CommandFlags flags = 0);
-
-    template<class Handler>
-    MICommand(CommandType type, const QString& arguments,
-              Handler* handler_this,
-              void (Handler::* handler_method)(const ResultRecord&),
-              CommandFlags flags = 0);
-
-    MICommand(CommandType type, const QString& arguments, MICommandHandler* handler,
-              CommandFlags flags = 0);
-
-    MICommand(CommandType type, const QString& arguments,
-              const FunctionCommandHandler::Function& callback,
-              CommandFlags flags = 0);
+    friend class KDevMI::MIDebugSession;
+public:
 
     virtual ~MICommand();
 
     CommandType type() const;
-    QString miCommand() const;
+    virtual QString miCommand() const;
 
     CommandFlags flags() const {return flags_;}
 
@@ -156,6 +149,10 @@ public:
      * The command object assumes ownership of @p handler.
      */
     void setHandler(MICommandHandler* handler);
+    void setHandler(const FunctionCommandHandler::Function &callback);
+
+    template<class Handler>
+    void setHandler(Handler* handler_this, void (Handler::* handler_method)(const ResultRecord&));
 
     /* The command that should be sent to debugger.
        This method is virtual so the command can compute this
@@ -287,11 +284,12 @@ public:
         const QString& expression,
         Handler* handler_this,
         void (Handler::* handler_method)(const QString&))
-    : MICommand(DataEvaluateExpression, expression, this,
-                 &ExpressionValueCommand::handleResponse),
+    : MICommand(DataEvaluateExpression, expression),
       handler_this(handler_this),
       handler_method(static_cast<handler_method_t>(handler_method))
-    {}
+    {
+        setHandler(this, &ExpressionValueCommand::handleResponse);
+    }
 
     void handleResponse(const ResultRecord& r)
     {
@@ -303,28 +301,28 @@ private:
     handler_method_t handler_method;
 };
 
+template<class Handler>
+FunctionCommandHandler::Function guarded_callback(Handler *handler_this,
+                                                 void (Handler::* handler_method)(const ResultRecord&))
+{
+    QPointer<Handler> guarded_this(handler_this);
+    return [guarded_this, handler_method](const ResultRecord& r) {
+        if (guarded_this) {
+            (guarded_this.data()->*handler_method)(r);
+        }
+    };
+}
 
 template<class Handler>
-MICommand::MICommand(
-    CommandType type,
-    const QString& command,
-    Handler* handler_this,
-    void (Handler::* handler_method)(const ResultRecord&),
-    CommandFlags flags)
-: type_(type),
-  flags_(flags & ~CmdHandlesError),
-  command_(command),
-  commandHandler_(nullptr),
-  stateReloading_(false),
-  m_thread(-1),
-  m_frame(-1)
+void MICommand::setHandler(Handler* handler_this,
+                           void (Handler::* handler_method)(const ResultRecord&))
 {
     QPointer<Handler> guarded_this(handler_this);
     setHandler(new FunctionCommandHandler([guarded_this, handler_method](const ResultRecord& r) {
         if (guarded_this) {
             (guarded_this.data()->*handler_method)(r);
         }
-    }, flags));
+    }, flags()));
 }
 
 template<class Handler>
