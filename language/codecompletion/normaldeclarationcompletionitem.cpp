@@ -69,6 +69,9 @@ int NormalDeclarationCompletionItem::argumentHintDepth() const
 
 QString NormalDeclarationCompletionItem::declarationName() const
 {
+  if (!m_declaration) {
+    return QStringLiteral("<unknown>");
+  }
   QString ret = m_declaration->identifier().toString();
   if (ret.isEmpty())
     return QStringLiteral("<unknown>");

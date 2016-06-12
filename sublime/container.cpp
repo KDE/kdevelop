@@ -394,7 +394,7 @@ void Container::documentTitleChanged(Sublime::Document* doc)
         Sublime::View* view = it.next().value();
         if (view->document() == doc) {
             if (currentView() == view) {
-                d->fileNameCorner->setText( doc->title(Document::Extended) );
+                d->fileNameCorner->setText( doc->title(Document::Extended) + i18n(" <i>(Press Ctrl+Tab to switch)</i>") );
             }
             int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
