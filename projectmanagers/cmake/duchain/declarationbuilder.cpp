@@ -31,6 +31,9 @@ void DeclarationBuilder::startVisiting(CMakeContentIterator* node)
         const CMakeFunctionDesc& func = node->next();
 
         if (func.name == "add_executable" || func.name == "add_library") {
+            if (func.arguments.isEmpty()) {
+                continue;
+            }
             CMakeFunctionArgument arg = func.arguments.first();
 
             DUChainWriteLocker lock;
@@ -38,6 +41,9 @@ void DeclarationBuilder::startVisiting(CMakeContentIterator* node)
             decl->setAbstractType(AbstractType::Ptr(new TargetType));
             closeDeclaration();
         } else if(func.name == "macro" || func.name == "function") {
+            if (func.arguments.isEmpty()) {
+                continue;
+            }
             CMakeFunctionArgument arg = func.arguments.first();
             FunctionType::Ptr funcType(new FunctionType);
 

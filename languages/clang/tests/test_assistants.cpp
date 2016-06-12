@@ -59,11 +59,11 @@ StaticAssistantsManager *staticAssistantsManager() { return Core::self()->langua
 
 void TestAssistants::initTestCase()
 {
-    QLoggingCategory::setFilterRules(QStringLiteral(R"(
-        *.debug=false
-        default.debug=true
-        kdevelop.plugins.clang.debug=true
-    )"));
+    QLoggingCategory::setFilterRules(QStringLiteral(
+        "*.debug=false\n"
+        "default.debug=true\n"
+        "kdevelop.plugins.clang.debug=true\n"
+    ));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     QVERIFY(qputenv("KDEV_CLANG_DISPLAY_DIAGS", "1"));
     AutoTestShell::init({QStringLiteral("kdevclangsupport")});
