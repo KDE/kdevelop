@@ -95,7 +95,7 @@ QList<KTextEditor::View*> EditorViewWatcher::allViews() {
 void BrowseManager::eventuallyStartDelayedBrowsing() {
     avoidMenuAltFocus();
 
-    if(m_browsingByKey && m_browsingStartedInView)
+    if(m_browsingByKey == Qt::Key_Alt && m_browsingStartedInView)
         emit startDelayedBrowsing(m_browsingStartedInView);
 }
 
