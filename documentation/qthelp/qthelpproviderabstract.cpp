@@ -63,7 +63,6 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declarat
 
         QString id;
         if(isQML && !idParts.isEmpty()) {
-            idParts.removeFirst(); // Skip the namespace (QtQuick2.0, etc)
             id = QLatin1String("QML.");
         }
 
