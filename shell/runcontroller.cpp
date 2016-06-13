@@ -341,8 +341,7 @@ RunController::RunController(QObject *parent)
     d->profileMode = 0;
 
     d->unityLauncher = new UnityLauncher(this);
-    // desktopFileName() reports itself as "org.kdevelop.kdevelop" which is rubbish
-    d->unityLauncher->setLauncherId(KAboutData::applicationData().componentName() + QLatin1String(".desktop"));
+    d->unityLauncher->setLauncherId(KAboutData::applicationData().desktopFileName());
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         // Note that things like registerJob() do not work without the actions, it'll simply crash.
