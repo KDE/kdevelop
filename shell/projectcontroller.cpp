@@ -397,6 +397,9 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
 
     QUrl projectFileUrl = dlg.projectFileUrl();
     qCDebug(SHELL) << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
+    if ( dlg.projectManager() == "<built-in>" ) {
+        return projectFileUrl;
+    }
 
     // controls if existing project file should be saved
     bool writeProjectConfigToFile = true;
