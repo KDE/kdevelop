@@ -51,13 +51,13 @@ void TestDUChain::testFormatComment()
 void TestDUChain::benchFormatComment()
 {
     QBENCHMARK {
-        formatComment(QByteArrayLiteral(R"(
-            /**
-             * This is a real comment of some imaginary code.
-             *
-             * @param foo bar
-             * @return meh
-             */
-        )"));
+        formatComment(QByteArrayLiteral(
+            "/**\n"
+            " * This is a real comment of some imaginary code.\n"
+            " *\n"
+            " * @param foo bar\n"
+            " * @return meh\n"
+            " */\n"
+        ));
     }
 }
