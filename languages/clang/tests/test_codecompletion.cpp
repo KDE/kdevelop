@@ -569,6 +569,18 @@ void TestCodeCompletion::testVirtualOverride_data()
         << "class Foo { virtual void foo(const int b) const; virtual void overridden(const int b) const; }\n;"
            "class Bar : Foo \n{void overridden(const int b) const override;\n}"
         << CompletionItems{{3, 1}, {"foo(const int b) const"}};
+
+    QTest::newRow("dont-override")
+        << R"(class A {
+                  virtual void something() = 0;
+              };
+              class B : public A
+              {
+              public:
+                  void foo();
+              };
+              void B::foo() {}
+        )" << CompletionItems{{8, 14}, {}};
 }
 
 void TestCodeCompletion::testImplement()
