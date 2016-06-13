@@ -95,7 +95,7 @@ QList<KTextEditor::View*> EditorViewWatcher::allViews() {
 void BrowseManager::eventuallyStartDelayedBrowsing() {
     avoidMenuAltFocus();
 
-    if(m_browsingByKey && m_browsingStartedInView)
+    if(m_browsingByKey == Qt::Key_Alt && m_browsingStartedInView)
         emit startDelayedBrowsing(m_browsingStartedInView);
 }
 
@@ -224,15 +224,9 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     }
 
     if(mouseEvent) {
-        KTextEditor::View* iface = dynamic_cast<KTextEditor::View*>(view);
-        if(!iface) {
-            qCDebug(PLUGIN_CONTEXTBROWSER) << "Update kdelibs for the browsing-mode to work";
-            return false;
-        }
-
         QPoint coordinatesInView = widget->mapTo(view, mouseEvent->pos());
 
-        KTextEditor::Cursor textCursor = iface->coordinatesToCursor(coordinatesInView);
+        KTextEditor::Cursor textCursor = view->coordinatesToCursor(coordinatesInView);
         if (textCursor.isValid()) {
             JumpLocation jumpTo = determineJumpLoc(textCursor, view->document()->url());
             if (jumpTo.isValid()) {

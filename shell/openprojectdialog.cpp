@@ -14,6 +14,7 @@
 
 #include <QFileInfo>
 #include <QFileDialog>
+#include <QDebug>
 
 #include <KColorScheme>
 #include <KIO/StatJob>
@@ -88,17 +89,14 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
         QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
         QString desc = info.value(QStringLiteral("X-KDevelop-ProjectFilesFilterDescription"));
 
-        if (!filter.isEmpty() && !desc.isEmpty()) {
-            m_projectFilters.insert(info.name(), filter);
-            allEntry += filter;
-            filters << filterFormat.arg(filter.join(QStringLiteral(" ")), desc);
-        }
+        m_projectFilters.insert(info.name(), filter);
+        m_projectPlugins.insert(info.name(), info);
+        allEntry += filter;
+        filters << filterFormat.arg(filter.join(QStringLiteral(" ")), desc);
     }
 
     if (useKdeFileDialog)
         filters.prepend(i18n("%1|All Project Files (%1)", allEntry.join(QStringLiteral(" "))));
-    else
-        filters.prepend(i18n("All Project Files (%1)", allEntry.join(QStringLiteral(" "))));
 
     QUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
     start = start.adjusted(QUrl::NormalizePathSegments);
@@ -124,8 +122,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
     } else {
         nativeDialog = new QFileDialog(this, i18n("Open Project"));
         nativeDialog->setDirectoryUrl(start);
-        nativeDialog->setFileMode(QFileDialog::ExistingFile);
-        nativeDialog->setNameFilters(filters);
+        nativeDialog->setFileMode(QFileDialog::Directory);
     }
 
     ProjectInfoPage* page = new ProjectInfoPage( this );
@@ -218,8 +215,6 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
         if( page )
         {
             page->setProjectName( m_url.fileName() );
-            // Default manager
-            page->setProjectManager( QStringLiteral("Generic Project Manager") );
             // clear the filelist
             m_fileList.clear();
 
@@ -231,26 +226,31 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                 KJobWidgets::setWindow(job, Core::self()->uiController()->activeMainWindow());
                 job->exec();
             } else {
-                // Else we'lll just take the given file
+                // Else we'll just take the given file
                 m_fileList << url.fileName();
             }
             // Now find a manager for the file(s) in our filelist.
-            bool managerFound = false;
-            foreach( const QString& manager, m_projectFilters.keys() )
-            {
-                foreach( const QString& filterexp, m_projectFilters.value(manager) )
-                {
-                    if( !m_fileList.filter( QRegExp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard ) ).isEmpty() )
-                    {
-                        managerFound = true;
-                        break;
-                    }
+            QVector<ProjectFileChoice> choices;
+            Q_FOREACH ( const auto& file, m_fileList ) {
+                auto plugins = projectManagerForFile(file);
+                if ( plugins.contains("<built-in>") ) {
+                    plugins.removeAll("<built-in>");
+                    choices.append({i18n("Open existing file \"%1\"", file), "<built-in>", QString()});
                 }
-                if( managerFound ) {
-                    page->setProjectManager( manager );
-                    break;
+                Q_FOREACH ( const auto& plugin, plugins ) {
+                    auto meta = m_projectPlugins.value(plugin);
+                    choices.append({file + QString(" (%1)").arg(plugin), meta.pluginId(), meta.iconName()});
                 }
             }
+            Q_FOREACH ( const auto& plugin, m_projectFilters.keys() ) {
+                qDebug() << plugin << m_projectFilters.value(plugin);
+                if ( m_projectFilters.value(plugin).isEmpty() ) {
+                    // that works in any case
+                    auto meta = m_projectPlugins.value(plugin);
+                    choices.append({plugin, meta.pluginId(), meta.iconName()});
+                }
+            }
+            page->populateProjectFileCombo(choices);
         }
         m_url.setPath( m_url.path() + '/' + m_url.fileName() + '.' + ShellExtension::getInstance()->projectFileExtension() );
     } else {
@@ -259,6 +259,25 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
     }
     validateProjectInfo();
     setValid( openPage, true );
+}
+
+QStringList OpenProjectDialog::projectManagerForFile(const QString& file) const
+{
+    QStringList ret;
+    foreach( const QString& manager, m_projectFilters.keys() )
+    {
+        foreach( const QString& filterexp, m_projectFilters.value(manager) )
+        {
+            QRegExp exp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard );
+            if ( exp.exactMatch(file) ) {
+                ret.append(manager);
+            }
+        }
+    }
+    if ( file.endsWith(ShellExtension::getInstance()->projectFileExtension()) ) {
+        ret.append("<built-in>");
+    }
+    return ret;
 }
 
 void OpenProjectDialog::openPageAccepted()

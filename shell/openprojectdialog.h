@@ -15,6 +15,7 @@
 
 #include <KAssistantDialog>
 #include <KIO/UDSEntry>
+#include <KPluginMetaData>
 
 class KPageWidgetItem;
 class QFileDialog;
@@ -50,6 +51,8 @@ public:
 
     int exec() override;
 
+    QStringList projectManagerForFile(const QString& file) const;
+
 private slots:
     void validateSourcePage( bool );
     void validateOpenUrl( const QUrl& );
@@ -72,6 +75,7 @@ private:
     KPageWidgetItem* projectInfoPage;
     QStringList m_fileList;
     QMap<QString, QStringList> m_projectFilters;
+    QMap<QString, KPluginMetaData> m_projectPlugins;
 
     KDevelop::OpenProjectPage* openPageWidget = nullptr;
     KDevelop::ProjectSourcePage* sourcePageWidget = nullptr;

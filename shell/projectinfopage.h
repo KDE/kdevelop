@@ -13,6 +13,12 @@
 
 #include <QWidget>
 
+struct ProjectFileChoice {
+    QString text;
+    QString pluginId;
+    QString iconName;
+};
+
 namespace Ui
 {
     class ProjectInfoPage;
@@ -28,7 +34,7 @@ public:
     explicit ProjectInfoPage( QWidget* parent = nullptr );
     ~ProjectInfoPage() override;
     void setProjectName( const QString& );
-    void setProjectManager( const QString& );
+    void populateProjectFileCombo( const QVector<ProjectFileChoice>& choices );
 signals:
     void projectNameChanged( const QString& );
     void projectManagerChanged( const QString& );
