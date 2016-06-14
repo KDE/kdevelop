@@ -290,9 +290,8 @@ void ProvidersModel::removeProviders(const QList<IDocumentationProvider* >&prov)
         for(int i = 0, c = prov.count(); i < c; ++i)
             mProviders.removeAt(idx);
         endRemoveRows();
+        emit providersChanged();
     }
-
-    emit providersChanged();
 }
 
 void ProvidersModel::unloaded(IPlugin* plugin)
