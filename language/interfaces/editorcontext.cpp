@@ -29,8 +29,8 @@ namespace KDevelop {
 class EditorContextPrivate
 {
 public:
-    EditorContextPrivate( KTextEditor::View* view, KTextEditor::Cursor position )
-            : m_view( view )
+    EditorContextPrivate( KTextEditor::View* view, const KTextEditor::Cursor& position )
+        : m_view( view )
     {
         m_url = view->document()->url();
         m_position = position;
@@ -49,7 +49,7 @@ public:
     KTextEditor::View* m_view;
 };
 
-EditorContext::EditorContext( KTextEditor::View* view, KTextEditor::Cursor position )
+EditorContext::EditorContext( KTextEditor::View* view, const KTextEditor::Cursor& position )
         : DeclarationContext( view, position ), d( new EditorContextPrivate( view, position ) )
 {}
 

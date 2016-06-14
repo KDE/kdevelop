@@ -37,12 +37,12 @@ namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT EditorContext: public DeclarationContext
 {
 public:
-    /**Builds a context for a KTextEditor part.
-        @param url The url of a file in the editor.
-        @param position The position where the cursor is.
-        @param linestr The content of the line where the cursor is.
-        @param wordstr The current word under the cursor.*/
-    EditorContext( KTextEditor::View*, KTextEditor::Cursor position );
+    /**
+     * Builds a context for a KTextEditor part.
+     * @param view The view for the editor context.
+     * @param position The cursor position.
+     */
+    EditorContext( KTextEditor::View* view, const KTextEditor::Cursor& position );
 
     /**Destructor.*/
     virtual ~EditorContext();
@@ -63,6 +63,9 @@ public:
         context object was created.*/
     QString currentWord() const;
 
+    /**
+     * Returns the associated view.
+     */
     KTextEditor::View* view() const;
 
 private:
