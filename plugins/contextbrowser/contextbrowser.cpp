@@ -476,6 +476,10 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     }
     tooltip->setHandleRect(KTextEditorHelpers::getItemBoundingRect(view, itemRange));
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
+    QObject::connect( view, &KTextEditor::View::verticalScrollPositionChanged,
+                      this, &ContextBrowserPlugin::hideToolTip );
+    QObject::connect( view, &KTextEditor::View::horizontalScrollPositionChanged,
+                      this, &ContextBrowserPlugin::hideToolTip );
     qCDebug(PLUGIN_CONTEXTBROWSER) << "tooltip size" << tooltip->size();
     m_currentToolTip = tooltip;
     m_currentNavigationWidget = navigationWidget;
