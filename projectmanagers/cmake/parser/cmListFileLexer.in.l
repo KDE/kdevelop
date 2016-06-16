@@ -32,7 +32,9 @@ Modify cmListFileLexer.c:
 
 /* #include "cmStandardLexer.h" */
 #ifdef WIN32
-#include <cmsys/Encoding.h>
+#define KWSYS_ENCODING_DEFAULT_CODEPAGE CP_ACP
+#include "EncodingC.c"
+#define cmsysEncoding_DupToWide kwsysEncoding_DupToWide
 #endif
 
 /* Setup the proper cmListFileLexer_yylex declaration.  */

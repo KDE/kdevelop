@@ -78,11 +78,9 @@ set( cmakedoc_SRCS
 remove_definitions( -DQT_NO_STL )
 
 if(WIN32)
-    find_library(CMSYS_LIBRARY cmsys_c)
     add_definitions(-DYY_NO_UNISTD_H)
-else()
-    set(CMSYS_LIBRARY)
 endif()
+
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
@@ -91,7 +89,7 @@ ki18n_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdevcmakecommon
                         KF5::TextEditor KDev::Interfaces KDev::Project KDev::Util
-                        ${QT_QTSCRIPT_LIBRARY} KDev::Language ${CMSYS_LIBRARY}
+                        ${QT_QTSCRIPT_LIBRARY} KDev::Language
                         )
 generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
 

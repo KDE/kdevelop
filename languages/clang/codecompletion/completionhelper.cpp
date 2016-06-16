@@ -233,13 +233,9 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
             if (kind == CXCursor_ClassTemplate || kind == CXCursor_ClassTemplatePartialSpecialization) {
                 //If we're at a template, we need to construct the template<typename T1, typename T2>
                 //which goes at the front of the prototype
-                QStringList templateTypes = templateParams(kind == CXCursor_ClassTemplate ? cursor : clang_getSpecializedCursorTemplate(cursor));
+                const QStringList templateTypes = templateParams(kind == CXCursor_ClassTemplate ? cursor : clang_getSpecializedCursorTemplate(cursor));
 
-                templatePrefix = QLatin1String("template<");
-                for (int i = 0; i < templateTypes.count(); i++) {
-                    templatePrefix = templatePrefix + QLatin1String((i > 0) ? ", " : "") + QLatin1String("typename ") + templateTypes.at(i);
-                }
-                templatePrefix = templatePrefix + QLatin1String("> ");
+                templatePrefix = QLatin1String("template<") + templateTypes.join(QStringLiteral(", typename ")) + QLatin1String("> ");
             }
         }
 
@@ -339,7 +335,7 @@ void CompletionHelper::computeCompletions(const ParseSession& session, CXFile fi
     if (clang_getCursorKind(currentCursor) == CXCursor_NoDeclFound) {
         currentCursor = topCursor;
     } else if (KTextEditor::Cursor(ClangLocation(clang_getCursorLocation(currentCursor))) >= ClangLocation(location)) {
-        currentCursor = clang_getCursorSemanticParent(currentCursor);
+        currentCursor = clang_getCursorLexicalParent(currentCursor);
     }
 
     clang_visitChildren(currentCursor, findBaseVisitor, &m_overrides);

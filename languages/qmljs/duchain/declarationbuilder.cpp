@@ -1341,10 +1341,10 @@ void DeclarationBuilder::closeAndAssignType()
     closeType();
     Declaration* dec = currentDeclaration();
     Q_ASSERT(dec);
-    Q_ASSERT(lastType());
-    {
+
+    if (auto type = lastType()) {
         DUChainWriteLocker lock;
-        dec->setType(lastType());
+        dec->setType(type);
     }
     closeDeclaration();
 }
