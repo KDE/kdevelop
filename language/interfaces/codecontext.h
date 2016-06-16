@@ -86,7 +86,7 @@ public:
      */
     explicit DeclarationContext(const IndexedDeclaration& declaration, const DocumentRange& use = DocumentRange::invalid(), const IndexedDUContext& context = IndexedDUContext());
     ///Computes the items under the cursor
-    DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position);
+    DeclarationContext(KTextEditor::View* view, const KTextEditor::Cursor& position);
 
     /**Destructor.*/
     virtual ~DeclarationContext();
