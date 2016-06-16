@@ -32,6 +32,7 @@
 #include <language/duchain/duchain.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <util/environmentgrouplist.h>
 #include <cmakeprojectdata.h>
 
 using namespace KDevelop;
@@ -44,6 +45,7 @@ QString CMakeCompliance::output;
 QString executeProcess(const QString& execName, const QStringList& args=QStringList())
 {
     QProcess p;
+    KDevelop::restoreSystemEnvironment(&p);
     p.setProcessChannelMode(QProcess::MergedChannels);
     p.setProgram(execName, args);
     p.start();

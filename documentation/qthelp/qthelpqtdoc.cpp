@@ -23,6 +23,8 @@
 #include "qthelpqtdoc.h"
 #include "debug.h"
 
+#include <util/environmentgrouplist.h>
+
 #include <QDir>
 #include <QIcon>
 #include <QStandardPaths>
@@ -59,6 +61,7 @@ void QtHelpQtDoc::registerDocumentations()
     const QString qmake = qmakeCandidate();
     if (!qmake.isEmpty()) {
         QProcess *p = new QProcess;
+        KDevelop::restoreSystemEnvironment(p);
         p->setProcessChannelMode(QProcess::MergedChannels);
         p->setProgram(qmake);
         p->setArguments(QStringList(QStringLiteral("-query QT_INSTALL_DOCS")));
