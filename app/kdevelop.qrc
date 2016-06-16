@@ -1,8 +1,5 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
-    <qresource prefix="/kdevelop">
-        <file>splash.qml</file>
-    </qresource>
     <qresource prefix="/kconfig">
         <file>kdeveloprc</file>
     </qresource>
