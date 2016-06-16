@@ -228,8 +228,7 @@ void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcess
 
 void KDevelop::restoreSystemEnvironment(QProcess* process)
 {
-    auto shouldChange = qEnvironmentVariableIsSet("_KDEV_OLD_LD_LIBRARY_PATH");
-    qWarning() << "resetting process environment:" << process << process->program() << shouldChange;
+    static const auto shouldChange = qEnvironmentVariableIsSet("_KDEV_OLD_LD_LIBRARY_PATH");
     if ( shouldChange ) {
         // running in AppImage
         auto env = process->processEnvironment();
@@ -240,5 +239,4 @@ void KDevelop::restoreSystemEnvironment(QProcess* process)
         env.insert("KDE_FORK_SLAVES", qgetenv("_KDEV_OLD_KDE_FORK_SLAVES"));
         process->setProcessEnvironment(env);
     }
-    qWarning() << "resulting environment:" << process->processEnvironment().toStringList();
 }
