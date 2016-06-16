@@ -76,6 +76,7 @@ OutputExecuteJobPrivate::OutputExecuteJobPrivate( OutputExecuteJob* owner ) :
     m_filteringStrategy( OutputModel::NoFilter ),
     m_outputStarted( false )
 {
+    KDevelop::restoreSystemEnvironment(m_process);
 }
 
 OutputExecuteJob::OutputExecuteJob( QObject* parent, OutputJob::OutputJobVerbosity verbosity ):
@@ -269,6 +270,7 @@ void OutputExecuteJob::start()
     }
 
     d->m_process->setProcessEnvironment( d->effectiveEnvironment() );
+    KDevelop::restoreSystemEnvironment(d->m_process);
     if (!d->effectiveCommandLine().isEmpty()) {
         d->m_process->setProgram( d->effectiveCommandLine() );
         // there is no way to input data in the output view so redirect stdin to the null device
@@ -454,6 +456,7 @@ QString OutputExecuteJob::environmentProfile() const
 void OutputExecuteJob::setEnvironmentProfile( const QString& profile )
 {
     d->m_environmentProfile = profile;
+    KDevelop::restoreSystemEnvironment(d->m_process);
 }
 
 void OutputExecuteJob::addEnvironmentOverride( const QString& name, const QString& value )

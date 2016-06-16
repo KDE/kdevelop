@@ -22,8 +22,10 @@ Boston, MA 02110-1301, USA.
 #include <QMap>
 #include <QStringList>
 #include <QString>
+#include <QDebug>
 
 #include <KConfigGroup>
+#include <QProcess>
 
 #include <QRegularExpression>
 #include <QProcessEnvironment>
@@ -222,4 +224,21 @@ void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcess
         }
         it.value().replace(rNotVar, QStringLiteral("$"));
     }
+}
+
+void KDevelop::restoreSystemEnvironment(QProcess* process)
+{
+    auto shouldChange = qEnvironmentVariableIsSet("_KDEV_OLD_LD_LIBRARY_PATH");
+    qWarning() << "resetting process environment:" << process << process->program() << shouldChange;
+    if ( shouldChange ) {
+        // running in AppImage
+        auto env = process->processEnvironment();
+        env.insert("LD_LIBRARY_PATH", qgetenv("_KDEV_OLD_LD_LIBRARY_PATH"));
+        env.insert("QT_PLUGIN_PATH", qgetenv("_KDEV_OLD_QT_PLUGIN_PATH"));
+        env.insert("XDG_DATA_DIRS", qgetenv("_KDEV_OLD_XDG_DATA_DIRS"));
+        env.insert("PATH", qgetenv("_KDEV_OLD_PATH"));
+        env.insert("KDE_FORK_SLAVES", qgetenv("_KDEV_OLD_KDE_FORK_SLAVES"));
+        process->setProcessEnvironment(env);
+    }
+    qWarning() << "resulting environment:" << process->processEnvironment().toStringList();
 }
