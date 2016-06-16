@@ -38,6 +38,7 @@
 #include <outputview/outputmodel.h>
 #include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
+#include <util/environmentgrouplist.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -181,6 +182,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
   }
 
   m_proc = new KProcess( this );
+  KDevelop::restoreSystemEnvironment(m_proc);
   if ( !workingDir.isEmpty() ) {
     m_proc->setWorkingDirectory( workingDir );
   }

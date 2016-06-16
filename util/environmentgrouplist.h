@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 
 class QProcessEnvironment;
 class KConfig;
+class QProcess;
 template <typename T1, typename T2> class QMap;
 class QString;
 class QStringList;
@@ -140,6 +141,14 @@ private:
     class EnvironmentGroupListPrivate* const d;
 
 };
+
+/**
+ * When running in an AppImage environment, external processes
+ * should not inherit our environment variables, esp. LD_LIBRARY_PATH.
+ * This function restores the original system's environment for the
+ * given @p process.
+ */
+KDEVPLATFORMUTIL_EXPORT void restoreSystemEnvironment(QProcess* process);
 
 KDEVPLATFORMUTIL_EXPORT void expandVariables(QMap<QString, QString>& variables, const QProcessEnvironment& environment);
 
