@@ -97,13 +97,12 @@ DeclarationContext::DeclarationContext( const IndexedDeclaration& declaration, c
         : DUContextContext(context), d( new Private( declaration, use ) )
 {}
 
-DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position) : DUContextContext(IndexedDUContext())
+DeclarationContext::DeclarationContext(KTextEditor::View* view, const KTextEditor::Cursor& position) : DUContextContext(IndexedDUContext())
 {
     const QUrl& url = view->document()->url();
-    const KTextEditor::Cursor pos = KTextEditor::Cursor(position);
     DUChainReadLocker lock;
-    DocumentRange useRange = DocumentRange(IndexedString(url), DUChainUtils::itemRangeUnderCursor(url, pos));
-    Declaration* declaration = DUChainUtils::itemUnderCursor(url, pos);
+    DocumentRange useRange = DocumentRange(IndexedString(url), DUChainUtils::itemRangeUnderCursor(url, position));
+    Declaration* declaration = DUChainUtils::itemUnderCursor(url, position);
     IndexedDeclaration indexed;
     if ( declaration ) {
         indexed = IndexedDeclaration(declaration);
@@ -111,7 +110,7 @@ DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cur
     IndexedDUContext context;
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
     if(topContext) {
-        DUContext* specific = topContext->findContextAt(CursorInRevision(pos.line(), pos.column()));
+        DUContext* specific = topContext->findContextAt(CursorInRevision(position.line(), position.column()));
         if(specific)
             context = IndexedDUContext(specific);
     }
