@@ -36,6 +36,8 @@
 #include <language/duchain/problem.h>
 
 #include <QProcess>
+#include <util/environmentgrouplist.h>
+
 #include <KLocalizedString>
 #include <QHash>
 #include <QQueue>
@@ -1470,6 +1472,7 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
     qCDebug(CMAKE) << "Executing:" << execName << "::" << args << "in" << exec->workingDirectory();
 
     QProcess p;
+    KDevelop::restoreSystemEnvironment(&p);
     if(!exec->workingDirectory().isEmpty())
         p.setWorkingDirectory(exec->workingDirectory());
     p.setProcessChannelMode(QProcess::MergedChannels);
@@ -1527,7 +1530,8 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
             workingDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
         }
         QStringList args(_args);
-        QProcess *p=new QProcess(), *prev=0;
+        QProcess *p = new QProcess(), *prev=0;
+        KDevPlatform::restoreSystemEnvironment(p);
         if(!procs.isEmpty())
         {
             prev=procs.last();

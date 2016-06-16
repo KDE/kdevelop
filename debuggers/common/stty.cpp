@@ -76,6 +76,8 @@
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
 
+#include <util/environmentgrouplist.h>
+
 using namespace KDevMI;
 
 static int chownpty(int fd, int grant)
@@ -304,6 +306,7 @@ bool STTY::findExternalTTY(const QString& termApp)
     }
 
     m_externalTerminal.reset(new QProcess(this));
+    KDevelop::restoreSystemEnvironment(m_externalTerminal.data());
 
     if (appName == "konsole") {
         m_externalTerminal->start(appName, QStringList() << "-e" << "sh" << "-c" << "tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done");

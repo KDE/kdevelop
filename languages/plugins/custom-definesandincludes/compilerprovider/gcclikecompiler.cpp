@@ -28,6 +28,8 @@
 #include <QRegularExpression>
 #include <QMap>
 
+#include <util/environmentgrouplist.h>
+
 #include "../debugarea.h"
 
 using namespace KDevelop;
@@ -86,6 +88,7 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     QRegExp defineExpression( "#define\\s+(\\S+)(?:\\s+(.*)\\s*)?");
 
     QProcess proc;
+    KDevelop::restoreSystemEnvironment(&proc);
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
     // TODO: what about -mXXX or -target= flags, some of these change search paths/defines
@@ -119,6 +122,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     }
 
     QProcess proc;
+    KDevelop::restoreSystemEnvironment(&proc);
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
     // The following command will spit out a bunch of information we don't care

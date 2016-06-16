@@ -22,6 +22,7 @@ target_link_libraries(kdevdebuggercommon
     KDev::Debugger
     PRIVATE
     Qt5::Core
+    KDev::Util
 )
 
 kde_target_enable_exceptions(kdevdebuggercommon PUBLIC)

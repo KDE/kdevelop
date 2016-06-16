@@ -38,6 +38,7 @@
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <QStandardPaths>
+#include <util/environmentgrouplist.h>
 
 #include "icmakedocumentation.h"
 #include "cmakebuilddirchooser.h"
@@ -570,6 +571,7 @@ QString executeProcess(const QString& execName, const QStringList& args)
     qCDebug(CMAKE) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
 
     QProcess p;
+    KDevelop::restoreSystemEnvironment(&p);
     QTemporaryDir tmp("kdevcmakemanager");
     p.setWorkingDirectory( tmp.path() );
     p.start(execName, args, QIODevice::ReadOnly);
