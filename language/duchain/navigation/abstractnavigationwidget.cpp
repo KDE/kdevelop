@@ -127,7 +127,7 @@ void AbstractNavigationWidget::updateIdealSize() const {
     QTextDocument doc;
     doc.setHtml(m_currentText);
     if(doc.idealWidth() > maxNavigationWidgetWidth) {
-      doc.setPageSize( QSize(maxNavigationWidgetWidth, 30) );
+      doc.setTextWidth(maxNavigationWidgetWidth);
       m_idealTextSize.setWidth(maxNavigationWidgetWidth);
     }else{
       m_idealTextSize.setWidth(doc.idealWidth());
