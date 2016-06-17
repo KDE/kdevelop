@@ -996,9 +996,9 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
             const QString offsetStr = bitOffset ? i18nc("%1: bytes, %2: bits", "%1, %2", byteOffsetStr, bitOffsetStr) : byteOffsetStr;
 
             decl->setComment(decl->comment()
-                                + i18n("<br/>offset in parent: %1<br/>"
-                                    "size: %2 Bytes<br/>"
-                                    "aligned to: %3 Bytes", offsetStr, sizeOf, alignedTo).toUtf8());
+                                + i18n("<p>offset in parent: %1; "
+                                    "size: %2 Bytes; "
+                                    "aligned to: %3 Bytes</p>", offsetStr, sizeOf, alignedTo).toUtf8());
         }
     }
 #endif
@@ -1036,8 +1036,8 @@ void Visitor::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
         auto alignOf = clang_Type_getAlignOf(type);
         if (sizeOf >= 0 && alignOf >= 0) {
             decl->setComment(decl->comment()
-                                + i18n("<br/>size: %1 Bytes<br/>"
-                                    "aligned to: %2 Bytes", sizeOf, alignOf).toUtf8());
+                                + i18n("<p>size: %1 Bytes; "
+                                    "aligned to: %2 Bytes</p>", sizeOf, alignOf).toUtf8());
         }
     }
 }
