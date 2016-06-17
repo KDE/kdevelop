@@ -19,51 +19,35 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.3
+import QtQuick.Layouts 1.2
 
-Rectangle
+GroupBox
 {
     id: bg
-    property Component tools: null
+    property alias tools: toolsLoader.sourceComponent
     property string pageIcon
-    property real marginLeft: toolbar.x+toolbar.width
+    readonly property real marginLeft: toolsLoader.x + toolsLoader.width
     property real margins: 5
-    color: pal.base
 
-    SystemPalette { id: pal }
-    
-    Rectangle {
-        id: toolbar
+    Loader {
+        id: toolsLoader
 
-        radius: 5
-        color: Qt.rgba(0.8, 0.8, 0.8, 0.4)
+        width: 200
 
         anchors {
             top: parent.top
             left: parent.left
-            margins: parent.margins
-        }
-        width: toolsLoader.width + 2*toolsLoader.margins
-        height: toolsLoader.height + 2*toolsLoader.margins
-        Loader {
-            id: toolsLoader
-
-            property int margins: 20
-
-            anchors {
-                top: parent.top
-                left: parent.left
-                margins: toolsLoader.margins
-            }
-            sourceComponent: tools
+            bottom: parent.bottom
         }
     }
-    
+
     Image {
         id: theIcon
         anchors {
             bottom: parent.bottom
             left: parent.left
-            margins: 5
+            margins: bg.margins
         }
         source: bg.pageIcon !== "" ? "image://icon/" + bg.pageIcon : ""
         width: 64
