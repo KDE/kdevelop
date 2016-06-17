@@ -96,6 +96,8 @@ namespace {
 
 DocumentationQuickOpenProvider::DocumentationQuickOpenProvider()
 {
+    connect(ICore::self()->documentationController(), &IDocumentationController::providersChanged,
+            this, &DocumentationQuickOpenProvider::reset);
 }
 
 void DocumentationQuickOpenProvider::setFilterText(const QString& text)
