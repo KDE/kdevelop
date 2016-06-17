@@ -39,6 +39,7 @@
 
 #include <project/projectmodel.h>
 #include <util/path.h>
+#include <util/environmentgrouplist.h>
 
 #include <language/interfaces/editorcontext.h>
 
@@ -284,6 +285,7 @@ QString ExternalScriptPlugin::executeCommandSync ( QString command, QString work
 {
   qCDebug(PLUGIN_EXTERNALSCRIPT) << "executing command " << command << " in working-dir " << workingDirectory;
   KProcess process;
+  KDevelop::restoreSystemEnvironment(&process);
   process.setWorkingDirectory( workingDirectory );
   process.setShellCommand( command );
   process.setOutputChannelMode( KProcess::OnlyStdoutChannel );

@@ -253,6 +253,9 @@ void ColorCache::updateInternal()
   emit colorsGotChanged();
 
   // rehighlight open documents
+  if (!ICore::self() || ICore::self()->shuttingDown()) {
+    return;
+  }
   foreach (IDocument* doc, ICore::self()->documentController()->openDocuments()) {
     foreach (const auto lang, ICore::self()->languageController()->languagesForUrl(doc->url())) {
       ReferencedTopDUContext top;
