@@ -59,12 +59,6 @@ install(TARGETS kdevelop ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES kdevelop! DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 
-if(APPLE)
-    #kde4_add_app_icon(kdevelop_bin_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps/kdevelop.png")
-else()
-    #kde4_add_app_icon(kdevelop_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
-endif()
-
 if (APPLE)
     # the MacOSX bundle display name property (CFBundleDisplayName) is not currently supported by cmake,
     # so has to be set for all targets in this cmake file
