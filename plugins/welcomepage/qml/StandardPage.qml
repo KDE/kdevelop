@@ -30,16 +30,4 @@ GroupBox {
 
         color: pal.base
     }
-
-    Image {
-        anchors {
-            bottom: parent.bottom
-            right: parent.right
-            margins: 5
-        }
-        opacity: 0.3
-        width: 64
-        height: width
-        source: "image://icon/kdevelop"
-    }
 }

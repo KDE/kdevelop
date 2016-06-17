@@ -23,12 +23,5 @@ import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.3
 
-Label {
-    id: root
-
-    height: 50
-
-    property string iconName
-
-    signal clicked()
+ToolButton {
 }

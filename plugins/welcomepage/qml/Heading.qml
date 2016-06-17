@@ -22,7 +22,8 @@ import QtQuick.Controls 1.3
 
 Label {
     Label { id: instance }
+    property real scale: 1.4
 
     height: 2 * implicitHeight
-    font.pointSize: instance.font.pointSize * 1.3
+    font.pointSize: instance.font.pointSize * scale
 }

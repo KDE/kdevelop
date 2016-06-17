@@ -27,19 +27,40 @@ StandardBackground {
     
     state: "develop"
 
-    tools: Column {
+    tools: ColumnLayout {
         spacing: 10
 
-        Button {
+        RowLayout {
+            Image {
+                id: icon
+                Layout.preferredHeight: parent.width/4
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Image.AlignHCenter
+
+                sourceSize {
+                    width: icon.height
+                    height: icon.height
+                }
+
+                source: "image://icon/kdevelop"
+                smooth: true
+                fillMode: Image.PreserveAspectFit
+            }
+            Heading {
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignLeft
+                text: "KDevelop"
+                scale: 2
+            }
+        }
+
+        Item {
             Layout.fillWidth: true
-            iconName: "applications-development"
-            text: i18n("Develop")
-            checkable: true
-            checked: root.state === "develop"
-            onClicked: root.state = "develop"
+            Layout.fillHeight: true
         }
 
         GroupBox {
+            Layout.fillWidth: true
             flat: true
 
             ColumnLayout {
@@ -48,19 +69,21 @@ StandardBackground {
                 }
 
                 Link {
-                    text: i18n("Official Website")
+                    text: i18n("KDevelop.org")
                     iconName: "applications-webbrowsers"
-                    onClicked: info.state="kdevelop.org"
+                    onClicked: {
+                        Qt.openUrlExternally("https://kdevelop.org")
+                    }
                 }
                 Link {
-                    text: i18n("Userbase")
+                    text: i18n("Learn about KDevelop")
                     iconName: "applications-webbrowsers"
-                    onClicked: info.state="userbase"
+                    onClicked: Qt.openUrlExternally("https://userbase.kde.org/KDevelop")
                 }
                 Link {
-                    text: i18n("Techbase")
+                    text: i18n("Join KDevelop's team!")
                     iconName: "applications-webbrowsers"
-                    onClicked: info.state="techbase"
+                    onClicked: Qt.openUrlExternally("https://techbase.kde.org/KDevelop5")
                 }
                 Link {
                     text: i18n("Handbook")
@@ -71,23 +94,10 @@ StandardBackground {
         }
     }
 
-    Loader {
-        id: codeContents
+    Develop {
         anchors {
             fill: parent
             leftMargin: root.marginLeft+root.margins
-            //margins: root.margins
         }
     }
-    states: [
-        State { name: "gettingstarted"
-            PropertyChanges { target: codeContents; source: "qrc:/qml/GettingStarted.qml"}
-        },
-        State { name: "develop"
-            PropertyChanges { target: codeContents; source: "qrc:/qml/Develop.qml"}
-        },
-        State { name: "projects"
-            PropertyChanges { target: codeContents; source: "qrc:/qml/ProjectsDashboard.qml"}
-        }
-    ]
 }
