@@ -228,15 +228,15 @@ void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcess
 
 void KDevelop::restoreSystemEnvironment(QProcess* process)
 {
-    static const auto shouldChange = qEnvironmentVariableIsSet("_KDEV_OLD_LD_LIBRARY_PATH");
-    if ( shouldChange ) {
+    static auto env = QProcessEnvironment::systemEnvironment();
+    if ( env.contains("_KDEV_OLD_LD_LIBRARY_PATH") ) {
         // running in AppImage
-        auto env = process->processEnvironment();
-        env.insert("LD_LIBRARY_PATH", qgetenv("_KDEV_OLD_LD_LIBRARY_PATH"));
-        env.insert("QT_PLUGIN_PATH", qgetenv("_KDEV_OLD_QT_PLUGIN_PATH"));
-        env.insert("XDG_DATA_DIRS", qgetenv("_KDEV_OLD_XDG_DATA_DIRS"));
-        env.insert("PATH", qgetenv("_KDEV_OLD_PATH"));
-        env.insert("KDE_FORK_SLAVES", qgetenv("_KDEV_OLD_KDE_FORK_SLAVES"));
-        process->setProcessEnvironment(env);
+        auto newEnv = env;
+        newEnv.insert("LD_LIBRARY_PATH", env.value("_KDEV_OLD_LD_LIBRARY_PATH"));
+        newEnv.insert("QT_PLUGIN_PATH", env.value("_KDEV_OLD_QT_PLUGIN_PATH"));
+        newEnv.insert("XDG_DATA_DIRS", env.value("_KDEV_OLD_XDG_DATA_DIRS"));
+        newEnv.insert("PATH", env.value("_KDEV_OLD_PATH"));
+        newEnv.insert("KDE_FORK_SLAVES", env.value("_KDEV_OLD_KDE_FORK_SLAVES"));
+        process->setProcessEnvironment(newEnv);
     }
 }
