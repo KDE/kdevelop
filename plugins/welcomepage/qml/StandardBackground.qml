@@ -33,7 +33,7 @@ GroupBox
     Loader {
         id: toolsLoader
 
-        width: 200
+        width: bg.width/5
 
         anchors {
             top: parent.top

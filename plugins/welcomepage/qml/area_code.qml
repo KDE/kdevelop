@@ -69,37 +69,34 @@ StandardBackground {
             Layout.fillHeight: true
         }
 
-        GroupBox {
+        ColumnLayout {
             Layout.fillWidth: true
-            flat: true
+            Heading {
+                Layout.fillWidth: true
+                text: i18n("Need Help?")
+            }
 
-            ColumnLayout {
-                Heading {
-                    text: i18n("Need Help?")
+            Link {
+                text: i18n("KDevelop.org")
+                iconName: "applications-webbrowsers"
+                onClicked: {
+                    Qt.openUrlExternally("https://kdevelop.org")
                 }
-
-                Link {
-                    text: i18n("KDevelop.org")
-                    iconName: "applications-webbrowsers"
-                    onClicked: {
-                        Qt.openUrlExternally("https://kdevelop.org")
-                    }
-                }
-                Link {
-                    text: i18n("Learn about KDevelop")
-                    iconName: "applications-webbrowsers"
-                    onClicked: Qt.openUrlExternally("https://userbase.kde.org/KDevelop")
-                }
-                Link {
-                    text: i18n("Join KDevelop's team!")
-                    iconName: "applications-webbrowsers"
-                    onClicked: Qt.openUrlExternally("https://techbase.kde.org/KDevelop5")
-                }
-                Link {
-                    text: i18n("Handbook")
-                    iconName: "applications-webbrowsers"
-                    onClicked: kdev.retrieveMenuAction("help/help_contents").trigger()
-                }
+            }
+            Link {
+                text: i18n("Learn about KDevelop")
+                iconName: "applications-webbrowsers"
+                onClicked: Qt.openUrlExternally("https://userbase.kde.org/KDevelop")
+            }
+            Link {
+                text: i18n("Join KDevelop's team!")
+                iconName: "applications-webbrowsers"
+                onClicked: Qt.openUrlExternally("https://techbase.kde.org/KDevelop5")
+            }
+            Link {
+                text: i18n("Handbook")
+                iconName: "applications-webbrowsers"
+                onClicked: kdev.retrieveMenuAction("help/help_contents").trigger()
             }
         }
     }
