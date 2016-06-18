@@ -14,6 +14,7 @@ include(ECMAddTests)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
+include(FeatureSummary)
 
 find_package(Qt5 REQUIRED Core Widgets Test)
 find_package(KF5 REQUIRED COMPONENTS IconThemes ItemModels ThreadWeaver TextEditor I18n)
@@ -57,3 +58,6 @@ target_link_libraries(kdevcppcheck
 install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
 
 add_subdirectory(tests)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
