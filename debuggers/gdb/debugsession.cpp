@@ -38,6 +38,11 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <debugger/breakpoint/breakpoint.h>
+#include <debugger/breakpoint/breakpointmodel.h>
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <interfaces/ilaunchconfiguration.h>
 #include <util/environmentgrouplist.h>
 
 #include <KLocalizedString>

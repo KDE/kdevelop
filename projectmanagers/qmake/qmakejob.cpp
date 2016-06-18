@@ -112,7 +112,7 @@ void QMakeJob::start()
     }
 
     m_process = new QProcess(this);
-    KDevPlatform::restoreSystemEnvironment(m_process);
+    KDevelop::restoreSystemEnvironment(m_process);
     m_process->setWorkingDirectory(m_buildDir);
     m_process->setProgram(m_qmakePath);
     m_process->setArguments(args);
