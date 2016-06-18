@@ -31,11 +31,16 @@ StandardBackground {
         spacing: 10
 
         RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.width/4
+            Layout.maximumHeight: parent.width/4
+
             Image {
                 id: icon
-                Layout.preferredHeight: parent.width/4
+                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Image.AlignHCenter
+                verticalAlignment: Image.AlignVCenter
 
                 sourceSize {
                     width: icon.height
@@ -46,11 +51,16 @@ StandardBackground {
                 smooth: true
                 fillMode: Image.PreserveAspectFit
             }
-            Heading {
+            Label {
                 Layout.fillWidth: true
-                horizontalAlignment: Text.AlignLeft
+                Layout.fillHeight: true
+                verticalAlignment: Text.AlignVCenter
                 text: "KDevelop"
-                scale: 2
+                fontSizeMode: Text.Fit
+                font {
+                    pointSize: icon.height/3
+                    weight: Font.ExtraLight
+                }
             }
         }
 
