@@ -114,7 +114,6 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
 
 QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 {
-    QMutexLocker lock(&m_mutex);
     QStringList result;
 
     for (const QFileInfo& fileInfo : fileInfos) {
@@ -133,14 +132,18 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
         }
 
         // Use the cache to speed-up reparses
-        if (m_modulePaths.contains(filePath)) {
-            QString cachedFilePath = m_modulePaths.value(filePath);
+        {
+            QMutexLocker lock(&m_mutex);
 
-            if (!cachedFilePath.isEmpty()) {
-                result.append(m_modulePaths.value(filePath));
+            if (m_modulePaths.contains(filePath)) {
+                QString cachedFilePath = m_modulePaths.value(filePath);
+
+                if (!cachedFilePath.isEmpty()) {
+                    result.append(cachedFilePath);
+                }
+
+                continue;
             }
-
-            continue;
         }
 
         // Locate an existing dump of the file
@@ -152,6 +155,8 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
         );
 
         if (!dumpPath.isNull()) {
+            QMutexLocker lock(&m_mutex);
+
             result.append(dumpPath);
             m_modulePaths.insert(filePath, dumpPath);
             continue;
@@ -187,6 +192,8 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
                 dumpFile.close();
 
                 result.append(dumpFile.fileName());
+
+                QMutexLocker lock(&m_mutex);
                 m_modulePaths.insert(filePath, dumpFile.fileName());
                 break;
             }
