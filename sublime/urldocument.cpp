@@ -55,6 +55,7 @@ QUrl UrlDocument::url() const
 
 void UrlDocument::setUrl(const QUrl& newUrl)
 {
+    Q_ASSERT(newUrl.adjusted(QUrl::NormalizePathSegments) == newUrl);
     d->url = newUrl;
     setTitle(newUrl.fileName());
     setToolTip(newUrl.toDisplayString(QUrl::PreferLocalFile));
