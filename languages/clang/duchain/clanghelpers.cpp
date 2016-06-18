@@ -162,7 +162,6 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         context->setFeatures(features);
 
         foreach(const auto& import, imports.values(file)) {
-            Q_ASSERT(includedFiles.contains(import.file));
             auto ctx = includedFiles.value(import.file);
             if (!ctx) {
                 // happens for cyclic imports
