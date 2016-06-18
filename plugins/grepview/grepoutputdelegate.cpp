@@ -98,10 +98,10 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
         cur.insertText(item->text().left(rng.start().column()).remove(leftspaces), fmt);
         
         fmt.setFontWeight(QFont::Bold);
-        // Blend the highlighted background color
-        // For some reason, it is extremely slow to use alpha-blending directly here
-        QColor bgHighlight = blendColor(option.palette.brush(QPalette::Highlight).color(), option.palette.brush(QPalette::Base).color(), 0.3);
-        fmt.setBackground(bgHighlight);
+        if ( !(options.state & QStyle::State_Selected) ) {
+            QColor bgHighlight = option.palette.color(QPalette::AlternateBase);
+            fmt.setBackground(bgHighlight);
+        }
         cur.insertText(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column()), fmt);
         fmt.clearBackground();
         
