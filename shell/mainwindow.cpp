@@ -40,6 +40,7 @@ Boston, MA 02110-1301, USA.
 #include <KWindowSystem>
 #include <KXMLGUIFactory>
 #include <KColorScheme>
+#include <kparts_version.h>
 
 #include <sublime/area.h>
 #include "shellextension.h"
@@ -95,13 +96,18 @@ void MainWindow::applyMainWindowSettings(const KConfigGroup& config)
 
 void MainWindow::createGUI(KParts::Part* part)
 {
+    //TODO remove if-clause once KF5 >= 5.24 is required
+#if KPARTS_VERSION_MINOR >= 24
+    Sublime::MainWindow::setWindowTitleHandling(false);
     Sublime::MainWindow::createGUI(part);
-
+#else
+    Sublime::MainWindow::createGUI(part);
     if (part) {
         // Don't let the Part control the main window caption -- we take care of that
         disconnect(part, SIGNAL(setWindowCaption(QString)),
                    this, SLOT(setCaption(QString)));
     }
+#endif
 }
 
 void MainWindow::initializeCorners()
