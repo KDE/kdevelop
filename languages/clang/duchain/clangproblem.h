@@ -35,12 +35,14 @@ struct KDEVCLANGPRIVATE_EXPORT ClangFixit
     QString replacementText;
     KDevelop::DocumentRange range;
     QString description;
+    QString currentText;
 
     bool operator==(const ClangFixit& other) const
     {
         return replacementText == other.replacementText
             && range == other.range
-            && description == other.description;
+            && description == other.description
+            && currentText == other.currentText;
     }
 };
 
