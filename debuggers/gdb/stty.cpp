@@ -69,7 +69,6 @@
 
 #include <QCoreApplication>
 #include <QStandardPaths>
-#include <util/environmentgrouplist.h>
 
 #include "stty.h"
 #include "debug.h"
@@ -306,7 +305,6 @@ bool STTY::findExternalTTY(const QString& termApp)
     }
 
     m_externalTerminal.reset(new QProcess(this));
-    KDevelop::restoreSystemEnvironment(m_externalTerminal.data());
 
     if (appName == "konsole") {
         m_externalTerminal->start(appName, QStringList() << "-e" << "sh" << "-c" << "tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done");

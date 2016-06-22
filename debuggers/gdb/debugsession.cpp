@@ -32,12 +32,6 @@
 #include <QRegExp>
 #include <QStandardPaths>
 #include <QRegularExpression>
-#include <debugger/breakpoint/breakpoint.h>
-#include <debugger/breakpoint/breakpointmodel.h>
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
-#include <interfaces/ilaunchconfiguration.h>
-#include <util/environmentgrouplist.h>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -1085,7 +1079,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
         QProcess *proc = new QProcess;
-        KDevelop::restoreSystemEnvironment(proc);
         QStringList arguments;
         arguments << "-c" << KShell::quoteArg(config_runShellScript_.toLocalFile()) +
             ' ' + KShell::quoteArg(executable) + QString::fromLatin1( options );
