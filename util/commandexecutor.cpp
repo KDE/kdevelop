@@ -20,9 +20,6 @@
 #include "commandexecutor.h"
 
 #include "processlinemaker.h"
-
-#include <util/environmentgrouplist.h>
-
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
 #include <QtCore/QString>
@@ -65,7 +62,6 @@ CommandExecutor::CommandExecutor( const QString& command, QObject* parent )
   : QObject(parent), d(new CommandExecutorPrivate(this))
 {
     d->m_process = new KProcess(this);
-    KDevelop::restoreSystemEnvironment(d->m_process);
     d->m_process->setOutputChannelMode( KProcess::SeparateChannels );
     d->m_lineMaker = new ProcessLineMaker( d->m_process );
     d->m_command = command;

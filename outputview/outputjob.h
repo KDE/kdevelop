@@ -30,7 +30,6 @@ Boston, MA 02110-1301, USA.
 
 class QStandardItemModel;
 class QItemDelegate;
-class KProcess;
 
 namespace KDevelop
 {

@@ -41,8 +41,6 @@
 #include <interfaces/iplugin.h>
 #include <outputview/outputmodel.h>
 
-#include <util/environmentgrouplist.h>
-
 using namespace KDevelop;
 
 struct DVcsJobPrivate
@@ -70,7 +68,6 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     : VcsJob(parent, verbosity), d(new DVcsJobPrivate)
 {
     Q_ASSERT(workingDir.exists());
-    KDevelop::restoreSystemEnvironment(d->childproc);
     d->status = JobNotStarted;
     d->vcsplugin = parent;
     d->childproc->setWorkingDirectory(workingDir.absolutePath());

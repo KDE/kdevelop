@@ -21,7 +21,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QStandardItemModel>
 #include <QItemDelegate>
-#include <KProcess>
 
 #include "interfaces/icore.h"
 #include "interfaces/iplugincontroller.h"
