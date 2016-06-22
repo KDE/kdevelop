@@ -101,6 +101,7 @@ class MICommand
 protected:
     MICommand(CommandType type, const QString& arguments = QString(), CommandFlags flags = 0);
     friend class KDevMI::MIDebugSession;
+
 public:
 
     virtual ~MICommand();
@@ -194,7 +195,7 @@ public:
 
     bool stateReloading() const;
 
-private:
+protected:
     CommandType type_;
     CommandFlags flags_;
     uint32_t token_ = 0;
@@ -203,7 +204,6 @@ private:
     QStringList lines;
     bool stateReloading_;
 
-private:
     int m_thread;
     int m_frame;
 };

@@ -48,7 +48,7 @@ GdbDebugger::~GdbDebugger()
 {
 }
 
-void GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
+bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
 {
     // FIXME: verify that default value leads to something sensible
     QUrl gdbUrl = config.readEntry(gdbPathEntry, QUrl());
@@ -78,8 +78,7 @@ void GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
                 qApp->activeWindow(),
                 i18n("Could not locate the debugging shell '%1'.", shell_without_args ),
                 i18n("Debugging Shell Not Found") );
-            // FIXME: throw, or set some error message.
-            return;
+            return false;
         }
 
         arguments.insert(0, debuggerBinary_);
@@ -96,4 +95,5 @@ void GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
     qCDebug(DEBUGGERGDB) << "GDB process pid:" << process_->pid();
     emit userCommandOutput(shell.toLocalFile() + ' ' + debuggerBinary_
                            + ' ' + arguments.join(' ') + '\n');
+    return true;
 }

@@ -69,7 +69,6 @@
 
 #include <QCoreApplication>
 #include <QStandardPaths>
-#include <util/environmentgrouplist.h>
 
 #include "stty.h"
 #include "debuglog.h"

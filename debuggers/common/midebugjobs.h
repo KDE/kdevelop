@@ -1,9 +1,10 @@
 /*
-* GDB Debugger Support
+* Common Code for Debugger Support
 *
 * Copyright 2006 Vladimir Prus <ghost@cs.msu.su>
 * Copyright 2007 Hamish Rodda <rodda@kde.org>
 * Copyright 2009 Andreas Pakulat <apaku@gmx.de>
+* Copyright 2016  Aetf <aetf@unlimitedcodeworks.xyz>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as
@@ -20,8 +21,8 @@
 * Free Software Foundation, Inc.,
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-#ifndef GDBDEBUGJOB
-#define GDBDEBUGJOB
+#ifndef MIDEBUGJOBS_H
+#define MIDEBUGJOBS_H
 
 #include <outputview/outputjob.h>
 
@@ -33,48 +34,71 @@ class ILaunchConfiguration;
 }
 
 namespace KDevMI {
-namespace GDB
-{
-class CppDebuggerPlugin;
-class DebugSession;
 
+class MIDebuggerPlugin;
+class MIDebugSession;
 
-class DebugJob : public KDevelop::OutputJob
+class MIDebugJob : public KDevelop::OutputJob
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    DebugJob( CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg,
-              IExecutePlugin* plugin, QObject* parent = 0 );
+    MIDebugJob(MIDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* plugin,
+             QObject* parent = 0);
     void start() override;
+
 protected:
     bool doKill() override;
-private slots:
+
+private Q_SLOTS:
     void stdoutReceived(const QStringList&);
     void stderrReceived(const QStringList&);
     void done();
+
 private:
     KDevelop::OutputModel* model();
-    DebugSession* m_session;
+
+    MIDebugSession* m_session;
     KDevelop::ILaunchConfiguration* m_launchcfg;
     IExecutePlugin* m_execute;
 };
 
-//this job is just here to be able to kill the debug session
-class KillSessionJob : public KJob
+class MIExamineCoreJob : public KJob
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    KillSessionJob(DebugSession *session, QObject *parent = 0);
+    MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent = nullptr);
+
     void start() override;
+
 protected:
     bool doKill() override;
+
+private Q_SLOTS:
+    void done();
+
 private:
-    DebugSession* m_session;
-private slots:
-    void sessionFinished();
+    MIDebugSession *m_session;
 };
 
-} // end of namespace GDB
+class MIAttachProcessJob : public KJob
+{
+    Q_OBJECT
+public:
+    MIAttachProcessJob(MIDebuggerPlugin *plugin, int pid, QObject *parent = nullptr);
+
+    void start() override;
+
+protected:
+    bool doKill() override;
+
+private Q_SLOTS:
+    void done();
+
+private:
+    int m_pid;
+    MIDebugSession *m_session;
+};
+
 } // end of namespace KDevMI
 
-#endif
+#endif // MIDEBUGJOBS_H

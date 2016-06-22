@@ -26,10 +26,8 @@
 class KSysGuardProcessList;
 class QPushButton;
 
-namespace KDevMI
-{
-namespace GDB
-{
+namespace KDevMI {
+
 class ProcessSelectionDialog : public QDialog
 {
     Q_OBJECT
@@ -47,7 +45,6 @@ class ProcessSelectionDialog : public QDialog
         QPushButton* m_okButton;
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
 
 #endif

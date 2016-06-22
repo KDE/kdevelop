@@ -46,11 +46,11 @@
 
 #include "debugsession.h"
 #include "debuggerplugin.h"
+#include "midebugjobs.h"
 
 #include "ui_gdbconfigpage.h"
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
-#include "debugjob.h"
 
 using namespace KDevelop;
 
@@ -165,7 +165,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
         {
             l << depjob;
         }
-        l << new KDevMI::GDB::DebugJob( m_plugin, cfg, m_execute );
+        l << new KDevMI::MIDebugJob( m_plugin, cfg, m_execute );
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
     }
     qWarning() << "Unknown launch mode" << launchMode << "for config:" << cfg->name();

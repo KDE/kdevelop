@@ -50,7 +50,7 @@ public:
 
     /** Starts the debugger.  This should be done after connecting to all
         signals the client is interested in.  */
-    virtual void start(KConfigGroup& config, const QStringList& extraArguments = {}) = 0;
+    virtual bool start(KConfigGroup& config, const QStringList& extraArguments = {}) = 0;
 
     /** Executes a command.  This method may be called at
         most once each time 'ready' is emitted.  When the

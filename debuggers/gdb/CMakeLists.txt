@@ -13,13 +13,6 @@ function(add_debuggable_executable target)
     set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} ${_flags}")
 endfunction()
 
-find_package(KF5SysGuard)
-if(KF5SysGuard_FOUND)
-    add_definitions(
-        -DKDEV_ENABLE_GDB_ATTACH_DIALOG
-    )
-endif()
-
 if (CMAKE_VERSION VERSION_GREATER "2.9" OR NOT CMAKE_GENERATOR MATCHES "Ninja")
     set(HAVE_PATH_WITH_SPACES_TEST TRUE)
 else()
@@ -44,8 +37,6 @@ set(kdevgdb_SRCS
     debugsession.cpp
     gdbbreakpointcontroller.cpp
     gdbconfigpage.cpp
-    debugjob.cpp
-    selectcoredialog.cpp
     variablecontroller.cpp
     gdbframestackmodel.cpp
     gdbvariable.cpp
@@ -64,18 +55,9 @@ if(OKTETA_FOUND)
         memviewdlg.cpp)
 endif()
 
-
-if(KF5SysGuard_FOUND)
-    set(kdevgdb_SRCS
-        ${kdevgdb_SRCS}
-        processselection.cpp
-    )
-endif()
-
 set(kdevgdb_UI
     debuggertracingdialog.ui
     gdbconfigpage.ui
-    selectcoredialog.ui
     selectaddressdialog.ui
     registers/registersview.ui
 )
@@ -95,9 +77,6 @@ target_link_libraries(kdevgdb
     KF5::TextEditor
     kdevdebuggercommon
 )
-if(KF5SysGuard_FOUND)
-    target_link_libraries(kdevgdb KF5::ProcessUi)
-endif()
 
 set(test_gdb_SRCS unittests/test_gdb.cpp ${kdevgdb_SRCS})
 ecm_add_test(${test_gdb_SRCS}
@@ -115,9 +94,6 @@ ecm_add_test(${test_gdb_SRCS}
         KF5::Parts
         kdevdebuggercommon
 )
-if(KF5SysGuard_FOUND)
-    target_link_libraries(test_gdb KF5::ProcessUi)
-endif()
 
 if (HAVE_PATH_WITH_SPACES_TEST)
     set_target_properties(test_gdb PROPERTIES COMPILE_FLAGS "-DHAVE_PATH_WITH_SPACES_TEST")

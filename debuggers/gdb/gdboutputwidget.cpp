@@ -105,7 +105,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
             this, &GDBOutputWidget::currentSessionChanged);
 
     connect(plugin, &CppDebuggerPlugin::reset, this, &GDBOutputWidget::clear);
-    connect(plugin, &CppDebuggerPlugin::raiseGdbConsoleViews, this, &GDBOutputWidget::requestRaise);
+    connect(plugin, &CppDebuggerPlugin::raiseDebuggerConsoleViews, this, &GDBOutputWidget::requestRaise);
 
     currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession());
 

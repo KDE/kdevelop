@@ -28,7 +28,6 @@
 #include "ui_selectcoredialog.h"
 
 namespace KDevMI {
-namespace GDB {
 
 class SelectCoreDialog : public QDialog
 {
@@ -41,7 +40,6 @@ private:
     Ui::SelectCoreDialog m_ui;
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
 
 #endif
