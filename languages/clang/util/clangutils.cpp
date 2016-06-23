@@ -56,7 +56,7 @@ CXCursor ClangUtils::getCXCursor(int line, int column, const CXTranslationUnit& 
 
 KTextEditor::Range ClangUtils::rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange)
 {
-    static const QRegularExpression pattern(QStringLiteral("^\\s*#include"));
+    static const QRegularExpression pattern(QStringLiteral("^\\s*(#include|#import)"));
     if (!line.contains(pattern)) {
         return KTextEditor::Range::invalid();
     }
