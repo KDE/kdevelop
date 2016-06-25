@@ -19,6 +19,7 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.2
 
 StandardBackground {
@@ -29,44 +30,81 @@ StandardBackground {
     tools: ColumnLayout {
         spacing: 10
 
-        Link {
+        RowLayout {
             Layout.fillWidth: true
-            iconName: "applications-development"
-            text: i18n("Develop")
-            onClicked: root.state = "develop"
+            Layout.preferredHeight: parent.width/4
+            Layout.maximumHeight: parent.width/4
+
+            Image {
+                id: icon
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Image.AlignHCenter
+                verticalAlignment: Image.AlignVCenter
+
+                sourceSize {
+                    width: icon.height
+                    height: icon.height
+                }
+
+                source: "image://icon/kdevelop"
+                smooth: true
+                fillMode: Image.PreserveAspectFit
+            }
+            Label {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                verticalAlignment: Text.AlignVCenter
+                text: "KDevelop"
+                fontSizeMode: Text.Fit
+                font {
+                    pointSize: icon.height/3
+                    weight: Font.ExtraLight
+                }
+            }
         }
-        Link {
+
+        Item {
             Layout.fillWidth: true
-            iconName: "project-development"
-            text: i18n("Projects")
-            onClicked: root.state = "projects"
-            visible: false //FIXME: removed until it makes sense
+            Layout.fillHeight: true
         }
-        Link {
+
+        ColumnLayout {
             Layout.fillWidth: true
-            iconName: "help-contents"
-            text: i18n("Getting Started")
-            onClicked: root.state = "gettingstarted"
+            Heading {
+                Layout.fillWidth: true
+                text: i18n("Need Help?")
+            }
+
+            Link {
+                text: i18n("KDevelop.org")
+                iconName: "applications-webbrowsers"
+                onClicked: {
+                    Qt.openUrlExternally("https://kdevelop.org")
+                }
+            }
+            Link {
+                text: i18n("Learn about KDevelop")
+                iconName: "applications-webbrowsers"
+                onClicked: Qt.openUrlExternally("https://userbase.kde.org/KDevelop")
+            }
+            Link {
+                text: i18n("Join KDevelop's team!")
+                iconName: "applications-webbrowsers"
+                onClicked: Qt.openUrlExternally("https://techbase.kde.org/KDevelop5")
+            }
+            Link {
+                text: i18n("Handbook")
+                iconName: "applications-webbrowsers"
+                onClicked: kdev.retrieveMenuAction("help/help_contents").trigger()
+            }
         }
     }
 
-    Loader {
-        id: codeContents
+    Develop {
         anchors {
             fill: parent
             leftMargin: root.marginLeft+root.margins
-            margins: root.margins
         }
     }
-    states: [
-        State { name: "gettingstarted"
-            PropertyChanges { target: codeContents; source: "qrc:/qml/GettingStarted.qml"}
-        },
-        State { name: "develop"
-            PropertyChanges { target: codeContents; source: "qrc:/qml/Develop.qml"}
-        },
-        State { name: "projects"
-            PropertyChanges { target: codeContents; source: "qrc:/qml/ProjectsDashboard.qml"}
-        }
-    ]
 }

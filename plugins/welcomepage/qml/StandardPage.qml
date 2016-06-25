@@ -19,20 +19,15 @@
  */
 
 import QtQuick 2.1
+import QtQuick.Controls 1.3
+import QtQuick.Layouts 1.2
 
-Rectangle {
-    radius: 5
-    color: Qt.rgba(0.8, 0.9, 0.8, 0.4)
+GroupBox {
+    SystemPalette { id: pal }
 
-    Image {
-        anchors {
-            bottom: parent.bottom
-            right: parent.right
-            margins: 5
-        }
-        opacity: 0.3
-        width: 128
-        height: width
-        source: "image://icon/kdevelop"
+    Rectangle {
+        anchors.fill: parent
+
+        color: pal.base
     }
 }

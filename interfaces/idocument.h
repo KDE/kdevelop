@@ -168,6 +168,11 @@ public:
     virtual void setTextSelection(const KTextEditor::Range &range) = 0;
 
     /**
+     * @returns the text in a given range
+     */
+    virtual QString text(const KTextEditor::Range &range) const;
+
+    /**
      * Retrieve the current text line, if one exists.
      *
      * @returns the current text line

@@ -136,5 +136,11 @@ KTextEditor::View* IDocument::activeTextView() const
     return 0;
 }
 
+QString KDevelop::IDocument::text(const KTextEditor::Range& range) const
+{
+    Q_UNUSED(range);
+    return {};
+}
+
 }
 

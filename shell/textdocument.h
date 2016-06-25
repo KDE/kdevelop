@@ -62,6 +62,8 @@ public:
     KTextEditor::Range textSelection() const override;
     void setTextSelection(const KTextEditor::Range &range) override;
 
+    QString text(const KTextEditor::Range &range) const override;
+
     QString textLine() const override;
     QString textWord() const override;
 

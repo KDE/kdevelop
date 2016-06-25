@@ -25,78 +25,76 @@ import org.kdevelop.welcomepage 4.3
 
 StandardPage
 {
-    RowLayout {
-        id: toolBar
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-            margins: 25
-        }
-        Link {
-            iconName: "project-development-new-template"
-            text: i18n("New Project")
-            onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 20
+
+        spacing: 20
+
+        RowLayout {
+            id: toolBar
+
+            width: parent.width
+
+            Button {
+                iconName: "project-development-new-template"
+                text: i18n("New Project")
+                onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
+            }
+
+            Button {
+                text: i18n("Open Project")
+                iconName: "project-development-open"
+                onClicked: ICore.projectController().openProject()
+            }
+
+            Button {
+                text: i18n("Fetch Project")
+                iconName: "download"
+                onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
+            }
+
+            Button {
+                iconName: "document-open-recent"
+                text: i18n("Recent Projects")
+                onClicked: kdev.showMenu("project/project_open_recent")
+            }
+            Item {
+                Layout.fillWidth: true
+            }
         }
 
-        Link {
-            text: i18n("Open Project")
-            iconName: "project-development-open"
-            onClicked: ICore.projectController().openProject()
-        }
-
-        Link {
-            text: i18n("Fetch Project")
-            iconName: "download"
-            onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
-        }
-
-        Link {
-            iconName: "document-open-recent"
-            text: i18n("Recent Projects")
-            onClicked: kdev.showMenu("project/project_open_recent")
-        }
-        Item {
+        ScrollView {
+            Layout.fillHeight: true
             Layout.fillWidth: true
-        }
-    }
 
-    ScrollView {
-        anchors {
-            left: parent.left
-            top: toolBar.bottom
-            bottom: parent.bottom
-            right: parent.right
-            bottomMargin: 30
-            leftMargin: 30
-            rightMargin: 30
-        }
-        ListView {
-            id: sessionsView
-            clip: true
+            ListView {
+                id: sessionsView
 
-            delegate: MouseArea {
-                        width: sessionsView.width
-                        height: visible ? 30 : 0
-                        visible: projects.length > 0
-                        onClicked: sessions.loadSession(uuid)
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
+                anchors.fill: parent
 
-                        Label {
-                            width: parent.width
-                            readonly property string projectNamesString: projectNames.join(", ").replace(/.kdev4/g, "")
-                            text: display=="" ? projectNamesString : i18n("%1: %2", display, projectNamesString)
-                            elide: Text.ElideRight
-                            opacity: parent.containsMouse ? 0.8 : 1
-                        }
+                delegate: MouseArea {
+                    width: sessionsView.width
+                    height: visible ? 30 : 0
+                    visible: projects.length > 0
+                    onClicked: sessions.loadSession(uuid)
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+
+                    Label {
+                        width: parent.width
+                        readonly property string projectNamesString: projectNames.join(", ").replace(/.kdev4/g, "")
+                        text: display=="" ? projectNamesString : i18n("%1: %2", display, projectNamesString)
+                        elide: Text.ElideRight
+                        opacity: parent.containsMouse ? 0.8 : 1
                     }
+                }
 
-            model: SessionsModel { id: sessions }
+                model: SessionsModel { id: sessions }
 
-            header: Heading {
-                height: 1.25*implicitHeight
-                text: i18n("Sessions")
+                header: Heading {
+                    text: i18n("Sessions")
+                }
             }
         }
     }

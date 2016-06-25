@@ -20,6 +20,8 @@ project(KDevPlatform)
 # we need some parts of the ECM CMake helpers
 find_package (ECM 0.0.9 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+
+include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMAddTests)
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
@@ -32,10 +34,8 @@ include(GenerateExportHeader)
 include(FeatureSummary)
 include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
-
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(KDECompilerSettings NO_POLICY_SCOPE)
 include(KDevPlatformMacros)
 
 set(QT_MIN_VERSION "5.4.0")
