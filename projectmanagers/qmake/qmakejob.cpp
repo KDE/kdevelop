@@ -26,7 +26,6 @@
 #include <KLocalizedString>
 #include <KShell>
 #include <util/processlinemaker.h>
-#include <util/environmentgrouplist.h>
 #include <outputview/outputmodel.h>
 #include <outputview/ioutputview.h>
 #include "debug.h"
@@ -112,7 +111,6 @@ void QMakeJob::start()
     }
 
     m_process = new QProcess(this);
-    KDevelop::restoreSystemEnvironment(m_process);
     m_process->setWorkingDirectory(m_buildDir);
     m_process->setProgram(m_qmakePath);
     m_process->setArguments(args);

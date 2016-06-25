@@ -51,7 +51,7 @@ void TestManPageModel::testModel()
 
 void TestManPageModel::testDocumentation()
 {
-    ManPageDocumentation documentation("dlopen", QUrl("man: (3)/dlopen"));
+    ManPageDocumentation documentation("dlopen", QUrl("man: (3)/dlmopen"));
     QSignalSpy spy(&documentation, SIGNAL(descriptionChanged()));
     QVERIFY(spy.wait());
 

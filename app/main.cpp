@@ -29,9 +29,10 @@
 
 #include <config.h>
 
+#include "urlinfo.h"
+
 #include <KLocalizedString>
 #include <Kdelibs4ConfigMigrator>
-
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <ktexteditor/cursor.h>
@@ -81,7 +82,31 @@ Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 
 using namespace KDevelop;
 
-class KDevelopApplication: 
+namespace {
+
+#if KDEVELOP_SINGLE_APP
+QString serializeOpenFilesMessage(const QVector<UrlInfo> &infos)
+{
+    QByteArray message;
+    QDataStream stream(&message, QIODevice::WriteOnly);
+    stream << QByteArrayLiteral("open");
+    stream << infos;
+    return QString::fromLatin1(message.toHex());
+}
+#endif
+
+void openFiles(const QVector<UrlInfo>& infos)
+{
+    foreach (const UrlInfo& file, infos) {
+        if (!ICore::self()->documentController()->openDocument(file.url, file.cursor)) {
+            qWarning() << i18n("Could not open %1", file.url.toDisplayString(QUrl::PreferLocalFile));
+        }
+    }
+}
+
+}
+
+class KDevelopApplication:
 #if KDEVELOP_SINGLE_APP
     public SharedTools::QtSingleApplication
 #else
@@ -96,8 +121,40 @@ public:
         : QApplication(argc, argv, GUIenabled)
 #endif
         {
+#if KDEVELOP_SINGLE_APP
+            Q_UNUSED(GUIenabled);
+#endif
+
             connect(this, &QGuiApplication::saveStateRequest, this, &KDevelopApplication::saveState);
         }
+
+#if KDEVELOP_SINGLE_APP
+public Q_SLOTS:
+    void remoteArguments(const QString &message, QObject *socket)
+    {
+        Q_UNUSED(socket);
+
+        QByteArray ba = QByteArray::fromHex(message.toLatin1());
+        QDataStream stream(ba);
+        QByteArray command;
+        stream >> command;
+
+        qCDebug(APP) << "Received remote command: " << command;
+
+        if (command == "open") {
+            QVector<UrlInfo> infos;
+            stream >> infos;
+            openFiles(infos);
+        } else {
+            qCWarning(APP) << "Unknown remote command: " << command;
+        }
+    }
+
+    void fileOpenRequested(const QString &file)
+    {
+        openFiles({UrlInfo(file)});
+    }
+#endif
 
 private Q_SLOTS:
     void saveState( QSessionManager& sm ) {
@@ -128,39 +185,6 @@ static const KDevelop::SessionInfo* findSessionInList( const SessionInfos& sessi
     }
     return 0;
 }
-
-
-// Represents a file to be opened, consisting of its URL and the cursor to jump to.
-struct UrlInfo
-{
-    // Parses a file path argument and determines its line number and column and full path
-    UrlInfo(QString path = {})
-        : cursor(KTextEditor::Cursor::invalid())
-    {
-        if (!path.startsWith(QLatin1Char('/')) && QFileInfo(path).isRelative()) {
-            path = QDir::currentPath() + QLatin1Char('/') + path;
-        }
-        url = QUrl::fromUserInput(path);
-
-        if (url.isLocalFile() && !QFile::exists(path)) {
-            // Allow opening specific lines in documents, like mydoc.cpp:10
-            // also supports columns, i.e. mydoc.cpp:10:42
-            static const QRegularExpression pattern(QStringLiteral(":(\\d+)(?::(\\d+))?$"));
-            const auto match = pattern.match(path);
-            if (match.isValid()) {
-                path.chop(match.capturedLength());
-                int line = match.captured(1).toInt() - 1;
-                // don't use an invalid column when the line is valid
-                int column = qMax(0, match.captured(2).toInt() - 1);
-                url = QUrl::fromLocalFile(path);
-                cursor = {line, column};
-            }
-        }
-    }
-
-    QUrl url;
-    KTextEditor::Cursor cursor;
-};
 
 /// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid
 /// Returns the exit status
@@ -464,8 +488,16 @@ int main( int argc, char *argv[] )
     foreach (const QString &file, parser.positionalArguments()) {
         initialFiles.append(UrlInfo(file));
     }
-    if ( ! initialFiles.isEmpty() && ! parser.isSet("new-session") )
-    {
+
+    if (!initialFiles.isEmpty() && !parser.isSet("new-session")) {
+#if KDEVELOP_SINGLE_APP
+        if (app.isRunning()) {
+            bool success = app.sendMessage(serializeOpenFilesMessage(initialFiles));
+            if (success) {
+                return 0;
+            }
+        }
+#else
         qint64 pid = -1;
         if (parser.isSet("open-session")) {
             const QString session = findSessionId(parser.value("open-session"));
@@ -481,6 +513,7 @@ int main( int argc, char *argv[] )
             return openFilesInRunningInstance(initialFiles, pid);
         }
         // else there are no running sessions, and the generated list of files will be opened below.
+#endif
     }
 
     // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
@@ -701,12 +734,18 @@ int main( int argc, char *argv[] )
 
         core->runControllerInternal()->execute("debug", launch);
     } else {
-        foreach ( const UrlInfo& file, initialFiles ) {
-            if(!core->documentController()->openDocument(file.url, file.cursor)) {
-                qWarning() << i18n("Could not open %1", file.url.toDisplayString(QUrl::PreferLocalFile));
-            }
-        }
+        openFiles(initialFiles);
     }
+
+#if KDEVELOP_SINGLE_APP
+    // Set up remote arguments.
+    QObject::connect(&app, &SharedTools::QtSingleApplication::messageReceived,
+                     &app, &KDevelopApplication::remoteArguments);
+
+    QObject::connect(&app, &SharedTools::QtSingleApplication::fileOpenRequest,
+                     &app, &KDevelopApplication::fileOpenRequested);
+#endif
+
 
 #ifdef WITH_WELCOMEPAGE
     // make it possible to disable the welcome page, useful for valgrind runs e.g.

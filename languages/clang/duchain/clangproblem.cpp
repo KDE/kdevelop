@@ -20,6 +20,8 @@
  */
 
 #include "clangproblem.h"
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/icore.h>
 
 #include "util/clangtypes.h"
 #include "util/clangdebug.h"
@@ -73,11 +75,12 @@ ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic)
         CXSourceRange range;
         const QString replacementText = ClangString(clang_getDiagnosticFixIt(diagnostic, i, &range)).toString();
 
+        auto location = ClangString(clang_formatDiagnostic(diagnostic, CXDiagnostic_DisplaySourceLocation)).toString();
+        const auto docRange = ClangRange(range).toDocumentRange();
+        auto doc = KDevelop::ICore::self()->documentController()->documentForUrl(docRange.document.toUrl());
+        const QString original = doc ? doc->text(docRange) : QString{};
 
-        // TODO: Apparently there's no way to find out the raw text via the C API given a source range
-        // Could be useful to pass that into ClangFixit to be sure to replace the correct text
-        // cf. DocumentChangeSet.m_oldText
-        fixits << ClangFixit{replacementText, ClangRange(range).toDocumentRange(), QString()};
+        fixits << ClangFixit{replacementText, docRange, QString(), original};
     }
     return fixits;
 }
@@ -235,8 +238,12 @@ QString ClangFixitAction::description() const
         return i18n("Insert \"%1\" at line: %2, column: %3",
                     m_fixit.replacementText, range.start().line()+1, range.start().column()+1);
     } else if (range.start().line() == range.end().line()) {
-        return i18n("Replace text at line: %1, column: %2 with: \"%3\"",
+        if (m_fixit.currentText.isEmpty()) {
+            return i18n("Replace text at line: %1, column: %2 with: \"%3\"",
                     range.start().line()+1, range.start().column()+1, m_fixit.replacementText);
+        } else
+            return i18n("Replace \"%1\" with: \"%2\"",
+                    m_fixit.currentText, m_fixit.replacementText);
     } else {
         return i18n("Replace multiple lines starting at line: %1, column: %2 with: \"%3\"",
                     range.start().line()+1, range.start().column()+1, m_fixit.replacementText);
@@ -250,9 +257,8 @@ void ClangFixitAction::execute()
         DUChainReadLocker lock;
 
         DocumentChange change(m_fixit.range.document, m_fixit.range,
-                    QString(), m_fixit.replacementText);
-        // TODO: We probably don't want this
-        change.m_ignoreOldText = true;
+                    m_fixit.currentText, m_fixit.replacementText);
+        change.m_ignoreOldText = !m_fixit.currentText.isEmpty();
         changes.addChange(change);
     }
 

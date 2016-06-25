@@ -40,6 +40,8 @@ using namespace KDevelop;
 
 void TestCMakeManager::initTestCase()
 {
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.projectmanagers.cmake.debug=true\n"));
+
     AutoTestShell::init();
     TestCore::initialize();
 

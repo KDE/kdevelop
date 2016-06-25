@@ -234,7 +234,6 @@ QList<RenameAction*> AdaptSignatureAssistant::getRenameActions(const Signature &
 {
     Q_ASSERT(DUChain::lock()->currentThreadHasReadLock());
     QList<RenameAction*> renameActions;
-    qDebug() << "called" << oldPositions << m_otherSideContext;
     if (!m_otherSideContext) {
         return renameActions;
     }

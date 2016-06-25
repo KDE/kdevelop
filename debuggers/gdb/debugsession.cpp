@@ -38,12 +38,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <debugger/breakpoint/breakpoint.h>
-#include <debugger/breakpoint/breakpointmodel.h>
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
-#include <interfaces/ilaunchconfiguration.h>
-#include <util/environmentgrouplist.h>
 
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -194,7 +188,6 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, const QString &execut
         QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
         QProcess *proc = new QProcess;
-        KDevelop::restoreSystemEnvironment(proc);
         QStringList arguments;
         arguments << "-c" << KShell::quoteArg(runShellScript.toLocalFile()) +
             ' ' + KShell::quoteArg(executable) + QString::fromLatin1(options);

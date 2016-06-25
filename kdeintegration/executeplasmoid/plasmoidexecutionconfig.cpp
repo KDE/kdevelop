@@ -33,7 +33,6 @@
 #include <util/kdevstringhandler.h>
 #include <util/executecompositejob.h>
 #include <util/path.h>
-#include <util/environmentgrouplist.h>
 
 #include <KMessageBox>
 #include <KParts/MainWindow>
@@ -69,11 +68,9 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
     connect( identifier->lineEdit(), &QLineEdit::textEdited, this, &PlasmoidExecutionConfig::changed );
 
     QProcess pPlasmoids;
-    KDevelop::restoreSystemEnvironment(&pPlasmoids);
     pPlasmoids.start("plasmoidviewer", QStringList("--list"), QIODevice::ReadOnly);
 
     QProcess pThemes;
-    KDevelop::restoreSystemEnvironment(&pThemes);
     pThemes.start("plasmoidviewer", QStringList("--list-themes"), QIODevice::ReadOnly);
     pThemes.waitForFinished();
     pPlasmoids.waitForFinished();
