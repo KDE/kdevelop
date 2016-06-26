@@ -161,6 +161,10 @@ DocumentChangeTracker* trackerForUrl(const IndexedString& url)
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
     : ParseJob(url, languageSupport)
 {
+    if (auto tracker = trackerForUrl(url)) {
+        tracker->reset();
+    }
+
     const auto tuUrl = clang()->index()->translationUnitForUrl(url);
     bool hasBuildSystemInfo;
     if (auto file = findProjectFileItem(tuUrl, &hasBuildSystemInfo)) {
@@ -194,16 +198,15 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         {
             continue;
         }
-        m_unsavedFiles << UnsavedFile(textDocument->url().toLocalFile(), textDocument->textLines(textDocument->documentRange()));
         const IndexedString indexedUrl(textDocument->url());
+        if ( indexedUrl == url ) {
+            readContents();
+        }
+        m_unsavedFiles << UnsavedFile(textDocument->url().toLocalFile(), textDocument->textLines(textDocument->documentRange()));
         m_unsavedRevisions.insert(indexedUrl, ModificationRevision::revisionForFile(indexedUrl));
         if (indexedUrl == tuUrl) {
             m_tuDocumentIsUnsaved = true;
         }
-    }
-
-    if (auto tracker = trackerForUrl(url)) {
-        tracker->reset();
     }
 }
 
