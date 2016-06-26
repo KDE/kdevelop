@@ -500,11 +500,6 @@ void IdealController::loadSettings()
         m_mainWindow->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 }
 
-void IdealController::setWidthForArea(Qt::DockWidgetArea area, int width)
-{
-    m_widthsForAreas[area] = width;
-}
-
 void IdealController::emitWidgetResized(Qt::DockWidgetArea dockArea, int thickness)
 {
     emit widgetResized(dockArea, thickness);

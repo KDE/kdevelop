@@ -437,10 +437,6 @@ void MainWindowPrivate::reconstruct()
         m_leftTabbarCornerWidget->setParent(0);
     }
 
-    idealController->setWidthForArea(Qt::LeftDockWidgetArea, area->thickness(Sublime::Left));
-    idealController->setWidthForArea(Qt::BottomDockWidgetArea, area->thickness(Sublime::Bottom));
-    idealController->setWidthForArea(Qt::RightDockWidgetArea, area->thickness(Sublime::Right));
-
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, Sublime::AllPositions);
 

@@ -78,8 +78,6 @@ public:
     enum Direction { NextDock, PrevDock };
     void goPrevNextDock(IdealController::Direction direction);
 
-    void setWidthForArea(Qt::DockWidgetArea, int);
-
     IdealButtonBarWidget *leftBarWidget;
     IdealButtonBarWidget *rightBarWidget;
     IdealButtonBarWidget *bottomBarWidget;
@@ -120,7 +118,6 @@ private:
     /** Map from IdealDockWidget  to an action that shows/hides
         that IdealDockWidget.  */
     QMap<IdealDockWidget*, QAction*> m_dockwidget_to_action;
-    QMap<Qt::DockWidgetArea, int> m_widthsForAreas;
 
     KActionMenu* m_docks;
 
