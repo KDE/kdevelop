@@ -36,6 +36,7 @@ target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
 option(BUILD_kdev_includepathsconverter "Build utility to modify include paths of a project from command line." ON)
 if(BUILD_kdev_includepathsconverter)
     add_executable(kdev_includepathsconverter includepathsconverter.cpp)
+    ecm_mark_nongui_executable(kdev_includepathsconverter)
     target_link_libraries(kdev_includepathsconverter LINK_PRIVATE
         KDev::Project
         kdevcompilerprovider
