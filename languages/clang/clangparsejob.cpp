@@ -200,6 +200,7 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         }
         const IndexedString indexedUrl(textDocument->url());
         if ( indexedUrl == url ) {
+#pragma message FIXME: If this indeed solves the "screwed-up highlighting" issue, separate the relevant code out of readContents() instead of calling it
             readContents();
         }
         m_unsavedFiles << UnsavedFile(textDocument->url().toLocalFile(), textDocument->textLines(textDocument->documentRange()));
