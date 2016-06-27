@@ -141,7 +141,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     connect( proc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &ScriptAppJob::processFinished );
 
     // Now setup the process parameters
-    KDevelop::restoreSystemEnvironment(proc);
+
     proc->setEnvironment( l.createEnvironment( envgrp, proc->systemEnvironment()) );
     QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() )

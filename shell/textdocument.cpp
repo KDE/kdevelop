@@ -479,6 +479,15 @@ KTextEditor::Range TextDocument::textSelection() const
     return PartDocument::textSelection();
 }
 
+QString TextDocument::text(const KTextEditor::Range &range) const
+{
+    if (!d->document) {
+        return QString();
+    }
+
+    return d->document->text( range );
+}
+
 QString TextDocument::textLine() const
 {
     if (!d->document) {

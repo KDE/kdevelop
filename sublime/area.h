@@ -166,9 +166,6 @@ public:
     void setDesiredToolViews(
         const QMap<QString, Sublime::Position>& desiredToolViews);
 
-    void setThickness(Sublime::Position pos, int thickness);
-    int thickness(Sublime::Position pos) const;
-
     void save(KConfigGroup& group) const;
     void load(const KConfigGroup& group);
 

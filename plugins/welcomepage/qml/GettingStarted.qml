@@ -33,26 +33,6 @@ StandardPage {
         spacing: 10
         
         width: 200
-        Link {
-            Layout.fillWidth: true
-            text: i18n("Official Website")
-            onClicked: info.state="kdevelop.org"
-        }
-        Link {
-            Layout.fillWidth: true
-            text: i18n("Userbase")
-            onClicked: info.state="userbase"
-        }
-        Link {
-            Layout.fillWidth: true
-            text: i18n("Techbase")
-            onClicked: info.state="techbase"
-        }
-        Link {
-            Layout.fillWidth: true
-            text: i18n("Handbook")
-            onClicked: kdev.retrieveMenuAction("help/help_contents").trigger()
-        }
     }
     
     Column {
