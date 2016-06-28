@@ -130,8 +130,8 @@ public:
         QObject::connect(&m_timer, &QTimer::timeout, m_parser, &BackgroundParser::parseDocuments);
     }
 
-    void startTimerThreadSafe() {
-        QMetaObject::invokeMethod(m_parser, "startTimer", Qt::QueuedConnection);
+    void startTimerThreadSafe(int delay) {
+        QMetaObject::invokeMethod(m_parser, "startTimer", Qt::QueuedConnection, Q_ARG(int, delay));
     }
 
     ~BackgroundParserPrivate()
@@ -530,7 +530,8 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
     }
 }
 
-void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Features features, int priority, QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags)
+void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Features features, int priority,
+                                   QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags, int delay)
 {
 //     qCDebug(LANGUAGE) << "BackgroundParser::addDocument" << url.toUrl();
     Q_ASSERT(isValidURL(url));
@@ -557,7 +558,10 @@ void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Featu
             ++d->m_maxParseJobs; //So the progress-bar waits for this document
         }
 
-        d->startTimerThreadSafe();
+        if ( delay == ILanguageSupport::DefaultDelay ) {
+            delay = d->m_delay;
+        }
+        d->startTimerThreadSafe(delay);
     }
 }
 
@@ -590,7 +594,7 @@ void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyW
 void BackgroundParser::parseDocuments()
 {
     if (!d->m_loadingProjects.empty()) {
-        startTimer();
+        startTimer(d->m_delay);
         return;
     }
     QMutexLocker lock(&d->m_mutex);
@@ -661,7 +665,7 @@ void BackgroundParser::setNeededPriority(int priority)
 {
     QMutexLocker lock(&d->m_mutex);
     d->m_neededPriority = priority;
-    d->startTimerThreadSafe();
+    d->startTimerThreadSafe(d->m_delay);
 }
 
 void BackgroundParser::abortAllJobs()
@@ -681,7 +685,6 @@ void BackgroundParser::suspend()
 void BackgroundParser::resume()
 {
     d->resume();
-
     updateProgressBar();
 }
 
@@ -745,6 +748,9 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
         // this happens e.g. when setting the final location of a problem that is not
         // yet associated with a top ctx.
         return 0;
+    }
+    if ( !isValidURL(url) ) {
+        qWarning() << "Tracker requested for invalild URL:" << url.toUrl();
     }
     Q_ASSERT(isValidURL(url));
 
@@ -813,8 +819,8 @@ void BackgroundParser::documentUrlChanged(IDocument* document)
         documentLoaded(document);
 }
 
-void BackgroundParser::startTimer() {
-    d->m_timer.start(d->m_delay);
+void BackgroundParser::startTimer(int delay) {
+    d->m_timer.start(delay);
 }
 
 void BackgroundParser::projectAboutToBeOpened(IProject* project)

@@ -165,12 +165,20 @@ public Q_SLOTS:
      * Queues up the @p url to be parsed.
      * @p features The minimum features that should be computed for this top-context
      * @p priority A value that manages the order of parsing. Documents with lowest priority are parsed first.
-     * @param notifyReady An optional pointer to a QObject that should contain a slot
-     *                    "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
-     *                    The notification is guaranteed to be called once for each call to addDocument. The given top-context
-     *                    may be invalid if the update failed.
+     * @param notifyWhenReady An optional pointer to a QObject that should contain a slot
+     *                        "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
+     *                        The notification is guaranteed to be called once for each call to addDocument. The given top-context
+     *                        may be invalid if the update failed.
+     * @param flags Flags indicating how the document should be treated in the queue
+     * @param delay_ms The delay in milliseconds to add the job with, or one of the values of the
+     *                 ILanguageSupport::ReparseDelaySpecialValues enum.
      */
-    void addDocument(const IndexedString& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0, QObject* notifyWhenReady = nullptr, ParseJob::SequentialProcessingFlags flags = ParseJob::IgnoresSequentialProcessing);
+    void addDocument(const IndexedString& url,
+                     TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts,
+                     int priority = 0,
+                     QObject* notifyWhenReady = nullptr,
+                     ParseJob::SequentialProcessingFlags flags = ParseJob::IgnoresSequentialProcessing,
+                     int delay_ms = ILanguageSupport::DefaultDelay);
 
     /**
      * Removes the @p url that is registered for the given notification from the url.
@@ -219,7 +227,7 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void parseComplete(const ThreadWeaver::JobPointer& job);
     void parseProgress(KDevelop::ParseJob*, float value, QString text);
-    void startTimer();
+    void startTimer(int delay);
     void aboutToQuit();
 
 private:
