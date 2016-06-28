@@ -69,6 +69,8 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     Q_ASSERT(document->url().isValid());
 
     connect(document, &Document::textInserted, this, &DocumentChangeTracker::textInserted);
+    connect(document, &Document::lineWrapped, this, &DocumentChangeTracker::lineWrapped);
+    connect(document, &Document::lineUnwrapped, this, &DocumentChangeTracker::lineUnwrapped);
     connect(document, &Document::textRemoved, this, &DocumentChangeTracker::textRemoved);
     connect(document, &Document::destroyed, this, &DocumentChangeTracker::documentDestroyed);
     connect(document, &Document::documentSavedOrUploaded, this, &DocumentChangeTracker::documentSavedOrUploaded);
@@ -161,7 +163,15 @@ int DocumentChangeTracker::recommendedDelay(KTextEditor::Document* doc, const KT
     return delay;
 }
 
-void DocumentChangeTracker::textInserted( Document* document, const Cursor& cursor, const QString& text)
+void DocumentChangeTracker::lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position) {
+    textInserted(document, position, QStringLiteral("\n"));
+}
+
+void DocumentChangeTracker::lineUnwrapped(KTextEditor::Document* document, int line) {
+    textRemoved(document, {{document->lineLength(line), line}, {0, line+1}}, QStringLiteral("\n"));
+}
+
+void DocumentChangeTracker::textInserted(Document* document, const Cursor& cursor, const QString& text)
 {
     /// TODO: get this data from KTextEditor directly, make its signal public
     KTextEditor::Range range(cursor, cursorAdd(cursor, text));
