@@ -161,10 +161,6 @@ DocumentChangeTracker* trackerForUrl(const IndexedString& url)
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
     : ParseJob(url, languageSupport)
 {
-    if (auto tracker = trackerForUrl(url)) {
-        tracker->reset();
-    }
-
     const auto tuUrl = clang()->index()->translationUnitForUrl(url);
     bool hasBuildSystemInfo;
     if (auto file = findProjectFileItem(tuUrl, &hasBuildSystemInfo)) {
@@ -198,16 +194,16 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         {
             continue;
         }
-        const IndexedString indexedUrl(textDocument->url());
-        if ( indexedUrl == url ) {
-#pragma message FIXME: If this indeed solves the "screwed-up highlighting" issue, separate the relevant code out of readContents() instead of calling it
-            readContents();
-        }
         m_unsavedFiles << UnsavedFile(textDocument->url().toLocalFile(), textDocument->textLines(textDocument->documentRange()));
+        const IndexedString indexedUrl(textDocument->url());
         m_unsavedRevisions.insert(indexedUrl, ModificationRevision::revisionForFile(indexedUrl));
         if (indexedUrl == tuUrl) {
             m_tuDocumentIsUnsaved = true;
         }
+    }
+
+    if (auto tracker = trackerForUrl(url)) {
+        tracker->reset();
     }
 }
 
