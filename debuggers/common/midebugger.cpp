@@ -26,14 +26,14 @@
 #include "debuglog.h"
 #include "mi/micommand.h"
 
-#include "sys/signal.h"
-
 #include <KLocalizedString>
 #include <KMessageBox>
 
 #include <QApplication>
 #include <QString>
 #include <QStringList>
+
+#include <signal.h>
 
 #include <memory>
 
