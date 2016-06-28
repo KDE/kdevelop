@@ -236,10 +236,14 @@ protected:
     KTextEditor::MovingInterface* m_moving;
     KDevelop::IndexedString m_url;
 
-    void updateChangedRange();
+    void updateChangedRange(int delay);
+    int recommendedDelay(KTextEditor::Document* doc, const KTextEditor::Range& range, const QString& text, bool removal);
 public slots:
-    virtual void textInserted( KTextEditor::Document* document, const KTextEditor::Cursor& position, const QString& inserted );
-    virtual void textRemoved( KTextEditor::Document* document, const KTextEditor::Range& range, const QString& oldText );
+    void textInserted(KTextEditor::Document* document, const KTextEditor::Cursor& position, const QString& inserted);
+    void textRemoved(KTextEditor::Document* document, const KTextEditor::Range& range, const QString& oldText);
+    void lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position);
+    void lineUnwrapped(KTextEditor::Document* document, int line);
+
     void documentDestroyed( QObject* );
     void aboutToInvalidateMovingInterfaceContent ( KTextEditor::Document* document );
     void documentSavedOrUploaded(KTextEditor::Document*,bool);
@@ -251,7 +255,6 @@ private:
     void unlockRevision(qint64 revision);
 
     QMap<qint64, int> m_revisionLocks;
-    ILanguageSupport::WhitespaceSensitivity m_whitespaceSensitivity;
 };
 
 }

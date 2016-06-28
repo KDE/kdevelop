@@ -79,11 +79,6 @@ ICreateClassHelper* ILanguageSupport::createClassHelper() const {
     return 0;
 }
 
-ILanguageSupport::WhitespaceSensitivity ILanguageSupport::whitespaceSensititivy() const
-{
-    return ILanguageSupport::Insensitive;
-}
-
 SourceFormatterItemList ILanguageSupport::sourceFormatterItems() const
 {
     return SourceFormatterItemList();
@@ -97,6 +92,17 @@ QString ILanguageSupport::indentationSample() const
 QReadWriteLock* ILanguageSupport::parseLock() const
 {
     return &d->lock;
+}
+
+int ILanguageSupport::suggestedReparseDelayForChange(KTextEditor::Document* doc,
+                                                     const KTextEditor::Range& changedRange,
+                                                     const QString& /*removedText*/, bool /*removal*/) const
+{
+    auto text = doc->text(changedRange);
+    bool joinedWord = doc->wordRangeAt(changedRange.start()).isEmpty() || doc->wordRangeAt(changedRange.end()).isEmpty();
+
+    auto isWhitespace = std::all_of(text.begin(), text.end(), [](const QChar& c) { return c.isSpace(); });
+    return (isWhitespace && !joinedWord) ? NoUpdateRequired : DefaultDelay;
 }
 
 }

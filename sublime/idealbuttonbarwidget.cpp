@@ -178,6 +178,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
 
     switch (event->type()) {
     case QEvent::ActionAdded: {
+        bool wasEmpty = isEmpty();
         if (! _buttons.contains(action)) {
             IdealToolButton *button = new IdealToolButton(_area);
             //apol: here we set the usual width of a button for the vertical toolbars as the minimumWidth
@@ -202,6 +203,9 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             connect(button, &IdealToolButton::clicked, this, &IdealButtonBarWidget::buttonPressed);
             connect(button, &IdealToolButton::customContextMenuRequested,
                     _widgets[action], &IdealDockWidget::contextMenuRequested);
+            if ( wasEmpty ) {
+                emit emptyChanged();
+            }
         }
     } break;
 

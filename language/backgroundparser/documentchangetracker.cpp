@@ -62,24 +62,15 @@ namespace KDevelop
 {
 
 DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
-    : m_needUpdate(false), m_document(document), m_moving(0), m_whitespaceSensitivity(ILanguageSupport::Insensitive)
+    : m_needUpdate(false), m_document(document), m_moving(0)
 {
     m_url = IndexedString(document->url());
     Q_ASSERT(document);
     Q_ASSERT(document->url().isValid());
 
-    // Check whether a language plugin is tracking the document which belongs to a
-    // whitespace-sensitive language (e.g. python)
-    foreach (const auto lang, ICore::self()->languageController()->languagesForUrl(document->url())) {
-        if (!lang) {
-            continue;
-        }
-        if (lang->whitespaceSensititivy() >= m_whitespaceSensitivity) {
-            m_whitespaceSensitivity = lang->whitespaceSensititivy();
-        }
-    }
-
     connect(document, &Document::textInserted, this, &DocumentChangeTracker::textInserted);
+    connect(document, &Document::lineWrapped, this, &DocumentChangeTracker::lineWrapped);
+    connect(document, &Document::lineUnwrapped, this, &DocumentChangeTracker::lineUnwrapped);
     connect(document, &Document::textRemoved, this, &DocumentChangeTracker::textRemoved);
     connect(document, &Document::destroyed, this, &DocumentChangeTracker::documentDestroyed);
     connect(document, &Document::documentSavedOrUploaded, this, &DocumentChangeTracker::documentSavedOrUploaded);
@@ -135,21 +126,7 @@ bool DocumentChangeTracker::needUpdate() const
     return m_needUpdate;
 }
 
-bool DocumentChangeTracker::checkMergeTokens(const KTextEditor::Range& range)
-{
-    ///@todo Improve this so that it notices when we wrapped in/out of a line-comment
-    ///@todo Improve this so that it really checks whether some merge-able tokens have been moved together
-    if(m_document->documentRange().contains(range))
-    {
-        if(range.start().column() == 0 || m_document->text(KTextEditor::Range(range.start().line(), range.start().column()-1, range.start().line(), range.start().column())).at(0).isSpace())
-            return true;
-        if(range.end().column() >= m_document->lineLength(range.end().line()) || m_document->text(KTextEditor::Range(range.end().line(), range.end().column(), range.end().line(), range.end().column()+1))[0].isSpace())
-            return true;
-    }
-    return false;
-}
-
-void DocumentChangeTracker::updateChangedRange()
+void DocumentChangeTracker::updateChangedRange(int delay)
 {
 //     Q_ASSERT(m_moving->revision() != m_revisionAtLastReset->revision()); // May happen after reload
 
@@ -157,8 +134,13 @@ void DocumentChangeTracker::updateChangedRange()
 
     ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());
 
-    if(needUpdate())
-        ICore::self()->languageController()->backgroundParser()->addDocument(m_url, TopDUContext::AllDeclarationsContextsAndUses);
+    if(needUpdate()) {
+        ICore::self()->languageController()->backgroundParser()->addDocument(m_url,
+                                                                             TopDUContext::AllDeclarationsContextsAndUses,
+                                                                             0, nullptr,
+                                                                             ParseJob::IgnoresSequentialProcessing,
+                                                                             delay);
+    }
 }
 
 static Cursor cursorAdd(Cursor c, const QString& text)
@@ -168,46 +150,31 @@ static Cursor cursorAdd(Cursor c, const QString& text)
     return c;
 }
 
-static bool whitespaceOnly(const QString& string)
+int DocumentChangeTracker::recommendedDelay(KTextEditor::Document* doc, const KTextEditor::Range& range,
+                                            const QString& text, bool removal)
 {
-    for (QChar c : string) {
-        if (!c.isSpace()) {
-            return false;
-        }
+    auto languages = ICore::self()->languageController()->languagesForUrl(doc->url());
+    int delay = ILanguageSupport::NoUpdateRequired;
+    Q_FOREACH (const auto& lang, languages) {
+        // take the largest value, because NoUpdateRequired is -2 and we want to make sure
+        // that if one language requires an update it actually happens
+        delay = qMax<int>(lang->suggestedReparseDelayForChange(doc, range, text, removal), delay);
     }
-    return true;
+    return delay;
 }
 
-void DocumentChangeTracker::textInserted( Document* document, const Cursor& cursor, const QString& text)
+void DocumentChangeTracker::lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position) {
+    textInserted(document, position, QStringLiteral("\n"));
+}
+
+void DocumentChangeTracker::lineUnwrapped(KTextEditor::Document* document, int line) {
+    textRemoved(document, {{document->lineLength(line), line}, {0, line+1}}, QStringLiteral("\n"));
+}
+
+void DocumentChangeTracker::textInserted(Document* document, const Cursor& cursor, const QString& text)
 {
-    if ( m_whitespaceSensitivity == ILanguageSupport::Sensitive ) {
-        m_needUpdate = true;
-    }
-
     /// TODO: get this data from KTextEditor directly, make its signal public
-    Range range(cursor, cursorAdd(cursor, text));
-
-    if ( ! m_needUpdate ) {
-        bool changeIsWhitespaceOnly = whitespaceOnly(text) && checkMergeTokens(range);
-        if ( m_whitespaceSensitivity == ILanguageSupport::IndentOnly && changeIsWhitespaceOnly ) {
-            // The language requires a document to be re-parsed if the indentation changes (e.g. python),
-            // so do some special checks here to see if that is the case.
-            if ( changeIsWhitespaceOnly ) {
-                QString fromLineBeginning = document->text(Range(Cursor(cursor.line(), 0), range.end() - Cursor{0, 1}));
-                if ( fromLineBeginning.trimmed().isEmpty() ) {
-                    m_needUpdate = true;
-                }
-            }
-        }
-        if ( ! changeIsWhitespaceOnly ) {
-            // If we've inserted something else than whitespace, an update is required for all languages.
-            m_needUpdate = true;
-        }
-    }
-
-    #ifdef ALWAYS_UPDATE
-    m_needUpdate = true;
-    #endif
+    KTextEditor::Range range(cursor, cursorAdd(cursor, text));
 
     if(!m_lastInsertionPosition.isValid() || m_lastInsertionPosition == cursor)
     {
@@ -215,35 +182,19 @@ void DocumentChangeTracker::textInserted( Document* document, const Cursor& curs
         m_lastInsertionPosition = range.end();
     }
 
-    updateChangedRange();
+    auto delay = recommendedDelay(document, range, text, false);
+    m_needUpdate = delay != ILanguageSupport::NoUpdateRequired;
+    updateChangedRange(delay);
 }
 
-void DocumentChangeTracker::textRemoved( Document* document, const Range& oldRange, const QString& oldText )
+void DocumentChangeTracker::textRemoved( Document* document, const KTextEditor::Range& oldRange, const QString& oldText )
 {
-    if (whitespaceOnly(oldText) && checkMergeTokens(Range(oldRange.start(), oldRange.start())))
-    {
-        // Only whitespace was changed, no update is required eventually
-        if ( m_whitespaceSensitivity == ILanguageSupport::Sensitive ) {
-            m_needUpdate = true;
-        }
-        else if ( m_whitespaceSensitivity == ILanguageSupport::IndentOnly ) {
-            // check text from the beginning of the line
-            if ( document->text({{oldRange.start().line(), 0}, oldRange.end()}).trimmed().isEmpty() ) {
-                m_needUpdate = true;
-            }
-        }
-    } else {
-        m_needUpdate = true; // If we've inserted something else than whitespace, an update is required
-    }
-
-    #ifdef ALWAYS_UPDATE
-    m_needUpdate = true;
-    #endif
-
     m_currentCleanedInsertion.clear();
     m_lastInsertionPosition = KTextEditor::Cursor::invalid();
 
-    updateChangedRange();
+    auto delay = recommendedDelay(document, oldRange, oldText, true);
+    m_needUpdate = delay != ILanguageSupport::NoUpdateRequired;
+    updateChangedRange(delay);
 }
 
 void DocumentChangeTracker::documentSavedOrUploaded(KTextEditor::Document* doc,bool)

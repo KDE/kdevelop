@@ -53,7 +53,7 @@ macro(kdevplatform_create_template_archive _templateName)
         )
     else()
 
-        if(APPLE)
+        if(APPLE OR CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
             add_custom_command(OUTPUT ${_template}
                 COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
                     --exclude .kdev_ignore --exclude .svn --numeric-owner

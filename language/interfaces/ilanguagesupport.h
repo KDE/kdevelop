@@ -33,6 +33,7 @@ class QReadWriteLock;
 namespace KTextEditor {
 class Cursor;
 class Range;
+class Document;
 }
 
 namespace KDevelop {
@@ -137,22 +138,28 @@ public:
      */
     virtual SourceFormatterItemList sourceFormatterItems() const;
 
-    enum WhitespaceSensitivity {
-        Insensitive = 0,
-        IndentOnly = 1,
-        Sensitive = 2
+    enum ReparseDelaySpecialValues {
+        DefaultDelay = -1,
+        NoUpdateRequired = -2
     };
 
-    /**Specifies whether this language is sensitive to whitespace changes.
-      * - The default "Insensitive" will only schedule a document for reparsing when
-      *   a change in a non-whitespace area happens (non-whitespace chars added or whitespace
-      *   added where it was surrounded by characters)
-      * - "IndentOnly" will additionally schedule the document for reparsing if a whitespace
-      *   change occurs at the beginning of the line (more exactly, if all characters before the
-      *   changed ones are whitespace)
-      * - "Sensitive" will always schedule the document for reparsing, no matter what was changed.
-      */
-    virtual WhitespaceSensitivity whitespaceSensititivy() const;
+    /**
+     * @brief Enables the language to control how long the background parser waits until a changed document is reparsed.
+     *
+     * You can return DefaultDelay to use the default delay, or NoUpdateRequired to indicate that
+     * this change does not require a re-parse at all.
+     *
+     * The default implementation returns DefaultDelay if the change was not whitespace-only,
+     * and NoUpdateRequired otherwise.
+     *
+     * @param doc the document which was modified
+     * @param changedRange the range which was modified
+     * @param changedText the text which was inserted or removed
+     * @param removal whether text was removed or inserted
+     * @return int duration in ms to wait until re-parsing or a value of the ReparseDelaySpecialValues enum.
+     */
+    virtual int suggestedReparseDelayForChange(KTextEditor::Document* doc, const KTextEditor::Range& changedRange,
+                                               const QString& changedText, bool removal) const;
 
 private:
     QScopedPointer<ILanguageSupportPrivate> const d;

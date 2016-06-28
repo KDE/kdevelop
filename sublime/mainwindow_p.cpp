@@ -45,10 +45,8 @@ class IdealToolBar : public QToolBar
     public:
         explicit IdealToolBar(const QString& title, bool hideWhenEmpty, Sublime::IdealButtonBarWidget* buttons, QMainWindow* parent)
             : QToolBar(title, parent)
-            , m_timer(nullptr)
             , m_buttons(buttons)
             , m_hideWhenEmpty(hideWhenEmpty)
-            , m_requestedVisibility(true)
         {
             setMovable(false);
             setFloatable(false);
@@ -58,37 +56,20 @@ class IdealToolBar : public QToolBar
             addWidget(m_buttons);
 
             if (m_hideWhenEmpty) {
-                m_timer = new QTimer(this);
-                m_timer->setInterval(100);
-                m_timer->setSingleShot(true);
-                connect(m_timer, &QTimer::timeout, this, &IdealToolBar::refresh);
-                connect(this, &IdealToolBar::visibilityChanged, m_timer, static_cast<void(QTimer::*)()>(&QTimer::start));
-                connect(m_buttons, &Sublime::IdealButtonBarWidget::emptyChanged, m_timer, static_cast<void(QTimer::*)()>(&QTimer::start));
-            }
-        }
-
-        void setVisible(bool visible) override
-        {
-            QToolBar::setVisible(visible);
-
-            m_requestedVisibility = visible;
-
-            if (m_hideWhenEmpty && visible) {
-                m_timer->start();
+                connect(m_buttons, &Sublime::IdealButtonBarWidget::emptyChanged,
+                        this, &IdealToolBar::updateVisibilty);
             }
         }
 
     private slots:
-        void refresh()
+        void updateVisibilty()
         {
-            setVisible(m_requestedVisibility && !m_buttons->isEmpty());
+            setVisible(!m_buttons->isEmpty());
         }
 
     private:
-        QTimer* m_timer;
         Sublime::IdealButtonBarWidget* m_buttons;
         const bool m_hideWhenEmpty;
-        bool m_requestedVisibility;
 };
 
 namespace Sublime {
