@@ -46,7 +46,7 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
     PURPOSE "Qt5 QuickWidgets library (part of Qt >=5.3). Required for the Welcome Page plugin."
 )
 
-set(KF5_DEP_VERSION "5.3.0")
+set(KF5_DEP_VERSION "5.16.0")
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Archive
   Config
