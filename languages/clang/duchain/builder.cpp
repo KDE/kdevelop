@@ -1251,6 +1251,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_Char16);
     UseKind(CXType_Char32);
     UseKind(CXType_Pointer);
+    UseKind(CXType_BlockPointer);
     UseKind(CXType_MemberPointer);
     UseKind(CXType_ObjCObjectPointer);
     UseKind(CXType_ConstantArray);

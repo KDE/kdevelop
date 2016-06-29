@@ -84,7 +84,7 @@ AdaptSignatureAssistant::AdaptSignatureAssistant(ILanguageSupport* supportedLang
 
 QString AdaptSignatureAssistant::title() const
 {
-    return tr("Adapt Signature");
+    return i18n("Adapt Signature");
 }
 
 void AdaptSignatureAssistant::reset()

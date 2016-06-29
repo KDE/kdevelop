@@ -41,6 +41,7 @@ class IDocument;
 namespace KTextEditor
 {
 class View;
+class Document;
 }
 
 class ClangSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport, public KDevelop::IBuddyDocumentFinder
@@ -76,6 +77,9 @@ public:
     KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
 
     int configPages() const override;
+
+    int suggestedReparseDelayForChange(KTextEditor::Document* doc, const KTextEditor::Range& changedRange,
+                                       const QString& changedText, bool removal) const override;
 
     //BEGIN IBuddyDocumentFinder
 
