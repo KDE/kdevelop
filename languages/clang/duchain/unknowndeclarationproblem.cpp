@@ -212,7 +212,28 @@ KDevelop::DocumentRange forwardDeclarationPosition(const QualifiedIdentifier& id
     return {IndexedString(source.pathOrUrl()), {line, 0, line, 0}};
 }
 
-QVector<KDevelop::QualifiedIdentifier> possibleDeclarations( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::CursorInRevision& cursor )
+/**
+ * Iteratively build all levels of the current scope. A (missing) type anywhere
+ * can be aribtrarily namespaced, so we create the permutations of possible
+ * nestings of namespaces it can currently be in,
+ *
+ * TODO: add detection of namespace aliases, such as 'using namespace KDevelop;'
+ *
+ * namespace foo {
+ *      namespace bar {
+ *          function baz() {
+ *              type var;
+ *          }
+ *      }
+ * }
+ *
+ * Would give:
+ * foo::bar::baz::type
+ * foo::bar::type
+ * foo::type
+ * type
+ */
+QVector<KDevelop::QualifiedIdentifier> findPossibleQualifiedIdentifiers( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::CursorInRevision& cursor )
 {
     DUChainReadLocker lock;
     const TopDUContext* top = DUChainUtils::standardContextForUrl( file.toUrl() );
@@ -229,29 +250,6 @@ QVector<KDevelop::QualifiedIdentifier> possibleDeclarations( const QualifiedIden
     }
 
     QVector<KDevelop::QualifiedIdentifier> declarations{ identifier };
-    auto scopes = context->scopeIdentifier();
-
-    /*
-     * Iteratively build all levels of the current scope. A (missing) type anywhere
-     * can be aribtrarily namespaced, so we create the permutations of possible
-     * nestings of namespaces it can currently be in,
-     *
-     * TODO: add detection of namespace aliases, such as 'using namespace KDevelop;'
-     *
-     * namespace foo {
-     *      namespace bar {
-     *          function baz() {
-     *              type var;
-     *          }
-     *      }
-     * }
-     *
-     * Would give:
-     * foo::bar::baz::type
-     * foo::bar::type
-     * foo::type
-     * type
-     */
     for( auto scopes = context->scopeIdentifier(); !scopes.isEmpty(); scopes.pop() ) {
         declarations.append( scopes + identifier );
     }
@@ -260,71 +258,50 @@ QVector<KDevelop::QualifiedIdentifier> possibleDeclarations( const QualifiedIden
     return declarations;
 }
 
-QStringList duchainCandidates( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::CursorInRevision& cursor )
+QStringList findMatchingIncludeFiles(const QVector<Declaration*> declarations)
 {
-    DUChainReadLocker lock;
-    /*
-     * Search the persistent symbol table for the declaration. If it is known from before,
-     * determine which file it came from and suggest that
-     */
     QStringList candidates;
-    for( const auto& declaration : possibleDeclarations( identifier, file, cursor ) ) {
-        clangDebug() << "Considering candidate declaration" << declaration;
-        const IndexedDeclaration* declarations;
-        uint declarationCount;
-        PersistentSymbolTable::self().declarations( declaration , declarationCount, declarations );
+    for (const auto decl: declarations) {
+        // skip declarations that don't belong to us
+        const auto& file = decl->topContext()->parsingEnvironmentFile();
+        if (!file || file->language() != ParseSession::languageString()) {
+            continue;
+        }
 
-        for( uint i = 0; i < declarationCount; ++i ) {
-            auto* decl = declarations[ i ].declaration();
+        if( dynamic_cast<KDevelop::AliasDeclaration*>( decl ) ) {
+            continue;
+        }
 
-            /* Skip if the declaration is invalid or if it is an alias declaration -
-             * we want the actual declaration (and its file)
+        if( decl->isForwardDeclaration() ) {
+            continue;
+        }
+
+        const auto filepath = decl->url().toUrl().toLocalFile();
+
+        if( !isBlacklisted( filepath ) ) {
+            candidates << filepath;
+            clangDebug() << "Adding" << filepath << "determined from candidate" << decl->toString();
+        }
+
+        for( const auto importer : file->importers() ) {
+            if( importer->imports().count() != 1 && !isBlacklisted( filepath ) ) {
+                continue;
+            }
+            if( importer->topContext()->localDeclarations().count() ) {
+                continue;
+            }
+
+            const auto filePath = importer->url().toUrl().toLocalFile();
+            if( isBlacklisted( filePath ) ) {
+                continue;
+            }
+
+            /* This file is a forwarder, such as <vector>
+             * <vector> does not actually implement the functions, but include other headers that do
+             * we prefer this to other headers
              */
-            if( !decl ) {
-                continue;
-            }
-
-            // skip declarations that don't belong to us
-            const auto& file = decl->topContext()->parsingEnvironmentFile();
-            if (!file || file->language() != ParseSession::languageString()) {
-                continue;
-            }
-
-            if( dynamic_cast<KDevelop::AliasDeclaration*>( decl ) ) {
-                continue;
-            }
-
-            if( decl->isForwardDeclaration() ) {
-                continue;
-            }
-
-            const auto filepath = decl->url().toUrl().toLocalFile();
-
-            if( !isBlacklisted( filepath ) ) {
-                candidates << filepath;
-                clangDebug() << "Adding" << filepath << "determined from candidate" << declaration;
-            }
-
-            for( const auto importer : file->importers() ) {
-                if( importer->imports().count() != 1 && !isBlacklisted( filepath ) ) {
-                    continue;
-                }
-                if( importer->topContext()->localDeclarations().count() ) {
-                    continue;
-                }
-
-                const auto filePath = importer->url().toUrl().toLocalFile();
-                if( isBlacklisted( filePath ) ) {
-                    continue;
-                }
-
-                /* This file is a forwarder, such as <vector>
-                 * <vector> does not actually implement the functions, but include other headers that do
-                 * we prefer this to other headers
-                 */
-                candidates << filePath;
-                clangDebug() << "Adding forwarder file" << filePath << "to the result set";
-            }
+            candidates << filePath;
+            clangDebug() << "Adding forwarder file" << filePath << "to the result set";
         }
     }
 
@@ -395,51 +372,88 @@ KDevelop::Path::List includePaths( const KDevelop::Path& file )
 /**
  * Return a list of header files viable for inclusions. All elements will be unique
  */
-QStringList includeFiles( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::DocumentRange& range )
+QStringList includeFiles(const QualifiedIdentifier& identifier, const QVector<Declaration*> declarations, const KDevelop::Path& file)
 {
-    const CursorInRevision cursor{ range.start().line(), range.start().column() };
     const auto includes = includePaths( file );
-
     if( includes.isEmpty() ) {
         clangDebug() << "Include path is empty";
         return {};
     }
 
-    const auto candidates = duchainCandidates( identifier, file, cursor );
+    const auto candidates = findMatchingIncludeFiles(declarations);
     if( !candidates.isEmpty() ) {
         // If we find a candidate from the duchain we don't bother scanning the include paths
         return candidates;
     }
 
-    return scanIncludePaths( identifier, includes );
+    return scanIncludePaths(identifier, includes);
 }
 
 /**
  * Construct viable forward declarations for the type name.
- *
- * Currently we're not able to determine what is namespaces, class names etc
- * and makes a suitable forward declaration, so just suggest "vanilla" declarations.
  */
-ClangFixits forwardDeclarations(const QualifiedIdentifier& identifier, const Path& source)
+ClangFixits forwardDeclarations(const QVector<Declaration*>& matchingDeclarations, const Path& source)
 {
-    const auto range = forwardDeclarationPosition(identifier, source);
-    if (!range.isValid()) {
-        return {};
-    }
+    ClangFixits fixits;
+    for (const auto decl : matchingDeclarations) {
+        const auto qid = decl->qualifiedIdentifier();
+        if (qid.count() > 1) {
+            // TODO: Currently we're not able to determine what is namespaces, class names etc
+            // and makes a suitable forward declaration, so just suggest "vanilla" declarations.
+            continue;
+        }
 
-    const auto name = identifier.last().toString();
-    return {
-        {QLatin1String("class ") + name + QLatin1String(";\n"), range, QObject::tr("Forward declare as 'class'")},
-        {QLatin1String("struct ") + name + QLatin1String(";\n"), range, QObject::tr("Forward declare as 'struct'")}
-    };
+        const auto range = forwardDeclarationPosition(qid, source);
+        if (!range.isValid()) {
+            continue; // do not know where to insert
+        }
+
+        const auto name = qid.last().toString();
+        fixits += {
+            {QLatin1String("class ") + name + QLatin1String(";\n"), range, QObject::tr("Forward declare as 'class'")},
+            {QLatin1String("struct ") + name + QLatin1String(";\n"), range, QObject::tr("Forward declare as 'struct'")}
+        };
+    }
+    return fixits;
+}
+
+/**
+ * Search the persistent symbol table for matching declarations for identifiers @p identifiers
+ */
+QVector<Declaration*> findMatchingDeclarations(const QVector<QualifiedIdentifier>& identifiers)
+{
+    DUChainReadLocker lock;
+
+    QVector<Declaration*> matchingDeclarations;
+    matchingDeclarations.reserve(identifiers.size());
+    for (const auto& declaration : identifiers) {
+        clangDebug() << "Considering candidate declaration" << declaration;
+        const IndexedDeclaration* declarations;
+        uint declarationCount;
+        PersistentSymbolTable::self().declarations( declaration , declarationCount, declarations );
+
+        for (uint i = 0; i < declarationCount; ++i) {
+            // Skip if the declaration is invalid or if it is an alias declaration -
+            // we want the actual declaration (and its file)
+            if (auto decl = declarations[i].declaration()) {
+                matchingDeclarations << decl;
+            }
+        }
+    }
+    return matchingDeclarations;
 }
 
 ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::DocumentRange& docrange )
 {
     ClangFixits fixits;
 
+    const CursorInRevision cursor{docrange.start().line(), docrange.start().column()};
+
+    const auto possibleIdentifiers = findPossibleQualifiedIdentifiers(identifier, file, cursor);
+    const auto matchingDeclarations = findMatchingDeclarations(possibleIdentifiers);
+
     if (ClangSettingsManager::self()->assistantsSettings().forwardDeclare) {
-        for (const auto& fixit : forwardDeclarations(identifier, file)) {
+        for (const auto& fixit : forwardDeclarations(matchingDeclarations, file)) {
             fixits << fixit;
             if (fixits.size() == maxSuggestions) {
                 return fixits;
@@ -447,7 +461,7 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
         }
     }
 
-    const auto includefiles = includeFiles( identifier, file, docrange );
+    const auto includefiles = includeFiles(identifier, matchingDeclarations, file);
     if (includefiles.isEmpty()) {
         // return early as the computation of the include paths is quite expensive
         return fixits;

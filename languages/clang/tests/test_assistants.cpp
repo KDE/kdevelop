@@ -540,13 +540,13 @@ void TestAssistants::testSignatureAssistant()
     QCOMPARE(testbed.documentText(Testbed::CppDoc), finalCppContents);
 }
 
-enum UnknownDeclarationActions
+enum UnknownDeclarationAction
 {
-    NoUnknownDeclaration = 0x0,
+    NoUnknownDeclarationAction = 0x0,
     ForwardDecls = 0x1,
     MissingInclude = 0x2
 };
-
+Q_DECLARE_FLAGS(UnknownDeclarationActions, UnknownDeclarationAction)
 Q_DECLARE_METATYPE(UnknownDeclarationActions)
 
 void TestAssistants::testUnknownDeclarationAssistant_data()
@@ -557,11 +557,11 @@ void TestAssistants::testUnknownDeclarationAssistant_data()
     QTest::addColumn<UnknownDeclarationActions>("actions");
 
     QTest::newRow("unincluded_struct") << "struct test{};" << "" << "test"
-        << static_cast<UnknownDeclarationActions>(ForwardDecls | MissingInclude);
+        << UnknownDeclarationActions(ForwardDecls | MissingInclude);
     QTest::newRow("forward_declared_struct") << "struct test{};" << "struct test;" << "test *f; f->"
-        << static_cast<UnknownDeclarationActions>(MissingInclude);
+        << UnknownDeclarationActions(MissingInclude);
     QTest::newRow("unknown_struct") << "" << "" << "test"
-        << static_cast<UnknownDeclarationActions>(ForwardDecls);
+        << UnknownDeclarationActions();
 }
 
 void TestAssistants::testUnknownDeclarationAssistant()
@@ -585,7 +585,7 @@ void TestAssistants::testUnknownDeclarationAssistant()
 
     const auto problems = topCtx->problems();
 
-    if (actions == NoUnknownDeclaration) {
+    if (actions == NoUnknownDeclarationAction) {
         QVERIFY(!problems.isEmpty());
         return;
     }
