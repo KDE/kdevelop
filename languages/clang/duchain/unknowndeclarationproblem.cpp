@@ -52,7 +52,7 @@
 using namespace KDevelop;
 
 namespace {
-/* Under some conditions, such as when looking up suggestions
+/** Under some conditions, such as when looking up suggestions
  * for the undeclared namespace 'std' we will get an awful lot
  * of suggestions. This parameter limits how many suggestions
  * will pop up, as rarely more than a few will be relevant anyways
@@ -106,7 +106,7 @@ QStringList scanIncludePaths( const QString& identifier, const QDir& dir, int ma
     return candidates;
 }
 
-/*
+/**
  * Find files in dir that match the given identifier. Matches common C++ header file extensions only.
  */
 QStringList scanIncludePaths( const QualifiedIdentifier& identifier, const KDevelop::Path::List& includes )
@@ -122,7 +122,7 @@ QStringList scanIncludePaths( const QualifiedIdentifier& identifier, const KDeve
     return candidates;
 }
 
-/*
+/**
  * Determine how much path is shared between two includes.
  *  boost/tr1/unordered_map
  *  boost/tr1/unordered_set
@@ -334,7 +334,7 @@ QStringList duchainCandidates( const QualifiedIdentifier& identifier, const KDev
     return candidates;
 }
 
-/*
+/**
  * Takes a filepath and the include paths and determines what directive to use.
  */
 ClangFixit directiveForFile( const QString& includefile, const KDevelop::Path::List& includepaths, const KDevelop::Path& source )
@@ -385,16 +385,14 @@ ClangFixit directiveForFile( const QString& includefile, const KDevelop::Path::L
 
 KDevelop::Path::List includePaths( const KDevelop::Path& file )
 {
-    /*
-     * Find project's custom include paths
-     */
+    // Find project's custom include paths
     const auto source = file.toLocalFile();
     const auto item = ICore::self()->projectController()->projectModel()->itemForPath( KDevelop::IndexedString( source ) );
 
     return IDefinesAndIncludesManager::manager()->includes(item);
 }
 
-/*
+/**
  * Return a list of header files viable for inclusions. All elements will be unique
  */
 QStringList includeFiles( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::DocumentRange& range )
@@ -416,7 +414,7 @@ QStringList includeFiles( const QualifiedIdentifier& identifier, const KDevelop:
     return scanIncludePaths( identifier, includes );
 }
 
-/*
+/**
  * Construct viable forward declarations for the type name.
  *
  * Currently we're not able to determine what is namespaces, class names etc
