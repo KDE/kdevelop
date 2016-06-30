@@ -91,7 +91,8 @@ QStringList scanIncludePaths( const QString& identifier, const QDir& dir, int ma
         return {};
     }
 
-    for (const auto& file : dir.entryList({identifier + QLatin1Char('*')}, QDir::Files)) {
+    const QStringList nameFilters = {identifier, identifier + QLatin1String(".*")};
+    for (const auto& file : dir.entryList(nameFilters, QDir::Files)) {
         if (identifier.compare(file, Qt::CaseInsensitive) == 0 || ClangHelpers::isHeader(file)) {
             const QString filePath = path + QLatin1Char('/') + file;
             clangDebug() << "Found candidate file" << filePath;
