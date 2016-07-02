@@ -109,7 +109,6 @@ class BrowseManager : public QObject {
         void resetChangedCursor();
         JumpLocation determineJumpLoc(KTextEditor::Cursor textCursor, const QUrl& viewUrl) const;
         void setHandCursor(QWidget* widget);
-        void avoidMenuAltFocus();
         bool eventFilter(QObject * watched, QEvent * event) override ;
         ContextBrowserPlugin* m_plugin;
         bool m_browsing;

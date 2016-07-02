@@ -24,23 +24,18 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QTimer>
-#include <QMenuBar>
 
-#include <kparts/mainwindow.h>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include "contextbrowserview.h"
-#include <interfaces/iuicontroller.h>
-#include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
-#include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <ktexteditor/codecompletioninterface.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/forwarddeclaration.h>
@@ -93,8 +88,6 @@ QList<KTextEditor::View*> EditorViewWatcher::allViews() {
 }
 
 void BrowseManager::eventuallyStartDelayedBrowsing() {
-    avoidMenuAltFocus();
-
     if(m_browsingByKey == Qt::Key_Alt && m_browsingStartedInView)
         emit startDelayedBrowsing(m_browsingStartedInView);
 }
@@ -185,17 +178,15 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         if(keyEvent->key() == magicModifier) {
             if(dynamic_cast<KTextEditor::CodeCompletionInterface*>(view) && dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive())
             {
-                //Completion is active.
-                avoidMenuAltFocus();
+                //Do nothing, completion is active.
             }else{
                 m_browsingStartedInView = view;
             }
         }
     }
 
-    if(!view) {
+    if(!view)
         return false;
-    }
 
     QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(event);
     //Eventually stop key-browsing
@@ -266,16 +257,6 @@ void BrowseManager::setHandCursor(QWidget* widget) {
         return; //Nothing to do
     m_oldCursors[widget] = widget->cursor();
     widget->setCursor(QCursor(Qt::PointingHandCursor));
-}
-
-void BrowseManager::avoidMenuAltFocus() {
-    // send an invalid key event to the main menu bar. The menu bar will
-    // stop listening when observing another key than ALT between the press
-    // and the release.
-    QKeyEvent event1(QEvent::KeyPress, 0, Qt::NoModifier);
-    QApplication::sendEvent(ICore::self()->uiController()->activeMainWindow()->menuBar(), &event1);
-    QKeyEvent event2(QEvent::KeyRelease, 0, Qt::NoModifier);
-    QApplication::sendEvent(ICore::self()->uiController()->activeMainWindow()->menuBar(), &event2);
 }
 
 void BrowseManager::applyEventFilter(QWidget* object, bool install) {

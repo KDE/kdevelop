@@ -34,9 +34,6 @@
 #include <QCheckBox>
 #include <QMetaObject>
 #include <QWidgetAction>
-#include <QMenuBar>
-#include <kparts/mainwindow.h>
-
 
 #include <KLocalizedString>
 #include <kpluginfactory.h>
@@ -50,8 +47,6 @@
 #include <kactioncollection.h>
 #include <QAction>
 
-#include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
