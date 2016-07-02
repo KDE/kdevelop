@@ -177,8 +177,11 @@ void CMakePreferences::updateCache(const Path &newBuildDir)
     const Path file = newBuildDir.isValid() ? Path(newBuildDir, "CMakeCache.txt") : Path();
     if(QFile::exists(file.toLocalFile()))
     {
-        m_currentModel->deleteLater();
-        m_currentModel=new CMakeCacheModel(this, file);
+        if (m_currentModel) {
+            m_currentModel->deleteLater();
+        }
+        m_currentModel = new CMakeCacheModel(this, file);
+
         configureCacheView();
         connect(m_currentModel, &CMakeCacheModel::itemChanged,
                 this, &CMakePreferences::cacheEdited);
@@ -190,8 +193,10 @@ void CMakePreferences::updateCache(const Path &newBuildDir)
     else
     {
         disconnect(m_prefsUi->cacheList->selectionModel(), &QItemSelectionModel::currentChanged, this, 0);
-        m_currentModel->deleteLater();
-        m_currentModel=0;
+        if (m_currentModel) {
+            m_currentModel->deleteLater();
+            m_currentModel = 0;
+        }
         configureCacheView();
     }
 
