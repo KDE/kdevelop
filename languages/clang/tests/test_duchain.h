@@ -72,6 +72,8 @@ private slots:
     void testReparseInclude();
     void testReparseChangeEnvironment();
     void testMacrosRanges();
+    void testHeaderParsingOrder1();
+    void testHeaderParsingOrder2();
     void testNestedImports();
     void testEnvironmentWithDifferentOrderOfElements();
     void testReparseMacro();

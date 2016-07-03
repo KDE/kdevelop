@@ -93,6 +93,11 @@ Imports ClangHelpers::tuImports(CXTranslationUnit tu)
     return imports;
 }
 
+bool importLocationLessThan(const Import& lhs, const Import& rhs)
+{
+    return lhs.location.line < rhs.location.line;
+}
+
 ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& imports, const ParseSession& session,
                                                   TopDUContext::Features features, IncludeFileContexts& includedFiles,
                                                   ClangIndex* index, const std::function<bool()>& abortFunction)
@@ -108,8 +113,11 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     // prevent recursion
     includedFiles.insert(file, {});
 
-    // ensure DUChain for imports are build properly
-    foreach(const auto& import, imports.values(file)) {
+    // ensure DUChain for imports are built properly, and in correct order
+    QList<Import> sortedImports = imports.values(file);
+    std::sort(sortedImports.begin(), sortedImports.end(), importLocationLessThan);
+
+    foreach(const auto& import, sortedImports) {
         buildDUChain(import.file, imports, session, features, includedFiles, index, abortFunction);
     }
 
@@ -161,7 +169,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         }
         context->setFeatures(features);
 
-        foreach(const auto& import, imports.values(file)) {
+        foreach(const auto& import, sortedImports) {
             auto ctx = includedFiles.value(import.file);
             if (!ctx) {
                 // happens for cyclic imports
