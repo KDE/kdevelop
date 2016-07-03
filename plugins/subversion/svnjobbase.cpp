@@ -130,13 +130,13 @@ void SvnJobBase::askForSslClientCertPassword( const QString& )
 
 void SvnJobBase::internalJobStarted()
 {
-    qDebug() << "job started" << static_cast<void*>(internalJob());
+    qCDebug(PLUGIN_SVN)  << "job started" << static_cast<void*>(internalJob());
     m_status = KDevelop::VcsJob::JobRunning;
 }
 
 void SvnJobBase::internalJobDone()
 {
-    qDebug() << "job done" << internalJob();
+    qCDebug(PLUGIN_SVN) << "job done" << internalJob();
     if ( m_status == VcsJob::JobFailed ) {
         // see: https://bugs.kde.org/show_bug.cgi?id=273759
         // this gets also called when the internal job failed
@@ -163,7 +163,7 @@ void SvnJobBase::internalJobDone()
 
 void SvnJobBase::internalJobFailed()
 {
-    qDebug() << "job failed" << internalJob();
+    qCDebug(PLUGIN_SVN) << "job failed" << internalJob();
 
     setError( 255 );
     QString msg = internalJob()->errorMessage();
