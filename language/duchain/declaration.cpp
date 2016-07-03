@@ -684,7 +684,13 @@ QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
       ranges[range] = true;
   }
 
-  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
+  DeclarationId _id = id();
+  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(_id);
+  if (!_id.isDirect())
+  { // also check uses based on direct IDs
+    KDevVarLengthArray<IndexedTopDUContext> directUseContexts = DUChain::uses()->uses(id(true));
+    useContexts.append(directUseContexts.data(), directUseContexts.size());
+  }
 
   foreach (const IndexedTopDUContext indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
@@ -731,8 +737,18 @@ bool Declaration::hasUses() const
   ENSURE_CAN_READ
   int idx = topContext()->indexForUsedDeclaration(const_cast<Declaration*>(this), false);
   bool ret = idx != std::numeric_limits<int>::max() && (idx>=0 || hasDeclarationUse(topContext(), idx)); //hasLocalUses
-  ret =  ret || DUChain::uses()->hasUses(id()); //hasUsesInOtherContexts 
-  
+  DeclarationId myId = id();
+
+  if (!ret && DUChain::uses()->hasUses(myId))
+  {
+    ret = true;
+  }
+
+  if (!ret && !myId.isDirect() && DUChain::uses()->hasUses(id(true)))
+  {
+    ret = true;
+  }
+
   return ret;
 }
 
@@ -750,7 +766,13 @@ QMap<IndexedString, QList<KTextEditor::Range> > Declaration::usesCurrentRevision
     }
   }
 
-  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
+  DeclarationId _id = id();
+  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(_id);
+  if (!_id.isDirect())
+  { // also check uses based on direct IDs
+    KDevVarLengthArray<IndexedTopDUContext> directUseContexts = DUChain::uses()->uses(id(true));
+    useContexts.append(directUseContexts.data(), directUseContexts.size());
+  }
 
   foreach (const IndexedTopDUContext indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
