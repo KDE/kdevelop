@@ -234,12 +234,12 @@ static qint64 getRunningSessionPid()
     return KDevelop::SessionController::sessionRunInfo(sessionUuid).holderPid;
 }
 
-static QString findSessionId(const QString& session)
+static QString findSessionId(const SessionInfos& availableSessionInfos, const QString& session)
 {
     //If there is a session and a project with the same name, always open the session
     //regardless of the order encountered
     QString projectAsSession;
-    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfos())
+    foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
     {
         if ( session == si.name || session == si.uuid.toString() ) {
             return si.uuid.toString();
@@ -473,6 +473,8 @@ int main( int argc, char *argv[] )
         initialFiles.append(UrlInfo(file));
     }
 
+    const auto availableSessionInfos = KDevelop::SessionController::availableSessionInfos();
+
     if (!initialFiles.isEmpty() && !parser.isSet("new-session")) {
 #if KDEVELOP_SINGLE_APP
         if (app.isRunning()) {
@@ -484,7 +486,7 @@ int main( int argc, char *argv[] )
 #else
         qint64 pid = -1;
         if (parser.isSet("open-session")) {
-            const QString session = findSessionId(parser.value("open-session"));
+            const QString session = findSessionId(availableSessionInfos, parser.value("open-session"));
             if (session.isEmpty()) {
                 return 1;
             } else if (KDevelop::SessionController::isSessionRunning(session)) {
@@ -504,7 +506,7 @@ int main( int argc, char *argv[] )
     QString session;
 
     uint nRunningSessions = 0;
-    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfos())
+    foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
         if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
             ++nRunningSessions;
 
@@ -514,7 +516,7 @@ int main( int argc, char *argv[] )
     {
         QTextStream qerr(stderr);
         SessionInfos candidates;
-        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfos())
+        foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
             if( (!si.name.isEmpty() || !si.projects.isEmpty() || parser.isSet("pid")) &&
                 (!parser.isSet("pid") || KDevelop::SessionController::isSessionRunning(si.uuid.toString())))
                 candidates << si;
@@ -563,7 +565,7 @@ int main( int argc, char *argv[] )
     } else if ( parser.isSet("new-session") )
     {
         session = parser.value("new-session");
-        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfos())
+        foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
         {
             if ( session == si.name ) {
                 QTextStream qerr(stderr);
@@ -573,14 +575,14 @@ int main( int argc, char *argv[] )
         }
         // session doesn't exist, we can create it
     } else if ( parser.isSet("open-session") ) {
-        session = findSessionId(parser.value("open-session"));
+        session = findSessionId(availableSessionInfos, parser.value("open-session"));
         if (session.isEmpty()) {
             return 1;
         }
     } else if ( parser.isSet("remove-session") )
     {
         session = parser.value("remove-session");
-        auto si = findSessionInList(KDevelop::SessionController::availableSessionInfos(), session);
+        auto si = findSessionInList(availableSessionInfos, session);
         if (!si) {
             QTextStream qerr(stderr);
             qerr << endl << i18n("No session with the name %1 exists.", session) << endl;
@@ -602,12 +604,11 @@ int main( int argc, char *argv[] )
     if(parser.isSet("pid")) {
         if (session.isEmpty())
         {   // just pick the first running session
-            foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfos())
+            foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
                 if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
                     session = si.uuid.toString();
         }
-        SessionInfos sessions = KDevelop::SessionController::availableSessionInfos();
-        const KDevelop::SessionInfo* sessionData = findSessionInList( sessions, session );
+        const KDevelop::SessionInfo* sessionData = findSessionInList(availableSessionInfos, session);
 
         if( !sessionData ) {
             qCritical() << "session not given or does not exist";
