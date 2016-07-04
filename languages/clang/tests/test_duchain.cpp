@@ -34,6 +34,7 @@
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/typealiastype.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
@@ -1193,6 +1194,80 @@ void TestDUChain::testReparseChangeEnvironment()
             m_provider->includes.append(Path("/foo/bar/asdf/lalala"));
         } // 3) stop
     }
+}
+
+void TestDUChain::testHeaderParsingOrder1()
+{
+    TestFile header("typedef const A<int> B;\n", "h");
+    TestFile impl("template<class T> class A{};\n"
+                  "#include \"" + header.url().byteArray() + "\"\n"
+                  "B c;", "cpp", &header);
+
+    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    QVERIFY(impl.waitForParsed(500000));
+
+    DUChainReadLocker lock;
+    TopDUContext* top = impl.topContext().data();
+    QVERIFY(top);
+    QCOMPARE(top->localDeclarations().size(), 2);
+    QCOMPARE(top->importedParentContexts().size(), 1);
+    AbstractType::Ptr type = top->localDeclarations()[1]->abstractType();
+    TypeAliasType* aType = dynamic_cast<TypeAliasType*>(type.data());
+    QVERIFY(aType);
+    AbstractType::Ptr targetType = aType->type();
+    QVERIFY(targetType);
+    IdentifiedType *idType = dynamic_cast<IdentifiedType*>(targetType.data());
+    QVERIFY(idType);
+    // this declaration could be resolved, because it was created with an
+    // indirect DeclarationId that is resolved from the perspective of 'top'
+    Declaration* decl = idType->declaration(top);
+    // NOTE: the decl. doesn't know (yet) about the template insantiation <int>
+    QVERIFY(decl);
+    QCOMPARE(decl, top->localDeclarations()[0]);
+    
+    // now ensure that a use was build for 'A' in header1
+    TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context(top));
+    QVERIFY(top2);
+    QEXPECT_FAIL("", "the use could not be created because the corresponding declaration didn't exist yet", Continue);
+    QCOMPARE(top2->usesCount(), 1);
+    // Declaration* decl2 = top2->uses()[0].usedDeclaration(top2);
+    // QVERIFY(decl2);
+    // QCOMPARE(decl, decl2);
+}
+
+void TestDUChain::testHeaderParsingOrder2()
+{
+    TestFile header("template<class T> class A{};\n", "h");
+    TestFile header2("typedef const A<int> B;\n", "h");
+    TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
+                  "#include \"" + header2.url().byteArray() + "\"\n"
+                  "B c;", "cpp", &header);
+
+    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    QVERIFY(impl.waitForParsed(500000));
+
+    DUChainReadLocker lock;
+    TopDUContext* top = impl.topContext().data();
+    QVERIFY(top);
+    QCOMPARE(top->localDeclarations().size(), 1);
+    QCOMPARE(top->importedParentContexts().size(), 2);
+    AbstractType::Ptr type = top->localDeclarations()[0]->abstractType();
+    TypeAliasType* aType = dynamic_cast<TypeAliasType*>(type.data());
+    QVERIFY(aType);
+    AbstractType::Ptr targetType = aType->type();
+    QVERIFY(targetType);
+    IdentifiedType *idType = dynamic_cast<IdentifiedType*>(targetType.data());
+    QVERIFY(idType);
+    Declaration* decl = idType->declaration(top);
+    // NOTE: the decl. doesn't know (yet) about the template insantiation <int>
+    QVERIFY(decl);
+    
+    // now ensure that a use was build for 'A' in header2
+    TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[1].context(top));
+    QVERIFY(top2);
+    QCOMPARE(top2->usesCount(), 1);
+    Declaration* decl2 = top2->uses()[0].usedDeclaration(top2);
+    QCOMPARE(decl, decl2);
 }
 
 void TestDUChain::testMacrosRanges()

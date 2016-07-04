@@ -61,7 +61,7 @@ void QtHelpQtDoc::registerDocumentations()
         QProcess *p = new QProcess;
         p->setProcessChannelMode(QProcess::MergedChannels);
         p->setProgram(qmake);
-        p->setArguments(QStringList(QStringLiteral("-query QT_INSTALL_DOCS")));
+        p->setArguments({QLatin1String("-query"), QLatin1String("QT_INSTALL_DOCS")});
         p->start();
         connect(p, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, &QtHelpQtDoc::lookupDone);
     }
@@ -69,12 +69,15 @@ void QtHelpQtDoc::registerDocumentations()
 
 void QtHelpQtDoc::lookupDone(int code)
 {
-    if(code==0) {
-        QProcess* p = qobject_cast<QProcess*>(sender());
-
+    QProcess *p = qobject_cast<QProcess*>(sender());
+    if(code == QProcess::NormalExit) {
         m_path = QDir::fromNativeSeparators(QString::fromLatin1(p->readAllStandardOutput().trimmed()));
         qCDebug(QTHELP) << "Detected doc path:" << m_path;
+    } else {
+        qCCritical(QTHELP) << "qmake query returned error:" << QString::fromLatin1(p->readAllStandardError());
+        qCDebug(QTHELP) << "last standard output was:" << QString::fromLatin1(p->readAllStandardOutput());
     }
+
     sender()->deleteLater();
 }
 
