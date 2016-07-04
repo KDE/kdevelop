@@ -41,15 +41,12 @@ LocalIndexedProblem::LocalIndexedProblem(const ProblemPointer& problem, const To
 {
     ENSURE_CHAIN_READ_LOCKED
     // ensure child problems are properly serialized before we serialize the parent problem
-    if (static_cast<uint>(problem->m_diagnostics.size()) != problem->d_func()->diagnosticsSize()) {
-        // see below, the diagnostic size is kept in sync by the mutable API of Problem
-        Q_ASSERT(!problem->diagnostics().isEmpty());
-        // the const cast is ugly but we don't really "change" the state as observed from the outside
-        auto& serialized = const_cast<Problem*>(problem.data())->d_func_dynamic()->diagnosticsList();
-        Q_ASSERT(serialized.isEmpty());
-        foreach(const ProblemPointer& child, problem->m_diagnostics) {
-            serialized << LocalIndexedProblem(child, top);
-        }
+    // see below, the diagnostic size is kept in sync by the mutable API of Problem
+    // the const cast is ugly but we don't really "change" the state as observed from the outside
+    auto& serialized = const_cast<Problem*>(problem.data())->d_func_dynamic()->diagnosticsList();
+    serialized.clear();
+    foreach(const ProblemPointer& child, problem->m_diagnostics) {
+        serialized << LocalIndexedProblem(child, top);
     }
 
     if (!m_index) {
