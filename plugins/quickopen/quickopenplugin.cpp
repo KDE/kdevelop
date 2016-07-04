@@ -1010,10 +1010,9 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
           return true;
       }
       break;
-     case QEvent::WindowActivate:
+    case QEvent::WindowActivate:
     case QEvent::WindowDeactivate:
-        qCDebug(PLUGIN_QUICKOPEN) << "closing because of window activation";
-        deactivate();
+        QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
         break;
     // handle bug 260657 - "Outline menu doesn't follow main window on its move"
     case QEvent::Move: {
@@ -1043,6 +1042,10 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
             if (!insideThis(obj))
                 deactivate();
         }
+        else if(obj != this)
+        {
+            QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
+        }        
         break;
     default:
         break;
@@ -1068,17 +1071,22 @@ void QuickOpenLineEdit::deactivate() {
 
     m_widget = 0;
     qApp->removeEventFilter(this);
-
 }
 
 void QuickOpenLineEdit::checkFocus()
 {
     qCDebug(PLUGIN_QUICKOPEN) << "checking focus" << m_widget;
     if(m_widget) {
-      if(isVisible() && !isHidden())
-        setFocus();
-      else
-        deactivate();
+      QWidget* focusWidget = QApplication::focusWidget();
+      bool focusWidgetInsideThis = focusWidget ? insideThis(focusWidget) : false;
+      if(QApplication::focusWindow() && isVisible() && !isHidden() && (!focusWidget || (focusWidget && focusWidgetInsideThis))) {
+          qCDebug(PLUGIN_QUICKOPEN) << "setting focus to line edit";
+          activateWindow();
+          setFocus();
+      } else {
+          qCDebug(PLUGIN_QUICKOPEN) << "deactivating because check failed, focusWidget" << focusWidget << "insideThis" << focusWidgetInsideThis;
+          deactivate();
+      }
     }else{
        if (ICore::self()->documentController()->activeDocument())
            ICore::self()->documentController()->activateDocument(ICore::self()->documentController()->activeDocument());

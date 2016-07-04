@@ -224,8 +224,6 @@ void SessionChooserDialog::deleteButtonPressed()
     const KGuiItem cancelItem = KStandardGuiItem::cancel();
 
     if(KMessageBox::warningYesNo(this, text, caption, deleteItem, cancelItem) == KMessageBox::Yes) {
-        QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
-
         SessionController::deleteSessionFromDisk(result.lock);
 
         m_model->removeRows( m_deleteCandidateRow, 1 );

@@ -1111,7 +1111,11 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
     return (int)(index | (1<<31)); //We don't put context-local declarations into the list, that's a waste. We just use the mark them with the highest bit.
   }
 
-  DeclarationId id(declaration->id());
+  // if the declaration can not be found from this top-context, we create a direct
+  // reference by index, to ensure that the use can be resolved in
+  // usedDeclarationForIndex
+  bool useDirectId = !recursiveImportIndices().contains(declaration->topContext());
+  DeclarationId id(declaration->id(useDirectId));
 
   int index = -1;
 

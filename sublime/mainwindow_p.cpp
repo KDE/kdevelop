@@ -21,6 +21,7 @@
 #include <QLayout>
 #include <QSplitter>
 #include <QTimer>
+#include <QApplication>
 #include <QToolBar>
 
 #include <KActionMenu>
@@ -230,9 +231,12 @@ bool MainWindowPrivate::eventFilter(QObject* obj, QEvent* event)
 {
     Q_ASSERT(m_mainWindow == obj);
     if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
-        Qt::KeyboardModifiers modifiers = static_cast<QKeyEvent *>(event)->modifiers();
+        const auto ev = static_cast<QKeyEvent *>(event);
+        Qt::KeyboardModifiers modifiers = ev->modifiers();
 
-        m_mainWindow->menuBar()->setVisible(modifiers == Qt::AltModifier && event->type() == QEvent::KeyPress);
+        //QLineEdit banned mostly so that alt navigation can be used from QuickOpen
+        const bool visible = modifiers == Qt::AltModifier && ev->type() == QEvent::KeyPress && !qApp->focusWidget()->inherits("QLineEdit");
+        m_mainWindow->menuBar()->setVisible(visible);
     }
 
     return false;
