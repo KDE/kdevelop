@@ -13,13 +13,6 @@ function(add_debuggable_executable target)
     set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} ${_flags}")
 endfunction()
 
-find_package(KF5SysGuard)
-if(KF5SysGuard_FOUND)
-    add_definitions(
-        -DKDEV_ENABLE_GDB_ATTACH_DIALOG
-    )
-endif()
-
 if (CMAKE_VERSION VERSION_GREATER "2.9" OR NOT CMAKE_GENERATOR MATCHES "Ninja")
     set(HAVE_PATH_WITH_SPACES_TEST TRUE)
 else()

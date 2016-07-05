@@ -65,14 +65,15 @@
 #include <interfaces/launchconfigurationtype.h>
 
 #include "disassemblewidget.h"
-#ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
-#include "processselection.h"
-#endif
 #include "memviewdlg.h"
 #include "gdboutputwidget.h"
 #include "gdbglobal.h"
 #include "debugsession.h"
 #include "selectcoredialog.h"
+
+#if KF5SysGuard_FOUND
+#include "processselection.h"
+#endif
 
 #include <iostream>
 #include "gdbconfigpage.h"
@@ -197,13 +198,13 @@ void CppDebuggerPlugin::setupActions()
     connect(action, &QAction::triggered, this, &CppDebuggerPlugin::slotExamineCore);
     ac->addAction("debug_core", action);
 
-    #ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
+#if KF5SysGuard_FOUND
     action = new QAction(QIcon::fromTheme("connect_creating"), i18n("Attach to Process"), this);
     action->setToolTip( i18n("Attach to process...") );
     action->setWhatsThis(i18n("<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAttachProcess()));
     ac->addAction("debug_attach", action);
-    #endif
+#endif
 }
 
 void CppDebuggerPlugin::setupDBus()
@@ -349,7 +350,7 @@ void CppDebuggerPlugin::slotExamineCore()
     job->start();
 }
 
-#ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
+#if KF5SysGuard_FOUND
 void CppDebuggerPlugin::slotAttachProcess()
 {
     emit showMessage(this, i18n("Choose a process to attach to..."), 1000);

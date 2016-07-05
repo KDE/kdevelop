@@ -24,6 +24,8 @@
 #ifndef _DEBUGGERPART_H_
 #define _DEBUGGERPART_H_
 
+#include "config.h"
+
 #include <QByteArray>
 #include <QLabel>
 #include <QtCore/QVariant>
@@ -101,9 +103,9 @@ private Q_SLOTS:
     void contextWatch();
 
     void slotExamineCore();
-    #ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
+#if KF5SysGuard_FOUND
     void slotAttachProcess();
-    #endif
+#endif
 
     void slotDBusServiceRegistered(const QString& service);
     void slotDBusServiceUnregistered(const QString& service);
