@@ -29,6 +29,8 @@
 #include <util/clangtypes.h>
 #include <util/clangdebug.h>
 #include <language/backgroundparser/urlparselock.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
 
 #include <clang-c/Index.h>
 
@@ -94,6 +96,34 @@ IndexedString ClangIndex::translationUnitForUrl(const IndexedString& url)
             return tu.value();
         }
     }
+    // if no explicit pin data is available, follow back the duchain import chain
+    {
+        KDevelop::DUChainReadLocker lock;
+        TopDUContext* top = DUChain::self()->chainForDocument(url);
+        if (top) {
+            TopDUContext* tuTop = top;
+            QSet<TopDUContext*> visited;
+            while(true) {
+                visited.insert(tuTop);
+                TopDUContext* next = NULL;
+                auto importers = tuTop->indexedImporters();
+                foreach(IndexedDUContext ctx, importers) {
+                    if (ctx.data()) {
+                        next = ctx.data()->topContext();
+                        break;
+                    }
+                }
+                if (!next || visited.contains(next)) {
+                    break;
+                }
+                tuTop = next;
+            }
+            if (tuTop != top) {
+                return tuTop->url();
+            }
+        }
+    }
+
     // otherwise, fallback to a simple buddy search for headers
     if (ClangHelpers::isHeader(url.str())) {
         foreach(const QUrl& buddy, DocumentFinderHelpers::getPotentialBuddies(url.toUrl(), false)) {
