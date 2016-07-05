@@ -17,6 +17,7 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QTimer>
+#include <QMimeDatabase>
 
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -29,6 +30,13 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/context.h>
+#include <interfaces/editorcontext.h>
+
+#include <project/projectmodel.h>
+
+#include <util/path.h>
 
 #include <libkomparediff2/komparemodellist.h>
 #include <libkomparediff2/kompare.h>
@@ -224,6 +232,7 @@ void PatchReviewPlugin::updateKompareModel() {
     qCDebug(PLUGIN_PATCHREVIEW) << "updating model";
     removeHighlighting();
     m_modelList.reset( nullptr );
+    m_depth = 0;
     delete m_diffSettings;
     {
         IDocument* patchDoc = ICore::self()->documentController()->documentForUrl( m_patch->file() );
@@ -263,6 +272,18 @@ void PatchReviewPlugin::updateKompareModel() {
             throw QStringLiteral( "lib/libdiff2 crashed, memory may be corrupted. Please restart kdevelop." );
         }
 
+        for (m_depth = 0; m_depth < 10; ++m_depth) {
+            bool allFound = true;
+            for( int i = 0; i < m_modelList->modelCount(); i++ ) {
+                if (!QFile::exists(urlForFileModel(m_modelList->modelAt(i)).toLocalFile())) {
+                    allFound = false;
+                }
+            }
+            if (allFound) {
+                break; // found depth
+            }
+        }
+
         emit patchChanged();
 
         for( int i = 0; i < m_modelList->modelCount(); i++ ) {
@@ -282,6 +303,7 @@ void PatchReviewPlugin::updateKompareModel() {
     }
     removeHighlighting();
     m_modelList.reset( nullptr );
+    m_depth = 0;
     m_kompareInfo.reset( nullptr );
     delete m_diffSettings;
 
@@ -336,6 +358,7 @@ void PatchReviewPlugin::closeReview()
     if( m_patch ) {
         removeHighlighting();
         m_modelList.reset( 0 );
+        m_depth = 0;
 
         if( !dynamic_cast<LocalPatchSource*>( m_patch.data() ) ) {
             // make sure "show" button still openes the file dialog to open a custom patch file
@@ -385,9 +408,17 @@ void PatchReviewPlugin::switchToEmptyReviewArea()
 
 QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
 {
-    QUrl file = m_patch->baseDir();
-    file.setPath(QDir::cleanPath(file.toLocalFile() + '/' + model->destinationPath() + '/' + model->destinationFile()));
-    return file;
+    KDevelop::Path path(QDir::cleanPath(m_patch->baseDir().toLocalFile()));
+    QVector<QString> destPath = KDevelop::Path("/"+model->destinationPath()).segments();
+    if (destPath.size() >= (int)m_depth) {
+        destPath = destPath.mid(m_depth);
+    }
+    foreach(QString segment, destPath) {
+        path.addPath(segment);
+    }
+    path.addPath(model->destinationFile());
+
+    return path.toUrl();
 }
 
 void PatchReviewPlugin::updateReview()
@@ -419,6 +450,10 @@ void PatchReviewPlugin::updateReview()
         //Open all relates files
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
             QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
+            if (absoluteUrl.isRelative()) {
+                KMessageBox::error( 0, i18n("The base directory of the patch must be an absolute directory"), i18n( "Patch Review" ) );
+                break;
+            }
 
             if( QFileInfo::exists( absoluteUrl.toLocalFile() ) && absoluteUrl.toLocalFile() != QLatin1String("/dev/null") )
             {
@@ -531,6 +566,50 @@ void PatchReviewPlugin::areaChanged(Sublime::Area* area)
     if(!reviewing) {
         closeReview();
     }
+}
+
+KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension( KDevelop::Context* context )
+{
+    QList<QUrl> urls;
+
+    if ( context->type() == KDevelop::Context::FileContext ) {
+        KDevelop::FileContext* filectx = dynamic_cast<KDevelop::FileContext*>( context );
+        urls = filectx->urls();
+    } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
+        KDevelop::ProjectItemContext* projctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+        foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
+            if ( item->file() ) {
+                urls << item->file()->path().toUrl();
+            }
+        }
+    } else if ( context->type() == KDevelop::Context::EditorContext ) {
+        KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>( context );
+        urls << econtext->url();
+    }
+
+    if (urls.size() == 1) {
+        QString mimetype = QMimeDatabase().mimeTypeForUrl(urls.first()).name();
+        QAction* reviewAction = new QAction( i18n( "Review Patch" ), this );
+        reviewAction->setData(QVariant(urls[0]));
+        connect( reviewAction, &QAction::triggered, this, &PatchReviewPlugin::executeFileReviewAction );
+        ContextMenuExtension cm;
+        cm.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, reviewAction );
+        return cm;
+    }
+
+    return KDevelop::IPlugin::contextMenuExtension( context );
+}
+
+void PatchReviewPlugin::executeFileReviewAction()
+{
+    QAction* reviewAction = qobject_cast<QAction*>(sender());
+    KDevelop::Path path(reviewAction->data().toUrl());
+    LocalPatchSource* ps = new LocalPatchSource();
+    ps->setFilename(path.toUrl());
+    ps->setBaseDir(path.parent().toUrl());
+    ps->setAlreadyApplied(true);
+    ps->createWidget();
+    startReview(ps, OpenAndRaise);
 }
 
 #include "patchreview.moc"

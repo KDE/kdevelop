@@ -40,10 +40,6 @@ public:
         return m_filename;
     }
 
-    uint depth() const override {
-        return m_depth;
-    }
-
     void update() override;
     QIcon icon() const override;
 
@@ -56,6 +52,10 @@ public:
     bool isAlreadyApplied() const override { return m_applied; }
 
     void setAlreadyApplied( bool applied ) { m_applied = applied; }
+
+    // the widget should be created _after_ the basic
+    // values have been filled
+    void createWidget();
 
     QWidget* customWidget() const override;
 

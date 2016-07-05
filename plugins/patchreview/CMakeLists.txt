@@ -22,7 +22,7 @@ ki18n_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 
 qt5_add_resources(patchreview_PART_SRCS kdevpatchreview.qrc)
 kdevplatform_add_plugin(kdevpatchreview JSON kdevpatchreview.json SOURCES ${patchreview_PART_SRCS})
-target_link_libraries(kdevpatchreview KF5::IconThemes KF5::TextEditor KF5::Parts KDev::Interfaces KDev::Util KDev::Language KDev::Vcs KDev::Sublime ${LIBKOMPAREDIFF2_LIBRARIES})
+target_link_libraries(kdevpatchreview KDev::Project KF5::IconThemes KF5::TextEditor KF5::Parts KDev::Interfaces KDev::Util KDev::Language KDev::Vcs KDev::Sublime ${LIBKOMPAREDIFF2_LIBRARIES})
 if (KDEExperimentalPurpose_FOUND)
     target_compile_definitions(kdevpatchreview PRIVATE WITH_PURPOSE)
     target_link_libraries(kdevpatchreview KDEExperimental::PurposeWidgets)
