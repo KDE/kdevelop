@@ -27,6 +27,8 @@
 #ifndef MIDEBUGGERPLUGIN_H
 #define MIDEBUGGERPLUGIN_H
 
+#include "config.h"
+
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
 #include <interfaces/iuicontroller.h>
@@ -85,9 +87,10 @@ protected Q_SLOTS:
 
     void slotDebugExternalProcess(QObject* interface);
     void slotExamineCore();
-    #ifdef KDEV_ENABLE_DBG_ATTACH_DIALOG
+
+#if KF5SysGuard_FOUND
     void slotAttachProcess();
-    #endif
+#endif
 
     void slotDBusServiceRegistered(const QString& service);
     void slotDBusServiceUnregistered(const QString& service);

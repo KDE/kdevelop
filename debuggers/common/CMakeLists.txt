@@ -19,12 +19,8 @@ set(debuggercommon_SRCS
     stringhelpers.cpp
     stty.cpp
 )
-
-find_package(KF5SysGuard)
 if(KF5SysGuard_FOUND)
-    add_definitions(-DKDEV_ENABLE_DBG_ATTACH_DIALOG)
-    set(debuggercommon_SRCS
-        ${debuggercommon_SRCS}
+    list(APPEND debuggercommon_SRCS
         dialogs/processselection.cpp
     )
 endif()

@@ -115,7 +115,7 @@ void MIDebuggerPlugin::setupActions()
     connect(action, &QAction::triggered, this, &MIDebuggerPlugin::slotExamineCore);
     ac->addAction("debug_core", action);
 
-    #ifdef KDEV_ENABLE_DBG_ATTACH_DIALOG
+#if KF5SysGuard_FOUND
     action = new QAction(this);
     action->setIcon(QIcon::fromTheme("connect_creating"));
     action->setText(i18n("Attach to Process..."));
@@ -124,7 +124,7 @@ void MIDebuggerPlugin::setupActions()
                               "<p>Attaches the debugger to a running process.</p>"));
     connect(action, &QAction::triggered, this, &MIDebuggerPlugin::slotAttachProcess);
     ac->addAction("debug_attach", action);
-    #endif
+#endif
 }
 
 void MIDebuggerPlugin::setupDBus()
@@ -264,7 +264,7 @@ void MIDebuggerPlugin::slotExamineCore()
     // job->start() is called in registerJob
 }
 
-#ifdef KDEV_ENABLE_DBG_ATTACH_DIALOG
+#if KF5SysGuard_FOUND
 void MIDebuggerPlugin::slotAttachProcess()
 {
     showStatusMessage(i18n("Choose a process to attach to..."), 1000);

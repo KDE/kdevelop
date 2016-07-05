@@ -57,6 +57,10 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   WindowSystem
   Crash
 )
+find_package(KF5SysGuard)
+set_package_properties(KF5SysGuard PROPERTIES
+    PURPOSE "Framework for process listing. Required for the 'Attach to Process' feature"
+)
 find_package(KDevelop-PG-Qt 1.90.90)
 set_package_properties(KDevelop-PG-Qt PROPERTIES
     PURPOSE "KDevelop parser generator library. Required for the QMake Builder/Manager plugin."

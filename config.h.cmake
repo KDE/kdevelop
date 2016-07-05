@@ -10,4 +10,6 @@
 
 #cmakedefine01 KDEVELOP_SINGLE_APP
 
+#cmakedefine01 KF5SysGuard_FOUND
+
 #endif //  KDEVELOP_CONFIG_H
