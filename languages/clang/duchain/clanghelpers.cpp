@@ -193,7 +193,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     return context;
 }
 
-DeclarationPointer ClangHelpers::findDeclaration(CXSourceLocation location, const ReferencedTopDUContext& top)
+DeclarationPointer ClangHelpers::findDeclaration(CXSourceLocation location, QualifiedIdentifier id, const ReferencedTopDUContext& top)
 {
     if (!top) {
         // may happen for cyclic includes
@@ -202,6 +202,24 @@ DeclarationPointer ClangHelpers::findDeclaration(CXSourceLocation location, cons
 
     auto cursor = CursorInRevision(ClangLocation(location));
     DUChainReadLocker lock;
+
+    QList<Declaration*> decls;
+    if (!id.isEmpty())
+    {
+        decls = top->findDeclarations(id);
+        foreach (Declaration* decl, decls)
+        {
+            if (decl->range().contains(cursor) ||
+                (decl->range().isEmpty() && decl->range().start == cursor))
+            {
+                return DeclarationPointer(decl);
+            }
+        }
+    }
+
+    // there was no match based on the IDs, try the classical
+    // range based search (very slow)
+
     Q_ASSERT(top);
     if (DUContext *local = top->findContextAt(cursor)) {
         if (local->owner() && local->owner()->range().contains(cursor)) {
@@ -221,7 +239,22 @@ DeclarationPointer ClangHelpers::findDeclaration(CXCursor cursor, const IncludeF
         return {};
     }
 
-    return findDeclaration(location, includes.value(file));
+    // build a qualified identifier by following the chain of semantic parents
+    QList<Identifier> ids;
+    CXCursor currentCursor = cursor;
+    while (currentCursor.kind != CXCursor_TranslationUnit &&
+           currentCursor.kind != CXCursor_InvalidFile)
+    {
+        ids << Identifier(ClangString(clang_getCursorSpelling(currentCursor)).toString());
+        currentCursor = clang_getCursorSemanticParent(currentCursor);
+    }
+    QualifiedIdentifier qid;
+    for (int i = ids.size()-1; i >= 0; --i)
+    {
+        qid.push(ids[i]);
+    }
+
+    return findDeclaration(location, qid, includes.value(file));
 }
 
 DeclarationPointer ClangHelpers::findDeclaration(CXType type, const IncludeFileContexts& includes)

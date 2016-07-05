@@ -45,7 +45,7 @@ using IncludeFileContexts = QHash<CXFile, KDevelop::ReferencedTopDUContext>;
 
 namespace ClangHelpers {
 
-KDevelop::DeclarationPointer findDeclaration(CXSourceLocation cursor, const KDevelop::ReferencedTopDUContext& top);
+KDevelop::DeclarationPointer findDeclaration(CXSourceLocation cursor, KDevelop::QualifiedIdentifier id, const KDevelop::ReferencedTopDUContext& top);
 KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& includes);
 KDevelop::DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes);
 

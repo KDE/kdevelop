@@ -74,6 +74,7 @@ private slots:
     void testMacrosRanges();
     void testHeaderParsingOrder1();
     void testHeaderParsingOrder2();
+    void testMacroDependentHeader();
     void testNestedImports();
     void testEnvironmentWithDifferentOrderOfElements();
     void testReparseMacro();
