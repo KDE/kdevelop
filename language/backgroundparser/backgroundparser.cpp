@@ -432,8 +432,6 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     QMap<int, QSet<IndexedString> > m_documentsForPriority;
     // Currently running parse jobs
     QHash<IndexedString, ThreadWeaver::QObjectDecorator*> m_parseJobs;
-    // A change tracker for each managed document
-    QHash<IndexedString, DocumentChangeTracker*> m_managed;
     // The url for each managed document. Those may temporarily differ from the real url.
     QHash<KTextEditor::Document*, IndexedString> m_managedTextDocumentUrls;
     // Projects currently in progress of loading
@@ -441,7 +439,13 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     ThreadWeaver::Queue m_weaver;
 
+    // generic high-level mutex
     QMutex m_mutex;
+
+    // local mutex only protecting m_managed
+    QMutex m_managedMutex;
+    // A change tracker for each managed document
+    QHash<IndexedString, DocumentChangeTracker*> m_managed;
 
     int m_maxParseJobs;
     int m_doneParseJobs;
@@ -737,8 +741,7 @@ void BackgroundParser::setDelay(int miliseconds)
 
 QList< IndexedString > BackgroundParser::managedDocuments()
 {
-    QMutexLocker l(&d->m_mutex);
-
+    QMutexLocker l(&d->m_managedMutex);
     return d->m_managed.keys();
 }
 
@@ -754,7 +757,7 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
     }
     Q_ASSERT(isValidURL(url));
 
-    QMutexLocker l(&d->m_mutex);
+    QMutexLocker l(&d->m_managedMutex);
     return d->m_managed.value(url, 0);
 }
 
@@ -772,6 +775,8 @@ void BackgroundParser::documentClosed(IDocument* document)
         Q_ASSERT(d->m_managedTextDocumentUrls.contains(textDocument));
 
         IndexedString url(d->m_managedTextDocumentUrls[textDocument]);
+        
+        QMutexLocker l2(&d->m_managedMutex);
         Q_ASSERT(d->m_managed.contains(url));
 
         qCDebug(LANGUAGE) << "removing" << url.str() << "from background parser";
@@ -791,6 +796,7 @@ void BackgroundParser::documentLoaded( IDocument* document )
         IndexedString url(document->url());
         // Some debugging because we had issues with this
 
+        QMutexLocker l2(&d->m_managedMutex);
         if(d->m_managed.contains(url) && d->m_managed[url]->document() == textDocument)
         {
             qCDebug(LANGUAGE) << "Got redundant documentLoaded from" << document->url() << textDocument;
@@ -815,7 +821,7 @@ void BackgroundParser::documentUrlChanged(IDocument* document)
     documentClosed(document);
 
     // Only call documentLoaded if the file wasn't renamed to a filename that is already tracked.
-    if(document->textDocument() && !d->m_managed.contains(IndexedString(document->textDocument()->url())))
+    if(document->textDocument() && !trackerForUrl(IndexedString(document->textDocument()->url())))
         documentLoaded(document);
 }
 
