@@ -162,10 +162,10 @@ int STTY::findTTY()
 
 #ifdef __sgi__
     ptyfd = open("/dev/ptmx",O_RDWR);
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_MAC) || defined(Q_OS_FREEBSD)
     ptyfd = posix_openpt(O_RDWR);
 #endif
-#if defined(__sgi__) || defined(Q_OS_MAC)
+#if defined(__sgi__) || defined(Q_OS_MAC) || defined(Q_OS_FREEBSD)
     if (ptyfd == -1) {
         perror("Can't open a pseudo teletype");
         return(-1);
@@ -178,7 +178,7 @@ int STTY::findTTY()
 #endif
 
     // first we try UNIX PTY's
-#ifdef TIOCGPTN
+#if defined(TIOCGPTN) && !defined(Q_OS_FREEBSD)
     strcpy(pty_master,"/dev/ptmx");
     strcpy(tty_slave,"/dev/pts/");
     ptyfd = open(pty_master,O_RDWR);
