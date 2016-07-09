@@ -91,7 +91,7 @@ StandardBackground {
             Link {
                 text: i18n("Join KDevelop's team!")
                 iconName: "applications-webbrowsers"
-                onClicked: Qt.openUrlExternally("https://techbase.kde.org/KDevelop5")
+                onClicked: Qt.openUrlExternally("https://kdevelop.org/contribute-kdevelop")
             }
             Link {
                 text: i18n("Handbook")

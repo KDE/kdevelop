@@ -28,8 +28,7 @@
 
 LocalPatchSource::LocalPatchSource()
     : m_applied(false)
-    , m_depth(0)
-    , m_widget(new LocalPatchWidget(this, 0))
+    , m_widget(0)
 {
 }
 
@@ -80,8 +79,17 @@ void LocalPatchSource::update()
         }else{
             qWarning() << "PROBLEM";
         }
-        emit patchChanged();
     }
+    if (m_widget) {
+        m_widget->updatePatchFromEdit();
+    }
+    emit patchChanged();
+}
+
+void LocalPatchSource::createWidget()
+{
+    delete m_widget;
+    m_widget = new LocalPatchWidget(this, 0);
 }
 
 QWidget* LocalPatchSource::customWidget() const
@@ -95,20 +103,8 @@ LocalPatchWidget::LocalPatchWidget(LocalPatchSource* lpatch, QWidget* parent)
     , m_ui(new Ui::LocalPatchWidget)
 {
     m_ui->setupUi(this);
-    connect( m_ui->applied, &QCheckBox::stateChanged, this, &LocalPatchWidget::updatePatchFromEdit );
-    connect( m_ui->filename, &KUrlRequester::textChanged, this, &LocalPatchWidget::updatePatchFromEdit );
-
     m_ui->baseDir->setMode( KFile::Directory );
-
-    connect( m_ui->command, &QLineEdit::textChanged, this, &LocalPatchWidget::updatePatchFromEdit );
-    //   connect( commandToFile, SIGNAL(clicked(bool)), this, SLOT(slotToFile()) );
-
-    connect( m_ui->filename->lineEdit(), &KLineEdit::returnPressed, this, &LocalPatchWidget::updatePatchFromEdit );
-    connect( m_ui->filename->lineEdit(), &KLineEdit::editingFinished, this, &LocalPatchWidget::updatePatchFromEdit );
-    connect( m_ui->filename, &KUrlRequester::urlSelected, this, &LocalPatchWidget::updatePatchFromEdit );
-    connect( m_ui->command, &QLineEdit::textChanged, this, &LocalPatchWidget::updatePatchFromEdit );
-    //     connect( commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
-
+    syncPatch();
     connect(m_lpatch, &LocalPatchSource::patchChanged, this, &LocalPatchWidget::syncPatch);
 }
 
@@ -131,6 +127,4 @@ void LocalPatchWidget::updatePatchFromEdit()
     m_lpatch->setFilename(m_ui->filename->url());
     m_lpatch->setBaseDir(m_ui->baseDir->url());
     m_lpatch->setAlreadyApplied(m_ui->applied->checkState() == Qt::Checked );
-
-    emit m_lpatch->patchChanged();
 }

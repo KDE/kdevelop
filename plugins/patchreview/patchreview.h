@@ -74,6 +74,8 @@ public :
     QUrl urlForFileModel( const Diff2::DiffModel* model );
     QAction* finishReviewAction() const { return m_finishReview; }
 
+    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context ) override;
+
 Q_SIGNALS:
     void startingNewReview();
     void patchChanged();
@@ -89,6 +91,7 @@ public Q_SLOTS :
     void updateKompareModel();
     void forceUpdate();
     void areaChanged(Sublime::Area* area);
+    void executeFileReviewAction();
 
 private Q_SLOTS :
     void documentClosed( KDevelop::IDocument* );
@@ -119,6 +122,7 @@ private:
     QPointer< DiffSettings > m_diffSettings;
     QScopedPointer< Kompare::Info > m_kompareInfo;
     QScopedPointer< Diff2::KompareModelList > m_modelList;
+    uint m_depth = 0; // depth of the patch represented by m_modelList
     typedef QMap< QUrl, QPointer< PatchHighlighter > > HighlightMap;
     HighlightMap m_highlighters;
 
