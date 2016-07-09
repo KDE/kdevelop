@@ -134,20 +134,22 @@ bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirec
 
 void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
 {
-    NoProjectCustomIncludePaths cip;
+    auto cip = new NoProjectCustomIncludePaths;
+    cip->setAttribute(Qt::WA_DeleteOnClose);
+    cip->setModal(true);
 
     QFileInfo fi(path);
     auto dir = fi.absoluteDir().absolutePath();
-    cip.setStorageDirectory(dir);
+    cip->setStorageDirectory(dir);
 
     auto paths = includesAndDefines(path).first;
 
-    cip.setCustomIncludePaths(pathListToStringList(paths));
+    cip->setCustomIncludePaths(pathListToStringList(paths));
 
-    if (cip.exec() == QDialog::Accepted) {
-        if (!writeIncludePaths(cip.storageDirectory(), cip.customIncludePaths())) {
-            qWarning() << i18n("Failed to save custom include paths in directory: %1", cip.storageDirectory());
+    QObject::connect(cip, &QDialog::accepted, [this, cip, &path]() {
+        if (!writeIncludePaths(cip->storageDirectory(), cip->customIncludePaths())) {
+            qWarning() << i18n("Failed to save custom include paths in directory: %1", cip->storageDirectory());
         }
         KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument(KDevelop::IndexedString(path));
-    }
+    });
 }
