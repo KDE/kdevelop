@@ -204,7 +204,20 @@ public:
 
         if(m_declaration->isFunctionDeclaration()) {
             auto doc = view->document();
-            if (doc->characterAt(word.end()) != QLatin1Char('(')) {
+
+            // Function pointer?
+            bool funcptr = false;
+            const auto line = doc->line(word.start().line());
+            auto pos = word.end().column() - 1;
+            while ( pos > 0 && (line.at(pos).isLetterOrNumber() || line.at(pos) == QLatin1Char(':')) ) {
+                pos--;
+                if ( line.at(pos) == QLatin1Char('&') ) {
+                    funcptr = true;
+                    break;
+                }
+            }
+
+            if ( !funcptr && doc->characterAt(word.end()) != QLatin1Char('(') ) {
                 repl += QLatin1String("()");
             }
             view->document()->replaceText(word, repl);
