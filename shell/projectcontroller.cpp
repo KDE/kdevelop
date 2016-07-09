@@ -102,7 +102,6 @@ public:
     QPointer<QAction> m_openConfig;
     IProjectDialogProvider* dialog;
     QList<QUrl> m_currentlyOpening; // project-file urls that are being opened
-    IProject* m_configuringProject;
     ProjectController* q;
     ProjectBuildSetModel* buildset;
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
@@ -111,7 +110,7 @@ public:
     QHash< IProject*, QPointer<KJob> > m_parseJobs; // parse jobs that add files from the project to the background parser.
 
     ProjectControllerPrivate( ProjectController* p )
-        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), buildset(0), m_foundProjectFile(false), m_cleaningUp(false)
+        : m_core(0), model(0), selectionModel(0), dialog(0), q(p), buildset(0), m_foundProjectFile(false), m_cleaningUp(false)
     {
     }
 
@@ -144,19 +143,20 @@ public:
             }
         }
 
-        Q_ASSERT(!m_configuringProject);
-        m_configuringProject = proj;
-        KDevelop::ConfigDialog cfgDlg(configPages, mainWindow);
-        QObject::connect(&cfgDlg, &ConfigDialog::configSaved, &cfgDlg, [this](ConfigPage* page) {
+        auto cfgDlg = new KDevelop::ConfigDialog(configPages, mainWindow);
+        cfgDlg->setAttribute(Qt::WA_DeleteOnClose);
+        cfgDlg->setModal(true);
+        QObject::connect(cfgDlg, &ConfigDialog::configSaved, cfgDlg, [this, proj](ConfigPage* page) {
             Q_UNUSED(page)
-            Q_ASSERT_X(m_configuringProject, Q_FUNC_INFO,
+            Q_ASSERT_X(proj, Q_FUNC_INFO,
                     "ConfigDialog signalled project config change, but no project set for configuring!");
-            emit q->projectConfigurationChanged(m_configuringProject);
+            emit q->projectConfigurationChanged(proj);
         });
-        cfgDlg.setWindowTitle(i18n("Configure Project %1", proj->name()));
-        cfgDlg.exec();
-        proj->projectConfiguration()->sync();
-        m_configuringProject = nullptr;
+        cfgDlg->setWindowTitle(i18n("Configure Project %1", proj->name()));
+        QObject::connect(cfgDlg, &KDevelop::ConfigDialog::finished, [this, proj]() {
+            proj->projectConfiguration()->sync();
+        });
+        cfgDlg->show();
 
     }
 
