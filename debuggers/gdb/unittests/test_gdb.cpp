@@ -1261,7 +1261,7 @@ void GdbTest::testVariablesStopDebugger()
 
 void GdbTest::testVariablesStartSecondSession()
 {
-    TestDebugSession *session = new TestDebugSession;
+    QPointer<TestDebugSession> session = new TestDebugSession;
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     TestLaunchConfiguration cfg;
@@ -1270,15 +1270,15 @@ void GdbTest::testVariablesStartSecondSession()
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
-    session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
+    QPointer<TestDebugSession> session2 = new TestDebugSession;
+    session2->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 38);
-    QVERIFY(session->startDebugging(&cfg, m_iface));
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QVERIFY(session2->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE(session2, DebugSession::PausedState);
 
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
+    session2->run();
+    WAIT_FOR_STATE(session2, DebugSession::EndedState);
 }
 
 void GdbTest::testVariablesSwitchFrame()

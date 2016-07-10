@@ -30,6 +30,7 @@
 
 #include "debuglog.h"
 #include "midebugger.h"
+#include "mivariable.h"
 #include "mi/mi.h"
 #include "mi/micommand.h"
 #include "mi/micommandqueue.h"
@@ -112,6 +113,27 @@ MIDebugSession::~MIDebugSession()
 IDebugSession::DebuggerState MIDebugSession::state() const
 {
     return m_sessionState;
+}
+
+QMap<QString, MIVariable*> & MIDebugSession::variableMapping()
+{
+    return m_allVariables;
+}
+
+MIVariable* MIDebugSession::findVariableByVarobjName(const QString &varobjName)
+{
+    if (m_allVariables.count(varobjName) == 0)
+        return nullptr;
+    return m_allVariables[varobjName];
+}
+
+void MIDebugSession::markAllVariableDead()
+{
+    for (auto i = m_allVariables.begin(), e = m_allVariables.end(); i != e; ++i)
+    {
+        i.value()->markAsDead();
+    }
+    m_allVariables.clear();
 }
 
 bool MIDebugSession::restartAvaliable() const

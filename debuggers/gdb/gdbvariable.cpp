@@ -22,11 +22,13 @@
 
 #include "gdbvariable.h"
 
+#include "debugsession.h"
+
 using namespace KDevelop;
 using namespace KDevMI::GDB;
 
-GdbVariable::GdbVariable(TreeModel *model, TreeItem *parent,
+GdbVariable::GdbVariable(DebugSession *session, TreeModel *model, TreeItem *parent,
                          const QString& expression, const QString& display)
-    : MIVariable(model, parent, expression, display)
+    : MIVariable(session, model, parent, expression, display)
 {
 }

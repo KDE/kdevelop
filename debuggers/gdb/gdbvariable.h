@@ -31,13 +31,13 @@ class TreeItem;
 }
 
 namespace KDevMI { namespace GDB {
-
+class DebugSession;
 class GdbVariable : public KDevMI::MIVariable
 {
     Q_OBJECT
 
 public:
-    GdbVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
+    GdbVariable(DebugSession *session, KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                 const QString& expression, const QString& display = "");
 };
 

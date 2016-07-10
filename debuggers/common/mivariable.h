@@ -27,16 +27,17 @@
 #include <debugger/variable/variablecollection.h>
 
 #include <QMap>
+#include <QPointer>
 
 
 class CreateVarobjHandler;
 class FetchMoreChildrenHandler;
 namespace KDevMI {
-
+class MIDebugSession;
 class MIVariable : public KDevelop::Variable
 {
 public:
-    MIVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
+    MIVariable(MIDebugSession *session, KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                const QString& expression, const QString& display = "");
 
     ~MIVariable();
@@ -46,11 +47,9 @@ public:
     const QString& varobj() const;
     void handleUpdate(const MI::Value& var);
 
-    static MIVariable *findByVarobjName(const QString& varobjName);
-
     /* Called when debugger dies.  Clears the association between varobj names
         and Variable instances.  */
-    static void markAllDead();
+    void markAsDead();
 
     bool canSetFormat() const override { return true; }
 
@@ -62,17 +61,19 @@ private: // Variable overrides
 private: // Internal
     friend class ::CreateVarobjHandler;
     friend class ::FetchMoreChildrenHandler;
+
     QString enquotedExpression() const;
+
+    bool sessionIsAlive() const;
+
     void setVarobj(const QString& v);
     QString varobj_;
+
+    QPointer<MIDebugSession> debugSession;
 
     // How many children should be fetched in one
     // increment.
     static const int fetchStep = 5;
-
-    /* Map from GDB varobj name to GdbVariable.
-        FIXME: eventually, should be per-session map.  */
-    static QMap<QString, MIVariable*> allVariables_;
 };
 } // end of KDevMI
 

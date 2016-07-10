@@ -35,6 +35,8 @@
 #include "mi/mi.h"
 #include "mi/micommand.h"
 
+#include <QMap>
+
 #include <memory>
 
 class IExecutePlugin;
@@ -50,6 +52,7 @@ class CommandQueue;
 }
 
 class MIDebugger;
+class MIVariable;
 class STTY;
 class MIDebugSession : public KDevelop::IDebugSession
 {
@@ -211,6 +214,10 @@ public:
                     void (Handler::* handler_method)(const MI::ResultRecord&),
                     MI::CommandFlags flags = 0);
 
+    QMap<QString, MIVariable*> & variableMapping();
+    MIVariable* findVariableByVarobjName(const QString &varobjName);
+    void markAllVariableDead();
+
 protected Q_SLOTS:
     virtual void slotDebuggerReady();
     virtual void slotDebuggerExited(bool abnormal, const QString &msg);
@@ -327,6 +334,9 @@ protected:
 
     bool m_hasCrashed;
     bool m_sourceInitFile;
+
+    // Map from GDB varobj name to MIVariable.
+    QMap<QString, MIVariable*> m_allVariables;
 };
 
 template<class Handler>

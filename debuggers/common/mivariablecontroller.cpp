@@ -98,7 +98,7 @@ void MIVariableController::handleVarUpdate(const ResultRecord& r)
     for (int i = 0; i < changed.size(); ++i)
     {
         const Value& var = changed[i];
-        MIVariable* v = MIVariable::findByVarobjName(var["name"].literal());
+        MIVariable* v = debugSession()->findVariableByVarobjName(var["name"].literal());
         // v can be NULL here if we've already removed locals after step,
         // but the corresponding -var-delete command is still in the queue.
         if (v) {
@@ -239,7 +239,7 @@ void MIVariableController::addWatchpoint(const ResultRecord& r)
 Variable* MIVariableController::createVariable(TreeModel* model, TreeItem* parent,
                                                  const QString& expression, const QString& display)
 {
-    return new MIVariable(model, parent, expression, display);
+    return new MIVariable(debugSession(), model, parent, expression, display);
 }
 
 void MIVariableController::handleEvent(IDebugSession::event_t event)
@@ -250,6 +250,6 @@ void MIVariableController::handleEvent(IDebugSession::event_t event)
 void MIVariableController::stateChanged(IDebugSession::DebuggerState state)
 {
     if (state == IDebugSession::EndedState) {
-        MIVariable::markAllDead();
+        debugSession()->markAllVariableDead();
     }
 }
