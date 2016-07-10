@@ -79,11 +79,17 @@ add_definitions(
 
 # Turn off missing-field-initializers warning to avoid noise from false positives with empty {}
 # See discussion: http://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html
-if (CMAKE_COMPILER_IS_GNUCXX)
+check_cxx_compiler_flag(-Wno-missing-field-initializers HAVE_MFI_FLAG)
+check_cxx_compiler_flag(-Werror=undefined-bool-conversion HAVE_UBC_FLAG)
+check_cxx_compiler_flag(-Werror=tautological-undefined-compare HAVE_TUC_FLAG)
+if (HAVE_MFI_FLAG)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers")
 endif()
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=undefined-bool-conversion -Werror=tautological-undefined-compare")
+if (HAVE_UBC_FLAG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=undefined-bool-conversion")
+endif()
+if (HAVE_TUC_FLAG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=tautological-undefined-compare")
 endif()
 
 include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR}  )
