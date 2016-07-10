@@ -772,7 +772,8 @@ void MIDebugSession::queueCmd(MICommand *cmd)
     m_commandQueue->enqueue(cmd);
 
     qCDebug(DEBUGGERCOMMON) << "QUEUE: " << cmd->initialString()
-                            << (m_stateReloadInProgress ? "(state reloading)" : "");
+                            << (m_stateReloadInProgress ? "(state reloading)" : "")
+                            << m_commandQueue->count() << "pending";
 
     bool varCommandWithContext= (cmd->type() >= MI::VarAssign
                                  && cmd->type() <= MI::VarUpdate

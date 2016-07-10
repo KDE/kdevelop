@@ -113,6 +113,42 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     m_runUntilCursor = new QAction(QIcon::fromTheme("debug-run-cursor"), i18n("&Run to Cursor"), this);
     m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
     connect(m_runUntilCursor,&QAction::triggered, widget, &DisassembleWidget::runToCursor);
+
+    m_disassemblyFlavorAtt = new QAction(i18n("&AT&&T"), this);
+    m_disassemblyFlavorAtt->setToolTip(i18n("GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."));
+    m_disassemblyFlavorAtt->setData(DisassemblyFlavorATT);
+    m_disassemblyFlavorAtt->setCheckable(true);
+
+    m_disassemblyFlavorIntel = new QAction(i18n("&Intel"), this);
+    m_disassemblyFlavorIntel->setToolTip(i18n("GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp+0xc])."));
+    m_disassemblyFlavorIntel->setData(DisassemblyFlavorIntel);
+    m_disassemblyFlavorIntel->setCheckable(true);
+
+    m_disassemblyFlavorActionGroup = new QActionGroup(this);
+    m_disassemblyFlavorActionGroup->setExclusive(true);
+    m_disassemblyFlavorActionGroup->addAction(m_disassemblyFlavorAtt);
+    m_disassemblyFlavorActionGroup->addAction(m_disassemblyFlavorIntel);
+    connect(m_disassemblyFlavorActionGroup, &QActionGroup::triggered, widget, &DisassembleWidget::setDisassemblyFlavor);
+    }
+}
+
+void DisassembleWindow::setDisassemblyFlavor(DisassemblyFlavor flavor)
+{
+    switch(flavor)
+    {
+    default:
+    case DisassemblyFlavorUnknown:
+        m_disassemblyFlavorAtt->setChecked(false);
+        m_disassemblyFlavorIntel->setChecked(false);
+        break;
+    case DisassemblyFlavorATT:
+        m_disassemblyFlavorAtt->setChecked(true);
+        m_disassemblyFlavorIntel->setChecked(false);
+        break;
+    case DisassemblyFlavorIntel:
+        m_disassemblyFlavorAtt->setChecked(false);
+        m_disassemblyFlavorIntel->setChecked(true);
+        break;
     }
 }
 
@@ -122,6 +158,9 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
         popup.addAction(m_selectAddrAction);
         popup.addAction(m_jumpToLocation);
         popup.addAction(m_runUntilCursor);
+        QMenu* disassemblyFlavorMenu = popup.addMenu(i18n("Disassembly flavor"));
+        disassemblyFlavorMenu->addAction(m_disassemblyFlavorAtt);
+        disassemblyFlavorMenu->addAction(m_disassemblyFlavorIntel);
         popup.exec(e->globalPos());
 }
 /***************************************************************************/
@@ -282,6 +321,7 @@ void DisassembleWidget::slotActivate(bool activate)
         active_ = activate;
         if (active_)
         {
+            updateDisassemblyFlavor();
             m_registersManager->updateRegisters();
             if (!displayCurrent())
                 disassembleMemoryRegion();
@@ -434,4 +474,65 @@ void DisassembleWidget::update(const QString &address)
         disassembleMemoryRegion();
     }
     m_registersManager->updateRegisters();
+}
+
+void DisassembleWidget::setDisassemblyFlavor(QAction* action)
+{
+    DebugSession* s = qobject_cast<DebugSession*>(KDevelop::ICore::
+            self()->debugController()->currentSession());
+    if(!s || !s->isRunning()) {
+        return;
+    }
+
+    DisassemblyFlavor disassemblyFlavor = static_cast<DisassemblyFlavor>(action->data().toInt());
+    QString cmd;
+    switch(disassemblyFlavor)
+    {
+    default:
+        // unknown flavor, do not build a GDB command
+        break;
+    case DisassemblyFlavorATT:
+        cmd = QStringLiteral("disassembly-flavor att");
+        break;
+    case DisassemblyFlavorIntel:
+        cmd = QStringLiteral("disassembly-flavor intel");
+        break;
+    }
+    qCDebug(DEBUGGERGDB) << "Disassemble widget set " << cmd;
+
+    if (!cmd.isEmpty()) {
+        s->addCommand(GdbSet, cmd, this, &DisassembleWidget::setDisassemblyFlavorHandler);
+    }
+}
+
+void DisassembleWidget::setDisassemblyFlavorHandler(const ResultRecord& r)
+{
+    if (r.reason == "done" && active_) {
+        disassembleMemoryRegion();
+    }
+}
+
+void DisassembleWidget::updateDisassemblyFlavor()
+{
+    DebugSession* s = qobject_cast<DebugSession*>(KDevelop::ICore::
+            self()->debugController()->currentSession());
+    if(!s || !s->isRunning()) {
+        return;
+    }
+
+    s->addCommand(GdbShow, QStringLiteral("disassembly-flavor"), this, &DisassembleWidget::showDisassemblyFlavorHandler);
+}
+
+void DisassembleWidget::showDisassemblyFlavorHandler(const ResultRecord& r)
+{
+    const Value& value = r["value"];
+    qCDebug(DEBUGGERGDB) << "Disassemble widget disassembly flavor" << value.literal();
+
+    DisassemblyFlavor disassemblyFlavor = DisassemblyFlavorUnknown;
+    if (value.literal() == "att") {
+        disassemblyFlavor = DisassemblyFlavorATT;
+    } else if (value.literal() == "intel") {
+        disassemblyFlavor = DisassemblyFlavorIntel;
+    }
+    m_disassembleWindow->setDisassemblyFlavor(disassemblyFlavor);
 }

@@ -326,7 +326,7 @@ void GDBOutputWidget::flushPending()
 
 /***************************************************************************/
 
-void GDBOutputWidget::slotStateChanged(DBGStateFlags oldStatus, DBGStateFlags newStatus)
+void GDBOutputWidget::slotStateChanged(KDevMI::DBGStateFlags oldStatus, KDevMI::DBGStateFlags newStatus)
 {
     Q_UNUSED(oldStatus)
     if (newStatus & s_dbgNotStarted)

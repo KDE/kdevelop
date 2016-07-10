@@ -19,6 +19,7 @@
 
 #include "mi.h"
 #include "micommand.h"
+#include "debuglog.h"
 
 using namespace KDevMI::MI;
 
@@ -39,19 +40,38 @@ void CommandQueue::enqueue(MICommand* command)
         m_tokenCounter = 1;
     command->setToken(m_tokenCounter);
 
+    // take the time when this command was added to the command queue
+    command->markAsEnqueued();
+
     m_commandList.append(command);
 
     if (command->flags() & (CmdImmediately | CmdInterrupt))
         ++m_immediatelyCounter;
 
     rationalizeQueue(command);
+    dumpQueue();
 }
 
-void CommandQueue::rationalizeQueue(MICommand * command)
+void CommandQueue::dumpQueue()
 {
-    if (command->type() >= ExecAbort && command->type() <= ExecUntil)
-      // Changing execution location, abort any variable updates
-      removeVariableUpdates();
+    qCDebug(DEBUGGERCOMMON) << "Pending commands" << m_commandList.count();
+    unsigned commandNum = 0;
+    foreach(const MICommand* command, m_commandList) {
+        qCDebug(DEBUGGERCOMMON) << "Command" << commandNum << command->initialString();
+        ++commandNum;
+    }
+}
+
+void CommandQueue::rationalizeQueue(MICommand* command)
+{
+    if ((command->type() >= ExecAbort && command->type() <= ExecUntil) &&
+         command->type() != ExecArguments &&
+         command->type() != ExecShowArguments ) {
+        // Changing execution location, abort any variable updates
+        removeVariableUpdates();
+        // ... and stack list updates
+        removeStackListUpdates();
+    }
 }
 
 void CommandQueue::removeVariableUpdates()
@@ -62,6 +82,22 @@ void CommandQueue::removeVariableUpdates()
         MICommand* command = it.next();
         CommandType type = command->type();
         if ((type >= VarEvaluateExpression && type <= VarListChildren) || type == VarUpdate) {
+            if (command->flags() & (CmdImmediately | CmdInterrupt))
+                --m_immediatelyCounter;
+            it.remove();
+            delete command;
+        }
+    }
+}
+
+void CommandQueue::removeStackListUpdates()
+{
+    QMutableListIterator<MICommand*> it = m_commandList;
+
+    while (it.hasNext()) {
+        MICommand* command = it.next();
+        CommandType type = command->type();
+        if (type >= StackListArguments && type <= StackListLocals) {
             if (command->flags() & (CmdImmediately | CmdInterrupt))
                 --m_immediatelyCounter;
             it.remove();

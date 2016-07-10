@@ -52,26 +52,34 @@ class SelectAddressDialog : public QDialog
     Q_OBJECT
 public:
     SelectAddressDialog(QWidget *parent = 0);
-    
+
     QString address() const;
     void setAddress(const QString& address);
     bool hasValidAddress() const;
     void updateOkState();
-     
+
 private Q_SLOTS:
     void validateInput();
     void itemSelected();
-    
+
 private:
     Ui::SelectAddressDialog m_ui;
 };
 
 class DisassembleWidget;
 
+enum DisassemblyFlavor {
+    DisassemblyFlavorUnknown = -1,
+    DisassemblyFlavorATT = 0,
+    DisassemblyFlavorIntel,
+};
+
 class DisassembleWindow : public QTreeWidget
 {
 public:
     DisassembleWindow(QWidget *parent, DisassembleWidget* widget);
+
+    void setDisassemblyFlavor(DisassemblyFlavor flavor);
 
 protected:
    void contextMenuEvent(QContextMenuEvent *e) override;
@@ -80,6 +88,9 @@ private:
     QAction* m_selectAddrAction;
     QAction* m_jumpToLocation;
     QAction* m_runUntilCursor;
+    QAction* m_disassemblyFlavorAtt;
+    QAction* m_disassemblyFlavorIntel;
+    QActionGroup* m_disassemblyFlavorActionGroup;
 };
 
 class Breakpoint;
@@ -115,6 +126,7 @@ public Q_SLOTS:
     void update(const QString &address);
     void jumpToCursor();
     void runToCursor();
+    void setDisassemblyFlavor(QAction* action);
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
@@ -126,7 +138,8 @@ protected:
 
 private:
     bool displayCurrent();
-    
+    void updateDisassemblyFlavor();
+
     /// Disassembles memory region from..to
     /// if from is empty current execution position is used
     /// if to is empty, 256 bytes range is taken
@@ -136,6 +149,8 @@ private:
     /// callbacks for GDBCommands
     void disassembleMemoryHandler(const MI::ResultRecord& r);
     void updateExecutionAddressHandler(const MI::ResultRecord& r);
+    void setDisassemblyFlavorHandler(const MI::ResultRecord& r);
+    void showDisassemblyFlavorHandler(const MI::ResultRecord& r);
 
     //for str to uint conversion.
     bool ok;

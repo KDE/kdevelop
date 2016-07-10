@@ -258,7 +258,7 @@ void DebugSession::handleVersion(const QStringList& s)
     }
 }
 
-void DebugSession::handleFileExecAndSymbols(const MI::ResultRecord& r)
+void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
 {
     if (r.reason == "error") {
         KMessageBox::error(

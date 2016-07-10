@@ -81,6 +81,7 @@ void MIDebugger::execute(MICommand* command)
     QByteArray commandUtf8 = commandText.toUtf8();
 
     process_->write(commandUtf8, commandUtf8.length());
+    command->markAsSubmitted();
 
     QString prettyCmd = currentCmd_->cmdToSend();
     prettyCmd.remove( QRegExp("set prompt \032.\n") );
@@ -183,12 +184,22 @@ void MIDebugger::processLine(const QByteArray& line)
                 } else {
                     qCDebug(DEBUGGERCOMMON) << "Result token is" << result.token;
                     Q_ASSERT(currentCmd_->token() == result.token);
+                    currentCmd_->markAsCompleted();
+                    qCDebug(DEBUGGERCOMMON) << "Command successful, times "
+                                            << currentCmd_->totalProcessingTime()
+                                            << currentCmd_->queueTime()
+                                            << currentCmd_->gdbProcessingTime();
                     currentCmd_->invokeHandler(result);
                 }
             }
             else if (result.reason == "error")
             {
                 qCDebug(DEBUGGERCOMMON) << "Handling error";
+                currentCmd_->markAsCompleted();
+                qCDebug(DEBUGGERCOMMON) << "Command error, times"
+                                        << currentCmd_->totalProcessingTime()
+                                        << currentCmd_->queueTime()
+                                        << currentCmd_->gdbProcessingTime();
                 // Some commands want to handle errors themself.
                 if (currentCmd_->handlesError() &&
                     currentCmd_->invokeHandler(result))

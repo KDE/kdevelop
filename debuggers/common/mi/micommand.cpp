@@ -14,6 +14,7 @@
  ***************************************************************************/
 
 #include "micommand.h"
+#include <QDateTime>
 
 using namespace KDevMI::MI;
 
@@ -603,4 +604,34 @@ void MICommand::setStateReloading(bool f)
 bool MICommand::stateReloading() const
 {
     return stateReloading_;
+}
+
+void MICommand::markAsEnqueued()
+{
+    m_enqueueTimestamp = QDateTime::currentMSecsSinceEpoch();
+}
+
+void MICommand::markAsSubmitted()
+{
+    m_submitTimestamp = QDateTime::currentMSecsSinceEpoch();
+}
+
+void MICommand::markAsCompleted()
+{
+    m_completeTimestamp = QDateTime::currentMSecsSinceEpoch();
+}
+
+qint64 MICommand::gdbProcessingTime() const
+{
+    return m_completeTimestamp - m_submitTimestamp;
+}
+
+qint64 MICommand::queueTime() const
+{
+    return m_submitTimestamp - m_enqueueTimestamp;
+}
+
+qint64 MICommand::totalProcessingTime() const
+{
+    return m_completeTimestamp - m_enqueueTimestamp;
 }

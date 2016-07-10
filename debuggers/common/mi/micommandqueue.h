@@ -49,6 +49,8 @@ public:
 private:
     void rationalizeQueue(MICommand* command);
     void removeVariableUpdates();
+    void removeStackListUpdates();
+    void dumpQueue();
 
     QList<MICommand*> m_commandList;
     int m_immediatelyCounter = 0;
