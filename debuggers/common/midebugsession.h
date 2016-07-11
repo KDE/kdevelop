@@ -215,7 +215,7 @@ public:
                     MI::CommandFlags flags = 0);
 
     QMap<QString, MIVariable*> & variableMapping();
-    MIVariable* findVariableByVarobjName(const QString &varobjName);
+    MIVariable* findVariableByVarobjName(const QString &varobjName) const;
     void markAllVariableDead();
 
 protected Q_SLOTS:

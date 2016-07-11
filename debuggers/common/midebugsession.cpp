@@ -120,11 +120,11 @@ QMap<QString, MIVariable*> & MIDebugSession::variableMapping()
     return m_allVariables;
 }
 
-MIVariable* MIDebugSession::findVariableByVarobjName(const QString &varobjName)
+MIVariable* MIDebugSession::findVariableByVarobjName(const QString &varobjName) const
 {
     if (m_allVariables.count(varobjName) == 0)
         return nullptr;
-    return m_allVariables[varobjName];
+    return m_allVariables.value(varobjName);
 }
 
 void MIDebugSession::markAllVariableDead()
