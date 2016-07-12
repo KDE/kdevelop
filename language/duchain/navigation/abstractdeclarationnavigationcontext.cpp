@@ -281,14 +281,14 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
   QByteArray declarationComment = m_declaration->comment();
   if( !shorten && (!declarationComment.isEmpty() || doc) ) {
-    modifyHtml() += QStringLiteral("<br />");
+    modifyHtml() += QStringLiteral("<p>");
 
     if(doc) {
       QString comment = doc->description();
       connect(doc.data(), &IDocumentation::descriptionChanged, this, &AbstractDeclarationNavigationContext::contentsChanged);
 
       if(!comment.isEmpty()) {
-        modifyHtml() += "<br />" + commentHighlight(comment);
+        modifyHtml() += "<p>" + commentHighlight(comment) + "</p>";
       }
     }
 
@@ -303,14 +303,15 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         comment.replace('\n', QLatin1String("<br />")); //Replicate newlines in html
       }
       modifyHtml() += commentHighlight(comment);
-      modifyHtml() += QStringLiteral("<br />");
+      modifyHtml() += QStringLiteral("</p>");
     }
   }
 
     if(!shorten && doc) {
-      modifyHtml() += "<br />" + i18n("Show documentation for ");
+      modifyHtml() += "<p>" + i18n("Show documentation for ");
       makeLink(prettyQualifiedName(m_declaration),
                m_declaration, NavigationAction::ShowDocumentation);
+      modifyHtml() += "</p>";
     }
 
 

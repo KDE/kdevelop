@@ -26,6 +26,9 @@
 #include "staticassistant.h"
 
 #include <language/languageexport.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/duchain/problem.h>
+#include <language/duchain/topducontext.h>
 #include <serialization/indexedstring.h>
 
 #include <ktexteditor/range.h>
@@ -56,22 +59,16 @@ public:
     explicit StaticAssistantsManager(QObject* parent = nullptr);
     ~StaticAssistantsManager() override;
 
-    QExplicitlySharedDataPointer<KDevelop::IAssistant> activeAssistant();
-
     void registerAssistant(const StaticAssistant::Ptr assistant);
     void unregisterAssistant(const StaticAssistant::Ptr assistant);
-    QList<StaticAssistant::Ptr> registeredAssistants() const;
+    QVector<StaticAssistant::Ptr> registeredAssistants() const;
+    void notifyAssistants(const IndexedString& url, const KDevelop::ReferencedTopDUContext& context);
 
-public slots:
-    void hideAssistant();
-
-signals:
-    void activeAssistantChanged();
+    QVector<KDevelop::Problem::Ptr> problemsForContext(const ReferencedTopDUContext& top);
 
 private:
     struct Private;
     QScopedPointer<Private> const d;
-    Q_PRIVATE_SLOT(d, void eventuallyStartAssistant())
 };
 
 }

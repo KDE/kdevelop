@@ -66,6 +66,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
 
     void nextLink();
     void previousLink();
+
+    int linkCount() const;
+
     void up();
     void down();
     void setPrefixSuffix( const QString& prefix, const QString& suffix );

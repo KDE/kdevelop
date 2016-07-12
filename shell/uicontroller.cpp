@@ -49,7 +49,6 @@
 #include "partdocument.h"
 #include "textdocument.h"
 #include "documentcontroller.h"
-#include "assistantpopup.h"
 #include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
@@ -146,8 +145,6 @@ public:
     QPointer<Sublime::MainWindow> activeSublimeWindow;
     bool areasRestored;
 
-    /// Currently shown assistant popup.
-    QPointer<AssistantPopup> currentShownAssistant;
     /// QWidget implementing IToolViewActionListener interface, or null
     QPointer<QWidget> activeActionListener;
     QTimer m_assistantTimer;
@@ -720,35 +717,6 @@ void UiController::showErrorMessage(const QString& message, int timeout)
     MainWindow* mw = qobject_cast<KDevelop::MainWindow*>(w);
     if (!mw) return;
     QMetaObject::invokeMethod(mw, "showErrorMessage", Q_ARG(QString, message), Q_ARG(int, timeout));
-}
-
-void UiController::hideAssistant()
-{
-    if (d->currentShownAssistant) {
-        d->currentShownAssistant->hide();
-    }
-}
-
-void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
-{
-    if(!assistant)
-        return;
-
-    Sublime::View* view = d->activeSublimeWindow->activeView();
-    if( !view )
-    {
-        qCDebug(SHELL) << "no active view in mainwindow";
-        return;
-    }
-
-    auto editorView = qobject_cast<KTextEditor::View*>(view->widget());
-    Q_ASSERT(editorView);
-    if (editorView) {
-        if ( !d->currentShownAssistant ) {
-            d->currentShownAssistant = new AssistantPopup;
-        }
-        d->currentShownAssistant->reset(editorView, assistant);
-    }
 }
 
 const QHash< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const

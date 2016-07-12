@@ -184,6 +184,7 @@ LINK_PRIVATE
         KF5::TextEditor
         KF5::Parts
         KF5::Archive
+        KF5::IconThemes
         KDev::Util
         KDev::Project
 )

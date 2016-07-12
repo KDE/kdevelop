@@ -40,8 +40,10 @@ public:
     explicit RenameAssistant(ILanguageSupport* supportedLanguage);
     ~RenameAssistant() override;
 
-    void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString()) override;
+    void textChanged(KTextEditor::Document* doc, const KTextEditor::Range& invocationRange,
+                     const QString& removedText = QString()) override;
     bool isUseful() const override;
+    KTextEditor::Range displayRange() const override;
 
     QString title() const override;
 

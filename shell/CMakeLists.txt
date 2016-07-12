@@ -11,7 +11,6 @@ set(KDevPlatformShell_LIB_SRCS
     workingsets/workingsetwidget.cpp
     workingsets/closedworkingsetswidget.cpp
     workingsets/workingsethelpers.cpp
-    assistantpopup.cpp
     mainwindow.cpp
     mainwindow_p.cpp
     plugincontroller.cpp
@@ -171,5 +170,3 @@ install(FILES
     filteredproblemstore.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/shell COMPONENT Devel
 )
-
-install( FILES AssistantButton.qml assistantpopup.qml DESTINATION ${KDE_INSTALL_DATADIR}/kdevelop )

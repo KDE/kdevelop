@@ -330,6 +330,11 @@ void AbstractNavigationContext::previousLink()
   Q_ASSERT(m_selectedLink >= 0);
 }
 
+int AbstractNavigationContext::linkCount() const
+{
+  return m_linkCount;
+}
+
 void AbstractNavigationContext::setPrefixSuffix( const QString& prefix, const QString& suffix ) {
   m_prefix = prefix;
   m_suffix = suffix;
@@ -453,6 +458,7 @@ void AbstractNavigationContext::addHtml(QString html) {
 }
 
 QString AbstractNavigationContext::currentHtml() const {
+
   return m_currentText;
 }
 
