@@ -38,78 +38,18 @@
 
 using namespace KDevelop;
 
-namespace {
-
-KTextEditor::View* createDocAndView(const QString& data, KTextEditor::Document** docPtr)
-{
-    if (data.isEmpty()) {
-        return 0;
-    }
-
-    KTextEditor::Document* doc = ICore::self()->partController()->editorPart()->createDocument(0);
-    *docPtr = doc;
-    doc->setText(data);
-    doc->setMode(QStringLiteral("C++"));
-    doc->setReadWrite(false);
-
-    KTextEditor::View* view = doc->createView(0);
-    view->setStatusBarEnabled(false);
-    if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
-        config->setConfigValue(QStringLiteral("icon-bar"), false);
-        config->setConfigValue(QStringLiteral("folding-bar"), false);
-        config->setConfigValue(QStringLiteral("line-numbers"), false);
-        config->setConfigValue(QStringLiteral("dynamic-word-wrap"), true);
-    }
-    return view;
-}
-
-}
-
 MacroNavigationContext::MacroNavigationContext(const MacroDefinition::Ptr& macro, const KDevelop::DocumentCursor& expansionLocation)
     : m_macro(macro)
-    , m_preprocessed(nullptr)
-    , m_definition(nullptr)
-    , m_widget(new QWidget)
 {
-    QVBoxLayout* layout = new QVBoxLayout(m_widget.data());
-
-    if (expansionLocation.isValid()) {
-        const QString preprocessedBody = retrievePreprocessedBody(expansionLocation);
-        KTextEditor::View* preprocessedView = createDocAndView(preprocessedBody, &m_preprocessed);
-        if (m_preprocessed) {
-            layout->addWidget(new QLabel(i18n("Preprocessed Body:")));
-            layout->addWidget(preprocessedView);
-        } else {
-            layout->addWidget(new QLabel(i18n("Preprocessed Body: (empty)")));
-        }
-    }
-
-    const QString definitionText = m_macro->definition().str();
-    KTextEditor::View* definitionView = createDocAndView(definitionText, &m_definition);
-    if (m_definition) {
-        layout->addWidget(new QLabel(i18n("Body:")));
-        layout->addWidget(definitionView);
-    } else {
-        layout->addWidget(new QLabel(i18n("Body: (empty)")));
-    }
-    m_widget->setLayout(layout);
 }
 
 MacroNavigationContext::~MacroNavigationContext()
 {
-    delete m_preprocessed;
-    delete m_definition;
-    delete m_widget;
 }
 
 QString MacroNavigationContext::name() const
 {
     return m_macro->identifier().toString();
-}
-
-QWidget* MacroNavigationContext::widget() const
-{
-    return m_widget.data();
 }
 
 QString MacroNavigationContext::html(bool shorten)
@@ -142,6 +82,11 @@ QString MacroNavigationContext::html(bool shorten)
 
     modifyHtml() += QStringLiteral(" "); //The action name _must_ stay "show_uses", since that is also used from outside
     makeLink(i18n("Show uses"), QStringLiteral("show_uses"), NavigationAction(m_macro.dynamicCast<Declaration>(), NavigationAction::NavigateUses));
+
+    auto code = m_macro->definition().str().replace(QStringLiteral("\n"), QStringLiteral("<br/>"));
+    modifyHtml() += QLatin1String("<p>") + i18n("Body: ");
+    modifyHtml() += QLatin1String("<tt>") + code + QLatin1String("</tt>");
+    modifyHtml() += QLatin1String("</p>");
 
     modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
     return currentHtml();
