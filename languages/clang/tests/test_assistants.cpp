@@ -41,6 +41,7 @@
 #include <language/assistant/staticassistant.h>
 #include <language/assistant/staticassistantsmanager.h>
 #include <language/assistant/renameaction.h>
+#include <language/assistant/renameassistant.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -66,7 +67,7 @@ void TestAssistants::initTestCase()
     ));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     QVERIFY(qputenv("KDEV_CLANG_DISPLAY_DIAGS", "1"));
-    AutoTestShell::init({QStringLiteral("kdevclangsupport")});
+    AutoTestShell::init({QStringLiteral("kdevclangsupport"), QStringLiteral("kdevproblemreporter")});
     TestCore::initialize();
     DUChain::self()->disablePersistentStorage();
     Core::self()->languageController()->backgroundParser()->setDelay(0);
@@ -130,8 +131,6 @@ public:
         Core::self()->documentController()->documentForUrl(m_cppDocument.url)->textDocument();
         Core::self()->documentController()->documentForUrl(m_cppDocument.url)->close(KDevelop::IDocument::Discard);
         Core::self()->documentController()->documentForUrl(m_headerDocument.url)->close(KDevelop::IDocument::Discard);
-
-        staticAssistantsManager()->hideAssistant();
     }
 
     void changeDocument(TestDoc which, Range where, const QString& what, bool waitForUpdate = false)
@@ -229,7 +228,6 @@ struct StateChange
 Q_DECLARE_METATYPE(StateChange)
 Q_DECLARE_METATYPE(QList<StateChange>)
 
-
 void TestAssistants::testRenameAssistant_data()
 {
     QTest::addColumn<QString>("fileContents");
@@ -258,17 +256,6 @@ void TestAssistants::testRenameAssistant_data()
         << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,12,0,13), "u", "u"))
         << "int foo(int u)\n { u = 0; return u; }";
 
-    QTest::newRow("Letter-by-Letter")
-        << "int foo(int i)\n { i = 0; return i; }"
-        << "i"
-        << (QList<StateChange>()
-            << StateChange(Testbed::CppDoc, Range(0,12,0,13), "", "")
-            << StateChange(Testbed::CppDoc, Range(0,12,0,12), "a", "a")
-            << StateChange(Testbed::CppDoc, Range(0,13,0,13), "b", "ab")
-            << StateChange(Testbed::CppDoc, Range(0,14,0,14), "c", "abc")
-        )
-        << "int foo(int abc)\n { abc = 0; return abc; }";
-
     QTest::newRow("Paste Replace")
         << "int foo(int abg)\n { abg = 0; return abg; }"
         << "abg"
@@ -281,6 +268,15 @@ void TestAssistants::testRenameAssistant_data()
         << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,14,0,14), "cdef", "abcdefg"))
         << "int foo(int abcdefg)\n { abcdefg = 0; return abcdefg; }";
 
+    QTest::newRow("Letter-by-Letter Prepend")
+        << "int foo(int i)\n { i = 0; return i; }"
+        << "i"
+        << (QList<StateChange>()
+            << StateChange(Testbed::CppDoc, Range(0,12,0,12), "a", "ai")
+            << StateChange(Testbed::CppDoc, Range(0,13,0,13), "b", "abi")
+            << StateChange(Testbed::CppDoc, Range(0,14,0,14), "c", "abci")
+        )
+        << "int foo(int abc)\n { abc = 0; return abc; }";
     QTest::newRow("Letter-by-Letter Insert")
         << "int foo(int abg)\n { abg = 0; return abg; }"
         << "abg"
@@ -293,27 +289,55 @@ void TestAssistants::testRenameAssistant_data()
         << "int foo(int abcdefg)\n { abcdefg = 0; return abcdefg; }";
 }
 
+ProblemPointer findStaticAssistantProblem(const QList<ProblemPointer>& problems)
+{
+    const auto renameProblemIt = std::find_if(problems.cbegin(), problems.cend(), [](const ProblemPointer& p) {
+        return dynamic_cast<const StaticAssistantProblem*>(p.constData());
+    });
+    if (renameProblemIt != problems.cend())
+        return *renameProblemIt;
+
+    return {};
+}
+
 void TestAssistants::testRenameAssistant()
 {
     QFETCH(QString, fileContents);
     Testbed testbed("", fileContents);
 
+    const auto document = testbed.document(Testbed::CppDoc);
+    QVERIFY(document);
+
+    QExplicitlySharedDataPointer<IAssistant> assistant;
+
     QFETCH(QString, oldDeclarationName);
     QFETCH(QList<StateChange>, stateChanges);
     foreach(StateChange stateChange, stateChanges)
     {
-        testbed.changeDocument(Testbed::CppDoc, stateChange.range, stateChange.newText);
+        testbed.changeDocument(Testbed::CppDoc, stateChange.range, stateChange.newText, true);
+
+        DUChainReadLocker lock;
+
+        auto topCtx = DUChain::self()->chainForDocument(document->url());
+        QVERIFY(topCtx);
+
+        const auto problem = findStaticAssistantProblem(topCtx->problems());
+        if (problem)
+            assistant = problem->solutionAssistant();
+
         if (stateChange.result.isEmpty()) {
-            QVERIFY(!staticAssistantsManager()->activeAssistant() || !staticAssistantsManager()->activeAssistant()->actions().size());
+            QVERIFY(!assistant || !assistant->actions().size());
         } else {
-            QVERIFY(staticAssistantsManager()->activeAssistant() && staticAssistantsManager()->activeAssistant()->actions().size());
-            RenameAction *r = qobject_cast<RenameAction*>(staticAssistantsManager()->activeAssistant()->actions().first().data());
+            qWarning() << assistant.data() << stateChange.result;
+            QVERIFY(assistant && assistant->actions().size());
+            RenameAction *r = qobject_cast<RenameAction*>(assistant->actions().first().data());
             QCOMPARE(r->oldDeclarationName(), oldDeclarationName);
             QCOMPARE(r->newDeclarationName(), stateChange.result);
         }
     }
-    if (staticAssistantsManager()->activeAssistant() && staticAssistantsManager()->activeAssistant()->actions().size()) {
-            staticAssistantsManager()->activeAssistant()->actions().first()->execute();
+
+    if (assistant && assistant->actions().size()) {
+        assistant->actions().first()->execute();
     }
     QFETCH(QString, finalFileContents);
     QCOMPARE(testbed.documentText(Testbed::CppDoc), finalFileContents);
@@ -322,16 +346,28 @@ void TestAssistants::testRenameAssistant()
 void TestAssistants::testRenameAssistantUndoRename()
 {
     Testbed testbed("", "int foo(int i)\n { i = 0; return i; }");
-    testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,13), "d");
-    QVERIFY(staticAssistantsManager()->activeAssistant());
-    QVERIFY(staticAssistantsManager()->activeAssistant()->actions().size() > 0);
-    RenameAction *r = qobject_cast<RenameAction*>(staticAssistantsManager()->activeAssistant()->actions().first().data());
+    testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,13), "d", true);
+
+    const auto document = testbed.document(Testbed::CppDoc);
+    QVERIFY(document);
+
+    DUChainReadLocker lock;
+    auto topCtx = DUChain::self()->chainForDocument(document->url());
+    QVERIFY(topCtx);
+
+    auto firstProblem = findStaticAssistantProblem(topCtx->problems());
+    auto assistant = firstProblem->solutionAssistant();
+    QVERIFY(assistant);
+
+    QVERIFY(assistant->actions().size() > 0);
+    RenameAction *r = qobject_cast<RenameAction*>(assistant->actions().first().data());
+    qWarning() << topCtx->problems() << assistant->actions().first().data() << assistant->actions().size();
     QVERIFY(r);
 
     // now rename the variable back to its original identifier
     testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,14), "");
     // there should be no assistant anymore
-    QVERIFY(!staticAssistantsManager()->activeAssistant());
+    QVERIFY(!assistant || assistant->actions().isEmpty());
 }
 
 const QString SHOULD_ASSIST = "SHOULD_ASSIST"; //An assistant will be visible
@@ -465,21 +501,38 @@ void TestAssistants::testSignatureAssistant()
     QFETCH(QString, cppContents);
     Testbed testbed(headerContents, cppContents);
 
+    QExplicitlySharedDataPointer<IAssistant> assistant;
+
     QFETCH(QList<StateChange>, stateChanges);
     foreach (StateChange stateChange, stateChanges)
     {
         testbed.changeDocument(stateChange.document, stateChange.range, stateChange.newText, true);
 
+        const auto document = testbed.document(stateChange.document);
+        QVERIFY(document);
+
+        DUChainReadLocker lock;
+
+        auto topCtx = DUChain::self()->chainForDocument(document->url());
+        QVERIFY(topCtx);
+
+        const auto problem = findStaticAssistantProblem(topCtx->problems());
+        if (problem) {
+            assistant = problem->solutionAssistant();
+        }
+
         if (stateChange.result == SHOULD_ASSIST) {
             QEXPECT_FAIL("change_function_type", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't parse the code...", Abort);
             QEXPECT_FAIL("change_return_type_impl", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't include the function's AST and thus we never get updated about the new return type...", Abort);
-            QVERIFY(staticAssistantsManager()->activeAssistant() && !staticAssistantsManager()->activeAssistant()->actions().isEmpty());
+            QVERIFY(assistant && !assistant->actions().isEmpty());
         } else {
-            QVERIFY(!staticAssistantsManager()->activeAssistant() || staticAssistantsManager()->activeAssistant()->actions().isEmpty());
+            QVERIFY(!assistant || assistant->actions().isEmpty());
         }
     }
-    if (staticAssistantsManager()->activeAssistant() && !staticAssistantsManager()->activeAssistant()->actions().isEmpty())
-        staticAssistantsManager()->activeAssistant()->actions().first()->execute();
+
+    DUChainReadLocker lock;
+    if (assistant && !assistant->actions().isEmpty())
+        assistant->actions().first()->execute();
 
     QFETCH(QString, finalHeaderContents);
     QFETCH(QString, finalCppContents);
@@ -520,16 +573,27 @@ void TestAssistants::testUnknownDeclarationAssistant()
 
     static const auto cppContents = QStringLiteral("%1\nvoid f_u_n_c_t_i_o_n() {\n}");
     Testbed testbed(headerContents, cppContents.arg(globalText), Testbed::NoAutoInclude);
-    const int line = testbed.document(Testbed::CppDoc)->lines() - 1;
+    const auto document = testbed.document(Testbed::CppDoc);
+    QVERIFY(document);
+    const int line = document->lines() - 1;
     testbed.changeDocument(Testbed::CppDoc, Range(line, 0, line, 0), functionText, true);
 
+    DUChainReadLocker lock;
+
+    auto topCtx = DUChain::self()->chainForDocument(document->url());
+    QVERIFY(topCtx);
+
+    const auto problems = topCtx->problems();
+
     if (actions == NoUnknownDeclaration) {
-        QVERIFY(!staticAssistantsManager()->activeAssistant());
+        QVERIFY(!problems.isEmpty());
         return;
     }
 
-    QVERIFY(staticAssistantsManager()->activeAssistant());
-    const auto assistantActions = staticAssistantsManager()->activeAssistant()->actions();
+    auto firstProblem = problems.first();
+    auto assistant = firstProblem->solutionAssistant();
+    QVERIFY(assistant);
+    const auto assistantActions = assistant->actions();
     QStringList actionDescriptions;
     for (auto action: assistantActions) {
         actionDescriptions << action->description();
