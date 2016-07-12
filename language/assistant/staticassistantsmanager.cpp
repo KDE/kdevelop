@@ -12,12 +12,13 @@
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
+   along with this library; see the file COPYING.LIB.  If not^, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
 
 #include "staticassistantsmanager.h"
+#include <interfaces/icodehighlighting.h>
 #include "util/debug.h"
 
 #include <QTimer>
@@ -44,57 +45,25 @@ struct StaticAssistantsManager::Private
 {
     Private(StaticAssistantsManager* qq)
         : q(qq)
-    {
-        connect(DUChain::self(), &DUChain::updateReady,
-                q, [this] (const IndexedString& url, const ReferencedTopDUContext& topContext) {
-                    updateReady(url, topContext);
-                });
-    }
+    { }
 
-    void eventuallyStartAssistant();
-    void startAssistant(KDevelop::IAssistant::Ptr assistant);
-    void checkAssistantForProblems(KDevelop::TopDUContext* top);
-
+    void updateReady(const IndexedString& document, const KDevelop::ReferencedTopDUContext& topContext);
     void documentLoaded(KDevelop::IDocument*);
-    void textInserted(Document* document, const Cursor& cursor, const QString& text);
-    void textRemoved(Document* document, const Range& cursor, const QString& removedText);
-    void updateReady(const IndexedString& document, const ReferencedTopDUContext& topContext);
-    void documentActivated(KDevelop::IDocument*);
-    void cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&);
-    void timeout();
+    void textInserted(KTextEditor::Document* document, const Cursor& cursor, const QString& text);
+    void textRemoved(KTextEditor::Document* document, const Range& cursor, const QString& removedText);
 
     StaticAssistantsManager* q;
 
-    QPointer<KTextEditor::View> m_currentView;
-    KTextEditor::Cursor m_assistantStartedAt;
-    KDevelop::IndexedString m_currentDocument;
-    QExplicitlySharedDataPointer<KDevelop::IAssistant> m_activeAssistant;
-    QList<StaticAssistant::Ptr> m_registeredAssistants;
-    bool m_activeProblemAssistant = false;
-    QTimer* m_timer;
-
-    SafeDocumentPointer m_eventualDocument;
-    KTextEditor::Range m_eventualRange;
-    QString m_eventualRemovedText;
-    QMetaObject::Connection m_cursorPositionChangeConnection;
+    QVector<StaticAssistant::Ptr> m_registeredAssistants;
 };
 
 StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
     : QObject(parent)
     , d(new Private(this))
 {
-    d->m_timer = new QTimer(this);
-    d->m_timer->setSingleShot(true);
-    d->m_timer->setInterval(400);
-    connect(d->m_timer, &QTimer::timeout, this, [&] { d->timeout(); });
-
     connect(KDevelop::ICore::self()->documentController(),
             &IDocumentController::documentLoaded,
             this, [&] (IDocument* document) { d->documentLoaded(document); });
-    connect(KDevelop::ICore::self()->documentController(),
-            &IDocumentController::documentActivated,
-            this, [&] (IDocument* doc) { d->documentActivated(doc); });
-
     foreach (IDocument* document, ICore::self()->documentController()->openDocuments()) {
         d->documentLoaded(document);
     }
@@ -102,11 +71,6 @@ StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
 
 StaticAssistantsManager::~StaticAssistantsManager()
 {
-}
-
-QExplicitlySharedDataPointer<IAssistant> StaticAssistantsManager::activeAssistant()
-{
-    return d->m_activeAssistant;
 }
 
 void StaticAssistantsManager::registerAssistant(const StaticAssistant::Ptr assistant)
@@ -122,7 +86,7 @@ void StaticAssistantsManager::unregisterAssistant(const StaticAssistant::Ptr ass
     d->m_registeredAssistants.removeOne(assistant);
 }
 
-QList<StaticAssistant::Ptr> StaticAssistantsManager::registeredAssistants() const
+QVector<StaticAssistant::Ptr> StaticAssistantsManager::registeredAssistants() const
 {
     return d->m_registeredAssistants;
 }
@@ -130,192 +94,78 @@ QList<StaticAssistant::Ptr> StaticAssistantsManager::registeredAssistants() cons
 void StaticAssistantsManager::Private::documentLoaded(IDocument* document)
 {
     if (document->textDocument()) {
-        connect(document->textDocument(),
-                &Document::textInserted, q,
-                [&] (Document* document, const Cursor& cursor, const QString& text) { textInserted(document, cursor, text); });
-        connect(document->textDocument(),
-                &Document::textRemoved, q,
-                [&] (Document* document, const Range& range, const QString& removedText) { textRemoved(document, range, removedText); });
+        auto doc = document->textDocument();
+        connect(doc, &KTextEditor::Document::textInserted, q,
+                [&] (KTextEditor::Document* doc, const Cursor& cursor, const QString& text) {
+                    textInserted(doc, cursor, text);
+                });
+        connect(doc, &KTextEditor::Document::textRemoved, q,
+                [&] (KTextEditor::Document* doc, const Range& range, const QString& removedText) {
+                    textRemoved(doc, range, removedText);
+                });
     }
 }
 
-void StaticAssistantsManager::hideAssistant()
+void StaticAssistantsManager::Private::textInserted(Document* doc, const Cursor& cursor, const QString& text)
 {
-    d->m_activeAssistant = QExplicitlySharedDataPointer<KDevelop::IAssistant>();
-    d->m_activeProblemAssistant = false;
-    emit activeAssistantChanged();
+    Q_FOREACH ( auto assistant, m_registeredAssistants ) {
+        auto range = Range(cursor, cursor+Cursor(0, text.size()));
+        assistant->textChanged(doc, range, {});
+    }
 }
 
-void StaticAssistantsManager::Private::textInserted(Document* document, const Cursor& cursor, const QString& text)
-{
-    m_eventualDocument = document;
-    m_eventualRange = Range(cursor, text.size());
-    m_eventualRemovedText.clear();
-    QMetaObject::invokeMethod(q, "eventuallyStartAssistant", Qt::QueuedConnection);
-}
-
-void StaticAssistantsManager::Private::textRemoved(Document* document, const Range& range,
+void StaticAssistantsManager::Private::textRemoved(Document* doc, const Range& range,
                                       const QString& removedText)
 {
-    m_eventualDocument = document;
-    m_eventualRange = range;
-    m_eventualRemovedText = removedText;
-    QMetaObject::invokeMethod(q, "eventuallyStartAssistant", Qt::QueuedConnection);
+    Q_FOREACH ( auto assistant, m_registeredAssistants ) {
+        assistant->textChanged(doc, range, removedText);
+    }
 }
 
-void StaticAssistantsManager::Private::eventuallyStartAssistant()
+void StaticAssistantsManager::notifyAssistants(const IndexedString& url, const KDevelop::ReferencedTopDUContext& context)
 {
-    if (!m_eventualDocument) {
-        return;
+    Q_FOREACH ( auto assistant, d->m_registeredAssistants ) {
+        assistant->updateReady(url, context);
     }
+}
 
+QVector<KDevelop::Problem::Ptr> KDevelop::StaticAssistantsManager::problemsForContext(const KDevelop::ReferencedTopDUContext& top)
+{
     View* view = ICore::self()->documentController()->activeTextDocumentView();
-    if (!view) {
-        return;
-    }
-    if (view->document() != m_eventualDocument) {
-        qWarning(LANGUAGE) << "Active view does not belong to document of last observed change!";
-        return;
+    if (!view || !top || IndexedString(view->document()->url()) != top->url()) {
+        return {};
     }
 
-    auto language = ICore::self()->languageController()->languagesForUrl(m_eventualDocument.data()->url()).value(0);
+    auto doc = top->url();
+    auto language = ICore::self()->languageController()->languagesForUrl(doc.toUrl()).value(0);
     if (!language) {
-        return;
+        return {};
     }
 
+    auto ret = QVector<KDevelop::Problem::Ptr>();
     qCDebug(LANGUAGE) << "Trying to find assistants for language" << language->name();
-    foreach (const auto& assistant, m_registeredAssistants) {
+    foreach (const auto& assistant, d->m_registeredAssistants) {
         if (assistant->supportedLanguage() != language)
             continue;
 
-        // notify assistant about editor changes
-        assistant->textChanged(view, m_eventualRange, m_eventualRemovedText);
-
         if (assistant->isUseful()) {
-            startAssistant(IAssistant::Ptr(assistant.data()));
-            break;
+            qDebug() << "assistant is now useful:" << assistant.data();
+
+            auto p = new KDevelop::StaticAssistantProblem();
+            auto range = assistant->displayRange();
+            qDebug() << "range:" << range;
+            p->setFinalLocation(DocumentRange(doc, range));
+            p->setSource(KDevelop::IProblem::SemanticAnalysis);
+            p->setSeverity(KDevelop::IProblem::Warning);
+            p->setDescription(assistant->title());
+            p->setSolutionAssistant(IAssistant::Ptr(assistant.data()));
+
+            ret.append(KDevelop::Problem::Ptr(p));
         }
     }
-
-    // optimize, esp. for setText() calls as done in e.g. reformat source
-    // only start the assitant once for multiple textRemoved/textInserted signals
-    m_eventualDocument.clear();
-    m_eventualRange = Range::invalid();
-    m_eventualRemovedText.clear();
+    return ret;
 }
 
-void StaticAssistantsManager::Private::startAssistant(IAssistant::Ptr assistant)
-{
-    if (assistant == m_activeAssistant) {
-        return;
-    }
 
-    qCDebug(LANGUAGE()) << "Starting assistant:" << assistant->title();
-
-    if (m_activeAssistant) {
-        m_activeAssistant->doHide();
-    }
-
-    if (!m_currentView)
-        return;
-
-    m_activeAssistant = assistant;
-    if (m_activeAssistant) {
-        connect(m_activeAssistant.data(), &IAssistant::hide, q, &StaticAssistantsManager::hideAssistant, Qt::UniqueConnection);
-        ICore::self()->uiController()->popUpAssistant(IAssistant::Ptr(m_activeAssistant.data()));
-
-        m_assistantStartedAt =  m_currentView.data()->cursorPosition();
-    }
-
-    emit q->activeAssistantChanged();
-}
-
-void StaticAssistantsManager::Private::updateReady(const IndexedString& url, const ReferencedTopDUContext& topContext)
-{
-    if (ICore::self()->shuttingDown()) {
-        return;
-    }
-
-    if (url != m_currentDocument) {
-        return;
-    }
-
-    if (m_activeAssistant) {
-        if (m_activeProblemAssistant) {
-            m_activeAssistant->doHide(); //Hide the assistant, as we will create a new one if the problem is still there
-        } else {
-            return;
-        }
-    }
-
-    DUChainReadLocker lock(DUChain::lock(), 300);
-    if (!lock.locked()) {
-        return;
-    }
-
-    if (topContext) {
-        checkAssistantForProblems(topContext);
-    }
-}
-
-void StaticAssistantsManager::Private::cursorPositionChanged(View*, const Cursor& pos)
-{
-    if (m_activeAssistant && m_assistantStartedAt.isValid()
-        && abs(m_assistantStartedAt.line() - pos.line()) >= 1)
-    {
-        m_activeAssistant->doHide();
-    }
-
-    m_timer->start();
-}
-
-void StaticAssistantsManager::Private::documentActivated(IDocument* doc)
-{
-    if (doc) {
-        m_currentDocument = IndexedString(doc->url());
-    }
-
-    if (m_currentView) {
-        QObject::disconnect(m_cursorPositionChangeConnection);
-        m_currentView.clear();
-    }
-
-    m_currentView = ICore::self()->documentController()->activeTextDocumentView();
-
-    if (m_currentView) {
-        m_cursorPositionChangeConnection = connect(m_currentView.data(),
-                &View::cursorPositionChanged, q,
-                [&] (View* v, const Cursor& pos) { cursorPositionChanged(v, pos); });
-    }
-}
-
-void StaticAssistantsManager::Private::checkAssistantForProblems(TopDUContext* top)
-{
-    foreach (ProblemPointer problem, top->problems()) {
-        if (m_currentView && m_currentView.data()->cursorPosition().line() == problem->range().start.line) {
-            IAssistant::Ptr solution = problem->solutionAssistant();
-            if(solution) {
-                startAssistant(solution);
-                m_activeProblemAssistant = true;
-                break;
-            }
-        }
-    }
-}
-
-void StaticAssistantsManager::Private::timeout()
-{
-    if (!m_activeAssistant && m_currentView) {
-        DUChainReadLocker lock(DUChain::lock(), 300);
-        if (!lock.locked()) {
-            return;
-        }
-
-        TopDUContext* top = DUChainUtils::standardContextForUrl(m_currentDocument.toUrl());
-        if (top) {
-            checkAssistantForProblems(top);
-        }
-    }
-}
 
 #include "moc_staticassistantsmanager.cpp"

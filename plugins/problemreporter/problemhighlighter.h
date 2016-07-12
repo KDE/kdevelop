@@ -26,22 +26,7 @@
 #include <language/duchain/problem.h>
 #include <qpointer.h>
 #include <ktexteditor/movingrange.h>
-#include <KTextEditor/TextHintInterface>
 #include <interfaces/iproblem.h>
-
-class ProblemHighlighter;
-
-class ProblemTextHintProvider : public KTextEditor::TextHintProvider
-{
-public:
-    explicit ProblemTextHintProvider(ProblemHighlighter* highlighter);
-
-    QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
-
-private:
-    ProblemHighlighter* m_highlighter;
-    KTextEditor::Range m_currentHintRange;
-};
 
 class ProblemHighlighter : public QObject
 {
@@ -53,7 +38,6 @@ public:
     void setProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
 private slots:
-    void viewCreated(KTextEditor::Document*, KTextEditor::View*);
     void aboutToRemoveText(const KTextEditor::Range& range);
     void clearProblems();
 
@@ -62,9 +46,6 @@ private:
     QList<KTextEditor::MovingRange*> m_topHLRanges;
     QVector<KDevelop::IProblem::Ptr> m_problems;
     QMap<KTextEditor::MovingRange*, KDevelop::IProblem::Ptr> m_problemsForRanges;
-
-    friend class ProblemTextHintProvider;
-    ProblemTextHintProvider m_textHintProvider;
 
 public slots:
     void settingsChanged();

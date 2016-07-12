@@ -20,6 +20,8 @@
 #define KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H
 
 #include <interfaces/iproblem.h>
+#include <interfaces/iassistant.h>
+
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 #include <language/languageexport.h>
 #include <qpointer.h>
@@ -30,7 +32,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavi
 {
   Q_OBJECT
   public:
-    explicit ProblemNavigationContext(const IProblem::Ptr& problem);
+    enum Flag {
+      NoFlag = 0,
+      ShowLocation = 1 << 0,
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
+    explicit ProblemNavigationContext(const IProblem::Ptr& problem, const Flags flags = {});
     ~ProblemNavigationContext() override;
 
     QString name() const override;
@@ -38,10 +46,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavi
     QWidget* widget() const override;
     bool isWidgetMaximized() const override;
 
+    NavigationContextPointer executeKeyAction(QString key) override;
+
+public slots:
+    void executeAction(int index); // TODO: Add API in base class?
+
   private:
     IProblem::Ptr m_problem;
+    Flags m_flags;
 
     QPointer<QWidget> m_widget;
+    IAssistant::Ptr m_cachedAssistant; // cache assistant, calling IAssistant::solutionAssistant() might be expensive
 };
 
 }

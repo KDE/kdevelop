@@ -26,6 +26,7 @@
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/mainwindow.h>
+#include <iprojectcontroller.h>
 
 #include "core.h"
 #include "uicontroller.h"
@@ -209,7 +210,7 @@ void PartDocument::setPrettyName(QString name)
     if(!name.isEmpty())
         setTitle(name);
     else
-        setTitle(url().fileName());
+        setTitle(Core::self()->projectController()->prettyFileName(url(), KDevelop::IProjectController::FormatPlain));
 }
 
 QMap<QWidget*, KParts::Part*> PartDocument::partForView() const

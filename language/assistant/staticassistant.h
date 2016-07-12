@@ -23,8 +23,12 @@
 #define KDEVPLATFORM_STATICASSISTANT_H
 
 #include <language/languageexport.h>
+#include <serialization/indexedstring.h>
+#include <language/duchain/topducontext.h>
 
 #include <interfaces/iassistant.h>
+
+#include <ktexteditor/range.h>
 
 namespace KTextEditor {
 class Document;
@@ -75,7 +79,7 @@ public:
      *
      * Reimplement in subclass
      */
-    virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange,
+    virtual void textChanged(KTextEditor::Document* doc, const KTextEditor::Range& invocationRange,
                              const QString& removedText = QString()) = 0;
     /**
      * Whether it's worth showing this assistant to the user
@@ -83,6 +87,13 @@ public:
      * Reimplement in subclass
      */
     virtual bool isUseful() const = 0;
+
+    /**
+     * The range the assistant should be displayed in.
+     */
+    virtual KTextEditor::Range displayRange() const = 0;
+
+    virtual void updateReady(const IndexedString&, const KDevelop::ReferencedTopDUContext&) { }
 
 private:
     struct Private;

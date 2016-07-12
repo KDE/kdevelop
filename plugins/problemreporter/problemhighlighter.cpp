@@ -24,7 +24,6 @@
 
 #include <KTextEditor/Document>
 #include <KTextEditor/MarkInterface>
-#include <ktexteditor/texthintinterface.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/movinginterface.h>
 
@@ -67,14 +66,9 @@ QColor colorForSeverity(IProblem::Severity severity)
 
 ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     : m_document(document)
-    , m_textHintProvider(this)
 {
     Q_ASSERT(m_document);
 
-    foreach (KTextEditor::View* view, m_document->views())
-        viewCreated(document, view);
-
-    connect(m_document.data(), &Document::viewCreated, this, &ProblemHighlighter::viewCreated);
     connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this,
             &ProblemHighlighter::settingsChanged);
     connect(m_document.data(), &Document::aboutToReload, this, &ProblemHighlighter::clearProblems);
@@ -93,55 +87,6 @@ void ProblemHighlighter::settingsChanged()
     setProblems(m_problems);
 }
 
-void ProblemHighlighter::viewCreated(Document*, View* view)
-{
-    KTextEditor::TextHintInterface* iface = dynamic_cast<KTextEditor::TextHintInterface*>(view);
-    if (!iface)
-        return;
-
-    iface->registerTextHintProvider(&m_textHintProvider);
-}
-
-ProblemTextHintProvider::ProblemTextHintProvider(ProblemHighlighter* highlighter)
-    : m_highlighter(highlighter)
-{
-}
-
-QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
-{
-    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(view->document());
-    if (moving) {
-        ///@todo Sort the ranges when writing them, and do binary search instead of linear
-        foreach (MovingRange* range, m_highlighter->m_topHLRanges) {
-            if (m_highlighter->m_problemsForRanges.contains(range) && range->contains(pos)) {
-                // There is a problem which's range contains the cursor
-                IProblem::Ptr problem = m_highlighter->m_problemsForRanges[range];
-                if (problem->source() == IProblem::ToDo) {
-                    continue;
-                }
-
-                if (m_currentHintRange == range->toRange()) {
-                    continue;
-                }
-                m_currentHintRange = range->toRange();
-
-                KDevelop::AbstractNavigationWidget* widget = new KDevelop::AbstractNavigationWidget;
-                widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problem)));
-
-                KDevelop::NavigationToolTip* tooltip
-                    = new KDevelop::NavigationToolTip(view, QCursor::pos() + QPoint(20, 40), widget);
-
-                tooltip->resize(widget->sizeHint() + QSize(10, 10));
-                tooltip->setHandleRect(KTextEditorHelpers::getItemBoundingRect(view, m_currentHintRange));
-                tooltip->connect(tooltip, &ActiveToolTip::destroyed, [&] () { m_currentHintRange = {}; });
-                ActiveToolTip::showToolTip(tooltip, 99, QStringLiteral("problem-tooltip"));
-                return QString();
-            }
-        }
-    }
-    return QString();
-}
-
 ProblemHighlighter::~ProblemHighlighter()
 {
     if (m_topHLRanges.isEmpty() || !m_document)
@@ -152,6 +97,7 @@ ProblemHighlighter::~ProblemHighlighter()
 
 void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
 {
+    qDebug() << "updating problem highlight";
     if (!m_document)
         return;
 

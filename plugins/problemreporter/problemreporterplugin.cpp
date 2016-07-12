@@ -44,6 +44,7 @@
 #include "problemhighlighter.h"
 #include "problemtreeview.h"
 #include "problemreportermodel.h"
+#include "language/assistant/staticassistantsmanager.h"
 #include <interfaces/context.h>
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/duchainutils.h>
@@ -128,17 +129,29 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
 {
     Q_ASSERT(document->textDocument());
     m_highlighters.insert(IndexedString(document->url()), new ProblemHighlighter(document->textDocument()));
-    DUChainReadLocker lock(DUChain::lock());
     DUChain::self()->updateContextForUrl(IndexedString(document->url()),
                                          KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
-void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop::ReferencedTopDUContext&)
+void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop::ReferencedTopDUContext& top)
 {
+    {
+      DUChainWriteLocker lock(DUChain::lock(), 300);
+      if ( !lock.locked() ) {
+        return;
+      }
+      ICore::self()->languageController()->staticAssistantsManager()->notifyAssistants(url, top);
+      auto assistantProblems = ICore::self()->languageController()->staticAssistantsManager()->problemsForContext(top);
+      Q_FOREACH ( const auto p, assistantProblems ) {
+        qDebug() << "adding problem:" << p << "assistant:" << p->solutionAssistant().data() << p->solutionAssistant()->actions().size();
+        top->addProblem(p);
+      }
+    }
+
     m_model->problemsUpdated(url);
     ProblemHighlighter* ph = m_highlighters.value(url);
     if (ph) {
-        QVector<IProblem::Ptr> allProblems = m_model->problems(url, false);
+        auto allProblems = m_model->problems(url, false);
         ph->setProblems(allProblems);
     }
 }

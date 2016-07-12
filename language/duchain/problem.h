@@ -30,6 +30,7 @@ Boston, MA 02110-1301, USA.
 #include <serialization/indexedstring.h>
 #include "indexedtopducontext.h"
 #include <interfaces/iproblem.h>
+#include <interfaces/iassistant.h>
 
 namespace KDevelop
 {
@@ -233,6 +234,19 @@ private:
     mutable QList<Ptr> m_diagnostics;
     uint m_indexInTopContext;
     //END dynamic data
+};
+
+class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistantProblem : public KDevelop::Problem {
+  public:
+    KDevelop::IAssistant::Ptr solutionAssistant() const override {
+      return m_solution;
+    }
+    void setSolutionAssistant(KDevelop::IAssistant::Ptr p) {
+      m_solution = p;
+    }
+
+  private:
+    KDevelop::IAssistant::Ptr m_solution;
 };
 
 }
