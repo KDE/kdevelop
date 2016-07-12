@@ -63,9 +63,7 @@ void TestCustomBuildSystemPlugin::loadSimpleProject()
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
-    if( !projectSpy->wait( 20000 ) ) {
-        qFatal("Expected project to be loaded within 20 seconds, but this didn't happen");
-    }
+    QVERIFY(projectSpy->wait(10000));
     IProject* project = ICore::self()->projectController()->findProjectByName( "SimpleProject" );
     QVERIFY( project );
 
@@ -79,9 +77,7 @@ void TestCustomBuildSystemPlugin::buildDirProject()
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
-    if( !projectSpy->wait( 20000 ) ) {
-        qFatal("Expected project to be loaded within 20 seconds, but this didn't happen");
-    }
+    QVERIFY(projectSpy->wait(10000));
     IProject* project = ICore::self()->projectController()->findProjectByName( "BuilddirProject" );
     QVERIFY( project );
 
@@ -97,9 +93,7 @@ void TestCustomBuildSystemPlugin::loadMultiPathProject()
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
-    if( !projectSpy->wait( 20000 ) ) {
-        qFatal("Expected project to be loaded within 20 seconds, but this didn't happen");
-    }
+    QVERIFY(projectSpy->wait(10000));
     IProject* project = ICore::self()->projectController()->findProjectByName( "MultiPathProject" );
     QVERIFY( project );
     KDevelop::ProjectBaseItem* mainfile = 0;
