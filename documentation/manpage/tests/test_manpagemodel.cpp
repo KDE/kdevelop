@@ -57,8 +57,8 @@ void TestManPageModel::testDocumentation()
 
     const QString description = documentation.description();
     QVERIFY(!description.isEmpty());
-    qDebug() << description;
-    if (description.contains("No man page matching to dlmopen found")) {
+    qDebug() << "Description:" << description;
+    if (description.isEmpty() || description.contains("No man page matching to dlmopen found")) {
         QSKIP("This test requires installed man pages for dlmopen & friends");
     }
 
