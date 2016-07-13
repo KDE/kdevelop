@@ -136,6 +136,8 @@ public:
 
     ~BackgroundParserPrivate()
     {
+        m_weaver.resume();
+        m_weaver.finish();
     }
 
     // Non-mutex guarded functions, only call with m_mutex acquired.
