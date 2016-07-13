@@ -272,11 +272,18 @@ PluginController::PluginController(Core *core)
     d->plugins = newPlugins;
 
     KTextEditorIntegration::initialize();
-    const QVector<KPluginMetaData> katePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData & md) {
+    const QVector<KPluginMetaData> ktePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData & md) {
         return md.serviceTypes().contains(QStringLiteral("KTextEditor/Plugin"))
             && md.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"));
     });
-    foreach (const auto& info, katePlugins) {
+
+    foundPlugins.clear();
+    std::for_each(ktePlugins.cbegin(), ktePlugins.cend(), [&foundPlugins](const KPluginMetaData& data) {
+        foundPlugins << data.pluginId();
+    });
+    qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << foundPlugins;
+
+    foreach (const auto& info, ktePlugins) {
         auto data = info.rawData();
         // add some KDevelop specific JSON data
         data[KEY_Category()] = KEY_Global();
