@@ -60,7 +60,7 @@ checkToolsInPath sed qdbus ls cut dirname mktemp basename readlink hostname
 
 if ! [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
     # Check for additional utilities that are required on the client machine
-    checkToolsInPath kioclient
+    checkToolsInPath kioclient5
 fi
 
 # Queries the session name from the running application instance
@@ -476,11 +476,11 @@ function exec! {
 }
 
 function copytohost! {
-    executeInApp "kioclient copy $1 $(mapFileToClient $2)"
+    executeInApp "kioclient5 copy $1 $(mapFileToClient $2)"
 }
 
 function copytoclient! {
-    executeInApp "kioclient copy $(mapFileToClient $1) $2"
+    executeInApp "kioclient5 copy $(mapFileToClient $1) $2"
 }
 
 function cexec! {
@@ -498,7 +498,7 @@ function cexec! {
             if [[ "$FILE" == fish://* ]]; then
                 # Add a prefix to copy the file into a temporary file
                 # Keep the baseline as suffix, so that applications can easily recognize the mimetype
-                PREFIX+="FILE$TMP=\$(mktemp).$(basename $FILE); kioclient copy $FILE \$FILE$TMP;"
+                PREFIX+="FILE$TMP=\$(mktemp).$(basename $FILE); kioclient5 copy $FILE \$FILE$TMP;"
                 # Use the temporary variable instead of the name
                 FILE="\$FILE$TMP"
                 TMP=$(($TMP+1))
