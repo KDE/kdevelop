@@ -644,8 +644,9 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
         if( !plugin) {
             plugin = loadPluginInternal( info.pluginId() );
         }
-        if (plugin)
+        if (plugin && !plugins.contains(plugin)) {
             plugins << plugin;
+        }
         return true;
     }, extension, constraints);
     return plugins;
