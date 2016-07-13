@@ -93,17 +93,12 @@ void TestQMakeProject::testBuildDirectory()
         ICore::self()->projectController()->closeProject(p);
     }
 
-    qDebug() << "HERE" << projectName;
-
     // setup project config, to avoid build dir chooser dialog popping up
     {
         // note: all checks from QMakeProjectManager::projectNeedsConfiguration must be satisfied
-
         const QString fileName
             = QString("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName);
 
-        qDebug() << "WRITING" << fileName;
-        QVERIFY(QFileInfo::exists(fileName));
         KConfig cfg(fileName);
         KConfigGroup group(&cfg, QMakeConfig::CONFIG_GROUP);
 
@@ -115,6 +110,8 @@ void TestQMakeProject::testBuildDirectory()
         KConfigGroup buildDirGroup = KConfigGroup(&cfg, QMakeConfig::CONFIG_GROUP).group(buildDir);
         buildDirGroup.writeEntry(QMakeConfig::QMAKE_BINARY, QMAKE_TESTS_QMAKE_BINARY);
         buildDirGroup.sync();
+
+        QVERIFY(QFileInfo::exists(fileName));
     }
 
     // opens project with kdevelop
