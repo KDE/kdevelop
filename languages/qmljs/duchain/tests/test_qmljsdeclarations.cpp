@@ -43,7 +43,7 @@ using namespace KDevelop;
 
 void TestDeclarations::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({"kdevqmljslanguagesupport"});
     TestCore::initialize(Core::NoUi);
 
     QmlJS::registerDUChainItems();
@@ -266,9 +266,6 @@ void TestDeclarations::testQMLtypesImportPaths()
     path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Dialogs", "1.1");
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Extras", "1.1");
-    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
-
     path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.LocalStorage", "2.0");
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
@@ -282,13 +279,7 @@ void TestDeclarations::testQMLtypesImportPaths()
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
     // QtQml QML modules
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQml", "2.2");
-    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
-
     path = QmlJS::Cache::instance().modulePath(stubPath, "QtQml.Models", "2.3");
-    QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
-
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQml.StateMachine", "1.0");
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
     // QtMultimedia QML modules

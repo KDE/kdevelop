@@ -29,11 +29,19 @@
 
 #=============================================================================
 
+set(KNOWN_VERSIONS 3.9 3.8 3.7 3.6 3.5)
+
+foreach(version ${KNOWN_VERSIONS})
+    if (LLVM_DIR OR (DEFINED Clang_FIND_VERSION AND Clang_FIND_VERSION VERSION_GREATER version))
+        break()
+    endif ()
+
 if (${Clang_FIND_REQUIRED})
-    find_package(LLVM ${Clang_FIND_VERSION} REQUIRED)
+        find_package(LLVM ${version} REQUIRED)
 else ()
-    find_package(LLVM ${Clang_FIND_VERSION})
+        find_package(LLVM ${version})
 endif ()
+endforeach()
 
 set(CLANG_FOUND FALSE)
 

@@ -56,13 +56,16 @@ void TestManPageModel::testDocumentation()
     QVERIFY(spy.wait());
 
     const QString description = documentation.description();
-    if (!description.isEmpty()) {
-        qDebug() << description;
-        // check that we've found the correct page by checking some references
-        QVERIFY(description.contains("dlclose"));
-        QVERIFY(description.contains("dlerror"));
-        QVERIFY(description.contains("dlopen"));
+    QVERIFY(!description.isEmpty());
+    qDebug() << "Description:" << description;
+    if (description.isEmpty() || description.contains("No man page matching to dlmopen found")) {
+        QSKIP("This test requires installed man pages for dlmopen & friends");
     }
+
+    // check that we've found the correct page by checking some references
+    QVERIFY(description.contains("dlclose"));
+    QVERIFY(description.contains("dlerror"));
+    QVERIFY(description.contains("dlopen"));
 }
 
 QTEST_MAIN(TestManPageModel)
