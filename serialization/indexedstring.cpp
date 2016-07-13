@@ -335,7 +335,7 @@ const char* IndexedString::c_str() const
     if (!m_index) {
         return 0;
     } else if (isSingleCharIndex(m_index)) {
-#if __BYTE_ORDER == __LITTLE_ENDIAN
+#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
         const uint offset = 0;
 #else
         const uint offset = 3;
