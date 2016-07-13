@@ -276,7 +276,7 @@ void TestAssistants::testRenameAssistant_data()
             << StateChange(Testbed::CppDoc, Range(0,13,0,13), "b", "abi")
             << StateChange(Testbed::CppDoc, Range(0,14,0,14), "c", "abci")
         )
-        << "int foo(int abc)\n { abc = 0; return abc; }";
+        << "int foo(int abci)\n { abci = 0; return abci; }";
     QTest::newRow("Letter-by-Letter Insert")
         << "int foo(int abg)\n { abg = 0; return abg; }"
         << "abg"
