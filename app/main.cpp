@@ -45,7 +45,6 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QProcess>
-#include <QResource>
 #include <QSessionManager>
 #include <QTextStream>
 #include <QDBusInterface>
@@ -263,16 +262,6 @@ static QString findSessionId(const QString& session)
     return projectAsSession;
 }
 
-static void tryLoadIconResources()
-{
-    const QString breezeIcons = QStandardPaths::locate(QStandardPaths::DataLocation, QStringLiteral("icons/breeze/breeze-icons.rcc"));
-    if (!breezeIcons.isEmpty() && QFile::exists(breezeIcons)) {
-        // prepend /icons to the root to comply with KIcon* machinery
-        QResource::registerResource(breezeIcons, QStringLiteral("/icons/breeze"));
-        QIcon::setThemeSearchPaths(QStringList() << QStringLiteral(":/icons"));
-    }
-}
-
 static qint64 findSessionPid(const QString &sessionId)
 {
     KDevelop::SessionRunInfo sessionInfo = KDevelop::SessionController::sessionRunInfo( sessionId );
@@ -410,8 +399,6 @@ int main( int argc, char *argv[] )
     KDevelopApplication app(argc, argv);
 
     KCrash::initialize();
-
-    tryLoadIconResources();
 
     Kdelibs4ConfigMigrator migrator(QStringLiteral("kdevelop"));
     migrator.setConfigFiles({QStringLiteral("kdeveloprc")});
