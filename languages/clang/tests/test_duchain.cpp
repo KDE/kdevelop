@@ -73,6 +73,11 @@ public:
         return includes;
     }
 
+    Path::List frameworkDirectoriesInBackground(const QString&) const override
+    {
+        return {};
+    }
+
     IDefinesAndIncludesManager::Type type() const override
     {
         return IDefinesAndIncludesManager::UserDefined;
