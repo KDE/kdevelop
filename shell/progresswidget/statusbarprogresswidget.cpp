@@ -37,6 +37,9 @@
 #include "statusbarprogresswidget.h"
 #include "progressdialog.h"
 #include "progressmanager.h"
+#ifdef Q_OS_OSX
+#include "../macdockprogressview.h"
+#endif
 
 #include <KLocalizedString>
 
@@ -178,6 +181,10 @@ void StatusbarProgressWidget::activateSingleItemMode()
     m_pProgressBar->setMaximum( 100 );
     m_pProgressBar->setValue( mCurrentItem->progress() );
     m_pProgressBar->setTextVisible( true );
+#ifdef Q_OS_OSX
+    MacDockProgressView::setRange( 0, 100 );
+    MacDockProgressView::setProgress( mCurrentItem->progress() );
+#endif
 }
 
 void StatusbarProgressWidget::slotShowItemDelayed()
@@ -188,6 +195,10 @@ void StatusbarProgressWidget::slotShowItemDelayed()
     } else if ( !noItems ) { // N items
         m_pProgressBar->setMaximum( 0 );
         m_pProgressBar->setTextVisible( false );
+#ifdef Q_OS_OSX
+        MacDockProgressView::setRange( 0, 0 );
+        MacDockProgressView::setProgress( 0 );
+#endif
     }
 
     if ( !noItems && mode == None ) {
@@ -201,6 +212,9 @@ void StatusbarProgressWidget::slotProgressItemProgress( ProgressItem *item, unsi
     Q_ASSERT( item == mCurrentItem); // the only one we should be connected to
     Q_UNUSED( item );
     m_pProgressBar->setValue( value );
+#ifdef Q_OS_OSX
+    MacDockProgressView::setProgress( value );
+#endif
 }
 
 void StatusbarProgressWidget::setMode() {
@@ -212,6 +226,9 @@ void StatusbarProgressWidget::setMode() {
         // show the empty label in order to make the status bar look better
         stack->show();
         stack->setCurrentWidget( m_pLabel );
+#ifdef Q_OS_OSX
+        MacDockProgressView::setProgressVisible( false );
+#endif
         break;
 
     case Progress:
@@ -220,6 +237,9 @@ void StatusbarProgressWidget::setMode() {
         if ( m_bShowButton ) {
             m_pButton->show();
         }
+#ifdef Q_OS_OSX
+        MacDockProgressView::setProgressVisible( true );
+#endif
         break;
     }
 }

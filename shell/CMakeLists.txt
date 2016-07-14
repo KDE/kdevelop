@@ -82,6 +82,12 @@ set(KDevPlatformShell_LIB_SRCS
 
 )
 
+if(APPLE)
+    set(KDevPlatformShell_LIB_SRCS ${KDevPlatformShell_LIB_SRCS}
+        macdockprogressview.mm
+    )
+endif()
+
 kconfig_add_kcfg_files(KDevPlatformShell_LIB_SRCS
     settings/uiconfig.kcfgc
     settings/projectconfig.kcfgc
@@ -140,6 +146,9 @@ LINK_PRIVATE
     KDev::Util
     KDev::Documentation
 )
+if(APPLE)
+    target_link_libraries(KDevPlatformShell PRIVATE "-framework AppKit")
+endif()
 
 install(FILES
     mainwindow.h
