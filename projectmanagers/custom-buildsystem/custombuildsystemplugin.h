@@ -70,12 +70,13 @@ public:
 // BuildSystemManager API
 public:
     bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*>& file, KDevelop::ProjectTargetItem* parent ) override;
-    bool hasIncludesOrDefines( KDevelop::ProjectBaseItem* ) const override;
+    bool hasBuildInfo( KDevelop::ProjectBaseItem* ) const override;
     KDevelop::Path buildDirectory( KDevelop::ProjectBaseItem* ) const override;
     IProjectBuilder* builder() const override;
     KDevelop::ProjectTargetItem* createTarget( const QString& target, KDevelop::ProjectFolderItem* parent ) override;
     QHash<QString, QString> defines( KDevelop::ProjectBaseItem* ) const override;
     KDevelop::Path::List includeDirectories( KDevelop::ProjectBaseItem* ) const override;
+    KDevelop::Path::List frameworkDirectories( KDevelop::ProjectBaseItem* ) const override;
     bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*>& ) override;
     bool removeTarget( KDevelop::ProjectTargetItem* target ) override;
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const override;

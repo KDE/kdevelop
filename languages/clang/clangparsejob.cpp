@@ -140,7 +140,7 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url, bool* hasBuildSys
     }
     if (file && file->project()) {
         if (auto bsm = file->project()->buildSystemManager()) {
-            *hasBuildSystemInfo = bsm->hasIncludesOrDefines(file);
+            *hasBuildSystemInfo = bsm->hasBuildInfo(file);
         }
     }
     return file;
@@ -165,10 +165,12 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     bool hasBuildSystemInfo;
     if (auto file = findProjectFileItem(tuUrl, &hasBuildSystemInfo)) {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(file));
+        m_environment.addFrameworkDirectories(IDefinesAndIncludesManager::manager()->frameworkDirectories(file));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(file));
         m_environment.setParserSettings(ClangSettingsManager::self()->parserSettings(file));
     } else {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(tuUrl.str()));
+        m_environment.addFrameworkDirectories(IDefinesAndIncludesManager::manager()->frameworkDirectories(tuUrl.str()));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(tuUrl.str()));
         m_environment.setParserSettings(ClangSettingsManager::self()->parserSettings(tuUrl.str()));
     }
@@ -230,6 +232,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
         }
 
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includesInBackground(tuUrlStr));
+        m_environment.addFrameworkDirectories(IDefinesAndIncludesManager::manager()->frameworkDirectoriesInBackground(tuUrlStr));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->definesInBackground(tuUrlStr));
         m_environment.setPchInclude(userDefinedPchIncludeForFile(tuUrlStr));
     }

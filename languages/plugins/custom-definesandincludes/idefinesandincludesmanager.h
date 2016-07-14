@@ -72,6 +72,8 @@ public:
 
         virtual Path::List includes( ProjectBaseItem* item ) const = 0;
 
+        virtual Path::List frameworkDirectories( ProjectBaseItem* item ) const = 0;
+
         /// @return the type of i/d this provider provides
         virtual Type type() const = 0;
     };
@@ -90,6 +92,8 @@ public:
 
         virtual Path::List includesInBackground( const QString& path ) const = 0;
 
+        virtual Path::List frameworkDirectoriesInBackground( const QString& path ) const = 0;
+
         virtual Defines definesInBackground( const QString& path ) const = 0;
 
         /// @return the type of i/d this provider provides
@@ -106,6 +110,11 @@ public:
     ///NOTE: call it from the foreground thread only.
     virtual Path::List includes( ProjectBaseItem* item, Type type = All ) const = 0;
 
+    ///@param item project item
+    ///@return list of framework directories for @p item
+    ///NOTE: call it from the foreground thread only.
+    virtual Path::List frameworkDirectories( ProjectBaseItem* item, Type type = All ) const = 0;
+
     ///@param path path to an out-of-project file.
     ///@return list of defines for @p path
     ///NOTE: call it from the foreground thread only.
@@ -116,6 +125,11 @@ public:
     ///NOTE: call it from the foreground thread only.
     virtual Path::List includes( const QString& path ) const = 0;
 
+    ///@param path path to an out-of-project file.
+    ///@return list of framework directories for @p path
+    ///NOTE: call it from the foreground thread only.
+    virtual Path::List frameworkDirectories( const QString& path ) const = 0;
+
     /**
      * Computes include directories in background thread.
      *
@@ -124,6 +138,15 @@ public:
      * Call it from background thread if possible.
     **/
     virtual Path::List includesInBackground( const QString& path ) const = 0;
+
+    /**
+     * Computes framework directories in background thread.
+     *
+     * This is especially useful for CustomMake projects.
+     *
+     * Call it from background thread if possible.
+    **/
+    virtual Path::List frameworkDirectoriesInBackground( const QString& path ) const = 0;
 
     /**
      * Computes defined macros in background thread.

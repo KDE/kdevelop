@@ -124,7 +124,7 @@ CMakeManager::~CMakeManager()
     parseLock()->unlock();
 }
 
-bool CMakeManager::hasIncludesOrDefines(ProjectBaseItem* item) const
+bool CMakeManager::hasBuildInfo(ProjectBaseItem* item) const
 {
     return m_projects[item->project()].jsonData.files.contains(item->path());
 }
@@ -232,6 +232,11 @@ CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
 Path::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     return fileInformation(item).includes;
+}
+
+Path::List CMakeManager::frameworkDirectories(KDevelop::ProjectBaseItem *item) const
+{
+    return fileInformation(item).frameworkDirectories;
 }
 
 QHash<QString, QString> CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const

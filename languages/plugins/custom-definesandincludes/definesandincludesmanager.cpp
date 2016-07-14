@@ -111,6 +111,10 @@ DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVa
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
     registerProvider(m_settings->provider());
+#ifdef Q_OS_OSX
+    m_defaultFrameworkDirectories += Path(QStringLiteral("/Library/Frameworks"));
+    m_defaultFrameworkDirectories += Path(QStringLiteral("/System/Library/Frameworks"));
+#endif
 }
 
 DefinesAndIncludesManager::~DefinesAndIncludesManager() = default;
@@ -184,6 +188,32 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     return includes;
 }
 
+Path::List DefinesAndIncludesManager::frameworkDirectories( ProjectBaseItem* item, Type type ) const
+{
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
+
+    if (!item) {
+        return m_settings->provider()->frameworkDirectories(nullptr);
+    }
+
+    Path::List frameworkDirectories = m_defaultFrameworkDirectories;
+
+    if ( type & ProjectSpecific ) {
+        auto buildManager = item->project()->buildSystemManager();
+        if ( buildManager ) {
+            frameworkDirectories += buildManager->frameworkDirectories(item);
+        }
+    }
+
+    for (auto provider : m_providers) {
+        if (provider->type() & type) {
+            frameworkDirectories += provider->frameworkDirectories(item);
+        }
+    }
+
+    return frameworkDirectories;
+}
+
 bool DefinesAndIncludesManager::unregisterProvider(IDefinesAndIncludesManager::Provider* provider)
 {
     int idx = m_providers.indexOf(provider);
@@ -218,6 +248,11 @@ Path::List DefinesAndIncludesManager::includes(const QString& path) const
            + m_noProjectIPM->includesAndDefines(path).first;
 }
 
+Path::List DefinesAndIncludesManager::frameworkDirectories(const QString& path) const
+{
+    return m_settings->provider()->frameworkDirectories(nullptr);
+}
+
 void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFile)
 {
     if (auto project = KDevelop::ICore::self()->projectController()->findProjectForUrl(QUrl::fromLocalFile(pathToFile))) {
@@ -236,6 +271,17 @@ Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) 
     }
 
     return includes;
+}
+
+Path::List DefinesAndIncludesManager::frameworkDirectoriesInBackground(const QString& path) const
+{
+    Path::List fwDirs;
+
+    for (auto provider: m_backgroundProviders) {
+        fwDirs += provider->frameworkDirectoriesInBackground(path);
+    }
+
+    return fwDirs;
 }
 
 Defines DefinesAndIncludesManager::definesInBackground(const QString& path) const

@@ -51,6 +51,7 @@ public:
     QStringList files() const;
     QStringList filesForTarget( const QString& ) const;
     QStringList includeDirectories() const;
+    QStringList frameworkDirectories() const;
 
     QStringList targets() const;
 
@@ -80,6 +81,8 @@ private:
     static QHash<QString, QHash<QString, QString> > m_qmakeQueryCache;
     QString m_qtIncludeDir;
     QString m_qtVersion;
+    // On OS X, QT_INSTALL_LIBS is typically a framework directory and should thus be added to the framework search path
+    QString m_qtLibDir;
 };
 
 #endif

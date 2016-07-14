@@ -81,6 +81,30 @@ void TestCustomMake::testIncludeDirectories()
     QVERIFY(result.paths.contains(Path("/testFile4")));
 }
 
+void TestCustomMake::testFrameworkDirectories()
+{
+    QTemporaryDir tempDir;
+    int expectedPaths = 2;
+    {
+        QFile file( tempDir.path() + "/Makefile" );
+        createFile( file );
+        QFile testfile( tempDir.path() + "/testfile.cpp" );
+        createFile(testfile);
+        QTextStream stream1( &file );
+        stream1 << "testfile.o:\n\t clang++ testfile.cpp -iframework /System/Library/Frameworks -F/Library/Frameworks -o testfile";
+    }
+
+    MakeFileResolver mf;
+    auto result = mf.resolveIncludePath(tempDir.path() + "/testfile.cpp");
+    if (!result.success) {
+      qDebug() << result.errorMessage << result.longErrorMessage;
+      QFAIL("Failed to resolve include path.");
+    }
+    QCOMPARE(result.frameworkDirectories.size(), expectedPaths);
+    QVERIFY(result.frameworkDirectories.contains(Path("/System/Library/Frameworks")));
+    QVERIFY(result.frameworkDirectories.contains(Path("/Library/Frameworks")));
+}
+
 void TestCustomMake::testDefines()
 {
     MakeFileResolver mf;

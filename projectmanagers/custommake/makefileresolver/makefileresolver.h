@@ -40,6 +40,10 @@ struct PathResolutionResult
   KDevelop::ModificationRevisionSet includePathDependency;
 
   KDevelop::Path::List paths;
+  // the list of framework directories specified with explicit -iframework and/or -F arguments.
+  // Mainly for OS X, but available everywhere to avoid #ifdefs and
+  // because clang is an out-of-the-box cross-compiler.
+  KDevelop::Path::List frameworkDirectories;
   QHash<QString, QString> defines;
 
   void mergeWith(const PathResolutionResult& rhs);

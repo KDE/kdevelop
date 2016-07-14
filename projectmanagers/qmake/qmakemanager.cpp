@@ -395,14 +395,15 @@ IProjectBuilder* QMakeProjectManager::builder() const
     return m_builder;
 }
 
-Path::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
+Path::List QMakeProjectManager::collectDirectories(ProjectBaseItem* item, const bool collectIncludes) const
 {
     Path::List list;
     QMakeFolderItem* folder = findQMakeFolderParent(item);
     if (folder) {
         foreach (QMakeProjectFile* pro, folder->projectFiles()) {
             if (pro->files().contains(item->path().toLocalFile())) {
-                foreach (const QString& dir, pro->includeDirectories()) {
+                const QStringList directories = collectIncludes ? pro->includeDirectories() : pro->frameworkDirectories();
+                foreach (const QString& dir, directories) {
                     Path path(dir);
                     if (!list.contains(path)) {
                         list << path;
@@ -413,7 +414,8 @@ Path::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
         if (list.isEmpty()) {
             // fallback for new files, use all possible include dirs
             foreach (QMakeProjectFile* pro, folder->projectFiles()) {
-                foreach (const QString& dir, pro->includeDirectories()) {
+                const QStringList directories = collectIncludes ? pro->includeDirectories() : pro->frameworkDirectories();
+                foreach (const QString& dir, directories) {
                     Path path(dir);
                     if (!list.contains(path)) {
                         list << path;
@@ -428,6 +430,16 @@ Path::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
         // qCDebug(KDEV_QMAKE) << "include dirs for" << item->path() << ":" << list;
     }
     return list;
+}
+
+Path::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
+{
+    return collectDirectories(item);
+}
+
+Path::List QMakeProjectManager::frameworkDirectories(ProjectBaseItem* item) const
+{
+    return collectDirectories(item, false);
 }
 
 QHash<QString, QString> QMakeProjectManager::defines(ProjectBaseItem* item) const
@@ -446,7 +458,7 @@ QHash<QString, QString> QMakeProjectManager::defines(ProjectBaseItem* item) cons
     return d;
 }
 
-bool QMakeProjectManager::hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) const
+bool QMakeProjectManager::hasBuildInfo(KDevelop::ProjectBaseItem* item) const
 {
     return findQMakeFolderParent(item);
 }

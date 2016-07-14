@@ -102,10 +102,11 @@ bool QMakeProjectFile::read()
 
     const QString qtInstallHeaders = QStringLiteral("QT_INSTALL_HEADERS");
     const QString qtVersion = QStringLiteral("QT_VERSION");
+    const QString qtInstallLibs = QStringLiteral("QT_INSTALL_LIBS");
 
     const QString binary = QMakeConfig::qmakeBinary(project());
     if (!m_qmakeQueryCache.contains(binary)) {
-        const auto queryResult = QMakeConfig::queryQMake(binary, {qtInstallHeaders, qtVersion});
+        const auto queryResult = QMakeConfig::queryQMake(binary, {qtInstallHeaders, qtVersion, qtInstallLibs});
         if (queryResult.isEmpty()) {
             qCWarning(KDEV_QMAKE) << "Failed to query qmake - bad qmake binary configured?" << binary;
         }
@@ -115,6 +116,7 @@ bool QMakeProjectFile::read()
     const auto cachedQueryResult = m_qmakeQueryCache.value(binary);
     m_qtIncludeDir = cachedQueryResult.value(qtInstallHeaders);
     m_qtVersion = cachedQueryResult.value(qtVersion);
+    m_qtLibDir = cachedQueryResult.value(qtInstallLibs);
 
     return QMakeFile::read();
 }
@@ -249,6 +251,42 @@ QStringList QMakeProjectFile::includeDirectories() const
     addPathsForVariable("UI_DIR", &list);
 
     ifDebug(qCDebug(KDEV_QMAKE) << "final list:" << list;) return list;
+}
+
+// Scan QMAKE_C*FLAGS for -F and -iframework and QMAKE_LFLAGS for good measure. Time will
+// tell if we need to scan the release/debug/... specific versions of QMAKE_C*FLAGS.
+// Also include QT_INSTALL_LIBS which corresponds to Qt's framework directory on OS X.
+QStringList QMakeProjectFile::frameworkDirectories() const
+{
+    const auto variablesToCheck = {QStringLiteral("QMAKE_CFLAGS"),
+                                    QStringLiteral("QMAKE_CXXFLAGS"),
+                                    QStringLiteral("QMAKE_LFLAGS")};
+    const QLatin1String fOption("-F");
+    const QLatin1String iframeworkOption("-iframework");
+    QStringList fwDirs;
+    foreach (const auto& var, variablesToCheck) {
+        bool storeArg = false;
+        foreach (const auto& arg, variableValues(var)) {
+            if (arg == fOption || arg == iframeworkOption) {
+                // detached -F/-iframework arg; set a warrant to store the next argument
+                storeArg = true;
+            } else {
+                if (arg.startsWith(fOption)) {
+                    fwDirs << arg.mid(fOption.size());
+                } else if (arg.startsWith(iframeworkOption)) {
+                    fwDirs << arg.mid(iframeworkOption.size());
+                } else if (storeArg) {
+                    fwDirs << arg;
+                }
+                // cancel any outstanding warrants to store the next argument
+                storeArg = false;
+            }
+        }
+    }
+#ifdef Q_OS_OSX
+    fwDirs << m_qtLibDir;
+#endif
+    return fwDirs;
 }
 
 QStringList QMakeProjectFile::files() const

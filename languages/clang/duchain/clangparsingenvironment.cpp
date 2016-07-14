@@ -43,14 +43,20 @@ void ClangParsingEnvironment::addIncludes(const Path::List& includes)
     m_includes += includes;
 }
 
-ClangParsingEnvironment::IncludePaths ClangParsingEnvironment::includes() const
+void ClangParsingEnvironment::addFrameworkDirectories(const KDevelop::Path::List& frameworkDirectories)
 {
-    IncludePaths ret;
-    ret.project.reserve(m_includes.size());
-    ret.system.reserve(m_includes.size());
-    foreach (const auto& path, m_includes) {
+    m_frameworkDirectories += frameworkDirectories;
+}
+
+template <typename PathType>
+static PathType appendPaths(const KDevelop::Path::List &paths, const KDevelop::Path::List &projectPaths)
+{
+    PathType ret;
+    ret.project.reserve(paths.size());
+    ret.system.reserve(paths.size());
+    foreach (const auto& path, paths) {
         bool inProject = false;
-        foreach (const auto& project, m_projectPaths) {
+        foreach (const auto& project, projectPaths) {
             if (project.isParentOf(path) || project == path) {
                 inProject = true;
                 break;
@@ -63,6 +69,16 @@ ClangParsingEnvironment::IncludePaths ClangParsingEnvironment::includes() const
         }
     }
     return ret;
+}
+
+ClangParsingEnvironment::IncludePaths ClangParsingEnvironment::includes() const
+{
+    return appendPaths<IncludePaths>(m_includes, m_projectPaths);
+}
+
+ClangParsingEnvironment::FrameworkDirectories ClangParsingEnvironment::frameworkDirectories() const
+{
+    return appendPaths<FrameworkDirectories>(m_frameworkDirectories, m_projectPaths);
 }
 
 void ClangParsingEnvironment::addDefines(const QHash<QString, QString>& defines)
@@ -121,6 +137,11 @@ uint ClangParsingEnvironment::hash() const
         hash << qHash(include);
     }
 
+    hash << m_frameworkDirectories.size();
+    for (const auto& fwDir : m_frameworkDirectories) {
+        hash << qHash(fwDir);
+    }
+
     hash << qHash(m_pchInclude);
     hash << qHash(m_parserSettings.parserOptions);
     return hash;
@@ -130,6 +151,7 @@ bool ClangParsingEnvironment::operator==(const ClangParsingEnvironment& other) c
 {
     return m_defines == other.m_defines
         && m_includes == other.m_includes
+        && m_frameworkDirectories == other.m_frameworkDirectories
         && m_pchInclude == other.m_pchInclude
         && m_quality == other.m_quality
         && m_tuUrl == other.m_tuUrl

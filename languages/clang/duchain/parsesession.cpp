@@ -118,6 +118,28 @@ void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
     }
 }
 
+void addFrameworkDirectories(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
+                 const Path::List& frameworkDirectories, const char* cliSwitch)
+{
+    foreach (const Path& url, frameworkDirectories) {
+        if (url.isEmpty()) {
+            continue;
+        }
+
+        QFileInfo info(url.toLocalFile());
+        if (!info.isDir()) {
+            qWarning() << "supposed framework directory is not a directory:" << url.pathOrUrl();
+            continue;
+        }
+        QByteArray path = url.toLocalFile().toUtf8();
+
+        otherArgs->append(cliSwitch);
+        otherArgs->append(path);
+        args->append(cliSwitch);
+        args->append(path.constData());
+    }
+}
+
 QVector<CXUnsavedFile> toClangApi(const QVector<UnsavedFile>& unsavedFiles)
 {
     QVector<CXUnsavedFile> unsaved;
@@ -219,6 +241,10 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
 
     addIncludes(&clangArguments, &smartArgs, includes.system, "-isystem");
     addIncludes(&clangArguments, &smartArgs, includes.project, "-I");
+
+    const auto& frameworkDirectories = environment.frameworkDirectories();
+    addFrameworkDirectories(&clangArguments, &smartArgs, frameworkDirectories.system, "-iframework");
+    addFrameworkDirectories(&clangArguments, &smartArgs, frameworkDirectories.project, "-F");
 
     smartArgs << writeDefinesFile(environment.defines());
     clangArguments << "-imacros" << smartArgs.last().constData();

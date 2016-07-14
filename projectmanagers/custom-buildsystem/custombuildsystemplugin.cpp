@@ -66,7 +66,7 @@ bool CustomBuildSystem::addFilesToTarget( const QList<ProjectFileItem*>&, Projec
     return false;
 }
 
-bool CustomBuildSystem::hasIncludesOrDefines( ProjectBaseItem* ) const
+bool CustomBuildSystem::hasBuildInfo( ProjectBaseItem* ) const
 {
     return false;
 }
@@ -140,6 +140,11 @@ ProjectFolderItem* CustomBuildSystem::createFolderItem( IProject* project,
 }
 
 Path::List CustomBuildSystem::includeDirectories( ProjectBaseItem* ) const
+{
+    return {};
+}
+
+Path::List CustomBuildSystem::frameworkDirectories( ProjectBaseItem* ) const
 {
     return {};
 }

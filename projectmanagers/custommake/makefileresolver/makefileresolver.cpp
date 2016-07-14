@@ -66,6 +66,7 @@ namespace {
     { }
     ModificationRevisionSet modificationTime;
     Path::List paths;
+    Path::List frameworkDirectories;
     QHash<QString, QString> defines;
     QString errorMessage, longErrorMessage;
     bool failed;
@@ -248,12 +249,18 @@ namespace {
       bool m_shouldTouchFiles;
   };
 
+static void mergePaths(KDevelop::Path::List& destList, const KDevelop::Path::List& srcList)
+{
+    foreach (const Path& path, srcList) {
+        if (!destList.contains(path))
+            destList.append(path);
+    }
+}
+
 void PathResolutionResult::mergeWith(const PathResolutionResult& rhs)
 {
-    foreach(const Path& path, rhs.paths) {
-        if(!paths.contains(path))
-            paths.append(path);
-    }
+    mergePaths(paths, rhs.paths);
+    mergePaths(frameworkDirectories, rhs.frameworkDirectories);
     includePathDependency += rhs.includePathDependency;
     defines.unite(rhs.defines);
 }
@@ -397,7 +404,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
       }
     }
 
-    if (!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty())
+    if (!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty() || !resultOnFail.frameworkDirectories.isEmpty())
       return resultOnFail;
     else
       return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("Problem while trying to resolve include paths for %1", file));
@@ -406,6 +413,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   PushValue<bool> e(m_isResolving, true);
 
   Path::List cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
+  Path::List cachedFWDirs;
   QHash<QString, QString> cachedDefines;
   ModificationRevisionSet dependency;
   dependency.addModificationRevision(IndexedString(makeFile.filePath()), ModificationRevision::revisionForFile(IndexedString(makeFile.filePath())));
@@ -416,12 +424,14 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
     it = s_cache.find(dir.path());
     if (it != s_cache.end()) {
       cachedPaths = it->paths;
+      cachedFWDirs = it->frameworkDirectories;
       cachedDefines = it->defines;
       if (dependency == it->modificationTime) {
         if (!it->failed) {
           //We have a valid cached result
           PathResolutionResult ret(true);
           ret.paths = it->paths;
+          ret.frameworkDirectories = it->frameworkDirectories;
           ret.defines = it->defines;
           ret.mergeWith(resultOnFail);
           return ret;
@@ -432,6 +442,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
             ret.errorMessage = i18n("Cached: %1", it->errorMessage);
             ret.longErrorMessage = it->longErrorMessage;
             ret.paths = it->paths;
+            ret.frameworkDirectories = it->frameworkDirectories;
             ret.defines = it->defines;
             ret.mergeWith(resultOnFail);
             return ret;
@@ -454,7 +465,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
   int dot;
   if ((dot = file.lastIndexOf('.')) == -1) {
-    if (!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty())
+    if (!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty() || !resultOnFail.frameworkDirectories.isEmpty())
       return resultOnFail;
     else
       return PathResolutionResult(false, i18n("Filename %1 seems to be malformed", file));
@@ -491,6 +502,10 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
       res.paths = cachedPaths; //We failed, maybe there is an old cached result, use that.
       res.defines = cachedDefines;
   }
+  // a build command could contain only one or more -iframework or -F specifications.
+  if (res.frameworkDirectories.isEmpty()) {
+      res.frameworkDirectories = cachedFWDirs;
+  }
 
   {
     QMutexLocker l(&s_cacheMutex);
@@ -499,6 +514,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
     CacheEntry& ce(*it);
     ce.paths = res.paths;
+    ce.frameworkDirectories = res.frameworkDirectories;
     ce.modificationTime = dependency;
 
     if (!res) {
@@ -514,7 +530,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   }
 
 
-  if (!res && (!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty()))
+  if (!res && (!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty() || !resultOnFail.frameworkDirectories.isEmpty()))
     return resultOnFail;
 
   return res;
@@ -523,7 +539,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 static QRegularExpression includeRegularExpression()
 {
   static const QRegularExpression expression(
-    "\\s(?:--include-dir=|-I\\s*|-isystem\\s+)("
+    "\\s(--include-dir=|-I\\s*|-isystem\\s+|-iframework\\s+|-F\\s*)("
     "\\'.*\\'|\\\".*\\\"" //Matches "hello", 'hello', 'hello"hallo"', etc.
     "|"
     "((?:\\\\.)?([\\S^\\\\]?))+" //Matches /usr/I\ am\ a\ strange\ path/include
@@ -639,7 +655,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   ///STEP 2: Search the output for include-paths
 
   PathResolutionResult ret = processOutput(fullOutput, workingDirectory);
-  if (ret.paths.isEmpty())
+  if (ret.paths.isEmpty() && ret.frameworkDirectories.isEmpty())
     return PathResolutionResult(false, i18n("Could not extract include paths from make output"),
                                 i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory,
                                      source.getCommand(file, workingDirectory, makeParameters), fullOutput));
@@ -683,18 +699,25 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
     auto it = includeRx.globalMatch(fullOutput);
     while (it.hasNext()) {
       const auto match = it.next();
-      QString path = match.captured(1);
+      QString path = match.captured(2);
       if (path.startsWith('"') || (path.startsWith('\'') && path.length() > 2)) {
-        //probable a quoted path
-        if (path.endsWith(path.left(1))) {
-          //Quotation is ok, remove it
-          path = path.mid(1, path.length() - 2);
-        }
+          //probable a quoted path
+          if (path.endsWith(path.left(1))) {
+            //Quotation is ok, remove it
+            path = path.mid(1, path.length() - 2);
+          }
       }
       if (QDir::isRelativePath(path))
         path = workingDirectory + '/' + path;
-
-      ret.paths << internPath(path);
+      const auto& internedPath = internPath(path);
+      const auto& type = match.captured(1);
+      const auto isFramework = type.startsWith(QLatin1String("-iframework"))
+        || type.startsWith(QLatin1String("-F"));
+      if (isFramework) {
+        ret.frameworkDirectories << internedPath;
+      } else {
+        ret.paths << internedPath;
+      }
     }
   }
 

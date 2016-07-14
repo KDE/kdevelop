@@ -40,6 +40,7 @@ public:
 
     KDevelop::Defines defines( KDevelop::ProjectBaseItem* item ) const override;
     KDevelop::Path::List includes( KDevelop::ProjectBaseItem* item ) const override;
+    KDevelop::Path::List frameworkDirectories( KDevelop::ProjectBaseItem* item ) const override;
     KDevelop::IDefinesAndIncludesManager::Type type() const override;
 
     /// @return current compiler for the @p item

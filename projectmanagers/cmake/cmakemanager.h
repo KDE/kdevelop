@@ -86,9 +86,10 @@ public:
 
     Features features() const override { return Features(Folders | Targets | Files ); }
     KDevelop::IProjectBuilder* builder() const override;
-    bool hasIncludesOrDefines(KDevelop::ProjectBaseItem*) const override;
+    bool hasBuildInfo(KDevelop::ProjectBaseItem*) const override;
     KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const override;
     KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem *) const override;
+    KDevelop::Path::List frameworkDirectories(KDevelop::ProjectBaseItem *item) const override;
     QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const override;
 
     KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) override { return 0; }

@@ -32,6 +32,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void testIncludeDirectories();
+    void testFrameworkDirectories();
     void testDefines();
 };
 

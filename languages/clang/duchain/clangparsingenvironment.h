@@ -49,6 +49,11 @@ public:
      */
     void addIncludes(const KDevelop::Path::List& includes);
 
+    /**
+     * Add the given list of @p framework-directories to this environment.
+     */
+    void addFrameworkDirectories(const KDevelop::Path::List& frameworkDirectories);
+
     struct IncludePaths
     {
         /// This list contains all include paths outside the known projects paths.
@@ -60,6 +65,18 @@ public:
      * Returns the list of includes, split into a list of system includes and project includes.
      */
     IncludePaths includes() const;
+
+    struct FrameworkDirectories
+    {
+        /// This list contains all framework directories outside the known projects paths.
+        KDevelop::Path::List system;
+        /// This list contains all framework directories inside the known projects paths.
+        KDevelop::Path::List project;
+    };
+    /**
+     * Returns the list of framework directories, split into a list of system paths and project paths.
+     */
+    FrameworkDirectories frameworkDirectories() const;
 
     void addDefines(const QHash<QString, QString>& defines);
     QMap<QString, QString> defines() const;
@@ -101,6 +118,7 @@ public:
 private:
     KDevelop::Path::List m_projectPaths;
     KDevelop::Path::List m_includes;
+    KDevelop::Path::List m_frameworkDirectories;
     // NOTE: As elements in QHash stored in an unordered sequence, we're using QMap instead
     QMap<QString, QString> m_defines;
     KDevelop::Path m_pchInclude;

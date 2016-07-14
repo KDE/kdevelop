@@ -46,6 +46,11 @@ public:
     KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const override;
 
     /**
+     * Provide a list of framework directories.
+     */
+    KDevelop::Path::List frameworkDirectories(KDevelop::ProjectBaseItem*) const override;
+
+    /**
      * Provide a list of files that contain the preprocessor defines for the
      * project
      */
@@ -88,7 +93,7 @@ public:
     /**
      * Test if @p item has any includes or defines from this BSM
      */
-    bool hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) const override;
+    bool hasBuildInfo(KDevelop::ProjectBaseItem* item) const override;
 
     /**
      * Get the toplevel build directory for the project

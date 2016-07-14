@@ -36,11 +36,12 @@
 struct CMakeFile
 {
     KDevelop::Path::List includes;
+    KDevelop::Path::List frameworkDirectories;
     QHash<QString, QString> defines;
 };
 inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
 {
-    debug << "CMakeFile(-I" << file.includes << ", -D" << file.defines << ")";
+    debug << "CMakeFile(-I" << file.includes << ", -F" << file.frameworkDirectories << ", -D" << file.defines << ")";
     return debug.maybeSpace();
 }
 

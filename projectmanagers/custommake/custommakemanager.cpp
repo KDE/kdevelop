@@ -62,7 +62,7 @@ public:
         return {};
     }
 
-    Path::List includesInBackground(const QString& path) const override
+    Path::List resolvePathInBackground(const QString& path, const bool isFrameworks) const
     {
         {
             QReadLocker lock(&m_lock);
@@ -77,7 +77,21 @@ public:
             }
         }
 
-        return m_resolver->resolveIncludePath(path).paths;
+        if (isFrameworks) {
+            return m_resolver->resolveIncludePath(path).frameworkDirectories;
+        } else {
+            return m_resolver->resolveIncludePath(path).paths;
+        }
+    }
+
+    Path::List includesInBackground(const QString& path) const override
+    {
+        return resolvePathInBackground(path, false);
+    }
+
+    Path::List frameworkDirectoriesInBackground(const QString& path) const override
+    {
+        return resolvePathInBackground(path, true);
     }
 
     IDefinesAndIncludesManager::Type type() const override
@@ -137,6 +151,11 @@ Path::List CustomMakeManager::includeDirectories(KDevelop::ProjectBaseItem*) con
     return Path::List();
 }
 
+Path::List CustomMakeManager::frameworkDirectories(KDevelop::ProjectBaseItem*) const
+{
+    return Path::List();
+}
+
 QHash<QString,QString> CustomMakeManager::defines(KDevelop::ProjectBaseItem*) const
 {
     return QHash<QString,QString>();
@@ -168,7 +187,7 @@ bool CustomMakeManager::removeFilesFromTargets(const QList< ProjectFileItem* > &
     return false;
 }
 
-bool CustomMakeManager::hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) const
+bool CustomMakeManager::hasBuildInfo(KDevelop::ProjectBaseItem* item) const
 {
     Q_UNUSED(item);
     return false;

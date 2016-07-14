@@ -86,6 +86,7 @@ CMakeJsonData importCommands(const Path& commandsFile)
 
         CMakeFile ret;
         ret.includes = result.paths;
+        ret.frameworkDirectories = result.frameworkDirectories;
         ret.defines = result.defines;
         // NOTE: we use the canonical file path to prevent issues with symlinks in the path
         //       leading to lookup failures

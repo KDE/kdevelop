@@ -49,14 +49,18 @@ public:
     KDevelop::Defines defines( KDevelop::ProjectBaseItem* item, Type type ) const override;
     ///@return list of all custom includes for @p item
     KDevelop::Path::List includes( KDevelop::ProjectBaseItem* item, Type type  ) const override;
+    ///@return list of all custom framework directories for @p item
+    KDevelop::Path::List frameworkDirectories( KDevelop::ProjectBaseItem* item, Type type ) const override;
 
     KDevelop::Defines defines( const QString& path ) const override;
     KDevelop::Path::List includes( const QString& path ) const override;
+    KDevelop::Path::List frameworkDirectories(const QString& path) const override;
 
     void registerProvider( Provider* provider ) override;
     bool unregisterProvider( Provider* provider ) override;
 
     KDevelop::Path::List includesInBackground( const QString& path ) const override;
+    KDevelop::Path::List frameworkDirectoriesInBackground( const QString& path ) const override;
     KDevelop::Defines definesInBackground(const QString& path) const override;
 
     void registerBackgroundProvider(BackgroundProvider* provider) override;
@@ -78,6 +82,7 @@ private:
     QVector<BackgroundProvider*> m_backgroundProviders;
     SettingsManager* m_settings;
     QScopedPointer<NoProjectIncludePathsManager> m_noProjectIPM;
+    KDevelop::Path::List m_defaultFrameworkDirectories;
 };
 
 #endif // CUSTOMDEFINESANDINCLUDESMANAGER_H

@@ -28,6 +28,7 @@
 class QMakeFolderItem;
 class IQMakeBuilder;
 class QMakeCache;
+class QMakeProjectFile;
 
 class QMakeProjectManager : public KDevelop::AbstractFileManagerPlugin, public KDevelop::IBuildSystemManager
 {
@@ -55,9 +56,11 @@ public:
     //TODO
     KDevelop::IProjectBuilder*  builder() const override;
     KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const override;
+    KDevelop::Path::List collectDirectories(KDevelop::ProjectBaseItem*, const bool collectIncludes=true) const;
     KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const override;
+    KDevelop::Path::List frameworkDirectories(KDevelop::ProjectBaseItem* item) const override;
     QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const override;
-    bool hasIncludesOrDefines(KDevelop::ProjectBaseItem*) const override;
+    bool hasBuildInfo(KDevelop::ProjectBaseItem*) const override;
 
     KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) override
     {
