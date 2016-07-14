@@ -64,6 +64,11 @@ public:
     virtual Path::List includeDirectories(ProjectBaseItem*) const = 0;
 
     /**
+     * Provide a list of framework directories.
+     */
+    virtual Path::List frameworkDirectories(ProjectBaseItem*) const = 0;
+
+    /**
      * Provide a list of preprocessor defines for the project item
      */
     virtual QHash<QString,QString> defines(ProjectBaseItem*) const = 0;
@@ -114,7 +119,7 @@ public:
     /**
      * Returns if the build system has information specific to @p item
      */
-    virtual bool hasIncludesOrDefines(ProjectBaseItem* item) const = 0;
+    virtual bool hasBuildInfo(ProjectBaseItem* item) const = 0;
 
     /**
      * Get the toplevel build directory for the project
