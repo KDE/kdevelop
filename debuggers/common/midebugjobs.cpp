@@ -43,6 +43,7 @@
 #include <KParts/MainWindow>
 
 #include <QFileInfo>
+#include <QRegularExpression>
 
 using namespace KDevMI;
 using namespace KDevelop;
@@ -58,6 +59,11 @@ MIDebugJob::MIDebugJob(MIDebuggerPlugin* p, ILaunchConfiguration* launchcfg,
     m_session = p->createSession();
     connect(m_session, &MIDebugSession::inferiorStdoutLines, this, &MIDebugJob::stderrReceived);
     connect(m_session, &MIDebugSession::inferiorStderrLines, this, &MIDebugJob::stdoutReceived);
+    connect(m_session, &MIDebugSession::debuggerInternalCommandOutput,
+            this, [this](const QString &output){
+                this->stdoutReceived(output.split(QRegularExpression("[\r\n]"), QString::SkipEmptyParts));
+            });
+
     connect(m_session, &MIDebugSession::finished, this, &MIDebugJob::done);
 
     if (launchcfg->project()) {

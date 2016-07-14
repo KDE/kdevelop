@@ -163,6 +163,7 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
             });
     connect(m_debugger, &MIDebugger::userCommandOutput, this, &MIDebugSession::debuggerUserCommandOutput);
     connect(m_debugger, &MIDebugger::internalCommandOutput, this, &MIDebugSession::debuggerInternalCommandOutput);
+    connect(m_debugger, &MIDebugger::debuggerInternalOutput, this, &MIDebugSession::debuggerInternalOutput);
 
     // state signals
     connect(m_debugger, &MIDebugger::programStopped, this, &MIDebugSession::inferiorStopped);

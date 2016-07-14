@@ -118,9 +118,12 @@ Q_SIGNALS:
     void userCommandOutput(const QString& s);
 
     /** Reports output of a command issued internally
-        by KDevelop.  At the moment, stderr output from
-        debugger and the 'log' MI channel will be also routed here.  */
+        by KDevelop. */
     void internalCommandOutput(const QString& s);
+
+    /** Reports debugger interal output, including stderr output from debugger
+        and the 'log' MI channel */
+    void debuggerInternalOutput(const QString& s);
 
 protected Q_SLOTS:
     void readyReadStandardOutput();

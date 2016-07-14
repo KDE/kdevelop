@@ -139,7 +139,7 @@ void MIDebugger::readyReadStandardOutput()
 void MIDebugger::readyReadStandardError()
 {
     process_->setReadChannel(QProcess::StandardError);
-    emit internalCommandOutput(QString::fromUtf8(process_->readAll()));
+    emit debuggerInternalOutput(QString::fromUtf8(process_->readAll()));
 }
 
 void MIDebugger::processLine(const QByteArray& line)
@@ -266,17 +266,16 @@ void MIDebugger::processLine(const QByteArray& line)
 
             if (s.subkind == MI::StreamRecord::Target) {
                 emit applicationOutput(s.message);
-            } else {
+            } else if (s.subkind == MI::StreamRecord::Console) {
                 if (currentCmd_ && currentCmd_->isUserCommand())
                     emit userCommandOutput(s.message);
-                else if (s.subkind == MI::StreamRecord::Console) {
-                    emit applicationOutput(s.message);
-                } else {
+                else
                     emit internalCommandOutput(s.message);
-                }
 
                 if (currentCmd_)
                     currentCmd_->newOutput(s.message);
+            } else {
+                emit debuggerInternalOutput(s.message);
             }
 
             emit streamRecord(s);
