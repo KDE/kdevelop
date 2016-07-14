@@ -144,9 +144,6 @@ ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfi
                               "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
                               INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
-if(APPLE)
-    target_link_libraries(KDevPlatformShell PRIVATE "-framework AppKit")
-endif()
 
 ecm_setup_version(${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}
                   VARIABLE_PREFIX KDEVPLATFORM
