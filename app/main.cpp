@@ -267,8 +267,6 @@ static void tryLoadIconResources()
 {
     const QString breezeIcons = QStandardPaths::locate(QStandardPaths::DataLocation, QStringLiteral("icons/breeze/breeze-icons.rcc"));
     if (!breezeIcons.isEmpty() && QFile::exists(breezeIcons)) {
-        qCDebug(APP) << "Loading icons rcc:" << breezeIcons;
-
         // prepend /icons to the root to comply with KIcon* machinery
         QResource::registerResource(breezeIcons, QStringLiteral("/icons/breeze"));
         QIcon::setThemeSearchPaths(QStringList() << QStringLiteral(":/icons"));
