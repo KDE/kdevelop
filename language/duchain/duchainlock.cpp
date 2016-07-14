@@ -30,7 +30,7 @@
 ///@todo Always prefer exactly that lock that is requested by the thread that has the foreground mutex,
 ///           to reduce the amount of UI blocking.
 
-//Nanoseconds to sleep when waiting for a lock
+//Microseconds to sleep when waiting for a lock
 const uint uSleepTime = 500;
 
 namespace KDevelop
