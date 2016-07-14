@@ -254,6 +254,7 @@ Q_SIGNALS:
     void ttyStderr            (const QByteArray& output);
     void gdbInternalCommandStdout (const QString& output);
     void gdbUserCommandStdout (const QString& output);
+    void gdbInternalOutput (const QString& output);
     void gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 
     void debuggerAbnormalExit();

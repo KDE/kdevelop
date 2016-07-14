@@ -35,6 +35,7 @@
 #include "debug.h"
 
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <KI18n/KLocalizedString>
 
 using namespace GDBDebugger;
@@ -50,6 +51,11 @@ DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfigur
     m_session = p->createSession();
     connect(m_session, &DebugSession::applicationStandardOutputLines, this, &DebugJob::stderrReceived);
     connect(m_session, &DebugSession::applicationStandardErrorLines, this, &DebugJob::stdoutReceived);
+    connect(m_session, &DebugSession::gdbInternalCommandStdout,
+            this, [this](const QString &output){
+                this->stdoutReceived(output.split(QRegularExpression("[\r\n]"), QString::SkipEmptyParts));
+            });
+
     connect(m_session, &DebugSession::finished, this, &DebugJob::done );
 
     if (launchcfg->project()) {

@@ -137,6 +137,9 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
              this, &GDBOutputWidget::slotInternalCommandStdout);
      connect(session, &DebugSession::gdbUserCommandStdout,
              this, &GDBOutputWidget::slotUserCommandStdout);
+     // debugger internal output, treat it as an internal command output
+     connect(session, &DebugSession::gdbInternalOutput,
+             this, &GDBOutputWidget::slotInternalCommandStdout);
 
      connect(session, &DebugSession::gdbStateChanged,
              this, &GDBOutputWidget::slotStateChanged);

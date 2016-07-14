@@ -24,6 +24,8 @@
 
 #include <KLocalizedString>
 
+#include <algorithm>
+
 using namespace KDevelop;
 
 QString getFunctionOrAddress(const GDBMI::Value &frame)
@@ -59,25 +61,26 @@ void GdbFrameStackModel::handleThreadInfo(const GDBMI::ResultRecord& r)
 {
     const GDBMI::Value& threads = r["threads"];
 
-    // Traverse GDB threads in backward order -- since GDB
+    QList<FrameStackModel::ThreadItem> threadsList;
+    for (int i = 0; i!= threads.size(); ++i) {
+        const auto &threadMI = threads[i];
+        FrameStackModel::ThreadItem threadItem;
+        threadItem.nr = threadMI["id"].toInt();
+        if (threadMI["state"].literal() == "stopped") {
+            threadItem.name = getFunctionOrAddress(threadMI["frame"]);
+        } else {
+            i18n("(running)");
+        }
+        threadsList << threadItem;
+    }
+    // Sort the list by id, some old version of GDB
     // reports them in backward order. We want UI to
     // show thread IDs in the natural order.
-    // FIXME: make the code independent of whatever craziness
-    // gdb might have tomorrow.
+    std::sort(threadsList.begin(), threadsList.end(),
+              [](const FrameStackModel::ThreadItem &a, const FrameStackModel::ThreadItem &b){
+                  return a.nr < b.nr;
+              });
 
-    QList<KDevelop::FrameStackModel::ThreadItem> threadsList;
-    int gidx = threads.size()-1;
-    for (; gidx >= 0; --gidx) {
-        KDevelop::FrameStackModel::ThreadItem i;
-        const GDBMI::Value & threadMI = threads[gidx];
-        i.nr = threadMI["id"].toInt();
-        if (threadMI["state"].literal() == "stopped") {
-            i.name = getFunctionOrAddress(threads[gidx]["frame"]);
-        } else {
-            i.name = i18n("(running)");
-        }
-        threadsList << i;
-    }
     setThreads(threadsList);
     if (r.hasField("current-thread-id")) {
         int currentThreadId = r["current-thread-id"].toInt();
