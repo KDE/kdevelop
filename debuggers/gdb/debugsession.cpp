@@ -952,6 +952,11 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
         queueCmd(new GDBCommand(GDBMI::NonMI, "source " + fileName));
     }
 
+    if (m_testing) {
+        // GDB can't disable ASLR on CI server.
+        queueCmd(new GDBCommand(GDBMI::GdbSet, "disable-randomization off"));
+    }
+
     return true;
 }
 
