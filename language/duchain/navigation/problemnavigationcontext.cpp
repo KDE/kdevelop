@@ -52,7 +52,10 @@ QString iconForSeverity(IProblem::Severity severity)
     return QStringLiteral("dialog-warning");
   case IProblem::Error:
     return QStringLiteral("dialog-error");
+  case IProblem::NoSeverity:
+    return {};
   }
+  Q_UNREACHABLE();
   return {};
 }
 
