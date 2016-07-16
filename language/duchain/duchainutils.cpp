@@ -28,6 +28,7 @@
 #include <interfaces/ilanguagecontroller.h>
 
 #include "../interfaces/ilanguagesupport.h"
+#include "../assistant/staticassistantsmanager.h"
 #include "util/debug.h"
 
 #include "declaration.h"
@@ -632,3 +633,16 @@ DUContext* DUChainUtils::getFunctionContext(Declaration* decl) {
     return functionContext;
   return 0;
 }
+
+QVector<KDevelop::Problem::Ptr> KDevelop::DUChainUtils::allProblemsForContext(KDevelop::ReferencedTopDUContext top)
+{
+  QVector<KDevelop::Problem::Ptr> ret;
+  Q_FOREACH ( const auto& p, top->problems() ) {
+    ret << p;
+  }
+  Q_FOREACH ( const auto& p, ICore::self()->languageController()->staticAssistantsManager()->problemsForContext(top) ) {
+    ret << p;
+  }
+  return ret;
+}
+

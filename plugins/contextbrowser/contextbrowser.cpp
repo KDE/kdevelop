@@ -438,9 +438,10 @@ void ContextBrowserPlugin::hideToolTip() {
   }
 }
 
-static ProblemPointer findProblemUnderCursor(const TopDUContext* topContext, KTextEditor::Cursor position)
+static ProblemPointer findProblemUnderCursor(TopDUContext* topContext, KTextEditor::Cursor position)
 {
-  foreach (auto problem, topContext->problems()) {
+  const auto top = ReferencedTopDUContext(topContext);
+  foreach (auto problem, DUChainUtils::allProblemsForContext(top)) {
     if (problem->rangeInCurrentRevision().contains(position)) {
       return problem;
     }
@@ -449,9 +450,10 @@ static ProblemPointer findProblemUnderCursor(const TopDUContext* topContext, KTe
   return {};
 }
 
-static ProblemPointer findProblemCloseToCursor(const TopDUContext* topContext, KTextEditor::Cursor position, KTextEditor::View* view)
+static ProblemPointer findProblemCloseToCursor(TopDUContext* topContext, KTextEditor::Cursor position, KTextEditor::View* view)
 {
-  auto problems = topContext->problems();
+  const auto top = ReferencedTopDUContext(topContext);
+  auto problems = DUChainUtils::allProblemsForContext(top);
   if (problems.isEmpty())
     return {};
 

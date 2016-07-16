@@ -27,6 +27,8 @@
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/problem.h>
+#include <language/duchain/duchainutils.h>
+#include <language/assistant/staticassistantsmanager.h>
 
 #include <QThread>
 #include <QTimer>
@@ -36,6 +38,8 @@
 #include <shell/watcheddocumentset.h>
 #include <shell/filteredproblemstore.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <interfaces/idocument.h>
 
 using namespace KDevelop;
@@ -58,6 +62,8 @@ ProblemReporterModel::ProblemReporterModel(QObject* parent)
     m_maxTimer->setSingleShot(true);
     connect(m_maxTimer, &QTimer::timeout, this, &ProblemReporterModel::timerExpired);
     connect(store(), &FilteredProblemStore::changed, this, &ProblemReporterModel::onProblemsChanged);
+    connect(ICore::self()->languageController()->staticAssistantsManager(), &StaticAssistantsManager::problemsChanged,
+            this, &ProblemReporterModel::onProblemsChanged);
 }
 
 ProblemReporterModel::~ProblemReporterModel()
@@ -110,7 +116,8 @@ void ProblemReporterModel::problemsInternal(KDevelop::TopDUContext* context, boo
     if (!context || visitedContexts.contains(context)) {
         return;
     }
-    foreach (KDevelop::ProblemPointer p, context->problems()) {
+    ReferencedTopDUContext top(context);
+    foreach (KDevelop::ProblemPointer p, DUChainUtils::allProblemsForContext(top)) {
         if (p && p->severity() <= store()->severity()) {
             result.append(p);
         }

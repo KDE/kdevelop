@@ -67,6 +67,9 @@ StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
     foreach (IDocument* document, ICore::self()->documentController()->openDocuments()) {
         d->documentLoaded(document);
     }
+    connect(DUChain::self(), &DUChain::updateReady,
+            this, &StaticAssistantsManager::notifyAssistants);
+
 }
 
 StaticAssistantsManager::~StaticAssistantsManager()
@@ -108,24 +111,45 @@ void StaticAssistantsManager::Private::documentLoaded(IDocument* document)
 
 void StaticAssistantsManager::Private::textInserted(Document* doc, const Cursor& cursor, const QString& text)
 {
+    auto changed = false;
     Q_FOREACH ( auto assistant, m_registeredAssistants ) {
         auto range = Range(cursor, cursor+Cursor(0, text.size()));
+        auto wasUseful = assistant->isUseful();
         assistant->textChanged(doc, range, {});
+        if ( wasUseful != assistant->isUseful() ) {
+            changed = true;
+        }
+    }
+    if ( changed ) {
+        Q_EMIT q->problemsChanged(IndexedString(doc->url()));
     }
 }
 
 void StaticAssistantsManager::Private::textRemoved(Document* doc, const Range& range,
                                       const QString& removedText)
 {
+    auto changed = false;
     Q_FOREACH ( auto assistant, m_registeredAssistants ) {
+        auto wasUseful = assistant->isUseful();
         assistant->textChanged(doc, range, removedText);
+        if ( wasUseful != assistant->isUseful() ) {
+            changed = true;
+        }
+    }
+    if ( changed ) {
+        Q_EMIT q->problemsChanged(IndexedString(doc->url()));
     }
 }
 
 void StaticAssistantsManager::notifyAssistants(const IndexedString& url, const KDevelop::ReferencedTopDUContext& context)
 {
+    auto changed = false;
     Q_FOREACH ( auto assistant, d->m_registeredAssistants ) {
+        auto wasUseful = assistant->isUseful();
         assistant->updateReady(url, context);
+        if ( wasUseful != assistant->isUseful() ) {
+            changed = true;
+        }
     }
 }
 
