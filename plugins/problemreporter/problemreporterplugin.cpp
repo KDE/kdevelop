@@ -137,7 +137,6 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
 
 void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop::ReferencedTopDUContext& top)
 {
-        qDebug() << "adding problem:" << p << "assistant:" << p->solutionAssistant().data() << p->solutionAssistant()->actions().size();
     m_model->problemsUpdated(url);
     updateHighlight(url);
 }
