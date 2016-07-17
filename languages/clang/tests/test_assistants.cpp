@@ -289,7 +289,7 @@ void TestAssistants::testRenameAssistant_data()
         << "int foo(int abcdefg)\n { abcdefg = 0; return abcdefg; }";
 }
 
-ProblemPointer findStaticAssistantProblem(const QList<ProblemPointer>& problems)
+ProblemPointer findStaticAssistantProblem(const QVector<ProblemPointer>& problems)
 {
     const auto renameProblemIt = std::find_if(problems.cbegin(), problems.cend(), [](const ProblemPointer& p) {
         return dynamic_cast<const StaticAssistantProblem*>(p.constData());
@@ -321,7 +321,7 @@ void TestAssistants::testRenameAssistant()
         auto topCtx = DUChain::self()->chainForDocument(document->url());
         QVERIFY(topCtx);
 
-        const auto problem = findStaticAssistantProblem(topCtx->problems());
+        const auto problem = findStaticAssistantProblem(DUChainUtils::allProblemsForContext(topCtx));
         if (problem)
             assistant = problem->solutionAssistant();
 
@@ -355,7 +355,8 @@ void TestAssistants::testRenameAssistantUndoRename()
     auto topCtx = DUChain::self()->chainForDocument(document->url());
     QVERIFY(topCtx);
 
-    auto firstProblem = findStaticAssistantProblem(topCtx->problems());
+    auto firstProblem = findStaticAssistantProblem(DUChainUtils::allProblemsForContext(topCtx));
+    QVERIFY(firstProblem);
     auto assistant = firstProblem->solutionAssistant();
     QVERIFY(assistant);
 
@@ -516,7 +517,7 @@ void TestAssistants::testSignatureAssistant()
         auto topCtx = DUChain::self()->chainForDocument(document->url());
         QVERIFY(topCtx);
 
-        const auto problem = findStaticAssistantProblem(topCtx->problems());
+        const auto problem = findStaticAssistantProblem(DUChainUtils::allProblemsForContext(topCtx));
         if (problem) {
             assistant = problem->solutionAssistant();
         }
@@ -530,7 +531,6 @@ void TestAssistants::testSignatureAssistant()
         }
     }
 
-    DUChainReadLocker lock;
     if (assistant && !assistant->actions().isEmpty())
         assistant->actions().first()->execute();
 
