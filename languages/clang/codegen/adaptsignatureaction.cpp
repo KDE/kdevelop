@@ -75,6 +75,7 @@ QString AdaptSignatureAction::toolTip() const
 
 void AdaptSignatureAction::execute()
 {
+    Q_ASSERT(!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock());
     DUChainReadLocker lock;
     IndexedString url = m_otherSideTopContext->url();
     lock.unlock();
@@ -110,6 +111,7 @@ void AdaptSignatureAction::execute()
     }
 
     DocumentChange changeParameters(functionContext->url(), parameterRange, QString(), newText);
+    lock.unlock();
     changeParameters.m_ignoreOldText = true;
     changes.addChange(changeParameters);
     changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
