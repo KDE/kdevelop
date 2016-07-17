@@ -211,8 +211,6 @@ void AbstractNavigationWidget::navigateDeclaration(KDevelop::IndexedDeclaration 
 }
 
 void AbstractNavigationWidget::anchorClicked(const QUrl& url) {
-  DUChainReadLocker lock( DUChain::lock() );
-
   //We may get deleted while the call to acceptLink, so make sure we don't crash in that case
   QPointer<AbstractNavigationWidget> thisPtr(this);
   NavigationContextPointer oldContext = m_context;
