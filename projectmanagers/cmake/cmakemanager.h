@@ -81,9 +81,6 @@ public:
 
     ~CMakeManager() override;
 
-    bool hasError() const override;
-    QString errorDescription() const override;
-
     Features features() const override { return Features(Folders | Targets | Files ); }
     KDevelop::IProjectBuilder* builder() const override;
     bool hasBuildInfo(KDevelop::ProjectBaseItem*) const override;

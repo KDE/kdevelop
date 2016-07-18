@@ -55,22 +55,13 @@ CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     KDEV_USE_EXTENSION_INTERFACE( ICMakeDocumentation )
 
     if (mCMakeCmd.isEmpty()) {
+        setErrorDescription(i18n("Unable to find cmake executable. Is it installed on the system?") );
         return;
     }
 
     CMakeDoc::s_provider=this;
     m_index= new QStringListModel(this);
     initializeModel();
-}
-
-bool CMakeDocumentation::hasError() const
-{
-    return mCMakeCmd.isEmpty();
-}
-
-QString CMakeDocumentation::errorDescription() const
-{
-    return mCMakeCmd.isEmpty() ? i18n("cmake is not installed") : QString();
 }
 
 static const char* args[] = { "--help-command", "--help-variable", "--help-module", "--help-property", 0, 0 };

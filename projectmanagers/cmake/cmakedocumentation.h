@@ -41,9 +41,6 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
     public:
         explicit CMakeDocumentation( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
-        bool hasError() const override;
-        QString errorDescription() const override;
-
         KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const override;
         KDevelop::IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const override;
         

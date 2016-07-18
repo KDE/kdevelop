@@ -38,13 +38,9 @@ KDevNinjaBuilderPlugin::KDevNinjaBuilderPlugin(QObject* parent, const QVariantLi
     : KDevelop::IPlugin("kdevninja", parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
-    if(hasError())
-        qWarning() << "Ninja plugin installed but ninja is not installed.";
-}
-
-bool KDevNinjaBuilderPlugin::hasError() const
-{
-    return NinjaJob::ninjaBinary().isEmpty();
+    if(NinjaJob::ninjaBinary().isEmpty()) {
+        setErrorDescription(i18n("Unable to find ninja executable. Is it installed on the system?"));
+    }
 }
 
 static QStringList targetsInFolder(KDevelop::ProjectFolderItem* item)
