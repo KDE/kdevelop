@@ -28,8 +28,6 @@ public:
     ~KDevKonsoleViewPlugin() override;
 
     void unload() override;
-    bool hasError() const override;
-    QString errorDescription() const override;
 
     KPluginFactory* konsoleFactory() const;
 

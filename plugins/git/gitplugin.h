@@ -140,8 +140,6 @@ public:
     bool hasModifications(const QDir& repository);
     bool hasModifications(const QDir& repo, const QUrl& file);
 
-    bool hasError() const override;
-    QString errorDescription() const override;
     void registerRepositoryForCurrentBranchChanges(const QUrl& repository) override;
 
     KDevelop::CheckInRepositoryJob* isInRepository(KTextEditor::Document* document) override;
@@ -216,8 +214,6 @@ private:
     /** Tells if it's older than 1.7.0 or not */
     bool m_oldVersion;
 
-    bool m_hasError;
-    QString m_errorDescription;
     KDirWatch* m_watcher;
     QList<QUrl> m_branchesChange;
     bool m_usePrefix;

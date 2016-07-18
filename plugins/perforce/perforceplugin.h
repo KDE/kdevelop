@@ -130,9 +130,6 @@ public:
     KDevelop::VcsJob* edit(const QList<QUrl>& localLocations);
 
 
-    bool hasError() const override;
-    QString errorDescription() const override;
-
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
 
@@ -174,10 +171,6 @@ private:
     QString m_perforceConfigName;
     QString m_perforceExecutable;
     QAction* m_edit_action;
-
-    bool m_hasError;
-    QString m_errorDescription;
-
 };
 
 #endif // PERFORCEPLUGIN_H

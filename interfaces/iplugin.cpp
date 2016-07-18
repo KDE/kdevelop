@@ -78,6 +78,7 @@ public:
     IPlugin *q;
     ICore *core;
     QVector<QByteArray> m_extensions;
+    QString m_errorDescription;
 };
 
 IPlugin::IPlugin( const QString &componentName, QObject *parent )
@@ -184,12 +185,18 @@ void KDevelop::IPlugin::createActionsForMainWindow( Sublime::MainWindow* /*windo
 
 bool KDevelop::IPlugin::hasError() const
 {
-    return false;
+    return !d->m_errorDescription.isEmpty();
 }
+
+void KDevelop::IPlugin::setErrorDescription(const QString& description)
+{
+    d->m_errorDescription = description;
+}
+
 
 QString KDevelop::IPlugin::errorDescription() const
 {
-    return QString();
+    return d->m_errorDescription;
 }
 
 int KDevelop::IPlugin::configPages() const

@@ -45,13 +45,11 @@ using namespace KDevelop;
 
 BazaarPlugin::BazaarPlugin(QObject* parent, const QVariantList& args) :
     IPlugin(QStringLiteral("kdevbazaar"), parent),
-    m_vcsPluginHelper(new KDevelop::VcsPluginHelper(this, this)), m_hasError(false)
+    m_vcsPluginHelper(new KDevelop::VcsPluginHelper(this, this))
 {
     Q_UNUSED(args); // What is this?
     if (QStandardPaths::findExecutable(QStringLiteral("bzr")).isEmpty()) {
-        m_hasError = true;
-        m_errorDescription = i18n("Bazaar is not installed (bzr executable not"
-                                 " found)");
+        setErrorDescription(i18n("Unable to find Bazaar (bzr) executable Is it installed on the system?"));
         return;
     }
 
@@ -339,12 +337,3 @@ ContextMenuExtension BazaarPlugin::contextMenuExtension(Context* context)
     return menuExt;
 }
 
-bool BazaarPlugin::hasError() const
-{
-    return m_hasError;
-}
-
-QString BazaarPlugin::errorDescription() const
-{
-    return m_errorDescription;
-}

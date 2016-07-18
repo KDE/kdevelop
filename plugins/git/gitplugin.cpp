@@ -181,8 +181,7 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     : DistributedVersionControlPlugin(parent, QStringLiteral("kdevgit")), m_oldVersion(false), m_usePrefix(true)
 {
     if (QStandardPaths::findExecutable(QStringLiteral("git")).isEmpty()) {
-        m_hasError = true;
-        m_errorDescription = i18n("git is not installed");
+        setErrorDescription(i18n("Unable to find git executable. Is it installed on the system?"));
         return;
     }
 
@@ -190,7 +189,6 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBranchingVersionControl )
 
-    m_hasError = false;
     setObjectName(QStringLiteral("Git"));
 
     DVcsJob* versionJob = new DVcsJob(QDir::tempPath(), this, KDevelop::OutputJob::Silent);
@@ -1456,16 +1454,6 @@ class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
 KDevelop::VcsLocationWidget* GitPlugin::vcsLocation(QWidget* parent) const
 {
     return new GitVcsLocationWidget(parent);
-}
-
-bool GitPlugin::hasError() const
-{
-    return m_hasError;
-}
-
-QString GitPlugin::errorDescription() const
-{
-    return m_errorDescription;
 }
 
 void GitPlugin::registerRepositoryForCurrentBranchChanges(const QUrl& repository)

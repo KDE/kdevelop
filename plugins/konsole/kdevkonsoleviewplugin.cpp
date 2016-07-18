@@ -62,7 +62,9 @@ KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( KPluginFactory* konsoleFactory, QO
     , m_konsoleFactory(konsoleFactory)
     , m_viewFactory(konsoleFactory ? new KDevKonsoleViewFactory(this) : nullptr)
 {
-    if (m_viewFactory) {
+    if(!m_viewFactory) {
+      setErrorDescription(i18n("Failed to load 'konsolepart' plugin"));
+    } else {
         core()->uiController()->addToolView(QStringLiteral("Konsole"), m_viewFactory);
     }
 }
@@ -72,16 +74,6 @@ void KDevKonsoleViewPlugin::unload()
     if (m_viewFactory) {
         core()->uiController()->removeToolView(m_viewFactory);
     }
-}
-
-bool KDevKonsoleViewPlugin::hasError() const
-{
-    return !m_viewFactory;
-}
-
-QString KDevKonsoleViewPlugin::errorDescription() const
-{
-    return !m_viewFactory ? i18n("Failed to load 'konsolepart' plugin") : QString();
 }
 
 KPluginFactory* KDevKonsoleViewPlugin::konsoleFactory() const

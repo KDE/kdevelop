@@ -210,14 +210,21 @@ public:
 
     /**
      * This function is necessary because there is no proper way to signal errors from plugin constructor.
-     * @returns True if the plugin has encountered an error, false otherwise.
+     * @returns True if the plugin has encountered an error (and therefore has an error description), 
+     * false otherwise.
      */
-    virtual bool hasError() const;
-
+    bool hasError() const;
+    
     /**
      * Description of the last encountered error, of an empty string if none.
      */
-    virtual QString errorDescription() const;
+    QString errorDescription() const;
+
+    /**
+     * Set a @p description of the errror encountered. An empty error 
+     * description implies no error in the plugin.
+     */
+    void setErrorDescription(QString const& description);
 
     /**
      * Get the global config page with the \p number, config pages from 0 to

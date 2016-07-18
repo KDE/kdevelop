@@ -118,19 +118,16 @@ PerforcePlugin::PerforcePlugin(QObject* parent, const QVariantList&):
     , m_perforceConfigName("p4config.txt")
     , m_perforceExecutable("p4")
     , m_edit_action(nullptr)
-    , m_hasError(true)
 {
     QProcessEnvironment currentEviron(QProcessEnvironment::systemEnvironment());
     QString tmp(currentEviron.value("P4CONFIG"));
     if (tmp.isEmpty()) {
         // We require the P4CONFIG variable to be set because the perforce command line client will need it
-        m_hasError = true;
-        m_errorDescription = i18n("The variable P4CONFIG is not set.");
+        setErrorDescription(i18n("The variable P4CONFIG is not set. Is perforce installed on the system?"));
         return;
     } else {
         m_perforceConfigName = tmp;
     }
-    m_hasError = false;
     qCDebug(PLUGIN_PERFORCE) << "The value of P4CONFIG is : " << tmp;
 
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
@@ -694,16 +691,6 @@ KDevelop::VcsJob* PerforcePlugin::errorsFound(const QString& error, KDevelop::Ou
     DVcsJob* j = new DVcsJob(QDir::temp(), this, verbosity);
     *j << "echo" << i18n("error: %1", error) << "-n";
     return j;
-}
-
-bool PerforcePlugin::hasError() const
-{
-    return m_hasError;
-}
-
-QString PerforcePlugin::errorDescription() const
-{
-    return m_errorDescription;
 }
 
 
