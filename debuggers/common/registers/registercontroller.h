@@ -33,10 +33,7 @@ namespace MI
 struct ResultRecord;
 }
 
-namespace GDB
-{
-
-class DebugSession;
+class MIDebugSession;
 
 enum RegisterType {general, structured, flag, floatPoint};
 
@@ -131,7 +128,7 @@ class IRegisterController : public QObject
 
 public:
     ///Sets session @p debugSession to send commands to.
-    void setSession(DebugSession* debugSession);
+    void setSession(MIDebugSession* debugSession);
 
     ///There'll be at least 2 groups: "General" and "Flags", also "XMM", "FPU", "Segment" for x86, x86_64 architectures.
     virtual QVector<GroupsName> namesOfRegisterGroups() const = 0;
@@ -160,7 +157,7 @@ public slots:
     virtual void setRegisterValue(const Register& reg);
 
 protected:
-    IRegisterController(DebugSession* debugSession = 0, QObject* parent = 0);
+    IRegisterController(MIDebugSession* debugSession = 0, QObject* parent = 0);
 
     ///Returns registers from the @p group, or empty registers group if @p group is invalid.
     virtual RegistersGroup registersFromGroup(const GroupsName& group) const = 0;
@@ -236,16 +233,15 @@ protected:
     QVector<FormatsModes > m_formatsModes;
 
     ///Current debug session;
-    DebugSession* m_debugSession;
+    MIDebugSession* m_debugSession;
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
 
-Q_DECLARE_TYPEINFO(KDevMI::GDB::Register, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevMI::GDB::RegistersGroup, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevMI::GDB::FlagRegister, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevMI::GDB::GroupsName, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KDevMI::GDB::FormatsModes, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::Register, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::RegistersGroup, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::FlagRegister, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::GroupsName, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevMI::FormatsModes, Q_MOVABLE_TYPE);
 
 #endif

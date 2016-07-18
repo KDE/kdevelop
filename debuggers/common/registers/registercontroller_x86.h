@@ -25,10 +25,7 @@
 
 namespace KDevMI
 {
-namespace GDB
-{
-
-class DebugSession;
+class MIDebugSession;
 
 class RegisterControllerGeneral_x86 : public IRegisterController
 {
@@ -39,7 +36,7 @@ public slots:
     virtual void updateRegisters(const GroupsName& group = GroupsName()) override;
 
 protected:
-    RegisterControllerGeneral_x86(DebugSession* debugSession = 0, QObject* parent = 0);
+    RegisterControllerGeneral_x86(MIDebugSession* debugSession = 0, QObject* parent = 0);
 
     virtual RegistersGroup registersFromGroup(const GroupsName& group) const override;
 
@@ -74,7 +71,7 @@ class RegisterController_x86 : public RegisterControllerGeneral_x86
 {
 
 public:
-    RegisterController_x86(DebugSession* debugSession = 0, QObject* parent = 0);
+    RegisterController_x86(MIDebugSession* debugSession = 0, QObject* parent = 0);
 
 private:
     void initRegisterNames();
@@ -84,13 +81,12 @@ class RegisterController_x86_64 : public RegisterControllerGeneral_x86
 {
 
 public:
-    RegisterController_x86_64(DebugSession* debugSession = 0, QObject* parent = 0);
+    RegisterController_x86_64(MIDebugSession* debugSession = 0, QObject* parent = 0);
 
 private:
     void initRegisterNames();
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
 
 #endif // REGISTERCONTROLLER_X86_H

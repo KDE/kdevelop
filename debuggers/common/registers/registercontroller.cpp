@@ -22,17 +22,17 @@
 
 #include "converters.h"
 #include "debuglog.h"
+#include "midebugsession.h"
 #include "mi/mi.h"
 #include "mi/micommand.h"
-#include "../debugsession.h"
 
 #include <QRegExp>
 #include <QtMath>
 
 using namespace KDevMI::MI;
-using namespace KDevMI::GDB;
+using namespace KDevMI;
 
-void IRegisterController::setSession(DebugSession* debugSession)
+void IRegisterController::setSession(MIDebugSession* debugSession)
 {
     m_debugSession = debugSession;
 }
@@ -44,7 +44,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     }
 
     if (m_pendingGroups.contains(group)) {
-        qCDebug(DEBUGGERGDB) << "Already updating " << group.name();
+        qCDebug(DEBUGGERCOMMON) << "Already updating " << group.name();
         return;
     }
 
@@ -54,7 +54,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
         }
         return;
     } else {
-        qCDebug(DEBUGGERGDB) << "Updating: " << group.name();
+        qCDebug(DEBUGGERCOMMON) << "Updating: " << group.name();
         m_pendingGroups << group;
     }
 
@@ -100,7 +100,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
 
     //Not initialized yet. They'll be updated afterwards.
     if (registers.contains("-1")) {
-        qCDebug(DEBUGGERGDB) << "Will update later";
+        qCDebug(DEBUGGERCOMMON) << "Will update later";
         m_pendingGroups.clear();
         return;
     }
@@ -227,7 +227,7 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
         setGeneralRegister(Register(flag.registerName, QString("0x%1").arg(flagsValue, 0, 16)), flag.groupName);
     } else {
         updateRegisters(flag.groupName);
-        qCDebug(DEBUGGERGDB) << reg.name << ' ' << reg.value << "is incorrect flag name/value";
+        qCDebug(DEBUGGERCOMMON) << reg.name << ' ' << reg.value << "is incorrect flag name/value";
     }
 }
 
@@ -238,13 +238,13 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
     }
 
     const QString command = QString("set var $%1=%2").arg(reg.name).arg(reg.value);
-    qCDebug(DEBUGGERGDB) << "Setting register: " << command;
+    qCDebug(DEBUGGERCOMMON) << "Setting register: " << command;
 
     m_debugSession->addCommand(NonMI, command);
     updateRegisters(group);
 }
 
-IRegisterController::IRegisterController(DebugSession* debugSession, QObject* parent)
+IRegisterController::IRegisterController(MIDebugSession* debugSession, QObject* parent)
 : QObject(parent), m_debugSession(debugSession) {}
 
 IRegisterController::~IRegisterController() {}

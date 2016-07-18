@@ -75,7 +75,7 @@ void MIVariableController::programStopped(const AsyncRecord& r)
 
 void MIVariableController::update()
 {
-    qCDebug(DEBUGGERGDB) << autoUpdate();
+    qCDebug(DEBUGGERCOMMON) << autoUpdate();
     if (autoUpdate() & UpdateWatches) {
         variableCollection()->watches()->reinstall();
     }

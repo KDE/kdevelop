@@ -54,9 +54,9 @@ class ProcessLineMaker;
 }
 
 namespace KDevMI {
-namespace GDB
-{
 class DisassembleWidget;
+
+namespace GDB {
 class GDBOutputWidget;
 class MemoryViewerWidget;
 
@@ -77,7 +77,7 @@ private:
     void setupToolviews();
 
 private:
-    DebuggerToolFactory<DisassembleWidget, CppDebuggerPlugin>* disassemblefactory;
+    DebuggerToolFactory<DisassembleWidget>* disassemblefactory;
     DebuggerToolFactory<GDBOutputWidget, CppDebuggerPlugin>* gdbfactory;
     DebuggerToolFactory<MemoryViewerWidget, CppDebuggerPlugin>* memoryviewerfactory;
 };

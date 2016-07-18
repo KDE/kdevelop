@@ -329,7 +329,7 @@ bool STTY::findExternalTTY(const QString& termApp)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
             usleep(8000);
         } else {
-            qCDebug(DEBUGGERGDB) << "Received terminal output(tty)";
+            qCDebug(DEBUGGERCOMMON) << "Received terminal output(tty)";
             break;
         }
     }

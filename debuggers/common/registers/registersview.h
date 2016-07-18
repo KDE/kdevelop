@@ -29,8 +29,6 @@ class QMenu;
 class QSignalMapper;
 
 namespace KDevMI {
-namespace GDB
-{
 
 class ModelsManager;
 
@@ -90,7 +88,6 @@ private:
     QVector<QAction*> m_actions;
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
 
 #endif

@@ -25,7 +25,7 @@
 #include "debuggerplugin.h"
 
 
-#include "disassemblewidget.h"
+#include "widgets/disassemblewidget.h"
 #include "memviewdlg.h"
 #include "gdboutputwidget.h"
 
@@ -51,7 +51,7 @@ CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
 {
     setXMLFile("kdevgdbui.rc");
 
-    disassemblefactory = new DebuggerToolFactory<DisassembleWidget, CppDebuggerPlugin>(
+    disassemblefactory = new DebuggerToolFactory<DisassembleWidget>(
     this, "org.kdevelop.debugger.DisassemblerView", Qt::BottomDockWidgetArea);
 
     gdbfactory = new DebuggerToolFactory<GDBOutputWidget, CppDebuggerPlugin>(

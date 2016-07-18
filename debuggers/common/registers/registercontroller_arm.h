@@ -25,16 +25,13 @@
 #include "registercontroller.h"
 
 namespace KDevMI {
-namespace GDB
-{
-
-class DebugSession;
+class MIDebugSession;
 
 class RegisterController_Arm : public IRegisterController
 {
 public:
 
-    RegisterController_Arm(DebugSession* debugSession = 0, QObject* parent = 0);
+    RegisterController_Arm(MIDebugSession* debugSession = 0, QObject* parent = 0);
 
     virtual QVector<GroupsName> namesOfRegisterGroups() const override;
 
@@ -69,7 +66,6 @@ private:
     bool m_registerNamesInitialized;
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
 
 #endif // REGISTERCONTROLLER_ARM_H

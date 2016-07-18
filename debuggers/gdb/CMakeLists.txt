@@ -31,7 +31,6 @@ include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 set(kdevgdb_SRCS
     debuggerplugin.cpp
     gdb.cpp
-    disassemblewidget.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     debugsession.cpp
@@ -40,13 +39,6 @@ set(kdevgdb_SRCS
     variablecontroller.cpp
     gdbframestackmodel.cpp
     gdbvariable.cpp
-    registers/registersview.cpp
-    registers/registercontroller.cpp
-    registers/registersmanager.cpp
-    registers/registercontroller_x86.cpp
-    registers/registercontroller_arm.cpp
-    registers/modelsmanager.cpp
-    registers/converters.cpp
 )
 
 if(OKTETA_FOUND)
@@ -58,8 +50,6 @@ endif()
 set(kdevgdb_UI
     debuggertracingdialog.ui
     gdbconfigpage.ui
-    selectaddressdialog.ui
-    registers/registersview.ui
 )
 
 kde_enable_exceptions()

@@ -43,7 +43,7 @@ namespace KDevelop {
     class IDebugSession;
 }
 
-namespace KDevMI { namespace GDB {
+namespace KDevMI {
 
 class RegistersManager;
 
@@ -95,7 +95,7 @@ private:
 
 class Breakpoint;
 class DebugSession;
-class CppDebuggerPlugin;
+class MIDebuggerPlugin;
 
 
 class DisassembleWidget : public QWidget
@@ -111,7 +111,7 @@ public:
         ColumnCount
     };
 
-    DisassembleWidget( CppDebuggerPlugin* plugin, QWidget *parent=0 );
+    DisassembleWidget( MIDebuggerPlugin* plugin, QWidget *parent=0 );
     ~DisassembleWidget() override;
 
 Q_SIGNALS:
@@ -169,11 +169,6 @@ private:
     QSplitter *m_splitter;
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
-
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
 
 #endif

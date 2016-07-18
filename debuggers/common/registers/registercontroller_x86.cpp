@@ -23,14 +23,14 @@
 
 #include <KLocalizedString>
 
-using namespace KDevMI::GDB;
+using namespace KDevMI;
 
 QVector<QStringList> RegisterControllerGeneral_x86::m_registerNames;
 FlagRegister RegisterControllerGeneral_x86::m_eflags;
 
 void RegisterControllerGeneral_x86::updateValuesForRegisters(RegistersGroup* registers) const
 {
-    qCDebug(DEBUGGERGDB) << "Updating values for registers: " << registers->groupName.name();
+    qCDebug(DEBUGGERCOMMON) << "Updating values for registers: " << registers->groupName.name();
     if (registers->groupName == enumToGroupName(Flags)) {
         updateFlagValues(registers, m_eflags);
     } else {
@@ -108,19 +108,19 @@ GroupsName RegisterControllerGeneral_x86::enumToGroupName(X86RegisterGroups grou
     return groups[group];
 }
 
-RegisterController_x86::RegisterController_x86(DebugSession* debugSession, QObject* parent)
+RegisterController_x86::RegisterController_x86(MIDebugSession* debugSession, QObject* parent)
     : RegisterControllerGeneral_x86(debugSession, parent)
 {
     initRegisterNames();
 }
 
-RegisterController_x86_64::RegisterController_x86_64(DebugSession* debugSession, QObject* parent)
+RegisterController_x86_64::RegisterController_x86_64(MIDebugSession* debugSession, QObject* parent)
     : RegisterControllerGeneral_x86(debugSession, parent)
 {
     initRegisterNames();
 }
 
-RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(DebugSession* debugSession, QObject* parent)
+RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(MIDebugSession* debugSession, QObject* parent)
     : IRegisterController(debugSession, parent), m_registerNamesInitialized(false)
 {
     if (m_registerNames.isEmpty()) {

@@ -24,9 +24,9 @@
 
 #include "disassemblewidget.h"
 
-#include "debuggerplugin.h"
+#include "midebuggerplugin.h"
 #include "debuglog.h"
-#include "debugsession.h"
+#include "midebugsession.h"
 #include "mi/micommand.h"
 #include "registers/registersmanager.h"
 
@@ -50,7 +50,7 @@
 #include <QHeaderView>
 #include <QFontDatabase>
 
-using namespace KDevMI::GDB;
+using namespace KDevMI;
 using namespace KDevMI::MI;
 
 
@@ -166,7 +166,7 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
-DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
+DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
         : QWidget(parent),
         active_(false),
         lower_(0),
@@ -230,7 +230,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
             &KDevelop::IDebugController::currentSessionChanged,
             this, &DisassembleWidget::currentSessionChanged);
 
-    connect(plugin, &CppDebuggerPlugin::reset, this, &DisassembleWidget::slotDeactivate);
+    connect(plugin, &MIDebuggerPlugin::reset, this, &DisassembleWidget::slotDeactivate);
 
     m_dlg = new SelectAddressDialog(this);
 
@@ -244,7 +244,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 }
 
 void DisassembleWidget::jumpToCursor() {
-    DebugSession *s = qobject_cast<DebugSession*>(KDevelop::ICore::
+    MIDebugSession *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if (s && s->isRunning()) {
         QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
@@ -253,7 +253,7 @@ void DisassembleWidget::jumpToCursor() {
 }
 
 void DisassembleWidget::runToCursor(){
-    DebugSession *s = qobject_cast<DebugSession*>(KDevelop::ICore::
+    MIDebugSession *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if (s && s->isRunning()) {
         QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
@@ -263,16 +263,16 @@ void DisassembleWidget::runToCursor(){
 
 void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
-    DebugSession *session = qobject_cast<DebugSession*>(s);
+    MIDebugSession *session = qobject_cast<MIDebugSession*>(s);
 
     enableControls( session != NULL ); // disable if session closed
 
     m_registersManager->setSession(session);
 
     if (session) {
-        connect(session, &DebugSession::showStepInSource,
+        connect(session, &MIDebugSession::showStepInSource,
                 this, &DisassembleWidget::slotShowStepInSource);
-        connect(session,&DebugSession::showStepInDisassemble,this, &DisassembleWidget::update);
+        connect(session,&MIDebugSession::showStepInDisassemble,this, &DisassembleWidget::update);
     }
 }
 
@@ -314,7 +314,7 @@ bool DisassembleWidget::displayCurrent()
 
 void DisassembleWidget::slotActivate(bool activate)
 {
-    qCDebug(DEBUGGERGDB) << "Disassemble widget active: " << activate;
+    qCDebug(DEBUGGERCOMMON) << "Disassemble widget active: " << activate;
 
     if (active_ != activate)
     {
@@ -353,7 +353,7 @@ void DisassembleWidget::updateExecutionAddressHandler(const ResultRecord& r)
 
 void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QString& to)
 {
-    DebugSession *s = qobject_cast<DebugSession*>(KDevelop::ICore::
+    MIDebugSession *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if(!s || !s->isRunning()) return;
 
@@ -478,7 +478,7 @@ void DisassembleWidget::update(const QString &address)
 
 void DisassembleWidget::setDisassemblyFlavor(QAction* action)
 {
-    DebugSession* s = qobject_cast<DebugSession*>(KDevelop::ICore::
+    MIDebugSession* s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if(!s || !s->isRunning()) {
         return;
@@ -498,7 +498,7 @@ void DisassembleWidget::setDisassemblyFlavor(QAction* action)
         cmd = QStringLiteral("disassembly-flavor intel");
         break;
     }
-    qCDebug(DEBUGGERGDB) << "Disassemble widget set " << cmd;
+    qCDebug(DEBUGGERCOMMON) << "Disassemble widget set " << cmd;
 
     if (!cmd.isEmpty()) {
         s->addCommand(GdbSet, cmd, this, &DisassembleWidget::setDisassemblyFlavorHandler);
@@ -514,7 +514,7 @@ void DisassembleWidget::setDisassemblyFlavorHandler(const ResultRecord& r)
 
 void DisassembleWidget::updateDisassemblyFlavor()
 {
-    DebugSession* s = qobject_cast<DebugSession*>(KDevelop::ICore::
+    MIDebugSession* s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if(!s || !s->isRunning()) {
         return;
@@ -526,7 +526,7 @@ void DisassembleWidget::updateDisassemblyFlavor()
 void DisassembleWidget::showDisassemblyFlavorHandler(const ResultRecord& r)
 {
     const Value& value = r["value"];
-    qCDebug(DEBUGGERGDB) << "Disassemble widget disassembly flavor" << value.literal();
+    qCDebug(DEBUGGERCOMMON) << "Disassemble widget disassembly flavor" << value.literal();
 
     DisassemblyFlavor disassemblyFlavor = DisassemblyFlavorUnknown;
     if (value.literal() == "att") {

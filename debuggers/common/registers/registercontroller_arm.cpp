@@ -23,14 +23,14 @@
 
 #include <KLocalizedString>
 
-using namespace KDevMI::GDB;
+using namespace KDevMI;
 
 QVector<QStringList> RegisterController_Arm::m_registerNames;
 FlagRegister RegisterController_Arm::m_cpsr;
 
 void  RegisterController_Arm::updateValuesForRegisters(RegistersGroup* registers) const
 {
-    qCDebug(DEBUGGERGDB) << "Updating values for registers: " << registers->groupName.name();
+    qCDebug(DEBUGGERCOMMON) << "Updating values for registers: " << registers->groupName.name();
     if (registers->groupName == enumToGroupName(Flags)) {
         updateFlagValues(registers, m_cpsr);
     } else {
@@ -108,7 +108,7 @@ GroupsName RegisterController_Arm::enumToGroupName(ArmRegisterGroups group) cons
     return groups[group];
 }
 
-RegisterController_Arm::RegisterController_Arm(DebugSession* debugSession, QObject* parent) : IRegisterController(debugSession, parent), m_registerNamesInitialized(false)
+RegisterController_Arm::RegisterController_Arm(MIDebugSession* debugSession, QObject* parent) : IRegisterController(debugSession, parent), m_registerNamesInitialized(false)
 {
     if (m_registerNames.isEmpty()) {
         for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {

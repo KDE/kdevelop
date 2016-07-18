@@ -21,7 +21,7 @@
 
 #include <KLocalizedString>
 
-using namespace KDevMI::GDB;
+using namespace KDevMI;
 
 QString Converters::formatToString(Format format)
 {

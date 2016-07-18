@@ -24,13 +24,14 @@
 #include "registercontroller_x86.h"
 #include "registersview.h"
 
+#include "dbgglobal.h"
 #include "debuglog.h"
+#include "midebugsession.h"
 #include "mi/micommand.h"
 #include "modelsmanager.h"
-#include "../debugsession.h"
 
 using namespace KDevMI::MI;
-using namespace KDevMI::GDB;
+using namespace KDevMI;
 
 void ArchitectureParser::parseArchitecture()
 {
@@ -67,7 +68,7 @@ void ArchitectureParser::registerNamesHandler(const ResultRecord& r)
     parseArchitecture();
 }
 
-void ArchitectureParser::determineArchitecture(DebugSession* debugSession)
+void ArchitectureParser::determineArchitecture(MIDebugSession* debugSession)
 {
     if (!debugSession || debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
@@ -87,7 +88,7 @@ RegistersManager::RegistersManager(QWidget* parent)
 
 void RegistersManager::architectureParsedSlot(Architecture arch)
 {
-    qCDebug(DEBUGGERGDB) << " Current controller: " << m_registerController << "Current arch " << m_currentArchitecture;
+    qCDebug(DEBUGGERCOMMON) << " Current controller: " << m_registerController << "Current arch " << m_currentArchitecture;
 
     if (m_registerController || m_currentArchitecture != undefined) {
         return;
@@ -96,15 +97,15 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
     switch (arch) {
     case x86:
         m_registerController.reset(new RegisterController_x86(m_debugSession)) ;
-        qCDebug(DEBUGGERGDB) << "Found x86 architecture";
+        qCDebug(DEBUGGERCOMMON) << "Found x86 architecture";
         break;
     case x86_64:
         m_registerController.reset(new RegisterController_x86_64(m_debugSession));
-        qCDebug(DEBUGGERGDB) << "Found x86_64 architecture";
+        qCDebug(DEBUGGERCOMMON) << "Found x86_64 architecture";
         break;
     case arm:
         m_registerController.reset(new RegisterController_Arm(m_debugSession));
-        qCDebug(DEBUGGERGDB) << "Found Arm architecture";
+        qCDebug(DEBUGGERCOMMON) << "Found Arm architecture";
         break;
     default:
         m_registerController.reset();
@@ -121,15 +122,15 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
     }
 }
 
-void RegistersManager::setSession(DebugSession* debugSession)
+void RegistersManager::setSession(MIDebugSession* debugSession)
 {
-    qCDebug(DEBUGGERGDB) << "Change session " << debugSession;
+    qCDebug(DEBUGGERCOMMON) << "Change session " << debugSession;
     m_debugSession = debugSession;
     if (m_registerController) {
         m_registerController->setSession(debugSession);
     }
     if (!m_debugSession) {
-        qCDebug(DEBUGGERGDB) << "Will reparse arch";
+        qCDebug(DEBUGGERCOMMON) << "Will reparse arch";
         m_needToCheckArch = true;
         setController(0);
     }
@@ -141,7 +142,7 @@ void RegistersManager::updateRegisters()
         return;
     }
 
-    qCDebug(DEBUGGERGDB) << "Updating registers";
+    qCDebug(DEBUGGERCOMMON) << "Updating registers";
     if (m_needToCheckArch) {
         m_needToCheckArch = false;
         m_currentArchitecture = undefined;
@@ -154,7 +155,7 @@ void RegistersManager::updateRegisters()
     if (m_registerController) {
         m_registersView->updateRegisters();
     } else {
-        qCDebug(DEBUGGERGDB) << "No registerController, yet?";
+        qCDebug(DEBUGGERCOMMON) << "No registerController, yet?";
     }
 }
 

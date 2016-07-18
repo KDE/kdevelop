@@ -30,7 +30,7 @@
 
 #include <KLocalizedString>
 
-using namespace KDevMI::GDB;
+using namespace KDevMI;
 
 namespace
 {
@@ -181,7 +181,7 @@ void RegistersView::enable(bool enabled)
 
 void RegistersView::setNameForTable(int idx, const QString& name)
 {
-    qCDebug(DEBUGGERGDB) << name << " " << idx;
+    qCDebug(DEBUGGERCOMMON) << name << " " << idx;
     const QString text = tabWidget->tabText(idx);
     if (!text.contains(name)) {
         tabWidget->setTabText(idx, text.isEmpty() ? name : text + '/' + name);

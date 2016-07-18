@@ -26,7 +26,7 @@
 
 #include <KSharedConfig>
 
-namespace KDevMI { namespace GDB {
+namespace KDevMI {
 
 struct Model {
     Model();
@@ -61,10 +61,9 @@ private:
     QVector<Model> m_models;
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
 
-using namespace KDevMI::GDB;
+using namespace KDevMI;
 
 ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(0), m_config(KSharedConfig::openConfig()->group("Register models")) {}
 

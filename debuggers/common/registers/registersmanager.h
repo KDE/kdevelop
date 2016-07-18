@@ -31,12 +31,10 @@ namespace MI
 struct ResultRecord;
 }
 
-namespace GDB
-{
+class MIDebugSession;
 
 class RegistersView;
 class IRegisterController;
-class DebugSession;
 class ModelsManager;
 
 enum Architecture {x86, x86_64, arm, other = 100, undefined};
@@ -51,7 +49,7 @@ public:
     ArchitectureParser(QObject* parent);
 
     ///Asynchronously determines current architecture. emits @p architectureParsed when ready.
-    void determineArchitecture(DebugSession* debugSession);
+    void determineArchitecture(MIDebugSession* debugSession);
 
 Q_SIGNALS:
     ///Emits current CPU architecture. @sa determineArchitecture
@@ -73,7 +71,7 @@ public:
     RegistersManager(QWidget* parent);
 
 public Q_SLOTS:
-    void setSession(DebugSession* debugSession);
+    void setSession(MIDebugSession* debugSession);
     ///Updates all registers.
     void updateRegisters();
     ///@sa ArchitectureParser::determineArchitecture
@@ -88,7 +86,7 @@ private:
 
     ArchitectureParser* m_architectureParser;
 
-    DebugSession* m_debugSession;
+    MIDebugSession* m_debugSession;
 
     ModelsManager* m_modelsManager;
 
@@ -98,6 +96,5 @@ private:
     bool m_needToCheckArch;
 };
 
-} // end of namespace GDB
 } // end of namespace KDevMI
 #endif // REGISTERSMANAGER_H
