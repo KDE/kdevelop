@@ -518,6 +518,13 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
     return;
   }
 
+  if(!tracker->holdingRevision(highlighting->m_waitingRevision)) {
+    qCDebug(LANGUAGE) << "not holding revision" << highlighting->m_waitingRevision << "not applying highlighting;"
+                      << "probably a new parse job has already updated the context";
+    delete highlighting;
+    return;
+  }
+
   QVector< MovingRange* > oldHighlightedRanges;
 
   if(m_highlights.contains(tracker))
