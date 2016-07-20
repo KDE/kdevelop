@@ -66,6 +66,9 @@ public:
 
     QVector<KDevelop::Problem::Ptr> problemsForContext(const ReferencedTopDUContext& top);
 
+signals:
+    void problemsChanged(const IndexedString& url);
+
 private:
     struct Private;
     QScopedPointer<Private> const d;

@@ -64,6 +64,10 @@ QString AbstractDeclarationNavigationContext::name() const
 
 QString AbstractDeclarationNavigationContext::html(bool shorten)
 {
+  DUChainReadLocker lock(DUChain::lock(), 300);
+  if ( !lock.locked() ) {
+    return {};
+  }
   clear();
   m_shorten = shorten;
   modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);

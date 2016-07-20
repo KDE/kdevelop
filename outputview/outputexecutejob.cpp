@@ -96,10 +96,13 @@ OutputExecuteJob::OutputExecuteJob( QObject* parent, OutputJob::OutputJobVerbosi
 
 OutputExecuteJob::~OutputExecuteJob()
 {
-    if( d->m_process->state() != QProcess::NotRunning ) {
-        doKill();
+    // indicates if process is running and survives kill, then we cannot do anything
+    bool killSuccessful = d->m_process->state() == QProcess::NotRunning;
+    if( !killSuccessful ) {
+        killSuccessful = doKill();
     }
-    Q_ASSERT( d->m_process->state() == QProcess::NotRunning );
+
+    Q_ASSERT( d->m_process->state() == QProcess::NotRunning || !killSuccessful );
     delete d;
 }
 
@@ -289,8 +292,9 @@ bool OutputExecuteJob::doKill()
 {
     const int terminateKillTimeout = 1000; // msecs
 
-    if( d->m_status != JobRunning )
+    if( d->m_status != JobRunning ) {
         return true;
+    }
     d->m_status = JobCanceled;
 
     d->m_process->terminate();
@@ -304,7 +308,9 @@ bool OutputExecuteJob::doKill()
         model()->appendLine( i18n( "*** Killed process ***" ) );
     } else {
         // It survived SIGKILL, leave it alone...
+        qCWarning(OUTPUTVIEW) << "Could not kill the running process:" << d->m_process->error();
         model()->appendLine( i18n( "*** Warning: could not kill the process ***" ) );
+        return false;
     }
     return true;
 }

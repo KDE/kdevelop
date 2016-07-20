@@ -62,6 +62,7 @@ public:
 
 private Q_SLOTS:
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext&);
+    void updateHighlight(const KDevelop::IndexedString& url);
     void textDocumentCreated(KDevelop::IDocument* document);
 
 private:

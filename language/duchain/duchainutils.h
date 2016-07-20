@@ -28,6 +28,8 @@
 #include <ktexteditor/codecompletionmodel.h>
 
 #include <language/languageexport.h>
+#include <language/duchain/problem.h>
+#include <language/duchain/topducontext.h>
 
 class QIcon;
 
@@ -120,6 +122,8 @@ namespace DUChainUtils {
   ///If the given declaration is a function-declaration, this follows the context-structure up to the function-context that contains the arguments,
   ///and returns it.
   KDEVPLATFORMLANGUAGE_EXPORT DUContext* getFunctionContext(Declaration* decl);
+
+  KDEVPLATFORMLANGUAGE_EXPORT QVector<KDevelop::Problem::Ptr> allProblemsForContext(ReferencedTopDUContext top);
 }
 }
 
