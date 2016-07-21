@@ -89,7 +89,7 @@ ki18n_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdevcmakecommon
                         KF5::TextEditor KDev::Interfaces KDev::Project KDev::Util
-                        ${QT_QTSCRIPT_LIBRARY} KDev::Language
+                        KDev::Language
                         )
 generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
 

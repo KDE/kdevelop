@@ -34,7 +34,7 @@ include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
 set(QT_MIN_VERSION "5.4.0")
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets WebKitWidgets Script Test)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets WebKitWidgets Test)
 set(KF5_DEP_VERSION "5.15.0") # we need KCrash::initialize
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Config
