@@ -83,9 +83,9 @@ QString MacroNavigationContext::html(bool shorten)
     modifyHtml() += QStringLiteral(" "); //The action name _must_ stay "show_uses", since that is also used from outside
     makeLink(i18n("Show uses"), QStringLiteral("show_uses"), NavigationAction(m_macro.dynamicCast<Declaration>(), NavigationAction::NavigateUses));
 
-    auto code = m_macro->definition().str().replace(QStringLiteral("\n"), QStringLiteral("<br/>"));
+    auto code = m_macro->definition().str();
     modifyHtml() += QLatin1String("<p>") + i18n("Body: ");
-    modifyHtml() += QLatin1String("<tt>") + code + QLatin1String("</tt>");
+    modifyHtml() += QLatin1String("<tt>") + code.toHtmlEscaped().replace(QStringLiteral("\n"), QStringLiteral("<br/>")) + QLatin1String("</tt>");
     modifyHtml() += QLatin1String("</p>");
 
     modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
