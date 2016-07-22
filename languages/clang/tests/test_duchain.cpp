@@ -1356,6 +1356,28 @@ void TestDUChain::testMacrosRanges()
     QCOMPARE(macroDefinition->uses().begin()->first(), RangeInRevision(1,0,1,11));
 }
 
+void TestDUChain::testMacroUses()
+{
+    TestFile file("#define USER(x) x\n#define USED\nUSER(USED)", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+    auto macroDefinition1 = file.topContext()->localDeclarations()[0];
+    auto macroDefinition2 = file.topContext()->localDeclarations()[1];
+
+    QCOMPARE(macroDefinition1->uses().size(), 1);
+    QCOMPARE(macroDefinition1->uses().begin()->first(), RangeInRevision(2,0,2,4));
+    QEXPECT_FAIL("", "This appears to be a clang bug, the AST doesn't contain the macro use", Continue);
+    QCOMPARE(macroDefinition2->uses().size(), 1);
+    if (macroDefinition2->uses().size())
+    {
+        QCOMPARE(macroDefinition2->uses().begin()->first(), RangeInRevision(2,5,2,9));
+    }
+}
+
 void TestDUChain::testMultiLineMacroRanges()
 {
     TestFile file("#define FUNC_MACROS(x) struct str##x{};\nFUNC_MACROS(x\n);", "cpp");
