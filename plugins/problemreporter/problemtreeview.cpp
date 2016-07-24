@@ -166,31 +166,37 @@ void ProblemTreeView::setModel(QAbstractItemModel* model)
 void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
 {
     QModelIndex index = indexAt(event->pos());
-    if (index.isValid()) {
-        const auto problem = index.data(ProblemModel::ProblemRole).value<IProblem::Ptr>();
-        if (!problem) {
-            return;
-        }
-        QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
-        if (!solution) {
-            return;
-        }
-        QList<QAction*> actions;
-        foreach (KDevelop::IAssistantAction::Ptr action, solution->actions()) {
-            actions << action->toKAction();
-        }
-        if (!actions.isEmpty()) {
-            QString title = solution->title();
-            title = KDevelop::htmlToPlainText(title);
-            title.replace(QLatin1String("&apos;"), QLatin1String("\'"));
+    if (!index.isValid())
+        return;
 
-            QPointer<QMenu> m = new QMenu(this);
-            m->addSection(title);
-            m->addActions(actions);
-            m->exec(event->globalPos());
-            delete m;
-        }
+    const auto problem = index.data(ProblemModel::ProblemRole).value<IProblem::Ptr>();
+    if (!problem) {
+        return;
     }
+
+    QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
+    if (!solution) {
+        return;
+    }
+
+    QList<QAction*> actions;
+    foreach (KDevelop::IAssistantAction::Ptr action, solution->actions()) {
+        actions << action->toKAction();
+    }
+
+    if (actions.isEmpty()) {
+        return;
+    }
+
+    QString title = solution->title();
+    title = KDevelop::htmlToPlainText(title);
+    title.replace(QLatin1String("&apos;"), QLatin1String("\'"));
+
+    QPointer<QMenu> m = new QMenu(this);
+    m->addSection(title);
+    m->addActions(actions);
+    m->exec(event->globalPos());
+    delete m;
 }
 
 void ProblemTreeView::showEvent(QShowEvent* event)
