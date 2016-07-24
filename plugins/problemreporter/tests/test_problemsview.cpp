@@ -18,7 +18,9 @@
  */
 
 #include <QtTest>
+#include <QAction>
 #include <QSignalSpy>
+#include <QTabWidget>
 #include <QToolBar>
 
 #include "../problemsview.h"
@@ -49,7 +51,6 @@ private slots:
 
 private:
     QTabWidget* tabWidget();
-    QToolBar* toolBar();
     bool compareActions(QWidget* w, QToolBar* tb);
 
     QScopedPointer<ProblemsView> m_view;
@@ -97,18 +98,24 @@ void TestProblemsView::testAddModel()
     QCOMPARE(tab->tabText(1), QStringLiteral("MODEL2 (0)"));
 }
 
+QVector<bool> visibilites(const QList<QAction*> actions)
+{
+    QVector<bool> visibilites;
+    foreach (auto action, actions) {
+        visibilites << action->isVisible();
+    }
+    return visibilites;
+}
+
 void TestProblemsView::testSwitchTab()
 {
     QTabWidget* tab = tabWidget();
     QVERIFY(tab != nullptr);
 
-    QToolBar* tb = toolBar();
-    QVERIFY(tb != nullptr);
-
     // Check that the current widget's actions are in the toolbar
     QWidget* oldWidget = tab->currentWidget();
     QVERIFY(oldWidget != nullptr);
-    QVERIFY(compareActions(oldWidget, tb));
+    const auto oldVisibilites = visibilites(m_view->actions());
 
     tab->setCurrentIndex(1);
 
@@ -116,7 +123,8 @@ void TestProblemsView::testSwitchTab()
     QWidget* newWidget = tab->currentWidget();
     QVERIFY(newWidget != nullptr);
     QVERIFY(newWidget != oldWidget);
-    QVERIFY(compareActions(newWidget, tb));
+    const auto newVisibilites = visibilites(m_view->actions());
+    QCOMPARE(oldVisibilites, newVisibilites);
 }
 
 void TestProblemsView::testRemoveModel()
@@ -199,12 +207,6 @@ QTabWidget* TestProblemsView::tabWidget()
 {
     QTabWidget* tab = m_view->findChild<QTabWidget*>();
     return tab;
-}
-
-QToolBar* TestProblemsView::toolBar()
-{
-    QToolBar* tb = m_view->findChild<QToolBar*>();
-    return tb;
 }
 
 bool TestProblemsView::compareActions(QWidget* w, QToolBar* tb)

@@ -22,9 +22,16 @@
 
 #include <interfaces/itoolviewactionlistener.h>
 
-#include <QMainWindow>
+#include <QWidget>
 
 class ProblemTreeView;
+
+class KActionMenu;
+
+class QAction;
+class QActionGroup;
+class QMenu;
+class QTabWidget;
 
 namespace KDevelop
 {
@@ -33,16 +40,13 @@ struct ModelData;
 /**
  * @brief Provides a tabbed view for models in the ProblemModelSet.
  *
+ *
  * Also provides a toolbar for actions for the models and shows the number of messages in each tab's text.
  * When the load() method is called it looks up the models in the ProblemModelSet.
  * For each model it creates a treeview, which is then added to the tabbed view and a new tab.
  * The tab's text will be the name of the model + the number of items in the treeview.
- *
- * TODO: According to apol this should NOT be a QMainWindow,
- * because updating the widget's actions should be sufficient to update the
- * toolbar of the toolviiew
  */
-class ProblemsView : public QMainWindow, public IToolViewActionListener
+class ProblemsView : public QWidget, public IToolViewActionListener
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IToolViewActionListener)
@@ -73,17 +77,30 @@ public Q_SLOTS:
 private:
     ProblemTreeView* currentView() const;
 
+    void setupActions();
+    void updateActions();
+
+    void handleSeverityActionToggled();
+    void setScope(int scope);
+
     /// Create a view for the model and add to the tabbed widget
     void addModel(const ModelData& data);
-
-    /// Update the toolbar with the widget's actions
-    void updateToolBar();
 
     /// Update the tab's text (name + number of problems in that tab)
     void updateTab(int idx, int rows);
 
-    QToolBar* m_toolBar;
     QTabWidget* m_tabWidget;
+
+    KActionMenu* m_scopeMenu = nullptr;
+    KActionMenu* m_groupingMenu = nullptr;
+    QAction* m_fullUpdateAction = nullptr;
+    QAction* m_showImportsAction = nullptr;
+    QActionGroup* m_severityActions = nullptr;
+    QAction* m_currentDocumentAction = nullptr;
+    QAction* m_showAllAction = nullptr;
+    QAction* m_errorSeverityAction = nullptr;
+    QAction* m_warningSeverityAction = nullptr;
+    QAction* m_hintSeverityAction = nullptr;
 };
 }
 

@@ -62,17 +62,11 @@ protected:
 
 private slots:
     void itemActivated(const QModelIndex& index);
-    void handleSeverityActionToggled();
-
-    void setScope(int scope);
 
 private:
     void resizeColumns();
     ProblemReporterPlugin* m_plugin;
     QSortFilterProxyModel* m_proxy;
-    QAction* m_errorSeverityAction;
-    QAction* m_warningSeverityAction;
-    QAction* m_hintSeverityAction;
 };
 
 #endif
