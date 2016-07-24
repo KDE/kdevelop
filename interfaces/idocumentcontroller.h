@@ -107,8 +107,7 @@ public Q_SLOTS:
      * Opens a new or existing document.
      *
      * @param url The full Url of the document to open.
-     * @param range The location information, if applicable.
-     * @param activate Indicates whether to fully activate the document.
+     * @param cursor The location information, if applicable.
      */
     KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Cursor& cursor,
@@ -120,7 +119,6 @@ public Q_SLOTS:
      *
      * @param url The full Url of the document to open.
      * @param range The range of text to select, if applicable.
-     * @param activate Indicates whether to fully activate the document
      * @param buddy Optional buddy document. If 0, the registered IBuddyDocumentFinder
      *              for the URL's mimetype will be queried to find a fitting buddy.
      *              If a buddy was found (or passed) @p url will be opened next
@@ -156,7 +154,7 @@ public Q_SLOTS:
      * @param url The full Url of the document to open.
      * @param prefName The name of the preferred KPart to open that document
      */
-    virtual KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefname ) = 0;
+    virtual KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefName ) = 0;
 
     virtual bool closeAllDocuments() = 0;
 
