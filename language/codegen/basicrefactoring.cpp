@@ -214,7 +214,7 @@ KDevelop::IndexedDeclaration BasicRefactoring::declarationUnderCursor(bool allow
 
     DUChainReadLocker lock;
     if (allowUse)
-        return DUChainUtils::itemUnderCursor(doc->url(), KTextEditor::Cursor(view->cursorPosition()));
+        return DUChainUtils::itemUnderCursor(doc->url(), KTextEditor::Cursor(view->cursorPosition())).declaration;
     else
         return DUChainUtils::declarationInLine(KTextEditor::Cursor(view->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
 }

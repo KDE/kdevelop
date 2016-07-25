@@ -123,7 +123,7 @@ DeclarationPointer cursorDeclaration()
 
   DUChainReadLocker lock;
 
-  Declaration *decl = DUChainUtils::declarationForDefinition(DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(view->cursorPosition())));
+  Declaration *decl = DUChainUtils::declarationForDefinition(DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(view->cursorPosition())).declaration);
   return DeclarationPointer(decl);
 }
 
@@ -528,7 +528,7 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
     }
   }
 
-  auto declUnderCursor = DUChainUtils::itemUnderCursor(viewUrl, position);
+  auto declUnderCursor = DUChainUtils::itemUnderCursor(viewUrl, position).declaration;
   Declaration* decl = DUChainUtils::declarationForDefinition(declUnderCursor);
   if (decl && decl->kind() == Declaration::Alias) {
     AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(decl);
@@ -588,7 +588,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     {
       DUChainReadLocker lock;
       auto viewUrl = view->document()->url();
-      itemRange = DUChainUtils::itemRangeUnderCursor(viewUrl, position);
+      itemRange = DUChainUtils::itemUnderCursor(viewUrl, position).range;
     }
     tooltip->setHandleRect(KTextEditorHelpers::getItemBoundingRect(view, itemRange));
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
@@ -693,7 +693,7 @@ Declaration* ContextBrowserPlugin::findDeclaration(View* view, const KTextEditor
         foundDeclaration = m_useDeclaration.data();
       }else{
         //If we haven't found a special language object, search for a use/declaration and eventually highlight it
-        foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), position) );
+        foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), position).declaration );
         if (foundDeclaration && foundDeclaration->kind() == Declaration::Alias) {
           AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(foundDeclaration);
           Q_ASSERT(alias);
@@ -967,7 +967,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
       }
 
       if(!decl) //Try finding a declaration under the cursor
-        decl = DUChainUtils::itemUnderCursor(doc->url(), cCurrent);
+        decl = DUChainUtils::itemUnderCursor(doc->url(), cCurrent).declaration;
 
       if (decl && decl->kind() == Declaration::Alias) {
         AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(decl);

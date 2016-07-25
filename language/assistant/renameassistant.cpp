@@ -51,12 +51,12 @@ bool rangesConnect(const KTextEditor::Range& firstRange, const KTextEditor::Rang
 Declaration* getDeclarationForChangedRange(KTextEditor::Document* doc, const KTextEditor::Range& changed)
 {
     const KTextEditor::Cursor cursor(changed.start());
-    Declaration* declaration = DUChainUtils::itemUnderCursor(doc->url(), cursor);
+    Declaration* declaration = DUChainUtils::itemUnderCursor(doc->url(), cursor).declaration;
 
     //If it's null we could be appending, but there's a case where appending gives a wrong decl
     //and not a null declaration ... "type var(init)", so check for that too
     if (!declaration || !rangesConnect(declaration->rangeInCurrentRevision(), changed)) {
-        declaration = DUChainUtils::itemUnderCursor(doc->url(), KTextEditor::Cursor(cursor.line(), cursor.column()-1));
+        declaration = DUChainUtils::itemUnderCursor(doc->url(), KTextEditor::Cursor(cursor.line(), cursor.column()-1)).declaration;
     }
 
     //In this case, we may either not have a decl at the cursor, or we got a decl, but are editing its use.

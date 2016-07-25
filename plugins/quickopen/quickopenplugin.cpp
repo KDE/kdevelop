@@ -171,7 +171,7 @@ Declaration* cursorDeclaration() {
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-  return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( view->document()->url(), KTextEditor::Cursor(view->cursorPosition()) ) );
+  return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( view->document()->url(), KTextEditor::Cursor(view->cursorPosition()) ).declaration );
 }
 
 ///The first definition that belongs to a context that surrounds the current cursor

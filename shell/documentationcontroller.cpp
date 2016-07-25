@@ -136,7 +136,7 @@ void KDevelop::DocumentationController::doShowDocumentation()
 
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-    Declaration* decl = usefulDeclaration(DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(view->cursorPosition())));
+    Declaration* decl = usefulDeclaration(DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(view->cursorPosition())).declaration);
     auto documentation = documentationForDeclaration(decl);
     if (documentation) {
         showDocumentation(documentation);
