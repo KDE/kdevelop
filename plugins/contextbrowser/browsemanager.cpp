@@ -187,6 +187,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
             {
                 //Completion is active.
                 avoidMenuAltFocus();
+                m_delayedBrowsingTimer->stop();
             }else{
                 m_browsingStartedInView = view;
             }
