@@ -188,7 +188,7 @@ QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const QUrl& url,
         // if the property key is listed in the supported properties.
         QPair<KTextEditor::Range, KTextEditor::Range> property = parseProperty(doc->textDocument()->line(position.line()), position);
         if ( property.first.isValid() && property.second.isValid() ) {
-            Declaration* decl = DUChainUtils::itemUnderCursor(url, property.first.start());
+            Declaration* decl = DUChainUtils::itemUnderCursor(url, property.first.start()).declaration;
 
             return PropertyPreviewWidget::constructIfPossible(
                 doc->textDocument(),
