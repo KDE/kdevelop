@@ -53,6 +53,7 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include "debug.h"
 #include "ktexteditorpluginintegration.h"
+#include "colorschemechooser.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
@@ -318,6 +319,9 @@ void MainWindowPrivate::setupActions()
     connect( action, &QAction::triggered,  this, &MainWindowPrivate::viewAddNewToolView );
     action->setToolTip( i18nc( "@info:tooltip", "Add tool view" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Adds a new tool view to this window." ) );
+
+    //Load themes
+    actionCollection()->addAction(QStringLiteral("coloscheme_menu"), new ColorSchemeChooser(actionCollection()));
 }
 
 void MainWindowPrivate::toggleArea(bool b)

@@ -18,6 +18,7 @@ set(KDevPlatformShell_LIB_SRCS
     shellextension.cpp
     core.cpp
     uicontroller.cpp
+    colorschemechooser.cpp
     projectcontroller.cpp
     project.cpp
     partcontroller.cpp
@@ -124,6 +125,7 @@ LINK_PRIVATE
     Qt5::QuickWidgets
 
     KF5::GuiAddons
+    KF5::ConfigWidgets
     KF5::IconThemes
     KF5::KIOFileWidgets
     KF5::KIOWidgets
@@ -156,6 +158,7 @@ install(FILES
     shellextension.h
     core.h
     uicontroller.h
+    colorschemechooser.h
     projectcontroller.h
     project.h
     partcontroller.h
