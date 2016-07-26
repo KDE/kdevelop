@@ -72,9 +72,9 @@ public:
     VariableController * variableController() const override;
     GdbFrameStackModel * frameStackModel() const override;
 
-    // FIXME: only used in unit test currently,
-    // potentially could be made a user configurable option
-    // Whether turn off auto-disable ASLR when starting inferiors
+    /// FIXME: only used in unit test currently, potentially could
+    /// be made a user configurable option.
+    /// Whether turn off auto-disable ASLR when starting inferiors
     void setAutoDisableASLR(bool enable);
 
 protected:
