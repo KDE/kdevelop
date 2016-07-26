@@ -72,6 +72,11 @@ public:
     VariableController * variableController() const override;
     GdbFrameStackModel * frameStackModel() const override;
 
+    // FIXME: only used in unit test currently,
+    // potentially could be made a user configurable option
+    // Whether turn off auto-disable ASLR when starting inferiors
+    void setAutoDisableASLR(bool enable);
+
 protected:
     GdbDebugger *createDebugger() const override;
     void initializeDebugger() override;
@@ -89,6 +94,8 @@ private:
     BreakpointController *m_breakpointController;
     VariableController *m_variableController;
     GdbFrameStackModel *m_frameStackModel;
+
+    bool m_autoDisableASLR;
 };
 
 } // end of namespace GDB

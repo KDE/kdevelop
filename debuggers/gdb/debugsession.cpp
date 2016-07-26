@@ -58,6 +58,7 @@ DebugSession::DebugSession()
     , m_breakpointController(nullptr)
     , m_variableController(nullptr)
     , m_frameStackModel(nullptr)
+    , m_autoDisableASLR(false)
 {
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);
@@ -66,6 +67,11 @@ DebugSession::DebugSession()
 
 DebugSession::~DebugSession()
 {
+}
+
+void DebugSession::setAutoDisableASLR(bool enable)
+{
+    m_autoDisableASLR = enable;
 }
 
 BreakpointController *DebugSession::breakpointController() const
@@ -119,6 +125,10 @@ void DebugSession::initializeDebugger()
                    QString("python sys.path.insert(0, \"%0\")").arg(quotedPrintersPath));
         addCommand(MI::NonMI, "source " + fileName);
     }
+
+    // GDB can't disable ASLR on CI server.
+    addCommand(MI::GdbSet,
+               QStringLiteral("disable-randomization %1").arg(m_autoDisableASLR ? "on" : "off"));
 
     qCDebug(DEBUGGERGDB) << "Initialized GDB";
 }

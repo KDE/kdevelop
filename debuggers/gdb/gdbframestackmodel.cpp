@@ -21,8 +21,6 @@
  */
 
 #include "gdbframestackmodel.h"
-#include <algorithm>
-
 
 #include "debugsession.h"
 
