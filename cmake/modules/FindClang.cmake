@@ -29,7 +29,7 @@
 
 #=============================================================================
 
-set(KNOWN_VERSIONS 3.9 3.8 3.7 3.6 3.5)
+set(KNOWN_VERSIONS 4.0 3.9 3.8 3.7 3.6 3.5)
 
 foreach(version ${KNOWN_VERSIONS})
     if (LLVM_DIR OR (DEFINED Clang_FIND_VERSION AND Clang_FIND_VERSION VERSION_GREATER version))

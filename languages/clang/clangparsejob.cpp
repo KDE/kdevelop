@@ -191,7 +191,9 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
 
     foreach(auto document, ICore::self()->documentController()->openDocuments()) {
         auto textDocument = document->textDocument();
-        if (!textDocument || !textDocument->isModified() || !textDocument->url().isLocalFile()
+        // TODO: Introduce a cache so we don't have to re-read all the open documents
+        // which were not changed since the last run
+        if (!textDocument || !textDocument->url().isLocalFile()
             || !DocumentFinderHelpers::mimeTypesList().contains(textDocument->mimeType()))
         {
             continue;

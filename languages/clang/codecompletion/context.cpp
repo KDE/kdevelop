@@ -237,7 +237,7 @@ public:
 
     QWidget* createExpandingWidget(const CodeCompletionModel* /*model*/) const override
     {
-        return new ClangNavigationWidget(m_declaration);
+        return new ClangNavigationWidget(m_declaration, KDevelop::AbstractNavigationWidget::EmbeddableWidget);
     }
 
     int matchQuality() const

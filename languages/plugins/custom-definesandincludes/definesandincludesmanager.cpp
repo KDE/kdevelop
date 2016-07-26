@@ -178,9 +178,19 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     }
 
     for (auto provider : m_providers) {
-        if (provider->type() & type) {
-            includes += provider->includes(item);
+        if ( !(provider->type() & type) ) {
+            continue;
         }
+        auto newItems = provider->includes(item);
+        if ( provider->type() & DefinesAndIncludesManager::CompilerSpecific ) {
+            // If an item occurs in the "compiler specific" list, but was previously supplied
+            // in the user include path list already, remove it from there.
+            // Re-ordering the system include paths causes confusion in some cases.
+            Q_FOREACH (const auto& x, newItems ) {
+                includes.removeAll(x);
+            }
+        }
+        includes += newItems;
     }
 
     includes += m_noProjectIPM->includesAndDefines(item->path().path()).first;

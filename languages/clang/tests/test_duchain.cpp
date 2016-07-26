@@ -1201,6 +1201,72 @@ void TestDUChain::testReparseChangeEnvironment()
     }
 }
 
+void TestDUChain::testMacroDependentHeader()
+{
+    TestFile header("struct MY_CLASS { class Q{Q(); int m;}; int m; };\n", "h");
+    TestFile impl("#define MY_CLASS A\n"
+                  "#include \"" + header.url().byteArray() + "\"\n"
+                  "#undef MY_CLASS\n"
+                  "#define MY_CLASS B\n"
+                  "#include \"" + header.url().byteArray() + "\"\n"
+                  "#undef MY_CLASS\n"
+                  "A a;\n"
+                  "const A::Q aq;\n"
+                  "B b;\n"
+                  "const B::Q bq;\n"
+                  "int am = a.m;\n"
+                  "int aqm = aq.m;\n"
+                  "int bm = b.m;\n"
+                  "int bqm = bq.m;\n"
+                  , "cpp", &header);
+
+    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    QVERIFY(impl.waitForParsed(500000));
+
+    DUChainReadLocker lock;
+    TopDUContext* top = impl.topContext().data();
+    QVERIFY(top);
+    QCOMPARE(top->localDeclarations().size(), 10); // 2x macro, then a, aq, b, bq
+    QCOMPARE(top->importedParentContexts().size(), 1);
+    AbstractType::Ptr type = top->localDeclarations()[2]->abstractType();
+    StructureType* sType = dynamic_cast<StructureType*>(type.data());
+    QVERIFY(sType);
+    QCOMPARE(sType->toString(), QString("A"));
+    Declaration* decl = sType->declaration(top);
+    QVERIFY(decl);
+    AbstractType::Ptr type2 = top->localDeclarations()[4]->abstractType();
+    StructureType* sType2 = dynamic_cast<StructureType*>(type2.data());
+    QVERIFY(sType2);
+    QCOMPARE(sType2->toString(), QString("B"));
+    Declaration* decl2 = sType2->declaration(top);
+    QVERIFY(decl2);
+
+    TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context(top));
+    QVERIFY(top2);
+    QCOMPARE(top2->localDeclarations().size(), 2);
+    QCOMPARE(top2->localDeclarations()[0], decl);
+    QCOMPARE(top2->localDeclarations()[1], decl2);
+    qDebug() << "DECL RANGE:" << top2->localDeclarations()[0]->range().castToSimpleRange().toString();
+    qDebug() << "CTX RANGE:" << top2->localDeclarations()[0]->internalContext()->range().castToSimpleRange().toString();
+
+    // validate uses:
+    QCOMPARE(top->usesCount(), 14);
+    QCOMPARE(top->uses()[0].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A"));
+    QCOMPARE(top->uses()[1].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A"));
+    QCOMPARE(top->uses()[2].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A::Q"));
+    QCOMPARE(top->uses()[3].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B"));
+    QCOMPARE(top->uses()[4].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B"));
+    QCOMPARE(top->uses()[5].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B::Q"));
+    QCOMPARE(top->uses()[6].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("a"));
+    QCOMPARE(top->uses()[7].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A::m"));
+    QCOMPARE(top->uses()[8].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("aq"));
+    QCOMPARE(top->uses()[9].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A::Q::m"));
+    QCOMPARE(top->uses()[10].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("b"));
+    QCOMPARE(top->uses()[11].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B::m"));
+    QCOMPARE(top->uses()[12].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("bq"));
+    QCOMPARE(top->uses()[13].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B::Q::m"));
+}
+
 void TestDUChain::testHeaderParsingOrder1()
 {
     TestFile header("typedef const A<int> B;\n", "h");
@@ -1293,6 +1359,28 @@ void TestDUChain::testMacrosRanges()
 
     QCOMPARE(macroDefinition->uses().size(), 1);
     QCOMPARE(macroDefinition->uses().begin()->first(), RangeInRevision(1,0,1,11));
+}
+
+void TestDUChain::testMacroUses()
+{
+    TestFile file("#define USER(x) x\n#define USED\nUSER(USED)", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+    auto macroDefinition1 = file.topContext()->localDeclarations()[0];
+    auto macroDefinition2 = file.topContext()->localDeclarations()[1];
+
+    QCOMPARE(macroDefinition1->uses().size(), 1);
+    QCOMPARE(macroDefinition1->uses().begin()->first(), RangeInRevision(2,0,2,4));
+    QEXPECT_FAIL("", "This appears to be a clang bug, the AST doesn't contain the macro use", Continue);
+    QCOMPARE(macroDefinition2->uses().size(), 1);
+    if (macroDefinition2->uses().size())
+    {
+        QCOMPARE(macroDefinition2->uses().begin()->first(), RangeInRevision(2,5,2,9));
+    }
 }
 
 void TestDUChain::testMultiLineMacroRanges()
@@ -1671,7 +1759,6 @@ void TestDUChain::testDeclarationsInsideMacroExpansion()
     auto context = file.topContext()->childContexts().first()->childContexts().first();
     QVERIFY(context);
     QCOMPARE(context->localDeclarations().size(), 1);
-    QEXPECT_FAIL("", "Clang assigns the same range for all declarations inside a macro expansion. Therefore we can't find their uses", Abort);
     QCOMPARE(context->usesCount(), 3);
 
     QCOMPARE(context->uses()[0].m_range, RangeInRevision({2, 0}, {2, 1}));

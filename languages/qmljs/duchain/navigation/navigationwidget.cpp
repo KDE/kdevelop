@@ -31,7 +31,8 @@ namespace QmlJS {
 NavigationWidget::NavigationWidget(KDevelop::Declaration* decl,
                                    KDevelop::TopDUContext* topContext,
                                    const QString& htmlPrefix,
-                                   const QString& htmlSuffix)
+                                   const QString& htmlSuffix,
+                                   KDevelop::AbstractNavigationWidget::DisplayHints hints)
 {
     m_topContext = TopDUContextPointer(topContext);
     m_startContext = NavigationContextPointer(new DeclarationNavigationContext(
@@ -41,6 +42,7 @@ NavigationWidget::NavigationWidget(KDevelop::Declaration* decl,
     ));
 
     m_startContext->setPrefixSuffix(htmlPrefix, htmlSuffix);
+    m_hints = hints;
     setContext(m_startContext);
 }
 

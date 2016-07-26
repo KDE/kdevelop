@@ -82,6 +82,7 @@ protected:
 private Q_SLOTS:
     void handleVersion(const QStringList& s);
     void handleFileExecAndSymbols(const MI::ResultRecord& r);
+    void gdbInternalOutput (const QString& output);
 
 private:
     friend class GdbTest;

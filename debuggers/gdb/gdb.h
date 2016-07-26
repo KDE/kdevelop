@@ -36,6 +36,10 @@ public:
 
     bool start(KConfigGroup& config, const QStringList& extraArguments = {}) override;
 
+    /** Reports debugger interal output, including stderr output from debugger
+        and the 'log' MI channel */
+    void debuggerInternalOutput(const QString& s);
+
 };
 
 } // end of namespace GDB

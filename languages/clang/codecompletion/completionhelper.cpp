@@ -299,7 +299,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
         DUChainReadLocker lock;
         top = DUChain::self()->chainForDocument(ClangString(clang_getFileName(file)).toIndexed());
     }
-    DeclarationPointer declaration = ClangHelpers::findDeclaration(clang_getCursorLocation(cursor), top);
+    DeclarationPointer declaration = ClangHelpers::findDeclaration(clang_getCursorLocation(cursor), QualifiedIdentifier(), top);
     data->prototypes->append(FuncImplementInfo{kind == CXCursor_Constructor, kind == CXCursor_Destructor,
                                                data->templatePrefix, returnType, rest, declaration});
 

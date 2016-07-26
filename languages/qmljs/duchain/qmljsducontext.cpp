@@ -35,21 +35,25 @@ using namespace KDevelop;
 namespace QmlJS {
 
 template<>
-QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
+QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
+                                                   const QString& htmlPrefix, const QString& htmlSuffix,
+                                                   AbstractNavigationWidget::DisplayHints hints) const
+{
     if (!decl) {
         qCDebug(KDEV_QMLJS_DUCHAIN) << "no declaration, not returning navigationwidget";
         return nullptr;
     }
-    return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix);
+    return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix, hints);
 }
 
 template<>
-QWidget* QmlJSNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
+QWidget* QmlJSNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix,
+                                                      const QString& htmlSuffix, AbstractNavigationWidget::DisplayHints hints) const {
     if (!decl) {
         qCDebug(KDEV_QMLJS_DUCHAIN) << "no declaration, not returning navigationwidget";
         return nullptr;
     }
-    return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix);
+    return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix, hints);
 }
 
 }

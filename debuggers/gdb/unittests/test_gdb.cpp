@@ -57,6 +57,7 @@ using KDevelop::AutoTestShell;
 namespace KDevMI { namespace GDB {
 
 QUrl findExecutable(const QString& name)
+
 {
     QFileInfo info(qApp->applicationDirPath()  + "/unittests/" + name);
     Q_ASSERT(info.exists());

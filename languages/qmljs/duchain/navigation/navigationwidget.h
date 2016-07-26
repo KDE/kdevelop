@@ -34,7 +34,8 @@ public:
     NavigationWidget(KDevelop::Declaration* decl,
                      KDevelop::TopDUContext* topContext,
                      const QString& htmlPrefix,
-                     const QString& htmlSuffix);
+                     const QString& htmlSuffix,
+                     KDevelop::AbstractNavigationWidget::DisplayHints hints);
 };
 
 }

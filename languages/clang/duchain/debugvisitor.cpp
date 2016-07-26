@@ -78,12 +78,16 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
         (*data->out) << "| display: \"" << displayName << "\" ";
     }
 
-    ClangRange range(clang_getCursorExtent(cursor));
-    KTextEditor::Range simpleRange = range.toRange();
+    auto cursorExtent = ClangRange(clang_getCursorExtent(cursor)).toRange();
     ClangString fileName(clang_getFileName(file));
     (*data->out) << "| loc: " << fileName << '@' << '['
-        << '(' << simpleRange.start().line()+1 << ',' << simpleRange.start().column()+1 << "),"
-        << '(' << simpleRange.end().line()+1 << ',' << simpleRange.end().column()+1 << ")] ";
+        << '(' << cursorExtent.start().line()+1 << ',' << cursorExtent.start().column()+1 << "),"
+        << '(' << cursorExtent.end().line()+1 << ',' << cursorExtent.end().column()+1 << ")] ";
+
+    auto spellingNameRange = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRange();
+    (*data->out) << "| sp-name-range: ["
+        << '(' << spellingNameRange.start().line()+1 << ',' << spellingNameRange.start().column()+1 << "),"
+        << '(' << spellingNameRange.end().line()+1 << ',' << spellingNameRange.end().column()+1 << ")] ";
 
     if (clang_isDeclaration(kind)) {
         (*data->out) << "| isDecl";

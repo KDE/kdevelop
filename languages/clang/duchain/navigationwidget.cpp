@@ -84,9 +84,10 @@ bool IncludeNavigationContext::filterDeclaration(Declaration* decl)
             && !(declId.startsWith(QLatin1String("__")) || (declId.startsWith(QLatin1Char('_')) && declId.length() > 1 && declId[1].isUpper()) );
 }
 
-ClangNavigationWidget::ClangNavigationWidget(const DeclarationPointer& declaration)
+ClangNavigationWidget::ClangNavigationWidget(const DeclarationPointer& declaration, KDevelop::AbstractNavigationWidget::DisplayHints hints)
     : AbstractNavigationWidget()
 {
+    setDisplayHints(hints);
     if (auto macro = declaration.dynamicCast<MacroDefinition>()) {
         initBrowser(200);
 
@@ -102,8 +103,11 @@ ClangNavigationWidget::ClangNavigationWidget(const DeclarationPointer& declarati
     }
 }
 
-ClangNavigationWidget::ClangNavigationWidget(const MacroDefinition::Ptr& macro, const KDevelop::DocumentCursor& expansionLocation)
+ClangNavigationWidget::ClangNavigationWidget(const MacroDefinition::Ptr& macro, const KDevelop::DocumentCursor& expansionLocation,
+                                             KDevelop::AbstractNavigationWidget::DisplayHints hints)
+    : AbstractNavigationWidget()
 {
+    setDisplayHints(hints);
     initBrowser(400);
 
     //The first context is registered so it is kept alive by the shared-pointer mechanism
@@ -112,8 +116,11 @@ ClangNavigationWidget::ClangNavigationWidget(const MacroDefinition::Ptr& macro, 
 }
 
 ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext,
-                                             const QString& htmlPrefix, const QString& htmlSuffix)
+                                             const QString& htmlPrefix, const QString& htmlSuffix,
+                                             KDevelop::AbstractNavigationWidget::DisplayHints hints)
+    : AbstractNavigationWidget()
 {
+    setDisplayHints(hints);
     m_topContext = topContext;
 
     initBrowser(200);
