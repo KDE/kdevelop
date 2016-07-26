@@ -191,7 +191,7 @@ void ProblemStore::setScope(int scope)
 
 int ProblemStore::scope() const
 {
-    Q_ASSERT(d->m_documents != nullptr);
+    Q_ASSERT(d->m_documents);
 
     return d->m_documents->getScope();
 }

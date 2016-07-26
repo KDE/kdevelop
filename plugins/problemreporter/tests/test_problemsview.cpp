@@ -51,7 +51,6 @@ private slots:
 
 private:
     QTabWidget* tabWidget();
-    bool compareActions(QWidget* w, QToolBar* tb);
 
     QScopedPointer<ProblemsView> m_view;
 };
@@ -81,7 +80,7 @@ void TestProblemsView::testLoad()
 
     // Check that the inital model's tab shows up
     QTabWidget* tab = tabWidget();
-    QVERIFY(tab != nullptr);
+    QVERIFY(tab);
     QCOMPARE(tab->count(), 1);
     QCOMPARE(tab->tabText(0), QStringLiteral("MODEL1 (1)"));
 }
@@ -92,7 +91,7 @@ void TestProblemsView::testAddModel()
     pms->addModel(QStringLiteral("MODEL2"), new ProblemModel(pms));
 
     QTabWidget* tab = tabWidget();
-    QVERIFY(tab != nullptr);
+    QVERIFY(tab);
     QCOMPARE(tab->count(), 2);
     QCOMPARE(tab->tabText(0), QStringLiteral("MODEL1 (1)"));
     QCOMPARE(tab->tabText(1), QStringLiteral("MODEL2 (0)"));
@@ -110,18 +109,18 @@ QVector<bool> visibilites(const QList<QAction*> actions)
 void TestProblemsView::testSwitchTab()
 {
     QTabWidget* tab = tabWidget();
-    QVERIFY(tab != nullptr);
+    QVERIFY(tab);
 
     // Check that the current widget's actions are in the toolbar
     QWidget* oldWidget = tab->currentWidget();
-    QVERIFY(oldWidget != nullptr);
+    QVERIFY(oldWidget);
     const auto oldVisibilites = visibilites(m_view->actions());
 
     tab->setCurrentIndex(1);
 
     // Check that the new widget's actions are in the toolbar
     QWidget* newWidget = tab->currentWidget();
-    QVERIFY(newWidget != nullptr);
+    QVERIFY(newWidget);
     QVERIFY(newWidget != oldWidget);
     const auto newVisibilites = visibilites(m_view->actions());
     QCOMPARE(oldVisibilites, newVisibilites);
@@ -132,14 +131,14 @@ void TestProblemsView::testRemoveModel()
     // Remove the model
     ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
     ProblemModel* model = pms->findModel(QStringLiteral("MODEL1"));
-    QVERIFY(model != nullptr);
+    QVERIFY(model);
     pms->removeModel(QStringLiteral("MODEL1"));
     delete model;
     model = nullptr;
 
     // Now let's see if the view has been updated!
     QTabWidget* tab = tabWidget();
-    QVERIFY(tab != nullptr);
+    QVERIFY(tab);
     QCOMPARE(tab->count(), 1);
     QCOMPARE(tab->tabText(0), QStringLiteral("MODEL2 (0)"));
 }
@@ -148,10 +147,10 @@ void TestProblemsView::testAddRemoveProblems()
 {
     ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
     ProblemModel* model = pms->findModel(QStringLiteral("MODEL2"));
-    QVERIFY(model != nullptr);
+    QVERIFY(model);
 
     QTabWidget* tab = tabWidget();
-    QVERIFY(tab != nullptr);
+    QVERIFY(tab);
 
     // Make sure there are no problems right now
     model->clearProblems();
@@ -180,10 +179,10 @@ void TestProblemsView::testSetProblems()
 {
     ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
     ProblemModel* model = pms->findModel(QStringLiteral("MODEL2"));
-    QVERIFY(model != nullptr);
+    QVERIFY(model);
 
     QTabWidget* tab = tabWidget();
-    QVERIFY(tab != nullptr);
+    QVERIFY(tab);
 
     // Make sure there are no problems right now
     model->clearProblems();
@@ -207,21 +206,6 @@ QTabWidget* TestProblemsView::tabWidget()
 {
     QTabWidget* tab = m_view->findChild<QTabWidget*>();
     return tab;
-}
-
-bool TestProblemsView::compareActions(QWidget* w, QToolBar* tb)
-{
-    // Check that they have the same number of actions
-    if (w->actions().count() != tb->actions().count())
-        return false;
-
-    // Check that the actions are the same
-    for (int i = 0; i < w->actions().count(); i++) {
-        if (w->actions().at(i) != tb->actions().at(i))
-            return false;
-    }
-
-    return true;
 }
 
 QTEST_MAIN(TestProblemsView)

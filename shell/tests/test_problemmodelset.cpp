@@ -107,7 +107,7 @@ void TestProblemModelSet::testFindModel()
     for (int i = 0; i < testModelCount; i++) {
         model = m_set->findModel(m_testData[i].name);
 
-        QVERIFY(model != nullptr);
+        QVERIFY(model);
         QVERIFY(model == m_testData[i].model);
     }
 

@@ -101,8 +101,8 @@ void TestProblemStore::testFindNode()
     for (int i = 0; i < m_problems.count(); i++) {
         const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
 
-        QVERIFY(node != nullptr);
-        QVERIFY(node->problem().data() != nullptr);
+        QVERIFY(node);
+        QVERIFY(node->problem().data());
         QCOMPARE(node->problem().data()->description(), m_problems[i]->description());
     }
 }

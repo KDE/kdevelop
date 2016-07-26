@@ -81,7 +81,7 @@ void TestProblemStoreNode::testChildren()
     for (int i = 0; i < c; i++) {
         ProblemStoreNode *node = m_root->child(i);
 
-        QVERIFY(node != nullptr);
+        QVERIFY(node);
         QVERIFY(node == nodes[i]);
         QCOMPARE(node->index(), i);
     }
