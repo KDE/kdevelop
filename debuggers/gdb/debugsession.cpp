@@ -89,8 +89,6 @@ GdbDebugger *DebugSession::createDebugger() const
 }
 
 void DebugSession::initializeDebugger()
-    connect(gdb, &GDB::debuggerInternalOutput, this,
-            &DebugSession::gdbInternalOutput);
 {
     //addCommand(new GDBCommand(GDBMI::EnableTimings, "yes"));
 
@@ -120,11 +118,6 @@ void DebugSession::initializeDebugger()
         addCommand(MI::NonMI,
                    QString("python sys.path.insert(0, \"%0\")").arg(quotedPrintersPath));
         addCommand(MI::NonMI, "source " + fileName);
-    }
-
-    if (m_testing) {
-        // GDB can't disable ASLR on CI server.
-        queueCmd(new GDBCommand(GDBMI::GdbSet, "disable-randomization off"));
     }
 
     qCDebug(DEBUGGERGDB) << "Initialized GDB";
