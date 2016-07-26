@@ -67,14 +67,16 @@ namespace DUChainUtils {
    * Returns zero if no content-context could be acquired.
    * */
   KDEVPLATFORMLANGUAGE_EXPORT TopDUContext* contentContextFromProxyContext(TopDUContext* top);
-  /** Returns the Declaration/Definition under the cursor, or zero. DUChain does not need to be locked.
-   * Must only be called from the foreground or with the foreground lock held.
-   * If the item under the cursor is a use, the declaration is returned. */
-  KDEVPLATFORMLANGUAGE_EXPORT Declaration* itemUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor);
-  /** Returns the Declaration/Definition/Use range under the cursor or empty range.
+  struct KDEVPLATFORMLANGUAGE_EXPORT ItemUnderCursor {
+    Declaration* declaration; // found declaration (either declared/defined or used)
+    DUContext* context; // context in which the declaration, definition, or use was found
+    KTextEditor::Range range; // range of the declaration/definition/use
+  };
+  /** Returns 1. the Declaration/Definition either declared or used under the cursor,
+   * or zero; and 2. the context in which the declaration, definition, or use was found.
    * DUChain must be locked.
    * Must only be called from the foreground or with the foreground lock held. */
-  KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::Range itemRangeUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor);
+  KDEVPLATFORMLANGUAGE_EXPORT ItemUnderCursor itemUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor);
   /**If the given declaration is a definition, and has a real declaration
     *attached, returns that declarations. Else returns the given argument. */
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForDefinition(Declaration* definition, TopDUContext* topContext = 0);

@@ -1462,12 +1462,14 @@ TopDUContext* DUContext::topContext() const
 }
 
 QWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
-                                           const QString& htmlPrefix, const QString& htmlSuffix) const
+                                           const QString& htmlPrefix, const QString& htmlSuffix,
+                                           AbstractNavigationWidget::DisplayHints hints) const
 {
   if (decl) {
     AbstractNavigationWidget* widget = new AbstractNavigationWidget;
+    widget->setDisplayHints(hints);
     AbstractDeclarationNavigationContext* context = new AbstractDeclarationNavigationContext(DeclarationPointer(decl),
-                                                                                            TopDUContextPointer(topContext));
+                                                                                             TopDUContextPointer(topContext));
     context->setPrefixSuffix(htmlPrefix, htmlSuffix);
     widget->setContext(NavigationContextPointer(context));
     return widget;

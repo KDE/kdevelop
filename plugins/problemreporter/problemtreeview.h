@@ -70,9 +70,9 @@ private:
     void resizeColumns();
     ProblemReporterPlugin* m_plugin;
     QSortFilterProxyModel* m_proxy;
-    QAction* errorSeverityAction;
-    QAction* warningSeverityAction;
-    QAction* hintSeverityAction;
+    QAction* m_errorSeverityAction;
+    QAction* m_warningSeverityAction;
+    QAction* m_hintSeverityAction;
 };
 
 #endif

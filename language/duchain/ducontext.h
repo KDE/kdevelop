@@ -34,6 +34,8 @@
 #include "declarationid.h"
 #include "indexedducontext.h"
 
+#include "navigation/abstractnavigationwidget.h"
+
 class QWidget;
 
 namespace KDevelop
@@ -673,7 +675,8 @@ public:
    */
   virtual QWidget* createNavigationWidget(Declaration* decl = nullptr, TopDUContext* topContext = nullptr,
                                           const QString& htmlPrefix = QString(),
-                                          const QString& htmlSuffix = QString()) const;
+                                          const QString& htmlSuffix = QString(),
+                                          AbstractNavigationWidget::DisplayHints hints = AbstractNavigationWidget::NoHints) const;
 
   enum {
     Identity = 2

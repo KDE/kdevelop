@@ -203,8 +203,8 @@ QWidget* DUChainItemData::expandingWidget() const
   return decl->context()->createNavigationWidget( decl, decl->topContext(),
             m_item.m_project.isEmpty()
                 ? QString()
-                : ("<small><small>" + i18n("Project %1", m_item.m_project) + "<br></small></small>")
-  );
+                : ("<small><small>" + i18n("Project %1", m_item.m_project) + "<br></small></small>"), QString(),
+         KDevelop::AbstractNavigationWidget::EmbeddableWidget);
 }
 
 QIcon DUChainItemData::icon() const

@@ -40,11 +40,17 @@ namespace KDevelop {
   {
     Q_OBJECT
     public:
-      AbstractNavigationWidget();
+      enum DisplayHint {
+        NoHints = 0x0, // < Normal display
+        EmbeddableWidget = 0x1, // < Omit parts which are only useful for the navigation popup
+      };
+      Q_DECLARE_FLAGS(DisplayHints, DisplayHint);
 
+      AbstractNavigationWidget();
       ~AbstractNavigationWidget() override;
 
       void setContext(NavigationContextPointer context, int initBrowser = 400);
+      void setDisplayHints(DisplayHints hints);
 
       QSize sizeHint() const override;
 
@@ -96,6 +102,7 @@ namespace KDevelop {
       QWidget* m_currentWidget;
       QString m_currentText;
       mutable QSize m_idealTextSize;
+      DisplayHints m_hints = NoHints;
 
     private:
       NavigationContextPointer m_context;

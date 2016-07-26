@@ -143,7 +143,7 @@ BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor 
     DUChainReadLocker lock;
     // Jump to definition by default, unless a definition itself was selected,
     // in which case jump to declaration.
-    if (auto selectedDeclaration = DUChainUtils::itemUnderCursor(viewUrl, textCursor)) {
+    if (auto selectedDeclaration = DUChainUtils::itemUnderCursor(viewUrl, textCursor).declaration) {
         auto jumpDestination = selectedDeclaration;
         if (selectedDeclaration->isDefinition()) {
             // A definition was clicked directly - jump to declaration instead.
@@ -187,6 +187,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
             {
                 //Completion is active.
                 avoidMenuAltFocus();
+                m_delayedBrowsingTimer->stop();
             }else{
                 m_browsingStartedInView = view;
             }

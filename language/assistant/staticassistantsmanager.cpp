@@ -143,13 +143,8 @@ void StaticAssistantsManager::Private::textRemoved(Document* doc, const Range& r
 
 void StaticAssistantsManager::notifyAssistants(const IndexedString& url, const KDevelop::ReferencedTopDUContext& context)
 {
-    auto changed = false;
     Q_FOREACH ( auto assistant, d->m_registeredAssistants ) {
-        auto wasUseful = assistant->isUseful();
         assistant->updateReady(url, context);
-        if ( wasUseful != assistant->isUseful() ) {
-            changed = true;
-        }
     }
 }
 

@@ -147,7 +147,7 @@ QString ProblemNavigationContext::html(bool shorten)
       modifyHtml() += diagnostic->description();
 
       const DocumentRange range = diagnostic->finalLocation();
-      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start());
+      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start()).declaration;
       if (declaration) {
         modifyHtml() += i18n("<br>See: ");
         makeLink(declaration->toString(), DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);

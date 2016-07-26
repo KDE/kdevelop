@@ -292,77 +292,52 @@ TopDUContext* DUChainUtils::standardContextForUrl(const QUrl& url, bool preferPr
   return chosen;
 }
 
-Declaration* declarationUnderCursor(const CursorInRevision& c, DUContext* ctx)
+struct ItemUnderCursorInternal
 {
-  foreach( Declaration* decl, ctx->localDeclarations() )
-    if( decl->range().contains(c, RangeInRevision::IncludeBackEdge) )
-      return decl;
+  Declaration* declaration;
+  DUContext* context;
+  RangeInRevision range;
+};
 
+ItemUnderCursorInternal itemUnderCursorInternal(const CursorInRevision& c, DUContext* ctx, RangeInRevision::ContainsBehavior behavior)
+{
   //Search all collapsed sub-contexts. In C++, those can contain declarations that have ranges out of the context
-  foreach( DUContext* subCtx, ctx->childContexts() ) {
+  foreach(DUContext* subCtx, ctx->childContexts()) {
     //This is a little hacky, but we need it in case of foreach macros and similar stuff
-    if(subCtx->range().isEmpty() || subCtx->range().start.line == c.line || subCtx->range().end.line == c.line) {
-      Declaration* decl = declarationUnderCursor(c, subCtx);
-      if(decl)
-        return decl;
+    if(subCtx->range().contains(c, behavior) || subCtx->range().isEmpty() || subCtx->range().start.line == c.line || subCtx->range().end.line == c.line) {
+      ItemUnderCursorInternal sub = itemUnderCursorInternal(c, subCtx, behavior);
+      if(sub.declaration) {
+        return sub;
+      }
     }
   }
-  return 0;
+
+  foreach(Declaration* decl, ctx->localDeclarations()) {
+    if(decl->range().contains(c, behavior)) {
+      return {decl, ctx, decl->range()};
+    }
+  }
+
+  //Try finding a use under the cursor
+  for(int a = 0; a < ctx->usesCount(); ++a) {
+    if(ctx->uses()[a].m_range.contains(c, behavior)) {
+      return {ctx->topContext()->usedDeclarationForIndex(ctx->uses()[a].m_declarationIndex), ctx, ctx->uses()[a].m_range};
+    }
+  }
+
+  return {nullptr, nullptr, RangeInRevision()};
 }
 
-Declaration* DUChainUtils::itemUnderCursor(const QUrl& url, const KTextEditor::Cursor& _c)
+DUChainUtils::ItemUnderCursor DUChainUtils::itemUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor)
 {
-  KDevelop::TopDUContext* chosen = standardContextForUrl(url);
+  KDevelop::TopDUContext* top = standardContextForUrl(url);
 
-  if( chosen )
-  {
-    CursorInRevision c = chosen->transformToLocalRevision(_c);
-    DUContext* ctx = chosen->findContextAt(c);
-
-    while( ctx ) {
-      //Try finding a declaration under the cursor
-      Declaration* decl = declarationUnderCursor(c, ctx);
-      if(decl)
-        return decl;
-
-      //Try finding a use under the cursor
-      for(int a = 0; a < ctx->usesCount(); ++a)
-        if( ctx->uses()[a].m_range.contains(c, RangeInRevision::IncludeBackEdge) )
-          return ctx->topContext()->usedDeclarationForIndex(ctx->uses()[a].m_declarationIndex);
-
-      ctx = ctx->parentContext(); //It may happen, for example in the case of function-declarations, that the use is one context higher.
-    }
+  if(!top) {
+    return {nullptr, nullptr, KTextEditor::Range()};
   }
-  return 0;
-}
 
-KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor)
-{
-  KDevelop::TopDUContext* chosen = standardContextForUrl(url);
-
-  if( chosen ) {
-    CursorInRevision c = chosen->transformToLocalRevision(cursor);
-    DUContext* ctx = chosen->findContextAt(c);
-    if (ctx) {
-      Declaration* decl = declarationUnderCursor(c, ctx);
-
-      // Some declarations need to be searched in parent context
-      if (!decl && ctx->parentContext()) {
-        decl = declarationUnderCursor(c, ctx->parentContext());
-      }
-
-      if (decl && decl->range().contains(c, RangeInRevision::IncludeBackEdge) ) {
-        return decl->rangeInCurrentRevision();
-      }
-
-      for(int a = 0; a < ctx->usesCount(); ++a) {
-        if( ctx->uses()[a].m_range.contains(c, RangeInRevision::IncludeBackEdge) ) {
-          return ctx->transformFromLocalRevision(ctx->uses()[a].m_range);
-        }
-      }
-    }
-  }
-  return KTextEditor::Range();
+  ItemUnderCursorInternal decl = itemUnderCursorInternal(top->transformToLocalRevision(cursor), top, RangeInRevision::IncludeBackEdge);
+  return {decl.declaration, decl.context, top->transformFromLocalRevision(decl.range)};
 }
 
 Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, TopDUContext* topContext)

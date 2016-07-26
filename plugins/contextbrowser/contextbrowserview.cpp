@@ -60,7 +60,7 @@ using namespace KDevelop;
 QWidget* ContextBrowserView::createWidget(KDevelop::DUContext* context) {
         m_context = IndexedDUContext(context);
         if(m_context.data()) {
-            return m_context.data()->createNavigationWidget();
+            return m_context.data()->createNavigationWidget(nullptr, nullptr, {}, {}, AbstractNavigationWidget::EmbeddableWidget);
         }
         return 0;
 }
@@ -71,7 +71,7 @@ KDevelop::IndexedDeclaration ContextBrowserView::declaration() const {
 
 QWidget* ContextBrowserView::createWidget(Declaration* decl, TopDUContext* topContext) {
     m_declaration = IndexedDeclaration(decl);
-    return decl->context()->createNavigationWidget(decl, topContext);
+    return decl->context()->createNavigationWidget(decl, topContext, {}, {}, AbstractNavigationWidget::EmbeddableWidget);
 }
 
 

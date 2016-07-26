@@ -101,21 +101,15 @@ DeclarationContext::DeclarationContext(KTextEditor::View* view, const KTextEdito
 {
     const QUrl& url = view->document()->url();
     DUChainReadLocker lock;
-    DocumentRange useRange = DocumentRange(IndexedString(url), DUChainUtils::itemRangeUnderCursor(url, position));
-    Declaration* declaration = DUChainUtils::itemUnderCursor(url, position);
+    DUChainUtils::ItemUnderCursor item = DUChainUtils::itemUnderCursor(url, position);
+    DocumentRange useRange = DocumentRange(IndexedString(url), item.range);
+    Declaration* declaration = item.declaration;
     IndexedDeclaration indexed;
     if ( declaration ) {
         indexed = IndexedDeclaration(declaration);
     }
-    IndexedDUContext context;
-    TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
-    if(topContext) {
-        DUContext* specific = topContext->findContextAt(CursorInRevision(position.line(), position.column()));
-        if(specific)
-            context = IndexedDUContext(specific);
-    }
     d = new Private(declaration, useRange);
-    setContext(context);
+    setContext(IndexedDUContext(item.context));
 }
 
 DeclarationContext::~DeclarationContext()
