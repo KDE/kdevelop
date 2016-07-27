@@ -336,7 +336,11 @@ DUChainUtils::ItemUnderCursor DUChainUtils::itemUnderCursor(const QUrl& url, con
     return {nullptr, nullptr, KTextEditor::Range()};
   }
 
-  ItemUnderCursorInternal decl = itemUnderCursorInternal(top->transformToLocalRevision(cursor), top, RangeInRevision::IncludeBackEdge);
+  ItemUnderCursorInternal decl = itemUnderCursorInternal(top->transformToLocalRevision(cursor), top, RangeInRevision::Default);
+  if (decl.declaration == nullptr)
+  {
+    decl = itemUnderCursorInternal(top->transformToLocalRevision(cursor), top, RangeInRevision::IncludeBackEdge);
+  }
   return {decl.declaration, decl.context, top->transformFromLocalRevision(decl.range)};
 }
 
