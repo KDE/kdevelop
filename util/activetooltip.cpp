@@ -134,6 +134,10 @@ void ActiveToolTipManager::doVisibility()
         }
     }
 
+    //Always include the mouse cursor in the full geometry, to avoid
+    //closing the tooltip inexpectedly
+    fullGeometry = fullGeometry.united(QRect(QCursor::pos(), QCursor::pos()));
+
     //Set bounding geometry, and remove old tooltips
     for (auto it = registeredToolTips.begin(); it != registeredToolTips.end(); ) {
         if (!it->first) {
