@@ -21,6 +21,7 @@
 #include "cmakedocumentation.h"
 #include "cmakeutils.h"
 
+#include <QProcess>
 #include <QString>
 #include <QTextDocument>
 #include <QStringListModel>
@@ -94,13 +95,22 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 {
     QString desc;
     if(args[t]) {
-        desc = CMake::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified()).toHtmlEscaped();
-        int firstLine = desc.indexOf('\n');
-        firstLine = desc.indexOf('\n', firstLine+1);
-        if(firstLine>=0)
-            desc = desc.mid(firstLine+1).trimmed(); //we remove the cmake version and the command name
-        desc.replace(QLatin1String("\n       "), QLatin1String("\n"));
-        desc = QString("<b>%1</b><pre>%2</pre>").arg(id).arg(desc);
+        desc = CMake::executeProcess(mCMakeCmd, { args[t], id.simplified() });
+        desc = desc.remove(":ref:");
+
+        const QString rst2html = QStandardPaths::findExecutable(QStringLiteral("rst2html"));
+        if (rst2html.isEmpty()) {
+            desc = ("<html><body style='background:#fff'><pre><code>" + desc.toHtmlEscaped() + "</code></pre>"
+                + i18n("<p>For better cmake documentation rendering, install rst2html</p>")
+                + "</body></html>");
+        } else {
+            QProcess p;
+            p.start(rst2html, { "--no-toc-backlinks" });
+            p.write(desc.toUtf8());
+            p.closeWriteChannel();
+            p.waitForFinished();
+            desc = QString::fromUtf8(p.readAllStandardOutput());
+        }
     }
 
     return desc;
@@ -190,8 +200,7 @@ void CMakeDocumentation::initializeModel() const
 QWidget* CMakeDoc::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
 {
     KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
-    view->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-    view->setHtml("<html><body style='background:#fff'><code>"+description()+"</code></body></html>");
+    view->setHtml(mDesc);
     return view;
 }
 
