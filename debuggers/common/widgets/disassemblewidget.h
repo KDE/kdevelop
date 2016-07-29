@@ -93,8 +93,6 @@ private:
     QActionGroup* m_disassemblyFlavorActionGroup;
 };
 
-class Breakpoint;
-class DebugSession;
 class MIDebuggerPlugin;
 
 

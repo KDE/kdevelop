@@ -1,0 +1,121 @@
+- [DONE] Correct signal handling commands for lldb
+- [DONE] Correct environment variable setting commands for lldb
+
+- [DONE] Port DebugJob
+- [DONE] Port exam core and attach process to KJob
+- [DONE] Move DebuggerPlugin to MIDebuggerPlugin
+
+- [DONE] Verify how unit test works in test_gdb
+- [DONE] Create minimal unit test cases to be able to test debugger and debugsession
+    + [DONE] can break on start
+    + [DONE] environment var successfully set
+    + Check if environment-cd works in remote debugging
+    + Check if lldb supports unicode correctly
+        * a program output in encoding other than utf8 and different from host system default
+    + Make examine core test working with coredumpctl
+
+- [DONE] Verify MIParser/MILexer can handle output without any stream prefix: no they can't
+
+- [DONE] Make config options in config page actually working
+
+- Clean up extra actions provided by gdb/lldb plugins
+    - Add lldb actions for attach to process and examine core file
+
+- Remove duplicate breakpoint: look at breakpointController()->setDeleteDuplicateBreakpoints(true)
+
+- LLDB data formatter for Qt types
+- Data formatter for lldb
+    * if this works in MI?
+    * print static member?
+
+- Show application exit reason in the Debug View
+
+- New config page options
+    * Inherit environment for inferior (related settings: inherit-env)
+
+- Clean up tool views
+    * register views
+        + controller
+        + tool view
+    * disassembly widget
+    * memory view
+
+- [DONE] Find a way to avoid duplicate tool views for GDB and LLDB plugin
+
+- Polish debugger console
+    * [DONE] user command output regarded as internal command
+    * [DONE] not correctly raised when starting debug
+    * correct prompt (from "(gdb)" to "(lldb)")
+
+- Handle error sometime with Command 'exec-run'. Invalid process during debug session.
+
+- An unified way to report error
+
+- File bug to lldb-mi
+    * HIGH PRIORITY: -break-insert
+        + [SUBMITED] pending breakpoints set with '-f' not got resolved after file loaded
+            - https://llvm.org/bugs/show_bug.cgi?id=28702
+        + [SUBMITED] pending breakpoints '-f' can only be last flag switch
+            - https://llvm.org/bugs/show_bug.cgi?id=28698
+        + [SUBMITED] create disabled breakpoint with '-d' not working when combined with '-f'
+            - https://llvm.org/bugs/show_bug.cgi?id=28703
+        + -break-enable has no effect
+    * breakpoint hit doesn't generate corresponding breakpoint-modified notification
+      (needed to update hitCount)
+    * -break-watch command not supported
+        + use raw cli command 'break set var' doesn't provides MI response
+    * when hit watch point, nothing is output, which confuses the controller
+    * thread-info returns malformated result
+        + there should be only one 'frame' key for each thread in the list
+        + [FIXED] there shoule be a current-thread-id field (Fixed at least in revision 265858)
+    * [FIXED] lldb-mi crashes when break on a point where multiple threads running. (Fixed at least in revision 265858)
+    * var-update doesn't support * as variable name
+    * can't have space in environment cd
+    * -inferior-tty-set only has dummy implementation
+    * 'process launch' doesn't provide thread-group-started notification
+    * sliently stop when attaching to process, which confuses the controller
+    * [SUBMITED] sliently stop when request stop at start
+        - https://llvm.org/bugs/show_bug.cgi?id=25000
+    * [SUBMITED] [PATCHED] cli output not wrapped in console stream record
+    * [PATCHED] -data-disassemble start and end address parameter doesn't accept expressions
+    * -gdb-set not fully implemented
+        + environment
+        + [SUBMITED] [PATCHED] disassembly-flavor
+            - https://llvm.org/bugs/show_bug.cgi?id=28718
+    * -gdb-show not fully implemented
+        + [SUBMITED] [PATCHED] disassembly-flavor
+            - https://llvm.org/bugs/show_bug.cgi?id=28718
+    * [SUBMITED] -stack-list-locals shows empty list
+        - https://llvm.org/bugs/show_bug.cgi?id=28621
+    * -data-list-register-values output format doesn't conform to spec
+    * File bug to lldb-mi for other missing commands
+
+- Fix TODOs in files
+
+- Change test_gdb to avoid direct use of QTest::qWait, which starts event loop, and could cause session to
+  be deleted. Use WAIT_FOR_STATE_AND_IDLE(session, <previous state>) instead. Or use QPointer for session.
+
+- Known issues
+    * Debugger console
+        + debugger CLI stdout isn't shown, due to bug https://llvm.org/bugs/show_bug.cgi?id=28026
+    * Remote debugging
+        + When using 'lldb-server gdbserver' as remote server, server exits once debug session ended.
+        + When using 'gdbserver' as remote server
+            - Remote work path can't contain space
+            - Can't actually start inferior
+    * Breakpoints
+        + Pending breakpoints doesn't work, which also causes break on start not function
+            - Can still manually set pending breakpoints
+        + Breakpoint hit count is not updated timely (limitation in lldb-mi)
+        + No watchpoint support
+            - Can still manually add watch point
+    * Threads
+        + lldb-mi crashes when break on a point where multiple threads running. (Fixed in latest lldb trunk version)
+    * Attach to process
+        + works internally, but there's no way to access it in the UI currently.
+
+relavent lldb settings:
+
+disassembly-format
+thread-format
+frame-format

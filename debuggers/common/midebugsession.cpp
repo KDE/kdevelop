@@ -44,7 +44,6 @@
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <util/environmentgrouplist.h>
 #include <util/processlinemaker.h>
 
 #include <KConfigGroup>
@@ -64,7 +63,7 @@ using namespace KDevelop;
 using namespace KDevMI;
 using namespace KDevMI::MI;
 
-MIDebugSession::MIDebugSession()
+MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
     : m_procLineMaker(new ProcessLineMaker(this))
     , m_commandQueue(new CommandQueue)
     , m_sessionState(NotStartedState)
@@ -75,6 +74,7 @@ MIDebugSession::MIDebugSession()
     , m_tty(nullptr)
     , m_hasCrashed(false)
     , m_sourceInitFile(true)
+    , m_plugin(plugin)
 {
     // setup signals
     connect(m_procLineMaker, &ProcessLineMaker::receivedStdoutLines,
@@ -159,7 +159,15 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
     // output signals
     connect(m_debugger, &MIDebugger::applicationOutput,
             this, [this](const QString &output) {
-                emit inferiorStdoutLines(output.split(QRegularExpression("[\r\n]"), QString::SkipEmptyParts));
+                auto lines = output.split(QRegularExpression("[\r\n]"), QString::SkipEmptyParts);
+                for (auto &line : lines) {
+                    int p = line.length();
+                    while (p >= 1 && (line[p-1] == '\r' || line[p-1] == '\n'))
+                        p--;
+                    if (p != line.length())
+                        line.remove(p, line.length() - p);
+                }
+                emit inferiorStdoutLines(lines);
             });
     connect(m_debugger, &MIDebugger::userCommandOutput, this, &MIDebugSession::debuggerUserCommandOutput);
     connect(m_debugger, &MIDebugger::internalCommandOutput, this, &MIDebugSession::debuggerInternalCommandOutput);
@@ -259,29 +267,16 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
     }
     addCommand(EnvironmentCd, '"' + dir + '"');
 
-    // Set the environment variables
-    EnvironmentGroupList l(KSharedConfig::openConfig());
-    QString envgrp = iexec->environmentGroup(cfg);
-    if (envgrp.isEmpty()) {
-        qCWarning(DEBUGGERCOMMON) << i18n("No environment group specified, looks like a broken "
-                                          "configuration, please check run configuration '%1'. "
-                                          "Using default environment group.", cfg->name());
-        envgrp = l.defaultGroup();
-    }
-    for (const auto &envvar : l.createEnvironment(envgrp, {})) {
-        addCommand(GdbSet, "environment " + envvar);
-    }
-
     // Set the run arguments
     if (!arguments.isEmpty())
         addCommand(ExecArguments, KShell::joinArgs(arguments));
 
     // Do other debugger specific config options and actually start the inferior program
-    if (!execInferior(cfg, executable)) {
+    if (!execInferior(cfg, iexec, executable)) {
         return false;
     }
 
-    QString config_startWith = cfg->config().readEntry(startWithEntry, QStringLiteral("ApplicationOutput"));
+    QString config_startWith = cfg->config().readEntry(Config::StartWithEntry, QStringLiteral("ApplicationOutput"));
     if (config_startWith == "GdbConsole") {
         emit raiseDebuggerConsoleViews();
     } else if (config_startWith == "FrameStack") {
@@ -311,14 +306,6 @@ bool MIDebugSession::attachToProcess(int pid)
 
     //set current state to running, after attaching we will get *stopped response
     setDebuggerStateOn(s_appRunning);
-
-    // Currently, we always start debugger with a name of binary,
-    // we might be connecting to a different binary completely,
-    // so cancel all symbol tables gdb has.
-    // We can't omit application name from gdb invocation
-    // because for libtool binaries, we have no way to guess
-    // real binary name.
-    addCommand(MI::FileExecAndSymbols);
 
     addCommand(TargetAttach, QString::number(pid),
                this, &MIDebugSession::handleTargetAttach,
@@ -555,6 +542,10 @@ void MIDebugSession::restartDebugger()
 
 void MIDebugSession::stopDebugger()
 {
+    if (debuggerStateIsOn(s_dbgNotStarted)) {
+        return;
+    }
+
     m_commandQueue->clear();
 
     qCDebug(DEBUGGERCOMMON) << "try stopping debugger";
@@ -727,7 +718,13 @@ void MIDebugSession::jumpToMemoryAddress(const QString& address)
 
 void MIDebugSession::addUserCommand(const QString& cmd)
 {
-    queueCmd(new UserCommand(MI::NonMI, cmd));
+    if (!cmd.isEmpty() && cmd[0].isDigit()) {
+        // Add a space to the begining, so debugger won't get confused if the
+        // command starts with a number (won't mix it up with command token added)
+        queueCmd(new UserCommand(MI::NonMI, " " + cmd));
+    } else {
+        queueCmd(new UserCommand(MI::NonMI, cmd));
+    }
 
     // User command can theoreticall modify absolutely everything,
     // so need to force a reload.

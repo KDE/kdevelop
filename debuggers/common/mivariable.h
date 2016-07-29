@@ -53,12 +53,12 @@ public:
 
     bool canSetFormat() const override { return true; }
 
-private: // Variable overrides
+protected: // Variable overrides
     void attachMaybe(QObject *callback, const char *callbackMethod) override;
     void fetchMoreChildren() override;
     void formatChanged() override;
 
-private: // Internal
+protected: // Internal
     friend class ::CreateVarobjHandler;
     friend class ::FetchMoreChildrenHandler;
 

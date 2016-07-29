@@ -155,9 +155,6 @@ QString MICommand::miCommand() const
         case BreakAfter:
             command = "break-after";//"ignore"
             break;
-        case BreakCatch: // FIXME: non-exist command
-            command = "break-catch";
-            break;
         case BreakCommands:
             command = "break-commands";
             break;
@@ -252,17 +249,8 @@ QString MICommand::miCommand() const
         case ExecNextInstruction:
             command = "exec-next-instruction";
             break;
-        case ExecReturn:
-            command = "exec-command =";
-            break;
         case ExecRun:
             command = "exec-run";
-            break;
-        case ExecShowArguments:
-            command = "exec-show-arguments";
-            break;
-        case ExecSignal:
-            command = "exec-signal";
             break;
         case ExecStep:
             command = "exec-step";
@@ -274,17 +262,11 @@ QString MICommand::miCommand() const
             command = "exec-until";
             break;
 
-        case FileClear:
-            command = "file-clear";
-            break;
         case FileExecAndSymbols:
             command = "file-exec-and-symbols";//"file"
             break;
         case FileExecFile:
             command = "file-exec-file";//"exec-file"
-            break;
-        case FileListExecSections:
-            command = "file-list-exec-sections";
             break;
         case FileListExecSourceFile:
             command = "file-list-exec-source-file";
@@ -292,19 +274,10 @@ QString MICommand::miCommand() const
         case FileListExecSourceFiles:
             command = "file-list-exec-source-files";
             break;
-        case FileListSharedLibraries:
-            command = "file-list-shared-libraries";
-            break;
-        case FileListSymbolFiles:
-            command = "file-list-symbol-files";
-            break;
         case FileSymbolFile:
             command = "file-symbol-file";//"symbol-file"
             break;
 
-        case GdbComplete:
-            command = "gdb-complete";
-            break;
         case GdbExit:
             command = "gdb-exit";
             break;
@@ -313,9 +286,6 @@ QString MICommand::miCommand() const
             break;
         case GdbShow:
             command = "gdb-show";//"show"
-            break;
-        case GdbSource:
-            command = "gdb-source";
             break;
         case GdbVersion:
             command = "gdb-version";//"show version"
@@ -336,37 +306,9 @@ QString MICommand::miCommand() const
             command = "list-features";
             break;
 
-        case OverlayAuto:
-            command = "overlay-auto";
-            break;
-        case OverlayListMappingState:
-            command = "overlay-list-mapping-state";
-            break;
-        case OverlayListOverlays:
-            command = "overlay-list-overlays";
-            break;
-        case OverlayMap:
-            command = "overlay-map";
-            break;
-        case OverlayOff:
-            command = "overlay-off";
-            break;
-        case OverlayOn:
-            command = "overlay-on";
-            break;
-        case OverlayUnmap:
-            command = "overlay-unmap";
-            break;
-
         case SignalHandle:
             return "handle";
             //command = "signal-handle";
-            break;
-        case SignalListHandleActions:
-            command = "signal-list-handle-actions";
-            break;
-        case SignalListSignalTypes:
-            command = "signal-list-signal-types";
             break;
 
         case StackInfoDepth:
@@ -378,9 +320,6 @@ QString MICommand::miCommand() const
         case StackListArguments:
             command = "stack-list-arguments";
             break;
-        case StackListExceptionHandlers:
-            command = "stack-list-exception-handlers";
-            break;
         case StackListFrames:
             command = "stack-list-frames";
             break;
@@ -391,45 +330,12 @@ QString MICommand::miCommand() const
             command = "stack-select-frame";
             break;
 
-        case SymbolInfoAddress:
-            command = "symbol-info-address";
-            break;
-        case SymbolInfoFile:
-            command = "symbol-info-file";
-            break;
-        case SymbolInfoFunction:
-            command = "symbol-info-function";
-            break;
-        case SymbolInfoLine:
-            command = "symbol-info-line";
-            break;
-        case SymbolInfoSymbol:
-            command = "symbol-info-symbol";
-            break;
-        case SymbolListFunctions:
-            command = "symbol-list-functions";
-            break;
         case SymbolListLines:
             command = "symbol-list-lines";
-            break;
-        case SymbolListTypes:
-            command = "symbol-list-types";
-            break;
-        case SymbolListVariables:
-            command = "symbol-list-variables";
-            break;
-        case SymbolLocate:
-            command = "symbol-locate";
-            break;
-        case SymbolType:
-            command = "symbol-type";
             break;
 
         case TargetAttach:
             command = "target-attach";
-            break;
-        case TargetCompareSections:
-            command = "target-compare-sections";
             break;
         case TargetDetach:
             command = "target-detach";//"detach"
@@ -440,27 +346,12 @@ QString MICommand::miCommand() const
         case TargetDownload:
             command = "target-download";
             break;
-        case TargetExecStatus:
-            command = "target-exec-status";
-            break;
-        case TargetListAvailableTargets:
-            command = "target-list-available-targets";
-            break;
-        case TargetListCurrentTargets:
-            command = "target-list-current-targets";
-            break;
-        case TargetListParameters:
-            command = "target-list-parameters";
-            break;
         case TargetSelect:
             command = "target-select";
             break;
 
         case ThreadInfo:
             command = "thread-info";
-            break;
-        case ThreadListAllThreads:
-            command = "thread-list-all-threads";
             break;
         case ThreadListIds:
             command = "thread-list-ids";
@@ -469,44 +360,8 @@ QString MICommand::miCommand() const
             command = "thread-select";
             break;
 
-        case TraceActions:
-            command = "trace-actions";
-            break;
-        case TraceDelete:
-            command = "trace-delete";
-            break;
-        case TraceDisable:
-            command = "trace-disable";
-            break;
-        case TraceDump:
-            command = "trace-dump";
-            break;
-        case TraceEnable:
-            command = "trace-enable";
-            break;
-        case TraceExists:
-            command = "trace-exists";
-            break;
         case TraceFind:
             command = "trace-find";
-            break;
-        case TraceFrameNumber:
-            command = "trace-frame-number";
-            break;
-        case TraceInfo:
-            command = "trace-info";
-            break;
-        case TraceInsert:
-            command = "trace-insert";
-            break;
-        case TraceList:
-            command = "trace-list";
-            break;
-        case TracePassCount:
-            command = "trace-pass-count";
-            break;
-        case TraceSave:
-            command = "trace-save";
             break;
         case TraceStart:
             command = "trace-start";
@@ -529,9 +384,6 @@ QString MICommand::miCommand() const
             break;
         case VarInfoPathExpression:
             command = "var-info-path-expression";
-            break;
-        case VarInfoExpression:
-            command = "var-info-expression";
             break;
         case VarInfoNumChildren:
             command = "var-info-num-children";

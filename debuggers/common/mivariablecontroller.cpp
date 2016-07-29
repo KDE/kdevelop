@@ -75,7 +75,7 @@ void MIVariableController::programStopped(const AsyncRecord& r)
 
 void MIVariableController::update()
 {
-    qCDebug(DEBUGGERCOMMON) << autoUpdate();
+    qCDebug(DEBUGGERCOMMON) << "autoUpdate =" << autoUpdate();
     if (autoUpdate() & UpdateWatches) {
         variableCollection()->watches()->reinstall();
     }
@@ -118,16 +118,17 @@ public:
     {
         if (!KDevelop::ICore::self()->debugController()) return; //happens on shutdown
 
-        // FIXME: handle error.
-        const Value& locals = r["stack-args"][0]["args"];
+        if (r.hasField("stack-args") && r["stack-args"].size() > 0) {
+            const Value& locals = r["stack-args"][0]["args"];
 
-        for (int i = 0; i < locals.size(); i++) {
-            m_localsName << locals[i].literal();
-        }
-        QList<Variable*> variables = KDevelop::ICore::self()->debugController()->variableCollection()
-                ->locals()->updateLocals(m_localsName);
-        foreach (Variable *v, variables) {
-            v->attachMaybe();
+            for (int i = 0; i < locals.size(); i++) {
+                m_localsName << locals[i].literal();
+            }
+            QList<Variable*> variables = KDevelop::ICore::self()->debugController()->variableCollection()
+                    ->locals()->updateLocals(m_localsName);
+            foreach (Variable *v, variables) {
+                v->attachMaybe();
+            }
         }
     }
 
@@ -144,20 +145,20 @@ public:
 
     void handle(const ResultRecord &r) override
     {
-        // FIXME: handle error.
+        if (r.hasField("locals")) {
+            const Value& locals = r["locals"];
 
-        const Value& locals = r["locals"];
-
-        QStringList localsName;
-        for (int i = 0; i < locals.size(); i++) {
-            const Value& var = locals[i];
-            localsName << var["name"].literal();
+            QStringList localsName;
+            for (int i = 0; i < locals.size(); i++) {
+                const Value& var = locals[i];
+                localsName << var["name"].literal();
+            }
+            int frame = m_session->frameStackModel()->currentFrame();
+            m_session->addCommand(StackListArguments,
+                                //dont'show value, low-frame, high-frame
+                                QString("0 %1 %2").arg(frame).arg(frame),
+                                new StackListArgumentsHandler(localsName));
         }
-        int frame = m_session->frameStackModel()->currentFrame();
-        m_session->addCommand(StackListArguments,
-                              //dont'show value, low-frame, high-frame
-                              QString("0 %1 %2").arg(frame).arg(frame),
-                              new StackListArgumentsHandler(localsName));
     }
 
 private:
@@ -223,8 +224,9 @@ void MIVariableController::addWatchpoint(KDevelop::Variable* variable)
 
 void MIVariableController::addWatch(const ResultRecord& r)
 {
-    // FIXME: handle error.
-    if (r.reason == "done" &&  !r["path_expr"].literal().isEmpty()) {
+    if (r.reason == "done"
+        && r.hasField("path_expr")
+        && !r["path_expr"].literal().isEmpty()) {
         variableCollection()->watches()->add(r["path_expr"].literal());
     }
 }

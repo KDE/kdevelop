@@ -58,7 +58,14 @@ public:
     void unload() override;
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
 
-    virtual MIDebugSession *createSession() const = 0;
+    virtual MIDebugSession *createSession() = 0;
+
+    virtual void setupToolviews() = 0;
+    /**
+     * The implementation should be sure it's safe to call
+     * even when tool views are already unloaded.
+     */
+    virtual void unloadToolviews() = 0;
 
 //BEGIN IStatus
 public:
@@ -97,7 +104,6 @@ protected Q_SLOTS:
     void slotCloseDrKonqi();
 
 protected:
-    void setupToolviews();
     void setupActions();
     void setupDBus();
 
@@ -137,14 +143,6 @@ public:
     {
         if (view->widget()->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("requestRaise()")) != -1)
             QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
-    }
-
-    /* At present, some debugger widgets (e.g. breakpoint) contain actions so that shortcuts
-        work, but they don't need any toolbar.  So, suppress toolbar action.  */
-    QList<QAction*> toolBarActions(QWidget* viewWidget) const override
-    {
-        Q_UNUSED(viewWidget);
-        return QList<QAction*>();
     }
 
 private:

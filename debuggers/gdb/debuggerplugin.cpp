@@ -48,9 +48,24 @@ K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<Cp
 
 CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
     : MIDebuggerPlugin("kdevgdb", parent)
+    , disassemblefactory(nullptr)
+    , gdbfactory(nullptr)
+    , memoryviewerfactory(nullptr)
 {
     setXMLFile("kdevgdbui.rc");
 
+    QList<IPlugin*> plugins = KDevelop::ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IExecutePlugin");
+    foreach(IPlugin* plugin, plugins) {
+        IExecutePlugin* iface = plugin->extension<IExecutePlugin>();
+        Q_ASSERT(iface);
+        KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( iface->nativeAppConfigTypeId() );
+        Q_ASSERT(type);
+        type->addLauncher( new GdbLauncher( this, iface ) );
+    }
+}
+
+void CppDebuggerPlugin::setupToolviews()
+{
     disassemblefactory = new DebuggerToolFactory<DisassembleWidget>(
     this, "org.kdevelop.debugger.DisassemblerView", Qt::BottomDockWidgetArea);
 
@@ -74,31 +89,31 @@ CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
         i18n("Memory"),
         memoryviewerfactory);
 #endif
-
-    QList<IPlugin*> plugins = KDevelop::ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IExecutePlugin");
-    foreach(IPlugin* plugin, plugins) {
-        IExecutePlugin* iface = plugin->extension<IExecutePlugin>();
-        Q_ASSERT(iface);
-        KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( iface->nativeAppConfigTypeId() );
-        Q_ASSERT(type);
-        type->addLauncher( new GdbLauncher( this, iface ) );
-    }
 }
 
-void CppDebuggerPlugin::unload()
+void CppDebuggerPlugin::unloadToolviews()
 {
-    core()->uiController()->removeToolView(disassemblefactory);
-    core()->uiController()->removeToolView(gdbfactory);
-    core()->uiController()->removeToolView(memoryviewerfactory);
+    if (disassemblefactory) {
+        core()->uiController()->removeToolView(disassemblefactory);
+        disassemblefactory = nullptr;
+    }
+    if (gdbfactory) {
+        core()->uiController()->removeToolView(gdbfactory);
+        gdbfactory = nullptr;
+    }
+    if (memoryviewerfactory) {
+        core()->uiController()->removeToolView(memoryviewerfactory);
+        memoryviewerfactory = nullptr;
+    }
 }
 
 CppDebuggerPlugin::~CppDebuggerPlugin()
 {
 }
 
-DebugSession* CppDebuggerPlugin::createSession() const
+DebugSession* CppDebuggerPlugin::createSession()
 {
-    DebugSession *session = new DebugSession();
+    DebugSession *session = new DebugSession(this);
     KDevelop::ICore::self()->debugController()->addSession(session);
     connect(session, &DebugSession::showMessage, this, &CppDebuggerPlugin::showStatusMessage);
     connect(session, &DebugSession::reset, this, &CppDebuggerPlugin::reset);

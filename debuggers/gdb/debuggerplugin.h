@@ -70,11 +70,9 @@ public:
     CppDebuggerPlugin(QObject *parent, const QVariantList & = QVariantList());
     ~CppDebuggerPlugin() override;
 
-    DebugSession *createSession() const override;
-    void unload() override;
-
-private:
-    void setupToolviews();
+    DebugSession *createSession() override;
+    void unloadToolviews() override;
+    void setupToolviews() override;
 
 private:
     DebuggerToolFactory<DisassembleWidget>* disassemblefactory;

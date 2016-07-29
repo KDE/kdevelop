@@ -1,0 +1,22 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kdevdgdb" library="kdevgdb" version="55" translationDomain="kdevgdb">
+<MenuBar>
+ <Menu name="run">
+  <text context="@title:menu">Run</text>
+
+  <Action name="debug_attach" group="run_operations"/>
+  <Action name="debug_core" group="run_operations"/>
+
+  <Separator group="debug"/>
+  <Action name="debug_memview" group="debug"/>
+ </Menu>
+</MenuBar>
+
+<ToolBar name="debugToolBar">
+  <text>Debugger Toolbar</text>
+  <Separator/>
+  <Action name="debug_memview"/>
+  <WeakSeparator/>
+</ToolBar>
+</kpartgui>
+

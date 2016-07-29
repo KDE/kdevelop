@@ -51,7 +51,7 @@ GdbDebugger::~GdbDebugger()
 bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
 {
     // FIXME: verify that default value leads to something sensible
-    QUrl gdbUrl = config.readEntry(gdbPathEntry, QUrl());
+    QUrl gdbUrl = config.readEntry(Config::GdbPathEntry, QUrl());
     if (gdbUrl.isEmpty()) {
         debuggerBinary_ = "gdb";
     } else {
@@ -62,7 +62,7 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
     QStringList arguments = extraArguments;
     arguments << "--interpreter=mi2" << "-quiet";
 
-    QUrl shell = config.readEntry(debuggerShellEntry, QUrl());
+    QUrl shell = config.readEntry(Config::DebuggerShellEntry, QUrl());
     if(!shell.isEmpty()) {
         qCDebug(DEBUGGERGDB) << "have shell" << shell;
         QString shell_without_args = shell.toLocalFile().split(QChar(' ')).first();

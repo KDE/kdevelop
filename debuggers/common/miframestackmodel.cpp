@@ -65,10 +65,6 @@ MIDebugSession * MIFrameStackModel::session()
 
 void MIFrameStackModel::fetchThreads()
 {
-    // TODO: preliminary test shows there might be a bug in lldb-mi
-    // that's causing std::logic_error when executing -thread-info with
-    // more than one threads. Find a workaround for this (and report bug
-    // if it truely is).
     session()->addCommand(ThreadInfo, "", this, &MIFrameStackModel::handleThreadInfo);
 }
 

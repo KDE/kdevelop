@@ -1,0 +1,44 @@
+{
+    "KPlugin": {
+        "Category": "Debugging",
+        "Description": "This plugin provides a frontend for LLDB, a next generation, high-performance C/Obj-C/C++ debugger.",
+        "Description[x-test]": "xxThis plugin provides a frontend for LLDB, a next generation, high-performance C/Obj-C/C++ debugger.xx",
+        "Description[zh_CN]": "此插件提供了 LLDB 前端，LLDB 是新一代、高性能的 C、Obj-C、C++ 调试器。",
+        "Icon": "debugger",
+        "Id": "kdevlldb",
+        "License": "GPL", 
+        "Name": "LLDB Support",
+        "Name[bs]": "LLDB podrška",
+        "Name[ca@valencia]": "Implementació del LLDB",
+        "Name[ca]": "Implementació del LLDB",
+        "Name[cs]": "Podpora LLDB",
+        "Name[de]": "Unterstützung für LLDB",
+        "Name[es]": "Implementación de LLDB",
+        "Name[fi]": "LLDB-tuki",
+        "Name[gl]": "Integración de LLDB",
+        "Name[hu]": "LLDB támogatás",
+        "Name[it]": "Supporto LLDB",
+        "Name[nl]": "Ondersteuning voor LLDB",
+        "Name[pl]": "Obsługa LLDB",
+        "Name[pt]": "Suporte ao LLDB",
+        "Name[pt_BR]": "Suporte ao LLDB",
+        "Name[sk]": "Podpora LLDB",
+        "Name[sl]": "Podpora za LLDB",
+        "Name[sv]": "LLDB-stöd",
+        "Name[tr]": "LLDB Desteği",
+        "Name[uk]": "Підтримка LLDB",
+        "Name[x-test]": "xxLLDB Supportxx",
+        "Name[zh_CN]": "LLDB 支持",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    }, 
+    "X-KDevelop-Category": "Global", 
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IExecutePlugin"
+    ], 
+    "X-KDevelop-Interfaces": [
+        "org.kdevelop.IStatus"
+    ], 
+    "X-KDevelop-Mode": "GUI"
+}

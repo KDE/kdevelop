@@ -52,13 +52,14 @@ class CommandQueue;
 }
 
 class MIDebugger;
+class MIDebuggerPlugin;
 class MIVariable;
 class STTY;
 class MIDebugSession : public KDevelop::IDebugSession
 {
     Q_OBJECT
 public:
-    MIDebugSession();
+    explicit MIDebugSession(MIDebuggerPlugin *plugin = nullptr);
     ~MIDebugSession() override;
 
 Q_SIGNALS:
@@ -258,8 +259,9 @@ protected:
         busy with previous command, and there's a command in the
         queue, sends it.  */
     void executeCmd();
-    void ensureDebuggerListening();
     void destroyCmds();
+
+    virtual void ensureDebuggerListening();
 
     /**
      * Start the debugger instance
@@ -279,7 +281,8 @@ protected:
     /**
      * Further config the debugger and start the inferior program (either local or remote).
      */
-    virtual bool execInferior(KDevelop::ILaunchConfiguration *cfg, const QString &executable) = 0;
+    virtual bool execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *iexec,
+                              const QString &executable) = 0;
 
     /**
      * Manipulate debugger instance state
@@ -342,6 +345,8 @@ protected:
 
     // Map from GDB varobj name to MIVariable.
     QMap<QString, MIVariable*> m_allVariables;
+
+    MIDebuggerPlugin *m_plugin;
 };
 
 template<class Handler>

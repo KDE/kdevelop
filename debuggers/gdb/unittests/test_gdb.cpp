@@ -38,6 +38,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <shell/shellextension.h>
+#include <util/environmentgrouplist.h>
 
 #include <KIO/Global>
 #include <KProcess>
@@ -126,6 +127,16 @@ void GdbTest::init()
     vc->watches()->clear();
 }
 
+class WritableEnvironmentGroupList : public KDevelop::EnvironmentGroupList
+{
+public:
+    explicit WritableEnvironmentGroupList(KConfig* config) : EnvironmentGroupList(config) {}
+
+    using EnvironmentGroupList::variables;
+    using EnvironmentGroupList::saveSettings;
+    using EnvironmentGroupList::removeGroup;
+};
+
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
 public:
@@ -147,6 +158,8 @@ public:
     QString name() const override { return QString("Test-Launch"); }
     KDevelop::IProject* project() const override { return 0; }
     KDevelop::LaunchConfigurationType* type() const override { return 0; }
+
+    KConfig *rootConfig() { return c; }
 private:
     KConfigGroup cfg;
     KConfig *c;
@@ -292,6 +305,38 @@ void GdbTest::testStdOut()
         QCOMPARE(arguments.count(), 1);
         QCOMPARE(arguments.first().toStringList(), QStringList() << "Hello, world!" << "Hello");
     }
+}
+
+void GdbTest::testEnvironmentSet()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg(findExecutable("debugeeechoenv"));
+
+    cfg.config().writeEntry("EnvironmentGroup", "GdbTestGroup");
+
+    WritableEnvironmentGroupList envGroups(cfg.rootConfig());
+    envGroups.removeGroup("GdbTestGroup");
+    auto &envs = envGroups.variables("GdbTestGroup");
+    envs["VariableA"] = "-A' \" complex --value";
+    envs["VariableB"] = "-B' \" complex --value";
+    envGroups.saveSettings(cfg.rootConfig());
+
+    QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
+
+    QVERIFY(session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);
+
+    QVERIFY(outputSpy.count() > 0);
+
+    QStringList outputLines;
+    while (outputSpy.count() > 0) {
+        QList<QVariant> arguments = outputSpy.takeFirst();
+        for (const auto &item : arguments) {
+            outputLines.append(item.toStringList());
+        }
+    }
+    QCOMPARE(outputLines, QStringList() << "-A' \" complex --value"
+                                       << "-B' \" complex --value");
 }
 
 void GdbTest::testBreakpoint()
@@ -990,7 +1035,7 @@ void GdbTest::testManualAttach()
     TestDebugSession *session = new TestDebugSession;
 
     TestLaunchConfiguration cfg;
-    cfg.config().writeEntry(remoteGdbRunEntry, QUrl::fromLocalFile(findSourceFile("gdb_script_empty")));
+    cfg.config().writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(findSourceFile("gdb_script_empty")));
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
     session->addCommand(MI::NonMI, QString("attach %0").arg(debugeeProcess.pid()));
@@ -1479,7 +1524,7 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(remoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
+    grp.writeEntry(Config::RemoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile("debugee.cpp"), 31);
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -1500,7 +1545,7 @@ void GdbTest::testPickupCatchThrowOnlyOnce()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(remoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
+    grp.writeEntry(Config::RemoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
 
 
     for (int i = 0; i < 2; ++i) {
@@ -1526,7 +1571,7 @@ void GdbTest::testRunGdbScript()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(remoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
+    grp.writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
@@ -1564,8 +1609,8 @@ void GdbTest::testRemoteDebug()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(remoteGdbShellEntry, QUrl::fromLocalFile((shellScript.fileName()+"-copy")));
-    grp.writeEntry(remoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
+    grp.writeEntry(Config::RemoteGdbShellEntry, QUrl::fromLocalFile((shellScript.fileName()+"-copy")));
+    grp.writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
@@ -1608,8 +1653,8 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(remoteGdbShellEntry, QUrl::fromLocalFile(shellScript.fileName()+"-copy"));
-    grp.writeEntry(remoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
+    grp.writeEntry(Config::RemoteGdbShellEntry, QUrl::fromLocalFile(shellScript.fileName()+"-copy"));
+    grp.writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
@@ -1659,8 +1704,8 @@ void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(remoteGdbShellEntry, QUrl::fromLocalFile((shellScript.fileName()+"-copy")));
-    grp.writeEntry(remoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
+    grp.writeEntry(Config::RemoteGdbShellEntry, QUrl::fromLocalFile((shellScript.fileName()+"-copy")));
+    grp.writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
@@ -1775,26 +1820,31 @@ void GdbTest::testCatchpoint()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-//TODO: figure out why do we need this test? And do we need it at all??
 void GdbTest::testThreadAndFrameInfo()
 {
+    // Check if --thread is added to user commands
+
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg(findExecutable("debugeethreads"));
     QString fileName = findSourceFile("debugeethreads.cpp");
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 38);
     QVERIFY(session->startDebugging(&cfg, m_iface));
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QTest::qWait(1000);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     QSignalSpy outputSpy(session, &TestDebugSession::debuggerUserCommandOutput);
 
-    session->addCommand(
-                new MI::UserCommand(MI::ThreadInfo,""));
+    session->addCommand(new MI::UserCommand(MI::ThreadInfo,""));
     session->addCommand(new MI::UserCommand(MI::StackListLocals, QLatin1String("0")));
-    QTest::qWait(1000);
-    QCOMPARE(outputSpy.count(), 2);
-    QVERIFY(outputSpy.last().at(0).toString().contains(QLatin1String("--thread 1")));
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // wait for command finish
+
+    // outputs should be
+    // 1. -thread-info
+    // 2. ^done for thread-info
+    // 3. -stack-list-locals
+    // 4. ^done for -stack-list-locals
+    QCOMPARE(outputSpy.count(), 4);
+    QVERIFY(outputSpy.at(2).at(0).toString().contains(QLatin1String("--thread 1")));
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);

@@ -63,39 +63,8 @@ MIDebuggerPlugin::MIDebuggerPlugin(const QString &componentName, QObject *parent
 
     core()->debugController()->initializeUi();
 
-    setupToolviews();
     setupActions();
     setupDBus();
-}
-
-void MIDebuggerPlugin::setupToolviews()
-{
-    // TODO: port tool views
-    /*
-    disassemblefactory = new DebuggerToolFactory<DisassembleWidget>(
-    this, "org.kdevelop.debugger.DisassemblerView", Qt::BottomDockWidgetArea);
-
-    lldbfactory = new DebuggerToolFactory<LLDBOutputWidget>(
-    this, "org.kdevelop.debugger.ConsoleView",Qt::BottomDockWidgetArea);
-
-    core()->uiController()->addToolView(
-        i18n("Disassemble/Registers"),
-        disassemblefactory);
-
-    core()->uiController()->addToolView(
-        i18n("LLDB"),
-        lldbfactory);
-
-#ifndef WITH_OKTETA
-    memoryviewerfactory = nullptr;
-#else
-    memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget>(
-    this, "org.kdevelop.debugger.MemoryView", Qt::BottomDockWidgetArea);
-    core()->uiController()->addToolView(
-        i18n("Memory"),
-        memoryviewerfactory);
-#endif
-*/
 }
 
 void MIDebuggerPlugin::setupActions()
@@ -147,12 +116,7 @@ void MIDebuggerPlugin::setupDBus()
 
 void MIDebuggerPlugin::unload()
 {
-    // TODO: port tool views
-    /*
-    core()->uiController()->removeToolView(disassemblefactory);
-    core()->uiController()->removeToolView(lldbfactory);
-    core()->uiController()->removeToolView(memoryviewerfactory);
-    */
+    unloadToolviews();
 }
 
 MIDebuggerPlugin::~MIDebuggerPlugin()

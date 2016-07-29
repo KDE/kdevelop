@@ -533,6 +533,8 @@ void DisassembleWidget::showDisassemblyFlavorHandler(const ResultRecord& r)
         disassemblyFlavor = DisassemblyFlavorATT;
     } else if (value.literal() == "intel") {
         disassemblyFlavor = DisassemblyFlavorIntel;
+    } else if (value.literal() == "default") {
+        disassemblyFlavor = DisassemblyFlavorATT;
     }
     m_disassembleWindow->setDisassemblyFlavor(disassemblyFlavor);
 }

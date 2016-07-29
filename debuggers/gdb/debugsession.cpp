@@ -26,6 +26,7 @@
 #include "debugsession.h"
 
 #include "debuglog.h"
+#include "debuggerplugin.h"
 #include "gdb.h"
 #include "gdbbreakpointcontroller.h"
 #include "gdbframestackmodel.h"
@@ -35,9 +36,11 @@
 
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>
+#include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <util/environmentgrouplist.h>
 
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -53,8 +56,8 @@ using namespace KDevMI::GDB;
 using namespace KDevMI::MI;
 using namespace KDevelop;
 
-DebugSession::DebugSession()
-    : MIDebugSession()
+DebugSession::DebugSession(CppDebuggerPlugin *plugin)
+    : MIDebugSession(plugin)
     , m_breakpointController(nullptr)
     , m_variableController(nullptr)
     , m_frameStackModel(nullptr)
@@ -63,10 +66,13 @@ DebugSession::DebugSession()
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);
     m_frameStackModel = new GdbFrameStackModel(this);
+
+    if (m_plugin) m_plugin->setupToolviews();
 }
 
 DebugSession::~DebugSession()
 {
+    if (m_plugin) m_plugin->unloadToolviews();
 }
 
 void DebugSession::setAutoDisableASLR(bool enable)
@@ -133,13 +139,13 @@ void DebugSession::initializeDebugger()
     qCDebug(DEBUGGERGDB) << "Initialized GDB";
 }
 
-void DebugSession::configure(ILaunchConfiguration *cfg)
+void DebugSession::configure(ILaunchConfiguration *cfg, IExecutePlugin *iexec)
 {
     // Read Configuration values
     KConfigGroup grp = cfg->config();
-    bool breakOnStart = grp.readEntry(KDevMI::breakOnStartEntry, false);
-    bool displayStaticMembers = grp.readEntry(KDevMI::staticMembersEntry, false);
-    bool asmDemangle = grp.readEntry(KDevMI::demangleNamesEntry, true);
+    bool breakOnStart = grp.readEntry(KDevMI::Config::BreakOnStartEntry, false);
+    bool displayStaticMembers = grp.readEntry(Config::StaticMembersEntry, false);
+    bool asmDemangle = grp.readEntry(Config::DemangleNamesEntry, true);
 
     if (breakOnStart) {
         BreakpointModel* m = ICore::self()->debugController()->breakpointModel();
@@ -171,20 +177,34 @@ void DebugSession::configure(ILaunchConfiguration *cfg)
         addCommand(MI::GdbSet, "print asm-demangle off");
     }
 
+    // Set the environment variables
+    EnvironmentGroupList l(KSharedConfig::openConfig());
+    QString envgrp = iexec->environmentGroup(cfg);
+    if (envgrp.isEmpty()) {
+        qCWarning(DEBUGGERCOMMON) << i18n("No environment group specified, looks like a broken "
+                                          "configuration, please check run configuration '%1'. "
+                                          "Using default environment group.", cfg->name());
+        envgrp = l.defaultGroup();
+    }
+    for (const auto &envvar : l.createEnvironment(envgrp, {})) {
+        addCommand(GdbSet, "environment " + envvar);
+    }
+
     qCDebug(DEBUGGERGDB) << "Per inferior configuration done";
 }
 
-bool DebugSession::execInferior(ILaunchConfiguration *cfg, const QString &executable)
+bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec,
+                                const QString &executable)
 {
     qCDebug(DEBUGGERGDB) << "Executing inferior";
 
     // debugger specific config
-    configure(cfg);
+    configure(cfg, iexec);
 
     KConfigGroup grp = cfg->config();
-    QUrl configGdbScript = grp.readEntry(KDevMI::remoteGdbConfigEntry, QUrl());
-    QUrl runShellScript = grp.readEntry(KDevMI::remoteGdbShellEntry, QUrl());
-    QUrl runGdbScript = grp.readEntry(KDevMI::remoteGdbRunEntry, QUrl());
+    QUrl configGdbScript = grp.readEntry(Config::RemoteGdbConfigEntry, QUrl());
+    QUrl runShellScript = grp.readEntry(Config::RemoteGdbShellEntry, QUrl());
+    QUrl runGdbScript = grp.readEntry(Config::RemoteGdbRunEntry, QUrl());
 
     // handle remote debug
     if (configGdbScript.isValid()) {

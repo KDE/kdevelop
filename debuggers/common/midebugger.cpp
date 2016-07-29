@@ -174,7 +174,13 @@ void MIDebugger::processLine(const QByteArray& line)
         case MI::Record::Result: {
             MI::ResultRecord& result = static_cast<MI::ResultRecord&>(*r);
 
-            emit internalCommandOutput(QString::fromUtf8(line) + '\n');
+            // it's still possible for the user to issue a MI command,
+            // emit correct signal
+            if (currentCmd_ && currentCmd_->isUserCommand()) {
+                emit userCommandOutput(QString::fromUtf8(line) + '\n');
+            } else {
+                emit internalCommandOutput(QString::fromUtf8(line) + '\n');
+            }
 
             // GDB doc: "running" and "exit" are status codes equivalent to "done"
             if (result.reason == "done" || result.reason == "running" || result.reason == "exit")
@@ -303,21 +309,19 @@ void MIDebugger::processLine(const QByteArray& line)
     #endif
 }
 
-// **************************************************************************
-
 void MIDebugger::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qCDebug(DEBUGGERCOMMON) << "GDB FINISHED\n";
+    qCDebug(DEBUGGERCOMMON) << "Debugger FINISHED\n";
 
     bool abnormal = exitCode != 0 || exitStatus != QProcess::NormalExit;
-    emit userCommandOutput("(gdb) Process exited\n");
+    emit userCommandOutput("Process exited\n");
     emit exited(abnormal, i18n("Process exited"));
 }
 
 void MIDebugger::processErrored(QProcess::ProcessError error)
 {
-    qCDebug(DEBUGGERCOMMON) << "GDB ERRORED" << error;
-    if( error == QProcess::FailedToStart )
+    qCDebug(DEBUGGERCOMMON) << "Debugger ERRORED" << error;
+    if(error == QProcess::FailedToStart)
     {
         KMessageBox::information(
             qApp->activeWindow(),
@@ -327,18 +331,20 @@ void MIDebugger::processErrored(QProcess::ProcessError error)
                  debuggerBinary_),
             i18n("Could not start debugger"));
 
-        emit userCommandOutput("(gdb) didn't start\n");
-        emit exited(true, i18n("Process didn't start'"));
+        emit userCommandOutput("Process failed to start\n");
+        emit exited(true, i18n("Process failed to start'"));
 
     } else if (error == QProcess::Crashed) {
         KMessageBox::error(
             qApp->activeWindow(),
-            i18n("<b>Gdb crashed.</b>"
-                 "<p>Because of that the debug session has to be ended.<br>"
-                 "Try to reproduce the crash with plain gdb and report a bug.<br>"),
-            i18n("Gdb crashed"));
+            i18n("<b>Debugger crashed.</b>"
+                 "<p>The debugger process '%1' crashed.<br>"
+                 "Because of that the debug session has to be ended.<br>"
+                 "Try to reproduce the crash without KDevelop and report a bug.<br>",
+                 debuggerBinary_),
+            i18n("Debugger crashed"));
 
-        emit userCommandOutput("(gdb) Process crashed\n");
+        emit userCommandOutput("Process crashed\n");
         emit exited(true, i18n("Process crashed"));
     }
 }

@@ -65,8 +65,7 @@ void CommandQueue::dumpQueue()
 void CommandQueue::rationalizeQueue(MICommand* command)
 {
     if ((command->type() >= ExecAbort && command->type() <= ExecUntil) &&
-         command->type() != ExecArguments &&
-         command->type() != ExecShowArguments ) {
+         command->type() != ExecArguments ) {
         // Changing execution location, abort any variable updates
         removeVariableUpdates();
         // ... and stack list updates

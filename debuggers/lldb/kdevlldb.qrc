@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/kxmlgui5/kdevgdb">
+        <file>kdevlldbui.rc</file>
+    </qresource>
+</RCC>

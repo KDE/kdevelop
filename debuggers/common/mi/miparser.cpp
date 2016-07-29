@@ -356,7 +356,10 @@ QString MIParser::parseStringLiteral()
                 {
                     translated = '\t';
                 }
-
+                else if (message[i+1] == 'r')
+                {
+                    translated = '\r';
+                }
             }
         }
 

@@ -19,6 +19,9 @@ set(debuggercommon_SRCS
     mivariable.cpp
     stringhelpers.cpp
     stty.cpp
+    # tool views
+    widgets/debuggerconsoleview.cpp
+    widgets/disassemblewidget.cpp
     # register
     registers/registersview.cpp
     registers/registercontroller.cpp
@@ -27,8 +30,6 @@ set(debuggercommon_SRCS
     registers/registercontroller_arm.cpp
     registers/modelsmanager.cpp
     registers/converters.cpp
-    # disassemble widget
-    widgets/disassemblewidget.cpp
 )
 if(KF5SysGuard_FOUND)
     list(APPEND debuggercommon_SRCS
@@ -38,8 +39,9 @@ endif()
 
 ki18n_wrap_ui(debuggercommon_SRCS
     dialogs/selectcoredialog.ui
-    registers/registersview.ui
+    widgets/debuggerconsoleview.ui
     widgets/selectaddressdialog.ui
+    registers/registersview.ui
 )
 
 # Use old behavior (ignore the visibility properties for static libraries, object
@@ -60,6 +62,7 @@ target_link_libraries(kdevdebuggercommon
     PRIVATE
     Qt5::Core
     Qt5::Gui
+    Qt5::Widgets
     KDev::Util
     KDev::Language
 )

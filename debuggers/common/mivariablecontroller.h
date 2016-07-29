@@ -55,6 +55,9 @@ public:
     void addWatchpoint(KDevelop::Variable* variable) override;
     void update() override;
 
+protected:
+    void updateLocals();
+
 private slots:
     void programStopped(const MI::AsyncRecord &r);
     void stateChanged(KDevelop::IDebugSession::DebuggerState);
@@ -62,7 +65,6 @@ private slots:
 private:
     MIDebugSession* debugSession() const;
 
-    void updateLocals();
 
     void handleVarUpdate(const MI::ResultRecord& r);
     void addWatch(const MI::ResultRecord& r);
