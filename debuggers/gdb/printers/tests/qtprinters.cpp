@@ -50,6 +50,7 @@ public:
         QVERIFY(!prompt.contains("No such file or directory"));
         execute("set confirm off");
         execute("set print pretty on");
+        execute("disable-randomization off"); // see https://phabricator.kde.org/D2188
         QList<QByteArray> p;
         QDir printersDir = QFileInfo(__FILE__).dir();
         printersDir.cdUp(); // go up to get to the main printers directory
