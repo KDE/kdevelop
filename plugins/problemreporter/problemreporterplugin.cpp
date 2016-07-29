@@ -135,7 +135,7 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
                                          KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
-void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop::ReferencedTopDUContext& top)
+void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop::ReferencedTopDUContext&)
 {
     m_model->problemsUpdated(url);
     updateHighlight(url);

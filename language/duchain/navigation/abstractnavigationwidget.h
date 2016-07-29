@@ -44,7 +44,7 @@ namespace KDevelop {
         NoHints = 0x0, // < Normal display
         EmbeddableWidget = 0x1, // < Omit parts which are only useful for the navigation popup
       };
-      Q_DECLARE_FLAGS(DisplayHints, DisplayHint);
+      Q_DECLARE_FLAGS(DisplayHints, DisplayHint)
 
       AbstractNavigationWidget();
       ~AbstractNavigationWidget() override;
