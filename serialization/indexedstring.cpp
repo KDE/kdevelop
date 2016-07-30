@@ -248,6 +248,7 @@ IndexedString::IndexedString(const QUrl& url)
     : IndexedString(url.isLocalFile() ? url.toLocalFile() : url.toString())
 {
     Q_ASSERT(url.isEmpty() || !url.isRelative());
+    Q_ASSERT(url == url.adjusted(QUrl::NormalizePathSegments));
 }
 
 IndexedString::IndexedString(const QString& string)
