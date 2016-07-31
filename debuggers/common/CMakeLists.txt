@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevdebuggercommon\")
 set(debuggercommon_SRCS
     mi/mi.cpp
     mi/milexer.cpp
