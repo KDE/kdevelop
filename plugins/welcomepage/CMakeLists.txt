@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevwelcomepage\")
 add_subdirectory(declarative)
 
 set(welcomepage_SRCS
