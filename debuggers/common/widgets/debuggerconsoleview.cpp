@@ -84,7 +84,7 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
     m_toolBar->insertAction(m_actCmdEditor, m_actInterrupt);
     setShowInterrupt(true);
 
-    m_actShowInternal = new QAction(i18n("Show Internal Commands"));
+    m_actShowInternal = new QAction(i18n("Show Internal Commands"), this);
     m_actShowInternal->setCheckable(true);
     m_actShowInternal->setChecked(m_showInternalCommands);
     m_actShowInternal->setWhatsThis(i18n(
