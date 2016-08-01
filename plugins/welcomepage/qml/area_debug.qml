@@ -55,11 +55,13 @@ StandardBackground
             Heading { text: i18n("Debug Area") }
             Label {
                 width: parent.width
-                text: i18n("On the <em>Debug</em> area you will be able to see and analyze how your program works on execution. "+
-                      "On the <em>Run</em> menu you will find all the possible options.<br/><br/>"+
-                      "As you can see, here you can just execute your application or debug it if you need "+
-                      "further runtime information. You can select what is going to be run by configuring "+
-                      "the launches and selecting the one you want to use in the <em>Current Launch Configuration</em> sub-menu.")
+                text: i18n("On the <em>Debug</em> area you will be able to see and analyze how your program works on execution. On the <em>Run</em> menu you will find all the possible options.")
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignJustify
+            }
+            Label {
+                width: parent.width
+                text: i18n("As you can see, here you can just execute your application or debug it if you need further runtime information. You can select what is going to be run by configuring the launches and selecting the one you want to use in the <em>Current Launch Configuration</em> sub-menu.")
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignJustify
             }
