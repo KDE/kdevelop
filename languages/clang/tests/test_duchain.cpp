@@ -1241,8 +1241,8 @@ void TestDUChain::testMacroDependentHeader()
     QCOMPARE(top2->localDeclarations().size(), 2);
     QCOMPARE(top2->localDeclarations()[0], decl);
     QCOMPARE(top2->localDeclarations()[1], decl2);
-    qDebug() << "DECL RANGE:" << top2->localDeclarations()[0]->range().castToSimpleRange().toString();
-    qDebug() << "CTX RANGE:" << top2->localDeclarations()[0]->internalContext()->range().castToSimpleRange().toString();
+    qDebug() << "DECL RANGE:" << top2->localDeclarations()[0]->range().castToSimpleRange();
+    qDebug() << "CTX RANGE:" << top2->localDeclarations()[0]->internalContext()->range().castToSimpleRange();
 
     // validate uses:
     QCOMPARE(top->usesCount(), 14);
