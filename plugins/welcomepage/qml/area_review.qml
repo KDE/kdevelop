@@ -61,10 +61,13 @@ StandardBackground
             
             Label {
                 width: parent.width
-                text: i18n("On the <em>Review</em> area you will be able to find the tools you need "+
-                      "to review changes in your projects, either the ones you made or some external patch.<br/> Also it will help you send "+
-                      "the changes to the community you're contributing to, either by committing the changes, sending them by e-mail or "+
-                      "putting them on a ReviewBoard service.")
+                text: i18n("On the <em>Review</em> area you will be able to find the tools you need to review changes in your projects, either the ones you made or some external patch.")
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignJustify
+            }
+            Label {
+                width: parent.width
+                text: i18n("Also it will help you send the changes to the community you're contributing to, either by committing the changes, sending them by e-mail or putting them on a ReviewBoard service.")
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignJustify
             }
