@@ -330,7 +330,7 @@ ItemUnderCursorInternal itemUnderCursorInternal(const CursorInRevision& c, DUCon
 
 DUChainUtils::ItemUnderCursor DUChainUtils::itemUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor)
 {
-  KDevelop::TopDUContext* top = standardContextForUrl(url);
+  KDevelop::TopDUContext* top = standardContextForUrl(url.adjusted(QUrl::NormalizePathSegments));
 
   if(!top) {
     return {nullptr, nullptr, KTextEditor::Range()};
