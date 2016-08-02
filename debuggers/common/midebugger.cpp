@@ -332,7 +332,7 @@ void MIDebugger::processErrored(QProcess::ProcessError error)
             i18n("Could not start debugger"));
 
         emit userCommandOutput("Process failed to start\n");
-        emit exited(true, i18n("Process failed to start'"));
+        emit exited(true, i18n("Process failed to start"));
 
     } else if (error == QProcess::Crashed) {
         KMessageBox::error(
