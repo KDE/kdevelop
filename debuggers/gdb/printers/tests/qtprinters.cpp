@@ -340,7 +340,7 @@ void QtPrintersTest::testQUrl()
     gdb.execute("break qurl.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print u");
-    QVERIFY(out.contains("http://www.kdevelop.org/foo"));
+    QVERIFY(out.contains("http://user@www.kdevelop.org:12345/foo?xyz=bar#asdf"));
 }
 
 void QtPrintersTest::testQHashInt()

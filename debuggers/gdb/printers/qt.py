@@ -561,11 +561,63 @@ class QUrlPrinter:
         self.val = val
 
     def to_string(self):
+        # first try to access the Qt 5 data
+        try:
+            int_type = gdb.lookup_type('int')
+            string_type = gdb.lookup_type('QString')
+            string_pointer = string_type.pointer()
+
+            addr = self.val['d'].cast(gdb.lookup_type('char').pointer())
+            # skip QAtomicInt ref
+            addr += int_type.sizeof
+            # handle int port
+            port = addr.cast(int_type.pointer()).dereference()
+            addr += int_type.sizeof
+            # handle QString scheme
+            scheme = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            addr += string_type.sizeof
+            # handle QString username
+            username = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            addr += string_type.sizeof
+            # skip QString password
+            addr += string_type.sizeof
+            # handle QString host
+            host = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            addr += string_type.sizeof
+            # handle QString path
+            path = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            addr += string_type.sizeof
+            # handle QString query
+            query = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+            addr += string_type.sizeof
+            # handle QString fragment
+            fragment = QStringPrinter(addr.cast(string_pointer).dereference()).to_string()
+
+            url = ""
+            if len(scheme) > 0:
+                # TODO: always adding // is apparently not compliant in all cases
+                url += scheme + "://"
+            if len(host) > 0:
+                if len(username) > 0:
+                    url += username + "@"
+                url += host
+                if port != -1:
+                    url += ":" + str(port)
+            url += path
+            if len(query) > 0:
+                url += "?" + query
+            if len(fragment) > 0:
+                url += "#" + fragment
+
+            return url
+        except:
+            pass
+        # then try to print directly, but that might lead to issues (see http://sourceware-org.1504.n7.nabble.com/help-Calling-malloc-from-a-Python-pretty-printer-td284031.html)
         try:
             return gdb.parse_and_eval("reinterpret_cast<const QUrl*>(%s)->toString((QUrl::FormattingOptions)QUrl::PrettyDecoded)" % self.val.address)
         except:
             pass
-        # TODO: the below code is only valid for Qt 4
+        # if everything fails, maybe we deal with Qt 4 code
         try:
             return self.val['d']['encodedOriginal']
         except RuntimeError:
