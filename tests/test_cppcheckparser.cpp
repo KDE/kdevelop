@@ -49,6 +49,11 @@ void TestCppcheckParser::testParser()
         "        <error id=\"memleak\" severity=\"error\" msg=\"Memory leak: ej\" verbose=\"Memory leak: ej\" cwe=\"401\">"
         "            <location file=\"/kdesrc/kdev-cppcheck/plugin.cpp\" line=\"169\"/>"
         "        </error>"
+        "        <error id=\"redundantAssignment\" severity=\"performance\" "
+        "               msg=\"location_test_msg\" verbose=\"location_test_verbose\">"
+        "            <location file=\"location_test.cpp\" line=\"120\"/>"
+        "            <location file=\"location_test.cpp\" line=\"100\"/>"
+        "        </error>"
         "    </errors>"
         "</results>");
 
@@ -60,12 +65,21 @@ void TestCppcheckParser::testParser()
     auto problems = parser.problems();
     QVERIFY(!problems.empty());
 
-    KDevelop::IProblem::Ptr p = problems.front();
+    KDevelop::IProblem::Ptr p = problems[0];
     QCOMPARE(p->description(), QStringLiteral("Memory leak: ej"));
     QCOMPARE(p->explanation(), QStringLiteral("Memory leak: ej"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/kdesrc/kdev-cppcheck/plugin.cpp"));
     QCOMPARE(p->finalLocation().start().line()+1, 169);
     QCOMPARE(p->severity(), KDevelop::IProblem::Error);
+    QCOMPARE(p->source(), KDevelop::IProblem::Plugin);
+
+    // test problem with 2 <location> elements
+    p = problems[1];
+    QCOMPARE(p->description(), QStringLiteral("location_test_msg"));
+    QCOMPARE(p->explanation(), QStringLiteral("location_test_verbose"));
+    QCOMPARE(p->finalLocation().document.str(), QStringLiteral("location_test.cpp"));
+    QCOMPARE(p->finalLocation().start().line()+1, 120);
+    QCOMPARE(p->severity(), KDevelop::IProblem::Hint);
     QCOMPARE(p->source(), KDevelop::IProblem::Plugin);
 }
 

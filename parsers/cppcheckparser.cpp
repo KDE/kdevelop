@@ -72,10 +72,13 @@ bool CppcheckParser::startElement()
         newState = Errors;
     else if (name() == "location") {
         newState = Location;
-        if (attributes().hasAttribute("line"))
-            ErrorLine = attributes().value("line").toString().toInt();
-        if (attributes().hasAttribute("file"))
-            ErrorFile = attributes().value("file").toString();
+        // use only first <location> element of the error
+        if (ErrorLine < 0) {
+            if (attributes().hasAttribute("line"))
+                ErrorLine = attributes().value("line").toString().toInt();
+            if (attributes().hasAttribute("file"))
+                ErrorFile = attributes().value("file").toString();
+        }
     } else if (name() == "error") {
         newState = Error;
         ErrorLine = -1;
