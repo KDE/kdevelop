@@ -39,7 +39,6 @@ Boston, MA 02110-1301, USA.
 #include <KTextEditor/MainWindow>
 #include <KWindowSystem>
 #include <KXMLGUIFactory>
-#include <KColorScheme>
 #include <kparts_version.h>
 
 #include <sublime/area.h>
@@ -73,8 +72,7 @@ namespace {
 
 QColor defaultColor(const QPalette& palette)
 {
-    const KColorScheme scheme(palette.currentColorGroup());
-    return scheme.foreground(KColorScheme::NormalText).color();
+    return palette.foreground().color();
 }
 
 QColor colorForDocument(const QUrl& url, const QPalette& palette, const QColor& defaultColor)

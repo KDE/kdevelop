@@ -47,8 +47,7 @@ void WidgetColorizer::drawBranches(const QTreeView* treeView, QPainter* painter,
 
 QColor WidgetColorizer::colorForId(uint id, const QPalette& activePalette)
 {
-    const KColorScheme scheme(activePalette.currentColorGroup());
-    const QColor schemeColor = scheme.foreground(KColorScheme::NormalText).color();
+    const QColor schemeColor = activePalette.foreground().color();
     int lightness = (schemeColor.blue() + schemeColor.red() + schemeColor.green()) / 3;
     int high = 255;
     int low = 100;
