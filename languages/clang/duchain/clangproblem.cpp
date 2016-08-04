@@ -114,7 +114,7 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
     CXFile diagnosticFile;
     clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
     const ClangString fileName(clang_getFileName(diagnosticFile));
-    DocumentRange docRange(fileName.toIndexed(), KTextEditor::Range(location, location));
+    DocumentRange docRange(IndexedString(QUrl::fromLocalFile(fileName.toString()).adjusted(QUrl::NormalizePathSegments)), KTextEditor::Range(location, location));
     const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
     for (uint i = 0; i < numRanges; ++i) {
         auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toRange();
