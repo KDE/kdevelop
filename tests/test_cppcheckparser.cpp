@@ -58,20 +58,19 @@ void TestCppcheckParser::testParser()
         "</results>");
 
     cppcheck::CppcheckParser parser;
-
     parser.addData(cppcheck_example_output);
     parser.parse();
 
-    auto problems = parser.problems();
+    const auto problems = parser.problems();
     QVERIFY(!problems.empty());
 
-    KDevelop::IProblem::Ptr p = problems[0];
+    IProblem::Ptr p = problems[0];
     QCOMPARE(p->description(), QStringLiteral("Memory leak: ej"));
     QCOMPARE(p->explanation(), QStringLiteral("Memory leak: ej"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/kdesrc/kdev-cppcheck/plugin.cpp"));
     QCOMPARE(p->finalLocation().start().line()+1, 169);
-    QCOMPARE(p->severity(), KDevelop::IProblem::Error);
-    QCOMPARE(p->source(), KDevelop::IProblem::Plugin);
+    QCOMPARE(p->severity(), IProblem::Error);
+    QCOMPARE(p->source(), IProblem::Plugin);
 
     // test problem with 2 <location> elements
     p = problems[1];
@@ -79,8 +78,8 @@ void TestCppcheckParser::testParser()
     QCOMPARE(p->explanation(), QStringLiteral("location_test_verbose"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("location_test.cpp"));
     QCOMPARE(p->finalLocation().start().line()+1, 120);
-    QCOMPARE(p->severity(), KDevelop::IProblem::Hint);
-    QCOMPARE(p->source(), KDevelop::IProblem::Plugin);
+    QCOMPARE(p->severity(), IProblem::Hint);
+    QCOMPARE(p->source(), IProblem::Plugin);
 }
 
 QTEST_GUILESS_MAIN(TestCppcheckParser);
