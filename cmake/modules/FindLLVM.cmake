@@ -34,7 +34,7 @@ endif()
 # if the user specified LLVM_ROOT, use that and fail otherwise
 if (LLVM_ROOT)
   find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config HINTS ${LLVM_ROOT}/bin DOC "llvm-config executable" NO_DEFAULT_PATH)
-else()
+elseif (NOT LLVM_CONFIG_EXECUTABLE)
   # find llvm-config, prefer the one with a version suffix, e.g. llvm-config-3.5
   # note: FreeBSD installs llvm-config as llvm-config35 and so on
   # note: on some distributions, only 'llvm-config' is shipped, so let's always try to fallback on that
@@ -62,9 +62,11 @@ if (LLVM_CONFIG_EXECUTABLE)
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   if (NOT LLVM_VERSION)
-    set(_LLVM_ERROR_MESSAGE "Failed to parse version from llvm-config")
+    set(_LLVM_ERROR_MESSAGE "Failed to parse version from ${LLVM_CONFIG_EXECUTABLE}")
+    unset(LLVM_CONFIG_EXECUTABLE CACHE)
   elseif (LLVM_FIND_VERSION VERSION_GREATER LLVM_VERSION)
-    set(_LLVM_ERROR_MESSAGE "LLVM version too old: ${LLVM_VERSION}")
+    set(_LLVM_ERROR_MESSAGE "${LLVM_CONFIG_EXECUTABLE} (version ${LLVM_VERSION}) unsuitable: too old for requested version ${LLVM_FIND_VERSION}")
+    unset(LLVM_CONFIG_EXECUTABLE CACHE)
   else()
     set(LLVM_FOUND TRUE)
   endif()

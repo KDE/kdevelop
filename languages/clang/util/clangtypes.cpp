@@ -147,7 +147,7 @@ DocumentRange ClangRange::toDocumentRange() const
     CXFile file;
     clang_getFileLocation(start, &file, 0, 0, 0);
     ClangString fileName(clang_getFileName(file));
-    return {IndexedString(fileName.c_str()), toRange()};
+    return {IndexedString(QUrl::fromLocalFile(fileName.toString()).adjusted(QUrl::NormalizePathSegments)), toRange()};
 }
 
 KTextEditor::Range ClangRange::toRange() const
