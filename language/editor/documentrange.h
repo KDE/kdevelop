@@ -38,7 +38,9 @@ public:
   
     inline DocumentRange(const IndexedString& document, const KTextEditor::Range& range)
       : KTextEditor::Range(range), document(document)
-    {}
+    {
+      Q_ASSERT(document.toUrl() == document.toUrl().adjusted(QUrl::NormalizePathSegments));
+    }
 
     inline bool operator==(const DocumentRange& rhs) const {
       return document == rhs.document && *static_cast<const KTextEditor::Range*>(this) == rhs;
