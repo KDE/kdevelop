@@ -23,9 +23,9 @@
 #include <QtCore/QStack>
 #include <algorithm>
 
-//#define DEBUG
+//#define DEBUG_SETREPOSITORY
 
-#ifdef DEBUG
+#ifdef DEBUG_SETREPOSITORY
 #define ifDebug(X) X
 #else
 #define ifDebug(x)
@@ -33,7 +33,7 @@
 #define Q_ASSERT(x)
 #endif
 
-#ifndef DEBUG
+#ifndef DEBUG_SETREPOSITORY
 #define CHECK_SPLIT_POSITION(Node)
 #else
 #define CHECK_SPLIT_POSITION(node) Q_ASSERT(!(node).leftNode || (getLeftNode(&node)->end() <= splitPositionForRange((node).start, (node).end) && getRightNode(&node)->start() >= splitPositionForRange((node).start, (node).end)))
@@ -192,7 +192,7 @@ void SetNodeDataRequest::createItem(SetNodeData* item) const {
 
     Q_ASSERT((item->rightNode() && item->leftNode()) || (!item->rightNode() && !item->leftNode()));
 
-    #ifdef DEBUG
+#ifdef DEBUG_SETREPOSITORY
     //Make sure we split at the correct split position
     if(item->hasSlaves()) {
         uint split = splitPositionForRange(data.start, data.end);
@@ -200,7 +200,7 @@ void SetNodeDataRequest::createItem(SetNodeData* item) const {
         const SetNodeData* right = repository.itemFromIndex(item->rightNode());
         Q_ASSERT(split >= left->end() && split <= right->start());
     }
-    #endif
+#endif
     if(!data.leftNode() && setRepository) {
         for(uint a = item->start(); a < item->end(); ++a)
             setRepository->itemAddedToSets(a);
