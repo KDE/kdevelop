@@ -108,20 +108,12 @@ void DebugSession::initializeDebugger()
 {
     //addCommand(MI::EnableTimings, "yes");
 
-    // TODO: lldb data formatter
-    /*
+    // load data formatter
     QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              "kdevlldb/printers/lldbinit");
+                                              "kdevlldb/formatters/qt.py");
     if (!fileName.isEmpty()) {
-        QFileInfo fileInfo(fileName);
-        QString quotedPrintersPath = fileInfo.dir().path()
-                                             .replace('\\', "\\\\")
-                                             .replace('"', "\\\"");
-        queueCmd(new MICommand(MI::NonMI,
-            QString("python sys.path.insert(0, \"%0\")").arg(quotedPrintersPath)));
-        queueCmd(new MICommand(MI::NonMI, "source " + fileName));
+        addCommand(MI::NonMI, "command script import " + KShell::quoteArg(fileName));
     }
-    */
 
     // set a larger term width.
     // TODO: set term-width to exact max column count in console view

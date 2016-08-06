@@ -23,10 +23,23 @@
 
 - Remove duplicate breakpoint: look at breakpointController()->setDeleteDuplicateBreakpoints(true)
 
-- LLDB data formatter for Qt types
-- Data formatter for lldb
-    * if this works in MI?
-    * print static member?
+- LLDB data formatters
+    * Qt types
+        + [DONE] QString, QChar
+        + [DONE] QByteArray
+        + [DONE] QList, QStringList, QQueue
+        + [DONE] QVector, QStack
+        + QLinkedList
+        + QMap, QMultiMap
+        + QHash, QMultiHash
+        + QSet
+        + QDate, QTime, QDateTime
+        + QUrl
+        + QUuid
+    * KDE types
+        + KDevelop::Path
+        + KTextEditor::Cursor
+        + KTextEditor::Range
 
 - Show application exit reason in the Debug View
 
@@ -59,8 +72,10 @@
             - https://llvm.org/bugs/show_bug.cgi?id=28698
         + [SUBMITED] create disabled breakpoint with '-d' not working when combined with '-f'
             - https://llvm.org/bugs/show_bug.cgi?id=28703
-        + -break-enable has no effect
-    * breakpoint hit doesn't generate corresponding breakpoint-modified notification
+        + [SUBMITED] -break-enable has no effect
+            - https://llvm.org/bugs/show_bug.cgi?id=28857
+    * [SUBMITED] breakpoint hit doesn't generate corresponding breakpoint-modified notification
+        - https://llvm.org/bugs/show_bug.cgi?id=28860
       (needed to update hitCount)
     * -break-watch command not supported
         + use raw cli command 'break set var' doesn't provides MI response
@@ -73,11 +88,13 @@
     * can't have space in environment cd
     * -inferior-tty-set only has dummy implementation
     * 'process launch' doesn't provide thread-group-started notification
-    * sliently stop when attaching to process, which confuses the controller
+    * [SUBMITED] sliently stop when attaching to process, which confuses the controller
+        - https://llvm.org/bugs/show_bug.cgi?id=28858
     * [SUBMITED] sliently stop when request stop at start
         - https://llvm.org/bugs/show_bug.cgi?id=25000
     * [SUBMITED] [PATCHED] cli output not wrapped in console stream record
-    * [PATCHED] -data-disassemble start and end address parameter doesn't accept expressions
+    * [SUBMITED][PATCHED] -data-disassemble start and end address parameter doesn't accept expressions
+        - https://llvm.org/bugs/show_bug.cgi?id=28859
     * -gdb-set not fully implemented
         + environment
         + [SUBMITED] [PATCHED] disassembly-flavor
@@ -85,9 +102,9 @@
     * -gdb-show not fully implemented
         + [SUBMITED] [PATCHED] disassembly-flavor
             - https://llvm.org/bugs/show_bug.cgi?id=28718
+    * -data-list-register-values output format doesn't conform to spec
     * [SUBMITED] -stack-list-locals shows empty list
         - https://llvm.org/bugs/show_bug.cgi?id=28621
-    * -data-list-register-values output format doesn't conform to spec
     * File bug to lldb-mi for other missing commands
 
 - Fix TODOs in files

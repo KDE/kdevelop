@@ -50,6 +50,9 @@ target_link_libraries(kdevlldb
     KDev::Sublime
 )
 
+# Data Formatters
+add_subdirectory(formatters)
+
 # Unit tests
 set(test_lldb_SRCS
     unittests/test_lldb.cpp
