@@ -60,7 +60,7 @@
     * [DONE] not correctly raised when starting debug
     * correct prompt (from "(gdb)" to "(lldb)")
 
-- Handle error sometime with Command 'exec-run'. Invalid process during debug session.
+- [DONE] Handle error sometime with Command 'exec-run'. Invalid process during debug session.
 
 - An unified way to report error
 

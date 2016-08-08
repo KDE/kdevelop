@@ -60,6 +60,49 @@ QString doubleQuoteArg(QString arg)
     return '"' + arg + '"';
 }
 
+struct ExecRunHandler : public MICommandHandler
+{
+    ExecRunHandler(DebugSession *session, int maxRetry = 5)
+        : m_session(session)
+        , m_remainRetry(maxRetry)
+        , m_activeCommands(1)
+    {
+    }
+
+    void handle(const ResultRecord& r) override
+    {
+        --m_activeCommands;
+        if (r.reason == QLatin1String("error")) {
+            if (r.hasField("msg")
+                && r["msg"].literal().contains("Invalid process during debug session")) {
+                // for some unknown reason, lldb-mi sometimes fails to start process
+                if (m_remainRetry && m_session) {
+                    qCDebug(DEBUGGERLLDB) << "Retry starting";
+                    --m_remainRetry;
+                    // resend the command again.
+                    ++m_activeCommands;
+                    m_session->addCommand(ExecRun, QStringLiteral(""),
+                                          this, // use *this as handler, so we can track error times
+                                          CmdMaybeStartsRunning | CmdHandlesError);
+                    return;
+                }
+            }
+            qCDebug(DEBUGGERLLDB) << "Failed to start inferior:"
+                                  << "exceeded retry times or session become invalid";
+            m_session->stopDebugger();
+        }
+        if (m_activeCommands == 0)
+            delete this;
+    }
+
+    bool handlesError() override { return true; }
+    bool autoDelete() override { return false; }
+
+    QPointer<DebugSession> m_session;
+    int m_remainRetry;
+    int m_activeCommands;
+};
+
 DebugSession::DebugSession(LldbDebuggerPlugin *plugin)
     : MIDebugSession(plugin)
     , m_breakpointController(nullptr)
@@ -221,21 +264,16 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
         if (!remoteDebugging) {
             // FIXME: a hacky way to emulate tty setting on linux. Not sure if this provides all needed
             // functionalities of a pty. Should make this conditional on other platforms.
-            // FIXME: 'process launch' doesn't provide thread-group-started notification which MIDebugSession
-            // relies on to know the inferior has been started
-            QPointer<DebugSession> guarded_this(this);
-            addCommand(MI::NonMI,
-                       QStringLiteral("process launch --stdin %0 --stdout %0 --stderr %0").arg(m_tty->getSlave()),
-                       [guarded_this](const MI::ResultRecord &r) {
-                           qCDebug(DEBUGGERLLDB) << "process launched:" << r.reason;
-                           if (guarded_this)
-                               guarded_this->setDebuggerStateOff(s_appNotStarted | s_programExited);
-                       },
-                       CmdMaybeStartsRunning);
+
+            // no need to quote, settings set takes 'raw' input
+            addCommand(MI::NonMI, QStringLiteral("settings set target.input-path %0").arg(m_tty->getSlave()));
+            addCommand(MI::NonMI, QStringLiteral("settings set target.output-path %0").arg(m_tty->getSlave()));
+            addCommand(MI::NonMI, QStringLiteral("settings set target.error-path %0").arg(m_tty->getSlave()));
         } else {
             // what is the expected behavior for using external terminal when doing remote debugging?
-            addCommand(MI::ExecRun, QString(), CmdMaybeStartsRunning);
         }
+        addCommand(MI::ExecRun, QString(), new ExecRunHandler(this),
+                   CmdMaybeStartsRunning | CmdHandlesError);
     }, CmdMaybeStartsRunning));
     return true;
 }
