@@ -24,6 +24,7 @@
 #include "debuglog.h"
 #include "midebugsession.h"
 #include "mi/micommand.h"
+#include "stringhelpers.h"
 
 #include <debugger/interfaces/ivariablecontroller.h>
 #include <interfaces/icore.h>
@@ -47,6 +48,24 @@ MIVariable::MIVariable(MIDebugSession *session, TreeModel* model, TreeItem* pare
     : Variable(model, parent, expression, display)
     , debugSession(session)
 {
+}
+
+MIVariable *MIVariable::createChild(const Value& child)
+{
+    if (!debugSession) return nullptr;
+    auto var = static_cast<MIVariable*>(debugSession->variableController()->createVariable(model(), this, child["exp"].literal()));
+    var->setTopLevel(false);
+    var->setVarobj(child["name"].literal());
+    bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
+    var->setHasMoreInitial(hasMore);
+
+    // *this must be parent's child before we can set type and value
+    appendChild(var);
+
+    var->setType(child["type"].literal());
+    var->setValue(formatValue(child["value"].literal()));
+    var->setChanged(true);
+    return var;
 }
 
 MIVariable::~MIVariable()
@@ -117,7 +136,7 @@ public:
             variable->setHasMore(hasMore);
 
             variable->setType(r["type"].literal());
-            variable->setValue(r["value"].literal());
+            variable->setValue(variable->formatValue(r["value"].literal()));
             hasValue = !r["value"].literal().isEmpty();
             if (variable->isExpanded() && r["numchild"].toInt()) {
                 variable->fetchMoreChildren();
@@ -188,17 +207,8 @@ public:
                                           QString("--all-values \"%1\"").arg(child["name"].literal()),
                                           this/*use again as handler*/);
                 } else {
-                    KDevelop::Variable* xvar = m_session->variableController()->
-                        createVariable(variable->model(), variable,
-                                       child["exp"].literal());
-                    MIVariable* var = static_cast<MIVariable*>(xvar);
-                    var->setTopLevel(false);
-                    var->setVarobj(child["name"].literal());
-                    bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
-                    var->setHasMoreInitial(hasMore);
-                    variable->appendChild(var);
-                    var->setType(child["type"].literal());
-                    var->setValue(child["value"].literal());
+                    variable->createChild(child);
+                    // it's automatically appended to variable's children list
                 }
             }
         }
@@ -276,28 +286,13 @@ void MIVariable::handleUpdate(const Value& var)
             }
         }
 
-        // FIXME: the below code is essentially copy-paste from
-        // FetchMoreChildrenHandler. We need to introduce GDB-specific
-        // subclass of KDevelop::Variable that is capable of creating
-        // itself from MI output directly, and relay to that.
         if (var.hasField("new_children"))
         {
             const Value& children = var["new_children"];
-            for (int i = 0; i < children.size(); ++i) {
-                const Value& child = children[i];
-                const QString& exp = child["exp"].literal();
-
-                if (debugSession) {
-                    auto xvar = debugSession->variableController()->createVariable(model(), this, exp);
-                    auto var = static_cast<MIVariable*>(xvar);
-                    var->setTopLevel(false);
-                    var->setVarobj(child["name"].literal());
-                    bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
-                    var->setHasMoreInitial(hasMore);
-                    appendChild(var);
-                    var->setType(child["type"].literal());
-                    var->setValue(child["value"].literal());
-                    var->setChanged(true);
+            if (debugSession) {
+                for (int i = 0; i < children.size(); ++i) {
+                    createChild(children[i]);
+                    // it's automatically appended to this's children list
                 }
             }
         }
@@ -305,7 +300,7 @@ void MIVariable::handleUpdate(const Value& var)
         if (var.hasField("type_changed") && var["type_changed"].literal() == "true") {
             setType(var["new_type"].literal());
         }
-        setValue(var["value"].literal());
+        setValue(formatValue(var["value"].literal()));
         setChanged(true);
         setHasMore(var.hasField("has_more") && var["has_more"].toInt());
     }
@@ -318,10 +313,7 @@ const QString& MIVariable::varobj() const
 
 QString MIVariable::enquotedExpression() const
 {
-    QString expr = expression();
-    expr.replace('"', "\\\"");
-    expr = expr.prepend('"').append('"');
-    return expr;
+    return Utils::quoteExpression(expression());
 }
 
 
@@ -334,8 +326,8 @@ public:
 
     void handle(const ResultRecord &r) override
     {
-        if(r.hasField("value"))
-            m_variable.data()->setValue(r["value"].literal());
+        if(m_variable && r.hasField("value"))
+            m_variable->setValue(m_variable->formatValue(r["value"].literal()));
     }
 private:
     QPointer<MIVariable> m_variable;
@@ -359,4 +351,9 @@ void MIVariable::formatChanged()
                                      new SetFormatHandler(this));
         }
     }
+}
+
+QString MIVariable::formatValue(const QString &rawValue) const
+{
+    return rawValue;
 }

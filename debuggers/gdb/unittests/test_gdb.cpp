@@ -1203,12 +1203,15 @@ void GdbTest::testVariablesWatchesQuotes()
 
     TestLaunchConfiguration cfg;
 
-    const QString testString("test");
-    const QString quotedTestString("\"" + testString + "\"");
+    // the unquoted string (the actual content):               t\"t
+    // quoted string (what we would write as a c string):     "t\\\"t"
+    // written in source file:                             R"("t\\\"t")"
+    const QString testString("t\\\"t"); // the actual content
+    const QString quotedTestString(R"("t\\\"t")");
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 38);
     QVERIFY(session->startDebugging(&cfg, m_iface));
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     variableCollection()->watches()->add(quotedTestString); //just a constant string
     QTest::qWait(300);
@@ -1227,7 +1230,14 @@ void GdbTest::testVariablesWatchesQuotes()
     {
         COMPARE_DATA(variableCollection()->index(ind, 0, testStr), QString::number(ind));
         QChar c = testString.at(ind);
-        QString value = QString::number(c.toLatin1()) + " '" + c + "'";
+        QString value = QString::number(c.toLatin1()) + " '";
+        if (c == '\\')
+            value += "\\\\";
+        else if (c == '\'')
+            value += "\\'";
+        else
+            value += c;
+        value += "'";
         COMPARE_DATA(variableCollection()->index(ind, 1, testStr), value);
     }
     COMPARE_DATA(variableCollection()->index(len, 0, testStr), QString::number(len));

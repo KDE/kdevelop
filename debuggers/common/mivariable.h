@@ -32,6 +32,7 @@
 
 class CreateVarobjHandler;
 class FetchMoreChildrenHandler;
+class SetFormatHandler;
 namespace KDevMI {
 class MIDebugSession;
 class MIVariable : public KDevelop::Variable
@@ -61,8 +62,15 @@ protected: // Variable overrides
 protected: // Internal
     friend class ::CreateVarobjHandler;
     friend class ::FetchMoreChildrenHandler;
+    friend class ::SetFormatHandler;
+
+    /**
+     * Construct a MIVariable child directly from a MI value
+     */
+    MIVariable *createChild(const MI::Value &child);
 
     QString enquotedExpression() const;
+    virtual QString formatValue(const QString &rawValue) const;
 
     bool sessionIsAlive() const;
 

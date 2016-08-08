@@ -59,6 +59,8 @@ public:
 
     void updateAllVariables();
 
+    void setFormatterPath(const QString &path);
+
 public Q_SLOTS:
     void interruptDebugger() override;
 
@@ -83,6 +85,8 @@ private:
     BreakpointController *m_breakpointController;
     VariableController *m_variableController;
     LldbFrameStackModel *m_frameStackModel;
+
+    QString m_formatterPath;
 };
 
 } // end of namespace GDB

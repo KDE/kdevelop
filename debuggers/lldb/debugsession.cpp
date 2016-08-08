@@ -147,15 +147,23 @@ MICommand *DebugSession::createCommand(MI::CommandType type, const QString& argu
     return new LldbCommand(type, arguments, flags);
 }
 
+void DebugSession::setFormatterPath(const QString &path)
+{
+    m_formatterPath = path;
+}
+
 void DebugSession::initializeDebugger()
 {
     //addCommand(MI::EnableTimings, "yes");
 
     // load data formatter
-    QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              "kdevlldb/formatters/qt.py");
-    if (!fileName.isEmpty()) {
-        addCommand(MI::NonMI, "command script import " + KShell::quoteArg(fileName));
+    auto formatterPath = m_formatterPath;
+    if (formatterPath.isEmpty()) {
+        formatterPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                               "kdevlldb/formatters/qt.py");
+    }
+    if (!formatterPath.isEmpty()) {
+        addCommand(MI::NonMI, "command script import " + KShell::quoteArg(formatterPath));
     }
 
     // set a larger term width.

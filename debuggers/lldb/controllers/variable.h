@@ -48,6 +48,7 @@ public:
 
 protected:
     void formatChanged() override;
+    QString formatValue(const QString &value) const override;
 };
 
 } // end of namespace LLDB

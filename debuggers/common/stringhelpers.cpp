@@ -16,10 +16,16 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "stringhelpers.h"
+
+#include "debuglog.h"
+
 #include <language/duchain/stringhelpers.h>
 #include <language/duchain/safetycounter.h>
-#include <QString>
+
+#include <QByteArray>
 #include <QChar>
+#include <QString>
 #include <QStringList>
 
 namespace Utils {
@@ -167,18 +173,114 @@ int expressionAt( const QString& text, int index ) {
 
 QString quoteExpression(QString expr)
 {
-    expr.replace('"', "\\\"");
-    expr = expr.prepend('"').append('"');
-    return expr;
+    return quote(expr, '"');
 }
 
 QString unquoteExpression(QString expr)
 {
-    if (expr.left(1) == QString('"') && expr.right(1) == QString('"')) {
-        expr = expr.mid(1, expr.length()-2);
-        expr.replace("\\\"", "\"");
+    return unquote(expr, false);
+}
+
+QString quote(QString str, char quoteCh)
+{
+    str.replace("\\", "\\\\").replace(quoteCh, QStringLiteral("\\") + quoteCh);
+    return str.prepend(quoteCh).append(quoteCh);
+}
+
+QString unquote(const QString &str, bool unescapeUnicode, char quoteCh)
+{
+    if (str.startsWith(quoteCh) && str.endsWith(quoteCh)) {
+        QString res;
+        res.reserve(str.length());
+        bool esc = false;
+        int type = 0;
+        QString escSeq;
+        escSeq.reserve(4);
+        // skip begining and ending quoteCh, no need for str = str.mid(1, str.length() - 2)
+        for (int i = 1; i != str.length() - 1; i++) {
+            auto ch = str[i];
+            if (esc) {
+                switch (ch.unicode()) {
+                case '\\':
+                    if (type != 0) {
+                        escSeq += ch;
+                        qCDebug(DEBUGGERCOMMON) << "Unrecognized escape sequence:" << escSeq;
+                        res += '\\';
+                        res += escSeq;
+                        escSeq.clear();
+                        esc = false;
+                        type = 0;
+                    } else {
+                        res.append('\\');
+                        // escSeq.clear();    // escSeq must be empty.
+                        esc = false;
+                    }
+                    break;
+                case 'u':
+                case 'x':
+                    if (type != 0 || !unescapeUnicode) {
+                        escSeq += ch;
+                        qCDebug(DEBUGGERCOMMON) << "Unrecognized escape sequence:" << escSeq;
+                        res += '\\';
+                        res += escSeq;
+                        escSeq.clear();
+                        esc = false;
+                        type = 0;
+                    } else {
+                        type = ch == 'u' ? 1 : 2;
+                    }
+                    break;
+                case '0': case '1': case '2': case '3': case '4':
+                case '5': case '6': case '7': case '8': case '9':
+                case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
+                case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
+                    escSeq += ch;
+                    if (type == 0) {
+                        qCDebug(DEBUGGERCOMMON) << "Unrecognized escape sequence:" << escSeq;
+                        res += '\\';
+                        res += escSeq;
+                        escSeq.clear();
+                        esc = false;
+                        type = 0;
+                    } else {
+                        // \uNNNN
+                        // \xNN
+                        if (escSeq.length() == (type == 1 ? 4 : 2)) {
+                            // no need to handle error, we know for sure escSeq is '[0-9a-fA-F]+'
+                            auto code = escSeq.toInt(nullptr, 16);
+                            res += QChar(code);
+                            escSeq.clear();
+                            esc = false;
+                            type = 0;
+                        }
+                    }
+                    break;
+                default:
+                    if (type == 0 && ch == quoteCh) {
+                        res += ch;
+                    } else {
+                        escSeq += ch;
+                        qCDebug(DEBUGGERCOMMON) << "Unrecognized escape sequence:" << escSeq;
+                        res += '\\';
+                        res += escSeq;
+                        escSeq.clear();
+                    }
+                    esc = false;
+                    type = 0;
+                    break;
+                }
+            } else {
+                if (ch == '\\') {
+                    esc = true;
+                    continue;
+                }
+                res += ch;
+            }
+        }
+        return res;
+    } else {
+        return str;
     }
-    return expr;
 }
 
 } // end of namespace Utils

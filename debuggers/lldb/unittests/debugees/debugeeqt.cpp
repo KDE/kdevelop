@@ -27,5 +27,6 @@ int main()
         x += QString::number(i);
         qDebug() << x;
     }
+    QString ustr = QString::fromUtf8("\u4f60\u597d\u4e16\u754c");
     return 0;
 }

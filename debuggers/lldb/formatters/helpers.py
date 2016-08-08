@@ -41,6 +41,28 @@ else:
     unichr = unichr
 # END
 
+def quote(string, quote='"'):
+    """Quote a string so it's suitable to be used in quote"""
+    return '{q}{s}{q}'.format(s = string.replace('\\', '\\\\').replace(quote, '\\' + quote),
+                              q = quote)
+
+def unquote(string, quote='"'):
+    """Unquote a string"""
+    if string.startswith(quote) and string.endswith(quote):
+        string = string.lstrip(quote).rstrip(quote)
+        ls = []
+        esc = False
+        for idx in range(0, len(string)):
+            ch = string[idx]
+            if ch == '\\':
+                if esc:
+                    ls.append(ch)
+                esc = not esc
+            else:
+                ls.append(ch)
+        string = ''.join(ls)
+    return string
+
 class SummaryProvider(object):
     """A lldb synthetic provider that defaults return real children of the value"""
     def __init__(self, valobj, internal_dict):

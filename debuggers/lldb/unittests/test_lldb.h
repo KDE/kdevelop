@@ -100,6 +100,7 @@ private slots:
     void testVariablesStartSecondSession();
     void testVariablesSwitchFrame();
     void testVariablesQuicklySwitchFrame();
+    void testVariablesNonascii();
     void testSwitchFrameLldbConsole();
 
     void testSegfaultDebugee();
@@ -120,7 +121,7 @@ private:
 
     KDevelop::VariableCollection *variableCollection();
     KDevelop::Variable *watchVariableAt(int i);
-    KDevelop::Variable *localVariableAt(int i);
+    QModelIndex localVariableIndexAt(int i, int col = 0);
 
 private:
     KDevelop::TestCore *m_core;

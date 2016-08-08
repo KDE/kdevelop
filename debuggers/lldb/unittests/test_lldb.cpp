@@ -44,6 +44,7 @@
 
 #include <QFileInfo>
 #include <QSignalSpy>
+#include <QString>
 #include <QStringList>
 #include <QTest>
 #include <QTemporaryFile>
@@ -149,6 +150,7 @@ public:
     {
         setSourceInitFile(false);
         m_frameStackModel = new TestFrameStackModel(this);
+        setFormatterPath(findSourceFile("../formatters/qt.py"));
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
 
@@ -181,11 +183,10 @@ Variable *LldbTest::watchVariableAt(int i)
     return dynamic_cast<Variable*>(variableCollection()->itemForIndex(idx));
 }
 
-Variable *LldbTest::localVariableAt(int i)
+QModelIndex LldbTest::localVariableIndexAt(int i, int col)
 {
     auto localRoot = variableCollection()->indexForItem(variableCollection()->locals(), 0);
-    auto idx = variableCollection()->index(i, 0, localRoot);
-    return dynamic_cast<Variable*>(variableCollection()->itemForIndex(idx));
+    return variableCollection()->index(i, col, localRoot);
 }
 
 // Called before the first testfunction is executed
@@ -1461,8 +1462,11 @@ void LldbTest::testVariablesWatchesQuotes()
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
 
-    const QString testString("test");
-    const QString quotedTestString("\"" + testString + "\"");
+    // the unquoted string (the actual content):               t\"t
+    // quoted string (what we would write as a c string):     "t\\\"t"
+    // written in source file:                             R"("t\\\"t")"
+    const QString testString("t\\\"t"); // the actual content
+    const QString quotedTestString(R"("t\\\"t")");
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), 38);
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -1661,6 +1665,26 @@ void LldbTest::testVariablesQuicklySwitchFrame()
     QVERIFY(locs.contains("x"));
 
     breakpoints()->removeRow(0);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+void LldbTest::testVariablesNonascii()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg(findExecutable("lldb_debugeeqt"));
+
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
+
+    QString fileName = findSourceFile("debugeeqt.cpp");
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30);
+
+    QVERIFY(session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->currentLine(), 30);
+    COMPARE_DATA(localVariableIndexAt(0, 1), QString("\"\u4f60\u597d\u4e16\u754c\""));
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }

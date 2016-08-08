@@ -71,7 +71,7 @@ def __lldb_init_module(debugger, unused):
     debugger.HandleCommand('type category enable kdevelop-qt')
 
 
-def dataForQString(valobj):
+def printableQString(valobj):
     pointer = 0
     length = 0
     if valobj.IsValid():
@@ -94,23 +94,26 @@ def dataForQString(valobj):
         # size in the number of chars, each char is 2 bytes in UTF16
         length = size.GetValueAsUnsigned(0) * 2
 
-    return (pointer, length)
+        error = lldb.SBError()
+        string_data = valobj.process.ReadMemory(pointer, length, error)
+        # The QString object might be not yet initialized. In this case size is a bogus value,
+        # and memory access may fail
+        if error.Success():
+            string = string_data.decode('utf-16').__repr__().lstrip("u'").rstrip("'")
+            return string, pointer, length
+    return None, 0, 0
 
 
 def QStringSummaryProvider(valobj, internal_dict):
     if valobj.IsValid():
-        content = valobj.GetChildMemberWithName('content')
+        content = valobj.GetChildMemberWithName('(content)')
         if content.IsValid():
-            return valobj.GetChildMemberWithName('content').GetSummary()
+            return content.GetSummary()
         else:
             # No synthetic provider installed, get the content by ourselves
-            dataPointer, byteLength = dataForQString(valobj)
-            error = lldb.SBError()
-            string_data = valobj.process.ReadMemory(dataPointer, byteLength, error)
-            # The QString object might be not yet initialized. In this case size is a bogus value,
-            # and memory access may fail
-            if error.Success():
-                return '"{}"'.format(string_data.decode('utf-16').encode('utf-8').replace('"', r'\"'))
+            printable, _, _ = printableQString(valobj)
+            if printable is not None:
+                return quote(printable)
     return None
 
 
@@ -119,7 +122,6 @@ class QStringFormatter(object):
 
     def __init__(self, valobj, internal_dict):
         self.valobj = valobj
-        self._size_member = None
         self._content_member = None
         self._members = []
         self._num_children = 0
@@ -134,54 +136,42 @@ class QStringFormatter(object):
         return self._num_children
 
     def get_child_index(self, name):
-        if name == 'size':
-            return 0
-        elif name == 'content':
-            return 1
+        if name == '(content)':
+            return self._num_children
         else:
             try:
-                return int(name.lstrip('[').rstrip(']')) + 2
+                return int(name.lstrip('[').rstrip(']'))
             except Exception:
                 return None
 
     def get_child_at_index(self, idx):
-        if idx < 0 or idx >= self._num_children:
+        if idx < 0 or idx > self._num_children:
             return None
-        if idx == 0:
-            return self._size_member
-        elif idx == 1:
+        if idx == self._num_children:
             return self._content_member
         else:
-            return self._members[idx - 2]
+            return self._members[idx]
 
     def update(self):
-        self._num_children = 2
+        self._num_children = 0
         self._members = []
         if not self.valobj.IsValid():
-            self._size_member = self.valobj.CreateValueFromExpression('size', '(size_t) 0')
             self._content_member = lldb.SBValue()
             return
 
-        dataPointer, byteLength = dataForQString(self.valobj)
+        printable, dataPointer, byteLength = printableQString(self.valobj)
         strLength = byteLength / 2
-        self._num_children += strLength
-        self._size_member = self.valobj.CreateValueFromExpression('size',
-                                                                  '(size_t) {}'.format(strLength))
+        self._num_children = strLength
 
-        error = lldb.SBError()
-        string_data = self.valobj.process.ReadMemory(dataPointer, byteLength, error)
-        # The QString object might be not yet initialized. In this case size is a bogus value,
-        # and memory access may fail
-        if error.Success():
-            string = string_data.decode('utf-16').encode('utf-8')
-
+        if printable is not None:
             for idx in range(0, strLength):
                 var = self.valobj.CreateValueFromAddress('[{}]'.format(idx),
                                                          dataPointer + idx * self._qchar_size,
                                                          self._qchar_type)
                 self._members.append(var)
-            self._content_member = self.valobj.CreateValueFromExpression('content',
-                                                                         '(const char*) "{}"'.format(string.replace('"', r'\"')))
+
+            self._content_member = self.valobj.CreateValueFromExpression('(content)',
+                                                                         '(const char*) {}'.format(quote(printable)))
         else:
             self._content_member = lldb.SBValue()
 
@@ -189,13 +179,11 @@ class QStringFormatter(object):
 def QCharSummaryProvider(valobj, internal_dict):
     if valobj.IsValid():
         ucs = valobj.GetChildMemberWithName('ucs').GetValueAsUnsigned(0)
-        return u"'{}'".format(unichr(ucs)).encode('utf-8')
-    return ''
+        return unichr(ucs).__repr__().lstrip('u')
+    return None
 
 
-def dataForQByteArray(valobj):
-    pointer = 0
-    length = 0
+def printableQByteArray(valobj):
     if valobj.IsValid():
         d = valobj.GetChildMemberWithName('d')
         data = d.GetChildMemberWithName('data')
@@ -211,26 +199,36 @@ def dataForQByteArray(valobj):
             pointer = d.GetValueAsUnsigned(0) + 24  # Fallback to hardcoded value
         length = size.GetValueAsUnsigned(0)
 
-    return (pointer, length)
+        error = lldb.SBError()
+        string_data = valobj.process.ReadMemory(pointer, length, error)
+        # The object might be not yet initialized. In this case size is a bogus value,
+        # and memory access may fail
+        if error.Success():
+            # replace non-ascii byte with a space and get a printable version
+            ls = list(string_data)
+            for idx in range(0, length):
+                byte = ord(ls[idx])
+                if byte >= 128 or byte < 0:
+                    ls[idx] = hex(byte).replace('0', '\\', 1)
+                elif byte == 0: # specical handle for 0, as hex(0) returns '\\x0'
+                    ls[idx] = '\\x00'
+            string = ''.join(ls)
+            return string, pointer, length
+    return None, 0, 0
 
 
 def QByteArraySummaryProvider(valobj, internal_dict):
     if valobj.IsValid():
-        content = valobj.GetChildMemberWithName('content')
+        content = valobj.GetChildMemberWithName('(content)')
         if content.IsValid():
-            return valobj.GetChildMemberWithName('content').GetSummary()
+            return content.GetSummary()
         else:
-            # No synthetic provider installed, get the content by ourselves
-            dataPointer, byteLength = dataForQByteArray(self.valobj)
-            error = lldb.SBError()
-            string_data = self.valobj.process.ReadMemory(dataPointer, byteLength, error)
-            # The object might be not yet initialized. In this case size is a bogus value,
-            # and memory access may fail
-            if error.Success():
-                # replace non-ascii byte with a space and get a printable version
-                string = ''.join([i if ord(i) < 128 else ' ' for i in string_data])
-                return '"{}"'.format(string)
+            # Our synthetic provider is not installed, get the content by ourselves
+            printable, _, _ = printableQByteArray(valobj)
+            if printable is not None:
+                return quote(printable)
     return None
+
 
 class QByteArrayFormatter(object):
     """A lldb synthetic provider for QByteArray"""
@@ -251,55 +249,45 @@ class QByteArrayFormatter(object):
         return self._num_children
 
     def get_child_index(self, name):
-        if name == 'size':
-            return 0
-        elif name == 'content':
-            return 1
+        # 'content' is a hidden child, since lldb won't ask for a child at
+        #  index >= self._num_children. But we know that index == self._num_children
+        #  is indeed valid, so we can use it in SummaryProvider, to reduce
+        #  another fetch from the inferior
+        if name == '(content)':
+            return self._num_children
         else:
             try:
-                return int(name.lstrip('[').rstrip(']')) + 2
+                return int(name.lstrip('[').rstrip(']'))
             except Exception:
                 return None
 
     def get_child_at_index(self, idx):
-        if idx < 0 or idx >= self._num_children:
+        if idx < 0 or idx > self._num_children:
             return None
-        if idx == 0:
-            return self._size_member
-        elif idx == 1:
+        # see comments in self.get_child_index
+        if idx == self._num_children:
             return self._content_member
         else:
-            return self._members[idx - 2]
+            return self._members[idx]
 
     def update(self):
-        self._num_children = 2
+        self._num_children = 0
         self._members = []
         if not self.valobj.IsValid():
-            self._size_member = self.valobj.CreateValueFromExpression('size', '(size_t) 0')
             self._content_member = lldb.SBValue()
             return
 
-        dataPointer, byteLength = dataForQByteArray(self.valobj)
-        strLength = byteLength
-        self._num_children += strLength
-        self._size_member = self.valobj.CreateValueFromExpression('size',
-                                                                  '(size_t) {}'.format(strLength))
+        printable, dataPointer, byteLength = printableQByteArray(self.valobj)
+        self._num_children = byteLength
 
-        error = lldb.SBError()
-        string_data = self.valobj.process.ReadMemory(dataPointer, byteLength, error)
-        # The object might be not yet initialized. In this case size is a bogus value,
-        # and memory access may fail
-        if error.Success():
-            # replace non-ascii byte with a space and get a printable version
-            string = ''.join([i if ord(i) < 128 else ' ' for i in string_data])
-
-            for idx in range(0, strLength):
+        if printable is not None:
+            self._content_member = self.valobj.CreateValueFromExpression('(content)',
+                                                                         '(const char*) {}'.format(quote(printable)))
+            for idx in range(0, self._num_children):
                 var = self.valobj.CreateValueFromAddress('[{}]'.format(idx),
                                                          dataPointer + idx * self._char_size,
                                                          self._char_type)
                 self._members.append(var)
-            self._content_member = self.valobj.CreateValueFromExpression('content',
-                                                                         '(const char*) "{}"'.format(string.replace('"', r'\"')))
         else:
             self._content_member = lldb.SBValue()
 

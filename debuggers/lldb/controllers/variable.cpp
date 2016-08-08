@@ -25,13 +25,16 @@
 #include "debuglog.h"
 #include "debugsession.h"
 #include "mi/micommand.h"
+#include "stringhelpers.h"
+
+#include <QString>
 
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
 using namespace KDevMI::MI;
 
 LldbVariable::LldbVariable(DebugSession *session, TreeModel *model, TreeItem *parent,
-                         const QString& expression, const QString& display)
+                           const QString& expression, const QString& display)
     : MIVariable(session, model, parent, expression, display)
 {
 }
@@ -72,4 +75,17 @@ void LldbVariable::formatChanged()
                 });
         }
     }
+}
+
+QString LldbVariable::formatValue(const QString& value) const
+{
+    // Data formatter emits value with unicode escape sequence for string and char,
+    // translate them back.
+    // Only check with first char is enough, as unquote will do the rest check
+    if (value.startsWith('"')) {
+        return Utils::quote(Utils::unquote(value, true));
+    } else if (value.startsWith('\'')) {
+        return Utils::quote(Utils::unquote(value, true, '\''), '\'');
+    }
+    return value;
 }
