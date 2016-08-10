@@ -10,8 +10,8 @@
     + [DONE] can break on start
     + [DONE] environment var successfully set
     + Check if environment-cd works in remote debugging
-    + Check if lldb supports unicode correctly
-        * a program output in encoding other than utf8 and different from host system default
+    + [DONE] Check if lldb supports unicode correctly
+        * [DONE] a program output in encoding other than utf8 and different from host system default
     + Make examine core test working with coredumpctl
 
 - [DONE] Verify MIParser/MILexer can handle output without any stream prefix: no they can't
@@ -29,10 +29,10 @@
         + [DONE] QByteArray
         + [DONE] QList, QStringList, QQueue
         + [DONE] QVector, QStack
-        + QLinkedList
-        + QMap, QMultiMap
-        + QHash, QMultiHash
-        + QSet
+        + [DONE] QLinkedList
+        + [DONE] QMap, QMultiMap
+        + [DONE] QHash, QMultiHash
+        + [DONE] QSet
         + QDate, QTime, QDateTime
         + QUrl
         + QUuid

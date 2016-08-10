@@ -23,6 +23,7 @@
 # Inspired by http://pythonhosted.org/six/
 
 import sys
+import lldb
 # Useful for very coarse version differentiation.
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
@@ -41,10 +42,12 @@ else:
     unichr = unichr
 # END
 
+
 def quote(string, quote='"'):
     """Quote a string so it's suitable to be used in quote"""
-    return '{q}{s}{q}'.format(s = string.replace('\\', '\\\\').replace(quote, '\\' + quote),
-                              q = quote)
+    return '{q}{s}{q}'.format(s=string.replace('\\', '\\\\').replace(quote, '\\' + quote),
+                              q=quote)
+
 
 def unquote(string, quote='"'):
     """Unquote a string"""
@@ -63,14 +66,64 @@ def unquote(string, quote='"'):
         string = ''.join(ls)
     return string
 
-class SummaryProvider(object):
-    """A lldb synthetic provider that defaults return real children of the value"""
+
+def invoke(val, method, args=''):
+    """Try to invoke a method on val, args are passed in as an expression string"""
+    # first try to get a valid frame
+    frame = None
+    for f in [val.frame, lldb.frame, val.process.selected_thread.GetFrameAtIndex(0)]:
+        if f.IsValid():
+            frame = f
+            break
+    if frame is None:
+        return lldb.SBValue()
+
+    # second try to get a pointer to val
+    if val.GetType().IsPointerType():
+        ptype = val.GetType()
+        addr = val.GetValueAsUnsigned(0)
+    else:
+        ptype = val.GetType().GetPointerType()
+        addr = val.AddressOf().GetValueAsUnsigned(0)
+
+    # third, build expression
+    expr = 'reinterpret_cast<const {}>({})->{}({})'.format(ptype.GetName(), addr, method, args)
+    res = frame.EvaluateExpression(expr)
+    #if not res.IsValid():
+        #print 'Expr {} on value {} failed'.format(expr, val.GetName())
+    return res
+
+
+def rename(name, val):
+    """Rename a SBValue"""
+    return val.CreateValueFromData(name, val.GetData(), val.GetType())
+
+
+def toSBPointer(valobj, addr, pointee_type):
+    """Convert a addr integer to SBValue"""
+    pointee = valobj.CreateValueFromAddress(None, addr, pointee_type)
+    return pointee.AddressOf()
+
+
+class HiddenMemberProvider(object):
+    """A lldb synthetic provider that can provide hidden children.
+       Original children is exposed in this way"""
+
     def __init__(self, valobj, internal_dict):
         self.valobj = valobj
-        self._members = []
-        self._name2idx = {}
-        self._has_children = False
+        # number of normally visible children
         self._num_children = 0
+        # cache for visible children
+        self._members = []
+        # cache for hidden children
+        self._hiddens = []
+        # child name to index
+        self._name2idx = {}
+        # whether to add original children
+        self._add_original = True
+
+    def has_children(self):
+        return self._num_children != 0
 
     def num_children(self):
         return self._num_children
@@ -81,27 +134,73 @@ class SummaryProvider(object):
         return None
 
     def get_child_at_index(self, idx):
-        if idx < 0 or idx >= self._num_children:
+        if not self.valobj.IsValid():
             return None
-        return self._members[idx]
+        if idx < 0:
+            return None
+        elif idx < self._num_children:
+            child = self._members[idx]
+        # These are hidden children, which won't be queried by lldb, but we know
+        # they are there, so we can use them in summary provider, to avoid another
+        # fetch from the inferior, and don't shadow original children
+        elif idx < self._num_children + len(self._hiddens):
+            child = self._hiddens[idx - self._num_children]
+        else:
+            return None
+
+        if isinstance(child, lldb.SBValue):
+            return child
+        else:
+            # we don't cache (const char[]) SBValue, ceate it on the fly
+            # LLDB tends to reuse a static data space for c-string literal type expressions,
+            # it might be overwriten by others if we cache them.
+            # child is a (name, expr) tuple in this case
+            return self.valobj.CreateValueFromExpression(*child)
+
+    @staticmethod
+    def _getName(var):
+        if isinstance(var, lldb.SBValue):
+            return var.GetName()
+        else:
+            return var[0]
 
     def update(self):
-        if not self.valobj.IsValid():
-            self._has_children = False
-        else:
-            self._has_children = self.valobj.MightHaveChildren()
-        self._num_children = 0
+        self._num_children = -1
         self._members = []
+        self._hiddens = []
         self._name2idx = {}
 
-        # The valobj doesn't has children or is invalid, no need to proceed
-        if self._has_children:
-            self._num_children = self.valobj.GetNumChildren()
-            self._members = [m for m in self.valobj]
-            self._name2idx = {
-                self._members[idx].GetName(): idx
-                for idx in range(0, self._num_children)
-            }
+        if not self.valobj.IsValid():
+            return
 
-    def has_children(self):
-        return self._has_children
+        # call _update on subclass
+        self._update()
+
+        # add valobj's original children as hidden children,
+        # must be called after self._update, so subclass has chance
+        # to disable it.
+        if self._add_original:
+            for v in self.valobj:
+                self._addChild(v, hidden=True)
+
+        # update num_children
+        if self._num_children == -1:
+            self._num_children = len(self._members)
+
+        # build name to index lookup, hidden value first, so normal value takes precedence
+        self._name2idx = {
+            self._getName(self._hiddens[idx]): idx + self._num_children
+            for idx in range(0, len(self._hiddens))
+        }
+        self._name2idx.update({
+            self._getName(self._members[idx]): idx
+            for idx in range(0, self._num_children)
+        })
+
+    def _update(self):
+        """override in subclass"""
+        pass
+
+    def _addChild(self, var, hidden=False):
+        cache = self._hiddens if hidden else self._members
+        cache.append(var)
