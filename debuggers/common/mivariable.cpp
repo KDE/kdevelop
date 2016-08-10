@@ -40,7 +40,8 @@ bool MIVariable::sessionIsAlive() const
 
     IDebugSession::DebuggerState s = debugSession->state();
     return s != IDebugSession::NotStartedState 
-        && s != IDebugSession::EndedState;
+        && s != IDebugSession::EndedState
+        && !debugSession->debuggerStateIsOn(s_shuttingDown);
 }
 
 MIVariable::MIVariable(MIDebugSession *session, TreeModel* model, TreeItem* parent,
