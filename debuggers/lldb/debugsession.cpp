@@ -158,9 +158,9 @@ void DebugSession::initializeDebugger()
 
     // load data formatter
     auto formatterPath = m_formatterPath;
-    if (formatterPath.isEmpty()) {
+    if (!QFileInfo(formatterPath).isFile()) {
         formatterPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                               "kdevlldb/formatters/qt.py");
+                                               "kdevlldb/formatters/all.py");
     }
     if (!formatterPath.isEmpty()) {
         addCommand(MI::NonMI, "command script import " + KShell::quoteArg(formatterPath));
