@@ -22,94 +22,233 @@
 
 #include "test_lldbformatters.h"
 
-#include <QTest>
-#include <QProcess>
+#include "controllers/variable.h"
+#include "controllers/variablecontroller.h"
+#include "debugsession.h"
+#include "stringhelpers.h"
+#include "testhelper.h"
+
+#include <execute/iexecuteplugin.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/ilaunchconfiguration.h>
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
+
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QDebug>
-#include <QFileInfo>
-#include <QDir>
+#include <QString>
+#include <QTest>
+#include <QUrl>
 
-#include "lldbformatterconfig.h"
+#define WAIT_FOR_STATE(session, state) \
+    do { if (!KDevMI::LLDB::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
 
-const QString BINARY_PATH(PRINTER_BIN_DIR);
+#define WAIT_FOR_STATE_AND_IDLE(session, state) \
+    do { if (!KDevMI::LLDB::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
 
-class LldbProcess : private QProcess
+#define WAIT_FOR_A_WHILE(session, ms) \
+    do { if (!KDevMI::LLDB::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; } while (0)
+
+#define WAIT_FOR(session, condition) \
+    do { \
+        KDevMI::LLDB::TestWaiter w((session), #condition, __FILE__, __LINE__); \
+        while (w.waitUnless((condition))) /* nothing */ ; \
+    } while(0)
+
+#define COMPARE_DATA(index, expected) \
+    do { if (!KDevMI::LLDB::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
+
+#define VERIFY_QSTRING(row, name, expected) \
+    do { if (!verifyQString((row), (name), (expected), __FILE__, __LINE__)) return; } while (0)
+
+#define findSourceFile(name) \
+    findSourceFile(__FILE__, (name))
+
+using namespace KDevelop;
+using namespace KDevMI::LLDB;
+
+class TestLaunchConfiguration : public ILaunchConfiguration
 {
 public:
-    LldbProcess(const QString &program) : QProcess()
-    {
-        setProcessChannelMode(MergedChannels);
-        // don't attempt to load .lldbinit in home (may cause unexpected results)
-        QProcess::start("lldb", (QStringList() << "--no-lldbinit" << (BINARY_PATH + '/' + program)));
-        const bool started = waitForStarted();
-        if (!started) {
-            qDebug() << "Failed to start 'lldb' executable:" << errorString();
-            Q_ASSERT(false);
-            return;
-        }
+    TestLaunchConfiguration(const QString& executable,
+                            const QUrl& workingDirectory = QUrl()) {
+        auto execPath = findExecutable(executable);
+        qDebug() << "FIND" << execPath;
+        c = new KConfig();
+        c->deleteGroup("launch");
+        cfg = c->group("launch");
+        cfg.writeEntry("isExecutable", true);
+        cfg.writeEntry("Executable", execPath);
+        cfg.writeEntry("Working Directory", workingDirectory);
+    }
+    ~TestLaunchConfiguration() override {
+        delete c;
+    }
+    const KConfigGroup config() const override { return cfg; }
+    KConfigGroup config() override { return cfg; };
+    QString name() const override { return QString("Test-Launch"); }
+    KDevelop::IProject* project() const override { return 0; }
+    KDevelop::LaunchConfigurationType* type() const override { return 0; }
 
-        QByteArray prompt = waitForPrompt();
-        QVERIFY(!prompt.contains("No such file or directory"));
-        execute("set confirm off");
-        execute("set print pretty on");
-        execute("set disable-randomization off"); // see https://phabricator.kde.org/D2188
-        QList<QByteArray> p;
-        QDir printersDir = QFileInfo(__FILE__).dir();
-        printersDir.cdUp(); // go up to get to the main printers directory
-        p << "python"
-          << "import sys"
-          << "sys.path.insert(0, '"+printersDir.path().toLatin1()+"')"
-          << "from qt import register_qt_printers"
-          << "register_qt_printers (None)"
-          << "from kde import register_kde_printers"
-          << "register_kde_printers (None)"
-          << "end";
-        foreach (const QByteArray &i, p) {
-            write(i + "\n");
-        }
-        waitForPrompt();
-    }
-    ~LldbProcess() override
-    {
-        write("q\n");
-        waitForFinished();
-    }
-    QByteArray waitForPrompt()
-    {
-        QByteArray output;
-        while (!output.endsWith("(lldb) ")) {
-            Q_ASSERT(state() == QProcess::Running);
-            waitForReadyRead();
-            QByteArray l = readAll();
-            //qDebug() << l;
-            output.append(l);
-        }
-        output.chop(7); //remove (lldb) prompt
-        if (output.contains("Traceback") || output.contains("Exception")) {
-            qDebug() << output;
-            QTest::qFail("Unexpected Python Exception", __FILE__, __LINE__);
-        }
-        return output;
-    }
+    KConfig *rootConfig() { return c; }
+private:
+    KConfigGroup cfg;
+    KConfig *c;
+};
 
-    QByteArray execute(const QByteArray &cmd)
+class TestDebugSession : public DebugSession
+{
+    Q_OBJECT
+public:
+    TestDebugSession() : DebugSession()
     {
-        write(cmd + "\n");
-        auto out = waitForPrompt();
-        qDebug() << cmd << " = " << out;
-        return out;
+        setSourceInitFile(false);
+        setFormatterPath(findSourceFile("../formatters/all.py"));
+
+        KDevelop::ICore::self()->debugController()->addSession(this);
+
+        variableController()->setAutoUpdate(IVariableController::UpdateLocals);
     }
 };
 
-void LldbFormattersTest::testQString()
+VariableCollection *LldbFormattersTest::variableCollection()
 {
-    LldbProcess lldb("qstring");
-    lldb.execute("break qstring.cpp:5");
-    lldb.execute("run");
-    QVERIFY(lldb.execute("print s").contains("\"test string\""));
-    lldb.execute("next");
-    QVERIFY(lldb.execute("print s").contains("\"test stringx\""));
+    return m_core->debugController()->variableCollection();
 }
 
+LldbVariable *LldbFormattersTest::watchVariableAt(int i)
+{
+    auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
+    auto idx = variableCollection()->index(i, 0, watchRoot);
+    return dynamic_cast<LldbVariable*>(variableCollection()->itemForIndex(idx));
+}
+
+QModelIndex LldbFormattersTest::localVariableIndexAt(int i, int col)
+{
+    auto localRoot = variableCollection()->indexForItem(variableCollection()->locals(), 0);
+    return variableCollection()->index(i, col, localRoot);
+}
+
+KDevelop::Breakpoint* LldbFormattersTest::addCodeBreakpoint(const QUrl& location, int line)
+{
+    return m_core->debugController()->breakpointModel()->addCodeBreakpoint(location, line);
+}
+
+// Called before the first testfunction is executed
+void LldbFormattersTest::initTestCase()
+{
+    AutoTestShell::init();
+    m_core = TestCore::initialize(Core::NoUi);
+
+    m_iface = m_core->pluginController()
+                ->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")
+                ->extension<IExecutePlugin>();
+    Q_ASSERT(m_iface);
+}
+
+// Called after the last testfunction was executed
+void LldbFormattersTest::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
+// Called before each testfunction is executed
+void LldbFormattersTest::init()
+{
+    //remove all breakpoints - so we can set our own in the test
+    KConfigGroup bpCfg = KSharedConfig::openConfig()->group("breakpoints");
+    bpCfg.writeEntry("number", 0);
+    bpCfg.sync();
+
+    auto count = m_core->debugController()->breakpointModel()->rowCount();
+    m_core->debugController()->breakpointModel()->removeRows(0, count);
+
+    while (variableCollection()->watches()->childCount() > 0) {
+        auto var = watchVariableAt(0);
+        if (!var) break;
+        var->die();
+    }
+
+    m_session = new TestDebugSession;
+}
+
+void LldbFormattersTest::cleanup()
+{
+    // Called after every testfunction
+    if (m_session)
+        m_session->stopDebugger();
+    WAIT_FOR_STATE(m_session, DebugSession::EndedState);
+    m_session.clear();
+}
+
+bool LldbFormattersTest::verifyQString(int index, const QString &name,
+                                       const QString &expected,
+                                       const char *file, int line)
+{
+    auto varidx = localVariableIndexAt(index, 0);
+    auto var = variableCollection()->itemForIndex(varidx);
+
+    if (!compareData(varidx, name, file, line)) {
+        return false;
+    }
+    if (!compareData(localVariableIndexAt(index, 1), Utils::quote(expected), file, line)) {
+        return false;
+    }
+
+    // fetch all children
+    auto childCount = 0;
+    while (childCount != variableCollection()->rowCount(varidx)) {
+        childCount = variableCollection()->rowCount(varidx);
+        var->fetchMoreChildren();
+        if (!waitForAWhile(m_session, 50, file, line))
+            return false;
+    }
+    if (childCount != expected.length()) {
+        QTest::qFail(qPrintable(QString("'%0' didn't match expected '%1' in %2:%3")
+                                .arg(childCount).arg(expected.length()).arg(file).arg(line)),
+                     file, line);
+        return false;
+    }
+
+    for (int i = 0; i != childCount; ++i) {
+        if (!compareData(variableCollection()->index(i, 0, varidx),
+                         QString("[%0]").arg(i), file, line)) {
+            return false;
+        }
+        if (!compareData(variableCollection()->index(i, 1, varidx),
+                         QString("'%0'").arg(expected[i]), file, line)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void LldbFormattersTest::testQString()
+{
+    TestLaunchConfiguration cfg("lldb_qstring");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qstring.cpp")), 4);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    VERIFY_QSTRING(0, "s", "test string");
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 5);
+
+    VERIFY_QSTRING(0, "s", "test stringx");
+
+    m_session->run();
+    WAIT_FOR_STATE(m_session, DebugSession::EndedState);
+}
+/*
 void LldbFormattersTest::testQByteArray()
 {
     LldbProcess lldb("qbytearray");
@@ -454,5 +593,8 @@ void LldbFormattersTest::testKDevelopTypes()
     QVERIFY(lldb.execute("print path1").contains("(\"tmp\", \"foo\")"));
     QVERIFY(lldb.execute("print path2").contains("(\"http://www.test.com\", \"tmp\", \"asdf.txt\")"));
 }
+*/
 
 QTEST_MAIN(LldbFormattersTest)
+
+#include "test_lldbformatters.moc"

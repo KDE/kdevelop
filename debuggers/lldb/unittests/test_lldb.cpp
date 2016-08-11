@@ -150,7 +150,7 @@ public:
     {
         setSourceInitFile(false);
         m_frameStackModel = new TestFrameStackModel(this);
-        setFormatterPath(findSourceFile("../formatters/qt.py"));
+        setFormatterPath(findSourceFile("../formatters/all.py"));
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
 

@@ -24,12 +24,32 @@
 #define LLDBFORMATTERSTEST_H
 
 #include <QObject>
+#include <QPointer>
 
+class IExecutePlugin;
+
+namespace KDevelop {
+class Breakpoint;
+class TestCore;
+class VariableCollection;
+}
+namespace KDevMI { namespace LLDB {
+class DebugSession;
+class LldbVariable;
+}
+}
 class LldbFormattersTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
+    void cleanupTestCase();
+
+    void init();
+    void cleanup();
+
     void testQString();
+    /*
     void testQByteArray();
     void testQListContainer_data();
     void testQListContainer();
@@ -49,6 +69,22 @@ private Q_SLOTS:
     void testQUuid();
     void testKTextEditorTypes();
     void testKDevelopTypes();
+    */
+
+private:
+    // helpers
+    bool verifyQString(int index, const QString &name, const QString &expected,
+                       const char *file, int line);
+
+private:
+    KDevelop::Breakpoint* addCodeBreakpoint(const QUrl& location, int line);
+    KDevelop::VariableCollection *variableCollection();
+    KDevMI::LLDB::LldbVariable *watchVariableAt(int i);
+    QModelIndex localVariableIndexAt(int i, int col = 0);
+
+    KDevelop::TestCore *m_core;
+    IExecutePlugin *m_iface;
+    QPointer<KDevMI::LLDB::DebugSession> m_session;
 };
 
 #endif

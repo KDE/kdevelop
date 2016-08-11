@@ -18,10 +18,19 @@
 
 - [DONE] Make config options in config page actually working
 
-- Clean up extra actions provided by gdb/lldb plugins
-    - Add lldb actions for attach to process and examine core file
+- Qt data formatter cause gangs when pause at middle of qt.cpp (deal with invalid data)
+    * [DONE] QString, QByteArray
+
+- Add lldb actions for attach to process and examine core file
 
 - Remove duplicate breakpoint: look at breakpointController()->setDeleteDuplicateBreakpoints(true)
+
+- Rework interrupt action
+
+- Variables view doesn't update when variable changes
+
+- Clean up extra actions provided by gdb/lldb plugins
+    * Global launch configuration for attach to process and examine core file
 
 - LLDB data formatters
     * Qt types
@@ -33,13 +42,13 @@
         + [DONE] QMap, QMultiMap
         + [DONE] QHash, QMultiHash
         + [DONE] QSet
-        + QDate, QTime, QDateTime
-        + QUrl
-        + QUuid
+        + [DONE] QDate, QTime, QDateTime
+        + [DONE] QUrl
+        + [DONE] QUuid
     * KDE types
-        + KDevelop::Path
-        + KTextEditor::Cursor
-        + KTextEditor::Range
+        + [DONE] KDevelop::Path
+        + [DONE] KTextEditor::Cursor
+        + [DONE] KTextEditor::Range
 
 - Show application exit reason in the Debug View
 

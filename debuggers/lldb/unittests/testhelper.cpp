@@ -34,7 +34,7 @@ namespace KDevMI { namespace LLDB {
 
 QUrl findExecutable(const QString& name)
 {
-    QFileInfo info(qApp->applicationDirPath()  + "/unittests/debugees/" + name);
+    QFileInfo info(qApp->applicationDirPath()  + "/debugees/" + name);
     Q_ASSERT(info.exists());
     Q_ASSERT(info.isExecutable());
     return QUrl::fromLocalFile(info.canonicalFilePath());
