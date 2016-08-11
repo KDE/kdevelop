@@ -101,13 +101,47 @@ def rename(name, val):
 
 def toSBPointer(valobj, addr, pointee_type):
     """Convert a addr integer to SBValue"""
-    pointee = valobj.CreateValueFromAddress(None, addr, pointee_type)
-    return pointee.AddressOf()
+    addr = addr & 0xFFFFFFFFFFFFFFFF  # force unsigned
+    return valobj.CreateValueFromAddress(None, addr, pointee_type).AddressOf()
+
+
+def validAddr(valobj, addr):
+    """Test if a address is valid"""
+    return toSBPointer(valobj, addr,
+                       valobj.GetType().GetBasicType(lldb.eBasicTypeVoid).GetPointerType()).IsValid()
+
+
+def validPointer(pointer):
+    """Test if a SBValue pointer is valid"""
+    if not pointer.IsValid():
+        return False
+    if pointer.GetValueAsUnsigned(0) == 0:
+        return False
+    return toSBPointer(pointer, pointer.GetValueAsUnsigned(0), pointer.GetType().GetPointeeType()).IsValid()
+
+
+class AutoCacheValue(object):
+    """An object that can create itself when needed and cache the result"""
+    def __init__(self, creator):
+        super(AutoCacheValue, self).__init__()
+        self.creator = creator
+        self.cache = None
+        self.cached = False
+
+    def get(self):
+        if not self.cached:
+            self.cache = self.creator()
+            self.cached = True
+        return self.cache
 
 
 class HiddenMemberProvider(object):
     """A lldb synthetic provider that can provide hidden children.
        Original children is exposed in this way"""
+
+    @staticmethod
+    def _capping_size():
+        return 255
 
     def __init__(self, valobj, internal_dict):
         self.valobj = valobj
@@ -148,6 +182,10 @@ class HiddenMemberProvider(object):
         else:
             return None
 
+        if isinstance(child, AutoCacheValue):
+            print 'used auto cache value'
+            child = child.get()
+
         if isinstance(child, lldb.SBValue):
             return child
         else:
@@ -184,7 +222,7 @@ class HiddenMemberProvider(object):
                 self._addChild(v, hidden=True)
 
         # update num_children
-        if self._num_children == -1:
+        if self._num_children < 0:
             self._num_children = len(self._members)
 
         # build name to index lookup, hidden value first, so normal value takes precedence

@@ -105,35 +105,35 @@ def printableQString(valobj):
         size = d.GetChildMemberWithName('size')
 
         isQt4 = data.IsValid()
+        size_val = size.GetValueAsSigned(-1)
+        alloc = d.GetChildMemberWithName('alloc').GetValueAsUnsigned(0)
         if isQt4:
-            # some sanity check to see if we are dealing with garbage
-            alloc = d.GetChildMemberWithName('alloc').GetValueAsUnsigned(0)
-            size_val = size.GetValueAsUnsigned(0)
-            if size_val > alloc:
-                return None, 0, 0
+            alloc += 1
 
-            pointer = data.GetValueAsUnsigned(0)
-        else:
-            # some sanity check to see if we are dealing with garbage
-            isGarbage = True
-            alloc = d.GetChildMemberWithName('alloc').GetValueAsUnsigned(0)
-            size_val = size.GetValueAsUnsigned(0)
-            if size_val >= alloc:
-                return None, 0, 0
 
-            if offset.IsValid():
-                pointer = d.GetValueAsUnsigned(0) + offset.GetValueAsUnsigned(0)
-            else:
-                qarraydata_t = valobj.GetTarget().FindFirstType('QArrayData')
-                if qarraydata_t.IsValid():
-                    pointer = d.GetValueAsUnsigned(0) + qarraydata_t.GetByteSize()
-                else:
-                    pointer = d.GetValueAsUnsigned(0) + 24  # Fallback to hardcoded value
-        if pointer == 0:
+        # some sanity check to see if we are dealing with garbage
+        if size_val < 0 or size_val >= alloc:
             return None, 0, 0
 
+        tooLarge = ''
+        if size_val > HiddenMemberProvider._capping_size():
+            tooLarge = '...'
+            size_val = HiddenMemberProvider._capping_size()
+
+
+        if isQt4:
+            pointer = data.GetValueAsUnsigned(0)
+        elif offset.IsValid():
+                pointer = d.GetValueAsUnsigned(0) + offset.GetValueAsUnsigned(0)
+        else:
+            qarraydata_t = valobj.GetTarget().FindFirstType('QArrayData')
+            if qarraydata_t.IsValid():
+                pointer = d.GetValueAsUnsigned(0) + qarraydata_t.GetByteSize()
+            else:
+                pointer = d.GetValueAsUnsigned(0) + 24  # Fallback to hardcoded value
+
         # size in the number of chars, each char is 2 bytes in UTF16
-        length = size.GetValueAsUnsigned(0) * 2
+        length = size_val * 2
         if length == 0:
             return '', pointer, length
 
@@ -144,7 +144,7 @@ def printableQString(valobj):
             # and memory access may fail
             if error.Success():
                 string = string_data.decode('utf-16').__repr__().lstrip("u'").rstrip("'")
-                return string, pointer, length
+                return string + tooLarge, pointer, length
         except:
             pass
     return None, 0, 0
@@ -199,26 +199,29 @@ def printableQByteArray(valobj):
         data = d.GetChildMemberWithName('data')
         offset = d.GetChildMemberWithName('offset')
         size = d.GetChildMemberWithName('size')
-        alloc = d.GetChildMemberWithName('alloc')
-
 
         isQt4 = data.IsValid()
+        size_val = size.GetValueAsSigned(-1)
+        alloc = d.GetChildMemberWithName('alloc').GetValueAsUnsigned(0)
         if isQt4:
-            # sanity check
-            if size.GetValueAsUnsigned(0) > alloc.GetValueAsUnsigned(0):
-                return None, 0, 0
+            alloc += 1
+
+        # sanity check
+        if size_val < 0 or size_val >= alloc:
+            return None, 0, 0
+
+        if size_val > HiddenMemberProvider._capping_size():
+            tooLarge = '...'
+            size_val = HiddenMemberProvider._capping_size()
+
+        if isQt4:
             pointer = data.GetValueAsUnsigned(0)
-        else:
-            # sanity check
-            if size.GetValueAsUnsigned(0) >= alloc.GetValueAsUnsigned(0):
-                return None, 0, 0
-
-            if offset.IsValid():
+        elif offset.IsValid():
                 pointer = d.GetValueAsUnsigned(0) + offset.GetValueAsUnsigned(0)
-            else:
-                pointer = d.GetValueAsUnsigned(0) + 24  # Fallback to hardcoded value
+        else:
+            pointer = d.GetValueAsUnsigned(0) + 24  # Fallback to hardcoded value
 
-        length = size.GetValueAsUnsigned(0)
+        length = size_val
         if length == 0:
             return '', pointer, length
 
@@ -237,7 +240,7 @@ def printableQByteArray(valobj):
                     elif byte == 0: # specical handle for 0, as hex(0) returns '\\x0'
                         ls[idx] = '\\x00'
                 string = ''.join(ls)
-                return string, pointer, length
+                return string + tooLarge, pointer, length
         except:
             pass
     return None, 0, 0
@@ -325,16 +328,20 @@ class BasicListFormatter(HiddenMemberProvider):
 
     def _update(self):
         d = self.valobj.GetChildMemberWithName('d')
-        begin = d.GetChildMemberWithName('begin').GetValueAsUnsigned(0)
-        end = d.GetChildMemberWithName('end').GetValueAsUnsigned(0)
+        begin = d.GetChildMemberWithName('begin').GetValueAsSigned(-1)
+        end = d.GetChildMemberWithName('end').GetValueAsSigned(-1)
         array = d.GetChildMemberWithName('array')
+
+        # sanity check
+        if begin < 0 or end < 0 or end < begin:
+            return
 
         self._num_children = end - begin
 
         for idx in range(0, self._num_children):
-            pAt = array.GetValueAsUnsigned(0) + (begin + idx) * self._pvoid_size
+            offset = (begin + idx) * self._pvoid_size
             name = '[{}]'.format(idx)
-            var = array.CreateChildAtOffset(name, pAt, self._node_type)
+            var = array.CreateChildAtOffset(name, offset, self._node_type)
             if self._externalStorage:
                 # can't use var.Dereference() directly, as the returned SBValue has '*' prepended
                 # to its name. And SBValue name can't be changed once constructed.
@@ -382,13 +389,23 @@ class BasicVectorFormatter(HiddenMemberProvider):
         # Qt4 has 'p', Qt5 doesn't
         isQt4 = d.IsValid()
         if isQt4:
-            pArray = d.GetChildMemberWithName('array').GetAddress().GetLoadAddress(self.valobj.GetTarget())
+            pArray = d.GetChildMemberWithName('array').AddressOf().GetValueAsUnsigned(0)
         else:
             d = self.valobj.GetChildMemberWithName('d')
             offset = d.GetChildMemberWithName('offset')
             pArray = d.GetValueAsUnsigned(0) + offset.GetValueAsUnsigned(0)
 
-        self._num_children = d.GetChildMemberWithName('size').GetValueAsUnsigned(0)
+        # sanity check
+        if not toSBPointer(self.valobj, pArray, self._item_type).IsValid():
+            return
+
+        #self._num_children = d.GetChildMemberWithName('size').GetValueAsUnsigned(0)
+        self._num_children = d.GetChildMemberWithName('size').GetValueAsSigned(-1)
+        if self._num_children < 0:
+            return
+
+        if self._num_children > self._capping_size():
+            self._num_children = self._capping_size()
 
         for idx in range(0, self._num_children):
             var = self.valobj.CreateValueFromAddress('[{}]'.format(idx),
@@ -424,11 +441,18 @@ class QLinkedListFormatter(HiddenMemberProvider):
 
     def _update(self):
         d = self.valobj.GetChildMemberWithName('d')
-        self._num_children = d.GetChildMemberWithName('size').GetValueAsUnsigned(0)
+        self._num_children = d.GetChildMemberWithName('size').GetValueAsSigned(-1)
+
+        if self._num_children < 0:
+            return
 
         node = self.valobj.GetChildMemberWithName('e').GetChildMemberWithName('n')
 
         for idx in range(0, self._num_children):
+            if not node.IsValid():
+                self._members = []
+                self._num_children = 0
+                return
             var = node.GetChildMemberWithName('t')
             node = node.GetChildMemberWithName('n')
 
@@ -543,6 +567,13 @@ class BasicMapFormatter(HiddenMemberProvider):
             self.node_type = node_type
             self.payload_size = payload_size
 
+            # sanity check
+            self.is_garbage = False
+            if not validAddr(headerobj, self.header_addr):
+                self.is_garbage = True
+            if not validPointer(self.current):
+                self.is_garbage = True
+
         def __iter__(self):
             return self
 
@@ -553,6 +584,8 @@ class BasicMapFormatter(HiddenMemberProvider):
             return toSBPointer(self.current, pnode_addr, self.node_type)
 
         def __next__(self):
+            if self.is_garbage:
+                raise StopIteration
             if self.current.GetValueAsUnsigned(0) == self.header_addr:
                 raise StopIteration
             pnode = self.concrete(self.current)
@@ -677,7 +710,12 @@ class BasicHashFormatter(HiddenMemberProvider):
             self.null_node = valobj.GetChildMemberWithName('e')
             self.pnode_type = pnode_type
 
-            self.num_buckets = d.GetChildMemberWithName('numBuckets').GetValueAsUnsigned(0)
+            self.num_buckets = d.GetChildMemberWithName('numBuckets').GetValueAsSigned(-1)
+
+            self.is_garbage = False
+            if self.num_buckets < -1:
+                self.is_garbage = True
+                return
             self.current = self.firstNode()
 
         def __iter__(self):
@@ -714,6 +752,8 @@ class BasicHashFormatter(HiddenMemberProvider):
                 self.current = self.findNode(start)
 
         def __next__(self):
+            if self.is_garbage:
+                raise StopIteration
             if self.current.GetValueAsUnsigned(0) == self.null_node.GetValueAsUnsigned(0):
                 raise StopIteration
             pnode = self.current
@@ -721,14 +761,21 @@ class BasicHashFormatter(HiddenMemberProvider):
             return pnode
 
     def _update(self):
-        self._num_children = 0
+        self._num_children = self.valobj.GetChildMemberWithName('d').GetChildMemberWithName('size').GetValueAsSigned(-1)
+        if self._num_children < 0:
+            return
+
+        idx = 0
         for pnode in self._iterator(self.valobj, self._node_type.GetPointerType()):
             # dereference node and change to a user friendly name
-            name = '[{}]'.format(self._num_children)
-            self._num_children += 1
+            name = '[{}]'.format(idx)
+            idx += 1
             var = self.valobj.CreateValueFromData(name, pnode.GetPointeeData(),
                                                   self._node_type)
             self._addChild(var)
+        if idx != self._num_children:
+            self._members = []
+            self._num_children = 0
 
 
 class QHashFormatter(BasicHashFormatter):
@@ -756,6 +803,10 @@ class QSetFormatter(HiddenMemberProvider):
         super(QSetFormatter, self).__init__(valobj, internal_dict)
         self._hash_formatter = QHashFormatter(valobj.GetChildMemberWithName('q_hash'),
                                               internal_dict)
+
+    def num_children(self):
+        return self._num_children
+        pass
 
     def _update(self):
         self._hash_formatter.valobj = self.valobj.GetChildMemberWithName('q_hash')
@@ -809,7 +860,7 @@ class QDateFormatter(HiddenMemberProvider):
             m = mm + 3 - 12 * (mm / 10);
             y = dd - 4800 + (mm / 10);
             if y <= 0:
-                --y;
+                return None
         return dt.date(y, m, d)
 
     def _update(self):
@@ -821,6 +872,7 @@ class QDateFormatter(HiddenMemberProvider):
         # jd
         julianDay = self.valobj.GetChildMemberWithName('jd')
         self._addChild(julianDay)
+
 
         pydate = self.parse(julianDay.GetValueAsUnsigned(0))
         if pydate is None:
@@ -848,7 +900,7 @@ def QDateSummaryProvider(valobj, internal_dict):
             if pydate is not None:
                 content = pydate.isoformat().decode().__repr__().lstrip("u'").rstrip("'")
                 return quote(content)
-    return None
+    return '<Invalid>'
 
 
 class QTimeFormatter(HiddenMemberProvider):
@@ -862,7 +914,7 @@ class QTimeFormatter(HiddenMemberProvider):
 
     @staticmethod
     def parse(ds):
-        if ds == -1:
+        if ds < 0:
             return None
         MSECS_PER_HOUR = 3600000
         SECS_PER_MIN = 60
@@ -1097,6 +1149,8 @@ class QUrlFormatter(HiddenMemberProvider):
         # if no debug information is avaliable for Qt, try guessing the correct address
         # problem with this is that if QUrlPrivate members get changed, this fails
         addr = dataobj.GetValueAsUnsigned(0)
+        if not validAddr(dataobj, addr):
+            return (None,) * 9
 
         # skip QAtomicInt ref
         addr += self._int_type.GetByteSize()
