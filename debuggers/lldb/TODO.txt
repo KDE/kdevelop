@@ -20,7 +20,7 @@
 
 - [DONE] Remove duplicate breakpoint: look at breakpointController()->setDeleteDuplicateBreakpoints(true)
 
-- Rework interrupt action
+- [DONE] Rework interrupt action
 
 - Variables view doesn't update when variable changes
 
@@ -47,10 +47,7 @@
         + [DONE] KTextEditor::Cursor
         + [DONE] KTextEditor::Range
 
-- Show application exit reason in the Debug View
-
-- New config page options
-    * Inherit environment for inferior (related settings: inherit-env)
+- [DONE] Show application exit reason in the Debug View
 
 - Clean up tool views
     * register views
@@ -61,7 +58,6 @@
 
 - Qt data formatter cause hangs data size is too large
     * use dynamic caching
-
 
 - [DONE] Find a way to avoid duplicate tool views for GDB and LLDB plugin
 
