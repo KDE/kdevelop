@@ -298,8 +298,10 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
 
 void DebugSession::interruptDebugger()
 {
-    // lldb always uses async mode and prompt is always available.
-    // no need to interrupt
+    if (debuggerStateIsOn(s_dbgNotStarted|s_shuttingDown))
+        return;
+
+    addCommand(ExecInterrupt, QString(), CmdInterrupt);
     return;
 }
 
@@ -307,10 +309,10 @@ void DebugSession::ensureDebuggerListening()
 {
     // lldb always uses async mode and prompt is always available.
     // no need to interrupt
+    setDebuggerStateOff(s_dbgNotListening);
     // NOTE: there is actually a bug in lldb-mi that, when receiving SIGINT,
     // it would print '^done', which doesn't coresponds to any previous command.
     // This confuses our command queue.
-    return;
 }
 
 void DebugSession::handleFileExecAndSymbols(const MI::ResultRecord& r)
