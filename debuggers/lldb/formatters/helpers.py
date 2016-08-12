@@ -45,8 +45,25 @@ else:
 
 def quote(string, quote='"'):
     """Quote a string so it's suitable to be used in quote"""
-    return '{q}{s}{q}'.format(s=string.replace('\\', '\\\\').replace(quote, '\\' + quote),
-                              q=quote)
+    if isinstance(string, unicode):
+        ls = []
+        for uch in string:
+            code = ord(uch)
+            ch = chr(code)
+            if code > 255:
+                ls += '\\u{:04x}'.format(code)
+            elif code >= 127:
+                ls += '\\x{:02x}'.format(code)
+            elif uch == quote or uch == '\\':
+                ls += '\\' + ch
+            elif code == 0:
+                ls += '\\x00'
+            else:
+                ls += ch
+        return quote + ''.join(ls) + quote
+    else:
+        return '{q}{s}{q}'.format(s=string.replace('\\', '\\\\').replace(quote, '\\' + quote),
+                                  q=quote)
 
 
 def unquote(string, quote='"'):
@@ -183,7 +200,6 @@ class HiddenMemberProvider(object):
             return None
 
         if isinstance(child, AutoCacheValue):
-            print 'used auto cache value'
             child = child.get()
 
         if isinstance(child, lldb.SBValue):
@@ -193,6 +209,9 @@ class HiddenMemberProvider(object):
             # LLDB tends to reuse a static data space for c-string literal type expressions,
             # it might be overwriten by others if we cache them.
             # child is a (name, expr) tuple in this case
+            print 'child is', child
+            if len(child) != 2:
+                print 'error, const char[] value should be a tuple with two elements, it is', child
             return self.valobj.CreateValueFromExpression(*child)
 
     @staticmethod

@@ -115,9 +115,9 @@ def printableQString(valobj):
         if size_val < 0 or size_val >= alloc:
             return None, 0, 0
 
-        tooLarge = ''
+        tooLarge = u''
         if size_val > HiddenMemberProvider._capping_size():
-            tooLarge = '...'
+            tooLarge = u'...'
             size_val = HiddenMemberProvider._capping_size()
 
 
@@ -135,7 +135,7 @@ def printableQString(valobj):
         # size in the number of chars, each char is 2 bytes in UTF16
         length = size_val * 2
         if length == 0:
-            return '', pointer, length
+            return u'', pointer, length
 
         try:
             error = lldb.SBError()
@@ -143,7 +143,7 @@ def printableQString(valobj):
             # The QString object might be not yet initialized. In this case size is a bogus value,
             # and memory access may fail
             if error.Success():
-                string = string_data.decode('utf-16').__repr__().lstrip("u'").rstrip("'")
+                string = string_data.decode('utf-16')
                 return string + tooLarge, pointer, length
         except:
             pass
@@ -210,8 +210,9 @@ def printableQByteArray(valobj):
         if size_val < 0 or size_val >= alloc:
             return None, 0, 0
 
+        tooLarge = u''
         if size_val > HiddenMemberProvider._capping_size():
-            tooLarge = '...'
+            tooLarge = u'...'
             size_val = HiddenMemberProvider._capping_size()
 
         if isQt4:
@@ -223,7 +224,7 @@ def printableQByteArray(valobj):
 
         length = size_val
         if length == 0:
-            return '', pointer, length
+            return u'', pointer, length
 
         try:
             error = lldb.SBError()
@@ -239,7 +240,7 @@ def printableQByteArray(valobj):
                         ls[idx] = hex(byte).replace('0', '\\', 1)
                     elif byte == 0: # specical handle for 0, as hex(0) returns '\\x0'
                         ls[idx] = '\\x00'
-                string = ''.join(ls)
+                string = u''.join(ls)
                 return string + tooLarge, pointer, length
         except:
             pass
