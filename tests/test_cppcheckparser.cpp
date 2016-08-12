@@ -49,10 +49,15 @@ void TestCppcheckParser::testParser()
         "        <error id=\"memleak\" severity=\"error\" msg=\"Memory leak: ej\" verbose=\"Memory leak: ej\" cwe=\"401\">"
         "            <location file=\"/kdesrc/kdev-cppcheck/plugin.cpp\" line=\"169\"/>"
         "        </error>"
-        "        <error id=\"redundantAssignment\" severity=\"performance\" "
+        "        <error id=\"redundantAssignment\" severity=\"performance\""
         "               msg=\"location_test_msg\" verbose=\"location_test_verbose\">"
         "            <location file=\"location_test.cpp\" line=\"120\"/>"
         "            <location file=\"location_test.cpp\" line=\"100\"/>"
+        "        </error>"
+        "        <error id=\"variableScope\" severity=\"style\" inconclusive=\"true\""
+        "               msg=\"The scope of the variable...\""
+        "               verbose=\"...Here is an example...:\\012void f(int x)\\012{\\012    int i = 0;\\012}\\012...\">"
+        "            <location file=\"html_pre_test.cpp\" line=\"41\"/>"
         "        </error>"
         "    </errors>"
         "</results>");
@@ -66,7 +71,7 @@ void TestCppcheckParser::testParser()
 
     IProblem::Ptr p = problems[0];
     QCOMPARE(p->description(), QStringLiteral("Memory leak: ej"));
-    QCOMPARE(p->explanation(), QStringLiteral("Memory leak: ej"));
+    QCOMPARE(p->explanation(), QStringLiteral("<html>Memory leak: ej</html>"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/kdesrc/kdev-cppcheck/plugin.cpp"));
     QCOMPARE(p->finalLocation().start().line()+1, 169);
     QCOMPARE(p->severity(), IProblem::Error);
@@ -74,10 +79,19 @@ void TestCppcheckParser::testParser()
 
     // test problem with 2 <location> elements
     p = problems[1];
-    QCOMPARE(p->description(), QStringLiteral("location_test_msg"));
-    QCOMPARE(p->explanation(), QStringLiteral("location_test_verbose"));
+    QCOMPARE(p->description(), QStringLiteral("(performance) location_test_msg"));
+    QCOMPARE(p->explanation(), QStringLiteral("<html>location_test_verbose</html>"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("location_test.cpp"));
     QCOMPARE(p->finalLocation().start().line()+1, 120);
+    QCOMPARE(p->severity(), IProblem::Hint);
+    QCOMPARE(p->source(), IProblem::Plugin);
+
+    // test problem with '\\012' tokens in verbose message
+    p = problems[2];
+    QCOMPARE(p->description(), QStringLiteral("(style, inconclusive) The scope of the variable..."));
+    QCOMPARE(p->explanation(), QStringLiteral("<html>...Here is an example...:<pre>void f(int x)\n{\n    int i = 0;\n}</pre><br>...</html>"));
+    QCOMPARE(p->finalLocation().document.str(), QStringLiteral("html_pre_test.cpp"));
+    QCOMPARE(p->finalLocation().start().line()+1, 41);
     QCOMPARE(p->severity(), IProblem::Hint);
     QCOMPARE(p->source(), IProblem::Plugin);
 }

@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
  * Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
+ * Copyright 2015 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -17,32 +18,51 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "cppcheckparser.h"
-
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/icore.h>
-#include <interfaces/iproject.h>
-
 #include <QApplication>
-#include <QDir>
-
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <shell/problem.h>
 
 #include "debug.h"
-
-#include <util/path.h>
-
-#include <shell/problem.h>
+#include "cppcheckparser.h"
 
 namespace cppcheck {
 
-
-CppcheckParser::CppcheckParser(QObject* parent) :
-    ErrorLine(0),
-    Severity(Unknown)
+/**
+ * Convert the value of <verbose> attribute of <error> element from cppcheck's
+ * XML-output to 'good-looking' HTML-version. This is necessary because the
+ * displaying of the original message is performed without line breaks - such
+ * tooltips are uncomfortable to read, and large messages will not fit into the
+ * screen.
+ *
+ * This function put the original message into <html> tag that automatically
+ * provides line wrapping by builtin capabilities of Qt library. The source text
+ * also can contain tokens '\012' (line break) - they are present in the case of
+ * source code examples. In such cases, the entire text between the first and
+ * last tokens (i.e. source code) is placed into <pre> tag.
+ *
+ * @param[in] input the original value of <verbose> attribute
+ * @return HTML version for displaying in problem's tooltip
+ */
+QString verboseMessageToHtml( const QString & input )
 {
-    Q_UNUSED(parent)
+    QString output(QString("<html>%1</html>").arg(input.toHtmlEscaped()));
+
+    output.replace("\\012", "\n");
+
+    if (output.count('\n') >= 2) {
+        output.replace(output.indexOf('\n'), 1, "<pre>" );
+        output.replace(output.lastIndexOf('\n'), 1, "</pre><br>" );
+    }
+
+    return output;
+}
+
+CppcheckParser::CppcheckParser(QObject*) :
+    m_errorLine(0),
+    m_errorInconclusive(false),
+    m_errorSeverity(Unknown)
+{
 }
 
 CppcheckParser::~CppcheckParser()
@@ -52,80 +72,101 @@ CppcheckParser::~CppcheckParser()
 void CppcheckParser::clear()
 {
     m_stateStack.clear();
-    m_buffer.clear();
-    cppcheckArgs.clear();
-    programArgs.clear();
 }
+
 bool CppcheckParser::startElement()
 {
-    m_buffer.clear();
     State newState = Unknown;
 
     qCDebug(KDEV_CPPCHECK) << "CppcheckParser::startElement: elem: " << qPrintable(name().toString());
 
-
     if (name() == "results")
         newState = Results;
+
     else if (name() == "cppcheck")
         newState = CppCheck;
+
     else if (name() == "errors")
         newState = Errors;
+
     else if (name() == "location") {
         newState = Location;
         // use only first <location> element of the error
-        if (ErrorLine < 0) {
+        if (m_errorLine < 0) {
             if (attributes().hasAttribute("line"))
-                ErrorLine = attributes().value("line").toString().toInt();
+                m_errorLine = attributes().value("line").toString().toInt();
             if (attributes().hasAttribute("file"))
-                ErrorFile = attributes().value("file").toString();
+                m_errorFile = attributes().value("file").toString();
         }
-    } else if (name() == "error") {
-        newState = Error;
-        ErrorLine = -1;
-        ErrorFile.clear();
-        Message.clear();
-        MessageVerbose.clear();
-        Severity = "unknown";
-        if (attributes().hasAttribute("msg"))
-            Message = attributes().value("msg").toString();
-        if (attributes().hasAttribute("verbose"))
-            MessageVerbose = attributes().value("verbose").toString();
-        if (attributes().hasAttribute("severity"))
-            Severity = attributes().value("severity").toString();
+    }
 
-    } else {
+    else if (name() == "error") {
+        newState = Error;
+        m_errorLine = -1;
+        m_errorSeverity = "unknown";
+        m_errorInconclusive = false;
+        m_errorFile.clear();
+        m_errorMessage.clear();
+        m_errorVerboseMessage.clear();
+
+        if (attributes().hasAttribute("msg"))
+            m_errorMessage = attributes().value("msg").toString();
+
+        if (attributes().hasAttribute("verbose"))
+            m_errorVerboseMessage = verboseMessageToHtml(attributes().value("verbose").toString());
+
+        if (attributes().hasAttribute("severity"))
+            m_errorSeverity = attributes().value("severity").toString();
+
+        if (attributes().hasAttribute("inconclusive"))
+            m_errorInconclusive = true;
+    }
+
+    else {
         m_stateStack.push(m_stateStack.top());
         return true;
     }
+
     m_stateStack.push(newState);
+
     return true;
 }
 
 bool CppcheckParser::endElement()
 {
     qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: elem: " << qPrintable(name().toString());
+
     State state = m_stateStack.pop();
+
     switch (state) {
     case CppCheck:
         if (attributes().hasAttribute("version"))
             qCDebug(KDEV_CPPCHECK) << "Cppcheck report version: " << attributes().value("version");
         break;
+
     case Errors:
         // errors finished
         break;
+
     case Error:
-        qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: new error elem: line: " << ErrorLine << " at " << ErrorFile << ", msg: " << Message;
+        qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: new error elem: line: "
+                               << m_errorLine << " at " << m_errorFile
+                               << ", msg: " << m_errorMessage;
 
         storeError();
         break;
+
     case Results:
         // results finished
         break;
+
     case Location:
         break;
+
     default:
         break;
     }
+
     return true;
 }
 
@@ -133,23 +174,25 @@ void CppcheckParser::parse()
 {
     qCDebug(KDEV_CPPCHECK) << "CppcheckParser::parse!";
 
-
-
     while (!atEnd()) {
         int readNextVal = readNext();
+
         switch (readNextVal) {
         case StartDocument:
             clear();
             break;
+
         case StartElement:
             startElement();
             break;
+
         case EndElement:
             endElement();
             break;
+
         case Characters:
-            m_buffer += text().toString();
             break;
+
         default:
             qCDebug(KDEV_CPPCHECK) << "CppcheckParser::startElement: case: " << readNextVal;
             break;
@@ -163,8 +206,12 @@ void CppcheckParser::parse()
         case CustomError:
         case UnexpectedElementError:
         case NotWellFormedError:
-            KMessageBox::error(qApp->activeWindow(), i18n("Cppcheck XML Parsing: error at line %1, column %2: %3", lineNumber(), columnNumber(), errorString()), i18n("Cppcheck Error"));
+            KMessageBox::error(
+                qApp->activeWindow(),
+                i18n("Cppcheck XML Parsing: error at line %1, column %2: %3", lineNumber(), columnNumber(), errorString()),
+                i18n("Cppcheck Error"));
             break;
+
         case NoError:
         case PrematureEndOfDocumentError:
             break;
@@ -174,27 +221,38 @@ void CppcheckParser::parse()
 
 void CppcheckParser::storeError()
 {
-   KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem());
-   problem->setDescription(Message);
-   problem->setExplanation(MessageVerbose);
+    KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem());
+    QStringList messagePrefix;
 
-   KDevelop::DocumentRange range;
-   range.document = KDevelop::IndexedString(ErrorFile);
-   range.setBothLines(ErrorLine - 1);
+    problem->setSource(KDevelop::IProblem::Plugin);
 
-   problem->setFinalLocation(range);
+    if (m_errorSeverity == "error")
+        problem->setSeverity(KDevelop::IProblem::Error);
 
-   if (Severity == "error")
-       problem->setSeverity(KDevelop::IProblem::Error);
-   else
-   if (Severity == "warning")
-       problem->setSeverity(KDevelop::IProblem::Warning);
-   else
+    else if (m_errorSeverity == "warning")
+        problem->setSeverity(KDevelop::IProblem::Warning);
+
+    else {
        problem->setSeverity(KDevelop::IProblem::Hint);
 
-   problem->setSource(KDevelop::IProblem::Plugin);
+       messagePrefix.push_back(m_errorSeverity);
+    }
 
-   m_problems.push_back(problem);
+    if (m_errorInconclusive)
+        messagePrefix.push_back("inconclusive");
+
+    if (!messagePrefix.isEmpty())
+        m_errorMessage = QString("(%1) %2").arg(messagePrefix.join(", ")).arg(m_errorMessage);
+
+    problem->setDescription(m_errorMessage);
+    problem->setExplanation(m_errorVerboseMessage);
+
+    KDevelop::DocumentRange range;
+    range.document = KDevelop::IndexedString(m_errorFile);
+    range.setBothLines(m_errorLine - 1);
+    problem->setFinalLocation(range);
+
+    m_problems.push_back(problem);
 }
 
 }

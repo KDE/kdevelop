@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
  * Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
+ * Copyright 2015 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -28,22 +29,16 @@
 namespace cppcheck
 {
 
-/**
- * A class which parses cppcheck's XML output
- * and emits signals when items are parsed
- */
+/// A class which parses cppcheck's XML output
 class CppcheckParser : public QXmlStreamReader
 {
 public:
-
-    CppcheckParser(QObject* parent = nullptr);
+    explicit CppcheckParser(QObject* parent = nullptr);
     ~CppcheckParser();
 
     QVector<KDevelop::IProblem::Ptr> problems() const { return m_problems; }
 
-public:
     void parse();
-
 
 private:
     void storeError();
@@ -63,21 +58,18 @@ private:
     };
 
     QStack<State> m_stateStack;
-    QString m_buffer;
-    QHash<QString, QString> cppcheckArgs, programArgs;
 
     // error info
-    int ErrorLine;
-    QString ErrorFile;
-    QString Message;
-    QString MessageVerbose;
-    QString Severity;
-    QString ProjectPath;
+    int     m_errorLine;
+    bool    m_errorInconclusive;
+    QString m_errorFile;
+    QString m_errorMessage;
+    QString m_errorVerboseMessage;
+    QString m_errorSeverity;
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
-
 };
+
 }
 
-
-#endif /* _CPPCHECKPARSER_H_ */
+#endif
