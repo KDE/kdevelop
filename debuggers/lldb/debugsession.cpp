@@ -29,6 +29,7 @@
 #include "lldbcommand.h"
 #include "mi/micommand.h"
 #include "stty.h"
+#include "stringhelpers.h"
 
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>
@@ -53,12 +54,6 @@
 using namespace KDevMI::LLDB;
 using namespace KDevMI::MI;
 using namespace KDevelop;
-
-QString doubleQuoteArg(QString arg)
-{
-    arg.replace("\"", "\\\"");
-    return '"' + arg + '"';
-}
 
 struct ExecRunHandler : public MICommandHandler
 {
@@ -114,6 +109,8 @@ DebugSession::DebugSession(LldbDebuggerPlugin *plugin)
     m_frameStackModel = new LldbFrameStackModel(this);
 
     if (m_plugin) m_plugin->setupToolviews();
+
+    connect(this, &DebugSession::stateChanged, this, &DebugSession::handleSessionStateChange);
 }
 
 DebugSession::~DebugSession()
@@ -173,12 +170,30 @@ void DebugSession::initializeDebugger()
     qCDebug(DEBUGGERLLDB) << "Initialized LLDB";
 }
 
-void DebugSession::configure(ILaunchConfiguration *cfg, IExecutePlugin *)
+void DebugSession::configure(ILaunchConfiguration *cfg, IExecutePlugin *iexec)
 {
     // Read Configuration values
     KConfigGroup grp = cfg->config();
 
-    // break on start: can't use "-exec-run --start" because in lldb-mi
+    // Set the environment variables has effect only after target created
+    const EnvironmentGroupList l(KSharedConfig::openConfig());
+    QString envgrp = iexec->environmentGroup(cfg);
+    if (envgrp.isEmpty()) {
+        qCWarning(DEBUGGERCOMMON) << i18n("No environment group specified, looks like a broken "
+                                          "configuration, please check run configuration '%1'. "
+                                          "Using default environment group.", cfg->name());
+        envgrp = l.defaultGroup();
+    }
+    QStringList vars;
+    for (auto it = l.variables(envgrp).constBegin(),
+              ite = l.variables(envgrp).constEnd();
+         it != ite; ++it) {
+        vars.append(QStringLiteral("%0=%1").arg(it.key(), Utils::quote(it.value())));
+    }
+    // actually using lldb command 'settings set target.env-vars' which accepts multiple values
+    addCommand(GdbSet, "environment " + vars.join(" "));
+
+    // Break on start: can't use "-exec-run --start" because in lldb-mi
     // the inferior stops without any notification
     bool breakOnStart = grp.readEntry(KDevMI::Config::BreakOnStartEntry, false);
     if (breakOnStart) {
@@ -200,12 +215,6 @@ void DebugSession::configure(ILaunchConfiguration *cfg, IExecutePlugin *)
     setDebuggerStateOn(s_dbgBusy);
     raiseEvent(debugger_ready);
 
-    // custom config script
-    QUrl configLldbScript = grp.readEntry(Config::LldbConfigScriptEntry, QUrl());
-    if (configLldbScript.isValid()) {
-        addCommand(MI::NonMI, "command source -s TRUE " + KShell::quoteArg(configLldbScript.toLocalFile()));
-    }
-
     qCDebug(DEBUGGERGDB) << "Per inferior configuration done";
 }
 
@@ -217,14 +226,14 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
     KConfigGroup grp = cfg->config();
 
     // Create target as early as possible, so we can do target specific configuration later
-    QString filesymbols = doubleQuoteArg(executable);
+    QString filesymbols = Utils::quote(executable);
     bool remoteDebugging = grp.readEntry(Config::LldbRemoteDebuggingEntry, false);
     if (remoteDebugging) {
         auto connStr = grp.readEntry(Config::LldbRemoteServerEntry, QString());
         auto remoteDir = grp.readEntry(Config::LldbRemotePathEntry, QString());
         auto remoteExe = QDir(remoteDir).filePath(QFileInfo(executable).fileName());
 
-        filesymbols += " -r " + doubleQuoteArg(remoteExe);
+        filesymbols += " -r " + Utils::quote(remoteExe);
 
         addCommand(MI::FileExecAndSymbols, filesymbols,
                    this, &DebugSession::handleFileExecAndSymbols,
@@ -234,9 +243,9 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
                    this, &DebugSession::handleTargetSelect, CmdHandlesError);
 
         // ensure executable is on remote end
-        addCommand(MI::NonMI, QStringLiteral("platform mkdir -v 755 %0").arg(doubleQuoteArg(remoteDir)));
+        addCommand(MI::NonMI, QStringLiteral("platform mkdir -v 755 %0").arg(Utils::quote(remoteDir)));
         addCommand(MI::NonMI, QStringLiteral("platform put-file %0 %1")
-                              .arg(doubleQuoteArg(executable), doubleQuoteArg(remoteExe)));
+                              .arg(Utils::quote(executable), Utils::quote(remoteExe)));
     } else {
         addCommand(MI::FileExecAndSymbols, filesymbols,
                    this, &DebugSession::handleFileExecAndSymbols,
@@ -245,31 +254,13 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
 
     raiseEvent(connected_to_program);
 
-    // Set the environment variables has effect only after target created
-    const EnvironmentGroupList l(KSharedConfig::openConfig());
-    QString envgrp = iexec->environmentGroup(cfg);
-    if (envgrp.isEmpty()) {
-        qCWarning(DEBUGGERCOMMON) << i18n("No environment group specified, looks like a broken "
-                                          "configuration, please check run configuration '%1'. "
-                                          "Using default environment group.", cfg->name());
-        envgrp = l.defaultGroup();
-    }
-    QStringList vars;
-    for (auto it = l.variables(envgrp).constBegin(),
-              ite = l.variables(envgrp).constEnd();
-         it != ite; ++it) {
-        vars.append(QStringLiteral("%0=%1").arg(it.key(), doubleQuoteArg(it.value())));
-    }
-    // actually using lldb command 'settings set target.env-vars' which accepts multiple values
-    addCommand(GdbSet, "environment " + vars.join(" "));
-
     // Do other per target config
     configure(cfg, iexec);
 
     // Start inferior
-    addCommand(new SentinelCommand([this, remoteDebugging]() {
-        breakpointController()->initSendBreakpoints();
-
+    QUrl configLldbScript = grp.readEntry(Config::LldbConfigScriptEntry, QUrl());
+    addCommand(new SentinelCommand([this, remoteDebugging, configLldbScript]() {
+        // setup inferior I/O redirection
         if (!remoteDebugging) {
             // FIXME: a hacky way to emulate tty setting on linux. Not sure if this provides all needed
             // functionalities of a pty. Should make this conditional on other platforms.
@@ -281,6 +272,24 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
         } else {
             // what is the expected behavior for using external terminal when doing remote debugging?
         }
+
+        // send breakpoints already in our breakpoint model to lldb
+        auto bc = breakpointController();
+        bc->initSendBreakpoints();
+
+        qCDebug(DEBUGGERLLDB) << "Turn on delete duplicate mode";
+        // turn on delete duplicate breakpoints model, so that breakpoints created by user command in
+        // the script and returned as a =breakpoint-created notification won't get duplicated with the
+        // one already in our model.
+        // we will turn this model off once we first reach a paused state, and from that time on,
+        // the user can create duplicated breakpoints using normal command.
+        bc->setDeleteDuplicateBreakpoints(true);
+        // run custom config script right before we starting the inferior,
+        // so the user has the freedom to change everything.
+        if (configLldbScript.isValid()) {
+            addCommand(MI::NonMI, "command source -s 0 " + KShell::quoteArg(configLldbScript.toLocalFile()));
+        }
+
         addCommand(MI::ExecRun, QString(), new ExecRunHandler(this),
                    CmdMaybeStartsRunning | CmdHandlesError);
     }, CmdMaybeStartsRunning));
@@ -333,5 +342,16 @@ void DebugSession::updateAllVariables()
         LldbVariable *var = qobject_cast<LldbVariable*>(it.value());
         addCommand(VarUpdate, "--all-values " + it.key(),
                    var, &LldbVariable::handleRawUpdate);
+    }
+}
+
+void DebugSession::handleSessionStateChange(IDebugSession::DebuggerState state)
+{
+    if (state == IDebugSession::PausedState) {
+        // session is paused, the user can input any commands now.
+        // Turn off delete duplicate breakpoints mode, as the user
+        // may intentionaly want to do this.
+        qCDebug(DEBUGGERLLDB) << "Turn off delete duplicate mode";
+        breakpointController()->setDeleteDuplicateBreakpoints(false);
     }
 }

@@ -18,7 +18,7 @@
 
 - [DONE] Make config options in config page actually working
 
-- Remove duplicate breakpoint: look at breakpointController()->setDeleteDuplicateBreakpoints(true)
+- [DONE] Remove duplicate breakpoint: look at breakpointController()->setDeleteDuplicateBreakpoints(true)
 
 - Rework interrupt action
 

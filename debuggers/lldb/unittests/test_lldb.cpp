@@ -828,11 +828,10 @@ void LldbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
 {
     TestDebugSession *session = new TestDebugSession;
 
-    QString sourceFile = findExecutable("lldb_debugee").toLocalFile();
+    QString sourceFile = findSourceFile("debugee.cpp");
     //inject here, so it behaves similar like a command from .lldbinit
     QTemporaryFile configScript;
     configScript.open();
-    configScript.write(QString("file %0\n").arg(sourceFile).toLocal8Bit());
     configScript.write(QString("break set --file %0 --line 32\n").arg(sourceFile).toLocal8Bit());
     configScript.close();
 

@@ -81,6 +81,8 @@ private Q_SLOTS:
     void handleFileExecAndSymbols(const MI::ResultRecord& r);
     void handleTargetSelect(const MI::ResultRecord& r);
 
+    void handleSessionStateChange(IDebugSession::DebuggerState state);
+
 private:
     BreakpointController *m_breakpointController;
     VariableController *m_variableController;
