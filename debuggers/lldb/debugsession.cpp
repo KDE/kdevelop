@@ -177,7 +177,6 @@ void DebugSession::configure(ILaunchConfiguration *cfg, IExecutePlugin *)
 {
     // Read Configuration values
     KConfigGroup grp = cfg->config();
-    QUrl configLldbScript = grp.readEntry(Config::LldbConfigScriptEntry, QUrl());
 
     // break on start: can't use "-exec-run --start" because in lldb-mi
     // the inferior stops without any notification
@@ -202,6 +201,7 @@ void DebugSession::configure(ILaunchConfiguration *cfg, IExecutePlugin *)
     raiseEvent(debugger_ready);
 
     // custom config script
+    QUrl configLldbScript = grp.readEntry(Config::LldbConfigScriptEntry, QUrl());
     if (configLldbScript.isValid()) {
         addCommand(MI::NonMI, "command source -s TRUE " + KShell::quoteArg(configLldbScript.toLocalFile()));
     }
@@ -214,12 +214,9 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
 {
     qCDebug(DEBUGGERGDB) << "Executing inferior";
 
-    // debugger specific config
-    configure(cfg, iexec);
-
-    // config that can't be placed in configure()
     KConfigGroup grp = cfg->config();
 
+    // Create target as early as possible, so we can do target specific configuration later
     QString filesymbols = doubleQuoteArg(executable);
     bool remoteDebugging = grp.readEntry(Config::LldbRemoteDebuggingEntry, false);
     if (remoteDebugging) {
@@ -266,6 +263,10 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
     // actually using lldb command 'settings set target.env-vars' which accepts multiple values
     addCommand(GdbSet, "environment " + vars.join(" "));
 
+    // Do other per target config
+    configure(cfg, iexec);
+
+    // Start inferior
     addCommand(new SentinelCommand([this, remoteDebugging]() {
         breakpointController()->initSendBreakpoints();
 

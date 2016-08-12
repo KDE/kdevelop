@@ -313,8 +313,6 @@ void LldbTest::testBreakpoint()
 
 void LldbTest::testBreakOnStart()
 {
-    QSKIP("SKipping... Pending breakpoints not work with the current version of lldb-mi");
-
     TestDebugSession *session = new TestDebugSession;
 
     TestLaunchConfiguration cfg;
@@ -322,7 +320,8 @@ void LldbTest::testBreakOnStart()
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->currentLine(), 28); // line 28 is the start of main function in debugee.cpp
+    // line 28 is the start of main function in debugee.cpp
+    QCOMPARE(session->currentLine(), 27); // currentLine is zero-based
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);

@@ -18,21 +18,18 @@
 
 - [DONE] Make config options in config page actually working
 
-- Qt data formatter cause gangs when pause at middle of qt.cpp (deal with invalid data)
-    * [DONE] QString, QByteArray
-
-- Add lldb actions for attach to process and examine core file
-
 - Remove duplicate breakpoint: look at breakpointController()->setDeleteDuplicateBreakpoints(true)
 
 - Rework interrupt action
 
 - Variables view doesn't update when variable changes
 
+- Add lldb actions for attach to process and examine core file
 - Clean up extra actions provided by gdb/lldb plugins
     * Global launch configuration for attach to process and examine core file
 
 - LLDB data formatters
+    * show summary for const char []
     * Qt types
         + [DONE] QString, QChar
         + [DONE] QByteArray
@@ -61,6 +58,10 @@
         + tool view
     * disassembly widget
     * memory view
+
+- Qt data formatter cause hangs data size is too large
+    * use dynamic caching
+
 
 - [DONE] Find a way to avoid duplicate tool views for GDB and LLDB plugin
 
@@ -130,7 +131,7 @@
             - Remote work path can't contain space
             - Can't actually start inferior
     * Breakpoints
-        + Pending breakpoints doesn't work, which also causes break on start not function
+        + Pending breakpoints doesn't work. (Break on start now works even without pending breakpoint support)
             - Can still manually set pending breakpoints
         + Breakpoint hit count is not updated timely (limitation in lldb-mi)
         + No watchpoint support
