@@ -5,6 +5,7 @@
  * Copyright 2011 Damien Coppel <damien.coppel@gmail.com>
  * Copyright 2011 Lionel Duc <lionel.data@gmail.com>
  * Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
+ * Copyright 2015 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -25,38 +26,13 @@
 #ifndef JOB_H
 #define JOB_H
 
-#include <QProcess>
-#include <QTcpSocket>
-#include <QFileInfo>
-#include <QTimer>
-#include <QBuffer>
-#include <QUrl>
-
-#include <outputview/outputjob.h>
+#include <outputview/outputexecutejob.h>
 #include <interfaces/iproblem.h>
-
-class KJob;
-class KConfigGroup;
-class QXmlInputSource;
-class QXmlSimpleReader;
-class QTcpServer;
-class QTcpSocket;
-class QBuffer;
-
-namespace KDevelop
-{
-class ProcessLineMaker;
-class ILaunchConfiguration;
-class IProblem;
-class OutputModel;
-class LaunchConfiguration;
-}
 
 namespace cppcheck
 {
-class CppcheckParser;
 
-class Job : public KDevelop::OutputJob
+class Job : public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
 
@@ -64,89 +40,40 @@ public:
     struct Parameters
     {
         QString parameters;
-        int viewMode;
-        bool checkStyle;
-        bool checkPerformance;
-        bool checkPortability;
-        bool checkInformation;
-        bool checkUnusedFunction;
-        bool checkMissingInclude;
+        bool checkStyle = false;
+        bool checkPerformance = false;
+        bool checkPortability = false;
+        bool checkInformation = false;
+        bool checkUnusedFunction = false;
+        bool checkMissingInclude = false;
         QString path;
         QString executable;
     };
 
     Job(const Parameters &params, QObject* parent = nullptr);
     ~Job() override;
-    KDevelop::OutputModel* model();
+
     void start() override;
-    bool doKill() override;
 
     QVector<KDevelop::IProblem::Ptr> problems() const;
 
-signals:
-    void jobFinished();
+protected slots:
+    void postProcessStdout( const QStringList& lines ) override;
+    void postProcessStderr( const QStringList& lines ) override;
 
-private slots:
-
-    void readyReadStandardError();
-    void readyReadStandardOutput();
-    void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void processErrored(QProcess::ProcessError);
+    void childProcessExited( int exitCode, QProcess::ExitStatus exitStatus ) override;
+    void childProcessError( QProcess::ProcessError processError ) override;
 
 protected:
-    typedef QString   t_cppcheck_cfg_argarray[][3];
+    void buildCommandLine();
+    void processStdoutLines( const QStringList& lines );
+    void processStderrLines( const QStringList& lines );
 
-    void beforeStart(); // called before launching the process
-    void processStarted(); // called after the process has been launched
-    void processEnded(); // called when the process ended
+    QStringList m_standardOutput;
+    QStringList m_xmlOutput;
 
-    QStringList buildCommandLine() const;
-
-
-protected:
-
-    QProcess* m_process;
-    QUrl m_workingDir;
-    int m_pid;
-
-    cppcheck::CppcheckParser* m_parser;
-
-    KDevelop::ProcessLineMaker* m_applicationOutput;
-    KDevelop::ILaunchConfiguration* m_launchcfg;
-
-    // The cppcheck output file
-    QFile* m_file;
-    bool      m_killed;
-    QBuffer* string_device;
-    QString stdout_output;
-    QString stderr_output;
-    Parameters m_parameters;
-
-private:
+    QVector<KDevelop::IProblem::Ptr> m_problems;
 };
 
-
-/**
- * It permits to call an process to do a post treatment on the cppcheck output
- */
-class KProcessOutputToParser : public QObject
-{
-    Q_OBJECT
-public:
-    KProcessOutputToParser(CppcheckParser* inst);
-    ~KProcessOutputToParser() override;
-
-    bool execute(QString execPath, QStringList args);
-
-private slots:
-    void  newDataFromStdOut();
-    void  processEnded(int returnCode, QProcess::ExitStatus status);
-
-private:
-    QProcess*  m_process;
-    QIODevice* m_device;
-    CppcheckParser* m_parser;
-
-};
 }
 #endif

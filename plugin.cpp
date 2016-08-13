@@ -77,7 +77,6 @@ Plugin::Plugin(QObject *parent, const QVariantList&)
     : IPlugin("kdevcppcheck", parent)
     , m_model(new KDevelop::ProblemModel(parent))
 {
-
     qCDebug(KDEV_CPPCHECK) << "setting cppcheck rc file";
     setXMLFile("kdevcppcheck.rc");
 
@@ -141,7 +140,6 @@ void Plugin::runCppcheck(bool allFiles)
 
     Job::Parameters params;
     params.parameters           = group.readEntry("cppcheckParameters", QString(""));
-    params.viewMode             = group.readEntry("OutputViewMode", "0").toInt();
     params.checkStyle           = group.readEntry("AdditionalCheckStyle", false);
     params.checkPerformance     = group.readEntry("AdditionalCheckPerformance", false);
     params.checkPortability     = group.readEntry("AdditionalCheckPortability", false);
@@ -159,13 +157,9 @@ void Plugin::runCppcheck(bool allFiles)
     else
         params.path = doc->url().toLocalFile();
 
-    QList<KJob*> l;
-    Job *job = new cppcheck::Job(params, KDevelop::ICore::self()->runController());
-
-    l << job;
-    KDevelop::ExecuteCompositeJob *ej = new KDevelop::ExecuteCompositeJob(KDevelop::ICore::self()->runController(), l);
-    connect (l.first(), SIGNAL(finished(KJob*)), this, SLOT(result(KJob*)));
-    ej->start();
+    Job* job = new cppcheck::Job(params, this);
+    connect(job, SIGNAL(finished(KJob*)), this, SLOT(result(KJob*)));
+    core()->runController()->registerJob( job );
 }
 
 void Plugin::runCppcheckFile()
@@ -179,7 +173,7 @@ void Plugin::runCppcheckAll()
    bool allFiles = true;
    runCppcheck(allFiles);
 }
- 
+
 
 void Plugin::loadOutput()
 {
@@ -191,7 +185,14 @@ void Plugin::result(KJob *job)
     if (!aj)
         return;
 
-    m_model->setProblems(aj->problems());
+    if (aj->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded) {
+        m_model->setProblems(aj->problems());
+
+        core()->uiController()->findToolView(
+            i18nd("kdevproblemreporter", "Problems"),
+            0,
+            KDevelop::IUiController::FindFlags::Raise);
+    }
 }
 
 KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context)
