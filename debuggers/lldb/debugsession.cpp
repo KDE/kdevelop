@@ -340,10 +340,23 @@ void DebugSession::handleTargetSelect(const MI::ResultRecord& r)
 
 void DebugSession::updateAllVariables()
 {
+    // FIXME: this is only a workaround for lldb-mi doesn't provide -var-update changelist
+    // for variables that have a python synthetic provider. Remove this after this is fixed
+    // in the upstream.
+
+    // re-fetch all toplevel variables, as -var-update doesn't work with data formatter
+    // we have to pick out top level variables first, as refetching will delete child
+    // variables.
+    QList<LldbVariable*> toplevels;
     for (auto it = m_allVariables.begin(), ite = m_allVariables.end(); it != ite; ++it) {
         LldbVariable *var = qobject_cast<LldbVariable*>(it.value());
-        addCommand(VarUpdate, "--all-values " + it.key(),
-                   var, &LldbVariable::handleRawUpdate);
+        if (var->topLevel()) {
+            toplevels << var;
+        }
+    }
+
+    for (auto var : toplevels) {
+        var->refetch();
     }
 }
 

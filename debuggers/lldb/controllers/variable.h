@@ -42,6 +42,10 @@ public:
 
     void handleRawUpdate(const MI::ResultRecord &r);
 
+    void refetch();
+
+    using KDevelop::Variable::topLevel;
+
     // For testing
     using KDevelop::Variable::childCount;
     using KDevelop::Variable::child;

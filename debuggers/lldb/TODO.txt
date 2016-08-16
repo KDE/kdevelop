@@ -22,14 +22,14 @@
 
 - [DONE] Rework interrupt action
 
-- Variables view doesn't update when variable changes
+- [DONE] (only workaround) Variables view doesn't update when variable changes
 
 - Add lldb actions for attach to process and examine core file
 - Clean up extra actions provided by gdb/lldb plugins
     * Global launch configuration for attach to process and examine core file
 
 - LLDB data formatters
-    * show summary for const char []
+    * [DONE] show summary for const char []
     * Qt types
         + [DONE] QString, QChar
         + [DONE] QByteArray
@@ -46,6 +46,7 @@
         + [DONE] KDevelop::Path
         + [DONE] KTextEditor::Cursor
         + [DONE] KTextEditor::Range
+- Finish unit tests for LLDB data formatters
 
 - [DONE] Show application exit reason in the Debug View
 

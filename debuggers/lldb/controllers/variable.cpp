@@ -39,6 +39,34 @@ LldbVariable::LldbVariable(DebugSession *session, TreeModel *model, TreeItem *pa
 {
 }
 
+void LldbVariable::refetch()
+{
+    if (!topLevel() || varobj_.isEmpty()) {
+        return;
+    }
+
+    if (!sessionIsAlive()) {
+        return;
+    }
+
+
+    // update the value itself
+    QPointer<LldbVariable> guarded_this(this);
+    debugSession->addCommand(VarEvaluateExpression, varobj_, [guarded_this](const ResultRecord &r){
+        if (guarded_this && r.reason == "done" && r.hasField("value")) {
+            guarded_this->setValue(r["value"].literal());
+        }
+    });
+
+    // update children
+    // remove all children fisrt, this will cause some gliches in the UI, but there's no good way
+    // that we can know if there's anything changed
+    if (isExpanded()) {
+        deleteChildren();
+        fetchMoreChildren();
+    }
+}
+
 void LldbVariable::handleRawUpdate(const ResultRecord& r)
 {
     qCDebug(DEBUGGERLLDB) << "handleRawUpdate for variable" << varobj();
