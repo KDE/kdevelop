@@ -65,7 +65,7 @@
 - Polish debugger console
     * [DONE] user command output regarded as internal command
     * [DONE] not correctly raised when starting debug
-    * correct prompt (from "(gdb)" to "(lldb)")
+    * [DONE] correct prompt (from "(gdb)" to "(lldb)")
 
 - [DONE] Handle error sometime with Command 'exec-run'. Invalid process during debug session.
 

@@ -60,6 +60,12 @@ public:
      */
     void setShowInterrupt(bool enable);
 
+    /**
+     * If set to a nonempty string, the default "(gdb)" prompt will be replaced.
+     * This only affects output lines after the call.
+     */
+    void setReplacePrompt(const QString &prompt);
+
     void setShowInternalCommands(bool enable);
 
 Q_SIGNALS:
@@ -150,6 +156,8 @@ private:
     QColor m_errorColor;
 
     int m_maxLines;
+
+    QString m_alterPrompt;
 };
 
 } // end of namespace KDevMI

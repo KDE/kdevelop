@@ -38,6 +38,7 @@ public:
         : DebuggerConsoleView(plugin, parent)
     {
         setShowInterrupt(false);
+        setReplacePrompt("(lldb)");
     }
 };
 

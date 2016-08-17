@@ -192,6 +192,11 @@ void DebuggerConsoleView::setShowInterrupt(bool enable)
     m_actInterrupt->setVisible(enable);
 }
 
+void DebuggerConsoleView::setReplacePrompt(const QString& prompt)
+{
+    m_alterPrompt = prompt;
+}
+
 void DebuggerConsoleView::setShowInternalCommands(bool enable)
 {
     if (enable != m_showInternalCommands)
@@ -320,6 +325,9 @@ void DebuggerConsoleView::receivedStdout(const QString& line, bool internal)
 {
     QString colored = toHtmlEscaped(line);
     if (colored.startsWith("(gdb)")) {
+        if (!m_alterPrompt.isEmpty()) {
+            colored.replace(0, 5, m_alterPrompt);
+        }
         colored = colorify(colored, m_stdColor);
     }
 
