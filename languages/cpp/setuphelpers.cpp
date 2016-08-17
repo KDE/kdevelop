@@ -154,6 +154,14 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       insertMacro( macros, m );
     }
 
+    { // ignore C99 _Pragma
+      rpp::pp_macro m("_Pragma");
+      m.function_like = true;
+      m.formalsList().append(IndexedString("string_literal"));
+      m.setDefinitionText("");
+      insertMacro( macros, m );
+    }
+
     {
       // see: https://bugs.kde.org/show_bug.cgi?id=325882
       rpp::pp_macro m("__final");
