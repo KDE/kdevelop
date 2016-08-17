@@ -163,6 +163,10 @@ void DebugSession::initializeDebugger()
         addCommand(MI::NonMI, "command script import " + KShell::quoteArg(formatterPath));
     }
 
+
+    // Treat char array as string
+    addCommand(MI::GdbSet, "print char-array-as-string on");
+
     // set a larger term width.
     // TODO: set term-width to exact max column count in console view
     addCommand(MI::NonMI, "settings set term-width 1024");
