@@ -248,9 +248,11 @@ IndexedString::IndexedString(const QUrl& url)
     : IndexedString(url.isLocalFile() ? url.toLocalFile() : url.toString())
 {
     Q_ASSERT(url.isEmpty() || !url.isRelative());
+#if !defined(QT_NO_DEBUG)
     if (url != url.adjusted(QUrl::NormalizePathSegments)) {
       qWarning() << "wrong url" << url << url.adjusted(QUrl::NormalizePathSegments);
     }
+#endif
     Q_ASSERT(url == url.adjusted(QUrl::NormalizePathSegments));
 }
 

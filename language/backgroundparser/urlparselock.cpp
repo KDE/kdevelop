@@ -2,6 +2,7 @@
 * This file is part of KDevelop
 *
 * Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
+* Copyright 2016 Milian Wolff <mail@milianw.de>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
@@ -20,40 +21,81 @@
 */
 #include "urlparselock.h"
 
-#include <QThread>
 #include <QHash>
+#include <QMutex>
 
 using namespace KDevelop;
 
 namespace
 {
-///Facilities to prevent multiple parse-jobs from processing the same url.
-QMutex urlParseMutex;
-QHash<IndexedString, QPair<QThread*, uint> > parsingUrls;
+struct PerUrlData
+{
+    PerUrlData()
+        // TODO: make this non-recursive
+        : mutex(QMutex::Recursive)
+        , ref(0)
+    {}
+    QMutex mutex;
+    // how many people are (trying to) parse this url
+    // we use this to delete the entry once noone needs it anymore
+    uint ref;
+};
+
+// this mutex protects the parsingUrls
+// NOTE: QBasicMutex is safe to initialize statically
+QBasicMutex parsingUrlsMutex;
+
+// Hash of urls that are currently being parsed and their protection data
+using ParsingUrls = QHash<IndexedString, PerUrlData*>;
+ParsingUrls& parsingUrls()
+{
+    // delay initialization of the hash until it's needed
+    static ParsingUrls parsingUrls;
+    return parsingUrls;
+}
+
 }
 
 UrlParseLock::UrlParseLock(const IndexedString& url)
     : m_url(url)
 {
-  QMutexLocker lock(&urlParseMutex);
-  while(parsingUrls.contains(m_url) && parsingUrls[m_url].first != QThread::currentThread()) {
-    //Wait here until no other thread is updating parsing the url
-    lock.unlock();
-    QThread::sleep(1);
-    lock.relock();
+  QMutexLocker lock(&parsingUrlsMutex);
+
+  // NOTE: operator[] default-initializes the ptr to zero for us when not available
+  auto& perUrlData = parsingUrls()[url];
+  if (!perUrlData) {
+    // if that was the case, we are the first to parse this url, create an entry
+    perUrlData = new PerUrlData;
   }
-  if(parsingUrls.contains(m_url))
-    ++parsingUrls[m_url].second;
-  else
-    parsingUrls.insert(m_url, qMakePair(QThread::currentThread(), 1u));
+
+  // always increment the refcount
+  ++perUrlData->ref;
+
+  // now lock the url, but don't do so while blocking the global mutex
+  auto& mutex = perUrlData->mutex;
+  lock.unlock();
+
+  mutex.lock();
 }
 
 UrlParseLock::~UrlParseLock()
 {
-  QMutexLocker lock(&urlParseMutex);
-  Q_ASSERT(parsingUrls.contains(m_url));
-  Q_ASSERT(parsingUrls[m_url].first == QThread::currentThread());
-  --parsingUrls[m_url].second;
-  if(parsingUrls[m_url].second == 0)
-    parsingUrls.remove(m_url);
+  QMutexLocker lock(&parsingUrlsMutex);
+
+  // find the entry for this url
+  auto& urls = parsingUrls();
+  auto it = urls.find(m_url);
+  Q_ASSERT(it != urls.end()); // it must exist
+  auto& perUrlData = it.value();
+
+  // unlock the per-url mutex
+  perUrlData->mutex.unlock();
+
+  // decrement the refcount
+  --perUrlData->ref;
+  if (perUrlData->ref == 0) {
+    // and cleanup, if possible
+    delete perUrlData;
+    urls.erase(it);
+  }
 }

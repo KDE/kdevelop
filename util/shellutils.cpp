@@ -22,8 +22,14 @@
 #include "shellutils.h"
 #include <QGuiApplication>
 #include <QtCore/QTextStream>
+#include <QtCore/QUrl>
+#include <QtCore/QFile>
+#include <QtCore/QList>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <kparts/mainwindow.h>
 
 namespace KDevelop {
 
@@ -55,7 +61,7 @@ bool askUser( const QString& mainText,
             }
         }
     } else {
-        int userAnswer = KMessageBox::questionYesNo( 0,
+        int userAnswer = KMessageBox::questionYesNo( ICore::self()->uiController()->activeMainWindow(),
                                                      mainText + "\n\n" + mboxAdditionalText,
                                                      mboxTitle,
                                                      KStandardGuiItem::ok(),
@@ -64,5 +70,40 @@ bool askUser( const QString& mainText,
     }
 }
 
+bool ensureWritable( const QList<QUrl> &urls )
+{
+    QList<QString> notWritable;
+    foreach (QUrl url, urls)
+    {
+        if (url.isLocalFile())
+        {
+            QFile file(url.toLocalFile());
+            if (file.exists() && !(file.permissions() & QFileDevice::WriteOwner) && !(file.permissions() & QFileDevice::WriteGroup))
+            {
+                notWritable << url.toLocalFile();
+            }
+        }
+    }
+    if (!notWritable.isEmpty())
+    {
+        int answer = KMessageBox::questionYesNoCancel(ICore::self()->uiController()->activeMainWindow(), i18n("You don't have write permissions for the following files; add write permissions for owner before saving?")+"\n\n"+notWritable.join("\n"), i18n("Some files are write-protected"), KStandardGuiItem::yes(), KStandardGuiItem::no(), KStandardGuiItem::cancel());
+        if (answer == KMessageBox::Yes) {
+            bool success = true;
+            foreach (QString filename, notWritable) {
+                QFile file(filename);
+                QFileDevice::Permissions permissions = file.permissions();
+                permissions |= QFileDevice::WriteOwner;
+                success &= file.setPermissions(permissions);
+            }
+            if (!success)
+            {
+                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Failed adding write permissions for some files."), i18n("Failed setting permissions"));
+                return false;
+            }
+        }
+        return answer != KMessageBox::Cancel;
+    }
+    return true;
+}
 
 }

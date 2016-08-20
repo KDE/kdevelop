@@ -23,8 +23,10 @@
 #define SHELLUTILS_H
 
 #include "utilexport.h"
+#include <QtCore/QList>
 
 class QString;
+class QUrl;
 
 namespace KDevelop {
 
@@ -38,6 +40,14 @@ bool KDEVPLATFORMUTIL_EXPORT askUser( const QString& mainText,
                                       const QString& mboxTitle,
                                       const QString& mboxAdditionalText,
                                       bool ttyDefaultToYes = true );
+
+/**
+ * Ensures that the given list of files is writable. If some files are not writable,
+ * asks the user whether they should be made writable. If the user disagrees,
+ * or if the operation failed, returns false.
+ * */
+bool KDEVPLATFORMUTIL_EXPORT ensureWritable( const QList<QUrl> &urls );
+
 }
 
 #endif // SHELLUTILS_H

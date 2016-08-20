@@ -62,6 +62,7 @@
 #include "documentcontroller.h"
 #include "debug.h"
 #include <path.h>
+#include <shellutils.h>
 
 namespace KDevelop {
 
@@ -419,6 +420,10 @@ bool TextDocument::save(DocumentSaveMode mode)
                     return false;
             }
             break;
+    }
+
+    if (!KDevelop::ensureWritable(QList<QUrl>() << url())) {
+        return false;
     }
 
     QUrl urlBeforeSave = d->document->url();

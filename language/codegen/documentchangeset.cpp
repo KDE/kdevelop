@@ -47,6 +47,7 @@
 #include <project/projectmodel.h>
 
 #include <util/path.h>
+#include <util/shellutils.h>
 
 namespace KDevelop {
 
@@ -204,6 +205,16 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
     QUrl oldActiveDoc;
     if (IDocument* activeDoc = ICore::self()->documentController()->activeDocument()) {
         oldActiveDoc = activeDoc->url();
+    }
+
+    QList<QUrl> allFiles;
+    foreach (IndexedString file, d->documentsRename.keys().toSet() + d->changes.keys().toSet()) {
+        allFiles << file.toUrl();
+    }
+
+    if (!KDevelop::ensureWritable(allFiles))
+    {
+        return ChangeResult(QStringLiteral("some affected files are not writable"));
     }
 
     // rename files
