@@ -553,7 +553,8 @@ class QDateTimePrinter:
         self.val = val
 
     def to_string(self):
-        return time.ctime(gdb.parse_and_eval("reinterpret_cast<const QDateTime*>(%s)->toTime_t()" % self.val.address))
+        time_t = gdb.parse_and_eval("reinterpret_cast<const QDateTime*>(%s)->toTime_t()" % self.val.address)
+        return time.ctime(int(time_t))
 
 class QUrlPrinter:
 
