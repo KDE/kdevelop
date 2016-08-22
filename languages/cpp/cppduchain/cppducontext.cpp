@@ -39,7 +39,8 @@ typedef CppDUContext<DUContext> CppNormalDUContext;
 REGISTER_DUCHAIN_ITEM_WITH_DATA(CppNormalDUContext, DUContextData);
 
 template<>
-QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix ) const {
+QWidget* CppDUContext<TopDUContext>::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix,
+                                                            AbstractNavigationWidget::DisplayHints /*hints*/) const {
   if( decl == 0 ) {
     Path path( url().str() );
     IncludeItem i;
@@ -55,7 +56,8 @@ QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, 
 }
 
 template<>
-QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
+QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix,
+                                                         AbstractNavigationWidget::DisplayHints /*hints*/) const {
   if( decl == 0 ) {
     if( owner() )
       return new NavigationWidget( DeclarationPointer(owner()), TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix );
