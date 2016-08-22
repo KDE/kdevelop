@@ -189,6 +189,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::Colorizer::Formatting);
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::Colorizer::Formatting)
 
 #endif
