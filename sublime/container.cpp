@@ -155,8 +155,26 @@ struct ContainerPrivate {
 
         std::sort(views.begin(), views.end(), sortViews);
 
-        foreach(View* view, views) {
-            QAction* action = documentListMenu->addAction(view->document()->title());
+        for (int i = 0; i < views.size(); ++i) {
+            View *view = views.at(i);
+            QString visibleEntryTitle;
+            // if filename is not unique, prepend containing directory
+            if ((i < views.size() - 1 && view->document()->title() == views.at(i + 1)->document()->title())
+                || (i > 0 && view->document()->title() == views.at(i - 1)->document()->title())
+            ) {
+                auto urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
+                if (!urlDoc) {
+                    visibleEntryTitle = view->document()->title();
+                    continue;
+                }
+                auto url = urlDoc->url().toString();
+                int secondOffset = url.lastIndexOf('/');
+                secondOffset = url.lastIndexOf('/', secondOffset - 1);
+                visibleEntryTitle = url.right(url.length() - url.lastIndexOf('/', secondOffset) - 1);
+            } else {
+                visibleEntryTitle = view->document()->title();
+            }
+            QAction* action = documentListMenu->addAction(visibleEntryTitle);
             action->setData(QVariant::fromValue(view));
             documentListActionForView[view] = action;
             action->setIcon(view->document()->icon());
@@ -400,13 +418,11 @@ void Container::documentTitleChanged(Sublime::Document* doc)
             if (tabIndex != -1) {
                 d->tabBar->setTabText(tabIndex, doc->title());
             }
-
-            // Update document list popup title
-            Q_ASSERT(d->documentListActionForView.contains(view));
-            d->documentListActionForView[view]->setText(doc->title());
             break;
         }
     }
+    // Update document list popup title
+    d->updateDocumentListPopupMenu();
 }
 
 int Container::count() const
