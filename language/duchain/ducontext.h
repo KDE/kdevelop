@@ -164,12 +164,12 @@ public:
   virtual void visit(DUChainVisitor& visitor);
 
   /**
-   * Find the context which most specifically covers @a position.
+   * Find the context which most specifically covers @p position.
    *
    * The search is recursive, so the most specific context is found.
    *
-   * @param includeRightBorder When this is true, contexts will also be found that
-   *                           have the position on their right border.
+   * @param includeBorders When this is true, contexts will also be found that
+   *                           have the position on their borders.
    *
    * @warning This uses the ranges in the local revision of the document (at last parsing time).
    *          Use DUChainBase::transformToLocalRevision to transform the cursor into that revision first.
@@ -177,7 +177,7 @@ public:
   DUContext* findContextAt(const CursorInRevision& position, bool includeBorders = false) const;
 
   /**
-   * Find a child declaration that has a rang that covers the given @a position.
+   * Find a child declaration that has a rang that covers the given @p position.
    *
    * The search is local, not recursive.
    *
@@ -428,15 +428,15 @@ public:
                                 const TopDUContext* topContext, int upDistance = 0);
 
   /**
-   * Searches for and returns a declaration with a given @a identifier in this context, which
-   * is currently active at the given text @a position, with the given type @a dataType.
+   * Searches for and returns a declaration with a given @p identifier in this context, which
+   * is currently active at the given text @p position, with the given type @p dataType.
    * In fact, only items are returned that are declared BEFORE that position.
    *
    * @param identifier the identifier of the definition to search for
-   * @param location the text position to search for
+   * @param position the text position to search for
    * @param topContext the top-context from where a completion is triggered.
    *                   This is needed so delayed types (templates in C++) can be resolved in the correct context.
-   * @param type the type to match, or null for no type matching.
+   * @param dataType the type to match, or null for no type matching.
    *
    * @returns the requested declaration if one was found, otherwise null.
    *
@@ -455,7 +455,7 @@ public:
    * @param identifier the identifier of the definition to search for
    * @param topContext the top-context from where a completion is triggered.
    *                   This is needed so delayed types(templates in C++) can be resolved in the correct context.
-   * @param location the text position to search for
+   * @param position   the text position to search for
    *
    * @returns the requested declaration if one was found, otherwise null.
    *
@@ -528,9 +528,9 @@ public:
   void resortLocalDeclarations();
 
   /**
-   * Searches for the most specific context for the given cursor @a position in the given @a url.
+   * Searches for the most specific context for the given cursor @p position in the given @p url.
    *
-   * @param location the text position to search for
+   * @param position the text position to search for
    * @param parent the parent context to search from (this is mostly an internal detail, but if you only
    *               want to search in a subbranch of the chain, you may specify the parent here)
    *
@@ -546,9 +546,9 @@ public:
   bool parentContextOf(DUContext* context) const;
 
   /**
-   * Return a list of all reachable declarations for a given cursor @a position in a given @a url.
+   * Return a list of all reachable declarations for a given cursor @p position in a given @p url.
    *
-   * @param location the text position to search for
+   * @param position the text position to search for
    * @param topContext the top-context from where a completion is triggered.
    *                   This is needed so delayed types(templates in C++) can be resolved
    *                   in the correct context.
@@ -617,13 +617,13 @@ public:
   void changeUseRange(int useIndex, const RangeInRevision& range);
 
   /**
-   * Assigns the declaration represented by @param declarationIndex
-   * to the use with index @param useIndex.
+   * Assigns the declaration represented by @p declarationIndex
+   * to the use with index @p useIndex.
    */
   void setUseDeclaration(int useIndex, int declarationIndex);
 
   /**
-   * Creates a new use of the declaration given  through @param declarationIndex.
+   * Creates a new use of the declaration given  through @p declarationIndex.
    * The index must be retrieved through @c TopDUContext::indexForUsedDeclaration(..).
    *
    * @param range The range of the use
@@ -636,7 +636,7 @@ public:
   int createUse(int declarationIndex, const RangeInRevision& range, int insertBefore = -1);
 
   /**
-   * Deletes the use number @param index.
+   * Deletes the use number @p index.
    *
    * @param index is the position in the vector of uses, not a used declaration index.
    */
@@ -698,18 +698,18 @@ public:
     typedef KDevVarLengthArray<Ptr, 256> PtrList;
 
     /**
-     * Constructs a representation of the given @param id qualified identifier,
-     * starting at its index @param start.
+     * Constructs a representation of the given @p id qualified identifier,
+     * starting at its index @p start.
      *
      * @param nextItem is set as next item to the last item in the chain
      */
     SearchItem(const QualifiedIdentifier& id, const Ptr& nextItem = Ptr(), int start = 0);
 
     /**
-     * Constructs a representation of the given @param id qualified identifier,
-     * starting at its index @param start.
+     * Constructs a representation of the given @p id qualified identifier,
+     * starting at its index @p start.
      *
-     * @param nextItem is set as next item to the last item in the chain
+     * @param nextItems is set as next item to the last item in the chain
      */
     SearchItem(const QualifiedIdentifier& id, const PtrList& nextItems, int start = 0);
 
@@ -758,6 +758,8 @@ public:
 
   /// Declaration search implementation
 
+  typedef QList<Declaration*> DeclarationList;
+
   /**
    * This is a more complex interface to the declaration search engine.
    *
@@ -780,8 +782,6 @@ public:
    * @return whether the search was successful. If it is false, it had to be stopped
    *         for special reasons (like some flags)
    */
-  typedef QList<Declaration*> DeclarationList;
-
   virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers,
                                         const CursorInRevision& position, const AbstractType::Ptr& dataType,
                                         DeclarationList& ret, const TopDUContext* source, SearchFlags flags,
@@ -802,7 +802,7 @@ protected:
    * After one scope was searched, this function is asked whether more
    * results should be collected. Override it, for example to collect overloaded functions.
    *
-   * The default-implementation returns true as soon as decls is not empty.
+   * The default-implementation returns true as soon as @p decls is not empty.
    */
   virtual bool foundEnough( const DeclarationList& decls , SearchFlags flags ) const;
 
@@ -812,7 +812,7 @@ protected:
    *
    * This includes declarations propagated from sub-contexts.
    *
-   * @param hadUrls is used to count together all contexts that already were
+   * @param hadContexts is used to count together all contexts that already were
    *                visited, so they are not visited again.
    */
   virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions,
@@ -940,7 +940,7 @@ KDEVPLATFORMLANGUAGE_EXPORT const IndexedIdentifier& globalIndexedImportIdentifi
 KDEVPLATFORMLANGUAGE_EXPORT const IndexedIdentifier& globalIndexedAliasIdentifier();
 
 /**
- * Collects all uses of the given @param declarationIndex
+ * Collects all uses of the given @p declarationIndex
  */
 KDEVPLATFORMLANGUAGE_EXPORT QList<RangeInRevision> allUses(DUContext* context,
                                                            int declarationIndex,

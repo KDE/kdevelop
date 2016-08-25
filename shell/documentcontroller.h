@@ -130,7 +130,7 @@ public Q_SLOTS:
 
     Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data ) override;
     
-    KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefname ) override;
+    KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefName ) override;
 
     virtual void closeDocument( const QUrl &url );
     void fileClose();

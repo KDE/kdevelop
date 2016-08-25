@@ -122,7 +122,7 @@ public:
      * Automatically sets the type to RepositoryLocation
      * @param data the vcs-specific data
      */
-    void setUserData( const QVariant& );
+    void setUserData( const QVariant& data );
 
     /**
      * retrieve vcs-specific data

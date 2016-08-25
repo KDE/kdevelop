@@ -118,6 +118,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(IProblem::Severities)
 
 }
 
-Q_DECLARE_METATYPE(KDevelop::IProblem::Ptr);
+Q_DECLARE_METATYPE(KDevelop::IProblem::Ptr)
 
 #endif

@@ -61,9 +61,10 @@ public:
     ~TemplateOptionsPage() override;
 
     /**
-     * Parses the XML-formatted .kcfg file contents and creates the UI for setting template options. 
+     * Parses template archive file and creates the UI for setting template options.
      *
-     * @param contents the file contents
+     * @param fileTemplate The template archive file
+     * @param renderer A Grantlee wrapper used to render all the templates
      **/
     void load(const SourceFileTemplate& fileTemplate, TemplateRenderer* renderer);
     /**

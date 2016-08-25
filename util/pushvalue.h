@@ -23,8 +23,8 @@
 
 /**
  * A simple helper-class that does the following:
- * Backup the given reference-value given through @param ptr,
- * replace it with the value given through @param push,
+ * Backup the given reference-value given through @p ptr,
+ * replace it with the value given through @p push,
  * restore the backed up value back on destruction.
  *
  * NOTE: This is _not_ a direct alias of QScopedValueRollback,

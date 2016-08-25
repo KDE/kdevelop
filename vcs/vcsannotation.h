@@ -75,22 +75,22 @@ public:
      * set the text of this annotation line
      * @param text the text of the line
      */
-    void setText( const QString& );
+    void setText( const QString& text );
     /**
      * set the author of this annotation line
      * @param author the author of the last change
      */
-    void setAuthor( const QString& );
+    void setAuthor( const QString& author );
     /**
      * set the revision of this annotation line
      * @param revision the revision of the last change
      */
-    void setRevision( const VcsRevision& );
+    void setRevision( const VcsRevision& revision );
     /**
      * set the date of this annotation line
      * @param date the date of the last change
      */
-    void setDate( const QDateTime& );
+    void setDate( const QDateTime& date );
     /**
      * set the commit message of the revision in this
      * line
@@ -138,12 +138,12 @@ public:
      * @param line the annotation line that should be inserted
      *
      */
-    void insertLine( int lineno, const VcsAnnotationLine& );
+    void insertLine( int lineno, const VcsAnnotationLine& line );
 
     /**
      * @param location the location of the file
      */
-    void setLocation( const QUrl& );
+    void setLocation( const QUrl& location );
 
     bool containsLine( int lineno ) const;
 

@@ -64,7 +64,7 @@ public:
     virtual Qt::DockWidgetArea defaultPosition() = 0;
     /**
      * Fetch a list of actions to add to the toolbar of the toolview @p view
-     * @param view the view to which the actions should be added
+     * @param viewWidget the view to which the actions should be added
      * @returns a list of actions to be added to the toolbar
      */
     virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const { return viewWidget->actions(); }
@@ -72,7 +72,7 @@ public:
      * Fetch a list of actions to be shown in the context menu of the toolview @p view.
      * The default implementation will return all actions of @p viewWidget.
      *
-     * @param view the view for which the context menu should be shown
+     * @param viewWidget the view for which the context menu should be shown
      * @returns a list of actions to be shown in the context menu
      */
     virtual QList<QAction*> contextMenuActions( QWidget* viewWidget ) const { return viewWidget->actions(); }

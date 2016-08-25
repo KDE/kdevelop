@@ -92,8 +92,7 @@ namespace KDevelop {
   KDEVPLATFORMSERIALIZATION_EXPORT void enableDUChainReferenceCounting(void* start, unsigned int size);
   ///Must be called as often as enableDUChainReferenceCounting, with the same ranges
   ///Must never be called for the same range twice, and not for overlapping ranges
-  ///@param start Position where to start the reference-counting
-  ///@param size Size of the area in bytes
+  ///@param start Position where the reference-counting was started
   KDEVPLATFORMSERIALIZATION_EXPORT void disableDUChainReferenceCounting(void* start);
   
   ///Use this as local variable within the object that maintains the reference-count,

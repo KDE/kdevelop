@@ -77,7 +77,6 @@ public:
    * If \a parentContext is in the symbol table, the declaration will automatically
    * be added into the symbol table.
    *
-   * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier
    * \param parentContext context in which this declaration occurred
    * */
@@ -149,7 +148,7 @@ public:
   /**
    * Set whether the declaration is deprecated.
    *
-   * \param final true if the declaration is deprecated, otherwise false.
+   * \param deprecated true if the declaration is deprecated, otherwise false.
    */
   void setDeprecated(bool deprecated);
 
@@ -531,7 +530,6 @@ protected:
     * Constructor for copy constructors in subclasses.
     *
     * \param dd data to copy.
-    * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
   Declaration( DeclarationData & dd, const RangeInRevision& range );

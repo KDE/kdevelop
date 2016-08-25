@@ -57,7 +57,7 @@ public:
     /** @return the parse job that is used by background parser to parse given @p url.*/
     virtual ParseJob *createParseJob(const IndexedString &url) = 0;
     /**
-      * Only important for languages that can parse multiple different versions of a file, like C++ due to the preprocessor.
+     * Only important for languages that can parse multiple different versions of a file, like C++ due to the preprocessor.
      * The default-implementation for other languages is "return DUChain::chainForDocument(url);"
      *
      * @param proxyContext      Whether the returned context should be a proxy-contexts. In C++, a proxy-contexts has no direct content.
@@ -69,8 +69,8 @@ public:
      *
      *  @warning The DUChain must be locked before calling this, @see KDevelop::DUChainReadLocker
      *
-     *  @return the standard context used by this language for the given @param url.
-      * */
+     *  @return the standard context used by this language for the given @p url
+     **/
     virtual TopDUContext *standardContext(const QUrl& url, bool proxyContext = false);
 
     /**
@@ -106,7 +106,7 @@ public:
      * */
 
     /**Should return the local range within the given url that belongs to the
-      *special language-object that contains @param position, or (QUrl(), KTextEditor::Range:invalid()) */
+      *special language-object that contains @param position , or (QUrl(), KTextEditor::Range:invalid()) */
     virtual KTextEditor::Range specialLanguageObjectRange(const QUrl& url, const KTextEditor::Cursor& position);
 
     /**Should return the source-range and source-document that the

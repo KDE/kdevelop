@@ -57,8 +57,8 @@ public:
     /**@return the controller for this document.*/
     Controller *controller() const;
 
-    /**@return the document title.*/
     enum TitleType { Normal, Extended};
+    /**@return the document title.*/
     virtual QString title(TitleType type = Normal) const;
     /**Set the document title.*/
     void setTitle(const QString& newTitle);

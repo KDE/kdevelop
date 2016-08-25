@@ -89,7 +89,7 @@ private slots:
   void executeScriptFromContextMenu() const;
 
 private:
-  /// @param item row in the model for the item to save
+  /// @param row row in the model for the item to save
   void saveItemForRow( int row );
 
   QStandardItemModel* m_model;

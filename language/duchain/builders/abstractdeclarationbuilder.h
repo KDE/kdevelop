@@ -58,13 +58,11 @@ protected:
   };
 
   /**
-   * Register a new declaration with the definition-use chain.
-   * Returns the new declaration created.
-   * \param name When this is zero, the identifier given through customName is used.
-   * \param range provide a valid AST node here if name is null.
-   * \param isFunction whether the new declaration is a function.
-   * \param isForward whether the new declaration is a forward declaration.
-   * \param isDefinition whether the new declaration is also a definition.
+   * Register a new declaration with the definition-use chain
+   * \param name When this is zero, the identifier given through customName is used
+   * \param range provide a valid AST node here if name is null
+   * \param flags equal to <b>DeclarationIsDefinition</b> whether the new declaration is also a definition
+   * \return the new declaration created
    */
   template<class DeclarationT>
   DeclarationT* openDeclaration(NameT* name, T* range, DeclarationFlags flags = NoFlags)
@@ -83,9 +81,8 @@ protected:
    *
    * \param id the identifier of the new declaration.
    * \param newRange the range which the identifier for the new declaration occupies.
-   * \param isFunction whether the new declaration is a function.
-   * \param isForward whether the new declaration is a forward declaration.
-   * \param isDefinition whether the new declaration is also a definition.
+   * \param flags equal to <b>DeclarationIsDefinition</b> whether the new declaration is also a definition
+   * \return the new declaration created
    */
   template<class DeclarationT>
   DeclarationT* openDeclaration(const QualifiedIdentifier& id, const RangeInRevision& newRange, DeclarationFlags flags = NoFlags)

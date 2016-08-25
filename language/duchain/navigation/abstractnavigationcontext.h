@@ -108,9 +108,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
 
   protected:
     
-    /// Returns the html font-size prefix (aka. <small> or similar) for the given mode
+    /// Returns the html font-size prefix (aka. &lt;small&gt; or similar) for the given mode
     QString fontSizePrefix(bool shorten) const;
-    /// Returns the html font-size suffix (aka. <small> or similar) for the given mode
+    /// Returns the html font-size suffix (aka. &lt;small&gt; or similar) for the given mode
     QString fontSizeSuffix(bool shorten) const;
     
     virtual void setPreviousContext(AbstractNavigationContext* previous);

@@ -86,10 +86,10 @@ public:
     virtual ProjectFolderItem *import(IProject *project) = 0;
 
     /**
-     * This method creates an import job for the given @arg item
+     * @brief This method creates an import job for the given @p item
      *
-     * The default implementation should be suitable for most needs,
-     * it'll create an instance of @class ImportProjectJob
+     * @details The default implementation should be suitable for most needs,
+     * it'll create an instance of class @ref ImportProjectJob
      *
      * @return a job that imports the project
      */

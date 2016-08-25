@@ -370,7 +370,7 @@ protected:
    * \param node The range to associate with the context.
    * \param range A custom range which the context should encompass.
    * \param type The type of context to open.
-   * \param identifier The identifier for this context
+   * \param id The identifier for this context
    * \returns the opened context.
    */
   DUContext* openContext(T* node, const RangeInRevision& range, DUContext::ContextType type, const QualifiedIdentifier& id)
@@ -452,7 +452,7 @@ protected:
 
   /**
    * This can be used to temporarily change the current context.
-   * \param range The range that will be used as new current range, or zero(then the range associated to the context is used)
+   * \param ctx The context to be injected
    * */
   void injectContext( DUContext* ctx ) {
     openContext( ctx );

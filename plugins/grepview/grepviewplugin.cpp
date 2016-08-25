@@ -113,10 +113,10 @@ void GrepViewPlugin::unload()
 {
     core()->uiController()->removeToolView(m_factory);
 }
-void GrepViewPlugin::startSearch(QString pattern, QString directory, bool showOptions)
+void GrepViewPlugin::startSearch(QString pattern, QString directory, bool show)
 {
     m_directory = directory;
-    showDialog(false, pattern, showOptions);
+    showDialog(false, pattern, show);
 }
 
 KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Context* context)
@@ -160,7 +160,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     return extension;
 }
 
-void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOptions)
+void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool show)
 {
     GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
@@ -182,7 +182,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
         dlg->setSearchLocations(m_directory);
     }
 
-    if(showOptions)
+    if(show)
         dlg->show();
     else{
         dlg->startSearch();

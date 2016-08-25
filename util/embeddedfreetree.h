@@ -143,7 +143,7 @@ namespace KDevelop {
                 }
             }
 
-            ///Returns the first valid index that has a data-value larger or equal to @param data.
+            ///Returns the first valid index that has a data-value larger or equal to @p data.
             ///Returns -1 if nothing is found.
             int lowerBound(const Data& data, int start, int end) {
                 int currentBound = -1;
@@ -657,8 +657,8 @@ namespace KDevelop {
                return increaseFraction * rebuildIfInsertionMoreExpensive;
            }
 
-           ///Inserts the given data item into position pos, and updates the sorting
-           ///@param otherBound can be another empty item, that together with @param pos represents the closest enclosure of the target position
+           ///Inserts the given data item into position @p pos, and updates the sorting
+           ///@param data can be another empty item, that together with @p pos represents the closest enclosure of the target position
            ///@return Whether the item could be inserted. It is not inserted if
            bool insertSorted(const Data& data, int pos, int start, int end, bool force) {
 

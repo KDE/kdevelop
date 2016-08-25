@@ -1,5 +1,4 @@
-class QFile;
-/* This  is part of KDevelop
+/* This is part of KDevelop
     Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -27,6 +26,8 @@ class QFile;
 #include <interfaces/iastcontainer.h>
 #include "problem.h"
 
+class QFile;
+
 namespace KDevelop {
 
 class TopDUContext;
@@ -49,7 +50,7 @@ class TopDUContextDynamicData {
   /**
    * Allocates an index for the given declaration in this top-context.
    * The returned index is never zero.
-   * @param anonymous whether the declaration is temporary. If it is, it will be stored separately, not stored to disk,
+   * @param temporary whether the declaration is temporary. If it is, it will be stored separately, not stored to disk,
    *                   and a duchain write-lock is not needed. Else, you need a write-lock when calling this.
   */
   uint allocateDeclarationIndex(Declaration* decl, bool temporary);
@@ -63,7 +64,7 @@ class TopDUContextDynamicData {
   /**
    * Allocates an index for the given context in this top-context.
    * The returned index is never zero.
-   * @param anonymous whether the context is temporary. If it is, it will be stored separately, not stored to disk,
+   * @param temporary whether the context is temporary. If it is, it will be stored separately, not stored to disk,
    *                   and a duchain write-lock is not needed. Else, you need a write-lock when calling this.
   */
   uint allocateContextIndex(DUContext* ctx, bool temporary);

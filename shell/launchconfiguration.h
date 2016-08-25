@@ -55,7 +55,7 @@ public:
     /**
      * Changes the type of this launch configuration. Note that
      * this removes all existing config values from this configuration
-     * @param type the id of the new type
+     * @param typeId the id of the new type
      */
     void setType( const QString& typeId );
 

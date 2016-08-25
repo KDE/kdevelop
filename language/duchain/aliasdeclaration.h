@@ -50,7 +50,6 @@ public:
   /**
    * Constructs an AliasDeclaration. The default value for isNamespaceAlias is true.
    *
-   * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier
    * \param context context in which this declaration occurred
    */

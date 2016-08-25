@@ -111,7 +111,7 @@ void VcsAnnotationLine::setAuthor( const QString& author )
     d->author = author;
 }
 
-void VcsAnnotationLine::setRevision( const VcsRevision& revision )
+void KDevelop::VcsAnnotationLine::setRevision( const KDevelop::VcsRevision& revision )
 {
     d->revision = revision;
 }

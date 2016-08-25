@@ -224,7 +224,6 @@ public:
      * configPages()-1 are available if configPages() > 0.
      *
      * @param number index of config page
-     * @param options The options used to initialize the ProjectConfigPage
      * @param parent parent widget for config page
      * @return newly created config page or NULL, if the number is out of bounds, default implementation returns NULL.
      * This config page should inherit from ProjectConfigPage, but it is not a strict requirement.

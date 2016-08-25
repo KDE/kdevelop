@@ -16,12 +16,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef KDEVPLATFORM_CODEGEN_UTILITIES_H
+#define KDEVPLATFORM_CODEGEN_UTILITIES_H
+
 #include <language/languageexport.h>
 
 #include <QValidator>
 
-#ifndef KDEVPLATFORM_CODEGEN_UTILITIES_H
-#define KDEVPLATFORM_CODEGEN_UTILITIES_H
 
 namespace KDevelop
 {

@@ -72,10 +72,10 @@ public:
 
     /**
      * Create a temporary file from @p contents with the same file basename as
-     * @p other but with the given @p fileExtension.
+     * @p base but with the given @p fileExtension.
      *
      * @param fileExtension the new file extension without the dot.
-     * @param other a different TestFile which is used for this file's basename
+     * @param base a different TestFile which is used for this file's basename
      *
      * This can be used to create e.g. .cpp/.h file pairs:
      *

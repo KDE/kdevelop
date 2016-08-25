@@ -85,7 +85,7 @@ public:
 
     /// Returns whether the given session can be locked (i. e., is not locked currently).
     /// @param doLocking whether to really lock the session or just "dry-run" the locking process
-    static TryLockSessionResult tryLockSession(const QString& id);
+    static TryLockSessionResult tryLockSession(const QString& id, bool doLocking=true);
 
     /**
      * @return true when the given session is currently running, false otherwise
@@ -141,10 +141,10 @@ public:
     /// It attempts to bring existing instance's window up via a DBus call; if that succeeds, empty string is returned.
     /// Otherwise (if the app did not respond) it shows a dialog where the user may choose
     /// 1) to force-remove the lockfile and continue,
-    /// 2) to select another session via \ref showSessionChooserDialog,
+    /// 2) to select another session via @ref showSessionChooserDialog,
     /// 3) to quit the current (starting-up) instance.
     /// @param sessionName session name (for the message)
-    /// @param sessionId current session GUID (to return if user chooses force-removal)
+    /// @param currentSessionId current session GUID (to return if user chooses force-removal)
     /// @param runInfo the run information about the session
     /// @return new session GUID to try or an empty string if application startup shall be aborted
     static QString handleLockedSession( const QString& sessionName, const QString& currentSessionId, const SessionRunInfo& runInfo );

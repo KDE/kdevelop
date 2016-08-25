@@ -133,10 +133,10 @@ public:
   virtual bool dataChangedWithInput() const;
 };
 
-///A custom-group node, that can be used as-is. Just create it, and call appendChild to add group items.
-///The items in the group will be shown in the completion-list with a group-header that contains the given name
+  ///A custom-group node, that can be used as-is. Just create it, and call appendChild to add group items.
+  ///The items in the group will be shown in the completion-list with a group-header that contains the given name
 struct KDEVPLATFORMLANGUAGE_EXPORT CompletionCustomGroupNode : public CompletionTreeNode {
-  ///@param inheritanceDepth @see KTextEditor::CodeCompletionModel::GroupRole
+  ///@param inheritanceDepth @ref KTextEditor::CodeCompletionModel::GroupRole
   CompletionCustomGroupNode(QString groupName, int inheritanceDepth = 700);
   
   int inheritanceDepth;

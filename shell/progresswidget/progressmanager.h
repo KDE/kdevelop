@@ -161,24 +161,24 @@ public:
 Q_SIGNALS:
     /**
      * Emitted when a new ProgressItem is added.
-     * @param The ProgressItem that was added.
+     * @param item The ProgressItem that was added.
      */
-    void progressItemAdded( KDevelop::ProgressItem * );
+    void progressItemAdded( KDevelop::ProgressItem* item );
 
     /**
      * Emitted when the progress value of an item changes.
-     * @param  The item which got a new value.
-     * @param  The value, for convenience.
+     * @param item The item which got a new value.
+     * @param value The value, for convenience.
      */
-    void progressItemProgress( KDevelop::ProgressItem *, unsigned int );
+    void progressItemProgress( KDevelop::ProgressItem* item, unsigned int value );
 
     /**
      * Emitted when a progress item was completed. The item will be
      * deleted afterwards, so slots connected to this are the last
      * chance to work with this item.
-     * @param The completed item.
+     * @param item The completed item.
      */
-    void progressItemCompleted( KDevelop::ProgressItem * );
+    void progressItemCompleted( KDevelop::ProgressItem* item );
 
     /**
      * Emitted when an item was canceled. It will _not_ go away immediately,
@@ -188,33 +188,33 @@ Q_SIGNALS:
      * canceled. There is a ProgressManager::slotStandardCancelHandler which
      * simply sets the item completed and can be used if no other work needs to
      * be done on cancel.
-     * @param The canceled item;
+     * @param item The canceled item;
      */
-    void progressItemCanceled( KDevelop::ProgressItem * );
+    void progressItemCanceled( KDevelop::ProgressItem* item );
 
     /**
      * Emitted when the status message of an item changed. Should be used by
      * progress dialogs to update the status message for an item.
-     * @param  The updated item.
-     * @param  The new message.
+     * @param item The updated item.
+     * @param message The new message.
      */
-    void progressItemStatus( KDevelop::ProgressItem *, const QString & );
+    void progressItemStatus( KDevelop::ProgressItem* item, const QString& message );
 
     /**
      * Emitted when the label of an item changed. Should be used by
      * progress dialogs to update the label of an item.
-     * @param  The updated item.
-     * @param  The new label.
+     * @param item The updated item.
+     * @param label The new label.
      */
-    void progressItemLabel( KDevelop::ProgressItem *, const QString & );
+    void progressItemLabel( KDevelop::ProgressItem* item, const QString& label );
 
     /**
      * Emitted when the crypto status of an item changed. Should be used by
      * progress dialogs to update the crypto indicator of an item.
-     * @param  The updated item.
-     * @param  The new state.
+     * @param item The updated item.
+     * @param state The new state.
      */
-    void progressItemUsesCrypto( KDevelop::ProgressItem *, bool );
+    void progressItemUsesCrypto( KDevelop::ProgressItem* item, bool state );
 
     /**
      * Emitted when the busy indicator state of an item changes. Should be used
@@ -286,10 +286,9 @@ public:
     static ProgressManager *instance();
 
     /**
-     * Use this to acquire a unique id number which can be used to discern
+     * @return a unique id number which can be used to discern
      * an operation from all others going on at the same time. Use that
-     * number as the id string for your progressItem to ensure it is unique.
-     * @return
+     * number as the id string for your <i>progressItem</i> to ensure it is unique.
      */
     static QString getUniqueID()
     {

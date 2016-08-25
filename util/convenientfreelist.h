@@ -73,14 +73,14 @@ namespace KDevelop {
                 return m_data;
             }
 
-            ///Returns the first valid index that has a data-value larger or equal to @param data.
+            ///Returns the first valid index that has a data-value larger or equal to @p data.
             ///Returns -1 if nothing is found.
             int lowerBound(const Data& data) const {
                 EmbeddedTreeAlgorithms<Data, Handler> alg(m_data, m_dataSize, m_centralFreeItem);
                 return alg.lowerBound(data, 0, m_dataSize);
             }
 
-            ///Returns the first valid index that has a data-value larger or equal to @param data,
+            ///Returns the first valid index that has a data-value larger or equal to @p data,
             ///and that is in the range [start, end).
             ///Returns -1 if nothing is found.
             int lowerBound(const Data& data, uint start, uint end) const {
@@ -456,7 +456,7 @@ namespace KDevelop {
             }
         }
 
-        ///Returns the first valid index that has an extracted data-value larger or equal to @param data.
+        ///Returns the first valid index that has an extracted data-value larger or equal to @p data.
         ///Returns -1 if nothing is found.
         int lowerBound(const Data2& data, int start, int end) {
             int currentBound = -1;
@@ -623,7 +623,7 @@ namespace KDevelop {
             }
         }
 
-        ///Returns the first valid index that has an extracted data-value larger or equal to @param data.
+        ///Returns the first valid index that has an extracted data-value larger or equal to @p data.
         ///Returns -1 if nothing is found.
         int lowerBound(const Data2& data, int start, int end) {
             int currentBound = -1;
