@@ -42,11 +42,6 @@ StandardBackground {
                 horizontalAlignment: Image.AlignHCenter
                 verticalAlignment: Image.AlignVCenter
 
-                sourceSize {
-                    width: icon.height
-                    height: icon.height
-                }
-
                 source: "image://icon/kdevelop"
                 smooth: true
                 fillMode: Image.PreserveAspectFit
