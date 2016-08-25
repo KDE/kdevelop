@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustomdefinesandincludes\")
+
 add_subdirectory(tests)
 add_subdirectory(compilerprovider)
 add_subdirectory(noprojectincludesanddefines)

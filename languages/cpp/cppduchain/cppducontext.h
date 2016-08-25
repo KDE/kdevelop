@@ -653,7 +653,8 @@ class CppDUContext : public BaseContext {
       return instantiateDeclarationAndContext( surroundingContext, source, this, info, 0, 0 );
     }
 
-    virtual QWidget* createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const override;
+    virtual QWidget* createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix,
+                                            KDevelop::AbstractNavigationWidget::DisplayHints hints = KDevelop::AbstractNavigationWidget::NoHints) const override;
 
     enum {
       Identity = BaseContext::Identity + 50
