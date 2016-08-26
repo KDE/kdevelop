@@ -34,7 +34,7 @@ using namespace KDevelop;
 
 void TestUiController::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({{}}); // load no plugins at all
     TestCore::initialize();
 }
 
