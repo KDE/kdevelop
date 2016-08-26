@@ -508,6 +508,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( QStringLiteral("kdevpatchreview"), parent ),
     m_patch( 0 ), m_factory( new PatchReviewToolViewFactory( this ) ) {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
 
     setXMLFile( QStringLiteral("kdevpatchreview.rc") );

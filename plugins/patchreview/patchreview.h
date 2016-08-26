@@ -19,6 +19,7 @@
 
 #include <interfaces/iplugin.h>
 #include <interfaces/ipatchsource.h>
+#include <interfaces/ilanguagesupport.h>
 
 class PatchHighlighter;
 class PatchReviewToolViewFactory;
@@ -45,10 +46,11 @@ struct Info;
 class DiffSettings;
 class PatchReviewPlugin;
 
-class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchReview
+class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchReview, public KDevelop::ILanguageSupport
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IPatchReview )
+    Q_INTERFACES( KDevelop::ILanguageSupport )
 
 public :
     explicit PatchReviewPlugin( QObject *parent, const QVariantList & = QVariantList() );
@@ -61,6 +63,14 @@ public :
 
     Diff2::KompareModelList* modelList() const {
         return m_modelList.data();
+    }
+
+    virtual QString name() const override {
+      return "diff";
+    }
+
+    virtual KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &) override {
+      return nullptr;
     }
 
     void seekHunk( bool forwards, const QUrl& file = QUrl() );

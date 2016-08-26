@@ -67,7 +67,13 @@
         ]
     }, 
     "X-KDevelop-Interfaces": [
-        "org.kdevelop.IPatchReview"
-    ], 
-    "X-KDevelop-Mode": "GUI"
+        "org.kdevelop.IPatchReview",
+        "ILanguageSupport"
+    ],
+    "X-KDevelop-Language": "Diff",
+    "X-KDevelop-Mode": "GUI",
+    "X-KDevelop-SupportedMimeTypes": [
+        "text/x-diff",
+        "text/x-patch"
+    ]
 }
