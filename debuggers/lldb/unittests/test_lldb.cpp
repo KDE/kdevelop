@@ -49,6 +49,7 @@
 #include <QTest>
 #include <QTemporaryFile>
 #include <QUrl>
+#include <QDir>
 
 #define WAIT_FOR_STATE(session, state) \
     do { if (!KDevMI::LLDB::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
