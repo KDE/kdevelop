@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevclang\")
 add_definitions(${LLVM_CFLAGS})
 include_directories(${CLANG_INCLUDE_DIRS})
 
