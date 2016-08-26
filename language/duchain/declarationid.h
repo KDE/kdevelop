@@ -149,7 +149,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
     /**
      * Set the specialization index (see class documentation).
      *
-     * \param specializationIndex the new specialization index.
+     * \param spec the new specialization index.
      */
     void setSpecialization(const IndexedInstantiationInformation& spec);
 

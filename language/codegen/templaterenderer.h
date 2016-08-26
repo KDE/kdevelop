@@ -145,7 +145,7 @@ public:
      * This is a convenience method, suitable if you have to render a large number of templates
      * with the same context.
      *
-     * @param content the template contents
+     * @param contents the template contents
      * @return the rendered templates
      **/
     QStringList render(const QStringList& contents) const;

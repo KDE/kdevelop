@@ -33,8 +33,8 @@ public:
 
     void rememberSearchDirectory(QString const & directory);
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
-    void showDialog(bool setLastUsed = false, QString pattern = QString(), bool showOptions = true);
-    
+    void showDialog(bool setLastUsed = false, QString pattern = QString(), bool show = true);
+
     /**
      * Returns a new instance of GrepJob. Since the plugin supports only one job at the same time,
      * previous job, if any, is killed before creating a new job.
@@ -45,9 +45,9 @@ public:
 public Q_SLOTS:
     ///@param pattern the pattern to search
     ///@param directory the directory, or a semicolon-separated list of files
-    ///@param showDIalog whether the search dialog should be shown. if false,
-    ///                  the parameters of the last search will be used.
-    Q_SCRIPTABLE void startSearch(QString pattern, QString directory, bool showOptions);
+    ///@param show whether the search dialog should be shown. if false,
+    ///            the parameters of the last search will be used.
+    Q_SCRIPTABLE void startSearch(QString pattern, QString directory, bool show);
 
 Q_SIGNALS:
     Q_SIGNAL void grepJobFinished();

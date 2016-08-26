@@ -17,11 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef KDEVPLATFORM_DEFINITIONS_H
+#define KDEVPLATFORM_DEFINITIONS_H
+
 #include <language/languageexport.h>
 #include <util/kdevvarlengtharray.h>
 
-#ifndef KDEVPLATFORM_DEFINITIONS_H
-#define KDEVPLATFORM_DEFINITIONS_H
 
 class QTextStream;
 
@@ -42,13 +43,13 @@ namespace KDevelop {
     /// Destructor.
     ~Definitions();
     /**
-     * Assigns @param definition to the given @param id.
+     * Assigns @param definition to the given @p id
      * */
     void addDefinition(const DeclarationId& id, const IndexedDeclaration& definition);
 
     void removeDefinition(const DeclarationId& id, const IndexedDeclaration& definition);
     
-    ///Gets all the known definitions assigned to @param id.
+    ///Gets all the known definitions assigned to @p id
     KDevVarLengthArray<IndexedDeclaration> definitions(const DeclarationId& id) const;
 
     /// Dump contents of the definitions repository to stream @p out

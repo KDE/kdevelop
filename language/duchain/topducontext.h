@@ -214,8 +214,8 @@ public:
   int indexForUsedDeclaration(Declaration* declaration, bool create = true);
 
   /**
-   * Tries to retrieve the used declaration @param declarationIndex
-   * @param context must be the context where the use happened
+   * Tries to retrieve the used declaration
+   * @param declarationIndex The index of the declaration which have to be retrieved
    * */
   Declaration* usedDeclarationForIndex(unsigned int declarationIndex) const;
 

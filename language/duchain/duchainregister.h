@@ -179,10 +179,10 @@ struct DUChainType {};
 #define DUCHAIN_DEFINE_TYPE(Type) \
   DUCHAIN_DEFINE_TYPE_WITH_DATA(Type, Type##Data)
 
-/// Register @param T to DUChainItemSystem
+/// Register @p T to DUChainItemSystem
 template<typename T>
 void duchainRegisterType() { DUChainType<T>::registerType(); }
-/// Unregister @param T to DUChainItemSystem
+/// Unregister @p T to DUChainItemSystem
 template<typename T>
 void duchainUnregisterType() { DUChainType<T>::unregisterType(); }
 

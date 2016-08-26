@@ -525,9 +525,9 @@ QString SessionController::sessionDirectory(const QString& sessionId)
     return SessionControllerPrivate::sessionBaseDirectory() + sessionId;
 }
 
-TryLockSessionResult SessionController::tryLockSession(const QString& id)
+TryLockSessionResult SessionController::tryLockSession(const QString& id, bool doLocking)
 {
-    return SessionLock::tryLockSession(id, true);
+    return SessionLock::tryLockSession(id, doLocking);
 }
 
 bool SessionController::isSessionRunning(const QString& id)

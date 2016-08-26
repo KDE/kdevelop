@@ -96,7 +96,7 @@ public:
      * @brief Indicates that this generation should not expect interaction with the user/
      * Most probable scenarios are: Testing, and a generator that is being used by another one
      * @param context If not NULL, the custom context to use, instead of user selection
-     * @param position If not NULL, the cursom range to use instead of user selection
+     * @param range If not NULL, the cursom range to use instead of user selection
      * @note If this function is called, then gather information will not be called.
      *       Derived classes should provide an alternative way of setting up the generator.
      */

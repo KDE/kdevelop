@@ -56,7 +56,7 @@ namespace DUChainUtils {
   /** Asks the language-plugins for standard-contexts for the given url, and returns one if available.
     * If there is no language-plugin registered for the given url, it will just try to get any top-context for the file from the du-chain.
     * NOTE: The DUChain needs to be read or write locked when you call this.
-    * @param proxyContext Whether the returned context should be a proxy context. When no proxy-context is found, a normal context is returned.
+    * @param preferProxyContext Whether the returned context should be a proxy context. When no proxy-context is found, a normal context is returned.
     *
     * FIXME: this should operate on IndexedString
     */
@@ -108,7 +108,7 @@ namespace DUChainUtils {
   ///                                           If you really want _all_ inheriters, you should initialize it with a very large value.
   KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions = true);
 
-  ///Gets all functions that override the function @param overriddenDeclaration, starting the search at @param currentClass
+  ///Gets all functions that override the function @p overriddenDeclaration, starting the search at @p currentClass
   ///@param maxAllowedSteps The maximum of steps allowed. If this is zero in the end, this means the search has been stopped with the max. reached
   KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps);
 

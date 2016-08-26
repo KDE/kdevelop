@@ -76,7 +76,7 @@ public:
      * Change the url of this status information item
      * @param url the url
      */
-    void setUrl( const QUrl& );
+    void setUrl( const QUrl& url );
 
     VcsStatusInfo::State state() const;
     void setState( VcsStatusInfo::State );

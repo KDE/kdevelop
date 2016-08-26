@@ -318,7 +318,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
         }
         else
         {
-            qCDebug(LANGUAGE) << "could not open template" << archName;
+            qCWarning(LANGUAGE) << "could not open template" << archName;
         }
     }
 }

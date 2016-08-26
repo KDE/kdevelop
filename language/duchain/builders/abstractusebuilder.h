@@ -75,16 +75,16 @@ public:
   }
 
 protected:
-  /**
-   * Register a new use at the AST node \a name.
-   *
-   * \param node AST node which both represents a use and the identifier for the declaration which is being used.
-   */
   
   struct ContextUseTracker {
     QVector<KDevelop::Use> createUses;
   };
   
+  /**
+   * Register a new use at the AST node @p name.
+   *
+   * @param name AST node which both represents a use and the identifier for the declaration which is being used.
+   */
   void newUse(NameT* name)
   {
     QualifiedIdentifier id = identifierForNode(name);
@@ -111,7 +111,7 @@ protected:
    * Register a new use for a \a declaration with a \a node.
    *
    * \param node Node which encompasses the use.
-   * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
+   * \param declaration Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
   void newUse(T* node, const KDevelop::DeclarationPointer& declaration)
   {
@@ -122,7 +122,7 @@ protected:
    * Register a new use.
    *
    * \param newRange Text range which encompasses the use.
-   * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
+   * \param _declaration Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
   void newUse(T* node, const RangeInRevision& newRange, const DeclarationPointer& _declaration)
   {

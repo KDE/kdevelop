@@ -125,7 +125,6 @@ public:
   /**
    * Constructor.
    *
-   * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier
    */
   explicit DUChainBase(const RangeInRevision& range);
@@ -200,7 +199,6 @@ protected:
     * Constructor for copy constructors in subclasses.
     *
     * \param dd data to use.
-    * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
   DUChainBase( DUChainBaseData& dd, const RangeInRevision& range );

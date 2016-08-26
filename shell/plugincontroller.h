@@ -116,7 +116,7 @@ public:
      * required in .desktop file for that plugin.
      *
      * @param extension The extension interface
-     * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
+     * @param pluginName The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
     IPlugin *pluginForExtension(const QString &extension, const QString &pluginName = {}, const QVariantMap& constraints = QVariantMap()) override;

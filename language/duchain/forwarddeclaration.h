@@ -46,9 +46,8 @@ public:
    *
    * If \a context is in the symbol table, the declaration will automatically be added into the symbol table.
    *
-   * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier
-   * \param parentContext context in which this declaration occurred
+   * \param context context in which this declaration occurred
    * */
   ForwardDeclaration(const RangeInRevision& range, DUContext* context);
   explicit ForwardDeclaration(ForwardDeclarationData& data);

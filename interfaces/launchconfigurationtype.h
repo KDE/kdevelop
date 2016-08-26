@@ -121,7 +121,7 @@ public:
     /**
      * Configure the given launch configuration to execute the selected item
      * @param config the configuration to setup
-     * @param item the item to launch
+     * @param args argument list
      */
     virtual void configureLaunchFromCmdLineArguments( KConfigGroup config,
                                                       const QStringList &args ) const = 0;

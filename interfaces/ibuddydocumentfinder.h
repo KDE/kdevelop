@@ -81,18 +81,18 @@ public:
     virtual bool areBuddies(const QUrl& url1, const QUrl& url2) = 0;
 
     /**
-     * Called to determine the order of two documents in the tabbar.
+     * @brief Called to determine the order of two documents in the tabbar.
      *
      * Example: a C++ implementation that wants to place the tab of the .h
-     * file left of the .cpp tab must return true for
-     *   buddyOrder(QUrl::fromLocalFile("...../foo.h"),   QUrl::fromLocalFile("...../foo.cpp"))
-     * and false for
-     *   buddyOrder(QUrl::fromLocalFile("...../foo.cpp"), QUrl::fromLocalFile("...../foo.h")).
+     * file left of the .cpp tab must return true for <br>
+     *   <i>buddyOrder(QUrl::fromLocalFile("foo.h"),   QUrl::fromLocalFile("foo.cpp"))</i><br>
+     * and false for <br>
+     *   <i>buddyOrder(QUrl::fromLocalFile("foo.cpp"), QUrl::fromLocalFile("foo.h"))</i>
      *
-     * @param url1 @param url2: two documents which are buddies,
-     * this means areBuddies(url1,url2) returned true.
-     * @return true, if url1's tab should be placed left of url2's tab.
-     *         false, for the inverse.
+     * accepts two documents which are buddies,
+     *         this means areBuddies(url1,url2) returned true.
+     * @return true if url1's tab should be placed left of url2's tab and
+     *         false for the inverse.
      */
     virtual bool buddyOrder(const QUrl& url1, const QUrl& url2) = 0;
 
@@ -110,20 +110,20 @@ public:
     virtual QVector<QUrl> getPotentialBuddies(const QUrl& url) const = 0;
 
     /**
-     * Registers a IBuddyDocumentFinder object for a mimetype.
+     * @brief Registers a <i>IBuddyDocumentFinder</i> object for a mimetype.
      *
-     * To be called in the constructor of language plugins.
-     * Afterwards, finderForMimeType(@param mimeType) will return @param finder,
-     * as long as the entry is not overwritten by another call to addFinder.
+     * @details To be called in the constructor of language plugins.
+     *   Afterwards, finderForMimeType( @p mimeType ) will return @p finder ,
+     *   as long as the entry is not overwritten by another call to addFinder.
      */
     static void addFinder(const QString& mimeType, IBuddyDocumentFinder* finder);
 
     /**
-     * Un-registers a IBuddyDocumentFinder object for a mimetype.
+     * @brief Un-registers a <i>IBuddyDocumentFinder</i> object for a mimetype.
      *
-     * To be called in the destructor of language plugins.
-     * Afterwards, finderForMimeType(@param mimeType) will return 0, until a new
-     * entry for this mimetype is created by addFinder().
+     * @details To be called in the destructor of language plugins.
+     *   Afterwards, finderForMimeType( @p mimeType ) will return 0, until a new
+     *   entry for this mimetype is created by addFinder().
      */
     static void removeFinder(const QString& mimeType);
 

@@ -72,7 +72,7 @@ public:
      * Registers a new provider under a specified name.
      * There may be multiple providers with the same type/scope, they will be used simultaneously in that case.
      * type and scope will be shown in the GUI, so they should be translated.
-     * @param scope Different scopes supported by this data-provider, Examples: "Project", "Imports", etc.
+     * @param scopes Different scopes supported by this data-provider, Examples: "Project", "Imports", etc.
      * @param type Types of the provided data, Examples: "Files", "Functions", "Classes", etc.
      * @param provider The provider. It does not need to be explicitly removed before its destruction.
      */

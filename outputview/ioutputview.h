@@ -143,7 +143,7 @@ public:
     /**
      * remove a toolview, don't forget to emit toolViewRemoved when you implement this
      *
-     * @param id identifies the view to remove
+     * @param toolviewId identifies the view to remove
      */
     virtual void removeToolView( int toolviewId ) = 0;
 

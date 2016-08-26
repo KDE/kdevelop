@@ -67,8 +67,8 @@ protected:
 private:
   /// Only environments with this type will be considered
   ParsingEnvironmentType m_type;
-  ///@param first must initially be true
   typedef QPair<int, uint> IdentifierPair;
+  ///@param first must initially be true
   void addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first,
                                   QList<IdentifierPair>& addedDeclarations,
                                   const QString& indent = {} );

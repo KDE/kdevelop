@@ -463,8 +463,8 @@ class Bucket {
 
     ///@param modulo Returns whether this bucket contains an item with (hash % modulo) == (item.hash % modulo)
     ///              The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
-    ///              @param modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
-    ///                            This this allows efficiently computing the clashes using the local object map hash.
+    ///@note modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
+    ///              This this allows efficiently computing the clashes using the local object map hash.
 
     bool hasClashingItem(uint hash, uint modulo) {
 
@@ -1094,7 +1094,7 @@ class ItemRepository : public AbstractItemRepository {
 
   ///Returns the index for the given item. If the item is not in the repository yet, it is inserted.
   ///The index can never be zero. Zero is reserved for your own usage as invalid
-  ///@param dynamic will be applied to the dynamic data of the found item
+  ///@param request Item to retrieve the index from
   unsigned int index(const ItemRequest& request) {
 
     ThisLocker lock(m_mutex);
@@ -1479,7 +1479,6 @@ class ItemRepository : public AbstractItemRepository {
   }
 
   ///@param index The index. It must be valid(match an existing item), and nonzero.
-  ///@param dynamic will be applied to the item.
   const Item* itemFromIndex(unsigned int index) const {
     verifyIndex(index);
 
@@ -1765,7 +1764,7 @@ class ItemRepository : public AbstractItemRepository {
   }
 
   /**
-   * Walks through all buckets clashing with @param hash
+   * Walks through all buckets clashing with @p hash
    *
    * Will return the value returned by the lambda, returning early if truthy
    */

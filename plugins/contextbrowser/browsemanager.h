@@ -45,7 +45,6 @@ namespace KDevelop {
 class EditorViewWatcher : public QObject {
     Q_OBJECT
 public:
-    ///@param sameWindow If this is true, only views that are child of the same window as the given widget are registered
     explicit EditorViewWatcher(QObject* parent = nullptr);
     QList<KTextEditor::View*> allViews();
 private:
@@ -84,10 +83,10 @@ class BrowseManager : public QObject {
 
         void viewAdded(KTextEditor::View* view);
 
-        //Installs/uninstalls the event-filter
+        ///Installs/uninstalls the event-filter
         void applyEventFilter(QWidget* object, bool install);
     Q_SIGNALS:
-        //Emitted when browsing was started using the magic-modifier
+        ///Emitted when browsing was started using the magic-modifier
         void startDelayedBrowsing(KTextEditor::View* view);
         void stopDelayedBrowsing();
         void invokeAction(int index);

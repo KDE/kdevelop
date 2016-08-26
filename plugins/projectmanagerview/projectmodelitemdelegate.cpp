@@ -52,8 +52,8 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     QPixmap decoData;
     QRect decorationRect;
     QIcon icon;
-    QIcon::Mode mode;
-    QIcon::State state;
+    QIcon::Mode mode = QIcon::Mode::Disabled;
+    QIcon::State state = QIcon::State::Off;
     {
         QVariant value;
         value = index.data(Qt::DecorationRole);

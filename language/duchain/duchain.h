@@ -74,7 +74,7 @@ public:
    * If the context is already up to date, the given QObject is notified directly.
    *
    * @param document Document to update
-   * @param features The requested features. If you want to force a full update of the context, give TopDUContext::ForceUpdate.
+   * @param minFeatures The requested features. If you want to force a full update of the context, give TopDUContext::ForceUpdate.
    *                 If you want to force an update including all imports, use TopDUContext::ForceUpdateRecursive.
    * @param notifyReady An optional pointer to a QObject that should contain a slot
    *                    "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
@@ -90,7 +90,7 @@ public:
     * Convenience-function similar to updateContextForUrl that blocks this thread until the update of the given document is ready,
     * and returns the top-context.
     * @param document The document to update
-    * @param features The requested features. If you want to force a full update of the context, give TopDUContext::ForceUpdate.
+    * @param minFeatures The requested features. If you want to force a full update of the context, give TopDUContext::ForceUpdate.
     *                 If you want to force an update including all imports, use TopDUContext::ForceUpdateRecursive.
     * @return The up-to-date top-context, or zero if the update failed
     *
