@@ -1477,7 +1477,7 @@ void LldbTest::testVariablesWatchesQuotes()
     QModelIndex i = variableCollection()->index(0, 0);
     QCOMPARE(variableCollection()->rowCount(i), 1);
     COMPARE_DATA(variableCollection()->index(0, 0, i), quotedTestString);
-    COMPARE_DATA(variableCollection()->index(0, 1, i), QStringLiteral("[%0]").arg(testString.length() + 1));
+    COMPARE_DATA(variableCollection()->index(0, 1, i), quotedTestString);
 
     QModelIndex testStr = variableCollection()->index(0, 0, i);
     COMPARE_DATA(variableCollection()->index(0, 0, testStr), "...");
