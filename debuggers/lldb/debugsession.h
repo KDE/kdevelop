@@ -73,6 +73,8 @@ protected:
 
     bool execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *iexec,
                       const QString &executable) override;
+    bool loadCoreFile(KDevelop::ILaunchConfiguration * cfg,
+                      const QString & debugee, const QString & corefile) override;
 
     void ensureDebuggerListening() override;
 
@@ -80,8 +82,9 @@ protected:
     void unloadToolviews();
 
 private Q_SLOTS:
-    void handleFileExecAndSymbols(const MI::ResultRecord& r);
-    void handleTargetSelect(const MI::ResultRecord& r);
+    void handleFileExecAndSymbols(const MI::ResultRecord &r);
+    void handleTargetSelect(const MI::ResultRecord &r);
+    void handleCoreFile(const QStringList &s);
 
     void handleSessionStateChange(IDebugSession::DebuggerState state);
 

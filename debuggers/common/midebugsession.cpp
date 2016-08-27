@@ -347,31 +347,13 @@ bool MIDebugSession::examineCoreFile(const QUrl &debugee, const QUrl &coreFile)
     }
 
     // FIXME: support non-local URLs
-    addCommand(FileExecAndSymbols, debugee.toLocalFile());
-    addCommand(NonMI, "core " + coreFile.toLocalFile(),
-               this, &MIDebugSession::handleCoreFile,
-               CmdHandlesError);
+    if (!loadCoreFile(nullptr, debugee.toLocalFile(), coreFile.toLocalFile())) {
+        return false;
+    }
 
-    raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
 
     return true;
-}
-
-void MIDebugSession::handleCoreFile(const MI::ResultRecord& r)
-{
-    if (r.reason != "error") {
-        setDebuggerStateOn(s_programExited|s_core);
-    } else {
-        KMessageBox::information(
-            qApp->activeWindow(),
-            i18n("<b>Failed to load core file</b>"
-                "<p>Debugger reported the following error:"
-                "<p><tt>%1", r["msg"].literal()),
-            i18n("Debugger error"));
-
-        // FIXME: How should we proceed at this point? Stop the debugger?
-    }
 }
 
 #define ENUM_NAME(o,e,v) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).valueToKey((v)))

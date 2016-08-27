@@ -87,9 +87,13 @@ protected:
     bool execInferior(KDevelop::ILaunchConfiguration* cfg, IExecutePlugin*,
                       const QString& executable) override;
 
+    bool loadCoreFile(KDevelop::ILaunchConfiguration *cfg,
+                      const QString &debugee, const QString &corefile) override;
+
 private Q_SLOTS:
     void handleVersion(const QStringList& s);
     void handleFileExecAndSymbols(const MI::ResultRecord& r);
+    void handleCoreFile(const MI::ResultRecord& r);
 
 private:
     friend class GdbTest;

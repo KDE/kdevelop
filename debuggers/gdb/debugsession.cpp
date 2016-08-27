@@ -262,6 +262,20 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
     return true;
 }
 
+bool DebugSession::loadCoreFile(KDevelop::ILaunchConfiguration*,
+                                const QString& debugee, const QString& corefile)
+{
+    addCommand(MI::FileExecAndSymbols, debugee,
+               this, &DebugSession::handleFileExecAndSymbols,
+               CmdHandlesError);
+    raiseEvent(connected_to_program);
+
+    addCommand(NonMI, "core " + corefile,
+               this, &DebugSession::handleCoreFile,
+               CmdHandlesError);
+    return true;
+}
+
 void DebugSession::handleVersion(const QStringList& s)
 {
     qCDebug(DEBUGGERGDB) << s.first();
@@ -291,6 +305,22 @@ void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
             qApp->activeWindow(),
             i18n("<b>Could not start debugger:</b><br />")+
             r["msg"].literal(),
+            i18n("Startup error"));
+        stopDebugger();
+    }
+}
+
+void DebugSession::handleCoreFile(const ResultRecord& r)
+{
+    if (r.reason != "error") {
+        setDebuggerStateOn(s_programExited | s_core);
+    } else {
+        KMessageBox::error(
+            qApp->activeWindow(),
+            i18n("<b>Failed to load core file</b>"
+                 "<p>Debugger reported the following error:"
+                 "<p><tt>%1",
+            r["msg"].literal()),
             i18n("Startup error"));
         stopDebugger();
     }

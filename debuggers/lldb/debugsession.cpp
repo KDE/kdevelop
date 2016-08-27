@@ -298,6 +298,20 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
     return true;
 }
 
+bool DebugSession::loadCoreFile(ILaunchConfiguration *,
+                                const QString &debugee, const QString &corefile)
+{
+    addCommand(MI::FileExecAndSymbols, debugee,
+               this, &DebugSession::handleFileExecAndSymbols,
+               CmdHandlesError);
+    raiseEvent(connected_to_program);
+
+    addCommand(new CliCommand(NonMI, "target create -c " + Utils::quote(corefile),
+                              this, &DebugSession::handleCoreFile,
+                              CmdHandlesError));
+    return true;
+}
+
 void DebugSession::interruptDebugger()
 {
     if (debuggerStateIsOn(s_dbgNotStarted|s_shuttingDown))
@@ -338,6 +352,29 @@ void DebugSession::handleTargetSelect(const MI::ResultRecord& r)
             i18n("Startup error"));
         stopDebugger();
     }
+}
+
+void DebugSession::handleCoreFile(const QStringList &s)
+{
+    qCDebug(DEBUGGERLLDB) << s;
+    for (const auto &line : s) {
+        if (line.startsWith("error:")) {
+            KMessageBox::error(
+                qApp->activeWindow(),
+                i18n("<b>Failed to load core file</b>"
+                "<p>Debugger reported the following error:"
+                "<p><tt>%1",
+                s.join('\n')),
+                i18n("Startup error"));
+            stopDebugger();
+            return;
+        }
+    }
+    // There's no "thread-group-started" notification from lldb-mi, so pretend we have received one.
+    // see MIDebugSession::processNotification(const MI::AsyncRecord & async)
+    setDebuggerStateOff(s_appNotStarted | s_programExited);
+
+    setDebuggerStateOn(s_programExited | s_core);
 }
 
 void DebugSession::updateAllVariables()

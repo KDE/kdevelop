@@ -1,6 +1,6 @@
 add_debuggable_executable(lldb_debugee SRCS debugee.cpp)
 add_debuggable_executable(lldb_debugeeslow SRCS debugeeslow.cpp)
-add_debuggable_executable(lldb_debugeecrash SRCS debugeecrash.cpp)
+add_debuggable_executable(lldb_crash SRCS debugeecrash.cpp)
 add_debuggable_executable(lldb_debugeerecursion SRCS debugeerecursion.cpp)
 add_debuggable_executable(lldb_debugeespace SRCS "debugee space.cpp")
 add_debuggable_executable(lldb_debugeemultilocbreakpoint SRCS debugeemultilocbreakpoint.cpp)

@@ -1057,9 +1057,19 @@ void GdbTest::testCoreFile()
     debugeeProcess.start();
     debugeeProcess.waitForFinished();
     qDebug() << debugeeProcess.readAll();
-    if (!QFile::exists("core")) {
-        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).", SkipSingle);
+
+    bool coreFileFound = QFile::exists("core");
+    if (!coreFileFound) {
+        // Try to use coredumpctl
+        auto coredumpctl = QStandardPaths::findExecutable("coredumpctl");
+        if (!coredumpctl.isEmpty()) {
+            QFileInfo fi("core");
+            KProcess::execute(coredumpctl, {"-1", "-o", fi.absoluteFilePath(), "dump", "debugeecrash"});
+            coreFileFound = fi.exists();
+        }
     }
+    if (!coreFileFound)
+        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).", SkipSingle);
 
     TestDebugSession *session = new TestDebugSession;
     session->examineCoreFile(findExecutable("debugeecrash"), QUrl::fromLocalFile(QDir::currentPath()+"/core"));

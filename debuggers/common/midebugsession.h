@@ -291,6 +291,12 @@ protected:
                               const QString &executable) = 0;
 
     /**
+     * Further config the debugger and load the core dump
+     */
+    virtual bool loadCoreFile(KDevelop::ILaunchConfiguration *cfg,
+                              const QString &debugee, const QString &corefile) = 0;
+
+    /**
      * Manipulate debugger instance state
      */
     void setDebuggerStateOn(DBGStateFlags stateOn);
@@ -323,7 +329,6 @@ protected:
 
 private Q_SLOTS:
     void handleTargetAttach(const MI::ResultRecord& r);
-    void handleCoreFile(const MI::ResultRecord& r);
     // Pops up a dialog box with some hopefully
     // detailed information about which state debugger
     // is in, which commands were sent and so on.
