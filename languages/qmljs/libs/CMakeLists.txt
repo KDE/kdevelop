@@ -1,7 +1,6 @@
 qt5_wrap_ui(uifiles_SRCS
 	utils/projectintropage.ui
 	utils/filewizardpage.ui
-	utils/submiteditorwidget.ui
 	utils/newclasswidget.ui
 )
 
