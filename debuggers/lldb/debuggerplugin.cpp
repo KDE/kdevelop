@@ -37,6 +37,8 @@
 
 using namespace KDevMI::LLDB;
 
+inline void initMyResource() { Q_INIT_RESOURCE(kdevlldb); }
+
 K_PLUGIN_FACTORY_WITH_JSON(LldbDebuggerFactory, "kdevlldb.json", registerPlugin<LldbDebuggerPlugin>(); )
 
 LldbDebuggerPlugin::LldbDebuggerPlugin(QObject *parent, const QVariantList &)
@@ -44,6 +46,8 @@ LldbDebuggerPlugin::LldbDebuggerPlugin(QObject *parent, const QVariantList &)
     , m_consoleFactory(nullptr)
     , m_disassembleFactory(nullptr)
 {
+    initMyResource();
+
     setXMLFile("kdevlldbui.rc");
 
     auto plugins = core()->pluginController()->allPluginsForExtension("org.kdevelop.IExecutePlugin");
