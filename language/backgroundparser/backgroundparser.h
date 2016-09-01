@@ -100,9 +100,9 @@ public:
     Q_SCRIPTABLE int threadCount() const;
 
     /**
-     * Set the delay in miliseconds before the background parser starts parsing.
+     * Set the delay in milliseconds before the background parser starts parsing.
      */
-    Q_SCRIPTABLE void setDelay(int miliseconds);
+    Q_SCRIPTABLE void setDelay(int milliseconds);
 
     /**
      * Returns all documents that were added through addManagedTopRange. This is typically the currently

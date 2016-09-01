@@ -733,10 +733,10 @@ int BackgroundParser::threadCount() const
     return d->m_threads;
 }
 
-void BackgroundParser::setDelay(int miliseconds)
+void BackgroundParser::setDelay(int milliseconds)
 {
-    if (d->m_delay != miliseconds) {
-        d->m_delay = miliseconds;
+    if (d->m_delay != milliseconds) {
+        d->m_delay = milliseconds;
         d->m_timer.setInterval(d->m_delay);
     }
 }
