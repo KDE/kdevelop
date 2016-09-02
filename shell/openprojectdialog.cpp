@@ -174,7 +174,9 @@ int OpenProjectDialog::exec()
 void OpenProjectDialog::validateSourcePage(bool valid)
 {
     setValid(sourcePage, valid);
-    openPageWidget->setUrl(sourcePageWidget->workingDir());
+    if (!nativeDialog) {
+        openPageWidget->setUrl(sourcePageWidget->workingDir());
+    }
 }
 
 void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
