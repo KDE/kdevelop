@@ -160,7 +160,7 @@ void PatchReviewPlugin::addHighlighting( const QUrl& highlightFile, IDocument* d
 
             removeHighlighting( file );
 
-            m_highlighters[file] = new PatchHighlighter( model, doc, this );
+            m_highlighters[file] = new PatchHighlighter( model, doc, this, dynamic_cast<LocalPatchSource*>(m_patch.data()) == nullptr );
         }
     } catch ( const QString & str ) {
         qCDebug(PLUGIN_PATCHREVIEW) << "highlightFile():" << str;
@@ -356,6 +356,15 @@ void PatchReviewPlugin::clearPatch( QObject* _patch ) {
 void PatchReviewPlugin::closeReview()
 {
     if( m_patch ) {
+        IDocument* patchDocument = ICore::self()->documentController()->documentForUrl( m_patch->file() );
+        if (patchDocument) {
+            // Revert modifications to the text document which we've done in updateReview
+            patchDocument->setPrettyName( QString() );
+            patchDocument->textDocument()->setReadWrite( true );
+            KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( patchDocument->textDocument() );
+            modif->setModifiedOnDiskWarning( true );
+        }
+
         removeHighlighting();
         m_modelList.reset( 0 );
         m_depth = 0;
@@ -433,18 +442,23 @@ void PatchReviewPlugin::updateReview()
     IDocument* futureActiveDoc = ICore::self()->documentController()->openDocument( m_patch->file() );
 
     updateKompareModel();
+
     if ( !m_modelList || !futureActiveDoc || !futureActiveDoc->textDocument() ) {
         // might happen if e.g. openDocument dialog was cancelled by user
         // or under the theoretic possibility of a non-text document getting opened
         return;
     }
+
     futureActiveDoc->textDocument()->setReadWrite( false );
     futureActiveDoc->setPrettyName( i18n( "Overview" ) );
-
-    IDocument* buddyDoc = futureActiveDoc;
-
     KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( futureActiveDoc->textDocument() );
     modif->setModifiedOnDiskWarning( false );
+
+    Q_ASSERT( futureActiveDoc );
+    ICore::self()->documentController()->activateDocument( futureActiveDoc );
+
+    PatchReviewToolView* toolView = qobject_cast<PatchReviewToolView*>(ICore::self()->uiController()->findToolView( i18n( "Patch Review" ), m_factory ));
+    Q_ASSERT( toolView );
 
     if( m_modelList->modelCount() < maximumFilesToOpenDirectly ) {
         //Open all relates files
@@ -457,22 +471,13 @@ void PatchReviewPlugin::updateReview()
 
             if( QFileInfo::exists( absoluteUrl.toLocalFile() ) && absoluteUrl.toLocalFile() != QLatin1String("/dev/null") )
             {
-                buddyDoc = ICore::self()->documentController()->openDocument( absoluteUrl, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate, QLatin1String(""), buddyDoc );
-
-                seekHunk( true, absoluteUrl ); //Jump to the first changed position
+                toolView->open( absoluteUrl, false );
             }else{
                 // Maybe the file was deleted
                 qCDebug(PLUGIN_PATCHREVIEW) << "could not open" << absoluteUrl << "because it doesn't exist";
             }
         }
     }
-
-    Q_ASSERT( futureActiveDoc );
-    ICore::self()->documentController()->activateDocument( futureActiveDoc );
-
-    bool b = ICore::self()->uiController()->findToolView( i18n( "Patch Review" ), m_factory );
-    Q_ASSERT( b );
-    Q_UNUSED( b );
 }
 
 void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
@@ -544,7 +549,10 @@ void PatchReviewPlugin::documentSaved( IDocument* doc ) {
     // Only update if the url is not the patch-file, because our call to
     // the reload() KTextEditor function also causes this signal,
     // which would lead to an endless update loop.
-    if( m_patch && doc->url() != m_patch->file() )
+    // Also, don't automatically update local patch sources, because
+    // they may correspond to static files which don't match any more
+    // after an edit was done.
+    if( m_patch && doc->url() != m_patch->file() && !dynamic_cast<LocalPatchSource*>(m_patch.data()) )
         forceUpdate();
 }
 

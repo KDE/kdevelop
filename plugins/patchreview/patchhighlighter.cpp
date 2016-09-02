@@ -441,12 +441,14 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, const KTextEdito
     }
 }
 
-PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin ) throw( QString )
+PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin, bool updatePatchFromEdits ) throw( QString )
     : m_doc( kdoc ), m_plugin( plugin ), m_model( model ), m_applying( false ) {
     KTextEditor::Document* doc = kdoc->textDocument();
 //     connect( kdoc, SIGNAL(destroyed(QObject*)), this, SLOT(documentDestroyed()) );
-    connect(doc, &KTextEditor::Document::textInserted, this, &PatchHighlighter::textInserted);
-    connect(doc, &KTextEditor::Document::textRemoved, this, &PatchHighlighter::textRemoved);
+    if (updatePatchFromEdits) {
+        connect(doc, &KTextEditor::Document::textInserted, this, &PatchHighlighter::textInserted);
+        connect(doc, &KTextEditor::Document::textRemoved, this, &PatchHighlighter::textRemoved);
+    }
     connect(doc, &KTextEditor::Document::destroyed, this, &PatchHighlighter::documentDestroyed);
 
     if ( doc->lines() == 0 )

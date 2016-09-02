@@ -92,6 +92,13 @@ public:
         return checkUrls(invisibleRootItem(), urls);
     }
 
+    /** 
+     * Returns the item for the specified url
+     * */
+    QStandardItem* itemForUrl(const QUrl &url) const {
+        return fileItemForUrl(invisibleRootItem(), url);
+    }
+
     /**
      * Changes the check-state of all files to the given state
      * */

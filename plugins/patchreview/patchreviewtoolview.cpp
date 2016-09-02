@@ -354,13 +354,13 @@ void PatchReviewToolView::seekFile(bool forwards)
 
     if(newUrl.isValid())
     {
-        activate( newUrl, forwards ? current : 0 );
+        open( newUrl, true );
     }else{
         qCDebug(PLUGIN_PATCHREVIEW) << "found no valid target url";
     }
 }
 
-void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
+void PatchReviewToolView::open( const QUrl& url, bool activate ) const
 {
     qCDebug(PLUGIN_PATCHREVIEW) << "activating url" << url;
     // If the document is already open in this area, just re-activate it
@@ -369,17 +369,39 @@ void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
         {
             if(view->document() == dynamic_cast<Sublime::Document*>(doc))
             {
-                ICore::self()->documentController()->activateDocument(doc);
+                if (activate) {
+                    ICore::self()->documentController()->activateDocument(doc);
+                }
                 return;
             }
         }
     }
 
-    // If the document is not open yet, open it in the correct order
-    IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range(), IDocumentController::DefaultMode, QString(), buddy);
+    QStandardItem* item = m_fileModel->itemForUrl( url );
+
+    IDocument* buddyDoc = nullptr;
+
+    if (m_plugin->patch() && item) {
+        for (int preRow = item->row() - 1; preRow >= 0; --preRow) {
+            QStandardItem* preItem = m_fileModel->item(preRow);
+            if (!m_fileModel->isCheckable() || preItem->checkState() == Qt::Checked) {
+                // found valid predecessor, take it as buddy
+                buddyDoc = ICore::self()->documentController()->documentForUrl(preItem->index().data(VcsFileChangesModel::UrlRole).toUrl());
+                if (buddyDoc) {
+                    break;
+                }
+            }
+        }
+        if (!buddyDoc) {
+            buddyDoc = ICore::self()->documentController()->documentForUrl(m_plugin->patch()->file());
+        }
+    }
+
+    IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range::invalid(), activate ? IDocumentController::DefaultMode : IDocumentController::DoNotActivate, QLatin1String(""), buddyDoc);
+
     KTextEditor::View* view = 0;
     if(newDoc)
-        view= newDoc->activeTextView();
+        view = newDoc->activeTextView();
 
     if(view && view->cursorPosition().line() == 0)
         m_plugin->seekHunk( true, url );
@@ -387,7 +409,7 @@ void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
 
 void PatchReviewToolView::fileItemChanged( QStandardItem* item )
 {
-    if (item->column()!=0)
+    if (item->column() != 0 || !m_plugin->patch())
         return;
 
     QUrl url = item->index().data(VcsFileChangesModel::UrlRole).toUrl();
@@ -396,8 +418,7 @@ void PatchReviewToolView::fileItemChanged( QStandardItem* item )
 
     KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
     if(m_fileModel->isCheckable() && item->checkState() != Qt::Checked)
-    {
-        // Eventually close the document
+    {   // The file was deselected, so eventually close it
         if(doc && doc->state() == IDocument::Clean)
         {
             foreach(Sublime::View* view, ICore::self()->uiController()->activeArea()->views())
@@ -410,7 +431,8 @@ void PatchReviewToolView::fileItemChanged( QStandardItem* item )
             }
         }
     } else if (!doc) {
-        ICore::self()->documentController()->openDocument(url, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate);
+        // Maybe the file was unchecked before, or it  was just loaded.
+        open( url, false );
     }
 }
 
@@ -443,7 +465,7 @@ void PatchReviewToolView::finishReview() {
 void PatchReviewToolView::fileDoubleClicked( const QModelIndex& idx )
 {
     const QUrl file = idx.data(VcsFileChangesModel::UrlRole).toUrl();
-    activate( file );
+    open( file, true );
 }
 
 void PatchReviewToolView::kompareModelChanged() {

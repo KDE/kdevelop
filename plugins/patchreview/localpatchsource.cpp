@@ -126,5 +126,5 @@ void LocalPatchWidget::updatePatchFromEdit()
     m_lpatch->setCommand(m_ui->command->text());
     m_lpatch->setFilename(m_ui->filename->url());
     m_lpatch->setBaseDir(m_ui->baseDir->url());
-    m_lpatch->setAlreadyApplied(m_ui->applied->checkState() == Qt::Checked );
+    m_lpatch->setAlreadyApplied(m_ui->applied->checkState() == Qt::Checked);
 }

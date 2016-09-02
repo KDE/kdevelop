@@ -40,6 +40,10 @@ public:
     PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin );
     ~PatchReviewToolView() override;
 
+    // opens the document which should be part of the patch,
+    // ensuring that the tabs are sorted correctly
+    void open( const QUrl& url, bool activate ) const;
+
 signals:
     void dialogClosed( PatchReviewToolView* );
     void  stateChanged( PatchReviewToolView* );
@@ -70,8 +74,6 @@ private slots:
 
 private:
     void resizeEvent(QResizeEvent*) override;
-
-    void activate( const QUrl& url, KDevelop::IDocument* buddy = nullptr ) const;
 
     void kompareModelChanged();
 
