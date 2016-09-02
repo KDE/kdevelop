@@ -234,6 +234,11 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
         return false;
     }
 
+    // Only dummy err here, actual erros have been checked already in the job and we don't get here if there were any
+    QString err;
+    QString executable = iexec->executable(cfg, err).toLocalFile();
+    configInferior(cfg, iexec, executable);
+
     // Set up the tty for the inferior
     bool config_useExternalTerminal = iexec->useTerminal(cfg);
     QString config_ternimalName = iexec->terminal(cfg);
@@ -256,10 +261,6 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
     }
     addCommand(InferiorTtySet, tty);
 
-    // Only dummy err here, actual erros have been checked already in the job and we don't get here if there were any
-    QString err;
-    QString executable = iexec->executable(cfg, err).toLocalFile();
-    QStringList arguments = iexec->arguments(cfg, err);
     // Change the working directory to the correct one
     QString dir = iexec->workingDirectory(cfg).toLocalFile();
     if (dir.isEmpty()) {
@@ -268,6 +269,7 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
     addCommand(EnvironmentCd, '"' + dir + '"');
 
     // Set the run arguments
+    QStringList arguments = iexec->arguments(cfg, err);
     if (!arguments.isEmpty())
         addCommand(ExecArguments, KShell::joinArgs(arguments));
 

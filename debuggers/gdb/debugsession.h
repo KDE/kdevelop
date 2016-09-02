@@ -81,10 +81,11 @@ public:
 protected:
     GdbDebugger *createDebugger() const override;
     void initializeDebugger() override;
-    bool execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *iexec,
-                      const QString &executable) override;
 
-    void configure(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *iexec);
+    void configInferior(KDevelop::ILaunchConfiguration* cfg, IExecutePlugin* iexec, const QString&) override;
+
+    bool execInferior(KDevelop::ILaunchConfiguration* cfg, IExecutePlugin*,
+                      const QString& executable) override;
 
 private Q_SLOTS:
     void handleVersion(const QStringList& s);

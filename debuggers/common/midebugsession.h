@@ -279,7 +279,13 @@ protected:
     virtual void initializeDebugger() = 0;
 
     /**
-     * Further config the debugger and start the inferior program (either local or remote).
+     * Do per launch configuration.
+     */
+    virtual void configInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *iexec,
+                                const QString &executable) = 0;
+
+    /**
+     * Start the inferior program (either local or remote).
      */
     virtual bool execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *iexec,
                               const QString &executable) = 0;

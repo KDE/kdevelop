@@ -115,6 +115,8 @@ private slots:
 
     void testSpecialPath();
 
+    void testEnvironmentCd();
+
 private:
     // convenient access methods
     KDevelop::BreakpointModel *breakpoints();

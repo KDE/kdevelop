@@ -139,7 +139,7 @@ void DebugSession::initializeDebugger()
     qCDebug(DEBUGGERGDB) << "Initialized GDB";
 }
 
-void DebugSession::configure(ILaunchConfiguration *cfg, IExecutePlugin *iexec)
+void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec, const QString &)
 {
     // Read Configuration values
     KConfigGroup grp = cfg->config();
@@ -193,13 +193,9 @@ void DebugSession::configure(ILaunchConfiguration *cfg, IExecutePlugin *iexec)
     qCDebug(DEBUGGERGDB) << "Per inferior configuration done";
 }
 
-bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec,
-                                const QString &executable)
+bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *, const QString &executable)
 {
     qCDebug(DEBUGGERGDB) << "Executing inferior";
-
-    // debugger specific config
-    configure(cfg, iexec);
 
     KConfigGroup grp = cfg->config();
     QUrl configGdbScript = grp.readEntry(Config::RemoteGdbConfigEntry, QUrl());

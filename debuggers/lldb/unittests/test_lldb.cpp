@@ -1867,6 +1867,30 @@ void LldbTest::testSpecialPath()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void KDevMI::LLDB::LldbTest::testEnvironmentCd()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
+
+    auto path = KIO::upUrl(findExecutable("path with space/lldb_spacedebugee"));
+    TestLaunchConfiguration cfg(findExecutable("lldb_debugeepath"), path);
+
+    QVERIFY(session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);
+
+    QVERIFY(outputSpy.count() > 0);
+
+    QStringList outputLines;
+    while (outputSpy.count() > 0) {
+        QList<QVariant> arguments = outputSpy.takeFirst();
+        for (const auto &item : arguments) {
+            outputLines.append(item.toStringList());
+        }
+    }
+    QCOMPARE(outputLines, QStringList() << path.toLocalFile());
+}
+
 QTEST_MAIN(KDevMI::LLDB::LldbTest);
 
 #include "test_lldb.moc"

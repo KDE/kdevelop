@@ -6,6 +6,7 @@ add_debuggable_executable(lldb_debugeespace SRCS "debugee space.cpp")
 add_debuggable_executable(lldb_debugeemultilocbreakpoint SRCS debugeemultilocbreakpoint.cpp)
 add_debuggable_executable(lldb_debugeemultiplebreakpoint SRCS debugeemultiplebreakpoint.cpp)
 add_debuggable_executable(lldb_debugeeechoenv SRCS debugeeechoenv.cpp)
+add_debuggable_executable(lldb_debugeepath SRCS debugeepath.cpp)
 
 add_debuggable_executable(lldb_debugeethreads SRCS debugeethreads.cpp)
 target_link_libraries(lldb_debugeethreads Qt5::Core)

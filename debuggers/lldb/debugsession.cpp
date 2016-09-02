@@ -174,10 +174,39 @@ void DebugSession::initializeDebugger()
     qCDebug(DEBUGGERLLDB) << "Initialized LLDB";
 }
 
-void DebugSession::configure(ILaunchConfiguration *cfg, IExecutePlugin *iexec)
+void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec, const QString &executable)
 {
     // Read Configuration values
     KConfigGroup grp = cfg->config();
+
+    // Create target as early as possible, so we can do target specific configuration later
+    QString filesymbols = Utils::quote(executable);
+    bool remoteDebugging = grp.readEntry(Config::LldbRemoteDebuggingEntry, false);
+    if (remoteDebugging) {
+        auto connStr = grp.readEntry(Config::LldbRemoteServerEntry, QString());
+        auto remoteDir = grp.readEntry(Config::LldbRemotePathEntry, QString());
+        auto remoteExe = QDir(remoteDir).filePath(QFileInfo(executable).fileName());
+
+        filesymbols += " -r " + Utils::quote(remoteExe);
+
+        addCommand(MI::FileExecAndSymbols, filesymbols,
+                   this, &DebugSession::handleFileExecAndSymbols,
+                   CmdHandlesError);
+
+        addCommand(MI::TargetSelect, "remote " + connStr,
+                   this, &DebugSession::handleTargetSelect, CmdHandlesError);
+
+        // ensure executable is on remote end
+        addCommand(MI::NonMI, QStringLiteral("platform mkdir -v 755 %0").arg(Utils::quote(remoteDir)));
+        addCommand(MI::NonMI, QStringLiteral("platform put-file %0 %1")
+                              .arg(Utils::quote(executable), Utils::quote(remoteExe)));
+    } else {
+        addCommand(MI::FileExecAndSymbols, filesymbols,
+                   this, &DebugSession::handleFileExecAndSymbols,
+                   CmdHandlesError);
+    }
+
+    raiseEvent(connected_to_program);
 
     // Set the environment variables has effect only after target created
     const EnvironmentGroupList l(KSharedConfig::openConfig());
@@ -229,39 +258,8 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec
 
     KConfigGroup grp = cfg->config();
 
-    // Create target as early as possible, so we can do target specific configuration later
-    QString filesymbols = Utils::quote(executable);
-    bool remoteDebugging = grp.readEntry(Config::LldbRemoteDebuggingEntry, false);
-    if (remoteDebugging) {
-        auto connStr = grp.readEntry(Config::LldbRemoteServerEntry, QString());
-        auto remoteDir = grp.readEntry(Config::LldbRemotePathEntry, QString());
-        auto remoteExe = QDir(remoteDir).filePath(QFileInfo(executable).fileName());
-
-        filesymbols += " -r " + Utils::quote(remoteExe);
-
-        addCommand(MI::FileExecAndSymbols, filesymbols,
-                   this, &DebugSession::handleFileExecAndSymbols,
-                   CmdHandlesError);
-
-        addCommand(MI::TargetSelect, "remote " + connStr,
-                   this, &DebugSession::handleTargetSelect, CmdHandlesError);
-
-        // ensure executable is on remote end
-        addCommand(MI::NonMI, QStringLiteral("platform mkdir -v 755 %0").arg(Utils::quote(remoteDir)));
-        addCommand(MI::NonMI, QStringLiteral("platform put-file %0 %1")
-                              .arg(Utils::quote(executable), Utils::quote(remoteExe)));
-    } else {
-        addCommand(MI::FileExecAndSymbols, filesymbols,
-                   this, &DebugSession::handleFileExecAndSymbols,
-                   CmdHandlesError);
-    }
-
-    raiseEvent(connected_to_program);
-
-    // Do other per target config
-    configure(cfg, iexec);
-
     // Start inferior
+    bool remoteDebugging = grp.readEntry(Config::LldbRemoteDebuggingEntry, false);
     QUrl configLldbScript = grp.readEntry(Config::LldbConfigScriptEntry, QUrl());
     addCommand(new SentinelCommand([this, remoteDebugging, configLldbScript]() {
         // setup inferior I/O redirection
