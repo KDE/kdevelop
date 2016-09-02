@@ -53,7 +53,7 @@ StandardBackground {
                 text: "KDevelop"
                 fontSizeMode: Text.Fit
                 font {
-                    pointSize: icon.height/3
+                    pointSize: 20
                     weight: Font.ExtraLight
                 }
             }
