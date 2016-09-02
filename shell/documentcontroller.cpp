@@ -408,32 +408,30 @@ struct DocumentControllerPrivate
 
                 Sublime::View* buddyView = 0;
                 bool placeAfterBuddy = true;
-                if(Core::self()->uiControllerInternal()->arrangeBuddies()) {
+                if(Core::self()->uiControllerInternal()->arrangeBuddies() && !buddy && doc->mimeType().isValid()) {
                     // If buddy is not set, look for a (usually) plugin which handles this URL's mimetype
                     // and use its IBuddyDocumentFinder, if available, to find a buddy document
-                    if(!buddy && doc->mimeType().isValid()) {
-                        QString mime = doc->mimeType().name();
-                        IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
-                        if(buddyFinder) {
-                            buddy = findBuddyDocument(url, buddyFinder);
-                            if(buddy) {
-                                placeAfterBuddy = buddyFinder->buddyOrder(buddy->url(), doc->url());
-                            }
+                    QString mime = doc->mimeType().name();
+                    IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
+                    if(buddyFinder) {
+                        buddy = findBuddyDocument(url, buddyFinder);
+                        if(buddy) {
+                            placeAfterBuddy = buddyFinder->buddyOrder(buddy->url(), doc->url());
                         }
                     }
+                }
 
-                    if(buddy) {
-                        Sublime::Document* sublimeDocBuddy = dynamic_cast<Sublime::Document*>(buddy);
+                if(buddy) {
+                    Sublime::Document* sublimeDocBuddy = dynamic_cast<Sublime::Document*>(buddy);
 
-                        if(sublimeDocBuddy) {
-                            Sublime::AreaIndex *pActiveViewIndex = area->indexOf(uiController->activeSublimeWindow()->activeView());
-                            if(pActiveViewIndex) {
-                                // try to find existing View of buddy document in current active view's tab
-                                foreach (Sublime::View *pView, pActiveViewIndex->views()) {
-                                    if(sublimeDocBuddy->views().contains(pView)) {
-                                        buddyView = pView;
-                                        break;
-                                    }
+                    if(sublimeDocBuddy) {
+                        Sublime::AreaIndex *pActiveViewIndex = area->indexOf(uiController->activeSublimeWindow()->activeView());
+                        if(pActiveViewIndex) {
+                            // try to find existing View of buddy document in current active view's tab
+                            foreach (Sublime::View *pView, pActiveViewIndex->views()) {
+                                if(sublimeDocBuddy->views().contains(pView)) {
+                                    buddyView = pView;
+                                    break;
                                 }
                             }
                         }
