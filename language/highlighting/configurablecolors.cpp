@@ -87,4 +87,4 @@ CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : Configurable
 
 }
 
-// kate: space-indent on; indent-width 2; replace-trailing-space-save on; show-tabs on; tab-indents on; tab-width 2;
+// kate: space-indent on; indent-width 2; remove-trailing-spaces all; show-tabs on; tab-indents on; tab-width 2;
