@@ -120,7 +120,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     auto searchButton = buttonBox->button(QDialogButtonBox::Ok);
     Q_ASSERT(searchButton);
-    searchButton->setText(tr("Search..."));
+    searchButton->setText(i18nc("@action:button", "Search..."));
     searchButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-find")));
     connect(searchButton, &QPushButton::clicked, this, &GrepDialog::startSearch);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &GrepDialog::reject);
@@ -184,8 +184,9 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
 void GrepDialog::selectDirectoryDialog()
 {
-    const QString dirName = QFileDialog::getExistingDirectory(this, tr("Select directory to search in"),
-                                                              searchPaths->lineEdit()->text());
+    const QString dirName = QFileDialog::getExistingDirectory(
+        this, i18nc("@title:window", "Select directory to search in"),
+        searchPaths->lineEdit()->text());
     if (!dirName.isEmpty()) {
         setSearchLocations(dirName);
     }
