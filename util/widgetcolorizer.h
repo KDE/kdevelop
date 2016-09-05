@@ -41,6 +41,12 @@ namespace WidgetColorizer
                                               const QRect& rect, const QModelIndex& index, const QColor& color);
 
     KDEVPLATFORMUTIL_EXPORT QColor colorForId(uint id, const QPalette& activePalette);
+
+    /**
+     * Returns true when the setting is enabled to colorize widgets representing
+     * files belonging to projects.
+     */
+    KDEVPLATFORMUTIL_EXPORT bool colorizeByProject();
 };
 
 }

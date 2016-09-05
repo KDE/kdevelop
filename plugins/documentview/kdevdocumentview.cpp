@@ -31,8 +31,6 @@ Boston, MA 02110-1301, USA.
 
 #include <KLocalizedString>
 #include <KStandardAction>
-#include <KSharedConfig>
-#include <KConfigGroup>
 
 #include "kdevdocumentselection.h"
 #include "kdevdocumentviewdelegate.h"
@@ -354,13 +352,11 @@ void KDevDocumentView::documentUrlChanged( KDevelop::IDocument* document )
 
 void KDevDocumentView::drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const
 {
-    const bool colorizeByProject = KSharedConfig::openConfig()->group("UiSettings").readEntry("ColorizeByProject", false);
-    if (colorizeByProject) {
+    if (WidgetColorizer::colorizeByProject()) {
         const auto url = index.data(KDevDocumentItem::UrlRole).value<QUrl>();
         const auto project = ICore::self()->projectController()->findProjectForUrl(url);
         if (project) {
-            const auto projectPath = project->path();
-            const QColor color = WidgetColorizer::colorForId(qHash(projectPath), palette());
+            const QColor color = WidgetColorizer::colorForId(qHash(project->path()), palette());
             WidgetColorizer::drawBranches(this, painter, rect, index, color);
         }
     }

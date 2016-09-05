@@ -25,6 +25,8 @@
 #include <interfaces/iuicontroller.h>
 
 #include <KColorScheme>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 #include <QColor>
 #include <QPainter>
@@ -59,4 +61,9 @@ QColor WidgetColorizer::colorForId(uint id, const QPalette& activePalette)
     }
 
     return QColor(qAbs(id % (high-low)), qAbs((id / 50 ) % (high-low)), qAbs((id / (50 * 50)) % (high-low)));
+}
+
+bool WidgetColorizer::colorizeByProject()
+{
+    return KSharedConfig::openConfig()->group("UiSettings").readEntry("ColorizeByProject", false);
 }
