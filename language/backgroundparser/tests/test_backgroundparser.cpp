@@ -26,6 +26,7 @@
 #include <QElapsedTimer>
 #include <QTemporaryFile>
 #include <QApplication>
+#include <QSemaphore>
 
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
@@ -35,6 +36,7 @@
 #include <tests/testlanguagecontroller.h>
 
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 #include <language/backgroundparser/backgroundparser.h>
 
 #include <interfaces/ilanguagecontroller.h>
@@ -162,20 +164,22 @@ void TestBackgroundparser::initTestCase()
   TestLanguageController* langController = new TestLanguageController(core);
   core->setLanguageController(langController);
   langController->backgroundParser()->setThreadCount(4);
+  langController->backgroundParser()->abortAllJobs();
 
-  auto testLang = new TestLanguageSupport(this);
-  connect(testLang, &TestLanguageSupport::parseJobCreated,
+  m_langSupport = new TestLanguageSupport(this);
+  connect(m_langSupport, &TestLanguageSupport::parseJobCreated,
           &m_jobPlan, &JobPlan::parseJobCreated);
-  langController->addTestLanguage(testLang, QStringList() << QStringLiteral("text/plain"));
+  langController->addTestLanguage(m_langSupport, QStringList() << QStringLiteral("text/plain"));
 
   const auto languages = langController->languagesForUrl(QUrl::fromLocalFile(QStringLiteral("/foo.txt")));
   QCOMPARE(languages.size(), 1);
-  QCOMPARE(languages.first(), testLang);
+  QCOMPARE(languages.first(), m_langSupport);
 }
 
 void TestBackgroundparser::cleanupTestCase()
 {
   TestCore::shutdown();
+  m_langSupport = nullptr;
 }
 
 void TestBackgroundparser::init()
@@ -326,3 +330,61 @@ void TestBackgroundparser::benchmarkDocumentChanges()
     doc->save();
 }
 
+// see also: http://bugs.kde.org/355100
+void TestBackgroundparser::testNoDeadlockInJobCreation()
+{
+    if (!qEnvironmentVariableIntValue("TEST_BUG_355100")) {
+        QSKIP("Skipping deadlock to keep CI working. Set TEST_BUG_355100=1 env var to run it yourself.");
+    }
+
+    m_jobPlan.clear();
+
+    // we need to run the background thread first (best priority)
+    const auto runUrl = QUrl::fromLocalFile(QStringLiteral("/lockInRun.txt"));
+    const auto run = IndexedString(runUrl);
+    m_jobPlan.addJob(JobPrototype(runUrl, BackgroundParser::BestPriority,
+                                  ParseJob::IgnoresSequentialProcessing, 0));
+
+    // before handling the foreground code (worst priority)
+    const auto ctorUrl = QUrl::fromLocalFile(QStringLiteral("/lockInCtor.txt"));
+    const auto ctor = IndexedString(ctorUrl);
+    m_jobPlan.addJob(JobPrototype(ctorUrl, BackgroundParser::WorstPriority,
+                                  ParseJob::IgnoresSequentialProcessing, 0));
+
+    // make sure that the background thread has the duchain locked for write
+    QSemaphore semaphoreA;
+    // make sure the foreground thread is inside the parse job ctor
+    QSemaphore semaphoreB;
+
+    // actually distribute the complicate code across threads to trigger the
+    // deadlock reliably
+    QObject::connect(m_langSupport, &TestLanguageSupport::aboutToCreateParseJob,
+                     m_langSupport, [&] (const IndexedString& url, ParseJob** job) {
+                        if (url == run) {
+                            auto testJob = new TestParseJob(url, m_langSupport);
+                            testJob->run_callback = [&] () {
+                                // this is run in the background parse thread
+                                DUChainWriteLocker lock;
+                                semaphoreA.release();
+                                // sync with the foreground parse job ctor
+                                semaphoreB.acquire();
+                                // this is acquiring the background parse lock
+                                // we want to support this order - i.e. DUChain -> Background Parser
+                                ICore::self()->languageController()->backgroundParser()->isQueued(url);
+                            };
+                            *job = testJob;
+                        } else if (url == ctor) {
+                            // this is run in the foreground, essentially the same
+                            // as code run within the parse job ctor
+                            semaphoreA.acquire();
+                            semaphoreB.release();
+                            // Note how currently, the background parser is locked while creating a parse job
+                            // thus locking the duchain here used to trigger a lock order inversion
+                            DUChainReadLocker lock;
+                            *job = new TestParseJob(url, m_langSupport);
+                        }
+                    }, Qt::DirectConnection);
+
+    // should be able to run quickly, if no deadlock occurs
+    QVERIFY(m_jobPlan.runJobs(500));
+}

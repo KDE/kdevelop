@@ -24,6 +24,8 @@
 
 #include "language/backgroundparser/parsejob.h"
 
+#include <functional>
+
 using namespace KDevelop;
 
 class TestParseJob : public KDevelop::ParseJob
@@ -36,6 +38,7 @@ public:
     DataAccessRepository* dataAccessInformation() override;
 
     int duration_ms;
+    std::function<void()> run_callback;
 };
 
 #endif

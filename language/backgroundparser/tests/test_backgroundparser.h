@@ -102,12 +102,15 @@ private slots:
     void testParseOrdering_foregroundThread();
     void testParseOrdering_noSequentialProcessing();
 
+    void testNoDeadlockInJobCreation();
+
     void benchmark();
 
     void benchmarkDocumentChanges();
 
 private:
     JobPlan m_jobPlan;
+    TestLanguageSupport *m_langSupport = nullptr;
 };
 
 #endif // KDEVPLATFORM_TEST_BACKGROUNDPARSER_H
