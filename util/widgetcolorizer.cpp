@@ -25,6 +25,7 @@
 #include <interfaces/iuicontroller.h>
 
 #include <KColorScheme>
+#include <KColorUtils>
 #include <KSharedConfig>
 #include <KConfigGroup>
 
@@ -35,32 +36,47 @@
 
 using namespace KDevelop;
 
-void WidgetColorizer::drawBranches(const QTreeView* treeView, QPainter* painter,
-                                              const QRect& rect, const QModelIndex& index, const QColor& baseColor)
+QColor WidgetColorizer::blendForeground(QColor color, float ratio,
+                                        const QColor& foreground, const QColor& background)
 {
-    // We want this color to be a bit transparent:
-    QColor color(baseColor);
-    color.setAlpha(!index.parent().isValid() ? 50 : 110);
-
-    QRect newRect(rect);
-    newRect.setWidth(treeView->indentation());
-    painter->fillRect(newRect, color);
+  if (KColorUtils::luma(foreground) > KColorUtils::luma(background)) {
+    // for dark color schemes, produce a fitting color first
+    color = KColorUtils::tint(foreground, color, 0.5);
+  }
+  // adapt contrast
+  return KColorUtils::mix(foreground, color, ratio);
 }
 
-QColor WidgetColorizer::colorForId(uint id, const QPalette& activePalette)
+QColor WidgetColorizer::blendBackground(QColor color, float ratio,
+                                        const QColor& /*foreground*/, const QColor& background)
 {
-    const QColor schemeColor = activePalette.foreground().color();
-    int lightness = (schemeColor.blue() + schemeColor.red() + schemeColor.green()) / 3;
-    int high = 255;
-    int low = 100;
+  // adapt contrast
+  return KColorUtils::mix(background, color, ratio);
+}
 
-    // Assign a brighter color if the scheme color is dark.
-    if (lightness > 100) {
-        low += 85;
-        return QColor(qAbs((id % (high-low)) + low), qAbs(((id / 50 ) % (high-low)) + low), qAbs(((id / (50 * 50)) % (high-low)) + low));
+void WidgetColorizer::drawBranches(const QTreeView* treeView, QPainter* painter,
+                                   const QRect& rect, const QModelIndex& /*index*/,
+                                   const QColor& baseColor)
+{
+    QRect newRect(rect);
+    newRect.setWidth(treeView->indentation());
+    painter->fillRect(newRect, baseColor);
+}
+
+QColor WidgetColorizer::colorForId(uint id, const QPalette& activePalette, bool forBackground)
+{
+    const int high = 255;
+    const int low = 100;
+    auto color = QColor(qAbs(id % (high-low)),
+                        qAbs((id / 50) % (high-low)),
+                        qAbs((id / (50 * 50)) % (high-low)));
+    const auto& foreground = activePalette.foreground().color();
+    const auto& background = activePalette.background().color();
+    if (forBackground) {
+        return blendBackground(color, .5, foreground, background);
+    } else {
+        return blendForeground(color, .5, foreground, background);
     }
-
-    return QColor(qAbs(id % (high-low)), qAbs((id / 50 ) % (high-low)), qAbs((id / (50 * 50)) % (high-low)));
 }
 
 bool WidgetColorizer::colorizeByProject()

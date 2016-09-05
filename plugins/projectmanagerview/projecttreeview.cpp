@@ -451,7 +451,7 @@ void ProjectTreeView::drawBranches(QPainter* painter, const QRect& rect, const Q
 {
     if (WidgetColorizer::colorizeByProject()) {
         const auto projectPath = index.data(ProjectModel::ProjectRole).value<IProject *>()->path();
-        const QColor color = WidgetColorizer::colorForId(qHash(projectPath), palette());
+        const QColor color = WidgetColorizer::colorForId(qHash(projectPath), palette(), true);
         WidgetColorizer::drawBranches(this, painter, rect, index, color);
     }
 

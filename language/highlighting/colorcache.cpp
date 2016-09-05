@@ -33,8 +33,8 @@
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
 #include "util/debug.h"
+#include "widgetcolorizer.h"
 
-#include <KColorUtils>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
@@ -277,22 +277,12 @@ QColor ColorCache::blend(QColor color, uchar ratio) const
 {
   Q_ASSERT(m_backgroundColor.isValid());
   Q_ASSERT(m_foregroundColor.isValid());
-  if ( KColorUtils::luma(m_foregroundColor) > KColorUtils::luma(m_backgroundColor) ) {
-    // for dark color schemes, produce a fitting color first
-    color = KColorUtils::tint(m_foregroundColor, color, 0.5);
-  }
-  // adapt contrast
-  return KColorUtils::mix( m_foregroundColor, color, float(ratio) / float(0xff) );
+  return WidgetColorizer::blendForeground(color, float(ratio) / float(0xff), m_foregroundColor, m_backgroundColor);
 }
 
 QColor ColorCache::blendBackground(QColor color, uchar ratio) const
 {
-/*  if ( KColorUtils::luma(m_foregroundColor) > KColorUtils::luma(m_backgroundColor) ) {
-    // for dark color schemes, produce a fitting color first
-    color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();
-  }*/
-  // adapt contrast
-  return KColorUtils::mix( m_backgroundColor, color, float(ratio) / float(0xff) );
+  return WidgetColorizer::blendBackground(color, float(ratio) / float(0xff), m_foregroundColor, m_backgroundColor);
 }
 
 QColor ColorCache::blendGlobalColor(QColor color) const

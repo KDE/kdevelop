@@ -356,7 +356,7 @@ void KDevDocumentView::drawBranches(QPainter* painter, const QRect& rect, const 
         const auto url = index.data(KDevDocumentItem::UrlRole).value<QUrl>();
         const auto project = ICore::self()->projectController()->findProjectForUrl(url);
         if (project) {
-            const QColor color = WidgetColorizer::colorForId(qHash(project->path()), palette());
+            const QColor color = WidgetColorizer::colorForId(qHash(project->path()), palette(), true);
             WidgetColorizer::drawBranches(this, painter, rect, index, color);
         }
     }
