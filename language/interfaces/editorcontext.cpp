@@ -68,6 +68,11 @@ QUrl EditorContext::url() const
     return d->m_url;
 }
 
+QList<QUrl> EditorContext::urls() const
+{
+    return {d->m_url};
+}
+
 KTextEditor::Cursor EditorContext::position() const
 {
     return d->m_position;
