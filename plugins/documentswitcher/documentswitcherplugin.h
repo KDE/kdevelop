@@ -34,7 +34,7 @@ namespace Sublime
 class MainWindow;
 }
 
-class QListView;
+class DocumentSwitcherTreeView;
 class QModelIndex;
 class QStringListModel;
 class QEvent;
@@ -71,7 +71,7 @@ private:
     // Need to use QObject here as we only have a QObject* in
     // the removeMainWindow method and cannot cast it to the mainwindow anymore
     QMap<QObject*, QHash<Sublime::Area*, QList<Sublime::View*> > > documentLists;
-    QListView* view;
+    DocumentSwitcherTreeView* view;
     QStandardItemModel* model;
     QAction* forwardAction;
     QAction* backwardAction;

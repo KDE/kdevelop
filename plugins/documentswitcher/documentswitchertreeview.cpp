@@ -20,10 +20,20 @@
 
 #include <QKeyEvent>
 
+#include <KSharedConfig>
+#include <KConfigGroup>
+
+#include <widgetcolorizer.h>
+#include <path.h>
+#include <projectmodel.h>
+#include <interfaces/iproject.h>
+
 #include "documentswitcherplugin.h"
 
+using namespace KDevelop;
+
 DocumentSwitcherTreeView::DocumentSwitcherTreeView(DocumentSwitcherPlugin* plugin_ )
-    : QListView(nullptr)
+    : QTreeView(nullptr)
     , plugin(plugin_)
 {
     setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
@@ -31,7 +41,7 @@ DocumentSwitcherTreeView::DocumentSwitcherTreeView(DocumentSwitcherPlugin* plugi
 
 void DocumentSwitcherTreeView::keyPressEvent(QKeyEvent* event)
 {
-    QListView::keyPressEvent(event);
+    QTreeView::keyPressEvent(event);
 }
 
 void DocumentSwitcherTreeView::keyReleaseEvent(QKeyEvent* event)
@@ -41,7 +51,20 @@ void DocumentSwitcherTreeView::keyReleaseEvent(QKeyEvent* event)
         event->accept();
         hide();
     } else {
-        QListView::keyReleaseEvent(event);
+        QTreeView::keyReleaseEvent(event);
     }
 }
 
+void DocumentSwitcherTreeView::drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const
+{
+    if (WidgetColorizer::colorizeByProject()) {
+        if (const auto project = index.data(ProjectRole).value<IProject *>()) {
+            const auto projectPath = project->path();
+            const QColor color = WidgetColorizer::colorForId(qHash(projectPath), palette(), true);
+            WidgetColorizer::drawBranches(this, painter, rect, index, color);
+        }
+    }
+    // don't call the base implementation, as we only want to paint the colorization above
+    // this means that for people who have the feature disabled, we get some padding on the left,
+    // but that is OK imo
+}
