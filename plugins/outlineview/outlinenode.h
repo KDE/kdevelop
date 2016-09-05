@@ -108,7 +108,7 @@ inline QString OutlineNode::text() const
 
 inline KDevelop::DUChainBase* OutlineNode::duChainObject() const
 {
-    Q_ASSERT(KDevelop::DUChain::lock()->currentThreadHasReadLock());
+    ENSURE_CHAIN_READ_LOCKED
     return m_declOrContext.data();
 }
 
