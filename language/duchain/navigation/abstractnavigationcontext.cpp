@@ -245,8 +245,10 @@ const int lineJump = 3;
 
 void AbstractNavigationContext::down() {
   //Make sure link-count is valid
-  if( m_linkCount == -1 )
+  if( m_linkCount == -1 ) {
+    DUChainReadLocker lock;
     html();
+  }
 
   int fromLine = m_currentPositionLine;
 
@@ -274,8 +276,10 @@ void AbstractNavigationContext::down() {
 
 void AbstractNavigationContext::up() {
   //Make sure link-count is valid
-  if( m_linkCount == -1 )
+  if( m_linkCount == -1 ) {
+    DUChainReadLocker lock;
     html();
+  }
 
   int fromLine = m_currentPositionLine;
 
@@ -304,8 +308,10 @@ void AbstractNavigationContext::up() {
 void AbstractNavigationContext::nextLink()
 {
   //Make sure link-count is valid
-  if( m_linkCount == -1 )
+  if( m_linkCount == -1 ) {
+    DUChainReadLocker lock;
     html();
+  }
 
   m_currentPositionLine = -1;
 
@@ -316,8 +322,10 @@ void AbstractNavigationContext::nextLink()
 void AbstractNavigationContext::previousLink()
 {
   //Make sure link-count is valid
-  if( m_linkCount == -1 )
+  if( m_linkCount == -1 ) {
+    DUChainReadLocker lock;
     html();
+  }
 
   m_currentPositionLine = -1;
 

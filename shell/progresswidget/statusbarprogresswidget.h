@@ -32,7 +32,7 @@
 class QBoxLayout;
 class QEvent;
 class QProgressBar;
-class QPushButton;
+class QToolButton;
 class QStackedWidget;
 class QBoxLayout;
 class QLabel;
@@ -73,7 +73,7 @@ protected:
 private:
     QProgressBar* m_pProgressBar;
     QLabel* m_pLabel;
-    QPushButton* m_pButton;
+    QToolButton* m_pButton;
 
     enum Mode { None, /*Label,*/ Progress };
 

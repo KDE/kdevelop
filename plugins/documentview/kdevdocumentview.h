@@ -74,6 +74,8 @@ private slots:
 protected:
     void mousePressEvent( QMouseEvent * event ) override;
     void contextMenuEvent( QContextMenuEvent * event ) override;
+    void drawBranches(QPainter* painter, const QRect& rect,
+                      const QModelIndex& index) const override;
 
 private:
     template<typename F> void visitItems(F, bool selectedItems);

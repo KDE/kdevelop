@@ -723,15 +723,16 @@ void DocumentController::fileClose()
     }
 }
 
-void DocumentController::closeDocument( const QUrl &url )
+bool DocumentController::closeDocument( const QUrl &url )
 {
     if( !d->documents.contains(url) )
-        return;
+        return false;
 
     //this will remove all views and after the last view is removed, the
     //document will be self-destructed and removeDocument() slot will catch that
     //and clean up internal data structures
     d->documents[url]->close();
+    return true;
 }
 
 void DocumentController::notifyDocumentClosed(Sublime::Document* doc_)

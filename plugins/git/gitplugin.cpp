@@ -281,7 +281,7 @@ bool GitPlugin::isValidDirectory(const QUrl & dirPath)
 {
     QDir dir=dotGitDirectory(dirPath);
 
-    return dir.cd(QStringLiteral(".git")) && dir.exists(QStringLiteral("HEAD"));
+    return dir.exists(QStringLiteral(".git/HEAD"));
 }
 
 bool GitPlugin::isVersionControlled(const QUrl &path)

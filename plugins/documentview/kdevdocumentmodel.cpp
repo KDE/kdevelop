@@ -71,6 +71,14 @@ void KDevDocumentItem::setUrl(const QUrl& url)
     m_url = url;
 }
 
+QVariant KDevDocumentItem::data(int role) const
+{
+    if (role == UrlRole) {
+        return m_url;
+    }
+    return QStandardItem::data(role);
+}
+
 KDevCategoryItem::KDevCategoryItem( const QString &name )
     : KDevDocumentItem( name )
 {

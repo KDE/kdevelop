@@ -27,9 +27,6 @@
 
 #include <KLocalizedString>
 
-#include "../declaration.h"
-#include "../ducontext.h"
-#include "../duchain.h"
 #include "../duchainlock.h"
 #include "util/debug.h"
 
@@ -141,10 +138,16 @@ void AbstractNavigationWidget::setDisplayHints(DisplayHints hints) {
 }
 
 void AbstractNavigationWidget::update() {
+
   setUpdatesEnabled(false);
   Q_ASSERT( m_context );
 
-  QString html = m_context->html();
+  QString html;
+  {
+    DUChainReadLocker lock;
+    html = m_context->html();
+  }
+
   if(!html.isEmpty()) {
     int scrollPos = m_browser->verticalScrollBar()->value();
 
@@ -212,7 +215,6 @@ NavigationContextPointer AbstractNavigationWidget::context() {
 }
 
 void AbstractNavigationWidget::navigateDeclaration(KDevelop::IndexedDeclaration decl) {
-  DUChainReadLocker lock( DUChain::lock() );
   setContext(m_context->accept(decl));
 }
 
@@ -227,21 +229,18 @@ void AbstractNavigationWidget::anchorClicked(const QUrl& url) {
 }
 
 void AbstractNavigationWidget::next() {
-  DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
   m_context->nextLink();
   update();
 }
 
 void AbstractNavigationWidget::previous() {
-  DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
   m_context->previousLink();
   update();
 }
 
 void AbstractNavigationWidget::accept() {
-  DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
 
   QPointer<AbstractNavigationWidget> thisPtr(this);
@@ -253,8 +252,6 @@ void AbstractNavigationWidget::accept() {
 }
 
 void AbstractNavigationWidget::back() {
-  DUChainReadLocker lock( DUChain::lock() );
-
   QPointer<AbstractNavigationWidget> thisPtr(this);
   NavigationContextPointer oldContext = m_context;
   NavigationContextPointer nextContext = m_context->back();
@@ -264,13 +261,11 @@ void AbstractNavigationWidget::back() {
 }
 
 void AbstractNavigationWidget::up() {
-  DUChainReadLocker lock( DUChain::lock() );
   m_context->up();
   update();
 }
 
 void AbstractNavigationWidget::down() {
-  DUChainReadLocker lock( DUChain::lock() );
   m_context->down();
   update();
 }

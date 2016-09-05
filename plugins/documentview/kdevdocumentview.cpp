@@ -44,6 +44,9 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/context.h>
 #include <interfaces/idocument.h>
 
+#include <widgetcolorizer.h>
+#include <path.h>
+
 using namespace KDevelop;
 
 KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *parent )
@@ -77,6 +80,7 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     setWindowTitle( i18n( "Documents" ) );
 
     setFocusPolicy( Qt::NoFocus );
+    setIndentation(10);
 
     header()->hide();
 
@@ -347,3 +351,16 @@ void KDevDocumentView::documentUrlChanged( KDevelop::IDocument* document )
     opened(document);
 }
 
+void KDevDocumentView::drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const
+{
+    if (WidgetColorizer::colorizeByProject()) {
+        const auto url = index.data(KDevDocumentItem::UrlRole).value<QUrl>();
+        const auto project = ICore::self()->projectController()->findProjectForUrl(url);
+        if (project) {
+            const QColor color = WidgetColorizer::colorForId(qHash(project->path()), palette(), true);
+            WidgetColorizer::drawBranches(this, painter, rect, index, color);
+        }
+    }
+
+    QTreeView::drawBranches(painter, rect, index);
+}

@@ -51,6 +51,7 @@ public:
 
     /**@return The url for the file which this context was invoked for.*/
     QUrl url() const;
+    QList<QUrl> urls() const override;
 
     /**@return The cursor position.*/
     KTextEditor::Cursor position() const;

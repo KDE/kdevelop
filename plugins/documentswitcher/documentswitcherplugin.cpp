@@ -41,6 +41,7 @@
 #include "documentswitchertreeview.h"
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocument.h>
+#include <interfaces/iproject.h>
 
 #include <algorithm>
 
@@ -77,11 +78,13 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     view = new DocumentSwitcherTreeView( this );
     view->setSelectionBehavior( QAbstractItemView::SelectRows );
     view->setSelectionMode( QAbstractItemView::SingleSelection );
-    view->setUniformItemSizes( true );
+    view->setUniformRowHeights( true );
     view->setTextElideMode( Qt::ElideMiddle );
     view->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     view->addAction( forwardAction );
     view->addAction( backwardAction );
+    view->setHeaderHidden( true );
+    view->setIndentation( 10 );
     connect( view, &QListView::pressed, this, &DocumentSwitcherPlugin::switchToClicked );
     connect( view, &QListView::activated, this, &DocumentSwitcherPlugin::itemActivated );
 
@@ -149,6 +152,7 @@ void DocumentSwitcherPlugin::walkBackward() { walk(model->rowCount()-1, 0); }
 void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
 {
     model->clear();
+    auto projectController = KDevelop::ICore::self()->projectController();
     foreach( Sublime::View* v, documentLists[window][window->area()] )
     {
         using namespace KDevelop;
@@ -159,9 +163,10 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
         }
         QString itemText = slDoc->title();// file name
         IDocument const* const doc = dynamic_cast<IDocument*>(v->document());
+        IProject* project = nullptr;
         if( doc )
         {
-            QString path = ICore::self()->projectController()->prettyFilePath(doc->url(),
+            QString path = projectController->prettyFilePath(doc->url(),
                                                                               IProjectController::FormatPlain);
             const bool isPartOfOpenProject = QDir::isRelativePath(path);
             if( path.endsWith('/') )
@@ -184,8 +189,11 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
             {
                 itemText = itemText + " (" + path + ')';
             }
+            project = projectController->findProjectForUrl(doc->url());
         }
-        model->appendRow( new QStandardItem( slDoc->icon(), itemText ) );
+        auto item = new QStandardItem( slDoc->icon(), itemText );
+        item->setData(QVariant::fromValue(project), DocumentSwitcherTreeView::ProjectRole);
+        model->appendRow( item );
     }
 }
 

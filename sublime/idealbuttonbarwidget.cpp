@@ -232,7 +232,6 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             button->setIcon(action->icon());
             button->setShortcut(QKeySequence());
             Q_ASSERT(_widgets.contains(action));
-            _widgets[action]->setWindowTitle(action->text());
         }
     } break;
 

@@ -16,22 +16,32 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
+
 #ifndef KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERTREEVIEW_H
 #define KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERTREEVIEW_H
 
-#include <QListView>
+#include <QTreeView>
 
 class DocumentSwitcherPlugin;
 
-class DocumentSwitcherTreeView : public QListView
+class DocumentSwitcherTreeView : public QTreeView
 {
     Q_OBJECT
+
 public:
-    explicit DocumentSwitcherTreeView( DocumentSwitcherPlugin* );
+    enum Roles {
+        ProjectRole = Qt::UserRole + 1
+    };
+    explicit DocumentSwitcherTreeView(DocumentSwitcherPlugin* plugin);
+
+    using QTreeView::sizeHintForColumn;
 
 protected:
-void keyPressEvent(QKeyEvent* event) override;
-void keyReleaseEvent(QKeyEvent* ) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
+    void drawBranches(QPainter* painter, const QRect& rect,
+                      const QModelIndex& index) const override;
+
 private:
     DocumentSwitcherPlugin* plugin;
 };

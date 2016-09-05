@@ -37,6 +37,9 @@ class MainWindow;
 
 namespace KTextEditorIntegration {
 
+/**
+ * Class mimicking the KTextEditor::Application interface
+ */
 class Application : public QObject
 {
     Q_OBJECT
@@ -47,7 +50,10 @@ public:
 public slots:
     KTextEditor::MainWindow *activeMainWindow() const;
     QList<KTextEditor::MainWindow *> mainWindows() const;
+
     KTextEditor::Plugin *plugin(const QString &id) const;
+
+    bool closeDocument(KTextEditor::Document *document) const;
 };
 
 class MainWindow : public QObject
