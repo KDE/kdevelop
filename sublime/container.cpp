@@ -165,12 +165,13 @@ struct ContainerPrivate {
                 auto urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
                 if (!urlDoc) {
                     visibleEntryTitle = view->document()->title();
-                    continue;
                 }
-                auto url = urlDoc->url().toString();
-                int secondOffset = url.lastIndexOf('/');
-                secondOffset = url.lastIndexOf('/', secondOffset - 1);
-                visibleEntryTitle = url.right(url.length() - url.lastIndexOf('/', secondOffset) - 1);
+                else {
+                    auto url = urlDoc->url().toString();
+                    int secondOffset = url.lastIndexOf('/');
+                    secondOffset = url.lastIndexOf('/', secondOffset - 1);
+                    visibleEntryTitle = url.right(url.length() - url.lastIndexOf('/', secondOffset) - 1);
+                }
             } else {
                 visibleEntryTitle = view->document()->title();
             }
