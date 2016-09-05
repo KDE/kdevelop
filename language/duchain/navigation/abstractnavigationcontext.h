@@ -80,6 +80,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
 
     virtual QString name() const = 0;
     ///Here the context can return html to be displayed.
+    ///NOTE: The DUChain must be locked while this is called.
     virtual QString html(bool shorten = false);
     ///Here the context can return a widget to be displayed.
     ///The widget stays owned by this navigation-context.
