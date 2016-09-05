@@ -141,6 +141,7 @@ void AbstractNavigationWidget::setDisplayHints(DisplayHints hints) {
 }
 
 void AbstractNavigationWidget::update() {
+  DUChainReadLocker lock;
   setUpdatesEnabled(false);
   Q_ASSERT( m_context );
 
