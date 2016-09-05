@@ -51,6 +51,7 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QTimer>
+#include <QToolButton>
 
 using namespace KDevelop;
 
@@ -65,7 +66,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     box->setMargin(0);
     box->setSpacing(0);
 
-    m_pButton = new QPushButton( this );
+    m_pButton = new QToolButton( this );
     m_pButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
                                            QSizePolicy::Minimum ) );
     QPixmap smallIcon = SmallIcon( "go-up" );
@@ -77,6 +78,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     box->addWidget( stack );
 
     m_pButton->setToolTip( i18n("Open detailed progress dialog") );
+    m_pButton->setAutoRaise(true);
 
     m_pProgressBar = new QProgressBar( this );
     m_pProgressBar->installEventFilter( this );

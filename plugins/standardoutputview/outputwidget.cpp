@@ -79,6 +79,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         connect( m_closeButton, SIGNAL(clicked()), SLOT(closeActiveView()) );
         m_closeButton->setIcon( KIcon("tab-close") );
         m_closeButton->setToolTip( i18n( "Close the currently active output view") );
+        m_closeButton->setAutoRaise(true);
 
         m_closeOthersAction = new QAction( this );
         connect(m_closeOthersAction, SIGNAL(triggered(bool)), SLOT(closeOtherViews()));
