@@ -143,6 +143,11 @@ public:
             }
         }
 
+        std::sort(configPages.begin(), configPages.end(),
+                  [](const ConfigPage* a, const ConfigPage* b) {
+            return a->name() < b->name();
+        });
+
         auto cfgDlg = new KDevelop::ConfigDialog(configPages, mainWindow);
         cfgDlg->setAttribute(Qt::WA_DeleteOnClose);
         cfgDlg->setModal(true);
@@ -157,7 +162,6 @@ public:
             proj->projectConfiguration()->sync();
         });
         cfgDlg->show();
-
     }
 
     void saveListOfOpenedProjects()
