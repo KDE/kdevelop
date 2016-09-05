@@ -80,6 +80,7 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     setWindowTitle( i18n( "Documents" ) );
 
     setFocusPolicy( Qt::NoFocus );
+    setIndentation(10);
 
     header()->hide();
 
