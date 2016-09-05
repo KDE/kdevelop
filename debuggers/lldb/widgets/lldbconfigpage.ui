@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>528</width>
+    <width>530</width>
     <height>535</height>
    </rect>
   </property>
@@ -28,23 +28,23 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KUrlRequester" name="lineDebuggerExec">
-        <property name="placeholderText">
-         <string>/path/to/lldb-mi/</string>
+       <widget class="KUrlRequester" name="lineDebuggerExec" native="true">
+        <property name="placeholderText" stdset="0">
+         <string>Override path to lldb-mi executable</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Arguments:</string>
+         <string>Additional Arguments:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="lineDebuggerArgs">
         <property name="placeholderText">
-         <string>Additional arguments passing to lldb</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -100,8 +100,8 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KUrlRequester" name="lineConfigScript">
-        <property name="placeholderText">
+       <widget class="KUrlRequester" name="lineConfigScript" native="true">
+        <property name="placeholderText" stdset="0">
          <string>/path/to/lldb/config/script</string>
         </property>
        </widget>
@@ -152,7 +152,7 @@
    <item>
     <widget class="QGroupBox" name="groupRemote">
      <property name="title">
-      <string>Re&amp;mote Debugging</string>
+      <string>Remo&amp;te Debugging</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -217,7 +217,7 @@
   </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
-   <extends>QLineEdit</extends>
+   <extends>QWidget</extends>
    <header>kurlrequester.h</header>
   </customwidget>
  </customwidgets>

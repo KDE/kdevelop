@@ -46,12 +46,15 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KUrlRequester" name="kcfg_gdbPath">
+       <widget class="KUrlRequester" name="kcfg_gdbPath" native="true">
         <property name="toolTip">
          <string>Gdb executable</string>
         </property>
         <property name="whatsThis">
          <string>To run &quot;gdb&quot; binary from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, &quot;arm-gdb&quot;), by typing the name here, or specify full path to the gdb executable.</string>
+        </property>
+        <property name="placeholderText" stdset="0">
+         <string>Override path to gdb executable</string>
         </property>
        </widget>
       </item>
@@ -81,7 +84,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KUrlRequester" name="kcfg_debuggingShell">
+       <widget class="KUrlRequester" name="kcfg_debuggingShell" native="true">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debugger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -210,7 +213,7 @@ However, non-mangled names are easier to read.</string>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KUrlRequester" name="kcfg_runShellScript">
+       <widget class="KUrlRequester" name="kcfg_runShellScript" native="true">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to start remote application&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This shell script is run after the Gdb Config script has been sourced by gdb.&lt;/p&gt;&lt;p&gt;It's purpose is to actually start the remote process.&lt;/p&gt;&lt;p&gt;1) Find a way to execute a command remotely - rsh, ssh, telnet, ...&lt;/p&gt;&lt;p&gt;2a) Execute &amp;quot;gdbserver ... application&amp;quot; on target.&lt;/p&gt;&lt;p&gt;or if your executable contains the gdb stub:&lt;/p&gt;&lt;p&gt;2b) Execute &amp;quot;application&amp;quot; on target.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -236,7 +239,7 @@ However, non-mangled names are easier to read.</string>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KUrlRequester" name="kcfg_runGdbScript">
+       <widget class="KUrlRequester" name="kcfg_runGdbScript" native="true">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to connect with remote application&lt;/p&gt;&lt;p&gt;For example:&lt;/p&gt;&lt;p&gt;	shell sleep 5	 #wait for remote program to start&lt;/p&gt;&lt;p&gt;	target remote ...	#connect to the remote debugger&lt;/p&gt;&lt;p&gt;	continue	#[optional] run debugging to the first breakpoint.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -262,7 +265,7 @@ However, non-mangled names are easier to read.</string>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KUrlRequester" name="kcfg_configGdbScript">
+       <widget class="KUrlRequester" name="kcfg_configGdbScript" native="true">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This script is sourced by gdb when the debugging starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -292,7 +295,7 @@ However, non-mangled names are easier to read.</string>
  <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>
-   <extends>QFrame</extends>
+   <extends>QWidget</extends>
    <header>kurlrequester.h</header>
    <container>1</container>
   </customwidget>
