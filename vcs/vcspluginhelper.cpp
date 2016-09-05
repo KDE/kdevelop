@@ -55,7 +55,6 @@
 #include "vcsstatusinfo.h"
 #include "vcsevent.h"
 #include "widgets/vcsdiffpatchsources.h"
-#include "widgets/flexibleaction.h"
 
 namespace KDevelop
 {
@@ -404,30 +403,6 @@ void VcsPluginHelper::annotation()
     }
 }
 
-class CopyFunction : public AbstractFunction
-{
-    public:
-        CopyFunction(const QString& tocopy)
-            : m_tocopy(tocopy) {}
-
-        void operator()() override { QApplication::clipboard()->setText(m_tocopy); }
-    private:
-        QString m_tocopy;
-};
-
-class HistoryFunction : public AbstractFunction
-{
-    public:
-        HistoryFunction(VcsPluginHelper* helper, const VcsRevision& rev)
-            : m_helper(helper), m_rev(rev) {}
-
-            void operator()() override { m_helper->history(m_rev); }
-
-    private:
-        VcsPluginHelper* m_helper;
-        VcsRevision m_rev;
-};
-
 void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line )
 {
     KTextEditor::AnnotationInterface* annotateiface =
@@ -448,8 +423,15 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
     menu->addSeparator();
     menu->addAction(d->diffForRevAction);
     menu->addAction(d->diffForRevGlobalAction);
-    menu->addAction(new FlexibleAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
-    menu->addAction(new FlexibleAction(QIcon::fromTheme(QStringLiteral("view-history")), i18n("History..."), new HistoryFunction(this, rev), menu));
+    QAction* action = nullptr;
+    action = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Revision"));
+    connect(action, &QAction::triggered, this, [this, rev]() {
+        QApplication::clipboard()->setText(rev.revisionValue().toString());
+    });
+    action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-history")), i18n("History..."));
+    connect(action, &QAction::triggered, this, [this, rev]() {
+        history(rev);
+    });
 }
 
 void VcsPluginHelper::update()
