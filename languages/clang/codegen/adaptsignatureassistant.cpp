@@ -230,7 +230,7 @@ void AdaptSignatureAssistant::setDefaultParams(Signature& newSignature, const QL
 
 QList<RenameAction*> AdaptSignatureAssistant::getRenameActions(const Signature &newSignature, const QList<int> &oldPositions) const
 {
-    Q_ASSERT(DUChain::lock()->currentThreadHasReadLock());
+    ENSURE_CHAIN_READ_LOCKED
     QList<RenameAction*> renameActions;
     if (!m_otherSideContext) {
         return renameActions;

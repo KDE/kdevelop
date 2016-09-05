@@ -75,7 +75,7 @@ QString AdaptSignatureAction::toolTip() const
 
 void AdaptSignatureAction::execute()
 {
-    Q_ASSERT(!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock());
+    ENSURE_CHAIN_NOT_LOCKED
     DUChainReadLocker lock;
     IndexedString url = m_otherSideTopContext->url();
     lock.unlock();
