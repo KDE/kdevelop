@@ -32,6 +32,7 @@
 #include <sublime/view.h>
 
 #include "core.h"
+#include "partcontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "plugincontroller.h"
@@ -188,6 +189,12 @@ KTextEditor::MainWindow *Application::activeMainWindow() const
 QList<KTextEditor::MainWindow *> Application::mainWindows() const
 {
     return {activeMainWindow()};
+}
+
+bool Application::closeDocument(KTextEditor::Document *document) const
+{
+    auto documentController = Core::self()->documentControllerInternal();
+    return documentController->closeDocument(document->url());
 }
 
 KTextEditor::Plugin *Application::plugin(const QString &id) const
