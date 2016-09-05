@@ -16,6 +16,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
+
 #ifndef KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERTREEVIEW_H
 #define KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERTREEVIEW_H
 
@@ -26,12 +27,14 @@ class DocumentSwitcherPlugin;
 class DocumentSwitcherTreeView : public QListView
 {
     Q_OBJECT
+
 public:
-    explicit DocumentSwitcherTreeView( DocumentSwitcherPlugin* );
+    explicit DocumentSwitcherTreeView(DocumentSwitcherPlugin* plugin);
 
 protected:
-void keyPressEvent(QKeyEvent* event) override;
-void keyReleaseEvent(QKeyEvent* ) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
+
 private:
     DocumentSwitcherPlugin* plugin;
 };

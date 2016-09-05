@@ -23,25 +23,24 @@
 #include "documentswitcherplugin.h"
 
 DocumentSwitcherTreeView::DocumentSwitcherTreeView(DocumentSwitcherPlugin* plugin_ )
-    : QListView( 0 ), plugin( plugin_ )
+    : QListView(nullptr)
+    , plugin(plugin_)
 {
-    setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
+    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
 }
 
-void DocumentSwitcherTreeView::keyPressEvent( QKeyEvent* event )
+void DocumentSwitcherTreeView::keyPressEvent(QKeyEvent* event)
 {
     QListView::keyPressEvent(event);
 }
 
-void DocumentSwitcherTreeView::keyReleaseEvent( QKeyEvent* event )
+void DocumentSwitcherTreeView::keyReleaseEvent(QKeyEvent* event)
 {
-    if( event->key() == Qt::Key_Control )
-    {
-        plugin->itemActivated( selectionModel()->currentIndex() );
+    if (event->key() == Qt::Key_Control) {
+        plugin->itemActivated(selectionModel()->currentIndex());
         event->accept();
         hide();
-    } else
-    {
+    } else {
         QListView::keyReleaseEvent(event);
     }
 }
