@@ -163,7 +163,7 @@ For example, a header file will be opened next to the implementation file.</stri
          <string>Color widgets based on the project affiliation</string>
         </property>
         <property name="checked">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
       </item>

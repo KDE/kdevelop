@@ -81,5 +81,5 @@ QColor WidgetColorizer::colorForId(uint id, const QPalette& activePalette, bool 
 
 bool WidgetColorizer::colorizeByProject()
 {
-    return KSharedConfig::openConfig()->group("UiSettings").readEntry("ColorizeByProject", false);
+    return KSharedConfig::openConfig()->group("UiSettings").readEntry("ColorizeByProject", true);
 }
