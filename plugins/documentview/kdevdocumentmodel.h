@@ -56,6 +56,12 @@ public:
     const QUrl url() const;
     void setUrl(const QUrl &url);
 
+    QVariant data(int role) const override;
+
+    enum Roles {
+        UrlRole = Qt::UserRole + 1
+    };
+
 protected:
     QString m_fileIcon;
 
