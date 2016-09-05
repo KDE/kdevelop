@@ -68,6 +68,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     setupUi(mainWidget);
     mainLayout->setContentsMargins( 0, 0, 0, 0 );
     splitter->setSizes(QList<int>() << 260 << 620);
+    splitter->setCollapsible(0, false);
 
     addConfig->setIcon( QIcon::fromTheme(QStringLiteral("list-add")) );
     addConfig->setToolTip(i18nc("@info:tooltip", "Add a new launch configuration."));
