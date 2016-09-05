@@ -52,7 +52,7 @@ QColor WidgetColorizer::colorForId(uint id, const QPalette& activePalette)
     int high = 255;
     int low = 100;
 
-    // Assign a bighter color if the scheme color is dark.
+    // Assign a brighter color if the scheme color is dark.
     if (lightness > 100) {
         low += 85;
         return QColor(qAbs((id % (high-low)) + low), qAbs(((id / 50 ) % (high-low)) + low), qAbs(((id / (50 * 50)) % (high-low)) + low));
