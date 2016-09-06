@@ -245,15 +245,10 @@ public:
                 break; //The additional parsing thread is reserved for higher priority parsing
             }
 
-            const auto& documentsForPriority = it1.value();
-
-            for (auto it = documentsForPriority.begin(); it != documentsForPriority.end();) {
-                const auto url = *it;
-
+            for (const auto& url : it1.value()) {
                 // When a document is scheduled for parsing while it is being parsed, it will be parsed
                 // again once the job finished, but not now.
                 if (m_parseJobs.contains(url)) {
-                    ++it;
                     continue;
                 }
 
@@ -264,7 +259,6 @@ public:
                 if (    parsePlan.sequentialProcessingFlags() & ParseJob::RequiresSequentialProcessing
                      && parsePlan.priority() > bestRunningPriority )
                 {
-                    ++it;
                     continue;
                 }
 
