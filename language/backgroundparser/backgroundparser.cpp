@@ -215,6 +215,19 @@ public:
 
     // Non-mutex guarded functions, only call with m_mutex acquired.
 
+    int currentBestRunningPriority() const
+    {
+        int bestRunningPriority = BackgroundParser::WorstPriority;
+        for (const auto* decorator : m_parseJobs) {
+            const ParseJob* parseJob = dynamic_cast<const ParseJob*>(decorator->job());
+            Q_ASSERT(parseJob);
+            if (parseJob->respectsSequentialProcessing() && parseJob->parsePriority() < bestRunningPriority) {
+                bestRunningPriority = parseJob->parsePriority();
+            }
+        }
+        return bestRunningPriority;
+    }
+
     /**
      * Create a single delayed parse job
      *
@@ -228,14 +241,7 @@ public:
 
         // Before starting a new job, first wait for all higher-priority ones to finish.
         // That way, parse job priorities can be used for dependency handling.
-        int bestRunningPriority = BackgroundParser::WorstPriority;
-        foreach (const ThreadWeaver::QObjectDecorator* decorator, m_parseJobs) {
-            const ParseJob* parseJob = dynamic_cast<const ParseJob*>(decorator->job());
-            Q_ASSERT(parseJob);
-            if (parseJob->respectsSequentialProcessing() && parseJob->parsePriority() < bestRunningPriority) {
-                bestRunningPriority = parseJob->parsePriority();
-            }
-        }
+        const int bestRunningPriority = currentBestRunningPriority();
 
         bool done = false;
         ThreadWeaver::JobPointer job;
