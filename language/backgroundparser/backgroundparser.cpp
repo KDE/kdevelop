@@ -228,7 +228,7 @@ public:
         return bestRunningPriority;
     }
 
-    ThreadWeaver::JobPointer takeNextDocument()
+    IndexedString nextDocumentToParse() const
     {
         // Before starting a new job, first wait for all higher-priority ones to finish.
         // That way, parse job priorities can be used for dependency handling.
@@ -258,7 +258,7 @@ public:
                 }
 
                 Q_ASSERT(m_documents.contains(url));
-                const DocumentParsePlan& parsePlan = m_documents[url];
+                const auto& parsePlan = m_documents[url];
                 // If the current job requires sequential processing, but not all jobs with a better priority have been
                 // completed yet, it will not be created now.
                 if (    parsePlan.sequentialProcessingFlags() & ParseJob::RequiresSequentialProcessing
@@ -268,38 +268,7 @@ public:
                     continue;
                 }
 
-                qCDebug(LANGUAGE) << "creating parse-job" << url << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
-                const QString elidedPathString = elidedPathLeft(url.str(), 70);
-                emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
-
-                ThreadWeaver::QObjectDecorator* decorator = createParseJob(url, parsePlan);
-
-                if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
-                    specialParseJob = decorator; //This parse-job is allocated into the reserved thread
-
-                // Remove all mentions of this document.
-                foreach(const DocumentParseTarget& target, parsePlan.targets) {
-                    if (target.priority != priority) {
-                        m_documentsForPriority[target.priority].remove(url);
-                    }
-                }
-                m_documents.remove(url);
-                it = documentsForPriority.erase(it);
-                --m_maxParseJobs; //We have added one when putting the document into m_documents
-
-                if (!m_documents.isEmpty()) {
-                    // Only try creating one parse-job at a time, else we might iterate through thousands of files
-                    // without finding a language-support, and block the UI for a long time.
-                    QMetaObject::invokeMethod(m_parser, "parseDocuments", Qt::QueuedConnection);
-                } else {
-                    // when documents is empty, then we can stop anyways
-                    Q_ASSERT(it == documentsForPriority.end());
-                    Q_ASSERT(std::none_of(m_documentsForPriority.constBegin(), m_documentsForPriority.constEnd(),
-                                          [] (const QSet<IndexedString>& docs) {
-                                            return !docs.isEmpty();
-                                          }));
-                }
-                return ThreadWeaver::JobPointer{decorator};
+                return url;
             }
         }
         return {};
@@ -323,10 +292,44 @@ public:
             return;
         }
 
-        const auto& job = takeNextDocument();
-        // Ok, enqueueing is fine because m_parseJobs contains the job now
-        if (job)
-            m_weaver.enqueue(job);
+        const auto& url = nextDocumentToParse();
+        if (!url.isEmpty()) {
+            qCDebug(LANGUAGE) << "creating parse-job" << url << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+            const QString elidedPathString = elidedPathLeft(url.str(), 70);
+            emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
+
+            auto parsePlanIt = m_documents.find(url);
+            ThreadWeaver::QObjectDecorator* decorator = createParseJob(url, *parsePlanIt);
+
+            // Remove all mentions of this document.
+            for (const auto& target : parsePlanIt->targets) {
+                m_documentsForPriority[target.priority].remove(url);
+            }
+            m_documents.erase(parsePlanIt);
+
+            if (decorator) {
+                if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
+                    specialParseJob = decorator; //This parse-job is allocated into the reserved thread
+
+                m_parseJobs.insert(url, decorator);
+                m_weaver.enqueue(ThreadWeaver::JobPointer(decorator));
+            } else {
+                --m_maxParseJobs;
+            }
+
+            if (!m_documents.isEmpty()) {
+                // Only try creating one parse-job at a time, else we might iterate through thousands of files
+                // without finding a language-support, and block the UI for a long time.
+                QMetaObject::invokeMethod(m_parser, "parseDocuments", Qt::QueuedConnection);
+            } else {
+                // make sure we cleaned up properly
+                // TODO: also empty m_documentsForPriority when m_documents is empty? or do we want to keep capacity?
+                Q_ASSERT(std::none_of(m_documentsForPriority.constBegin(), m_documentsForPriority.constEnd(),
+                                        [] (const QSet<IndexedString>& docs) {
+                                        return !docs.isEmpty();
+                                        }));
+            }
+        }
 
         m_parser->updateProgressBar();
 
@@ -368,9 +371,6 @@ public:
                              m_parser, &BackgroundParser::parseComplete);
             QObject::connect(job, &ParseJob::progress,
                              m_parser, &BackgroundParser::parseProgress, Qt::QueuedConnection);
-
-            m_parseJobs.insert(url, decorator);
-            ++m_maxParseJobs;
 
             // TODO more thinking required here to support multiple parse jobs per url (where multiple language plugins want to parse)
             return decorator;
