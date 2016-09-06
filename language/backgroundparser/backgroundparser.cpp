@@ -53,9 +53,6 @@
 #include "parsejob.h"
 #include <editor/modificationrevisionset.h>
 
-using namespace KDevelop;
-
-namespace {
 
 const bool separateThreadForHighPriority = true;
 
@@ -69,7 +66,7 @@ const bool separateThreadForHighPriority = true;
  *
  * TODO: Move to kdevutil?
  */
-QString elidedPathLeft(const QString& path, int width)
+static QString elidedPathLeft(const QString& path, int width)
 {
     static const QChar separator = QDir::separator();
     static const QString placeholder = QStringLiteral("...");
@@ -91,10 +88,11 @@ QString elidedPathLeft(const QString& path, int width)
     return result;
 }
 
+namespace {
 /**
  * @return true if @p url is non-empty, valid and has a clean path, false otherwise.
  */
-inline bool isValidURL(const IndexedString& url)
+inline bool isValidURL(const KDevelop::IndexedString& url)
 {
     if (url.isEmpty()) {
         return false;
@@ -107,83 +105,12 @@ inline bool isValidURL(const IndexedString& url)
     QUrl cleaned = original.adjusted(QUrl::NormalizePathSegments);
     return original == cleaned;
 }
-
 }
 
-struct DocumentParseTarget
+namespace KDevelop
 {
-    QPointer<QObject> notifyWhenReady;
-    int priority;
-    TopDUContext::Features features;
-    ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
 
-    bool operator==(const DocumentParseTarget& rhs) const
-    {
-        return notifyWhenReady == rhs.notifyWhenReady
-            && priority == rhs.priority
-            && features == rhs.features;
-    }
-};
-
-inline uint qHash(const DocumentParseTarget& target)
-{
-    return target.features * 7 + target.priority * 13 + target.sequentialProcessingFlags * 17
-                               + reinterpret_cast<size_t>(target.notifyWhenReady.data());
-};
-
-struct DocumentParsePlan
-{
-    QSet<DocumentParseTarget> targets;
-
-    ParseJob::SequentialProcessingFlags sequentialProcessingFlags() const
-    {
-        //Pick the strictest possible flags
-        ParseJob::SequentialProcessingFlags ret = ParseJob::IgnoresSequentialProcessing;
-        foreach(const DocumentParseTarget &target, targets) {
-            ret |= target.sequentialProcessingFlags;
-        }
-        return ret;
-    }
-
-    int priority() const
-    {
-        //Pick the best priority
-        int ret = BackgroundParser::WorstPriority;
-        foreach(const DocumentParseTarget &target, targets) {
-            if(target.priority < ret) {
-                ret = target.priority;
-            }
-        }
-        return ret;
-    }
-
-    TopDUContext::Features features() const
-    {
-        //Pick the best features
-        TopDUContext::Features ret = (TopDUContext::Features)0;
-        foreach(const DocumentParseTarget &target, targets) {
-            ret = (TopDUContext::Features) (ret | target.features);
-        }
-        return ret;
-    }
-
-    QList<QPointer<QObject> > notifyWhenReady() const
-    {
-        QList<QPointer<QObject> > ret;
-
-        foreach(const DocumentParseTarget &target, targets) {
-            if(target.notifyWhenReady)
-                ret << target.notifyWhenReady;
-        }
-
-        return ret;
-    }
-};
-
-Q_DECLARE_TYPEINFO(DocumentParseTarget, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(DocumentParsePlan, Q_MOVABLE_TYPE);
-
-class KDevelop::BackgroundParserPrivate
+class BackgroundParserPrivate
 {
 public:
     BackgroundParserPrivate(BackgroundParser *parser, ILanguageController *languageController)
@@ -234,14 +161,14 @@ public:
         }
 
         bool done = false;
-        for (auto it1 = m_documentsForPriority.begin();
+        for (QMap<int, QSet<IndexedString> >::Iterator it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
         {
 
             if(it1.key() > m_neededPriority)
                 break; //The priority is not good enough to be processed right now
 
-            for (auto it = it1.value().begin(); it != it1.value().end();) {
+            for(QSet<IndexedString>::Iterator it = it1.value().begin(); it != it1.value().end();) {
                 //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
                 if(m_parseJobs.count() >= m_threads+1 || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority) )
                     break;
@@ -273,10 +200,7 @@ public:
                 const QString elidedPathString = elidedPathLeft(it->str(), 70);
                 emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
 
-                ThreadWeaver::QObjectDecorator* decorator = createParseJob(url, parsePlan);
-
-                m_parseJobs.insert(url, decorator);
-                ++m_maxParseJobs;
+                ThreadWeaver::QObjectDecorator* decorator = createParseJob(url, parsePlan.features(), parsePlan.notifyWhenReady(), parsePlan.priority());
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
                     specialParseJob = decorator; //This parse-job is allocated into the reserved thread
@@ -331,14 +255,13 @@ public:
         }
     }
 
-    ThreadWeaver::QObjectDecorator* createParseJob(const IndexedString& url, const DocumentParsePlan& parsePlan)
+    ThreadWeaver::QObjectDecorator* createParseJob(const IndexedString& url, TopDUContext::Features features, const QList<QPointer<QObject> >& notifyWhenReady, int priority = 0)
     {
         ///FIXME: use IndexedString in the other APIs as well! Esp. for createParseJob!
         QUrl qUrl = url.toUrl();
-        const auto languages = m_languageController->languagesForUrl(qUrl);
-        const auto& notifyWhenReady = parsePlan.notifyWhenReady();
-        for (const auto language : languages) {
-            if (!language) {
+        auto languages = m_languageController->languagesForUrl(qUrl);
+        foreach (const auto language, languages) {
+            if(!language) {
                 qCWarning(LANGUAGE) << "got zero language for" << qUrl;
                 continue;
             }
@@ -348,8 +271,8 @@ public:
                 continue; // Language part did not produce a valid ParseJob.
             }
 
-            job->setParsePriority(parsePlan.priority());
-            job->setMinimumFeatures(parsePlan.features());
+            job->setParsePriority(priority);
+            job->setMinimumFeatures(features);
             job->setNotifyWhenReady(notifyWhenReady);
 
             ThreadWeaver::QObjectDecorator* decorator = new ThreadWeaver::QObjectDecorator(job);
@@ -361,25 +284,24 @@ public:
             QObject::connect(job, &ParseJob::progress,
                              m_parser, &BackgroundParser::parseProgress, Qt::QueuedConnection);
 
+            m_parseJobs.insert(url, decorator);
+
+            ++m_maxParseJobs;
+
             // TODO more thinking required here to support multiple parse jobs per url (where multiple language plugins want to parse)
             return decorator;
         }
 
-        if (languages.isEmpty())
+        if(languages.isEmpty())
             qCDebug(LANGUAGE) << "found no languages for url" << qUrl;
         else
             qCDebug(LANGUAGE) << "could not create parse-job for url" << qUrl;
 
         //Notify that we failed
-        for (const auto& n : notifyWhenReady) {
-            if (!n) {
-                continue;
-            }
-
-            QMetaObject::invokeMethod(n.data(), "updateReady", Qt::QueuedConnection,
-                                      Q_ARG(KDevelop::IndexedString, url),
-                                      Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
-        }
+        typedef QPointer<QObject> Notify;
+        foreach(const Notify& n, notifyWhenReady)
+            if(n)
+                QMetaObject::invokeMethod(n.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, url), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
 
         return nullptr;
     }
@@ -456,6 +378,58 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     bool m_shuttingDown;
 
+    struct DocumentParseTarget {
+        QPointer<QObject> notifyWhenReady;
+        int priority;
+        TopDUContext::Features features;
+        ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
+        bool operator==(const DocumentParseTarget& rhs) const {
+            return notifyWhenReady == rhs.notifyWhenReady && priority == rhs.priority && features == rhs.features;
+        }
+    };
+
+    struct DocumentParsePlan {
+        QSet<DocumentParseTarget> targets;
+
+        ParseJob::SequentialProcessingFlags sequentialProcessingFlags() const {
+            //Pick the strictest possible flags
+            ParseJob::SequentialProcessingFlags ret = ParseJob::IgnoresSequentialProcessing;
+            foreach(const DocumentParseTarget &target, targets) {
+                ret |= target.sequentialProcessingFlags;
+            }
+            return ret;
+        }
+
+        int priority() const {
+            //Pick the best priority
+            int ret = BackgroundParser::WorstPriority;
+            foreach(const DocumentParseTarget &target, targets) {
+                if(target.priority < ret) {
+                    ret = target.priority;
+                }
+            }
+            return ret;
+        }
+
+        TopDUContext::Features features() const {
+            //Pick the best features
+            TopDUContext::Features ret = (TopDUContext::Features)0;
+            foreach(const DocumentParseTarget &target, targets) {
+                ret = (TopDUContext::Features) (ret | target.features);
+            }
+            return ret;
+        }
+
+        QList<QPointer<QObject> > notifyWhenReady() const {
+            QList<QPointer<QObject> > ret;
+
+            foreach(const DocumentParseTarget &target, targets)
+                if(target.notifyWhenReady)
+                    ret << target.notifyWhenReady;
+
+            return ret;
+        }
+    };
     // A list of documents that are planned to be parsed, and their priority
     QHash<IndexedString, DocumentParsePlan > m_documents;
     // The documents ordered by priority
@@ -481,6 +455,11 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     int m_doneParseJobs;
     QHash<KDevelop::ParseJob*, float> m_jobProgress;
     int m_neededPriority; //The minimum priority needed for processed jobs
+};
+
+inline uint qHash(const BackgroundParserPrivate::DocumentParseTarget& target) {
+    return target.features * 7 + target.priority * 13 + target.sequentialProcessingFlags * 17
+                               + reinterpret_cast<size_t>(target.notifyWhenReady.data());
 };
 
 BackgroundParser::BackgroundParser(ILanguageController *languageController)
@@ -537,11 +516,11 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 {
     QMutexLocker lock(&d->m_mutex);
-    for (auto it = d->m_documents.begin(); it != d->m_documents.end(); ) {
+    for(QHash<IndexedString, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
 
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
 
-        foreach ( const DocumentParseTarget& target, (*it).targets ) {
+        foreach ( const BackgroundParserPrivate::DocumentParseTarget& target, (*it).targets ) {
             if ( notifyWhenReady && target.notifyWhenReady.data() == notifyWhenReady ) {
                 (*it).targets.remove(target);
             }
@@ -566,13 +545,13 @@ void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Featu
     Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
     {
-        DocumentParseTarget target;
+        BackgroundParserPrivate::DocumentParseTarget target;
         target.priority = priority;
         target.features = features;
         target.sequentialProcessingFlags = flags;
         target.notifyWhenReady = QPointer<QObject>(notifyWhenReady);
 
-        auto it = d->m_documents.find(url);
+        QHash<IndexedString, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(url);
 
         if (it != d->m_documents.end()) {
             //Update the stored plan
@@ -604,7 +583,7 @@ void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyW
 
         d->m_documentsForPriority[d->m_documents[url].priority()].remove(url);
 
-        foreach(const DocumentParseTarget& target, d->m_documents[url].targets) {
+        foreach(const BackgroundParserPrivate::DocumentParseTarget& target, d->m_documents[url].targets) {
             if(target.notifyWhenReady.data() == notifyWhenReady) {
                 d->m_documents[url].targets.remove(target);
             }
@@ -727,9 +706,8 @@ void BackgroundParser::updateProgressBar()
         d->m_maxParseJobs = 0;
     } else {
         float additionalProgress = 0;
-        for (auto it = d->m_jobProgress.constBegin(); it != d->m_jobProgress.constEnd(); ++it) {
+        for(QHash<KDevelop::ParseJob*, float>::const_iterator it = d->m_jobProgress.constBegin(); it != d->m_jobProgress.constEnd(); ++it)
             additionalProgress += *it;
-        }
 
         emit showProgress(this, 0, d->m_maxParseJobs*1000, (additionalProgress + d->m_doneParseJobs)*1000);
     }
@@ -869,3 +847,10 @@ void BackgroundParser::projectOpeningAborted(IProject* project)
 {
     d->m_loadingProjects.remove(project);
 }
+
+}
+
+Q_DECLARE_TYPEINFO(KDevelop::BackgroundParserPrivate::DocumentParseTarget, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::BackgroundParserPrivate::DocumentParsePlan, Q_MOVABLE_TYPE);
+
+
