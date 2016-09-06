@@ -282,12 +282,6 @@ public:
 
                 if (decorator) {
                     jobs.append(ThreadWeaver::JobPointer(decorator));
-                    // update the currently best processed priority, if the created job respects sequential processing
-                    if (   parsePlan.sequentialProcessingFlags() & ParseJob::RespectsSequentialProcessing
-                        && parsePlan.priority() < bestRunningPriority)
-                    {
-                        bestRunningPriority = parsePlan.priority();
-                    }
                 }
 
                 // Remove all mentions of this document.
