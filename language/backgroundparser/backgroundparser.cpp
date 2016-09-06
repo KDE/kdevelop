@@ -237,16 +237,18 @@ public:
         for (auto it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
         {
-
-            if(it1.key() > m_neededPriority)
+            const auto priority = it1.key();
+            if(priority > m_neededPriority)
                 break; //The priority is not good enough to be processed right now
 
-            for (auto it = it1.value().begin(); it != it1.value().end();) {
+            auto& documentsForPriority = it1.value();
+
+            for (auto it = documentsForPriority.begin(); it != documentsForPriority.end();) {
                 //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
                 if(m_parseJobs.count() >= m_threads+1 || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority) )
                     break;
 
-                if(m_parseJobs.count() >= m_threads && it1.key() > BackgroundParser::NormalPriority && !specialParseJob)
+                if(m_parseJobs.count() >= m_threads && priority > BackgroundParser::NormalPriority && !specialParseJob)
                     break; //The additional parsing thread is reserved for higher priority parsing
 
                 const auto url = *it;
@@ -290,12 +292,12 @@ public:
 
                 // Remove all mentions of this document.
                 foreach(const DocumentParseTarget& target, parsePlan.targets) {
-                    if (target.priority != it1.key()) {
+                    if (target.priority != priority) {
                         m_documentsForPriority[target.priority].remove(url);
                     }
                 }
                 m_documents.remove(url);
-                it = it1.value().erase(it);
+                it = documentsForPriority.erase(it);
                 --m_maxParseJobs; //We have added one when putting the document into m_documents
 
                 if(!m_documents.isEmpty())
