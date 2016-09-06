@@ -333,10 +333,6 @@ void TestBackgroundparser::benchmarkDocumentChanges()
 // see also: http://bugs.kde.org/355100
 void TestBackgroundparser::testNoDeadlockInJobCreation()
 {
-    if (!qEnvironmentVariableIntValue("TEST_BUG_355100")) {
-        QSKIP("Skipping deadlock to keep CI working. Set TEST_BUG_355100=1 env var to run it yourself.");
-    }
-
     m_jobPlan.clear();
 
     // we need to run the background thread first (best priority)

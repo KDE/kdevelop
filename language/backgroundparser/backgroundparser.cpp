@@ -299,7 +299,19 @@ public:
             emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
 
             auto parsePlanIt = m_documents.find(url);
-            ThreadWeaver::QObjectDecorator* decorator = createParseJob(url, *parsePlanIt);
+
+            ThreadWeaver::QObjectDecorator* decorator = nullptr;
+            {
+                // we must not lock the mutex while creating a parse job
+                // this could in turn lock e.g. the DUChain and then
+                // we have a classic lock order inversion (since, usually,
+                // we lock first the duchain and then our background parser
+                // mutex)
+                // see also: https://bugs.kde.org/show_bug.cgi?id=355100
+                m_mutex.unlock();
+                decorator = createParseJob(url, *parsePlanIt);
+                m_mutex.lock();
+            }
 
             // Remove all mentions of this document.
             for (const auto& target : parsePlanIt->targets) {
@@ -341,6 +353,9 @@ public:
         }
     }
 
+    // NOTE: you must not access any of the data structures that are protected by any of the
+    //       background parser internal mutexes in this method
+    //       see also: https://bugs.kde.org/show_bug.cgi?id=355100
     ThreadWeaver::QObjectDecorator* createParseJob(const IndexedString& url, const DocumentParsePlan& parsePlan)
     {
         ///FIXME: use IndexedString in the other APIs as well! Esp. for createParseJob!
