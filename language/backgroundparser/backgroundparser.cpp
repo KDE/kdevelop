@@ -228,34 +228,15 @@ public:
         return bestRunningPriority;
     }
 
-    /**
-     * Create a single delayed parse job
-     *
-     * E.g. jobs for documents which have been changed by the user, but also to
-     * handle initial startup where we parse all project files.
-     */
-    void parseDocumentsInternal()
+    ThreadWeaver::JobPointer takeNextDocument()
     {
-        if(m_shuttingDown)
-            return;
-
-        //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
-        if (m_parseJobs.count() >= m_threads+1
-            || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority))
-        {
-            return;
-        }
-
         // Before starting a new job, first wait for all higher-priority ones to finish.
         // That way, parse job priorities can be used for dependency handling.
         const int bestRunningPriority = currentBestRunningPriority();
 
-        bool done = false;
-        ThreadWeaver::JobPointer job;
         for (auto it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
         {
-
             const auto priority = it1.key();
             if(priority > m_neededPriority)
                 break; //The priority is not good enough to be processed right now
@@ -288,11 +269,10 @@ public:
                 }
 
                 qCDebug(LANGUAGE) << "creating parse-job" << url << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
-                const QString elidedPathString = elidedPathLeft(it->str(), 70);
+                const QString elidedPathString = elidedPathLeft(url.str(), 70);
                 emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
 
                 ThreadWeaver::QObjectDecorator* decorator = createParseJob(url, parsePlan);
-                job = ThreadWeaver::JobPointer(decorator);
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
                     specialParseJob = decorator; //This parse-job is allocated into the reserved thread
@@ -319,12 +299,31 @@ public:
                                             return !docs.isEmpty();
                                           }));
                 }
-                done = true;
-                break;
+                return ThreadWeaver::JobPointer{decorator};
             }
-            if ( done ) break;
+        }
+        return {};
+    }
+
+    /**
+     * Create a single delayed parse job
+     *
+     * E.g. jobs for documents which have been changed by the user, but also to
+     * handle initial startup where we parse all project files.
+     */
+    void parseDocumentsInternal()
+    {
+        if(m_shuttingDown)
+            return;
+
+        //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
+        if (m_parseJobs.count() >= m_threads+1
+            || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority))
+        {
+            return;
         }
 
+        const auto& job = takeNextDocument();
         // Ok, enqueueing is fine because m_parseJobs contains the job now
         if (job)
             m_weaver.enqueue(job);
