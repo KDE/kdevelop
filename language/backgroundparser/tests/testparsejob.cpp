@@ -33,7 +33,7 @@ void TestParseJob::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     qDebug() << "Running parse job for" << document();
     if (run_callback) {
-        run_callback();
+        run_callback(document());
     }
     if (duration_ms) {
         qDebug() << "waiting" << duration_ms << "ms";

@@ -38,7 +38,7 @@ public:
     DataAccessRepository* dataAccessInformation() override;
 
     int duration_ms;
-    std::function<void()> run_callback;
+    std::function<void(const IndexedString&)> run_callback;
 };
 
 #endif

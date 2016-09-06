@@ -362,7 +362,7 @@ void TestBackgroundparser::testNoDeadlockInJobCreation()
                      m_langSupport, [&] (const IndexedString& url, ParseJob** job) {
                         if (url == run) {
                             auto testJob = new TestParseJob(url, m_langSupport);
-                            testJob->run_callback = [&] () {
+                            testJob->run_callback = [&] (const IndexedString& url) {
                                 // this is run in the background parse thread
                                 DUChainWriteLocker lock;
                                 semaphoreA.release();
