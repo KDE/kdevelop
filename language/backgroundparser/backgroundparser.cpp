@@ -300,15 +300,20 @@ public:
                 it = documentsForPriority.erase(it);
                 --m_maxParseJobs; //We have added one when putting the document into m_documents
 
-                if(!m_documents.isEmpty())
-                {
+                if (!m_documents.isEmpty()) {
                     // Only try creating one parse-job at a time, else we might iterate through thousands of files
                     // without finding a language-support, and block the UI for a long time.
-                    // If there are more documents to parse, instantly re-try.
                     QMetaObject::invokeMethod(m_parser, "parseDocuments", Qt::QueuedConnection);
-                    done = true;
-                    break;
+                } else {
+                    // when documents is empty, then we can stop anyways
+                    Q_ASSERT(it == documentsForPriority.end());
+                    Q_ASSERT(std::none_of(m_documentsForPriority.constBegin(), m_documentsForPriority.constEnd(),
+                                          [] (const QSet<IndexedString>& docs) {
+                                            return !docs.isEmpty();
+                                          }));
                 }
+                done = true;
+                break;
             }
             if ( done ) break;
         }
