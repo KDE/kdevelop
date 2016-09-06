@@ -239,6 +239,13 @@ public:
         if(m_shuttingDown)
             return;
 
+        //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
+        if (m_parseJobs.count() >= m_threads+1
+            || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority))
+        {
+            return;
+        }
+
         // Before starting a new job, first wait for all higher-priority ones to finish.
         // That way, parse job priorities can be used for dependency handling.
         const int bestRunningPriority = currentBestRunningPriority();
@@ -248,20 +255,18 @@ public:
         for (auto it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
         {
+
             const auto priority = it1.key();
             if(priority > m_neededPriority)
                 break; //The priority is not good enough to be processed right now
 
+            if (m_parseJobs.count() >= m_threads && priority > BackgroundParser::NormalPriority && !specialParseJob) {
+                break; //The additional parsing thread is reserved for higher priority parsing
+            }
+
             auto& documentsForPriority = it1.value();
 
             for (auto it = documentsForPriority.begin(); it != documentsForPriority.end();) {
-                //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
-                if(m_parseJobs.count() >= m_threads+1 || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority) )
-                    break;
-
-                if(m_parseJobs.count() >= m_threads && priority > BackgroundParser::NormalPriority && !specialParseJob)
-                    break; //The additional parsing thread is reserved for higher priority parsing
-
                 const auto url = *it;
 
                 // When a document is scheduled for parsing while it is being parsed, it will be parsed
