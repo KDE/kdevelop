@@ -276,8 +276,6 @@ public:
                 ThreadWeaver::QObjectDecorator* decorator = createParseJob(url, parsePlan);
 
                 m_parseJobs.insert(url, decorator);
-                // FIXME: this looks like a noop, see decrement below
-                //        I doubt this is desired
                 ++m_maxParseJobs;
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
