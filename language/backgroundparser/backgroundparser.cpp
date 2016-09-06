@@ -176,15 +176,17 @@ public:
                 if(m_parseJobs.count() >= m_threads && it1.key() > BackgroundParser::NormalPriority && !specialParseJob)
                     break; //The additional parsing thread is reserved for higher priority parsing
 
+                const auto url = *it;
+
                 // When a document is scheduled for parsing while it is being parsed, it will be parsed
                 // again once the job finished, but not now.
-                if (m_parseJobs.contains(*it) ) {
+                if (m_parseJobs.contains(url)) {
                     ++it;
                     continue;
                 }
 
-                Q_ASSERT(m_documents.contains(*it));
-                const DocumentParsePlan& parsePlan = m_documents[*it];
+                Q_ASSERT(m_documents.contains(url));
+                const DocumentParsePlan& parsePlan = m_documents[url];
                 // If the current job requires sequential processing, but not all jobs with a better priority have been
                 // completed yet, it will not be created now.
                 if (    parsePlan.sequentialProcessingFlags() & ParseJob::RequiresSequentialProcessing
@@ -194,11 +196,11 @@ public:
                     continue;
                 }
 
-                qCDebug(LANGUAGE) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+                qCDebug(LANGUAGE) << "creating parse-job" << url << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
                 const QString elidedPathString = elidedPathLeft(it->str(), 70);
                 emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
 
-                ThreadWeaver::QObjectDecorator* decorator = createParseJob(*it, parsePlan.features(), parsePlan.notifyWhenReady(), parsePlan.priority());
+                ThreadWeaver::QObjectDecorator* decorator = createParseJob(url, parsePlan.features(), parsePlan.notifyWhenReady(), parsePlan.priority());
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
                     specialParseJob = decorator; //This parse-job is allocated into the reserved thread
@@ -218,10 +220,10 @@ public:
                 // Remove all mentions of this document.
                 foreach(const DocumentParseTarget& target, parsePlan.targets) {
                     if (target.priority != it1.key()) {
-                        m_documentsForPriority[target.priority].remove(*it);
+                        m_documentsForPriority[target.priority].remove(url);
                     }
                 }
-                m_documents.remove(*it);
+                m_documents.remove(url);
                 it = it1.value().erase(it);
                 --m_maxParseJobs; //We have added one when putting the document into m_documents
 
