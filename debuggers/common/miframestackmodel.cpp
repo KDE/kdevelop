@@ -120,7 +120,7 @@ struct FrameListHandler : public MICommandHandler
             f.nr = frame["level"].toInt();
             f.name = getFunctionOrAddress(frame);
             QPair<QString, int> loc = getSource(frame);
-            f.file = QUrl::fromLocalFile(loc.first);
+            f.file = QUrl::fromLocalFile(loc.first).adjusted(QUrl::NormalizePathSegments);
             f.line = loc.second;
             frames << f;
         }
