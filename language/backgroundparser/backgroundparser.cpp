@@ -245,7 +245,7 @@ public:
                 break; //The additional parsing thread is reserved for higher priority parsing
             }
 
-            auto& documentsForPriority = it1.value();
+            const auto& documentsForPriority = it1.value();
 
             for (auto it = documentsForPriority.begin(); it != documentsForPriority.end();) {
                 const auto url = *it;
