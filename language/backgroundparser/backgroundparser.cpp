@@ -214,13 +214,17 @@ public:
     }
 
     // Non-mutex guarded functions, only call with m_mutex acquired.
+
+    /**
+     * Create a single delayed parse job
+     *
+     * E.g. jobs for documents which have been changed by the user, but also to
+     * handle initial startup where we parse all project files.
+     */
     void parseDocumentsInternal()
     {
         if(m_shuttingDown)
             return;
-        // Create delayed jobs, that is, jobs for documents which have been changed
-        // by the user.
-        QList<ThreadWeaver::JobPointer> jobs;
 
         // Before starting a new job, first wait for all higher-priority ones to finish.
         // That way, parse job priorities can be used for dependency handling.
@@ -234,6 +238,7 @@ public:
         }
 
         bool done = false;
+        ThreadWeaver::JobPointer job;
         for (auto it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
         {
@@ -276,13 +281,10 @@ public:
                 emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
 
                 ThreadWeaver::QObjectDecorator* decorator = createParseJob(url, parsePlan);
+                job = ThreadWeaver::JobPointer(decorator);
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
                     specialParseJob = decorator; //This parse-job is allocated into the reserved thread
-
-                if (decorator) {
-                    jobs.append(ThreadWeaver::JobPointer(decorator));
-                }
 
                 // Remove all mentions of this document.
                 foreach(const DocumentParseTarget& target, parsePlan.targets) {
@@ -312,9 +314,8 @@ public:
             if ( done ) break;
         }
 
-        // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
-
-        foreach (const ThreadWeaver::JobPointer& job, jobs)
+        // Ok, enqueueing is fine because m_parseJobs contains the job now
+        if (job)
             m_weaver.enqueue(job);
 
         m_parser->updateProgressBar();
