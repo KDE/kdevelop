@@ -279,8 +279,6 @@ public:
                     specialParseJob = decorator; //This parse-job is allocated into the reserved thread
 
                 if (decorator) {
-                    ParseJob* parseJob = dynamic_cast<ParseJob*>(decorator->job());
-                    parseJob->setSequentialProcessingFlags(parsePlan.sequentialProcessingFlags());
                     jobs.append(ThreadWeaver::JobPointer(decorator));
                     // update the currently best processed priority, if the created job respects sequential processing
                     if (   parsePlan.sequentialProcessingFlags() & ParseJob::RespectsSequentialProcessing
@@ -348,6 +346,7 @@ public:
             job->setParsePriority(parsePlan.priority());
             job->setMinimumFeatures(parsePlan.features());
             job->setNotifyWhenReady(notifyWhenReady);
+            job->setSequentialProcessingFlags(parsePlan.sequentialProcessingFlags());
 
             ThreadWeaver::QObjectDecorator* decorator = new ThreadWeaver::QObjectDecorator(job);
 
