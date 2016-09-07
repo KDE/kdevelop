@@ -197,7 +197,7 @@ VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelo
     d->m_ui = new Ui::VcsEventWidget();
     d->m_ui->setupUi(this);
 
-    d->m_logModel= new VcsEventModel(iface, rev, url, this);
+    d->m_logModel = new VcsEventModel(iface, rev, url, this);
     d->m_ui->eventView->setModel( d->m_logModel );
     d->m_ui->eventView->sortByColumn(0, Qt::DescendingOrder);
     d->m_ui->eventView->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -206,6 +206,11 @@ VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelo
     header->setSectionResizeMode( 1, QHeaderView::Stretch );
     header->setSectionResizeMode( 2, QHeaderView::ResizeToContents );
     header->setSectionResizeMode( 3, QHeaderView::ResizeToContents );
+    // Select first row as soon as the model got populated
+    connect(d->m_logModel, &QAbstractItemModel::rowsInserted, this, [this]() {
+        auto view = d->m_ui->eventView;
+        view->setCurrentIndex(view->model()->index(0, 0));
+    });
 
     d->m_detailModel = new VcsItemEventModel(this);
     d->m_ui->itemEventView->setModel( d->m_detailModel );

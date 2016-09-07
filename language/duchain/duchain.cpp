@@ -798,7 +798,8 @@ public:
           {
             QMutexLocker l(&m_referenceCountsMutex);
             //Test if the context is imported by a referenced one
-            foreach(TopDUContext* context, m_referenceCounts.keys()) {
+            for (auto it = m_referenceCounts.constBegin(), end = m_referenceCounts.constEnd(); it != end; ++it) {
+              auto* context = it.key();
               if(context == unload || context->imports(unload, CursorInRevision())) {
                 workOnContexts.remove(unload);
                 hasReference = true;
@@ -1647,10 +1648,8 @@ uint DUChain::newTopContextIndex() {
 
 void DUChain::refCountUp(TopDUContext* top) {
   QMutexLocker l(&sdDUChainPrivate->m_referenceCountsMutex);
-  if(!sdDUChainPrivate->m_referenceCounts.contains(top))
-    sdDUChainPrivate->m_referenceCounts.insert(top, 1);
-  else
-    ++sdDUChainPrivate->m_referenceCounts[top];
+  // note: value is default-constructed to zero if it does not exist
+  ++sdDUChainPrivate->m_referenceCounts[top];
 }
 
 bool DUChain::deleted() {
@@ -1659,13 +1658,16 @@ bool DUChain::deleted() {
 
 void DUChain::refCountDown(TopDUContext* top) {
   QMutexLocker l(&sdDUChainPrivate->m_referenceCountsMutex);
-  if(!sdDUChainPrivate->m_referenceCounts.contains(top)) {
+  auto it = sdDUChainPrivate->m_referenceCounts.find(top);
+  if (it == sdDUChainPrivate->m_referenceCounts.end()) {
     //qCWarning(LANGUAGE) << "tried to decrease reference-count for" << top->url().str() << "but this top-context is not referenced";
     return;
   }
-  --sdDUChainPrivate->m_referenceCounts[top];
-  if(!sdDUChainPrivate->m_referenceCounts[top])
-    sdDUChainPrivate->m_referenceCounts.remove(top);
+  auto& refCount = *it;
+  --refCount;
+  if (!refCount) {
+    sdDUChainPrivate->m_referenceCounts.erase(it);
+  }
 }
 
 void DUChain::emitDeclarationSelected(const DeclarationPointer& decl)

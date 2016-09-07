@@ -224,6 +224,9 @@ public:
         }
     }
 
+    /**
+     * Decide whether a plugin is enabled
+     */
     bool isEnabled(const KPluginMetaData& info) const
     {
         static const QStringList disabledPlugins = QString::fromLatin1(qgetenv("KDEV_DISABLE_PLUGINS")).split(';');
@@ -234,16 +237,26 @@ public:
         if (!isUserSelectable( info ))
             return true;
 
+        // in case there's a user preference, prefer that
+        const KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins() );
+        const QString pluginEnabledKey = info.pluginId() + KEY_Suffix_Enabled();
+        if (grp.hasKey(pluginEnabledKey)) {
+            return grp.readEntry(pluginEnabledKey, true);
+        }
+
+        // in all other cases: figure out if we want to load that plugin by default
+        const auto defaultPlugins = ShellExtension::getInstance()->defaultPlugins();
+        const bool isDefaultPlugin = defaultPlugins.isEmpty() || defaultPlugins.contains(info.pluginId());
+        if (isDefaultPlugin) {
+            return true;
+        }
+
         if (!isGlobalPlugin( info )) {
             QJsonValue enabledByDefault = info.rawData()[QStringLiteral("KPlugin")].toObject()[QStringLiteral("EnabledByDefault")];
             return enabledByDefault.isNull() || enabledByDefault.toBool(); //We consider plugins enabled until specified otherwise
         }
 
-        KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins() );
-        const bool isDefaultPlugin = ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains(info.pluginId());
-        bool isEnabled = grp.readEntry(info.pluginId() + KEY_Suffix_Enabled(), isDefaultPlugin);
-//         qDebug() << "read config:" << info.pluginId() << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginId() );
-        return isEnabled;
+        return false;
     }
 
     Core *core;

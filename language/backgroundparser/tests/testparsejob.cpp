@@ -20,6 +20,7 @@
  */
 
 #include "testparsejob.h"
+
 #include <QTest>
 
 TestParseJob::TestParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
@@ -30,7 +31,10 @@ TestParseJob::TestParseJob(const IndexedString& url, ILanguageSupport* languageS
 
 void TestParseJob::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    qDebug() << "Running parse job for" << document().toUrl();
+    qDebug() << "Running parse job for" << document();
+    if (run_callback) {
+        run_callback(document());
+    }
     if (duration_ms) {
         qDebug() << "waiting" << duration_ms << "ms";
         QTest::qWait(duration_ms);

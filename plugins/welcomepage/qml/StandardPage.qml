@@ -22,12 +22,11 @@ import QtQuick 2.1
 import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.2
 
-GroupBox {
+Rectangle {
+    id: root
+
     SystemPalette { id: pal }
 
-    Rectangle {
-        anchors.fill: parent
-
-        color: pal.base
-    }
+    color: pal.base
+    border.color: pal.mid
 }
