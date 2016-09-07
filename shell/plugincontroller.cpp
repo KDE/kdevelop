@@ -245,8 +245,8 @@ public:
         }
 
         // in all other cases: figure out if we want to load that plugin by default
-        const bool isDefaultPlugin = ShellExtension::getInstance()->defaultPlugins().isEmpty()
-            || ShellExtension::getInstance()->defaultPlugins().contains(info.pluginId());
+        const auto defaultPlugins = ShellExtension::getInstance()->defaultPlugins();
+        const bool isDefaultPlugin = defaultPlugins.isEmpty() || defaultPlugins.contains(info.pluginId());
         if (isDefaultPlugin) {
             return true;
         }
