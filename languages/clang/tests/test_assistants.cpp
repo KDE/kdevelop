@@ -50,6 +50,8 @@
 
 #include <shell/documentcontroller.h>
 
+#include <clang-c/Index.h>
+
 using namespace KDevelop;
 using namespace KTextEditor;
 
@@ -523,8 +525,10 @@ void TestAssistants::testSignatureAssistant()
         }
 
         if (stateChange.result == SHOULD_ASSIST) {
+#if CINDEX_VERSION_MINOR < 35
             QEXPECT_FAIL("change_function_type", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't parse the code...", Abort);
             QEXPECT_FAIL("change_return_type_impl", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't include the function's AST and thus we never get updated about the new return type...", Abort);
+#endif
             QVERIFY(assistant && !assistant->actions().isEmpty());
         } else {
             QVERIFY(!assistant || assistant->actions().isEmpty());

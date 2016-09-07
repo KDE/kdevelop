@@ -98,7 +98,7 @@ IndexedString ClangIndex::translationUnitForUrl(const IndexedString& url)
     }
     // if no explicit pin data is available, follow back the duchain import chain
     {
-        KDevelop::DUChainReadLocker lock;
+        DUChainReadLocker lock;
         TopDUContext* top = DUChain::self()->chainForDocument(url);
         if (top) {
             TopDUContext* tuTop = top;
