@@ -101,6 +101,10 @@ QString highlightAndEscapeUseText(QString line, int cutOff, KTextEditor::Range r
                     + "</span>" + line.mid(range.end().column(), line.length() - range.end().column()).toHtmlEscaped() + "</span>";
 }
 
+/**
+ * Note: the links in the HTML here are only used for styling
+ * the navigation is implemented in the mouse press event handler
+ */
 OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, KTextEditor::Range range, const CodeRepresentation& code) : m_range(new PersistentMovingRange(range, document)), m_declaration(declaration), m_document(document) {
 
   //Make the sizing of this widget independent of the content, because we will adapt the content to the size
@@ -112,14 +116,14 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   m_layout->setContentsMargins(0, 0, 0, 0);
   setLayout(m_layout);
 
+  setCursor(Qt::PointingHandCursor);
+
   m_label = new QLabel(this);
   m_icon = new QLabel(this);
   m_icon->setPixmap(QIcon::fromTheme(QStringLiteral("code-function")).pixmap(16));
 
-  connect(m_label, &QLabel::linkActivated, this, &OneUseWidget::jumpTo);
-
   DUChainReadLocker lock(DUChain::lock());
-  QString text = "<a href='open'>" + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start().line()) + QStringLiteral("</a>");
+  QString text = "<a>" + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start().line()) + QStringLiteral("</a>");
   if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range->range().end().column()) {
 
     text += "&nbsp;&nbsp;" + highlightAndEscapeUseText(m_sourceLine, 0, m_range->range());
@@ -150,9 +154,12 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   m_layout->setAlignment(Qt::AlignLeft);
 }
 
-void OneUseWidget::jumpTo() {
-        //This is used to execute the slot delayed in the event-loop, so crashes are avoided
-  ICore::self()->documentController()->openDocument(m_document.toUrl(), m_range->range().start());
+void OneUseWidget::mousePressEvent(QMouseEvent* event)
+{
+  if (event->button() == Qt::LeftButton && !event->modifiers()) {
+    ICore::self()->documentController()->openDocument(m_document.toUrl(), m_range->range().start());
+    event->accept();
+  }
 }
 
 OneUseWidget::~OneUseWidget() {
@@ -168,12 +175,13 @@ void OneUseWidget::resizeEvent ( QResizeEvent * event ) {
   int maxCutOff = m_sourceLine.length() - (range.end().column() - range.start().column());
 
   //Reset so we also get more context while up-sizing
-  m_label->setText(QStringLiteral("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
+  m_label->setText(QStringLiteral("<a>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
                  + QStringLiteral("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
 
+  /// FIXME: this is incredibly ugly and slow... we could simply paint the text ourselves and elide it properly
   while(sizeHint().width() > size.width() && cutOff < maxCutOff) {
     //We've got to save space
-    m_label->setText(QStringLiteral("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
+    m_label->setText(QStringLiteral("<a>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
                    + QStringLiteral("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
     cutOff += 5;
   }

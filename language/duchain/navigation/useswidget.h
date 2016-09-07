@@ -47,10 +47,9 @@ namespace KDevelop {
       public:
         OneUseWidget(IndexedDeclaration declaration, IndexedString document, KTextEditor::Range range, const CodeRepresentation& code);
         ~OneUseWidget() override;
-        
-      private slots:
-        void jumpTo();
+
       private:
+        void mousePressEvent(QMouseEvent * event) override;
         void resizeEvent ( QResizeEvent * event ) override;
         
         PersistentMovingRange::Ptr m_range;
