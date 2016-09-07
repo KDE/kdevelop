@@ -248,7 +248,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         void setText( const QString& text );
 
         class ProjectBaseItemPrivate* const d_ptr;
-        ProjectBaseItem( ProjectBaseItemPrivate& dd );
         void setRow( int row );
         void setModel( ProjectModel* model );
     private:
