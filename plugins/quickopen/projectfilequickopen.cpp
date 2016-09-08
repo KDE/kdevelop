@@ -194,6 +194,11 @@ QString ProjectFileData::project() const
     }
 }
 
+Path ProjectFileData::projectPath() const
+{
+    return m_file.projectPath;
+}
+
 BaseFileDataProvider::BaseFileDataProvider()
 {
 }

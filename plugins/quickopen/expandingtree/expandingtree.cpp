@@ -26,6 +26,11 @@
 #include <QPainter>
 #include "expandingwidgetmodel.h"
 
+#include <util/path.h>
+#include <util/widgetcolorizer.h>
+
+using namespace KDevelop;
+
 ExpandingTree::ExpandingTree(QWidget* parent) : QTreeView(parent) {
   m_drawText.documentLayout()->setPaintDevice(this);
   setUniformRowHeights(false);
@@ -60,4 +65,14 @@ void ExpandingTree::drawRow ( QPainter * painter, const QStyleOptionViewItem & o
 
 int ExpandingTree::sizeHintForColumn ( int column ) const {
     return columnWidth( column );
+}
+
+void ExpandingTree::drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const
+{
+  const auto& path = index.data(ProjectPathRole).value<Path>();
+  if (path.isValid()) {
+    const auto color = WidgetColorizer::colorForId(qHash(path), palette(), true);
+    WidgetColorizer::drawBranches(this, painter, rect, index, color);
+  }
+  QTreeView::drawBranches(painter, rect, index);
 }

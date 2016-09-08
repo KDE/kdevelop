@@ -26,6 +26,9 @@
 #include <ktexteditor/codecompletionmodel.h>
 #include <typeinfo>
 
+#include "expandingtree/expandingtree.h"
+#include "projectfilequickopen.h"
+
 #define QUICKOPEN_USE_ITEM_CACHING
 
 using namespace KDevelop;
@@ -291,6 +294,12 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
       v.setValue<QWidget*>(w);
       return v;
     }
+    case ExpandingTree::ProjectPathRole:
+      // TODO: put this into the QuickOpenDataBase API
+      //       we cannot do this in 5.0, cannot change ABI
+      if (auto projectFile = dynamic_cast<const ProjectFileData*>(d.constData())) {
+          return QVariant::fromValue(projectFile->projectPath());
+      }
   }
 
   if( index.column() == 1 )
