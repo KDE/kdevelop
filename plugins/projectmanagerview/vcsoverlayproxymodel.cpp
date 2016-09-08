@@ -87,9 +87,21 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const QUrl& url)
 {
     QList<IProject*> allProjects = ICore::self()->projectController()->projects();
     foreach(IProject* project, allProjects) {
-        if( url.isParentOf(project->path().toUrl()) || url.matches(project->path().toUrl(), QUrl::StripTrailingSlash)) {
+        const bool isExactMatch = url.matches(project->path().toUrl(), QUrl::StripTrailingSlash);
+        const bool isParentOf = url.isParentOf(project->path().toUrl());
+        if (isParentOf || isExactMatch) {
+            // example projects in KDevelop:
+            // - /path/to/mygitrepo/:          isParentOf=0 isExactMatch=1,
+            // - /path/to/mygitrepo/myproject: isParentOf=1 isExactMatch=0
+            // - /path/to/norepo:              isParentOf=0 isExactMatch=0
+            // isParentOf=1 isExactMatch=1 is not a valid combination
+
             IPlugin* v = project->versionControlPlugin();
-            Q_ASSERT(v);
+            Q_ASSERT(!isExactMatch || v); // project url == 'change' url => project should be associated with a VCS plugin
+            if (!v) {
+                continue;
+            }
+
             IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
             Q_ASSERT(branching);
             VcsJob* job = branching->currentBranch(url);
