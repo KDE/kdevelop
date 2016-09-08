@@ -80,6 +80,10 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const KUrl& url)
         if( url.isParentOf(project->folder())) {
             IPlugin* v = project->versionControlPlugin();
             Q_ASSERT(v);
+            if (!v) {
+                continue;
+            }
+
             IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
             Q_ASSERT(branching);
             VcsJob* job = branching->currentBranch(url);
