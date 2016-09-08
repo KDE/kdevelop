@@ -47,7 +47,7 @@ public:
 
     template< typename T >
     static void mergeEnvironment( QProcessEnvironment& dest, const T& src );
-    QProcessEnvironment effectiveEnvironment() const;
+    QProcessEnvironment effectiveEnvironment(const QUrl& workingDirectory) const;
     QStringList effectiveCommandLine() const;
 
     OutputExecuteJob* m_owner;
@@ -271,7 +271,8 @@ void OutputExecuteJob::start()
         d->m_process->setWorkingDirectory( effectiveWorkingDirectory.toLocalFile() );
     }
 
-    d->m_process->setProcessEnvironment( d->effectiveEnvironment() );
+    d->m_process->setProcessEnvironment( d->effectiveEnvironment(effectiveWorkingDirectory) );
+
     if (!d->effectiveCommandLine().isEmpty()) {
         d->m_process->setProgram( d->effectiveCommandLine() );
         // there is no way to input data in the output view so redirect stdin to the null device
@@ -480,7 +481,7 @@ void OutputExecuteJobPrivate::mergeEnvironment( QProcessEnvironment& dest, const
     }
 }
 
-QProcessEnvironment OutputExecuteJobPrivate::effectiveEnvironment() const
+QProcessEnvironment OutputExecuteJobPrivate::effectiveEnvironment(const QUrl& workingDirectory) const
 {
     const EnvironmentGroupList environmentGroup( KSharedConfig::openConfig() );
     QString environmentProfile = m_owner->environmentProfile();
@@ -496,6 +497,10 @@ QProcessEnvironment OutputExecuteJobPrivate::effectiveEnvironment() const
     if( m_properties.testFlag( OutputExecuteJob::PortableMessages ) ) {
         environment.remove( QStringLiteral( "LC_ALL" ) );
         environment.insert( QStringLiteral( "LC_MESSAGES" ), QStringLiteral( "C" ) );
+    }
+    if (!workingDirectory.isEmpty() && environment.contains(QStringLiteral("PWD"))) {
+        // also update the environment variable for the cwd, otherwise scripts can break easily
+        environment.insert(QStringLiteral("PWD"), workingDirectory.toLocalFile());
     }
     return environment;
 }
