@@ -197,6 +197,8 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
                 : KConfigGroup(KSharedConfig::openConfig(), "GDB Config");
 
     if (!m_debugger->start(config, extraArguments)) {
+        // debugger failed to start, ensure debugger and session state are correctly updated.
+        setDebuggerStateOn(s_dbgFailedStart);
         return false;
     }
 
@@ -458,7 +460,7 @@ void MIDebugSession::handleDebuggerStateChange(DBGStateFlags oldState, DBGStateF
             message = i18n("Debugger stopped");
             emit finished();
         }
-        if (oldSessionState != NotStartedState) {
+        if (oldSessionState != NotStartedState || newState & s_dbgFailedStart) {
             newSessionState = EndedState;
         }
     } else {
@@ -527,6 +529,8 @@ void MIDebugSession::restartDebugger()
 void MIDebugSession::stopDebugger()
 {
     if (debuggerStateIsOn(s_dbgNotStarted)) {
+        // we are force to stop even before debugger started, just reset
+        qCDebug(DEBUGGERCOMMON) << "Stopping debugger when it's not started";
         return;
     }
 

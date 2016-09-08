@@ -43,6 +43,8 @@ enum DBGStateFlag
     /// Once GDB is completely idle, send an automatic ExecContinue to resume from an interruption
     /// by CmdImmediately commands
     s_automaticContinue = 1 << 12,
+    /// Set when the debugger failed to start
+    s_dbgFailedStart    = 1 << 13,
 };
 Q_DECLARE_FLAGS(DBGStateFlags, DBGStateFlag)
 
