@@ -205,6 +205,11 @@ QIcon DUChainItemData::icon() const
   return QIcon();
 }
 
+Path DUChainItemData::projectPath() const
+{
+  return m_item.m_projectPath;
+}
+
 DUChainItemDataProvider::DUChainItemDataProvider( IQuickOpen* quickopen, bool openDefinitions )
 : m_quickopen(quickopen)
 , m_openDefinitions(openDefinitions)

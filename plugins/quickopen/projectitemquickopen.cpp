@@ -31,6 +31,7 @@
 #include <language/interfaces/abbreviations.h>
 
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 
 #include <project/projectmodel.h>
@@ -112,6 +113,13 @@ struct ClosestMatchToText
 private:
     const QHash<int , int>& cache;
 };
+
+Path findProjectForForPath(const IndexedString& path)
+{
+    const auto model = ICore::self()->projectController()->projectModel();
+    const auto item = model->itemForPath(path);
+    return item ? item->project()->path() : Path();
+}
 
 }
 
@@ -246,11 +254,13 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
             DUChainItem item;
             item.m_item = decl;
             item.m_text = decl->qualifiedIdentifier().toString();
+            item.m_projectPath = findProjectForForPath(filteredItem.m_file);
             ret << QuickOpenDataPointer(new DUChainItemData(item));
         }
         if(decls.isEmpty()) {
             DUChainItem item;
             item.m_text = filteredItem.m_id.toString();
+            item.m_projectPath = findProjectForForPath(filteredItem.m_file);
             ret << QuickOpenDataPointer(new DUChainItemData(item));
         }
     } else {

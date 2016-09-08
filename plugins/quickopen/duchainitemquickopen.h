@@ -37,6 +37,7 @@ struct DUChainItem
   }
   KDevelop::IndexedDeclaration m_item;
   QString m_text;
+  KDevelop::Path m_projectPath;
   bool m_noHtmlDestription;
 };
 
@@ -57,6 +58,7 @@ class DUChainItemData : public KDevelop::QuickOpenDataBase
     QWidget* expandingWidget() const override;
 
     QIcon icon() const override;
+    KDevelop::Path projectPath() const;
 
 private:
     DUChainItem m_item;
