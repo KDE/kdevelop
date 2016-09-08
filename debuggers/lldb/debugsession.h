@@ -85,6 +85,7 @@ private Q_SLOTS:
     void handleFileExecAndSymbols(const MI::ResultRecord &r);
     void handleTargetSelect(const MI::ResultRecord &r);
     void handleCoreFile(const QStringList &s);
+    void handleVersion(const QStringList& s);
 
     void handleSessionStateChange(IDebugSession::DebuggerState state);
 

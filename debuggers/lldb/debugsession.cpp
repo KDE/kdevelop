@@ -153,6 +153,9 @@ void DebugSession::initializeDebugger()
 {
     //addCommand(MI::EnableTimings, "yes");
 
+    // Check version
+    addCommand(new CliCommand(MI::NonMI, "version", this, &DebugSession::handleVersion));
+
     // load data formatter
     auto formatterPath = m_formatterPath;
     if (!QFileInfo(formatterPath).isFile()) {
@@ -251,8 +254,7 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     qCDebug(DEBUGGERGDB) << "Per inferior configuration done";
 }
 
-bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *iexec,
-                                const QString &executable)
+bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *, const QString &)
 {
     qCDebug(DEBUGGERGDB) << "Executing inferior";
 
@@ -375,6 +377,47 @@ void DebugSession::handleCoreFile(const QStringList &s)
     setDebuggerStateOff(s_appNotStarted | s_programExited);
 
     setDebuggerStateOn(s_programExited | s_core);
+}
+
+void DebugSession::handleVersion(const QStringList& s)
+{
+    qCDebug(DEBUGGERLLDB) << s.first();
+
+    QRegularExpression rx("^lldb version: (\\d+).(\\d+).(\\d+)\\b", QRegularExpression::MultilineOption);
+    auto match = rx.match(s.first());
+    int version[] = {0, 0, 0};
+    if (match.hasMatch()) {
+        for (int i = 0; i != 3; ++i) {
+            version[i] = match.captured(i+1).toInt();
+        }
+    }
+
+    // minimal version is 3.8.1
+    bool ok = true;
+    const int min_ver[] = {3, 8, 1};
+    for (int i = 0; i < 3; ++i) {
+        if (version[i] < min_ver[i]) {
+            ok = false;
+            break;
+        } else if (version[i] > min_ver[i]) {
+            ok = true;
+            break;
+        }
+    }
+
+    if (!ok) {
+        if (!qobject_cast<QGuiApplication*>(qApp))  {
+            //for unittest
+            qFatal("You need a graphical application.");
+        }
+
+        KMessageBox::error(
+            qApp->activeWindow(),
+            i18n("<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />"
+            "You are using: %1", s.first()),
+            i18n("LLDB Error"));
+        stopDebugger();
+    }
 }
 
 void DebugSession::updateAllVariables()
