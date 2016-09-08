@@ -31,6 +31,7 @@
 #include <language/interfaces/abbreviations.h>
 
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 
 #include <project/projectmodel.h>
@@ -39,6 +40,7 @@
 
 using namespace KDevelop;
 
+namespace {
 struct SubstringCache
 {
     SubstringCache( const QString& string = QString() )
@@ -111,6 +113,15 @@ struct ClosestMatchToText
 private:
     const QHash<int , int>& cache;
 };
+
+Path findProjectForForPath(const IndexedString& path)
+{
+    const auto model = ICore::self()->projectController()->projectModel();
+    const auto item = model->itemForPath(path);
+    return item ? item->project()->path() : Path();
+}
+
+}
 
 ProjectItemDataProvider::ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen )
 : m_quickopen(quickopen)
@@ -213,23 +224,25 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
         filteredItemOffset += it.value().count();
     }
 
-    uint a = pos - filteredItemOffset;
+    const uint a = pos - filteredItemOffset;
     if(a > (uint)m_filteredItems.size()) {
         return KDevelop::QuickOpenDataPointer();
     }
 
+    const auto& filteredItem = m_filteredItems[a];
+
     QList<KDevelop::QuickOpenDataPointer> ret;
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
-    TopDUContext* ctx = DUChainUtils::standardContextForUrl(m_filteredItems[a].m_file.toUrl());
+    TopDUContext* ctx = DUChainUtils::standardContextForUrl(filteredItem.m_file.toUrl());
     if(ctx) {
-        QList<Declaration*> decls = ctx->findDeclarations(m_filteredItems[a].m_id, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::DirectQualifiedLookup);
+        QList<Declaration*> decls = ctx->findDeclarations(filteredItem.m_id, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::DirectQualifiedLookup);
 
         //Filter out forward-declarations or duplicate imported declarations
         foreach(Declaration* decl, decls) {
             bool filter = false;
             if (decls.size() > 1 && decl->isForwardDeclaration()) {
                 filter = true;
-            } else if (decl->url() != m_filteredItems[a].m_file && m_files.contains(decl->url())) {
+            } else if (decl->url() != filteredItem.m_file && m_files.contains(decl->url())) {
                 filter = true;
             }
             if (filter) {
@@ -241,13 +254,13 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
             DUChainItem item;
             item.m_item = decl;
             item.m_text = decl->qualifiedIdentifier().toString();
-            //item.m_project =  .. @todo fill
+            item.m_projectPath = findProjectForForPath(filteredItem.m_file);
             ret << QuickOpenDataPointer(new DUChainItemData(item));
         }
         if(decls.isEmpty()) {
             DUChainItem item;
-            item.m_text = m_filteredItems[a].m_id.toString();
-            //item.m_project =  .. @todo fill
+            item.m_text = filteredItem.m_id.toString();
+            item.m_projectPath = findProjectForForPath(filteredItem.m_file);
             ret << QuickOpenDataPointer(new DUChainItemData(item));
         }
     } else {

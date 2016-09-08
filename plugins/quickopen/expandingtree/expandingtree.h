@@ -28,10 +28,17 @@
 class ExpandingTree : public QTreeView {
    Q_OBJECT
  public:
-   explicit ExpandingTree(QWidget* parent);
+    explicit ExpandingTree(QWidget* parent);
+
+    enum CustomRoles {
+        ProjectPathRole = Qt::UserRole + 5000
+    };
+
   protected:
     virtual void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
     virtual int sizeHintForColumn ( int column ) const override;
+
+    void drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const override;
   private:
     mutable QTextDocument m_drawText;
 };

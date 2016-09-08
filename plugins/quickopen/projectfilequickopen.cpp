@@ -148,7 +148,7 @@ QWidget* ProjectFileData::expandingWidget() const
         return chosen->createNavigationWidget(0, 0,
             "<small><small>"
             + i18nc("%1: project name", "Project %1", project())
-            + "</small></small>");
+            + "</small></small><br/>");
     } else {
         QTextBrowser* ret = new QTextBrowser();
         ret->resize(400, 100);
@@ -192,6 +192,11 @@ QString ProjectFileData::project() const
     } else {
         return i18n("none");
     }
+}
+
+Path ProjectFileData::projectPath() const
+{
+    return m_file.projectPath;
 }
 
 BaseFileDataProvider::BaseFileDataProvider()
