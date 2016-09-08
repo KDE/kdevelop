@@ -1371,7 +1371,9 @@ void TestDUChain::testMacroUses()
 
     QCOMPARE(macroDefinition1->uses().size(), 1);
     QCOMPARE(macroDefinition1->uses().begin()->first(), RangeInRevision(2,0,2,4));
+#if CINDEX_VERSION_MINOR < 32
     QEXPECT_FAIL("", "This appears to be a clang bug, the AST doesn't contain the macro use", Continue);
+#endif
     QCOMPARE(macroDefinition2->uses().size(), 1);
     if (macroDefinition2->uses().size())
     {
