@@ -143,16 +143,12 @@ QString DUChainItemData::htmlDescription() const
 
   if( function && function->returnType() ) {
     text = i18nc("%1: function signature", "Return: %1",
-                  function->partToString(FunctionType::SignatureReturn));
+                  function->partToString(FunctionType::SignatureReturn)) + QLatin1String(" ");
   }
 
-  text += ' ' + i18nc("%1: file path", "File: %1", decl->url().str());
+  text += i18nc("%1: file path", "File: %1", ICore::self()->projectController()->prettyFileName(decl->url().toUrl()));
 
   QString ret = "<small><small>" + text + "</small></small>";
-
-  if(!m_item.m_project.isEmpty()) {
-    ret.prepend(i18n("Project %1", m_item.m_project) + (ret.isEmpty() ? ", " : ""));
-  }
 
   return ret;
 }
