@@ -43,6 +43,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/TextHintInterface>
 #include <KTextEditor/View>
+#include <KTextEditor/ConfigInterface>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -618,32 +619,32 @@ void ContextBrowserPlugin::clearMouseHover() {
   m_mouseHoverDocument.clear();
 }
 
-Attribute::Ptr highlightedUseAttribute() {
+Attribute::Ptr highlightedUseAttribute(KTextEditor::View* view) {
   static Attribute::Ptr standardAttribute = Attribute::Ptr();
   if( !standardAttribute ) {
-    standardAttribute= Attribute::Ptr( new Attribute() );
+    standardAttribute = Attribute::Ptr( new Attribute() );
+    standardAttribute->setDefaultStyle(KTextEditor::dsNormal);
+    standardAttribute->setForeground(standardAttribute->selectedForeground());
     standardAttribute->setBackgroundFillWhitespace(true);
 
-    // mixing (255, 255, 0, 100) with white yields this:
-    standardAttribute->setBackground(QColor(251, 250, 150));
-
-    // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
-    // foreground color could change, hence apply it everytime
-    standardAttribute->setForeground(QColor(0, 0, 0, 255)); //Don't use alpha here, as kate uses the alpha only to blend with the document background color
+    auto iface = qobject_cast<KTextEditor::ConfigInterface*>(view);
+    auto background = iface->configValue(QStringLiteral("search-highlight-color")).value<QColor>();
+    standardAttribute->setBackground(background);
   }
   return standardAttribute;
 }
 
-Attribute::Ptr highlightedSpecialObjectAttribute() {
+Attribute::Ptr highlightedSpecialObjectAttribute(KTextEditor::View* view) {
   static Attribute::Ptr standardAttribute = Attribute::Ptr();
   if( !standardAttribute ) {
     standardAttribute = Attribute::Ptr( new Attribute() );
+    standardAttribute->setDefaultStyle(KTextEditor::dsNormal);
+    standardAttribute->setForeground(standardAttribute->selectedForeground());
     standardAttribute->setBackgroundFillWhitespace(true);
-    // mixing (90, 255, 0, 100) with white yields this:
-    standardAttribute->setBackground(QColor(190, 255, 155));
-    // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
-    // foreground color could change, hence apply it everytime
-    standardAttribute->setForeground(QColor(0, 0, 0, 255)); //Don't use alpha here, as kate uses the alpha only to blend with the document background color
+
+    auto iface = qobject_cast<KTextEditor::ConfigInterface*>(view);
+    auto background = iface->configValue(QStringLiteral("search-highlight-color")).value<QColor>();
+    standardAttribute->setBackground(background);
   }
   return standardAttribute;
 }
@@ -660,7 +661,7 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
 
   // Highlight the declaration
   highlights.highlights << decl->createRangeMoving();
-  highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+  highlights.highlights.back()->setAttribute(highlightedUseAttribute(view));
   highlights.highlights.back()->setZDepth(highlightingZDepth);
 
   // Highlight uses
@@ -671,7 +672,7 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
       for(QList< KTextEditor::Range >::const_iterator useIt = (*fileIt).constBegin(); useIt != (*fileIt).constEnd(); ++useIt)
       {
         highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(*useIt, fileIt.key()));
-        highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+        highlights.highlights.back()->setAttribute(highlightedUseAttribute(view));
         highlights.highlights.back()->setZDepth(highlightingZDepth);
       }
     }
@@ -680,7 +681,7 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
   if( FunctionDefinition* def = FunctionDefinition::definition(decl) )
   {
     highlights.highlights << def->createRangeMoving();
-    highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+    highlights.highlights.back()->setAttribute(highlightedUseAttribute(view));
     highlights.highlights.back()->setZDepth(highlightingZDepth);
   }
 }
@@ -771,7 +772,7 @@ void ContextBrowserPlugin::updateForView(View* view)
       if(allowHighlight)
       {
         highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(specialRange, IndexedString(url)));
-        highlights.highlights.back()->setAttribute(highlightedSpecialObjectAttribute());
+        highlights.highlights.back()->setAttribute(highlightedSpecialObjectAttribute(view));
         highlights.highlights.back()->setZDepth(highlightingZDepth);
       }
       if(updateBrowserView)
