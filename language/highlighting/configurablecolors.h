@@ -32,7 +32,7 @@
 namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors {
   public:
-    explicit ConfigurableHighlightingColors(QString highlightingName);
+    explicit ConfigurableHighlightingColors();
 
     void addAttribute(int number, KTextEditor::Attribute::Ptr attribute);
 

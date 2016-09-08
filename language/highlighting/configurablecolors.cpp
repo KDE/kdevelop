@@ -49,7 +49,7 @@ void ConfigurableHighlightingColors::addAttribute(int number, KTextEditor::Attri
   m_attributes[number] = attribute;
 }
 
-ConfigurableHighlightingColors::ConfigurableHighlightingColors(QString highlightingName) : m_highlightingName(highlightingName)
+ConfigurableHighlightingColors::ConfigurableHighlightingColors()
 {
   KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
   setDefaultAttribute(a);
@@ -63,7 +63,7 @@ ConfigurableHighlightingColors::ConfigurableHighlightingColors(QString highlight
     ifDebug(qCDebug(LANGUAGE) << #type << "color: " << #color_ << "->" << a->foreground().color().name();) \
   }
 
-CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : ConfigurableHighlightingColors(QStringLiteral("KDev Semantic Highlighting"))
+CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : ConfigurableHighlightingColors()
 {
   // TODO: The set of colors doesn't work very well. Many colors simply too dark (even on the maximum "Global colorization intensity" they hardly distinguishable from grey) and look alike.
   ADD_COLOR(ClassType, 0x005912) //Dark green
