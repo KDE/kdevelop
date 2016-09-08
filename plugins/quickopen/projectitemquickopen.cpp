@@ -241,13 +241,11 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
             DUChainItem item;
             item.m_item = decl;
             item.m_text = decl->qualifiedIdentifier().toString();
-            //item.m_project =  .. @todo fill
             ret << QuickOpenDataPointer(new DUChainItemData(item));
         }
         if(decls.isEmpty()) {
             DUChainItem item;
             item.m_text = m_filteredItems[a].m_id.toString();
-            //item.m_project =  .. @todo fill
             ret << QuickOpenDataPointer(new DUChainItemData(item));
         }
     } else {

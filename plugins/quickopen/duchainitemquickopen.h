@@ -37,7 +37,6 @@ struct DUChainItem
   }
   KDevelop::IndexedDeclaration m_item;
   QString m_text;
-  QString m_project;
   bool m_noHtmlDestription;
 };
 
