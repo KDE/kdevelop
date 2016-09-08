@@ -56,6 +56,8 @@
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/interfaces/iquickopen.h>
 
+#include <language/highlighting/colorcache.h>
+
 #include <language/duchain/duchain.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/declaration.h>
@@ -295,6 +297,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
 
   connect( core()->documentController(), &IDocumentController::textDocumentCreated, this, &ContextBrowserPlugin::textDocumentCreated );
   connect( DUChain::self(), &DUChain::updateReady, this, &ContextBrowserPlugin::updateReady);
+  connect( ColorCache::self(), &ColorCache::colorsGotChanged, this, &ContextBrowserPlugin::colorSetupChanged );
 
   connect( DUChain::self(), &DUChain::declarationSelected,
            this, &ContextBrowserPlugin::declarationSelectedInUI );
@@ -619,34 +622,26 @@ void ContextBrowserPlugin::clearMouseHover() {
   m_mouseHoverDocument.clear();
 }
 
-Attribute::Ptr highlightedUseAttribute(KTextEditor::View* view) {
-  static Attribute::Ptr standardAttribute = Attribute::Ptr();
-  if( !standardAttribute ) {
-    standardAttribute = Attribute::Ptr( new Attribute() );
-    standardAttribute->setDefaultStyle(KTextEditor::dsNormal);
-    standardAttribute->setForeground(standardAttribute->selectedForeground());
-    standardAttribute->setBackgroundFillWhitespace(true);
+Attribute::Ptr ContextBrowserPlugin::highlightedUseAttribute(KTextEditor::View* view) const {
+  if( !m_highlightAttribute ) {
+    m_highlightAttribute = Attribute::Ptr( new Attribute() );
+    m_highlightAttribute->setDefaultStyle(KTextEditor::dsNormal);
+    m_highlightAttribute->setForeground(m_highlightAttribute->selectedForeground());
+    m_highlightAttribute->setBackgroundFillWhitespace(true);
 
     auto iface = qobject_cast<KTextEditor::ConfigInterface*>(view);
     auto background = iface->configValue(QStringLiteral("search-highlight-color")).value<QColor>();
-    standardAttribute->setBackground(background);
+    m_highlightAttribute->setBackground(background);
   }
-  return standardAttribute;
+  return m_highlightAttribute;
 }
 
-Attribute::Ptr highlightedSpecialObjectAttribute(KTextEditor::View* view) {
-  static Attribute::Ptr standardAttribute = Attribute::Ptr();
-  if( !standardAttribute ) {
-    standardAttribute = Attribute::Ptr( new Attribute() );
-    standardAttribute->setDefaultStyle(KTextEditor::dsNormal);
-    standardAttribute->setForeground(standardAttribute->selectedForeground());
-    standardAttribute->setBackgroundFillWhitespace(true);
+void ContextBrowserPlugin::colorSetupChanged() {
+  m_highlightAttribute = Attribute::Ptr();
+}
 
-    auto iface = qobject_cast<KTextEditor::ConfigInterface*>(view);
-    auto background = iface->configValue(QStringLiteral("search-highlight-color")).value<QColor>();
-    standardAttribute->setBackground(background);
-  }
-  return standardAttribute;
+Attribute::Ptr ContextBrowserPlugin::highlightedSpecialObjectAttribute(KTextEditor::View* view) const {
+  return highlightedUseAttribute(view);
 }
 
 void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl ) {

@@ -119,6 +119,9 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
 
     void showUses(const KDevelop::DeclarationPointer& declaration) override;
 
+    KTextEditor::Attribute::Ptr highlightedUseAttribute(KTextEditor::View* view) const;
+    KTextEditor::Attribute::Ptr highlightedSpecialObjectAttribute(KTextEditor::View* view) const;
+
   public Q_SLOTS:
     void showUsesDelayed(const KDevelop::DeclarationPointer& declaration);
     void previousContextShortcut();
@@ -149,6 +152,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
 
     void historyNext();
     void historyPrevious();
+
+    void colorSetupChanged();
 
   private slots:
     // history browsing
@@ -265,6 +270,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     //Used to not record jumps triggered by the context-browser as history entries
     QPointer<QWidget> m_focusBackWidget;
     int m_nextHistoryIndex;
+
+    mutable KTextEditor::Attribute::Ptr m_highlightAttribute;
 
     friend class ContextBrowserHintProvider;
     ContextBrowserHintProvider m_textHintProvider;
