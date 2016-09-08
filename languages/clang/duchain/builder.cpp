@@ -894,7 +894,11 @@ CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor, CXCursor parent)
 
     constexpr bool isClassMember = IsInClass == Decision::True;
     constexpr bool isDefinition = IsDefinition == Decision::True;
-    constexpr bool hasContext = CursorKindTraits::isFunction(CK) || (IsDefinition == Decision::True);
+    // always build a context for class templates and functions, otherwise we "leak"
+    // the function/template parameter declarations into the surrounding context,
+    // which can lead to interesting bugs, like https://bugs.kde.org/show_bug.cgi?id=368067
+    constexpr bool hasContext = isDefinition || CursorKindTraits::isFunction(CK) || CursorKindTraits::isClassTemplate(CK);
+
     return buildDeclaration<CK, typename DeclType<CK, isDefinition, isClassMember>::Type, hasContext>(cursor);
 }
 

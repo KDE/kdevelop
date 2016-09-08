@@ -42,6 +42,7 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/use.h>
+#include <language/duchain/duchaindumper.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -1764,6 +1765,28 @@ void TestDUChain::testDeclarationsInsideMacroExpansion()
     QCOMPARE(context->uses()[0].m_range, RangeInRevision({2, 0}, {2, 1}));
     QCOMPARE(context->uses()[1].m_range, RangeInRevision({2, 5}, {2, 6}));
     QCOMPARE(context->uses()[2].m_range, RangeInRevision({2, 8}, {2, 11}));
+}
+
+// see also: https://bugs.kde.org/show_bug.cgi?id=368067
+void TestDUChain::testForwardTemplateTypeParameterContext()
+{
+    TestFile file(R"(
+        template<typename MatchingName> class Foo;
+
+        class MatchingName { void bar(); };
+        void MatchingName::bar() {  }
+    )", "cpp");
+
+    file.parse();
+    QVERIFY(file.waitForParsed(500));
+    DUChainReadLocker lock;
+    const auto top = file.topContext();
+    QVERIFY(top);
+    DUChainDumper dumper(DUChainDumper::Features(DUChainDumper::DumpContext | DUChainDumper::DumpProblems));
+    dumper.dump(top);
+
+    auto declarations = top->localDeclarations();
+    QCOMPARE(declarations.size(), 2);
 }
 
 static bool containsErrors(const QList<Problem::Ptr>& problems)
