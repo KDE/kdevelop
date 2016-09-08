@@ -832,7 +832,9 @@ void ProjectController::projectImportingFinished( IProject* project )
     d->m_projectPlugins.insert( project, pluglist );
     d->m_projects.append( project );
 
-    d->saveListOfOpenedProjects();
+    if ( d->m_currentlyOpening.isEmpty() ) {
+        d->saveListOfOpenedProjects();
+    }
 
     if (Core::self()->setupFlags() != Core::NoUi)
     {
