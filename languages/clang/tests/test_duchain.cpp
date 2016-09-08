@@ -1786,6 +1786,40 @@ void TestDUChain::testForwardTemplateTypeParameterContext()
     QCOMPARE(declarations.size(), 2);
 }
 
+// see also: https://bugs.kde.org/show_bug.cgi?id=368460
+void TestDUChain::testTemplateFunctionParameterName()
+{
+    TestFile file(R"(
+        template<class T>
+        void foo(int name);
+
+        void bar(int name);
+    )", "cpp");
+
+    file.parse();
+    QVERIFY(file.waitForParsed(500));
+    DUChainReadLocker lock;
+    const auto top = file.topContext();
+    QVERIFY(top);
+    DUChainDumper dumper(DUChainDumper::Features(DUChainDumper::DumpContext | DUChainDumper::DumpProblems));
+    dumper.dump(top);
+
+    auto declarations = top->localDeclarations();
+    QCOMPARE(declarations.size(), 2);
+
+    for (auto decl : declarations) {
+        auto ctx = DUChainUtils::getArgumentContext(decl);
+        QVERIFY(ctx);
+        auto args = ctx->localDeclarations();
+        if (decl == declarations.first())
+            QEXPECT_FAIL("", "We get two declarations, for both template and args :(", Continue);
+        QCOMPARE(args.size(), 1);
+        if (decl == declarations.first())
+            QEXPECT_FAIL("", "see above, this then triggers T T here", Continue);
+        QCOMPARE(args.first()->toString(), QStringLiteral("int name"));
+    }
+}
+
 static bool containsErrors(const QList<Problem::Ptr>& problems)
 {
     auto it = std::find_if(problems.begin(), problems.end(), [] (const Problem::Ptr& problem) {

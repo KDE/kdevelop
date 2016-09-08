@@ -93,6 +93,7 @@ private slots:
     void testTypeAliasTemplate();
     void testDeclarationsInsideMacroExpansion();
     void testForwardTemplateTypeParameterContext();
+    void testTemplateFunctionParameterName();
 
     void benchDUChainBuilder();
     void testGccCompatibility();
