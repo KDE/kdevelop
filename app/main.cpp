@@ -566,7 +566,19 @@ int main( int argc, char *argv[] )
             qerr << endl << i18nc("@info:shell", "Specify the binary you want to debug.") << endl;
             return 1;
         }
-        debugeeName = i18n("Debug %1", QUrl( debugArgs.first() ).fileName());
+
+        QFileInfo binaryInfo(debugArgs.first());
+        if (!binaryInfo.exists()) {
+            binaryInfo = QStandardPaths::findExecutable(debugArgs.first());
+            if (!binaryInfo.exists()) {
+                QTextStream qerr(stderr);
+                qerr << endl << i18nc("@info:shell", "Specified binary does not exists.") << endl;
+                return 1;
+            }
+        }
+
+        debugArgs.first() = binaryInfo.absoluteFilePath();
+        debugeeName = i18n("Debug %1", binaryInfo.fileName());
         session = debugeeName;
     } else if ( parser.isSet("new-session") )
     {
