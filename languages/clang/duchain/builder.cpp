@@ -96,6 +96,12 @@ CXCursor referencedCursor(CXCursor cursor)
 
 Identifier makeId(CXCursor cursor)
 {
+    if (CursorKindTraits::isClassTemplate(cursor.kind)) {
+        // TODO: how to handle functions here? We don't want to add the "real" function arguments here
+        //       and there does not seem to be an API to get the template arguments for non-specializations easily
+        // NOTE: using the QString overload of the Identifier ctor here, so that the template name gets parsed
+        return Identifier(ClangString(clang_getCursorDisplayName(cursor)).toString());
+    }
     return Identifier(ClangString(clang_getCursorSpelling(cursor)).toIndexed());
 }
 

@@ -436,8 +436,8 @@ void TestDUChain::testTemplate()
     QVERIFY(fooDecl->internalContext());
     QCOMPARE(fooDecl->internalContext()->localDeclarations().size(), 2);
 
-    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
-    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo::bar")).size(), 1);
+    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo< T >")).size(), 1);
+    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo< T >::bar")).size(), 1);
 
     auto mainCtx = file.topContext()->localDeclarations().last()->internalContext()->childContexts().first();
     QVERIFY(mainCtx);
@@ -540,7 +540,7 @@ void TestDUChain::testTypeDeductionInTemplateInstantiation()
     // check 'foo' declaration
     decl = ctx->localDeclarations()[0];
     QVERIFY(decl);
-    QCOMPARE(decl->identifier(), Identifier("foo"));
+    QCOMPARE(decl->identifier(), Identifier("foo< T >"));
 
     // check type of 'member' inside declaration-scope
     QCOMPARE(ctx->childContexts().size(), 1);

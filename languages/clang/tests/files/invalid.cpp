@@ -1,7 +1,7 @@
 // this file is allowed to have erroneous code, which is still parseable
 
 /*This example used to crash while building the type of Bar*/
-/// "type" : { "toString" : "Bar" }
+/// "type" : { "toString" : "Bar< T >" }
 template <typename T>
 class Bar
 {
