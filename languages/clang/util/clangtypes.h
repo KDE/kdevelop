@@ -81,6 +81,7 @@ private:
 };
 
 QTextStream& operator<<(QTextStream& stream, const ClangString& str);
+QDebug operator<<(QDebug stream, const ClangString& str);
 
 class ClangLocation
 {
@@ -99,6 +100,8 @@ public:
 private:
     CXSourceLocation location;
 };
+
+QDebug operator<<(QDebug stream, const ClangLocation& str);
 
 class KDEVCLANGPRIVATE_EXPORT ClangRange
 {
@@ -122,6 +125,8 @@ private:
     CXSourceRange m_range;
 };
 
+QDebug operator<<(QDebug stream, const ClangRange& str);
+
 class KDEVCLANGPRIVATE_EXPORT ClangTokens
 {
 public:
@@ -135,10 +140,14 @@ public:
     std::reverse_iterator<CXToken*> rend() const;
     uint size() const;
     CXToken at(uint index) const;
+    CXTranslationUnit unit() const;
 private:
     CXTranslationUnit m_unit;
     CXToken* m_tokens;
     uint m_numTokens;
 };
+
+QDebug operator<<(QDebug stream, const ClangTokens& str);
+QDebug operator<<(QDebug stream, const CXToken& token);
 
 #endif // CLANGTYPES_H

@@ -85,6 +85,11 @@ QTextStream& operator<<(QTextStream& stream, const ClangString& str)
     return stream << str.toString();
 }
 
+QDebug operator<<(QDebug stream, const ClangString& str)
+{
+    return stream << str.toString();
+}
+
 ClangLocation::ClangLocation(CXSourceLocation location)
     : location(location)
 {
@@ -118,6 +123,11 @@ ClangLocation::operator CXSourceLocation() const
 
 ClangLocation::~ClangLocation()
 {
+}
+
+QDebug operator<<(QDebug stream, const ClangLocation& location)
+{
+    return stream << static_cast<DocumentCursor>(location);
 }
 
 ClangRange::ClangRange(CXSourceRange range)
@@ -164,6 +174,11 @@ ClangRange::~ClangRange()
 {
 }
 
+QDebug operator<<(QDebug stream, const ClangRange& range)
+{
+    return stream << range.toDocumentRange();
+}
+
 ClangTokens::ClangTokens(CXTranslationUnit unit, CXSourceRange range)
     : m_unit(unit)
 {
@@ -196,4 +211,23 @@ uint ClangTokens::size() const
 CXToken ClangTokens::at(uint index) const {
     Q_ASSERT(index < m_numTokens);
     return m_tokens[index];
+}
+
+CXTranslationUnit ClangTokens::unit() const
+{
+    return m_unit;
+}
+
+QDebug operator<<(QDebug stream, const ClangTokens& tokens)
+{
+    stream << "ClangTokens {";
+    for (uint i = 0; i < tokens.size(); ++i) {
+        stream << i << tokens.at(i) << clang_getTokenSpelling(tokens.unit(), tokens.at(i)) << ",";
+    }
+    return stream << "}";
+}
+
+QDebug operator<<(QDebug stream, const CXToken& token)
+{
+    return stream << clang_getTokenKind(token);
 }
