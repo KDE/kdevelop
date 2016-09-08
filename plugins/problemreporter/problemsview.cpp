@@ -352,16 +352,28 @@ QString nameFromLabel(const QString& label)
     return txt;
 }
 
-void ProblemsView::onModelRemoved(const QString& name)
+int tabIndexForName(const QTabWidget* tabWidget, const QString& name)
 {
-    int c = m_tabWidget->count();
-    int idx = 0;
-    for (idx = 0; idx < c; ++idx) {
-        if (nameFromLabel(m_tabWidget->tabText(idx)) == name)
-            break;
+    for (int idx = 0; idx < tabWidget->count(); ++idx) {
+        if (nameFromLabel(tabWidget->tabText(idx)) == name) {
+            return idx;
+        }
     }
 
-    if (idx < c) {
+    return -1;
+}
+
+void ProblemsView::showModel(const QString& name)
+{
+    int idx = tabIndexForName(m_tabWidget, name);
+    if (idx >= 0)
+        m_tabWidget->setCurrentIndex(idx);
+}
+
+void ProblemsView::onModelRemoved(const QString& name)
+{
+    int idx = tabIndexForName(m_tabWidget, name);
+    if (idx >= 0) {
         QWidget* w = m_tabWidget->widget(idx);
         m_tabWidget->removeTab(idx);
         delete w;

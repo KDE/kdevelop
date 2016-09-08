@@ -98,6 +98,7 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList
             this, &ProblemReporterPlugin::updateReady);
     connect(ICore::self()->languageController()->staticAssistantsManager(), &StaticAssistantsManager::problemsChanged,
             this, &ProblemReporterPlugin::updateHighlight);
+    connect(pms, &ProblemModelSet::showRequested, this, &ProblemReporterPlugin::showModel);
 }
 
 ProblemReporterPlugin::~ProblemReporterPlugin()
@@ -148,6 +149,13 @@ void ProblemReporterPlugin::updateHighlight(const KDevelop::IndexedString& url)
         auto allProblems = m_model->problems(url, false);
         ph->setProblems(allProblems);
     }
+}
+
+void ProblemReporterPlugin::showModel(const QString& name)
+{
+    auto w = dynamic_cast<ProblemsView*>(core()->uiController()->findToolView(i18n("Problems"), m_factory));
+    if (w)
+      w->showModel(name);
 }
 
 KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context)

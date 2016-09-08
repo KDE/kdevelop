@@ -71,6 +71,9 @@ public Q_SLOTS:
     /// Triggered when a view changes (happens when the model data changes)
     void onViewChanged();
 
+    /// Open tab for selected model
+    void showModel(const QString& name);
+
     void selectNextItem() override;
     void selectPreviousItem() override;
 

@@ -73,6 +73,9 @@ public:
     /// Removes a model
     void removeModel(const QString &name);
 
+    /// Show model in ProblemsView
+    void showModel(const QString &name);
+
     /// Retrieves a list of models stored
     QVector<ModelData> models() const;
 
@@ -82,6 +85,9 @@ signals:
 
     /// Emitted when a model is removed
     void removed(const QString &name);
+
+    /// Emitted when showModel() is called
+    void showRequested(const QString &name);
 
 private:
     QScopedPointer<ProblemModelSetPrivate> d;

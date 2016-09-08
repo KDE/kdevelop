@@ -64,6 +64,7 @@ private Q_SLOTS:
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext&);
     void updateHighlight(const KDevelop::IndexedString& url);
     void textDocumentCreated(KDevelop::IDocument* document);
+    void showModel(const QString& name);
 
 private:
     class ProblemReporterFactory* m_factory;

@@ -75,10 +75,19 @@ void ProblemModelSet::removeModel(const QString &name)
     emit removed(name);
 }
 
+void ProblemModelSet::showModel(const QString &name)
+{
+    for (const ModelData &data : d->data) {
+        if (data.name == name) {
+            emit showRequested(name);
+            return;
+        }
+    }
+}
+
 QVector<ModelData> ProblemModelSet::models() const
 {
     return d->data;
 }
 
 }
-
