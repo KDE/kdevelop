@@ -572,7 +572,7 @@ int main( int argc, char *argv[] )
             binaryInfo = QStandardPaths::findExecutable(debugArgs.first());
             if (!binaryInfo.exists()) {
                 QTextStream qerr(stderr);
-                qerr << endl << i18nc("@info:shell", "Specified binary does not exists.") << endl;
+                qerr << endl << i18nc("@info:shell", "Specified binary does not exist.") << endl;
                 return 1;
             }
         }
