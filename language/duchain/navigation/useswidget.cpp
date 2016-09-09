@@ -175,13 +175,13 @@ void OneUseWidget::resizeEvent ( QResizeEvent * event ) {
   int maxCutOff = m_sourceLine.length() - (range.end().column() - range.start().column());
 
   //Reset so we also get more context while up-sizing
-  m_label->setText(QStringLiteral("<a>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
+  m_label->setText(QStringLiteral("<a>") + i18nc("Refers to a line in source code", "Line <b>%1</b>:", range.start().line()+1)
                  + QStringLiteral("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
 
   /// FIXME: this is incredibly ugly and slow... we could simply paint the text ourselves and elide it properly
   while(sizeHint().width() > size.width() && cutOff < maxCutOff) {
     //We've got to save space
-    m_label->setText(QStringLiteral("<a>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
+    m_label->setText(QStringLiteral("<a>") + i18nc("Refers to a line in source code", "Line <b>%1</b>:", range.start().line()+1)
                    + QStringLiteral("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
     cutOff += 5;
   }
