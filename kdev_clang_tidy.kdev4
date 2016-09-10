@@ -1,0 +1,4 @@
+[Project]
+Name=kdev_clang_tidy
+Manager=KDevCMakeManager
+VersionControl=kdevgit
