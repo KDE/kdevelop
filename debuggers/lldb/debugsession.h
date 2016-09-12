@@ -56,6 +56,7 @@ public:
 
     MI::MICommand *createCommand(MI::CommandType type, const QString &arguments,
                                  MI::CommandFlags flags) const override;
+    MI::MICommand *createUserCommand(const QString & cmd) const override;
 
     void updateAllVariables();
 
@@ -95,6 +96,7 @@ private:
     LldbFrameStackModel *m_frameStackModel;
 
     QString m_formatterPath;
+    bool m_hasCorrectCLIOutput;
 };
 
 } // end of namespace GDB

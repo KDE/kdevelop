@@ -103,6 +103,8 @@ DebugSession::DebugSession(LldbDebuggerPlugin *plugin)
     , m_breakpointController(nullptr)
     , m_variableController(nullptr)
     , m_frameStackModel(nullptr)
+    , m_formatterPath()
+    , m_hasCorrectCLIOutput(false)
 {
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);
@@ -142,6 +144,16 @@ MICommand *DebugSession::createCommand(MI::CommandType type, const QString& argu
                                        MI::CommandFlags flags) const
 {
     return new LldbCommand(type, arguments, flags);
+}
+
+MICommand *DebugSession::createUserCommand(const QString& cmd) const
+{
+    if (m_hasCorrectCLIOutput)
+        return MIDebugSession::createUserCommand(cmd);
+    auto msg = i18n("Attempting to execute user command on unsupported lldb version");
+    emit debuggerInternalOutput(msg);
+    qCDebug(DEBUGGERLLDB) << "Attempting user command on unsupported lldb version";
+    return nullptr;
 }
 
 void DebugSession::setFormatterPath(const QString &path)
@@ -381,9 +393,45 @@ void DebugSession::handleCoreFile(const QStringList &s)
 
 void DebugSession::handleVersion(const QStringList& s)
 {
+    m_hasCorrectCLIOutput = !s.isEmpty();
+    if (!m_hasCorrectCLIOutput) {
+        // No output from 'version' command. It's likely that
+        // the lldb used is not patched for the CLI output
+
+        if (!qobject_cast<QGuiApplication*>(qApp))  {
+            //for unittest
+            qFatal("You need a graphical application.");
+        }
+
+        auto ans = KMessageBox::warningYesNo(
+            qApp->activeWindow(),
+            i18n("<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</b><br/>"
+                 "See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information.<br/>"
+                 "Debugger console will be disabled to prevent crash.<br/>"
+                 "Do you want to continue?"),
+            i18n("LLDB Version Unsupported"),
+            KStandardGuiItem::yes(),
+            KStandardGuiItem::no(),
+            "unsupported-lldb-debugger");
+        if (ans == KMessageBox::ButtonCode::No) {
+            programFinished("Stopped because of unsupported LLDB version");
+            stopDebugger();
+        }
+        return;
+    }
+
     qCDebug(DEBUGGERLLDB) << s.first();
 
-    QRegularExpression rx("^lldb version: (\\d+).(\\d+).(\\d+)\\b", QRegularExpression::MultilineOption);
+// minimal version is 3.8.1
+#ifdef Q_OS_OSX
+    QRegularExpression rx("^lldb-(\\d+).(\\d+).(\\d+)\\b", QRegularExpression::MultilineOption);
+    // lldb 3.8.1 reports version 350.99.0 on OS X
+    const int min_ver[] = {350, 99, 0};
+#else
+    QRegularExpression rx("^lldb version (\\d+).(\\d+).(\\d+)\\b", QRegularExpression::MultilineOption);
+    const int min_ver[] = {3, 8, 1};
+#endif
+
     auto match = rx.match(s.first());
     int version[] = {0, 0, 0};
     if (match.hasMatch()) {
@@ -392,9 +440,7 @@ void DebugSession::handleVersion(const QStringList& s)
         }
     }
 
-    // minimal version is 3.8.1
     bool ok = true;
-    const int min_ver[] = {3, 8, 1};
     for (int i = 0; i < 3; ++i) {
         if (version[i] < min_ver[i]) {
             ok = false;

@@ -706,14 +706,11 @@ void MIDebugSession::jumpToMemoryAddress(const QString& address)
 
 void MIDebugSession::addUserCommand(const QString& cmd)
 {
-    if (!cmd.isEmpty() && cmd[0].isDigit()) {
-        // Add a space to the begining, so debugger won't get confused if the
-        // command starts with a number (won't mix it up with command token added)
-        queueCmd(new UserCommand(MI::NonMI, " " + cmd));
-    } else {
-        queueCmd(new UserCommand(MI::NonMI, cmd));
-    }
+    auto usercmd = createUserCommand(cmd);
+    if (!usercmd)
+        return;
 
+    queueCmd(usercmd);
     // User command can theoreticall modify absolutely everything,
     // so need to force a reload.
 
@@ -722,6 +719,19 @@ void MIDebugSession::addUserCommand(const QString& cmd)
     // user command anyway.
     if (!debuggerStateIsOn(s_appNotStarted) && !debuggerStateIsOn(s_programExited))
         raiseEvent(program_state_changed);
+}
+
+MICommand *MIDebugSession::createUserCommand(const QString &cmd) const
+{
+    MICommand *res = nullptr;
+    if (!cmd.isEmpty() && cmd[0].isDigit()) {
+        // Add a space to the begining, so debugger won't get confused if the
+        // command starts with a number (won't mix it up with command token added)
+        res = new UserCommand(MI::NonMI, " " + cmd);
+    } else {
+        res = new UserCommand(MI::NonMI, cmd);
+    }
+    return res;
 }
 
 MICommand *MIDebugSession::createCommand(CommandType type, const QString& arguments,

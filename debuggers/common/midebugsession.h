@@ -66,61 +66,61 @@ Q_SIGNALS:
     /**
      * Emits when received standard output lines from inferior
      */
-    void inferiorStdoutLines(const QStringList &lines);
+    void inferiorStdoutLines(const QStringList &lines) const;
 
     /**
      * Emits when received standard error lines from inferior
      */
-    void inferiorStderrLines(const QStringList &lines);
+    void inferiorStderrLines(const QStringList &lines) const;
 
-    void inferiorStopped(const MI::AsyncRecord &r);
+    void inferiorStopped(const MI::AsyncRecord &r) const;
 
-    void inferiorRunning();
+    void inferiorRunning() const;
 
     /**
      * Emits when received standard output from debugger for user commands
      */
-    void debuggerUserCommandOutput(const QString &output);
+    void debuggerUserCommandOutput(const QString &output) const;
 
     /**
      * Emits when received standard output from debugger for internal commands
      */
-    void debuggerInternalCommandOutput(const QString &output);
+    void debuggerInternalCommandOutput(const QString &output) const;
 
     /**
      * Emits when received internal output from debugger
      */
-    void debuggerInternalOutput(const QString &output);
+    void debuggerInternalOutput(const QString &output) const;
 
     /**
      * Emits when received standard output from inferior's tty
      */
-    void inferiorTtyStdout(const QByteArray &output);
+    void inferiorTtyStdout(const QByteArray &output) const;
 
     /**
      * Emits when received standard output from inferior's tty
      */
-    void inferiorTtyStderr(const QByteArray &output);
+    void inferiorTtyStderr(const QByteArray &output) const;
 
     /**
      * Emits when the debugger instance state changes
      */
-    void debuggerStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
+    void debuggerStateChanged(DBGStateFlags oldState, DBGStateFlags newState) const;
 
     /**
      * Emits when there's message needed to be show to user.
      */
-    void showMessage(const QString& message, int timeout);
+    void showMessage(const QString& message, int timeout) const;
 
     /**
      * Emits when the debugger console view need to be raised.
      */
-    void raiseDebuggerConsoleViews();
+    void raiseDebuggerConsoleViews() const;
 
     /**
      * Emits when need to reset
      */
-    void reset();
+    void reset() const;
 
 public:
     bool debuggerStateIsOn(DBGStateFlags state) const;
@@ -189,11 +189,12 @@ public Q_SLOTS:
 public:
     virtual MI::MICommand *createCommand(MI::CommandType type, const QString& arguments,
                                          MI::CommandFlags flags = 0) const;
+    virtual MI::MICommand *createUserCommand(const QString &cmd) const;
     /** Adds a command to the end of queue of commands to be executed
-        by gdb. The command will be actually sent to gdb only when
+        by debugger. The command will be actually sent to debugger only when
         replies from all previous commands are received and full processed.
 
-        The literal command sent to gdb is obtained by calling
+        The literal command sent to debugger is obtained by calling
         cmd->cmdToSend. The call is made immediately before sending the
         command, so it's possible to use results of prior commands when
         computing the exact command to send.
