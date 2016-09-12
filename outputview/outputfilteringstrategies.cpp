@@ -414,8 +414,13 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
         //    ...
         //    Loc: [Unknown file(0)]
         ErrorFormat(QStringLiteral("   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]"), 1, 2, -1),
+
         // file:///path/to/foo.qml:7:1: Bar is not a type
-        ErrorFormat(QStringLiteral("(file:\\/\\/(?:.+)):([1-9][0-9]*):([1-9][0-9]*): (.+) (?:is not a type|is ambiguous\\.|is instantiated recursively)"), 1, 2, -1, 3)
+        // file:///path/to/foo.qml:49:5: QML Row: Binding loop detected for property "height"
+        ErrorFormat(QStringLiteral("(file:\\/\\/(?:[^:]+)):([1-9][0-9]*):([1-9][0-9]*): (.*) (?:is not a type|is ambiguous|is instantiated recursively|Binding loop detected)"), 1, 2, -1, 3),
+
+        // file:///path/to/foo.qml:52: TypeError: Cannot read property 'height' of null
+        ErrorFormat(QStringLiteral("(file:\\/\\/(?:[^:]+)):([1-9][0-9]*): ([a-zA-Z]+)Error"), 1, 2, -1),
 
         // END: Qt
     };

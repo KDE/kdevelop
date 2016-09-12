@@ -267,6 +267,18 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
         << "file:///path/to/foo.qml:7:1: Bar is instantiated recursively"
         << "/path/to/foo.qml"
         << 6 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qml-typeerror")
+        << "file:///path/to/foo.qml:7: TypeError: Cannot read property 'height' of null"
+        << "/path/to/foo.qml"
+        << 6 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qml-referenceerror")
+        << "file:///path/to/foo.qml:7: ReferenceError: readOnly is not defined"
+        << "/path/to/foo.qml"
+        << 6 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qml-bindingloop")
+        << "file:///path/to/foo.qml:7:5: QML Row: Binding loop detected for property \"height\""
+        << "/path/to/foo.qml"
+        << 6 << 4 << FilteredItem::ErrorItem;
     // END: Qt
 }
 
