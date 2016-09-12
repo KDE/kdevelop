@@ -148,7 +148,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     }
 
     {
-        auto other = new QAction(i18n("other..."), this);
+        auto other = new QAction(i18n("Other..."), this);
         connect(other, &QAction::triggered, this, [this] {
             auto dialog = new KOpenWithDialog(m_urls, ICore::self()->uiController()->activeMainWindow());
             if (dialog->exec() == QDialog::Accepted && dialog->service()) {
