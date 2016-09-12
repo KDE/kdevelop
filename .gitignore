@@ -1,0 +1,4 @@
+.kdev4
+kdev4-clangtidy.kdev4
+build
+*.yaml

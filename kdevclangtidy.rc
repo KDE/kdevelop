@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui>
+<gui name="ClangTidy" library="libclangtidyplugin" version="1">
+<MenuBar>
+ <Menu name="run">
+   <text context="@title:menu">Run</text>
+     <Action name="clangtidy_file" group="run_operations"/>
+     <Action name="clangtidy_all" group="run_operations"/>
+ </Menu>
+</MenuBar>
+</gui>

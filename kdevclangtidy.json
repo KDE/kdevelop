@@ -1,0 +1,79 @@
+{
+    "GenericName": "Syntax check", 
+    "GenericName[bs]": "Provjera sintakse", 
+    "GenericName[ca@valencia]": "Comprova la sintaxi", 
+    "GenericName[ca]": "Comprova la sintaxi", 
+    "GenericName[cs]": "Kontrola syntaxe", 
+    "GenericName[de]": "Syntaxprüfung", 
+    "GenericName[es]": "Comprobación de sintaxis", 
+    "GenericName[fr]": "Vérification de la syntaxe", 
+    "GenericName[hu]": "Szintaxis-ellenőrzés", 
+    "GenericName[nl]": "Controle op syntaxis", 
+    "GenericName[pl]": "Sprawdzanie składni", 
+    "GenericName[pt]": "Verificação de sintaxe", 
+    "GenericName[pt_BR]": "Verificação de sintaxe", 
+    "GenericName[sk]": "Kontrola syntaxe", 
+    "GenericName[sv]": "Syntaxkontroll", 
+    "GenericName[uk]": "Перевірка синтаксису", 
+    "GenericName[x-test]": "xxSyntax checkxx", 
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Carlos Nihelton", 
+                "Name[x-test]": "xxCarlos Niheltonxx"
+            }
+        ], 
+        "Description": "clang-tidy provides an extensible framework for diagnosing and 
+fixing typical programming errors, like style violations, interface misuse, or bugs that 
+can be deduced via static analysis. http://clang.llvm.org/extra/clang-tidy/", 
+        "Description[es]": "clang-tidy proporciona un marco extensible para el diagnóstico 
+y fijación de los errores típicos de la programación, como violaciónes de estilo, el mal 
+uso de la interfaz, o errores que se pueden deducir a través de análisis estático. 
+http://clang.llvm.org/extra/clang-tidy/", 
+        "Description[pt]": "clang-tidy fornece uma estrutura extensível para o 
+diagnóstico e correção de erros de programação típicos, como violações de estilo, uso 
+indevido de interface, ou bugs que podem ser deduzidos através da análise estática. 
+http://clang.llvm.org/extra/clang-tidy/", 
+        "Description[pt_BR]": "clang-tidy fornece uma estrutura extensível para o 
+diagnóstico e correção de erros de programação típicos, como violações de estilo, uso 
+indevido de interface, ou bugs que podem ser deduzidos através da análise estática. 
+http://clang.llvm.org/extra/clang-tidy/", 
+        "Description[x-test]": "xxclang-tidy provides an extensible framework for 
+diagnosing and fixing typical programming errors, like style violations, interface misuse, 
+or bugs that can be deduced via static analysis. 
+http://clang.llvm.org/extra/clang-tidy/xx",
+        "Icon": "kdevelop", 
+        "Id": "kdevclangtidy", 
+        "License": "GPL", 
+        "Name": "clang-tidy Support", 
+        "Name[ast]": "Sofitu clang-tidy", 
+        "Name[bs]": "clang-tidy podrška", 
+        "Name[ca@valencia]": "Implementació del clang-tidy", 
+        "Name[ca]": "Implementació del clang-tidy", 
+        "Name[cs]": "Podpora clang-tidy", 
+        "Name[de]": "clang-tidy-Unterstützung", 
+        "Name[es]": "Uso de clang-tidy", 
+        "Name[fi]": "clang-tidy-tuki", 
+        "Name[fr]": "Prise en charge de clang-tidy", 
+        "Name[gl]": "Integración de clang-tidy", 
+        "Name[hu]": "clang-tidy támogatás", 
+        "Name[nl]": "Ondersteuning van clang-tidy", 
+        "Name[pl]": "Obsługa clang-tidy", 
+        "Name[pt]": "Suporte para o clang-tidy", 
+        "Name[pt_BR]": "Suporte ao clang-tidy", 
+        "Name[sk]": "Podpora clang-tidy", 
+        "Name[sv]": "Stöd för clang-tidy", 
+        "Name[tr]": "clang-tidy Desteği", 
+        "Name[uk]": "Підтримка clang-tidy", 
+        "Name[x-test]": "xxclang-tidy Supportxx", 
+        "Name[zh_CN]": "clang-tidy 支持", 
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    }, 
+    "X-KDevelop-Category": "Global", 
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IExecutePlugin"
+    ],
+    "X-KDevelop-Mode": "GUI"
+}
