@@ -80,7 +80,7 @@ set(KDevPlatformShell_LIB_SRCS
     settings/bgpreferences.cpp
     settings/templateconfig.cpp
     settings/templatepage.cpp
-
+    settings/analyzerspreferences.cpp
 )
 
 if(APPLE)

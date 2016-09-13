@@ -52,6 +52,7 @@ PluginPreferences::PluginPreferences(QWidget* parent)
         { "Language Support", i18nc("@title:group", "Language Support") },
         { "Debugging", i18nc("@title:group", "Debugging") },
         { "Testing", i18nc("@title:group", "Testing") },
+        { "Analyzers", i18nc("@title:group", "Analyzers") },
         { "Other", i18nc("@title:group", "Other") }
     };
     foreach (const KPluginMetaData& info, Core::self()->pluginControllerInternal()->allPluginInfos()) {

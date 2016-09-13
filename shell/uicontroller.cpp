@@ -60,6 +60,7 @@
 #include "settings/sourceformattersettings.h"
 #include "settings/uipreferences.h"
 #include "settings/templateconfig.h"
+#include "settings/analyzerspreferences.h"
 
 namespace KDevelop {
 
@@ -491,27 +492,34 @@ void UiController::addNewToolView(MainWindow *mw, QListWidgetItem* item)
 
 void UiController::showSettingsDialog()
 {
-    auto editorConfigPage = new EditorConfigPage(activeMainWindow());
-    auto languageConfigPage = new LanguagePreferences(activeMainWindow());
+    auto parent = activeMainWindow();
+
+    auto editorConfigPage = new EditorConfigPage(parent);
+    auto languageConfigPage = new LanguagePreferences(parent);
+    auto analyzersPreferences = new AnalyzersPreferences(parent);
 
     auto configPages = QVector<KDevelop::ConfigPage*> {
-        new UiPreferences(activeMainWindow()),
-        new PluginPreferences(activeMainWindow()),
-        new SourceFormatterSettings(activeMainWindow()),
-        new ProjectPreferences(activeMainWindow()),
-        new EnvironmentPreferences(QString(), activeMainWindow()),
-        new BGPreferences(activeMainWindow()),
-        new TemplateConfig(activeMainWindow()),
+        new UiPreferences(parent),
+        new PluginPreferences(parent),
+        new SourceFormatterSettings(parent),
+        new ProjectPreferences(parent),
+        new EnvironmentPreferences(QString(), parent),
+        new TemplateConfig(parent),
         editorConfigPage
     };
 
-    ConfigDialog cfgDlg(configPages, activeMainWindow());
+    ConfigDialog cfgDlg(configPages, parent);
 
     auto addPluginPages = [&](IPlugin* plugin) {
         for (int i = 0, numPages = plugin->configPages(); i < numPages; ++i) {
             auto page = plugin->configPage(i, &cfgDlg);
-            if(page && page->configPageType() == ConfigPage::LanguageConfigPage){
+            if (!page)
+                continue;
+
+            if (page->configPageType() == ConfigPage::LanguageConfigPage) {
                 cfgDlg.addSubConfigPage(languageConfigPage, page);
+            } else if (page->configPageType() == ConfigPage::AnalyzerConfigPage) {
+                cfgDlg.addSubConfigPage(analyzersPreferences, page);
             } else {
                 // insert them before the editor config page
                 cfgDlg.addConfigPage(page, editorConfigPage);
@@ -519,11 +527,15 @@ void UiController::showSettingsDialog()
         }
     };
 
-    cfgDlg.addConfigPage(languageConfigPage, configPages[5]);
+    cfgDlg.addConfigPage(analyzersPreferences, configPages[5]);
+
+    cfgDlg.addConfigPage(languageConfigPage, analyzersPreferences);
+    cfgDlg.addSubConfigPage(languageConfigPage, new BGPreferences(parent));
 
     foreach (IPlugin* plugin, ICore::self()->pluginController()->loadedPlugins()) {
         addPluginPages(plugin);
     }
+
     // TODO: only load settings if a UI related page was changed?
     connect(&cfgDlg, &ConfigDialog::configSaved, activeSublimeWindow(), &Sublime::MainWindow::loadSettings);
     // make sure that pages get added whenever a new plugin is loaded (probably from the plugin selection dialog)
