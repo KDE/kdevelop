@@ -480,10 +480,6 @@ void SourceFormatterSettings::updatePreview()
         SourceFormatterStyle* style = l.selectedStyle;
 
         descriptionLabel->setText( style->description() );
-        if( style->description().isEmpty() )
-            descriptionLabel->hide();
-        else
-            descriptionLabel->show();
 
         if( style->usePreview() )
         {
