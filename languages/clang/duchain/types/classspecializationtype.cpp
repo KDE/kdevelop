@@ -81,11 +81,31 @@ uint ClassSpecializationType::hash() const
     return kdevhash;
 }
 
+namespace {
+// we need to skip the template parameters of the last identifier,
+// so do the stringification manually here
+QString strippedQid(const QualifiedIdentifier& qid)
+{
+    QString result;
+    if (qid.explicitlyGlobal()) {
+        result += QLatin1String("::");
+    }
+    const auto parts = qid.count();
+    for (int i = 0; i < parts - 1; ++i) {
+        result += qid.at(i).toString();
+        result += QLatin1String("::");
+    }
+    const auto last = qid.at(parts - 1);
+    result += last.identifier().str();
+    return result;
+}
+}
+
 QString ClassSpecializationType::toString() const
 {
     QualifiedIdentifier id = qualifiedIdentifier();
     if (!id.isEmpty()) {
-        QString result = StructureType::toString() + QLatin1String("< ");
+        QString result = AbstractType::toString() + strippedQid(id) + QLatin1String("< ");
         bool first = true;
         for (const auto& param : templateParameters()) {
             if (first) {
@@ -95,7 +115,8 @@ QString ClassSpecializationType::toString() const
             }
             result += param.abstractType()->toString();
         }
-        return result + QLatin1String(" >");
+        result += QLatin1String(" >");
+        return result;
     }
 
     return StructureType::toString();

@@ -441,8 +441,8 @@ void TestDUChain::testTemplate()
     QVERIFY(fooDecl->internalContext());
     QCOMPARE(fooDecl->internalContext()->localDeclarations().size(), 2);
 
-    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
-    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo::bar")).size(), 1);
+    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo< T >")).size(), 1);
+    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo< T >::bar")).size(), 1);
 
     auto mainCtx = file.topContext()->localDeclarations().last()->internalContext()->childContexts().first();
     QVERIFY(mainCtx);
@@ -545,7 +545,7 @@ void TestDUChain::testTypeDeductionInTemplateInstantiation()
     // check 'foo' declaration
     decl = ctx->localDeclarations()[0];
     QVERIFY(decl);
-    QCOMPARE(decl->identifier(), Identifier("foo"));
+    QCOMPARE(decl->identifier(), Identifier("foo< T >"));
 
     // check type of 'member' inside declaration-scope
     QCOMPARE(ctx->childContexts().size(), 1);
@@ -1376,7 +1376,9 @@ void TestDUChain::testMacroUses()
 
     QCOMPARE(macroDefinition1->uses().size(), 1);
     QCOMPARE(macroDefinition1->uses().begin()->first(), RangeInRevision(2,0,2,4));
+#if CINDEX_VERSION_MINOR < 32
     QEXPECT_FAIL("", "This appears to be a clang bug, the AST doesn't contain the macro use", Continue);
+#endif
     QCOMPARE(macroDefinition2->uses().size(), 1);
     if (macroDefinition2->uses().size())
     {
@@ -1629,13 +1631,13 @@ void TestDUChain::testReparseIncludeGuard()
     TestFile header("#ifndef GUARD\n#define GUARD\nint something;\n#endif\n", "h");
     TestFile impl("#include \"" + header.url().byteArray() + "\"\n", "cpp", &header);
 
-    impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST  ));
+    QVERIFY(impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST  )));
     {
         DUChainReadLocker lock;
         QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
             importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
     }
-    impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+    QVERIFY(impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive)));
     {
         DUChainReadLocker lock;
         QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
@@ -1787,6 +1789,40 @@ void TestDUChain::testForwardTemplateTypeParameterContext()
 
     auto declarations = top->localDeclarations();
     QCOMPARE(declarations.size(), 2);
+}
+
+// see also: https://bugs.kde.org/show_bug.cgi?id=368460
+void TestDUChain::testTemplateFunctionParameterName()
+{
+    TestFile file(R"(
+        template<class T>
+        void foo(int name);
+
+        void bar(int name);
+    )", "cpp");
+
+    file.parse();
+    QVERIFY(file.waitForParsed(500));
+    DUChainReadLocker lock;
+    const auto top = file.topContext();
+    QVERIFY(top);
+    DUChainDumper dumper(DUChainDumper::Features(DUChainDumper::DumpContext | DUChainDumper::DumpProblems));
+    dumper.dump(top);
+
+    auto declarations = top->localDeclarations();
+    QCOMPARE(declarations.size(), 2);
+
+    for (auto decl : declarations) {
+        auto ctx = DUChainUtils::getArgumentContext(decl);
+        QVERIFY(ctx);
+        auto args = ctx->localDeclarations();
+        if (decl == declarations.first())
+            QEXPECT_FAIL("", "We get two declarations, for both template and args :(", Continue);
+        QCOMPARE(args.size(), 1);
+        if (decl == declarations.first())
+            QEXPECT_FAIL("", "see above, this then triggers T T here", Continue);
+        QCOMPARE(args.first()->toString(), QStringLiteral("int name"));
+    }
 }
 
 static bool containsErrors(const QList<Problem::Ptr>& problems)

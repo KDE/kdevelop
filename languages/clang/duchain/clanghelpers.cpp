@@ -203,12 +203,9 @@ DeclarationPointer ClangHelpers::findDeclaration(CXSourceLocation location, Qual
     auto cursor = CursorInRevision(ClangLocation(location));
     DUChainReadLocker lock;
 
-    QList<Declaration*> decls;
-    if (!id.isEmpty())
-    {
-        decls = top->findDeclarations(id);
-        foreach (Declaration* decl, decls)
-        {
+    if (!id.isEmpty()) {
+        const auto& decls = top->findDeclarations(id);
+        foreach (Declaration* decl, decls) {
             if (decl->range().contains(cursor) ||
                 (decl->range().isEmpty() && decl->range().start == cursor))
             {

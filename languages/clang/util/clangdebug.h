@@ -34,5 +34,9 @@ extern KDEVCLANGPRIVATE_EXPORT const QLoggingCategory &KDEV_CLANG();
 KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXString string);
 KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXSourceLocation location);
 KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXSourceRange range);
+KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXCursor cursor);
+KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXCursorKind kind);
+KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXType type);
+KDEVCLANGPRIVATE_EXPORT QDebug operator<<(QDebug dbg, CXTypeKind typeKind);
 
 #endif // CLANGDEBUG_H

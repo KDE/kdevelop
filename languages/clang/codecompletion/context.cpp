@@ -521,17 +521,27 @@ Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPoin
 {
     PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(qid);
 
+    const auto top = ctx->topContext();
+    const auto& importedContexts = top->importedParentContexts();
+
     for (auto it = decl.iterator(); it; ++it) {
+        // if the context is not included, then this match is not correct for our consideration
+        // this fixes issues where we used to include matches from files that did not have
+        // anything to do with the current TU, e.g. the main from a different file or stuff like that
+        // it also reduces the chance of us picking up a function of the same name from somewhere else
+        // also, this makes sure the context has the correct language and we don't get confused by stuff
+        // from other language plugins
+        if (std::none_of(importedContexts.begin(), importedContexts.end(), [it] (const DUContext::Import& import) {
+            return import.topContextIndex() == it->indexedTopContext().index();
+        })) {
+            continue;
+        }
+
         auto declaration = it->declaration();
         if (!declaration) {
             // Mitigate problems such as: Cannot load a top-context from file "/home/kfunk/.cache/kdevduchain/kdevelop-{foo}/topcontexts/6085"
             //  - the required language-support for handling ID 55 is probably not loaded
             qCWarning(KDEV_CLANG) << "Detected an invalid declaration for" << qid;
-            continue;
-        }
-
-        const auto& file = declaration->topContext()->parsingEnvironmentFile();
-        if (!file || file->language() != ParseSession::languageString()) {
             continue;
         }
 
