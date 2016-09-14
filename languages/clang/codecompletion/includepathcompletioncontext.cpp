@@ -159,9 +159,9 @@ IncludePathProperties includePathProperties(const QString& text, int rightBounda
     return properties;
 }
 
-QList<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePathProperties& properties, const Path::List& includePaths )
+QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePathProperties& properties, const Path::List& includePaths )
 {
-    QList<IncludeItem> includeItems;
+    QVector<IncludeItem> includeItems;
     Path::List paths = includePaths;
 
     if (properties.local) {

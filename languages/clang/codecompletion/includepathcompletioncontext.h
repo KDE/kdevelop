@@ -42,8 +42,7 @@ public:
     virtual ~IncludePathCompletionContext() = default;
 
 private:
-    QList<KDevelop::IncludeItem> m_includeItems;
-
+    QVector<KDevelop::IncludeItem> m_includeItems;
 };
 
 #endif // INCLUDEPATHCOMPLETIONCONTEXT_H
