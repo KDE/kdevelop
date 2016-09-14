@@ -768,6 +768,9 @@ public:
         QString iconName;
         if ( it == mimeToIcon.constEnd() ) {
             iconName = mime.iconName();
+            if (iconName.isEmpty()) {
+                iconName = QStringLiteral("none");
+            }
             mimeToIcon.insert(mime.name(), iconName);
         } else {
             iconName = *it;

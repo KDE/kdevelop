@@ -211,10 +211,10 @@ public:
                            const QPersistentModelIndex &index) const override
     {
         Q_UNUSED(index);
-        if ( widgets.isEmpty() ) {
-            qDebug() << "Fixme: missing button?";
+        if (widgets.isEmpty()) {
             return;
         }
+
         QPushButton *aboutPushButton = static_cast<QPushButton*>(widgets[0]);
         QSize aboutPushButtonSizeHint = aboutPushButton->sizeHint();
         aboutPushButton->resize(aboutPushButtonSizeHint);
