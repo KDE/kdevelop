@@ -16,61 +16,41 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef JOB_H
-#define JOB_H
+#include "clangtidypreferences.h"
 
-#include <outputview/outputexecutejob.h>
-#include <interfaces/iproblem.h>
+#include <QVBoxLayout>
 
-namespace ClangTidy
+#include "clangtidyconfig.h"
+
+#include "ui_clangtidysettings.h"
+
+using namespace KDevelop;
+
+ClangtidyPreferences::ClangtidyPreferences ( IPlugin *plugin, QWidget* parent )
+    : ConfigPage ( plugin, ClangtidySettings::self(), parent )
 {
-
-class Job : public KDevelop::OutputExecuteJob
-{
-    Q_OBJECT
-
-public:
-    struct Parameters
-    {
-        QString executable;
-        QString filePath;
-        QString projectRootDir;
-        QString buildDir;
-        QString checks;
-        
-        QString headerFilter;
-        QString additionals;
-        QString checkSysHeaders;
-        QString dump;
-        QString overrideConfigFile;
-    };
-
-    Job(const Parameters &params, QObject* parent = nullptr);
-    ~Job() override;
-
-    void start() override;
-
-    QVector<KDevelop::IProblem::Ptr> problems() const;
-
-protected slots:
-    void postProcessStdout( const QStringList& lines ) override;
-    void postProcessStderr( const QStringList& lines ) override;
-
-    void childProcessExited( int exitCode, QProcess::ExitStatus exitStatus ) override;
-    void childProcessError( QProcess::ProcessError processError ) override;
-
-protected:
-    void buildCommandLine();
-    void processStdoutLines( const QStringList& lines );
-    void processStderrLines( const QStringList& lines );
-
-    QStringList m_standardOutput;
-    QStringList m_xmlOutput;
-    bool mustDumpConfig;
-    Job::Parameters m_parameters;
-
-    QVector<KDevelop::IProblem::Ptr> m_problems;
-};
-
+    QVBoxLayout* layout = new QVBoxLayout ( this );
+    QWidget* widget = new QWidget ( this );
+    Ui::ClangtidySettings ui;
+    ui.setupUi ( widget );
+    layout->addWidget ( widget );
 }
-#endif
+
+ClangtidyPreferences::~ClangtidyPreferences()
+{
+}
+
+QString ClangtidyPreferences::name() const
+{
+    return i18n ( "clang-tidy" );
+}
+
+QString ClangtidyPreferences::fullName() const
+{
+    return i18n ( "Configure clang-tidy settings" );
+}
+
+QIcon ClangtidyPreferences::icon() const
+{
+    return QIcon::fromTheme ( QStringLiteral ( "kdevelop" ) );
+}

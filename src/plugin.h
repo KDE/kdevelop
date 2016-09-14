@@ -29,6 +29,8 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iuicontroller.h>
 
+#include "configgroup.h"
+
 class KJob;
 class QTreeView;
 
@@ -39,7 +41,6 @@ class ProblemModel;
 
 namespace ClangTidy
 {
-class Control;
 /**
  * \class
  * \brief implements the support for clang-tidy inside KDevelop.

@@ -47,8 +47,8 @@ Job::Job ( const Parameters &params, QObject* parent )
 
     *this << params.executable;
 
-    if(params.overrideConfigFile.isEmpty()) *this << QString ( "--checks=%1" ).arg ( params.checks ); else *this << 
-params.overrideConfigFile;
+    if(params.useConfigFile.isEmpty()) *this << QString ( "--checks=%1" ).arg ( params.checks ); else *this << 
+params.useConfigFile;
     *this << QString ( "--export-fixes=%1.%2" ).arg ( params.filePath ).arg ( "yaml" );
     *this << QString ( "-p=%1" ).arg ( params.buildDir );
     *this << QString ( "%1" ).arg ( params.filePath );

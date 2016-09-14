@@ -24,24 +24,25 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 include_directories(
     ${clangtidy_BINARY_DIR}
-    ${clangtidy_SOURCE_DIR}
-    ${clangtidy_SOURCE_DIR}/config
-    ${clangtidy_SOURCE_DIR}/parsers
+    ${clangtidy_SOURCE_DIR}/src
+    ${clangtidy_SOURCE_DIR}/src/config
+    ${clangtidy_SOURCE_DIR}/src/parsers
 )
 
 set(kdevclangtidy_PART_SRCS
-    debug.cpp
-    job.cpp
-    plugin.cpp
-    config/genericconfigpage.cpp
-    config/clangtidypreferences.cpp
-    parsers/clangtidyparser.cpp
+    src/debug.cpp
+    src/job.cpp
+    src/plugin.cpp
+    src/config/configgroup.cpp
+    src/config/genericconfigpage.cpp
+    src/config/clangtidypreferences.cpp
+    src/parsers/clangtidyparser.cpp
 )
 
 ki18n_wrap_ui(kdevclangtidy_PART_SRCS  ${kdevclangtidy_PART_UI} 
-config/ui/genericconfig.ui config/ui/clangtidysettings.ui)
-kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS config/clangtidyconfig.kcfgc)
-kdevplatform_add_plugin(kdevclangtidy JSON kdevclangtidy.json SOURCES 
+src/config/ui/genericconfig.ui src/config/ui/clangtidysettings.ui)
+kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS src/config/clangtidyconfig.kcfgc)
+kdevplatform_add_plugin(kdevclangtidy JSON res/kdevclangtidy.json SOURCES 
 ${kdevclangtidy_PART_SRCS} ${kdevclangtidy_CONFIG_SRCS})
 target_link_libraries(kdevclangtidy
     KDev::Interfaces
@@ -57,7 +58,7 @@ target_link_libraries(kdevclangtidy
     KF5::TextEditor
     Qt5::Network)
 
-install(FILES kdevclangtidy.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangtidy)
+install(FILES res/kdevclangtidy.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangtidy)
 
 # add_subdirectory(tests)
 

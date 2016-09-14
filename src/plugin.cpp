@@ -70,12 +70,11 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY_WITH_JSON ( ClangtidyFactory, "kdevclangtidy.json",
+K_PLUGIN_FACTORY_WITH_JSON ( ClangtidyFactory, "res/kdevclangtidy.json",
                              registerPlugin<ClangTidy::Plugin>(); )
 
 namespace ClangTidy
 {
-
 Plugin::Plugin ( QObject *parent, const QVariantList& )
     : IPlugin ( "kdevclangtidy", parent )
     , m_model ( new KDevelop::ProblemModel ( parent ) )
@@ -102,24 +101,24 @@ Plugin::Plugin ( QObject *parent, const QVariantList& )
     ProblemModelSet *pms = core()->languageController()->problemModelSet();
     pms->addModel ( QStringLiteral ( "Clangtidy" ), m_model.data() );
 
-    KConfigGroup projConf = KSharedConfig::openConfig()->group ( "Clangtidy" );
-    QUrl clangtidyPath = projConf.readEntry ( "clangtidyPath" );
-    if ( !clangtidyPath.isValid() ) {
-        clangtidyPath=QUrl ( "/usr/bin/clang-tidy" );
+    ConfigGroup projConf = KSharedConfig::openConfig()->group ( "Clangtidy" );
+    auto clangtidyPath = projConf.readEntry(ConfigGroup::ExecutablePath);
+    if ( !clangtidyPath.isEmpty() ) {
+        clangtidyPath=QString( "/usr/bin/clang-tidy" );
     }
     collectAllAvailableChecks (clangtidyPath);
-    projConf.writeEntry ( "AdditionalParameters", "" );
+    projConf.writeEntry ( ConfigGroup::AdditionalParameters, "" );
     for ( auto check : m_allChecks ) {
         bool enable = check.contains ( "cert" ) || check.contains ( "-core." ) || check.contains ( "-cplusplus" ) ||
                       check.contains ( "-deadcode" ) || check.contains ( "-security" ) || check.contains (
                           "cppcoreguide" ) ;
-        projConf.writeEntry ( check, enable );
         if(enable){
             m_activeChecks << check;
         } else {
             m_activeChecks.removeAll(check);
         }
     }
+    projConf.writeEntry (ConfigGroup::EnabledChecks, m_activeChecks.join(','));
 }
 
 void Plugin::unload()
@@ -142,16 +141,12 @@ void Plugin::collectAllAvailableChecks ( QUrl clangtidyPath )
 
     if ( !tidy.waitForStarted() ) {
         qCDebug ( KDEV_CLANGTIDY ) << "Unable to execute clang-tidy.";
-//         QMessageBox::information(nullptr,"Unable to execute clang-tidy.","Unable to execute clang-tidy.",
-// QMessageBox::Ok);
         return;
     }
 
     tidy.closeWriteChannel();
     if ( !tidy.waitForFinished() ) {
         qCDebug ( KDEV_CLANGTIDY ) << "Failed during clang-tidy execution.";
-//         QMessageBox::information(nullptr,"Failed during clang-tidy execution.","Failed during clang-tidy execution.",
-// QMessageBox::Ok);
         return;
     }
 
@@ -159,7 +154,6 @@ void Plugin::collectAllAvailableChecks ( QUrl clangtidyPath )
     QString each;
     while ( ios.readLineInto ( &each ) ) {
         m_allChecks.append ( each.trimmed() );
-//         QMessageBox::information(nullptr,each,each, QMessageBox::Ok);
     }
     if ( m_allChecks.size() > 3 ) {
         m_allChecks.removeAt ( m_allChecks.length()-1 );
@@ -187,7 +181,7 @@ void Plugin::runClangtidy ( bool allFiles )
     }
 
     KSharedConfigPtr ptr = project->projectConfiguration();
-    KConfigGroup groupConfig = ptr->group ( "Clangtidy" );
+    ConfigGroup groupConfig = ptr->group ( "Clangtidy" );
     if ( !groupConfig.isValid() ) {
         QMessageBox::critical ( nullptr,
                                 i18n ( "Error starting Clangtidy" ),
@@ -195,15 +189,15 @@ void Plugin::runClangtidy ( bool allFiles )
         return;
     }
 
-    QUrl clangtidyPath = groupConfig.readEntry ( "clangtidyPath" );    
+    auto clangtidyPath = groupConfig.readEntry (ConfigGroup::ExecutablePath);    
 
 //todo: evaluate and change this to a dynamic data gotten from clang-tidy executable.
     Job::Parameters params;
 
-    if ( clangtidyPath.toLocalFile().isEmpty() ) {
+    if ( clangtidyPath.isEmpty() ) {
         params.executable = QStringLiteral ( "/usr/bin/clang-tidy" );
     } else {
-        params.executable = clangtidyPath.toLocalFile();
+        params.executable = clangtidyPath;
     }
 
     if ( allFiles ) {
@@ -216,16 +210,18 @@ void Plugin::runClangtidy ( bool allFiles )
     auto buildSystem = project->buildSystemManager();
     params.buildDir = buildSystem->buildDirectory(project->projectItem()).toLocalFile();
     params.checks = m_activeChecks.join(',');
-    params.headerFilter = groupConfig.readEntry("headerFilter");
-    params.additionals = groupConfig.readEntry("AdditionalParameters");
-    params.checkSysHeaders = groupConfig.readEntry("CheckSystemHeaders");
-    params.dump = groupConfig.readEntry("DumpConfigToFile"); 
-    params.overrideConfigFile = groupConfig.readEntry("OverrideConfigFile");
+    params.headerFilter = groupConfig.readEntry(ConfigGroup::HeaderFilter);
+    params.additionals = groupConfig.readEntry(ConfigGroup::AdditionalParameters);
+    params.checkSysHeaders = groupConfig.readEntry(ConfigGroup::CheckSystemHeaders);
+    params.dump = groupConfig.readEntry(ConfigGroup::DumpConfig); 
+    params.useConfigFile = groupConfig.readEntry(ConfigGroup::UseConfigFile);
     
-    Job* job = new ClangTidy::Job ( params, this );
-    connect ( job, SIGNAL ( finished ( KJob* ) ), this, SLOT ( result ( KJob* ) ) );
-    core()->runController()->registerJob ( job );
-    params.dump = QString();
+    if(!params.dump.isEmpty()){
+        Job* job = new ClangTidy::Job ( params, this );
+        connect ( job, SIGNAL ( finished ( KJob* ) ), this, SLOT ( result ( KJob* ) ) );
+        core()->runController()->registerJob ( job );
+        params.dump = QString();
+    }    
     Job* job2 = new ClangTidy::Job ( params, this );    
     connect ( job2, SIGNAL ( finished ( KJob* ) ), this, SLOT ( result ( KJob* ) ) );
     core()->runController()->registerJob ( job2 );
@@ -305,6 +301,7 @@ KDevelop::ConfigPage* Plugin::configPage ( int number, QWidget *parent )
         return new ClangtidyPreferences ( this, parent );
     }
 }
+
 
 }
 #include "plugin.moc"
