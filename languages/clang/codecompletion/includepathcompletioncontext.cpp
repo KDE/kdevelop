@@ -168,6 +168,7 @@ QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const Include
         paths.push_front(Path(url).parent());
     }
 
+    std::sort(paths.begin(), paths.end());
     auto last = std::unique(paths.begin(), paths.end());
 
     int pathNumber = 0;
