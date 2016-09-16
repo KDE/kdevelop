@@ -148,9 +148,27 @@ void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* /*wind
     xmlFile = this->xmlFile();
 
     QAction* switchDefinitionDeclaration = actions.addAction(QStringLiteral("switch_definition_declaration"));
-    switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
-    actions.setDefaultShortcut( switchDefinitionDeclaration, Qt::CTRL | Qt::SHIFT | Qt::Key_C );
+    switchDefinitionDeclaration->setText(i18n("&Switch Definition/Declaration"));
+    actions.setDefaultShortcut(switchDefinitionDeclaration, Qt::CTRL | Qt::SHIFT | Qt::Key_C);
     connect(switchDefinitionDeclaration, &QAction::triggered, this, &SwitchToBuddyPlugin::switchDefinitionDeclaration);
+
+    QAction* switchHeaderSource = actions.addAction(QStringLiteral("switch_header_source"));
+    switchHeaderSource->setText(i18n("Switch Header/Source"));
+    actions.setDefaultShortcut(switchHeaderSource, Qt::CTRL | Qt::Key_Slash);
+    connect(switchHeaderSource, &QAction::triggered, this, &SwitchToBuddyPlugin::switchHeaderSource);
+}
+
+void SwitchToBuddyPlugin::switchHeaderSource()
+{
+    qCDebug(PLUGIN_SWITCHTOBUDDY) << "switching header/source";
+
+    auto doc = ICore::self()->documentController()->activeDocument();
+    if (!doc)
+        return;
+
+    QString buddyUrl = findSwitchCandidate(doc->url());
+    if (!buddyUrl.isEmpty())
+        switchToBuddy(buddyUrl);
 }
 
 void SwitchToBuddyPlugin::switchToBuddy(const QString& url)

@@ -63,6 +63,11 @@ private slots:
     void switchToBuddy(const QString& url);
 
     /**
+     * Switch between header and source files
+     */
+    void switchHeaderSource();
+
+    /**
      * @brief Switch between definitions and declarations
      *
      * E.g. if the cursor in the currently active view points to an implementation file

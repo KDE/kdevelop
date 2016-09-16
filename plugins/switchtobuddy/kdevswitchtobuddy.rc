@@ -3,6 +3,7 @@
 <MenuBar>
   <Menu name="navigation">
     <Action name="switch_definition_declaration" group="navigation_jmp"/>
+    <Action name="switch_header_source" group="navigation_jmp"/>
   </Menu>
 </MenuBar>
 </kpartgui>
