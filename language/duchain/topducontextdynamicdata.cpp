@@ -392,6 +392,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
       //When this happens, the item has not been registered correctly.
       //We can stop here, because else we will get crashes later.
       qCritical() << "Failed to load item with identity" << itemData->classId;
+      return {};
     }
 
     if (isSharedDataItem<Item>()) {
