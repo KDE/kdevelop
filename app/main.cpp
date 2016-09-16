@@ -315,11 +315,11 @@ int main( int argc, char *argv[] )
     KAboutData aboutData( "kdevelop", i18n( "KDevelop" ), QByteArray(VERSION), i18n(description), KAboutLicense::GPL,
                           i18n("Copyright 1999-2016, The KDevelop developers"), QString(), "http://www.kdevelop.org/");
     aboutData.setDesktopFileName(QStringLiteral("org.kde.kdevelop.desktop"));
-    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "Co-Maintainer, CMake Support, Run Support, Kross Support" ), "aleixpol@gmail.com" );
-    aboutData.addAuthor( i18n("Milian Wolff"), i18n( "Co-Maintainer, C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), "mail@milianw.de" );
-    aboutData.addAuthor( i18n("Kevin Funk"), i18n( "C++/Clang, General Improvements, QA, Windows Support" ), "kfunk@kde.org" );
+    aboutData.addAuthor( i18n("Kevin Funk"), i18n( "Co-maintainer, C++/Clang, QA, Windows Support" ), "kfunk@kde.org" );
+    aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Co-maintainer, AppImage, Python Support, User Interface improvements" ), "svenbrauch@gmail.com" );
+    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "CMake Support, Run Support, Kross Support" ), "aleixpol@gmail.com" );
+    aboutData.addAuthor( i18n("Milian Wolff"), i18n( "C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), "mail@milianw.de" );
     aboutData.addAuthor( i18n("Olivier JG"), i18n( "C++/Clang, DUChain, Bug Fixes" ), "olivier.jg@gmail.com" );
-    aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Python Support, User Interface improvements" ), "svenbrauch@gmail.com" );
     aboutData.addAuthor( i18n("Andreas Pakulat"), i18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( i18n("Alexander Dymo"), i18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( i18n("David Nolden"), i18n( "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding Assistance, Refactoring" ), "david.nolden.kdevelop@art-master.de" );
