@@ -18,16 +18,16 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QApplication>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <QApplication>
 #include <shell/problem.h>
 
-#include "debug.h"
 #include "clangtidyparser.h"
+#include "debug.h"
 
 namespace ClangTidy
- {
+{
 
 /**
  * Convert the value of <verbose> attribute of <error> element from clangtidy's
@@ -45,24 +45,24 @@ namespace ClangTidy
  * @param[in] input the original value of <verbose> attribute
  * @return HTML version for displaying in problem's tooltip
  */
-QString verboseMessageToHtml( const QString & input )
+QString verboseMessageToHtml(const QString& input)
 {
     QString output(QString("<html>%1</html>").arg(input.toHtmlEscaped()));
 
     output.replace("\\012", "\n");
 
     if (output.count('\n') >= 2) {
-        output.replace(output.indexOf('\n'), 1, "<pre>" );
-        output.replace(output.lastIndexOf('\n'), 1, "</pre><br>" );
+        output.replace(output.indexOf('\n'), 1, "<pre>");
+        output.replace(output.lastIndexOf('\n'), 1, "</pre><br>");
     }
 
     return output;
 }
 
-ClangtidyParser::ClangtidyParser(QObject*) :
-    m_errorLine(0),
-    m_errorInconclusive(false),
-    m_errorSeverity(Unknown)
+ClangtidyParser::ClangtidyParser(QObject*)
+    : m_errorLine(0)
+    , m_errorInconclusive(false)
+    , m_errorSeverity(Unknown)
 {
 }
 
@@ -150,9 +150,8 @@ bool ClangtidyParser::endElement()
         break;
 
     case Error:
-        qCDebug(KDEV_CLANGTIDY) << "ClangtidyParser::endElement: new error elem: line: "
-                               << m_errorLine << " at " << m_errorFile
-                               << ", msg: " << m_errorMessage;
+        qCDebug(KDEV_CLANGTIDY) << "ClangtidyParser::endElement: new error elem: line: " << m_errorLine << " at "
+                                << m_errorFile << ", msg: " << m_errorMessage;
 
         storeError();
         break;
@@ -207,10 +206,9 @@ void ClangtidyParser::parse()
         case CustomError:
         case UnexpectedElementError:
         case NotWellFormedError:
-            KMessageBox::error(
-                qApp->activeWindow(),
-                i18n("Clangtidy XML Parsing: error at line %1, column %2: %3", lineNumber(), columnNumber(), errorString()),
-                i18n("Clangtidy Error"));
+            KMessageBox::error(qApp->activeWindow(), i18n("Clangtidy XML Parsing: error at line %1, column %2: %3",
+                                                          lineNumber(), columnNumber(), errorString()),
+                               i18n("Clangtidy Error"));
             break;
 
         case NoError:
@@ -234,9 +232,9 @@ void ClangtidyParser::storeError()
         problem->setSeverity(KDevelop::IProblem::Warning);
 
     else {
-       problem->setSeverity(KDevelop::IProblem::Hint);
+        problem->setSeverity(KDevelop::IProblem::Hint);
 
-       messagePrefix.push_back(m_errorSeverity);
+        messagePrefix.push_back(m_errorSeverity);
     }
 
     if (m_errorInconclusive)
@@ -255,5 +253,4 @@ void ClangtidyParser::storeError()
 
     m_problems.push_back(problem);
 }
-
 }

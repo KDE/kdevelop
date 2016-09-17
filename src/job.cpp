@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include <KShell>
-#include <KMessageBox>
-#include <QApplication>
 #include <KLocalizedString>
+#include <KMessageBox>
+#include <KShell>
+#include <QApplication>
 #include <QRegularExpression>
 
 #include "clangtidyparser.h"
@@ -30,44 +30,47 @@
 namespace ClangTidy
 {
 
-Job::Job ( const Parameters &params, QObject* parent )
-    : KDevelop::OutputExecuteJob ( parent ), m_parameters ( params )
+Job::Job(const Parameters& params, QObject* parent)
+    : KDevelop::OutputExecuteJob(parent)
+    , m_parameters(params)
 {
-    setJobName ( i18n ( "clang-tidy output" ) );
-    mustDumpConfig = ! ( params.dump.isEmpty() );
+    setJobName(i18n("clang-tidy output"));
+    mustDumpConfig = !(params.dumpConfig.isEmpty());
 
-    setCapabilities ( KJob::Killable );
-    if ( !mustDumpConfig ) {
-        setStandardToolView ( KDevelop::IOutputView::TestView );
-        setBehaviours ( KDevelop::IOutputView::AutoScroll );
-        setProperties ( KDevelop::OutputExecuteJob::JobProperty::DisplayStdout );
-        setProperties ( KDevelop::OutputExecuteJob::JobProperty::DisplayStderr );
-        setProperties ( KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput );
+    setCapabilities(KJob::Killable);
+    if (!mustDumpConfig) {
+        setStandardToolView(KDevelop::IOutputView::TestView);
+        setBehaviours(KDevelop::IOutputView::AutoScroll);
+        setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStdout);
+        setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStderr);
+        setProperties(KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
     }
 
-    *this << params.executable;
+    *this << params.executablePath;
 
-    if(params.useConfigFile.isEmpty()) *this << QString ( "--checks=%1" ).arg ( params.checks ); else *this << 
-params.useConfigFile;
-    *this << QString ( "--export-fixes=%1.%2" ).arg ( params.filePath ).arg ( "yaml" );
-    *this << QString ( "-p=%1" ).arg ( params.buildDir );
-    *this << QString ( "%1" ).arg ( params.filePath );
+    if (params.useConfigFile.isEmpty())
+        *this << QString("--checks=%1").arg(params.enabledChecks);
+    else
+        *this << params.useConfigFile;
+    if (!params.exportFixes.isEmpty())
+        *this << params.exportFixes.arg(params.filePath);
+    *this << QString("-p=%1").arg(params.buildDir);
+    *this << QString("%1").arg(params.filePath);
 
-    if ( !params.headerFilter.isEmpty() ) {
+    if (!params.headerFilter.isEmpty()) {
         *this << params.headerFilter;
     }
-    if ( !params.additionals.isEmpty() ) {
-        *this << params.additionals;
+    if (!params.additionalParameters.isEmpty()) {
+        *this << params.additionalParameters;
     }
-    if ( !params.checkSysHeaders.isEmpty() ) {
-        *this << params.checkSysHeaders;
+    if (!params.checkSystemHeaders.isEmpty()) {
+        *this << params.checkSystemHeaders;
     }
-    if ( mustDumpConfig ) {
-        *this << params.dump;
+    if (mustDumpConfig) {
+        *this << params.dumpConfig;
     }
 
-
-    qCDebug ( KDEV_CLANGTIDY ) << "checking path" << params.filePath;
+    qCDebug(KDEV_CLANGTIDY) << "checking path" << params.filePath;
 }
 
 Job::~Job()
@@ -75,23 +78,23 @@ Job::~Job()
     doKill();
 }
 
-void Job::processStdoutLines ( const QStringList& lines )
+void Job::processStdoutLines(const QStringList& lines)
 {
-    if ( !mustDumpConfig ) {
+    if (!mustDumpConfig) {
         m_standardOutput << lines;
     } else {
-        QFile file ( m_parameters.projectRootDir + "/.clang-tidy" );
-        file.open ( QIODevice::WriteOnly );
-        QTextStream os ( &file );
-        os << lines.join ( '\n' );
+        QFile file(m_parameters.projectRootDir + "/.clang-tidy");
+        file.open(QIODevice::WriteOnly);
+        QTextStream os(&file);
+        os << lines.join('\n');
     }
 }
 
-void Job::processStderrLines ( const QStringList& lines )
+void Job::processStderrLines(const QStringList& lines)
 {
-    static const auto xmlStartRegex = QRegularExpression ( "\\s*<" );
+    static const auto xmlStartRegex = QRegularExpression("\\s*<");
 
-    for ( const QString & line : lines ) {
+    for (const QString& line : lines) {
         // unfortunately sometime clangtidy send non-XML messages to stderr.
         // For example, if we pass '-I /missing_include_dir' to the argument list,
         // then stderr output will contains such line (tested on clangtidy 1.72):
@@ -100,7 +103,7 @@ void Job::processStderrLines ( const QStringList& lines )
         //
         // Therefore we must 'move' such messages to m_standardOutput.
 
-        if ( line.indexOf ( xmlStartRegex ) != -1 ) { // the line contains XML
+        if (line.indexOf(xmlStartRegex) != -1) { // the line contains XML
             m_xmlOutput << line;
         } else {
             m_standardOutput << line;
@@ -108,18 +111,18 @@ void Job::processStderrLines ( const QStringList& lines )
     }
 }
 
-void Job::postProcessStdout ( const QStringList& lines )
+void Job::postProcessStdout(const QStringList& lines)
 {
-    processStdoutLines ( lines );
+    processStdoutLines(lines);
 
-    KDevelop::OutputExecuteJob::postProcessStdout ( lines );
+    KDevelop::OutputExecuteJob::postProcessStdout(lines);
 }
 
-void Job::postProcessStderr ( const QStringList& lines )
+void Job::postProcessStderr(const QStringList& lines)
 {
-    processStderrLines ( lines );
+    processStderrLines(lines);
 
-    KDevelop::OutputExecuteJob::postProcessStderr ( lines );
+    KDevelop::OutputExecuteJob::postProcessStderr(lines);
 }
 
 void Job::start()
@@ -127,7 +130,7 @@ void Job::start()
     m_standardOutput.clear();
     m_xmlOutput.clear();
 
-    qCDebug ( KDEV_CLANGTIDY ) << "executing:" << commandLine().join ( ' ' );
+    qCDebug(KDEV_CLANGTIDY) << "executing:" << commandLine().join(' ');
 
     KDevelop::OutputExecuteJob::start();
 }
@@ -137,29 +140,29 @@ QVector<KDevelop::IProblem::Ptr> Job::problems() const
     return m_problems;
 }
 
-void Job::childProcessError ( QProcess::ProcessError e )
+void Job::childProcessError(QProcess::ProcessError e)
 {
     QString message;
 
-    switch ( e ) {
+    switch (e) {
     case QProcess::FailedToStart:
-        message = i18n ( "Failed to start Clangtidy from %1.", commandLine() [0] );
+        message = i18n("Failed to start Clangtidy from %1.", commandLine()[0]);
         break;
 
     case QProcess::Crashed:
-        message = i18n ( "Clangtidy crashed." );
+        message = i18n("Clangtidy crashed.");
         break;
 
     case QProcess::Timedout:
-        message = i18n ( "Clangtidy process timed out." );
+        message = i18n("Clangtidy process timed out.");
         break;
 
     case QProcess::WriteError:
-        message = i18n ( "Write to Clangtidy process failed." );
+        message = i18n("Write to Clangtidy process failed.");
         break;
 
     case QProcess::ReadError:
-        message = i18n ( "Read from Clangtidy process failed." );
+        message = i18n("Read from Clangtidy process failed.");
         break;
 
     case QProcess::UnknownError:
@@ -168,30 +171,29 @@ void Job::childProcessError ( QProcess::ProcessError e )
         break;
     }
 
-    if ( !message.isEmpty() ) {
-        KMessageBox::error ( qApp->activeWindow(), message, i18n ( "Clangtidy Error" ) );
+    if (!message.isEmpty()) {
+        KMessageBox::error(qApp->activeWindow(), message, i18n("Clangtidy Error"));
     }
 
-    KDevelop::OutputExecuteJob::childProcessError ( e );
+    KDevelop::OutputExecuteJob::childProcessError(e);
 }
 
-void Job::childProcessExited ( int exitCode, QProcess::ExitStatus exitStatus )
+void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qCDebug ( KDEV_CLANGTIDY ) << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
+    qCDebug(KDEV_CLANGTIDY) << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
 
-    if ( exitCode != 0 ) {
-        qCDebug ( KDEV_CLANGTIDY ) << "clangtidy failed, standard output: ";
-        qCDebug ( KDEV_CLANGTIDY ) << m_standardOutput.join ( '\n' );
-        qCDebug ( KDEV_CLANGTIDY ) << "clangtidy failed, XML output: ";
-        qCDebug ( KDEV_CLANGTIDY ) << m_xmlOutput.join ( '\n' );
+    if (exitCode != 0) {
+        qCDebug(KDEV_CLANGTIDY) << "clangtidy failed, standard output: ";
+        qCDebug(KDEV_CLANGTIDY) << m_standardOutput.join('\n');
+        qCDebug(KDEV_CLANGTIDY) << "clangtidy failed, XML output: ";
+        qCDebug(KDEV_CLANGTIDY) << m_xmlOutput.join('\n');
     } else {
-        ClangtidyParser parser;
-        parser.addData ( m_xmlOutput.join ( '\n' ) );
-        parser.parse();
-        m_problems = parser.problems();
+        //         ClangtidyParser parser;
+        //         parser.addData (m_standardOutput);
+        //         parser.parse();
+        //         m_problems = parser.problems();
     }
 
-    KDevelop::OutputExecuteJob::childProcessExited ( exitCode, exitStatus );
+    KDevelop::OutputExecuteJob::childProcessExited(exitCode, exitStatus);
 }
-
 }

@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-
 #ifndef TEST_PLUGIN_H
 #define TEST_PLUGIN_H
 
@@ -32,4 +31,4 @@ private slots:
     void testPlugin();
 };
 
-#endif //TEST_PLUGIN_H
+#endif // TEST_PLUGIN_H

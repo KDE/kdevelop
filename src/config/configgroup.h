@@ -69,20 +69,23 @@ public:
     static const Option CheckSystemHeaders;
     static const OptionArray m_allOptions;
 
-    QString readEntry(const Option& key) const { return m_group.readEntry(std::get<0>(key)); }
+    QString readEntry(const Option& key) const { return m_group.readEntry(key.first); }
 
     template <typename T>
     void writeEntry(const Option& key, const T& value, KConfig::WriteConfigFlags pFlags = KConfig::Normal)
     {
-        m_group.writeEntry(std::get<0>(key), std::get<1>(key).arg(value), pFlags);
+        m_group.writeEntry(key.first, key.second.arg(value), pFlags);
     }
 
     void deleteEntry(const Option& key, KConfig::WriteConfigFlags pFlags = KConfig::Normal)
     {
-        m_group.deleteEntry(std::get<0>(key), pFlags);
+        m_group.deleteEntry(key.first, pFlags);
     }
 
-    void enableEntry(const Option& key, bool enable) { enable ? writeEntry(key, "") : deleteEntry(key); }
+    void enableEntry(const Option& key, bool enable)
+    {
+        enable ? writeEntry(key, QStringLiteral("")) : deleteEntry(key);
+    }
 };
 }
 

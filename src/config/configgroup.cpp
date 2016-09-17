@@ -20,84 +20,30 @@
 
 namespace ClangTidy
 {
-const ConfigGroup::Option ConfigGroup::ExecutablePath
-{ {"ExecutablePath"}, {"%1"}
-};
-const ConfigGroup::Option ConfigGroup::FilePath
-{ {"FilePath"}, {"%1"}
-};
-const ConfigGroup::Option ConfigGroup::BuildPath
-{ {"BuildPath"}, {"--p=%1"}
-};
-const ConfigGroup::Option ConfigGroup::AdditionalParameters
-{
-    {"AdditionalParameters"}, {"%1"}
-};
-const ConfigGroup::Option ConfigGroup::AnaliseTempDtors {
-    {"AnaliseTempDtors"}, {"--analyze-temporary-dtors"}
-};
-const ConfigGroup::Option ConfigGroup::EnabledChecks
-{ {"Checks"}, {"--checks=%1"}
-};
-const ConfigGroup::Option ConfigGroup::UseConfigFile
-{ {"UseConfigFile"}, {"--config="}
-};
-const ConfigGroup::Option ConfigGroup::DumpConfig
-{ {"DumpConfigToFile"}, {"--dump-config"}
-};
-const ConfigGroup::Option ConfigGroup::EnableChecksProfile
-{ {"EnableChecksProfile"}, {"--enable-check-profile"}
-};
-const ConfigGroup::Option ConfigGroup::ExportFixes
-{ {"ExportFixes"}, {"--export-fixes=%1"}
-};
-const ConfigGroup::Option ConfigGroup::ExtraArgs
-{ {"ExtraArgs"}, {"--extra-arg=%1"}
-};
-const ConfigGroup::Option ConfigGroup::ExtraArgsBefore
-{ {"ExtraArgsBefore"}, {"--extra-arg-before=%1"}
-};
-const ConfigGroup::Option ConfigGroup::AutoFix
-{ {"AutoFix"}, {"--fix"}
-};
-const ConfigGroup::Option ConfigGroup::AutoFixError
-{ {"AutoFixError"}, {"--fix-errors"}
-};
-const ConfigGroup::Option ConfigGroup::HeaderFilter
-{ {"HeaderFilter"}, {"--header-filter=%1"}
-};
-const ConfigGroup::Option ConfigGroup::LineFilter
-{ {"LineFilter"}, {"--line-filter=%1"}
-};
-const ConfigGroup::Option ConfigGroup::ListChecks
-{ {"ListChecks"}, {"--list-checks"}
-};
-const ConfigGroup::Option ConfigGroup::CheckSystemHeaders
-{ {"CheckSystemHeaders"}, {"--system-headers"}
-};
-const ConfigGroup::OptionArray ConfigGroup::m_allOptions
-{
-    {
-    &ConfigGroup::ExecutablePath, 
-    &ConfigGroup::FilePath, 
-    &ConfigGroup::BuildPath,
-    &ConfigGroup::AdditionalParameters,
-    &ConfigGroup::AnaliseTempDtors, 
-    &ConfigGroup::EnabledChecks, 
-    &ConfigGroup::UseConfigFile,
-    &ConfigGroup::DumpConfig,
-    &ConfigGroup::EnableChecksProfile,
-    &ConfigGroup::ExportFixes, 
-    &ConfigGroup::ExtraArgs,
-    &ConfigGroup::ExtraArgsBefore,
-    &ConfigGroup::AutoFix, 
-    &ConfigGroup::AutoFixError, 
-    &ConfigGroup::HeaderFilter, 
-    &ConfigGroup::LineFilter,
-    &ConfigGroup::ListChecks,
-    &ConfigGroup::CheckSystemHeaders
-    }
+const ConfigGroup::Option ConfigGroup::ExecutablePath{ { "ExecutablePath" }, { "%1" } };
+const ConfigGroup::Option ConfigGroup::FilePath{ { "FilePath" }, { "%1" } };
+const ConfigGroup::Option ConfigGroup::BuildPath{ { "BuildPath" }, { "--p=%1%2" } };
+const ConfigGroup::Option ConfigGroup::AdditionalParameters{ { "AdditionalParameters" }, { "%1" } };
+const ConfigGroup::Option ConfigGroup::AnaliseTempDtors{ { "AnaliseTempDtors" }, { "--analyze-temporary-dtors" } };
+const ConfigGroup::Option ConfigGroup::EnabledChecks{ { "Checks" }, { "%1" } };
+const ConfigGroup::Option ConfigGroup::UseConfigFile{ { "UseConfigFile" }, { "--config=" } };
+const ConfigGroup::Option ConfigGroup::DumpConfig{ { "DumpConfigToFile" }, { "--dump-config" } };
+const ConfigGroup::Option ConfigGroup::EnableChecksProfile{ { "EnableChecksProfile" }, { "--enable-check-profile" } };
+const ConfigGroup::Option ConfigGroup::ExportFixes{ { "ExportFixes" }, { "--export-fixes=%1%2.yaml" } };
+const ConfigGroup::Option ConfigGroup::ExtraArgs{ { "ExtraArgs" }, { "--extra-arg=%1" } };
+const ConfigGroup::Option ConfigGroup::ExtraArgsBefore{ { "ExtraArgsBefore" }, { "--extra-arg-before=%1" } };
+const ConfigGroup::Option ConfigGroup::AutoFix{ { "AutoFix" }, { "--fix" } };
+const ConfigGroup::Option ConfigGroup::AutoFixError{ { "AutoFixError" }, { "--fix-errors" } };
+const ConfigGroup::Option ConfigGroup::HeaderFilter{ { "HeaderFilter" }, { "--header-filter=%1" } };
+const ConfigGroup::Option ConfigGroup::LineFilter{ { "LineFilter" }, { "--line-filter=%1" } };
+const ConfigGroup::Option ConfigGroup::ListChecks{ { "ListChecks" }, { "--list-checks" } };
+const ConfigGroup::Option ConfigGroup::CheckSystemHeaders{ { "CheckSystemHeaders" }, { "--system-headers" } };
+const ConfigGroup::OptionArray ConfigGroup::m_allOptions{
+    { &ConfigGroup::ExecutablePath, &ConfigGroup::FilePath, &ConfigGroup::BuildPath, &ConfigGroup::AdditionalParameters,
+      &ConfigGroup::AnaliseTempDtors, &ConfigGroup::EnabledChecks, &ConfigGroup::UseConfigFile,
+      &ConfigGroup::DumpConfig, &ConfigGroup::EnableChecksProfile, &ConfigGroup::ExportFixes, &ConfigGroup::ExtraArgs,
+      &ConfigGroup::ExtraArgsBefore, &ConfigGroup::AutoFix, &ConfigGroup::AutoFixError, &ConfigGroup::HeaderFilter,
+      &ConfigGroup::LineFilter, &ConfigGroup::ListChecks, &ConfigGroup::CheckSystemHeaders }
 };
 
-
-}//namespace ClangTidy
+} // namespace ClangTidy

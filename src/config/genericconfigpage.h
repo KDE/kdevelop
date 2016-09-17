@@ -19,9 +19,9 @@
 #ifndef CLANGTIDYGENERICCONFIGPAGE_H_
 #define CLANGTIDYGENERICCONFIGPAGE_H_
 
+#include <QItemSelectionModel>
 #include <QObject>
 #include <QStringListModel>
-#include <QItemSelectionModel>
 #include <interfaces/configpage.h>
 
 #include "configgroup.h"
@@ -40,7 +40,7 @@ class Plugin;
 
 namespace Ui
 {
-class GenericConfig;
+    class GenericConfig;
 }
 
 class GenericConfigPage : public KDevelop::ConfigPage
@@ -48,8 +48,7 @@ class GenericConfigPage : public KDevelop::ConfigPage
     Q_OBJECT
 
 public:
-
-    GenericConfigPage(KDevelop::IProject *project, QWidget* parent);
+    GenericConfigPage(KDevelop::IProject* project, QWidget* parent);
     ~GenericConfigPage() override;
 
     QString name() const override;
@@ -64,14 +63,13 @@ public slots:
     void reset() override;
 
 private:
-    KDevelop::IProject *m_project;
+    KDevelop::IProject* m_project;
     Ui::GenericConfig* ui;
     QStringList* m_activeChecksReceptor;
     QStringList m_underlineAvailChecks;
-    QStringListModel*  m_availableChecksModel;
+    QStringListModel* m_availableChecksModel;
     QItemSelectionModel* m_selectedItemModel;
 };
-
 }
 
 #endif /* CLANGTIDYGENERICCONFIGPAGE_H_ */

@@ -22,35 +22,44 @@
 
 #include "clangtidyconfig.h"
 
+#include "configgroup.h"
 #include "ui_clangtidysettings.h"
 
-using namespace KDevelop;
+using KDevelop::IPlugin;
+using ClangTidy::ConfigGroup;
 
-ClangtidyPreferences::ClangtidyPreferences ( IPlugin *plugin, QWidget* parent )
-    : ConfigPage ( plugin, ClangtidySettings::self(), parent )
+ClangtidyPreferences::ClangtidyPreferences(IPlugin* plugin, QWidget* parent)
+    : ConfigPage(plugin, ClangtidySettings::self(), parent)
 {
-    QVBoxLayout* layout = new QVBoxLayout ( this );
-    QWidget* widget = new QWidget ( this );
-    Ui::ClangtidySettings ui;
-    ui.setupUi ( widget );
-    layout->addWidget ( widget );
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    QWidget* widget = new QWidget(this);
+    ui = new Ui::ClangtidySettings();
+    ui->setupUi(widget);
+    layout->addWidget(widget);
 }
 
 ClangtidyPreferences::~ClangtidyPreferences()
 {
+    delete ui;
 }
 
 QString ClangtidyPreferences::name() const
 {
-    return i18n ( "clang-tidy" );
+    return i18n("clang-tidy");
 }
 
 QString ClangtidyPreferences::fullName() const
 {
-    return i18n ( "Configure clang-tidy settings" );
+    return i18n("Configure clang-tidy settings");
 }
 
 QIcon ClangtidyPreferences::icon() const
 {
-    return QIcon::fromTheme ( QStringLiteral ( "kdevelop" ) );
+    return QIcon::fromTheme(QStringLiteral("kdevelop"));
+}
+
+void ClangtidyPreferences::apply()
+{
+    ConfigGroup projConf = KSharedConfig::openConfig()->group("Clangtidy");
+    projConf.writeEntry(ConfigGroup::ExecutablePath, ui->kcfg_clangtidyPath->text());
 }

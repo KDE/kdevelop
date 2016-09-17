@@ -17,8 +17,8 @@
  *************************************************************************************/
 
 #include <QtTest/QTest>
-#include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 #include "job.h"
 #include "test_clangtidyjob.h"
@@ -29,7 +29,10 @@ using namespace clangtidy;
 class JobTester : public Job
 {
 public:
-    JobTester(Job::Parameters params) : Job(params) {}
+    JobTester(Job::Parameters params)
+        : Job(params)
+    {
+    }
 
     using Job::processStdoutLines;
     using Job::processStderrLines;
@@ -40,7 +43,7 @@ public:
 
 void TestClangtidyJob::initTestCase()
 {
-    AutoTestShell::init({"kdevclangtidy"});
+    AutoTestShell::init({ "kdevclangtidy" });
     TestCore::initialize(Core::NoUi);
 }
 
@@ -51,24 +54,19 @@ void TestClangtidyJob::cleanupTestCase()
 
 void TestClangtidyJob::testJob()
 {
-    QStringList stdoutOutput = {
-        "Checking source1.cpp...",
-        "1/2 files checked 50% done",
-        "Checking source2.cpp...",
-        "2/2 files checked 50% done"
-    };
+    QStringList stdoutOutput = { "Checking source1.cpp...", "1/2 files checked 50% done", "Checking source2.cpp...",
+                                 "2/2 files checked 50% done" };
 
-    QStringList stderrOutput = {
-        "(information) Couldn't find path given by -I '/missing_include_dir_1/'",
-        "(information) Couldn't find path given by -I '/missing_include_dir_2/'",
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-        "<results version=\"2\">",
-        "   <clangtidy version=\"1.72\"/>",
-        "   <errors>",
-        "       <error id=\"missingInclude\" severity=\"information\" msg=\"msg...\" verbose=\"verbose...\"/>",
-        "   </errors>",
-        "</results>"
-    };
+    QStringList stderrOutput
+        = { "(information) Couldn't find path given by -I '/missing_include_dir_1/'",
+            "(information) Couldn't find path given by -I '/missing_include_dir_2/'",
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+            "<results version=\"2\">",
+            "   <clangtidy version=\"1.72\"/>",
+            "   <errors>",
+            "       <error id=\"missingInclude\" severity=\"information\" msg=\"msg...\" verbose=\"verbose...\"/>",
+            "   </errors>",
+            "</results>" };
 
     Job::Parameters jobParams;
     JobTester jobTester(jobParams);

@@ -19,8 +19,8 @@
 #include "test_plugin.h"
 
 #include <QtTest/QTest>
-#include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 #include "kdevplatform/shell/problem.h"
 #include "plugin.h"

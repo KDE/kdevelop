@@ -21,8 +21,8 @@
 #ifndef _CLANGTIDYPARSER_H_
 #define _CLANGTIDYPARSER_H_
 
-#include <QXmlStreamReader>
 #include <QStack>
+#include <QXmlStreamReader>
 
 #include <interfaces/iproblem.h>
 
@@ -48,20 +48,13 @@ private:
     bool startElement();
     void clear();
 
-    enum State {
-        Unknown,
-        Results,
-        Clangtidy,
-        Errors,
-        Error,
-        Location
-    };
+    enum State { Unknown, Results, Clangtidy, Errors, Error, Location };
 
     QStack<State> m_stateStack;
 
     // error info
-    int     m_errorLine;
-    bool    m_errorInconclusive;
+    int m_errorLine;
+    bool m_errorInconclusive;
     QString m_errorFile;
     QString m_errorMessage;
     QString m_errorVerboseMessage;
@@ -69,7 +62,6 @@ private:
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
 };
-
 }
 
 #endif

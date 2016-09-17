@@ -19,11 +19,11 @@
 #include "test_clangtidyparser.h"
 
 #include <QtTest/QTest>
-#include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
-#include "kdevplatform/shell/problem.h"
 #include "clangtidyparser.h"
+#include "kdevplatform/shell/problem.h"
 
 using namespace KDevelop;
 using namespace ClangTidy;
@@ -46,7 +46,8 @@ void TestClangtidyParser::testParser()
         "<results version=\"2\">\n"
         "    <clangtidy version=\"1.72\"/>"
         "    <errors>"
-        "        <error id=\"memleak\" severity=\"error\" msg=\"Memory leak: ej\" verbose=\"Memory leak: ej\" cwe=\"401\">"
+        "        <error id=\"memleak\" severity=\"error\" msg=\"Memory leak: ej\" verbose=\"Memory leak: ej\" "
+        "cwe=\"401\">"
         "            <location file=\"/kdesrc/kdev-clangtidy/plugin.cpp\" line=\"169\"/>"
         "        </error>"
         "        <error id=\"redundantAssignment\" severity=\"performance\""
@@ -73,7 +74,7 @@ void TestClangtidyParser::testParser()
     QCOMPARE(p->description(), QStringLiteral("Memory leak: ej"));
     QCOMPARE(p->explanation(), QStringLiteral("<html>Memory leak: ej</html>"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/kdesrc/kdev-clangtidy/plugin.cpp"));
-    QCOMPARE(p->finalLocation().start().line()+1, 169);
+    QCOMPARE(p->finalLocation().start().line() + 1, 169);
     QCOMPARE(p->severity(), IProblem::Error);
     QCOMPARE(p->source(), IProblem::Plugin);
 
@@ -82,16 +83,18 @@ void TestClangtidyParser::testParser()
     QCOMPARE(p->description(), QStringLiteral("(performance) location_test_msg"));
     QCOMPARE(p->explanation(), QStringLiteral("<html>location_test_verbose</html>"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("location_test.cpp"));
-    QCOMPARE(p->finalLocation().start().line()+1, 120);
+    QCOMPARE(p->finalLocation().start().line() + 1, 120);
     QCOMPARE(p->severity(), IProblem::Hint);
     QCOMPARE(p->source(), IProblem::Plugin);
 
     // test problem with '\\012' tokens in verbose message
     p = problems[2];
     QCOMPARE(p->description(), QStringLiteral("(style, inconclusive) The scope of the variable..."));
-    QCOMPARE(p->explanation(), QStringLiteral("<html>...Here is an example...:<pre>void f(int x)\n{\n    int i = 0;\n}</pre><br>...</html>"));
+    QCOMPARE(
+        p->explanation(),
+        QStringLiteral("<html>...Here is an example...:<pre>void f(int x)\n{\n    int i = 0;\n}</pre><br>...</html>"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("html_pre_test.cpp"));
-    QCOMPARE(p->finalLocation().start().line()+1, 41);
+    QCOMPARE(p->finalLocation().start().line() + 1, 41);
     QCOMPARE(p->severity(), IProblem::Hint);
     QCOMPARE(p->source(), IProblem::Plugin);
 }

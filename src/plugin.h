@@ -67,7 +67,7 @@ public:
 
     QStringList allAvailableChecks() { return m_allChecks; }
 protected:
-    void collectAllAvailableChecks(QUrl clangtidyPath);
+    void collectAllAvailableChecks(QString clangtidyPath);
 
 private slots:
     void loadOutput();

@@ -21,17 +21,26 @@
 
 #include <interfaces/configpage.h>
 
+namespace Ui
+{
 class ClangtidySettings;
+};
 
-class ClangtidyPreferences: public KDevelop::ConfigPage {
-Q_OBJECT
+class ClangtidyPreferences : public KDevelop::ConfigPage
+{
+    Q_OBJECT
 public:
-    explicit ClangtidyPreferences(KDevelop::IPlugin *plugin = nullptr, QWidget* parent = nullptr);
+    explicit ClangtidyPreferences(KDevelop::IPlugin* plugin = nullptr, QWidget* parent = nullptr);
     ~ClangtidyPreferences() override;
     QString name() const override;
     QString fullName() const override;
     QIcon icon() const override;
 
+public slots:
+    void apply() override;
+
+private:
+    Ui::ClangtidySettings* ui;
 };
 
 #endif

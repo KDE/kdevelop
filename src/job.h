@@ -19,8 +19,8 @@
 #ifndef JOB_H
 #define JOB_H
 
-#include <outputview/outputexecutejob.h>
 #include <interfaces/iproblem.h>
+#include <outputview/outputexecutejob.h>
 
 namespace ClangTidy
 {
@@ -30,22 +30,29 @@ class Job : public KDevelop::OutputExecuteJob
     Q_OBJECT
 
 public:
-    struct Parameters
-    {
-        QString executable;
-        QString filePath;
+    struct Parameters {
         QString projectRootDir;
+        QString executablePath;
+        QString filePath;
         QString buildDir;
-        QString checks;
-        
-        QString headerFilter;
-        QString additionals;
-        QString checkSysHeaders;
-        QString dump;
+        QString additionalParameters;
+        QString analiseTempDtors;
+        QString enabledChecks;
         QString useConfigFile;
+        QString dumpConfig;
+        QString enableChecksProfile;
+        QString exportFixes;
+        QString extraArgs;
+        QString extraArgsBefore;
+        QString autoFix;
+        QString autoFixError;
+        QString headerFilter;
+        QString lineFilter;
+        QString listChecks;
+        QString checkSystemHeaders;
     };
 
-    Job(const Parameters &params, QObject* parent = nullptr);
+    Job(const Parameters& params, QObject* parent = nullptr);
     ~Job() override;
 
     void start() override;
@@ -53,16 +60,16 @@ public:
     QVector<KDevelop::IProblem::Ptr> problems() const;
 
 protected slots:
-    void postProcessStdout( const QStringList& lines ) override;
-    void postProcessStderr( const QStringList& lines ) override;
+    void postProcessStdout(const QStringList& lines) override;
+    void postProcessStderr(const QStringList& lines) override;
 
-    void childProcessExited( int exitCode, QProcess::ExitStatus exitStatus ) override;
-    void childProcessError( QProcess::ProcessError processError ) override;
+    void childProcessExited(int exitCode, QProcess::ExitStatus exitStatus) override;
+    void childProcessError(QProcess::ProcessError processError) override;
 
 protected:
     void buildCommandLine();
-    void processStdoutLines( const QStringList& lines );
-    void processStderrLines( const QStringList& lines );
+    void processStdoutLines(const QStringList& lines);
+    void processStderrLines(const QStringList& lines);
 
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
@@ -71,6 +78,5 @@ protected:
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
 };
-
 }
 #endif

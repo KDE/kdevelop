@@ -39,6 +39,8 @@ set(kdevclangtidy_PART_SRCS
     src/parsers/clangtidyparser.cpp
 )
 
+include (cmake/ClangFormatAll.cmake)
+
 ki18n_wrap_ui(kdevclangtidy_PART_SRCS  ${kdevclangtidy_PART_UI} 
 src/config/ui/genericconfig.ui src/config/ui/clangtidysettings.ui)
 kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS src/config/clangtidyconfig.kcfgc)
@@ -57,7 +59,7 @@ target_link_libraries(kdevclangtidy
     KF5::WidgetsAddons
     KF5::TextEditor
     Qt5::Network)
-
+# add_dependencies(kdevclangtidy ClangFormatAll)
 install(FILES res/kdevclangtidy.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangtidy)
 
 # add_subdirectory(tests)
