@@ -12,7 +12,7 @@ cmake to configure the project, build it and have fun.
 
 ## Screenshots
 ![clang-tidy output on Problem Viewer](/doc/cltd-1-default.png?raw=true)
-![Per-project configuration page](/doc/cltd-2-projconf.png?raw=true)
+![Per-project configuration page](/doc/cltd-2-projconfig.png?raw=true)
 ![Tooltip/hint details clang-tidy check result](/doc/cltd-3-w-tooltip.png?raw=true)
 ![Global configuration](/doc/cltd-4-globalconfig.png?raw=true)
 
