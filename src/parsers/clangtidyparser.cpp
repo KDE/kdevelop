@@ -106,7 +106,6 @@ void ClangtidyParser::parse()
             auto problem = m_problems.last();
             line.prepend(problem->explanation() + '\n');
             problem->setExplanation(line);
-            QMessageBox::information(nullptr, "Parse:", QStringLiteral("Explanation: ") + line, QMessageBox::Ok);
         } else
             continue;
     }
