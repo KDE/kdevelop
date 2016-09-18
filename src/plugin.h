@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef CLANGTIDYPLUGIN_H
-#define CLANGTIDYPLUGIN_H
+#ifndef CLANGTIDY_PLUGIN_H
+#define CLANGTIDY_PLUGIN_H
 
 #include <QPointer>
 #include <QVariant>
@@ -26,13 +26,12 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
 
+#include "configgroup.h"
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iuicontroller.h>
-
-#include "configgroup.h"
+#include <shell/problemmodel.h>
 
 class KJob;
-class QTreeView;
 
 namespace KDevelop
 {
@@ -43,7 +42,7 @@ namespace ClangTidy
 {
 /**
  * \class
- * \brief implements the support for clang-tidy inside KDevelop.
+ * \brief implements the support for clang-tidy inside KDevelop by using the IPlugin interface.
  */
 class Plugin : public KDevelop::IPlugin
 {
@@ -51,20 +50,14 @@ class Plugin : public KDevelop::IPlugin
 
 public:
     Plugin(QObject* parent, const QVariantList& = QVariantList());
-
-    ~Plugin() override;
-
+    ~Plugin() = default;
     void unload() override;
-
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
-
     int configPages() const override { return 1; }
     KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
-
     int perProjectConfigPages() const override { return 1; }
     KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options,
                                                QWidget* parent) override;
-
     QStringList allAvailableChecks() { return m_allChecks; }
 protected:
     void collectAllAvailableChecks(QString clangtidyPath);
@@ -77,12 +70,12 @@ private slots:
     void result(KJob* job);
 
 private:
-    QString m_lastExec, m_lastParams, m_lastValExec, m_lastValParams, m_lastCtExec, m_lastCtParams, m_lastKcExec;
-
+    ConfigGroup m_config;
     QScopedPointer<KDevelop::ProblemModel> m_model;
     QStringList m_allChecks;
     QStringList m_activeChecks;
 };
-}
 
-#endif // CLANGTIDYPLUGIN_H
+} // namespace ClangTidy
+
+#endif // CLANGTIDY_PLUGIN_H

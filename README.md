@@ -17,7 +17,6 @@ cmake to configure the project, build it and have fun.
 ![Global configuration](/doc/cltd-4-globalconfig.png?raw=true)
 
 ## TO-DO List
-- Add unit tests.
 - Refine the code:
  - Exclude unnecessary includes from all sources;
  - Review the encapsulation to extend/shrink number of members inside the classes;

@@ -1,5 +1,5 @@
 /*************************************************************************************
- *  Copyright 2016 (C) Anton Anikin <anton.anikin@htower.ru>                         *
+ *  Copyright (C) 2016 by Carlos Nihelton <carlosnsoliveira@gmail.com>               *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -24,7 +24,7 @@
 #include "test_clangtidyjob.h"
 
 using namespace KDevelop;
-using namespace clangtidy;
+using namespace ClangTidy;
 
 class JobTester : public Job
 {
@@ -36,9 +36,9 @@ public:
 
     using Job::processStdoutLines;
     using Job::processStderrLines;
+    using Job::childProcessExited;
 
     QString standardOutput() const { return m_standardOutput.join('\n'); }
-    QString xmlOutput() const { return m_xmlOutput.join('\n'); }
 };
 
 void TestClangtidyJob::initTestCase()
@@ -54,34 +54,36 @@ void TestClangtidyJob::cleanupTestCase()
 
 void TestClangtidyJob::testJob()
 {
-    QStringList stdoutOutput = { "Checking source1.cpp...", "1/2 files checked 50% done", "Checking source2.cpp...",
-                                 "2/2 files checked 50% done" };
-
-    QStringList stderrOutput
-        = { "(information) Couldn't find path given by -I '/missing_include_dir_1/'",
-            "(information) Couldn't find path given by -I '/missing_include_dir_2/'",
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-            "<results version=\"2\">",
-            "   <clangtidy version=\"1.72\"/>",
-            "   <errors>",
-            "       <error id=\"missingInclude\" severity=\"information\" msg=\"msg...\" verbose=\"verbose...\"/>",
-            "   </errors>",
-            "</results>" };
+    QFile output_example_file("output_example");
+    output_example_file.open(QIODevice::ReadOnly);
+    QTextStream ios(&output_example_file);
+    QStringList stdoutOutput;
+    QString line;
+    while (ios.readLineInto(&line)) {
+        stdoutOutput << line;
+    }
+    QVERIFY(!stdoutOutput.isEmpty());
 
     Job::Parameters jobParams;
     JobTester jobTester(jobParams);
 
-    jobTester.processStderrLines(stderrOutput);
     jobTester.processStdoutLines(stdoutOutput);
-
-    // move non-XML elements from stderrOutput
-    stdoutOutput.push_front(stderrOutput[1]);
-    stdoutOutput.push_front(stderrOutput[0]);
-    stderrOutput.pop_front();
-    stderrOutput.pop_front();
-
     QCOMPARE(jobTester.standardOutput(), stdoutOutput.join('\n'));
-    QCOMPARE(jobTester.xmlOutput(), stderrOutput.join('\n'));
+
+    jobTester.childProcessExited(0, QProcess::NormalExit);
+    auto problems = jobTester.problems();
+
+    QVERIFY(problems[0]->finalLocation().document.str().contains(QStringLiteral("/kdev-clang-tidy/src/plugin.cpp")));
+    QVERIFY(
+        problems[0]->explanation().startsWith(QStringLiteral("[cppcoreguidelines-pro-bounds-array-to-pointer-decay]")));
+    QVERIFY(problems[1]->finalLocation().document.str().contains(QStringLiteral("/kdev-clang-tidy/src/plugin.cpp")));
+
+    QVERIFY(
+        problems[1]->explanation().startsWith(QStringLiteral("[cppcoreguidelines-pro-bounds-array-to-pointer-decay]")));
+    QVERIFY(problems[2]->finalLocation().document.str().contains(QStringLiteral("/kdev-clang-tidy/src/plugin.cpp")));
+
+    QVERIFY(
+        problems[2]->explanation().startsWith(QStringLiteral("[cppcoreguidelines-pro-bounds-array-to-pointer-decay]")));
 }
 
 QTEST_GUILESS_MAIN(TestClangtidyJob);

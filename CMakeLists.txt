@@ -34,7 +34,7 @@ set(kdevclangtidy_PART_SRCS
     src/job.cpp
     src/plugin.cpp
     src/config/configgroup.cpp
-    src/config/genericconfigpage.cpp
+    src/config/perprojectconfigpage.cpp
     src/config/clangtidypreferences.cpp
     src/parsers/clangtidyparser.cpp
 )
@@ -59,10 +59,10 @@ target_link_libraries(kdevclangtidy
     KF5::WidgetsAddons
     KF5::TextEditor
     Qt5::Network)
-# add_dependencies(kdevclangtidy ClangFormatAll)
+
 install(FILES res/kdevclangtidy.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangtidy)
 
-# add_subdirectory(tests)
+add_subdirectory(tests)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 

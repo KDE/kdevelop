@@ -16,15 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef CLANGTIDYGENERICCONFIGPAGE_H_
-#define CLANGTIDYGENERICCONFIGPAGE_H_
+#ifndef CLANGTIDY_PERPROJECTCONFIGPAGE_H_
+#define CLANGTIDY_PERPROJECTCONFIGPAGE_H_
 
+#include "configgroup.h"
 #include <QItemSelectionModel>
 #include <QObject>
 #include <QStringListModel>
 #include <interfaces/configpage.h>
-
-#include "configgroup.h"
 
 class QIcon;
 class QStringListModel;
@@ -43,13 +42,13 @@ namespace Ui
     class GenericConfig;
 }
 
-class GenericConfigPage : public KDevelop::ConfigPage
+class PerProjectConfigPage : public KDevelop::ConfigPage
 {
     Q_OBJECT
 
 public:
-    GenericConfigPage(KDevelop::IProject* project, QWidget* parent);
-    ~GenericConfigPage() override;
+    PerProjectConfigPage(KDevelop::IProject* project, QWidget* parent);
+    ~PerProjectConfigPage() override;
 
     QString name() const override;
     void setList(QStringList list);
@@ -65,6 +64,7 @@ public slots:
 private:
     KDevelop::IProject* m_project;
     Ui::GenericConfig* ui;
+    ConfigGroup m_config;
     QStringList* m_activeChecksReceptor;
     QStringList m_underlineAvailChecks;
     QStringListModel* m_availableChecksModel;
@@ -72,4 +72,4 @@ private:
 };
 }
 
-#endif /* CLANGTIDYGENERICCONFIGPAGE_H_ */
+#endif /* CLANGTIDY_PERPROJECTCONFIGPAGE_H_ */

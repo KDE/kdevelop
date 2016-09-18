@@ -16,23 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include <KPluginFactory>
-
+#include "perprojectconfigpage.h"
 #include "debug.h"
-#include "genericconfigpage.h"
 #include "plugin.h"
-
 #include "ui_genericconfig.h"
 
-#include <interfaces/iproject.h>
-
-#include <KConfigGroup>
 #include <KSharedConfig>
+#include <interfaces/iproject.h>
 
 namespace ClangTidy
 {
 
-GenericConfigPage::GenericConfigPage(KDevelop::IProject* project, QWidget* parent)
+PerProjectConfigPage::PerProjectConfigPage(KDevelop::IProject* project, QWidget* parent)
     : ConfigPage(nullptr, nullptr, parent)
     , m_project(project)
 {
@@ -44,31 +39,28 @@ GenericConfigPage::GenericConfigPage(KDevelop::IProject* project, QWidget* paren
 
     m_selectedItemModel = new QItemSelectionModel(m_availableChecksModel);
     ui->checkListView->setSelectionModel(m_selectedItemModel);
+
+    m_config = m_project->projectConfiguration()->group("Clangtidy");
 }
 
-GenericConfigPage::~GenericConfigPage(void)
+PerProjectConfigPage::~PerProjectConfigPage(void)
 {
     delete ui;
 }
 
-QString GenericConfigPage::name() const
+QString PerProjectConfigPage::name() const
 {
     return i18n("clang-tidy");
 }
 
-void GenericConfigPage::setActiveChecksReceptorList(QStringList* list)
+void PerProjectConfigPage::setActiveChecksReceptorList(QStringList* list)
 {
-    KSharedConfigPtr ptr = m_project->projectConfiguration();
-    ConfigGroup group = ptr->group("Clangtidy");
     m_activeChecksReceptor = list;
-    *m_activeChecksReceptor = group.readEntry(ConfigGroup::EnabledChecks).split(',');
+    *m_activeChecksReceptor = m_config.readEntry(ConfigGroup::EnabledChecks).split(',');
 }
 
-void GenericConfigPage::setList(QStringList list)
+void PerProjectConfigPage::setList(QStringList list)
 {
-    KSharedConfigPtr ptr = m_project->projectConfiguration();
-    ConfigGroup group = ptr->group("Clangtidy");
-
     m_underlineAvailChecks = list;
     m_availableChecksModel->setStringList(m_underlineAvailChecks);
 
@@ -76,7 +68,6 @@ void GenericConfigPage::setList(QStringList list)
         QModelIndex index = m_availableChecksModel->index(i, 0);
         if (index.isValid()) {
             if (m_activeChecksReceptor->contains((index.data().toString()))) {
-                // todo continue.
                 m_selectedItemModel->select(index, QItemSelectionModel::Select);
             } else {
                 m_selectedItemModel->select(index, QItemSelectionModel::Deselect);
@@ -85,19 +76,15 @@ void GenericConfigPage::setList(QStringList list)
     }
 }
 
-// TODO: Adapt from here to the end of file.
-void GenericConfigPage::apply()
+void PerProjectConfigPage::apply()
 {
-    KSharedConfigPtr ptr = m_project->projectConfiguration();
-    ConfigGroup projConf = ptr->group("Clangtidy");
-
     // TODO: discover a way to set the project folders where user header files might exist into this option.
     // Right now it only works with manual entry.
-    projConf.writeEntry(ConfigGroup::HeaderFilter, ui->headerFilterText->text());
-    projConf.writeEntry(ConfigGroup::AdditionalParameters, ui->clangtidyParameters->text());
-    projConf.enableEntry(ConfigGroup::CheckSystemHeaders, ui->sysHeadersCheckBox->isChecked());
-    projConf.enableEntry(ConfigGroup::UseConfigFile, !ui->overrideConfigFileCheckBox->isChecked());
-    projConf.enableEntry(ConfigGroup::DumpConfig, ui->dumpCheckBox->isChecked());
+    m_config.writeEntry(ConfigGroup::HeaderFilter, ui->headerFilterText->text());
+    m_config.writeEntry(ConfigGroup::AdditionalParameters, ui->clangtidyParameters->text());
+    m_config.enableEntry(ConfigGroup::CheckSystemHeaders, ui->sysHeadersCheckBox->isChecked());
+    m_config.enableEntry(ConfigGroup::UseConfigFile, !ui->overrideConfigFileCheckBox->isChecked());
+    m_config.enableEntry(ConfigGroup::DumpConfig, ui->dumpCheckBox->isChecked());
 
     for (int i = 0; i < m_availableChecksModel->rowCount(); ++i) {
         QModelIndex index = m_availableChecksModel->index(i, 0);
@@ -112,35 +99,32 @@ void GenericConfigPage::apply()
         }
     }
     m_activeChecksReceptor->removeDuplicates();
-    projConf.writeEntry(ConfigGroup::EnabledChecks, m_activeChecksReceptor->join(','));
+    m_config.writeEntry(ConfigGroup::EnabledChecks, m_activeChecksReceptor->join(','));
 }
 
-void GenericConfigPage::defaults()
+void PerProjectConfigPage::defaults()
 {
     bool wasBlocked = signalsBlocked();
     blockSignals(true);
 
-    KSharedConfigPtr ptr = m_project->projectConfiguration();
-    ConfigGroup projConf = ptr->group("Clangtidy");
-
     // TODO: discover a way to set the project folders where user header files might exist into this option.
     // Right now it only works with manual entry.
-    projConf.writeEntry(ConfigGroup::ExecutablePath, "/usr/bin/clang-tidy");
+    m_config.writeEntry(ConfigGroup::ExecutablePath, "/usr/bin/clang-tidy");
 
-    projConf.writeEntry(ConfigGroup::HeaderFilter, "");
+    m_config.writeEntry(ConfigGroup::HeaderFilter, "");
     ui->headerFilterText->setText("");
 
-    projConf.writeEntry(ConfigGroup::AdditionalParameters, "");
+    m_config.writeEntry(ConfigGroup::AdditionalParameters, "");
     ui->clangtidyParameters->setText(QString(""));
 
-    projConf.writeEntry(ConfigGroup::CheckSystemHeaders, "");
+    m_config.writeEntry(ConfigGroup::CheckSystemHeaders, "");
     ui->sysHeadersCheckBox->setChecked(false);
 
-    projConf.enableEntry(ConfigGroup::UseConfigFile, true);
+    m_config.enableEntry(ConfigGroup::UseConfigFile, true);
     ui->overrideConfigFileCheckBox->setChecked(false);
     ui->CheckListGroupBox->setEnabled(false);
 
-    projConf.enableEntry(ConfigGroup::DumpConfig, true);
+    m_config.enableEntry(ConfigGroup::DumpConfig, true);
     ui->dumpCheckBox->setChecked(true);
     ui->CheckListGroupBox->setEnabled(true);
 
@@ -159,22 +143,21 @@ void GenericConfigPage::defaults()
         }
     }
     m_activeChecksReceptor->removeDuplicates();
-    projConf.writeEntry(ConfigGroup::EnabledChecks, m_activeChecksReceptor->join(','));
+    m_config.writeEntry(ConfigGroup::EnabledChecks, m_activeChecksReceptor->join(','));
     blockSignals(wasBlocked);
 }
 
-void GenericConfigPage::reset()
+void PerProjectConfigPage::reset()
 {
-    KSharedConfigPtr ptr = m_project->projectConfiguration();
-    ConfigGroup projConf = ptr->group("Clangtidy");
-    if (!projConf.isValid()) {
+    if (!m_config.isValid()) {
         return;
     }
-    ui->headerFilterText->setText(projConf.readEntry(ConfigGroup::HeaderFilter).remove("--header-filter="));
-    ui->clangtidyParameters->setText(projConf.readEntry(ConfigGroup::AdditionalParameters));
-    ui->sysHeadersCheckBox->setChecked(!projConf.readEntry(ConfigGroup::CheckSystemHeaders).isEmpty());
-    ui->overrideConfigFileCheckBox->setChecked(projConf.readEntry(ConfigGroup::UseConfigFile).isEmpty());
-    ui->CheckListGroupBox->setEnabled(projConf.readEntry(ConfigGroup::UseConfigFile).isEmpty());
-    ui->dumpCheckBox->setChecked(!projConf.readEntry(ConfigGroup::DumpConfig).isEmpty());
+    ui->headerFilterText->setText(m_config.readEntry(ConfigGroup::HeaderFilter).remove("--header-filter="));
+    ui->clangtidyParameters->setText(m_config.readEntry(ConfigGroup::AdditionalParameters));
+    ui->sysHeadersCheckBox->setChecked(!m_config.readEntry(ConfigGroup::CheckSystemHeaders).isEmpty());
+    ui->overrideConfigFileCheckBox->setChecked(m_config.readEntry(ConfigGroup::UseConfigFile).isEmpty());
+    ui->CheckListGroupBox->setEnabled(m_config.readEntry(ConfigGroup::UseConfigFile).isEmpty());
+    ui->dumpCheckBox->setChecked(!m_config.readEntry(ConfigGroup::DumpConfig).isEmpty());
 }
-}
+
+} // namespace ClangTidy

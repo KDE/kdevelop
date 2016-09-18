@@ -42,6 +42,7 @@ void TestClangtidyPlugin::cleanupTestCase()
 void TestClangtidyPlugin::testPlugin()
 {
     ClangTidy::Plugin plugin(nullptr);
+    QCOMPARE(plugin.configPages(), 1);
     QVERIFY(!plugin.allAvailableChecks().isEmpty());
 }
 

@@ -1,5 +1,5 @@
 /*************************************************************************************
- *  Copyright 2016 (C) Peje Nilsson <peje66@gmail.com>                               *
+ *  Copyright (C) 2016 by Carlos Nihelton <carlosnsoliveira@gmail.com>               *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *

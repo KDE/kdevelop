@@ -19,14 +19,7 @@
 #include <unistd.h>
 
 #include <QAction>
-#include <QApplication>
-#include <QDomElement>
-#include <QFile>
 #include <QMessageBox>
-#include <QRegExp>
-#include <QTreeView>
-#include <QXmlInputSource>
-#include <QXmlSimpleReader>
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
@@ -36,6 +29,7 @@
 
 #include <execute/iexecuteplugin.h>
 
+#include <KXMLGUIFactory>
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/idocument.h>
@@ -47,26 +41,18 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/launchconfigurationtype.h>
+#include <language/interfaces/editorcontext.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
+#include <shell/problemmodelset.h>
 #include <util/executecompositejob.h>
 
-#include <shell/problemmodel.h>
-#include <shell/problemmodelset.h>
-
-#include <language/interfaces/editorcontext.h>
-
+#include "./config/clangtidypreferences.h"
+#include "./config/perprojectconfigpage.h"
 #include "debug.h"
 #include "job.h"
 #include "plugin.h"
-
-#include <KXMLGUIFactory>
-
-#include "./config/clangtidypreferences.h"
-#include "./config/genericconfigpage.h"
-#include <project/projectconfigpage.h>
-
-#include <QMessageBox>
 
 using namespace KDevelop;
 
@@ -85,12 +71,13 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
     act_checkfile->setStatusTip(i18n("Launches Clangtidy for current file"));
     act_checkfile->setText(i18n("clang-tidy"));
 
-    //     TODO: Uncomment this only when discover a safe way to run clang-tidy on the whole project.
+    /*     TODO: Uncomment this only when discover a safe way to run clang-tidy on the whole project.
     //     QAction* act_check_all_files;
     //     act_check_all_files = actionCollection()->addAction ( "clangtidy_all", this, SLOT ( runClangtidyAll() ) );
     //     act_check_all_files->setStatusTip ( i18n ( "Launches clangtidy for all translation "
     //                                         "units of current project" ) );
     //     act_check_all_files->setText ( i18n ( "clang-tidy (all)" ) );
+    */
 
     IExecutePlugin* iface = KDevelop::ICore::self()
                                 ->pluginController()
@@ -101,15 +88,17 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->addModel(QStringLiteral("Clangtidy"), m_model.data());
 
-    ConfigGroup projConf = KSharedConfig::openConfig()->group("Clangtidy");
-    auto clangtidyPath = projConf.readEntry(ConfigGroup::ExecutablePath);
+    m_config = KSharedConfig::openConfig()->group("Clangtidy");
+    auto clangtidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
 
+    // TODO: auto detect clang-tidy executable instead of hard-coding it.
     if (clangtidyPath.isEmpty()) {
         clangtidyPath = QString("/usr/bin/clang-tidy");
     }
 
     collectAllAvailableChecks(clangtidyPath);
-    projConf.writeEntry(ConfigGroup::AdditionalParameters, "");
+
+    m_config.writeEntry(ConfigGroup::AdditionalParameters, "");
     for (auto check : m_allChecks) {
         bool enable = check.contains("cert") || check.contains("-core.") || check.contains("-cplusplus")
             || check.contains("-deadcode") || check.contains("-security") || check.contains("cppcoreguide");
@@ -120,17 +109,13 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
         }
     }
     m_activeChecks.removeDuplicates();
-    projConf.writeEntry(ConfigGroup::EnabledChecks, m_activeChecks.join(','));
+    m_config.writeEntry(ConfigGroup::EnabledChecks, m_activeChecks.join(','));
 }
 
 void Plugin::unload()
 {
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->removeModel(QStringLiteral("Clangtidy"));
-}
-
-Plugin::~Plugin()
-{
 }
 
 void Plugin::collectAllAvailableChecks(QString clangtidyPath)
@@ -179,21 +164,21 @@ void Plugin::runClangtidy(bool allFiles)
         return;
     }
 
-    KSharedConfigPtr ptr = project->projectConfiguration();
-    ConfigGroup groupConfig = ptr->group("Clangtidy");
-    if (!groupConfig.isValid()) {
+    m_config = project->projectConfiguration()->group("Clangtidy");
+    if (!m_config.isValid()) {
         QMessageBox::critical(nullptr, i18n("Error starting Clangtidy"),
                               i18n("Can't load parameters. They must be set in the project settings."));
         return;
     }
 
-    auto clangtidyPath = groupConfig.readEntry(ConfigGroup::ExecutablePath);
+    auto clangtidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
     auto buildSystem = project->buildSystemManager();
-    // todo: evaluate and change this to a dynamic data gotten from clang-tidy executable.
+
     Job::Parameters params;
 
     params.projectRootDir = project->path().toLocalFile();
 
+    // TODO: auto detect clang-tidy executable instead of hard-coding it.
     if (clangtidyPath.isEmpty()) {
         params.executablePath = QStringLiteral("/usr/bin/clang-tidy");
     } else {
@@ -206,20 +191,20 @@ void Plugin::runClangtidy(bool allFiles)
         params.filePath = doc->url().toLocalFile();
     }
     params.buildDir = buildSystem->buildDirectory(project->projectItem()).toLocalFile();
-    params.additionalParameters = groupConfig.readEntry(ConfigGroup::AdditionalParameters);
-    params.analiseTempDtors = groupConfig.readEntry(ConfigGroup::AnaliseTempDtors);
+    params.additionalParameters = m_config.readEntry(ConfigGroup::AdditionalParameters);
+    params.analiseTempDtors = m_config.readEntry(ConfigGroup::AnaliseTempDtors);
     params.enabledChecks = m_activeChecks.join(',');
-    params.useConfigFile = groupConfig.readEntry(ConfigGroup::UseConfigFile);
-    params.dumpConfig = groupConfig.readEntry(ConfigGroup::DumpConfig);
-    params.enableChecksProfile = groupConfig.readEntry(ConfigGroup::EnableChecksProfile);
-    params.exportFixes = groupConfig.readEntry(ConfigGroup::ExportFixes);
-    params.extraArgs = groupConfig.readEntry(ConfigGroup::ExtraArgs);
-    params.extraArgsBefore = groupConfig.readEntry(ConfigGroup::ExtraArgsBefore);
-    params.autoFix = groupConfig.readEntry(ConfigGroup::AutoFix);
-    params.headerFilter = groupConfig.readEntry(ConfigGroup::HeaderFilter);
-    params.lineFilter = groupConfig.readEntry(ConfigGroup::LineFilter);
-    params.listChecks = groupConfig.readEntry(ConfigGroup::ListChecks);
-    params.checkSystemHeaders = groupConfig.readEntry(ConfigGroup::CheckSystemHeaders);
+    params.useConfigFile = m_config.readEntry(ConfigGroup::UseConfigFile);
+    params.dumpConfig = m_config.readEntry(ConfigGroup::DumpConfig);
+    params.enableChecksProfile = m_config.readEntry(ConfigGroup::EnableChecksProfile);
+    params.exportFixes = m_config.readEntry(ConfigGroup::ExportFixes);
+    params.extraArgs = m_config.readEntry(ConfigGroup::ExtraArgs);
+    params.extraArgsBefore = m_config.readEntry(ConfigGroup::ExtraArgsBefore);
+    params.autoFix = m_config.readEntry(ConfigGroup::AutoFix);
+    params.headerFilter = m_config.readEntry(ConfigGroup::HeaderFilter);
+    params.lineFilter = m_config.readEntry(ConfigGroup::LineFilter);
+    params.listChecks = m_config.readEntry(ConfigGroup::ListChecks);
+    params.checkSystemHeaders = m_config.readEntry(ConfigGroup::CheckSystemHeaders);
 
     if (!params.dumpConfig.isEmpty()) {
         Job* job = new ClangTidy::Job(params, this);
@@ -286,7 +271,7 @@ KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConf
     if (number != 0) {
         return nullptr;
     } else {
-        auto config = new GenericConfigPage(options.project, parent);
+        auto config = new PerProjectConfigPage(options.project, parent);
         config->setActiveChecksReceptorList(&m_activeChecks);
         config->setList(m_allChecks);
         return config;
