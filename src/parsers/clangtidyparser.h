@@ -30,7 +30,7 @@ namespace ClangTidy
 {
 
 /// A class which parses clangtidy's XML output
-class ClangtidyParser : public QXmlStreamReader
+class ClangtidyParser
 {
 public:
     explicit ClangtidyParser(QObject* parent = nullptr);
@@ -39,28 +39,11 @@ public:
     QVector<KDevelop::IProblem::Ptr> problems() const { return m_problems; }
 
     void parse();
+    void addData(const QStringList& stdoutList) { m_stdout = stdoutList; }
 
 private:
-    void storeError();
-
-    // XML parsing
-    bool endElement();
-    bool startElement();
-    void clear();
-
-    enum State { Unknown, Results, Clangtidy, Errors, Error, Location };
-
-    QStack<State> m_stateStack;
-
-    // error info
-    int m_errorLine;
-    bool m_errorInconclusive;
-    QString m_errorFile;
-    QString m_errorMessage;
-    QString m_errorVerboseMessage;
-    QString m_errorSeverity;
-
     QVector<KDevelop::IProblem::Ptr> m_problems;
+    QStringList m_stdout;
 };
 }
 

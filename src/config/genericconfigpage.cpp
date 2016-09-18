@@ -29,7 +29,6 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-
 namespace ClangTidy
 {
 

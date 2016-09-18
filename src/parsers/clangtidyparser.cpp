@@ -21,6 +21,7 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <QApplication>
+#include <QRegularExpression>
 #include <shell/problem.h>
 
 #include "clangtidyparser.h"
@@ -28,7 +29,10 @@
 
 namespace ClangTidy
 {
-
+using KDevelop::IProblem;
+using KDevelop::DetectedProblem;
+using KDevelop::DocumentRange;
+using KDevelop::IndexedString;
 /**
  * Convert the value of <verbose> attribute of <error> element from clangtidy's
  * XML-output to 'good-looking' HTML-version. This is necessary because the
@@ -59,10 +63,7 @@ QString verboseMessageToHtml(const QString& input)
     return output;
 }
 
-ClangtidyParser::ClangtidyParser(QObject*)
-    : m_errorLine(0)
-    , m_errorInconclusive(false)
-    , m_errorSeverity(Unknown)
+ClangtidyParser::ClangtidyParser(QObject* parent)
 {
 }
 
@@ -70,187 +71,44 @@ ClangtidyParser::~ClangtidyParser()
 {
 }
 
-void ClangtidyParser::clear()
-{
-    m_stateStack.clear();
-}
-
-bool ClangtidyParser::startElement()
-{
-    State newState = Unknown;
-
-    qCDebug(KDEV_CLANGTIDY) << "ClangtidyParser::startElement: elem: " << qPrintable(name().toString());
-
-    if (name() == "results")
-        newState = Results;
-
-    else if (name() == "clangtidy")
-        newState = Clangtidy;
-
-    else if (name() == "errors")
-        newState = Errors;
-
-    else if (name() == "location") {
-        newState = Location;
-        // use only first <location> element of the error
-        if (m_errorLine < 0) {
-            if (attributes().hasAttribute("line"))
-                m_errorLine = attributes().value("line").toString().toInt();
-            if (attributes().hasAttribute("file"))
-                m_errorFile = attributes().value("file").toString();
-        }
-    }
-
-    else if (name() == "error") {
-        newState = Error;
-        m_errorLine = -1;
-        m_errorSeverity = "unknown";
-        m_errorInconclusive = false;
-        m_errorFile.clear();
-        m_errorMessage.clear();
-        m_errorVerboseMessage.clear();
-
-        if (attributes().hasAttribute("msg"))
-            m_errorMessage = attributes().value("msg").toString();
-
-        if (attributes().hasAttribute("verbose"))
-            m_errorVerboseMessage = verboseMessageToHtml(attributes().value("verbose").toString());
-
-        if (attributes().hasAttribute("severity"))
-            m_errorSeverity = attributes().value("severity").toString();
-
-        if (attributes().hasAttribute("inconclusive"))
-            m_errorInconclusive = true;
-    }
-
-    else {
-        m_stateStack.push(m_stateStack.top());
-        return true;
-    }
-
-    m_stateStack.push(newState);
-
-    return true;
-}
-
-bool ClangtidyParser::endElement()
-{
-    qCDebug(KDEV_CLANGTIDY) << "ClangtidyParser::endElement: elem: " << qPrintable(name().toString());
-
-    State state = m_stateStack.pop();
-
-    switch (state) {
-    case Clangtidy:
-        if (attributes().hasAttribute("version"))
-            qCDebug(KDEV_CLANGTIDY) << "Clangtidy report version: " << attributes().value("version");
-        break;
-
-    case Errors:
-        // errors finished
-        break;
-
-    case Error:
-        qCDebug(KDEV_CLANGTIDY) << "ClangtidyParser::endElement: new error elem: line: " << m_errorLine << " at "
-                                << m_errorFile << ", msg: " << m_errorMessage;
-
-        storeError();
-        break;
-
-    case Results:
-        // results finished
-        break;
-
-    case Location:
-        break;
-
-    default:
-        break;
-    }
-
-    return true;
-}
-
 void ClangtidyParser::parse()
 {
-    qCDebug(KDEV_CLANGTIDY) << "ClangtidyParser::parse!";
+    QRegularExpression regex(QStringLiteral("(\\/.+\\.cpp):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"));
 
-    while (!atEnd()) {
-        int readNextVal = readNext();
+    for (auto line : m_stdout) {
+        auto smatch = regex.match(line);
+        if (smatch.hasMatch()) {
+            IProblem::Ptr problem(new DetectedProblem());
+            problem->setSource(IProblem::Plugin);
+            problem->setDescription(smatch.captured(5));
+            problem->setExplanation(smatch.captured(6) + '\n');
 
-        switch (readNextVal) {
-        case StartDocument:
-            clear();
-            break;
+            DocumentRange range;
+            range.document = IndexedString(smatch.captured(1));
+            range.setBothColumns(smatch.captured(3).toInt() - 1);
+            range.setBothLines(smatch.captured(2).toInt() - 1);
+            problem->setFinalLocation(range);
 
-        case StartElement:
-            startElement();
-            break;
+            auto sev(smatch.captured(4));
+            IProblem::Severity erity;
+            if (sev == QStringLiteral("error"))
+                erity = IProblem::Error;
+            else if (sev == QStringLiteral("warning"))
+                erity = IProblem::Warning;
+            else if (sev == QStringLiteral("note"))
+                erity = IProblem::Hint;
+            else
+                erity = IProblem::NoSeverity;
+            problem->setSeverity(erity);
+            m_problems.push_back(problem);
 
-        case EndElement:
-            endElement();
-            break;
-
-        case Characters:
-            break;
-
-        default:
-            qCDebug(KDEV_CLANGTIDY) << "ClangtidyParser::startElement: case: " << readNextVal;
-            break;
-        }
+        } else if (!m_problems.isEmpty()) {
+            auto problem = m_problems.last();
+            line.prepend(problem->explanation() + '\n');
+            problem->setExplanation(line);
+            QMessageBox::information(nullptr, "Parse:", QStringLiteral("Explanation: ") + line, QMessageBox::Ok);
+        } else
+            continue;
     }
-
-    qCDebug(KDEV_CLANGTIDY) << "ClangtidyParser::parse: end";
-
-    if (hasError()) {
-        switch (error()) {
-        case CustomError:
-        case UnexpectedElementError:
-        case NotWellFormedError:
-            KMessageBox::error(qApp->activeWindow(), i18n("Clangtidy XML Parsing: error at line %1, column %2: %3",
-                                                          lineNumber(), columnNumber(), errorString()),
-                               i18n("Clangtidy Error"));
-            break;
-
-        case NoError:
-        case PrematureEndOfDocumentError:
-            break;
-        }
-    }
-}
-
-void ClangtidyParser::storeError()
-{
-    KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem());
-    QStringList messagePrefix;
-
-    problem->setSource(KDevelop::IProblem::Plugin);
-
-    if (m_errorSeverity == "error")
-        problem->setSeverity(KDevelop::IProblem::Error);
-
-    else if (m_errorSeverity == "warning")
-        problem->setSeverity(KDevelop::IProblem::Warning);
-
-    else {
-        problem->setSeverity(KDevelop::IProblem::Hint);
-
-        messagePrefix.push_back(m_errorSeverity);
-    }
-
-    if (m_errorInconclusive)
-        messagePrefix.push_back("inconclusive");
-
-    if (!messagePrefix.isEmpty())
-        m_errorMessage = QString("(%1) %2").arg(messagePrefix.join(", ")).arg(m_errorMessage);
-
-    problem->setDescription(m_errorMessage);
-    problem->setExplanation(m_errorVerboseMessage);
-
-    KDevelop::DocumentRange range;
-    range.document = KDevelop::IndexedString(m_errorFile);
-    range.setBothLines(m_errorLine - 1);
-    problem->setFinalLocation(range);
-
-    m_problems.push_back(problem);
 }
 }
