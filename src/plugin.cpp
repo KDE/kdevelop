@@ -208,7 +208,6 @@ void Plugin::runClangtidy(bool allFiles)
 
     if (!params.dumpConfig.isEmpty()) {
         Job* job = new ClangTidy::Job(params, this);
-        //         connect ( job, SIGNAL ( finished ( KJob* ) ), this, SLOT ( result ( KJob* ) ) );
         core()->runController()->registerJob(job);
         params.dumpConfig = QString();
     }

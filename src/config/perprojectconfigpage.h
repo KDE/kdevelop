@@ -41,7 +41,10 @@ namespace Ui
 {
     class GenericConfig;
 }
-
+/**
+ * \class
+ * \brief Implements the clang-tidy's configuration project for the current project.
+ */
 class PerProjectConfigPage : public KDevelop::ConfigPage
 {
     Q_OBJECT

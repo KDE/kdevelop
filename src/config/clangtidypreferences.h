@@ -25,7 +25,10 @@ namespace Ui
 {
 class ClangtidySettings;
 };
-
+/**
+ * \class
+ * \brief Implements the session configuration page for clang-tidy.
+ */
 class ClangtidyPreferences : public KDevelop::ConfigPage
 {
     Q_OBJECT

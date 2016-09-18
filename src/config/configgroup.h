@@ -23,18 +23,20 @@
 #include <kconfiggroup.h>
 #include <tuple>
 
-// using namespace KDevelop;
-
 namespace ClangTidy
 {
-
+/**
+ * \class
+ * \brief Specializes KConfigGroup for clang-tidy, using a type system to avoid configuration control by passing
+ * strings around.
+ */
 class ConfigGroup
 {
-    //\typedef Typedef for tuple of QStrings.
+    //\typedef Typedef for pair of QStrings.
     using Option = std::pair<QString, QString>;
+    ///\typedef definition of an array of options.
     using OptionArray = std::array<const Option*, 18>;
 
-    //     using KConfigGroup::KConfigGroup;
 private:
     KConfigGroup m_group;
 
@@ -48,7 +50,8 @@ public:
         return *this;
     }
     bool isValid() { return m_group.isValid(); }
-
+    /// This technique allows us to avoid passing strings to KConfigGroup member functions, thus allowing compile time
+    /// detection of wrong parameters.
     static const Option ExecutablePath;
     static const Option FilePath;
     static const Option BuildPath;

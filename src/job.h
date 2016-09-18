@@ -24,12 +24,19 @@
 
 namespace ClangTidy
 {
-
+/**
+ * \class
+ * \brief specializes a KJob for running clang-tidy.
+ */
 class Job : public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
 
 public:
+    /**
+     * \class
+     * \brief command line parameters.
+     */
     struct Parameters {
         QString projectRootDir;
         QString executablePath;

@@ -26,8 +26,10 @@
 
 namespace ClangTidy
 {
-
-/// A class which parses clangtidy's XML output
+/**
+ * \class
+ * \brief Implements a parser for clang-tidy's standard output.
+ */
 class ClangtidyParser : public QObject
 {
 public:

@@ -54,12 +54,31 @@ public:
     void unload() override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
     int configPages() const override { return 1; }
+    /**
+     * \function
+     * \return the session configuration page for clang-tidy plugin.
+     */
     KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
     int perProjectConfigPages() const override { return 1; }
+    /**
+     * \function
+     * \return the clang-tidy configuration page for the current project.
+     */
     KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options,
                                                QWidget* parent) override;
+    /**
+     *\function
+     *\returns all available checks, obtained from clang-tidy program, ran with with "--checks=* --list-checks"
+     * parameters.
+     */
     QStringList allAvailableChecks() { return m_allChecks; }
 protected:
+    /**
+     * \function
+     * \brief collects all available checks by running clang-tidy with the following parameters: "--checks=*
+     * --list-checks".
+     * \param clangtidyPath QString - the system path for the clang-tidy program.
+     */
     void collectAllAvailableChecks(QString clangtidyPath);
 
 private slots:

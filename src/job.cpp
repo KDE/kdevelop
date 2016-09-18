@@ -38,13 +38,11 @@ Job::Job(const Parameters& params, QObject* parent)
     mustDumpConfig = !(params.dumpConfig.isEmpty());
 
     setCapabilities(KJob::Killable);
-    if (!mustDumpConfig) {
-        setStandardToolView(KDevelop::IOutputView::TestView);
-        setBehaviours(KDevelop::IOutputView::AutoScroll);
-        setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStdout);
-        setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStderr);
-        setProperties(KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
-    }
+    setStandardToolView(KDevelop::IOutputView::TestView);
+    setBehaviours(KDevelop::IOutputView::AutoScroll);
+    setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStdout);
+    setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStderr);
+    setProperties(KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
 
     *this << params.executablePath;
 
