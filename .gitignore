@@ -2,5 +2,6 @@
 *.kdev4
 build
 *.yaml
+!tests/data/*
 *.parse.txt
 tips

@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QRegularExpression>
 #include <QVector>
+#include <boost/utility/string_ref.hpp>
 #include <language/editor/documentrange.h>
 
 using KDevelop::DocumentRange;
@@ -31,7 +32,7 @@ namespace ClangTidy
 {
 
 struct Replacement {
-    size_t offset, lenght; // read from YAML.
+    size_t offset, length; // read from YAML.
     size_t line, column; // calculated by parser. Might drop eventually.
     QString replacementText; // read from YAML.
     DocumentRange range; // created from line and colum.
@@ -51,13 +52,14 @@ private:
     QString m_sourceFile;
     IndexedString i_source;
     QString m_yamlContent;
-    QString m_sourceCode;
+    std::string m_sourceCode;
+    boost::string_ref m_sourceView;
     static const QRegularExpression regex, check;
     Replacements all_replacements;
 
 protected:
     Replacement nextNode(const QRegularExpressionMatch& smatch);
-    KDevelop::DocumentRange composeNextNodeRange(size_t offset);
+    KDevelop::DocumentRange composeNextNodeRange(size_t offset, size_t length);
 
 public:
     ReplacementParser() = default;

@@ -53,7 +53,8 @@ QIcon PerProjectConfigPage::icon() const
     return QIcon::fromTheme(QStringLiteral("dialog-ok"));
 }
 
-KDevelop::ConfigPage::ConfigPageType PerProjectConfigPage::configPageType() const{
+KDevelop::ConfigPage::ConfigPageType PerProjectConfigPage::configPageType() const
+{
     return ConfigPage::AnalyzerConfigPage;
 }
 

@@ -44,7 +44,8 @@ ClangtidyPreferences::~ClangtidyPreferences()
     delete ui;
 }
 
-ConfigPage::ConfigPageType ClangtidyPreferences::configPageType() const{
+ConfigPage::ConfigPageType ClangtidyPreferences::configPageType() const
+{
     return ConfigPage::AnalyzerConfigPage;
 }
 
