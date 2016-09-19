@@ -27,6 +27,7 @@
 
 using KDevelop::IPlugin;
 using ClangTidy::ConfigGroup;
+using KDevelop::ConfigPage;
 
 ClangtidyPreferences::ClangtidyPreferences(IPlugin* plugin, QWidget* parent)
     : ConfigPage(plugin, ClangtidySettings::self(), parent)
@@ -43,6 +44,10 @@ ClangtidyPreferences::~ClangtidyPreferences()
     delete ui;
 }
 
+ConfigPage::ConfigPageType ClangtidyPreferences::configPageType() const{
+    return ConfigPage::AnalyzerConfigPage;
+}
+
 QString ClangtidyPreferences::name() const
 {
     return i18n("clang-tidy");
@@ -55,7 +60,7 @@ QString ClangtidyPreferences::fullName() const
 
 QIcon ClangtidyPreferences::icon() const
 {
-    return QIcon::fromTheme(QStringLiteral("kdevelop"));
+    return QIcon::fromTheme(QStringLiteral("dialog-ok"));
 }
 
 void ClangtidyPreferences::apply()

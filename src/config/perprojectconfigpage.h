@@ -53,7 +53,9 @@ public:
     PerProjectConfigPage(KDevelop::IProject* project, QWidget* parent);
     ~PerProjectConfigPage() override;
 
+    ConfigPageType configPageType() const override;
     QString name() const override;
+    QIcon icon() const override;
     void setList(QStringList list);
     void setActiveChecksReceptorList(QStringList* list);
 

@@ -257,7 +257,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
         auto mime = doc->mimeType().name();
         if (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc")) {
             QAction* action
-                = new QAction(QIcon::fromTheme("document-new"), i18n("Check current unit with clang-tidy"), this);
+                = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Check unit with clang-tidy"), this);
             connect(action, SIGNAL(triggered(bool)), this, SLOT(runClangtidyFile()));
             extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
         }
