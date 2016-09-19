@@ -56,10 +56,14 @@ public:
     bool isLoaded() const;
     int nbSectionLoaded() const;
     bool identifierInSection(const QString &identifier, const QString &section) const;
+    bool hasError() const;
+    const QString& errorString() const;
+
 signals:
     void sectionParsed();
     void sectionListUpdated();
     void manPagesLoaded();
+    void error(const QString& errorString);
 
 public slots:
     void showItem(const QModelIndex& idx);
@@ -69,7 +73,7 @@ private slots:
     void initModel();
 
     void indexEntries(KIO::Job* job, const KIO::UDSEntryList& entries);
-    void indexLoaded();
+    void indexLoaded(KJob* job);
 
     void sectionEntries(KIO::Job* job, const KIO::UDSEntryList& entries);
     void sectionLoaded();
@@ -86,6 +90,7 @@ private:
 
     bool m_loaded;
     int m_nbSectionLoaded;
+    QString m_errorString;
 };
 
 #endif // MANPAGEMODEL_H

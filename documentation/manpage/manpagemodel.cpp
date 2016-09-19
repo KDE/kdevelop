@@ -120,8 +120,14 @@ void ManPageModel::indexEntries(KIO::Job* /*job*/, const KIO::UDSEntryList& entr
     }
 }
 
-void ManPageModel::indexLoaded()
+void ManPageModel::indexLoaded(KJob* job)
 {
+    if (job->error() != 0) {
+        m_errorString = job->errorString();
+        emit error(m_errorString);
+        return;
+    }
+
     emit sectionListUpdated();
 
     iterator = new QListIterator<ManSection>(m_sectionList);
@@ -224,3 +230,12 @@ bool ManPageModel::identifierInSection(const QString& identifier, const QString&
     return false;
 }
 
+bool ManPageModel::hasError() const
+{
+    return !m_errorString.isEmpty();
+}
+
+const QString& ManPageModel::errorString() const
+{
+    return m_errorString;
+}

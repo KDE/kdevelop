@@ -23,6 +23,8 @@
 
 #include <QStackedWidget>
 
+class QString;
+class QLabel;
 class QTreeView;
 class QProgressBar;
 
@@ -35,9 +37,11 @@ public slots:
     void manIndexLoaded();
     void sectionListUpdated();
     void sectionParsed();
+    void handleError(const QString& errorString);
 private:
     QWidget* m_loadingWidget;
     QTreeView* m_treeView;
+    QLabel* m_statusLabel;
     QProgressBar* m_progressBar;
 };
 
