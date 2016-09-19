@@ -44,7 +44,7 @@ void TestClangtidyParser::cleanupTestCase()
 void TestClangtidyParser::testParser()
 {
     // prepare QStringList from file to be parsed.
-    QFile output_example_file("output_example");
+    QFile output_example_file("data/output_example");
     output_example_file.open(QIODevice::ReadOnly);
     QTextStream ios(&output_example_file);
     QStringList clangtidy_example_output;

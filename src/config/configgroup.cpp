@@ -29,7 +29,7 @@ const ConfigGroup::Option ConfigGroup::EnabledChecks{ { "Checks" }, { "%1" } };
 const ConfigGroup::Option ConfigGroup::UseConfigFile{ { "UseConfigFile" }, { "--config=" } };
 const ConfigGroup::Option ConfigGroup::DumpConfig{ { "DumpConfigToFile" }, { "--dump-config" } };
 const ConfigGroup::Option ConfigGroup::EnableChecksProfile{ { "EnableChecksProfile" }, { "--enable-check-profile" } };
-const ConfigGroup::Option ConfigGroup::ExportFixes{ { "ExportFixes" }, { "--export-fixes=%1%2.yaml" } };
+const ConfigGroup::Option ConfigGroup::ExportFixes{ { "ExportFixes" }, { "--export-fixes=" } };
 const ConfigGroup::Option ConfigGroup::ExtraArgs{ { "ExtraArgs" }, { "--extra-arg=%1" } };
 const ConfigGroup::Option ConfigGroup::ExtraArgsBefore{ { "ExtraArgsBefore" }, { "--extra-arg-before=%1" } };
 const ConfigGroup::Option ConfigGroup::AutoFix{ { "AutoFix" }, { "--fix" } };

@@ -1,0 +1,118 @@
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:57:1: warning: do not use namespace 
+using-directives; use using-declarations instead [google-build-using-namespace]
+using namespace KDevelop;
+^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:66:5: warning: do not implicitly decay an array 
+into a pointer; consider using gsl::array_view or an explicit cast instead 
+[cppcoreguidelines-pro-bounds-array-to-pointer-decay]
+    qCDebug(KDEV_CLANGTIDY) << "setting clangtidy rc file";
+    ^
+/usr/include/qt5/QtCore/qloggingcategory.h:125:64: note: expanded from macro 'qCDebug'
+        QMessageLogger(QT_MESSAGELOG_FILE, QT_MESSAGELOG_LINE, QT_MESSAGELOG_FUNC, 
+category().categoryName()).debug(__VA_ARGS__)
+                                                               ^
+/usr/include/qt5/QtCore/qlogging.h:151:30: note: expanded from macro 'QT_MESSAGELOG_FUNC'
+  #define QT_MESSAGELOG_FUNC Q_FUNC_INFO
+                             ^
+/usr/include/qt5/QtCore/qcompilerdetection.h:230:29: note: expanded from macro 'Q_FUNC_INFO'
+#  define Q_FUNC_INFO       __PRETTY_FUNCTION__
+                            ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:67:5: warning: Call Path : setXMLFile
+Call virtual functions during construction or destruction will never go to a more derived class 
+[clang-analyzer-alpha.cplusplus.VirtualCall]
+    setXMLFile("kdevclangtidy.rc");
+    ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:67:5: note: Call Path : setXMLFileCall virtual 
+functions during construction or destruction will never go to a more derived class
+    setXMLFile("kdevclangtidy.rc");
+    ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:70:21: warning: Call Path : actionCollection
+Call virtual functions during construction or destruction will never go to a more derived class 
+[clang-analyzer-alpha.cplusplus.VirtualCall]
+    act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangtidyFile()));
+                    ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:70:21: note: Call Path : actionCollectionCall 
+virtual functions during construction or destruction will never go to a more derived class
+    act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangtidyFile()));
+                    ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:130:9: warning: do not implicitly decay an 
+array into a pointer; consider using gsl::array_view or an explicit cast instead 
+[cppcoreguidelines-pro-bounds-array-to-pointer-decay]
+        qCDebug(KDEV_CLANGTIDY) << "Unable to execute clang-tidy.";
+        ^
+/usr/include/qt5/QtCore/qloggingcategory.h:125:64: note: expanded from macro 'qCDebug'
+        QMessageLogger(QT_MESSAGELOG_FILE, QT_MESSAGELOG_LINE, QT_MESSAGELOG_FUNC, 
+category().categoryName()).debug(__VA_ARGS__)
+                                                               ^
+/usr/include/qt5/QtCore/qlogging.h:151:30: note: expanded from macro 'QT_MESSAGELOG_FUNC'
+  #define QT_MESSAGELOG_FUNC Q_FUNC_INFO
+                             ^
+/usr/include/qt5/QtCore/qcompilerdetection.h:230:29: note: expanded from macro 'Q_FUNC_INFO'
+#  define Q_FUNC_INFO       __PRETTY_FUNCTION__
+                            ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:136:9: warning: do not implicitly decay an 
+array into a pointer; consider using gsl::array_view or an explicit cast instead 
+[cppcoreguidelines-pro-bounds-array-to-pointer-decay]
+        qCDebug(KDEV_CLANGTIDY) << "Failed during clang-tidy execution.";
+        ^
+/usr/include/qt5/QtCore/qloggingcategory.h:125:64: note: expanded from macro 'qCDebug'
+        QMessageLogger(QT_MESSAGELOG_FILE, QT_MESSAGELOG_LINE, QT_MESSAGELOG_FUNC, 
+category().categoryName()).debug(__VA_ARGS__)
+                                                               ^
+/usr/include/qt5/QtCore/qlogging.h:151:30: note: expanded from macro 'QT_MESSAGELOG_FUNC'
+  #define QT_MESSAGELOG_FUNC Q_FUNC_INFO
+                             ^
+/usr/include/qt5/QtCore/qcompilerdetection.h:230:29: note: expanded from macro 'Q_FUNC_INFO'
+#  define Q_FUNC_INFO       __PRETTY_FUNCTION__
+                            ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:155:10: warning: implicit cast 
+'KDevelop::IDocument *' -> bool [readability-implicit-bool-cast]
+    if (!doc) {
+         ^
+             == nullptr
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:162:10: warning: implicit cast 
+'KDevelop::IProject *' -> bool [readability-implicit-bool-cast]
+    if (!project) {
+         ^
+                 == nullptr
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:181:5: warning: missing username/bug in TODO 
+[google-readability-todo]
+    // TODO: auto detect clang-tidy executable instead of hard-coding it.
+    ^
+    // TODO(cnihelton): auto detect clang-tidy executable instead of hard-coding it.
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:210:9: warning: use auto when initializing with 
+new to avoid duplicating the type name [modernize-use-auto]
+        Job* job = new ClangTidy::Job(params, this);
+        ^
+        auto 
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:214:5: warning: use auto when initializing with 
+new to avoid duplicating the type name [modernize-use-auto]
+    Job* job2 = new ClangTidy::Job(params, this);
+    ^
+    auto 
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:238:10: warning: implicit cast 'class 
+ClangTidy::Job *' -> bool [readability-implicit-bool-cast]
+    if (!aj) {
+         ^
+            == nullptr
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:245:88: warning: use nullptr 
+[modernize-use-nullptr]
+        core()->uiController()->findToolView(i18nd("kdevproblemreporter", "Problems"), 0,
+                                                                                       ^
+                                                                                       nullptr
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:272:7: warning: don't use else after return 
+[readability-else-after-return]
+    } else {
+      ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:284:7: warning: don't use else after return 
+[readability-else-after-return]
+    } else {
+      ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:288:2: warning: namespace 'ClangTidy' not 
+terminated with a closing comment [llvm-namespace-comment]
+}
+ ^
+  // namespace ClangTidy
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:60:11: note: namespace 'ClangTidy' starts here
+namespace ClangTidy
+          ^

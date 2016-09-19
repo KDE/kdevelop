@@ -3,7 +3,7 @@
 #     TEST_NAME test_clangtidyplugin
 #     LINK_LIBRARIES Qt5::Test KDev::Tests)
 
-file(COPY "${PROJECT_SOURCE_DIR}/tests/output_example" 
+file(COPY "${PROJECT_SOURCE_DIR}/tests/data" 
      DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
      
 ecm_add_test(test_clangtidyparser.cpp ../src/parsers/clangtidyparser.cpp ../src/debug.cpp
@@ -12,4 +12,8 @@ ecm_add_test(test_clangtidyparser.cpp ../src/parsers/clangtidyparser.cpp ../src/
 
 ecm_add_test(test_clangtidyjob.cpp ../src/job.cpp ../src/parsers/clangtidyparser.cpp ../src/debug.cpp
     TEST_NAME test_clangtidyjob
+    LINK_LIBRARIES Qt5::Test KDev::Tests)
+
+ecm_add_test(test_replacementparser.cpp ../src/parsers/replacementparser.cpp ../src/debug.cpp
+    TEST_NAME test_replacementparser
     LINK_LIBRARIES Qt5::Test KDev::Tests)

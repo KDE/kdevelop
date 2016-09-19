@@ -37,6 +37,7 @@ set(kdevclangtidy_PART_SRCS
     src/config/perprojectconfigpage.cpp
     src/config/clangtidypreferences.cpp
     src/parsers/clangtidyparser.cpp
+    src/parsers/replacementparser.cpp
 )
 
 include (cmake/ClangFormatAll.cmake)

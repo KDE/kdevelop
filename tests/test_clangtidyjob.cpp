@@ -54,7 +54,7 @@ void TestClangtidyJob::cleanupTestCase()
 
 void TestClangtidyJob::testJob()
 {
-    QFile output_example_file("output_example");
+    QFile output_example_file("data/output_example");
     output_example_file.open(QIODevice::ReadOnly);
     QTextStream ios(&output_example_file);
     QStringList stdoutOutput;

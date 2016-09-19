@@ -21,8 +21,8 @@ cmake to configure the project, build it and have fun.
  - Exclude unnecessary includes from all sources;
  - Review the encapsulation to extend/shrink number of members inside the classes;
 - Implement the interactive fix feature:
- - Add output to yaml option into command line;
- - Parse yaml output to display on a suggested correction widget;
+ - [OK] Add output to yaml option into command line;
+ - [OK] Parse yaml output to display on a suggested correction widget;
  - Create a widget to allow user to choose which correction to use and which ignore;
  - Create a way to exclude some corrections per user wish from the original yaml output;
  - Use clang-apply-replacements to apply the remained fixes from the yaml file.

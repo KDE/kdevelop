@@ -50,8 +50,10 @@ Job::Job(const Parameters& params, QObject* parent)
         *this << QString("--checks=%1").arg(params.enabledChecks);
     else
         *this << params.useConfigFile;
-    if (!params.exportFixes.isEmpty())
-        *this << params.exportFixes.arg(params.filePath);
+    if (!params.exportFixes.isEmpty()) {
+        *this << params.exportFixes + QStringLiteral("%1.yaml").arg(params.filePath);
+    }
+
     *this << QString("-p=%1").arg(params.buildDir);
     *this << QString("%1").arg(params.filePath);
 

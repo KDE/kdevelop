@@ -120,13 +120,16 @@ void PerProjectConfigPage::defaults()
     m_config.writeEntry(ConfigGroup::CheckSystemHeaders, "");
     ui->sysHeadersCheckBox->setChecked(false);
 
-    m_config.enableEntry(ConfigGroup::UseConfigFile, true);
-    ui->overrideConfigFileCheckBox->setChecked(false);
-    ui->CheckListGroupBox->setEnabled(false);
+    m_config.enableEntry(ConfigGroup::UseConfigFile, false);
+    ui->overrideConfigFileCheckBox->setChecked(true);
+    ui->CheckListGroupBox->setEnabled(true);
 
     m_config.enableEntry(ConfigGroup::DumpConfig, true);
     ui->dumpCheckBox->setChecked(true);
     ui->CheckListGroupBox->setEnabled(true);
+
+    m_config.enableEntry(ConfigGroup::ExportFixes, true);
+    //     ui->autoFixCheckBox->setChecked(true);
 
     for (int i = 0; i < m_availableChecksModel->rowCount(); ++i) {
         QModelIndex index = m_availableChecksModel->index(i, 0);
