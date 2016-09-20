@@ -159,15 +159,16 @@ IncludePathProperties includePathProperties(const QString& text, int rightBounda
     return properties;
 }
 
-QList<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePathProperties& properties, const Path::List& includePaths )
+QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePathProperties& properties, const Path::List& includePaths )
 {
-    QList<IncludeItem> includeItems;
+    QVector<IncludeItem> includeItems;
     Path::List paths = includePaths;
 
     if (properties.local) {
         paths.push_front(Path(url).parent());
     }
 
+    std::sort(paths.begin(), paths.end());
     auto last = std::unique(paths.begin(), paths.end());
 
     int pathNumber = 0;

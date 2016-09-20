@@ -38,6 +38,7 @@
 #include <interfaces/icore.h>
 #include "cmakemanager.h"
 #include "cmakeparserutils.h"
+#include "cmakeutils.h"
 #include "cmakehelpdocumentation.h"
 #include "cmakedoc.h"
 #include "debug.h"
@@ -49,7 +50,7 @@ KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin( "kdevcmakedocumentation", parent )
-    , mCMakeCmd(QStandardPaths::findExecutable("cmake"))
+    , mCMakeCmd(CMake::findExecutable())
     , m_index(nullptr)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
