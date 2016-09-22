@@ -27,6 +27,7 @@ Q_OBJECT
 public:
     explicit CppCheckPreferences(KDevelop::IPlugin *plugin = nullptr, QWidget* parent = nullptr);
     ~CppCheckPreferences() override;
+    ConfigPage::ConfigPageType configPageType() const override;
     QString name() const override;
     QString fullName() const override;
     QIcon icon() const override;

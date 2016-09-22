@@ -39,6 +39,10 @@ CppCheckPreferences::~CppCheckPreferences()
 {
 }
 
+ConfigPage::ConfigPageType CppCheckPreferences::configPageType() const
+{
+    return ConfigPage::AnalyzerConfigPage;
+}
 QString CppCheckPreferences::name() const
 {
     return i18n("Cppcheck");
