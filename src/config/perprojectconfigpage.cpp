@@ -16,9 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include "perprojectconfigpage.h"
-#include "debug.h"
-#include "plugin.h"
+#include "config/perprojectconfigpage.h"
+#include "debug/debug.h"
+#include "plugin/plugin.h"
 #include "ui_genericconfig.h"
 
 #include <KSharedConfig>
@@ -28,10 +28,10 @@ namespace ClangTidy
 {
 
 PerProjectConfigPage::PerProjectConfigPage(KDevelop::IProject* project, QWidget* parent)
-    : ConfigPage(nullptr, nullptr, parent)
+    : KDevelop::ConfigPage(nullptr, nullptr, parent)
     , m_project(project)
 {
-    ui = new Ui::GenericConfig();
+    ui = new Ui::PerProjectConfig ();
     ui->setupUi(this);
 
     m_availableChecksModel = new QStringListModel();

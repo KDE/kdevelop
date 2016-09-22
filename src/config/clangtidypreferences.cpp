@@ -16,14 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include "clangtidypreferences.h"
+#include "config/clangtidypreferences.h"
+#include "config/clangtidyconfig.h"
+#include "config/configgroup.h"
+#include "ui_clangtidysettings.h"
 
 #include <QVBoxLayout>
-
-#include "clangtidyconfig.h"
-
-#include "configgroup.h"
-#include "ui_clangtidysettings.h"
 
 using KDevelop::IPlugin;
 using ClangTidy::ConfigGroup;

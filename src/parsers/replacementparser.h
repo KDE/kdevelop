@@ -25,6 +25,8 @@
 #include <boost/utility/string_ref.hpp>
 #include <language/editor/documentrange.h>
 
+#include "debug/debug.h"
+
 using KDevelop::DocumentRange;
 using KDevelop::IndexedString;
 

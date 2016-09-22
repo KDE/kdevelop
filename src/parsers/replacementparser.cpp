@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include "replacementparser.h"
+#include "parsers/replacementparser.h"
 // See <https://github.com/CarlosNihelton/kdev-clang-tidy/issues/1>
 #include <algorithm>
 #include <fstream>
@@ -27,8 +27,9 @@
 // boost libraries.
 namespace boost
 {
-void throw_exception(std::exception const& /* unused */)
+void throw_exception(std::exception const& e)
 {
+    qCDebug(KDEV_CLANGTIDY) << e.what().c_str();
 }
 }
 #endif

@@ -21,6 +21,7 @@
 
 #include <interfaces/iproblem.h>
 #include <outputview/outputexecutejob.h>
+#include "debug/debug.h"
 
 namespace ClangTidy
 {

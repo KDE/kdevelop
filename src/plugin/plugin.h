@@ -26,10 +26,12 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
 
-#include "configgroup.h"
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iuicontroller.h>
 #include <shell/problemmodel.h>
+
+#include "config/configgroup.h"
+#include "debug/debug.h"
 
 class KJob;
 
@@ -37,6 +39,8 @@ namespace KDevelop
 {
 class ProblemModel;
 }
+
+/* #undef CLANG_TIDY_PATH */
 
 namespace ClangTidy
 {

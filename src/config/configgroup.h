@@ -19,9 +19,10 @@
 #ifndef CLANGTIDY_CONFIG_H
 #define CLANGTIDY_CONFIG_H
 
+#include <tuple>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <tuple>
+#include "debug/debug.h"
 
 namespace ClangTidy
 {

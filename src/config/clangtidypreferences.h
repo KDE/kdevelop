@@ -20,6 +20,7 @@
 #define CLANGTIDYPREFERENCES_H
 
 #include <interfaces/configpage.h>
+#include "debug/debug.h"
 
 namespace Ui
 {

@@ -23,9 +23,10 @@
 #include <QtTest/QTest>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <shell/problem.h>
 
-#include "clangtidyparser.h"
-#include "kdevplatform/shell/problem.h"
+#include "parsers/clangtidyparser.h"
+
 
 using namespace KDevelop;
 using namespace ClangTidy;

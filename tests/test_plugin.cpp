@@ -22,8 +22,8 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include "kdevplatform/shell/problem.h"
-#include "plugin.h"
+#include <shell/problem.h>
+#include "plugin/plugin.h"
 
 using namespace KDevelop;
 // using namespace ClangTidy;

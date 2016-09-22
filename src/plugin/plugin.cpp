@@ -48,11 +48,11 @@
 #include <shell/problemmodelset.h>
 #include <util/executecompositejob.h>
 
-#include "./config/clangtidypreferences.h"
-#include "./config/perprojectconfigpage.h"
-#include "debug.h"
-#include "job.h"
-#include "plugin.h"
+#include "config/clangtidypreferences.h"
+#include "config/perprojectconfigpage.h"
+#include "debug/debug.h"
+#include "plugin/job.h"
+#include "plugin/plugin.h"
 
 using namespace KDevelop;
 
@@ -93,7 +93,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
 
     // TODO(cnihelton): auto detect clang-tidy executable instead of hard-coding it.
     if (clangtidyPath.isEmpty()) {
-        clangtidyPath = QString("/usr/bin/clang-tidy");
+        clangtidyPath = QString(CLANG_TIDY_PATH);
     }
 
     collectAllAvailableChecks(clangtidyPath);

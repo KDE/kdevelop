@@ -2,8 +2,6 @@
 file(GLOB_RECURSE ALL_SOURCE_FILES
         src/*/*.cpp
         src/*/*.h
-        src/*.cpp
-        src/*.h
         tests/*.cpp
         tests/*.h
         )

@@ -25,7 +25,7 @@ cmake to configure the project, build it and have fun.
  - [OK] Parse yaml output to display on a suggested correction widget;
  - Create a widget to allow user to choose which correction to use and which ignore;
  - Create a way to exclude some corrections per user wish from the original yaml output;
- - Use clang-apply-replacements to apply the remained fixes from the yaml file.
+ - Apply the remained fixes from the yaml file.
 
 
 ## License
@@ -41,7 +41,7 @@ cmake to configure the project, build it and have fun.
   GNU General Public License for more details.                                     
                                                                                   
   You should have received a copy of the GNU General Public License                
-  along with this program; if not, write to the Free Software                      
-  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  along with this program; if not, write to the Free Software Foundation, 
+  Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
   
   Copyright (C) 2016 by Carlos Nihelton <carlosnsoliveira@gmail.com>  

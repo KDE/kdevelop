@@ -22,8 +22,8 @@
 #include <QRegularExpression>
 #include <shell/problem.h>
 
-#include "clangtidyparser.h"
-#include "debug.h"
+#include "parsers/clangtidyparser.h"
+#include "debug/debug.h"
 
 namespace ClangTidy
 {

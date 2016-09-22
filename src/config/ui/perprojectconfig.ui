@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ClangTidy::GenericConfig</class>
- <widget class="QWidget" name="ClangTidy::GenericConfig">
+ <class>ClangTidy::PerProjectConfig</class>
+ <widget class="QWidget" name="ClangTidy::PerProjectConfig">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,7 +12,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="5" column="0" colspan="2">
-    <widget class="QGroupBox" name="CheckListGroupBox">
+    <widget class="QGroupBox" name="checkListGroupBox">
      <property name="toolTip">
       <string>Enable additional checks</string>
      </property>
@@ -95,7 +95,7 @@
   <connection>
    <sender>overrideConfigFileCheckBox</sender>
    <signal>clicked(bool)</signal>
-   <receiver>CheckListGroupBox</receiver>
+   <receiver>checkListGroupBox</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">

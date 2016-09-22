@@ -16,15 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
+#include "plugin/job.h"
+#include "debug/debug.h"
+#include "parsers/clangtidyparser.h"
+
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KShell>
 #include <QApplication>
 #include <QRegularExpression>
-
-#include "clangtidyparser.h"
-#include "debug.h"
-#include "job.h"
 #include <QFile>
 
 namespace ClangTidy

@@ -19,10 +19,8 @@
 #ifndef _CLANGTIDYPARSER_H_
 #define _CLANGTIDYPARSER_H_
 
-#include <QStack>
-#include <QXmlStreamReader>
-
 #include <interfaces/iproblem.h>
+#include "debug/debug.h"
 
 namespace ClangTidy
 {
