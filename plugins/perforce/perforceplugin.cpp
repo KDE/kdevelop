@@ -51,8 +51,8 @@ namespace
 {
 QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision=QString())
 {
-    bool *ok(new bool());
-    int previous = currentRevision.toInt(ok);
+    bool ok;
+    int previous = currentRevision.toInt(&ok);
     previous--;
     QString tmp;
     switch(rev.revisionType()) {
