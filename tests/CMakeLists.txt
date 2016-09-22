@@ -3,14 +3,14 @@ file(COPY "${PROJECT_SOURCE_DIR}/tests/data"
 
 ecm_add_test(   test_replacementparser.cpp 
                 ../src/parsers/replacementparser.cpp
-                ../src/debug/debug.cpp
+                ../src/qCDebug/debug.cpp
                 TEST_NAME test_replacementparser
                 LINK_LIBRARIES Qt5::Test KDev::Tests
                 )     
      
 ecm_add_test(   test_clangtidyparser.cpp
                 ../src/parsers/clangtidyparser.cpp
-                ../src/debug/debug.cpp
+                ../src/qCDebug/debug.cpp
                 TEST_NAME test_clangtidyparser
                 LINK_LIBRARIES Qt5::Test KDev::Tests
                 )
@@ -18,7 +18,7 @@ ecm_add_test(   test_clangtidyparser.cpp
 ecm_add_test(   test_clangtidyjob.cpp
                 ../src/plugin/job.cpp
                 ../src/parsers/clangtidyparser.cpp
-                ../src/debug/debug.cpp
+                ../src/qCDebug/debug.cpp
                 TEST_NAME test_clangtidyjob
                 LINK_LIBRARIES Qt5::Test KDev::Tests
                 )

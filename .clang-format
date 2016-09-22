@@ -4,6 +4,7 @@ Language:        Cpp
 AlignAfterOpenBracket: true
 AlwaysBreakTemplateDeclarations: true
 AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
 BreakBeforeBraces: Linux
 ColumnLimit: 120
 Standard:        Cpp11

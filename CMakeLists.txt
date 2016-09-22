@@ -40,7 +40,7 @@ include_directories(
 )
 
 set(kdevclangtidy_PART_SRCS
-    src/debug/debug.cpp
+    src/qCDebug/debug.cpp
     src/plugin/job.cpp
     src/plugin/plugin.cpp
     src/config/configgroup.cpp
@@ -76,7 +76,7 @@ target_link_libraries(kdevclangtidy
 
 install(FILES res/kdevclangtidy.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangtidy)
 
-# add_subdirectory(tests)
+add_subdirectory(tests)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 

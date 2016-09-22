@@ -1,22 +1,25 @@
-/*************************************************************************************
- *  Copyright (C) 2016 by Carlos Nihelton <carlosnsoliveira@gmail.com>               *
- *                                                                                   *
- *  This program is free software; you can redistribute it and/or                    *
- *  modify it under the terms of the GNU General Public License                      *
- *  as published by the Free Software Foundation; either version 2                   *
- *  of the License, or (at your option) any later version.                           *
- *                                                                                   *
- *  This program is distributed in the hope that it will be useful,                  *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of                   *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                    *
- *  GNU General Public License for more details.                                     *
- *                                                                                   *
- *  You should have received a copy of the GNU General Public License                *
- *  along with this program; if not, write to the Free Software                      *
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
- *************************************************************************************/
+/* 
+ * This file is part of KDevelop
+ *
+ * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
-#include <unistd.h>
+#include "plugin.h"
 
 #include <QAction>
 #include <QMessageBox>
@@ -50,9 +53,7 @@
 
 #include "config/clangtidypreferences.h"
 #include "config/perprojectconfigpage.h"
-#include "debug/debug.h"
-#include "plugin/job.h"
-#include "plugin/plugin.h"
+#include "job.h"
 
 using namespace KDevelop;
 
@@ -71,10 +72,13 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     act_checkfile->setStatusTip(i18n("Launches Clangtidy for current file"));
     act_checkfile->setText(i18n("clang-tidy"));
 
-    /*     TODO: Uncomment this only when discover a safe way to run clang-tidy on the whole project.
+    /*     TODO: Uncomment this only when discover a safe way to run clang-tidy on
+    the whole project.
     //     QAction* act_check_all_files;
-    //     act_check_all_files = actionCollection()->addAction ( "clangtidy_all", this, SLOT ( runClangtidyAll() ) );
-    //     act_check_all_files->setStatusTip ( i18n ( "Launches clangtidy for all translation "
+    //     act_check_all_files = actionCollection()->addAction ( "clangtidy_all",
+    this, SLOT ( runClangtidyAll() ) );
+    //     act_check_all_files->setStatusTip ( i18n ( "Launches clangtidy for all
+    translation "
     //                                         "units of current project" ) );
     //     act_check_all_files->setText ( i18n ( "clang-tidy (all)" ) );
     */
@@ -91,7 +95,8 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     m_config = KSharedConfig::openConfig()->group("Clangtidy");
     auto clangtidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
 
-    // TODO(cnihelton): auto detect clang-tidy executable instead of hard-coding it.
+    // TODO(cnihelton): auto detect clang-tidy executable instead of hard-coding
+    // it.
     if (clangtidyPath.isEmpty()) {
         clangtidyPath = QString(CLANG_TIDY_PATH);
     }
@@ -152,14 +157,14 @@ void Plugin::collectAllAvailableChecks(QString clangtidyPath)
 void Plugin::runClangtidy(bool allFiles)
 {
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    if (!doc) {
+    if (doc == nullptr) {
         QMessageBox::critical(nullptr, i18n("Error starting clang-tidy"),
                               i18n("No suitable active file, unable to deduce project."));
         return;
     }
 
     KDevelop::IProject* project = core()->projectController()->findProjectForUrl(doc->url());
-    if (!project) {
+    if (project == nullptr) {
         QMessageBox::critical(nullptr, i18n("Error starting clang-tidy"), i18n("Active file isn't in a project"));
         return;
     }
@@ -167,7 +172,8 @@ void Plugin::runClangtidy(bool allFiles)
     m_config = project->projectConfiguration()->group("Clangtidy");
     if (!m_config.isValid()) {
         QMessageBox::critical(nullptr, i18n("Error starting Clangtidy"),
-                              i18n("Can't load parameters. They must be set in the project settings."));
+                              i18n("Can't load parameters. They must be set in the "
+                                   "project settings."));
         return;
     }
 
@@ -207,11 +213,11 @@ void Plugin::runClangtidy(bool allFiles)
     params.checkSystemHeaders = m_config.readEntry(ConfigGroup::CheckSystemHeaders);
 
     if (!params.dumpConfig.isEmpty()) {
-        Job* job = new ClangTidy::Job(params, this);
+        auto job = new ClangTidy::Job(params, this);
         core()->runController()->registerJob(job);
         params.dumpConfig = QString();
     }
-    Job* job2 = new ClangTidy::Job(params, this);
+    auto job2 = new ClangTidy::Job(params, this);
     connect(job2, SIGNAL(finished(KJob*)), this, SLOT(result(KJob*)));
     core()->runController()->registerJob(job2);
 }
@@ -235,14 +241,14 @@ void Plugin::loadOutput()
 void Plugin::result(KJob* job)
 {
     Job* aj = dynamic_cast<Job*>(job);
-    if (!aj) {
+    if (aj == nullptr) {
         return;
     }
 
     if (aj->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded) {
         m_model->setProblems(aj->problems());
 
-        core()->uiController()->findToolView(i18nd("kdevproblemreporter", "Problems"), 0,
+        core()->uiController()->findToolView(i18nd("kdevproblemreporter", "Problems"), nullptr,
                                              KDevelop::IUiController::FindFlags::Raise);
     }
 }
@@ -268,22 +274,21 @@ KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConf
 {
     if (number != 0) {
         return nullptr;
-    } else {
-        auto config = new PerProjectConfigPage(options.project, parent);
-        config->setActiveChecksReceptorList(&m_activeChecks);
-        config->setList(m_allChecks);
-        return config;
     }
+    auto config = new PerProjectConfigPage(options.project, parent);
+    config->setActiveChecksReceptorList(&m_activeChecks);
+    config->setList(m_allChecks);
+    return config;
+    
 }
 
 KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
 {
     if (number != 0) {
         return nullptr;
-    } else {
-        return new ClangtidyPreferences(this, parent);
     }
+    return new ClangtidyPreferences(this, parent);
 }
-}
+} //namespace ClangTidy
 
 #include "plugin.moc"

@@ -1,37 +1,42 @@
-/*************************************************************************************
- *  Copyright (C) 2016 by Carlos Nihelton <carlosnsoliveira@gmail.com>               *
- *                                                                                   *
- *  This program is free software; you can redistribute it and/or                    *
- *  modify it under the terms of the GNU General Public License                      *
- *  as published by the Free Software Foundation; either version 2                   *
- *  of the License, or (at your option) any later version.                           *
- *                                                                                   *
- *  This program is distributed in the hope that it will be useful,                  *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of                   *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                    *
- *  GNU General Public License for more details.                                     *
- *                                                                                   *
- *  You should have received a copy of the GNU General Public License                *
- *  along with this program; if not, write to the Free Software                      *
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
- *************************************************************************************/
+/* 
+ * This file is part of KDevelop
+ *
+ * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
-#include "parsers/replacementparser.h"
+#include "replacementparser.h"
+#include "qCDebug/debug.h"
 // See <https://github.com/CarlosNihelton/kdev-clang-tidy/issues/1>
 #include <algorithm>
 #include <fstream>
 #include <iterator>
 
 #ifdef BOOST_NO_EXCEPTIONS
-// Because we are using boost we need to provide an implementation of this function, because KDE disables exceptions on
+// Because we are using boost we need to provide an implementation of this
+// function, because KDE disables exceptions on
 // boost libraries.
 namespace boost
 {
 void throw_exception(std::exception const& e)
 {
-    qCDebug(KDEV_CLANGTIDY) << e.what().c_str();
+    qCDebug(KDEV_CLANGTIDY) << e.what();
 }
-}
+}//namespace boost
 #endif
 
 namespace ClangTidy
@@ -73,8 +78,6 @@ ReplacementParser::ReplacementParser(const QString& yaml_file, const QString& so
         std::copy(std::istreambuf_iterator<char>(cpp), std::istreambuf_iterator<char>(),
                   std::back_insert_iterator<std::string>(m_sourceCode));
         m_sourceView = boost::string_ref(m_sourceCode);
-        qDebug() << "m_sourceView.length(): " << m_sourceView.length() << '\n';
-        qDebug() << "m_sourceCode.length(): " << m_sourceCode.length() << '\n';
     }
 }
 
@@ -143,18 +146,23 @@ KDevelop::DocumentRange ReplacementParser::composeNextNodeRange(size_t offset, s
         return range;
     }
 
-    sourceView = m_sourceView.substr(offset, length);
-    qDebug() << "sourceView.length(): " << sourceView.length() << '\n';
-    line = 0;
-    col = 0;
-    for (const auto elem : sourceView) {
-        if (elem == char('\n')) {
-            ++line;
-            col = 0;
-        } else {
-            ++col;
+    if(offset+length < m_sourceView.length()){
+        sourceView = m_sourceView.substr(offset, length);
+    
+        line = 0;
+        col = 0;
+        for (const auto elem : sourceView) {
+            if (elem == char('\n')) {
+                ++line;
+                col = 0;
+            } else {
+                ++col;
+            }
         }
     }
+        
+    
+    
 
     KTextEditor::Cursor start(currentLine, currentColumn);
 

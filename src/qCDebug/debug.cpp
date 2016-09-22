@@ -18,36 +18,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+#include "debug.h"
 
-#ifndef CLANGTIDYPREFERENCES_H
-#define CLANGTIDYPREFERENCES_H
-
-#include <interfaces/configpage.h>
-
-namespace Ui
-{
-class ClangtidySettings;
-};
-/**
- * \class
- * \brief Implements the session configuration page for clang-tidy.
- */
-class ClangtidyPreferences : public KDevelop::ConfigPage
-{
-    Q_OBJECT
-public:
-    explicit ClangtidyPreferences(KDevelop::IPlugin* plugin = nullptr, QWidget* parent = nullptr);
-    ~ClangtidyPreferences() override;
-    ConfigPage::ConfigPageType configPageType() const override;
-    QString name() const override;
-    QString fullName() const override;
-    QIcon icon() const override;
-
-public slots:
-    void apply() override;
-
-private:
-    Ui::ClangtidySettings* ui;
-};
-
-#endif
+Q_LOGGING_CATEGORY(KDEV_CLANGTIDY, "kdev.clangtidy")

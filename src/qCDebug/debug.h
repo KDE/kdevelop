@@ -19,35 +19,11 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLANGTIDYPREFERENCES_H
-#define CLANGTIDYPREFERENCES_H
+#ifndef DEBUG_H
+#define DEBUG_H
 
-#include <interfaces/configpage.h>
+#include <QLoggingCategory>
 
-namespace Ui
-{
-class ClangtidySettings;
-};
-/**
- * \class
- * \brief Implements the session configuration page for clang-tidy.
- */
-class ClangtidyPreferences : public KDevelop::ConfigPage
-{
-    Q_OBJECT
-public:
-    explicit ClangtidyPreferences(KDevelop::IPlugin* plugin = nullptr, QWidget* parent = nullptr);
-    ~ClangtidyPreferences() override;
-    ConfigPage::ConfigPageType configPageType() const override;
-    QString name() const override;
-    QString fullName() const override;
-    QIcon icon() const override;
+Q_DECLARE_LOGGING_CATEGORY(KDEV_CLANGTIDY)
 
-public slots:
-    void apply() override;
-
-private:
-    Ui::ClangtidySettings* ui;
-};
-
-#endif
+#endif // DEBUG_H
