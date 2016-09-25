@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of KDevelop
  *
  * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>

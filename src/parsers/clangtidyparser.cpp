@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of KDevelop
  *
  * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
@@ -68,10 +68,6 @@ ClangtidyParser::ClangtidyParser(QObject* parent)
 {
 }
 
-// ClangtidyParser::~ClangtidyParser()
-// {
-// }
-
 void ClangtidyParser::parse()
 {
     QRegularExpression regex(QStringLiteral("(\\/.+\\.cpp):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"));
@@ -92,14 +88,15 @@ void ClangtidyParser::parse()
 
             auto sev(smatch.captured(4));
             IProblem::Severity erity;
-            if (sev == QStringLiteral("error"))
+            if (sev == QStringLiteral("error")) {
                 erity = IProblem::Error;
-            else if (sev == QStringLiteral("warning"))
+            } else if (sev == QStringLiteral("warning")) {
                 erity = IProblem::Warning;
-            else if (sev == QStringLiteral("note"))
+            } else if (sev == QStringLiteral("note")) {
                 erity = IProblem::Hint;
-            else
+            } else {
                 erity = IProblem::NoSeverity;
+            }
             problem->setSeverity(erity);
             m_problems.push_back(problem);
 
@@ -111,4 +108,4 @@ void ClangtidyParser::parse()
             continue;
     }
 }
-}//namespace ClangTidy
+} // namespace ClangTidy

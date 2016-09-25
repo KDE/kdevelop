@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of KDevelop
  *
  * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iterator>
+#include <tuple>
 
 #ifdef BOOST_NO_EXCEPTIONS
 // Because we are using boost we need to provide an implementation of this
@@ -36,8 +37,35 @@ void throw_exception(std::exception const& e)
 {
     qCDebug(KDEV_CLANGTIDY) << e.what();
 }
-}//namespace boost
+} // namespace boost
 #endif
+
+namespace
+{
+
+/**
+* @function
+* @brief For a given string_ref representing the source code, it counts the number of rows and the column where the
+* string_ref ends.
+* @param substring : a piece of the source code.
+* @return std::pair<size_t,size_t>: <b>first</b>: count of lines and <b>second</b>: column at the end.
+*/
+inline std::pair<size_t, size_t> countOfRowAndColumnToTheEndOfSubstr(boost::string_ref substring)
+{
+    size_t line = 0, col = 0;
+    for (const auto elem : substring) {
+        if (elem == char('\n')) {
+            ++line;
+            col = 0;
+        } else {
+            ++col;
+        }
+    }
+
+    return std::make_pair(line, col);
+}
+
+} // namespace
 
 namespace ClangTidy
 {
@@ -69,7 +97,7 @@ ReplacementParser::ReplacementParser(const QString& yaml_file, const QString& so
         }
     }
 
-    // TODO: Discover a way to get that from KDevelop.
+    // TODO (CarlosNihelton): Discover a way to get that from KDevelop.
     if (m_sourceFile.endsWith(".cpp")) {
         i_source = IndexedString(m_sourceFile);
         // See <https://github.com/CarlosNihelton/kdev-clang-tidy/issues/1>
@@ -83,8 +111,9 @@ ReplacementParser::ReplacementParser(const QString& yaml_file, const QString& so
 
 void ReplacementParser::parse()
 {
-    if (m_yamlContent.isEmpty())
+    if (m_yamlContent.isEmpty()) {
         return; // Nothing to parse.
+    }
 
     for (auto iMatch = regex.globalMatch(m_yamlContent); iMatch.hasNext(); ++cReplacements) {
         auto smatch = iMatch.next();
@@ -97,47 +126,49 @@ Replacement ReplacementParser::nextNode(const QRegularExpressionMatch& smatch)
 {
     Replacement repl;
 
-    if (smatch.captured(1) != m_sourceFile)
+    if (smatch.captured(1) != m_sourceFile) {
         return repl; // Parsing output from only one file.
-
-    repl.offset = smatch.captured(2).toInt();
-    repl.length = smatch.captured(3).toInt();
-    repl.replacementText = smatch.captured(4);
-    if (repl.replacementText.startsWith('\'') && repl.replacementText.endsWith('\'')) {
-        repl.replacementText.remove(0, 1);
-        repl.replacementText.remove(repl.replacementText.length() - 1, 1);
+    }
+    int off{ smatch.captured(2).toInt() };
+    int len{ smatch.captured(3).toInt() };
+    repl.range = composeNextNodeRange(off, len);
+    if (repl.range.isValid()) {
+        repl.offset = off;
+        repl.length = len;
+        repl.replacementText = smatch.captured(4);
+        if (repl.replacementText.startsWith('\'') && repl.replacementText.endsWith('\'')) {
+            repl.replacementText.remove(0, 1);
+            repl.replacementText.remove(repl.replacementText.length() - 1, 1);
+        }
+    } else {
+        repl.offset = 0;
+        repl.length = 0;
+        repl.replacementText = QStringLiteral("");
     }
 
-    repl.range = composeNextNodeRange(repl.offset, repl.length);
     return repl;
 }
 
 KDevelop::DocumentRange ReplacementParser::composeNextNodeRange(size_t offset, size_t length)
 {
-    KDevelop::DocumentRange range;
-
-    if (offset < 1)
+    qDebug() << "count: " << cReplacements << "\toffset: " << offset << "\tlength: " << length << '\n';
+    KDevelop::DocumentRange range{ KDevelop::IndexedString(), KTextEditor::Range::invalid() };
+    /// See https://github.com/CarlosNihelton/kdev-clang-tidy/issues/2.
+    if (offset < 1 || offset + length >= m_sourceView.length()) {
         return range;
+    }
 
     range.document = i_source;
     auto sourceView = m_sourceView.substr(currentOffset, offset - currentOffset);
-    qDebug() << "sourceView.length(): " << sourceView.length() << '\n';
-    size_t line = 0, col = 0;
-    for (const auto elem : sourceView) {
-        if (elem == char('\n')) {
-            ++line;
-            col = 0;
-        } else {
-            ++col;
-        }
-    }
 
-    if (line == 0) {
-        currentColumn += col;
+    auto pos = ::countOfRowAndColumnToTheEndOfSubstr(sourceView);
+
+    if (pos.first == 0) {
+        currentColumn += pos.second;
     } else {
-        currentColumn = col;
+        currentColumn = pos.second;
     }
-    currentLine += line;
+    currentLine += pos.first;
     currentOffset = offset;
 
     if (length == 0) {
@@ -146,35 +177,19 @@ KDevelop::DocumentRange ReplacementParser::composeNextNodeRange(size_t offset, s
         return range;
     }
 
-    if(offset+length < m_sourceView.length()){
-        sourceView = m_sourceView.substr(offset, length);
-    
-        line = 0;
-        col = 0;
-        for (const auto elem : sourceView) {
-            if (elem == char('\n')) {
-                ++line;
-                col = 0;
-            } else {
-                ++col;
-            }
-        }
-    }
-        
-    
-    
+    sourceView = m_sourceView.substr(offset, length);
+    pos = ::countOfRowAndColumnToTheEndOfSubstr(sourceView);
 
     KTextEditor::Cursor start(currentLine, currentColumn);
 
     size_t endCol;
-
-    if (line == 0) {
-        endCol = currentColumn + col;
+    if (pos.first == 0) {
+        endCol = currentColumn + pos.second;
     } else {
-        endCol = col;
+        endCol = pos.second;
     }
 
-    KTextEditor::Cursor end(currentLine + line, endCol);
+    KTextEditor::Cursor end(currentLine + pos.first, endCol);
 
     range.setRange(start, end);
 

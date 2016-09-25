@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of KDevelop
  *
  * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
@@ -199,4 +199,4 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 
     KDevelop::OutputExecuteJob::childProcessExited(exitCode, exitStatus);
 }
-}//namespace ClangTidy
+} // namespace ClangTidy

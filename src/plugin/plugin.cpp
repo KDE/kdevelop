@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of KDevelop
  *
  * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
@@ -279,7 +279,6 @@ KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConf
     config->setActiveChecksReceptorList(&m_activeChecks);
     config->setList(m_allChecks);
     return config;
-    
 }
 
 KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
@@ -289,6 +288,6 @@ KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
     }
     return new ClangtidyPreferences(this, parent);
 }
-} //namespace ClangTidy
+} // namespace ClangTidy
 
 #include "plugin.moc"

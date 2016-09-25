@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of KDevelop
  *
  * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
@@ -36,14 +36,20 @@ class ClangtidyParser : public QObject
 public:
     explicit ClangtidyParser(QObject* parent = nullptr);
     ~ClangtidyParser() = default;
-
+    /**
+     * \return all problems collected from clang-tidy stdout.
+     */
     QVector<KDevelop::IProblem::Ptr> problems() const { return m_problems; }
 
     void parse();
+
+    /**
+     * \brief meant to be used by Job class to pass the standard output to be parsed.
+     */
     void addData(const QStringList& stdoutList) { m_stdout = stdoutList; }
 
 private:
-    QVector<KDevelop::IProblem::Ptr> m_problems;
+    QVector<KDevelop::IProblem::Ptr> m_problems; ///< problems collected from clang-tidy stdout.
     QStringList m_stdout;
 };
 } // namespace ClangTidy
