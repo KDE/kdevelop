@@ -53,4 +53,16 @@ Replacements:
     Offset:          10957
     Length:          1
     ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          14994000
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          15055000
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          150600000
+    Length:          15
+    ReplacementText: '  // namespace ClangTidy'
 ...
