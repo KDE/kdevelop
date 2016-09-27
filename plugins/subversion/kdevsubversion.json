@@ -7,7 +7,7 @@
             }
         ], 
         "Category": "Version Control", 
-        "Description": "This plugin integrates subversion to KDevelop.", 
+        "Description": "This plugin integrates Subversion to KDevelop.", 
         "Description[ca@valencia]": "Este connector integra el «subversion» en el KDevelop.", 
         "Description[ca]": "Aquest connector integra el «subversion» en el KDevelop.", 
         "Description[cs]": "Tento modul integruje podporu pro subversion v KDevelop", 
