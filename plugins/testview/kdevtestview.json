@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Miha Čančula"
+                "Name": "Miha Čančula", 
+                "Name[x-test]": "xxMiha Čančulaxx"
             }
         ], 
         "Category": "Testing", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Vos permet veure i executar proves unitàries.", 
         "Description[ca]": "Us permet veure i executar proves unitàries.", 
         "Description[de]": "Unit-Tests anzeigen und ausführen.", 
-        "Description[en_GB]": "Lets you see and run unit tests.", 
         "Description[es]": "Le permite ver y ejecutar pruebas unitarias.", 
         "Description[et]": "Ühiktestide näitamine ja käivitamine.", 
         "Description[fi]": "Mahdollistaa yksikkötestien tarkastelemisen ja suorittamisen.", 
@@ -33,7 +33,6 @@
         "Name[ca@valencia]": "Vista de proves unitàries", 
         "Name[ca]": "Vista de proves unitàries", 
         "Name[de]": "Unittest-Ansicht", 
-        "Name[en_GB]": "Unit Test View", 
         "Name[es]": "Vista de la prueba unitaria", 
         "Name[et]": "Ühiktestide vaade", 
         "Name[fi]": "Yksikkötestinäkymä", 
@@ -44,6 +43,7 @@
         "Name[pl]": "Widok jednostkowego testu", 
         "Name[pt]": "Área de Testes Unitários", 
         "Name[pt_BR]": "Exibição de testes unitários", 
+        "Name[ru]": "Панель модульных тестов", 
         "Name[sk]": "Pohľad unit testov", 
         "Name[sl]": "Prikaz preizkusov enot", 
         "Name[sv]": "Visning av enhetstester", 

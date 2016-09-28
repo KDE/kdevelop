@@ -3,7 +3,8 @@
         "Authors": [
             {
                 "Email": "aleixpol@kde.org", 
-                "Name": "Aleix Pol"
+                "Name": "Aleix Pol", 
+                "Name[x-test]": "xxAleix Polxx"
             }
         ], 
         "Category": "Version Control", 
@@ -11,7 +12,6 @@
         "Description[ca@valencia]": "Este connector proporciona la integració entre els projectes i la seua infraestructura de VCS", 
         "Description[ca]": "Aquest connector proporciona la integració entre els projectes i la seva infraestructura de VCS", 
         "Description[de]": "Dieses Modul stellt eine Integration zwischen Projekten und ihrer VCS-Infrastruktur her.", 
-        "Description[en_GB]": "This plugin provides integration between the projects and their VCS infrastructure", 
         "Description[es]": "Este complemento proporciona integración entre los proyectos y su infraestructura VCS", 
         "Description[et]": "See plugin võimaldab lõimida projektid ja nende versioonihalduse infrastruktuuri", 
         "Description[fi]": "Tämä liitännäinen tarjoaa projektien ja niiden versionhallintajärjestelmien välisen integraation", 
@@ -34,7 +34,6 @@
         "Name[ca@valencia]": "Integració de VCS", 
         "Name[ca]": "Integració de VCS", 
         "Name[de]": "VCS-Integration", 
-        "Name[en_GB]": "VCS Integration", 
         "Name[es]": "Integración VCS", 
         "Name[et]": "Versioonihalduse lõimimine", 
         "Name[fi]": "VCS-integraatio", 
@@ -45,6 +44,7 @@
         "Name[pl]": "Integracja VCS", 
         "Name[pt]": "Integração com o SCV", 
         "Name[pt_BR]": "Integração com o VCS", 
+        "Name[ru]": "Интеграция VCS", 
         "Name[sk]": "Integrácia VCS", 
         "Name[sl]": "Vgradnja nadzora različic", 
         "Name[sv]": "Integrering av VCS", 

@@ -2,7 +2,9 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Alexander Dymo"
+                "Name": "Alexander Dymo", 
+                "Name[uk]": "Олександр Димо", 
+                "Name[x-test]": "xxAlexander Dymoxx"
             }
         ], 
         "Category": "Core", 
@@ -10,7 +12,6 @@
         "Description[ca@valencia]": "Assistent d'aplicació", 
         "Description[ca]": "Assistent d'aplicació", 
         "Description[de]": "Anwendungsassistent", 
-        "Description[en_GB]": "Application Wizard", 
         "Description[es]": "Asistente de aplicaciones", 
         "Description[et]": "Rakenduse nõustaja", 
         "Description[fi]": "Opastettu sovelluksen luonti", 
@@ -32,8 +33,8 @@
         "Name": "New Project Wizard", 
         "Name[ca@valencia]": "Assistent de projecte nou", 
         "Name[ca]": "Assistent de projecte nou", 
+        "Name[cs]": "Průvodce novým projektem", 
         "Name[de]": "Projekt-Assistent", 
-        "Name[en_GB]": "New Project Wizard", 
         "Name[es]": "Asistente de nuevo proyecto", 
         "Name[et]": "Uue projekti nõustaja", 
         "Name[fi]": "Uuden projektin opastettu luonti", 
@@ -44,6 +45,7 @@
         "Name[pl]": "Pomocnik nowego projektu", 
         "Name[pt]": "Assistente de Novos Projectos", 
         "Name[pt_BR]": "Assistente de novo projeto", 
+        "Name[ru]": "Мастер создания проекта", 
         "Name[sk]": "Sprievodca novým projektom", 
         "Name[sl]": "Čarovnik za nov projekt", 
         "Name[sv]": "Ny projektguide", 

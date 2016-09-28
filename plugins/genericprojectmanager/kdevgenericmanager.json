@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Milian Wolff"
+                "Name": "Milian Wolff", 
+                "Name[x-test]": "xxMilian Wolffxx"
             }
         ], 
         "Category": "Project Management", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Permet al KDevelop gestionar projectes genèrics", 
         "Description[ca]": "Permet al KDevelop gestionar projectes genèrics", 
         "Description[de]": "Zum Verwalten allgemeiner Projekte in KDevelop", 
-        "Description[en_GB]": "Allow KDevelop to manage generic projects", 
         "Description[es]": "Permite que KDevelop use proyectos genéricos", 
         "Description[et]": "Võimaldab KDevelopil hallata üldisi projekte", 
         "Description[fi]": "Sallii KDevelop-ohjelman hallita yleisiä projekteja", 
@@ -32,7 +32,6 @@
         "Name[ca@valencia]": "Gestor de projectes genèric", 
         "Name[ca]": "Gestor de projectes genèric", 
         "Name[de]": "Allgemeine Projektverwaltung", 
-        "Name[en_GB]": "Generic Project Manager", 
         "Name[es]": "Gestor de proyectos genéricos", 
         "Name[et]": "Üldine projektihaldur", 
         "Name[fi]": "Yleinen projektinhallinta", 
@@ -43,6 +42,7 @@
         "Name[pl]": "Zwykłe zarządzanie projektami", 
         "Name[pt]": "Gestor de Projectos Genérico", 
         "Name[pt_BR]": "Gerenciador de projetos genérico", 
+        "Name[ru]": "Управление произвольными проектами", 
         "Name[sk]": "Všeobecný správca projektov", 
         "Name[sl]": "Splošni upravljalnik projektov", 
         "Name[sv]": "Generell projekthantering", 

@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "David Nolden"
+                "Name": "David Nolden", 
+                "Name[x-test]": "xxDavid Noldenxx"
             }
         ], 
         "Category": "Utilities", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Este connector permet revisar pedaços directament en l'editor.", 
         "Description[ca]": "Aquest connector permet revisar pedaços directament en l'editor.", 
         "Description[de]": "Dieses Modul ermöglicht es, Patches direkt im Editor durchzusehen.", 
-        "Description[en_GB]": "This plugin allows reviewing patches directly in the editor.", 
         "Description[es]": "Este complemento permite la revisión de parches directamente en el editor.", 
         "Description[et]": "See plugin võimaldab paiku üle vaadata otse redaktoris.", 
         "Description[fi]": "Tämä liitännäinen salli korjausten katselmoinnin suoraan editorissa.", 
@@ -33,7 +33,6 @@
         "Name[ca@valencia]": "Revisió del pedaç", 
         "Name[ca]": "Revisió del pedaç", 
         "Name[de]": "Patch-Durchsicht", 
-        "Name[en_GB]": "Patch Review", 
         "Name[es]": "Revisión de parches", 
         "Name[et]": "Paikade läbivaatus", 
         "Name[fi]": "Korjauksen katselmointi", 
@@ -44,6 +43,7 @@
         "Name[pl]": "Przeglądanie poprawek", 
         "Name[pt]": "Revisão da Modificação", 
         "Name[pt_BR]": "Revisão da modificação", 
+        "Name[ru]": "Рецензирование патчей", 
         "Name[sk]": "Zhodnotenie záplaty", 
         "Name[sl]": "Pregled popravkov", 
         "Name[sv]": "Granska programfixar", 

@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Dukju Ahn"
+                "Name": "Dukju Ahn", 
+                "Name[x-test]": "xxDukju Ahnxx"
             }
         ], 
         "Category": "Version Control", 
@@ -11,7 +12,6 @@
         "Description[ca]": "Aquest connector integra el «subversion» en el KDevelop.", 
         "Description[cs]": "Tento modul integruje podporu pro subversion v KDevelop", 
         "Description[de]": "Dieses Modul integriert Subversion in KDevelop.", 
-        "Description[en_GB]": "This plugin integrates subversion to KDevelop.", 
         "Description[es]": "Este complemento integra Subversion en KDevelop", 
         "Description[et]": "See plugin lõimib Subversioni KDevelopiga.", 
         "Description[fi]": "Tämä liitännäinen integroi subversionin KDevelopiin.", 
@@ -35,7 +35,6 @@
         "Name[ca]": "Implementació del «subversion»", 
         "Name[cs]": "Podpora subversion", 
         "Name[de]": "Subversion-Unterstützung", 
-        "Name[en_GB]": "Subversion Support", 
         "Name[es]": "Implementación de Subversion", 
         "Name[et]": "Subversioni toetus", 
         "Name[fi]": "Subversion-tuki", 
@@ -46,6 +45,7 @@
         "Name[pl]": "Obsługa Subversion", 
         "Name[pt]": "Suporte para o Subversion", 
         "Name[pt_BR]": "Suporte a Subversion", 
+        "Name[ru]": "Поддержка Subversion", 
         "Name[sk]": "Podpora subversion", 
         "Name[sl]": "Podpora za Subversion", 
         "Name[sv]": "Stöd för Subversion", 

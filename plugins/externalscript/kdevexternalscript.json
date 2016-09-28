@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Milian Wolff"
+                "Name": "Milian Wolff", 
+                "Name[x-test]": "xxMilian Wolffxx"
             }
         ], 
         "Category": "Utilities", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Executa scripts externs o aplicacions per a manipular el contingut de l'editor o altres accions arbitràries.", 
         "Description[ca]": "Executa scripts externs o aplicacions per a manipular el contingut de l'editor o altres accions arbitràries.", 
         "Description[de]": "Führen Sie externe Skripte oder Programme zum Verändern des Editorinhalts oder für beliebige andere Aktionen aus.", 
-        "Description[en_GB]": "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions.", 
         "Description[es]": "Ejecutar scripts externos o aplicaciones para manipular el contenido del editor o realizar otras acciones.", 
         "Description[et]": "Välised skriptid või rakendused, mis võimaldavad muuta redaktori sisu või ette võtta mingeid muid toiminguid.", 
         "Description[fi]": "Suorittaa ulkoisia skriptejä tai sovelluksia editorisisällön manipuloimiseksi tai muiden satunnaisten tehtävien tekemiseksi.", 
@@ -34,7 +34,6 @@
         "Name[ca]": "Scripts externs", 
         "Name[cs]": "Externí skripty", 
         "Name[de]": "Externe Skripte", 
-        "Name[en_GB]": "External Scripts", 
         "Name[es]": "Scripts externos", 
         "Name[et]": "Välised skriptid", 
         "Name[fi]": "Ulkoiset skriptit", 
@@ -45,6 +44,7 @@
         "Name[pl]": "Zewnętrzne skrypty", 
         "Name[pt]": "Programas Externos", 
         "Name[pt_BR]": "Scripts externos", 
+        "Name[ru]": "Внешние сценарии", 
         "Name[sk]": "Externé skripty", 
         "Name[sl]": "Zunanji skripti", 
         "Name[sv]": "Externa skript", 

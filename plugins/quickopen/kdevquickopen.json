@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "David Nolden"
+                "Name": "David Nolden", 
+                "Name[x-test]": "xxDavid Noldenxx"
             }
         ], 
         "Category": "Core", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Este connector permet un ràpid accés als fitxers del projecte i a elements del llenguatge com classes/funcions.", 
         "Description[ca]": "Aquest connector permet un ràpid accés als fitxers del projecte i a elements del llenguatge com classes/funcions.", 
         "Description[de]": "Dieses Modul bietet schnellen Zugriff auf Projektdateien und Sprachelemente wie Klassen und Funktionen.", 
-        "Description[en_GB]": "This plugin allows quick access to project files and language-items like classes/functions.", 
         "Description[es]": "Este complemento permite acceder rápidamente a los archivos del proyecto y a elementos del lenguaje, como clases y funciones.", 
         "Description[et]": "See plugin pakub kiiret ligipääsu projekti failidele ja keele elementidele, näiteks klassidele ja funktsioonidele.", 
         "Description[fi]": "Tämä liitännäinen mahdollistaa projektitiedostojen nopean haun ja kielialkiot kuten luokat/funktiot.", 
@@ -32,8 +32,8 @@
         "Name": "Quick Open", 
         "Name[ca@valencia]": "Obertura ràpida", 
         "Name[ca]": "Obertura ràpida", 
+        "Name[cs]": "Rychle otevřít", 
         "Name[de]": "Schnellöffner", 
-        "Name[en_GB]": "Quick Open", 
         "Name[es]": "Apertura rápida", 
         "Name[et]": "Kiiravamine", 
         "Name[fi]": "Pika-avaus", 
@@ -44,6 +44,7 @@
         "Name[pl]": "Szybkie otwarcie", 
         "Name[pt]": "Abertura Rápida", 
         "Name[pt_BR]": "Abertura rápida", 
+        "Name[ru]": "Быстрый переход", 
         "Name[sk]": "Rýchlo otvoriť", 
         "Name[sl]": "Hitro odpiranje", 
         "Name[sv]": "Snabböppna", 

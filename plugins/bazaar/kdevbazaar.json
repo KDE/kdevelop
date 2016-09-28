@@ -4,7 +4,8 @@
         "Authors": [
             {
                 "Email": "d82ks8djf82msd83hf8sc02lqb5gh5@gmail.com", 
-                "Name": "Maciej Poleski"
+                "Name": "Maciej Poleski", 
+                "Name[x-test]": "xxMaciej Poleskixx"
             }
         ], 
         "Category": "Version Control", 
@@ -13,7 +14,6 @@
         "Description[ca]": "Aquest connector integra Bazaar al KDevelop", 
         "Description[cs]": "Tento modul integruje podporu pro Bazaar v KDevelop", 
         "Description[de]": "Dieses Modul integriert Bazaar in KDevelop", 
-        "Description[en_GB]": "This plugin integrates Bazaar to KDevelop", 
         "Description[es]": "Este complemento integra Bazaar en KDevelop", 
         "Description[et]": "See plugin lõimib Bazaari KDevelopiga", 
         "Description[fi]": "Tämä liitännäinen integroi Bazaarin KDevelop-ympäristöön", 
@@ -37,7 +37,6 @@
         "Name[ca]": "Implementació de Bazaar", 
         "Name[cs]": "Podpora Bazaar", 
         "Name[de]": "Bazaar-Unterstützung", 
-        "Name[en_GB]": "Bazaar Support", 
         "Name[es]": "Implementación de Bazaar", 
         "Name[et]": "Bazaari toetus", 
         "Name[fi]": "Bazaar-tuki", 
@@ -49,6 +48,7 @@
         "Name[pl]": "Obsługa Bazaar", 
         "Name[pt]": "Suporte para o Bazaar", 
         "Name[pt_BR]": "Suporte a Bazaar", 
+        "Name[ru]": "Поддержка Bazaar", 
         "Name[sk]": "Podpora Bazaar", 
         "Name[sl]": "Podpora za Bazaar", 
         "Name[sv]": "Stöd för Bazaar", 

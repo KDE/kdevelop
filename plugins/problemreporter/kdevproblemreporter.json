@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Hamish Rodda"
+                "Name": "Hamish Rodda", 
+                "Name[x-test]": "xxHamish Roddaxx"
             }
         ], 
         "Category": "Utilities", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Este connector permet mostrar errors en el codi font.", 
         "Description[ca]": "Aquest connector permet mostrar errors en el codi font.", 
         "Description[de]": "Dieses Modul zeigt Fehler im Quelltext an.", 
-        "Description[en_GB]": "This plugin shows errors in source code.", 
         "Description[es]": "Este complemento muestra errores en el código fuente.", 
         "Description[et]": "See plugin näitab vigu lähtekoodis.", 
         "Description[fi]": "Tämä liitännäinen näyttää virheet lähdekoodissa.", 
@@ -33,7 +33,6 @@
         "Name[ca@valencia]": "Vista del notificador de problemes", 
         "Name[ca]": "Vista del notificador de problemes", 
         "Name[de]": "Ansicht für Fehlerberichte", 
-        "Name[en_GB]": "Problem Reporter View", 
         "Name[es]": "Vista del notificador de problemas", 
         "Name[et]": "Probleemide teavitaja vaade", 
         "Name[fi]": "Ongelmailmoitinnäkymä", 
@@ -43,7 +42,8 @@
         "Name[nl]": "Probleemrapporteuroverzicht", 
         "Name[pl]": "Widok raportów o problemach", 
         "Name[pt]": "Área de Relatórios de Erros", 
-        "Name[pt_BR]": "Área de Relatórios de Erros", 
+        "Name[pt_BR]": "Área do relatórios de erros", 
+        "Name[ru]": "Панель диагностики проблем", 
         "Name[sk]": "Pohľad na zadávač problémov", 
         "Name[sl]": "Prikaz poročevalca o težavah", 
         "Name[sv]": "Problemrapporteringsvisning", 

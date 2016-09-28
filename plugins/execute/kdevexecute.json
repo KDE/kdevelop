@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Hamish Rodda"
+                "Name": "Hamish Rodda", 
+                "Name[x-test]": "xxHamish Roddaxx"
             }
         ], 
         "Category": "Core", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Este connector permet executar programes sense «instrumentor», és a dir, nativament per a la màquina actual.", 
         "Description[ca]": "Aquest connector permet executar programes sense «instrumentor», és a dir, nativament per a la màquina actual.", 
         "Description[de]": "Dieses Modul erlaubt das Ausführen von Programmen im Kontext des Betriebssystems.", 
-        "Description[en_GB]": "This plugin allows running of programs with no instrumentor, ie. natively by the current host.", 
         "Description[es]": "Este complemento permite ejecutar programas sin instrumentador (es decir, de forma nativa) en la máquina actual.", 
         "Description[et]": "See plugin võimaldab panna programme aktiivses masinas tööle ilma instrumentaatorita, s.t loomulikult.", 
         "Description[fi]": "Tämä liitännäinen mahdollistaa ohjelmien suorittamisen ilman välikappaletta, ts. natiivisti nykyisellä tietokoneella.", 
@@ -34,7 +34,6 @@
         "Name[ca]": "Executa programes", 
         "Name[cs]": "Spustit programy", 
         "Name[de]": "Programme ausführen", 
-        "Name[en_GB]": "Execute Programs", 
         "Name[es]": "Ejecutar programas", 
         "Name[et]": "Programmide täitmine", 
         "Name[fi]": "Ohjelmien suorittaminen", 
@@ -45,6 +44,7 @@
         "Name[pl]": "Wykonaj programy", 
         "Name[pt]": "Execução de Programas", 
         "Name[pt_BR]": "Executar programas", 
+        "Name[ru]": "Запуск программ", 
         "Name[sk]": "Spustiť programy", 
         "Name[sl]": "Izvedi programe", 
         "Name[sv]": "Kör program", 

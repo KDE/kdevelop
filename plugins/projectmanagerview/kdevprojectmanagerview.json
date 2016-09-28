@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Roberto Raggi"
+                "Name": "Roberto Raggi", 
+                "Name[x-test]": "xxRoberto Raggixx"
             }
         ], 
         "Category": "Core", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Vos permet gestionar els continguts del projecte.", 
         "Description[ca]": "Us permet gestionar els continguts del projecte.", 
         "Description[de]": "Lässt Sie den Inhalt Ihres Projekts verwalten.", 
-        "Description[en_GB]": "Lets you manage the project contents.", 
         "Description[es]": "Le permite gestionar el contenido del proyecto.", 
         "Description[et]": "Projektide sisu haldamine.", 
         "Description[fi]": "Mahdollistaa projektien sisällön hallinnan.", 
@@ -33,7 +33,6 @@
         "Name[ca@valencia]": "Vista del gestor de projectes", 
         "Name[ca]": "Vista del gestor de projectes", 
         "Name[de]": "Ansicht für Projektverwaltung", 
-        "Name[en_GB]": "Project Manager View", 
         "Name[es]": "Vista del gestor de proyectos", 
         "Name[et]": "Projektihalduri vaade", 
         "Name[fi]": "Projektinhallintanäkymä", 
@@ -44,6 +43,7 @@
         "Name[pl]": "Widok zarządzania projektem", 
         "Name[pt]": "Área do Gestor de Projectos", 
         "Name[pt_BR]": "Visualizador do gerenciador de projeto", 
+        "Name[ru]": "Панель управления проектами", 
         "Name[sk]": "Pohľad na správcu projektu", 
         "Name[sl]": "Prikaz upravljalnika projektov", 
         "Name[sv]": "Projekthanteringsvisning", 

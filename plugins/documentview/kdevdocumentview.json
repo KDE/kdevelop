@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Adam Treat"
+                "Name": "Adam Treat", 
+                "Name[x-test]": "xxAdam Treatxx"
             }
         ], 
         "Category": "Utilities", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Este connector mostra una visualització gràfica de tots els documents carregats actualment, separats per tipus MIME.", 
         "Description[ca]": "Aquest connector mostra una visualització gràfica de tots els documents carregats actualment, separats per tipus MIME.", 
         "Description[de]": "Dieses Modul zeigt alle aktuell geladenen Dokumente getrennt nach ihren MIME-Typen an.", 
-        "Description[en_GB]": "This plugin displays a graphical view of all documents currently loaded and separates them by mimetype.", 
         "Description[es]": "Este complemento muestra una vista gráfica de todos los documentos actualmente cargados y los separa por su tipo MIME.", 
         "Description[et]": "See plugin näitab graafiliselt kõiki laaditud dokumente ja eraldab need MIME tüübi alusel.", 
         "Description[fi]": "Tämä liitännäinen näyttää kaikkien parhaillaan ladattujen tiedostojen graafisen näkymän ja erottelee ne MIME-tyypin perusteella.", 
@@ -34,7 +34,6 @@
         "Name[ca]": "Visor de document", 
         "Name[cs]": "Pohled na dokumenty", 
         "Name[de]": "Dokumentansicht", 
-        "Name[en_GB]": "Document View", 
         "Name[es]": "Vista de documento", 
         "Name[et]": "Dokumendivaade", 
         "Name[fi]": "Tiedostonäkymä", 
@@ -44,7 +43,8 @@
         "Name[nl]": "Documentweergave", 
         "Name[pl]": "Widok dokumentu", 
         "Name[pt]": "Área de Documentos", 
-        "Name[pt_BR]": "Área de Documentos", 
+        "Name[pt_BR]": "Área de documentos", 
+        "Name[ru]": "Панель документов", 
         "Name[sk]": "Pohľad na dokumenty", 
         "Name[sl]": "Prikaz dokumentov", 
         "Name[sv]": "Dokumentvisning", 

@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Milian Wolff"
+                "Name": "Milian Wolff", 
+                "Name[x-test]": "xxMilian Wolffxx"
             }
         ], 
         "Category": "Project Management", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Configura quins fitxers i carpetes dins de la carpeta del projecte s'han d'incloure o excloure.", 
         "Description[ca]": "Configura quins fitxers i carpetes dins de la carpeta del projecte s'han d'incloure o excloure.", 
         "Description[de]": "Legt fest, welche Dateien und Ordner innerhalb des Projektordners ein- oder ausgeschlossen werden sollen.", 
-        "Description[en_GB]": "Configure which files and folders inside the project folder should be included or excluded.", 
         "Description[es]": "Configurar los archivos y carpetas que pertenecen a la carpeta del proyecto y que deben ser incluidos o excluidos.", 
         "Description[et]": "Määramine, millised projektikataloogi failid ja kataloogid kaasata või välja jätta.", 
         "Description[fi]": "Valitse, mitkä projektikansiossa olevat tiedostot ja kansiot pitäisi ottaa mukaan ja mitkä pitäisi jättää pois.", 
@@ -31,8 +31,8 @@
         "Name": "Project Filter", 
         "Name[ca@valencia]": "Filtre de projecte", 
         "Name[ca]": "Filtre de projecte", 
+        "Name[cs]": "Filtr projektů", 
         "Name[de]": "Projektfilter", 
-        "Name[en_GB]": "Project Filter", 
         "Name[es]": "Filtro del proyecto", 
         "Name[et]": "Projektifilter", 
         "Name[fi]": "Projektisuodatin", 
@@ -43,6 +43,7 @@
         "Name[pl]": "Filtr projektu", 
         "Name[pt]": "Filtro de Projectos", 
         "Name[pt_BR]": "Filtro de projetos", 
+        "Name[ru]": "Фильтр проекта", 
         "Name[sk]": "Filter projektu", 
         "Name[sl]": "Filter projektov", 
         "Name[sv]": "Projektfilter", 

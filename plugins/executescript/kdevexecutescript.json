@@ -2,14 +2,14 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Niko Sams"
+                "Name": "Niko Sams", 
+                "Name[x-test]": "xxNiko Samsxx"
             }
         ], 
         "Description": "This plugin allows running of scripts.", 
         "Description[ca@valencia]": "Este connector permet executar scripts.", 
         "Description[ca]": "Aquest connector permet executar scripts.", 
         "Description[de]": "Dieses Modul ermöglicht das Ausführen von Skripten.", 
-        "Description[en_GB]": "This plugin allows running of scripts.", 
         "Description[es]": "Este complemento permite la ejecución de scripts.", 
         "Description[et]": "See plugin võimaldab käivitada skripte.", 
         "Description[fi]": "Tämä liitännäinen mahdollistaa skriptien suorittamisen.", 
@@ -33,7 +33,6 @@
         "Name[ca]": "Executa scripts", 
         "Name[cs]": "Spustit skripty", 
         "Name[de]": "Skripte ausführen", 
-        "Name[en_GB]": "Execute Scripts", 
         "Name[es]": "Ejecutar scripts", 
         "Name[et]": "Skriptide käivitamine", 
         "Name[fi]": "Skriptien suorittaminen", 
@@ -44,6 +43,7 @@
         "Name[pl]": "Wykonaj skrypty", 
         "Name[pt]": "Executar Programas", 
         "Name[pt_BR]": "Executar scripts", 
+        "Name[ru]": "Запуск сценариев", 
         "Name[sk]": "Spustiť skripty", 
         "Name[sl]": "Izvedi skripte", 
         "Name[sv]": "Kör skript", 

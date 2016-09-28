@@ -2,7 +2,9 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Alexander Dymo"
+                "Name": "Alexander Dymo", 
+                "Name[uk]": "Олександр Димо", 
+                "Name[x-test]": "xxAlexander Dymoxx"
             }
         ], 
         "Category": "Core", 
@@ -10,7 +12,6 @@
         "Description[ca@valencia]": "Gestiona les plantilles dels fitxers de codi font", 
         "Description[ca]": "Gestiona les plantilles dels fitxers de codi font", 
         "Description[de]": "Verwaltung von Vorlagen für Quelltextdateien", 
-        "Description[en_GB]": "Manages templates for source files", 
         "Description[es]": "Gestiona plantillas para los archivos de código fuente", 
         "Description[et]": "Lähtekoodi failide mallide haldamine", 
         "Description[fi]": "Hallitsee lähdekooditiedostojen malleja", 
@@ -33,7 +34,6 @@
         "Name[ca@valencia]": "Configuració de les plantilles de fitxer", 
         "Name[ca]": "Configuració de les plantilles de fitxer", 
         "Name[de]": "Einrichtung der Dateivorlagen", 
-        "Name[en_GB]": "File Templates Configuration", 
         "Name[es]": "Configuración de las plantillas de archivos", 
         "Name[et]": "Failimallide seadistamine", 
         "Name[fi]": "Tiedostomallien asetukset", 
@@ -44,6 +44,7 @@
         "Name[pl]": "Ustawienia szablonów plików", 
         "Name[pt]": "Configuração dos Modelos de Ficheiros", 
         "Name[pt_BR]": "Configuração dos modelos de arquivos", 
+        "Name[ru]": "Настройка шаблонов файлов", 
         "Name[sk]": "Nastavenie šablón súborov", 
         "Name[sl]": "Nastavitev predlog dokumentov", 
         "Name[sv]": "Inställning av filmallar", 
