@@ -2,7 +2,9 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Aleix Pol"
+                "Name": "Aleix Pol", 
+                "Name[ru]": "Aleix Pol Gonzalez", 
+                "Name[x-test]": "xxAleix Polxx"
             }
         ], 
         "Category": "Utilities", 
@@ -10,7 +12,6 @@
         "Description[ca@valencia]": "Este connector ajuda a obtindre els projectes KDE", 
         "Description[ca]": "Aquest connector ajuda a obtenir els projectes KDE", 
         "Description[de]": "Dieses Modul hilft dabei KDE-Projekte zu beziehen", 
-        "Description[en_GB]": "This plugin helps to obtain KDE projects", 
         "Description[es]": "Este complemento le ayuda a obtener proyectos de KDE", 
         "Description[et]": "See plugin aitab hankida KDE projekte", 
         "Description[fi]": "Tämä liitännäinen auttaa KDE-projektien hakemisessa", 
@@ -34,7 +35,6 @@
         "Name[ca]": "Proveïdor del KDE", 
         "Name[cs]": "Poskytovatel KDE", 
         "Name[de]": "KDE-Provider", 
-        "Name[en_GB]": "KDE Provider", 
         "Name[es]": "Proveedor de KDE", 
         "Name[et]": "KDE pakkuja", 
         "Name[fi]": "KDE-tarjoaja", 

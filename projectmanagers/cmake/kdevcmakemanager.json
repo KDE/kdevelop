@@ -3,7 +3,8 @@
         "Authors": [
             {
                 "Email": "mattr@kde.org", 
-                "Name": "Matt Rogers"
+                "Name": "Matt Rogers", 
+                "Name[x-test]": "xxMatt Rogersxx"
             }
         ], 
         "Category": "Project Management", 
@@ -12,7 +13,6 @@
         "Description[ca]": "Permet que el KDevelop gestioni projectes basats en CMake", 
         "Description[cs]": "Umožňuje KDevelop spravovat projekty založené na CMake", 
         "Description[de]": "Erlaubt das Verwalten CMake-basierter Projekte mit KDevelop", 
-        "Description[en_GB]": "Allows KDevelop to manage CMake-based projects", 
         "Description[es]": "Permite que KDevelop gestione proyectos basados en CMake", 
         "Description[et]": "Võimaldab KDevelopil hallata CMake'i põhiseid projekte", 
         "Description[fi]": "Sallii KDevelop-ohjelman hallinnoida CMake-perustaisia projekteja", 
@@ -36,7 +36,6 @@
         "Name[ca]": "Gestor de projectes CMake", 
         "Name[cs]": "Správce projektů CMake", 
         "Name[de]": "CMake-Projektverwaltung", 
-        "Name[en_GB]": "CMake Project Manager", 
         "Name[es]": "Gestor de proyectos CMake", 
         "Name[et]": "CMake'i projektihaldur", 
         "Name[fi]": "CMake-projektinhallinta", 
@@ -67,7 +66,7 @@
     "X-KDevelop-Mode": "GUI", 
     "X-KDevelop-ProjectFilesFilter": [
         "CMakeLists.txt"
-    ],
+    ], 
     "X-KDevelop-ProjectFilesFilterDescription": "CMake Project Files", 
     "X-KDevelop-SupportedMimeTypes": [
         "text/x-cmake"

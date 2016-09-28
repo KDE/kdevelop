@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Cedric Pasteur, Matthias Hölzer-Klüpfel"
+                "Name": "Cedric Pasteur, Matthias Hölzer-Klüpfel", 
+                "Name[x-test]": "xxCedric Pasteur, Matthias Hölzer-Klüpfelxx"
             }
         ], 
         "Category": "Utilities", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Un connector per a formatar el codi font d'acord a un conjunt especificat de regles", 
         "Description[ca]": "Un connector per a formatar el codi font d'acord a un conjunt especificat de regles", 
         "Description[de]": "Modul zum Formatieren von Quelltext nach bestimmten Vorschriften", 
-        "Description[en_GB]": "A plugin for formatting of sourcecode according to a specified set of rules", 
         "Description[es]": "Un complemento para formatear código fuente según el conjunto de reglas indicado", 
         "Description[et]": "Plugin lähtekoodi vormindamiseks vastavalt konkreetsetele reeglitele.", 
         "Description[fi]": "Liitännäinen lähdekoodin muotoilemiseen määritellyn sääntöjoukon mukaan", 
@@ -33,7 +33,6 @@
         "Name[ca@valencia]": "Dorsal del formatador AStyle", 
         "Name[ca]": "Dorsal del formatador AStyle", 
         "Name[de]": "AStyle-Formatierer", 
-        "Name[en_GB]": "AStyle Formatter Backend", 
         "Name[es]": "Motor de formateo AStyle", 
         "Name[et]": "AStyle'i vormindamise taustaprogramm", 
         "Name[fi]": "AStyle-muotoilijataustaohjelma", 

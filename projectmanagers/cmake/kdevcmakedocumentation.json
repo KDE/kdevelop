@@ -3,7 +3,9 @@
         "Authors": [
             {
                 "Email": "aleixpol@kde.org", 
-                "Name": "Aleix Pol"
+                "Name": "Aleix Pol", 
+                "Name[ru]": "Aleix Pol Gonzalez", 
+                "Name[x-test]": "xxAleix Polxx"
             }
         ], 
         "Category": "Documentation", 
@@ -12,7 +14,6 @@
         "Description[ca]": "Permet al KDevelop proporcionar documentació de CMake", 
         "Description[cs]": "Umožňuje KDevelop poskytovat dokumentaci CMake", 
         "Description[de]": "Ermöglicht das Bereitstellen von Dokumentation für CMake", 
-        "Description[en_GB]": "Allows KDevelop to provide CMake documentation", 
         "Description[es]": "Permite que KDevelop proporcione documentación de CMake", 
         "Description[et]": "Võimaldab KDevelopil pakkuda CMake'i dokumentatsiooni", 
         "Description[fi]": "Sallii KDevelop-ohjelman tarjota CMake-dokumentaation", 
@@ -36,7 +37,6 @@
         "Name[ca]": "Documentació del CMake", 
         "Name[cs]": "Dokumentace CMake", 
         "Name[de]": "CMake-Dokumentation", 
-        "Name[en_GB]": "CMake Documentation", 
         "Name[es]": "Documentación de CMake", 
         "Name[et]": "CMake'i dokumentatsioon", 
         "Name[fi]": "CMake-dokumentaatio", 

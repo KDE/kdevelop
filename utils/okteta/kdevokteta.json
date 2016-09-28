@@ -36,7 +36,8 @@
         "Authors": [
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ], 
         "Category": "Utilities", 
@@ -44,11 +45,11 @@
         "Description[ca@valencia]": "Editor hexadecimal del KDevelop basat en l'Okteta", 
         "Description[ca]": "Editor hexadecimal del KDevelop basat en l'Okteta", 
         "Description[de]": "Auf Okteta basierender Hex-Editor für KDevelop", 
-        "Description[en_GB]": "KDevelop Hex Editor based on Okteta", 
         "Description[es]": "Editor hexadecimal de KDevelop basado en Okteta", 
         "Description[et]": "KDevelopi binaarfailide redaktor Okteta põhjal", 
         "Description[fi]": "KDevelopin Oktetaan perustuva heksaeditori", 
         "Description[gl]": "Editor hexadecimal do KDevelop baseado no Okteta", 
+        "Description[it]": "Editor esadecimale di KDevelop basato su Okteta", 
         "Description[nl]": "Hex-bewerker van KDevelop gebaseerd op Okteta", 
         "Description[pl]": "Edytor szesnastkowy KDevelop na podstawie Oktety", 
         "Description[pt]": "Editor Hexadecimal do KDevelop, baseado no Okteta", 
@@ -64,8 +65,8 @@
         "Name": "Okteta Integration", 
         "Name[ca@valencia]": "Integració de l'Okteta", 
         "Name[ca]": "Integració de l'Okteta", 
+        "Name[cs]": "Integrace Oktety", 
         "Name[de]": "Integration von Okteta", 
-        "Name[en_GB]": "Okteta Integration", 
         "Name[es]": "Integración de Okteta", 
         "Name[et]": "Okteta lõimimine", 
         "Name[fi]": "Okteta-integraatio", 

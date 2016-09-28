@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Miquel Sabaté"
+                "Name": "Miquel Sabaté", 
+                "Name[x-test]": "xxMiquel Sabatéxx"
             }
         ], 
         "Category": "Utilities", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Este connector ajuda a obtindre els projectes des de Github", 
         "Description[ca]": "Aquest connector ajuda a obtenir els projectes des de Github", 
         "Description[de]": "Dieses Modul hilft dabei Github-Projekte zu beziehen", 
-        "Description[en_GB]": "This plugin helps to obtain projects from Github", 
         "Description[es]": "Este complemento le ayuda a obtener proyectos de Github", 
         "Description[et]": "See plugin aitab hankida projekte Githubist", 
         "Description[fi]": "Tämä liitännäinen auttaa Github-projektien hakemisessa", 
@@ -34,7 +34,6 @@
         "Name[ca]": "Proveïdor de Github", 
         "Name[cs]": "Poskytovatel GitHubu", 
         "Name[de]": "Github-Provider", 
-        "Name[en_GB]": "Github Provider", 
         "Name[es]": "Proveedor de Github", 
         "Name[et]": "Githubi pakkuja", 
         "Name[fi]": "Github-tarjoaja", 

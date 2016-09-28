@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "David Nolden"
+                "Name": "David Nolden", 
+                "Name[x-test]": "xxDavid Noldenxx"
             }
         ], 
         "Category": "Utilities", 
@@ -10,7 +11,6 @@
         "Description[ca@valencia]": "Un connector per a formatar fitxers C emprant scripts personalitzats", 
         "Description[ca]": "Un connector per a formatar fitxers C emprant scripts personalitzats", 
         "Description[de]": "Ein Modul zum Formatieren von C-Dateien mit Hilfe von eigenen Skripten", 
-        "Description[en_GB]": "A plugin for formatting C files using custom scripts", 
         "Description[es]": "Un complemento para formatear archivos de C usando scripts personalizados", 
         "Description[et]": "Plugin C-failide vormindamiseks kohandatud skriptidega", 
         "Description[fi]": "Liitännäinen C-tiedostojen muotoiluun käyttäen mukautettuja skriptejä", 
@@ -33,7 +33,6 @@
         "Name[ca@valencia]": "Dorsal de l'script formatador personalitzat", 
         "Name[ca]": "Dorsal de l'script formatador personalitzat", 
         "Name[de]": "Backend für einen Formatierer für eigene Skripte", 
-        "Name[en_GB]": "Custom Script Formatter Backend", 
         "Name[es]": "Motor de formateo de scripts personalizados", 
         "Name[et]": "Kohandatud skriptiga vormindaja taustaprogramm", 
         "Name[fi]": "Mukautetun skriptin muotoilijataustaohjelma", 
