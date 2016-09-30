@@ -1,7 +1,5 @@
 configure_file(qtprintersconfig.h.in qtprintersconfig.h)
 
-include_directories(KF5::TextEditor)
-
 add_debuggable_executable(qstring SRCS qstring.cpp)
 target_link_libraries(qstring Qt5::Core)
 
