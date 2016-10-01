@@ -7,8 +7,6 @@ set(kdevcodeutils_PART_SRCS
     codeutilsplugin.cpp
 )
 
-include_directories(CMAKE_CURRENT_BINARY_DIR)
-
 qt5_add_resources(kdevcodeutils_PART_SRCS kdevcodeutils.qrc)
 kdevplatform_add_plugin(kdevcodeutils JSON kdevcodeutils.json SOURCES ${kdevcodeutils_PART_SRCS})
 
