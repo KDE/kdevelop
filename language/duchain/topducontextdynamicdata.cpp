@@ -449,19 +449,14 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::writeData(QFile* file)
 
 //END DUChainItemStorage
 
-const char* KDevelop::TopDUContextDynamicData::pointerInData(uint totalOffset) const {
+const char* TopDUContextDynamicData::pointerInData(uint totalOffset) const
+{
   Q_ASSERT(!m_mappedData || m_data.isEmpty());
 
   if(m_mappedData && m_mappedDataSize)
     return (char*)m_mappedData + totalOffset;
 
-  for(int a = 0; a < m_data.size(); ++a) {
-    if(totalOffset < m_data[a].second)
-      return m_data[a].first.constData() + totalOffset;
-    totalOffset -= m_data[a].second;
-  }
-  Q_ASSERT(0); //Offset doesn't exist in the data
-  return 0;
+  return ::pointerInData(m_data, totalOffset);
 }
 
 TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext)
