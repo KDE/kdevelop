@@ -1,6 +1,5 @@
 configure_file(testqthelpconfig.h.in testqthelpconfig.h)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/..) # "ui_qthelpconfig.h"
 set(test_qthelpplugin_SRCS
     test_qthelpplugin.cpp
     ../qthelpplugin.cpp
@@ -12,6 +11,11 @@ set(test_qthelpplugin_SRCS
     ../debug.cpp
     ../qthelpconfig.cpp
 )
+ki18n_wrap_ui(test_qthelpplugin_SRCS
+   ../qthelpconfig.ui
+   ../qthelpconfigeditdialog.ui
+)
+
 
 ecm_add_test(${test_qthelpplugin_SRCS}
     TEST_NAME test_qthelpplugin
