@@ -117,6 +117,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     setWindowTitle( i18n("Find/Replace in Files") );
 
     setupUi(this);
+    adjustSize();
 
     auto searchButton = buttonBox->button(QDialogButtonBox::Ok);
     Q_ASSERT(searchButton);
