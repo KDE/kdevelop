@@ -13,6 +13,8 @@ project(KDevelop)
 # we need some parts of the ECM CMake helpers
 find_package (ECM 0.0.9 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+
+include(KDECompilerSettings NO_POLICY_SCOPE) # needs to be first, as set policies influence following macros
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
 include(ECMAddAppIcon)
@@ -31,7 +33,6 @@ include(CheckFunctionExists)
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(KDECompilerSettings NO_POLICY_SCOPE)
 
 set(QT_MIN_VERSION "5.4.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets WebKitWidgets Test)

@@ -61,6 +61,10 @@ install(TARGETS kdevelop ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES kdevelop! DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 
+if (WIN32)
+install(FILES windows/kdevelop-msvc.bat DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+endif (WIN32)
+
 if (APPLE)
     # the MacOSX bundle display name property (CFBundleDisplayName) is not currently supported by cmake,
     # so has to be set for all targets in this cmake file
