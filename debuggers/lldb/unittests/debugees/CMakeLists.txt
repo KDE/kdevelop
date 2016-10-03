@@ -22,8 +22,6 @@ if (HAVE_PATH_WITH_SPACES_TEST)
 endif()
 
 
-include_directories(KF5::TextEditor)
-
 add_debuggable_executable(lldb_qstring SRCS qstring.cpp)
 target_link_libraries(lldb_qstring Qt5::Core)
 
