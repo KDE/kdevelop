@@ -87,15 +87,4 @@
   <Action name="edit_find_last" group="edit_operations" />
 </ToolBar>
 
-<!--<ToolBar name="designerToolbar" noMerge="1"><text>Designer Layout Toolbar</text>
-    <Action name="layout_horiz"/>
-    <Action name="layout_vertical"/>
-    <Action name="layout_split_horiz"/>
-    <Action name="layout_split_vert"/>
-    <Action name="layout_grid"/>
-    <Action name="break_layout"/>
-    <Separator/>
-    <Action name="adjust_size"/>
-</ToolBar>-->
-
 </gui>
