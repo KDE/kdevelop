@@ -8,7 +8,7 @@
             }
         ], 
         "Category": "Utilities", 
-        "Description": "KDevelop Hex Editor based on Okteta", 
+        "Description": "Enables viewing and editing of the raw data of files (Okteta-based)",
         "Description[ca@valencia]": "Editor hexadecimal del KDevelop basat en l'Okteta", 
         "Description[ca]": "Editor hexadecimal del KDevelop basat en l'Okteta", 
         "Description[de]": "Auf Okteta basierender Hex-Editor für KDevelop", 
@@ -28,7 +28,7 @@
         "Icon": "okteta", 
         "Id": "kdevokteta", 
         "License": "GPL", 
-        "Name": "Okteta Integration", 
+        "Name": "Hex Editor",
         "Name[ca@valencia]": "Integració de l'Okteta", 
         "Name[ca]": "Integració de l'Okteta", 
         "Name[cs]": "Integrace Oktety", 
