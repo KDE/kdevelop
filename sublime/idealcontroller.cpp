@@ -454,22 +454,17 @@ void IdealController::goPrevNextDock(IdealController::Direction direction)
 
 void IdealController::toggleDocksShown()
 {
-    QList<QAction*> allActions;
-    allActions += leftBarWidget->actions();
-    allActions += bottomBarWidget->actions();
-    allActions += rightBarWidget->actions();
+    bool anyBarShown = leftBarWidget->isShown() || bottomBarWidget->isShown() || rightBarWidget->isShown();
 
-    bool show = true;
-    foreach (QAction *action, allActions) {
-        if (action->isChecked()) {
-            show = false;
-            break;
-        }
+    if (anyBarShown) {
+        leftBarWidget->saveShowState();
+        bottomBarWidget->saveShowState();
+        rightBarWidget->saveShowState();
     }
 
-    toggleDocksShown(leftBarWidget, show);
-    toggleDocksShown(bottomBarWidget, show);
-    toggleDocksShown(rightBarWidget, show);
+    toggleDocksShown(leftBarWidget, !anyBarShown && leftBarWidget->lastShowState());
+    toggleDocksShown(bottomBarWidget, !anyBarShown && bottomBarWidget->lastShowState());
+    toggleDocksShown(rightBarWidget, !anyBarShown && rightBarWidget->lastShowState());
 }
 
 void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)
