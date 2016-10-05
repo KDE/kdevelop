@@ -433,23 +433,20 @@ void IdealController::goPrevNextDock(IdealController::Direction direction)
     IdealButtonBarWidget *bar = barForDockArea(currentDock->dockWidgetArea());
 
     int index = bar->actions().indexOf(m_dockwidget_to_action.value(currentDock));
+    int step = (direction == NextDock) ? 1 : -1;
 
-    if (direction == NextDock) {
-        if (index < 1)
-            index = bar->actions().count() - 1;
-        else
-            --index;
-    } else {
-        if (index == -1 || index == bar->actions().count() - 1)
-            index = 0;
-        else
-            ++index;
-    }
+    if (bar->area() == Qt::BottomDockWidgetArea)
+        step = -step;
 
-    if (index < bar->actions().count()) {
-        QAction* action = bar->actions().at(index);
-        action->setChecked(true);
-    }
+    index += step;
+
+    if (index < 0)
+        index = bar->actions().count() - 1;
+
+    if (index > bar->actions().count() - 1)
+        index = 0;
+
+    bar->actions().at(index)->setChecked(true);
 }
 
 void IdealController::toggleDocksShown()
