@@ -102,32 +102,57 @@ void CMakeBuildDirChooser::setSourceFolder( const Path &srcFolder )
     update();
 }
 
-QString CMakeBuildDirChooser::buildDirProject(const Path &srcDir)
+void CMakeBuildDirChooser::buildDirSettings(
+    const KDevelop::Path& buildDir,
+    QString& srcDir,
+    QString& installDir,
+    QString& buildType)
 {
-    const Path cachePath(srcDir, "CMakeCache.txt");
+    static const QString srcLine = QStringLiteral("CMAKE_HOME_DIRECTORY:INTERNAL=");
+    static const QString installLine = QStringLiteral("CMAKE_INSTALL_PREFIX:PATH=");
+    static const QString buildLine = QStringLiteral("CMAKE_BUILD_TYPE:STRING=");
+
+    const Path cachePath(buildDir, "CMakeCache.txt");
     QFile file(cachePath.toLocalFile());
+
+    srcDir.clear();
+    installDir.clear();
+    buildType.clear();
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qCWarning(CMAKE) << "Something really strange happened reading" << cachePath;
-        return QString();
+        return;
     }
 
-    QString ret;
-    bool correct=false;
-    const QString pLine="CMAKE_HOME_DIRECTORY:INTERNAL=";
-    while (!correct && !file.atEnd())
+    int cnt = 0;
+    while (cnt != 3 && !file.atEnd())
     {
         // note: CMakeCache.txt is UTF8-encoded, also see bug 329305
         QString line = QString::fromUtf8(file.readLine().trimmed());
-        if(line.startsWith(pLine))
+
+        if (line.startsWith(srcLine))
         {
-            correct=true;
-            ret=line.mid(pLine.count());
+            srcDir = line.mid(srcLine.count());
+            ++cnt;
+        }
+
+        if (line.startsWith(installLine))
+        {
+            installDir = line.mid(installLine.count());
+            ++cnt;
+        }
+
+        if (line.startsWith(buildLine))
+        {
+            buildType = line.mid(buildLine.count());
+            ++cnt;
         }
     }
-    qCDebug(CMAKE) << "The source directory for " << file.fileName() << "is" << ret;
-    return ret;
+
+    qCDebug(CMAKE) << "The source directory for " << file.fileName() << "is" << srcDir;
+    qCDebug(CMAKE) << "The install directory for " << file.fileName() << "is" << installDir;
+    qCDebug(CMAKE) << "The build type for " << file.fileName() << "is" << buildType;
 }
 
 void CMakeBuildDirChooser::updated()
@@ -152,6 +177,8 @@ void CMakeBuildDirChooser::updated()
 
     bool dirEmpty = false, dirExists= false, dirRelative = false;
     QString srcDir;
+    QString installDir;
+    QString buildType;
     if(!emptyUrl)
     {
         QDir d(chosenBuildFolder.toLocalFile());
@@ -165,7 +192,7 @@ void CMakeBuildDirChooser::updated()
             {
                 QString proposed=m_srcFolder.toLocalFile();
 
-                srcDir = buildDirProject(chosenBuildFolder);
+                buildDirSettings(chosenBuildFolder, srcDir, installDir, buildType);
                 if(!srcDir.isEmpty())
                 {
                     if(QDir(srcDir).canonicalPath()==QDir(proposed).canonicalPath())
@@ -177,6 +204,13 @@ void CMakeBuildDirChooser::updated()
                 {
                     qCWarning(CMAKE) << "maybe you are trying a damaged CMakeCache.txt file. Proper: ";
                 }
+
+                if(!installDir.isEmpty() && QDir(installDir).exists())
+                {
+                    m_chooserUi->installPrefix->setUrl(QUrl::fromLocalFile(installDir));
+                }
+
+                m_chooserUi->buildType->setCurrentText(buildType);
             }
         }
 

@@ -71,7 +71,11 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
         void updated();
     private:
         QStringList m_alreadyUsed;
-        static QString buildDirProject(const KDevelop::Path &buildDir);
+        void buildDirSettings(
+            const KDevelop::Path& buildDir,
+            QString& srcDir,
+            QString& installDir,
+            QString& buildType);
         QStringList extraArgumentsHistory() const;
 
         Ui::CMakeBuildDirChooser* m_chooserUi;
