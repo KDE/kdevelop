@@ -43,6 +43,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     , _area(area)
     , _controller(controller)
     , _corner(0)
+    , _showState(false)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setToolTip(i18nc("@info:tooltip", "Right click to add new tool views."));
@@ -115,6 +116,22 @@ void IdealButtonBarWidget::removeAction(QAction * action)
 bool IdealButtonBarWidget::isEmpty()
 {
     return actions().isEmpty();
+}
+
+bool IdealButtonBarWidget::isShown()
+{
+    return std::any_of(actions().cbegin(), actions().cend(),
+                       [](const QAction* action){ return action->isChecked(); });
+}
+
+void IdealButtonBarWidget::saveShowState()
+{
+    _showState = isShown();
+}
+
+bool IdealButtonBarWidget::lastShowState()
+{
+    return _showState;
 }
 
 Qt::Orientation IdealButtonBarWidget::orientation() const

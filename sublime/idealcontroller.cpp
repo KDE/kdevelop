@@ -433,43 +433,35 @@ void IdealController::goPrevNextDock(IdealController::Direction direction)
     IdealButtonBarWidget *bar = barForDockArea(currentDock->dockWidgetArea());
 
     int index = bar->actions().indexOf(m_dockwidget_to_action.value(currentDock));
+    int step = (direction == NextDock) ? 1 : -1;
 
-    if (direction == NextDock) {
-        if (index < 1)
-            index = bar->actions().count() - 1;
-        else
-            --index;
-    } else {
-        if (index == -1 || index == bar->actions().count() - 1)
-            index = 0;
-        else
-            ++index;
-    }
+    if (bar->area() == Qt::BottomDockWidgetArea)
+        step = -step;
 
-    if (index < bar->actions().count()) {
-        QAction* action = bar->actions().at(index);
-        action->setChecked(true);
-    }
+    index += step;
+
+    if (index < 0)
+        index = bar->actions().count() - 1;
+
+    if (index > bar->actions().count() - 1)
+        index = 0;
+
+    bar->actions().at(index)->setChecked(true);
 }
 
 void IdealController::toggleDocksShown()
 {
-    QList<QAction*> allActions;
-    allActions += leftBarWidget->actions();
-    allActions += bottomBarWidget->actions();
-    allActions += rightBarWidget->actions();
+    bool anyBarShown = leftBarWidget->isShown() || bottomBarWidget->isShown() || rightBarWidget->isShown();
 
-    bool show = true;
-    foreach (QAction *action, allActions) {
-        if (action->isChecked()) {
-            show = false;
-            break;
-        }
+    if (anyBarShown) {
+        leftBarWidget->saveShowState();
+        bottomBarWidget->saveShowState();
+        rightBarWidget->saveShowState();
     }
 
-    toggleDocksShown(leftBarWidget, show);
-    toggleDocksShown(bottomBarWidget, show);
-    toggleDocksShown(rightBarWidget, show);
+    toggleDocksShown(leftBarWidget, !anyBarShown && leftBarWidget->lastShowState());
+    toggleDocksShown(bottomBarWidget, !anyBarShown && bottomBarWidget->lastShowState());
+    toggleDocksShown(rightBarWidget, !anyBarShown && rightBarWidget->lastShowState());
 }
 
 void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)

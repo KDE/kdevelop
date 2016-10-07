@@ -59,6 +59,10 @@ public:
     void showWidget(QAction *widgetAction, bool checked);
     bool isEmpty();
 
+    bool isShown();
+    void saveShowState();
+    bool lastShowState();
+
 private Q_SLOTS:
     void showWidget(bool checked);
     void buttonPressed(bool state);
@@ -75,6 +79,7 @@ private:
     QHash<QAction *, IdealToolButton*> _buttons;
     QHash<QAction *, IdealDockWidget*> _widgets;
     QWidget *_corner;
+    bool _showState;
 };
 
 }

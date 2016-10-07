@@ -209,7 +209,8 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(con
 KDevelop::IndexedDeclaration BasicRefactoring::declarationUnderCursor(bool allowUse)
 {
     KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
-    Q_ASSERT(view);
+    if (!view)
+        return KDevelop::IndexedDeclaration();
     KTextEditor::Document* doc = view->document();
 
     DUChainReadLocker lock;
@@ -261,6 +262,10 @@ void BasicRefactoring::executeRenameAction()
         IndexedDeclaration decl = action->data().value<IndexedDeclaration>();
         if(!decl.isValid())
             decl = declarationUnderCursor();
+
+        if(!decl.isValid())
+            return;
+
         startInteractiveRename(decl);
     }
 }
