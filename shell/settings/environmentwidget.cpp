@@ -54,6 +54,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     connect(topProxyModel, &PlaceholderItemProxyModel::dataInserted, this, &EnvironmentWidget::handleVariableInserted);
 
     ui.variableTable->setModel( topProxyModel );
+    ui.variableTable->horizontalHeader()->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
     ui.variableTable->horizontalHeader()->setSectionResizeMode( 1, QHeaderView::Stretch );
     ui.addgrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
     ui.clonegrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("edit-clone")));
