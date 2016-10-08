@@ -1,6 +1,7 @@
 /* KDevelop
  *
  * Copyright 2011 Aleix Pol <aleixpol@kde.org>
+ * Copyright 2016 Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +22,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.3
+
 import org.kdevelop.welcomepage 4.3
 
 StandardPage
@@ -76,21 +78,25 @@ StandardPage
                 delegate: MouseArea {
                     width: sessionsView.width
                     height: visible ? 30 : 0
+
                     visible: projects.length > 0
-                    onClicked: sessions.loadSession(uuid)
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
 
+                    onClicked: sessionsModel.loadSession(uuid)
+
                     Label {
-                        width: parent.width
                         readonly property string projectNamesString: projectNames.join(", ").replace(/.kdev4/g, "")
-                        text: display=="" ? projectNamesString : i18n("%1: %2", display, projectNamesString)
+
+                        width: parent.width
+
+                        text: display == "" ? projectNamesString : i18n("%1: %2", display, projectNamesString)
                         elide: Text.ElideRight
                         opacity: parent.containsMouse ? 0.8 : 1
                     }
                 }
 
-                model: SessionsModel { id: sessions }
+                model: SessionsModel { id: sessionsModel }
 
                 header: Heading {
                     text: i18n("Sessions")
