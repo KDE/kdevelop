@@ -27,6 +27,8 @@ import org.kdevelop.welcomepage 4.3
 
 StandardPage
 {
+    id: root
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 20
@@ -66,9 +68,40 @@ StandardPage
             }
         }
 
+        Label {
+            id: greetingLabel
+
+            visible: !sessionsView.visible
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            text: qsTr("<h3>Welcome to KDevelop!</h3>
+                <p>You currently have no saved sessions. You can start a session by opening or creating a project via the above buttons.</p>
+                <p>If you need help, please check out the <a href=\"https://userbase.kde.org/KDevelop\">User Manual.</a></p>") +
+
+                (Qt.platform.os === "windows" ?
+                    qsTr("<br/>
+                        <h3>Note for Windows users</h3>
+                        <p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>
+                        <p>You need to install either GCC via MinGW or install a recent version of the Microsoft Visual Studio IDE and make sure the environment is setup correctly <i>before</i> starting KDevelop.</p>
+                        <p>If you need further assistance, please check out the <a href=\"https://userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows instructions.</a></p>") :
+                    "")
+            wrapMode: Text.WordWrap
+            onLinkActivated: Qt.openUrlExternally(link)
+
+            MouseArea {
+                anchors.fill: parent
+
+                acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+            }
+        }
+
         ScrollView {
             Layout.fillHeight: true
             Layout.fillWidth: true
+
+            visible: sessionsView.count > 0
 
             ListView {
                 id: sessionsView
