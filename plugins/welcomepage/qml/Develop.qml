@@ -76,7 +76,7 @@ StandardPage
             Layout.fillHeight: true
 
             text: qsTr("<h3>Welcome to KDevelop!</h3>
-                <p>You currently have no saved sessions. You can start a session by opening or creating a project via the above buttons.</p>
+                <p>You can start working on a project by opening an existing or creating a new one via the above buttons.</p>
                 <p>If you need help, please check out the <a href=\"https://userbase.kde.org/KDevelop\">User Manual.</a></p>") +
 
                 (Qt.platform.os === "windows" ?
@@ -101,7 +101,7 @@ StandardPage
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            visible: sessionsView.count > 0
+            visible: sessionsView.count > 1 // we always have at least one active session
 
             ListView {
                 id: sessionsView
