@@ -80,7 +80,7 @@ public:
     QStringList supportedModes() const override;
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
-    KDevMI::GDB::CppDebuggerPlugin* m_plugin;
+    QPointer<KDevMI::GDB::CppDebuggerPlugin> m_plugin;
     IExecutePlugin* m_execute;
 };
 

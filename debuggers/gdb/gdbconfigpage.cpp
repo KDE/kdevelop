@@ -151,6 +151,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
     if( launchMode == "debug" )
     {
         Q_ASSERT(m_execute);
+        Q_ASSERT(m_plugin);
 
         if (KDevelop::ICore::self()->debugController()->currentSession() != nullptr) {
             KMessageBox::ButtonCode answer = KMessageBox::warningYesNo(
