@@ -75,12 +75,12 @@ StandardPage
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            text: qsTr("<h3>Welcome to KDevelop!</h3>
+            text: i18n("<h3>Welcome to KDevelop!</h3>
                 <p>You can start working on a project by opening an existing or creating a new one via the above buttons.</p>
                 <p>If you need help, please check out the <a href=\"https://userbase.kde.org/KDevelop\">User Manual.</a></p>") +
 
                 (Qt.platform.os === "windows" ?
-                    qsTr("<br/>
+                    i18n("<br/>
                         <h3>Note for Windows users</h3>
                         <p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>
                         <p>You need to install either GCC via MinGW or install a recent version of the Microsoft Visual Studio IDE and make sure the environment is setup correctly <i>before</i> starting KDevelop.</p>
