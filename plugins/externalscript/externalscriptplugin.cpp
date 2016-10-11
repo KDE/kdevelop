@@ -217,7 +217,8 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
       menu->addAction( scriptAction );
     }
 
-    ext.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
+    if (!menu->actions().isEmpty())
+      ext.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
 
     return ext;
   }
