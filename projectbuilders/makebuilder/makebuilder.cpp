@@ -130,8 +130,8 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
     ///so kill jobs already running on the same project
     foreach (MakeJob* makeJob, m_activeMakeJobs.data())
     {
-        if(item && makeJob->item() && makeJob->item()->project() == item->project()) {
-            qCDebug(MAKEBUILDER) << "killing running ninja job, due to new started build on same project:" << makeJob;
+        if(item && makeJob->item() && makeJob->item()->project() == item->project() && makeJob->commandType() == c) {
+            qCDebug(MAKEBUILDER) << "killing running make job, due to new started build on same project:" << makeJob;
             makeJob->kill(KJob::EmitResult);
         }
     }
