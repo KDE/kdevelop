@@ -321,7 +321,7 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18nc( "@info:whatsthis", "Adds a new tool view to this window." ) );
 
     //Load themes
-    actionCollection()->addAction(QStringLiteral("coloscheme_menu"), new ColorSchemeChooser(actionCollection()));
+    actionCollection()->addAction(QStringLiteral("colorscheme_menu"), new ColorSchemeChooser(actionCollection()));
 }
 
 void MainWindowPrivate::toggleArea(bool b)
