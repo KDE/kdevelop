@@ -395,6 +395,7 @@ QStringList includeFiles(const QualifiedIdentifier& identifier, const QVector<De
  */
 ClangFixits forwardDeclarations(const QVector<Declaration*>& matchingDeclarations, const Path& source)
 {
+    DUChainReadLocker lock;
     ClangFixits fixits;
     for (const auto decl : matchingDeclarations) {
         const auto qid = decl->qualifiedIdentifier();
