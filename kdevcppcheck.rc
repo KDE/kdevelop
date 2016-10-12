@@ -1,8 +1,8 @@
 <!DOCTYPE kpartgui>
 <gui name="cppcheck" library="libcppcheckplugin" version="7">
 <MenuBar>
- <Menu name="run">
-   <text context="@title:menu">Run</text>
+ <Menu name="analyze">
+   <text context="@title:menu">Analyze</text>
      <Action name="cppcheck_file" group="run_operations"/>
      <Action name="cppcheck_project" group="run_operations"/>
  </Menu>
