@@ -61,6 +61,7 @@ private:
 
     QAction* m_actionFile;
     QAction* m_actionProject;
+    QAction* m_actionProjectItem;
     QScopedPointer<KDevelop::ProblemModel> m_model;
 };
 

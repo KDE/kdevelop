@@ -35,6 +35,7 @@
 #include <kpluginfactory.h>
 #include <language/interfaces/editorcontext.h>
 #include <project/projectconfigpage.h>
+#include <project/projectmodel.h>
 #include <shell/problemmodel.h>
 #include <shell/problemmodelset.h>
 
@@ -72,6 +73,8 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
         runCppcheck(true);
     });
     actionCollection()->addAction("cppcheck_project", m_actionProject);
+
+    m_actionProjectItem = new QAction("Cppcheck", this);
 
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->addModel(modelName, m_model.data());
@@ -166,6 +169,32 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
         extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, m_actionFile);
         extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, m_actionProject);
     }
+
+    if (context->hasType(KDevelop::Context::ProjectItemContext)) {
+        auto pContext = dynamic_cast<KDevelop::ProjectItemContext*>(context);
+        if (pContext->items().size() != 1)
+            return extension;
+
+        auto item = pContext->items().first();
+
+        switch (item->type()) {
+            case KDevelop::ProjectBaseItem::File:
+            case KDevelop::ProjectBaseItem::Folder:
+            case KDevelop::ProjectBaseItem::BuildFolder:
+                break;
+
+            default:
+                return extension;
+        }
+
+        m_actionProjectItem->disconnect();
+        connect(m_actionProjectItem, &QAction::triggered, [this, item](){
+            runCppcheck(item->project(), item->path().toLocalFile());
+        });
+
+        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, m_actionProjectItem);
+    }
+
     return extension;
 }
 
