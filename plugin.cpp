@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
- *  Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
+   Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
+   Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -8,61 +9,34 @@
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General Public License for more details.
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   General Public License for more details.
 
    You should have received a copy of the GNU General Public License
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
+*/
 
- */
-
-#include <unistd.h>
-
-#include <QAction>
-#include <QRegExp>
-#include <QFile>
-#include <QTreeView>
-#include <QXmlInputSource>
-#include <QXmlSimpleReader>
-#include <QDomElement>
-#include <QApplication>
-
-#include <kactioncollection.h>
-#include <klocalizedstring.h>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-
-#include <execute/iexecuteplugin.h>
-
-#include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
-#include <interfaces/iruncontroller.h>
-#include <interfaces/launchconfigurationtype.h>
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/idebugcontroller.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iproject.h>
-#include <interfaces/idocumentcontroller.h>
-#include <interfaces/idocument.h>
-#include <interfaces/ilanguagecontroller.h>
-#include <util/executecompositejob.h>
-
-#include <shell/problemmodelset.h>
-#include <shell/problemmodel.h>
-
-#include <language/interfaces/editorcontext.h>
-
-#include "debug.h"
 #include "plugin.h"
+
+#include "config/genericconfigpage.h"
+#include "config/cppcheckpreferences.h"
+#include "debug.h"
 #include "job.h"
 
-#include <KXMLGUIFactory>
-
-#include "./config/genericconfigpage.h"
-#include "./config/cppcheckpreferences.h"
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <kactioncollection.h>
+#include <kpluginfactory.h>
+#include <language/interfaces/editorcontext.h>
 #include <project/projectconfigpage.h>
+#include <shell/problemmodel.h>
+#include <shell/problemmodelset.h>
 
 #include <QMessageBox>
 
@@ -73,43 +47,49 @@ K_PLUGIN_FACTORY_WITH_JSON(CppcheckFactory, "kdevcppcheck.json", registerPlugin<
 namespace cppcheck
 {
 
-Plugin::Plugin(QObject *parent, const QVariantList&)
+static const QString modelName = QStringLiteral("Cppcheck");
+
+Plugin::Plugin(QObject* parent, const QVariantList&)
     : IPlugin("kdevcppcheck", parent)
-    , m_model(new KDevelop::ProblemModel(parent))
+    , m_model(new KDevelop::ProblemModel(this))
 {
     qCDebug(KDEV_CPPCHECK) << "setting cppcheck rc file";
     setXMLFile("kdevcppcheck.rc");
 
-    QAction* act_checkfile;
-    act_checkfile = actionCollection()->addAction("cppcheck_file", this, SLOT(runCppcheckFile()));
-    act_checkfile->setStatusTip(i18n("Launches Cppcheck for current file"));
-    act_checkfile->setText(i18n("Cppcheck"));
+    m_model->setFeatures(
+        KDevelop::ProblemModel::SeverityFilter |
+        KDevelop::ProblemModel::Grouping |
+        KDevelop::ProblemModel::CanByPassScopeFilter);
 
-    QAction* act_check_all_files;
-    act_check_all_files = actionCollection()->addAction("cppcheck_all", this, SLOT(runCppcheckAll()));
-    act_check_all_files->setStatusTip(i18n("Launches Cppcheck for all files"));
-    act_check_all_files->setText(i18n("Cppcheck (all Files)"));
+    m_actionFile = new QAction(i18n("Cppcheck (Current File)"), this);
+    connect(m_actionFile, &QAction::triggered, [this](){
+        runCppcheck(false);
+    });
+    actionCollection()->addAction("cppcheck_file", m_actionFile);
 
-    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
+    m_actionProject = new QAction(i18n("Cppcheck (Current Project)"), this);
+    connect(m_actionProject, &QAction::triggered, [this](){
+        runCppcheck(true);
+    });
+    actionCollection()->addAction("cppcheck_project", m_actionProject);
 
-    ProblemModelSet *pms = core()->languageController()->problemModelSet();
-    pms->addModel(QStringLiteral("Cppcheck"), m_model.data());
+    ProblemModelSet* pms = core()->languageController()->problemModelSet();
+    pms->addModel(modelName, m_model.data());
 }
 
 void Plugin::unload()
 {
-    ProblemModelSet *pms = core()->languageController()->problemModelSet();
-    pms->removeModel(QStringLiteral("Cppcheck"));
+    ProblemModelSet* pms = core()->languageController()->problemModelSet();
+    pms->removeModel(modelName);
 }
 
 Plugin::~Plugin()
 {
 }
 
-void Plugin::runCppcheck(bool allFiles)
+void Plugin::runCppcheck(bool checkProject)
 {
-    KDevelop::IDocument *doc = core()->documentController()->activeDocument();
+    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
     if (!doc) {
         QMessageBox::critical(nullptr,
                               i18n("Error starting Cppcheck"),
@@ -117,7 +97,7 @@ void Plugin::runCppcheck(bool allFiles)
         return;
     }
 
-    KDevelop::IProject *project = core()->projectController()->findProjectForUrl(doc->url());
+    KDevelop::IProject* project = core()->projectController()->findProjectForUrl(doc->url());
     if (!project) {
         QMessageBox::critical(nullptr,
                               i18n("Error starting Cppcheck"),
@@ -125,6 +105,14 @@ void Plugin::runCppcheck(bool allFiles)
         return;
     }
 
+    if (checkProject)
+        runCppcheck(project, project->path().toUrl().toLocalFile());
+    else
+        runCppcheck(project, doc->url().toLocalFile());
+}
+
+void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
+{
     KSharedConfigPtr ptr = project->projectConfiguration();
     KConfigGroup group = ptr->group("Cppcheck");
     if (!group.isValid()) {
@@ -137,8 +125,14 @@ void Plugin::runCppcheck(bool allFiles)
     KConfigGroup group2 = KSharedConfig::openConfig()->group("Cppcheck");
     QUrl cppcheckPath = group2.readEntry("Cppcheck Path");
 
-
     Job::Parameters params;
+
+    if (cppcheckPath.toLocalFile().isEmpty())
+        params.executable = QStringLiteral("/usr/bin/cppcheck");
+    else
+        params.executable = cppcheckPath.toLocalFile();
+
+    params.path                 = path;
     params.parameters           = group.readEntry("cppcheckParameters", QString(""));
     params.checkStyle           = group.readEntry("AdditionalCheckStyle", false);
     params.checkPerformance     = group.readEntry("AdditionalCheckPerformance", false);
@@ -147,51 +141,20 @@ void Plugin::runCppcheck(bool allFiles)
     params.checkUnusedFunction  = group.readEntry("AdditionalCheckUnusedFunction", false);
     params.checkMissingInclude  = group.readEntry("AdditionalCheckMissingInclude", false);
 
-    if (cppcheckPath.toLocalFile().isEmpty())
-        params.executable = QStringLiteral("/usr/bin/cppcheck");
-    else
-        params.executable = cppcheckPath.toLocalFile();
-
-    if (allFiles)
-        params.path = project->path().toUrl().toLocalFile();
-    else
-        params.path = doc->url().toLocalFile();
-
     Job* job = new cppcheck::Job(params, this);
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(result(KJob*)));
+    connect(job, &Job::finished, this, &Plugin::result);
     core()->runController()->registerJob( job );
 }
 
-void Plugin::runCppcheckFile()
+void Plugin::result(KJob* kjob)
 {
-    bool allFiles = false;
-    runCppcheck(allFiles);
-}
-
-void Plugin::runCppcheckAll()
-{
-   bool allFiles = true;
-   runCppcheck(allFiles);
-}
-
-
-void Plugin::loadOutput()
-{
-}
-
-void Plugin::result(KJob *job)
-{
-    Job *aj = dynamic_cast<Job*>(job);
-    if (!aj)
+    Job* job = dynamic_cast<Job*>(kjob);
+    if (!job)
         return;
 
-    if (aj->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded) {
-        m_model->setProblems(aj->problems());
-
-        core()->uiController()->findToolView(
-            i18nd("kdevproblemreporter", "Problems"),
-            0,
-            KDevelop::IUiController::FindFlags::Raise);
+    if (job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded) {
+        m_model->setProblems(job->problems());
+        core()->languageController()->problemModelSet()->showModel(modelName);
     }
 }
 
@@ -200,28 +163,28 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
 
     if ( context->type() == KDevelop::Context::EditorContext ) {
-        QAction* action = new QAction(i18n("Cppcheck (Current File)"), this);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(runCppcheckFile()));
-        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
+        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, m_actionFile);
+        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, m_actionProject);
     }
     return extension;
 }
 
-KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConfigOptions &options, QWidget *parent)
+KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent)
 {
-    if (number != 0)
+    if (number)
         return nullptr;
     else
         return new GenericConfigPage(options.project, parent);
 }
 
-KDevelop::ConfigPage* Plugin::configPage(int number, QWidget *parent)
+KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
 {
-    if (number != 0)
+    if (number)
         return nullptr;
     else
         return new CppCheckPreferences(this, parent);
 }
 
 }
+
 #include "plugin.moc"
