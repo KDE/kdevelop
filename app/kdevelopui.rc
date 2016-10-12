@@ -49,6 +49,11 @@
     <Merge />
   </Menu>
 
+  <Menu name="analyze" append="first_menu">
+    <text name="@title:menu">&amp;Analyze</text>
+    <Merge />
+  </Menu>
+
   <Menu name="navigation" append="first_menu">
     <text context="@title:menu">&amp;Navigation</text>
     <DefineGroup name="navigation_file"/>
