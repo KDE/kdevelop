@@ -289,14 +289,14 @@ public:
         const auto& url = nextDocumentToParse();
         if (!url.isEmpty()) {
             qCDebug(LANGUAGE) << "creating parse-job" << url << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+
             const QString elidedPathString = elidedPathLeft(url.str(), 70);
             emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
-
-            const auto parsePlanConstIt = m_documents.constFind(url);
 
             ThreadWeaver::QObjectDecorator* decorator = nullptr;
             {
                 // copy shared data before unlocking the mutex
+                const auto parsePlanConstIt = m_documents.constFind(url);
                 const DocumentParsePlan parsePlan = *parsePlanConstIt;
 
                 // we must not lock the mutex while creating a parse job
