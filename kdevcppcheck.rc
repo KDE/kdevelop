@@ -4,7 +4,7 @@
  <Menu name="run">
    <text context="@title:menu">Run</text>
      <Action name="cppcheck_file" group="run_operations"/>
-     <Action name="cppcheck_all" group="run_operations"/>
+     <Action name="cppcheck_project" group="run_operations"/>
  </Menu>
 </MenuBar>
 </gui>
