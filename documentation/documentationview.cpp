@@ -76,6 +76,7 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
 
     mIdentifiers = new QLineEdit(mActions);
     mIdentifiers->setClearButtonEnabled(true);
+    mIdentifiers->setPlaceholderText(i18n("Search..."));
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
 //     mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     mIdentifiers->completer()->setCaseSensitivity(Qt::CaseInsensitive);
