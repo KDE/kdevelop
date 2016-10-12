@@ -24,9 +24,14 @@
 #include "projectsettings.h"
 
 #include <interfaces/iproject.h>
-#include <KShell>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
+
+#include <KShell>
+#include <KLocalizedString>
+
+#include <QFile>
+#include <QRegularExpression>
 
 namespace cppcheck
 {
@@ -97,13 +102,29 @@ Parameters::Parameters(KDevelop::IProject* project)
 
     extraParameters      = projectSettings.extraParameters();
 
-    m_projectRootPath = m_project->path();
-    m_projectBuildPath = m_project->buildSystemManager()->buildDirectory(m_project->projectItem());
+    m_projectRootPath    = m_project->path();
+    m_projectBuildPath   = m_project->buildSystemManager()->buildDirectory(m_project->projectItem());
     m_includeDirectories = includesForProject(project);
 }
 
 QStringList Parameters::commandLine() const
 {
+    QString temp;
+    return commandLine(temp);
+}
+
+QStringList Parameters::commandLine(QString& infoMessage) const
+{
+    static const auto mocHeaderRegex = QRegularExpression("#define\\s+Q_MOC_OUTPUT_REVISION\\s+(.+)");
+    static const auto mocParametersRegex = QRegularExpression("-DQ_MOC_OUTPUT_REVISION=\\d{2,}");
+
+    const QString mocMessage = i18n(
+        "It seems that this project uses Qt library. For correctly work of cppcheck "
+        "the value for define Q_MOC_OUTPUT_REVISION must be set. Unfortunatly, the plugin is unable "
+        "to find this value automatically - you should set it manually by adding "
+        "'-DQ_MOC_OUTPUT_REVISION=XX' to extra parameters. The 'XX' value can be found in any project's "
+        "moc-generated file or in the <QtCore/qobjectdefs.h> header file.");
+
     QStringList result;
 
     result << executablePath;
@@ -135,6 +156,34 @@ QStringList Parameters::commandLine() const
 
     if (checkConfig)
         result << QStringLiteral("--check-config");
+
+    // Try to automatically get value of Q_MOC_OUTPUT_REVISION for Qt-projects.
+    // If such define is not correctly set, cppcheck 'fails' on files with moc-includes
+    // and not return any errors, even if the file contains them.
+    if (!mocParametersRegex.match(extraParameters).hasMatch()) {
+        bool mocDefineFinded = false;
+        foreach (auto dir, m_includeDirectories) {
+            if (dir.path().endsWith("QtCore")) {
+                QFile qtHeader(dir.path() + QStringLiteral("/qobjectdefs.h"));
+                if (!qtHeader.open(QIODevice::ReadOnly)) {
+                    break;
+                }
+
+                while(!qtHeader.atEnd()) {
+                    auto match = mocHeaderRegex.match(qtHeader.readLine());
+                    if (match.hasMatch()) {
+                        mocDefineFinded = true;
+                        result << QStringLiteral("-DQ_MOC_OUTPUT_REVISION=") + match.captured(1);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        if (!mocDefineFinded)
+            infoMessage = mocMessage;
+    }
 
     if (!extraParameters.isEmpty())
         result << KShell::splitArgs(applyPlaceholders(extraParameters));

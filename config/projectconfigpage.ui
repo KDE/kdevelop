@@ -329,9 +329,30 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="KMessageWidget" name="messageWidget">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="closeButtonVisible">
+      <bool>false</bool>
+     </property>
+     <property name="messageType">
+      <enum>KMessageWidget::Error</enum>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QFrame</extends>
+   <header>kmessagewidget.h</header>
+  </customwidget>
   <customwidget>
    <class>KFilterProxySearchLine</class>
    <extends>QWidget</extends>

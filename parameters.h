@@ -59,6 +59,7 @@ public:
     explicit Parameters(KDevelop::IProject* project = nullptr);
 
     QStringList commandLine() const;
+    QStringList commandLine(QString& infoMessage) const;
 
     // global settings
     QString executablePath;

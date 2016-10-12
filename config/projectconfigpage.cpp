@@ -87,7 +87,15 @@ void ProjectConfigPage::updateCommandLine()
     m_parameters->ignoredIncludes = ui->kcfg_ignoredIncludes->text();
     m_parameters->extraParameters = ui->kcfg_extraParameters->text().trimmed();
 
-    QString commandLine = m_parameters->commandLine().join(' ');
+    QString message;
+    QString commandLine = m_parameters->commandLine(message).join(' ');
+
+    if (message.isEmpty())
+        ui->messageWidget->hide();
+    else {
+        ui->messageWidget->setText(message);
+        ui->messageWidget->show();
+    }
 
     if (!ui->commandLineBreaks->isChecked()) {
         ui->commandLine->setText(commandLine);
