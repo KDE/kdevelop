@@ -200,9 +200,9 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
 
     if ( context->type() == KDevelop::Context::EditorContext ) {
-        QAction* action = new QAction(QIcon::fromTheme("document-new"), i18n("Cppcheck for current file"), this);
+        QAction* action = new QAction(i18n("Cppcheck (Current File)"), this);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(runCppcheckFile()));
-        extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
+        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
     }
     return extension;
 }
