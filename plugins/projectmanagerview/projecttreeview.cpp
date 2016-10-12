@@ -323,6 +323,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
     QList<QAction*> buildActions;
     QList<QAction*> vcsActions;
+    QList<QAction*> analyzeActions;
     QList<QAction*> extActions;
     QList<QAction*> projectActions;
     QList<QAction*> fileActions;
@@ -333,14 +334,27 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         fileActions += ext.actions(ContextMenuExtension::FileGroup);
         projectActions += ext.actions(ContextMenuExtension::ProjectGroup);
         vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
+        analyzeActions += ext.actions(ContextMenuExtension::AnalyzeGroup);
         extActions += ext.actions(ContextMenuExtension::ExtensionGroup);
         runActions += ext.actions(ContextMenuExtension::RunGroup);
+    }
+
+    if ( analyzeActions.count() )
+    {
+        QMenu* analyzeMenu = new QMenu( i18n("Analyze With"), this );
+        analyzeMenu->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
+        foreach( QAction* act, analyzeActions )
+        {
+            analyzeMenu->addAction( act );
+        }
+        analyzeActions = {analyzeMenu->menuAction()};
     }
 
     popupContextMenu_appendActions(menu, buildActions);
     popupContextMenu_appendActions(menu, runActions );
     popupContextMenu_appendActions(menu, fileActions);
     popupContextMenu_appendActions(menu, vcsActions);
+    popupContextMenu_appendActions(menu, analyzeActions);
     popupContextMenu_appendActions(menu, extActions);
 
     if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && !itemlist[0]->folder()->parent() )

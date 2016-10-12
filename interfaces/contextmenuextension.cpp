@@ -40,6 +40,7 @@ const QString ContextMenuExtension::VcsGroup      = QStringLiteral("VcsGroup");
 const QString ContextMenuExtension::ProjectGroup  = QStringLiteral("ProjectGroup");
 const QString ContextMenuExtension::OpenEmbeddedGroup  = QStringLiteral("OpenEmbeddedGroup");
 const QString ContextMenuExtension::OpenExternalGroup  = QStringLiteral("OpenExternalGroup");
+const QString ContextMenuExtension::AnalyzeGroup = QStringLiteral("AnalyzeGroup");
 const QString ContextMenuExtension::ExtensionGroup  = QStringLiteral("ExtensionGroup");
 
 
@@ -98,6 +99,7 @@ void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExte
     QList<QAction*> extActions;
     QList<QAction*> refactorActions;
     QList<QAction*> debugActions;
+    QList<QAction*> analyzeActions;
     foreach( const ContextMenuExtension &ext, extensions )
     {
         foreach( QAction* act, ext.actions( ContextMenuExtension::BuildGroup ) )
@@ -108,6 +110,11 @@ void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExte
         foreach( QAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
         {
             vcsActions << act;
+        }
+
+        foreach( QAction* act, ext.actions( ContextMenuExtension::AnalyzeGroup ) )
+        {
+            analyzeActions << act;
         }
 
         foreach( QAction* act, ext.actions( ContextMenuExtension::ExtensionGroup ) )
@@ -178,8 +185,20 @@ void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExte
     {
         vcsmenu->addAction( act );
     }
-
     menu->addSeparator();
+
+    QMenu* analyzeMenu = menu;
+    if( analyzeActions.count() > 1 )
+    {
+        analyzeMenu = menu->addMenu( i18n("Analyze With") );
+        analyzeMenu->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
+    }
+    foreach( QAction* act, analyzeActions )
+    {
+        analyzeMenu->addAction( act );
+    }
+    menu->addSeparator();
+
     foreach( QAction* act, extActions )
     {
         menu->addAction( act );

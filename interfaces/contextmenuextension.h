@@ -59,6 +59,8 @@ public:
     static const QString OpenEmbeddedGroup;
     /** menu group to contain open with external application actions */
     static const QString OpenExternalGroup;
+    /** menu group to contain analyze actions */
+    static const QString AnalyzeGroup;
 
     /** menu group that can contain any extension menu.
       * Actions for this extension will always be at the end
