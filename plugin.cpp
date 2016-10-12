@@ -216,7 +216,8 @@ void Plugin::result(KJob* kjob)
 
     m_model->setProblems(m_problems);
 
-    if (job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded)
+    if (job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
+        job->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled)
         raiseProblemsView();
     else
         raiseOutputView();

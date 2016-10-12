@@ -182,7 +182,8 @@ void Job::childProcessError(QProcess::ProcessError e)
         break;
 
     case QProcess::Crashed:
-        message = i18n("Cppcheck crashed.");
+        if (status() != KDevelop::OutputExecuteJob::JobStatus::JobCanceled)
+            message = i18n("Cppcheck crashed.");
         break;
 
     case QProcess::Timedout:
