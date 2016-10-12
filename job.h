@@ -5,7 +5,7 @@
  * Copyright 2011 Damien Coppel <damien.coppel@gmail.com>
  * Copyright 2011 Lionel Duc <lionel.data@gmail.com>
  * Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
- * Copyright 2015 Anton Anikin <anton.anikin@htower.ru>
+ * Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -23,11 +23,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef JOB_H
-#define JOB_H
+#ifndef CPPCHECK_JOB_H
+#define CPPCHECK_JOB_H
 
-#include <outputview/outputexecutejob.h>
 #include <interfaces/iproblem.h>
+#include <outputview/outputexecutejob.h>
 
 namespace cppcheck
 {
@@ -50,7 +50,7 @@ public:
         QString executable;
     };
 
-    Job(const Parameters &params, QObject* parent = nullptr);
+    Job(const Parameters& params, QObject* parent = nullptr);
     ~Job() override;
 
     void start() override;
@@ -58,17 +58,13 @@ public:
     QVector<KDevelop::IProblem::Ptr> problems() const;
 
 protected slots:
-    void postProcessStdout( const QStringList& lines ) override;
-    void postProcessStderr( const QStringList& lines ) override;
+    void postProcessStdout(const QStringList& lines) override;
+    void postProcessStderr(const QStringList& lines) override;
 
-    void childProcessExited( int exitCode, QProcess::ExitStatus exitStatus ) override;
-    void childProcessError( QProcess::ProcessError processError ) override;
+    void childProcessExited(int exitCode, QProcess::ExitStatus exitStatus) override;
+    void childProcessError(QProcess::ProcessError processError) override;
 
 protected:
-    void buildCommandLine();
-    void processStdoutLines( const QStringList& lines );
-    void processStderrLines( const QStringList& lines );
-
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
 
@@ -76,4 +72,5 @@ protected:
 };
 
 }
+
 #endif

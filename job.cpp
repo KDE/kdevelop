@@ -7,7 +7,7 @@
    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
    Copyright 2002 Harald Fernengel <harry@kdevelop.org>
    Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
-   Copyright 2015 Anton Anikin <anton.anikin@htower.ru>
+   Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -25,20 +25,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <KShell>
-#include <KMessageBox>
-#include <QApplication>
-#include <KLocalizedString>
-#include <QRegularExpression>
+#include "job.h"
 
 #include "cppcheckparser.h"
 #include "debug.h"
-#include "job.h"
+
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KShell>
+
+#include <QApplication>
+#include <QRegularExpression>
 
 namespace cppcheck
 {
 
-Job::Job(const Parameters &params, QObject* parent)
+Job::Job(const Parameters& params, QObject* parent)
     : KDevelop::OutputExecuteJob(parent)
 {
     setJobName(i18n("Cppcheck output"));
@@ -86,12 +88,15 @@ Job::~Job()
     doKill();
 }
 
-void Job::processStdoutLines(const QStringList& lines)
+void Job::postProcessStdout(const QStringList& lines)
 {
     m_standardOutput << lines;
+
+    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning)
+        KDevelop::OutputExecuteJob::postProcessStdout(lines);
 }
 
-void Job::processStderrLines(const QStringList& lines)
+void Job::postProcessStderr(const QStringList& lines)
 {
     static const auto xmlStartRegex = QRegularExpression("\\s*<");
 
@@ -109,20 +114,9 @@ void Job::processStderrLines(const QStringList& lines)
         else
             m_standardOutput << line;
     }
-}
 
-void Job::postProcessStdout(const QStringList& lines)
-{
-    processStdoutLines(lines);
-
-    KDevelop::OutputExecuteJob::postProcessStdout(lines);
-}
-
-void Job::postProcessStderr(const QStringList& lines)
-{
-    processStderrLines(lines);
-
-    KDevelop::OutputExecuteJob::postProcessStderr(lines);
+    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning)
+        KDevelop::OutputExecuteJob::postProcessStderr(lines);
 }
 
 void Job::start()

@@ -31,8 +31,8 @@ class JobTester : public Job
 public:
     JobTester(Job::Parameters params) : Job(params) {}
 
-    using Job::processStdoutLines;
-    using Job::processStderrLines;
+    using Job::postProcessStdout;
+    using Job::postProcessStderr;
 
     QString standardOutput() const { return m_standardOutput.join('\n'); }
     QString xmlOutput() const { return m_xmlOutput.join('\n'); }
@@ -73,8 +73,8 @@ void TestCppcheckJob::testJob()
     Job::Parameters jobParams;
     JobTester jobTester(jobParams);
 
-    jobTester.processStderrLines(stderrOutput);
-    jobTester.processStdoutLines(stdoutOutput);
+    jobTester.postProcessStderr(stderrOutput);
+    jobTester.postProcessStdout(stdoutOutput);
 
     // move non-XML elements from stderrOutput
     stdoutOutput.push_front(stderrOutput[1]);
