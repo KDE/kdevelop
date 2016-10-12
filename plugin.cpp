@@ -134,35 +134,13 @@ void Plugin::runCppcheck(bool checkProject)
 
 void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
 {
-    KSharedConfigPtr ptr = project->projectConfiguration();
-    KConfigGroup group = ptr->group("Cppcheck");
-    if (!group.isValid()) {
-        QMessageBox::critical(nullptr,
-                              i18n("Error starting Cppcheck"),
-                              i18n("Can't load parameters. They must be set in the project settings."));
-        return;
-    }
-
-    Job::Parameters params;
-
-    params.executablePath = KDevelop::Path(GlobalSettings::executablePath()).toLocalFile();
-    params.hideOutputView = GlobalSettings::hideOutputView();
-    params.showXmlOutput  = GlobalSettings::showXmlOutput();
-
-    params.extraParameters      = group.readEntry("cppcheckParameters", QString(""));
-    params.checkStyle           = group.readEntry("AdditionalCheckStyle", false);
-    params.checkPerformance     = group.readEntry("AdditionalCheckPerformance", false);
-    params.checkPortability     = group.readEntry("AdditionalCheckPortability", false);
-    params.checkInformation     = group.readEntry("AdditionalCheckInformation", false);
-    params.checkUnusedFunction  = group.readEntry("AdditionalCheckUnusedFunction", false);
-    params.checkMissingInclude  = group.readEntry("AdditionalCheckMissingInclude", false);
-
-    params.path                 = path;
+    Parameters params(project);
+    params.checkPath = path;
 
     m_problems.clear();
     m_project = project;
 
-    Job* job = new cppcheck::Job(params, this);
+    Job* job = new Job(params, this);
     connect(job, &Job::problemsDetected, this, &Plugin::problemsDetected);
     connect(job, &Job::finished,         this, &Plugin::result);
 

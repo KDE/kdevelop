@@ -20,8 +20,10 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
-#include "job.h"
 #include "test_cppcheckjob.h"
+
+#include "job.h"
+#include "parameters.h"
 
 using namespace KDevelop;
 using namespace cppcheck;
@@ -29,7 +31,7 @@ using namespace cppcheck;
 class JobTester : public Job
 {
 public:
-    JobTester(Job::Parameters params) : Job(params) {}
+    JobTester(const Parameters& params) : Job(params) {}
 
     using Job::postProcessStdout;
     using Job::postProcessStderr;
@@ -70,7 +72,7 @@ void TestCppcheckJob::testJob()
         "</results>"
     };
 
-    Job::Parameters jobParams;
+    Parameters jobParams;
     JobTester jobTester(jobParams);
 
     jobTester.postProcessStderr(stderrOutput);

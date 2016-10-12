@@ -32,7 +32,6 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KShell>
 #include <shell/problem.h>
 
 #include <QApplication>
@@ -46,8 +45,6 @@ Job::Job(const Parameters& params, QObject* parent)
     , m_parser(new CppcheckParser)
     , m_showXmlOutput(params.showXmlOutput)
 {
-    setJobName(i18n("Cppcheck output"));
-
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
     setBehaviours(KDevelop::IOutputView::AutoScroll);
@@ -56,34 +53,8 @@ Job::Job(const Parameters& params, QObject* parent)
     setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStderr);
     setProperties(KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
 
-    *this << params.executablePath;
-
-    *this << "--force";
-    *this << "--xml-version=2";
-
-    if (!params.extraParameters.isEmpty())
-        *this << KShell::splitArgs(params.extraParameters);
-
-    if (params.checkStyle)
-        *this << "--enable=style";
-
-    if (params.checkPerformance)
-        *this << "--enable=performance";
-
-    if (params.checkPortability)
-        *this << "--enable=portability";
-
-    if (params.checkInformation)
-        *this << "--enable=information";
-
-    if (params.checkUnusedFunction)
-        *this << "--enable=unusedFunction";
-
-    if (params.checkMissingInclude)
-        *this << "--enable=missingInclude";
-
-    *this << params.path;
-    qCDebug(KDEV_CPPCHECK) << "checking path" << params.path;
+    *this << params.commandLine();
+    qCDebug(KDEV_CPPCHECK) << "checking path" << params.checkPath;
 }
 
 Job::~Job()

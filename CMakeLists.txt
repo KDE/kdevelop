@@ -31,6 +31,7 @@ include_directories(
 set(kdevcppcheck_SRCS
     debug.cpp
     job.cpp
+    parameters.cpp
     parser.cpp
     plugin.cpp
 

@@ -26,6 +26,8 @@
 #ifndef CPPCHECK_JOB_H
 #define CPPCHECK_JOB_H
 
+#include "parameters.h"
+
 #include <interfaces/iproblem.h>
 #include <outputview/outputexecutejob.h>
 
@@ -39,27 +41,6 @@ class Job : public KDevelop::OutputExecuteJob
     Q_OBJECT
 
 public:
-    struct Parameters
-    {
-        // global settings
-        QString executablePath;
-        bool hideOutputView;
-        bool showXmlOutput;
-
-        // project settings
-        bool checkStyle = false;
-        bool checkPerformance = false;
-        bool checkPortability = false;
-        bool checkInformation = false;
-        bool checkUnusedFunction = false;
-        bool checkMissingInclude = false;
-
-        QString extraParameters;
-
-        // runtime settings
-        QString path;
-    };
-
     Job(const Parameters& params, QObject* parent = nullptr);
     ~Job() override;
 
