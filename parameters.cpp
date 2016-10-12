@@ -25,6 +25,8 @@
 
 #include <interfaces/iproject.h>
 #include <KShell>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/projectmodel.h>
 
 namespace cppcheck
 {
@@ -39,6 +41,7 @@ Parameters::Parameters(KDevelop::IProject* project)
     , checkInformation(defaults::checkInformation)
     , checkUnusedFunction(defaults::checkUnusedFunction)
     , checkMissingInclude(defaults::checkMissingInclude)
+    , m_project(nullptr)
 {
     executablePath = KDevelop::Path(GlobalSettings::executablePath()).toLocalFile();
     hideOutputView = GlobalSettings::hideOutputView();
@@ -59,6 +62,10 @@ Parameters::Parameters(KDevelop::IProject* project)
     checkMissingInclude  = projectSettings.checkMissingInclude();
 
     extraParameters      = projectSettings.extraParameters();
+
+    m_project = project;
+    m_projectRootPath = m_project->path();
+    m_projectBuildPath = m_project->buildSystemManager()->buildDirectory(m_project->projectItem());
 }
 
 QStringList Parameters::commandLine() const
@@ -87,9 +94,21 @@ QStringList Parameters::commandLine() const
         result << QStringLiteral("--enable=missingInclude");
 
     if (!extraParameters.isEmpty())
-        result << KShell::splitArgs(extraParameters);
+        result << KShell::splitArgs(applyPlaceholders(extraParameters));
 
     result << checkPath;
+
+    return result;
+}
+
+QString Parameters::applyPlaceholders(const QString& text) const
+{
+    QString result(text);
+
+    if (m_project) {
+        result.replace("%p", m_projectRootPath.toLocalFile());
+        result.replace("%b", m_projectBuildPath.toLocalFile());
+    }
 
     return result;
 }

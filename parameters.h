@@ -71,6 +71,14 @@ public:
 
     // runtime settings
     QString checkPath;
+
+private:
+    QString applyPlaceholders(const QString& text) const;
+
+    KDevelop::IProject* m_project;
+
+    KDevelop::Path m_projectRootPath;
+    KDevelop::Path m_projectBuildPath;
 };
 
 }
