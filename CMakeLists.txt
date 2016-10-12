@@ -17,7 +17,7 @@ include(KDECompilerSettings)
 include(FeatureSummary)
 
 find_package(Qt5 REQUIRED Core Widgets Test)
-find_package(KF5 REQUIRED COMPONENTS IconThemes ItemModels ThreadWeaver TextEditor I18n)
+find_package(KF5 REQUIRED COMPONENTS IconThemes ItemModels ItemViews ThreadWeaver TextEditor I18n)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
@@ -36,16 +36,17 @@ set(kdevcppcheck_SRCS
     plugin.cpp
 
     config/globalconfigpage.cpp
-    config/genericconfigpage.cpp
+    config/projectconfigpage.cpp
 )
 
 ki18n_wrap_ui(kdevcppcheck_UI_SRCS
     config/globalconfigpage.ui
-    config/ui/genericconfig.ui
+    config/projectconfigpage.ui
 )
 
 kconfig_add_kcfg_files(kdevcppcheck_CONFIG_SRCS
     config/globalsettings.kcfgc
+    config/projectsettings.kcfgc
 )
 
 kdevplatform_add_plugin(kdevcppcheck
@@ -62,6 +63,7 @@ target_link_libraries(kdevcppcheck
     KDev::Shell
     KF5::ConfigCore
     KF5::IconThemes
+    KF5::ItemViews
     KF5::KIOCore
     KF5::WidgetsAddons
     KF5::TextEditor

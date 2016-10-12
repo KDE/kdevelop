@@ -21,7 +21,7 @@
 #include "plugin.h"
 
 #include "config/globalconfigpage.h"
-#include "config/genericconfigpage.h"
+#include "config/projectconfigpage.h"
 #include "globalsettings.h"
 
 #include "debug.h"
@@ -245,7 +245,7 @@ KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConf
     if (number)
         return nullptr;
     else
-        return new GenericConfigPage(options.project, parent);
+        return new ProjectConfigPage(this, options.project, parent);
 }
 
 KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)

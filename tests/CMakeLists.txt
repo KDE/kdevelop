@@ -9,6 +9,7 @@ ecm_add_test(
 
 kconfig_add_kcfg_files(test_cppcheckjob_CONFIG_SRCS
     ../config/globalsettings.kcfgc
+    ../config/projectsettings.kcfgc
 )
 
 ecm_add_test(

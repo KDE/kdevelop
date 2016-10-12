@@ -21,9 +21,10 @@
 #include "parameters.h"
 
 #include "globalsettings.h"
-// #include "projectsettings.h"
+#include "projectsettings.h"
 
 #include <interfaces/iproject.h>
+#include <KShell>
 
 namespace cppcheck
 {
@@ -46,19 +47,18 @@ Parameters::Parameters(KDevelop::IProject* project)
     if (!project)
         return;
 
-    KSharedConfigPtr ptr = project->projectConfiguration();
-    KConfigGroup group = ptr->group("Cppcheck");
-    if (!group.isValid())
-        return;
+    ProjectSettings projectSettings;
+    projectSettings.setSharedConfig(project->projectConfiguration());
+    projectSettings.load();
 
-    checkStyle           = group.readEntry("AdditionalCheckStyle", false);
-    checkPerformance     = group.readEntry("AdditionalCheckPerformance", false);
-    checkPortability     = group.readEntry("AdditionalCheckPortability", false);
-    checkInformation     = group.readEntry("AdditionalCheckInformation", false);
-    checkUnusedFunction  = group.readEntry("AdditionalCheckUnusedFunction", false);
-    checkMissingInclude  = group.readEntry("AdditionalCheckMissingInclude", false);
+    checkStyle           = projectSettings.checkStyle();
+    checkPerformance     = projectSettings.checkPerformance();
+    checkPortability     = projectSettings.checkPortability();
+    checkInformation     = projectSettings.checkInformation();
+    checkUnusedFunction  = projectSettings.checkUnusedFunction();
+    checkMissingInclude  = projectSettings.checkMissingInclude();
 
-    extraParameters      = group.readEntry("cppcheckParameters", QString());
+    extraParameters      = projectSettings.extraParameters();
 }
 
 QStringList Parameters::commandLine() const
@@ -85,6 +85,9 @@ QStringList Parameters::commandLine() const
 
     if (checkMissingInclude)
         result << QStringLiteral("--enable=missingInclude");
+
+    if (!extraParameters.isEmpty())
+        result << KShell::splitArgs(extraParameters);
 
     result << checkPath;
 

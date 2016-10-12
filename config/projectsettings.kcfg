@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <group name="Cppcheck">
+
+    <entry name="checkStyle" key="checkStyle" type="Bool">
+        <default>false</default>
+    </entry>
+
+    <entry name="checkPerformance" key="checkPerformance" type="Bool">
+        <default>false</default>
+    </entry>
+
+    <entry name="checkPortability" key="checkPortability" type="Bool">
+        <default>false</default>
+    </entry>
+
+    <entry name="checkInformation" key="checkInformation" type="Bool">
+        <default>false</default>
+    </entry>
+
+    <entry name="checkUnusedFunction" key="checkUnusedFunction" type="Bool">
+        <default>false</default>
+    </entry>
+
+    <entry name="checkMissingInclude" key="checkMissingInclude" type="Bool">
+        <default>false</default>
+    </entry>
+
+    <entry name="extraParameters" key="extraParameters" type="String">
+        <default></default>
+    </entry>
+
+  </group>
+</kcfg>

@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
    Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
+   Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -17,14 +18,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CPPCHECKGENERICCONFIGPAGE_H_
-#define CPPCHECKGENERICCONFIGPAGE_H_
+#ifndef CPPCHECK_PROJECT_CONFIG_PAGE_H
+#define CPPCHECK_PROJECT_CONFIG_PAGE_H
 
-#include <QObject>
+#include "parameters.h"
 
 #include <interfaces/configpage.h>
-
-class QIcon;
 
 namespace KDevelop
 {
@@ -33,36 +32,37 @@ class IProject;
 
 namespace cppcheck
 {
-class Plugin;
 
 namespace Ui
 {
-class GenericConfig;
+class ProjectConfigPage;
 }
 
-class GenericConfigPage : public KDevelop::ConfigPage
+class Parameters;
+
+class ProjectConfigPage : public KDevelop::ConfigPage
 {
     Q_OBJECT
 
 public:
 
-    GenericConfigPage(KDevelop::IProject *project, QWidget* parent);
-    ~GenericConfigPage() override;
+    ProjectConfigPage(KDevelop::IPlugin* plugin, KDevelop::IProject* project, QWidget* parent);
+    ~ProjectConfigPage() override;
 
+    QIcon icon() const override;
     QString name() const override;
 
-signals:
-
 public slots:
-    void apply() override;
     void defaults() override;
     void reset() override;
 
 private:
-    KDevelop::IProject *m_project;
-    Ui::GenericConfig* ui;
+    void updateCommandLine();
+
+    QScopedPointer<Ui::ProjectConfigPage> ui;
+    QScopedPointer<Parameters> m_parameters;
 };
 
 }
 
-#endif /* CPPCHECKGENERICCONFIGPAGE_H_ */
+#endif
