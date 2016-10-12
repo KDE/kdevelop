@@ -3,30 +3,45 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+
+  <include>"parameters.h"</include>
+
   <group name="Cppcheck">
 
     <entry name="checkStyle" key="checkStyle" type="Bool">
-        <default>false</default>
+        <default code="true">defaults::checkStyle</default>
     </entry>
 
     <entry name="checkPerformance" key="checkPerformance" type="Bool">
-        <default>false</default>
+        <default code="true">defaults::checkPerformance</default>
     </entry>
 
     <entry name="checkPortability" key="checkPortability" type="Bool">
-        <default>false</default>
+        <default code="true">defaults::checkPortability</default>
     </entry>
 
     <entry name="checkInformation" key="checkInformation" type="Bool">
-        <default>false</default>
+        <default code="true">defaults::checkInformation</default>
     </entry>
 
     <entry name="checkUnusedFunction" key="checkUnusedFunction" type="Bool">
-        <default>false</default>
+        <default code="true">defaults::checkUnusedFunction</default>
     </entry>
 
     <entry name="checkMissingInclude" key="checkMissingInclude" type="Bool">
-        <default>false</default>
+        <default code="true">defaults::checkMissingInclude</default>
+    </entry>
+
+    <entry name="inconclusiveAnalysis" key="inconclusiveAnalysis" type="Bool">
+        <default code="true">defaults::inconclusiveAnalysis</default>
+    </entry>
+
+    <entry name="forceCheck" key="forceCheck" type="Bool">
+        <default code="true">defaults::forceCheck</default>
+    </entry>
+
+    <entry name="checkConfig" key="checkConfig" type="Bool">
+        <default code="true">defaults::checkConfig</default>
     </entry>
 
     <entry name="extraParameters" key="extraParameters" type="String">

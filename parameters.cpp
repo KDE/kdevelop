@@ -41,6 +41,9 @@ Parameters::Parameters(KDevelop::IProject* project)
     , checkInformation(defaults::checkInformation)
     , checkUnusedFunction(defaults::checkUnusedFunction)
     , checkMissingInclude(defaults::checkMissingInclude)
+    , inconclusiveAnalysis(defaults::inconclusiveAnalysis)
+    , forceCheck(defaults::forceCheck)
+    , checkConfig(defaults::checkConfig)
     , m_project(nullptr)
 {
     executablePath = KDevelop::Path(GlobalSettings::executablePath()).toLocalFile();
@@ -60,6 +63,9 @@ Parameters::Parameters(KDevelop::IProject* project)
     checkInformation     = projectSettings.checkInformation();
     checkUnusedFunction  = projectSettings.checkUnusedFunction();
     checkMissingInclude  = projectSettings.checkMissingInclude();
+    inconclusiveAnalysis = projectSettings.inconclusiveAnalysis();
+    forceCheck           = projectSettings.forceCheck();
+    checkConfig          = projectSettings.checkConfig();
 
     extraParameters      = projectSettings.extraParameters();
 
@@ -92,6 +98,15 @@ QStringList Parameters::commandLine() const
 
     if (checkMissingInclude)
         result << QStringLiteral("--enable=missingInclude");
+
+    if (inconclusiveAnalysis)
+        result << QStringLiteral("--inconclusive");
+
+    if (forceCheck)
+        result << QStringLiteral("--force");
+
+    if (checkConfig)
+        result << QStringLiteral("--check-config");
 
     if (!extraParameters.isEmpty())
         result << KShell::splitArgs(applyPlaceholders(extraParameters));

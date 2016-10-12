@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
-    <height>408</height>
+    <width>443</width>
+    <height>502</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -39,6 +39,16 @@
            </property>
            <property name="checked">
             <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QCheckBox" name="kcfg_inconclusiveAnalysis">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allow that Cppcheck reports even though the analysis is inconclusive. There are false positives with this option. Each result must be carefully investigated before you know if it is good or bad.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Inconclusive analysis</string>
            </property>
           </widget>
          </item>
@@ -81,6 +91,16 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="1">
+          <widget class="QCheckBox" name="kcfg_forceCheck">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Force checking of files that have a lot of configurations. Error is printed if such a file is found so there is no reason to use this by default. If used together with '--max-configs=', the last option is the one that is effective.&lt;/p&gt;&lt;p&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Force checking</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="0">
           <widget class="QCheckBox" name="kcfg_checkPortability">
            <property name="toolTip">
@@ -104,6 +124,16 @@
            </property>
            <property name="checked">
             <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QCheckBox" name="kcfg_checkConfig">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check Cppcheck configuration. The normal code analysis is disabled by this flag.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Check config</string>
            </property>
           </widget>
          </item>
@@ -233,6 +263,9 @@
   <tabstop>kcfg_checkInformation</tabstop>
   <tabstop>kcfg_checkUnusedFunction</tabstop>
   <tabstop>kcfg_checkMissingInclude</tabstop>
+  <tabstop>kcfg_inconclusiveAnalysis</tabstop>
+  <tabstop>kcfg_forceCheck</tabstop>
+  <tabstop>kcfg_checkConfig</tabstop>
   <tabstop>kcfg_extraParameters</tabstop>
   <tabstop>commandLineBreaks</tabstop>
   <tabstop>commandLine</tabstop>

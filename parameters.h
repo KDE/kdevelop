@@ -45,6 +45,9 @@ namespace defaults
     static const bool checkInformation = false;
     static const bool checkUnusedFunction = false;
     static const bool checkMissingInclude = false;
+    static const bool inconclusiveAnalysis = false;
+    static const bool forceCheck = false;
+    static const bool checkConfig = false;
 }
 
 class Parameters
@@ -66,6 +69,9 @@ public:
     bool checkInformation;
     bool checkUnusedFunction;
     bool checkMissingInclude;
+    bool inconclusiveAnalysis;
+    bool forceCheck;
+    bool checkConfig;
 
     QString extraParameters;
 
