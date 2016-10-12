@@ -1,6 +1,7 @@
 /* KDevelop
  *
  * Copyright 2011 Aleix Pol <aleixpol@kde.org>
+ * Copyright 2016 Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +22,13 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.3
+
 import org.kdevelop.welcomepage 4.3
 
 StandardPage
 {
+    id: root
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 20
@@ -64,9 +68,40 @@ StandardPage
             }
         }
 
+        Label {
+            id: greetingLabel
+
+            visible: !sessionsView.visible
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            text: i18n("<h3>Welcome to KDevelop!</h3>
+                <p>You can start working on a project by opening an existing or creating a new one via the above buttons.</p>
+                <p>If you need help, please check out the <a href=\"https://userbase.kde.org/KDevelop\">User Manual.</a></p>") +
+
+                (Qt.platform.os === "windows" ?
+                    i18n("<br/>
+                        <h3>Note for Windows users</h3>
+                        <p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>
+                        <p>You need to install either GCC via MinGW or install a recent version of the Microsoft Visual Studio IDE and make sure the environment is setup correctly <i>before</i> starting KDevelop.</p>
+                        <p>If you need further assistance, please check out the <a href=\"https://userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows instructions.</a></p>") :
+                    "")
+            wrapMode: Text.WordWrap
+            onLinkActivated: Qt.openUrlExternally(link)
+
+            MouseArea {
+                anchors.fill: parent
+
+                acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+            }
+        }
+
         ScrollView {
             Layout.fillHeight: true
             Layout.fillWidth: true
+
+            visible: sessionsView.count > 1 // we always have at least one active session
 
             ListView {
                 id: sessionsView
@@ -76,21 +111,25 @@ StandardPage
                 delegate: MouseArea {
                     width: sessionsView.width
                     height: visible ? 30 : 0
+
                     visible: projects.length > 0
-                    onClicked: sessions.loadSession(uuid)
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
 
+                    onClicked: sessionsModel.loadSession(uuid)
+
                     Label {
-                        width: parent.width
                         readonly property string projectNamesString: projectNames.join(", ").replace(/.kdev4/g, "")
-                        text: display=="" ? projectNamesString : i18n("%1: %2", display, projectNamesString)
+
+                        width: parent.width
+
+                        text: display == "" ? projectNamesString : i18n("%1: %2", display, projectNamesString)
                         elide: Text.ElideRight
                         opacity: parent.containsMouse ? 0.8 : 1
                     }
                 }
 
-                model: SessionsModel { id: sessions }
+                model: SessionsModel { id: sessionsModel }
 
                 header: Heading {
                     text: i18n("Sessions")

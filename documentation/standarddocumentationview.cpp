@@ -22,6 +22,8 @@
 #include "documentationfindwidget.h"
 #include "debug.h"
 
+#include <QFontDatabase>
+
 using namespace KDevelop;
 
 StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent)
@@ -29,6 +31,21 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
 {
     findWidget->setEnabled(true);
     connect(findWidget, &DocumentationFindWidget::newSearch, this, &StandardDocumentationView::search);
+
+    QFont sansSerifFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    QFont monospaceFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    QFont minimalFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
+
+    QWebSettings* s = settings();
+
+    s->setFontFamily(QWebSettings::StandardFont, sansSerifFont.family());
+    s->setFontFamily(QWebSettings::SerifFont, "Serif");
+    s->setFontFamily(QWebSettings::SansSerifFont, sansSerifFont.family());
+    s->setFontFamily(QWebSettings::FixedFont, monospaceFont.family());
+
+    s->setFontSize(QWebSettings::DefaultFontSize, QFontInfo(sansSerifFont).pixelSize());
+    s->setFontSize(QWebSettings::DefaultFixedFontSize, QFontInfo(monospaceFont).pixelSize());
+    s->setFontSize(QWebSettings::MinimumFontSize, QFontInfo(minimalFont).pixelSize());
 }
 
 void StandardDocumentationView::search ( const QString& text, DocumentationFindWidget::FindOptions options )

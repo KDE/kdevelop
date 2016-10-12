@@ -289,13 +289,16 @@ public:
         const auto& url = nextDocumentToParse();
         if (!url.isEmpty()) {
             qCDebug(LANGUAGE) << "creating parse-job" << url << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+
             const QString elidedPathString = elidedPathLeft(url.str(), 70);
             emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
 
-            auto parsePlanIt = m_documents.find(url);
-
             ThreadWeaver::QObjectDecorator* decorator = nullptr;
             {
+                // copy shared data before unlocking the mutex
+                const auto parsePlanConstIt = m_documents.constFind(url);
+                const DocumentParsePlan parsePlan = *parsePlanConstIt;
+
                 // we must not lock the mutex while creating a parse job
                 // this could in turn lock e.g. the DUChain and then
                 // we have a classic lock order inversion (since, usually,
@@ -303,15 +306,22 @@ public:
                 // mutex)
                 // see also: https://bugs.kde.org/show_bug.cgi?id=355100
                 m_mutex.unlock();
-                decorator = createParseJob(url, *parsePlanIt);
+                decorator = createParseJob(url, parsePlan);
                 m_mutex.lock();
             }
 
-            // Remove all mentions of this document.
-            for (const auto& target : parsePlanIt->targets) {
-                m_documentsForPriority[target.priority].remove(url);
+            // iterator might get invalid during the time we didn't have the lock
+            // search again
+            const auto parsePlanIt = m_documents.find(url);
+            if (parsePlanIt != m_documents.end()) {
+                // Remove all mentions of this document.
+                for (const auto& target : parsePlanIt->targets) {
+                    m_documentsForPriority[target.priority].remove(url);
+                }
+                m_documents.erase(parsePlanIt);
+            } else {
+                qWarning(LANGUAGE) << "Document got removed during parse job creation:" << url;
             }
-            m_documents.erase(parsePlanIt);
 
             if (decorator) {
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
