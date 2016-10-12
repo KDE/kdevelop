@@ -41,15 +41,23 @@ class Job : public KDevelop::OutputExecuteJob
 public:
     struct Parameters
     {
-        QString parameters;
+        // global settings
+        QString executablePath;
+        bool hideOutputView;
+        bool showXmlOutput;
+
+        // project settings
         bool checkStyle = false;
         bool checkPerformance = false;
         bool checkPortability = false;
         bool checkInformation = false;
         bool checkUnusedFunction = false;
         bool checkMissingInclude = false;
+
+        QString extraParameters;
+
+        // runtime settings
         QString path;
-        QString executable;
     };
 
     Job(const Parameters& params, QObject* parent = nullptr);
@@ -72,6 +80,8 @@ protected:
 
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
+
+    bool m_showXmlOutput;
 };
 
 }

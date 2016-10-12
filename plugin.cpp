@@ -20,8 +20,10 @@
 
 #include "plugin.h"
 
+#include "config/globalconfigpage.h"
 #include "config/genericconfigpage.h"
-#include "config/cppcheckpreferences.h"
+#include "globalsettings.h"
+
 #include "debug.h"
 #include "job.h"
 
@@ -141,24 +143,21 @@ void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
         return;
     }
 
-    KConfigGroup group2 = KSharedConfig::openConfig()->group("Cppcheck");
-    QUrl cppcheckPath = group2.readEntry("Cppcheck Path");
-
     Job::Parameters params;
 
-    if (cppcheckPath.toLocalFile().isEmpty())
-        params.executable = QStringLiteral("/usr/bin/cppcheck");
-    else
-        params.executable = cppcheckPath.toLocalFile();
+    params.executablePath = KDevelop::Path(GlobalSettings::executablePath()).toLocalFile();
+    params.hideOutputView = GlobalSettings::hideOutputView();
+    params.showXmlOutput  = GlobalSettings::showXmlOutput();
 
-    params.path                 = path;
-    params.parameters           = group.readEntry("cppcheckParameters", QString(""));
+    params.extraParameters      = group.readEntry("cppcheckParameters", QString(""));
     params.checkStyle           = group.readEntry("AdditionalCheckStyle", false);
     params.checkPerformance     = group.readEntry("AdditionalCheckPerformance", false);
     params.checkPortability     = group.readEntry("AdditionalCheckPortability", false);
     params.checkInformation     = group.readEntry("AdditionalCheckInformation", false);
     params.checkUnusedFunction  = group.readEntry("AdditionalCheckUnusedFunction", false);
     params.checkMissingInclude  = group.readEntry("AdditionalCheckMissingInclude", false);
+
+    params.path                 = path;
 
     m_problems.clear();
     m_project = project;
@@ -169,6 +168,11 @@ void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
 
     core()->uiController()->registerStatus(new KDevelop::JobStatus(job, "Cppcheck"));
     core()->runController()->registerJob( job );
+
+    if (params.hideOutputView)
+        raiseProblemsView();
+    else
+        raiseOutputView();
 }
 
 void Plugin::problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems)
@@ -270,7 +274,7 @@ KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
     if (number)
         return nullptr;
     else
-        return new CppCheckPreferences(this, parent);
+        return new GlobalConfigPage(this, parent);
 }
 
 }

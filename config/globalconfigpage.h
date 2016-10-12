@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 Laszlo Kis-Adam <laszlo.kis-adam@kdemail.net>
+ * Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,23 +16,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CPPCHECKPREFERENCES_H
-#define CPPCHECKPREFERENCES_H
+#ifndef CPPCHECK_GLOBAL_CONFIG_PAGE_H
+#define CPPCHECK_GLOBAL_CONFIG_PAGE_H
 
 #include <interfaces/configpage.h>
 
-class CppCheckSettings;
+namespace cppcheck
+{
 
-class CppCheckPreferences: public KDevelop::ConfigPage {
-Q_OBJECT
+class GlobalConfigPage: public KDevelop::ConfigPage
+{
+    Q_OBJECT
+
 public:
-    explicit CppCheckPreferences(KDevelop::IPlugin *plugin = nullptr, QWidget* parent = nullptr);
-    ~CppCheckPreferences() override;
-    ConfigPage::ConfigPageType configPageType() const override;
+    GlobalConfigPage(KDevelop::IPlugin* plugin, QWidget* parent);
+    ~GlobalConfigPage() override;
+
+    KDevelop::ConfigPage::ConfigPageType configPageType() const override;
+
     QString name() const override;
     QString fullName() const override;
     QIcon icon() const override;
-
 };
+
+}
 
 #endif

@@ -44,6 +44,7 @@ namespace cppcheck
 Job::Job(const Parameters& params, QObject* parent)
     : KDevelop::OutputExecuteJob(parent)
     , m_parser(new CppcheckParser)
+    , m_showXmlOutput(params.showXmlOutput)
 {
     setJobName(i18n("Cppcheck output"));
 
@@ -55,13 +56,13 @@ Job::Job(const Parameters& params, QObject* parent)
     setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStderr);
     setProperties(KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
 
-    *this << params.executable;
+    *this << params.executablePath;
 
     *this << "--force";
     *this << "--xml-version=2";
 
-    if (!params.parameters.isEmpty())
-        *this << KShell::splitArgs(params.parameters);
+    if (!params.extraParameters.isEmpty())
+        *this << KShell::splitArgs(params.extraParameters);
 
     if (params.checkStyle)
         *this << "--enable=style";
@@ -150,11 +151,14 @@ void Job::postProcessStderr(const QStringList& lines)
 
             emit problemsDetected({problem});
 
-            m_standardOutput << line;
+            if (m_showXmlOutput)
+                m_standardOutput << line;
+            else
+                postProcessStdout({line});
         }
     }
 
-    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning)
+    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning && m_showXmlOutput)
         KDevelop::OutputExecuteJob::postProcessStderr(lines);
 }
 

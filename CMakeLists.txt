@@ -28,18 +28,30 @@ include_directories(
     ${cppcheck_SOURCE_DIR}/config
 )
 
-set(kdevcppcheck_PART_SRCS
+set(kdevcppcheck_SRCS
     debug.cpp
     job.cpp
     parser.cpp
     plugin.cpp
+
+    config/globalconfigpage.cpp
     config/genericconfigpage.cpp
-    config/cppcheckpreferences.cpp
 )
 
-ki18n_wrap_ui(kdevcppcheck_PART_SRCS  ${kdevcppcheck_PART_UI} config/ui/genericconfig.ui config/ui/cppchecksettings.ui)
-kconfig_add_kcfg_files(kdevcppcheck_PART_SRCS config/cppcheckconfig.kcfgc)
-kdevplatform_add_plugin(kdevcppcheck JSON kdevcppcheck.json SOURCES ${kdevcppcheck_PART_SRCS} ${kdevcppcheck_CONFIG_SRCS})
+ki18n_wrap_ui(kdevcppcheck_UI_SRCS
+    config/globalconfigpage.ui
+    config/ui/genericconfig.ui
+)
+
+kconfig_add_kcfg_files(kdevcppcheck_CONFIG_SRCS
+    config/globalsettings.kcfgc
+)
+
+kdevplatform_add_plugin(kdevcppcheck
+    JSON kdevcppcheck.json
+    SOURCES ${kdevcppcheck_SRCS} ${kdevcppcheck_UI_SRCS} ${kdevcppcheck_CONFIG_SRCS}
+)
+
 target_link_libraries(kdevcppcheck
     KDev::Interfaces
     KDev::Project
