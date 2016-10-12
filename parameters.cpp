@@ -31,6 +31,32 @@
 namespace cppcheck
 {
 
+void includesForItem(KDevelop::ProjectBaseItem* parent, QSet<KDevelop::Path>& includes)
+{
+    foreach (auto child, parent->children()) {
+        if (child->type() == KDevelop::ProjectBaseItem::ProjectItemType::File)
+            continue;
+
+        else if (child->type() == KDevelop::ProjectBaseItem::ProjectItemType::ExecutableTarget ||
+                 child->type() == KDevelop::ProjectBaseItem::ProjectItemType::LibraryTarget ||
+                 child->type() == KDevelop::ProjectBaseItem::ProjectItemType::Target) {
+
+            foreach (auto dir, child->project()->buildSystemManager()->includeDirectories(child))
+                includes.insert(dir);
+        }
+
+        includesForItem(child, includes);
+    }
+}
+
+QList<KDevelop::Path> includesForProject(KDevelop::IProject* project)
+{
+    QSet<KDevelop::Path> includesSet;
+    includesForItem(project->projectItem(), includesSet);
+
+    return includesSet.toList();
+}
+
 Parameters::Parameters(KDevelop::IProject* project)
     : executablePath(defaults::executablePath)
     , hideOutputView(defaults::hideOutputView)
@@ -44,7 +70,9 @@ Parameters::Parameters(KDevelop::IProject* project)
     , inconclusiveAnalysis(defaults::inconclusiveAnalysis)
     , forceCheck(defaults::forceCheck)
     , checkConfig(defaults::checkConfig)
-    , m_project(nullptr)
+    , useProjectIncludes(defaults::useProjectIncludes)
+    , useSystemIncludes(defaults::useSystemIncludes)
+    , m_project(project)
 {
     executablePath = KDevelop::Path(GlobalSettings::executablePath()).toLocalFile();
     hideOutputView = GlobalSettings::hideOutputView();
@@ -69,9 +97,9 @@ Parameters::Parameters(KDevelop::IProject* project)
 
     extraParameters      = projectSettings.extraParameters();
 
-    m_project = project;
     m_projectRootPath = m_project->path();
     m_projectBuildPath = m_project->buildSystemManager()->buildDirectory(m_project->projectItem());
+    m_includeDirectories = includesForProject(project);
 }
 
 QStringList Parameters::commandLine() const
@@ -110,6 +138,28 @@ QStringList Parameters::commandLine() const
 
     if (!extraParameters.isEmpty())
         result << KShell::splitArgs(applyPlaceholders(extraParameters));
+
+    if (m_project && useProjectIncludes) {
+        QList<KDevelop::Path> ignored;
+
+        foreach (QString element, applyPlaceholders(ignoredIncludes).split(';')) {
+            if (!element.trimmed().isEmpty())
+                ignored.append(KDevelop::Path(element));
+        }
+
+        foreach (auto dir, m_includeDirectories) {
+            if (ignored.contains(dir))
+                continue;
+
+            else if (useSystemIncludes ||
+                     dir == m_projectRootPath || m_projectRootPath.isParentOf(dir) ||
+                     dir == m_projectBuildPath || m_projectBuildPath.isParentOf(dir)) {
+
+                result << QStringLiteral("-I");
+                result << dir.toLocalFile();
+            }
+        }
+    }
 
     result << checkPath;
 

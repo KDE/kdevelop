@@ -44,6 +44,18 @@
         <default code="true">defaults::checkConfig</default>
     </entry>
 
+    <entry name="useProjectIncludes" key="useProjectIncludes" type="Bool">
+        <default code="true">defaults::useProjectIncludes</default>
+    </entry>
+
+    <entry name="useSystemIncludes" key="useSystemIncludes" type="Bool">
+        <default code="true">defaults::useSystemIncludes</default>
+    </entry>
+
+    <entry name="ignoredIncludes" key="ignoredIncludes" type="String">
+        <default></default>
+    </entry>
+
     <entry name="extraParameters" key="extraParameters" type="String">
         <default></default>
     </entry>

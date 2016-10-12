@@ -48,6 +48,9 @@ namespace defaults
     static const bool inconclusiveAnalysis = false;
     static const bool forceCheck = false;
     static const bool checkConfig = false;
+
+    static const bool useProjectIncludes = true;
+    static const bool useSystemIncludes = false;
 }
 
 class Parameters
@@ -73,6 +76,10 @@ public:
     bool forceCheck;
     bool checkConfig;
 
+    bool useProjectIncludes;
+    bool useSystemIncludes;
+    QString ignoredIncludes;
+
     QString extraParameters;
 
     // runtime settings
@@ -85,6 +92,8 @@ private:
 
     KDevelop::Path m_projectRootPath;
     KDevelop::Path m_projectBuildPath;
+
+    QList<KDevelop::Path> m_includeDirectories;
 };
 
 }

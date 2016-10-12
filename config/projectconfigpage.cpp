@@ -82,6 +82,9 @@ void ProjectConfigPage::updateCommandLine()
     m_parameters->inconclusiveAnalysis = ui->kcfg_inconclusiveAnalysis->isChecked();
     m_parameters->forceCheck = ui->kcfg_forceCheck->isChecked();
     m_parameters->checkConfig = ui->kcfg_checkConfig->isChecked();
+    m_parameters->useProjectIncludes = ui->kcfg_useProjectIncludes->isChecked();
+    m_parameters->useSystemIncludes = ui->kcfg_useSystemIncludes->isChecked();
+    m_parameters->ignoredIncludes = ui->kcfg_ignoredIncludes->text();
     m_parameters->extraParameters = ui->kcfg_extraParameters->text().trimmed();
 
     QString commandLine = m_parameters->commandLine().join(' ');

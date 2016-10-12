@@ -141,6 +141,89 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabIncludes">
+      <attribute name="title">
+       <string>Include directories</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QCheckBox" name="kcfg_useProjectIncludes">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add 'project' include directories to cppcheck arguments. This option adds only paths related with project's root and build directories.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Use 'project' include dirs</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="kcfg_useSystemIncludes">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add other, 'system' include directories to cppcheck arguments. &lt;/p&gt;&lt;p&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Use 'system' include dirs</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>&amp;Ignored includes:</string>
+           </property>
+           <property name="buddy">
+            <cstring>kcfg_ignoredIncludes</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="kcfg_ignoredIncludes">
+           <property name="toolTip">
+            <string>&lt;html&gt;
+
+&lt;p&gt;Defines semicolon-separated list of ignored include directories.&lt;/p&gt;
+
+&lt;p&gt;You can use the following placeholders:&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;&lt;tt&gt;%p&lt;/tt&gt;&lt;/b&gt; - Gets replaced by the URL of the project's root directory.&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;&lt;tt&gt;%b&lt;/tt&gt;&lt;/b&gt; - Gets replaced by the URL of the project's build directory.&lt;/p&gt;
+
+&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tabExtra">
       <attribute name="title">
        <string>Extra parameters</string>
@@ -266,10 +349,30 @@
   <tabstop>kcfg_inconclusiveAnalysis</tabstop>
   <tabstop>kcfg_forceCheck</tabstop>
   <tabstop>kcfg_checkConfig</tabstop>
+  <tabstop>kcfg_useProjectIncludes</tabstop>
+  <tabstop>kcfg_useSystemIncludes</tabstop>
+  <tabstop>kcfg_ignoredIncludes</tabstop>
   <tabstop>kcfg_extraParameters</tabstop>
   <tabstop>commandLineBreaks</tabstop>
   <tabstop>commandLine</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>kcfg_useProjectIncludes</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_useSystemIncludes</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>226</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>665</x>
+     <y>58</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
