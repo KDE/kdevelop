@@ -31,6 +31,7 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <kactioncollection.h>
 #include <kpluginfactory.h>
 #include <language/interfaces/editorcontext.h>
@@ -38,6 +39,7 @@
 #include <project/projectmodel.h>
 #include <shell/problemmodel.h>
 #include <shell/problemmodelset.h>
+#include <util/jobstatus.h>
 
 #include <QMessageBox>
 
@@ -146,6 +148,8 @@ void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
 
     Job* job = new cppcheck::Job(params, this);
     connect(job, &Job::finished, this, &Plugin::result);
+
+    core()->uiController()->registerStatus(new KDevelop::JobStatus(job, "Cppcheck"));
     core()->runController()->registerJob( job );
 }
 

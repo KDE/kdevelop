@@ -90,6 +90,25 @@ Job::~Job()
 
 void Job::postProcessStdout(const QStringList& lines)
 {
+    static const auto fileNameRegex = QRegularExpression("Checking ([^:]*)\\.{3}");
+    static const auto percentRegex  = QRegularExpression("(\\d+)% done");
+
+    QRegularExpressionMatch match;
+
+    foreach (const QString & line, lines) {
+        match = fileNameRegex.match(line);
+        if (match.hasMatch()) {
+            emit infoMessage(this, match.captured(1));
+            continue;
+        }
+
+        match = percentRegex.match(line);
+        if (match.hasMatch()) {
+            setPercent(match.captured(1).toULong());
+            continue;
+        }
+    }
+
     m_standardOutput << lines;
 
     if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning)
