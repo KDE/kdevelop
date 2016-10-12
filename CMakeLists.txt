@@ -1,4 +1,4 @@
-project(cppcheck)
+project(kdevcppcheck)
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 90)
@@ -17,15 +17,12 @@ include(KDECompilerSettings)
 include(FeatureSummary)
 
 find_package(Qt5 REQUIRED Core Widgets Test)
-find_package(KF5 REQUIRED COMPONENTS IconThemes ItemModels ItemViews ThreadWeaver TextEditor I18n)
+find_package(KF5 REQUIRED COMPONENTS ItemModels ItemViews)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-
 include_directories(
-    ${cppcheck_BINARY_DIR}
-    ${cppcheck_SOURCE_DIR}
-    ${cppcheck_SOURCE_DIR}/config
+    ${kdevcppcheck_BINARY_DIR}
+    ${kdevcppcheck_SOURCE_DIR}
 )
 
 set(kdevcppcheck_SRCS
@@ -55,23 +52,15 @@ kdevplatform_add_plugin(kdevcppcheck
 )
 
 target_link_libraries(kdevcppcheck
-    KDev::Interfaces
     KDev::Project
     KDev::Language
     KDev::OutputView
-    KDev::Util
     KDev::Shell
-    KF5::ConfigCore
-    KF5::IconThemes
     KF5::ItemViews
-    KF5::KIOCore
-    KF5::WidgetsAddons
-    KF5::TextEditor
-    Qt5::Network)
+)
 
 install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
 
 add_subdirectory(tests)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-

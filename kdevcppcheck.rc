@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<gui name="cppcheck" library="libcppcheckplugin" version="7">
+<gui name="kdevcppcheck" version="8">
 <MenuBar>
  <Menu name="analyze">
    <text context="@title:menu">Analyze</text>
