@@ -27,12 +27,13 @@
 
 #include "job.h"
 
-#include "cppcheckparser.h"
 #include "debug.h"
+#include "parser.h"
 
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KShell>
+#include <shell/problem.h>
 
 #include <QApplication>
 #include <QRegularExpression>
@@ -42,6 +43,7 @@ namespace cppcheck
 
 Job::Job(const Parameters& params, QObject* parent)
     : KDevelop::OutputExecuteJob(parent)
+    , m_parser(new CppcheckParser)
 {
     setJobName(i18n("Cppcheck output"));
 
@@ -128,10 +130,28 @@ void Job::postProcessStderr(const QStringList& lines)
         //
         // Therefore we must 'move' such messages to m_standardOutput.
 
-        if (line.indexOf(xmlStartRegex) != -1) // the line contains XML
+        if (line.indexOf(xmlStartRegex) != -1) { // the line contains XML
             m_xmlOutput << line;
-        else
+
+            m_parser->addData(line);
+
+            auto problems = m_parser->parse();
+
+            if (!problems.isEmpty())
+                emit problemsDetected(problems);
+        }
+        else {
+            KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem);
+
+            problem->setSource(KDevelop::IProblem::Plugin);
+            problem->setSeverity(KDevelop::IProblem::Error);
+            problem->setDescription(line);
+            problem->setExplanation("Check your cppcheck settings");
+
+            emit problemsDetected({problem});
+
             m_standardOutput << line;
+        }
     }
 
     if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning)
@@ -146,11 +166,6 @@ void Job::start()
     qCDebug(KDEV_CPPCHECK) << "executing:" << commandLine().join(' ');
 
     KDevelop::OutputExecuteJob::start();
-}
-
-QVector<KDevelop::IProblem::Ptr> Job::problems() const
-{
-    return m_problems;
 }
 
 void Job::childProcessError(QProcess::ProcessError e)
@@ -199,11 +214,6 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
         qCDebug(KDEV_CPPCHECK) << m_standardOutput.join('\n');
         qCDebug(KDEV_CPPCHECK) << "cppcheck failed, XML output: ";
         qCDebug(KDEV_CPPCHECK) << m_xmlOutput.join('\n');
-    } else {
-        CppcheckParser parser;
-        parser.addData(m_xmlOutput.join('\n'));
-        parser.parse();
-        m_problems = parser.problems();
     }
 
     KDevelop::OutputExecuteJob::childProcessExited(exitCode, exitStatus);

@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
- * Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
- * Copyright 2015 Anton Anikin <anton.anikin@htower.ru>
+
+   Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
+   Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -18,15 +19,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QApplication>
+#include "parser.h"
+
+#include "debug.h"
+
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <shell/problem.h>
 
-#include "debug.h"
-#include "cppcheckparser.h"
+#include <QApplication>
 
-namespace cppcheck {
+namespace cppcheck
+{
 
 /**
  * Convert the value of <verbose> attribute of <error> element from cppcheck's
@@ -58,10 +62,9 @@ QString verboseMessageToHtml( const QString & input )
     return output;
 }
 
-CppcheckParser::CppcheckParser(QObject*) :
-    m_errorLine(0),
-    m_errorInconclusive(false),
-    m_errorSeverity(Unknown)
+CppcheckParser::CppcheckParser() :
+      m_errorLine(-1)
+    , m_errorInconclusive(false)
 {
 }
 
@@ -132,7 +135,7 @@ bool CppcheckParser::startElement()
     return true;
 }
 
-bool CppcheckParser::endElement()
+bool CppcheckParser::endElement(QVector<KDevelop::IProblem::Ptr>& problems)
 {
     qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: elem: " << qPrintable(name().toString());
 
@@ -153,7 +156,7 @@ bool CppcheckParser::endElement()
                                << m_errorLine << " at " << m_errorFile
                                << ", msg: " << m_errorMessage;
 
-        storeError();
+        storeError(problems);
         break;
 
     case Results:
@@ -170,8 +173,9 @@ bool CppcheckParser::endElement()
     return true;
 }
 
-void CppcheckParser::parse()
+QVector<KDevelop::IProblem::Ptr> CppcheckParser::parse()
 {
+    QVector<KDevelop::IProblem::Ptr> problems;
     qCDebug(KDEV_CPPCHECK) << "CppcheckParser::parse!";
 
     while (!atEnd()) {
@@ -187,7 +191,7 @@ void CppcheckParser::parse()
             break;
 
         case EndElement:
-            endElement();
+            endElement(problems);
             break;
 
         case Characters:
@@ -217,9 +221,11 @@ void CppcheckParser::parse()
             break;
         }
     }
+
+    return problems;
 }
 
-void CppcheckParser::storeError()
+void CppcheckParser::storeError(QVector<KDevelop::IProblem::Ptr>& problems)
 {
     KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem());
     QStringList messagePrefix;
@@ -250,9 +256,10 @@ void CppcheckParser::storeError()
     KDevelop::DocumentRange range;
     range.document = KDevelop::IndexedString(m_errorFile);
     range.setBothLines(m_errorLine - 1);
+    range.setBothColumns(0);
     problem->setFinalLocation(range);
 
-    m_problems.push_back(problem);
+    problems.push_back(problem);
 }
 
 }

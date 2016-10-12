@@ -26,16 +26,15 @@ include_directories(
     ${cppcheck_BINARY_DIR}
     ${cppcheck_SOURCE_DIR}
     ${cppcheck_SOURCE_DIR}/config
-    ${cppcheck_SOURCE_DIR}/parsers
 )
 
 set(kdevcppcheck_PART_SRCS
     debug.cpp
     job.cpp
+    parser.cpp
     plugin.cpp
     config/genericconfigpage.cpp
     config/cppcheckpreferences.cpp
-    parsers/cppcheckparser.cpp
 )
 
 ki18n_wrap_ui(kdevcppcheck_PART_SRCS  ${kdevcppcheck_PART_UI} config/ui/genericconfig.ui config/ui/cppchecksettings.ui)

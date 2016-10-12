@@ -21,6 +21,8 @@
 #ifndef CPPCHECK_PLUGIN_H
 #define CPPCHECK_PLUGIN_H
 
+#include "job.h"
+
 #include <interfaces/iplugin.h>
 #include <QScopedPointer>
 
@@ -55,14 +57,22 @@ public:
     KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 
 private:
+    void raiseProblemsView();
+    void raiseOutputView();
+
     void runCppcheck(bool checkProject);
     void runCppcheck(KDevelop::IProject* project, const QString& path);
+
+    void problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems);
     void result(KJob* job);
 
     QAction* m_actionFile;
     QAction* m_actionProject;
     QAction* m_actionProjectItem;
+
+    KDevelop::IProject* m_project;
     QScopedPointer<KDevelop::ProblemModel> m_model;
+    QVector<KDevelop::IProblem::Ptr> m_problems;
 };
 
 }

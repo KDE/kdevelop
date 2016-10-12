@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
- * Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
- * Copyright 2015 Anton Anikin <anton.anikin@htower.ru>
+
+   Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
+   Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -18,33 +19,33 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _CPPCHECKPARSER_H_
-#define _CPPCHECKPARSER_H_
-
-#include <QXmlStreamReader>
-#include <QStack>
+#ifndef CPPCHECK_PARSER_H
+#define CPPCHECK_PARSER_H
 
 #include <interfaces/iproblem.h>
+
+#include <QStack>
+#include <QXmlStreamReader>
 
 namespace cppcheck
 {
 
 /// A class which parses cppcheck's XML output
-class CppcheckParser : public QXmlStreamReader
+class CppcheckParser : protected QXmlStreamReader
 {
 public:
-    explicit CppcheckParser(QObject* parent = nullptr);
+    CppcheckParser();
     ~CppcheckParser();
 
-    QVector<KDevelop::IProblem::Ptr> problems() const { return m_problems; }
+    using QXmlStreamReader::addData;
 
-    void parse();
+    QVector<KDevelop::IProblem::Ptr> parse();
 
 private:
-    void storeError();
+    void storeError(QVector<KDevelop::IProblem::Ptr>& problems);
 
     // XML parsing
-    bool endElement();
+    bool endElement(QVector<KDevelop::IProblem::Ptr>& problems);
     bool startElement();
     void clear();
 
@@ -60,14 +61,12 @@ private:
     QStack<State> m_stateStack;
 
     // error info
-    int     m_errorLine;
-    bool    m_errorInconclusive;
-    QString m_errorFile;
+    QString m_errorSeverity;
     QString m_errorMessage;
     QString m_errorVerboseMessage;
-    QString m_errorSeverity;
-
-    QVector<KDevelop::IProblem::Ptr> m_problems;
+    QString m_errorFile;
+    int     m_errorLine;
+    bool    m_errorInconclusive;
 };
 
 }

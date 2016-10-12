@@ -23,7 +23,7 @@
 #include <tests/autotestshell.h>
 
 #include "kdevplatform/shell/problem.h"
-#include "cppcheckparser.h"
+#include "parser.h"
 
 using namespace KDevelop;
 using namespace cppcheck;
@@ -64,9 +64,8 @@ void TestCppcheckParser::testParser()
 
     cppcheck::CppcheckParser parser;
     parser.addData(cppcheck_example_output);
-    parser.parse();
 
-    const auto problems = parser.problems();
+    const auto problems = parser.parse();
     QVERIFY(!problems.empty());
 
     IProblem::Ptr p = problems[0];

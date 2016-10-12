@@ -54,6 +54,7 @@ static const QString modelName = QStringLiteral("Cppcheck");
 
 Plugin::Plugin(QObject* parent, const QVariantList&)
     : IPlugin("kdevcppcheck", parent)
+    , m_project(nullptr)
     , m_model(new KDevelop::ProblemModel(this))
 {
     qCDebug(KDEV_CPPCHECK) << "setting cppcheck rc file";
@@ -90,6 +91,19 @@ void Plugin::unload()
 
 Plugin::~Plugin()
 {
+}
+
+void Plugin::raiseProblemsView()
+{
+    core()->languageController()->problemModelSet()->showModel(modelName);
+}
+
+void Plugin::raiseOutputView()
+{
+    core()->uiController()->findToolView(
+        i18ndc("kdevstandardoutputview", "@title:window", "Test"),
+        nullptr,
+        KDevelop::IUiController::FindFlags::Raise);
 }
 
 void Plugin::runCppcheck(bool checkProject)
@@ -146,11 +160,48 @@ void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
     params.checkUnusedFunction  = group.readEntry("AdditionalCheckUnusedFunction", false);
     params.checkMissingInclude  = group.readEntry("AdditionalCheckMissingInclude", false);
 
+    m_problems.clear();
+    m_project = project;
+
     Job* job = new cppcheck::Job(params, this);
-    connect(job, &Job::finished, this, &Plugin::result);
+    connect(job, &Job::problemsDetected, this, &Plugin::problemsDetected);
+    connect(job, &Job::finished,         this, &Plugin::result);
 
     core()->uiController()->registerStatus(new KDevelop::JobStatus(job, "Cppcheck"));
     core()->runController()->registerJob( job );
+}
+
+void Plugin::problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems)
+{
+    static int maxLength = 0;
+
+    if (m_problems.isEmpty())
+        maxLength = 0;
+
+    // Fix problems with incorrect range, which produced by cppcheck's errors
+    // without <location> element. In this case location automaticlly gets "/"
+    // which entails showing file dialog after selecting such problem in
+    // ProblemsView. To avoid this we set project's root path as problem location.
+    foreach (auto problem, problems) {
+        auto range = problem->finalLocation();
+        if (range.document.isEmpty()) {
+            range.document = KDevelop::IndexedString(m_project->path().toLocalFile());
+            problem->setFinalLocation(range);
+        }
+    }
+
+    m_problems.append(problems);
+
+    foreach (auto p, problems) {
+        m_model->addProblem(p);
+
+        // This performs adjusing of columns width in the ProblemsView.
+        // Should be fixed in ProblemsView ?
+        if (maxLength < p->description().length()) {
+            maxLength = p->description().length();
+            m_model->setProblems(m_problems);
+        }
+    }
 }
 
 void Plugin::result(KJob* kjob)
@@ -159,10 +210,14 @@ void Plugin::result(KJob* kjob)
     if (!job)
         return;
 
-    if (job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded) {
-        m_model->setProblems(job->problems());
-        core()->languageController()->problemModelSet()->showModel(modelName);
-    }
+    m_model->setProblems(m_problems);
+
+    if (job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded)
+        raiseProblemsView();
+    else
+        raiseOutputView();
+
+    m_project = nullptr;
 }
 
 KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context)

@@ -32,6 +32,8 @@
 namespace cppcheck
 {
 
+class CppcheckParser;
+
 class Job : public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
@@ -55,7 +57,8 @@ public:
 
     void start() override;
 
-    QVector<KDevelop::IProblem::Ptr> problems() const;
+Q_SIGNALS:
+    void problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems);
 
 protected slots:
     void postProcessStdout(const QStringList& lines) override;
@@ -65,10 +68,10 @@ protected slots:
     void childProcessError(QProcess::ProcessError processError) override;
 
 protected:
+    QScopedPointer<CppcheckParser> m_parser;
+
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
-
-    QVector<KDevelop::IProblem::Ptr> m_problems;
 };
 
 }
