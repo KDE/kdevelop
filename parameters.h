@@ -33,24 +33,26 @@ namespace cppcheck
 
 namespace defaults
 {
-    // global settings
-    static const QString executablePath = QStringLiteral("/usr/bin/cppcheck");
-    static const bool hideOutputView = true;
-    static const bool showXmlOutput = false;
 
-    // project settings
-    static const bool checkStyle = false;
-    static const bool checkPerformance = false;
-    static const bool checkPortability = false;
-    static const bool checkInformation = false;
-    static const bool checkUnusedFunction = false;
-    static const bool checkMissingInclude = false;
-    static const bool inconclusiveAnalysis = false;
-    static const bool forceCheck = false;
-    static const bool checkConfig = false;
+// global settings
+static const QString executablePath = QStringLiteral("/usr/bin/cppcheck");
+static const bool hideOutputView = true;
+static const bool showXmlOutput = false;
 
-    static const bool useProjectIncludes = true;
-    static const bool useSystemIncludes = false;
+// project settings
+static const bool checkStyle = false;
+static const bool checkPerformance = false;
+static const bool checkPortability = false;
+static const bool checkInformation = false;
+static const bool checkUnusedFunction = false;
+static const bool checkMissingInclude = false;
+static const bool inconclusiveAnalysis = false;
+static const bool forceCheck = false;
+static const bool checkConfig = false;
+
+static const bool useProjectIncludes = true;
+static const bool useSystemIncludes = false;
+
 }
 
 class Parameters

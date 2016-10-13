@@ -63,28 +63,28 @@ QList<KDevelop::Path> includesForProject(KDevelop::IProject* project)
 }
 
 Parameters::Parameters(KDevelop::IProject* project)
-    : executablePath(defaults::executablePath)
-    , hideOutputView(defaults::hideOutputView)
-    , showXmlOutput(defaults::showXmlOutput)
-    , checkStyle(defaults::checkStyle)
-    , checkPerformance(defaults::checkPerformance)
-    , checkPortability(defaults::checkPortability)
-    , checkInformation(defaults::checkInformation)
-    , checkUnusedFunction(defaults::checkUnusedFunction)
-    , checkMissingInclude(defaults::checkMissingInclude)
-    , inconclusiveAnalysis(defaults::inconclusiveAnalysis)
-    , forceCheck(defaults::forceCheck)
-    , checkConfig(defaults::checkConfig)
-    , useProjectIncludes(defaults::useProjectIncludes)
-    , useSystemIncludes(defaults::useSystemIncludes)
-    , m_project(project)
+    : m_project(project)
 {
     executablePath = KDevelop::Path(GlobalSettings::executablePath()).toLocalFile();
     hideOutputView = GlobalSettings::hideOutputView();
     showXmlOutput  = GlobalSettings::showXmlOutput();
 
-    if (!project)
+    if (!project) {
+        checkStyle           = defaults::checkStyle;
+        checkPerformance     = defaults::checkPerformance;
+        checkPortability     = defaults::checkPortability;
+        checkInformation     = defaults::checkInformation;
+        checkUnusedFunction  = defaults::checkUnusedFunction;
+        checkMissingInclude  = defaults::checkMissingInclude;
+        inconclusiveAnalysis = defaults::inconclusiveAnalysis;
+        forceCheck           = defaults::forceCheck;
+        checkConfig          = defaults::checkConfig;
+
+        useProjectIncludes   = defaults::useProjectIncludes;
+        useSystemIncludes    = defaults::useSystemIncludes;
+
         return;
+    }
 
     ProjectSettings projectSettings;
     projectSettings.setSharedConfig(project->projectConfiguration());
@@ -99,6 +99,10 @@ Parameters::Parameters(KDevelop::IProject* project)
     inconclusiveAnalysis = projectSettings.inconclusiveAnalysis();
     forceCheck           = projectSettings.forceCheck();
     checkConfig          = projectSettings.checkConfig();
+
+    useProjectIncludes   = projectSettings.useProjectIncludes();
+    useSystemIncludes    = projectSettings.useSystemIncludes();
+    ignoredIncludes      = projectSettings.ignoredIncludes();
 
     extraParameters      = projectSettings.extraParameters();
 
