@@ -54,7 +54,6 @@ kdevplatform_add_plugin(kdevcppcheck
 target_link_libraries(kdevcppcheck
     KDev::Project
     KDev::Language
-    KDev::OutputView
     KDev::Shell
     KF5::ItemViews
 )
