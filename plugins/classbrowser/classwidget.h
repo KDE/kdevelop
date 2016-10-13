@@ -30,6 +30,7 @@ class ClassBrowserPlugin;
 class ClassTree;
 class ClassModel;
 class QLineEdit;
+class QTimer;
 
 /// The class browser widget
 class ClassWidget : public QWidget
@@ -45,6 +46,8 @@ private:
   ClassModel* m_model;
   ClassTree* m_tree;
   QLineEdit* m_searchLine;
+  QTimer* m_filterTimer;
+  QString m_filterText;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_CLASSWIDGET_H
