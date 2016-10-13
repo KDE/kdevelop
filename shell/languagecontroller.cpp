@@ -96,9 +96,6 @@ struct LanguageControllerPrivate
     LanguageCache languageCache; //Maps mimetype-names to languages
     typedef QMultiHash<QMimeType, ILanguageSupport*> MimeTypeCache;
     MimeTypeCache mimeTypeCache; //Maps mimetypes to languages
-    // fallback cache for file extensions not handled by any pattern
-    typedef QMap<QString, QList<ILanguageSupport*> > FileExtensionCache;
-    FileExtensionCache fileExtensionCache;
 
     BackgroundParser *backgroundParser;
     StaticAssistantsManager* staticAssistantsManager;
@@ -283,23 +280,6 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
     if(!languages.isEmpty())
         return languages;
 
-    // no pattern found, try the file extension cache
-    int extensionStart = fileName.lastIndexOf(QLatin1Char('.'));
-    QString extension;
-    if(extensionStart != -1)
-    {
-        extension = fileName.mid(extensionStart+1);
-        if(extension.size() > maximumCacheExtensionLength || isNumeric(extension))
-            extension = QString();
-    }
-
-    if(!extension.isEmpty())
-    {
-        languages = d->fileExtensionCache.value(extension);
-        if(languages.isEmpty() && d->fileExtensionCache.contains(extension))
-            return languages; // Nothing found, but was in the cache
-    }
-
     //Never use findByUrl from within a background thread, and never load a language support
     //from within the backgruond thread. Both is unsafe, and can lead to crashes
     if(!languages.isEmpty() || QThread::currentThread() != thread())
@@ -308,17 +288,7 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
     QMimeType mimeType;
 
     if (url.isLocalFile()) {
-        // If we have recognized a file extension, allow using the file-contents
-        // to look up the type. We will cache it after all.
-        // If we have not recognized a file extension, do not allow using the file-contents
-        // to look up the type. We cannot cache the result, and thus we might end up reading
-        // the contents of every single file, which can make the application very unresponsive.
-        if (!extension.isEmpty()) {
-            mimeType = QMimeDatabase().mimeTypeForFile(url.toLocalFile());
-        } else {
-            // this will not be cached -> don't bother reading the contents
-            mimeType = QMimeDatabase().mimeTypeForFile(url.toLocalFile(), QMimeDatabase::MatchExtension);
-        }
+        mimeType = QMimeDatabase().mimeTypeForFile(url.toLocalFile());
     } else {
         // remote file, only look at the extension
         mimeType = QMimeDatabase().mimeTypeForUrl(url);
@@ -332,10 +302,6 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
     }
 
     languages = languagesForMimetype(mimeType.name());
-
-    if(!extension.isEmpty()) {
-        d->fileExtensionCache.insert(extension, languages);
-    }
 
     return languages;
 }
