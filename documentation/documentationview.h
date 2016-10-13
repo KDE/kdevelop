@@ -52,9 +52,8 @@ public slots:
 
     void browseForward();
     void browseBack();
-    void changedSelection();
+    void changedSelection(const QModelIndex& idx);
     void changedProvider(int);
-    void changeProvider(const QModelIndex &);
     void showHome();
 
 private:

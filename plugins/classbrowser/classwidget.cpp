@@ -30,6 +30,7 @@
 
 #include <KLocalizedString>
 #include <QLineEdit>
+#include <QTimer>
 
 #include "language/classmodel/classmodel.h"
 #include "classtree.h"
@@ -43,6 +44,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   , m_model(new ClassModel())
   , m_tree(new ClassTree(this, plugin))
   , m_searchLine(new QLineEdit(this))
+  , m_filterTimer(new QTimer(this))
 {
   setObjectName(QStringLiteral("Class Browser Tree"));
   setWindowTitle(i18n("Classes"));
@@ -62,9 +64,24 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   connect(m_tree, &ClassTree::expanded,
           m_model, &ClassModel::expanded);
 
+  // Init filter timer
+  m_filterTimer->setSingleShot(true);
+  connect(m_filterTimer, &QTimer::timeout, [this]() {
+    m_model->updateFilterString(m_filterText);
+
+    if (m_filterText.isEmpty())
+      m_tree->collapseAll();
+    else
+      m_tree->expandToDepth(0);
+  });
+
   // Init search box
   m_searchLine->setClearButtonEnabled( true );
-  connect(m_searchLine, &QLineEdit::textChanged, m_model, &ClassModel::updateFilterString);
+  connect(m_searchLine, &QLineEdit::textChanged, [this](const QString& newFilter) {
+    m_filterText = newFilter;
+    m_filterTimer->start(500);
+  });
+
   QLabel *searchLabel = new QLabel( i18n("S&earch:"), this );
   searchLabel->setBuddy( m_searchLine );
 

@@ -76,14 +76,15 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
 
     mIdentifiers = new QLineEdit(mActions);
     mIdentifiers->setClearButtonEnabled(true);
+    mIdentifiers->setPlaceholderText(i18n("Search..."));
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
 //     mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     mIdentifiers->completer()->setCaseSensitivity(Qt::CaseInsensitive);
 
     /* vertical size policy should be left to the style. */
     mIdentifiers->setSizePolicy(QSizePolicy::Expanding, mIdentifiers->sizePolicy().verticalPolicy());
-    connect(mIdentifiers, &QLineEdit::returnPressed, this, &DocumentationView::changedSelection);
-    connect(mIdentifiers->completer(), static_cast<void(QCompleter::*)(const QModelIndex&)>(&QCompleter::activated), this, &DocumentationView::changeProvider);
+    connect(mIdentifiers->completer(), static_cast<void(QCompleter::*)(const QModelIndex&)>(&QCompleter::activated),
+            this, &DocumentationView::changedSelection);
     QWidget::setTabOrder(mProviders, mIdentifiers);
 
     mActions->addWidget(mProviders);
@@ -143,12 +144,7 @@ void DocumentationView::showHome()
     showDocumentation(prov->homePage());
 }
 
-void DocumentationView::changedSelection()
-{
-    changeProvider(mIdentifiers->completer()->currentIndex());
-}
-
-void DocumentationView::changeProvider(const QModelIndex& idx)
+void DocumentationView::changedSelection(const QModelIndex& idx)
 {
     if (idx.isValid()) {
         IDocumentationProvider* prov = mProvidersModel->provider(mProviders->currentIndex());
