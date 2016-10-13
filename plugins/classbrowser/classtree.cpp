@@ -51,7 +51,9 @@ ClassTree::ClassTree( QWidget* parent, ClassBrowserPlugin* plugin )
   , m_plugin( plugin ), m_tooltip( 0 )
 {
   header()->hide();
+
   setIndentation( 10 );
+  setUniformRowHeights( true );
 
   connect( this, &ClassTree::activated, this, &ClassTree::itemActivated );
 }
