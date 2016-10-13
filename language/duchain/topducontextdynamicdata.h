@@ -37,8 +37,6 @@ class IndexedString;
 class IndexedDUContext;
 class DUChainBaseData;
 
-typedef QPair<QByteArray, uint> ArrayWithPosition;
-
 ///This class contains dynamic data of a top-context, and also the repository that contains all the data within this top-context.
 class TopDUContextDynamicData {
   public:
@@ -117,6 +115,12 @@ class TopDUContextDynamicData {
     uint parentContext; /// Parent context of the data (0 means the global context)
   };
 
+  struct ArrayWithPosition
+  {
+    QByteArray array;
+    uint position;
+  };
+
   private:
     bool hasChanged() const;
 
@@ -142,7 +146,7 @@ class TopDUContextDynamicData {
       void clearItems();
       bool itemsHaveChanged() const;
 
-      void storeData(uint& currentDataOffset, const QList<ArrayWithPosition>& oldData);
+      void storeData(uint& currentDataOffset, const QVector<ArrayWithPosition>& oldData);
       Item getItemForIndex(uint index) const;
 
       void clearItemIndex(const Item& item, const uint index);
@@ -168,8 +172,8 @@ class TopDUContextDynamicData {
 
     //For temporary declarations that will not be stored to disk, like template instantiations
 
-    mutable QList<ArrayWithPosition> m_data;
-    mutable QList<ArrayWithPosition> m_topContextData;
+    mutable QVector<ArrayWithPosition> m_data;
+    mutable QVector<ArrayWithPosition> m_topContextData;
     bool m_onDisk;
     mutable bool m_dataLoaded;
 
