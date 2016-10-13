@@ -256,7 +256,7 @@ void QuickOpenWidget::setPreselectedText(const QString& text)
 }
 
 void QuickOpenWidget::updateProviders() {
-  if(QAction* action = qobject_cast<QAction*>(sender())) {
+  if(QAction* action = (sender() ? qobject_cast<QAction*>(sender()) : nullptr)) {
     QMenu* menu = qobject_cast<QMenu*>(action->parentWidget());
     if(menu) {
       menu->show();
