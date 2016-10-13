@@ -75,7 +75,13 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
     m_showLeftDock = qobject_cast<KAction*>(m_mainWindow->action("show_left_dock"));
     m_showRightDock = qobject_cast<KAction*>(m_mainWindow->action("show_right_dock"));
     m_showBottomDock = qobject_cast<KAction*>(m_mainWindow->action("show_bottom_dock"));
-    m_showTopDock = qobject_cast<KAction*>(m_mainWindow->action("show_top_dock"));
+
+    // the 'show top dock' action got removed (IOW, it's never created)
+    // (let's keep this code around if we ever want to reintroduce the feature...
+    auto action = m_mainWindow->action("show_top_dock");
+    if (action) {
+        m_showTopDock = qobject_cast<KAction*>(action);
+    }
 
     connect(m_mainWindow, SIGNAL(settingsLoaded()), this, SLOT(loadSettings()));
 
