@@ -57,8 +57,13 @@ public:
     KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 
 private:
+    bool isRunning();
+    void killCppcheck();
+
     void raiseProblemsView();
     void raiseOutputView();
+
+    void updateActions();
 
     void runCppcheck(bool checkProject);
     void runCppcheck(KDevelop::IProject* project, const QString& path);
@@ -66,11 +71,15 @@ private:
     void problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems);
     void result(KJob* job);
 
+    Job* m_job;
+
+    KDevelop::IProject* m_currentProject;
+    KDevelop::IProject* m_checkedProject;
+
     QAction* m_actionFile;
     QAction* m_actionProject;
     QAction* m_actionProjectItem;
 
-    KDevelop::IProject* m_project;
     QScopedPointer<KDevelop::ProblemModel> m_model;
     QVector<KDevelop::IProblem::Ptr> m_problems;
 };

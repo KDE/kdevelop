@@ -56,7 +56,9 @@ static const QString modelName = QStringLiteral("Cppcheck");
 
 Plugin::Plugin(QObject* parent, const QVariantList&)
     : IPlugin("kdevcppcheck", parent)
-    , m_project(nullptr)
+    , m_job(nullptr)
+    , m_currentProject(nullptr)
+    , m_checkedProject(nullptr)
     , m_model(new KDevelop::ProblemModel(this))
 {
     qCDebug(KDEV_CPPCHECK) << "setting cppcheck rc file";
@@ -81,8 +83,26 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
 
     m_actionProjectItem = new QAction("Cppcheck", this);
 
+    auto updateSlot = [this](){ updateActions(); };
+
+    connect(core()->documentController(), &KDevelop::IDocumentController::documentClosed,    updateSlot);
+    connect(core()->documentController(), &KDevelop::IDocumentController::documentActivated, updateSlot);
+
+    connect(core()->projectController(), &KDevelop::IProjectController::projectOpened, updateSlot);
+    connect(core()->projectController(), &KDevelop::IProjectController::projectClosed,
+            [this](KDevelop::IProject* project) {
+                if (project == m_checkedProject) {
+                    killCppcheck();
+                    m_problems.clear();
+                    m_model->setProblems(m_problems);
+                    m_checkedProject = nullptr;
+                }
+    });
+
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->addModel(modelName, m_model.data());
+
+    updateActions();
 }
 
 void Plugin::unload()
@@ -93,6 +113,17 @@ void Plugin::unload()
 
 Plugin::~Plugin()
 {
+}
+
+bool Plugin::isRunning()
+{
+    return m_job;
+}
+
+void Plugin::killCppcheck()
+{
+    if (m_job)
+        m_job->kill(KJob::EmitResult);
 }
 
 void Plugin::raiseProblemsView()
@@ -108,49 +139,64 @@ void Plugin::raiseOutputView()
         KDevelop::IUiController::FindFlags::Raise);
 }
 
+void Plugin::updateActions()
+{
+    m_currentProject = nullptr;
+
+    m_actionFile->setEnabled(false);
+    m_actionProject->setEnabled(false);
+
+    if (isRunning())
+        return;
+
+    KDevelop::IDocument* activeDocument = core()->documentController()->activeDocument();
+    if (!activeDocument)
+        return;
+
+    QUrl url = activeDocument->url();
+
+    m_currentProject = core()->projectController()->findProjectForUrl(url);
+    if (!m_currentProject)
+        return;
+
+    m_actionFile->setEnabled(true);
+    m_actionProject->setEnabled(true);
+}
+
 void Plugin::runCppcheck(bool checkProject)
 {
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    if (!doc) {
-        QMessageBox::critical(nullptr,
-                              i18n("Error starting Cppcheck"),
-                              i18n("No active file, unable to deduce project."));
-        return;
-    }
-
-    KDevelop::IProject* project = core()->projectController()->findProjectForUrl(doc->url());
-    if (!project) {
-        QMessageBox::critical(nullptr,
-                              i18n("Error starting Cppcheck"),
-                              i18n("Active file isn't in a project"));
-        return;
-    }
+    Q_ASSERT(doc);
 
     if (checkProject)
-        runCppcheck(project, project->path().toUrl().toLocalFile());
+        runCppcheck(m_currentProject, m_currentProject->path().toUrl().toLocalFile());
     else
-        runCppcheck(project, doc->url().toLocalFile());
+        runCppcheck(m_currentProject, doc->url().toLocalFile());
 }
 
 void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
 {
-    Parameters params(project);
+    m_checkedProject = project;
+
+    Parameters params(m_checkedProject);
     params.checkPath = path;
 
     m_problems.clear();
-    m_project = project;
 
-    Job* job = new Job(params, this);
-    connect(job, &Job::problemsDetected, this, &Plugin::problemsDetected);
-    connect(job, &Job::finished,         this, &Plugin::result);
+    m_job = new Job(params);
 
-    core()->uiController()->registerStatus(new KDevelop::JobStatus(job, "Cppcheck"));
-    core()->runController()->registerJob( job );
+    connect(m_job, &Job::problemsDetected, this, &Plugin::problemsDetected);
+    connect(m_job, &Job::finished,         this, &Plugin::result);
+
+    core()->uiController()->registerStatus(new KDevelop::JobStatus(m_job, "Cppcheck"));
+    core()->runController()->registerJob(m_job);
 
     if (params.hideOutputView)
         raiseProblemsView();
     else
         raiseOutputView();
+
+    updateActions();
 }
 
 void Plugin::problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems)
@@ -161,13 +207,14 @@ void Plugin::problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems)
         maxLength = 0;
 
     // Fix problems with incorrect range, which produced by cppcheck's errors
-    // without <location> element. In this case location automaticlly gets "/"
+    // without <location> element. In this case location automatically gets "/"
     // which entails showing file dialog after selecting such problem in
     // ProblemsView. To avoid this we set project's root path as problem location.
+    // FIXME: move this code to Job
     foreach (auto problem, problems) {
         auto range = problem->finalLocation();
         if (range.document.isEmpty()) {
-            range.document = KDevelop::IndexedString(m_project->path().toLocalFile());
+            range.document = KDevelop::IndexedString(m_checkedProject->path().toLocalFile());
             problem->setFinalLocation(range);
         }
     }
@@ -186,33 +233,38 @@ void Plugin::problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems)
     }
 }
 
-void Plugin::result(KJob* kjob)
+void Plugin::result(KJob*)
 {
-    Job* job = dynamic_cast<Job*>(kjob);
-    if (!job)
-        return;
+    if (!core()->projectController()->projects().contains(m_checkedProject)) {
+        m_problems.clear();
+        m_model->setProblems(m_problems);
+    } else {
+        m_model->setProblems(m_problems);
 
-    m_model->setProblems(m_problems);
+        if (m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
+            m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled)
+            raiseProblemsView();
+        else
+            raiseOutputView();
+    }
 
-    if (job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
-        job->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled)
-        raiseProblemsView();
-    else
-        raiseOutputView();
+    m_job = nullptr; // job is automatically deleted later
 
-    m_project = nullptr;
+    updateActions();
 }
 
 KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context)
 {
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
 
-    if ( context->type() == KDevelop::Context::EditorContext ) {
+    if (context->hasType(KDevelop::Context::EditorContext) &&
+        m_currentProject && !isRunning()) {
+
         extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, m_actionFile);
         extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, m_actionProject);
     }
 
-    if (context->hasType(KDevelop::Context::ProjectItemContext)) {
+    if (context->hasType(KDevelop::Context::ProjectItemContext) && !isRunning()) {
         auto pContext = dynamic_cast<KDevelop::ProjectItemContext*>(context);
         if (pContext->items().size() != 1)
             return extension;
