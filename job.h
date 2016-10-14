@@ -31,6 +31,8 @@
 #include <interfaces/iproblem.h>
 #include <outputview/outputexecutejob.h>
 
+class QElapsedTimer;
+
 namespace cppcheck
 {
 
@@ -58,6 +60,8 @@ protected slots:
 
 protected:
     void emitProblems();
+
+    QScopedPointer<QElapsedTimer> m_timer;
 
     QScopedPointer<CppcheckParser> m_parser;
     QVector<KDevelop::IProblem::Ptr> m_problems;

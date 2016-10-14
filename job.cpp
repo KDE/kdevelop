@@ -37,6 +37,7 @@
 #include <shell/problem.h>
 
 #include <QApplication>
+#include <QElapsedTimer>
 #include <QRegularExpression>
 
 namespace cppcheck
@@ -44,6 +45,7 @@ namespace cppcheck
 
 Job::Job(const Parameters& params, QObject* parent)
     : KDevelop::OutputExecuteJob(parent)
+    , m_timer(new QElapsedTimer)
     , m_parser(new CppcheckParser)
     , m_showXmlOutput(params.showXmlOutput)
     , m_projectRootPath(params.projectRootPath())
@@ -147,6 +149,7 @@ void Job::start()
 
     qCDebug(KDEV_CPPCHECK) << "executing:" << commandLine().join(' ');
 
+    m_timer->restart();
     KDevelop::OutputExecuteJob::start();
 }
 
@@ -191,6 +194,8 @@ void Job::childProcessError(QProcess::ProcessError e)
 void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qCDebug(KDEV_CPPCHECK) << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
+
+    postProcessStdout({QString("Elapsed time: %1 s.").arg(m_timer->elapsed()/1000.0)});
 
     if (exitCode != 0) {
         qCDebug(KDEV_CPPCHECK) << "cppcheck failed, standard output: ";
