@@ -30,6 +30,8 @@
 #include "debug.h"
 #include "parser.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <shell/problem.h>
@@ -46,6 +48,11 @@ Job::Job(const Parameters& params, QObject* parent)
     , m_showXmlOutput(params.showXmlOutput)
     , m_projectRootPath(params.projectRootPath())
 {
+    QString prettyName = KDevelop::ICore::self()->projectController()->prettyFileName(
+        params.checkPath,
+        KDevelop::IProjectController::FormatPlain);
+    setJobName(QString("Cppcheck (%1)").arg(prettyName));
+
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
     setBehaviours(KDevelop::IOutputView::AutoScroll);
