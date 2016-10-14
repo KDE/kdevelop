@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef TEST_CPPCHECKPARSER_H
-#define TEST_CPPCHECKPARSER_H
+#ifndef TEST_CPPCHECK_PARSER_H
+#define TEST_CPPCHECK_PARSER_H
 
 #include <QObject>
 
@@ -31,4 +31,4 @@ private slots:
     void testParser();
 };
 
-#endif // TEST_CPPCHECKPARSER_H
+#endif

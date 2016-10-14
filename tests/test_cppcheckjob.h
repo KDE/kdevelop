@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef TEST_CPPCHECKJOB_H
-#define TEST_CPPCHECKJOB_H
+#ifndef TEST_CPPCHECK_JOB_H
+#define TEST_CPPCHECK_JOB_H
 
 #include <QObject>
 

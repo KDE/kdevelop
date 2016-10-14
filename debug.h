@@ -16,11 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#ifndef CPPCHECK_DEBUG_H
+#define CPPCHECK_DEBUG_H
 
 #include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(KDEV_CPPCHECK)
 
-#endif // DEBUG_H
+#endif
