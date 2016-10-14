@@ -151,7 +151,7 @@ void BreakpointWidget::contextMenuEvent(QContextMenuEvent* event)
 
 void BreakpointWidget::slotPopupMenuAboutToShow()
 {
-    if (m_debugController->breakpointModel()->rowCount() < 2) {
+    if (m_debugController->breakpointModel()->rowCount() < 1) {
         m_breakpointDisableAllAction->setDisabled(true);
         m_breakpointEnableAllAction->setDisabled(true);
         m_breakpointRemoveAll->setDisabled(true);
@@ -159,7 +159,7 @@ void BreakpointWidget::slotPopupMenuAboutToShow()
         m_breakpointRemoveAll->setEnabled(true);
         bool allDisabled = true;
         bool allEnabled = true;
-        for (int i = 0; i < m_debugController->breakpointModel()->rowCount() - 1 ; i++) {
+        for (int i = 0; i < m_debugController->breakpointModel()->rowCount(); i++) {
             Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(i);
             if (bp->enabled())
                 allDisabled = false;
@@ -174,7 +174,7 @@ void BreakpointWidget::slotPopupMenuAboutToShow()
 
 void BreakpointWidget::showEvent(QShowEvent *)
 {
-    if (m_firstShow) {
+    if (m_firstShow && m_debugController->breakpointModel()->rowCount() > 0) {
         for (int i = 0; i < m_breakpointsView->model()->columnCount(); ++i) {
             if(i == Breakpoint::LocationColumn){
                 continue;
@@ -243,6 +243,7 @@ void BreakpointWidget::slotRemoveAllBreakpoints()
 
 void BreakpointWidget::slotUpdateBreakpointDetail()
 {
+    showEvent(nullptr);
     QModelIndexList selected = m_breakpointsView->selectionModel()->selectedIndexes();
     IF_DEBUG( qCDebug(DEBUGGER) << selected; )
     if (selected.isEmpty()) {
@@ -297,7 +298,7 @@ void BreakpointWidget::slotOpenFile(const QModelIndex& breakpointIdx)
 
 void BreakpointWidget::slotDisableAllBreakpoints()
 {
-    for (int i = 0; i < m_debugController->breakpointModel()->rowCount() - 1 ; i++) {
+    for (int i = 0; i < m_debugController->breakpointModel()->rowCount(); i++) {
         Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(i);
         bp->setData(Breakpoint::EnableColumn, Qt::Unchecked);
     }
@@ -305,7 +306,7 @@ void BreakpointWidget::slotDisableAllBreakpoints()
 
 void BreakpointWidget::slotEnableAllBreakpoints()
 {
-    for (int i = 0; i < m_debugController->breakpointModel()->rowCount() - 1 ; i++) {
+    for (int i = 0; i < m_debugController->breakpointModel()->rowCount(); i++) {
         Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(i);
         bp->setData(Breakpoint::EnableColumn, Qt::Checked);
     }

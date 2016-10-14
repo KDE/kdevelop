@@ -22,6 +22,7 @@
 #include "placeholderitemproxymodel.h"
 
 #include <KColorScheme>
+#include <QDebug>
 
 using namespace KDevelop;
 
@@ -106,6 +107,14 @@ int PlaceholderItemProxyModel::rowCount(const QModelIndex& parent) const
     Q_ASSERT(!parent.isValid());
     Q_UNUSED(parent);
     return sourceModel()->rowCount() + 1;
+}
+
+bool KDevelop::PlaceholderItemProxyModel::hasChildren(const QModelIndex& parent) const
+{
+    if ( !parent.isValid() ) {
+        return true;
+    }
+    return QIdentityProxyModel::hasChildren(parent);
 }
 
 QVariant PlaceholderItemProxyModel::data(const QModelIndex& proxyIndex, int role) const
