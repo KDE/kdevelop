@@ -206,21 +206,7 @@ void Plugin::problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems)
     if (m_problems.isEmpty())
         maxLength = 0;
 
-    // Fix problems with incorrect range, which produced by cppcheck's errors
-    // without <location> element. In this case location automatically gets "/"
-    // which entails showing file dialog after selecting such problem in
-    // ProblemsView. To avoid this we set project's root path as problem location.
-    // FIXME: move this code to Job
-    foreach (auto problem, problems) {
-        auto range = problem->finalLocation();
-        if (range.document.isEmpty()) {
-            range.document = KDevelop::IndexedString(m_checkedProject->path().toLocalFile());
-            problem->setFinalLocation(range);
-        }
-    }
-
     m_problems.append(problems);
-
     foreach (auto p, problems) {
         m_model->addProblem(p);
 

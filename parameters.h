@@ -88,6 +88,8 @@ public:
     // runtime settings
     QString checkPath;
 
+    KDevelop::Path projectRootPath() const;
+
 private:
     QString applyPlaceholders(const QString& text) const;
 

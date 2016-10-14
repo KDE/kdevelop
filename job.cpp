@@ -44,6 +44,7 @@ Job::Job(const Parameters& params, QObject* parent)
     : KDevelop::OutputExecuteJob(parent)
     , m_parser(new CppcheckParser)
     , m_showXmlOutput(params.showXmlOutput)
+    , m_projectRootPath(params.projectRootPath())
 {
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
@@ -107,10 +108,8 @@ void Job::postProcessStderr(const QStringList& lines)
 
             m_parser->addData(line);
 
-            auto problems = m_parser->parse();
-
-            if (!problems.isEmpty())
-                emit problemsDetected(problems);
+            m_problems = m_parser->parse();
+            emitProblems();
         }
         else {
             KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem);
@@ -120,7 +119,8 @@ void Job::postProcessStderr(const QStringList& lines)
             problem->setDescription(line);
             problem->setExplanation("Check your cppcheck settings");
 
-            emit problemsDetected({problem});
+            m_problems = {problem};
+            emitProblems();
 
             if (m_showXmlOutput)
                 m_standardOutput << line;
@@ -193,6 +193,26 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     }
 
     KDevelop::OutputExecuteJob::childProcessExited(exitCode, exitStatus);
+}
+
+void Job::emitProblems()
+{
+    if (m_problems.isEmpty())
+        return;
+
+    // Fix problems with incorrect range, which produced by cppcheck's errors
+    // without <location> element. In this case location automatically gets "/"
+    // which entails showing file dialog after selecting such problem in
+    // ProblemsView. To avoid this we set project's root path as problem location.
+    foreach (auto problem, m_problems) {
+        auto range = problem->finalLocation();
+        if (range.document.isEmpty()) {
+            range.document = KDevelop::IndexedString(m_projectRootPath.toLocalFile());
+            problem->setFinalLocation(range);
+        }
+    }
+
+    emit problemsDetected(m_problems);
 }
 
 }

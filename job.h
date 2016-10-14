@@ -57,12 +57,17 @@ protected slots:
     void childProcessError(QProcess::ProcessError processError) override;
 
 protected:
+    void emitProblems();
+
     QScopedPointer<CppcheckParser> m_parser;
+    QVector<KDevelop::IProblem::Ptr> m_problems;
 
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
 
     bool m_showXmlOutput;
+
+    KDevelop::Path m_projectRootPath;
 };
 
 }

@@ -219,6 +219,11 @@ QStringList Parameters::commandLine(QString& infoMessage) const
     return result;
 }
 
+KDevelop::Path Parameters::projectRootPath() const
+{
+    return m_projectRootPath;
+}
+
 QString Parameters::applyPlaceholders(const QString& text) const
 {
     QString result(text);
