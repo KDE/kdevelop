@@ -341,7 +341,8 @@ public:
         else
         {
             KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "Could not load project management plugin %1.",
+                            i18n( "Could not load project management plugin <b>%1</b>.<br> Check that the required programs are installed,"
+                                  " or see console output for more information.",
                                   managerSetting ) );
             manager = 0;
             return 0;
