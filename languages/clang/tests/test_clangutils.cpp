@@ -64,7 +64,7 @@ struct CursorCollectorVisitor
 
 CXSourceRange toCXRange(CXTranslationUnit unit, const DocumentRange& range)
 {
-    auto file = clang_getFile(unit, range.document.c_str());
+    auto file = clang_getFile(unit, QString::fromUtf8(range.document.c_str(), range.document.length()).toUtf8());
     auto begin = clang_getLocation(unit, file, range.start().line()+1, range.start().column()+1);
     auto end = clang_getLocation(unit, file, range.end().line()+1, range.end().column()+1);
     return clang_getRange(begin, end);

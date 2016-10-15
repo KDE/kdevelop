@@ -62,7 +62,10 @@
         "org.kdevelop.IBuildSystemManager", 
         "org.kdevelop.IProjectFileManager", 
         "ILanguageSupport"
-    ], 
+    ],
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IProjectBuilder@KDevCMakeBuilder"
+    ],
     "X-KDevelop-Language": "CMake", 
     "X-KDevelop-LoadMode": "AlwaysOn", 
     "X-KDevelop-Mode": "GUI", 

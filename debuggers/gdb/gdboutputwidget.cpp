@@ -125,8 +125,13 @@ void GDBOutputWidget::updateColors()
 
 void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
+    if (!s)
+        return;
+
     DebugSession *session = qobject_cast<DebugSession*>(s);
-    if (!session) return;
+    if (!session)
+        return;
+
      connect(this, &GDBOutputWidget::userGDBCmd,
              session, &DebugSession::addUserCommand);
      connect(this, &GDBOutputWidget::breakInto,
