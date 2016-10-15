@@ -488,6 +488,8 @@ export APPIMAGE_STARTUP_PYTHONHOME=\$PYTHONHOME
 
 export KDEV_DISABLE_PLUGINS=KDevWelcomePage
 
+cd \$HOME
+
 kdevelop \$@
 EOF
 chmod +x AppRun
