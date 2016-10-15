@@ -32,6 +32,7 @@
         "Description": "This plugin integrates Cppcheck (static analysis tool) to KDevelop", 
         "Description[ca]": "Aquest connector integra el Cppcheck (eina per a l'anàlisi estàtic) al KDevelop", 
         "Description[nl]": "Deze plugin integreert Cppcheck (statisch analyse hulpmiddel) in KDevelop", 
+        "Description[pl]": "Wtyczka ta integruje Cppcheck (statyczne narzędzie analizy) z KDevelop", 
         "Description[pt]": "Este 'plugin' integra o Cppcheck (ferramenta de análise estática) com o KDevelop", 
         "Description[sv]": "Insticksprogrammet integrerar Cppcheck (statiskt analysverktyg) i KDevelop", 
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Cppcheck (засіб статичного аналізу) до KDevelop", 
