@@ -32,7 +32,7 @@ namespace KDevelop
 class IAssistant;
 
 /// Interface for the Problem classes
-class IProblem : public QSharedData
+class KDEVPLATFORMLANGUAGE_EXPORT IProblem : public QSharedData
 {
 public:
     typedef QExplicitlySharedDataPointer<IProblem> Ptr;
