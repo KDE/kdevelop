@@ -31,7 +31,7 @@ using namespace cppcheck;
 class JobTester : public Job
 {
 public:
-    JobTester(const Parameters& params) : Job(params) {}
+    explicit JobTester(const Parameters& params) : Job(params) {}
 
     using Job::postProcessStdout;
     using Job::postProcessStderr;
