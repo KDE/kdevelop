@@ -121,9 +121,6 @@ LINK_PUBLIC
     KDev::OutputView
     KDev::Interfaces
 LINK_PRIVATE
-    Qt5::Quick
-    Qt5::QuickWidgets
-
     KF5::GuiAddons
     KF5::ConfigWidgets
     KF5::IconThemes
