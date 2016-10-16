@@ -366,25 +366,25 @@ void BreakpointModel::markChanged(
 
 const QPixmap* BreakpointModel::breakpointPixmap()
 {
-  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("script-error")).pixmap(QSize(22,22), QIcon::Active, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(16,16), QIcon::Active, QIcon::Off);
   return &pixmap;
 }
 
 const QPixmap* BreakpointModel::pendingBreakpointPixmap()
 {
-  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("script-error")).pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(16,16), QIcon::Normal, QIcon::Off);
   return &pixmap;
 }
 
 const QPixmap* BreakpointModel::reachedBreakpointPixmap()
 {
-  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("script-error")).pixmap(QSize(22,22), QIcon::Selected, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(16,16), QIcon::Selected, QIcon::Off);
   return &pixmap;
 }
 
 const QPixmap* BreakpointModel::disabledBreakpointPixmap()
 {
-  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("script-error")).pixmap(QSize(22,22), QIcon::Disabled, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(16,16), QIcon::Disabled, QIcon::Off);
   return &pixmap;
 }
 

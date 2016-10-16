@@ -96,7 +96,7 @@ void IBreakpointController::notifyHit(int row, const QString& msg)
             break;
     }
     if (ev) {
-        ev->setPixmap(QIcon::fromTheme(QStringLiteral("script-error")).pixmap(QSize(22,22)));
+        ev->setPixmap(QIcon::fromTheme(QStringLiteral("breakpoint")).pixmap(QSize(22,22)));
         // TODO: Port
         //ev->setComponentName(ICore::self()->aboutData().componentName());
         ev->sendEvent();

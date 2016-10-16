@@ -1,6 +1,3 @@
-########### install files ###############
-
-set( kdevplatform_icon_dirs  22x22  )
-
-install( DIRECTORY ${kdevplatform_icon_dirs} DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor PATTERN .svn EXCLUDE)
+install(DIRECTORY 22x22 DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor)
+install(DIRECTORY 16x16 DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor)
 

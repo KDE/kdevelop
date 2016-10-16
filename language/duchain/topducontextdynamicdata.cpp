@@ -56,7 +56,7 @@ namespace {
  * If we'd set the data to point to the constant region, we'd get crashes due to use-after-free when
  * we unmap the data and a shared pointer outlives that.
  */
-void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& totalDataOffset, bool isSharedDataItem)
+void saveDUChainItem(QVector<TopDUContextDynamicData::ArrayWithPosition>& data, DUChainBase& item, uint& totalDataOffset, bool isSharedDataItem)
 {
   if(!item.d_func()->classId) {
     //If this triggers, you have probably created an own DUChainBase based class, but haven't called setClassId(this) in the constructor.
@@ -66,26 +66,26 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
 
   int size = DUChainItemSystem::self().dynamicSize(*item.d_func());
 
-  if(data.back().first.size() - int(data.back().second) < size)
+  if(data.back().array.size() - int(data.back().position) < size)
       //Create a new data item
-      data.append( qMakePair(QByteArray(size > 10000 ? size : 10000, 0), 0u) );
+      data.append({QByteArray(size > 10000 ? size : 10000, 0), 0u});
 
-  uint pos = data.back().second;
-  data.back().second += size;
+  uint pos = data.back().position;
+  data.back().position += size;
   totalDataOffset += size;
 
-  DUChainBaseData& target(*(reinterpret_cast<DUChainBaseData*>(data.back().first.data() + pos)));
+  DUChainBaseData& target(*(reinterpret_cast<DUChainBaseData*>(data.back().array.data() + pos)));
 
   if(item.d_func()->isDynamic()) {
     //Change from dynamic data to constant data
 
-    enableDUChainReferenceCounting(data.back().first.data(), data.back().first.size());
+    enableDUChainReferenceCounting(data.back().array.data(), data.back().array.size());
     DUChainItemSystem::self().copy(*item.d_func(), target, true);
     Q_ASSERT(!target.isDynamic());
     if (!isSharedDataItem) {
       item.setData(&target);
     }
-    disableDUChainReferenceCounting(data.back().first.data());
+    disableDUChainReferenceCounting(data.back().array.data());
   }else{
     //Just copy the data into another place, expensive copy constructors are not needed
     memcpy(&target, item.d_func(), size);
@@ -128,18 +128,18 @@ void validateItem(const DUChainBaseData* const data, const uchar* const mappedDa
 }
 #endif
 
-const char* pointerInData(const QList<ArrayWithPosition>& data, uint totalOffset)
+const char* pointerInData(const QVector<TopDUContextDynamicData::ArrayWithPosition>& data, uint totalOffset)
 {
   for(int a = 0; a < data.size(); ++a) {
-    if(totalOffset < data[a].second)
-      return data[a].first.constData() + totalOffset;
-    totalOffset -= data[a].second;
+    if(totalOffset < data[a].position)
+      return data[a].array.constData() + totalOffset;
+    totalOffset -= data[a].position;
   }
   Q_ASSERT_X(false, Q_FUNC_INFO, "Offset doesn't exist in the data.");
   return 0;
 }
 
-void verifyDataInfo(const TopDUContextDynamicData::ItemDataInfo& info, const QList<ArrayWithPosition>& data)
+void verifyDataInfo(const TopDUContextDynamicData::ItemDataInfo& info, const QVector<TopDUContextDynamicData::ArrayWithPosition>& data)
 {
   Q_UNUSED(info);
   Q_UNUSED(data);
@@ -276,7 +276,8 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::clearItemIndex(const Ite
 }
 
 template<class Item>
-void TopDUContextDynamicData::DUChainItemStorage<Item>::storeData(uint& currentDataOffset, const QList<ArrayWithPosition>& oldData)
+void TopDUContextDynamicData::DUChainItemStorage<Item>::storeData(uint& currentDataOffset,
+                                                                  const QVector<ArrayWithPosition>& oldData)
 {
   auto const oldOffsets = offsets;
   offsets.clear();
@@ -568,7 +569,7 @@ void TopDUContextDynamicData::loadData() const {
 
   if(!m_mappedFile) {
     QByteArray data = file->readAll();
-    m_data.append(qMakePair(data, (uint)data.size()));
+    m_data.append({data, (uint)data.size()});
     delete file;
   }
 
@@ -603,7 +604,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     target.m_dataLoaded = false;
     target.m_onDisk = true;
     ret->rebuildDynamicData(0, topContextIndex);
-    target.m_topContextData.append(qMakePair(topContextData, (uint)0));
+    target.m_topContextData.append({topContextData, (uint)0});
     return ret;
   }else{
     return 0;
@@ -673,7 +674,7 @@ void TopDUContextDynamicData::store() {
   Q_ASSERT(m_topContext->d_func()->m_ownIndex == m_topContext->ownIndex());
 
   uint topContextDataSize = DUChainItemSystem::self().dynamicSize(*m_topContext->d_func());
-  m_topContextData.append( qMakePair(QByteArray(DUChainItemSystem::self().dynamicSize(*m_topContext->d_func()), topContextDataSize), 0u) );
+  m_topContextData.append({QByteArray(DUChainItemSystem::self().dynamicSize(*m_topContext->d_func()), topContextDataSize), 0u});
   uint actualTopContextDataSize = 0;
 
   if (contentDataChanged) {
@@ -687,13 +688,13 @@ void TopDUContextDynamicData::store() {
 
     uint newDataSize = 0;
     foreach(const ArrayWithPosition &array, oldData)
-        newDataSize += array.second;
+        newDataSize += array.position;
 
     newDataSize = std::max(newDataSize, 10000u);
 
     //We always put 1 byte to the front, so we don't have zero data-offsets, since those are used for "invalid".
     uint currentDataOffset = 1;
-    m_data.append( qMakePair(QByteArray(newDataSize, 0), currentDataOffset) );
+    m_data.append({QByteArray(newDataSize, 0), currentDataOffset});
 
     m_itemRetrievalForbidden = true;
 
@@ -720,14 +721,14 @@ void TopDUContextDynamicData::store() {
 
       file.write((char*)&topContextDataSize, sizeof(uint));
       foreach(const ArrayWithPosition& pos, m_topContextData)
-        file.write(pos.first.constData(), pos.second);
+        file.write(pos.array.constData(), pos.position);
 
       m_contexts.writeData(&file);
       m_declarations.writeData(&file);
       m_problems.writeData(&file);
 
       foreach(const ArrayWithPosition& pos, m_data)
-        file.write(pos.first.constData(), pos.second);
+        file.write(pos.array.constData(), pos.position);
 
       m_onDisk = true;
 
@@ -747,18 +748,18 @@ TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(con
   const auto size = DUChainItemSystem::self().dynamicSize(*data);
   Q_ASSERT(size);
 
-  if(m_data.back().first.size() - m_data.back().second < size) {
+  if(m_data.back().array.size() - m_data.back().position < size) {
       //Create a new m_data item
-      m_data.append( qMakePair(QByteArray(std::max(size, 10000u), 0), 0u) );
+      m_data.append({QByteArray(std::max(size, 10000u), 0), 0u});
   }
 
   ret.dataOffset = totalDataOffset;
 
-  uint pos = m_data.back().second;
-  m_data.back().second += size;
+  uint pos = m_data.back().position;
+  m_data.back().position += size;
   totalDataOffset += size;
 
-  auto target = reinterpret_cast<DUChainBaseData*>(m_data.back().first.data() + pos);
+  auto target = reinterpret_cast<DUChainBaseData*>(m_data.back().array.data() + pos);
   memcpy(target, data, size);
 
   verifyDataInfo(ret, m_data);

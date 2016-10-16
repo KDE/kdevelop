@@ -278,7 +278,7 @@ void DebugController::setupActions()
     connect(action, &QAction::triggered, this, &DebugController::stepOut);
     ac->addAction(QStringLiteral("debug_stepout"), action);
 
-    m_toggleBreakpoint = action = new QAction(QIcon::fromTheme(QStringLiteral("script-error")), i18n("Toggle Breakpoint"), this);
+    m_toggleBreakpoint = action = new QAction(QIcon::fromTheme(QStringLiteral("breakpoint")), i18n("Toggle Breakpoint"), this);
     ac->setDefaultShortcut( action, i18n("Ctrl+Alt+B") );
     action->setToolTip(i18n("Toggle breakpoint"));
     action->setWhatsThis(i18n("Toggles the breakpoint at the current line in editor."));
