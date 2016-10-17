@@ -64,6 +64,7 @@ private:
     void raiseOutputView();
 
     void updateActions();
+    void projectClosed(KDevelop::IProject* project);
 
     void runCppcheck(bool checkProject);
     void runCppcheck(KDevelop::IProject* project, const QString& path);

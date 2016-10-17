@@ -83,21 +83,15 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
 
     m_actionProjectItem = new QAction("Cppcheck", this);
 
-    auto updateSlot = [this](){ updateActions(); };
+    connect(core()->documentController(), &KDevelop::IDocumentController::documentClosed,
+            this, &Plugin::updateActions);
+    connect(core()->documentController(), &KDevelop::IDocumentController::documentActivated,
+            this, &Plugin::updateActions);
 
-    connect(core()->documentController(), &KDevelop::IDocumentController::documentClosed,    updateSlot);
-    connect(core()->documentController(), &KDevelop::IDocumentController::documentActivated, updateSlot);
-
-    connect(core()->projectController(), &KDevelop::IProjectController::projectOpened, updateSlot);
+    connect(core()->projectController(), &KDevelop::IProjectController::projectOpened,
+            this, &Plugin::updateActions);
     connect(core()->projectController(), &KDevelop::IProjectController::projectClosed,
-            [this](KDevelop::IProject* project) {
-                if (project == m_checkedProject) {
-                    killCppcheck();
-                    m_problems.clear();
-                    m_model->setProblems(m_problems);
-                    m_checkedProject = nullptr;
-                }
-    });
+            this, &Plugin::projectClosed);
 
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->addModel(modelName, m_model.data());
@@ -163,6 +157,17 @@ void Plugin::updateActions()
     m_actionProject->setEnabled(true);
 }
 
+void Plugin::projectClosed(KDevelop::IProject* project)
+{
+    if (project != m_checkedProject)
+        return;
+
+    killCppcheck();
+    m_problems.clear();
+    m_model->clearProblems();
+    m_checkedProject = nullptr;
+}
+
 void Plugin::runCppcheck(bool checkProject)
 {
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
@@ -182,6 +187,7 @@ void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
     params.checkPath = path;
 
     m_problems.clear();
+    m_model->clearProblems();
 
     m_job = new Job(params);
 
@@ -223,7 +229,7 @@ void Plugin::result(KJob*)
 {
     if (!core()->projectController()->projects().contains(m_checkedProject)) {
         m_problems.clear();
-        m_model->setProblems(m_problems);
+        m_model->clearProblems();
     } else {
         m_model->setProblems(m_problems);
 
