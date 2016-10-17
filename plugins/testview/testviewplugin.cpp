@@ -48,7 +48,7 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
     public:
         TestToolViewFactory( TestViewPlugin *plugin ): mplugin( plugin )
         {}
-        QWidget* create( QWidget *parent = 0 ) override
+        QWidget* create( QWidget *parent = nullptr ) override
         {
             return new TestView( mplugin, parent );
         }

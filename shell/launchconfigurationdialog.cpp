@@ -275,7 +275,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             }
         }
     }
-    updateNameLabel(0);
+    updateNameLabel(nullptr);
 
     for( int i = 1; i < stack->count(); i++ )
     {
@@ -560,7 +560,7 @@ LaunchConfigurationsModel::ProjectItem* LaunchConfigurationsModel::findItemForPr
         }
     }
     Q_ASSERT(false);
-    return 0;
+    return nullptr;
 }
 
 int LaunchConfigurationsModel::columnCount(const QModelIndex& parent) const
@@ -797,7 +797,7 @@ ILaunchMode* LaunchConfigurationsModel::modeForIndex( const QModelIndex& idx ) c
             return item->mode;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 LaunchConfiguration* LaunchConfigurationsModel::configForIndex(const QModelIndex& idx ) const
@@ -815,7 +815,7 @@ LaunchConfiguration* LaunchConfigurationsModel::configForIndex(const QModelIndex
             return dynamic_cast<LaunchItem*>( lmitem->parent )->launch;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l ) const
@@ -872,7 +872,7 @@ void LaunchConfigurationsModel::createConfiguration(const QModelIndex& parent )
 
         LaunchConfigurationType* type = Core::self()->runController()->launchConfigurationTypes().at(0);
         QPair<QString,QString> launcher = qMakePair( type->launchers().at( 0 )->supportedModes().at(0), type->launchers().at( 0 )->id() );
-        IProject* p = ( ti ? ti->project : 0 );
+        IProject* p = ( ti ? ti->project : nullptr );
         ILaunchConfiguration* l = Core::self()->runController()->createLaunchConfiguration( type, launcher, p );
 
         addConfiguration(l, parent);
@@ -900,7 +900,7 @@ IProject* LaunchConfigurationsModel::projectForIndex(const QModelIndex& idx)
         return projectForIndex(idx.parent());
     } else {
         const ProjectItem* item = dynamic_cast<const ProjectItem*>(topItems[idx.row()]);
-        return item ? item->project : 0;
+        return item ? item->project : nullptr;
     }
 }
 
@@ -910,7 +910,7 @@ LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfig
     setLayout( new QVBoxLayout( this ) );
     layout()->setContentsMargins( 0, 0, 0, 0 );
     QWidget* parentwidget = this;
-    QTabWidget* tab = 0;
+    QTabWidget* tab = nullptr;
     if( factories.count() > 1 )
     {
         tab = new QTabWidget( this );

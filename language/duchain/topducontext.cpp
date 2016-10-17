@@ -112,8 +112,8 @@ public:
     QMutexLocker lock(&importStructureMutex);
 
     foreach(const DUContext::Import& import, m_importedContexts)
-      if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context(0)))
-        dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.remove(m_ctxt);
+      if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context(nullptr)))
+        dynamic_cast<TopDUContext*>(import.context(nullptr))->m_local->m_directImporters.remove(m_ctxt);
   }
 
   ///@todo Make all this work consistently together with import-caching
@@ -125,8 +125,8 @@ public:
 
     FOREACH_FUNCTION(const DUContext::Import& import, m_ctxt->d_func()->m_importedContexts) {
       if(DUChain::self()->isInMemory(import.topContextIndex())) {
-        Q_ASSERT(import.context(0));
-        TopDUContext* top = import.context(0)->topContext();
+        Q_ASSERT(import.context(nullptr));
+        TopDUContext* top = import.context(nullptr)->topContext();
         Q_ASSERT(top);
         addImportedContextRecursively(top, false, true);
       }
@@ -166,7 +166,7 @@ public:
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
 
     foreach(const DUContext::Import &import, m_importedContexts) {
-      TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(0));
+      TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(nullptr));
       if(top) {
         top->m_local->m_directImporters.remove(m_ctxt);
 
@@ -475,7 +475,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
     return;
 
   for(QVector<DUContext::Import>::const_iterator parentIt = m_importedContexts.constBegin(); parentIt != m_importedContexts.constEnd(); ++parentIt) {
-    TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context(0))); //To avoid detaching, use const iterator
+    TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context(nullptr))); //To avoid detaching, use const iterator
     if(top) {
 //       top->m_local->needImportStructure();
       if(top == imported) {
@@ -491,7 +491,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
   }
 
   for(unsigned int a = 0; a < m_ctxt->d_func()->m_importedContextsSize(); ++a) {
-  TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context(0))); //To avoid detaching, use const iterator
+  TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context(nullptr))); //To avoid detaching, use const iterator
     if(top) {
 //       top->m_local->needImportStructure();
       if(top == imported) {
@@ -512,7 +512,7 @@ void TopDUContext::rebuildDynamicImportStructure() {
 }
 
 void TopDUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
-  Q_ASSERT(parent == 0 && ownIndex != 0);
+  Q_ASSERT(parent == nullptr && ownIndex != 0);
   m_local->m_ownIndex = ownIndex;
 
   DUContext::rebuildDynamicData(parent, 0);
@@ -688,7 +688,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
       target.append(decl);
     }
 
-    check.createVisibleCache = 0;
+    check.createVisibleCache = nullptr;
 
     return !top->foundEnough(target, flags);
   }
@@ -723,7 +723,7 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 struct TopDUContext::ApplyAliasesBuddyInfo {
   ApplyAliasesBuddyInfo(uint importChainType, ApplyAliasesBuddyInfo* predecessor, IndexedQualifiedIdentifier importId) : m_importChainType(importChainType), m_predecessor(predecessor), m_importId(importId) {
     if(m_predecessor && m_predecessor->m_importChainType != importChainType)
-      m_predecessor = 0;
+      m_predecessor = nullptr;
   }
 
   bool alreadyImporting(IndexedQualifiedIdentifier id) {
@@ -776,7 +776,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
       PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(aliasId, recursiveImportIndices());
 
       if(filter) {
-        DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
+        DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, nullptr);
 
         //The first part of the identifier has been found as a namespace-alias.
         //In c++, we only need the first alias. However, just to be correct, follow them all for now.
@@ -834,7 +834,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
         return false;
     } else {
       foreach (const SearchItem::Ptr& next, identifier->next)
-        if(!applyAliases(id, next, accept, position, canBeNamespace, 0, recursionDepth+1))
+        if(!applyAliases(id, next, accept, position, canBeNamespace, nullptr, recursionDepth+1))
           return false;
     }
   }
@@ -857,7 +857,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
       PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(importId, recursiveImportIndices());
 
       if(filter) {
-        DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
+        DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, nullptr);
 
         for(; filter; ++filter)
         {
@@ -905,7 +905,7 @@ void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Accepto
   QualifiedIdentifier emptyId;
 
   for (const SearchItem::Ptr& item : identifiers)
-    applyAliases(emptyId, item, acceptor, position, canBeNamespace, 0, 0);
+    applyAliases(emptyId, item, acceptor, position, canBeNamespace, nullptr, 0);
 }
 
 TopDUContext * TopDUContext::topContext() const
@@ -1091,7 +1091,7 @@ Declaration* TopDUContext::usedDeclarationForIndex(unsigned int declarationIndex
   }else if(declarationIndex < d_func()->m_usedDeclarationIdsSize())
     return d_func()->m_usedDeclarationIds()[declarationIndex].getDeclaration(this);
   else
-    return 0;
+    return nullptr;
 }
 
 int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create) {
@@ -1157,7 +1157,7 @@ QExplicitlySharedDataPointer<IAstContainer> TopDUContext::ast() const
 
 void TopDUContext::clearAst()
 {
-  setAst(QExplicitlySharedDataPointer<IAstContainer>(0));
+  setAst(QExplicitlySharedDataPointer<IAstContainer>(nullptr));
 }
 
 IndexedString TopDUContext::url() const {

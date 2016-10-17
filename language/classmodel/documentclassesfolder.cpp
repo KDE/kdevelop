@@ -139,22 +139,22 @@ ClassNode* DocumentClassesFolder::findClassNode(const IndexedQualifiedIdentifier
 
   ClassIdentifierIterator iter = m_openFilesClasses.get<ClassIdentifierIndex>().find(a_id);
   if ( iter == m_openFilesClasses.get<ClassIdentifierIndex>().end() )
-    return 0;
+    return nullptr;
 
   // If the node is invisible - make it visible by going over the identifiers list.
-  if ( iter->nodeItem == 0 )
+  if ( iter->nodeItem == nullptr )
   {
     QualifiedIdentifier qualifiedIdentifier = a_id.identifier();
 
     // Ignore zero length identifiers.
     if ( qualifiedIdentifier.count() == 0 )
-      return 0;
+      return nullptr;
     
-    ClassNode* closestNode = 0;
+    ClassNode* closestNode = nullptr;
     int closestNodeIdLen = qualifiedIdentifier.count();
 
     // First find the closest visible class node by reverse iteration over the id list.
-    while ( (closestNodeIdLen > 0) && (closestNode == 0) )
+    while ( (closestNodeIdLen > 0) && (closestNode == nullptr) )
     {
       // Omit one from the end.
       --closestNodeIdLen;
@@ -163,7 +163,7 @@ ClassNode* DocumentClassesFolder::findClassNode(const IndexedQualifiedIdentifier
       closestNode = findClassNode(qualifiedIdentifier.mid(0, closestNodeIdLen));
     }
 
-    if ( closestNode != 0 )
+    if ( closestNode != nullptr )
     {
       // Start iterating forward from this node by exposing each class.
       // By the end of this loop, closestNode should hold the actual node.
@@ -267,7 +267,7 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
       }
 
       // Where should we put this class?
-      Node* parentNode = 0;
+      Node* parentNode = nullptr;
 
       // Check if it's namespaced and add it to the proper namespace.
       if ( id.count() > 1 )
@@ -321,8 +321,8 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
         parentNode = this;
       }
 
-      ClassNode* newNode = 0;
-      if ( parentNode != 0 )
+      ClassNode* newNode = nullptr;
+      if ( parentNode != nullptr )
       {
         // Create the new node and add it.
         IndexedDeclaration decl;
@@ -420,7 +420,7 @@ StaticNamespaceFolderNode* DocumentClassesFolder::getNamespaceFolder(const KDeve
 {
   // Stop condition.
   if ( a_identifier.count() == 0 )
-    return 0;
+    return nullptr;
 
   // Look it up in the cache.
   NamespacesMap::iterator iter = m_namespaces.find(a_identifier);
@@ -428,7 +428,7 @@ StaticNamespaceFolderNode* DocumentClassesFolder::getNamespaceFolder(const KDeve
   {
     // It's not in the cache - create folders up to it.
     Node* parentNode = getNamespaceFolder(a_identifier.left(-1));
-    if ( parentNode == 0 )
+    if ( parentNode == nullptr )
       parentNode = this;
 
     // Create the new node.

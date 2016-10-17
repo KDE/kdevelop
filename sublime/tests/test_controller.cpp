@@ -59,7 +59,7 @@ void TestController::areaDeletion()
     QCOMPARE(area->views().count(), 2);
 
     delete area;
-    view2 = 0; view3= 0;
+    view2 = nullptr; view3= nullptr;
 
     QEXPECT_FAIL("", "Fails because of delayed view deletion", Continue);
     QCOMPARE(doc->views().count(), 1);

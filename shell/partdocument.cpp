@@ -63,7 +63,7 @@ QWidget *PartDocument::createViewWidget(QWidget* /*parent*/)
         d->partForView[w] = part;
         return w;
     }
-    return 0;
+    return nullptr;
 }
 
 KParts::Part *PartDocument::partForView(QWidget *view) const
@@ -83,7 +83,7 @@ QMimeType PartDocument::mimeType() const
 
 KTextEditor::Document *PartDocument::textDocument() const
 {
-    return 0;
+    return nullptr;
 }
 
 bool PartDocument::isActive() const

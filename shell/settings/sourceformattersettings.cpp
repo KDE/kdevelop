@@ -59,7 +59,7 @@ QString userStylePrefix() { return QStringLiteral("User"); }
 }
 
 LanguageSettings::LanguageSettings()
-    : selectedFormatter(0), selectedStyle(0) {
+    : selectedFormatter(nullptr), selectedStyle(nullptr) {
 }
 
 SourceFormatterSettings::SourceFormatterSettings(QWidget* parent)
@@ -326,7 +326,7 @@ void SourceFormatterSettings::selectFormatter( int idx )
     Q_ASSERT( l.formatters.contains(formatterIter.value()) );
     if (l.selectedFormatter != formatterIter.value()) {
         l.selectedFormatter = formatterIter.value();
-        l.selectedStyle = 0;    // will hold 0 until a style is picked
+        l.selectedStyle = nullptr;    // will hold 0 until a style is picked
     }
     foreach( const SourceFormatterStyle* style, formatterIter.value()->styles ) {
         if ( ! style->supportsLanguage(cbLanguages->currentText())) {
@@ -338,7 +338,7 @@ void SourceFormatterSettings::selectFormatter( int idx )
             styleList->setCurrentItem(item);
         }
     }
-    if (l.selectedStyle == 0) {
+    if (l.selectedStyle == nullptr) {
         styleList->setCurrentRow(0);
     }
     enableStyleButtons();
@@ -402,7 +402,7 @@ void SourceFormatterSettings::editStyle()
     SourceFormatter* fmt = l.selectedFormatter;
 
     QMimeType mimetype = l.mimetypes.first();
-    if( fmt->formatter->editStyleWidget( mimetype ) != 0 ) {
+    if( fmt->formatter->editStyleWidget( mimetype ) != nullptr ) {
         EditStyleDialog dlg( fmt->formatter, mimetype, *l.selectedStyle, this );
         if( dlg.exec() == QDialog::Accepted )
         {

@@ -41,8 +41,8 @@ using namespace Sublime;
 
 IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindow *parent)
     : QDockWidget(parent),
-      m_area(0),
-      m_view(0),
+      m_area(nullptr),
+      m_view(nullptr),
       m_docking_area(Qt::NoDockWidgetArea),
       m_controller(controller)
 {
@@ -53,7 +53,7 @@ IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindo
 
     QAbstractButton *closeButton = findChild<QAbstractButton *>(QStringLiteral("qt_dockwidget_closebutton"));
     if (closeButton) {
-    disconnect(closeButton, &QAbstractButton::clicked, 0, 0);
+    disconnect(closeButton, &QAbstractButton::clicked, nullptr, nullptr);
 
     connect(closeButton, &QAbstractButton::clicked, this, &IdealDockWidget::closeRequested);
     }

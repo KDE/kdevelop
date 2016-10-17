@@ -174,7 +174,7 @@ KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* wi
         ret->setXmlFile(file);
     } else {
         delete ret;
-        ret = 0;
+        ret = nullptr;
     }
     return ret;
 }

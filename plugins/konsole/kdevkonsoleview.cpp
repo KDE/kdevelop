@@ -43,9 +43,9 @@ public:
 
     void init( KPluginFactory* factory )
     {
-        Q_ASSERT( konsolepart == 0 );
+        Q_ASSERT( konsolepart == nullptr );
 
-        Q_ASSERT( factory != 0 );
+        Q_ASSERT( factory != nullptr );
 
         if ( ( konsolepart = factory->create<KParts::ReadOnlyPart>( m_view ) ) )
         {
@@ -84,7 +84,7 @@ public:
 
 void KDevKonsoleViewPrivate::_k_slotTerminalClosed()
 {
-    konsolepart = 0;
+    konsolepart = nullptr;
     init( mplugin->konsoleFactory() );
 }
 
@@ -94,7 +94,7 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent
 {
     d->mplugin = plugin;
     d->m_view = this;
-    d->konsolepart = 0;
+    d->konsolepart = nullptr;
     setObjectName( i18n( "Konsole" ) );
 
     setWindowIcon( QIcon::fromTheme( QStringLiteral( "utilities-terminal" ), windowIcon() ) );

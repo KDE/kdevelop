@@ -115,7 +115,7 @@ void VCSCommitDiffPatchSource::jobFinished(KJob *job)
         if (details.isEmpty()) {    //errorText may be empty
             details = i18n("For more detailed information please see the Version Control toolview");
         }
-        KMessageBox::detailedError(0, i18n("Unable to commit"), details, i18n("Commit unsuccessful"));
+        KMessageBox::detailedError(nullptr, i18n("Unable to commit"), details, i18n("Commit unsuccessful"));
     }
 
     deleteLater();
@@ -149,7 +149,7 @@ VCSDiffPatchSource::VCSDiffPatchSource(VCSDiffUpdater* updater)
 }
 
 VCSDiffPatchSource::VCSDiffPatchSource(const KDevelop::VcsDiff& diff)
-    : m_updater(0)
+    : m_updater(nullptr)
 {
     updateFromDiff(diff);
 }
@@ -260,7 +260,7 @@ bool VCSCommitDiffPatchSource::finishReview(QList< QUrl > selection) {
 
     QString text = i18n("<qt>Files will be committed:\n<ul>%1</ul>\nWith message:\n <pre>%2</pre></qt>", files, message);
 
-    int res = KMessageBox::warningContinueCancel(0, text, i18n("About to commit to repository"),
+    int res = KMessageBox::warningContinueCancel(nullptr, text, i18n("About to commit to repository"),
                                                  KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
                                                  QStringLiteral("ShouldAskConfirmCommit"));
     if (res != KMessageBox::Continue) {
@@ -300,7 +300,7 @@ VcsDiff VCSStandardDiffUpdater::update() const
                                    KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)));
     const bool success = diffJob ? diffJob->exec() : false;
     if (!success) {
-        KMessageBox::error(0, i18n("Could not create a patch for the current version."));
+        KMessageBox::error(nullptr, i18n("Could not create a patch for the current version."));
         return {};
     }
 

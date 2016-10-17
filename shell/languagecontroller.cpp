@@ -210,7 +210,7 @@ ILanguageSupport* LanguageController::language(const QString &name) const
     QMutexLocker lock(&d->dataMutex);
 
     if(d->m_cleanedUp)
-        return 0;
+        return nullptr;
 
     if(d->languages.contains(name))
         return d->languages[name];

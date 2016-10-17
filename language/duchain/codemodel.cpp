@@ -349,7 +349,7 @@ void CodeModel::items(const IndexedString& file, uint& count, const CodeModelIte
   }else{
     ifDebug( qCDebug(LANGUAGE) << "found no index"; )
     count = 0;
-    items = 0;
+    items = nullptr;
   }
 }
 

@@ -27,7 +27,7 @@ class IDocumentPrivate
 {
 public:
     inline IDocumentPrivate(KDevelop::ICore *core)
-        : m_core(core), scriptWrapper(0)
+        : m_core(core), scriptWrapper(nullptr)
     {}
 
     KDevelop::ICore* m_core;
@@ -133,7 +133,7 @@ void IDocument::notifyLoaded()
 
 KTextEditor::View* IDocument::activeTextView() const
 {
-    return 0;
+    return nullptr;
 }
 
 QString KDevelop::IDocument::text(const KTextEditor::Range& range) const

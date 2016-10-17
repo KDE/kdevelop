@@ -166,7 +166,7 @@ void IdealButtonBarLayout::addItem(QLayoutItem *item)
 
 QLayoutItem* IdealButtonBarLayout::itemAt(int index) const
 {
-    return _items.value(index, 0);
+    return _items.value(index, nullptr);
 }
 
 QLayoutItem* IdealButtonBarLayout::takeAt(int index)
@@ -174,7 +174,7 @@ QLayoutItem* IdealButtonBarLayout::takeAt(int index)
     if (index >= 0 && index < _items.count())
         return _items.takeAt(index);
     invalidate();
-    return 0;
+    return nullptr;
 }
 
 int IdealButtonBarLayout::count() const

@@ -187,7 +187,7 @@ QModelIndex ClassModel::index(ClassModelNodes::Node* a_node) const
   }
 
   // If no parent exists, we have an invalid index (root node or not part of a model).
-  if ( a_node->getParent() == 0 )
+  if ( a_node->getParent() == nullptr )
     return QModelIndex();
 
   return createIndex(a_node->row(), 0, a_node);
@@ -196,7 +196,7 @@ QModelIndex ClassModel::index(ClassModelNodes::Node* a_node) const
 KDevelop::DUChainBase* ClassModel::duObjectForIndex(const QModelIndex& a_index)
 {
   if ( !a_index.isValid() )
-    return 0;
+    return nullptr;
     
   Node* node = static_cast<Node*>(a_index.internalPointer());
 
@@ -204,13 +204,13 @@ KDevelop::DUChainBase* ClassModel::duObjectForIndex(const QModelIndex& a_index)
     return identifierNode->getDeclaration();
 
   // Non was found.
-  return 0;
+  return nullptr;
 }
 
 QModelIndex ClassModel::getIndexForIdentifier(const KDevelop::IndexedQualifiedIdentifier& a_id)
 {
   ClassNode* node = m_allClassesNode->findClassNode(a_id);
-  if ( node == 0 )
+  if ( node == nullptr )
     return QModelIndex();
 
   return index(node);

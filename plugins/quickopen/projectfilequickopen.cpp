@@ -137,7 +137,7 @@ QWidget* ProjectFileData::expandingWidget() const
     QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(url);
 
     ///Pick a non-proxy context
-    TopDUContext* chosen = 0;
+    TopDUContext* chosen = nullptr;
     foreach( TopDUContext* ctx, contexts ) {
         if( !(ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext()) ) {
             chosen = ctx;
@@ -145,7 +145,7 @@ QWidget* ProjectFileData::expandingWidget() const
     }
 
     if( chosen ) {
-        return chosen->createNavigationWidget(0, 0,
+        return chosen->createNavigationWidget(nullptr, nullptr,
             "<small><small>"
             + i18nc("%1: project name", "Project %1", project())
             + "</small></small><br/>");
@@ -159,7 +159,7 @@ QWidget* ProjectFileData::expandingWidget() const
         return ret;
     }
 
-    return 0;
+    return nullptr;
 }
 
 QIcon ProjectFileData::icon() const

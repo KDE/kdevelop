@@ -399,7 +399,7 @@ void ProblemsView::onViewChanged()
 
 void ProblemsView::addModel(const ModelData& data)
 {
-    ProblemTreeView* view = new ProblemTreeView(NULL, data.model);
+    ProblemTreeView* view = new ProblemTreeView(nullptr, data.model);
     connect(view, &ProblemTreeView::changed, this, &ProblemsView::onViewChanged);
     int idx = m_tabWidget->addTab(view, data.name);
     int rows = view->model()->rowCount();

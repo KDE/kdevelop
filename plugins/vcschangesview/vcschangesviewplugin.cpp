@@ -48,7 +48,7 @@ class VCSProjectToolViewFactory : public KDevelop::IToolViewFactory
 public:
     VCSProjectToolViewFactory(VcsProjectIntegrationPlugin *plugin): m_plugin(plugin) {}
 
-    QWidget* create(QWidget *parent = 0) override
+    QWidget* create(QWidget *parent = nullptr) override
     {
         VcsChangesView* modif = new VcsChangesView(m_plugin, parent);
         modif->setModel(m_plugin->model());
@@ -74,7 +74,7 @@ private:
 
 VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevvcsprojectintegration"), parent)
-    , m_model(0)
+    , m_model(nullptr)
 {
     ICore::self()->uiController()->addToolView(i18n("Project Changes"), new VCSProjectToolViewFactory(this));
 

@@ -247,16 +247,16 @@ QIcon DUChainUtils::iconForDeclaration(const Declaration* dec)
 TopDUContext* DUChainUtils::contentContextFromProxyContext(TopDUContext* top)
 {
   if(!top)
-    return 0;
+    return nullptr;
   if(top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) {
     if(!top->importedParentContexts().isEmpty())
     {
-      DUContext* ctx = top->importedParentContexts().at(0).context(0);
+      DUContext* ctx = top->importedParentContexts().at(0).context(nullptr);
       if(!ctx)
-        return 0;
+        return nullptr;
       TopDUContext* ret = ctx->topContext();
       if(!ret)
-        return 0;
+        return nullptr;
       if(ret->url() != top->url())
         qCDebug(LANGUAGE) << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
       if(ret->url() == top->url() && !ret->parsingEnvironmentFile()->isProxyContext())
@@ -267,11 +267,11 @@ TopDUContext* DUChainUtils::contentContextFromProxyContext(TopDUContext* top)
     }
   } else
     return top;
-  return 0;
+  return nullptr;
 }
 
 TopDUContext* DUChainUtils::standardContextForUrl(const QUrl& url, bool preferProxyContext) {
-  KDevelop::TopDUContext* chosen = 0;
+  KDevelop::TopDUContext* chosen = nullptr;
 
   auto languages = ICore::self()->languageController()->languagesForUrl(url);
 
@@ -347,7 +347,7 @@ DUChainUtils::ItemUnderCursor DUChainUtils::itemUnderCursor(const QUrl& url, con
 Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, TopDUContext* topContext)
 {
   if(!definition)
-    return 0;
+    return nullptr;
 
   if(!topContext)
     topContext = definition->topContext();
@@ -363,7 +363,7 @@ Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, Top
 
 Declaration* DUChainUtils::declarationInLine(const KTextEditor::Cursor& _cursor, DUContext* ctx) {
   if(!ctx)
-    return 0;
+    return nullptr;
 
   CursorInRevision cursor = ctx->transformToLocalRevision(_cursor);
 
@@ -381,7 +381,7 @@ Declaration* DUChainUtils::declarationInLine(const KTextEditor::Cursor& _cursor,
       return decl;
   }
 
-  return 0;
+  return nullptr;
 }
 
 DUChainUtils::DUChainItemFilter::~DUChainItemFilter() {
@@ -397,22 +397,22 @@ void DUChainUtils::collectItems( DUContext* context, DUChainItemFilter& filter )
 
   while(childIt != children.constEnd() || declIt != localDeclarations.constEnd()) {
 
-    DUContext* child = 0;
+    DUContext* child = nullptr;
     if(childIt != children.constEnd())
       child = *childIt;
 
-    Declaration* decl = 0;
+    Declaration* decl = nullptr;
     if(declIt != localDeclarations.constEnd())
       decl = *declIt;
 
     if(decl) {
       if(child && child->range().start.line >= decl->range().start.line)
-        child = 0;
+        child = nullptr;
     }
 
     if(child) {
       if(decl && decl->range().start >= child->range().start)
-        decl = 0;
+        decl = nullptr;
     }
 
     if(decl) {
@@ -436,7 +436,7 @@ void DUChainUtils::collectItems( DUContext* context, DUChainItemFilter& filter )
 KDevelop::DUContext* DUChainUtils::getArgumentContext(KDevelop::Declaration* decl) {
   DUContext* internal = decl->internalContext();
   if( !internal )
-    return 0;
+    return nullptr;
   if( internal->type() == DUContext::Function )
     return internal;
   foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
@@ -444,7 +444,7 @@ KDevelop::DUContext* DUChainUtils::getArgumentContext(KDevelop::Declaration* dec
       if( ctx.context(decl->topContext())->type() == DUContext::Function )
         return ctx.context(decl->topContext());
   }
-  return 0;
+  return nullptr;
 }
 
 QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
@@ -578,7 +578,7 @@ uint DUChainUtils::contextCountUses(DUContext* context, Declaration* declaration
 Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
   const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl);
   if(!classFunDecl || !classFunDecl->isVirtual())
-    return 0;
+    return nullptr;
 
   QList<Declaration*> decls;
 
@@ -595,7 +595,7 @@ Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
       return found;
   }
 
-  return 0;
+  return nullptr;
 }
 
 DUContext* DUChainUtils::getFunctionContext(Declaration* decl) {
@@ -610,7 +610,7 @@ DUContext* DUChainUtils::getFunctionContext(Declaration* decl) {
 
   if(functionContext && functionContext->type() == DUContext::Function)
     return functionContext;
-  return 0;
+  return nullptr;
 }
 
 QVector<KDevelop::Problem::Ptr> KDevelop::DUChainUtils::allProblemsForContext(KDevelop::ReferencedTopDUContext top)

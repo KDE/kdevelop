@@ -39,18 +39,18 @@ namespace svn
     Pool pool;
 
     /** constructor (because of optional param */
-    Data(const Path & path_, const svn_info_t * info_ = 0)
-        : info(0), path(path_)
+    Data(const Path & path_, const svn_info_t * info_ = nullptr)
+        : info(nullptr), path(path_)
     {
-      if (info_ != 0)
+      if (info_ != nullptr)
         info = svn_info_dup(info_, pool);
     }
 
     /** copy constructor */
     Data(const Data * src)
-        : info(0), path(src->path)
+        : info(nullptr), path(src->path)
     {
-      if (src->info != 0)
+      if (src->info != nullptr)
         info = svn_info_dup(src->info, pool);
     }
   };
@@ -95,7 +95,7 @@ namespace svn
   bool
   Info::isValid() const
   {
-    return m->info != 0;
+    return m->info != nullptr;
   }
 
 
@@ -103,7 +103,7 @@ namespace svn
   Info::url() const
   {
     if (isValid())
-      return 0;
+      return nullptr;
     else
       return m->info->URL;
   }
@@ -127,7 +127,7 @@ namespace svn
   Info::repos () const
   {
     if (isValid())
-      return 0;
+      return nullptr;
     else
       return m->info->repos_root_URL;
   }
@@ -135,7 +135,7 @@ namespace svn
   const char *
   Info::uuid () const {
     if (isValid())
-      return 0;
+      return nullptr;
     else
       return m->info->repos_UUID;
   }
@@ -162,7 +162,7 @@ namespace svn
   Info::lastChangedAuthor () const
   {
     if (isValid())
-      return 0;
+      return nullptr;
     else
       return m->info->last_changed_author;
   }
@@ -185,7 +185,7 @@ namespace svn
   const char* Info::copyFromUrl () const
   {
     if (isValid())
-      return 0;
+      return nullptr;
     else
       return m->info->copyfrom_url;
   }
@@ -217,7 +217,7 @@ namespace svn
   const char* Info::oldConflictFile () const
   {
     if (isValid())
-      return 0;
+      return nullptr;
     else
       return m->info->conflict_old;
   }
@@ -225,7 +225,7 @@ namespace svn
   const char* Info::newConflictFile () const
   {
     if (isValid())
-      return 0;
+      return nullptr;
     else
       return m->info->conflict_new;
   }
@@ -233,7 +233,7 @@ namespace svn
   const char* Info::workingConflictFile () const
   {
     if (isValid())
-      return 0;
+      return nullptr;
     else
       return m->info->conflict_wrk;
   }
@@ -241,7 +241,7 @@ namespace svn
   const char* Info::propertyRejectFile () const 
   {
     if (isValid())
-      return 0;
+      return nullptr;
     else
       return m->info->prejfile;
   }

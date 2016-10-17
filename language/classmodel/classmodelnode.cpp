@@ -85,7 +85,7 @@ bool EnumNode::getIcon(QIcon& a_resultIcon)
   DUChainReadLocker readLock(DUChain::lock());
 
   ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(getDeclaration());
-  if ( decl == 0 )
+  if ( decl == nullptr )
   {
     static QIcon Icon = QIcon::fromTheme(QStringLiteral("enum"));
     a_resultIcon = Icon;
@@ -185,7 +185,7 @@ bool ClassNode::updateClassDeclarations()
         continue;
       }
 
-      Node* newNode = 0;
+      Node* newNode = nullptr;
 
       if ( EnumerationType::Ptr enumType = decl->type<EnumerationType>() )
         newNode = new EnumNode( decl, m_model );
@@ -276,14 +276,14 @@ ClassNode* ClassNode::findSubClass(const KDevelop::IndexedQualifiedIdentifier& a
   foreach(Node* item, m_subIdentifiers)
   {
     ClassNode* classNode = dynamic_cast<ClassNode*>(item);
-    if ( classNode == 0 )
+    if ( classNode == nullptr )
       continue;
 
     if ( classNode->getIdentifier() == a_id )
       return classNode;
   }
 
-  return 0;
+  return nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -322,7 +322,7 @@ bool ClassMemberNode::getIcon(QIcon& a_resultIcon)
   DUChainReadLocker readLock(DUChain::lock());
 
   ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(getDeclaration());
-  if ( decl == 0 )
+  if ( decl == nullptr )
     return false;
 
   if ( decl->isTypeAlias() )
@@ -444,7 +444,7 @@ void DerivedClassesFolderNode::populateNode()
 //////////////////////////////////////////////////////////////////////////////
 
 Node::Node(const QString& a_displayName, NodesModelInterface* a_model)
-  : m_parentNode(0)
+  : m_parentNode(nullptr)
   , m_displayName(a_displayName)
   , m_model(a_model)
 {
@@ -519,7 +519,7 @@ void Node::recursiveSort()
 
 int Node::row()
 {
-  if ( m_parentNode == 0 )
+  if ( m_parentNode == nullptr )
     return -1;
 
   return m_parentNode->m_children.indexOf(this);

@@ -51,7 +51,7 @@
 #include <interfaces/iplugincontroller.h>
 
 ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
-    : QWidget( parent ), m_view( 0 ),
+    : QWidget( parent ), m_view( nullptr ),
      m_ui( new Ui::ProjectBuildSetWidget )
 {
     m_ui->setupUi( this );

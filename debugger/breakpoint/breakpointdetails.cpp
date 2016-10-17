@@ -38,7 +38,7 @@
 using namespace KDevelop;
 
 BreakpointDetails::BreakpointDetails(QWidget *parent)
-    : QWidget(parent), m_currentBreakpoint(0)
+    : QWidget(parent), m_currentBreakpoint(nullptr)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
 
@@ -69,7 +69,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
 
     layout->addStretch();
 
-    setItem(0); //initialize with no breakpoint active
+    setItem(nullptr); //initialize with no breakpoint active
 }
 
 void KDevelop::BreakpointDetails::setIgnoreHits(int ignoreHits)

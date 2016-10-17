@@ -113,7 +113,7 @@ void popupContextMenu_appendActions(QMenu& menu, const QList<QAction*>& actions)
 }
 
 ProjectTreeView::ProjectTreeView( QWidget *parent )
-        : QTreeView( parent ), m_ctxProject( 0 )
+        : QTreeView( parent ), m_ctxProject( nullptr )
 {
     header()->hide();
 
@@ -183,7 +183,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             cancel->setIcon(QIcon::fromTheme(QStringLiteral("process-stop")));
             dropMenu.addAction(cancel);
 
-            QAction *executedAction = 0;
+            QAction *executedAction = nullptr;
 
             Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
             if (modifiers == Qt::ControlModifier) {
@@ -242,7 +242,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             cancel->setIcon(QIcon::fromTheme(QStringLiteral("process-stop")));
             dropMenu.addAction(cancel);
 
-            QAction *executedAction = 0;
+            QAction *executedAction = nullptr;
 
             Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
             if (modifiers == Qt::ControlModifier) {
@@ -313,7 +313,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         m_ctxProject = itemlist.at(0)->project();
     } else
     {
-        m_ctxProject = 0;
+        m_ctxProject = nullptr;
     }
 
     QMenu menu( this );

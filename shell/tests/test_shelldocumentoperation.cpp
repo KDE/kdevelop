@@ -81,8 +81,8 @@ void TestShellDocumentOperation::testClosing()
         QPointer<Sublime::View> the_view = area->views().at(0);
         QPointer<QWidget> the_widget = the_view->widget();
         documentController->openDocuments().at(0)->close(IDocument::Discard);
-        QCOMPARE(the_view.data(), (Sublime::View*)0);
-        QCOMPARE(the_widget.data(), (QWidget*)0);
+        QCOMPARE(the_view.data(), (Sublime::View*)nullptr);
+        QCOMPARE(the_widget.data(), (QWidget*)nullptr);
     }
 
     // Now try the same, where there are two open documents.
@@ -101,8 +101,8 @@ void TestShellDocumentOperation::testClosing()
                      << " " << area->views().at(1);
         QPointer<QWidget> the_widget = the_view->widget();
         doc2->close(IDocument::Discard);
-        QCOMPARE(the_view.data(), (Sublime::View*)0);
-        QCOMPARE(the_widget.data(), (QWidget*)0);
+        QCOMPARE(the_view.data(), (Sublime::View*)nullptr);
+        QCOMPARE(the_widget.data(), (QWidget*)nullptr);
         doc1->close(IDocument::Discard);
     }
 }

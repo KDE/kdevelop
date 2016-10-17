@@ -375,7 +375,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                                                                           QString & output)
 {
 
-    ISourceFormatter* formatter = 0;
+    ISourceFormatter* formatter = nullptr;
     if(ICore::self()) {
         formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
     }

@@ -126,8 +126,8 @@ public:
         return it;
     }
 
-    ProjectFolderItem* addFolder(const Path& /*folder*/, ProjectFolderItem */*parent*/) override { return 0; }
-    ProjectFileItem* addFile(const Path& /*file*/, ProjectFolderItem */*parent*/) override { return 0; }
+    ProjectFolderItem* addFolder(const Path& /*folder*/, ProjectFolderItem */*parent*/) override { return nullptr; }
+    ProjectFileItem* addFile(const Path& /*file*/, ProjectFolderItem */*parent*/) override { return nullptr; }
     bool removeFilesAndFolders(const QList<ProjectBaseItem*> &/*items*/) override { return false; }
     bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &/*items*/, KDevelop::ProjectFolderItem* /*newParent*/) override { return false; }
     bool copyFilesAndFolders(const Path::List &/*items*/, KDevelop::ProjectFolderItem* /*newParent*/) override { return false; }
@@ -535,7 +535,7 @@ void TestProjectController::assertSpyCaughtProject(QSignalSpy* spy, IProject* pr
 void TestProjectController::assertProjectClosed(IProject* proj)
 {
     IProject* p = m_projCtrl->findProjectByName(proj->name());
-    QVERIFY(p == 0);
+    QVERIFY(p == nullptr);
     QVERIFY(!m_projCtrl->projects().contains(proj));
 }
 

@@ -33,7 +33,7 @@ DUChainBase* DUChainPointerData::base() const
 }
 
 DUChainPointerData::DUChainPointerData()
-  : m_base(0)
+  : m_base(nullptr)
 {
 }
 

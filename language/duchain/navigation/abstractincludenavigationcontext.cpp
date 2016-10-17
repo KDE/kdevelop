@@ -37,18 +37,18 @@ AbstractIncludeNavigationContext::AbstractIncludeNavigationContext(const Include
 TopDUContext* pickContextWithData(QList<TopDUContext*> duchains, uint maxDepth,
                                    const ParsingEnvironmentType& type,
                                    bool forcePick = true) {
-  TopDUContext* duchain = 0;
+  TopDUContext* duchain = nullptr;
 
   foreach(TopDUContext* ctx, duchains) {
     if(!ctx->parsingEnvironmentFile() || ctx->parsingEnvironmentFile()->type() != type)
       continue;
 
     if(ctx->childContexts().count() != 0
-        && (duchain == 0 || ctx->childContexts().count() > duchain->childContexts().count())) {
+        && (duchain == nullptr || ctx->childContexts().count() > duchain->childContexts().count())) {
       duchain = ctx;
     }
     if(ctx->localDeclarations().count() != 0
-        && (duchain == 0 || ctx->localDeclarations().count() > duchain->localDeclarations().count())) {
+        && (duchain == nullptr || ctx->localDeclarations().count() > duchain->localDeclarations().count())) {
       duchain = ctx;
     }
   }
@@ -58,8 +58,8 @@ TopDUContext* pickContextWithData(QList<TopDUContext*> duchains, uint maxDepth,
       foreach(TopDUContext* ctx, duchains) {
         QList<TopDUContext*> children;
         foreach(const DUContext::Import &import, ctx->importedParentContexts())
-          if(import.context(0))
-            children << import.context(0)->topContext();
+          if(import.context(nullptr))
+            children << import.context(nullptr)->topContext();
 
         duchain = pickContextWithData(children, maxDepth-1, type, false);
         if(duchain)

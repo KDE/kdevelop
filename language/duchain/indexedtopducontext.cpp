@@ -48,5 +48,5 @@ TopDUContext* IndexedTopDUContext::data() const {
   if(index())
     return DUChain::self()->chainForIndex(index());
   else
-    return 0;
+    return nullptr;
 }

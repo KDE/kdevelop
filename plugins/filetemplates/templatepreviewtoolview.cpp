@@ -40,7 +40,7 @@ using namespace KDevelop;
 TemplatePreviewToolView::TemplatePreviewToolView(FileTemplatesPlugin* plugin, QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , ui(new Ui::TemplatePreviewToolView)
-, m_original(0)
+, m_original(nullptr)
 , m_plugin(plugin)
 {
     ui->setupUi(this);
@@ -127,7 +127,7 @@ void TemplatePreviewToolView::documentChanged(KTextEditor::Document* document)
 void TemplatePreviewToolView::showEvent(QShowEvent*)
 {
     IDocument* doc = ICore::self()->documentController()->activeDocument();
-    documentChanged(doc ? doc->textDocument() : 0);
+    documentChanged(doc ? doc->textDocument() : nullptr);
 }
 
 void TemplatePreviewToolView::documentClosed(IDocument* document)

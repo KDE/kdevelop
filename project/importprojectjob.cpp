@@ -57,7 +57,7 @@ public:
 };
 
 ImportProjectJob::ImportProjectJob(ProjectFolderItem *folder, IProjectFileManager *importer)
-    : KJob(0), d(new ImportProjectJobPrivate )
+    : KJob(nullptr), d(new ImportProjectJobPrivate )
 {
     d->m_importer = importer;
     d->m_folder = folder;

@@ -28,7 +28,7 @@
 
 LocalPatchSource::LocalPatchSource()
     : m_applied(false)
-    , m_widget(0)
+    , m_widget(nullptr)
 {
 }
 
@@ -89,7 +89,7 @@ void LocalPatchSource::update()
 void LocalPatchSource::createWidget()
 {
     delete m_widget;
-    m_widget = new LocalPatchWidget(this, 0);
+    m_widget = new LocalPatchWidget(this, nullptr);
 }
 
 QWidget* LocalPatchSource::customWidget() const

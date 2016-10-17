@@ -21,7 +21,7 @@
 using namespace KDevelop;
 
 ControlFlowNode::ControlFlowNode()
-  : m_conditionRange(RangeInRevision::invalid()), m_next(0), m_alternative(0)
+  : m_conditionRange(RangeInRevision::invalid()), m_next(nullptr), m_alternative(nullptr)
 {}
 
 ControlFlowNode::Type ControlFlowNode::type() const

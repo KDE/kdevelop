@@ -167,14 +167,14 @@ KJob* ScriptAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     Q_ASSERT(cfg);
     if( !cfg )
     {
-        return 0;
+        return nullptr;
     }
     if( launchMode == QLatin1String("execute") )
     {
         return new ScriptAppJob( m_plugin, cfg);
     }
     qWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
-    return 0;
+    return nullptr;
 }
 
 QStringList ScriptAppLauncher::supportedModes() const

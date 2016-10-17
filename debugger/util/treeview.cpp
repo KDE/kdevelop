@@ -28,7 +28,7 @@
 
 using namespace KDevelop;
 
-AsyncTreeView::AsyncTreeView(TreeModel* model, QSortFilterProxyModel *proxy, QWidget *parent = 0)
+AsyncTreeView::AsyncTreeView(TreeModel* model, QSortFilterProxyModel *proxy, QWidget *parent = nullptr)
     : QTreeView(parent)
     , m_proxy(proxy)
 {

@@ -56,14 +56,14 @@ IndexedTopDUContext IndexedDUContext::indexedTopContext() const
 DUContext* IndexedDUContext::context() const
 {
   if(isDummy())
-    return 0;
+    return nullptr;
 //   ENSURE_CHAIN_READ_LOCKED
   if(!m_topContext)
-    return 0;
+    return nullptr;
 
   TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
   if(!ctx)
-    return 0;
+    return nullptr;
 
   if(!m_contextIndex)
     return ctx;

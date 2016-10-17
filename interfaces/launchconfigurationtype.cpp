@@ -66,7 +66,7 @@ ILauncher* LaunchConfigurationType::launcherForId( const QString& id )
            return l;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 }

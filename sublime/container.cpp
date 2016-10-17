@@ -188,7 +188,7 @@ struct ContainerPrivate {
 class UnderlinedLabel: public KSqueezedTextLabel {
 Q_OBJECT
 public:
-    UnderlinedLabel(QTabBar *tabBar, QWidget* parent = 0)
+    UnderlinedLabel(QTabBar *tabBar, QWidget* parent = nullptr)
         :KSqueezedTextLabel(parent), m_tabBar(tabBar)
     {
     }
@@ -230,7 +230,7 @@ protected:
 class StatusLabel: public UnderlinedLabel {
 Q_OBJECT
 public:
-    StatusLabel(QTabBar *tabBar, QWidget* parent = 0):
+    StatusLabel(QTabBar *tabBar, QWidget* parent = nullptr):
         UnderlinedLabel(tabBar, parent)
     {
         setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -310,7 +310,7 @@ void Container::setLeftCornerWidget(QWidget* widget)
 {
     if(d->leftCornerWidget.data() == widget) {
         if(d->leftCornerWidget)
-            d->leftCornerWidget.data()->setParent(0);
+            d->leftCornerWidget.data()->setParent(nullptr);
     }else{
         delete d->leftCornerWidget.data();
         d->leftCornerWidget.clear();

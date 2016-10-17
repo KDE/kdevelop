@@ -349,7 +349,7 @@ int main(int argc, char** argv)
         int sockfd;
         
         int addrSize;
-        sockaddr* useAddr = 0;
+        sockaddr* useAddr = nullptr;
         sockaddr_un serv_addru;
         sockaddr_in serv_addrin;
         
@@ -379,7 +379,7 @@ int main(int argc, char** argv)
             }
             int port = atoi(argv[1]);
             hostent *server = gethostbyname("localhost");
-            if(server == NULL)
+            if(server == nullptr)
             {
                 std::cerr << "failed to get server" << std::endl;
                 return 5;

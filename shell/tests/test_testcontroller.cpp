@@ -77,21 +77,21 @@ IndexedDeclaration FakeTestSuite::caseDeclaration(const QString& testCase) const
 KJob* FakeTestSuite::launchAllCases(ITestSuite::TestJobVerbosity verbosity)
 {
     Q_UNUSED(verbosity);
-    return 0;
+    return nullptr;
 }
 
 KJob* FakeTestSuite::launchCase(const QString& testCase, ITestSuite::TestJobVerbosity verbosity)
 {
     Q_UNUSED(testCase);
     Q_UNUSED(verbosity);
-    return 0;
+    return nullptr;
 }
 
 KJob* FakeTestSuite::launchCases(const QStringList& testCases, ITestSuite::TestJobVerbosity verbosity)
 {
     Q_UNUSED(testCases);
     Q_UNUSED(verbosity);
-    return 0;
+    return nullptr;
 }
 
 void TestTestController::emitTestResult(ITestSuite* suite, TestResult::TestCaseResult caseResult)
@@ -146,7 +146,7 @@ void TestTestController::removeSuite()
     QVERIFY(m_testController->findTestSuite(m_project, TestSuiteName));
     m_testController->removeTestSuite(&suite);
 
-    QCOMPARE(m_testController->findTestSuite(m_project, TestSuiteName), (ITestSuite*)0);
+    QCOMPARE(m_testController->findTestSuite(m_project, TestSuiteName), (ITestSuite*)nullptr);
     QVERIFY(m_testController->testSuites().isEmpty());
 }
 

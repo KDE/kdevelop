@@ -50,7 +50,7 @@ namespace svn
                    date?date:"unknown date",
                    line?line:"???"));
 
-    return NULL;
+    return nullptr;
   }
 
   AnnotatedFile *
@@ -70,7 +70,7 @@ namespace svn
               *m_context, // client ctx
               pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       delete entries;
       throw ClientException(error);

@@ -61,7 +61,7 @@ public:
   DebuggerToolFactory(DebugController* controller, const QString &id, Qt::DockWidgetArea defaultArea)
   : m_controller(controller), m_id(id), m_defaultArea(defaultArea) {}
 
-  QWidget* create(QWidget *parent = 0) override
+  QWidget* create(QWidget *parent = nullptr) override
   {
     return new T(m_controller, parent);
   }
@@ -98,12 +98,12 @@ private:
 
 DebugController::DebugController(QObject *parent)
     : IDebugController(parent), KXMLGUIClient(),
-      m_continueDebugger(0), m_stopDebugger(0),
-      m_interruptDebugger(0), m_runToCursor(0),
-      m_jumpToCursor(0), m_stepOver(0),
-      m_stepIntoInstruction(0), m_stepInto(0),
-      m_stepOverInstruction(0), m_stepOut(0),
-      m_toggleBreakpoint(0),
+      m_continueDebugger(nullptr), m_stopDebugger(nullptr),
+      m_interruptDebugger(nullptr), m_runToCursor(nullptr),
+      m_jumpToCursor(nullptr), m_stepOver(nullptr),
+      m_stepIntoInstruction(nullptr), m_stepInto(nullptr),
+      m_stepOverInstruction(nullptr), m_stepOut(nullptr),
+      m_toggleBreakpoint(nullptr),
       m_breakpointModel(new BreakpointModel(this)),
       m_variableCollection(new VariableCollection(this)),
       m_uiInitialized(false)
@@ -376,7 +376,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
     if (state == IDebugSession::EndedState) {
         if (session == m_currentSession.data()) {
             m_currentSession.clear();
-            emit currentSessionChanged(0);
+            emit currentSessionChanged(nullptr);
             if (!Core::self()->shuttingDown()) {
                 Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
                 if (mainWindow && mainWindow->area()->objectName() != QLatin1String("code")) {
@@ -384,7 +384,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
                     ICore::self()->uiController()->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
                     mainWindow->area()->setWorkingSet(workingSet);
                 }
-                ICore::self()->uiController()->findToolView(i18n("Debug"), 0, IUiController::Raise);
+                ICore::self()->uiController()->findToolView(i18n("Debug"), nullptr, IUiController::Raise);
             }
         }
         session->deleteLater();

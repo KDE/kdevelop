@@ -103,7 +103,7 @@ struct SetRepositoryAlgorithms {
   QString shortLabel(const SetNodeData& node) const;
 
   uint set_union(uint firstNode, uint secondNode, const SetNodeData* first, const SetNodeData* second, uchar splitBit = 31);
-  uint createSetFromNodes(uint leftNode, uint rightNode, const SetNodeData* left = 0, const SetNodeData* right = 0);
+  uint createSetFromNodes(uint leftNode, uint rightNode, const SetNodeData* left = nullptr, const SetNodeData* right = nullptr);
   uint computeSetFromNodes(uint leftNode, uint rightNode, const SetNodeData* left, const SetNodeData* right, uchar splitBit);
   uint set_intersect(uint firstNode, uint secondNode, const SetNodeData* first, const SetNodeData* second, uchar splitBit = 31);
   bool set_contains(const SetNodeData* node, Index index);
@@ -225,7 +225,7 @@ public:
   private:
 };
 
-Set::Set() : m_tree(0), m_repository(0) {
+Set::Set() : m_tree(0), m_repository(nullptr) {
 }
 
 Set::~Set() {
@@ -341,7 +341,7 @@ const int nodeStackAlloc = 500;
 class Set::Iterator::IteratorPrivate {
 public:
 
-  IteratorPrivate() : nodeStackSize(0), currentIndex(0), repository(0) {
+  IteratorPrivate() : nodeStackSize(0), currentIndex(0), repository(nullptr) {
     nodeStackData.resize(nodeStackAlloc);
     nodeStack = nodeStackData.data();
   }
@@ -531,7 +531,7 @@ uint SetRepositoryAlgorithms::computeSetFromNodes(uint leftNode, uint rightNode,
     //Create a new set from left + rightLeft, and from rightRight. That set will have the correct split-position.
     uint newLeftNode = computeSetFromNodes(leftNode, rightLeftNode, left, rightLeft, splitBit);
 
-    return createSetFromNodes(newLeftNode, rightRightNode, 0, rightRight);
+    return createSetFromNodes(newLeftNode, rightRightNode, nullptr, rightRight);
   }else{
     return createSetFromNodes(leftNode, rightNode, left, right);
   }
@@ -595,7 +595,7 @@ uint SetRepositoryAlgorithms::set_union(uint firstNode, uint secondNode, const S
     //So we only need to union that side of first with second.
 
     if(secondEnd <= splitPosition) {
-      return createSetFromNodes( set_union(firstLeftNode, secondNode, firstLeft, second, splitBit), firstRightNode, 0, firstRight );
+      return createSetFromNodes( set_union(firstLeftNode, secondNode, firstLeft, second, splitBit), firstRightNode, nullptr, firstRight );
     }else{
       Q_ASSERT(secondStart >= splitPosition);
       return createSetFromNodes( firstLeftNode, set_union(firstRightNode, secondNode, firstRight, second, splitBit), firstLeft );
@@ -612,7 +612,7 @@ uint SetRepositoryAlgorithms::set_union(uint firstNode, uint secondNode, const S
     Q_ASSERT(splitPosition >= secondLeft->end() && splitPosition <= secondRight->start());
 
     if(firstEnd <= splitPosition) {
-      return createSetFromNodes( set_union(secondLeftNode, firstNode, secondLeft, first, splitBit), secondRightNode, 0, secondRight );
+      return createSetFromNodes( set_union(secondLeftNode, firstNode, secondLeft, first, splitBit), secondRightNode, nullptr, secondRight );
     }else{
       Q_ASSERT(firstStart >= splitPosition);
       return createSetFromNodes( secondLeftNode, set_union(secondRightNode, firstNode, secondRight, first, splitBit), secondLeft );
@@ -887,7 +887,7 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
   return createSetFromIndices(indicesVector);
 }
 
-BasicSetRepository::BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry, bool delayedDeletion) : d(new Private(name)), dataRepository(this, name, registry), m_mutex(0), m_delayedDeletion(delayedDeletion) {
+BasicSetRepository::BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry, bool delayedDeletion) : d(new Private(name)), dataRepository(this, name, registry), m_mutex(nullptr), m_delayedDeletion(delayedDeletion) {
     m_mutex = dataRepository.mutex();
 }
 

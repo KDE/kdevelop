@@ -340,7 +340,7 @@ void ExpandingWidgetModel::setExpanded(QModelIndex idx_, bool expanded)
         edit->resize(200, 50); //Make the widget small so it embeds nicely.
         m_expandingWidgets[idx] = edit;
       } else {
-        m_expandingWidgets[idx] = 0;
+        m_expandingWidgets[idx] = nullptr;
       }
     }
 
@@ -372,7 +372,7 @@ void ExpandingWidgetModel::placeExpandingWidget(const QModelIndex& idx_)
 {
   QModelIndex idx(firstColumn(idx_));
 
-  QWidget* w = 0;
+  QWidget* w = nullptr;
   if( m_expandingWidgets.contains(idx) )
     w = m_expandingWidgets[idx];
 
@@ -436,7 +436,7 @@ QWidget* ExpandingWidgetModel::expandingWidget(const QModelIndex& idx_) const
   if( m_expandingWidgets.contains(idx) )
     return m_expandingWidgets[idx];
   else
-    return 0;
+    return nullptr;
 }
 
 void ExpandingWidgetModel::cacheIcons() const {

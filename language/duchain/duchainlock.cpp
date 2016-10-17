@@ -40,7 +40,7 @@ class DUChainLockPrivate
 {
 public:
   DUChainLockPrivate()
-    : m_writer(0)
+    : m_writer(nullptr)
     , m_writerRecursion(0)
     , m_totalReaderRecursion(0)
   { }
@@ -85,7 +85,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
   d->changeOwnReaderRecursion(1);
 
   QThread* w = d->m_writer.loadAcquire();
-  if (w == 0 || w == QThread::currentThread()) {
+  if (w == nullptr || w == QThread::currentThread()) {
     //Successful lock: Either there is no writer, or we hold the write-lock by ourselves
   } else {
     ///Step 2: Start spinning until there is no writer any more
@@ -146,7 +146,7 @@ bool DUChainLock::lockForWrite(uint timeout)
         return true;
       } else {
         //There may be readers.. we have to continue spinning
-        d->m_writer = 0;
+        d->m_writer = nullptr;
         d->m_writerRecursion = 0;
       }
     }
@@ -170,7 +170,7 @@ void DUChainLock::releaseWriteLock()
 
   //TODO: could testAndSet here
   if (d->m_writerRecursion.load() == 1) {
-    d->m_writer = 0;
+    d->m_writer = nullptr;
     d->m_writerRecursion = 0;
   } else {
     d->m_writerRecursion.fetchAndAddOrdered(-1);

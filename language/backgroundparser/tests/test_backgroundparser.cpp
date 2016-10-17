@@ -316,7 +316,7 @@ void TestBackgroundparser::benchmarkDocumentChanges()
 
     doc->setText(QStringLiteral("hello world"));
     // required for proper benchmark results
-    doc->createView(0);
+    doc->createView(nullptr);
     QBENCHMARK {
         for ( int i = 0; i < 5000; i++ ) {
             {

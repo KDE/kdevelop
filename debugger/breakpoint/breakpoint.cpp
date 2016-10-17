@@ -55,7 +55,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
     , m_state(NotStartedState)
     , m_kind(kind)
     , m_line(-1)
-    , m_movingCursor(0)
+    , m_movingCursor(nullptr)
     , m_hitCount(0)
     , m_ignoreHits(0)
 {
@@ -69,7 +69,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
     , m_deleted(false)
     , m_state(NotStartedState)
     , m_line(-1)
-    , m_movingCursor(0)
+    , m_movingCursor(nullptr)
     , m_hitCount(0)
     , m_ignoreHits(0)
 {
@@ -214,7 +214,7 @@ void Breakpoint::setDeleted()
     if (m->breakpointIndex(this, 0).isValid()) {
         m->removeRow(m->breakpointIndex(this, 0).row());
     }
-    m_model = 0; // invalidate
+    m_model = nullptr; // invalidate
 }
 
 int Breakpoint::line() const {

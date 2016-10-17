@@ -27,8 +27,8 @@
 
 void KDevelop::PersistentMovingRangePrivate::connectTracker()
 {
-  Q_ASSERT(m_tracker == 0);
-  Q_ASSERT(m_movingRange == 0);
+  Q_ASSERT(m_tracker == nullptr);
+  Q_ASSERT(m_movingRange == nullptr);
   
   m_tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(m_document);
   
@@ -57,7 +57,7 @@ void KDevelop::PersistentMovingRangePrivate::disconnectTracker()
   
   delete m_movingRange;
   m_tracker.clear();
-  m_movingRange = 0;
+  m_movingRange = nullptr;
 }
 
 void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent()
@@ -70,7 +70,7 @@ void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceCon
     m_valid = false; /// @todo More precise tracking: Why is the document being invalidated? Try
                             ///            keeping the range alive. DocumentChangeTracker to the rescue.
     delete m_movingRange;
-    m_movingRange = 0;
+    m_movingRange = nullptr;
     m_range = KTextEditor::Range::invalid();
   }
 }
@@ -90,6 +90,6 @@ void KDevelop::PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent
   
   // No need to disconnect, as the document is being deleted. Simply set the referenes to zero.
   delete m_movingRange;
-  m_movingRange = 0;
+  m_movingRange = nullptr;
   m_tracker.clear();
 }

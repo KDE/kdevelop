@@ -84,7 +84,7 @@ ExternalScriptItem* ExternalScriptView::currentItem() const
 ExternalScriptItem* ExternalScriptView::itemForIndex( const QModelIndex& index ) const
 {
   if ( !index.isValid() ) {
-    return 0;
+    return nullptr;
   }
 
   const QModelIndex mappedIndex = m_model->mapToSource( index );

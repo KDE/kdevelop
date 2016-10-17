@@ -91,7 +91,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
     friend class DUChainPointer;
 
     public:
-    DUChainPointer() : d(QExplicitlySharedDataPointer<DUChainPointerData>(0)) {
+    DUChainPointer() : d(QExplicitlySharedDataPointer<DUChainPointerData>(nullptr)) {
     }
 
     DUChainPointer(const DUChainPointer& rhs)

@@ -33,7 +33,7 @@
 namespace KDevelop {
 
 AbstractNavigationWidget::AbstractNavigationWidget()
-  : m_browser(0), m_currentWidget(0)
+  : m_browser(nullptr), m_currentWidget(nullptr)
 {
   setPalette( QApplication::palette() );
   setFocusPolicy(Qt::NoFocus);
@@ -97,7 +97,7 @@ AbstractNavigationWidget::~AbstractNavigationWidget() {
 
 void AbstractNavigationWidget::setContext(NavigationContextPointer context, int initBrows)
 {
-  if(m_browser == 0)
+  if(m_browser == nullptr)
     initBrowser(initBrows);
 
   if(!context) {
@@ -184,7 +184,7 @@ void AbstractNavigationWidget::update() {
 
   if(m_currentWidget) {
     layout()->removeWidget(m_currentWidget);
-    m_currentWidget->setParent(0);
+    m_currentWidget->setParent(nullptr);
   }
 
   m_currentWidget = m_context->widget();

@@ -58,7 +58,7 @@ namespace svn
                             *m_context,
                             pool);
 
-    if (error != 0)
+    if (error != nullptr)
       throw ClientException(error);
 
     return std::string(stringbuf->data, stringbuf->len);
@@ -84,7 +84,7 @@ namespace svn
                const Revision & revision, Pool & pool)
   throw(ClientException)
   {
-    apr_file_t * file = 0;
+    apr_file_t * file = nullptr;
 
     if (dstPath.length() > 0)
     {
@@ -125,7 +125,7 @@ namespace svn
           0, // dont delete on close
           pool);
 
-      if (error != 0)
+      if (error != nullptr)
         throw ClientException(error);
 
       dstPath = unique_name;
@@ -150,7 +150,7 @@ namespace svn
     // now create a stream and let svn_client_cat write to the
     // stream
     svn_stream_t * stream = svn_stream_from_aprfile(file, pool);
-    if (stream != 0)
+    if (stream != nullptr)
     {
       svn_error_t * error = svn_client_cat2(
                               stream,
@@ -160,7 +160,7 @@ namespace svn
                               *m_context,
                               pool);
 
-      if (error != 0)
+      if (error != nullptr)
         throw ClientException(error);
 
       svn_stream_close(stream);

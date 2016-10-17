@@ -41,7 +41,7 @@ class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
     KDevKonsoleViewFactory(KDevKonsoleViewPlugin *plugin):
         mplugin(plugin) {}
-    QWidget* create(QWidget *parent = 0) override
+    QWidget* create(QWidget *parent = nullptr) override
     {
         return new KDevKonsoleView(mplugin, parent);
     }

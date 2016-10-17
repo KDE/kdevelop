@@ -170,12 +170,12 @@ KParts::Part* PartController::createPart( const QString & mimeType,
     if ( !className.isEmpty() && editorFactory )
     {
         return editorFactory->create<KParts::Part>(
-                   0,
+                   nullptr,
                    this,
                    className.toLatin1() );
     }
 
-    return 0;
+    return nullptr;
 }
 
 bool PartController::canCreatePart(const QUrl& url)
@@ -203,7 +203,7 @@ KParts::Part* PartController::createPart( const QUrl & url, const QString& prefe
         //create a part for empty text file
         mimeType = QStringLiteral("text/plain");
     else if ( !url.isValid() )
-        return 0;
+        return nullptr;
     else
         mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
 
@@ -214,7 +214,7 @@ KParts::Part* PartController::createPart( const QUrl & url, const QString& prefe
         return part;
     }
 
-    return 0;
+    return nullptr;
 }
 
 KParts::ReadOnlyPart* PartController::activeReadOnly() const
@@ -287,14 +287,14 @@ KTextEditor::View *PartController::activeView()
     if (textView) {
         return textView->textView();
     }
-    return 0;
+    return nullptr;
 }
 
 KTextEditor::Document *PartController::createDocument()
 {
   // NOTE: not implemented
   qWarning() << "WARNING: interface call not implemented";
-  return 0;
+  return nullptr;
 }
 
 bool PartController::closeDocument(KTextEditor::Document *doc)
@@ -310,7 +310,7 @@ KTextEditor::View *PartController::createView(KTextEditor::Document *doc)
   Q_UNUSED(doc)
   // NOTE: not implemented
   qWarning() << "WARNING: interface call not implemented";
-  return 0;
+  return nullptr;
 }
 
 bool PartController::closeView(KTextEditor::View *view)

@@ -43,7 +43,7 @@ struct CompletionTreeNode;
 ///Leaf items
 class CompletionTreeItem;
 
-CompletionTreeElement::CompletionTreeElement() : m_parent(0), m_rowInParent(0) {
+CompletionTreeElement::CompletionTreeElement() : m_parent(nullptr), m_rowInParent(0) {
 }
 
 CompletionTreeElement::~CompletionTreeElement() {
@@ -54,7 +54,7 @@ CompletionTreeElement* CompletionTreeElement::parent() const {
 }
 
 void CompletionTreeElement::setParent(CompletionTreeElement* parent) {
-    Q_ASSERT(m_parent == 0);
+    Q_ASSERT(m_parent == nullptr);
 
     m_parent = parent;
     auto node = parent ? parent->asNode() : nullptr;

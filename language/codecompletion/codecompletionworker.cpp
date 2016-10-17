@@ -141,7 +141,7 @@ CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::D
   Q_UNUSED(contextText);
   Q_UNUSED(followingText);
   Q_UNUSED(position);
-  return 0;
+  return nullptr;
 }
 
 void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& contextRange, const QString& contextText)
@@ -196,7 +196,7 @@ QList<QExplicitlySharedDataPointer<CompletionTreeElement> > CodeCompletionWorker
    * 2. Group by inheritance depth
    * 3. Group by simplified attributes
    * */
-  CodeCompletionItemGrouper<ArgumentHintDepthExtractor, CodeCompletionItemGrouper<InheritanceDepthExtractor, CodeCompletionItemGrouper<SimplifiedAttributesExtractor> > > argumentHintDepthGrouper(tree, 0, items);
+  CodeCompletionItemGrouper<ArgumentHintDepthExtractor, CodeCompletionItemGrouper<InheritanceDepthExtractor, CodeCompletionItemGrouper<SimplifiedAttributesExtractor> > > argumentHintDepthGrouper(tree, nullptr, items);
   return tree;
 }
 

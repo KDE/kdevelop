@@ -162,7 +162,7 @@ GrepOutputItem::~GrepOutputItem()
 
 GrepOutputModel::GrepOutputModel( QObject *parent )
     : QStandardItemModel( parent ), m_regExp(), m_replacement(), m_replacementTemplate(), m_finalReplacement(),
-      m_finalUpToDate(false), m_rootItem(0), m_fileCount(0), m_matchCount(0), m_itemsCheckable(false)
+      m_finalUpToDate(false), m_rootItem(nullptr), m_fileCount(0), m_matchCount(0), m_itemsCheckable(false)
 {
     connect(this, &GrepOutputModel::itemChanged,
             this, &GrepOutputModel::updateCheckState);
@@ -175,7 +175,7 @@ void GrepOutputModel::clear()
 {
     QStandardItemModel::clear();
     // the above clear() also destroys the root item, so invalidate the pointer
-    m_rootItem = 0;
+    m_rootItem = nullptr;
 
     m_fileCount = 0;
     m_matchCount = 0;
@@ -241,7 +241,7 @@ void GrepOutputModel::activate( const QModelIndex &idx )
 
 QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) const
 {
-    GrepOutputItem* current_item = 0;
+    GrepOutputItem* current_item = nullptr;
 
     if (!currentIdx.isValid()) {
         // no item selected, search recursively for the last item in search results
@@ -256,7 +256,7 @@ QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) co
     else
         current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
 
-    if (current_item->parent() != 0) {
+    if (current_item->parent() != nullptr) {
         int row = currentIdx.row();
 
         if(!current_item->isText()) // the item is a file
@@ -288,7 +288,7 @@ QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) co
 
 QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
 {
-    GrepOutputItem* current_item = 0;
+    GrepOutputItem* current_item = nullptr;
 
     if (!currentIdx.isValid()) {
         QStandardItem *it = item(0,0);
@@ -298,7 +298,7 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
     else
         current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
 
-    if (current_item->parent() == 0) {
+    if (current_item->parent() == nullptr) {
         // root item with overview of search results
         if (current_item->rowCount() > 0)
             return nextItemIndex(current_item->child(0)->index());

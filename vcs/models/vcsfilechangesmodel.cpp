@@ -170,7 +170,7 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
             parent->appendRow({ item, itStatus });
         } else {
             QStandardItem *parent = item->parent();
-            if(parent == 0)
+            if(parent == nullptr)
                 parent = invisibleRootItem();
             auto statusInfoItem = static_cast<VcsStatusInfoItem*>(parent->child(item->row(), 1));
             statusInfoItem->setStatus(status);
@@ -196,7 +196,7 @@ QStandardItem* VcsFileChangesModel::fileItemForUrl(QStandardItem* parent, const 
             return parent->child(i);
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void VcsFileChangesModel::setAllChecked(bool checked)

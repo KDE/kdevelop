@@ -41,7 +41,7 @@ namespace svn
     const char *copyFromPath_,
     const svn_revnum_t copyFromRevision_)
       : path(path_), action(action_),
-      copyFromPath(copyFromPath_ != NULL ? copyFromPath_ : ""),
+      copyFromPath(copyFromPath_ != nullptr ? copyFromPath_ : ""),
       copyFromRevision(copyFromRevision_)
   {
   }
@@ -60,17 +60,17 @@ namespace svn
   {
     date = 0;
 
-    if (date_ != 0)
+    if (date_ != nullptr)
     {
       Pool pool;
 
-      if (svn_time_from_cstring(&date, date_, pool) != 0)
+      if (svn_time_from_cstring(&date, date_, pool) != nullptr)
         date = 0;
     }
 
     revision = revision_;
-    author = author_ == 0 ? "" : author_;
-    message = message_ == 0 ? "" : message_;
+    author = author_ == nullptr ? "" : author_;
+    message = message_ == nullptr ? "" : message_;
   }
 }
 

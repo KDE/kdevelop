@@ -69,7 +69,7 @@ Declaration* SpecializationStore::applySpecialization(Declaration* declaration, 
                                                       bool recursive)
 {
   if(!declaration)
-    return 0;
+    return nullptr;
 
   IndexedInstantiationInformation specialization = get(declaration->id());
   if(specialization.index())
@@ -98,7 +98,7 @@ DUContext* SpecializationStore::applySpecialization(DUContext* context, TopDUCon
                                                     bool recursive)
 {
   if(!context)
-    return 0;
+    return nullptr;
 
   if(Declaration* declaration = context->owner())
     return applySpecialization(declaration, source, recursive)->internalContext();

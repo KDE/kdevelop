@@ -137,7 +137,7 @@ void ProjectSet::trackProjectFiles(const IProject* project)
 }
 
 CurrentProjectSet::CurrentProjectSet(const IndexedString& document, QObject *parent)
-    : ProjectSet(parent), m_currentProject(0)
+    : ProjectSet(parent), m_currentProject(nullptr)
 {
     setCurrentDocumentInternal(document);
     trackProjectFiles(m_currentProject);

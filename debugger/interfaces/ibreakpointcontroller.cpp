@@ -52,7 +52,7 @@ IDebugSession* IBreakpointController::debugSession() const
 
 BreakpointModel* IBreakpointController::breakpointModel() const
 {
-    if (!ICore::self()) return 0;
+    if (!ICore::self()) return nullptr;
     return ICore::self()->debugController()->breakpointModel();
 }
 
@@ -79,7 +79,7 @@ void IBreakpointController::notifyHit(int row, const QString& msg)
     // This is a slightly odd place to issue this notification,
     // but then again it's not clear which place would be more natural
     Breakpoint* breakpoint = model->breakpoint(row);
-    KNotification* ev = 0;
+    KNotification* ev = nullptr;
     switch(breakpoint->kind()) {
         case Breakpoint::CodeBreakpoint:
             ev = new KNotification(QStringLiteral("BreakpointHit"), ICore::self()->uiController()->activeMainWindow());

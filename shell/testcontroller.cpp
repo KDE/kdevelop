@@ -88,7 +88,7 @@ ITestSuite* TestController::findTestSuite(IProject* project, const QString& name
             return suite;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 

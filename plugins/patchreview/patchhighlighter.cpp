@@ -244,7 +244,7 @@ KTextEditor::MovingRange* PatchHighlighter::rangeForMark( const KTextEditor::Mar
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void PatchHighlighter::markToolTipRequested( KTextEditor::Document*, const KTextEditor::Mark& mark, QPoint pos, bool& handled ) {

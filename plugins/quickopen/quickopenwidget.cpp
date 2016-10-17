@@ -42,7 +42,7 @@ using namespace KDevelop;
 class QuickOpenDelegate : public ExpandingDelegate {
     Q_OBJECT
 public:
-  QuickOpenDelegate(ExpandingWidgetModel* model, QObject* parent = 0L) : ExpandingDelegate(model, parent) {
+  QuickOpenDelegate(ExpandingWidgetModel* model, QObject* parent = nullptr) : ExpandingDelegate(model, parent) {
   }
   QList<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const override {
     QList<QVariant> highlighting = index.data(KTextEditor::CodeCompletionModel::CustomHighlight).toList();
@@ -195,7 +195,7 @@ void QuickOpenWidget::showSearchField(bool b)
 
 void QuickOpenWidget::prepareShow()
 {
-  ui.list->setModel( 0 );
+  ui.list->setModel( nullptr );
   ui.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
   m_model->setTreeView( ui.list );
   ui.list->setModel( m_model );
@@ -223,7 +223,7 @@ void QuickOpenWidgetDialog::run() {
 }
 
 QuickOpenWidget::~QuickOpenWidget() {
-  m_model->setTreeView( 0 );
+  m_model->setTreeView( nullptr );
 }
 
 

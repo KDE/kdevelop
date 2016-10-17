@@ -85,8 +85,8 @@ struct DocumentControllerPrivate
 
     DocumentControllerPrivate(DocumentController* c)
         : controller(c)
-        , fileOpenRecent(0)
-        , globalTextEditorInstance(0)
+        , fileOpenRecent(nullptr)
+        , globalTextEditorInstance(nullptr)
     {
     }
 
@@ -203,7 +203,7 @@ struct DocumentControllerPrivate
                 return doc;
             }
         }
-        return 0;
+        return nullptr;
     }
 
     static bool fileExists(const QUrl& url)
@@ -219,8 +219,8 @@ struct DocumentControllerPrivate
 
     IDocument* openDocumentInternal( const QUrl & inputUrl, const QString& prefName = QString(),
         const KTextEditor::Range& range = KTextEditor::Range::invalid(), const QString& encoding = QString(),
-        DocumentController::DocumentActivationParams activationParams = 0,
-        IDocument* buddy = 0)
+        DocumentController::DocumentActivationParams activationParams = nullptr,
+        IDocument* buddy = nullptr)
     {
         Q_ASSERT(!inputUrl.isRelative());
         Q_ASSERT(!inputUrl.fileName().isEmpty());
@@ -236,7 +236,7 @@ struct DocumentControllerPrivate
             _encoding = res.encoding;
             if ( url.isEmpty() )
                 //still no url
-                return 0;
+                return nullptr;
         }
 
         KSharedConfig::openConfig()->group("Open File").writeEntry( "Last Open File Directory", url.adjusted(QUrl::RemoveFilename) );
@@ -266,13 +266,13 @@ struct DocumentControllerPrivate
                 // If the url is valid and the file does not already exist,
                 // kate creates the file and gives a message saying so
                 qCDebug(SHELL) << "invalid URL:" << url.url();
-                return 0;
+                return nullptr;
             }
             else if (KProtocolInfo::isKnownProtocol(url.scheme()) && !fileExists(url))
             {
                 //Don't create a new file if we are not in the code mode.
                 if (ICore::self()->uiController()->activeArea()->objectName() != QLatin1String("code")) {
-                    return 0;
+                    return nullptr;
                 }
                 // enfore text mime type in order to create a kate part editor which then can be used to create the file
                 // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
@@ -297,7 +297,7 @@ struct DocumentControllerPrivate
             if (mimeType.inherits(QStringLiteral("inode/directory")))
             {
                 qCDebug(SHELL) << "cannot open directory:" << url.url();
-                return 0;
+                return nullptr;
             }
 
             if( prefName.isEmpty() )
@@ -325,12 +325,12 @@ struct DocumentControllerPrivate
                     doc = new PartDocument(url, Core::self());
                 } else
                 {
-                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType.name()), i18nc("@title:window", "Could Not Find Editor"),
+                    int openAsText = KMessageBox::questionYesNo(nullptr, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType.name()), i18nc("@title:window", "Could Not Find Editor"),
                                                                 KStandardGuiItem::yes(), KStandardGuiItem::no(), QStringLiteral("AskOpenWithTextEditor"));
                     if (openAsText == KMessageBox::Yes)
                         doc = new TextDocument(url, Core::self(), _encoding);
                     else
-                        return 0;
+                        return nullptr;
                 }
             }
         }
@@ -341,14 +341,14 @@ struct DocumentControllerPrivate
         if(doc && openDocumentInternal(doc, range, activationParams, buddy))
             return doc;
         else
-            return 0;
+            return nullptr;
 
     }
 
     bool openDocumentInternal(IDocument* doc,
                                 const KTextEditor::Range& range,
                                 DocumentController::DocumentActivationParams activationParams,
-                                IDocument* buddy = 0)
+                                IDocument* buddy = nullptr)
     {
         IDocument* previousActiveDocument = controller->activeDocument();
         KTextEditor::View* previousActiveTextView = ICore::self()->documentController()->activeTextDocumentView();
@@ -383,7 +383,7 @@ struct DocumentControllerPrivate
         if (!activationParams.testFlag(IDocumentController::DoNotCreateView))
         {
             //find a view if there's one already opened in this area
-            Sublime::View *partView = 0;
+            Sublime::View *partView = nullptr;
             Sublime::AreaIndex* activeViewIdx = area->indexOf(uiController->activeSublimeWindow()->activeView());
             foreach (Sublime::View *view, sdoc->views())
             {
@@ -406,7 +406,7 @@ struct DocumentControllerPrivate
                 // This code is never executed when restoring session on startup,
                 // only when opening a file manually
 
-                Sublime::View* buddyView = 0;
+                Sublime::View* buddyView = nullptr;
                 bool placeAfterBuddy = true;
                 if(Core::self()->uiControllerInternal()->arrangeBuddies() && !buddy && doc->mimeType().isValid()) {
                     // If buddy is not set, look for a (usually) plugin which handles this URL's mimetype
@@ -455,8 +455,8 @@ struct DocumentControllerPrivate
                 else {
                     // no buddy found for new document / plugin does not support buddies / buddy feature disabled
                     Sublime::View *activeView = uiController->activeSublimeWindow()->activeView();
-                    Sublime::UrlDocument *activeDoc = 0;
-                    IBuddyDocumentFinder *buddyFinder = 0;
+                    Sublime::UrlDocument *activeDoc = nullptr;
+                    IBuddyDocumentFinder *buddyFinder = nullptr;
                     if(activeView)
                         activeDoc = dynamic_cast<Sublime::UrlDocument *>(activeView->document());
                     if(activeDoc && Core::self()->uiControllerInternal()->arrangeBuddies()) {
@@ -474,9 +474,9 @@ struct DocumentControllerPrivate
                         // we do not want to separate foo.h and foo.cpp, so we take care and avoid this.
                         Sublime::AreaIndex *activeAreaIndex = area->indexOf(activeView);
                         int pos = activeAreaIndex->views().indexOf(activeView);
-                        Sublime::View *afterActiveView = activeAreaIndex->views().value(pos+1, 0);
+                        Sublime::View *afterActiveView = activeAreaIndex->views().value(pos+1, nullptr);
 
-                        Sublime::UrlDocument *activeDoc = 0, *afterActiveDoc = 0;
+                        Sublime::UrlDocument *activeDoc = nullptr, *afterActiveDoc = nullptr;
                         if(activeView && afterActiveView) {
                             activeDoc = dynamic_cast<Sublime::UrlDocument *>(activeView->document());
                             afterActiveDoc = dynamic_cast<Sublime::UrlDocument *>(afterActiveView->document());
@@ -766,7 +766,7 @@ IDocument * DocumentController::documentForUrl( const QUrl & dirtyUrl ) const
     Q_ASSERT(!dirtyUrl.isRelative());
     Q_ASSERT(!dirtyUrl.fileName().isEmpty());
     //Fix urls that might not be normalized
-    return d->documents.value( dirtyUrl.adjusted( QUrl::NormalizePathSegments ), 0 );
+    return d->documents.value( dirtyUrl.adjusted( QUrl::NormalizePathSegments ), nullptr );
 }
 
 QList<IDocument*> DocumentController::openDocuments() const
@@ -946,7 +946,7 @@ IDocument* DocumentController::activeDocument() const
 {
     UiController *uiController = Core::self()->uiControllerInternal();
     Sublime::MainWindow* mw = uiController->activeSublimeWindow();
-    if( !mw || !mw->activeView() ) return 0;
+    if( !mw || !mw->activeView() ) return nullptr;
     return dynamic_cast<IDocument*>(mw->activeView()->document());
 }
 
@@ -955,11 +955,11 @@ KTextEditor::View* DocumentController::activeTextDocumentView() const
     UiController *uiController = Core::self()->uiControllerInternal();
     Sublime::MainWindow* mw = uiController->activeSublimeWindow();
     if( !mw || !mw->activeView() )
-        return 0;
+        return nullptr;
 
     TextView* view = qobject_cast<TextView*>(mw->activeView());
     if(!view)
-        return 0;
+        return nullptr;
     return view->textView();
 }
 
@@ -1220,7 +1220,7 @@ void DocumentController::vcsAnnotateCurrentDocument()
     QUrl url = doc->url();
     IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
     if(project && project->versionControlPlugin()) {
-        IBasicVersionControl* iface = 0;
+        IBasicVersionControl* iface = nullptr;
         iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
         auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
         connect(doc->textDocument(), &KTextEditor::Document::aboutToClose,
@@ -1233,7 +1233,7 @@ void DocumentController::vcsAnnotateCurrentDocument()
         helper->annotation();
     }
     else {
-        KMessageBox::error(0, i18n("Could not annotate the document because it is not "
+        KMessageBox::error(nullptr, i18n("Could not annotate the document because it is not "
                                    "part of a version-controlled project."));
     }
 }

@@ -38,7 +38,7 @@ class OutlineViewFactory: public KDevelop::IToolViewFactory {
 public:
     OutlineViewFactory(OutlineViewPlugin *plugin) : m_plugin(plugin) {}
 
-    QWidget* create(QWidget *parent = 0) override
+    QWidget* create(QWidget *parent = nullptr) override
     {
         return new OutlineWidget(parent, m_plugin);
     }

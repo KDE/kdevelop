@@ -44,25 +44,25 @@ uint DUChainBaseData::classSize() const {
 }
 
 DUChainBase::DUChainBase(const RangeInRevision& range)
-  : d_ptr(new DUChainBaseData), m_ptr( 0L )
+  : d_ptr(new DUChainBaseData), m_ptr( nullptr )
 {
   d_func_dynamic()->m_range = range;
   d_func_dynamic()->setClassId(this);
 }
 
 DUChainBase::DUChainBase( DUChainBaseData & dd, const RangeInRevision& range )
-  : d_ptr( &dd ), m_ptr( 0 )
+  : d_ptr( &dd ), m_ptr( nullptr )
 {
   d_func_dynamic()->m_range = range;
 }
 
 DUChainBase::DUChainBase( DUChainBaseData & dd )
-  : d_ptr( &dd ), m_ptr( 0 )
+  : d_ptr( &dd ), m_ptr( nullptr )
 {
 }
 
 DUChainBase::DUChainBase( DUChainBase& rhs )
-  : d_ptr( new DUChainBaseData(*rhs.d_func()) ), m_ptr( 0 )
+  : d_ptr( new DUChainBaseData(*rhs.d_func()) ), m_ptr( nullptr )
 {
   d_func_dynamic()->setClassId(this);
 }
@@ -93,20 +93,20 @@ void DUChainBase::setData(DUChainBaseData* data, bool constructorCalled)
 DUChainBase::~DUChainBase()
 {
   if (m_ptr)
-    m_ptr->m_base = 0;
+    m_ptr->m_base = nullptr;
 
   if(d_ptr->m_dynamic)
   {
     KDevelop::DUChainItemSystem::self().callDestructor(d_ptr);
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
   }
 }
 
 TopDUContext* DUChainBase::topContext() const
 {
   ///@todo Move the reference to the top-context right into this class, as it's common to all inheriters
-  return 0;
+  return nullptr;
 }
 
 namespace {

@@ -28,7 +28,7 @@ using namespace KDevelop;
 
 TestProject::TestProject(const Path& path, QObject* parent)
 : IProject(parent)
-, m_root(0)
+, m_root(nullptr)
 , m_projectConfiguration(KSharedConfig::openConfig())
 {
     m_path = path.isValid() ? path : Path(QStringLiteral("/tmp/kdev-testproject/"));
@@ -60,7 +60,7 @@ void TestProject::setProjectItem(ProjectFolderItem* item)
 {
     if (m_root) {
         ICore::self()->projectController()->projectModel()->removeRow( m_root->row() );
-        m_root = 0;
+        m_root = nullptr;
         m_path.clear();
     }
     if (item) {

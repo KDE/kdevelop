@@ -107,7 +107,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
 QWidget* NormalDeclarationCompletionItem::createExpandingWidget(const KDevelop::CodeCompletionModel* model) const
 {
   Q_UNUSED(model);
-  return 0;
+  return nullptr;
 }
 
 bool NormalDeclarationCompletionItem::createsExpandingWidget() const

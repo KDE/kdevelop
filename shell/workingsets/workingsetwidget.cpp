@@ -33,14 +33,14 @@ using namespace KDevelop;
 WorkingSet* getSet(const QString& id)
 {
     if (id.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
     return Core::self()->workingSetControllerInternal()->getWorkingSet(id);
 }
 
 WorkingSetWidget::WorkingSetWidget(Sublime::Area* area, QWidget* parent)
-    : WorkingSetToolButton(parent, 0)
+    : WorkingSetToolButton(parent, nullptr)
     , m_area(area)
 {
     //Queued connect so the change is already applied to the area when we start processing

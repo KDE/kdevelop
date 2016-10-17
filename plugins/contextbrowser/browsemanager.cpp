@@ -117,7 +117,7 @@ BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
 
 KTextEditor::View* viewFromWidget(QWidget* widget) {
     if(!widget)
-        return 0;
+        return nullptr;
     KTextEditor::View* view = qobject_cast<KTextEditor::View*>(widget);
     if(view)
         return view;

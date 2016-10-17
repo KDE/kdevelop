@@ -57,7 +57,7 @@ class KDevCvsViewFactory: public KDevelop::IToolViewFactory
 {
 public:
     KDevCvsViewFactory(CvsPlugin *plugin): m_plugin(plugin) {}
-    QWidget* create(QWidget *parent = 0) override {
+    QWidget* create(QWidget *parent = nullptr) override {
         return new CvsMainView(m_plugin, parent);
     }
     Qt::DockWidgetArea defaultPosition() override {
@@ -282,7 +282,7 @@ bool CvsPlugin::isVersionControlled(const QUrl & localLocation)
 KDevelop::VcsJob * CvsPlugin::repositoryLocation(const QUrl & localLocation)
 {
     Q_UNUSED(localLocation);
-    return NULL;
+    return nullptr;
 }
 
 KDevelop::VcsJob * CvsPlugin::add(const QList<QUrl> & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
@@ -303,7 +303,7 @@ KDevelop::VcsJob * CvsPlugin::remove(const QList<QUrl> & localLocations)
 KDevelop::VcsJob * CvsPlugin::localRevision(const QUrl & localLocation, KDevelop::VcsRevision::RevisionType)
 {
     Q_UNUSED(localLocation)
-    return NULL;
+    return nullptr;
 }
 
 KDevelop::VcsJob * CvsPlugin::status(const QList<QUrl> & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
@@ -332,7 +332,7 @@ KDevelop::VcsJob * CvsPlugin::copy(const QUrl & localLocationSrc, const QUrl & l
 {
     bool ok = QFile::copy(localLocationSrc.toLocalFile(), localLocationDstn.path());
     if (!ok) {
-        return NULL;
+        return nullptr;
     }
 
     QList<QUrl> listDstn;
@@ -346,7 +346,7 @@ KDevelop::VcsJob * CvsPlugin::copy(const QUrl & localLocationSrc, const QUrl & l
 
 KDevelop::VcsJob * CvsPlugin::move(const QUrl &, const QUrl &)
 {
-    return NULL;
+    return nullptr;
 }
 
 KDevelop::VcsJob * CvsPlugin::revert(const QList<QUrl> & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
@@ -419,7 +419,7 @@ KDevelop::VcsJob * CvsPlugin::resolve(const QList<QUrl> & localLocations, KDevel
 {
     Q_UNUSED(localLocations);
     Q_UNUSED(recursion);
-    return NULL;
+    return nullptr;
 }
 
 KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const QUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository)
@@ -428,7 +428,7 @@ KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const QUrl& s
             || !sourceDirectory.isLocalFile()
             || !destinationRepository.isValid()
             || destinationRepository.type() != KDevelop::VcsLocation::RepositoryLocation) {
-        return 0;
+        return nullptr;
     }
 
     qCDebug(PLUGIN_CVS) << "CVS Import requested "
@@ -451,7 +451,7 @@ KDevelop::VcsJob * CvsPlugin::createWorkingCopy(const KDevelop::VcsLocation & so
     if (!destinationDirectory.isLocalFile()
             || !sourceRepository.isValid()
             || sourceRepository.type() != KDevelop::VcsLocation::RepositoryLocation) {
-        return 0;
+        return nullptr;
     }
 
     qCDebug(PLUGIN_CVS) << "CVS Checkout requested "

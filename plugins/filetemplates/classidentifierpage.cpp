@@ -25,7 +25,7 @@
 struct ClassIdentifierPagePrivate
 {
     ClassIdentifierPagePrivate()
-        : classid(0)
+        : classid(nullptr)
     {
     }
 

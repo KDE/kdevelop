@@ -44,14 +44,14 @@ IndexedDeclaration::IndexedDeclaration(const Declaration* decl)
 Declaration* IndexedDeclaration::declaration() const
 {
   if(isDummy())
-    return 0;
+    return nullptr;
 //   ENSURE_CHAIN_READ_LOCKED
   if(!m_topContext || !m_declarationIndex)
-    return 0;
+    return nullptr;
 
   TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
   if(!ctx)
-    return 0;
+    return nullptr;
 
   return ctx->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
 }

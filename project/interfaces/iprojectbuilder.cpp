@@ -28,12 +28,12 @@ IProjectBuilder::~IProjectBuilder()
 
 KJob* IProjectBuilder::configure(IProject*)
 {
-    return 0;
+    return nullptr;
 }
 
 KJob* IProjectBuilder::prune(IProject*)
 {
-    return 0;
+    return nullptr;
 }
 
 QList< IProjectBuilder* > IProjectBuilder::additionalBuilderPlugins( IProject* project ) const

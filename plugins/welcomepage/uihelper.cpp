@@ -50,7 +50,7 @@ QAction* findActionRec(const QStringList& path, const QList<QAction*>& actions)
     }
     
     qWarning() << "error: action path not found: " << path;
-    return 0;
+    return nullptr;
 }
 
 QAction* UiHelper::retrieveMenuAction(const QString& menuPath)

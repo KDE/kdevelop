@@ -64,7 +64,7 @@ namespace svn
 
   Targets::Targets(const char * target)
   {
-    if (target != 0)
+    if (target != nullptr)
     {
       m_targets.push_back(target);
     }

@@ -51,7 +51,7 @@ namespace svn
     msg = apr_pvsprintf(pool, fmt, ap);
     va_end(ap);
 
-    error = svn_error_create(status, NULL, msg);
+    error = svn_error_create(status, nullptr, msg);
     throw ClientException(error);
   }
 
@@ -63,16 +63,16 @@ namespace svn
               apr_file_t * errfile, const char * errfileName,
               apr_pool_t *pool)
   {
-    if (outfile != NULL)
+    if (outfile != nullptr)
       apr_file_close(outfile);
 
-    if (errfile != NULL)
+    if (errfile != nullptr)
       apr_file_close(errfile);
 
-    if (outfileName != NULL)
+    if (outfileName != nullptr)
       svn_error_clear(svn_io_remove_file(outfileName, pool));
 
-    if (errfileName != NULL)
+    if (errfileName != nullptr)
       svn_error_clear(svn_io_remove_file(errfileName, pool));
   }
 
@@ -85,10 +85,10 @@ namespace svn
     Pool pool;
     svn_error_t * error;
     apr_status_t status;
-    apr_file_t * outfile = NULL;
-    const char * outfileName = NULL;
-    apr_file_t * errfile = NULL;
-    const char * errfileName = NULL;
+    apr_file_t * outfile = nullptr;
+    const char * outfileName = nullptr;
+    apr_file_t * errfile = nullptr;
+    const char * errfileName = nullptr;
     apr_array_header_t * options;
     svn_stringbuf_t * stringbuf;
 
@@ -100,7 +100,7 @@ namespace svn
                                     tmpPath.c_str(), ".tmp",
                                     false, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -111,7 +111,7 @@ namespace svn
                                     tmpPath.c_str(), ".tmp",
                                     false, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -126,7 +126,7 @@ namespace svn
                             *m_context,
                             pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -150,7 +150,7 @@ namespace svn
     // now we can read the diff output from outfile and return that
     error = svn_stringbuf_from_aprfile(&stringbuf, outfile, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -170,10 +170,10 @@ namespace svn
     Pool pool;
     svn_error_t * error;
     apr_status_t status;
-    apr_file_t * outfile = NULL;
-    const char * outfileName = NULL;
-    apr_file_t * errfile = NULL;
-    const char * errfileName = NULL;
+    apr_file_t * outfile = nullptr;
+    const char * outfileName = nullptr;
+    apr_file_t * errfile = nullptr;
+    const char * errfileName = nullptr;
     apr_array_header_t * options;
     svn_stringbuf_t * stringbuf;
 
@@ -185,7 +185,7 @@ namespace svn
                                     tmpPath.c_str(), ".tmp",
                                     false, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -196,7 +196,7 @@ namespace svn
                                     tmpPath.c_str(), ".tmp",
                                     false, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -211,7 +211,7 @@ namespace svn
                             *m_context,
                             pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -235,7 +235,7 @@ namespace svn
     // now we can read the diff output from outfile and return that
     error = svn_stringbuf_from_aprfile(&stringbuf, outfile, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -255,10 +255,10 @@ namespace svn
     Pool pool;
     svn_error_t * error;
     apr_status_t status;
-    apr_file_t * outfile = NULL;
-    const char * outfileName = NULL;
-    apr_file_t * errfile = NULL;
-    const char * errfileName = NULL;
+    apr_file_t * outfile = nullptr;
+    const char * outfileName = nullptr;
+    apr_file_t * errfile = nullptr;
+    const char * errfileName = nullptr;
     apr_array_header_t * options;
     svn_stringbuf_t * stringbuf;
 
@@ -270,7 +270,7 @@ namespace svn
                                     tmpPath.c_str(), ".tmp",
                                     false, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -281,7 +281,7 @@ namespace svn
                                     tmpPath.c_str(), ".tmp",
                                     false, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -296,7 +296,7 @@ namespace svn
                                 *m_context,
                                 pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);
@@ -320,7 +320,7 @@ namespace svn
     // now we can read the diff output from outfile and return that
     error = svn_stringbuf_from_aprfile(&stringbuf, outfile, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       diffCleanup(outfile, outfileName, errfile, errfileName, pool);
       throw ClientException(error);

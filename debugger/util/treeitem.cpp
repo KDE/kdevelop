@@ -30,7 +30,7 @@
 using namespace KDevelop;
 
 TreeItem::TreeItem(TreeModel* model, TreeItem *parent)
-: model_(model), more_(false), ellipsis_(0), expanded_(false)
+: model_(model), more_(false), ellipsis_(nullptr), expanded_(false)
 {
     parentItem = parent;
 }
@@ -62,7 +62,7 @@ void TreeItem::appendChild(TreeItem *item, bool initial)
             model_->beginRemoveRows(index, childItems.size(), childItems.size());
         more_ = false;
         delete ellipsis_;
-        ellipsis_ = 0;
+        ellipsis_ = nullptr;
         if (!initial)
             model_->endRemoveRows();
     }
@@ -136,7 +136,7 @@ void TreeItem::clear()
         childItems.clear();
         more_ = false;
         delete ellipsis_;
-        ellipsis_ = 0;
+        ellipsis_ = nullptr;
         model_->endRemoveRows();
     }
 }
@@ -148,7 +148,7 @@ TreeItem *TreeItem::child(int row)
     else if (row == childItems.size() && more_)
         return ellipsis_;
     else
-        return NULL;
+        return nullptr;
 
 }
 
@@ -226,7 +226,7 @@ void TreeItem::setHasMore(bool more)
     {
         model_->beginRemoveRows(index, childItems.size(), childItems.size());
         delete ellipsis_;
-        ellipsis_ = 0;
+        ellipsis_ = nullptr;
         more_ = more;
         model_->endRemoveRows();
     }

@@ -42,7 +42,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     : QWidget(parent)
     , _area(area)
     , _controller(controller)
-    , _corner(0)
+    , _corner(nullptr)
     , _showState(false)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -149,7 +149,7 @@ Qt::DockWidgetArea IdealButtonBarWidget::area() const
 
 void IdealButtonBarWidget::showWidget(bool checked)
 {
-    Q_ASSERT(parentWidget() != 0);
+    Q_ASSERT(parentWidget() != nullptr);
 
     QAction *action = qobject_cast<QAction *>(sender());
     Q_ASSERT(action);

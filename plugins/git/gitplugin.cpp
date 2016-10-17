@@ -254,7 +254,7 @@ void GitPlugin::ctxPopStash()
 
 void GitPlugin::ctxStashManager()
 {
-    QPointer<StashManagerDialog> d = new StashManagerDialog(urlDir(m_urls), this, 0);
+    QPointer<StashManagerDialog> d = new StashManagerDialog(urlDir(m_urls), this, nullptr);
     d->exec();
 
     delete d;
@@ -536,7 +536,7 @@ VcsJob* GitPlugin::remove(const QList<QUrl>& files)
         }
     }
 
-    if (files_.isEmpty()) return 0;
+    if (files_.isEmpty()) return nullptr;
 
     DVcsJob* job = new GitJob(dotGitDir, this);
     job->setType(VcsJob::Remove);
@@ -591,7 +591,7 @@ KDevelop::VcsJob* GitPlugin::annotate(const QUrl &localLocation, const KDevelop:
 void GitPlugin::parseGitBlameOutput(DVcsJob *job)
 {
     QVariantList results;
-    VcsAnnotationLine* annotation = 0;
+    VcsAnnotationLine* annotation = nullptr;
     const auto output = job->output();
     const auto lines = output.splitRef('\n');
 
@@ -676,7 +676,7 @@ VcsJob* GitPlugin::switchBranch(const QUrl &repository, const QString &branch)
 {
     QDir d=urlDir(repository);
 
-    if(hasModifications(d) && KMessageBox::questionYesNo(0, i18n("There are pending changes, do you want to stash them first?"))==KMessageBox::Yes) {
+    if(hasModifications(d) && KMessageBox::questionYesNo(nullptr, i18n("There are pending changes, do you want to stash them first?"))==KMessageBox::Yes) {
         QScopedPointer<DVcsJob> stash(gitStash(d, QStringList(), KDevelop::OutputJob::Verbose));
         stash->exec();
     }
@@ -1442,7 +1442,7 @@ class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
 {
     Q_OBJECT
     public:
-        GitVcsLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0)
+        GitVcsLocationWidget(QWidget* parent = nullptr, Qt::WindowFlags f = nullptr)
             : StandardVcsLocationWidget(parent, f) {}
 
         bool isCorrect() const override

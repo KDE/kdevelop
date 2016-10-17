@@ -47,7 +47,7 @@ struct LicensePagePrivate
 
 
     LicensePagePrivate(LicensePage* page_)
-    : license(0)
+    : license(nullptr)
     , page(page_)
     {
     }

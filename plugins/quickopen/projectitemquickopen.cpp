@@ -235,7 +235,7 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
     TopDUContext* ctx = DUChainUtils::standardContextForUrl(filteredItem.m_file.toUrl());
     if(ctx) {
-        QList<Declaration*> decls = ctx->findDeclarations(filteredItem.m_id, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::DirectQualifiedLookup);
+        QList<Declaration*> decls = ctx->findDeclarations(filteredItem.m_id, CursorInRevision::invalid(), AbstractType::Ptr(), nullptr, DUContext::DirectQualifiedLookup);
 
         //Filter out forward-declarations or duplicate imported declarations
         foreach(Declaration* decl, decls) {

@@ -61,7 +61,7 @@ class ClassBrowserFactory: public KDevelop::IToolViewFactory
 public:
   ClassBrowserFactory(ClassBrowserPlugin *plugin): m_plugin(plugin) {}
 
-  QWidget* create(QWidget *parent = 0) override
+  QWidget* create(QWidget *parent = nullptr) override
   {
     return new ClassWidget(parent, m_plugin);
   }
@@ -83,7 +83,7 @@ private:
 ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevclassbrowser"), parent)
     , m_factory(new ClassBrowserFactory(this))
-    , m_activeClassTree(0)
+    , m_activeClassTree(nullptr)
 {
   core()->uiController()->addToolView(i18n("Classes"), m_factory);
   setXMLFile( QStringLiteral("kdevclassbrowser.rc") );
@@ -106,7 +106,7 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
   KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension( context );
 
   // No context menu if we don't have a class browser at hand.
-  if ( m_activeClassTree == 0 )
+  if ( m_activeClassTree == nullptr )
     return menuExt;
 
   KDevelop::DeclarationContext *codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
@@ -139,7 +139,7 @@ void ClassBrowserPlugin::findInClassBrowser()
 
   Q_ASSERT(qobject_cast<QAction*>(sender()));
 
-  if ( m_activeClassTree == 0 )
+  if ( m_activeClassTree == nullptr )
     return;
 
   DUChainReadLocker readLock(DUChain::lock());
@@ -165,7 +165,7 @@ void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
   if ( decl && decl->isFunctionDeclaration() )
   {
     FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(decl);
-    if ( funcDefinition == 0 )
+    if ( funcDefinition == nullptr )
       funcDefinition = FunctionDefinition::definition(decl);
     if ( funcDefinition )
       decl = funcDefinition;

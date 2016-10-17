@@ -50,7 +50,7 @@ using namespace KDevelop;
 
 BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent)
 : AutoOrientedSplitter(parent), m_firstShow(true), m_debugController(controller),
-  m_breakpointDisableAllAction(0), m_breakpointEnableAllAction(0), m_breakpointRemoveAll(0)
+  m_breakpointDisableAllAction(nullptr), m_breakpointEnableAllAction(nullptr), m_breakpointRemoveAll(nullptr)
 {
     setWindowTitle(i18nc("@title:window", "Debugger Breakpoints"));
     setWhatsThis(i18nc("@info:whatsthis", "Displays a list of breakpoints with "
@@ -247,7 +247,7 @@ void BreakpointWidget::slotUpdateBreakpointDetail()
     QModelIndexList selected = m_breakpointsView->selectionModel()->selectedIndexes();
     IF_DEBUG( qCDebug(DEBUGGER) << selected; )
     if (selected.isEmpty()) {
-        m_details->setItem(0);
+        m_details->setItem(nullptr);
     } else {
         m_details->setItem(m_debugController->breakpointModel()->breakpoint(selected.first().row()));
     }

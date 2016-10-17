@@ -31,7 +31,7 @@ AbstractItemRepository::~AbstractItemRepository()
 {
 }
 
-AbstractRepositoryManager::AbstractRepositoryManager() : m_repository(0)
+AbstractRepositoryManager::AbstractRepositoryManager() : m_repository(nullptr)
 {
 }
 
@@ -42,7 +42,7 @@ AbstractRepositoryManager::~AbstractRepositoryManager()
 void AbstractRepositoryManager::deleteRepository()
 {
   delete m_repository;
-  m_repository = 0;
+  m_repository = nullptr;
 }
 
 }

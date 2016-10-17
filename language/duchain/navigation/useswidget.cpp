@@ -195,7 +195,7 @@ void NavigatableWidgetList::setShowHeader(bool show) {
   if(show && !m_headerLayout->parent())
     m_layout->insertLayout(0, m_headerLayout);
   else
-    m_headerLayout->setParent(0);
+    m_headerLayout->setParent(nullptr);
 }
 
 NavigatableWidgetList::~NavigatableWidgetList() {
@@ -511,7 +511,7 @@ void TopContextUsesWidget::labelClicked() {
 UsesWidget::~UsesWidget()
 {
     if (m_collector) {
-        m_collector->setWidget(0);
+        m_collector->setWidget(nullptr);
     }
 }
 
@@ -587,7 +587,7 @@ void UsesWidget::headerLinkActivated(QString linkName)
   }
 }
 
-UsesWidget::UsesWidgetCollector::UsesWidgetCollector(IndexedDeclaration decl) : UsesCollector(decl), m_widget(0) {
+UsesWidget::UsesWidgetCollector::UsesWidgetCollector(IndexedDeclaration decl) : UsesCollector(decl), m_widget(nullptr) {
 
 }
 
@@ -623,7 +623,7 @@ void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
     if(processed == total) {
       m_widget->setUpdatesEnabled(false);
       delete m_widget->m_progressBar;
-      m_widget->m_progressBar = 0;
+      m_widget->m_progressBar = nullptr;
       m_widget->setShowHeader(false);
       m_widget->setUpdatesEnabled(true);
     }

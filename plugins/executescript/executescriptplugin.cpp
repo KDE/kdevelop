@@ -78,7 +78,7 @@ void ExecuteScriptPlugin::unload()
 {
     core()->runController()->removeConfigurationType( m_configType );
     delete m_configType;
-    m_configType = 0;
+    m_configType = nullptr;
 }
 
 QUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const

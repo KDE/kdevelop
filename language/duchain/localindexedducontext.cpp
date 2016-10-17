@@ -52,7 +52,7 @@ bool LocalIndexedDUContext::isLoaded(TopDUContext* top) const
 DUContext* LocalIndexedDUContext::data(TopDUContext* top) const
 {
   if(!m_contextIndex)
-    return 0;
+    return nullptr;
   else
     return top->m_dynamicData->getContextForIndex(m_contextIndex);
 }

@@ -29,8 +29,8 @@
 GitPluginCheckInRepositoryJob::GitPluginCheckInRepositoryJob(KTextEditor::Document* document,
                                                              const QString& rootDirectory)
     : CheckInRepositoryJob(document)
-    , m_hashjob(0)
-    , m_findjob(0)
+    , m_hashjob(nullptr)
+    , m_findjob(nullptr)
     , m_rootDirectory(rootDirectory)
 {}
 

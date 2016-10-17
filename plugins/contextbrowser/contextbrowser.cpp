@@ -113,7 +113,7 @@ DUContext* contextForHighlightingAt(const KTextEditor::Cursor& position, TopDUCo
 DUContext* getContextAt(const QUrl& url, KTextEditor::Cursor cursor)
 {
   TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
-  if (!topContext) return 0;
+  if (!topContext) return nullptr;
   return contextForHighlightingAt(KTextEditor::Cursor(cursor), topContext);
 }
 
@@ -137,7 +137,7 @@ class ContextBrowserViewFactory: public KDevelop::IToolViewFactory
 public:
     ContextBrowserViewFactory(ContextBrowserPlugin *plugin): m_plugin(plugin) {}
 
-    QWidget* create(QWidget *parent = 0) override
+    QWidget* create(QWidget *parent = nullptr) override
     {
         ContextBrowserView* ret = new ContextBrowserView(m_plugin, parent);
         return ret;
@@ -435,8 +435,8 @@ void ContextBrowserPlugin::startDelayedBrowsing(KTextEditor::View* view) {
 void ContextBrowserPlugin::hideToolTip() {
   if(m_currentToolTip) {
     m_currentToolTip->deleteLater();
-    m_currentToolTip = 0;
-    m_currentNavigationWidget = 0;
+    m_currentToolTip = nullptr;
+    m_currentNavigationWidget = nullptr;
     m_currentToolTipProblem = {};
     m_currentToolTipDeclaration = {};
   }
@@ -583,8 +583,8 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
 
     if(m_currentToolTip) {
       m_currentToolTip->deleteLater();
-      m_currentToolTip = 0;
-      m_currentNavigationWidget = 0;
+      m_currentToolTip = nullptr;
+      m_currentNavigationWidget = nullptr;
     }
 
     KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, view->mapToGlobal(view->cursorToCoordinate(position)) + QPoint(20, 40), navigationWidget);
@@ -684,7 +684,7 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
 Declaration* ContextBrowserPlugin::findDeclaration(View* view, const KTextEditor::Cursor& position, bool mouseHighlight)
 {
       Q_UNUSED(mouseHighlight);
-      Declaration* foundDeclaration = 0;
+      Declaration* foundDeclaration = nullptr;
       if(m_useDeclaration.data()) {
         foundDeclaration = m_useDeclaration.data();
       }else{
@@ -708,7 +708,7 @@ ContextBrowserView* ContextBrowserPlugin::browserViewForWidget(QWidget* widget)
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
 void ContextBrowserPlugin::updateForView(View* view)
@@ -759,7 +759,7 @@ void ContextBrowserPlugin::updateForView(View* view)
     ///Check whether there is a special language object to highlight (for example a macro)
 
     KTextEditor::Range specialRange = language->specialLanguageObjectRange(url, highlightPosition);
-    ContextBrowserView* updateBrowserView = shouldUpdateBrowser ?  browserViewForWidget(view) : 0;
+    ContextBrowserView* updateBrowserView = shouldUpdateBrowser ?  browserViewForWidget(view) : nullptr;
 
     if(specialRange.isValid())
     {
@@ -886,7 +886,7 @@ void ContextBrowserPlugin::cursorPositionChanged( View* view, const KTextEditor:
   if(view->document() == m_lastInsertionDocument && newPosition == m_lastInsertionPos)
   {
     //Do not update the highlighting while typing
-    m_lastInsertionDocument = 0;
+    m_lastInsertionDocument = nullptr;
     m_lastInsertionPos = KTextEditor::Cursor();
     if(m_highlightedRanges.contains(view))
       m_highlightedRanges[view].keep = true;
@@ -954,7 +954,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
       KTextEditor::Cursor cCurrent(view->cursorPosition());
       KDevelop::CursorInRevision c = chosen->transformToLocalRevision(cCurrent);
 
-      Declaration* decl = 0;
+      Declaration* decl = nullptr;
       //If we have a locked declaration, use that for jumping
       foreach(ContextBrowserView* view, m_views) {
         decl = view->lockedDeclaration().data(); ///@todo Somehow match the correct context-browser view if there is multiple
@@ -974,7 +974,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
 
       if(decl) {
 
-        Declaration* target = 0;
+        Declaration* target = nullptr;
         if(forward)
           //Try jumping from definition to declaration
           target = DUChainUtils::declarationForDefinition(decl, chosen);

@@ -55,9 +55,9 @@ SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
 
 SvnInternalJobBase::~SvnInternalJobBase()
 {
-    m_ctxt->setListener(0);
+    m_ctxt->setListener(nullptr);
     delete m_ctxt;
-    m_ctxt = 0;
+    m_ctxt = nullptr;
 }
 
 void SvnInternalJobBase::defaultBegin(const ThreadWeaver::JobPointer& self, ThreadWeaver::Thread *thread)

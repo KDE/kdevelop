@@ -45,7 +45,7 @@ using namespace KDevelop;
 
 struct DVcsJobPrivate
 {
-    DVcsJobPrivate() : childproc(new KProcess), vcsplugin(0), ignoreError(false)
+    DVcsJobPrivate() : childproc(new KProcess), vcsplugin(nullptr), ignoreError(false)
     {}
 
     ~DVcsJobPrivate() {

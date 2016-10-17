@@ -48,7 +48,7 @@ using namespace KDevelop;
 
 ClassTree::ClassTree( QWidget* parent, ClassBrowserPlugin* plugin )
   : QTreeView( parent )
-  , m_plugin( plugin ), m_tooltip( 0 )
+  , m_plugin( plugin ), m_tooltip( nullptr )
 {
   header()->hide();
 

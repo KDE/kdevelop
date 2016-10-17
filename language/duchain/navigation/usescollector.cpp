@@ -164,7 +164,7 @@ void UsesCollector::startCollecting() {
             allDeclarations.insert(d);
 
             if(m_collectConstructors && d.data() && d.data()->internalContext() && d.data()->internalContext()->type() == DUContext::Class) {
-              QList<Declaration*> constructors = d.data()->internalContext()->findLocalDeclarations(d.data()->identifier(), CursorInRevision::invalid(), 0, AbstractType::Ptr(), DUContext::OnlyFunctions);
+              QList<Declaration*> constructors = d.data()->internalContext()->findLocalDeclarations(d.data()->identifier(), CursorInRevision::invalid(), nullptr, AbstractType::Ptr(), DUContext::OnlyFunctions);
               foreach(Declaration* constructor, constructors) {
                 ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(constructor);
                 if(classFun && classFun->isConstructor())
@@ -173,7 +173,7 @@ void UsesCollector::startCollecting() {
 
               Identifier destructorId = destructorForName(d.data()->identifier());
 
-              QList<Declaration*> destructors = d.data()->internalContext()->findLocalDeclarations(destructorId, CursorInRevision::invalid(), 0, AbstractType::Ptr(), DUContext::OnlyFunctions);
+              QList<Declaration*> destructors = d.data()->internalContext()->findLocalDeclarations(destructorId, CursorInRevision::invalid(), nullptr, AbstractType::Ptr(), DUContext::OnlyFunctions);
               foreach(Declaration* destructor, destructors) {
                 ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(destructor);
                 if(classFun && classFun->isDestructor())
@@ -332,9 +332,9 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
     if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
       ///Use the attached content-context instead
       foreach(const DUContext::Import &import, topContext->importedParentContexts()) {
-        if(import.context(0) && import.context(0)->topContext()->parsingEnvironmentFile() && !import.context(0)->topContext()->parsingEnvironmentFile()->isProxyContext()) {
-          if((import.context(0)->topContext()->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
-            ReferencedTopDUContext newTop(import.context(0)->topContext());
+        if(import.context(nullptr) && import.context(nullptr)->topContext()->parsingEnvironmentFile() && !import.context(nullptr)->topContext()->parsingEnvironmentFile()->isProxyContext()) {
+          if((import.context(nullptr)->topContext()->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
+            ReferencedTopDUContext newTop(import.context(nullptr)->topContext());
             topContext = newTop;
             break;
           }
@@ -342,7 +342,7 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
       }
       if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
         qCDebug(LANGUAGE) << "got bad proxy-context for" << url.str();
-        topContext = 0;
+        topContext = nullptr;
       }
 
     }
@@ -411,8 +411,8 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
     QList<KDevelop::ReferencedTopDUContext> imports;
 
     foreach(const DUContext::Import &imported, topContext->importedParentContexts())
-      if(imported.context(0) && imported.context(0)->topContext())
-      imports << KDevelop::ReferencedTopDUContext(imported.context(0)->topContext());
+      if(imported.context(nullptr) && imported.context(nullptr)->topContext())
+      imports << KDevelop::ReferencedTopDUContext(imported.context(nullptr)->topContext());
 
     foreach(const KDevelop::ReferencedTopDUContext &import, imports) {
       IndexedString url = import->url();

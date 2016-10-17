@@ -38,13 +38,13 @@ struct ViewPrivate
 };
 
 ViewPrivate::ViewPrivate()
-    :doc(0), widget(0)
+    :doc(nullptr), widget(nullptr)
 {
 }
 
 void ViewPrivate::unsetWidget()
 {
-    widget = 0;
+    widget = nullptr;
 }
 
 View::View(Document *doc, WidgetOwnership ws )
@@ -58,7 +58,7 @@ View::~View()
 {
     if (d->widget && d->ws == View::TakeOwnership ) {
         d->widget->hide();
-        d->widget->setParent(0);
+        d->widget->setParent(nullptr);
         d->widget->deleteLater();
     }
     delete d;
@@ -86,7 +86,7 @@ QWidget *View::createWidget(QWidget *parent)
 
 bool View::hasWidget() const
 {
-    return d->widget != 0;
+    return d->widget != nullptr;
 }
 
 void View::requestRaise()

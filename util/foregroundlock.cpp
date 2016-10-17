@@ -34,7 +34,7 @@ QMutex waitMutex;
 QMutex finishMutex;
 QWaitCondition condition;
 
-volatile QThread* holderThread = 0;
+volatile QThread* holderThread = nullptr;
 volatile int recursion = 0;
 
 void lockForegroundMutexInternal() {
@@ -44,7 +44,7 @@ void lockForegroundMutexInternal() {
         ++recursion;
     }else{
         internalMutex.lock();
-        Q_ASSERT(recursion == 0 && holderThread == 0);
+        Q_ASSERT(recursion == 0 && holderThread == nullptr);
         holderThread = QThread::currentThread();
         recursion = 1;
     }
@@ -59,7 +59,7 @@ bool tryLockForegroundMutexInternal(int interval = 0) {
     }else{
         if(internalMutex.tryLock(interval))
         {
-            Q_ASSERT(recursion == 0 && holderThread == 0);
+            Q_ASSERT(recursion == 0 && holderThread == nullptr);
             holderThread = QThread::currentThread();
             recursion = 1;
             return true;
@@ -79,7 +79,7 @@ void unlockForegroundMutexInternal(bool duringDestruction = false) {
     recursion -= 1;
     if(recursion == 0)
     {
-        holderThread = 0;
+        holderThread = nullptr;
         internalMutex.unlock();
     }
 }

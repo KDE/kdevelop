@@ -70,7 +70,7 @@ static KDevelop::ProjectBaseItem* itemForPath(const QStringList& path, KDevelop:
 void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project )
 {
     bool b = blockSignals( true );
-    projectTarget->setBaseItem( project ? project->projectItem() : 0, true);
+    projectTarget->setBaseItem( project ? project->projectItem() : nullptr, true);
     projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
 
     QUrl exe = cfg.readEntry( ExecutePlugin::executableEntry, QUrl());
@@ -191,7 +191,7 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     Q_ASSERT(cfg);
     if( !cfg )
     {
-        return 0;
+        return nullptr;
     }
     if( launchMode == QLatin1String("execute") )
     {
@@ -208,7 +208,7 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
 
     }
     qWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
-    return 0;
+    return nullptr;
 }
 
 QStringList NativeAppLauncher::supportedModes() const

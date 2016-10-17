@@ -76,7 +76,7 @@ Declaration* usefulDeclaration(Declaration* decl)
     if (decl->kind() == Declaration::Instance) {
         AbstractType::Ptr type = TypeUtils::targetTypeKeepAliases(decl->abstractType(), decl->topContext());
         IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
-        Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : 0;
+        Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : nullptr;
         if (idDecl) {
             decl = idDecl;
         }

@@ -37,7 +37,7 @@ namespace KDevelop {
 
   //Speedup: In most cases there is only exactly one reference-counted range active,
   //so the first reference-counting range can be marked here.
-  void* refCountingFirstRangeStart = 0;
+  void* refCountingFirstRangeStart = nullptr;
   QPair<uint, uint> refCountingFirstRangeExtent = qMakePair(0u, 0u);
 }
 
@@ -51,7 +51,7 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
     --refCountingFirstRangeExtent.second;
     if(refCountingFirstRangeExtent.second == 0) {
       refCountingFirstRangeExtent = qMakePair<uint, uint>(0, 0);
-      refCountingFirstRangeStart = 0;
+      refCountingFirstRangeStart = nullptr;
     }
   }
   else if(refCountingHasAdditionalRanges)

@@ -57,17 +57,17 @@ namespace svn
     LogEntries * entries = (LogEntries *) baton;
     entries->insert(entries->begin(), LogEntry(rev, author, date, msg));
 
-    if (changedPaths != NULL)
+    if (changedPaths != nullptr)
     {
       LogEntry &entry = entries->front();
 
       for (apr_hash_index_t *hi = apr_hash_first(pool, changedPaths);
-           hi != NULL;
+           hi != nullptr;
            hi = apr_hash_next(hi))
       {
         char *path;
         void *val;
-        apr_hash_this(hi, (const void **)&path, NULL, &val);
+        apr_hash_this(hi, (const void **)&path, nullptr, &val);
 
         svn_log_changed_path_t *log_item = reinterpret_cast<svn_log_changed_path_t *>(val);
 
@@ -79,7 +79,7 @@ namespace svn
       }
     }
 
-    return NULL;
+    return nullptr;
   }
 
   static void
@@ -121,7 +121,7 @@ namespace svn
               *context,   // client ctx
               pool);
 
-    if (error!=NULL)
+    if (error!=nullptr)
       throw ClientException(error);
 
     return entries;
@@ -234,12 +234,12 @@ public:
     StatusBaton * baton = static_cast<StatusBaton *>(baton_);
 
     // now we have to decide whether to return the entry or not
-    if (0 == status)
+    if (nullptr == status)
       return;
 
     bool useStatus = false;
 
-    bool isUnversioned = 0 == status->entry;
+    bool isUnversioned = nullptr == status->entry;
     if (isUnversioned)
     { // unversioned
       if (baton->filter.showUnversioned)
@@ -302,7 +302,7 @@ public:
               *context,   // client ctx
               pool);
 
-    if (error!=NULL)
+    if (error!=nullptr)
       throw ClientException(error);
 
     return revnum;
@@ -356,7 +356,7 @@ public:
               *m_context, // client ctx
               pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       delete entries;
       throw ClientException(error);
@@ -380,7 +380,7 @@ public:
 
     infoVector->push_back(Info(path, info));
 
-    return 0;
+    return nullptr;
   }
 
 
@@ -403,7 +403,7 @@ public:
                       *m_context,
                       pool);
 
-    if (error != 0)
+    if (error != nullptr)
       throw ClientException(error);
 
     return infoVector;

@@ -22,7 +22,7 @@ namespace KDevelop {
 AbstractType* TypeSystem::create(AbstractTypeData* data) const
 {
   if (!isFactoryLoaded(*data)) {
-    return 0;
+    return nullptr;
   }
   return m_factories.value(data->typeClassId)->create(data);
 }

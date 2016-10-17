@@ -36,7 +36,7 @@ OutputJob::OutputJob(QObject* parent, OutputJobVerbosity verbosity)
     , m_killJobOnOutputClose(true)
     , m_verbosity(verbosity)
     , m_outputId(-1)
-    , m_outputDelegate(0)
+    , m_outputDelegate(nullptr)
 {
 }
 
@@ -61,14 +61,14 @@ void OutputJob::startOutput()
             m_outputId = view->registerOutputInToolView( tvid, m_title, m_behaviours );
 
             if (!m_outputModel) {
-                m_outputModel = new QStandardItemModel(0);
+                m_outputModel = new QStandardItemModel(nullptr);
             }
 
             // Keep the item model around after the job is gone
             view->setModel(m_outputId, m_outputModel);
 
             if (!m_outputDelegate) {
-                m_outputDelegate = new QItemDelegate(0);
+                m_outputDelegate = new QItemDelegate(nullptr);
             }
 
             view->setDelegate(m_outputId, m_outputDelegate);

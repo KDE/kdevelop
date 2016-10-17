@@ -58,8 +58,8 @@ using namespace KDevelop;
 
 //-----------------------------------------------------------------------------
 StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog, QWidget* parent, bool button )
-    : QFrame( parent ), mCurrentItem( 0 ), mProgressDialog( progressDialog ),
-      mDelayTimer( 0 ), mCleanTimer( 0 )
+    : QFrame( parent ), mCurrentItem( nullptr ), mProgressDialog( progressDialog ),
+      mDelayTimer( nullptr ), mCleanTimer( nullptr )
 {
     m_bShowButton = button;
     int w = fontMetrics().width( QStringLiteral(" 999.9 kB/s 00:00:01 ") ) + 8;
@@ -150,11 +150,11 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
 {
     if ( item->parent() ) {
         item->deleteLater();
-        item = 0;
+        item = nullptr;
         return; // we are only interested in top level items
     }
     item->deleteLater();
-    item = 0;
+    item = nullptr;
     connectSingleItem(); // if going back to 1 item
     if ( ProgressManager::instance()->isEmpty() ) { // No item
         // Done. In 5s the progress-widget will close, then we can clean up the statusbar
@@ -169,7 +169,7 @@ void StatusbarProgressWidget::connectSingleItem()
     if ( mCurrentItem ) {
         disconnect ( mCurrentItem, &ProgressItem::progressItemProgress,
                      this, &StatusbarProgressWidget::slotProgressItemProgress );
-        mCurrentItem = 0;
+        mCurrentItem = nullptr;
     }
     mCurrentItem = ProgressManager::instance()->singleItem();
     if ( mCurrentItem ) {

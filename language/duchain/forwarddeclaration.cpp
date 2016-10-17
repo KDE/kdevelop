@@ -73,7 +73,7 @@ Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const
     if(decl && !decl->isForwardDeclaration())
       return decl;
     else
-      return 0;
+      return nullptr;
   }
   
   if(!topContext)
@@ -83,14 +83,14 @@ Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const
   globalIdentifier.setExplicitlyGlobal(true);
 
   //We've got to use DUContext::DirectQualifiedLookup so C++ works correctly.
-  QList<Declaration*> declarations = topContext->findDeclarations(globalIdentifier, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::DirectQualifiedLookup);
+  QList<Declaration*> declarations = topContext->findDeclarations(globalIdentifier, CursorInRevision::invalid(), AbstractType::Ptr(), nullptr, DUContext::DirectQualifiedLookup);
 
   foreach(Declaration* decl, declarations) {
     if( !decl->isForwardDeclaration() )
       return decl;
   }
 
-  return 0;
+  return nullptr;
 }
 
 DUContext * ForwardDeclaration::logicalInternalContext(const TopDUContext* topContext) const

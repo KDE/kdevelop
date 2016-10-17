@@ -37,7 +37,7 @@ struct OutputPagePrivate
 {
     OutputPagePrivate(OutputPage* page_)
     : page(page_)
-    , output(0)
+    , output(nullptr)
     { }
     OutputPage* page;
     Ui::OutputLocationDialog* output;

@@ -127,7 +127,7 @@ void SvnRecursiveAdd::test()
     cmd << QStringLiteral("svnadmin") << QStringLiteral("create") << reposDir.path();
     QCOMPARE(cmd.execute(10000), 0);
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
-    IBasicVersionControl* vcs = NULL;
+    IBasicVersionControl* vcs = nullptr;
     foreach(IPlugin* p,  plugins) {
         qDebug() << "checking plugin" << p;
         ICentralizedVersionControl* icentr = p->extension<ICentralizedVersionControl>();

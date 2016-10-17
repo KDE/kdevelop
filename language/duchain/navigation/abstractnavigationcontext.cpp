@@ -436,7 +436,7 @@ bool AbstractNavigationContext::isWidgetMaximized() const
 }
 
 QWidget* AbstractNavigationContext::widget() const {
-  return 0;
+  return nullptr;
 }
 
 ///Splits the string by the given regular expression, but keeps the split-matches at the end of each line

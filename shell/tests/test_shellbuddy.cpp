@@ -97,7 +97,7 @@ void TestShellBuddy::cleanupTestCase()
 {
     KDevelop::IBuddyDocumentFinder::removeFinder(QStringLiteral("text/plain"));
     delete m_finder;
-    m_finder = 0;
+    m_finder = nullptr;
     TestCore::shutdown();
 }
 

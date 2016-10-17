@@ -49,7 +49,7 @@ FocusedTreeView::~FocusedTreeView()
 void FocusedTreeView::setModel(QAbstractItemModel* newModel)
 {
     if (QAbstractItemModel* oldModel = model()) {
-        disconnect(oldModel, 0, this, 0);
+        disconnect(oldModel, nullptr, this, nullptr);
     }
 
     QTreeView::setModel(newModel);

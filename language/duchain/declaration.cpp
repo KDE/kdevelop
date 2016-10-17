@@ -119,8 +119,8 @@ Declaration::Declaration( const RangeInRevision& range, DUContext* context )
   : DUChainBase(*new DeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
-  m_topContext = 0;
-  m_context = 0;
+  m_topContext = nullptr;
+  m_context = nullptr;
   m_indexInTopContext = 0;
 
   if(context)
@@ -135,23 +135,23 @@ uint Declaration::ownIndex() const
 
 Declaration::Declaration(const Declaration& rhs)
   : DUChainBase(*new DeclarationData( *rhs.d_func() )) {
-  m_topContext = 0;
-  m_context = 0;
+  m_topContext = nullptr;
+  m_context = nullptr;
   m_indexInTopContext = 0;
 }
 
 Declaration::Declaration( DeclarationData & dd ) : DUChainBase(dd)
 {
-  m_topContext = 0;
-  m_context = 0;
+  m_topContext = nullptr;
+  m_context = nullptr;
   m_indexInTopContext = 0;
 }
 
 Declaration::Declaration( DeclarationData & dd, const RangeInRevision& range )
   : DUChainBase(dd, range)
 {
-  m_topContext = 0;
-  m_context = 0;
+  m_topContext = nullptr;
+  m_context = nullptr;
   m_indexInTopContext = 0;
 }
 
@@ -173,7 +173,7 @@ Declaration::~Declaration()
 
     // Inserted by the builder after construction has finished.
     if( d->m_internalContext.context() )
-      d->m_internalContext.context()->setOwner(0);
+      d->m_internalContext.context()->setOwner(nullptr);
 
     setInSymbolTable(false);
   }
@@ -188,7 +188,7 @@ Declaration::~Declaration()
   clearOwnIndex();
 
   if(!topContext->deleting() || !topContext->isOnDisk()) {
-    setContext(0);
+    setContext(nullptr);
 
     setAbstractType(AbstractType::Ptr());
   }
@@ -199,7 +199,7 @@ Declaration::~Declaration()
 QByteArray Declaration::comment() const {
   DUCHAIN_D(Declaration);
   if(!d->m_comment)
-    return 0;
+    return nullptr;
   else
     return Repositories::arrayFromItem(commentRepository().itemFromIndex(d->m_comment));
 }
@@ -274,7 +274,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 Declaration* Declaration::specialize(const IndexedInstantiationInformation& /*specialization*/, const TopDUContext* topContext, int /*upDistance*/)
 {
   if(!topContext)
-    return 0;
+    return nullptr;
   return this;
 }
 
@@ -331,7 +331,7 @@ void Declaration::setContext(DUContext* context, bool anonymous)
   if(context)
     m_topContext = context->topContext();
   else
-    m_topContext = 0;
+    m_topContext = nullptr;
 
   d->m_anonymousInContext = anonymous;
   m_context = context;
@@ -460,7 +460,7 @@ void Declaration::setInternalContext(DUContext* context)
 
   //Q_ASSERT( !oldInternalContext || oldInternalContext->owner() == this );
   if( oldInternalContext && oldInternalContext->owner() == this )
-    oldInternalContext->setOwner(0);
+    oldInternalContext->setOwner(nullptr);
 
 
   if( context )

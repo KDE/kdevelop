@@ -258,9 +258,9 @@ void VariableTree::setupActions()
 
 Variable* VariableTree::selectedVariable() const
 {
-    if (selectionModel()->selectedRows().isEmpty()) return 0;
+    if (selectionModel()->selectedRows().isEmpty()) return nullptr;
     auto item = selectionModel()->currentIndex().data(TreeModel::ItemRole).value<TreeItem*>();
-    if (!item) return 0;
+    if (!item) return nullptr;
     return qobject_cast<Variable*>(item);
 }
 

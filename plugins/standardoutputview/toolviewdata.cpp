@@ -26,8 +26,8 @@
 
 OutputData::OutputData( ToolViewData* tv )
 : QObject( tv )
-, delegate(0)
-, model(0)
+, delegate(nullptr)
+, model(nullptr)
 , toolView(tv)
 , id(-1)
 {
@@ -56,7 +56,7 @@ void OutputData::setDelegate( QAbstractItemDelegate* del )
 }
 
 ToolViewData::ToolViewData( QObject* parent )
-    : QObject( parent ), plugin(0), toolViewId(-1)
+    : QObject( parent ), plugin(nullptr), toolViewId(-1)
 {
 }
 

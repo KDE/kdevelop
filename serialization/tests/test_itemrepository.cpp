@@ -114,7 +114,7 @@ class TestItemRepository : public QObject {
       uint totalInsertions = 0, totalDeletions = 0;
       uint maxSize = 0;
       uint totalSize = 0;
-      srand(time(NULL));
+      srand(time(nullptr));
       uint highestSeenIndex = 0;
 
       for(uint a = 0; a < cycles; ++a) {

@@ -95,20 +95,20 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
 SourceFileTemplate::SourceFileTemplate (const QString& templateDescription)
 : d(new KDevelop::SourceFileTemplatePrivate)
 {
-    d->archive = 0;
+    d->archive = nullptr;
     setTemplateDescription(templateDescription);
 }
 
 SourceFileTemplate::SourceFileTemplate()
 : d(new KDevelop::SourceFileTemplatePrivate)
 {
-    d->archive = 0;
+    d->archive = nullptr;
 }
 
 SourceFileTemplate::SourceFileTemplate (const SourceFileTemplate& other)
 : d(new KDevelop::SourceFileTemplatePrivate)
 {
-    d->archive = 0;
+    d->archive = nullptr;
     *this = other;
 }
 
@@ -133,7 +133,7 @@ SourceFileTemplate& SourceFileTemplate::operator=(const SourceFileTemplate& othe
         }
         d->archive->open(QIODevice::ReadOnly);
     } else {
-        d->archive = 0;
+        d->archive = nullptr;
     }
     d->descriptionFileName = other.d->descriptionFileName;
     return *this;
@@ -162,7 +162,7 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
 
     if (archiveFileName.isEmpty() || !QFileInfo::exists(archiveFileName)) {
         qCWarning(LANGUAGE) << "Could not find a template archive for description" << templateDescription << ", archive file" << archiveFileName;
-        d->archive = 0;
+        d->archive = nullptr;
     } else {
         QFileInfo info(archiveFileName);
 

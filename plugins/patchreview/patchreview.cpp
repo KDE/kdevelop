@@ -254,7 +254,7 @@ void PatchReviewPlugin::updateKompareModel() {
 
     if (!patchFile.isEmpty()) //only try to construct the model if we have a patch to load
     try {
-        m_diffSettings = new DiffSettings( 0 );
+        m_diffSettings = new DiffSettings( nullptr );
         m_kompareInfo.reset( new Kompare::Info() );
         m_kompareInfo->localDestination = patchFile;
         m_kompareInfo->localSource = m_patch->baseDir().toLocalFile();
@@ -297,9 +297,9 @@ void PatchReviewPlugin::updateKompareModel() {
 
         return;
     } catch ( const QString & str ) {
-        KMessageBox::error( 0, str, i18n( "Kompare Model Update" ) );
+        KMessageBox::error( nullptr, str, i18n( "Kompare Model Update" ) );
     } catch ( const char * str ) {
-        KMessageBox::error( 0, str, i18n( "Kompare Model Update" ) );
+        KMessageBox::error( nullptr, str, i18n( "Kompare Model Update" ) );
     }
     removeHighlighting();
     m_modelList.reset( nullptr );
@@ -317,7 +317,7 @@ class PatchReviewToolViewFactory : public KDevelop::IToolViewFactory
 public:
     PatchReviewToolViewFactory( PatchReviewPlugin *plugin ) : m_plugin( plugin ) {}
 
-    QWidget* create( QWidget *parent = 0 ) override {
+    QWidget* create( QWidget *parent = nullptr ) override {
         return new PatchReviewToolView( parent, m_plugin );
     }
 
@@ -340,7 +340,7 @@ PatchReviewPlugin::~PatchReviewPlugin()
     // Tweak to work around a crash on OS X; see https://bugs.kde.org/show_bug.cgi?id=338829
     // and http://qt-project.org/forums/viewthread/38406/#162801
     // modified tweak: use setPatch() and deleteLater in that method.
-    setPatch(0);
+    setPatch(nullptr);
 }
 
 void PatchReviewPlugin::clearPatch( QObject* _patch ) {
@@ -366,7 +366,7 @@ void PatchReviewPlugin::closeReview()
         }
 
         removeHighlighting();
-        m_modelList.reset( 0 );
+        m_modelList.reset( nullptr );
         m_depth = 0;
 
         if( !dynamic_cast<LocalPatchSource*>( m_patch.data() ) ) {
@@ -465,7 +465,7 @@ void PatchReviewPlugin::updateReview()
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
             QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
             if (absoluteUrl.isRelative()) {
-                KMessageBox::error( 0, i18n("The base directory of the patch must be an absolute directory"), i18n( "Patch Review" ) );
+                KMessageBox::error( nullptr, i18n("The base directory of the patch must be an absolute directory"), i18n( "Patch Review" ) );
                 break;
             }
 
@@ -511,7 +511,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
 
 PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( QStringLiteral("kdevpatchreview"), parent ),
-    m_patch( 0 ), m_factory( new PatchReviewToolViewFactory( this ) ) {
+    m_patch( nullptr ), m_factory( new PatchReviewToolViewFactory( this ) ) {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );

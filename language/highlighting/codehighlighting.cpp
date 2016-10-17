@@ -137,7 +137,7 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
 }
 
 ColorMap emptyColorMap() {
- ColorMap ret(ColorCache::self()->validColorCount()+1, 0);
+ ColorMap ret(ColorCache::self()->validColorCount()+1, nullptr);
  return ret;
 }
 
@@ -331,7 +331,7 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForDepth(int depth) const
 KDevelop::Declaration* CodeHighlightingInstance::localClassFromCodeContext(KDevelop::DUContext* context) const
 {
   if(!context)
-    return 0;
+    return nullptr;
 
   if(m_contextClasses.contains(context))
     return m_contextClasses[context];
@@ -349,7 +349,7 @@ KDevelop::Declaration* CodeHighlightingInstance::localClassFromCodeContext(KDeve
   }
 
   ///Step 1: Find the function-declaration for the function we are in
-  Declaration* functionDeclaration = 0;
+  Declaration* functionDeclaration = nullptr;
 
   if( FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(context->owner()) ) {
 
@@ -364,8 +364,8 @@ KDevelop::Declaration* CodeHighlightingInstance::localClassFromCodeContext(KDeve
 
   if(!functionDeclaration) {
     if(m_useClassCache)
-      m_contextClasses[context] = 0;
-    return 0;
+      m_contextClasses[context] = nullptr;
+    return nullptr;
   }
 
   Declaration* decl  = functionDeclaration->context()->owner();
@@ -462,7 +462,7 @@ void CodeHighlightingInstance::highlightDeclaration(Declaration * declaration, c
 {
   HighlightedRange h;
   h.range = declaration->range();
-  h.attribute = m_highlighting->attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, color);
+  h.attribute = m_highlighting->attributeForType(typeForDeclaration(declaration, nullptr), DeclarationContext, color);
   m_highlight.push_back(h);
 }
 

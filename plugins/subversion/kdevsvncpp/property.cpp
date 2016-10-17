@@ -67,7 +67,7 @@ namespace svn
                           false, /* recurse */
                           *m_context,
                           pool);
-    if (error != NULL)
+    if (error != nullptr)
     {
       throw ClientException(error);
     }
@@ -85,7 +85,7 @@ namespace svn
         const void *key;
         void *val;
 
-        apr_hash_this(hi, &key, NULL, &val);
+        apr_hash_this(hi, &key, nullptr, &val);
 
         m_entries.push_back(PropertyEntry(
                               (const char *)key, getValue((const char *)key).c_str()));
@@ -118,7 +118,7 @@ namespace svn
     const void *key;
     void *val;
     const svn_string_t *propval;
-    apr_hash_this(hi, &key, NULL, &val);
+    apr_hash_this(hi, &key, nullptr, &val);
     propval = (const svn_string_t *)val;
 
     return propval->data;
@@ -144,7 +144,7 @@ namespace svn
                           *m_context,
                           pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -155,11 +155,11 @@ namespace svn
 
     svn_error_t * error =
       svn_client_propset(name,
-                         NULL, // value = NULL
+                         nullptr, // value = NULL
                          m_path.c_str(),
                          false, //dont recurse
                          pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 

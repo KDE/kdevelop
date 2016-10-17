@@ -806,7 +806,7 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
     if (url.isEmpty()) {
         // this happens e.g. when setting the final location of a problem that is not
         // yet associated with a top ctx.
-        return 0;
+        return nullptr;
     }
     if ( !isValidURL(url) ) {
         qWarning() << "Tracker requested for invalild URL:" << url.toUrl();
@@ -814,7 +814,7 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
     Q_ASSERT(isValidURL(url));
 
     QMutexLocker l(&d->m_managedMutex);
-    return d->m_managed.value(url, 0);
+    return d->m_managed.value(url, nullptr);
 }
 
 void BackgroundParser::documentClosed(IDocument* document)

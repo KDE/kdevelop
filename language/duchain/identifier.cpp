@@ -413,7 +413,7 @@ Identifier& Identifier::operator=(const Identifier& rhs)
 
   if(!m_index)
     delete dd;
-  dd = 0;
+  dd = nullptr;
 
   rhs.makeConstant();
   cd = rhs.cd;
@@ -441,7 +441,7 @@ Identifier& Identifier::operator=(Identifier&& rhs) Q_DECL_NOEXCEPT
 
   if (!m_index) {
     delete dd;
-    dd = 0;
+    dd = nullptr;
   }
 
   m_index = rhs.m_index;

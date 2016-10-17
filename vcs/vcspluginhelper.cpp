@@ -394,11 +394,11 @@ void VcsPluginHelper::annotation()
                     SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
                     this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
         } else {
-            KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
+            KMessageBox::error(nullptr, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
             delete job;
         }
     } else {
-        KMessageBox::error(0, i18n("Cannot execute annotate action because the "
+        KMessageBox::error(nullptr, i18n("Cannot execute annotate action because the "
                                    "document was not found, or was not a text document:\n%1", url.toDisplayString(QUrl::PreferLocalFile)));
     }
 }

@@ -153,9 +153,9 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
     }
 
     QMenu menu;
-    QAction deleteAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("&Delete Breakpoint"), 0);
-    QAction disableAction(QIcon::fromTheme(QStringLiteral("dialog-cancel")), i18n("&Disable Breakpoint"), 0);
-    QAction enableAction(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")), i18n("&Enable Breakpoint"), 0);
+    QAction deleteAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("&Delete Breakpoint"), nullptr);
+    QAction disableAction(QIcon::fromTheme(QStringLiteral("dialog-cancel")), i18n("&Disable Breakpoint"), nullptr);
+    QAction enableAction(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")), i18n("&Enable Breakpoint"), nullptr);
     menu.addAction(&deleteAction);
     if (b->enabled()) {
         menu.addAction(&disableAction);
@@ -209,7 +209,7 @@ Qt::ItemFlags BreakpointModel::flags(const QModelIndex &index) const
 {
     /* FIXME: all this logic must be in item */
     if (!index.isValid())
-        return 0;
+        return nullptr;
 
     if (index.column() == 0)
         return static_cast<Qt::ItemFlags>(
@@ -245,7 +245,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
         if (controller)
             controller->breakpointAboutToBeDeleted(row);
         m_breakpoints.removeAt(row);
-        b->m_model = 0;
+        b->m_model = nullptr;
         // To be changed: the controller is currently still responsible for deleting the breakpoint
         // object
     }
@@ -495,7 +495,7 @@ void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document*
 {
     foreach (Breakpoint *breakpoint, m_breakpoints) {
         if (breakpoint->movingCursor() && breakpoint->movingCursor()->document() == document) {
-            breakpoint->setMovingCursor(0);
+            breakpoint->setMovingCursor(nullptr);
         }
     }
 }
@@ -547,7 +547,7 @@ QList<Breakpoint*> KDevelop::BreakpointModel::breakpoints() const
 
 Breakpoint* BreakpointModel::breakpoint(int row)
 {
-    if (row >= m_breakpoints.count()) return 0;
+    if (row >= m_breakpoints.count()) return nullptr;
     return m_breakpoints.at(row);
 }
 
@@ -636,5 +636,5 @@ Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) {
             return b;
         }
     }
-    return 0;
+    return nullptr;
 }

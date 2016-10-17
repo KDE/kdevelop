@@ -32,7 +32,7 @@
 
 namespace KDevelop
 {
-StaticParsingEnvironmentData* ParsingEnvironmentFile::m_staticData = 0;
+StaticParsingEnvironmentData* ParsingEnvironmentFile::m_staticData = nullptr;
 
  #if 0
 ///Wrapper class around objects that are managed through the DUChain, and may contain arbitrary objects

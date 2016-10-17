@@ -148,7 +148,7 @@ struct ItemRepositoryRegistryPrivate {
 };
 
 //The global item-reposity registry
-ItemRepositoryRegistry* ItemRepositoryRegistry::m_self = 0;
+ItemRepositoryRegistry* ItemRepositoryRegistry::m_self = nullptr;
 
 ItemRepositoryRegistry::ItemRepositoryRegistry(const ISessionLock::Ptr& session)
 : d(new ItemRepositoryRegistryPrivate(this))

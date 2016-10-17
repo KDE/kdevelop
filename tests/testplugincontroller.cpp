@@ -54,7 +54,7 @@ IPlugin* TestPluginController::pluginForExtension(const QString& extension, cons
     Q_UNUSED(extension);
     Q_UNUSED(pluginname);
     Q_UNUSED(constraints);
-    return 0;
+    return nullptr;
 }
 
 QVector<KPluginMetaData> TestPluginController::queryExtensionPlugins(const QString& extension, const QVariantMap& constraints) const
@@ -67,7 +67,7 @@ QVector<KPluginMetaData> TestPluginController::queryExtensionPlugins(const QStri
 IPlugin* TestPluginController::loadPlugin(const QString& pluginName)
 {
     Q_UNUSED(pluginName);
-    return 0;
+    return nullptr;
 }
 
 KPluginMetaData TestPluginController::pluginInfo(const IPlugin*) const

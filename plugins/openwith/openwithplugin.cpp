@@ -89,7 +89,7 @@ bool canOpenDefault(const QString& mimeType)
 
 OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( QStringLiteral("kdevopenwith"), parent ),
-    m_actionMap( 0 )
+    m_actionMap( nullptr )
 {
     KDEV_USE_EXTENSION_INTERFACE( IOpenWith )
 }
@@ -192,7 +192,7 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceTyp
 
     m_services += list;
     QList<QAction*> actions;
-    QAction* standardAction = 0;
+    QAction* standardAction = nullptr;
     const QString defaultId = defaultForMimeType(m_mimeType);
     foreach( KService::Ptr svc, list ) {
         QAction* act = new QAction( isTextEditor(svc) ? i18n("Default Editor") : svc->name(), this );

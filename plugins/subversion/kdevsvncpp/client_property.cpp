@@ -62,7 +62,7 @@ namespace svn
                           recurse,
                           *m_context,
                           pool);
-    if (error != NULL)
+    if (error != nullptr)
     {
       throw ClientException(error);
     }
@@ -82,7 +82,7 @@ namespace svn
         const void *key;
         void *val;
 
-        apr_hash_this(hi, &key, NULL, &val);
+        apr_hash_this(hi, &key, nullptr, &val);
 
         prop_map [std::string((const char *)key)] =
           std::string(((const svn_string_t *)val)->data);
@@ -121,7 +121,7 @@ namespace svn
                          recurse,
                          *m_context,
                          pool);
-    if (error != NULL)
+    if (error != nullptr)
     {
       throw ClientException(error);
     }
@@ -138,7 +138,7 @@ namespace svn
       const void *key;
       void *val;
 
-      apr_hash_this(hi, &key, NULL, &val);
+      apr_hash_this(hi, &key, nullptr, &val);
 
       prop_map [std::string(propName)] = std::string(((const svn_string_t *)val)->data);
 
@@ -180,7 +180,7 @@ namespace svn
                           skip_checks,
                           *m_context,
                           pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -205,11 +205,11 @@ namespace svn
 
     svn_error_t * error =
       svn_client_propset(propName,
-                         NULL, // value = NULL
+                         nullptr, // value = NULL
                          path.c_str(),
                          recurse,
                          pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -242,7 +242,7 @@ namespace svn
                               &revnum,
                               *m_context,
                               pool);
-    if (error != NULL)
+    if (error != nullptr)
     {
       throw ClientException(error);
     }
@@ -256,7 +256,7 @@ namespace svn
       const void *key;
       void *val;
 
-      apr_hash_this(hi, &key, NULL, &val);
+      apr_hash_this(hi, &key, nullptr, &val);
 
       prop_map [std::string((const char *)key)] =
         std::string(((const svn_string_t *)val)->data);
@@ -292,13 +292,13 @@ namespace svn
                              &revnum,
                              *m_context,
                              pool);
-    if (error != NULL)
+    if (error != nullptr)
     {
       throw ClientException(error);
     }
 
     // if the property does not exist NULL is returned
-    if (propval == NULL)
+    if (propval == nullptr)
       return std::pair<svn_revnum_t,std::string> (0, std::string());
 
     return std::pair<svn_revnum_t,std::string> (revnum, std::string(propval->data));
@@ -338,7 +338,7 @@ namespace svn
                              force,
                              *m_context,
                              pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
 
     return revnum;
@@ -367,14 +367,14 @@ namespace svn
     svn_revnum_t revnum;
     svn_error_t * error =
       svn_client_revprop_set(propName,
-                             NULL, // value = NULL
+                             nullptr, // value = NULL
                              path.c_str(),
                              revision.revision(),
                              &revnum,
                              force,
                              *m_context,
                              pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
 
     return revnum;

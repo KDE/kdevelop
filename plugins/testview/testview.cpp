@@ -232,7 +232,7 @@ QStandardItem* TestView::itemForSuite(ITestSuite* suite)
             return item;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 QStandardItem* TestView::itemForProject(IProject* project)
@@ -278,7 +278,7 @@ void TestView::runSelectedTests()
             continue;
         }
         QStandardItem* item = m_model->itemFromIndex(index);
-        if (item->parent() == 0)
+        if (item->parent() == nullptr)
         {
             // A project was selected
             IProject* project = ICore::self()->projectController()->findProjectByName(item->data(ProjectRole).toString());
@@ -287,7 +287,7 @@ void TestView::runSelectedTests()
                 jobs << suite->launchAllCases(ITestSuite::Silent);
             }
         }
-        else if (item->parent()->parent() == 0)
+        else if (item->parent()->parent() == nullptr)
         {
             // A suite was selected
             IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->data(ProjectRole).toString());
@@ -326,12 +326,12 @@ void TestView::showSource()
 
     QModelIndex index = m_filter->mapToSource(indexes.first());
     QStandardItem* item = m_model->itemFromIndex(index);
-    if (item->parent() == 0)
+    if (item->parent() == nullptr)
     {
         // No sense in finding source code for projects.
         return;
     }
-    else if (item->parent()->parent() == 0)
+    else if (item->parent()->parent() == nullptr)
     {
         IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->data(ProjectRole).toString());
         ITestSuite* suite =  tc->findTestSuite(project, item->data(SuiteRole).toString());

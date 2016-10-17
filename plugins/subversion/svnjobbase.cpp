@@ -67,7 +67,7 @@ KDevelop::VcsJob::JobStatus SvnJobBase::status() const
 void SvnJobBase::askForLogin( const QString& realm )
 {
     qCDebug(PLUGIN_SVN) << "login";
-    KPasswordDialog dlg( 0, KPasswordDialog::ShowUsernameLine | KPasswordDialog::ShowKeepPassword );
+    KPasswordDialog dlg( nullptr, KPasswordDialog::ShowUsernameLine | KPasswordDialog::ShowKeepPassword );
     dlg.setPrompt( i18n("Enter Login for: %1", realm ) );
     dlg.exec();
     internalJob()->m_login_username = dlg.username();
@@ -117,7 +117,7 @@ void SvnJobBase::askForSslServerTrust( const QStringList& failures, const QStrin
 
 void SvnJobBase::askForSslClientCert( const QString& realm )
 {
-    KMessageBox::information( 0, realm );
+    KMessageBox::information( nullptr, realm );
     qCDebug(PLUGIN_SVN) << "clientrust";
     internalJob()->m_guiSemaphore.release( 1 );
 }

@@ -110,7 +110,7 @@ public:
     QHash< IProject*, QPointer<KJob> > m_parseJobs; // parse jobs that add files from the project to the background parser.
 
     ProjectControllerPrivate( ProjectController* p )
-        : m_core(0), model(0), selectionModel(0), dialog(0), q(p), buildset(0), m_foundProjectFile(false), m_cleaningUp(false)
+        : m_core(nullptr), model(nullptr), selectionModel(nullptr), dialog(nullptr), q(p), buildset(nullptr), m_foundProjectFile(false), m_cleaningUp(false)
     {
     }
 
@@ -650,7 +650,7 @@ IProject* ProjectController::projectAt( int num ) const
 {
     if( !d->m_projects.isEmpty() && num >= 0 && num < d->m_projects.count() )
         return d->m_projects.at( num );
-    return 0;
+    return nullptr;
 }
 
 QList<IProject*> ProjectController::projects() const
@@ -954,14 +954,14 @@ ProjectModel* ProjectController::projectModel()
 IProject* ProjectController::findProjectForUrl( const QUrl& url ) const
 {
     if (d->m_projects.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
     ProjectBaseItem* item = d->model->itemForPath(IndexedString(url));
     if (item) {
         return item->project();
     }
-    return 0;
+    return nullptr;
 }
 
 IProject* ProjectController::findProjectByName( const QString& name )
@@ -973,7 +973,7 @@ IProject* ProjectController::findProjectByName( const QString& name )
             return proj;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -1136,7 +1136,7 @@ void ProjectController::commitCurrentProject()
 QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, bool fallbackRoot ) const
 {
     Path path(path_);
-    IProject* sourceDirProject = 0, *buildDirProject = 0;
+    IProject* sourceDirProject = nullptr, *buildDirProject = nullptr;
     Q_FOREACH(IProject* proj, d->m_projects)
     {
         if(proj->path().isParentOf(path) || proj->path() == path)

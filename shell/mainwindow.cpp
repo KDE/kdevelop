@@ -180,7 +180,7 @@ void MainWindow::ensureVisible()
 
 QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomElement& element)
 {
-    QAction* before = 0L;
+    QAction* before = nullptr;
     if (index > 0 && index < parent->actions().count())
         before = parent->actions().at(index);
 

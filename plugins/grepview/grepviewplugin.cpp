@@ -75,7 +75,7 @@ static QString patternFromSelection(const KDevelop::IDocument* doc)
 }
 
 GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( QStringLiteral("kdevgrepview"), parent ), m_currentJob(0)
+    : KDevelop::IPlugin( QStringLiteral("kdevgrepview"), parent ), m_currentJob(nullptr)
 {
     setXMLFile(QStringLiteral("kdevgrepview.rc"));
 
@@ -208,7 +208,7 @@ void GrepViewPlugin::rememberSearchDirectory(QString const & directory)
 
 GrepJob* GrepViewPlugin::newGrepJob()
 {
-    if(m_currentJob != 0)
+    if(m_currentJob != nullptr)
     {
         m_currentJob->kill();
     }
@@ -227,6 +227,6 @@ void GrepViewPlugin::jobFinished(KJob* job)
     if(job == m_currentJob)
     {
         emit grepJobFinished();
-        m_currentJob = 0;
+        m_currentJob = nullptr;
     }
 }

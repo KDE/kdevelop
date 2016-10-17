@@ -52,7 +52,7 @@ K_PLUGIN_FACTORY_WITH_JSON(DocumentSwitcherFactory, "kdevdocumentswitcher.json",
 //TODO: Make the widget transparent
 
 DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantList &/*args*/)
-    :KDevelop::IPlugin(QStringLiteral("kdevdocumentswitcher"), parent), view(0)
+    :KDevelop::IPlugin(QStringLiteral("kdevdocumentswitcher"), parent), view(nullptr)
 {
     setXMLFile(QStringLiteral("kdevdocumentswitcher.rc"));
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "Adding active mainwindow from constructor" << KDevelop::ICore::self()->uiController()->activeMainWindow();
@@ -217,7 +217,7 @@ void DocumentSwitcherPlugin::itemActivated( const QModelIndex& idx )
     int row = view->selectionModel()->selectedRows().first().row();
 
     Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
-    Sublime::View* activatedView = 0;
+    Sublime::View* activatedView = nullptr;
     if( window && documentLists.contains( window ) && documentLists[window].contains( window->area() ) )
     {
         const QList<Sublime::View*> l = documentLists[window][window->area()];
@@ -325,7 +325,7 @@ void DocumentSwitcherPlugin::removeMainWindow( QObject* obj )
         return;
     }
     obj->removeEventFilter( this );
-    disconnect( obj, 0, this, 0 );
+    disconnect( obj, nullptr, this, nullptr );
     documentLists.remove( obj );
 }
 

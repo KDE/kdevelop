@@ -31,7 +31,7 @@ namespace KDevelop
 {
 
 ProjectModelSaver::ProjectModelSaver()
-: m_project(0)
+: m_project(nullptr)
 {
 }
 

@@ -67,7 +67,7 @@ public:
     enum ExtraRoles {
         DescriptionRole = Qt::UserRole+1
     };
-    PluginsModel(QObject* parent = 0)
+    PluginsModel(QObject* parent = nullptr)
         : QAbstractListModel(parent)
     {
         m_plugins = KDevelop::Core::self()->pluginControllerInternal()->loadedPlugins();
@@ -76,10 +76,10 @@ public:
 
     KDevelop::IPlugin *pluginForIndex(const QModelIndex& index) const
     {
-        if (!index.isValid()) return 0;
-        if (index.parent().isValid()) return 0;
-        if (index.column() != 0) return 0;
-        if (index.row() >= m_plugins.count()) return 0;
+        if (!index.isValid()) return nullptr;
+        if (index.parent().isValid()) return nullptr;
+        if (index.column() != 0) return nullptr;
+        if (index.row() >= m_plugins.count()) return nullptr;
         return m_plugins[index.row()];
     }
 
@@ -119,7 +119,7 @@ class LoadedPluginsDelegate : public KWidgetItemDelegate
 
 public:
 
-    LoadedPluginsDelegate(QAbstractItemView *itemView, QObject *parent = 0)
+    LoadedPluginsDelegate(QAbstractItemView *itemView, QObject *parent = nullptr)
         : KWidgetItemDelegate(itemView, parent)
         , pushButton(new QPushButton)
     {
@@ -160,7 +160,7 @@ public:
 
         painter->save();
 
-        QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, 0);
+        QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, nullptr);
 
         int iconSize = option.rect.height() - MARGIN * 2;
         QIcon icon = QIcon::fromTheme(index.model()->data(index, Qt::DecorationRole).toString());
@@ -259,7 +259,7 @@ class PluginsView : public QListView
 {
     Q_OBJECT
 public:
-    PluginsView(QWidget* parent = 0)
+    PluginsView(QWidget* parent = nullptr)
         :QListView(parent)
     {
         setModel(new PluginsModel());

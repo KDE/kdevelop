@@ -59,12 +59,12 @@ const int GrepOutputView::HISTORY_SIZE = 5;
 
 GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
   : QWidget(parent)
-  , m_next(0)
-  , m_prev(0)
-  , m_collapseAll(0)
-  , m_expandAll(0)
-  , m_clearSearchHistory(0)
-  , m_statusLabel(0)
+  , m_next(nullptr)
+  , m_prev(nullptr)
+  , m_collapseAll(nullptr)
+  , m_expandAll(nullptr)
+  , m_clearSearchHistory(nullptr)
+  , m_statusLabel(nullptr)
   , m_plugin(plugin)
 {
     Ui::GrepOutputView::setupUi(this);

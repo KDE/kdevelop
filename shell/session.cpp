@@ -158,7 +158,7 @@ QString SessionPrivate::generatePrettyContents( const SessionInfo& info )
     projectNames.reserve( info.projects.size() );
 
     foreach( const QUrl& url, info.projects ) {
-        IProject* project = 0;
+        IProject* project = nullptr;
         if( ICore::self() && ICore::self()->projectController() ) {
             project = ICore::self()->projectController()->findProjectForUrl( url );
         }

@@ -77,7 +77,7 @@ void RenameFileAction::execute()
         result = changes.applyAllChanges();
     }
     if(!result) {
-        KMessageBox::error(0, i18n("Failed to apply changes: %1", result.m_failureReason));
+        KMessageBox::error(nullptr, i18n("Failed to apply changes: %1", result.m_failureReason));
     }
     emit executed(this);
 }

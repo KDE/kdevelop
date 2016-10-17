@@ -74,8 +74,8 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevSvnFactory, "kdevsubversion.json", registerPlugin
 KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)
         : KDevelop::IPlugin(QStringLiteral("kdevsubversion"), parent)
         , m_common(new KDevelop::VcsPluginHelper(this, this))
-        , copy_action( 0 )
-        , move_action( 0 )
+        , copy_action( nullptr )
+        , move_action( nullptr )
         , m_jobQueue(new ThreadWeaver::Queue(this))
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
@@ -155,12 +155,12 @@ KDevelop::VcsJob* KDevSvnPlugin::remove(const QList<QUrl>& localLocations)
 
 KDevelop::VcsJob* KDevSvnPlugin::edit(const QUrl& /*localLocation*/)
 {
-    return 0;
+    return nullptr;
 }
 
 KDevelop::VcsJob* KDevSvnPlugin::unedit(const QUrl& /*localLocation*/)
 {
-    return 0;
+    return nullptr;
 }
 
 KDevelop::VcsJob* KDevSvnPlugin::localRevision(const QUrl &localLocation, KDevelop::VcsRevision::RevisionType type)
@@ -288,13 +288,13 @@ KDevelop::VcsJob* KDevSvnPlugin::merge(const KDevelop::VcsLocation& localOrRepoL
     Q_UNUSED(srcRevision)
     Q_UNUSED(dstRevision)
     Q_UNUSED(localLocation)
-    return 0;
+    return nullptr;
 }
 
 KDevelop::VcsJob* KDevSvnPlugin::resolve(const QList<QUrl>& /*localLocations*/,
         KDevelop::IBasicVersionControl::RecursionMode /*recursion*/)
 {
-    return 0;
+    return nullptr;
 }
 
 KDevelop::VcsJob* KDevSvnPlugin::import(const QString & commitMessage, const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
@@ -360,7 +360,7 @@ void KDevSvnPlugin::ctxInfo()
 {
     QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
-        KMessageBox::error(0, i18n("Please select only one item for this operation"));
+        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
         return;
     }
 }
@@ -369,7 +369,7 @@ void KDevSvnPlugin::ctxStatus()
 {
     QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() > 1) {
-        KMessageBox::error(0, i18n("Please select only one item for this operation"));
+        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
         return;
     }
 }
@@ -378,7 +378,7 @@ void KDevSvnPlugin::ctxCopy()
 {
     QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() > 1) {
-        KMessageBox::error(0, i18n("Please select only one item for this operation"));
+        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
         return;
     }
 
@@ -392,7 +392,7 @@ void KDevSvnPlugin::ctxCopy()
             dir = dir.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
         }
 
-        KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
+        KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), nullptr);
 
         if (isFile) {
             dlg.urlRequester()->setMode(KFile::File | KFile::Directory | KFile::LocalOnly);
@@ -404,7 +404,7 @@ void KDevSvnPlugin::ctxCopy()
             KDevelop::ICore::self()->runController()->registerJob(copy(source, dlg.selectedUrl()));
         }
     } else {
-        KMessageBox::error(0, i18n("Copying only works on local files"));
+        KMessageBox::error(nullptr, i18n("Copying only works on local files"));
         return;
     }
 
@@ -414,7 +414,7 @@ void KDevSvnPlugin::ctxMove()
 {
     QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
-        KMessageBox::error(0, i18n("Please select only one item for this operation"));
+        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
         return;
     }
 
@@ -428,7 +428,7 @@ void KDevSvnPlugin::ctxMove()
             dir = source.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
         }
 
-        KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
+        KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), nullptr);
 
         if (isFile) {
             dlg.urlRequester()->setMode(KFile::File | KFile::Directory | KFile::LocalOnly);
@@ -440,7 +440,7 @@ void KDevSvnPlugin::ctxMove()
             KDevelop::ICore::self()->runController()->registerJob(move(source, dlg.selectedUrl()));
         }
     } else {
-        KMessageBox::error(0, i18n("Moving only works on local files/dirs"));
+        KMessageBox::error(nullptr, i18n("Moving only works on local files/dirs"));
         return;
     }
 }
@@ -449,7 +449,7 @@ void KDevSvnPlugin::ctxCat()
 {
     QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
-        KMessageBox::error(0, i18n("Please select only one item for this operation"));
+        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
         return;
     }
 }
@@ -468,7 +468,7 @@ void KDevSvnPlugin::ctxImport()
 {
     QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
-        KMessageBox::error(0, i18n("Please select only one item for this operation"));
+        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
         return;
     }
 
@@ -495,7 +495,7 @@ void KDevSvnPlugin::ctxCheckout()
 {
     QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
-        KMessageBox::error(0, i18n("Please select only one item for this operation"));
+        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
         return;
     }
 

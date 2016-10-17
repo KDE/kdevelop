@@ -91,7 +91,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
     KAcceleratorManager::setNoAccel(dock);
     QWidget *w = view->widget(dock);
-    if (w->parent() == 0)
+    if (w->parent() == nullptr)
     {
         /* Could happen when we're moving the widget from
            one IdealDockWidget to another.  See moveView below.
@@ -211,7 +211,7 @@ IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) c
 
         default:
             Q_ASSERT(false);
-            return 0;
+            return nullptr;
     }
 }
 
@@ -346,7 +346,7 @@ void IdealController::removeView(View* view, bool nondestructive)
     m_dockwidget_to_action.remove(dock);
 
     if (nondestructive)
-        view->widget()->setParent(0);
+        view->widget()->setParent(nullptr);
 
     delete dock;
 }
@@ -428,7 +428,7 @@ IdealDockWidget* IdealController::currentDockWidget()
 
         w = w->parentWidget();
     }
-    return 0;
+    return nullptr;
 }
 
 void IdealController::goPrevNextDock(IdealController::Direction direction)

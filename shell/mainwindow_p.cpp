@@ -67,8 +67,8 @@ namespace KDevelop {
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
     : QObject(mainWindow)
     , m_mainWindow(mainWindow)
-    , m_statusBar(0)
-    , lastXMLGUIClientView(0)
+    , m_statusBar(nullptr)
+    , lastXMLGUIClientView(nullptr)
     , m_changingActiveView(false)
     , m_kateWrapper(new KTextEditorIntegration::MainWindow(mainWindow))
 {
@@ -173,9 +173,9 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
 
         m_mainWindow->guiFactory()->removeClient(dynamic_cast<KXMLGUIClient*>(lastXMLGUIClientView));
 
-        disconnect (lastXMLGUIClientView, &QWidget::destroyed, this, 0);
+        disconnect (lastXMLGUIClientView, &QWidget::destroyed, this, nullptr);
 
-        lastXMLGUIClientView = NULL;
+        lastXMLGUIClientView = nullptr;
     }
 
     if (!view)

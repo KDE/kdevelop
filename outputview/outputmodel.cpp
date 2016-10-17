@@ -63,7 +63,7 @@ class ParseWorker : public QObject
     Q_OBJECT
 public:
     ParseWorker()
-        : QObject(0)
+        : QObject(nullptr)
         , m_filter(new NoFilterStrategy)
         , m_timer(new QTimer(this))
     {
@@ -408,7 +408,7 @@ QModelIndex OutputModel::lastHighlightIndex()
 void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrategy)
 {
     // TODO: Turn into factory, decouple from OutputModel
-    IFilterStrategy* filter = 0;
+    IFilterStrategy* filter = nullptr;
     switch( currentStrategy )
     {
         case NoFilter:

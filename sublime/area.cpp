@@ -61,7 +61,7 @@ struct AreaPrivate {
     }
 
     struct ViewFinder {
-        ViewFinder(View *_view): view(_view), index(0) {}
+        ViewFinder(View *_view): view(_view), index(nullptr) {}
         Area::WalkerMode operator() (AreaIndex *idx) {
             if (idx->hasView(view))
             {
@@ -243,7 +243,7 @@ void Sublime::Area::raiseToolView(View * toolView)
 View* Area::removeToolView(View *view)
 {
     if (!d->toolViews.contains(view))
-        return 0;
+        return nullptr;
 
     emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
     QString id = view->document()->documentSpecifier();

@@ -53,17 +53,17 @@ Q_DECLARE_METATYPE(QTreeView*)
 
 OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     : QWidget( parent )
-    , tabwidget(0)
-    , stackwidget(0)
+    , tabwidget(nullptr)
+    , stackwidget(nullptr)
     , data(tvdata)
-    , m_closeButton(0)
-    , m_closeOthersAction(0)
-    , nextAction(0)
-    , previousAction(0)
-    , activateOnSelect(0)
-    , focusOnSelect(0)
-    , filterInput(0)
-    , filterAction(0)
+    , m_closeButton(nullptr)
+    , m_closeOthersAction(nullptr)
+    , nextAction(nullptr)
+    , previousAction(nullptr)
+    , activateOnSelect(nullptr)
+    , focusOnSelect(nullptr)
+    , filterInput(nullptr)
+    , filterAction(nullptr)
 {
     setWindowTitle(i18n("Output View"));
     setWindowIcon(tvdata->icon);
@@ -264,8 +264,8 @@ void OutputWidget::removeOutput( int id )
             delete view;
         } else
         {
-            views.value( id )->setModel( 0 );
-            views.value( id )->setItemDelegate( 0 );
+            views.value( id )->setModel( nullptr );
+            views.value( id )->setItemDelegate( nullptr );
             if( proxyModels.contains( 0 ) ) {
                 delete proxyModels.take( 0 );
                 filters.remove( 0 );
@@ -481,7 +481,7 @@ QTreeView* OutputWidget::createListView(int id)
         return listview;
     };
 
-    QTreeView* listview = 0;
+    QTreeView* listview = nullptr;
     if( !views.contains(id) )
     {
         bool newView = true;

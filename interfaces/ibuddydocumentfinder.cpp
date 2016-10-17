@@ -47,7 +47,7 @@ void IBuddyDocumentFinder::removeFinder(const QString& mimeType)
 
 IBuddyDocumentFinder* IBuddyDocumentFinder::finderForMimeType(const QString& mimeType)
 {
-    return Private::finders().value(mimeType, 0);
+    return Private::finders().value(mimeType, nullptr);
 }
 
 }

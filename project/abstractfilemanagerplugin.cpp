@@ -464,7 +464,7 @@ QList<ProjectFolderItem*> AbstractFileManagerPlugin::parse( ProjectFolderItem *i
 
 ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
 {
-    ProjectFolderItem *projectRoot = createFolderItem( project, project->path(), 0 );
+    ProjectFolderItem *projectRoot = createFolderItem( project, project->path(), nullptr );
     emit folderAdded( projectRoot );
     qCDebug(FILEMANAGER) << "imported new project" << project->name() << "at" << projectRoot->path();
 
@@ -502,7 +502,7 @@ ProjectFolderItem* AbstractFileManagerPlugin::addFolder( const Path& folder,
         ProjectFolderItem * parent )
 {
     qCDebug(FILEMANAGER) << "adding folder" << folder << "to" << parent->path();
-    ProjectFolderItem* created = 0;
+    ProjectFolderItem* created = nullptr;
     d->stopWatcher(parent);
     if ( createFolder(folder.toUrl()) ) {
         created = createFolderItem( parent->project(), folder, parent );
@@ -519,7 +519,7 @@ ProjectFileItem* AbstractFileManagerPlugin::addFile( const Path& file,
         ProjectFolderItem * parent )
 {
     qCDebug(FILEMANAGER) << "adding file" << file << "to" << parent->path();
-    ProjectFileItem* created = 0;
+    ProjectFileItem* created = nullptr;
     d->stopWatcher(parent);
     if ( createFile(file.toUrl()) ) {
         created = createFileItem( parent->project(), file, parent );
@@ -651,7 +651,7 @@ ProjectFolderItem* AbstractFileManagerPlugin::createFolderItem( IProject* projec
 
 KDirWatch* AbstractFileManagerPlugin::projectWatcher( IProject* project ) const
 {
-    return d->m_watchers.value( project, 0 );
+    return d->m_watchers.value( project, nullptr );
 }
 
 //END Plugin

@@ -82,7 +82,7 @@ public:
   ClientException::ClientException(svn_error_t * error) throw()
       : Exception("")
   {
-    if (error == 0)
+    if (error == nullptr)
       return;
 
     m->apr_err = error->apr_err;
@@ -103,7 +103,7 @@ public:
         message += num.str();
       }
     }
-    while (next != NULL && next->message != NULL)
+    while (next != nullptr && next->message != nullptr)
     {
       message = message + '\n' + next->message;
 

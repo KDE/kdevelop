@@ -339,7 +339,7 @@ int IndexedString::lengthFromIndex(uint index)
 const char* IndexedString::c_str() const
 {
     if (!m_index) {
-        return 0;
+        return nullptr;
     } else if (isSingleCharIndex(m_index)) {
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
         const uint offset = 0;

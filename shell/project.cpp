@@ -323,7 +323,7 @@ public:
     {
         if (manager)
         {
-            IProjectFileManager* iface = 0;
+            IProjectFileManager* iface = nullptr;
             iface = manager->extension<KDevelop::IProjectFileManager>();
             Q_ASSERT(iface);
             return iface;
@@ -335,7 +335,7 @@ public:
         //Get our importer
         IPluginController* pluginManager = Core::self()->pluginController();
         manager = pluginManager->pluginForExtension( QStringLiteral("org.kdevelop.IProjectFileManager"), managerSetting );
-        IProjectFileManager* iface = 0;
+        IProjectFileManager* iface = nullptr;
         if ( manager )
             iface = manager->extension<IProjectFileManager>();
         else
@@ -344,15 +344,15 @@ public:
                             i18n( "Could not load project management plugin <b>%1</b>.<br> Check that the required programs are installed,"
                                   " or see console output for more information.",
                                   managerSetting ) );
-            manager = 0;
-            return 0;
+            manager = nullptr;
+            return nullptr;
         }
-        if (iface == 0)
+        if (iface == nullptr)
         {
             KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
                             i18n( "project importing plugin (%1) does not support the IProjectFileManager interface.", managerSetting ) );
             delete manager;
-            manager = 0;
+            manager = nullptr;
         }
         return iface;
     }
@@ -411,8 +411,8 @@ Project::Project( QObject *parent )
     QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/Project"), this, QDBusConnection::ExportScriptableSlots );
 
     d->project = this;
-    d->manager = 0;
-    d->topItem = 0;
+    d->manager = nullptr;
+    d->topItem = nullptr;
     d->loading = false;
     d->scheduleReload = false;
     d->progress = new ProjectProgress;
@@ -462,7 +462,7 @@ void Project::reloadModel()
     // delete topItem and remove it from model
     ProjectModel* model = Core::self()->projectController()->projectModel();
     model->removeRow( d->topItem->row() );
-    d->topItem = 0;
+    d->topItem = nullptr;
 
     IProjectFileManager* iface = d->manager->extension<IProjectFileManager>();
     if (!d->importTopItem(iface))

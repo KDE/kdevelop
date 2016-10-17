@@ -34,7 +34,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevFileManagerFactory, "kdevfilemanager.json", regis
 class KDevFileManagerViewFactory: public KDevelop::IToolViewFactory{
 public:
     KDevFileManagerViewFactory(KDevFileManagerPlugin *plugin): m_plugin(plugin) {}
-    QWidget* create(QWidget *parent = 0) override
+    QWidget* create(QWidget *parent = nullptr) override
     {
         Q_UNUSED(parent)
         return new FileManager(m_plugin,parent);

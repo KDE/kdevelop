@@ -116,7 +116,7 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
     }
     qCDebug(PROJECT) << "got build system manager";
     Q_ASSERT(item->project()->buildSystemManager()->builder());
-    KJob* j = 0;
+    KJob* j = nullptr;
     switch( t )
     {
         case BuilderJob::Build:

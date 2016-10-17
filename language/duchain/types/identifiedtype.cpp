@@ -77,7 +77,7 @@ KDevelop::DUContext* IdentifiedType::internalContext(const KDevelop::TopDUContex
   if(decl)
     return decl->internalContext();
   else
-    return 0;
+    return nullptr;
 }
 
 void IdentifiedType::setDeclaration(Declaration* declaration)

@@ -105,7 +105,7 @@ void BasicRefactoring::fillContextMenu(ContextMenuExtension &extension, Context 
     if (declaration && acceptForContextMenu(declaration)) {
         QFileInfo finfo(declaration->topContext()->url().str());
         if (finfo.isWritable()) {
-            QAction *action = new QAction(i18n("Rename \"%1\"...", declaration->qualifiedIdentifier().toString()), 0);
+            QAction *action = new QAction(i18n("Rename \"%1\"...", declaration->qualifiedIdentifier().toString()), nullptr);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
             connect(action, &QAction::triggered, this, &BasicRefactoring::executeRenameAction);
@@ -330,7 +330,7 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
             hadIndices.insert(usedDeclarationIndex);
             DocumentChangeSet::ChangeResult result = applyChanges(originalName, replacementName, changes, collected.data(), usedDeclarationIndex);
             if (!result) {
-                KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
+                KMessageBox::error(nullptr, i18n("Applying changes failed: %1", result.m_failureReason));
                 return {};
             }
         }
@@ -338,7 +338,7 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
 
     DocumentChangeSet::ChangeResult result = applyChangesToDeclarations(originalName, replacementName, changes, collector->declarations());
     if (!result) {
-        KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
+        KMessageBox::error(nullptr, i18n("Applying changes failed: %1", result.m_failureReason));
         return {};
     }
 
@@ -351,7 +351,7 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
 
     result = changes.applyAllChanges();
     if (!result) {
-        KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
+        KMessageBox::error(nullptr, i18n("Applying changes failed: %1", result.m_failureReason));
     }
 
     return {};

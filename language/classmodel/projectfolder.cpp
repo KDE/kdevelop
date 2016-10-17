@@ -34,7 +34,7 @@ ProjectFolder::ProjectFolder( NodesModelInterface* a_model, IProject* project )
 
 ProjectFolder::ProjectFolder( NodesModelInterface* a_model )
   : DocumentClassesFolder( QLatin1String(""), a_model )
-  , m_project( 0 )
+  , m_project( nullptr )
 {
 }
 

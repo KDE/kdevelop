@@ -31,7 +31,7 @@ using namespace KDevelop;
 
 TreeModel::TreeModel(const QVector<QString>& headers,
                      QObject *parent)
-  : QAbstractItemModel(parent), headers_(headers), root_(NULL)
+  : QAbstractItemModel(parent), headers_(headers), root_(nullptr)
 {
 }
 
@@ -67,7 +67,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return 0;
+        return nullptr;
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
@@ -142,7 +142,7 @@ TreeItem* TreeModel::itemForIndex(const QModelIndex& index) const
 
 QModelIndex TreeModel::indexForItem(TreeItem *item, int column) const
 {
-    if (item->parent() == 0)
+    if (item->parent() == nullptr)
         return QModelIndex();
 
     if (TreeItem* parent = item->parent())

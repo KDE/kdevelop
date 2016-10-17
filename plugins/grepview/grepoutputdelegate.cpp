@@ -33,7 +33,7 @@
 #include <cmath>
 #include <algorithm>
 
-GrepOutputDelegate* GrepOutputDelegate::m_self = 0;
+GrepOutputDelegate* GrepOutputDelegate::m_self = nullptr;
 
 GrepOutputDelegate* GrepOutputDelegate::self()
 {
@@ -50,7 +50,7 @@ GrepOutputDelegate::GrepOutputDelegate( QObject* parent )
 
 GrepOutputDelegate::~GrepOutputDelegate()
 {
-    m_self = 0;
+    m_self = nullptr;
 }
 
 QColor GrepOutputDelegate::blendColor(QColor color1, QColor color2, double blend) const

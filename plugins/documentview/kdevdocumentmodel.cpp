@@ -111,7 +111,7 @@ KDevFileItem* KDevCategoryItem::file( const QUrl &url ) const
             return item;
     }
 
-    return 0;
+    return nullptr;
 }
 
 KDevFileItem::KDevFileItem( const QUrl &url )
@@ -161,6 +161,6 @@ KDevCategoryItem* KDevDocumentModel::category( const QString& category ) const
             return item;
     }
 
-    return 0;
+    return nullptr;
 }
 

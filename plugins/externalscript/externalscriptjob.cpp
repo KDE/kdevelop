@@ -52,10 +52,10 @@ using namespace KDevelop;
 
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url, ExternalScriptPlugin* parent )
     : KDevelop::OutputJob( parent ),
-    m_proc( 0 ), m_lineMaker( 0 ),
+    m_proc( nullptr ), m_lineMaker( nullptr ),
     m_outputMode( item->outputMode() ), m_inputMode( item->inputMode() ),
     m_errorMode( item->errorMode() ), m_filterMode( item->filterMode() ),
-    m_document( 0 ), m_url( url ), m_selectionRange( KTextEditor::Range::invalid() ),
+    m_document( nullptr ), m_url( url ), m_selectionRange( KTextEditor::Range::invalid() ),
     m_showOutput( item->showOutput() )
 {
   qCDebug(PLUGIN_EXTERNALSCRIPT) << "creating external script job";
@@ -127,7 +127,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
   if ( !m_url.isEmpty() ) {
     const QUrl url = m_url;
 
-    KDevelop::ProjectFolderItem* folder = 0;
+    KDevelop::ProjectFolderItem* folder = nullptr;
     if ( KDevelop::ICore::self()->projectController()->findProjectForUrl( url ) ) {
       QList<KDevelop::ProjectFolderItem*> folders = KDevelop::ICore::self()->projectController()->findProjectForUrl(url)->foldersForPath(KDevelop::IndexedString(url));
       if ( !folders.isEmpty() ) {

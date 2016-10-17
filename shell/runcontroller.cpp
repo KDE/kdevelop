@@ -200,7 +200,7 @@ public:
         //qCDebug(SHELL) << "got mode and type:" << type << type->id() << mode << mode->id();
         if( type && mode )
         {
-            ILauncher* launcher = 0;
+            ILauncher* launcher = nullptr;
             foreach (ILauncher *l, type->launchers())
             {
                 //qCDebug(SHELL) << "available launcher" << l << l->id() << l->supportedModes();
@@ -212,7 +212,7 @@ public:
             if (launcher)
             {
                 QStringList itemPath = Core::self()->projectController()->projectModel()->pathFromIndex(contextItem->index());
-                ILaunchConfiguration* ilaunch = 0;
+                ILaunchConfiguration* ilaunch = nullptr;
                 foreach (LaunchConfiguration *l, launchConfigurations) {
                     QStringList path = l->config().readEntry(Strings::ConfiguredFromProjectItemEntry(), QStringList());
                     if (l->type() == type && path == itemPath) {
@@ -247,7 +247,7 @@ public:
         QString currentLaunchProject = launchGrp.readEntry( Strings::CurrentLaunchConfigProjectEntry(), "" );
         QString currentLaunchName = launchGrp.readEntry( Strings::CurrentLaunchConfigNameEntry(), "" );
 
-        LaunchConfiguration* l = 0;
+        LaunchConfiguration* l = nullptr;
         if( currentTargetAction->currentAction() )
         {
             l = static_cast<LaunchConfiguration*>( currentTargetAction->currentAction()->data().value<void*>() );
@@ -311,7 +311,7 @@ public:
         {
             qWarning() << "couldn't find type for id:" << id << ". Known types:" << launchConfigurationTypes.keys();
         }
-        return 0;
+        return nullptr;
 
     }
 
@@ -329,16 +329,16 @@ RunController::RunController(QObject *parent)
     // TODO: need to implement compile only if needed before execute
     // TODO: need to implement abort all running programs when project closed
 
-    d->currentTargetAction = 0;
+    d->currentTargetAction = nullptr;
     d->state = Idle;
     d->q = this;
     d->delegate = new RunDelegate(this);
     d->launchChangeMapper = new QSignalMapper( this );
-    d->launchAsMapper = 0;
-    d->contextItem = 0;
-    d->executeMode = 0;
-    d->debugMode = 0;
-    d->profileMode = 0;
+    d->launchAsMapper = nullptr;
+    d->contextItem = nullptr;
+    d->executeMode = nullptr;
+    d->debugMode = nullptr;
+    d->profileMode = nullptr;
 
     d->unityLauncher = new UnityLauncher(this);
     d->unityLauncher->setLauncherId(KAboutData::applicationData().desktopFileName());
@@ -369,11 +369,11 @@ void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 void RunController::cleanup()
 {
     delete d->executeMode;
-    d->executeMode = 0;
+    d->executeMode = nullptr;
     delete d->profileMode;
-    d->profileMode = 0;
+    d->profileMode = nullptr;
     delete d->debugMode;
-    d->debugMode = 0;
+    d->debugMode = nullptr;
 
     stopAllProcesses();
     d->saveCurrentLaunchAction();
@@ -387,7 +387,7 @@ void RunController::initialize()
     addLaunchMode( d->profileMode );
     d->debugMode = new DebugMode;
     addLaunchMode( d->debugMode );
-    d->readLaunchConfigs( Core::self()->activeSession()->config(), 0 );
+    d->readLaunchConfigs( Core::self()->activeSession()->config(), nullptr );
 
     foreach (IProject* project, Core::self()->projectController()->projects()) {
         slotProjectOpened(project);
@@ -411,7 +411,7 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
     if( !launch )
     {
         qCDebug(SHELL) << "execute called without launch config!";
-        return 0;
+        return nullptr;
     }
     LaunchConfiguration *run = dynamic_cast<LaunchConfiguration*>(launch);
     //TODO: Port to launch framework, probably needs to be part of the launcher
@@ -434,7 +434,7 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
             qApp->activeWindow(),
             i18n("The current launch configuration does not support the '%1' mode.", runMode),
             QLatin1String(""));
-        return 0;
+        return nullptr;
     }
 
     KJob* launchJob = launcher->start(runMode, run);
@@ -583,7 +583,7 @@ LaunchConfiguration* KDevelop::RunController::defaultLaunch() const
     QAction* projectAction = d->currentTargetAction->currentAction();
     if( projectAction )
         return static_cast<LaunchConfiguration*>(qvariant_cast<void*>(projectAction->data()));
-    return 0;
+    return nullptr;
 }
 
 void KDevelop::RunController::registerJob(KJob * job)
@@ -597,7 +597,7 @@ void KDevelop::RunController::registerJob(KJob * job)
     }
 
     if (!d->jobs.contains(job)) {
-        QAction* stopJobAction = 0;
+        QAction* stopJobAction = nullptr;
         if (Core::self()->setupFlags() != Core::NoUi) {
             stopJobAction = new QAction(job->objectName().isEmpty() ? i18n("<%1> Unnamed job", job->staticMetaObject.className()) : job->objectName(), this);
             stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
@@ -725,7 +725,7 @@ void KDevelop::RunController::finished(KJob * job)
             auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Close, dialog);
             KMessageBox::createKMessageBox(dialog, buttonBox, QMessageBox::Warning,
                                            job->errorString(), QStringList(),
-                                           QString(), 0, KMessageBox::NoExec);
+                                           QString(), nullptr, KMessageBox::NoExec);
             dialog->show();
         }
     }
@@ -827,7 +827,7 @@ KDevelop::ILaunchMode* KDevelop::RunController::launchModeForId(const QString& i
     {
         return it.value();
     }
-    return 0;
+    return nullptr;
 }
 
 void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfiguration* l)
@@ -980,7 +980,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
     d->launchAsMapper = new QSignalMapper( this );
     connect( d->launchAsMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), this, [&] (int id) { d->launchAs(id); } );
     d->launchAsInfo.clear();
-    d->contextItem = 0;
+    d->contextItem = nullptr;
     ContextMenuExtension ext;
     if( ctx->type() == Context::ProjectItemContext ) {
         KDevelop::ProjectItemContext* prjctx = dynamic_cast<KDevelop::ProjectItemContext*>( ctx );

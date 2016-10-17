@@ -62,7 +62,7 @@ QWidget* ContextBrowserView::createWidget(KDevelop::DUContext* context) {
         if(m_context.data()) {
             return m_context.data()->createNavigationWidget(nullptr, nullptr, {}, {}, AbstractNavigationWidget::EmbeddableWidget);
         }
-        return 0;
+        return nullptr;
 }
 
 KDevelop::IndexedDeclaration ContextBrowserView::declaration() const {
@@ -79,7 +79,7 @@ void ContextBrowserView::resetWidget()
 {
     if (m_navigationWidget) {
         delete m_navigationWidget;
-        m_navigationWidget = 0;
+        m_navigationWidget = nullptr;
     }
 }
 

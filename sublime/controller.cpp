@@ -35,7 +35,7 @@
 namespace Sublime {
 
 struct WidgetFinder {
-    WidgetFinder(QWidget *_w) :w(_w), view(0) {}
+    WidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
         foreach (View *v, index->views())
@@ -54,7 +54,7 @@ struct WidgetFinder {
 };
 
 struct ToolWidgetFinder {
-    ToolWidgetFinder(QWidget *_w) :w(_w), view(0) {}
+    ToolWidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
     Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
     {
         if (v->hasWidget() && (v->widget() == w))
@@ -113,7 +113,7 @@ Controller::~Controller()
 
 void Controller::showArea(Area *area, MainWindow *mainWindow)
 {
-    Area *areaToShow = 0;
+    Area *areaToShow = nullptr;
     //if the area is already shown in another mainwindow then we need to clone it
     if (d->shownAreas.contains(area) && (mainWindow != d->shownAreas[area]))
         areaToShow = new Area(*area);
@@ -149,7 +149,7 @@ void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
     int index = d->controlledWindows.indexOf(mainWindow);
     Q_ASSERT(index != -1);
 
-    Area* area = NULL;
+    Area* area = nullptr;
     foreach (Area* a, d->mainWindowAreas[index])
     {
         qCDebug(SUBLIME) << "Object name: " << a->objectName() << " id "
@@ -170,7 +170,7 @@ void Controller::resetCurrentArea(MainWindow *mainWindow)
     QString id = mainWindow->area()->objectName();
 
     int areaIndex = 0;
-    Area* def = NULL;
+    Area* def = nullptr;
     foreach (Area* a, d->areas) {
         if (a->objectName() == id)
         {
@@ -259,7 +259,7 @@ void Controller::areaReleased()
     {
         qCDebug(SUBLIME) << "" << area->objectName();
         areaReleased(area);
-        disconnect(area, 0, w, 0);
+        disconnect(area, nullptr, w, nullptr);
     }
 
     d->controlledWindows.removeAll(w);
@@ -283,7 +283,7 @@ Area *Controller::area(int mainWindow, const QString& id) const
         if (area->objectName() == id)
             return area;
     }
-    return 0;
+    return nullptr;
 }
 
 Area* Controller::areaForView(View* view) const
@@ -292,7 +292,7 @@ Area* Controller::areaForView(View* view) const
         if(area->views().contains(view))
             return area;
 
-    return 0;
+    return nullptr;
 }
 
 /*We need this to catch activation of views and toolviews
@@ -320,7 +320,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         return false;
 
     //not a mouse button that should activate the widget? - return
-    QMouseEvent *mev = 0;
+    QMouseEvent *mev = nullptr;
     if (ev->type() == QEvent::MouseButtonPress || ev->type() == QEvent::MouseButtonDblClick)
     {
         mev = static_cast<QMouseEvent*>(ev);

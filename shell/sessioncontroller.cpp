@@ -65,7 +65,7 @@ namespace KDevelop
 
 namespace {
     int argc = 0;
-    char** argv = 0;
+    char** argv = nullptr;
 };
 
 void SessionController::setArguments(int _argc, char** _argv)
@@ -96,8 +96,8 @@ class SessionControllerPrivate : public QObject
 public:
     SessionControllerPrivate( SessionController* s )
         : q(s)
-        , activeSession(0)
-        , grp(0)
+        , activeSession(nullptr)
+        , grp(nullptr)
     {
     }
 
@@ -111,7 +111,7 @@ public:
             if( s->name() == name )
                 return s;
         }
-        return 0;
+        return nullptr;
     }
 
     Session* findSessionForId(QString idString)
@@ -123,7 +123,7 @@ public:
             if( s->id() == id)
                 return s;
         }
-        return 0;
+        return nullptr;
     }
 
     void newSession()
@@ -178,7 +178,7 @@ public:
         activeSession = s;
         TryLockSessionResult result = SessionController::tryLockSession( s->id().toString());
         if( !result.lock ) {
-            activeSession = 0;
+            activeSession = nullptr;
             return result;
         }
         Q_ASSERT(s->id().toString() == result.lock->id());
@@ -212,7 +212,7 @@ public:
     void addSession( Session* s )
     {
         if (Core::self()->setupFlags() & Core::NoUi) {
-            sessionActions[s] = 0;
+            sessionActions[s] = nullptr;
             return;
         }
 
@@ -309,7 +309,7 @@ void SessionController::cleanup()
         if (d->activeSession->isTemporary()) {
             deleteSessionFromDisk(d->sessionLock);
         }
-        d->activeSession = 0;
+        d->activeSession = nullptr;
     }
 
     d->sessionLock.clear();
@@ -442,7 +442,7 @@ void SessionController::loadDefaultSession( const QString& session )
 
     // Iteratively try to load the session, asking user what to do in case of failure
     // If showForceOpenDialog() returns empty string, stop trying
-    Session* s = 0;
+    Session* s = nullptr;
     do
     {
         s = this->session( load );

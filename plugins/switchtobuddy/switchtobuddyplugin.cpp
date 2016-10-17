@@ -69,7 +69,7 @@ Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, c
             return definition;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 QString findSwitchCandidate(const QUrl& docUrl)
@@ -95,7 +95,7 @@ K_PLUGIN_FACTORY_WITH_JSON(SwitchToBuddyPluginFactory, "kdevswitchtobuddy.json",
 
 SwitchToBuddyPlugin::SwitchToBuddyPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( QStringLiteral("kdevswitchtobuddy"), parent )
-    , m_signalMapper(0)
+    , m_signalMapper(nullptr)
 {
     setXMLFile(QStringLiteral("kdevswitchtobuddy.rc"));
 }
@@ -224,7 +224,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
 
     bool wasSignal = false;
     if (standardCtx) {
-        Declaration* definition = 0;
+        Declaration* definition = nullptr;
 
         DUContext* ctx = standardCtx->findContext(standardCtx->transformToLocalRevision(cursor));
         if (!ctx) {
@@ -247,7 +247,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
         if (ClassFunctionDeclaration* cDef = dynamic_cast<ClassFunctionDeclaration*>(definition)) {
             if (cDef->isSignal()) {
                 qCDebug(PLUGIN_SWITCHTOBUDDY) << "found definition is a signal, not switching to .moc implementation";
-                definition = 0;
+                definition = nullptr;
                 wasSignal = true;
             }
         }
@@ -277,7 +277,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
         qCDebug(PLUGIN_SWITCHTOBUDDY) << "Got no context for the current document";
     }
 
-    Declaration* def = 0;
+    Declaration* def = nullptr;
     if (!wasSignal) {
         def = definitionForCursorDeclaration(cursor, docUrl);
     }

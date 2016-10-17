@@ -145,9 +145,9 @@ void TestAreaOperation::cleanup()
     delete m_area1;
     delete m_area2;
     delete m_controller;
-    m_area1 = 0;
-    m_area2 = 0;
-    m_controller = 0;
+    m_area1 = nullptr;
+    m_area2 = nullptr;
+    m_controller = nullptr;
 }
 
 void TestAreaOperation::areaConstruction()
@@ -218,7 +218,7 @@ void TestAreaOperation::checkArea1(MainWindow *mw)
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
-    QVERIFY(central != 0);
+    QVERIFY(central != nullptr);
     QVERIFY(central->inherits("QWidget"));
 
     QWidget *splitter = central->findChild<QSplitter*>();
@@ -232,7 +232,7 @@ void TestAreaOperation::checkArea1(MainWindow *mw)
     area->walkViews(c, area->rootIndex());
     QCOMPARE(container->count(), c.count);
     for (int i = 0; i < container->count(); ++i)
-        QVERIFY(container->widget(i) != 0);
+        QVERIFY(container->widget(i) != nullptr);
 }
 
 void TestAreaOperation::checkArea2(MainWindow *mw)
@@ -247,7 +247,7 @@ void TestAreaOperation::checkArea2(MainWindow *mw)
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
-    QVERIFY(central != 0);
+    QVERIFY(central != nullptr);
     QVERIFY(central->inherits("QWidget"));
 
     QWidget *splitter = central->findChild<QSplitter*>();
@@ -262,7 +262,7 @@ void TestAreaOperation::checkArea2(MainWindow *mw)
     foreach (Container *c, containers)
     {
         for (int i = 0; i < c->count(); ++i)
-            QVERIFY(c->widget(i) != 0);
+            QVERIFY(c->widget(i) != nullptr);
         widgetCount += c->count();
     }
 
@@ -524,7 +524,7 @@ toolview1.4.1 [ right ]\n\
 
     //check that mainwindow has newly added toolview
     foreach (View *dock, mw.toolDocks())
-        QVERIFY(dock->widget() != 0);
+        QVERIFY(dock->widget() != nullptr);
     QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
 
     //now remove toolview
@@ -541,7 +541,7 @@ toolview1.2.2 [ bottom ]\n\
 
     //check that mainwindow has newly added toolview
     foreach (View *dock, mw.toolDocks())
-        QVERIFY(dock->widget() != 0);
+        QVERIFY(dock->widget() != nullptr);
     QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
 }
 
@@ -682,7 +682,7 @@ void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
 
     //check mainwindow
     QWidget *central = mw->centralWidget();
-    QVERIFY(central != 0);
+    QVERIFY(central != nullptr);
     QVERIFY(central->inherits("QWidget"));
 
     QWidget *splitter = central->findChild<QSplitter*>();
@@ -701,8 +701,8 @@ void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     {
         for (int i = 0; i < c->count(); ++i)
         {
-            QVERIFY(c->widget(i) != 0);
-            QVERIFY(c->widget(i)->parentWidget() != 0);
+            QVERIFY(c->widget(i) != nullptr);
+            QVERIFY(c->widget(i)->parentWidget() != nullptr);
         }
         widgetCount += c->count();
     }
@@ -721,7 +721,7 @@ View *TestAreaOperation::findNamedView(Area *area, const QString &name)
     foreach (View *view, area->views())
         if (view->objectName() == name)
             return view;
-    return 0;
+    return nullptr;
 }
 
 ///////////

@@ -111,9 +111,9 @@ public:
 
 TemplateClassAssistantPrivate::TemplateClassAssistantPrivate(const QUrl& baseUrl)
 : baseUrl(baseUrl)
-, helper(0)
-, generator(0)
-, renderer(0)
+, helper(nullptr)
+, generator(nullptr)
+, renderer(nullptr)
 {
 }
 
@@ -162,7 +162,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
     }
 
     QList<ProjectTargetItem*> targets;
-    ProjectTargetItem* target = 0;
+    ProjectTargetItem* target = nullptr;
 
     foreach (ProjectBaseItem* item, items)
     {
@@ -315,7 +315,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     d->fileTemplate.setTemplateDescription(templateDescription);
     d->type = d->fileTemplate.type();
 
-    d->generator = 0;
+    d->generator = nullptr;
 
     if (!d->fileTemplate.isValid())
     {
@@ -354,7 +354,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         d->membersPage->setIcon(QIcon::fromTheme(QStringLiteral("field")));
         setValid(d->membersPage, true);
 
-        d->helper = 0;
+        d->helper = nullptr;
         QString languageName = d->fileTemplate.languageName();
         auto language = ICore::self()->languageController()->language(languageName);
         if (language)
@@ -515,7 +515,7 @@ void TemplateClassAssistant::back()
         REMOVE_PAGE(license)
 
         delete d->helper;
-        d->helper = 0;
+        d->helper = nullptr;
 
         if (d->generator)
         {
@@ -525,8 +525,8 @@ void TemplateClassAssistant::back()
         {
             delete d->renderer;
         }
-        d->generator = 0;
-        d->renderer = 0;
+        d->generator = nullptr;
+        d->renderer = nullptr;
 
         if (d->baseUrl.isValid())
         {

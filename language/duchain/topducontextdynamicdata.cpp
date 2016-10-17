@@ -136,7 +136,7 @@ const char* pointerInData(const QVector<TopDUContextDynamicData::ArrayWithPositi
     totalOffset -= data[a].position;
   }
   Q_ASSERT_X(false, Q_FUNC_INFO, "Offset doesn't exist in the data.");
-  return 0;
+  return nullptr;
 }
 
 void verifyDataInfo(const TopDUContextDynamicData::ItemDataInfo& info, const QVector<TopDUContextDynamicData::ArrayWithPosition>& data)
@@ -468,8 +468,8 @@ TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext)
   , m_problems(this)
   , m_onDisk(false)
   , m_dataLoaded(true)
-  , m_mappedFile(0)
-  , m_mappedData(0)
+  , m_mappedFile(nullptr)
+  , m_mappedData(nullptr)
   , m_mappedDataSize(0)
   , m_itemRetrievalForbidden(false)
 {
@@ -489,8 +489,8 @@ TopDUContextDynamicData::~TopDUContextDynamicData()
 
 void KDevelop::TopDUContextDynamicData::unmap() {
   delete m_mappedFile;
-  m_mappedFile = 0;
-  m_mappedData = 0;
+  m_mappedFile = nullptr;
+  m_mappedData = nullptr;
   m_mappedDataSize = 0;
 }
 
@@ -581,7 +581,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
   if(file.open(QIODevice::ReadOnly)) {
     if(file.size() == 0) {
       qCWarning(LANGUAGE) << "Top-context file is empty" << file.fileName();
-      return 0;
+      return nullptr;
     }
     QVector<ItemDataInfo> contextDataOffsets;
     QVector<ItemDataInfo> declarationDataOffsets;
@@ -595,7 +595,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
     if(!ret) {
       qCWarning(LANGUAGE) << "Cannot load a top-context from file" << file.fileName() << "- the required language-support for handling ID" << topData->classId << "is probably not loaded";
-      return 0;
+      return nullptr;
     }
 
     TopDUContextDynamicData& target(*ret->m_dynamicData);
@@ -603,11 +603,11 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     target.m_data.clear();
     target.m_dataLoaded = false;
     target.m_onDisk = true;
-    ret->rebuildDynamicData(0, topContextIndex);
+    ret->rebuildDynamicData(nullptr, topContextIndex);
     target.m_topContextData.append({topContextData, (uint)0});
     return ret;
   }else{
-    return 0;
+    return nullptr;
   }
 }
 

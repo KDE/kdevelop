@@ -32,34 +32,34 @@ DUChainItemSystem::~DUChainItemSystem()
 }
 
 DUChainBase* DUChainItemSystem::create(DUChainBaseData* data) const {
-  if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == 0)
-    return 0;
+  if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == nullptr)
+    return nullptr;
   return m_factories[data->classId]->create(data);
 }
 
 DUChainBaseData* DUChainItemSystem::cloneData(const DUChainBaseData& data) const {
-  if(uint(m_factories.size()) <= data.classId || m_factories[data.classId] == 0) {
+  if(uint(m_factories.size()) <= data.classId || m_factories[data.classId] == nullptr) {
     ENSURE_VALID_CLASSID(data.classId)
-    return 0;
+    return nullptr;
   }
   return m_factories[data.classId]->cloneData(data);
 }
 
 void DUChainItemSystem::callDestructor(DUChainBaseData* data) const {
-  if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == 0)
+  if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == nullptr)
     return;
   return m_factories[data->classId]->callDestructor(data);
 }
 
 void DUChainItemSystem::freeDynamicData(KDevelop::DUChainBaseData* data) const {
-  if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == 0)
+  if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == nullptr)
     return;
   return m_factories[data->classId]->freeDynamicData(data);
 
 }
 
 uint DUChainItemSystem::dynamicSize(const DUChainBaseData& data) const {
-  if(uint(m_factories.size()) <= data.classId || m_factories[data.classId] == 0)
+  if(uint(m_factories.size()) <= data.classId || m_factories[data.classId] == nullptr)
     return 0;
   return m_factories[data.classId]->dynamicSize(data);
 }
@@ -72,7 +72,7 @@ uint DUChainItemSystem::dataClassSize(const DUChainBaseData& data) const {
 
 
 void DUChainItemSystem::copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
-  if(uint(m_factories.size()) <= from.classId || m_factories[from.classId] == 0) {
+  if(uint(m_factories.size()) <= from.classId || m_factories[from.classId] == nullptr) {
     ENSURE_VALID_CLASSID(from.classId)
     return;
   }

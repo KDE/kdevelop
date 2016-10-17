@@ -149,7 +149,7 @@ LocalPatchSource* PatchReviewToolView::GetLocalPatchSource() {
     IPatchSource::Ptr ips = m_plugin->patch();
 
     if ( !ips )
-        return 0;
+        return nullptr;
     return dynamic_cast<LocalPatchSource*>( ips.data() );
 }
 
@@ -176,7 +176,7 @@ void PatchReviewToolView::fillEditFromPatch() {
     }
 
     bool showTests = false;
-    IProject* project = 0;
+    IProject* project = nullptr;
     QMap<QUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
     QMap<QUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
 
@@ -227,7 +227,7 @@ void PatchReviewToolView::showEditDialog() {
     m_exportMenu = new Purpose::Menu(this);
     connect(m_exportMenu, &Purpose::Menu::finished, this, [](const QJsonObject &output, int error, const QString &message) {
         if (error==0) {
-            KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", output["url"].toString()),
+            KMessageBox::information(nullptr, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", output["url"].toString()),
                                     QString(), QString(), KMessageBox::AllowLink);
         } else {
             QMessageBox::warning(nullptr, i18n("Error exporting"), i18n("Couldn't export the patch.\n%1", message));
@@ -399,7 +399,7 @@ void PatchReviewToolView::open( const QUrl& url, bool activate ) const
 
     IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range::invalid(), activate ? IDocumentController::DefaultMode : IDocumentController::DoNotActivate, QLatin1String(""), buddyDoc);
 
-    KTextEditor::View* view = 0;
+    KTextEditor::View* view = nullptr;
     if(newDoc)
         view = newDoc->activeTextView();
 
@@ -539,7 +539,7 @@ void PatchReviewToolView::runTests()
         return;
     }
 
-    IProject* project = 0;
+    IProject* project = nullptr;
     QMap<QUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
     QMap<QUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
 

@@ -76,7 +76,7 @@ class IdealToolBar : public QToolBar
 namespace Sublime {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
-:controller(controller), area(0), activeView(0), activeToolView(0), bgCentralWidget(0),
+:controller(controller), area(nullptr), activeView(nullptr), activeToolView(nullptr), bgCentralWidget(nullptr),
  ignoreDockShown(false), autoAreaSettingsSave(false), m_mainWindow(w)
 {
     KActionCollection *ac = m_mainWindow->actionCollection();
@@ -214,7 +214,7 @@ void MainWindowPrivate::restoreConcentrationMode()
         m_concentrateToolBar->setMovable(false);
 
         m_mainWindow->addToolBar(Qt::TopToolBarArea, m_concentrateToolBar);
-        m_mainWindow->menuBar()->setCornerWidget(0, Qt::TopRightCorner);
+        m_mainWindow->menuBar()->setCornerWidget(nullptr, Qt::TopRightCorner);
     } else if (cornerWidget) {
         m_mainWindow->menuBar()->setCornerWidget(cornerWidget, Qt::TopRightCorner);
         cornerWidget->show();
@@ -346,14 +346,14 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         splitter->setOrientation(index->orientation());
     else
     {
-        Container *container = 0;
+        Container *container = nullptr;
 
         while(splitter->count() && qobject_cast<QSplitter*>(splitter->widget(0)))
         {
             // After unsplitting, we might have to remove old splitters
             QWidget* widget = splitter->widget(0);
             qCDebug(SUBLIME) << "deleting" << widget;
-            widget->setParent(0);
+            widget->setParent(nullptr);
             delete widget;
         }
 
@@ -419,7 +419,7 @@ void MainWindowPrivate::reconstruct()
 {
     if(m_leftTabbarCornerWidget) {
         m_leftTabbarCornerWidget->hide();
-        m_leftTabbarCornerWidget->setParent(0);
+        m_leftTabbarCornerWidget->setParent(nullptr);
     }
 
     IdealToolViewCreator toolViewCreator(this);
@@ -448,7 +448,7 @@ void MainWindowPrivate::reconstruct()
 void MainWindowPrivate::clearArea()
 {
     if(m_leftTabbarCornerWidget)
-        m_leftTabbarCornerWidget->setParent(0);
+        m_leftTabbarCornerWidget->setParent(nullptr);
 
     //reparent toolview widgets to 0 to prevent their deletion together with dockwidgets
     foreach (View *view, area->toolViews())
@@ -458,7 +458,7 @@ void MainWindowPrivate::clearArea()
         idealController->removeView(view, nonDestructive);
 
         if (view->hasWidget())
-            view->widget()->setParent(0);
+            view->widget()->setParent(nullptr);
     }
 
     docks.clear();
@@ -468,12 +468,12 @@ void MainWindowPrivate::clearArea()
     foreach (View *view, area->views())
     {
         if (view->hasWidget())
-            view->widget()->setParent(0);
+            view->widget()->setParent(nullptr);
     }
     cleanCentralWidget();
-    m_mainWindow->setActiveView(0);
+    m_mainWindow->setActiveView(nullptr);
     m_indexSplitters.clear();
-    area = 0;
+    area = nullptr;
     viewContainers.clear();
 
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
@@ -524,7 +524,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
 {
     if(m_leftTabbarCornerWidget) {
         m_leftTabbarCornerWidget->hide();
-        m_leftTabbarCornerWidget->setParent(0);
+        m_leftTabbarCornerWidget->setParent(nullptr);
     }
 
     // Remove container objects in the hierarchy from the parents,
@@ -546,7 +546,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
                 {
                     while (container->count())
                     {
-                        container->widget(0)->setParent(0);
+                        container->widget(0)->setParent(nullptr);
                     }
                     //and then delete the container
                     delete container;
@@ -598,7 +598,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         //just remove a widget
         if( view->widget() ) {
             container->removeWidget(view->widget());
-            view->widget()->setParent(0);
+            view->widget()->setParent(nullptr);
             //activate what is visible currently in the container if the removed view was active
             if (wasActive)
                 return m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
@@ -608,7 +608,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     {
         if(m_leftTabbarCornerWidget) {
             m_leftTabbarCornerWidget->hide();
-            m_leftTabbarCornerWidget->setParent(0);
+            m_leftTabbarCornerWidget->setParent(nullptr);
         }
 
         // We've about to remove the last view of this container.  It will
@@ -620,7 +620,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         container->removeWidget(view->widget());
 
         if (view->widget())
-            view->widget()->setParent(0);
+            view->widget()->setParent(nullptr);
         else
             qWarning() << "View does not have a widget!";
 
@@ -628,7 +628,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         // We can be called from signal handler of container
         // (which is tab widget), so defer deleting it.
         container->deleteLater();
-        container->setParent(0);
+        container->setParent(nullptr);
 
         /* If we're not at the top level, we get to collapse split views.  */
         if (index->parent())
@@ -636,7 +636,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             /* The splitter used to have container as the only child, now it's
                time to get rid of it.  Make sure deleting splitter does not
                delete container -- per above comment, we'll delete it later.  */
-            container->setParent(0);
+            container->setParent(nullptr);
             m_indexSplitters.remove(index);
             delete splitter;
 
@@ -687,7 +687,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
     if ( wasActive ) {
-        m_mainWindow->setActiveView(0L);
+        m_mainWindow->setActiveView(nullptr);
     }
 }
 
@@ -782,7 +782,7 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
 
 //     Q_ASSERT(splitter || putToIndex == area->rootIndex());
 
-    Container* c = 0;
+    Container* c = nullptr;
     if(splitter) {
         c = qobject_cast<Container*>(splitter->widget(0));
     }else{

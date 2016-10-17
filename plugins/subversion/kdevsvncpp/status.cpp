@@ -38,12 +38,12 @@ namespace svn
     bool isVersioned;
 
     Data(const char * path_, const svn_wc_status2_t * status_)
-        : status(0), path("")
+        : status(nullptr), path("")
     {
-      if (path_ != 0)
+      if (path_ != nullptr)
         path = path_;
 
-      if (status_ != 0)
+      if (status_ != nullptr)
       {
         status = svn_wc_dup_status2(
                    const_cast<svn_wc_status2_t *>(status_), pool);
@@ -52,9 +52,9 @@ namespace svn
     }
 
     Data(const Data * src)
-        : status(0), path(src->path)
+        : status(nullptr), path(src->path)
     {
-      if (src->status != 0)
+      if (src->status != nullptr)
       {
         status = svn_wc_dup_status2(src->status, pool);
 
@@ -99,7 +99,7 @@ namespace svn
   const Entry
   Status::entry() const
   {
-    if (0 == m->status)
+    if (nullptr == m->status)
       return Entry();
 
     return Entry(m->status->entry);
@@ -150,10 +150,10 @@ namespace svn
   bool
   Status::isLocked() const
   {
-    if (m->status->repos_lock && (m->status->repos_lock->token != 0))
+    if (m->status->repos_lock && (m->status->repos_lock->token != nullptr))
       return true;
     else if (m->status->entry)
-      return m->status->entry->lock_token != 0;
+      return m->status->entry->lock_token != nullptr;
     else
       return false;
   }
@@ -161,9 +161,9 @@ namespace svn
   bool
   Status::isRepLock() const
   {
-    if (m->status->entry && (m->status->entry->lock_token != 0))
+    if (m->status->entry && (m->status->entry->lock_token != nullptr))
       return false;
-    else if (m->status->repos_lock && (m->status->repos_lock->token != 0))
+    else if (m->status->repos_lock && (m->status->repos_lock->token != nullptr))
       return true;
     else
       return false;
@@ -172,7 +172,7 @@ namespace svn
   const char *
   Status::lockToken() const
   {
-    if (m->status->repos_lock && m->status->repos_lock->token != 0)
+    if (m->status->repos_lock && m->status->repos_lock->token != nullptr)
       return m->status->repos_lock->token;
     else if (m->status->entry)
       return m->status->entry->lock_token;
@@ -183,7 +183,7 @@ namespace svn
   const char *
   Status::lockOwner() const
   {
-    if (m->status->repos_lock && m->status->repos_lock->token != 0)
+    if (m->status->repos_lock && m->status->repos_lock->token != nullptr)
       return m->status->repos_lock->owner;
     else if (m->status->entry)
       return m->status->entry->lock_owner;
@@ -194,7 +194,7 @@ namespace svn
   const char *
   Status::lockComment() const
   {
-    if (m->status->repos_lock && m->status->repos_lock->token != 0)
+    if (m->status->repos_lock && m->status->repos_lock->token != nullptr)
       return m->status->repos_lock->comment;
     else if (m->status->entry)
       return m->status->entry->lock_comment;
@@ -205,7 +205,7 @@ namespace svn
   apr_time_t
   Status::lockCreationDate() const
   {
-    if (m->status->repos_lock && m->status->repos_lock->token != 0)
+    if (m->status->repos_lock && m->status->repos_lock->token != nullptr)
       return m->status->repos_lock->creation_date;
     else if (m->status->entry)
       return m->status->entry->lock_creation_date;

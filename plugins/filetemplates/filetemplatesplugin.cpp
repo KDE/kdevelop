@@ -37,7 +37,7 @@ public:
 
     }
 
-    QWidget* create(QWidget* parent = 0) override
+    QWidget* create(QWidget* parent = nullptr) override
     {
         return new TemplatePreviewToolView(m_plugin, parent);
     }
@@ -58,7 +58,7 @@ private:
 
 FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& args)
     : IPlugin(QStringLiteral("kdevfiletemplates"), parent)
-    , m_model(0)
+    , m_model(nullptr)
 {
     Q_UNUSED(args);
     KDEV_USE_EXTENSION_INTERFACE(ITemplateProvider)

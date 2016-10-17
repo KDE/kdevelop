@@ -43,12 +43,12 @@ void TestParseJob::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 
 ControlFlowGraph* TestParseJob::controlFlowGraph()
 {
-    return 0;
+    return nullptr;
 }
 
 DataAccessRepository* TestParseJob::dataAccessInformation()
 {
-    return 0;
+    return nullptr;
 }
 
 

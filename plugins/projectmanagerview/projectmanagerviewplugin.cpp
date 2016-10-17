@@ -63,7 +63,7 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
     public:
         KDevProjectManagerViewFactory( ProjectManagerViewPlugin *plugin ): mplugin( plugin )
         {}
-        QWidget* create( QWidget *parent = 0 ) override
+        QWidget* create( QWidget *parent = nullptr ) override
         {
             return new ProjectManagerView( mplugin, parent );
         }
@@ -629,7 +629,7 @@ ProjectFileItem* createFile(const ProjectFolderItem* item)
     QString name = QInputDialog::getText(window, i18n("Create File in %1", item->path().pathOrUrl()), i18n("File name:"));
 
     if(name.isEmpty())
-        return 0;
+        return nullptr;
 
     ProjectFileItem* ret = item->project()->projectFileManager()->addFile( Path(item->path(), name), item->folder() );
     if (ret) {

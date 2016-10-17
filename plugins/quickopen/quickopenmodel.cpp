@@ -34,7 +34,7 @@
 
 using namespace KDevelop;
 
-QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent ), m_treeView(0), m_expandingWidgetHeightIncrease(0), m_resetBehindRow(0)
+QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent ), m_treeView(nullptr), m_expandingWidgetHeightIncrease(0), m_resetBehindRow(0)
 {
     m_resetTimer = new QTimer(this);
     m_resetTimer->setSingleShot(true);

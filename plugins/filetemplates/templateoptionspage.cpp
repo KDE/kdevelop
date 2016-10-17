@@ -76,7 +76,7 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
         foreach (const SourceFileTemplate::ConfigOption& entry, it.value())
         {
             QLabel* label = new QLabel(entry.label, box);
-            QWidget* control = 0;
+            QWidget* control = nullptr;
             const QString type = entry.type;
             if (type == QLatin1String("String"))
             {

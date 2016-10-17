@@ -38,7 +38,7 @@ class EnvironmentConfigureButtonPrivate
 {
 public:
     EnvironmentConfigureButtonPrivate(EnvironmentConfigureButton* _q)
-        : q(_q), selectionWidget(0)
+        : q(_q), selectionWidget(nullptr)
     {
     }
 

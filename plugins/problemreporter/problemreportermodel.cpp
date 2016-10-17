@@ -128,7 +128,7 @@ void ProblemReporterModel::problemsInternal(KDevelop::TopDUContext* context, boo
         foreach (const KDevelop::DUContext::Import& ctx, context->importedParentContexts()) {
             if (!ctx.indexedContext().indexedTopContext().isLoaded())
                 continue;
-            KDevelop::TopDUContext* topCtx = dynamic_cast<KDevelop::TopDUContext*>(ctx.context(0));
+            KDevelop::TopDUContext* topCtx = dynamic_cast<KDevelop::TopDUContext*>(ctx.context(nullptr));
             if (topCtx) {
                 /// If we are starting at a proxy-context, only recurse into other proxy-contexts, because those contain the problems.
                 if (!isProxy

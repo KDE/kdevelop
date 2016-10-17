@@ -63,11 +63,11 @@ QPair<QUrl, KTextEditor::Cursor> ILanguageSupport::specialLanguageObjectJumpCurs
 QWidget* ILanguageSupport::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) {
     Q_UNUSED(url)
     Q_UNUSED(position)
-    return 0;
+    return nullptr;
 }
 
 ICodeHighlighting* ILanguageSupport::codeHighlighting() const {
-    return 0;
+    return nullptr;
 }
 
 BasicRefactoring* ILanguageSupport::refactoring() const
@@ -76,7 +76,7 @@ BasicRefactoring* ILanguageSupport::refactoring() const
 }
 
 ICreateClassHelper* ILanguageSupport::createClassHelper() const {
-    return 0;
+    return nullptr;
 }
 
 SourceFormatterItemList ILanguageSupport::sourceFormatterItems() const

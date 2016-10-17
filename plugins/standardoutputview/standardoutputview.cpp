@@ -42,7 +42,7 @@
 class OutputViewFactory : public KDevelop::IToolViewFactory{
 public:
     OutputViewFactory(const ToolViewData* data): m_data(data) {}
-    QWidget* create(QWidget *parent = 0) override
+    QWidget* create(QWidget *parent = nullptr) override
     {
         return new OutputWidget( parent, m_data );
     }
@@ -283,7 +283,7 @@ OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )

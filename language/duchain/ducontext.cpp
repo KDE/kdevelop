@@ -161,7 +161,7 @@ DUContextData::DUContextData(const DUContextData& rhs)
 }
 
 DUContextDynamicData::DUContextDynamicData(DUContext* d)
-  : m_topContext(0)
+  : m_topContext(nullptr)
   , m_indexInTopContext(0)
   , m_context(d)
 {
@@ -359,7 +359,7 @@ DUContext::DUContext(const RangeInRevision& range, DUContext* parent, bool anony
   d_func_dynamic()->setClassId(this);
   DUCHAIN_D_DYNAMIC(DUContext);
   d->m_contextType = Other;
-  m_dynamicData->m_parentContext = 0;
+  m_dynamicData->m_parentContext = nullptr;
 
   d->m_anonymousInParent = anonymous;
   d->m_inSymbolTable = false;
@@ -393,7 +393,7 @@ DUContext::DUContext( DUContextData& dd, const RangeInRevision& range, DUContext
 
   DUCHAIN_D_DYNAMIC(DUContext);
   d->m_contextType = Other;
-  m_dynamicData->m_parentContext = 0;
+  m_dynamicData->m_parentContext = nullptr;
   d->m_inSymbolTable = false;
   d->m_anonymousInParent = anonymous;
   if (parent) {
@@ -420,7 +420,7 @@ DUContext::~DUContext( )
     DUCHAIN_D_DYNAMIC(DUContext);
 
     if(d->m_owner.declaration())
-      d->m_owner.declaration()->setInternalContext(0);
+      d->m_owner.declaration()->setInternalContext(nullptr);
 
     while( d->m_importersSize() != 0 ) {
       if(d->m_importers()[0].data())
@@ -478,7 +478,7 @@ void DUContext::setOwner(Declaration* owner) {
 
   //Q_ASSERT(!oldOwner || oldOwner->internalContext() == this);
   if( oldOwner && oldOwner->internalContext() == this )
-    oldOwner->setInternalContext(0);
+    oldOwner->setInternalContext(nullptr);
 
 
   //The context set as internal context should always be the last opened context
@@ -901,7 +901,7 @@ DUContext * DUContext::findContext( const CursorInRevision& position, DUContext*
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
 bool DUContext::parentContextOf(DUContext* context) const
@@ -1036,7 +1036,7 @@ QVector<Declaration *> DUContext::clearLocalDeclarations( )
 {
   auto copy = m_dynamicData->m_localDeclarations;
   foreach (Declaration* dec, copy) {
-    dec->setContext(0);
+    dec->setContext(nullptr);
   }
   return copy;
 }
@@ -1160,7 +1160,7 @@ DUContext* DUContext::specialize(const IndexedInstantiationInformation& /*specia
                                  const TopDUContext* topContext, int /*upDistance*/)
 {
   if(!topContext)
-    return 0;
+    return nullptr;
   return this;
 }
 
@@ -1220,7 +1220,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
       if( !identifier->isEmpty() && (identifier->hasNext() || canBeNamespace) ) {
 
         DeclarationList aliases;
-        findLocalDeclarationsInternal(identifier->identifier, position, AbstractType::Ptr(), imports, 0, DUContext::NoFiltering);
+        findLocalDeclarationsInternal(identifier->identifier, position, AbstractType::Ptr(), imports, nullptr, DUContext::NoFiltering);
 
         if(!aliases.isEmpty()) {
           //The first part of the identifier has been found as a namespace-alias.
@@ -1347,7 +1347,7 @@ DUContext * DUContext::findContextAt(const CursorInRevision & position, bool inc
 
   if (!range().contains(position) && (!includeRightBorder || range().end != position)) {
 //     qCDebug(LANGUAGE) << "mismatch";
-    return 0;
+    return nullptr;
   }
 
   const auto childContexts = m_dynamicData->m_childContexts;
@@ -1365,7 +1365,7 @@ Declaration * DUContext::findDeclarationAt(const CursorInRevision & position) co
   ENSURE_CAN_READ
 
   if (!range().contains(position))
-    return 0;
+    return nullptr;
 
   foreach (Declaration* child, m_dynamicData->m_localDeclarations) {
     if (child->range().contains(position)) {
@@ -1373,7 +1373,7 @@ Declaration * DUContext::findDeclarationAt(const CursorInRevision & position) co
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
 DUContext* DUContext::findContextIncluding(const RangeInRevision& range) const
@@ -1381,7 +1381,7 @@ DUContext* DUContext::findContextIncluding(const RangeInRevision& range) const
   ENSURE_CAN_READ
 
   if (!this->range().contains(range))
-    return 0;
+    return nullptr;
 
   foreach (DUContext* child, m_dynamicData->m_childContexts) {
     if (DUContext* specific = child->findContextIncluding(range)) {
@@ -1423,7 +1423,7 @@ void DUContext::clearImportedParentContexts()
   DUCHAIN_D_DYNAMIC(DUContext);
 
   while( d->m_importedContextsSize() != 0 ) {
-    DUContext* ctx = d->m_importedContexts()[0].context(0, false);
+    DUContext* ctx = d->m_importedContexts()[0].context(nullptr, false);
     if(ctx)
       ctx->m_dynamicData->removeImportedChildContext(this);
 
@@ -1474,7 +1474,7 @@ QWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topC
     widget->setContext(NavigationContextPointer(context));
     return widget;
   } else {
-    return 0;
+    return nullptr;
   }
 }
 
@@ -1647,7 +1647,7 @@ DUContext* DUContext::Import::context(const TopDUContext* topContext, bool insta
     if(decl)
       return decl->logicalInternalContext(topContext);
     else
-      return 0;
+      return nullptr;
   }else{
     return m_context.data();
   }

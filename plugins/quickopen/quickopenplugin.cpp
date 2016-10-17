@@ -167,7 +167,7 @@ Declaration* cursorDeclaration() {
 
   KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if(!view)
-    return 0;
+    return nullptr;
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
@@ -178,13 +178,13 @@ Declaration* cursorDeclaration() {
 Declaration* cursorContextDeclaration() {
   KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if(!view)
-    return 0;
+    return nullptr;
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
   TopDUContext* ctx = DUChainUtils::standardContextForUrl(view->document()->url());
   if(!ctx)
-    return 0;
+    return nullptr;
 
   KTextEditor::Cursor cursor(view->cursorPosition());
 
@@ -193,7 +193,7 @@ Declaration* cursorContextDeclaration() {
   while(subCtx && !subCtx->owner())
     subCtx = subCtx->parentContext();
 
-  Declaration* definition = 0;
+  Declaration* definition = nullptr;
 
   if(!subCtx || !subCtx->owner())
     definition = DUChainUtils::declarationInLine(cursor, ctx);
@@ -201,7 +201,7 @@ Declaration* cursorContextDeclaration() {
     definition = subCtx->owner();
 
   if(!definition)
-    return 0;
+    return nullptr;
 
   return definition;
 }
@@ -250,10 +250,10 @@ QuickOpenLineEdit* QuickOpenPlugin::quickOpenLine(QString name)
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
-static QuickOpenPlugin* staticQuickOpenPlugin = 0;
+static QuickOpenPlugin* staticQuickOpenPlugin = nullptr;
 
 QuickOpenPlugin* QuickOpenPlugin::self()
 {
@@ -345,7 +345,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
 {
     staticQuickOpenPlugin = this;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
-    m_model = new QuickOpenModel( 0 );
+    m_model = new QuickOpenModel( nullptr );
 
     KConfigGroup quickopengrp = KSharedConfig::openConfig()->group("QuickOpen");
     lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << i18n("Project") << i18n("Includes") << i18n("Includers") << i18n("Currently Open") );
@@ -595,7 +595,7 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
 {
   KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if( !view )
-    return 0;
+    return nullptr;
 
   QUrl url = ICore::self()->documentController()->activeDocument()->url();
 
@@ -606,7 +606,7 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
       return w;
   }
 
-  return 0;
+  return nullptr;
 }
 
 QPair<QUrl, KTextEditor::Cursor> QuickOpenPlugin::specialObjectJumpPosition() const
@@ -679,7 +679,7 @@ bool QuickOpenPlugin::freeModel()
 {
   if(m_currentWidgetHandler)
     delete m_currentWidgetHandler;
-  m_currentWidgetHandler = 0;
+  m_currentWidgetHandler = nullptr;
 
   return true;
 }
@@ -719,9 +719,9 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
   if (!cursor.isValid())
     return;
 
-  Declaration *nearestDeclBefore = 0;
+  Declaration *nearestDeclBefore = nullptr;
   int distanceBefore = INT_MIN;
-  Declaration *nearestDeclAfter = 0;
+  Declaration *nearestDeclAfter = nullptr;
   int distanceAfter = INT_MAX;
 
   for (int i = 0; i < items.count(); ++i) {
@@ -756,7 +756,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
 
 
 struct CreateOutlineDialog {
-  CreateOutlineDialog() : dialog(0), cursorDecl(0), model(0) {
+  CreateOutlineDialog() : dialog(nullptr), cursorDecl(nullptr), model(nullptr) {
   }
 
   void start() {
@@ -778,7 +778,7 @@ struct CreateOutlineDialog {
         return;
       }
 
-      model = new QuickOpenModel(0);
+      model = new QuickOpenModel(nullptr);
 
       OutlineFilter filter(items);
 
@@ -823,7 +823,7 @@ struct CreateOutlineDialog {
 
 class OutlineQuickopenWidgetCreator : public QuickOpenWidgetCreator {
   public:
-    OutlineQuickopenWidgetCreator(QStringList /*scopes*/, QStringList /*items*/) : m_creator(0) {
+    OutlineQuickopenWidgetCreator(QStringList /*scopes*/, QStringList /*items*/) : m_creator(nullptr) {
     }
 
     ~OutlineQuickopenWidgetCreator() override {
@@ -836,7 +836,7 @@ class OutlineQuickopenWidgetCreator : public QuickOpenWidgetCreator {
       m_creator->start();
 
       if(!m_creator->dialog)
-        return 0;
+        return nullptr;
 
       m_creator->dialog->deleteLater();
       return m_creator->dialog->widget();
@@ -846,7 +846,7 @@ class OutlineQuickopenWidgetCreator : public QuickOpenWidgetCreator {
       if(m_creator) {
         m_creator->finish();
         delete m_creator;
-        m_creator = 0;
+        m_creator = nullptr;
       }
     }
 
@@ -880,7 +880,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
   create.finish();
 }
 
-QuickOpenLineEdit::QuickOpenLineEdit(QuickOpenWidgetCreator* creator) : m_widget(0), m_forceUpdate(false), m_widgetCreator(creator) {
+QuickOpenLineEdit::QuickOpenLineEdit(QuickOpenWidgetCreator* creator) : m_widget(nullptr), m_forceUpdate(false), m_widgetCreator(creator) {
     setMinimumWidth(200);
     setMaximumWidth(400);
 
@@ -963,7 +963,7 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     m_widget->showStandardButtons(false);
     m_widget->showSearchField(false);
 
-    m_widget->setParent(0, Qt::ToolTip);
+    m_widget->setParent(nullptr, Qt::ToolTip);
     m_widget->setFocusPolicy(Qt::NoFocus);
     m_widget->setAlternativeSearchField(this);
 
@@ -1069,7 +1069,7 @@ void QuickOpenLineEdit::deactivate() {
    if (m_widget)
         m_widget->deleteLater();
 
-    m_widget = 0;
+    m_widget = nullptr;
     qApp->removeEventFilter(this);
 }
 

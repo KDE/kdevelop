@@ -42,7 +42,7 @@ QDebug fromTextStream(const QTextStream& out) { if (out.device()) return {out.de
 namespace KDevelop {
 
 Utils::BasicSetRepository* RecursiveImportCacheRepository::repository() {
-  static Utils::BasicSetRepository recursiveImportCacheRepositoryObject(QStringLiteral("Recursive Imports Cache"), 0, false);
+  static Utils::BasicSetRepository recursiveImportCacheRepositoryObject(QStringLiteral("Recursive Imports Cache"), nullptr, false);
   return &recursiveImportCacheRepositoryObject;
 }
 
@@ -346,7 +346,7 @@ void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, u
     declarationsTarget = repositoryItem->declarations();
   }else{
     countTarget = 0;
-    declarationsTarget = 0;
+    declarationsTarget = nullptr;
   }
 }
 

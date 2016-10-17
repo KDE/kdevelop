@@ -138,7 +138,7 @@ bool isPublicBaseClassInternal( const ClassDeclaration* self, ClassDeclaration* 
 
 bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) const
 {
-  return isPublicBaseClassInternal( this, base, topContext, baseConversionLevels, 0, 0 );
+  return isPublicBaseClassInternal( this, base, topContext, baseConversionLevels, 0, nullptr );
 }
 
 QString ClassDeclaration::toString() const

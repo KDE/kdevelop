@@ -61,7 +61,7 @@ void StandardOutputViewTest::initTestCase()
 
     QTest::qWait(500); // makes sure that everything is loaded (don't know if it's required)
 
-    m_stdOutputView = 0;
+    m_stdOutputView = nullptr;
     KDevelop::IPluginController* plugin_controller = m_testCore->pluginController();
 
 
@@ -90,7 +90,7 @@ OutputWidget* StandardOutputViewTest::toolviewPointer(QString toolviewTitle)
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void StandardOutputViewTest::testRegisterAndRemoveToolView()
@@ -118,8 +118,8 @@ void StandardOutputViewTest::testActions()
     QVERIFY(!toolviewPointer(toolviewTitle));
 
     QList<QAction*> addedActions;
-    addedActions.append(new QAction(QStringLiteral("Action1"), 0));
-    addedActions.append(new QAction(QStringLiteral("Action2"), 0));
+    addedActions.append(new QAction(QStringLiteral("Action1"), nullptr));
+    addedActions.append(new QAction(QStringLiteral("Action2"), nullptr));
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView,
                                                    QIcon(),
                                                    KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction,

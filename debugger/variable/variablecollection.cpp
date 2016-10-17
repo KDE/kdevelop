@@ -240,14 +240,14 @@ QVariant Variable::data(int column, int role) const
 }
 
 Watches::Watches(TreeModel* model, TreeItem* parent)
-: TreeItem(model, parent), finishResult_(0)
+: TreeItem(model, parent), finishResult_(nullptr)
 {
     setData(QVector<QVariant>() << i18n("Auto") << QString());
 }
 
 Variable* Watches::add(const QString& expression)
 {
-    if (!hasStartedSession()) return 0;
+    if (!hasStartedSession()) return nullptr;
 
     Variable* v = currentSession()->variableController()->createVariable(
         model(), this, expression);
@@ -280,7 +280,7 @@ void Watches::removeFinishResult()
     if (finishResult_)
     {
         finishResult_->die();
-        finishResult_ = 0;
+        finishResult_ = nullptr;
     }
 }
 

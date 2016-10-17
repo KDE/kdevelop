@@ -59,8 +59,8 @@ void TestDocumentController::init()
 
     // pre-conditions
     QVERIFY(m_subject->openDocuments().empty());
-    QVERIFY(m_subject->documentForUrl(QUrl()) == 0);
-    QVERIFY(m_subject->activeDocument() == 0);
+    QVERIFY(m_subject->documentForUrl(QUrl()) == nullptr);
+    QVERIFY(m_subject->activeDocument() == nullptr);
 }
 
 void TestDocumentController::cleanup()
@@ -88,7 +88,7 @@ void TestDocumentController::testOpeningNewDocumentFromText()
     QVERIFY(openedSpy.isValid());
 
     IDocument* document = m_subject->openDocumentFromText(QLatin1String(""));
-    QVERIFY(document != 0);
+    QVERIFY(document != nullptr);
 
     QCOMPARE(createdSpy.count(), 1);
     QCOMPARE(openedSpy.count(), 1);
@@ -102,7 +102,7 @@ void TestDocumentController::testOpeningDocumentFromUrl()
 {
     QUrl url = QUrl::fromLocalFile(m_file1.fileName());
     IDocument* document = m_subject->openDocument(url);
-    QVERIFY(document != 0);
+    QVERIFY(document != nullptr);
 }
 
 void TestDocumentController::testSaveSomeDocuments()

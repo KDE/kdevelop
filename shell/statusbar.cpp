@@ -45,7 +45,7 @@ namespace KDevelop
 StatusBar::StatusBar(QWidget* parent)
     : QStatusBar(parent)
     , m_timer(new QTimer(this))
-    , m_currentView(0)
+    , m_currentView(nullptr)
     , m_errorRemovalMapper(new QSignalMapper(this))
 {
 #ifdef Q_OS_MAC

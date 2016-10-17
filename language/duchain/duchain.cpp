@@ -123,7 +123,7 @@ class EnvironmentInformationRequest {
   public:
 
   ///This constructor should only be used for lookup
-  EnvironmentInformationRequest(uint topContextIndex) : m_file(0), m_index(topContextIndex) {
+  EnvironmentInformationRequest(uint topContextIndex) : m_file(nullptr), m_index(topContextIndex) {
   }
 
   EnvironmentInformationRequest(const ParsingEnvironmentFile* file) : m_file(file), m_index(file->indexedTopContext().index()) {
@@ -214,7 +214,7 @@ class EnvironmentInformationListRequest {
   public:
 
   ///This constructor should only be used for lookup
-  EnvironmentInformationListRequest(const IndexedString& file) : m_file(file), m_item(0) {
+  EnvironmentInformationListRequest(const IndexedString& file) : m_file(file), m_item(nullptr) {
   }
   ///This is used to actually construct the information in the repository
   EnvironmentInformationListRequest(const IndexedString& file, const EnvironmentInformationListItem& item) : m_file(file), m_item(&item) {
@@ -255,7 +255,7 @@ class EnvironmentInformationListRequest {
 };
 
 class DUChainPrivate;
-static DUChainPrivate* duChainPrivateSelf = 0;
+static DUChainPrivate* duChainPrivateSelf = nullptr;
 class DUChainPrivate
 {
   class CleanupThread : public QThread {
@@ -298,7 +298,7 @@ class DUChainPrivate
       DUChainPrivate* m_data;
   };
 public:
-  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), m_cleanupMutex(QMutex::Recursive), instance(0), m_cleanupDisabled(false), m_destroyed(false), m_environmentListInfo(QStringLiteral("Environment Lists")), m_environmentInfo(QStringLiteral("Environment Information"))
+  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), m_cleanupMutex(QMutex::Recursive), instance(nullptr), m_cleanupDisabled(false), m_destroyed(false), m_environmentListInfo(QStringLiteral("Environment Lists")), m_environmentInfo(QStringLiteral("Environment Information"))
   {
 #if defined(TEST_NO_CLEANUP)
     m_cleanupDisabled = true;
@@ -411,7 +411,7 @@ public:
     Q_ASSERT(hasChainForIndex(index));
 
     QMutexLocker lock(&DUChain::chainsByIndexLock);
-    DUChain::chainsByIndex[index] = 0;
+    DUChain::chainsByIndex[index] = nullptr;
   }
 
   ///Must be locked before accessing content of this class.
@@ -549,7 +549,7 @@ public:
     if(DUChain::chainsByIndex.size() > index)
       return DUChain::chainsByIndex[index];
     else
-      return 0;
+      return nullptr;
   }
 
   ///Makes sure that the chain with the given index is loaded
@@ -927,7 +927,7 @@ public:
     QHash<uint, ParsingEnvironmentFilePointer>::iterator it = m_indexEnvironmentInformations.find(topContextIndex);
     if(it != m_indexEnvironmentInformations.end())
       return (*it).data();
-    return 0;
+    return nullptr;
   }
 
   ///Loads/gets the environment-information for the given top-context index, or returns zero if none exists
@@ -943,7 +943,7 @@ public:
     uint dataIndex = m_environmentInfo.findIndex(EnvironmentInformationRequest(topContextIndex));
     if(!dataIndex) {
       //No environment-information stored for this top-context
-      return 0;
+      return nullptr;
     }
 
     const EnvironmentInformationItem& item(*m_environmentInfo.itemFromIndex(dataIndex));
@@ -1229,7 +1229,7 @@ void DUChain::addDocumentChain( TopDUContext * chain )
   {
     QMutexLocker lock(&DUChain::chainsByIndexLock);
     if(DUChain::chainsByIndex.size() <= chain->ownIndex())
-      DUChain::chainsByIndex.resize(chain->ownIndex() + 100, 0);
+      DUChain::chainsByIndex.resize(chain->ownIndex() + 100, nullptr);
 
     DUChain::chainsByIndex[chain->ownIndex()] = chain;
   }
@@ -1322,7 +1322,7 @@ TopDUContext* DUChain::loadChain(uint index)
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
 TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document, bool proxyContext) const
@@ -1330,7 +1330,7 @@ TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document,
   ENSURE_CHAIN_READ_LOCKED;
 
   if(sdDUChainPrivate->m_destroyed)
-    return 0;
+    return nullptr;
 
   QList<ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
 
@@ -1351,7 +1351,7 @@ TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document,
       return ctx;
   }
 
-  return 0;
+  return nullptr;
 }
 
 QList<TopDUContext*> DUChain::chainsForDocument(const QUrl& document) const
@@ -1420,12 +1420,12 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument(IndexedTopDUCo
 TopDUContext* DUChain::chainForDocument( const IndexedString& document, const ParsingEnvironment* environment, bool proxyContext ) const {
 
   if(sdDUChainPrivate->m_destroyed)
-    return 0;
+    return nullptr;
   ParsingEnvironmentFilePointer envFile = environmentFileForDocument(document, environment, proxyContext);
   if(envFile) {
     return envFile->topContext();
   }else{
-    return 0;
+    return nullptr;
   }
 }
 
@@ -1697,7 +1697,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
   while(!waiter.m_ready) {
     // we might have been shut down in the meanwhile
     if (!ICore::self()) {
-      return 0;
+      return nullptr;
     }
 
     QMetaObject::invokeMethod(ICore::self()->languageController()->backgroundParser(), "parseDocuments");

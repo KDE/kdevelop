@@ -60,7 +60,7 @@ namespace svn
                            *m_context,
                            apr_pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
 
     return revnum;
@@ -72,7 +72,7 @@ namespace svn
   {
     Pool pool;
     Targets targets(path.c_str());
-    svn_client_commit_info_t *commit_info = NULL;
+    svn_client_commit_info_t *commit_info = nullptr;
 
     svn_error_t * error =
       svn_client_delete(&commit_info,
@@ -80,7 +80,7 @@ namespace svn
                         force,
                         *m_context,
                         pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -89,7 +89,7 @@ namespace svn
                  bool force) throw(ClientException)
   {
     Pool pool;
-    svn_client_commit_info_t *commit_info = NULL;
+    svn_client_commit_info_t *commit_info = nullptr;
 
     svn_error_t * error =
       svn_client_delete(&commit_info,
@@ -97,7 +97,7 @@ namespace svn
                         force,
                         *m_context,
                         pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -113,7 +113,7 @@ namespace svn
                       force,
                       *m_context,
                       pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -127,7 +127,7 @@ namespace svn
                         force,
                         *m_context,
                         pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -143,7 +143,7 @@ namespace svn
                         *m_context,
                         pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -163,7 +163,7 @@ namespace svn
                      *m_context,
                      pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -184,7 +184,7 @@ namespace svn
                          ignore_externals,
                          *m_context,
                          pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
 
     std::vector<svn_revnum_t> revnums;
@@ -220,7 +220,7 @@ namespace svn
 
     m_context->setLogMessage(message);
 
-    svn_client_commit_info_t *commit_info = NULL;
+    svn_client_commit_info_t *commit_info = nullptr;
 
     svn_error_t * error =
       svn_client_commit2(&commit_info,
@@ -229,7 +229,7 @@ namespace svn
                          keep_locks,
                          *m_context,
                          pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
 
     if (commit_info && SVN_IS_VALID_REVNUM(commit_info->revision))
@@ -245,7 +245,7 @@ namespace svn
                const Path & destPath) throw(ClientException)
   {
     Pool pool;
-    svn_client_commit_info_t *commit_info = NULL;
+    svn_client_commit_info_t *commit_info = nullptr;
     svn_error_t * error =
       svn_client_copy(&commit_info,
                       srcPath.c_str(),
@@ -254,7 +254,7 @@ namespace svn
                       *m_context,
                       pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -265,7 +265,7 @@ namespace svn
                bool force) throw(ClientException)
   {
     Pool pool;
-    svn_client_commit_info_t *commit_info = NULL;
+    svn_client_commit_info_t *commit_info = nullptr;
 
     svn_error_t * error =
       svn_client_move2(&commit_info,
@@ -275,7 +275,7 @@ namespace svn
                        *m_context,
                        pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -285,14 +285,14 @@ namespace svn
     Pool pool;
     Targets targets(path.c_str());
 
-    svn_client_commit_info_t *commit_info = NULL;
+    svn_client_commit_info_t *commit_info = nullptr;
     svn_error_t * error =
       svn_client_mkdir(&commit_info,
                        const_cast<apr_array_header_t*>
                        (targets.array(pool)),
                        *m_context, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -301,14 +301,14 @@ namespace svn
   {
     Pool pool;
 
-    svn_client_commit_info_t *commit_info = NULL;
+    svn_client_commit_info_t *commit_info = nullptr;
     svn_error_t * error =
       svn_client_mkdir(&commit_info,
                        const_cast<apr_array_header_t*>
                        (targets.array(pool)),
                        *m_context, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -321,7 +321,7 @@ namespace svn
     svn_error_t * error =
       svn_client_cleanup(path.c_str(), *m_context, apr_pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -336,7 +336,7 @@ namespace svn
                           *m_context,
                           pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -366,7 +366,7 @@ namespace svn
                          *m_context,
                          pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -387,7 +387,7 @@ namespace svn
                         *m_context,
                         pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
     return revnum;
   }
@@ -399,7 +399,7 @@ namespace svn
                  bool recurse) throw(ClientException)
   {
     Pool pool;
-    svn_client_commit_info_t *commit_info = NULL;
+    svn_client_commit_info_t *commit_info = nullptr;
 
     m_context->setLogMessage(message);
 
@@ -411,7 +411,7 @@ namespace svn
                         *m_context,
                         pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -446,7 +446,7 @@ namespace svn
                        *m_context,
                        pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -465,7 +465,7 @@ namespace svn
                           *m_context,
                           pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -488,7 +488,7 @@ namespace svn
                          false, // recursive
                          *m_context,
                          pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
 
     PathPropertiesMapList path_prop_map_list;
@@ -502,7 +502,7 @@ namespace svn
       const void *key;
       void *val;
 
-      apr_hash_this(hi, &key, NULL, &val);
+      apr_hash_this(hi, &key, nullptr, &val);
 
       prop_map [std::string(s_svnIgnore)] = std::string(((const svn_string_t *)val)->data);
 
@@ -531,7 +531,7 @@ namespace svn
                           false,
                           *m_context,
                           pool);
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 

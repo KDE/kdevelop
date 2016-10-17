@@ -40,7 +40,7 @@ IVariableController::IVariableController(IDebugSession* parent)
 
 VariableCollection* IVariableController::variableCollection()
 {
-    if (!ICore::self()) return 0;
+    if (!ICore::self()) return nullptr;
     return ICore::self()->debugController()->variableCollection();
 }
 

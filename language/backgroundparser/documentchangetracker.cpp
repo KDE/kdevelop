@@ -62,7 +62,7 @@ namespace KDevelop
 {
 
 DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
-    : m_needUpdate(false), m_document(document), m_moving(0)
+    : m_needUpdate(false), m_document(document), m_moving(nullptr)
 {
     m_url = IndexedString(document->url());
     Q_ASSERT(document);
@@ -204,8 +204,8 @@ void DocumentChangeTracker::documentSavedOrUploaded(KTextEditor::Document* doc,b
 
 void DocumentChangeTracker::documentDestroyed( QObject* )
 {
-    m_document = 0;
-    m_moving = 0;
+    m_document = nullptr;
+    m_moving = nullptr;
 }
 
 DocumentChangeTracker::~DocumentChangeTracker()

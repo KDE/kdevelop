@@ -20,7 +20,7 @@
 
 namespace KDevelop
 {
-ShellExtension *ShellExtension::s_instance = 0;
+ShellExtension *ShellExtension::s_instance = nullptr;
 
 ShellExtension::ShellExtension()
 {

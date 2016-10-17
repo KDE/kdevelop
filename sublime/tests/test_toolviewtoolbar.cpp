@@ -42,7 +42,7 @@ public:
     ToolViewToolBarFactory(const QString &id): SimpleToolWidgetFactory<QTextEdit>(id) {}
     QList<QAction*> toolBarActions( QWidget* ) const override
     {
-        QAction* action = new QAction(actionText, 0);
+        QAction* action = new QAction(actionText, nullptr);
         return QList<QAction*>() << action;
     }
     QString actionText;

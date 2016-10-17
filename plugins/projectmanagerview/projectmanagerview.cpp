@@ -172,7 +172,7 @@ void ProjectManagerView::selectionChanged()
     {
         selected << ICore::self()->projectController()->projectModel()->itemFromIndex(indexFromView( idx ));
     }
-    selected.removeAll(0);
+    selected.removeAll(nullptr);
     KDevelop::ICore::self()->selectionController()->updateSelection( new ProjectManagerViewItemContext( selected, this ) );
 }
 

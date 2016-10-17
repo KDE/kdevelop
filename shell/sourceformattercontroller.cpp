@@ -188,8 +188,8 @@ ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const
             return iformatter;
         }
     }
-    knownFormatters[mime.name()] = 0;
-    return 0;
+    knownFormatters[mime.name()] = nullptr;
+    return nullptr;
 }
 
 static void populateStyleFromConfigGroup(SourceFormatterStyle* s, const KConfigGroup& stylegrp)
@@ -225,7 +225,7 @@ SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceForm
 ISourceFormatter* SourceFormatterController::formatterForMimeType(const QMimeType& mime)
 {
     if( !m_enabled || !isMimeTypeSupported( mime ) ) {
-        return 0;
+        return nullptr;
     }
     QString formatter = sessionConfig().readEntry( mime.name(), QString() );
 
@@ -238,7 +238,7 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const QMimeTyp
 
     if( formatterinfo.size() != 2 ) {
         qCDebug(SHELL) << "Broken formatting entry for mime:" << mime.name() << "current value:" << formatter;
-        return 0;
+        return nullptr;
     }
 
     return Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( QStringLiteral("org.kdevelop.ISourceFormatter"), formatterinfo.at(0) );
@@ -581,9 +581,9 @@ void SourceFormatterController::formatFiles(QList<QUrl> &list)
             data += addModelineForCurrentLang(output, list[fileCount], mime).toUtf8();
             job = KIO::storedPut(data, list[fileCount], -1);
             if (!job->exec())
-                KMessageBox::error(0, job->errorString());
+                KMessageBox::error(nullptr, job->errorString());
         } else
-            KMessageBox::error(0, job->errorString());
+            KMessageBox::error(nullptr, job->errorString());
     }
 }
 

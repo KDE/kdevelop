@@ -60,7 +60,7 @@ class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
 public:
   ExternalScriptViewFactory( ExternalScriptPlugin *plugin ): m_plugin( plugin ) {}
 
-  QWidget* create( QWidget *parent = 0 ) override {
+  QWidget* create( QWidget *parent = nullptr ) override {
     return new ExternalScriptView( m_plugin, parent );
   }
 
@@ -76,7 +76,7 @@ private:
   ExternalScriptPlugin *m_plugin;
 };
 
-ExternalScriptPlugin* ExternalScriptPlugin::m_self = 0;
+ExternalScriptPlugin* ExternalScriptPlugin::m_self = nullptr;
 
 ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList& /*args*/ )
     : IPlugin( QStringLiteral("kdevexternalscript"), parent ),
@@ -150,7 +150,7 @@ ExternalScriptPlugin* ExternalScriptPlugin::self()
 
 ExternalScriptPlugin::~ExternalScriptPlugin()
 {
-  m_self = 0;
+  m_self = nullptr;
 }
 
 KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDevelop::Context* context )

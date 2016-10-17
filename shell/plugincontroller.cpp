@@ -585,7 +585,7 @@ IPlugin* PluginController::plugin( const QString& pluginId )
 {
     KPluginMetaData info = infoForPluginId( pluginId );
     if ( !info.isValid() )
-        return 0L;
+        return nullptr;
 
     return d->loadedPlugins.value( info );
 }

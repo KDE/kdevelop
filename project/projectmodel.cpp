@@ -88,7 +88,7 @@ public:
             return rootItem;
         }
         if( idx.model() != model ) {
-            return 0;
+            return nullptr;
         }
         return model->itemFromIndex( idx );
     }
@@ -100,7 +100,7 @@ public:
 class ProjectBaseItemPrivate
 {
 public:
-    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0), m_pathIndex(0) {}
+    ProjectBaseItemPrivate() : project(nullptr), parent(nullptr), row(-1), model(nullptr), m_pathIndex(0) {}
     IProject* project;
     ProjectBaseItem* parent;
     int row;
@@ -194,7 +194,7 @@ ProjectBaseItem* ProjectBaseItem::child( int row ) const
 {
     Q_D(const ProjectBaseItem);
     if( row < 0 || row >= d->children.length() ) {
-        return 0;
+        return nullptr;
     }
     return d->children.at( row );
 }
@@ -214,9 +214,9 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
         model()->beginRemoveRows(index(), row, row);
     }
     ProjectBaseItem* olditem = d->children.takeAt( row );
-    olditem->d_func()->parent = 0;
+    olditem->d_func()->parent = nullptr;
     olditem->d_func()->row = -1;
-    olditem->setModel( 0 );
+    olditem->setModel( nullptr );
 
     for(int i=row; i<rowCount(); i++) {
         child(i)->d_func()->row--;
@@ -251,18 +251,18 @@ void ProjectBaseItem::removeRows(int row, int count)
     if (row == 0 && count == d->children.size()) {
         // optimize if we want to delete all
         foreach(ProjectBaseItem* item, d->children) {
-            item->d_func()->parent = 0;
+            item->d_func()->parent = nullptr;
             item->d_func()->row = -1;
-            item->setModel( 0 );
+            item->setModel( nullptr );
             delete item;
         }
         d->children.clear();
     } else {
         for (int i = row; i < count; ++i) {
             ProjectBaseItem* item = d->children.at(i);
-            item->d_func()->parent = 0;
+            item->d_func()->parent = nullptr;
             item->d_func()->row = -1;
-            item->setModel( 0 );
+            item->setModel( nullptr );
             delete d->children.takeAt( row );
         }
         for(int i = row; i < d->children.size(); ++i) {
@@ -305,7 +305,7 @@ ProjectBaseItem* ProjectBaseItem::parent() const
 {
     Q_D(const ProjectBaseItem);
     if( model() && model()->d->rootItem == d->parent ) {
-        return 0;
+        return nullptr;
     }
     return d->parent;
 }
@@ -499,22 +499,22 @@ QString ProjectBaseItem::iconName() const
 
 ProjectFolderItem *ProjectBaseItem::folder() const
 {
-    return 0;
+    return nullptr;
 }
 
 ProjectTargetItem *ProjectBaseItem::target() const
 {
-    return 0;
+    return nullptr;
 }
 
 ProjectExecutableTargetItem *ProjectBaseItem::executable() const
 {
-    return 0;
+    return nullptr;
 }
 
 ProjectFileItem *ProjectBaseItem::file() const
 {
-    return 0;
+    return nullptr;
 }
 
 QList<ProjectFolderItem*> ProjectBaseItem::folderList() const
@@ -658,7 +658,7 @@ bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
 
 bool ProjectBaseItem::isProjectRoot() const
 {
-    return parent()==0;
+    return parent()==nullptr;
 }
 
 ProjectBuildFolderItem::ProjectBuildFolderItem(IProject* project, const Path& path, ProjectBaseItem *parent)
@@ -971,7 +971,7 @@ ProjectBaseItem* ProjectModel::itemFromIndex( const QModelIndex& index ) const
             return parent->child( index.row() );
         }
     }
-    return 0;
+    return nullptr;
 }
 
 QVariant ProjectModel::data( const QModelIndex& index, int role ) const
@@ -1009,7 +1009,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 ProjectModel::ProjectModel( QObject *parent )
         : QAbstractItemModel( parent ), d( new ProjectModelPrivate( this ) )
 {
-    d->rootItem = new ProjectBaseItem( 0, QString(), 0 );
+    d->rootItem = new ProjectBaseItem( nullptr, QString(), nullptr );
     d->rootItem->setModel( this );
 }
 
@@ -1065,7 +1065,7 @@ Qt::ItemFlags ProjectModel::flags(const QModelIndex& index) const
     if(item)
         return item->flags();
     else
-        return 0;
+        return nullptr;
 }
 
 bool ProjectModel::insertColumns(int, int, const QModelIndex&)

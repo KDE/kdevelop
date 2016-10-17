@@ -157,7 +157,7 @@ ProgressManager::~ProgressManager() {}
 
 ProgressManager *ProgressManager::instance()
 {
-    return progressManagerPrivate.isDestroyed() ? 0 : &progressManagerPrivate->instance ;
+    return progressManagerPrivate.isDestroyed() ? nullptr : &progressManagerPrivate->instance ;
 }
 
 ProgressItem *ProgressManager::createProgressItemImpl( ProgressItem *parent,
@@ -167,7 +167,7 @@ ProgressItem *ProgressManager::createProgressItemImpl( ProgressItem *parent,
                                                        bool cancellable,
                                                        bool usesCrypto )
 {
-    ProgressItem *t = 0;
+    ProgressItem *t = nullptr;
     if ( !mTransactions.value( id ) ) {
         t = new ProgressItem ( parent, id, label, status, cancellable, usesCrypto );
         mTransactions.insert( id, t );
@@ -234,18 +234,18 @@ void ProgressManager::slotStandardCancelHandler( ProgressItem *item )
 
 ProgressItem *ProgressManager::singleItem() const
 {
-    ProgressItem *item = 0;
+    ProgressItem *item = nullptr;
     QHash< QString, ProgressItem* >::const_iterator it = mTransactions.constBegin();
     QHash< QString, ProgressItem* >::const_iterator end = mTransactions.constEnd();
     while ( it != end ) {
 
         // No single item for progress possible, as one of them is a busy indicator one.
         if ( (*it)->usesBusyIndicator() )
-            return 0;
+            return nullptr;
 
         if ( !(*it)->parent() ) {             // if it's a top level one, only those count
             if ( item ) {
-                return 0; // we found more than one
+                return nullptr; // we found more than one
             } else {
                 item = (*it);
             }

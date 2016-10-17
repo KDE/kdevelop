@@ -43,13 +43,13 @@
 
 namespace KDevelop {
 
-ColorCache* ColorCache::m_self = 0;
+ColorCache* ColorCache::m_self = nullptr;
 
 ColorCache::ColorCache(QObject* parent)
-  : QObject(parent), m_defaultColors(0), m_validColorCount(0), m_colorOffset(0),
+  : QObject(parent), m_defaultColors(nullptr), m_validColorCount(0), m_colorOffset(0),
     m_localColorRatio(0), m_globalColorRatio(0), m_boldDeclarations(true)
 {
-  Q_ASSERT(m_self == 0);
+  Q_ASSERT(m_self == nullptr);
 
   updateColorsFromScheme(); // default / fallback
   updateColorsFromSettings();
@@ -84,9 +84,9 @@ bool ColorCache::tryActiveDocument()
 
 ColorCache::~ColorCache()
 {
-  m_self = 0;
+  m_self = nullptr;
   delete m_defaultColors;
-  m_defaultColors = 0;
+  m_defaultColors = nullptr;
 }
 
 ColorCache* ColorCache::self()

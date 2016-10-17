@@ -135,7 +135,7 @@ void Problem::setDiagnostics(const QVector<IProblem::Ptr> &diagnostics)
 void Problem::addDiagnostic(const IProblem::Ptr &diagnostic)
 {
     Problem *problem = dynamic_cast<Problem*>(diagnostic.data());
-    Q_ASSERT(problem != NULL);
+    Q_ASSERT(problem != nullptr);
 
     ProblemPointer ptr(problem);
 

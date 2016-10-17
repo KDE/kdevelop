@@ -46,7 +46,7 @@
 namespace KDevelop {
 
 AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
-  : AbstractNavigationContext((topContext ? topContext : TopDUContextPointer(decl ? decl->topContext() : 0)), previousContext), m_declaration(decl), m_fullBackwardSearch(false)
+  : AbstractNavigationContext((topContext ? topContext : TopDUContextPointer(decl ? decl->topContext() : nullptr)), previousContext), m_declaration(decl), m_fullBackwardSearch(false)
 {
   //Jump from definition to declaration if possible
   FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data());

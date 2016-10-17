@@ -48,7 +48,7 @@ class ProjectItemCompleter : public QCompleter
 {
     Q_OBJECT
 public:
-    ProjectItemCompleter(QObject* parent=0);
+    ProjectItemCompleter(QObject* parent=nullptr);
 
     QString separator() const { return sep; }
     QStringList splitPath(const QString &path) const override;
@@ -65,7 +65,7 @@ class ProjectItemValidator : public QValidator
 {
     Q_OBJECT
 public:
-    ProjectItemValidator(QObject* parent = 0 );
+    ProjectItemValidator(QObject* parent = nullptr );
     QValidator::State validate( QString& input, int& pos ) const override;
 
     void setBaseItem( KDevelop::ProjectBaseItem* item ) { mBase = item; }
@@ -77,7 +77,7 @@ private:
 ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
     : QCompleter(parent)
     , mModel(KDevelop::ICore::self()->projectController()->projectModel())
-    , mBase( 0 )
+    , mBase( nullptr )
 {
     setModel(mModel);
     setCaseSensitivity( Qt::CaseInsensitive );
@@ -98,7 +98,7 @@ QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
 }
 
 
-ProjectItemValidator::ProjectItemValidator(QObject* parent): QValidator(parent), mBase(0)
+ProjectItemValidator::ProjectItemValidator(QObject* parent): QValidator(parent), mBase(nullptr)
 {
 }
 
@@ -147,10 +147,10 @@ QValidator::State ProjectItemValidator::validate(QString& input, int& pos) const
 
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     : QLineEdit(parent),
-      m_base(0),
+      m_base(nullptr),
       m_completer( new ProjectItemCompleter( this ) ),
       m_validator( new ProjectItemValidator( this ) ),
-      m_suggestion( 0 )
+      m_suggestion( nullptr )
 {
     setCompleter( m_completer );
     setValidator( m_validator );

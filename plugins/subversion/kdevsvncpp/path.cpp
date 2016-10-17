@@ -60,7 +60,7 @@ namespace svn
 
     m_pathIsUrl = false;
 
-    if (path == 0)
+    if (path == nullptr)
       m_path = "";
     else
     {
@@ -120,7 +120,7 @@ namespace svn
   static bool
   isAbsolute(const char * path)
   {
-    if (0 == path)
+    if (nullptr == path)
       return false;
 
     std::string p(path);
@@ -146,7 +146,7 @@ namespace svn
   {
     Pool pool;
 
-    if (0 == component)
+    if (nullptr == component)
       return;
 
     // in case of an empty string, return
@@ -362,12 +362,12 @@ end:
   Path
   Path::getTempDir()
   {
-    const char * tempdir = NULL;
+    const char * tempdir = nullptr;
     Pool pool;
 
     if (apr_temp_dir_get(&tempdir, pool) != APR_SUCCESS)
     {
-      tempdir = NULL;
+      tempdir = nullptr;
     }
 
     return tempdir;

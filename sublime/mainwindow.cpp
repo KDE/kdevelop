@@ -42,7 +42,7 @@ Q_LOGGING_CATEGORY(SUBLIME, "kdevplatform.sublime")
 namespace Sublime {
 
 MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
-: KParts::MainWindow(0, flags), d(new MainWindowPrivate(this, controller))
+: KParts::MainWindow(nullptr, flags), d(new MainWindowPrivate(this, controller))
 {
     connect(this, &MainWindow::destroyed, controller, static_cast<void(Controller::*)()>(&Controller::areaReleased));
 
@@ -107,7 +107,7 @@ QList<Container*> MainWindow::containers() const
 void MainWindow::setArea(Area *area)
 {
     if (d->area)
-        disconnect(d->area, 0, d, 0);
+        disconnect(d->area, nullptr, d, nullptr);
 
     bool differentArea = (area != d->area);
     /* All views will be removed from dock area now.  However, this does
@@ -419,7 +419,7 @@ View* MainWindow::viewForPosition(QPoint globalPos) const
        }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void MainWindow::setBackgroundCentralWidget(QWidget* w)

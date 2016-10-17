@@ -116,7 +116,7 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
 
     int idx = 0;
     foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
-        TemplatePreview* preview = 0;
+        TemplatePreview* preview = nullptr;
         if (ui->tabWidget->count() > idx) {
             // reuse existing tab
             preview = qobject_cast<TemplatePreview*>(ui->tabWidget->widget(idx));

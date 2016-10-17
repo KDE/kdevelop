@@ -44,7 +44,7 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, QWidget* parent)
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
 
     m_ui->sources->addItem(QIcon::fromTheme(QStringLiteral("folder")), i18n("From File System"));
-    m_plugins.append(0);
+    m_plugins.append(nullptr);
 
     IPluginController* pluginManager = ICore::self()->pluginController();
     QList<IPlugin*> plugins = pluginManager->allPluginsForExtension( QStringLiteral("org.kdevelop.IBasicVersionControl") );
@@ -80,11 +80,11 @@ ProjectSourcePage::~ProjectSourcePage()
 
 void ProjectSourcePage::setSourceIndex(int index)
 {
-    m_locationWidget = 0;
-    m_providerWidget = 0;
+    m_locationWidget = nullptr;
+    m_providerWidget = nullptr;
     QLayout* remoteWidgetLayout = m_ui->remoteWidget->layout();
     QLayoutItem *child;
-    while ((child = remoteWidgetLayout->takeAt(0)) != 0) {
+    while ((child = remoteWidgetLayout->takeAt(0)) != nullptr) {
         delete child->widget();
         delete child;
     }
@@ -117,7 +117,7 @@ IBasicVersionControl* ProjectSourcePage::vcsPerIndex(int index)
 {
     IPlugin* p = m_plugins.value(index);
     if(!p)
-        return 0;
+        return nullptr;
     else
         return p->extension<KDevelop::IBasicVersionControl>();
 }
@@ -126,7 +126,7 @@ IProjectProvider* ProjectSourcePage::providerPerIndex(int index)
 {
     IPlugin* p = m_plugins.value(index);
     if(!p)
-        return 0;
+        return nullptr;
     else
         return p->extension<KDevelop::IProjectProvider>();
 }
@@ -135,7 +135,7 @@ VcsJob* ProjectSourcePage::jobPerCurrent()
 {
     QUrl url=m_ui->workingDir->url();
     IPlugin* p=m_plugins[m_ui->sources->currentIndex()];
-    VcsJob* job=0;
+    VcsJob* job=nullptr;
 
     if(IBasicVersionControl* iface=p->extension<IBasicVersionControl>()) {
         Q_ASSERT(iface && m_locationWidget);
@@ -153,7 +153,7 @@ void ProjectSourcePage::checkoutVcsProject()
     if(!url.isLocalFile() && !d.exists()) {
         bool corr = d.mkpath(d.path());
         if(!corr) {
-            KMessageBox::error(0, i18n("Could not create the directory: %1", d.path()));
+            KMessageBox::error(nullptr, i18n("Could not create the directory: %1", d.path()));
             return;
         }
     }

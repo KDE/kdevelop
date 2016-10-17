@@ -42,7 +42,7 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
     public:
         KDevDocumentViewPluginFactory( KDevDocumentViewPlugin *plugin ): m_plugin( plugin )
         {}
-        QWidget* create( QWidget *parent = 0 ) override
+        QWidget* create( QWidget *parent = nullptr ) override
         {
             KDevDocumentView* view = new KDevDocumentView( m_plugin, parent );
             KDevelop::IDocumentController* docController = m_plugin->core()->documentController();

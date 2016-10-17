@@ -56,7 +56,7 @@ public:
     QString documentType() const override { return QStringLiteral("Test"); }
     QString documentSpecifier() const override { return QString(); }
 protected:
-    QWidget *createViewWidget(QWidget *parent = 0) override { return new QWidget(parent); }
+    QWidget *createViewWidget(QWidget *parent = nullptr) override { return new QWidget(parent); }
     View *newView(Document *doc) override { return new Test(doc); }
 };
 
@@ -65,7 +65,7 @@ void TestView::viewReimplementation()
     Controller controller;
     Document *doc = new TestDocument(&controller);
     View *view = doc->createView();
-    QVERIFY(dynamic_cast<Test*>(view) != 0);
+    QVERIFY(dynamic_cast<Test*>(view) != nullptr);
 }
 
 QTEST_MAIN(TestView)

@@ -120,7 +120,7 @@ public:
         }
         else
         {
-            activeSublimeWindow = defaultMainWindow = 0;
+            activeSublimeWindow = defaultMainWindow = nullptr;
         }
 
         m_assistantTimer.setSingleShot(true);
@@ -159,7 +159,7 @@ class UiToolViewFactory: public Sublime::ToolFactory {
 public:
     UiToolViewFactory(IToolViewFactory *factory): m_factory(factory) {}
     ~UiToolViewFactory() override { delete m_factory; }
-    QWidget* create(Sublime::ToolDocument *doc, QWidget *parent = 0) override
+    QWidget* create(Sublime::ToolDocument *doc, QWidget *parent = nullptr) override
     {
         Q_UNUSED( doc );
         return m_factory->create(parent);
@@ -183,7 +183,7 @@ private:
 
 class ViewSelectorItem: public QListWidgetItem {
 public:
-    ViewSelectorItem(const QString &text, QListWidget *parent = 0, int type = Type)
+    ViewSelectorItem(const QString &text, QListWidget *parent = nullptr, int type = Type)
         :QListWidgetItem(text, parent, type) {}
     IToolViewFactory *factory;
 };
@@ -193,7 +193,7 @@ class NewToolViewListWidget: public QListWidget {
     Q_OBJECT
 
 public:
-    NewToolViewListWidget(MainWindow *mw, QWidget* parent = 0)
+    NewToolViewListWidget(MainWindow *mw, QWidget* parent = nullptr)
         :QListWidget(parent), m_mw(mw)
     {
         connect(this, &NewToolViewListWidget::doubleClicked, this, &NewToolViewListWidget::addNewToolViewByDoubleClick);
@@ -216,7 +216,7 @@ private:
 };
 
 UiController::UiController(Core *core)
-    :Sublime::Controller(0), IUiController(), d(new UiControllerPrivate(this))
+    :Sublime::Controller(nullptr), IUiController(), d(new UiControllerPrivate(this))
 {
     setObjectName(QStringLiteral("UiController"));
     d->core = core;
@@ -278,7 +278,7 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 QWidget* UiController::findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags)
 {
     if(!d->areasRestored || !activeArea())
-        return 0;
+        return nullptr;
 
     QList< Sublime::View* > views = activeArea()->toolViews();
     foreach(Sublime::View* view, views) {
@@ -290,7 +290,7 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
         }
     }
 
-    QWidget* ret = 0;
+    QWidget* ret = nullptr;
 
     if(flags & Create)
     {
@@ -406,7 +406,7 @@ Sublime::Area *UiController::activeArea()
     Sublime::MainWindow *m = activeSublimeWindow();
     if (m)
         return activeSublimeWindow()->area();
-    return 0;
+    return nullptr;
 }
 
 Sublime::MainWindow *UiController::activeSublimeWindow()

@@ -261,7 +261,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
     if(mainWindow->area()->activeView())
         activeFile = mainWindow->area()->activeView()->document()->documentSpecifier();
 
-    WorkingSet* currentWorkingSet = 0;
+    WorkingSet* currentWorkingSet = nullptr;
     QSet<QString> openFiles;
 
     if(!mainWindow->area()->workingSet().isEmpty())

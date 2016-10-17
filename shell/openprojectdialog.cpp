@@ -100,7 +100,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
 
     QUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
     start = start.adjusted(QUrl::NormalizePathSegments);
-    KPageWidgetItem* currentPage = 0;
+    KPageWidgetItem* currentPage = nullptr;
 
     if( fetch ) {
         sourcePageWidget = new ProjectSourcePage( start, this );

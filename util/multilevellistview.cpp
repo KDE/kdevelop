@@ -60,7 +60,7 @@ class RootProxyModel : public QSortFilterProxyModel, public LabeledProxy
     Q_OBJECT
 
 public:
-    RootProxyModel( QObject* parent = 0 )
+    RootProxyModel( QObject* parent = nullptr )
     : QSortFilterProxyModel( parent )
     {
     }
@@ -82,7 +82,7 @@ class SubTreeProxyModel : public KSelectionProxyModel, public LabeledProxy
     Q_OBJECT
 
 public:
-    explicit SubTreeProxyModel( QItemSelectionModel* selectionModel, QObject* parent = 0 )
+    explicit SubTreeProxyModel( QItemSelectionModel* selectionModel, QObject* parent = nullptr )
     : KSelectionProxyModel( selectionModel, parent )
     {}
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const override
@@ -136,7 +136,7 @@ public:
 MultiLevelListViewPrivate::MultiLevelListViewPrivate(MultiLevelListView* view_)
 : view(view_)
 , levels(0)
-, model(0)
+, model(nullptr)
 {
 }
 
@@ -291,7 +291,7 @@ void MultiLevelListView::setLevels(int levels)
 
     d->levels = levels;
 
-    QTreeView* previousView = 0;
+    QTreeView* previousView = nullptr;
     for (int i = 0; i < d->levels; ++i)
     {
         QVBoxLayout* levelLayout = new QVBoxLayout();

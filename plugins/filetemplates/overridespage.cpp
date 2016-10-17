@@ -79,7 +79,7 @@ static QString functionPropertiesToString(ClassFunctionDeclaration* decl)
 struct KDevelop::OverridesPagePrivate
 {
     OverridesPagePrivate()
-        : overrides(0)
+        : overrides(nullptr)
     {
     }
     Ui::OverridesDialog* overrides;

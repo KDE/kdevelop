@@ -92,7 +92,7 @@ void installSignalHandler()
 
 namespace KDevelop {
 
-Core *Core::m_self = 0;
+Core *Core::m_self = nullptr;
 
 KAboutData createAboutData()
 {
@@ -396,7 +396,7 @@ Core::~Core()
 
     //Cleanup already called before mass destruction of GUI
     delete d;
-    m_self = 0;
+    m_self = nullptr;
 }
 
 Core::Setup Core::setupFlags() const

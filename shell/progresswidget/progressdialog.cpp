@@ -135,7 +135,7 @@ void TransactionItemView::slotItemCompleted(TransactionItem* item)
 
 TransactionItem::TransactionItem( QWidget *parent,
                                   ProgressItem *item, bool first )
-    : QWidget( parent ), mCancelButton( 0 ), mItem( item )
+    : QWidget( parent ), mCancelButton( nullptr ), mItem( item )
 {
     auto vbox = new QVBoxLayout(this);
     vbox->setSpacing( 2 );

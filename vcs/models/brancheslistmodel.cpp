@@ -75,11 +75,11 @@ class BranchItem : public QStandardItem
                 BranchesListModel* bmodel = qobject_cast<BranchesListModel*>(model());
                 if(!bmodel->findItems(newBranch).isEmpty())
                 {
-                    KMessageBox::messageBox(0, KMessageBox::Sorry, i18n("Branch \"%1\" already exists.", newBranch));
+                    KMessageBox::messageBox(nullptr, KMessageBox::Sorry, i18n("Branch \"%1\" already exists.", newBranch));
                     return;
                 }
 
-                int ret = KMessageBox::messageBox(0, KMessageBox::WarningYesNo,
+                int ret = KMessageBox::messageBox(nullptr, KMessageBox::WarningYesNo,
                                                 i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch));
                 if (ret == KMessageBox::No) {
                     return; // ignore event

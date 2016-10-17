@@ -30,7 +30,7 @@ namespace Sublime {
 
 struct AreaIndexPrivate {
     AreaIndexPrivate()
-        :parent(0), first(0), second(0), orientation(Qt::Horizontal)
+        :parent(nullptr), first(nullptr), second(nullptr), orientation(Qt::Horizontal)
     {
     }
     ~AreaIndexPrivate()
@@ -45,10 +45,10 @@ struct AreaIndexPrivate {
     }
     AreaIndexPrivate(const AreaIndexPrivate &p)
     {
-        parent = 0;
+        parent = nullptr;
         orientation = p.orientation;
-        first = p.first ? new AreaIndex(*(p.first)) : 0;
-        second = p.second ? new AreaIndex(*(p.second)) : 0;
+        first = p.first ? new AreaIndex(*(p.first)) : nullptr;
+        second = p.second ? new AreaIndex(*(p.second)) : nullptr;
     }
 
     bool isSplit() const
@@ -149,8 +149,8 @@ void AreaIndex::unsplit(AreaIndex *childToRemove)
     AreaIndex *other = d->first == childToRemove ? d->second : d->first;
     other->moveViewsTo(this);
     d->orientation = other->orientation();
-    d->first = 0;
-    d->second = 0;
+    d->first = nullptr;
+    d->second = nullptr;
     other->copyChildrenTo(this);
 
     delete other;
@@ -166,8 +166,8 @@ void AreaIndex::copyChildrenTo(AreaIndex *target)
     target->d->first->setParent(target);
     target->d->second->setParent(target);
 
-    d->first = 0;
-    d->second = 0;
+    d->first = nullptr;
+    d->second = nullptr;
 }
 
 void AreaIndex::moveViewsTo(AreaIndex *target)
@@ -183,7 +183,7 @@ QList<View*> &AreaIndex::views() const
 
 View *AreaIndex::viewAt(int position) const
 {
-    return d->views.value(position, 0);
+    return d->views.value(position, nullptr);
 }
 
 int AreaIndex::viewCount() const
@@ -234,7 +234,7 @@ void Sublime::AreaIndex::setOrientation(Qt::Orientation orientation) const
 // class RootAreaIndex
 
 RootAreaIndex::RootAreaIndex()
-    :AreaIndex(), d(0)
+    :AreaIndex(), d(nullptr)
 {
 }
 

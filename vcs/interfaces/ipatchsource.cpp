@@ -66,7 +66,7 @@ QString IPatchSource::finishReviewCustomText() const
 
 QWidget* IPatchSource::customWidget() const
 {
-    return 0;
+    return nullptr;
 }
 
 uint IPatchSource::depth() const

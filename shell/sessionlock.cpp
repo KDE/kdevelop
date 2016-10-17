@@ -202,7 +202,7 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
     choose.setText(i18nc("@action:button", "Choose another session"));
 
     KGuiItem cancel = KStandardGuiItem::quit();
-    int ret = KMessageBox::warningYesNoCancel(0, errmsg, i18nc("@title:window", "Failed to Lock Session %1", sessionName),
+    int ret = KMessageBox::warningYesNoCancel(nullptr, errmsg, i18nc("@title:window", "Failed to Lock Session %1", sessionName),
                                               retry, choose, cancel);
     switch( ret ) {
     case KMessageBox::Yes:

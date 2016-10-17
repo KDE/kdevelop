@@ -47,29 +47,29 @@ void fail (apr_pool_t *pool, apr_status_t status, const char *fmt, ...)
     msg = apr_pvsprintf (pool, fmt, ap);
     va_end (ap);
 
-    error = svn_error_create (status, NULL, msg);
+    error = svn_error_create (status, nullptr, msg);
     throw svn::ClientException (error);
 }
 
 void cleanup( apr_file_t* outfile, const char* outfileName, apr_file_t* errfile, const char* errfileName, const svn::Pool& pool )
 {
-    if( outfile != 0 )
+    if( outfile != nullptr )
     {
         apr_file_close( outfile );
     }
 
-    if( errfile != 0 )
+    if( errfile != nullptr )
     {
         apr_file_close( outfile );
     }
 
-    if( outfileName != 0 )
+    if( outfileName != nullptr )
     {
         svn_error_clear( svn_io_remove_file ( outfileName, pool ) );
     }
 
 
-    if( errfileName != 0 )
+    if( errfileName != nullptr )
     {
         svn_error_clear( svn_io_remove_file ( errfileName, pool ) );
     }
@@ -77,7 +77,7 @@ void cleanup( apr_file_t* outfile, const char* outfileName, apr_file_t* errfile,
 }
 
 SvnClient::SvnClient( svn::Context* ctx )
-    : QObject(0), svn::Client( ctx ), m_ctxt( ctx )
+    : QObject(nullptr), svn::Client( ctx ), m_ctxt( ctx )
 {
 }
 
@@ -93,16 +93,16 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
 
     svn_error_t* error;
 
-    const char* outfileName = 0;
-    apr_file_t* outfile = 0;
-    const char* errfileName = 0;
-    apr_file_t* errfile = 0;
+    const char* outfileName = nullptr;
+    apr_file_t* outfile = nullptr;
+    const char* errfileName = nullptr;
+    apr_file_t* errfile = nullptr;
 
     QByteArray ba = QString(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/kdevelop_svn_diff" ).toUtf8();
     
     error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", false, pool );
 
-    if( error != 0 )
+    if( error != nullptr )
     {
         ::cleanup( outfile, outfileName, errfile, errfileName, pool );
         throw svn::ClientException( error );
@@ -110,7 +110,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
 
     error = svn_io_open_unique_file( &errfile, &errfileName, ba.data(), ".tmp", false, pool );
 
-    if( error != 0 )
+    if( error != nullptr )
     {
         ::cleanup( outfile, outfileName, errfile, errfileName, pool );
         throw svn::ClientException( error );
@@ -148,7 +148,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
     // now we can read the diff output from outfile and return that
     error = svn_stringbuf_from_aprfile (&stringbuf, outfile, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       ::cleanup (outfile, outfileName, errfile, errfileName, pool);
       throw svn::ClientException (error);
@@ -171,16 +171,16 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& pegRev,
 
     svn_error_t* error;
 
-    const char* outfileName = 0;
-    apr_file_t* outfile = 0;
-    const char* errfileName = 0;
-    apr_file_t* errfile = 0;
+    const char* outfileName = nullptr;
+    apr_file_t* outfile = nullptr;
+    const char* errfileName = nullptr;
+    apr_file_t* errfile = nullptr;
 
     QByteArray ba = QStandardPaths::writableLocation(QStandardPaths::TempLocation).toUtf8();
 
     error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", false, pool );
 
-    if( error != 0 )
+    if( error != nullptr )
     {
         ::cleanup( outfile, outfileName, errfile, errfileName, pool );
         throw svn::ClientException( error );
@@ -188,7 +188,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& pegRev,
 
     error = svn_io_open_unique_file( &errfile, &errfileName, ba.data(), ".tmp", false, pool );
 
-    if( error != 0 )
+    if( error != nullptr )
     {
         ::cleanup( outfile, outfileName, errfile, errfileName, pool );
         throw svn::ClientException( error );
@@ -226,7 +226,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& pegRev,
     // now we can read the diff output from outfile and return that
     error = svn_stringbuf_from_aprfile (&stringbuf, outfile, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
       ::cleanup (outfile, outfileName, errfile, errfileName, pool);
       throw svn::ClientException(error);
@@ -255,15 +255,15 @@ kdev_logReceiver (void *baton,
     vcsrev.setRevisionValue( QVariant( qlonglong( rev ) ), KDevelop::VcsRevision::GlobalNumber );
     ev.setRevision( vcsrev );
 
-    if (changedPaths != NULL)
+    if (changedPaths != nullptr)
     {
         for (apr_hash_index_t *hi = apr_hash_first (pool, changedPaths);
-            hi != NULL;
+            hi != nullptr;
             hi = apr_hash_next (hi))
         {
             char *path;
             void *val;
-            apr_hash_this (hi, (const void **)&path, NULL, &val);
+            apr_hash_this (hi, (const void **)&path, nullptr, &val);
 
             svn_log_changed_path_t *log_item = reinterpret_cast<svn_log_changed_path_t *> (val);
             KDevelop::VcsItemEvent iev;
@@ -296,7 +296,7 @@ kdev_logReceiver (void *baton,
     }
     client->emitLogEventReceived( ev );
 
-    return NULL;
+    return nullptr;
 }
 
 void SvnClient::log( const char* path,
@@ -323,7 +323,7 @@ void SvnClient::log( const char* path,
     m_ctxt->ctx(), // client ctx
     pool);
 
-    if (error != NULL)
+    if (error != nullptr)
     {
         throw svn::ClientException (error);
     }

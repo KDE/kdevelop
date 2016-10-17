@@ -193,7 +193,7 @@ QWidget* DUChainItemData::expandingWidget() const
 
   Declaration* decl = dynamic_cast<KDevelop::Declaration*>(m_item.m_item.data());
   if( !decl || !decl->context() ) {
-    return 0;
+    return nullptr;
   }
 
   return decl->context()->createNavigationWidget( decl, decl->topContext(),

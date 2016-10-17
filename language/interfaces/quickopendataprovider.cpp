@@ -42,7 +42,7 @@ namespace KDevelop {
   }
 
   QWidget* QuickOpenDataBase::expandingWidget() const {
-    return 0;
+    return nullptr;
   }
   
   QList<QVariant> QuickOpenDataBase::highlighting() const {

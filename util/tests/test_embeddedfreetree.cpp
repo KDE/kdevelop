@@ -336,7 +336,7 @@ class TestEmbeddedFreeTree : public QObject {
         const int removeProbability = 40; //Percent
 
         TestSet set;
-        srand(time(NULL));
+        srand(time(nullptr));
         for(int a = 0; a < cycles; ++a) {
             if(a % (cycles / 10) == 0) {
                 qDebug() << "cycle" << a;
@@ -439,7 +439,7 @@ class TestEmbeddedFreeTree : public QObject {
 
         uint totalItems = 0, totalFilteredItems = 0;
 
-        srand(time(NULL));
+        srand(time(nullptr));
         for(uint a = 0; a < cycles; ++a) {
             KDevelop::ConvenientFreeListSet<TestItem, TestItemHandler> set1;
             std::set<uint> testSet1;

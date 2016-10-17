@@ -65,7 +65,7 @@ K_PLUGIN_FACTORY_WITH_JSON(AppWizardFactory, "kdevappwizard.json", registerPlugi
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(QStringLiteral("kdevappwizard"), parent)
-    , m_templatesModel(0)
+    , m_templatesModel(nullptr)
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::ITemplateProvider);
     setXMLFile(QStringLiteral("kdevappwizard.rc"));
@@ -134,7 +134,7 @@ void vcsError(const QString &errorMsg, QTemporaryDir &tmpdir, const QUrl &dest, 
     {
         displayDetails = i18n("Please see the Version Control toolview");
     }
-    KMessageBox::detailedError(0, errorMsg, displayDetails, i18n("Version Control System Error"));
+    KMessageBox::detailedError(nullptr, errorMsg, displayDetails, i18n("Version Control System Error"));
     KIO::del(dest)->exec();
     tmpdir.remove();
 }
@@ -244,7 +244,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     m_variables[QStringLiteral("PROJECTDIRNAME")] = dest.fileName();
     m_variables[QStringLiteral("VERSIONCONTROLPLUGIN")] = info.vcsPluginName;
 
-    KArchive* arch = 0;
+    KArchive* arch = nullptr;
     if( templateArchive.endsWith(QLatin1String(".zip")) )
     {
         arch = new KZip(templateArchive);
@@ -306,7 +306,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             else
             {
                 if (KMessageBox::Continue ==
-                    KMessageBox::warningContinueCancel(0,
+                    KMessageBox::warningContinueCancel(nullptr,
                     QStringLiteral("Failed to initialize version control system, "
                     "plugin is neither VCS nor DVCS.")))
                     success = true;
@@ -400,7 +400,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
             if (!copyFileAndExpandMacros(QDir::cleanPath(tdir.path()+'/'+file->name()),
                     KMacroExpander::expandMacros(destName, m_variables)))
             {
-                KMessageBox::sorry(0, i18n("The file %1 cannot be created.", dest));
+                KMessageBox::sorry(nullptr, i18n("The file %1 cannot be created.", dest));
                 return false;
             }
         }

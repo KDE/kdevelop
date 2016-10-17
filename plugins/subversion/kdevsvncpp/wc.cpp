@@ -50,7 +50,7 @@ namespace svn
     svn_error_t * error =
       svn_wc_check_wc(dir.c_str(), &wc, pool);
 
-    if ((error != NULL) || (wc == 0))
+    if ((error != nullptr) || (wc == 0))
     {
       return false;
     }
@@ -73,7 +73,7 @@ namespace svn
                         revision.revnum(),   // revision
                         pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 
@@ -85,7 +85,7 @@ namespace svn
     svn_error_t * error =
       svn_wc_set_adm_dir(dir, pool);
 
-    if (error != NULL)
+    if (error != nullptr)
       throw ClientException(error);
   }
 

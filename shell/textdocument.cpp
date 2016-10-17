@@ -84,14 +84,14 @@ static void selectAndReveal( KTextEditor::View* view, const KTextEditor::Range& 
 struct TextDocumentPrivate {
     TextDocumentPrivate(TextDocument *textDocument)
         : document(nullptr), state(IDocument::Clean), encoding(), q(textDocument)
-        , m_loaded(false), m_addedContextMenu(0)
+        , m_loaded(false), m_addedContextMenu(nullptr)
     {
     }
 
     ~TextDocumentPrivate()
     {
         delete m_addedContextMenu;
-        m_addedContextMenu = 0;
+        m_addedContextMenu = nullptr;
 
         saveSessionConfig();
         delete document;
@@ -175,7 +175,7 @@ struct TextDocumentPrivate {
     // Determines whether the current contents of this document in the editor
     // could be retrieved from the VCS if they were dismissed.
     void queryCanRecreateFromVcs(KTextEditor::Document* document) const {
-        IProject* project = 0;
+        IProject* project = nullptr;
         // Find projects by checking which one contains the file's parent directory,
         // to avoid issues with the cmake manager temporarily removing files from a project
         // during reloading.
@@ -279,7 +279,7 @@ KTextEditor::Document *TextDocument::textDocument() const
 
 QWidget *TextDocument::createViewWidget(QWidget *parent)
 {
-    KTextEditor::View* view = 0L;
+    KTextEditor::View* view = nullptr;
 
     if (!d->document)
     {
@@ -295,7 +295,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                 this, [] (KTextEditor::Document* document) {
             ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(document->url()),
                     (TopDUContext::Features) ( TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate ),
-                    BackgroundParser::BestPriority, 0);
+                    BackgroundParser::BestPriority, nullptr);
         });
 
         // Set encoding passed via constructor
@@ -368,7 +368,7 @@ KParts::Part *TextDocument::partForView(QWidget *view) const
 {
     if (d->document && d->document->views().contains((KTextEditor::View*)view))
         return d->document;
-    return 0;
+    return nullptr;
 }
 
 
@@ -380,7 +380,7 @@ void TextDocument::reload()
     if (!d->document)
         return;
 
-    KTextEditor::ModificationInterface* modif=0;
+    KTextEditor::ModificationInterface* modif=nullptr;
     if(d->state==Dirty) {
         modif = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
         modif->setModifiedOnDiskWarning(false);

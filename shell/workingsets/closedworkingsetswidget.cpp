@@ -40,7 +40,7 @@ WorkingSet* getWorkingSet(const QString& id)
 }
 
 ClosedWorkingSetsWidget::ClosedWorkingSetsWidget( MainWindow* window )
-    : QWidget(0), m_mainWindow(window)
+    : QWidget(nullptr), m_mainWindow(window)
 {
     connect(window, &MainWindow::areaChanged,
             this, &ClosedWorkingSetsWidget::areaChanged);

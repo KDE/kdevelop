@@ -32,8 +32,8 @@ struct ProjectTestJob::Private
 {
     Private(ProjectTestJob* q)
         : q(q)
-        , m_currentJob(0)
-        , m_currentSuite(0)
+        , m_currentJob(nullptr)
+        , m_currentSuite(nullptr)
     {}
 
     void runNext();

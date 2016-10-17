@@ -38,7 +38,7 @@ namespace KDevelop
 {
 
 Context::Context()
-    : d(0)
+    : d(nullptr)
 {}
 
 Context::~Context()

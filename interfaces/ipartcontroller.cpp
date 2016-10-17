@@ -29,7 +29,7 @@
 namespace KDevelop {
 
 IPartController::IPartController( QWidget* toplevel )
-    : KParts::PartManager( toplevel, 0 )
+    : KParts::PartManager( toplevel, nullptr )
 {
 }
 
@@ -65,7 +65,7 @@ KPluginFactory* IPartController::findPartFactory ( const QString& mimetype, cons
         return loader.factory();
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -78,13 +78,13 @@ KParts::Part* IPartController::createPart ( const QString& mimetype, const QStri
         /*"KParts/ReadWritePart",*/ "KParts/ReadOnlyPart"
     };
 
-    KParts::Part* part = 0;
+    KParts::Part* part = nullptr;
     for ( uint i = 0; i < length; ++i )
     {
         KPluginFactory* editorFactory = findPartFactory( mimetype, QString::fromLatin1(services[ i ]), prefName );
         if ( editorFactory )
         {
-            part = editorFactory->create<KParts::ReadOnlyPart>( 0, this );
+            part = editorFactory->create<KParts::ReadOnlyPart>( nullptr, this );
             break;
         }
     }

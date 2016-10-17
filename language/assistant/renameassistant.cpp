@@ -62,7 +62,7 @@ Declaration* getDeclarationForChangedRange(KTextEditor::Document* doc, const KTe
     //In this case, we may either not have a decl at the cursor, or we got a decl, but are editing its use.
     //In either of those cases, give up and return 0
     if (!declaration || !rangesConnect(declaration->rangeInCurrentRevision(), changed)) {
-        return 0;
+        return nullptr;
     }
 
     return declaration;

@@ -70,7 +70,7 @@ void FrameStackItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem
 }
 
 FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent)
-    : AutoOrientedSplitter(Qt::Horizontal, parent), m_session(0)
+    : AutoOrientedSplitter(Qt::Horizontal, parent), m_session(nullptr)
 {
     connect(controller,
             &IDebugController::currentSessionChanged,
@@ -137,8 +137,8 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
 {
     m_session = session;
 
-    m_threadsListView->setModel(session ? session->frameStackModel() : 0);
-    m_framesTreeView->setModel(session ? session->frameStackModel() : 0);
+    m_threadsListView->setModel(session ? session->frameStackModel() : nullptr);
+    m_framesTreeView->setModel(session ? session->frameStackModel() : nullptr);
 
     if (session) {
         connect(session->frameStackModel(), &IFrameStackModel::dataChanged,

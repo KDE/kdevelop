@@ -71,7 +71,7 @@ public:
    CompletionWorkerThread(CodeCompletionModel* model)
      : QThread(model), m_model(model), m_worker(m_model->createCompletionWorker())
    {
-     Q_ASSERT(m_worker->parent() == 0); // Must be null, else we cannot change the thread affinity!
+     Q_ASSERT(m_worker->parent() == nullptr); // Must be null, else we cannot change the thread affinity!
      m_worker->moveToThread(this);
      Q_ASSERT(m_worker->thread() == this);
    }
@@ -109,7 +109,7 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   , m_forceWaitForModel(false)
   , m_fullCompletion(true)
   , m_mutex(new QMutex)
-  , m_thread(0)
+  , m_thread(nullptr)
 {
   qRegisterMetaType<KTextEditor::Cursor>();
 }

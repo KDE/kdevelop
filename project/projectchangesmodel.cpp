@@ -108,7 +108,7 @@ QStandardItem* findItemChild(QStandardItem* parent, const QVariant& value, int r
         if(curr->data(role) == value)
             return curr;
     }
-    return 0;
+    return nullptr;
 }
 
 QStandardItem* ProjectChangesModel::projectItem(IProject* p) const
@@ -127,7 +127,7 @@ void ProjectChangesModel::updateState(IProject* p, const KDevelop::VcsStatusInfo
 void ProjectChangesModel::changes(IProject* project, const QList<QUrl>& urls, IBasicVersionControl::RecursionMode mode)
 {
     IPlugin* vcsplugin=project->versionControlPlugin();
-    IBasicVersionControl* vcs = vcsplugin ? vcsplugin->extension<IBasicVersionControl>() : 0;
+    IBasicVersionControl* vcs = vcsplugin ? vcsplugin->extension<IBasicVersionControl>() : nullptr;
     
     if(vcs && vcs->isVersionControlled(urls.first())) { //TODO: filter?
         VcsJob* job=vcs->status(urls, mode);

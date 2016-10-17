@@ -57,7 +57,7 @@ DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
         if(a->pos() == cursor)
             return a;
     }
-    return 0;
+    return nullptr;
 }
 
 QList<DataAccess*> DataAccessRepository::accessesInRange(const RangeInRevision& range) const

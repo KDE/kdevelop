@@ -27,7 +27,7 @@ namespace KDevelop
 
 KDevSignalSpy::KDevSignalSpy(QObject *obj, const char *signal,
               Qt::ConnectionType ct )
-  : QObject(0), m_obj(obj), m_emitted(false) 
+  : QObject(nullptr), m_obj(obj), m_emitted(false) 
 {
     m_timer = new QTimer(this);
     m_loop = new QEventLoop(this);
@@ -52,7 +52,7 @@ bool KDevSignalSpy::wait(int timeout)
 void KDevSignalSpy::signalEmitted()
 {
     m_emitted = true;
-    disconnect(m_obj, 0, this, 0);
+    disconnect(m_obj, nullptr, this, nullptr);
     m_timer->stop();
     m_loop->quit();
 }

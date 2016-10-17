@@ -157,7 +157,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
 
 Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instantiateIfRequired) const
 {
-  Declaration* ret = 0;
+  Declaration* ret = nullptr;
 
   if(m_isDirect == false) {
     //Find the declaration by its qualified identifier and additionalIdentity
@@ -211,7 +211,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
     {
       const TopDUContext* topContextForSpecialization = top;
       if(!instantiateIfRequired)
-        topContextForSpecialization = 0; //If we don't want to instantiate new declarations, set the top-context to zero, so specialize(..) will only look-up
+        topContextForSpecialization = nullptr; //If we don't want to instantiate new declarations, set the top-context to zero, so specialize(..) will only look-up
       else if(!topContextForSpecialization)
         topContextForSpecialization = ret->topContext();
 
@@ -220,7 +220,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
       return ret;
     }
   }else
-    return 0;
+    return nullptr;
 }
 
 QualifiedIdentifier DeclarationId::qualifiedIdentifier() const
@@ -232,7 +232,7 @@ QualifiedIdentifier DeclarationId::qualifiedIdentifier() const
       return baseIdentifier;
     return m_specialization.information().applyToIdentifier(baseIdentifier);
   } else {
-    Declaration* decl = getDeclaration(0);
+    Declaration* decl = getDeclaration(nullptr);
     if(decl)
       return decl->qualifiedIdentifier();
 

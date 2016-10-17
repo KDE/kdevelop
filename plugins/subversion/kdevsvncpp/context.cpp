@@ -111,14 +111,14 @@ public:
     static svn_error_t *
     getData(void * baton, Data ** data)
     {
-      if (baton == NULL)
-        return svn_error_create(SVN_ERR_CANCELLED, NULL,
+      if (baton == nullptr)
+        return svn_error_create(SVN_ERR_CANCELLED, nullptr,
                                 "invalid baton");
 
       Data * data_ = static_cast <Data *>(baton);
 
-      if (data_->listener == 0)
-        return svn_error_create(SVN_ERR_CANCELLED, NULL,
+      if (data_->listener == nullptr)
+        return svn_error_create(SVN_ERR_CANCELLED, nullptr,
                                 "invalid listener");
 
       *data = data_;
@@ -126,10 +126,10 @@ public:
     }
 
     Data(const std::string & configDir_)
-        : listener(0), logIsSet(false),
+        : listener(nullptr), logIsSet(false),
         promptCounter(0), configDir(configDir_)
     {
-      const char * c_configDir = 0;
+      const char * c_configDir = nullptr;
       if (configDir.length() > 0)
         c_configDir = configDir.c_str();
 
@@ -214,9 +214,9 @@ public:
       svn_config_t *config = (svn_config_t *)apr_hash_get(
         ctx->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
       svn_config_set(config, SVN_CONFIG_SECTION_HELPERS,
-                     SVN_CONFIG_OPTION_DIFF_CMD, NULL);
+                     SVN_CONFIG_OPTION_DIFF_CMD, nullptr);
       svn_config_set(config, SVN_CONFIG_SECTION_HELPERS,
-                     SVN_CONFIG_OPTION_DIFF3_CMD, NULL);
+                     SVN_CONFIG_OPTION_DIFF3_CMD, nullptr);
 
       // tell the auth functions where the config is
       svn_auth_set_parameter(ab, SVN_AUTH_PARAM_CONFIG_DIR,
@@ -236,7 +236,7 @@ public:
 
     void setAuthCache(bool value)
     {
-      void *param = 0;
+      void *param = nullptr;
       if (!value)
         param = (void *)"1";
 
@@ -278,7 +278,7 @@ public:
              void *baton,
              apr_pool_t * pool)
     {
-      Data * data = NULL;
+      Data * data = nullptr;
       SVN_ERR(getData(baton, &data));
 
       std::string msg;
@@ -287,12 +287,12 @@ public:
       else
       {
         if (!data->retrieveLogMessage(msg))
-          return svn_error_create(SVN_ERR_CANCELLED, NULL, "");
+          return svn_error_create(SVN_ERR_CANCELLED, nullptr, "");
       }
 
       *log_msg = apr_pstrdup(pool, msg.c_str());
 
-      *tmp_file = NULL;
+      *tmp_file = nullptr;
 
       return SVN_NO_ERROR;
     }
@@ -311,7 +311,7 @@ public:
              svn_wc_notify_state_t prop_state,
              svn_revnum_t revision)
     {
-      if (baton == 0)
+      if (baton == nullptr)
         return;
 
       Data * data = static_cast <Data *>(baton);
@@ -349,13 +349,13 @@ public:
     static svn_error_t *
     onCancel(void * baton)
     {
-      if (baton == 0)
+      if (baton == nullptr)
         return SVN_NO_ERROR;
 
       Data * data = static_cast <Data *>(baton);
 
       if (data->cancel())
-        return svn_error_create(SVN_ERR_CANCELLED, NULL, "cancelled by user");
+        return svn_error_create(SVN_ERR_CANCELLED, nullptr, "cancelled by user");
       else
         return SVN_NO_ERROR;
     }
@@ -371,12 +371,12 @@ public:
                    svn_boolean_t _may_save,
                    apr_pool_t *pool)
     {
-      Data * data = NULL;
+      Data * data = nullptr;
       SVN_ERR(getData(baton, &data));
 
       bool may_save = _may_save != 0;
       if (!data->retrieveLogin(username, realm, may_save))
-        return svn_error_create(SVN_ERR_CANCELLED, NULL, "");
+        return svn_error_create(SVN_ERR_CANCELLED, nullptr, "");
 
       svn_auth_cred_simple_t* lcred = (svn_auth_cred_simple_t*)
                                       apr_palloc(pool, sizeof(svn_auth_cred_simple_t));
@@ -408,11 +408,11 @@ public:
                            svn_boolean_t may_save,
                            apr_pool_t *pool)
     {
-      Data * data = NULL;
+      Data * data = nullptr;
       SVN_ERR(getData(baton, &data));
 
       ContextListener::SslServerTrustData trustData(failures);
-      if (realm != NULL)
+      if (realm != nullptr)
         trustData.realm = realm;
       trustData.hostname = info->hostname;
       trustData.fingerprint = info->fingerprint;
@@ -427,7 +427,7 @@ public:
           trustData, acceptedFailures);
 
       if (answer == ContextListener::DONT_ACCEPT)
-        *cred = NULL;
+        *cred = nullptr;
       else
       {
         svn_auth_cred_ssl_server_trust_t *cred_ =
@@ -453,12 +453,12 @@ public:
                           void *baton,
                           apr_pool_t *pool)
     {
-      Data * data = NULL;
+      Data * data = nullptr;
       SVN_ERR(getData(baton, &data));
 
       std::string certFile;
       if (!data->listener->contextSslClientCertPrompt(certFile))
-        return svn_error_create(SVN_ERR_CANCELLED, NULL, "");
+        return svn_error_create(SVN_ERR_CANCELLED, nullptr, "");
 
       svn_auth_cred_ssl_client_cert_t *cred_ =
         (svn_auth_cred_ssl_client_cert_t*)
@@ -486,13 +486,13 @@ public:
       svn_boolean_t maySave,
       apr_pool_t *pool)
     {
-      Data * data = NULL;
+      Data * data = nullptr;
       SVN_ERR(getData(baton, &data));
 
       std::string password;
       bool may_save = maySave != 0;
       if (!data->listener->contextSslClientCertPwPrompt(password, realm, may_save))
-        return svn_error_create(SVN_ERR_CANCELLED, NULL, "");
+        return svn_error_create(SVN_ERR_CANCELLED, nullptr, "");
 
       svn_auth_cred_ssl_client_cert_pw_t *cred_ =
         (svn_auth_cred_ssl_client_cert_pw_t *)
@@ -545,7 +545,7 @@ public:
     {
       bool ok;
 
-      if (listener == 0)
+      if (listener == nullptr)
         return false;
 
       ok = listener->contextGetLogMessage(logMessage);
@@ -575,10 +575,10 @@ public:
     {
       bool ok;
 
-      if (listener == 0)
+      if (listener == nullptr)
         return false;
 
-      if (username_ == NULL)
+      if (username_ == nullptr)
         username = "";
       else
         username = username_;
@@ -601,7 +601,7 @@ public:
            svn_wc_notify_state_t prop_state,
            svn_revnum_t revision)
     {
-      if (listener != 0)
+      if (listener != nullptr)
       {
         listener->contextNotify(path, action, kind, mime_type,
                                 content_state, prop_state, revision);
@@ -615,7 +615,7 @@ public:
     bool
     cancel()
     {
-      if (listener != 0)
+      if (listener != nullptr)
       {
         return listener->contextCancel();
       }

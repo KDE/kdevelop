@@ -66,7 +66,7 @@ using namespace KDevelop;
 class ProblemReporterFactory : public KDevelop::IToolViewFactory
 {
 public:
-    QWidget* create(QWidget* parent = 0) override
+    QWidget* create(QWidget* parent = nullptr) override
     {
         Q_UNUSED(parent);
 
@@ -196,8 +196,8 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
                 text = i18n("Solve: %1", KDevelop::htmlToPlainText(title));
             }
 
-            QAction* menuAction = new QAction(text, 0);
-            QMenu* menu(new QMenu(text, 0));
+            QAction* menuAction = new QAction(text, nullptr);
+            QMenu* menu(new QMenu(text, nullptr));
             menuAction->setMenu(menu);
             foreach (QAction* action, actions)
                 menu->addAction(action);

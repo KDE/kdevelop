@@ -45,7 +45,7 @@ using namespace KDevelop;
 const int toolTipTimeout = 2000;
 
 WorkingSetController::WorkingSetController()
-    : m_emptyWorkingSet(0), m_changingWorkingSet(false)
+    : m_emptyWorkingSet(nullptr), m_changingWorkingSet(false)
 {
     m_hideToolTipTimer = new QTimer(this);
     m_hideToolTipTimer->setInterval(toolTipTimeout);
@@ -95,7 +95,7 @@ void WorkingSetController::cleanup()
     m_workingSets.clear();
 
     delete m_emptyWorkingSet;
-    m_emptyWorkingSet = 0;
+    m_emptyWorkingSet = nullptr;
 }
 
 const QString WorkingSetController::makeSetId(const QString& prefix) const
