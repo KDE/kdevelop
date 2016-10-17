@@ -685,19 +685,28 @@ QStringList PluginController::allPluginNames()
     return names;
 }
 
-QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const
+QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensions(KDevelop::Context* context) const
 {
-    QList<ContextMenuExtension> exts;
-    for( auto it=d->loadedPlugins.constBegin(), itEnd = d->loadedPlugins.constEnd(); it!=itEnd; ++it )
-    {
-        IPlugin* plug = it.value();
-        exts << plug->contextMenuExtension( context );
+    // This fixes random order of extension menu items between different runs of KDevelop.
+    // Without sorting we have random reordering of "Analyze With" submenu for example:
+    // 1) "Cppcheck" actions, "Vera++" actions - first run
+    // 2) "Vera++" actions, "Cppcheck" actions - some other run.
+    QMultiMap<QString, IPlugin*> sortedPlugins;
+    for (auto it = d->loadedPlugins.constBegin(); it != d->loadedPlugins.constEnd(); ++it) {
+        sortedPlugins.insert(it.key().name(), it.value());
     }
-    exts << Core::self()->debugControllerInternal()->contextMenuExtension( context );
-    exts << Core::self()->documentationControllerInternal()->contextMenuExtension( context );
-    exts << Core::self()->sourceFormatterControllerInternal()->contextMenuExtension( context );
-    exts << Core::self()->runControllerInternal()->contextMenuExtension( context );
-    exts << Core::self()->projectControllerInternal()->contextMenuExtension( context );
+
+    QList<ContextMenuExtension> exts;
+    foreach (IPlugin* plugin, sortedPlugins) {
+        exts << plugin->contextMenuExtension(context);
+    }
+
+    exts << Core::self()->debugControllerInternal()->contextMenuExtension(context);
+    exts << Core::self()->documentationControllerInternal()->contextMenuExtension(context);
+    exts << Core::self()->sourceFormatterControllerInternal()->contextMenuExtension(context);
+    exts << Core::self()->runControllerInternal()->contextMenuExtension(context);
+    exts << Core::self()->projectControllerInternal()->contextMenuExtension(context);
+
     return exts;
 }
 
