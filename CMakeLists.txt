@@ -26,10 +26,6 @@ include_directories(
 )
 
 set(kdevcppcheck_SRCS
-    debug.cpp
-    job.cpp
-    parameters.cpp
-    parser.cpp
     plugin.cpp
 
     config/globalconfigpage.cpp
@@ -46,15 +42,28 @@ kconfig_add_kcfg_files(kdevcppcheck_CONFIG_SRCS
     config/projectsettings.kcfgc
 )
 
-kdevplatform_add_plugin(kdevcppcheck
-    JSON kdevcppcheck.json
-    SOURCES ${kdevcppcheck_SRCS} ${kdevcppcheck_UI_SRCS} ${kdevcppcheck_CONFIG_SRCS}
+add_library(kdevcppcheck_core STATIC
+    debug.cpp
+    parser.cpp
+    job.cpp
+    parameters.cpp
+
+    ${kdevcppcheck_CONFIG_SRCS}
 )
 
-target_link_libraries(kdevcppcheck
+target_link_libraries(kdevcppcheck_core
     KDev::Project
     KDev::Language
     KDev::Shell
+)
+
+kdevplatform_add_plugin(kdevcppcheck
+    JSON kdevcppcheck.json
+    SOURCES ${kdevcppcheck_SRCS} ${kdevcppcheck_UI_SRCS}
+)
+
+target_link_libraries(kdevcppcheck
+    kdevcppcheck_core
     KF5::ItemViews
 )
 
