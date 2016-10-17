@@ -79,7 +79,7 @@ class HomeDocumentation : public KDevelop::IDocumentation
     Q_OBJECT
     public:
         HomeDocumentation();
-        QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0) override;
+        QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = nullptr) override;
         QString description() const override { return QString(); }
         QString name() const override;
         KDevelop::IDocumentationProvider* provider() const override;

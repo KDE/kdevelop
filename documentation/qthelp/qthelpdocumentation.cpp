@@ -98,14 +98,14 @@ int lastIndexOf(const QString &str, const QRegularExpression &re, int from, QReg
 
 }
 
-QtHelpProviderAbstract* QtHelpDocumentation::s_provider=0;
+QtHelpProviderAbstract* QtHelpDocumentation::s_provider=nullptr;
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
-    : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(0)
+    : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(nullptr)
 {}
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key)
-    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(0)
+    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(nullptr)
 { Q_ASSERT(m_current!=m_info.constEnd()); }
 
 QtHelpDocumentation::~QtHelpDocumentation()

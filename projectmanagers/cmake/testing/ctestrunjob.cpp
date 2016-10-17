@@ -44,8 +44,8 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 : KJob(parent)
 , m_suite(suite)
 , m_cases(cases)
-, m_job(0)
-, m_outputJob(0)
+, m_job(nullptr)
+, m_outputJob(nullptr)
 , m_verbosity(verbosity)
 , m_expectFail(expectFail)
 {
@@ -66,7 +66,7 @@ KJob* createTestJob(QString launchModeId, QStringList arguments )
     qCDebug(CMAKE) << "got mode and type:" << type << type->id() << mode << mode->id();
     Q_ASSERT(type && mode);
 
-    ILauncher* launcher = 0;
+    ILauncher* launcher = nullptr;
     foreach (ILauncher *l, type->launchers())
     {
         //qCDebug(CMAKE) << "avaliable launcher" << l << l->id() << l->supportedModes();
@@ -77,7 +77,7 @@ KJob* createTestJob(QString launchModeId, QStringList arguments )
     }
     Q_ASSERT(launcher);
 
-    ILaunchConfiguration* ilaunch = 0;
+    ILaunchConfiguration* ilaunch = nullptr;
     QList<ILaunchConfiguration*> launchConfigurations = ICore::self()->runController()->launchConfigurations();
     foreach (ILaunchConfiguration *l, launchConfigurations) {
         if (l->type() == type && l->config().readEntry("ConfiguredByCTest", false)) {
@@ -88,7 +88,7 @@ KJob* createTestJob(QString launchModeId, QStringList arguments )
     if (!ilaunch) {
         ilaunch = ICore::self()->runController()->createLaunchConfiguration( type,
                                                 qMakePair( mode->id(), launcher->id() ),
-                                                0, //TODO add project
+                                                nullptr, //TODO add project
                                                 i18n("CTest") );
         ilaunch->config().writeEntry("ConfiguredByCTest", true);
         //qCDebug(CMAKE) << "created config, launching";

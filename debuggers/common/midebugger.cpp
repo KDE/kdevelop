@@ -95,7 +95,7 @@ void MIDebugger::execute(MICommand* command)
 
 bool MIDebugger::isReady() const
 {
-    return currentCmd_ == 0;
+    return currentCmd_ == nullptr;
 }
 
 void MIDebugger::interrupt()

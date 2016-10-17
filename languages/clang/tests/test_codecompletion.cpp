@@ -920,7 +920,7 @@ void TestCodeCompletion::testIncludePathCompletion()
     QTemporaryDir tempDir;
     QDir dir(tempDir.path());
     QVERIFY(dir.mkpath("foo/bar/asdf"));
-    TestFile file(code, "cpp", 0, tempDir.path());
+    TestFile file(code, "cpp", nullptr, tempDir.path());
     IncludeTester tester(executeIncludePathCompletion(&file, cursor));
     QVERIFY(tester.completionContext);
     QVERIFY(tester.completionContext->isValid());

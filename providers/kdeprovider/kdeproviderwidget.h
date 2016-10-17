@@ -31,7 +31,7 @@ class KDEProviderWidget : public KDevelop::IProjectProviderWidget
 {
     Q_OBJECT
     public:
-        KDEProviderWidget(QWidget* parent = 0);
+        KDEProviderWidget(QWidget* parent = nullptr);
         
         KDevelop::VcsJob* createWorkingCopy(const QUrl &destinationDirectory) override;
         bool isCorrect() const override;

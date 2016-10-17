@@ -40,7 +40,7 @@ CMakeCacheDelegate::~CMakeCacheDelegate()
 
 QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
-    QWidget *ret=0;
+    QWidget *ret=nullptr;
     if(index.column()==2)
     {
         QModelIndex typeIdx=index.sibling(index.row(), 1);

@@ -120,7 +120,7 @@ KJob* CustomBuildSystem::configure( IProject* project )
 
 ProjectTargetItem* CustomBuildSystem::createTarget( const QString&, ProjectFolderItem* )
 {
-    return 0;
+    return nullptr;
 }
 
 QHash<QString, QString> CustomBuildSystem::defines( ProjectBaseItem* ) const

@@ -40,7 +40,7 @@ class CMakePreferences : public KDevelop::ConfigPage
 {
     Q_OBJECT
     public:
-        explicit CMakePreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
+        explicit CMakePreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = nullptr);
         ~CMakePreferences() override;
 
         QString name() const override;

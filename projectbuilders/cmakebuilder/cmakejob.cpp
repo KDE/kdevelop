@@ -43,7 +43,7 @@ using namespace KDevelop;
 
 CMakeJob::CMakeJob(QObject* parent)
     : OutputExecuteJob(parent)
-    , m_project(0)
+    , m_project(nullptr)
 {
     setCapabilities( Killable );
     setFilteringStrategy( OutputModel::CompilerFilter );

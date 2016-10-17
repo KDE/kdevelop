@@ -376,7 +376,7 @@ IndexedTypeIdentifier shortenedTypeIdentifier(const AbstractType::Ptr& type_, DU
         return IndexedTypeIdentifier();
     }
 
-    IndexedTypeIdentifier identifier = identifierForType(type, ctx ? ctx->topContext() : 0);
+    IndexedTypeIdentifier identifier = identifierForType(type, ctx ? ctx->topContext() : nullptr);
 
     identifier = stripPrefixIdentifiers(identifier, stripPrefix);
 

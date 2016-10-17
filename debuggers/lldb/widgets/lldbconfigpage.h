@@ -34,7 +34,7 @@ class LldbConfigPage : public KDevelop::LaunchConfigurationPage
 {
     Q_OBJECT
 public:
-    LldbConfigPage( QWidget* parent = 0 );
+    LldbConfigPage( QWidget* parent = nullptr );
     ~LldbConfigPage() override;
 
     QIcon icon() const override;

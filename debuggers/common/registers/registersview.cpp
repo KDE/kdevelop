@@ -38,7 +38,7 @@ const int TABLES_COUNT = 5;
 }
 
 RegistersView::RegistersView(QWidget* p)
-    : QWidget(p), m_menu(new QMenu(this)), m_mapper(new QSignalMapper(this)), m_modelsManager(0)
+    : QWidget(p), m_menu(new QMenu(this)), m_mapper(new QSignalMapper(this)), m_modelsManager(nullptr)
 {
     setupUi(this);
 
@@ -145,7 +145,7 @@ QAction* RegistersView::findAction(const QString& name)
             return a;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void RegistersView::addView(QTableView* view, int idx)

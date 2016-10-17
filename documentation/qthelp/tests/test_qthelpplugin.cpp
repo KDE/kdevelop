@@ -185,7 +185,7 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
     QVERIFY(ctx);
     auto decl = ctx->findDeclarations(QualifiedIdentifier("o")).first();
     QVERIFY(decl);
-    auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().data())->declaration(0);
+    auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().data())->declaration(nullptr);
     QVERIFY(typeDecl);
 
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));

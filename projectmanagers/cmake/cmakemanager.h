@@ -77,7 +77,7 @@ Q_INTERFACES( KDevelop::IProjectFileManager )
 Q_INTERFACES( KDevelop::ILanguageSupport )
 Q_INTERFACES( ICMakeManager )
 public:
-    explicit CMakeManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
+    explicit CMakeManager( QObject* parent = nullptr, const QVariantList& args = QVariantList() );
 
     ~CMakeManager() override;
 
@@ -89,7 +89,7 @@ public:
     KDevelop::Path::List frameworkDirectories(KDevelop::ProjectBaseItem *item) const override;
     QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const override;
 
-    KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) override { return 0; }
+    KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) override { return nullptr; }
 
     virtual QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const override;
@@ -116,7 +116,7 @@ public:
 //     virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
 
 
-    KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = 0) override;
+    KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = nullptr) override;
     QPair<QString, QString> cacheValue(KDevelop::IProject* project, const QString& id) const override;
     
     //LanguageSupport

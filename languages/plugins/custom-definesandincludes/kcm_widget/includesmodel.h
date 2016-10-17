@@ -26,7 +26,7 @@ class IncludesModel : public QAbstractListModel
 {
 Q_OBJECT
 public:
-    IncludesModel( QObject* parent = 0 );
+    IncludesModel( QObject* parent = nullptr );
     void setIncludes( const QStringList&  );
     QStringList includes() const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;

@@ -47,7 +47,7 @@ class CMakeBuilder : public KDevelop::IPlugin, public KDevelop::IProjectBuilder
     Q_INTERFACES( KDevelop::IProjectBuilder )
 
 public:
-    explicit CMakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
+    explicit CMakeBuilder(QObject *parent = nullptr, const QVariantList &args = QVariantList());
     ~CMakeBuilder() override;
 
     KJob* build(KDevelop::ProjectBaseItem *dom) override;

@@ -21,7 +21,7 @@ void foo() {
     int j = 0;
     j++;
     j++;
-    int *i=0;
+    int *i=nullptr;
     *i = 0;
 }
 int main() {

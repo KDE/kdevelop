@@ -57,7 +57,7 @@ using namespace KTextEditor;
 
 QTEST_MAIN(TestAssistants)
 
-ForegroundLock *globalTestLock = 0;
+ForegroundLock *globalTestLock = nullptr;
 StaticAssistantsManager *staticAssistantsManager() { return Core::self()->languageController()->staticAssistantsManager(); }
 
 void TestAssistants::initTestCase()
@@ -83,7 +83,7 @@ void TestAssistants::cleanupTestCase()
 {
     Core::self()->cleanup();
     delete globalTestLock;
-    globalTestLock = 0;
+    globalTestLock = nullptr;
 }
 
 static QUrl createFile(const QString& fileContents, QString extension, int id)

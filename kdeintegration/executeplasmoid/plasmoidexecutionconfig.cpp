@@ -157,7 +157,7 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
     Q_ASSERT(cfg);
     if( !cfg )
     {
-        return 0;
+        return nullptr;
     }
 
     if( launchMode == "execute" )
@@ -171,7 +171,7 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), jobs );
     }
     qWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
-    return 0;
+    return nullptr;
 }
 
 KJob* PlasmoidLauncher::calculateDependencies(KDevelop::ILaunchConfiguration* cfg)
@@ -199,7 +199,7 @@ KJob* PlasmoidLauncher::calculateDependencies(KDevelop::ILaunchConfiguration* cf
         job->updateJobName();
         return job;
     }
-    return 0;
+    return nullptr;
 }
 
 KJob* PlasmoidLauncher::dependencies(KDevelop::ILaunchConfiguration* cfg)
@@ -303,7 +303,7 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
         }
     }
 
-    QMenu *m = 0;
+    QMenu *m = nullptr;
     if(!found.isEmpty()) {
         m = new QMenu(i18n("Plasmoids"));
         m->addActions(found);

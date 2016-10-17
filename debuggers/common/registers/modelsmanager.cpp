@@ -65,7 +65,7 @@ private:
 
 using namespace KDevMI;
 
-ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(0), m_config(KSharedConfig::openConfig()->group("Register models")) {}
+ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(nullptr), m_config(KSharedConfig::openConfig()->group("Register models")) {}
 
 ModelsManager::~ModelsManager() {}
 
@@ -166,7 +166,7 @@ QStandardItemModel* Models::addModel(const Model& m)
         m_models.append(m);
         return m.model.data();
     }
-    return 0;
+    return nullptr;
 }
 
 bool Models::contains(const QString& name) const
@@ -206,7 +206,7 @@ QStandardItemModel* Models::modelForName(const QString& name) const
             return m.model.data();
         }
     }
-    return 0;
+    return nullptr;
 }
 
 QStandardItemModel* Models::modelForView(QAbstractItemView* view) const
@@ -216,7 +216,7 @@ QStandardItemModel* Models::modelForView(QAbstractItemView* view) const
             return m.model.data();
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void ModelsManager::itemChanged(QStandardItem* i)

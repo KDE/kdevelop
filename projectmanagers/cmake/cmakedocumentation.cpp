@@ -45,7 +45,7 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(CMakeSupportDocFactory, "kdevcmakedocumentation.json", registerPlugin<CMakeDocumentation>(); )
 
-CMakeDocumentation* CMakeDoc::s_provider=0;
+CMakeDocumentation* CMakeDoc::s_provider=nullptr;
 KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider; }
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
@@ -66,7 +66,7 @@ CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     initializeModel();
 }
 
-static const char* args[] = { "--help-command", "--help-variable", "--help-module", "--help-property", 0, 0 };
+static const char* args[] = { "--help-command", "--help-variable", "--help-module", "--help-property", nullptr, nullptr };
 
 void CMakeDocumentation::delayedInitialization()
 {
@@ -135,7 +135,7 @@ KDevelop::IDocumentation::Ptr CMakeDocumentation::description(const QString& ide
     }
 
     KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
-    ICMakeManager* m=0;
+    ICMakeManager* m=nullptr;
     if(p)
         m=p->managerPlugin()->extension<ICMakeManager>();
     if(m)

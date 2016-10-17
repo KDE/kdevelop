@@ -31,7 +31,7 @@ class KDevProjectOpen : public QObject
     Q_OBJECT
 
 public:
-    explicit KDevProjectOpen(QObject* parent = 0);
+    explicit KDevProjectOpen(QObject* parent = nullptr);
     void openProject(const QUrl& path);
     void cleanup();
 private slots:

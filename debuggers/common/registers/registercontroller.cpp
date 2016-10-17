@@ -218,7 +218,7 @@ void IRegisterController::updateValuesForRegisters(RegistersGroup* registers) co
 
 void IRegisterController::setFlagRegister(const Register& reg, const FlagRegister& flag)
 {
-    quint32 flagsValue = registerValue(flag.registerName).toUInt(0, 16);
+    quint32 flagsValue = registerValue(flag.registerName).toUInt(nullptr, 16);
 
     const int idx = flag.flags.indexOf(reg.name);
 
@@ -251,7 +251,7 @@ IRegisterController::~IRegisterController() {}
 
 void IRegisterController::updateFlagValues(RegistersGroup* flagsGroup, const FlagRegister& flagRegister) const
 {
-    const quint32 flagsValue = registerValue(flagRegister.registerName).toUInt(0, 16);
+    const quint32 flagsValue = registerValue(flagRegister.registerName).toUInt(nullptr, 16);
 
     for (int idx = 0; idx < flagRegister.flags.count(); idx++) {
         flagsGroup->registers[idx].value = ((flagsValue >> flagRegister.bits[idx].toInt()) & 1) ? "1" : "0";

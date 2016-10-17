@@ -718,7 +718,7 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &/*_files*/,
 QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position)
 {
     KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));
-    Declaration *decl=0;
+    Declaration *decl=nullptr;
     if(top)
     {
         int useAt=top->findUseAt(top->transformToLocalRevision(position));
@@ -729,7 +729,7 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const QUrl &url, co
         }
     }
 
-    CMakeNavigationWidget* doc=0;
+    CMakeNavigationWidget* doc=nullptr;
     if(decl)
     {
         doc=new CMakeNavigationWidget(top, decl);

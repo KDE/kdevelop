@@ -97,7 +97,7 @@ static int chownpty(int fd, int grant)
             ::exit(1);
 
         QString path = QStandardPaths::findExecutable(BASE_CHOWN);
-        execle(QFile::encodeName(path), BASE_CHOWN, grant?"--grant":"--revoke", (void *)0, NULL);
+        execle(QFile::encodeName(path), BASE_CHOWN, grant?"--grant":"--revoke", (void *)nullptr, NULL);
         ::exit(1); // should not be reached
     }
     if (pid > 0) {
@@ -124,9 +124,9 @@ static int chownpty(int fd, int grant)
 
 STTY::STTY(bool ext, const QString &termAppName)
     : QObject(),
-      out(0),
+      out(nullptr),
       ttySlave(""),
-      m_externalTerminal(0),
+      m_externalTerminal(nullptr),
       external_(ext)
 {
     if (ext) {

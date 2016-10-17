@@ -47,5 +47,5 @@ void TargetType::accept0(KDevelop::TypeVisitor* ) const
 
 bool TargetType::equals(const KDevelop::AbstractType* rhs) const
 {
-    return dynamic_cast<const TargetType*>(rhs)!=0;
+    return dynamic_cast<const TargetType*>(rhs)!=nullptr;
 }

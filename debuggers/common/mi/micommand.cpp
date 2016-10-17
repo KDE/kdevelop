@@ -112,7 +112,7 @@ bool MICommand::invokeHandler(const ResultRecord& r)
         if (autoDelete) {
             delete commandHandler_;
         }
-        commandHandler_ = 0;
+        commandHandler_ = nullptr;
         return true;
     } else {
         return false;

@@ -51,7 +51,7 @@ void ExecutePlasmoidPlugin::unload()
 {
     core()->runController()->removeConfigurationType( m_configType );
     delete m_configType;
-    m_configType = 0;
+    m_configType = nullptr;
 }
 
 QUrl ExecutePlasmoidPlugin::executable(ILaunchConfiguration* config, QString& /*error*/) const

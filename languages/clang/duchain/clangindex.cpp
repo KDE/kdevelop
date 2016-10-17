@@ -105,7 +105,7 @@ IndexedString ClangIndex::translationUnitForUrl(const IndexedString& url)
             QSet<TopDUContext*> visited;
             while(true) {
                 visited.insert(tuTop);
-                TopDUContext* next = NULL;
+                TopDUContext* next = nullptr;
                 auto importers = tuTop->indexedImporters();
                 foreach(IndexedDUContext ctx, importers) {
                     if (ctx.data()) {

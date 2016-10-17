@@ -555,7 +555,7 @@ struct Visitor
         return t;
     }
 
-    template<CXTypeKind TK, EnableIf<CursorKindTraits::delayedTypeName(TK) != 0> = dummy>
+    template<CXTypeKind TK, EnableIf<CursorKindTraits::delayedTypeName(TK) != nullptr> = dummy>
     AbstractType *createType(CXType, CXCursor /*parent*/)
     {
         auto t = new DelayedType;

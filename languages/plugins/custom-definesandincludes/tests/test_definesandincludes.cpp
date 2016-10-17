@@ -93,7 +93,7 @@ void TestDefinesAndIncludes::loadMultiPathProject()
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
     QVERIFY(!manager->parserArguments(s_currentProject->projectItem()).isEmpty());
 
-    ProjectBaseItem* mainfile = 0;
+    ProjectBaseItem* mainfile = nullptr;
     for (const auto& file: s_currentProject->fileSet() ) {
         for (auto i: s_currentProject->filesForPath(file)) {
             if( i->text() == "main.cpp" ) {

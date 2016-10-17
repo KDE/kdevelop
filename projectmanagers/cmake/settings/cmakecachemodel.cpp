@@ -178,7 +178,7 @@ QString CMakeCacheModel::value(const QString & varName) const
 bool CMakeCacheModel::isAdvanced(int i) const
 {
     QStandardItem *p=item(i, 4);
-    bool isAdv= (p!=0) || i>m_internalBegin;
+    bool isAdv= (p!=nullptr) || i>m_internalBegin;
     if(!isAdv)
     {
         p=item(i, 1);

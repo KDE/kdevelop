@@ -179,7 +179,7 @@ static const KDevelop::SessionInfo* findSessionInList( const SessionInfos& sessi
     // We won't search a session without input data, since that could lead to false-positives
     // with unnamed sessions
     if( data.isEmpty() )
-        return 0;
+        return nullptr;
 
     for( auto it = sessions.constBegin(); it != sessions.constEnd(); ++it ) {
         if ( ( it->name == data ) || ( it->uuid.toString() == data ) ) {
@@ -187,7 +187,7 @@ static const KDevelop::SessionInfo* findSessionInList( const SessionInfos& sessi
             return &sessionRef;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 /// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid
@@ -686,7 +686,7 @@ int main( int argc, char *argv[] )
         Q_ASSERT( !debugeeName.isEmpty() );
         QString launchName = debugeeName;
 
-        KDevelop::LaunchConfiguration* launch = 0;
+        KDevelop::LaunchConfiguration* launch = nullptr;
         qCDebug(APP) << launchName;
         foreach (KDevelop::LaunchConfiguration *l, core->runControllerInternal()->launchConfigurationsInternal()) {
             qCDebug(APP) << l->name();
@@ -695,7 +695,7 @@ int main( int argc, char *argv[] )
             }
         }
 
-        KDevelop::LaunchConfigurationType *type = 0;
+        KDevelop::LaunchConfigurationType *type = nullptr;
         foreach (KDevelop::LaunchConfigurationType *t, core->runController()->launchConfigurationTypes()) {
             qCDebug(APP) << t->id();
             if (t->id() == "Native Application") {
@@ -709,8 +709,8 @@ int main( int argc, char *argv[] )
             return 1;
         }
 
-        if (launch && launch->type()->id() != "Native Application") launch = 0;
-        if (launch && launch->launcherForMode("debug") != parser.value("debug")) launch = 0;
+        if (launch && launch->type()->id() != "Native Application") launch = nullptr;
+        if (launch && launch->launcherForMode("debug") != parser.value("debug")) launch = nullptr;
         if (!launch) {
             qCDebug(APP) << launchName << "not found, creating a new one";
             QPair<QString,QString> launcher;
@@ -727,7 +727,7 @@ int main( int argc, char *argv[] )
                 qerr << endl << i18n("Cannot find launcher %1", parser.value("debug")) << endl;
                 return 1;
             }
-            KDevelop::ILaunchConfiguration* ilaunch = core->runController()->createLaunchConfiguration(type, launcher, 0, launchName);
+            KDevelop::ILaunchConfiguration* ilaunch = core->runController()->createLaunchConfiguration(type, launcher, nullptr, launchName);
             launch = dynamic_cast<KDevelop::LaunchConfiguration*>(ilaunch);
         }
 

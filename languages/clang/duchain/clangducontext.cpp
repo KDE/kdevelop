@@ -53,7 +53,7 @@ QWidget* ClangNormalDUContext::createNavigationWidget(Declaration* decl, TopDUCo
 {
     if (!decl) {
         clangDebug() << "no declaration, not returning navigationwidget";
-        return 0;
+        return nullptr;
     }
     return new ClangNavigationWidget(DeclarationPointer(decl), hints);
 }

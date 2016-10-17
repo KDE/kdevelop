@@ -31,7 +31,7 @@ using namespace KDevelop;
 PruneJob::PruneJob(KDevelop::IProject* project)
     : OutputJob(project, Verbose)
     , m_project(project)
-    , m_job(0)
+    , m_job(nullptr)
 {
     setCapabilities( Killable );
     setToolTitle( i18n("CMake") );
@@ -84,5 +84,5 @@ void PruneJob::jobFinished(KJob* job)
     else
         output->appendLine(i18n("** Prune failed: %1 **", job->errorString()));
     emitResult();
-    m_job = 0;
+    m_job = nullptr;
 }

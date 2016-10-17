@@ -188,7 +188,7 @@ public Q_SLOTS:
 
 public:
     virtual MI::MICommand *createCommand(MI::CommandType type, const QString& arguments,
-                                         MI::CommandFlags flags = 0) const;
+                                         MI::CommandFlags flags = nullptr) const;
     virtual MI::MICommand *createUserCommand(const QString &cmd) const;
     /** Adds a command to the end of queue of commands to be executed
         by debugger. The command will be actually sent to debugger only when
@@ -205,21 +205,21 @@ public:
 
     /** Same as above, but internally constructs MICommand using createCommand() */
     void addCommand(MI::CommandType type, const QString& arguments = QString(),
-                    MI::CommandFlags flags = 0);
+                    MI::CommandFlags flags = nullptr);
 
     void addCommand(MI::CommandType type, const QString& arguments,
                     MI::MICommandHandler* handler,
-                    MI::CommandFlags flags = 0);
+                    MI::CommandFlags flags = nullptr);
 
     void addCommand(MI::CommandType type, const QString& arguments,
                     const MI::FunctionCommandHandler::Function& callback,
-                    MI::CommandFlags flags = 0);
+                    MI::CommandFlags flags = nullptr);
 
     template<class Handler>
     void addCommand(MI::CommandType type, const QString& arguments,
                     Handler* handler_this,
                     void (Handler::* handler_method)(const MI::ResultRecord&),
-                    MI::CommandFlags flags = 0);
+                    MI::CommandFlags flags = nullptr);
 
     QMap<QString, MIVariable*> & variableMapping();
     MIVariable* findVariableByVarobjName(const QString &varobjName) const;

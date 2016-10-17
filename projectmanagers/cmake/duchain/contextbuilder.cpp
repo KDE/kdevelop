@@ -25,7 +25,7 @@ using namespace KDevelop;
 
 KDevelop::DUContext* ContextBuilder::contextFromNode(CMakeContentIterator* /*node*/)
 {
-    return 0;
+    return nullptr;
 }
 
 KDevelop::RangeInRevision ContextBuilder::editorFindRange(CMakeContentIterator* /*fromNode*/, CMakeContentIterator* /*toNode*/)

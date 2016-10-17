@@ -78,12 +78,12 @@ void ArchitectureParser::determineArchitecture(MIDebugSession* debugSession)
 }
 
 RegistersManager::RegistersManager(QWidget* parent)
-: QObject(parent), m_registersView(new RegistersView(parent)), m_registerController(0), m_architectureParser(new ArchitectureParser(this)), m_debugSession(0), m_modelsManager(new ModelsManager(this)), m_currentArchitecture(undefined), m_needToCheckArch(false)
+: QObject(parent), m_registersView(new RegistersView(parent)), m_registerController(nullptr), m_architectureParser(new ArchitectureParser(this)), m_debugSession(nullptr), m_modelsManager(new ModelsManager(this)), m_currentArchitecture(undefined), m_needToCheckArch(false)
 {
     connect(m_architectureParser, &ArchitectureParser::architectureParsed, this, &RegistersManager::architectureParsedSlot);
 
     m_registersView->setModel(m_modelsManager);
-    setController(0);
+    setController(nullptr);
 }
 
 void RegistersManager::architectureParsedSlot(Architecture arch)
@@ -132,7 +132,7 @@ void RegistersManager::setSession(MIDebugSession* debugSession)
     if (!m_debugSession) {
         qCDebug(DEBUGGERCOMMON) << "Will reparse arch";
         m_needToCheckArch = true;
-        setController(0);
+        setController(nullptr);
     }
 }
 
@@ -146,7 +146,7 @@ void RegistersManager::updateRegisters()
     if (m_needToCheckArch) {
         m_needToCheckArch = false;
         m_currentArchitecture = undefined;
-        setController(0);
+        setController(nullptr);
     }
     if (m_currentArchitecture == undefined) {
         m_architectureParser->determineArchitecture(m_debugSession);

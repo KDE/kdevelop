@@ -41,7 +41,7 @@ public:
         CompilerDataRole = Qt::UserRole + 1
     };
 
-    CompilersModel( QObject* parent = 0 );
+    CompilersModel( QObject* parent = nullptr );
 
     void setCompilers( const QVector<CompilerPointer>& compilers );
     QVector<CompilerPointer> compilers() const;

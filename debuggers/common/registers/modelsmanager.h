@@ -47,7 +47,7 @@ class ModelsManager : public QObject
     Q_OBJECT
 
 public:
-    explicit ModelsManager(QObject* parent = 0);
+    explicit ModelsManager(QObject* parent = nullptr);
 
     ~ModelsManager() override;
 

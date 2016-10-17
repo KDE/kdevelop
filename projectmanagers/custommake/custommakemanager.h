@@ -28,7 +28,7 @@ class CustomMakeManager : public KDevelop::AbstractFileManagerPlugin,
     Q_INTERFACES( KDevelop::IBuildSystemManager )
 public:
 
-    explicit CustomMakeManager( QObject *parent = NULL, const QVariantList& args = QVariantList()  );
+    explicit CustomMakeManager( QObject *parent = nullptr, const QVariantList& args = QVariantList()  );
 
     ~CustomMakeManager() override;
 
@@ -117,7 +117,7 @@ protected:
                                                       KDevelop::ProjectBaseItem* parent) override;
     KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project,
                                                           const KDevelop::Path& path,
-                                                          KDevelop::ProjectBaseItem* parent = 0) override;
+                                                          KDevelop::ProjectBaseItem* parent = nullptr) override;
 
     void unload() override;
 

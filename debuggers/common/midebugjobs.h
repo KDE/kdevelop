@@ -43,7 +43,7 @@ class MIDebugJob : public KDevelop::OutputJob
     Q_OBJECT
 public:
     MIDebugJob(MIDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* plugin,
-             QObject* parent = 0);
+             QObject* parent = nullptr);
     void start() override;
 
 protected:

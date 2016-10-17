@@ -34,7 +34,7 @@ class MakeBuilderPreferences : public ProjectConfigPage<MakeBuilderSettings>
     Q_OBJECT
 
 public:
-    explicit MakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
+    explicit MakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = nullptr);
     ~MakeBuilderPreferences() override;
     void reset() override;
     void apply() override;

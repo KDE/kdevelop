@@ -34,7 +34,7 @@ class NinjaBuilderPreferences : public ProjectConfigPage<NinjaBuilderSettings>
     Q_OBJECT
 
 public:
-    explicit NinjaBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
+    explicit NinjaBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = nullptr);
     ~NinjaBuilderPreferences() override;
 
     QString name() const override;

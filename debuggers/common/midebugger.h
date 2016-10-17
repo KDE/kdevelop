@@ -45,7 +45,7 @@ class MIDebugger : public QObject
 {
     Q_OBJECT
 public:
-    explicit MIDebugger(QObject* parent = 0);
+    explicit MIDebugger(QObject* parent = nullptr);
     ~MIDebugger() override;
 
     /** Starts the debugger.  This should be done after connecting to all

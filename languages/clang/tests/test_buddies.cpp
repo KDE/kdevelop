@@ -422,11 +422,11 @@ void TestBuddies::testDUChainBuddy()
 
     QTemporaryDir dirA;
 
-    TestFile header("void myfunction();\n", "h", 0, dirA.path());
-    TestFile other("void otherfunction() {}\n", "cpp", 0, dirA.path());
+    TestFile header("void myfunction();\n", "h", nullptr, dirA.path());
+    TestFile other("void otherfunction() {}\n", "cpp", nullptr, dirA.path());
     TestFile source(
         QString("#include \"%1\"\nvoid myfunction() {}\n").arg(header.url().toUrl().fileName()),
-        "cpp", 0, dirA.path()
+        "cpp", nullptr, dirA.path()
     );
 
     header.parseAndWait();
@@ -469,14 +469,14 @@ void TestBuddies::testDUChainBuddyVote()
 
     QTemporaryDir dirA;
 
-    TestFile header("void func1();\nvoid func2();\nvoid func3();\n", "h", 0, dirA.path());
+    TestFile header("void func1();\nvoid func2();\nvoid func3();\n", "h", nullptr, dirA.path());
     TestFile source1(
         QString("#include \"%1\"\nvoid func1() {}\n").arg(header.url().toUrl().fileName()),
-        "cpp", 0, dirA.path()
+        "cpp", nullptr, dirA.path()
     );
     TestFile source2(
         QString("#include \"%1\"\nvoid func2() {}\nvoid func3() {}\n").arg(header.url().toUrl().fileName()),
-        "cpp", 0, dirA.path()
+        "cpp", nullptr, dirA.path()
     );
 
     // -> buddy(header) should resolve to source2

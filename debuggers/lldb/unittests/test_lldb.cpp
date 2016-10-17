@@ -111,8 +111,8 @@ public:
     const KConfigGroup config() const override { return cfg; }
     KConfigGroup config() override { return cfg; };
     QString name() const override { return QString("Test-Launch"); }
-    KDevelop::IProject* project() const override { return 0; }
-    KDevelop::LaunchConfigurationType* type() const override { return 0; }
+    KDevelop::IProject* project() const override { return nullptr; }
+    KDevelop::LaunchConfigurationType* type() const override { return nullptr; }
 
     KConfig *rootConfig() { return c; }
 private:

@@ -35,8 +35,8 @@ class PlasmoidExecutionConfig : public KDevelop::LaunchConfigurationPage, Ui::Pl
 Q_OBJECT
 public:
     PlasmoidExecutionConfig( QWidget* parent );
-    void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 ) override;
-    void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const override;
+    void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = nullptr ) override;
+    void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = nullptr ) const override;
     QString title() const override;
     QIcon icon() const override;
 };

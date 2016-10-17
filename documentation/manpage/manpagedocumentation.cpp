@@ -36,7 +36,7 @@
 #include <kio/jobclasses.h>
 #include <documentation/standarddocumentationview.h>
 
-ManPagePlugin* ManPageDocumentation::s_provider=0;
+ManPagePlugin* ManPageDocumentation::s_provider=nullptr;
 
 
 ManPageDocumentation::ManPageDocumentation(const QString& name, const QUrl& url)

@@ -49,7 +49,7 @@
 using namespace KDevelop;
 
 CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& options, QWidget* parent)
-    : ConfigPage(plugin, nullptr, parent), m_project(options.project), m_currentModel(0)
+    : ConfigPage(plugin, nullptr, parent), m_project(options.project), m_currentModel(nullptr)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -192,10 +192,10 @@ void CMakePreferences::updateCache(const Path &newBuildDir)
     }
     else
     {
-        disconnect(m_prefsUi->cacheList->selectionModel(), &QItemSelectionModel::currentChanged, this, 0);
+        disconnect(m_prefsUi->cacheList->selectionModel(), &QItemSelectionModel::currentChanged, this, nullptr);
         if (m_currentModel) {
             m_currentModel->deleteLater();
-            m_currentModel = 0;
+            m_currentModel = nullptr;
         }
         configureCacheView();
     }

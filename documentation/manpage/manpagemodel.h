@@ -37,7 +37,7 @@ class ManPageModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    ManPageModel(QObject* parent = 0);
+    ManPageModel(QObject* parent = nullptr);
     ~ManPageModel() override;
 
     /**

@@ -64,7 +64,7 @@ static QStringList closestTargetsForFolder(KDevelop::ProjectFolderItem* item)
         if (!targets.isEmpty()) {
             return targets;
         }
-        current = (current->parent() ? current->parent()->folder() : 0);
+        current = (current->parent() ? current->parent()->folder() : nullptr);
     }
     return QStringList();
 }

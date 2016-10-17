@@ -52,7 +52,7 @@ class GDBOutputWidget : public QWidget
     Q_OBJECT
 
 public:
-    GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent=0 );
+    GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent=nullptr );
     ~GDBOutputWidget() override;
 
     void savePartialProjectSession();

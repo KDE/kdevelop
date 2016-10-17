@@ -124,7 +124,7 @@ public:
     : m_plugin(plugin), m_id(id), m_defaultArea(defaultArea)
     {}
 
-    QWidget* create(QWidget *parent = 0) override
+    QWidget* create(QWidget *parent = nullptr) override
     {
         return new T(m_plugin, parent);
     }

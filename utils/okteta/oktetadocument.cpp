@@ -61,7 +61,7 @@ namespace KDevelop
 OktetaDocument::OktetaDocument( const QUrl &url , ICore* core )
   : Sublime::UrlDocument( core->uiController()->controller(), url ),
     IDocument( core ),
-    mByteArrayDocument( 0 )
+    mByteArrayDocument( nullptr )
 {
 }
 
@@ -70,8 +70,8 @@ QUrl OktetaDocument::url() const { return Sublime::UrlDocument::url(); }
 // TODO: use fromContentAndUrl(ByteArrayIODevice) if document loaded
 QMimeType OktetaDocument::mimeType() const { return QMimeDatabase().mimeTypeForUrl( url() ); }
 
-KParts::Part* OktetaDocument::partForView( QWidget* ) const { return 0; }
-KTextEditor::Document* OktetaDocument::textDocument() const { return 0; }
+KParts::Part* OktetaDocument::partForView( QWidget* ) const { return nullptr; }
+KTextEditor::Document* OktetaDocument::textDocument() const { return nullptr; }
 KTextEditor::Cursor OktetaDocument::cursorPosition() const { return KTextEditor::Cursor(); }
 
 IDocument::DocumentState OktetaDocument::state() const
@@ -201,7 +201,7 @@ void OktetaDocument::setPlugin( OktetaPlugin* plugin )
 
 Sublime::View* OktetaDocument::newView( Sublime::Document* document )
 {
-    if( mByteArrayDocument == 0 )
+    if( mByteArrayDocument == nullptr )
     {
         Kasten::ByteArrayRawFileSynchronizerFactory* synchronizerFactory =
             new Kasten::ByteArrayRawFileSynchronizerFactory();

@@ -146,7 +146,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
     Q_ASSERT(cfg);
     if( !cfg )
     {
-        return 0;
+        return nullptr;
     }
     if( launchMode == "debug" )
     {
@@ -172,7 +172,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
     }
     qWarning() << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
-    return 0;
+    return nullptr;
 }
 
 QStringList GdbLauncher::supportedModes() const

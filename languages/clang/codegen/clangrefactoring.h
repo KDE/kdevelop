@@ -40,7 +40,7 @@ class KDEVCLANGPRIVATE_EXPORT ClangRefactoring : public KDevelop::BasicRefactori
     Q_OBJECT
 
 public:
-    explicit ClangRefactoring(QObject* parent = 0);
+    explicit ClangRefactoring(QObject* parent = nullptr);
 
     void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) override;
 

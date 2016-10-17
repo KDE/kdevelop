@@ -60,7 +60,7 @@ bool IncludesModel::setData( const QModelIndex& index, const QVariant& value, in
 Qt::ItemFlags IncludesModel::flags( const QModelIndex& index ) const
 {
     if( !index.isValid() ) {
-        return 0;
+        return nullptr;
     }
 
     return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );

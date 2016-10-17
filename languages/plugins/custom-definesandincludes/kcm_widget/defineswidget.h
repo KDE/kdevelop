@@ -41,7 +41,7 @@ class DefinesWidget : public QWidget
 {
 Q_OBJECT
 public:
-    DefinesWidget( QWidget* parent = 0 );
+    DefinesWidget( QWidget* parent = nullptr );
     void setDefines( const KDevelop::Defines& defines );
     void clear();
 signals:

@@ -58,11 +58,11 @@ class GdbConfigPage : public KDevelop::LaunchConfigurationPage
 {
 Q_OBJECT
 public:
-    GdbConfigPage( QWidget* parent = 0 );
+    GdbConfigPage( QWidget* parent = nullptr );
     ~GdbConfigPage() override;
     QIcon icon() const override;
-    void loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* = 0) override;
-    void saveToConfiguration(KConfigGroup, KDevelop::IProject* = 0 ) const override;
+    void loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* = nullptr) override;
+    void saveToConfiguration(KConfigGroup, KDevelop::IProject* = nullptr ) const override;
     QString title() const override;
 private:
     Ui::GdbConfigPage* ui;

@@ -46,7 +46,7 @@ class CompilersWidget : public KDevelop::ConfigPage
     Q_OBJECT
 
 public:
-    explicit CompilersWidget(QWidget* parent = 0);
+    explicit CompilersWidget(QWidget* parent = nullptr);
     ~CompilersWidget() override;
 
     void setCompilers(const QVector<CompilerPointer>& compilers);

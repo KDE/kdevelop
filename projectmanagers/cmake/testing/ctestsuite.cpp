@@ -67,7 +67,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
         return;
     }
 
-    Declaration* testClass = 0;
+    Declaration* testClass = nullptr;
     Identifier testCaseIdentifier("tc");
     foreach (Declaration* declaration, topContext->findLocalDeclarations(Identifier("main")))
     {
@@ -181,7 +181,7 @@ IndexedDeclaration CTestSuite::declaration() const
 
 IndexedDeclaration CTestSuite::caseDeclaration(const QString& testCase) const
 {
-    return m_declarations.value(testCase, IndexedDeclaration(0));
+    return m_declarations.value(testCase, IndexedDeclaration(nullptr));
 }
 
 void CTestSuite::setTestCases(const QStringList& cases)

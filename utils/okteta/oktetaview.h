@@ -49,7 +49,7 @@ class OktetaView : public Sublime::View
     Kasten::ByteArrayView* byteArrayView() const;
 
   protected: // Sublime::View API
-    QWidget* createWidget( QWidget* parent = 0 ) override;
+    QWidget* createWidget( QWidget* parent = nullptr ) override;
 
   protected:
     Kasten::ByteArrayView* mByteArrayView;

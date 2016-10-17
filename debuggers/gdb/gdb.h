@@ -31,7 +31,7 @@ class GdbDebugger : public MIDebugger
 {
     Q_OBJECT
 public:
-    explicit GdbDebugger(QObject* parent = 0);
+    explicit GdbDebugger(QObject* parent = nullptr);
     ~GdbDebugger() override;
 
     bool start(KConfigGroup& config, const QStringList& extraArguments = {}) override;

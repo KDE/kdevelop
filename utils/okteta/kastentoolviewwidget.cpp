@@ -68,7 +68,7 @@ void KastenToolViewWidget::onActiveViewChanged( Sublime::View* view )
 {
     // TODO: check if own mainWindow
     OktetaView* oktetaView = qobject_cast<OktetaView*>( view );
-    Kasten::ByteArrayView* byteArrayView = oktetaView ? oktetaView->byteArrayView() : 0;
+    Kasten::ByteArrayView* byteArrayView = oktetaView ? oktetaView->byteArrayView() : nullptr;
     mToolView->tool()->setTargetModel( byteArrayView );
 }
 

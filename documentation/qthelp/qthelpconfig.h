@@ -40,7 +40,7 @@ public:
     Q_OBJECT
 
     public:
-      explicit QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent = 0);
+      explicit QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent = nullptr);
       ~QtHelpConfig() override;
 
       bool checkNamespace(const QString &filename, QTreeWidgetItem* modifiedItem);

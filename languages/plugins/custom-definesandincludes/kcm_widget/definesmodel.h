@@ -28,7 +28,7 @@ class DefinesModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
-    DefinesModel( QObject* parent = 0 );
+    DefinesModel( QObject* parent = nullptr );
     void setDefines( const KDevelop::Defines& defines );
     KDevelop::Defines defines() const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;

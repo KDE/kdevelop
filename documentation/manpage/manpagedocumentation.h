@@ -44,7 +44,7 @@ class ManPageDocumentation : public KDevelop::IDocumentation
         QString name() const override { return m_name; }
         QString description() const override;
         virtual bool providesWidget() const;
-        QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0) override;
+        QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = nullptr) override;
         KDevelop::IDocumentationProvider* provider() const override;
         static ManPagePlugin* s_provider;
 
@@ -65,7 +65,7 @@ class ManPageHomeDocumentation : public KDevelop::IDocumentation
         KDevelop::IDocumentationProvider* provider() const override;
         QString name() const override;
         QString description() const override { return name(); }
-        QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 ) override;
+        QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = nullptr ) override;
 };
 
 

@@ -265,7 +265,7 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
     MIDebugSession *session = qobject_cast<MIDebugSession*>(s);
 
-    enableControls( session != NULL ); // disable if session closed
+    enableControls( session != nullptr ); // disable if session closed
 
     m_registersManager->setSession(session);
 

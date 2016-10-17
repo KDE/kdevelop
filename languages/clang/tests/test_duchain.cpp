@@ -540,7 +540,7 @@ void TestDUChain::testTypeDeductionInTemplateInstantiation()
     DUContext* ctx = file.topContext().data();
     QVERIFY(ctx);
     QCOMPARE(ctx->localDeclarations().size(), 3);
-    Declaration* decl = 0;
+    Declaration* decl = nullptr;
 
     // check 'foo' declaration
     decl = ctx->localDeclarations()[0];

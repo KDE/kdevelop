@@ -38,7 +38,7 @@ inline T cursorForCXSrcLoc(CXSourceLocation loc)
 {
     uint line = 0;
     uint column = 0;
-    clang_getFileLocation(loc, 0, &line, &column, 0);
+    clang_getFileLocation(loc, nullptr, &line, &column, nullptr);
     return {static_cast<int>(line-1), static_cast<int>(column-1)};
 }
 
@@ -101,7 +101,7 @@ ClangLocation::operator DocumentCursor() const
     uint line = 0;
     uint column = 0;
     CXFile file;
-    clang_getFileLocation(location, &file, &line, &column, 0);
+    clang_getFileLocation(location, &file, &line, &column, nullptr);
     ClangString fileName(clang_getFileName(file));
     return {IndexedString(fileName.c_str()), {static_cast<int>(line-1), static_cast<int>(column-1)}};
 }
@@ -155,7 +155,7 @@ DocumentRange ClangRange::toDocumentRange() const
 {
     auto start = clang_getRangeStart(m_range);
     CXFile file;
-    clang_getFileLocation(start, &file, 0, 0, 0);
+    clang_getFileLocation(start, &file, nullptr, nullptr, nullptr);
     ClangString fileName(clang_getFileName(file));
     return {IndexedString(QUrl::fromLocalFile(fileName.toString()).adjusted(QUrl::NormalizePathSegments)), toRange()};
 }

@@ -1252,7 +1252,7 @@ void MIDebugSession::handleNoInferior(const QString& msg)
         // will continiously bomd STTY with signals, so we need to either disable
         // QSocketNotifier, or delete STTY. The latter is simpler, since we can't
         // reuse it for future debug sessions anyway.
-        m_tty.reset(0);
+        m_tty.reset(nullptr);
     }
 
     stopDebugger();

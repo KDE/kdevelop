@@ -28,7 +28,7 @@ class QtTestDelegate : public QItemDelegate
     Q_OBJECT
     
 public:
-    explicit QtTestDelegate(QObject* parent = 0);
+    explicit QtTestDelegate(QObject* parent = nullptr);
     ~QtTestDelegate() override;
     
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;

@@ -118,7 +118,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         bool valid;
         KJob* configure = checkConfigureJob(dom->project(), valid);
 
-        KJob* build = 0;
+        KJob* build = nullptr;
         if(dom->file())
         {
             IMakeBuilder* makeBuilder = dynamic_cast<IMakeBuilder*>(builder);

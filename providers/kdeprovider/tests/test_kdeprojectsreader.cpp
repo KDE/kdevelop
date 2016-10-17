@@ -27,7 +27,7 @@ QTEST_MAIN( TestKDEProjectsReader )
 void TestKDEProjectsReader::testsProperParse()
 {
     KDEProjectsModel m;
-    KDEProjectsReader reader(&m, 0);
+    KDEProjectsReader reader(&m, nullptr);
     
     if(reader.hasErrors())
         qDebug() << "errors:" << reader.errors();

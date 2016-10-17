@@ -31,7 +31,7 @@ class LldbDebugger : public MIDebugger
 {
     Q_OBJECT
 public:
-    explicit LldbDebugger(QObject* parent = 0);
+    explicit LldbDebugger(QObject* parent = nullptr);
     ~LldbDebugger() override;
 
     bool start(KConfigGroup& config, const QStringList& extraArguments = {}) override;

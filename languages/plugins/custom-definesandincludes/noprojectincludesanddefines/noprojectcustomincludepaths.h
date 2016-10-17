@@ -35,7 +35,7 @@ class NoProjectCustomIncludePaths : public QDialog
     Q_OBJECT
 
 public:
-    NoProjectCustomIncludePaths( QWidget* parent = 0 );
+    NoProjectCustomIncludePaths( QWidget* parent = nullptr );
 
     void setStorageDirectory( const QString& path );
     QString storageDirectory() const;

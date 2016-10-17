@@ -26,7 +26,7 @@
 using namespace KDevelop;
 
 ProjectPathsModel::ProjectPathsModel( QObject* parent )
-    : QAbstractListModel( parent ), project( 0 )
+    : QAbstractListModel( parent ), project( nullptr )
 {
 }
 
@@ -135,7 +135,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
 Qt::ItemFlags ProjectPathsModel::flags( const QModelIndex& index ) const
 {
     if( !index.isValid() ) {
-        return 0;
+        return nullptr;
     }
 
     if( index.row() == 0 ) {

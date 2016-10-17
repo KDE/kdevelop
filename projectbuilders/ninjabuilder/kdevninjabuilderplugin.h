@@ -32,7 +32,7 @@ class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuild
     Q_OBJECT
     Q_INTERFACES( KDevelop::IProjectBuilder )
     public:
-        KDevNinjaBuilderPlugin(QObject* parent = 0, const QVariantList& args = QVariantList());
+        KDevNinjaBuilderPlugin(QObject* parent = nullptr, const QVariantList& args = QVariantList());
         
         KJob* build(KDevelop::ProjectBaseItem* item) override;
         KJob* clean(KDevelop::ProjectBaseItem* item) override;

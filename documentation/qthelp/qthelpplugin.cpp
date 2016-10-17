@@ -31,7 +31,7 @@
 #include "debug.h"
 #include "qthelpconfig.h"
 
-QtHelpPlugin *QtHelpPlugin::s_plugin = 0;
+QtHelpPlugin *QtHelpPlugin::s_plugin = nullptr;
 
 K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
 
@@ -107,7 +107,7 @@ void QtHelpPlugin::loadQtHelpProvider(QStringList pathList, QStringList nameList
         QString iconName = iconList.at(i);
         QString nameSpace = QHelpEngineCore::namespaceName(fileName);
         if(!nameSpace.isEmpty()){
-            QtHelpProvider *provider = 0;
+            QtHelpProvider *provider = nullptr;
             foreach(QtHelpProvider* oldProvider, oldList){
                 if(QHelpEngineCore::namespaceName(oldProvider->fileName()) == nameSpace){
                     provider = oldProvider;

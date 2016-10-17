@@ -51,7 +51,7 @@ QString AStyleFormatter::formatSource(const QString &text, const QString& leftCo
     while(hasMoreLines())
         os << QString::fromUtf8(nextLine().c_str()) << endl;
 
-    init(0);
+    init(nullptr);
 
     return extractFormattedTextFromContext(output, text, leftContext, rightContext, m_options["FillCount"].toInt());
 }

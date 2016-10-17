@@ -32,7 +32,7 @@ class ProcessSelectionDialog : public QDialog
 {
     Q_OBJECT
     public:
-        ProcessSelectionDialog( QWidget *parent=0 );
+        ProcessSelectionDialog( QWidget *parent=nullptr );
         ~ProcessSelectionDialog() override;
         long int pidSelected();
         QSize sizeHint() const override;

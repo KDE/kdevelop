@@ -133,7 +133,7 @@ void AdaptSignatureAssistant::textChanged(KTextEditor::Document* doc, const KTex
        }
      */
 
-    Declaration* otherSide = 0;
+    Declaration* otherSide = nullptr;
     FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(funDecl);
     if (definition) {
         m_editingDefinition = true;

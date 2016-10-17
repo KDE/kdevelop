@@ -30,7 +30,7 @@
 
 ManPageDocumentationWidget::ManPageDocumentationWidget(QWidget *parent)
     : QStackedWidget(parent)
-    , m_loadingWidget(0)
+    , m_loadingWidget(nullptr)
 {
     ManPageModel* model = ManPageDocumentation::s_provider->model();
     m_treeView = new QTreeView(this);
@@ -73,7 +73,7 @@ void ManPageDocumentationWidget::manIndexLoaded()
     if(m_loadingWidget){
         removeWidget(m_loadingWidget);
         delete m_loadingWidget;
-        m_loadingWidget = 0;
+        m_loadingWidget = nullptr;
     }
 }
 

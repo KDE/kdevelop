@@ -49,7 +49,7 @@ using namespace KDevMI::MI;
   } while (0)
 
 MIParser::MIParser()
-    : m_lex(0)
+    : m_lex(nullptr)
 {
 }
 
@@ -59,11 +59,11 @@ MIParser::~MIParser()
 
 std::unique_ptr<Record> MIParser::parse(FileSymbol *file)
 {
-    m_lex = 0;
+    m_lex = nullptr;
 
     TokenStream *tokenStream = m_lexer.tokenize(file);
     if (!tokenStream)
-        return 0;
+        return nullptr;
 
     m_lex = file->tokenStream = tokenStream;
 
@@ -192,7 +192,7 @@ bool MIParser::parseResult(Result *&result)
         m_lex->nextToken();
     }
 
-    Value *value = 0;
+    Value *value = nullptr;
     if (!parseValue(value))
         return false;
 
@@ -204,7 +204,7 @@ bool MIParser::parseResult(Result *&result)
 
 bool MIParser::parseValue(Value *&value)
 {
-    value = 0;
+    value = nullptr;
 
     switch (m_lex->lookAhead()) {
         case Token_string_literal: {
@@ -247,8 +247,8 @@ bool MIParser::parseList(Value *&value)
     // that out too using function pointers.
     int tok = m_lex->lookAhead();
     while (tok && tok != ']') {
-        Result *result = 0;
-        Value *val = 0;
+        Result *result = nullptr;
+        Value *val = nullptr;
 
         if (tok == Token_identifier)
         {

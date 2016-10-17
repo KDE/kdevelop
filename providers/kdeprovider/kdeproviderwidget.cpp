@@ -87,12 +87,12 @@ VcsJob* KDEProviderWidget::createWorkingCopy(const QUrl &destinationDirectory)
 {
     QModelIndex pos = m_projects->currentIndex();
     if(!pos.isValid())
-        return 0;
+        return nullptr;
     
     IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
     if (!plugin) {
-        KMessageBox::error(0, i18n("The Git plugin could not be loaded which is required to download a KDE project."), i18n("KDE Provider Error"));
-        return 0;
+        KMessageBox::error(nullptr, i18n("The Git plugin could not be loaded which is required to download a KDE project."), i18n("KDE Provider Error"));
+        return nullptr;
     }
     IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
     VcsJob* ret = vcIface->createWorkingCopy(extractLocation(pos), destinationDirectory);

@@ -156,8 +156,8 @@ public:
     const KConfigGroup config() const override { return cfg; }
     KConfigGroup config() override { return cfg; };
     QString name() const override { return QString("Test-Launch"); }
-    KDevelop::IProject* project() const override { return 0; }
-    KDevelop::LaunchConfigurationType* type() const override { return 0; }
+    KDevelop::IProject* project() const override { return nullptr; }
+    KDevelop::LaunchConfigurationType* type() const override { return nullptr; }
 
     KConfig *rootConfig() { return c; }
 private:
@@ -2028,7 +2028,7 @@ void GdbTest::testDebugInExternalTerminal()
 
     foreach (const QString & console, QStringList() << "konsole" << "xterm" << "xfce4-terminal" << "gnome-terminal") {
 
-        TestDebugSession* session = 0;
+        TestDebugSession* session = nullptr;
         if (QStandardPaths::findExecutable(console).isEmpty()) {
             continue;
         }

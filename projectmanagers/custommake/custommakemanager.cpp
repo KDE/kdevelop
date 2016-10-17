@@ -165,7 +165,7 @@ ProjectTargetItem* CustomMakeManager::createTarget(const QString& target, KDevel
 {
     Q_UNUSED(target)
     Q_UNUSED(parent)
-    return NULL;
+    return nullptr;
 }
 
 bool CustomMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &files, ProjectTargetItem* parent)
@@ -271,7 +271,7 @@ KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *proje
     {
         //FIXME turn this into a real warning
         qCWarning(CUSTOMMAKE) << project->path() << "not a local file. Custom make support doesn't handle remote projects";
-        return 0;
+        return nullptr;
     }
 
     {

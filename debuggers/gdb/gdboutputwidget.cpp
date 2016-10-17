@@ -53,9 +53,9 @@ using namespace KDevMI::GDB;
 
 GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     QWidget(parent),
-    m_userGDBCmdEditor(0),
-    m_Interrupt(0),
-    m_gdbView(0),
+    m_userGDBCmdEditor(nullptr),
+    m_Interrupt(nullptr),
+    m_gdbView(nullptr),
     showInternalCommands_(false),
     maxLines_(5000)
 {
