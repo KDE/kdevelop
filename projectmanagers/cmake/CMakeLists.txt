@@ -111,6 +111,6 @@ target_link_libraries( kdevcmakedocumentation
                         KDev::Interfaces kdevcmakecommon
                         KDev::Project KDev::Language
                         KDev::Documentation
-                        KF5::TextEditor Qt5::WebKitWidgets)
+                        KF5::TextEditor)
 
 install(TARGETS kdevcmakecommon ${INSTALL_TARGETS_DEFAULT_ARGS} )
