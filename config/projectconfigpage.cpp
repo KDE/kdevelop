@@ -51,7 +51,7 @@ ProjectConfigPage::~ProjectConfigPage()
 
 QIcon ProjectConfigPage::icon() const
 {
-   return QIcon::fromTheme(QStringLiteral("emblem-checked"));
+   return QIcon::fromTheme(QStringLiteral("dialog-ok"));
 }
 
 void ProjectConfigPage::defaults()
