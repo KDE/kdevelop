@@ -41,10 +41,6 @@
 #include "debug.h"
 
 namespace {
-// Maximum length of a string to still consider it as a file extension which we cache
-// This has to be a slow value, so that we don't fill our file extension cache with crap
-const int maximumCacheExtensionLength = 3;
-
 QString KEY_SupportedMimeTypes() { return QStringLiteral("X-KDevelop-SupportedMimeTypes"); }
 QString KEY_ILanguageSupport() { return QStringLiteral("ILanguageSupport"); }
 }
