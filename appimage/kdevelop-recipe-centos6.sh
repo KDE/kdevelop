@@ -23,7 +23,7 @@ QTDIR=/usr/local/Qt-${QTVERSION}/
 
 KDEVELOP_VERSION=5.0
 KDEV_PG_QT_VERSION=2.0
-KF5_VERSION=v5.26.0
+KF5_VERSION=v5.27.0
 KDE_APPLICATION_VERSION=v16.08.0
 GRANTLEE_VERSION=v5.1.0
 
@@ -116,6 +116,7 @@ if [ ! -d /grantlee ]; then
     git clone https://github.com/steveire/grantlee.git
 fi
 cd /grantlee
+git checkout master
 git_pull_rebase_helper
 git checkout $GRANTLEE_VERSION
 
@@ -516,7 +517,7 @@ rm -Rf /kdevelop.appdir/usr/lib/python3.5/{test,config-3.5m,__pycache__,site-pac
 
 mkdir -p /kdevelop.appdir/usr/share/kdevelop/
 cp /kf5/build/breeze-icons/icons/breeze-icons.rcc /kdevelop.appdir/usr/share/kdevelop/icontheme.rcc
-rm -Rf /kdevelop.appdir/usr/share/icons # not needed because of the rcc
+rm -Rf /kdevelop.appdir/usr/share/icons/breeze* # not needed because of the rcc
 rm -f /kdevelop.appdir/usr/bin/llvm*
 rm -f /kdevelop.appdir/usr/bin/clang*
 rm -f /kdevelop.appdir/usr/bin/opt
