@@ -88,4 +88,4 @@ void TestCppcheckJob::testJob()
     QCOMPARE(jobTester.xmlOutput(), stderrOutput.join('\n'));
 }
 
-QTEST_GUILESS_MAIN(TestCppcheckJob);
+QTEST_GUILESS_MAIN(TestCppcheckJob)

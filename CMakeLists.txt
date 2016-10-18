@@ -20,6 +20,8 @@ find_package(Qt5 REQUIRED Core Widgets Test)
 find_package(KF5 REQUIRED COMPONENTS ItemModels ItemViews)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic" )
+
 include_directories(
     ${kdevcppcheck_BINARY_DIR}
     ${kdevcppcheck_SOURCE_DIR}

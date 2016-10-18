@@ -95,4 +95,4 @@ void TestCppcheckParser::testParser()
     QCOMPARE(p->source(), IProblem::Plugin);
 }
 
-QTEST_GUILESS_MAIN(TestCppcheckParser);
+QTEST_GUILESS_MAIN(TestCppcheckParser)
