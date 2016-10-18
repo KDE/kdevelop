@@ -29,13 +29,13 @@
 #include <QVariantList>
 #include <QHelpEngine>
 
-
 class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationProvider
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
     QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList & args);
+    virtual ~QtHelpProviderAbstract();
     KDevelop::IDocumentation::Ptr documentationForDeclaration (KDevelop::Declaration*) const override;
 
     KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const override;
