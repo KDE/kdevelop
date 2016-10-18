@@ -641,7 +641,7 @@ struct Visitor
         return makeType(clangType, cursor);
     }
 
-#if CINDEX_VERSION_MINOR >= 31
+#if CINDEX_VERSION_MINOR >= 32
     template<CXTypeKind TK, EnableIf<TK == CXType_Auto> = dummy>
     AbstractType *createType(CXType type, CXCursor parent)
     {
@@ -988,7 +988,7 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
         decl->setStatic(true);
     decl->setAccessPolicy(CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor)));
 
-#if CINDEX_VERSION_MINOR >= 31
+#if CINDEX_VERSION_MINOR >= 32
     decl->setMutable(clang_CXXField_isMutable(cursor));
 #endif
 
@@ -1285,7 +1285,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_ObjCClass);
     UseKind(CXType_ObjCSel);
     UseKind(CXType_NullPtr);
-#if CINDEX_VERSION_MINOR >= 31
+#if CINDEX_VERSION_MINOR >= 32
     UseKind(CXType_Auto);
 #endif
 #if CINDEX_VERSION_MINOR >= 34
