@@ -159,7 +159,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
 
     Type* data() const {
       if( !d )
-        return 0;
+        return nullptr;
       return static_cast<Type*>(d->base());
     }
 
@@ -167,7 +167,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
       if( rhs )
         d = rhs->weakPointer();
       else
-        d = 0;
+        d = nullptr;
 
       return *this;
     }

@@ -32,7 +32,7 @@ public:
   ///@param shareMutex Option repository from where this repository should take the thread-safety mutex
   RepositoryManager(QString name,
                     int version = 1,
-                    AbstractRepositoryManager*(*shareMutex)() = 0,
+                    AbstractRepositoryManager*(*shareMutex)() = nullptr,
                     ItemRepositoryRegistry& registry = globalItemRepositoryRegistry()) :
   m_name(name),
   m_version(version),

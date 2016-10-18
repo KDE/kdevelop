@@ -39,7 +39,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationFindWidget : public QWidget
         };
         Q_DECLARE_FLAGS(FindOptions, FindOption);
         
-        explicit DocumentationFindWidget(QWidget* parent = 0);
+        explicit DocumentationFindWidget(QWidget* parent = nullptr);
         virtual ~DocumentationFindWidget();
         
         virtual void showEvent ( QShowEvent* ) override;

@@ -108,14 +108,14 @@ class VirtualSetNode {
             if(m_data->leftNode())
                 return StaticRepository::repository()->nodeFromIndex(m_data->leftNode());
             else
-                return 0;
+                return nullptr;
         }
 
         inline VirtualSetNode<T, Conversion, StaticRepository> rightChild() const {
             if(m_data->rightNode())
                 return StaticRepository::repository()->nodeFromIndex(m_data->rightNode());
             else
-                return 0;
+                return nullptr;
         }
 
         ///Returns the start of this node's range. If this is a final node, the length of the range is 1.

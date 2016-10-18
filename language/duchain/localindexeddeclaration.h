@@ -33,7 +33,7 @@ class Declaration;
 class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration
 {
   public:
-    LocalIndexedDeclaration(Declaration* decl = 0);
+    LocalIndexedDeclaration(Declaration* decl = nullptr);
     LocalIndexedDeclaration(uint declarationIndex);
 
     /**

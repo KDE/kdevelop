@@ -44,7 +44,7 @@ class KDEVPLATFORMVCS_EXPORT VcsJob : public OutputJob
 {
     Q_OBJECT
 public:
-    explicit VcsJob( QObject* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
+    explicit VcsJob( QObject* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Verbose);
     virtual ~VcsJob();
     /**
      * To easily check which type of job this is.

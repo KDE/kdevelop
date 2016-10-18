@@ -274,7 +274,7 @@ namespace KDevelop {
             }
 
             ///Transfers the data into a new item-list. The size of the new item-list must equal newItemCount()
-            void transferData(Data* newItems, uint newCount, int* newCentralFree = 0) {
+            void transferData(Data* newItems, uint newCount, int* newCentralFree = nullptr) {
                 DEBUG_FREEITEM_COUNT
 
                 uint currentRealCount = m_itemCount - countFreeItems(*m_centralFreeItem);
@@ -756,7 +756,7 @@ namespace KDevelop {
             }
 
             ///Transfers the data into a new item-list. The size of the new item-list must equal newItemCount()
-            void transferData(Data* newItems, uint newCount, int* newCentralFree = 0) {
+            void transferData(Data* newItems, uint newCount, int* newCentralFree = nullptr) {
                 DEBUG_FREEITEM_COUNT
                 //We only transfer into a new list when all the free items are used up
 

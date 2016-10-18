@@ -79,7 +79,7 @@ namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT ItemUnderCursor itemUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor);
   /**If the given declaration is a definition, and has a real declaration
     *attached, returns that declarations. Else returns the given argument. */
-  KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForDefinition(Declaration* definition, TopDUContext* topContext = 0);
+  KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForDefinition(Declaration* definition, TopDUContext* topContext = nullptr);
   ///Returns the first declaration in the given line. Searches the given context and all sub-contexts.
   ///Must only be called from the foreground or with the foreground lock held.
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationInLine(const KTextEditor::Cursor& cursor, KDevelop::DUContext* ctx);

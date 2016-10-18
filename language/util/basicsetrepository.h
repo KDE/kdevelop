@@ -291,7 +291,7 @@ public:
       if(index)
           return dataRepository.itemFromIndex(index);
       else
-          return 0;
+          return nullptr;
   }
   
   inline QMutex* mutex() const {

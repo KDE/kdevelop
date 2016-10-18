@@ -58,17 +58,17 @@
 #include <KIO/Global>
 #include <KLocalizedString>
 
-#define REMOVE_PAGE(name)       \
-if (d->name##Page)              \
-{                               \
-    removePage(d->name##Page);  \
-    d->name##Page = 0;          \
-    d->name##PageWidget = 0;    \
+#define REMOVE_PAGE(name)          \
+if (d->name##Page)                 \
+{                                  \
+    removePage(d->name##Page);     \
+    d->name##Page = nullptr;       \
+    d->name##PageWidget = nullptr; \
 }
 
-#define ZERO_PAGE(name)         \
-d->name##Page = 0;              \
-d->name##PageWidget = 0;
+#define ZERO_PAGE(name)  \
+d->name##Page = nullptr; \
+d->name##PageWidget = nullptr;
 
 using namespace KDevelop;
 

@@ -182,7 +182,7 @@ DeclarationTest(identifiedTypeDeclaration)
   const QString UN_ID_ERROR = QStringLiteral("Unable to identify declaration of type \"%1\".");
   AbstractType::Ptr type = TypeUtils::targetType(decl->abstractType(), decl->topContext());
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
-  Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : 0;
+  Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : nullptr;
   if (!idDecl)
     return UN_ID_ERROR.arg(type->toString());
 
@@ -238,7 +238,7 @@ DeclarationTest(isMutable)
 DeclarationTest(definition)
 {
   KDevVarLengthArray<IndexedDeclaration> definitions = DUChain::definitions()->definitions(decl->id());
-  Declaration *declDef  = 0;
+  Declaration *declDef = nullptr;
   if (!definitions.isEmpty())
     declDef = definitions.at(0).declaration();
   return testObject(declDef, value, QStringLiteral("Declaration's definition"));
@@ -257,7 +257,7 @@ DeclarationTest(declaration)
 ///@returns whether the declaration's nullity matches the given value
 DeclarationTest(null)
 {
-  return compareValues(decl == 0, value, QStringLiteral("Declaration's nullity"));
+  return compareValues(decl == nullptr, value, QStringLiteral("Declaration's nullity"));
 }
 ///JSON type: bool
 ///@returns whether the declaration's default parameter matches the given value

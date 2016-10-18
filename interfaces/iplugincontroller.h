@@ -161,7 +161,7 @@ public:
         if (plugin) {
             return plugin->extension<Extension>();
         }
-        return 0L;
+        return nullptr;
     }
 
     /**

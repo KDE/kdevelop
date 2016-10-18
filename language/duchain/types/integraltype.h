@@ -118,7 +118,7 @@ protected:
 template<>
 inline IntegralType* fastCast<IntegralType*>(AbstractType* from) {
   if(!from || from->whichType() != AbstractType::TypeIntegral)
-    return 0;
+    return nullptr;
   else
     return static_cast<IntegralType*>(from);
 }

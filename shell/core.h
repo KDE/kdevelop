@@ -63,7 +63,7 @@ public:
       * @param session the name or uuid of the session to be loaded
       *
       */
-    static bool initialize(QObject* splash = 0, Setup mode=Default, const QString& session = {} );
+    static bool initialize(QObject* splash = nullptr, Setup mode=Default, const QString& session = {} );
 
     /**
      * \brief Provide access an instance of Core
@@ -123,11 +123,11 @@ signals:
 
 protected:
     friend class CorePrivate;
-    Core( KDevelop::CorePrivate* dd, QObject* parent = 0 );
+    Core( KDevelop::CorePrivate* dd, QObject* parent = nullptr );
     KDevelop::CorePrivate *d;
     static Core *m_self;
 private:
-    Core(QObject *parent = 0);
+    Core(QObject *parent = nullptr);
 };
 
 }

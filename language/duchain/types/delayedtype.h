@@ -97,7 +97,7 @@ public:
 template<>
 inline DelayedType* fastCast<DelayedType*>(AbstractType* from) {
   if(!from || from->whichType() != AbstractType::TypeDelayed)
-    return 0;
+    return nullptr;
   else
     return static_cast<DelayedType*>(from);
 }

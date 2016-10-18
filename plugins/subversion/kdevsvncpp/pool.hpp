@@ -41,7 +41,7 @@ namespace svn
      *
      * @param parent NULL -> global pool
      */
-    Pool(apr_pool_t * parent = (apr_pool_t *)0);
+    Pool(apr_pool_t * parent = nullptr);
 
     virtual ~ Pool();
 

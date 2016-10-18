@@ -98,7 +98,7 @@ protected:
 template<>
 inline ArrayType* fastCast<ArrayType*>(AbstractType* from) {
   if(!from || from->whichType() != AbstractType::TypeArray)
-    return 0;
+    return nullptr;
   else
     return static_cast<ArrayType*>(from);
 }

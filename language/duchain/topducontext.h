@@ -58,7 +58,7 @@ namespace KDevelop
 ///keep a ReferencedTopDUContext.
 class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
   public:
-    ReferencedTopDUContext(TopDUContext* context = 0);
+    ReferencedTopDUContext(TopDUContext* context = nullptr);
     ReferencedTopDUContext(const ReferencedTopDUContext& rhs);
     ~ReferencedTopDUContext();
     
@@ -107,7 +107,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
-  explicit TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file = 0);
+  explicit TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file = nullptr);
   explicit TopDUContext(TopDUContextData& data);
 
   TopDUContext* topContext() const override;

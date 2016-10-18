@@ -64,7 +64,7 @@ namespace svn
   class Property
   {
   public:
-    Property(Context * context = 0,
+    Property(Context * context = nullptr,
              const Path & path = "");
 
     virtual ~Property();

@@ -40,7 +40,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext
       if(!index)
         setIsDummy(true);
     }
-    IndexedTopDUContext(TopDUContext* context = 0);
+    IndexedTopDUContext(TopDUContext* context = nullptr);
 
     enum {
       DummyMask = 1u<<31u

@@ -51,7 +51,7 @@ public:
      * @param parent the parent to use as parent for the widget
      * @returns the new widget for the toolview
      */
-    virtual QWidget* create(QWidget *parent = 0) = 0;
+    virtual QWidget* create(QWidget *parent = nullptr) = 0;
     /** 
      * @returns the identifier of this toolview.  The identifier
      * is used to remember which areas the tool view should appear

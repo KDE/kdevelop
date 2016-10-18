@@ -130,12 +130,12 @@ class Bucket {
     Bucket()
       : m_monsterBucketExtent(0)
       , m_available(0)
-      , m_data(0)
-      , m_mappedData(0)
-      , m_objectMap(0)
+      , m_data(nullptr)
+      , m_mappedData(nullptr)
+      , m_objectMap(nullptr)
       , m_largestFreeItem(0)
       , m_freeItemCount(0)
-      , m_nextBucketHash(0)
+      , m_nextBucketHash(nullptr)
       , m_dirty(false)
       , m_changed(false)
       , m_lastUsed(0)
@@ -214,7 +214,7 @@ class Bucket {
 
       if(static_cast<size_t>(file->pos()) != offset + (1+m_monsterBucketExtent)*DataSize)
       {
-        KMessageBox::error(0, i18n("Failed writing to %1, probably the disk is full", file->fileName()));
+        KMessageBox::error(nullptr, i18n("Failed writing to %1, probably the disk is full", file->fileName()));
         abort();
       }
 
@@ -1013,7 +1013,7 @@ class DynamicItem {
     DynamicItem(const DynamicItem& rhs) : m_item(rhs.m_item), m_start(rhs.m_start) {
 //         qDebug() << "stealing" << m_item;
       Q_ASSERT(rhs.m_start);
-      rhs.m_start = 0;
+      rhs.m_start = nullptr;
     }
 
     Item* operator->() {
@@ -1057,20 +1057,20 @@ class ItemRepository : public AbstractItemRepository {
   ///                If this is zero, you have to care about storing the data using store() and/or close() by yourself. It does not happen automatically.
   ///                For the global standard registry, the storing/loading is triggered from within duchain, so you don't need to care about it.
   ItemRepository(const QString& repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(),
-                 uint repositoryVersion = 1, AbstractRepositoryManager* manager = 0)
+                 uint repositoryVersion = 1, AbstractRepositoryManager* manager = nullptr)
     : m_ownMutex(QMutex::Recursive)
     , m_mutex(&m_ownMutex)
     , m_repositoryName(repositoryName)
     , m_registry(registry)
-    , m_file(0)
-    , m_dynamicFile(0)
+    , m_file(nullptr)
+    , m_dynamicFile(nullptr)
     , m_repositoryVersion(repositoryVersion)
     , m_manager(manager)
   {
     m_unloadingEnabled = true;
     m_metaDataChanged = true;
     m_buckets.resize(10);
-    m_buckets.fill(0);
+    m_buckets.fill(nullptr);
 
     memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
 
@@ -1695,7 +1695,7 @@ class ItemRepository : public AbstractItemRepository {
             const int unloadAfterTicks = 2;
             if(m_buckets[a]->lastUsed() > unloadAfterTicks) {
                 delete m_buckets[a];
-                m_buckets[a] = 0;
+                m_buckets[a] = nullptr;
             }else{
                 m_buckets[a]->tick();
             }
@@ -1910,9 +1910,9 @@ class ItemRepository : public AbstractItemRepository {
     m_dynamicFile = new QFile(dir.absoluteFilePath( m_repositoryName + QLatin1String("_dynamic") ));
     if(!m_file->open( QFile::ReadWrite ) || !m_dynamicFile->open( QFile::ReadWrite ) ) {
       delete m_file;
-      m_file = 0;
+      m_file = nullptr;
       delete m_dynamicFile;
-      m_dynamicFile = 0;
+      m_dynamicFile = nullptr;
       return false;
     }
 
@@ -1932,7 +1932,7 @@ class ItemRepository : public AbstractItemRepository {
       m_file->write((char*)&m_statItemCount, sizeof(uint));
 
       m_buckets.resize(10);
-      m_buckets.fill(0);
+      m_buckets.fill(nullptr);
       uint bucketCount = m_buckets.size();
       m_file->write((char*)&bucketCount, sizeof(uint));
 
@@ -1944,7 +1944,7 @@ class ItemRepository : public AbstractItemRepository {
       //We have completely initialized the file now
       if(m_file->pos() != BucketStartOffset)
       {
-        KMessageBox::error(0, i18n("Failed writing to %1, probably the disk is full", m_file->fileName()));
+        KMessageBox::error(nullptr, i18n("Failed writing to %1, probably the disk is full", m_file->fileName()));
         abort();
       }
 
@@ -1967,9 +1967,9 @@ class ItemRepository : public AbstractItemRepository {
       if(storedVersion != m_repositoryVersion || hashSize != bucketHashSize || itemRepositoryVersion != staticItemRepositoryVersion()) {
         qDebug() << "repository" << m_repositoryName << "version mismatch in" << m_file->fileName() << ", stored: version " << storedVersion << "hashsize" << hashSize << "repository-version" << itemRepositoryVersion << " current: version" << m_repositoryVersion << "hashsize" << bucketHashSize << "repository-version" << staticItemRepositoryVersion();
         delete m_file;
-        m_file = 0;
+        m_file = nullptr;
         delete m_dynamicFile;
-        m_dynamicFile = 0;
+        m_dynamicFile = nullptr;
         return false;
       }
       m_metaDataChanged = false;
@@ -1990,7 +1990,7 @@ class ItemRepository : public AbstractItemRepository {
     }
 
     m_fileMapSize = 0;
-    m_fileMap = 0;
+    m_fileMap = nullptr;
 
 #ifdef ITEMREPOSITORY_USE_MMAP_LOADING
     if(m_file->size() > BucketStartOffset){
@@ -2020,14 +2020,14 @@ class ItemRepository : public AbstractItemRepository {
     if(m_file)
       m_file->close();
     delete m_file;
-    m_file = 0;
-    m_fileMap = 0;
+    m_file = nullptr;
+    m_fileMap = nullptr;
     m_fileMapSize = 0;
 
     if(m_dynamicFile)
       m_dynamicFile->close();
     delete m_dynamicFile;
-    m_dynamicFile = 0;
+    m_dynamicFile = nullptr;
 
     qDeleteAll(m_buckets);
     m_buckets.clear();
@@ -2136,7 +2136,7 @@ class ItemRepository : public AbstractItemRepository {
     Q_ASSERT(bucketForIndex(bucketNumber)->isEmpty());
     Q_ASSERT(bucketForIndex(bucketNumber)->noNextBuckets());
     delete m_buckets[bucketNumber];
-    m_buckets[bucketNumber] = 0;
+    m_buckets[bucketNumber] = nullptr;
   }
 
   //m_file must be opened

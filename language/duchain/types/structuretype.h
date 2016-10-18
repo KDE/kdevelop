@@ -77,7 +77,7 @@ protected:
 template<>
 inline StructureType* fastCast<StructureType*>(AbstractType* from) {
   if(!from || from->whichType() != AbstractType::TypeStructure)
-    return 0;
+    return nullptr;
   else
     return static_cast<StructureType*>(from);
 }

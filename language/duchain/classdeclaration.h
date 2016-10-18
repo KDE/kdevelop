@@ -112,7 +112,7 @@ public:
   /**Returns whether base is a public base-class of this class
    * @param baseConversionLevels If nonzero, this will count the distance of the classes.
    * */
-  bool isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 ) const;
+  bool isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels = nullptr ) const;
 
   QString toString() const override;
 

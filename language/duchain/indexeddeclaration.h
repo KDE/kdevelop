@@ -33,7 +33,7 @@ class Declaration;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
   public:
-    IndexedDeclaration(const Declaration* decl = 0);
+    IndexedDeclaration(const Declaration* decl = nullptr);
     IndexedDeclaration(uint topContext, uint declarationIndex);
 
     /**
@@ -60,7 +60,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
 
     ///@warning The duchain needs to be locked when this is called
     inline bool isValid() const {
-      return !isDummy() && declaration() != 0;
+      return !isDummy() && declaration() != nullptr;
     }
 
     inline bool operator<(const IndexedDeclaration& rhs) const {

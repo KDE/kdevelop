@@ -142,7 +142,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     ///Can additionally use language-specific information to decide whether the top-context that has this data attached needs to be reparsed.
     ///The standard-implementation checks the modification-time of this file stored using setModificationRevision, and all other modification-times
     ///stored with addModificationRevision(..).
-    virtual bool needsUpdate(const ParsingEnvironment* environment = 0) const;
+    virtual bool needsUpdate(const ParsingEnvironment* environment = nullptr) const;
     
     /**
      * A language-specific flag used by C++ to mark one context as a proxy of another.

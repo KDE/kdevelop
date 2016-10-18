@@ -65,7 +65,7 @@ protected:
 template<>
 inline EnumerationType* fastCast<EnumerationType*>(AbstractType* from) {
   if(!from || from->whichType() != KDevelop::AbstractType::TypeEnumeration)
-    return 0;
+    return nullptr;
   else
     return static_cast<EnumerationType*>(from);
 }

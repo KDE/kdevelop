@@ -41,12 +41,12 @@ namespace TypeUtils {
    * Modifiers of aliases ore references are pushed into the targets.
    * @return return-value will only be zero if type is zero
    */
-  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetType(const KDevelop::AbstractType::Ptr& type, const KDevelop::TopDUContext* topContext, bool* constant = 0);
+  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetType(const KDevelop::AbstractType::Ptr& type, const KDevelop::TopDUContext* topContext, bool* constant = nullptr);
   /**
    * Same as targetType(..), ecept that it does not un-aliases TypeAliasTypes
    * Modifiers of aliases ore references are pushed into the targets.
    */
-  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetTypeKeepAliases(const KDevelop::AbstractType::Ptr& type, const KDevelop::TopDUContext* topContext, bool* constant = 0);
+  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetTypeKeepAliases(const KDevelop::AbstractType::Ptr& type, const KDevelop::TopDUContext* topContext, bool* constant = nullptr);
   /**
    * Resolves all type-aliases, returning the effective aliased type
    * All modifiers are pushed from the aliases into the targets.

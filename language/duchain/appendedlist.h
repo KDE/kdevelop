@@ -121,14 +121,14 @@ class TemporaryDataManager {
           //The only function that does not lock the mutex is getItem(..), because that function must be very efficient.
           //Since it's only a few instructions from the moment m_items is read to the moment it's used,
           //deleting the old data after a few seconds should be safe.
-          m_deleteLater.append(qMakePair(time(0), oldItems));
+          m_deleteLater.append(qMakePair(time(nullptr), oldItems));
 
           //We do this in this place so it isn't called too often. The result is that we will always have some additional data around.
           //However the index itself should anyway not consume too much data.
           if(!m_deleteLater.isEmpty()) {
             while(!m_deleteLater.isEmpty()) {
               //We delete after 5 seconds
-              if(time(0) - m_deleteLater.first().first > 5) {
+              if(time(nullptr) - m_deleteLater.first().first > 5) {
                 m_deleteLater.removeFirst();
               }else{
                 break;
@@ -296,7 +296,7 @@ class TemporaryDataManager {
 #define APPENDED_LIST_FIRST(container, type, name) \
     APPENDED_LIST_COMMON(container, type, name) \
     const type* name() const { \
-      if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; \
+      if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return nullptr; \
       if(!appendedListsDynamic()) return reinterpret_cast<const type*>(reinterpret_cast<const char*>(this) + classSize() + offsetBehindBase()); \
       else return temporaryHash ## container ## name().getItem(name ## Data).data(); \
     } \
@@ -309,7 +309,7 @@ class TemporaryDataManager {
 #define APPENDED_LIST(container, type, name, predecessor) \
     APPENDED_LIST_COMMON(container, type, name) \
     const type* name() const {\
-      if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; \
+      if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return nullptr; \
       if(!appendedListsDynamic()) return reinterpret_cast<const type*>(reinterpret_cast<const char*>(this) + classSize() + predecessor ## OffsetBehind()); \
       else return temporaryHash ## container ## name().getItem(name ## Data).data(); \
     } \

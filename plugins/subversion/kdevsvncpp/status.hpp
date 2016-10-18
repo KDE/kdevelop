@@ -50,7 +50,7 @@ namespace svn
      * @param path
      * @param status
      */
-    Status(const char * path = 0, const svn_wc_status2_t * status = 0);
+    Status(const char * path = nullptr, const svn_wc_status2_t * status = nullptr);
 
     /**
      * copy constructor

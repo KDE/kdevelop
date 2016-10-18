@@ -57,7 +57,7 @@ public:
             inside the documentation widget. The implementation will have to enable the
             widget if it means to support the search feature.
     */
-    virtual QWidget* documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent=0) = 0;
+    virtual QWidget* documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent = nullptr) = 0;
 
     virtual IDocumentationProvider* provider() const = 0;
 

@@ -76,7 +76,7 @@ protected:
 template<>
 inline TypeAliasType* fastCast<TypeAliasType*>(AbstractType* from) {
   if(!from || from->whichType() != AbstractType::TypeIntegral)
-    return 0;
+    return nullptr;
   else
     return static_cast<TypeAliasType*>(from);
 }

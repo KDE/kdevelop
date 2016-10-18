@@ -126,7 +126,7 @@ public:
     Does nothing if the view is already split.
     @param after if not 0, new view will be placed after this one.
     @param view the view to be added.*/
-    void add(View *view, View *after = 0);
+    void add(View *view, View *after = nullptr);
     /**Removes view and unsplits the parent index when no views
     are left at the current index.*/
     void remove(View *view);

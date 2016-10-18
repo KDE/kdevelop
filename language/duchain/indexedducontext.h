@@ -55,7 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext
     }
 
     bool isValid() const {
-      return !isDummy() && context() != 0;
+      return !isDummy() && context() != nullptr;
     }
 
     bool operator<(const IndexedDUContext& rhs) const {

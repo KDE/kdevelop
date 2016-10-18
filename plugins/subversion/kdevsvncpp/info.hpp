@@ -49,7 +49,7 @@ namespace svn
      *
      * @param src another entry to copy from
      */
-    Info(const Path & path, const svn_info_t * src = 0);
+    Info(const Path & path, const svn_info_t * src = nullptr);
 
     /**
      * copy constructor

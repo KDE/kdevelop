@@ -112,7 +112,7 @@ public:
     /**
      * Initializes the primary memory pool.
      */
-    Client(Context * context = 0);
+    Client(Context * context = nullptr);
 
     virtual ~Client();
 

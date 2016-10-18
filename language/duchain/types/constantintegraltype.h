@@ -110,7 +110,7 @@ private:
 template<>
 inline ConstantIntegralType* fastCast<ConstantIntegralType*>(AbstractType* from) {
   if(!from || from->whichType() != KDevelop::AbstractType::TypeIntegral)
-    return 0;
+    return nullptr;
   else
     return dynamic_cast<ConstantIntegralType*>(from);
 }

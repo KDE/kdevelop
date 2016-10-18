@@ -102,7 +102,7 @@ protected:
 template<>
 inline ReferenceType* fastCast<ReferenceType*>(AbstractType* from) {
   if(!from || from->whichType() != AbstractType::TypeReference)
-    return 0;
+    return nullptr;
   else
     return static_cast<ReferenceType*>(from);
 }

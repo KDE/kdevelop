@@ -64,7 +64,7 @@ namespace svn
      *
      * @param target
      */
-    Targets(const char * target = 0);
+    Targets(const char * target = nullptr);
 
     /**
      * Copy Constructor

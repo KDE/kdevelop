@@ -36,7 +36,7 @@ namespace KDevelop {
     template<class Data, class Handler>
     class ConstantConvenientEmbeddedSet {
         public:
-            ConstantConvenientEmbeddedSet() : m_data(0), m_dataSize(0), m_centralFreeItem(-1) {
+            ConstantConvenientEmbeddedSet() : m_data(nullptr), m_dataSize(0), m_centralFreeItem(-1) {
             }
             ConstantConvenientEmbeddedSet(const Data* data, uint count, int centralFreeItem) : m_data(data), m_dataSize(count), m_centralFreeItem(centralFreeItem) {
             }
@@ -151,7 +151,7 @@ namespace KDevelop {
     template<class Data, class Handler>
     class ConvenientEmbeddedSetIterator : public ConstantConvenientEmbeddedSet<Data, Handler> {
         public:
-        ConvenientEmbeddedSetIterator(const Data* data = 0, uint count = 0, int centralFreeItem = -1) : ConstantConvenientEmbeddedSet<Data, Handler>(data, count, centralFreeItem), m_pos(0) {
+        ConvenientEmbeddedSetIterator(const Data* data = nullptr, uint count = 0, int centralFreeItem = -1) : ConstantConvenientEmbeddedSet<Data, Handler>(data, count, centralFreeItem), m_pos(0) {
             //Move to first valid position
             moveToValid();
         }

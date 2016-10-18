@@ -139,7 +139,7 @@ protected:
 template<>
 inline FunctionType* fastCast<FunctionType*>(AbstractType* from) {
   if(!from || from->whichType() != AbstractType::TypeFunction)
-    return 0;
+    return nullptr;
   else
     return static_cast<FunctionType*>(from);
 }

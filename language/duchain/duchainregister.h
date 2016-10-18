@@ -117,7 +117,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
       Q_ASSERT(m_factories.size() > T::Identity);
       Q_ASSERT(m_factories[T::Identity]);
       delete m_factories[T::Identity];
-      m_factories[T::Identity] = 0;
+      m_factories[T::Identity] = nullptr;
       m_dataClassSizes[T::Identity] = 0;
     }
 

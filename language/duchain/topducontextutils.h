@@ -27,7 +27,7 @@ namespace KDevelop
 /// \todo move data to private d pointer classes
 struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::DeclarationChecker
 {
-  DeclarationChecker(const TopDUContext* _top, const CursorInRevision& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache = 0);
+  DeclarationChecker(const TopDUContext* _top, const CursorInRevision& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache = nullptr);
   bool operator()(const Declaration* dec) const;
 
   mutable KDevVarLengthArray<IndexedDeclaration>* createVisibleCache;
