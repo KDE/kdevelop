@@ -31,7 +31,7 @@ class RegisterController_Arm : public IRegisterController
 {
 public:
 
-    RegisterController_Arm(MIDebugSession* debugSession = 0, QObject* parent = 0);
+    RegisterController_Arm(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
 
     virtual QVector<GroupsName> namesOfRegisterGroups() const override;
 

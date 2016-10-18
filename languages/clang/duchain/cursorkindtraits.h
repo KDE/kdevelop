@@ -261,7 +261,7 @@ constexpr const char* delayedTypeName(CXTypeKind TK)
          : TK == CXType_ObjCId  ? "id"
          : TK == CXType_ObjCSel ? "SEL"
          : TK == CXType_NullPtr ? "nullptr_t"
-         : 0;
+         : nullptr;
 }
 
 }

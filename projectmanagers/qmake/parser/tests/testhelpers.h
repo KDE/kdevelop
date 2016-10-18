@@ -67,7 +67,7 @@ void classname::funcname()\
 #define ENDTESTFUNCIMPL }
 
 #define TESTASSIGNMENT( ast, var, opval, valcount ) \
-    QVERIFY( ast != 0 );\
+    QVERIFY( ast != nullptr );\
     QVERIFY( ast->identifier->value == var );\
     QVERIFY( ast->op->value == opval );\
     QVERIFY( ast->values.count() == valcount );
@@ -100,7 +100,7 @@ void classname::funcname()\
     }
 
 #define TESTSCOPEBODY( scope, teststmts, stmtcount ) \
-    QVERIFY( scope->body != 0 ); \
+    QVERIFY( scope->body != nullptr ); \
     QVERIFY( scope->body->statements.count() == stmtcount ); \
     matchScopeBodies(scope->body->statements, teststmts);
 

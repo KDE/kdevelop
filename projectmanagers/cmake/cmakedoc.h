@@ -33,7 +33,7 @@ class CMakeDoc : public KDevelop::IDocumentation
         virtual QString name() const override { return mName; }
         virtual KDevelop::IDocumentationProvider* provider() const override;
         
-        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0) override;
+        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = nullptr) override;
         
         static CMakeDocumentation* s_provider;
         

@@ -82,7 +82,7 @@ class FunctionCommandHandler : public MICommandHandler {
 public:
     typedef std::function<void (const ResultRecord&)> Function;
 
-    FunctionCommandHandler(const Function& callback, CommandFlags flags = 0);
+    FunctionCommandHandler(const Function& callback, CommandFlags flags = nullptr);
 
     virtual void handle(const ResultRecord&) override;
     virtual bool handlesError() override;
@@ -99,7 +99,7 @@ private:
 class MICommand
 {
 protected:
-    MICommand(CommandType type, const QString& arguments = QString(), CommandFlags flags = 0);
+    MICommand(CommandType type, const QString& arguments = QString(), CommandFlags flags = nullptr);
     friend class KDevMI::MIDebugSession;
 
 public:
@@ -254,7 +254,7 @@ public:
     CliCommand(CommandType type, const QString& command,
                Handler* handler_this,
                void (Handler::* handler_method)(const QStringList&),
-               CommandFlags flags = 0);
+               CommandFlags flags = nullptr);
 };
 
 /** Command that does nothing and can be just used to invoke
@@ -269,7 +269,7 @@ public:
     template<class Handler>
     SentinelCommand(Handler* handler_this,
                     void (Handler::* handler_method)(),
-                    CommandFlags flags = 0)
+                    CommandFlags flags = nullptr)
         : MICommand(NonMI, QString(), flags)
     {
         QPointer<Handler> guarded_this(handler_this);
@@ -280,7 +280,7 @@ public:
         };
     }
 
-    SentinelCommand(const Function& handler, CommandFlags flags = 0)
+    SentinelCommand(const Function& handler, CommandFlags flags = nullptr)
         : MICommand(NonMI, QString(), flags)
         , handler(handler)
     {

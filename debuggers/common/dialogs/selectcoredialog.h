@@ -32,7 +32,7 @@ namespace KDevMI {
 class SelectCoreDialog : public QDialog
 {
 public:
-    SelectCoreDialog(QWidget *parent = 0);
+    SelectCoreDialog(QWidget *parent = nullptr);
     QUrl binary() const;
     QUrl core() const;
 

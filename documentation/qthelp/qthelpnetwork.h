@@ -74,7 +74,7 @@ class HelpNetworkAccessManager : public QNetworkAccessManager
 
 	protected:
 		virtual QNetworkReply *createRequest(Operation op,
-			const QNetworkRequest &request, QIODevice *outgoingData = 0) override;
+			const QNetworkRequest &request, QIODevice *outgoingData = nullptr) override;
 
 	private:
 		QHelpEngineCore *m_helpEngine;

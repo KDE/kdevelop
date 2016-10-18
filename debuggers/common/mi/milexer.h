@@ -44,7 +44,7 @@ struct FileSymbol
     TokenStream *tokenStream;
 
     inline FileSymbol()
-        : tokenStream(0) {}
+        : tokenStream(nullptr) {}
 
     inline ~FileSymbol();
 };
@@ -142,7 +142,7 @@ private:
 inline FileSymbol::~FileSymbol()
 {
     delete tokenStream;
-    tokenStream = 0;
+    tokenStream = nullptr;
 }
 
 } // end of MI

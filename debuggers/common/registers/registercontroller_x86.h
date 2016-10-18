@@ -36,7 +36,7 @@ public slots:
     virtual void updateRegisters(const GroupsName& group = GroupsName()) override;
 
 protected:
-    RegisterControllerGeneral_x86(MIDebugSession* debugSession = 0, QObject* parent = 0);
+    RegisterControllerGeneral_x86(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
 
     virtual RegistersGroup registersFromGroup(const GroupsName& group) const override;
 
@@ -71,7 +71,7 @@ class RegisterController_x86 : public RegisterControllerGeneral_x86
 {
 
 public:
-    RegisterController_x86(MIDebugSession* debugSession = 0, QObject* parent = 0);
+    RegisterController_x86(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
 
 private:
     void initRegisterNames();
@@ -81,7 +81,7 @@ class RegisterController_x86_64 : public RegisterControllerGeneral_x86
 {
 
 public:
-    RegisterController_x86_64(MIDebugSession* debugSession = 0, QObject* parent = 0);
+    RegisterController_x86_64(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
 
 private:
     void initRegisterNames();

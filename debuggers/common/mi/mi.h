@@ -241,8 +241,8 @@ namespace KDevMI { namespace MI {
     */
     struct Result
     {
-        Result() : value(0) {}
-        ~Result() { delete value; value = 0; }
+        Result() : value(nullptr) {}
+        ~Result() { delete value; value = nullptr; }
 
         QString variable;
         Value *value;
