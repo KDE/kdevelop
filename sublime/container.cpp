@@ -27,6 +27,7 @@
 #include <QMouseEvent>
 #include <QPointer>
 #include <QStackedWidget>
+#include <QStyleFactory>
 #include <QStyleOptionTabBarBase>
 #include <QStylePainter>
 #include <QTabBar>
@@ -54,6 +55,19 @@ public:
     ContainerTabBar(Container* container)
         : QTabBar(container), m_container(container)
     {
+        if (QApplication::style()->objectName() == QLatin1String("macintosh")) {
+            static QPointer<QStyle> qTabBarStyle = QStyleFactory::create("fusion");
+            if (qTabBarStyle) {
+                setStyle(qTabBarStyle);
+            }
+        }
+        // configure the QTabBar style so it behaves as appropriately as possible,
+        // even if we end up using the native Macintosh style because the user's
+        // Qt doesn't have the Fusion style installed.
+        setDocumentMode(true);
+        setUsesScrollButtons(true);
+        setElideMode(Qt::ElideNone);
+
         installEventFilter(this);
     }
 
@@ -196,6 +210,10 @@ public:
 protected:
     void paintEvent(QPaintEvent *ev) override
     {
+#ifndef Q_OS_OSX
+        // getting the underlining right on OS X is tricky; omitting
+        // the underlining attracts the eye less than not getting it
+        // exactly right.
         if (m_tabBar->isVisible() && m_tabBar->count() > 0)
         {
             QStylePainter p(this);
@@ -219,6 +237,7 @@ protected:
                 p.drawPrimitive(QStyle::PE_FrameTabBarBase, optTabBase);
             }
         }
+#endif
 
         KSqueezedTextLabel::paintEvent(ev);
     }
