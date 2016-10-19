@@ -47,6 +47,11 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &c
     }
 }
 
+
+QtHelpProviderAbstract::~QtHelpProviderAbstract()
+{
+}
+
 IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declaration* dec) const
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);

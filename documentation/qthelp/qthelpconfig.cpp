@@ -119,9 +119,11 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), "kdevelop-qthelp.knsrc", m_configWidget->boxQchManage);
     m_configWidget->tableCtrlLayout->insertWidget(1, knsButton);
     connect(knsButton, &KNS3::Button::dialogFinished, this, &QtHelpConfig::knsUpdate);
-    connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled, this, static_cast<void(QtHelpConfig::*)()>(&QtHelpConfig::changed));
-    connect(m_configWidget->qchSearchDirButton, &QPushButton::clicked, this, &QtHelpConfig::chooseSearchDir);
-    connect(m_configWidget->qchSearchDir,&QLineEdit::textChanged, this, &QtHelpConfig::searchDirChanged);
+    connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled,
+            this, static_cast<void(QtHelpConfig::*)()>(&QtHelpConfig::changed));
+    m_configWidget->qchSearchDir->setMode(KFile::Directory);
+    connect(m_configWidget->qchSearchDir, &KUrlRequester::textChanged,
+            this, &QtHelpConfig::changed);
 
     // Set availability information for QtHelp
     m_configWidget->messageAvailabilityQtDocs->setCloseButtonVisible(false);
@@ -293,16 +295,6 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
             }
         }
     }
-    emit changed();
-}
-
-void QtHelpConfig::chooseSearchDir()
-{
-    m_configWidget->qchSearchDir->setText(QFileDialog::getExistingDirectory(this));
-}
-
-void QtHelpConfig::searchDirChanged()
-{
     emit changed();
 }
 
