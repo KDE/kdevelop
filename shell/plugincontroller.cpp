@@ -554,7 +554,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         if (auto katePlugin = factory->create<KTextEditor::Plugin>(d->core, QVariantList() << info.pluginId())) {
             plugin = new KTextEditorIntegration::Plugin(katePlugin, d->core);
         } else {
-            qWarning() << "Creating plugin" << pluginId << "failed.";
+            qCWarning(SHELL) << "Creating plugin" << pluginId << "failed.";
             return nullptr;
         }
     }
@@ -562,7 +562,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     KConfigGroup group = Core::self()->activeSession()->config()->group(KEY_Plugins());
     // runtime errors such as missing executables on the system or such get checked now
     if (plugin->hasError()) {
-        qWarning() << "Could not load plugin" << pluginId << ", it reported the error:" << plugin->errorDescription()
+        qCWarning(SHELL) << "Could not load plugin" << pluginId << ", it reported the error:" << plugin->errorDescription()
                     << "Disabling the plugin now.";
         group.writeEntry(info.pluginId() + KEY_Suffix_Enabled(), false); // do the same as KPluginInfo did
         group.sync();
