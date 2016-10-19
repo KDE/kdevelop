@@ -132,7 +132,8 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
 void StatusbarProgressWidget::updateBusyMode()
 {
     connectSingleItem(); // if going to 1 item
-    mDelayTimer->start( 1000 );
+    if (!mDelayTimer->isActive())
+        mDelayTimer->start( 1000 );
 }
 
 void StatusbarProgressWidget::slotProgressItemAdded( ProgressItem *item )
