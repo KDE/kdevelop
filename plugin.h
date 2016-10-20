@@ -46,8 +46,6 @@ public:
 
     ~Plugin() override;
 
-    void unload() override;
-
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
     int configPages() const override { return 1; }

@@ -97,14 +97,10 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
     updateActions();
 }
 
-void Plugin::unload()
+Plugin::~Plugin()
 {
     KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->removeModel(modelName);
-}
-
-Plugin::~Plugin()
-{
 }
 
 bool Plugin::isRunning()
