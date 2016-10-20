@@ -47,10 +47,10 @@ public:
     KTextEditor::Range displayRange() const override;
 
 private:
-    ///Compare @param newSignature to m_oldSignature and put differences in oldPositions
+    ///Compare @a newSignature to m_oldSignature and put differences in @a oldPositions
     ///@returns whether or not there are any differences
     bool getSignatureChanges(const Signature &newSignature, QList<int> &oldPositions) const;
-    ///Set default params in @param newSignature based on m_oldSignature's defaults and @param oldPositions
+    ///Set default params in @a newSignature based on m_oldSignature's defaults and @a oldPositions
     void setDefaultParams(Signature &newSignature, const QList<int> &oldPositions) const;
     ///@returns RenameActions for each parameter in newSignature that has been renamed
     QList<KDevelop::RenameAction*> getRenameActions(const Signature &newSignature, const QList<int> &oldPositions) const;

@@ -1,5 +1,5 @@
 #ifndef KDETEST_H
-#define KDETEST_h
+#define KDETEST_H
 
 #include <QtCore/QObject>
 

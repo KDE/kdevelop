@@ -173,9 +173,6 @@ public:
 
     /**
      * Schedule a document for update using the default flags of QML/JS
-     *
-     * @return The actual priority of the file being queued (this priority can
-     *         only be lower then @p priority)
      */
     static void scheduleForParsing(const KDevelop::IndexedString& url, int priority);
 
