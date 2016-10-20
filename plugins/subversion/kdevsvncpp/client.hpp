@@ -629,8 +629,6 @@ public:
      * repository
      *
      * @deprecated
-     *
-     * @return PropertiesList
      */
     void
     propset(const char * propName,

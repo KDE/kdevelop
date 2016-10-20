@@ -50,7 +50,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
 
     /**
      * @param items The list of items that should be used.
-     * @param scopesThe list of scopes that should be used.
+     * @param scopes The list of scopes that should be used.
      
     * When this is called, the state is restart()ed.
      * */

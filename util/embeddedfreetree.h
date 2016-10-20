@@ -234,8 +234,8 @@ namespace KDevelop {
      *   a new list as large as newItemCount, and call object.transferData to transfer the data
      *   into the new list. The new size must match the returned newItemCount.
      * - Either call object.apply(), or let it be called automatically by the destructor.
-     * @param increaseFraction By what fraction the list is increased when it needs to. For example the size will be increased by 1/5 if it's 5.
-     * @param rebuildIfInsertionMoreExpensive The structure is rebuilt completely when an insertion needs a moving around of more than rebuildIfInsertionMoreExpensive times
+     * @tparam increaseFraction By what fraction the list is increased when it needs to. For example the size will be increased by 1/5 if it's 5.
+     * @tparam rebuildIfInsertionMoreExpensive The structure is rebuilt completely when an insertion needs a moving around of more than rebuildIfInsertionMoreExpensive times
                                               the count of items needed to be moved in worst case in a fresh tree.
      *                                          After rebuilding the tree, the free space is evenly distributed, and thus insertions require much less moving.
      * */

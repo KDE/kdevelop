@@ -122,7 +122,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository, true> CachedIndexedRecursiveImports;
     
     typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, CachedIndexedRecursiveImports, DeclarationTopContextExtractor> FilteredDeclarationIterator;
-    ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @param visibility
+    ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @a visibility
     ///This is very efficient since it uses a cache
     ///The returned iterator is valid as long as the duchain read lock is held
     FilteredDeclarationIterator getFilteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const;
