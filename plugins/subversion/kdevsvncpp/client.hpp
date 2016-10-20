@@ -318,7 +318,6 @@ public:
      * @param dstPath Filename in which the contents
      *                of the file file will be safed.
      * @param path path or url
-     * @param revision
      * @param peg_revision peg revision to retrieve, by default is the latest one
      */
     void
@@ -383,7 +382,6 @@ public:
      * directory on disk and schedules it for addition. If <i>path</i>
      * is a URL then authentication is usually required, see Auth.
      *
-     * @param path
      * @exception ClientException
      */
     void
@@ -413,10 +411,8 @@ public:
      * @param from_path path to import
      * @param to_path where to import
      * @param revision revision of files in source repository or working copy
-     * @param peg_revision
      * @param overwrite overwrite existing files in to_path
      * @param ignore_externals whether to ignore external sources in from_path
-     * @param recurse
      * @param native_eol which EOL to use when exporting, usually different for
      * different OSs
      * @exception ClientException
@@ -445,9 +441,7 @@ public:
      * Import file or directory PATH into repository directory URL at
      * head.  This usually requires authentication, see Auth.
      * @param path path to import
-     * @param url
      * @param message log message.
-     * @param recurse
      * @exception ClientException
      */
     void
@@ -481,11 +475,6 @@ public:
      *
      * @see Client::status
      * @see Info
-     *
-     * @param pathOrUrl
-     * @param pegRevision
-     * @param revision
-     * @param recurse
      */
     InfoVector
     info(const Path & pathOrUrl,
@@ -501,12 +490,7 @@ public:
      *
      * You can use the constants Revision::START and
      * Revision::HEAD
-     *
-     * @param path
-     * @param revisionStart
-     * @param revisionEnd
-     * @param discoverChangedPaths
-     * @param strictNodeHistory
+
      * @return a vector with log entries
      */
     const LogEntries *
@@ -607,9 +591,6 @@ public:
      * lists entries in @a pathOrUrl no matter whether local or
      * repository
      *
-     * @param pathOrUrl
-     * @param revision
-     * @param recurse
      * @return a vector of directory entries, each with
      *         a relative path (only filename)
      */
@@ -622,9 +603,6 @@ public:
      * lists properties in @a path no matter whether local or
      * repository
      *
-     * @param path
-     * @param revision
-     * @param recurse
      * @return PropertiesList
      */
     PathPropertiesMapList
@@ -636,10 +614,6 @@ public:
      * lists one property in @a path no matter whether local or
      * repository
      *
-     * @param propName
-     * @param path
-     * @param revision
-     * @param recurse
      * @return PathPropertiesMapList
      */
     PathPropertiesMapList
@@ -656,12 +630,6 @@ public:
      *
      * @deprecated
      *
-     * @param path
-     * @param revision
-     * @param propName
-     * @param propValue
-     * @param recurse
-     * @param skip_checks
      * @return PropertiesList
      */
     void
@@ -676,10 +644,6 @@ public:
      * delete property in @a path no matter whether local or
      * repository
      *
-     * @param propName
-     * @param path
-     * @param revision
-     * @param recurse
      */
     void
     propdel(const char * propName,
@@ -692,8 +656,6 @@ public:
      * lists revision properties in @a path no matter whether local or
      * repository
      *
-     * @param path
-     * @param revision
      * @return PropertiesList
      */
     std::pair<svn_revnum_t,PropertiesMap>
@@ -704,9 +666,6 @@ public:
      * lists one revision property in @a path no matter whether local or
      * repository
      *
-     * @param propName
-     * @param path
-     * @param revision
      * @return PropertiesList
      */
     std::pair<svn_revnum_t,std::string>
@@ -718,11 +677,6 @@ public:
      * set revision property in @a path no matter whether local or
      * repository
      *
-     * @param propName
-     * @param propValue
-     * @param path
-     * @param revision
-     * @param force
      * @return Revision
      */
     svn_revnum_t
@@ -736,10 +690,6 @@ public:
      * delete revision property in @a path no matter whether local or
      * repository
      *
-     * @param propName
-     * @param path
-     * @param revision
-     * @param force
      * @return Revision
      */
     svn_revnum_t

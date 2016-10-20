@@ -103,7 +103,6 @@ public:
      * - baton->Data
      * - listener set?
      *
-     * @param baton
      * @param data returned data if everything is OK
      * @retval SVN_NO_ERROR if everything is fine
      * @retval SVN_ERR_CANCELLED on invalid values

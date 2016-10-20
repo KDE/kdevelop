@@ -52,9 +52,7 @@ namespace svn
      * WORKAROUND FOR apr_xlate PROBLEM:
      * STRINGS ALREADY HAVE TO BE UTF8!!!
      *
-     * @param username
      * @param realm in which username/password will be used
-     * @param password
      * @param maySave in/out set false to not save
      * @return continue action?
      * @retval true continue
@@ -69,13 +67,6 @@ namespace svn
      * this method will be called to notify about
      * the progress of an ongoing action
      *
-     * @param path
-     * @param action
-     * @param kind
-     * @param mime_type
-     * @param content_state
-     * @param prop_state
-     * @param revision
      */
     virtual void
     contextNotify(const char *path,
@@ -180,8 +171,6 @@ public:
      * this method is called if there is ssl server
      * information, that has to be confirmed by the user
      *
-     * @param data
-     * @param acceptedFailures
      * @return @a SslServerTrustAnswer
      */
     virtual SslServerTrustAnswer
@@ -198,10 +187,6 @@ public:
     /**
      * this method is called to retrieve the password
      * for the client certificate
-     *
-     * @param password
-     * @param realm
-     * @param maySave
      */
     virtual bool
     contextSslClientCertPwPrompt(std::string & password,
