@@ -75,6 +75,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
         : QWidget( parent ), m_ui(new Ui::ProjectManagerView), m_plugin(plugin)
 {
     m_ui->setupUi( this );
+    setFocusProxy(m_ui->projectTreeView);
 
     m_ui->projectTreeView->installEventFilter(this);
 

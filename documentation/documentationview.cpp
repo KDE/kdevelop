@@ -100,6 +100,8 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
     layout()->addWidget(new QWidget(this));
     layout()->addWidget(mFindDoc);
 
+    setFocusProxy(mIdentifiers);
+
     QMetaObject::invokeMethod(this, "initialize", Qt::QueuedConnection);
 }
 
