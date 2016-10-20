@@ -56,24 +56,24 @@
 using namespace KDevelop;
 using namespace KDevMI;
 
-MIDebuggerPlugin::MIDebuggerPlugin(const QString &componentName, QObject *parent)
+MIDebuggerPlugin::MIDebuggerPlugin(const QString &componentName, const QString& displayName, QObject *parent)
     : KDevelop::IPlugin(componentName, parent)
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IStatus)
 
     core()->debugController()->initializeUi();
 
-    setupActions();
+    setupActions(displayName);
     setupDBus();
 }
 
-void MIDebuggerPlugin::setupActions()
+void MIDebuggerPlugin::setupActions(const QString& displayName)
 {
     KActionCollection* ac = actionCollection();
 
     QAction * action = new QAction(this);
     action->setIcon(QIcon::fromTheme("core"));
-    action->setText(i18n("Examine Core File..."));
+    action->setText(i18n("Examine Core File... (%1)", displayName));
     action->setToolTip(i18n("Examine core file"));
     action->setWhatsThis(i18n("<b>Examine core file</b>"
                               "<p>This loads a core file, which is typically created "
@@ -87,7 +87,7 @@ void MIDebuggerPlugin::setupActions()
 #if KF5SysGuard_FOUND
     action = new QAction(this);
     action->setIcon(QIcon::fromTheme("connect_creating"));
-    action->setText(i18n("Attach to Process..."));
+    action->setText(i18n("Attach to Process... (%1)", displayName));
     action->setToolTip(i18n("Attach to process"));
     action->setWhatsThis(i18n("<b>Attach to process</b>"
                               "<p>Attaches the debugger to a running process.</p>"));
