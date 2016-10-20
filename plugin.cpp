@@ -99,6 +99,8 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
 
 Plugin::~Plugin()
 {
+    killCppcheck();
+
     KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->removeModel(modelName);
 }
