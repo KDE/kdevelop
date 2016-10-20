@@ -45,8 +45,6 @@
 
 #include <QMessageBox>
 
-using namespace KDevelop;
-
 K_PLUGIN_FACTORY_WITH_JSON(CppcheckFactory, "kdevcppcheck.json", registerPlugin<cppcheck::Plugin>();)
 
 namespace cppcheck
@@ -93,7 +91,7 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
     connect(core()->projectController(), &KDevelop::IProjectController::projectClosed,
             this, &Plugin::projectClosed);
 
-    ProblemModelSet* pms = core()->languageController()->problemModelSet();
+    KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->addModel(modelName, m_model.data());
 
     updateActions();
@@ -101,7 +99,7 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
 
 void Plugin::unload()
 {
-    ProblemModelSet* pms = core()->languageController()->problemModelSet();
+    KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->removeModel(modelName);
 }
 
@@ -284,7 +282,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
     return extension;
 }
 
-KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent)
+KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
 {
     if (number)
         return nullptr;
