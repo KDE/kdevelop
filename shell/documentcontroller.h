@@ -80,6 +80,8 @@ public:
 
     KTextEditor::View* activeTextDocumentView() const override;
     
+    /// Activate the given \a document. This convenience function does not add the document
+    /// to the File/Recent Open menu. Use DocumentController::openDocument if that is desired.
     void activateDocument( IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() ) override;
 
     void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) override;

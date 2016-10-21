@@ -58,7 +58,8 @@ public:
         DefaultMode = 0,            /**Activate document and create a view if no other flags passed.*/
         DoNotActivate = 1,          /**Don't activate the Document.*/
         DoNotCreateView = 2,        /**Don't create and show the view for the Document.*/
-        DoNotFocus = 4              /**Don't change the keyboard focus.*/
+        DoNotFocus = 4,             /**Don't change the keyboard focus.*/
+        DoNotAddToRecentOpen = 8,   /**Don't add the document to the File/Open Recent menu.*/
     };
     Q_DECLARE_FLAGS(DocumentActivationParams, DocumentActivation)
 

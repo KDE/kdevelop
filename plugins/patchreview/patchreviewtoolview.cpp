@@ -370,7 +370,8 @@ void PatchReviewToolView::open( const QUrl& url, bool activate ) const
             if(view->document() == dynamic_cast<Sublime::Document*>(doc))
             {
                 if (activate) {
-                    ICore::self()->documentController()->activateDocument(doc);
+                    // use openDocument() for the activation so that the document is added to File/Open Recent.
+                    ICore::self()->documentController()->openDocument(doc->url(), KTextEditor::Range::invalid());
                 }
                 return;
             }
@@ -397,7 +398,11 @@ void PatchReviewToolView::open( const QUrl& url, bool activate ) const
         }
     }
 
-    IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range::invalid(), activate ? IDocumentController::DefaultMode : IDocumentController::DoNotActivate, QLatin1String(""), buddyDoc);
+    // we simplify and assume that documents to be opened without activating them also need not be
+    // added to the Files/Open Recent menu.
+    IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range::invalid(),
+        activate ? IDocumentController::DefaultMode : IDocumentController::DoNotActivate|IDocumentController::DoNotAddToRecentOpen,
+        QString(), buddyDoc);
 
     KTextEditor::View* view = nullptr;
     if(newDoc)

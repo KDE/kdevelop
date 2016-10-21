@@ -508,7 +508,7 @@ struct DocumentControllerPrivate
                 uiController->activeSublimeWindow()->activateView(
                     partView, !activationParams.testFlag(IDocumentController::DoNotFocus));
             }
-            if (!controller->isEmptyDocumentUrl(url))
+            if (!activationParams.testFlag(IDocumentController::DoNotAddToRecentOpen) && !controller->isEmptyDocumentUrl(url))
             {
                 fileOpenRecent->addUrl( url );
             }
@@ -789,7 +789,7 @@ void DocumentController::activateDocument( IDocument * document, const KTextEdit
 {
     // TODO avoid some code in openDocument?
     Q_ASSERT(document);
-    openDocument(document->url(), range);
+    openDocument(document->url(), range, IDocumentController::DoNotAddToRecentOpen);
 }
 
 void DocumentController::slotSaveAllDocuments()

@@ -118,7 +118,9 @@ void PatchReviewPlugin::seekHunk( bool forwards, const QUrl& fileName ) {
                             return;
                         } else if(fileName.isEmpty()) {
                             int next = qBound(0, forwards ? a+1 : a-1, m_modelList->modelCount()-1);
-                            ICore::self()->documentController()->openDocument(urlForFileModel(m_modelList->modelAt(next)));
+                            if (next < maximumFilesToOpenDirectly) {
+                                ICore::self()->documentController()->openDocument(urlForFileModel(m_modelList->modelAt(next)));
+                            }
                         }
                     }
                 }
@@ -439,7 +441,10 @@ void PatchReviewPlugin::updateReview()
 
     switchToEmptyReviewArea();
 
-    IDocument* futureActiveDoc = ICore::self()->documentController()->openDocument( m_patch->file() );
+    KDevelop::IDocumentController *docController = ICore::self()->documentController();
+    // don't add documents opened automatically to the Files/Open Recent list
+    IDocument* futureActiveDoc = docController->openDocument( m_patch->file(), KTextEditor::Range::invalid(),
+                                                              IDocumentController::DoNotAddToRecentOpen );
 
     updateKompareModel();
 
@@ -454,28 +459,25 @@ void PatchReviewPlugin::updateReview()
     KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( futureActiveDoc->textDocument() );
     modif->setModifiedOnDiskWarning( false );
 
-    Q_ASSERT( futureActiveDoc );
-    ICore::self()->documentController()->activateDocument( futureActiveDoc );
+    docController->activateDocument( futureActiveDoc );
 
     PatchReviewToolView* toolView = qobject_cast<PatchReviewToolView*>(ICore::self()->uiController()->findToolView( i18n( "Patch Review" ), m_factory ));
     Q_ASSERT( toolView );
 
-    if( m_modelList->modelCount() < maximumFilesToOpenDirectly ) {
-        //Open all relates files
-        for( int a = 0; a < m_modelList->modelCount(); ++a ) {
-            QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
-            if (absoluteUrl.isRelative()) {
-                KMessageBox::error( nullptr, i18n("The base directory of the patch must be an absolute directory"), i18n( "Patch Review" ) );
-                break;
-            }
+    //Open all relates files
+    for( int a = 0; a < m_modelList->modelCount() && a < maximumFilesToOpenDirectly; ++a ) {
+        QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
+        if (absoluteUrl.isRelative()) {
+            KMessageBox::error( nullptr, i18n("The base directory of the patch must be an absolute directory"), i18n( "Patch Review" ) );
+            break;
+        }
 
-            if( QFileInfo::exists( absoluteUrl.toLocalFile() ) && absoluteUrl.toLocalFile() != QLatin1String("/dev/null") )
-            {
-                toolView->open( absoluteUrl, false );
-            }else{
-                // Maybe the file was deleted
-                qCDebug(PLUGIN_PATCHREVIEW) << "could not open" << absoluteUrl << "because it doesn't exist";
-            }
+        if( QFileInfo::exists( absoluteUrl.toLocalFile() ) && absoluteUrl.toLocalFile() != QLatin1String("/dev/null") )
+        {
+            toolView->open( absoluteUrl, false );
+        }else{
+            // Maybe the file was deleted
+            qCDebug(PLUGIN_PATCHREVIEW) << "could not open" << absoluteUrl << "because it doesn't exist";
         }
     }
 }
