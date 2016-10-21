@@ -165,9 +165,12 @@ QStringList Parameters::commandLine(QString& infoMessage) const
     // If such define is not correctly set, cppcheck 'fails' on files with moc-includes
     // and not return any errors, even if the file contains them.
     if (!mocParametersRegex.match(extraParameters).hasMatch()) {
+        bool qtUsed = false;
         bool mocDefineFinded = false;
         foreach (auto dir, m_includeDirectories) {
             if (dir.path().endsWith("QtCore")) {
+                qtUsed = true;
+
                 QFile qtHeader(dir.path() + QStringLiteral("/qobjectdefs.h"));
                 if (!qtHeader.open(QIODevice::ReadOnly)) {
                     break;
@@ -185,7 +188,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
             }
         }
 
-        if (!mocDefineFinded)
+        if (qtUsed && !mocDefineFinded)
             infoMessage = mocMessage;
     }
 
