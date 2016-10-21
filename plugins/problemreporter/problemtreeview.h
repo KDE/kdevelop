@@ -50,6 +50,8 @@ public:
                              const QVector<int>& roles = QVector<int>()) override;
     void reset() override;
 
+    int setFilter(const QString& filterText);
+
 public slots:
     void openDocumentForCurrentProblem();
 

@@ -23,9 +23,11 @@
 #include <KLocalizedString>
 
 #include <QAction>
+#include <QLineEdit>
 #include <QMenu>
 #include <QSignalMapper>
 #include <QTabWidget>
+#include <QTimer>
 #include <QVBoxLayout>
 
 #include <interfaces/icore.h>
@@ -201,6 +203,34 @@ void ProblemsView::setupActions()
             currentView()->model()->setGrouping(index);
         });
     }
+
+    {
+        QTimer* filterTimer = new QTimer(this);
+        filterTimer->setSingleShot(true);
+
+        connect(filterTimer, &QTimer::timeout, this, [this]() {
+            setFilter(m_filterEdit->text());
+        });
+
+        m_filterEdit = new QLineEdit(this);
+        m_filterEdit->setClearButtonEnabled(true);
+        m_filterEdit->setPlaceholderText(i18n("Search..."));
+
+        QSizePolicy p(m_filterEdit->sizePolicy());
+        p.setHorizontalPolicy(QSizePolicy::Fixed);
+        m_filterEdit->setSizePolicy(p);
+
+        connect(m_filterEdit, &QLineEdit::textChanged, this, [filterTimer](const QString&) {
+            filterTimer->start(500);
+        });
+
+        QWidgetAction* filterAction = new QWidgetAction(this);
+        filterAction->setDefaultWidget(m_filterEdit);
+        addAction(filterAction);
+
+        m_prevTabIdx = -1;
+        setFocusProxy(m_filterEdit);
+    }
 }
 
 void ProblemsView::updateActions()
@@ -229,6 +259,8 @@ void ProblemsView::updateActions()
     }
 
     problemModel->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
+
+    setFocus(); // set focus to default widget (filterEdit)
 }
 
 /// TODO: Move to util?
@@ -385,6 +417,10 @@ void ProblemsView::onCurrentChanged(int idx)
     if (idx == -1)
         return;
 
+    setFilter(QStringLiteral(""), m_prevTabIdx);
+    setFilter(QStringLiteral(""));
+    m_prevTabIdx = idx;
+
     updateActions();
 }
 
@@ -451,6 +487,28 @@ void ProblemsView::setScope(int scope)
     m_scopeMenu->setText(i18n("Scope: %1", m_scopeMenu->menu()->actions().at(scope)->text()));
 
     currentView()->model()->setScope(scope);
+}
+
+void ProblemsView::setFilter(const QString& filterText)
+{
+    setFilter(filterText, m_tabWidget->currentIndex());
+}
+
+void ProblemsView::setFilter(const QString& filterText, int tabIdx)
+{
+    if (tabIdx < 0 || tabIdx >= m_tabWidget->count())
+        return;
+
+    ProblemTreeView* view = static_cast<ProblemTreeView*>(m_tabWidget->widget(tabIdx));
+    int rows = view->setFilter(filterText);
+
+    updateTab(tabIdx, rows);
+
+    if (tabIdx == m_tabWidget->currentIndex()) {
+        m_filterEdit->blockSignals(true);
+        m_filterEdit->setText(filterText);
+        m_filterEdit->blockSignals(false);
+    }
 }
 
 }

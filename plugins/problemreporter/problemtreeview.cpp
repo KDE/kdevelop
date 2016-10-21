@@ -100,6 +100,9 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     connect(model(), &QAbstractItemModel::rowsInserted, this, &ProblemTreeView::changed);
     connect(model(), &QAbstractItemModel::rowsRemoved, this, &ProblemTreeView::changed);
     connect(model(), &QAbstractItemModel::modelReset, this, &ProblemTreeView::changed);
+
+    m_proxy->setFilterKeyColumn(-1);
+    m_proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
 }
 
 ProblemTreeView::~ProblemTreeView()
@@ -149,6 +152,13 @@ void ProblemTreeView::reset()
 {
     QTreeView::reset();
     resizeColumns();
+}
+
+int ProblemTreeView::setFilter(const QString& filterText)
+{
+    m_proxy->setFilterFixedString(filterText);
+
+    return m_proxy->rowCount();
 }
 
 ProblemModel* ProblemTreeView::model() const

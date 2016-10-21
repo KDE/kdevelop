@@ -30,6 +30,7 @@ class KActionMenu;
 
 class QAction;
 class QActionGroup;
+class QLineEdit;
 class QMenu;
 class QTabWidget;
 
@@ -104,6 +105,12 @@ private:
     QAction* m_errorSeverityAction = nullptr;
     QAction* m_warningSeverityAction = nullptr;
     QAction* m_hintSeverityAction = nullptr;
+
+    void setFilter(const QString& filterText);
+    void setFilter(const QString& filterText, int tabIdx);
+
+    QLineEdit* m_filterEdit;
+    int m_prevTabIdx;
 };
 }
 
