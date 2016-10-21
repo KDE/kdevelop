@@ -166,7 +166,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
     // and not return any errors, even if the file contains them.
     if (!mocParametersRegex.match(extraParameters).hasMatch()) {
         bool qtUsed = false;
-        bool mocDefineFinded = false;
+        bool mocDefineFound = false;
         foreach (auto dir, m_includeDirectories) {
             if (dir.path().endsWith("QtCore")) {
                 qtUsed = true;
@@ -179,7 +179,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
                 while(!qtHeader.atEnd()) {
                     auto match = mocHeaderRegex.match(qtHeader.readLine());
                     if (match.hasMatch()) {
-                        mocDefineFinded = true;
+                        mocDefineFound = true;
                         result << QStringLiteral("-DQ_MOC_OUTPUT_REVISION=") + match.captured(1);
                         break;
                     }
@@ -188,7 +188,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
             }
         }
 
-        if (qtUsed && !mocDefineFinded)
+        if (qtUsed && !mocDefineFound)
             infoMessage = mocMessage;
     }
 
