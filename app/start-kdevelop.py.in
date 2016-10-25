@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+
+import os
+import pprint
+import subprocess
+import sys
+
+new_env = {}
+
+def prepend_to_env_list(var: str, new_dirs: list, default_dirs: list=list()):
+    path_list = new_dirs + list(os.getenv(var, "").split(":")) + default_dirs
+    # print(var, "path_list:", pprint.pformat(path_list))
+    # remove duplicates as well as empty entries and preserve order
+    unique_path_list = []
+    for path in path_list:
+        if path and path not in unique_path_list:
+            unique_path_list.append(path)
+    # print(var, "unique_path_list:", pprint.pformat(unique_path_list))
+    new_env[var] = ":".join(unique_path_list)
+
+
+plugin_dirs = ["@KDE_INSTALL_FULL_PLUGINDIR@"]
+if "@QT_PLUGIN_INSTALL_DIR@" and os.path.exists("@QT_PLUGIN_INSTALL_DIR@"):
+    plugin_dirs.append("@QT_PLUGIN_INSTALL_DIR@")
+qt_plugin_dir = subprocess.check_output(["qtpaths", "--plugin-dir"]).decode("utf-8").strip()
+plugin_dirs.append(qt_plugin_dir)
+prepend_to_env_list("QT_PLUGIN_PATH", plugin_dirs)
+
+qml_import_dirs = ["@KDE_INSTALL_FULL_QMLDIR@"]
+if "@QT_INSTALL_QML@" and os.path.exists("@QT_INSTALL_QML@"):
+    qml_import_dirs.append("@QT_INSTALL_QML@")
+qml_import_dirs.append(os.path.abspath(os.path.join(qt_plugin_dir, os.pardir, "qml")))
+prepend_to_env_list("QML2_IMPORT_PATH", qml_import_dirs)
+
+config_dirs = subprocess.check_output(["qtpaths", "--paths", "GenericConfigLocation"]).decode("utf-8").strip().split(":")
+prepend_to_env_list("XDG_CONFIG_DIRS", ["@KDE_INSTALL_FULL_CONFDIR@"], config_dirs)
+
+data_dirs = subprocess.check_output(["qtpaths", "--paths", "GenericDataLocation"]).decode("utf-8").strip().split(":")
+prepend_to_env_list("XDG_DATA_DIRS", ["@KDE_INSTALL_FULL_DATADIR@"], data_dirs)
+
+# add the directory where we installed kdevelop to $PATH in case e.g. CMake, etc. are also there
+prepend_to_env_list("PATH", ["@KDE_INSTALL_FULL_BINDIR@"])
+
+new_env["QT_MESSAGE_PATTERN"] = "\033[32m%{time h:mm:ss.zzz}%{if-category}\033[32m %{category}:%{endif} %{if-debug}\033[34m%{function}%{endif}%{if-warning}\033[31m%{backtrace depth=5}\n%{endif}%{if-critical}\033[31m%{backtrace depth=5}\n%{endif}%{if-fatal}\033[31m%{backtrace depth=5}\n%{endif}\033[0m %{message}"
+
+os.environ.update(new_env)
+# print("updating env:", pprint.pformat(new_env))
+
+kdevelop_binary = "@KDE_INSTALL_FULL_BINDIR@/kdevelop"
+os.execvpe(kdevelop_binary, [kdevelop_binary] + sys.argv[1:], os.environ)
