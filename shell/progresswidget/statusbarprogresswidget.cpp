@@ -53,6 +53,9 @@
 #include <QStackedWidget>
 #include <QTimer>
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
+#include <QDebug>
 
 using namespace KDevelop;
 
@@ -66,38 +69,70 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     box = new QHBoxLayout( this );
     box->setMargin(0);
     box->setSpacing(0);
+    stack = new QStackedWidget( this );
 
     m_pButton = new QToolButton( this );
-    m_pButton->setAttribute(Qt::WA_MacMiniSize);
     m_pButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
                                            QSizePolicy::Minimum ) );
     QIcon smallIcon = QIcon::fromTheme( QStringLiteral("go-up") );
-    m_pButton->setIcon( smallIcon );
-    box->addWidget( m_pButton  );
-    stack = new QStackedWidget( this );
-    int maximumHeight = fontMetrics().height();
-    stack->setMaximumHeight( maximumHeight );
-    box->addWidget( stack );
-
-    m_pButton->setToolTip( i18n("Open detailed progress dialog") );
+    if ( smallIcon.isNull() ) {
+        // this can happen everywhere but in particular with a standard build on OS X.
+        // QToolButtons won't be visible without an icon, so fall back to showing a Qt::UpArrow.
+        m_pButton->setArrowType( Qt::UpArrow );
+    } else {
+        m_pButton->setIcon( smallIcon );
+    }
     m_pButton->setAutoRaise(true);
+    QSize iconSize = m_pButton->iconSize();
 
     m_pProgressBar = new QProgressBar( this );
     m_pProgressBar->installEventFilter( this );
     m_pProgressBar->setMinimumWidth( w );
+    m_pProgressBar->setAttribute( Qt::WA_LayoutUsesWidgetRect, true );
+
+    // Determine maximumHeight from the progressbar's height and scale the icon.
+    // This operation is style specific and cannot infer the style in use
+    // from Q_OS_??? because users can have started us using the -style option
+    // (or even be using an unexpected QPA).
+    // In most cases, maximumHeight should be set to fontMetrics().height() + 2
+    // (Breeze, Oxygen, Fusion, Windows, QtCurve etc.); this corresponds to the actual
+    // progressbar height plus a 1 pixel margin above and below.
+    int maximumHeight = m_pProgressBar->fontMetrics().height() + 2;
+    const bool isMacWidgetStyle = QApplication::style()->objectName() == QLatin1String( "macintosh" );
+
+    if ( isMacWidgetStyle && !smallIcon.isNull() ) {
+        // QProgressBar height is fixed with the macintosh native widget style
+        // and alignment with m_pButton is tricky. Sizing the icon to maximumHeight
+        // gives a button that is slightly too high and not perfectly
+        // aligned. Annoyingly that doesn't improve by calling setMaximumHeight()
+        // which even causes the button to change shape. So we use a "flat" button,
+        // an invisible outline which is more in line with platform practices anyway.
+        maximumHeight = m_pProgressBar->sizeHint().height();
+        iconSize.scale( maximumHeight, maximumHeight, Qt::KeepAspectRatio );
+    } else {
+        // The icon is scaled to maximumHeight but with 1 pixel margins on each side
+        // because it will be in a visible button.
+        iconSize.scale( maximumHeight - 2, maximumHeight - 2, Qt::KeepAspectRatio );
+        // additional adjustments:
+        m_pButton->setAttribute( Qt::WA_LayoutUsesWidgetRect, true );
+    }
+    stack->setMaximumHeight( maximumHeight );
+    m_pButton->setIconSize( iconSize );
+    box->addWidget( m_pButton  );
+
+    m_pButton->setToolTip( i18n("Open detailed progress dialog") );
+
+    box->addWidget( stack );
+
     stack->insertWidget( 1,m_pProgressBar );
 
     m_pLabel = new QLabel( QString(), this );
     m_pLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
     m_pLabel->installEventFilter( this );
     m_pLabel->setMinimumWidth( w );
+    m_pLabel->setMaximumHeight( maximumHeight );
     stack->insertWidget( 2, m_pLabel );
 
-#ifndef Q_OS_MAC
-    // Currently on OSX this causes the button to be cut-off
-    // It isn't necessary because on OSX the button's minimumSizeHint is small enough
-    m_pButton->setMaximumHeight( maximumHeight );
-#endif
     setMinimumWidth( minimumSizeHint().width() );
 
     mode = None;
