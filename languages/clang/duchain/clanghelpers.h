@@ -50,7 +50,7 @@ KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileC
 KDevelop::DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes);
 
 /**
- * Try to look up the first reachable forward declaration for type @p type
+ * Try to look up the first reachable forward declaration for type @a type
  *
  * @param context The context where this search is happening
  * @param cursor The location from which we're searching
@@ -63,15 +63,15 @@ KDevelop::DeclarationPointer findForwardDeclaration(CXType type, KDevelop::DUCon
 KDevelop::RangeInRevision cursorSpellingNameRange(CXCursor cursor, const KDevelop::Identifier& id);
 
 /**
- * @returns all the Imports for each file in the @param tu
+ * @returns all the Imports for each file in the @a tu
  */
 KDEVCLANGPRIVATE_EXPORT Imports tuImports(CXTranslationUnit tu);
 
 /**
- * Recursively builds a duchain with the specified @param features for the
- * @param file and each of its @param imports using the TU from @param session.
- * The resulting contexts are placed in @param includedFiles.
- * @returns the context created for @param file
+ * Recursively builds a duchain with the specified @a features for the
+ * @a file and each of its @a imports using the TU from @a session.
+ * The resulting contexts are placed in @a includedFiles.
+ * @returns the context created for @a file
  */
 KDEVCLANGPRIVATE_EXPORT KDevelop::ReferencedTopDUContext buildDUChain(
     CXFile file, const Imports& imports, const ParseSession& session,
@@ -89,12 +89,12 @@ QStringList headerExtensions();
 QStringList sourceExtensions();
 
 /**
- * @return True if the given file @p path has the extension of a C++ source file
+ * @return True if the given file @a path has the extension of a C++ source file
  */
 KDEVCLANGPRIVATE_EXPORT bool isSource(const QString& path);
 
 /**
- * @return True if the given file @p path has the extension of a C++ header file
+ * @return True if the given file @a path has the extension of a C++ header file
  */
 KDEVCLANGPRIVATE_EXPORT bool isHeader(const QString& path);
 

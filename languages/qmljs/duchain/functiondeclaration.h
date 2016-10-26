@@ -73,7 +73,6 @@ public:
 
     /**
      * @brief Set the prototype context of this function
-     * @param own True if this function declaration must be set as the owner of context
      *
      * @note The DUChain must be write-locked
      */
