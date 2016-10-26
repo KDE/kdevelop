@@ -27,6 +27,7 @@
 #include <QHash>
 
 class IdealToolButton;
+class ToolViewAction;
 class QAction;
 namespace Sublime {
 
@@ -44,7 +45,7 @@ public:
     IdealButtonBarWidget(Qt::DockWidgetArea area,
         IdealController *controller, Sublime::MainWindow *parent);
 
-    QAction* addWidget(const QString& title, IdealDockWidget *widget,
+    QAction* addWidget(IdealDockWidget *widget,
                        Area* area, View *view);
     void removeAction(QAction* action);
 
@@ -76,8 +77,6 @@ protected:
 private:
     Qt::DockWidgetArea _area;
     IdealController *_controller;
-    QHash<QAction *, IdealToolButton*> _buttons;
-    QHash<QAction *, IdealDockWidget*> _widgets;
     QWidget *_corner;
     bool _showState;
 };

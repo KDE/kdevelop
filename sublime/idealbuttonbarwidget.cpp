@@ -37,6 +37,61 @@
 
 using namespace Sublime;
 
+class ToolViewAction : public QAction
+{
+public:
+    ToolViewAction(IdealDockWidget *dock, QObject* parent) : QAction(parent), m_dock(dock)
+    {
+        setCheckable(true);
+
+        const QString title = dock->view()->document()->title();
+        setIcon(dock->windowIcon());
+        setToolTip(i18n("Toggle '%1' tool view.", title));
+        setText(title);
+
+        //restore toolview shortcut config
+        KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+        QStringList shortcutStrings = config.readEntry(QStringLiteral("Shortcut for %1").arg(title), QStringList());
+        setShortcuts({ QKeySequence::fromString(shortcutStrings.value(0)), QKeySequence::fromString(shortcutStrings.value(1)) });
+
+        dock->setWindowTitle(title);
+        dock->view()->widget()->installEventFilter(this);
+        refreshText();
+    }
+
+    IdealDockWidget *dockWidget() const
+    {
+        Q_ASSERT(m_dock);
+        return m_dock;
+    }
+
+    IdealToolButton* button() { return m_button; }
+    void setButton(IdealToolButton* button) {
+        m_button = button;
+        refreshText();
+    }
+
+private:
+    bool eventFilter(QObject * watched, QEvent * event) override
+    {
+        if (watched == m_dock->view()->widget() && event->type() == QEvent::EnabledChange) {
+            refreshText();
+        }
+
+        return QObject::eventFilter(watched, event);
+    }
+
+    void refreshText()
+    {
+        const auto widget = m_dock->view()->widget();
+        const QString title = m_dock->view()->document()->title();
+        setText(widget->isEnabled() ? title : QStringLiteral("(%1)").arg(title));
+    }
+
+    QPointer<IdealDockWidget> m_dock;
+    QPointer<IdealToolButton> m_button;
+};
+
 IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
         IdealController *controller, Sublime::MainWindow *parent)
     : QWidget(parent)
@@ -69,21 +124,9 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
         (void) new IdealButtonBarLayout(orientation(), this);
 }
 
-QAction* IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *dock,
+QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
                                          Area *area, View *view)
 {
-    QAction* action = new QAction(this);
-    action->setCheckable(true);
-    action->setText(title);
-    action->setIcon(dock->windowIcon());
-
-    //restore toolview shortcut config
-    KConfigGroup config = KSharedConfig::openConfig()->group("UI");
-    QList<QKeySequence> shortcuts;
-    QStringList shortcutStrings = config.readEntry(QStringLiteral("Shortcut for %1").arg(view->document()->title()), QStringList());
-    shortcuts << QKeySequence::fromString(shortcutStrings.value(0)) << QKeySequence::fromString(shortcutStrings.value(1));
-    action->setShortcuts(shortcuts);
-
     if (_area == Qt::BottomDockWidgetArea || _area == Qt::TopDockWidgetArea)
         dock->setFeatures( dock->features() | IdealDockWidget::DockWidgetVerticalTitleBar );
 
@@ -91,9 +134,9 @@ QAction* IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     dock->setView(view);
     dock->setDockWidgetArea(_area);
 
-    _widgets[action] = dock;
-
     bool wasEmpty = actions().isEmpty();
+
+    auto action = new ToolViewAction(dock, this);
     addAction(action);
 
     if(wasEmpty)
@@ -106,10 +149,10 @@ QWidget* IdealButtonBarWidget::corner()
     return _corner;
 }
 
-void IdealButtonBarWidget::removeAction(QAction * action)
+void IdealButtonBarWidget::removeAction(QAction * widgetAction)
 {
-    _widgets.remove(action);
-    delete _buttons.take(action);
+    auto action = dynamic_cast<ToolViewAction*>(widgetAction);
+    delete action->button();
     delete action;
 }
 
@@ -157,12 +200,11 @@ void IdealButtonBarWidget::showWidget(bool checked)
     showWidget(action, checked);
 }
 
-void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
+void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
 {
-    IdealDockWidget *widget = _widgets.value(widgetAction);
-    Q_ASSERT(widget);
+    auto widgetAction = dynamic_cast<ToolViewAction*>(action);
 
-    IdealToolButton* button = _buttons.value(widgetAction);
+    IdealToolButton* button = widgetAction->button();
     Q_ASSERT(button);
 
     if (checked) {
@@ -178,10 +220,10 @@ void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
             }
         }
 
-        _controller->lastDockWidget[_area] = widget;
+        _controller->lastDockWidget[_area] = widgetAction->dockWidget();
     }
 
-    _controller->showDockWidget(widget, checked);
+    _controller->showDockWidget(widgetAction->dockWidget(), checked);
     widgetAction->setChecked(checked);
     button->setChecked(checked);
 }
@@ -189,14 +231,14 @@ void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
 
 void IdealButtonBarWidget::actionEvent(QActionEvent *event)
 {
-    QAction *action = qobject_cast<QAction *>(event->action());
-    if (! action)
+    auto action = dynamic_cast<ToolViewAction *>(event->action());
+    if (!action)
       return;
 
     switch (event->type()) {
     case QEvent::ActionAdded: {
         bool wasEmpty = isEmpty();
-        if (! _buttons.contains(action)) {
+        if (!action->button()) {
             IdealToolButton *button = new IdealToolButton(_area);
             //apol: here we set the usual width of a button for the vertical toolbars as the minimumWidth
             //this is done because otherwise when we remove all the buttons and re-add new ones we get all
@@ -204,22 +246,16 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             int w = button->sizeHint().width();
             if(orientation()==Qt::Vertical && w>minimumWidth())
                 setMinimumWidth(w);
-            _buttons.insert(action, button);
+            action->setButton(button);
+            button->setDefaultAction(action);
 
-            button->setText(action->text());
-            button->setToolTip(i18n("Toggle '%1' tool view.", action->text()));
-            button->setIcon(action->icon());
-            button->setShortcut(QKeySequence());
-            button->setChecked(action->isChecked());
-
-            Q_ASSERT(_widgets.contains(action));
-            _widgets[action]->setWindowTitle(action->text());
+            Q_ASSERT(action->dockWidget());
 
             layout()->addWidget(button);
             connect(action, &QAction::toggled, this, static_cast<void(IdealButtonBarWidget::*)(bool)>(&IdealButtonBarWidget::showWidget));
             connect(button, &IdealToolButton::clicked, this, &IdealButtonBarWidget::buttonPressed);
             connect(button, &IdealToolButton::customContextMenuRequested,
-                    _widgets[action], &IdealDockWidget::contextMenuRequested);
+                    action->dockWidget(), &IdealDockWidget::contextMenuRequested);
             if ( wasEmpty ) {
                 emit emptyChanged();
             }
@@ -227,7 +263,8 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     } break;
 
     case QEvent::ActionRemoved: {
-        if (IdealToolButton *button = _buttons.value(action)) {
+        IdealToolButton *button = action->button();
+        if (button) {
             for (int index = 0; index < layout()->count(); ++index) {
                 if (QLayoutItem *item = layout()->itemAt(index)) {
                     if (item->widget() == button) {
@@ -243,30 +280,26 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
         }
     } break;
 
-    case QEvent::ActionChanged: {
-        if (IdealToolButton *button = _buttons.value(action)) {
-            button->setText(action->text());
-            button->setIcon(action->icon());
-            button->setShortcut(QKeySequence());
-            Q_ASSERT(_widgets.contains(action));
-        }
-    } break;
-
     default:
         break;
     }
 }
 
-IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *action) const
+IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *_action) const
 {
-    return _widgets.value(action);
+    return dynamic_cast<ToolViewAction *>(_action)->dockWidget();
 }
 
 void IdealButtonBarWidget::buttonPressed(bool state)
 {
     auto button = qobject_cast<IdealToolButton*>(sender());
     Q_ASSERT(button);
-    auto action = _buttons.key(button);
+    ToolViewAction* action = nullptr;
+    foreach(QAction* a, actions()) {
+        auto tva = dynamic_cast<ToolViewAction *>(a);
+        if (tva && tva->button() == button)
+            action = tva;
+    }
     Q_ASSERT(action);
 
     const bool forceGrouping = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
