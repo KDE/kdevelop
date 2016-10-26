@@ -28,8 +28,8 @@
 namespace Utils {
 /**
  * Use this class to conveniently iterate over the items in a set.
- * @param T The type the indices will be converted to
- * @param Conversion Should be a class that has a toIndex member function that takes an object of type T as parameter, and returns an index,
+ * @tparam T The type the indices will be converted to
+ * @tparam Conversion Should be a class that has a toIndex member function that takes an object of type T as parameter, and returns an index,
  *                   and a toItem member function that takes an index, and returns an item of type T.
  * */
 template<class T, class Conversion>
@@ -344,8 +344,8 @@ uint qHash(const StorableSet<T, Conversion, StaticRepository, doReferenceCountin
      *
      * @todo eventually make this unnecessary
      *
-     * @param T Should be the type that should be dealt
-     * @param Conversion Should be a class that has a toIndex member function that takes an object of type T as parameter, and returns an index,
+     * @tparam T Should be the type that should be dealt
+     * @tparam Conversion Should be a class that has a toIndex member function that takes an object of type T as parameter, and returns an index,
      *                   and a toItem member function that takes an index, and returns an item of type T.
      **/
 template<class T, class Conversion>

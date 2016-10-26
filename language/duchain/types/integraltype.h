@@ -83,9 +83,9 @@ public:
   uint dataType() const;
 
   /**
-   * Set the type's modifiers.
+   * Set the type's data type.
    *
-   * \param modifiers modifiers of this type.
+   * \param dataType data type of this type.
    */
   void setDataType(uint dataType);
 

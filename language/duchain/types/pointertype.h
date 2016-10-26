@@ -50,7 +50,7 @@ public:
   /**
    * Sets the base type of the pointer, ie. what type of data the pointer points to.
    *
-   * \param baseType the base type.
+   * \param type the base type.
    */
   void setBaseType(AbstractType::Ptr type);
 

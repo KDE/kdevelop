@@ -173,7 +173,6 @@ namespace svn
     /**
      * get a substring of a path, starting at index
      *
-     * @param index
      * @return substr substring
      */
     std::string

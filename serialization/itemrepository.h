@@ -1026,14 +1026,14 @@ class DynamicItem {
     DynamicItem& operator=(const DynamicItem&);
 };
 
-///@param Item @see ExampleItem
-///@param ItemRequest @see ExampleReqestItem
-///@param fixedItemSize When this is true, all inserted items must have the same size.
+///@tparam Item See ExampleItem
+///@tparam ItemRequest See ExampleReqestItem
+///@tparam fixedItemSize When this is true, all inserted items must have the same size.
 ///                     This greatly simplifies and speeds up the task of managing free items within the buckets.
-///@param markForReferenceCounting Whether the data within the repository should be marked for reference-counting.
+///@tparam markForReferenceCounting Whether the data within the repository should be marked for reference-counting.
 ///                                This costs a bit of performance, but must be enabled if there may be data in the repository
 ///                                that does on-disk reference counting, like IndexedString, IndexedIdentifier, etc.
-///@param threadSafe Whether class access should be thread-safe. Disabling this is dangerous when you do multi-threading.
+///@tparam threadSafe Whether class access should be thread-safe. Disabling this is dangerous when you do multi-threading.
 ///                  You have to make sure that mutex() is locked whenever the repository is accessed.
 template<class Item, class ItemRequest, bool markForReferenceCounting = true, bool threadSafe = true, uint fixedItemSize = 0, unsigned int targetBucketHashSize = 524288*2>
 class ItemRepository : public AbstractItemRepository {
@@ -1429,14 +1429,13 @@ class ItemRepository : public AbstractItemRepository {
     }
   }
 
+  typedef DynamicItem<Item, markForReferenceCounting> MyDynamicItem;
+
   ///This returns an editable version of the item. @warning: Never change an entry that affects the hash,
   ///or the equals(..) function. That would completely destroy the consistency.
   ///@param index The index. It must be valid(match an existing item), and nonzero.
   ///@warning If you use this, make sure you lock mutex() before calling,
   ///         and hold it until you're ready using/changing the data..
-
-  typedef DynamicItem<Item, markForReferenceCounting> MyDynamicItem;
-
   MyDynamicItem dynamicItemFromIndex(unsigned int index) {
     verifyIndex(index);
 

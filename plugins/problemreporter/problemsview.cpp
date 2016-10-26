@@ -435,12 +435,34 @@ void ProblemsView::onViewChanged()
 
 void ProblemsView::addModel(const ModelData& data)
 {
+    // We implement follows tabs order:
+    //
+    // 1) First tab always used by "Parser" model due it's the most important
+    //    problem listing, it should be at the front (K.Funk idea at #kdevelop IRC channel).
+    //
+    // 2) Other tabs are alphabetically ordered.
+
+    static const QString parserTitle = QStringLiteral("Parser");
+
     ProblemTreeView* view = new ProblemTreeView(nullptr, data.model);
     connect(view, &ProblemTreeView::changed, this, &ProblemsView::onViewChanged);
-    int idx = m_tabWidget->addTab(view, data.name);
-    int rows = view->model()->rowCount();
 
-    updateTab(idx, rows);
+    int insertIdx = 0;
+    if (data.name != parserTitle) {
+        for (insertIdx = 0; insertIdx < m_tabWidget->count(); ++insertIdx) {
+            QString tabName = nameFromLabel(m_tabWidget->tabText(insertIdx));
+
+            // Skip first element if it's already occupied by "Parser" model
+            if (insertIdx == 0 && tabName == parserTitle)
+                continue;
+
+            if (tabName.localeAwareCompare(data.name) > 0)
+                break;
+        }
+    }
+    m_tabWidget->insertTab(insertIdx, view, data.name);
+
+    updateTab(insertIdx, view->model()->rowCount());
 }
 
 void ProblemsView::updateTab(int idx, int rows)

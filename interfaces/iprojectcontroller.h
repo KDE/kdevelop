@@ -130,7 +130,6 @@ public Q_SLOTS:
      * the file and starts creating the project model from it. The opening process
      * is finished once @ref projectOpened signal is emitted.
      * @param url a kdev4 project file top open
-     * @returns true if the given project could be opened, false otherwise
      */
     virtual void openProject( const QUrl & url = QUrl() ) = 0;
     /**
@@ -138,7 +137,6 @@ public Q_SLOTS:
      * the @ref projectClosing and @ref projectClosed signals are emitted. Only when
      * the latter signal is emitted it is guaranteed that the project has been closed.
      * The @ref IProject object will be deleted after the closing has finished.
-     * @returns true if the project could be closed, false otherwise
      */
     virtual void closeProject( IProject* ) = 0;
 

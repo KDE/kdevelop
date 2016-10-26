@@ -79,6 +79,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 
     connect( dirop, &KDirOperator::fileSelected, this, &FileManager::openFile );
 
+    setFocusProxy(dirop);
 
     // includes some actions, but not hooked into the shortcut dialog atm
     m_actionCollection = new KActionCollection(this);

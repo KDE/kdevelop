@@ -37,6 +37,7 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
     : QWidget( parent ), m_plugin( plugin )
 {
   Ui::ExternalScriptViewBase::setupUi( this );
+  setFocusProxy(filterText);
 
   setWindowTitle( i18n( "External Scripts" ) );
   setWindowIcon( QIcon::fromTheme(QStringLiteral("dialog-scripts"), windowIcon()) );
@@ -58,9 +59,11 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   m_addScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("Add External Script"), this);
   connect(m_addScriptAction, &QAction::triggered, this, &ExternalScriptView::addScript);
   addAction(m_addScriptAction);
+
   m_editScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-edit")), i18n("Edit External Script"), this);
   connect(m_editScriptAction, &QAction::triggered, this, &ExternalScriptView::editScript);
   addAction(m_editScriptAction);
+
   m_removeScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n("Remove External Script"), this);
   connect(m_removeScriptAction, &QAction::triggered, this, &ExternalScriptView::removeScript);
   addAction(m_removeScriptAction);

@@ -163,7 +163,11 @@ void ExpandingDelegate::drawDisplay( QPainter * painter, const QStyleOptionViewI
 
   QTextLayout layout(text, option.font, painter->device());
 
+#if QT_VERSION < 0x050600
   QList<QTextLayout::FormatRange> additionalFormats;
+#else
+  QVector<QTextLayout::FormatRange> additionalFormats;
+#endif
 
   int missingFormats = text.length();
 
@@ -247,7 +251,11 @@ void ExpandingDelegate::drawDisplay( QPainter * painter, const QStyleOptionViewI
 //   foreach (const QTextLayout::FormatRange& fr, additionalFormats)
 //     qCDebug( PLUGIN_QUICKOPEN ) << fr.start << " len " << fr.length << "foreground" << fr.format.foreground() << "background" << fr.format.background();
 
+#if QT_VERSION < 0x050600
   layout.setAdditionalFormats(additionalFormats);
+#else
+  layout.setFormats(additionalFormats);
+#endif
 
   QTextOption to;
 

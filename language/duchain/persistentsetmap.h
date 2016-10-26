@@ -123,11 +123,11 @@ class PersistentSetMapItemRequest {
 
 /**
  * This class allows easily implement a very efficient persistent map from a key, to a set of data items.
- * @param Key The key class, from which a set of Data items is mapped. It must be safely memory-copyable((no virtual functions etc),
- * @param Data The data class, of which a set will be stored. The data must be safely memory-copyable(no virtual functions etc),
+ * @tparam Key The key class, from which a set of Data items is mapped. It must be safely memory-copyable((no virtual functions etc),
+ * @tparam Data The data class, of which a set will be stored. The data must be safely memory-copyable(no virtual functions etc),
  *             and it must be compatbiel with EmbeddedFreeTree
- * @param Handler Must be a handler that allows storing additional information into invalid items, @see util/embeddedfreetree.h
- * @param Hasher A hasher that extracts a hash-value from the key.
+ * @tparam Handler Must be a handler that allows storing additional information into invalid items, @see util/embeddedfreetree.h
+ * @tparam Hasher A hasher that extracts a hash-value from the key.
  * */
 template<class Key, class Data, class Handler, class Hasher = HashHasher<Key> >
 class PersistentSetMap {

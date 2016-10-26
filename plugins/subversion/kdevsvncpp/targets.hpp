@@ -61,8 +61,6 @@ namespace svn
     /**
      * Constructor. Initializes list with just
      * one entry
-     *
-     * @param target
      */
     Targets(const char * target = nullptr);
 
@@ -73,9 +71,6 @@ namespace svn
      */
     Targets(const Targets & targets);
 
-    /**
-     * Destructor
-     */
     virtual ~Targets();
 
     /**

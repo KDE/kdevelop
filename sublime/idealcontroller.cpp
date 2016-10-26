@@ -113,6 +113,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
       toolBar->setMovable(false);
       toolBar->addActions(toolBarActions);
       toolView->setCentralWidget(w);
+      toolView->setFocusProxy(w);
       toolView->addToolBar(toolBar);
       dock->setWidget(toolView);
     }

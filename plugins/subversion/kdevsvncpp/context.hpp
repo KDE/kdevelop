@@ -59,8 +59,6 @@ namespace svn
 
     /**
      * copy constructor
-     *
-     * @param src
      */
     Context(const Context &src);
 
@@ -99,8 +97,6 @@ namespace svn
 
     /**
      * set log message
-     *
-     * @param msg
      */
     void setLogMessage(const char * msg);
 
@@ -132,8 +128,6 @@ namespace svn
      * set the listener for the context. The listener will be
      * called to poll authentication information and other
      * information like this
-     *
-     * @param listener
      */
     void
     setListener(ContextListener * listener);

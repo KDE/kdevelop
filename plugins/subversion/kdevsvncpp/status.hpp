@@ -44,22 +44,8 @@ namespace svn
   class Status
   {
   public:
-    /**
-     * default constructor
-     *
-     * @param path
-     * @param status
-     */
     Status(const char * path = nullptr, const svn_wc_status2_t * status = nullptr);
-
-    /**
-     * copy constructor
-     */
     Status(const Status & src);
-
-    /**
-     * destructor
-     */
     ~Status();
 
     /**

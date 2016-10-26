@@ -113,7 +113,7 @@ namespace svn
     /**
      * add and check the next entry
      *
-     * @param status @ref Status to add
+     * @param status The @ref Status to add
      */
     void
     push_back(const Status & status);

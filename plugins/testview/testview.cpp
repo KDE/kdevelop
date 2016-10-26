@@ -107,6 +107,8 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     connect(edit, &QLineEdit::textChanged, this, &TestView::changeFilter);
     addAction(widgetAction);
 
+    setFocusProxy(edit);
+
     IProjectController* pc = ICore::self()->projectController();
     connect (pc, &IProjectController::projectClosed, this, &TestView::removeProject);
 
