@@ -88,7 +88,12 @@ KTextEditor::Document *PartDocument::textDocument() const
 
 bool PartDocument::isActive() const
 {
-    return Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView()->document() == this;
+    const auto activeView = Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView();
+    if (!activeView) {
+        return false;
+    }
+
+    return activeView->document() == this;
 }
 
 bool PartDocument::save(DocumentSaveMode /*mode*/)
