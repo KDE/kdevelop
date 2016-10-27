@@ -94,6 +94,8 @@ ProblemModel::ProblemModel(QObject * parent, ProblemStore *store)
 
     connect(d->m_problems.data(), &ProblemStore::beginRebuild, this, &ProblemModel::onBeginRebuild);
     connect(d->m_problems.data(), &ProblemStore::endRebuild, this, &ProblemModel::onEndRebuild);
+
+    connect(d->m_problems.data(), &ProblemStore::problemsChanged, this, &ProblemModel::problemsChanged);
 }
 
 ProblemModel::~ ProblemModel()
@@ -253,6 +255,10 @@ void ProblemModel::clearProblems()
     endResetModel();
 }
 
+QVector<IProblem::Ptr> ProblemModel::problems(const KDevelop::IndexedString& document)
+{
+    return d->m_problems->problems(document);
+}
 
 QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {

@@ -64,13 +64,16 @@ private Q_SLOTS:
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext&);
     void updateHighlight(const KDevelop::IndexedString& url);
     void textDocumentCreated(KDevelop::IDocument* document);
+    void documentActivated(KDevelop::IDocument* document);
     void showModel(const QString& name);
 
 private:
+    void updateOpenedDocumentsHighlight();
     class ProblemReporterFactory* m_factory;
     ProblemReporterModel* m_model;
 
     QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
+    QSet<KDevelop::IndexedString> m_reHighlightNeeded;
 public slots:
     void documentClosed(KDevelop::IDocument*);
 };

@@ -43,6 +43,9 @@ struct ProblemStorePrivate
 
     /// Path of the currently open document
     KDevelop::IndexedString m_currentDocument;
+
+    /// All stored problems
+    QVector<KDevelop::IProblem::Ptr> m_allProblems;
 };
 
 namespace KDevelop
@@ -66,17 +69,43 @@ void ProblemStore::addProblem(const IProblem::Ptr &problem)
     ProblemNode *node = new ProblemNode(d->m_rootNode);
     node->setProblem(problem);
     d->m_rootNode->addChild(node);
+
+    d->m_allProblems += problem;
+    emit problemsChanged();
 }
 
 void ProblemStore::setProblems(const QVector<IProblem::Ptr> &problems)
 {
-    clear();
+    int oldSize = d->m_allProblems.size();
+
+    // set signals block to prevent problemsChanged() emitting during clean
+    {
+        QSignalBlocker blocker(this);
+        clear();
+    }
 
     foreach (const IProblem::Ptr &problem, problems) {
         d->m_rootNode->addChild(new ProblemNode(d->m_rootNode, problem));
     }
 
     rebuild();
+
+    if (d->m_allProblems.size() != oldSize || d->m_allProblems != problems) {
+        d->m_allProblems = problems;
+        emit problemsChanged();
+    }
+}
+
+QVector<IProblem::Ptr> ProblemStore::problems(const KDevelop::IndexedString& document) const
+{
+    QVector<IProblem::Ptr> documentProblems;
+
+    foreach (auto problem, d->m_allProblems) {
+        if (problem->finalLocation().document == document)
+            documentProblems += problem;
+    }
+
+    return documentProblems;
 }
 
 const ProblemStoreNode* ProblemStore::findNode(int row, ProblemStoreNode *parent) const
@@ -96,6 +125,11 @@ int ProblemStore::count(ProblemStoreNode *parent) const
 void ProblemStore::clear()
 {
     d->m_rootNode->clear();
+
+    if (!d->m_allProblems.isEmpty()) {
+        d->m_allProblems.clear();
+        emit problemsChanged();
+    }
 }
 
 void ProblemStore::rebuild()

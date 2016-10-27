@@ -89,6 +89,9 @@ signals:
     /// Emitted when showModel() is called
     void showRequested(const QString &name);
 
+    /// Emitted when any model emits problemsChanged()
+    void problemsChanged();
+
 private:
     QScopedPointer<ProblemModelSetPrivate> d;
 

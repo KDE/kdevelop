@@ -18,6 +18,7 @@
  */
 
 #include "problemmodelset.h"
+#include "problemmodel.h"
 #include <QAction>
 
 namespace KDevelop
@@ -42,6 +43,8 @@ void ProblemModelSet::addModel(const QString &name, ProblemModel *model)
     m.name = name;
     m.model = model;
     d->data.push_back(m);
+
+    connect(model, &ProblemModel::problemsChanged, this, &ProblemModelSet::problemsChanged);
 
     emit added(m);
 }
@@ -69,8 +72,10 @@ void ProblemModelSet::removeModel(const QString &name)
         ++itr;
     }
 
-    if(itr != d->data.end())
+    if(itr != d->data.end()) {
+        (*itr).model->disconnect(this);
         d->data.erase(itr);
+    }
 
     emit removed(name);
 }

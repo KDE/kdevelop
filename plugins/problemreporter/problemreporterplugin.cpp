@@ -94,11 +94,14 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList
             &ProblemReporterPlugin::documentClosed);
     connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this,
             &ProblemReporterPlugin::textDocumentCreated);
+    connect(ICore::self()->documentController(), &IDocumentController::documentActivated, this,
+            &ProblemReporterPlugin::documentActivated);
     connect(DUChain::self(), &DUChain::updateReady,
             this, &ProblemReporterPlugin::updateReady);
     connect(ICore::self()->languageController()->staticAssistantsManager(), &StaticAssistantsManager::problemsChanged,
             this, &ProblemReporterPlugin::updateHighlight);
     connect(pms, &ProblemModelSet::showRequested, this, &ProblemReporterPlugin::showModel);
+    connect(pms, &ProblemModelSet::problemsChanged, this, &ProblemReporterPlugin::updateOpenedDocumentsHighlight);
 }
 
 ProblemReporterPlugin::~ProblemReporterPlugin()
@@ -126,6 +129,7 @@ void ProblemReporterPlugin::documentClosed(IDocument* doc)
 
     IndexedString url(doc->url());
     delete m_highlighters.take(url);
+    m_reHighlightNeeded.remove(url);
 }
 
 void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
@@ -136,6 +140,16 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
                                          KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
+void ProblemReporterPlugin::documentActivated(KDevelop::IDocument* document)
+{
+  IndexedString documentUrl(document->url());
+
+  if (m_reHighlightNeeded.contains(documentUrl)) {
+    m_reHighlightNeeded.remove(documentUrl);
+    updateHighlight(documentUrl);
+  }
+}
+
 void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop::ReferencedTopDUContext&)
 {
     m_model->problemsUpdated(url);
@@ -144,11 +158,18 @@ void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop
 
 void ProblemReporterPlugin::updateHighlight(const KDevelop::IndexedString& url)
 {
-  ProblemHighlighter* ph = m_highlighters.value(url);
-    if (ph) {
-        auto allProblems = m_model->problems(url, false);
-        ph->setProblems(allProblems);
+    ProblemHighlighter* ph = m_highlighters.value(url);
+    if (!ph)
+        return;
+
+    KDevelop::ProblemModelSet* pms(core()->languageController()->problemModelSet());
+    QVector<IProblem::Ptr> documentProblems;
+
+    foreach (const ModelData& modelData, pms->models()) {
+        documentProblems += modelData.model->problems(url);
     }
+
+    ph->setProblems(documentProblems);
 }
 
 void ProblemReporterPlugin::showModel(const QString& name)
@@ -206,6 +227,18 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
         }
     }
     return extension;
+}
+
+void ProblemReporterPlugin::updateOpenedDocumentsHighlight()
+{
+    foreach(auto document, core()->documentController()->openDocuments()) {
+        IndexedString documentUrl(document->url());
+
+        if (document->isActive())
+            updateHighlight(documentUrl);
+        else
+            m_reHighlightNeeded.insert(documentUrl);
+    }
 }
 
 #include "problemreporterplugin.moc"

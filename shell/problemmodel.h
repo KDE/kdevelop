@@ -129,11 +129,21 @@ public:
     /// Clears the problems
     void clearProblems();
 
+    /// Retrieve problems for selected document
+    QVector<IProblem::Ptr> problems(const KDevelop::IndexedString& document);
+
     /// Retrieve the supported features
     Features features() const;
 
     /// Set the supported features
     void setFeatures(Features features);
+
+signals:
+    /// Emitted when the stored problems are changed with addProblem(), setProblems() and
+    /// clearProblems() methods. This signal emitted only when internal problems storage is
+    /// really changed: for example, it is not emitted when we call clearProblems() method
+    /// for empty model.
+    void problemsChanged();
 
 public slots:
     /// Show imports

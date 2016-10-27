@@ -100,6 +100,9 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     if (!m_document)
         return;
 
+    if (m_problems == problems)
+        return;
+
     const bool hadProblems = !m_problems.isEmpty();
     m_problems = problems;
 

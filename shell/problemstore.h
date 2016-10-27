@@ -82,6 +82,9 @@ public:
     /// Clears the current problems, and adds new ones from a list
     virtual void setProblems(const QVector<IProblem::Ptr> &problems);
 
+    /// Retrieve problems for selected document
+    QVector<IProblem::Ptr> problems(const KDevelop::IndexedString& document) const;
+
     /// Finds the specified node
     virtual const ProblemStoreNode* findNode(int row, ProblemStoreNode *parent = nullptr) const;
 
@@ -123,8 +126,13 @@ public:
     const KDevelop::IndexedString& currentDocument() const;
 
 signals:
-    /// Emitted when the problems change
+    /// Emitted when any store setting (grouping, scope, severity, document) is changed
     void changed();
+
+    /// Emitted when the stored problems are changed with clear(), addProblem() and setProblems()
+    /// methods. This signal emitted only when internal problems storage is really changed:
+    /// for example, it is not emitted when we call clear() method for empty storage.
+    void problemsChanged();
 
     /// Emitted before the problemlist is rebuilt
     void beginRebuild();
