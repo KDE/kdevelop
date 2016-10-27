@@ -232,6 +232,14 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
 void ProblemReporterPlugin::updateOpenedDocumentsHighlight()
 {
     foreach(auto document, core()->documentController()->openDocuments()) {
+        // Skip non-text documents.
+        // This also fixes crash caused by calling updateOpenedDocumentsHighlight() method without
+        // any opened documents. In this case documentController()->openDocuments() returns single
+        // (non-text) document with url like file:///tmp/kdevelop_QW2530.patch which has fatal bug:
+        // if we call isActive() method from this document the crash will happens.
+        if (!document->isTextDocument())
+            continue;
+
         IndexedString documentUrl(document->url());
 
         if (document->isActive())
