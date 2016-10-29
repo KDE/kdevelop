@@ -90,7 +90,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     Q_ASSERT(iface);
 
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->addModel(QStringLiteral("Clangtidy"), m_model.data());
+    pms->addModel(QStringLiteral("Clangtidy"), i18n("Clangtidy"), m_model.data());
 
     m_config = KSharedConfig::openConfig()->group("Clangtidy");
     auto clangtidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
