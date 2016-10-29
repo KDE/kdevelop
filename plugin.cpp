@@ -1,4 +1,4 @@
-/* This file is part of KDevelop
+1/* This file is part of KDevelop
    Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
    Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
 
@@ -50,7 +50,7 @@ K_PLUGIN_FACTORY_WITH_JSON(CppcheckFactory, "kdevcppcheck.json", registerPlugin<
 namespace cppcheck
 {
 
-static const QString modelName = QStringLiteral("Cppcheck");
+static const QString modelId = QStringLiteral("Cppcheck");
 
 Plugin::Plugin(QObject* parent, const QVariantList&)
     : IPlugin("kdevcppcheck", parent)
@@ -92,7 +92,7 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
             this, &Plugin::projectClosed);
 
     KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->addModel(modelName, m_model.data());
+    pms->addModel(modelId, QStringLiteral("Cppcheck"), m_model.data());
 
     updateActions();
 }
@@ -102,7 +102,7 @@ Plugin::~Plugin()
     killCppcheck();
 
     KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->removeModel(modelName);
+    pms->removeModel(modelId);
 }
 
 bool Plugin::isRunning()
@@ -118,7 +118,7 @@ void Plugin::killCppcheck()
 
 void Plugin::raiseProblemsView()
 {
-    core()->languageController()->problemModelSet()->showModel(modelName);
+    core()->languageController()->problemModelSet()->showModel(modelId);
 }
 
 void Plugin::raiseOutputView()
