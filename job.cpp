@@ -212,11 +212,13 @@ void Job::emitProblems()
     if (m_problems.isEmpty())
         return;
 
-    // Fix problems with incorrect range, which produced by cppcheck's errors
-    // without <location> element. In this case location automatically gets "/"
-    // which entails showing file dialog after selecting such problem in
-    // ProblemsView. To avoid this we set project's root path as problem location.
     foreach (auto problem, m_problems) {
+        problem->setFinalLocationMode(KDevelop::IProblem::TrimmedLine);
+
+        // Fix problems with incorrect range, which produced by cppcheck's errors
+        // without <location> element. In this case location automatically gets "/"
+        // which entails showing file dialog after selecting such problem in
+        // ProblemsView. To avoid this we set project's root path as problem location.
         auto range = problem->finalLocation();
         if (range.document.isEmpty()) {
             range.document = KDevelop::IndexedString(m_projectRootPath.toLocalFile());
