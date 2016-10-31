@@ -72,7 +72,10 @@ protected:
 
 private:
     QProgressBar* m_pProgressBar;
-    QLabel* m_pLabel;
+    union {
+        QLabel* label;
+        QToolButton* button;
+    } m_pPlaceHolder;
     QToolButton* m_pButton;
 
     enum Mode { None, /*Label,*/ Progress };

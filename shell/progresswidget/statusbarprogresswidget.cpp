@@ -53,6 +53,8 @@
 #include <QStackedWidget>
 #include <QTimer>
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
 
 using namespace KDevelop;
 
@@ -66,38 +68,92 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     box = new QHBoxLayout( this );
     box->setMargin(0);
     box->setSpacing(0);
+    stack = new QStackedWidget( this );
 
     m_pButton = new QToolButton( this );
-    m_pButton->setAttribute(Qt::WA_MacMiniSize);
-    m_pButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
-                                           QSizePolicy::Minimum ) );
+    m_pButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,
+                                           QSizePolicy::Fixed ) );
     QIcon smallIcon = QIcon::fromTheme( QStringLiteral("go-up") );
-    m_pButton->setIcon( smallIcon );
-    box->addWidget( m_pButton  );
-    stack = new QStackedWidget( this );
-    int maximumHeight = fontMetrics().height();
-    stack->setMaximumHeight( maximumHeight );
-    box->addWidget( stack );
-
-    m_pButton->setToolTip( i18n("Open detailed progress dialog") );
+    if ( smallIcon.isNull() ) {
+        // this can happen everywhere but in particular with a standard build on OS X.
+        // QToolButtons won't be visible without an icon, so fall back to showing a Qt::UpArrow.
+        m_pButton->setArrowType( Qt::UpArrow );
+    } else {
+        m_pButton->setIcon( smallIcon );
+    }
     m_pButton->setAutoRaise(true);
+    QSize iconSize = m_pButton->iconSize();
 
     m_pProgressBar = new QProgressBar( this );
+    m_pProgressBar->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,
+                                                QSizePolicy::Fixed ) );
     m_pProgressBar->installEventFilter( this );
     m_pProgressBar->setMinimumWidth( w );
-    stack->insertWidget( 1,m_pProgressBar );
+    m_pProgressBar->setAttribute( Qt::WA_LayoutUsesWidgetRect, true );
 
-    m_pLabel = new QLabel( QString(), this );
-    m_pLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-    m_pLabel->installEventFilter( this );
-    m_pLabel->setMinimumWidth( w );
-    stack->insertWidget( 2, m_pLabel );
+    // Determine maximumHeight from the progressbar's height and scale the icon.
+    // This operation is style specific and cannot infer the style in use
+    // from Q_OS_??? because users can have started us using the -style option
+    // (or even be using an unexpected QPA).
+    // In most cases, maximumHeight should be set to fontMetrics().height() + 2
+    // (Breeze, Oxygen, Fusion, Windows, QtCurve etc.); this corresponds to the actual
+    // progressbar height plus a 1 pixel margin above and below.
+    int maximumHeight = m_pProgressBar->fontMetrics().height() + 2;
+    const bool isMacWidgetStyle = QApplication::style()->objectName() == QLatin1String( "macintosh" );
 
-#ifndef Q_OS_MAC
-    // Currently on OSX this causes the button to be cut-off
-    // It isn't necessary because on OSX the button's minimumSizeHint is small enough
-    m_pButton->setMaximumHeight( maximumHeight );
-#endif
+    if ( isMacWidgetStyle && !smallIcon.isNull() ) {
+        // QProgressBar height is fixed with the macintosh native widget style
+        // and alignment with m_pButton is tricky. Sizing the icon to maximumHeight
+        // gives a button that is slightly too high and not perfectly
+        // aligned. Annoyingly that doesn't improve by calling setMaximumHeight()
+        // which even causes the button to change shape. So we use a "flat" button,
+        // an invisible outline which is more in line with platform practices anyway.
+        maximumHeight = m_pProgressBar->sizeHint().height();
+        iconSize.scale( maximumHeight, maximumHeight, Qt::KeepAspectRatio );
+    } else {
+        // The icon is scaled to maximumHeight but with 1 pixel margins on each side
+        // because it will be in a visible button.
+        iconSize.scale( maximumHeight - 2, maximumHeight - 2, Qt::KeepAspectRatio );
+        // additional adjustments:
+        m_pButton->setAttribute( Qt::WA_LayoutUsesWidgetRect, true );
+    }
+    stack->setMaximumHeight( maximumHeight );
+    m_pButton->setIconSize( iconSize );
+    box->addWidget( m_pButton  );
+
+    m_pButton->setToolTip( i18n("Open detailed progress dialog") );
+
+    box->addWidget( stack );
+
+    stack->insertWidget( 1, m_pProgressBar );
+
+    if (m_bShowButton) {
+        // create an empty, inactive QToolButton that's as high as m_pButton but only 1 pixel wide
+        // this will act as a placeholder when the widget is invisible.
+        m_pPlaceHolder.button = new QToolButton(this);
+        m_pPlaceHolder.button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,
+                                           QSizePolicy::Fixed ) );
+        m_pPlaceHolder.button->setMinimumHeight(m_pButton->minimumSizeHint().height());
+        m_pPlaceHolder.button->setMaximumWidth(1);
+        m_pPlaceHolder.button->setAutoRaise(true);
+        m_pPlaceHolder.button->setAttribute( Qt::WA_LayoutUsesWidgetRect, true );
+        m_pPlaceHolder.button->setEnabled(false);
+        m_pPlaceHolder.button->installEventFilter( this );
+        // the placeholder button should not go into the stack to avoid misalignment
+        box->addWidget( m_pPlaceHolder.button );
+        m_pPlaceHolder.button->hide();
+    } else {
+        // when the widget doesn't show m_pButton we can use a QLabel as the placeholder.
+        m_pPlaceHolder.label = new QLabel( QString(), this );
+        m_pPlaceHolder.label->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,
+                                              QSizePolicy::Fixed ) );
+        m_pPlaceHolder.label->setAlignment( Qt::AlignHCenter );
+        m_pPlaceHolder.label->installEventFilter( this );
+        m_pPlaceHolder.label->setMinimumWidth( w );
+        m_pPlaceHolder.label->setMaximumHeight( maximumHeight );
+        stack->insertWidget( 2, m_pPlaceHolder.label );
+    }
+
     setMinimumWidth( minimumSizeHint().width() );
 
     mode = None;
@@ -223,12 +279,16 @@ void StatusbarProgressWidget::slotProgressItemProgress( ProgressItem *item, unsi
 void StatusbarProgressWidget::setMode() {
     switch ( mode ) {
     case None:
+        m_pButton->hide();
         if ( m_bShowButton ) {
-            m_pButton->hide();
+            // show the empty button in order to make the status bar look better
+            m_pPlaceHolder.button->show();
+        } else {
+            // show the empty label in order to make the status bar look better
+            stack->setCurrentWidget( m_pPlaceHolder.label );
         }
-        // show the empty label in order to make the status bar look better
+        m_pProgressBar->hide();
         stack->show();
-        stack->setCurrentWidget( m_pLabel );
 #ifdef Q_OS_OSX
         MacDockProgressView::setProgressVisible( false );
 #endif
@@ -236,9 +296,11 @@ void StatusbarProgressWidget::setMode() {
 
     case Progress:
         stack->show();
+        m_pProgressBar->show();
         stack->setCurrentWidget( m_pProgressBar );
         if ( m_bShowButton ) {
             m_pButton->show();
+            m_pPlaceHolder.button->hide();
         }
 #ifdef Q_OS_OSX
         MacDockProgressView::setProgressVisible( true );
@@ -252,7 +314,7 @@ void StatusbarProgressWidget::slotClean()
     // check if a new item showed up since we started the timer. If not, clear
     if ( ProgressManager::instance()->isEmpty() ) {
         m_pProgressBar->setValue( 0 );
-        //m_pLabel->clear();
+        //m_pPlaceHolder.label->clear();
         mode = None;
         setMode();
     }
