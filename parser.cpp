@@ -62,9 +62,8 @@ QString verboseMessageToHtml( const QString & input )
     return output;
 }
 
-CppcheckParser::CppcheckParser() :
-      m_errorLine(-1)
-    , m_errorInconclusive(false)
+CppcheckParser::CppcheckParser()
+    : m_errorInconclusive(false)
 {
 }
 
@@ -94,21 +93,18 @@ bool CppcheckParser::startElement()
 
     else if (name() == "location") {
         newState = Location;
-        // use only first <location> element of the error
-        if (m_errorLine < 0) {
-            if (attributes().hasAttribute("line"))
-                m_errorLine = attributes().value("line").toString().toInt();
-            if (attributes().hasAttribute("file"))
-                m_errorFile = attributes().value("file").toString();
+        if (attributes().hasAttribute("file") && attributes().hasAttribute("line")) {
+            m_errorFiles += attributes().value("file").toString();
+            m_errorLines += attributes().value("line").toString().toInt();
         }
     }
 
     else if (name() == "error") {
         newState = Error;
-        m_errorLine = -1;
         m_errorSeverity = "unknown";
         m_errorInconclusive = false;
-        m_errorFile.clear();
+        m_errorFiles.clear();
+        m_errorLines.clear();
         m_errorMessage.clear();
         m_errorVerboseMessage.clear();
 
@@ -153,7 +149,7 @@ bool CppcheckParser::endElement(QVector<KDevelop::IProblem::Ptr>& problems)
 
     case Error:
         qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: new error elem: line: "
-                               << m_errorLine << " at " << m_errorFile
+                               << m_errorLines.first() << " at " << m_errorFiles.first()
                                << ", msg: " << m_errorMessage;
 
         storeError(problems);
@@ -227,8 +223,23 @@ QVector<KDevelop::IProblem::Ptr> CppcheckParser::parse()
 
 void CppcheckParser::storeError(QVector<KDevelop::IProblem::Ptr>& problems)
 {
+    // Construct problem with using first location element
+    KDevelop::IProblem::Ptr problem = getProblem();
+
+    // Adds other <location> elements as diagnostics.
+    // This allows the user to track the problem.
+    for (int locationIdx = 1; locationIdx < m_errorFiles.size(); ++locationIdx) {
+        problem->addDiagnostic(getProblem(locationIdx));
+    }
+
+    problems.push_back(problem);
+}
+
+KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
+{
     KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem());
     QStringList messagePrefix;
+    QString errorMessage(m_errorMessage);
 
     problem->setSource(KDevelop::IProblem::Plugin);
 
@@ -248,18 +259,24 @@ void CppcheckParser::storeError(QVector<KDevelop::IProblem::Ptr>& problems)
         messagePrefix.push_back("inconclusive");
 
     if (!messagePrefix.isEmpty())
-        m_errorMessage = QString("(%1) %2").arg(messagePrefix.join(", ")).arg(m_errorMessage);
+        errorMessage = QString("(%1) %2").arg(messagePrefix.join(", ")).arg(m_errorMessage);
 
-    problem->setDescription(m_errorMessage);
+    problem->setDescription(errorMessage);
     problem->setExplanation(m_errorVerboseMessage);
 
     KDevelop::DocumentRange range;
-    range.document = KDevelop::IndexedString(m_errorFile);
-    range.setBothLines(m_errorLine - 1);
-    range.setBothColumns(0);
+
+    if (locationIdx < 0 || locationIdx >= m_errorFiles.size())
+        range = KDevelop::DocumentRange::invalid();
+    else {
+        range.document = KDevelop::IndexedString(m_errorFiles.at(locationIdx));
+        range.setBothLines(m_errorLines.at(locationIdx) - 1);
+        range.setBothColumns(0);
+    }
+
     problem->setFinalLocation(range);
 
-    problems.push_back(problem);
+    return problem;
 }
 
 }

@@ -43,6 +43,7 @@ public:
 
 private:
     void storeError(QVector<KDevelop::IProblem::Ptr>& problems);
+    KDevelop::IProblem::Ptr getProblem(int locationIdx = 0) const;
 
     // XML parsing
     bool endElement(QVector<KDevelop::IProblem::Ptr>& problems);
@@ -64,9 +65,9 @@ private:
     QString m_errorSeverity;
     QString m_errorMessage;
     QString m_errorVerboseMessage;
-    QString m_errorFile;
-    int     m_errorLine;
     bool    m_errorInconclusive;
+    QStringList  m_errorFiles;
+    QVector<int> m_errorLines;
 };
 
 }
