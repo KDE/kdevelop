@@ -81,11 +81,13 @@ IDocumentation::Ptr ManPagePlugin::documentationForDeclaration( Declaration* dec
     Q_ASSERT(dec);
     Q_ASSERT(dec->topContext());
     Q_ASSERT(dec->topContext()->parsingEnvironmentFile());
-    static const IndexedString cppLanguage("C++");
-    if (dec->topContext()->parsingEnvironmentFile()->language() != cppLanguage) {
+
+    static const IndexedString cppLanguage("C++"); // TODO remove because of new clang parser?
+    static const IndexedString clangLanguage("Clang");
+    const IndexedString declarationLanguage(dec->topContext()->parsingEnvironmentFile()->language());
+    if (declarationLanguage != cppLanguage && declarationLanguage != clangLanguage)
         return {};
-    }
-    
+
     // Don't show man-page documentation for files that are part of our project
     if(core()->projectController()->findProjectForUrl(dec->topContext()->url().toUrl()))
         return {};
