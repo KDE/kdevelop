@@ -1,4 +1,4 @@
-1/* This file is part of KDevelop
+/* This file is part of KDevelop
    Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
    Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
 
