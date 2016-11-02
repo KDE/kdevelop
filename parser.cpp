@@ -32,6 +32,15 @@
 namespace cppcheck
 {
 
+class CppcheckProblem : public KDevelop::DetectedProblem
+{
+public:
+    CppcheckProblem() {}
+    ~CppcheckProblem() override {}
+
+    QString sourceString() const override { return QStringLiteral("Cppcheck"); };
+};
+
 /**
  * Convert the value of <verbose> attribute of <error> element from cppcheck's
  * XML-output to 'good-looking' HTML-version. This is necessary because the
@@ -237,7 +246,7 @@ void CppcheckParser::storeError(QVector<KDevelop::IProblem::Ptr>& problems)
 
 KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
 {
-    KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem());
+    KDevelop::IProblem::Ptr problem(new CppcheckProblem);
     QStringList messagePrefix;
     QString errorMessage(m_errorMessage);
 
