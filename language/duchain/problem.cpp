@@ -98,9 +98,18 @@ DocumentRange Problem::finalLocation() const
 
 void Problem::setFinalLocation(const DocumentRange& location)
 {
-
     setRange(RangeInRevision::castFromSimpleRange(location));
     d_func_dynamic()->url = location.document;
+}
+
+IProblem::FinalLocationMode Problem::finalLocationMode() const
+{
+    return d_func()->finalLocationMode;
+}
+
+void Problem::setFinalLocationMode(IProblem::FinalLocationMode mode)
+{
+    d_func_dynamic()->finalLocationMode = mode;
 }
 
 void Problem::clearDiagnostics()

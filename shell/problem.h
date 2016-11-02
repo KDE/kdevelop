@@ -68,6 +68,9 @@ public:
     DocumentRange finalLocation() const override;
     void setFinalLocation(const DocumentRange& location) override;
 
+    FinalLocationMode finalLocationMode() const override;
+    void setFinalLocationMode(FinalLocationMode mode) override;
+
     QString description() const override;
     void setDescription(const QString& description) override;
 

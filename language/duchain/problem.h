@@ -87,6 +87,7 @@ public:
     ProblemData()
         : source(IProblem::Unknown)
         , severity(IProblem::Error)
+        , finalLocationMode(IProblem::Range)
     {
       initializeAppendedLists();
     }
@@ -98,6 +99,7 @@ public:
       , url(rhs.url)
       , description(rhs.description)
       , explanation(rhs.explanation)
+      , finalLocationMode(IProblem::Range)
     {
       initializeAppendedLists();
       copyListsFrom(rhs);
@@ -113,6 +115,7 @@ public:
     IndexedString url;
     IndexedString description;
     IndexedString explanation;
+    IProblem::FinalLocationMode finalLocationMode;
 
     START_APPENDED_LISTS_BASE(ProblemData, DUChainBaseData);
     APPENDED_LIST_FIRST(ProblemData, LocalIndexedProblem, diagnostics);
@@ -153,6 +156,9 @@ public:
      * */
     DocumentRange finalLocation() const override;
     void setFinalLocation(const DocumentRange& location) override;
+
+    FinalLocationMode finalLocationMode() const override;
+    void setFinalLocationMode(FinalLocationMode mode) override;
 
     /**
      * Returns child diagnostics of this particular problem

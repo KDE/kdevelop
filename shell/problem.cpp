@@ -27,6 +27,7 @@ struct DetectedProblemPrivate
     DetectedProblemPrivate()
         : m_severity(KDevelop::IProblem::Error)
         , m_source(KDevelop::IProblem::Unknown)
+        , m_finalLocationMode(KDevelop::IProblem::Range)
     {
     }
 
@@ -36,6 +37,7 @@ struct DetectedProblemPrivate
     KDevelop::IProblem::Source m_source;
     KDevelop::DocumentRange m_range;
     QVector<KDevelop::IProblem::Ptr> m_diagnostics;
+    KDevelop::IProblem::FinalLocationMode m_finalLocationMode;
 };
 
 namespace KDevelop
@@ -89,6 +91,17 @@ DocumentRange DetectedProblem::finalLocation() const
 void DetectedProblem::setFinalLocation(const DocumentRange &location)
 {
     d->m_range = location;
+}
+
+
+IProblem::FinalLocationMode DetectedProblem::finalLocationMode() const
+{
+    return d->m_finalLocationMode;
+}
+
+void DetectedProblem::setFinalLocationMode(IProblem::FinalLocationMode mode)
+{
+    d->m_finalLocationMode = mode;
 }
 
 QString DetectedProblem::description() const

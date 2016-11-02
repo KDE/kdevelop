@@ -97,16 +97,10 @@ public:
     virtual void setFinalLocation(const KDevelop::DocumentRange& location) = 0;
 
     /// Returns the final location mode of the problem
-    inline FinalLocationMode finalLocationMode()
-    {
-        return m_finalLocationMode;
-    }
+    virtual FinalLocationMode finalLocationMode() const = 0;
 
     /// Sets the final location mode of the problem
-    inline void setFinalLocationMode(FinalLocationMode mode)
-    {
-        m_finalLocationMode = mode;
-    }
+    virtual void setFinalLocationMode(FinalLocationMode mode) = 0;
 
     /// Returns the short description of the problem.
     virtual QString description() const = 0;
@@ -143,9 +137,6 @@ public:
 
     /// Returns a solution assistant for the problem, if applicable that is.
     virtual QExplicitlySharedDataPointer<KDevelop::IAssistant> solutionAssistant() const = 0;
-
-protected:
-    FinalLocationMode m_finalLocationMode = Range;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(IProblem::Severities)
