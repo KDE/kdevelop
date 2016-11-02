@@ -358,9 +358,10 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
     if( !iface )
         return;
 
-    document->textDocument()->blockSignals(true);
-    iface->addMark( lineNum, KTextEditor::MarkInterface::Execution );
-    document->textDocument()->blockSignals(false);
+    {
+        QSignalBlocker blocker(document->textDocument());
+        iface->addMark( lineNum, KTextEditor::MarkInterface::Execution );
+    }
 }
 
 

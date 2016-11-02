@@ -427,20 +427,20 @@ void MainWindowPrivate::reconstruct()
 
     reconstructViews();
 
-    m_mainWindow->blockSignals(true);
-
-    qCDebug(SUBLIME) << "RECONSTRUCT" << area << area->shownToolViews(Sublime::Left);
-    foreach (View *view, area->toolViews())
     {
-        QString id = view->document()->documentSpecifier();
-        if (!id.isEmpty())
+        QSignalBlocker blocker(m_mainWindow);
+        qCDebug(SUBLIME) << "RECONSTRUCT" << area << area->shownToolViews(Sublime::Left);
+        foreach (View *view, area->toolViews())
         {
-            Sublime::Position pos = area->toolViewPosition(view);
-            if (area->shownToolViews(pos).contains(id))
-                idealController->raiseView(view, IdealController::GroupWithOtherViews);
+            QString id = view->document()->documentSpecifier();
+            if (!id.isEmpty())
+            {
+                Sublime::Position pos = area->toolViewPosition(view);
+                if (area->shownToolViews(pos).contains(id))
+                    idealController->raiseView(view, IdealController::GroupWithOtherViews);
+            }
         }
     }
-    m_mainWindow->blockSignals(false);
 
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 }

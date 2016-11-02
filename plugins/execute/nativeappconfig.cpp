@@ -69,7 +69,7 @@ static KDevelop::ProjectBaseItem* itemForPath(const QStringList& path, KDevelop:
 
 void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project )
 {
-    bool b = blockSignals( true );
+    QSignalBlocker blocker(this);
     projectTarget->setBaseItem( project ? project->projectItem() : nullptr, true);
     projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
 
@@ -100,7 +100,6 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     dependencies->setDependencies(KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList());
 
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
-    blockSignals( b );
 }
 
 NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )

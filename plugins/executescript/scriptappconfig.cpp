@@ -71,7 +71,7 @@ QIcon ScriptAppConfigPage::icon() const
 
 void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project )
 {
-    bool b = blockSignals( true );
+    QSignalBlocker blocker(this);
     if( project )
     {
         executablePath->setStartDir( project->path().toUrl() );
@@ -94,7 +94,6 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, QString() ) );
     outputFilteringMode->setCurrentIndex( cfg.readEntry( ExecuteScriptPlugin::outputFilteringEntry, 2u ));
     //runInTerminal->setChecked( cfg.readEntry( ExecuteScriptPlugin::useTerminalEntry, false ) );
-    blockSignals( b );
 }
 
 ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )

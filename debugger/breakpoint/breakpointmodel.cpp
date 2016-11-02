@@ -444,16 +444,17 @@ void KDevelop::BreakpointModel::updateMarks()
         uint type = breakpointType(breakpoint);
         IF_DEBUG( qCDebug(DEBUGGER) << type << breakpoint->url() << mark->mark(breakpoint->line()); )
 
-        doc->textDocument()->blockSignals(true);
-        if (mark->mark(breakpoint->line()) & AllBreakpointMarks) {
-            if (!(mark->mark(breakpoint->line()) & type)) {
-                mark->removeMark(breakpoint->line(), AllBreakpointMarks);
+        {
+            QSignalBlocker blocker(doc->textDocument());
+            if (mark->mark(breakpoint->line()) & AllBreakpointMarks) {
+                if (!(mark->mark(breakpoint->line()) & type)) {
+                    mark->removeMark(breakpoint->line(), AllBreakpointMarks);
+                    mark->addMark(breakpoint->line(), type);
+                }
+            } else {
                 mark->addMark(breakpoint->line(), type);
             }
-        } else {
-            mark->addMark(breakpoint->line(), type);
         }
-        doc->textDocument()->blockSignals(false);
     }
 
     //remove marks
@@ -461,20 +462,21 @@ void KDevelop::BreakpointModel::updateMarks()
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
 
-        doc->textDocument()->blockSignals(true);
-        foreach (KTextEditor::Mark *m, mark->marks()) {
-            if (!(m->type & AllBreakpointMarks)) continue;
-            IF_DEBUG( qCDebug(DEBUGGER) << m->line << m->type; )
-            foreach (Breakpoint *breakpoint, m_breakpoints) {
-                if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
-                if (doc->url() == breakpoint->url() && m->line == breakpoint->line()) {
-                    goto continueNextMark;
+        {
+            QSignalBlocker blocker(doc->textDocument());
+            foreach (KTextEditor::Mark *m, mark->marks()) {
+                if (!(m->type & AllBreakpointMarks)) continue;
+                IF_DEBUG( qCDebug(DEBUGGER) << m->line << m->type; )
+                foreach (Breakpoint *breakpoint, m_breakpoints) {
+                    if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
+                    if (doc->url() == breakpoint->url() && m->line == breakpoint->line()) {
+                        goto continueNextMark;
+                    }
                 }
+                mark->removeMark(m->line, AllBreakpointMarks);
+                continueNextMark:;
             }
-            mark->removeMark(m->line, AllBreakpointMarks);
-            continueNextMark:;
         }
-        doc->textDocument()->blockSignals(false);
     }
 }
 

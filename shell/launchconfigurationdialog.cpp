@@ -298,15 +298,16 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             connect( l, &LaunchConfiguration::nameChanged, this, &LaunchConfigurationDialog::updateNameLabel );
             if( lm )
             {
-                bool b = debugger->blockSignals(true);
-                QList<ILauncher*> launchers = l->type()->launchers();
-                for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); it++ )
                 {
-                    if( ((*it)->supportedModes().contains( lm->id() ) ) ) {
-                        debugger->addItem( (*it)->name(), (*it)->id() );
+                    QSignalBlocker blocker(debugger);
+                    QList<ILauncher*> launchers = l->type()->launchers();
+                    for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); it++ )
+                    {
+                        if( ((*it)->supportedModes().contains( lm->id() ) ) ) {
+                            debugger->addItem( (*it)->name(), (*it)->id() );
+                        }
                     }
                 }
-                debugger->blockSignals(b);
 
                 debugger->setVisible(debugger->count()>0);
                 debugLabel->setVisible(debugger->count()>0);

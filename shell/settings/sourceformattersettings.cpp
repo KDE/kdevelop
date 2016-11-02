@@ -297,14 +297,15 @@ void SourceFormatterSettings::selectLanguage( int idx )
         return;
     }
     cbFormatters->setEnabled( true );
-    bool b = cbFormatters->blockSignals( true );
-    LanguageSettings& l = languages[cbLanguages->itemText( idx )];
-    foreach( const SourceFormatter* fmt, l.formatters )
     {
-        cbFormatters->addItem( fmt->formatter->caption(), fmt->formatter->name() );
+        QSignalBlocker blocker(cbFormatters);
+        LanguageSettings& l = languages[cbLanguages->itemText( idx )];
+        foreach( const SourceFormatter* fmt, l.formatters )
+        {
+            cbFormatters->addItem( fmt->formatter->caption(), fmt->formatter->name() );
+        }
+        cbFormatters->setCurrentIndex(cbFormatters->findData(l.selectedFormatter->formatter->name()));
     }
-    cbFormatters->setCurrentIndex(cbFormatters->findData(l.selectedFormatter->formatter->name()));
-    cbFormatters->blockSignals(b);
     selectFormatter( cbFormatters->currentIndex() );
     emit changed();
 }

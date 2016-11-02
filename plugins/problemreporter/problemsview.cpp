@@ -527,9 +527,8 @@ void ProblemsView::setFilter(const QString& filterText, int tabIdx)
     updateTab(tabIdx, rows);
 
     if (tabIdx == m_tabWidget->currentIndex()) {
-        m_filterEdit->blockSignals(true);
+        QSignalBlocker blocker(m_filterEdit);
         m_filterEdit->setText(filterText);
-        m_filterEdit->blockSignals(false);
     }
 }
 
