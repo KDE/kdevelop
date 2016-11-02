@@ -37,11 +37,10 @@ ProblemModelSet::ProblemModelSet(QObject *parent)
 
 ProblemModelSet::~ProblemModelSet() = default;
 
-void ProblemModelSet::addModel(const QString &name, ProblemModel *model)
+void ProblemModelSet::addModel(const QString &id, const QString &name, ProblemModel *model)
 {
-    ModelData m;
-    m.name = name;
-    m.model = model;
+    ModelData m{id, name, model};
+
     d->data.push_back(m);
 
     connect(model, &ProblemModel::problemsChanged, this, &ProblemModelSet::problemsChanged);
@@ -49,12 +48,12 @@ void ProblemModelSet::addModel(const QString &name, ProblemModel *model)
     emit added(m);
 }
 
-ProblemModel* ProblemModelSet::findModel(const QString &name) const
+ProblemModel* ProblemModelSet::findModel(const QString &id) const
 {
     ProblemModel *model = nullptr;
 
     foreach (const ModelData &data, d->data) {
-        if (data.name == name) {
+        if (data.id == id) {
             model = data.model;
             break;
         }
@@ -63,11 +62,12 @@ ProblemModel* ProblemModelSet::findModel(const QString &name) const
     return model;
 }
 
-void ProblemModelSet::removeModel(const QString &name)
+void ProblemModelSet::removeModel(const QString &id)
 {
     QVector<ModelData>::iterator itr = d->data.begin();
+
     while (itr != d->data.end()) {
-        if(itr->name == name)
+        if(itr->id == id)
             break;
         ++itr;
     }
@@ -75,16 +75,15 @@ void ProblemModelSet::removeModel(const QString &name)
     if(itr != d->data.end()) {
         (*itr).model->disconnect(this);
         d->data.erase(itr);
+        emit removed(id);
     }
-
-    emit removed(name);
 }
 
-void ProblemModelSet::showModel(const QString &name)
+void ProblemModelSet::showModel(const QString &id)
 {
     for (const ModelData &data : d->data) {
-        if (data.name == name) {
-            emit showRequested(name);
+        if (data.id == id) {
+            emit showRequested(data.id);
             return;
         }
     }

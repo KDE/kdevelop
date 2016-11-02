@@ -32,6 +32,12 @@ namespace
 
 const int testModelCount = 3;
 
+const QString testModelIds[] = {
+    QStringLiteral("MODEL1_ID"),
+    QStringLiteral("MODEL2_ID"),
+    QStringLiteral("MODEL3_ID")
+};
+
 const QString testModelNames[] = {
     QStringLiteral("MODEL1"),
     QStringLiteral("MODEL2"),
@@ -40,6 +46,7 @@ const QString testModelNames[] = {
 
 struct TestModelData
 {
+    QString id;
     QString name;
     ProblemModel* model;
 };
@@ -72,7 +79,7 @@ void TestProblemModelSet::initTestCase()
     m_set.reset(new ProblemModelSet());
 
     for (int i = 0; i < testModelCount; i++) {
-        m_testData.push_back(TestModelData({testModelNames[i], new ProblemModel(nullptr)}));
+        m_testData.push_back(TestModelData({testModelIds[i], testModelNames[i], new ProblemModel(nullptr)}));
     }
 }
 
@@ -93,7 +100,7 @@ void TestProblemModelSet::testAddModel()
 
     int c = 0;
     for (int i = 0; i < testModelCount; i++) {
-        m_set->addModel(m_testData[i].name, m_testData[i].model);
+        m_set->addModel(m_testData[i].id, m_testData[i].name, m_testData[i].model);
         c++;
         QCOMPARE(spy.count(), c);
         QCOMPARE(m_set->models().count(), c);
@@ -105,7 +112,7 @@ void TestProblemModelSet::testFindModel()
 {
     ProblemModel *model = nullptr;
     for (int i = 0; i < testModelCount; i++) {
-        model = m_set->findModel(m_testData[i].name);
+        model = m_set->findModel(m_testData[i].id);
 
         QVERIFY(model);
         QVERIFY(model == m_testData[i].model);
@@ -135,7 +142,7 @@ void TestProblemModelSet::testRemoveModel()
 
     int c = 0;
     foreach (const TestModelData &data, m_testData) {
-        m_set->removeModel(data.name);
+        m_set->removeModel(data.id);
         c++;
 
         QCOMPARE(spy.count(), c);

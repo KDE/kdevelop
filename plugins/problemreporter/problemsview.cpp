@@ -370,45 +370,26 @@ void ProblemsView::onModelAdded(const ModelData& data)
     addModel(data);
 }
 
-/**
- * @brief Returns the name part of the label
- *
- * E.g.: Test (666) => Test
- */
-QString nameFromLabel(const QString& label)
+void ProblemsView::showModel(const QString& id)
 {
-    QString txt = label;
-    int i = txt.lastIndexOf('(');
-    if (i != -1)
-        txt = txt.left(i - 1); /// ignore whitespace before '('
-    return txt;
-}
-
-int tabIndexForName(const QTabWidget* tabWidget, const QString& name)
-{
-    for (int idx = 0; idx < tabWidget->count(); ++idx) {
-        if (nameFromLabel(tabWidget->tabText(idx)) == name) {
-            return idx;
+    for (int i = 0; i < m_models.size(); ++i) {
+        if (m_models[i].id == id) {
+            m_tabWidget->setCurrentIndex(i);
+            return;
         }
     }
-
-    return -1;
 }
 
-void ProblemsView::showModel(const QString& name)
+void ProblemsView::onModelRemoved(const QString& id)
 {
-    int idx = tabIndexForName(m_tabWidget, name);
-    if (idx >= 0)
-        m_tabWidget->setCurrentIndex(idx);
-}
-
-void ProblemsView::onModelRemoved(const QString& name)
-{
-    int idx = tabIndexForName(m_tabWidget, name);
-    if (idx >= 0) {
-        QWidget* w = m_tabWidget->widget(idx);
-        m_tabWidget->removeTab(idx);
-        delete w;
+    for (int i = 0; i < m_models.size(); ++i) {
+        if (m_models[i].id == id) {
+            m_models.remove(i);
+            QWidget* w = m_tabWidget->widget(i);
+            m_tabWidget->removeTab(i);
+            delete w;
+            return;
+        }
     }
 }
 
@@ -433,41 +414,45 @@ void ProblemsView::onViewChanged()
     updateTab(idx, rows);
 }
 
-void ProblemsView::addModel(const ModelData& data)
+void ProblemsView::addModel(const ModelData& newData)
 {
     // We implement follows tabs order:
     //
-    // 1) First tab always used by "Parser" model due it's the most important
+    // 1) First tab always used by "Parser" model due to it's the most important
     //    problem listing, it should be at the front (K.Funk idea at #kdevelop IRC channel).
     //
     // 2) Other tabs are alphabetically ordered.
 
-    static const QString parserTitle = QStringLiteral("Parser");
+    static const QString parserId = QStringLiteral("Parser");
 
-    ProblemTreeView* view = new ProblemTreeView(nullptr, data.model);
+    ProblemTreeView* view = new ProblemTreeView(nullptr, newData.model);
     connect(view, &ProblemTreeView::changed, this, &ProblemsView::onViewChanged);
 
     int insertIdx = 0;
-    if (data.name != parserTitle) {
-        for (insertIdx = 0; insertIdx < m_tabWidget->count(); ++insertIdx) {
-            QString tabName = nameFromLabel(m_tabWidget->tabText(insertIdx));
+    if (newData.id != parserId) {
+        for (insertIdx = 0; insertIdx < m_models.size(); ++insertIdx) {
+            const ModelData& currentData = m_models[insertIdx];
 
             // Skip first element if it's already occupied by "Parser" model
-            if (insertIdx == 0 && tabName == parserTitle)
+            if (insertIdx == 0 && currentData.id == parserId)
                 continue;
 
-            if (tabName.localeAwareCompare(data.name) > 0)
+            if (currentData.name.localeAwareCompare(newData.name) > 0)
                 break;
         }
     }
-    m_tabWidget->insertTab(insertIdx, view, data.name);
+    m_tabWidget->insertTab(insertIdx, view, newData.name);
+    m_models.insert(insertIdx, newData);
 
     updateTab(insertIdx, view->model()->rowCount());
 }
 
 void ProblemsView::updateTab(int idx, int rows)
 {
-    const QString name = nameFromLabel(m_tabWidget->tabText(idx));
+    if (idx < 0 || idx >= m_models.size())
+        return;
+
+    const QString name = m_models[idx].name;
     const QString tabText = i18nc("%1: tab name, %2: number of problems", "%1 (%2)", name, rows);
     m_tabWidget->setTabText(idx, tabText);
 }

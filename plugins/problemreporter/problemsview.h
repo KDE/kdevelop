@@ -64,7 +64,7 @@ public Q_SLOTS:
     void onModelAdded(const ModelData& data);
 
     /// Triggered when a model is removed from the ModelSet
-    void onModelRemoved(const QString& name);
+    void onModelRemoved(const QString& id);
 
     /// Triggered when the user (or program) selects a new tab
     void onCurrentChanged(int idx);
@@ -73,7 +73,7 @@ public Q_SLOTS:
     void onViewChanged();
 
     /// Open tab for selected model
-    void showModel(const QString& name);
+    void showModel(const QString& id);
 
     void selectNextItem() override;
     void selectPreviousItem() override;
@@ -111,6 +111,7 @@ private:
 
     QLineEdit* m_filterEdit;
     int m_prevTabIdx;
+    QVector<ModelData> m_models;
 };
 }
 

@@ -64,7 +64,7 @@ void TestProblemsView::initTestCase()
     ProblemModel* model = new ProblemModel(pms);
     IProblem::Ptr p(new DetectedProblem());
     model->addProblem(p);
-    pms->addModel(QStringLiteral("MODEL1"), model);
+    pms->addModel(QStringLiteral("MODEL1_ID"), QStringLiteral("MODEL1"), model);
 
     m_view.reset(new ProblemsView());
 }
@@ -88,7 +88,7 @@ void TestProblemsView::testLoad()
 void TestProblemsView::testAddModel()
 {
     ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
-    pms->addModel(QStringLiteral("MODEL2"), new ProblemModel(pms));
+    pms->addModel(QStringLiteral("MODEL2_ID"), QStringLiteral("MODEL2"), new ProblemModel(pms));
 
     QTabWidget* tab = tabWidget();
     QVERIFY(tab);
@@ -130,9 +130,9 @@ void TestProblemsView::testRemoveModel()
 {
     // Remove the model
     ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
-    ProblemModel* model = pms->findModel(QStringLiteral("MODEL1"));
+    ProblemModel* model = pms->findModel(QStringLiteral("MODEL1_ID"));
     QVERIFY(model);
-    pms->removeModel(QStringLiteral("MODEL1"));
+    pms->removeModel(QStringLiteral("MODEL1_ID"));
     delete model;
     model = nullptr;
 
@@ -146,7 +146,7 @@ void TestProblemsView::testRemoveModel()
 void TestProblemsView::testAddRemoveProblems()
 {
     ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
-    ProblemModel* model = pms->findModel(QStringLiteral("MODEL2"));
+    ProblemModel* model = pms->findModel(QStringLiteral("MODEL2_ID"));
     QVERIFY(model);
 
     QTabWidget* tab = tabWidget();
@@ -178,7 +178,7 @@ void TestProblemsView::testAddRemoveProblems()
 void TestProblemsView::testSetProblems()
 {
     ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
-    ProblemModel* model = pms->findModel(QStringLiteral("MODEL2"));
+    ProblemModel* model = pms->findModel(QStringLiteral("MODEL2_ID"));
     QVERIFY(model);
 
     QTabWidget* tab = tabWidget();

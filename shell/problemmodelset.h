@@ -34,6 +34,7 @@ class ProblemModel;
 /// Struct that handles the model and it's name as one unit, stored in ProblemModelSet
 struct ModelData
 {
+    QString id;
     QString name;
     ProblemModel *model;
 };
@@ -50,10 +51,10 @@ struct ProblemModelSetPrivate;
  * @code
  * ProblemModelSet *set = new ProblemModelSet();
  * ProblemModel *model = new ProblemModel(nullptr);
- * set->addModel(QStringLiteral("MODEL"), model); // added() signal is emitted
+ * set->addModel(QStringLiteral("MODEL_ID"), QStringLiteral("MODEL"), model); // added() signal is emitted
  * set->models().count(); // returns 1
- * set->findModel(QStringLiteral("MODEL")); // returns the model just added
- * set->removeModel(QStringLiteral("MODEL")); // removed() signal is emitted
+ * set->findModel(QStringLiteral("MODEL_ID")); // returns the model just added
+ * set->removeModel(QStringLiteral("MODEL_ID")); // removed() signal is emitted
  * @endcode
  *
  */
@@ -65,16 +66,16 @@ public:
     ~ProblemModelSet() override;
 
     /// Adds a model
-    void addModel(const QString &name, ProblemModel *model);
+    void addModel(const QString &id, const QString &name, ProblemModel *model);
 
     /// Finds a model
-    ProblemModel* findModel(const QString &name) const;
+    ProblemModel* findModel(const QString &id) const;
 
     /// Removes a model
-    void removeModel(const QString &name);
+    void removeModel(const QString &id);
 
     /// Show model in ProblemsView
-    void showModel(const QString &name);
+    void showModel(const QString &id);
 
     /// Retrieves a list of models stored
     QVector<ModelData> models() const;
@@ -84,10 +85,10 @@ signals:
     void added(const ModelData &model);
 
     /// Emitted when a model is removed
-    void removed(const QString &name);
+    void removed(const QString &id);
 
     /// Emitted when showModel() is called
-    void showRequested(const QString &name);
+    void showRequested(const QString &id);
 
     /// Emitted when any model emits problemsChanged()
     void problemsChanged();

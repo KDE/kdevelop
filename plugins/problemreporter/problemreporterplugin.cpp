@@ -86,7 +86,7 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList
     , m_model(new ProblemReporterModel(this))
 {
     KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->addModel(QStringLiteral("Parser"), m_model);
+    pms->addModel(QStringLiteral("Parser"), i18n("Parser"), m_model);
     core()->uiController()->addToolView(i18n("Problems"), m_factory);
     setXMLFile(QStringLiteral("kdevproblemreporter.rc"));
 
@@ -172,11 +172,11 @@ void ProblemReporterPlugin::updateHighlight(const KDevelop::IndexedString& url)
     ph->setProblems(documentProblems);
 }
 
-void ProblemReporterPlugin::showModel(const QString& name)
+void ProblemReporterPlugin::showModel(const QString& id)
 {
     auto w = dynamic_cast<ProblemsView*>(core()->uiController()->findToolView(i18n("Problems"), m_factory));
     if (w)
-      w->showModel(name);
+      w->showModel(id);
 }
 
 KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context)
