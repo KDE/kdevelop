@@ -149,6 +149,29 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
         else
             range = problem->finalLocation();
 
+        // Fix problem's location range if necessary
+        if (problem->finalLocationMode() != IProblem::Range && range.onSingleLine()) {
+            int line = range.start().line();
+            const QString lineString = m_document->line(line);
+
+            int startColumn = 0;
+            int endColumn = lineString.length();
+
+            if (problem->finalLocationMode() == IProblem::TrimmedLine) {
+                while (lineString.at(startColumn++).isSpace()) {}
+                --startColumn;
+
+                while (lineString.at(endColumn--).isSpace()) {}
+                ++endColumn;
+            }
+
+            range.setStart(Cursor(line, startColumn));
+            range.setEnd(Cursor(line, endColumn));
+
+            problem->setFinalLocation(DocumentRange(problem->finalLocation().document, range));
+            problem->setFinalLocationMode(IProblem::Range);
+        }
+
         if (range.end().line() >= m_document->lines())
             range.end() = KTextEditor::Cursor(m_document->endOfLine(m_document->lines() - 1));
 

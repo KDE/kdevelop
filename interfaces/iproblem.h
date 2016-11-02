@@ -59,6 +59,25 @@ public:
     };
     Q_DECLARE_FLAGS(Severities, Severity)
 
+    /// Final location mode of the problem. Used during highlighting.
+    enum FinalLocationMode
+    {
+        /// Location range used "As Is"
+        Range = 0,
+
+        /// Location range used to highlight whole line.
+        ///
+        /// Mode applied only if location range is wholly contained within one line
+        WholeLine,
+
+        /// Location range used to highlight only trimmed part of the line.
+        /// For example for the line: "   int x = 0;  \t"
+        /// only "int x = 0;" will be highlighted.
+        ///
+        /// Mode applied only if location range is wholly contained within one line
+        TrimmedLine
+    };
+
     IProblem(){}
     virtual ~IProblem(){}
 
@@ -76,6 +95,18 @@ public:
 
     /// Sets the location of the problem (path, line, column)
     virtual void setFinalLocation(const KDevelop::DocumentRange& location) = 0;
+
+    /// Returns the final location mode of the problem
+    inline FinalLocationMode finalLocationMode()
+    {
+        return m_finalLocationMode;
+    }
+
+    /// Sets the final location mode of the problem
+    inline void setFinalLocationMode(FinalLocationMode mode)
+    {
+        m_finalLocationMode = mode;
+    }
 
     /// Returns the short description of the problem.
     virtual QString description() const = 0;
@@ -112,6 +143,9 @@ public:
 
     /// Returns a solution assistant for the problem, if applicable that is.
     virtual QExplicitlySharedDataPointer<KDevelop::IAssistant> solutionAssistant() const = 0;
+
+protected:
+    FinalLocationMode m_finalLocationMode = Range;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(IProblem::Severities)
