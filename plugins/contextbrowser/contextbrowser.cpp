@@ -489,8 +489,17 @@ static ProblemPointer findProblemCloseToCursor(TopDUContext* topContext, KTextEd
       return *closestProblem;
     }
 
-    // if not, only show it in case there's only whitespace between the current cursor pos and the problem
-    auto dist = position < r.start() ? KTextEditor::Range(position, r.start()) : KTextEditor::Range(r.end(), position);
+    // if not, only show it in case there's only whitespace
+    // between the current cursor position and the problem line
+    KTextEditor::Range dist;
+    KTextEditor::Cursor bound(r.start().line(), 0);
+    if (position < r.start())
+      dist = KTextEditor::Range(position, bound);
+    else {
+      bound.setLine(r.end().line() + 1);
+      dist = KTextEditor::Range(bound, position);
+    }
+
     auto textBetween = view->document()->text(dist);
     auto isSpace = std::all_of(textBetween.begin(), textBetween.end(), [](QChar c) { return c.isSpace(); });
     if (!isSpace) {
