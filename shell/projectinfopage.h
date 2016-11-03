@@ -17,6 +17,7 @@ struct ProjectFileChoice {
     QString text;
     QString pluginId;
     QString iconName;
+    QString fileName;
 };
 
 namespace Ui
@@ -37,7 +38,7 @@ public:
     void populateProjectFileCombo( const QVector<ProjectFileChoice>& choices );
 signals:
     void projectNameChanged( const QString& );
-    void projectManagerChanged( const QString& );
+    void projectManagerChanged( const QString& pluginId, const QString & fileName);
 private slots:
     void changeProjectManager( int );
 private:

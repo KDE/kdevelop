@@ -16,6 +16,8 @@
 
 namespace KDevelop
 {
+    
+const int FileNameRole = Qt::UserRole + 1;
 
 ProjectInfoPage::ProjectInfoPage( QWidget* parent )
         : QWidget( parent )
@@ -35,7 +37,8 @@ ProjectInfoPage::~ProjectInfoPage()
 
 void ProjectInfoPage::changeProjectManager( int idx )
 {
-    emit projectManagerChanged( page_ui->managerCombo->itemData( idx ).toString() );
+    emit projectManagerChanged( page_ui->managerCombo->itemData( idx ).toString(),
+                                page_ui->managerCombo->itemData( idx, FileNameRole ).toString() );
 }
 
 void ProjectInfoPage::setProjectName( const QString& name )
@@ -48,7 +51,9 @@ void ProjectInfoPage::populateProjectFileCombo(const QVector<ProjectFileChoice>&
 {
     page_ui->managerCombo->clear();
     Q_FOREACH ( const auto& item, choices ) {
+        const int index = page_ui->managerCombo->count();
         page_ui->managerCombo->addItem(QIcon::fromTheme(item.iconName), item.text, item.pluginId);
+        page_ui->managerCombo->setItemData( index, item.fileName, FileNameRole );
     }
     changeProjectManager(0);
 }

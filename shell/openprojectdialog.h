@@ -57,7 +57,7 @@ private slots:
     void validateSourcePage( bool );
     void validateOpenUrl( const QUrl& );
     void validateProjectName( const QString& );
-    void validateProjectManager( const QString& );
+    void validateProjectManager( const QString&, const QString & );
     void storeFileList(KIO::Job*, const KIO::UDSEntryList&);
     void openPageAccepted();
 
@@ -68,6 +68,7 @@ private:
     QUrl m_selected;
     QString m_projectName;
     QString m_projectManager;
+    bool m_urlIsDirectory;
     /// Used to select files when we aren't in KDE
     QFileDialog* nativeDialog = nullptr;
     KPageWidgetItem* sourcePage;

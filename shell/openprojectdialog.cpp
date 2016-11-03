@@ -70,6 +70,7 @@ namespace KDevelop
 
 OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget* parent )
     : KAssistantDialog( parent )
+    , m_urlIsDirectory(false)
     , sourcePage(nullptr)
     , openPage(nullptr)
     , projectInfoPage(nullptr)
@@ -208,6 +209,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
 
     if( urlInfo.isDir || urlInfo.extension != ShellExtension::getInstance()->projectFileExtension() )
     {
+        m_urlIsDirectory = urlInfo.isDir;
         setAppropriate( projectInfoPage, true );
         m_url = url;
         if( !urlInfo.isDir ) {
@@ -241,7 +243,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                 }
                 Q_FOREACH ( const auto& plugin, plugins ) {
                     auto meta = m_projectPlugins.value(plugin);
-                    choices.append({file + QString(" (%1)").arg(plugin), meta.pluginId(), meta.iconName()});
+                    choices.append({file + QString(" (%1)").arg(plugin), meta.pluginId(), meta.iconName(), file});
                 }
             }
             Q_FOREACH ( const auto& plugin, m_projectFilters.keys() ) {
@@ -258,6 +260,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
     } else {
         setAppropriate( projectInfoPage, false );
         m_url = url;
+        m_urlIsDirectory = false;
     }
     validateProjectInfo();
     setValid( openPage, true );
@@ -300,9 +303,15 @@ void OpenProjectDialog::validateProjectInfo()
     setValid( projectInfoPage, (!projectName().isEmpty() && !projectManager().isEmpty()) );
 }
 
-void OpenProjectDialog::validateProjectManager( const QString& manager )
+void OpenProjectDialog::validateProjectManager( const QString& manager, const QString & fileName )
 {
     m_projectManager = manager;
+    
+    if ( m_urlIsDirectory )
+    {
+        m_selected = m_url.resolved( QUrl("./" + fileName) );
+    }
+    
     validateProjectInfo();
 }
 
