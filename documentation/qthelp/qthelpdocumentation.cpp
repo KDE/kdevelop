@@ -249,7 +249,8 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         return new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
     } else {
         StandardDocumentationView* view = new StandardDocumentationView(findWidget, parent);
-        view->settings()->setAttribute(QWebSettings::JavascriptEnabled, false);
+        // QCH files created by doxygen can come with JavaScript
+        view->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
         if (!m_sharedQNAM) {
             m_sharedQNAM.reset(new HelpNetworkAccessManager(m_provider->engine()));
         }
