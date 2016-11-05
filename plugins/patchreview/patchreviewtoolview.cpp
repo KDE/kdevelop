@@ -506,7 +506,7 @@ void PatchReviewToolView::kompareModelChanged() {
         }
     }
 
-    for( QMap<QUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); it++ ) {
+    for( QMap<QUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it ) {
         VcsStatusInfo status;
         status.setUrl( it.key() );
         status.setState( it.value() );

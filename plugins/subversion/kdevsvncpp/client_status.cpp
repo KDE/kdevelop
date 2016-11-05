@@ -178,7 +178,7 @@ namespace svn
     DirEntries::const_iterator it;
     svn_revnum_t revnum = 0;
 
-    for (it = dirEntries.begin(); it != dirEntries.end(); it++)
+    for (it = dirEntries.begin(); it != dirEntries.end(); ++it)
     {
       const DirEntry & dirEntry = *it;
 

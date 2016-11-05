@@ -123,7 +123,7 @@ void DocumentationView::initialize()
 
 void DocumentationView::browseBack()
 {
-    mCurrent--;
+    --mCurrent;
     mBack->setEnabled(mCurrent != mHistory.begin());
     mForward->setEnabled(true);
 
@@ -132,7 +132,7 @@ void DocumentationView::browseBack()
 
 void DocumentationView::browseForward()
 {
-    mCurrent++;
+    ++mCurrent;
     mForward->setEnabled(mCurrent+1 != mHistory.end());
     mBack->setEnabled(true);
 

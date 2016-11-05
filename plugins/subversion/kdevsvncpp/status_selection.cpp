@@ -74,7 +74,7 @@ namespace svn
 
       // ... and set from source
       StatusVector::const_iterator it;
-      for (it = src.status.begin(); it != src.status.end(); it++)
+      for (it = src.status.begin(); it != src.status.end(); ++it)
       {
         push_back(*it);
       }

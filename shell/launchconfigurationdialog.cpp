@@ -301,7 +301,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                 {
                     QSignalBlocker blocker(debugger);
                     QList<ILauncher*> launchers = l->type()->launchers();
-                    for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); it++ )
+                    for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); ++it )
                     {
                         if( ((*it)->supportedModes().contains( lm->id() ) ) ) {
                             debugger->addItem( (*it)->name(), (*it)->id() );
@@ -963,7 +963,7 @@ QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const
     {
         KComboBox* box = new KComboBox( parent );
         QList<ILauncher*> launchers = config->type()->launchers();
-        for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); it++ )
+        for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); ++it )
         {
             if( ((*it)->supportedModes().contains( mode->id() ) ) )
             {
@@ -975,7 +975,7 @@ QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const
     {
         KComboBox* box = new KComboBox( parent );
         const QList<LaunchConfigurationType*> types = Core::self()->runController()->launchConfigurationTypes();
-        for( QList<LaunchConfigurationType*>::const_iterator it = types.begin(); it != types.end(); it++ )
+        for( QList<LaunchConfigurationType*>::const_iterator it = types.begin(); it != types.end(); ++it )
         {
             box->addItem( (*it)->name(), (*it)->id() );
         }

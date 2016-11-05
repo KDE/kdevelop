@@ -61,7 +61,7 @@ void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::T
         return;
     }
     svn_revnum_t minrev = -1, maxrev = -1;
-    for( svn::AnnotatedFile::const_iterator it = file->begin(); it != file->end(); it++ )
+    for( svn::AnnotatedFile::const_iterator it = file->begin(); it != file->end(); ++it )
     {
         if( (*it).revision() < minrev || minrev == -1 )
         {
@@ -76,7 +76,7 @@ void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::T
     try
     {
         const svn::LogEntries* entries = cli.log( ba.data(), svn::Revision(minrev), svn::Revision(maxrev), false, false );
-        for( svn::LogEntries::const_iterator it = entries->begin(); it != entries->end(); it++ )
+        for( svn::LogEntries::const_iterator it = entries->begin(); it != entries->end(); ++it )
         {
             commitMessages[(*it).revision] = QString::fromUtf8( (*it).message.c_str() );
         }
@@ -88,7 +88,7 @@ void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::T
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
     }
-    for( svn::AnnotatedFile::const_iterator it = file->begin(); it != file->end(); it++ )
+    for( svn::AnnotatedFile::const_iterator it = file->begin(); it != file->end(); ++it )
     {
         KDevelop::VcsAnnotationLine line;
         line.setAuthor( QString::fromUtf8( it->author().c_str() ) );
