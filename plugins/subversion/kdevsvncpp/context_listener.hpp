@@ -129,22 +129,27 @@ public:
       bool maySave;
 
       SslServerTrustData(const apr_uint32_t failures_ = 0)
-          : failures(failures_), hostname(""), fingerprint(""),
-          validFrom(""), validUntil(""), issuerDName(""),
-          realm(""), maySave(true)
+          : failures(failures_)
+          , hostname("")
+          , fingerprint("")
+          , validFrom("")
+          , validUntil("")
+          , issuerDName("")
+          , realm("")
+          , maySave(true)
       {
       }
 
       SslServerTrustData(const SslServerTrustData & src)
           : failures(src.failures)
+          , hostname(src.hostname)
+          , fingerprint(src.fingerprint)
+          , validFrom(src.validFrom)
+          , validUntil(src.validUntil)
+          , issuerDName(src.issuerDName)
+          , realm(src.realm)
+          , maySave(src.maySave)
       {
-        hostname = src.hostname;
-        fingerprint = src.fingerprint;
-        validFrom = src.validFrom;
-        validUntil = src.validUntil;
-        issuerDName = src.issuerDName;
-        realm = src.realm;
-        maySave = src.maySave;
       }
 
       SslServerTrustData &

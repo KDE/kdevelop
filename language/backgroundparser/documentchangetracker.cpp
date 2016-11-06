@@ -62,9 +62,11 @@ namespace KDevelop
 {
 
 DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
-    : m_needUpdate(false), m_document(document), m_moving(nullptr)
+    : m_needUpdate(false)
+    , m_document(document)
+    , m_moving(nullptr)
+    , m_url(IndexedString(document->url()))
 {
-    m_url = IndexedString(document->url());
     Q_ASSERT(document);
     Q_ASSERT(document->url().isValid());
 

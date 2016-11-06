@@ -30,8 +30,8 @@ public:
   NamespaceAliasDeclarationData() {}
   NamespaceAliasDeclarationData( const NamespaceAliasDeclarationData& rhs )
       : DeclarationData( rhs )
+      , m_importIdentifier(rhs.m_importIdentifier)
   {
-    m_importIdentifier = rhs.m_importIdentifier;
   }
   IndexedQualifiedIdentifier m_importIdentifier; //The identifier that was imported
 };

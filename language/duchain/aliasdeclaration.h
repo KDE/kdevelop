@@ -32,8 +32,8 @@ public:
   AliasDeclarationData() {}
   AliasDeclarationData( const AliasDeclarationData& rhs )
       : ClassMemberDeclarationData( rhs )
+      , m_aliasedDeclaration(rhs.m_aliasedDeclaration)
   {
-    m_aliasedDeclaration = rhs.m_aliasedDeclaration;
   }
   IndexedDeclaration m_aliasedDeclaration;
 };

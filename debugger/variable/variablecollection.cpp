@@ -68,10 +68,14 @@ bool hasStartedSession()
 Variable::Variable(TreeModel* model, TreeItem* parent,
                    const QString& expression,
                    const QString& display)
-  : TreeItem(model, parent),
-      m_inScope(true), m_topLevel(true), m_changed(false), m_showError(false), m_format(Natural)
+  : TreeItem(model, parent)
+  , m_expression(expression)
+  , m_inScope(true)
+  , m_topLevel(true)
+  , m_changed(false)
+  , m_showError(false)
+  , m_format(Natural)
 {
-    m_expression = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
     // and return expression_ directly.
     if (display.isEmpty())

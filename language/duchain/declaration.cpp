@@ -54,6 +54,7 @@ REGISTER_DUCHAIN_ITEM(Declaration);
 
 DeclarationData::DeclarationData()
   : m_comment(0)
+  , m_kind(Declaration::Instance)
   , m_isDefinition(false)
   , m_inSymbolTable(false)
   , m_isTypeAlias(false)
@@ -63,7 +64,6 @@ DeclarationData::DeclarationData()
   , m_isAutoDeclaration(false)
   , m_isExplicitlyDeleted(false)
 {
-  m_kind = Declaration::Instance;
 }
 
 DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData(rhs),

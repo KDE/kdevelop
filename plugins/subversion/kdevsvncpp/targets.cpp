@@ -37,8 +37,8 @@
 namespace svn
 {
   Targets::Targets(const PathVector & targets)
+    : m_targets(targets)
   {
-    m_targets = targets;
   }
 
   Targets::Targets(const apr_array_header_t * apr_targets)
@@ -58,8 +58,8 @@ namespace svn
   }
 
   Targets::Targets(const Targets & targets)
+    : m_targets(targets.targets())
   {
-    m_targets = targets.targets();
   }
 
   Targets::Targets(const char * target)

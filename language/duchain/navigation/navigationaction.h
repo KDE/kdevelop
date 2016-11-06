@@ -51,8 +51,7 @@ struct NavigationAction {
   NavigationAction( DeclarationPointer decl_, Type type_ ) : targetContext(nullptr), decl(decl_), type(type_) {
   }
 
-  NavigationAction( const QUrl& _document, const KTextEditor::Cursor& _cursor) : targetContext(nullptr), document(_document), cursor(_cursor) {
-    type = JumpToSource;
+  NavigationAction( const QUrl& _document, const KTextEditor::Cursor& _cursor) : targetContext(nullptr), type(JumpToSource), document(_document), cursor(_cursor) {
   }
 
   NavigationAction(AbstractNavigationContext* _targetContext) : targetContext(_targetContext) {

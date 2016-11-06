@@ -1627,8 +1627,8 @@ DUContext::Import::Import(DUContext* _context, const DUContext* importer, const 
 
 DUContext::Import::Import(const DeclarationId& id, const CursorInRevision& _position)
   : position(_position)
+  , m_declaration(id)
 {
-  m_declaration = id;
 }
 
 DUContext* DUContext::Import::context(const TopDUContext* topContext, bool instantiateIfRequired) const {

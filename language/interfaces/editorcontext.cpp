@@ -30,11 +30,11 @@ class EditorContextPrivate
 {
 public:
     EditorContextPrivate( KTextEditor::View* view, const KTextEditor::Cursor& position )
-        : m_view( view )
+        : m_url(view->document()->url())
+        , m_position(position)
+        , m_currentLine(view->document()->line(m_position.line()))
+        , m_view( view )
     {
-        m_url = view->document()->url();
-        m_position = position;
-        m_currentLine = view->document()->line(m_position.line());
         int wordStart = m_position.column();
         int wordEnd = m_position.column();
         while(wordStart > 0 && wordStart < m_currentLine.length() && (m_currentLine[wordStart-1].isLetterOrNumber() || m_currentLine[wordStart-1] == '_'))

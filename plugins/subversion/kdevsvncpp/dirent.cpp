@@ -48,11 +48,14 @@ public:
     }
 
     Data(const char * _name, const svn_dirent_t * dirEntry)
-        : name(_name), kind(dirEntry->kind), size(dirEntry->size),
-        hasProps(dirEntry->has_props != 0),
-        createdRev(dirEntry->created_rev), time(dirEntry->time)
+        : name(_name)
+        , kind(dirEntry->kind)
+        , size(dirEntry->size)
+        , hasProps(dirEntry->has_props != 0)
+        , createdRev(dirEntry->created_rev)
+        , time(dirEntry->time)
+        , lastAuthor(dirEntry->last_author ? dirEntry->last_author : "")
     {
-      lastAuthor = dirEntry->last_author == nullptr ? "" : dirEntry->last_author;
     }
 
     Data(const DirEntry & src)

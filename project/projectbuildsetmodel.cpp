@@ -53,8 +53,8 @@ BuildItem::BuildItem( KDevelop::ProjectBaseItem* item )
 }
 
 BuildItem::BuildItem( const BuildItem& rhs )
+    : m_itemPath(rhs.itemPath())
 {
-    m_itemPath = rhs.itemPath();
 }
 
 void BuildItem::initializeFromItem( KDevelop::ProjectBaseItem* item )
