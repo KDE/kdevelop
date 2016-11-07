@@ -68,6 +68,8 @@ private:
     void runCppcheck(KDevelop::IProject* project, const QString& path);
 
     void problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems);
+    bool problemExists(KDevelop::IProblem::Ptr problem);
+
     void result(KJob* job);
 
     Job* m_job;

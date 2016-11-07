@@ -201,6 +201,20 @@ void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
     updateActions();
 }
 
+bool Plugin::problemExists(KDevelop::IProblem::Ptr newProblem)
+{
+    foreach (auto problem, m_problems) {
+        if (newProblem->source() == problem->source() &&
+            newProblem->severity() == problem->severity() &&
+            newProblem->finalLocation() == problem->finalLocation() &&
+            newProblem->description() == problem->description() &&
+            newProblem->explanation() == problem->explanation())
+            return true;
+    }
+
+    return false;
+}
+
 void Plugin::problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems)
 {
     static int maxLength = 0;
@@ -208,8 +222,11 @@ void Plugin::problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems)
     if (m_problems.isEmpty())
         maxLength = 0;
 
-    m_problems.append(problems);
     foreach (auto p, problems) {
+        if (problemExists(p))
+            continue;
+
+        m_problems.append(p);
         m_model->addProblem(p);
 
         // This performs adjusing of columns width in the ProblemsView.
