@@ -884,7 +884,7 @@ bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin(), itEnd=func.arguments.constEnd();
     // don't re-read the first element
-    it++;
+    ++it;
     for(; it!=itEnd; ++it) {
         if(it->value=="OUTPUT_VARIABLE") {
             ++it;
@@ -1144,7 +1144,7 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
             for(; it!=itEnd; ++it) {
                 if(it->value=="RELATIVE") {
-                    it++;
+                    ++it;
                     if(it==itEnd)
                         return false;
                     else
@@ -1162,7 +1162,7 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
             for(; it!=itEnd; ++it) {
                 if(it->value=="RELATIVE") {
-                    it++;
+                    ++it;
                     if(it==itEnd)
                         return false;
                     else
@@ -1530,7 +1530,7 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         definedNames = true;
     } else {
         m_filenames=QStringList(it->value);
-        it++;
+        ++it;
         s=PATHS;
         definedNames = false;
     }
@@ -2499,7 +2499,7 @@ bool MarkAsAdvancedAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     itEnd = func.arguments.end();
 
     if(m_isClear || m_isForce)
-    it++;
+    ++it;
 
     for ( ; it != itEnd; ++it )
     {

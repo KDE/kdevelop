@@ -1285,14 +1285,14 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
                 {
                     qCDebug(CMAKE) << "param:" << *mit << "=" << *cit;
                     m_vars->insertMulti(*mit, QStringList(*cit));
-                    mit++;
+                    ++mit;
                 }
                 else
                 {
                     argn += *cit;
                 }
-                cit++;
-                i++;
+                ++cit;
+                ++i;
             }
             m_vars->insertMulti("ARGN", argn);
             m_vars->insertMulti("ARGV", call->arguments());
