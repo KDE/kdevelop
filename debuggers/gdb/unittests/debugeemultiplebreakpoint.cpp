@@ -26,8 +26,7 @@ class Str2 {
 };
 
 class Str {
-    public: Str() {
-        S="str\n";
+    public: Str() : S("str\n") {
     }
     public: void print(void) {
         std::cout << S;

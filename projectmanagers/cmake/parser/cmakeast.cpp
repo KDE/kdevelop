@@ -137,11 +137,11 @@ CMAKE_REGISTER_AST( WriteFileAst, write_file)
 enum Stage {NAMES, PATHS, PATH_SUFFIXES, HINTS};
 
 CustomCommandAst::CustomCommandAst()
+    : m_isForTarget(false) //only used here? :S
+    , m_buildStage(PostBuild)
+    , m_isVerbatim(false)
+    , m_append(false)
 {
-    m_isForTarget = false; //only used here? :S
-    m_buildStage = PostBuild;
-    m_isVerbatim = false;
-    m_append = false;
 }
 
 CustomCommandAst::~CustomCommandAst()

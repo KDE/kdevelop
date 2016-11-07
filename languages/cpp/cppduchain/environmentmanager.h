@@ -156,28 +156,31 @@ DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedS
 class EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
 public:
 
-    EnvironmentFileData() {
-      m_contentStartLine = 0;
+    EnvironmentFileData()
+      : m_contentStartLine(0)
+      , m_identityOffset(0)
+      , m_includePaths(0)
+    {
 //       m_includeFiles = 0;
-      m_identityOffset = 0;
-      m_includePaths = 0;
     }
-    EnvironmentFileData(const EnvironmentFileData& rhs) : KDevelop::ParsingEnvironmentFileData(rhs) {
-      m_url = rhs.m_url;
-      m_strings = rhs.m_strings; //String-set
+    EnvironmentFileData(const EnvironmentFileData& rhs)
+      : KDevelop::ParsingEnvironmentFileData(rhs)
+      , m_url(rhs.m_url)
+      , m_strings(rhs.m_strings) //String-set
+      , m_missingIncludeFiles(rhs.m_missingIncludeFiles) //String-set
+      , m_usedMacros(rhs.m_usedMacros) //Macro-set
+      , m_usedMacroNames(rhs.m_usedMacroNames) //String-set
+      , m_definedMacros(rhs.m_definedMacros) //Macro-set
+      , m_definedMacroNames(rhs.m_definedMacroNames) //String-set
+      , m_unDefinedMacroNames(rhs.m_unDefinedMacroNames) //String-set
+      , m_contentStartLine(rhs.m_contentStartLine)
+      , m_topContext(rhs.m_topContext)
+      , m_identityOffset(rhs.m_identityOffset)
+      , m_includePaths(rhs.m_includePaths)
+      , m_guard(rhs.m_guard)
+      , m_includePathDependencies(rhs.m_includePathDependencies)
+    {
 //       m_includeFiles = rhs.m_includeFiles; //String-set
-      m_missingIncludeFiles = rhs.m_missingIncludeFiles; //String-set
-      m_usedMacros = rhs.m_usedMacros; //Macro-set
-      m_usedMacroNames = rhs.m_usedMacroNames; //String-set
-      m_definedMacros = rhs.m_definedMacros; //Macro-set
-      m_definedMacroNames = rhs.m_definedMacroNames; //String-set
-      m_unDefinedMacroNames = rhs.m_unDefinedMacroNames; //String-set
-      m_contentStartLine = rhs.m_contentStartLine;
-      m_topContext = rhs.m_topContext;
-      m_identityOffset = rhs.m_identityOffset;
-      m_includePaths = rhs.m_includePaths;
-      m_guard = rhs.m_guard;
-      m_includePathDependencies = rhs.m_includePathDependencies;
     }
     
     ~EnvironmentFileData() {
