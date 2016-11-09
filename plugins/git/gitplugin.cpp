@@ -366,7 +366,9 @@ VcsJob* GitPlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision
         && srcRevision.specialType()==VcsRevision::Base
         && dstRevision.specialType()==VcsRevision::Working)
         *job << "HEAD";
-    else {
+    else if(dstRevision.specialType()==VcsRevision::Working){
+        *job << "--cached" << srcRevision.revisionValue().toString();
+    } else {
         QString revstr = revisionInterval(srcRevision, dstRevision);
         if(!revstr.isEmpty())
             *job << revstr;

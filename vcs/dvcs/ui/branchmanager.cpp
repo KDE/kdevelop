@@ -32,6 +32,7 @@
 #include <vcs/models/brancheslistmodel.h>
 #include "ui_branchmanager.h"
 #include "../../debug.h"
+#include "widgets/vcsdiffpatchsources.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -39,6 +40,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <KParts/MainWindow>
 
 using namespace KDevelop;
 
@@ -88,6 +90,8 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
 
     m_ui->mergeButton->setIcon(QIcon::fromTheme(QStringLiteral("merge")));
     connect(m_ui->mergeButton, &QPushButton::clicked, this, &BranchManager::mergeBranch);
+    m_ui->diffButton->setIcon(QIcon::fromTheme(QStringLiteral("text-x-patch")));
+    connect(m_ui->diffButton, &QPushButton::clicked, this, &BranchManager::diffFromBranch);
 }
 
 BranchManager::~BranchManager()
@@ -188,4 +192,49 @@ void BranchManager::mergeBranch()
         KMessageBox::messageBox(this, KMessageBox::Error,
                                 i18n("You must select a branch to merge into current one from the list."));
     }
+}
+
+void BranchManager::diffFromBranch()
+{
+    const auto dest = m_model->currentBranch();
+    const auto src = m_ui->branchView->currentIndex().data().toString();
+    if (src == dest) {
+        KMessageBox::messageBox(this, KMessageBox::Information, i18n("Already on branch \"%1\"\n", src));
+        return;
+    }
+
+    VcsRevision srcRev;
+    srcRev.setRevisionValue(src, KDevelop::VcsRevision::GlobalNumber);
+    // We have two options here:
+    // * create a regular VcsRevision to represent the last commit on the current branch or
+    // * create a special branch to reflect the staging area. I choosed this one.
+    // If the staing area is clean it automatically defaults to the first option.
+    const auto destRev = VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working);
+    const auto job = m_dvcPlugin->diff(QUrl::fromLocalFile(m_repository), srcRev, destRev);
+    connect(job, &VcsJob::finished, this, &BranchManager::diffJobFinished);
+    m_dvcPlugin->core()->runController()->registerJob(job);
+}
+
+void BranchManager::diffJobFinished(KJob* job)
+{
+    auto vcsjob = qobject_cast<KDevelop::VcsJob*>(job);
+    Q_ASSERT(vcsjob);
+
+    if (vcsjob->status() != KDevelop::VcsJob::JobSucceeded) {
+        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(),
+                           i18n("Unable to retrieve diff."));
+        return;
+    }
+
+    auto diff = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
+    if(diff.isEmpty()){
+        KMessageBox::information(ICore::self()->uiController()->activeMainWindow(),
+                                    i18n("There are no committed differences."),
+                                    i18n("VCS support"));
+        return;
+    }
+
+    auto patch = new VCSDiffPatchSource(diff);
+    showVcsDiff(patch);
+    close();
 }

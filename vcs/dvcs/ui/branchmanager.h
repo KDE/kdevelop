@@ -49,6 +49,8 @@ private slots:
     void renameBranch();
     void checkoutBranch();
     void mergeBranch();
+    void diffFromBranch();
+    void diffJobFinished(KJob* job);
 
 private:
     QString m_repository;

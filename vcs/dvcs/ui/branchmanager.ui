@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>438</width>
+    <height>352</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -34,6 +34,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="renameButton">
+       <property name="text">
+        <string>Rename</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -50,11 +57,30 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="renameButton">
+      <widget class="QPushButton" name="diffButton">
+       <property name="toolTip">
+        <string>&lt;p&gt;Show changes between the &lt;span style=&quot; font-style:italic;&quot;&gt;staging area&lt;/span&gt; (if not clean or last commit on current branch, otherwise) and the last commit on the selected branch.&lt;/p&gt;</string>
+       </property>
        <property name="text">
-        <string>Rename</string>
+        <string>Compare to Branch</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>15</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="checkoutButton">
@@ -67,7 +93,7 @@
       </widget>
      </item>
      <item>
-     <widget class="QPushButton" name="mergeButton">
+      <widget class="QPushButton" name="mergeButton">
        <property name="text">
         <string>Merge</string>
        </property>
