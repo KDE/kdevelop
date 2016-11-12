@@ -1,0 +1,6 @@
+[General]
+Name=Empty
+Comment=A project to fill with your ideas
+Category=Standard/Empty
+Icon=default-kdevelop
+ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_]+$
