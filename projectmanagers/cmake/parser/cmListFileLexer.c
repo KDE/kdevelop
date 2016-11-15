@@ -581,7 +581,7 @@ Modify cmListFileLexer.c:
 */
 
 /* #include "cmStandardLexer.h" */
-#ifdef WIN32
+#ifdef _WIN32
 #define KWSYS_ENCODING_DEFAULT_CODEPAGE CP_ACP
 #include "EncodingC.c"
 #define cmsysEncoding_DupToWide kwsysEncoding_DupToWide
