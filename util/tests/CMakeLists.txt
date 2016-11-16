@@ -24,3 +24,11 @@ ecm_add_test(test_executecompositejob.cpp
 
 ecm_add_test(test_environment.cpp
     LINK_LIBRARIES Qt5::Test KDev::Util)
+
+ecm_add_test(
+    ../kdevformatfile.cpp
+    test_kdevformatsource.cpp 
+
+    TEST_NAME test_kdevformatsource
+    LINK_LIBRARIES Qt5::Test
+)

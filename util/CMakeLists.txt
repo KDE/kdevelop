@@ -52,10 +52,11 @@ LINK_PRIVATE
     KF5::TextEditor
     KF5::GuiAddons
 )
-
 install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
-install( FILES kdev_format_source DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 
+add_executable(kdev_format_source kdevformatsource.cpp kdevformatfile.cpp)
+target_link_libraries(kdev_format_source Qt5::Core)
+install(TARGETS kdev_format_source DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
