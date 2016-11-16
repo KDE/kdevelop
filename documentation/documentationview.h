@@ -58,6 +58,7 @@ public slots:
 
 private:
     void updateView();
+    void returnPressed();
 
     KToolBar* mActions;
     QAction* mForward;
