@@ -28,6 +28,7 @@
 #include <QCompleter>
 #include <QLayout>
 #include <QTextBrowser>
+#include <QAbstractItemView>
 
 #include <QLineEdit>
 #include <KLocalizedString>
@@ -85,8 +86,9 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
     mIdentifiers->setSizePolicy(QSizePolicy::Expanding, mIdentifiers->sizePolicy().verticalPolicy());
     connect(mIdentifiers->completer(), static_cast<void(QCompleter::*)(const QModelIndex&)>(&QCompleter::activated),
             this, &DocumentationView::changedSelection);
-    QWidget::setTabOrder(mProviders, mIdentifiers);
+    connect(mIdentifiers, &QLineEdit::returnPressed, this, &DocumentationView::returnPressed);
 
+    QWidget::setTabOrder(mProviders, mIdentifiers);
     mActions->addWidget(mProviders);
     mActions->addWidget(mIdentifiers);
 
@@ -144,6 +146,23 @@ void DocumentationView::showHome()
     auto prov = mProvidersModel->provider(mProviders->currentIndex());
 
     showDocumentation(prov->homePage());
+}
+
+void DocumentationView::returnPressed()
+{
+    // Exit if search text is empty. It's necessary because of empty
+    // line edit text not leads to "empty" completer indexes.
+    if (mIdentifiers->text().isEmpty())
+        return;
+
+    // Exit if completer popup has selected item - in this case 'Return'
+    // key press emits QCompleter::activated signal which is already connected.
+    if (mIdentifiers->completer()->popup()->currentIndex().isValid())
+        return;
+
+    // If user doesn't select any item in popup we will try to use the first row.
+    if (mIdentifiers->completer()->setCurrentRow(0))
+        changedSelection(mIdentifiers->completer()->currentIndex());
 }
 
 void DocumentationView::changedSelection(const QModelIndex& idx)
