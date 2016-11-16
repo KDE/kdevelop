@@ -9,8 +9,8 @@
   implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   See the License for more information.
 ============================================================================*/
-//#include "kwsysPrivate.h"
-//#include KWSYS_HEADER(Encoding.h)
+/*#include "kwsysPrivate.h"*/
+/*#include KWSYS_HEADER(Encoding.h)*/
 
 /* Work-around CMake dependency scanning limitation.  This must
    duplicate the above list of headers.  */

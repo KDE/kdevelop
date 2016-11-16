@@ -106,7 +106,8 @@ public:
 
 // NOTE: Fixes build failures for GCC versions <4.8.
 // See above.
-CustomMakeProvider::~CustomMakeProvider() Q_DECL_NOEXCEPT = default;
+CustomMakeProvider::~CustomMakeProvider() Q_DECL_NOEXCEPT
+{}
 
 K_PLUGIN_FACTORY_WITH_JSON(CustomMakeSupportFactory, "kdevcustommakemanager.json", registerPlugin<CustomMakeManager>(); )
 
