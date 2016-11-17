@@ -127,6 +127,23 @@ private:
 };
 
 /**
+ * Flags to control the string representation of identifiers.
+ */
+enum IdentifierStringFormattingOption {
+  NoOptions = 0x0,
+
+  /// Removes explicit global prefix from the result.
+  /// When enabled, global identifiers will be formatted as "globalIdentifierFormattedString"
+  /// instead "::globalIdentifierFormattedString".
+  RemoveExplicitlyGlobalPrefix = 0x1,
+
+  /// Removes template information from the result.
+  /// When enabled, TemplateClass< someDataType > will be formatted as plain "TemplateClass".
+  RemoveTemplateInformation = 0x2
+};
+Q_DECLARE_FLAGS(IdentifierStringFormattingOptions, IdentifierStringFormattingOption)
+
+/**
  * Represents a single unqualified identifier
  */
 class KDEVPLATFORMLANGUAGE_EXPORT Identifier
@@ -191,7 +208,7 @@ public:
   void clearTemplateIdentifiers();
   void setTemplateIdentifiers(const QList<IndexedTypeIdentifier>& templateIdentifiers);
 
-  QString toString() const;
+  QString toString(IdentifierStringFormattingOptions options = NoOptions) const;
 
   bool operator==(const Identifier& rhs) const;
   bool operator!=(const Identifier& rhs) const;
@@ -297,8 +314,8 @@ public:
    */
   void setIsExpression(bool);
 
-  QString toString(bool ignoreExplicitlyGlobal = false) const;
-  QStringList toStringList() const;
+  QString toString(IdentifierStringFormattingOptions options = NoOptions) const;
+  QStringList toStringList(IdentifierStringFormattingOptions options = NoOptions) const;
 
   QualifiedIdentifier operator+(const QualifiedIdentifier& rhs) const;
   QualifiedIdentifier& operator+=(const QualifiedIdentifier& rhs);
@@ -403,7 +420,7 @@ public:
   bool isConstPointer(int depthNumber) const;
   void setIsConstPointer(int depthNumber, bool constant);
 
-  QString toString(bool ignoreExplicitlyGlobal = false) const;
+  QString toString(IdentifierStringFormattingOptions options = NoOptions) const;
 
   uint hash() const;
 

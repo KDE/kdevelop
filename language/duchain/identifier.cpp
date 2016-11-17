@@ -588,14 +588,14 @@ void Identifier::setTemplateIdentifiers(const QList<IndexedTypeIdentifier>& temp
     dd->templateIdentifiersList.append(id);
 }
 
-QString Identifier::toString() const
+QString Identifier::toString(IdentifierStringFormattingOptions options) const
 {
   QString ret = identifier().str();
 
-  if (templateIdentifiersCount()) {
+  if (!options.testFlag(RemoveTemplateInformation) && templateIdentifiersCount()) {
     ret.append("< ");
     for (uint i = 0; i < templateIdentifiersCount(); ++i) {
-      ret.append(templateIdentifier(i).toString());
+      ret.append(templateIdentifier(i).toString(options));
       if (i != templateIdentifiersCount() - 1)
         ret.append(", ");
     }
@@ -772,7 +772,7 @@ QualifiedIdentifier::~QualifiedIdentifier()
     delete dd;
 }
 
-QStringList QualifiedIdentifier::toStringList() const
+QStringList QualifiedIdentifier::toStringList(IdentifierStringFormattingOptions options) const
 {
   QStringList ret;
   ret.reserve(explicitlyGlobal() + count());
@@ -781,21 +781,21 @@ QStringList QualifiedIdentifier::toStringList() const
 
   if(m_index) {
     FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, cd->identifiers)
-      ret << index.identifier().toString();
+      ret << index.identifier().toString(options);
   }else{
     FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, dd->identifiers)
-      ret << index.identifier().toString();
+      ret << index.identifier().toString(options);
   }
 
   return ret;
 }
 
-QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
+QString QualifiedIdentifier::toString(IdentifierStringFormattingOptions options) const
 {
   const QString doubleColon = QStringLiteral("::");
-  
+
   QString ret;
-  if( !ignoreExplicitlyGlobal && explicitlyGlobal() )
+  if( !options.testFlag(RemoveExplicitlyGlobalPrefix) && explicitlyGlobal() )
     ret = doubleColon;
 
   bool first = true;
@@ -807,7 +807,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
       else
         first = false;
 
-      ret += index.identifier().toString();
+      ret += index.identifier().toString(options);
     }
   }else{
     FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, dd->identifiers)
@@ -817,7 +817,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
       else
         first = false;
 
-      ret += index.identifier().toString();
+      ret += index.identifier().toString(options);
     }
   }
 
@@ -1247,7 +1247,7 @@ void IndexedTypeIdentifier::setIsConstPointer(int depthNumber, bool constant)
     m_pointerConstMask &= (~(1 << depthNumber));
 }
 
-QString IndexedTypeIdentifier::toString(bool ignoreExplicitlyGlobal) const
+QString IndexedTypeIdentifier::toString(IdentifierStringFormattingOptions options) const
 {
   QString ret;
   if(isConstant())
@@ -1255,7 +1255,7 @@ QString IndexedTypeIdentifier::toString(bool ignoreExplicitlyGlobal) const
   if(isVolatile())
     ret += QLatin1String("volatile ");
 
-  ret += m_identifier.identifier().toString(ignoreExplicitlyGlobal);
+  ret += m_identifier.identifier().toString(options);
   for(int a = 0; a < pointerDepth(); ++a) {
     ret += '*';
     if( isConstPointer(a) )
