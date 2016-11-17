@@ -53,6 +53,8 @@ signals:
     void addHistory(const KDevelop::IDocumentation::Ptr& doc ) const override;
 
 private:
+    KDevelop::IDocumentation::Ptr documentationForIdentifier(const QString& identifier) const;
+
     ManPageModel *m_model;
 };
 

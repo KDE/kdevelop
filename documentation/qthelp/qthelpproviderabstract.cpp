@@ -55,25 +55,19 @@ QtHelpProviderAbstract::~QtHelpProviderAbstract()
 IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declaration* dec) const
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
-    if(dec) {
+    if (dec) {
         static const IndexedString qmlJs("QML/JS");
-        bool isQML;
-        QStringList idParts;
+        QString id;
 
         {
             DUChainReadLocker lock;
-            isQML = dec->topContext()->parsingEnvironmentFile()->language() == qmlJs;
-            idParts = dec->qualifiedIdentifier().toStringList();
+            id = dec->qualifiedIdentifier().toString(RemoveTemplateInformation);
+            if (dec->topContext()->parsingEnvironmentFile()->language() == qmlJs && !id.isEmpty())
+                id = QLatin1String("QML.") + id;
         }
 
-        QString id;
-        if(isQML && !idParts.isEmpty()) {
-            id = QLatin1String("QML.");
-        }
-
-        if(!idParts.isEmpty()) {
-            id += idParts.join(QLatin1String("::"));
-            QMap<QString, QUrl> links=m_engine.linksForIdentifier(id);
+        if (!id.isEmpty()) {
+            QMap<QString, QUrl> links = m_engine.linksForIdentifier(id);
 
             if(!links.isEmpty())
                 return IDocumentation::Ptr(new QtHelpDocumentation(id, links));

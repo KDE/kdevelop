@@ -89,31 +89,54 @@ IDocumentation::Ptr ManPagePlugin::documentationForDeclaration( Declaration* dec
         return {};
 
     // Don't show man-page documentation for files that are part of our project
-    if(core()->projectController()->findProjectForUrl(dec->topContext()->url().toUrl()))
+    if (core()->projectController()->findProjectForUrl(dec->topContext()->url().toUrl()))
         return {};
 
     // Don't show man-page documentation for files that are not in /usr/include, because then we
     // most probably will be confusing the global function-name with a local one
-    if(!dec->topContext()->url().str().startsWith("/usr/"))
+    if (!dec->topContext()->url().str().startsWith("/usr/"))
         return {};
-    
+
     ///@todo Do more verification to make sure that we're showing the correct documentation for the declaration
 
-    QString identifier = dec->identifier().toString();
-    if(m_model->containsIdentifier(identifier)){
+    QString identifier;
+    IDocumentation::Ptr result;
+
+    // First, try to find help for qualified identifier like 'std::vector'
+    {
         DUChainReadLocker lock;
-        QualifiedIdentifier qid = dec->qualifiedIdentifier();
-        if(qid.count() == 1){
-            if(m_model->identifierInSection(identifier, "3")){
-                return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(3)/"+identifier)));
-            } else if(m_model->identifierInSection(identifier, "2")){
-                return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(2)/"+identifier)));
-            } else {
-                return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:"+identifier)));
-            }
-        }
+        identifier = dec->qualifiedIdentifier().toString(RemoveTemplateInformation);
     }
-    return  {};
+
+    result = documentationForIdentifier(identifier);
+    if (result.data())
+        return result;
+
+    // Second, try to find help for simple identifier like 'sin'
+    {
+        DUChainReadLocker lock;
+        identifier = dec->identifier().toString(RemoveTemplateInformation);
+    }
+
+    result = documentationForIdentifier(identifier);
+    if (result.data())
+        return result;
+
+    return {};
+}
+
+KDevelop::IDocumentation::Ptr ManPagePlugin::documentationForIdentifier(const QString& identifier) const
+{
+    if (!m_model->containsIdentifier(identifier))
+        return KDevelop::IDocumentation::Ptr(nullptr);
+
+    if (m_model->identifierInSection(identifier, "3"))
+        return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(3)/" + identifier)));
+
+    if (m_model->identifierInSection(identifier, "2"))
+        return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(2)/" + identifier)));
+
+    return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:/" + identifier)));
 }
 
 QAbstractListModel* ManPagePlugin::indexModel() const
