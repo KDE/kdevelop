@@ -205,7 +205,8 @@ void Area::addView(View* view, AreaIndex* indexToSplit, Qt::Orientation orientat
 View* Area::removeView(View *view)
 {
     AreaIndex *index = indexOf(view);
-    Q_ASSERT(index);
+    if (!index)
+        return nullptr;
 
     emit aboutToRemoveView(index, view);
     index->remove(view);

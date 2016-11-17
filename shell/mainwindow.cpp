@@ -328,8 +328,8 @@ void MainWindow::initialize()
     connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->sessionController()->activeSession(), &ISession::sessionUpdated, this, &MainWindow::updateCaption);
 
-    connect(Core::self()->documentController(), &IDocumentController::documentOpened, this, &MainWindow::updateTabColor, Qt::QueuedConnection);
-    connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateTabColor, Qt::QueuedConnection);
+    connect(Core::self()->documentController(), &IDocumentController::documentOpened, this, &MainWindow::updateTabColor);
+    connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateTabColor);
     connect(this, &Sublime::MainWindow::viewAdded, this, &MainWindow::updateAllTabColors);
     connect(Core::self()->projectController(), &ProjectController::projectOpened, this, &MainWindow::updateAllTabColors, Qt::QueuedConnection);
 
