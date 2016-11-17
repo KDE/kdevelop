@@ -192,13 +192,6 @@ public:
         parser->d = this; //Set this so we can safely call back BackgroundParser from within loadSettings()
 
         m_timer.setSingleShot(true);
-        m_delay = 500;
-        m_threads = 1;
-        m_doneParseJobs = 0;
-        m_maxParseJobs = 0;
-        m_neededPriority = BackgroundParser::WorstPriority;
-        m_progressMax = 0;
-        m_progressDone = 0;
         m_progressTimer.setSingleShot(true);
         m_progressTimer.setInterval(500);
 
@@ -486,8 +479,8 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     QPointer<QObject> specialParseJob;
 
     QTimer m_timer;
-    int m_delay;
-    int m_threads;
+    int m_delay = 500;
+    int m_threads = 1;
 
     bool m_shuttingDown;
 
@@ -512,12 +505,13 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     // A change tracker for each managed document
     QHash<IndexedString, DocumentChangeTracker*> m_managed;
 
-    int m_maxParseJobs;
-    int m_doneParseJobs;
+    int m_maxParseJobs = 0;
+    int m_doneParseJobs = 0;
     QHash<KDevelop::ParseJob*, float> m_jobProgress;
-    int m_neededPriority; //The minimum priority needed for processed jobs
-    int m_progressMax;
-    int m_progressDone;
+    /// The minimum priority needed for processed jobs
+    int m_neededPriority = BackgroundParser::WorstPriority;
+    int m_progressMax = 0;
+    int m_progressDone = 0;
     QTimer m_progressTimer;
 };
 
