@@ -51,7 +51,7 @@ Job::Job(const Parameters& params, QObject* parent)
     , m_projectRootPath(params.projectRootPath())
 {
     QString prettyName = KDevelop::ICore::self()->projectController()->prettyFileName(
-        params.checkPath,
+        QUrl::fromLocalFile(params.checkPath),
         KDevelop::IProjectController::FormatPlain);
     setJobName(QString("Cppcheck (%1)").arg(prettyName));
 
