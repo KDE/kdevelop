@@ -24,6 +24,8 @@
 #include <kio/storedtransferjob.h>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QDebug>
+#include <QtNetwork/QHostInfo>
+#include <QDateTime>
 
 #include "debug.h"
 #include <ghresource.h>
@@ -60,8 +62,15 @@ void Resource::authenticate(const QString &name, const QString &password)
     QUrl url = baseUrl;
     url = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + '/' + "/authorizations");
-    QByteArray data = "{ \"scopes\": [\"repo\"], \"note\": \"KDevelop Github Provider\" }";
+
+    // generate a unique token, see bug 372144
+    const QString tokenName = "KDevelop Github Provider : "
+        + QHostInfo::localHostName() + " - "
+        + QDateTime::currentDateTimeUtc().toString();
+    const QByteArray data = "{ \"scopes\": [\"repo\"], \"note\": \"" + tokenName.toUtf8() + "\" }";
+
     KIO::StoredTransferJob *job = KIO::storedHttpPost(data, url, KIO::HideProgressInfo);
+    job->setProperty("requestedTokenName", tokenName);
     job->addMetaData("customHTTPHeader", "Authorization: Basic " + QString (name + ':' + password).toUtf8().toBase64());
     connect(job, &KIO::StoredTransferJob::result, this, &Resource::slotAuthenticate);
     job->start();
@@ -132,8 +141,11 @@ void Resource::retrieveOrgs(const QByteArray &data)
 
 void Resource::slotAuthenticate(KJob *job)
 {
+    const QString tokenName = job->property("requestedTokenName").toString();
+    Q_ASSERT(!tokenName.isEmpty());
+
     if (job->error()) {
-        emit authenticated("", "");
+        emit authenticated("", "", tokenName);
         return;
     }
 
@@ -145,9 +157,9 @@ void Resource::slotAuthenticate(KJob *job)
     if (error.error == 0) {
         QVariantMap map = doc.toVariant().toMap();
         emit authenticated(map.value("id").toByteArray(),
-                           map.value("token").toByteArray());
+                           map.value("token").toByteArray(), tokenName);
     } else
-        emit authenticated("", "");
+        emit authenticated("", "", tokenName);
 }
 
 void Resource::slotRepos(KIO::Job *job, const QByteArray &data)

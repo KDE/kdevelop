@@ -124,9 +124,12 @@ signals:
      * successful.
      *
      * @param id The id of the authorization. Empty if something went wrong.
-     * @param token The authorization token. Empty if something went wrong.
+     * @param token The authorization token (e.g. "14bf8e87e2ec5fe30f8a6755bda63b5bc4d02e22").
+     *   Empty if something went wrong.
+     * @param tokenName The authorization token (e.g. "KDevelop Github Provider : machinename - Thu Nov 17 23:18:03 2016 GMT").
+     *   Empty if something went wrong.
      */
-    void authenticated(const QByteArray &id, const QByteArray &token);
+    void authenticated(const QByteArray &id, const QByteArray &token, const QString &tokenName);
 
     /**
      * This signal is emitted when the model containing repos has

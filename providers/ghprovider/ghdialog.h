@@ -72,7 +72,7 @@ private slots:
      * @param id The id of the authorization.
      * @param token The authorization token.
      */
-    void authorizeResponse(const QByteArray &id, const QByteArray &token);
+    void authorizeResponse(const QByteArray &id, const QByteArray &token, const QString &tokenName);
 
     /// Sync the user's groups.
     void syncUser();

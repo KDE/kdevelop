@@ -112,8 +112,10 @@ void Dialog::authorizeClicked()
             this, &Dialog::authorizeResponse);
 }
 
-void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token)
+void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token, const QString &tokenName)
 {
+    Q_UNUSED(tokenName);
+
     Resource *rs = m_account->resource();
     disconnect(rs, &Resource::authenticated,
                this, &Dialog::authorizeResponse);
