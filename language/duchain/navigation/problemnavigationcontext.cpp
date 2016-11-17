@@ -70,11 +70,26 @@ QString htmlImg(const QString& iconName, KIconLoader::Group group)
 
 }
 
-ProblemNavigationContext::ProblemNavigationContext(const IProblem::Ptr& problem, const Flags flags)
-  : m_problem(problem)
+ProblemNavigationContext::ProblemNavigationContext(const QVector<IProblem::Ptr>& problems, const Flags flags)
+  : m_problems(problems)
   , m_flags(flags)
   , m_widget(nullptr)
 {
+  // Sort problems vector:
+  // 1) By severity
+  // 2) By sourceString, if severities are equals
+  std::sort(m_problems.begin(), m_problems.end(), [](const IProblem::Ptr a, const IProblem::Ptr b) {
+    if (a->severity() < b->severity())
+      return true;
+
+    if (a->severity() > b->severity())
+      return false;
+
+    if (a->sourceString() < b->sourceString())
+      return true;
+
+    return false;
+  });
 }
 
 ProblemNavigationContext::~ProblemNavigationContext()
@@ -97,11 +112,25 @@ QString ProblemNavigationContext::name() const
   return i18n("Problem");
 }
 
-QString ProblemNavigationContext::html(bool shorten)
+QString ProblemNavigationContext::escapedHtml(const QString& text) const
 {
-  clear();
-  m_shorten = shorten;
-  auto iconPath = iconForSeverity(m_problem->severity());
+  static const QString htmlStart = QStringLiteral("<html>");
+  static const QString htmlEnd = QStringLiteral("</html>");
+
+  QString result = text.trimmed();
+
+  if (!result.startsWith(htmlStart))
+    return result.toHtmlEscaped();
+
+  result.remove(htmlStart);
+  result.remove(htmlEnd);
+
+  return result;
+}
+
+void ProblemNavigationContext::html(IProblem::Ptr problem)
+{
+  auto iconPath = iconForSeverity(problem->severity());
 
   modifyHtml() += QStringLiteral("<table><tr>");
 
@@ -110,36 +139,38 @@ QString ProblemNavigationContext::html(bool shorten)
   // BEGIN: right column
   modifyHtml() += QStringLiteral("<td>");
 
-  modifyHtml() += i18n("Problem in <i>%1</i>", m_problem->sourceString());
+  modifyHtml() += i18n("Problem in <i>%1</i>", problem->sourceString());
   modifyHtml() += QStringLiteral("<br/>");
 
   if (m_flags & ShowLocation) {
-    const auto duchainProblem = dynamic_cast<Problem*>(m_problem.data());
-    if (duchainProblem) {
-      modifyHtml() += labelHighlight(i18n("Location: "));
-      makeLink(QStringLiteral("%1 :%2")
-          .arg(duchainProblem->finalLocation().document.toUrl().fileName())
-          .arg(duchainProblem->rangeInCurrentRevision().start().line() + 1),
-        QString(),
-        NavigationAction(duchainProblem->finalLocation().document.toUrl(), duchainProblem->finalLocation().start())
-      );
-      modifyHtml() += QStringLiteral("<br/>");
-    }
+    modifyHtml() += labelHighlight(i18n("Location: "));
+    makeLink(QStringLiteral("%1 :%2")
+        .arg(problem->finalLocation().document.toUrl().fileName())
+        .arg(problem->finalLocation().start().line() + 1),
+      QString(),
+      NavigationAction(problem->finalLocation().document.toUrl(), problem->finalLocation().start())
+    );
+
+    modifyHtml() += QStringLiteral("<br/>");
   }
 
-  modifyHtml() += m_problem->description().toHtmlEscaped();
-  if ( !m_problem->explanation().isEmpty() ) {
-    modifyHtml() += "<p><i style=\"white-space:pre-wrap\">" + m_problem->explanation().toHtmlEscaped() + "</i></p>";
-  }
+  QString description = escapedHtml(problem->description());
+  QString explanation = escapedHtml(problem->explanation());
+
+  modifyHtml() += description;
+
+  // Add only non-empty explanation which differs from the problem description.
+  // Skip this if we have more than one problem.
+  if (m_problems.size() == 1 && !explanation.isEmpty() && explanation != description)
+    modifyHtml() += "<p><i style=\"white-space:pre-wrap\">" + explanation + "</i></p>";
 
   modifyHtml() += QStringLiteral("</td>");
   // END: right column
 
   modifyHtml() += QStringLiteral("</tr></table>");
 
-  const QVector<IProblem::Ptr> diagnostics = m_problem->diagnostics();
+  auto diagnostics = problem->diagnostics();
   if (!diagnostics.isEmpty()) {
-
     DUChainReadLocker lock;
     for (auto diagnostic : diagnostics) {
       modifyHtml() += QStringLiteral("<p>");
@@ -155,39 +186,60 @@ QString ProblemNavigationContext::html(bool shorten)
         makeLink(QStringLiteral("%1 :%2")
                   .arg(declaration->url().toUrl().fileName())
                   .arg(declaration->rangeInCurrentRevision().start().line() + 1),
-                 DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
-      } else if (range.start().isValid()) {
+                DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+      }
+
+      else if (range.start().isValid()) {
         modifyHtml() += i18n("<br>See: ");
         const auto url = range.document.toUrl();
         makeLink(QStringLiteral("%1 :%2")
-                   .arg(url.fileName())
-                   .arg(range.start().line() + 1),
-                 url.toDisplayString(QUrl::PreferLocalFile), NavigationAction(url, range.start()));
+                  .arg(url.fileName())
+                  .arg(range.start().line() + 1),
+                url.toDisplayString(QUrl::PreferLocalFile), NavigationAction(url, range.start()));
       }
+
       modifyHtml() += QStringLiteral("</p>");
     }
   }
 
-  if (!m_cachedAssistant) {
-    m_cachedAssistant = m_problem->solutionAssistant();
-  }
-  auto assistant = m_cachedAssistant;
+  auto assistant = problem->solutionAssistant();
   if (assistant && !assistant->actions().isEmpty()) {
     modifyHtml() += QString::fromLatin1("<table width='100%' style='border: 1px solid black; background-color: %1;'>").arg("#b3d4ff");
-
     modifyHtml() += QStringLiteral("<tr><td valign='middle'>%1</td><td width='100%'>").arg(htmlImg(QStringLiteral("dialog-ok-apply"), KIconLoader::Panel));
-    int index = 0;
+
+    const int startIndex = m_assistantsActions.size();
+    int currentIndex = startIndex;
     foreach (auto assistantAction, assistant->actions()) {
-      if (index != 0) {
+      m_assistantsActions.append(assistantAction);
+
+      if (currentIndex != startIndex)
         modifyHtml() += "<br/>";
-      }
-      makeLink(i18n("Solution (%1)", index + 1), KEY_INVOKE_ACTION(index),
-                NavigationAction(KEY_INVOKE_ACTION(index)));
+
+      makeLink(i18n("Solution (%1)", currentIndex + 1), KEY_INVOKE_ACTION( currentIndex ),
+               NavigationAction(KEY_INVOKE_ACTION( currentIndex )));
       modifyHtml() += ": " + assistantAction->description().toHtmlEscaped();
-      ++index;
+
+      ++currentIndex;
     }
+
     modifyHtml() += "</td></tr>";
     modifyHtml() += QStringLiteral("</table>");
+  }
+}
+
+QString ProblemNavigationContext::html(bool shorten)
+{
+  m_shorten = shorten;
+
+  clear();
+  m_assistantsActions.clear();
+
+  int problemIndex = 0;
+  foreach (auto problem, m_problems) {
+    html(problem);
+
+    if (++problemIndex != m_problems.size())
+      modifyHtml() += "<hr>";
   }
 
   return currentHtml();
@@ -195,11 +247,8 @@ QString ProblemNavigationContext::html(bool shorten)
 
 NavigationContextPointer ProblemNavigationContext::executeKeyAction(QString key)
 {
-  auto assistant = m_cachedAssistant;
-  if (!assistant)
-    return {};
   if (key.startsWith(QLatin1String("invoke_action_"))) {
-    const auto index = key.replace(QLatin1String("invoke_action_"), QString()).toInt();
+    const int index = key.replace(QLatin1String("invoke_action_"), QString()).toInt();
     executeAction(index);
   }
 
@@ -208,16 +257,16 @@ NavigationContextPointer ProblemNavigationContext::executeKeyAction(QString key)
 
 void ProblemNavigationContext::executeAction(int index)
 {
-  auto assistant = m_problem->solutionAssistant();
-  if (!assistant)
+  if (index < 0 || index >= m_assistantsActions.size())
     return;
 
-  auto action = assistant->actions().value(index);
+  auto action = m_assistantsActions.at(index);
+  Q_ASSERT(action);
+
   if (action) {
     action->execute();
-    if ( topContext() ) {
+    if ( topContext() )
       DUChain::self()->updateContextForUrl(topContext()->url(), TopDUContext::ForceUpdate);
-    }
   } else {
     qCWarning(LANGUAGE()) << "No such action";
     return;

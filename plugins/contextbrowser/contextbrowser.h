@@ -232,7 +232,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     QPointer<QWidget> m_currentToolTip;
     QPointer<QWidget> m_currentNavigationWidget;
     KDevelop::IndexedDeclaration m_currentToolTipDeclaration;
-    KDevelop::Problem::Ptr m_currentToolTipProblem;
+    QVector<KDevelop::IProblem::Ptr> m_currentToolTipProblems;
     QAction* m_findUses;
     
     QPointer<KTextEditor::Document> m_lastInsertionDocument;

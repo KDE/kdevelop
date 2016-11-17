@@ -1,6 +1,6 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -38,7 +38,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavi
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
-    explicit ProblemNavigationContext(const IProblem::Ptr& problem, const Flags flags = {});
+    explicit ProblemNavigationContext(const QVector<IProblem::Ptr>& problems, const Flags flags = {});
     ~ProblemNavigationContext() override;
 
     QString name() const override;
@@ -52,11 +52,20 @@ public slots:
     void executeAction(int index); // TODO: Add API in base class?
 
   private:
-    IProblem::Ptr m_problem;
+    void html(IProblem::Ptr problem);
+
+    /**
+     * Return HTML-ized text. Used for processing problem's description and explanation.
+     * Some plugins (kdev-cppcheck for example) return already HTML-ized strings,
+     * therefore we should make check for this case.
+     */
+    QString escapedHtml(const QString& text) const;
+
+    QVector<IProblem::Ptr> m_problems;
     Flags m_flags;
 
     QPointer<QWidget> m_widget;
-    IAssistant::Ptr m_cachedAssistant; // cache assistant, calling IAssistant::solutionAssistant() might be expensive
+    QVector<IAssistantAction::Ptr> m_assistantsActions;
 };
 
 }

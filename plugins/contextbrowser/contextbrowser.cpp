@@ -74,6 +74,9 @@
 
 #include <language/util/navigationtooltip.h>
 
+#include <shell/problemmodel.h>
+#include <shell/problemmodelset.h>
+
 #include <util/texteditorhelpers.h>
 
 #include <sublime/mainwindow.h>
@@ -437,34 +440,43 @@ void ContextBrowserPlugin::hideToolTip() {
     m_currentToolTip->deleteLater();
     m_currentToolTip = nullptr;
     m_currentNavigationWidget = nullptr;
-    m_currentToolTipProblem = {};
+    m_currentToolTipProblems.clear();
     m_currentToolTipDeclaration = {};
   }
 }
 
-static ProblemPointer findProblemUnderCursor(TopDUContext* topContext, KTextEditor::Cursor position)
+static QVector<KDevelop::IProblem::Ptr> findProblemsUnderCursor(TopDUContext* topContext, KTextEditor::Cursor position)
 {
-  const auto top = ReferencedTopDUContext(topContext);
-  foreach (auto problem, DUChainUtils::allProblemsForContext(top)) {
-    if (problem->rangeInCurrentRevision().contains(position)) {
-      return problem;
+  QVector<KDevelop::IProblem::Ptr> problems;
+  auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
+  foreach (auto modelData, modelsData) {
+    foreach (auto problem, modelData.model->problems(topContext->url())) {
+      DocumentRange problemRange = problem->finalLocation();
+      if (problemRange.contains(position) || (problemRange.isEmpty() && problemRange.boundaryAtCursor(position)))
+        problems += problem;
     }
   }
 
-  return {};
+  return problems;
 }
 
-static ProblemPointer findProblemCloseToCursor(TopDUContext* topContext, KTextEditor::Cursor position, KTextEditor::View* view)
+static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(TopDUContext* topContext, KTextEditor::Cursor position, KTextEditor::View* view)
 {
-  const auto top = ReferencedTopDUContext(topContext);
-  auto problems = DUChainUtils::allProblemsForContext(top);
-  if (problems.isEmpty())
-    return {};
+  QVector<KDevelop::IProblem::Ptr> allProblems;
+  auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
+  foreach (auto modelData, modelsData) {
+    foreach (auto problem, modelData.model->problems(topContext->url())) {
+      allProblems += problem;
+    }
+  }
 
-  auto closestProblem = std::min_element(problems.constBegin(), problems.constEnd(),
-                                         [position](const ProblemPointer& a, const ProblemPointer& b) {
-    const auto aRange = a->rangeInCurrentRevision();
-    const auto bRange = b->rangeInCurrentRevision();
+  if (allProblems.isEmpty())
+    return allProblems;
+
+  std::sort(allProblems.begin(), allProblems.end(),
+            [position](const KDevelop::IProblem::Ptr a, const KDevelop::IProblem::Ptr b) {
+    const auto aRange = a->finalLocation();
+    const auto bRange = b->finalLocation();
 
     const auto aLineDistance = qMin(qAbs(aRange.start().line() - position.line()),
                                     qAbs(aRange.end().line() - position.line()));
@@ -482,32 +494,40 @@ static ProblemPointer findProblemCloseToCursor(TopDUContext* topContext, KTextEd
       qAbs(bRange.end().column() - position.column());
   });
 
-  auto r = (*closestProblem)->rangeInCurrentRevision();
-  if (!r.contains(position)) {
-    if (r.start().line() == position.line() || r.end().line() == position.line()) {
-      // problem is on the same line, let's use it
-      return *closestProblem;
-    }
+  QVector<KDevelop::IProblem::Ptr> closestProblems;
 
-    // if not, only show it in case there's only whitespace
-    // between the current cursor position and the problem line
-    KTextEditor::Range dist;
-    KTextEditor::Cursor bound(r.start().line(), 0);
-    if (position < r.start())
-      dist = KTextEditor::Range(position, bound);
-    else {
-      bound.setLine(r.end().line() + 1);
-      dist = KTextEditor::Range(bound, position);
-    }
+  // Show problems, located on the same line
+  foreach (auto problem, allProblems) {
+    auto r = problem->finalLocation();
+    if (r.onSingleLine() && r.start().line() == position.line())
+      closestProblems += problem;
+    else
+      break;
+  }
 
-    auto textBetween = view->document()->text(dist);
-    auto isSpace = std::all_of(textBetween.begin(), textBetween.end(), [](QChar c) { return c.isSpace(); });
-    if (!isSpace) {
-      return {};
+  // If not, only show it in case there's only whitespace
+  // between the current cursor position and the problem line
+  if (closestProblems.isEmpty()) {
+    foreach (auto problem, allProblems) {
+      auto r = problem->finalLocation();
+
+      KTextEditor::Range dist;
+      KTextEditor::Cursor bound(r.start().line(), 0);
+      if (position < r.start())
+        dist = KTextEditor::Range(position, bound);
+      else {
+        bound.setLine(r.end().line() + 1);
+        dist = KTextEditor::Range(bound, position);
+      }
+
+      if (view->document()->text(dist).trimmed().isEmpty())
+        closestProblems += problem;
+      else
+        break;
     }
   }
 
-  return *closestProblem;
+  return closestProblems;
 }
 
 QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* view, KTextEditor::Cursor position)
@@ -526,15 +546,15 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
   TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
   if (topContext) {
     // first pass: find problems under the cursor
-    const auto problem = findProblemUnderCursor(topContext, position);
-    if (problem) {
-      if (problem == m_currentToolTipProblem && m_currentToolTip) {
+    const auto problems = findProblemsUnderCursor(topContext, position);
+    if (!problems.isEmpty()) {
+      if (problems == m_currentToolTipProblems && m_currentToolTip) {
         return nullptr;
       }
 
-      m_currentToolTipProblem = problem;
+      m_currentToolTipProblems = problems;
       auto widget = new AbstractNavigationWidget;
-      auto context = new ProblemNavigationContext(problem);
+      auto context = new ProblemNavigationContext(problems);
       context->setTopContext(TopDUContextPointer(topContext));
       widget->setContext(NavigationContextPointer(context));
       return widget;
@@ -559,16 +579,16 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
 
   if (topContext) {
     // second pass: find closest problem to the cursor
-    const auto problem = findProblemCloseToCursor(topContext, position, view);
-    if (problem) {
-      if (problem == m_currentToolTipProblem && m_currentToolTip) {
+    const auto problems = findProblemsCloseToCursor(topContext, position, view);
+    if (!problems.isEmpty()) {
+      if (problems == m_currentToolTipProblems && m_currentToolTip) {
         return nullptr;
       }
 
-      m_currentToolTipProblem = problem;
+      m_currentToolTipProblems = problems;
       auto widget = new AbstractNavigationWidget;
       // since the problem is not under cursor: show location
-      widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problem, ProblemNavigationContext::ShowLocation)));
+      widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problems, ProblemNavigationContext::ShowLocation)));
       return widget;
     }
   }
@@ -577,7 +597,6 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
 }
 
 void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cursor position) {
-
   ContextBrowserView* contextView = browserViewForWidget(view);
   if(contextView && contextView->isVisible() && !contextView->isLocked())
     return; // If the context-browser view is visible, it will care about updating by itself
