@@ -28,6 +28,15 @@ include_directories(
     ${kdevcppcheck_SOURCE_DIR}
 )
 
+add_definitions(
+    -DQT_DEPRECATED_WARNINGS
+    -DQT_DISABLE_DEPRECATED_BEFORE=0x050400
+    -DQT_NO_URL_CAST_FROM_STRING
+    -DQT_STRICT_ITERATORS
+    -DQT_USE_FAST_CONCATENATION
+    -DQT_USE_FAST_OPERATOR_PLUS
+)
+
 set(kdevcppcheck_SRCS
     plugin.cpp
 
