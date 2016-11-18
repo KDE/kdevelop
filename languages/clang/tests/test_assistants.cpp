@@ -566,6 +566,8 @@ void TestAssistants::testUnknownDeclarationAssistant_data()
         << UnknownDeclarationActions(MissingInclude);
     QTest::newRow("unknown_struct") << "" << "" << "test"
         << UnknownDeclarationActions();
+    QTest::newRow("not a class type") << "void test();" << "" << "test"
+        << UnknownDeclarationActions();
 }
 
 void TestAssistants::testUnknownDeclarationAssistant()
@@ -605,7 +607,7 @@ void TestAssistants::testUnknownDeclarationAssistant()
 
     {
         const bool hasForwardDecls =
-            actionDescriptions.contains(QObject::tr("Forward declare as 'struct'")) &&
+            actionDescriptions.contains(QObject::tr("Forward declare as 'struct'")) ||
             actionDescriptions.contains(QObject::tr("Forward declare as 'class'"));
         QCOMPARE(hasForwardDecls, static_cast<bool>(actions & ForwardDecls));
     }

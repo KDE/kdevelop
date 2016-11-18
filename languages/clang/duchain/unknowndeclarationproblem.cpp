@@ -35,6 +35,7 @@
 
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/aliasdeclaration.h>
+#include <language/duchain/classdeclaration.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchainlock.h>
@@ -399,6 +400,7 @@ ClangFixits forwardDeclarations(const QVector<Declaration*>& matchingDeclaration
     ClangFixits fixits;
     for (const auto decl : matchingDeclarations) {
         const auto qid = decl->qualifiedIdentifier();
+
         if (qid.count() > 1) {
             // TODO: Currently we're not able to determine what is namespaces, class names etc
             // and makes a suitable forward declaration, so just suggest "vanilla" declarations.
@@ -410,11 +412,26 @@ ClangFixits forwardDeclarations(const QVector<Declaration*>& matchingDeclaration
             continue; // do not know where to insert
         }
 
-        const auto name = qid.last().toString();
-        fixits += {
-            {QLatin1String("class ") + name + QLatin1String(";\n"), range, QObject::tr("Forward declare as 'class'")},
-            {QLatin1String("struct ") + name + QLatin1String(";\n"), range, QObject::tr("Forward declare as 'struct'")}
-        };
+        if (const auto classDecl = dynamic_cast<ClassDeclaration*>(decl)) {
+            const auto name = qid.last().toString();
+
+            switch (classDecl->classType()) {
+            case ClassDeclarationData::Class:
+                fixits += {
+                    QLatin1String("class ") + name + QLatin1String(";\n"), range,
+                    QObject::tr("Forward declare as 'class'")
+                };
+                break;
+            case ClassDeclarationData::Struct:
+                fixits += {
+                    QLatin1String("struct ") + name + QLatin1String(";\n"), range,
+                    QObject::tr("Forward declare as 'struct'")
+                };
+                break;
+            default:
+                break;
+            }
+        }
     }
     return fixits;
 }
