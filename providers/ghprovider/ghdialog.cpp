@@ -132,7 +132,7 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token, co
     }
     else{
         KMessageBox::information(this, i18n("Authentication succeeded!\n\n"
-                                       "Created token: \"") + tokenName + "\"\n" +
+                                       "Created token: \"%1\"\n", tokenName) +
                                        i18n(TOKEN_LINK_STATEMENT),
                                        i18n("Github Account Authorized"));
     }
