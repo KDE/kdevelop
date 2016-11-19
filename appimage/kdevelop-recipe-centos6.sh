@@ -148,7 +148,8 @@ function build_framework
     if ( test -d $FRAMEWORK )
     then
         echo "$FRAMEWORK already cloned"
-        cd $FRAMEWORK
+        cd $FRAMEWORK 
+        git stash
         git reset --hard
         git checkout master
         git pull --rebase
@@ -160,6 +161,7 @@ function build_framework
 
     cd $FRAMEWORK
     git checkout $KF5_VERSION || git checkout $KDE_APPLICATION_VERSION
+    git stash pop
     cd ..
 
     if [ "$FRAMEWORK" = "knotifications" ]; then
