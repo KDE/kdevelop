@@ -7,7 +7,7 @@
             }
         ], 
         "Category": "Utilities", 
-        "Description": "This plugin helps to obtain projects from Github", 
+        "Description": "This plugin helps to obtain projects from GitHub", 
         "Description[ca@valencia]": "Este connector ajuda a obtindre els projectes des de Github", 
         "Description[ca]": "Aquest connector ajuda a obtenir els projectes des de Github", 
         "Description[de]": "Dieses Modul hilft dabei Github-Projekte zu beziehen", 
@@ -29,7 +29,7 @@
         "Icon": "kdevgh", 
         "Id": "kdevghprovider", 
         "License": "GPL", 
-        "Name": "Github Provider", 
+        "Name": "GitHub Provider", 
         "Name[ca@valencia]": "Proveïdor de Github", 
         "Name[ca]": "Proveïdor de Github", 
         "Name[cs]": "Poskytovatel GitHubu", 

@@ -67,10 +67,12 @@ QString AdaptSignatureAction::toolTip() const
     if (!declaration) {
         return {};
     }
-    return i18n("Update %1 signature\nfrom: %2\nto: %3",
-                m_editingDefinition ? i18n("declaration") : i18n("definition"),
-                CodegenHelper::makeSignatureString(declaration, m_oldSignature, m_editingDefinition),
-                CodegenHelper::makeSignatureString(declaration, m_newSignature, !m_editingDefinition));
+    KLocalizedString msg = m_editingDefinition
+                         ? ki18n("Update declaration signature\nfrom: %1\nto: %2")
+                         : ki18n("Update definition signature\nfrom: %1\nto: %2");
+    msg = msg.subs(CodegenHelper::makeSignatureString(declaration, m_oldSignature, m_editingDefinition));
+    msg = msg.subs(CodegenHelper::makeSignatureString(declaration, m_newSignature, !m_editingDefinition));
+    return msg.toString();
 }
 
 void AdaptSignatureAction::execute()

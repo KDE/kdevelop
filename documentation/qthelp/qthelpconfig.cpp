@@ -325,13 +325,13 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
 
     QToolButton *modifyBtn = new QToolButton(item->treeWidget());
     modifyBtn->setIcon(QIcon::fromTheme("document-edit"));
-    modifyBtn->setToolTip(ki18n("Modify").toString());
+    modifyBtn->setToolTip(i18n("Modify"));
     connect(modifyBtn, &QPushButton::clicked, this, [=](){
         modify(item);
     });
     QToolButton *removeBtn = new QToolButton(item->treeWidget());
     removeBtn->setIcon(QIcon::fromTheme("entry-delete"));
-    removeBtn->setToolTip(ki18n("Delete").toString());
+    removeBtn->setToolTip(i18n("Delete"));
     if (item->text(GhnsColumn) != "0") {
         // KNS3 currently does not provide API to uninstall entries
         // just removing the files results in wrong installed states in the KNS3 dialog

@@ -182,7 +182,7 @@ QStringList GdbLauncher::supportedModes() const
 
 QString GdbLauncher::description() const
 {
-    return i18n("Executes a Native application in GDB");
+    return i18n("Executes a native application in GDB");
 }
 
 KDevelop::LaunchConfigurationPage* GdbConfigPageFactory::createWidget( QWidget* parent )

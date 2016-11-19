@@ -48,7 +48,7 @@ void PruneJob::start()
     Path builddir = CMake::currentBuildDir( m_project );
     if( builddir.isEmpty() )
     {
-        output->appendLine(i18n("No Build Directory configured, cannot clear builddir"));
+        output->appendLine(i18n("No Build Directory configured, cannot clear the build directory"));
         emitResult();
         return;
     }

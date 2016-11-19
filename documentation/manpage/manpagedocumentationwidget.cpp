@@ -40,7 +40,7 @@ ManPageDocumentationWidget::ManPageDocumentationWidget(QWidget *parent)
     if(!model->isLoaded()){
         m_loadingWidget = new QWidget(this);
         m_progressBar = new QProgressBar(m_loadingWidget);
-        m_statusLabel = new QLabel(i18n("Loading man pages ..."));
+        m_statusLabel = new QLabel(i18n("Loading man pages..."));
         if(model->sectionCount() == 0){
             connect(model, &ManPageModel::sectionListUpdated, this, &ManPageDocumentationWidget::sectionListUpdated );
         } else {
@@ -94,5 +94,5 @@ void ManPageDocumentationWidget::handleError(const QString& errorString)
     delete m_progressBar;
     m_progressBar = nullptr;
     m_statusLabel->setWordWrap(true);
-    m_statusLabel->setText(i18n("Man pages loading error") + '\n' + errorString);
+    m_statusLabel->setText(i18n("Error while loading man pages:\n%1", errorString));
 }

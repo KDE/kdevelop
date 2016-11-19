@@ -41,7 +41,7 @@ using namespace KDevMI;
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     : QDialog(parent)
 {
-    setWindowTitle(i18n("Attach to a process"));
+    setWindowTitle(i18n("Attach to a Process"));
     m_processList = new KSysGuardProcessList(this);
     QVBoxLayout* mainLayout = new QVBoxLayout;
     setLayout(mainLayout);

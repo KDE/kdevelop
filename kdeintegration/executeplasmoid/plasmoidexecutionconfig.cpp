@@ -191,7 +191,7 @@ KJob* PlasmoidLauncher::calculateDependencies(KDevelop::ILaunchConfiguration* cf
             else
             {
                 KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
-                                   i18n("Couldn't resolve the dependency: %1", dep.toString()));
+                                   i18n("Could not resolve the dependency: %1", dep.toString()));
             }
         }
         KDevelop::BuilderJob* job = new KDevelop::BuilderJob;

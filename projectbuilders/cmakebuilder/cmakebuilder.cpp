@@ -123,7 +123,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         {
             IMakeBuilder* makeBuilder = dynamic_cast<IMakeBuilder*>(builder);
             if (!makeBuilder) {
-                return new ErrorJob(this, i18n("Couldn't find the make builder. Check your installation"));
+                return new ErrorJob(this, i18n("Could not find the make builder. Check your installation"));
             }
             KDevelop::ProjectFileItem* file = dom->file();
             int lastDot = file->text().lastIndexOf('.');
@@ -147,7 +147,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         }
         return build;
     }
-    return new ErrorJob(this, i18n("Couldn't find a builder for %1", p->name()));
+    return new ErrorJob(this, i18n("Could not find a builder for %1", p->name()));
 }
 
 KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
@@ -173,7 +173,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         }
         return clean;
     }
-    return new ErrorJob(this, i18n("Couldn't find a builder for %1", dom->project()->name()));
+    return new ErrorJob(this, i18n("Could not find a builder for %1", dom->project()->name()));
 }
 
 KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPrefix)
@@ -200,7 +200,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installP
         return install;
 
     }
-    return new ErrorJob(this, i18n("Couldn't find a builder for %1", dom->project()->name()));
+    return new ErrorJob(this, i18n("Could not find a builder for %1", dom->project()->name()));
 }
 
 KJob* CMakeBuilder::checkConfigureJob(KDevelop::IProject* project, bool& valid)

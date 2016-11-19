@@ -152,7 +152,7 @@ void IncludesWidget::checkIfIncludePathExist()
     for (auto& include : includesModel->includes()) {
         info.setFile(include);
         if (!info.exists()) {
-            ui->errorWidget->setText(i18nc("%1 is an include path", "%1 doesn't exist", include));
+            ui->errorWidget->setText(i18nc("%1 is an include path", "%1 does not exist", include));
             ui->errorWidget->animatedShow();
             return;
         }

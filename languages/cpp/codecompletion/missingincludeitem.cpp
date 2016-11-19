@@ -577,9 +577,9 @@ QVariant ForwardDeclarationItem::data(const QModelIndex& index, int role, const 
     //Add some text behind the item, so we get some more info in minimal completion mode
     DUChainReadLocker lock(DUChain::lock());
     if(m_declaration)
-      return QString(m_declaration->qualifiedIdentifier().toString() + ": " + i18n("forward-declare"));
+      return i18n("%1: forward-declare", m_declaration->qualifiedIdentifier().toString());
     return ret;
-//     return m_displayTextPrefix + ": " + i18n("Add Forward-Declaration");
+//     return i18n("%1: Add Forward-Declaration", m_displayTextPrefix);
   }
 
   return ret;

@@ -308,7 +308,7 @@ void CMakePreferences::removeBuildDir()
         {
             bool correct = KIO::del(removedPath.toUrl())->exec();
             if(!correct)
-                KMessageBox::error(this, i18n("Could not remove: %1\n", removed));
+                KMessageBox::error(this, i18n("Could not remove: %1", removed));
         }
     }
 

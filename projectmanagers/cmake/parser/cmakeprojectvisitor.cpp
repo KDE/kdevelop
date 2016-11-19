@@ -2393,7 +2393,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
 
         if(line>fc.count()) {
             Problem::Ptr p(new Problem);
-            p->setDescription(i18n("Unfinished function. "));
+            p->setDescription(i18n("Unfinished function."));
             p->setRange(it->nameRange());
             p->setFinalLocation(DocumentRange(url, KDevelop::RangeInRevision(fc.first().range().start, fc.last().range().end).castToSimpleRange()));
 

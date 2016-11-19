@@ -49,7 +49,7 @@ ProviderPlugin::~ProviderPlugin()
 
 QString ProviderPlugin::name() const
 {
-    return i18n("Github");
+    return i18n("GitHub");
 }
 
 IProjectProviderWidget * ProviderPlugin::providerWidget(QWidget *parent)

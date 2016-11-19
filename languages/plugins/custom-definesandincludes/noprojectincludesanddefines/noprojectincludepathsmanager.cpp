@@ -95,7 +95,7 @@ std::pair<Path::List, QHash<QString, QString>>
                 {
                     defines[items[1]] = QStringList(items.mid(2)).join(' ');
                 }else{
-                    qWarning() << i18n("Bad #define directive in %1: %1", pathToFile, textLine);
+                    qWarning() << i18n("Bad #define directive in %1: %2", pathToFile, textLine);
                 }
                 continue;
             }

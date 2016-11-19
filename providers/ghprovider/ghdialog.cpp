@@ -31,13 +31,21 @@
 #include <ghaccount.h>
 #include <ghresource.h>
 
-#define VALID_ACCOUNT ""
-#define INVALID_ACCOUNT "You haven't authorized KDevelop to use your Github " \
-    "account. If you authorize KDevelop, you will be able to fetch your " \
-    "public/private repositories and the repositories from your organizations."
-#define TOKEN_LINK_STATEMENT "You can check the " \
-    "authorization for this application and others " \
-    "at https://github.com/settings/tokens."
+static QString invalidAccountText()
+{
+    return i18n("You have not authorized KDevelop to use your GitHub account. "
+                "If you authorize KDevelop, you will be able to fetch your "
+                "public/private repositories and the repositories from your "
+                "organizations.");
+}
+
+static QString tokenLinkStatementText()
+{
+    return i18nc("%1 is the URL with the GitHub token settings",
+                 "You can check the authorization for this application and "
+                 "others at %1",
+                 QStringLiteral("https://github.com/settings/tokens."));
+}
 
 namespace gh
 {
@@ -54,11 +62,11 @@ Dialog::Dialog(QWidget *parent, Account *account)
     auto buttonBox = new QDialogButtonBox();
 
     if (m_account->validAccount()) {
-        m_text = new QLabel(i18n("You're logged in as <b>%1</b>.<br/>",
-                                 m_account->name()) + i18n(TOKEN_LINK_STATEMENT), this);
+        m_text = new QLabel(i18n("You are logged in as <b>%1</b>.<br/>%2",
+                                 m_account->name(), tokenLinkStatementText()), this);
 
         auto logOutButton = new QPushButton;
-        logOutButton->setText(i18n("Log out"));
+        logOutButton->setText(i18n("Log Out"));
         logOutButton->setIcon(QIcon::fromTheme("dialog-cancel"));
         buttonBox->addButton(logOutButton, QDialogButtonBox::ActionRole);
         connect(logOutButton, &QPushButton::clicked, this, &Dialog::revokeAccess);
@@ -72,7 +80,7 @@ Dialog::Dialog(QWidget *parent, Account *account)
         connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
         connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     } else {
-        m_text = new QLabel(i18n(INVALID_ACCOUNT), this);
+        m_text = new QLabel(invalidAccountText(), this);
 
         buttonBox->addButton(QDialogButtonBox::Cancel);
 
@@ -92,7 +100,7 @@ Dialog::Dialog(QWidget *parent, Account *account)
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-    setWindowTitle(i18n("Github Account"));
+    setWindowTitle(i18n("GitHub Account"));
 }
 
 void Dialog::authorizeClicked()
@@ -122,19 +130,19 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token, co
 
     if (id.isEmpty()) {
         m_text->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        m_text->setText(i18n(INVALID_ACCOUNT));
+        m_text->setText(invalidAccountText());
         m_account->setName(QString());
-        KMessageBox::sorry(this, i18n("Authentication failed! Please Try Again.\n\n"
-                                      "Couldn't create token: \"%1\"\n", tokenName) +
-                                 i18n(TOKEN_LINK_STATEMENT),
-                                 i18n("Github Authorization Failed"));
+        KMessageBox::sorry(this, i18n("Authentication failed. Please try again.\n\n"
+                                      "Could not create token: \"%1\"\n%2", tokenName,
+                                      tokenLinkStatementText()),
+                                 i18n("GitHub Authorization Failed"));
         return;
     }
     else{
-        KMessageBox::information(this, i18n("Authentication succeeded!\n\n"
-                                       "Created token: \"%1\"\n", tokenName) +
-                                       i18n(TOKEN_LINK_STATEMENT),
-                                       i18n("Github Account Authorized"));
+        KMessageBox::information(this, i18n("Authentication succeeded.\n\n"
+                                            "Created token: \"%1\"\n%2", tokenName,
+                                            tokenLinkStatementText()),
+                                       i18n("GitHub Account Authorized"));
     }
     m_account->saveToken(id, token);
     syncUser();

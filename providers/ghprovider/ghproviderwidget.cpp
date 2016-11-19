@@ -64,7 +64,7 @@ ProviderWidget::ProviderWidget(QWidget *parent)
     QHBoxLayout *topLayout = new QHBoxLayout();
     m_edit = new LineEdit(this);
     m_edit->setPlaceholderText(i18n("Search"));
-    m_edit->setToolTip(i18n("You can press the Return key if you don't want to wait"));
+    m_edit->setToolTip(i18n("You can press the Return key if you do not want to wait"));
     connect(m_edit, &LineEdit::returnPressed, this, &ProviderWidget::searchRepo);
     topLayout->addWidget(m_edit);
 
@@ -76,7 +76,7 @@ ProviderWidget::ProviderWidget(QWidget *parent)
 
     QPushButton *settings = new QPushButton(QIcon::fromTheme("configure"), "", this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
-    settings->setToolTip(i18n("Click this button to configure your Github account"));
+    settings->setToolTip(i18n("Click this button to configure your GitHub account"));
     connect(settings, &QPushButton::clicked, this, &ProviderWidget::showSettings);
     topLayout->addWidget(settings);
 
@@ -93,7 +93,7 @@ KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const QUrl &dest)
 
     auto plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
     if (!plugin) {
-        KMessageBox::error(0, i18n("The Git plugin could not be loaded which is required to import a Github project."), i18n("Github Provider Error"));
+        KMessageBox::error(0, i18n("The Git plugin could not be loaded which is required to import a GitHub project."), i18n("GitHub Provider Error"));
         return nullptr;
     }
 
