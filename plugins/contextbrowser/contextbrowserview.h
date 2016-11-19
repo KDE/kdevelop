@@ -33,7 +33,7 @@
 class ContextBrowserPlugin;
 class QVBoxLayout;
 class QHBoxLayout;
-class QToolButton;
+class QAction;
 class QCheckBox;
 class QMenu;
 class KComboBox;
@@ -97,8 +97,8 @@ class ContextBrowserView : public QWidget {
         
         ContextBrowserPlugin* m_plugin;
         QVBoxLayout* m_layout;
-        QToolButton* m_lockButton;
-        QToolButton* m_declarationMenuButton;
+        QAction* m_lockAction;
+        QAction* m_declarationMenuAction;
         QHBoxLayout* m_buttons;
 
         QPointer<QWidget> m_navigationWidget;

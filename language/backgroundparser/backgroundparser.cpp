@@ -192,15 +192,13 @@ public:
         parser->d = this; //Set this so we can safely call back BackgroundParser from within loadSettings()
 
         m_timer.setSingleShot(true);
-        m_delay = 500;
-        m_threads = 1;
-        m_doneParseJobs = 0;
-        m_maxParseJobs = 0;
-        m_neededPriority = BackgroundParser::WorstPriority;
+        m_progressTimer.setSingleShot(true);
+        m_progressTimer.setInterval(500);
 
         ThreadWeaver::setDebugLevel(true, 1);
 
         QObject::connect(&m_timer, &QTimer::timeout, m_parser, &BackgroundParser::parseDocuments);
+        QObject::connect(&m_progressTimer, &QTimer::timeout, m_parser, &BackgroundParser::updateProgressBar);
     }
 
     void startTimerThreadSafe(int delay) {
@@ -347,7 +345,7 @@ public:
             }
         }
 
-        m_parser->updateProgressBar();
+        m_parser->updateProgressData();
 
         //We don't hide the progress-bar in updateProgressBar, so it doesn't permanently flash when a document is reparsed again and again.
         if(m_doneParseJobs == m_maxParseJobs
@@ -481,8 +479,8 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     QPointer<QObject> specialParseJob;
 
     QTimer m_timer;
-    int m_delay;
-    int m_threads;
+    int m_delay = 500;
+    int m_threads = 1;
 
     bool m_shuttingDown;
 
@@ -507,10 +505,14 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     // A change tracker for each managed document
     QHash<IndexedString, DocumentChangeTracker*> m_managed;
 
-    int m_maxParseJobs;
-    int m_doneParseJobs;
+    int m_maxParseJobs = 0;
+    int m_doneParseJobs = 0;
     QHash<KDevelop::ParseJob*, float> m_jobProgress;
-    int m_neededPriority; //The minimum priority needed for processed jobs
+    /// The minimum priority needed for processed jobs
+    int m_neededPriority = BackgroundParser::WorstPriority;
+    int m_progressMax = 0;
+    int m_progressDone = 0;
+    QTimer m_progressTimer;
 };
 
 BackgroundParser::BackgroundParser(ILanguageController *languageController)
@@ -561,7 +563,7 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
 {
     Q_UNUSED(text)
     d->m_jobProgress[job] = value;
-    updateProgressBar();
+    updateProgressData();
 }
 
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
@@ -677,7 +679,7 @@ void BackgroundParser::parseComplete(const ThreadWeaver::JobPointer& job)
         d->m_jobProgress.remove(parseJob);
 
         ++d->m_doneParseJobs;
-        updateProgressBar();
+        updateProgressData();
     }
 
     //Continue creating more parse-jobs
@@ -744,10 +746,10 @@ void BackgroundParser::suspend()
 void BackgroundParser::resume()
 {
     d->resume();
-    updateProgressBar();
+    updateProgressData();
 }
 
-void BackgroundParser::updateProgressBar()
+void BackgroundParser::updateProgressData()
 {
     if (d->m_doneParseJobs >= d->m_maxParseJobs) {
         if(d->m_doneParseJobs > d->m_maxParseJobs) {
@@ -761,7 +763,12 @@ void BackgroundParser::updateProgressBar()
             additionalProgress += *it;
         }
 
-        emit showProgress(this, 0, d->m_maxParseJobs*1000, (additionalProgress + d->m_doneParseJobs)*1000);
+        d->m_progressMax = d->m_maxParseJobs*1000;
+        d->m_progressDone = (additionalProgress + d->m_doneParseJobs)*1000;
+
+        if (!d->m_progressTimer.isActive()) {
+            d->m_progressTimer.start();
+        }
     }
 }
 
@@ -898,4 +905,9 @@ void BackgroundParser::projectOpened(IProject* project)
 void BackgroundParser::projectOpeningAborted(IProject* project)
 {
     d->m_loadingProjects.remove(project);
+}
+
+void BackgroundParser::updateProgressBar()
+{
+    emit showProgress(this, 0, d->m_progressMax, d->m_progressDone);
 }

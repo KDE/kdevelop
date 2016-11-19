@@ -168,6 +168,12 @@ void DocumentationView::returnPressed()
 void DocumentationView::changedSelection(const QModelIndex& idx)
 {
     if (idx.isValid()) {
+        // Skip view update if user try to show already opened documentation
+        mIdentifiers->setText(idx.data(Qt::DisplayRole).toString());
+        if (mIdentifiers->text() == (*mCurrent)->name()) {
+            return;
+        }
+
         IDocumentationProvider* prov = mProvidersModel->provider(mProviders->currentIndex());
         auto doc = prov->documentationForIndex(idx);
         if (doc) {
@@ -225,6 +231,7 @@ void DocumentationView::updateView()
     mProviders->setCurrentIndex(mProvidersModel->rowForProvider((*mCurrent)->provider()));
     mIdentifiers->completer()->setModel((*mCurrent)->provider()->indexModel());
     mIdentifiers->setText((*mCurrent)->name());
+    mIdentifiers->completer()->setCompletionPrefix((*mCurrent)->name());
 
     QLayoutItem* lastview = layout()->takeAt(1);
     Q_ASSERT(lastview);

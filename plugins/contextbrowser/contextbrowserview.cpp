@@ -102,7 +102,7 @@ void ContextBrowserView::declarationMenu() {
 }
 
 void ContextBrowserView::updateLockIcon(bool checked) {
-    m_lockButton->setIcon(QIcon::fromTheme(checked ? QStringLiteral("document-encrypt") : QStringLiteral("document-decrypt")));
+    m_lockAction->setIcon(QIcon::fromTheme(checked ? QStringLiteral("document-encrypt") : QStringLiteral("document-decrypt")));
 }
 
 ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new QTextBrowser()), m_autoLocked(false) {
@@ -110,25 +110,21 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
 
     m_allowLockedUpdate = false;
 
-    m_buttons = new QHBoxLayout;
-    m_buttons->addStretch();
-    m_declarationMenuButton = new QToolButton();
-    m_declarationMenuButton->setIcon(QIcon::fromTheme(QStringLiteral("code-class")));
-    m_declarationMenuButton->setToolTip(i18n("Declaration menu"));
-    connect(m_declarationMenuButton, &QToolButton::clicked, this, &ContextBrowserView::declarationMenu);
-    m_buttons->addWidget(m_declarationMenuButton);
-    m_lockButton = new QToolButton();
-    m_lockButton->setCheckable(true);
-    m_lockButton->setChecked(false);
-    m_lockButton->setToolTip(i18n("Lock current view"));
-    updateLockIcon(m_lockButton->isChecked());
-    connect(m_lockButton, &QToolButton::toggled, this, &ContextBrowserView::updateLockIcon);
-    m_buttons->addWidget(m_lockButton);
+    m_declarationMenuAction = new QAction(QIcon::fromTheme(QStringLiteral("code-class")), QString(), this);
+    m_declarationMenuAction->setToolTip(i18n("Declaration menu"));
+    connect(m_declarationMenuAction, &QAction::triggered, this, &ContextBrowserView::declarationMenu);
+    addAction(m_declarationMenuAction);
+    m_lockAction = new QAction(this);
+    m_lockAction->setCheckable(true);
+    m_lockAction->setChecked(false);
+    m_lockAction->setToolTip(i18n("Lock current view"));
+    addAction(m_lockAction);
+    updateLockIcon(m_lockAction->isChecked());
+    connect(m_lockAction, &QAction::triggered, this, &ContextBrowserView::updateLockIcon);
 
     m_layout = new QVBoxLayout;
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
-    m_layout->addLayout(m_buttons);
     m_layout->addWidget(m_navigationWidget);
     //m_layout->addStretch();
     setLayout(m_layout);
@@ -179,7 +175,7 @@ bool ContextBrowserView::event(QEvent* event) {
 
 
             if(key == Qt::Key_L)
-                m_lockButton->toggle();
+                m_lockAction->toggle();
         }
     }
     return QWidget::event(event);
@@ -209,7 +205,7 @@ bool ContextBrowserView::isLocked() const {
     if (m_allowLockedUpdate) {
         isLocked = false;
     } else {
-        isLocked = m_lockButton->isChecked();
+        isLocked = m_lockAction->isChecked();
     }
     return isLocked;
 }
@@ -232,14 +228,14 @@ void ContextBrowserView::updateMainWidget(QWidget* widget)
 
 void ContextBrowserView::navigationContextChanged(bool wasInitial, bool isInitial)
 {
-    if(wasInitial && !isInitial && !m_lockButton->isChecked())
+    if(wasInitial && !isInitial && !m_lockAction->isChecked())
     {
         m_autoLocked = true;
-        m_lockButton->setChecked(true);
+        m_lockAction->setChecked(true);
     }else if(!wasInitial && isInitial && m_autoLocked)
     {
         m_autoLocked = false;
-        m_lockButton->setChecked(false);
+        m_lockAction->setChecked(false);
     }else if(isInitial) {
         m_autoLocked = false;
     }
@@ -253,7 +249,7 @@ void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::T
         // Automatically remove the locked state if the view is not visible or the widget was deleted,
         // because the locked state has side-effects on other navigation functionality.
         m_autoLocked = false;
-        m_lockButton->setChecked(false);
+        m_lockAction->setChecked(false);
     }
 
     if(m_navigationWidgetDeclaration == decl->id() && !force)
@@ -269,7 +265,7 @@ void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::T
 }
 
 KDevelop::IndexedDeclaration ContextBrowserView::lockedDeclaration() const {
-    if(m_lockButton->isChecked())
+    if(m_lockAction->isChecked())
         return declaration();
     else
         return KDevelop::IndexedDeclaration();

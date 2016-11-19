@@ -192,7 +192,7 @@ public Q_SLOTS:
      */
     void parseDocuments();
 
-    void updateProgressBar();
+    void updateProgressData();
 
     ///Disables processing for all jobs that have a worse priority than @param priority
     ///This can be used to temporarily limit the processing to only the most important jobs.
@@ -229,6 +229,7 @@ protected Q_SLOTS:
     void parseProgress(KDevelop::ParseJob*, float value, QString text);
     void startTimer(int delay);
     void aboutToQuit();
+    void updateProgressBar();
 
 private:
     friend class BackgroundParserPrivate;

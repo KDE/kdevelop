@@ -21,6 +21,7 @@
 #include <QVBoxLayout>
 
 #include <KColorScheme>
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -69,12 +70,17 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, QWidget* parent)
 
     setSourceIndex(FROM_FILESYSTEM_SOURCE_INDEX);
 
-    if(!m_plugins.isEmpty())
-        m_ui->sources->setCurrentIndex(1);
+    const int defaultIndex = m_plugins.isEmpty() ? 0 : 1; // "From File System" is quite unlikely to what you want...
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group("Providers");
+    const int lastCurrentIndex = configGroup.readEntry("LastProviderIndex", defaultIndex);
+    m_ui->sources->setCurrentIndex(qBound(0, lastCurrentIndex, m_ui->sources->count() - 1));
 }
 
 ProjectSourcePage::~ProjectSourcePage()
 {
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group("Providers");
+    configGroup.writeEntry("LastProviderIndex", m_ui->sources->currentIndex());
+
     delete m_ui;
 }
 
