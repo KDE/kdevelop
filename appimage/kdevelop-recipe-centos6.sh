@@ -113,7 +113,7 @@ git checkout $KDEVELOP_VERSION
 
 # Get Grantlee
 if [ ! -d /grantlee ]; then
-    git clone https://github.com/steveire/grantlee.git
+    git clone https://github.com/steveire/grantlee.git /grantlee
 fi
 cd /grantlee
 git checkout master
@@ -514,7 +514,7 @@ Categories=Qt;KDE;Utility;TextEditor;
 EOF
 
 cp /kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
-cp -R /opt/python3.5/lib/python3.5 /kdevelop.appdir/usr/lib/
+cp -R /usr/lib/python3.5 /kdevelop.appdir/usr/lib/
 rm -Rf /kdevelop.appdir/usr/lib/python3.5/{test,config-3.5m,__pycache__,site-packages,lib-dynload,distutils,idlelib,unittest,tkinter,ensurepip}
 
 mkdir -p /kdevelop.appdir/usr/share/kdevelop/
