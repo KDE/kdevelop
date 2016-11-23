@@ -151,7 +151,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
 
     template<class NewType>
     DUChainPointer<NewType> dynamicCast() const {
-      if( dynamic_cast<NewType*>( d->base() ) ) //When the reference to the pointer is constant that doesn't mean that the pointed object needs to be constant
+      if( d && dynamic_cast<NewType*>( d->base() ) ) //When the reference to the pointer is constant that doesn't mean that the pointed object needs to be constant
         return DUChainPointer<NewType>( static_cast<NewType*>(d->base()) );
       else
         return DUChainPointer<NewType>();
