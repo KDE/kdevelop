@@ -14,7 +14,7 @@
    <item row="1" column="0">
     <widget class="QCheckBox" name="parseHeadersInPlainC">
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check this if you want &lt;code&gt;*.h&lt;code/&gt; headers to be parsed in plain C mode. By default they are parsed as C++ headers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check this if you want &lt;code&gt;*.h&lt;/code&gt; headers to be parsed in plain C mode. By default they are parsed as C++ headers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
       <string>Parse *.h headers in plain C</string>
