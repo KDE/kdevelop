@@ -31,13 +31,21 @@
 #include <ghaccount.h>
 #include <ghresource.h>
 
-#define VALID_ACCOUNT "You're logged in as <b>%1</b>. You can check the " \
-    "authorization for this application and others " \
-    "<a href=\"https://github.com/settings/applications\">here</a>."
-#define INVALID_ACCOUNT "You haven't authorized KDevelop to use your Github " \
-    "account. If you authorize KDevelop, you will be able to fetch your " \
-    "public/private repositories and the repositories from your organizations."
+static QString invalidAccountText()
+{
+    return i18n("You have not authorized KDevelop to use your GitHub account. "
+                "If you authorize KDevelop, you will be able to fetch your "
+                "public/private repositories and the repositories from your "
+                "organizations.");
+}
 
+static QString tokenLinkStatementText()
+{
+    return i18nc("%1 is the URL with the GitHub token settings",
+                 "You can check the authorization for this application and "
+                 "others at %1",
+                 QStringLiteral("https://github.com/settings/tokens."));
+}
 
 namespace gh
 {
@@ -54,8 +62,8 @@ Dialog::Dialog(QWidget *parent, Account *account)
     auto buttonBox = new QDialogButtonBox();
 
     if (m_account->validAccount()) {
-        QString str = QString(VALID_ACCOUNT).arg(m_account->name());
-        m_text = new QLabel(i18n(str.toUtf8()), this);
+        m_text = new QLabel(i18n("You are logged in as <b>%1</b>.<br/>%2",
+                                 m_account->name(), tokenLinkStatementText()), this);
 
         auto logOutButton = new QPushButton;
         logOutButton->setText(i18n("Log out"));
@@ -72,7 +80,7 @@ Dialog::Dialog(QWidget *parent, Account *account)
         connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
         connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     } else {
-        m_text = new QLabel(i18n(INVALID_ACCOUNT), this);
+        m_text = new QLabel(invalidAccountText(), this);
 
         buttonBox->addButton(QDialogButtonBox::Cancel);
 
@@ -122,7 +130,7 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token, co
 
     if (id.isEmpty()) {
         m_text->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        m_text->setText(i18n(INVALID_ACCOUNT));
+        m_text->setText(invalidAccountText());
         m_account->setName(QString());
         KMessageBox::sorry(this, i18n("Authentication failed! Please, "
                                       "try again"));
