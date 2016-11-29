@@ -522,6 +522,15 @@ void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
+    static bool orderIsLoaded = false;
+
+    if (!orderIsLoaded) {
+        orderIsLoaded = true;
+        idealController->leftBarWidget->loadOrderSettings();
+        idealController->bottomBarWidget->loadOrderSettings();
+        idealController->rightBarWidget->loadOrderSettings();
+    }
+
     if(m_leftTabbarCornerWidget) {
         m_leftTabbarCornerWidget->hide();
         m_leftTabbarCornerWidget->setParent(nullptr);
@@ -571,6 +580,15 @@ void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
 {
+    static bool orderIsSaved = false;
+
+    if (!orderIsSaved) {
+        orderIsSaved = true;
+        idealController->leftBarWidget->saveOrderSettings();
+        idealController->bottomBarWidget->saveOrderSettings();
+        idealController->rightBarWidget->saveOrderSettings();
+    }
+
     QSplitter *splitter = m_indexSplitters[index];
     if (!splitter)
         return;

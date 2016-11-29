@@ -71,6 +71,10 @@ public:
         refreshText();
     }
 
+    QString id() {
+        return m_dock->view()->document()->documentSpecifier();
+    }
+
 private:
     bool eventFilter(QObject * watched, QEvent * event) override
     {
@@ -134,13 +138,9 @@ QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
     dock->setView(view);
     dock->setDockWidgetArea(_area);
 
-    bool wasEmpty = actions().isEmpty();
-
     auto action = new ToolViewAction(dock, this);
     addAction(action);
 
-    if(wasEmpty)
-        emit emptyChanged();
     return action;
 }
 
@@ -149,11 +149,62 @@ QWidget* IdealButtonBarWidget::corner()
     return _corner;
 }
 
-void IdealButtonBarWidget::removeAction(QAction * widgetAction)
+void IdealButtonBarWidget::addAction(QAction* qaction)
 {
+    QWidget::addAction(qaction);
+
+    auto action = dynamic_cast<ToolViewAction*>(qaction);
+    if (!action || action->button()) {
+      return;
+    }
+
+    bool wasEmpty = isEmpty();
+
+    IdealToolButton *button = new IdealToolButton(_area);
+    //apol: here we set the usual width of a button for the vertical toolbars as the minimumWidth
+    //this is done because otherwise when we remove all the buttons and re-add new ones we get all
+    //the screen flickering. This is solved by not defaulting to a smaller width when it's empty
+    int w = button->sizeHint().width();
+    if (orientation() == Qt::Vertical && w > minimumWidth()) {
+        setMinimumWidth(w);
+    }
+
+    action->setButton(button);
+    button->setDefaultAction(action);
+
+    Q_ASSERT(action->dockWidget());
+
+    connect(action, &QAction::toggled, this, static_cast<void(IdealButtonBarWidget::*)(bool)>(&IdealButtonBarWidget::showWidget));
+    connect(button, &IdealToolButton::clicked, this, &IdealButtonBarWidget::buttonPressed);
+    connect(button, &IdealToolButton::customContextMenuRequested,
+            action->dockWidget(), &IdealDockWidget::contextMenuRequested);
+
+    QString buttonId = id(button);
+    if (!_buttonsOrder.contains(buttonId)) {
+        if (_area == Qt::BottomDockWidgetArea) {
+            _buttonsOrder.push_front(buttonId);
+        } else {
+            _buttonsOrder.push_back(buttonId);
+        }
+    }
+    applyOrderToLayout();
+
+    if (wasEmpty) {
+        emit emptyChanged();
+    }
+}
+
+void IdealButtonBarWidget::removeAction(QAction* widgetAction)
+{
+    QWidget::removeAction(widgetAction);
+
     auto action = dynamic_cast<ToolViewAction*>(widgetAction);
     delete action->button();
     delete action;
+
+    if (layout()->isEmpty()) {
+        emit emptyChanged();
+    }
 }
 
 bool IdealButtonBarWidget::isEmpty()
@@ -175,6 +226,71 @@ void IdealButtonBarWidget::saveShowState()
 bool IdealButtonBarWidget::lastShowState()
 {
     return _showState;
+}
+
+QString IdealButtonBarWidget::id(const IdealToolButton* button) const
+{
+    foreach (QAction* a, actions()) {
+        auto tva = dynamic_cast<ToolViewAction*>(a);
+        if (tva && tva->button() == button) {
+            return tva->id();
+        }
+    }
+
+    return QString();
+}
+
+IdealToolButton* Sublime::IdealButtonBarWidget::button(const QString& id) const
+{
+    foreach (QAction* a, actions()) {
+        auto tva = dynamic_cast<ToolViewAction*>(a);
+        if (tva && tva->id() == id) {
+            return tva->button();
+        }
+    }
+
+    return nullptr;
+}
+
+void IdealButtonBarWidget::loadOrderSettings()
+{
+    KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+    _buttonsOrder = config.readEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), QStringList());
+
+    applyOrderToLayout();
+}
+
+void IdealButtonBarWidget::saveOrderSettings()
+{
+    takeOrderFromLayout();
+
+    KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+    config.writeEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), _buttonsOrder);
+}
+
+void IdealButtonBarWidget::applyOrderToLayout()
+{
+    foreach(QAction* a, actions()) {
+        if (auto tva = dynamic_cast<ToolViewAction*>(a)) {
+            layout()->removeWidget(tva->button());
+        }
+    }
+
+    foreach(const QString& id, _buttonsOrder) {
+        if (auto b = button(id)) {
+            layout()->addWidget(b);
+        }
+    }
+}
+
+void IdealButtonBarWidget::takeOrderFromLayout()
+{
+    _buttonsOrder.clear();
+    for (int i = 0; i < layout()->count(); ++i) {
+        if (auto button = dynamic_cast<IdealToolButton*>(layout()->itemAt(i)->widget())) {
+            _buttonsOrder += id(button);
+        }
+    }
 }
 
 Qt::Orientation IdealButtonBarWidget::orientation() const
@@ -226,63 +342,6 @@ void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
     _controller->showDockWidget(widgetAction->dockWidget(), checked);
     widgetAction->setChecked(checked);
     button->setChecked(checked);
-}
-
-
-void IdealButtonBarWidget::actionEvent(QActionEvent *event)
-{
-    auto action = dynamic_cast<ToolViewAction *>(event->action());
-    if (!action)
-      return;
-
-    switch (event->type()) {
-    case QEvent::ActionAdded: {
-        bool wasEmpty = isEmpty();
-        if (!action->button()) {
-            IdealToolButton *button = new IdealToolButton(_area);
-            //apol: here we set the usual width of a button for the vertical toolbars as the minimumWidth
-            //this is done because otherwise when we remove all the buttons and re-add new ones we get all
-            //the screen flickering. This is solved by not defaulting to a smaller width when it's empty
-            int w = button->sizeHint().width();
-            if(orientation()==Qt::Vertical && w>minimumWidth())
-                setMinimumWidth(w);
-            action->setButton(button);
-            button->setDefaultAction(action);
-
-            Q_ASSERT(action->dockWidget());
-
-            layout()->addWidget(button);
-            connect(action, &QAction::toggled, this, static_cast<void(IdealButtonBarWidget::*)(bool)>(&IdealButtonBarWidget::showWidget));
-            connect(button, &IdealToolButton::clicked, this, &IdealButtonBarWidget::buttonPressed);
-            connect(button, &IdealToolButton::customContextMenuRequested,
-                    action->dockWidget(), &IdealDockWidget::contextMenuRequested);
-            if ( wasEmpty ) {
-                emit emptyChanged();
-            }
-        }
-    } break;
-
-    case QEvent::ActionRemoved: {
-        IdealToolButton *button = action->button();
-        if (button) {
-            for (int index = 0; index < layout()->count(); ++index) {
-                if (QLayoutItem *item = layout()->itemAt(index)) {
-                    if (item->widget() == button) {
-                        action->disconnect(this);
-                        delete layout()->takeAt(index);
-                        break;
-                    }
-                }
-            }
-        }
-        if(layout()->isEmpty()) {
-            emit emptyChanged();
-        }
-    } break;
-
-    default:
-        break;
-    }
 }
 
 IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *_action) const

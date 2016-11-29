@@ -47,6 +47,8 @@ public:
 
     QAction* addWidget(IdealDockWidget *widget,
                        Area* area, View *view);
+
+    void addAction(QAction *action);
     void removeAction(QAction* action);
 
     Qt::Orientation orientation() const;
@@ -64,6 +66,9 @@ public:
     void saveShowState();
     bool lastShowState();
 
+    void loadOrderSettings();
+    void saveOrderSettings();
+
 private Q_SLOTS:
     void showWidget(bool checked);
     void buttonPressed(bool state);
@@ -71,14 +76,18 @@ private Q_SLOTS:
 signals:
     void emptyChanged();
 
-protected:
-    void actionEvent(QActionEvent *event) override;
-
 private:
+    void applyOrderToLayout();
+    void takeOrderFromLayout();
+
+    IdealToolButton* button(const QString& id) const;
+    QString id(const IdealToolButton* button) const;
+
     Qt::DockWidgetArea _area;
     IdealController *_controller;
     QWidget *_corner;
     bool _showState;
+    QStringList _buttonsOrder;
 };
 
 }
