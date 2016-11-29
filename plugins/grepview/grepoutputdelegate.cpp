@@ -69,7 +69,7 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
     const GrepOutputModel *model = dynamic_cast<const GrepOutputModel *>(index.model());
     const GrepOutputItem  *item  = dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index));
 
-    QStyleOptionViewItemV4 options = option;
+    QStyleOptionViewItem options = option;
     initStyleOption(&options, index);
 
     // building item representation

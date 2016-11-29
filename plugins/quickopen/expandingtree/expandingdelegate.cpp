@@ -289,7 +289,7 @@ void ExpandingDelegate::drawDecoration(QPainter* painter, const QStyleOptionView
 
 void ExpandingDelegate::drawBackground ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
     Q_UNUSED(index)
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     //initStyleOption(&opt, index);
     //Problem: This isn't called at all, because drawBrackground is not virtual :-/
     QStyle *style = model()->treeView()->style() ? model()->treeView()->style() : QApplication::style();

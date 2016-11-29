@@ -125,7 +125,7 @@ void ProjectModelItemDelegate::drawBranchName(QPainter* painter, const QStyleOpt
 
 void ProjectModelItemDelegate::drawStyledBackground(QPainter* painter, const QStyleOptionViewItem& option) const
 {
-    QStyleOptionViewItemV4 opt(option);
+    QStyleOptionViewItem opt(option);
     QStyle *style = opt.widget->style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, opt.widget);
 }
