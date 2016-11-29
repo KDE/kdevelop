@@ -680,7 +680,7 @@ void UiController::addToolViewToDockArea(IToolViewFactory* factory, Qt::DockWidg
 
 bool UiController::toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area)
 {
-    foreach (Sublime::View *view, doc->views()) {
+    for (Sublime::View *view : doc->views()) {
         if( area->toolViews().contains( view ) )
             return true;
     }
