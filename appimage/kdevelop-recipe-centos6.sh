@@ -23,7 +23,7 @@ QTDIR=/usr/local/Qt-${QTVERSION}/
 
 KDEVELOP_VERSION=5.0
 KDEV_PG_QT_VERSION=2.0
-KF5_VERSION=v5.27.0
+KF5_VERSION=v5.28.0
 KDE_APPLICATION_VERSION=v16.08.0
 GRANTLEE_VERSION=v5.1.0
 
@@ -113,7 +113,7 @@ git checkout $KDEVELOP_VERSION
 
 # Get Grantlee
 if [ ! -d /grantlee ]; then
-    git clone https://github.com/steveire/grantlee.git
+    git clone https://github.com/steveire/grantlee.git /grantlee
 fi
 cd /grantlee
 git checkout master
@@ -148,7 +148,8 @@ function build_framework
     if ( test -d $FRAMEWORK )
     then
         echo "$FRAMEWORK already cloned"
-        cd $FRAMEWORK
+        cd $FRAMEWORK 
+        git stash
         git reset --hard
         git checkout master
         git pull --rebase
@@ -160,6 +161,7 @@ function build_framework
 
     cd $FRAMEWORK
     git checkout $KF5_VERSION || git checkout $KDE_APPLICATION_VERSION
+    git stash pop
     cd ..
 
     if [ "$FRAMEWORK" = "knotifications" ]; then
@@ -512,7 +514,7 @@ Categories=Qt;KDE;Utility;TextEditor;
 EOF
 
 cp /kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
-cp -R /opt/python3.5/lib/python3.5 /kdevelop.appdir/usr/lib/
+cp -R /usr/lib/python3.5 /kdevelop.appdir/usr/lib/
 rm -Rf /kdevelop.appdir/usr/lib/python3.5/{test,config-3.5m,__pycache__,site-packages,lib-dynload,distutils,idlelib,unittest,tkinter,ensurepip}
 
 mkdir -p /kdevelop.appdir/usr/share/kdevelop/

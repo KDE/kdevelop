@@ -23,7 +23,7 @@
         "Description[uk]": "Імпортує і змінює проекти нетипових make", 
         "Description[x-test]": "xxImports and edits custom make projectsxx", 
         "Description[zh_CN]": "导入并编辑定制 make 工程", 
-        "Icon": "gear", 
+        "Icon": "kdevelop", 
         "Id": "KDevCustomMakeManager", 
         "Name": "Custom Makefile Project Manager", 
         "Name[bs]": "Korisnički Makefile menadžer projekta", 
