@@ -52,7 +52,7 @@ ConfigPage::ConfigPageType ClangtidyPreferences::configPageType() const
 
 QString ClangtidyPreferences::name() const
 {
-    return i18n("clang-tidy");
+    return i18n("Clang-Tidy");
 }
 
 QString ClangtidyPreferences::fullName() const
