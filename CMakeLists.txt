@@ -13,6 +13,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMAddTests)
+include(ECMInstallIcons)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(FeatureSummary)
@@ -80,6 +81,9 @@ target_link_libraries(kdevcppcheck
 )
 
 install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
+
+ecm_install_icons(ICONS icons/128-apps-cppcheck.png
+                  DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)
 
 add_subdirectory(tests)
 

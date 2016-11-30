@@ -41,7 +41,7 @@
         "Description[sv]": "Insticksprogrammet integrerar Cppcheck (statiskt analysverktyg) i KDevelop", 
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Cppcheck (засіб статичного аналізу) до KDevelop", 
         "Description[x-test]": "xxThis plugin integrates Cppcheck (static analysis tool) to KDevelopxx", 
-        "Icon": "kdevelop", 
+        "Icon": "cppcheck", 
         "Id": "kdevcppcheck", 
         "License": "GPL", 
         "Name": "Cppcheck Support", 
