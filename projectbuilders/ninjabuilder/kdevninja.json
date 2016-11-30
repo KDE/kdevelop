@@ -21,7 +21,7 @@
         "Description[uk]": "Збирач Ninja для KDevelop", 
         "Description[x-test]": "xxKDevelop Ninja Builderxx", 
         "Description[zh_CN]": "KDevelop Ninja 构建器", 
-        "Icon": "gear", 
+        "Icon": "kdevelop", 
         "Id": "KDevNinjaBuilder", 
         "Name": "Ninja Project Builder", 
         "Name[ca@valencia]": "Constructor de projectes Ninja", 

@@ -21,7 +21,7 @@
         "Description[uk]": "Надає змогу використовувати нетипові системи збирання у проектах KDevelop", 
         "Description[x-test]": "xxAllows to use custom buildsystems for KDevelop projectsxx", 
         "Description[zh_CN]": "允许对 KDevelop 工程使用自定义构建系统", 
-        "Icon": "gear", 
+        "Icon": "kdevelop", 
         "Id": "KDevCustomBuildSystem", 
         "Name": "Custom BuildSystem", 
         "Name[ca@valencia]": "BuildSystem personalitzat", 
