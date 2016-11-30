@@ -150,9 +150,9 @@ MICommand *DebugSession::createUserCommand(const QString& cmd) const
 {
     if (m_hasCorrectCLIOutput)
         return MIDebugSession::createUserCommand(cmd);
-    auto msg = i18n("Attempting to execute user command on unsupported lldb version");
+    auto msg = i18n("Attempting to execute user command on unsupported LLDB version");
     emit debuggerInternalOutput(msg);
-    qCDebug(DEBUGGERLLDB) << "Attempting user command on unsupported lldb version";
+    qCDebug(DEBUGGERLLDB) << "Attempting user command on unsupported LLDB version";
     return nullptr;
 }
 
