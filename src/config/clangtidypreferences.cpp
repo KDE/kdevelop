@@ -67,6 +67,6 @@ QIcon ClangtidyPreferences::icon() const
 
 void ClangtidyPreferences::apply()
 {
-    ConfigGroup projConf = KSharedConfig::openConfig()->group("Clangtidy");
-    projConf.writeEntry(ConfigGroup::ExecutablePath, ui->kcfg_clangtidyPath->text());
+    ConfigGroup configGroup = KSharedConfig::openConfig()->group("Clangtidy");
+    configGroup.writeEntry(ConfigGroup::ExecutablePath, ui->kcfg_clangtidyPath->text());
 }

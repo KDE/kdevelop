@@ -93,15 +93,12 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     pms->addModel(QStringLiteral("Clangtidy"), i18n("Clang-Tidy"), m_model.data());
 
     m_config = KSharedConfig::openConfig()->group("Clangtidy");
-    auto clangtidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
-
-    // TODO(cnihelton): auto detect clang-tidy executable instead of hard-coding
-    // it.
-    if (clangtidyPath.isEmpty()) {
-        clangtidyPath = QString(CLANG_TIDY_PATH);
+    auto clangTidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
+    if (clangTidyPath.isEmpty()) {
+        clangTidyPath = QStandardPaths::findExecutable("clang-tidy");
     }
 
-    collectAllAvailableChecks(clangtidyPath);
+    collectAllAvailableChecks(clangTidyPath);
 
     m_config.writeEntry(ConfigGroup::AdditionalParameters, "");
     for (auto check : m_allChecks) {
@@ -123,11 +120,11 @@ void Plugin::unload()
     pms->removeModel(QStringLiteral("Clangtidy"));
 }
 
-void Plugin::collectAllAvailableChecks(QString clangtidyPath)
+void Plugin::collectAllAvailableChecks(QString clangTidyPath)
 {
     m_allChecks.clear();
     KProcess tidy;
-    tidy << clangtidyPath << QLatin1String("-checks=*") << QLatin1String("--list-checks");
+    tidy << clangTidyPath << QLatin1String("-checks=*") << QLatin1String("--list-checks");
     tidy.setOutputChannelMode(KProcess::OnlyStdoutChannel);
     tidy.start();
 
@@ -177,18 +174,18 @@ void Plugin::runClangtidy(bool allFiles)
         return;
     }
 
-    auto clangtidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
+    ConfigGroup configGroup = KSharedConfig::openConfig()->group("Clangtidy");
+    auto clangTidyPath = configGroup.readEntry(ConfigGroup::ExecutablePath);
     auto buildSystem = project->buildSystemManager();
 
     Job::Parameters params;
 
     params.projectRootDir = project->path().toLocalFile();
 
-    // TODO: auto detect clang-tidy executable instead of hard-coding it.
-    if (clangtidyPath.isEmpty()) {
-        params.executablePath = QStringLiteral("/usr/bin/clang-tidy");
+    if (clangTidyPath.isEmpty()) {
+        params.executablePath = QStandardPaths::findExecutable("/usr/bin/clang-tidy");
     } else {
-        params.executablePath = clangtidyPath;
+        params.executablePath = clangTidyPath;
     }
 
     if (allFiles) {

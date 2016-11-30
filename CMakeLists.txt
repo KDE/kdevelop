@@ -20,18 +20,6 @@ find_package(Qt5 REQUIRED Core Widgets Test)
 find_package(KF5 REQUIRED COMPONENTS IconThemes ItemModels ThreadWeaver TextEditor I18n)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
-# find clang-tidy executable and sets it in plugin.h.in
-find_program(CLANG_TIDY_EXEC NAMES "clang-tidy")
-if(NOT CLANG_TIDY_EXEC)
-    message(ERROR "clang-tidy program not found")
-else()
-    configure_file("${PROJECT_SOURCE_DIR}/src/plugin/plugin.h.in" 
-                   "${PROJECT_SOURCE_DIR}/src/plugin/plugin.h"    )
-                   
-    configure_file("${PROJECT_SOURCE_DIR}/res/clangtidyconfig.kcfg.in" 
-                   "${PROJECT_SOURCE_DIR}/res/clangtidyconfig.kcfg"    )                   
-endif()
-
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 include_directories(
