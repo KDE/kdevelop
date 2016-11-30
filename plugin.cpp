@@ -79,7 +79,7 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
     });
     actionCollection()->addAction("cppcheck_project", m_actionProject);
 
-    m_actionProjectItem = new QAction("Cppcheck", this);
+    m_actionProjectItem = new QAction(i18n("Cppcheck"), this);
 
     connect(core()->documentController(), &KDevelop::IDocumentController::documentClosed,
             this, &Plugin::updateActions);
@@ -92,7 +92,7 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
             this, &Plugin::projectClosed);
 
     KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->addModel(modelId, QStringLiteral("Cppcheck"), m_model.data());
+    pms->addModel(modelId, i18n("Cppcheck"), m_model.data());
 
     updateActions();
 }
