@@ -130,6 +130,8 @@ QStringList PlasmoidExecutionJob::arguments(ILaunchConfiguration* cfg)
         QString identifier = cfg->config().readEntry("PlasmoidIdentifier", "");
         arguments += "-a";
         arguments += identifier;
+    } else {
+        arguments += { "-a", "." };
     }
     return arguments;
 }
