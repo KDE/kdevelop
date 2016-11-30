@@ -69,7 +69,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
 
     QAction* act_checkfile;
     act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangtidyFile()));
-    act_checkfile->setStatusTip(i18n("Launches Clangtidy for current file"));
+    act_checkfile->setStatusTip(i18n("Launches clang-tidy for current file"));
     act_checkfile->setText(i18n("clang-tidy"));
 
     /*     TODO: Uncomment this only when discover a safe way to run clang-tidy on
@@ -90,7 +90,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     Q_ASSERT(iface);
 
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->addModel(QStringLiteral("Clangtidy"), i18n("Clangtidy"), m_model.data());
+    pms->addModel(QStringLiteral("Clangtidy"), i18n("Clang-Tidy"), m_model.data());
 
     m_config = KSharedConfig::openConfig()->group("Clangtidy");
     auto clangtidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
@@ -171,7 +171,7 @@ void Plugin::runClangtidy(bool allFiles)
 
     m_config = project->projectConfiguration()->group("Clangtidy");
     if (!m_config.isValid()) {
-        QMessageBox::critical(nullptr, i18n("Error starting Clangtidy"),
+        QMessageBox::critical(nullptr, i18n("Error starting clang-tidy"),
                               i18n("Can't load parameters. They must be set in the "
                                    "project settings."));
         return;
