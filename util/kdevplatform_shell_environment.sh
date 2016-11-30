@@ -18,10 +18,21 @@
 # the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA.
 
-if [ -e ~/.bashrc ]; then
-    # Since this runs as a replacement for the init-file, we need to chain in the 'real' bash-rc
-    source ~/.bashrc
-fi
+if [ -z "$ZDOTDIR" ]; then _shell=bash; else _shell=zsh; fi
+
+# Since this runs as a replacement for the init-files, we need to chain in the 'real' rcs.
+# We ignore profile, login & logout rcs, as we want no login shells.
+case $_shell in
+    zsh)
+        alias shopt=':'
+        test -f "$OLD_ZDOTDIR/.zshenv" && . "$OLD_ZDOTDIR/.zshenv"
+        test -f "$OLD_ZDOTDIR/.zshrc"  && . "$OLD_ZDOTDIR/.zshrc"
+        ;; #zsh still also sources the systemwide rcs when called with $ZDOTDIR set.
+    bash)
+        test -f ~/.bash_profile  && source ~/.bash_profile
+        test -f /etc/bash.bashrc && source /etc/bash.bashrc
+        ;;
+esac
 
 if ! [ "$APPLICATION_HOST" ]; then
     export APPLICATION_HOST=$(hostname)
@@ -84,7 +95,7 @@ function getCurrentShellEnvPath {
 function help! {
     echo "You are controlling the $APPLICATION session '$(getSessionName)'"
     echo ""
-    if [ "$1" == "" ]; then
+    if [[ "$1" == "" ]]; then
     echo "Standard commands:"
     echo "raise!                                 - Raise the window."
     echo "sync!                                  - Synchronize the working directory with the currently open document. See \"help! sync\""
@@ -104,7 +115,7 @@ function help! {
     echo "Most commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
     fi
 
-    if [ "$1" == "open" ]; then
+    if [[ "$1" == "open" ]]; then
     echo "Extended opening:"
     echo "The open! command can also be used to open files in specific tool-view configurations, by adding split-separators:"
     echo "- Files around the / separator will be arranged horizontally by split-view."
@@ -123,7 +134,7 @@ function help! {
     echo "Short forms: o! = open!, eo! = eopen!, c! = create!"
     fi
 
-    if [ "$1" == "sync" ]; then
+    if [[ "$1" == "sync" ]]; then
     echo "Extended syncing:"
     echo "sync!    [[project-name]]           - If no project-name is given, then the sync! command synchronizes to the currently active document."
     echo "                                      If no document is active, then it synchronizes to the currently selected item in the project tree-view."
@@ -137,7 +148,7 @@ function help! {
     echo "Short forms: s! = sync!, ss! = syncsel!, p! = project!, b! = bdir!"
     fi
 
-    if [ "$1" == "remote" ]; then
+    if [[ "$1" == "remote" ]]; then
     echo "Extended remote commands:"
     echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive."
     echo "                                       - The whole dbus environment is forwarded, KDevelop needs to be installed on both sides."
@@ -152,7 +163,7 @@ function help! {
     echo "Short forms: e! = exec!, ce! = cexec!, cth! = copytohost!, ctc! = copytoclient!"
     fi
 
-    if [ "$1" == "env" ]; then
+    if [[ "$1" == "env" ]]; then
       echo "Environment management:"
       echo "The environment can be used to store session-specific macros and generally manipulate the shell environment"
       echo "for embedded shell sessions. The environment is sourced into the shell when the shell is initialized, and"
@@ -257,15 +268,20 @@ function shev! {
 # Opens a document in internally in the application
 function openDocument {
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentSimple $1)
-    if ! [ "$RESULT" == "true" ]; then
+    if [[ "$RESULT" != "true" ]]; then
         echo "Failed to open $1"
     fi
 }
 
 # Opens a document in internally in the application
 function openDocuments {
-    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentsSimple "(" $1 ")")
-    if ! [ "$RESULT" == "true" ]; then
+    if [[ $_shell == "zsh" ]]; then
+        arr=(${=1})
+    else
+        arr=("$1")
+    fi
+    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentsSimple "(" $arr ")")
+    if [[ "$RESULT" != "true" ]]; then
         echo "Failed to open $1"
     fi
 }
@@ -279,7 +295,7 @@ function executeInApp {
         WD=$(pwd)
     fi
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommand "$CMD" "$WD")
-    if ! [ "$RESULT" == "true" ]; then
+    if [[ "$RESULT" != "true" ]]; then
         echo "Execution failed"
     fi
 }
@@ -343,10 +359,10 @@ function sync! {
             # This regular expression filters the user@host:port out of fish:///user@host:port/path/...
             LOGIN=$(echo $P | sed "s/fish\:\/\/*\([^\/]*\)\(\/.*\)/\1/")
             P_ON_HOST=$(echo $P | sed "s/fish\:\/\/*\([^\/]*\)\(\/.*\)/\2/")
-            if [ "$KDEV_SSH_FORWARD_CHAIN" == "$LOGIN" ]; then
+            if [[ "$KDEV_SSH_FORWARD_CHAIN" == "$LOGIN" ]]; then
                 P="$P_ON_HOST"
             else
-                if [ "$KDEV_SSH_FORWARD_CHAIN" == "" ]; then
+                if [[ "$KDEV_SSH_FORWARD_CHAIN" == "" ]]; then
                     # Try to ssh to the host machine
                     # We need to split away the optional ":port" suffix, because the ssh command does not allow that syntax
                     HOST=$(echo $LOGIN | cut --delimiter=':' -f 1)
@@ -377,7 +393,7 @@ function sync! {
         elif [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
             # This session is being forwarded to another machine, but the current document is not
             # However, we won't complain, because it's possible that the machines share the same file-system
-            if [ $(isEqualFileOnHostAndClient $P) != "yes" ]; then
+            if [[ $(isEqualFileOnHostAndClient $P) != "yes" ]]; then
                 echo "Cannot synchronize the working directory, because the file systems do not match"
                 return
             fi
@@ -400,7 +416,7 @@ function isEqualFileOnHostAndClient {
     FILE=$1
     INODE_HOST=$(trimWhiteSpace $(ls --color=never -i $FILE | cut -d' ' -f1))
     INODE_CLIENT=$(trimWhiteSpace $(executeInAppSync "ls --color=never -i $FILE | cut -d' ' -f1" "$(dirname $FILE)"))
-    if [ "$INODE_HOST" == "$INODE_CLIENT" ]; then
+    if [[ "$INODE_HOST" == "$INODE_CLIENT" ]]; then
         echo "yes"
     else
         echo ""
@@ -419,7 +435,7 @@ function mapFileToClient {
 
         if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
             # If we are forwarding, map it to the client somehow.
-            if [ "$(isEqualFileOnHostAndClient "$FILE")" != "yes" ]; then
+            if [[ "$(isEqualFileOnHostAndClient "$FILE")" != "yes" ]]; then
                     # We can eventually map the file using the fish protocol
                     FISH_HOST=$KDEV_SSH_FORWARD_CHAIN
                     if [[ "$FISH_HOST" == *\,* ]]; then
@@ -437,10 +453,9 @@ function mapFileToClient {
 }
 
 function open! {
-    FILES=$@
     NEWFILES=""
-    for RELATIVE_FILE in $FILES; do
-        if [ "$RELATIVE_FILE" == "/" ]; then
+    for RELATIVE_FILE; do
+        if [[ "$RELATIVE_FILE" == "/" || "$RELATIVE_FILE" == "-" ]]; then
             FILE=$RELATIVE_FILE
         else
             FILE=$(mapFileToClient $RELATIVE_FILE)
@@ -452,18 +467,16 @@ function open! {
 }
 
 function eopen! {
-    FILES=$@
-    for RELATIVE_FILE in $FILES; do
+    for RELATIVE_FILE; do
         FILE=$(mapFileToClient $RELATIVE_FILE)
-        executeInApp "kde-open $FILE"
+        executeInApp "kde-open5 $FILE"
     done
 }
 
 function exec! {
-    FILES=$@
     ARGS=""
-    for RELATIVE_FILE in $FILES; do
-        if [ "$ARGS" == "" ]; then
+    for RELATIVE_FILE; do
+        if [[ "$ARGS" == "" ]]; then
             # Do not transform the command-name
             ARGS=$RELATIVE_FILE
         else
@@ -484,12 +497,11 @@ function copytoclient! {
 }
 
 function cexec! {
-    FILES=$@
     ARGS=""
     PREFIX=""
     TMP=1
-    for RELATIVE_FILE in $FILES; do
-        if [ "$ARGS" == "" ]; then
+    for RELATIVE_FILE; do
+        if [[ "$ARGS" == "" ]]; then
             # Do not transform the command-name
             ARGS=$RELATIVE_FILE
         else
@@ -543,10 +555,10 @@ function search! {
     LOCATION=$(mapFileToClient $LOCATION)
 
     for LOC in $*; do
-        if [ "$LOC" == "$1" ]; then
+        if [[ "$LOC" == "$1" ]]; then
             continue;
         fi
-        if [ "$LOC" == "$2" ]; then
+        if [[ "$LOC" == "$2" ]]; then
             continue;
         fi
         LOCATION="$LOCATION;$(mapFileToClient $LOC)"
@@ -572,10 +584,10 @@ function dsearch! {
     LOCATION=$(mapFileToClient $LOCATION)
 
     for LOC in $*; do
-        if [ "$LOC" == "$1" ]; then
+        if [[ "$LOC" == "$1" ]]; then
             continue;
         fi
-        if [ "$LOC" == "$2" ]; then
+        if [[ "$LOC" == "$2" ]]; then
             continue;
         fi
         LOCATION="$LOCATION;$(mapFileToClient $LOC)"
@@ -604,7 +616,7 @@ function getPortFromSSHCommand {
     # This regular expression extracts the "4821" from "ssh -q bla1 -p 4821 bla2"
     local ARGS=$@
     local RET=$(echo "$@" | sed "s/.*-p \+\([0-9]*\).*/\1/")
-    if [ "$ARGS" == "$RET" ]; then
+    if [[ "$ARGS" == "$RET" ]]; then
         # There was no match
         echo ""
     else
@@ -617,7 +629,7 @@ function getLoginFromSSHCommand {
     # This regular expression extracts the "NAME" from "ssh -q bla1 -l NAME bla2"
     local ARGS=$@
     local RET=$(echo "$ARGS" | sed "s/.*-l \+\([a-z,A-Z,_,0-9]*\).*/\1/")
-    if [ "$RET" == "$ARGS" ] || [ "$RET" == "" ]; then
+    if [[ "$RET" == "$ARGS"  ||  "$RET" == "" ]]; then
         # There was no match
         echo ""
     else
@@ -632,7 +644,7 @@ function getHostFromSSHCommand {
     local CLEANED=""
     local NEWCLEANED="$@"
 
-    while ! [ "$NEWCLEANED" == "$CLEANED" ]; do
+    while [[ "$NEWCLEANED" != "$CLEANED" ]]; do
         CLEANED="$NEWCLEANED"
     # This expression removes one "-x ARG" parameter
         NEWCLEANED="$(echo $CLEANED | sed "s/\(.*\)\(-[a-z,A-Z] \+[a-z,0-9]*\)\ \(.*\)/\1\3/")"
@@ -739,7 +751,7 @@ function env! {
     for FILE in $FILES; do
         FILE=$(basename $FILE)
         ID=${FILE%.sh} # This ugly construct strips away the .sh suffix
-        if [ "$ID" == "$KDEV_SHELL_ENVIRONMENT_ID" ]; then
+        if [[ "$ID" == "$KDEV_SHELL_ENVIRONMENT_ID" ]]; then
             echo "$ID   [current]"
         else
             echo "$ID"
