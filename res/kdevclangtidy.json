@@ -23,6 +23,7 @@
                 "Name[x-test]": "xxCarlos Niheltonxx"
             }
         ], 
+        "Category": "Analyzers",
         "Description": "clang-tidy provides an extensible framework for diagnosing and 
 fixing typical programming errors, like style violations, interface misuse, or bugs that 
 can be deduced via static analysis. http://clang.llvm.org/extra/clang-tidy/", 

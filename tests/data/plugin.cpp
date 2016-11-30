@@ -259,7 +259,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
             QAction* action
                 = new QAction(QIcon::fromTheme("document-new"), i18n("Check current unit with clang-tidy"), this);
             connect(action, SIGNAL(triggered(bool)), this, SLOT(runClangtidyFile()));
-            extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
+            extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
         }
     }
     return extension;

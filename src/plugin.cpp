@@ -70,7 +70,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     QAction* act_checkfile;
     act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangtidyFile()));
     act_checkfile->setStatusTip(i18n("Launches clang-tidy for current file"));
-    act_checkfile->setText(i18n("clang-tidy"));
+    act_checkfile->setText(i18n("Clang-Tidy"));
 
     /*     TODO: Uncomment this only when discover a safe way to run clang-tidy on
     the whole project.
@@ -261,7 +261,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
         if (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc")) {
             QAction* action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Check unit with clang-tidy"), this);
             connect(action, SIGNAL(triggered(bool)), this, SLOT(runClangtidyFile()));
-            extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
+            extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
         }
     }
     return extension;
