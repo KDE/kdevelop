@@ -50,4 +50,7 @@ fi
 
 export KDEV_DBUS_ID="org.kdevelop.kdevelop-$KDEV_ATTACHED_PID"
 
-bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i
+case $(basename $SHELL) in
+    zsh) OLD_ZDOTDIR="${ZDOTDIR-$HOME}" ZDOTDIR="$KDEV_BASEDIR/../share/kdevplatform/shellutils/" zsh -i ;;
+    *) bash --init-file "$KDEV_BASEDIR/kdevplatform_shell_environment.sh" -i ;;
+esac
