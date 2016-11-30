@@ -155,7 +155,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
             const QString lineString = m_document->line(line);
 
             int startColumn = 0;
-            int endColumn = lineString.length();
+            int endColumn = lineString.length() - 1;
 
             if (problem->finalLocationMode() == IProblem::TrimmedLine) {
                 while (lineString.at(startColumn++).isSpace()) {}
