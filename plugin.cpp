@@ -67,19 +67,19 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
         KDevelop::ProblemModel::Grouping |
         KDevelop::ProblemModel::CanByPassScopeFilter);
 
-    m_actionFile = new QAction(i18n("Cppcheck (Current File)"), this);
+    m_actionFile = new QAction(QIcon::fromTheme("cppcheck"), i18n("Cppcheck (Current File)"), this);
     connect(m_actionFile, &QAction::triggered, [this](){
         runCppcheck(false);
     });
     actionCollection()->addAction("cppcheck_file", m_actionFile);
 
-    m_actionProject = new QAction(i18n("Cppcheck (Current Project)"), this);
+    m_actionProject = new QAction(QIcon::fromTheme("cppcheck"), i18n("Cppcheck (Current Project)"), this);
     connect(m_actionProject, &QAction::triggered, [this](){
         runCppcheck(true);
     });
     actionCollection()->addAction("cppcheck_project", m_actionProject);
 
-    m_actionProjectItem = new QAction(i18n("Cppcheck"), this);
+    m_actionProjectItem = new QAction(QIcon::fromTheme("cppcheck"), i18n("Cppcheck"), this);
 
     connect(core()->documentController(), &KDevelop::IDocumentController::documentClosed,
             this, &Plugin::updateActions);
