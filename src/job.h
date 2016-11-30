@@ -22,7 +22,8 @@
 #ifndef JOB_H
 #define JOB_H
 
-#include "qCDebug/debug.h"
+#include "debug.h"
+
 #include <interfaces/iproblem.h>
 #include <outputview/outputexecutejob.h>
 

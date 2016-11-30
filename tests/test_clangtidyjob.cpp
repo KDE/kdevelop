@@ -23,7 +23,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include "plugin/job.h"
+#include "job.h"
 #include "test_clangtidyjob.h"
 
 using namespace KDevelop;

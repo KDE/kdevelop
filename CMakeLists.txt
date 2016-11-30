@@ -40,12 +40,14 @@ include_directories(
 )
 
 set(kdevclangtidy_PART_SRCS
-    src/qCDebug/debug.cpp
-    src/plugin/job.cpp
-    src/plugin/plugin.cpp
+    src/debug.cpp
+    src/job.cpp
+    src/plugin.cpp
+
     src/config/configgroup.cpp
     src/config/perprojectconfigpage.cpp
     src/config/clangtidypreferences.cpp
+
     src/parsers/clangtidyparser.cpp
     src/parsers/replacementparser.cpp
 )

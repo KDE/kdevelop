@@ -34,7 +34,7 @@
 #include <shell/problemmodel.h>
 
 #include "config/configgroup.h"
-#include "qCDebug/debug.h"
+#include "debug.h"
 
 class KJob;
 

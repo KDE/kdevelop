@@ -20,7 +20,8 @@
  */
 
 #include "replacementparser.h"
-#include "qCDebug/debug.h"
+#include "debug.h"
+
 // See <https://github.com/CarlosNihelton/kdev-clang-tidy/issues/1>
 #include <algorithm>
 #include <fstream>
