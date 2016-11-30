@@ -346,13 +346,6 @@ public:
         }
 
         m_parser->updateProgressData();
-
-        //We don't hide the progress-bar in updateProgressBar, so it doesn't permanently flash when a document is reparsed again and again.
-        if(m_doneParseJobs == m_maxParseJobs
-            || (m_neededPriority == BackgroundParser::BestPriority && m_weaver.queueLength() == 0))
-        {
-            emit m_parser->hideProgress(m_parser);
-        }
     }
 
     // NOTE: you must not access any of the data structures that are protected by any of the
@@ -769,6 +762,16 @@ void BackgroundParser::updateProgressData()
         if (!d->m_progressTimer.isActive()) {
             d->m_progressTimer.start();
         }
+    }
+
+    // Cancel progress updating and hide progress-bar when parsing is done.
+    if(d->m_doneParseJobs == d->m_maxParseJobs
+        || (d->m_neededPriority == BackgroundParser::BestPriority && d->m_weaver.queueLength() == 0))
+    {
+        if (d->m_progressTimer.isActive()) {
+            d->m_progressTimer.stop();
+        }
+        emit d->m_parser->hideProgress(d->m_parser);
     }
 }
 
