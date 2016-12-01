@@ -59,7 +59,7 @@
      <item>
       <widget class="QPushButton" name="diffButton">
        <property name="toolTip">
-        <string>&lt;p&gt;Show changes between the &lt;span style=&quot; font-style:italic;&quot;&gt;staging area&lt;/span&gt; (if not clean or last commit on current branch, otherwise) and the last commit on the selected branch.&lt;/p&gt;</string>
+        <string>&lt;p&gt;Show changes between the current branch (or staging area, if not empty) and the last commit on the selected branch.&lt;/p&gt;</string>
        </property>
        <property name="text">
         <string>Compare to Branch</string>
