@@ -54,8 +54,7 @@ QString GlobalConfigPage::fullName() const
 
 QIcon GlobalConfigPage::icon() const
 {
-//     return QIcon::fromTheme(QStringLiteral("emblem-checked"));
-    return QIcon::fromTheme(QStringLiteral("kdevelop"));
+    return QIcon::fromTheme(QStringLiteral("cppcheck"));
 }
 
 }
