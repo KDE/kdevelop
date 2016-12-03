@@ -1868,6 +1868,64 @@ static void verifyNoErrors(TopDUContext* top, QSet<TopDUContext*>& checked)
     }
 }
 
+void TestDUChain::testFriendDeclaration()
+{
+    TestFile file(R"(
+        struct FriendFoo
+        {
+            friend class FriendBar;
+        };
+
+        class FriendBar{};
+
+        FriendBar friendBar;
+    )", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+
+    QVERIFY(file.waitForParsed(1000));
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+        QCOMPARE(file.topContext()->localDeclarations().size(), 3);
+
+        auto friendBar = file.topContext()->localDeclarations()[1];
+        if (CINDEX_VERSION_MINOR < 37) {
+            QEXPECT_FAIL("", "Your clang version is too old", Abort);
+        }
+        QCOMPARE(friendBar->uses().size(), 1);
+        QCOMPARE(friendBar->uses().begin()->first(), RangeInRevision(3,25,3,34));
+        QCOMPARE(friendBar->uses().begin()->last(), RangeInRevision(8,8,8,17));
+    }
+}
+
+void TestDUChain::testVariadicTemplateArguments()
+{
+    TestFile file(R"(
+        template<typename T, typename... Targs>
+        class VariadicTemplate {};
+
+        VariadicTemplate<int, double, bool> variadic;
+    )", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+
+    QVERIFY(file.waitForParsed(1000));
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+        QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+
+        auto decl = file.topContext()->localDeclarations()[1];
+        QVERIFY(decl);
+        if (CINDEX_VERSION_MINOR < 37) {
+            QEXPECT_FAIL("", "Your clang version is too old", Abort);
+        }
+        QCOMPARE(decl->toString(), QStringLiteral("VariadicTemplate< int, double, bool > variadic"));
+
+        QVERIFY(decl->abstractType());
+        QCOMPARE(decl->abstractType()->toString(), QStringLiteral("VariadicTemplate< int, double, bool >"));
+    }
+}
+
 void TestDUChain::testGccCompatibility()
 {
     // TODO: make it easier to change the compiler provider for testing purposes

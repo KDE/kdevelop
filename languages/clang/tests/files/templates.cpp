@@ -36,9 +36,6 @@ class VariadicTemplate {};
 /// "type" : { "toString" : "Class_volatile_const< int >" }
 Class_volatile_const<int> instance;
 
-/// "type" : { "toString" : "VariadicTemplate< int, double, bool >", "EXPECT_FAIL": {"toString": "No way to get variadic template arguments with LibClang"} }
-VariadicTemplate<int, double, bool> variadic;
-
 /// "type" : { "toString" : "TemplateTest< const TemplateTest< int, 100 >, 30 >" }
 TemplateTest<const TemplateTest<int, 100>, 30> tst;
 
