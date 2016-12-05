@@ -230,7 +230,7 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
     const CodeModelItem& item = codeModelItems[codeModelItemIndex];
 
     // Don't insert unknown or forward declarations into the class browser
-    if ( (item.kind & CodeModelItem::Unknown) || (item.kind & CodeModelItem::ForwardDeclaration) )
+    if ( item.kind == CodeModelItem::Unknown || (item.kind & CodeModelItem::ForwardDeclaration) )
       continue;
 
     KDevelop::QualifiedIdentifier id = item.id.identifier();

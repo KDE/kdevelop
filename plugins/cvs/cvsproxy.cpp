@@ -185,7 +185,7 @@ CvsJob* CvsProxy::log(const QUrl &url, const KDevelop::VcsRevision& rev)
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -229,7 +229,7 @@ CvsJob* CvsProxy::diff(const QUrl& url,
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -250,7 +250,7 @@ CvsJob * CvsProxy::annotate(const QUrl& url, const KDevelop::VcsRevision& rev)
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -265,7 +265,7 @@ CvsJob* CvsProxy::edit(const QString& repo, const QList<QUrl>& files)
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -281,7 +281,7 @@ CvsJob* CvsProxy::unedit(const QString& repo, const QList<QUrl>& files)
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -296,7 +296,7 @@ CvsJob* CvsProxy::editors(const QString& repo, const QList<QUrl>& files)
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -314,7 +314,7 @@ CvsJob* CvsProxy::commit(const QString& repo, const QList<QUrl>& files, const QS
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -336,7 +336,7 @@ CvsJob* CvsProxy::add(const QString& repo, const QList<QUrl>& files,
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -353,7 +353,7 @@ CvsJob * CvsProxy::remove(const QString& repo, const QList<QUrl>& files)
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -386,7 +386,7 @@ CvsJob * CvsProxy::update(const QString& repo, const QList<QUrl>& files,
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -412,7 +412,7 @@ CvsJob * CvsProxy::import(const QUrl& directory,
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -451,7 +451,7 @@ CvsJob * CvsProxy::checkout(const QUrl& targetDir,
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 
@@ -474,7 +474,7 @@ CvsJob * CvsProxy::status(const QString & repo, const QList<QUrl> & files, bool 
 
         return job;
     }
-    if (job) delete job;
+    delete job;
     return nullptr;
 }
 

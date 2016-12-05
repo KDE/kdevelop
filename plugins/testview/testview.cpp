@@ -239,11 +239,10 @@ QStandardItem* TestView::itemForSuite(ITestSuite* suite)
 
 QStandardItem* TestView::itemForProject(IProject* project)
 {
-    foreach (QStandardItem* item, m_model->findItems(project->name()))
-    {
-        return item;
+    QList<QStandardItem*> itemsForProject = m_model->findItems(project->name());
+    if (!itemsForProject.isEmpty()) {
+        return itemsForProject.first();
     }
-
     return addProject(project);
 }
 

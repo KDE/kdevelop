@@ -176,7 +176,6 @@ void SourceFormatterSettings::reset()
                     l.selectedStyle = styleIter.value();
                 }
             }
-            break;
         }
         if (!l.selectedFormatter) {
             Q_ASSERT(!l.formatters.empty());

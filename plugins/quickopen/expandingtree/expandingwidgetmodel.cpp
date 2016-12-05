@@ -345,7 +345,7 @@ void ExpandingWidgetModel::setExpanded(QModelIndex idx_, bool expanded)
     }
 
     //Eventually partially expand the row
-    if( !expanded && firstColumn(treeView()->currentIndex()) == idx && !isPartiallyExpanded(idx) )
+    if( !expanded && firstColumn(treeView()->currentIndex()) == idx && (isPartiallyExpanded(idx) == ExpandingWidgetModel::ExpansionType::NotExpanded) )
       rowSelected(idx); //Partially expand the row.
 
     emit dataChanged(idx, idx);

@@ -40,7 +40,7 @@ void ExpandingTree::drawRow ( QPainter * painter, const QStyleOptionViewItem & o
   QTreeView::drawRow( painter, option, index );
 
   const ExpandingWidgetModel* eModel = qobject_cast<const ExpandingWidgetModel*>(model());
-  if( eModel && eModel->isPartiallyExpanded( index ) )
+  if( eModel && eModel->isPartiallyExpanded( index ) != ExpandingWidgetModel::ExpansionType::NotExpanded)
   {
     QRect rect = eModel->partialExpandRect( index );
     if( rect.isValid() )

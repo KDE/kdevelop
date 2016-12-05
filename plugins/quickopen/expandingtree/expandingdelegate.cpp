@@ -131,7 +131,7 @@ QSize ExpandingDelegate::sizeHint ( const QStyleOptionViewItem & option, const Q
     QSize widgetSize = widget->size();
 
     s.setHeight( widgetSize.height() + s.height() + 10 ); //10 is the sum that must match exactly the offsets used in ExpandingWidgetModel::placeExpandingWidgets
-  } else if( model()->isPartiallyExpanded( index ) ) {
+  } else if( model()->isPartiallyExpanded( index ) != ExpandingWidgetModel::ExpansionType::NotExpanded) {
     s.setHeight( s.height() + 30 + 10 );
   }
   return s;
