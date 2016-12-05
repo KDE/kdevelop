@@ -55,16 +55,12 @@ public:
 
     Path projectFile() const;
     Path developerFile() const;
+
+protected:
+    explicit ProjectConfigSkeleton( KSharedConfigPtr config );
+
 private:
-    /**
-     * There's no way in KDE4 API to find out the file that the config object
-     * was created from, so we can't apply defaults when using this
-     * constructors. Thus I'm making this private, so we can find out when
-     * this constructor is used and see if we need to add appropriate API to
-     * kdelibs
-     */
-     explicit ProjectConfigSkeleton( KSharedConfigPtr config );
-     struct ProjectConfigSkeletonPrivate * const d;
+    struct ProjectConfigSkeletonPrivate * const d;
 };
 
 }
