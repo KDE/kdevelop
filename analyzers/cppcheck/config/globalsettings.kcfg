@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+
+  <include>"parameters.h"</include>
+
+  <group name="Cppcheck">
+
+    <entry name="executablePath" key="executablePath" type="Path">
+        <default code="true">defaults::executablePath</default>
+    </entry>
+
+    <entry name="hideOutputView" key="hideOutputView" type="Bool">
+        <default code="true">defaults::hideOutputView</default>
+    </entry>
+
+    <entry name="showXmlOutput" key="showXmlOutput" type="Bool">
+        <default code="true">defaults::showXmlOutput</default>
+    </entry>
+
+  </group>
+</kcfg>
