@@ -1,2 +1,0 @@
-# Default: 4-space indentation
-* : uncrustify -l CPP -f $TMPFILE -c format.config.uncrustify.4_spaces -o $TMPFILE
