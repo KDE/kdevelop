@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevcppcheck\")
+
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
 )
