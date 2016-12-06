@@ -30,7 +30,7 @@ using namespace cppcheck;
 
 void TestCppcheckParser::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({"kdevcppcheck"});
     TestCore::initialize(Core::NoUi);
 }
 
