@@ -108,6 +108,7 @@ configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 add_subdirectory(pics)
 add_subdirectory(app)
+add_subdirectory(analyzers)
 add_subdirectory(formatters)
 add_subdirectory(languages)
 add_subdirectory(projectbuilders)
