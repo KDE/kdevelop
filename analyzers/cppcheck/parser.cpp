@@ -158,7 +158,8 @@ bool CppcheckParser::endElement(QVector<KDevelop::IProblem::Ptr>& problems)
 
     case Error:
         qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: new error elem: line: "
-                               << m_errorLines.first() << " at " << m_errorFiles.first()
+                               << (m_errorLines.isEmpty() ? "?" : QString::number(m_errorLines.first()))
+                               << " at " << (m_errorFiles.isEmpty() ? "?" : m_errorFiles.first())
                                << ", msg: " << m_errorMessage;
 
         storeError(problems);
