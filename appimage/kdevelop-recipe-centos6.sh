@@ -161,7 +161,7 @@ function build_framework
 
     cd $FRAMEWORK
     git checkout $KF5_VERSION || git checkout $KDE_APPLICATION_VERSION
-    git stash pop
+    git stash pop || true
     cd ..
 
     if [ "$FRAMEWORK" = "knotifications" ]; then
