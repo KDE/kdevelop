@@ -32,7 +32,7 @@
          <item row="2" column="0">
           <widget class="QCheckBox" name="kcfg_checkUnusedFunction">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check for unused functions. It is recommend to only enable this when the whole program is scanned&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Check for unused functions. It is recommend to only enable this when the whole program is scanned</string>
            </property>
            <property name="text">
             <string>Unused function</string>
@@ -45,7 +45,7 @@
          <item row="3" column="0">
           <widget class="QCheckBox" name="kcfg_inconclusiveAnalysis">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allow that Cppcheck reports even though the analysis is inconclusive. There are false positives with this option. Each result must be carefully investigated before you know if it is good or bad.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Allow that Cppcheck reports even though the analysis is inconclusive. There are false positives with this option. Each result must be carefully investigated before you know if it is good or bad.</string>
            </property>
            <property name="text">
             <string>Inconclusive analysis</string>
@@ -55,7 +55,7 @@
          <item row="1" column="1">
           <widget class="QCheckBox" name="kcfg_checkInformation">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable information messages&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Enable information messages</string>
            </property>
            <property name="text">
             <string>Information</string>
@@ -68,7 +68,7 @@
          <item row="2" column="1">
           <widget class="QCheckBox" name="kcfg_checkMissingInclude">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Warn if there are missing includes. For detailed information use 'check-config'&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Warn if there are missing includes. For detailed information use 'check-config'</string>
            </property>
            <property name="text">
             <string>Missing include</string>
@@ -81,7 +81,7 @@
          <item row="0" column="1">
           <widget class="QCheckBox" name="kcfg_checkPerformance">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable performance messages&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Enable performance messages</string>
            </property>
            <property name="text">
             <string>Performance</string>
@@ -94,7 +94,7 @@
          <item row="3" column="1">
           <widget class="QCheckBox" name="kcfg_forceCheck">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Force checking of files that have a lot of configurations. Error is printed if such a file is found so there is no reason to use this by default. If used together with '--max-configs=', the last option is the one that is effective.&lt;/p&gt;&lt;p&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;p&gt;Force checking of files that have a lot of configurations. Error is printed if such a file is found so there is no reason to use this by default. If used together with '--max-configs=', the last option is the one that is effective.&lt;br/&gt;&lt;br/&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;</string>
            </property>
            <property name="text">
             <string>Force checking</string>
@@ -104,7 +104,7 @@
          <item row="1" column="0">
           <widget class="QCheckBox" name="kcfg_checkPortability">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable portability messages&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Enable portability messages</string>
            </property>
            <property name="text">
             <string>Portability</string>
@@ -117,7 +117,7 @@
          <item row="0" column="0">
           <widget class="QCheckBox" name="kcfg_checkStyle">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable all coding style checks. All messages with the severities 'style', 'performance' and 'portability' are enabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Enable all coding style checks. All messages with the severities 'style', 'performance' and 'portability' are enabled.</string>
            </property>
            <property name="text">
             <string>Style</string>
@@ -130,7 +130,7 @@
          <item row="4" column="0">
           <widget class="QCheckBox" name="kcfg_checkConfig">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check Cppcheck configuration. The normal code analysis is disabled by this flag.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Check Cppcheck configuration. The normal code analysis is disabled by this flag.</string>
            </property>
            <property name="text">
             <string>Check config</string>
@@ -149,7 +149,7 @@
        <item>
         <widget class="QCheckBox" name="kcfg_useProjectIncludes">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add 'project' include directories to cppcheck arguments. This option adds only paths related with project's root and build directories.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Add 'project' include directories to cppcheck arguments. This option adds only paths related with project's root and build directories.</string>
          </property>
          <property name="text">
           <string>Use 'project' include dirs</string>
@@ -165,7 +165,7 @@
           <bool>false</bool>
          </property>
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add other, 'system' include directories to cppcheck arguments. &lt;/p&gt;&lt;p&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;p&gt;Add other, 'system' include directories to cppcheck arguments.&lt;br/&gt;&lt;br/&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;</string>
          </property>
          <property name="text">
           <string>Use 'system' include dirs</string>
@@ -239,7 +239,7 @@
            <item>
             <widget class="QLabel" name="extraLabel">
              <property name="text">
-              <string>&amp;Extra parameters:</string>
+              <string>Ex&amp;tra parameters:</string>
              </property>
              <property name="buddy">
               <cstring>kcfg_extraParameters</cstring>
@@ -349,14 +349,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KMessageWidget</class>
-   <extends>QFrame</extends>
-   <header>kmessagewidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>KFilterProxySearchLine</class>
    <extends>QWidget</extends>
    <header>kfilterproxysearchline.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QFrame</extends>
+   <header>kmessagewidget.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

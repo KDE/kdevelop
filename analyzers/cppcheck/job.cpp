@@ -53,7 +53,7 @@ Job::Job(const Parameters& params, QObject* parent)
     QString prettyName = KDevelop::ICore::self()->projectController()->prettyFileName(
         QUrl::fromLocalFile(params.checkPath),
         KDevelop::IProjectController::FormatPlain);
-    setJobName(QString("Cppcheck (%1)").arg(prettyName));
+    setJobName(i18n("Cppcheck (%1)", prettyName));
 
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);

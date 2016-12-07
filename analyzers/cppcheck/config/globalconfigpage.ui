@@ -10,9 +10,6 @@
     <height>397</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Cppcheck Settings</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="pathsGroupBox">
@@ -23,7 +20,7 @@
       <item>
        <widget class="QLabel" name="cppcheckLabel">
         <property name="text">
-         <string>Cppchec&amp;k executable</string>
+         <string>Cppchec&amp;k executable:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

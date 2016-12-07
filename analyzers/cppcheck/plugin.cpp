@@ -124,7 +124,7 @@ void Plugin::raiseProblemsView()
 void Plugin::raiseOutputView()
 {
     core()->uiController()->findToolView(
-        i18ndc("kdevstandardoutputview", "@title:window", "Test"),
+        i18nc("@title:window", "Test"),
         nullptr,
         KDevelop::IUiController::FindFlags::Raise);
 }
