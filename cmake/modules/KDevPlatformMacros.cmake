@@ -145,7 +145,7 @@ function(kdevplatform_add_plugin plugin)
 
     list(LENGTH KDEV_ADD_PLUGIN_SOURCES src_count)
     if (NOT ${src_count} GREATER 0)
-        message(FATAL_ERROR "kdevplatform_add_plugin() called without passing any source files. Please uses the SOURCES parameter.")
+        message(FATAL_ERROR "kdevplatform_add_plugin() called without passing any source files. Please use the SOURCES parameter.")
     endif()
 
     # ensure we recompile the corresponding object files when the json file changes
