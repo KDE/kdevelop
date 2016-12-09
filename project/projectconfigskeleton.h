@@ -32,17 +32,8 @@ class Path;
 class KDEVPLATFORMPROJECT_EXPORT ProjectConfigSkeleton: public KConfigSkeleton
 {
     Q_OBJECT
+
 public:
-
-    /**
-     * Constructs a new skeleton, the skeleton will write to the developer
-     * configuration file, which is by default located in projectdir/.kdev4
-     * The defaults will be set from the project file, which is in the projectdir
-     *
-     * @param configname The absolute filename of the developer configuration file
-     */
-    explicit ProjectConfigSkeleton( const QString & configname );
-
     ~ProjectConfigSkeleton() override;
 
     void setDeveloperTempFile( const QString& );
@@ -58,6 +49,14 @@ public:
 
 protected:
     explicit ProjectConfigSkeleton( KSharedConfigPtr config );
+    /**
+     * Constructs a new skeleton, the skeleton will write to the developer
+     * configuration file, which is by default located in projectdir/.kdev4
+     * The defaults will be set from the project file, which is in the projectdir
+     *
+     * @param configname The absolute filename of the developer configuration file
+     */
+    explicit ProjectConfigSkeleton( const QString & configname );
 
 private:
     struct ProjectConfigSkeletonPrivate * const d;
