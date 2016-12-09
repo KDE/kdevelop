@@ -31,6 +31,7 @@ case $_shell in
     bash)
         test -f ~/.bash_profile  && source ~/.bash_profile
         test -f /etc/bash.bashrc && source /etc/bash.bashrc
+        test -f ~/.bashrc && source ~/.bashrc
         ;;
 esac
 
