@@ -196,7 +196,7 @@ QString unquote(const QString &str, bool unescapeUnicode, char quoteCh)
         int type = 0;
         QString escSeq;
         escSeq.reserve(4);
-        // skip begining and ending quoteCh, no need for str = str.mid(1, str.length() - 2)
+        // skip beginning and ending quoteCh, no need for str = str.mid(1, str.length() - 2)
         for (int i = 1; i != str.length() - 1; i++) {
             auto ch = str[i];
             if (esc) {

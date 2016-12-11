@@ -281,7 +281,7 @@ ASBeautifier::~ASBeautifier()
  * This init() should be called every time a ABeautifier object is to start
  * beautifying a NEW source file.
  * It is called only when a new ASFormatter object is created.
- * init() recieves a pointer to a ASSourceIterator object that will be
+ * init() receives a pointer to a ASSourceIterator object that will be
  * used to iterate through the source code.
  *
  * @param iter     a pointer to the ASSourceIterator or ASStreamIterator object.
@@ -451,7 +451,7 @@ void ASBeautifier::setModeManuallySet(bool state)
 
 /**
  * set tabLength equal to indentLength.
- * This is done when tabLength is not explicitely set by
+ * This is done when tabLength is not explicitly set by
  * "indent=force-tab-x"
  *
  */
@@ -1058,7 +1058,7 @@ string ASBeautifier::beautify(const string &originalLine)
 	if (lineCommentNoBeautify || blockCommentNoBeautify || isInQuoteContinuation)
 		indentCount = spaceIndentCount = 0;
 
-	// finally, insert indentations into begining of line
+	// finally, insert indentations into beginning of line
 
 	string outBuffer = preLineWS(indentCount, spaceIndentCount) + line;
 

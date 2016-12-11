@@ -24,7 +24,7 @@
 *  to find out the standard macros, there is no "gcc -dM -E -".
 *  A trick is used to find out the standard macros. You can 
 *  exchange the compiler. The standard macros are written in
-*  a enviroment variable. This helper programm analysis this
+*  a environment variable. This helper program analysis this
 *  variable and prints the output to stdout.
 */
 

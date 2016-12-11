@@ -29,7 +29,6 @@
 #include <QTextEdit>
 #include <QTimer>
 #include <QStringList>
-#include <QStringList>
 
 namespace KDevelop {
 class IDebugSession;

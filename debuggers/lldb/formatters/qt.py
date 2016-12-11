@@ -725,7 +725,7 @@ class BasicHashFormatter(HiddenMemberProvider):
         def findNode(self, start=0):
             """Iterate through buckets, start at `start`,
                return any bucket the is not the null_node, or the null_node itself if nothing found.
-               adapted from QHashData::fisrtNode
+               adapted from QHashData::firstNode
             """
             null_node_addr = self.null_node.GetValueAsUnsigned(0)
             for idx in range(start, self.num_buckets):
@@ -1094,7 +1094,7 @@ class QUrlFormatter(HiddenMemberProvider):
             query = dataobj.GetChildMemberWithName('query')
             fragment = dataobj.GetChildMemberWithName('fragment')
             return constructEncoded(port, scheme, username, password, host, path, query, fragment)
-        # if no debug information is avaliable for Qt, try guessing the correct address
+        # if no debug information is available for Qt, try guessing the correct address
         # problem with this is that if QUrlPrivate members get changed, this fails
         addr = dataobj.GetValueAsUnsigned(0)
 
@@ -1147,7 +1147,7 @@ class QUrlFormatter(HiddenMemberProvider):
         if encodedOriginal.IsValid():
             return parseComponents(encodedOriginal)
 
-        # if no debug information is avaliable for Qt, try guessing the correct address
+        # if no debug information is available for Qt, try guessing the correct address
         # problem with this is that if QUrlPrivate members get changed, this fails
         addr = dataobj.GetValueAsUnsigned(0)
         if not validAddr(dataobj, addr):

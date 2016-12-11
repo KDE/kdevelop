@@ -271,7 +271,7 @@ void STTY::OutReceived(int f)
     }
     // Note: for some reason, n can be 0 here.
     // I can understand that non-blocking read returns 0,
-    // but I don't understand how OutRecieved can be even
+    // but I don't understand how OutReceived can be even
     // called when there's no input.
     if (n == 0 /* eof */
         || (n == -1 && errno != EAGAIN))

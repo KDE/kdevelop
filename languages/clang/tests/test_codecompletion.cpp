@@ -557,7 +557,7 @@ void TestCodeCompletion::testVirtualOverride_data()
     QTest::newRow("deep")
         << "class Foo { virtual int foo(int i); virtual int overridden(int i); };\n"
            "class Baz : Foo { };\n"
-           "class Bar : Baz \n{int overridden(int i) overriden;\n}"
+           "class Bar : Baz \n{int overridden(int i) overridden;\n}"
         << CompletionItems{{4, 1}, {"foo(int i)"}};
 
     QTest::newRow("pure")

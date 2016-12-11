@@ -725,7 +725,7 @@ MICommand *MIDebugSession::createUserCommand(const QString &cmd) const
 {
     MICommand *res = nullptr;
     if (!cmd.isEmpty() && cmd[0].isDigit()) {
-        // Add a space to the begining, so debugger won't get confused if the
+        // Add a space to the beginning, so debugger won't get confused if the
         // command starts with a number (won't mix it up with command token added)
         res = new UserCommand(MI::NonMI, " " + cmd);
     } else {

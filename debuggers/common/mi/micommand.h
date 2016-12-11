@@ -258,7 +258,7 @@ public:
 };
 
 /** Command that does nothing and can be just used to invoke
-    a user provided handler when all preceeding commands are
+    a user provided handler when all preceding commands are
     executed.
 */
 class SentinelCommand : public MICommand

@@ -25,8 +25,6 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
 
-#include "cmake-test-paths.h"
-
 #include "cmListFileLexer.h"
 #include "cmakelistsparser.h"
 #include "cmakeprojectvisitor.h"

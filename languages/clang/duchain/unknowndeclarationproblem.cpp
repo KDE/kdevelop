@@ -216,7 +216,7 @@ KDevelop::DocumentRange forwardDeclarationPosition(const QualifiedIdentifier& id
 
 /**
  * Iteratively build all levels of the current scope. A (missing) type anywhere
- * can be aribtrarily namespaced, so we create the permutations of possible
+ * can be arbitrarily namespaced, so we create the permutations of possible
  * nestings of namespaces it can currently be in,
  *
  * TODO: add detection of namespace aliases, such as 'using namespace KDevelop;'

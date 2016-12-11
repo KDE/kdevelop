@@ -41,7 +41,6 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <interfaces/iruncontroller.h>
-#include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>

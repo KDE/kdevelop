@@ -59,7 +59,7 @@ public:
     /// @return All available factories
     QVector<CompilerFactoryPointer> compilerFactories() const;
 
-    /// Checks wheter the @p compiler exist, if so returns it. Otherwise returns default compiler
+    /// Checks whether the @p compiler exist, if so returns it. Otherwise returns default compiler
     CompilerPointer checkCompilerExists( const CompilerPointer& compiler ) const;
 
 private Q_SLOTS:

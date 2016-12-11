@@ -59,7 +59,7 @@ namespace ClangUtils
     /**
      * Given a cursor representing a function, returns a vector containing the string
      * representations of the default arguments of the function which are defined at
-     * the occurance of the cursor. Note that this is not necessarily all of the default
+     * the occurence of the cursor. Note that this is not necessarily all of the default
      * arguments of the function.
      *
      * @param cursor The cursor to examine
@@ -129,7 +129,7 @@ namespace ClangUtils
 #else
         // note: according to the implementation of clang_File_isEqual, file1 and file2 can still be equal,
         // regardless of whether file1 == file2 is true or not
-        // however, we didn't see any problems with pure pointer comparisions until now, so fall back to that
+        // however, we didn't see any problems with pure pointer comparisons until now, so fall back to that
         return file1 == file2;
 #endif
     }

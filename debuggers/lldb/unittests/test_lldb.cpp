@@ -469,7 +469,7 @@ void LldbTest::testUpdateBreakpoint()
     session->stepInto();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop after step
 
-    QCOMPARE(session->currentLine(), 23-1); // at the begining of foo():23: ++i;
+    QCOMPARE(session->currentLine(), 23-1); // at the beginning of foo():23: ++i;
 
     session->addUserCommand(QString("break set --file %1 --line %2").arg(m_debugeeFileName).arg(33));
     WAIT_FOR_A_WHILE(session, 20);

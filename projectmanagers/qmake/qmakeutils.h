@@ -32,7 +32,7 @@ class IProject;
 namespace QMakeUtils {
 
 /**
- * Checks wether there's a need to run qmake for the given project item
+ * Checks whether there's a need to run qmake for the given project item
  * This is the case if no builddir has been specified, in which case
  * it asks for one.
  *

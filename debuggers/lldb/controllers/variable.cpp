@@ -59,7 +59,7 @@ void LldbVariable::refetch()
     });
 
     // update children
-    // remove all children fisrt, this will cause some gliches in the UI, but there's no good way
+    // remove all children first, this will cause some gliches in the UI, but there's no good way
     // that we can know if there's anything changed
     if (isExpanded()) {
         deleteChildren();

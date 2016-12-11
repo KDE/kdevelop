@@ -220,7 +220,7 @@ void TestBuddies::testActivation()
 
 void TestBuddies::testDisableBuddies()
 {
-/*  3. Disactivate buddy option, Activate open next to active tab
+/*  3. Deactivate buddy option, Activate open next to active tab
        Open a.cpp a.h
        Verify order (a.cpp a.h)
        Verify that a.h is activated

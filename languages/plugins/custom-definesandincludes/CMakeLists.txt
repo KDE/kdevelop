@@ -15,7 +15,7 @@ set( kdevdefinesandincludesmanager_SRCS
         kcm_widget/projectpathswidget.cpp
         kcm_widget/definesandincludesconfigpage.cpp
         kcm_widget/parserwidget.cpp
-        compilerprovider/icompiler.cpp # TODO: is this really neccessary
+        compilerprovider/icompiler.cpp # TODO: is this really necessary
     )
 
 ki18n_wrap_ui(kdevdefinesandincludesmanager_SRCS

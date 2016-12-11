@@ -40,7 +40,7 @@
 namespace KDevelop
 {
 
-// TODO: find if hiddden, than unset target model
+// TODO: find if hidden, than unset target model
 KastenToolViewWidget::KastenToolViewWidget( Kasten::AbstractToolView* toolView, QWidget* parent )
   : QWidget( parent ),
     mToolView( toolView )

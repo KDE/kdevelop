@@ -38,7 +38,6 @@
 #include <interfaces/icore.h>
 #include "cmakemanager.h"
 #include "cmakeparserutils.h"
-#include "cmakeutils.h"
 #include "cmakehelpdocumentation.h"
 #include "cmakedoc.h"
 #include "debug.h"

@@ -29,7 +29,6 @@
 #include "clangducontext.h"
 #include "macrodefinition.h"
 #include "types/classspecializationtype.h"
-#include "util/clangdebug.h"
 #include "util/clangutils.h"
 #include "util/clangtypes.h"
 

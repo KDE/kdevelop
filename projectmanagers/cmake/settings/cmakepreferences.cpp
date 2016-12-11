@@ -43,7 +43,6 @@
 #include <interfaces/iruncontroller.h>
 #include <KAboutData>
 #include <util/environmentgrouplist.h>
-#include <KLocalizedString>
 #include <QStandardPaths>
 
 using namespace KDevelop;

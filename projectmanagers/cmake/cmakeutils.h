@@ -39,7 +39,7 @@ class CMakeCacheModel;
 namespace CMake
 {
     /**
-     * Checks wether there's a need to run cmake for the given project item
+     * Checks whether there's a need to run cmake for the given project item
      * This is the case if no builddir has been specified, in which case
      * it asks for one.
      *

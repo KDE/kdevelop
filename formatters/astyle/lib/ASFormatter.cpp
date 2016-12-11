@@ -273,7 +273,7 @@ void ASFormatter::init(ASSourceIterator* si)
 }
 
 /**
- * build vectors for each programing language
+ * build vectors for each programming language
  * depending on the file extension.
  */
 void ASFormatter::buildLanguageVectors()
@@ -5022,7 +5022,7 @@ void ASFormatter::formatLineCommentOpener()
 		}
 	}
 
-	// explicitely break a line when a line comment's end is found.
+	// explicitly break a line when a line comment's end is found.
 	if (charNum + 1 == (int) currentLine.length())
 	{
 		isInLineBreak = true;
