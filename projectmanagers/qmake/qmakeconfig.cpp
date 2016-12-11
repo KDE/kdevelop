@@ -94,13 +94,13 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
         }
     }
     if (exe.isEmpty()) {
-        exe = QStandardPaths::findExecutable("qmake-qt4");
+        exe = QStandardPaths::findExecutable("qmake");
     }
     if (exe.isEmpty()) {
         exe = QStandardPaths::findExecutable("qmake-qt5");
     }
     if (exe.isEmpty()) {
-        exe = QStandardPaths::findExecutable("qmake");
+        exe = QStandardPaths::findExecutable("qmake-qt4");
     }
     Q_ASSERT(!exe.isEmpty());
     return exe;
