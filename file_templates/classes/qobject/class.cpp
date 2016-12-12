@@ -64,5 +64,4 @@ void {{ name }}::set{{ property.name|upper_first }}({{ property.type|arg_type }}
 {% endblock function_definitions %}
 
 {% block bottom %}
-#include "{{ output_file_header|cut:".h"|cut:".hpp" }}.moc"
 {% endblock bottom %}
