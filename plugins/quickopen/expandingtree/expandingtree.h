@@ -35,8 +35,8 @@ class ExpandingTree : public QTreeView {
     };
 
   protected:
-    virtual void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
-    virtual int sizeHintForColumn ( int column ) const override;
+    void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
+    int sizeHintForColumn ( int column ) const override;
 
     void drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const override;
   private:

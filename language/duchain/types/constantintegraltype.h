@@ -82,15 +82,15 @@ public:
 
   qint64 plainValue() const;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
   QString valueAsString() const;
 
-  virtual bool equals(const KDevelop::AbstractType* rhs) const override;
+  bool equals(const KDevelop::AbstractType* rhs) const override;
 
-  virtual KDevelop::AbstractType* clone() const override;
+  KDevelop::AbstractType* clone() const override;
 
-  virtual uint hash() const override;
+  uint hash() const override;
 
   enum {
     Identity = 14

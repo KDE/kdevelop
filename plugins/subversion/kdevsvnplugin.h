@@ -43,8 +43,8 @@ public:
     explicit KDevSvnPlugin(QObject *parent, const QVariantList & = QVariantList());
     virtual ~KDevSvnPlugin();
 
-    virtual QString name() const override;
-    virtual KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;
+    QString name() const override;
+    KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;
 
     // Begin:  KDevelop::IBasicVersionControl
     bool isVersionControlled(const QUrl &localLocation) override;

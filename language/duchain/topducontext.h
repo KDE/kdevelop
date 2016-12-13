@@ -129,7 +129,7 @@ public:
   bool deleting() const;
 
   /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.) can be changed
-  virtual bool inDUChain() const override;
+  bool inDUChain() const override;
   /// This flag is only used by DUChain, never change it from outside.
   void setInDuChain(bool);
 
@@ -171,7 +171,7 @@ public:
    * 
    * \note you must be holding a read but not a write chain lock when you access this function.
    */
-  virtual bool imports(const DUContext* origin, const CursorInRevision& position) const override;
+  bool imports(const DUContext* origin, const CursorInRevision& position) const override;
 
   enum {
     Identity = 4
@@ -232,7 +232,7 @@ public:
   /**
    * Recursively deletes all contained uses, declaration-indices, etc.
    */
-  virtual void deleteUsesRecursively() override;
+  void deleteUsesRecursively() override;
 
   /**
    * Returns the AST Container, that contains the AST created during parsing.
@@ -257,7 +257,7 @@ public:
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
   ///When this top-context does not own its private data, the import is added locally only to this context, not into the shared data.
-  virtual void addImportedParentContext(DUContext* context, const CursorInRevision& position = CursorInRevision(), bool anonymous=false, bool temporary=false) override;
+  void addImportedParentContext(DUContext* context, const CursorInRevision& position = CursorInRevision(), bool anonymous=false, bool temporary=false) override;
   ///Use this for mass-adding of imported contexts, it is faster than adding them individually.
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
@@ -265,24 +265,24 @@ public:
   virtual void addImportedParentContexts(const QList<QPair<TopDUContext*, CursorInRevision> >& contexts, bool temporary=false);
 
   ///When this top-context does not own its private data, the import is removed locally only from this context, not from the shared data.
-  virtual void removeImportedParentContext(DUContext* context) override;
+  void removeImportedParentContext(DUContext* context) override;
   ///Use this for mass-removing of imported contexts, it is faster than removing them individually.
   ///When this top-context does not own its private data, the import is removed locally only from this context, not from the shared data.
   virtual void removeImportedParentContexts(const QList<TopDUContext*>& contexts);
 
   ///When this top-context does not own its private data, only the local imports of this context are removed, not those from the shared data.
-  virtual void clearImportedParentContexts() override;
+  void clearImportedParentContexts() override;
   
   typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportRepository, true> IndexedRecursiveImports;
   
-  virtual QVector<Import> importedParentContexts() const override;
+  QVector<Import> importedParentContexts() const override;
   
-  virtual QVector<DUContext*> importers() const override;
+  QVector<DUContext*> importers() const override;
 
   ///Returns all currently loade importers
   virtual QList<DUContext*> loadedImporters() const;
   
-  virtual CursorInRevision importPosition(const DUContext* target) const override;
+  CursorInRevision importPosition(const DUContext* target) const override;
   
   ///Returns the set of all recursively imported top-contexts. If import-caching is used, this returns the cached set.
   ///The list also contains this context itself. This set is used to determine declaration-visibility from within this top-context.
@@ -305,7 +305,7 @@ public:
   
   bool usingImportsCache() const;
 
-  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const CursorInRevision& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth) const override;
+  bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const CursorInRevision& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth) const override;
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
 

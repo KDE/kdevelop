@@ -48,9 +48,9 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT NoFilterStrategy : public IFilterStrategy
 public:
     NoFilterStrategy();
 
-    virtual FilteredItem errorInLine(const QString& line) override;
+    FilteredItem errorInLine(const QString& line) override;
 
-    virtual FilteredItem actionInLine(const QString& line) override;
+    FilteredItem actionInLine(const QString& line) override;
 
 };
 
@@ -65,9 +65,9 @@ public:
     CompilerFilterStrategy(const QUrl& buildDir);
     virtual ~CompilerFilterStrategy();
 
-    virtual FilteredItem errorInLine(const QString& line) override;
+    FilteredItem errorInLine(const QString& line) override;
 
-    virtual FilteredItem actionInLine(const QString& line) override;
+    FilteredItem actionInLine(const QString& line) override;
 
     QVector<QString> getCurrentDirs();
 
@@ -84,9 +84,9 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT ScriptErrorFilterStrategy : public IFilterSt
 public:
     ScriptErrorFilterStrategy();
 
-    virtual FilteredItem errorInLine(const QString& line) override;
+    FilteredItem errorInLine(const QString& line) override;
 
-    virtual FilteredItem actionInLine(const QString& line) override;
+    FilteredItem actionInLine(const QString& line) override;
 
 };
 
@@ -101,8 +101,8 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT NativeAppErrorFilterStrategy : public IFilte
 public:
     NativeAppErrorFilterStrategy();
 
-    virtual FilteredItem errorInLine(const QString& line) override;
-    virtual FilteredItem actionInLine(const QString& line) override;
+    FilteredItem errorInLine(const QString& line) override;
+    FilteredItem actionInLine(const QString& line) override;
 };
 
 /**
@@ -114,9 +114,9 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT StaticAnalysisFilterStrategy : public IFilte
 public:
     StaticAnalysisFilterStrategy();
 
-    virtual FilteredItem errorInLine(const QString& line) override;
+    FilteredItem errorInLine(const QString& line) override;
 
-    virtual FilteredItem actionInLine(const QString& line) override;
+    FilteredItem actionInLine(const QString& line) override;
 
 };
 

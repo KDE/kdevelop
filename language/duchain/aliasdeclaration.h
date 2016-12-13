@@ -64,7 +64,7 @@ public:
    *
    * \param type ignored type
    */
-  virtual void setAbstractType(AbstractType::Ptr type) override;
+  void setAbstractType(AbstractType::Ptr type) override;
 
   /**
    * Set the declaration that is aliased by this declaration.
@@ -80,14 +80,14 @@ public:
    */
   IndexedDeclaration aliasedDeclaration() const;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
   enum {
     Identity = 6
   };
   
 private:
-  virtual Declaration* clonePrivate() const override;
+  Declaration* clonePrivate() const override;
   DUCHAIN_DECLARE_DATA(AliasDeclaration)
 };
 }

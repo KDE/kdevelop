@@ -97,7 +97,7 @@ protected:
 
   DUCHAIN_DECLARE_DATA(ClassMemberDeclaration)
 private:
-  virtual Declaration* clonePrivate() const override;
+  Declaration* clonePrivate() const override;
 
 };
 }

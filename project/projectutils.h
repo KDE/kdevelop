@@ -40,7 +40,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectItemContextImpl : public ProjectItemCont
 public:
     explicit ProjectItemContextImpl(const QList<ProjectBaseItem*>& items);
 
-    virtual QList<QUrl> urls() const override;
+    QList<QUrl> urls() const override;
 
 private:
     Q_DISABLE_COPY(ProjectItemContextImpl)

@@ -97,18 +97,18 @@ public:
 
   bool isFunctionDeclaration() const override;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual void setAbstractType(AbstractType::Ptr type) override;
+  void setAbstractType(AbstractType::Ptr type) override;
 
-  virtual Declaration* clonePrivate() const override;
+  Declaration* clonePrivate() const override;
   
-  virtual uint additionalIdentity() const override;
+  uint additionalIdentity() const override;
   
-  virtual const IndexedString* defaultParameters() const override;
-  virtual unsigned int defaultParametersSize() const override;
-  virtual void addDefaultParameter(const IndexedString& str) override;
-  virtual void clearDefaultParameters() override;
+  const IndexedString* defaultParameters() const override;
+  unsigned int defaultParametersSize() const override;
+  void addDefaultParameter(const IndexedString& str) override;
+  void clearDefaultParameters() override;
   
   enum {
     Identity = 14

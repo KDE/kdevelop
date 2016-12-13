@@ -44,15 +44,15 @@ public:
 
   typedef TypePtr<EnumeratorType> Ptr;
 
-  virtual bool equals(const KDevelop::AbstractType* rhs) const override;
+  bool equals(const KDevelop::AbstractType* rhs) const override;
 
-  virtual KDevelop::AbstractType* clone() const override;
+  KDevelop::AbstractType* clone() const override;
 
-  virtual uint hash() const override;
+  uint hash() const override;
 
-  virtual WhichType whichType() const override;
+  WhichType whichType() const override;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
   enum {
     Identity = 20

@@ -129,7 +129,7 @@ public:
   };
 
 private:
-  virtual KDevelop::Declaration* clonePrivate() const override;
+  KDevelop::Declaration* clonePrivate() const override;
   DUCHAIN_DECLARE_DATA(ClassDeclaration)
 };
 

@@ -93,15 +93,15 @@ public:
    * TODO: think of a way to make @c toString work properly for custom data types
    *       right now you need to create a custom type and overload it...
    */
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual uint hash() const override;
+  uint hash() const override;
 
-  virtual WhichType whichType() const override;
+  WhichType whichType() const override;
 
-  virtual AbstractType* clone() const override;
+  AbstractType* clone() const override;
 
-  virtual bool equals(const AbstractType* rhs) const override;
+  bool equals(const AbstractType* rhs) const override;
 
   enum {
     Identity = 2
@@ -110,7 +110,7 @@ public:
   typedef IntegralTypeData Data;
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const override;
+  void accept0 (TypeVisitor *v) const override;
 
   TYPE_DECLARE_DATA(IntegralType)
 };

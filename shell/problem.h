@@ -86,7 +86,7 @@ public:
     void addDiagnostic(const Ptr &diagnostic) override;
     void clearDiagnostics() override;
 
-    virtual QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const override;
+    QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const override;
 
 private:
     QScopedPointer<DetectedProblemPrivate> d;

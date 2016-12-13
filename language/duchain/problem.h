@@ -214,7 +214,7 @@ public:
      /**
      * If this problem can be solved, this may return an assistant for the solution.
      */
-    virtual QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const override;
+    QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const override;
 
     enum {
         Identity = 15

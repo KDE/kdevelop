@@ -48,7 +48,7 @@ public:
                                         const QString& sessionId,
                                         const SessionRunInfo& runInfo );
 
-    virtual QString id() override;
+    QString id() override;
 
     virtual ~SessionLock();
 

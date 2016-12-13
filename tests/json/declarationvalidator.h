@@ -33,8 +33,8 @@ public:
   virtual ~DeclarationValidator();
 
   virtual bool testsPassed();
-  virtual void visit(DUContext*) override;
-  virtual void visit(Declaration *declaration) override;
+  void visit(DUContext*) override;
+  void visit(Declaration *declaration) override;
 private:
   Q_DISABLE_COPY(DeclarationValidator)
   const QScopedPointer<DeclarationValidatorPrivate> d;

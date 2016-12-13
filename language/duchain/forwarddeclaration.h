@@ -58,7 +58,7 @@ public:
   /// Destructor.
   virtual ~ForwardDeclaration();
 
-  virtual bool isForwardDeclaration() const override;
+  bool isForwardDeclaration() const override;
 
   /**
    * Resolved the forward-declaration using the given import-trace.
@@ -71,9 +71,9 @@ public:
    * */
   virtual Declaration* resolve(const TopDUContext* topContext) const;
 
-  virtual DUContext * logicalInternalContext(const TopDUContext* topContext) const override;
+  DUContext * logicalInternalContext(const TopDUContext* topContext) const override;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
   enum {
     Identity = 10
@@ -82,7 +82,7 @@ public:
   typedef Declaration BaseClass;
   
 private:
-  virtual Declaration* clonePrivate() const override;
+  Declaration* clonePrivate() const override;
   DUCHAIN_DECLARE_DATA(ForwardDeclaration)
 };
 

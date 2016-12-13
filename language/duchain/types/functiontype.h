@@ -103,11 +103,11 @@ public:
    */
   void removeArgument(int i);
 
-  virtual AbstractType* clone() const override;
+  AbstractType* clone() const override;
 
-  virtual bool equals(const AbstractType* rhs) const override;
+  bool equals(const AbstractType* rhs) const override;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
   /**
    * This function creates a string that represents the requested part of
@@ -118,11 +118,11 @@ public:
    */
   virtual QString partToString( SignaturePart sigPart ) const;
 
-  virtual uint hash() const override;
+  uint hash() const override;
 
-  virtual WhichType whichType() const override;
+  WhichType whichType() const override;
 
-  virtual void exchangeTypes( TypeExchanger* exchanger ) override;
+  void exchangeTypes( TypeExchanger* exchanger ) override;
 
   enum {
     Identity = 5
@@ -131,7 +131,7 @@ public:
   typedef FunctionTypeData Data;
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const override;
+  void accept0 (TypeVisitor *v) const override;
 
   TYPE_DECLARE_DATA(FunctionType)
 };

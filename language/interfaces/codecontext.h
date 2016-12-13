@@ -61,7 +61,7 @@ public:
     
     int type() const override;
 
-    virtual QList<QUrl> urls() const override;
+    QList<QUrl> urls() const override;
     
 protected:
     void setContext(IndexedDUContext context);
@@ -92,7 +92,7 @@ public:
     virtual ~DeclarationContext();
 
     /// Returns the type of this context.
-    virtual int type() const override;
+    int type() const override;
 
     ///The referenced declaration
     IndexedDeclaration declaration() const;

@@ -72,22 +72,22 @@ public:
 
     virtual ~Core();
 
-    virtual IUiController *uiController() override;
-    virtual IPluginController *pluginController() override;
-    virtual IProjectController *projectController() override;
-    virtual ILanguageController *languageController() override;
-    virtual IPartController *partController() override;
-    virtual IDocumentController *documentController() override;
-    virtual IRunController *runController() override;
-    virtual ISourceFormatterController* sourceFormatterController() override;
-    virtual ISelectionController* selectionController() override;
-    virtual IDocumentationController* documentationController() override;
-    virtual IDebugController* debugController() override;
-    virtual ITestController* testController() override;
-    virtual ISession *activeSession() override;
-    virtual ISessionLock::Ptr activeSessionLock() override;
+    IUiController *uiController() override;
+    IPluginController *pluginController() override;
+    IProjectController *projectController() override;
+    ILanguageController *languageController() override;
+    IPartController *partController() override;
+    IDocumentController *documentController() override;
+    IRunController *runController() override;
+    ISourceFormatterController* sourceFormatterController() override;
+    ISelectionController* selectionController() override;
+    IDocumentationController* documentationController() override;
+    IDebugController* debugController() override;
+    ITestController* testController() override;
+    ISession *activeSession() override;
+    ISessionLock::Ptr activeSessionLock() override;
 
-    virtual KAboutData aboutData() const override;
+    KAboutData aboutData() const override;
 
     /// The following methods may only be used within the shell.
 
@@ -111,7 +111,7 @@ public:
 
     void cleanup();
 
-    virtual bool shuttingDown() const override;
+    bool shuttingDown() const override;
 
     Core::Setup setupFlags() const;
 

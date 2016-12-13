@@ -78,25 +78,25 @@ public:
   /// you must override to collect all types.
   using TypeVisitor::visit;
 
-  virtual bool preVisit (const AbstractType *) override ;
-  virtual void postVisit (const AbstractType *) override ;
+  bool preVisit (const AbstractType *) override ;
+  void postVisit (const AbstractType *) override ;
 
-  virtual void visit (const IntegralType *) override ;
+  void visit (const IntegralType *) override ;
 
-  virtual bool visit (const PointerType *) override ;
-  virtual void endVisit (const PointerType *) override ;
+  bool visit (const PointerType *) override ;
+  void endVisit (const PointerType *) override ;
 
-  virtual bool visit (const ReferenceType *) override ;
-  virtual void endVisit (const ReferenceType *) override ;
+  bool visit (const ReferenceType *) override ;
+  void endVisit (const ReferenceType *) override ;
 
-  virtual bool visit (const FunctionType *) override ;
-  virtual void endVisit (const FunctionType *) override ;
+  bool visit (const FunctionType *) override ;
+  void endVisit (const FunctionType *) override ;
 
-  virtual bool visit (const StructureType *) override ;
-  virtual void endVisit (const StructureType *) override ;
+  bool visit (const StructureType *) override ;
+  void endVisit (const StructureType *) override ;
 
-  virtual bool visit (const ArrayType *) override ;
-  virtual void endVisit (const ArrayType *) override ;
+  bool visit (const ArrayType *) override ;
+  void endVisit (const ArrayType *) override ;
 };
 
 /**
@@ -120,7 +120,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeExchanger {
 class KDEVPLATFORMLANGUAGE_EXPORT SimpleTypeExchanger : public TypeExchanger {
   public:
     SimpleTypeExchanger(AbstractType::Ptr replace, AbstractType::Ptr replaceWith);
-    virtual AbstractType::Ptr exchange( const AbstractType::Ptr& ) override ;
+    AbstractType::Ptr exchange( const AbstractType::Ptr& ) override ;
   private:
     AbstractType::Ptr m_replace, m_replaceWith;
 };

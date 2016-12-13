@@ -50,15 +50,15 @@ public:
   /// Destructor
   virtual ~StructureType();
 
-  virtual AbstractType* clone() const override;
+  AbstractType* clone() const override;
 
-  virtual bool equals(const AbstractType* rhs) const override;
+  bool equals(const AbstractType* rhs) const override;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual uint hash() const override;
+  uint hash() const override;
 
-  virtual WhichType whichType() const override;
+  WhichType whichType() const override;
 
   //virtual void exchangeTypes(KDevelop::TypeExchanger*);
 
@@ -69,7 +69,7 @@ public:
   typedef StructureTypeData Data;
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const override;
+  void accept0 (TypeVisitor *v) const override;
 
   TYPE_DECLARE_DATA(StructureType)
 };

@@ -65,11 +65,11 @@ public :
         return m_modelList.data();
     }
 
-    virtual QString name() const override {
+    QString name() const override {
       return "diff";
     }
 
-    virtual KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &) override {
+    KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &) override {
       return nullptr;
     }
 

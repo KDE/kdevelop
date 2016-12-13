@@ -88,7 +88,7 @@ public:
   /// Uses the given data
   explicit Declaration( DeclarationData & dd );
 
-  virtual TopDUContext* topContext() const override;
+  TopDUContext* topContext() const override;
 
   /**
    * Determine whether this declaration is a forward declaration.
