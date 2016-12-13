@@ -46,8 +46,6 @@ ProjectConfigSkeleton::ProjectConfigSkeleton( const QString & configname )
 ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfigPtr config )
         : KConfigSkeleton( config ), d( new ProjectConfigSkeletonPrivate )
 {
-    // FIXME: Check if that does the right thing.
-    // https://phabricator.kde.org/D3386 broke source compat in kconfig, thus requiring us to make this ctor public
     Q_ASSERT(config);
     d->m_developerTempFile = config->name();
 }

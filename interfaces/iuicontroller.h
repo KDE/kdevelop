@@ -98,7 +98,7 @@ public:
     virtual ~IUiController();
 
     enum SwitchMode {
-        ThisWindow /**< indicates that the area switch should be in the this window */,
+        ThisWindow /**< indicates that the area switch should be in this window */,
         NewWindow  /**< indicates that the area switch should be using a new window */
     };
 
