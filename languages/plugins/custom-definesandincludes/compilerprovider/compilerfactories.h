@@ -29,31 +29,31 @@
 class ClangFactory : public ICompilerFactory
 {
 public:
-    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
+    CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
 
-    virtual QString name() const override;
+    QString name() const override;
 
-    virtual void registerDefaultCompilers(CompilerProvider* provider) const override;
+    void registerDefaultCompilers(CompilerProvider* provider) const override;
 };
 
 class GccFactory : public ICompilerFactory
 {
 public:
-    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
+    CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
 
-    virtual QString name() const override;
+    QString name() const override;
 
-    virtual void registerDefaultCompilers(CompilerProvider* provider) const override;
+    void registerDefaultCompilers(CompilerProvider* provider) const override;
 };
 
 class MsvcFactory : public ICompilerFactory
 {
 public:
-    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
+    CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
 
-    virtual QString name() const override;
+    QString name() const override;
 
-    virtual void registerDefaultCompilers(CompilerProvider* provider) const override;
+    void registerDefaultCompilers(CompilerProvider* provider) const override;
 };
 
 #endif // COMPILERFACTORIES_H

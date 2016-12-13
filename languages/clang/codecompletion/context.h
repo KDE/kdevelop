@@ -54,7 +54,7 @@ public:
                                const QString& followingText = {});
     ~ClangCodeCompletionContext();
 
-    virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
+    QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
 
     QList<KDevelop::CompletionTreeElementPointer> ungroupedElements() override;
 

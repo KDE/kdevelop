@@ -34,18 +34,18 @@ class DebugVisitor:  public DefaultVisitor
 
 public:
     DebugVisitor(QMake::Parser* parser);
-    virtual void visitArgumentList( ArgumentListAst *node ) override;
-    virtual void visitFunctionArguments( FunctionArgumentsAst *node ) override;
-    virtual void visitOrOperator( OrOperatorAst *node ) override;
-    virtual void visitItem( ItemAst *node ) override;
-    virtual void visitScope( ScopeAst *node ) override;
-    virtual void visitOp( OpAst *node ) override;
-    virtual void visitProject( ProjectAst *node ) override;
-    virtual void visitScopeBody( ScopeBodyAst *node ) override;
-    virtual void visitStatement( StatementAst *node ) override;
-    virtual void visitValue( ValueAst *node ) override;
-    virtual void visitValueList( ValueListAst *node ) override;
-    virtual void visitVariableAssignment( VariableAssignmentAst *node ) override;
+    void visitArgumentList( ArgumentListAst *node ) override;
+    void visitFunctionArguments( FunctionArgumentsAst *node ) override;
+    void visitOrOperator( OrOperatorAst *node ) override;
+    void visitItem( ItemAst *node ) override;
+    void visitScope( ScopeAst *node ) override;
+    void visitOp( OpAst *node ) override;
+    void visitProject( ProjectAst *node ) override;
+    void visitScopeBody( ScopeBodyAst *node ) override;
+    void visitStatement( StatementAst *node ) override;
+    void visitValue( ValueAst *node ) override;
+    void visitValueList( ValueListAst *node ) override;
+    void visitVariableAssignment( VariableAssignmentAst *node ) override;
     QString getTokenInfo(qint64 idx);
     QString getIndent();
 private:

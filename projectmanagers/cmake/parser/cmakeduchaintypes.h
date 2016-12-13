@@ -39,9 +39,9 @@ class KDEVCMAKECOMMON_EXPORT TargetType : public KDevelop::AbstractType
         TargetType(TargetType& rhs);
         TargetType(KDevelop::AbstractTypeData& dd);
 
-        virtual void accept0(KDevelop::TypeVisitor* v) const override;
-        virtual AbstractType* clone() const override;
-        virtual bool equals(const AbstractType* rhs) const override;
+        void accept0(KDevelop::TypeVisitor* v) const override;
+        AbstractType* clone() const override;
+        bool equals(const AbstractType* rhs) const override;
         
     private:
         TYPE_DECLARE_DATA(TargetType)

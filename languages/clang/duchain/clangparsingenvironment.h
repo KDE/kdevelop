@@ -33,7 +33,7 @@ class KDEVCLANGPRIVATE_EXPORT ClangParsingEnvironment : public KDevelop::Parsing
 {
 public:
     virtual ~ClangParsingEnvironment() = default;
-    virtual int type() const override;
+    int type() const override;
 
     /**
      * Sets the list of project paths.

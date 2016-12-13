@@ -39,10 +39,10 @@ public:
     ClangParsingEnvironmentFile(ClangParsingEnvironmentFileData& data);
     ~ClangParsingEnvironmentFile();
 
-    virtual bool needsUpdate(const KDevelop::ParsingEnvironment* environment = nullptr) const override;
-    virtual int type() const override;
+    bool needsUpdate(const KDevelop::ParsingEnvironment* environment = nullptr) const override;
+    int type() const override;
 
-    virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const override;
+    bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const override;
 
     void setEnvironment(const ClangParsingEnvironment& environment);
 

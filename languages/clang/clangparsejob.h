@@ -47,9 +47,9 @@ public:
     };
 
 protected:
-    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
 
-    virtual const KDevelop::ParsingEnvironment* environment() const override;
+    const KDevelop::ParsingEnvironment* environment() const override;
 
 private:
     QExplicitlySharedDataPointer<ParseSessionData> createSessionData() const;

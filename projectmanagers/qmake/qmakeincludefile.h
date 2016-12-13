@@ -29,10 +29,10 @@ public:
     explicit QMakeIncludeFile( const QString& incfile, QMakeFile* parent,
                                const VariableMap& variables );
 
-    virtual QString pwd() const override;
-    virtual QString outPwd() const override;
-    virtual QString proFile() const override;
-    virtual QString proFilePwd() const override;
+    QString pwd() const override;
+    QString outPwd() const override;
+    QString proFile() const override;
+    QString proFilePwd() const override;
 
 private:
     QMakeFile* m_parent;

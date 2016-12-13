@@ -39,7 +39,7 @@ public:
     explicit QMakeFileVisitor(const QMakeVariableResolver* resolver, QMakeFile* baseFile);
     virtual ~QMakeFileVisitor();
 
-    virtual QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const override;
+    QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const override;
 
     // use this before visiting a file to set the default variables
     void setVariables(const VariableMap& vars);
@@ -49,8 +49,8 @@ public:
     QStringList visitMacro(QMake::ScopeBodyAST* node, const QStringList& arguments);
 
 protected:
-    virtual void visitAssignment(QMake::AssignmentAST* node) override;
-    virtual void visitFunctionCall(QMake::FunctionCallAST* node) override;
+    void visitAssignment(QMake::AssignmentAST* node) override;
+    void visitFunctionCall(QMake::FunctionCallAST* node) override;
 
 private:
     QStringList resolveVariables( const QString& value ) const;

@@ -36,7 +36,7 @@ class KDEVQMLJSCOMPLETION_EXPORT CodeCompletionContext : public KDevelop::CodeCo
 public:
     CodeCompletionContext(const KDevelop::DUContextPointer& context, const QString& text,
                           const KDevelop::CursorInRevision& position, int depth = 0);
-    virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
+    QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
 
     KDevelop::AbstractType::Ptr typeToMatch() const;
 

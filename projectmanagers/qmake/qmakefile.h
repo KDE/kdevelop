@@ -56,7 +56,7 @@ public:
 
     bool containsVariable( const QString& ) const;
 
-    virtual QStringList resolveVariable( const QString& variable, VariableInfo::VariableType type) const override;
+    QStringList resolveVariable( const QString& variable, VariableInfo::VariableType type) const override;
 
     /// required for proper build-dir resolution
     void setProject(KDevelop::IProject* project);

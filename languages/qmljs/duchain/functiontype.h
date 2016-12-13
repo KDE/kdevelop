@@ -47,9 +47,9 @@ public:
     FunctionType(Data& data);
     virtual ~FunctionType();
 
-    virtual KDevelop::AbstractType* clone() const override;
-    virtual QString toString() const override;
-    virtual uint hash() const override;
+    KDevelop::AbstractType* clone() const override;
+    QString toString() const override;
+    uint hash() const override;
 
     enum {
         Identity = 30

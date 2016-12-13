@@ -35,8 +35,8 @@ public:
                                  KDevelop::AbstractNavigationContext* previousContext = nullptr);
 
 protected:
-    virtual void htmlIdentifiedType(KDevelop::AbstractType::Ptr type, const KDevelop::IdentifiedType* idType) override;
-    virtual void eventuallyMakeTypeLinks(KDevelop::AbstractType::Ptr type) override;
+    void htmlIdentifiedType(KDevelop::AbstractType::Ptr type, const KDevelop::IdentifiedType* idType) override;
+    void eventuallyMakeTypeLinks(KDevelop::AbstractType::Ptr type) override;
 };
 
 }

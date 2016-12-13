@@ -30,11 +30,11 @@ class HelpNetworkReply : public QNetworkReply
 	public:
 		HelpNetworkReply(const QNetworkRequest &request, const QByteArray &fileData, const QString &mimeType);
 		
-		virtual void abort() override {}
-		virtual qint64 bytesAvailable() const override { return data.length() + QNetworkReply::bytesAvailable(); }
+		void abort() override {}
+		qint64 bytesAvailable() const override { return data.length() + QNetworkReply::bytesAvailable(); }
 		
 	protected:
-		virtual qint64 readData(char *data, qint64 maxlen) override;
+		qint64 readData(char *data, qint64 maxlen) override;
 		
 	private:
 		QByteArray data;

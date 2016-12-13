@@ -39,7 +39,7 @@ public:
 
     void setSymbol(const KDevelop::QualifiedIdentifier& identifier);
 
-    virtual KDevelop::IAssistant::Ptr solutionAssistant() const override;
+    KDevelop::IAssistant::Ptr solutionAssistant() const override;
 
 private:
     KDevelop::QualifiedIdentifier m_identifier;

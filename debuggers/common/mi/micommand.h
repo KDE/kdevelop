@@ -84,8 +84,8 @@ public:
 
     FunctionCommandHandler(const Function& callback, CommandFlags flags = nullptr);
 
-    virtual void handle(const ResultRecord&) override;
-    virtual bool handlesError() override;
+    void handle(const ResultRecord&) override;
+    bool handlesError() override;
 
 private:
     CommandFlags _flags;

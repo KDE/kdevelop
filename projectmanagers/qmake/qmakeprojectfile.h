@@ -61,7 +61,7 @@ public:
     QMakeMkSpecs* mkSpecs() const;
     void setQMakeCache( QMakeCache* cache );
     QMakeCache* qmakeCache() const;
-    virtual QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const override;
+    QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const override;
     QList< DefinePair > defines() const;
 
     /// current pwd, e.g. absoluteDir even for included files

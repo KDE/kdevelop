@@ -43,11 +43,11 @@ public:
 
     KDevelop::AbstractType::Ptr currentArgumentType() const;
 
-    virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
-    virtual KDevelop::DeclarationPointer declaration() const override;
-    virtual int argumentHintDepth() const override;
-    virtual int inheritanceDepth() const override;
-    virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const override;
+    QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
+    KDevelop::DeclarationPointer declaration() const override;
+    int argumentHintDepth() const override;
+    int inheritanceDepth() const override;
+    KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const override;
 
 private:
     KDevelop::DeclarationPointer m_declaration;

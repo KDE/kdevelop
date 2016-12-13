@@ -48,8 +48,8 @@ public:
     };
     
     CustomBuildJob( CustomBuildSystem*, KDevelop::ProjectBaseItem*, CustomBuildSystemTool::ActionType t );
-    virtual void start() override;
-    virtual bool doKill() override;
+    void start() override;
+    bool doKill() override;
 
     void setInstallPrefix(const QUrl &installPrefix) { this->installPrefix=installPrefix; }
 

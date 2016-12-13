@@ -33,18 +33,18 @@ public:
     QVector<GroupsName> namesOfRegisterGroups() const override;
 
 public slots:
-    virtual void updateRegisters(const GroupsName& group = GroupsName()) override;
+    void updateRegisters(const GroupsName& group = GroupsName()) override;
 
 protected:
     RegisterControllerGeneral_x86(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
 
-    virtual RegistersGroup registersFromGroup(const GroupsName& group) const override;
+    RegistersGroup registersFromGroup(const GroupsName& group) const override;
 
-    virtual QStringList registerNamesForGroup(const GroupsName& group) const override;
+    QStringList registerNamesForGroup(const GroupsName& group) const override;
 
-    virtual void updateValuesForRegisters(RegistersGroup* registers) const override;
+    void updateValuesForRegisters(RegistersGroup* registers) const override;
 
-    virtual void setRegisterValueForGroup(const GroupsName& group, const Register& reg) override;
+    void setRegisterValueForGroup(const GroupsName& group, const Register& reg) override;
 
     enum X86RegisterGroups {General, Flags, FPU, XMM, Segment, LAST_REGISTER};
 

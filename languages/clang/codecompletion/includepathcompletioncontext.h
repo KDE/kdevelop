@@ -37,7 +37,7 @@ public:
                                  const KTextEditor::Cursor& position,
                                  const QString& text);
 
-    virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
+    QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
 
     virtual ~IncludePathCompletionContext() = default;
 

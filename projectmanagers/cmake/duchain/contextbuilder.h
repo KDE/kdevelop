@@ -29,11 +29,11 @@ typedef QListIterator<CMakeFunctionDesc> CMakeContentIterator;
 class ContextBuilder : public KDevelop::AbstractContextBuilder<CMakeContentIterator, CMakeFunctionDesc>
 {
 public:
-    virtual KDevelop::DUContext* contextFromNode(CMakeContentIterator* node) override;
-    virtual KDevelop::RangeInRevision editorFindRange(CMakeContentIterator* fromNode, CMakeContentIterator* toNode) override;
-    virtual KDevelop::QualifiedIdentifier identifierForNode(CMakeFunctionDesc* node) override;
-    virtual void setContextOnNode(CMakeContentIterator* node, KDevelop::DUContext* context) override;
-    virtual KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range, KDevelop::ParsingEnvironmentFile* file = nullptr) override;
+    KDevelop::DUContext* contextFromNode(CMakeContentIterator* node) override;
+    KDevelop::RangeInRevision editorFindRange(CMakeContentIterator* fromNode, CMakeContentIterator* toNode) override;
+    KDevelop::QualifiedIdentifier identifierForNode(CMakeFunctionDesc* node) override;
+    void setContextOnNode(CMakeContentIterator* node, KDevelop::DUContext* context) override;
+    KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range, KDevelop::ParsingEnvironmentFile* file = nullptr) override;
 };
 
 #endif // CONTEXTBUILDER_H

@@ -36,8 +36,8 @@ public:
                            const KDevelop::DocumentCursor& expansionLocation = KDevelop::DocumentCursor::invalid());
     ~MacroNavigationContext();
 
-    virtual QString html(bool shorten) override;
-    virtual QString name() const override;
+    QString html(bool shorten) override;
+    QString name() const override;
 
 private:
     QString retrievePreprocessedBody(const KDevelop::DocumentCursor& expansionLocation) const;

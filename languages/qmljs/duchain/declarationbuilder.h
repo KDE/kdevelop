@@ -50,7 +50,7 @@ public:
     virtual KDevelop::ReferencedTopDUContext build(const KDevelop::IndexedString& url,
                                                    QmlJS::AST::Node* node,
                                                    KDevelop::ReferencedTopDUContext updateContext = KDevelop::ReferencedTopDUContext()) override;
-    virtual void startVisiting(QmlJS::AST::Node* node) override;
+    void startVisiting(QmlJS::AST::Node* node) override;
 
 protected:
     using Visitor::visit;
@@ -72,36 +72,36 @@ protected:
     void declareParameters(Node* node, QStringRef Node::*typeAttribute);
     void endVisitFunction();    // Set the return type of the function to void if no return statement has been encountered
 
-    virtual bool visit(QmlJS::AST::FunctionDeclaration* node) override;
-    virtual bool visit(QmlJS::AST::FunctionExpression* node) override;
-    virtual bool visit(QmlJS::AST::FormalParameterList* node) override;
-    virtual bool visit(QmlJS::AST::UiParameterList* node) override;
-    virtual bool visit(QmlJS::AST::ReturnStatement* node) override;
-    virtual void endVisit(QmlJS::AST::FunctionDeclaration* node) override;
-    virtual void endVisit(QmlJS::AST::FunctionExpression* node) override;
+    bool visit(QmlJS::AST::FunctionDeclaration* node) override;
+    bool visit(QmlJS::AST::FunctionExpression* node) override;
+    bool visit(QmlJS::AST::FormalParameterList* node) override;
+    bool visit(QmlJS::AST::UiParameterList* node) override;
+    bool visit(QmlJS::AST::ReturnStatement* node) override;
+    void endVisit(QmlJS::AST::FunctionDeclaration* node) override;
+    void endVisit(QmlJS::AST::FunctionExpression* node) override;
 
     // Variables
     /// NOTE: this visits the @p base node and its children
     void inferArgumentsFromCall(QmlJS::AST::Node* base,
                                 QmlJS::AST::ArgumentList* arguments);
-    virtual bool visit(QmlJS::AST::VariableDeclaration* node) override;
-    virtual void endVisit(QmlJS::AST::VariableDeclaration* node) override;
-    virtual bool visit(QmlJS::AST::BinaryExpression* node) override;
-    virtual bool visit(QmlJS::AST::CallExpression* node) override;
-    virtual bool visit(QmlJS::AST::NewMemberExpression* node) override;
+    bool visit(QmlJS::AST::VariableDeclaration* node) override;
+    void endVisit(QmlJS::AST::VariableDeclaration* node) override;
+    bool visit(QmlJS::AST::BinaryExpression* node) override;
+    bool visit(QmlJS::AST::CallExpression* node) override;
+    bool visit(QmlJS::AST::NewMemberExpression* node) override;
 
     // Arrays
     void declareFieldMember(const KDevelop::DeclarationPointer& declaration,
                             const QString& member,
                             QmlJS::AST::Node* node,
                             const QmlJS::AST::SourceLocation& location);
-    virtual bool visit(QmlJS::AST::FieldMemberExpression* node) override;
-    virtual bool visit(QmlJS::AST::ArrayMemberExpression* node) override;
+    bool visit(QmlJS::AST::FieldMemberExpression* node) override;
+    bool visit(QmlJS::AST::ArrayMemberExpression* node) override;
 
-    virtual bool visit(QmlJS::AST::ObjectLiteral* node) override;
-    virtual bool visit(QmlJS::AST::PropertyNameAndValue* node) override;
-    virtual void endVisit(QmlJS::AST::PropertyNameAndValue* node) override;
-    virtual void endVisit(QmlJS::AST::ObjectLiteral* node) override;
+    bool visit(QmlJS::AST::ObjectLiteral* node) override;
+    bool visit(QmlJS::AST::PropertyNameAndValue* node) override;
+    void endVisit(QmlJS::AST::PropertyNameAndValue* node) override;
+    void endVisit(QmlJS::AST::ObjectLiteral* node) override;
 
     // plugin.qmltypes
     void declareComponent(QmlJS::AST::UiObjectInitializer* node,
@@ -132,18 +132,18 @@ protected:
     // UI
     void importDirectory(const QString& directory, QmlJS::AST::UiImport* node);
     void importModule(QmlJS::AST::UiImport* node);
-    virtual bool visit(QmlJS::AST::UiImport* node) override;
+    bool visit(QmlJS::AST::UiImport* node) override;
 
-    virtual bool visit(QmlJS::AST::UiObjectDefinition* node) override;
-    virtual void endVisit(QmlJS::AST::UiObjectDefinition* node) override;
+    bool visit(QmlJS::AST::UiObjectDefinition* node) override;
+    void endVisit(QmlJS::AST::UiObjectDefinition* node) override;
 
-    virtual bool visit(QmlJS::AST::UiScriptBinding* node) override;
-    virtual void endVisit(QmlJS::AST::UiScriptBinding* node) override;
-    virtual bool visit(QmlJS::AST::UiObjectBinding* node) override;
-    virtual void endVisit(QmlJS::AST::UiObjectBinding* node) override;
+    bool visit(QmlJS::AST::UiScriptBinding* node) override;
+    void endVisit(QmlJS::AST::UiScriptBinding* node) override;
+    bool visit(QmlJS::AST::UiObjectBinding* node) override;
+    void endVisit(QmlJS::AST::UiObjectBinding* node) override;
 
-    virtual bool visit(QmlJS::AST::UiPublicMember* node) override;
-    virtual void endVisit(QmlJS::AST::UiPublicMember* node) override;
+    bool visit(QmlJS::AST::UiPublicMember* node) override;
+    void endVisit(QmlJS::AST::UiPublicMember* node) override;
 
 protected:
     template<class DeclarationT>

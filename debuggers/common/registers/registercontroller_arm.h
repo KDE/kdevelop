@@ -33,19 +33,19 @@ public:
 
     RegisterController_Arm(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
 
-    virtual QVector<GroupsName> namesOfRegisterGroups() const override;
+    QVector<GroupsName> namesOfRegisterGroups() const override;
 
 public slots:
-    virtual void updateRegisters(const GroupsName& group = GroupsName()) override;
+    void updateRegisters(const GroupsName& group = GroupsName()) override;
 
 protected:
-    virtual RegistersGroup registersFromGroup(const GroupsName& group) const override;
+    RegistersGroup registersFromGroup(const GroupsName& group) const override;
 
-    virtual QStringList registerNamesForGroup(const GroupsName& group) const override;
+    QStringList registerNamesForGroup(const GroupsName& group) const override;
 
-    virtual void updateValuesForRegisters(RegistersGroup* registers) const override;
+    void updateValuesForRegisters(RegistersGroup* registers) const override;
 
-    virtual void setRegisterValueForGroup(const GroupsName& group, const Register& reg) override;
+    void setRegisterValueForGroup(const GroupsName& group, const Register& reg) override;
 
     enum ArmRegisterGroups {General, Flags, VFP_single, VFP_double, VFP_quad, LAST_REGISTER};
 

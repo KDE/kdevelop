@@ -85,8 +85,8 @@ public:
 
 // IPlugin API
 public:
-    virtual int perProjectConfigPages() const override;
-    virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+    int perProjectConfigPages() const override;
+    KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 };
 
 #endif

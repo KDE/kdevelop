@@ -37,8 +37,8 @@ public:
     static QString stringForAstKind(int kind);
 
 protected:
-    virtual void postVisit(QmlJS::AST::Node* node) override;
-    virtual bool preVisit(QmlJS::AST::Node* node) override;
+    void postVisit(QmlJS::AST::Node* node) override;
+    bool preVisit(QmlJS::AST::Node* node) override;
 
 private:
     QString indent() const;

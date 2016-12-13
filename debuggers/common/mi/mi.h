@@ -339,7 +339,7 @@ namespace KDevMI { namespace MI {
     {
         inline PromptRecord() { Record::kind = Prompt; }
 
-        virtual QString toString() const override
+        QString toString() const override
         { return "(prompt)\n"; }
     };
 

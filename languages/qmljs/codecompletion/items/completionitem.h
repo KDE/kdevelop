@@ -44,12 +44,12 @@ public:
 
     CompletionItem(KDevelop::DeclarationPointer decl, int inheritanceDepth, Decoration decoration);
 
-    virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
-    virtual QString declarationName() const override;
-    virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const override;
+    QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
+    QString declarationName() const override;
+    KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const override;
 
 protected:
-    virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
+    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
 
 private:
     Decoration m_decoration;

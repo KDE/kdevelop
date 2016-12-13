@@ -45,8 +45,8 @@ public:
                      const QString& s, KDevelop::ProjectBaseItem* parent );
     ~QMakeTargetItem();
 
-    virtual QUrl builtUrl() const override;
-    virtual QUrl installedUrl() const override;
+    QUrl builtUrl() const override;
+    QUrl installedUrl() const override;
 
 private:
     QMakeProjectFile *m_pro;

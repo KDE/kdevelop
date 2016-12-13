@@ -33,7 +33,7 @@ public:
 
     MissingIncludePathProblem(CXDiagnostic diagnostic, CXTranslationUnit unit);
 
-    virtual KDevelop::IAssistant::Ptr solutionAssistant() const override;
+    KDevelop::IAssistant::Ptr solutionAssistant() const override;
 };
 
 #endif // MISSINGINCLUDEPATHPROBLEM_H
