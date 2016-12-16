@@ -78,23 +78,27 @@ SerializedFilters defaultFilters()
         << SerializedFilter(QStringLiteral(".gitmodules"), Filter::Files, Filter::Inclusive);
 
     // common vcs folders which we want to hide
-    static const QVector<QString> invalidFolders = QVector<QString>()
-        << QStringLiteral(".git") << QStringLiteral("CVS") << QStringLiteral(".svn") << QStringLiteral("_svn")
-        << QStringLiteral("SCCS") << QStringLiteral("_darcs") << QStringLiteral(".hg") << QStringLiteral(".bzr") << QStringLiteral("__pycache__");
+    static const QVector<QString> invalidFolders = {
+        QStringLiteral(".git"), QStringLiteral("CVS"), QStringLiteral(".svn"), QStringLiteral("_svn"),
+        QStringLiteral("SCCS"), QStringLiteral("_darcs"), QStringLiteral(".hg"), QStringLiteral(".bzr"), QStringLiteral("__pycache__")
+    };
     foreach(const QString& folder, invalidFolders) {
         ret << SerializedFilter(folder, Filter::Folders);
     }
 
     // common files which we want to hide
-    static const QVector<QString> filePatterns = QVector<QString>()
-        // binary files
-        << QStringLiteral("*.o") << QStringLiteral("*.a") << QStringLiteral("*.so") << QStringLiteral("*.so.*")
+    static const QVector<QString> filePatterns = {
+        // binary files (Unix)
+        QStringLiteral("*.o"), QStringLiteral("*.a"), QStringLiteral("*.so"), QStringLiteral("*.so.*"),
+        // binary files (Windows)
+        QStringLiteral("*.obj"), QStringLiteral("*.lib"), QStringLiteral("*.dll"), QStringLiteral("*.pdb"),
         // generated files
-        << QStringLiteral("moc_*.cpp") << QStringLiteral("*.moc") << QStringLiteral("ui_*.h") << QStringLiteral("qrc_*.cpp")
+        QStringLiteral("moc_*.cpp"), QStringLiteral("*.moc"), QStringLiteral("ui_*.h"), QStringLiteral("qrc_*.cpp"),
         // backup files
-        << QStringLiteral("*~") << QStringLiteral("*.orig") << QStringLiteral(".*.kate-swp") << QStringLiteral(".*.swp")
+        QStringLiteral("*~"), QStringLiteral("*.orig"), QStringLiteral(".*.kate-swp"), QStringLiteral(".*.swp"),
         // python cache and object files
-        << QStringLiteral("*.pyc") << QStringLiteral("*.pyo");
+        QStringLiteral("*.pyc"), QStringLiteral("*.pyo")
+    };
     foreach(const QString& filePattern, filePatterns) {
         ret << SerializedFilter(filePattern, Filter::Files);
     }
