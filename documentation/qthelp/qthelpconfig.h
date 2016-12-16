@@ -43,6 +43,8 @@ public:
       explicit QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent = nullptr);
       ~QtHelpConfig() override;
 
+      KDevelop::ConfigPage::ConfigPageType configPageType() const override;
+
       bool checkNamespace(const QString &filename, QTreeWidgetItem* modifiedItem);
 
       QString name() const override;

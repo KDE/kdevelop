@@ -143,6 +143,11 @@ QtHelpConfig::~QtHelpConfig()
     delete m_configWidget;
 }
 
+KDevelop::ConfigPage::ConfigPageType QtHelpConfig::configPageType() const
+{
+    return KDevelop::ConfigPage::DocumentationConfigPage;
+}
+
 void QtHelpConfig::apply()
 {
     QStringList iconList, nameList, pathList, ghnsList;
@@ -305,7 +310,7 @@ QString QtHelpConfig::name() const
 
 QIcon QtHelpConfig::icon() const
 {
-    return QIcon::fromTheme(QStringLiteral("help-contents"));
+    return QIcon::fromTheme(QStringLiteral("qtlogo"));
 }
 
 QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString &name,
