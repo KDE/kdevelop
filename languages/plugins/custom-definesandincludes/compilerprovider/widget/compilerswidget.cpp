@@ -230,12 +230,12 @@ void CompilersWidget::defaults()
 
 QString CompilersWidget::name() const
 {
-    return i18n("Compilers");
+    return i18n("C/C++ Compilers");
 }
 
 QString CompilersWidget::fullName() const
 {
-    return i18n("Configure Compilers");
+    return i18n("Configure C/C++ Compilers");
 }
 
 QIcon CompilersWidget::icon() const
