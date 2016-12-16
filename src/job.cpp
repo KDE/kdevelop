@@ -149,23 +149,23 @@ void Job::childProcessError(QProcess::ProcessError e)
 
     switch (e) {
     case QProcess::FailedToStart:
-        message = i18n("Failed to start Clangtidy from %1.", commandLine()[0]);
+        message = i18n("Failed to start clang-tidy from %1.", commandLine()[0]);
         break;
 
     case QProcess::Crashed:
-        message = i18n("Clangtidy crashed.");
+        message = i18n("Clang-tidy crashed.");
         break;
 
     case QProcess::Timedout:
-        message = i18n("Clangtidy process timed out.");
+        message = i18n("Clang-tidy process timed out.");
         break;
 
     case QProcess::WriteError:
-        message = i18n("Write to Clangtidy process failed.");
+        message = i18n("Write to Clang-tidy process failed.");
         break;
 
     case QProcess::ReadError:
-        message = i18n("Read from Clangtidy process failed.");
+        message = i18n("Read from Clang-tidy process failed.");
         break;
 
     case QProcess::UnknownError:
@@ -175,7 +175,7 @@ void Job::childProcessError(QProcess::ProcessError e)
     }
 
     if (!message.isEmpty()) {
-        KMessageBox::error(qApp->activeWindow(), message, i18n("Clangtidy Error"));
+        KMessageBox::error(qApp->activeWindow(), message, i18n("Clang-tidy Error"));
     }
 
     KDevelop::OutputExecuteJob::childProcessError(e);
