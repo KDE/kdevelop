@@ -57,12 +57,12 @@ void SessionSettings::apply()
 
 QString SessionSettings::name() const
 {
-    return i18n("Clang Language Support");
+    return i18n("C/C++ Helpers");
 }
 
 QString SessionSettings::fullName() const
 {
-    return i18n("Clang Language Support");
+    return i18n("Configure C/C++ Helpers");
 }
 
 QIcon SessionSettings::icon() const
