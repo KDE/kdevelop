@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Cppcheck Settings</string>
+   <string>Clang-Tidy Settings</string>
   </property>
   <layout class="QVBoxLayout" name="settingsLayout">
    <item>
