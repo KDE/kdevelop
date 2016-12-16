@@ -415,7 +415,7 @@ KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
     if (number != 0) {
         return nullptr;
     } else {
-        return new ClangtidyPreferences(this, parent);
+        return new ClangTidyPreferences(this, parent);
     }
 }
 }

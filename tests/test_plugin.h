@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-class TestClangtidyPlugin : public QObject
+class TestClangTidyPlugin : public QObject
 {
     Q_OBJECT
 private slots:

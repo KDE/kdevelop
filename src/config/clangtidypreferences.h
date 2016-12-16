@@ -26,18 +26,18 @@
 
 namespace Ui
 {
-class ClangtidySettings;
+class ClangTidySettings;
 };
 /**
  * \class
  * \brief Implements the session configuration page for clang-tidy.
  */
-class ClangtidyPreferences : public KDevelop::ConfigPage
+class ClangTidyPreferences : public KDevelop::ConfigPage
 {
     Q_OBJECT
 public:
-    explicit ClangtidyPreferences(KDevelop::IPlugin* plugin = nullptr, QWidget* parent = nullptr);
-    ~ClangtidyPreferences() override;
+    explicit ClangTidyPreferences(KDevelop::IPlugin* plugin = nullptr, QWidget* parent = nullptr);
+    ~ClangTidyPreferences() override;
     ConfigPage::ConfigPageType configPageType() const override;
     QString name() const override;
     QString fullName() const override;
@@ -47,7 +47,7 @@ public slots:
     void apply() override;
 
 private:
-    Ui::ClangtidySettings* ui;
+    Ui::ClangTidySettings* ui;
 };
 
 #endif

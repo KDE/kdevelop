@@ -30,22 +30,22 @@
 using namespace KDevelop;
 // using namespace ClangTidy;
 
-void TestClangtidyPlugin::initTestCase()
+void TestClangTidyPlugin::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 }
 
-void TestClangtidyPlugin::cleanupTestCase()
+void TestClangTidyPlugin::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void TestClangtidyPlugin::testPlugin()
+void TestClangTidyPlugin::testPlugin()
 {
     ClangTidy::Plugin plugin(nullptr);
     QCOMPARE(plugin.configPages(), 1);
     QVERIFY(!plugin.allAvailableChecks().isEmpty());
 }
 
-QTEST_GUILESS_MAIN(TestClangtidyPlugin);
+QTEST_GUILESS_MAIN(TestClangTidyPlugin);
