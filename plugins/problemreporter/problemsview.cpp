@@ -55,18 +55,6 @@ void ProblemsView::setupActions()
     }
 
     {
-        m_showImportsAction = new QAction(this);
-        addAction(m_showImportsAction);
-        m_showImportsAction->setCheckable(true);
-        m_showImportsAction->setChecked(false);
-        m_showImportsAction->setText(i18n("Show Imports"));
-        m_showImportsAction->setToolTip(i18nc("@info:tooltip", "Display problems in imported files"));
-        connect(m_showImportsAction, &QAction::triggered, this, [this](bool checked) {
-            currentView()->model()->setShowImports(checked);
-        });
-    }
-
-    {
         m_scopeMenu = new KActionMenu(this);
         m_scopeMenu->setDelayed(false);
         m_scopeMenu->setToolTip(i18nc("@info:tooltip", "Which files to display the problems for"));
@@ -135,19 +123,34 @@ void ProblemsView::setupActions()
     }
 
     {
+        m_showImportsAction = new QAction(this);
+        addAction(m_showImportsAction);
+        m_showImportsAction->setCheckable(true);
+        m_showImportsAction->setChecked(false);
+        m_showImportsAction->setText(i18n("Show Imports"));
+        m_showImportsAction->setToolTip(i18nc("@info:tooltip", "Display problems in imported files"));
+        connect(m_showImportsAction, &QAction::triggered, this, [this](bool checked) {
+            currentView()->model()->setShowImports(checked);
+        });
+    }
+
+    {
         m_severityActions = new QActionGroup(this);
 
         m_errorSeverityAction = new QAction(this);
         m_errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors"));
         m_errorSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-error")));
+        m_errorSeverityAction->setIconText(i18n("Show Error"));
 
         m_warningSeverityAction = new QAction(this);
         m_warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display warnings"));
         m_warningSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-warning")));
+        m_warningSeverityAction->setIconText(i18n("Show Warnings"));
 
         m_hintSeverityAction = new QAction(this);
         m_hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display hints"));
         m_hintSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
+        m_hintSeverityAction->setIconText(i18n("Show Hints"));
 
         QAction* severityActionArray[] = { m_errorSeverityAction, m_warningSeverityAction, m_hintSeverityAction };
         for (int i = 0; i < 3; ++i) {
