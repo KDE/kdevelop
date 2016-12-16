@@ -1,4 +1,4 @@
-project(kdevclangtidy)
+project(kdev-clangtidy)
 
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
@@ -46,8 +46,8 @@ ki18n_wrap_ui(kdevclangtidy_PART_SRCS ${kdevclangtidy_PART_UI}
     src/config/clangtidypreferences.ui
     src/config/perprojectconfig.ui
 )
-kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS res/clangtidyconfig.kcfgc)
-kdevplatform_add_plugin(kdevclangtidy JSON res/kdevclangtidy.json SOURCES 
+kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS src/config/clangtidyconfig.kcfgc)
+kdevplatform_add_plugin(kdevclangtidy JSON kdevclangtidy.json SOURCES
 ${kdevclangtidy_PART_SRCS} ${kdevclangtidy_CONFIG_SRCS})
 target_link_libraries(kdevclangtidy
     KDev::Interfaces
@@ -64,7 +64,7 @@ target_link_libraries(kdevclangtidy
     Qt5::Network
     )
 
-install(FILES res/kdevclangtidy.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangtidy)
+install(FILES kdevclangtidy.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangtidy)
 
 add_subdirectory(tests)
 
