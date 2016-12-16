@@ -61,7 +61,7 @@ KDevelop::ConfigPage::ConfigPageType PerProjectConfigPage::configPageType() cons
 
 QString PerProjectConfigPage::name() const
 {
-    return i18n("clang-tidy");
+    return i18n("Clang-tidy");
 }
 
 void PerProjectConfigPage::setActiveChecksReceptorList(QStringList* list)

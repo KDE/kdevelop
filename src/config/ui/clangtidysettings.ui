@@ -25,7 +25,7 @@
         <item>
          <widget class="QLabel" name="clangtidyLabel">
           <property name="text">
-           <string>clang-tidy executable</string>
+           <string>Clang-tidy executable</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

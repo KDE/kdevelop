@@ -37,7 +37,7 @@ Job::Job(const Parameters& params, QObject* parent)
     : KDevelop::OutputExecuteJob(parent)
     , m_parameters(params)
 {
-    setJobName(i18n("clang-tidy output"));
+    setJobName(i18n("Clang-tidy output"));
     mustDumpConfig = !(params.dumpConfig.isEmpty());
 
     setCapabilities(KJob::Killable);
