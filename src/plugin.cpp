@@ -58,13 +58,13 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(ClangtidyFactory, "res/kdevclangtidy.json", registerPlugin<ClangTidy::Plugin>();)
+
 namespace ClangTidy
 {
 Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     : IPlugin("kdevclangtidy", parent)
     , m_model(new KDevelop::ProblemModel(parent))
 {
-    qCDebug(KDEV_CLANGTIDY) << "setting clangtidy rc file";
     setXMLFile("kdevclangtidy.rc");
 
     QAction* act_checkfile;
@@ -183,7 +183,7 @@ void Plugin::runClangtidy(bool allFiles)
     params.projectRootDir = project->path().toLocalFile();
 
     if (clangTidyPath.isEmpty()) {
-        params.executablePath = QStandardPaths::findExecutable("/usr/bin/clang-tidy");
+        params.executablePath = QStandardPaths::findExecutable("clang-tidy");
     } else {
         params.executablePath = clangTidyPath;
     }

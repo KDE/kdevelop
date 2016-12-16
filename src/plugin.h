@@ -43,8 +43,6 @@ namespace KDevelop
 class ProblemModel;
 }
 
-#define CLANG_TIDY_PATH "/usr/bin/clang-tidy"
-
 namespace ClangTidy
 {
 /**
@@ -58,6 +56,7 @@ class Plugin : public KDevelop::IPlugin
 public:
     Plugin(QObject* parent, const QVariantList& = QVariantList());
     ~Plugin() = default;
+
     void unload() override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
     int configPages() const override { return 1; }
@@ -79,6 +78,7 @@ public:
      * parameters.
      */
     QStringList allAvailableChecks() { return m_allChecks; }
+
 protected:
     /**
      * \function
