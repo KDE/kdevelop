@@ -87,8 +87,10 @@ SerializedFilters defaultFilters()
 
     // common files which we want to hide
     static const QVector<QString> filePatterns = QVector<QString>()
-        // binary files
+        // binary files (Unix)
         << QStringLiteral("*.o") << QStringLiteral("*.a") << QStringLiteral("*.so") << QStringLiteral("*.so.*")
+        // binary files (Windows)
+        << QStringLiteral("*.obj") << QStringLiteral("*.lib") << QStringLiteral("*.dll") << QStringLiteral("*.pdb")
         // generated files
         << QStringLiteral("moc_*.cpp") << QStringLiteral("*.moc") << QStringLiteral("ui_*.h") << QStringLiteral("qrc_*.cpp")
         // backup files
