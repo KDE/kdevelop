@@ -42,10 +42,10 @@ set(kdevclangtidy_PART_SRCS
 
 include (cmake/ClangFormatAll.cmake)
 
-ki18n_wrap_ui(  kdevclangtidy_PART_SRCS  ${kdevclangtidy_PART_UI} 
-                src/config/ui/clangtidysettings.ui
-                src/config/ui/perprojectconfig.ui
-                )
+ki18n_wrap_ui(kdevclangtidy_PART_SRCS ${kdevclangtidy_PART_UI}
+    src/config/clangtidypreferences.ui
+    src/config/perprojectconfig.ui
+)
 kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS res/clangtidyconfig.kcfgc)
 kdevplatform_add_plugin(kdevclangtidy JSON res/kdevclangtidy.json SOURCES 
 ${kdevclangtidy_PART_SRCS} ${kdevclangtidy_CONFIG_SRCS})

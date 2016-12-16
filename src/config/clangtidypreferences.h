@@ -26,7 +26,7 @@
 
 namespace Ui
 {
-class ClangTidySettings;
+class ClangTidyPreferences;
 };
 /**
  * \class
@@ -47,7 +47,7 @@ public slots:
     void apply() override;
 
 private:
-    Ui::ClangTidySettings* ui;
+    Ui::ClangTidyPreferences* ui;
 };
 
 #endif

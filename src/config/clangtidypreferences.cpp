@@ -22,7 +22,7 @@
 #include "config/clangtidypreferences.h"
 #include "clangtidyconfig.h"
 #include "config/configgroup.h"
-#include "ui_clangtidysettings.h"
+#include "ui_clangtidypreferences.h"
 
 #include <QVBoxLayout>
 
@@ -35,7 +35,7 @@ ClangTidyPreferences::ClangTidyPreferences(IPlugin* plugin, QWidget* parent)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     QWidget* widget = new QWidget(this);
-    ui = new Ui::ClangTidySettings();
+    ui = new Ui::ClangTidyPreferences();
     ui->setupUi(widget);
     layout->addWidget(widget);
 }
