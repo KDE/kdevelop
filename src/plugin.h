@@ -90,10 +90,10 @@ protected:
 
 private slots:
     void loadOutput();
-    void runClangtidy(bool allFiles = false);
-    void runClangtidy(const QUrl& url, bool allFiles = false);
-    void runClangtidyFile();
-    void runClangtidyAll();
+    void runClangTidy(bool allFiles = false);
+    void runClangTidy(const QUrl& url, bool allFiles = false);
+    void runClangTidyFile();
+    void runClangTidyAll();
     void result(KJob* job);
 
 private:

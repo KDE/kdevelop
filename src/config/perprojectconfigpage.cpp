@@ -41,7 +41,7 @@ PerProjectConfigPage::PerProjectConfigPage(KDevelop::IProject* project, QWidget*
     m_selectedItemModel = new QItemSelectionModel(m_availableChecksModel);
     ui->checkListView->setSelectionModel(m_selectedItemModel);
 
-    m_config = m_project->projectConfiguration()->group("Clangtidy");
+    m_config = m_project->projectConfiguration()->group("ClangTidy");
 }
 
 PerProjectConfigPage::~PerProjectConfigPage(void)

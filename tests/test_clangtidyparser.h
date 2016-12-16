@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-class TestClangtidyParser : public QObject
+class TestClangTidyParser : public QObject
 {
     Q_OBJECT
 private slots:

@@ -31,11 +31,11 @@ namespace ClangTidy
  * \class
  * \brief Implements a parser for clang-tidy's standard output.
  */
-class ClangtidyParser : public QObject
+class ClangTidyParser : public QObject
 {
 public:
-    explicit ClangtidyParser(QObject* parent = nullptr);
-    ~ClangtidyParser() = default;
+    explicit ClangTidyParser(QObject* parent = nullptr);
+    ~ClangTidyParser() = default;
     /**
      * \return all problems collected from clang-tidy stdout.
      */

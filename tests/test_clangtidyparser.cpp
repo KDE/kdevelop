@@ -33,18 +33,18 @@
 using namespace KDevelop;
 using namespace ClangTidy;
 
-void TestClangtidyParser::initTestCase()
+void TestClangTidyParser::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 }
 
-void TestClangtidyParser::cleanupTestCase()
+void TestClangTidyParser::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void TestClangtidyParser::testParser()
+void TestClangTidyParser::testParser()
 {
     // prepare QStringList from file to be parsed.
     QFile output_example_file("data/output_example");
@@ -57,7 +57,7 @@ void TestClangtidyParser::testParser()
     }
 
     QVERIFY(!clangtidy_example_output.isEmpty());
-    ClangTidy::ClangtidyParser parser;
+    ClangTidy::ClangTidyParser parser;
     parser.addData(clangtidy_example_output);
     parser.parse();
 
@@ -97,4 +97,4 @@ void TestClangtidyParser::testParser()
     QCOMPARE(p->source(), IProblem::Plugin);
 }
 
-QTEST_GUILESS_MAIN(TestClangtidyParser);
+QTEST_GUILESS_MAIN(TestClangTidyParser);

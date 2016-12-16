@@ -63,12 +63,12 @@ QString verboseMessageToHtml(const QString& input)
     return output;
 }
 
-ClangtidyParser::ClangtidyParser(QObject* parent)
+ClangTidyParser::ClangTidyParser(QObject* parent)
     : QObject(parent)
 {
 }
 
-void ClangtidyParser::parse()
+void ClangTidyParser::parse()
 {
     QRegularExpression regex(QStringLiteral("(\\/.+\\.cpp):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"));
 

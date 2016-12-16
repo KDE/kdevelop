@@ -57,7 +57,7 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY_WITH_JSON(ClangtidyFactory, "res/kdevclangtidy.json", registerPlugin<ClangTidy::Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ClangTidyFactory, "res/kdevclangtidy.json", registerPlugin<ClangTidy::Plugin>();)
 
 namespace ClangTidy
 {
@@ -68,7 +68,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     setXMLFile("kdevclangtidy.rc");
 
     QAction* act_checkfile;
-    act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangtidyFile()));
+    act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangTidyFile()));
     act_checkfile->setStatusTip(i18n("Launches clang-tidy for current file"));
     act_checkfile->setText(i18n("Clang-Tidy (Current File)"));
 
@@ -76,7 +76,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     the whole project.
     //     QAction* act_check_all_files;
     //     act_check_all_files = actionCollection()->addAction ( "clangtidy_all",
-    this, SLOT ( runClangtidyAll() ) );
+    this, SLOT ( runClangTidyAll() ) );
     //     act_check_all_files->setStatusTip ( i18n ( "Launches clangtidy for all
     translation "
     //                                         "units of current project" ) );
@@ -90,9 +90,9 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     Q_ASSERT(iface);
 
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->addModel(QStringLiteral("Clangtidy"), i18n("Clang-Tidy"), m_model.data());
+    pms->addModel(QStringLiteral("ClangTidy"), i18n("Clang-Tidy"), m_model.data());
 
-    m_config = KSharedConfig::openConfig()->group("Clangtidy");
+    m_config = KSharedConfig::openConfig()->group("ClangTidy");
     auto clangTidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
     if (clangTidyPath.isEmpty()) {
         clangTidyPath = QStandardPaths::findExecutable("clang-tidy");
@@ -117,7 +117,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
 void Plugin::unload()
 {
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->removeModel(QStringLiteral("Clangtidy"));
+    pms->removeModel(QStringLiteral("ClangTidy"));
 }
 
 void Plugin::collectAllAvailableChecks(QString clangTidyPath)
@@ -151,7 +151,7 @@ void Plugin::collectAllAvailableChecks(QString clangTidyPath)
     m_allChecks.removeDuplicates();
 }
 
-void Plugin::runClangtidy(bool allFiles)
+void Plugin::runClangTidy(bool allFiles)
 {
     auto doc = core()->documentController()->activeDocument();
     if (doc == nullptr) {
@@ -160,10 +160,10 @@ void Plugin::runClangtidy(bool allFiles)
         return;
     }
 
-    runClangtidy(doc->url(), allFiles);
+    runClangTidy(doc->url(), allFiles);
 }
 
-void Plugin::runClangtidy(const QUrl& url, bool allFiles)
+void Plugin::runClangTidy(const QUrl& url, bool allFiles)
 {
     KDevelop::IProject* project = core()->projectController()->findProjectForUrl(url);
     if (project == nullptr) {
@@ -171,7 +171,7 @@ void Plugin::runClangtidy(const QUrl& url, bool allFiles)
         return;
     }
 
-    m_config = project->projectConfiguration()->group("Clangtidy");
+    m_config = project->projectConfiguration()->group("ClangTidy");
     if (!m_config.isValid()) {
         QMessageBox::critical(nullptr, i18n("Error starting clang-tidy"),
                               i18n("Can't load parameters. They must be set in the "
@@ -179,7 +179,7 @@ void Plugin::runClangtidy(const QUrl& url, bool allFiles)
         return;
     }
 
-    ConfigGroup configGroup = KSharedConfig::openConfig()->group("Clangtidy");
+    ConfigGroup configGroup = KSharedConfig::openConfig()->group("ClangTidy");
     auto clangTidyPath = configGroup.readEntry(ConfigGroup::ExecutablePath);
     auto buildSystem = project->buildSystemManager();
 
@@ -231,16 +231,16 @@ bool Plugin::isRunning() const
     return !m_runningJob.isNull();
 }
 
-void Plugin::runClangtidyFile()
+void Plugin::runClangTidyFile()
 {
     bool allFiles = false;
-    runClangtidy(allFiles);
+    runClangTidy(allFiles);
 }
 
-void Plugin::runClangtidyAll()
+void Plugin::runClangTidyAll()
 {
     bool allFiles = true;
-    runClangtidy(allFiles);
+    runClangTidy(allFiles);
 }
 
 void Plugin::loadOutput()
@@ -271,7 +271,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
         const auto mime = doc->mimeType().name();
         if (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc")) {
             auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), this);
-            connect(action, &QAction::triggered, this, &Plugin::runClangtidyFile);
+            connect(action, &QAction::triggered, this, &Plugin::runClangTidyFile);
             extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
         }
     }
@@ -293,7 +293,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
 
         auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), this);
         connect(action, &QAction::triggered, this, [this, item]() {
-            runClangtidy(item->path().toUrl());
+            runClangTidy(item->path().toUrl());
         });
         extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
     }

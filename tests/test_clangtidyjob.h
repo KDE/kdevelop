@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-class TestClangtidyJob : public QObject
+class TestClangTidyJob : public QObject
 {
     Q_OBJECT
 private slots:

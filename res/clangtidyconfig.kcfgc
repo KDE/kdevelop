@@ -1,5 +1,5 @@
 File=clangtidyconfig.kcfg
-ClassName=ClangtidySettings
+ClassName=ClangTidySettings
 Singleton=true
 UseEnumTypes=true
 SetUserTexts=true

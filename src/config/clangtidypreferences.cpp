@@ -31,7 +31,7 @@ using ClangTidy::ConfigGroup;
 using KDevelop::ConfigPage;
 
 ClangTidyPreferences::ClangTidyPreferences(IPlugin* plugin, QWidget* parent)
-    : ConfigPage(plugin, ClangtidySettings::self(), parent)
+    : ConfigPage(plugin, ClangTidySettings::self(), parent)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     QWidget* widget = new QWidget(this);
@@ -67,6 +67,6 @@ QIcon ClangTidyPreferences::icon() const
 
 void ClangTidyPreferences::apply()
 {
-    ConfigGroup configGroup = KSharedConfig::openConfig()->group("Clangtidy");
+    ConfigGroup configGroup = KSharedConfig::openConfig()->group("ClangTidy");
     configGroup.writeEntry(ConfigGroup::ExecutablePath, ui->kcfg_clangtidyPath->text());
 }

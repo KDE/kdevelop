@@ -191,7 +191,7 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
         qCDebug(KDEV_CLANGTIDY) << "clangtidy failed, XML output: ";
         qCDebug(KDEV_CLANGTIDY) << m_xmlOutput.join('\n');
     } else {
-        ClangtidyParser parser;
+        ClangTidyParser parser;
         parser.addData(m_standardOutput);
         parser.parse();
         m_problems = parser.problems();

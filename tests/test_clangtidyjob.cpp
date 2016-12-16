@@ -44,18 +44,18 @@ public:
     QString standardOutput() const { return m_standardOutput.join('\n'); }
 };
 
-void TestClangtidyJob::initTestCase()
+void TestClangTidyJob::initTestCase()
 {
     AutoTestShell::init({ "kdevclangtidy" });
     TestCore::initialize(Core::NoUi);
 }
 
-void TestClangtidyJob::cleanupTestCase()
+void TestClangTidyJob::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void TestClangtidyJob::testJob()
+void TestClangTidyJob::testJob()
 {
     QFile output_example_file("data/output_example");
     output_example_file.open(QIODevice::ReadOnly);
@@ -89,4 +89,4 @@ void TestClangtidyJob::testJob()
         problems[2]->explanation().startsWith(QStringLiteral("[cppcoreguidelines-pro-bounds-array-to-pointer-decay]")));
 }
 
-QTEST_GUILESS_MAIN(TestClangtidyJob);
+QTEST_GUILESS_MAIN(TestClangTidyJob);

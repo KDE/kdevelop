@@ -3,8 +3,8 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
-  <group name="Clangtidy">
-    <entry name="clangtidyPath" key="Clangtidy Path" type="Url">
+  <group name="ClangTidy">
+    <entry name="clangtidyPath" key="ClangTidy Path" type="Url">
         <default></default>
         <label>clang-tidy Executable</label>
         <tooltip>The full path to the clang-tidy executable</tooltip>
