@@ -17,6 +17,11 @@ https://community.kde.org/KDevelop/HowToCompile_v5
 API documentation is available from:
 https://api.kde.org/extragear-api/kdevelop-apidocs/kdevplatform/html/index.html
 
+## Contribute
+
+If you want to contribute to KDevelop, please read through:
+https://www.kdevelop.org/contribute-kdevelop
+
 ## Infrastructure
 - [Bug tracker](https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&list_id=1408918&product=kdevplatform&query_format=advanced)
 - [Phabricator (task tracker, code review and more)](https://phabricator.kde.org/dashboard/view/8/?)
