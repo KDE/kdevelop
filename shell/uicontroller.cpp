@@ -61,6 +61,7 @@
 #include "settings/uipreferences.h"
 #include "settings/templateconfig.h"
 #include "settings/analyzerspreferences.h"
+#include "settings/documentationpreferences.h"
 
 namespace KDevelop {
 
@@ -497,6 +498,7 @@ void UiController::showSettingsDialog()
     auto editorConfigPage = new EditorConfigPage(parent);
     auto languageConfigPage = new LanguagePreferences(parent);
     auto analyzersPreferences = new AnalyzersPreferences(parent);
+    auto documentationPreferences = new DocumentationPreferences(parent);
 
     auto configPages = QVector<KDevelop::ConfigPage*> {
         new UiPreferences(parent),
@@ -520,6 +522,8 @@ void UiController::showSettingsDialog()
                 cfgDlg.addSubConfigPage(languageConfigPage, page);
             } else if (page->configPageType() == ConfigPage::AnalyzerConfigPage) {
                 cfgDlg.addSubConfigPage(analyzersPreferences, page);
+            } else if (page->configPageType() == ConfigPage::DocumentationConfigPage) {
+                cfgDlg.addSubConfigPage(documentationPreferences, page);
             } else {
                 // insert them before the editor config page
                 cfgDlg.addConfigPage(page, editorConfigPage);
@@ -527,7 +531,8 @@ void UiController::showSettingsDialog()
         }
     };
 
-    cfgDlg.addConfigPage(analyzersPreferences, configPages[5]);
+    cfgDlg.addConfigPage(documentationPreferences, configPages[5]);
+    cfgDlg.addConfigPage(analyzersPreferences, documentationPreferences);
 
     cfgDlg.addConfigPage(languageConfigPage, analyzersPreferences);
     cfgDlg.addSubConfigPage(languageConfigPage, new BGPreferences(parent));

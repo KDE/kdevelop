@@ -81,6 +81,7 @@ set(KDevPlatformShell_LIB_SRCS
     settings/templateconfig.cpp
     settings/templatepage.cpp
     settings/analyzerspreferences.cpp
+    settings/documentationpreferences.cpp
 )
 
 if(APPLE)
