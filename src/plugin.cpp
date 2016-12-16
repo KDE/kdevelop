@@ -70,7 +70,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     QAction* act_checkfile;
     act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangtidyFile()));
     act_checkfile->setStatusTip(i18n("Launches clang-tidy for current file"));
-    act_checkfile->setText(i18n("Clang-Tidy"));
+    act_checkfile->setText(i18n("Clang-Tidy (Current File)"));
 
     /*     TODO: Uncomment this only when discover a safe way to run clang-tidy on
     the whole project.
@@ -153,14 +153,19 @@ void Plugin::collectAllAvailableChecks(QString clangTidyPath)
 
 void Plugin::runClangtidy(bool allFiles)
 {
-    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
+    auto doc = core()->documentController()->activeDocument();
     if (doc == nullptr) {
         QMessageBox::critical(nullptr, i18n("Error starting clang-tidy"),
                               i18n("No suitable active file, unable to deduce project."));
         return;
     }
 
-    KDevelop::IProject* project = core()->projectController()->findProjectForUrl(doc->url());
+    runClangtidy(doc->url(), allFiles);
+}
+
+void Plugin::runClangtidy(const QUrl& url, bool allFiles)
+{
+    KDevelop::IProject* project = core()->projectController()->findProjectForUrl(url);
     if (project == nullptr) {
         QMessageBox::critical(nullptr, i18n("Error starting clang-tidy"), i18n("Active file isn't in a project"));
         return;
@@ -191,7 +196,7 @@ void Plugin::runClangtidy(bool allFiles)
     if (allFiles) {
         params.filePath = project->path().toUrl().toLocalFile();
     } else {
-        params.filePath = doc->url().toLocalFile();
+        params.filePath = url.toLocalFile();
     }
     params.buildDir = buildSystem->buildDirectory(project->projectItem()).toLocalFile();
     params.additionalParameters = m_config.readEntry(ConfigGroup::AdditionalParameters);
@@ -217,6 +222,13 @@ void Plugin::runClangtidy(bool allFiles)
     auto job2 = new ClangTidy::Job(params, this);
     connect(job2, SIGNAL(finished(KJob*)), this, SLOT(result(KJob*)));
     core()->runController()->registerJob(job2);
+
+    m_runningJob = job2;
+}
+
+bool Plugin::isRunning() const
+{
+    return !m_runningJob.isNull();
 }
 
 void Plugin::runClangtidyFile()
@@ -252,18 +264,40 @@ void Plugin::result(KJob* job)
 
 KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context)
 {
-    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
+    ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
 
-    if (context->type() == KDevelop::Context::EditorContext) {
-
-        auto mime = doc->mimeType().name();
+    if (context->hasType(KDevelop::Context::EditorContext) && !isRunning()) {
+        IDocument* doc = core()->documentController()->activeDocument();
+        const auto mime = doc->mimeType().name();
         if (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc")) {
-            QAction* action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Check unit with clang-tidy"), this);
-            connect(action, SIGNAL(triggered(bool)), this, SLOT(runClangtidyFile()));
+            auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), this);
+            connect(action, &QAction::triggered, this, &Plugin::runClangtidyFile);
             extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
         }
     }
+
+    if (context->hasType(KDevelop::Context::ProjectItemContext) && !isRunning()) {
+        auto pContext = dynamic_cast<KDevelop::ProjectItemContext*>(context);
+        if (pContext->items().size() != 1)
+            return extension;
+
+        auto item = pContext->items().first();
+
+        switch (item->type()) {
+            case KDevelop::ProjectBaseItem::File:
+                break;
+
+            default:
+                return extension;
+        }
+
+        auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), this);
+        connect(action, &QAction::triggered, this, [this, item]() {
+            runClangtidy(item->path().toUrl());
+        });
+        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
+    }
+
     return extension;
 }
 

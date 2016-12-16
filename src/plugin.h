@@ -90,12 +90,17 @@ protected:
 
 private slots:
     void loadOutput();
-    void runClangtidy(bool allFiles);
+    void runClangtidy(bool allFiles = false);
+    void runClangtidy(const QUrl& url, bool allFiles = false);
     void runClangtidyFile();
     void runClangtidyAll();
     void result(KJob* job);
 
 private:
+    bool isRunning() const;
+
+    QPointer<KJob> m_runningJob;
+
     ConfigGroup m_config;
     QScopedPointer<KDevelop::ProblemModel> m_model;
     QStringList m_allChecks;
