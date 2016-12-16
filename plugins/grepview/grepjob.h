@@ -36,6 +36,21 @@ class QRegExp;
 class GrepViewPlugin;
 class FindReplaceTest; //FIXME: this is useful only for tests
 
+struct GrepJobSettings
+{
+    bool projectFilesOnly = false;
+    bool caseSensitive = true;
+    bool regexp = true;
+
+    int depth = -1;
+
+    QString pattern;
+    QString searchTemplate;
+    QString replacementTemplate;
+    QString files;
+    QString exclude;
+};
+
 class GrepJob : public KJob, public KDevelop::IStatus
 {
     Q_OBJECT
@@ -49,18 +64,11 @@ private:
     explicit GrepJob( QObject *parent = nullptr );
 
 public:
+    void setSettings(const GrepJobSettings& settings);
+    GrepJobSettings settings() const;
 
     void setOutputModel(GrepOutputModel * model);
-    void setPatternString(const QString& patternString);
-    void setTemplateString(const QString &templateString);
-    void setReplacementTemplateString(const QString &replTmplString);
-    void setFilesString(const QString &filesString);
-    void setExcludeString(const QString &excludeString);
     void setDirectoryChoice(const QList<QUrl> &choice);
-    void setDepth(int depth);
-    void setRegexpFlag(bool regexpFlag);
-    void setCaseSensitive(bool caseSensitive);
-    void setProjectFilesFlag(bool projectFilesFlag);
 
     void start() override;
 
@@ -85,7 +93,9 @@ Q_SIGNALS:
 private:
     Q_INVOKABLE void slotWork();
 
-    QString m_patternString;
+    QList<QUrl> m_directoryChoice;
+    QString m_errorMessage;
+
     QRegExp m_regExp;
     QString m_regExpSimple;
     GrepOutputModel *m_outputModel;
@@ -101,17 +111,7 @@ private:
     int m_fileIndex;
     QPointer<GrepFindFilesThread> m_findThread;
 
-    QString m_errorMessage;
-    QString m_templateString;
-    QString m_replacementTemplateString;
-    QString m_filesString;
-    QString m_excludeString;
-    QList<QUrl> m_directoryChoice;
-
-    bool m_useProjectFilesFlag;
-    bool m_regexpFlag;
-    bool m_caseSensitiveFlag;
-    int m_depthValue;
+    GrepJobSettings m_settings;
 
     bool m_findSomething;
 };

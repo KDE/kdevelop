@@ -90,6 +90,7 @@ private slots:
     void expandAllItems();
     void onApply();
     void showDialog();
+    void refresh();
     void expandElements( const QModelIndex & parent );
     void rowsRemoved();
     void clearSearchHistory();

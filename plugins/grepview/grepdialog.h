@@ -17,6 +17,7 @@
 #include <QDialog>
 #include <QUrl>
 
+#include "grepjob.h"
 #include "ui_grepwidget.h"
 
 class KConfig;
@@ -32,20 +33,8 @@ public:
     explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=nullptr );
     ~GrepDialog() override;
 
-    void setPattern(const QString &pattern);
-    void setEnableProjectBox(bool enable);
-
-    QString patternString() const;
-    QString templateString() const;
-    QString replacementTemplateString() const;
-    QString filesString() const;
-    QString excludeString() const;
-
-    bool useProjectFilesFlag() const;
-    bool regexpFlag() const;
-    bool caseSensitiveFlag() const;
-
-    int depthValue() const;
+    void setSettings(const GrepJobSettings &settings);
+    GrepJobSettings settings() const;
 
 public Q_SLOTS:
     void startSearch();
@@ -71,8 +60,11 @@ private:
     // Returns whether the given url is a subfile/subdirectory of one of the chosen directories/files
     // This is slow, so don't call it too often
     bool isPartOfChoice(QUrl url) const;
+    // Checks what a user has entered into the dialog and saves the data in m_settings
+    void updateSettings();
 
     GrepViewPlugin * m_plugin;
+    GrepJobSettings m_settings;
 };
 
 

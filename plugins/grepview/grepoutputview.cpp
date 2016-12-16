@@ -84,6 +84,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     separator->setSeparator(true);
     QAction *newSearchAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("New &Search"), this);
     m_clearSearchHistory = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear Search History"), this);
+    QAction *refreshAction = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Refresh"), this);
 
     addAction(m_prev);
     addAction(m_next);
@@ -91,6 +92,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     addAction(m_expandAll);
     addAction(separator);
     addAction(newSearchAction);
+    addAction(refreshAction);
     addAction(m_clearSearchHistory);
 
     separator = new QAction(this);
@@ -128,6 +130,8 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(replacementCombo, static_cast<void(KComboBox::*)()>(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
+
+    connect(refreshAction, &QAction::triggered, this, &GrepOutputView::refresh);
 
     resultsTreeView->header()->setStretchLastSection(true);
 
@@ -272,6 +276,11 @@ void GrepOutputView::onApply()
 void GrepOutputView::showDialog()
 {
     m_plugin->showDialog(true);
+}
+
+void GrepOutputView::refresh()
+{
+    m_plugin->showDialog(true, QString(), false);
 }
 
 void GrepOutputView::expandElements(const QModelIndex& index)

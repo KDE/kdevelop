@@ -162,18 +162,23 @@ void FindReplaceTest::testReplace()
 
     GrepJob *job = new GrepJob(this);
     GrepOutputModel *model = new GrepOutputModel(job);
+    GrepJobSettings settings;
 
     job->setOutputModel(model);
-    job->setPatternString(searchPattern);
-    job->setTemplateString(searchTemplate);
-    job->setReplacementTemplateString(replaceTemplate);
-    job->setFilesString(QStringLiteral("*"));
-    job->setExcludeString(QString());
     job->setDirectoryChoice(QList<QUrl>() << QUrl::fromLocalFile(dir.path()));
-    job->setDepth(-1); // fully recursive
-    job->setRegexpFlag(true);
-    job->setCaseSensitive(true);
-    job->setProjectFilesFlag(false);
+
+    settings.projectFilesOnly = false;
+    settings.caseSensitive = true;
+    settings.regexp = true;
+    settings.depth = -1; // fully recursive
+    settings.pattern = searchPattern;
+    settings.searchTemplate = searchTemplate;
+    settings.replacementTemplate = replaceTemplate;
+    settings.files = QStringLiteral("*");
+    settings.exclude = QString();
+
+    job->setSettings(settings);
+
     QVERIFY(job->exec());
 
     QVERIFY(model->hasResults());

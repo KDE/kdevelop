@@ -90,10 +90,6 @@ GrepJob::GrepJob( QObject* parent )
     : KJob( parent )
     , m_workState(WorkIdle)
     , m_fileIndex(0)
-    , m_useProjectFilesFlag(false)
-    , m_regexpFlag(true)
-    , m_caseSensitiveFlag(true)
-    , m_depthValue(-1)
     , m_findSomething(false)
 {
     setCapabilities(Killable);
@@ -134,12 +130,12 @@ void GrepJob::slotFindFinished()
         return;
     }
 
-    if(!m_regexpFlag)
+    if(!m_settings.regexp)
     {
-        m_patternString = QRegExp::escape(m_patternString);
+        m_settings.pattern = QRegExp::escape(m_settings.pattern);
     }
 
-    if(m_regexpFlag && QRegExp(m_patternString).captureCount() > 0)
+    if(m_settings.regexp && QRegExp(m_settings.pattern).captureCount() > 0)
     {
         m_workState = WorkIdle;
         emit hideProgress(this);
@@ -151,10 +147,10 @@ void GrepJob::slotFindFinished()
         return;
     }
 
-    QString pattern = substitudePattern(m_templateString, m_patternString);
+    QString pattern = substitudePattern(m_settings.searchTemplate, m_settings.pattern);
     m_regExp.setPattern(pattern);
     m_regExp.setPatternSyntax(QRegExp::RegExp2);
-    m_regExp.setCaseSensitivity( m_caseSensitiveFlag ? Qt::CaseSensitive : Qt::CaseInsensitive );
+    m_regExp.setCaseSensitivity( m_settings.caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive );
     if(pattern == QRegExp::escape(pattern))
     {
         // enable wildcard mode when possible
@@ -163,7 +159,7 @@ void GrepJob::slotFindFinished()
     }
 
     m_outputModel->setRegExp(m_regExp);
-    m_outputModel->setReplacementTemplate(m_replacementTemplateString);
+    m_outputModel->setReplacementTemplate(m_settings.replacementTemplate);
 
 
     emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
@@ -186,7 +182,7 @@ void GrepJob::slotWork()
             QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
             break;
         case WorkCollectFiles:
-            m_findThread = new GrepFindFilesThread(this, m_directoryChoice, m_depthValue, m_filesString, m_excludeString, m_useProjectFilesFlag);
+            m_findThread = new GrepFindFilesThread(this, m_directoryChoice, m_settings.depth, m_settings.files, m_settings.exclude, m_settings.projectFilesOnly);
             emit showMessage(this, i18n("Collecting files..."));
             connect(m_findThread.data(), &GrepFindFilesThread::finished, this, &GrepJob::slotFindFinished);
             m_findThread->start();
@@ -279,55 +275,19 @@ void GrepJob::setOutputModel(GrepOutputModel* model)
     m_outputModel = model;
 }
 
-void GrepJob::setTemplateString(const QString& templateString)
-{
-    m_templateString = templateString;
-}
-
-void GrepJob::setReplacementTemplateString(const QString &replTmplString)
-{
-    m_replacementTemplateString = replTmplString;
-}
-
-void GrepJob::setFilesString(const QString& filesString)
-{
-    m_filesString = filesString;
-}
-
-void GrepJob::setExcludeString(const QString& excludeString)
-{
-    m_excludeString = excludeString;
-}
-
 void GrepJob::setDirectoryChoice(const QList<QUrl>& choice)
 {
     m_directoryChoice = choice;
 }
 
-void GrepJob::setCaseSensitive(bool caseSensitive)
+void GrepJob::setSettings(const GrepJobSettings& settings)
 {
-    m_caseSensitiveFlag = caseSensitive;
+    m_settings = settings;
+
+    setObjectName(i18n("Grep: %1", m_settings.pattern));
 }
 
-void GrepJob::setDepth(int depth)
+GrepJobSettings GrepJob::settings() const
 {
-    m_depthValue = depth;
+    return m_settings;
 }
-
-void GrepJob::setRegexpFlag(bool regexpFlag)
-{
-    m_regexpFlag = regexpFlag;
-}
-
-void GrepJob::setProjectFilesFlag(bool projectFilesFlag)
-{
-    m_useProjectFilesFlag = projectFilesFlag;
-}
-
-void GrepJob::setPatternString(const QString& patternString)
-{
-    m_patternString = patternString;
-
-    setObjectName(i18n("Grep: %1", m_patternString));
-}
-

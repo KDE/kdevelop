@@ -163,17 +163,20 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
 void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool show)
 {
     GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
+    GrepJobSettings dlgSettings = dlg->settings();
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
 
     if(!pattern.isEmpty())
     {
-        dlg->setPattern(pattern);
+        dlgSettings.pattern = pattern;
+        dlg->setSettings(dlgSettings);
     }
     else if(!setLastUsed)
     {
         QString pattern = patternFromSelection(doc);
         if (!pattern.isEmpty()) {
-            dlg->setPattern( pattern );
+            dlgSettings.pattern = pattern;
+            dlg->setSettings(dlgSettings);
         }
     }
 

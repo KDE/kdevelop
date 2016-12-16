@@ -38,7 +38,6 @@
 #include <util/path.h>
 
 #include "grepviewplugin.h"
-#include "grepjob.h"
 #include "grepoutputview.h"
 #include "grepfindthread.h"
 #include "greputil.h"
@@ -66,7 +65,7 @@ inline QStringList template_str() { return QStringList()
     << QStringLiteral("\\b%s\\b\\s*=[^=]")
     << QStringLiteral("\\->\\s*\\b%s\\b\\s*\\(")
     << QStringLiteral("([a-z0-9_$]+)\\s*::\\s*\\b%s\\b\\s*\\(")
-    << QStringLiteral("\\b%s\\b\\s*\\->\\s*([a-z0-9_$]+)\\s*\\("); 
+    << QStringLiteral("\\b%s\\b\\s*\\->\\s*([a-z0-9_$]+)\\s*\\(");
 }
 
 inline QStringList repl_template() { return QStringList()
@@ -257,7 +256,7 @@ void GrepDialog::directoryChanged(const QString& dir)
 {
     QUrl currentUrl = QUrl::fromLocalFile(dir);
     if( !currentUrl.isValid() ) {
-        setEnableProjectBox(false);
+        m_settings.projectFilesOnly = false;
         return;
     }
 
@@ -270,7 +269,7 @@ void GrepDialog::directoryChanged(const QString& dir)
             projectAvailable = false;
     }
 
-    setEnableProjectBox(projectAvailable);
+    m_settings.projectFilesOnly =  projectAvailable;
 }
 
 GrepDialog::~GrepDialog()
@@ -297,16 +296,22 @@ void GrepDialog::templateTypeComboActivated(int index)
     replacementTemplateEdit->setCurrentItem( repl_template().at(index), true );
 }
 
-void GrepDialog::setEnableProjectBox(bool enable)
+void GrepDialog::setSettings(const GrepJobSettings& settings)
 {
-    limitToProjectCheck->setEnabled(enable);
-    limitToProjectLabel->setEnabled(enable);
+    patternCombo->setEditText(settings.pattern);
+    patternComboEditTextChanged(settings.pattern);
+    m_settings.pattern = settings.pattern;
+
+    limitToProjectCheck->setEnabled(settings.projectFilesOnly);
+    limitToProjectLabel->setEnabled(settings.projectFilesOnly);
+    m_settings.projectFilesOnly = settings.projectFilesOnly;
+
+    // Note: everything else is set by a user
 }
 
-void GrepDialog::setPattern(const QString &pattern)
+GrepJobSettings GrepDialog::settings() const
 {
-    patternCombo->setEditText(pattern);
-    patternComboEditTextChanged(pattern);
+    return m_settings;
 }
 
 void GrepDialog::setSearchLocations(const QString &dir)
@@ -329,52 +334,6 @@ void GrepDialog::setSearchLocations(const QString &dir)
             }
     }
     directoryChanged(dir);
-}
-
-QString GrepDialog::patternString() const
-{
-    return patternCombo->currentText();
-}
-
-QString GrepDialog::templateString() const
-{
-    return templateEdit->currentText().isEmpty() ? QStringLiteral("%s") : templateEdit->currentText();
-}
-
-QString GrepDialog::replacementTemplateString() const
-{
-    return replacementTemplateEdit->currentText();
-}
-
-QString GrepDialog::filesString() const
-{
-    return filesCombo->currentText();
-}
-
-QString GrepDialog::excludeString() const
-{
-    return excludeCombo->currentText();
-}
-
-bool GrepDialog::useProjectFilesFlag() const
-{
-    if (!limitToProjectCheck->isEnabled()) return false;
-    return limitToProjectCheck->isChecked();
-}
-
-bool GrepDialog::regexpFlag() const
-{
-    return regexCheck->isChecked();
-}
-
-int GrepDialog::depthValue() const
-{
-    return depthSpin->value();
-}
-
-bool GrepDialog::caseSensitiveFlag() const
-{
-    return caseSensitiveCheck->isChecked();
 }
 
 void GrepDialog::patternComboEditTextChanged( const QString& text)
@@ -419,10 +378,12 @@ bool GrepDialog::isPartOfChoice(QUrl url) const
 
 void GrepDialog::startSearch()
 {
+    updateSettings();
+
     // search for unsaved documents
     QList<IDocument*> unsavedFiles;
-    QStringList include = GrepFindFilesThread::parseInclude(filesString());
-    QStringList exclude = GrepFindFilesThread::parseExclude(excludeString());
+    QStringList include = GrepFindFilesThread::parseInclude(m_settings.files);
+    QStringList exclude = GrepFindFilesThread::parseExclude(m_settings.exclude);
 
     foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
     {
@@ -461,7 +422,7 @@ void GrepDialog::startSearch()
 
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
-    GrepOutputModel* outputModel = toolView->renewModel(patternString(), description);
+    GrepOutputModel* outputModel = toolView->renewModel(m_settings.pattern, description);
 
     connect(job, &GrepJob::showErrorMessage,
             toolView, &GrepOutputView::showErrorMessage);
@@ -475,17 +436,9 @@ void GrepDialog::startSearch()
     connect(toolView, &GrepOutputView::outputViewIsClosed, job, [=]() {job->kill();});
 
     job->setOutputModel(outputModel);
-    job->setPatternString(patternString());
-    job->setReplacementTemplateString(replacementTemplateString());
-    job->setTemplateString(templateString());
-    job->setFilesString(filesString());
-    job->setExcludeString(excludeString());
     job->setDirectoryChoice(choice);
 
-    job->setProjectFilesFlag( useProjectFilesFlag() );
-    job->setRegexpFlag( regexpFlag() );
-    job->setDepth( depthValue() );
-    job->setCaseSensitive( caseSensitiveFlag() );
+    job->setSettings(m_settings);
 
     ICore::self()->runController()->registerJob(job);
 
@@ -494,4 +447,20 @@ void GrepDialog::startSearch()
     close();
 }
 
+void GrepDialog::updateSettings()
+{
+    if (limitToProjectCheck->isEnabled())
+        m_settings.projectFilesOnly = limitToProjectCheck->isChecked();
+
+    m_settings.caseSensitive = caseSensitiveCheck->isChecked();
+    m_settings.regexp = regexCheck->isChecked();
+
+    m_settings.depth = depthSpin->value();
+
+    m_settings.pattern = patternCombo->currentText();
+    m_settings.searchTemplate = templateEdit->currentText().isEmpty() ? QStringLiteral("%s") : templateEdit->currentText();
+    m_settings.replacementTemplate = replacementTemplateEdit->currentText();
+    m_settings.files = filesCombo->currentText();
+    m_settings.exclude = excludeCombo->currentText();
+}
 
