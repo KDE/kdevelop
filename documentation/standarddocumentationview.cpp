@@ -23,11 +23,12 @@
 #include "debug.h"
 
 #include <QFontDatabase>
+#include <QWebFrame>
 
 using namespace KDevelop;
 
 StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent)
-    : QWebView (parent)
+    : QWebView(parent)
 {
     findWidget->setEnabled(true);
     connect(findWidget, &DocumentationFindWidget::newSearch, this, &StandardDocumentationView::search);
@@ -46,6 +47,33 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
     s->setFontSize(QWebSettings::DefaultFontSize, QFontInfo(sansSerifFont).pixelSize());
     s->setFontSize(QWebSettings::DefaultFixedFontSize, QFontInfo(monospaceFont).pixelSize());
     s->setFontSize(QWebSettings::MinimumFontSize, QFontInfo(minimalFont).pixelSize());
+
+    // Fixes for correct positioning. The problem looks like the following:
+    //
+    // 1) Some page is loaded and loadFinished() signal is emitted,
+    //    after this QWebView set right position inside page.
+    //
+    // 2) After loadFinished() emitting, page JS code finishes it's work and changes
+    //    font settings (size). This leads to page contents "moving" inside view widget
+    //    and as a result we have wrong position.
+    //
+    // Such behavior occurs for example with QtHelp pages.
+    //
+    // To fix the problem, first, we disable view painter updates during load to avoid content
+    // "flickering" and also to hide font size "jumping". Secondly, we reset position inside page
+    // after loading with using standard QWebFrame method scrollToAnchor().
+
+    connect(this, &QWebView::loadStarted, this, [this]() {
+        setUpdatesEnabled(false);
+    });
+
+    connect(this, &QWebView::loadFinished, this, [this](bool) {
+        if (url().isValid()) {
+            page()->mainFrame()->scrollToAnchor(url().fragment());
+        }
+        setUpdatesEnabled(true);
+    });
+
 }
 
 void StandardDocumentationView::search ( const QString& text, DocumentationFindWidget::FindOptions options )
