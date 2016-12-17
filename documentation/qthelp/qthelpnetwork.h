@@ -19,6 +19,8 @@
 #ifndef QTHELPNETWORK_H
 #define QTHELPNETWORK_H
 
+#include "debug.h"
+
 #include <QNetworkReply>
 #include <QTimer>
 #include <QHelpEngine>
@@ -47,6 +49,13 @@ HelpNetworkReply::HelpNetworkReply(const QNetworkRequest &request,
 {
     setRequest(request);
     setOpenMode(QIODevice::ReadOnly);
+
+    // Instantly finish processing if data is empty. Without this code the loadFinished()
+    // signal will never be emitted by the corresponding QWebView.
+    if (!origLen) {
+        qCDebug(QTHELP) << "Empty data for" << request.url().toDisplayString();
+        QTimer::singleShot(0, this, SIGNAL(finished()));
+    }
 
     setHeader(QNetworkRequest::ContentTypeHeader, mimeType);
     setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(origLen));
