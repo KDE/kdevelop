@@ -57,7 +57,7 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY_WITH_JSON(ClangTidyFactory, "res/kdevclangtidy.json", registerPlugin<ClangTidy::Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ClangTidyFactory, "kdevclangtidy.json", registerPlugin<ClangTidy::Plugin>();)
 
 namespace ClangTidy
 {
