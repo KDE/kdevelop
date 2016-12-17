@@ -119,6 +119,12 @@ public:
     /// Sets the grouping method
     virtual void setGrouping(int grouping);
 
+    /// Set 'show imports' filter value
+    void setShowImports(bool showImports);
+
+    /// Retrieve 'show imports' filter setting
+    int showImports() const;
+
     /// Sets the currently shown document (in the editor, it's triggered by the IDE)
     void setCurrentDocument(const IndexedString &doc);
 

@@ -49,7 +49,6 @@ const int ProblemReporterModel::MaxTimeout = 5000;
 
 ProblemReporterModel::ProblemReporterModel(QObject* parent)
     : ProblemModel(parent, new FilteredProblemStore())
-    , m_showImports(false)
 {
     setFeatures(CanDoFullUpdate | CanShowImports | ScopeFilter | SeverityFilter);
 
@@ -70,23 +69,24 @@ ProblemReporterModel::~ProblemReporterModel()
 {
 }
 
-QVector<IProblem::Ptr> ProblemReporterModel::problems(const KDevelop::IndexedString& url, bool showImports) const
+QVector<KDevelop::IProblem::Ptr> ProblemReporterModel::problems(const QSet<KDevelop::IndexedString>& docs) const
 {
     QVector<IProblem::Ptr> result;
-    QSet<KDevelop::TopDUContext*> visitedContexts;
-    KDevelop::DUChainReadLocker lock;
-    problemsInternal(KDevelop::DUChain::self()->chainForDocument(url), showImports, visitedContexts, result);
-    return result;
-}
+    DUChainReadLocker lock;
 
-QVector<IProblem::Ptr> ProblemReporterModel::problems(const QSet<KDevelop::IndexedString>& urls, bool showImports) const
-{
-    QVector<IProblem::Ptr> result;
-    QSet<KDevelop::TopDUContext*> visitedContexts;
-    KDevelop::DUChainReadLocker lock;
-    foreach (const KDevelop::IndexedString& url, urls) {
-        problemsInternal(KDevelop::DUChain::self()->chainForDocument(url), showImports, visitedContexts, result);
+    foreach (const IndexedString& doc, docs) {
+        if (doc.isEmpty())
+            continue;
+
+        TopDUContext* ctx = DUChain::self()->chainForDocument(doc);
+        if (!ctx)
+            continue;
+
+        foreach (ProblemPointer p, DUChainUtils::allProblemsForContext(ctx)) {
+            result.append(p);
+        }
     }
+
     return result;
 }
 
@@ -94,48 +94,21 @@ void ProblemReporterModel::forceFullUpdate()
 {
     Q_ASSERT(thread() == QThread::currentThread());
 
-    QSet<KDevelop::IndexedString> documents = store()->documents()->get();
-    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-    foreach (const KDevelop::IndexedString& document, documents) {
+    QSet<IndexedString> documents = store()->documents()->get();
+    if (showImports())
+        documents += store()->documents()->getImports();
+
+    DUChainReadLocker lock(DUChain::lock());
+    foreach (const IndexedString& document, documents) {
         if (document.isEmpty())
             continue;
 
-        KDevelop::TopDUContext::Features updateType = KDevelop::TopDUContext::ForceUpdate;
+        TopDUContext::Features updateType = TopDUContext::ForceUpdate;
         if (documents.size() == 1)
-            updateType = KDevelop::TopDUContext::ForceUpdateRecursive;
-        KDevelop::DUChain::self()->updateContextForUrl(
+            updateType = TopDUContext::ForceUpdateRecursive;
+        DUChain::self()->updateContextForUrl(
             document,
-            (KDevelop::TopDUContext::Features)(updateType | KDevelop::TopDUContext::VisibleDeclarationsAndContexts));
-    }
-}
-
-void ProblemReporterModel::problemsInternal(KDevelop::TopDUContext* context, bool showImports,
-                                            QSet<KDevelop::TopDUContext*>& visitedContexts,
-                                            QVector<IProblem::Ptr>& result) const
-{
-    if (!context || visitedContexts.contains(context)) {
-        return;
-    }
-    ReferencedTopDUContext top(context);
-    foreach (KDevelop::ProblemPointer p, DUChainUtils::allProblemsForContext(top)) {
-        if (p && p->severity() <= store()->severity()) {
-            result.append(p);
-        }
-    }
-    visitedContexts.insert(context);
-    if (showImports) {
-        bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
-        foreach (const KDevelop::DUContext::Import& ctx, context->importedParentContexts()) {
-            if (!ctx.indexedContext().indexedTopContext().isLoaded())
-                continue;
-            KDevelop::TopDUContext* topCtx = dynamic_cast<KDevelop::TopDUContext*>(ctx.context(nullptr));
-            if (topCtx) {
-                /// If we are starting at a proxy-context, only recurse into other proxy-contexts, because those contain the problems.
-                if (!isProxy
-                    || (topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext()))
-                    problemsInternal(topCtx, showImports, visitedContexts, result);
-            }
-        }
+            (TopDUContext::Features)(updateType | TopDUContext::VisibleDeclarationsAndContexts));
     }
 }
 
@@ -156,10 +129,9 @@ void ProblemReporterModel::setCurrentDocument(KDevelop::IDocument* doc)
     Q_ASSERT(thread() == QThread::currentThread());
 
     beginResetModel();
-    QUrl currentDocument = doc->url();
 
     /// Will trigger signal changed() if problems change
-    store()->setCurrentDocument(KDevelop::IndexedString(currentDocument));
+    store()->setCurrentDocument(IndexedString(doc->url()));
     endResetModel();
 }
 
@@ -167,33 +139,30 @@ void ProblemReporterModel::problemsUpdated(const KDevelop::IndexedString& url)
 {
     Q_ASSERT(thread() == QThread::currentThread());
 
-    if (store()->documents()->get().contains(url)) {
-        /// m_minTimer will expire in MinTimeout unless some other parsing job finishes in this period.
-        m_minTimer->start();
-        /// m_maxTimer will expire unconditionally in MaxTimeout
-        if (!m_maxTimer->isActive()) {
-            m_maxTimer->start();
-        }
-    }
-}
+    // skip update for urls outside current scope
+    if (!store()->documents()->get().contains(url) &&
+        !(showImports() && store()->documents()->getImports().contains(url)))
+        return;
 
-void ProblemReporterModel::setShowImports(bool showImports)
-{
-    if (m_showImports != showImports) {
-        Q_ASSERT(thread() == QThread::currentThread());
-        m_showImports = showImports;
-        rebuildProblemList();
+    /// m_minTimer will expire in MinTimeout unless some other parsing job finishes in this period.
+    m_minTimer->start();
+    /// m_maxTimer will expire unconditionally in MaxTimeout
+    if (!m_maxTimer->isActive()) {
+        m_maxTimer->start();
     }
 }
 
 void ProblemReporterModel::rebuildProblemList()
 {
-    QVector<IProblem::Ptr> problems;
     /// No locking here, because it may be called from an already locked context
     beginResetModel();
 
-    problems = this->problems(store()->documents()->get(), m_showImports);
-    store()->setProblems(problems);
+    QVector<IProblem::Ptr> allProblems = problems(store()->documents()->get());
+
+    if (showImports())
+        allProblems += problems(store()->documents()->getImports());
+
+    store()->setProblems(allProblems);
 
     endResetModel();
 }

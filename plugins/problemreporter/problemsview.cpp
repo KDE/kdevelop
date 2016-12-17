@@ -249,8 +249,8 @@ void ProblemsView::updateActions()
 
     m_showAllAction->setVisible(problemModel->features().testFlag(ProblemModel::CanByPassScopeFilter));
 
+    m_showImportsAction->setChecked(false);
     problemModel->setShowImports(false);
-    setScope(CurrentDocument);
 
     // Show All should be default if it's supported. It helps with error messages that are otherwise invisible
     if (problemModel->features().testFlag(ProblemModel::CanByPassScopeFilter)) {

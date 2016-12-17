@@ -35,7 +35,7 @@ class IDocument;
 class IProject;
 class ProjectFileItem;
 class Path;
-
+class WatchedDocumentSetPrivate;
 
 /**
  * Helper class that tracks set of documents and notifies its owner whenever this set changes. Derived classes implement different tracking strategies.
@@ -44,18 +44,25 @@ class KDEVPLATFORMSHELL_EXPORT WatchedDocumentSet : public QObject
 {
     Q_OBJECT
 public:
-    typedef QSet<IndexedString> DocumentSet;
+    using DocumentSet = QSet<IndexedString>;
+
     explicit WatchedDocumentSet(QObject* parent);
+    ~WatchedDocumentSet() override;
+
+    bool showImports() const;
+    void setShowImports(bool showImports);
+
     virtual DocumentSet get() const;
+    virtual DocumentSet getImports() const;
+
     virtual void setCurrentDocument(const IndexedString& url);
     virtual ProblemScope getScope() const = 0;
-    ~WatchedDocumentSet() override {}
 
 signals:
     void changed();
 
 protected:
-    DocumentSet m_documents;
+    QScopedPointer<WatchedDocumentSetPrivate> d;
 };
 
 /**
@@ -126,6 +133,15 @@ class AllProjectSet : public ProjectSet
     Q_OBJECT
 public:
     explicit AllProjectSet(QObject* parent);
+    ProblemScope getScope() const override;
+};
+
+class BypassSet : public WatchedDocumentSet
+{
+    Q_OBJECT
+public:
+    explicit BypassSet(QObject* parent);
+
     ProblemScope getScope() const override;
 };
 

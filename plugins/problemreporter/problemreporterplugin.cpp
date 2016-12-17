@@ -166,7 +166,7 @@ void ProblemReporterPlugin::updateHighlight(const KDevelop::IndexedString& url)
     QVector<IProblem::Ptr> documentProblems;
 
     foreach (const ModelData& modelData, pms->models()) {
-        documentProblems += modelData.model->problems(url);
+        documentProblems += modelData.model->problems({url});
     }
 
     ph->setProblems(documentProblems);

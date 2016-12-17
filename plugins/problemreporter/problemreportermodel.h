@@ -45,13 +45,9 @@ public:
     ~ProblemReporterModel() override;
 
     /**
-     * Get problems for @ref url.
-     */
-    QVector<KDevelop::IProblem::Ptr> problems(const KDevelop::IndexedString& url, bool showImports) const;
-    /**
      * Get merged list of problems for all @ref urls.
      */
-    QVector<KDevelop::IProblem::Ptr> problems(const QSet<KDevelop::IndexedString>& urls, bool showImports) const;
+    QVector<KDevelop::IProblem::Ptr> problems(const QSet<KDevelop::IndexedString>& urls) const;
 
 public Q_SLOTS:
     /**
@@ -59,7 +55,6 @@ public Q_SLOTS:
      */
     void problemsUpdated(const KDevelop::IndexedString& url);
 
-    void setShowImports(bool showImports) override;
     void forceFullUpdate() override;
 
 protected Q_SLOTS:
@@ -71,12 +66,8 @@ private Q_SLOTS:
     void setCurrentDocument(KDevelop::IDocument* doc) override;
 
 private:
-    void problemsInternal(KDevelop::TopDUContext* context, bool showImports,
-                          QSet<KDevelop::TopDUContext*>& visitedContexts,
-                          QVector<KDevelop::IProblem::Ptr>& result) const;
     void rebuildProblemList();
 
-    bool m_showImports; /// include problems from imported documents
     QTimer* m_minTimer;
     QTimer* m_maxTimer;
     const static int MinTimeout;

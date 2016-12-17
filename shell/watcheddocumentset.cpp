@@ -23,19 +23,183 @@
 #include "watcheddocumentset.h"
 
 #include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
 #include <interfaces/iprojectcontroller.h>
-#include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
-#include <project/projectmodel.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/topducontext.h>
 #include <project/interfaces/iprojectfilemanager.h>
+#include <project/projectmodel.h>
 
 namespace KDevelop
 {
 
-WatchedDocumentSet::WatchedDocumentSet(QObject* parent)
-    :QObject(parent)
+enum ActionFlag {
+    DoUpdate = 1,
+    DoEmit = 2
+};
+Q_DECLARE_FLAGS(ActionFlags, ActionFlag);
+Q_DECLARE_OPERATORS_FOR_FLAGS(ActionFlags);
+
+class WatchedDocumentSetPrivate : public QObject
 {
+    Q_OBJECT
+
+public:
+    using DocumentSet = WatchedDocumentSet::DocumentSet;
+
+    WatchedDocumentSetPrivate(WatchedDocumentSet* documentSet)
+        : m_documentSet(documentSet)
+        , m_showImports(false)
+    {
+        connect(DUChain::self(), &DUChain::updateReady, this, &WatchedDocumentSetPrivate::updateReady);
+    }
+
+    inline bool showImports() const
+    {
+        return m_showImports;
+    }
+
+    void setShowImports(bool showImports)
+    {
+        if (m_showImports == showImports)
+            return;
+
+        DocumentSet oldImports = m_imports;
+
+        m_showImports = showImports;
+        updateImports();
+
+        if (m_imports != oldImports)
+            emit m_documentSet->changed();
+    }
+
+    inline const DocumentSet& documents() const
+    {
+        return m_documents;
+    }
+
+    inline const DocumentSet& imports() const
+    {
+        return m_imports;
+    }
+
+    inline void doUpdate(ActionFlags flags)
+    {
+        if (flags.testFlag(DoUpdate))
+            updateImports();
+
+        if (flags.testFlag(DoEmit))
+            emit m_documentSet->changed();
+    }
+
+    void setDocuments(const DocumentSet& docs, ActionFlags flags = nullptr)
+    {
+        m_documents = docs;
+        doUpdate(flags);
+    }
+
+    void addDocument(const IndexedString& doc, ActionFlags flags = nullptr)
+    {
+        if (m_documents.contains(doc))
+            return;
+
+        m_documents.insert(doc);
+        doUpdate(flags);
+    }
+
+    void delDocument(const IndexedString& doc, ActionFlags flags = nullptr)
+    {
+        if (!m_documents.contains(doc))
+            return;
+
+        m_documents.remove(doc);
+        doUpdate(flags);
+    }
+
+    void updateImports()
+    {
+        if (!m_showImports) {
+            if (!m_imports.isEmpty()) {
+                m_imports.clear();
+                return;
+            }
+            return;
+        }
+
+        getImportsFromDUChain();
+    }
+
+private:
+    void getImportsFromDU(TopDUContext* context, QSet<TopDUContext*>& visitedContexts)
+    {
+        if (!context || visitedContexts.contains(context))
+            return;
+
+        visitedContexts.insert(context);
+        foreach (const DUContext::Import& ctx, context->importedParentContexts()) {
+            TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context(nullptr));
+
+            if (topCtx)
+                getImportsFromDU(topCtx, visitedContexts);
+        }
+    }
+
+    void getImportsFromDUChain()
+    {
+        QSet<TopDUContext*> visitedContexts;
+
+        m_imports.clear();
+        foreach (const IndexedString& doc, m_documents) {
+            TopDUContext* ctx = DUChain::self()->chainForDocument(doc);
+            getImportsFromDU(ctx, visitedContexts);
+            visitedContexts.remove(ctx);
+        }
+
+        foreach (TopDUContext* ctx, visitedContexts) {
+            m_imports.insert(ctx->url());
+        }
+    }
+
+    void updateReady(const IndexedString& doc, const ReferencedTopDUContext&)
+    {
+        if (!m_showImports || !m_documents.contains(doc))
+            return;
+
+        DocumentSet oldImports = m_imports;
+
+        updateImports();
+        if (m_imports != oldImports)
+            emit m_documentSet->changed();
+    }
+
+    WatchedDocumentSet* m_documentSet;
+
+    DocumentSet m_documents;
+    DocumentSet m_imports;
+
+    bool m_showImports;
+};
+
+WatchedDocumentSet::WatchedDocumentSet(QObject* parent)
+    : QObject(parent)
+    , d(new WatchedDocumentSetPrivate(this))
+{
+}
+
+WatchedDocumentSet::~WatchedDocumentSet()
+{
+}
+
+bool WatchedDocumentSet::showImports() const
+{
+    return d->showImports();
+}
+
+void WatchedDocumentSet::setShowImports(bool showImports)
+{
+    d->setShowImports(showImports);
 }
 
 void WatchedDocumentSet::setCurrentDocument(const IndexedString&)
@@ -44,20 +208,23 @@ void WatchedDocumentSet::setCurrentDocument(const IndexedString&)
 
 WatchedDocumentSet::DocumentSet WatchedDocumentSet::get() const
 {
-    return m_documents;
+    return d->documents();
 }
 
-CurrentDocumentSet::CurrentDocumentSet(const IndexedString& document, QObject *parent)
+WatchedDocumentSet::DocumentSet WatchedDocumentSet::getImports() const
+{
+    return d->imports();
+}
+
+CurrentDocumentSet::CurrentDocumentSet(const IndexedString& document, QObject* parent)
     : WatchedDocumentSet(parent)
 {
-    m_documents.insert(document);
+    d->setDocuments({document}, DoUpdate);
 }
 
 void CurrentDocumentSet::setCurrentDocument(const IndexedString& url)
 {
-    m_documents.clear();
-    m_documents.insert(url);
-    emit changed();
+    d->setDocuments({url}, DoUpdate | DoEmit);
 }
 
 ProblemScope CurrentDocumentSet::getScope() const
@@ -65,28 +232,26 @@ ProblemScope CurrentDocumentSet::getScope() const
     return CurrentDocument;
 }
 
-OpenDocumentSet::OpenDocumentSet(QObject *parent)
+OpenDocumentSet::OpenDocumentSet(QObject* parent)
     : WatchedDocumentSet(parent)
 {
-    QList<IDocument*> docs = ICore::self()->documentController()->openDocuments();
-    foreach (IDocument* doc, docs) {
-        m_documents.insert(IndexedString(doc->url()));
+    foreach (IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+        d->addDocument(IndexedString(doc->url()));
     }
+    d->updateImports();
+
     connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &OpenDocumentSet::documentClosed);
     connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &OpenDocumentSet::documentCreated);
 }
 
 void OpenDocumentSet::documentClosed(IDocument* doc)
 {
-    if (m_documents.remove(IndexedString(doc->url()))) {
-        emit changed();
-    }
+    d->delDocument(IndexedString(doc->url()), DoUpdate | DoEmit);
 }
 
 void OpenDocumentSet::documentCreated(IDocument* doc)
 {
-    m_documents.insert(IndexedString(doc->url()));
-    emit changed();
+    d->addDocument(IndexedString(doc->url()), DoUpdate | DoEmit);
 }
 
 ProblemScope OpenDocumentSet::getScope() const
@@ -94,29 +259,25 @@ ProblemScope OpenDocumentSet::getScope() const
     return OpenDocuments;
 }
 
-ProjectSet::ProjectSet(QObject *parent)
+ProjectSet::ProjectSet(QObject* parent)
     : WatchedDocumentSet(parent)
 {
 }
 
 void ProjectSet::fileAdded(ProjectFileItem* file)
 {
-    m_documents.insert(file->indexedPath());
-    emit changed();
+    d->addDocument(IndexedString(file->indexedPath()), DoUpdate | DoEmit);
 }
 
 void ProjectSet::fileRemoved(ProjectFileItem* file)
 {
-    if (m_documents.remove(file->indexedPath())) {
-        emit changed();
-    }
+    d->delDocument(IndexedString(file->indexedPath()), DoUpdate | DoEmit);
 }
 
 void ProjectSet::fileRenamed(const Path& oldFile, ProjectFileItem* newFile)
 {
-    if (m_documents.remove(IndexedString(oldFile.pathOrUrl()))) {
-        m_documents.insert(newFile->indexedPath());
-    }
+    d->delDocument(IndexedString(oldFile.pathOrUrl()));
+    d->addDocument(IndexedString(newFile->indexedPath()), DoUpdate | DoEmit);
 }
 
 void ProjectSet::trackProjectFiles(const IProject* project)
@@ -136,11 +297,11 @@ void ProjectSet::trackProjectFiles(const IProject* project)
     }
 }
 
-CurrentProjectSet::CurrentProjectSet(const IndexedString& document, QObject *parent)
-    : ProjectSet(parent), m_currentProject(nullptr)
+CurrentProjectSet::CurrentProjectSet(const IndexedString& document, QObject* parent)
+    : ProjectSet(parent)
+    , m_currentProject(nullptr)
 {
     setCurrentDocumentInternal(document);
-    trackProjectFiles(m_currentProject);
 }
 
 void CurrentProjectSet::setCurrentDocument(const IndexedString& url)
@@ -152,13 +313,10 @@ void CurrentProjectSet::setCurrentDocumentInternal(const IndexedString& url)
 {
     IProject* projectForUrl = ICore::self()->projectController()->findProjectForUrl(url.toUrl());
     if (projectForUrl && projectForUrl != m_currentProject) {
-        m_documents.clear();
         m_currentProject = projectForUrl;
-
-        foreach (const IndexedString &indexedString, m_currentProject->fileSet()) {
-            m_documents.insert(indexedString);
-        }
-        emit changed();
+        d->setDocuments(m_currentProject->fileSet());
+        d->addDocument(IndexedString(m_currentProject->path().toLocalFile()), DoUpdate | DoEmit);
+        trackProjectFiles(m_currentProject);
     }
 }
 
@@ -167,15 +325,18 @@ ProblemScope CurrentProjectSet::getScope() const
     return CurrentProject;
 }
 
-AllProjectSet::AllProjectSet(QObject *parent)
+AllProjectSet::AllProjectSet(QObject* parent)
     : ProjectSet(parent)
 {
     foreach(const IProject* project, ICore::self()->projectController()->projects()) {
         foreach (const IndexedString &indexedString, project->fileSet()) {
-            m_documents.insert(indexedString);
+            d->addDocument(indexedString);
         }
+        d->addDocument(IndexedString(project->path().toLocalFile()));
         trackProjectFiles(project);
     }
+    d->updateImports();
+    emit changed();
 }
 
 ProblemScope AllProjectSet::getScope() const
@@ -183,5 +344,16 @@ ProblemScope AllProjectSet::getScope() const
     return AllProjects;
 }
 
+BypassSet::BypassSet(QObject* parent)
+    : WatchedDocumentSet(parent)
+{
 }
 
+ProblemScope BypassSet::getScope() const
+{
+    return BypassScopeFilter;
+}
+
+}
+
+#include "watcheddocumentset.moc"

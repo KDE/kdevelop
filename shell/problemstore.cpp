@@ -186,15 +186,13 @@ WatchedDocumentSet* ProblemStore::documents() const
 void ProblemStore::setScope(int scope)
 {
     ProblemScope cast_scope = static_cast<ProblemScope>(scope);
-
-    if (cast_scope == BypassScopeFilter) {
-        return;
-    }
+    bool showImports = false;
 
     if (d->m_documents) {
         if(cast_scope == d->m_documents->getScope())
             return;
 
+        showImports = d->m_documents->showImports();
         delete d->m_documents;
     }
 
@@ -212,9 +210,11 @@ void ProblemStore::setScope(int scope)
         d->m_documents = new AllProjectSet(this);
         break;
     case BypassScopeFilter:
-        // handled above
+        d->m_documents = new BypassSet(this);
         break;
     }
+
+    d->m_documents->setShowImports(showImports);
 
     rebuild();
 
@@ -233,6 +233,16 @@ int ProblemStore::scope() const
 void ProblemStore::setGrouping(int grouping)
 {
     Q_UNUSED(grouping);
+}
+
+void ProblemStore::setShowImports(bool showImports)
+{
+    d->m_documents->setShowImports(showImports);
+}
+
+int ProblemStore::showImports() const
+{
+    return d->m_documents->showImports();
 }
 
 void ProblemStore::setCurrentDocument(const IndexedString &doc)

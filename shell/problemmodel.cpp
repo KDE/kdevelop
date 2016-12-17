@@ -310,9 +310,24 @@ void ProblemModel::onEndRebuild()
     endResetModel();
 }
 
+void ProblemModel::setShowImports(bool showImports)
+{
+    Q_ASSERT(thread() == QThread::currentThread());
+
+    d->m_problems->setShowImports(showImports);
+}
+
+bool ProblemModel::showImports()
+{
+    return d->m_problems->showImports();
+}
+
 void ProblemModel::setScope(int scope)
 {
     Q_ASSERT(thread() == QThread::currentThread());
+
+    if (!features().testFlag(ScopeFilter))
+        scope = ProblemScope::BypassScopeFilter;
 
     /// Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
     d->m_problems->setScope(scope);

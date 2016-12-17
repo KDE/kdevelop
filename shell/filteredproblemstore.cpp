@@ -292,6 +292,10 @@ int FilteredProblemStore::grouping() const
 
 bool FilteredProblemStorePrivate::match(const IProblem::Ptr &problem) const
 {
+    if (q->scope() != ProblemScope::BypassScopeFilter &&
+        !q->documents()->get().contains(problem.data()->finalLocation().document) &&
+        !(q->showImports() && q->documents()->getImports().contains(problem.data()->finalLocation().document)))
+        return false;
 
     if(problem->severity()!=IProblem::NoSeverity)
     {

@@ -135,6 +135,9 @@ public:
     /// Retrieve the supported features
     Features features() const;
 
+    /// Retrieve 'show imports' filter setting
+    bool showImports();
+
     /// Set the supported features
     void setFeatures(Features features);
 
@@ -147,15 +150,15 @@ signals:
 
 public slots:
     /// Show imports
-    virtual void setShowImports(bool){}
+    void setShowImports(bool showImports);
 
     /// Sets the scope filter. Uses int to be able to use QSignalMapper
-    virtual void setScope(int scope);
+    void setScope(int scope);
 
     /// Sets the severity filter. Uses int to be able to use QSignalMapper
-    virtual void setSeverity(int severity);///old-style severity filtering
+    void setSeverity(int severity);///old-style severity filtering
 
-    virtual void setSeverities(KDevelop::IProblem::Severities severities);///new-style severity filtering
+    void setSeverities(KDevelop::IProblem::Severities severities);///new-style severity filtering
 
     void setGrouping(int grouping);
 
