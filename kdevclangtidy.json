@@ -24,25 +24,11 @@
             }
         ], 
         "Category": "Analyzers",
-        "Description": "clang-tidy provides an extensible framework for diagnosing and 
-fixing typical programming errors, like style violations, interface misuse, or bugs that 
-can be deduced via static analysis. http://clang.llvm.org/extra/clang-tidy/", 
-        "Description[es]": "clang-tidy proporciona un marco extensible para el diagnóstico 
-y fijación de los errores típicos de la programación, como violaciónes de estilo, el mal 
-uso de la interfaz, o errores que se pueden deducir a través de análisis estático. 
-http://clang.llvm.org/extra/clang-tidy/", 
-        "Description[pt]": "clang-tidy fornece uma estrutura extensível para o 
-diagnóstico e correção de erros de programação típicos, como violações de estilo, uso 
-indevido de interface, ou bugs que podem ser deduzidos através da análise estática. 
-http://clang.llvm.org/extra/clang-tidy/", 
-        "Description[pt_BR]": "clang-tidy fornece uma estrutura extensível para o 
-diagnóstico e correção de erros de programação típicos, como violações de estilo, uso 
-indevido de interface, ou bugs que podem ser deduzidos através da análise estática. 
-http://clang.llvm.org/extra/clang-tidy/", 
-        "Description[x-test]": "xxclang-tidy provides an extensible framework for 
-diagnosing and fixing typical programming errors, like style violations, interface misuse, 
-or bugs that can be deduced via static analysis. 
-http://clang.llvm.org/extra/clang-tidy/xx",
+        "Description": "clang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. http://clang.llvm.org/extra/clang-tidy/",
+        "Description[es]": "clang-tidy proporciona un marco extensible para el diagnóstico y fijación de los errores típicos de la programación, como violaciónes de estilo, el mal uso de la interfaz, o errores que se pueden deducir a través de análisis estático. http://clang.llvm.org/extra/clang-tidy/",
+        "Description[pt]": "clang-tidy fornece uma estrutura extensível para o diagnóstico e correção de erros de programação típicos, como violações de estilo, uso indevido de interface, ou bugs que podem ser deduzidos através da análise estática. http://clang.llvm.org/extra/clang-tidy/",
+        "Description[pt_BR]": "clang-tidy fornece uma estrutura extensível para o diagnóstico e correção de erros de programação típicos, como violações de estilo, uso indevido de interface, ou bugs que podem ser deduzidos através da análise estática. http://clang.llvm.org/extra/clang-tidy/",
+        "Description[x-test]": "xxclang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. http://clang.llvm.org/extra/clang-tidy/xx",
         "Icon": "kdevelop", 
         "Id": "kdevclangtidy", 
         "License": "GPL", 
