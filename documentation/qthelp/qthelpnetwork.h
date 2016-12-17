@@ -57,6 +57,11 @@ HelpNetworkReply::HelpNetworkReply(const QNetworkRequest &request,
         QTimer::singleShot(0, this, SIGNAL(finished()));
     }
 
+    // Fix broken CSS images (tested on Qt 5.5.1 and 5.7.0)
+    if (request.url().fileName() ==  QStringLiteral("offline.css")) {
+        data.replace("../images", "images");
+    }
+
     setHeader(QNetworkRequest::ContentTypeHeader, mimeType);
     setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(origLen));
     QTimer::singleShot(0, this, SIGNAL(metaDataChanged()));
