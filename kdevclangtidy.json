@@ -1,5 +1,5 @@
 {
-    "GenericName": "Syntax check", 
+    "GenericName": "clang-tidy Support",
     "GenericName[bs]": "Provjera sintakse", 
     "GenericName[ca@valencia]": "Comprova la sintaxi", 
     "GenericName[ca]": "Comprova la sintaxi", 
@@ -15,7 +15,7 @@
     "GenericName[sk]": "Kontrola syntaxe", 
     "GenericName[sv]": "Syntaxkontroll", 
     "GenericName[uk]": "Перевірка синтаксису", 
-    "GenericName[x-test]": "xxSyntax checkxx", 
+    "GenericName[x-test]": "xxclang-tidy Supportxx",
     "KPlugin": {
         "Authors": [
             {
