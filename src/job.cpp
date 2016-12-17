@@ -148,9 +148,15 @@ void Job::childProcessError(QProcess::ProcessError e)
     QString message;
 
     switch (e) {
-    case QProcess::FailedToStart:
-        message = i18n("Failed to start clang-tidy from %1.", commandLine()[0]);
+    case QProcess::FailedToStart: {
+        const auto binaryPath = commandLine().value(0);
+        if (binaryPath.isEmpty()) {
+            message = i18n("Failed to find clang-tidy binary.");
+        } else {
+            message = i18n("Failed to start clang-tidy from %1.", binaryPath);
+        }
         break;
+    }
 
     case QProcess::Crashed:
         message = i18n("Clang-tidy crashed.");
