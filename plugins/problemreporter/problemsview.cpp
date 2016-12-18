@@ -140,7 +140,7 @@ void ProblemsView::setupActions()
         m_errorSeverityAction = new QAction(this);
         m_errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors"));
         m_errorSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-error")));
-        m_errorSeverityAction->setIconText(i18n("Show Error"));
+        m_errorSeverityAction->setIconText(i18n("Show Errors"));
 
         m_warningSeverityAction = new QAction(this);
         m_warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display warnings"));
