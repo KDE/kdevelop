@@ -23,8 +23,8 @@ find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 include_directories(
-    ${kdevclangtidy_BINARY_DIR}
-    ${kdevclangtidy_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 set(kdevclangtidy_PART_SRCS
