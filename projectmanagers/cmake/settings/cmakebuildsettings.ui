@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>605</width>
-    <height>537</height>
+    <height>547</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -110,14 +110,78 @@
       <property name="fieldGrowthPolicy">
        <enum>QFormLayout::ExpandingFieldsGrow</enum>
       </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="installationPrefixLabel">
+        <property name="text">
+         <string>Installation Prefix</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KUrlRequester" name="installationPrefix"/>
+      </item>
       <item row="1" column="0">
+       <widget class="QLabel" name="buildTypeLabel">
+        <property name="text">
+         <string>Build Type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="buildType">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string notr="true">Debug</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Release</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">RelWithDebInfo</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">MinSizeRel</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="extraArgumentsLabel">
+        <property name="text">
+         <string>Extra Arguments</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="KComboBox" name="extraArguments">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Configure Environment</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="3" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="KDevelop::EnvironmentSelectionWidget" name="environment">
@@ -137,10 +201,20 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="1">
+      <item row="5" column="1">
        <widget class="QCheckBox" name="showInternal">
         <property name="text">
          <string>Show Advanced Values</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="KUrlRequester" name="cMakeBinary"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="cMakeBinaryLabel">
+        <property name="text">
+         <string>CMake Binary</string>
         </property>
        </widget>
       </item>
@@ -154,6 +228,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QWidget</extends>
+   <header>kurlrequester.h</header>
   </customwidget>
   <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>

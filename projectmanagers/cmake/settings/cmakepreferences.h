@@ -23,6 +23,7 @@
 #define CMAKEPREFERENCES_H
 
 #include "cmakecachemodel.h"
+#include "cmakeextraargumentshistory.h"
 
 #include <project/projectconfigpage.h>
 #include <util/path.h>
@@ -63,6 +64,7 @@ class CMakePreferences : public KDevelop::ConfigPage
         void configureCacheView();
     private:
         void configure();
+        void initAdvanced();
         
         KDevelop::IProject* m_project;
         KDevelop::Path m_srcFolder;
@@ -70,6 +72,7 @@ class CMakePreferences : public KDevelop::ConfigPage
         void updateCache( const KDevelop::Path & );
         Ui::CMakeBuildSettings* m_prefsUi;
         CMakeCacheModel* m_currentModel;
+        CMakeExtraArgumentsHistory* m_extraArgumentsHistory;
 };
 
 #endif

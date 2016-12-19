@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QDir>
 #include <QHeaderView>
+#include <QComboBox>
 
 #include "ui_cmakebuildsettings.h"
 #include "cmakecachedelegate.h"
@@ -66,6 +67,11 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
     m_prefsUi->cacheList->horizontalHeader()->setStretchLastSection(true);
     m_prefsUi->cacheList->verticalHeader()->hide();
 
+    // configure the extraArguments widget to span the advanced box width but not
+    // expand the dialog to the width of the longest element in the argument history.
+    m_prefsUi->extraArguments->setMinimumWidth(dynamic_cast<QComboBox*>(m_prefsUi->extraArguments)->minimumSizeHint().width());
+    m_extraArgumentsHistory = new CMakeExtraArgumentsHistory(m_prefsUi->extraArguments);
+
     connect(m_prefsUi->buildDirs, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
             this, &CMakePreferences::buildDirChanged);
     connect(m_prefsUi->showInternal, &QCheckBox::stateChanged,
@@ -76,6 +82,19 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
     connect(m_prefsUi->environment, &EnvironmentSelectionWidget::currentProfileChanged,
             this, &CMakePreferences::changed);
     connect(m_prefsUi->configureEnvironment, &EnvironmentConfigureButton::environmentConfigured,
+            this, &CMakePreferences::changed);
+
+    connect(m_prefsUi->installationPrefix, &KUrlRequester::textChanged,
+            this, &CMakePreferences::changed);
+    connect(m_prefsUi->buildType, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged),
+            this, &CMakePreferences::changed);
+    connect(m_prefsUi->buildType, &QComboBox::currentTextChanged,
+            this, &CMakePreferences::changed);
+    connect(m_prefsUi->extraArguments, &KComboBox::currentTextChanged,
+            this, &CMakePreferences::changed);
+    connect(m_prefsUi->extraArguments, &KComboBox::editTextChanged,
+            this, &CMakePreferences::changed);
+    connect(m_prefsUi->cMakeBinary, &KUrlRequester::textChanged,
             this, &CMakePreferences::changed);
 
     showInternal(m_prefsUi->showInternal->checkState());
@@ -97,7 +116,21 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
 CMakePreferences::~CMakePreferences()
 {
     CMake::removeOverrideBuildDirIndex(m_project);
+    delete m_extraArgumentsHistory;
     delete m_prefsUi;
+}
+
+void CMakePreferences::initAdvanced()
+{
+    m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment(m_project) );
+    m_prefsUi->installationPrefix->setText(CMake::currentInstallDir(m_project).toLocalFile());
+    const QString buildType = CMake::currentBuildType(m_project);
+    if (m_prefsUi->buildType->findText(buildType) == -1) {
+        m_prefsUi->buildType->addItem(buildType);
+    }
+    m_prefsUi->buildType->setCurrentIndex(m_prefsUi->buildType->findText(buildType));
+    m_prefsUi->extraArguments->setEditText(CMake::currentExtraArguments(m_project));
+    m_prefsUi->cMakeBinary->setText(CMake::currentCMakeBinary(m_project).toLocalFile());
 }
 
 void CMakePreferences::reset()
@@ -107,7 +140,8 @@ void CMakePreferences::reset()
     m_prefsUi->buildDirs->addItems( CMake::allBuildDirs(m_project) );
     CMake::removeOverrideBuildDirIndex(m_project); // addItems() triggers buildDirChanged(), compensate for it
     m_prefsUi->buildDirs->setCurrentIndex( CMake::currentBuildDirIndex(m_project) );
-    m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment(m_project) );
+
+    initAdvanced();
 
     m_srcFolder = m_project->path();
 
@@ -131,6 +165,15 @@ void CMakePreferences::apply()
     }
 
     CMake::setCurrentEnvironment( m_project, m_prefsUi->environment->currentProfile() );
+
+    CMake::setCurrentInstallDir( m_project, Path(m_prefsUi->installationPrefix->text()) );
+    const QString buildType = m_prefsUi->buildType->currentText();
+    if (m_prefsUi->buildType->findText(buildType) == -1) {
+        m_prefsUi->buildType->addItem(buildType);
+    }
+    CMake::setCurrentBuildType( m_project, buildType );
+    CMake::setCurrentExtraArguments( m_project, m_prefsUi->extraArguments->currentText() );
+    CMake::setCurrentCMakeBinary( m_project, Path(m_prefsUi->cMakeBinary->text()) );
 
     qCDebug(CMAKE) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
     qCDebug(CMAKE) << "writing to cmake config: builddir path " << CMake::currentBuildDir(m_project);
@@ -231,7 +274,7 @@ void CMakePreferences::buildDirChanged(int index)
 {
     CMake::setOverrideBuildDirIndex( m_project, index );
     const Path buildDir = CMake::currentBuildDir(m_project);
-    m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment( m_project ) );
+    initAdvanced();
     updateCache(buildDir);
     qCDebug(CMAKE) << "builddir Changed" << buildDir;
     emit changed();

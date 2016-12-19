@@ -26,6 +26,7 @@
 
 #include <util/path.h>
 
+#include "cmakeextraargumentshistory.h"
 #include "cmakecommonexport.h"
 
 class QDialogButtonBox;
@@ -76,7 +77,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
             QString& srcDir,
             QString& installDir,
             QString& buildType);
-        QStringList extraArgumentsHistory() const;
+
+        CMakeExtraArgumentsHistory* m_extraArgumentsHistory;
 
         Ui::CMakeBuildDirChooser* m_chooserUi;
         QDialogButtonBox* m_buttonBox;

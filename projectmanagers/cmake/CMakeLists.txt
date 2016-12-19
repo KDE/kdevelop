@@ -27,6 +27,7 @@ set( cmakecommon_SRCS
 #   parser/cmakeduchaintypes.cpp
 #   parser/generationexpressionsolver.cpp
   cmakeutils.cpp
+  cmakeextraargumentshistory.cpp
   cmakebuilddirchooser.cpp
   debug.cpp
 

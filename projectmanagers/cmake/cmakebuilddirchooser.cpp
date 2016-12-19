@@ -37,12 +37,6 @@
 
 using namespace KDevelop;
 
-namespace {
-
-const int maxExtraArgumentsInHistory = 15;
-
-}
-
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     : QDialog(parent)
 {
@@ -67,14 +61,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 
     setCMakeBinary(Path(CMake::findExecutable()));
 
-    KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");
-    QStringList lastExtraArguments = config.readEntry("LastExtraArguments", QStringList());;
-    m_chooserUi->extraArguments->addItem("");
-    m_chooserUi->extraArguments->addItems(lastExtraArguments);
-    m_chooserUi->extraArguments->setInsertPolicy(QComboBox::InsertAtTop);
-    KCompletion *comp = m_chooserUi->extraArguments->completionObject();
-    connect(m_chooserUi->extraArguments, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::returnPressed), comp, static_cast<void(KCompletion::*)(const QString&)>(&KCompletion::addItem));
-    comp->insertItems(lastExtraArguments);
+    m_extraArgumentsHistory = new CMakeExtraArgumentsHistory(m_chooserUi->extraArguments);
 
     connect(m_chooserUi->cmakeBin, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->buildFolder, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
@@ -86,9 +73,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 
 CMakeBuildDirChooser::~CMakeBuildDirChooser()
 {
-    KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");
-    config.writeEntry("LastExtraArguments", extraArgumentsHistory());
-    config.sync();
+    delete m_extraArgumentsHistory;
 
     delete m_chooserUi;
 }
@@ -324,20 +309,3 @@ Path CMakeBuildDirChooser::buildFolder() const { return Path(m_chooserUi->buildF
 QString CMakeBuildDirChooser::buildType() const { return m_chooserUi->buildType->currentText(); }
 
 QString CMakeBuildDirChooser::extraArguments() const { return m_chooserUi->extraArguments->currentText(); }
-
-QStringList CMakeBuildDirChooser::extraArgumentsHistory() const
-{
-    QStringList list;
-    KComboBox* extraArguments = m_chooserUi->extraArguments;
-    if (!extraArguments->currentText().isEmpty()) {
-        list << extraArguments->currentText();
-    }
-    for (int i = 0; i < qMin(maxExtraArgumentsInHistory, extraArguments->count()); ++i) {
-        if (!extraArguments->itemText(i).isEmpty() &&
-            (extraArguments->currentText() != extraArguments->itemText(i))) {
-            list << extraArguments->itemText(i);
-        }
-    }
-    return list;
-}
-
