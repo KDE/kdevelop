@@ -166,8 +166,12 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
             this,
             &MainWindowPrivate::widgetResized);
 
-   connect(idealController, &IdealController::dockBarContextMenuRequested,
+    connect(idealController, &IdealController::dockBarContextMenuRequested,
             m_mainWindow, &MainWindow::dockBarContextMenuRequested);
+
+    idealController->leftBarWidget->loadOrderSettings();
+    idealController->bottomBarWidget->loadOrderSettings();
+    idealController->rightBarWidget->loadOrderSettings();
 }
 
 
@@ -522,15 +526,6 @@ void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
-    static bool orderIsLoaded = false;
-
-    if (!orderIsLoaded) {
-        orderIsLoaded = true;
-        idealController->leftBarWidget->loadOrderSettings();
-        idealController->bottomBarWidget->loadOrderSettings();
-        idealController->rightBarWidget->loadOrderSettings();
-    }
-
     if(m_leftTabbarCornerWidget) {
         m_leftTabbarCornerWidget->hide();
         m_leftTabbarCornerWidget->setParent(nullptr);
