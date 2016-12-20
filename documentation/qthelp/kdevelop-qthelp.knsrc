@@ -1,4 +1,6 @@
 [KNewStuff3]
+Name=API Documentation (QtHelp)
+
 ProvidersUrl=https://collect.kde.org/kdevelop-qthelp/providers.xml
 TargetDir=kdevelop-qthelp
 Uncompress=archive
