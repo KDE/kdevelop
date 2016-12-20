@@ -179,14 +179,7 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
     connect(button, &IdealToolButton::customContextMenuRequested,
             action->dockWidget(), &IdealDockWidget::contextMenuRequested);
 
-    QString buttonId = id(button);
-    if (!_buttonsOrder.contains(buttonId)) {
-        if (_area == Qt::BottomDockWidgetArea) {
-            _buttonsOrder.push_front(buttonId);
-        } else {
-            _buttonsOrder.push_back(buttonId);
-        }
-    }
+    addButtonToOrder(button);
     applyOrderToLayout();
 
     if (wasEmpty) {
@@ -240,7 +233,7 @@ QString IdealButtonBarWidget::id(const IdealToolButton* button) const
     return QString();
 }
 
-IdealToolButton* Sublime::IdealButtonBarWidget::button(const QString& id) const
+IdealToolButton* IdealButtonBarWidget::button(const QString& id) const
 {
     foreach (QAction* a, actions()) {
         auto tva = dynamic_cast<ToolViewAction*>(a);
@@ -252,27 +245,40 @@ IdealToolButton* Sublime::IdealButtonBarWidget::button(const QString& id) const
     return nullptr;
 }
 
-void IdealButtonBarWidget::loadOrderSettings()
+void IdealButtonBarWidget::addButtonToOrder(IdealToolButton* button)
 {
-    KConfigGroup config = KSharedConfig::openConfig()->group("UI");
-    _buttonsOrder = config.readEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), QStringList());
+    QString buttonId = id(button);
+    if (!_buttonsOrder.contains(buttonId)) {
+        if (_area == Qt::BottomDockWidgetArea) {
+            _buttonsOrder.push_front(buttonId);
+        }
+        else {
+            _buttonsOrder.push_back(buttonId);
+        }
+    }
+}
 
+void IdealButtonBarWidget::loadOrderSettings(const KConfigGroup& configGroup)
+{
+    _buttonsOrder = configGroup.readEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), QStringList());
     applyOrderToLayout();
 }
 
-void IdealButtonBarWidget::saveOrderSettings()
+void IdealButtonBarWidget::saveOrderSettings(KConfigGroup& configGroup)
 {
     takeOrderFromLayout();
-
-    KConfigGroup config = KSharedConfig::openConfig()->group("UI");
-    config.writeEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), _buttonsOrder);
+    configGroup.writeEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), _buttonsOrder);
 }
 
 void IdealButtonBarWidget::applyOrderToLayout()
 {
-    foreach(QAction* a, actions()) {
-        if (auto tva = dynamic_cast<ToolViewAction*>(a)) {
-            layout()->removeWidget(tva->button());
+    // If widget already have some buttons in the layout then calling loadOrderSettings() may leads
+    // to situations when loaded order does not contains all existing buttons. Therefore we should
+    // fix this with using addToOrder() method.
+    for (int i = 0; i < layout()->count(); ++i) {
+        if (auto button = dynamic_cast<IdealToolButton*>(layout()->itemAt(i)->widget())) {
+            addButtonToOrder(button);
+            layout()->removeWidget(button);
         }
     }
 

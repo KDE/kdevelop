@@ -168,10 +168,6 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     connect(idealController, &IdealController::dockBarContextMenuRequested,
             m_mainWindow, &MainWindow::dockBarContextMenuRequested);
-
-    idealController->leftBarWidget->loadOrderSettings();
-    idealController->bottomBarWidget->loadOrderSettings();
-    idealController->rightBarWidget->loadOrderSettings();
 }
 
 
@@ -575,15 +571,6 @@ void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
 {
-    static bool orderIsSaved = false;
-
-    if (!orderIsSaved) {
-        orderIsSaved = true;
-        idealController->leftBarWidget->saveOrderSettings();
-        idealController->bottomBarWidget->saveOrderSettings();
-        idealController->rightBarWidget->saveOrderSettings();
-    }
-
     QSplitter *splitter = m_indexSplitters[index];
     if (!splitter)
         return;

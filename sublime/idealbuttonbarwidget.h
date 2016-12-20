@@ -29,7 +29,11 @@
 class IdealToolButton;
 class ToolViewAction;
 class QAction;
-namespace Sublime {
+
+class KConfigGroup;
+
+namespace Sublime
+{
 
 class MainWindow;
 class IdealController;
@@ -66,8 +70,8 @@ public:
     void saveShowState();
     bool lastShowState();
 
-    void loadOrderSettings();
-    void saveOrderSettings();
+    void loadOrderSettings(const KConfigGroup& configGroup);
+    void saveOrderSettings(KConfigGroup& configGroup);
 
 private Q_SLOTS:
     void showWidget(bool checked);
@@ -82,6 +86,8 @@ private:
 
     IdealToolButton* button(const QString& id) const;
     QString id(const IdealToolButton* button) const;
+
+    void addButtonToOrder(IdealToolButton* button);
 
     Qt::DockWidgetArea _area;
     IdealController *_controller;
