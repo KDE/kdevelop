@@ -87,7 +87,7 @@ private:
     IdealToolButton* button(const QString& id) const;
     QString id(const IdealToolButton* button) const;
 
-    void addButtonToOrder(IdealToolButton* button);
+    void addButtonToOrder(const IdealToolButton* button);
 
     Qt::DockWidgetArea _area;
     IdealController *_controller;

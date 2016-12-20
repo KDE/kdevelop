@@ -245,7 +245,7 @@ IdealToolButton* IdealButtonBarWidget::button(const QString& id) const
     return nullptr;
 }
 
-void IdealButtonBarWidget::addButtonToOrder(IdealToolButton* button)
+void IdealButtonBarWidget::addButtonToOrder(const IdealToolButton* button)
 {
     QString buttonId = id(button);
     if (!_buttonsOrder.contains(buttonId)) {
