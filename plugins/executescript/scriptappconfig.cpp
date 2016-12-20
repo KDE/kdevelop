@@ -54,7 +54,7 @@ static const QString interpreterForUrl(const QUrl& url) {
     auto mimetype = QMimeDatabase().mimeTypeForUrl(url);
     static QHash<QString, QString> knownMimetypes;
     if ( knownMimetypes.isEmpty() ) {
-        knownMimetypes[QStringLiteral("text/x-python")] = QStringLiteral("python");
+        knownMimetypes[QStringLiteral("text/x-python")] = QStringLiteral("python3");
         knownMimetypes[QStringLiteral("application/x-php")] = QStringLiteral("php");
         knownMimetypes[QStringLiteral("application/x-ruby")] = QStringLiteral("ruby");
         knownMimetypes[QStringLiteral("application/x-shellscript")] = QStringLiteral("bash");
