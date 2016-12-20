@@ -1,4 +1,6 @@
 [KNewStuff3]
+Name=Application Templates (SDK)
+
 ProvidersUrl=http://download.kde.org/ocs/providers.xml
 Categories=KDE App Template
 TargetDir=kdevappwizard/templates

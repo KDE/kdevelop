@@ -1,4 +1,6 @@
 [KNewStuff3]
+Name=File Templates Templates (SDK)
+
 ProvidersUrl=http://download.kde.org/ocs/providers.xml
 Categories=KDevelop File Template
 TargetDir=kdevfiletemplates/templates
