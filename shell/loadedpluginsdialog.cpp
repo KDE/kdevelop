@@ -131,11 +131,6 @@ public:
         delete pushButton;
     }
 
-    QList<QWidget *> createItemWidgets(const QModelIndex &/*index*/) const override
-    {
-        return QList<QWidget *>();
-    }
-
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
         int i = 5;
@@ -194,8 +189,10 @@ public:
         painter->restore();
     }
 
-    QList<QWidget*> createItemWidgets() const
+    QList<QWidget *> createItemWidgets(const QModelIndex &index) const override
     {
+        Q_UNUSED(index);
+
         QPushButton *button = new QPushButton();
         button->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
         setBlockedEventTypes(button, QList<QEvent::Type>() << QEvent::MouseButtonPress
@@ -242,13 +239,12 @@ private Q_SLOTS:
         PluginsModel *m = static_cast<PluginsModel*>(itemView()->model());
         KDevelop::IPlugin *p = m->pluginForIndex(focusedIndex());
         if (p) {
-//             TODO KF5: Port
-//             const K4AboutData *aboutData = p->componentData().aboutData();
-//             if (!aboutData->programName().isEmpty()) { // Be sure the about data is not completely empty
-//                 KAboutApplicationDialog aboutPlugin(aboutData, itemView());
-//                 aboutPlugin.exec();
-//                 return;
-//             }
+            KAboutData aboutData = KAboutData::fromPluginMetaData(pluginInfo(p));
+            if (!aboutData.componentName().isEmpty()) { // Be sure the about data is not completely empty
+                KAboutApplicationDialog aboutPlugin(aboutData, itemView());
+                aboutPlugin.exec();
+                return;
+            }
         }
     }
 private:
