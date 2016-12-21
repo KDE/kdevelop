@@ -50,7 +50,6 @@ K_PLUGIN_FACTORY_WITH_JSON(ManPageFactory, "kdevmanpage.json", registerPlugin<Ma
 ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
     : IPlugin("kdevmanpage", parent)
 {
-    KDEV_USE_EXTENSION_INTERFACE( IDocumentationProvider )
     Q_UNUSED(args);
     ManPageDocumentation::s_provider = this;
     m_model = new ManPageModel(this);

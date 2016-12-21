@@ -84,11 +84,6 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     : KDevelop::AbstractFileManagerPlugin( "kdevcmakemanager", parent )
     , m_filter( new ProjectFilterManager( this ) )
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
-    KDEV_USE_EXTENSION_INTERFACE( ICMakeManager)
-
     if (CMake::findExecutable().isEmpty()) {
         setErrorDescription(i18n("Unable to find cmake executable. Is it installed on the system?"));
         m_highlight = nullptr;

@@ -41,8 +41,6 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     , m_qtDoc(new QtHelpQtDoc(this, QVariantList()))
     , m_loadSystemQtDoc(false)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProviderProvider )
-
     Q_UNUSED(args);
     s_plugin = this;
     connect(this, &QtHelpPlugin::changedProvidersList, KDevelop::ICore::self()->documentationController(), &KDevelop::IDocumentationController::changedDocumentationProviders);

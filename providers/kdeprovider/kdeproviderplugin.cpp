@@ -34,7 +34,6 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevKDEProviderFactory, "kdevkdeprovider.json", regis
 KDEProviderPlugin::KDEProviderPlugin ( QObject* parent, const QVariantList& ) 
     : IPlugin ( "kdevkdeprovider", parent )
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectProvider )
 }
 
 KDEProviderPlugin::~KDEProviderPlugin()

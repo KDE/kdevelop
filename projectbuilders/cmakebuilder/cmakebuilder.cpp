@@ -75,8 +75,6 @@ private:
 CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin("kdevcmakebuilder", parent)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
-
     addBuilder("Makefile", QStringList("Unix Makefiles") << "NMake Makefiles", core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder"));
     addBuilder("build.ninja", QStringList("Ninja"), core()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder"));
 }
@@ -105,7 +103,7 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
             qCDebug(CMAKEBUILDER) << "Added builder " << i->metaObject()->className() << "for" << neededfile;
         }
         else
-            qWarning() << "Couldn't add " << i->metaObject()->className() << i->extensions();
+            qWarning() << "Couldn't add" << i->metaObject()->className();
     }
 }
 

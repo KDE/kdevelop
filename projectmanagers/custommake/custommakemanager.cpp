@@ -117,7 +117,6 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
     , m_provider(new CustomMakeProvider(this))
 {
     Q_UNUSED(args)
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
 
     setXMLFile( "kdevcustommakemanager.rc" );
 

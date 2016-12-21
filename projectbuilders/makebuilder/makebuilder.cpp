@@ -38,8 +38,6 @@ K_PLUGIN_FACTORY_WITH_JSON(MakeBuilderFactory, "kdevmakebuilder.json", registerP
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin("kdevmakebuilder", parent)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
-    KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )
 }
 
 MakeBuilder::~MakeBuilder()

@@ -59,8 +59,6 @@ using namespace KDevMI;
 MIDebuggerPlugin::MIDebuggerPlugin(const QString &componentName, const QString& displayName, QObject *parent)
     : KDevelop::IPlugin(componentName, parent)
 {
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IStatus)
-
     core()->debugController()->initializeUi();
 
     setupActions(displayName);

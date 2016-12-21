@@ -48,9 +48,6 @@ K_PLUGIN_FACTORY_WITH_JSON(QMakeBuilderFactory, "kdevqmakebuilder.json", registe
 QMakeBuilder::QMakeBuilder(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin("kdevqmakebuilder", parent)
 {
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IProjectBuilder)
-    KDEV_USE_EXTENSION_INTERFACE(IQMakeBuilder)
-
     m_makeBuilder = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if (m_makeBuilder) {
         IMakeBuilder* mbuilder = m_makeBuilder->extension<IMakeBuilder>();

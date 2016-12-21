@@ -43,7 +43,6 @@ AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
     : IPlugin("kdevastyle", parent)
     , m_formatter(new AStyleFormatter())
 {
-    KDEV_USE_EXTENSION_INTERFACE(ISourceFormatter)
     currentStyle = predefinedStyles().at(0);
 }
 

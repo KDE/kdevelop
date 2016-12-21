@@ -92,7 +92,6 @@ QMakeProjectManager::QMakeProjectManager(QObject* parent, const QVariantList&)
     Q_ASSERT(!m_self);
     m_self = this;
 
-    KDEV_USE_EXTENSION_INTERFACE(IBuildSystemManager)
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IQMakeBuilder");
     Q_ASSERT(i);
     m_builder = i->extension<IQMakeBuilder>();

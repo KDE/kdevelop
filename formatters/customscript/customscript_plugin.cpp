@@ -78,7 +78,6 @@ static QString replaceVariables( QString command, QMap<QString, QString> variabl
 CustomScriptPlugin::CustomScriptPlugin(QObject *parent, const QVariantList&)
 	: IPlugin("kdevcustomscript", parent)
 {
-	KDEV_USE_EXTENSION_INTERFACE(ISourceFormatter)
         m_currentStyle = predefinedStyles().at(0);
 	indentPluginSingleton = this;
 }

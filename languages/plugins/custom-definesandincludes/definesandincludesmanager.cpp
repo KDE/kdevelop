@@ -109,7 +109,6 @@ DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVa
     , m_settings(SettingsManager::globalInstance())
     , m_noProjectIPM(new NoProjectIncludePathsManager())
 {
-    KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
     registerProvider(m_settings->provider());
 #ifdef Q_OS_OSX
     m_defaultFrameworkDirectories += Path(QStringLiteral("/Library/Frameworks"));

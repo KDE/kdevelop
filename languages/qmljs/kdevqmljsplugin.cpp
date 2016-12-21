@@ -71,8 +71,6 @@ KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
 , m_refactoring(new BasicRefactoring(this))
 , m_modelManager(new ModelManager(this))
 {
-    KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
-
     QmlJS::registerDUChainItems();
 
     CodeCompletionModel* codeCompletion = new QmlJS::CodeCompletionModel(this);

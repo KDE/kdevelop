@@ -178,7 +178,6 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     , m_refactoring(nullptr)
     , m_index(nullptr)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     setXMLFile( QStringLiteral("kdevclangsupport.rc") );
 
     ClangIntegration::DUChainUtils::registerDUChainItems();

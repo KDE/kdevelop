@@ -52,9 +52,6 @@ CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     , mCMakeCmd(CMake::findExecutable())
     , m_index(nullptr)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
-    KDEV_USE_EXTENSION_INTERFACE( ICMakeDocumentation )
-
     if (mCMakeCmd.isEmpty()) {
         setErrorDescription(i18n("Unable to find cmake executable. Is it installed on the system?") );
         return;

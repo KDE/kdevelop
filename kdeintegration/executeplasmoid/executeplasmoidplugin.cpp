@@ -37,7 +37,6 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevExecutePlasmoidFactory,"kdevexecuteplasmoid.json"
 ExecutePlasmoidPlugin::ExecutePlasmoidPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin("kdevexecuteplasmoid", parent)
 {
-    KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
     m_configType = new PlasmoidExecutionConfigType();
     m_configType->addLauncher( new PlasmoidLauncher( this ) );
     qCDebug(EXECUTEPLASMOID) << "adding plasmoid launch config";

@@ -39,7 +39,6 @@ ProviderPlugin::ProviderPlugin(QObject *parent, const QList<QVariant> &args)
     : IPlugin("kdevghprovider", parent)
 {
     Q_UNUSED(args);
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IProjectProvider)
 }
 
 ProviderPlugin::~ProviderPlugin()

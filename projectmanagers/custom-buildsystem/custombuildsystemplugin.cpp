@@ -52,9 +52,6 @@ K_PLUGIN_FACTORY_WITH_JSON(CustomBuildSystemFactory, "kdevcustombuildsystem.json
 CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )
     : AbstractFileManagerPlugin( "kdevcustombuildsystem", parent )
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
 }
 
 CustomBuildSystem::~CustomBuildSystem()
