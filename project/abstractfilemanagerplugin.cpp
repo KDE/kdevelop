@@ -438,8 +438,6 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentNa
       IPlugin( componentName, parent ),
       d(new Private(this))
 {
-    KDEV_USE_EXTENSION_INTERFACE( IProjectFileManager )
-
     connect(core()->projectController(), &IProjectController::projectClosing,
             this, [&] (IProject* project) { d->projectClosing(project); });
 }

@@ -91,7 +91,6 @@ OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( QStringLiteral("kdevopenwith"), parent ),
     m_actionMap( nullptr )
 {
-    KDEV_USE_EXTENSION_INTERFACE( IOpenWith )
 }
 
 OpenWithPlugin::~OpenWithPlugin()

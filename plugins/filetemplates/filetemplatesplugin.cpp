@@ -61,7 +61,6 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
     , m_model(nullptr)
 {
     Q_UNUSED(args);
-    KDEV_USE_EXTENSION_INTERFACE(ITemplateProvider)
 
     setXMLFile(QStringLiteral("kdevfiletemplates.rc"));
     QAction* action = actionCollection()->addAction(QStringLiteral("new_from_template"));

@@ -53,9 +53,6 @@ BazaarPlugin::BazaarPlugin(QObject* parent, const QVariantList& args) :
         return;
     }
 
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IDistributedVersionControl)
-
     setObjectName(QStringLiteral("Bazaar"));
 }
 

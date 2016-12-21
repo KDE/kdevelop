@@ -129,10 +129,6 @@ PerforcePlugin::PerforcePlugin(QObject* parent, const QVariantList&):
         m_perforceConfigName = tmp;
     }
     qCDebug(PLUGIN_PERFORCE) << "The value of P4CONFIG is : " << tmp;
-
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::ICentralizedVersionControl)
-
 }
 
 PerforcePlugin::~PerforcePlugin()

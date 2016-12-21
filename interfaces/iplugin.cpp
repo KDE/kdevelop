@@ -77,7 +77,6 @@ public:
 
     IPlugin *q;
     ICore *core;
-    QVector<QByteArray> m_extensions;
     QString m_errorDescription;
 };
 
@@ -130,16 +129,6 @@ ICore *IPlugin::core() const
     return d->core;
 }
 
-}
-
-QVector<QByteArray> KDevelop::IPlugin::extensions( ) const
-{
-    return d->m_extensions;
-}
-
-void KDevelop::IPlugin::addExtension( const QByteArray& ext )
-{
-    d->m_extensions << ext;
 }
 
 KDevelop::ContextMenuExtension KDevelop::IPlugin::contextMenuExtension(

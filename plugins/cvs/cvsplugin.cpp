@@ -88,9 +88,6 @@ CvsPlugin::CvsPlugin(QObject *parent, const QVariantList &)
         : KDevelop::IPlugin(QStringLiteral("kdevcvs"), parent)
         , d(new CvsPluginPrivate(this))
 {
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::ICentralizedVersionControl)
-
     core()->uiController()->addToolView(i18n("CVS"), d->m_factory);
 
     setXMLFile(QStringLiteral("kdevcvs.rc"));

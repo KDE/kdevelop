@@ -67,7 +67,6 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(QStringLiteral("kdevappwizard"), parent)
     , m_templatesModel(nullptr)
 {
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::ITemplateProvider);
     setXMLFile(QStringLiteral("kdevappwizard.rc"));
 
     m_newFromTemplate = actionCollection()->addAction(QStringLiteral("project_new"));

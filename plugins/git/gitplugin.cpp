@@ -185,10 +185,6 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
         return;
     }
 
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBranchingVersionControl )
-
     setObjectName(QStringLiteral("Git"));
 
     DVcsJob* versionJob = new DVcsJob(QDir::tempPath(), this, KDevelop::OutputJob::Silent);

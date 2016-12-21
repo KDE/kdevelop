@@ -19,6 +19,9 @@
 
 #include "test_plugincontroller.h"
 
+#include "nonguiinterfaceplugin.h"
+#include "testfilepaths.h"
+
 #include <QtCore/QProcess>
 #include <QtCore/QStringList>
 #include <QtTest/QSignalSpy>
@@ -29,8 +32,6 @@
 
 #include "../core.h"
 #include "../plugincontroller.h"
-
-#include "testfilepaths.h"
 
 using namespace KDevelop;
 
@@ -94,7 +95,8 @@ void TestPluginController::loadFromExtension()
 {
     IPlugin* plugin = m_pluginCtrl->pluginForExtension( QStringLiteral("org.kdevelop.ITestNonGuiInterface") );
     QVERIFY( plugin );
-    QCOMPARE( plugin->extensions(), QVector<QByteArray>() << "org.kdevelop.ITestNonGuiInterface" );
+    QVERIFY( plugin->inherits("org.kdevelop.ITestNonGuiInterface") );
+    QVERIFY( plugin->extension<ITestNonGuiInterface>());
 }
 
 void TestPluginController::benchPluginForExtension()

@@ -145,10 +145,6 @@ specific details from shell.
   Q_INTERFACES( IMyInterface )
   \endcode
   to one's class declaration.
-- Use KDEV_USE_EXTENSION_INTERFACE macro in the constructor of the plugin:
-    \code
-    KDEV_USE_EXTENSION_INTERFACE( IMyInterface )
-    \endcode
 - Add the following to the plugin's .desktop file:
     \code
     X-KDevelop-Interfaces=IMyInterface
@@ -165,7 +161,6 @@ class MyPlugin: public KDevelop::IPlugin, public KDevelop::IMyInterface
 public:
     MyPlugin(QObject* parent) : IPlugin( parent )
     {
-        KDEV_USE_EXTENSION_INTERFACE( KDevelop::IMyInterface )
     }
 };
 \endcode

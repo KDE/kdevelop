@@ -39,8 +39,7 @@ class MainWindow;
  * Call this macro for all interfaces your plugin implements in its constructor
  */
 #define KDEV_USE_EXTENSION_INTERFACE(Extension) \
-    addExtension(QByteArray::fromRawData(qobject_interface_iid<Extension*>(), \
-                                         static_cast<int>(strlen(qobject_interface_iid<Extension*>()))));
+    _Pragma("message(\"Using deprecated function: KDEV_USE_EXTENSION_INTERFACE. Just remove the use of it.\")")
 
 namespace KDevelop
 {
@@ -163,16 +162,15 @@ public:
      */
     Q_SCRIPTABLE ICore *core() const;
 
-    Q_SCRIPTABLE QVector<QByteArray> extensions() const;
-
-    template<class Extension> Extension* extension()
+    /**
+     * Convenience API to access an interface inherited by this plugin
+     *
+     * @return Instance to the specified interface, or nullptr
+     */
+    template<class Extension>
+    inline Extension* extension()
     {
-        const auto extensionIID = QByteArray::fromRawData(qobject_interface_iid<Extension*>(),
-                                                          static_cast<int>(strlen(qobject_interface_iid<Extension*>())));
-        if (extensions().contains(extensionIID)) {
-            return qobject_cast<Extension*>(this);
-        }
-        return nullptr;
+        return qobject_cast<Extension*>(this);
     }
 
     /**
@@ -268,8 +266,6 @@ public:
     virtual ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
 
 protected:
-    void addExtension( const QByteArray& );
-
     /**
      * Initialize the XML GUI State.
      */

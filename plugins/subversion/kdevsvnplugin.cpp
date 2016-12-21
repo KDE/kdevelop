@@ -78,9 +78,6 @@ KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)
         , move_action( nullptr )
         , m_jobQueue(new ThreadWeaver::Queue(this))
 {
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
-    KDEV_USE_EXTENSION_INTERFACE(KDevelop::ICentralizedVersionControl)
-
     qRegisterMetaType<KDevelop::VcsStatusInfo>();
     qRegisterMetaType<SvnInfoHolder>();
     qRegisterMetaType<KDevelop::VcsEvent>();

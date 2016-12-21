@@ -69,13 +69,11 @@ public:
     FakeFileManager(QObject*, const QVariantList&)
         : IPlugin(ICore::self()->aboutData().componentName(), Core::self())
     {
-        KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     }
 
     FakeFileManager()
         : IPlugin(ICore::self()->aboutData().componentName(), Core::self())
     {
-        KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     }
 
     ~FakeFileManager() override {}
@@ -148,8 +146,9 @@ public:
 
     IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) override
     {
-        if (extension == m_fakeFileManager->extensions().at(0))
+        if (extension == qobject_interface_iid<IProjectFileManager*>()) {
             return m_fakeFileManager;
+        }
         return PluginController::pluginForExtension(extension, pluginName, constraints);
     }
 

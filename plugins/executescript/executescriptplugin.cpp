@@ -62,7 +62,6 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecutescript.json", registe
 ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevexecutescript"), parent)
 {
-    KDEV_USE_EXTENSION_INTERFACE( IExecuteScriptPlugin )
     m_configType = new ScriptAppConfigType();
     m_configType->addLauncher( new ScriptAppLauncher( this ) );
     qCDebug(PLUGIN_EXECUTESCRIPT) << "adding script launch config";

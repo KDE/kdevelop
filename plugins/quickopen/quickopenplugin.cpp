@@ -344,7 +344,6 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     : KDevelop::IPlugin(QStringLiteral("kdevquickopen"), parent)
 {
     staticQuickOpenPlugin = this;
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
     m_model = new QuickOpenModel( nullptr );
 
     KConfigGroup quickopengrp = KSharedConfig::openConfig()->group("QuickOpen");
