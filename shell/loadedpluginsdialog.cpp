@@ -262,7 +262,7 @@ public:
     PluginsView(QWidget* parent = 0)
         :QListView(parent)
     {
-        setModel(new PluginsModel());
+        setModel(new PluginsModel(this));
         setItemDelegate(new LoadedPluginsDelegate(this));
         setVerticalScrollMode(QListView::ScrollPerPixel);
     }
