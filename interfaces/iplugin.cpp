@@ -154,29 +154,27 @@ void KDevelop::IPlugin::initializeGuiState()
 class CustomXmlGUIClient : public KXMLGUIClient
 {
 public:
-    CustomXmlGUIClient(const QString& componentName) {
+    CustomXmlGUIClient(const QString& componentName)
+    {
         // TODO KF5: Get rid off this
         setComponentName(componentName, componentName);
     }
-    void setXmlFile(QString file) {
-        KXMLGUIClient::setXMLFile(file);
-    }
+    using KXMLGUIClient::setXMLFile;
 };
 
 KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* window)
 {
-    CustomXmlGUIClient* ret = new CustomXmlGUIClient(componentName());
+    QScopedPointer<CustomXmlGUIClient> ret(new CustomXmlGUIClient(componentName()));
+
     QString file;
     createActionsForMainWindow(window, file, *ret->actionCollection());
-
-    if(!ret->actionCollection()->isEmpty()) {
-        Q_ASSERT(!file.isEmpty()); //A file must have been set
-        ret->setXmlFile(file);
-    } else {
-        delete ret;
-        ret = nullptr;
+    if (ret->actionCollection()->isEmpty()) {
+        return nullptr;
     }
-    return ret;
+
+    Q_ASSERT(!file.isEmpty()); //A file must have been set
+    ret->setXMLFile(file);
+    return ret.take();
 }
 
 void KDevelop::IPlugin::createActionsForMainWindow( Sublime::MainWindow* /*window*/, QString& /*xmlFile*/, KActionCollection& /*actions*/ )
