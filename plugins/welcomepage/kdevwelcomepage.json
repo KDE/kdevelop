@@ -1,7 +1,6 @@
 {
     "KPlugin": {
-        "Description": "Provides the welcome page visible in an empty session",
-        "Description[x-test]": "xxProvides the welcome page visible in an empty sessionxx",
+        "Description": "Provides the welcome page visible in an empty session", 
         "Icon": "kdevelop", 
         "Id": "KDevWelcomePage", 
         "Name": "KDevelop Welcome Page", 
