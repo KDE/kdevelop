@@ -1,0 +1,7 @@
+# KDE Config File
+[General]
+Name=Simple KDevelop Plugin
+Comment=Generate a general KDevelop plugin, using CMake and C++
+ShowFilesAfterGeneration=%{PROJECTDIR}/src/%{APPNAMELC}.cpp
+Category=KDevelop/Plugin
+ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_]+$
