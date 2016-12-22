@@ -6,7 +6,7 @@
 
 #include <QtTest>
 
-
+// other options: QTEST_GUILESS_MAIN, QTEST_APPLESS_MAIN
 QTEST_MAIN({{ name }});
 
 
