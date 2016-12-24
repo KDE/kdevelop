@@ -2,6 +2,8 @@
     "KPlugin": {
         "Description": "Provides the welcome page visible in an empty session", 
         "Description[ca]": "Proporciona la visibilitat de la pàgina de benvinguda en una sessió buida", 
+        "Description[it]": "Fornisce la pagina di benvenuto visibile in una sessione vuota", 
+        "Description[nl]": "Biedt de welkomst pagina zichtbaar in een lege sessie", 
         "Description[pt]": "Oferece a página de boas-vindas visível numa sessão vazia", 
         "Description[sv]": "Tillhandahåller välkomstsidan synlig i en tom session", 
         "Description[uk]": "Забезпечує роботу сторінки вітання, яку програма показує, якщо сеанс порожній", 
