@@ -34,7 +34,6 @@
 #include <KLocalizedString>
 #include <KTitleWidget>
 #include <KWidgetItemDelegate>
-#include <kcoreaddons_version.h>
 
 #include "core.h"
 #include "plugincontroller.h"
@@ -132,6 +131,11 @@ public:
         delete pushButton;
     }
 
+    QList<QWidget *> createItemWidgets(const QModelIndex &/*index*/) const override
+    {
+        return QList<QWidget *>();
+    }
+
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
         int i = 5;
@@ -190,10 +194,8 @@ public:
         painter->restore();
     }
 
-    QList<QWidget *> createItemWidgets(const QModelIndex &index) const override
+    QList<QWidget*> createItemWidgets() const
     {
-        Q_UNUSED(index);
-
         QPushButton *button = new QPushButton();
         button->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
         setBlockedEventTypes(button, QList<QEvent::Type>() << QEvent::MouseButtonPress
@@ -240,37 +242,13 @@ private Q_SLOTS:
         PluginsModel *m = static_cast<PluginsModel*>(itemView()->model());
         KDevelop::IPlugin *p = m->pluginForIndex(focusedIndex());
         if (p) {
-#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 18, 0)
-            KPluginMetaData pInfo = pluginInfo(p);
-            KAboutData aboutData(pInfo.pluginId(), pInfo.name(), pInfo.version(), pInfo.description(),
-                                 KAboutLicense::byKeyword(pInfo.license()).key(), pInfo.copyrightText(),
-                                 pInfo.extraInformation(), pInfo.website());
-            aboutData.setProgramIconName(pInfo.iconName());
-            foreach(const KAboutPerson& person, pInfo.authors()) {
-                aboutData.addAuthor(person.name(), person.task(),
-                                    person.emailAddress(), person.webAddress(),
-                                    person.ocsUsername());
-            }
-            foreach(const KAboutPerson& person, pInfo.otherContributors()) {
-                aboutData.addCredit(person.name(), person.task(),
-                                    person.emailAddress(), person.webAddress(),
-                                    person.ocsUsername());
-            }
-            QStringList translatorName, translatorEmailAddress;
-            foreach(const KAboutPerson& person, pInfo.translators()) {
-                translatorName << person.name();
-                translatorEmailAddress << person.emailAddress();
-            }
-            aboutData.setTranslator(translatorName.join(QLatin1Char(',')),
-                                    translatorEmailAddress.join(QLatin1Char(',')));
-#else
-            KAboutData aboutData = KAboutData::fromPluginMetaData(pluginInfo(p));
-#endif
-            if (!aboutData.componentName().isEmpty()) { // Be sure the about data is not completely empty
-                KAboutApplicationDialog aboutPlugin(aboutData, itemView());
-                aboutPlugin.exec();
-                return;
-            }
+//             TODO KF5: Port
+//             const K4AboutData *aboutData = p->componentData().aboutData();
+//             if (!aboutData->programName().isEmpty()) { // Be sure the about data is not completely empty
+//                 KAboutApplicationDialog aboutPlugin(aboutData, itemView());
+//                 aboutPlugin.exec();
+//                 return;
+//             }
         }
     }
 private:
