@@ -71,6 +71,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Declarative
   XmlGui
 )
+find_package(KF5CoreAddons 5.18 REQUIRED)
 
 find_package(Grantlee5)
 set_package_properties(Grantlee5 PROPERTIES
