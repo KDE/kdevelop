@@ -357,13 +357,14 @@ VcsJob* GitPlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision
         // has become optional.
         *job << "--no-prefix";
     }
-    if(srcRevision.revisionType()==VcsRevision::Special
-        && dstRevision.revisionType()==VcsRevision::Special
-        && srcRevision.specialType()==VcsRevision::Base
-        && dstRevision.specialType()==VcsRevision::Working)
-        *job << "HEAD";
-    else if(dstRevision.specialType()==VcsRevision::Working){
-        *job << "--cached" << srcRevision.revisionValue().toString();
+    if (dstRevision.revisionType() == VcsRevision::Special &&
+         dstRevision.specialType() == VcsRevision::Working) {
+        if (srcRevision.revisionType() == VcsRevision::Special &&
+             srcRevision.specialType() == VcsRevision::Base) {
+            *job << "HEAD";
+        } else {
+            *job << "--cached" << srcRevision.revisionValue().toString();
+        }
     } else {
         QString revstr = revisionInterval(srcRevision, dstRevision);
         if(!revstr.isEmpty())
