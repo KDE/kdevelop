@@ -5,6 +5,7 @@
         "Description[es]": "Proporciona la página de bienvenida visible en una sesión vacía", 
         "Description[it]": "Fornisce la pagina di benvenuto visibile in una sessione vuota", 
         "Description[nl]": "Biedt de welkomst pagina zichtbaar in een lege sessie", 
+        "Description[pl]": "Dostarcza stronę powitania widoczną przy pustych sesjach", 
         "Description[pt]": "Oferece a página de boas-vindas visível numa sessão vazia", 
         "Description[sv]": "Tillhandahåller välkomstsidan synlig i en tom session", 
         "Description[uk]": "Забезпечує роботу сторінки вітання, яку програма показує, якщо сеанс порожній", 
