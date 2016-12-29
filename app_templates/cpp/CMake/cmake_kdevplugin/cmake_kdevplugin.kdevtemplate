@@ -2,6 +2,7 @@
 [General]
 Name=Simple KDevelop Plugin
 Name[ca]=Connector senzill del KDevelop
+Name[ca@valencia]=Connector senzill del KDevelop
 Name[en_GB]=Simple KDevelop Plugin
 Name[es]=Complemento sencillo de KDevelop
 Name[it]=Semplice estensione per KDevelop
@@ -14,6 +15,7 @@ Name[uk]=Простий додаток до KDevelop
 Name[x-test]=xxSimple KDevelop Pluginxx
 Comment=Generate a general KDevelop plugin, using CMake and C++
 Comment[ca]=Genera un connector del KDevelop general, usant CMake i C++
+Comment[ca@valencia]=Genera un connector del KDevelop general, usant CMake i C++
 Comment[en_GB]=Generate a general KDevelop plugin, using CMake and C++
 Comment[es]=Generar un complemento general para KDevelop que usa CMake y C++
 Comment[it]=Genera un'estensione generica per KDevelop usando CMake e C++
