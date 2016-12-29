@@ -17,14 +17,14 @@ git_pull_rebase_helper()
     git stash pop || true
 }
 
-QTVERSION=5.7.0
+QTVERSION=5.7.1
 QVERSION_SHORT=5.7
 QTDIR=/usr/local/Qt-${QTVERSION}/
 
-KDEVELOP_VERSION=5.0
+KDEVELOP_VERSION=5.1
 KDEV_PG_QT_VERSION=2.0
-KF5_VERSION=v5.28.0
-KDE_APPLICATION_VERSION=v16.08.0
+KF5_VERSION=v5.29.0
+KDE_APPLICATION_VERSION=v16.12.0
 GRANTLEE_VERSION=v5.1.0
 
 export LLVM_ROOT=/opt/llvm/
@@ -48,12 +48,15 @@ fi
 cd  /
 
 # Build AppImageKit
+rm -Rf /AppImageKit
 if [ ! -d AppImageKit ] ; then
   git clone  --depth 1 https://github.com/probonopd/AppImageKit.git /AppImageKit
 fi
 
 cd /AppImageKit/
+git checkout master
 git_pull_rebase_helper
+git reset --hard remotes/origin/stable/v1.0
 ./build.sh
 cd /
 
@@ -63,7 +66,7 @@ cd /
 export CMAKE_PREFIX_PATH=$QTDIR:/kdevelop.appdir/share/llvm/
 
 # if the library path doesn't point to our usr/lib, linking will be broken and we won't find all deps either
-export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/kdevelop.appdir/usr/lib:$QTDIR/lib/:/opt/python3.5/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/kdevelop.appdir/usr/lib:$QTDIR/lib/:/opt/python3.6/lib/:$LD_LIBRARY_PATH
 
 # Workaround for: On CentOS 6, .pc files in /usr/lib/pkgconfig are not recognized
 # However, this is where .pc files get installed when bulding libraries... (FIXME)
@@ -198,7 +201,7 @@ EOF
     cd $BUILD/$FRAMEWORK
 
     # cmake it
-    cmake $SRC/$FRAMEWORK -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $2
+    cmake3 $SRC/$FRAMEWORK -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $2
 
     # make
     make -j$(nproc)
@@ -237,6 +240,7 @@ build_framework kitemmodels
 build_framework threadweaver
 build_framework attica
 build_framework knewstuff
+build_framework syntax-highlighting
 build_framework ktexteditor
 build_framework kpackage
 build_framework kdeclarative
@@ -514,8 +518,8 @@ Categories=Qt;KDE;Utility;TextEditor;
 EOF
 
 cp /kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
-cp -R /usr/lib/python3.5 /kdevelop.appdir/usr/lib/
-rm -Rf /kdevelop.appdir/usr/lib/python3.5/{test,config-3.5m,__pycache__,site-packages,lib-dynload,distutils,idlelib,unittest,tkinter,ensurepip}
+cp -R /usr/lib/python3.6 /kdevelop.appdir/usr/lib/
+rm -Rf /kdevelop.appdir/usr/lib/python3.6/{test,config-3.5m,__pycache__,site-packages,lib-dynload,distutils,idlelib,unittest,tkinter,ensurepip}
 
 mkdir -p /kdevelop.appdir/usr/share/kdevelop/
 cp /kf5/build/breeze-icons/icons/breeze-icons.rcc /kdevelop.appdir/usr/share/kdevelop/icontheme.rcc

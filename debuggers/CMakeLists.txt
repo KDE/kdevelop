@@ -18,8 +18,9 @@ else()
     message(WARNING "Disabling 'path with spaces' test, this CMake version would create a faulty build.ninja file. Upgrade to at least CMake v3.0")
 endif()
 
-add_subdirectory(common)
-add_subdirectory(lldb)
 if(NOT WIN32)
+    # TODO: Make compile under Windows
+    add_subdirectory(common)
+    add_subdirectory(lldb)
     add_subdirectory(gdb)
 endif()
