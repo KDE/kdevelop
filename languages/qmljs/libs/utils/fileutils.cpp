@@ -383,12 +383,12 @@ bool FileReader::fetch(const QString &fileName, QIODevice::OpenMode mode, QWidge
 
 FileSaverBase::FileSaverBase()
     : m_hasError(false)
+    , m_file(nullptr)
 {
 }
 
 FileSaverBase::~FileSaverBase()
 {
-    delete m_file;
 }
 
 bool FileSaverBase::finalize()

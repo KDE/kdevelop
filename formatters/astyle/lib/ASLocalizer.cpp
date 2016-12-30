@@ -78,15 +78,15 @@ namespace astyle {
 //----------------------------------------------------------------------------
 
 ASLocalizer::ASLocalizer()
-// Set the locale information.
+    // Set the locale information.
+    // set language default values to english (ascii)
+    // this will be used if a locale or a language cannot be found
+    : m_localeName("UNKNOWN")
+    , m_langID("en")
+    , m_lcid(0)
+    , m_translation(nullptr)
 {
-	// set language default values to english (ascii)
-	// this will be used if a locale or a language cannot be found
-	m_localeName = "UNKNOWN";
-	m_langID = "en";
-	m_lcid = 0;
 	m_subLangID.clear();
-	m_translation = NULL;
 
 	// Not all compilers support the C++ function locale::global(locale(""));
 	// For testing on Windows change the "Region and Language" settings or use AppLocale.

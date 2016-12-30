@@ -59,9 +59,10 @@ namespace KDevelop
 {
 
 OktetaDocument::OktetaDocument( const QUrl &url , ICore* core )
-  : Sublime::UrlDocument( core->uiController()->controller(), url ),
-    IDocument( core ),
-    mByteArrayDocument( nullptr )
+    : Sublime::UrlDocument( core->uiController()->controller(), url )
+    , IDocument( core )
+    , mPlugin( nullptr )
+    , mByteArrayDocument( nullptr )
 {
 }
 
@@ -210,7 +211,7 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* document )
         Kasten::AbstractLoadJob* loadJob = synchronizer->startLoad( url() );
         connect( loadJob, &Kasten::AbstractLoadJob::documentLoaded,
                  this, &OktetaDocument::onByteArrayDocumentLoaded );
-        const bool syncSucceeded = Kasten::JobManager::executeJob( loadJob );
+        Kasten::JobManager::executeJob( loadJob );
 
         delete synchronizerFactory;
     }

@@ -42,6 +42,8 @@ QTEST_MAIN(TestQtHelpPlugin)
 using namespace KDevelop;
 
 TestQtHelpPlugin::TestQtHelpPlugin()
+    : m_testCore(nullptr)
+    , m_plugin(nullptr)
 {
 }
 

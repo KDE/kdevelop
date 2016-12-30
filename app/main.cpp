@@ -211,7 +211,7 @@ static int openFilesInRunningInstance(const QVector<UrlInfo>& files, qint64 pid)
     QDBusMessage makeVisible = QDBusMessage::createMethodCall( service, "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
                                                                "ensureVisible" );
     QDBusConnection::sessionBus().asyncCall( makeVisible );
-    return errors_occured ? 1 : 0;
+    return errors_occured;
 }
 
 /// Gets the PID of a running KDevelop instance, eventually asking the user if there is more than one.
@@ -387,13 +387,11 @@ int main( int argc, char *argv[] )
         for (int i=0; i < c; ++i) {
             if (debugFound) {
                 debugArgs << argv[i];
-            } else if (qstrcmp(argv[i], "--debug") == 0 || qstrcmp(argv[i], "-d") == 0) {
-                if (argc <= i+1) {
-                    argc = i + 1;
-                } else {
+            } else if ((qstrcmp(argv[i], "--debug") == 0) || (qstrcmp(argv[i], "-d") == 0)) {
+                if (argc > (i + 1)) {
                     i++;
-                    argc = i + 1;
                 }
+                argc = i + 1;
                 debugFound = true;
             } else if (QString(argv[i]).startsWith("--debug=")) {
                 argc = i + 1;
