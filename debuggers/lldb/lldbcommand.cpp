@@ -179,7 +179,7 @@ QString LldbCommand::cmdToSend()
             }
             break;
         }
-        // find the postion to insert '-f'
+        // find the position to insert '-f'
         case BreakInsert: {
             if (!overrideCmd.isEmpty()) {
                 // already done

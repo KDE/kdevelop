@@ -56,7 +56,7 @@ public:
     ~DebuggerConsoleView();
 
     /**
-     * Whether show a button allowing user to interrput debugger execution.
+     * Whether show a button allowing user to interrupt debugger execution.
      */
     void setShowInterrupt(bool enable);
 

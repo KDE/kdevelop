@@ -227,7 +227,7 @@ void TestDUChain::testElaboratedType_data()
 void TestDUChain::testInclude()
 {
     TestFile header("int foo() { return 42; }\n", "h");
-    // NOTE: header is _not_ explictly being parsed, instead the impl job does that
+    // NOTE: header is _not_ explicitly being parsed, instead the impl job does that
 
     TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
                   "int main() { return foo(); }", "cpp", &header);

@@ -520,7 +520,7 @@ void CMakeProjectVisitorTest::testRun_data()
     results.clear();
     results << StringPair("result", "");
     QTest::newRow("empty set with scope") <<
-                            "set(result ${nonexistant} PARENT_SCOPE)\n"
+                            "set(result ${nonexistent} PARENT_SCOPE)\n"
                             << cacheValues << results;
 }
 

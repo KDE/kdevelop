@@ -582,7 +582,7 @@ string ASFormatter::nextLine()
 				isInHorstmannRunIn = false;
 			}
 			processPreprocessor();
-			//  need to fall thru here to reset the variables
+			//  need to fall through here to reset the variables
 		}
 
 		/* not in preprocessor ... */
@@ -1102,7 +1102,7 @@ string ASFormatter::nextLine()
 			else if ((newHeader = findHeader(preCommandHeaders)) != NULL)
 			{
 				foundPreCommandHeader = true;
-				// fall thru here for a 'const' that is not a precommand header
+				// fall through here for a 'const' that is not a precommand header
 			}
 			else if ((newHeader = findHeader(castOperators)) != NULL)
 			{

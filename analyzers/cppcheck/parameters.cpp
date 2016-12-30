@@ -124,7 +124,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
 
     const QString mocMessage = i18n(
         "It seems that this project uses Qt library. For correctly work of cppcheck "
-        "the value for define Q_MOC_OUTPUT_REVISION must be set. Unfortunatly, the plugin is unable "
+        "the value for define Q_MOC_OUTPUT_REVISION must be set. Unfortunately, the plugin is unable "
         "to find this value automatically - you should set it manually by adding "
         "'-DQ_MOC_OUTPUT_REVISION=XX' to extra parameters. The 'XX' value can be found in any project's "
         "moc-generated file or in the <QtCore/qobjectdefs.h> header file.");

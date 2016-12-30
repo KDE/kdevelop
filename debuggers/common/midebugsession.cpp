@@ -1177,7 +1177,7 @@ void MIDebugSession::programNoApp(const QString& msg)
     if (m_tty){
         m_tty->readRemaining();
         // Tty is no longer usable, delete it. Without this, QSocketNotifier
-        // will continiously bomd STTY with signals, so we need to either disable
+        // will continuously bomd STTY with signals, so we need to either disable
         // QSocketNotifier, or delete STTY. The latter is simpler, since we can't
         // reuse it for future debug sessions anyway.
         m_tty.reset(nullptr);
@@ -1249,7 +1249,7 @@ void MIDebugSession::handleNoInferior(const QString& msg)
     if (m_tty){
         m_tty->readRemaining();
         // Tty is no longer usable, delete it. Without this, QSocketNotifier
-        // will continiously bomd STTY with signals, so we need to either disable
+        // will continuously bomd STTY with signals, so we need to either disable
         // QSocketNotifier, or delete STTY. The latter is simpler, since we can't
         // reuse it for future debug sessions anyway.
         m_tty.reset(nullptr);

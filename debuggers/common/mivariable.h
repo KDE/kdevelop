@@ -43,7 +43,7 @@ public:
 
     ~MIVariable();
 
-    /* FIXME: should eventually remove, so that existance of
+    /* FIXME: should eventually remove, so that existence of
         varobjs is fully encapsulalated inside GdbVariable.  */
     const QString& varobj() const;
     void handleUpdate(const MI::Value& var);

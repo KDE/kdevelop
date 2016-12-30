@@ -160,7 +160,7 @@ void TestAstyle::varTypeAssistant()
 {
     // think this:
     // asdf = 1;
-    // and you execute the assitant to get:
+    // and you execute the assistant to get:
     // int asdf = 1;
 
     // test1: already indented

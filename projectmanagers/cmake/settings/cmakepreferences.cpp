@@ -295,7 +295,7 @@ void CMakePreferences::createBuildDir()
     // NOTE: (on removing the trailing slashes)
     // Generally, we have no clue about how shall a trailing slash look in the current system.
     // Moreover, the slash may be a part of the filename.
-    // It may be '/' or '\', so maybe should we rely on CMake::allBuildDirs() for returning well-formed pathes?
+    // It may be '/' or '\', so maybe should we rely on CMake::allBuildDirs() for returning well-formed paths?
     QStringList used = CMake::allBuildDirs( m_project );
     bdCreator.setAlreadyUsed(used);
     bdCreator.setCMakeBinary(Path(CMake::findExecutable()));

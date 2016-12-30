@@ -405,7 +405,7 @@ void TestBuddies::testSplitViewBuddies()
     // check that it only contains pNewView
     QVERIFY(pContainer->count() == 1 && pContainer->hasWidget(pNewView->widget()));
 
-    // now open the correponding definition file, classA.cpp
+    // now open the corresponding definition file, classA.cpp
     IDocument *pClassAImplem = m_documentController->openDocument(QUrl::fromLocalFile(dirA.filePath("classA.cpp")));
     QVERIFY(pClassAImplem);
     pMainWindow->activeView()->setObjectName("classA.cpp");

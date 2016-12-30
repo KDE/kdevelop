@@ -1268,7 +1268,7 @@ const string* ASBeautifier::findOperator(const string &line, int i,
 	assert(isCharPotentialOperator(line[i]));
 	// find the operator in the vector
 	// the vector contains the LONGEST operators first
-	// must loop thru the entire vector
+	// must loop through the entire vector
 	size_t maxOperators = possibleOperators->size();
 	for (size_t p = 0; p < maxOperators; p++)
 	{

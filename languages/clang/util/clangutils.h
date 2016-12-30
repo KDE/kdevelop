@@ -59,7 +59,7 @@ namespace ClangUtils
     /**
      * Given a cursor representing a function, returns a vector containing the string
      * representations of the default arguments of the function which are defined at
-     * the occurence of the cursor. Note that this is not necessarily all of the default
+     * the occurrence of the cursor. Note that this is not necessarily all of the default
      * arguments of the function.
      *
      * @param cursor The cursor to examine

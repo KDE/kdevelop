@@ -139,7 +139,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
     }
     openType(func);
 
-    // Parameters, if any (a function must always have an interal function context,
+    // Parameters, if any (a function must always have an internal function context,
     // so always open a context here even if there are no parameters)
     DUContext* parametersContext = openContext(
         node + 1,                                               // Don't call setContextOnNode on node, only the body context can be associated with node

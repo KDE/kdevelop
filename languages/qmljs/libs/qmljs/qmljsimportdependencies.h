@@ -56,7 +56,7 @@ class ViewerContext;
 namespace Internal { class ImportDependenciesPrivate; }
 class ImportDependencies;
 
-// match strenght wrt to the selectors of a ViewerContext
+// match strength wrt to the selectors of a ViewerContext
 // this is valid only within a ViewerContext
 class QMLJS_EXPORT ImportMatchStrength
 {

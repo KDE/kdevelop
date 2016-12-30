@@ -43,7 +43,7 @@ TODO:
 
       - Debugging optimized binaries
 
-      - Debugged application somtimes not killed.
+      - Debugged application sometimes not killed.
 
       - Fix moving breakpoints on editing files
 
