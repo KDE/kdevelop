@@ -38,7 +38,7 @@ class IncludeItem;
 class KDEVCLANGPRIVATE_EXPORT ClangNavigationWidget : public KDevelop::AbstractNavigationWidget
 {
 public:
-    ClangNavigationWidget(const KDevelop::DeclarationPointer& declaration,
+    explicit ClangNavigationWidget(const KDevelop::DeclarationPointer& declaration,
                           KDevelop::AbstractNavigationWidget::DisplayHints hints = KDevelop::AbstractNavigationWidget::NoHints);
     ClangNavigationWidget(const MacroDefinition::Ptr& macro, const KDevelop::DocumentCursor& expansionLocation,
                           KDevelop::AbstractNavigationWidget::DisplayHints hints = KDevelop::AbstractNavigationWidget::NoHints);

@@ -34,7 +34,7 @@ class VariableController : public MIVariableController
     Q_OBJECT
 
 public:
-    VariableController(DebugSession* parent);
+    explicit VariableController(DebugSession* parent);
 
     void update() override;
     LldbVariable* createVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,

@@ -321,7 +321,7 @@ QString MIVariable::enquotedExpression() const
 class SetFormatHandler : public MICommandHandler
 {
 public:
-    SetFormatHandler(MIVariable *var)
+    explicit SetFormatHandler(MIVariable *var)
         : m_variable(var)
     {}
 

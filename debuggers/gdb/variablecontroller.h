@@ -33,7 +33,7 @@ class VariableController : public MIVariableController
     Q_OBJECT
 
 public:
-    VariableController(DebugSession* parent);
+    explicit VariableController(DebugSession* parent);
 
 private:
     DebugSession* debugSession() const;

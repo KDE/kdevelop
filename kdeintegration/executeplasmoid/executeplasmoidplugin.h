@@ -37,7 +37,7 @@ class ExecutePlasmoidPlugin : public KDevelop::IPlugin, public IExecutePlugin
     Q_OBJECT
     Q_INTERFACES( IExecutePlugin )
     public:
-        ExecutePlasmoidPlugin(QObject *parent, const QVariantList & = QVariantList() );
+        explicit ExecutePlasmoidPlugin(QObject *parent, const QVariantList & = QVariantList() );
         ~ExecutePlasmoidPlugin() override;
         void unload() override;
 

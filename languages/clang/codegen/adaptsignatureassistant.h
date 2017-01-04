@@ -39,7 +39,7 @@ class KDEVCLANGPRIVATE_EXPORT AdaptSignatureAssistant : public KDevelop::StaticA
     Q_OBJECT
 
 public:
-    AdaptSignatureAssistant(KDevelop::ILanguageSupport* supportedLanguage);
+    explicit AdaptSignatureAssistant(KDevelop::ILanguageSupport* supportedLanguage);
 
     QString title() const override;
     void textChanged(KTextEditor::Document* doc, const KTextEditor::Range& invocationRange, const QString& removedText = QString()) override;

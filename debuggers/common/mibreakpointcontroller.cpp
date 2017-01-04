@@ -167,7 +167,7 @@ struct MIBreakpointController::DeleteHandler : MIBreakpointController::Handler {
 };
 
 struct MIBreakpointController::IgnoreChanges {
-    IgnoreChanges(MIBreakpointController& controller)
+    explicit IgnoreChanges(MIBreakpointController& controller)
         : controller(controller)
     {
         ++controller.m_ignoreChanges;

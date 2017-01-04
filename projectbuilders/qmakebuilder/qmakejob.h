@@ -41,7 +41,7 @@ class QMakeJob : public KDevelop::OutputExecuteJob
     Q_OBJECT
 
 public:
-    QMakeJob(QObject *parent = nullptr);
+    explicit QMakeJob(QObject *parent = nullptr);
 
     enum ErrorTypes {
         NoProjectError = UserDefinedError,

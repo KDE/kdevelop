@@ -59,7 +59,7 @@ struct ConfigEntry
     CompilerPointer compiler;
     ParserArguments parserArguments;
 
-    ConfigEntry( const QString& path = QString() );
+    explicit ConfigEntry( const QString& path = QString() );
 
     // FIXME: get rid of this but stay backwards compatible
     void setDefines(const QHash<QString, QVariant>& defines);

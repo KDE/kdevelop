@@ -31,7 +31,7 @@ namespace QmlJS {
 class CodeCompletionWorker : public KDevelop::CodeCompletionWorker
 {
 public:
-    CodeCompletionWorker(KDevelop::CodeCompletionModel* model);
+    explicit CodeCompletionWorker(KDevelop::CodeCompletionModel* model);
 
 protected:
     virtual KDevelop::CodeCompletionContext* createCompletionContext(

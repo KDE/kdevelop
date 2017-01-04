@@ -33,7 +33,7 @@ class AStylePreferences : public KDevelop::SettingsWidget, public Ui::AStylePref
 public:
     enum Language { CPP, Java, CSharp};
 
-    AStylePreferences(Language lang=CPP, QWidget *parent=nullptr);
+    explicit AStylePreferences(Language lang=CPP, QWidget *parent=nullptr);
     ~AStylePreferences() override;
 
     void load(const KDevelop::SourceFormatterStyle &style) override;

@@ -66,7 +66,7 @@ class MIExamineCoreJob : public KJob
 {
     Q_OBJECT
 public:
-    MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent = nullptr);
+    explicit MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent = nullptr);
 
     void start() override;
 

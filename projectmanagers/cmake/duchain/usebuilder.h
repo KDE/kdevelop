@@ -28,7 +28,7 @@
 class UseBuilder
 {
 public:
-    UseBuilder(const KDevelop::ReferencedTopDUContext& ctx);
+    explicit UseBuilder(const KDevelop::ReferencedTopDUContext& ctx);
 
     void startVisiting(CMakeContentIterator* node);
 

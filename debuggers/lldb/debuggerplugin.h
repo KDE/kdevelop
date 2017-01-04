@@ -34,7 +34,7 @@ namespace KDevMI { namespace LLDB {
 class NonInterruptDebuggerConsoleView : public DebuggerConsoleView
 {
 public:
-    NonInterruptDebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *parent = nullptr)
+    explicit NonInterruptDebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *parent = nullptr)
         : DebuggerConsoleView(plugin, parent)
     {
         setShowInterrupt(false);
@@ -49,7 +49,7 @@ class LldbDebuggerPlugin : public MIDebuggerPlugin
 public:
     friend class KDevMI::LLDB::DebugSession;
 
-    LldbDebuggerPlugin(QObject *parent, const QVariantList & = QVariantList());
+    explicit LldbDebuggerPlugin(QObject *parent, const QVariantList & = QVariantList());
     ~LldbDebuggerPlugin() override;
 
     DebugSession *createSession() override;

@@ -59,7 +59,7 @@ inline bool operator==(const CXCursor& lhs, const CXCursor& rhs) noexcept
 class ClangString
 {
 public:
-    ClangString(CXString string);
+    explicit ClangString(CXString string);
     ~ClangString();
 
     ClangString(const ClangString&) = delete;
@@ -86,7 +86,7 @@ QDebug operator<<(QDebug stream, const ClangString& str);
 class ClangLocation
 {
 public:
-    ClangLocation(CXSourceLocation cursor);
+    explicit ClangLocation(CXSourceLocation cursor);
     ~ClangLocation();
 
     operator KDevelop::DocumentCursor() const;
@@ -106,7 +106,7 @@ QDebug operator<<(QDebug stream, const ClangLocation& str);
 class KDEVCLANGPRIVATE_EXPORT ClangRange
 {
 public:
-    ClangRange(CXSourceRange range);
+    explicit ClangRange(CXSourceRange range);
 
     ~ClangRange();
 

@@ -8,7 +8,7 @@
 #include <QDebug>
 
 struct A {
-    A(const QString& _a = QString(), const QString& _b = QString(),
+    explicit A(const QString& _a = QString(), const QString& _b = QString(),
       int _c = -1, int _d = -1)
     : a(_a), b(_b), c(_c), d(_d)
     {}

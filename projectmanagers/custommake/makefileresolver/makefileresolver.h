@@ -31,7 +31,7 @@
 
 struct PathResolutionResult
 {
-  PathResolutionResult(bool success = false, const QString& errorMessage = QString(), const QString& longErrorMessage = QString());
+  explicit PathResolutionResult(bool success = false, const QString& errorMessage = QString(), const QString& longErrorMessage = QString());
 
   bool success;
   QString errorMessage;

@@ -285,7 +285,7 @@ public:
         return replacement;
     }
 
-    ImplementsItem(const FuncImplementInfo& item)
+    explicit ImplementsItem(const FuncImplementInfo& item)
         : DeclarationItem(item.declaration.data(), item.prototype,
             i18n("Implement %1", item.isConstructor ? QStringLiteral("<constructor>") :
                                    item.isDestructor ? QStringLiteral("<destructor>") : item.returnType),
@@ -598,7 +598,7 @@ Declaration* classDeclarationForContext(const DUContextPointer& context, const C
 class LookAheadItemMatcher
 {
 public:
-    LookAheadItemMatcher(const TopDUContextPointer& ctx)
+    explicit LookAheadItemMatcher(const TopDUContextPointer& ctx)
         : m_topContext(ctx)
         , m_enabled(ClangSettingsManager::self()->codeCompletionSettings().lookAhead)
     {}

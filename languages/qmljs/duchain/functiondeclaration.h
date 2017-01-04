@@ -58,7 +58,7 @@ class KDEVQMLJSDUCHAIN_EXPORT FunctionDeclaration : public KDevelop::FunctionDec
 public:
     FunctionDeclaration(const FunctionDeclaration &rhs);
     FunctionDeclaration(const KDevelop::RangeInRevision &range, KDevelop::DUContext *context);
-    FunctionDeclaration(FunctionDeclarationData &data);
+    explicit FunctionDeclaration(FunctionDeclarationData &data);
     ~FunctionDeclaration();
 
     /**

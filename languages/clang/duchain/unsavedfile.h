@@ -34,7 +34,7 @@ struct CXUnsavedFile;
 class KDEVCLANGPRIVATE_EXPORT UnsavedFile
 {
 public:
-    UnsavedFile(const QString& fileName = {}, const QStringList& contents = {});
+    explicit UnsavedFile(const QString& fileName = {}, const QStringList& contents = {});
 
     CXUnsavedFile toClangApi() const;
 

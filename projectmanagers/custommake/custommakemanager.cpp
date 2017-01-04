@@ -48,7 +48,7 @@ using namespace KDevelop;
 class CustomMakeProvider : public IDefinesAndIncludesManager::BackgroundProvider
 {
 public:
-    CustomMakeProvider(CustomMakeManager* manager)
+    explicit CustomMakeProvider(CustomMakeManager* manager)
         : m_customMakeManager(manager)
         , m_resolver(new MakeFileResolver())
     {}

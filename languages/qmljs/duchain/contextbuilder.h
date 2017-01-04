@@ -37,7 +37,7 @@ typedef KDevelop::AbstractContextBuilder<QmlJS::AST::Node, QmlJS::AST::Identifie
 class Editor
 {
 public:
-    Editor(ParseSession** session)
+    explicit Editor(ParseSession** session)
     : m_session(session)
     {}
 

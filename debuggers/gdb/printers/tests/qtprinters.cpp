@@ -31,7 +31,7 @@ const QString BINARY_PATH(PRINTER_BIN_DIR);
 class GdbProcess : private QProcess
 {
 public:
-    GdbProcess(const QString &program) : QProcess()
+    explicit GdbProcess(const QString &program) : QProcess()
     {
         setProcessChannelMode(MergedChannels);
         // don't attempt to load .gdbinit in home (may cause unexpected results)

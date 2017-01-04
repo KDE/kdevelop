@@ -28,7 +28,7 @@ class PruneJob : public KDevelop::OutputJob
 {
     Q_OBJECT
     public:
-        PruneJob(KDevelop::IProject* project);
+        explicit PruneJob(KDevelop::IProject* project);
         void start() override;
         bool doKill() override;
 

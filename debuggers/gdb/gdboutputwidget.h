@@ -51,7 +51,7 @@ class GDBOutputWidget : public QWidget
     Q_OBJECT
 
 public:
-    GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent=nullptr );
+    explicit GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent=nullptr );
     ~GDBOutputWidget() override;
 
     void savePartialProjectSession();
@@ -144,7 +144,7 @@ class OutputTextEdit : public QTextEdit
     Q_OBJECT
 
 public:
-    OutputTextEdit(GDBOutputWidget* parent);
+    explicit OutputTextEdit(GDBOutputWidget* parent);
 
 protected:
     void contextMenuEvent(QContextMenuEvent* event) override;

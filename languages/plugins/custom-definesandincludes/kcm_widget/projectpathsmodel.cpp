@@ -96,7 +96,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
                 return false;
             }
         }
-        projectPaths.insert( 1, sanitizePath( value.toString(), false ) );
+        projectPaths.insert( 1, ConfigEntry(sanitizePath( value.toString(), false ) ));
         emit dataChanged( this->index( 1, 0 ), this->index( projectPaths.count() - 1, 0 ) );
         return true;
     }
@@ -161,7 +161,7 @@ void ProjectPathsModel::setPaths(const QList< ConfigEntry >& paths )
         config.path = sanitizePath(rootPath ? QString() : config.path );
         addPathInternal(config, rootPath);
     }
-    addPathInternal( sanitizePath( QString() ), true ); // add an empty "root" config entry if one does not exist
+    addPathInternal( ConfigEntry(sanitizePath( QString() )), true ); // add an empty "root" config entry if one does not exist
     endResetModel();
 }
 
@@ -190,7 +190,7 @@ void ProjectPathsModel::addPath( const QUrl &url )
     }
 
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-    addPathInternal( sanitizeUrl(url), false );
+    addPathInternal( ConfigEntry(sanitizeUrl(url)), false );
     endInsertRows();
 }
 

@@ -51,7 +51,7 @@ class SelectAddressDialog : public QDialog
 {
     Q_OBJECT
 public:
-    SelectAddressDialog(QWidget *parent = nullptr);
+    explicit SelectAddressDialog(QWidget *parent = nullptr);
 
     QString address() const;
     void setAddress(const QString& address);
@@ -109,7 +109,7 @@ public:
         ColumnCount
     };
 
-    DisassembleWidget( MIDebuggerPlugin* plugin, QWidget *parent=nullptr );
+    explicit DisassembleWidget( MIDebuggerPlugin* plugin, QWidget *parent=nullptr );
     ~DisassembleWidget() override;
 
 Q_SIGNALS:

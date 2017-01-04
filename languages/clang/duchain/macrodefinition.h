@@ -47,7 +47,7 @@ public:
     using Ptr = KDevelop::DUChainPointer<MacroDefinition>;
 
     MacroDefinition(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
-    MacroDefinition(MacroDefinitionData& data);
+    explicit MacroDefinition(MacroDefinitionData& data);
     MacroDefinition(const MacroDefinition& rhs);
     virtual ~MacroDefinition();
 

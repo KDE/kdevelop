@@ -220,7 +220,7 @@ QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const Include
 class IncludeFileCompletionItem : public AbstractIncludeFileCompletionItem<ClangNavigationWidget>
 {
 public:
-    IncludeFileCompletionItem(const IncludeItem& include)
+    explicit IncludeFileCompletionItem(const IncludeItem& include)
         : AbstractIncludeFileCompletionItem<ClangNavigationWidget>(include)
     {}
 

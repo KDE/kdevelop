@@ -95,7 +95,7 @@ public:
 class TestLaunchConfiguration : public ILaunchConfiguration
 {
 public:
-    TestLaunchConfiguration(const QUrl& executable = findExecutable("lldb_debugee"),
+    explicit TestLaunchConfiguration(const QUrl& executable = findExecutable("lldb_debugee"),
                             const QUrl& workingDirectory = QUrl()) {
         qDebug() << "FIND" << executable;
         c = new KConfig();
@@ -124,7 +124,7 @@ class TestFrameStackModel : public LldbFrameStackModel
 {
 public:
 
-    TestFrameStackModel(DebugSession* session)
+    explicit TestFrameStackModel(DebugSession* session)
         : LldbFrameStackModel(session), fetchFramesCalled(0), fetchThreadsCalled(0) {}
 
     void fetchFrames(int threadNumber, int from, int to) override

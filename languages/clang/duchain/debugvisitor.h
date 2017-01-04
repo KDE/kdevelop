@@ -28,7 +28,7 @@
 class KDEVCLANGPRIVATE_EXPORT DebugVisitor
 {
 public:
-    DebugVisitor(ParseSession* session);
+    explicit DebugVisitor(ParseSession* session);
 
     void visit(CXTranslationUnit unit, CXFile file);
 

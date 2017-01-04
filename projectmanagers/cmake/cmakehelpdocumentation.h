@@ -28,7 +28,7 @@ class CMakeContentsModel : public QAbstractItemModel
 {
     Q_OBJECT
     public:       
-        CMakeContentsModel(QObject* parent) ;
+        explicit CMakeContentsModel(QObject* parent) ;
         int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         
         int columnCount(const QModelIndex&) const override { return 1; }

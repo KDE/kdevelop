@@ -34,7 +34,7 @@ class MIDebugSession;
 class MIFrameStackModel : public KDevelop::FrameStackModel
 {
 public:
-    MIFrameStackModel( MIDebugSession* session);
+    explicit MIFrameStackModel( MIDebugSession* session);
 
     MIDebugSession* session();
 

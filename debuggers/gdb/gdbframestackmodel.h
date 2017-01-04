@@ -32,7 +32,7 @@ class GdbFrameStackModel : public KDevMI::MIFrameStackModel
 {
     Q_OBJECT
 public:
-    GdbFrameStackModel(DebugSession* session);
+    explicit GdbFrameStackModel(DebugSession* session);
 
     DebugSession* session();
 };

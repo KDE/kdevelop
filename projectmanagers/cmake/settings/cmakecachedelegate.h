@@ -29,7 +29,7 @@ class CMakeCacheDelegate : public QItemDelegate
 {
     Q_OBJECT
     public:
-        CMakeCacheDelegate(QObject* parent);
+        explicit CMakeCacheDelegate(QObject* parent);
         ~CMakeCacheDelegate() override;
         QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option,
                                          const QModelIndex & index ) const override;

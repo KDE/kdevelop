@@ -110,7 +110,7 @@ void MIVariableController::handleVarUpdate(const ResultRecord& r)
 class StackListArgumentsHandler : public MICommandHandler
 {
 public:
-    StackListArgumentsHandler(QStringList localsName)
+    explicit StackListArgumentsHandler(QStringList localsName)
         : m_localsName(localsName)
     {}
 
@@ -139,7 +139,7 @@ private:
 class StackListLocalsHandler : public MICommandHandler
 {
 public:
-    StackListLocalsHandler(MIDebugSession *session)
+    explicit StackListLocalsHandler(MIDebugSession *session)
         : m_session(session)
     {}
 

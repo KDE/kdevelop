@@ -37,7 +37,7 @@ class FunctionScopeTest : public QObject
 {
         Q_OBJECT
     public:
-        FunctionScopeTest( QObject* parent = nullptr );
+        explicit FunctionScopeTest( QObject* parent = nullptr );
         ~FunctionScopeTest() override;
     private slots:
         void init();

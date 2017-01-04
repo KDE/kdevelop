@@ -138,12 +138,12 @@ ClangRange::ClangRange(CXSourceRange range)
 
 ClangLocation ClangRange::start() const
 {
-    return {clang_getRangeStart(m_range)};
+    return ClangLocation(clang_getRangeStart(m_range));
 }
 
 ClangLocation ClangRange::end() const
 {
-    return {clang_getRangeEnd(m_range)};
+    return ClangLocation(clang_getRangeEnd(m_range));
 }
 
 CXSourceRange ClangRange::range() const
@@ -222,7 +222,7 @@ QDebug operator<<(QDebug stream, const ClangTokens& tokens)
 {
     stream << "ClangTokens {";
     for (uint i = 0; i < tokens.size(); ++i) {
-        stream << i << tokens.at(i) << clang_getTokenSpelling(tokens.unit(), tokens.at(i)) << ",";
+        stream << i << tokens.at(i) << ClangString(clang_getTokenSpelling(tokens.unit(), tokens.at(i))) << ",";
     }
     return stream << "}";
 }

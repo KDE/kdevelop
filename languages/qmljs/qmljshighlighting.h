@@ -26,7 +26,7 @@ class QmlJsHighlighting : public KDevelop::CodeHighlighting
     Q_OBJECT
 
 public:
-    QmlJsHighlighting(QObject* parent);
+    explicit QmlJsHighlighting(QObject* parent);
     KDevelop::CodeHighlightingInstance* createInstance() const override;
 };
 

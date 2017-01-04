@@ -40,7 +40,7 @@ public:
     typedef QPair< QString, QString > DefinePair;
     static const QStringList FileVariables;
 
-    QMakeProjectFile( const QString& projectfile );
+    explicit QMakeProjectFile( const QString& projectfile );
     ~QMakeProjectFile();
 
     bool read() override;

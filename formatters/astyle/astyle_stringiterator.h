@@ -32,7 +32,7 @@ Boston, MA 02110-1301, USA.
 class AStyleStringIterator : public astyle::ASSourceIterator
 {
 public:
-    AStyleStringIterator(const QString &string);
+    explicit AStyleStringIterator(const QString &string);
     virtual ~AStyleStringIterator();
 
     bool hasMoreLines() const override;

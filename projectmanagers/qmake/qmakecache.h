@@ -28,7 +28,7 @@ class QMakeMkSpecs;
 class QMakeCache : public QMakeFile
 {
 public:
-    QMakeCache( const QString& cachefile );
+    explicit QMakeCache( const QString& cachefile );
     void setMkSpecs( QMakeMkSpecs* specs );
     bool read() override;
 private:

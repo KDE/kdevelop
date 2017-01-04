@@ -30,12 +30,12 @@ class ClangDUContext : public BaseContext
 {
 public:
     template<class Data>
-    ClangDUContext(Data& data) : BaseContext(data) {
+    explicit ClangDUContext(Data& data) : BaseContext(data) {
     }
 
     ///Parameters will be reached to the base-class
     template<typename... Params>
-    ClangDUContext(Params... params) : BaseContext(params...) {
+    explicit ClangDUContext(Params... params) : BaseContext(params...) {
         static_cast<KDevelop::DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
 

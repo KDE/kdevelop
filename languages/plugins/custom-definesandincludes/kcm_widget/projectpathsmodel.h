@@ -42,7 +42,7 @@ public:
         CompilerDataRole = Qt::UserRole + 4,
         ParserArgumentsRole = Qt::UserRole + 5
     };
-    ProjectPathsModel( QObject* parent = nullptr );
+    explicit ProjectPathsModel( QObject* parent = nullptr );
     void setProject( KDevelop::IProject* w_project );
     void setPaths( const QList< ConfigEntry >& paths );
     void addPath( const QUrl &url );

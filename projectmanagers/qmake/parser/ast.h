@@ -74,7 +74,7 @@ public:
 class KDEVQMAKEPARSER_EXPORT ScopeBodyAST: public AST
 {
 public:
-    ScopeBodyAST( AST* parent, AST::Type type = AST::ScopeBody );
+    explicit ScopeBodyAST( AST* parent, AST::Type type = AST::ScopeBody );
     ~ScopeBodyAST();
     QList<StatementAST*> statements;
 };

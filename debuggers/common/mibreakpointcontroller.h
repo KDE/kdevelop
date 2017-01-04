@@ -64,7 +64,7 @@ class MIBreakpointController : public KDevelop::IBreakpointController
 {
     Q_OBJECT
 public:
-    MIBreakpointController(MIDebugSession* parent);
+    explicit MIBreakpointController(MIDebugSession* parent);
 
     using IBreakpointController::breakpointModel;
 

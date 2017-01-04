@@ -85,7 +85,7 @@ class KDEVCLANGPRIVATE_EXPORT ClangFixitAssistant : public KDevelop::IAssistant
     Q_OBJECT
 
 public:
-    ClangFixitAssistant(const ClangFixits& fixits);
+    explicit ClangFixitAssistant(const ClangFixits& fixits);
     ClangFixitAssistant(const QString& title, const ClangFixits& fixits);
 
     QString title() const override;
@@ -104,7 +104,7 @@ class KDEVCLANGPRIVATE_EXPORT ClangFixitAction : public KDevelop::IAssistantActi
     Q_OBJECT
 
 public:
-    ClangFixitAction(const ClangFixit& fixit);
+    explicit ClangFixitAction(const ClangFixit& fixit);
 
     QString description() const override;
 

@@ -32,7 +32,7 @@ class TestQMakeProject : public QObject {
     Q_OBJECT
 
 public:
-    TestQMakeProject(QObject* parent = nullptr);
+    explicit TestQMakeProject(QObject* parent = nullptr);
     ~TestQMakeProject() override;
 
 private slots:

@@ -30,7 +30,7 @@
 class TreeItem
 {
 public:
-    TreeItem(const QList<QVariant> &data, TreeItem *parent = nullptr)
+    explicit TreeItem(const QList<QVariant> &data, TreeItem *parent = nullptr)
         :m_itemData(data)
         ,m_parentItem(parent)
     {}

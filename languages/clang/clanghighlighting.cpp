@@ -30,7 +30,7 @@ using namespace KDevelop;
 class ClangHighlighting::Instance : public KDevelop::CodeHighlightingInstance
 {
 public:
-    Instance(const KDevelop::CodeHighlighting* highlighting);
+    explicit Instance(const KDevelop::CodeHighlighting* highlighting);
 
     KDevelop::HighlightingEnumContainer::Types typeForDeclaration(KDevelop::Declaration* dec, KDevelop::DUContext* context) const override
     {

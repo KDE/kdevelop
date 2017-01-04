@@ -74,7 +74,7 @@ using namespace KDevMI::LLDB;
 class TestLaunchConfiguration : public ILaunchConfiguration
 {
 public:
-    TestLaunchConfiguration(const QString& executable,
+    explicit TestLaunchConfiguration(const QString& executable,
                             const QUrl& workingDirectory = QUrl()) {
         auto execPath = findExecutable(executable);
         qDebug() << "FIND" << execPath;

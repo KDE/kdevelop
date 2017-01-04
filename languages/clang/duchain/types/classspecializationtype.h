@@ -53,7 +53,7 @@ class ClassSpecializationType : public KDevelop::StructureType
 public:
     ClassSpecializationType(const ClassSpecializationType& rhs);
 
-    ClassSpecializationType(ClassSpecializationTypeData& data);
+    explicit ClassSpecializationType(ClassSpecializationTypeData& data);
 
     typedef KDevelop::TypePtr<ClassSpecializationType> Ptr;
 

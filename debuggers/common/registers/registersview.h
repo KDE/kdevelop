@@ -38,7 +38,7 @@ class RegistersView : public QWidget, private Ui::RegistersView
     Q_OBJECT
 
 public:
-    RegistersView(QWidget* p = nullptr);
+    explicit RegistersView(QWidget* p = nullptr);
 
     void enable(bool enabled);
 

@@ -32,7 +32,7 @@ namespace QmlJS {
 class KDEVQMLJSCOMPLETION_EXPORT CodeCompletionModel : public KDevelop::CodeCompletionModel
 {
 public:
-    CodeCompletionModel(QObject* parent);
+    explicit CodeCompletionModel(QObject* parent);
 protected:
     KDevelop::CodeCompletionWorker* createCompletionWorker() override;
 };

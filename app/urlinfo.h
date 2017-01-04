@@ -39,7 +39,7 @@ public:
      * Parses a file path argument and determines its line number and column and full path
      * @param path path passed on e.g. command line to parse into an URL
      */
-    UrlInfo(QString path = QString())
+    explicit UrlInfo(QString path = QString())
         : cursor(KTextEditor::Cursor::invalid())
     {
         /**

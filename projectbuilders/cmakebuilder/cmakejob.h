@@ -45,7 +45,7 @@ public:
         FailedError
     };
 
-    CMakeJob(QObject* parent = nullptr);
+    explicit CMakeJob(QObject* parent = nullptr);
     
     void setProject(KDevelop::IProject* project);
 

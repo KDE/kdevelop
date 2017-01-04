@@ -30,7 +30,7 @@ class QQuickWidget;
 
 // Describes one supported property, such as "width"
 struct SupportedProperty {
-    SupportedProperty(const QUrl& qmlfile,
+    explicit SupportedProperty(const QUrl& qmlfile,
                       const QString &typeContains = QString(),
                       const QString &classContains = QString())
     : qmlfile(qmlfile),

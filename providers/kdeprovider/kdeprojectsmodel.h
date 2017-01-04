@@ -48,7 +48,7 @@ struct Source
 class SourceItem : public QStandardItem
 {
     public:
-        SourceItem(const Source& s);
+        explicit SourceItem(const Source& s);
         QVariant data(int role = Qt::UserRole + 1) const override;
         
     private:

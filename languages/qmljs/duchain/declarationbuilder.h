@@ -45,7 +45,7 @@ class KDEVQMLJSDUCHAIN_EXPORT DeclarationBuilder : public DeclarationBuilderBase
     friend class QmlJS::NodeJS;
 
 public:
-    DeclarationBuilder(ParseSession* session);
+    explicit DeclarationBuilder(ParseSession* session);
 
     virtual KDevelop::ReferencedTopDUContext build(const KDevelop::IndexedString& url,
                                                    QmlJS::AST::Node* node,

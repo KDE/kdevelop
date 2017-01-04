@@ -42,7 +42,7 @@ class MIVariableController : public KDevelop::IVariableController
     Q_OBJECT
 
 public:
-    MIVariableController( MIDebugSession* parent);
+    explicit MIVariableController( MIDebugSession* parent);
 
     KDevelop::Variable* createVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                                        const QString& expression,

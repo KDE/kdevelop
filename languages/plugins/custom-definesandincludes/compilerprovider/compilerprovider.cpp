@@ -69,7 +69,7 @@ static CompilerPointer createDummyCompiler()
 ConfigEntry configForItem(KDevelop::ProjectBaseItem* item)
 {
     if(!item){
-        return {};
+        return ConfigEntry();
     }
 
     const Path itemPath = item->path();

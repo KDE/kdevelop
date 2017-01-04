@@ -220,7 +220,7 @@ AbstractType::Ptr stripType(const AbstractType::Ptr& type, DUContext* ctx)
         : public TypeExchanger
     {
         DUContext* ctx;
-        ShortenTemplateDefaultParameter(DUContext* _ctx)
+        explicit ShortenTemplateDefaultParameter(DUContext* _ctx)
             : ctx(_ctx) {
             Q_ASSERT(ctx);
         }

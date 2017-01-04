@@ -34,7 +34,7 @@ class PlasmoidExecutionConfig : public KDevelop::LaunchConfigurationPage, Ui::Pl
 {
 Q_OBJECT
 public:
-    PlasmoidExecutionConfig( QWidget* parent );
+    explicit PlasmoidExecutionConfig( QWidget* parent );
     void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = nullptr ) override;
     void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = nullptr ) const override;
     QString title() const override;
@@ -44,7 +44,7 @@ public:
 class PlasmoidLauncher : public KDevelop::ILauncher
 {
 public:
-    PlasmoidLauncher( ExecutePlasmoidPlugin* plugin );
+    explicit PlasmoidLauncher( ExecutePlasmoidPlugin* plugin );
     QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
     QString description() const override;
     QString id() override;

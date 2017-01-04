@@ -44,7 +44,7 @@ public:
 
     FunctionType();
     FunctionType(const FunctionType& rhs);
-    FunctionType(Data& data);
+    explicit FunctionType(Data& data);
     virtual ~FunctionType();
 
     KDevelop::AbstractType* clone() const override;

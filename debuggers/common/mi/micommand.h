@@ -82,7 +82,7 @@ class FunctionCommandHandler : public MICommandHandler {
 public:
     typedef std::function<void (const ResultRecord&)> Function;
 
-    FunctionCommandHandler(const Function& callback, CommandFlags flags = nullptr);
+    explicit FunctionCommandHandler(const Function& callback, CommandFlags flags = nullptr);
 
     void handle(const ResultRecord&) override;
     bool handlesError() override;
@@ -99,7 +99,7 @@ private:
 class MICommand
 {
 protected:
-    MICommand(CommandType type, const QString& arguments = QString(), CommandFlags flags = nullptr);
+    explicit MICommand(CommandType type, const QString& arguments = QString(), CommandFlags flags = nullptr);
     friend class KDevMI::MIDebugSession;
 
 public:
@@ -280,7 +280,7 @@ public:
         };
     }
 
-    SentinelCommand(const Function& handler, CommandFlags flags = nullptr)
+    explicit SentinelCommand(const Function& handler, CommandFlags flags = nullptr)
         : MICommand(NonMI, QString(), flags)
         , handler(handler)
     {

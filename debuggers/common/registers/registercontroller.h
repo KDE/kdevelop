@@ -157,7 +157,7 @@ public slots:
     virtual void setRegisterValue(const Register& reg);
 
 protected:
-    IRegisterController(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
+    explicit IRegisterController(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
 
     ///Returns registers from the @p group, or empty registers group if @p group is invalid.
     virtual RegistersGroup registersFromGroup(const GroupsName& group) const = 0;

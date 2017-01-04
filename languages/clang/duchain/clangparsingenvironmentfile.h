@@ -36,7 +36,7 @@ public:
     using Ptr = QExplicitlySharedDataPointer<ClangParsingEnvironmentFile>;
 
     ClangParsingEnvironmentFile(const KDevelop::IndexedString& url, const ClangParsingEnvironment& environment);
-    ClangParsingEnvironmentFile(ClangParsingEnvironmentFileData& data);
+    explicit ClangParsingEnvironmentFile(ClangParsingEnvironmentFileData& data);
     ~ClangParsingEnvironmentFile();
 
     bool needsUpdate(const KDevelop::ParsingEnvironment* environment = nullptr) const override;

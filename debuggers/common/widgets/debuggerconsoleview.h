@@ -52,7 +52,7 @@ class DebuggerConsoleView : public QWidget
 {
     Q_OBJECT
 public:
-    DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *parent = nullptr);
+    explicit DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *parent = nullptr);
     ~DebuggerConsoleView();
 
     /**

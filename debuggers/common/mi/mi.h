@@ -250,7 +250,7 @@ namespace KDevMI { namespace MI {
 
     struct StringLiteralValue : public Value
     {
-        StringLiteralValue(const QString &lit)
+        explicit StringLiteralValue(const QString &lit)
             : literal_(lit) { Value::kind = StringLiteral; }
 
     public: // Value overrides
@@ -305,7 +305,7 @@ namespace KDevMI { namespace MI {
 
     struct ResultRecord : public TupleRecord
     {
-        ResultRecord(const QString& reason)
+        explicit ResultRecord(const QString& reason)
             : token(0)
             , reason(reason)
         {
@@ -357,7 +357,7 @@ namespace KDevMI { namespace MI {
             Log
         };
 
-        StreamRecord(Subkind subkind)
+        explicit StreamRecord(Subkind subkind)
             : subkind(subkind)
         {
             Record::kind = Stream;

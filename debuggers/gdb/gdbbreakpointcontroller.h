@@ -33,7 +33,7 @@ class BreakpointController : public MIBreakpointController
     Q_OBJECT
 
 public:
-    BreakpointController(DebugSession *parent);
+    explicit BreakpointController(DebugSession *parent);
 private:
 };
 

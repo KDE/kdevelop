@@ -46,7 +46,7 @@ class ArchitectureParser : public QObject
 
 public:
 
-    ArchitectureParser(QObject* parent);
+    explicit ArchitectureParser(QObject* parent);
 
     ///Asynchronously determines current architecture. emits @p architectureParsed when ready.
     void determineArchitecture(MIDebugSession* debugSession);
@@ -68,7 +68,7 @@ class RegistersManager : public QObject
     Q_OBJECT
 
 public:
-    RegistersManager(QWidget* parent);
+    explicit RegistersManager(QWidget* parent);
 
 public Q_SLOTS:
     void setSession(MIDebugSession* debugSession);

@@ -140,7 +140,7 @@ public:
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
 public:
-    TestLaunchConfiguration(const QUrl& executable = findExecutable("debugee"),
+    explicit TestLaunchConfiguration(const QUrl& executable = findExecutable("debugee"),
                             const QUrl& workingDirectory = QUrl()) {
         qDebug() << "FIND" << executable;
         c = new KConfig();
@@ -169,7 +169,7 @@ class TestFrameStackModel : public GdbFrameStackModel
 {
 public:
 
-    TestFrameStackModel(DebugSession* session)
+    explicit TestFrameStackModel(DebugSession* session)
         : GdbFrameStackModel(session), fetchFramesCalled(0), fetchThreadsCalled(0) {}
 
     int fetchFramesCalled;

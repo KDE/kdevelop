@@ -29,7 +29,7 @@ typedef KDevelop::AbstractUseBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPro
 class KDEVQMLJSDUCHAIN_EXPORT UseBuilder : public UseBuilderBase
 {
 public:
-    UseBuilder(ParseSession* session);
+    explicit UseBuilder(ParseSession* session);
 
 protected:
     using Visitor::visit;

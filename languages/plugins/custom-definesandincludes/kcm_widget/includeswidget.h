@@ -42,7 +42,7 @@ class IncludesWidget : public QWidget
 {
 Q_OBJECT
 public:
-    IncludesWidget( QWidget* parent = nullptr );
+    explicit IncludesWidget( QWidget* parent = nullptr );
     void setProject(KDevelop::IProject* w_project);
     void setIncludes( const QStringList& );
     void clear();

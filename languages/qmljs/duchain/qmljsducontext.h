@@ -42,7 +42,7 @@ class QmlJSDUContext : public BaseContext
 {
 public:
     template<class Data>
-    QmlJSDUContext(Data& data) : BaseContext(data) {
+    explicit QmlJSDUContext(Data& data) : BaseContext(data) {
     }
 
     ///Parameters will be reached to the base-class

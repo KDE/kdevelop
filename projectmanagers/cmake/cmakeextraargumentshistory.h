@@ -39,7 +39,7 @@ namespace Ui {
 class KDEVCMAKECOMMON_EXPORT CMakeExtraArgumentsHistory
 {
     public:
-        CMakeExtraArgumentsHistory(KComboBox* widget);
+        explicit CMakeExtraArgumentsHistory(KComboBox* widget);
         ~CMakeExtraArgumentsHistory();
 
         QStringList list() const;

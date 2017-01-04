@@ -25,7 +25,7 @@ using namespace KDevelop;
 class HighlightingInstance : public KDevelop::CodeHighlightingInstance
 {
 public:
-    HighlightingInstance(const CodeHighlighting* highlighting)
+    explicit HighlightingInstance(const CodeHighlighting* highlighting)
     : CodeHighlightingInstance(highlighting)
     {}
 

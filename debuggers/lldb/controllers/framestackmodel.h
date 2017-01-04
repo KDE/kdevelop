@@ -38,7 +38,7 @@ class LldbFrameStackModel : public MIFrameStackModel
 {
     Q_OBJECT
 public:
-    LldbFrameStackModel(DebugSession* session);
+    explicit LldbFrameStackModel(DebugSession* session);
 
     DebugSession* session();
 

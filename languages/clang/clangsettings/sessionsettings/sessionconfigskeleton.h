@@ -34,7 +34,7 @@ using namespace KDevelop;
 class SessionConfigSkeleton : public KConfigSkeleton
 {
 public:
-    SessionConfigSkeleton( const QString& )
+    explicit SessionConfigSkeleton( const QString& )
         : KConfigSkeleton( ICore::self()->activeSession()->config() )
     {
     }

@@ -43,7 +43,7 @@ class ParserWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ParserWidget(QWidget* parent);
+    explicit ParserWidget(QWidget* parent);
     ~ParserWidget() override;
 
     void setParserArguments(const ParserArguments& arguments);

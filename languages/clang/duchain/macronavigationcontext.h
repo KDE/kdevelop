@@ -32,7 +32,7 @@
 class KDEVCLANGPRIVATE_EXPORT MacroNavigationContext : public KDevelop::AbstractNavigationContext
 {
 public:
-    MacroNavigationContext(const MacroDefinition::Ptr& macro,
+    explicit MacroNavigationContext(const MacroDefinition::Ptr& macro,
                            const KDevelop::DocumentCursor& expansionLocation = KDevelop::DocumentCursor::invalid());
     ~MacroNavigationContext();
 

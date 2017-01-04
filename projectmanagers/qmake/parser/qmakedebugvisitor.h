@@ -33,7 +33,7 @@ class DebugVisitor:  public DefaultVisitor
 {
 
 public:
-    DebugVisitor(QMake::Parser* parser);
+    explicit DebugVisitor(QMake::Parser* parser);
     void visitArgumentList( ArgumentListAst *node ) override;
     void visitFunctionArguments( FunctionArgumentsAst *node ) override;
     void visitOrOperator( OrOperatorAst *node ) override;

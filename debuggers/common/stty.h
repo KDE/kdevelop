@@ -39,7 +39,7 @@ class STTY : public QObject
     Q_OBJECT
 
 public:
-    STTY(bool ext=false, const QString &termAppName=QString());
+    explicit STTY(bool ext=false, const QString &termAppName=QString());
     ~STTY() override;
 
     ///Call it if getSlave returns an empty string.

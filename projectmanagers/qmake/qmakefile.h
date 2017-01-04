@@ -43,7 +43,7 @@ class QMakeMkSpecs;
 class QMakeFile : public QMakeVariableResolver
 {
 public:
-    QMakeFile( QString  file );
+    explicit QMakeFile( QString  file );
     virtual ~QMakeFile();
     virtual bool read();
     QString absoluteDir() const;

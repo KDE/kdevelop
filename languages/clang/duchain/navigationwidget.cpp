@@ -34,7 +34,7 @@ using namespace KDevelop;
 class DeclarationNavigationContext : public AbstractDeclarationNavigationContext
 {
 public:
-    DeclarationNavigationContext(const DeclarationPointer& decl, AbstractNavigationContext* previousContext = nullptr)
+    explicit DeclarationNavigationContext(const DeclarationPointer& decl, AbstractNavigationContext* previousContext = nullptr)
         : AbstractDeclarationNavigationContext(decl, {}, previousContext)
     {
     }

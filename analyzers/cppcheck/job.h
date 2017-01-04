@@ -43,7 +43,7 @@ class Job : public KDevelop::OutputExecuteJob
     Q_OBJECT
 
 public:
-    Job(const Parameters& params, QObject* parent = nullptr);
+    explicit Job(const Parameters& params, QObject* parent = nullptr);
     ~Job() override;
 
     void start() override;

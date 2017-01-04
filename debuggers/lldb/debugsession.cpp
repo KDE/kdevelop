@@ -57,7 +57,7 @@ using namespace KDevelop;
 
 struct ExecRunHandler : public MICommandHandler
 {
-    ExecRunHandler(DebugSession *session, int maxRetry = 5)
+    explicit ExecRunHandler(DebugSession *session, int maxRetry = 5)
         : m_session(session)
         , m_remainRetry(maxRetry)
         , m_activeCommands(1)

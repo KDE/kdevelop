@@ -32,7 +32,7 @@ namespace KTextEditor { class Document; class Range; }
 class CMakeCodeCompletionModel : public KTextEditor::CodeCompletionModel
 {
     public:
-        CMakeCodeCompletionModel(QObject *parent);
+        explicit CMakeCodeCompletionModel(QObject *parent);
 
         void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType) override;
         QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const override;

@@ -42,7 +42,7 @@ namespace GDB
     {
         Q_OBJECT
     public:
-        MemoryViewerWidget(CppDebuggerPlugin* plugin, QWidget* parent = nullptr);
+        explicit MemoryViewerWidget(CppDebuggerPlugin* plugin, QWidget* parent = nullptr);
 
     public Q_SLOTS:
         /** Adds a new memory view. */
@@ -65,7 +65,7 @@ namespace GDB
     {
         Q_OBJECT
     public:
-        MemoryView(QWidget* parent);
+        explicit MemoryView(QWidget* parent);
 
         void debuggerStateChanged(DBGStateFlags state);
 

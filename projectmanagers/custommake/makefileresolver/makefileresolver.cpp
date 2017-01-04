@@ -168,7 +168,7 @@ namespace {
   class SourcePathInformation
   {
   public:
-    SourcePathInformation(const QString& path)
+    explicit SourcePathInformation(const QString& path)
       : m_path(path)
       , m_isUnsermake(false)
       , m_shouldTouchFiles(false)

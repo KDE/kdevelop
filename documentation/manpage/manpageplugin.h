@@ -36,7 +36,7 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
-    ManPagePlugin(QObject *parent, const QVariantList & args= QVariantList());
+    explicit ManPagePlugin(QObject *parent, const QVariantList & args= QVariantList());
     ~ManPagePlugin() override;
     KDevelop::IDocumentation::Ptr documentationForDeclaration (KDevelop::Declaration* dec) const override;
     QAbstractListModel* indexModel() const override;
