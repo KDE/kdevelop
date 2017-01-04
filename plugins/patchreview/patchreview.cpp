@@ -317,7 +317,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevpatchreview.json", r
 class PatchReviewToolViewFactory : public KDevelop::IToolViewFactory
 {
 public:
-    PatchReviewToolViewFactory( PatchReviewPlugin *plugin ) : m_plugin( plugin ) {}
+    explicit PatchReviewToolViewFactory( PatchReviewPlugin *plugin ) : m_plugin( plugin ) {}
 
     QWidget* create( QWidget *parent = nullptr ) override {
         return new PatchReviewToolView( parent, m_plugin );

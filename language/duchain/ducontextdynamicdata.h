@@ -81,7 +81,7 @@ public:
   public:
     struct StackEntry
     {
-      StackEntry(const DUContextDynamicData* data = nullptr)
+      explicit StackEntry(const DUContextDynamicData* data = nullptr)
         : data(data)
         , index(0)
         , nextChild(0)

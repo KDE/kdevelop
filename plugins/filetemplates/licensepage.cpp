@@ -46,7 +46,7 @@ struct LicensePagePrivate
     typedef QList<LicenseInfo> LicenseList;
 
 
-    LicensePagePrivate(LicensePage* page_)
+    explicit LicensePagePrivate(LicensePage* page_)
     : license(nullptr)
     , page(page_)
     {

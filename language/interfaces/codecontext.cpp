@@ -45,7 +45,7 @@ namespace KDevelop
 class DUContextContext::Private
 {
 public:
-    Private( const IndexedDUContext& item ) : m_item( item )
+    explicit Private( const IndexedDUContext& item ) : m_item( item )
     {}
 
     IndexedDUContext m_item;

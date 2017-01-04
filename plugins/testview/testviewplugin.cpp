@@ -46,7 +46,7 @@ using namespace KDevelop;
 class TestToolViewFactory: public KDevelop::IToolViewFactory
 {
     public:
-        TestToolViewFactory( TestViewPlugin *plugin ): mplugin( plugin )
+        explicit TestToolViewFactory( TestViewPlugin *plugin ): mplugin( plugin )
         {}
         QWidget* create( QWidget *parent = nullptr ) override
         {

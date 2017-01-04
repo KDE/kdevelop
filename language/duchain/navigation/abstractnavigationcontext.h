@@ -41,7 +41,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
     Fixed = 0x4
   };
   Q_DECLARE_FLAGS(Formatting, FormattingFlag)
-  Colorizer(const QString& color, Formatting formatting = Nothing)
+  explicit Colorizer(const QString& color, Formatting formatting = Nothing)
     : m_color(color), m_formatting(formatting)
   {
   }
@@ -117,7 +117,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
     virtual void setPreviousContext(AbstractNavigationContext* previous);
     
     struct TextHandler {
-      TextHandler(AbstractNavigationContext* c) : context(c) {
+      explicit TextHandler(AbstractNavigationContext* c) : context(c) {
       }
       void operator+=(const QString& str) const {
         context->addHtml(str);

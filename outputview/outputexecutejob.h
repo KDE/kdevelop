@@ -68,7 +68,7 @@ public:
     Q_FLAGS(JobProperty JobProperties)
     Q_DECLARE_FLAGS(JobProperties, JobProperty)
 
-    OutputExecuteJob( QObject* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Verbose );
+    explicit OutputExecuteJob( QObject* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Verbose );
     ~OutputExecuteJob() override;
 
     /**

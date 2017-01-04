@@ -52,7 +52,7 @@ class ApplyChangesWidgetPrivate
 {
 public:
 
-    ApplyChangesWidgetPrivate(ApplyChangesWidget * p)
+    explicit ApplyChangesWidgetPrivate(ApplyChangesWidget * p)
         : parent(p), m_index(0) {}
     ~ApplyChangesWidgetPrivate()
     {

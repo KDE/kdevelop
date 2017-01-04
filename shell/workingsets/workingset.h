@@ -34,7 +34,7 @@ namespace KDevelop {
 
 /// Contains all significant parameters which control the appearance of a working set icon
 struct WorkingSetIconParameters {
-    WorkingSetIconParameters(const QString& id)
+    explicit WorkingSetIconParameters(const QString& id)
         : setId(qHash(id) % 268435459)
         , coloredCount((setId % 15 < 4) ? 1 : (setId % 15 < 10) ? 2 : (setId % 15 == 14) ? 4 : 3)
         , hue((setId % 273 * 83) % 360)

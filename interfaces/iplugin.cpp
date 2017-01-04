@@ -46,7 +46,7 @@ namespace KDevelop
 class IPluginPrivate
 {
 public:
-    IPluginPrivate(IPlugin *q)
+    explicit IPluginPrivate(IPlugin *q)
         : q(q)
     {}
 
@@ -143,7 +143,7 @@ void KDevelop::IPlugin::initializeGuiState()
 class CustomXmlGUIClient : public KXMLGUIClient
 {
 public:
-    CustomXmlGUIClient(const QString& componentName)
+    explicit CustomXmlGUIClient(const QString& componentName)
     {
         // TODO KF5: Get rid off this
         setComponentName(componentName, componentName);

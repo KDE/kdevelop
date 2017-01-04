@@ -42,7 +42,7 @@ struct NavigationAction {
   };
 
   ///When executed, this navigation-action calls the "executeKeyAction(QString) function in its navigation-context
-  NavigationAction(QString _key) : targetContext(nullptr), type(ExecuteKey), key(_key) {
+  explicit NavigationAction(QString _key) : targetContext(nullptr), type(ExecuteKey), key(_key) {
   }
 
   NavigationAction() : targetContext(nullptr), type(None) {
@@ -54,7 +54,7 @@ struct NavigationAction {
   NavigationAction( const QUrl& _document, const KTextEditor::Cursor& _cursor) : targetContext(nullptr), type(JumpToSource), document(_document), cursor(_cursor) {
   }
 
-  NavigationAction(AbstractNavigationContext* _targetContext) : targetContext(_targetContext) {
+  explicit NavigationAction(AbstractNavigationContext* _targetContext) : targetContext(_targetContext) {
   }
 
   AbstractNavigationContext* targetContext; //If this is set, this action does nothing else than jumping to that context

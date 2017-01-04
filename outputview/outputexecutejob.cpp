@@ -35,7 +35,7 @@ namespace KDevelop
 class OutputExecuteJobPrivate
 {
 public:
-    OutputExecuteJobPrivate( KDevelop::OutputExecuteJob* owner );
+    explicit OutputExecuteJobPrivate( KDevelop::OutputExecuteJob* owner );
 
     void childProcessStdout();
     void childProcessStderr();

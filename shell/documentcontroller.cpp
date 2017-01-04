@@ -83,7 +83,7 @@ struct DocumentControllerPrivate
         QString encoding;
     };
 
-    DocumentControllerPrivate(DocumentController* c)
+    explicit DocumentControllerPrivate(DocumentController* c)
         : controller(c)
         , fileOpenRecent(nullptr)
         , globalTextEditorInstance(nullptr)

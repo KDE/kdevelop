@@ -67,7 +67,7 @@ public:
     enum ExtraRoles {
         DescriptionRole = Qt::UserRole+1
     };
-    PluginsModel(QObject* parent = nullptr)
+    explicit PluginsModel(QObject* parent = nullptr)
         : QAbstractListModel(parent)
     {
         m_plugins = KDevelop::Core::self()->pluginControllerInternal()->loadedPlugins();
@@ -119,7 +119,7 @@ class LoadedPluginsDelegate : public KWidgetItemDelegate
 
 public:
 
-    LoadedPluginsDelegate(QAbstractItemView *itemView, QObject *parent = nullptr)
+    explicit LoadedPluginsDelegate(QAbstractItemView *itemView, QObject *parent = nullptr)
         : KWidgetItemDelegate(itemView, parent)
         , pushButton(new QPushButton)
     {
@@ -255,7 +255,7 @@ class PluginsView : public QListView
 {
     Q_OBJECT
 public:
-    PluginsView(QWidget* parent = nullptr)
+    explicit PluginsView(QWidget* parent = nullptr)
         :QListView(parent)
     {
         setModel(new PluginsModel(this));

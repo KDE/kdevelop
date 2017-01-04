@@ -53,7 +53,7 @@ class SizeGrip : public QWidget
 {
     Q_OBJECT
 public:
-    SizeGrip(QWidget* parent) : QWidget(parent) {
+    explicit SizeGrip(QWidget* parent) : QWidget(parent) {
         m_parent = parent;
     }
 protected:

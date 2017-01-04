@@ -73,7 +73,7 @@ template<typename InternalJobClass>
 class SvnJobBaseImpl : public SvnJobBase
 {
 public:
-    SvnJobBaseImpl(KDevSvnPlugin* plugin,
+    explicit SvnJobBaseImpl(KDevSvnPlugin* plugin,
                    KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose)
         : SvnJobBase(plugin, verbosity)
     {

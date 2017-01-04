@@ -98,7 +98,7 @@ bool VcsFileChangesSortProxyModel::lessThan(const QModelIndex& source_left, cons
 class VcsStatusInfoItem : public QStandardItem
 {
 public:
-    VcsStatusInfoItem(const VcsStatusInfo& info)
+    explicit VcsStatusInfoItem(const VcsStatusInfo& info)
         : QStandardItem()
         , m_info(info) {}
 

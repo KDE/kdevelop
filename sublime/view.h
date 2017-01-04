@@ -85,7 +85,7 @@ public Q_SLOTS:
     void requestRaise();
 
 protected:
-    View(Document *doc, WidgetOwnership ws = DoNotTakeOwnerShip );
+    explicit View(Document *doc, WidgetOwnership ws = DoNotTakeOwnerShip );
     /**
      * override this function to create a custom widget in your View subclass
      * @param parent the parent widget

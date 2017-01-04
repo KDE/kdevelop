@@ -115,7 +115,7 @@ bool UsesCollector::shouldRespectFile(IndexedString document) {
 }
 
 struct ImportanceChecker {
-  ImportanceChecker(UsesCollector& collector) : m_collector(collector) {
+  explicit ImportanceChecker(UsesCollector& collector) : m_collector(collector) {
   }
   bool operator ()(ParsingEnvironmentFile* file) {
     return m_collector.shouldRespectFile(file->url());

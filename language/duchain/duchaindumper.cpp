@@ -88,7 +88,7 @@ DUChainDumper::~DUChainDumper( )
 class Indent
 {
 public:
-  Indent(int level): m_level(level) {}
+  explicit Indent(int level): m_level(level) {}
 
   friend QDebug& operator<<(QDebug& debug, const Indent& ind) {
     for (int i=0; i<ind.m_level; i++) {

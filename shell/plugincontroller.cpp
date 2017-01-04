@@ -122,7 +122,7 @@ bool constraintsMatch( const KPluginMetaData& info, const QVariantMap& constrain
 
 struct Dependency
 {
-    Dependency(const QString &dependency)
+    explicit Dependency(const QString &dependency)
         : interface(dependency)
     {
         if (dependency.contains('@')) {

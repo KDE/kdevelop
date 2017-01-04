@@ -135,7 +135,7 @@ class StandardQuickOpenWidgetCreator : public QuickOpenWidgetCreator {
 class OutlineFilter : public DUChainUtils::DUChainItemFilter {
 public:
   enum OutlineMode { Functions, FunctionsAndClasses };
-  OutlineFilter(QList<DUChainItem>& _items, OutlineMode _mode = FunctionsAndClasses) : items(_items), mode(_mode) {
+  explicit OutlineFilter(QList<DUChainItem>& _items, OutlineMode _mode = FunctionsAndClasses) : items(_items), mode(_mode) {
   }
   bool accept(Declaration* decl) override {
     if(decl->range().isEmpty())

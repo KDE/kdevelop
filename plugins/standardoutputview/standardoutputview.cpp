@@ -41,7 +41,7 @@
 
 class OutputViewFactory : public KDevelop::IToolViewFactory{
 public:
-    OutputViewFactory(const ToolViewData* data): m_data(data) {}
+    explicit OutputViewFactory(const ToolViewData* data): m_data(data) {}
     QWidget* create(QWidget *parent = nullptr) override
     {
         return new OutputWidget( parent, m_data );

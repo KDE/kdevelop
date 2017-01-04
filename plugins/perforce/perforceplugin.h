@@ -49,7 +49,7 @@ class PerforcePlugin : public KDevelop::IPlugin, public KDevelop::ICentralizedVe
 
     friend class PerforcePluginTest;
 public:
-    PerforcePlugin(QObject* parent, const QVariantList & = QVariantList());
+    explicit PerforcePlugin(QObject* parent, const QVariantList & = QVariantList());
     ~PerforcePlugin() override;
 
     //@{

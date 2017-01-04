@@ -42,7 +42,7 @@ using namespace KDevelop;
 class QuickOpenDelegate : public ExpandingDelegate {
     Q_OBJECT
 public:
-  QuickOpenDelegate(ExpandingWidgetModel* model, QObject* parent = nullptr) : ExpandingDelegate(model, parent) {
+  explicit QuickOpenDelegate(ExpandingWidgetModel* model, QObject* parent = nullptr) : ExpandingDelegate(model, parent) {
   }
   QList<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const override {
     QList<QVariant> highlighting = index.data(KTextEditor::CodeCompletionModel::CustomHighlight).toList();

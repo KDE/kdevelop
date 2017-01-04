@@ -35,7 +35,7 @@ namespace KDevelop {
 
 struct OutputPagePrivate
 {
-    OutputPagePrivate(OutputPage* page_)
+    explicit OutputPagePrivate(OutputPage* page_)
     : page(page_)
     , output(nullptr)
     { }

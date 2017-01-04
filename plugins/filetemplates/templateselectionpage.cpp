@@ -53,7 +53,7 @@ static const char FileTemplatesGroup[] = "SourceFileTemplates";
 class KDevelop::TemplateSelectionPagePrivate
 {
 public:
-    TemplateSelectionPagePrivate(TemplateSelectionPage* page_)
+    explicit TemplateSelectionPagePrivate(TemplateSelectionPage* page_)
     : page(page_)
     {}
 

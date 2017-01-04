@@ -67,7 +67,7 @@ namespace KDevelop {
 
 class UiControllerPrivate {
 public:
-    UiControllerPrivate(UiController *controller)
+    explicit UiControllerPrivate(UiController *controller)
     : areasRestored(false), m_controller(controller)
     {
         if (Core::self()->workingSetControllerInternal())
@@ -158,7 +158,7 @@ private:
 
 class UiToolViewFactory: public Sublime::ToolFactory {
 public:
-    UiToolViewFactory(IToolViewFactory *factory): m_factory(factory) {}
+    explicit UiToolViewFactory(IToolViewFactory *factory): m_factory(factory) {}
     ~UiToolViewFactory() override { delete m_factory; }
     QWidget* create(Sublime::ToolDocument *doc, QWidget *parent = nullptr) override
     {
@@ -184,7 +184,7 @@ private:
 
 class ViewSelectorItem: public QListWidgetItem {
 public:
-    ViewSelectorItem(const QString &text, QListWidget *parent = nullptr, int type = Type)
+    explicit ViewSelectorItem(const QString &text, QListWidget *parent = nullptr, int type = Type)
         :QListWidgetItem(text, parent, type) {}
     IToolViewFactory *factory;
 };
@@ -194,7 +194,7 @@ class NewToolViewListWidget: public QListWidget {
     Q_OBJECT
 
 public:
-    NewToolViewListWidget(MainWindow *mw, QWidget* parent = nullptr)
+    explicit NewToolViewListWidget(MainWindow *mw, QWidget* parent = nullptr)
         :QListWidget(parent), m_mw(mw)
     {
         connect(this, &NewToolViewListWidget::doubleClicked, this, &NewToolViewListWidget::addNewToolViewByDoubleClick);

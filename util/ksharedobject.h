@@ -63,7 +63,7 @@ struct FakeAtomic {
  * Notice however that the object will not be deleted immediately, which may lead to unintended behavior.
  */
 struct KSharedObject : public QSharedData {
-  inline KSharedObject(QObject& object) : ref(object, *this) {
+  inline explicit KSharedObject(QObject& object) : ref(object, *this) {
   }
   
   mutable FakeAtomic ref;

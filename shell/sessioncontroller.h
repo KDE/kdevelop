@@ -60,10 +60,10 @@ struct SessionRunInfo
 
 struct TryLockSessionResult
 {
-    TryLockSessionResult(const ISessionLock::Ptr& _lock)
+    explicit TryLockSessionResult(const ISessionLock::Ptr& _lock)
     : lock(_lock)
     {}
-    TryLockSessionResult(const SessionRunInfo& _runInfo)
+    explicit TryLockSessionResult(const SessionRunInfo& _runInfo)
     : runInfo(_runInfo)
     {}
     // if this is non-null then the session was locked

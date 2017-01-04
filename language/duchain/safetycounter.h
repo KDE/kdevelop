@@ -21,7 +21,7 @@ struct SafetyCounter {
   int safetyCounter;
   const int maxSafetyCounter;
 
-  SafetyCounter( int max = 40000 ) : safetyCounter(0), maxSafetyCounter(max) {
+  explicit SafetyCounter( int max = 40000 ) : safetyCounter(0), maxSafetyCounter(max) {
   }
 
   void init() {

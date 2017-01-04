@@ -171,13 +171,13 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addDocumentRenameChange(const
                                                                            const IndexedString& newname)
 {
     d->documentsRename.insert(oldFile, newname);
-    return true;
+    return DocumentChangeSet::ChangeResult::successfulResult();
 }
 
 DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::addChange(const DocumentChangePointer& change)
 {
     changes[change->m_document].append(change);
-    return true;
+    return DocumentChangeSet::ChangeResult::successfulResult();
 }
 
 void DocumentChangeSet::setReplacementPolicy(DocumentChangeSet::ReplacementPolicy policy)
@@ -264,7 +264,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
     QMap<IndexedString, CodeRepresentation::Ptr> codeRepresentations;
     QMap<IndexedString, QString> newTexts;
     ChangesHash filteredSortedChanges;
-    ChangeResult result(true);
+    ChangeResult result = ChangeResult::successfulResult();
 
     QList<IndexedString> files(d->changes.keys());
 
@@ -352,7 +352,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
                 //If set to ignore failed changes just continue with the others
             }
         }
-        return true;
+        return DocumentChangeSet::ChangeResult::successfulResult();
     }
 
     //For files on disk
@@ -366,7 +366,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
         return DocumentChangeSet::ChangeResult(warningString);
     }
 
-    return true;
+    return DocumentChangeSet::ChangeResult::successfulResult();
 }
 
 DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const IndexedString & file,
@@ -488,7 +488,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
         }
     }
     output = textLines.join(QStringLiteral("\n"));
-    return true;
+    return DocumentChangeSet::ChangeResult::successfulResult();
 }
 
 //Removes all duplicate changes for a single file, and then returns (via filteredChanges) the filtered duplicates
@@ -551,7 +551,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
     }
 
     filteredChanges = sortedChanges.values();
-    return true;
+    return DocumentChangeSet::ChangeResult::successfulResult();
 }
 
 void DocumentChangeSetPrivate::updateFiles()

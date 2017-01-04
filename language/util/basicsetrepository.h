@@ -74,7 +74,7 @@ private:
 public:
   uint m_refCount;
 
-  inline SetNodeData(uint start = 1, uint end = 1, uint leftNode = 0, uint rightNode = 0)
+  inline explicit SetNodeData(uint start = 1, uint end = 1, uint leftNode = 0, uint rightNode = 0)
   : m_start(start)
   , m_end(end)
   , m_leftNode(leftNode)

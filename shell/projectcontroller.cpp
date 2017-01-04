@@ -107,7 +107,7 @@ public:
     QPointer<ProjectChangesModel> m_changesModel;
     QHash< IProject*, QPointer<KJob> > m_parseJobs; // parse jobs that add files from the project to the background parser.
 
-    ProjectControllerPrivate( ProjectController* p )
+    explicit ProjectControllerPrivate( ProjectController* p )
         : m_core(nullptr), model(nullptr), dialog(nullptr), q(p), buildset(nullptr), m_foundProjectFile(false), m_cleaningUp(false)
     {
     }

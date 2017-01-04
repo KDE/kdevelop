@@ -74,7 +74,7 @@ static void grepLine(const QString& identifier, const QString& lineText, int lin
 
 class EditorCodeRepresentation : public DynamicCodeRepresentation {
   public:
-  EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
+  explicit EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
       m_url = IndexedString(m_document->url());
   }
 
@@ -151,7 +151,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
 
 class FileCodeRepresentation : public CodeRepresentation {
   public:
-    FileCodeRepresentation(const IndexedString& document) : m_document(document) {
+    explicit FileCodeRepresentation(const IndexedString& document) : m_document(document) {
         QString localFile(document.toUrl().toLocalFile());
 
         QFile file( localFile );
@@ -221,7 +221,7 @@ class FileCodeRepresentation : public CodeRepresentation {
 
 class ArtificialStringData : public QSharedData {
     public:
-    ArtificialStringData(const QString& data) {
+    explicit ArtificialStringData(const QString& data) {
         setData(data);
     }
     void setData(const QString& data) {
@@ -242,7 +242,7 @@ class ArtificialStringData : public QSharedData {
 
 class StringCodeRepresentation : public CodeRepresentation {
   public:
-    StringCodeRepresentation(QExplicitlySharedDataPointer<ArtificialStringData> _data) : data(_data) {
+    explicit StringCodeRepresentation(QExplicitlySharedDataPointer<ArtificialStringData> _data) : data(_data) {
       Q_ASSERT(data);
     }
 

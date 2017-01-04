@@ -39,7 +39,7 @@ using namespace KDevelop;
 class KDevelop::TemplatesModelPrivate
 {
 public:
-    TemplatesModelPrivate(const QString& typePrefix);
+    explicit TemplatesModelPrivate(const QString& typePrefix);
 
     QString typePrefix;
 

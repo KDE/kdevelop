@@ -47,7 +47,7 @@ public:
 template <class Widget>
 class SimpleToolWidgetFactory: public ToolFactory {
 public:
-    SimpleToolWidgetFactory(const QString &id): ToolFactory(), m_id(id) {}
+    explicit SimpleToolWidgetFactory(const QString &id): ToolFactory(), m_id(id) {}
     QWidget* create(ToolDocument * /*doc*/, QWidget *parent = nullptr) override
     {
         return new Widget(parent);

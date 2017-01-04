@@ -35,7 +35,7 @@
 namespace Sublime {
 
 struct WidgetFinder {
-    WidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
+    explicit WidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
         foreach (View *v, index->views())
@@ -54,7 +54,7 @@ struct WidgetFinder {
 };
 
 struct ToolWidgetFinder {
-    ToolWidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
+    explicit ToolWidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
     Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
     {
         if (v->hasWidget() && (v->widget() == w))

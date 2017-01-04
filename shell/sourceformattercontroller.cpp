@@ -483,7 +483,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
     if(indentation.isValid())
     {
         struct CommandCaller {
-            CommandCaller(KTextEditor::Document* _doc) : doc(_doc), editor(KTextEditor::Editor::instance()) {
+            explicit CommandCaller(KTextEditor::Document* _doc) : doc(_doc), editor(KTextEditor::Editor::instance()) {
                 Q_ASSERT(editor);
             }
             void operator()(QString cmd) {

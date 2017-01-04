@@ -43,7 +43,7 @@ namespace KDevelop
 class ColorSchemeChooser : public QAction
 {
     public:
-        ColorSchemeChooser(QObject* parent);
+        explicit ColorSchemeChooser(QObject* parent);
 
         QString currentSchemeName() const;
     private Q_SLOTS:

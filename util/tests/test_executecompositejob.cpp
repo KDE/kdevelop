@@ -32,7 +32,7 @@ using namespace KDevelop;
 
 struct JobSpy
 {
-    JobSpy(KJob* job)
+    explicit JobSpy(KJob* job)
         : finished(job, SIGNAL(finished(KJob*)))
         , result(job, SIGNAL(result(KJob*)))
     {}

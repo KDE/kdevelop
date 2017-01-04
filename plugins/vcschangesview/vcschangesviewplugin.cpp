@@ -46,7 +46,7 @@ using namespace KDevelop;
 class VCSProjectToolViewFactory : public KDevelop::IToolViewFactory
 {
 public:
-    VCSProjectToolViewFactory(VcsProjectIntegrationPlugin *plugin): m_plugin(plugin) {}
+    explicit VCSProjectToolViewFactory(VcsProjectIntegrationPlugin *plugin): m_plugin(plugin) {}
 
     QWidget* create(QWidget *parent = nullptr) override
     {

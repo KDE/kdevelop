@@ -100,12 +100,10 @@ class BrowseManager : public QObject {
         {
             QUrl url;
             KTextEditor::Cursor cursor;
-            JumpLocation(const QPair<QUrl, KTextEditor::Cursor>& pair = {})
-                : url(pair.first)
-                , cursor(pair.second)
-            {}
+
             bool isValid() const { return url.isValid() && cursor.isValid(); }
         };
+
         void resetChangedCursor();
         JumpLocation determineJumpLoc(KTextEditor::Cursor textCursor, const QUrl& viewUrl) const;
         void setHandCursor(QWidget* widget);

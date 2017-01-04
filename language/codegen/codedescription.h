@@ -58,7 +58,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT VariableDescription
      * Creates a variable and determines it type and name from the @p declaration
      *
      **/
-    VariableDescription(const DeclarationPointer& declaration);
+    explicit VariableDescription(const DeclarationPointer& declaration);
 
     /**
      * The name of this variable
@@ -114,7 +114,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
      *
      * @param declaration a function declaration
      **/
-    FunctionDescription(const DeclarationPointer& declaration);
+    explicit FunctionDescription(const DeclarationPointer& declaration);
 
     /**
      * Convenience method, returns the type of the first variable in returnArguments
@@ -219,7 +219,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT ClassDescription
      *
      * @param name the name of the new class
      **/
-    ClassDescription(const QString& name);
+    explicit ClassDescription(const QString& name);
 
     /**
      * The name of this class

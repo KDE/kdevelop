@@ -79,7 +79,7 @@ FilteredItem NoFilterStrategy::errorInLine(const QString& line)
 /// Impl. of CompilerFilterStrategy.
 struct CompilerFilterStrategyPrivate
 {
-    CompilerFilterStrategyPrivate(const QUrl& buildDir);
+    explicit CompilerFilterStrategyPrivate(const QUrl& buildDir);
     Path pathForFile( const QString& ) const;
     bool isMultiLineCase(ErrorFormat curErrFilter) const;
     void putDirAtEnd(const Path& pathToInsert);

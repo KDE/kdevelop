@@ -143,7 +143,7 @@ class MergeIdentifiedType : public Parent, public IdentifiedType {
     }
 
 
-    MergeIdentifiedType(Data& data) : Parent(data) {
+    explicit MergeIdentifiedType(Data& data) : Parent(data) {
     }
 
     virtual IdentifiedTypeData* idData() {

@@ -52,7 +52,7 @@ bool Context::hasType( int aType ) const
 class FileContextPrivate
 {
 public:
-    FileContextPrivate( const QList<QUrl> &urls )
+    explicit FileContextPrivate( const QList<QUrl> &urls )
             : m_urls( urls )
     {}
 
@@ -81,7 +81,7 @@ QList<QUrl> FileContext::urls() const
 class ProjectItemContextPrivate
 {
 public:
-    ProjectItemContextPrivate( const QList<ProjectBaseItem*> &items )
+    explicit ProjectItemContextPrivate( const QList<ProjectBaseItem*> &items )
         : m_items( items )
     {}
 

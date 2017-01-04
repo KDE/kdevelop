@@ -100,7 +100,7 @@ template<class T>
 class ObjectList
 {
 public:
-    ObjectList(ObjectListTracker::CleanupBehavior behavior = ObjectListTracker::NoCleanupWhenDone)
+    explicit ObjectList(ObjectListTracker::CleanupBehavior behavior = ObjectListTracker::NoCleanupWhenDone)
         : m_tracker(behavior)
     {
     };

@@ -94,7 +94,7 @@ class SessionControllerPrivate : public QObject
 {
     Q_OBJECT
 public:
-    SessionControllerPrivate( SessionController* s )
+    explicit SessionControllerPrivate( SessionController* s )
         : q(s)
         , activeSession(nullptr)
         , grp(nullptr)

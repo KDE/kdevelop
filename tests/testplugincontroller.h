@@ -37,7 +37,7 @@ class KDEVPLATFORMTESTS_EXPORT TestPluginController : public PluginController
     Q_OBJECT
 
 public:
-    TestPluginController(KDevelop::Core* core);
+    explicit TestPluginController(KDevelop::Core* core);
     QList< KDevelop::IPlugin* > allPluginsForExtension(const QString& extension,
                                                                const QVariantMap& constraints = QVariantMap()) override;
     QList< KDevelop::IPlugin* > loadedPlugins() const override;

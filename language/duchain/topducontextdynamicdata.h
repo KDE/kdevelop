@@ -140,7 +140,7 @@ class TopDUContextDynamicData {
     template<class Item>
     struct DUChainItemStorage
     {
-      DUChainItemStorage(TopDUContextDynamicData* data);
+      explicit DUChainItemStorage(TopDUContextDynamicData* data);
       ~DUChainItemStorage();
 
       void clearItems();

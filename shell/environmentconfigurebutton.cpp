@@ -37,7 +37,7 @@ namespace KDevelop {
 class EnvironmentConfigureButtonPrivate
 {
 public:
-    EnvironmentConfigureButtonPrivate(EnvironmentConfigureButton* _q)
+    explicit EnvironmentConfigureButtonPrivate(EnvironmentConfigureButton* _q)
         : q(_q), selectionWidget(nullptr)
     {
     }

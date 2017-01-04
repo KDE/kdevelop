@@ -45,7 +45,7 @@ public:
     /**
      * @p url Path to project directory.
      */
-    TestProject(const Path& url = Path(), QObject* parent = nullptr);
+    explicit TestProject(const Path& url = Path(), QObject* parent = nullptr);
     ~TestProject() override;
     IProjectFileManager* projectFileManager() const override { return nullptr; }
     IBuildSystemManager* buildSystemManager() const override { return nullptr; }
@@ -89,7 +89,7 @@ class KDEVPLATFORMTESTS_EXPORT TestProjectController : public ProjectController
     Q_OBJECT
 
 public:
-    TestProjectController(Core* core) : ProjectController(core) {}
+    explicit TestProjectController(Core* core) : ProjectController(core) {}
 
 public:
     using ProjectController::addProject;

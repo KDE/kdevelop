@@ -48,7 +48,7 @@ namespace KDevelop
 class BuilderJobPrivate
 {
 public:
-    BuilderJobPrivate( BuilderJob* job )
+    explicit BuilderJobPrivate( BuilderJob* job )
         : q(job)
         , failOnFirstError(true)
     {

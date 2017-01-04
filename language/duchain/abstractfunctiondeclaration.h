@@ -102,7 +102,7 @@ template<class Base, class _Data>
 class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDeclaration {
   public:
   template<class BaseData>
-  MergeAbstractFunctionDeclaration(BaseData& data) : Base(data) {
+  explicit MergeAbstractFunctionDeclaration(BaseData& data) : Base(data) {
   }
   template<class BaseData, class Arg2>
   MergeAbstractFunctionDeclaration(BaseData& data, const Arg2& arg2) : Base(data, arg2) {

@@ -48,7 +48,7 @@ namespace KDevelop
 class KDEVPLATFORMTESTS_EXPORT AutoTestShell : public KDevelop::ShellExtension
 {
 public:
-    AutoTestShell(const QStringList& plugins);
+    explicit AutoTestShell(const QStringList& plugins);
 
     QString xmlFile() override { return QString(); }
     QString binaryPath() override { return QString(); };

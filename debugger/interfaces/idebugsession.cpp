@@ -33,7 +33,7 @@ namespace KDevelop {
 class IDebugSessionPrivate
 {
 public:
-    IDebugSessionPrivate(IDebugSession* q) : q(q) {}
+    explicit IDebugSessionPrivate(IDebugSession* q) : q(q) {}
 
     void slotStateChanged(IDebugSession::DebuggerState state);
 

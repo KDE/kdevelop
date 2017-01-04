@@ -35,7 +35,7 @@ struct EnvironmentSelectionWidgetPrivate
     EnvironmentSelectionModel* model;
     EnvironmentSelectionWidget* owner;
 
-    EnvironmentSelectionWidgetPrivate( EnvironmentSelectionWidget* _owner )
+    explicit EnvironmentSelectionWidgetPrivate( EnvironmentSelectionWidget* _owner )
         : comboBox( new KComboBox( _owner ) )
         , model( new EnvironmentSelectionModel( _owner ) )
         , owner( _owner )

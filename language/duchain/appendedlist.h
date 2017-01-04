@@ -72,7 +72,7 @@ enum {
 template<class T, bool threadSafe = true>
 class TemporaryDataManager {
   public:
-    TemporaryDataManager(const QByteArray& id = {})
+    explicit TemporaryDataManager(const QByteArray& id = {})
         : m_id(id)
     {
       int first = alloc();  //Allocate the zero item, just to reserve that index

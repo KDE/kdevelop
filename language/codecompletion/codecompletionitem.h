@@ -137,7 +137,7 @@ public:
   ///The items in the group will be shown in the completion-list with a group-header that contains the given name
 struct KDEVPLATFORMLANGUAGE_EXPORT CompletionCustomGroupNode : public CompletionTreeNode {
   ///@param inheritanceDepth @ref KTextEditor::CodeCompletionModel::GroupRole
-  CompletionCustomGroupNode(QString groupName, int inheritanceDepth = 700);
+  explicit CompletionCustomGroupNode(QString groupName, int inheritanceDepth = 700);
   
   int inheritanceDepth;
 };

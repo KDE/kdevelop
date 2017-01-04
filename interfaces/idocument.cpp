@@ -26,7 +26,7 @@ namespace KDevelop {
 class IDocumentPrivate
 {
 public:
-    inline IDocumentPrivate(KDevelop::ICore *core)
+    inline explicit IDocumentPrivate(KDevelop::ICore *core)
         : m_core(core), scriptWrapper(nullptr)
     {}
 

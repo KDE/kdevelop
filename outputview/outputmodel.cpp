@@ -182,7 +182,7 @@ Q_GLOBAL_STATIC(ParsingThread, s_parsingThread);
 
 struct OutputModelPrivate
 {
-    OutputModelPrivate( OutputModel* model, const QUrl& builddir = QUrl() );
+    explicit OutputModelPrivate( OutputModel* model, const QUrl& builddir = QUrl() );
     ~OutputModelPrivate();
     bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
 

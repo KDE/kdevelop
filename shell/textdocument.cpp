@@ -82,7 +82,7 @@ static void selectAndReveal( KTextEditor::View* view, const KTextEditor::Range& 
 }
 
 struct TextDocumentPrivate {
-    TextDocumentPrivate(TextDocument *textDocument)
+    explicit TextDocumentPrivate(TextDocument *textDocument)
         : document(nullptr), state(IDocument::Clean), encoding(), q(textDocument)
         , m_loaded(false), m_addedContextMenu(nullptr)
     {
@@ -241,7 +241,7 @@ struct TextDocumentPrivate {
 
 struct TextViewPrivate
 {
-    TextViewPrivate(TextView* q) : q(q) {}
+    explicit TextViewPrivate(TextView* q) : q(q) {}
 
     TextView* const q;
     QPointer<KTextEditor::View> view;

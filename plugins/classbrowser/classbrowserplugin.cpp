@@ -59,7 +59,7 @@ using namespace KDevelop;
 class ClassBrowserFactory: public KDevelop::IToolViewFactory
 {
 public:
-  ClassBrowserFactory(ClassBrowserPlugin *plugin): m_plugin(plugin) {}
+  explicit ClassBrowserFactory(ClassBrowserPlugin *plugin): m_plugin(plugin) {}
 
   QWidget* create(QWidget *parent = nullptr) override
   {

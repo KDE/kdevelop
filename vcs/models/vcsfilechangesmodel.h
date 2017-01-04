@@ -41,7 +41,7 @@ class KDEVPLATFORMVCS_EXPORT VcsFileChangesSortProxyModel : public QSortFilterPr
     Q_OBJECT
 
 public:
-    VcsFileChangesSortProxyModel(QObject* parent = nullptr);
+    explicit VcsFileChangesSortProxyModel(QObject* parent = nullptr);
 
     bool lessThan(const QModelIndex& rLeft, const QModelIndex& rRight) const override;
 };

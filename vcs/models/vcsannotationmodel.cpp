@@ -43,7 +43,7 @@ namespace KDevelop
 class VcsAnnotationModelPrivate
 {
 public:
-    VcsAnnotationModelPrivate( VcsAnnotationModel* q_ ) : q(q_) {}
+    explicit VcsAnnotationModelPrivate( VcsAnnotationModel* q_ ) : q(q_) {}
     KDevelop::VcsAnnotation m_annotation;
     QHash<KDevelop::VcsRevision,QBrush> m_brushes;
     VcsAnnotationModel* q;

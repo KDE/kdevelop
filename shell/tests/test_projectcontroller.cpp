@@ -138,7 +138,7 @@ class FakePluginController : public PluginController
 {
     Q_OBJECT
 public:
-    FakePluginController(Core* core)
+    explicit FakePluginController(Core* core)
         : PluginController(core)
         , m_fakeFileManager(new FakeFileManager)
     {

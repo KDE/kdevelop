@@ -32,7 +32,7 @@ namespace KDevelop
 class CommandExecutorPrivate
 {
 public:
-    CommandExecutorPrivate( CommandExecutor* cmd )
+    explicit CommandExecutorPrivate( CommandExecutor* cmd )
         : m_exec(cmd), m_useShell(false)
     {
     }

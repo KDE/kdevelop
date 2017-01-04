@@ -58,7 +58,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ExternalScriptFactory, "kdevexternalscript.json", reg
 class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-  ExternalScriptViewFactory( ExternalScriptPlugin *plugin ): m_plugin( plugin ) {}
+  explicit ExternalScriptViewFactory( ExternalScriptPlugin *plugin ): m_plugin( plugin ) {}
 
   QWidget* create( QWidget *parent = nullptr ) override {
     return new ExternalScriptView( m_plugin, parent );

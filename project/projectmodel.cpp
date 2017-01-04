@@ -78,7 +78,7 @@ inline uint indexForPath( const Path& path )
 class ProjectModelPrivate
 {
 public:
-    ProjectModelPrivate( ProjectModel* model ): model( model )
+    explicit ProjectModelPrivate( ProjectModel* model ): model( model )
     {
     }
     ProjectBaseItem* rootItem;

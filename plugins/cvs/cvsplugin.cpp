@@ -56,7 +56,7 @@ K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>();)
 class KDevCvsViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-    KDevCvsViewFactory(CvsPlugin *plugin): m_plugin(plugin) {}
+    explicit KDevCvsViewFactory(CvsPlugin *plugin): m_plugin(plugin) {}
     QWidget* create(QWidget *parent = nullptr) override {
         return new CvsMainView(m_plugin, parent);
     }

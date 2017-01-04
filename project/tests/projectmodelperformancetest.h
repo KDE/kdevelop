@@ -34,7 +34,7 @@ class ProjectModelPerformanceTest : public QWidget
 {
 Q_OBJECT
 public:
-    ProjectModelPerformanceTest(QWidget* parent = nullptr);
+    explicit ProjectModelPerformanceTest(QWidget* parent = nullptr);
     ~ProjectModelPerformanceTest() override;
 private slots:
     void init();

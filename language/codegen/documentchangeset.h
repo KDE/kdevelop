@@ -62,16 +62,16 @@ public:
     DocumentChangeSet& operator=(const DocumentChangeSet& rhs);
 
     //Returns true on success
-    struct ChangeResult
+    class ChangeResult
     {
-        ChangeResult(bool success)
-        : m_success(success)
-        { }
-        ChangeResult(const QString& failureReason, const DocumentChangePointer& reasonChange = DocumentChangePointer())
-        : m_failureReason(failureReason)
-        , m_reasonChange(reasonChange)
-        , m_success(false)
-        { }
+    public:
+        explicit ChangeResult(const QString& failureReason, const DocumentChangePointer& reasonChange = DocumentChangePointer())
+            : ChangeResult(failureReason, reasonChange, false) {}
+
+        static ChangeResult successfulResult()
+        {
+            return ChangeResult({}, {}, true);
+        }
 
         operator bool() const
         {
@@ -84,6 +84,13 @@ public:
         DocumentChangePointer m_reasonChange;
 
         bool m_success;
+
+    private:
+        explicit ChangeResult(const QString& failureReason, const DocumentChangePointer& reasonChange, bool success)
+            : m_failureReason(failureReason)
+            , m_reasonChange(reasonChange)
+            , m_success(success)
+        {}
     };
 
     /// Add an individual local change to this change-set.

@@ -39,7 +39,7 @@ class ExecutablePathsVisitor
     : public ProjectVisitor
 {
     public:
-        ExecutablePathsVisitor(bool exec) : m_onlyExecutables(exec) {}
+        explicit ExecutablePathsVisitor(bool exec) : m_onlyExecutables(exec) {}
         using ProjectVisitor::visit;
         void visit(ProjectExecutableTargetItem* eit) override {
             if(!m_onlyExecutables || eit->type()==ProjectTargetItem::ExecutableTarget)

@@ -34,7 +34,7 @@ class DvcsImportMetadataWidgetPrivate
 {
     friend class DvcsImportMetadataWidget;
 
-    DvcsImportMetadataWidgetPrivate(Ui::DvcsImportMetadataWidget* ui) : m_ui(ui) {}
+    explicit DvcsImportMetadataWidgetPrivate(Ui::DvcsImportMetadataWidget* ui) : m_ui(ui) {}
     ~DvcsImportMetadataWidgetPrivate() { delete m_ui; }
 
     Ui::DvcsImportMetadataWidget* m_ui;

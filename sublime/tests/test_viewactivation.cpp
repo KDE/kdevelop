@@ -37,7 +37,7 @@ using namespace Sublime;
 template <class Widget>
 class SpecialWidgetFactory: public SimpleToolWidgetFactory<Widget> {
 public:
-    SpecialWidgetFactory(const QString &id): SimpleToolWidgetFactory<Widget>(id) {}
+    explicit SpecialWidgetFactory(const QString &id): SimpleToolWidgetFactory<Widget>(id) {}
     QWidget* create(ToolDocument *doc, QWidget *parent = nullptr) override
     {
         QWidget *w = new QWidget(parent);

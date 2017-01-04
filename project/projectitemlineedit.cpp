@@ -48,7 +48,7 @@ class ProjectItemCompleter : public QCompleter
 {
     Q_OBJECT
 public:
-    ProjectItemCompleter(QObject* parent=nullptr);
+    explicit ProjectItemCompleter(QObject* parent=nullptr);
 
     QString separator() const { return sep; }
     QStringList splitPath(const QString &path) const override;
@@ -65,7 +65,7 @@ class ProjectItemValidator : public QValidator
 {
     Q_OBJECT
 public:
-    ProjectItemValidator(QObject* parent = nullptr );
+    explicit ProjectItemValidator(QObject* parent = nullptr );
     QValidator::State validate( QString& input, int& pos ) const override;
 
     void setBaseItem( KDevelop::ProjectBaseItem* item ) { mBase = item; }

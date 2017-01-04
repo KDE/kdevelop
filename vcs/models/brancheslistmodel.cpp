@@ -54,7 +54,7 @@ class KDevelop::BranchesListModelPrivate
 class BranchItem : public QStandardItem
 {
     public:
-        BranchItem(const QString& name, bool current=false) :
+        explicit BranchItem(const QString& name, bool current=false) :
             QStandardItem(name)
         {
             setEditable(true);

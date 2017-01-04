@@ -163,7 +163,7 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChanges(const QString &ol
                                                                int usedDeclarationIndex)
 {
     if (usedDeclarationIndex == std::numeric_limits<int>::max())
-        return DocumentChangeSet::ChangeResult(true);
+        return DocumentChangeSet::ChangeResult::successfulResult();
 
     for (int a = 0; a < context->usesCount(); ++a) {
         const Use &use(context->uses()[a]);
@@ -183,7 +183,8 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChanges(const QString &ol
         if (!result)
             return result;
     }
-    return DocumentChangeSet::ChangeResult(true);
+
+    return DocumentChangeSet::ChangeResult::successfulResult();
 }
 
 DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(const QString &oldName,
@@ -203,7 +204,8 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(con
         if (!result)
             return result;
     }
-    return DocumentChangeSet::ChangeResult(true);
+
+    return DocumentChangeSet::ChangeResult::successfulResult();
 }
 
 KDevelop::IndexedDeclaration BasicRefactoring::declarationUnderCursor(bool allowUse)

@@ -39,7 +39,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KonsoleViewFactory, "kdevkonsoleview.json", registerP
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
-    KDevKonsoleViewFactory(KDevKonsoleViewPlugin *plugin):
+    explicit KDevKonsoleViewFactory(KDevKonsoleViewPlugin *plugin):
         mplugin(plugin) {}
     QWidget* create(QWidget *parent = nullptr) override
     {

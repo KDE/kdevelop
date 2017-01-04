@@ -252,7 +252,7 @@ public:
     Import(DUContext* context, const DUContext* importer,
            const CursorInRevision& position = CursorInRevision::invalid());
     Import() : position(CursorInRevision::invalid()) { }
-    Import(const DeclarationId& id, const CursorInRevision& position = CursorInRevision::invalid());
+    explicit Import(const DeclarationId& id, const CursorInRevision& position = CursorInRevision::invalid());
 
     bool operator==(const Import& rhs) const {
       return m_context == rhs.m_context && m_declaration == rhs.m_declaration;
@@ -703,7 +703,7 @@ public:
      *
      * @param nextItem is set as next item to the last item in the chain
      */
-    SearchItem(const QualifiedIdentifier& id, const Ptr& nextItem = Ptr(), int start = 0);
+    explicit SearchItem(const QualifiedIdentifier& id, const Ptr& nextItem = Ptr(), int start = 0);
 
     /**
      * Constructs a representation of the given @p id qualified identifier,

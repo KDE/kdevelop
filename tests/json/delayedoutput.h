@@ -36,7 +36,7 @@ public:
   class KDEVPLATFORMTESTS_EXPORT Delay
   {
   public:
-    Delay(DelayedOutput* output);
+    explicit Delay(DelayedOutput* output);
     ~Delay();
   private:
     DelayedOutput *m_output;

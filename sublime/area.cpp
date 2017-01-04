@@ -61,7 +61,7 @@ struct AreaPrivate {
     }
 
     struct ViewFinder {
-        ViewFinder(View *_view): view(_view), index(nullptr) {}
+        explicit ViewFinder(View *_view): view(_view), index(nullptr) {}
         Area::WalkerMode operator() (AreaIndex *idx) {
             if (idx->hasView(view))
             {

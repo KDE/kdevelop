@@ -45,7 +45,7 @@ public:
   }
 
   template<bool rhsDynamic>
-  IdentifierPrivate(const IdentifierPrivate<rhsDynamic>& rhs)
+  explicit IdentifierPrivate(const IdentifierPrivate<rhsDynamic>& rhs)
     : m_unique(rhs.m_unique)
     , m_identifier(rhs.m_identifier)
     , m_refCount(0)
@@ -203,7 +203,7 @@ public:
   }
 
   template<bool rhsDynamic>
-  QualifiedIdentifierPrivate(const QualifiedIdentifierPrivate<rhsDynamic>& rhs)
+  explicit QualifiedIdentifierPrivate(const QualifiedIdentifierPrivate<rhsDynamic>& rhs)
     : m_explicitlyGlobal(rhs.m_explicitlyGlobal)
     , m_isExpression(rhs.m_isExpression)
     , m_hash(rhs.m_hash)

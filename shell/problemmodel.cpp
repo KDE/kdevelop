@@ -59,7 +59,7 @@ QIcon iconForSeverity(KDevelop::IProblem::Severity severity)
 
 struct ProblemModelPrivate
 {
-    ProblemModelPrivate(KDevelop::ProblemStore *store)
+    explicit ProblemModelPrivate(KDevelop::ProblemStore *store)
         : m_problems(store)
         , m_features(KDevelop::ProblemModel::NoFeatures)
     {

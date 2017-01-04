@@ -43,7 +43,7 @@ using namespace KTextEditor;
 
 struct StaticAssistantsManager::Private
 {
-    Private(StaticAssistantsManager* qq)
+    explicit Private(StaticAssistantsManager* qq)
         : q(qq)
     { }
 

@@ -35,9 +35,9 @@ namespace Utils {
 template<class T, class Conversion>
 class ConvenientIterator : public Conversion {
   public:
-    ConvenientIterator(Set::Iterator it=Set::Iterator()) : m_it(it) {
+    explicit ConvenientIterator(Set::Iterator it=Set::Iterator()) : m_it(it) {
     }
-    ConvenientIterator(const Set& set) : m_it(set.iterator()) {
+    explicit ConvenientIterator(const Set& set) : m_it(set.iterator()) {
     }
 
     operator bool() const {
@@ -77,9 +77,13 @@ struct IdentityConversion {
 ///This is a virtual set-node that allows conveniently iterating through the tree-structure,
 ///accessing the contained items directly, and accessing the ranges.
 template<class T, class Conversion, class StaticRepository>
-class VirtualSetNode {
+class VirtualSetNode
+{
+    private:
+        using ClassType = VirtualSetNode<T, Conversion, StaticRepository>;
+
     public:
-        inline VirtualSetNode(const SetNodeData* data = 0) : m_data(data) {
+        inline explicit VirtualSetNode(const SetNodeData* data = nullptr) : m_data(data) {
         }
 
         inline bool isValid() const {
@@ -104,18 +108,18 @@ class VirtualSetNode {
             return Conversion::toItem(start());
         }
 
-        inline VirtualSetNode<T, Conversion, StaticRepository> leftChild() const {
+        inline ClassType leftChild() const {
             if(m_data->leftNode())
-                return StaticRepository::repository()->nodeFromIndex(m_data->leftNode());
+                return ClassType(StaticRepository::repository()->nodeFromIndex(m_data->leftNode()));
             else
-                return nullptr;
+                return ClassType(nullptr);
         }
 
-        inline VirtualSetNode<T, Conversion, StaticRepository> rightChild() const {
+        inline ClassType rightChild() const {
             if(m_data->rightNode())
-                return StaticRepository::repository()->nodeFromIndex(m_data->rightNode());
+                return ClassType(StaticRepository::repository()->nodeFromIndex(m_data->rightNode()));
             else
-                return nullptr;
+                return ClassType(nullptr);
         }
 
         ///Returns the start of this node's range. If this is a final node, the length of the range is 1.
@@ -129,6 +133,7 @@ class VirtualSetNode {
         }
 
     private:
+
         const SetNodeData* m_data;
 };
 
@@ -145,7 +150,7 @@ class StorableSet : public Conversion {
             set().staticRef();
     }
 
-    StorableSet(const std::set<uint>& indices) {
+    explicit StorableSet(const std::set<uint>& indices) {
         StaticAccessLocker lock;
         Q_UNUSED(lock);
         m_setIndex = StaticRepository::repository()->createSet(indices).setIndex();
@@ -357,7 +362,7 @@ class LazySet : public Conversion {
      *
      * @warning Watch for deadlocks, never use this class while the mutex given through lockBeforeAccess is locked
      */
-    LazySet(BasicSetRepository* rep, QMutex* lockBeforeAccess = 0, const Set& basicSet = Set()) : m_rep(rep), m_set(basicSet), m_lockBeforeAccess(lockBeforeAccess) {
+    explicit LazySet(BasicSetRepository* rep, QMutex* lockBeforeAccess = 0, const Set& basicSet = Set()) : m_rep(rep), m_set(basicSet), m_lockBeforeAccess(lockBeforeAccess) {
     }
 
     void insert(const T& t) {
@@ -467,7 +472,7 @@ class LazySet : public Conversion {
   
   ///Persistent repository that manages string-sets, also correctly increasing the string reference-counts as needed
   struct KDEVPLATFORMLANGUAGE_EXPORT StringSetRepository : public Utils::BasicSetRepository {
-    StringSetRepository(QString name);
+    explicit StringSetRepository(QString name);
     void itemRemovedFromSets(uint index) override;
     void itemAddedToSets(uint index) override;
   };

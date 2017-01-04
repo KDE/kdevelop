@@ -138,7 +138,7 @@ DeclarationPointer cursorDeclaration()
 class ContextBrowserViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-    ContextBrowserViewFactory(ContextBrowserPlugin *plugin): m_plugin(plugin) {}
+    explicit ContextBrowserViewFactory(ContextBrowserPlugin *plugin): m_plugin(plugin) {}
 
     QWidget* create(QWidget *parent = nullptr) override
     {

@@ -72,7 +72,7 @@ Declaration* getDeclarationForChangedRange(KTextEditor::Document* doc, const KTe
 
 struct RenameAssistant::Private
 {
-    Private(RenameAssistant* qq)
+    explicit Private(RenameAssistant* qq)
         : q(qq)
         , m_isUseful(false)
         , m_renameFile(false)

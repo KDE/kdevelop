@@ -103,7 +103,7 @@ struct HighlightedRange
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public HighlightingEnumContainer {
   public:
-    CodeHighlightingInstance(const CodeHighlighting* highlighting) : m_useClassCache(false), m_highlighting(highlighting) {
+    explicit CodeHighlightingInstance(const CodeHighlighting* highlighting) : m_useClassCache(false), m_highlighting(highlighting) {
     }
     virtual ~CodeHighlightingInstance() {
     }

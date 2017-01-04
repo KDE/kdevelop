@@ -28,7 +28,7 @@ using namespace KDevelop;
 
 struct PlaceholderItemProxyModel::Private
 {
-    Private(PlaceholderItemProxyModel* qq)
+    explicit Private(PlaceholderItemProxyModel* qq)
         : q(qq)
     {}
 

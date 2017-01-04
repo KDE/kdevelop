@@ -30,7 +30,7 @@ using namespace KDevelop;
 
 struct ProjectTestJob::Private
 {
-    Private(ProjectTestJob* q)
+    explicit Private(ProjectTestJob* q)
         : q(q)
         , m_currentJob(nullptr)
         , m_currentSuite(nullptr)

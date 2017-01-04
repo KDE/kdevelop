@@ -30,7 +30,7 @@ K_PLUGIN_FACTORY_WITH_JSON(FileTemplatesFactory, "kdevfiletemplates.json", regis
 class TemplatePreviewFactory : public KDevelop::IToolViewFactory
 {
 public:
-    TemplatePreviewFactory(FileTemplatesPlugin* plugin)
+    explicit TemplatePreviewFactory(FileTemplatesPlugin* plugin)
     : KDevelop::IToolViewFactory()
     , m_plugin(plugin)
     {

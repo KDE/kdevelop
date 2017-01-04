@@ -39,7 +39,7 @@ namespace KDevelop {
 class FrameStackModelPrivate
 {
 public:
-    FrameStackModelPrivate(FrameStackModel* q) : q(q) {}
+    explicit FrameStackModelPrivate(FrameStackModel* q) : q(q) {}
 
     void update();
 

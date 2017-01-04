@@ -271,7 +271,7 @@ void ProblemsView::updateActions()
 class ItemViewWalker
 {
 public:
-    ItemViewWalker(QItemSelectionModel* itemView);
+    explicit ItemViewWalker(QItemSelectionModel* itemView);
 
     void selectNextIndex();
     void selectPreviousIndex();

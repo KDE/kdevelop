@@ -163,7 +163,7 @@ protected:
 
 private:
     /**Constructor for indices other than root.*/
-    AreaIndex(AreaIndex *parent);
+    explicit AreaIndex(AreaIndex *parent);
 
     /**Sets the parent for this index.*/
     void setParent(AreaIndex *parent);

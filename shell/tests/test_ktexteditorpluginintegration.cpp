@@ -62,7 +62,7 @@ class TestPlugin : public KTextEditor::Plugin
 {
     Q_OBJECT
 public:
-    TestPlugin(QObject *parent)
+    explicit TestPlugin(QObject *parent)
         : Plugin(parent)
     {
     }

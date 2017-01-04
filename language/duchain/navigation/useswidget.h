@@ -132,7 +132,7 @@ namespace KDevelop {
             struct KDEVPLATFORMLANGUAGE_EXPORT UsesWidgetCollector : public UsesCollector {
               public:
               void setWidget(UsesWidget* widget );
-              UsesWidgetCollector(IndexedDeclaration decl);
+              explicit UsesWidgetCollector(IndexedDeclaration decl);
               void processUses(KDevelop::ReferencedTopDUContext topContext) override;
               void maximumProgress(uint max) override;
               void progress(uint processed, uint total) override;

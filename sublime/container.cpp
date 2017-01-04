@@ -52,7 +52,7 @@ class ContainerTabBar : public QTabBar
     Q_OBJECT
 
 public:
-    ContainerTabBar(Container* container)
+    explicit ContainerTabBar(Container* container)
         : QTabBar(container), m_container(container)
     {
         if (QApplication::style()->objectName() == QLatin1String("macintosh")) {
@@ -202,7 +202,7 @@ struct ContainerPrivate {
 class UnderlinedLabel: public KSqueezedTextLabel {
 Q_OBJECT
 public:
-    UnderlinedLabel(QTabBar *tabBar, QWidget* parent = nullptr)
+    explicit UnderlinedLabel(QTabBar *tabBar, QWidget* parent = nullptr)
         :KSqueezedTextLabel(parent), m_tabBar(tabBar)
     {
     }
@@ -249,7 +249,7 @@ protected:
 class StatusLabel: public UnderlinedLabel {
 Q_OBJECT
 public:
-    StatusLabel(QTabBar *tabBar, QWidget* parent = nullptr):
+    explicit StatusLabel(QTabBar *tabBar, QWidget* parent = nullptr):
         UnderlinedLabel(tabBar, parent)
     {
         setAlignment(Qt::AlignRight | Qt::AlignVCenter);

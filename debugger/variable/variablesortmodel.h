@@ -35,7 +35,7 @@ class VariableSortProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 
 public:
-    VariableSortProxyModel(QObject *parent = nullptr);
+    explicit VariableSortProxyModel(QObject *parent = nullptr);
 
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;

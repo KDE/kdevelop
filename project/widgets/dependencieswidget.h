@@ -33,7 +33,7 @@ class KDEVPLATFORMPROJECT_EXPORT DependenciesWidget : public QWidget
 {
     Q_OBJECT
     public:
-        DependenciesWidget(QWidget* parent);
+        explicit DependenciesWidget(QWidget* parent);
         ~DependenciesWidget();
 
         void setSuggestion(KDevelop::IProject* project);

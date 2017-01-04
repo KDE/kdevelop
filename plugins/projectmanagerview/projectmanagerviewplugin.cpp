@@ -61,7 +61,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ProjectManagerFactory, "kdevprojectmanagerview.json",
 class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 {
     public:
-        KDevProjectManagerViewFactory( ProjectManagerViewPlugin *plugin ): mplugin( plugin )
+        explicit KDevProjectManagerViewFactory( ProjectManagerViewPlugin *plugin ): mplugin( plugin )
         {}
         QWidget* create( QWidget *parent = nullptr ) override
         {

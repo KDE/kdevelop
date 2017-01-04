@@ -75,7 +75,7 @@ using namespace KDevelop;
 class KDevelop::TemplateClassAssistantPrivate
 {
 public:
-    TemplateClassAssistantPrivate(const QUrl& baseUrl);
+    explicit TemplateClassAssistantPrivate(const QUrl& baseUrl);
     ~TemplateClassAssistantPrivate();
 
     void addFilesToTarget (const QHash<QString, QUrl>& fileUrls);

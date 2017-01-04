@@ -974,12 +974,12 @@ class Bucket {
 template<bool lock>
 struct Locker { //This is a dummy that does nothing
   template<class T>
-  Locker(const T& /*t*/) {
+  explicit Locker(const T& /*t*/) {
   }
 };
 template<>
 struct Locker<true> {
-  Locker(QMutex* mutex) : m_mutex(mutex) {
+  explicit Locker(QMutex* mutex) : m_mutex(mutex) {
     m_mutex->lock();
   }
   ~Locker() {
@@ -1056,7 +1056,7 @@ class ItemRepository : public AbstractItemRepository {
   ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
   ///                If this is zero, you have to care about storing the data using store() and/or close() by yourself. It does not happen automatically.
   ///                For the global standard registry, the storing/loading is triggered from within duchain, so you don't need to care about it.
-  ItemRepository(const QString& repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(),
+  explicit ItemRepository(const QString& repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(),
                  uint repositoryVersion = 1, AbstractRepositoryManager* manager = nullptr)
     : m_ownMutex(QMutex::Recursive)
     , m_mutex(&m_ownMutex)
@@ -2035,7 +2035,7 @@ class ItemRepository : public AbstractItemRepository {
   }
 
   struct AllItemsReachableVisitor {
-    AllItemsReachableVisitor(ItemRepository* rep) : repository(rep) {
+    explicit AllItemsReachableVisitor(ItemRepository* rep) : repository(rep) {
     }
 
     bool operator()(const Item* item) {

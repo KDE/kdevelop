@@ -25,7 +25,7 @@ namespace KDevelop {
 
 struct CheckInRepositoryJobPrivate
 {
-    CheckInRepositoryJobPrivate(KTextEditor::Document* document)
+    explicit CheckInRepositoryJobPrivate(KTextEditor::Document* document)
         : document(document) { };
     friend class CheckInRepositoryJob;
     KTextEditor::Document* document;

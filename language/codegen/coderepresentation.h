@@ -42,7 +42,7 @@ class IndexedString;
 //NOTE: this is ugly, but otherwise kate might remove tabs again :-/
 // see also: https://bugs.kde.org/show_bug.cgi?id=291074
 struct EditorDisableReplaceTabs {
-    EditorDisableReplaceTabs(KTextEditor::Document* document) : m_iface(qobject_cast<KTextEditor::ConfigInterface*>(document)), m_count(0) {
+    explicit EditorDisableReplaceTabs(KTextEditor::Document* document) : m_iface(qobject_cast<KTextEditor::ConfigInterface*>(document)), m_count(0) {
         ++m_count;
         if( m_count > 1 )
             return;
@@ -74,7 +74,7 @@ struct EditorDisableReplaceTabs {
 };
 
 struct KDevEditingTransaction {
-    KDevEditingTransaction(KTextEditor::Document* document)
+    explicit KDevEditingTransaction(KTextEditor::Document* document)
         : edit(document)
         , disableReplaceTabs(document)
     {}

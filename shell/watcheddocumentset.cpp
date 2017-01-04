@@ -49,7 +49,7 @@ class WatchedDocumentSetPrivate : public QObject
 public:
     using DocumentSet = WatchedDocumentSet::DocumentSet;
 
-    WatchedDocumentSetPrivate(WatchedDocumentSet* documentSet)
+    explicit WatchedDocumentSetPrivate(WatchedDocumentSet* documentSet)
         : m_documentSet(documentSet)
         , m_showImports(false)
     {

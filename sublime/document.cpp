@@ -27,7 +27,7 @@ namespace Sublime {
 // struct DocumentPrivate
 
 struct DocumentPrivate {
-    DocumentPrivate(Document *doc): m_document(doc) {}
+    explicit DocumentPrivate(Document *doc): m_document(doc) {}
 
     void removeView(Sublime::View* view)
     {

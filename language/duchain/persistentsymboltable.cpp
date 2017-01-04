@@ -259,7 +259,7 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
 }
 
 struct DeclarationCacheVisitor {
-  DeclarationCacheVisitor(KDevVarLengthArray<IndexedDeclaration>& _cache) : cache(_cache) {
+  explicit DeclarationCacheVisitor(KDevVarLengthArray<IndexedDeclaration>& _cache) : cache(_cache) {
   }
   
   bool operator()(const IndexedDeclaration& decl) const {
@@ -352,7 +352,7 @@ void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, u
 
 struct DebugVisitor
 {
-  DebugVisitor(const QTextStream& _out)
+  explicit DebugVisitor(const QTextStream& _out)
     : out(_out)
   {
   }

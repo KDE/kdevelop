@@ -36,7 +36,7 @@ public:
     ProcessLineMaker* p;
     QProcess* m_proc;
 
-    ProcessLineMakerPrivate( ProcessLineMaker* maker )
+    explicit ProcessLineMakerPrivate( ProcessLineMaker* maker )
         : p(maker)
     {
     }

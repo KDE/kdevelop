@@ -115,7 +115,7 @@ QIcon generateIcon(const WorkingSetIconParameters& params)
 WorkingSet::WorkingSet(const QString& id)
     : QObject()
     , m_id(id)
-    , m_icon(generateIcon(id))
+    , m_icon(generateIcon(WorkingSetIconParameters(id)))
 {
 }
 
@@ -163,7 +163,7 @@ bool WorkingSet::isEmpty() const
 
 struct DisableMainWindowUpdatesFromArea
 {
-    DisableMainWindowUpdatesFromArea(Sublime::Area* area) : m_area(area) {
+    explicit DisableMainWindowUpdatesFromArea(Sublime::Area* area) : m_area(area) {
         if(area) {
             foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
                 if(window->area() == area) {

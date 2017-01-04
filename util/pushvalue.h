@@ -38,7 +38,7 @@ template<class Value>
 class PushValue : public QScopedValueRollback<Value>
 {
 public:
-    PushValue(Value& ref, const Value& newValue = Value())
+    explicit PushValue(Value& ref, const Value& newValue = Value())
         : QScopedValueRollback<Value>(ref, newValue)
     {
     }
@@ -49,7 +49,7 @@ template<class Value>
 class PushPositiveValue : public QScopedValueRollback<Value>
 {
 public:
-    PushPositiveValue(Value& ref, const Value& newValue = Value())
+    explicit PushPositiveValue(Value& ref, const Value& newValue = Value())
         : QScopedValueRollback<Value>(ref)
     {
         if (newValue) {

@@ -39,7 +39,7 @@ using namespace Sublime;
 
 class ToolViewToolBarFactory : public SimpleToolWidgetFactory<QTextEdit> {
 public:
-    ToolViewToolBarFactory(const QString &id): SimpleToolWidgetFactory<QTextEdit>(id) {}
+    explicit ToolViewToolBarFactory(const QString &id): SimpleToolWidgetFactory<QTextEdit>(id) {}
     QList<QAction*> toolBarActions( QWidget* ) const override
     {
         QAction* action = new QAction(actionText, nullptr);

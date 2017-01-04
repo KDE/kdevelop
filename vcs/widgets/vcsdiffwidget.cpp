@@ -43,7 +43,7 @@ public:
     VcsJob* m_job;
     VcsDiffWidget* q;
 
-    VcsDiffWidgetPrivate(VcsDiffWidget* _q) : q(_q) {
+    explicit VcsDiffWidgetPrivate(VcsDiffWidget* _q) : q(_q) {
     }
 
     void diffReady( KDevelop::VcsJob* job )

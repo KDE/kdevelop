@@ -55,7 +55,7 @@ namespace KDevelop
 class VcsEventWidgetPrivate
 {
 public:
-    VcsEventWidgetPrivate( VcsEventWidget* w )
+    explicit VcsEventWidgetPrivate( VcsEventWidget* w )
         : q( w )
     {
         m_copyAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy revision number"), q);

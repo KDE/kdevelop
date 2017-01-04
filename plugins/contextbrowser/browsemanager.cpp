@@ -135,7 +135,7 @@ BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor 
     foreach (const auto& language, ICore::self()->languageController()->languagesForUrl(viewUrl)) {
         auto jumpTo = language->specialLanguageObjectJumpCursor(viewUrl, textCursor);
         if (jumpTo.first.isValid() && jumpTo.second.isValid()) {
-            return {jumpTo};
+            return {jumpTo.first, jumpTo.second};
         }
     }
 
@@ -156,7 +156,7 @@ BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor 
                 jumpDestination = definition;
             }
         }
-        return {{jumpDestination->url().toUrl(), jumpDestination->rangeInCurrentRevision().start()}};
+        return {jumpDestination->url().toUrl(), jumpDestination->rangeInCurrentRevision().start()};
     }
 
     return {};

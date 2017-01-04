@@ -43,7 +43,7 @@ using namespace KDevelop;
 namespace {
 struct SubstringCache
 {
-    SubstringCache( const QString& string = QString() )
+    explicit SubstringCache( const QString& string = QString() )
     : substring(string)
     {
     }
@@ -81,7 +81,7 @@ struct SubstringCache
 
 struct ClosestMatchToText
 {
-    ClosestMatchToText( const QHash<int , int>& _cache )
+    explicit ClosestMatchToText( const QHash<int , int>& _cache )
     : cache(_cache)
     {
     }

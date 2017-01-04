@@ -60,7 +60,7 @@ typedef QHash<QString, QList<ILanguageSupport*> > LanguageCache;
 
 struct LanguageControllerPrivate
 {
-    LanguageControllerPrivate(LanguageController *controller)
+    explicit LanguageControllerPrivate(LanguageController *controller)
         : dataMutex(QMutex::Recursive)
         , backgroundParser(new BackgroundParser(controller))
         , staticAssistantsManager(nullptr)

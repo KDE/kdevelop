@@ -216,7 +216,7 @@ bool SetNodeDataRequest::equals(const SetNodeData* item) const {
 class BasicSetRepository::Private {
 public:
 
-  Private(QString _name) : name(_name) {
+  explicit Private(QString _name) : name(_name) {
   }
   ~Private() {
   }
@@ -892,7 +892,7 @@ BasicSetRepository::BasicSetRepository(QString name, KDevelop::ItemRepositoryReg
 }
 
 struct StatisticsVisitor {
-  StatisticsVisitor(const SetDataRepository& _rep) : nodeCount(0), badSplitNodeCount(0), zeroRefCountNodes(0), rep(_rep) {
+  explicit StatisticsVisitor(const SetDataRepository& _rep) : nodeCount(0), badSplitNodeCount(0), zeroRefCountNodes(0), rep(_rep) {
   }
   bool operator() (const SetNodeData* item) {
     if(item->m_refCount == 0)

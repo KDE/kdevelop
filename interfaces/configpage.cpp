@@ -26,7 +26,7 @@
 namespace KDevelop {
 
 struct ConfigPagePrivate {
-    ConfigPagePrivate(IPlugin* plugin)
+    explicit ConfigPagePrivate(IPlugin* plugin)
         : plugin(plugin)
     {}
     QScopedPointer<KConfigDialogManager> configManager;

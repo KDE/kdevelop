@@ -41,7 +41,7 @@ class NonGuiInterfacePlugin : public KDevelop::IPlugin, ITestNonGuiInterface
     Q_OBJECT
     Q_INTERFACES(ITestNonGuiInterface)
 public:
-    NonGuiInterfacePlugin( QObject* parent, const QVariantList& = QVariantList() );
+    explicit NonGuiInterfacePlugin( QObject* parent, const QVariantList& = QVariantList() );
 };
 
 #endif

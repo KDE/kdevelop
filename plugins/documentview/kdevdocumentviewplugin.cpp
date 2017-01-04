@@ -40,7 +40,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevDocumentViewFactory, "kdevdocumentview.json", reg
 class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
 {
     public:
-        KDevDocumentViewPluginFactory( KDevDocumentViewPlugin *plugin ): m_plugin( plugin )
+        explicit KDevDocumentViewPluginFactory( KDevDocumentViewPlugin *plugin ): m_plugin( plugin )
         {}
         QWidget* create( QWidget *parent = nullptr ) override
         {

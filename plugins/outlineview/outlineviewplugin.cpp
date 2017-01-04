@@ -36,7 +36,7 @@ using namespace KDevelop;
 
 class OutlineViewFactory: public KDevelop::IToolViewFactory {
 public:
-    OutlineViewFactory(OutlineViewPlugin *plugin) : m_plugin(plugin) {}
+    explicit OutlineViewFactory(OutlineViewPlugin *plugin) : m_plugin(plugin) {}
 
     QWidget* create(QWidget *parent = nullptr) override
     {

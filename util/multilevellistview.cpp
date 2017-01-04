@@ -60,7 +60,7 @@ class RootProxyModel : public QSortFilterProxyModel, public LabeledProxy
     Q_OBJECT
 
 public:
-    RootProxyModel( QObject* parent = nullptr )
+    explicit RootProxyModel( QObject* parent = nullptr )
     : QSortFilterProxyModel( parent )
     {
     }
@@ -105,7 +105,7 @@ using namespace KDevelop;
 class KDevelop::MultiLevelListViewPrivate
 {
 public:
-    MultiLevelListViewPrivate(MultiLevelListView* view);
+    explicit MultiLevelListViewPrivate(MultiLevelListView* view);
     ~MultiLevelListViewPrivate();
 
     void viewSelectionChanged(const QModelIndex& current, const QModelIndex& previous);

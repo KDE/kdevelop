@@ -68,7 +68,7 @@ class CompletionWorkerThread : public QThread
    Q_OBJECT
 public:
 
-   CompletionWorkerThread(CodeCompletionModel* model)
+   explicit CompletionWorkerThread(CodeCompletionModel* model)
      : QThread(model), m_model(model), m_worker(m_model->createCompletionWorker())
    {
      Q_ASSERT(m_worker->parent() == nullptr); // Must be null, else we cannot change the thread affinity!

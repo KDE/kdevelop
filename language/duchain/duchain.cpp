@@ -260,7 +260,7 @@ class DUChainPrivate
 {
   class CleanupThread : public QThread {
     public:
-      CleanupThread(DUChainPrivate* data) : m_stopRunning(false), m_data(data) {
+      explicit CleanupThread(DUChainPrivate* data) : m_stopRunning(false), m_data(data) {
       }
 
       void stopThread() {

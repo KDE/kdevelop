@@ -199,7 +199,7 @@ public:
 
 protected:
     ICore* core();
-    IDocument( ICore* );
+    explicit IDocument( ICore* );
     void notifySaved();
     void notifyStateChanged();
     void notifyActivated();

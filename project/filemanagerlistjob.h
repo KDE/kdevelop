@@ -39,7 +39,7 @@ class FileManagerListJob : public KIO::Job
     Q_OBJECT
 
 public:
-    FileManagerListJob(ProjectFolderItem* item);
+    explicit FileManagerListJob(ProjectFolderItem* item);
     ProjectFolderItem* item() const;
 
     void addSubDir(ProjectFolderItem* item);

@@ -123,11 +123,11 @@ signals:
 
 protected:
     friend class CorePrivate;
-    Core( KDevelop::CorePrivate* dd, QObject* parent = nullptr );
+    explicit Core( KDevelop::CorePrivate* dd, QObject* parent = nullptr );
     KDevelop::CorePrivate *d;
     static Core *m_self;
 private:
-    Core(QObject *parent = nullptr);
+    explicit Core(QObject *parent = nullptr);
 };
 
 }

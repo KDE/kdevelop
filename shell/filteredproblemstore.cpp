@@ -48,7 +48,7 @@ void addDiagnostics(ProblemStoreNode *node, const QVector<IProblem::Ptr> &diagno
 class GroupingStrategy
 {
 public:
-    GroupingStrategy( ProblemStoreNode *root )
+    explicit GroupingStrategy( ProblemStoreNode *root )
         : m_rootNode(root)
         , m_groupedRootNode(new ProblemStoreNode())
     {
@@ -95,7 +95,7 @@ protected:
 class NoGroupingStrategy final : public GroupingStrategy
 {
 public:
-    NoGroupingStrategy(ProblemStoreNode *root)
+    explicit NoGroupingStrategy(ProblemStoreNode *root)
         : GroupingStrategy(root)
     {
     }
@@ -116,7 +116,7 @@ public:
 class PathGroupingStrategy final : public GroupingStrategy
 {
 public:
-    PathGroupingStrategy(ProblemStoreNode *root)
+    explicit PathGroupingStrategy(ProblemStoreNode *root)
         : GroupingStrategy(root)
     {
     }
@@ -160,7 +160,7 @@ public:
         GroupHint           = 2
     };
 
-    SeverityGroupingStrategy(ProblemStoreNode *root)
+    explicit SeverityGroupingStrategy(ProblemStoreNode *root)
         : GroupingStrategy(root)
     {
         /// Create the groups on construction, so there's no need to search for them on addition
@@ -202,7 +202,7 @@ namespace KDevelop
 
 struct FilteredProblemStorePrivate
 {
-    FilteredProblemStorePrivate(FilteredProblemStore* q)
+    explicit FilteredProblemStorePrivate(FilteredProblemStore* q)
         : q(q)
         , m_strategy(new NoGroupingStrategy(q->rootNode()))
         , m_grouping(NoGrouping)

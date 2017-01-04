@@ -46,13 +46,13 @@ void TestView::widgetDeletion()
 class Test: public View {
 Q_OBJECT
 public:
-    Test(Document *doc): View(doc) {}
+    explicit Test(Document *doc): View(doc) {}
 };
 
 class TestDocument: public Document {
 Q_OBJECT
 public:
-    TestDocument(Controller *controller): Document(QStringLiteral("TestDocument"), controller) {}
+    explicit TestDocument(Controller *controller): Document(QStringLiteral("TestDocument"), controller) {}
     QString documentType() const override { return QStringLiteral("Test"); }
     QString documentSpecifier() const override { return QString(); }
 protected:

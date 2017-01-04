@@ -304,7 +304,7 @@ struct StaticRepository {
 
 struct UintSetVisitor {
     std::set<uint>& s;
-    UintSetVisitor(std::set<uint>& _s) : s(_s) {
+    explicit UintSetVisitor(std::set<uint>& _s) : s(_s) {
     }
 
     inline bool operator() (const TestItem& item) {
