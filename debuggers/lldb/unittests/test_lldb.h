@@ -100,7 +100,6 @@ private slots:
     void testVariablesStartSecondSession();
     void testVariablesSwitchFrame();
     void testVariablesQuicklySwitchFrame();
-    void testVariablesNonascii();
     void testSwitchFrameLldbConsole();
 
     void testSegfaultDebugee();
