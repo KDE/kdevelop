@@ -26,7 +26,6 @@ Boston, MA 02110-1301, USA.
 #include <QDBusConnection>
 #include <QDir>
 #include <QGroupBox>
-#include <QItemSelectionModel>
 #include <QLabel>
 #include <QList>
 #include <QMap>
@@ -95,7 +94,6 @@ public:
     Core* m_core;
 //     IProject* m_currentProject;
     ProjectModel* model;
-    QItemSelectionModel* selectionModel;
     QPointer<QAction> m_openProject;
     QPointer<QAction> m_fetchProject;
     QPointer<QAction> m_closeProject;
@@ -110,7 +108,7 @@ public:
     QHash< IProject*, QPointer<KJob> > m_parseJobs; // parse jobs that add files from the project to the background parser.
 
     ProjectControllerPrivate( ProjectController* p )
-        : m_core(nullptr), model(nullptr), selectionModel(nullptr), dialog(nullptr), q(p), buildset(nullptr), m_foundProjectFile(false), m_cleaningUp(false)
+        : m_core(nullptr), model(nullptr), dialog(nullptr), q(p), buildset(nullptr), m_foundProjectFile(false), m_cleaningUp(false)
     {
     }
 
@@ -606,8 +604,6 @@ void ProjectController::initialize()
     connect( this, &ProjectController::projectClosed,
              d->buildset, &ProjectBuildSetModel::projectClosed );
 
-    d->selectionModel = new QItemSelectionModel(d->model);
-
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d);
 
@@ -995,11 +991,6 @@ void ProjectController::addProject(IProject* project)
     project->setParent(this);
     d->m_projects.append(project);
     emit projectOpened(project);
-}
-
-QItemSelectionModel* ProjectController::projectSelectionModel()
-{
-    return d->selectionModel;
 }
 
 bool ProjectController::isProjectNameUsed( const QString& name ) const

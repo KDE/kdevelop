@@ -83,7 +83,6 @@ public:
     ProjectBuildSetModel* buildSetModel() override;
     ProjectModel* projectModel() override;
     ProjectChangesModel* changesModel() override;
-    virtual QItemSelectionModel* projectSelectionModel();
     IProject* findProjectByName( const QString& name ) override;
     IProject* findProjectForUrl( const QUrl& ) const override;
 
