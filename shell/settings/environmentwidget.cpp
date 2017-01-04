@@ -198,12 +198,14 @@ void EnvironmentWidget::cloneGroupClicked()
 {
     QString newGroup = ui.activeCombo->currentText();
     if( !groupModel->cloneCurrentGroup( newGroup ) ) {
-        int id = 1;
-        newGroup = i18nc("a copy of the existing environment was created", "%1 (Cloned %2)", newGroup, id);
-        while( !groupModel->cloneCurrentGroup( newGroup.arg( id ) ) ) {
-            ++id;
+        const KLocalizedString newGroupTemplate =
+            ki18nc("a copy of the existing environment was created", "%1 (Cloned %2)").subs(newGroup);
+        for (int id = 1; ; ++id) {
+            newGroup = newGroupTemplate.subs(id).toString();
+            if (groupModel->cloneCurrentGroup(newGroup)) {
+                break;
+            }
         }
-        newGroup = newGroup.arg( id );
     }
     ui.activeCombo->addItem( newGroup );
     ui.activeCombo->setCurrentItem( newGroup );
