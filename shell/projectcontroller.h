@@ -98,9 +98,9 @@ public:
 
 public Q_SLOTS:
     void openProjectForUrl( const QUrl &sourceUrl ) override;
-    virtual void fetchProject();
+    void fetchProject();
     void openProject( const QUrl &KDev4ProjectFile = QUrl() ) override;
-    virtual void abortOpeningProject( IProject* );
+    void abortOpeningProject( IProject* );
     void projectImportingFinished( IProject* );
     void closeProject( IProject* ) override;
     void closeAllProjects() override;
