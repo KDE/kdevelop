@@ -46,8 +46,11 @@ void includesForItem(KDevelop::ProjectBaseItem* parent, QSet<KDevelop::Path>& in
                  child->type() == KDevelop::ProjectBaseItem::ProjectItemType::LibraryTarget ||
                  child->type() == KDevelop::ProjectBaseItem::ProjectItemType::Target) {
 
-            foreach (auto dir, child->project()->buildSystemManager()->includeDirectories(child))
-                includes.insert(dir);
+            if (auto buildSystemManager = child->project()->buildSystemManager()) {
+                foreach (auto dir, buildSystemManager->includeDirectories(child)) {
+                    includes.insert(dir);
+                }
+            }
         }
 
         includesForItem(child, includes);
@@ -107,7 +110,10 @@ Parameters::Parameters(KDevelop::IProject* project)
     extraParameters      = projectSettings.extraParameters();
 
     m_projectRootPath    = m_project->path();
-    m_projectBuildPath   = m_project->buildSystemManager()->buildDirectory(m_project->projectItem());
+
+    if (auto buildSystemManager = m_project->buildSystemManager()) {
+        m_projectBuildPath   = buildSystemManager->buildDirectory(m_project->projectItem());
+    }
     m_includeDirectories = includesForProject(project);
 }
 
