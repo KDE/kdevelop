@@ -50,6 +50,8 @@ void TestGenerationTest::initTestCase()
     bool addedDir = qputenv("XDG_DATA_DIRS", xdgData);
     QVERIFY(addedDir);
 
+    // avoid translated desktop entries, tests use untranslated strings
+    QLocale::setDefault(QLocale::c());
     AutoTestShell::init();
     TestCore::initialize (Core::NoUi);
 
