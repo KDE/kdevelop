@@ -1,12 +1,10 @@
+cmake_minimum_required(VERSION 2.8.12)
+
 # KDevelop version
 set(KDEVELOP_VERSION_MAJOR 5)
 set(KDEVELOP_VERSION_MINOR 0)
 set(KDEVELOP_VERSION_PATCH 80)
 set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
-
-################################################################################
-
-cmake_minimum_required(VERSION 2.8.12)
 
 project(KDevelop)
 
