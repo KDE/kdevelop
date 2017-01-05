@@ -33,7 +33,7 @@ class QuickOpenModel;
 
 class QLineEdit;
 
-///Will delete itself once the dialog is closed, so use QPointer when referencing it permanently
+/// Will delete itself once the dialog is closed, so use QPointer when referencing it permanently
 class QuickOpenWidget : public QMenu {
   Q_OBJECT
   public:
@@ -41,7 +41,7 @@ class QuickOpenWidget : public QMenu {
    * @param initialItems List of items that should initially be enabled in the quickopen-list. If empty, all are enabled.
    * @param initialScopes List of scopes that should initially be enabled in the quickopen-list. If empty, all are enabled.
    * @param listOnly when this is true, the given items will be listed, but all filtering using checkboxes is disabled.
-   * @param noSearchFied when this is true, no search-line is shown.
+   * @param noSearchField when this is true, no search-line is shown.
    * */
   QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
   ~QuickOpenWidget() override;
@@ -97,13 +97,15 @@ class QuickOpenWidgetDialog : public QObject {
   public:
     QuickOpenWidgetDialog( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
     ~QuickOpenWidgetDialog() override;
-    ///Shows the dialog
+
+    /// Shows the dialog
     void run();
+
     QuickOpenWidget* widget() const {
       return m_widget;
     }
   private:
-  QDialog* m_dialog; //Warning: m_dialog is also the parent
+  QDialog* m_dialog; /// @warning m_dialog is also the parent
   QuickOpenWidget* m_widget;
 };
 

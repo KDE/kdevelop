@@ -5,13 +5,13 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevsubversion\")
 # but for now, we won't spend time on it...
 add_definitions(-DSVN_DEPRECATED=)
 
-project(KDevSubversionPlugin)
+string(REPLACE "-Wdocumentation" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 add_subdirectory(tests)
 add_subdirectory(icons)
 
 include_directories(
-    ${SUBVERSION_INCLUDE_DIRS}
+    SYSTEM ${SUBVERSION_INCLUDE_DIRS}
 )
 
 kde_enable_exceptions()

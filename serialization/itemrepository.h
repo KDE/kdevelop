@@ -461,11 +461,10 @@ class Bucket {
       return insertedAt;
     }
 
-    ///@param modulo Returns whether this bucket contains an item with (hash % modulo) == (item.hash % modulo)
-    ///              The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
-    ///@note modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
-    ///              This this allows efficiently computing the clashes using the local object map hash.
-
+    /// @param modulo Returns whether this bucket contains an item with (hash % modulo) == (item.hash % modulo)
+    ///               The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
+    /// @note modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
+    ///               This this allows efficiently computing the clashes using the local object map hash.
     bool hasClashingItem(uint hash, uint modulo) {
 
       Q_ASSERT(modulo % ObjectMapSize == 0);
@@ -922,9 +921,9 @@ class Bucket {
       ++m_freeItemCount;
     }
 
-    ///Returns true if the given index is right behind free space, and thus can be merged to the free space.
+    /// Returns true if the given index is right behind free space, and thus can be merged to the free space.
     bool isBehindFreeSpace(unsigned short index) const {
-      ///@todo Without iteration!
+      // TODO: Without iteration!
       unsigned short currentIndex = m_largestFreeItem;
 
       while(currentIndex) {
@@ -936,7 +935,7 @@ class Bucket {
       return false;
     }
 
-    ///@param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
+    /// @param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
     inline unsigned short followerIndex(unsigned short index) const {
       Q_ASSERT(index >= 2);
       return *reinterpret_cast<unsigned short*>(m_data+(index-2));
@@ -2145,8 +2144,8 @@ class ItemRepository : public AbstractItemRepository {
     }
   }
 
-  ///Returns whether @param mustFindBucket was found
-  ///If mustFindBucket is zero, the whole chain is just walked. This is good for debugging for infinite recursion.
+  /// If mustFindBucket is zero, the whole chain is just walked. This is good for debugging for infinite recursion.
+  /// @return whether @p mustFindBucket was found
   bool walkBucketLinks(uint checkBucket, uint hash, uint mustFindBucket = 0) const {
     bool found = false;
     while(checkBucket) {
@@ -2158,9 +2157,9 @@ class ItemRepository : public AbstractItemRepository {
     return found || (mustFindBucket == 0);
   }
 
-  ///Computes the bucket where the chains opened by the buckets @param mainHead and @param intersectorHead
-  ///with hash @param hash meet each other.
-  ///@return <predecessor of first shared bucket in mainHead, first shared bucket>
+  /// Computes the bucket where the chains opened by the buckets @p mainHead and @p intersectorHead
+  /// with hash @p hash meet each other.
+  /// @return <predecessor of first shared bucket in mainHead, first shared bucket>
   QPair<unsigned int, unsigned int> hashChainIntersection(uint mainHead, uint intersectorHead, uint hash) const {
     uint previous = 0;
     uint current = mainHead;
