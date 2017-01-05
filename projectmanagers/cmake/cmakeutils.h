@@ -162,9 +162,9 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT void attemptMigrate( KDevelop::IProject* project );
 
     /**
-     * Attempts to update CMake configuration keys from the cache data.
+     * Attempts to update CMake configuration keys from the cache data (CMakeCache.txt)
      *
-     * @param model The CMake cache model to load data from. If NULL, the model is created based on build directory path for the given index.
+     * The model is created based on build directory path for the given index @p buildDirectory
      */
     KDEVCMAKECOMMON_EXPORT void updateConfig( KDevelop::IProject* project, int buildDirectory);
 
