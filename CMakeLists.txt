@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.12)
+
 # kdevplatform version
 set(KDEVPLATFORM_VERSION_MAJOR 5)
 set(KDEVPLATFORM_VERSION_MINOR 0)
@@ -12,9 +14,6 @@ set(KDEV_ITEMREPOSITORY_VERSION 86)
 set(KDEVPLATFORM_LIB_VERSION 10.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 10)
 
-################################################################################
-
-cmake_minimum_required(VERSION 2.8.12)
 project(KDevPlatform)
 
 # we need some parts of the ECM CMake helpers
