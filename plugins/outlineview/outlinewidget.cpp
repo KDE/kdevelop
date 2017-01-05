@@ -18,6 +18,7 @@
  */
 #include "outlinewidget.h"
 
+#include <QAction>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -26,6 +27,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QIcon>
+#include <QWidgetAction>
 
 #include <KLocalizedString>
 #include <KRecursiveFilterProxyModel>
@@ -58,29 +60,29 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     m_tree->setModel(m_proxy);
     m_tree->setHeaderHidden(true);
 
-    //filter
-    connect(m_filter, &QLineEdit::textChanged, m_proxy, &KRecursiveFilterProxyModel::setFilterFixedString);
-    connect(m_tree, &QTreeView::activated, this, &OutlineWidget::activated);
-
-    QHBoxLayout* filterLayout = new QHBoxLayout();
-
-    m_filter->setPlaceholderText(i18n("Filter..."));
-    m_sortAlphabetically = new QPushButton(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), QString(), this);
-    m_sortAlphabetically->setToolTip(i18n("Sort alphabetically"));
-    m_sortAlphabetically->setCheckable(true);
-    connect(m_sortAlphabetically, &QPushButton::toggled, this, [this](bool sort) {
+    // sort action
+    m_sortAlphabeticallyAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), QString(), this);
+    m_sortAlphabeticallyAction->setToolTip(i18n("Sort alphabetically"));
+    m_sortAlphabeticallyAction->setCheckable(true);
+    connect(m_sortAlphabeticallyAction, &QAction::triggered, this, [this](bool sort) {
         // calling sort with -1 will restore the original order
         m_proxy->sort(sort ? 0 : -1, Qt::AscendingOrder);
-        m_sortAlphabetically->setChecked(sort);
+        m_sortAlphabeticallyAction->setChecked(sort);
     });
+    addAction(m_sortAlphabeticallyAction);
 
-    filterLayout->addWidget(m_sortAlphabetically);
-    filterLayout->addWidget(m_filter);
+    // filter
+    connect(m_filter, &QLineEdit::textChanged, m_proxy, &KRecursiveFilterProxyModel::setFilterFixedString);
+    connect(m_tree, &QTreeView::activated, this, &OutlineWidget::activated);
+    m_filter->setPlaceholderText(i18n("Filter..."));
+    auto filterAction = new QWidgetAction(this);
+    filterAction->setDefaultWidget(m_filter);
+    addAction(filterAction);
+
     setFocusProxy(m_filter);
 
     QVBoxLayout* vbox = new QVBoxLayout(this);
     vbox->setMargin(0);
-    vbox->addLayout(filterLayout);
     vbox->addWidget(m_tree);
     setLayout(vbox);
     expandFirstLevel();
