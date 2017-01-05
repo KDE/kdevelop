@@ -167,6 +167,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
 
     m_previousButton = new QToolButton();
     m_previousButton->setToolTip(i18n("Go back in context history"));
+    m_previousButton->setAutoRaise(true);
     m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
     m_previousButton->setEnabled(false);
@@ -178,6 +179,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
 
     m_nextButton = new QToolButton();
     m_nextButton->setToolTip(i18n("Go forward in context history"));
+    m_nextButton->setAutoRaise(true);
     m_nextButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     m_nextButton->setEnabled(false);
