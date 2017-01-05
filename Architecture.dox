@@ -50,7 +50,6 @@ Platform consists of
 
 \subsection platform_coding_conventions Current Platform Coding Conventions
 
-- The preferred coding style is http://www.kdevelop.org/mediawiki/index.php/Coding_Guidelines
 - All platform classes shall be in the KDevelop namespace
 - All files should be named without a kdev prefix
 - All files have to be installed in subdirectories under ${INCLUDE_INSTALL_DIR}/kdevplatform/
