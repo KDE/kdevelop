@@ -263,7 +263,7 @@ bool LldbFormattersTest::verifyVariable(int index, const QString &name,
         return false;
     }
 
-    std::vector<int> theOrder;
+    QVector<int> theOrder;
     theOrder.reserve(childCount);
     for (int i = 0; i != childCount; ++i) {
         theOrder.push_back(i);
