@@ -118,19 +118,19 @@ public:
     DocumentChangeTracker* trackerForUrl(const IndexedString& url) const;
 
 Q_SIGNALS:
-    /** 
-	 * Emitted whenever a document parse-job has finished. 
-	 * The job contains the du-chain(if one was created) etc.
-	 *
-	 * The job is deleted after this signal has been emitted.  Receivers should not hold
-	 * references to it.
+    /**
+     * Emitted whenever a document parse-job has finished.
+     * The job contains the du-chain(if one was created) etc.
+     *
+     * The job is deleted after this signal has been emitted.  Receivers should not hold
+     * references to it.
      *
      * Note that if you want to be get updated for all DUChain updates, use
      * DUChain::updateReady instead, as a single ParseJob may update multiple
      * DUChain top contexts.
      *
      * @sa DUChain::updateReady
-	 */
+     */
     void parseJobFinished(KDevelop::ParseJob* job);
 
     // Implementations of IStatus signals
@@ -156,9 +156,9 @@ public Q_SLOTS:
      */
     void resume();
 
-    ///Reverts all requests that were made for the given notification-target.
-    ///priorities and requested features will be reverted as well.
-    ///When @p notifyWhenReady is set to a nullptr, all requests will be reverted.
+    /// Reverts all requests that were made for the given notification-target.
+    /// priorities and requested features will be reverted as well.
+    /// When @p notifyWhenReady is set to a nullptr, all requests will be reverted.
     void revertAllRequests(QObject* notifyWhenReady);
 
     /**
@@ -194,28 +194,28 @@ public Q_SLOTS:
 
     void updateProgressData();
 
-    ///Disables processing for all jobs that have a worse priority than @param priority
-    ///This can be used to temporarily limit the processing to only the most important jobs.
-    ///To only enable processing for important jobs, call setNeededPriority(0).
-    ///This should only be used to temporarily alter the processing. A progress-bar
-    ///will still be shown for the not yet processed jobs.
+    /// Disables processing for all jobs that have a worse priority than @p priority
+    /// This can be used to temporarily limit the processing to only the most important jobs.
+    /// To only enable processing for important jobs, call setNeededPriority(0).
+    /// This should only be used to temporarily alter the processing. A progress-bar
+    /// will still be shown for the not yet processed jobs.
     void setNeededPriority(int priority);
-    ///Disables all processing of new jobs, equivalent to setNeededPriority(BestPriority)
+    /// Disables all processing of new jobs, equivalent to setNeededPriority(BestPriority)
     void disableProcessing();
-    ///Enables all processing of new jobs, equivalent to setNeededPriority(WorstPriority)
+    /// Enables all processing of new jobs, equivalent to setNeededPriority(WorstPriority)
     void enableProcessing();
 
-    ///Returns true if the given url is queued for parsing
+    /// Returns true if the given url is queued for parsing
     bool isQueued(const IndexedString& url) const;
 
-    ///Retrieve the current priority for the given URL.
-    ///You need to check whether @param url is queued before calling this function.
+    /// Retrieve the current priority for the given URL.
+    /// You need to check whether @param url is queued before calling this function.
     int priorityForDocument(const IndexedString& url) const;
 
-    ///Returns the number of queued jobs (not yet running nor submitted to ThreadWeaver)
+    /// Returns the number of queued jobs (not yet running nor submitted to ThreadWeaver)
     int queuedCount() const;
 
-    ///Returns true if there are no jobs running nor queued anywhere
+    /// Returns true if there are no jobs running nor queued anywhere
     bool isIdle() const;
 
     void documentClosed(KDevelop::IDocument*);

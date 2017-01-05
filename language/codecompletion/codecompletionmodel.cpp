@@ -183,7 +183,7 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
     qCDebug(LANGUAGE) << "completion invoked for context" << (DUContext*)top;
 
     if( top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.toString())) ) {
-      qCDebug(LANGUAGE) << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.toString()))*/;
+      qCDebug(LANGUAGE) << "Found context is not current.";
     }
 
     DUContextPointer thisContext;

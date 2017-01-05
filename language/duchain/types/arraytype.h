@@ -70,8 +70,6 @@ public:
 
   /**
    * Set the element type of the array, e.g. "int" for int[3].
-   *
-   * \returns the element type.
    */
   void setElementType(AbstractType::Ptr type);
 

@@ -51,14 +51,14 @@ public:
 
   CompletionTreeElement* parent() const;
 
-  ///Reparenting is not supported. This is only allowed if parent() is still zero.
+  /// Reparenting is not supported. This is only allowed if parent() is still zero.
   void setParent(CompletionTreeElement*);
 
   int rowInParent() const;
   
   int columnInParent() const;
 
-  ///Each element is either a node, or an item.
+  /// Each element is either a node, or an item.
   
   CompletionTreeNode* asNode();
   
@@ -90,12 +90,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeNode : public CompletionTreeEle
   KTextEditor::CodeCompletionModel::ExtraItemDataRoles role;
   QVariant roleValue;
   
-  ///Will append the child, and initialize it correctly to create a working tree-structure
+  /// Will append the child, and initialize it correctly to create a working tree-structure
   void appendChild(QExplicitlySharedDataPointer<CompletionTreeElement>);
   void appendChildren(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >);
   void appendChildren(QList<QExplicitlySharedDataPointer<CompletionTreeItem> >);
   
-  ///@warning Do not manipulate this directly, that's bad for consistency. Use appendChild instead.
+  /// @warning Do not manipulate this directly, that's bad for consistency. Use appendChild instead.
   QList<QExplicitlySharedDataPointer<CompletionTreeElement> > children;
 };
 
@@ -103,40 +103,40 @@ class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeElem
 {
 public:
 
-  ///Execute the completion item. The default implementation does nothing.
+  /// Execute the completion item. The default implementation does nothing.
   virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word);
 
-  ///Should return normal completion data, @see KTextEditor::CodeCompletionModel
-  ///The default implementation returns "unimplemented", so re-implement it!
-  ///The duchain is not locked when this is called
-  ///Navigation-widgets should be registered to the model, then it will care about the interaction.
+  /// Should return normal completion data, @see KTextEditor::CodeCompletionModel
+  /// The default implementation returns "unimplemented", so re-implement it!
+  /// The duchain is not locked when this is called
+  /// Navigation-widgets should be registered to the model, then it will care about the interaction.
   virtual QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const;
   
-  ///Should return the inheritance-depth. The completion-items don't need to return it through the data() function.
+  /// Should return the inheritance-depth. The completion-items don't need to return it through the data() function.
   virtual int inheritanceDepth() const;
-  ///Should return the argument-hint depth. The completion-items don't need to return it through the data() function.
+  /// Should return the argument-hint depth. The completion-items don't need to return it through the data() function.
   virtual int argumentHintDepth() const;
 
-  ///The default-implementation calls DUChainUtils::completionProperties
+  /// The default-implementation calls DUChainUtils::completionProperties
   virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
 
-  ///If this item represents a Declaration, this should return the declaration.
-  ///The default-implementation returns zero.
+  /// If this item represents a Declaration, this should return the declaration.
+  /// The default-implementation returns zero.
   virtual DeclarationPointer declaration() const;
   
-  ///Should return the types should be used for matching items against this one when it's an argument hint.
-  ///The matching against all types should be done, and the best one will be used as final match result.
+  /// Should return the types should be used for matching items against this one when it's an argument hint.
+  /// The matching against all types should be done, and the best one will be used as final match result.
   virtual QList<IndexedType> typeForArgumentMatching() const;
   
-  ///Should return whether this completion-items data changes with input done by the user during code-completion.
-  ///Returning true is very expensive.
+  /// Should return whether this completion-items data changes with input done by the user during code-completion.
+  /// Returning true is very expensive.
   virtual bool dataChangedWithInput() const;
 };
 
-  ///A custom-group node, that can be used as-is. Just create it, and call appendChild to add group items.
-  ///The items in the group will be shown in the completion-list with a group-header that contains the given name
+/// A custom-group node, that can be used as-is. Just create it, and call appendChild to add group items.
+/// The items in the group will be shown in the completion-list with a group-header that contains the given name
 struct KDEVPLATFORMLANGUAGE_EXPORT CompletionCustomGroupNode : public CompletionTreeNode {
-  ///@param inheritanceDepth @ref KTextEditor::CodeCompletionModel::GroupRole
+  /// @param inheritanceDepth See KTextEditor::CodeCompletionModel::GroupRole
   explicit CompletionCustomGroupNode(QString groupName, int inheritanceDepth = 700);
   
   int inheritanceDepth;

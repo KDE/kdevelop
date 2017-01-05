@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.12)
+
 # kdevplatform version
 set(KDEVPLATFORM_VERSION_MAJOR 5)
 set(KDEVPLATFORM_VERSION_MINOR 0)
@@ -12,9 +14,6 @@ set(KDEV_ITEMREPOSITORY_VERSION 86)
 set(KDEVPLATFORM_LIB_VERSION 10.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 10)
 
-################################################################################
-
-cmake_minimum_required(VERSION 2.8.12)
 project(KDevPlatform)
 
 # we need some parts of the ECM CMake helpers
@@ -107,6 +106,9 @@ if (HAVE_UBC_FLAG)
 endif()
 if (HAVE_TUC_FLAG)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=tautological-undefined-compare")
+endif()
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdocumentation")
 endif()
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
