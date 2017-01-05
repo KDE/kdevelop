@@ -1,12 +1,10 @@
+cmake_minimum_required(VERSION 2.8.12)
+
 # KDevelop version
 set(KDEVELOP_VERSION_MAJOR 5)
 set(KDEVELOP_VERSION_MINOR 0)
 set(KDEVELOP_VERSION_PATCH 80)
 set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
-
-################################################################################
-
-cmake_minimum_required(VERSION 2.8.12)
 
 project(KDevelop)
 
@@ -91,6 +89,9 @@ if (HAVE_UBC_FLAG)
 endif()
 if (HAVE_TUC_FLAG)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=tautological-undefined-compare")
+endif()
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdocumentation")
 endif()
 
 include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR}  )

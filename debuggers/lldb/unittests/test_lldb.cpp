@@ -1676,26 +1676,6 @@ void LldbTest::testVariablesQuicklySwitchFrame()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-void LldbTest::testVariablesNonascii()
-{
-    TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeeqt"));
-
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-
-    QString fileName = findSourceFile("debugeeqt.cpp");
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30);
-
-    QVERIFY(session->startDebugging(&cfg, m_iface));
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    QCOMPARE(session->currentLine(), 30);
-    COMPARE_DATA(localVariableIndexAt(0, 1), QString("\"\u4f60\u597d\u4e16\u754c\""));
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
 void LldbTest::testSwitchFrameLldbConsole()
 {
     TestDebugSession *session = new TestDebugSession;

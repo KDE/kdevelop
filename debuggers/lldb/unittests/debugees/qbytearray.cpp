@@ -1,7 +1,7 @@
 #include <QByteArray>
 int main()
 {
-    QByteArray ba("test byte array");
+    QByteArray ba("\xe6\x98\xaf'\"\\u6211");
     ba.append("x");
     return 0;
 }

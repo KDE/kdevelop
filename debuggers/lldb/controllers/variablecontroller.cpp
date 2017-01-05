@@ -54,11 +54,11 @@ void VariableController::update()
         variableCollection()->watches()->reinstall();
     }
 
-   if (autoUpdate() & UpdateLocals) {
+    if (autoUpdate() & UpdateLocals) {
         updateLocals();
-   }
+    }
 
-   if ((autoUpdate() & UpdateLocals) ||
+    if ((autoUpdate() & UpdateLocals) ||
        ((autoUpdate() & UpdateWatches) && variableCollection()->watches()->childCount() > 0))
     {
         debugSession()->updateAllVariables();

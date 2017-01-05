@@ -46,11 +46,12 @@ public:
     CXIndex index() const;
 
     /**
-     * @returns the existing ClangPCH for the @param pchInclude
-     * The PCH is created using @param includePaths and @param defines if it doesn't exist
+     * @returns the existing ClangPCH for @p environment
+     *
+     * The PCH is created using @p environment if it doesn't exist
      * This function is thread safe.
      */
-    QSharedPointer<const ClangPCH> pch(const ClangParsingEnvironment& defines);
+    QSharedPointer<const ClangPCH> pch(const ClangParsingEnvironment& environment);
 
     /**
      * Gets the currently pinned TU for @p url

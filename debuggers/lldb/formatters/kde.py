@@ -19,13 +19,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import lldb
-
-from helpers import *
 
 def __lldb_init_module(debugger, unused):
     debugger.HandleCommand('type summary add KDevelop::Path -w kdevelop-kde -F kde.KDevPathSummaryProvider')
-    debugger.HandleCommand('type summary add KTextEditor::Cursor -w kdevelop-kde -F kde.KTextEditorCursorSummaryProvider')
+    debugger.HandleCommand('type summary add KTextEditor::Cursor -w kdevelop-kde -F kde.KTextEditorCursorSummaryProvider')  # noqa: E501
     debugger.HandleCommand('type summary add KTextEditor::Range -w kdevelop-kde -F kde.KTextEditorRangeSummaryProvider')
 
     debugger.HandleCommand('type category enable kdevelop-kde')

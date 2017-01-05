@@ -46,7 +46,11 @@
         + [DONE] KDevelop::Path
         + [DONE] KTextEditor::Cursor
         + [DONE] KTextEditor::Range
+    * lldb-mi doesn't properly quote string in most MI records, so can't use \\ or " in names
 - Finish unit tests for LLDB data formatters
+- Qt data formatter cause hangs data size is too large
+    * [DONE] use dynamic caching
+    * invalid object detect
 
 - [DONE] Show application exit reason in the Debug View
 
@@ -56,9 +60,6 @@
         + tool view
     * disassembly widget
     * memory view
-
-- Qt data formatter cause hangs data size is too large
-    * use dynamic caching
 
 - [DONE] Find a way to avoid duplicate tool views for GDB and LLDB plugin
 

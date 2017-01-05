@@ -21,7 +21,7 @@
 
 # BEGIN: Utilities for wrapping differences of Python 2.x and Python 3
 # Inspired by http://pythonhosted.org/six/
-
+from __future__ import print_function
 import sys
 import lldb
 # Useful for very coarse version differentiation.
@@ -38,9 +38,19 @@ else:
             return type(self).__next__(self)
 if PY3:
     unichr = chr
+    unicode = str
 else:
     unichr = unichr
 # END
+
+
+def canonicalized_type_name(name):
+    """Canonicalize the type name for FindFirstType usage.
+        + 1 space between template arguments (after comma)
+        + no space before pointer *
+    otherwise FindFirstType returns None
+    """
+    return name.replace(' ', '').replace(',', ', ')
 
 
 def quote(string, quote='"'):
@@ -65,22 +75,25 @@ def quote(string, quote='"'):
                                   q=quote)
 
 
-def unquote(string, quote='"'):
+def unquote(data, quote='"'):
     """Unquote a string"""
-    if string.startswith(quote) and string.endswith(quote):
-        string = string.lstrip(quote).rstrip(quote)
+    if data.startswith(quote) and data.endswith(quote):
+        data = data[1:-1]
         ls = []
         esc = False
-        for idx in range(0, len(string)):
-            ch = string[idx]
-            if ch == '\\':
-                if esc:
-                    ls.append(ch)
-                esc = not esc
-            else:
+        for ch in data:
+            if esc:
                 ls.append(ch)
-        string = ''.join(ls)
-    return string
+                esc = False
+            else:
+                if ch == '\\':
+                    esc = True
+                else:
+                    ls.append(ch)
+        if esc:
+            print('WARNING: unpaired escape')
+        data = ''.join(ls)
+    return data
 
 
 def invoke(val, method, args=''):
@@ -105,8 +118,8 @@ def invoke(val, method, args=''):
     # third, build expression
     expr = 'reinterpret_cast<const {}>({})->{}({})'.format(ptype.GetName(), addr, method, args)
     res = frame.EvaluateExpression(expr)
-    #if not res.IsValid():
-        #print 'Expr {} on value {} failed'.format(expr, val.GetName())
+    # if not res.IsValid():
+    #     print 'Expr {} on value {} failed'.format(expr, val.GetName())
     return res
 
 
@@ -209,7 +222,7 @@ class HiddenMemberProvider(object):
             # it might be overwriten by others if we cache them.
             # child is a (name, expr) tuple in this case
             if len(child) != 2:
-                print 'error, const char[] value should be a tuple with two elements, it is', child
+                print('error, const char[] value should be a tuple with two elements, it is', child)
             return self.valobj.CreateValueFromExpression(*child)
 
     @staticmethod

@@ -40,9 +40,13 @@
 #include <KSharedConfig>
 
 #include <QDebug>
+#include <QRegularExpression>
 #include <QString>
 #include <QTest>
 #include <QUrl>
+
+#include <algorithm>
+#include <vector>
 
 #define WAIT_FOR_STATE(session, state) \
     do { if (!KDevMI::LLDB::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
@@ -50,8 +54,11 @@
 #define WAIT_FOR_STATE_AND_IDLE(session, state) \
     do { if (!KDevMI::LLDB::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
 
-#define WAIT_FOR_A_WHILE(session, ms) \
-    do { if (!KDevMI::LLDB::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; } while (0)
+#define WAIT_FOR_A_WHILE_AND_IDLE(session, ms) \
+    do { if (!KDevMI::LLDB::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; \
+         if (!KDevMI::LLDB::waitForState((session), DebugSession::PausedState, __FILE__, __LINE__, true)) \
+             return; \
+    } while (0)
 
 #define WAIT_FOR(session, condition) \
     do { \
@@ -62,8 +69,17 @@
 #define COMPARE_DATA(index, expected) \
     do { if (!KDevMI::LLDB::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
 
-#define VERIFY_QSTRING(row, name, expected) \
-    do { if (!verifyQString((row), (name), (expected), __FILE__, __LINE__)) return; } while (0)
+#define VERIFY_LOCAL(row, name, summary, children) \
+    do { \
+        if (!verifyVariable((row), (name), (summary), (children), __FILE__, __LINE__)) \
+            return; \
+    } while (0)
+
+#define VERIFY_WATCH(row, name, summary, children) \
+    do { \
+        if (!verifyVariable((row), (name), (summary), (children), __FILE__, __LINE__, false)) \
+            return; \
+    } while (0)
 
 #define findSourceFile(name) \
     findSourceFile(__FILE__, (name))
@@ -120,11 +136,10 @@ VariableCollection *LldbFormattersTest::variableCollection()
     return m_core->debugController()->variableCollection();
 }
 
-LldbVariable *LldbFormattersTest::watchVariableAt(int i)
+QModelIndex LldbFormattersTest::watchVariableIndexAt(int i, int col)
 {
     auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
-    auto idx = variableCollection()->index(i, 0, watchRoot);
-    return dynamic_cast<LldbVariable*>(variableCollection()->itemForIndex(idx));
+    return variableCollection()->index(i, col, watchRoot);
 }
 
 QModelIndex LldbFormattersTest::localVariableIndexAt(int i, int col)
@@ -133,6 +148,7 @@ QModelIndex LldbFormattersTest::localVariableIndexAt(int i, int col)
     return variableCollection()->index(i, col, localRoot);
 }
 
+// Note: line is zero-based
 KDevelop::Breakpoint* LldbFormattersTest::addCodeBreakpoint(const QUrl& location, int line)
 {
     return m_core->debugController()->breakpointModel()->addCodeBreakpoint(location, line);
@@ -168,7 +184,8 @@ void LldbFormattersTest::init()
     m_core->debugController()->breakpointModel()->removeRows(0, count);
 
     while (variableCollection()->watches()->childCount() > 0) {
-        auto var = watchVariableAt(0);
+        auto idx = watchVariableIndexAt(0);
+        auto var = dynamic_cast<LldbVariable*>(variableCollection()->itemForIndex(idx));
         if (!var) break;
         var->die();
     }
@@ -185,46 +202,120 @@ void LldbFormattersTest::cleanup()
     m_session.clear();
 }
 
-bool LldbFormattersTest::verifyQString(int index, const QString &name,
-                                       const QString &expected,
-                                       const char *file, int line)
+bool LldbFormattersTest::verifyVariable(int index, const QString &name,
+                                        const QString &expectedSummary,
+                                        QStringList expectedChildren,
+                                        const char *file, int line,
+                                        bool isLocal, bool useRE, bool unordered)
 {
-    auto varidx = localVariableIndexAt(index, 0);
-    auto var = variableCollection()->itemForIndex(varidx);
+    QList<QPair<QString, QString>> childrenPairs;
+    childrenPairs.reserve(expectedChildren.size());
+    if (unordered) {
+        qDebug() << "useRE set to true when unordered = true";
+        useRE = true;
+        expectedChildren.sort();
+        for (auto c : expectedChildren) {
+            childrenPairs << qMakePair(QStringLiteral(R"(^\[\d+\]$)"), c);
+        }
+    } else {
+        for (int i = 0; i != expectedChildren.size(); ++i) {
+            childrenPairs << qMakePair(QStringLiteral("[%0]").arg(i), expectedChildren[i]);
+        }
+    }
+    return verifyVariable(index, name, expectedSummary, childrenPairs, file, line, isLocal, useRE, unordered);
+}
 
-    if (!compareData(varidx, name, file, line)) {
+bool LldbFormattersTest::verifyVariable(int index, const QString &name,
+                                        const QString &expectedSummary,
+                                        QList<QPair<QString, QString>> expectedChildren,
+                                        const char *file, int line,
+                                        bool isLocal, bool useRE, bool unordered)
+{
+    QModelIndex varIdx, summaryIdx;
+    if (isLocal) {
+        varIdx = localVariableIndexAt(index, 0);
+        summaryIdx = localVariableIndexAt(index, 1);
+    } else {
+        varIdx = watchVariableIndexAt(index, 0);
+        summaryIdx = watchVariableIndexAt(index, 1);
+    }
+
+    if (!compareData(varIdx, name, file, line)) {
         return false;
     }
-    if (!compareData(localVariableIndexAt(index, 1), Utils::quote(expected), file, line)) {
+    if (!compareData(summaryIdx, expectedSummary, file, line, useRE)) {
         return false;
     }
 
     // fetch all children
+    auto var = variableCollection()->itemForIndex(varIdx);
     auto childCount = 0;
-    while (childCount != variableCollection()->rowCount(varidx)) {
-        childCount = variableCollection()->rowCount(varidx);
+    while (childCount != variableCollection()->rowCount(varIdx)) {
+        childCount = variableCollection()->rowCount(varIdx);
         var->fetchMoreChildren();
         if (!waitForAWhile(m_session, 50, file, line))
             return false;
     }
-    if (childCount != expected.length()) {
+    if (childCount != expectedChildren.length()) {
         QTest::qFail(qPrintable(QString("'%0' didn't match expected '%1' in %2:%3")
-                                .arg(childCount).arg(expected.length()).arg(file).arg(line)),
+                                .arg(childCount).arg(expectedChildren.length()).arg(file).arg(line)),
                      file, line);
         return false;
     }
 
+    QVector<int> theOrder;
+    theOrder.reserve(childCount);
     for (int i = 0; i != childCount; ++i) {
-        if (!compareData(variableCollection()->index(i, 0, varidx),
-                         QString("[%0]").arg(i), file, line)) {
+        theOrder.push_back(i);
+    }
+    if (unordered) {
+        qDebug() << "actual list sorted for unordered compare";
+        std::sort(theOrder.begin(), theOrder.end(), [&](int a, int b){
+            auto indexA = variableCollection()->index(a, 1, varIdx);
+            auto indexB = variableCollection()->index(b, 1, varIdx);
+            return indexA.model()->data(indexA, Qt::DisplayRole).toString()
+                < indexB.model()->data(indexB, Qt::DisplayRole).toString();
+        });
+        std::sort(expectedChildren.begin(), expectedChildren.end(),
+                  [](const QPair<QString, QString> &a, const QPair<QString, QString> &b){
+            return a.second < b.second;
+        });
+        qDebug() << "sorted actual order" << theOrder;
+        qDebug() << "sorted expectedChildren" << expectedChildren;
+    }
+
+    for (int i = 0; i != childCount; ++i) {
+        if (!compareData(variableCollection()->index(theOrder[i], 0, varIdx),
+                         expectedChildren[i].first, file, line, useRE)) {
             return false;
         }
-        if (!compareData(variableCollection()->index(i, 1, varidx),
-                         QString("'%0'").arg(expected[i]), file, line)) {
+
+        if (!compareData(variableCollection()->index(theOrder[i], 1, varIdx),
+                         expectedChildren[i].second, file, line, useRE)) {
             return false;
         }
     }
     return true;
+}
+
+void LldbFormattersTest::testQChar()
+{
+    TestLaunchConfiguration cfg("lldb_qchar");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qchar.cpp")), 4);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    QList<QPair<QString, QString>> children;
+    children << qMakePair(QStringLiteral("ucs"), QStringLiteral("107"));
+
+    VERIFY_LOCAL(0, "c", "'k'", children);
 }
 
 void LldbFormattersTest::testQString()
@@ -235,365 +326,682 @@ void LldbFormattersTest::testQString()
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
+    // Should be two rows ('auto', 'local')
     QCOMPARE(variableCollection()->rowCount(), 2);
 
-    VERIFY_QSTRING(0, "s", "test string");
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    QString expected = QString::fromUtf8("test最后一个不是特殊字符'\"\\u6211");
+    QStringList children;
+    for (auto ch : expected) {
+        children << Utils::quote(ch, '\'');
+    }
+
+    VERIFY_LOCAL(0, "s", Utils::quote(expected), children);
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
     QCOMPARE(m_session->currentLine(), 5);
 
-    VERIFY_QSTRING(0, "s", "test stringx");
+    expected.append("x");
+    children << "'x'";
+
+    VERIFY_LOCAL(0, "s", Utils::quote(expected), children);
 
     m_session->run();
     WAIT_FOR_STATE(m_session, DebugSession::EndedState);
 }
-/*
+
 void LldbFormattersTest::testQByteArray()
 {
-    LldbProcess lldb("qbytearray");
-    lldb.execute("break qbytearray.cpp:5");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print ba");
-    QVERIFY(out.contains("\"test byte array\""));
-    QVERIFY(out.contains("[0] = 116 't'"));
-    QVERIFY(out.contains("[4] = 32 ' '"));
-    lldb.execute("next");
-    QVERIFY(lldb.execute("print ba").contains("\"test byte arrayx\""));
+    TestLaunchConfiguration cfg("lldb_qbytearray");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qbytearray.cpp")), 4);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    QStringList charlist {
+        R"(-26 '\xe6')",
+        R"(-104 '\x98')",
+        R"(-81 '\xaf')",
+        R"(39 ''')",
+        R"(34 '"')",
+        R"(92 '\')",
+        R"(117 'u')",
+        R"(54 '6')",
+        R"(50 '2')",
+        R"(49 '1')",
+        R"(49 '1')",
+    };
+
+    VERIFY_LOCAL(0, "ba", R"("\xe6\x98\xaf'\"\\u6211")", charlist);
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 5);
+
+    charlist << "120 'x'";
+    VERIFY_LOCAL(0, "ba", R"("\xe6\x98\xaf'\"\\u6211x")", charlist);
+
+    m_session->run();
+    WAIT_FOR_STATE(m_session, DebugSession::EndedState);
 }
+
 
 void LldbFormattersTest::testQListContainer_data()
 {
     QTest::addColumn<QString>("container");
+    QTest::addColumn<bool>("unordered");
 
-    QTest::newRow("QList") << "QList";
-    QTest::newRow("QQueue") << "QQueue";
-    QTest::newRow("QVector") << "QVector";
-    QTest::newRow("QStack") << "QStack";
-    QTest::newRow("QLinkedList") << "QLinkedList";
-    QTest::newRow("QSet") << "QSet";
+    QTest::newRow("QList") << "QList" << false;
+    QTest::newRow("QQueue") << "QQueue" << false;
+    QTest::newRow("QVector") << "QVector" << false;
+    QTest::newRow("QStack") << "QStack" << false;
+    QTest::newRow("QLinkedList") << "QLinkedList" << false;
+    QTest::newRow("QSet") << "QSet" << true;
 }
 
 void LldbFormattersTest::testQListContainer()
 {
     QFETCH(QString, container);
-    LldbProcess lldb("qlistcontainer");
-    lldb.execute("break main");
-    lldb.execute("run");
-    lldb.execute(QString("break 'doStuff<%1>()'").arg(container).toLocal8Bit());
-    lldb.execute("cont");
-    { // <int>
-    lldb.execute("break qlistcontainer.cpp:34");
-    lldb.execute("cont");
-    QByteArray out = lldb.execute("print intList");
-    QVERIFY(out.contains(QString("empty %1<int>").arg(container).toLocal8Bit()));
-    lldb.execute("next");
-    out = lldb.execute("print intList");
-    QVERIFY(out.contains(QString("%1<int>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
-        QVERIFY(out.contains("[0] = 10"));
-        QVERIFY(out.contains("[1] = 20"));
-        QVERIFY(!out.contains("[2] = 30"));
-    } else { // QSet order is undefined
-        QVERIFY(out.contains("] = 10"));
-        QVERIFY(out.contains("] = 20"));
-        QVERIFY(!out.contains("] = 30"));
+    QFETCH(bool, unordered);
+
+    TestLaunchConfiguration cfg("lldb_qlistcontainer");
+    cfg.config().writeEntry(KDevMI::Config::BreakOnStartEntry, true);
+
+    auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
+    variableCollection()->expanded(watchRoot);
+    variableCollection()->variableWidgetShown();
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    m_session->addUserCommand(QString("break set --func doStuff<%1>()").arg(container));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    m_session->run();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // <int>
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    auto var = variableCollection()->watches()->add("intList");
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "intList", "<size=0>", QStringList{},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
-    lldb.execute("next");
-    out = lldb.execute("print intList");
-    QVERIFY(out.contains(QString("%1<int>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
-        QVERIFY(out.contains("[0] = 10"));
-        QVERIFY(out.contains("[1] = 20"));
-        QVERIFY(out.contains("[2] = 30"));
-    } else { // QSet order is undefined
-        QVERIFY(out.contains("] = 10"));
-        QVERIFY(out.contains("] = 20"));
-        QVERIFY(out.contains("] = 30"));
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "intList", "<size=2>", QStringList{"10", "20"},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    if (!verifyVariable(0, "intList", "<size=3>", QStringList{"10", "20", "30"},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
-    { // <QString>
-    lldb.execute("next");
-    QByteArray out = lldb.execute("print stringList");
-    QVERIFY(out.contains(QString("empty %1<QString>").arg(container).toLocal8Bit()));
-    lldb.execute("next");
-    out = lldb.execute("print stringList");
-    QVERIFY(out.contains(QString("%1<QString>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
-        QVERIFY(out.contains("[0] = \"a\""));
-        QVERIFY(out.contains("[1] = \"bc\""));
-        QVERIFY(!out.contains("[2] = \"d\""));
-    } else { // QSet order is undefined
-        QVERIFY(out.contains("] = \"a\""));
-        QVERIFY(out.contains("] = \"bc\""));
-        QVERIFY(!out.contains("] = \"d\""));
+    var->die();
+
+    // <QString>
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    var = variableCollection()->watches()->add("stringList");
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "stringList", "<size=0>", QStringList{},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
-    lldb.execute("next");
-    out = lldb.execute("print stringList");
-    QVERIFY(out.contains(QString("%1<QString>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
-        QVERIFY(out.contains("[0] = \"a\""));
-        QVERIFY(out.contains("[1] = \"bc\""));
-        QVERIFY(out.contains("[2] = \"d\""));
-    } else { // QSet order is undefined
-        QVERIFY(out.contains("] = \"a\""));
-        QVERIFY(out.contains("] = \"bc\""));
-        QVERIFY(out.contains("] = \"d\""));
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+
+    if (!verifyVariable(0, "stringList", "<size=2>", QStringList{"\"a\"", "\"bc\""},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    if (!verifyVariable(0, "stringList", "<size=3>", QStringList{"\"a\"", "\"bc\"", "\"d\""},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
-    { // <struct A>
-    lldb.execute("next");
-    QByteArray out = lldb.execute("print structList");
-    QVERIFY(out.contains(QString("empty %1<A>").arg(container).toLocal8Bit()));
-    lldb.execute("next");
-    out = lldb.execute("print structList");
-    QVERIFY(out.contains(QString("%1<A>").arg(container).toLocal8Bit()));
-    QVERIFY(out.contains("[0] = {"));
-    QVERIFY(out.contains("a = \"a\""));
-    QVERIFY(out.contains("b = \"b\""));
-    QVERIFY(out.contains("c = 100"));
-    QVERIFY(out.contains("d = -200"));
-    lldb.execute("next");
-    out = lldb.execute("print structList");
-    QVERIFY(out.contains(QString("%1<A>").arg(container).toLocal8Bit()));
-    QVERIFY(out.contains("[1] = {"));
+    var->die();
+
+    // <struct A>
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    var = variableCollection()->watches()->add("structList");
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "structList", "<size=0>", QStringList{},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
-    { // <int*>
-    lldb.execute("next");
-    QByteArray out = lldb.execute("print pointerList");
-    QVERIFY(out.contains(QString("empty %1<int *>").arg(container).toLocal8Bit()));
-    lldb.execute("next");
-    out = lldb.execute("print pointerList");
-    QVERIFY(out.contains(QString("%1<int *>").arg(container).toLocal8Bit()));
-    QVERIFY(out.contains("[0] = 0x"));
-    QVERIFY(out.contains("[1] = 0x"));
-    QVERIFY(!out.contains("[2] = 0x"));
-    lldb.execute("next");
-    out = lldb.execute("print pointerList");
-    QVERIFY(out.contains("[0] = 0x"));
-    QVERIFY(out.contains("[1] = 0x"));
-    QVERIFY(out.contains("[2] = 0x"));
-	lldb.execute("next");
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "structList", "<size=1>", QStringList{"{...}"},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
-    { // <QPair<int, int> >
-    lldb.execute("next");
-    QByteArray out = lldb.execute("print pairList");
-    QVERIFY(out.contains(QString("empty %1<QPair<int, int>>").arg(container).toLocal8Bit()));
-    lldb.execute("next");
-    out = lldb.execute("print pairList");
-    QVERIFY(out.contains(QString("%1<QPair<int, int>>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
-        QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
-        QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
-    } else { // order is undefined in QSet
-        QVERIFY(out.contains("] = {\n    first = 1, \n    second = 2\n  }"));
-        QVERIFY(out.contains("] = {\n    first = 2, \n    second = 3\n  }"));
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    if (!verifyVariable(0, "structList", "<size=2>", QStringList{"{...}", "{...}"},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
-    QVERIFY(!out.contains("[2] = "));
-    lldb.execute("next");
-    out = lldb.execute("print pairList");
-    if (container != "QSet") {
-        QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
-        QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
-        QVERIFY(out.contains("[2] = {\n    first = 4, \n    second = 5\n  }"));
-    } else { // order is undefined in QSet
-        QVERIFY(out.contains("] = {\n    first = 1, \n    second = 2\n  }"));
-        QVERIFY(out.contains("] = {\n    first = 2, \n    second = 3\n  }"));
-        QVERIFY(out.contains("] = {\n    first = 4, \n    second = 5\n  }"));
+    var->die();
+
+    // <int*>
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    var = variableCollection()->watches()->add("pointerList");
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "pointerList", "<size=0>", QStringList{},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
     }
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "pointerList", "<size=2>", QStringList{"^0x[0-9A-Fa-f]+$", "^0x[0-9A-Fa-f]+$"},
+                        __FILE__, __LINE__, false, true, unordered)) {
+        return;
     }
-}
 
-void LldbFormattersTest::testQMapInt()
-{
-    LldbProcess lldb("qmapint");
-    lldb.execute("break qmapint.cpp:7");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print m");
-    QVERIFY(out.contains("QMap<int, int>"));
-    QVERIFY(out.contains("[10] = 100"));
-    QVERIFY(out.contains("[20] = 200"));
-    lldb.execute("next");
-    out = lldb.execute("print m");
-    QVERIFY(out.contains("[30] = 300"));
-}
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
-void LldbFormattersTest::testQMapString()
-{
-    LldbProcess lldb("qmapstring");
-    lldb.execute("break qmapstring.cpp:8");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print m");
-    QVERIFY(out.contains("QMap<QString, QString>"));
-    QVERIFY(out.contains("[\"10\"] = \"100\""));
-    QVERIFY(out.contains("[\"20\"] = \"200\""));
-    lldb.execute("next");
-    out = lldb.execute("print m");
-    QVERIFY(out.contains("[\"30\"] = \"300\""));
-}
+    if (!verifyVariable(0, "pointerList", "<size=3>", QStringList{"^0x[0-9A-Fa-f]+$", "^0x[0-9A-Fa-f]+$",
+                                                                  "^0x[0-9A-Fa-f]+$"},
+                        __FILE__, __LINE__, false, true, unordered)) {
+        return;
+    }
+    var->die();
+    m_session->stepOver(); // step over qDeleteAll
 
-void LldbFormattersTest::testQMapStringBool()
-{
-    LldbProcess lldb("qmapstringbool");
-    lldb.execute("break qmapstringbool.cpp:8");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print m");
-    QVERIFY(out.contains("QMap<QString, bool>"));
-    QVERIFY(out.contains("[\"10\"] = true"));
-    QVERIFY(out.contains("[\"20\"] = false"));
-    lldb.execute("next");
-    out = lldb.execute("print m");
-    QVERIFY(out.contains("[\"30\"] = true"));
-}
+    // <QPair<int, int>>
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    var = variableCollection()->watches()->add("pairList");
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
+    VERIFY_WATCH(0, "pairList", "<size=0>", QStringList{});
 
-void LldbFormattersTest::testQDate()
-{
-    LldbProcess lldb("qdate");
-    lldb.execute("break qdate.cpp:6");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print d");
-    QVERIFY(out.contains("2010-01-20"));
-}
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
-void LldbFormattersTest::testQTime()
-{
-    LldbProcess lldb("qtime");
-    lldb.execute("break qtime.cpp:6");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print t");
-    QVERIFY(out.contains("15:30:10.123"));
-}
+    variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-void LldbFormattersTest::testQDateTime()
-{
-    LldbProcess lldb("qdatetime");
-    lldb.execute("break qdatetime.cpp:5");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print dt");
-    QVERIFY(out.contains("Wed Jan 20 15:31:13 2010"));
-}
+    if (!verifyVariable(0, "pairList", "<size=2>", QStringList{"{...}", "{...}"},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
+    }
 
-void LldbFormattersTest::testQUrl()
-{
-    LldbProcess lldb("qurl");
-    lldb.execute("break qurl.cpp:5");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print u");
-    QVERIFY(out.contains("http://www.kdevelop.org/foo"));
-}
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
-void LldbFormattersTest::testQHashInt()
-{
-    LldbProcess lldb("qhashint");
-    lldb.execute("break qhashint.cpp:7");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print h");
-    QVERIFY(out.contains("[10] = 100"));
-    QVERIFY(out.contains("[20] = 200"));
-    lldb.execute("next");
-    out = lldb.execute("print h");
-    QVERIFY(out.contains("[30] = 300"));
-}
-
-void LldbFormattersTest::testQHashString()
-{
-    LldbProcess lldb("qhashstring");
-    lldb.execute("break qhashstring.cpp:8");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print h");
-    QVERIFY(out.contains("[\"10\"] = \"100\""));
-    QVERIFY(out.contains("[\"20\"] = \"200\""));
-    lldb.execute("next");
-    out = lldb.execute("print h");
-    QVERIFY(out.contains("[\"30\"] = \"300\""));
-}
-
-void LldbFormattersTest::testQSetInt()
-{
-    LldbProcess lldb("qsetint");
-    lldb.execute("break qsetint.cpp:7");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print s");
-    QVERIFY(out.contains("] = 10"));
-    QVERIFY(out.contains("] = 20"));
-    lldb.execute("next");
-    out = lldb.execute("print s");
-    QVERIFY(out.contains("] = 30"));
-}
-
-void LldbFormattersTest::testQSetString()
-{
-    LldbProcess lldb("qsetstring");
-    lldb.execute("break qsetstring.cpp:8");
-    lldb.execute("run");
-    QByteArray out = lldb.execute("print s");
-    QVERIFY(out.contains("] = \"10\""));
-    QVERIFY(out.contains("] = \"20\""));
-    lldb.execute("next");
-    out = lldb.execute("print s");
-    QVERIFY(out.contains("] = \"30\""));
-}
-
-void LldbFormattersTest::testQChar()
-{
-    LldbProcess lldb("qchar");
-    lldb.execute("break qchar.cpp:5");
-    lldb.execute("run");
-    QVERIFY(lldb.execute("print c").contains("\"k\""));
+    if (!verifyVariable(0, "pairList", "<size=3>", QStringList{"{...}", "{...}", "{...}"},
+                        __FILE__, __LINE__, false, false, unordered)) {
+        return;
+    }
+    var->die();
 }
 
 void LldbFormattersTest::testQListPOD()
 {
-    LldbProcess lldb("qlistpod");
-    lldb.execute("break qlistpod.cpp:31");
-    lldb.execute("run");
-    QVERIFY(lldb.execute("print b").contains("false"));
-    QVERIFY(lldb.execute("print c").contains("50"));
-    QVERIFY(lldb.execute("print uc").contains("50"));
-    QVERIFY(lldb.execute("print s").contains("50"));
-    QVERIFY(lldb.execute("print us").contains("50"));
-    QVERIFY(lldb.execute("print i").contains("50"));
-    QVERIFY(lldb.execute("print ui").contains("50"));
-    QVERIFY(lldb.execute("print l").contains("50"));
-    QVERIFY(lldb.execute("print ul").contains("50"));
-    QVERIFY(lldb.execute("print i64").contains("50"));
-    QVERIFY(lldb.execute("print ui64").contains("50"));
-    QVERIFY(lldb.execute("print f").contains("50"));
-    QVERIFY(lldb.execute("print d").contains("50"));
+    TestLaunchConfiguration cfg("lldb_qlistpod");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qlistpod.cpp")), 30);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
+    variableCollection()->expanded(watchRoot);
+    variableCollection()->variableWidgetShown();
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    variableCollection()->watches()->add("b");
+    variableCollection()->watches()->add("c");
+    variableCollection()->watches()->add("uc");
+    variableCollection()->watches()->add("s");
+    variableCollection()->watches()->add("us");
+    variableCollection()->watches()->add("i");
+    variableCollection()->watches()->add("ui");
+    variableCollection()->watches()->add("l");
+    variableCollection()->watches()->add("ul");
+    variableCollection()->watches()->add("i64");
+    variableCollection()->watches()->add("ui64");
+    variableCollection()->watches()->add("f");
+    variableCollection()->watches()->add("d");
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    VERIFY_WATCH(0, "b", "<size=1>", (QStringList{"false"}));
+    VERIFY_WATCH(1, "c", "<size=1>", (QStringList{"50 '2'"}));
+    VERIFY_WATCH(2, "uc", "<size=1>", (QStringList{"50 '2'"}));
+
+    VERIFY_WATCH(3, "s", "<size=1>", (QStringList{"50"}));
+    VERIFY_WATCH(4, "us", "<size=1>", (QStringList{"50"}));
+
+    VERIFY_WATCH(5, "i", "<size=1>", (QStringList{"50"}));
+    VERIFY_WATCH(6, "ui", "<size=1>", (QStringList{"50"}));
+
+    VERIFY_WATCH(7, "l", "<size=1>", (QStringList{"50"}));
+    VERIFY_WATCH(8, "ul", "<size=1>", (QStringList{"50"}));
+
+    VERIFY_WATCH(9, "i64", "<size=1>", (QStringList{"50"}));
+    VERIFY_WATCH(10, "ui64", "<size=1>", (QStringList{"50"}));
+
+    VERIFY_WATCH(11, "f", "<size=1>", (QStringList{"50"}));
+    VERIFY_WATCH(12, "d", "<size=1>", (QStringList{"50"}));
+}
+
+void LldbFormattersTest::testQMapInt()
+{
+    TestLaunchConfiguration cfg("lldb_qmapint");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qmapint.cpp")), 6);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    VERIFY_LOCAL(0, "m", "<size=2>", (QStringList{"(10, 100)", "(20, 200)"}));
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 7);
+
+    VERIFY_LOCAL(0, "m", "<size=3>", (QStringList{"(10, 100)", "(20, 200)", "(30, 300)"}));
+}
+
+void LldbFormattersTest::testQMapString()
+{
+    TestLaunchConfiguration cfg("lldb_qmapstring");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qmapstring.cpp")), 7);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    VERIFY_LOCAL(0, "m", "<size=2>", (QStringList{"(\"10\", \"100\")", "(\"20\", \"200\")"}));
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 8);
+
+    VERIFY_LOCAL(0, "m", "<size=3>",
+                 (QStringList{"(\"10\", \"100\")", "(\"20\", \"200\")", "(\"30\", \"300\")"}));
+}
+
+void LldbFormattersTest::testQMapStringBool()
+{
+    TestLaunchConfiguration cfg("lldb_qmapstringbool");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qmapstringbool.cpp")), 7);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    VERIFY_LOCAL(0, "m", "<size=2>", (QStringList{"(\"10\", true)", "(\"20\", false)"}));
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 8);
+
+    VERIFY_LOCAL(0, "m", "<size=3>", (QStringList{"(\"10\", true)", "(\"20\", false)", "(\"30\", true)"}));
+}
+
+
+void LldbFormattersTest::testQHashInt()
+{
+    TestLaunchConfiguration cfg("lldb_qhashint");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qhashint.cpp")), 6);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "h", "<size=2>", {"(10, 100)", "(20, 200)"},
+                        __FILE__, __LINE__, true, false, true)) {
+        return;
+    }
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 7);
+
+    if (!verifyVariable(0, "h", "<size=3>", {"(10, 100)", "(20, 200)", "(30, 300)"},
+                        __FILE__, __LINE__, true, false, true)) {
+        return;
+    }
+}
+
+void LldbFormattersTest::testQHashString()
+{
+    TestLaunchConfiguration cfg("lldb_qhashstring");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qhashstring.cpp")), 7);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "h", "<size=2>", {"(\"10\", \"100\")", "(\"20\", \"200\")"},
+                        __FILE__, __LINE__, true, false, true)) {
+        return;
+    }
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 8);
+
+    if (!verifyVariable(0, "h", "<size=3>",
+                        {"(\"10\", \"100\")", "(\"20\", \"200\")", "(\"30\", \"300\")"},
+                        __FILE__, __LINE__, true, false, true)) {
+        return;
+    }
+}
+
+void LldbFormattersTest::testQSetInt()
+{
+    TestLaunchConfiguration cfg("lldb_qsetint");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qsetint.cpp")), 6);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "s", "<size=2>", {"10", "20"},
+                        __FILE__, __LINE__, true, false, true)) {
+        return;
+    }
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 7);
+
+    if (!verifyVariable(0, "s", "<size=3>", {"10", "20", "30"},
+                        __FILE__, __LINE__, true, false, true)) {
+        return;
+    }
+}
+
+void LldbFormattersTest::testQSetString()
+{
+    TestLaunchConfiguration cfg("lldb_qsetstring");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qsetstring.cpp")), 7);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    if (!verifyVariable(0, "s", "<size=2>", {"\"10\"", "\"20\""},
+                        __FILE__, __LINE__, true, false, true)) {
+        return;
+    }
+
+    m_session->stepOver();
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 8);
+
+    if (!verifyVariable(0, "s", "<size=3>",
+                        {"\"10\"", "\"20\"", "\"30\""},
+                        __FILE__, __LINE__, true, false, true)) {
+        return;
+    }
+}
+
+void LldbFormattersTest::testQDate()
+{
+    TestLaunchConfiguration cfg("lldb_qdate");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qdate.cpp")), 5);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    QList<QPair<QString, QString>> children;
+    children.append({"jd", "2455217"});
+    children.append({"(ISO)", "\"2010-01-20\""});
+    children.append({"(Locale)", "\".+\""}); // (Locale) and summary are locale dependent
+    if (!verifyVariable(0, "d", ".+", children,
+                        __FILE__, __LINE__, true, true, false)) {
+        return;
+    }
+}
+
+void LldbFormattersTest::testQTime()
+{
+    TestLaunchConfiguration cfg("lldb_qtime");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qtime.cpp")), 5);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    QList<QPair<QString, QString>> children;
+    children.append({"mds", "55810123"});
+    children.append({"(ISO)", "\"15:30:10.000123\""});
+    children.append({"(Locale)", "\".+\""}); // (Locale) and summary are locale dependent
+    if (!verifyVariable(0, "t", ".+", children,
+                        __FILE__, __LINE__, true, true, false)) {
+        return;
+    }
+}
+
+void LldbFormattersTest::testQDateTime()
+{
+    TestLaunchConfiguration cfg("lldb_qdatetime");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qdatetime.cpp")), 5);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    QList<QPair<QString, QString>> children;
+    children.append({"toTime_t", "1264019473"});
+    children.append({"(ISO)", "\"2010-01-20 20:31:13\""});
+    children.append({"(Locale)", "\".+\""}); // (Locale), (UTC) and summary are locale dependent
+    children.append({"(UTC)", "\".+\""});
+    if (!verifyVariable(0, "dt", ".+", children,
+                        __FILE__, __LINE__, true, true, false)) {
+        return;
+    }
+}
+
+void LldbFormattersTest::testQUrl()
+{
+    TestLaunchConfiguration cfg("lldb_qurl");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qurl.cpp")), 4);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    QList<QPair<QString, QString>> children;
+    children.append({"(port)", "-1"});
+    children.append({"(scheme)", "\"http\""});
+    children.append({"(userName)", "<Invalid>"});
+    children.append({"(password)", "<Invalid>"});
+    children.append({"(host)", "\"www.kdevelop.org\""});
+    children.append({"(path)", "\"/foo\""});
+    children.append({"(query)", "<Invalid>"});
+    children.append({"(fragment)", "<Invalid>"});
+    VERIFY_LOCAL(0, "u", "\"http://www.kdevelop.org/foo\"", children);
 }
 
 void LldbFormattersTest::testQUuid()
 {
-    LldbProcess lldb("quuid");
-    lldb.execute("break quuid.cpp:4");
-    lldb.execute("run");
-    QByteArray data = lldb.execute("print id");
-    QVERIFY(data.contains("{9ec3b70b-d105-42bf-b3b4-656e44d2e223}"));
+    TestLaunchConfiguration cfg("lldb_quuid");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("quuid.cpp")), 4);
+
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    variableCollection()->expanded(localVariableIndexAt(0));
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    VERIFY_LOCAL(0, "id", "QUuid({9ec3b70b-d105-42bf-b3b4-656e44d2e223})", (QStringList{}));
 }
 
 void LldbFormattersTest::testKTextEditorTypes()
 {
-    LldbProcess lldb("ktexteditortypes");
-    lldb.execute("break ktexteditortypes.cpp:9");
-    lldb.execute("run");
+    TestLaunchConfiguration cfg("lldb_ktexteditortypes");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("ktexteditortypes.cpp")), 8);
 
-    QByteArray data = lldb.execute("print cursor");
-    QCOMPARE(data, QByteArray("$1 = [1, 1]"));
-    data = lldb.execute("print range");
-    QCOMPARE(data, QByteArray("$2 = [(1, 1) -> (2, 2)]"));
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
+    variableCollection()->expanded(watchRoot);
+    variableCollection()->variableWidgetShown();
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    variableCollection()->watches()->add("cursor");
+    variableCollection()->watches()->add("range");
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    QList<QPair<QString, QString>> cursorChildren;
+    cursorChildren.append({"m_line", "1"});
+    cursorChildren.append({"m_column", "1"});
+
+    QList<QPair<QString, QString>> rangeChildren;
+    rangeChildren.append({"m_start", "(1, 1)"});
+    rangeChildren.append({"m_end", "(2, 2)"});
+
+    VERIFY_WATCH(0, "cursor", "(1, 1)", cursorChildren);
+    VERIFY_WATCH(1, "range", "[(1, 1) -> (2, 2)]", rangeChildren);
 }
 
 void LldbFormattersTest::testKDevelopTypes()
 {
-    LldbProcess lldb("kdeveloptypes");
-    lldb.execute("break kdeveloptypes.cpp:12");
-    lldb.execute("run");
+    TestLaunchConfiguration cfg("lldb_kdeveloptypes");
+    addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("kdeveloptypes.cpp")), 11);
 
-    QVERIFY(lldb.execute("print path1").contains("(\"tmp\", \"foo\")"));
-    QVERIFY(lldb.execute("print path2").contains("(\"http://www.test.com\", \"tmp\", \"asdf.txt\")"));
+    QVERIFY(m_session->startDebugging(&cfg, m_iface));
+    WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+
+    // Should be two rows ('auto', 'local')
+    QCOMPARE(variableCollection()->rowCount(), 2);
+
+    auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
+    variableCollection()->expanded(watchRoot);
+    variableCollection()->variableWidgetShown();
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    variableCollection()->watches()->add("path1");
+    variableCollection()->watches()->add("path2");
+    WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
+
+    QList<QPair<QString, QString>> path1Children;
+    path1Children.append({"m_data", "<size=2>"});
+
+    QList<QPair<QString, QString>> path2Children;
+    path2Children.append({"m_data", "<size=3>"});
+
+    VERIFY_WATCH(0, "path1", "(\"tmp\", \"foo\")", path1Children);
+    VERIFY_WATCH(1, "path2", "(\"http://www.test.com\", \"tmp\", \"asdf.txt\")", path2Children);
 }
-*/
 
 QTEST_MAIN(LldbFormattersTest)
 

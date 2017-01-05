@@ -49,19 +49,18 @@ void LldbVariable::refetch()
         return;
     }
 
-
     // update the value itself
     QPointer<LldbVariable> guarded_this(this);
     debugSession->addCommand(VarEvaluateExpression, varobj_, [guarded_this](const ResultRecord &r){
         if (guarded_this && r.reason == "done" && r.hasField("value")) {
-            guarded_this->setValue(r["value"].literal());
+            guarded_this->setValue(guarded_this->formatValue(r["value"].literal()));
         }
     });
 
     // update children
     // remove all children first, this will cause some gliches in the UI, but there's no good way
     // that we can know if there's anything changed
-    if (isExpanded()) {
+    if (isExpanded() || !childCount()) {
         deleteChildren();
         fetchMoreChildren();
     }
@@ -114,6 +113,9 @@ QString LldbVariable::formatValue(const QString& value) const
         return Utils::quote(Utils::unquote(value, true));
     } else if (value.startsWith('\'')) {
         return Utils::quote(Utils::unquote(value, true, '\''), '\'');
+    } else if (value.startsWith('b')) {
+        // this is a byte array, don't translate unicode, simply return without 'b' prefix
+        return value.mid(1);
     }
     return value;
 }
