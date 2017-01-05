@@ -38,7 +38,7 @@
 using namespace KDevelop;
 
 OverlayWidget::OverlayWidget( QWidget* alignWidget, QWidget* parent, const char* name )
-    : QWidget( parent, Qt::Window | Qt::FramelessWindowHint ), mAlignWidget( nullptr )
+    : QWidget( parent, Qt::Window | Qt::FramelessWindowHint | Qt::ToolTip ), mAlignWidget( nullptr )
 {
     auto hboxHBoxLayout = new QHBoxLayout(this);
     hboxHBoxLayout->setMargin(0);

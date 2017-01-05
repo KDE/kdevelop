@@ -29,6 +29,8 @@ using namespace KDevelop;
 
 void TestTemplatesModel::initTestCase()
 {
+    // avoid translated desktop entries, tests use untranslated strings
+    QLocale::setDefault(QLocale::c());
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 
