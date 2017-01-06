@@ -81,10 +81,10 @@ ASLocalizer::ASLocalizer()
     // Set the locale information.
     // set language default values to english (ascii)
     // this will be used if a locale or a language cannot be found
-    : m_localeName("UNKNOWN")
+    : m_translation(nullptr)
     , m_langID("en")
+    , m_localeName("UNKNOWN")
     , m_lcid(0)
-    , m_translation(nullptr)
 {
 	m_subLangID.clear();
 

@@ -382,8 +382,8 @@ bool FileReader::fetch(const QString &fileName, QIODevice::OpenMode mode, QWidge
 
 
 FileSaverBase::FileSaverBase()
-    : m_hasError(false)
-    , m_file(nullptr)
+    : m_file(nullptr)
+    , m_hasError(false)
 {
 }
 
