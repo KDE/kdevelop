@@ -118,7 +118,7 @@ QModelIndex ExpandingWidgetModel::mapFromSource(const QModelIndex& index) const
 {
     const auto proxyModel = qobject_cast<QAbstractProxyModel*>(treeView()->model());
     Q_ASSERT(proxyModel);
-    Q_ASSERT(index.model() == this);
+    Q_ASSERT(!index.isValid() || index.model() == this);
     return proxyModel->mapFromSource(index);
 }
 
@@ -126,7 +126,7 @@ QModelIndex ExpandingWidgetModel::mapToSource(const QModelIndex& index) const
 {
     const auto proxyModel = qobject_cast<QAbstractProxyModel*>(treeView()->model());
     Q_ASSERT(proxyModel);
-    Q_ASSERT(index.model() == proxyModel);
+    Q_ASSERT(!index.isValid() || index.model() == proxyModel);
     return proxyModel->mapToSource(index);
 }
 
