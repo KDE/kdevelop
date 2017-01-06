@@ -63,9 +63,9 @@ private Q_SLOTS:
     void slotCompleted(int);
     
 private:
-    KDevelop::IProject* m_project;
-    KDevelop::CommandExecutor* m_cmd;
-    bool m_killed;
+    KDevelop::IProject* m_project = nullptr;
+    KDevelop::CommandExecutor* m_cmd = nullptr;
+    bool m_killed = false;
 };
 
 #endif // QMAKEJOB_H
