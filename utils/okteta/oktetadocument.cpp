@@ -192,6 +192,8 @@ void OktetaDocument::setTextSelection( const KTextEditor::Range& ) {}
 
 void OktetaDocument::activate( Sublime::View* view, KParts::MainWindow* mainWindow )
 {
+    Q_UNUSED(view);
+    Q_UNUSED(mainWindow);
     notifyActivated();
 }
 
@@ -202,6 +204,8 @@ void OktetaDocument::setPlugin( OktetaPlugin* plugin )
 
 Sublime::View* OktetaDocument::newView( Sublime::Document* document )
 {
+    Q_UNUSED(document);
+
     if( mByteArrayDocument == nullptr )
     {
         Kasten::ByteArrayRawFileSynchronizerFactory* synchronizerFactory =
