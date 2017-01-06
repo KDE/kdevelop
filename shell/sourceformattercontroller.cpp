@@ -581,10 +581,10 @@ void SourceFormatterController::formatFiles(QList<QUrl> &list)
         qCDebug(SHELL) << "Processing file " << list[fileCount] << endl;
         KIO::StoredTransferJob *job = KIO::storedGet(list[fileCount]);
         if (job->exec()) {
-            QByteArray data = job->data();
-            QString output = formatter->formatSource(data, list[fileCount], mime);
-            data += addModelineForCurrentLang(output, list[fileCount], mime).toUtf8();
-            job = KIO::storedPut(data, list[fileCount], -1);
+            QString text = QString::fromLocal8Bit(job->data());
+            text = formatter->formatSource(text, list[fileCount], mime);
+            text = addModelineForCurrentLang(text, list[fileCount], mime).toUtf8();
+            job = KIO::storedPut(text.toLocal8Bit(), list[fileCount], -1, KIO::Overwrite);
             if (!job->exec())
                 KMessageBox::error(0, job->errorString());
         } else
