@@ -25,7 +25,8 @@
 #include <QTextDocument>
 
 //A tree that allows drawing additional information
-class ExpandingTree : public QTreeView {
+class ExpandingTree : public QTreeView
+{
    Q_OBJECT
  public:
     explicit ExpandingTree(QWidget* parent);
@@ -33,6 +34,8 @@ class ExpandingTree : public QTreeView {
     enum CustomRoles {
         ProjectPathRole = Qt::UserRole + 5000
     };
+
+    void setModel(QAbstractItemModel* model) override;
 
   protected:
     void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;

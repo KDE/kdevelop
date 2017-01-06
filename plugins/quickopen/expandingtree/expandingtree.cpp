@@ -37,6 +37,14 @@ ExpandingTree::ExpandingTree(QWidget* parent) : QTreeView(parent) {
   setUniformRowHeights(false);
 }
 
+void ExpandingTree::setModel(QAbstractItemModel* model)
+{
+  Q_ASSERT(!model || qobject_cast<const ExpandingWidgetModel*>(
+    qobject_cast<const QAbstractProxyModel*>(model)->sourceModel())
+  );
+  QTreeView::setModel(model);
+}
+
 void ExpandingTree::drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
   QTreeView::drawRow( painter, option, index );
 
