@@ -567,7 +567,7 @@ QStringList allBuildDirs(KDevelop::IProject* project)
 QString executeProcess(const QString& execName, const QStringList& args)
 {
     Q_ASSERT(!execName.isEmpty());
-    qCDebug(CMAKE) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+    qCDebug(CMAKE) << "Executing:" << execName << "::" << args;
 
     QProcess p;
     QTemporaryDir tmp("kdevcmakemanager");

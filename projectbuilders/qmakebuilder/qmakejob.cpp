@@ -39,7 +39,6 @@ using namespace KDevelop;
 
 QMakeJob::QMakeJob(QObject* parent)
     : OutputExecuteJob(parent)
-    , m_killed(false)
 {
     setCapabilities(Killable);
     setFilteringStrategy(OutputModel::CompilerFilter);
