@@ -30,82 +30,83 @@
 #include <QTimer>
 #include <QPushButton>
 
-class CustomScriptPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
+class CustomScriptPlugin
+    : public KDevelop::IPlugin
+    , public KDevelop::ISourceFormatter
 {
-		Q_OBJECT
-		Q_INTERFACES(KDevelop::ISourceFormatter)
-
-	public:
-		explicit CustomScriptPlugin(QObject *parent, const QVariantList & = QVariantList());
-		~CustomScriptPlugin() override;
-
-		QString name() override;
-		QString caption()  override;
-		QString description() override;
-
-		/** Formats using the current style.
-		*/
-		QString formatSource(const QString &text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
-
-		QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
-											  const QUrl &url,
-											  const QMimeType& mime,
-											  const QString& leftContext = QString(),
-											  const QString& rightContext = QString()) override;
-		
-		/** \return A map of predefined styles (a key and a caption for each type)
-		*/
-		QList<KDevelop::SourceFormatterStyle> predefinedStyles() override;
-
-		/** \return The widget to edit a style.
-		*/
-		KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) override;
-
-		/** \return The text used in the config dialog to preview the current style.
-		*/
-		QString previewText(const KDevelop::SourceFormatterStyle& style, const QMimeType& mime) override;
-
-		/** \return The indentation of the currently selected style.
-		*/
-		Indentation indentation(const QUrl &url) override;
-
-	private:
-		QStringList computeIndentationFromSample(const QUrl &url);
-		
-		QStringList m_options;
-		KDevelop::SourceFormatterStyle m_currentStyle;
-		KDevelop::SourceFormatterStyle predefinedStyle(const QString& name);
-};
-
-class CustomScriptPreferences : public KDevelop::SettingsWidget {
-Q_OBJECT
+    Q_OBJECT
+    Q_INTERFACES(KDevelop::ISourceFormatter)
 public:
-	CustomScriptPreferences() ;
-		
-    void load ( const KDevelop::SourceFormatterStyle& style ) override ;
-    
-    QString save() override ;
+    explicit CustomScriptPlugin(QObject* parent, const QVariantList& = QVariantList());
+    ~CustomScriptPlugin() override;
+
+    QString name() override;
+    QString caption()  override;
+    QString description() override;
+
+    /** Formats using the current style.
+     */
+    QString formatSource(const QString& text, const QUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
+
+    QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
+                                  const QUrl& url,
+                                  const QMimeType& mime,
+                                  const QString& leftContext = QString(),
+                                  const QString& rightContext = QString()) override;
+
+    /** \return A map of predefined styles (a key and a caption for each type)
+     */
+    QList<KDevelop::SourceFormatterStyle> predefinedStyles() override;
+
+    /** \return The widget to edit a style.
+     */
+    KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) override;
+
+    /** \return The text used in the config dialog to preview the current style.
+     */
+    QString previewText(const KDevelop::SourceFormatterStyle& style, const QMimeType& mime) override;
+
+    /** \return The indentation of the currently selected style.
+     */
+    Indentation indentation(const QUrl& url) override;
 private:
-	QVBoxLayout* m_vLayout;
-	QLabel* m_captionLabel;
-	QHBoxLayout* m_hLayout;
-	QLabel* m_commandLabel;
-	QLineEdit* m_commandEdit;
-	QLabel* m_bottomLabel;
-	QTimer* m_updateTimer;
-	QPushButton* m_moreVariablesButton;
-	KDevelop::SourceFormatterStyle m_style;
-	
-private slots:
-	void textEdited ( QString ) {
-		m_updateTimer->start(1000);
-	}
-	
-	void updateTimeout();
-    void moreVariablesClicked ( bool );
+    QStringList computeIndentationFromSample(const QUrl& url);
+
+    QStringList m_options;
+    KDevelop::SourceFormatterStyle m_currentStyle;
+    KDevelop::SourceFormatterStyle predefinedStyle(const QString& name);
 };
 
+class CustomScriptPreferences
+    : public KDevelop::SettingsWidget
+{
+    Q_OBJECT
+public:
+    CustomScriptPreferences();
+
+    void load (const KDevelop::SourceFormatterStyle& style) override;
+
+    QString save() override;
+private:
+    QVBoxLayout* m_vLayout;
+    QLabel* m_captionLabel;
+    QHBoxLayout* m_hLayout;
+    QLabel* m_commandLabel;
+    QLineEdit* m_commandEdit;
+    QLabel* m_bottomLabel;
+    QTimer* m_updateTimer;
+    QPushButton* m_moreVariablesButton;
+    KDevelop::SourceFormatterStyle m_style;
+private slots:
+    void textEdited(QString)
+    {
+        m_updateTimer->start(1000);
+    }
+
+    void updateTimeout();
+    void moreVariablesClicked (bool);
+};
 
 #endif // CUSTOMSCRIPTPLUGIN_H
 
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 
+// kate: indent-mode cstyle; space-indent off; tab-width 4;
