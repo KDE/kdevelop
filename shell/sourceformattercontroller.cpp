@@ -432,6 +432,11 @@ void SourceFormatterController::beautifyLine()
 
 void SourceFormatterController::formatDocument(KDevelop::IDocument* doc, ISourceFormatter* formatter, const QMimeType& mime)
 {
+    Q_ASSERT(doc);
+    Q_ASSERT(formatter);
+
+    qCDebug(SHELL) << "Running" << formatter->name() << "on" << doc->url();
+
     // We don't use KTextEditor::Document directly, because CodeRepresentation transparently works
     // around a possible tab-replacement incompatibility between kate and kdevelop
     CodeRepresentation::Ptr code = KDevelop::createCodeRepresentation( IndexedString( doc->url() ) );
