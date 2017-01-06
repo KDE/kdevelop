@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "projectitemquickopen.h"
 
@@ -38,213 +38,213 @@
 
 using namespace KDevelop;
 
-DUChainItemData::DUChainItemData( const DUChainItem& file, bool openDefinition )
-: m_item(file)
-, m_openDefinition(openDefinition)
+DUChainItemData::DUChainItemData(const DUChainItem& file, bool openDefinition)
+    : m_item(file)
+    , m_openDefinition(openDefinition)
 {
 }
 
 QString DUChainItemData::text() const
 {
-  DUChainReadLocker lock;;
-  Declaration* decl = m_item.m_item.data();
-  if(!decl)
-    return i18n("Not available any more: %1", m_item.m_text);
-
-  if(FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl)) {
-    if(def->declaration()) {
-      decl = def->declaration();
+    DUChainReadLocker lock;;
+    Declaration* decl = m_item.m_item.data();
+    if (!decl) {
+        return i18n("Not available any more: %1", m_item.m_text);
     }
-  }
 
-  QString text = decl->qualifiedIdentifier().toString();
-
-  if(!decl->abstractType()) {
-    //With simplified representation, still mark functions as such by adding parens
-    if(dynamic_cast<AbstractFunctionDeclaration*>(decl)) {
-      text += QLatin1String("(...)");
+    if (FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl)) {
+        if (def->declaration()) {
+            decl = def->declaration();
+        }
     }
-  }else if(TypePtr<FunctionType> function = decl->type<FunctionType>()) {
-    text += function->partToString( FunctionType::SignatureArguments );
-  }
 
-  return text;
+    QString text = decl->qualifiedIdentifier().toString();
+
+    if (!decl->abstractType()) {
+        //With simplified representation, still mark functions as such by adding parens
+        if (dynamic_cast<AbstractFunctionDeclaration*>(decl)) {
+            text += QLatin1String("(...)");
+        }
+    } else if (TypePtr<FunctionType> function = decl->type<FunctionType>()) {
+        text += function->partToString(FunctionType::SignatureArguments);
+    }
+
+    return text;
 }
 
 QList<QVariant> DUChainItemData::highlighting() const
 {
-  DUChainReadLocker lock;;
+    DUChainReadLocker lock;;
 
-  Declaration* decl = m_item.m_item.data();
-  if(!decl) {
-    return QList<QVariant>();
-  }
-
-  if(FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl)) {
-    if(def->declaration()) {
-      decl = def->declaration();
+    Declaration* decl = m_item.m_item.data();
+    if (!decl) {
+        return QList<QVariant>();
     }
-  }
 
-  QTextCharFormat boldFormat;
-  boldFormat.setFontWeight(QFont::Bold);
-  QTextCharFormat normalFormat;
+    if (FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl)) {
+        if (def->declaration()) {
+            decl = def->declaration();
+        }
+    }
 
-  int prefixLength = 0;
+    QTextCharFormat boldFormat;
+    boldFormat.setFontWeight(QFont::Bold);
+    QTextCharFormat normalFormat;
 
-  QString signature;
-  TypePtr<FunctionType> function = decl->type<FunctionType>();
-  if(function) {
-    signature = function->partToString( FunctionType::SignatureArguments );
-  }
+    int prefixLength = 0;
 
-  //Only highlight the last part of the qualified identifier, so the scope doesn't distract too much
-  QualifiedIdentifier id = decl->qualifiedIdentifier();
-  QString fullId = id.toString();
-  QString lastId;
-  if(!id.isEmpty()) {
-    lastId = id.last().toString();
-  }
+    QString signature;
+    TypePtr<FunctionType> function = decl->type<FunctionType>();
+    if (function) {
+        signature = function->partToString(FunctionType::SignatureArguments);
+    }
 
-  prefixLength += fullId.length() - lastId.length();
+    //Only highlight the last part of the qualified identifier, so the scope doesn't distract too much
+    QualifiedIdentifier id = decl->qualifiedIdentifier();
+    QString fullId = id.toString();
+    QString lastId;
+    if (!id.isEmpty()) {
+        lastId = id.last().toString();
+    }
 
-  QList<QVariant> ret;
-  ret << 0;
-  ret << prefixLength;
-  ret << QVariant(normalFormat);
-  ret << prefixLength;
-  ret << lastId.length();
-  ret << QVariant(boldFormat);
-  if(!signature.isEmpty()) {
-    ret << prefixLength + lastId.length();
-    ret << signature.length();
+    prefixLength += fullId.length() - lastId.length();
+
+    QList<QVariant> ret;
+    ret << 0;
+    ret << prefixLength;
     ret << QVariant(normalFormat);
-  }
+    ret << prefixLength;
+    ret << lastId.length();
+    ret << QVariant(boldFormat);
+    if (!signature.isEmpty()) {
+        ret << prefixLength + lastId.length();
+        ret << signature.length();
+        ret << QVariant(normalFormat);
+    }
 
-  return ret;
-
+    return ret;
 }
 
 QString DUChainItemData::htmlDescription() const
 {
-  if(m_item.m_noHtmlDestription) {
-    return QString();
-  }
+    if (m_item.m_noHtmlDestription) {
+        return QString();
+    }
 
-  DUChainReadLocker lock;;
-  Declaration* decl = m_item.m_item.data();
-  if(!decl) {
-    return i18n("Not available any more");
-  }
+    DUChainReadLocker lock;;
+    Declaration* decl = m_item.m_item.data();
+    if (!decl) {
+        return i18n("Not available any more");
+    }
 
-  TypePtr<FunctionType> function = decl->type<FunctionType>();
+    TypePtr<FunctionType> function = decl->type<FunctionType>();
 
-  QString text;
+    QString text;
 
-  if( function && function->returnType() ) {
-    text = i18nc("%1: function signature", "Return: %1",
-                  function->partToString(FunctionType::SignatureReturn)) + QLatin1String(" ");
-  }
+    if (function && function->returnType()) {
+        text = i18nc("%1: function signature", "Return: %1",
+                     function->partToString(FunctionType::SignatureReturn)) + QLatin1String(" ");
+    }
 
-  text += i18nc("%1: file path", "File: %1", ICore::self()->projectController()->prettyFileName(decl->url().toUrl()));
+    text += i18nc("%1: file path", "File: %1", ICore::self()->projectController()->prettyFileName(decl->url().toUrl()));
 
-  QString ret = "<small><small>" + text + "</small></small>";
+    QString ret = "<small><small>" + text + "</small></small>";
 
-  return ret;
+    return ret;
 }
 
-bool DUChainItemData::execute( QString& /*filterText*/ )
+bool DUChainItemData::execute(QString& /*filterText*/)
 {
-  DUChainReadLocker lock;;
-  Declaration* decl = m_item.m_item.data();
-  if(!decl) {
-    return false;
-  }
-
-  if(m_openDefinition && FunctionDefinition::definition(decl)) {
-    decl = FunctionDefinition::definition(decl);
-  }
-
-  QUrl url = decl->url().toUrl();
-  KTextEditor::Cursor cursor = decl->rangeInCurrentRevision().start();
-
-  DUContext* internal = decl->internalContext();
-
-  if(internal && (internal->type() == DUContext::Other || internal->type() == DUContext::Class)) {
-    //Move into the body
-    if(internal->range().end.line > internal->range().start.line) {
-      cursor = KTextEditor::Cursor(internal->range().start.line+1, 0); //Move into the body
+    DUChainReadLocker lock;;
+    Declaration* decl = m_item.m_item.data();
+    if (!decl) {
+        return false;
     }
-  }
 
-  lock.unlock();
-  ICore::self()->documentController()->openDocument( url, cursor );
-  return true;
+    if (m_openDefinition && FunctionDefinition::definition(decl)) {
+        decl = FunctionDefinition::definition(decl);
+    }
+
+    QUrl url = decl->url().toUrl();
+    KTextEditor::Cursor cursor = decl->rangeInCurrentRevision().start();
+
+    DUContext* internal = decl->internalContext();
+
+    if (internal && (internal->type() == DUContext::Other || internal->type() == DUContext::Class)) {
+        //Move into the body
+        if (internal->range().end.line > internal->range().start.line) {
+            cursor = KTextEditor::Cursor(internal->range().start.line + 1, 0); //Move into the body
+        }
+    }
+
+    lock.unlock();
+    ICore::self()->documentController()->openDocument(url, cursor);
+    return true;
 }
 
 bool DUChainItemData::isExpandable() const
 {
-  return true;
+    return true;
 }
 
 QWidget* DUChainItemData::expandingWidget() const
 {
-  DUChainReadLocker lock;;
+    DUChainReadLocker lock;;
 
-  Declaration* decl = dynamic_cast<KDevelop::Declaration*>(m_item.m_item.data());
-  if( !decl || !decl->context() ) {
-    return nullptr;
-  }
+    Declaration* decl = dynamic_cast<KDevelop::Declaration*>(m_item.m_item.data());
+    if (!decl || !decl->context()) {
+        return nullptr;
+    }
 
-  return decl->context()->createNavigationWidget( decl, decl->topContext(),
-            QString(), QString(), AbstractNavigationWidget::EmbeddableWidget);
+    return decl->context()->createNavigationWidget(decl, decl->topContext(),
+                                                   QString(), QString(), AbstractNavigationWidget::EmbeddableWidget);
 }
 
 QIcon DUChainItemData::icon() const
 {
-  return QIcon();
+    return QIcon();
 }
 
 Path DUChainItemData::projectPath() const
 {
-  return m_item.m_projectPath;
+    return m_item.m_projectPath;
 }
 
-DUChainItemDataProvider::DUChainItemDataProvider( IQuickOpen* quickopen, bool openDefinitions )
-: m_quickopen(quickopen)
-, m_openDefinitions(openDefinitions)
+DUChainItemDataProvider::DUChainItemDataProvider(IQuickOpen* quickopen, bool openDefinitions)
+    : m_quickopen(quickopen)
+    , m_openDefinitions(openDefinitions)
 {
-  reset();
+    reset();
 }
 
-void DUChainItemDataProvider::setFilterText( const QString& text )
+void DUChainItemDataProvider::setFilterText(const QString& text)
 {
-  Base::setFilter( text );
+    Base::setFilter(text);
 }
 
 uint DUChainItemDataProvider::itemCount() const
 {
-  return Base::filteredItems().count();
+    return Base::filteredItems().count();
 }
 
 uint DUChainItemDataProvider::unfilteredItemCount() const
 {
-  return Base::items().count();
+    return Base::items().count();
 }
 
-QuickOpenDataPointer DUChainItemDataProvider::data( uint row ) const
+QuickOpenDataPointer DUChainItemDataProvider::data(uint row) const
 {
-  return KDevelop::QuickOpenDataPointer( createData( Base::filteredItems()[row] ) );
+    return KDevelop::QuickOpenDataPointer(createData(Base::filteredItems()[row]));
 }
 
-DUChainItemData* DUChainItemDataProvider::createData( const DUChainItem& item ) const
+DUChainItemData* DUChainItemDataProvider::createData(const DUChainItem& item) const
 {
-  return new DUChainItemData( item, m_openDefinitions );
+    return new DUChainItemData(item, m_openDefinitions);
 }
 
-QString DUChainItemDataProvider::itemText( const DUChainItem& data ) const
+QString DUChainItemDataProvider::itemText(const DUChainItem& data) const
 {
-  return data.m_text;
+    return data.m_text;
 }
 
 void DUChainItemDataProvider::reset()

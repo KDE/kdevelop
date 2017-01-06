@@ -25,7 +25,8 @@
 #include <language/interfaces/quickopendataprovider.h>
 #include <QVector>
 
-class ActionsQuickOpenProvider : public KDevelop::QuickOpenDataProviderBase
+class ActionsQuickOpenProvider
+    : public KDevelop::QuickOpenDataProviderBase
 {
     Q_OBJECT
 public:
@@ -36,7 +37,6 @@ public:
     uint itemCount() const override;
     void reset() override;
     void setFilterText(const QString& text) override;
-
 private:
     QVector<KDevelop::QuickOpenDataPointer> m_results;
 };

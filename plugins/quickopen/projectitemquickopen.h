@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 #ifndef PROJECT_ITEM_QUICKOPEN
 #define PROJECT_ITEM_QUICKOPEN
 
@@ -29,8 +29,8 @@ struct CodeModelViewItem
     {
     }
     CodeModelViewItem(const KDevelop::IndexedString& file, const KDevelop::QualifiedIdentifier& id)
-    : m_file(file)
-    , m_id(id)
+        : m_file(file)
+        , m_id(id)
     {
     }
     KDevelop::IndexedString m_file;
@@ -41,45 +41,45 @@ Q_DECLARE_TYPEINFO(CodeModelViewItem, Q_MOVABLE_TYPE);
 
 typedef QMap<uint, QList<KDevelop::QuickOpenDataPointer> > AddedItems;
 
-class ProjectItemDataProvider : public KDevelop::QuickOpenDataProviderBase
+class ProjectItemDataProvider
+    : public KDevelop::QuickOpenDataProviderBase
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  enum ItemTypes {
-    NoItems = 0,
-    Classes = 1,
-    Functions = 2,
-    AllItemTypes = Classes + Functions
-  };
+    enum ItemTypes {
+        NoItems = 0,
+        Classes = 1,
+        Functions = 2,
+        AllItemTypes = Classes + Functions
+    };
 
-  explicit ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen );
+    explicit ProjectItemDataProvider(KDevelop::IQuickOpen* quickopen);
 
-  void enableData( const QStringList& items, const QStringList& scopes ) override;
+    void enableData(const QStringList& items, const QStringList& scopes) override;
 
-  void setFilterText( const QString& text ) override;
+    void setFilterText(const QString& text) override;
 
-  virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
+    virtual QList<KDevelop::QuickOpenDataPointer> data(uint start, uint end) const;
 
-  void reset() override;
+    void reset() override;
 
-  uint itemCount() const override;
-  uint unfilteredItemCount() const override;
+    uint itemCount() const override;
+    uint unfilteredItemCount() const override;
 
-  static QStringList supportedItemTypes();
-
+    static QStringList supportedItemTypes();
 private:
-  KDevelop::QuickOpenDataPointer data( uint pos ) const override;
+    KDevelop::QuickOpenDataPointer data(uint pos) const override;
 
-  ItemTypes m_itemTypes;
-  KDevelop::IQuickOpen* m_quickopen;
-  QSet<KDevelop::IndexedString> m_files;
-  QVector<CodeModelViewItem> m_currentItems;
-  QString m_currentFilter;
-  QVector<CodeModelViewItem> m_filteredItems;
-  //Maps positions to the additional items behind those positions
-  //Here additional inserted items are stored, that are not represented in m_filteredItems.
-  //This is needed at least to also show overloaded function declarations
-  mutable AddedItems m_addedItems;
+    ItemTypes m_itemTypes;
+    KDevelop::IQuickOpen* m_quickopen;
+    QSet<KDevelop::IndexedString> m_files;
+    QVector<CodeModelViewItem> m_currentItems;
+    QString m_currentFilter;
+    QVector<CodeModelViewItem> m_filteredItems;
+    //Maps positions to the additional items behind those positions
+    //Here additional inserted items are stored, that are not represented in m_filteredItems.
+    //This is needed at least to also show overloaded function declarations
+    mutable AddedItems m_addedItems;
 };
 
 #endif

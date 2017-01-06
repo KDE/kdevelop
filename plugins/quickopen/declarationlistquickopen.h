@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_PLUGIN_DECLARATION_LIST_QUICKOPEN_H
 #define KDEVPLATFORM_PLUGIN_DECLARATION_LIST_QUICKOPEN_H
@@ -22,23 +22,22 @@
 #include "duchainitemquickopen.h"
 
 namespace KDevelop {
-  class IQuickOpen;
+class IQuickOpen;
 }
 
-class DeclarationListDataProvider : public DUChainItemDataProvider
+class DeclarationListDataProvider
+    : public DUChainItemDataProvider
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  DeclarationListDataProvider( KDevelop::IQuickOpen* quickopen,
-                               const QList<DUChainItem>& items,
-                               bool openDefinitions = false );
+    DeclarationListDataProvider(KDevelop::IQuickOpen* quickopen,
+                                const QList<DUChainItem>& items,
+                                bool openDefinitions = false);
 
-  void reset() override;
-
+    void reset() override;
 private:
-  QList<DUChainItem> m_items;
+    QList<DUChainItem> m_items;
 };
-
 
 #endif
 

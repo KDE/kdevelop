@@ -25,10 +25,11 @@
 #include <QTextDocument>
 
 //A tree that allows drawing additional information
-class ExpandingTree : public QTreeView
+class ExpandingTree
+    : public QTreeView
 {
-   Q_OBJECT
- public:
+    Q_OBJECT
+public:
     explicit ExpandingTree(QWidget* parent);
 
     enum CustomRoles {
@@ -36,13 +37,12 @@ class ExpandingTree : public QTreeView
     };
 
     void setModel(QAbstractItemModel* model) override;
-
-  protected:
-    void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
-    int sizeHintForColumn ( int column ) const override;
+protected:
+    void drawRow (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+    int sizeHintForColumn (int column) const override;
 
     void drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const override;
-  private:
+private:
     mutable QTextDocument m_drawText;
 };
 

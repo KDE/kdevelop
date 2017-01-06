@@ -30,9 +30,8 @@ QTEST_MAIN(TestQuickOpen);
 using namespace KDevelop;
 
 TestQuickOpen::TestQuickOpen(QObject* parent)
-: QuickOpenTestBase(Core::Default, parent)
+    : QuickOpenTestBase(Core::Default, parent)
 {
-
 }
 
 void TestQuickOpen::testDuchainFilter()
@@ -44,12 +43,13 @@ void TestQuickOpen::testDuchainFilter()
     QFETCH(ItemList, filtered);
 
     auto toStringList = [](const ItemList& items) {
-        QStringList result;
-        for ( const DUChainItem& item: items ) {
-            result << item.m_text;
-        }
-        return result;
-    };
+                            QStringList result;
+                            for (const DUChainItem& item: items) {
+                                result << item.m_text;
+                            }
+
+                            return result;
+                        };
 
     TestFilter filterItems;
     filterItems.setItems(items);
@@ -66,28 +66,28 @@ void TestQuickOpen::testDuchainFilter_data()
     QTest::addColumn<ItemList>("filtered");
 
     auto i = [](const QString& text) {
-        auto item = DUChainItem();
-        item.m_text = text;
-        return item;
-    };
+                 auto item = DUChainItem();
+                 item.m_text = text;
+                 return item;
+             };
 
     auto items = ItemList()
-        << i(QStringLiteral("KTextEditor::Cursor"))
-        << i(QStringLiteral("void KTextEditor::Cursor::explode()"))
-        << i(QStringLiteral("QVector<int> SomeNamespace::SomeClass::func(int)"));
+                 << i(QStringLiteral("KTextEditor::Cursor"))
+                 << i(QStringLiteral("void KTextEditor::Cursor::explode()"))
+                 << i(QStringLiteral("QVector<int> SomeNamespace::SomeClass::func(int)"));
 
-    QTest::newRow("prefix") << items << "KTE" << ( ItemList() << items.at(0) << items.at(1) );
-    QTest::newRow("prefix_mismatch") << items << "KTEY" << ( ItemList() );
-    QTest::newRow("prefix_colon") << items << "KTE:" << ( ItemList() << items.at(0) << items.at(1) );
-    QTest::newRow("prefix_colon_mismatch") << items << "KTE:Y" << ( ItemList() );
-    QTest::newRow("prefix_colon_mismatch2") << items << "XKTE:" << ( ItemList() );
-    QTest::newRow("prefix_two_colon") << items << "KTE::" << ( ItemList() << items.at(0) << items.at(1) );
-    QTest::newRow("prefix_two_colon_mismatch") << items << "KTE::Y" << ( ItemList() );
-    QTest::newRow("prefix_two_colon_mismatch2") << items << "XKTE::" << ( ItemList() );
-    QTest::newRow("suffix") << items << "Curs" << ( ItemList() << items.at(0) << items.at(1) );
-    QTest::newRow("suffix2") << items << "curs" << ( ItemList() << items.at(0) << items.at(1) );
-    QTest::newRow("mid") << items << "SomeClass" << ( ItemList() << items.at(2) );
-    QTest::newRow("mid_abbrev") << items << "SClass" << ( ItemList() << items.at(2) );
+    QTest::newRow("prefix") << items << "KTE" << (ItemList() << items.at(0) << items.at(1));
+    QTest::newRow("prefix_mismatch") << items << "KTEY" << (ItemList());
+    QTest::newRow("prefix_colon") << items << "KTE:" << (ItemList() << items.at(0) << items.at(1));
+    QTest::newRow("prefix_colon_mismatch") << items << "KTE:Y" << (ItemList());
+    QTest::newRow("prefix_colon_mismatch2") << items << "XKTE:" << (ItemList());
+    QTest::newRow("prefix_two_colon") << items << "KTE::" << (ItemList() << items.at(0) << items.at(1));
+    QTest::newRow("prefix_two_colon_mismatch") << items << "KTE::Y" << (ItemList());
+    QTest::newRow("prefix_two_colon_mismatch2") << items << "XKTE::" << (ItemList());
+    QTest::newRow("suffix") << items << "Curs" << (ItemList() << items.at(0) << items.at(1));
+    QTest::newRow("suffix2") << items << "curs" << (ItemList() << items.at(0) << items.at(1));
+    QTest::newRow("mid") << items << "SomeClass" << (ItemList() << items.at(2));
+    QTest::newRow("mid_abbrev") << items << "SClass" << (ItemList() << items.at(2));
 }
 
 void TestQuickOpen::testAbbreviations()
@@ -109,14 +109,14 @@ void TestQuickOpen::testAbbreviations_data()
     QTest::addColumn<QStringList>("filtered");
 
     const QStringList items = QStringList()
-        << QStringLiteral("/foo/bar/caz/a.h")
-        << QStringLiteral("/KateThing/CMakeLists.txt")
-        << QStringLiteral("/FooBar/FooBar/Footestfoo.h");
+                              << QStringLiteral("/foo/bar/caz/a.h")
+                              << QStringLiteral("/KateThing/CMakeLists.txt")
+                              << QStringLiteral("/FooBar/FooBar/Footestfoo.h");
 
-    QTest::newRow("path_segments") << items << "fbc" << ( QStringList() );
-    QTest::newRow("path_segment_abbrev") << items << "cmli" << ( QStringList() << items.at(1) );
-    QTest::newRow("path_segment_old") << items << "kate/cmake" << ( QStringList() << items.at(1) );
-    QTest::newRow("path_segment_multi_mixed") << items << "ftfoo.h" << ( QStringList() << items.at(2) );
+    QTest::newRow("path_segments") << items << "fbc" << (QStringList());
+    QTest::newRow("path_segment_abbrev") << items << "cmli" << (QStringList() << items.at(1));
+    QTest::newRow("path_segment_old") << items << "kate/cmake" << (QStringList() << items.at(1));
+    QTest::newRow("path_segment_multi_mixed") << items << "ftfoo.h" << (QStringList() << items.at(2));
 }
 
 void TestQuickOpen::testSorting()
@@ -139,10 +139,10 @@ void TestQuickOpen::testSorting_data()
     QTest::addColumn<QStringList>("filtered");
 
     const QStringList items = QStringList()
-        << QStringLiteral("/foo/a.h")
-        << QStringLiteral("/foo/ab.h")
-        << QStringLiteral("/foo/bc.h")
-        << QStringLiteral("/bar/a.h");
+                              << QStringLiteral("/foo/a.h")
+                              << QStringLiteral("/foo/ab.h")
+                              << QStringLiteral("/foo/bc.h")
+                              << QStringLiteral("/bar/a.h");
 
     {
         QTest::newRow("no-filter") << items << QString() << items;
@@ -228,7 +228,7 @@ void TestQuickOpen::testProjectFileFilter()
     projectController->addProject(project);
 
     const QStringList original = QStringList()
-        << QStringLiteral("aaaa") << QStringLiteral("asdf/bar") << QStringLiteral("foo/asdf") << QStringLiteral("foo/bar") << QStringLiteral("foo/space bar");
+                                 << QStringLiteral("aaaa") << QStringLiteral("asdf/bar") << QStringLiteral("foo/asdf") << QStringLiteral("foo/bar") << QStringLiteral("foo/space bar");
 
     // lazy load
     QCOMPARE(provider.itemCount(), 0u);

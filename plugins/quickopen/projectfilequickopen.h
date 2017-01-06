@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef PROJECT_FILE_QUICKOPEN
 #define PROJECT_FILE_QUICKOPEN
@@ -38,7 +38,7 @@ class QIcon;
 struct ProjectFile
 {
     ProjectFile()
-    : outsideOfProject(false)
+        : outsideOfProject(false)
     {}
     KDevelop::Path path;
     // project root folder url
@@ -64,15 +64,16 @@ Q_DECLARE_TYPEINFO(ProjectFile, Q_MOVABLE_TYPE);
 /**
  * The shared data class that is used by the quick open model.
  */
-class ProjectFileData : public KDevelop::QuickOpenDataBase
+class ProjectFileData
+    : public KDevelop::QuickOpenDataBase
 {
 public:
-    explicit ProjectFileData( const ProjectFile& file );
+    explicit ProjectFileData(const ProjectFile& file);
 
     QString text() const override;
     QString htmlDescription() const override;
 
-    bool execute( QString& filterText ) override;
+    bool execute(QString& filterText) override;
 
     bool isExpandable() const override;
     QWidget* expandingWidget() const override;
@@ -84,22 +85,24 @@ public:
     QString project() const;
 
     KDevelop::Path projectPath() const;
-
 private:
     ProjectFile m_file;
 };
 
-class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::PathFilter<ProjectFile, BaseFileDataProvider>, public KDevelop::QuickOpenFileSetInterface
+class BaseFileDataProvider
+    : public KDevelop::QuickOpenDataProviderBase
+    , public KDevelop::PathFilter<ProjectFile, BaseFileDataProvider>
+    , public KDevelop::QuickOpenFileSetInterface
 {
     Q_OBJECT
 public:
     BaseFileDataProvider();
-    void setFilterText( const QString& text ) override;
+    void setFilterText(const QString& text) override;
     uint itemCount() const override;
     uint unfilteredItemCount() const override;
-    KDevelop::QuickOpenDataPointer data( uint row ) const override;
+    KDevelop::QuickOpenDataPointer data(uint row) const override;
 
-    inline KDevelop::Path itemPath( const ProjectFile& data ) const
+    inline KDevelop::Path itemPath(const ProjectFile& data) const
     {
         return data.path;
     }
@@ -110,20 +113,19 @@ public:
  *
  * It provides all files from all open projects except currently opened ones.
  */
-class ProjectFileDataProvider : public BaseFileDataProvider
+class ProjectFileDataProvider
+    : public BaseFileDataProvider
 {
     Q_OBJECT
 public:
     ProjectFileDataProvider();
     void reset() override;
     QSet<KDevelop::IndexedString> files() const override;
-
 private slots:
-    void projectClosing( KDevelop::IProject* );
-    void projectOpened( KDevelop::IProject* );
-    void fileAddedToSet( KDevelop::ProjectFileItem* );
-    void fileRemovedFromSet( KDevelop::ProjectFileItem* );
-
+    void projectClosing(KDevelop::IProject*);
+    void projectOpened(KDevelop::IProject*);
+    void fileAddedToSet(KDevelop::ProjectFileItem*);
+    void fileRemovedFromSet(KDevelop::ProjectFileItem*);
 private:
     // project files sorted by their url
     // this is done so we can limit ourselves to a relatively fast
@@ -134,7 +136,8 @@ private:
 /**
  * Quick open data provider for currently opened documents.
  */
-class OpenFilesDataProvider : public BaseFileDataProvider
+class OpenFilesDataProvider
+    : public BaseFileDataProvider
 {
     Q_OBJECT
 public:

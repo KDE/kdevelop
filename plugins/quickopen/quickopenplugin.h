@@ -40,50 +40,51 @@ class QuickOpenModel;
 class QuickOpenWidget;
 class QuickOpenLineEdit;
 
-class QuickOpenPlugin : public KDevelop::IPlugin, public KDevelop::IQuickOpen
+class QuickOpenPlugin
+    : public KDevelop::IPlugin
+    , public KDevelop::IQuickOpen
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IQuickOpen )
-
+    Q_INTERFACES(KDevelop::IQuickOpen)
 public:
-    explicit QuickOpenPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    explicit QuickOpenPlugin(QObject* parent, const QVariantList& = QVariantList());
     ~QuickOpenPlugin() override;
 
     static QuickOpenPlugin* self();
-    
+
     // KDevelop::Plugin methods
     void unload() override;
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
     enum ModelTypes {
-      Files = 1,
-      Functions = 2,
-      Classes = 4,
-      OpenFiles = 8,
-      All = Files + Functions + Classes + OpenFiles
+        Files = 1,
+        Functions = 2,
+        Classes = 4,
+        OpenFiles = 8,
+        All = Files + Functions + Classes + OpenFiles
     };
 
     /**
      * Shows the quickopen dialog with the specified Model-types
      * @param modes A combination of ModelTypes
      * */
-    void showQuickOpen( ModelTypes modes = All );
-    void showQuickOpen( const QStringList &items ) override;
+    void showQuickOpen(ModelTypes modes = All);
+    void showQuickOpen(const QStringList& items) override;
 
-    void registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider ) override;
+    void registerProvider(const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider) override;
 
-    bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider ) override;
+    bool removeProvider(KDevelop::QuickOpenDataProviderBase* provider) override;
 
     QSet<KDevelop::IndexedString> fileSet() const override;
 
     //Frees the model by closing active quickopen dialoags, and retuns whether successful.
     bool freeModel();
-    
-    void createActionsForMainWindow( Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions ) override;
+
+    void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
 
     QuickOpenLineEdit* createQuickOpenLineWidget();
-    
+
     KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind) override;
 public slots:
     void quickOpen();
@@ -99,15 +100,13 @@ public slots:
 
     void previousFunction();
     void nextFunction();
-
 private slots:
-    void storeScopes( const QStringList& );
-    void storeItems( const QStringList& );
-
+    void storeScopes(const QStringList&);
+    void storeItems(const QStringList&);
 private:
     friend class QuickOpenLineEdit;
     friend class StandardQuickOpenWidgetCreator;
-    QuickOpenLineEdit* quickOpenLine(QString name = QStringLiteral("Quickopen"));
+    QuickOpenLineEdit* quickOpenLine(QString name = QStringLiteral( "Quickopen" ));
 
     enum FunctionJumpDirection { NextFunction, PreviousFunction };
     void jumpToNearestFunction(FunctionJumpDirection direction);
@@ -115,8 +114,8 @@ private:
     QPair<QUrl, KTextEditor::Cursor> specialObjectJumpPosition() const;
     QWidget* specialObjectNavigationWidget() const;
     bool jumpToSpecialObject();
-    void showQuickOpenWidget(const QStringList &items, const QStringList &scopes, bool preselectText);
-    
+    void showQuickOpenWidget(const QStringList& items, const QStringList& scopes, bool preselectText);
+
     QuickOpenModel* m_model;
     class ProjectFileDataProvider* m_projectFileData;
     class ProjectItemDataProvider* m_projectItemData;
@@ -125,7 +124,7 @@ private:
     class ActionsQuickOpenProvider* m_actionsItemData;
     QStringList lastUsedScopes;
     QStringList lastUsedItems;
-  
+
     //We can only have one widget at a time, because we manipulate the model.
     QPointer<QObject> m_currentWidgetHandler;
     QAction* m_quickOpenDeclaration;
@@ -134,29 +133,32 @@ private:
 
 class QuickOpenWidgetCreator;
 
-class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
-  Q_OBJECT
-  public:
-    explicit QuickOpenLineEdit(QuickOpenWidgetCreator* creator) ;
-    ~QuickOpenLineEdit() override ;
-    
+class QuickOpenLineEdit
+    : public KDevelop::IQuickOpenLine
+{
+    Q_OBJECT
+public:
+    explicit QuickOpenLineEdit(QuickOpenWidgetCreator* creator);
+    ~QuickOpenLineEdit() override;
+
     bool insideThis(QObject* object);
     void showWithWidget(QuickOpenWidget* widget);
-    
-    void setDefaultText(const QString& text) override {
-      m_defaultText = text;
-      setPlaceholderText(m_defaultText);
+
+    void setDefaultText(const QString& text) override
+    {
+        m_defaultText = text;
+        setPlaceholderText(m_defaultText);
     }
-  private slots:
-    void activate() ;
-    void deactivate() ;
+private slots:
+    void activate();
+    void deactivate();
     void checkFocus();
     void widgetDestroyed(QObject*);
-  private:
-    void focusInEvent(QFocusEvent* ev) override ;
-    bool eventFilter(QObject* obj, QEvent* e) override ;
-    void hideEvent(QHideEvent* ) override;
-    
+private:
+    void focusInEvent(QFocusEvent* ev) override;
+    bool eventFilter(QObject* obj, QEvent* e) override;
+    void hideEvent(QHideEvent*) override;
+
     QPointer<QuickOpenWidget> m_widget;
     bool m_forceUpdate;
     QString m_defaultText;

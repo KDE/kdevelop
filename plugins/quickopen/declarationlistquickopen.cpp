@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "declarationlistquickopen.h"
 
@@ -24,14 +24,14 @@ using namespace KDevelop;
 DeclarationListDataProvider::DeclarationListDataProvider(IQuickOpen* quickopen,
                                                          const QList<DUChainItem>& items,
                                                          bool openDefinitions)
-: DUChainItemDataProvider( quickopen, openDefinitions )
-, m_items(items)
+    : DUChainItemDataProvider(quickopen, openDefinitions)
+    , m_items(items)
 {
-  reset();
+    reset();
 }
 
 void DeclarationListDataProvider::reset()
 {
-  DUChainItemDataProvider::clearFilter();
-  setItems(m_items);
+    DUChainItemDataProvider::clearFilter();
+    setItems(m_items);
 }

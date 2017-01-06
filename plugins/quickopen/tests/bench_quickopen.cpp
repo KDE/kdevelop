@@ -31,7 +31,7 @@ QTEST_MAIN(BenchQuickOpen);
 using namespace KDevelop;
 
 BenchQuickOpen::BenchQuickOpen(QObject* parent)
-: QuickOpenTestBase(Core::NoUi, parent)
+    : QuickOpenTestBase(Core::NoUi, parent)
 {
 }
 

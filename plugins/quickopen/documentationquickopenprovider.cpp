@@ -30,13 +30,14 @@
 
 using namespace KDevelop;
 
-class DocumentationQuickOpenItem : public QuickOpenDataBase
+class DocumentationQuickOpenItem
+    : public QuickOpenDataBase
 {
 public:
     DocumentationQuickOpenItem(const QModelIndex& data, IDocumentationProvider* p)
-    : QuickOpenDataBase()
-    , m_data(data)
-    , m_provider(p)
+        : QuickOpenDataBase()
+        , m_data(data)
+        , m_provider(p)
     {}
 
     QString text() const override
@@ -50,7 +51,7 @@ public:
     bool execute(QString&) override
     {
         IDocumentation::Ptr docu = m_provider->documentationForIndex(m_data);
-        if(docu) {
+        if (docu) {
             ICore::self()->documentationController()->showDocumentation(docu);
         }
         return docu;
@@ -59,39 +60,39 @@ public:
     {
         return m_provider->icon();
     }
-
 private:
     QModelIndex m_data;
     IDocumentationProvider* m_provider;
 };
 
 namespace {
-    uint recursiveRowCount(const QAbstractItemModel* m, const QModelIndex& idx)
-    {
-        uint rows = m->rowCount(idx);
-        uint ret = rows;
+uint recursiveRowCount(const QAbstractItemModel* m, const QModelIndex& idx)
+{
+    uint rows = m->rowCount(idx);
+    uint ret = rows;
 
-        for(uint i = 0; i < rows; i++) {
-            ret += recursiveRowCount(m, m->index(i, 0, idx));
-        }
-        return ret;
+    for (uint i = 0; i < rows; i++) {
+        ret += recursiveRowCount(m, m->index(i, 0, idx));
     }
 
-    void matchingIndexes(const QAbstractItemModel* m, const QString& match, const QModelIndex& idx, QList<QModelIndex>& ret, int& preferred)
-    {
-        if(m->hasChildren(idx)) {
-            for(int i = 0, rows = m->rowCount(); i < rows; i++) {
-                matchingIndexes(m, match, m->index(i, 0, idx), ret, preferred);
-            }
-        } else {
-            int index = idx.data().toString().indexOf(match, 0, Qt::CaseInsensitive);
-            if(index == 0) {
-                ret.insert(preferred++, idx);
-            } else if(index > 0) {
-                ret.append(idx);
-            }
+    return ret;
+}
+
+void matchingIndexes(const QAbstractItemModel* m, const QString& match, const QModelIndex& idx, QList<QModelIndex>& ret, int& preferred)
+{
+    if (m->hasChildren(idx)) {
+        for (int i = 0, rows = m->rowCount(); i < rows; i++) {
+            matchingIndexes(m, match, m->index(i, 0, idx), ret, preferred);
+        }
+    } else {
+        int index = idx.data().toString().indexOf(match, 0, Qt::CaseInsensitive);
+        if (index == 0) {
+            ret.insert(preferred++, idx);
+        } else if (index > 0) {
+            ret.append(idx);
         }
     }
+}
 }
 
 DocumentationQuickOpenProvider::DocumentationQuickOpenProvider()
@@ -102,21 +103,22 @@ DocumentationQuickOpenProvider::DocumentationQuickOpenProvider()
 
 void DocumentationQuickOpenProvider::setFilterText(const QString& text)
 {
-    if(text.size() < 2) {
+    if (text.size() < 2) {
         return;
     }
     m_results.clear();
     int split = 0;
     QList<IDocumentationProvider*> providers = ICore::self()->documentationController()->documentationProviders();
-    foreach(IDocumentationProvider* p, providers) {
+    foreach (IDocumentationProvider* p, providers) {
         QList<QModelIndex> idxs;
         int internalSplit = 0;
         int i = 0;
         matchingIndexes(p->indexModel(), text, QModelIndex(), idxs, internalSplit);
-        foreach(const QModelIndex& idx, idxs) {
-            m_results.insert(split+i, QuickOpenDataPointer(new DocumentationQuickOpenItem(idx, p)));
+        foreach (const QModelIndex& idx, idxs) {
+            m_results.insert(split + i, QuickOpenDataPointer(new DocumentationQuickOpenItem(idx, p)));
             i++;
         }
+
         split += internalSplit;
     }
 }
@@ -125,9 +127,10 @@ uint DocumentationQuickOpenProvider::unfilteredItemCount() const
 {
     uint ret = 0;
     QList<IDocumentationProvider*> providers = ICore::self()->documentationController()->documentationProviders();
-    foreach(IDocumentationProvider* p, providers) {
+    foreach (IDocumentationProvider* p, providers) {
         ret += recursiveRowCount(p->indexModel(), QModelIndex());
     }
+
     return ret;
 }
 

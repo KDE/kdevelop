@@ -31,13 +31,14 @@
 
 using namespace KDevelop;
 
-class ActionsQuickOpenItem : public QuickOpenDataBase
+class ActionsQuickOpenItem
+    : public QuickOpenDataBase
 {
 public:
-    ActionsQuickOpenItem(const QString &display, QAction* action)
-    : QuickOpenDataBase()
-    , m_action(action)
-    , m_display(display)
+    ActionsQuickOpenItem(const QString& display, QAction* action)
+        : QuickOpenDataBase()
+        , m_action(action)
+        , m_display(display)
     {}
 
     QString text() const override
@@ -62,7 +63,6 @@ public:
     {
         return m_action->icon();
     }
-
 private:
     QAction* m_action;
 
@@ -84,14 +84,15 @@ void ActionsQuickOpenProvider::setFilterText(const QString& text)
     QRegularExpression mnemonicRx(QStringLiteral("^(.*)&(.+)$"));
     for (KActionCollection* c : collections) {
         QList<QAction*> actions = c->actions();
-        foreach(QAction* action, actions) {
-            if (!action->isEnabled())
+        foreach (QAction* action, actions) {
+            if (!action->isEnabled()) {
                 continue;
+            }
 
             QString display = action->text();
             QRegularExpressionMatch match = mnemonicRx.match(display);
             if (match.hasMatch()) {
-                display = match.captured(1)+match.captured(2);
+                display = match.captured(1) + match.captured(2);
             }
 
             if (display.contains(text, Qt::CaseInsensitive)) {
@@ -105,9 +106,10 @@ uint ActionsQuickOpenProvider::unfilteredItemCount() const
 {
     uint ret = 0;
     QList<KActionCollection*> collections = KActionCollection::allCollections();
-    foreach(KActionCollection* c, collections) {
+    foreach (KActionCollection* c, collections) {
         ret += c->count();
     }
+
     return ret;
 }
 

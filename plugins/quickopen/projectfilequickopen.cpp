@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "projectfilequickopen.h"
 
@@ -45,15 +45,15 @@
 using namespace KDevelop;
 
 namespace {
-
 QSet<IndexedString> openFiles()
 {
     QSet<IndexedString> openFiles;
     const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
     openFiles.reserve(docs.size());
-    foreach( IDocument* doc, docs ) {
+    foreach (IDocument* doc, docs) {
         openFiles << IndexedString(doc->url());
     }
+
     return openFiles;
 }
 
@@ -68,11 +68,10 @@ QString iconNameForUrl(const IndexedString& url)
     }
     return QStringLiteral("unknown");
 }
-
 }
 
-ProjectFileData::ProjectFileData( const ProjectFile& file )
-: m_file(file)
+ProjectFileData::ProjectFileData(const ProjectFile& file)
+    : m_file(file)
 {
 }
 
@@ -83,10 +82,10 @@ QString ProjectFileData::text() const
 
 QString ProjectFileData::htmlDescription() const
 {
-  return "<small><small>" + i18nc("%1: project name", "Project %1", project())  + "</small></small>";
+    return "<small><small>" + i18nc("%1: project name", "Project %1", project())  + "</small></small>";
 }
 
-bool ProjectFileData::execute( QString& filterText )
+bool ProjectFileData::execute(QString& filterText)
 {
     const QUrl url = m_file.path.toUrl();
     IOpenWith::openFiles(QList<QUrl>() << url);
@@ -138,24 +137,24 @@ QWidget* ProjectFileData::expandingWidget() const
 
     ///Pick a non-proxy context
     TopDUContext* chosen = nullptr;
-    foreach( TopDUContext* ctx, contexts ) {
-        if( !(ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext()) ) {
+    foreach (TopDUContext* ctx, contexts) {
+        if (!(ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext())) {
             chosen = ctx;
         }
     }
 
-    if( chosen ) {
+    if (chosen) {
         return chosen->createNavigationWidget(nullptr, nullptr,
-            "<small><small>"
-            + i18nc("%1: project name", "Project %1", project())
-            + "</small></small><br/>");
+                                              "<small><small>"
+                                              + i18nc("%1: project name", "Project %1", project())
+                                              + "</small></small><br/>");
     } else {
         QTextBrowser* ret = new QTextBrowser();
         ret->resize(400, 100);
         ret->setText(
-                "<small><small>"
-                + i18nc("%1: project name", "Project %1", project())
-                + "<br>" + i18n("Not parsed yet") + "</small></small>");
+            "<small><small>"
+            + i18nc("%1: project name", "Project %1", project())
+            + "<br>" + i18n("Not parsed yet") + "</small></small>");
         return ret;
     }
 
@@ -174,7 +173,7 @@ QIcon ProjectFileData::icon() const
      *       in a large list of quickopen items becomes very slow.
      */
     static QHash<QString, QPixmap> iconCache;
-    QHash< QString, QPixmap >::const_iterator it = iconCache.constFind(iconName);
+    QHash<QString, QPixmap>::const_iterator it = iconCache.constFind(iconName);
     if (it != iconCache.constEnd()) {
         return it.value();
     }
@@ -203,19 +202,19 @@ BaseFileDataProvider::BaseFileDataProvider()
 {
 }
 
-void BaseFileDataProvider::setFilterText( const QString& text )
+void BaseFileDataProvider::setFilterText(const QString& text)
 {
     int pathLength;
     KTextEditorHelpers::extractCursor(text, &pathLength);
     QString path(text.mid(0, pathLength));
-    if ( path.startsWith(QLatin1String("./")) || path.startsWith(QLatin1String("../")) ) {
+    if (path.startsWith(QLatin1String("./")) || path.startsWith(QLatin1String("../"))) {
         // assume we want to filter relative to active document's url
         IDocument* doc = ICore::self()->documentController()->activeDocument();
         if (doc) {
             path = Path(Path(doc->url()).parent(), path).pathOrUrl();
         }
     }
-    setFilter( path.split('/', QString::SkipEmptyParts) );
+    setFilter(path.split('/', QString::SkipEmptyParts));
 }
 
 uint BaseFileDataProvider::itemCount() const
@@ -230,7 +229,7 @@ uint BaseFileDataProvider::unfilteredItemCount() const
 
 QuickOpenDataPointer BaseFileDataProvider::data(uint row) const
 {
-    return QuickOpenDataPointer(new ProjectFileData( filteredItems().at(row) ));
+    return QuickOpenDataPointer(new ProjectFileData(filteredItems().at(row)));
 }
 
 ProjectFileDataProvider::ProjectFileDataProvider()
@@ -245,18 +244,18 @@ ProjectFileDataProvider::ProjectFileDataProvider()
     }
 }
 
-void ProjectFileDataProvider::projectClosing( IProject* project )
+void ProjectFileDataProvider::projectClosing(IProject* project)
 {
-    foreach(ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
+    foreach (ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
         fileRemovedFromSet(file);
     }
 }
 
-void ProjectFileDataProvider::projectOpened( IProject* project )
+void ProjectFileDataProvider::projectOpened(IProject* project)
 {
     const int processAfter = 1000;
     int processed = 0;
-    foreach(ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
+    foreach (ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
         fileAddedToSet(file);
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
@@ -271,7 +270,7 @@ void ProjectFileDataProvider::projectOpened( IProject* project )
             this, &ProjectFileDataProvider::fileRemovedFromSet);
 }
 
-void ProjectFileDataProvider::fileAddedToSet( ProjectFileItem* file )
+void ProjectFileDataProvider::fileAddedToSet(ProjectFileItem* file)
 {
     ProjectFile f;
     f.projectPath = file->project()->path();
@@ -284,7 +283,7 @@ void ProjectFileDataProvider::fileAddedToSet( ProjectFileItem* file )
     }
 }
 
-void ProjectFileDataProvider::fileRemovedFromSet( ProjectFileItem* file )
+void ProjectFileDataProvider::fileRemovedFromSet(ProjectFileItem* file)
 {
     ProjectFile item;
     item.path = file->path();
@@ -314,9 +313,8 @@ void ProjectFileDataProvider::reset()
     QList<ProjectFile> projectFiles = m_projectFiles;
 
     const auto& open = openFiles();
-    for(QList<ProjectFile>::iterator it = projectFiles.begin();
-        it != projectFiles.end();)
-    {
+    for (QList<ProjectFile>::iterator it = projectFiles.begin();
+         it != projectFiles.end(); ) {
         if (open.contains(it->indexedPath)) {
             it = projectFiles.erase(it);
         } else {
@@ -331,8 +329,9 @@ QSet<IndexedString> ProjectFileDataProvider::files() const
 {
     QSet<IndexedString> ret;
 
-    foreach( IProject* project, ICore::self()->projectController()->projects() )
+    foreach (IProject* project, ICore::self()->projectController()->projects()) {
         ret += project->fileSet();
+    }
 
     return ret - openFiles();
 }
@@ -346,7 +345,7 @@ void OpenFilesDataProvider::reset()
 
     QList<ProjectFile> currentFiles;
     currentFiles.reserve(docs.size());
-    foreach( IDocument* doc, docs ) {
+    foreach (IDocument* doc, docs) {
         ProjectFile f;
         f.path = Path(doc->url());
         IProject* project = projCtrl->findProjectForUrl(doc->url());

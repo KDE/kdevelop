@@ -23,7 +23,8 @@
 
 #include "quickopentestbase.h"
 
-class TestQuickOpen : public QuickOpenTestBase
+class TestQuickOpen
+    : public QuickOpenTestBase
 {
     Q_OBJECT
 public:
