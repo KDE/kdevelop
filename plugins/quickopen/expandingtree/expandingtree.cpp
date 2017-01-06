@@ -22,6 +22,7 @@
 
 #include <QTextLayout>
 #include <QTextDocument>
+#include <QAbstractProxyModel>
 #include <QAbstractTextDocumentLayout>
 #include <QPainter>
 #include "expandingwidgetmodel.h"
@@ -39,10 +40,12 @@ ExpandingTree::ExpandingTree(QWidget* parent) : QTreeView(parent) {
 void ExpandingTree::drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
   QTreeView::drawRow( painter, option, index );
 
-  const ExpandingWidgetModel* eModel = qobject_cast<const ExpandingWidgetModel*>(model());
-  if( eModel && eModel->isPartiallyExpanded( index ) != ExpandingWidgetModel::ExpansionType::NotExpanded)
+  const ExpandingWidgetModel* eModel = qobject_cast<const ExpandingWidgetModel*>( qobject_cast<const QAbstractProxyModel*>(model())->sourceModel());
+  Q_ASSERT(eModel);
+  const QModelIndex sourceIndex = eModel->mapToSource(index);
+  if (eModel->isPartiallyExpanded( sourceIndex ) != ExpandingWidgetModel::ExpansionType::NotExpanded)
   {
-    QRect rect = eModel->partialExpandRect( index );
+    QRect rect = eModel->partialExpandRect( sourceIndex );
     if( rect.isValid() )
     {
       painter->fillRect(rect,QBrush(0xffffffff));
@@ -54,7 +57,7 @@ void ExpandingTree::drawRow ( QPainter * painter, const QStyleOptionViewItem & o
       painter->setViewTransformEnabled(true);
       painter->translate(rect.left(), rect.top());
 
-      m_drawText.setHtml( eModel->partialExpandText( index ) );
+      m_drawText.setHtml( eModel->partialExpandText( sourceIndex ) );
       m_drawText.setPageSize(QSizeF(rect.width(), rect.height()));
       m_drawText.documentLayout()->draw( painter, ctx );
 

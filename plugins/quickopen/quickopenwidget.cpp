@@ -21,7 +21,6 @@
  */
 
 #include "quickopenwidget.h"
-#include <KParts/MainWindow>
 #include "debug.h"
 
 #include "expandingtree/expandingdelegate.h"
@@ -31,10 +30,12 @@
 #include <iuicontroller.h>
 
 #include <QDialog>
+#include <QIdentityProxyModel>
 #include <QMenuBar>
 #include <QKeyEvent>
 #include <QScrollBar>
 
+#include <KParts/MainWindow>
 #include <KTextEditor/CodeCompletionModel>
 
 using namespace KDevelop;
@@ -149,6 +150,16 @@ void QuickOpenWidget::showStandardButtons(bool show)
   }
 }
 
+bool QuickOpenWidget::sortingEnabled() const
+{
+  return m_sortingEnabled;
+}
+
+void QuickOpenWidget::setSortingEnabled(bool enabled)
+{
+  m_sortingEnabled = enabled;
+}
+
 void QuickOpenWidget::updateTimerInterval(bool cheapFilterChange)
 {
   const int MAX_ITEMS = 10000;
@@ -195,10 +206,26 @@ void QuickOpenWidget::showSearchField(bool b)
 
 void QuickOpenWidget::prepareShow()
 {
-  ui.list->setModel( nullptr );
+  ui.list->setModel(nullptr);
   ui.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-  m_model->setTreeView( ui.list );
-  ui.list->setModel( m_model );
+  m_model->setTreeView(ui.list);
+
+  // set up proxy filter
+  delete m_proxy;
+  m_proxy = nullptr;
+
+  if (sortingEnabled()) {
+    auto sortFilterProxyModel = new QSortFilterProxyModel(this);
+    sortFilterProxyModel->setDynamicSortFilter(true);
+    m_proxy = sortFilterProxyModel;
+  } else {
+    m_proxy = new QIdentityProxyModel(this);
+  }
+  m_proxy->setSourceModel(m_model);
+  if (sortingEnabled()) {
+    m_proxy->sort(1);
+  }
+  ui.list->setModel(m_proxy);
 
   m_filterTimer.stop();
   m_filter = QString();
@@ -311,22 +338,23 @@ void QuickOpenWidget::applyFilter()
   m_model->textChanged( m_filter );
 
   QModelIndex currentIndex = m_model->index(0, 0, QModelIndex());
-    ui.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );
+
+  ui.list->selectionModel()->setCurrentIndex( m_proxy->mapFromSource( currentIndex ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );
 
   callRowSelected();
 }
 
 void QuickOpenWidget::callRowSelected() {
-  QModelIndex currentIndex = ui.list->selectionModel()->currentIndex();
+  const QModelIndex currentIndex = ui.list->currentIndex();
   if( currentIndex.isValid() )
-    m_model->rowSelected( currentIndex );
+    m_model->rowSelected(m_proxy->mapToSource(currentIndex));
   else
     qCDebug(PLUGIN_QUICKOPEN) << "current index is not valid";
 }
 
 void QuickOpenWidget::accept() {
   QString filterText = ui.searchLine->text();
-  m_model->execute( ui.list->currentIndex(), filterText );
+  m_model->execute( m_proxy->mapToSource( ui.list->currentIndex() ), filterText );
 }
 
 void QuickOpenWidget::doubleClicked ( const QModelIndex & index ) {
@@ -354,7 +382,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
     if(keyEvent->key() == Qt::Key_Alt) {
       if((m_expandedTemporary && m_altDownTime.msecsTo( QTime::currentTime() ) > 300) || (!m_expandedTemporary && m_altDownTime.msecsTo( QTime::currentTime() ) < 300 && m_hadNoCommandSinceAlt)) {
         //Unexpand the item
-        QModelIndex row = ui.list->selectionModel()->currentIndex();
+        QModelIndex row = m_proxy->mapToSource(ui.list->selectionModel()->currentIndex());
         if( row.isValid() ) {
           row = row.sibling( row.row(), 0 );
           if(m_model->isExpanded( row ))
@@ -371,7 +399,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
       avoidMenuAltFocus();
       m_hadNoCommandSinceAlt = true;
       //Expand
-      QModelIndex row = ui.list->selectionModel()->currentIndex();
+      QModelIndex row = m_proxy->mapToSource(ui.list->selectionModel()->currentIndex());
       if( row.isValid() ) {
         row = row.sibling( row.row(), 0 );
         m_altDownTime = QTime::currentTime();
@@ -403,7 +431,8 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
       case Qt::Key_Up:
       {
         if( keyEvent->modifiers() == Qt::AltModifier ) {
-          QWidget* w = m_model->expandingWidget(ui.list->selectionModel()->currentIndex());
+          const QModelIndex index = m_proxy->mapToSource(ui.list->currentIndex());
+          QWidget* w = m_model->expandingWidget(index);
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             if( keyEvent->key() == Qt::Key_Down )
@@ -427,14 +456,15 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
         //Expand/unexpand
         if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
-          QWidget* w = m_model->expandingWidget(ui.list->selectionModel()->currentIndex());
+          const QModelIndex index = m_proxy->mapToSource(ui.list->currentIndex());
+          QWidget* w = m_model->expandingWidget(index);
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->previous();
             return true;
           }
         } else {
-          QModelIndex row = ui.list->selectionModel()->currentIndex();
+          QModelIndex row = m_proxy->mapToSource(ui.list->currentIndex());
           if( row.isValid() ) {
             row = row.sibling( row.row(), 0 );
 
@@ -450,14 +480,15 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
         //Expand/unexpand
         if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
-          QWidget* w = m_model->expandingWidget(ui.list->selectionModel()->currentIndex());
+          const QModelIndex index = m_proxy->mapToSource(ui.list->currentIndex());
+          QWidget* w = m_model->expandingWidget(index);
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->next();
             return true;
           }
         } else {
-          QModelIndex row = ui.list->selectionModel()->currentIndex();
+          QModelIndex row = m_proxy->mapToSource(ui.list->selectionModel()->currentIndex());
           if( row.isValid() ) {
             row = row.sibling( row.row(), 0 );
 
@@ -477,7 +508,8 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
         }
         if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
-          QWidget* w = m_model->expandingWidget(ui.list->selectionModel()->currentIndex());
+          const QModelIndex index = m_proxy->mapToSource(ui.list->currentIndex());
+          QWidget* w = m_model->expandingWidget(index);
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->accept();
@@ -490,7 +522,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
           //which kills the quickopen widget.
           QPointer<QObject> stillExists(this);
 
-          if( m_model->execute( ui.list->currentIndex(), filterText ) ) {
+          if( m_model->execute( m_proxy->mapToSource( ui.list->currentIndex() ), filterText ) ) {
 
             if(!stillExists)
               return true;

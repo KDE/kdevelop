@@ -111,6 +111,22 @@ QVariant ExpandingWidgetModel::data( const QModelIndex & index, int role ) const
   return QVariant();
 }
 
+QModelIndex ExpandingWidgetModel::mapFromSource(const QModelIndex& index) const
+{
+  const auto proxyModel = qobject_cast<QAbstractProxyModel*>(treeView()->model());
+  Q_ASSERT(proxyModel);
+  Q_ASSERT(index.model() == this);
+  return proxyModel->mapFromSource(index);
+}
+
+QModelIndex ExpandingWidgetModel::mapToSource(const QModelIndex& index) const
+{
+  const auto proxyModel = qobject_cast<QAbstractProxyModel*>(treeView()->model());
+  Q_ASSERT(proxyModel);
+  Q_ASSERT(index.model() == proxyModel);
+  return proxyModel->mapToSource(index);
+}
+
 void ExpandingWidgetModel::clearMatchQualities() {
     m_contextMatchQualities.clear();
 }
@@ -157,6 +173,8 @@ int ExpandingWidgetModel::partiallyExpandWidgetHeight() const {
 
 void ExpandingWidgetModel::rowSelected(const QModelIndex& idx_)
 {
+  Q_ASSERT(idx_.model() == this);
+
   QModelIndex idx( firstColumn(idx_) );
   if( !m_partiallyExpanded.contains( idx ) )
   {
@@ -191,17 +209,18 @@ void ExpandingWidgetModel::rowSelected(const QModelIndex& idx_)
 
             if( treeView()->verticalScrollMode() == QAbstractItemView::ScrollPerItem )
             {
+              const QModelIndex viewIndex = mapFromSource(idx);
               //Qt fails to correctly scroll in ScrollPerItem mode, so the selected index is completely visible,
               //so we do the scrolling by hand.
-              QRect selectedRect = treeView()->visualRect(idx);
+              QRect selectedRect = treeView()->visualRect(viewIndex);
               QRect frameRect = treeView()->frameRect();
 
               if( selectedRect.bottom() > frameRect.bottom() ) {
                 int diff = selectedRect.bottom() - frameRect.bottom();
                 //We need to scroll down
-                QModelIndex newTopIndex = idx;
+                QModelIndex newTopIndex = viewIndex;
 
-                QModelIndex nextTopIndex = idx;
+                QModelIndex nextTopIndex = viewIndex;
                 QRect nextRect = treeView()->visualRect(nextTopIndex);
                 while( nextTopIndex.isValid() && nextRect.isValid() && nextRect.top() >= diff ) {
                   newTopIndex = nextTopIndex;
@@ -242,7 +261,10 @@ void ExpandingWidgetModel::rowSelected(const QModelIndex& idx_)
   }
 }
 
-QString ExpandingWidgetModel::partialExpandText(const QModelIndex& idx) const {
+QString ExpandingWidgetModel::partialExpandText(const QModelIndex& idx) const
+{
+  Q_ASSERT(idx.model() == this);
+
   if( !idx.isValid() )
     return QString();
 
@@ -251,6 +273,8 @@ QString ExpandingWidgetModel::partialExpandText(const QModelIndex& idx) const {
 
 QRect ExpandingWidgetModel::partialExpandRect(const QModelIndex& idx_) const
 {
+  Q_ASSERT(idx_.model() == this);
+
   QModelIndex idx(firstColumn(idx_));
 
   if( !idx.isValid() )
@@ -262,12 +286,13 @@ QRect ExpandingWidgetModel::partialExpandRect(const QModelIndex& idx_) const
       expansion = m_partiallyExpanded[idx];
 
     //Get the whole rectangle of the row:
-    QModelIndex rightMostIndex = idx;
-    QModelIndex tempIndex = idx;
+    const QModelIndex viewIndex = mapFromSource(idx);
+    QModelIndex rightMostIndex = viewIndex;
+    QModelIndex tempIndex = viewIndex;
     while( (tempIndex = rightMostIndex.sibling(rightMostIndex.row(), rightMostIndex.column()+1)).isValid() )
       rightMostIndex = tempIndex;
 
-    QRect rect = treeView()->visualRect(idx);
+    QRect rect = treeView()->visualRect(viewIndex);
     QRect rightMostRect = treeView()->visualRect(rightMostIndex);
 
     rect.setLeft( rect.left() + 20 );
@@ -278,9 +303,9 @@ QRect ExpandingWidgetModel::partialExpandRect(const QModelIndex& idx_) const
     int bottom = rightMostRect.bottom() - 5 ;
 
     if( expansion == ExpandDownwards )
-        top += basicRowHeight(idx);
+        top += basicRowHeight(viewIndex);
     else
-        bottom -= basicRowHeight(idx);
+        bottom -= basicRowHeight(viewIndex);
 
     rect.setTop( top );
     rect.setBottom( bottom );
@@ -290,6 +315,8 @@ QRect ExpandingWidgetModel::partialExpandRect(const QModelIndex& idx_) const
 
 bool ExpandingWidgetModel::isExpandable(const QModelIndex& idx_) const
 {
+  Q_ASSERT(idx_.model() == this);
+
   QModelIndex idx(firstColumn(idx_));
 
   if( !m_expandState.contains(idx) )
@@ -305,15 +332,19 @@ bool ExpandingWidgetModel::isExpandable(const QModelIndex& idx_) const
 
 bool ExpandingWidgetModel::isExpanded(const QModelIndex& idx_) const
 {
+  Q_ASSERT(idx_.model() == this);
+
     QModelIndex idx(firstColumn(idx_));
     return m_expandState.contains(idx) && m_expandState[idx] == Expanded;
 }
 
 void ExpandingWidgetModel::setExpanded(QModelIndex idx_, bool expanded)
 {
+  Q_ASSERT(idx_.model() == this);
+
   QModelIndex idx(firstColumn(idx_));
 
-  //qCDebug( PLUGIN_QUICKOPEN ) << "Setting expand-state of row " << idx.row() << " to " << expanded;
+  qCDebug( PLUGIN_QUICKOPEN ) << "Setting expand-state of row " << idx.row() << " to " << expanded;
   if( !idx.isValid() )
     return;
 
@@ -345,18 +376,20 @@ void ExpandingWidgetModel::setExpanded(QModelIndex idx_, bool expanded)
     }
 
     //Eventually partially expand the row
-    if( !expanded && firstColumn(treeView()->currentIndex()) == idx && (isPartiallyExpanded(idx) == ExpandingWidgetModel::ExpansionType::NotExpanded) )
+    if( !expanded && firstColumn(mapToSource(treeView()->currentIndex())) == idx && (isPartiallyExpanded(idx) == ExpandingWidgetModel::ExpansionType::NotExpanded) )
       rowSelected(idx); //Partially expand the row.
 
     emit dataChanged(idx, idx);
 
     if(treeView())
-      treeView()->scrollTo(idx);
+      treeView()->scrollTo(mapFromSource(idx));
   }
 }
 
 int ExpandingWidgetModel::basicRowHeight( const QModelIndex& idx_ ) const
 {
+  Q_ASSERT(idx_.model() == treeView()->model());
+
   QModelIndex idx(firstColumn(idx_));
 
     ExpandingDelegate* delegate = dynamic_cast<ExpandingDelegate*>( treeView()->itemDelegate(idx) );
@@ -370,6 +403,8 @@ int ExpandingWidgetModel::basicRowHeight( const QModelIndex& idx_ ) const
 
 void ExpandingWidgetModel::placeExpandingWidget(const QModelIndex& idx_)
 {
+  Q_ASSERT(idx_.model() == this);
+
   QModelIndex idx(firstColumn(idx_));
 
   QWidget* w = nullptr;
@@ -380,7 +415,8 @@ void ExpandingWidgetModel::placeExpandingWidget(const QModelIndex& idx_)
       if( !idx.isValid() )
         return;
 
-      QRect rect = treeView()->visualRect(idx);
+      const QModelIndex viewIndex = mapFromSource(idx_);
+      QRect rect = treeView()->visualRect(viewIndex);
 
       if( !rect.isValid() || rect.bottom() < 0 || rect.top() >= treeView()->height() ) {
           //The item is currently not visible
@@ -388,8 +424,8 @@ void ExpandingWidgetModel::placeExpandingWidget(const QModelIndex& idx_)
           return;
       }
 
-      QModelIndex rightMostIndex = idx;
-      QModelIndex tempIndex = idx;
+      QModelIndex rightMostIndex = viewIndex;
+      QModelIndex tempIndex = viewIndex;
       while( (tempIndex = rightMostIndex.sibling(rightMostIndex.row(), rightMostIndex.column()+1)).isValid() )
         rightMostIndex = tempIndex;
 
@@ -400,7 +436,7 @@ void ExpandingWidgetModel::placeExpandingWidget(const QModelIndex& idx_)
       rect.setRight( rightMostRect.right() - 5 );
 
       //These offsets must match exactly those used in KateCompletionDeleage::sizeHint()
-      rect.setTop( rect.top() + basicRowHeight(idx) + 5 );
+      rect.setTop( rect.top() + basicRowHeight(viewIndex) + 5 );
       rect.setHeight( w->height() );
 
       if( w->parent() != treeView()->viewport() || w->geometry() != rect || !w->isVisible() ) {

@@ -28,6 +28,7 @@
 #include <QMenu>
 #include <QTime>
 #include <QTimer>
+#include <QSortFilterProxyModel>
 
 class QuickOpenModel;
 
@@ -49,6 +50,9 @@ class QuickOpenWidget : public QMenu {
   void prepareShow();
 
   void setAlternativeSearchField(QLineEdit* alterantiveSearchField);
+
+  bool sortingEnabled() const;
+  void setSortingEnabled(bool enabled);
 
   //Shows OK + Cancel. By default they are hidden
   void showStandardButtons(bool show);
@@ -79,6 +83,8 @@ class QuickOpenWidget : public QMenu {
   void avoidMenuAltFocus();
 
   QuickOpenModel* m_model;
+  QAbstractProxyModel* m_proxy = nullptr;
+  bool m_sortingEnabled = false;
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
   QTime m_altDownTime;
   QString m_preselectedText;

@@ -341,7 +341,7 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
 
 void QuickOpenModel::resetTimer()
 {
-    int currentRow = treeView() ? treeView()->currentIndex().row() : -1;
+    int currentRow = treeView() ? mapToSource(treeView()->currentIndex()).row() : -1;
 
     beginResetModel();
     //Remove all cached data behind row m_resetBehindRow
@@ -354,7 +354,7 @@ void QuickOpenModel::resetTimer()
     endResetModel();
 
     if (currentRow != -1) {
-        treeView()->setCurrentIndex(index(currentRow, 0, QModelIndex())); //Preserve the current index
+        treeView()->setCurrentIndex(mapFromSource(index(currentRow, 0, QModelIndex()))); //Preserve the current index
     }
     m_resetBehindRow = 0;
 }
@@ -418,7 +418,10 @@ QTreeView* QuickOpenModel::treeView() const {
   return m_treeView;
 }
 
-bool QuickOpenModel::indexIsItem(const QModelIndex& /*index*/) const {
+bool QuickOpenModel::indexIsItem(const QModelIndex& index) const
+{
+  Q_ASSERT(index.model() == this);
+  Q_UNUSED(index);
   return true;
 }
 

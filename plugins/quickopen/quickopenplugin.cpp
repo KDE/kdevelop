@@ -793,6 +793,7 @@ struct CreateOutlineDialog {
       model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(QuickOpenPlugin::self(), items, true) );
 
       dialog = new QuickOpenWidgetDialog( i18n("Outline"), model, QStringList(), QStringList(), true );
+      dialog->widget()->setSortingEnabled(true);
 
       model->setParent(dialog->widget());
   }

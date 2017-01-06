@@ -78,11 +78,12 @@ void ExpandingDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
 
   adjustStyle(index, option);
 
+  const QModelIndex sourceIndex = model()->mapToSource(index);
   if( index.column() == 0 )
-    model()->placeExpandingWidget(index);
+    model()->placeExpandingWidget(sourceIndex);
 
   //Make sure the decorations are painted at the top, because the center of expanded items will be filled with the embedded widget.
-  if( model()->isPartiallyExpanded(index) == ExpandingWidgetModel::ExpandUpwards )
+  if( model()->isPartiallyExpanded(sourceIndex) == ExpandingWidgetModel::ExpandUpwards )
     m_cachedAlignment = Qt::AlignBottom;
   else
     m_cachedAlignment = Qt::AlignTop;
@@ -95,7 +96,7 @@ void ExpandingDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
   m_cachedHighlights.clear();
   m_backgroundColor = getUsedBackgroundColor(option, index);
 
-  if (model()->indexIsItem(index) ) {
+  if (model()->indexIsItem(sourceIndex) ) {
     m_currentColumnStart = 0;
     m_cachedHighlights = createHighlighting(index, option);
   }
@@ -108,8 +109,8 @@ void ExpandingDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
 
   ///This is a bug workaround for the Qt raster paint engine: It paints over widgets embedded into the viewport when updating due to mouse events
   ///@todo report to Qt Software
-  if( model()->isExpanded(index) && model()->expandingWidget( index ) )
-    model()->expandingWidget( index )->update();
+  if( model()->isExpanded(sourceIndex) && model()->expandingWidget( sourceIndex ) )
+    model()->expandingWidget( sourceIndex )->update();
 }
 
 QList<QTextLayout::FormatRange> ExpandingDelegate::createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const {
@@ -124,14 +125,15 @@ QSize ExpandingDelegate::basicSizeHint( const QModelIndex& index ) const {
 
 QSize ExpandingDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+  const QModelIndex sourceIndex = model()->mapToSource(index);
   QSize s = QItemDelegate::sizeHint( option, index );
-  if( model()->isExpanded(index) && model()->expandingWidget( index ) )
+  if( model()->isExpanded(sourceIndex) && model()->expandingWidget(sourceIndex) )
   {
-    QWidget* widget = model()->expandingWidget( index );
+    QWidget* widget = model()->expandingWidget( sourceIndex );
     QSize widgetSize = widget->size();
 
     s.setHeight( widgetSize.height() + s.height() + 10 ); //10 is the sum that must match exactly the offsets used in ExpandingWidgetModel::placeExpandingWidgets
-  } else if( model()->isPartiallyExpanded( index ) != ExpandingWidgetModel::ExpansionType::NotExpanded) {
+  } else if( model()->isPartiallyExpanded( sourceIndex ) != ExpandingWidgetModel::ExpansionType::NotExpanded) {
     s.setHeight( s.height() + 30 + 10 );
   }
   return s;
@@ -143,11 +145,13 @@ void ExpandingDelegate::adjustStyle( const QModelIndex& index, QStyleOptionViewI
     Q_UNUSED(option)
 }
 
-void ExpandingDelegate::adjustRect(QRect& rect) const {
-  if (!model()->indexIsItem(m_currentIndex) /*&& m_currentIndex.column() == 0*/) {
+void ExpandingDelegate::adjustRect(QRect& rect) const
+{
+  const QModelIndex sourceIndex = model()->mapToSource(m_currentIndex);
+  if (!model()->indexIsItem(sourceIndex) /*&& m_currentIndex.column() == 0*/) {
 
     rect.setLeft(model()->treeView()->columnViewportPosition(0));
-    int columnCount = model()->columnCount(m_currentIndex.parent());
+    int columnCount = model()->columnCount(sourceIndex.parent());
 
     if(!columnCount)
       return;
@@ -282,8 +286,10 @@ void ExpandingDelegate::drawDisplay( QPainter * painter, const QStyleOptionViewI
   //qt_format_text(option.font, textRect, option.displayAlignment, str, 0, 0, 0, 0, painter);
 }
 
-void ExpandingDelegate::drawDecoration(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QPixmap& pixmap) const {
-  if (model()->indexIsItem(m_currentIndex) )
+void ExpandingDelegate::drawDecoration(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QPixmap& pixmap) const
+{
+  const QModelIndex sourceIndex = model()->mapToSource(m_currentIndex);
+  if (model()->indexIsItem(sourceIndex))
     QItemDelegate::drawDecoration(painter, option, rect, pixmap);
 }
 
@@ -307,8 +313,9 @@ bool ExpandingDelegate::editorEvent ( QEvent * event, QAbstractItemModel * /*mod
 {
   if( event->type() == QEvent::MouseButtonRelease )
   {
+    const QModelIndex sourceIndex = model()->mapToSource(index);
     event->accept();
-    model()->setExpanded(index, !model()->isExpanded( index ));
+    model()->setExpanded(sourceIndex, !model()->isExpanded(sourceIndex));
     heightChanged();
 
     return true;

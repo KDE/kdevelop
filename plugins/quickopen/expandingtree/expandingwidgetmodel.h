@@ -26,6 +26,10 @@
 #include <QIcon>
 #include <QPersistentModelIndex>
 #include <QPointer>
+#include <QSortFilterProxyModel>
+
+class ExpandingDelegate;
+class ExpandingTree;
 
 class KWidget;
 class QTreeView;
@@ -97,17 +101,19 @@ class ExpandingWidgetModel : public QAbstractTableModel {
     ///
     virtual void rowSelected(const QModelIndex & row);
 
-    ///Returns the rectangle for the partially expanded part of the given row
+    /// Returns the rectangle for the partially expanded part of the given row
+    /// TODO: Do this via QAIM roles?
     QRect partialExpandRect(const QModelIndex & row) const;
 
+    /// TODO: Do this via QAIM roles?
     QString partialExpandText(const QModelIndex & row) const;
     
     ///Places and shows the expanding-widget for the given row, if it should be visible and is valid.
     ///Also shows the partial-expanding-widget when it should be visible.
     void placeExpandingWidget(const QModelIndex & row);
-    
+
     virtual QTreeView* treeView() const = 0;
-    
+
     ///Should return true if the given row should be painted like a contained item(as opposed to label-rows etc.)
     virtual bool indexIsItem(const QModelIndex& index) const = 0;
 
@@ -130,6 +136,9 @@ class ExpandingWidgetModel : public QAbstractTableModel {
      * */
     virtual int contextMatchQuality(const QModelIndex & index) const = 0;
 
+    QModelIndex mapFromSource(const QModelIndex& index) const;
+    QModelIndex mapToSource(const QModelIndex& index) const;
+
     //Makes sure m_expandedIcon and m_collapsedIcon are loaded
     void cacheIcons() const;
     
@@ -142,6 +151,9 @@ class ExpandingWidgetModel : public QAbstractTableModel {
     int basicRowHeight( const QModelIndex& index ) const;
     
     private:
+    friend ExpandingDelegate;
+    friend ExpandingTree;
+
     QMap<QModelIndex, ExpansionType> m_partiallyExpanded;
     // Store expanding-widgets and cache whether items can be expanded
     mutable QMap<QModelIndex, ExpandingType> m_expandState;
