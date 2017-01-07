@@ -17,26 +17,23 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef CONFIGCONSTANTS_H
-#define CONFIGCONSTANTS_H
+#include "configconstants.h"
 
-class QString;
+#include <QString>
 
 namespace ConfigConstants
 {
-    QString buildConfigPrefix();
-    QString buildDirKey();
-    QString currentConfigKey();
-    QString toolGroupPrefix();
-    QString toolArguments();
-    QString toolExecutable();
-    QString toolEnvironment();
-    QString toolType();
-    QString toolEnabled();
-    QString projectPathPrefix();
-    QString projectPathKey();
-    QString customBuildSystemGroup();
-    QString configTitleKey();
+    QString buildConfigPrefix()      { return QStringLiteral("BuildConfig"); }
+    QString buildDirKey()            { return QStringLiteral("BuildDir"); }
+    QString currentConfigKey()       { return QStringLiteral("CurrentConfiguration"); }
+    QString toolGroupPrefix()        { return QStringLiteral("Tool"); }
+    QString toolArguments()          { return QStringLiteral("Arguments"); }
+    QString toolExecutable()         { return QStringLiteral("Executable"); }
+    QString toolEnvironment()        { return QStringLiteral("Environment"); }
+    QString toolType()               { return QStringLiteral("Type"); }
+    QString toolEnabled()            { return QStringLiteral("Enabled"); }
+    QString projectPathPrefix()      { return QStringLiteral("ProjectPath"); }
+    QString projectPathKey()         { return QStringLiteral("Path"); }
+    QString customBuildSystemGroup() { return QStringLiteral("CustomBuildSystem"); }
+    QString configTitleKey()         { return QStringLiteral("Title"); }
 }
-
-#endif

@@ -44,7 +44,7 @@ QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
     Q_ASSERT( type >= 0 && type < toolTypeCount );
     Q_UNUSED( toolTypeCount );
 
-    return ConfigConstants::toolGroupPrefix + toolTypes[type];
+    return ConfigConstants::toolGroupPrefix() + toolTypes[type];
 }
 
 }
@@ -79,23 +79,23 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
 {
     ui->currentConfig->clear();
     QStringList groupNameList;
-    KConfigGroup grp = cfg->group( ConfigConstants::customBuildSystemGroup );
+    KConfigGroup grp = cfg->group(ConfigConstants::customBuildSystemGroup());
     foreach( const QString& grpName, grp.groupList() ) {
         KConfigGroup subgrp = grp.group( grpName );
         CustomBuildSystemConfig config;
 
-        config.title = subgrp.readEntry( ConfigConstants::configTitleKey, QString() );
-        config.buildDir = subgrp.readEntry( ConfigConstants::buildDirKey, QUrl() );
+        config.title = subgrp.readEntry(ConfigConstants::configTitleKey(), QString());
+        config.buildDir = subgrp.readEntry(ConfigConstants::buildDirKey(), QUrl());
 
         foreach( const QString& subgrpName, subgrp.groupList() ) {
-            if( subgrpName.startsWith( ConfigConstants::toolGroupPrefix ) ) {
+            if (subgrpName.startsWith(ConfigConstants::toolGroupPrefix())) {
                 KConfigGroup toolgrp = subgrp.group( subgrpName );
                 CustomBuildSystemTool tool;
-                tool.arguments = toolgrp.readEntry( ConfigConstants::toolArguments, "" );
-                tool.executable = toolgrp.readEntry( ConfigConstants::toolExecutable, QUrl() );
-                tool.envGrp = toolgrp.readEntry( ConfigConstants::toolEnvironment, QString() );
-                tool.enabled = toolgrp.readEntry( ConfigConstants::toolEnabled, false );
-                tool.type = CustomBuildSystemTool::ActionType( toolgrp.readEntry( ConfigConstants::toolType, 0 ) );
+                tool.arguments = toolgrp.readEntry(ConfigConstants::toolArguments(), QString());
+                tool.executable = toolgrp.readEntry(ConfigConstants::toolExecutable(), QUrl());
+                tool.envGrp = toolgrp.readEntry(ConfigConstants::toolEnvironment(), QString());
+                tool.enabled = toolgrp.readEntry(ConfigConstants::toolEnabled(), false);
+                tool.type = CustomBuildSystemTool::ActionType(toolgrp.readEntry(ConfigConstants::toolType(), 0));
                 config.tools[tool.type] = tool;
             }
         }
@@ -103,7 +103,7 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
         ui->currentConfig->addItem( config.title );
         groupNameList << grpName;
     }
-    int idx = groupNameList.indexOf( grp.readEntry( ConfigConstants::currentConfigKey, "" ) );
+    int idx = groupNameList.indexOf(grp.readEntry(ConfigConstants::currentConfigKey(), QString()));
     if( !groupNameList.isEmpty() && idx < 0 )
         idx = 0;
 
@@ -114,28 +114,28 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
 void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSystemConfig& c, int index )
 {
     // Generate group name, access and clear it
-    KConfigGroup subgrp = grp.group( ConfigConstants::buildConfigPrefix + QString::number(index) );
+    KConfigGroup subgrp = grp.group(ConfigConstants::buildConfigPrefix() + QString::number(index));
     subgrp.deleteGroup();
 
     // Write current configuration key, if our group is current
     if( ui->currentConfig->currentIndex() == index )
-        grp.writeEntry( ConfigConstants::currentConfigKey, subgrp.name() );
+        grp.writeEntry(ConfigConstants::currentConfigKey(), subgrp.name());
 
-    subgrp.writeEntry( ConfigConstants::configTitleKey, c.title );
-    subgrp.writeEntry<QUrl>( ConfigConstants::buildDirKey, c.buildDir );
+    subgrp.writeEntry(ConfigConstants::configTitleKey(), c.title);
+    subgrp.writeEntry<QUrl>(ConfigConstants::buildDirKey(), c.buildDir);
     foreach( const CustomBuildSystemTool& tool, c.tools ) {
         KConfigGroup toolgrp = subgrp.group( generateToolGroupName( tool.type ) );
-        toolgrp.writeEntry( ConfigConstants::toolType, int(tool.type) );
-        toolgrp.writeEntry( ConfigConstants::toolEnvironment , tool.envGrp );
-        toolgrp.writeEntry( ConfigConstants::toolEnabled, tool.enabled );
-        toolgrp.writeEntry<QUrl>( ConfigConstants::toolExecutable, tool.executable );
-        toolgrp.writeEntry( ConfigConstants::toolArguments, tool.arguments );
+        toolgrp.writeEntry(ConfigConstants::toolType(), int(tool.type));
+        toolgrp.writeEntry(ConfigConstants::toolEnvironment(), tool.envGrp);
+        toolgrp.writeEntry(ConfigConstants::toolEnabled(), tool.enabled);
+        toolgrp.writeEntry<QUrl>(ConfigConstants::toolExecutable(), tool.executable);
+        toolgrp.writeEntry(ConfigConstants::toolArguments(), tool.arguments);
     }
 }
 
 void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* /*project*/ )
 {
-    KConfigGroup subgrp = cfg->group( ConfigConstants::customBuildSystemGroup );
+    KConfigGroup subgrp = cfg->group(ConfigConstants::customBuildSystemGroup());
     subgrp.deleteGroup();
     for( int i = 0; i < ui->currentConfig->count(); i++ ) {
         configs[i].title = ui->currentConfig->itemText(i);

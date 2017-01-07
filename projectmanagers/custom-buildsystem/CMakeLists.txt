@@ -8,6 +8,7 @@ set(custom_SRCS
     custombuildsystemconfig.cpp
     custombuildsystemplugin.cpp
     custombuildjob.cpp
+    configconstants.cpp
     configwidget.cpp
     custombuildsystemconfigwidget.cpp
     kcm_custombuildsystem.cpp

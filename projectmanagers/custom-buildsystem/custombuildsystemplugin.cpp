@@ -91,7 +91,7 @@ Path CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
         return Path();
     }
 
-    Path builddir(grp.readEntry( ConfigConstants::buildDirKey, QUrl() ));
+    Path builddir(grp.readEntry(ConfigConstants::buildDirKey(), QUrl()));
     if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value
     {
         builddir = item->project()->path();
@@ -175,9 +175,9 @@ QList<ProjectTargetItem*> CustomBuildSystem::targets( ProjectFolderItem* ) const
 
 KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
 {
-    KConfigGroup grp = project->projectConfiguration()->group( ConfigConstants::customBuildSystemGroup );
-    if(grp.isValid() && grp.hasKey(ConfigConstants::currentConfigKey))
-        return grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
+    KConfigGroup grp = project->projectConfiguration()->group(ConfigConstants::customBuildSystemGroup());
+    if (grp.isValid() && grp.hasKey(ConfigConstants::currentConfigKey()))
+        return grp.group(grp.readEntry(ConfigConstants::currentConfigKey()));
     else
         return KConfigGroup();
 }

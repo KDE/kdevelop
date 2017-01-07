@@ -8,6 +8,7 @@ ecm_add_test(test_custombuildsystemplugin.cpp ../debugarea.cpp
 # Useful for testing UI ideas quickly
 set( kcm_uitest_SRCS kcmuitestmain.cpp
                      ../custombuildsystemconfigwidget.cpp
+                     ../configconstants.cpp
                      ../configwidget.cpp
                      ../debugarea.cpp
    )

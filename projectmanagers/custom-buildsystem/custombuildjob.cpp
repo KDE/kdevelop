@@ -47,19 +47,19 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
     QString subgrpname;
     switch( type ) {
         case CustomBuildSystemTool::Build:
-            subgrpname = QString( "%1Build" ).arg( ConfigConstants::toolGroupPrefix );
+            subgrpname = ConfigConstants::toolGroupPrefix() + QLatin1String("Build");
             break;
         case CustomBuildSystemTool::Clean:
-            subgrpname = QString( "%1Clean" ).arg( ConfigConstants::toolGroupPrefix );
+            subgrpname = ConfigConstants::toolGroupPrefix() + QLatin1String("Clean");
             break;
         case CustomBuildSystemTool::Install:
-            subgrpname = QString( "%1Install" ).arg( ConfigConstants::toolGroupPrefix );
+            subgrpname = ConfigConstants::toolGroupPrefix() + QLatin1String("Install");
             break;
         case CustomBuildSystemTool::Configure:
-            subgrpname = QString( "%1Configure" ).arg( ConfigConstants::toolGroupPrefix );
+            subgrpname = ConfigConstants::toolGroupPrefix() + QLatin1String("Configure");
             break;
         case CustomBuildSystemTool::Prune:
-            subgrpname = QString( "%1Prune" ).arg( ConfigConstants::toolGroupPrefix );
+            subgrpname = ConfigConstants::toolGroupPrefix() + QLatin1String("Prune");
             break;
         case CustomBuildSystemTool::Undefined:
             return;
@@ -69,10 +69,10 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
     KConfigGroup g = plugin->configuration( item->project() );
     if(g.isValid()) {
         KConfigGroup grp = g.group( subgrpname );
-        enabled = grp.readEntry( ConfigConstants::toolEnabled, false );
-        cmd = grp.readEntry( ConfigConstants::toolExecutable, QUrl() ).toLocalFile();
-        environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
-        arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
+        enabled = grp.readEntry(ConfigConstants::toolEnabled(), false);
+        cmd = grp.readEntry(ConfigConstants::toolExecutable(), QUrl()).toLocalFile();
+        environment = grp.readEntry(ConfigConstants::toolEnvironment(), QString());
+        arguments = grp.readEntry(ConfigConstants::toolArguments(), QString());
     }
 
     QString title;
