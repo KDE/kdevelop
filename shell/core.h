@@ -58,12 +58,13 @@ public:
       * returns false if the initialization fails, which may happen
       * if the same session is already active in another instance
       *
-      * @param splash the splashscreen instance that shows the startup progress (may be 0)
       * @param mode the mode in which to run
       * @param session the name or uuid of the session to be loaded
       *
       */
-    static bool initialize(QObject* splash = nullptr, Setup mode=Default, const QString& session = {} );
+    static bool initialize(Setup mode=Default, const QString& session = {});
+    // TODO: remove before 5.2 release
+    static QT_DEPRECATED bool initialize(QObject* splash = nullptr, Setup mode=Default, const QString& session = {});
 
     /**
      * \brief Provide access an instance of Core
@@ -117,9 +118,6 @@ public:
 
 public slots:
     void shutdown();
-
-signals:
-    void startupProgress(int percent);
 
 protected:
     friend class CorePrivate;
