@@ -120,7 +120,7 @@ double bar ()
 <para>If you have multiple applications or libraries, simply repeat the steps to add more and more projects to your session.</para>
 </sect1>
 <sect1 id="creating-projects-from-scratch"><title>Creating projects from scratch</title>
-<para>There is of course also the possibility that you want to start a new project from scratch. This can be done using the <menuchoice><guimenu>Projects</guimenu><guimenuitem>New from Template</guimenuitem></menuchoice> menu item, which presents you with a template selection dialog. Some project templates are provided with &kdevelop;, but even more are available by installing the <application>KAppTemplate</application> application. Choose the project type and programming language from the dialog, enter a name and location for you project, and click <guilabel>Next</guilabel>.
+<para>There is of course also the possibility that you want to start a new project from scratch. This can be done using the <menuchoice><guimenu>Projects</guimenu><guimenuitem>New from Template...</guimenuitem></menuchoice> menu item, which presents you with a template selection dialog. Some project templates are provided with &kdevelop;, but even more are available by installing the <application>KAppTemplate</application> application. Choose the project type and programming language from the dialog, enter a name and location for you project, and click <guilabel>Next</guilabel>.
 </para>
 <para>
 <screenshot>
@@ -1019,7 +1019,7 @@ for (typename Triangulation::active_cell_iterator
 <para>&kdevelop; uses templates for generating source code files and to avoid writing repeatable code.
 </para>
 <sect1 id="creating-a-new-class"><title>Creating a new class</title>
-<para>The most common use for code generation is probably writing new classes. To create a new class in an existing project, right click on a project folder and choose <guilabel>Create from Template</guilabel>. The same dialog can be started from the menu by clicking <menuchoice><guimenu>File</guimenu><guimenuitem>New from Template</guimenuitem></menuchoice>, but using a project folder has the benefit of setting a base URL for the output files. Choose <filename>Class</filename> in the category selection view, and the desired language and template in the other two views. After you have selected a class template, you will have to specify the details of the new class.
+<para>The most common use for code generation is probably writing new classes. To create a new class in an existing project, right click on a project folder and choose <guilabel>Create from Template...</guilabel>. The same dialog can be started from the menu by clicking <menuchoice><guimenu>File</guimenu><guimenuitem>New from Template...</guimenuitem></menuchoice>, but using a project folder has the benefit of setting a base URL for the output files. Choose <filename>Class</filename> in the category selection view, and the desired language and template in the other two views. After you have selected a class template, you will have to specify the details of the new class.
 </para>
 <para>
 <screenshot>
@@ -1089,7 +1089,7 @@ for (typename Triangulation::active_cell_iterator
 </para>
 </sect1>
 <sect1 id="creating-a-new-unit-test"><title>Creating a new unit test</title>
-<para>Even though most testing frameworks require each test to also be a class, &kdevelop; includes a method to simplify the creation of unit tests. To create a new test, right click on a project folder and choose <guilabel>Create from Template</guilabel>. In the template selection page, choose <filename>Test</filename> as the category, then choose your programming language and template and click <guilabel>Next</guilabel>.
+<para>Even though most testing frameworks require each test to also be a class, &kdevelop; includes a method to simplify the creation of unit tests. To create a new test, right click on a project folder and choose <guilabel>Create from Template...</guilabel>. In the template selection page, choose <filename>Test</filename> as the category, then choose your programming language and template and click <guilabel>Next</guilabel>.
 </para>
 <para>You will be prompted for the test name and a list of test cases. For the test cases, you only have to specify a list of names. Some unit testing frameworks, such as PyUnit and PHPUnit, require that test cases start with a special prefix. In &kdevelop;, the template is responsible for adding the prefix, so you do not have to prefix the test cases here. After clicking <guilabel>Next</guilabel>, specify the license and output locations for the generated files, and the test will be created.
 </para>
@@ -1097,11 +1097,11 @@ for (typename Triangulation::active_cell_iterator
 </para>
 </sect1>
 <sect1 id="other-files"><title>Other files</title>
-<para>While classes and unit tests receive special attention when generating code from templates, the same method can be used for any kind of source code files. For example, one could use a template for a CMake Find module or a .desktop file. This can be done by choosing <guilabel>Create from Template</guilabel>, and selecting the wanted category and template. If the selected category is neither <filename>Class</filename> nor <filename>Test</filename>, you will only have the option of choosing the license, any custom options specified by the template, and the output file locations. As with classes and tests, finishing the assistant will generate the files and open them in the editor.
+<para>While classes and unit tests receive special attention when generating code from templates, the same method can be used for any kind of source code files. For example, one could use a template for a CMake Find module or a .desktop file. This can be done by choosing <guilabel>Create from Template...</guilabel>, and selecting the wanted category and template. If the selected category is neither <filename>Class</filename> nor <filename>Test</filename>, you will only have the option of choosing the license, any custom options specified by the template, and the output file locations. As with classes and tests, finishing the assistant will generate the files and open them in the editor.
 </para>
 </sect1>
 <sect1 id="managing-templates"><title>Managing templates</title>
-<para>From the <menuchoice><guimenu>File</guimenu><guimenuitem>New from Template</guimenuitem></menuchoice> assistant, you can also download additional file templates by clicking the <guilabel>Get more Templates...</guilabel> button. This opens a Get Hot New Stuff dialog, where you can install additional templates, as well as update or remove them. There is also a configuration module for templates, which can be reached by clicking <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure &kdevelop;</guisubmenu><guimenuitem>Templates</guimenuitem></menuchoice>. From there, you can manage both file templates (explained above) and project templates (used for creating new projects).
+<para>From the <menuchoice><guimenu>File</guimenu><guimenuitem>New from Template...</guimenuitem></menuchoice> assistant, you can also download additional file templates by clicking the <guilabel>Get more Templates...</guilabel> button. This opens a Get Hot New Stuff dialog, where you can install additional templates, as well as update or remove them. There is also a configuration module for templates, which can be reached by clicking <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure &kdevelop;</guisubmenu><guimenuitem>Templates</guimenuitem></menuchoice>. From there, you can manage both file templates (explained above) and project templates (used for creating new projects).
 </para>
 <para>
 <screenshot>
