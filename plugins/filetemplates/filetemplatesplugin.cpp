@@ -64,7 +64,7 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
 
     setXMLFile(QStringLiteral("kdevfiletemplates.rc"));
     QAction* action = actionCollection()->addAction(QStringLiteral("new_from_template"));
-    action->setText( i18n( "New From Template" ) );
+    action->setText(i18n("New From Template..."));
     action->setIcon( QIcon::fromTheme( QStringLiteral("code-class") ) );
     action->setWhatsThis( i18n( "Allows you to create new source code files, such as classes or unit tests, using templates." ) );
     action->setStatusTip( i18n( "Create new files from a template" ) );
@@ -110,7 +110,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
         }
         if (url.isValid())
         {
-            QAction* action = new QAction(i18n("Create From Template"), this);
+            QAction* action = new QAction(i18n("Create From Template..."), this);
             action->setIcon(QIcon::fromTheme(QStringLiteral("code-class")));
             action->setData(url);
             connect(action, &QAction::triggered, this, &FileTemplatesPlugin::createFromTemplate);
