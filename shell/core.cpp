@@ -48,8 +48,6 @@
 #include "testcontroller.h"
 #include "debug.h"
 
-#include <KMessageBox>
-
 #include <KTextEditor/Document>
 #include <ktexteditor/movinginterface.h>
 
@@ -296,23 +294,6 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     installSignalHandler();
 
     qCDebug(SHELL) << "Done initializing controllers";
-
-    if (partController) {
-        // check features of kate and report to user if it does not fit
-        KTextEditor::Document* doc = partController.data()->createTextPart();
-
-        if ( !qobject_cast< KTextEditor::MovingInterface* >(doc) ) {
-            KMessageBox::error(QApplication::activeWindow(),
-                                i18n("The installed Kate version does not support the MovingInterface which is crucial for "
-                                    "KDevelop starting from version 4.2.\n\n"
-                                    "To use KDevelop with KDE SC prior to 4.6, where the SmartInterface is used instead "
-                                    "of the MovingInterface, you need KDevelop 4.1 or lower."));
-            delete doc;
-            return false;
-        }
-
-        delete doc;
-    }
 
     emit m_core->startupProgress(100);
     return true;
