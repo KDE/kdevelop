@@ -254,10 +254,9 @@ void TestProblems::testMissingInclude()
     QVERIFY(clangFixitAssistant);
 
     auto fixits = clangFixitAssistant->fixits();
-    QCOMPARE(fixits.size(), 3);
+    QCOMPARE(fixits.size(), 2);
     QCOMPARE(fixits[0].replacementText, QString("class A;\n"));
-    QCOMPARE(fixits[1].replacementText, QString("struct A;\n")); // TODO: We shouldn't show this
-    QCOMPARE(fixits[2].replacementText, QString("#include \"%1\"\n").arg(include.url().toUrl().fileName()));
+    QCOMPARE(fixits[1].replacementText, QString("#include \"%1\"\n").arg(include.url().toUrl().fileName()));
 }
 
 struct ExpectedTodo
