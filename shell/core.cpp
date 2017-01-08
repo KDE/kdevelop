@@ -99,8 +99,8 @@ KAboutData createAboutData()
     KAboutData aboutData( QStringLiteral("kdevplatform"),
                           i18n("KDevelop Platform"), QStringLiteral(KDEVPLATFORM_VERSION_STRING),
                           i18n("Development Platform for IDE-like Applications"),
-                          KAboutLicense::LGPL_V2, i18n( "Copyright 2004-2016, The KDevelop developers" ),
-                          QString(), QStringLiteral("http://www.kdevelop.org") );
+                          KAboutLicense::LGPL_V2, i18n("Copyright 2004-2017, The KDevelop developers"),
+                          QString(), QStringLiteral("https://www.kdevelop.org/"));
 
     aboutData.addAuthor( i18n("Andreas Pakulat"), i18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), QStringLiteral("apaku@gmx.de") );
     aboutData.addAuthor( i18n("Alexander Dymo"), i18n( "Architecture, Sublime UI, Ruby support" ), QStringLiteral("adymo@kdevelop.org") );
