@@ -41,9 +41,9 @@ using namespace KDevelop;
 KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     : IProjectProviderWidget(parent)
 {
-    setLayout(new QVBoxLayout());
+    setLayout(new QVBoxLayout);
     m_projects = new QListView(this);
-    QHBoxLayout* topLayout = new QHBoxLayout(this);
+    QHBoxLayout* topLayout = new QHBoxLayout;
     KFilterProxySearchLine* filterLine = new KFilterProxySearchLine(this);
     KDEProjectsModel* model = new KDEProjectsModel(this);
     KDEProjectsReader* reader = new KDEProjectsReader(model, model);
