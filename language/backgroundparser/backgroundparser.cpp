@@ -100,7 +100,7 @@ inline bool isValidURL(const IndexedString& url)
         return false;
     }
     QUrl original = url.toUrl();
-    if (!original.isValid() || original.isRelative() || original.fileName().isEmpty()) {
+    if (!original.isValid() || original.isRelative() || (original.fileName().isEmpty() && original.isLocalFile())) {
         qCWarning(LANGUAGE) << "INVALID URL ENCOUNTERED:" << url << original;
         return false;
     }

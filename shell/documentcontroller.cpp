@@ -223,7 +223,7 @@ struct DocumentControllerPrivate
         IDocument* buddy = nullptr)
     {
         Q_ASSERT(!inputUrl.isRelative());
-        Q_ASSERT(!inputUrl.fileName().isEmpty());
+        Q_ASSERT(!inputUrl.fileName().isEmpty() || !inputUrl.isLocalFile());
         QString _encoding = encoding;
 
         QUrl url = inputUrl;
@@ -764,7 +764,7 @@ IDocument * DocumentController::documentForUrl( const QUrl & dirtyUrl ) const
         return nullptr;
     }
     Q_ASSERT(!dirtyUrl.isRelative());
-    Q_ASSERT(!dirtyUrl.fileName().isEmpty());
+    Q_ASSERT(!dirtyUrl.fileName().isEmpty() || !dirtyUrl.isLocalFile());
     //Fix urls that might not be normalized
     return d->documents.value( dirtyUrl.adjusted( QUrl::NormalizePathSegments ), nullptr );
 }

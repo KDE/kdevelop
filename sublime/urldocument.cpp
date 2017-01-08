@@ -22,8 +22,8 @@
 #include <QWidget>
 
 #include <KTextEdit>
+#include <KLocalizedString>
 #include <kio/global.h>
-
 
 namespace Sublime {
 
@@ -57,7 +57,13 @@ void UrlDocument::setUrl(const QUrl& newUrl)
 {
     Q_ASSERT(newUrl.adjusted(QUrl::NormalizePathSegments) == newUrl);
     d->url = newUrl;
-    setTitle(newUrl.fileName());
+    // remote URLs might not have a file name
+    Q_ASSERT(!newUrl.fileName().isEmpty() || !newUrl.isLocalFile());
+    auto title = newUrl.fileName();
+    if (title.isEmpty()) {
+        title = i18n("Untitled");
+    }
+    setTitle(title);
     setToolTip(newUrl.toDisplayString(QUrl::PreferLocalFile));
 }
 
