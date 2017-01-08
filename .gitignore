@@ -25,3 +25,6 @@ perf.data*
 *.BASE.*
 *.LOCAL.*
 *.REMOTE.*
+
+# do not ignore .kdev4 files from test data
+!projectmanagers/custom-buildsystem/tests/projects/**/.kdev4
