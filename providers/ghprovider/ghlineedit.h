@@ -48,12 +48,9 @@ public:
     /// Destructor.
     ~LineEdit() override;
 
+protected:
     /// Overridden from QLineEdit.
     void keyPressEvent(QKeyEvent *e) override;
-
-signals:
-    /// Emitted when the return key has been pressed.
-    void returnPressed();
 
 private slots:
     /// The timer has timed out: stop it and emit the returnPressed signal.
