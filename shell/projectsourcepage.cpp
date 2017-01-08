@@ -221,20 +221,20 @@ void ProjectSourcePage::reevaluateCorrection()
     bool correct=!cwd.isRelative() && (!cwd.isLocalFile() || QDir(cwd.adjusted(QUrl::RemoveFilename).toLocalFile()).exists());
     emit isCorrect(correct && m_ui->creationProgress->value() == m_ui->creationProgress->maximum());
 
-    bool validWidget = ((m_locationWidget && m_locationWidget->isCorrect()) ||
+    const bool validWidget = ((m_locationWidget && m_locationWidget->isCorrect()) ||
                        (m_providerWidget && m_providerWidget->isCorrect()));
-    bool validToCheckout = correct && validWidget; //To checkout, if it exists, it should be an empty dir
-    if (validToCheckout && cwd.isLocalFile() && dir.exists()) {
-        validToCheckout = dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
-    }
+    const bool isFolderEmpty = (correct && cwd.isLocalFile() && dir.exists() && dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty());
+    const bool validToCheckout = correct && validWidget && (!dir.exists() || isFolderEmpty);
 
     m_ui->get->setEnabled(validToCheckout);
     m_ui->creationProgress->setEnabled(validToCheckout);
 
     if(!correct)
         setStatus(i18n("You need to specify a valid or nonexistent directory to check out a project"));
-    else if(!m_ui->get->isEnabled() && m_ui->workingDir->isEnabled())
-        setStatus(i18n("You need to specify a valid project location"));
+    else if(!m_ui->get->isEnabled() && m_ui->workingDir->isEnabled() && !validWidget)
+        setStatus(i18n("You need to specify the source for your remote project"));
+    else if(!m_ui->get->isEnabled() && m_ui->workingDir->isEnabled() && !isFolderEmpty)
+        setStatus(i18n("You need to specify an empty folder as your project destination"));
     else
         clearStatus();
 }
