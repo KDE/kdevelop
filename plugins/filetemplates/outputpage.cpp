@@ -197,7 +197,7 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
 
         label = new QLabel(file.label, this);
         d->labels << label;
-        QHBoxLayout* layout = new QHBoxLayout(this);
+        QHBoxLayout* layout = new QHBoxLayout;
 
         auto line = new QSpinBox(this);
         line->setPrefix(i18n("Line: "));
