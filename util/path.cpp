@@ -75,11 +75,7 @@ Path::Path()
 }
 
 Path::Path(const QString& pathOrUrl)
-#if QT_VERSION >= 0x050400
     : Path(QUrl::fromUserInput(pathOrUrl, QString(), QUrl::DefaultResolution))
-#else
-    : Path(QUrl::fromUserInput(pathOrUrl))
-#endif
 {
 }
 

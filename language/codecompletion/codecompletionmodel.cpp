@@ -30,7 +30,6 @@
 #include <QDebug>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
-#include <ktexteditor_version.h>
 
 #include "../duchain/declaration.h"
 #include "../duchain/classfunctiondeclaration.h"
@@ -51,10 +50,6 @@
 #include "codecompletionworker.h"
 #include "codecompletioncontext.h"
 #include <duchain/specializationstore.h>
-
-#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(5, 10, 0)
-Q_DECLARE_METATYPE(KTextEditor::Cursor)
-#endif
 
 using namespace KTextEditor;
 
