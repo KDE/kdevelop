@@ -28,11 +28,6 @@
 
 #include "clangprivateexport.h"
 
-#include <ktexteditor_version.h>
-#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(5, 10, 0)
-Q_DECLARE_METATYPE(KTextEditor::Cursor)
-#endif
-
 class ClangIndex;
 
 class KDEVCLANGPRIVATE_EXPORT ClangCodeCompletionModel : public KDevelop::CodeCompletionModel

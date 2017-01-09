@@ -40,12 +40,6 @@
 #include <QtTest/QTest>
 #include <QLoggingCategory>
 
-#include <ktexteditor_version.h>
-#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(5, 10, 0)
-Q_DECLARE_METATYPE(KTextEditor::Cursor);
-Q_DECLARE_METATYPE(KTextEditor::Range);
-#endif
-
 Q_DECLARE_METATYPE(KDevelop::IProblem::Severity);
 
 using namespace KDevelop;
