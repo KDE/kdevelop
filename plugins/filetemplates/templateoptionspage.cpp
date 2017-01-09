@@ -75,7 +75,6 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
         d->entries << it.value();
         foreach (const SourceFileTemplate::ConfigOption& entry, it.value())
         {
-            QLabel* label = new QLabel(entry.label, box);
             QWidget* control = nullptr;
             const QString type = entry.type;
             if (type == QLatin1String("String"))
@@ -99,8 +98,9 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             else if (type == QLatin1String("Bool"))
             {
                 bool checked = (QString::compare(entry.value.toString(), QStringLiteral("true"), Qt::CaseInsensitive) == 0);
-                QCheckBox* checkBox = new QCheckBox(entry.label, box);
+                QCheckBox* checkBox = new QCheckBox(box);
                 checkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+                control = checkBox;
             }
             else
             {
@@ -108,6 +108,7 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             }
             if (control)
             {
+                QLabel* label = new QLabel(entry.label, box);
                 formLayout->addRow(label, control);
                 d->controls.insert(entry.name, control);
             }

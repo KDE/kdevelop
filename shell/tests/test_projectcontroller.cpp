@@ -160,7 +160,7 @@ private:
 
 void TestProjectController::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({{}});
     TestCore* testCore = new TestCore;
     testCore->setPluginController( new FakePluginController(testCore) );
     testCore->initialize();
