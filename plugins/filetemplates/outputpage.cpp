@@ -184,7 +184,8 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
     {
         d->fileIdentifiers << file.identifier;
 
-        QLabel* label = new QLabel(file.label, this);
+        const QString fileLabelText = i18n("%1:", file.label);
+        QLabel* label = new QLabel(fileLabelText, this);
         d->labels << label;
         KUrlRequester* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
@@ -195,7 +196,7 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
         d->output->urlFormLayout->addRow(label, requester);
         d->outputFiles.insert(file.identifier, requester);
 
-        label = new QLabel(file.label, this);
+        label = new QLabel(fileLabelText, this);
         d->labels << label;
         QHBoxLayout* layout = new QHBoxLayout;
 

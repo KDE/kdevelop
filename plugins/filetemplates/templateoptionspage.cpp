@@ -24,6 +24,8 @@
 #include <language/codegen/templateclassgenerator.h>
 #include <language/codegen/sourcefiletemplate.h>
 
+#include <KLocalizedString>
+
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QDomElement>
@@ -108,7 +110,8 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             }
             if (control)
             {
-                QLabel* label = new QLabel(entry.label, box);
+                const QString entryLabelText = i18n("%1:", entry.label);
+                QLabel* label = new QLabel(entryLabelText, box);
                 formLayout->addRow(label, control);
                 d->controls.insert(entry.name, control);
             }
