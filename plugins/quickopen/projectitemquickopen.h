@@ -58,8 +58,6 @@ public:
 
   void setFilterText( const QString& text ) override;
 
-  virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
-
   void reset() override;
 
   uint itemCount() const override;
