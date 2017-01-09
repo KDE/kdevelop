@@ -55,6 +55,7 @@ ProblemStore::ProblemStore(QObject *parent)
     : QObject(parent),
       d(new ProblemStorePrivate)
 {
+    setScope(BypassScopeFilter);
 }
 
 ProblemStore::~ProblemStore()
