@@ -40,10 +40,7 @@ namespace KDevelop {
  * typing text, so it quite efficient for the most common case.
  *
  * The simplest way of using this is by reimplementing your data-provider
- * based on QuickOpenDataProviderBase and KDevelop::Filter<YourType>.
- *
- * YourType should be the type that holds all the information you need.
- * The filter will hold the data, and you can access it through "items()".
+ * based on QuickOpenDataProviderBase and KDevelop::Filter\<Item\>.
  *
  * What you need to do to use it:
  *
@@ -56,7 +53,10 @@ namespace KDevelop {
  * Call setFilter(..) with the text that should be filtered for on user-input.
  *
  * Use filteredItems() to provide data to quickopen.
- * */
+ *
+ * @tparam Item should be the type that holds all the information you need.
+ * The filter will hold the data, and you can access it through "items()".
+ */
 template<class Item>
 class Filter
 {
