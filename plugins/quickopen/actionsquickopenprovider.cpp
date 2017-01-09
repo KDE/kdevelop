@@ -61,8 +61,17 @@ public:
     }
     QIcon icon() const override
     {
-        return m_action->icon();
+        // note: not the best icon, but can't find anything better
+        static const QIcon fallbackIcon = QIcon::fromTheme("system-run");
+
+        const QIcon icon = m_action->icon();
+        if (icon.isNull()) {
+            return fallbackIcon;
+        }
+
+        return icon;
     }
+
 private:
     QAction* m_action;
 
