@@ -119,16 +119,27 @@ Path findProjectForForPath(const IndexedString& path)
     const auto item = model->itemForPath(path);
     return item ? item->project()->path() : Path();
 }
+uint addedItems(const AddedItems& items)
+{
+    uint add = 0;
+    for(auto it = items.constBegin(); it != items.constEnd(); ++it) {
+        add += it.value().count();
+    }
+    return add;
+}
+
 }
 
 ProjectItemDataProvider::ProjectItemDataProvider(KDevelop::IQuickOpen* quickopen)
     : m_quickopen(quickopen)
+    , m_addedItemsCountCache([this]() { return addedItems(m_addedItems); })
 {
 }
 
 void ProjectItemDataProvider::setFilterText(const QString& text)
 {
     m_addedItems.clear();
+    m_addedItemsCountCache.markDirty();
 
     QStringList search(text.split(QStringLiteral("::"), QString::SkipEmptyParts));
     for (int a = 0; a < search.count(); ++a) {
@@ -271,6 +282,8 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data(uint pos) const
     if (!ret.isEmpty()) {
         QList<KDevelop::QuickOpenDataPointer> append = ret.mid(1);
         if (!append.isEmpty()) {
+            m_addedItemsCountCache.markDirty();
+
             AddedItems addMap;
             for (AddedItems::iterator it = m_addedItems.begin(); it != m_addedItems.end(); ) {
                 if (it.key() == pos) { //There already is appended data stored, nothing to do
@@ -300,6 +313,7 @@ void ProjectItemDataProvider::reset()
     m_files = m_quickopen->fileSet();
     m_currentItems.clear();
     m_addedItems.clear();
+    m_addedItemsCountCache.markDirty();
 
     KDevelop::DUChainReadLocker lock(DUChain::lock());
     foreach (const IndexedString& u, m_files) {
@@ -332,24 +346,15 @@ void ProjectItemDataProvider::reset()
     m_currentFilter.clear();
 }
 
-uint addedItems(const AddedItems& items)
-{
-    uint add = 0;
-    for (AddedItems::const_iterator it = items.constBegin(); it != items.constEnd(); ++it) {
-        add += it.value().count();
-    }
-
-    return add;
-}
 
 uint ProjectItemDataProvider::itemCount() const
 {
-    return m_filteredItems.count() + addedItems(m_addedItems);
+    return m_filteredItems.count() + m_addedItemsCountCache.cachedResult();
 }
 
 uint ProjectItemDataProvider::unfilteredItemCount() const
 {
-    return m_currentItems.count() + addedItems(m_addedItems);
+    return m_currentItems.count() + m_addedItemsCountCache.cachedResult();
 }
 
 QStringList ProjectItemDataProvider::supportedItemTypes()

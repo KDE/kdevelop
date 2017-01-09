@@ -23,6 +23,44 @@
 #include <serialization/indexedstring.h>
 #include <language/duchain/identifier.h>
 
+#include <functional>
+#include <type_traits>
+
+template <typename Type>
+class ResultCache
+{
+public:
+    ResultCache(std::function<Type()> func)
+        : m_func(func)
+    {
+    }
+
+    /// Mark this cache dirty. A call to cachedResult() will need to refill the cache
+    inline void markDirty() const
+    {
+        m_isDirty = true;
+    }
+
+    /**
+     * If marked dirty, calls @p func and stores return value of @p func
+     *
+     * @return Cached result of @p func
+     */
+    inline Type cachedResult() const
+    {
+        if (m_isDirty) {
+            m_result = m_func();
+            m_isDirty = false;
+        }
+        return m_result;
+    }
+private:
+    std::function<Type()> m_func;
+
+    mutable Type m_result;
+    mutable bool m_isDirty = false;
+};
+
 struct CodeModelViewItem
 {
     CodeModelViewItem()
@@ -76,10 +114,12 @@ private:
     QVector<CodeModelViewItem> m_currentItems;
     QString m_currentFilter;
     QVector<CodeModelViewItem> m_filteredItems;
+
     //Maps positions to the additional items behind those positions
     //Here additional inserted items are stored, that are not represented in m_filteredItems.
     //This is needed at least to also show overloaded function declarations
     mutable AddedItems m_addedItems;
+    ResultCache<uint> m_addedItemsCountCache;
 };
 
 #endif
