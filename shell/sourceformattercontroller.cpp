@@ -124,16 +124,17 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
     m_formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
     connect(m_formatFilesAction, &QAction::triggered, this, static_cast<void(SourceFormatterController::*)()>(&SourceFormatterController::formatFiles));
 
-    m_formatTextAction->setEnabled(false);
-    m_formatFilesAction->setEnabled(true);
-
+    // connect to both documentActivated & documentClosed,
+    // otherwise we miss when the last document was closed
     connect(Core::self()->documentController(), &IDocumentController::documentActivated,
-            this, &SourceFormatterController::activeDocumentChanged);
+            this, &SourceFormatterController::updateFormatTextAction);
+    connect(Core::self()->documentController(), &IDocumentController::documentClosed,
+            this, &SourceFormatterController::updateFormatTextAction);
     // Use a queued connection, because otherwise the view is not yet fully set up
     connect(Core::self()->documentController(), &IDocumentController::documentLoaded,
             this, &SourceFormatterController::documentLoaded, Qt::QueuedConnection);
 
-    activeDocumentChanged(Core::self()->documentController()->activeDocument());
+    updateFormatTextAction();
 }
 
 void SourceFormatterController::documentLoaded( IDocument* doc )
@@ -339,23 +340,26 @@ void SourceFormatterController::cleanup()
 {
 }
 
-
-void SourceFormatterController::activeDocumentChanged(IDocument* doc)
+void SourceFormatterController::updateFormatTextAction()
 {
     bool enabled = false;
 
+    IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument();
     if (doc) {
         QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
         if (isMimeTypeSupported(mime))
             enabled = true;
     }
 
+    m_formatLine->setEnabled(enabled);
     m_formatTextAction->setEnabled(enabled);
 }
 
 void SourceFormatterController::beautifySource()
 {
     IDocument* idoc = KDevelop::ICore::self()->documentController()->activeDocument();
+    if (!idoc)
+        return;
     KTextEditor::View* view = idoc->activeTextView();
     if (!view)
         return;

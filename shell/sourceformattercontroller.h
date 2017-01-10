@@ -133,7 +133,7 @@ public:
     bool sourceFormattingEnabled() override;
 
 private Q_SLOTS:
-    void activeDocumentChanged(KDevelop::IDocument *doc);
+    void updateFormatTextAction();
     void beautifySource();
     void beautifyLine();
     void formatFiles();
