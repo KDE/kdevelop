@@ -89,7 +89,6 @@ public:
 public Q_SLOTS:
     //slots for context menu
     void ctxBranchManager();
-    void ctxRevHistory();
 
 protected:
     /** Checks if dirPath is located in DVCS repository */

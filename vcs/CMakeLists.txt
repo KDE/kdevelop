@@ -37,8 +37,6 @@ set(KDevPlatformVcs_LIB_SRCS
     dvcs/dvcsplugin.cpp
     dvcs/ui/dvcsimportmetadatawidget.cpp
     dvcs/ui/branchmanager.cpp
-    dvcs/ui/revhistory/commitView.cpp
-    dvcs/ui/revhistory/commitlogmodel.cpp
     interfaces/ibasicversioncontrol.cpp
     interfaces/icontentawareversioncontrol.cpp
     interfaces/ipatchdocument.cpp

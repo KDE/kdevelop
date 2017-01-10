@@ -48,8 +48,6 @@
 #include "dvcsjob.h"
 #include "ui/dvcsimportmetadatawidget.h"
 #include "ui/branchmanager.h"
-#include "ui/revhistory/commitlogmodel.h"
-#include "ui/revhistory/commitView.h"
 #include <vcs/vcspluginhelper.h>
 
 #include <KConfigGroup>
@@ -112,7 +110,6 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     QMenu * menu = d->m_common->commonActions();
     menu->addSeparator();
     menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
-    menu->addAction(i18n("Revision Graph..."), this, SLOT(ctxRevHistory()))->setEnabled(ctxUrlList.count()==1);
     additionalMenuEntries(menu, ctxUrlList);
 
     ContextMenuExtension menuExt;
@@ -141,30 +138,6 @@ void DistributedVersionControlPlugin::ctxBranchManager()
     BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()),
                                 this, core()->uiController()->activeMainWindow());
     branchManager.exec();
-}
-
-// This is redundant with the normal VCS "history" action
-void DistributedVersionControlPlugin::ctxRevHistory()
-{
-    QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
-    Q_ASSERT(!ctxUrlList.isEmpty());
-    
-    QDialog d;
-    QVBoxLayout* layout = new QVBoxLayout(&d);
-    d.setLayout(layout);
-
-    CommitLogModel* model = new CommitLogModel(this, ctxUrlList.first().toLocalFile(), &d);
-    CommitView *revTree = new CommitView(&d);
-    revTree->setModel(model);
-    layout->addWidget(revTree);
-
-    QDialogButtonBox* dbox = new QDialogButtonBox(&d);
-    dbox->setStandardButtons(QDialogButtonBox::Close);
-    connect(dbox, &QDialogButtonBox::accepted, &d, &QDialog::accept);
-    connect(dbox, &QDialogButtonBox::rejected, &d, &QDialog::reject);
-    layout->addWidget(dbox);
-
-    d.exec();
 }
 
 }
