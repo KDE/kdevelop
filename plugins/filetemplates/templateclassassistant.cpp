@@ -307,7 +307,13 @@ void TemplateClassAssistant::setup()
     d->templateSelectionPage->setIcon(QIcon::fromTheme(QStringLiteral("project-development-new-template")));
 
     d->dummyPage = addPage(new QWidget(this), QStringLiteral("Dummy Page"));
-//     showButton(QDialog::Help, false);
+
+    // KAssistantDialog creates a help button by default, no option to prevent that
+    QPushButton *helpButton = button(QDialogButtonBox::Help);
+    if (helpButton) {
+        buttonBox()->removeButton(helpButton);
+        delete helpButton;
+    }
 }
 
 void TemplateClassAssistant::templateChosen(const QString& templateDescription)

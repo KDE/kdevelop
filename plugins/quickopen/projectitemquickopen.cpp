@@ -210,15 +210,6 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
     std::sort(m_filteredItems.begin(), m_filteredItems.end(), ClosestMatchToText(heights));
 }
 
-QList<KDevelop::QuickOpenDataPointer> ProjectItemDataProvider::data(uint start, uint end) const
-{
-    QList<KDevelop::QuickOpenDataPointer> ret;
-    for (uint a = start; a < end; ++a) {
-        ret << data(a);
-    }
-
-    return ret;
-}
 
 KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data(uint pos) const
 {

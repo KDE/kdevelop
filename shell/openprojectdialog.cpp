@@ -12,6 +12,7 @@
 #include "openprojectpage.h"
 #include "projectinfopage.h"
 
+#include <QPushButton>
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QDebug>
@@ -76,6 +77,13 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
     , projectInfoPage(nullptr)
 {
     resize(QSize(700, 500));
+
+    // KAssistantDialog creates a help button by default, no option to prevent that
+    auto helpButton = button(QDialogButtonBox::Help);
+    if (helpButton) {
+        buttonBox()->removeButton(helpButton);
+        delete helpButton;
+    }
 
     const bool useKdeFileDialog = qEnvironmentVariableIsSet("KDE_FULL_SESSION");
     QStringList filters, allEntry;
