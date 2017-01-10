@@ -11,6 +11,7 @@
 
 #include <QSignalMapper>
 #include <QDir>
+#include <QPushButton>
 
 #include <KLocalizedString>
 
@@ -25,7 +26,13 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
     :KAssistantDialog(parent, flags)
 {
     setWindowTitle(i18n("Create New Project"));
-//     KDialog::showButton(Help, false);
+
+    // KAssistantDialog creates a help button by default, no option to prevent that
+    QPushButton *helpButton = button(QDialogButtonBox::Help);
+    if (helpButton) {
+        buttonBox()->removeButton(helpButton);
+        delete helpButton;
+    }
 
     m_selectionPage = new ProjectSelectionPage(templatesModel, this);
     m_vcsPage = new ProjectVcsPage( pluginController, this );
