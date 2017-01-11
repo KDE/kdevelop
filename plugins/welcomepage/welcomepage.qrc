@@ -9,6 +9,7 @@
     <file>qml/GettingStarted.qml</file>
     <file>qml/Link.qml</file>
     <file>qml/StandardPage.qml</file>
+    <file>qml/NewsFeed.qml</file>
     <file>qml/Heading.qml</file>
     <file>qml/StandardBackground.qml</file>
     <file>qml/ProjectsDashboard.qml</file>
@@ -17,6 +18,8 @@
     <file>qml/area_code.qml</file>
     <file>qml/area_debug.qml</file>
     <file>qml/area_review.qml</file>
+
+    <file>qml/storage.js</file>
 
     <file>qml/main.qml</file>
  </qresource>

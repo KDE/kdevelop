@@ -61,6 +61,30 @@ StandardBackground {
         }
 
         Heading {
+            id: newsHeading
+
+            Layout.fillWidth: true
+            text: i18n("News")
+        }
+
+        NewsFeed {
+            id: newsFeed
+
+            readonly property int maxEntries: 3
+
+            Layout.fillWidth: true
+            Layout.minimumHeight: !loading ? (Math.min(count, maxEntries) * 40) : 40
+
+            Behavior on Layout.minimumHeight { PropertyAnimation {} }
+        }
+
+        // add some spacing
+        Item {
+            Layout.fillWidth: true
+            height: 10
+        }
+
+        Heading {
             text: i18n("Need Help?")
         }
 
