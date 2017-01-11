@@ -23,5 +23,22 @@ import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.3
 
-ToolButton {
+Label {
+    id: root
+
+    signal clicked
+
+    elide: Text.ElideRight
+    opacity: mouseArea.containsMouse ? 0.8 : 1
+
+    MouseArea {
+        id: mouseArea
+
+        anchors.fill: parent
+
+        cursorShape: Qt.PointingHandCursor
+        hoverEnabled: true
+        onClicked: root.clicked()
+    }
+
 }

@@ -30,15 +30,13 @@ StandardBackground {
     tools: ColumnLayout {
         spacing: 10
 
-        RowLayout {
+        Row {
             Layout.fillWidth: true
-            Layout.preferredHeight: parent.width/4
-            Layout.maximumHeight: parent.width/4
+            spacing: 5
 
             Image {
                 id: icon
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignHCenter
+
                 horizontalAlignment: Image.AlignHCenter
                 verticalAlignment: Image.AlignVCenter
 
@@ -47,11 +45,9 @@ StandardBackground {
                 fillMode: Image.PreserveAspectFit
             }
             Label {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
                 verticalAlignment: Text.AlignVCenter
+                height: icon.height
                 text: "KDevelop"
-                fontSizeMode: Text.Fit
                 font {
                     pointSize: 20
                     weight: Font.ExtraLight
@@ -64,33 +60,33 @@ StandardBackground {
             Layout.fillHeight: true
         }
 
-        ColumnLayout {
-            Layout.fillWidth: true
-            Heading {
-                Layout.fillWidth: true
-                text: i18n("Need Help?")
-            }
+        Heading {
+            text: i18n("Need Help?")
+        }
+
+        Column {
+            spacing: 10
 
             Link {
+                x: 10
                 text: i18n("KDevelop.org")
-                iconName: "applications-webbrowsers"
                 onClicked: {
                     Qt.openUrlExternally("https://kdevelop.org")
                 }
             }
             Link {
+                x: 10
                 text: i18n("Learn about KDevelop")
-                iconName: "applications-webbrowsers"
                 onClicked: Qt.openUrlExternally("https://userbase.kde.org/KDevelop")
             }
             Link {
+                x: 10
                 text: i18n("Join KDevelop's team!")
-                iconName: "applications-webbrowsers"
                 onClicked: Qt.openUrlExternally("https://kdevelop.org/contribute-kdevelop")
             }
             Link {
+                x: 10
                 text: i18n("Handbook")
-                iconName: "applications-webbrowsers"
                 onClicked: kdev.retrieveMenuAction("help/help_contents").trigger()
             }
         }
