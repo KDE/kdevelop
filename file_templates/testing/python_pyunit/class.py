@@ -14,12 +14,12 @@ import unittest
 
 class {{ name }}(unittest.TestCase):
     def setUp(self):
-        # Called before the first testfunction is executed
+        # Called prior to each test method
         pass
 
 
     def tearDown(self):
-        # Called after the last testfunction was executed
+        # Called after each test method
         pass
 
 
