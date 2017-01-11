@@ -644,7 +644,7 @@ int main( int argc, char *argv[] )
 
     KDevIDEExtension::init();
 
-    if(!Core::initialize(nullptr, Core::Default, session))
+    if(!Core::initialize(Core::Default, session))
         return 5;
 
     // register a DBUS service for this process, so that we can open files in it from other invocations
