@@ -110,9 +110,12 @@ ListView {
         }
     }
 
-    model: ListModel {
+    ListModel {
         id: newsFeedOfflineModel
     }
+
+    // detach from model while fetching feed to make space for the busy indicator
+    model: root.loading ? undefined : newsFeedOfflineModel
 
     delegate: Column {
         id: feedDelegate
@@ -149,7 +152,7 @@ ListView {
 
         height: newsHeading.height
 
-        running: newsFeed.loading
+        running: root.loading
     }
 
     Label {
