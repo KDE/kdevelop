@@ -300,18 +300,12 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
 
 KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
 {
-    if (number)
-        return nullptr;
-    else
-        return new ProjectConfigPage(this, options.project, parent);
+    return number ? nullptr : new ProjectConfigPage(this, options.project, parent);
 }
 
 KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
 {
-    if (number)
-        return nullptr;
-    else
-        return new GlobalConfigPage(this, parent);
+    return number ? nullptr : new GlobalConfigPage(this, parent);
 }
 
 }
