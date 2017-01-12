@@ -120,10 +120,7 @@ public:
         : QApplication(argc, argv, GUIenabled)
 #endif
         {
-#if KDEVELOP_SINGLE_APP
             Q_UNUSED(GUIenabled);
-#endif
-
             connect(this, &QGuiApplication::saveStateRequest, this, &KDevelopApplication::saveState);
         }
 
