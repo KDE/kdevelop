@@ -60,6 +60,14 @@ ecm_add_test(test_duchain.cpp
         KDevClangPrivate
 )
 
+ecm_add_test(test_refactoring.cpp
+    TEST_NAME test_refactoring-clang
+    LINK_LIBRARIES
+        KDev::Tests
+        Qt5::Test
+        KDevClangPrivate
+)
+
 ecm_add_test(test_duchainutils.cpp
     TEST_NAME test_duchainutils
     LINK_LIBRARIES

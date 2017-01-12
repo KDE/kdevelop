@@ -28,6 +28,8 @@
 
 #include <language/codegen/basicrefactoring.h>
 
+class TestRefactoring;
+
 namespace KDevelop
 {
 class Context;
@@ -49,7 +51,12 @@ public:
 public slots:
     void executeMoveIntoSourceAction();
 
+protected:
+    KDevelop::DocumentChangeSet::ChangeResult applyChangesToDeclarations(const QString& oldName, const QString& newName, KDevelop::DocumentChangeSet& changes, const QList<KDevelop::IndexedDeclaration>& declarations) override;
+
 private:
+    friend TestRefactoring;
+
     bool validCandidateToMoveIntoSource(KDevelop::Declaration* decl);
 };
 

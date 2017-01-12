@@ -28,6 +28,7 @@
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/functiondeclaration.h>
@@ -46,6 +47,27 @@
 #include "util/clangdebug.h"
 
 using namespace KDevelop;
+
+namespace {
+
+bool isDestructor(Declaration* decl)
+{
+    if (auto functionDef = dynamic_cast<FunctionDefinition*>(decl)) {
+        // we found a definition, e.g. "Foo::~Foo()"
+        const auto functionDecl = functionDef->declaration(decl->topContext());
+        if (auto classFunctionDecl = dynamic_cast<ClassFunctionDeclaration*>(functionDecl)) {
+            return classFunctionDecl->isDestructor();
+        }
+    }
+    else if (auto classFunctionDecl = dynamic_cast<ClassFunctionDeclaration*>(decl)) {
+        // we found a declaration, e.g. "~Foo()"
+        return classFunctionDecl->isDestructor();
+    }
+
+    return false;
+}
+
+}
 
 ClangRefactoring::ClangRefactoring(QObject* parent)
     : BasicRefactoring(parent)
@@ -232,4 +254,37 @@ void ClangRefactoring::executeMoveIntoSourceAction()
     if (!error.isEmpty()) {
         KMessageBox::error(nullptr, error);
     }
+}
+
+DocumentChangeSet::ChangeResult ClangRefactoring::applyChangesToDeclarations(const QString& oldName,
+                                                                             const QString& newName,
+                                                                             DocumentChangeSet& changes,
+                                                                             const QList<IndexedDeclaration>& declarations)
+{
+    foreach (const IndexedDeclaration decl, declarations) {
+        Declaration *declaration = decl.data();
+        if (!declaration)
+            continue;
+
+        if (declaration->range().isEmpty())
+            clangDebug() << "found empty declaration:" << declaration->toString();
+
+        // special handling for dtors, their name is not "Foo", but "~Foo"
+        // see https://bugs.kde.org/show_bug.cgi?id=373452
+        QString fixedOldName = oldName;
+        QString fixedNewName = newName;
+
+        if (isDestructor(declaration)) {
+            clangDebug() << "found destructor:" << declaration->toString() << "-- making sure we replace the identifier correctly";
+            fixedOldName = QLatin1Char('~') + oldName;
+            fixedNewName = QLatin1Char('~') + newName;
+        }
+
+        TopDUContext *top = declaration->topContext();
+        DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), declaration->rangeInCurrentRevision(), fixedOldName, fixedNewName));
+        if (!result)
+            return result;
+    }
+
+    return true;
 }
