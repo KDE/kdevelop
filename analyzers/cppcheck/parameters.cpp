@@ -204,12 +204,12 @@ QStringList Parameters::commandLine(QString& infoMessage) const
     if (m_project && useProjectIncludes) {
         QList<KDevelop::Path> ignored;
 
-        foreach (QString element, applyPlaceholders(ignoredIncludes).split(';')) {
+        foreach (const QString& element, applyPlaceholders(ignoredIncludes).split(';')) {
             if (!element.trimmed().isEmpty())
                 ignored.append(KDevelop::Path(element));
         }
 
-        foreach (auto dir, m_includeDirectories) {
+        foreach (const auto& dir, m_includeDirectories) {
             if (ignored.contains(dir))
                 continue;
 
