@@ -662,8 +662,8 @@ int main( int argc, char *argv[] )
             // make sure the project is not already opened by the session controller
             bool shouldOpen = true;
             Path path(info.absoluteFilePath());
-            foreach(KDevelop::IProject* p, core->projectController()->projects()) {
-                if (p->projectFile() == path) {
+            foreach(KDevelop::IProject* project, core->projectController()->projects()) {
+                if (project->projectFile() == path) {
                     shouldOpen = false;
                     break;
                 }
