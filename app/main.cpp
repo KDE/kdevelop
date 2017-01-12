@@ -655,27 +655,25 @@ int main( int argc, char *argv[] )
     }
 
     QStringList projectNames = parser.values("project");
-    if(!projectNames.isEmpty())
+    foreach(const QString& p, projectNames)
     {
-        foreach(const QString& p, projectNames)
-        {
-            QFileInfo info( p );
-            if( info.suffix() == "kdev4" ) {
-                // make sure the project is not already opened by the session controller
-                bool shouldOpen = true;
-                Path path(info.absoluteFilePath());
-                foreach(KDevelop::IProject* p, core->projectController()->projects()) {
-                    if (p->projectFile() == path) {
-                        shouldOpen = false;
-                        break;
-                    }
+        QFileInfo info( p );
+        if( info.suffix() == "kdev4" ) {
+            // make sure the project is not already opened by the session controller
+            bool shouldOpen = true;
+            Path path(info.absoluteFilePath());
+            foreach(KDevelop::IProject* p, core->projectController()->projects()) {
+                if (p->projectFile() == path) {
+                    shouldOpen = false;
+                    break;
                 }
-                if (shouldOpen) {
-                    core->projectController()->openProject( path.toUrl() );
-                }
+            }
+            if (shouldOpen) {
+                core->projectController()->openProject( path.toUrl() );
             }
         }
     }
+
 
     if ( parser.isSet("debug") ) {
         Q_ASSERT( !debugeeName.isEmpty() );
