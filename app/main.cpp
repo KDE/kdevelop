@@ -163,7 +163,7 @@ private Q_SLOTS:
             }
 
             QString kdevelopSessionId = activeSession->id().toString();
-            sm.setRestartCommand(QStringList() << QCoreApplication::applicationFilePath() << "-session" << x11SessionId << "-s" << kdevelopSessionId);
+            sm.setRestartCommand({QCoreApplication::applicationFilePath(), "-session", x11SessionId, "-s", kdevelopSessionId});
         }
     }
 };
