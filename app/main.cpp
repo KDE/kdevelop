@@ -655,9 +655,9 @@ int main( int argc, char *argv[] )
     }
 
     QStringList projectNames = parser.values("project");
-    foreach(const QString& p, projectNames)
+    foreach(const QString& projectName, projectNames)
     {
-        QFileInfo info( p );
+        QFileInfo info( projectName );
         if( info.suffix() == "kdev4" ) {
             // make sure the project is not already opened by the session controller
             bool shouldOpen = true;
