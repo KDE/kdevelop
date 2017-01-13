@@ -60,9 +60,33 @@ void TestKTextEditorHelpers::testExtractCursor_data()
         << QStringLiteral("widget.cpp:12:5")
         << KTextEditor::Cursor(11, 4)
         << QStringLiteral("widget.cpp");
+    QTest::newRow("file:line")
+        << QStringLiteral("widget.cpp#12")
+        << KTextEditor::Cursor(11, 0)
+        << QStringLiteral("widget.cpp");
+    QTest::newRow("file:line")
+        << QStringLiteral("widget.cpp#L12")
+        << KTextEditor::Cursor(11, 0)
+        << QStringLiteral("widget.cpp");
+    QTest::newRow("file:line")
+        << QStringLiteral("widget.cpp#n12")
+        << KTextEditor::Cursor(11, 0)
+        << QStringLiteral("widget.cpp");
     // partially invalid input
     QTest::newRow("file:")
         << QStringLiteral("widget.cpp:")
         << KTextEditor::Cursor::invalid()
         << QStringLiteral("widget.cpp:");
+    QTest::newRow("file:")
+        << QStringLiteral("widget.cpp#")
+        << KTextEditor::Cursor::invalid()
+        << QStringLiteral("widget.cpp#");
+    QTest::newRow("file:")
+        << QStringLiteral("widget.cpp#L")
+        << KTextEditor::Cursor::invalid()
+        << QStringLiteral("widget.cpp#L");
+    QTest::newRow("file:")
+        << QStringLiteral("widget.cpp#n")
+        << KTextEditor::Cursor::invalid()
+        << QStringLiteral("widget.cpp#n");
 }

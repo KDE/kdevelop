@@ -53,8 +53,17 @@ QRect KTextEditorHelpers::getItemBoundingRect(const KTextEditor::View* view, con
 
 KTextEditor::Cursor KTextEditorHelpers::extractCursor(const QString& input, int* pathLength)
 {
+    // ":ll:cc", ":ll"
     static const QRegularExpression pattern(QStringLiteral(":(\\d+)(?::(\\d+))?$"));
-    const auto match = pattern.match(input);
+    // "#Lll", "#nll", "#ll" as e.g. seen with repo web links
+    static const QRegularExpression pattern2(QStringLiteral("#(?:n|L|)(\\d+)$"));
+
+    auto match = pattern.match(input);
+
+    if (!match.hasMatch()) {
+        match = pattern2.match(input);
+    }
+
     if (!match.hasMatch()) {
         if (pathLength)
             *pathLength = input.length();
@@ -62,6 +71,7 @@ KTextEditor::Cursor KTextEditorHelpers::extractCursor(const QString& input, int*
     }
 
     int line = match.capturedRef(1).toInt() - 1;
+    // captured(2) for pattern2 will yield null QString, toInt() thus 0, so no need for if-else
     // don't use an invalid column when the line is valid
     int column = qMax(0, match.captured(2).toInt() - 1);
 
