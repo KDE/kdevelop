@@ -609,14 +609,8 @@ void OutputWidget::copySelection()
 
 void OutputWidget::selectAll()
 {
-    QWidget* widget = currentWidget();
-    if( !widget )
-        return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
-    if( !view )
-        return;
-
-    view->selectAll();
+    if (QAbstractItemView *view = qobject_cast<QAbstractItemView*>(currentWidget()))
+        view->selectAll();
 }
 
 int OutputWidget::currentOutputIndex()
