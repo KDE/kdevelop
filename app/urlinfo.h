@@ -21,9 +21,9 @@
 #ifndef URLINFO_H
 #define URLINFO_H
 
+#include <util/texteditorhelpers.h>
 #include <KTextEditor/Cursor>
 
-#include <QRegularExpression>
 #include <QDataStream>
 #include <QDir>
 #include <QString>
@@ -58,20 +58,13 @@ public:
          * ok, the path as is, is no existing file, now, cut away :xx:yy stuff as cursor
          * this will make test:50 to test with line 50
          */
-        const auto match = QRegularExpression(QStringLiteral(":(\\d+)(?::(\\d+))?:?$")).match(path);
-        if (match.isValid()) {
+        int pathLength;
+        cursor = KDevelop::KTextEditorHelpers::extractCursor(path, &pathLength);
+        if (cursor.isValid()) {
             /**
              * cut away the line/column specification from the path
              */
-            path.chop(match.capturedLength());
-
-            /**
-             * set right cursor position
-             * don't use an invalid column when the line is valid
-             */
-            const int line = match.captured(1).toInt() - 1;
-            const int column = qMax(0, match.captured(2).toInt() - 1);
-            cursor.setPosition(line, column);
+            path.truncate(pathLength);
         }
 
         /**
