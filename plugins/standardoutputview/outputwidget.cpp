@@ -333,13 +333,8 @@ QWidget* OutputWidget::currentWidget() const
 
 KDevelop::IOutputViewModel *OutputWidget::outputViewModel() const
 {
-    QWidget* widget = currentWidget();
-
-    if( !widget || !widget->isVisible() )
-        return nullptr;
-
-    auto view = qobject_cast<QAbstractItemView*>(widget);
-    if( !view )
+    auto view = qobject_cast<QAbstractItemView*>(currentWidget());
+    if( !view || !view->isVisible())
         return nullptr;
 
     QAbstractItemModel *absmodel = view->model();
@@ -365,8 +360,7 @@ void OutputWidget::eventuallyDoFocus()
 
 QAbstractItemView *OutputWidget::outputView() const
 {
-    auto widget = currentWidget();
-    return qobject_cast<QAbstractItemView*>(widget);
+    return qobject_cast<QAbstractItemView*>(currentWidget());
 }
 
 void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *view, KDevelop::IOutputViewModel *iface)
