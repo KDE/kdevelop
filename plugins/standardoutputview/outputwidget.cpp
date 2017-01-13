@@ -634,14 +634,11 @@ int OutputWidget::currentOutputIndex()
 
 void OutputWidget::outputFilter(const QString& filter)
 {
-    QWidget* widget = currentWidget();
-    if( !widget )
-        return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    QAbstractItemView *view = qobject_cast<QAbstractItemView*>(currentWidget());
     if( !view )
         return;
     int index = currentOutputIndex();
-    auto proxyModel = dynamic_cast<QSortFilterProxyModel*>(view->model());
+    auto proxyModel = qobject_cast<QSortFilterProxyModel*>(view->model());
     if( !proxyModel )
     {
         proxyModel = new QSortFilterProxyModel(view->model());
