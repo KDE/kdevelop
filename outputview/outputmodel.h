@@ -77,6 +77,7 @@ public Q_SLOTS:
     void appendLine( const QString& );
     void appendLines( const QStringList& );
     void ensureAllDone();
+    void clear();
 
 signals:
     /// If the current filter strategy supports it, reports progress information

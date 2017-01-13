@@ -452,14 +452,22 @@ void OutputModel::appendLines( const QStringList& lines )
                               Q_ARG(QStringList, lines));
 }
 
-void OutputModel::appendLine( const QString& l )
+void OutputModel::appendLine( const QString& line )
 {
-    appendLines( QStringList() << l );
+    appendLines( QStringList() << line );
 }
 
 void OutputModel::ensureAllDone()
 {
     QMetaObject::invokeMethod(d->worker, "flushBuffers");
+}
+
+void OutputModel::clear()
+{
+    ensureAllDone();
+    beginResetModel();
+    d->m_filteredItems.clear();
+    endResetModel();
 }
 
 }

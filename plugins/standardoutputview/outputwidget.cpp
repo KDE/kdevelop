@@ -45,6 +45,7 @@
 #include <outputview/ioutputviewmodel.h>
 #include <util/focusedtreeview.h>
 
+#include "outputmodel.h"
 #include "toolviewdata.h"
 #include "debug.h"
 
@@ -172,6 +173,23 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
                     this, &OutputWidget::updateFilter);
         }
     }
+
+    QAction *clearAction = new QAction("Clear");
+    connect(clearAction, &QAction::triggered, [=]{
+        auto view = qobject_cast<QAbstractItemView*>(currentWidget());
+        if( !view || !view->isVisible())
+            return;
+
+        KDevelop::OutputModel *outputModel = nullptr;
+        if ( QAbstractProxyModel* proxy = qobject_cast<QAbstractProxyModel*>(view->model())) {
+            outputModel = dynamic_cast<KDevelop::OutputModel*>(proxy->sourceModel());
+        } else {
+            outputModel = dynamic_cast<KDevelop::OutputModel*>(view->model());
+        }
+        outputModel->clear();
+    });
+
+    addAction(clearAction);
 
     addActions(data->actionList);
 
