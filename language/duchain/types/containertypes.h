@@ -93,12 +93,14 @@ public:
      * Pass your language's UnsureType as a template parameter, as it will eventually
      * need to be instantiated.
      *
+     * @note If the type is already assigned to a declaration, the duchain
+     * must be write-locked when this is called.
+     *
      * @param typeToAdd The new type the list's contents can possibly be of.
      */
     template <typename LanguageUnsureType>
     void addContentType(AbstractType::Ptr typeToAdd) {
         auto newContentType = TypeUtils::mergeTypes<LanguageUnsureType>(contentType().abstractType(), typeToAdd);
-        DUChainWriteLocker lock;
         d_func_dynamic()->m_contentType = IndexedType(newContentType);
     }
 
