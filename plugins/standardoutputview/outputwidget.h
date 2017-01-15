@@ -79,6 +79,7 @@ private slots:
     void selectAll();
     void outputFilter(const QString& filter);
     void updateFilter(int index);
+    void clearModel();
 
 private:
     enum SelectionMode {

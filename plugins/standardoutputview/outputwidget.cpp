@@ -174,20 +174,8 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         }
     }
 
-    QAction *clearAction = new QAction("Clear");
-    connect(clearAction, &QAction::triggered, [=]{
-        auto view = qobject_cast<QAbstractItemView*>(currentWidget());
-        if( !view || !view->isVisible())
-            return;
-
-        KDevelop::OutputModel *outputModel = nullptr;
-        if ( QAbstractProxyModel* proxy = qobject_cast<QAbstractProxyModel*>(view->model())) {
-            outputModel = dynamic_cast<KDevelop::OutputModel*>(proxy->sourceModel());
-        } else {
-            outputModel = dynamic_cast<KDevelop::OutputModel*>(view->model());
-        }
-        outputModel->clear();
-    });
+    QAction *clearAction = new QAction(i18n("Clear"));
+    connect(clearAction, &QAction::triggered, this, &OutputWidget::clearModel);
 
     addAction(clearAction);
 
@@ -205,6 +193,21 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         changeDelegate( id );
     }
     enableActions();
+}
+
+void OutputWidget::clearModel()
+{
+    auto view = qobject_cast<QAbstractItemView*>(currentWidget());
+    if( !view || !view->isVisible())
+        return;
+
+    KDevelop::OutputModel *outputModel = nullptr;
+    if (auto proxy = qobject_cast<QAbstractProxyModel*>(view->model())) {
+        outputModel = qobject_cast<KDevelop::OutputModel*>(proxy->sourceModel());
+    } else {
+        outputModel = qobject_cast<KDevelop::OutputModel*>(view->model());
+    }
+    outputModel->clear();
 }
 
 void OutputWidget::addOutput( int id )
