@@ -100,6 +100,10 @@ bool ClangRefactoring::validCandidateToMoveIntoSource(Declaration* decl)
         return false;
     }
 
+    if (dynamic_cast<FunctionDefinition*>(decl)) {
+        return false;
+    }
+
     auto childCtx = decl->internalContext()->childContexts();
     if (childCtx.isEmpty()) {
         return false;
