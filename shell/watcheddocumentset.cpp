@@ -28,6 +28,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
@@ -148,6 +149,7 @@ private:
 
     void getImportsFromDUChain()
     {
+        KDevelop::DUChainReadLocker lock;
         QSet<TopDUContext*> visitedContexts;
 
         m_imports.clear();
