@@ -174,9 +174,8 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         }
     }
 
-    QAction *clearAction = new QAction(i18n("Clear"));
+    QAction *clearAction = new QAction(i18n("Clear"), this);
     connect(clearAction, &QAction::triggered, this, &OutputWidget::clearModel);
-
     addAction(clearAction);
 
     addActions(data->actionList);
