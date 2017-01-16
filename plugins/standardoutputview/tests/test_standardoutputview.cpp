@@ -112,7 +112,7 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
 
     QList<QAction*> actions = outputWidget->actions();
-    QCOMPARE(actions.size(), 10);
+    QCOMPARE(actions.size(), 11);
 
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
