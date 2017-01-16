@@ -181,7 +181,6 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
 
     ConfigGroup configGroup = KSharedConfig::openConfig()->group("ClangTidy");
     auto clangTidyPath = configGroup.readEntry(ConfigGroup::ExecutablePath);
-    auto buildSystem = project->buildSystemManager();
 
     Job::Parameters params;
 
@@ -198,7 +197,9 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     } else {
         params.filePath = url.toLocalFile();
     }
-    params.buildDir = buildSystem->buildDirectory(project->projectItem()).toLocalFile();
+    if (const auto buildSystem = project->buildSystemManager()) {
+        params.buildDir = buildSystem->buildDirectory(project->projectItem()).toLocalFile();
+    }
     params.additionalParameters = m_config.readEntry(ConfigGroup::AdditionalParameters);
     params.analiseTempDtors = m_config.readEntry(ConfigGroup::AnaliseTempDtors);
     params.enabledChecks = m_activeChecks.join(',');
