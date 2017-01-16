@@ -286,5 +286,5 @@ DocumentChangeSet::ChangeResult ClangRefactoring::applyChangesToDeclarations(con
             return result;
     }
 
-    return true;
+    return KDevelop::DocumentChangeSet::ChangeResult::successfulResult();
 }
