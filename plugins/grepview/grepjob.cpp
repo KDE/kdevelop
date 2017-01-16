@@ -141,7 +141,7 @@ void GrepJob::slotFindFinished()
         emit hideProgress(this);
         emit clearMessage(this);
         m_errorMessage = i18nc("Capture is the text which is \"captured\" with () in regular expressions "
-                                    "see http://doc.trolltech.com/qregexp.html#capturedTexts",
+                                    "see https://doc.qt.io/qt-5/qregexp.html#capturedTexts",
                                     "Captures are not allowed in pattern string");
         emitResult();
         return;
