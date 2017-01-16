@@ -98,7 +98,8 @@ void ConfigWidget::changeAction( int idx )
         emptyTool.enabled = false;
         setTool(emptyTool);
     } else {
-        const CustomBuildSystemTool& selectedTool = m_tools[idx];
+        // create copy to avoid crash, see https://bugs.kde.org/show_bug.cgi?id=335470
+        const CustomBuildSystemTool selectedTool = m_tools[idx];
         setTool(selectedTool);
     }
 }
