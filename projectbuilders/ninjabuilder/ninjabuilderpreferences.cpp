@@ -45,8 +45,6 @@ NinjaBuilderPreferences::NinjaBuilderPreferences(IPlugin* plugin,
 
     connect(m_prefsUi->configureEnvironment, &EnvironmentConfigureButton::environmentConfigured,
             this, &NinjaBuilderPreferences::changed);
-    connect(m_prefsUi->kcfg_environmentProfile, &EnvironmentSelectionWidget::currentProfileChanged,
-            this, &NinjaBuilderPreferences::changed);
 
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
 }

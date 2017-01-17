@@ -42,8 +42,6 @@ MakeBuilderPreferences::MakeBuilderPreferences(IPlugin* plugin, const ProjectCon
             this, &MakeBuilderPreferences::changed);
     connect(m_prefsUi->configureEnvironment, &EnvironmentConfigureButton::environmentConfigured,
             this, &MakeBuilderPreferences::changed);
-    connect(m_prefsUi->kcfg_environmentProfile, &EnvironmentSelectionWidget::currentProfileChanged,
-            this, &MakeBuilderPreferences::changed);
     l->addWidget( w );
 
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
