@@ -78,7 +78,7 @@ public:
   /**
    * Access the integral type
    *
-   * \returns the type's modifiers.
+   * \returns the type's data type.
    */
   uint dataType() const;
 
