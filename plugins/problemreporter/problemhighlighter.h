@@ -45,7 +45,6 @@ private:
     QPointer<KTextEditor::Document> m_document;
     QList<KTextEditor::MovingRange*> m_topHLRanges;
     QVector<KDevelop::IProblem::Ptr> m_problems;
-    QMap<KTextEditor::MovingRange*, KDevelop::IProblem::Ptr> m_problemsForRanges;
 
 public slots:
     void settingsChanged();
