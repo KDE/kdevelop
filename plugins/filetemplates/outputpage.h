@@ -23,6 +23,8 @@
 #include <QUrl>
 #include <ktexteditor/cursor.h>
 
+#include "ipagefocus.h"
+
 namespace KDevelop {
 
 class TemplateRenderer;
@@ -32,7 +34,7 @@ class CreateClassAssistant;
 /**
  * Assistant page for setting the output location of generated source code
  */
-class OutputPage : public QWidget
+class OutputPage : public QWidget, public IPageFocus
 {
     Q_OBJECT
 
@@ -68,6 +70,8 @@ public:
      * Returns the positions within files where code is to be generated.
      */
     QHash<QString, KTextEditor::Cursor> filePositions() const;
+
+    void setFocusToFirstEditWidget() override;
 
 Q_SIGNALS:
     /**

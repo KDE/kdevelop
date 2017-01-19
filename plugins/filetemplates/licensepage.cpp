@@ -270,6 +270,11 @@ QString LicensePage::license() const
     return licenseText;
 }
 
+void LicensePage::setFocusToFirstEditWidget()
+{
+    d->license->licenseComboBox->setFocus();
+}
+
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::LicensePagePrivate::LicenseInfo, Q_MOVABLE_TYPE);

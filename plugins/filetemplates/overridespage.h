@@ -22,6 +22,7 @@
 #include <QWidget>
 
 #include "language/duchain/declaration.h"
+#include "ipagefocus.h"
 
 class QTreeWidget;
 class QTreeWidgetItem;
@@ -31,7 +32,7 @@ namespace KDevelop {
 /**
  * Assistant page for choosing class functions, overridden from base classes. 
  */
-class OverridesPage : public QWidget
+class OverridesPage : public QWidget, public IPageFocus
 {
     Q_OBJECT
 
@@ -78,6 +79,8 @@ public:
     QTreeWidget* overrideTree() const;
 
     QWidget* extraFunctionsContainer() const;
+
+    void setFocusToFirstEditWidget() override;
 
 public Q_SLOTS:
     /**

@@ -21,10 +21,15 @@
 
 #include <QWidget>
 
+#include "ipagefocus.h"
+
+namespace KDevelop
+{
+
 /**
  * Assistant dialog page for setting the identifier and inheritances of a new class
  */
-class ClassIdentifierPage : public QWidget
+class ClassIdentifierPage : public QWidget, public IPageFocus
 {
     Q_OBJECT
     Q_PROPERTY(QStringList inheritance READ inheritanceList)
@@ -54,6 +59,8 @@ public:
      */
     void setInheritanceList(const QStringList& list);
 
+    void setFocusToFirstEditWidget() override;
+
 Q_SIGNALS:
     void inheritanceChanged();
     /**
@@ -70,5 +77,7 @@ private Q_SLOTS:
 private:
     struct ClassIdentifierPagePrivate* const d;
 };
+
+}
 
 #endif // KDEVPLATFORM_PLUGIN_CLASSIDENTIFIERPAGE_H

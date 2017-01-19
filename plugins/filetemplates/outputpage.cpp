@@ -265,6 +265,11 @@ QHash< QString, KTextEditor::Cursor > OutputPage::filePositions() const
     return positions;
 }
 
+void OutputPage::setFocusToFirstEditWidget()
+{
+    d->output->lowerFilenameCheckBox->setFocus();
+}
+
 }
 
 #include "moc_outputpage.cpp"

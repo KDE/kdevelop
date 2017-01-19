@@ -505,6 +505,10 @@ void TemplateClassAssistant::next()
     {
         d->outputPageWidget->loadFileTemplate(d->fileTemplate, d->baseUrl, d->renderer);
     }
+
+    if (auto* pageFocus = dynamic_cast<KDevelop::IPageFocus*>(currentPage()->widget())) {
+        pageFocus->setFocusToFirstEditWidget();
+    }
 }
 
 void TemplateClassAssistant::back()

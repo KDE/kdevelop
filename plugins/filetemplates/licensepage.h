@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-
+#include "ipagefocus.h"
 
 namespace KDevelop {
 
@@ -30,7 +30,7 @@ namespace KDevelop {
  *
  * @todo Add the name of the Author at the top of the license
  */
-class LicensePage : public QWidget
+class LicensePage : public QWidget, public IPageFocus
 {
     Q_OBJECT
 
@@ -43,6 +43,8 @@ public:
      *         or user-supplied one.
      */
     QString license() const;
+
+    void setFocusToFirstEditWidget() override;
 
 private:
     // data

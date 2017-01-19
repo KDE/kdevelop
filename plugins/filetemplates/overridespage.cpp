@@ -264,3 +264,8 @@ void OverridesPage::addCustomDeclarations (const QString& category, const QList<
     overrideTree()->expandAll();
     overrideTree()->header()->resizeSections(QHeaderView::ResizeToContents);
 }
+
+void OverridesPage::setFocusToFirstEditWidget()
+{
+    d->overrides->overridesTree->setFocus();
+}

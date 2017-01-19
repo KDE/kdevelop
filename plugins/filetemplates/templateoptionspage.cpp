@@ -43,12 +43,15 @@ public:
     QList<SourceFileTemplate::ConfigOption> entries;
     QHash<QString, QWidget*> controls;
     QHash<QString, QByteArray> typeProperties;
+    QWidget *firstEditWidget;
 };
 
 TemplateOptionsPage::TemplateOptionsPage(QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , d(new TemplateOptionsPagePrivate)
 {
+    d->firstEditWidget = nullptr;
+
     d->typeProperties.insert(QStringLiteral("String"), "text");
     d->typeProperties.insert(QStringLiteral("Int"), "value");
     d->typeProperties.insert(QStringLiteral("Bool"), "checked");
@@ -62,6 +65,8 @@ TemplateOptionsPage::~TemplateOptionsPage()
 void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateRenderer* renderer)
 {
     d->entries.clear();
+    d->controls.clear();
+    d->firstEditWidget = nullptr;
 
     QLayout* layout = new QVBoxLayout();
     QHash<QString, QList<SourceFileTemplate::ConfigOption> > options = fileTemplate.customOptions(renderer);
@@ -114,6 +119,9 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
                 QLabel* label = new QLabel(entryLabelText, box);
                 formLayout->addRow(label, control);
                 d->controls.insert(entry.name, control);
+                if (d->firstEditWidget == nullptr) {
+                    d->firstEditWidget = control;
+                }
             }
         }
 
@@ -138,4 +146,11 @@ QVariantHash TemplateOptionsPage::templateOptions() const
     qCDebug(PLUGIN_FILETEMPLATES) << values.size() << d->entries.size();
 
     return values;
+}
+
+void TemplateOptionsPage::setFocusToFirstEditWidget()
+{
+    if (d->firstEditWidget) {
+        d->firstEditWidget->setFocus();
+    }
 }

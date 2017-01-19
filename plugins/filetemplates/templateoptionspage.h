@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <QVariantHash>
 
+#include "ipagefocus.h"
 
 
 namespace KDevelop
@@ -42,7 +43,7 @@ class TemplateClassAssistant;
  * 
  * @sa SourceFileTemplate::customOptions()
  **/
-class TemplateOptionsPage : public QWidget
+class TemplateOptionsPage : public QWidget, public IPageFocus
 {
     Q_OBJECT
     Q_PROPERTY(QVariantHash templateOptions READ templateOptions)
@@ -74,6 +75,8 @@ public:
      *
      **/
     QVariantHash templateOptions() const;
+
+    void setFocusToFirstEditWidget() override;
 
 private:
     class TemplateOptionsPagePrivate* const d;

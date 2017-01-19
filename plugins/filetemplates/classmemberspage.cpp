@@ -28,7 +28,7 @@
 
 using namespace KDevelop;
 
-class ClassMembersPagePrivate
+class KDevelop::ClassMembersPagePrivate
 {
 public:
     KEditListWidget* editListWidget;
@@ -106,4 +106,9 @@ VariableDescriptionList ClassMembersPage::members() const
         }
     }
     return list;
+}
+
+void ClassMembersPage::setFocusToFirstEditWidget()
+{
+    d->editListWidget->lineEdit()->setFocus();
 }

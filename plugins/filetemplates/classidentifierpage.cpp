@@ -22,7 +22,9 @@
 
 #include "ui_newclass.h"
 
-struct ClassIdentifierPagePrivate
+using namespace KDevelop;
+
+struct KDevelop::ClassIdentifierPagePrivate
 {
     ClassIdentifierPagePrivate()
         : classid(nullptr)
@@ -73,4 +75,9 @@ QStringList ClassIdentifierPage::inheritanceList() const
 void ClassIdentifierPage::setInheritanceList (const QStringList& list)
 {
     d->classid->keditlistwidget->setItems(list);
+}
+
+void ClassIdentifierPage::setFocusToFirstEditWidget()
+{
+    d->classid->identifierLineEdit->setFocus();
 }

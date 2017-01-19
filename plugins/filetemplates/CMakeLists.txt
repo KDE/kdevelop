@@ -4,6 +4,7 @@ set(kdevfiletemplates_PART_SRCS
     templatepreviewtoolview.cpp
     filetemplatesplugin.cpp
 
+    ipagefocus.cpp
     classidentifierpage.cpp
     classmemberspage.cpp
     defaultcreateclasshelper.cpp
@@ -64,6 +65,7 @@ set(test_srcs
 main.cpp
     templatepreview.cpp
 
+    ipagefocus.cpp
     classidentifierpage.cpp
     classmemberspage.cpp
     defaultcreateclasshelper.cpp

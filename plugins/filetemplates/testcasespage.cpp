@@ -69,6 +69,11 @@ QStringList TestCasesPage::testCases() const
     return d->ui->keditlistwidget->items();
 }
 
+void TestCasesPage::setFocusToFirstEditWidget()
+{
+    d->ui->identifierLineEdit->setFocus();
+}
+
 void TestCasesPage::identifierChanged(const QString& identifier)
 {
     emit isValid(!identifier.isEmpty());

@@ -24,11 +24,16 @@
 
 #include <language/codegen/codedescription.h>
 
+#include "ipagefocus.h"
+
+namespace KDevelop
+{
+
 /**
  * Assistant dialog page for declaring data members of a new class
  *
  */
-class ClassMembersPage : public QWidget
+class ClassMembersPage : public QWidget, public IPageFocus
 {
     Q_OBJECT
     Q_PROPERTY(KDevelop::VariableDescriptionList members READ members WRITE setMembers)
@@ -46,8 +51,12 @@ public:
      */
     void setMembers(const KDevelop::VariableDescriptionList& members);
 
+    void setFocusToFirstEditWidget() override;
+
 private:
     class ClassMembersPagePrivate* const d;
 };
+
+}
 
 #endif // KDEVPLATFORM_PLUGIN_CLASSMEMBERSPAGE_H
