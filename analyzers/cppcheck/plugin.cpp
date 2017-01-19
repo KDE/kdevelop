@@ -64,6 +64,7 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
     setXMLFile("kdevcppcheck.rc");
 
     m_model->setFeatures(
+        KDevelop::ProblemModel::ScopeFilter |
         KDevelop::ProblemModel::SeverityFilter |
         KDevelop::ProblemModel::Grouping |
         KDevelop::ProblemModel::CanByPassScopeFilter);
