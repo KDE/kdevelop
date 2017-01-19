@@ -22,6 +22,7 @@
 #define KDEVPLATFORM_VCSEVENTMODEL_H
 
 #include <QtCore/QAbstractTableModel>
+#include <QScopedPointer>
 
 #include <vcs/vcsexport.h>
 
@@ -34,7 +35,12 @@ class VcsRevision;
 class IBasicVersionControl;
 class VcsEvent;
 
-class KDEVPLATFORMVCS_EXPORT VcsEventModel : public QAbstractTableModel
+/**
+ * This is a generic model to store a list of VcsEvents.
+ *
+ * To add events use @c addEvents
+ */
+class KDEVPLATFORMVCS_EXPORT VcsBasicEventModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
@@ -46,14 +52,35 @@ public:
         ColumnCount,
     };
 
-    VcsEventModel( KDevelop::IBasicVersionControl* iface, const KDevelop::VcsRevision& rev, const QUrl& url, QObject* parent );
-    ~VcsEventModel() override;
-    int rowCount( const QModelIndex& = QModelIndex() ) const override;
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
-    QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const override;
-    QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const override;
-    KDevelop::VcsEvent eventForIndex( const QModelIndex& ) const;
+    VcsBasicEventModel(QObject* parent);
+    ~VcsBasicEventModel() override;
+    int rowCount(const QModelIndex& = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
+    QVariant headerData(int, Qt::Orientation, int role = Qt::DisplayRole) const override;
+    KDevelop::VcsEvent eventForIndex(const QModelIndex&) const;
 
+protected:
+    void addEvents(const QList<KDevelop::VcsEvent>&);
+
+private:
+    QScopedPointer<class VcsBasicEventModelPrivate> d;
+};
+
+/**
+ * This model stores a list of VcsEvents corresponding to the log obtained
+ * via IBasicVersionControl::log for a given revision. The model is populated
+ * lazily via @c fetchMore.
+ */
+class KDEVPLATFORMVCS_EXPORT VcsEventLogModel : public VcsBasicEventModel
+{
+Q_OBJECT
+public:
+
+    VcsEventLogModel(KDevelop::IBasicVersionControl* iface, const KDevelop::VcsRevision& rev, const QUrl& url, QObject* parent);
+    ~VcsEventLogModel() override;
+
+    /// Adds events to the model via @sa IBasicVersionControl::log
     void fetchMore(const QModelIndex& parent) override;
     bool canFetchMore(const QModelIndex& parent) const override;
 
@@ -61,8 +88,7 @@ private slots:
     void jobReceivedResults( KJob* job );
 
 private:
-    void addEvents( const QList<KDevelop::VcsEvent>& );
-    class VcsEventModelPrivate* const d;
+    QScopedPointer<class VcsEventLogModelPrivate> d;
 };
 
 }

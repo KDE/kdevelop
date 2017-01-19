@@ -65,7 +65,7 @@ public:
 
     Ui::VcsEventWidget* m_ui;
     VcsItemEventModel* m_detailModel;
-    VcsEventModel *m_logModel;
+    VcsEventLogModel *m_logModel;
     QUrl m_url;
     QModelIndex m_contextIndex;
     VcsEventWidget* q;
@@ -197,7 +197,7 @@ VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelo
     d->m_ui = new Ui::VcsEventWidget();
     d->m_ui->setupUi(this);
 
-    d->m_logModel = new VcsEventModel(iface, rev, url, this);
+    d->m_logModel = new VcsEventLogModel(iface, rev, url, this);
     d->m_ui->eventView->setModel( d->m_logModel );
     d->m_ui->eventView->sortByColumn(0, Qt::DescendingOrder);
     d->m_ui->eventView->setContextMenuPolicy( Qt::CustomContextMenu );
