@@ -50,10 +50,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QGroupBox" name="compilerBox">
-       <property name="title">
-        <string/>
-       </property>
+      <widget class="QWidget" name="compilerBox">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <property name="leftMargin">
          <number>0</number>
