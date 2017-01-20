@@ -97,11 +97,8 @@ void QtHelpConfigEditDialog::accept()
 QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     : KDevelop::ConfigPage(plugin, nullptr, parent)
 {
-    QVBoxLayout * l = new QVBoxLayout( this );
-
-    QWidget* w = new QWidget;
     m_configWidget = new Ui::QtHelpConfigUI;
-    m_configWidget->setupUi( w );
+    m_configWidget->setupUi(this);
     m_configWidget->addButton->setIcon(QIcon::fromTheme("list-add"));
     connect(m_configWidget->addButton, &QPushButton::clicked, this, &QtHelpConfig::add);
 
@@ -134,7 +131,6 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
             i18n("The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."));
         m_configWidget->loadQtDocsCheckBox->setVisible(false);
     }
-    l->addWidget(w);
     reset();
 }
 

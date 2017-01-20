@@ -23,8 +23,6 @@
 
 #include "sessionsettings.h"
 
-#include <QVBoxLayout>
-
 #include "sessionconfig.h"
 #include "ui_sessionsettings.h"
 
@@ -32,12 +30,7 @@ SessionSettings::SessionSettings(QWidget* parent)
     : ConfigPage(nullptr, SessionConfig::self(), parent)
     , m_settings(new Ui::SessionSettings)
 {
-    auto l = new QVBoxLayout(this);
-    auto w = new QWidget(this);
-
-    m_settings->setupUi(w);
-
-    l->addWidget(w);
+    m_settings->setupUi(this);
 }
 
 void SessionSettings::reset()

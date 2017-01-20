@@ -20,8 +20,6 @@
 
 #include "makebuilderpreferences.h"
 
-#include <QVBoxLayout>
-
 #include <util/environmentgrouplist.h>
 
 #include "ui_makeconfig.h"
@@ -32,10 +30,8 @@ using namespace KDevelop;
 MakeBuilderPreferences::MakeBuilderPreferences(IPlugin* plugin, const ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<MakeBuilderSettings>(plugin, options, parent)
 {
-    QVBoxLayout* l = new QVBoxLayout( this );
-    QWidget* w = new QWidget;
     m_prefsUi = new Ui::MakeConfig;
-    m_prefsUi->setupUi( w );
+    m_prefsUi->setupUi(this);
     connect(m_prefsUi->makeBinary, &KUrlRequester::textChanged,
             this, &MakeBuilderPreferences::changed);
     connect(m_prefsUi->makeBinary, &KUrlRequester::urlSelected,
@@ -44,7 +40,6 @@ MakeBuilderPreferences::MakeBuilderPreferences(IPlugin* plugin, const ProjectCon
             this, &MakeBuilderPreferences::changed);
     connect(m_prefsUi->kcfg_environmentProfile, &EnvironmentSelectionWidget::currentProfileChanged,
             this, &MakeBuilderPreferences::changed);
-    l->addWidget( w );
 
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
 }

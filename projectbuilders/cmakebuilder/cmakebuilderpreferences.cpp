@@ -20,8 +20,6 @@
 
 #include "cmakebuilderpreferences.h"
 
-#include <QVBoxLayout>
-
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 
@@ -33,11 +31,8 @@
 CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWidget* parent)
     : KDevelop::ConfigPage(plugin, CMakeBuilderSettings::self(), parent)
 {
-    QVBoxLayout* l = new QVBoxLayout( this );
-    QWidget* w = new QWidget;
     m_prefsUi = new Ui::CMakeBuilderPreferences;
-    m_prefsUi->setupUi( w );
-    l->addWidget( w );
+    m_prefsUi->setupUi(this);
 
 #ifdef Q_OS_WIN
     m_prefsUi->kcfg_cmakeExe->setFilter("*.exe");
