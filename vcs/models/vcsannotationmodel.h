@@ -53,9 +53,6 @@ public:
 private:
     class VcsAnnotationModelPrivate* const d;
     friend class VcsAnnotationModelPrivate;
-
-    QColor foreground;
-    QColor background;
 };
 
 }

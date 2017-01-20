@@ -48,6 +48,9 @@ public:
     QHash<KDevelop::VcsRevision,QBrush> m_brushes;
     VcsAnnotationModel* q;
     VcsJob* job;
+    QColor foreground;
+    QColor background;
+
     void addLines( KDevelop::VcsJob* job )
     {
         if( job == this->job )
@@ -59,8 +62,8 @@ public:
                     VcsAnnotationLine l = v.value<KDevelop::VcsAnnotationLine>();
                     if( !m_brushes.contains( l.revision() ) )
                     {
-                        const int background_y = q->background.red()*0.299 + 0.587*q->background.green()
-                                                                           + 0.114*q->background.blue();
+                        const int background_y = background.red()*0.299 + 0.587*background.green()
+                                                                        + 0.114*background.blue();
                         int u = ( float(qrand()) / RAND_MAX ) * 255;
                         int v = ( float(qrand()) / RAND_MAX ) * 255;
                         float r = qMin(255.0, qMax(0.0, background_y + 1.402*(v-128)));
@@ -79,12 +82,12 @@ public:
 VcsAnnotationModel::VcsAnnotationModel(VcsJob *job, const QUrl& url, QObject* parent,
                                        const QColor &foreground, const QColor &background)
     : d( new VcsAnnotationModelPrivate( this ) )
-    , foreground(foreground)
-    , background(background)
 {
     setParent( parent );
     d->m_annotation.setLocation( url );
     d->job = job;
+    d->foreground = foreground;
+    d->background = background;
     qsrand( QDateTime().toTime_t() );
     connect( d->job, &VcsJob::resultsReady,this, [&] (VcsJob* job) { d->addLines(job); } );
     ICore::self()->runController()->registerJob( d->job );
@@ -111,7 +114,7 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
     KDevelop::VcsAnnotationLine aline = d->m_annotation.line( line );
     if( role == Qt::ForegroundRole )
     {
-        return QVariant( QPen( foreground ) );
+        return QVariant(QPen(d->foreground));
     }
     if( role == Qt::BackgroundRole )
     {
