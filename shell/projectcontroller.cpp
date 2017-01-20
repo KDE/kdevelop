@@ -222,38 +222,61 @@ public:
         return projectPlugins;
     }
 
-    void updateActionStates( Context* ctx )
+    void updateActionStates()
     {
-        ProjectItemContext* itemctx = dynamic_cast<ProjectItemContext*>(ctx);
-        m_openConfig->setEnabled( itemctx && itemctx->items().count() == 1 );
-        m_closeProject->setEnabled( itemctx && itemctx->items().count() > 0 );
+        // if only one project loaded, this is always our target
+        int itemCount = (m_projects.size() == 1) ? 1 : 0;
+
+        if (itemCount == 0) {
+            // otherwise base on selection
+            ProjectItemContext* itemContext = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+            if (itemContext) {
+                itemCount = itemContext->items().count();
+            }
+        }
+
+        m_openConfig->setEnabled(itemCount == 1);
+        m_closeProject->setEnabled(itemCount > 0);
     }
 
     void openProjectConfig()
     {
-        ProjectItemContext* ctx = dynamic_cast<ProjectItemContext*>( Core::self()->selectionController()->currentSelection() );
-        if( ctx && ctx->items().count() == 1 )
-        {
-            q->configureProject( ctx->items().at(0)->project() );
+        // if only one project loaded, this is our target
+        IProject *project = (m_projects.count() == 1) ? m_projects.at(0) : nullptr;
+
+        // otherwise base on selection
+        if (!project) {
+            ProjectItemContext* ctx = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+            if (ctx && ctx->items().count() == 1) {
+                project = ctx->items().at(0)->project();
+            }
+        }
+
+        if (project) {
+            q->configureProject(project);
         }
     }
 
     void closeSelectedProjects()
     {
-        ProjectItemContext* ctx =  dynamic_cast<ProjectItemContext*>( Core::self()->selectionController()->currentSelection() );
-        if( ctx && ctx->items().count() > 0 )
-        {
-            QSet<IProject*> projects;
-            foreach( ProjectBaseItem* item, ctx->items() )
-            {
-                projects.insert( item->project() );
-            }
-            foreach( IProject* project, projects )
-            {
-                q->closeProject( project );
+        QSet<IProject*> projects;
+
+        // if only one project loaded, this is our target
+        if (m_projects.count() == 1) {
+            projects.insert(m_projects.at(0));
+        } else {
+            // otherwise base on selection
+            ProjectItemContext* ctx =  dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+            if (ctx) {
+                foreach (ProjectBaseItem* item, ctx->items()) {
+                    projects.insert(item->project());
+                }
             }
         }
 
+        foreach (IProject* project, projects) {
+            q->closeProject(project);
+        }
     }
 
     void importProject(const QUrl& url_)
@@ -617,7 +640,11 @@ void ProjectController::initialize()
     QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(QList<QUrl>, openProjects));
 
     connect( Core::self()->selectionController(), &ISelectionController::selectionChanged,
-             this, [&] (Context* ctx) { d->updateActionStates(ctx); } );
+             this, [&] () { d->updateActionStates(); } );
+    connect(this, &ProjectController::projectOpened,
+            this, [&] () { d->updateActionStates(); });
+    connect(this, &ProjectController::projectClosing,
+            this, [&] () { d->updateActionStates(); });
 }
 
 void ProjectController::openProjects(const QList<QUrl>& projects)
