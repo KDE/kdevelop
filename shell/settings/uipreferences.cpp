@@ -20,8 +20,6 @@
 
 #include "uipreferences.h"
 
-#include <QVBoxLayout>
-
 #include <KLocalizedString>
 
 #include "../core.h"
@@ -35,11 +33,8 @@ using namespace KDevelop;
 UiPreferences::UiPreferences(QWidget* parent)
     : ConfigPage(nullptr, UiConfig::self(), parent)
 {
-    QVBoxLayout* l = new QVBoxLayout( this );
-    QWidget* w = new QWidget(parent);
     m_uiconfigUi = new Ui::UiConfig();
-    m_uiconfigUi->setupUi( w );
-    l->addWidget( w );
+    m_uiconfigUi->setupUi(this);
 }
 
 UiPreferences::~UiPreferences()

@@ -18,7 +18,6 @@
 */
 #include "projectfilterconfigpage.h"
 
-#include <QLayout>
 #include <QStandardItemModel>
 #include <QKeyEvent>
 
@@ -47,10 +46,7 @@ ProjectFilterConfigPage::ProjectFilterConfigPage(ProjectFilterProvider* provider
     , m_projectFilterProvider(provider)
     , m_ui(new Ui::ProjectFilterSettings)
 {
-    QVBoxLayout *l = new QVBoxLayout(this);
-    QWidget *w = new QWidget;
-
-    m_ui->setupUi(w);
+    m_ui->setupUi(this);
 
     m_ui->messageWidget->hide();
 
@@ -75,7 +71,6 @@ ProjectFilterConfigPage::ProjectFilterConfigPage(ProjectFilterProvider* provider
     m_ui->filters->setDragEnabled(true);
     m_ui->filters->setDragDropMode(QAbstractItemView::InternalMove);
     m_ui->filters->setAutoScroll(true);
-    l->addWidget(w);
 
     reset();
     selectionChanged();

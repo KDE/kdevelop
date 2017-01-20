@@ -19,7 +19,6 @@
 */
 #include "bgpreferences.h"
 
-#include <QVBoxLayout>
 #include <QThread>
 
 #include <interfaces/ilanguagecontroller.h>
@@ -38,12 +37,8 @@ namespace KDevelop
 BGPreferences::BGPreferences(QWidget* parent)
     : ConfigPage(nullptr, BGSettings::self(), parent)
 {
-    QVBoxLayout * l = new QVBoxLayout( this );
-    QWidget* w = new QWidget;
     preferencesDialog = new Ui::BGPreferences;
-    preferencesDialog->setupUi( w );
-
-    l->addWidget( w );
+    preferencesDialog->setupUi(this);
 }
 
 void BGPreferences::reset()

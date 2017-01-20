@@ -46,12 +46,9 @@ namespace KDevelop
 LanguagePreferences::LanguagePreferences(QWidget* parent)
     : ConfigPage(nullptr, LanguageConfig::self(), parent)
 {
-    QVBoxLayout * l = new QVBoxLayout( this );
-    QWidget* w = new QWidget;
     preferencesDialog = new Ui::LanguagePreferences;
-    preferencesDialog->setupUi( w );
+    preferencesDialog->setupUi(this);
     preferencesDialog->kcfg_minFilesForSimplifiedParsing->setSuffix(ki18np(" file", " files"));
-    l->addWidget( w );
 }
 
 void LanguagePreferences::notifySettingsChanged()

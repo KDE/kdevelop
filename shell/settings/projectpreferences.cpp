@@ -19,8 +19,6 @@
 */
 #include "projectpreferences.h"
 
-#include <QVBoxLayout>
-
 #include "projectconfig.h"
 #include "../core.h"
 #include "../projectcontroller.h"
@@ -33,11 +31,8 @@ namespace KDevelop
 ProjectPreferences::ProjectPreferences(QWidget* parent)
     : ConfigPage(nullptr, ProjectSettings::self(), parent)
 {
-    QVBoxLayout * l = new QVBoxLayout( this );
-    QWidget* w = new QWidget;
     preferencesDialog = new Ui::ProjectPreferences;
-    preferencesDialog->setupUi( w );
-    l->addWidget( w );
+    preferencesDialog->setupUi(this);
 }
 
 ProjectPreferences::~ProjectPreferences( )
