@@ -42,6 +42,7 @@ EnvironmentPreferences::EnvironmentPreferences(const QString& activeGroup, QWidg
     : ConfigPage(nullptr, nullptr, parent), d(new EnvironmentPreferencesPrivate)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
+    l->setMargin(0);
     d->preferencesDialog = new EnvironmentWidget( this );
     l->addWidget( d->preferencesDialog );
 
