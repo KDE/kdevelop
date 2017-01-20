@@ -109,8 +109,6 @@ Q_SIGNALS:
     void receivedStderrLines( const QStringList& lines );
 
 private:
-    Q_PRIVATE_SLOT(d, void slotReadyReadStdout( ) )
-    Q_PRIVATE_SLOT(d, void slotReadyReadStderr( ) )
     class ProcessLineMakerPrivate* const d;
     friend class ProcessLineMakerPrivate;
 };

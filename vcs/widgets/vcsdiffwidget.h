@@ -38,7 +38,6 @@ public:
     void setRevisions( const KDevelop::VcsRevision&, const KDevelop::VcsRevision& );
     
 private:
-    Q_PRIVATE_SLOT(d, void diffReady( KDevelop::VcsJob* ) )
     class VcsDiffWidgetPrivate* const d;
 };
 

@@ -191,8 +191,6 @@ protected:
 private:
     friend IDebugSessionPrivate;
     QScopedPointer<IDebugSessionPrivate> d;
-
-    Q_PRIVATE_SLOT(d, void slotStateChanged(KDevelop::IDebugSession::DebuggerState state))
 };
 
 }

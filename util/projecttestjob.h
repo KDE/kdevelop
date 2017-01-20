@@ -111,9 +111,6 @@ protected:
 private:
     struct Private;
     QScopedPointer<Private> d;
-
-    Q_PRIVATE_SLOT(d, void runNext());
-    Q_PRIVATE_SLOT(d, void gotResult(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result));
 };
 
 }

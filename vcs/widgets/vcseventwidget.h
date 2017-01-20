@@ -45,10 +45,6 @@ public:
 private:
     Q_PRIVATE_SLOT(d, void diffToPrevious())
     Q_PRIVATE_SLOT(d, void diffRevisions())
-    Q_PRIVATE_SLOT(d, void eventViewCustomContextMenuRequested( const QPoint &point ))
-    Q_PRIVATE_SLOT(d, void eventViewClicked( const QModelIndex &index ))
-    Q_PRIVATE_SLOT(d, void currentRowChanged(const QModelIndex&, const QModelIndex& ))
-    Q_PRIVATE_SLOT(d, void copyRevision())
     class VcsEventWidgetPrivate* const d;
 };
 }

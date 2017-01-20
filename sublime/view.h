@@ -94,9 +94,6 @@ protected:
     virtual QWidget *createWidget(QWidget *parent);
 
 private:
-    Q_PRIVATE_SLOT(d, void unsetWidget())
-
-
     //copy is not allowed, create a new view from the document instead
     View(const View &v);
     struct ViewPrivate *const d;

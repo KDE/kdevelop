@@ -132,9 +132,6 @@ signals:
     void aboutToOpen(KDevelop::IProject*);
 
 private:
-    Q_PRIVATE_SLOT(d, void importDone(KJob*))
-    Q_PRIVATE_SLOT(d, void reloadDone(KJob*))
-
     class ProjectPrivate* const d;
 };
 

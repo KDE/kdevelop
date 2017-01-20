@@ -120,17 +120,6 @@ private:
 //     friend class Private;
     Private* const d;
 
-    Q_PRIVATE_SLOT(d, KJob* eventuallyReadFolder( ProjectFolderItem* item ))
-    Q_PRIVATE_SLOT(d, void addJobItems(FileManagerListJob* job,
-                                       ProjectFolderItem* baseItem,
-                                       const KIO::UDSEntryList& entries))
-
-    Q_PRIVATE_SLOT(d, void deleted(const QString &path))
-    Q_PRIVATE_SLOT(d, void created(const QString &path))
-
-    Q_PRIVATE_SLOT(d, void projectClosing(KDevelop::IProject* project))
-    Q_PRIVATE_SLOT(d, void jobFinished(KJob* job))
-
 Q_SIGNALS:
     void reloadedFileItem(KDevelop::ProjectFileItem* file);
     void reloadedFolderItem(KDevelop::ProjectFolderItem* folder);

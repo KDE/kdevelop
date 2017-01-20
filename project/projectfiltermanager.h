@@ -90,8 +90,6 @@ private:
     struct Private;
     QScopedPointer<Private> d;
 
-    Q_PRIVATE_SLOT(d, void pluginLoaded( KDevelop::IPlugin* ) )
-    Q_PRIVATE_SLOT(d, void unloadingPlugin( KDevelop::IPlugin* ) )
     Q_PRIVATE_SLOT(d, void filterChanged( KDevelop::IProjectFilterProvider*, KDevelop::IProject* ) )
 };
 

@@ -141,9 +141,6 @@ public slots:
 private:
     friend class MultiLevelListViewPrivate;
     class MultiLevelListViewPrivate* const d;
-    Q_PRIVATE_SLOT(d, void viewSelectionChanged(const QModelIndex& current,
-                                                const QModelIndex& previous))
-    Q_PRIVATE_SLOT(d, void lastViewsContentsChanged())
     Q_PRIVATE_SLOT(d, void ensureViewSelected(QTreeView* view))
 };
 

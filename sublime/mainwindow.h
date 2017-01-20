@@ -155,15 +155,6 @@ public: // FIXME?
     void activateViewAndFocus(Sublime::View *view) { activateView(view, true); }
 
 private:
-
-    Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*))
-    Q_PRIVATE_SLOT(d, void viewRemovedInternal(Sublime::AreaIndex*, Sublime::View*))
-    Q_PRIVATE_SLOT(d, void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*))
-    Q_PRIVATE_SLOT(d, void toolViewAdded(Sublime::View*, Sublime::Position))
-    Q_PRIVATE_SLOT(d, void raiseToolView(Sublime::View*))
-    Q_PRIVATE_SLOT(d, void aboutToRemoveToolView(Sublime::View*, Sublime::Position))
-    Q_PRIVATE_SLOT(d, void toolViewMoved(Sublime::View*, Sublime::Position))
-
     QString screenKey() const;
 
     //Inherit MainWindowOperator to access four methods below

@@ -120,7 +120,6 @@ private:
     void setupActions();
     class UiControllerPrivate* const d;
     friend class UiControllerPrivate;
-    Q_PRIVATE_SLOT(d, void widgetChanged(QWidget*,QWidget*))
 };
 
 }

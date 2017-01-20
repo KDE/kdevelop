@@ -72,10 +72,7 @@ protected:
     void addLanguageSupport(KDevelop::ILanguageSupport* languageSupport, const QStringList& mimetypes);
 
 private:
-
     struct LanguageControllerPrivate *d;
-
-    Q_PRIVATE_SLOT(d, void documentActivated(KDevelop::IDocument *document))
 };
 
 }

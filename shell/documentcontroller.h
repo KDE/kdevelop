@@ -171,9 +171,6 @@ private:
     bool saveSomeDocuments(const QList<IDocument*>& list, IDocument::DocumentSaveMode mode) override;
 
     void setupActions();
-    Q_PRIVATE_SLOT(d, void removeDocument(Sublime::Document*))
-    Q_PRIVATE_SLOT(d, void chooseDocument())
-    Q_PRIVATE_SLOT(d, void changeDocumentUrl(KDevelop::IDocument*))
 
     friend struct DocumentControllerPrivate;
     struct DocumentControllerPrivate *d;

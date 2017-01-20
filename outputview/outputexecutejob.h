@@ -244,9 +244,6 @@ protected slots:
 private:
     friend class OutputExecuteJobPrivate;
     OutputExecuteJobPrivate* d;
-
-    Q_PRIVATE_SLOT(d, void childProcessStdout());
-    Q_PRIVATE_SLOT(d, void childProcessStderr());
 };
 
 } // namespace KDevelop

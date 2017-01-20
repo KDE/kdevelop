@@ -143,9 +143,6 @@ private:
     void checkState();
     void removeLaunchConfigurationInternal( LaunchConfiguration* l );
 
-    Q_PRIVATE_SLOT(d, void configureLaunches())
-    Q_PRIVATE_SLOT(d, void launchAs(int))
-
     class RunControllerPrivate;
     RunControllerPrivate* const d;
 };

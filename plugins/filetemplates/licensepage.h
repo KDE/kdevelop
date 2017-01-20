@@ -47,7 +47,6 @@ public:
 private:
     // data
     struct LicensePagePrivate* const d;
-    Q_PRIVATE_SLOT(d, void licenseComboChanged(int license))
 };
 
 }
