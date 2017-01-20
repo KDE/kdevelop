@@ -118,12 +118,10 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
       dock->setWidget(toolView);
 
       KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings/Docks/ToolbarEnabled");
-      toolBar->setVisible(cg.readEntry(qPrintable(toolBar->windowTitle()),
-                                       QVariant::fromValue(true)).toBool());
+      toolBar->setVisible(cg.readEntry(qPrintable(toolBar->windowTitle()),true));
       connect(toolBar->toggleViewAction(), &QAction::toggled, this, [toolBar](){
         KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings/Docks/ToolbarEnabled");
-        cg.writeEntry(qPrintable(toolBar->windowTitle()),
-                      QVariant::fromValue(toolBar->toggleViewAction()->isChecked()));
+        cg.writeEntry(qPrintable(toolBar->windowTitle()),toolBar->toggleViewAction()->isChecked());
       });
     }
 
