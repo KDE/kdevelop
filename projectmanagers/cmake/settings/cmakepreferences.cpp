@@ -51,11 +51,8 @@ using namespace KDevelop;
 CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& options, QWidget* parent)
     : ConfigPage(plugin, nullptr, parent), m_project(options.project), m_currentModel(nullptr)
 {
-    QVBoxLayout* l = new QVBoxLayout( this );
-    QWidget* w = new QWidget;
     m_prefsUi = new Ui::CMakeBuildSettings;
-    m_prefsUi->setupUi( w );
-    l->addWidget( w );
+    m_prefsUi->setupUi(this);
 
     m_prefsUi->addBuildDir->setIcon(QIcon::fromTheme( "list-add" ));
     m_prefsUi->removeBuildDir->setIcon(QIcon::fromTheme( "list-remove" ));

@@ -22,7 +22,6 @@
 #include "qmakebuilderpreferences.h"
 
 #include <QIcon>
-#include <QVBoxLayout>
 #include <QDebug>
 
 #include <kio/deletejob.h>
@@ -46,11 +45,8 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     : KDevelop::ConfigPage(plugin, nullptr, parent)
     , m_project(options.project)
 {
-    auto l = new QVBoxLayout(this);
-    auto w = new QWidget;
-
     m_prefsUi = new Ui::QMakeConfig;
-    m_prefsUi->setupUi(w);
+    m_prefsUi->setupUi(this);
 
     // display icons instead of text
     m_prefsUi->addButton->setIcon(QIcon::fromTheme("list-add"));
@@ -63,7 +59,6 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     groupBoxLayout->addWidget(m_chooserUi);
 
     m_chooserUi->kcfg_buildDir->setEnabled(false); // build directory MUST NOT be changed here
-    l->addWidget(w);
     connect(m_chooserUi, &QMakeBuildDirChooser::changed, this, &QMakeBuilderPreferences::changed);
     connect(m_chooserUi, &QMakeBuildDirChooser::changed, this, &QMakeBuilderPreferences::validate);
 
