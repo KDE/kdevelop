@@ -66,7 +66,6 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     mainLayout->addWidget(mainWidget);
 
     setupUi(mainWidget);
-    mainLayout->setContentsMargins( 0, 0, 0, 0 );
     splitter->setSizes(QList<int>() << 260 << 620);
     splitter->setCollapsible(0, false);
 
