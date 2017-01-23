@@ -175,7 +175,6 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
     Q_ASSERT(action->dockWidget());
 
     connect(action, &QAction::toggled, this, static_cast<void(IdealButtonBarWidget::*)(bool)>(&IdealButtonBarWidget::showWidget));
-    connect(button, &IdealToolButton::clicked, this, &IdealButtonBarWidget::buttonPressed);
     connect(button, &IdealToolButton::customContextMenuRequested,
             action->dockWidget(), &IdealDockWidget::contextMenuRequested);
 
@@ -330,8 +329,7 @@ void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
     Q_ASSERT(button);
 
     if (checked) {
-        IdealController::RaiseMode mode = IdealController::RaiseMode(widgetAction->property("raise").toInt());
-        if ( mode == IdealController::HideOtherViews ) {
+        if ( !QApplication::keyboardModifiers().testFlag(Qt::ControlModifier) ) {
             // Make sure only one widget is visible at any time.
             // The alternative to use a QActionCollection and setting that to "exclusive"
             // has a big drawback: QActions in a collection that is exclusive cannot
@@ -353,31 +351,4 @@ void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
 IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *_action) const
 {
     return dynamic_cast<ToolViewAction *>(_action)->dockWidget();
-}
-
-void IdealButtonBarWidget::buttonPressed(bool state)
-{
-    auto button = qobject_cast<IdealToolButton*>(sender());
-    Q_ASSERT(button);
-    ToolViewAction* action = nullptr;
-    foreach(QAction* a, actions()) {
-        auto tva = dynamic_cast<ToolViewAction *>(a);
-        if (tva && tva->button() == button)
-            action = tva;
-    }
-    Q_ASSERT(action);
-
-    const bool forceGrouping = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
-
-    if (forceGrouping) {
-        action->setProperty("raise", IdealController::GroupWithOtherViews);
-    }
-
-    action->setChecked(state);
-
-    if (forceGrouping) {
-        // need to reset the raise property so that subsequent
-        // showWidget()'s will not do grouping unless explicitly asked
-        action->setProperty("raise", IdealController::HideOtherViews);
-    }
 }
