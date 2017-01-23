@@ -73,14 +73,12 @@ public:
     void loadOrderSettings(const KConfigGroup& configGroup);
     void saveOrderSettings(KConfigGroup& configGroup);
 
-private Q_SLOTS:
-    void showWidget(bool checked);
-    void buttonPressed(bool state);
-
 signals:
     void emptyChanged();
 
 private:
+    void showWidget(bool checked);
+
     void applyOrderToLayout();
     void takeOrderFromLayout();
 
