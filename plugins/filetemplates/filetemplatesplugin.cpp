@@ -6,10 +6,13 @@
 #include <language/codegen/templatesmodel.h>
 #include <language/interfaces/editorcontext.h>
 #include <interfaces/icore.h>
+#include <interfaces/iproject.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iselectioncontroller.h>
+#include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
 
@@ -197,6 +200,32 @@ void FileTemplatesPlugin::createFromTemplate()
         if (doc && doc->url().isValid()) {
             baseUrl = doc->url().adjusted(QUrl::RemoveFilename);
         }
+    }
+    if (!baseUrl.isValid()) {
+        // fall-back to currently selected project's or item's base directory
+        ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+        if (projectContext) {
+            const QList<ProjectBaseItem*> items = projectContext->items();
+            if (items.size() == 1) {
+                ProjectBaseItem* item = items.at(0);
+                if (item->folder()) {
+                    baseUrl = item->path().toUrl();
+                } else if (item->target()) {
+                    baseUrl = item->parent()->path().toUrl();
+                }
+            }
+        }
+    }
+    if (!baseUrl.isValid()) {
+        // fall back to base directory of currently open project, if there is only one
+        const QList<IProject*> projects = ICore::self()->projectController()->projects();
+        if (projects.size() == 1) {
+            baseUrl = projects.at(0)->path().toUrl();
+        }
+    }
+    if (!baseUrl.isValid()) {
+        // last resort: home path
+        baseUrl = QUrl::fromLocalFile(QDir::homePath());
     }
     TemplateClassAssistant* assistant = new TemplateClassAssistant(QApplication::activeWindow(), baseUrl);
     assistant->setAttribute(Qt::WA_DeleteOnClose);

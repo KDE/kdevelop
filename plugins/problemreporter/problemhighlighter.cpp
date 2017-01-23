@@ -108,7 +108,6 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
 
     qDeleteAll(m_topHLRanges);
     m_topHLRanges.clear();
-    m_problemsForRanges.clear();
 
     IndexedString url(m_document->url());
 
@@ -180,8 +179,6 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
         }
 
         KTextEditor::MovingRange* problemRange = iface->newMovingRange(range);
-
-        m_problemsForRanges.insert(problemRange, problem);
         m_topHLRanges.append(problemRange);
 
         if (problem->source() != IProblem::ToDo
@@ -216,7 +213,6 @@ void ProblemHighlighter::aboutToRemoveText(const KTextEditor::Range& range)
     QList<MovingRange*>::iterator it = m_topHLRanges.begin();
     while (it != m_topHLRanges.end()) {
         if (range.contains((*it)->toRange())) {
-            m_problemsForRanges.remove(*it);
             delete (*it);
             it = m_topHLRanges.erase(it);
         } else {
