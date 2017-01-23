@@ -215,11 +215,6 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>QLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>
    <extends>KComboBox</extends>
    <header location="global">util/environmentselectionwidget.h</header>

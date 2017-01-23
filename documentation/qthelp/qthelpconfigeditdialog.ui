@@ -96,11 +96,6 @@
    <header>KIconThemes/KIconButton</header>
   </customwidget>
   <customwidget>
-   <class>QLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
    <header>kurlrequester.h</header>
