@@ -90,11 +90,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>SvnRevisionWidget</class>
    <extends>QWidget</extends>
    <header>svnrevisionwidget.h</header>

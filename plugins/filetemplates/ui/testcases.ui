@@ -82,11 +82,6 @@
    <extends>QWidget</extends>
    <header>keditlistwidget.h</header>
   </customwidget>
-  <customwidget>
-   <class>QLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>
