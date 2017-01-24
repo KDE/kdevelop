@@ -33,11 +33,8 @@ using KDevelop::ConfigPage;
 ClangTidyPreferences::ClangTidyPreferences(IPlugin* plugin, QWidget* parent)
     : ConfigPage(plugin, ClangTidySettings::self(), parent)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    QWidget* widget = new QWidget(this);
     ui = new Ui::ClangTidyPreferences();
-    ui->setupUi(widget);
-    layout->addWidget(widget);
+    ui->setupUi(this);
 }
 
 ClangTidyPreferences::~ClangTidyPreferences()
