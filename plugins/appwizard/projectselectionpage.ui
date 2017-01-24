@@ -27,14 +27,14 @@
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="appNameLabel">
+       <widget class="QLabel" name="projectNameLabel">
         <property name="text">
-         <string>Application Name:</string>
+         <string>Project Name:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="appNameEdit"/>
+       <widget class="QLineEdit" name="projectNameEdit"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="locationLabel">
@@ -168,7 +168,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>appNameEdit</tabstop>
+  <tabstop>projectNameEdit</tabstop>
  </tabstops>
  <resources/>
  <connections/>

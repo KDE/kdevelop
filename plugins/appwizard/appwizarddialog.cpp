@@ -65,7 +65,7 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
 ApplicationInfo AppWizardDialog::appInfo() const
 {
     ApplicationInfo a;
-    a.name = m_selectionPage->appName();
+    a.name = m_selectionPage->projectName();
     a.location = m_selectionPage->location();
     a.appTemplate = m_selectionPage->selectedTemplate();
     a.vcsPluginName = m_vcsPage->pluginName();

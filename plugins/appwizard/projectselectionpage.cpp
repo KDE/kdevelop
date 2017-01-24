@@ -51,7 +51,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, &ProjectSelectionPage::urlEdited);
     connect( ui->locationUrl, &KUrlRequester::urlSelected,
              this, &ProjectSelectionPage::urlEdited);
-    connect( ui->appNameEdit, &QLineEdit::textEdited,
+    connect( ui->projectNameEdit, &QLineEdit::textEdited,
              this, &ProjectSelectionPage::nameChanged );
 
     m_listView = new KDevelop::MultiLevelListView(this);
@@ -155,13 +155,13 @@ QString ProjectSelectionPage::selectedTemplate()
 QUrl ProjectSelectionPage::location()
 {
     QUrl url = ui->locationUrl->url().adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + '/' + encodedAppName());
+    url.setPath(url.path() + '/' + encodedProjectName());
     return url;
 }
 
-QString ProjectSelectionPage::appName()
+QString ProjectSelectionPage::projectName()
 {
-    return ui->appNameEdit->text();
+    return ui->projectNameEdit->text();
 }
 
 void ProjectSelectionPage::urlEdited()
@@ -181,17 +181,15 @@ void ProjectSelectionPage::validateData()
         return;
     }
 
-    if( appName().isEmpty() )
-    {
+    if (projectName().isEmpty()) {
         ui->locationValidWidget->setText( i18n("Empty project name") );
         ui->locationValidWidget->animatedShow();
         emit invalid();
         return;
     }
 
-    if( !appName().isEmpty() )
-    {
-        QString appname = appName();
+    if (!projectName().isEmpty()) {
+        QString projectName = this->projectName();
         QString templatefile = m_wizardDialog->appInfo().appTemplate;
 
         // Read template file
@@ -203,7 +201,7 @@ void ProjectSelectionPage::validateData()
         int pos = 0;
         QRegExp regex( pattern );
         QRegExpValidator validator( regex );
-        if( validator.validate(appname, pos) == QValidator::Invalid )
+        if( validator.validate(projectName, pos) == QValidator::Invalid )
         {
             ui->locationValidWidget->setText( i18n("Invalid project name") );
             emit invalid();
@@ -245,7 +243,7 @@ void ProjectSelectionPage::validateData()
     }
 
     // Check for non-empty target directory. Not an error, but need to display a warning.
-    url.setPath( url.path() + '/' + encodedAppName() );
+    url.setPath( url.path() + '/' + encodedProjectName() );
     QFileInfo fi( url.toLocalFile() );
     if( fi.exists() && fi.isDir() )
     {
@@ -259,10 +257,10 @@ void ProjectSelectionPage::validateData()
     }
 }
 
-QByteArray ProjectSelectionPage::encodedAppName()
+QByteArray ProjectSelectionPage::encodedProjectName()
 {
     // : < > * ? / \ | " are invalid on windows
-    QByteArray tEncodedName = appName().toUtf8();
+    QByteArray tEncodedName = projectName().toUtf8();
     for (int i = 0; i < tEncodedName.size(); ++i)
     {
         QChar tChar(tEncodedName.at( i ));

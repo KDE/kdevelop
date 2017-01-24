@@ -36,7 +36,7 @@ public:
     bool shouldContinue() override;
 
     QString selectedTemplate();
-    QString appName();
+    QString projectName();
     QUrl location();
 signals:
     void locationChanged( const QUrl& );
@@ -55,7 +55,7 @@ private slots:
 
 
 private:
-    inline QByteArray encodedAppName();
+    inline QByteArray encodedProjectName();
     inline QStandardItem* getCurrentItem() const;
     void setCurrentTemplate(const QString& fileName);
 
