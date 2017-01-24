@@ -73,11 +73,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>ConfigWidget</class>
    <extends>QWidget</extends>
    <header>configwidget.h</header>
