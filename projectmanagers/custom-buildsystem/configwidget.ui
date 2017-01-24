@@ -155,7 +155,7 @@ If this is the same as the source directory you can leave it empty.</string>
   </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
-   <extends>QFrame</extends>
+   <extends>QWidget</extends>
    <header>kurlrequester.h</header>
   </customwidget>
   <customwidget>

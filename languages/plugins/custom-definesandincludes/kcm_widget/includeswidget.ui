@@ -93,13 +93,8 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>KUrlRequester</class>
-   <extends>QFrame</extends>
+   <extends>QWidget</extends>
    <header location="global">kurlrequester.h</header>
    <container>1</container>
   </customwidget>
