@@ -262,6 +262,8 @@ QVector<KDevelop::QualifiedIdentifier> findPossibleQualifiedIdentifiers( const Q
 
 QStringList findMatchingIncludeFiles(const QVector<Declaration*> declarations)
 {
+    DUChainReadLocker lock;
+
     QStringList candidates;
     for (const auto decl: declarations) {
         // skip declarations that don't belong to us
