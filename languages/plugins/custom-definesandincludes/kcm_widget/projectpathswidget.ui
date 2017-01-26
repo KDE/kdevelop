@@ -70,7 +70,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler that will be used to retrieve standard include directories and defined macros.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>Compiler for path</string>
+           <string>Compiler for path:</string>
           </property>
          </widget>
         </item>
