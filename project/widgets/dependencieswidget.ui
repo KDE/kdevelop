@@ -42,7 +42,7 @@
    <item row="0" column="1">
     <widget class="QPushButton" name="browseProject">
      <property name="icon">
-      <iconset theme="folder-document&lt;"/>
+      <iconset theme="folder-document"/>
      </property>
     </widget>
    </item>
