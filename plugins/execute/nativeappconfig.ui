@@ -296,14 +296,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KDevelop::DependenciesWidget" name="dependencies" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
+       <widget class="KDevelop::DependenciesWidget" name="dependencies" native="true"/>
       </item>
      </layout>
     </widget>

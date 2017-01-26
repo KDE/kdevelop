@@ -104,7 +104,7 @@
  <customwidgets>
   <customwidget>
    <class>KMessageWidget</class>
-   <extends>QWidget</extends>
+   <extends>QFrame</extends>
    <header location="global">kmessagewidget.h</header>
    <container>1</container>
   </customwidget>

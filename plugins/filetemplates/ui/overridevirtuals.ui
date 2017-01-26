@@ -11,10 +11,7 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -23,15 +20,6 @@
       <string>Select any methods you would like to override in the new class.</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
       <item>
        <widget class="QTreeWidget" name="overridesTree">
         <property name="rootIsDecorated">
@@ -92,13 +80,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
