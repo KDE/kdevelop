@@ -70,11 +70,10 @@ class TypeExchanger;
  * - Implement a copy-constructor in which you copy the data from the source using copyData<YourType>()
  * - Override the clone() function in which you use the copy-constructor to clone the type
  * - Add an enumerator "Identity" that contains an arbitrary unique identity value of the type
- * - Add a typedef "BaseType" that specifies the base type, which must be a type that also follows these rules
  * - Register your type in a source-file using REGISTER_TYPE(..), @see typeregister.h
  * - Add a typedef "Data", that contains the actual data of the type using the mechanisms described in appendedlist.h.
- *  - That data type must follow the same inheritance chain as the type itself, so it must be based on BaseType::Data.
- *    @see AbstractTypeData
+ *   That data type must follow the same inheritance chain as the type itself, so it must be based on the Data object
+ *   of the base class. See AbstractTypeData.
  * - Use createData<YourType>() to create the data-object in a constructor (which you then reach to the parent constructor)
  * - Use TYPE_DECLARE_DATA(YourType) to declare the data access functions d_func and d_func_dynamic,
  *   and  then use d_func()->.. and d_func_dynamic()->.. to access your type data

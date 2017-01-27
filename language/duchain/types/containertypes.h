@@ -131,7 +131,6 @@ public:
     enum { Identity = 58 };
 
     typedef ListTypeData Data;
-    typedef KDevelop::StructureType BaseType;
 
 protected:
     TYPE_DECLARE_DATA(ListType);
@@ -202,7 +201,6 @@ public:
     enum { Identity = 57 };
 
     typedef MapTypeData Data;
-    typedef KDevelop::StructureType BaseType;
 
 protected:
     TYPE_DECLARE_DATA(MapType);

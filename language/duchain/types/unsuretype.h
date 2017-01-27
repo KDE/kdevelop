@@ -77,7 +77,6 @@ public:
     Identity = 39
   };
   
-  typedef KDevelop::AbstractType BaseType;
   typedef UnsureTypeData Data;
   
 protected:
