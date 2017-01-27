@@ -35,7 +35,9 @@
 using namespace KDevelop;
 
 ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget * parent )
-    : AppWizardPageWidget( parent ), m_ui( new Ui::ProjectVcsPage )
+    : AppWizardPageWidget(parent)
+    , m_currentImportWidget(nullptr)
+    , m_ui(new Ui::ProjectVcsPage)
 {
     m_ui->setupUi( this );
     QList<KDevelop::IPlugin*> vcsplugins = controller->allPluginsForExtension ( QStringLiteral("org.kdevelop.IBasicVersionControl") );
@@ -65,18 +67,25 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
              m_ui->vcsImportOptions, &QStackedWidget::setCurrentIndex );
     connect( m_ui->vcsTypes, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated),
              this, &ProjectVcsPage::vcsTypeChanged );
-    validateData();
+    vcsTypeChanged(m_ui->vcsTypes->currentIndex());
 }
 
 
 void ProjectVcsPage::vcsTypeChanged( int idx )
 {
+    if (m_currentImportWidget) {
+        disconnect(m_currentImportWidget, &VcsImportMetadataWidget::changed, this, &ProjectVcsPage::validateData);
+    }
+
+    // first type in list is "no vcs", without an import widget
+    const int widgetIndex = idx - 1;
+    m_currentImportWidget = importWidgets.value(widgetIndex);
+
     validateData();
-    int widgetidx = idx - 1;
-    disconnect( this, static_cast<void(ProjectVcsPage::*)()>(nullptr), this, &ProjectVcsPage::validateData );
-    if ( widgetidx < 0 || widgetidx >= importWidgets.size())
-        return;
-    connect( importWidgets[widgetidx], &VcsImportMetadataWidget::changed, this, &ProjectVcsPage::validateData );
+
+    if (m_currentImportWidget) {
+        connect(m_currentImportWidget, &VcsImportMetadataWidget::changed, this, &ProjectVcsPage::validateData);
+    }
 }
 
 void ProjectVcsPage::validateData()
