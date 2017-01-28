@@ -47,7 +47,7 @@ using namespace KDevelop;
 
 bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, const bool isFolder)
 {
-    QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
+    QWidget* window = QApplication::activeWindow();
 
     auto job = KIO::stat(url, KIO::StatJob::DestinationSide, 0);
     KJobWidgets::setWindow(job, window);
@@ -162,6 +162,7 @@ bool KDevelop::renameUrl(const KDevelop::IProject* project, const QUrl& oldname,
     } else if (!wasVcsMoved) {
         // fallback for non-textdocuments (also folders e.g.)
         KIO::CopyJob* job = KIO::move(oldname, newname);
+        KJobWidgets::setWindow(job, QApplication::activeWindow());
         bool success = job->exec();
         if (success) {
             // save files that where opened in this folder under the new name
@@ -205,6 +206,7 @@ bool KDevelop::copyUrl(const KDevelop::IProject* project, const QUrl& source, co
 
     // Fallback for the case of no vcs, or not-vcs-managed file/folder
     auto job = KIO::copy(source, target);
+    KJobWidgets::setWindow(job, QApplication::activeWindow());
     return job->exec();
 }
 
