@@ -211,7 +211,7 @@ struct DocumentControllerPrivate
         if (url.isLocalFile()) {
             return QFile::exists(url.toLocalFile());
         } else {
-            auto job = KIO::stat(url, KIO::StatJob::SourceSide, 0);
+            auto job = KIO::stat(url, KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
             KJobWidgets::setWindow(job, ICore::self()->uiController()->activeMainWindow());
             return job->exec();
         }

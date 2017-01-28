@@ -141,7 +141,7 @@ public:
         Path newPath = item->path();
         newPath.setLastPathSegment(newName);
 
-        auto job = KIO::stat(newPath.toUrl(), KIO::StatJob::SourceSide, 0);
+        auto job = KIO::stat(newPath.toUrl(), KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
         if (job->exec()) {
             // file/folder exists already
             return ProjectBaseItem::ExistingItemSameName;
