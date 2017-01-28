@@ -452,7 +452,10 @@ void IdealController::goPrevNextDock(IdealController::Direction direction)
 
 void IdealController::toggleDocksShown()
 {
-    bool anyBarShown = leftBarWidget->isShown() || bottomBarWidget->isShown() || rightBarWidget->isShown();
+    bool anyBarShown =
+        (leftBarWidget->isShown() && !leftBarWidget->isLocked()) ||
+        (bottomBarWidget->isShown() && !bottomBarWidget->isLocked()) ||
+        (rightBarWidget->isShown() && !rightBarWidget->isLocked());
 
     if (anyBarShown) {
         leftBarWidget->saveShowState();
@@ -460,9 +463,14 @@ void IdealController::toggleDocksShown()
         rightBarWidget->saveShowState();
     }
 
-    toggleDocksShown(leftBarWidget, !anyBarShown && leftBarWidget->lastShowState());
-    toggleDocksShown(bottomBarWidget, !anyBarShown && bottomBarWidget->lastShowState());
-    toggleDocksShown(rightBarWidget, !anyBarShown && rightBarWidget->lastShowState());
+    if (!leftBarWidget->isLocked())
+        toggleDocksShown(leftBarWidget, !anyBarShown && leftBarWidget->lastShowState());
+
+    if (!bottomBarWidget->isLocked())
+        toggleDocksShown(bottomBarWidget, !anyBarShown && bottomBarWidget->lastShowState());
+
+    if (!rightBarWidget->isLocked())
+        toggleDocksShown(rightBarWidget, !anyBarShown && rightBarWidget->lastShowState());
 }
 
 void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)

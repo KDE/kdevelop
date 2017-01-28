@@ -431,10 +431,27 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         menu.addActions(actionMap.values());
     }
 
+    QAction* lockAction = new QAction(this);
+    lockAction->setCheckable(true);
+    lockAction->setText(i18n("Lock the Panel from Hiding"));
+
+    KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+    lockAction->setChecked(config.readEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(area), false));
+
+    menu.addSeparator();
+    menu.addAction(lockAction);
+
     QAction* triggered = menu.exec(position);
     if ( !triggered ) {
         return;
     }
+
+    if (triggered == lockAction) {
+        KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+        config.writeEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(area), lockAction->isChecked());
+        return;
+    }
+
     Core::self()->uiControllerInternal()->addToolViewToDockArea(
         actionToFactory[triggered],
         area

@@ -269,6 +269,12 @@ void IdealButtonBarWidget::saveOrderSettings(KConfigGroup& configGroup)
     configGroup.writeEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), _buttonsOrder);
 }
 
+bool IdealButtonBarWidget::isLocked()
+{
+    KConfigGroup config = KSharedConfig::openConfig()->group("UI");
+    return config.readEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(_area), false);
+}
+
 void IdealButtonBarWidget::applyOrderToLayout()
 {
     // If widget already have some buttons in the layout then calling loadOrderSettings() may leads

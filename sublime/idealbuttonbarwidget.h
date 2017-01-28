@@ -73,6 +73,8 @@ public:
     void loadOrderSettings(const KConfigGroup& configGroup);
     void saveOrderSettings(KConfigGroup& configGroup);
 
+    bool isLocked();
+
 signals:
     void emptyChanged();
 
