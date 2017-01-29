@@ -37,6 +37,16 @@ StandardVcsLocationWidget::StandardVcsLocationWidget(QWidget* parent, Qt::Window
     connect(m_urlWidget, &KUrlRequester::textChanged, this, &StandardVcsLocationWidget::textChanged);
 }
 
+void StandardVcsLocationWidget::setLocation(const QUrl& remoteLocation)
+{
+    setUrl(remoteLocation);
+}
+
+void StandardVcsLocationWidget::setUrl(const QUrl& url)
+{
+    m_urlWidget->setUrl(url);
+}
+
 QUrl StandardVcsLocationWidget::url() const
 {
     return m_urlWidget->url();

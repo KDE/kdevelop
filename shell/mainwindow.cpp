@@ -59,6 +59,7 @@ Boston, MA 02110-1301, USA.
 
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 #include <sublime/view.h>
 #include <sublime/document.h>
 #include <sublime/urldocument.h>
@@ -202,9 +203,15 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
 
 void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
 {
-    if( ev->mimeData()->hasFormat( QStringLiteral("text/uri-list") ) && ev->mimeData()->hasUrls() )
-    {
+    const QMimeData* mimeData = ev->mimeData();
+    if (mimeData->hasUrls()) {
         ev->acceptProposedAction();
+    } else if (mimeData->hasText()) {
+        // also take text which contains a URL
+        const QUrl url = QUrl::fromUserInput(mimeData->text());
+        if (url.isValid()) {
+            ev->acceptProposedAction();
+        }
     }
 }
 
@@ -214,10 +221,43 @@ void MainWindow::dropEvent( QDropEvent* ev )
     if(dropToView)
         activateView(dropToView);
 
-    foreach( const QUrl& u, ev->mimeData()->urls() )
-    {
-        Core::self()->documentController()->openDocument( u );
+    QList<QUrl> urls;
+
+    const QMimeData* mimeData = ev->mimeData();
+    if (mimeData->hasUrls()) {
+        urls = mimeData->urls();
+    } else if (mimeData->hasText()) {
+        const QUrl url = QUrl::fromUserInput(mimeData->text());
+        if (url.isValid()) {
+            urls << url;
+        }
     }
+
+    bool eventUsed = false;
+    if (urls.size() == 1) {
+        const QUrl& url = urls.at(0);
+        // TODO: query also projectprovider plugins, and that before plain vcs plugins
+        // e.g. KDE provider plugin could catch URLs from mirror or pickup kde:repo things
+
+        auto* pluginController = Core::self()->pluginController();
+        const auto& plugins = pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
+
+        for (auto* plugin : plugins) {
+            auto* iface = plugin->extension<IBasicVersionControl>();
+            if (iface->isValidRemoteRepositoryUrl(url)) {
+                Core::self()->projectControllerInternal()->fetchProjectFromUrl(url, plugin);
+                eventUsed = true;
+                break;
+            }
+        }
+    }
+
+    if (!eventUsed) {
+        for(const auto& url : urls) {
+            Core::self()->documentController()->openDocument(url);
+        }
+    }
+
     ev->acceptProposedAction();
 }
 

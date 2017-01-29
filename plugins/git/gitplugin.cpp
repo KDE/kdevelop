@@ -280,6 +280,32 @@ bool GitPlugin::isValidDirectory(const QUrl & dirPath)
     return dir.exists(QStringLiteral(".git/HEAD"));
 }
 
+bool GitPlugin::isValidRemoteRepositoryUrl(const QUrl& remoteLocation)
+{
+    if (remoteLocation.isLocalFile()) {
+        QFileInfo fileInfo(remoteLocation.toLocalFile());
+        if (fileInfo.isDir()) {
+            QDir dir(fileInfo.filePath());
+            if (dir.exists(QStringLiteral(".git/HEAD"))) {
+                return true;
+            }
+            // TODO: check also for bare repo
+        }
+    } else {
+        const QString scheme = remoteLocation.scheme();
+        if (scheme == QLatin1String("git")) {
+            return true;
+        }
+        // heuristic check, anything better we can do here without talking to server?
+        if ((scheme == QLatin1String("http") ||
+             scheme == QLatin1String("https")) &&
+            remoteLocation.path().endsWith(QLatin1String(".git"))) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool GitPlugin::isVersionControlled(const QUrl &path)
 {
     QFileInfo fsObject(path.toLocalFile());

@@ -413,10 +413,11 @@ bool equalProjectFile( const QString& configPath, OpenProjectDialog* dlg )
            grp.readEntry( "Manager", QString() ) == dlg->projectManager();
 }
 
-QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& startUrl)
+QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& startUrl,
+                                                     const QUrl& repoUrl, IPlugin* vcsOrProviderPlugin)
 {
     Q_ASSERT(d);
-    OpenProjectDialog dlg( fetch, startUrl, Core::self()->uiController()->activeMainWindow() );
+    OpenProjectDialog dlg(fetch, startUrl, repoUrl, vcsOrProviderPlugin, Core::self()->uiController()->activeMainWindow());
     if(dlg.exec() == QDialog::Rejected)
         return QUrl();
 
@@ -828,6 +829,15 @@ void ProjectController::openProject( const QUrl &projectFile )
 
     if ( !url.isEmpty() )
     {
+        d->importProject(url);
+    }
+}
+
+void ProjectController::fetchProjectFromUrl(const QUrl& repoUrl, IPlugin* vcsOrProviderPlugin)
+{
+    const QUrl url = d->dialog->askProjectConfigLocation(true, QUrl(), repoUrl, vcsOrProviderPlugin);
+
+    if (!url.isEmpty()) {
         d->importProject(url);
     }
 }

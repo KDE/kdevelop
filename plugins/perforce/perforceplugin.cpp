@@ -145,6 +145,13 @@ KDevelop::VcsImportMetadataWidget* PerforcePlugin::createImportMetadataWidget(QW
     return nullptr;
 }
 
+bool PerforcePlugin::isValidRemoteRepositoryUrl(const QUrl& remoteLocation)
+{
+    Q_UNUSED(remoteLocation);
+    // TODO
+    return false;
+}
+
 bool PerforcePlugin::isValidDirectory(const QUrl & dirPath)
 {
     const QFileInfo finfo(dirPath.toLocalFile());

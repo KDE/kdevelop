@@ -60,7 +60,8 @@ public Q_SLOTS:
      * @param fetch will tell the UI that the user might want to fetch the project first
      * @param startUrl tells where to look first
      */
-    virtual QUrl askProjectConfigLocation(bool fetch, const QUrl& startUrl = QUrl()) = 0;
+    virtual QUrl askProjectConfigLocation(bool fetch, const QUrl& startUrl = QUrl(),
+                                          const QUrl& repoUrl = QUrl(), IPlugin* plugin = nullptr) = 0;
     virtual bool userWantsReopen() = 0;
 };
 
@@ -94,6 +95,8 @@ public:
     QString prettyFilePath(const QUrl& url, FormattingOptions format = FormatHtml) const override;
 
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
+
+    void fetchProjectFromUrl(const QUrl& repoUrl, IPlugin* vcsOrProviderPlugin);
 
 public Q_SLOTS:
     void openProjectForUrl( const QUrl &sourceUrl ) override;
@@ -168,7 +171,8 @@ public:
     ProjectControllerPrivate* const d;
 
 public Q_SLOTS:
-    QUrl askProjectConfigLocation(bool fetch, const QUrl& sta) override;
+    QUrl askProjectConfigLocation(bool fetch, const QUrl& startUrl,
+                                  const QUrl& repoUrl, IPlugin* plugin) override;
     bool userWantsReopen() override;
 };
 

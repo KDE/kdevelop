@@ -69,7 +69,9 @@ URLInfo getUrlInfo(const QUrl& url)
 namespace KDevelop
 {
 
-OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget* parent )
+OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
+                                     const QUrl& repoUrl, IPlugin* vcsOrProviderPlugin,
+                                     QWidget* parent)
     : KAssistantDialog( parent )
     , m_urlIsDirectory(false)
     , sourcePage(nullptr)
@@ -112,7 +114,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
     KPageWidgetItem* currentPage = nullptr;
 
     if( fetch ) {
-        sourcePageWidget = new ProjectSourcePage( start, this );
+        sourcePageWidget = new ProjectSourcePage(start, repoUrl, vcsOrProviderPlugin, this);
         connect( sourcePageWidget, &ProjectSourcePage::isCorrect, this, &OpenProjectDialog::validateSourcePage );
         sourcePage = addPage( sourcePageWidget, i18n("Select Source") );
         currentPage = sourcePage;

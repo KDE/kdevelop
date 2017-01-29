@@ -42,6 +42,8 @@ public:
 
     QString name() const override;
 
+    bool isValidRemoteRepositoryUrl(const QUrl& remoteLocation) override;
+
     KDevelop::VcsJob* add(const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
     KDevelop::VcsJob* annotate(const QUrl& localLocation, const KDevelop::VcsRevision& rev) override;
     KDevelop::VcsJob* commit(const QString& message, const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;

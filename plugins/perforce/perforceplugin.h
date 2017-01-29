@@ -58,6 +58,7 @@ public:
 
     KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;
 
+    bool isValidRemoteRepositoryUrl(const QUrl& remoteLocation) override;
     bool isVersionControlled(const QUrl& localLocation) override;
 
     KDevelop::VcsJob* repositoryLocation(const QUrl& localLocation) override;

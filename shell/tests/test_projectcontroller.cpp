@@ -54,7 +54,9 @@ public:
     bool m_reopen;
 
 public slots:
-    QUrl askProjectConfigLocation(bool /*fetch*/, const QUrl& /*startUrl*/ = QUrl()) override { return QUrl(); }
+    QUrl askProjectConfigLocation(bool /*fetch*/, const QUrl& /*startUrl*/,
+                                  const QUrl& /*repoUrl*/, IPlugin* /*plugin*/) override
+    { return QUrl(); }
     bool userWantsReopen() override { return m_reopen; }
 };
 

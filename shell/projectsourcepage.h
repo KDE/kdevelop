@@ -29,7 +29,8 @@ class ProjectSourcePage : public QWidget
 {
     Q_OBJECT
     public:
-        explicit ProjectSourcePage(const QUrl& initial, QWidget* parent = nullptr);
+        explicit ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, IPlugin* preSelectPlugin,
+                                   QWidget* parent = nullptr);
         ~ProjectSourcePage() override;
 
         QUrl workingDir() const;
@@ -48,6 +49,7 @@ class ProjectSourcePage : public QWidget
         void isCorrect(bool);
         
     private:
+        void setSourceWidget(int index, const QUrl& repoUrl);
         void setStatus(const QString& message);
         void clearStatus();
         

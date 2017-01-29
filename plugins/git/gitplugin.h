@@ -77,6 +77,7 @@ public:
    
     QString name() const override;
 
+    bool isValidRemoteRepositoryUrl(const QUrl& remoteLocation) override;
     bool isVersionControlled(const QUrl &path) override;
     
     KDevelop::VcsJob* copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn) override;

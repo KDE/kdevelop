@@ -38,7 +38,9 @@ class KDEVPLATFORMVCS_EXPORT StandardVcsLocationWidget : public VcsLocationWidge
         bool isCorrect() const override;
         QUrl url() const;
         QString projectName() const override;
-        
+        void setLocation(const QUrl& remoteLocation) override;
+        void setUrl(const QUrl& url);
+
     public slots:
         void textChanged(const QString& str);
         

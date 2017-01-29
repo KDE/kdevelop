@@ -28,13 +28,16 @@ namespace KDevelop
 {
 class ProjectSourcePage;
 class OpenProjectPage;
+class IPlugin;
 
 class OpenProjectDialog : public KAssistantDialog
 {
     Q_OBJECT
 
 public:
-    OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget* parent = nullptr );
+    OpenProjectDialog(bool fetch, const QUrl& startUrl,
+                      const QUrl& repoUrl = QUrl(), IPlugin* vcsOrProviderPlugin = nullptr,
+                      QWidget* parent = nullptr);
 
     /**
     * Return a QUrl pointing to the project's .kdev file.

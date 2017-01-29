@@ -91,6 +91,17 @@ KDevSvnPlugin::~KDevSvnPlugin()
 {
 }
 
+bool KDevSvnPlugin::isValidRemoteRepositoryUrl(const QUrl& remoteLocation)
+{
+    const QString scheme = remoteLocation.scheme();
+    if (scheme == QLatin1String("svn") ||
+        scheme == QLatin1String("svn+ssh")) {
+        return true;
+    }
+    return false;
+}
+
+
 bool KDevSvnPlugin::isVersionControlled(const QUrl &localLocation)
 {
     ///TODO: also check this in the other functions?

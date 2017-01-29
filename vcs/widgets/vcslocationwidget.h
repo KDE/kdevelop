@@ -50,7 +50,13 @@ class KDEVPLATFORMVCS_EXPORT VcsLocationWidget : public QWidget
          * for the VcsLocation.
          */
         virtual QString projectName() const=0;
-        
+
+        /** Sets the location by a respective URL
+         * @param remoteLocation the URL used to access a remote repository
+         * @see IBasicVersionControl::isValidRemoteRepositoryUrl
+         */
+        virtual void setLocation(const QUrl& remoteLocation) = 0;
+
     signals:
         void changed();
 };

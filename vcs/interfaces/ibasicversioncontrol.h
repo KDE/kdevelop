@@ -81,6 +81,19 @@ public:
     virtual VcsImportMetadataWidget* createImportMetadataWidget( QWidget* parent ) = 0;
 
     /**
+     * Checks whether the given @p remoteLocation is a valid remote repository URL.
+     *
+     * If the URL is a local filesystem path, the folder will be checked
+     * if it contains proper repository content.
+     * For non-local filesystem URLs only the URL properties will be checked,
+     * no communication to any server is done.
+     *
+     * @param remoteLocation the URL used to access a remote repository
+     * @returns true if the the given @p remoteLocation seems valid for this version control system
+     */
+    virtual bool isValidRemoteRepositoryUrl(const QUrl& remoteLocation) = 0;
+
+    /**
      * These methods rely on a valid vcs-directory with vcs-metadata in it.
      *
      * revisions can contain a date in format parseable by QDate, a number,

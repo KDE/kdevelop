@@ -52,6 +52,7 @@ public:
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*) override;
 
     // Begin:  KDevelop::IBasicVersionControl
+    bool isValidRemoteRepositoryUrl(const QUrl& remoteLocation) override;
     bool isVersionControlled(const QUrl& localLocation) override;
     KDevelop::VcsJob* repositoryLocation(const QUrl& localLocation) override;
     KDevelop::VcsJob* add(const QList<QUrl>& localLocations,

@@ -65,6 +65,16 @@ QString BazaarPlugin::name() const
     return QStringLiteral("Bazaar");
 }
 
+bool BazaarPlugin::isValidRemoteRepositoryUrl(const QUrl& remoteLocation)
+{
+    const QString scheme = remoteLocation.scheme();
+    if (scheme == QLatin1String("bzr") ||
+        scheme == QLatin1String("bzr+ssh")) {
+        return true;
+    }
+    return false;
+}
+
 VcsJob* BazaarPlugin::add(const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
     DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);

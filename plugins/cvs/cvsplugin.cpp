@@ -271,6 +271,13 @@ QString CvsPlugin::findWorkingDir(const QUrl& location)
 
 // Begin:  KDevelop::IBasicVersionControl
 
+bool CvsPlugin::isValidRemoteRepositoryUrl(const QUrl& remoteLocation)
+{
+    Q_UNUSED(remoteLocation);
+    // TODO
+    return false;
+}
+
 bool CvsPlugin::isVersionControlled(const QUrl & localLocation)
 {
     return d->m_proxy->isVersionControlled(localLocation);
