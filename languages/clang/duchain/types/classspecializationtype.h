@@ -77,7 +77,6 @@ public:
     };
 
     typedef ClassSpecializationTypeData Data;
-    typedef StructureType BaseType;
 
 protected:
     TYPE_DECLARE_DATA(ClassSpecializationType);
