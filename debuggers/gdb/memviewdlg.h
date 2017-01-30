@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _MEMVIEW_H_
-#define _MEMVIEW_H_
+#ifndef MEMVIEW_H_
+#define MEMVIEW_H_
 
 #include "dbgglobal.h"
 #include "mi/mi.h"
@@ -22,6 +22,12 @@
 #include <QContextMenuEvent>
 #include <QWidget>
 
+namespace Okteta {
+class ByteArrayModel;
+}
+namespace Okteta {
+class ByteArrayColumnView;
+}
 
 namespace KDevelop {
 class IDebugSession;
@@ -30,6 +36,7 @@ class IDebugSession;
 class QLineEdit;
 class QToolBox;
 
+
 namespace KDevMI
 {
 namespace GDB
@@ -37,6 +44,7 @@ namespace GDB
     class CppDebuggerPlugin;
     class MemoryView;
     class GDBController;
+    class MemoryRangeSelector;
 
     class MemoryViewerWidget : public QWidget
     {
@@ -57,8 +65,8 @@ namespace GDB
         void slotChildDestroyed(QObject* child);
 
     private: // Data
-        QToolBox* toolBox_;
-        QList<MemoryView*> memoryViews_;
+        QToolBox* m_toolBox;
+        QList<MemoryView*> m_memoryViews;
     };
 
     class MemoryView : public QWidget
@@ -77,20 +85,16 @@ namespace GDB
 
         void memoryRead(const MI::ResultRecord& r);
 
+        // Returns true is we successfully created the memoryView, and
+        // can work.
+        bool isOk() const;
+
     private Q_SLOTS:
         void memoryEdited(int start, int end);
         /** Informs the view about changes in debugger state.
          *  Allows view to disable itself when debugger is not running. */
         void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 
-    private:
-        // Returns true is we successfully created the hexeditor, and so
-        // can work.
-        bool isOk() const;
-
-
-
-    private Q_SLOTS:
         /** Invoked when user has changed memory range.
             Gets memory for the new range. */
         void slotChangeMemoryRange();
@@ -100,19 +104,17 @@ namespace GDB
     private: // QWidget overrides
         void contextMenuEvent(QContextMenuEvent* e) override;
 
-    private:
         void initWidget();
 
-    private:
-        class MemoryRangeSelector* rangeSelector_;
-        QWidget* khexedit2_widget;
+        MemoryRangeSelector* m_rangeSelector;
+        Okteta::ByteArrayModel *m_memViewModel;
+        Okteta::ByteArrayColumnView *m_memViewView;
 
-        uint amount_;
-        quintptr start_;
-        QString startAsString_, amountAsString_;
-        char* data_;
+        quintptr m_memStart;
+        QString m_memStartStr, m_memAmountStr;
+        QByteArray m_memData;
+        int m_debuggerState;
 
-        int debuggerState_;
     private slots:
         void currentSessionChanged(KDevelop::IDebugSession* session);
     };

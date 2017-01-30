@@ -24,6 +24,7 @@
 
 #include "debuggerplugin.h"
 
+#include "config-gdb-plugin.h"
 
 #include "widgets/disassemblewidget.h"
 #include "memviewdlg.h"
@@ -80,7 +81,7 @@ void CppDebuggerPlugin::setupToolviews()
         i18n("GDB"),
         gdbfactory);
 
-#ifndef WITH_OKTETA
+#ifndef KDEV_WITH_MEMVIEW
     memoryviewerfactory = nullptr;
 #else
     memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget, CppDebuggerPlugin>(

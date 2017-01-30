@@ -25,9 +25,8 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include <khexedit/byteseditinterface.h>
-#include <khexedit/charcolumninterface.h>
-#include <khexedit/valuecolumninterface.h>
+#include <Okteta/ByteArrayColumnView>
+#include <Okteta/ByteArrayModel>
 
 #include <QAction>
 #include <QContextMenuEvent>
@@ -45,22 +44,26 @@
 
 #include <cctype>
 
-using namespace KDevMI::GDB;
 using KDevMI::MI::CommandType;
 
-/** Container for controls that select memory range.
+namespace KDevMI
+{
+namespace GDB
+{
 
+/** Container for controls that select memory range.
+     *
     The memory range selection is embedded into memory view widget,
     it's not a standalone dialog. However, we want to have easy way
     to hide/show all controls, so we group them in this class.
 */
 class MemoryRangeSelector : public QWidget
 {
-public:
-    QLineEdit* startAddressLineEdit;
-    QLineEdit* amountLineEdit;
-    QPushButton* okButton;
-    QPushButton* cancelButton;
+    public:
+        QLineEdit* startAddressLineEdit;
+        QLineEdit* amountLineEdit;
+        QPushButton* okButton;
+        QPushButton* cancelButton;
 
     MemoryRangeSelector(QWidget* parent)
     : QWidget(parent)
@@ -68,7 +71,7 @@ public:
         QVBoxLayout* l = new QVBoxLayout(this);
 
         // Grid layout: labels + address field
-        QGridLayout* gl = new QGridLayout(this);
+        QGridLayout* gl = new QGridLayout();
         l->addLayout(gl);
 
         QLabel* l1 = new QLabel(i18n("Start"), this);
@@ -85,7 +88,7 @@ public:
 
         l->addSpacing(2);
 
-        QHBoxLayout* hb = new QHBoxLayout(this);
+        QHBoxLayout* hb = new QHBoxLayout();
         l->addLayout(hb);
         hb->addStretch();
 
@@ -98,23 +101,22 @@ public:
         l->addSpacing(2);
         setLayout(l);
 
-        connect(startAddressLineEdit, SIGNAL(returnPressed()),
-                okButton, SLOT(animateClick()));
+        connect(startAddressLineEdit, &QLineEdit::returnPressed, okButton, [this]() {
+                okButton->animateClick();
+        });
 
-        connect(amountLineEdit, SIGNAL(returnPressed()),
-                okButton, SLOT(animateClick()));
+        connect(amountLineEdit, &QLineEdit::returnPressed, okButton, [this]() {
+                okButton->animateClick();
+        });
     }
 };
-
-
 
 MemoryView::MemoryView(QWidget* parent)
 : QWidget(parent),
     // New memory view can be created only when debugger is active,
     // so don't set s_appNotStarted here.
-    khexedit2_widget(0),
-    amount_(0), data_(0),
-    debuggerState_(0)
+    m_memViewView(nullptr),
+    m_debuggerState(0)
 {
     setWindowTitle(i18n("Memory view"));
     emit captionChanged(windowTitle());
@@ -124,18 +126,20 @@ MemoryView::MemoryView(QWidget* parent)
     if (isOk())
         slotEnableOrDisable();
 
-    connect(KDevelop::ICore::self()->debugController(),
-            SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
-            SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
+    auto debugController = KDevelop::ICore::self()->debugController();
+    Q_ASSERT(debugController);
+
+    connect(debugController, &KDevelop::IDebugController::currentSessionChanged,
+            this, &MemoryView::currentSessionChanged);
 }
 
 void MemoryView::currentSessionChanged(KDevelop::IDebugSession* s)
 {
     DebugSession *session = qobject_cast<DebugSession*>(s);
     if (!session) return;
-    connect(session,
-            SIGNAL(gdbStateChanged(DBGStateFlags,DBGStateFlags)),
-            SLOT(slotStateChanged(DBGStateFlags,DBGStateFlags)));
+
+    connect(session, &DebugSession::debuggerStateChanged,
+             this, &MemoryView::slotStateChanged);
 }
 
 void MemoryView::slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState)
@@ -149,72 +153,53 @@ void MemoryView::initWidget()
     QVBoxLayout *l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
 
-    khexedit2_widget = KHE::createBytesEditWidget(this);
-    if (!khexedit2_widget)
-    {
-        QTextEdit* edit = new QTextEdit(this);
-        l->addWidget(edit);
+    m_memViewModel = new Okteta::ByteArrayModel(0, -1, this);
+    m_memViewView = new Okteta::ByteArrayColumnView(this);
+    m_memViewView->setByteArrayModel(m_memViewModel);
 
-        edit->setText(
-            "<h1>Not Available</h1>"
-            "<p>Could not open a KHexEdit2 interface. "
-            "Installing Okteta should provide the required components.</p>");
-        return;
-    }
+    m_memViewModel->setReadOnly(false);
+    m_memViewView->setReadOnly(false);
+    m_memViewView->setOverwriteMode(true);
+    m_memViewView->setOverwriteOnly(true);
+    m_memViewModel->setAutoDelete(false);
 
-    KHE::BytesEditInterface *bytesEdit = KHE::bytesEditInterface(khexedit2_widget);
-    if (bytesEdit)
-    {
-        bytesEdit->setReadOnly(false);
-        bytesEdit->setOverwriteMode(true);
-        bytesEdit->setOverwriteOnly(true);
-        bytesEdit->setAutoDelete(false);
-    }
+    m_memViewView->setValueCoding( Okteta::ByteArrayColumnView::HexadecimalCoding );
+    m_memViewView->setNoOfGroupedBytes(4);
+    m_memViewView->setByteSpacingWidth(2);
+    m_memViewView->setGroupSpacingWidth(12);
+    m_memViewView->setLayoutStyle(Okteta::AbstractByteArrayView::FullSizeLayoutStyle);
 
-    KHE::ValueColumnInterface *valueColumn = KHE::valueColumnInterface(khexedit2_widget);
-    if (valueColumn)
-    {
-        valueColumn->setCoding(KHE::ValueColumnInterface::HexadecimalCoding);
-        valueColumn->setNoOfGroupedBytes(4);
-        valueColumn->setByteSpacingWidth(2);
-        valueColumn->setGroupSpacingWidth(12);
-        valueColumn->setResizeStyle(KHE::ValueColumnInterface::LockGrouping);
-    }
 
-    KHE::CharColumnInterface *charColumn = KHE::charColumnInterface(khexedit2_widget);
-    if(charColumn)
-    {
-        charColumn->setShowUnprintable(false);
-        charColumn->setSubstituteChar('*');
-    }
+    m_memViewView->setShowsNonprinting(false);
+    m_memViewView->setSubstituteChar('*');
 
-    rangeSelector_ = new MemoryRangeSelector(this);
-    l->addWidget(rangeSelector_);
+    m_rangeSelector = new MemoryRangeSelector(this);
+    l->addWidget(m_rangeSelector);
 
-    connect(rangeSelector_->okButton, SIGNAL(clicked()),
-            this,                     SLOT(slotChangeMemoryRange()));
+    connect(m_rangeSelector->okButton, &QPushButton::clicked,
+            this, &MemoryView::slotChangeMemoryRange);
 
-    connect(rangeSelector_->cancelButton, SIGNAL(clicked()),
-            this,                         SLOT(slotHideRangeDialog()));
+    connect(m_rangeSelector->cancelButton, &QPushButton::clicked,
+            this, &MemoryView::slotHideRangeDialog);
 
-    connect(rangeSelector_->startAddressLineEdit,
-            SIGNAL(textChanged(QString)),
+    connect(m_rangeSelector->startAddressLineEdit,
+            &QLineEdit::textChanged,
             this,
-            SLOT(slotEnableOrDisable()));
+            &MemoryView::slotEnableOrDisable);
 
-    connect(rangeSelector_->amountLineEdit,
-            SIGNAL(textChanged(QString)),
+    connect(m_rangeSelector->amountLineEdit,
+            &QLineEdit::textChanged,
             this,
-            SLOT(slotEnableOrDisable()));
+            &MemoryView::slotEnableOrDisable);
 
-    l->addWidget(khexedit2_widget);
+    l->addWidget(m_memViewView);
 }
 
 void MemoryView::debuggerStateChanged(DBGStateFlags state)
 {
     if (isOk())
     {
-        debuggerState_ = state;
+        m_debuggerState = state;
         slotEnableOrDisable();
     }
 }
@@ -222,7 +207,7 @@ void MemoryView::debuggerStateChanged(DBGStateFlags state)
 
 void MemoryView::slotHideRangeDialog()
 {
-    rangeSelector_->hide();
+    m_rangeSelector->hide();
 }
 
 void MemoryView::slotChangeMemoryRange()
@@ -231,11 +216,11 @@ void MemoryView::slotChangeMemoryRange()
         KDevelop::ICore::self()->debugController()->currentSession());
     if (!session) return;
 
-    QString amount = rangeSelector_->amountLineEdit->text();
+    QString amount = m_rangeSelector->amountLineEdit->text();
     if(amount.isEmpty())
-        amount = QString("sizeof(%1)").arg(rangeSelector_->startAddressLineEdit->text());
+        amount = QString("sizeof(%1)").arg(m_rangeSelector->startAddressLineEdit->text());
 
-    session->addCommand(new ExpressionValueCommand(amount, this, &MemoryView::sizeComputed));
+    session->addCommand(new MI::ExpressionValueCommand(amount, this, &MemoryView::sizeComputed));
 }
 
 void MemoryView::sizeComputed(const QString& size)
@@ -244,38 +229,33 @@ void MemoryView::sizeComputed(const QString& size)
         KDevelop::ICore::self()->debugController()->currentSession());
     if (!session) return;
 
-    session->addCommand(new GDBCommand(MI::DataReadMemory,
+    session->addCommand(MI::DataReadMemory,
             QString("%1 x 1 1 %2")
-                .arg(rangeSelector_->startAddressLineEdit->text())
+                .arg(m_rangeSelector->startAddressLineEdit->text())
                 .arg(size),
             this,
-            &MemoryView::memoryRead));
+            &MemoryView::memoryRead);
 }
 
 void MemoryView::memoryRead(const MI::ResultRecord& r)
 {
     const MI::Value& content = r["memory"][0]["data"];
     bool startStringConverted;
-    start_ = r["addr"].literal().toULongLong(&startStringConverted, 16);
-    amount_ = content.size();
+    m_memStart = r["addr"].literal().toULongLong(&startStringConverted, 16);
+    m_memData.resize(content.size());
 
-    startAsString_ = rangeSelector_->startAddressLineEdit->text();
-    amountAsString_ = rangeSelector_->amountLineEdit->text();
+    m_memStartStr = m_rangeSelector->startAddressLineEdit->text();
+    m_memAmountStr = m_rangeSelector->amountLineEdit->text();
 
-    setWindowTitle(i18np("%2 (1 byte)","%2 (%1 bytes)",amount_,startAsString_));
+    setWindowTitle(i18np("%2 (1 byte)","%2 (%1 bytes)",m_memData.size(),m_memStartStr));
     emit captionChanged(windowTitle());
 
-    KHE::BytesEditInterface* bytesEditor = KHE::bytesEditInterface(khexedit2_widget);
-    bytesEditor->setData(this->data_, 0);
-
-    delete[] this->data_;
-    this->data_ = new char[amount_];
     for(int i = 0; i < content.size(); ++i)
     {
-        this->data_[i] = content[i].literal().toInt(0, 16);
+        m_memData[i] = content[i].literal().toInt(0, 16);
     }
 
-    bytesEditor->setData(this->data_, amount_);
+    m_memViewModel->setData(reinterpret_cast<Okteta::Byte*>(m_memData.data()), m_memData.size());
 
     slotHideRangeDialog();
 }
@@ -289,11 +269,11 @@ void MemoryView::memoryEdited(int start, int end)
 
     for(int i = start; i <= end; ++i)
     {
-        session->addCommand(new GDBCommand(MI::GdbSet,
+        session->addCommand(MI::GdbSet,
                 QString("*(char*)(%1 + %2) = %3")
-                    .arg(start_)
+                    .arg(m_memStart)
                     .arg(i)
-                    .arg(QString::number(data_[i]))));
+                    .arg(QString::number(m_memData[i])));
     }
 }
 
@@ -302,49 +282,46 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     if (!isOk())
         return;
 
-    KHE::BytesEditInterface *bytesEdit = KHE::bytesEditInterface(khexedit2_widget);
-    KHE::ValueColumnInterface *valueColumn = KHE::valueColumnInterface(khexedit2_widget);
-
     QMenu menu;
 
-    bool app_running = !(debuggerState_ & s_appNotStarted);
+    bool app_running = !(m_debuggerState & s_appNotStarted);
 
     QAction* reload = menu.addAction(i18n("&Reload"));
     reload->setIcon(QIcon::fromTheme("view-refresh"));
-    reload->setEnabled(app_running && amount_ != 0);
+    reload->setEnabled(app_running && !m_memData.isEmpty() );
 
     QActionGroup *formatGroup = NULL;
     QActionGroup *groupingGroup = NULL;
-    if (valueColumn)
+    if (m_memViewModel && m_memViewView)
     {
         // make Format menu with action group
         QMenu *formatMenu = new QMenu(i18n("&Format"));
         formatGroup = new QActionGroup(formatMenu);
 
         QAction *binary = formatGroup->addAction(i18n("&Binary"));
-        binary->setData(KHE::ValueColumnInterface::BinaryCoding);
+        binary->setData(Okteta::ByteArrayColumnView::BinaryCoding);
         binary->setShortcut(Qt::Key_B);
         formatMenu->addAction(binary);
 
         QAction *octal = formatGroup->addAction(i18n("&Octal"));
-        octal->setData(KHE::ValueColumnInterface::OctalCoding);
+        octal->setData(Okteta::ByteArrayColumnView::OctalCoding);
         octal->setShortcut(Qt::Key_O);
         formatMenu->addAction(octal);
 
         QAction *decimal = formatGroup->addAction(i18n("&Decimal"));
-        decimal->setData(KHE::ValueColumnInterface::DecimalCoding);
+        decimal->setData(Okteta::ByteArrayColumnView::DecimalCoding);
         decimal->setShortcut(Qt::Key_D);
         formatMenu->addAction(decimal);
 
         QAction *hex = formatGroup->addAction(i18n("&Hexadecimal"));
-        hex->setData(KHE::ValueColumnInterface::HexadecimalCoding);
+        hex->setData(Okteta::ByteArrayColumnView::HexadecimalCoding);
         hex->setShortcut(Qt::Key_H);
         formatMenu->addAction(hex);
 
         foreach(QAction* act, formatGroup->actions())
         {
             act->setCheckable(true);
-            act->setChecked(act->data().toInt() == valueColumn->coding());
+            act->setChecked(act->data().toInt() ==  m_memViewView->valueCoding());
             act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         }
 
@@ -388,7 +365,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
         foreach(QAction* act, groupingGroup->actions())
         {
             act->setCheckable(true);
-            act->setChecked(act->data().toInt() == valueColumn->noOfGroupedBytes());
+            act->setChecked(act->data().toInt() == m_memViewView->noOfGroupedBytes());
             act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         }
 
@@ -397,10 +374,10 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
     QAction* write = menu.addAction(i18n("Write changes"));
     write->setIcon(QIcon::fromTheme("document-save"));
-    write->setEnabled(app_running && bytesEdit && bytesEdit->isModified());
+    write->setEnabled(app_running && m_memViewView && m_memViewView->isModified());
 
     QAction* range = menu.addAction(i18n("Change memory range"));
-    range->setEnabled(app_running && !rangeSelector_->isVisible());
+    range->setEnabled(app_running && !m_rangeSelector->isVisible());
     range->setIcon(QIcon::fromTheme("document-edit"));
 
     QAction* close = menu.addAction(i18n("Close this view"));
@@ -412,39 +389,39 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
     if (result == reload)
     {
-        // We use numeric start_ and amount_ stored in this,
-        // not textual startAsString_ and amountAsString_,
+        // We use m_memStart and m_memAmount stored in this,
+        // not textual m_memStartStr and m_memAmountStr,
         // because program position might have changes and expressions
         // are no longer valid.
         DebugSession *session = qobject_cast<DebugSession*>(
             KDevelop::ICore::self()->debugController()->currentSession());
         if (session) {
-            session->addCommand(new GDBCommand(MI::DataReadMemory,
-                    QString("%1 x 1 1 %2").arg(start_).arg(amount_),
+            session->addCommand(MI::DataReadMemory,
+                    QString("%1 x 1 1 %2").arg(m_memStart).arg(m_memData.size()),
                     this,
-                    &MemoryView::memoryRead));
+                    &MemoryView::memoryRead);
         }
     }
 
     if (result && formatGroup && formatGroup == result->actionGroup())
-        valueColumn->setCoding((KHE::ValueColumnInterface::KCoding)result->data().toInt());
+        m_memViewView->setValueCoding( (Okteta::ByteArrayColumnView::ValueCoding)result->data().toInt());
 
     if (result && groupingGroup && groupingGroup == result->actionGroup())
-        valueColumn->setNoOfGroupedBytes(result->data().toInt());
+        m_memViewView->setNoOfGroupedBytes(result->data().toInt());
 
     if (result == write)
     {
-        memoryEdited(0, amount_);
-        bytesEdit->setModified(false);
+        memoryEdited(0, m_memData.size());
+        m_memViewView->setModified(false);
     }
 
     if (result == range)
     {
-        rangeSelector_->startAddressLineEdit->setText(startAsString_);
-        rangeSelector_->amountLineEdit->setText(amountAsString_);
+        m_rangeSelector->startAddressLineEdit->setText(m_memStartStr);
+        m_rangeSelector->amountLineEdit->setText(m_memAmountStr);
 
-        rangeSelector_->show();
-        rangeSelector_->startAddressLineEdit->setFocus();
+        m_rangeSelector->show();
+        m_rangeSelector->startAddressLineEdit->setFocus();
     }
 
     if (result == close)
@@ -453,16 +430,16 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
 bool MemoryView::isOk() const
 {
-    return khexedit2_widget;
+    return m_memViewView;
 }
 
 void MemoryView::slotEnableOrDisable()
 {
-    bool app_started = !(debuggerState_ & s_appNotStarted);
+    bool app_started = !(m_debuggerState & s_appNotStarted);
 
-    bool enabled_ = app_started && !rangeSelector_->startAddressLineEdit->text().isEmpty();
+    bool enabled_ = app_started && !m_rangeSelector->startAddressLineEdit->text().isEmpty();
 
-    rangeSelector_->okButton->setEnabled(enabled_);
+    m_rangeSelector->okButton->setEnabled(enabled_);
 }
 
 
@@ -477,15 +454,15 @@ MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* p
     newMemoryViewerAction->setText(i18n("New memory viewer"));
     newMemoryViewerAction->setToolTip(i18nc("@info:tooltip", "Open a new memory viewer."));
     newMemoryViewerAction->setIcon(QIcon::fromTheme("window-new"));
-    connect(newMemoryViewerAction, SIGNAL(triggered(bool)), this, SLOT(slotAddMemoryView()));
+    connect(newMemoryViewerAction, &QAction::triggered, this , &MemoryViewerWidget::slotAddMemoryView);
     addAction(newMemoryViewerAction);
 
     QVBoxLayout *l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
 
-    toolBox_ = new QToolBox(this);
-    toolBox_->setContentsMargins(0, 0, 0, 0);
-    l->addWidget(toolBox_);
+    m_toolBox = new QToolBox(this);
+    m_toolBox->setContentsMargins(0, 0, 0, 0);
+    l->addWidget(m_toolBox);
 
     setLayout(l);
 
@@ -496,15 +473,15 @@ MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* p
 void MemoryViewerWidget::slotAddMemoryView()
 {
     MemoryView* widget = new MemoryView(this);
-    toolBox_->addItem(widget, widget->windowTitle());
-    toolBox_->setCurrentIndex(toolBox_->indexOf(widget));
-    memoryViews_.push_back(widget);
+    m_toolBox->addItem(widget, widget->windowTitle());
+    m_toolBox->setCurrentIndex(m_toolBox->indexOf(widget));
+    m_memoryViews.push_back(widget);
 
-    connect(widget, SIGNAL(captionChanged(QString)),
-            this, SLOT(slotChildCaptionChanged(QString)));
+    connect(widget, &MemoryView::captionChanged,
+            this, &MemoryViewerWidget::slotChildCaptionChanged);
 
-    connect(widget, SIGNAL(destroyed(QObject*)),
-            this, SLOT(slotChildDestroyed(QObject*)));
+    connect(widget, &MemoryView::destroyed,
+            this, &MemoryViewerWidget::slotChildDestroyed);
 }
 
 void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
@@ -514,18 +491,22 @@ void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
     QString cap = caption;
     // Prevent intepreting '&' as accelerator specifier.
     cap.replace('&', "&&");
-    toolBox_->setItemText(toolBox_->indexOf(ncs), cap);
+    m_toolBox->setItemText(m_toolBox->indexOf(ncs), cap);
 }
 
 void MemoryViewerWidget::slotChildDestroyed(QObject* child)
 {
     QList<MemoryView*>::iterator i, e;
-    for(i = memoryViews_.begin(), e = memoryViews_.end(); i != e; ++i)
+    for(i = m_memoryViews.begin(), e = m_memoryViews.end(); i != e; ++i)
     {
         if (*i == child)
         {
-            memoryViews_.erase(i);
+            m_memoryViews.erase(i);
             break;
         }
     }
 }
+
+
+} // end of namespace GDB
+} // end of namespace KDevMI
