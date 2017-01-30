@@ -78,6 +78,10 @@ public slots:
 
     QObject *pluginView(const QString &id) const;
 
+    QWidget *createViewBar(KTextEditor::View *view);
+
+    void deleteViewBar(KTextEditor::View *view);
+
 public:
     KTextEditor::MainWindow *interface() const;
 

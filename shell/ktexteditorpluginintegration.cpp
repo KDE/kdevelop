@@ -266,6 +266,19 @@ QObject *MainWindow::pluginView(const QString &id) const
     return m_pluginViews.value(id);
 }
 
+QWidget *MainWindow::createViewBar(KTextEditor::View* view)
+{
+    Q_UNUSED(view);
+    // TODO
+    return nullptr;
+}
+
+void MainWindow::deleteViewBar(KTextEditor::View* view)
+{
+    Q_UNUSED(view);
+    // TODO
+}
+
 KTextEditor::MainWindow *MainWindow::interface() const
 {
     return m_interface;
