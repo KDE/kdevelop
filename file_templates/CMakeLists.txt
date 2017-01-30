@@ -8,6 +8,7 @@ set(filetemplate_DIRS
     classes/c_gobject_private
     classes/c_gobject_properties
     classes/qt_shared
+    classes/qt_interface
 
     testing/cpp_cpputest
     testing/cpp_gtest

@@ -1,0 +1,18 @@
+[General]
+Name=QObject interface class
+Comment=QObject interface class with properties
+Category=C++/Qt
+Language=C++
+Type=Class
+Files=Header,Implementation
+OptionsFile=options.kcfg
+
+[Header]
+Name=Public Header
+File=interface.h
+OutputFile={{ name }}.h
+
+[Implementation]
+Name=Implementation
+File=interface.cpp
+OutputFile={{ name }}.cpp
