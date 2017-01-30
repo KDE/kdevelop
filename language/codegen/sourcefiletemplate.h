@@ -172,7 +172,7 @@ public:
         /**
          * The type of this option.
          *
-         * Currently supported are Int, String and Bool
+         * Currently supported are Int, String, Enum and Bool
          */
         QString type;
         /**
@@ -205,6 +205,12 @@ public:
          * This is applicable only to integers
          */
         QString minValue;
+        /**
+         * The possible values of this entry, as a list of strings
+         *
+         * This is applicable only to enums
+         */
+        QStringList values;
     };
 
     /**

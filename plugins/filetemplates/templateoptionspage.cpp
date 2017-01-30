@@ -34,6 +34,7 @@
 #include <QFormLayout>
 #include <QLabel>
 #include <QCheckBox>
+#include <QComboBox>
 
 using namespace KDevelop;
 
@@ -53,6 +54,7 @@ TemplateOptionsPage::TemplateOptionsPage(QWidget* parent, Qt::WindowFlags f)
     d->firstEditWidget = nullptr;
 
     d->typeProperties.insert(QStringLiteral("String"), "text");
+    d->typeProperties.insert(QStringLiteral("Enum"), "currentText");
     d->typeProperties.insert(QStringLiteral("Int"), "value");
     d->typeProperties.insert(QStringLiteral("Bool"), "checked");
 }
@@ -87,6 +89,13 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             if (type == QLatin1String("String"))
             {
                 control = new QLineEdit(entry.value.toString(), box);
+            }
+            else if (type == QLatin1String("Enum"))
+            {
+                auto input = new QComboBox(box);
+                input->addItems(entry.values);
+                input->setCurrentText(entry.value.toString());
+                control = input;
             }
             else if (type == QLatin1String("Int"))
             {

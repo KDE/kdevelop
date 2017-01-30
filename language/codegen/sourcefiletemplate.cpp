@@ -57,6 +57,7 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
     entry.name = element.attribute(QStringLiteral("name"));
     entry.type = element.attribute(QStringLiteral("type"), QStringLiteral("String"));
 
+    bool isDefaultValueSet = false;
     for (QDomElement e = element.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
     {
         QString tag = e.tagName();
@@ -84,10 +85,38 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
         else if ( tag == QLatin1String("default") )
         {
             entry.value = renderer->render(e.text(), entry.name);
+            isDefaultValueSet = true;
+        }
+        else if (tag == QLatin1String("choices")) {
+            QStringList values;
+            QDomNodeList choices = element.elementsByTagName(QStringLiteral("choice"));
+            for (int j = 0; j < choices.size(); ++j) {
+                QDomElement choiceElement = choices.at(j).toElement();
+                values << choiceElement.attribute(QStringLiteral("name"));
+            }
+            Q_ASSERT(!values.isEmpty());
+            if (values.isEmpty()) {
+                qCWarning(LANGUAGE) << "Entry " << entry.name << "has an enum without any choices";
+            }
+            entry.values = values;
         }
     }
 
     qCDebug(LANGUAGE) << "Read entry" << entry.name << "with default value" << entry.value;
+
+    // preset value for enum if needed
+    if (!entry.values.isEmpty()) {
+        if (isDefaultValueSet) {
+            const bool isSaneDefaultValue = entry.values.contains(entry.value.toString());
+            Q_ASSERT(isSaneDefaultValue);
+            if (!isSaneDefaultValue) {
+                qCWarning(LANGUAGE) << "Default value" << entry.value << "not in enum" << entry.values;
+                entry.value = entry.values.at(0);
+            }
+        } else {
+            entry.value = entry.values.at(0);
+        }
+    }
     return entry;
 }
 
