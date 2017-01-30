@@ -447,6 +447,9 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn_data()
     QTest::newRow("gcc-no-col")
         << "/path/to/file.cpp:123: error ..."
         << "/path/to/file.cpp" << 122 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("gcc-app-gives-invalid-column")
+    << "/path/to/file.h:60:0:\
+warning: \"SOME_MACRO\" redefined" << "/path/to/file.h" << 59 << 0 << FilteredItem::WarningItem;
     QTest::newRow("fortcom")
         << "fortcom: Error: Ogive8.f90, line 123: ..."
         << QString(projectPath() + "/Ogive8.f90") << 122 << 0 << FilteredItem::ErrorItem;

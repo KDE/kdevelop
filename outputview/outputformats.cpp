@@ -49,7 +49,7 @@ ActionFormat::ActionFormat(int file, const QString& regExp)
 
 int ErrorFormat::columnNumber(const QRegularExpressionMatch& match) const
 {
-    return columnGroup >= 0 ? match.captured( columnGroup ).toInt() - 1 : 0;
+    return columnGroup < 0 ? 0 : std::max(match.captured(columnGroup).toInt() - 1, 0);
 }
 
 }
