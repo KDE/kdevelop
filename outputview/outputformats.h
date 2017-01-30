@@ -40,6 +40,9 @@ struct ErrorFormat
     int textGroup;
     QString compiler;
 
+    // Returns the column number starting with 0 as the first column
+    // If no match was found for columns or if index was not valid
+    // (i.e. less than zero) - 0 is returned.
     int columnNumber(const QRegularExpressionMatch& match) const;
 };
 
