@@ -398,7 +398,7 @@ bool projectFileExists( const QUrl& u )
         return QFileInfo::exists( u.toLocalFile() );
     } else
     {
-        auto statJob = KIO::stat(u, KIO::StatJob::DestinationSide, 0);
+        auto statJob = KIO::stat(u, KIO::StatJob::DestinationSide, 0, KIO::HideProgressInfo);
         KJobWidgets::setWindow(statJob, Core::self()->uiControllerInternal()->activeMainWindow());
         return statJob->exec();
     }

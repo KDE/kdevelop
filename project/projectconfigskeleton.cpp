@@ -158,7 +158,7 @@ bool ProjectConfigSkeleton::writeConfig()
 
     load();
 
-    auto copyJob = KIO::copy(QUrl::fromLocalFile(d->m_developerTempFile), d->m_developerFile.toUrl());
+    auto copyJob = KIO::copy(QUrl::fromLocalFile(d->m_developerTempFile), d->m_developerFile.toUrl(), KIO::HideProgressInfo);
     copyJob ->exec();
 
     emit configChanged();

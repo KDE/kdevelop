@@ -87,9 +87,9 @@ protected:
    */
   void newUse(NameT* name)
   {
-    QualifiedIdentifier id = identifierForNode(name);
+    QualifiedIdentifier id = this->identifierForNode(name);
 
-    RangeInRevision newRange = editorFindRange(name, name);
+    RangeInRevision newRange = this->editorFindRange(name, name);
 
     DUChainReadLocker lock(DUChain::lock());
     QList<Declaration*> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);

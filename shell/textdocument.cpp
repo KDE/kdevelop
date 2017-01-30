@@ -60,7 +60,9 @@
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "documentcontroller.h"
+#include "ktexteditorpluginintegration.h"
 #include "debug.h"
+
 #include <path.h>
 #include <shellutils.h>
 
@@ -343,7 +345,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         notifyTextDocumentCreated();
     }
 
-    view = d->document->createView(parent);
+    view = d->document->createView(parent, Core::self()->uiControllerInternal()->defaultMainWindow()->kateWrapper()->interface());
 
     // get rid of some actions regarding the config dialog, we merge that one into the kdevelop menu already
     delete view->actionCollection()->action(QStringLiteral("set_confdlg"));

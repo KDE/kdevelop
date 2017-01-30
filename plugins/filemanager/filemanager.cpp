@@ -34,6 +34,7 @@
 #include <KXmlGui/KActionCollection>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KActionMenu>
+#include <KJobWidgets>
 #include <KConfigGroup>
 
 #include <interfaces/icore.h>
@@ -171,6 +172,7 @@ void FileManager::createNewFile()
     }
 
     KJob* job = KIO::storedPut(QByteArray(), destUrl, -1);
+    KJobWidgets::setWindow(job, this);
     connect(job, &KJob::result, this, &FileManager::fileCreated);
 }
 
