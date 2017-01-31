@@ -63,10 +63,6 @@ Type=QString
 [PropertyDef::X-KDevelop-Mode]
 Type=QString
 
-# optional, Arguments to pass to the plugin
-[PropertyDef::X-KDevelop-Args]
-Type=QString
-
 # optional, Interfaces that a plugin implements
 # usually values start with org.kdevelop
 [PropertyDef::X-KDevelop-Interfaces]
