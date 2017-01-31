@@ -40,7 +40,7 @@ void {{name}}::cleanup()
 {% endif %}
 {% for case in testCases %}
 
-void {{name}}::{{ case }}()
+void {{ name }}::{% if test_prefixMethods %}test{{ case|upper_first }}{% else %}{{ case }}{% endif %}()
 {
 
 

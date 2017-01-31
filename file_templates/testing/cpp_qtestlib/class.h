@@ -28,7 +28,7 @@ private Q_SLOTS:
 
     {% endif %}
     {% for case in testCases %}
-    void {{ case }}();
+    void {% if test_prefixMethods %}test{{ case|upper_first }}{% else %}{{ case }}{% endif %}();
     {% endfor %}
 };
 

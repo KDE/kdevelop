@@ -22,5 +22,9 @@
       <label>Init and cleanup methods for each test</label>
       <default>true</default>
     </entry>
+    <entry name="test_prefixMethods" type="Bool">
+      <label>Prefix all test methods with "test"</label>
+      <default>true</default>
+    </entry>
   </group>
 </kcfg>
