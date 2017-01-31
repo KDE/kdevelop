@@ -20,13 +20,20 @@ public:
     {% for method in public_functions %}
         {# skipping any defined destructor #}
         {% if not method.isDestructor %}
-        {% include "method_declaration_cpp.txt" %}
+
+        {% include "class_method_declaration_apidox_cpp.txt" %}
+        {% include "class_method_declaration_cpp.txt" %}
+
         {% endif %}
     {% endfor %}
 
 {% for property in members %}
 
+    {% include "class_property_getter_declaration_apidox_cpp.txt" %}
     virtual {{ property.type }} {{ property.name }}() const = 0;
+
+
+    {% include "class_property_setter_declaration_apidox_cpp.txt" %}
     virtual void set{{ property.name|upper_first }}({{ property.type|arg_type }} {{ property.name }}) = 0;
 
 {% endfor %}
@@ -36,7 +43,10 @@ protected:
     {% for method in protected_functions %}
         {# skipping any defined destructor #}
         {% if not method.isDestructor %}
-        {% include "method_declaration_cpp.txt" %}
+
+        {% include "class_method_declaration_apidox_cpp.txt" %}
+        {% include "class_method_declaration_cpp.txt" %}
+
         {% endif %}
     {% endfor %}
 {% endif %}
@@ -46,7 +56,10 @@ private:
     {% for method in private_functions %}
     {# skipping any defined destructor #}
     {% if not method.isDestructor %}
-    {% include "method_declaration.txt" %}
+
+        {% include "class_method_declaration_apidox_cpp.txt" %}
+        {% include "class_method_declaration_cpp.txt" %}
+
     {% endif %}
     {% endfor %}
 {% endif %}

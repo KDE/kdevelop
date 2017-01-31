@@ -1,0 +1,5 @@
+{# Template for class method declaration #}
+{% with method.arguments as arguments %}
+    {# standard four spaces indentation to match context #}
+    {% if method.isStatic %}static {% endif %}{% if method.isVirtual and not method.isOverriding %}virtual {% endif %}{% if not method.isConstructor and not method.isDestructor %}{{ method.returnType|default:"void" }} {% endif %}{% if method.isConstructor %}{{ name }}{% else %}{{ method.name }}{% endif %}({% include "arguments_types_names.txt" %}){% if method.isConst %} const{% endif %}{% if method.isVirtual %}{% if method.isFinal %} final{% elif method.isOverriding %} override{% elif method.isAbstract %} = 0{% endif %}{% endif %};
+{% endwith %}

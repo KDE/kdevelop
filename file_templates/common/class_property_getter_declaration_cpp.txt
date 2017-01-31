@@ -1,0 +1,3 @@
+{# Template for class property setter method declaration #}
+    {# standard four spaces indentation to match context #}
+    {{ property.type }} {{ property.name }}() const;

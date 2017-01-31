@@ -25,48 +25,68 @@
 
 
 {% block class_declaration_open %}
-class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.inheritanceMode }} {{ base.baseType }}{% if not forloop.last %},{% endif %}{% endfor %}{% endif %}
+{% include "class_declaration_apidox_cpp.txt" %}
+{% include "class_declaration_cpp.txt" %}
 {
 {% endblock class_declaration_open %}
-
 {% block class_body %}
 {% if public_members or public_functions %}
+
 public:
 {% endif %}
     {% if public_functions %}
     {% for method in public_functions %}
-    {% include "method_declaration_cpp.txt" %}
+
+    {% include "class_method_declaration_apidox_cpp.txt" %}
+    {% include "class_method_declaration_cpp.txt" %}
+
     {% endfor %}
+
     {% endif %}
     {% if public_members %}
     {% for member in public_members %}
     {{ member.type }} {{ member.name }};
     {% endfor %}
+
     {% endif %}
 {% if protected_members or protected_functions %}
+
 protected:
 {% endif %}
     {% if protected_functions %}
     {% for method in protected_functions %}
-    {% include "method_declaration_cpp.txt" %}
+
+    {% include "class_method_declaration_apidox_cpp.txt" %}
+    {% include "class_method_declaration_cpp.txt" %}
+
     {% endfor %}
+
     {% endif %}
     {% if protected_members %}
     {% for member in protected_members %}
     {{ member.type }} {{ member.name }};
     {% endfor %}
+
     {% endif %}
 {% if private_members or private_functions %}
+
 private:
 {% endif %}
     {% if private_functions %}
     {% for method in private_functions %}
-    {% include "method_declaration_cpp.txt" %}
+
+    {% include "class_method_declaration_apidox_cpp.txt" %}
+    {% include "class_method_declaration_cpp.txt" %}
+
     {% endfor %}
+
     {% endif %}
+    {% if private_members %}
     {% for member in private_members %}
     {{ member.type }} {{ member.name }};
     {% endfor %}
+
+    {% endif %}
 {% endblock class_body %}
 {% block class_bottom %}
 {% endblock %}
@@ -74,12 +94,15 @@ private:
 };
 {% endblock %}
 
+
 {% block outside_class %}
 {% endblock %}
+
 
 {% block namespaces_close %}
 {% include "namespace_close_cpp.txt" %}
 {% endblock namespaces_close %}
+
 
 {% block outside_namespace %}
 {% endblock %}

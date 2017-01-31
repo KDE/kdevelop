@@ -11,7 +11,7 @@ class {% if namespaces %}{{ namespaces|join:"::" }}::{% endif %}{{ name }}Data :
 {
 public:
 {% for member in members %}
-{{ member.type }} {{ member.name }};
+    {{ member.type }} {{ member.name }};
 {% endfor %}
 };
 

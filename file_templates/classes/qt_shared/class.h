@@ -12,13 +12,20 @@ class {{ name }}Data;
 
 {% block class_body %}
 {{ block.super }}
+{% if members %}
 
-{% for member in members %}
+public:
+{% for property in members %}
 
-    {{ member.type }} {{ member.name }}() const;
-    void set{{ member.name|capfirst }}({{ member.type|arg_type }} {{ member.name }});
+    {% include "class_property_getter_declaration_apidox_cpp.txt" %}
+    {% include "class_property_getter_declaration_cpp.txt" %}
+
+
+    {% include "class_property_setter_declaration_apidox_cpp.txt" %}
+    {% include "class_property_setter_declaration_cpp.txt" %}
 
 {% endfor %}
+{% endif %}
 
 private:
     QSharedDataPointer<{{ name }}Data> d;

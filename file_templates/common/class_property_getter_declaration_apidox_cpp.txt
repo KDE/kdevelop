@@ -1,0 +1,5 @@
+{# Template for api dox in front of class property getter method declaration #}
+    {# standard four spaces indentation to match context #}
+    /**
+     * @return the {{ property.name }}
+     */

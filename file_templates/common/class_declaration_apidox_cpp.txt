@@ -1,0 +1,4 @@
+{# Template for api dox in front of class declaration #}
+/**
+ * @todo write docs
+ */

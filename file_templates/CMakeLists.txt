@@ -27,6 +27,13 @@ install ( FILES
     common/method_definition_cpp.txt
     common/license_header_cpp.txt
     common/class_declaration_cpp.txt
+    common/class_declaration_apidox_cpp.txt
+    common/class_method_declaration_cpp.txt
+    common/class_method_declaration_apidox_cpp.txt
+    common/class_property_setter_declaration_cpp.txt
+    common/class_property_setter_declaration_apidox_cpp.txt
+    common/class_property_getter_declaration_cpp.txt
+    common/class_property_getter_declaration_apidox_cpp.txt
     common/cpp_header.h
     common/cpp_header_onlyfunctions.h
     common/cpp_implementation.cpp

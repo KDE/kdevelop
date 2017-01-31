@@ -1,0 +1,23 @@
+{# Template for api dox in front of class method declaration #}
+{% with method.arguments as arguments %}
+    {# standard four spaces indentation to match context #}
+    /**
+    {% if method.isConstructor %}
+     * {% if not arguments %}Default constructor{% else %}Constructor{% endif %}
+    {% elif method.isDestructor %}
+     * Destructor
+    {% else %}
+     * @todo write docs
+    {% endif %}
+    {# and > or, so we go here if arguments or (returntype and not constructor/destructor) #}
+    {% if arguments  or  method.returnType and not method.isConstructor and not method.isDestructor %}
+     *
+    {% endif %}
+    {% for argument in arguments %}
+     * @param {{ argument.name }} TODO
+    {% endfor %}
+    {% if method.returnType and not method.isConstructor and not method.isDestructor %}
+     * @return TODO
+    {% endif %}
+     */
+{% endwith %}

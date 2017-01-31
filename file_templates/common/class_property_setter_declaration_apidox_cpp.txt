@@ -1,0 +1,7 @@
+{# Template for api dox in front of class property setter method declaration #}
+    {# standard four spaces indentation to match context #}
+    /**
+     * Sets the {{ property.name }}.
+     *
+     * @param {{ property.name }} the new {{ property.name }}
+     */

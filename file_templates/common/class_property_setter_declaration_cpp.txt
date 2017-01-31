@@ -1,0 +1,4 @@
+{# Template for class property setter method declaration #}
+{% load kdev_filters %}
+    {# standard four spaces indentation to match context #}
+    void set{{ property.name|capfirst }}({{ property.type|arg_type }} {{ property.name }});

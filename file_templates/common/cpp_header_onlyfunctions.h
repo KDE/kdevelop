@@ -25,50 +25,60 @@
 
 
 {% block class_declaration_open %}
-class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.inheritanceMode }} {{ base.baseType }}{% if not forloop.last %},{% endif %}{% endfor %}{% endif %}
+{% include "class_declaration_apidox_cpp.txt" %}
+{% include "class_declaration_cpp.txt" %}
 {
 {% endblock class_declaration_open %}
-
 {% block class_body %}
 {% if public_functions %}
+
 public:
     {% for method in public_functions %}
-    {% include "method_declaration_cpp.txt" %}
-    {% endfor %}
 
+    {% include "class_method_declaration_apidox_cpp.txt" %}
+    {% include "class_method_declaration_cpp.txt" %}
+
+    {% endfor %}
 
 {% endif %}
 {% if protected_functions %}
+
 protected:
     {% for method in protected_functions %}
-    {% include "method_declaration_cpp.txt" %}
-    {% endfor %}
 
+    {% include "class_method_declaration_apidox_cpp.txt" %}
+    {% include "class_method_declaration_cpp.txt" %}
+
+    {% endfor %}
 
 {% endif %}
 {% if private_functions %}
+
 private:
     {% for method in private_functions %}
-    {% include "method_declaration_cpp.txt" %}
-    {% endfor %}
 
+    {% include "class_method_declaration_apidox_cpp.txt" %}
+    {% include "class_method_declaration_cpp.txt" %}
+
+    {% endfor %}
 
 {% endif %}
 {% endblock class_body %}
-
 {% block class_bottom %}
 {% endblock %}
-
 {% block class_declaration_close %}
 };
 {% endblock %}
 
+
 {% block outside_class %}
 {% endblock %}
+
 
 {% block namespaces_close %}
 {% include "namespace_close_cpp.txt" %}
 {% endblock namespaces_close %}
+
 
 {% block outside_namespace %}
 {% endblock %}
