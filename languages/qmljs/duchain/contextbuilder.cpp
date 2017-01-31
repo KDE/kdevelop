@@ -29,8 +29,6 @@ using namespace KDevelop;
 ContextBuilder::ContextBuilder()
 : ContextBuilderBase()
 , m_session(nullptr)
-, m_mapAst(false)
-, m_editor(new Editor(&m_session))
 {
 }
 
@@ -102,9 +100,4 @@ DUContext* ContextBuilder::newContext(const RangeInRevision& range)
 void ContextBuilder::setParseSession(ParseSession* session)
 {
     m_session = session;
-}
-
-Editor* ContextBuilder::editor() const
-{
-    return m_editor.data();
 }

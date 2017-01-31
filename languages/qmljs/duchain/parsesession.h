@@ -130,15 +130,6 @@ public:
      */
     KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode) const;
 
-    /**
-     * Implemented to make the AbstractUseBuilder happy.
-     */
-    void mapAstUse(QmlJS::AST::Node* node, const SimpleUse& use)
-    {
-        Q_UNUSED(node);
-        Q_UNUSED(use);
-    }
-
     void setContextOnNode(QmlJS::AST::Node* node, KDevelop::DUContext* context);
     KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node) const;
 

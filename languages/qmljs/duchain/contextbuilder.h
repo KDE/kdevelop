@@ -33,22 +33,6 @@ class ParseSession;
 
 typedef KDevelop::AbstractContextBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName> ContextBuilderBase;
 
-///TODO: cleanup KDevplatform API, remove need for editor integrator
-class Editor
-{
-public:
-    explicit Editor(ParseSession** session)
-    : m_session(session)
-    {}
-
-    ParseSession* parseSession() const
-    {
-        return *m_session;
-    }
-private:
-    ParseSession** m_session;
-};
-
 class KDEVQMLJSDUCHAIN_EXPORT ContextBuilder : public ContextBuilderBase, public QmlJS::AST::Visitor
 {
 public:
@@ -76,12 +60,8 @@ public:
     ExpressionType findType(QmlJS::AST::Node* node);
     void setParseSession(ParseSession* session);
 
-    Editor* editor() const;
-
 protected:
     ParseSession* m_session;
-    bool m_mapAst; // make KDevelop::AbstractContextBuilder happy
-    QScopedPointer<Editor> m_editor; // make KDevelop::AbstractUseBuilder happy
 
 };
 
