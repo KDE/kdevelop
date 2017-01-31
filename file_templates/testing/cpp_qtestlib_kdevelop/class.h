@@ -2,8 +2,8 @@
 {% include "license_header_cpp.txt" %}
 
 
-#ifndef {{ name|upper }}_H
-#define {{ name|upper }}_H
+#ifndef {% include "include_guard_cpp.txt" %}
+#define {% include "include_guard_cpp.txt" %}
 
 
 #include <QObject>
@@ -12,15 +12,17 @@
 class {{ name }} : public QObject
 {
     Q_OBJECT
-private slots:
+
+
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
 
     {% for case in testCases %}
-    void {{ case }}();
+    void {% if test_prefixMethods %}test{{ case|upper_first }}{% else %}{{ case }}{% endif %}();
     {% endfor %}
 };
 
 
-#endif // {{ name|upper }}_H
+#endif // {% include "include_guard_cpp.txt" %}

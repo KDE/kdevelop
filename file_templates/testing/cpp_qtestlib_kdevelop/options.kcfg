@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile arg="true"/>
+  <group name="Test">
+    <entry name="test_nogui" type="Bool">
+      <label>No UI required</label>
+      <default>true</default>
+    </entry>
+    <entry name="test_initAndCleanup" type="Bool">
+      <label>Add init and cleanup methods for each test</label>
+      <default>false</default>
+    </entry>
+    <entry name="test_prefixMethods" type="Bool">
+      <label>Prefix all test methods with "test"</label>
+      <default>true</default>
+    </entry>
+  </group>
+</kcfg>
