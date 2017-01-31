@@ -42,6 +42,7 @@
 #include <language/interfaces/iastcontainer.h>
 
 #include "codegen/clangrefactoring.h"
+#include "codegen/clangclasshelper.h"
 #include "codegen/adaptsignatureassistant.h"
 #include "duchain/documentfinderhelpers.h"
 #include "duchain/clangindex.h"
@@ -245,6 +246,11 @@ ICodeHighlighting* ClangSupport::codeHighlighting() const
 BasicRefactoring* ClangSupport::refactoring() const
 {
     return m_refactoring;
+}
+
+ICreateClassHelper* ClangSupport::createClassHelper() const
+{
+    return new ClangClassHelper;
 }
 
 ClangIndex* ClangSupport::index()
