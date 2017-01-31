@@ -50,7 +50,6 @@
             "KDevelop/Plugin"
         ]
     }, 
-    "X-KDevelop-Args": "C", 
     "X-KDevelop-Interfaces": [
         "ILanguageSupport"
     ], 
