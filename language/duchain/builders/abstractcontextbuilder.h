@@ -47,7 +47,6 @@ namespace KDevelop
  *
  * The AbstractContextBuilder is a convenience class template for creating customized
  * definition-use chain context builders from an AST.  It simplifies:
- * - use of your editor integrator
  * - creating or modifying an existing DUContext tree
  * - following a DUContext tree for second and subsequent passes, if required
  * - opening and closing DUContext instances
@@ -66,7 +65,6 @@ public:
   {
   }
 
-  /// Destructor.  Deletes the editor integrator, if one was created specifically for this builder only.
   virtual ~AbstractContextBuilder()
   {
   }

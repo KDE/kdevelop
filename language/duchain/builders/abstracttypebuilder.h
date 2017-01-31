@@ -31,7 +31,6 @@ namespace KDevelop {
  *
  * The AbstractTypeBuilder is a convenience class template for creating customized
  * definition-use chain type builders from an AST.  It simplifies:
- * - use of your editor integrator
  * - creating and re-using types
  * - creating complex types in a stack
  * - referencing named types
