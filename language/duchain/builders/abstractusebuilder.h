@@ -156,10 +156,6 @@ protected:
         currentUseTracker() = m_trackerStack.at(m_trackerStack.size()-contextUpSteps-2);
       }
 
-      if (LanguageSpecificUseBuilderBase::m_mapAst)
-        LanguageSpecificUseBuilderBase::editor()->parseSession()->mapAstUse(
-          node, qMakePair<DUContextPointer, RangeInRevision>(DUContextPointer(newContext), newRange));
-
       currentUseTracker().createUses << KDevelop::Use(newRange, declarationIndex);
     }
 
