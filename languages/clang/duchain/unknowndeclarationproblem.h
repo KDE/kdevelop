@@ -41,6 +41,12 @@ public:
 
     KDevelop::IAssistant::Ptr solutionAssistant() const override;
 
+    /**
+     * @param declarations declarations to find matching include files for
+     * @return list of paths of include files usable for the given declarations
+     */
+    static QStringList findMatchingIncludeFiles(const QVector<KDevelop::Declaration*>& declarations);
+
 private:
     KDevelop::QualifiedIdentifier m_identifier;
 };
