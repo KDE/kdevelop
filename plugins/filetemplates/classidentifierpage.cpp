@@ -40,6 +40,7 @@ ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
 {
     d->classid = new Ui::NewClassDialog;
     d->classid->setupUi(this);
+    d->classid->identifierLineEdit->setPlaceholderText(i18n("Class name, including any namespaces"));
     d->classid->keditlistwidget->lineEdit()->setPlaceholderText(i18n("Inheritance type and base class name"));
 
     d->classid->inheritanceLabel->setBuddy(d->classid->keditlistwidget->lineEdit());
