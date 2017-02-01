@@ -22,9 +22,6 @@
         <property name="enabled">
          <bool>true</bool>
         </property>
-        <property name="title">
-         <string>Location within existing file(s)</string>
-        </property>
         <property name="flat">
          <bool>true</bool>
         </property>
@@ -37,9 +34,6 @@
       </item>
       <item row="0" column="0">
        <widget class="QGroupBox" name="urlGroupBox">
-        <property name="title">
-         <string>Output file(s)</string>
-        </property>
         <property name="flat">
          <bool>true</bool>
         </property>
