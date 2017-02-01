@@ -1,6 +1,18 @@
 [General]
 Name=QObject interface class
+Name[ca]=Classe d'interfície QObject
+Name[nl]=Interfaceklasse van QObject
+Name[pt]=Classe-interface de QObject
+Name[sv]=QObject-gränssnittsklass
+Name[uk]=Клас інтерфейсу QObject
+Name[x-test]=xxQObject interface classxx
 Comment=QObject interface class with properties
+Comment[ca]=Classe d'interfície QObject amb propietats
+Comment[nl]=Interfaceklasse van QObject met eigenschappen
+Comment[pt]=Classe-interface de QObject com propriedades
+Comment[sv]=QObject-gränssnittsklass med egenskaper
+Comment[uk]=Клас інтерфейсу QObject з властивостями
+Comment[x-test]=xxQObject interface class with propertiesxx
 Category=C++/Qt
 Language=C++
 Language[bs]=C++
