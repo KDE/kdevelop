@@ -15,11 +15,11 @@
       <default>QTEST_MAIN</default>
     </entry>
     <entry name="testCase_initAndCleanup" type="Bool">
-      <label>Init and cleanup methods for test case</label>
+      <label>Add init and cleanup methods for complete test case</label>
       <default>true</default>
     </entry>
     <entry name="test_initAndCleanup" type="Bool">
-      <label>Init and cleanup methods for each test</label>
+      <label>Add init and cleanup methods for each test</label>
       <default>true</default>
     </entry>
     <entry name="test_prefixMethods" type="Bool">
