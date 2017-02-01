@@ -74,6 +74,12 @@ TemplatePreviewRenderer::TemplatePreviewRenderer()
     vars[QStringLiteral("protected_functions")] = CodeDescription::toVariantList(protectedFunctions);
     vars[QStringLiteral("private_functions")]   = CodeDescription::toVariantList(privateFunctions);
 
+    vars[QStringLiteral("testCases")]  = QStringList {
+        QStringLiteral("doFoo"),
+        QStringLiteral("doBar"),
+        QStringLiteral("doMore")
+    };
+
     addVariables(vars);
 }
 

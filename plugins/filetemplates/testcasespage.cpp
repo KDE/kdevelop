@@ -42,8 +42,6 @@ TestCasesPage::TestCasesPage(QWidget* parent, Qt::WindowFlags f)
     d->ui->setupUi(this);
 
     d->ui->testCasesLabel->setBuddy(d->ui->keditlistwidget->lineEdit());
-    d->ui->keditlistwidget->setContentsMargins(0, 0, 0, 0);
-    d->ui->keditlistwidget->layout()->setContentsMargins(0, 0, 0, 0);
     
     connect(d->ui->identifierLineEdit, &QLineEdit::textChanged, this, &TestCasesPage::identifierChanged);
 }
