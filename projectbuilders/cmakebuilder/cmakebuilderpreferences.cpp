@@ -57,7 +57,7 @@ QString CMakeBuilderPreferences::name() const
 
 QString CMakeBuilderPreferences::fullName() const
 {
-    return i18n("Configure global CMake settings");
+    return i18n("Configure Global CMake Settings");
 }
 
 QIcon CMakeBuilderPreferences::icon() const

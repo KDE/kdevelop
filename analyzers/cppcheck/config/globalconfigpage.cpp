@@ -49,7 +49,7 @@ QString GlobalConfigPage::name() const
 
 QString GlobalConfigPage::fullName() const
 {
-    return i18n("Configure Cppcheck settings");
+    return i18n("Configure Cppcheck Settings");
 }
 
 QIcon GlobalConfigPage::icon() const
