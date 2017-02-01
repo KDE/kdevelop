@@ -54,7 +54,7 @@ QString ClangTidyPreferences::name() const
 
 QString ClangTidyPreferences::fullName() const
 {
-    return i18n("Configure clang-tidy settings");
+    return i18n("Configure Clang-Tidy Settings");
 }
 
 QIcon ClangTidyPreferences::icon() const
