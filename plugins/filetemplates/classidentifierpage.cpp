@@ -44,6 +44,15 @@ ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
 
     connect(d->classid->identifierLineEdit, &QLineEdit::textChanged, this, &ClassIdentifierPage::checkIdentifier);
 
+    // ensure keyboard focus is returned to edit line
+    // Patch pending for KEditListWidget: https://phabricator.kde.org/D4392
+    connect(d->classid->keditlistwidget, &KEditListWidget::added,
+            d->classid->keditlistwidget->lineEdit(),
+            static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+    connect(d->classid->keditlistwidget, &KEditListWidget::removed,
+            d->classid->keditlistwidget->lineEdit(),
+            static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+
     emit isValid(false);
 }
 
