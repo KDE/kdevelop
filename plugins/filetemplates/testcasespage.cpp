@@ -42,7 +42,16 @@ TestCasesPage::TestCasesPage(QWidget* parent, Qt::WindowFlags f)
     d->ui->setupUi(this);
 
     d->ui->testCasesLabel->setBuddy(d->ui->keditlistwidget->lineEdit());
-    
+
+    // ensure keyboard focus is returned to edit line
+    // Patch pending for KEditListWidget: https://phabricator.kde.org/D4392
+    connect(d->ui->keditlistwidget, &KEditListWidget::added,
+            d->ui->keditlistwidget->lineEdit(),
+            static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+    connect(d->ui->keditlistwidget, &KEditListWidget::removed,
+            d->ui->keditlistwidget->lineEdit(),
+            static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+
     connect(d->ui->identifierLineEdit, &QLineEdit::textChanged, this, &TestCasesPage::identifierChanged);
 }
 

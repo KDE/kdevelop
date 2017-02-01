@@ -224,8 +224,8 @@ void FileTemplatesPlugin::createFromTemplate()
         }
     }
     if (!baseUrl.isValid()) {
-        // last resort: home path
-        baseUrl = QUrl::fromLocalFile(QDir::homePath());
+        // last resort
+        baseUrl = ICore::self()->projectController()->projectsBaseDirectory();
     }
     TemplateClassAssistant* assistant = new TemplateClassAssistant(QApplication::activeWindow(), baseUrl);
     assistant->setAttribute(Qt::WA_DeleteOnClose);
