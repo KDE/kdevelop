@@ -87,7 +87,7 @@ QString LanguagePreferences::name() const
 
 QString LanguagePreferences::fullName() const
 {
-    return i18n("Configure code-completion and semantic highlighting");
+    return i18n("Configure Code-Completion and Semantic Highlighting");
 }
 
 QIcon LanguagePreferences::icon() const

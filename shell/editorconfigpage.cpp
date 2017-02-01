@@ -108,7 +108,7 @@ QIcon EditorConfigPage::icon() const
 
 QString EditorConfigPage::fullName() const
 {
-    return i18n("Configure Text editor");
+    return i18n("Configure Text Editor");
 }
 
 int EditorConfigPage::childPages() const
