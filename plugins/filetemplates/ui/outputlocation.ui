@@ -14,7 +14,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Choose where to save the new class.</string>
+      <string>Choose where to save the generated content.</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="1" column="0">

@@ -14,7 +14,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Choose the license under which to place the new class.</string>
+      <string>Choose the license under which to place the generated content.</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
