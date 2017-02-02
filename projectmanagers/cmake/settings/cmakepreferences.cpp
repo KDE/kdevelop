@@ -25,6 +25,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KJobWidgets>
 #include <kio/deletejob.h>
 
 #include <QFile>
@@ -348,8 +349,9 @@ void CMakePreferences::removeBuildDir()
                     "Do you want KDevelop to remove it in the file system as well?", removed));
         if(ret == KMessageBox::Yes)
         {
-            bool correct = KIO::del(removedPath.toUrl())->exec();
-            if(!correct)
+            auto deleteJob = KIO::del(removedPath.toUrl());
+            KJobWidgets::setWindow(deleteJob, this);
+            if (!deleteJob->exec())
                 KMessageBox::error(this, i18n("Could not remove: %1", removed));
         }
     }
