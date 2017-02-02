@@ -1,6 +1,7 @@
 set( test_filetemplate_DIRS
     test_yaml
     test_cpp
+    test_options
 )
 
 include(KDevPlatformMacros)

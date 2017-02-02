@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile arg="true"/>
+  <group name="A Group">
+    <entry name="bool_option" type="Bool">
+      <label>A Bool</label>
+      <default>true</default>
+    </entry>
+    <entry name="string_option" type="String">
+      <label>Zzz String</label>
+      <default>Test</default>
+    </entry>
+    <entry name="enum_option" type="Enum">
+      <label>Bb Enum</label>
+      <choices>
+          <choice name="First" />
+          <choice name="Second" />
+          <choice name="Last" />
+      </choices>
+      <default>Second</default>
+    </entry>
+  </group>
+  <group name="Zzz Group">
+    <entry name="z_option" type="Bool">
+      <label>Z Bool</label>
+      <default>false</default>
+    </entry>
+  </group>
+  <group name="Bb Group">
+    <entry name="b_option" type="Bool">
+      <label>B Bool</label>
+      <default>true</default>
+    </entry>
+  </group>
+</kcfg>

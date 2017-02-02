@@ -131,6 +131,55 @@ void TestTemplateClassGenerator::customOptions()
 {
     TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_yaml"));
     QCOMPARE(generator->sourceFileTemplate().hasCustomOptions(), false);
+
+    generator = loadTemplate(QStringLiteral("test_options"));
+    QCOMPARE(generator->sourceFileTemplate().hasCustomOptions(), true);
+
+    // test if option data loaded with all values in same order as in kcfg file
+    struct ExpectedOption
+    {
+        const char* name; const char* label; const char* type; const char* value; QStringList values;
+    };
+    const struct {
+        const char* name;
+        QVector<ExpectedOption> expectedOptions;
+    } expectedGroupDataList[] = {
+        { name: "A Group", expectedOptions: {
+            {name: "bool_option",   label: "A Bool",     type: "Bool",   value: "true",   values: {}},
+            {name: "string_option", label: "Zzz String", type: "String", value: "Test",   values: {}},
+            {name: "enum_option",   label: "Bb Enum",    type: "Enum",   value: "Second", values: {
+                {QLatin1String("First")}, {QLatin1String("Second")}, {QLatin1String("Last")}
+            }}
+        }},
+        { name: "Zzz Group", expectedOptions: {
+            {name: "z_option", label: "Z Bool", type: "Bool", value: "false", values: {}}
+        }},
+        { name: "Bb Group", expectedOptions: {
+            {name: "b_option", label: "B Bool", type: "Bool", value: "true", values: {}}
+        }}
+    };
+    const int expectedGroupDataCount = sizeof(expectedGroupDataList)/sizeof(expectedGroupDataList[0]);
+    
+    const auto customOptionGroups = generator->sourceFileTemplate().customOptions(generator->renderer());
+
+    QCOMPARE(customOptionGroups.count(), expectedGroupDataCount);
+    for (int i = 0; i < expectedGroupDataCount; ++i) {
+        const auto& customOptionGroup = customOptionGroups[i];
+        const auto& expectedGroupData = expectedGroupDataList[i];
+
+        QCOMPARE(customOptionGroup.name, QString::fromLatin1(expectedGroupData.name));
+        QCOMPARE(customOptionGroup.options.count(), expectedGroupData.expectedOptions.count());
+        for (int j = 0; j < expectedGroupData.expectedOptions.count(); ++j) {
+            const auto& customOption = customOptionGroup.options[j];
+            const auto& expectedOptionData = expectedGroupData.expectedOptions[j];
+
+            QCOMPARE(customOption.name, QString::fromLatin1(expectedOptionData.name));
+            QCOMPARE(customOption.label, QString::fromLatin1(expectedOptionData.label));
+            QCOMPARE(customOption.type, QString::fromLatin1(expectedOptionData.type));
+            QCOMPARE(customOption.value.toString(), QString::fromLatin1(expectedOptionData.value));
+            QCOMPARE(customOption.values, expectedOptionData.values);
+        }
+    }
 }
 
 void TestTemplateClassGenerator::templateVariablesCpp()

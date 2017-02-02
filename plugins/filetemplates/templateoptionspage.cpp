@@ -41,7 +41,7 @@ using namespace KDevelop;
 class KDevelop::TemplateOptionsPagePrivate
 {
 public:
-    QList<SourceFileTemplate::ConfigOption> entries;
+    QVector<SourceFileTemplate::ConfigOption> entries;
     QHash<QString, QWidget*> controls;
     QHash<QString, QByteArray> typeProperties;
     QWidget *firstEditWidget;
@@ -71,19 +71,15 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
     d->firstEditWidget = nullptr;
 
     QVBoxLayout* layout = new QVBoxLayout();
-    QHash<QString, QList<SourceFileTemplate::ConfigOption> > options = fileTemplate.customOptions(renderer);
-    QHash<QString, QList<SourceFileTemplate::ConfigOption> >::const_iterator it;
 
-    for (it = options.constBegin(); it != options.constEnd(); ++it)
-    {
+    for (const auto& optionGroup : fileTemplate.customOptions(renderer)) {
         QGroupBox* box = new QGroupBox(this);
-        box->setTitle(it.key());
+        box->setTitle(optionGroup.name);
 
         QFormLayout* formLayout = new QFormLayout;
 
-        d->entries << it.value();
-        foreach (const SourceFileTemplate::ConfigOption& entry, it.value())
-        {
+        d->entries << optionGroup.options;
+        for (const auto& entry : optionGroup.options) {
             QWidget* control = nullptr;
             const QString type = entry.type;
             if (type == QLatin1String("String"))

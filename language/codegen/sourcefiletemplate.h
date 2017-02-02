@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <QList>
+#include <QVector>
 #include <QVariant>
 
 #include <language/languageexport.h>
@@ -214,6 +215,22 @@ public:
     };
 
     /**
+     * Describes a group of configuration options
+     */
+    struct ConfigOptionGroup
+    {
+        /**
+         * A unique identifier for this option group
+         */
+        QString name;
+
+        /**
+         * The list of options in this group
+         */
+        QVector<ConfigOption> options;
+    };
+
+    /**
      * Creates a SourceFileTemplate representing the template archive with
      * description file @p templateDescription.
      *
@@ -274,9 +291,9 @@ public:
     bool hasCustomOptions() const;
 
     /**
-     * Return the custom options this template exposes
+     * @return the custom options this template exposes, in the order as defined in the config file
      **/
-    QHash<QString, QList<ConfigOption> > customOptions(TemplateRenderer* renderer) const;
+    QVector<ConfigOptionGroup> customOptions(TemplateRenderer* renderer) const;
 
     /**
      * @return The type of this template.
@@ -318,5 +335,6 @@ private:
 
 Q_DECLARE_TYPEINFO(KDevelop::SourceFileTemplate::OutputFile, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::SourceFileTemplate::ConfigOption, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::SourceFileTemplate::ConfigOptionGroup, Q_MOVABLE_TYPE);
 
 #endif // KDEVPLATFORM_SOURCEFILETEMPLATE_H

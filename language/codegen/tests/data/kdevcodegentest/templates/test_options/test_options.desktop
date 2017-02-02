@@ -1,0 +1,11 @@
+[General]
+Name=Options Test Template
+Comment=
+Category=Foo/Bar
+Files=Template
+OptionsFile=options.kcfg
+
+[Template]
+Name=Template
+File=template.txt
+OutputFile=output.txt
