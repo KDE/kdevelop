@@ -349,6 +349,11 @@ void initialize()
     KTextEditor::Editor::instance()->setApplication(app);
 }
 
+void MainWindow::splitView(Qt::Orientation orientation)
+{
+    m_mainWindow->split(orientation);
+}
+
 }
 
 #include "ktexteditorpluginintegration.moc"

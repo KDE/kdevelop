@@ -167,6 +167,11 @@ KTextEditorIntegration::MainWindow *MainWindow::kateWrapper() const
     return d->kateWrapper();
 }
 
+void MainWindow::split(Qt::Orientation orientation)
+{
+    d->split(orientation);
+}
+
 void MainWindow::ensureVisible()
 {
     if (isMinimized()) {

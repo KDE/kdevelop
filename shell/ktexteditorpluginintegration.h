@@ -77,6 +77,7 @@ public slots:
     KTextEditor::View *activeView() const;
 
     QObject *pluginView(const QString &id) const;
+    void splitView(Qt::Orientation orientation);
 
     QWidget *createViewBar(KTextEditor::View *view);
 

@@ -57,6 +57,7 @@ public:
     /*! @p status must implement KDevelop::IStatus */
     void registerStatus(QObject* status);
     KTextEditorIntegration::MainWindow *kateWrapper() const;
+    void split(Qt::Orientation orientation);
 
 public Q_SLOTS:
     /*! Shows an error message in the status bar.
