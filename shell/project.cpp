@@ -264,7 +264,7 @@ public:
         }
 
         projectTempFile.open();
-        auto copyJob = KIO::file_copy(projectFile.toUrl(), QUrl::fromLocalFile(projectTempFile.fileName()), -1, KIO::Overwrite);
+        auto copyJob = KIO::file_copy(projectFile.toUrl(), QUrl::fromLocalFile(projectTempFile.fileName()), -1, KIO::HideProgressInfo | KIO::Overwrite);
         KJobWidgets::setWindow(copyJob, Core::self()->uiController()->activeMainWindow());
         if (!copyJob->exec())
         {
@@ -530,7 +530,7 @@ void Project::close()
 
     if (!d->developerFile.isLocalFile())
     {
-        auto copyJob = KIO::file_copy(QUrl::fromLocalFile(d->developerTempFile), d->developerFile.toUrl());
+        auto copyJob = KIO::file_copy(QUrl::fromLocalFile(d->developerTempFile), d->developerFile.toUrl(), -1, KIO::HideProgressInfo);
         KJobWidgets::setWindow(copyJob, Core::self()->uiController()->activeMainWindow());
         if (!copyJob->exec()) {
             qCDebug(SHELL) << "Job failed:" << copyJob->errorString();
