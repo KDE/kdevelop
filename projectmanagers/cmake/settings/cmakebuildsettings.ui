@@ -116,7 +116,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="installationPrefixLabel">
         <property name="text">
-         <string>Installation Prefix</string>
+         <string>Installation Prefix:</string>
         </property>
        </widget>
       </item>
@@ -126,7 +126,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="buildTypeLabel">
         <property name="text">
-         <string>Build Type</string>
+         <string>Build Type:</string>
         </property>
        </widget>
       </item>
@@ -160,7 +160,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="extraArgumentsLabel">
         <property name="text">
-         <string>Extra Arguments</string>
+         <string>Extra Arguments:</string>
         </property>
        </widget>
       </item>
@@ -180,7 +180,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Configure Environment</string>
+         <string>Configure Environment:</string>
         </property>
        </widget>
       </item>
@@ -217,7 +217,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="cMakeBinaryLabel">
         <property name="text">
-         <string>CMake Binary</string>
+         <string>CMake Binary:</string>
         </property>
        </widget>
       </item>
