@@ -34,7 +34,7 @@
     "X-KDevelop-Interfaces": [
         "ILanguageSupport"
     ], 
-    "X-KDevelop-Language": "QML/JS", 
+    "X-KDevelop-Languages": ["QML/JS"], 
     "X-KDevelop-Mode": "NoGUI", 
     "X-KDevelop-SupportedMimeTypes": [
         "text/x-qml", 
