@@ -62,6 +62,7 @@ public:
     /** the code highlighter */
     KDevelop::ICodeHighlighting* codeHighlighting() const override;
     KDevelop::BasicRefactoring* refactoring() const override;
+    KDevelop::ICreateClassHelper* createClassHelper() const override;
 
     void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;

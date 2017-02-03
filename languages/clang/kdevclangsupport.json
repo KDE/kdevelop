@@ -50,11 +50,10 @@
             "KDevelop/Plugin"
         ]
     }, 
-    "X-KDevelop-Args": "C", 
     "X-KDevelop-Interfaces": [
         "ILanguageSupport"
     ], 
-    "X-KDevelop-Language": "C", 
+    "X-KDevelop-Languages": ["C", "C++", "Objective-C"], 
     "X-KDevelop-LoadMode": "AlwaysOn", 
     "X-KDevelop-Mode": "NoGUI", 
     "X-KDevelop-SupportedMimeTypes": [

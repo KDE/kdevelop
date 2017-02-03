@@ -56,6 +56,7 @@ set(kdevclangprivate_SRCS
     codegen/adaptsignatureassistant.cpp
     codegen/codegenhelper.cpp
     codegen/clangrefactoring.cpp
+    codegen/clangclasshelper.cpp
     codegen/sourcemanipulation.cpp
 
     duchain/builder.cpp

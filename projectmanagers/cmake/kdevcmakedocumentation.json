@@ -64,7 +64,6 @@
         "org.kdevelop.IDocumentationProvider", 
         "org.kdevelop.ICMakeDocumentation"
     ], 
-    "X-KDevelop-Language": "CMake", 
     "X-KDevelop-Mode": "GUI", 
     "X-KDevelop-SupportedMimeTypes": [
         "text/x-cmake"
