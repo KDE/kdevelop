@@ -75,7 +75,7 @@ struct ProjectConfigOptions;
  * X-KDevelop-Category=
  * X-KDevelop-Mode=GUI
  * X-KDevelop-LoadMode=
- * X-KDevelop-Language=
+ * X-KDevelop-Languages=
  * X-KDevelop-SupportedMimeTypes=
  * X-KDevelop-Interfaces=
  * X-KDevelop-IOptional=
@@ -110,7 +110,7 @@ struct ProjectConfigOptions;
  * in which case a plugin of the given name is required which implements the interface.
  * - <i>X-KDevelop-IOptional</i> is a list of extension interfaces that this
  * plugin will use if they are available (optional);
- * - <i>X-KDevelop-Language</i> is the name of the language the plugin provides 
+ * - <i>X-KDevelop-Languages</i> is a list of the names of the languages the plugin provides
  *   support for (optional);
  * - <i>X-KDevelop-SupportedMimeTypes</i> is a list of mimetypes that the 
  *   language-parser in this plugin supports (optional);

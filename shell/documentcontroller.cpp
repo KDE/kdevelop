@@ -31,7 +31,6 @@ Boston, MA 02110-1301, USA.
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QRegularExpression>
-#include <QTemporaryFile>
 
 #include <KActionCollection>
 #include <KEncodingFileDialog>
@@ -90,18 +89,12 @@ struct DocumentControllerPrivate
     {
     }
 
-    ~DocumentControllerPrivate()
-    {
-        //delete temporary files so they are removed from disk
-        foreach (QTemporaryFile *temp, tempFiles)
-            delete temp;
-    }
+    ~DocumentControllerPrivate() = default;
 
     // used to map urls to open docs
     QHash< QUrl, IDocument* > documents;
 
     QHash< QString, IDocumentFactory* > factories;
-    QList<QTemporaryFile*> tempFiles;
 
     struct HistoryEntry
     {

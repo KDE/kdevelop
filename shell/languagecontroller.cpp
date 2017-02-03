@@ -211,9 +211,27 @@ ILanguageSupport* LanguageController::language(const QString &name) const
     if(d->languages.contains(name))
         return d->languages[name];
 
-    QVariantMap constraints;
-    constraints.insert(QStringLiteral("X-KDevelop-Language"), name);
-    QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport(), constraints);
+    // temporary support for deprecated-in-5.1 "X-KDevelop-Language" as fallback
+    // remove in later version
+    const QString keys[2] = {
+        QStringLiteral("X-KDevelop-Languages"),
+        QStringLiteral("X-KDevelop-Language")
+    };
+    QList<IPlugin*> supports;
+    for (const auto& key : keys) {
+        QVariantMap constraints;
+        constraints.insert(key, name);
+        supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport(), constraints);
+        if (key == keys[1]) {
+            for (auto support : supports) {
+                qWarning() << "Plugin" << Core::self()->pluginController()->pluginInfo(support).name() << " has deprecated (since 5.1) metadata key \"X-KDevelop-Language\", needs porting to: \"X-KDevelop-Languages\": ["<<name<<"]'";
+            }
+        }
+        if (!supports.isEmpty()) {
+            break;
+        }
+    }
+
     if(!supports.isEmpty()) {
         ILanguageSupport *languageSupport = supports[0]->extension<ILanguageSupport>();
         if(languageSupport) {

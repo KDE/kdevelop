@@ -20,7 +20,6 @@
 class QMenu;
 class QUrl;
 class SvnStatusHolder;
-class QTemporaryDir;
 class SvnCommitDialog;
 
 namespace ThreadWeaver
