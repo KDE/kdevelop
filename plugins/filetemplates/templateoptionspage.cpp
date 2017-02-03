@@ -61,7 +61,7 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
 {
     d->entries.clear();
 
-    QLayout* layout = new QVBoxLayout();
+    QVBoxLayout* layout = new QVBoxLayout();
     QHash<QString, QList<SourceFileTemplate::ConfigOption> > options = fileTemplate.customOptions(renderer);
     QHash<QString, QList<SourceFileTemplate::ConfigOption> >::const_iterator it;
 
@@ -117,6 +117,9 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
         box->setLayout(formLayout);
         layout->addWidget(box);
     }
+
+    layout->addStretch();
+
     setLayout(layout);
 }
 
