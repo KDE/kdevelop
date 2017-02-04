@@ -72,7 +72,9 @@
         "org.kdevelop.IPatchReview", 
         "ILanguageSupport"
     ], 
-    "X-KDevelop-Languages": ["Diff"], 
+    "X-KDevelop-Languages": [
+        "Diff"
+    ], 
     "X-KDevelop-Mode": "GUI", 
     "X-KDevelop-SupportedMimeTypes": [
         "text/x-diff", 
