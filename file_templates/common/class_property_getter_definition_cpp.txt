@@ -1,0 +1,1 @@
+{{ property.type }} {{ name }}::{{ property.name }}() const

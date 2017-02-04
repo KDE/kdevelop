@@ -73,17 +73,7 @@ protected:
 {% endif %}
 
 
-{% if private_functions or members %}
 private:
-    {% for method in private_functions %}
-
-        {% include "class_method_declaration_apidox_cpp.txt" %}
-        {% include "class_method_declaration_cpp.txt" %}
-
-    {% endfor %}
-
-    {% for property in members %}
-    {{property.type}} m_{{property.name}};
-    {% endfor %}
-{% endif %}
+    class {{ name }}Private* const d_ptr;
+    Q_DECLARE_PRIVATE({{ name }})
 {% endblock class_body %}

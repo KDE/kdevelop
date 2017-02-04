@@ -1,9 +1,20 @@
 {# Template for api dox in front of class method declaration #}
+{% load kdev_filters %}
 {% with method.arguments as arguments %}
     {# standard four spaces indentation to match context #}
     /**
     {% if method.isConstructor %}
-     * {% if not arguments %}Default constructor{% else %}Constructor{% endif %}
+        {% if not arguments %}
+     * Default constructor
+        {% else %}
+            {% with arguments|first as argFirst %}
+            {% if arguments|length == 1 and argFirst.type == method.name|arg_type %}
+     * Copy Constructor
+            {% else %}
+     * Constructor
+            {% endif %}
+            {% endwith %}
+        {% endif %}
     {% elif method.isDestructor %}
      * Destructor
     {% else %}

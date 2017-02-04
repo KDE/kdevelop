@@ -3,6 +3,7 @@ set(filetemplate_DIRS
     classes/private_pointer
     classes/qt_widget
     classes/qobject
+    classes/qobject_pimpl
     classes/python_basic
     classes/c_gobject
     classes/c_gobject_private
@@ -32,8 +33,12 @@ install ( FILES
     common/class_method_declaration_apidox_cpp.txt
     common/class_property_setter_declaration_cpp.txt
     common/class_property_setter_declaration_apidox_cpp.txt
+    common/class_property_setter_definition_cpp.txt
     common/class_property_getter_declaration_cpp.txt
     common/class_property_getter_declaration_apidox_cpp.txt
+    common/class_property_getter_definition_cpp.txt
+    common/class_property_signal_declaration_cpp.txt
+    common/class_qproperty_declaration_cpp.txt
     common/cpp_header.h
     common/cpp_header_onlyfunctions.h
     common/cpp_implementation.cpp

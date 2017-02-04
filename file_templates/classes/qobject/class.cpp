@@ -8,10 +8,10 @@
 
 {% include "method_definition_cpp.txt" %}
 {
+
     {% if method.type %}
     return {{ method.default_return_value }};
     {% endif %}
-
 
 }
 
@@ -27,8 +27,10 @@
 
 {% include "method_definition_cpp.txt" %}
 {
+
     {% if method.type %}return {{ method.default_return_value }};
     {% endif %}
+
 }
 
 {% endwith %}
@@ -39,8 +41,10 @@
 
 {% include "method_definition_cpp.txt" %}
 {
+
     {% if method.type %}return {{ method.default_return_value }};
     {% endif %}
+
 }
 
 {% endwith %}
@@ -48,15 +52,22 @@
 
 {% for property in members %}
 
-{{ property.type }} {{ name }}::{{ property.name }}() const
+
+{% include "class_property_getter_definition_cpp.txt" %}
 {
     return m_{{ property.name }};
 }
 
 
-void {{ name }}::set{{ property.name|upper_first }}({{ property.type|arg_type }} {{ property.name }})
+{% include "class_property_setter_definition_cpp.txt" %}
 {
+    if (m_{{ property.name }} == {{ property.name }}) {
+        return;
+    }
+
+
     m_{{ property.name }} = {{ property.name }};
+    emit {{ property.name }}Changed(m_{{ property.name }});
 }
 
 {% endfor %}

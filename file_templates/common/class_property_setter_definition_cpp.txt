@@ -1,0 +1,2 @@
+{% load kdev_filters %}
+void {{ name }}::set{{ property.name|upper_first }}({{ property.type|arg_type }} {{ property.name }})

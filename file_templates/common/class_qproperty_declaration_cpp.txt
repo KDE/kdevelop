@@ -1,0 +1,4 @@
+{# Template for class qproperty declaration #}
+{% load kdev_filters %}
+    {# standard four spaces indentation to match context #}
+    Q_PROPERTY({{ property.type }} {{ property.name }} READ {{ property.name }} WRITE set{{ property.name|upper_first }} NOTIFY {{ property.name }}Changed)
