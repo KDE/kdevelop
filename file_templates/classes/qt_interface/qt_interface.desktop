@@ -1,6 +1,7 @@
 [General]
 Name=QObject interface class
 Name[ca]=Classe d'interfície QObject
+Name[ca@valencia]=Classe d'interfície QObject
 Name[en_GB]=QObject interface class
 Name[es]=Clase de interfaz para QObject
 Name[it]=Classe interfaccia di QObject
@@ -12,6 +13,7 @@ Name[uk]=Клас інтерфейсу QObject
 Name[x-test]=xxQObject interface classxx
 Comment=QObject interface class with properties
 Comment[ca]=Classe d'interfície QObject amb propietats
+Comment[ca@valencia]=Classe d'interfície QObject amb propietats
 Comment[en_GB]=QObject interface class with properties
 Comment[es]=Clase de interfaz para QObject con propiedades
 Comment[it]=Classe interfaccia di QObject con delle proprietà
