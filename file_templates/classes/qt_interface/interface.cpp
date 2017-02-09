@@ -1,7 +1,7 @@
 {% extends "cpp_implementation.cpp" %}
 {% load kdev_filters %}
 
-{% block extra_definitons %}
+{% block extra_definitions %}
 
 {% for method in private_functions %}
 {% with method.arguments as arguments %}
@@ -19,7 +19,7 @@
 {% endwith %}
 {% endfor %}
 
-{% endblock extra_definitons %}
+{% endblock extra_definitions %}
 
 {% block function_definitions %}
 
