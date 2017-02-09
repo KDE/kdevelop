@@ -12,7 +12,10 @@
   <property name="windowTitle" >
    <string>Import</string>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QFormLayout" >
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="0" >
     <widget class="QLabel" name="labelUrl" >
      <property name="text" >
@@ -25,12 +28,6 @@
    </item>
    <item row="1" column="0" >
     <widget class="QLabel" name="repositoryLabel" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>&amp;Repository:</string>
      </property>
@@ -47,12 +44,6 @@
    </item>
    <item row="2" column="0" >
     <widget class="QLabel" name="moduleLabel" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>Mo&amp;dule:</string>
      </property>
@@ -69,12 +60,6 @@
    </item>
    <item row="3" column="0" >
     <widget class="QLabel" name="vendorLabel" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>&amp;Vendor tag:</string>
      </property>
@@ -95,12 +80,6 @@
    </item>
    <item row="4" column="0" >
     <widget class="QLabel" name="releaseLabel" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>Re&amp;lease tag:</string>
      </property>
@@ -121,12 +100,6 @@
    </item>
    <item row="5" column="0" >
     <widget class="QLabel" name="commentLabel" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>Co&amp;mment:</string>
      </property>
