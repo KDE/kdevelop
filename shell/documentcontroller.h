@@ -44,8 +44,6 @@ namespace Sublime {
 }
 
 namespace KDevelop {
-class ProjectFileItem;
-class IProject;
 class MainWindow;
 
 /**
