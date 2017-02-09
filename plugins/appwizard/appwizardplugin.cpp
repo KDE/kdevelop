@@ -160,7 +160,7 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
         vcsError(i18n("Could not add files to the DVCS repository"), scratchArea, dest);
         return false;
     }
-    job = dvcs->commit(QStringLiteral("initial project import from KDevelop"), {dest},
+    job = dvcs->commit(info.importCommitMessage, {dest},
                             KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {

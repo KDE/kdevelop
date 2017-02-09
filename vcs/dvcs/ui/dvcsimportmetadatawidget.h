@@ -55,6 +55,7 @@ public:
     QString message() const override; //Is not used, it returns an empty string
     void setSourceLocation( const KDevelop::VcsLocation& ) override;
     void setSourceLocationEditable( bool ) override;
+    void setMessage(const QString& message) override;
     bool hasValidData() const override;
 
 private:

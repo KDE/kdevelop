@@ -51,6 +51,7 @@ DvcsImportMetadataWidget::DvcsImportMetadataWidget(QWidget *parent)
     d->m_ui->sourceLoc->setMode( KFile::Directory );
     connect( d->m_ui->sourceLoc, &KUrlRequester::textChanged, this, &DvcsImportMetadataWidget::changed );
     connect( d->m_ui->sourceLoc, &KUrlRequester::urlSelected, this, &DvcsImportMetadataWidget::changed );
+    connect(d->m_ui->message, &QTextEdit::textChanged, this, &DvcsImportMetadataWidget::changed);
 }
 
 DvcsImportMetadataWidget::~DvcsImportMetadataWidget()
@@ -75,7 +76,8 @@ KDevelop::VcsLocation DvcsImportMetadataWidget::destination() const
 
 QString DvcsImportMetadataWidget::message( ) const
 {
-    return QString();
+    Q_D(const DvcsImportMetadataWidget);
+    return d->m_ui->message->toPlainText();
 }
 
 void DvcsImportMetadataWidget::setSourceLocation( const KDevelop::VcsLocation& url )
@@ -90,9 +92,15 @@ void DvcsImportMetadataWidget::setSourceLocationEditable( bool enable )
     d->m_ui->sourceLoc->setEnabled( enable );
 }
 
+void DvcsImportMetadataWidget::setMessage(const QString& message)
+{
+    Q_D(DvcsImportMetadataWidget);
+    d->m_ui->message->setText(message);
+}
+
 bool DvcsImportMetadataWidget::hasValidData() const
 {
     Q_D(const DvcsImportMetadataWidget);
-    return !d->m_ui->sourceLoc->text().isEmpty();
+    return !d->m_ui->message->toPlainText().isEmpty() && !d->m_ui->sourceLoc->text().isEmpty();
 }
 

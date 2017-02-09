@@ -32,6 +32,7 @@ public:
     KDevelop::VcsLocation destination() const override;
     QString message() const override;
     void setUseSourceDirForDestination( bool ) override;
+    void setMessage(const QString& message) override;
     bool hasValidData() const override;
 private:
     Ui::SvnImportMetadataWidget *m_ui;

@@ -51,6 +51,9 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
                                                     m_ui->vcsImportOptions );
             if( widget )
             {
+                // untranslated on purpose, as English might be lingua franca at most target users
+                // perhaps make default string configurable if people request it
+                widget->setMessage(QStringLiteral("Initial import"));
                 widget->setSourceLocationEditable( false );
                 widget->setUseSourceDirForDestination( true );
                 m_ui->vcsTypes->insertItem( idx, iface->name() );

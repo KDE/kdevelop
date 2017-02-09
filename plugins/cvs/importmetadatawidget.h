@@ -40,6 +40,7 @@ public:
     QString message() const override;
     void setSourceLocation( const KDevelop::VcsLocation& ) override;
     void setSourceLocationEditable( bool ) override;
+    void setMessage(const QString& message) override;
     bool hasValidData() const override;
 
 private:

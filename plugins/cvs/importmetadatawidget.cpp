@@ -68,6 +68,11 @@ void ImportMetadataWidget::setSourceLocationEditable( bool enable )
     m_ui->sourceLoc->setEnabled( enable );
 }
 
+void ImportMetadataWidget::setMessage(const QString& message)
+{
+    m_ui->comment->setText(message);
+}
+
 bool ImportMetadataWidget::hasValidData() const
 {
     return !m_ui->comment->toPlainText().isEmpty() && !m_ui->sourceLoc->text().isEmpty()

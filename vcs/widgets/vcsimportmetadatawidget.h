@@ -58,6 +58,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     virtual void setSourceLocation( const VcsLocation& ) = 0;
     virtual void setSourceLocationEditable( bool ) = 0;
+    virtual void setMessage(const QString& message) = 0;
 };
 
 }

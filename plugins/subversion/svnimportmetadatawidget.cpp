@@ -62,6 +62,11 @@ void SvnImportMetadataWidget::setSourceLocationEditable( bool enable )
     m_ui->srcEdit->setEnabled( enable );
 }
 
+void SvnImportMetadataWidget::setMessage(const QString& message)
+{
+    m_ui->message->setText(message);
+}
+
 QString SvnImportMetadataWidget::message() const
 {
     return m_ui->message->toPlainText();
