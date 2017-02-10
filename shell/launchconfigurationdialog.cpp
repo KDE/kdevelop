@@ -284,7 +284,6 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
         delete w;
     }
 
-    debugger->clear();
     if( !selected.indexes().isEmpty() )
     {
         QModelIndex idx = selected.indexes().first();
@@ -298,22 +297,24 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             connect( l, &LaunchConfiguration::nameChanged, this, &LaunchConfigurationDialog::updateNameLabel );
             if( lm )
             {
+                QVariant currentLaunchMode = idx.sibling(idx.row(), 1).data(Qt::EditRole);
                 {
                     QSignalBlocker blocker(debugger);
                     QList<ILauncher*> launchers = l->type()->launchers();
+
+                    debugger->clear();
                     for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); ++it )
                     {
                         if( ((*it)->supportedModes().contains( lm->id() ) ) ) {
                             debugger->addItem( (*it)->name(), (*it)->id() );
                         }
                     }
+
+                    debugger->setCurrentIndex(debugger->findData(currentLaunchMode));
                 }
 
                 debugger->setVisible(debugger->count()>0);
                 debugLabel->setVisible(debugger->count()>0);
-
-                QVariant currentLaunchMode = idx.sibling(idx.row(), 1).data(Qt::EditRole);
-                debugger->setCurrentIndex(debugger->findData(currentLaunchMode));
 
                 ILauncher* launcher = l->type()->launcherForId( currentLaunchMode.toString() );
                 if( launcher )
