@@ -23,21 +23,17 @@
 #include <interfaces/idebugcontroller.h>
 
 #include <KLocalizedString>
-#include <KMessageBox>
 
 #include <Okteta/ByteArrayColumnView>
 #include <Okteta/ByteArrayModel>
 
 #include <QAction>
 #include <QContextMenuEvent>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLayout>
+#include <QFormLayout>
 #include <QLineEdit>
+#include <QDialogButtonBox>
 #include <QMenu>
 #include <QPushButton>
-#include <QTextEdit>
 #include <QToolBox>
 #include <QVariant>
 #include <QVBoxLayout>
@@ -65,40 +61,27 @@ class MemoryRangeSelector : public QWidget
         QPushButton* okButton;
         QPushButton* cancelButton;
 
-    MemoryRangeSelector(QWidget* parent)
+    explicit MemoryRangeSelector(QWidget* parent)
     : QWidget(parent)
     {
         QVBoxLayout* l = new QVBoxLayout(this);
 
-        // Grid layout: labels + address field
-        QGridLayout* gl = new QGridLayout();
-        l->addLayout(gl);
-
-        QLabel* l1 = new QLabel(i18n("Start"), this);
-        gl->addWidget(l1, 0, 1);
+        // Form layout: labels + address field
+        auto formLayout = new QFormLayout();
+        l->addLayout(formLayout);
 
         startAddressLineEdit = new QLineEdit(this);
-        gl->addWidget(startAddressLineEdit, 0, 3);
-
-        QLabel* l2 = new QLabel(i18n("Amount"), this);
-        gl->addWidget(l2, 2, 1);
+        formLayout->addRow(i18n("Start:"), startAddressLineEdit);
 
         amountLineEdit = new QLineEdit(this);
-        gl->addWidget(amountLineEdit, 2, 3);
+        formLayout->addRow(i18n("Amount:"), amountLineEdit);
 
-        l->addSpacing(2);
+        auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
+        l->addWidget(buttonBox);
 
-        QHBoxLayout* hb = new QHBoxLayout();
-        l->addLayout(hb);
-        hb->addStretch();
+        okButton = buttonBox->button(QDialogButtonBox::Ok);
+        cancelButton = buttonBox->button(QDialogButtonBox::Cancel);
 
-        okButton = new QPushButton(i18n("OK"), this);
-        hb->addWidget(okButton);
-
-        cancelButton = new QPushButton(i18n("Cancel"), this);
-        hb->addWidget(cancelButton);
-
-        l->addSpacing(2);
         setLayout(l);
 
         connect(startAddressLineEdit, &QLineEdit::returnPressed, okButton, [this]() {
