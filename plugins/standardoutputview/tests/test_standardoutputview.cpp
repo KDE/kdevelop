@@ -128,7 +128,7 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
 
     actions = outputWidget->actions();
-    QCOMPARE(actions.size(), 15);
+    QCOMPARE(actions.size(), 16);
     QCOMPARE(actions[actions.size()-2]->text(), addedActions[0]->text());
     QCOMPARE(actions[actions.size()-1]->text(), addedActions[1]->text());
 
