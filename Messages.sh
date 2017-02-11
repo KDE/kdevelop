@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 subdirs="debugger interfaces language outputview project serialization shell sublime util vcs documentation"
-rcfiles="`find $subdirs -name \*.rc`"
-uifiles="`find $subdirs -name \*.ui`"
-kcfgfiles="`find $subdirs -name \*.kcfg`"
+rcfiles="`find $subdirs -name \*.rc | grep -v '/tests/'`"
+uifiles="`find $subdirs -name \*.ui | grep -v '/tests/'`"
+kcfgfiles="`find $subdirs -name \*.kcfg | grep -v '/tests/'`"
 if [[ "$rcfiles" != "" ]] ; then
     $EXTRACTRC $rcfiles >> rc.cpp || exit 11
 fi
