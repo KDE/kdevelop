@@ -62,11 +62,9 @@ namespace GDB
 
     private Q_SLOTS:
         void slotChildCaptionChanged(const QString& caption);
-        void slotChildDestroyed(QObject* child);
 
     private: // Data
         QToolBox* m_toolBox;
-        QList<MemoryView*> m_memoryViews;
     };
 
     class MemoryView : public QWidget

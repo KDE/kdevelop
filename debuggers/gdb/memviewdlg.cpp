@@ -458,13 +458,9 @@ void MemoryViewerWidget::slotAddMemoryView()
     MemoryView* widget = new MemoryView(this);
     m_toolBox->addItem(widget, widget->windowTitle());
     m_toolBox->setCurrentIndex(m_toolBox->indexOf(widget));
-    m_memoryViews.push_back(widget);
 
     connect(widget, &MemoryView::captionChanged,
             this, &MemoryViewerWidget::slotChildCaptionChanged);
-
-    connect(widget, &MemoryView::destroyed,
-            this, &MemoryViewerWidget::slotChildDestroyed);
 }
 
 void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
@@ -476,20 +472,6 @@ void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
     cap.replace('&', "&&");
     m_toolBox->setItemText(m_toolBox->indexOf(ncs), cap);
 }
-
-void MemoryViewerWidget::slotChildDestroyed(QObject* child)
-{
-    QList<MemoryView*>::iterator i, e;
-    for(i = m_memoryViews.begin(), e = m_memoryViews.end(); i != e; ++i)
-    {
-        if (*i == child)
-        {
-            m_memoryViews.erase(i);
-            break;
-        }
-    }
-}
-
 
 } // end of namespace GDB
 } // end of namespace KDevMI
