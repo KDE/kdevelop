@@ -69,9 +69,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     splitter->setSizes(QList<int>() << 260 << 620);
     splitter->setCollapsible(0, false);
 
-    addConfig->setIcon( QIcon::fromTheme(QStringLiteral("list-add")) );
     addConfig->setToolTip(i18nc("@info:tooltip", "Add a new launch configuration."));
-    deleteConfig->setIcon( QIcon::fromTheme(QStringLiteral("list-remove")) );
     deleteConfig->setEnabled( false );
     deleteConfig->setToolTip(i18nc("@info:tooltip", "Delete selected launch configuration."));
 
@@ -379,7 +377,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             deleteConfig->setEnabled( false );
             stack->setCurrentIndex( 0 );
             QLabel* l = new QLabel(i18n("<i>Select a configuration to edit from the left,<br>"
-                                        "or click the \"Add New\" button to add a new one.</i>"), stack);
+                                        "or click the \"Add\" button to add a new one.</i>"), stack);
             l->setAlignment(Qt::AlignCenter);
             stack->addWidget(l);
             stack->setCurrentWidget(l);
