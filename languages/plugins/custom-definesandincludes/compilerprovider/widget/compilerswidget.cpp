@@ -25,7 +25,6 @@
 
 #include <QAction>
 #include <KLocalizedString>
-#include <QFileDialog>
 #include <QKeySequence>
 #include <QMenu>
 #include <QSignalMapper>
@@ -78,10 +77,8 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 
     connect(m_ui->compilers->selectionModel(), &QItemSelectionModel::currentChanged, this, &CompilersWidget::compilerSelected);
 
-    connect(m_ui->compilerName, &QLineEdit::editingFinished, this, &CompilersWidget::compilerEdited);
-    connect(m_ui->compilerPath, &QLineEdit::editingFinished, this, &CompilersWidget::compilerEdited);
-
-    connect(m_ui->compilerSelector, &QPushButton::clicked, this, &CompilersWidget::selectCompilerPathDialog);
+    connect(m_ui->compilerName, &QLineEdit::textEdited, this, &CompilersWidget::compilerEdited);
+    connect(m_ui->compilerPath, &KUrlRequester::textEdited, this, &CompilersWidget::compilerEdited);
 
     connect(m_compilersModel, &CompilersModel::compilerChanged, this, &CompilersWidget::compilerChanged);
 
@@ -133,6 +130,8 @@ void CompilersWidget::addCompiler(const QString& factoryName)
 
             m_ui->compilers->selectionModel()->select(compilerIndex, QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
             compilerSelected(compilerIndex);
+            m_ui->compilers->scrollTo(compilerIndex);
+            m_ui->compilerName->setFocus(Qt::OtherFocusReason);
             break;
         }
     }
@@ -175,21 +174,10 @@ void CompilersWidget::compilerEdited()
     emit changed();
 }
 
-void CompilersWidget::selectCompilerPathDialog()
-{
-    const QString compilerPath = QFileDialog::getOpenFileName(this, tr("Select path to compiler"));
-    if (compilerPath.isEmpty())
-        return;
-
-    m_ui->compilerPath->setText(compilerPath);
-    compilerEdited();
-}
-
 void CompilersWidget::enableItems(bool enable)
 {
     m_ui->compilerName->setEnabled(enable);
     m_ui->compilerPath->setEnabled(enable);
-    m_ui->compilerSelector->setEnabled(enable);
 
     if(!enable) {
         m_ui->compilerName->clear();
