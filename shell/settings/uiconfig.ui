@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>User Interface</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QVBoxLayout">
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Dock Window Behavior</string>
@@ -45,12 +45,6 @@
       </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="kcfg_BottomLeftCornerOwner">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>&lt;p&gt;Controls whether the bottom left corner is occupied by the dock at the left, or by the dock at the bottom.&lt;/p&gt;</string>
         </property>
@@ -68,12 +62,6 @@
       </item>
       <item row="1" column="1">
        <widget class="QComboBox" name="kcfg_BottomRightCornerOwner">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>&lt;p&gt;Controls whether the bottom right corner is occupied by the dock at the right, or by the dock at the bottom.&lt;/p&gt;</string>
         </property>
@@ -92,20 +80,7 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0">
-    <spacer>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>503</width>
-       <height>21</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="0">
+   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Tabbed Browsing</string>
@@ -151,7 +126,7 @@ For example, a header file will be opened next to the implementation file.</stri
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
       <string>Coloring</string>
@@ -172,6 +147,13 @@ For example, a header file will be opened next to the implementation file.</stri
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

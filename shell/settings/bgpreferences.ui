@@ -10,24 +10,12 @@
     <height>402</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">
     <number>0</number>
    </property>
    <item>
     <widget class="QGroupBox" name="kcfg_enable">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="toolTip">
       <string>&lt;p&gt;Enables or disables the background parser.&lt;br&gt;If unsure, leave it enabled. Disabling the background parser will disable large parts of KDevelop's functionality.&lt;/p&gt;</string>
      </property>
@@ -41,9 +29,6 @@
       <bool>true</bool>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::ExpandingFieldsGrow</enum>
-      </property>
       <item row="1" column="0">
        <widget class="QLabel" name="label">
         <property name="toolTip">
@@ -56,12 +41,6 @@
       </item>
       <item row="1" column="1">
        <widget class="QSpinBox" name="kcfg_delay">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>The time to wait before the document is re-analyzed when you edit it.</string>
         </property>
@@ -88,12 +67,6 @@
       </item>
       <item row="2" column="1">
        <widget class="QSpinBox" name="kcfg_threads">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>The maximum number of parallel instances the background parser uses. If unsure, select 1 or 2.</string>
         </property>

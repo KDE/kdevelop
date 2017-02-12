@@ -175,22 +175,19 @@ bool ProjectItemLineEdit::selectItemDialog()
 {
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
 
-    QWidget* w=new QWidget;
-    w->setLayout(new QVBoxLayout(w));
-    QTreeView* view = new QTreeView(w);
+    QDialog dialog;
+    dialog.setWindowTitle(i18n("Select an item..."));
+
+    auto mainLayout = new QVBoxLayout(&dialog);
+
+    QTreeView* view = new QTreeView(&dialog);
     ProjectProxyModel* proxymodel = new ProjectProxyModel(view);
     proxymodel->setSourceModel(model);
     view->header()->hide();
     view->setModel(proxymodel);
     view->setSelectionMode(QAbstractItemView::SingleSelection);
-    w->layout()->addWidget(new QLabel(i18n("Select the item you want to get the path from.")));
-    w->layout()->addWidget(view);
-
-    QDialog dialog;
-    dialog.setWindowTitle(i18n("Select an item..."));
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(&dialog);
-    mainLayout->addWidget(w);
+    mainLayout->addWidget(new QLabel(i18n("Select the item you want to get the path from.")));
+    mainLayout->addWidget(view);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);

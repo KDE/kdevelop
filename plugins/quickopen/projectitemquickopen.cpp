@@ -131,7 +131,8 @@ uint addedItems(const AddedItems& items)
 }
 
 ProjectItemDataProvider::ProjectItemDataProvider(KDevelop::IQuickOpen* quickopen)
-    : m_quickopen(quickopen)
+    : m_itemTypes(NoItems)
+    , m_quickopen(quickopen)
     , m_addedItemsCountCache([this]() { return addedItems(m_addedItems); })
 {
 }
