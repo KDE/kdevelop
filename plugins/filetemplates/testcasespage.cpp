@@ -23,7 +23,8 @@
 #include "ui_testcases.h"
 
 #include <KEditListWidget>
-#include <QLayout>
+#include <kwidgetsaddons_version.h>
+
 #include <QVBoxLayout>
 
 using namespace KDevelop;
@@ -43,14 +44,16 @@ TestCasesPage::TestCasesPage(QWidget* parent, Qt::WindowFlags f)
 
     d->ui->testCasesLabel->setBuddy(d->ui->keditlistwidget->lineEdit());
 
+#if KWIDGETSADDONS_VERSION < QT_VERSION_CHECK(5,32,0)
+    // workaround for KEditListWidget bug:
     // ensure keyboard focus is returned to edit line
-    // Patch pending for KEditListWidget: https://phabricator.kde.org/D4392
     connect(d->ui->keditlistwidget, &KEditListWidget::added,
             d->ui->keditlistwidget->lineEdit(),
             static_cast<void(QWidget::*)()>(&QWidget::setFocus));
     connect(d->ui->keditlistwidget, &KEditListWidget::removed,
             d->ui->keditlistwidget->lineEdit(),
             static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+#endif
 
     connect(d->ui->identifierLineEdit, &QLineEdit::textChanged, this, &TestCasesPage::identifierChanged);
 }
