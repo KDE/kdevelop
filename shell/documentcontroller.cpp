@@ -1171,7 +1171,6 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
         // Check if the second child-set contains an unterminated separator, which means that the active views should end up there
         for(int pos = pickSeparator+1; pos < urlsWithSeparators.size(); ++pos)
             if( separators.contains(urlsWithSeparators[pos]) && (pos == urlsWithSeparators.size()-1 ||
-                separatorsAndParens.contains(urlsWithSeparators[pos-1]) ||
                 separatorsAndParens.contains(urlsWithSeparators[pos-1])) )
                     activeViewToSecondChild = true;
     }
