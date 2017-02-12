@@ -49,7 +49,7 @@ public:
 class ClangTemplateNewClass : public KDevelop::TemplateClassGenerator
 {
   public:
-    ClangTemplateNewClass(const QUrl& url);
+    explicit ClangTemplateNewClass(const QUrl& url);
     ~ClangTemplateNewClass() override;
 
     KDevelop::DocumentChangeSet generate() override;
