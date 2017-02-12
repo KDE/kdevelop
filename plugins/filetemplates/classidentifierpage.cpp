@@ -18,7 +18,9 @@
 
 #include "classidentifierpage.h"
 #include "language/duchain/identifier.h"
+
 #include <KI18n/KLocalizedString>
+#include <kwidgetsaddons_version.h>
 
 #include "ui_newclass.h"
 
@@ -47,14 +49,16 @@ ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
 
     connect(d->classid->identifierLineEdit, &QLineEdit::textChanged, this, &ClassIdentifierPage::checkIdentifier);
 
+#if KWIDGETSADDONS_VERSION < QT_VERSION_CHECK(5,32,0)
+    // workaround for KEditListWidget bug:
     // ensure keyboard focus is returned to edit line
-    // Patch pending for KEditListWidget: https://phabricator.kde.org/D4392
     connect(d->classid->keditlistwidget, &KEditListWidget::added,
             d->classid->keditlistwidget->lineEdit(),
             static_cast<void(QWidget::*)()>(&QWidget::setFocus));
     connect(d->classid->keditlistwidget, &KEditListWidget::removed,
             d->classid->keditlistwidget->lineEdit(),
             static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+#endif
 
     emit isValid(false);
 }

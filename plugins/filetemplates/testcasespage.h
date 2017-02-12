@@ -25,8 +25,6 @@
 
 #include "ipagefocus.h"
 
-class KEditListWidget;
-
 namespace KDevelop
 {
 
