@@ -239,7 +239,6 @@ constexpr bool isPointerType(CXTypeKind TK)
 {
     return TK == CXType_Pointer
         || TK == CXType_BlockPointer
-        || TK == CXType_ObjCObjectPointer
         || TK == CXType_MemberPointer
         || TK == CXType_ObjCObjectPointer;
 }
