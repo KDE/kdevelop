@@ -35,7 +35,7 @@
 int main(int argc, char**argv)
 {
     char *next, *token, *tmp, *equal;
-    int i = 0, nextlen, currentlen;
+    int nextlen, currentlen;
     next = getenv("MSC_CMD_FLAGS");
 
     while (next != NULL)
