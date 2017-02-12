@@ -124,7 +124,8 @@ Path findProjectForForPath(const IndexedString& path)
 }
 
 ProjectItemDataProvider::ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen )
-: m_quickopen(quickopen)
+    : m_itemTypes(NoItems)
+    , m_quickopen(quickopen)
 {
 }
 
