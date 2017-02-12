@@ -102,7 +102,7 @@ class DebugMode : public ILaunchMode
 {
 public:
     DebugMode() {}
-    QIcon icon() const override { return QIcon::fromTheme(QStringLiteral("tools-report-bug")); }
+    QIcon icon() const override { return QIcon::fromTheme(QStringLiteral("debug-run")); }
     QString id() const override { return QStringLiteral("debug"); }
     QString name() const override { return i18n("Debug"); }
 };
