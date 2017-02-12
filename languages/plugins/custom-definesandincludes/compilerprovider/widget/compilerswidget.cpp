@@ -95,6 +95,7 @@ CompilersWidget::~CompilersWidget()
 void CompilersWidget::setCompilers(const QVector< CompilerPointer >& compilers)
 {
     m_compilersModel->setCompilers(compilers);
+    m_ui->compilers->expandAll();
 }
 
 void CompilersWidget::clear()
