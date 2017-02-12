@@ -35,7 +35,8 @@
         "ILanguageSupport"
     ], 
     "X-KDevelop-Languages": [
-        "QML/JS"
+        "QML/JS",
+        "JavaScript"
     ], 
     "X-KDevelop-Mode": "NoGUI", 
     "X-KDevelop-SupportedMimeTypes": [
