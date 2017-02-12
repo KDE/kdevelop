@@ -49,10 +49,9 @@ void TestTemplatesModel::descriptionExtraction()
 {
     QCOMPARE(model->rowCount(), 1);
     QModelIndex testingCategoryIndex = model->index(0, 0);
-    QCOMPARE(model->rowCount(testingCategoryIndex), 2);
+    QCOMPARE(model->rowCount(testingCategoryIndex), 3);
 
-    for (int i = 0; i < 2; ++i)
-    {
+    for (int i = 0; i < 3; ++i) {
         QModelIndex languageCategoryIndex = model->index(i, 0, testingCategoryIndex);
         QCOMPARE(model->rowCount(languageCategoryIndex), 1);
         QModelIndex templateIndex = model->index(0, 0, languageCategoryIndex);
