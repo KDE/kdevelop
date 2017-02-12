@@ -24,6 +24,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <kwidgetsaddons_version.h>
 
 #include <interfaces/iprojectprovider.h>
 
@@ -82,7 +83,7 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
 
     // connect as last step, otherwise KMessageWidget could get both animatedHide() and animatedShow()
     // during setup and due to a bug will ignore any but the first call
-    // Patch proposed at https://phabricator.kde.org/D4329
+    // Only fixed for KF5 5.32
     connect(m_ui->workingDir, &KUrlRequester::textChanged, this, &ProjectSourcePage::reevaluateCorrection);
     connect(m_ui->sources, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ProjectSourcePage::setSourceIndex);
     connect(m_ui->get, &QPushButton::clicked, this, &ProjectSourcePage::checkoutVcsProject);
@@ -292,15 +293,20 @@ void ProjectSourcePage::setStatus(const QString& message)
 
 void ProjectSourcePage::clearStatus()
 {
+#if KWIDGETSADDONS_VERSION < QT_VERSION_CHECK(5,32,0)
     // workaround for KMessageWidget bug:
-    // animatedHide will not explicitely hide the widget if it is not yet shown,
-    // so if show() is called on the parent later, the KMessageWidget
-    // Patch proposed at https://phabricator.kde.org/D4329
+    // animatedHide() will not explicitely hide the widget if it is not yet shown.
+    // So if it has never been explicitely hidden otherwise,
+    // if show() is called on the parent later the KMessageWidget will be shown as well.
+    // As this method is sometimes called when the page is created and thus not yet shown,
+    // we have to ensure the hidden state ourselves here.
     if (!m_ui->status->isVisible()) {
         m_ui->status->hide();
-    } else {
-        m_ui->status->animatedHide();
+        return;
     }
+#endif
+
+    m_ui->status->animatedHide();
 }
 
 QUrl ProjectSourcePage::workingDir() const
