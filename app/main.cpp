@@ -428,7 +428,7 @@ int main( int argc, char *argv[] )
     parser.addOption(QCommandLineOption{QStringList{"p", "project"}, i18n("Open KDevelop and load the given project."), "project"});
     parser.addOption(QCommandLineOption{QStringList{"d", "debug"},
                      i18n("Start debugging an application in KDevelop with the given debugger.\n"
-                     "The binary that should be debugged must follow - including arguments.\n"
+                     "The executable that should be debugged must follow - including arguments.\n"
                      "Example: kdevelop --debug gdb myapp --foo bar"), "debugger"});
 
     // this is used by the 'kdevelop!' script to retrieve the pid of a KDEVELOP
@@ -558,22 +558,22 @@ int main( int argc, char *argv[] )
     if ( parser.isSet("debug") ) {
         if ( debugArgs.isEmpty() ) {
             QTextStream qerr(stderr);
-            qerr << endl << i18nc("@info:shell", "Specify the binary you want to debug.") << endl;
+            qerr << endl << i18nc("@info:shell", "Specify the executable you want to debug.") << endl;
             return 1;
         }
 
-        QFileInfo binaryInfo(debugArgs.first());
-        if (!binaryInfo.exists()) {
-            binaryInfo = QStandardPaths::findExecutable(debugArgs.first());
-            if (!binaryInfo.exists()) {
+        QFileInfo executableFileInfo(debugArgs.first());
+        if (!executableFileInfo.exists()) {
+            executableFileInfo = QStandardPaths::findExecutable(debugArgs.first());
+            if (!executableFileInfo.exists()) {
                 QTextStream qerr(stderr);
-                qerr << endl << i18nc("@info:shell", "Specified binary does not exist.") << endl;
+                qerr << endl << i18nc("@info:shell", "Specified executable does not exist.") << endl;
                 return 1;
             }
         }
 
-        debugArgs.first() = binaryInfo.absoluteFilePath();
-        debugeeName = i18n("Debug %1", binaryInfo.fileName());
+        debugArgs.first() = executableFileInfo.absoluteFilePath();
+        debugeeName = i18n("Debug %1", executableFileInfo.fileName());
         session = debugeeName;
     } else if ( parser.isSet("new-session") )
     {

@@ -74,13 +74,13 @@ public:
 
     QString errorString() const;
 
-    QString qmakeBin() const;
+    QString qmakeExecutable() const;
     QString buildDir() const;
     QString installPrefix() const;
     int buildType() const;
     QString extraArgs() const;
 
-    void setQMakeBin(const QString &binary);
+    void setQMakeExecutable(const QString& executable);
     void setBuildDir(const QString &buildDir);
     void setInstallPrefix(const QString &prefix);
     void setBuildType(int type);

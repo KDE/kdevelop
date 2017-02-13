@@ -104,16 +104,16 @@ bool QMakeProjectFile::read()
     const QString qtVersion = QStringLiteral("QT_VERSION");
     const QString qtInstallLibs = QStringLiteral("QT_INSTALL_LIBS");
 
-    const QString binary = QMakeConfig::qmakeBinary(project());
-    if (!m_qmakeQueryCache.contains(binary)) {
-        const auto queryResult = QMakeConfig::queryQMake(binary, {qtInstallHeaders, qtVersion, qtInstallLibs});
+    const QString executable = QMakeConfig::qmakeExecutable(project());
+    if (!m_qmakeQueryCache.contains(executable)) {
+        const auto queryResult = QMakeConfig::queryQMake(executable, {qtInstallHeaders, qtVersion, qtInstallLibs});
         if (queryResult.isEmpty()) {
-            qCWarning(KDEV_QMAKE) << "Failed to query qmake - bad qmake binary configured?" << binary;
+            qCWarning(KDEV_QMAKE) << "Failed to query qmake - bad qmake executable configured?" << executable;
         }
-        m_qmakeQueryCache[binary] = queryResult;
+        m_qmakeQueryCache[executable] = queryResult;
     }
 
-    const auto cachedQueryResult = m_qmakeQueryCache.value(binary);
+    const auto cachedQueryResult = m_qmakeQueryCache.value(executable);
     m_qtIncludeDir = cachedQueryResult.value(qtInstallHeaders);
     m_qtVersion = cachedQueryResult.value(qtVersion);
     m_qtLibDir = cachedQueryResult.value(qtInstallLibs);

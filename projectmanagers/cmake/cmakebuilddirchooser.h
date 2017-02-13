@@ -53,13 +53,13 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
         explicit CMakeBuildDirChooser(QWidget* parent = nullptr);
         ~CMakeBuildDirChooser() override;
 
-        KDevelop::Path cmakeBinary() const;
+        KDevelop::Path cmakeExecutable() const;
         KDevelop::Path installPrefix() const;
         KDevelop::Path buildFolder() const;
         QString buildType() const;
         QString extraArguments() const;
 
-        void setCMakeBinary(const KDevelop::Path& path);
+        void setCMakeExecutable(const KDevelop::Path& path);
         void setInstallPrefix(const KDevelop::Path& path);
         void setBuildFolder(const KDevelop::Path& path);
         void setBuildType(const QString& buildType);

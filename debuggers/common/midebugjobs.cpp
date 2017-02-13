@@ -172,7 +172,7 @@ void MIExamineCoreJob::start()
         return;
     }
 
-    if (!m_session->examineCoreFile(dlg.binary(), dlg.core())) {
+    if (!m_session->examineCoreFile(dlg.executableFile(), dlg.core())) {
         done();
     }
 }

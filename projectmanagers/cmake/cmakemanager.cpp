@@ -85,7 +85,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     , m_filter( new ProjectFilterManager( this ) )
 {
     if (CMake::findExecutable().isEmpty()) {
-        setErrorDescription(i18n("Unable to find cmake executable. Is it installed on the system?"));
+        setErrorDescription(i18n("Unable to find a CMake executable. Is one installed on the system?"));
         m_highlight = nullptr;
         return;
     }

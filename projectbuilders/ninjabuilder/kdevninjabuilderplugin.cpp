@@ -37,7 +37,7 @@ K_PLUGIN_FACTORY_WITH_JSON(NinjaBuilderFactory, "kdevninja.json", registerPlugin
 KDevNinjaBuilderPlugin::KDevNinjaBuilderPlugin(QObject* parent, const QVariantList& )
     : KDevelop::IPlugin("kdevninja", parent)
 {
-    if(NinjaJob::ninjaBinary().isEmpty()) {
+    if(NinjaJob::ninjaExecutable().isEmpty()) {
         setErrorDescription(i18n("Unable to find ninja executable. Is it installed on the system?"));
     }
 }

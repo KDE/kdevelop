@@ -56,9 +56,9 @@ QMakeBuildDirChooser::QMakeBuildDirChooser(KDevelop::IProject* project, QWidget*
 
     kcfg_buildDir->setMode(KFile::Directory | KFile::LocalOnly);
     kcfg_installPrefix->setMode(KFile::Directory | KFile::LocalOnly);
-    kcfg_qmakeBin->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
+    kcfg_qmakeExecutable->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
 
-    connect(kcfg_qmakeBin, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
+    connect(kcfg_qmakeExecutable, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
     connect(kcfg_buildDir, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
     connect(kcfg_installPrefix, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
     connect(kcfg_buildType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this,
@@ -102,7 +102,7 @@ void QMakeBuildDirChooser::saveConfig(KConfigGroup& config)
 {
     qCDebug(KDEV_QMAKE) << "Writing config for" << buildDir() << "to config" << config.name();
 
-    config.writeEntry(QMakeConfig::QMAKE_BINARY, qmakeBin());
+    config.writeEntry(QMakeConfig::QMAKE_EXECUTABLE, qmakeExecutable());
     config.writeEntry(QMakeConfig::INSTALL_PREFIX, installPrefix());
     config.writeEntry(QMakeConfig::EXTRA_ARGUMENTS, extraArgs());
     config.writeEntry(QMakeConfig::BUILD_TYPE, buildType());
@@ -125,7 +125,7 @@ void QMakeBuildDirChooser::loadConfig(const QString& config)
         QSignalBlocker blocker(this); // only emit changed once
 
         // sets values into fields
-        setQMakeBin(QMakeConfig::qmakeBinary(m_project));
+        setQMakeExecutable(QMakeConfig::qmakeExecutable(m_project));
         setBuildDir(config);
         setInstallPrefix(build.readEntry(QMakeConfig::INSTALL_PREFIX, QString()));
         setExtraArgs(build.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()));
@@ -138,27 +138,27 @@ bool QMakeBuildDirChooser::validate(QString* message)
 {
     bool valid = true;
     QString msg;
-    if (qmakeBin().isEmpty()) {
-        msg = i18n("Please specify path to QMake binary.");
+    if (qmakeExecutable().isEmpty()) {
+        msg = i18n("Please specify path to QMake executable.");
         valid = false;
     } else {
-        QFileInfo info(qmakeBin());
+        QFileInfo info(qmakeExecutable());
         if (!info.exists()) {
-            msg = i18n("QMake binary \"%1\" does not exist.", qmakeBin());
+            msg = i18n("QMake executable \"%1\" does not exist.", qmakeExecutable());
             valid = false;
         } else if (!info.isFile()) {
-            msg = i18n("QMake binary is not a file.");
+            msg = i18n("QMake executable is not a file.");
             valid = false;
         } else if (!info.isExecutable()) {
-            msg = i18n("QMake binary is not executable.");
+            msg = i18n("QMake executable is not executable.");
             valid = false;
         } else {
             const QHash<QString, QString> vars = QMakeConfig::queryQMake(info.absoluteFilePath());
             if (vars.isEmpty()) {
-                msg = i18n("QMake binary cannot be queried for variables.");
+                msg = i18n("QMake executable cannot be queried for variables.");
                 valid = false;
             } else if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
-                msg = i18n("No basic MkSpec file could be found for the given QMake binary.");
+                msg = i18n("No basic MkSpec file could be found for the given QMake executable.");
                 valid = false;
             }
         }
@@ -176,9 +176,9 @@ bool QMakeBuildDirChooser::validate(QString* message)
     return valid;
 }
 
-QString QMakeBuildDirChooser::qmakeBin() const
+QString QMakeBuildDirChooser::qmakeExecutable() const
 {
-    return kcfg_qmakeBin->url().toLocalFile();
+    return kcfg_qmakeExecutable->url().toLocalFile();
 }
 
 QString QMakeBuildDirChooser::buildDir() const
@@ -201,9 +201,9 @@ QString QMakeBuildDirChooser::extraArgs() const
     return kcfg_extraArgs->text();
 }
 
-void QMakeBuildDirChooser::setQMakeBin(const QString& binary)
+void QMakeBuildDirChooser::setQMakeExecutable(const QString& executable)
 {
-    kcfg_qmakeBin->setUrl(QUrl::fromLocalFile(binary));
+    kcfg_qmakeExecutable->setUrl(QUrl::fromLocalFile(executable));
 }
 
 void QMakeBuildDirChooser::setBuildDir(const QString& buildDir)

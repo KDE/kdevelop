@@ -26,18 +26,18 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>CMake &amp;Binary:</string>
+      <string>CMake &amp;executable:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>cmakeBin</cstring>
+      <cstring>cmakeExecutable</cstring>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="KUrlRequester" name="cmakeBin">
+    <widget class="KUrlRequester" name="cmakeExecutable">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>

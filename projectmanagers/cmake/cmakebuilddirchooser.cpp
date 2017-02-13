@@ -59,11 +59,11 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
     m_chooserUi->installPrefix->setMode(KFile::Directory|KFile::ExistingOnly);
 
-    setCMakeBinary(Path(CMake::findExecutable()));
+    setCMakeExecutable(Path(CMake::findExecutable()));
 
     m_extraArgumentsHistory = new CMakeExtraArgumentsHistory(m_chooserUi->extraArguments);
 
-    connect(m_chooserUi->cmakeBin, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
+    connect(m_chooserUi->cmakeExecutable, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->buildFolder, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->buildType, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->extraArguments, &KComboBox::editTextChanged, this, &CMakeBuildDirChooser::updated);
@@ -142,7 +142,7 @@ void CMakeBuildDirChooser::buildDirSettings(
 
 void CMakeBuildDirChooser::updated()
 {
-    bool haveCMake=QFile::exists(m_chooserUi->cmakeBin->url().toLocalFile());
+    bool haveCMake=QFile::exists(m_chooserUi->cmakeExecutable->url().toLocalFile());
     StatusTypes st;
     if( haveCMake ) st |= HaveCMake;
 
@@ -152,7 +152,7 @@ void CMakeBuildDirChooser::updated()
 //  m_chooserUi->generator->setEnabled(haveCMake);
     if(!haveCMake)
     {
-        setStatus(i18n("You need to select a cmake binary."), false);
+        setStatus(i18n("You need to select a CMake executable."), false);
         return;
     }
 
@@ -244,9 +244,9 @@ void CMakeBuildDirChooser::updated()
     }
 }
 
-void CMakeBuildDirChooser::setCMakeBinary(const Path& path)
+void CMakeBuildDirChooser::setCMakeExecutable(const Path& path)
 {
-    m_chooserUi->cmakeBin->setUrl(path.toUrl());
+    m_chooserUi->cmakeExecutable->setUrl(path.toUrl());
     updated();
 }
 
@@ -300,7 +300,7 @@ void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
     }
 }
 
-Path CMakeBuildDirChooser::cmakeBinary() const { return Path(m_chooserUi->cmakeBin->url()); }
+Path CMakeBuildDirChooser::cmakeExecutable() const { return Path(m_chooserUi->cmakeExecutable->url()); }
 
 Path CMakeBuildDirChooser::installPrefix() const { return Path(m_chooserUi->installPrefix->url()); }
 

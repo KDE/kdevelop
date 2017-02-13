@@ -103,12 +103,12 @@ void TestQMakeProject::testBuildDirectory()
         KConfigGroup group(&cfg, QMakeConfig::CONFIG_GROUP);
 
         group.writeEntry(QMakeConfig::BUILD_FOLDER, buildDir);
-        group.writeEntry(QMakeConfig::QMAKE_BINARY, QMAKE_TESTS_QMAKE_BINARY);
+        group.writeEntry(QMakeConfig::QMAKE_EXECUTABLE, QMAKE_TESTS_QMAKE_EXECUTABLE);
         group.sync();
 
         /// create subgroup for one build dir
         KConfigGroup buildDirGroup = KConfigGroup(&cfg, QMakeConfig::CONFIG_GROUP).group(buildDir);
-        buildDirGroup.writeEntry(QMakeConfig::QMAKE_BINARY, QMAKE_TESTS_QMAKE_BINARY);
+        buildDirGroup.writeEntry(QMakeConfig::QMAKE_EXECUTABLE, QMAKE_TESTS_QMAKE_EXECUTABLE);
         buildDirGroup.sync();
 
         QVERIFY(QFileInfo::exists(fileName));

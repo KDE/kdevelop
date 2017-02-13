@@ -52,8 +52,8 @@ bool QMakeUtils::checkForNeedingConfigure(IProject* project)
     if (!QMakeConfig::isConfigured(project)) {
         return true;
     }
-    const QString qmakeBinary = QMakeConfig::qmakeBinary(project);
-    if (qmakeBinary.isEmpty()) {
+    const QString qmakeExecutable = QMakeConfig::qmakeExecutable(project);
+    if (qmakeExecutable.isEmpty()) {
         return true;
     }
     const QHash<QString, QString> vars = queryQMake(project);
@@ -78,5 +78,5 @@ QHash<QString, QString> QMakeUtils::queryQMake(IProject* project)
     if (!project->path().toUrl().isLocalFile())
         return QHash<QString, QString>();
 
-    return QMakeConfig::queryQMake(QMakeConfig::qmakeBinary(project));
+    return QMakeConfig::queryQMake(QMakeConfig::qmakeExecutable(project));
 }

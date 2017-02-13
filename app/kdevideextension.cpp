@@ -38,7 +38,7 @@ QString KDevIDEExtension::xmlFile()
     return "kdevelopui.rc";
 }
 
-QString KDevIDEExtension::binaryPath()
+QString KDevIDEExtension::executableFilePath()
 {
     return QApplication::applicationDirPath() + "/kdevelop";
 }

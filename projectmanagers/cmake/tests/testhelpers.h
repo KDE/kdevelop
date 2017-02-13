@@ -33,7 +33,7 @@
 #include <QSignalSpy>
 
 static QString currentBuildDirKey = "Build Directory Path";
-static QString currentCMakeBinaryKey = "CMake Binary";
+static QString currentCMakeExecutableKey = "CMake Binary";
 static QString currentBuildTypeKey = "Build Type";
 static QString currentInstallDirKey = "Install Directory";
 static QString currentExtraArgumentsKey = "Extra Arguments";
@@ -110,7 +110,7 @@ void defaultConfigure(const TestProjectPaths& paths)
 
     KConfigGroup buildDirGrp = cmakeGrp.group(QStringLiteral("CMake Build Directory 0"));
     buildDirGrp.writeEntry( currentBuildDirKey, bd.buildFolder().toLocalFile() );
-    buildDirGrp.writeEntry( currentCMakeBinaryKey, bd.cmakeBinary().toLocalFile() );
+    buildDirGrp.writeEntry(currentCMakeExecutableKey, bd.cmakeExecutable().toLocalFile());
     buildDirGrp.writeEntry( currentInstallDirKey, bd.installPrefix().toLocalFile() );
     buildDirGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
     buildDirGrp.writeEntry( currentBuildTypeKey, bd.buildType() );

@@ -33,7 +33,7 @@ class SelectCoreDialog : public QDialog
 {
 public:
     explicit SelectCoreDialog(QWidget *parent = nullptr);
-    QUrl binary() const;
+    QUrl executableFile() const;
     QUrl core() const;
 
 private:

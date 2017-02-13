@@ -80,7 +80,7 @@ char* toString(const QMakeFile::VariableMap& variables)
 
 QHash<QString, QString> setDefaultMKSpec(QMakeProjectFile& file)
 {
-    static const QHash<QString, QString> qmvars = QMakeConfig::queryQMake(QMakeConfig::qmakeBinary(nullptr));
+    static const QHash<QString, QString> qmvars = QMakeConfig::queryQMake(QMakeConfig::qmakeExecutable(nullptr));
     static const QString specFile = QMakeConfig::findBasicMkSpec(qmvars);
     Q_ASSERT(QFile::exists(specFile));
     QMakeMkSpecs* mkspecs = new QMakeMkSpecs(specFile, qmvars);

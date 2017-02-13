@@ -32,9 +32,9 @@ MakeBuilderPreferences::MakeBuilderPreferences(IPlugin* plugin, const ProjectCon
 {
     m_prefsUi = new Ui::MakeConfig;
     m_prefsUi->setupUi(this);
-    connect(m_prefsUi->makeBinary, &KUrlRequester::textChanged,
+    connect(m_prefsUi->makeExecutable, &KUrlRequester::textChanged,
             this, &MakeBuilderPreferences::changed);
-    connect(m_prefsUi->makeBinary, &KUrlRequester::urlSelected,
+    connect(m_prefsUi->makeExecutable, &KUrlRequester::urlSelected,
             this, &MakeBuilderPreferences::changed);
     connect(m_prefsUi->configureEnvironment, &EnvironmentConfigureButton::environmentConfigured,
             this, &MakeBuilderPreferences::changed);
@@ -45,13 +45,13 @@ MakeBuilderPreferences::MakeBuilderPreferences(IPlugin* plugin, const ProjectCon
 void MakeBuilderPreferences::reset()
 {
     ProjectConfigPage::reset();
-    QSignalBlocker sigBlock(this); // don't emit changed signal from m_prefsUi->makeBinary
-    m_prefsUi->makeBinary->setText(MakeBuilderSettings::self()->makeBinary());
+    QSignalBlocker sigBlock(this); // don't emit changed signal from m_prefsUi->makeExecutable
+    m_prefsUi->makeExecutable->setText(MakeBuilderSettings::self()->makeExecutable());
 }
 
 void MakeBuilderPreferences::apply()
 {
-    MakeBuilderSettings::self()->setMakeBinary(m_prefsUi->makeBinary->text());
+    MakeBuilderSettings::self()->setMakeExecutable(m_prefsUi->makeExecutable->text());
     MakeBuilderSettings::self()->save(); // TODO: is this needed? KConfigDialogManager should end up calling it
     ProjectConfigPage::apply();
 }
@@ -59,7 +59,7 @@ void MakeBuilderPreferences::apply()
 void MakeBuilderPreferences::defaults()
 {
     MakeBuilderSettings::self()->setDefaults();
-    m_prefsUi->makeBinary->setText(MakeBuilderSettings::self()->makeBinary());
+    m_prefsUi->makeExecutable->setText(MakeBuilderSettings::self()->makeExecutable());
     ProjectConfigPage::defaults();
 }
 
@@ -68,7 +68,7 @@ MakeBuilderPreferences::~MakeBuilderPreferences()
     delete m_prefsUi;
 }
 
-QString MakeBuilderPreferences::standardMakeCommand()
+QString MakeBuilderPreferences::standardMakeExecutable()
 {
 #ifdef Q_OS_WIN
     if (!QStandardPaths::findExecutable("make").isEmpty())

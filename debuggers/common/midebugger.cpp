@@ -328,7 +328,7 @@ void MIDebugger::processErrored(QProcess::ProcessError error)
             i18n("<b>Could not start debugger.</b>"
                  "<p>Could not run '%1'. "
                  "Make sure that the path name is specified correctly.",
-                 debuggerBinary_),
+                 debuggerExecutable_),
             i18n("Could not start debugger"));
 
         emit userCommandOutput("Process failed to start\n");
@@ -341,7 +341,7 @@ void MIDebugger::processErrored(QProcess::ProcessError error)
                  "<p>The debugger process '%1' crashed.<br>"
                  "Because of that the debug session has to be ended.<br>"
                  "Try to reproduce the crash without KDevelop and report a bug.<br>",
-                 debuggerBinary_),
+                 debuggerExecutable_),
             i18n("Debugger crashed"));
 
         emit userCommandOutput("Process crashed\n");

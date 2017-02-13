@@ -49,11 +49,11 @@ KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin( "kdevcmakedocumentation", parent )
-    , mCMakeCmd(CMake::findExecutable())
+    , m_cmakeExecutable(CMake::findExecutable())
     , m_index(nullptr)
 {
-    if (mCMakeCmd.isEmpty()) {
-        setErrorDescription(i18n("Unable to find cmake executable. Is it installed on the system?") );
+    if (m_cmakeExecutable.isEmpty()) {
+        setErrorDescription(i18n("Unable to find a CMake executable. Is one installed on the system?"));
         return;
     }
 
@@ -75,7 +75,7 @@ void CMakeDocumentation::delayedInitialization()
 
 void CMakeDocumentation::collectIds(const QString& param, Type type)
 {
-    QStringList ids=CMake::executeProcess(mCMakeCmd, QStringList(param)).split('\n');
+    QStringList ids = CMake::executeProcess(m_cmakeExecutable, QStringList(param)).split(QLatin1Char('\n'));
     ids.takeFirst();
     foreach(const QString& name, ids)
     {
@@ -92,7 +92,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 {
     QString desc;
     if(args[t]) {
-        desc = CMake::executeProcess(mCMakeCmd, { args[t], id.simplified() });
+        desc = CMake::executeProcess(m_cmakeExecutable, { args[t], id.simplified() });
         desc = desc.remove(":ref:");
 
         const QString rst2html = QStandardPaths::findExecutable(QStringLiteral("rst2html"));

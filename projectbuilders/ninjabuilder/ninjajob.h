@@ -43,7 +43,7 @@ class NinjaJob : public KDevelop::OutputExecuteJob
         NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent );
 
         void setIsInstalling( bool isInstalling );
-        static QString ninjaBinary();
+        static QString ninjaExecutable();
 
         KDevelop::ProjectBaseItem* item() const;
 

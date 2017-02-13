@@ -32,7 +32,8 @@
 
 const char* QMakeConfig::CONFIG_GROUP = "QMake_Builder";
 
-const char* QMakeConfig::QMAKE_BINARY = "QMake_Binary";
+ // TODO: migrate to more generic & consistent key term "QMake_Executable"
+const char* QMakeConfig::QMAKE_EXECUTABLE = "QMake_Binary";
 const char* QMakeConfig::BUILD_FOLDER = "Build_Folder";
 const char* QMakeConfig::INSTALL_PREFIX = "Install_Prefix";
 const char* QMakeConfig::EXTRA_ARGUMENTS = "Extra_Arguments";
@@ -61,7 +62,7 @@ bool QMakeConfig::isConfigured(const IProject* project)
 {
     QMutexLocker lock(&s_buildDirMutex);
     KConfigGroup cg(project->projectConfiguration(), CONFIG_GROUP);
-    return cg.exists() && cg.hasKey(QMAKE_BINARY) && cg.hasKey(BUILD_FOLDER);
+    return cg.exists() && cg.hasKey(QMAKE_EXECUTABLE) && cg.hasKey(BUILD_FOLDER);
 }
 
 Path QMakeConfig::buildDirFromSrc(const IProject* project, const Path& srcDir)
@@ -77,15 +78,15 @@ Path QMakeConfig::buildDirFromSrc(const IProject* project, const Path& srcDir)
     return buildDir;
 }
 
-QString QMakeConfig::qmakeBinary(const IProject* project)
+QString QMakeConfig::qmakeExecutable(const IProject* project)
 {
     QMutexLocker lock(&s_buildDirMutex);
     QString exe;
     if (project) {
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), CONFIG_GROUP);
-        if (group.hasKey(QMAKE_BINARY)) {
-            exe = group.readEntry(QMAKE_BINARY, QString());
+        if (group.hasKey(QMAKE_EXECUTABLE)) {
+            exe = group.readEntry(QMAKE_EXECUTABLE, QString());
             QFileInfo info(exe);
             if (!info.exists() || !info.isExecutable()) {
                 qWarning() << "bad QMake configured for project " << project->path().toUrl() << ":" << exe;
@@ -106,12 +107,12 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
     return exe;
 }
 
-QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeBinary, const QStringList& args)
+QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeExecutable, const QStringList& args)
 {
     QHash<QString, QString> hash;
     KProcess p;
     p.setOutputChannelMode(KProcess::OnlyStdoutChannel);
-    p << qmakeBinary << "-query" << args;
+    p << qmakeExecutable << QStringLiteral("-query") << args;
 
     const int rc = p.execute();
     if (rc != 0) {

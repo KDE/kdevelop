@@ -87,7 +87,7 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
     // hardcode the ninja output format so we can parse it reliably
     addEnvironmentOverride(QStringLiteral("NINJA_STATUS"), QStringLiteral("[%s/%t] "));
 
-    *this << ninjaBinary();
+    *this << ninjaExecutable();
     *this << arguments;
 
     QStringList targets;
@@ -111,7 +111,7 @@ void NinjaJob::setIsInstalling( bool isInstalling )
     m_isInstalling = isInstalling;
 }
 
-QString NinjaJob::ninjaBinary()
+QString NinjaJob::ninjaExecutable()
 {
     QString path = QStandardPaths::findExecutable("ninja-build");
     if (path.isEmpty()) {

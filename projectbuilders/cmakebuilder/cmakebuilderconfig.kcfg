@@ -6,7 +6,7 @@
   <include>cmakeutils.h</include>
   <kcfgfile name="kdeveloprc"/>
   <group name="CMakeBuilder">
-    <entry name="cmakeExe" key="cmakeExe" type="String">
+    <entry name="cmakeExecutable" key="cmakeExe" type="String">
         <default code="true">CMake::findExecutable()</default>
         <whatsthis>The path to the default CMake executable.</whatsthis>
     </entry>

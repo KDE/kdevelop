@@ -27,7 +27,7 @@ public:
     static void init();
 
     QString xmlFile() override;
-    QString binaryPath() override;
+    QString executableFilePath() override;
     KDevelop::AreaParams defaultArea() override;
     QString projectFileExtension() override;
     QString projectFileDescription() override;

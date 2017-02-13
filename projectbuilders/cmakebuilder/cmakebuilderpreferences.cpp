@@ -35,11 +35,11 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWid
     m_prefsUi->setupUi(this);
 
 #ifdef Q_OS_WIN
-    m_prefsUi->kcfg_cmakeExe->setFilter("*.exe");
+    m_prefsUi->kcfg_cmakeExecutable->setFilter(QStringLiteral("*.exe"));
 #endif
 
-    m_prefsUi->kcfg_cmakeExe->setToolTip(CMakeBuilderSettings::self()->cmakeExeItem()->whatsThis());
-    m_prefsUi->label1->setToolTip(CMakeBuilderSettings::self()->cmakeExeItem()->whatsThis());
+    m_prefsUi->kcfg_cmakeExecutable->setToolTip(CMakeBuilderSettings::self()->cmakeExecutableItem()->whatsThis());
+    m_prefsUi->label1->setToolTip(CMakeBuilderSettings::self()->cmakeExecutableItem()->whatsThis());
 
     foreach(const QString& generator, CMakeBuilder::supportedGenerators())
         m_prefsUi->kcfg_generator->addItem(generator);

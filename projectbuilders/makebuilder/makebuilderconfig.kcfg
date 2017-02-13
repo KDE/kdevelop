@@ -22,8 +22,9 @@
     <entry name="numberOfJobs" key="Number Of Jobs" type="UInt">
         <default>2</default>
     </entry>
-    <entry name="makeBinary" key="Make Binary" type="String">
-        <default code="true">MakeBuilderPreferences::standardMakeCommand()</default>
+    <!-- TODO: migrate to more generic & consistent key term "Make Executable" -->
+    <entry name="makeExecutable" key="Make Binary" type="String">
+        <default code="true">MakeBuilderPreferences::standardMakeExecutable()</default>
     </entry>
     <entry name="defaultTarget" key="Default Target" type="String">
     </entry>

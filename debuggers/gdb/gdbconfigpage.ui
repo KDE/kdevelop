@@ -45,7 +45,7 @@
          <string>Gdb executable</string>
         </property>
         <property name="whatsThis">
-         <string>To run &quot;gdb&quot; binary from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, &quot;arm-gdb&quot;), by typing the name here, or specify full path to the gdb executable.</string>
+         <string>To run &quot;gdb&quot; executable from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, &quot;arm-gdb&quot;), by typing the name here, or specify full path to the gdb executable.</string>
         </property>
         <property name="placeholderText" stdset="0">
          <string>Override path to gdb executable</string>

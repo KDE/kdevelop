@@ -212,12 +212,12 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="KUrlRequester" name="cMakeBinary"/>
+       <widget class="KUrlRequester" name="cMakeExecutable"/>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel" name="cMakeBinaryLabel">
+       <widget class="QLabel">
         <property name="text">
-         <string>CMake Binary:</string>
+         <string>CMake executable:</string>
         </property>
        </widget>
       </item>

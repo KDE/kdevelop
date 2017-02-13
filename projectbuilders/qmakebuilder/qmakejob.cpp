@@ -80,7 +80,7 @@ QStringList QMakeJob::commandLine() const
     }
 
     QStringList args;
-    args << QMakeConfig::qmakeBinary(m_project);
+    args << QMakeConfig::qmakeExecutable(m_project);
 
     args << m_project->path().toUrl().toLocalFile();
 

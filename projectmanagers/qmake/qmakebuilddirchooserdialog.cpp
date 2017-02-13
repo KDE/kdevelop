@@ -52,7 +52,7 @@ QMakeBuildDirChooserDialog::QMakeBuildDirChooserDialog(KDevelop::IProject* proje
     mainLayout->addWidget(m_buttonBox);
 
     loadConfig();
-    // save; like this, we can be sure to have a qmake binary and build path set
+    // save; like this, we can be sure to have a qmake executable and build path set
     //(even if user clicks Cancel)
     saveConfig();
 

@@ -504,7 +504,7 @@ void QMakeProjectManager::slotRunQMake()
     Path buildDir = QMakeConfig::buildDirFromSrc(m_actionItem->project(), srcDir);
     QMakeJob* job = new QMakeJob(srcDir.toLocalFile(), buildDir.toLocalFile(), this);
 
-    job->setQMakePath(QMakeConfig::qmakeBinary(m_actionItem->project()));
+    job->setQMakePath(QMakeConfig::qmakeExecutable(m_actionItem->project()));
 
     KConfigGroup cg(m_actionItem->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
     QString installPrefix = cg.readEntry(QMakeConfig::INSTALL_PREFIX, QString());

@@ -70,15 +70,15 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT QString currentBuildType( KDevelop::IProject* project );
 
     /**
-    * @returns the cmake executable, taking into account standard
+    * @returns the CMake executable, taking into account standard
     * installation dirs on Windows, or empty string in case of failure.
     */
     KDEVCMAKECOMMON_EXPORT QString findExecutable();
     /**
-     * @returns the current cmake binary for the given project or
+     * @returns the current CMake executable for the given project or
      * QStandardPaths::findExecutable("cmake") as default value. 
      */
-    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentCMakeBinary( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project);
 
     /**
      * @returns the current install dir for the given project or "/usr/local" as default value.
@@ -126,9 +126,9 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT void setCurrentBuildType( KDevelop::IProject* project, const QString& type );
 
     /**
-     * Sets the current cmake binary for the given project.
+     * Sets the current CMake executable for the given project.
      */
-    KDEVCMAKECOMMON_EXPORT void setCurrentCMakeBinary( KDevelop::IProject* project, const KDevelop::Path &path );
+    KDEVCMAKECOMMON_EXPORT void setCurrentCMakeExecutable(KDevelop::IProject* project, const KDevelop::Path& path);
 
     /**
      * Sets the current build dir for the given project.
