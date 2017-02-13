@@ -119,10 +119,11 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
       KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings/Docks/ToolbarEnabled");
       toolBar->setVisible(cg.readEntry(dockObjectName, true));
-      connect(toolBar->toggleViewAction(), &QAction::toggled, this, [toolBar, dockObjectName](){
-        KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings/Docks/ToolbarEnabled");
-        cg.writeEntry(dockObjectName, toolBar->toggleViewAction()->isChecked());
-      });
+      connect(toolBar->toggleViewAction(), &QAction::toggled,
+            this, [toolBar, dockObjectName](){
+                KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings/Docks/ToolbarEnabled");
+                cg.writeEntry(dockObjectName, toolBar->toggleViewAction()->isChecked());
+            });
     }
 
     dock->setWindowTitle(view->widget()->windowTitle());
