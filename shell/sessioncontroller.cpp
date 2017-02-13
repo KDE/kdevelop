@@ -131,7 +131,7 @@ public:
         qsrand(QDateTime::currentDateTimeUtc().toTime_t());
         Session* session = new Session( QUuid::createUuid().toString() );
 
-        KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << QStringLiteral("-s") << session->id().toString() << standardArguments());
+        KProcess::startDetached(ShellExtension::getInstance()->executableFilePath(), QStringList() << QStringLiteral("-s") << session->id().toString() << standardArguments());
         delete session;
 #if 0
         //Terminate this instance of kdevelop if the user agrees
@@ -167,7 +167,7 @@ public:
     bool loadSessionExternally( Session* s )
     {
         Q_ASSERT( s );
-        KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << QStringLiteral("-s") << s->id().toString() << standardArguments());
+        KProcess::startDetached(ShellExtension::getInstance()->executableFilePath(), QStringList() << QStringLiteral("-s") << s->id().toString() << standardArguments());
         return true;
     }
 

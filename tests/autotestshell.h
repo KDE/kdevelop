@@ -51,7 +51,7 @@ public:
     explicit AutoTestShell(const QStringList& plugins);
 
     QString xmlFile() override { return QString(); }
-    QString binaryPath() override { return QString(); };
+    QString executableFilePath() override { return QString(); };
     QString defaultProfile() { return QStringLiteral("kdevtest"); }
     KDevelop::AreaParams defaultArea() override {
         KDevelop::AreaParams params;

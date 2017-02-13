@@ -52,8 +52,8 @@ public:
     @endcode*/
     static ShellExtension *getInstance();
 
-    /**Reimplement to return the path to the binary that needs to be executed for new sessions.*/
-    virtual QString binaryPath() = 0;
+    /**Reimplement to return the path to the executable that needs to be executed for new sessions.*/
+    virtual QString executableFilePath() = 0;
 
     /**Reimplement to return the name of KXMLGUI resource file for an application.*/
     virtual QString xmlFile() = 0;
