@@ -58,7 +58,7 @@ private:
     std::function<Type()> m_func;
 
     mutable Type m_result;
-    mutable bool m_isDirty = false;
+    mutable bool m_isDirty = true;
 };
 
 struct CodeModelViewItem
