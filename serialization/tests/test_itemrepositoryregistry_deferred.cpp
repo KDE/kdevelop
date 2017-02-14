@@ -26,7 +26,7 @@ class TestItemRepositoryRegistryDeferredDeletion : public QObject {
       // so it will stay (won't be temporary) and request the session deletion
       // from the same core instance.
 
-      static const char* sessionName = "test-itemrepositoryregistry-deferreddeletion";
+      static const char sessionName[] = "test-itemrepositoryregistry-deferreddeletion";
       QString repositoryPath;
 
       {
