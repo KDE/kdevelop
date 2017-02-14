@@ -444,9 +444,6 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn_data()
     QTest::newRow("gcc-with-col")
         << "/path/to/file.cpp:123:45: fatal error: ..."
         << "/path/to/file.cpp" << 122 << 44 << FilteredItem::ErrorItem;
-    QTest::newRow("gcc-with-invalid-col")
-        << "/path/to/file.cpp:123:0: fatal error: ..."
-        << "/path/to/file.cpp" << 122 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("gcc-no-col")
         << "/path/to/file.cpp:123: error ..."
         << "/path/to/file.cpp" << 122 << 0 << FilteredItem::ErrorItem;
