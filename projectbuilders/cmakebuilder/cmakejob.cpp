@@ -101,7 +101,7 @@ QStringList CMakeJob::commandLine() const
 
     //if we are creating a new build directory, we'll want to specify the generator
     QDir builddir(CMake::currentBuildDir( m_project ).toLocalFile());
-    if(!builddir.exists() || builddir.count()==2) {
+    if(!builddir.exists() || !builddir.exists("CMakeCache.txt")) {
         CMakeBuilderSettings::self()->load();
         args << QString("-G") << CMakeBuilder::defaultGenerator();
     }
