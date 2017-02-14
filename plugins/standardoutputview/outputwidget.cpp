@@ -174,7 +174,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         }
     }
 
-    QAction *clearAction = new QAction(i18n("Clear"), this);
+    QAction *clearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear"), this);
     connect(clearAction, &QAction::triggered, this, &OutputWidget::clearModel);
     addAction(clearAction);
 
