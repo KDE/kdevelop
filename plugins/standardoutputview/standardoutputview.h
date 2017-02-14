@@ -85,9 +85,9 @@ Q_SIGNALS:
     void toolViewRemoved( int toolviewId );
 
 private:
-    QMap<int, ToolViewData*> toolviews;
-    QList<int> ids;
-    QMap<KDevelop::IOutputView::StandardToolView,int> standardViews;
+    QMap<int, ToolViewData*> m_toolviews;
+    QList<int> m_ids;
+    QMap<KDevelop::IOutputView::StandardToolView, int> m_standardViews;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_STANDARDOUTPUTVIEW_H

@@ -54,17 +54,17 @@ Q_DECLARE_METATYPE(QTreeView*)
 
 OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     : QWidget( parent )
-    , tabwidget(nullptr)
-    , stackwidget(nullptr)
+    , m_tabwidget(nullptr)
+    , m_stackwidget(nullptr)
     , data(tvdata)
     , m_closeButton(nullptr)
     , m_closeOthersAction(nullptr)
-    , nextAction(nullptr)
-    , previousAction(nullptr)
-    , activateOnSelect(nullptr)
-    , focusOnSelect(nullptr)
-    , filterInput(nullptr)
-    , filterAction(nullptr)
+    , m_nextAction(nullptr)
+    , m_previousAction(nullptr)
+    , m_activateOnSelect(nullptr)
+    , m_focusOnSelect(nullptr)
+    , m_filterInput(nullptr)
+    , m_filterAction(nullptr)
 {
     setWindowTitle(i18n("Output View"));
     setWindowIcon(tvdata->icon);
@@ -72,8 +72,8 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     layout->setMargin(0);
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
-        tabwidget = new QTabWidget(this);
-        layout->addWidget( tabwidget );
+        m_tabwidget = new QTabWidget(this);
+        layout->addWidget( m_tabwidget );
         m_closeButton = new QToolButton( this );
         connect( m_closeButton, &QToolButton::clicked, this, &OutputWidget::closeActiveView );
         m_closeButton->setIcon( QIcon::fromTheme( QStringLiteral( "tab-close") ) );
@@ -87,31 +87,31 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         m_closeOthersAction->setText( m_closeOthersAction->toolTip() );
         addAction(m_closeOthersAction);
 
-        tabwidget->setCornerWidget(m_closeButton, Qt::TopRightCorner);
+        m_tabwidget->setCornerWidget(m_closeButton, Qt::TopRightCorner);
     } else if ( data->type == KDevelop::IOutputView::HistoryView )
     {
-        stackwidget = new QStackedWidget( this );
-        layout->addWidget( stackwidget );
+        m_stackwidget = new QStackedWidget( this );
+        layout->addWidget( m_stackwidget );
 
-        previousAction = new QAction( QIcon::fromTheme( QStringLiteral( "arrow-left" ) ), i18n("Previous Output"), this );
-        connect(previousAction, &QAction::triggered, this, &OutputWidget::previousOutput);
-        addAction(previousAction);
-        nextAction = new QAction( QIcon::fromTheme( QStringLiteral( "arrow-right" ) ), i18n("Next Output"), this );
-        connect(nextAction, &QAction::triggered, this, &OutputWidget::nextOutput);
-        addAction(nextAction);
+        m_previousAction = new QAction( QIcon::fromTheme( QStringLiteral( "arrow-left" ) ), i18n("Previous Output"), this );
+        connect(m_previousAction, &QAction::triggered, this, &OutputWidget::previousOutput);
+        addAction(m_previousAction);
+        m_nextAction = new QAction( QIcon::fromTheme( QStringLiteral( "arrow-right" ) ), i18n("Next Output"), this );
+        connect(m_nextAction, &QAction::triggered, this, &OutputWidget::nextOutput);
+        addAction(m_nextAction);
     }
 
     addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action(QStringLiteral("prev_error"))));
     addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action(QStringLiteral("next_error"))));
 
-    activateOnSelect = new KToggleAction( QIcon(), i18n("Select activated Item"), this );
-    activateOnSelect->setChecked( true );
-    focusOnSelect = new KToggleAction( QIcon(), i18n("Focus when selecting Item"), this );
-    focusOnSelect->setChecked( false );
+    m_activateOnSelect = new KToggleAction( QIcon(), i18n("Select activated Item"), this );
+    m_activateOnSelect->setChecked( true );
+    m_focusOnSelect = new KToggleAction( QIcon(), i18n("Focus when selecting Item"), this );
+    m_focusOnSelect->setChecked( false );
     if( data->option & KDevelop::IOutputView::ShowItemsButton )
     {
-        addAction(activateOnSelect);
-        addAction(focusOnSelect);
+        addAction(m_activateOnSelect);
+        addAction(m_focusOnSelect);
     }
 
     QAction *separator = new QAction(this);
@@ -151,25 +151,25 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         separator->setSeparator(true);
         addAction(separator);
 
-        filterInput = new QLineEdit();
-        filterInput->setMaximumWidth(150);
-        filterInput->setMinimumWidth(100);
-        filterInput->setPlaceholderText(i18n("Search..."));
-        filterInput->setClearButtonEnabled(true);
-        filterInput->setToolTip(i18n("Enter a wild card string to filter the output view"));
-        filterAction = new QWidgetAction(this);
-        filterAction->setDefaultWidget(filterInput);
-        addAction(filterAction);
+        m_filterInput = new QLineEdit();
+        m_filterInput->setMaximumWidth(150);
+        m_filterInput->setMinimumWidth(100);
+        m_filterInput->setPlaceholderText(i18n("Search..."));
+        m_filterInput->setClearButtonEnabled(true);
+        m_filterInput->setToolTip(i18n("Enter a wild card string to filter the output view"));
+        m_filterAction = new QWidgetAction(this);
+        m_filterAction->setDefaultWidget(m_filterInput);
+        addAction(m_filterAction);
 
-        connect(filterInput, &QLineEdit::textEdited,
+        connect(m_filterInput, &QLineEdit::textEdited,
                 this, &OutputWidget::outputFilter );
         if( data->type & KDevelop::IOutputView::MultipleView )
         {
-            connect(tabwidget, &QTabWidget::currentChanged,
+            connect(m_tabwidget, &QTabWidget::currentChanged,
                     this, &OutputWidget::updateFilter);
         } else if ( data->type == KDevelop::IOutputView::HistoryView )
         {
-            connect(stackwidget, &QStackedWidget::currentChanged,
+            connect(m_stackwidget, &QStackedWidget::currentChanged,
                     this, &OutputWidget::updateFilter);
         }
     }
@@ -223,17 +223,17 @@ void OutputWidget::setCurrentWidget( QTreeView* view )
 {
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
-        tabwidget->setCurrentWidget( view );
+        m_tabwidget->setCurrentWidget( view );
     } else if( data->type & KDevelop::IOutputView::HistoryView )
     {
-        stackwidget->setCurrentWidget( view );
+        m_stackwidget->setCurrentWidget( view );
     }
 }
 
 void OutputWidget::changeDelegate( int id )
 {
-    if( data->outputdata.contains( id ) && views.contains( id ) ) {
-        views.value(id)->setItemDelegate(data->outputdata.value(id)->delegate);
+    if( data->outputdata.contains( id ) && m_views.contains( id ) ) {
+        m_views.value(id)->setItemDelegate(data->outputdata.value(id)->delegate);
     } else {
         addOutput(id);
     }
@@ -241,10 +241,10 @@ void OutputWidget::changeDelegate( int id )
 
 void OutputWidget::changeModel( int id )
 {
-    if( data->outputdata.contains( id ) && views.contains( id ) )
+    if( data->outputdata.contains( id ) && m_views.contains( id ) )
     {
         OutputData* od = data->outputdata.value(id);
-        views.value( id )->setModel(od->model);
+        m_views.value( id )->setModel(od->model);
     }
     else
     {
@@ -254,44 +254,44 @@ void OutputWidget::changeModel( int id )
 
 void OutputWidget::removeOutput( int id )
 {
-    if( data->outputdata.contains( id ) && views.contains( id ) )
+    if( data->outputdata.contains( id ) && m_views.contains( id ) )
     {
-        QTreeView* view = views.value(id);
+        QTreeView* view = m_views.value(id);
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
-                int idx = tabwidget->indexOf( view );
+                int idx = m_tabwidget->indexOf( view );
                 if( idx != -1 )
                 {
-                    tabwidget->removeTab( idx );
-                    if( proxyModels.contains( idx ) )
+                    m_tabwidget->removeTab( idx );
+                    if( m_proxyModels.contains( idx ) )
                     {
-                        delete proxyModels.take( idx );
-                        filters.remove( idx );
+                        delete m_proxyModels.take( idx );
+                        m_filters.remove( idx );
                     }
                 }
             } else
             {
-                int idx = stackwidget->indexOf( view );
-                if( idx != -1 && proxyModels.contains( idx ) )
+                int idx = m_stackwidget->indexOf( view );
+                if( idx != -1 && m_proxyModels.contains( idx ) )
                 {
-                    delete proxyModels.take( idx );
-                    filters.remove( idx );
+                    delete m_proxyModels.take( idx );
+                    m_filters.remove( idx );
                 }
-                stackwidget->removeWidget( view );
+                m_stackwidget->removeWidget( view );
             }
             delete view;
         } else
         {
-            views.value( id )->setModel( nullptr );
-            views.value( id )->setItemDelegate( nullptr );
-            if( proxyModels.contains( 0 ) ) {
-                delete proxyModels.take( 0 );
-                filters.remove( 0 );
+            m_views.value( id )->setModel( nullptr );
+            m_views.value( id )->setItemDelegate( nullptr );
+            if( m_proxyModels.contains( 0 ) ) {
+                delete m_proxyModels.take( 0 );
+                m_filters.remove( 0 );
             }
         }
-        views.remove( id );
+        m_views.remove( id );
         emit outputRemoved( data->toolViewId, id );
     }
     enableActions();
@@ -299,12 +299,12 @@ void OutputWidget::removeOutput( int id )
 
 void OutputWidget::closeActiveView()
 {
-    QWidget* widget = tabwidget->currentWidget();
+    QWidget* widget = m_tabwidget->currentWidget();
     if( !widget )
         return;
-    foreach( int id, views.keys() )
+    foreach( int id, m_views.keys() )
     {
-        if( views.value(id) == widget )
+        if( m_views.value(id) == widget )
         {
             OutputData* od = data->outputdata.value(id);
             if( od->behaviour & KDevelop::IOutputView::AllowUserClose )
@@ -318,12 +318,12 @@ void OutputWidget::closeActiveView()
 
 void OutputWidget::closeOtherViews()
 {
-    QWidget* widget = tabwidget->currentWidget();
+    QWidget* widget = m_tabwidget->currentWidget();
     if (!widget)
         return;
 
-    foreach (int id, views.keys()) {
-        if (views.value(id) == widget) {
+    foreach (int id, m_views.keys()) {
+        if (m_views.value(id) == widget) {
             continue; // leave the active view open
         }
 
@@ -340,13 +340,13 @@ QWidget* OutputWidget::currentWidget() const
     QWidget* widget;
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
-        widget = tabwidget->currentWidget();
+        widget = m_tabwidget->currentWidget();
     } else if( data->type & KDevelop::IOutputView::HistoryView )
     {
-        widget = stackwidget->currentWidget();
+        widget = m_stackwidget->currentWidget();
     } else
     {
-        widget = views.begin().value();
+        widget = m_views.begin().value();
     }
     return widget;
 }
@@ -373,7 +373,7 @@ KDevelop::IOutputViewModel *OutputWidget::outputViewModel() const
 void OutputWidget::eventuallyDoFocus()
 {
     QWidget* widget = currentWidget();
-    if( focusOnSelect->isChecked() && !widget->hasFocus() ) {
+    if( m_focusOnSelect->isChecked() && !widget->hasFocus() ) {
         widget->setFocus( Qt::OtherFocusReason );
     }
 }
@@ -390,7 +390,7 @@ void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *vi
     int tabIndex = currentOutputIndex();
     QModelIndex sourceIndex = index;
     QModelIndex viewIndex = index;
-    if( QAbstractProxyModel* proxy = proxyModels.value(tabIndex) ) {
+    if( QAbstractProxyModel* proxy = m_proxyModels.value(tabIndex) ) {
         if ( index.model() == proxy ) {
             // index is from the proxy, map it to the source
             sourceIndex = proxy->mapToSource(index);
@@ -403,7 +403,7 @@ void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *vi
     view->setCurrentIndex( viewIndex );
     view->scrollTo( viewIndex );
 
-    if( activateOnSelect->isChecked() ) {
+    if( m_activateOnSelect->isChecked() ) {
         iface->activate( sourceIndex );
     }
 }
@@ -438,7 +438,7 @@ void OutputWidget::selectItem(SelectionMode selectionMode)
 
     auto index = view->currentIndex();
 
-    if (QAbstractProxyModel* proxy = proxyModels.value(currentOutputIndex())) {
+    if (QAbstractProxyModel* proxy = m_proxyModels.value(currentOutputIndex())) {
         if ( index.model() == proxy ) {
             // index is from the proxy, map it to the source
             index = proxy->mapToSource(index);
@@ -496,7 +496,7 @@ QTreeView* OutputWidget::createListView(int id)
     };
 
     QTreeView* listview = nullptr;
-    if( !views.contains(id) )
+    if( !m_views.contains(id) )
     {
         bool newView = true;
 
@@ -507,26 +507,26 @@ QTreeView* OutputWidget::createListView(int id)
 
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
-                tabwidget->addTab( listview, data->outputdata.value(id)->title );
+                m_tabwidget->addTab( listview, data->outputdata.value(id)->title );
             } else
             {
-                stackwidget->addWidget( listview );
-                stackwidget->setCurrentWidget( listview );
+                m_stackwidget->addWidget( listview );
+                m_stackwidget->setCurrentWidget( listview );
             }
         } else
         {
-            if( views.isEmpty() )
+            if( m_views.isEmpty() )
             {
                 listview = createHelper();
 
                 layout()->addWidget( listview );
             } else
             {
-                listview = views.begin().value();
+                listview = m_views.begin().value();
                 newView = false;
             }
         }
-        views[id] = listview;
+        m_views[id] = listview;
 
         changeModel( id );
         changeDelegate( id );
@@ -535,7 +535,7 @@ QTreeView* OutputWidget::createListView(int id)
             listview->scrollToBottom();
     } else
     {
-        listview = views.value(id);
+        listview = m_views.value(id);
     }
     enableActions();
     return listview;
@@ -543,21 +543,21 @@ QTreeView* OutputWidget::createListView(int id)
 
 void OutputWidget::raiseOutput(int id)
 {
-    if( views.contains(id) )
+    if( m_views.contains(id) )
     {
         if( data->type & KDevelop::IOutputView::MultipleView )
         {
-            int idx = tabwidget->indexOf( views.value(id) );
+            int idx = m_tabwidget->indexOf( m_views.value(id) );
             if( idx >= 0 )
             {
-                tabwidget->setCurrentIndex( idx );
+                m_tabwidget->setCurrentIndex( idx );
             }
         } else if( data->type & KDevelop::IOutputView::HistoryView )
         {
-            int idx = stackwidget->indexOf( views.value(id) );
+            int idx = m_stackwidget->indexOf( m_views.value(id) );
             if( idx >= 0 )
             {
-                stackwidget->setCurrentIndex( idx );
+                m_stackwidget->setCurrentIndex( idx );
             }
         }
     }
@@ -566,18 +566,18 @@ void OutputWidget::raiseOutput(int id)
 
 void OutputWidget::nextOutput()
 {
-    if( stackwidget && stackwidget->currentIndex() < stackwidget->count()-1 )
+    if( m_stackwidget && m_stackwidget->currentIndex() < m_stackwidget->count()-1 )
     {
-        stackwidget->setCurrentIndex( stackwidget->currentIndex()+1 );
+        m_stackwidget->setCurrentIndex( m_stackwidget->currentIndex()+1 );
     }
     enableActions();
 }
 
 void OutputWidget::previousOutput()
 {
-    if( stackwidget && stackwidget->currentIndex() > 0 )
+    if( m_stackwidget && m_stackwidget->currentIndex() > 0 )
     {
-        stackwidget->setCurrentIndex( stackwidget->currentIndex()-1 );
+        m_stackwidget->setCurrentIndex( m_stackwidget->currentIndex()-1 );
     }
     enableActions();
 }
@@ -586,11 +586,11 @@ void OutputWidget::enableActions()
 {
     if( data->type == KDevelop::IOutputView::HistoryView )
     {
-        Q_ASSERT(stackwidget);
-        Q_ASSERT(nextAction);
-        Q_ASSERT(previousAction);
-        previousAction->setEnabled( ( stackwidget->currentIndex() > 0 ) );
-        nextAction->setEnabled( ( stackwidget->currentIndex() < stackwidget->count() - 1 ) );
+        Q_ASSERT(m_stackwidget);
+        Q_ASSERT(m_nextAction);
+        Q_ASSERT(m_previousAction);
+        m_previousAction->setEnabled( ( m_stackwidget->currentIndex() > 0 ) );
+        m_nextAction->setEnabled( ( m_stackwidget->currentIndex() < m_stackwidget->count() - 1 ) );
     }
 }
 
@@ -632,10 +632,10 @@ int OutputWidget::currentOutputIndex()
     int index = 0;
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
-        index = tabwidget->currentIndex();
+        index = m_tabwidget->currentIndex();
     } else if( data->type & KDevelop::IOutputView::HistoryView )
     {
-        index = stackwidget->currentIndex();
+        index = m_stackwidget->currentIndex();
     }
     return index;
 }
@@ -652,29 +652,29 @@ void OutputWidget::outputFilter(const QString& filter)
         proxyModel = new QSortFilterProxyModel(view->model());
         proxyModel->setDynamicSortFilter(true);
         proxyModel->setSourceModel(view->model());
-        proxyModels.insert(index, proxyModel);
+        m_proxyModels.insert(index, proxyModel);
         view->setModel(proxyModel);
     }
     QRegExp regExp(filter, Qt::CaseInsensitive);
     proxyModel->setFilterRegExp(regExp);
-    filters[index] = filter;
+    m_filters[index] = filter;
 }
 
 void OutputWidget::updateFilter(int index)
 {
-    if(filters.contains(index))
+    if(m_filters.contains(index))
     {
-        filterInput->setText(filters[index]);
+        m_filterInput->setText(m_filters[index]);
     } else
     {
-        filterInput->clear();
+        m_filterInput->clear();
     }
 }
 
 void OutputWidget::setTitle(int outputId, const QString& title)
 {
     if( data->type & KDevelop::IOutputView::MultipleView ) {
-        tabwidget->setTabText(outputId - 1, title);
+        m_tabwidget->setTabText(outputId - 1, title);
     }
 }
 

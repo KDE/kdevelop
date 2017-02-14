@@ -100,20 +100,20 @@ private:
     void eventuallyDoFocus();
     int currentOutputIndex();
 
-    QMap<int, QTreeView*> views;
-    QMap<int, QSortFilterProxyModel*> proxyModels;
-    QMap<int, QString> filters;
-    QTabWidget* tabwidget;
-    QStackedWidget* stackwidget;
+    QMap<int, QTreeView*> m_views;
+    QMap<int, QSortFilterProxyModel*> m_proxyModels;
+    QMap<int, QString> m_filters;
+    QTabWidget* m_tabwidget;
+    QStackedWidget* m_stackwidget;
     const ToolViewData* data;
     QToolButton* m_closeButton;
     QAction* m_closeOthersAction;
-    QAction* nextAction;
-    QAction* previousAction;
-    KToggleAction* activateOnSelect;
-    KToggleAction* focusOnSelect;
-    QLineEdit *filterInput;
-    QWidgetAction* filterAction;
+    QAction* m_nextAction;
+    QAction* m_previousAction;
+    KToggleAction* m_activateOnSelect;
+    KToggleAction* m_focusOnSelect;
+    QLineEdit * m_filterInput;
+    QWidgetAction* m_filterAction;
 };
 
 #endif

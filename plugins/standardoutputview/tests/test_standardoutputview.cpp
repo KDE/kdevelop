@@ -149,14 +149,14 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
     for(int i = 0; i < 5; i++)
     {
         QCOMPARE(outputWidget->data->outputdata.value(outputId[i])->title, QStringLiteral("output%1").arg(i));
-        QCOMPARE(outputWidget->tabwidget->tabText(i), QStringLiteral("output%1").arg(i));
+        QCOMPARE(outputWidget->m_tabwidget->tabText(i), QStringLiteral("output%1").arg(i));
     }
     for(int i = 0; i < 5; i++)
     {
         m_stdOutputView->removeOutput(outputId[i]);
         QVERIFY(!outputWidget->data->outputdata.contains(outputId[i]));
     }
-    QCOMPARE(outputWidget->tabwidget->count(), 0);
+    QCOMPARE(outputWidget->m_tabwidget->count(), 0);
 
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
@@ -179,7 +179,7 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
         m_stdOutputView->removeOutput(outputId[i]);
         QVERIFY(!outputWidget->data->outputdata.contains(outputId[i]));
     }
-    QCOMPARE(outputWidget->stackwidget->count(), 0);
+    QCOMPARE(outputWidget->m_stackwidget->count(), 0);
 
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
@@ -200,8 +200,8 @@ void StandardOutputViewTest::testSetModelAndDelegate()
     m_stdOutputView->setModel(outputId[0], model);
     m_stdOutputView->setDelegate(outputId[0], delegate);
 
-    QCOMPARE(outputWidget->views.value(outputId[0])->model(), model);
-    QCOMPARE(outputWidget->views.value(outputId[0])->itemDelegate(), delegate);
+    QCOMPARE(outputWidget->m_views.value(outputId[0])->model(), model);
+    QCOMPARE(outputWidget->m_views.value(outputId[0])->itemDelegate(), delegate);
 
     QVERIFY(model->parent()); // they have a parent (the outputdata), so parent() != 0x0
     QVERIFY(delegate->parent());
