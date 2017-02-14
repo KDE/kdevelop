@@ -214,7 +214,7 @@ public:
    * that context.
    * The declaration has to be part of the same top-context.
    *
-   * \returns the internal context for this declaration
+   * \returns the internal context for this declaration or, if none exists, nullptr
    */
   DUContext * internalContext() const;
 
