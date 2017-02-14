@@ -166,7 +166,7 @@ p, li { white-space: pre-wrap; }
    <item row="3" column="2">
     <widget class="QLabel" name="label_11">
      <property name="text">
-      <string>Case Sensitive:</string>
+      <string>Case sensitive:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -323,7 +323,7 @@ p, li { white-space: pre-wrap; }
    <item row="3" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
-      <string>Regular Expression:</string>
+      <string>Regular expression:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -385,7 +385,7 @@ p, li { white-space: pre-wrap; }
    <item row="2" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Replacement Template:</string>
+      <string>Replacement template:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

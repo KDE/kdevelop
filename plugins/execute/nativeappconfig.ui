@@ -20,7 +20,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Project &amp;Target:</string>
+         <string>Project &amp;target:</string>
         </property>
         <property name="buddy">
          <cstring>projectTargetRadio</cstring>
@@ -126,7 +126,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Working &amp;Directory:</string>
+         <string>Working &amp;directory:</string>
         </property>
         <property name="buddy">
          <cstring>workingDirectory</cstring>
@@ -194,7 +194,7 @@
            <string>&lt;p&gt;By default applications will be run in the background and only their output will be displayed in a toolview. This makes it impossible to interact with applications requiring user input from a terminal emulator. To run such applications, you should use an external terminal.&lt;/p&gt;</string>
           </property>
           <property name="text">
-           <string>Use External Terminal:</string>
+           <string>Use external terminal:</string>
           </property>
          </widget>
         </item>

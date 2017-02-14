@@ -38,7 +38,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Replacement &amp;Text:</string>
+           <string>Replacement &amp;text:</string>
           </property>
           <property name="buddy">
            <cstring>replacementCombo</cstring>

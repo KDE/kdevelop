@@ -165,7 +165,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Working Directory:</string>
+         <string>Working directory:</string>
         </property>
         <property name="buddy">
          <cstring>workingDirectory</cstring>
@@ -202,7 +202,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Output Filter:</string>
+         <string>Output filter:</string>
         </property>
        </widget>
       </item>

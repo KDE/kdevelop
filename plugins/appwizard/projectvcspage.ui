@@ -15,7 +15,7 @@
      <item>
       <widget class="QLabel" name="label" >
        <property name="text" >
-        <string>Version Control System:</string>
+        <string>Version control system:</string>
        </property>
       </widget>
      </item>

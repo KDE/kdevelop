@@ -33,7 +33,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="testCasesLabel">
         <property name="text">
-         <string>&amp;Test Cases:</string>
+         <string>&amp;Test cases:</string>
         </property>
        </widget>
       </item>

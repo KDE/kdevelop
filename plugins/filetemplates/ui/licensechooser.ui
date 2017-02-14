@@ -52,7 +52,7 @@
             <string>Click here if you want to save this license for future use</string>
            </property>
            <property name="text">
-            <string>Save License</string>
+            <string>Save license</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
