@@ -145,6 +145,10 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
 
+    QAction *clearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear"), this);
+    connect(clearAction, &QAction::triggered, this, &OutputWidget::clearModel);
+    addAction(clearAction);
+
     if( data->option & KDevelop::IOutputView::AddFilterAction )
     {
         QAction *separator = new QAction(this);
@@ -173,10 +177,6 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
                     this, &OutputWidget::updateFilter);
         }
     }
-
-    QAction *clearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear"), this);
-    connect(clearAction, &QAction::triggered, this, &OutputWidget::clearModel);
-    addAction(clearAction);
 
     addActions(data->actionList);
 
