@@ -214,6 +214,7 @@ void GrepOutputView::changeModel(int index)
         QVariant var = modelSelector->itemData(index);
         GrepOutputModel *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
         resultsTreeView->setModel(resultModel);
+        resultsTreeView->expandAll();
 
         connect(model(), &GrepOutputModel::showMessage,
                 this, &GrepOutputView::showMessage);
