@@ -62,7 +62,7 @@ CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     initializeModel();
 }
 
-static const char* args[] = { "--help-command", "--help-variable", "--help-module", "--help-property", nullptr, nullptr };
+static const char* const args[] = { "--help-command", "--help-variable", "--help-module", "--help-property", nullptr, nullptr };
 
 void CMakeDocumentation::delayedInitialization()
 {
