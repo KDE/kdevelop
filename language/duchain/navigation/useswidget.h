@@ -48,6 +48,10 @@ namespace KDevelop {
         OneUseWidget(IndexedDeclaration declaration, IndexedString document, KTextEditor::Range range, const CodeRepresentation& code);
         ~OneUseWidget() override;
 
+        void setHighlighted(bool highlight);
+        bool isHighlighted() const;
+        void activateLink();
+
       private:
         void mousePressEvent(QMouseEvent * event) override;
         void resizeEvent ( QResizeEvent * event ) override;
@@ -60,6 +64,7 @@ namespace KDevelop {
         QLabel* m_label;
         QLabel* m_icon;
         QHBoxLayout* m_layout;
+        bool m_isHighlighted = false;
     };
     
     

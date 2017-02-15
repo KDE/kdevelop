@@ -29,6 +29,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/editor/documentcursor.h>
 #include <serialization/indexedstring.h>
+#include <interfaces/itoolviewactionlistener.h>
 
 class ContextBrowserPlugin;
 class QVBoxLayout;
@@ -42,8 +43,9 @@ namespace KDevelop {
 class IDocument;
 }
 
-class ContextBrowserView : public QWidget {
+class ContextBrowserView : public QWidget, public KDevelop::IToolViewActionListener {
     Q_OBJECT
+    Q_INTERFACES(KDevelop::IToolViewActionListener)
     public:
         ContextBrowserView( ContextBrowserPlugin*, QWidget* parent );
         ~ContextBrowserView() override;
@@ -82,6 +84,8 @@ class ContextBrowserView : public QWidget {
         void updateLockIcon(bool); 
         void declarationMenu();
         void navigationContextChanged(bool wasInitial, bool isInitial);
+        void selectNextItem() override;
+        void selectPreviousItem() override;
 
     private:
         void showEvent(QShowEvent* event) override;

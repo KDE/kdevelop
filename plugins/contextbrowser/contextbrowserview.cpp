@@ -57,6 +57,81 @@
 
 using namespace KDevelop;
 
+namespace {
+
+enum Direction
+{
+    NextUse,
+    PreviousUse
+};
+
+void selectUse(ContextBrowserView* view, Direction direction)
+{
+    auto abstractNaviWidget = dynamic_cast<AbstractNavigationWidget*>(view->navigationWidget());
+
+    if (!abstractNaviWidget) {
+        return;
+    }
+
+    auto usesWidget = dynamic_cast<UsesWidget*>(abstractNaviWidget->context()->widget());
+    if (!usesWidget) {
+        return;
+    }
+
+    OneUseWidget* first = nullptr, *previous = nullptr, *current = nullptr;
+    for (auto item : usesWidget->items()) {
+        auto topContext = dynamic_cast<TopContextUsesWidget*>(item);
+        if (!topContext) {
+            continue;
+        }
+        for (auto item : topContext->items()) {
+            auto navigationList = dynamic_cast<NavigatableWidgetList*>(item);
+            if (!navigationList) {
+                continue;
+            }
+            for (auto item : navigationList->items()) {
+                auto use = dynamic_cast<OneUseWidget*>(item);
+                if (!use) {
+                    continue;
+                }
+                if (!first) {
+                    first = use;
+                }
+                current = use;
+                if (direction == PreviousUse && current->isHighlighted() && previous) {
+                    previous->setHighlighted(true);
+                    previous->activateLink();
+                    current->setHighlighted(false);
+                    return;
+                }
+                if (direction == NextUse && previous && previous->isHighlighted()) {
+                    current->setHighlighted(true);
+                    current->activateLink();
+                    previous->setHighlighted(false);
+                    return;
+                }
+                previous = current;
+            }
+        }
+    }
+    if (direction == NextUse && first) {
+        first->setHighlighted(true);
+        first->activateLink();
+        if (current && current->isHighlighted())
+            current->setHighlighted(false);
+        return;
+    }
+    if (direction == PreviousUse && current) {
+        current->setHighlighted(true);
+        current->activateLink();
+        if (first && first->isHighlighted()) {
+            first->setHighlighted(false);
+        }
+    }
+}
+
+}
+
 QWidget* ContextBrowserView::createWidget(KDevelop::DUContext* context) {
         m_context = IndexedDUContext(context);
         if(m_context.data()) {
@@ -239,6 +314,16 @@ void ContextBrowserView::navigationContextChanged(bool wasInitial, bool isInitia
     }else if(isInitial) {
         m_autoLocked = false;
     }
+}
+
+void ContextBrowserView::selectNextItem()
+{
+    selectUse(this, NextUse);
+}
+
+void ContextBrowserView::selectPreviousItem()
+{
+    selectUse(this, PreviousUse);
 }
 
 void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext, bool force) {

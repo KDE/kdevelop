@@ -44,6 +44,18 @@
 
 using namespace KDevelop;
 
+namespace {
+
+QString backgroundColor(bool isHighlighted)
+{
+    if (isHighlighted) {
+      return QColor(251, 150, 242).name();
+    } else {
+      return QColor(251, 250, 150).name();
+    }
+}
+
+}
 
 const int tooltipContextSize = 2; //How many lines around the use are shown in the tooltip
 
@@ -92,11 +104,10 @@ QString highlightAndEscapeUseText(QString line, int cutOff, KTextEditor::Range r
 
   //TODO: share code with context browser
   // mixing (255, 255, 0, 100) with white yields this:
-  const QColor background(251, 250, 150);
   const QColor foreground(0, 0, 0);
 
   return "<span style=\"font-family:'monospace'\">" + line.left(range.start().column()).toHtmlEscaped()
-                    + "<span style=\"background-color:" + background.name() + ";color:" + foreground.name() + ";\">"
+                    + "<span style=\"background-color:" + backgroundColor(false) + ";color:" + foreground.name() + ";\">"
                     + line.mid(range.start().column(), range.end().column() - range.start().column()).toHtmlEscaped()
                     + "</span>" + line.mid(range.end().column(), line.length() - range.end().column()).toHtmlEscaped() + "</span>";
 }
@@ -154,10 +165,35 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   m_layout->setAlignment(Qt::AlignLeft);
 }
 
+void OneUseWidget::setHighlighted(bool highlight)
+{
+    if (highlight == m_isHighlighted) {
+        return;
+    }
+
+    if (highlight) {
+        m_label->setText(m_label->text().replace("background-color:" + backgroundColor(false), "background-color:" + backgroundColor(true)));
+        m_isHighlighted = true;
+    } else {
+        m_label->setText(m_label->text().replace("background-color:" + backgroundColor(true), "background-color:" + backgroundColor(false)));
+        m_isHighlighted = false;
+    }
+}
+
+bool KDevelop::OneUseWidget::isHighlighted() const
+{
+    return m_isHighlighted;
+}
+
+void OneUseWidget::activateLink()
+{
+    ICore::self()->documentController()->openDocument(m_document.toUrl(), m_range->range().start());
+}
+
 void OneUseWidget::mousePressEvent(QMouseEvent* event)
 {
   if (event->button() == Qt::LeftButton && !event->modifiers()) {
-    ICore::self()->documentController()->openDocument(m_document.toUrl(), m_range->range().start());
+    activateLink();
     event->accept();
   }
 }
