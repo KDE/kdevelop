@@ -195,7 +195,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     connect(buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, static_cast<void(LaunchConfigurationDialog::*)()>(&LaunchConfigurationDialog::saveConfig) );
     mainLayout->addWidget(buttonBox);
 
-    resize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
+    resize( QSize(qMax(1200, sizeHint().width()), qMax(500, sizeHint().height())) );
 }
 
 void LaunchConfigurationDialog::doTreeContextMenu(QPoint point)
