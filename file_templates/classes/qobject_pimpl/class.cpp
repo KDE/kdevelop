@@ -14,11 +14,9 @@
 
 {% include "method_definition_cpp.txt" %}
 {
-
     {% if method.type %}
     return {{ method.default_return_value }};
     {% endif %}
-
 }
 
 {% endwith %}
@@ -43,13 +41,11 @@
     {% endwith %}
 {% endif %}
 {
-
     {% if method.isDestructor %}
     delete d_ptr;
     {% endif %}
     {% if method.type %}return {{ method.default_return_value }};
     {% endif %}
-
 }
 
 {% endwith %}
@@ -70,13 +66,11 @@
     {% endwith %}
 {% endif %}
 {
-
     {% if method.isDestructor %}
     delete d_ptr;
     {% endif %}
     {% if method.type %}return {{ method.default_return_value }};
     {% endif %}
-
 }
 
 {% endwith %}
@@ -107,6 +101,3 @@
 {% endfor %}
 
 {% endblock function_definitions %}
-
-{% block bottom %}
-{% endblock bottom %}

@@ -4,7 +4,6 @@
 {% block extra_definitions %}
 
 {% for method in private_functions %}
-{% with method.arguments as arguments %}
 {# skipping any defined destructor #}
 {% if not method.isDestructor %}
 
@@ -16,7 +15,6 @@
 }
 
 {% endif %}
-{% endwith %}
 {% endfor %}
 
 {% endblock extra_definitions %}
@@ -27,33 +25,31 @@
 {{ name }}::~{{ name }}() = default;
 
 {% for method in public_functions %}
-{% with method.arguments as arguments %}
 {# skipping any defined destructor #}
 {% if not method.isDestructor %}
 
 {% include "method_definition_cpp.txt" %}
 {
-    {% if method.type %}return {{ method.default_return_value }};
+    {% if method.type %}
+    return {{ method.default_return_value }};
     {% endif %}
 }
 
 {% endif %}
-{% endwith %}
 {% endfor %}
 
 {% for method in protected_functions %}
-{% with method.arguments as arguments %}
 {# skipping any defined destructor #}
 {% if not method.isDestructor %}
 
 {% include "method_definition_cpp.txt" %}
 {
-    {% if method.type %}return {{ method.default_return_value }};
+    {% if method.type %}
+    return {{ method.default_return_value }};
     {% endif %}
 }
 
 {% endif %}
-{% endwith %}
 {% endfor %}
 
 {% endblock function_definitions %}
