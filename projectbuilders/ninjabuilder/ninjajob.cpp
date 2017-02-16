@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2012 Aleix Pol Gonzalez <aleixpol@kde.org>
+    Copyright 2017 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,7 +19,7 @@
 
 #include "ninjajob.h"
 
-#include "kdevninjabuilderplugin.h"
+#include "ninjabuilder.h"
 
 #include <interfaces/iproject.h>
 #include <outputview/outputmodel.h>
@@ -71,7 +72,7 @@ IFilterStrategy::Progress NinjaJobCompilerFilterStrategy::progressInLine(const Q
 }
 
 NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType,
-                   const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent)
+                   const QStringList& arguments, const QByteArray& signal, NinjaBuilder* parent)
     : OutputExecuteJob(parent)
     , m_isInstalling(false)
     , m_idx(item->index())

@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2012 Aleix Pol Gonzalez <aleixpol@kde.org>
+    Copyright 2017 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,9 +17,11 @@
    Boston, MA 02110-1301, USA.
  */
 
-#include "kdevninjabuilderplugin.h"
+#include "ninjabuilder.h"
+
 #include "ninjajob.h"
 #include "ninjabuilderpreferences.h"
+
 #include <KAboutData>
 #include <KPluginFactory>
 #include <KConfigGroup>
@@ -27,15 +30,16 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/builderjob.h>
 #include <interfaces/iproject.h>
+
 #include <QFile>
 #include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(NINJABUILDER)
 
 Q_LOGGING_CATEGORY(NINJABUILDER, "kdevelop.projectbuilders.ninjabuilder")
-K_PLUGIN_FACTORY_WITH_JSON(NinjaBuilderFactory, "kdevninja.json", registerPlugin<KDevNinjaBuilderPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(NinjaBuilderFactory, "kdevninja.json", registerPlugin<NinjaBuilder>(); )
 
-KDevNinjaBuilderPlugin::KDevNinjaBuilderPlugin(QObject* parent, const QVariantList&)
+NinjaBuilder::NinjaBuilder(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin("kdevninja", parent)
 {
     if (NinjaJob::ninjaBinary().isEmpty()) {
@@ -91,7 +95,7 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
     return QStringList();
 }
 
-NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::CommandType commandType,
+NinjaJob* NinjaBuilder::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::CommandType commandType,
                                            const QStringList& args, const QByteArray& signal)
 {
     ///Running the same builder twice may result in serious problems,
@@ -137,17 +141,17 @@ NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, Ninj
     return job;
 }
 
-KJob* KDevNinjaBuilderPlugin::build(KDevelop::ProjectBaseItem* item)
+KJob* NinjaBuilder::build(KDevelop::ProjectBaseItem* item)
 {
     return runNinja(item, NinjaJob::BuildCommand, argumentsForItem(item), "built");
 }
 
-KJob* KDevNinjaBuilderPlugin::clean(KDevelop::ProjectBaseItem* item)
+KJob* NinjaBuilder::clean(KDevelop::ProjectBaseItem* item)
 {
     return runNinja(item, NinjaJob::CleanCommand, QStringList("-t") << "clean", "cleaned");
 }
 
-KJob* KDevNinjaBuilderPlugin::install(KDevelop::ProjectBaseItem* item)
+KJob* NinjaBuilder::install(KDevelop::ProjectBaseItem* item)
 {
     NinjaJob* installJob = runNinja(item, NinjaJob::InstallCommand, QStringList("install"), "installed");
     installJob->setIsInstalling(true);
@@ -166,12 +170,12 @@ KJob* KDevNinjaBuilderPlugin::install(KDevelop::ProjectBaseItem* item)
     }
 }
 
-int KDevNinjaBuilderPlugin::perProjectConfigPages() const
+int NinjaBuilder::perProjectConfigPages() const
 {
     return 1;
 }
 
-KDevelop::ConfigPage* KDevNinjaBuilderPlugin::perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+KDevelop::ConfigPage* NinjaBuilder::perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
 {
     if (number == 0) {
         return new NinjaBuilderPreferences(this, options, parent);
@@ -199,9 +203,9 @@ private:
     QString m_error;
 };
 
-KJob* KDevNinjaBuilderPlugin::install(KDevelop::ProjectBaseItem* dom, const QUrl& installPath)
+KJob* NinjaBuilder::install(KDevelop::ProjectBaseItem* dom, const QUrl& installPath)
 {
     return installPath.isEmpty() ? install(dom) : new ErrorJob(nullptr, i18n("Cannot specify prefix in %1, on ninja", installPath.toDisplayString()));
 }
 
-#include "kdevninjabuilderplugin.moc"
+#include "ninjabuilder.moc"

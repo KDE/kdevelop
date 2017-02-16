@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2012 Aleix Pol Gonzalez <aleixpol@kde.org>
+    Copyright 2017 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +28,7 @@
 #include <QUrl>
 #include <QVariantList>
 
-class KDevNinjaBuilderPlugin
+class NinjaBuilder
     : public KDevelop::IPlugin
     , public KDevelop::IProjectBuilder
 {
@@ -35,7 +36,7 @@ class KDevNinjaBuilderPlugin
     Q_INTERFACES(KDevelop::IProjectBuilder)
 
 public:
-    KDevNinjaBuilderPlugin(QObject* parent = nullptr, const QVariantList& args = QVariantList());
+    NinjaBuilder(QObject* parent = nullptr, const QVariantList& args = QVariantList());
 
     KJob* build(KDevelop::ProjectBaseItem* item) override;
     KJob* clean(KDevelop::ProjectBaseItem* item) override;
