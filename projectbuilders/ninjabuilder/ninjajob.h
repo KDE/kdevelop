@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef NINJAJOB_H
 #define NINJAJOB_H
@@ -24,46 +24,46 @@
 #include <QPointer>
 
 namespace KDevelop {
-    class OutputModel;
-    class ProjectBaseItem;
+class OutputModel;
+class ProjectBaseItem;
 }
 
 class KDevNinjaBuilderPlugin;
 
 class QUrl;
 
-class NinjaJob : public KDevelop::OutputExecuteJob
+class NinjaJob
+    : public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
-    enum ErrorTypes {
-        Correct = 0,
-        Failed
-    };
-    public:
-        NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent );
+    enum ErrorTypes { Correct = 0, Failed };
 
-        void setIsInstalling( bool isInstalling );
-        static QString ninjaBinary();
+public:
+    NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments,
+             const QByteArray& signal, KDevNinjaBuilderPlugin* parent);
 
-        KDevelop::ProjectBaseItem* item() const;
+    void setIsInstalling(bool isInstalling);
+    static QString ninjaBinary();
 
-        QUrl workingDirectory() const override;
-        QStringList privilegedExecutionCommand() const override;
+    KDevelop::ProjectBaseItem* item() const;
 
-    protected slots:
-        void postProcessStdout( const QStringList& lines ) override;
-        void postProcessStderr( const QStringList& lines ) override;
+    QUrl workingDirectory() const override;
+    QStringList privilegedExecutionCommand() const override;
 
-    private slots:
-        void emitProjectBuilderSignal(KJob* job);
+protected slots:
+    void postProcessStdout(const QStringList& lines) override;
+    void postProcessStderr(const QStringList& lines) override;
 
-    private:
-        bool m_isInstalling;
-        QPersistentModelIndex m_idx;
-        QByteArray m_signal;
-        QPointer<KDevNinjaBuilderPlugin> m_plugin;
+private slots:
+    void emitProjectBuilderSignal(KJob* job);
 
-        void appendLines( const QStringList& lines );
+private:
+    bool m_isInstalling;
+    QPersistentModelIndex m_idx;
+    QByteArray m_signal;
+    QPointer<KDevNinjaBuilderPlugin> m_plugin;
+
+    void appendLines(const QStringList& lines);
 };
 
-#endif // NINJAJOB_H
+#endif  // NINJAJOB_H

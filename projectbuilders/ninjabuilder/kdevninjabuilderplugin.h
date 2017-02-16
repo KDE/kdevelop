@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVNINJABUILDERPLUGIN_H
 #define KDEVNINJABUILDERPLUGIN_H
@@ -27,31 +27,34 @@
 
 class NinjaJob;
 
-class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuilder
+class KDevNinjaBuilderPlugin
+    : public KDevelop::IPlugin
+    , KDevelop::IProjectBuilder
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IProjectBuilder )
-    public:
-        KDevNinjaBuilderPlugin(QObject* parent = nullptr, const QVariantList& args = QVariantList());
-        
-        KJob* build(KDevelop::ProjectBaseItem* item) override;
-        KJob* clean(KDevelop::ProjectBaseItem* item) override;
-        KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath) override;
-        KJob* install(KDevelop::ProjectBaseItem* item);
-        
-        NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal);
+    Q_INTERFACES(KDevelop::IProjectBuilder)
 
-        int perProjectConfigPages() const override;
-        KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+public:
+    KDevNinjaBuilderPlugin(QObject* parent = nullptr, const QVariantList& args = QVariantList());
 
-    Q_SIGNALS:
-        void built( KDevelop::ProjectBaseItem* item);
-        void failed( KDevelop::ProjectBaseItem* item);
-        void installed(KDevelop::ProjectBaseItem* item);
-        void cleaned(KDevelop::ProjectBaseItem* item);
+    KJob* build(KDevelop::ProjectBaseItem* item) override;
+    KJob* clean(KDevelop::ProjectBaseItem* item) override;
+    KJob* install(KDevelop::ProjectBaseItem* dom, const QUrl& installPath) override;
+    KJob* install(KDevelop::ProjectBaseItem* item);
 
-    private:
-        KDevelop::ObjectList<NinjaJob> m_activeNinjaJobs;
+    NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal);
+
+    int perProjectConfigPages() const override;
+    KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+
+Q_SIGNALS:
+    void built(KDevelop::ProjectBaseItem* item);
+    void failed(KDevelop::ProjectBaseItem* item);
+    void installed(KDevelop::ProjectBaseItem* item);
+    void cleaned(KDevelop::ProjectBaseItem* item);
+
+private:
+    KDevelop::ObjectList<NinjaJob> m_activeNinjaJobs;
 };
 
 #endif // KDEVNINJABUILDERPLUGIN_H

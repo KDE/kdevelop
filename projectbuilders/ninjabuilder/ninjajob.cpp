@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "ninjajob.h"
 
@@ -39,7 +39,8 @@
 
 using namespace KDevelop;
 
-class NinjaJobCompilerFilterStrategy : public CompilerFilterStrategy
+class NinjaJobCompilerFilterStrategy
+    : public CompilerFilterStrategy
 {
 public:
     using CompilerFilterStrategy::CompilerFilterStrategy;
@@ -59,8 +60,10 @@ IFilterStrategy::Progress NinjaJobCompilerFilterStrategy::progressInLine(const Q
         if (current && total) {
             // this is output from ninja
             const QString action = match.captured(3);
-            const int percent = qRound((float)current / total * 100);
-            return {action, percent};
+            const int percent = qRound(( float )current / total * 100);
+            return {
+                       action, percent
+            };
         }
     }
 
@@ -79,10 +82,10 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
 
     setToolTitle(i18n("Ninja"));
     setCapabilities(Killable);
-    setStandardToolView( KDevelop::IOutputView::BuildView );
-    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+    setStandardToolView(KDevelop::IOutputView::BuildView);
+    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     setFilteringStrategy(new NinjaJobCompilerFilterStrategy(buildDir.toUrl()));
-    setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint | PostProcessOutput );
+    setProperties(NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint | PostProcessOutput);
 
     // hardcode the ninja output format so we can parse it reliably
     addEnvironmentOverride(QStringLiteral("NINJA_STATUS"), QStringLiteral("[%s/%t] "));
@@ -91,22 +94,24 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
     *this << arguments;
 
     QStringList targets;
-    foreach( const QString& arg, arguments ) {
-        if( !arg.startsWith( '-' ) ) {
+    foreach (const QString& arg, arguments) {
+        if (!arg.startsWith('-')) {
             targets << arg;
         }
     }
+
     QString title;
-    if( !targets.isEmpty() )
+    if (!targets.isEmpty()) {
         title = i18n("Ninja (%1): %2", item->text(), targets.join(" "));
-    else
+    } else {
         title = i18n("Ninja (%1)", item->text());
-    setJobName( title );
+    }
+    setJobName(title);
 
     connect(this, &NinjaJob::finished, this, &NinjaJob::emitProjectBuilderSignal);
 }
 
-void NinjaJob::setIsInstalling( bool isInstalling )
+void NinjaJob::setIsInstalling(bool isInstalling)
 {
     m_isInstalling = isInstalling;
 }
@@ -123,14 +128,15 @@ QString NinjaJob::ninjaBinary()
 QUrl NinjaJob::workingDirectory() const
 {
     KDevelop::ProjectBaseItem* it = item();
-    if(!it)
+    if (!it) {
         return QUrl();
+    }
     KDevelop::IBuildSystemManager* bsm = it->project()->buildSystemManager();
-    KDevelop::Path workingDir = bsm->buildDirectory( it );
-    while( !QFile::exists( workingDir.toLocalFile() + "build.ninja" ) ) {
+    KDevelop::Path workingDir = bsm->buildDirectory(it);
+    while (!QFile::exists(workingDir.toLocalFile() + "build.ninja")) {
         KDevelop::Path upWorkingDir = workingDir.parent();
-        if( !upWorkingDir.isValid() || upWorkingDir == workingDir ) {
-            return bsm->buildDirectory( it->project()->projectItem() ).toUrl();
+        if (!upWorkingDir.isValid() || upWorkingDir == workingDir) {
+            return bsm->buildDirectory(it->project()->projectItem()).toUrl();
         }
         workingDir = upWorkingDir;
     }
@@ -140,26 +146,26 @@ QUrl NinjaJob::workingDirectory() const
 QStringList NinjaJob::privilegedExecutionCommand() const
 {
     KDevelop::ProjectBaseItem* it = item();
-    if(!it)
+    if (!it) {
         return QStringList();
+    }
     KSharedConfigPtr configPtr = it->project()->projectConfiguration();
-    KConfigGroup builderGroup( configPtr, "NinjaBuilder" );
+    KConfigGroup builderGroup(configPtr, "NinjaBuilder");
 
-    bool runAsRoot = builderGroup.readEntry( "Install As Root", false );
-    if ( runAsRoot && m_isInstalling )
-    {
-        int suCommand = builderGroup.readEntry( "Su Command", 0 );
+    bool runAsRoot = builderGroup.readEntry("Install As Root", false);
+    if (runAsRoot && m_isInstalling) {
+        int suCommand = builderGroup.readEntry("Su Command", 0);
         QStringList arguments;
         QString suCommandName;
-        switch( suCommand ) {
-            case 1:
-                return QStringList() << "kdesudo" << "-t";
+        switch (suCommand) {
+        case 1:
+            return QStringList() << "kdesudo" << "-t";
 
-            case 2:
-                return QStringList() << "sudo";
+        case 2:
+            return QStringList() << "sudo";
 
-            default:
-                return QStringList() << "kdesu" << "-t";
+        default:
+            return QStringList() << "kdesu" << "-t";
         }
     }
     return QStringList();
@@ -167,12 +173,14 @@ QStringList NinjaJob::privilegedExecutionCommand() const
 
 void NinjaJob::emitProjectBuilderSignal(KJob* job)
 {
-    if (!m_plugin)
+    if (!m_plugin) {
         return;
+    }
 
     KDevelop::ProjectBaseItem* it = item();
-    if(!it)
+    if (!it) {
         return;
+    }
 
     if (job->error() == 0) {
         Q_ASSERT(!m_signal.isEmpty());
@@ -182,28 +190,30 @@ void NinjaJob::emitProjectBuilderSignal(KJob* job)
     }
 }
 
-void NinjaJob::postProcessStderr( const QStringList& lines )
+void NinjaJob::postProcessStderr(const QStringList& lines)
 {
-    appendLines( lines );
+    appendLines(lines);
 }
 
-void NinjaJob::postProcessStdout( const QStringList& lines )
+void NinjaJob::postProcessStdout(const QStringList& lines)
 {
-    appendLines( lines );
+    appendLines(lines);
 }
 
 void NinjaJob::appendLines(const QStringList& lines)
 {
-    if(lines.isEmpty())
+    if (lines.isEmpty()) {
         return;
+    }
 
     QStringList ret(lines);
     bool prev = false;
-    for(QStringList::iterator it=ret.end(); it!=ret.begin(); ) {
+    for (QStringList::iterator it = ret.end(); it != ret.begin(); ) {
         --it;
         bool curr = it->startsWith('[');
-        if((prev && curr) || it->endsWith("] "))
+        if ((prev && curr) || it->endsWith("] ")) {
             it = ret.erase(it);
+        }
         prev = curr;
     }
 

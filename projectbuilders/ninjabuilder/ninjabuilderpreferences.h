@@ -27,9 +27,12 @@
 
 class QWidget;
 class QStringList;
-namespace Ui { class NinjaConfig; }
+namespace Ui {
+class NinjaConfig;
+}
 
-class NinjaBuilderPreferences : public ProjectConfigPage<NinjaBuilderSettings>
+class NinjaBuilderPreferences
+    : public ProjectConfigPage<NinjaBuilderSettings>
 {
     Q_OBJECT
 
