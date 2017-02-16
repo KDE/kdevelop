@@ -50,14 +50,54 @@ LldbDebuggerPlugin::LldbDebuggerPlugin(QObject *parent, const QVariantList &)
 
     setXMLFile("kdevlldbui.rc");
 
-    auto plugins = core()->pluginController()->allPluginsForExtension("org.kdevelop.IExecutePlugin");
-    for (auto plugin : plugins) {
-        auto iexec = plugin->extension<IExecutePlugin>();
-        Q_ASSERT(iexec);
+    auto pluginController = core()->pluginController();
+    for(auto plugin : pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
+        setupExecutePlugin(plugin, true);
+    }
 
-        auto type = core()->runController()->launchConfigurationTypeForId(iexec->nativeAppConfigTypeId());
-        Q_ASSERT(type);
-        type->addLauncher(new LldbLauncher(this, iexec));
+    connect(pluginController, &KDevelop::IPluginController::pluginLoaded,
+            this, [this](KDevelop::IPlugin* plugin) {
+                setupExecutePlugin(plugin, true);
+            });
+
+    connect(pluginController, &KDevelop::IPluginController::unloadingPlugin,
+            this, [this](KDevelop::IPlugin* plugin) {
+                setupExecutePlugin(plugin, false);
+            });
+}
+
+void LldbDebuggerPlugin::unload()
+{
+    for(auto plugin : core()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
+        setupExecutePlugin(plugin, false);
+    }
+    Q_ASSERT(m_launchers.isEmpty());
+}
+
+void LldbDebuggerPlugin::setupExecutePlugin(KDevelop::IPlugin* plugin, bool load)
+{
+    if (plugin == this) {
+        return;
+    }
+
+    auto iface = plugin->extension<IExecutePlugin>();
+    if (!iface) {
+        return;
+    }
+
+    auto type = core()->runController()->launchConfigurationTypeForId(iface->nativeAppConfigTypeId());
+    Q_ASSERT(type);
+
+    if (load) {
+        auto launcher = new LldbLauncher(this, iface);
+        m_launchers.insert(plugin, launcher);
+        type->addLauncher(launcher);
+    } else {
+        auto launcher = m_launchers.take(plugin);
+        Q_ASSERT(launcher);
+
+        type->removeLauncher(launcher);
+        delete launcher;
     }
 }
 

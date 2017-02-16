@@ -31,6 +31,8 @@
 
 namespace KDevMI { namespace LLDB {
 
+class LldbLauncher;
+
 class NonInterruptDebuggerConsoleView : public DebuggerConsoleView
 {
 public:
@@ -52,13 +54,18 @@ public:
     explicit LldbDebuggerPlugin(QObject *parent, const QVariantList & = QVariantList());
     ~LldbDebuggerPlugin() override;
 
+    void unload() override;
+
     DebugSession *createSession() override;
     void unloadToolviews() override;
     void setupToolviews() override;
 
 private:
+    void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);
+
     DebuggerToolFactory<NonInterruptDebuggerConsoleView> *m_consoleFactory;
     DebuggerToolFactory<DisassembleWidget> *m_disassembleFactory;
+    QHash<KDevelop::IPlugin*, LldbLauncher*> m_launchers;
 };
 
 } // end of namespace LLDB
