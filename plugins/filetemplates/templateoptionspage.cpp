@@ -45,6 +45,7 @@ public:
     QHash<QString, QWidget*> controls;
     QHash<QString, QByteArray> typeProperties;
     QWidget *firstEditWidget;
+    QList<QWidget*> groupBoxes;
 };
 
 TemplateOptionsPage::TemplateOptionsPage(QWidget* parent, Qt::WindowFlags f)
@@ -66,14 +67,24 @@ TemplateOptionsPage::~TemplateOptionsPage()
 
 void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateRenderer* renderer)
 {
+    // TODO: keep any old changed values, as it comes by surprise to have them lost
+    // when going back and forward
+
+    // clear anything as there is on reentering the page
     d->entries.clear();
     d->controls.clear();
+    // clear any old option group boxes & the base layout
     d->firstEditWidget = nullptr;
+    qDeleteAll(d->groupBoxes);
+    d->groupBoxes.clear();
+    delete layout();
 
     QVBoxLayout* layout = new QVBoxLayout();
 
     for (const auto& optionGroup : fileTemplate.customOptions(renderer)) {
         QGroupBox* box = new QGroupBox(this);
+        d->groupBoxes.append(box);
+
         box->setTitle(optionGroup.name);
 
         QFormLayout* formLayout = new QFormLayout;
