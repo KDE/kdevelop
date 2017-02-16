@@ -48,6 +48,8 @@ class ProcessWidget;
 class KToolBar;
 class QAction;
 
+class GdbLauncher;
+
 namespace KDevelop {
 class Context;
 class ProcessLineMaker;
@@ -70,14 +72,19 @@ public:
     explicit CppDebuggerPlugin(QObject *parent, const QVariantList & = QVariantList());
     ~CppDebuggerPlugin() override;
 
+    void unload() override;
+
     DebugSession *createSession() override;
     void unloadToolviews() override;
     void setupToolviews() override;
 
 private:
+    void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);
+
     DebuggerToolFactory<DisassembleWidget>* disassemblefactory;
     DebuggerToolFactory<GDBOutputWidget, CppDebuggerPlugin>* gdbfactory;
     DebuggerToolFactory<MemoryViewerWidget, CppDebuggerPlugin>* memoryviewerfactory;
+    QHash<KDevelop::IPlugin*, GdbLauncher*> m_launchers;
 };
 
 } // end of namespace GDB

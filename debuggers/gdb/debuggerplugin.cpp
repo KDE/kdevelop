@@ -55,13 +55,54 @@ CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
 {
     setXMLFile("kdevgdbui.rc");
 
-    QList<IPlugin*> plugins = KDevelop::ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IExecutePlugin");
-    foreach(IPlugin* plugin, plugins) {
-        IExecutePlugin* iface = plugin->extension<IExecutePlugin>();
-        Q_ASSERT(iface);
-        KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( iface->nativeAppConfigTypeId() );
-        Q_ASSERT(type);
-        type->addLauncher( new GdbLauncher( this, iface ) );
+    auto pluginController = core()->pluginController();
+    for(auto plugin : pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
+        setupExecutePlugin(plugin, true);
+    }
+
+    connect(pluginController, &KDevelop::IPluginController::pluginLoaded,
+            this, [this](KDevelop::IPlugin* plugin) {
+                setupExecutePlugin(plugin, true);
+            });
+
+    connect(pluginController, &KDevelop::IPluginController::unloadingPlugin,
+            this, [this](KDevelop::IPlugin* plugin) {
+                setupExecutePlugin(plugin, false);
+            });
+}
+
+void CppDebuggerPlugin::unload()
+{
+    for(auto plugin : core()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
+        setupExecutePlugin(plugin, false);
+    }
+    Q_ASSERT(m_launchers.isEmpty());
+}
+
+void CppDebuggerPlugin::setupExecutePlugin(KDevelop::IPlugin* plugin, bool load)
+{
+    if (plugin == this) {
+        return;
+    }
+
+    auto iface = plugin->extension<IExecutePlugin>();
+    if (!iface) {
+        return;
+    }
+
+    auto type = core()->runController()->launchConfigurationTypeForId(iface->nativeAppConfigTypeId());
+    Q_ASSERT(type);
+
+    if (load) {
+        auto launcher = new GdbLauncher(this, iface);
+        m_launchers.insert(plugin, launcher);
+        type->addLauncher(launcher);
+    } else {
+        auto launcher = m_launchers.take(plugin);
+        Q_ASSERT(launcher);
+
+        type->removeLauncher(launcher);
+        delete launcher;
     }
 }
 
