@@ -131,7 +131,7 @@ KDevelop::ProjectBaseItem * MakeJob::item() const
     return ICore::self()->projectController()->projectModel()->itemFromIndex(m_idx);
 }
 
-MakeJob::CommandType MakeJob::commandType()
+MakeJob::CommandType MakeJob::commandType() const
 {
     return m_command;
 }
