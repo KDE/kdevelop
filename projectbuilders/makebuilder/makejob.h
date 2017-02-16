@@ -68,7 +68,7 @@ public:
     void start() override;
 
     KDevelop::ProjectBaseItem* item() const;
-    CommandType commandType();
+    CommandType commandType() const;
     QStringList customTargets() const;
 
 

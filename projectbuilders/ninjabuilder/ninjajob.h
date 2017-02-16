@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2012 Aleix Pol Gonzalez <aleixpol@kde.org>
+    Copyright 2017 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef NINJAJOB_H
 #define NINJAJOB_H
@@ -24,46 +25,59 @@
 #include <QPointer>
 
 namespace KDevelop {
-    class OutputModel;
-    class ProjectBaseItem;
+class OutputModel;
+class ProjectBaseItem;
 }
 
-class KDevNinjaBuilderPlugin;
+class NinjaBuilder;
 
 class QUrl;
 
-class NinjaJob : public KDevelop::OutputExecuteJob
+class NinjaJob
+    : public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
+
+public:
+    enum CommandType {
+        BuildCommand,
+        CleanCommand,
+        CustomTargetCommand,
+        InstallCommand
+    };
+
     enum ErrorTypes {
         Correct = 0,
         Failed
     };
-    public:
-        NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent );
 
-        void setIsInstalling( bool isInstalling );
-        static QString ninjaExecutable();
+public:
+    NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType, const QStringList& arguments,
+             const QByteArray& signal, NinjaBuilder* parent);
 
-        KDevelop::ProjectBaseItem* item() const;
+    void setIsInstalling(bool isInstalling);
+    static QString ninjaExecutable();
 
-        QUrl workingDirectory() const override;
-        QStringList privilegedExecutionCommand() const override;
+    KDevelop::ProjectBaseItem* item() const;
+    CommandType commandType() const;
+    QUrl workingDirectory() const override;
+    QStringList privilegedExecutionCommand() const override;
 
-    protected slots:
-        void postProcessStdout( const QStringList& lines ) override;
-        void postProcessStderr( const QStringList& lines ) override;
+protected slots:
+    void postProcessStdout(const QStringList& lines) override;
+    void postProcessStderr(const QStringList& lines) override;
 
-    private slots:
-        void emitProjectBuilderSignal(KJob* job);
+private slots:
+    void emitProjectBuilderSignal(KJob* job);
 
-    private:
-        bool m_isInstalling;
-        QPersistentModelIndex m_idx;
-        QByteArray m_signal;
-        QPointer<KDevNinjaBuilderPlugin> m_plugin;
+private:
+    bool m_isInstalling;
+    QPersistentModelIndex m_idx;
+    CommandType m_commandType;
+    QByteArray m_signal;
+    QPointer<NinjaBuilder> m_plugin;
 
-        void appendLines( const QStringList& lines );
+    void appendLines(const QStringList& lines);
 };
 
-#endif // NINJAJOB_H
+#endif  // NINJAJOB_H
