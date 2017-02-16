@@ -19,17 +19,17 @@
 #ifndef KDEVNINJABUILDERPLUGIN_H
 #define KDEVNINJABUILDERPLUGIN_H
 
+#include "ninjajob.h"
+
 #include <interfaces/iplugin.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <util/objectlist.h>
 #include <QUrl>
 #include <QVariantList>
 
-class NinjaJob;
-
 class KDevNinjaBuilderPlugin
     : public KDevelop::IPlugin
-    , KDevelop::IProjectBuilder
+    , public KDevelop::IProjectBuilder
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IProjectBuilder)
@@ -42,7 +42,8 @@ public:
     KJob* install(KDevelop::ProjectBaseItem* dom, const QUrl& installPath) override;
     KJob* install(KDevelop::ProjectBaseItem* item);
 
-    NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal);
+    NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::CommandType commandType,
+                       const QStringList& args, const QByteArray& signal);
 
     int perProjectConfigPages() const override;
     KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;

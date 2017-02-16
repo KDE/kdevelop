@@ -70,10 +70,12 @@ IFilterStrategy::Progress NinjaJobCompilerFilterStrategy::progressInLine(const Q
     return {};
 }
 
-NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent)
+NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType,
+                   const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent)
     : OutputExecuteJob(parent)
     , m_isInstalling(false)
     , m_idx(item->index())
+    , m_commandType(commandType)
     , m_signal(signal)
     , m_plugin(parent)
 {
@@ -223,4 +225,9 @@ void NinjaJob::appendLines(const QStringList& lines)
 KDevelop::ProjectBaseItem* NinjaJob::item() const
 {
     return KDevelop::ICore::self()->projectController()->projectModel()->itemFromIndex(m_idx);
+}
+
+NinjaJob::CommandType NinjaJob::commandType() const
+{
+    return m_commandType;
 }

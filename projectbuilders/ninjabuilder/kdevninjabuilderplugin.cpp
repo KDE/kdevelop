@@ -91,12 +91,13 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
     return QStringList();
 }
 
-NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal)
+NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::CommandType commandType,
+                                           const QStringList& args, const QByteArray& signal)
 {
     ///Running the same builder twice may result in serious problems,
     ///so kill jobs already running on the same project
     foreach (NinjaJob* ninjaJob, m_activeNinjaJobs.data()) {
-        if (item && ninjaJob->item() && ninjaJob->item()->project() == item->project()) {
+        if (item && ninjaJob->item() && ninjaJob->item()->project() == item->project() && ninjaJob->commandType() == commandType) {
             qCDebug(NINJABUILDER) << "killing running ninja job, due to new started build on same project:" << ninjaJob;
             ninjaJob->kill(KJob::EmitResult);
         }
@@ -131,24 +132,24 @@ NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, cons
     }
     jobArguments << args;
 
-    NinjaJob* job = new NinjaJob(item, jobArguments, signal, this);
+    NinjaJob* job = new NinjaJob(item, commandType, jobArguments, signal, this);
     m_activeNinjaJobs.append(job);
     return job;
 }
 
 KJob* KDevNinjaBuilderPlugin::build(KDevelop::ProjectBaseItem* item)
 {
-    return runNinja(item, argumentsForItem(item), "built");
+    return runNinja(item, NinjaJob::BuildCommand, argumentsForItem(item), "built");
 }
 
 KJob* KDevNinjaBuilderPlugin::clean(KDevelop::ProjectBaseItem* item)
 {
-    return runNinja(item, QStringList("-t") << "clean", "cleaned");
+    return runNinja(item, NinjaJob::CleanCommand, QStringList("-t") << "clean", "cleaned");
 }
 
 KJob* KDevNinjaBuilderPlugin::install(KDevelop::ProjectBaseItem* item)
 {
-    NinjaJob* installJob = runNinja(item, QStringList("install"), "installed");
+    NinjaJob* installJob = runNinja(item, NinjaJob::InstallCommand, QStringList("install"), "installed");
     installJob->setIsInstalling(true);
 
     KSharedConfigPtr configPtr = item->project()->projectConfiguration();

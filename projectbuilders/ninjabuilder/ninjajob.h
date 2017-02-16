@@ -36,17 +36,29 @@ class NinjaJob
     : public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
-    enum ErrorTypes { Correct = 0, Failed };
 
 public:
-    NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments,
+    enum CommandType {
+        BuildCommand,
+        CleanCommand,
+        CustomTargetCommand,
+        InstallCommand
+    };
+
+    enum ErrorTypes {
+        Correct = 0,
+        Failed
+    };
+
+public:
+    NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType, const QStringList& arguments,
              const QByteArray& signal, KDevNinjaBuilderPlugin* parent);
 
     void setIsInstalling(bool isInstalling);
     static QString ninjaBinary();
 
     KDevelop::ProjectBaseItem* item() const;
-
+    CommandType commandType() const;
     QUrl workingDirectory() const override;
     QStringList privilegedExecutionCommand() const override;
 
@@ -60,6 +72,7 @@ private slots:
 private:
     bool m_isInstalling;
     QPersistentModelIndex m_idx;
+    CommandType m_commandType;
     QByteArray m_signal;
     QPointer<KDevNinjaBuilderPlugin> m_plugin;
 
