@@ -16,9 +16,11 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/contextmenuextension.h>
 
-#include <QtCore/QVariant>
+#include <QPointer>
+#include <QVariant>
 
 class KJob;
+class GrepDialog;
 class GrepJob;
 class GrepOutputViewFactory;
 
@@ -29,6 +31,7 @@ class GrepViewPlugin : public KDevelop::IPlugin
 public:
     explicit GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~GrepViewPlugin() override;
+
     void unload() override;
 
     void rememberSearchDirectory(QString const & directory);
@@ -59,6 +62,7 @@ private Q_SLOTS:
 
 private:
     GrepJob *m_currentJob;
+    QPointer<GrepDialog> m_currentDialog;
     QString m_directory;
     QString m_contextMenuDirectory;
     GrepOutputViewFactory* m_factory;

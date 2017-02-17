@@ -20,9 +20,11 @@
 #include "grepjob.h"
 #include "ui_grepwidget.h"
 
+class GrepViewPlugin;
+
 class KConfig;
 class KUrlRequester;
-class GrepViewPlugin;
+
 class QLineEdit;
 
 class GrepDialog : public QDialog, private Ui::GrepWidget
@@ -53,6 +55,9 @@ private Q_SLOTS:
 
     ///Opens the dialog to select a directory to search in, and inserts it into Location(s) field.
     void selectDirectoryDialog();
+
+protected:
+    void closeEvent(QCloseEvent* closeEvent) override;
 
 private:
     // Returns the chosen directories or files (only the top directories, not subfiles)

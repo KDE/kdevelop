@@ -151,7 +151,7 @@ QVariant ProblemModel::data(const QModelIndex& index, int role) const
         case Error:
             return p->description();
         case File:
-            return displayUrl(p->finalLocation().document.toUrl(), baseDirectory);
+            return displayUrl(p->finalLocation().document.toUrl().adjusted(QUrl::NormalizePathSegments), baseDirectory);
         case Line:
             if (p->finalLocation().isValid()) {
                 return QString::number(p->finalLocation().start().line() + 1);

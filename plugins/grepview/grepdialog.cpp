@@ -274,6 +274,10 @@ void GrepDialog::directoryChanged(const QString& dir)
 
 GrepDialog::~GrepDialog()
 {
+}
+
+void GrepDialog::closeEvent(QCloseEvent* closeEvent)
+{
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
