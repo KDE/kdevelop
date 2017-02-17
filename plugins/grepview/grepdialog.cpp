@@ -278,6 +278,8 @@ GrepDialog::~GrepDialog()
 
 void GrepDialog::closeEvent(QCloseEvent* closeEvent)
 {
+    Q_UNUSED(closeEvent);
+
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
