@@ -23,6 +23,8 @@
 
 #include "compilerswidget.h"
 
+#include <KLineEdit>
+
 #include <QAction>
 #include <KLocalizedString>
 #include <QKeySequence>
@@ -78,7 +80,11 @@ CompilersWidget::CompilersWidget(QWidget* parent)
     connect(m_ui->compilers->selectionModel(), &QItemSelectionModel::currentChanged, this, &CompilersWidget::compilerSelected);
 
     connect(m_ui->compilerName, &QLineEdit::textEdited, this, &CompilersWidget::compilerEdited);
-    connect(m_ui->compilerPath, &KUrlRequester::textEdited, this, &CompilersWidget::compilerEdited);
+
+    // TODO: KF5 5.21: Use KUrlRequester::textEdited signal directly
+    auto kUrlRequesterLineEdit = m_ui->compilerPath->lineEdit();
+    Q_ASSERT(kUrlRequesterLineEdit);
+    connect(kUrlRequesterLineEdit, &QLineEdit::textEdited, this, &CompilersWidget::compilerEdited);
 
     connect(m_compilersModel, &CompilersModel::compilerChanged, this, &CompilersWidget::compilerChanged);
 
