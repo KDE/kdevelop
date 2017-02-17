@@ -303,7 +303,9 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
         start = problem->finalLocation().start();
     }
 
-    ICore::self()->documentController()->openDocument(url, start);
+    if (QFile::exists(url.toLocalFile())) {
+        ICore::self()->documentController()->openDocument(url, start);
+    }
 }
 
 void ProblemTreeView::handleSeverityActionToggled()
