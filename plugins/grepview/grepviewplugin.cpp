@@ -111,8 +111,14 @@ GrepViewPlugin::~GrepViewPlugin()
 
 void GrepViewPlugin::unload()
 {
+    if (m_currentDialog) {
+        m_currentDialog->reject();
+        m_currentDialog->deleteLater();
+    }
+
     core()->uiController()->removeToolView(m_factory);
 }
+
 void GrepViewPlugin::startSearch(QString pattern, QString directory, bool show)
 {
     m_directory = directory;
@@ -163,6 +169,8 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
 void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool show)
 {
     GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
+    m_currentDialog = dlg;
+
     GrepJobSettings dlgSettings = dlg->settings();
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
 
