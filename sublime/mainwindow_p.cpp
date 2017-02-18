@@ -321,7 +321,6 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             //this is root area
             splitter = d->splitterCentralWidget;
             d->m_indexSplitters[index] = splitter;
-            d->centralWidget->layout()->addWidget(splitter);
         }
         else
         {
