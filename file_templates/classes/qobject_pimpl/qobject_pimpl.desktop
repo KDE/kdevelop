@@ -1,6 +1,18 @@
 [General]
 Name=QObject pimpl subclass
+Name[ca]=Subclasse QObject «pimpl»
+Name[es]=Subclase «pimpl» de QObject
+Name[nl]=pimpl subklasse van QObject
+Name[pt]=Sub-classe 'pimpl' de QObject
+Name[uk]=Підклас pimpl QObject
+Name[x-test]=xxQObject pimpl subclassxx
 Comment=QObject subclass with private implementation
+Comment[ca]=Una subclasse QObject amb implementació privada
+Comment[es]=Una subclase de QObject con una implementación privada
+Comment[nl]=Een subklasse van QObject met een private implementatie
+Comment[pt]=Uma sub-classe de QObject com uma implementação privada
+Comment[uk]=Підклас QObject із закритою (private) реалізацією
+Comment[x-test]=xxQObject subclass with private implementationxx
 Category=C++/Qt
 Language=C++
 Language[bs]=C++
