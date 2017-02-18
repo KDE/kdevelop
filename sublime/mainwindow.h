@@ -130,9 +130,8 @@ Q_SIGNALS:
     /**Emitted when a view is going to be removed from the mainwindow.*/
     void aboutToRemoveView(Sublime::View*);
 
-
 protected:
-    QWidget *statusBarLocation();
+    QWidget *statusBarLocation() const;
     virtual void initializeStatusBar();
 protected Q_SLOTS:
     virtual void tabDoubleClicked(Sublime::View* view);

@@ -382,7 +382,7 @@ void MainWindow::enableAreaSettingsSave()
     d->autoAreaSettingsSave = true;
 }
 
-QWidget *MainWindow::statusBarLocation()
+QWidget *MainWindow::statusBarLocation() const
 {
     return d->idealController->statusBarLocation();
 }
