@@ -24,7 +24,6 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QTabWidget>
-#include <QToolButton>
 #include <QTreeView>
 #include <QVBoxLayout>
 
@@ -87,7 +86,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
 
     tree->setContextMenuPolicy(Qt::CustomContextMenu);
     connect( tree, &QTreeView::customContextMenuRequested, this, &LaunchConfigurationDialog::doTreeContextMenu );
-    connect( deleteConfig, &QToolButton::clicked, this, &LaunchConfigurationDialog::deleteConfiguration);
+    connect( deleteConfig, &QPushButton::clicked, this, &LaunchConfigurationDialog::deleteConfiguration);
     connect( model, &LaunchConfigurationsModel::dataChanged, this, &LaunchConfigurationDialog::modelChanged );
     connect( tree->selectionModel(), &QItemSelectionModel::selectionChanged, this, &LaunchConfigurationDialog::selectionChanged);
     QModelIndex idx = model->indexForConfig( Core::self()->runControllerInternal()->defaultLaunch() );
