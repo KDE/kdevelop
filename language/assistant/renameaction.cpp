@@ -63,7 +63,7 @@ RenameAction::RenameAction(const Identifier& oldDeclarationName, const QString& 
     : d(new Private)
 {
     d->m_oldDeclarationName = oldDeclarationName;
-    d->m_newDeclarationName = newDeclarationName;
+    d->m_newDeclarationName = newDeclarationName.trimmed();
     d->m_oldDeclarationUses = oldDeclarationUses;
 }
 

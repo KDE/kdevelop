@@ -86,6 +86,7 @@ protected:
     virtual void initialize();
     virtual void cleanup();
     void initializeStatusBar() override;
+    bool event( QEvent* ) override;
     void dragEnterEvent( QDragEnterEvent* ) override;
     void dropEvent( QDropEvent* ) override;
     void applyMainWindowSettings(const KConfigGroup& config) override;

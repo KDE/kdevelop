@@ -306,7 +306,8 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
     if (dialog.exec() != QDialog::Accepted)
         return {};
 
-    RefactoringProgressDialog refactoringProgress(i18n("Renaming \"%1\" to \"%2\"", declarationName, renameDialog.edit->text()), collector.data());
+    const auto text = renameDialog.edit->text().trimmed();
+    RefactoringProgressDialog refactoringProgress(i18n("Renaming \"%1\" to \"%2\"", declarationName, text), collector.data());
     if (!collector->isReady()) {
         refactoringProgress.exec();
         if (refactoringProgress.result() != QDialog::Accepted) {
@@ -315,7 +316,7 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
     }
 
     //TODO: input validation
-    return {renameDialog.edit->text(),collector};
+    return {text,collector};
 }
 
 DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicRefactoringCollector* collector, const QString& replacementName, const QString& originalName, bool apply)

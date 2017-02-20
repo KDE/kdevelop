@@ -206,6 +206,13 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
     return KXMLGUIBuilder::createCustomElement(parent, index, element);
 }
 
+bool KDevelop::MainWindow::event( QEvent* ev )
+{
+    if ( ev->type() == QEvent::PaletteChange )
+        updateAllTabColors();
+    return Sublime::MainWindow::event(ev);
+}
+
 void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
 {
     const QMimeData* mimeData = ev->mimeData();

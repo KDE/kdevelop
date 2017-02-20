@@ -200,7 +200,7 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
             d->m_newDeclarationRange->range().encompass(invocationRange), indexedUrl, true);
     }
 
-    d->m_newDeclarationName = doc->text(d->m_newDeclarationRange->range());
+    d->m_newDeclarationName = doc->text(d->m_newDeclarationRange->range()).trimmed();
     if (d->m_newDeclarationName == d->m_oldDeclarationName.toString()) {
         d->reset();
         return;
