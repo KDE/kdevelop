@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KPluginInfo> // TODO: remove once we no longer support old style plugins
+#include <KPluginFactory>
 #include <KPluginLoader>
 
 #include <interfaces/contextmenuextension.h>
