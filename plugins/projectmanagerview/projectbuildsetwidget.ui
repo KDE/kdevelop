@@ -7,10 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>298</width>
-    <height>229</height>
+    <height>244</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="horizontalSpacing">
+    <number>0</number>
+   </property>
    <item row="1" column="1">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
@@ -33,6 +36,9 @@
        </property>
        <property name="text">
         <string>...</string>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -60,6 +66,9 @@
        <property name="text">
         <string>...</string>
        </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -69,6 +78,9 @@
        </property>
        <property name="text">
         <string>...</string>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -95,6 +107,9 @@
        </property>
        <property name="text">
         <string>...</string>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -175,6 +190,9 @@
        <property name="text">
         <string>...</string>
        </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -184,6 +202,9 @@
        </property>
        <property name="text">
         <string>...</string>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
