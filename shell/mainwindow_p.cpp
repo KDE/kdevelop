@@ -301,7 +301,7 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous split view." ) );
     action->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
 
-    action = KStandardAction::fullScreen( this, SLOT(toggleFullScreen(bool)), m_mainWindow, actionCollection() );
+    KStandardAction::fullScreen( this, SLOT(toggleFullScreen(bool)), m_mainWindow, actionCollection() );
 
     action = actionCollection()->addAction( QStringLiteral("file_new") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-new")));

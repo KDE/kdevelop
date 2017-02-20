@@ -200,9 +200,7 @@ void ApplyChangesWidget::indexChanged(int newIndex)
 
 void ApplyChangesWidget::updateDiffView(int index)
 {
-    int prevIndex = d->m_index;
     d->m_index = index == -1 ? d->m_index : index;
-    d->m_index = prevIndex;
 }
 
 }

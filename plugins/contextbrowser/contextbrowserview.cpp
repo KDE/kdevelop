@@ -265,12 +265,11 @@ void ContextBrowserView::showEvent(QShowEvent* event)
     }
 
     TopDUContext* top = m_lastUsedTopContext.data();
-    if(top && m_navigationWidgetDeclaration.isValid() && m_navigationWidgetDeclaration.getDeclaration(top)) {
-        if(top) {
-            //Update the navigation-widget
-            Declaration* decl = m_navigationWidgetDeclaration.getDeclaration(top);
+    if(top && m_navigationWidgetDeclaration.isValid()) {
+        //Update the navigation-widget
+        Declaration* decl = m_navigationWidgetDeclaration.getDeclaration(top);
+        if(decl)
             setDeclaration(decl, top, true);
-        }
     }
     QWidget::showEvent(event);
 }

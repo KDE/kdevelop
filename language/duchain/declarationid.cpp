@@ -128,12 +128,10 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
         if((!DUChain::self()->isInMemory(iDecl.topContextIndex())))
           continue;
 
-        if(!top) {
-          Declaration* decl = iDecl.data();
-          if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
-            //Hit
-            ret.append(decl);
-          }
+        Declaration* decl = iDecl.data();
+        if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
+          //Hit
+          ret.append(decl);
         }
       }
     }
@@ -188,14 +186,12 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
         if((!DUChain::self()->isInMemory(iDecl.topContextIndex())))
           continue;
 
-        if(!top) {
-          Declaration* decl = iDecl.data();
-          if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
-            //Hit
-            ret = decl;
-            if(!ret->isForwardDeclaration())
-              break;
-          }
+        Declaration* decl = iDecl.data();
+        if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
+          //Hit
+          ret = decl;
+          if(!ret->isForwardDeclaration())
+            break;
         }
       }
     }

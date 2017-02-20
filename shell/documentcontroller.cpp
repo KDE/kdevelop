@@ -1212,8 +1212,7 @@ void DocumentController::vcsAnnotateCurrentDocument()
     QUrl url = doc->url();
     IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
     if(project && project->versionControlPlugin()) {
-        IBasicVersionControl* iface = nullptr;
-        iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
+        IBasicVersionControl* iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
         auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
         connect(doc->textDocument(), &KTextEditor::Document::aboutToClose,
                 helper, static_cast<void(VcsPluginHelper::*)(KTextEditor::Document*)>(&VcsPluginHelper::disposeEventually));

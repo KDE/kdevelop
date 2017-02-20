@@ -168,51 +168,47 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
 
   TopDUContext* top = DUChainUtils::standardContextForUrl( url );
   if(!top) {
+    qCDebug(LANGUAGE) << "================== NO CONTEXT FOUND =======================";
+    beginResetModel();
+    m_completionItems.clear();
+    m_navigationWidgets.clear();
+    endResetModel();
+
+    qCDebug(LANGUAGE) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
+
     return;
   }
+
   setCurrentTopContext(TopDUContextPointer(top));
 
   RangeInRevision rangeInRevision = top->transformToLocalRevision(KTextEditor::Range(range));
 
-  if (top) {
-    qCDebug(LANGUAGE) << "completion invoked for context" << (DUContext*)top;
+  qCDebug(LANGUAGE) << "completion invoked for context" << (DUContext*)top;
 
-    if( top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.toString())) ) {
+  if( top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.toString())) ) {
       qCDebug(LANGUAGE) << "Found context is not current.";
-    }
-
-    DUContextPointer thisContext;
-    {
-      qCDebug(LANGUAGE) << "apply specialization:" << range.start();
-      thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(rangeInRevision.start), top);
-
-      if ( thisContext ) {
-        qCDebug(LANGUAGE) << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->rangeInCurrentRevision();
-      }
-
-      if(!thisContext)
-        thisContext = top;
-
-       qCDebug(LANGUAGE) << "context is set to" << thisContext.data();
-        if( !thisContext ) {
-          qCDebug(LANGUAGE) << "================== NO CONTEXT FOUND =======================";
-          beginResetModel();
-          m_completionItems.clear();
-          m_navigationWidgets.clear();
-          endResetModel();
-          return;
-        }
-    }
-
-    lock.unlock();
-
-    if(m_forceWaitForModel)
-      emit waitForReset();
-
-    emit completionsNeeded(thisContext, range.start(), view);
-  } else {
-    qCDebug(LANGUAGE) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
   }
+
+  DUContextPointer thisContext;
+  {
+    qCDebug(LANGUAGE) << "apply specialization:" << range.start();
+    thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(rangeInRevision.start), top);
+
+    if ( thisContext ) {
+      qCDebug(LANGUAGE) << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->rangeInCurrentRevision();
+    } else {
+      thisContext = top;
+    }
+
+    qCDebug(LANGUAGE) << "context is set to" << thisContext.data();
+  }
+
+  lock.unlock();
+
+  if(m_forceWaitForModel)
+    emit waitForReset();
+
+  emit completionsNeeded(thisContext, range.start(), view);
 }
 
 
