@@ -50,20 +50,8 @@ bool isSpaceOnly(const QString& string)
 
 bool includePathCompletionRequired(const QString& text)
 {
-    QString line;
-    const int idx = text.lastIndexOf(QLatin1Char('\n'));
-    if (idx != -1) {
-        line = text.mid(idx + 1).trimmed();
-    } else {
-        line = text.trimmed();
-    }
-
-    const static QRegularExpression includeRegExp(QStringLiteral("^\\s*#\\s*include"));
-    if (!line.contains(includeRegExp)) {
-        return false;
-    }
-
-    return true;
+    const auto properties = IncludePathProperties::parseText(text);
+    return properties.valid;
 }
 
 QSharedPointer<CodeCompletionContext> createCompletionContext(const DUContextPointer& context,
@@ -175,10 +163,39 @@ bool ClangCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, co
 {
     static const QString noCompletionAfter = QStringLiteral(";{}]) ");
 
-    if (inserted.isEmpty() || isSpaceOnly(inserted) || noCompletionAfter.contains(inserted.at(inserted.size() - 1))) {
+    if (inserted.isEmpty() || isSpaceOnly(inserted)) {
         return false;
     }
+    const auto lastChar = inserted.at(inserted.size() - 1);
+    if (noCompletionAfter.contains(lastChar)) {
+        return false;
+    }
+    // also show include path completion after dashes
+    if (userInsertion && lastChar == QLatin1Char('-') && includePathCompletionRequired(view->document()->line(position.line()))) {
+        return true;
+    }
     return KDevelop::CodeCompletionModel::shouldStartCompletion(view, inserted, userInsertion, position);
+}
+
+KTextEditor::Range ClangCodeCompletionModel::completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position)
+{
+    auto range = KDevelop::CodeCompletionModel::completionRange(view, position);
+    const auto includeProperties = IncludePathProperties::parseText(view->document()->line(position.line()), position.column());
+    if (includeProperties.valid && includeProperties.inputFrom != -1) {
+        // expand include path range to include e.g. dashes
+        range.setStart({position.line(), includeProperties.inputFrom});
+    }
+    return range;
+}
+
+bool ClangCodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::Range& range, const QString& currentCompletion)
+{
+    const auto shouldAbort = KDevelop::CodeCompletionModel::shouldAbortCompletion(view, range, currentCompletion);
+    if (shouldAbort && includePathCompletionRequired(view->document()->line(range.end().line()))) {
+        // don't abort include path completion which can contain dashes
+        return false;
+    }
+    return shouldAbort;
 }
 
 CodeCompletionWorker* ClangCodeCompletionModel::createCompletionWorker()

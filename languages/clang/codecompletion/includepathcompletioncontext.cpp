@@ -36,28 +36,10 @@
 
 using namespace KDevelop;
 
-namespace
-{
-
-struct IncludePathProperties
-{
-    // potentially already existing path to a directory
-    QString prefixPath;
-    // whether we look at a i.e. #include "local"
-    // or a #include <global> include line
-    bool local = false;
-    // whether the line actually includes an #include
-    bool valid = false;
-    // start offset into @p text where to insert the new item
-    int inputFrom = -1;
-    // end offset into @p text where to insert the new item
-    int inputTo = -1;
-};
-
 /**
  * Parse the last line of @p text and extract information about any existing include path from it.
  */
-IncludePathProperties includePathProperties(const QString& text, int rightBoundary = -1)
+IncludePathProperties IncludePathProperties::parseText(const QString& text, int rightBoundary)
 {
     IncludePathProperties properties;
 
@@ -159,6 +141,9 @@ IncludePathProperties includePathProperties(const QString& text, int rightBounda
     return properties;
 }
 
+namespace
+{
+
 QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePathProperties& properties, const Path::List& includePaths )
 {
     QVector<IncludeItem> includeItems;
@@ -230,7 +215,7 @@ public:
         auto range = word;
         const int lineNumber = word.end().line();
         const QString line = document->line(lineNumber);
-        const auto properties = includePathProperties(line, word.end().column());
+        const auto properties = IncludePathProperties::parseText(line, word.end().column());
         if (!properties.valid) {
             return;
         }
@@ -276,7 +261,7 @@ IncludePathCompletionContext::IncludePathCompletionContext(const DUContextPointe
                                                            const QString& text)
     : CodeCompletionContext(context, text, CursorInRevision::castFromSimpleCursor(position), 0)
 {
-    const IncludePathProperties properties = includePathProperties(text);
+    const IncludePathProperties properties = IncludePathProperties::parseText(text);
 
     if (!properties.valid) {
         return;

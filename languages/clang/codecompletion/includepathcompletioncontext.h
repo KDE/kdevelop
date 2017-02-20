@@ -28,6 +28,24 @@
 #include <language/codecompletion/codecompletioncontext.h>
 #include <language/util/includeitem.h>
 
+
+struct KDEVCLANGPRIVATE_EXPORT IncludePathProperties
+{
+    // potentially already existing path to a directory
+    QString prefixPath;
+    // whether we look at a i.e. #include "local"
+    // or a #include <global> include line
+    bool local = false;
+    // whether the line actually includes an #include
+    bool valid = false;
+    // start offset into @p text where to insert the new item
+    int inputFrom = -1;
+    // end offset into @p text where to insert the new item
+    int inputTo = -1;
+
+    static IncludePathProperties parseText(const QString& text, int rightBoundary = -1);
+};
+
 class KDEVCLANGPRIVATE_EXPORT IncludePathCompletionContext : public KDevelop::CodeCompletionContext
 {
 public:
