@@ -62,11 +62,13 @@ struct ProblemModelPrivate
     explicit ProblemModelPrivate(KDevelop::ProblemStore *store)
         : m_problems(store)
         , m_features(KDevelop::ProblemModel::NoFeatures)
+        , m_fullUpdateTooltip(i18nc("@info:tooltip", "Re-parse all watched documents"))
     {
     }
 
     QScopedPointer<KDevelop::ProblemStore> m_problems;
     KDevelop::ProblemModel::Features m_features;
+    QString m_fullUpdateTooltip;
 };
 
 namespace KDevelop
@@ -231,6 +233,21 @@ ProblemModel::Features ProblemModel::features() const
 void ProblemModel::setFeatures(Features features)
 {
     d->m_features = features;
+}
+
+QString ProblemModel::fullUpdateTooltip() const
+{
+    return d->m_fullUpdateTooltip;
+}
+
+void ProblemModel::setFullUpdateTooltip(const QString& tooltip)
+{
+    if (d->m_fullUpdateTooltip == tooltip) {
+        return;
+    }
+
+    d->m_fullUpdateTooltip = tooltip;
+    emit fullUpdateTooltipChanged();
 }
 
 void ProblemModel::addProblem(const IProblem::Ptr &problem)

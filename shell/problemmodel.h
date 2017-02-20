@@ -141,12 +141,23 @@ public:
     /// Set the supported features
     void setFeatures(Features features);
 
+    /// Tooltip for "Force Full Update" action in the Problems View when the model
+    /// is active (correspondent tab is selected)
+    QString fullUpdateTooltip() const;
+
+    /// Set the "Force Full Update" action tooltip
+    void setFullUpdateTooltip(const QString& tooltip);
+
 signals:
     /// Emitted when the stored problems are changed with addProblem(), setProblems() and
     /// clearProblems() methods. This signal emitted only when internal problems storage is
     /// really changed: for example, it is not emitted when we call clearProblems() method
     /// for empty model.
     void problemsChanged();
+
+    /// Emitted when the "Force Full Update" action tooltip is changed with setFullUpdateTooltip().
+    /// This signal emitted only when tooltip is really changed.
+    void fullUpdateTooltipChanged();
 
 public slots:
     /// Show imports

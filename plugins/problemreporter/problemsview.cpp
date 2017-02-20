@@ -46,7 +46,6 @@ void ProblemsView::setupActions()
         m_fullUpdateAction = new QAction(this);
         m_fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         m_fullUpdateAction->setText(i18n("Force Full Update"));
-        m_fullUpdateAction->setToolTip(i18nc("@info:tooltip", "Re-parse all watched documents"));
         m_fullUpdateAction->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         connect(m_fullUpdateAction, &QAction::triggered, this, [this]() {
             currentView()->model()->forceFullUpdate();
@@ -242,6 +241,7 @@ void ProblemsView::updateActions()
     Q_ASSERT(problemModel);
 
     m_fullUpdateAction->setVisible(problemModel->features().testFlag(ProblemModel::CanDoFullUpdate));
+    m_fullUpdateAction->setToolTip(problemModel->fullUpdateTooltip());
     m_showImportsAction->setVisible(problemModel->features().testFlag(ProblemModel::CanShowImports));
     m_scopeMenu->setVisible(problemModel->features().testFlag(ProblemModel::ScopeFilter));
     m_severityActions->setVisible(problemModel->features().testFlag(ProblemModel::SeverityFilter));
@@ -428,8 +428,15 @@ void ProblemsView::addModel(const ModelData& newData)
 
     static const QString parserId = QStringLiteral("Parser");
 
-    ProblemTreeView* view = new ProblemTreeView(nullptr, newData.model);
+    auto model = newData.model;
+    auto view = new ProblemTreeView(nullptr, model);
     connect(view, &ProblemTreeView::changed, this, &ProblemsView::onViewChanged);
+    connect(model, &ProblemModel::fullUpdateTooltipChanged,
+            this, [this, model]() {
+                if (currentView()->model() == model) {
+                    m_fullUpdateAction->setToolTip(model->fullUpdateTooltip());
+                }
+            });
 
     int insertIdx = 0;
     if (newData.id != parserId) {
@@ -447,7 +454,7 @@ void ProblemsView::addModel(const ModelData& newData)
     m_tabWidget->insertTab(insertIdx, view, newData.name);
     m_models.insert(insertIdx, newData);
 
-    updateTab(insertIdx, view->model()->rowCount());
+    updateTab(insertIdx, model->rowCount());
 }
 
 void ProblemsView::updateTab(int idx, int rows)
