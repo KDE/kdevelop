@@ -175,7 +175,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
     for (auto diagnostic : diagnostics) {
       modifyHtml() += QStringLiteral("<p>");
       modifyHtml() += labelHighlight(QStringLiteral("%1: ").arg(diagnostic->severityString()));
-      modifyHtml() += diagnostic->description();
+      modifyHtml() += escapedHtml(diagnostic->description());
 
       const DocumentRange range = diagnostic->finalLocation();
       Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start()).declaration;
