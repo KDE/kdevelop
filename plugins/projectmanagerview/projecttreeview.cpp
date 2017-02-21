@@ -113,7 +113,7 @@ void popupContextMenu_appendActions(QMenu& menu, const QList<QAction*>& actions)
 }
 
 ProjectTreeView::ProjectTreeView( QWidget *parent )
-        : QTreeView( parent ), m_ctxProject( nullptr )
+        : QTreeView( parent ), m_previousSelection ( nullptr )
 {
     header()->hide();
 
@@ -137,10 +137,8 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
              this, &ProjectTreeView::aboutToShutdown);
     connect( ICore::self()->projectController(), &IProjectController::projectOpened,
              this, &ProjectTreeView::restoreState );
-    connect( ICore::self()->projectController(), &IProjectController::projectClosing,
-             this, &ProjectTreeView::saveState );
-
-    restoreState();
+    connect( ICore::self()->projectController(), &IProjectController::projectClosed,
+             this, &ProjectTreeView::projectClosed );
 }
 
 ProjectTreeView::~ProjectTreeView()
@@ -294,28 +292,50 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
     }
 }
 
-void ProjectTreeView::popupContextMenu( const QPoint &pos )
+void ProjectTreeView::projectClosed(KDevelop::IProject* project)
 {
-    QList<KDevelop::ProjectBaseItem*> itemlist;
+    if ( project == m_previousSelection )
+        m_previousSelection = nullptr;
+}
 
-    if ( indexAt(pos).isValid() )
-    {
+
+QList<ProjectBaseItem*> ProjectTreeView::selectedProjects()
+{
+    QList<ProjectBaseItem*> itemlist;
+    if ( selectionModel()->hasSelection() ) {
         QModelIndexList indexes = selectionModel()->selectedRows();
-        foreach( const QModelIndex& index, indexes )
-        {
-            if ( KDevelop::ProjectBaseItem *item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>() )
+        for ( const QModelIndex& index: indexes ) {
+            ProjectBaseItem* item = index.data( ProjectModel::ProjectItemRole ).value<ProjectBaseItem*>();
+            if ( item ) {
                 itemlist << item;
+                m_previousSelection = item->project();
+            }
         }
     }
 
-    if( !itemlist.isEmpty() )
-    {
-        m_ctxProject = itemlist.at(0)->project();
-    } else
-    {
-        m_ctxProject = nullptr;
+    // add previous selection if nothing is selected right now
+    if ( itemlist.isEmpty() && m_previousSelection ) {
+        itemlist << m_previousSelection->projectItem();
     }
 
+    return itemlist;
+}
+
+KDevelop::IProject* ProjectTreeView::getCurrentProject()
+{
+    auto itemList = selectedProjects();
+    if ( !itemList.isEmpty() ) {
+        return itemList.at( 0 )->project();
+    }
+    return nullptr;
+}
+
+void ProjectTreeView::popupContextMenu( const QPoint &pos )
+{
+    QList<ProjectBaseItem*> itemlist;
+    if ( indexAt( pos ).isValid() ) {
+        itemlist = selectedProjects();
+    }
     QMenu menu( this );
 
     KDevelop::ProjectItemContextImpl context(itemlist);
@@ -376,38 +396,81 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
 void ProjectTreeView::openProjectConfig()
 {
-    if( m_ctxProject )
-    {
+    if ( IProject* project = getCurrentProject() ) {
         IProjectController* ip = ICore::self()->projectController();
-        ip->configureProject( m_ctxProject );
+        ip->configureProject( project );
     }
 }
 
-void ProjectTreeView::saveState()
+void ProjectTreeView::saveState( IProject* project )
 {
-    KConfigGroup configGroup( ICore::self()->activeSession()->config(), settingsConfigGroup );
+    // nullptr won't create a usable saved state, so spare the effort
+    if ( !project ) {
+        return;
+    }
+
+    KConfigGroup configGroup( ICore::self()->activeSession()->config(),
+                              QString( settingsConfigGroup ).append( project->name() ) );
 
     ProjectModelSaver saver;
+    saver.setProject( project );
     saver.setView( this );
     saver.saveState( configGroup );
 }
 
-void ProjectTreeView::restoreState(IProject* project)
+void ProjectTreeView::restoreState( IProject* project )
 {
-    KConfigGroup configGroup( ICore::self()->activeSession()->config(), settingsConfigGroup );
+    if ( !project ) {
+        return;
+    }
 
+    KConfigGroup configGroup( ICore::self()->activeSession()->config(),
+                              QString( settingsConfigGroup ).append( project->name() ) );
     ProjectModelSaver saver;
     saver.setProject( project );
     saver.setView( this );
     saver.restoreState( configGroup );
 }
 
+void ProjectTreeView::rowsInserted( const QModelIndex& parent, int start, int end )
+{
+    QTreeView::rowsInserted( parent, start, end );
+
+    // automatically select row if there is only one
+    if ( model()->rowCount() == 1 ) {
+        selectionModel()->select( model()->index( 0, 0 ), QItemSelectionModel::Select );
+    }
+
+    if ( !parent.model() ) {
+        for ( const auto& project: selectedProjects() ) {
+            restoreState( project->project() );
+        }
+    }
+}
+
+void ProjectTreeView::rowsAboutToBeRemoved( const QModelIndex& parent, int start, int end )
+{
+    // automatically select row if there is only one
+    if ( model()->rowCount() == 1 ) {
+        selectionModel()->select( model()->index( 0, 0 ), QItemSelectionModel::Select );
+    }
+
+    if ( !parent.model() ) {
+        for ( const auto& project: selectedProjects() ) {
+            saveState( project->project() );
+        }
+    }
+
+    QTreeView::rowsAboutToBeRemoved( parent, start, end );
+}
+
 void ProjectTreeView::aboutToShutdown()
 {
-    // save all projects, not just the last one that is closed
-    disconnect( ICore::self()->projectController(), &IProjectController::projectClosing,
-                this, &ProjectTreeView::saveState );
-    saveState();
+    // save all projects, not just the selected ones
+    const auto projects = ICore::self()->projectController()->projects();
+    for ( const auto& project: projects ) {
+        saveState( project );
+    }
 }
 
 bool ProjectTreeView::event(QEvent* event)
