@@ -45,6 +45,8 @@ private slots:
     void testTodoProblems_data();
 
     void testMissingInclude();
+    void testMissingInclude_data();
+
     void testSeverity();
     void testSeverity_data();
 };

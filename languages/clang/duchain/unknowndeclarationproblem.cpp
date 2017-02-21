@@ -47,6 +47,7 @@
 
 #include <QDir>
 #include <QProcess>
+#include <QRegularExpression>
 
 #include <algorithm>
 
@@ -155,6 +156,8 @@ int sharedPathLevel(const QString& a, const QString& b)
  */
 KDevelop::DocumentRange includeDirectivePosition(const KDevelop::Path& source, const QString& includeFile)
 {
+    static const QRegularExpression mocFilenameExpression(QStringLiteral("(moc_[^\\/\\\\]+\\.cpp$|\\.moc$)") );
+
     DUChainReadLocker lock;
     const TopDUContext* top = DUChainUtils::standardContextForUrl( source.toUrl() );
     if( !top ) {
@@ -168,8 +171,15 @@ KDevelop::DocumentRange includeDirectivePosition(const KDevelop::Path& source, c
     int currentMatchQuality = -1;
     for( const auto& import : top->importedParentContexts() ) {
 
-        const int matchQuality = sharedPathLevel( import.context(top)->url().str(), includeFile );
+        const auto importFilename = import.context(top)->url().str();
+        const int matchQuality = sharedPathLevel( importFilename , includeFile );
         if( matchQuality < currentMatchQuality ) {
+            continue;
+        }
+
+        const auto match = mocFilenameExpression.match(importFilename);
+        if (match.isValid()) {
+            clangDebug() << "moc file detected in" << source.toUrl().toDisplayString() << ":" << importFilename << "-- not using as include insertion location";
             continue;
         }
 
