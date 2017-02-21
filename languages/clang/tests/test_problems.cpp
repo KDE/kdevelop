@@ -265,10 +265,19 @@ void TestProblems::testMissingInclude()
 {
     QFETCH(QString, includeFileContent);
     QFETCH(QString, workingFileContent);
+    QFETCH(QString, dummyFileName);
     QFETCH(QVector<ClangFixit>, fixits);
 
     TestFile include(includeFileContent, "h");
     include.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    QScopedPointer<QTemporaryFile> dummyFile;
+    if (!dummyFileName.isEmpty()) {
+        dummyFile.reset(new QTemporaryFile(QDir::tempPath() + dummyFileName));
+        QVERIFY(dummyFile->open());
+
+        workingFileContent.replace("dummyInclude", dummyFile->fileName());
+    }
 
     TestFile workingFile(workingFileContent, "cpp");
     workingFile.parse(TopDUContext::AllDeclarationsAndContexts);
@@ -304,13 +313,33 @@ void TestProblems::testMissingInclude_data()
 {
     QTest::addColumn<QString>("includeFileContent");
     QTest::addColumn<QString>("workingFileContent");
+    QTest::addColumn<QString>("dummyFileName");
     QTest::addColumn<QVector<ClangFixit>>("fixits");
 
     QTest::newRow("basic")
         << "class A {};\n"
-        << "int main() { A a; }"
+        << "int main() { A a; }\n"
+        << QString()
         << QVector<ClangFixit>{
             ClangFixit{"class A;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()},
+            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()}
+        };
+
+    // cf. bug 375274
+    QTest::newRow("ignore-moc-at-end")
+        << "class Foo {};\n"
+        << "int main() { Foo foo; }\n#include \"dummyInclude\"\n"
+        << "/moc_fooXXXXXX.cpp"
+        << QVector<ClangFixit>{
+            ClangFixit{"class Foo;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()},
+            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()}
+        };
+    QTest::newRow("ignore-moc-at-end2")
+        << "class Foo {};\n"
+        << "int main() { Foo foo; }\n#include \"dummyInclude\"\n"
+        << "/fooXXXXXX.moc"
+        << QVector<ClangFixit>{
+            ClangFixit{"class Foo;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()},
             ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()}
         };
 }
