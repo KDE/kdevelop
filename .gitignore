@@ -11,6 +11,8 @@ build
 *.rej
 *.swp
 massif.out.*
+perf.data
+perf.data.*
 callgrind.out.*
 .*kate-swp
 
