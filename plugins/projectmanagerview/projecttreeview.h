@@ -60,9 +60,12 @@ class ProjectTreeView: public QTreeView
         void slotActivated( const QModelIndex &index );
         void popupContextMenu( const QPoint &pos );
         void openProjectConfig();
-        void saveState();
+        void saveState(KDevelop::IProject* project = nullptr);
         void restoreState(KDevelop::IProject* project = nullptr);
         void aboutToShutdown();
+        void projectClosed(KDevelop::IProject* project);
+        void rowsInserted(const QModelIndex& parent, int start, int end) override;
+        void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) override;
 
     protected:
         void keyPressEvent(QKeyEvent *event) override;
@@ -72,8 +75,10 @@ class ProjectTreeView: public QTreeView
     private:
         QModelIndex mapFromItem(const KDevelop::ProjectBaseItem* item);
         KDevelop::ProjectBaseItem* itemAtPos(QPoint pos);
+        QList<KDevelop::ProjectBaseItem*> selectedProjects();
+        KDevelop::IProject* getCurrentProject();
 
-        KDevelop::IProject* m_ctxProject;
+        QPointer<KDevelop::IProject> m_previousSelection;
         QPointer<KDevelop::NavigationToolTip> m_tooltip;
         QPersistentModelIndex m_idx;
 };
