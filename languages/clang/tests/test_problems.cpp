@@ -69,6 +69,22 @@ QList<ProblemPointer> parse(const QByteArray& code)
     return session.problemsForFile(session.mainFile());
 }
 
+void compareFixitWithoutDescription(const ClangFixit& a, const ClangFixit& b)
+{
+    QCOMPARE(a.replacementText, b.replacementText);
+    QCOMPARE(a.range, b.range);
+    QCOMPARE(a.currentText, b.currentText);
+}
+
+void compareFixitsWithoutDescription(const ClangFixits& a, const ClangFixits& b)
+{
+    QCOMPARE(a.size(), b.size());
+    const int size = a.size();
+    for (int i = 0; i < size; ++i) {
+        compareFixitWithoutDescription(a.at(i), b.at(i));
+    }
+}
+
 }
 
 QTEST_GUILESS_MAIN(TestProblems)
@@ -76,9 +92,8 @@ QTEST_GUILESS_MAIN(TestProblems)
 void TestProblems::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
-    QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     QVERIFY(qputenv("KDEV_CLANG_DISPLAY_DIAGS", "1"));
-    AutoTestShell::init();
+    AutoTestShell::init({"kdevclangsupport"});
     TestCore::initialize(Core::NoUi);
     DUChain::self()->disablePersistentStorage();
     Core::self()->languageController()->backgroundParser()->setDelay(0);
@@ -225,12 +240,37 @@ void TestProblems::testFixits_data()
         << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), KTextEditor::Range(1, 20, 1, 32)), QString()} };
 }
 
+struct Replacement
+{
+    QString string;
+    QString replacement;
+};
+using Replacements = QVector<Replacement>;
+
+ClangFixits resolveFilenames(const ClangFixits& fixits, const Replacements& replacements)
+{
+    ClangFixits ret;
+    for (const auto& fixit : fixits) {
+        ClangFixit copy = fixit;
+        for (const auto& replacement : replacements) {
+            copy.replacementText.replace(replacement.string, replacement.replacement);
+            copy.range.document = IndexedString(copy.range.document.str().replace(replacement.string, replacement.replacement));
+        }
+        ret << copy;
+    }
+    return ret;
+}
+
 void TestProblems::testMissingInclude()
 {
-    TestFile include("class A {};\n", "h");
+    QFETCH(QString, includeFileContent);
+    QFETCH(QString, workingFileContent);
+    QFETCH(QVector<ClangFixit>, fixits);
+
+    TestFile include(includeFileContent, "h");
     include.parse(TopDUContext::AllDeclarationsAndContexts);
 
-    TestFile workingFile("int main() { A a; }", "cpp");
+    TestFile workingFile(workingFileContent, "cpp");
     workingFile.parse(TopDUContext::AllDeclarationsAndContexts);
 
     QCOMPARE(include.url().toUrl().adjusted(QUrl::RemoveFilename), workingFile.url().toUrl().adjusted(QUrl::RemoveFilename));
@@ -253,10 +293,26 @@ void TestProblems::testMissingInclude()
     auto clangFixitAssistant = qobject_cast<ClangFixitAssistant*>(assistant.data());
     QVERIFY(clangFixitAssistant);
 
-    auto fixits = clangFixitAssistant->fixits();
-    QCOMPARE(fixits.size(), 2);
-    QCOMPARE(fixits[0].replacementText, QString("class A;\n"));
-    QCOMPARE(fixits[1].replacementText, QString("#include \"%1\"\n").arg(include.url().toUrl().fileName()));
+    auto resolvedFixits = resolveFilenames(fixits, {
+       {"includeFile.h", include.url().toUrl().fileName()},
+       {"workingFile.h", workingFile.url().toUrl().fileName()}
+    });
+    compareFixitsWithoutDescription(clangFixitAssistant->fixits(), resolvedFixits);
+}
+
+void TestProblems::testMissingInclude_data()
+{
+    QTest::addColumn<QString>("includeFileContent");
+    QTest::addColumn<QString>("workingFileContent");
+    QTest::addColumn<QVector<ClangFixit>>("fixits");
+
+    QTest::newRow("basic")
+        << "class A {};\n"
+        << "int main() { A a; }"
+        << QVector<ClangFixit>{
+            ClangFixit{"class A;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()},
+            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()}
+        };
 }
 
 struct ExpectedTodo
