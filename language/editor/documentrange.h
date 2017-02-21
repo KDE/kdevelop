@@ -54,6 +54,16 @@ public:
 };
 
 }
+
+namespace QTest {
+template<>
+inline char *toString(const KDevelop::DocumentRange &documentRange)
+{
+    QByteArray ba = "DocumentRange[range=" + QByteArray(QTest::toString(*static_cast<const KTextEditor::Range*>(&documentRange)))
+        + ", document=" + documentRange.document.toUrl().toDisplayString().toLatin1()
+        + "]";
+    return qstrdup(ba.data());
+}
+}
+
 #endif // KDEVPLATFORM_DOCUMENTRANGE_H
-
-
