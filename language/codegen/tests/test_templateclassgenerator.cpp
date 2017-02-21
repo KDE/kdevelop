@@ -144,18 +144,18 @@ void TestTemplateClassGenerator::customOptions()
         const char* name;
         QVector<ExpectedOption> expectedOptions;
     } expectedGroupDataList[] = {
-        { name: "A Group", expectedOptions: {
-            {name: "bool_option",   label: "A Bool",     type: "Bool",   value: "true",   values: {}},
-            {name: "string_option", label: "Zzz String", type: "String", value: "Test",   values: {}},
-            {name: "enum_option",   label: "Bb Enum",    type: "Enum",   value: "Second", values: {
+        { .name =  "A Group", .expectedOptions =  {
+            {.name =  "bool_option",   .label =  "A Bool",     .type =  "Bool",   .value =  "true",   .values =  {}},
+            {.name =  "string_option", .label =  "Zzz String", .type =  "String", .value =  "Test",   .values =  {}},
+            {.name =  "enum_option",   .label =  "Bb Enum",    .type =  "Enum",   .value =  "Second", .values =  {
                 {QLatin1String("First")}, {QLatin1String("Second")}, {QLatin1String("Last")}
             }}
         }},
-        { name: "Zzz Group", expectedOptions: {
-            {name: "z_option", label: "Z Bool", type: "Bool", value: "false", values: {}}
+        { .name =  "Zzz Group", .expectedOptions =  {
+            {.name =  "z_option", .label =  "Z Bool", .type =  "Bool", .value =  "false", .values = {}}
         }},
-        { name: "Bb Group", expectedOptions: {
-            {name: "b_option", label: "B Bool", type: "Bool", value: "true", values: {}}
+        { .name =  "Bb Group", .expectedOptions =  {
+            {.name =  "b_option", .label =  "B Bool", .type =  "Bool", .value =  "true",  .values = {}}
         }}
     };
     const int expectedGroupDataCount = sizeof(expectedGroupDataList)/sizeof(expectedGroupDataList[0]);
