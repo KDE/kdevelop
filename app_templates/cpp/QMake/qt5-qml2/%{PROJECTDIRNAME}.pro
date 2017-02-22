@@ -1,7 +1,4 @@
-SOURCES += \
-    src/main.cpp
+SOURCES = src/main.cpp
+RESOURCES = resources.qrc
 
-OTHER_FILES += \
-    src/qml/main.qml
-
-QT += quick declarative
+QT += quick

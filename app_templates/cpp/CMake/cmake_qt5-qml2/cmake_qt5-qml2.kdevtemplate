@@ -23,7 +23,7 @@ Name[sv]=Qt5 QML2-program
 Name[uk]=Програма мовою QML2 для Qt5
 Name[x-test]=xxQt5 QML2 Applicationxx
 
-Comment=A Qt5 and QML2 basic application using QMake
+Comment=A Qt5 and QtQuick2 basic application using CMake
 Comment[ca]=Una aplicació bàsica en QML2 i les Qt5 usant el QMake. Avís: Calen les Qt5, no les Qt4.
 Comment[ca@valencia]=Una aplicació bàsica en QML2 i les Qt5 usant el QMake. Avís: Calen les Qt5, no les Qt4.
 Comment[de]=Eine einfache Qt5- und QML2-Anwendung basierend auf QMake. Achtung: Sie benötigen hier Qt5.
@@ -45,6 +45,6 @@ Comment[sv]=Ett Qt5 och QML2-baserat program som använder QMake. Varning: man b
 Comment[uk]=Базова програма мовою QML2 для Qt5 з використанням QMake. Зауваження: для працездатності цієї програми слід встановити Qt5, а не Qt4.
 Comment[x-test]=xxA Qt5 and QML2 basic application using QMake. Warning, you need Qt5 for it, not Qt4.xx
 
-Category=Qt/Graphical (QMake-based)
+Category=Qt/Graphical
 Icon=qt5-qml2.png
 ShowFilesAfterGeneration=%{dest}/src/main.cpp
