@@ -45,7 +45,6 @@
 
 #include "executescriptplugin.h"
 #include <util/kdevstringhandler.h>
-#include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
 
 using namespace KDevelop;

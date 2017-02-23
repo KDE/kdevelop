@@ -32,7 +32,6 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <util/environmentgrouplist.h>
 #include "scriptappconfig.h"
 #include "debug.h"
 #include <project/projectmodel.h>
