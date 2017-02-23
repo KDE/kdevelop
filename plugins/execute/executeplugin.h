@@ -47,7 +47,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     static QString argumentsEntry;
     static QString isExecutableEntry;
     static QString dependencyEntry;
-    static QString environmentGroupEntry;
+    static QString environmentProfileEntry;
     static QString useTerminalEntry;
     static QString terminalEntry;
     static QString userIdToRunEntry;
@@ -60,7 +60,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const override;
     QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const override;
     KJob* dependencyJob( KDevelop::ILaunchConfiguration* ) const override;
-    QString environmentGroup( KDevelop::ILaunchConfiguration* ) const override;
+    QString environmentProfileName(KDevelop::ILaunchConfiguration*) const override;
     bool useTerminal( KDevelop::ILaunchConfiguration* ) const override;
     QString terminal( KDevelop::ILaunchConfiguration* ) const override;
     QString nativeAppConfigTypeId() const override;

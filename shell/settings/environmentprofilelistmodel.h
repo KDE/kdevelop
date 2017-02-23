@@ -22,15 +22,15 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_ENVIRONMENTPROFILELISTMODEL_H
 
 #include <QAbstractItemModel>
-#include "util/environmentgrouplist.h"
+#include "util/environmentprofilelist.h"
 
 class QStringList;
 
 namespace KDevelop
 {
 
-// Subclassing EnvironmentGroupList instead of having as a member, to have access to protected API
-class EnvironmentProfileListModel : public QAbstractItemModel, protected EnvironmentGroupList
+// Subclassing EnvironmentProfileList instead of having as a member, to have access to protected API
+class EnvironmentProfileListModel : public QAbstractItemModel, protected EnvironmentProfileList
 {
     Q_OBJECT
 

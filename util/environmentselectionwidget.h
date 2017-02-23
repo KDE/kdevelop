@@ -22,10 +22,10 @@ Boston, MA 02110-1301, USA.
 #include <QWidget>
 
 #include "utilexport.h"
-#include "environmentgrouplist.h"
 
 namespace KDevelop
 {
+class EnvironmentProfileList;
 
 /**
  * Simple combobox which allows each plugin to decide which environment
@@ -65,10 +65,10 @@ public:
     QString effectiveProfileName() const;
 
     /**
-     * @returns The @ref EnvironmentGroupList which has been used to populate this
+     * @returns The @ref EnvironmentProfileList which has been used to populate this
      *          widget.
      */
-    EnvironmentGroupList environment() const;
+    EnvironmentProfileList environmentProfiles() const;
 
 public slots:
     /**

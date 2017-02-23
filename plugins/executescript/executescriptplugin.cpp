@@ -47,7 +47,8 @@ QString ExecuteScriptPlugin::runCurrentFileEntry = QStringLiteral("Run current f
 QString ExecuteScriptPlugin::remoteHostEntry = QStringLiteral("Remote Host");
 QString ExecuteScriptPlugin::argumentsEntry = QStringLiteral("Arguments");
 QString ExecuteScriptPlugin::isExecutableEntry = QStringLiteral("isExecutable");
-QString ExecuteScriptPlugin::environmentGroupEntry = QStringLiteral("EnvironmentGroup");
+// TODO: migrate to more consistent key term "EnvironmentProfile"
+QString ExecuteScriptPlugin::environmentProfileEntry = QStringLiteral("EnvironmentGroup");
 //QString ExecuteScriptPlugin::useTerminalEntry = "Use External Terminal";
 QString ExecuteScriptPlugin::userIdToRunEntry = QStringLiteral("User Id to Run");
 QString ExecuteScriptPlugin::projectTargetEntry = QStringLiteral("Project Target");
@@ -161,14 +162,14 @@ QStringList ExecuteScriptPlugin::arguments( KDevelop::ILaunchConfiguration* cfg,
     return args;
 }
 
-QString ExecuteScriptPlugin::environmentGroup( KDevelop::ILaunchConfiguration* cfg ) const
+QString ExecuteScriptPlugin::environmentProfileName(KDevelop::ILaunchConfiguration* cfg) const
 {
     if( !cfg )
     {
         return QString();
     }
 
-    return cfg->config().readEntry( ExecuteScriptPlugin::environmentGroupEntry, "" );
+    return cfg->config().readEntry(ExecuteScriptPlugin::environmentProfileEntry, QString());
 }
 
 int ExecuteScriptPlugin::outputFilterModeId( KDevelop::ILaunchConfiguration* cfg ) const

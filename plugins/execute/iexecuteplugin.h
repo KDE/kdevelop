@@ -45,7 +45,7 @@ public:
     virtual QStringList arguments( KDevelop::ILaunchConfiguration* config, QString& error) const = 0;
     virtual QUrl workingDirectory( KDevelop::ILaunchConfiguration* config) const = 0;
     virtual KJob* dependencyJob( KDevelop::ILaunchConfiguration* config) const = 0;
-    virtual QString environmentGroup( KDevelop::ILaunchConfiguration* config) const = 0;
+    virtual QString environmentProfileName(KDevelop::ILaunchConfiguration* config) const = 0;
     virtual bool useTerminal( KDevelop::ILaunchConfiguration* config) const = 0;
     virtual QString terminal( KDevelop::ILaunchConfiguration* config) const = 0;
     virtual QString nativeAppConfigTypeId() const = 0;

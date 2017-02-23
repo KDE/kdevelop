@@ -30,7 +30,7 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iruncontroller.h>
 #include <outputview/outputmodel.h>
-#include <util/environmentgrouplist.h>
+#include <util/environmentprofilelist.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
@@ -50,8 +50,8 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
     Q_ASSERT(iface);
 
-    KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
-    QString envgrp = iface->environmentGroup(cfg);
+    const KDevelop::EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
+    QString envProfileName = iface->environmentProfileName(cfg);
 
     QString err;
     QUrl executable = iface->executable( cfg, err );
@@ -63,14 +63,13 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         return;
     }
 
-    if( envgrp.isEmpty() )
-    {
-        qWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment group specified, looks like a broken "
+    if (envProfileName.isEmpty()) {
+        qWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment profile specified, looks like a broken "
                        "configuration, please check run configuration '%1'. "
-                       "Using default environment group.", cfg->name() );
-        envgrp = l.defaultGroup();
+                       "Using default environment profile.", cfg->name() );
+        envProfileName = environmentProfiles.defaultProfileName();
     }
-    setEnvironmentProfile(envgrp);
+    setEnvironmentProfile(envProfileName);
 
     QStringList arguments = iface->arguments( cfg, err );
     if( !err.isEmpty() )

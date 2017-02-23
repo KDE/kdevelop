@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "outputmodel.h"
 #include "outputdelegate.h"
 #include "debug.h"
-#include <util/environmentgrouplist.h>
+#include <util/environmentprofilelist.h>
 #include <util/processlinemaker.h>
 #include <KProcess>
 #include <KLocalizedString>
@@ -483,13 +483,13 @@ void OutputExecuteJobPrivate::mergeEnvironment( QProcessEnvironment& dest, const
 
 QProcessEnvironment OutputExecuteJobPrivate::effectiveEnvironment(const QUrl& workingDirectory) const
 {
-    const EnvironmentGroupList environmentGroup( KSharedConfig::openConfig() );
+    const EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
     QString environmentProfile = m_owner->environmentProfile();
     if( environmentProfile.isEmpty() ) {
-        environmentProfile = environmentGroup.defaultGroup();
+        environmentProfile = environmentProfiles.defaultProfileName();
     }
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
-    auto userEnv = environmentGroup.variables(environmentProfile);
+    auto userEnv = environmentProfiles.variables(environmentProfile);
     expandVariables(userEnv, environment);
 
     OutputExecuteJobPrivate::mergeEnvironment( environment, userEnv );

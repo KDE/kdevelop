@@ -33,7 +33,7 @@
 #include <outputview/outputmodel.h>
 #include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
-#include <util/environmentgrouplist.h>
+#include <util/environmentprofilelist.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -55,8 +55,8 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     IExecuteScriptPlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecuteScriptPlugin"))->extension<IExecuteScriptPlugin>();
     Q_ASSERT(iface);
 
-    KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
-    QString envgrp = iface->environmentGroup(cfg);
+    const KDevelop::EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
+    QString envProfileName = iface->environmentProfileName(cfg);
 
     QString err;
     QString interpreterString = iface->interpreter( cfg, err );
@@ -106,12 +106,11 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         return;
     }
 
-    if( envgrp.isEmpty() )
-    {
-        qWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment group specified, looks like a broken "
+    if (envProfileName.isEmpty()) {
+        qWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment profile specified, looks like a broken "
                        "configuration, please check run configuration '%1'. "
-                       "Using default environment group.", cfg->name() );
-        envgrp = l.defaultGroup();
+                       "Using default environment profile.", cfg->name() );
+        envProfileName = environmentProfiles.defaultProfileName();
     }
 
     QStringList arguments = iface->arguments( cfg, err );
@@ -142,7 +141,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
 
     // Now setup the process parameters
 
-    proc->setEnvironment( l.createEnvironment( envgrp, proc->systemEnvironment()) );
+    proc->setEnvironment(environmentProfiles.createEnvironment(envProfileName, proc->systemEnvironment()));
     QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() )
     {

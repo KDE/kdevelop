@@ -17,7 +17,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 #include "environmentselectionwidget.h"
-#include "environmentgrouplist.h"
+#include "environmentprofilelist.h"
 #include "environmentselectionmodel.h"
 
 #include <QHBoxLayout>
@@ -89,9 +89,9 @@ QString EnvironmentSelectionWidget::effectiveProfileName() const
     return d->model->index( d->comboBox->currentIndex(), 0 ).data( EnvironmentSelectionModel::EffectiveNameRole ).toString();
 }
 
-EnvironmentGroupList EnvironmentSelectionWidget::environment() const
+EnvironmentProfileList EnvironmentSelectionWidget::environmentProfiles() const
 {
-    return d->model->environment();
+    return d->model->environmentProfiles();
 }
 
 }

@@ -37,7 +37,7 @@ class EnvironmentProfileModel;
 
 /**
  * @short Environment variable setting widget.
- * This class manages a EnvironmentGroupList and allows one to change the variables and add/remove groups
+ * This class manages a EnvironmentProfileList and allows one to change the variables and add/remove groups
  *
  * @sa EnvPreferences
  */

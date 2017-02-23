@@ -20,11 +20,10 @@ Boston, MA 02110-1301, USA.
 #ifndef ENVIRONMENTSELECTIONMODEL_H
 #define ENVIRONMENTSELECTIONMODEL_H
 
-#include "environmentgrouplist.h"
+#include "environmentprofilelist.h"
 
 #include <QStringListModel>
-
-#include <KLocalizedString>
+#include <QSet>
 
 namespace KDevelop
 {
@@ -47,10 +46,10 @@ public:
     bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
 
     /**
-     * @returns The @ref EnvironmentGroupList which has bee used to populate this
+     * @returns The @ref EnvironmentProfileList which has been used to populate this
      *          model.
      */
-    EnvironmentGroupList environment() const;
+    EnvironmentProfileList environmentProfiles() const;
 
     /**
      * Reloads the model from the global config.
@@ -66,8 +65,8 @@ public:
     QString reloadSelectedItem( const QString& currentProfile );
 
 private:
-    EnvironmentGroupList m_env;
-    QSet<QString> m_groupsLookupTable;
+    EnvironmentProfileList m_env;
+    QSet<QString> m_profilesLookupTable;
 };
 
 } // namespace KDevelop

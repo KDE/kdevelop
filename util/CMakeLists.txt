@@ -13,7 +13,7 @@ set(KDevPlatformUtil_LIB_SRCS
     commandexecutor.cpp
     environmentselectionwidget.cpp
     environmentselectionmodel.cpp
-    environmentgrouplist.cpp
+    environmentprofilelist.cpp
     jobstatus.cpp
     activetooltip.cpp
     executecompositejob.cpp
@@ -76,7 +76,7 @@ install( FILES
     processlinemaker.h
     commandexecutor.h
     environmentselectionwidget.h
-    environmentgrouplist.h
+    environmentprofilelist.h
     jobstatus.h
     pushvalue.h
     kdevvarlengtharray.h

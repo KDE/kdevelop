@@ -19,13 +19,15 @@ Boston, MA 02110-1301, USA.
 
 #include "environmentselectionmodel.h"
 
+#include <KLocalizedString>
+
 namespace
 {
 
-QStringList entriesFromEnv( const KDevelop::EnvironmentGroupList& env )
+QStringList entriesFromEnv(const KDevelop::EnvironmentProfileList& env)
 {
     // We add an empty (i. e. default profile) entry to the front of the model's list.
-    return QStringList( QString() ) + env.groups();
+    return QStringList(QString()) + env.profileNames();
 }
 
 }
@@ -38,7 +40,7 @@ EnvironmentSelectionModel::EnvironmentSelectionModel( QObject* parent ) :
     m_env( KSharedConfig::openConfig() )
 {
     setStringList( entriesFromEnv( m_env ) );
-    m_groupsLookupTable = stringList().toSet();
+    m_profilesLookupTable = stringList().toSet();
 }
 
 QVariant EnvironmentSelectionModel::headerData( int section, Qt::Orientation orientation, int role ) const
@@ -60,10 +62,10 @@ QVariant EnvironmentSelectionModel::data( const QModelIndex& index, int role ) c
     switch( role ) {
     case Qt::DisplayRole:
         if( profileName.isEmpty() ) {
-            return i18nc( "@item:inlistbox", "Use default profile (currently: %1)", m_env.defaultGroup() );
+            return i18nc("@item:inlistbox", "Use default profile (currently: %1)", m_env.defaultProfileName());
         }
 
-        if( !m_groupsLookupTable.contains( profileName ) ) {
+        if (!m_profilesLookupTable.contains(profileName)) {
             return i18nc( "@item:inlistbox", "%1 (does not exist)", profileName );
         }
 
@@ -71,7 +73,7 @@ QVariant EnvironmentSelectionModel::data( const QModelIndex& index, int role ) c
 
     case EffectiveNameRole:
         if( profileName.isEmpty() ) {
-            return m_env.defaultGroup();
+            return m_env.defaultProfileName();
         }
 
         return nativeData;
@@ -86,22 +88,22 @@ bool EnvironmentSelectionModel::setData( const QModelIndex& /*index*/, const QVa
     return false;
 }
 
-EnvironmentGroupList EnvironmentSelectionModel::environment() const
+EnvironmentProfileList EnvironmentSelectionModel::environmentProfiles() const
 {
     return m_env;
 }
 
 void EnvironmentSelectionModel::reload()
 {
-    m_env = EnvironmentGroupList( KSharedConfig::openConfig() );
+    m_env = EnvironmentProfileList(KSharedConfig::openConfig());
 
     setStringList( entriesFromEnv( m_env ) );
-    m_groupsLookupTable = stringList().toSet();
+    m_profilesLookupTable = stringList().toSet();
 }
 
 QString EnvironmentSelectionModel::reloadSelectedItem( const QString& currentProfile )
 {
-    if( m_groupsLookupTable.contains( currentProfile ) ) {
+    if (m_profilesLookupTable.contains(currentProfile)) {
         return currentProfile;
     } else {
         return QString();

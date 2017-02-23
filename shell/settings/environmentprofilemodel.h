@@ -23,7 +23,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QAbstractTableModel>
 #include <QStringList>
-#include "util/environmentgrouplist.h"
 
 namespace KDevelop
 {

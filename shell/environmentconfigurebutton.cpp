@@ -21,7 +21,6 @@
 #include "environmentconfigurebutton.h"
 
 #include <util/environmentselectionwidget.h>
-#include <util/environmentgrouplist.h>
 #include "settings/environmentpreferences.h"
 
 #include <QApplication>

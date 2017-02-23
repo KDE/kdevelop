@@ -21,7 +21,7 @@
 
 #include "test_environment.h"
 
-#include "util/environmentgrouplist.h"
+#include "util/environmentprofilelist.h"
 
 #include <QtTest>
 

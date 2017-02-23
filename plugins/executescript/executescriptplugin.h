@@ -50,7 +50,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     static QString runCurrentFileEntry;
     static QString argumentsEntry;
     static QString isExecutableEntry;
-    static QString environmentGroupEntry;
+    static QString environmentProfileEntry;
     //static QString useTerminalEntry;
     static QString userIdToRunEntry;
     static QString projectTargetEntry;
@@ -63,7 +63,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     QString remoteHost(KDevelop::ILaunchConfiguration* , QString& err) const override;
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const override;
     QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const override;
-    QString environmentGroup( KDevelop::ILaunchConfiguration* ) const override;
+    QString environmentProfileName(KDevelop::ILaunchConfiguration*) const override;
     //bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString scriptAppConfigTypeId() const override;
     int outputFilterModeId( KDevelop::ILaunchConfiguration* ) const override;

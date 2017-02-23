@@ -17,7 +17,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "environmentgrouplist.h"
+#include "environmentprofilelist.h"
 
 #include <QMap>
 #include <QStringList>
@@ -29,11 +29,11 @@ Boston, MA 02110-1301, USA.
 #include <QProcessEnvironment>
 
 namespace KDevelop {
-class EnvironmentGroupListPrivate
+class EnvironmentProfileListPrivate
 {
 public:
-    QMap<QString, QMap<QString,QString> > m_groups;
-    QString m_defaultGroup;
+    QMap<QString, QMap<QString,QString> > m_profiles;
+    QString m_defaultProfileName;
 };
 }
 
@@ -42,43 +42,42 @@ using namespace KDevelop;
 namespace {
 
 namespace Strings {
-inline QString defaultEnvGroupKey() { return QStringLiteral("Default Environment Group"); }
+// TODO: migrate to more consistent key term "Default Environment Profile"
+inline QString defaultEnvProfileKey() { return QStringLiteral("Default Environment Group"); }
 inline QString envGroup() { return QStringLiteral("Environment Settings"); }
-inline QString groupListKey() { return QStringLiteral("Group List"); }
-inline QString defaultGroup() { return QStringLiteral("default"); }
+// TODO: migrate to more consistent key term "Profile List"
+inline QString profileListKey() { return QStringLiteral("Group List"); }
+inline QString defaultProfileName() { return QStringLiteral("default"); }
 }
 
-void decode( KConfig* config, EnvironmentGroupListPrivate* d )
+void decode(KConfig* config, EnvironmentProfileListPrivate* d)
 {
     KConfigGroup cfg( config, Strings::envGroup() );
-    d->m_defaultGroup = cfg.readEntry( Strings::defaultEnvGroupKey(), Strings::defaultGroup() );
-    QStringList grouplist = cfg.readEntry( Strings::groupListKey(), QStringList{Strings::defaultGroup()} );
-    foreach( const QString &envgrpname, grouplist )
-    {
-        KConfigGroup envgrp( &cfg, envgrpname );
+    d->m_defaultProfileName = cfg.readEntry(Strings::defaultEnvProfileKey(), Strings::defaultProfileName());
+    const QStringList profileNames = cfg.readEntry(Strings::profileListKey(), QStringList{Strings::defaultProfileName()});
+    for (const auto& profileName : profileNames) {
+        KConfigGroup envgrp(&cfg, profileName);
         QMap<QString,QString> variables;
         foreach( const QString &varname, envgrp.keyList() )
         {
             variables[varname] = envgrp.readEntry( varname, QString() );
         }
-        d->m_groups.insert( envgrpname, variables );
+        d->m_profiles.insert(profileName, variables);
     }
 }
 
-void encode( KConfig* config, EnvironmentGroupListPrivate* d )
+void encode(KConfig* config, EnvironmentProfileListPrivate* d)
 {
     KConfigGroup cfg( config, Strings::envGroup() );
-    cfg.writeEntry( Strings::defaultEnvGroupKey(), d->m_defaultGroup );
-    cfg.writeEntry( Strings::groupListKey(), d->m_groups.keys() );
+    cfg.writeEntry(Strings::defaultEnvProfileKey(), d->m_defaultProfileName);
+    cfg.writeEntry(Strings::profileListKey(), d->m_profiles.keys());
     foreach( const QString &group, cfg.groupList() )
     {
-        if( !d->m_groups.contains( group ) )
-        {
+        if (!d->m_profiles.contains(group)) {
             cfg.deleteGroup( group );
         }
     }
-    for(auto it = d->m_groups.cbegin(), itEnd = d->m_groups.cend(); it!=itEnd; ++it)
-    {
+    for (auto it = d->m_profiles.cbegin(), itEnd = d->m_profiles.cend(); it!=itEnd; ++it) {
         KConfigGroup envgrp( &cfg, it.key() );
         envgrp.deleteGroup();
 
@@ -93,90 +92,88 @@ void encode( KConfig* config, EnvironmentGroupListPrivate* d )
 
 }
 
-EnvironmentGroupList::EnvironmentGroupList( const EnvironmentGroupList& rhs )
-    : d( new EnvironmentGroupListPrivate( *rhs.d ) )
+EnvironmentProfileList::EnvironmentProfileList(const EnvironmentProfileList& rhs)
+    : d(new EnvironmentProfileListPrivate(*rhs.d))
 {
 }
 
-EnvironmentGroupList& EnvironmentGroupList::operator=( const EnvironmentGroupList& rhs )
+EnvironmentProfileList& EnvironmentProfileList::operator=(const EnvironmentProfileList& rhs)
 {
     *d = *rhs.d;
     return *this;
 }
 
-EnvironmentGroupList::EnvironmentGroupList( KSharedConfigPtr config )
-    : d( new EnvironmentGroupListPrivate )
+EnvironmentProfileList::EnvironmentProfileList(KSharedConfigPtr config)
+    : d( new EnvironmentProfileListPrivate )
 {
     decode( config.data(), d );
 }
 
-EnvironmentGroupList::EnvironmentGroupList( KConfig* config )
-    : d( new EnvironmentGroupListPrivate )
+EnvironmentProfileList::EnvironmentProfileList(KConfig* config)
+    : d(new EnvironmentProfileListPrivate)
 {
     decode( config, d );
 }
 
-EnvironmentGroupList::~EnvironmentGroupList()
+EnvironmentProfileList::~EnvironmentProfileList()
 {
     delete d;
 }
 
-const QMap<QString, QString> EnvironmentGroupList::variables( const QString& group ) const
+QMap<QString, QString> EnvironmentProfileList::variables(const QString& profileName) const
 {
-    return d->m_groups[group.isEmpty() ? d->m_defaultGroup : group];
+    return d->m_profiles[profileName.isEmpty() ? d->m_defaultProfileName : profileName];
 }
 
-QMap<QString, QString>& EnvironmentGroupList::variables( const QString& group )
+QMap<QString, QString>& EnvironmentProfileList::variables(const QString& profileName)
 {
-    return d->m_groups[group.isEmpty() ? d->m_defaultGroup : group];
+    return d->m_profiles[profileName.isEmpty() ? d->m_defaultProfileName : profileName];
 }
 
 
-QString EnvironmentGroupList::defaultGroup() const
+QString EnvironmentProfileList::defaultProfileName() const
 {
-    return d->m_defaultGroup;
+    return d->m_defaultProfileName;
 }
 
-void EnvironmentGroupList::setDefaultGroup( const QString& group )
+void EnvironmentProfileList::setDefaultProfile(const QString& profileName)
 {
-    if( group.isEmpty() ) {
+    if (profileName.isEmpty() ||
+        !d->m_profiles.contains(profileName)) {
         return;
     }
 
-    if( d->m_groups.contains( group ) )
-    {
-        d->m_defaultGroup = group;
-    }
+    d->m_defaultProfileName = profileName;
 }
 
-void EnvironmentGroupList::saveSettings( KConfig* config ) const
+void EnvironmentProfileList::saveSettings(KConfig* config) const
 {
     encode( config, d );
     config->sync();
 }
 
-void EnvironmentGroupList::loadSettings( KConfig* config )
+void EnvironmentProfileList::loadSettings(KConfig* config)
 {
-    d->m_groups.clear();
+    d->m_profiles.clear();
     decode( config, d );
 }
 
-QStringList EnvironmentGroupList::groups() const
+QStringList EnvironmentProfileList::profileNames() const
 {
-    return d->m_groups.keys();
+    return d->m_profiles.keys();
 }
 
-void EnvironmentGroupList::removeGroup( const QString& group )
+void EnvironmentProfileList::removeProfile(const QString& profileName)
 {
-    d->m_groups.remove( group );
+    d->m_profiles.remove(profileName);
 }
 
-EnvironmentGroupList::EnvironmentGroupList()
-    : d( new EnvironmentGroupListPrivate )
+EnvironmentProfileList::EnvironmentProfileList()
+    : d(new EnvironmentProfileListPrivate)
 {
 }
 
-QStringList EnvironmentGroupList::createEnvironment( const QString & group, const QStringList & defaultEnvironment ) const
+QStringList EnvironmentProfileList::createEnvironment(const QString& profileName, const QStringList& defaultEnvironment) const
 {
     QMap<QString, QString> retMap;
     foreach( const QString &line, defaultEnvironment )
@@ -186,8 +183,8 @@ QStringList EnvironmentGroupList::createEnvironment( const QString & group, cons
         retMap.insert( varName, varValue );
     }
 
-    if( !group.isEmpty() ) {
-      QMap<QString, QString> userMap = variables(group);
+    if (!profileName.isEmpty()) {
+      const auto userMap = variables(profileName);
 
       for( QMap<QString, QString>::const_iterator it = userMap.constBegin();
           it != userMap.constEnd(); ++it )

@@ -35,7 +35,7 @@ int EnvironmentProfileListModel::rowCount(const QModelIndex& parent) const
         return 0;
     }
 
-    return groups().count();
+    return profileNames().count();
 }
 
 int EnvironmentProfileListModel::columnCount(const QModelIndex& parent) const
@@ -56,8 +56,8 @@ QVariant EnvironmentProfileListModel::data(const QModelIndex& index, int role) c
     }
 
     if (role == Qt::DisplayRole) {
-        auto profileName = groups().at(index.row());
-        if (profileName == defaultGroup()) {
+        auto profileName = profileNames().at(index.row());
+        if (profileName == defaultProfileName()) {
             profileName = i18n("%1 (default profile)", profileName);
         }
         return profileName;
@@ -82,32 +82,32 @@ QModelIndex EnvironmentProfileListModel::parent(const QModelIndex& index) const
 
 int EnvironmentProfileListModel::defaultProfileIndex() const
 {
-    return groups().indexOf(defaultGroup());
+    return profileNames().indexOf(defaultProfileName());
 }
 
 QString EnvironmentProfileListModel::profileName(int profileIndex) const
 {
-    return groups().value(profileIndex);
+    return profileNames().value(profileIndex);
 }
 
 int EnvironmentProfileListModel::profileIndex(const QString& profileName) const
 {
-    return groups().indexOf(profileName);
+    return profileNames().indexOf(profileName);
 }
 
 bool EnvironmentProfileListModel::hasProfile(const QString& profileName) const
 {
-    return groups().contains(profileName);
+    return profileNames().contains(profileName);
 }
 
 QMap<QString, QString>& EnvironmentProfileListModel::variables(const QString& profileName)
 {
-    return EnvironmentGroupList::variables(profileName);
+    return EnvironmentProfileList::variables(profileName);
 }
 
 int EnvironmentProfileListModel::addProfile(const QString& newProfileName)
 {
-    const auto profileNames = groups();
+    const auto profileNames = this->profileNames();
     if (newProfileName.isEmpty() ||
         profileNames.contains(newProfileName)) {
         return -1;
@@ -130,12 +130,12 @@ int EnvironmentProfileListModel::addProfile(const QString& newProfileName)
 
 void EnvironmentProfileListModel::removeProfile(int profileIndex)
 {
-    const auto profileNames = groups();
+    const auto profileNames = this->profileNames();
     if (profileIndex < 0 || profileIndex >= profileNames.size()) {
         return;
     }
     const auto profileName = profileNames.at(profileIndex);
-    if (defaultGroup() == profileName) {
+    if (defaultProfileName() == profileName) {
         return;
     }
 
@@ -143,14 +143,14 @@ void EnvironmentProfileListModel::removeProfile(int profileIndex)
 
     beginRemoveRows(QModelIndex(), profileIndex, profileIndex);
 
-    EnvironmentGroupList::removeGroup(profileName);
+    EnvironmentProfileList::removeProfile(profileName);
 
     endRemoveRows();
 }
 
 int EnvironmentProfileListModel::cloneProfile(const QString& newProfileName, const QString& sourceProfileName)
 {
-    const auto profileNames = groups();
+    const auto profileNames = this->profileNames();
     if (newProfileName.isEmpty() ||
         profileNames.contains(newProfileName) ||
         !profileNames.contains(sourceProfileName)) {
@@ -175,8 +175,8 @@ int EnvironmentProfileListModel::cloneProfile(const QString& newProfileName, con
 
 void EnvironmentProfileListModel::setDefaultProfile(int profileIndex)
 {
-    const auto profileNames = groups();
-    const auto oldDefaultProfileName = defaultGroup();
+    const auto profileNames = this->profileNames();
+    const auto oldDefaultProfileName = defaultProfileName();
     const int oldDefaultProfileIndex = profileNames.indexOf(oldDefaultProfileName);
 
     if (profileIndex < 0 || profileIndex >= profileNames.size() ||
@@ -187,7 +187,7 @@ void EnvironmentProfileListModel::setDefaultProfile(int profileIndex)
     const auto oldIndex = index(oldDefaultProfileIndex, 0);
 
     const auto profileName = profileNames.at(profileIndex);
-    setDefaultGroup(profileName);
+    EnvironmentProfileList::setDefaultProfile(profileName);
 
     const int newDefaultProfileIndex = profileNames.indexOf(profileName);
     const auto newIndex = index(newDefaultProfileIndex, 0);

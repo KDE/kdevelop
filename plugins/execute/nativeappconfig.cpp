@@ -93,7 +93,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     arguments->setClearButtonEnabled( true );
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, QUrl() ) );
-    environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, QString() ) );
+    environment->setCurrentProfile(cfg.readEntry(ExecutePlugin::environmentProfileEntry, QString()));
     runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
     terminal->setEditText( cfg.readEntry( ExecutePlugin::terminalEntry, terminal->itemText(0) ) );
     dependencies->setDependencies(KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList());
@@ -147,7 +147,7 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
     cfg.writeEntry( ExecutePlugin::projectTargetEntry, projectTarget->currentItemPath() );
     cfg.writeEntry( ExecutePlugin::argumentsEntry, arguments->text() );
     cfg.writeEntry( ExecutePlugin::workingDirEntry, workingDirectory->url() );
-    cfg.writeEntry( ExecutePlugin::environmentGroupEntry, environment->currentProfile() );
+    cfg.writeEntry( ExecutePlugin::environmentProfileEntry, environment->currentProfile() );
     cfg.writeEntry( ExecutePlugin::useTerminalEntry, runInTerminal->isChecked() );
     cfg.writeEntry( ExecutePlugin::terminalEntry, terminal->currentText() );
     cfg.writeEntry( ExecutePlugin::dependencyActionEntry, dependencyAction->itemData( dependencyAction->currentIndex() ).toString() );
