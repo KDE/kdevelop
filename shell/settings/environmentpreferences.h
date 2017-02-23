@@ -29,7 +29,7 @@ class EnvironmentPreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    explicit EnvironmentPreferences(const QString& activeGroup = QString(), QWidget* parent = nullptr);
+    explicit EnvironmentPreferences(const QString& preselectedProfileName = {}, QWidget* parent = nullptr);
     ~EnvironmentPreferences() override;
 
     QString name() const override;

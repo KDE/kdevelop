@@ -31,7 +31,8 @@ class QSortFilterProxyModel;
 namespace KDevelop
 {
 
-class EnvironmentGroupModel;
+class EnvironmentProfileListModel;
+class EnvironmentProfileModel;
 
 
 /**
@@ -50,27 +51,29 @@ public:
     void loadSettings( KConfig* config );
     void saveSettings( KConfig* config );
     void defaults( KConfig* config );
-    void setActiveGroup( const QString& group );
+    void selectProfile(const QString& profileName);
 
 Q_SIGNALS:
     void changed();
 
-private Q_SLOTS:
-    void handleVariableInserted(int column, const QVariant& value);
-    void deleteButtonClicked();
+private:
+    QString askNewProfileName(const QString& defaultName);
+    void removeSelectedVariables();
     void batchModeEditButtonClicked();
-    void addGroupClicked();
-    void cloneGroupClicked();
-    void removeGroupClicked();
-    void activeGroupChanged( int );
-    void enableDeleteButton();
-    void setAsDefault();
-    void enableButtons( const QString& );
+    void addProfile();
+    void cloneSelectedProfile();
+    void removeSelectedProfile();
+    void setSelectedProfileAsDefault();
+    void onDefaultProfileChanged(int defaultProfileIndex);
+    void onSelectedProfileChanged(int selectedProfileIndex);
+    void onVariableInserted(int column, const QVariant& value);
+    void updateDeleteVariableButton();
 
 private:
     Ui::EnvironmentWidget ui;
-    EnvironmentGroupModel* groupModel;
-    QSortFilterProxyModel* proxyModel;
+    EnvironmentProfileListModel* const m_environmentProfileListModel;
+    EnvironmentProfileModel* const m_environmentProfileModel;
+    QSortFilterProxyModel* const m_proxyModel;
 
 };
 

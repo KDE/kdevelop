@@ -2,6 +2,7 @@
 Copyright 2006 Adam Treat <treat@kde.org>
 Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
 Copyright 2008 Andreas Pakuat <apaku@gmx.de>
+Copyright 2017 Friedrich W. H. Kossebau <kossebau@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -27,99 +28,147 @@ Boston, MA 02110-1301, USA.
 #include <QPushButton>
 #include <QSortFilterProxyModel>
 #include <QTextEdit>
+#include <QLineEdit>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QValidator>
 
 #include <KLocalizedString>
 
-#include "environmentgroupmodel.h"
+#include "environmentprofilelistmodel.h"
+#include "environmentprofilemodel.h"
 #include "placeholderitemproxymodel.h"
 #include "../debug.h"
 
-namespace KDevelop
+using namespace KDevelop;
+
+
+class ProfileNameValidator : public QValidator
 {
+    Q_OBJECT
+
+public:
+    explicit ProfileNameValidator(EnvironmentProfileListModel* environmentProfileListModel, QObject* parent = nullptr);
+    QValidator::State validate(QString& input, int& pos) const override;
+
+private:
+    const EnvironmentProfileListModel* const m_environmentProfileListModel;
+};
+
+ProfileNameValidator::ProfileNameValidator(EnvironmentProfileListModel* environmentProfileListModel,
+                                           QObject* parent)
+    : QValidator(parent)
+    , m_environmentProfileListModel(environmentProfileListModel)
+{
+}
+
+QValidator::State ProfileNameValidator::validate(QString& input, int& pos) const
+{
+    Q_UNUSED(pos);
+
+    if (input.isEmpty()) {
+        return QValidator::Intermediate;
+    }
+    if (m_environmentProfileListModel->hasProfile(input)) {
+        return QValidator::Intermediate;
+    }
+    return QValidator::Acceptable;
+}
+
+
 
 EnvironmentWidget::EnvironmentWidget( QWidget *parent )
-        : QWidget( parent ), groupModel( new EnvironmentGroupModel() ), proxyModel( new QSortFilterProxyModel() )
+    : QWidget(parent)
+    , m_environmentProfileListModel(new EnvironmentProfileListModel(this))
+    , m_environmentProfileModel(new EnvironmentProfileModel(m_environmentProfileListModel, this))
+    , m_proxyModel(new QSortFilterProxyModel(this))
 {
-
     // setup ui
     ui.setupUi( this );
-    ui.variableTable->verticalHeader()->hide();
 
-    proxyModel->setSourceModel( groupModel );
+    ui.profileSelect->setModel(m_environmentProfileListModel);
+    m_proxyModel->setSourceModel(m_environmentProfileModel);
 
     PlaceholderItemProxyModel* topProxyModel  = new PlaceholderItemProxyModel(this);
-    topProxyModel->setSourceModel(proxyModel);
-    topProxyModel->setColumnHint(0, i18n("Enter variable ..."));
-    connect(topProxyModel, &PlaceholderItemProxyModel::dataInserted, this, &EnvironmentWidget::handleVariableInserted);
+    topProxyModel->setSourceModel(m_proxyModel);
+    topProxyModel->setColumnHint(0, i18n("Enter variable..."));
+    connect(topProxyModel, &PlaceholderItemProxyModel::dataInserted, this, &EnvironmentWidget::onVariableInserted);
 
     ui.variableTable->setModel( topProxyModel );
     ui.variableTable->horizontalHeader()->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
     ui.variableTable->horizontalHeader()->setSectionResizeMode( 1, QHeaderView::Stretch );
-    ui.addgrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-    ui.clonegrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("edit-clone")));
-    ui.removegrpBtn->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
-    ui.deleteButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
-    ui.deleteButton->setShortcut(Qt::Key_Delete);
-    ui.batchModeEditButton->setIcon(QIcon::fromTheme(QStringLiteral("format-list-unordered")));
+    ui.removeVariableButton->setShortcut(Qt::Key_Delete);
 
-    connect( ui.deleteButton, &QPushButton::clicked,
-             this, &EnvironmentWidget::deleteButtonClicked );
-    connect( ui.batchModeEditButton, &QPushButton::clicked,
-             this, &EnvironmentWidget::batchModeEditButtonClicked );
+    connect(ui.removeVariableButton, &QPushButton::clicked,
+            this, &EnvironmentWidget::removeSelectedVariables);
+    connect(ui.batchModeEditButton, &QPushButton::clicked,
+            this, &EnvironmentWidget::batchModeEditButtonClicked);
 
-    connect( ui.clonegrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::cloneGroupClicked );
-    connect( ui.addgrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::addGroupClicked );
-    connect( ui.addgrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::changed );
-    connect( ui.removegrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::removeGroupClicked );
-    connect( ui.removegrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::changed );
-    connect( ui.setAsDefaultBtn, &QPushButton::clicked, this, &EnvironmentWidget::setAsDefault );
-    connect( ui.setAsDefaultBtn, &QPushButton::clicked, this, &EnvironmentWidget::changed );
-    connect( ui.activeCombo, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
-             this, &EnvironmentWidget::activeGroupChanged );
-    connect( ui.activeCombo, &KComboBox::editTextChanged, this, &EnvironmentWidget::enableButtons);
-    connect( groupModel, &EnvironmentGroupModel::dataChanged, this, &EnvironmentWidget::changed );
-    connect( groupModel, &EnvironmentGroupModel::rowsRemoved, this, &EnvironmentWidget::changed );
-    connect( groupModel, &EnvironmentGroupModel::rowsInserted, this, &EnvironmentWidget::changed );
-    connect( groupModel, &EnvironmentGroupModel::rowsRemoved, this, &EnvironmentWidget::enableDeleteButton );
-    connect( groupModel, &EnvironmentGroupModel::rowsInserted, this, &EnvironmentWidget::enableDeleteButton );
-    connect( groupModel, &EnvironmentGroupModel::modelReset, this, &EnvironmentWidget::enableDeleteButton );
+    connect(ui.cloneProfileButton, &QPushButton::clicked, this, &EnvironmentWidget::cloneSelectedProfile);
+    connect(ui.addProfileButton, &QPushButton::clicked, this, &EnvironmentWidget::addProfile);
+    connect(ui.removeProfileButton, &QPushButton::clicked, this, &EnvironmentWidget::removeSelectedProfile);
+    connect(ui.setAsDefaultProfileButton, &QPushButton::clicked, this, &EnvironmentWidget::setSelectedProfileAsDefault);
+    connect(ui.profileSelect, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+            this, &EnvironmentWidget::onSelectedProfileChanged);
+
+    connect(m_environmentProfileListModel, &EnvironmentProfileListModel::defaultProfileChanged,
+            this, &EnvironmentWidget::onDefaultProfileChanged);
+    connect(m_environmentProfileListModel, &EnvironmentProfileListModel::rowsInserted,
+            this, &EnvironmentWidget::changed);
+    connect(m_environmentProfileListModel, &EnvironmentProfileListModel::rowsRemoved,
+            this, &EnvironmentWidget::changed);
+    connect(m_environmentProfileListModel, &EnvironmentProfileListModel::defaultProfileChanged,
+            this, &EnvironmentWidget::changed);
+
+    connect(ui.variableTable->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &EnvironmentWidget::updateDeleteVariableButton);
+    connect(m_environmentProfileModel, &EnvironmentProfileModel::rowsInserted,
+            this, &EnvironmentWidget::updateDeleteVariableButton);
+    connect(m_environmentProfileModel, &EnvironmentProfileModel::rowsRemoved,
+            this, &EnvironmentWidget::updateDeleteVariableButton);
+    connect(m_environmentProfileModel, &EnvironmentProfileModel::modelReset,
+            this, &EnvironmentWidget::updateDeleteVariableButton);
+    connect(m_environmentProfileModel, &EnvironmentProfileModel::dataChanged,
+            this, &EnvironmentWidget::changed);
+    connect(m_environmentProfileModel, &EnvironmentProfileModel::rowsInserted,
+            this, &EnvironmentWidget::changed);
+    connect(m_environmentProfileModel, &EnvironmentProfileModel::rowsRemoved,
+            this, &EnvironmentWidget::changed);
 }
 
-void EnvironmentWidget::setActiveGroup( const QString& group )
+void EnvironmentWidget::selectProfile(const QString& profileName)
 {
-    ui.activeCombo->setCurrentItem(group);
+    const int profileIndex = m_environmentProfileListModel->profileIndex(profileName);
+    if (profileIndex < 0) {
+        return;
+    }
+    ui.profileSelect->setCurrentIndex(profileIndex);
 }
 
-void EnvironmentWidget::enableDeleteButton()
+void EnvironmentWidget::updateDeleteVariableButton()
 {
-    ui.deleteButton->setEnabled( groupModel->rowCount() > 0 );
+    const auto selectedRows = ui.variableTable->selectionModel()->selectedRows();
+    ui.removeVariableButton->setEnabled(!selectedRows.isEmpty());
 }
 
-void EnvironmentWidget::setAsDefault()
+void EnvironmentWidget::setSelectedProfileAsDefault()
 {
-    groupModel->changeDefaultGroup( ui.activeCombo->currentText() );
-    enableButtons( ui.activeCombo->currentText() );
-    emit changed();
+    const int selectedIndex = ui.profileSelect->currentIndex();
+    m_environmentProfileListModel->setDefaultProfile(selectedIndex);
 }
 
 void EnvironmentWidget::loadSettings( KConfig* config )
 {
-    qCDebug(SHELL) << "Loading groups from config";
-    groupModel->loadFromConfig( config );
+    qCDebug(SHELL) << "Loading profiles from config";
+    m_environmentProfileListModel->loadFromConfig(config);
 
-    ui.activeCombo->clear();
-
-    QStringList groupList = groupModel->groups();
-    qCDebug(SHELL) << "Grouplist:" << groupList << "default group:" << groupModel->defaultGroup();
-    ui.activeCombo->addItems( groupList );
-    int idx = ui.activeCombo->findText( groupModel->defaultGroup() );
-    ui.activeCombo->setCurrentIndex( idx );
+    const int defaultProfileIndex = m_environmentProfileListModel->defaultProfileIndex();
+    ui.profileSelect->setCurrentIndex(defaultProfileIndex);
 }
 
 void EnvironmentWidget::saveSettings( KConfig* config )
 {
-    groupModel->saveToConfig( config );
+    m_environmentProfileListModel->saveToConfig(config);
 }
 
 void EnvironmentWidget::defaults( KConfig* config )
@@ -127,25 +176,67 @@ void EnvironmentWidget::defaults( KConfig* config )
     loadSettings( config );
 }
 
-void EnvironmentWidget::deleteButtonClicked()
+QString EnvironmentWidget::askNewProfileName(const QString& defaultName)
 {
-    QModelIndexList selected = ui.variableTable->selectionModel()->selectedRows();
-    if( selected.isEmpty() )
+    QDialog dialog(this);
+    dialog.setWindowTitle(i18n("Enter Name of New Environment Profile"));
+
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+    auto editLayout = new QHBoxLayout;
+
+    auto label = new QLabel(i18n("Name:"));
+    editLayout->addWidget(label);
+    auto edit = new QLineEdit;
+    editLayout->addWidget(edit);
+    layout->addLayout(editLayout);
+
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    auto okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(false);
+    okButton->setDefault(true);
+    dialog.connect(buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    dialog.connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    layout->addWidget(buttonBox);
+
+    auto validator = new ProfileNameValidator(m_environmentProfileListModel, &dialog);
+    connect(edit, &QLineEdit::textChanged, validator, [validator, okButton](const QString& text) {
+        int pos;
+        QString t(text);
+        const bool isValidProfileName = (validator->validate(t, pos) == QValidator::Acceptable);
+        okButton->setEnabled(isValidProfileName);
+    });
+
+    edit->setText(defaultName);
+    edit->selectAll();
+
+    if (dialog.exec() != QDialog::Accepted) {
+        return {};
+    }
+
+    return edit->text();
+}
+
+void EnvironmentWidget::removeSelectedVariables()
+{
+    const auto selectedRows = ui.variableTable->selectionModel()->selectedRows();
+    if (selectedRows.isEmpty()) {
         return;
+    }
 
     QStringList variables;
-    foreach( const QModelIndex &idx, selected )
-    {
-        const QString variable = idx.data(EnvironmentGroupModel::VariableRole).toString();
+    for (const auto& idx : selectedRows) {
+        const QString variable = idx.data(EnvironmentProfileModel::VariableRole).toString();
         variables << variable;
     }
 
-    groupModel->removeVariables(variables);
+    m_environmentProfileModel->removeVariables(variables);
 }
 
-void EnvironmentWidget::handleVariableInserted(int /*column*/, const QVariant& value)
+void EnvironmentWidget::onVariableInserted(int column, const QVariant& value)
 {
-    groupModel->addVariable(value.toString(), QString());
+    Q_UNUSED(column);
+    m_environmentProfileModel->addVariable(value.toString(), QString());
 }
 
 void EnvironmentWidget::batchModeEditButtonClicked()
@@ -158,9 +249,9 @@ void EnvironmentWidget::batchModeEditButtonClicked()
     QTextEdit *edit = new QTextEdit;
     edit->setPlaceholderText(QStringLiteral("VARIABLE1=VALUE1\nVARIABLE2=VALUE2"));
     QString text;
-    for (int i = 0; i < proxyModel->rowCount(); ++i) {
-        const auto variable = proxyModel->index(i, EnvironmentGroupModel::VariableColumn).data().toString();
-        const auto value = proxyModel->index(i, EnvironmentGroupModel::ValueColumn).data().toString();
+    for (int i = 0; i < m_proxyModel->rowCount(); ++i) {
+        const auto variable = m_proxyModel->index(i, EnvironmentProfileModel::VariableColumn).data().toString();
+        const auto value = m_proxyModel->index(i, EnvironmentProfileModel::ValueColumn).data().toString();
         text.append(QStringLiteral("%1=%2\n").arg(variable, value));
     }
     edit->setText(text);
@@ -180,65 +271,70 @@ void EnvironmentWidget::batchModeEditButtonClicked()
         return;
     }
 
-    groupModel->loadEnvironmentFromString(edit->toPlainText());
+    m_environmentProfileModel->setVariablesFromString(edit->toPlainText());
 }
 
-void EnvironmentWidget::addGroupClicked()
+void EnvironmentWidget::addProfile()
 {
-    QString curText = ui.activeCombo->currentText();
-    if( groupModel->groups().contains( curText ) )
-    {
-        return; // same group name cannot be added twice.
-    }
-    ui.activeCombo->addItem( curText );
-    ui.activeCombo->setCurrentItem( curText );
-}
-
-void EnvironmentWidget::cloneGroupClicked()
-{
-    QString newGroup = ui.activeCombo->currentText();
-    if( !groupModel->cloneCurrentGroup( newGroup ) ) {
-        const KLocalizedString newGroupTemplate =
-            ki18nc("a copy of the existing environment was created", "%1 (Cloned %2)").subs(newGroup);
-        for (int id = 1; ; ++id) {
-            newGroup = newGroupTemplate.subs(id).toString();
-            if (groupModel->cloneCurrentGroup(newGroup)) {
-                break;
-            }
-        }
-    }
-    ui.activeCombo->addItem( newGroup );
-    ui.activeCombo->setCurrentItem( newGroup );
-}
-
-void EnvironmentWidget::removeGroupClicked()
-{
-    int idx = ui.activeCombo->currentIndex();
-    if( idx < 0 || ui.activeCombo->count() == 1 )
-    {
+    const auto profileName = askNewProfileName(QString());
+    if (profileName.isEmpty()) {
         return;
     }
 
-    QString curText = ui.activeCombo->currentText();
-    groupModel->removeGroup( curText );
-    ui.activeCombo->removeItem( idx );
-    ui.activeCombo->setCurrentItem( groupModel->defaultGroup() );
+    const int profileIndex = m_environmentProfileListModel->addProfile(profileName);
+
+    ui.profileSelect->setCurrentIndex(profileIndex);
+    ui.variableTable->setFocus(Qt::OtherFocusReason);
 }
 
-void EnvironmentWidget::activeGroupChanged( int /*idx*/ )
+void EnvironmentWidget::cloneSelectedProfile()
 {
-    groupModel->setCurrentGroup( ui.activeCombo->currentText() );
-    enableButtons( ui.activeCombo->currentText() );
+    const int currentIndex = ui.profileSelect->currentIndex();
+    const auto currentProfileName = m_environmentProfileListModel->profileName(currentIndex);
+    // pass original name as starting name, as the user might want to enter a variant of it
+    const auto profileName = askNewProfileName(currentProfileName);
+    if (profileName.isEmpty()) {
+        return;
+    }
+
+    const int profileIndex = m_environmentProfileListModel->cloneProfile(profileName, currentProfileName);
+
+    ui.profileSelect->setCurrentIndex(profileIndex);
+    ui.variableTable->setFocus(Qt::OtherFocusReason);
 }
 
-void EnvironmentWidget::enableButtons( const QString& txt )
+void EnvironmentWidget::removeSelectedProfile()
 {
-    ui.addgrpBtn->setEnabled( !groupModel->groups().contains( txt  ) );
-    ui.removegrpBtn->setEnabled( ( groupModel->groups().contains( txt  ) && groupModel->defaultGroup() != txt ) );
-    ui.setAsDefaultBtn->setEnabled( ( groupModel->groups().contains( txt  ) && groupModel->defaultGroup() != txt ) );
+    if (ui.profileSelect->count() <= 1) {
+        return;
+    }
+
+    const int selectedProfileIndex = ui.profileSelect->currentIndex();
+
+    m_environmentProfileListModel->removeProfile(selectedProfileIndex);
+
+    const int defaultProfileIndex = m_environmentProfileListModel->defaultProfileIndex();
+    ui.profileSelect->setCurrentIndex(defaultProfileIndex);
 }
 
+void EnvironmentWidget::onDefaultProfileChanged(int defaultProfileIndex)
+{
+    const int selectedProfileIndex = ui.profileSelect->currentIndex();
+    const bool isDefaultProfile = (defaultProfileIndex == selectedProfileIndex);
 
+    ui.removeProfileButton->setEnabled(ui.profileSelect->count() > 1 && !isDefaultProfile);
+    ui.setAsDefaultProfileButton->setEnabled(!isDefaultProfile);
 }
 
-#include "moc_environmentwidget.cpp"
+void EnvironmentWidget::onSelectedProfileChanged(int selectedProfileIndex)
+{
+    const auto selectedProfileName = m_environmentProfileListModel->profileName(selectedProfileIndex);
+    m_environmentProfileModel->setCurrentProfile(selectedProfileName);
+
+    const bool isDefaultProfile = (m_environmentProfileListModel->defaultProfileIndex() == selectedProfileIndex);
+
+    ui.removeProfileButton->setEnabled(ui.profileSelect->count() > 1 && !isDefaultProfile);
+    ui.setAsDefaultProfileButton->setEnabled(!isDefaultProfile);
+}
+
+#include "environmentwidget.moc"

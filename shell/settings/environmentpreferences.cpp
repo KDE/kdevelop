@@ -35,10 +35,10 @@ class EnvironmentPreferencesPrivate
 public:
     EnvironmentWidget *preferencesDialog;
     KConfigSkeleton* skel;
-    QString activeGroup;
+    QString preselectedProfileName;
 };
 
-EnvironmentPreferences::EnvironmentPreferences(const QString& activeGroup, QWidget* parent)
+EnvironmentPreferences::EnvironmentPreferences(const QString& preselectedProfileName, QWidget* parent)
     : ConfigPage(nullptr, nullptr, parent), d(new EnvironmentPreferencesPrivate)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -52,7 +52,7 @@ EnvironmentPreferences::EnvironmentPreferences(const QString& activeGroup, QWidg
     d->skel = new KConfigSkeleton(KSharedConfig::openConfig());
     setConfigSkeleton(d->skel);
 
-    d->activeGroup = activeGroup;
+    d->preselectedProfileName = preselectedProfileName;
 }
 
 EnvironmentPreferences::~EnvironmentPreferences( )
@@ -69,7 +69,9 @@ void EnvironmentPreferences::apply()
 void EnvironmentPreferences::reset()
 {
     d->preferencesDialog->loadSettings(d->skel->config());
-    d->preferencesDialog->setActiveGroup(d->activeGroup);
+    if (!d->preselectedProfileName.isEmpty()) {
+        d->preferencesDialog->selectProfile(d->preselectedProfileName);
+    }
     ConfigPage::reset();
 }
 

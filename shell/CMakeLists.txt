@@ -74,7 +74,8 @@ set(KDevPlatformShell_LIB_SRCS
     settings/editstyledialog.cpp
     settings/projectpreferences.cpp
     settings/environmentwidget.cpp
-    settings/environmentgroupmodel.cpp
+    settings/environmentprofilemodel.cpp
+    settings/environmentprofilelistmodel.cpp
     settings/environmentpreferences.cpp
     settings/languagepreferences.cpp
     settings/bgpreferences.cpp

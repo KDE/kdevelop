@@ -19,48 +19,57 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Environment group:</string>
+        <string>Environment profile:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KComboBox" name="activeCombo">
+      <widget class="KComboBox" name="profileSelect">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="editable">
-        <bool>true</bool>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addProfileButton">
+       <property name="toolTip">
+        <string>Add profile...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="list-add"/>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="addgrpBtn">
-       <property name="text">
-        <string>Add Group</string>
+      <widget class="QPushButton" name="cloneProfileButton">
+       <property name="toolTip">
+        <string>Clone profile...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-clone"/>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="clonegrpBtn">
-       <property name="text">
-        <string>Clone Group</string>
+      <widget class="QPushButton" name="removeProfileButton">
+       <property name="toolTip">
+        <string>Remove profile</string>
+       </property>
+       <property name="icon">
+        <iconset theme="list-remove"/>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="removegrpBtn">
-       <property name="text">
-        <string>Remove Group</string>
+      <widget class="QPushButton" name="setAsDefaultProfileButton">
+       <property name="toolTip">
+        <string>Set as default</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="setAsDefaultBtn">
-       <property name="text">
-        <string>Set As Default Group</string>
+       <property name="icon">
+        <iconset theme="starred-symbolic"/>
        </property>
       </widget>
      </item>
@@ -86,12 +95,15 @@
      <property name="cornerButtonEnabled">
       <bool>false</bool>
      </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
     </widget>
    </item>
    <item row="1" column="1">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="deleteButton">
+      <widget class="QPushButton" name="removeVariableButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -100,6 +112,9 @@
        </property>
        <property name="toolTip">
         <string>Remove variable</string>
+       </property>
+       <property name="icon">
+        <iconset theme="list-remove"/>
        </property>
       </widget>
      </item>
@@ -113,6 +128,9 @@
        </property>
        <property name="toolTip">
         <string>Batch Edit Mode</string>
+       </property>
+       <property name="icon">
+        <iconset theme="format-list-unordered"/>
        </property>
       </widget>
      </item>
