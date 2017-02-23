@@ -102,6 +102,7 @@ public:
 
     QWidget *centralWidget;
     QWidget* bgCentralWidget;
+    QWidget* viewBarContainer;
     QSplitter* splitterCentralWidget;
 
     IdealController *idealController;

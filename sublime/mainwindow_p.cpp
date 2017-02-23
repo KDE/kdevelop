@@ -149,11 +149,26 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     // this doesn't work well with toolbars added via xmlgui
 
     centralWidget = new QWidget;
+    centralWidget->setObjectName(QStringLiteral("centralWidget"));
     QVBoxLayout* layout = new QVBoxLayout(centralWidget);
-    centralWidget->setLayout(layout);
     layout->setMargin(0);
+    centralWidget->setLayout(layout);
+
     splitterCentralWidget = new QSplitter(centralWidget);
-    layout->addWidget(splitterCentralWidget);
+    // take as much space as possible
+    splitterCentralWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    layout->addWidget(splitterCentralWidget, 2);
+
+    // this view bar container is used for the ktexteditor integration to show
+    // all view bars at a central place, esp. for split view configurations
+    viewBarContainer = new QWidget;
+    viewBarContainer->setObjectName(QStringLiteral("viewBarContainer"));
+    // hide by default
+    viewBarContainer->setVisible(false);
+    // only take as much as needed
+    viewBarContainer->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    layout->addWidget(viewBarContainer);
+
     m_mainWindow->setCentralWidget(centralWidget);
 
     connect(idealController,

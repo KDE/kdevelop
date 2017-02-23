@@ -106,6 +106,9 @@ public:
      */
     void setBackgroundCentralWidget(QWidget* w);
 
+    /**Returns a widget that can hold a centralized view bar*/
+    QWidget *viewBarContainer() const;
+
 public Q_SLOTS:
     /**Shows the @p view and makes it active, focusing it by default).*/
     void activateView(Sublime::View *view, bool focus = true);

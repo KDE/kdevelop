@@ -30,6 +30,8 @@
 
 #include <interfaces/iplugin.h>
 
+class QStackedLayout;
+
 namespace KDevelop {
 class ObjectListTracker;
 class MainWindow;
@@ -80,8 +82,10 @@ public slots:
     void splitView(Qt::Orientation orientation);
 
     QWidget *createViewBar(KTextEditor::View *view);
-
     void deleteViewBar(KTextEditor::View *view);
+    void showViewBar(KTextEditor::View *view);
+    void hideViewBar(KTextEditor::View *view);
+    void addWidgetToViewBar(KTextEditor::View *view, QWidget *widget);
 
 public:
     KTextEditor::MainWindow *interface() const;
@@ -93,6 +97,8 @@ private:
     KDevelop::MainWindow *m_mainWindow;
     KTextEditor::MainWindow *m_interface;
     QHash<QString, QPointer<QObject>> m_pluginViews;
+    QStackedLayout *m_viewBarContainerLayout;
+    QHash<KTextEditor::View*, QWidget*> m_viewBars;
 };
 
 class Plugin : public KDevelop::IPlugin
