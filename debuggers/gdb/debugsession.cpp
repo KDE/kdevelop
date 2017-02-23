@@ -40,7 +40,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <util/environmentgrouplist.h>
+#include <util/environmentprofilelist.h>
 
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -178,15 +178,15 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     }
 
     // Set the environment variables
-    EnvironmentGroupList l(KSharedConfig::openConfig());
-    QString envgrp = iexec->environmentGroup(cfg);
-    if (envgrp.isEmpty()) {
-        qCWarning(DEBUGGERCOMMON) << i18n("No environment group specified, looks like a broken "
+    const EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
+    QString envProfileName = iexec->environmentProfileName(cfg);
+    if (envProfileName.isEmpty()) {
+        qCWarning(DEBUGGERCOMMON) << i18n("No environment profile specified, looks like a broken "
                                           "configuration, please check run configuration '%1'. "
-                                          "Using default environment group.", cfg->name());
-        envgrp = l.defaultGroup();
+                                          "Using default environment profile.", cfg->name());
+        envProfileName = environmentProfiles.defaultProfileName();
     }
-    for (const auto &envvar : l.createEnvironment(envgrp, {})) {
+    for (const auto &envvar : environmentProfiles.createEnvironment(envProfileName, {})) {
         addCommand(GdbSet, "environment " + envvar);
     }
 

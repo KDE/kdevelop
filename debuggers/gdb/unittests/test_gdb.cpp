@@ -38,7 +38,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <shell/shellextension.h>
-#include <util/environmentgrouplist.h>
+#include <util/environmentprofilelist.h>
 
 #include <KIO/Global>
 #include <KProcess>
@@ -127,14 +127,14 @@ void GdbTest::init()
     vc->watches()->clear();
 }
 
-class WritableEnvironmentGroupList : public KDevelop::EnvironmentGroupList
+class WritableEnvironmentProfileList : public KDevelop::EnvironmentProfileList
 {
 public:
-    explicit WritableEnvironmentGroupList(KConfig* config) : EnvironmentGroupList(config) {}
+    explicit WritableEnvironmentProfileList(KConfig* config) : EnvironmentProfileList(config) {}
 
-    using EnvironmentGroupList::variables;
-    using EnvironmentGroupList::saveSettings;
-    using EnvironmentGroupList::removeGroup;
+    using EnvironmentProfileList::variables;
+    using EnvironmentProfileList::saveSettings;
+    using EnvironmentProfileList::removeProfile;
 };
 
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
@@ -314,12 +314,12 @@ void GdbTest::testEnvironmentSet()
 
     cfg.config().writeEntry("EnvironmentGroup", "GdbTestGroup");
 
-    WritableEnvironmentGroupList envGroups(cfg.rootConfig());
-    envGroups.removeGroup("GdbTestGroup");
-    auto &envs = envGroups.variables("GdbTestGroup");
+    WritableEnvironmentProfileList envProfiles(cfg.rootConfig());
+    envProfiles.removeProfile("GdbTestGroup");
+    auto &envs = envProfiles.variables("GdbTestGroup");
     envs["VariableA"] = "-A' \" complex --value";
     envs["VariableB"] = "-B' \" complex --value";
-    envGroups.saveSettings(cfg.rootConfig());
+    envProfiles.saveSettings(cfg.rootConfig());
 
     QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
 

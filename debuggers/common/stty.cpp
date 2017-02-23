@@ -76,8 +76,6 @@
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
 
-#include <util/environmentgrouplist.h>
-
 using namespace KDevMI;
 
 static int chownpty(int fd, int grant)

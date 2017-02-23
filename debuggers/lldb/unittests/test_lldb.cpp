@@ -36,7 +36,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
-#include <util/environmentgrouplist.h>
+#include <util/environmentprofilelist.h>
 
 #include <KConfigGroup>
 #include <KIO/Global>
@@ -82,14 +82,14 @@ using namespace KDevelop;
 using namespace KDevMI::LLDB;
 
 namespace {
-class WritableEnvironmentGroupList : public EnvironmentGroupList
+class WritableEnvironmentProfileList : public EnvironmentProfileList
 {
 public:
-    explicit WritableEnvironmentGroupList(KConfig* config) : EnvironmentGroupList(config) {}
+    explicit WritableEnvironmentProfileList(KConfig* config) : EnvironmentProfileList(config) {}
 
-    using EnvironmentGroupList::variables;
-    using EnvironmentGroupList::saveSettings;
-    using EnvironmentGroupList::removeGroup;
+    using EnvironmentProfileList::variables;
+    using EnvironmentProfileList::saveSettings;
+    using EnvironmentProfileList::removeProfile;
 };
 
 class TestLaunchConfiguration : public ILaunchConfiguration
@@ -262,12 +262,12 @@ void LldbTest::testEnvironmentSet()
 
     cfg.config().writeEntry("EnvironmentGroup", "LldbTestGroup");
 
-    WritableEnvironmentGroupList envGroups(cfg.rootConfig());
-    envGroups.removeGroup("LldbTestGroup");
-    auto &envs = envGroups.variables("LldbTestGroup");
+    WritableEnvironmentProfileList envProfiles(cfg.rootConfig());
+    envProfiles.removeProfile("LldbTestGroup");
+    auto &envs = envProfiles.variables("LldbTestGroup");
     envs["VariableA"] = "-A' \" complex --value";
     envs["VariableB"] = "-B' \" complex --value";
-    envGroups.saveSettings(cfg.rootConfig());
+    envProfiles.saveSettings(cfg.rootConfig());
 
     QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
 

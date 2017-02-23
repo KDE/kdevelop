@@ -25,7 +25,7 @@
 #include "dbgglobal.h"
 #include "debuglog.h"
 
-#include <util/environmentgrouplist.h>
+#include <util/environmentprofilelist.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -62,8 +62,8 @@ bool LldbDebugger::start(KConfigGroup& config, const QStringList& extraArguments
     arguments.append(KShell::splitArgs(config.readEntry(Config::LldbArgumentsEntry, QString())));
 
     // Get environment
-    const EnvironmentGroupList egl(config.config());
-    const auto &envs = egl.variables(config.readEntry(Config::LldbEnvironmentEntry, egl.defaultGroup()));
+    const EnvironmentProfileList egl(config.config());
+    const auto &envs = egl.variables(config.readEntry(Config::LldbEnvironmentEntry, egl.defaultProfileName()));
     QProcessEnvironment processEnv;
     if (config.readEntry(Config::LldbInheritSystemEnvEntry, true)) {
         processEnv = QProcessEnvironment::systemEnvironment();

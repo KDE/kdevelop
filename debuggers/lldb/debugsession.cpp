@@ -37,7 +37,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <util/environmentgrouplist.h>
+#include <util/environmentprofilelist.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -224,17 +224,17 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     raiseEvent(connected_to_program);
 
     // Set the environment variables has effect only after target created
-    const EnvironmentGroupList l(KSharedConfig::openConfig());
-    QString envgrp = iexec->environmentGroup(cfg);
-    if (envgrp.isEmpty()) {
-        qCWarning(DEBUGGERCOMMON) << i18n("No environment group specified, looks like a broken "
+    const EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
+    QString envProfileName = iexec->environmentProfileName(cfg);
+    if (envProfileName.isEmpty()) {
+        qCWarning(DEBUGGERCOMMON) << i18n("No environment profile specified, looks like a broken "
                                           "configuration, please check run configuration '%1'. "
-                                          "Using default environment group.", cfg->name());
-        envgrp = l.defaultGroup();
+                                          "Using default environment profile.", cfg->name());
+        envProfileName = environmentProfiles.defaultProfileName();
     }
     QStringList vars;
-    for (auto it = l.variables(envgrp).constBegin(),
-              ite = l.variables(envgrp).constEnd();
+    for (auto it = environmentProfiles.variables(envProfileName).constBegin(),
+              ite = environmentProfiles.variables(envProfileName).constEnd();
          it != ite; ++it) {
         vars.append(QStringLiteral("%0=%1").arg(it.key(), Utils::quote(it.value())));
     }

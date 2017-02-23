@@ -36,7 +36,6 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iuicontroller.h>
 #include <outputview/outputmodel.h>
-#include <util/environmentgrouplist.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>

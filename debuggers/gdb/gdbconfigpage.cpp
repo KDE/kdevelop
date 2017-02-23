@@ -35,7 +35,6 @@
 #include <outputview/outputmodel.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/builderjob.h>

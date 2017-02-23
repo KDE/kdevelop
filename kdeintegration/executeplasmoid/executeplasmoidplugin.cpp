@@ -73,7 +73,7 @@ QUrl ExecutePlasmoidPlugin::workingDirectory(ILaunchConfiguration* config) const
     return QUrl::fromLocalFile(PlasmoidExecutionJob::workingDirectory(config));
 }
 
-QString ExecutePlasmoidPlugin::environmentGroup(ILaunchConfiguration* /*config*/) const
+QString ExecutePlasmoidPlugin::environmentProfileName(ILaunchConfiguration* /*config*/) const
 {
     return QString();
 }
