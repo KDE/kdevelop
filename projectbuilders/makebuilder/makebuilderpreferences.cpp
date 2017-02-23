@@ -20,8 +20,6 @@
 
 #include "makebuilderpreferences.h"
 
-#include <util/environmentgrouplist.h>
-
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"
 

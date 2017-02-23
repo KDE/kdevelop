@@ -39,7 +39,6 @@
 #include <kparts/mainwindow.h>
 #include <kio/deletejob.h>
 #include <kaboutdata.h>
-#include <kmessagebox.h>
 #include <KLocalizedString>
 #include <kjob.h>
 #include <QUrl>

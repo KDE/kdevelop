@@ -24,7 +24,6 @@
 #include <QFileDialog>
 #include <QRegExp>
 
-#include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
 #include <KLocalizedString>
 #include <interfaces/icore.h>

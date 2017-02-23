@@ -59,7 +59,6 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <interfaces/idocumentation.h>
-#include <util/environmentgrouplist.h>
 #include <util/executecompositejob.h>
 #include <language/highlighting/codehighlighting.h>
 #include <project/projectmodel.h>

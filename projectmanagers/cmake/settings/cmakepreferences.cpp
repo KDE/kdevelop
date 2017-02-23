@@ -44,7 +44,6 @@
 #include <project/interfaces/iprojectbuilder.h>
 #include <interfaces/iruncontroller.h>
 #include <KAboutData>
-#include <util/environmentgrouplist.h>
 #include <QStandardPaths>
 
 using namespace KDevelop;

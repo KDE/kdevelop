@@ -27,7 +27,6 @@
 #include <QAction>
 
 #include "ui_configwidget.h"
-#include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
 
 using namespace KDevelop;

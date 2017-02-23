@@ -26,7 +26,6 @@
 
 #include <kprocess.h>
 #include <KLocalizedString>
-#include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <kparts/mainwindow.h>
 
@@ -34,7 +33,6 @@
 #include <outputview/outputmodel.h>
 #include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
-#include <util/environmentgrouplist.h>
 #include <util/commandexecutor.h>
 #include <util/path.h>
 

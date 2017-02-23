@@ -22,7 +22,6 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <util/environmentgrouplist.h>
 #include <KAboutData>
 
 #include "ui_ninjaconfig.h"

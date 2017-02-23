@@ -34,7 +34,6 @@
 #include <KLocalizedString>
 #include <Kdelibs4ConfigMigrator>
 #include <kaboutdata.h>
-#include <kmessagebox.h>
 #include <ktexteditor/cursor.h>
 #include <kcrash.h>
 

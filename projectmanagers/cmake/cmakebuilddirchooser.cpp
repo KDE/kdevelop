@@ -26,13 +26,13 @@
 #include <project/helper.h>
 
 #include <KColorScheme>
-#include <KMessageBox>
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
 
 #include <QDir>
 #include <QStandardPaths>
+#include <QDialogButtonBox>
 #include <QVBoxLayout>
 
 using namespace KDevelop;
