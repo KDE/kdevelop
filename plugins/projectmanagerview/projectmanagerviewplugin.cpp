@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
    Copyright 2004 Roberto Raggi <roberto@kdevelop.org>
    Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+   Copyright 2017 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,6 +33,7 @@
 #include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KPluginFactory>
+#include <KIO/Paste>
 
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>
@@ -48,9 +50,11 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
+#include <serialization/indexedstring.h>
 
 #include "projectmanagerview.h"
 #include "debug.h"
+#include "cutcopypastehelpers.h"
 
 using namespace KDevelop;
 
@@ -671,40 +675,67 @@ void ProjectManagerViewPlugin::copyFromContextMenu()
     }
 }
 
+static void selectItemsByPaths(ProjectManagerView* view, const Path::List& paths)
+{
+    KDevelop::ProjectModel* projectModel = KDevelop::ICore::self()->projectController()->projectModel();
+
+    QList<ProjectBaseItem*> newItems;
+    for (const Path& path : paths) {
+        QList<ProjectBaseItem*> items = projectModel->itemsForPath(IndexedString(path.path()));
+        newItems.append(items);
+        for (ProjectBaseItem* item : items) {
+            view->expandItem(item->parent());
+        }
+    }
+    view->selectItems(newItems);
+}
+
 void ProjectManagerViewPlugin::pasteFromContextMenu()
 {
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
-    if (ctx->items().count() != 1)
+    if (ctx->items().count() != 1) {
         return; //do nothing if multiple or none items are selected
+    }
 
     ProjectBaseItem* destItem = ctx->items().at(0);
-    if (!destItem->folder())
+    if (!destItem->folder()) {
         return; //do nothing if the target is not a directory
+    }
 
     const QMimeData* data = qApp->clipboard()->mimeData();
     qCDebug(PLUGIN_PROJECTMANAGERVIEW) << data->urls();
-    const Path::List paths = toPathList(data->urls());
-    bool success = destItem->project()->projectFileManager()->copyFilesAndFolders(paths, destItem->folder());
+    Path::List origPaths = toPathList(data->urls());
+    const bool isCut = KIO::isClipboardDataCut(data);
 
-    if (success) {
-        ProjectManagerViewItemContext* viewCtx = dynamic_cast<ProjectManagerViewItemContext*>(ICore::self()->selectionController()->currentSelection());
-        if (viewCtx) {
+    const CutCopyPasteHelpers::SourceToDestinationMap map = CutCopyPasteHelpers::mapSourceToDestination(origPaths, destItem->folder()->path());
 
-            //expand target folder
-            viewCtx->view()->expandItem(destItem);
+    QVector<CutCopyPasteHelpers::TaskInfo> tasks = CutCopyPasteHelpers::copyMoveItems(
+        map.filteredPaths, destItem,
+        isCut ? CutCopyPasteHelpers::Operation::CUT : CutCopyPasteHelpers::Operation::COPY);
 
-            //and select new items
-            QList<ProjectBaseItem*> newItems;
-            foreach (const Path &path, paths) {
-                const Path targetPath(destItem->path(), path.lastPathSegment());
-                foreach (ProjectBaseItem *item, destItem->children()) {
-                    if (item->path() == targetPath) {
-                        newItems << item;
-                    }
+    // Select new items in the project manager view
+    ProjectManagerViewItemContext* itemCtx = dynamic_cast<ProjectManagerViewItemContext*>(ICore::self()->selectionController()->currentSelection());
+    if (itemCtx) {
+        Path::List finalPathsList;
+        for (const auto& task : tasks) {
+            if (task.m_status == CutCopyPasteHelpers::TaskStatus::SUCCESS && task.m_type != CutCopyPasteHelpers::TaskType::DELETION) {
+                for (const Path& src : task.m_src) {
+                    finalPathsList.append(map.finalPaths[src]);
                 }
             }
-            viewCtx->view()->selectItems(newItems);
         }
+
+        selectItemsByPaths(itemCtx->view(), finalPathsList);
+    }
+
+    // If there was a single failure, display a warning dialog.
+    const bool anyFailed = std::any_of(tasks.begin(), tasks.end(),
+                                       [](const CutCopyPasteHelpers::TaskInfo& task) {
+                                           return task.m_status != CutCopyPasteHelpers::TaskStatus::SUCCESS;
+                                       });
+    if (anyFailed) {
+        QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
+        showWarningDialogForFailedPaste(window, tasks);
     }
 }
 

@@ -9,6 +9,7 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     projectbuildsetwidget.cpp
     vcsoverlayproxymodel.cpp
     projectmodelitemdelegate.cpp
+    cutcopypastehelpers.cpp
 )
 
 ecm_qt_declare_logging_category(kdevprojectmanagerview_PLUGIN_SRCS
