@@ -129,6 +129,7 @@ void CustomBuildJob::start()
             setError( WrongArgs );
             setErrorText( i18n( "The given arguments would need a real shell, this is not supported currently." ) );
             emitResult();
+            return;
         }
         // and remove the command name back out of the split argument list
         Q_ASSERT(!strargs.isEmpty());

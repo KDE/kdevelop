@@ -36,6 +36,8 @@
 #include <signal.h>
 
 #include <memory>
+#include <stdexcept>
+#include <sstream>
 
 // #define DEBUG_NO_TRY //to get a backtrace to where the exception was thrown
 
@@ -153,7 +155,8 @@ void MIDebugger::processLine(const QByteArray& line)
 
     if (!r)
     {
-        // FIXME: Issue an error!
+        // simply ignore the invalid MI message because both gdb and lldb
+        // sometimes produces invalid messages that can be safely ignored.
         qCDebug(DEBUGGERCOMMON) << "Invalid MI message:" << line;
         // We don't consider the current command done.
         // So, if a command results in unparseable reply,
@@ -182,21 +185,31 @@ void MIDebugger::processLine(const QByteArray& line)
                 emit internalCommandOutput(QString::fromUtf8(line) + '\n');
             }
 
+            // protect against wild replies that sometimes returned from gdb without a pending command
+            if (!currentCmd_)
+            {
+                qCWarning(DEBUGGERCOMMON) << "Received a result without a pending command";
+                throw std::runtime_error("Received a result without a pending command");
+            }
+            else if (currentCmd_->token() != result.token)
+            {
+                std::stringstream ss;
+                ss << "Received a result with token not matching pending command. "
+                   << "Pending: " << currentCmd_->token() << "Received: " << result.token;
+                qCWarning(DEBUGGERCOMMON) << ss.str().c_str();
+                throw std::runtime_error(ss.str());
+            }
+
             // GDB doc: "running" and "exit" are status codes equivalent to "done"
             if (result.reason == "done" || result.reason == "running" || result.reason == "exit")
             {
-                if (!currentCmd_) {
-                    qCDebug(DEBUGGERCOMMON) << "Received a result without a pending command";
-                } else {
-                    qCDebug(DEBUGGERCOMMON) << "Result token is" << result.token;
-                    Q_ASSERT(currentCmd_->token() == result.token);
-                    currentCmd_->markAsCompleted();
-                    qCDebug(DEBUGGERCOMMON) << "Command successful, times "
-                                            << currentCmd_->totalProcessingTime()
-                                            << currentCmd_->queueTime()
-                                            << currentCmd_->gdbProcessingTime();
-                    currentCmd_->invokeHandler(result);
-                }
+                qCDebug(DEBUGGERCOMMON) << "Result token is" << result.token;
+                currentCmd_->markAsCompleted();
+                qCDebug(DEBUGGERCOMMON) << "Command successful, times "
+                                        << currentCmd_->totalProcessingTime()
+                                        << currentCmd_->queueTime()
+                                        << currentCmd_->gdbProcessingTime();
+                currentCmd_->invokeHandler(result);
             }
             else if (result.reason == "error")
             {
@@ -300,11 +313,13 @@ void MIDebugger::processLine(const QByteArray& line)
             qApp->activeWindow(),
             i18nc("<b>Internal debugger error</b>",
                     "<p>The debugger component encountered internal error while "
-                    "processing reply from gdb. Please submit a bug report."),
+                    "processing reply from gdb. Please submit a bug report. "
+                    "The debug session will now end to prevent potential crash"),
             i18n("The exception is: %1\n"
                 "The MI response is: %2", e.what(),
                 QString::fromLatin1(line)),
             i18n("Internal debugger error"));
+        emit exited(true, e.what());
     }
     #endif
 }
