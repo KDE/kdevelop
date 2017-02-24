@@ -1336,7 +1336,14 @@ void StandardJob::start()
 
 void StandardJob::result(KJob* job)
 {
-    m_status=job->error() == 0? JobSucceeded : JobFailed; emitResult();
+    if (job->error() == 0) {
+        m_status = JobSucceeded;
+        setError(NoError);
+    } else {
+        m_status = JobFailed;
+        setError(UserDefinedError);
+    }
+    emitResult();
 }
 
 VcsJob* GitPlugin::copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn)
