@@ -60,6 +60,16 @@ bool isPathChar(const QChar& c)
     return c.isLetterOrNumber() || c=='/' || c=='.';
 }
 
+QString escapePath(QString path)
+{
+    static const QChar toBeEscaped[] = {'(', ')'};
+    for(const QChar &ch : toBeEscaped)
+    {
+        path.replace(ch, "\\" + ch);
+    }
+    return path;
+}
+
 void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range, InvocationType invocationType)
 {
     beginResetModel();
@@ -276,7 +286,9 @@ void CMakeCodeCompletionModel::executeCompletionItem(View* view, const Range& wo
             for(QChar c=document->characterAt(r.end()); c.isLetterOrNumber() || c=='.'; c=document->characterAt(r.end())) {
                 r.setEnd(KTextEditor::Cursor(r.end().line(), r.end().column()+1));
             }
-            document->replaceText(r, data(index(row, Name, QModelIndex())).toString());
+            QString path = data(index(row, Name, QModelIndex())).toString();
+
+            document->replaceText(r, escapePath(path));
         }   break;
         case Macro:
         case Command: {
