@@ -366,9 +366,9 @@ QList< QUrl > GrepDialog::getDirectoryChoice() const
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
             // a semicolon in the name.
             foreach(const QString& file, semicolonSeparatedFileList)
-                ret << QUrl::fromLocalFile(file);
+                ret << QUrl::fromLocalFile(file).adjusted(QUrl::StripTrailingSlash);
         }else{
-            ret << QUrl::fromUserInput(searchPaths->currentText());
+            ret << QUrl::fromUserInput(searchPaths->currentText()).adjusted(QUrl::StripTrailingSlash);
         }
     }
     return ret;
