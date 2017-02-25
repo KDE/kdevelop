@@ -334,6 +334,7 @@ ProblemsView::ProblemsView(QWidget* parent)
 
     m_tabWidget = new QTabWidget(this);
     m_tabWidget->setTabPosition(QTabWidget::South);
+    m_tabWidget->setDocumentMode(true);
     layout->addWidget(m_tabWidget);
 
     setupActions();
