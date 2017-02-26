@@ -42,7 +42,7 @@ class ProcessSelectionDialog : public QDialog
 
     private:
         KSysGuardProcessList* m_processList;
-        QPushButton* m_okButton;
+        QPushButton* m_attachButton;
 };
 
 } // end of namespace KDevMI

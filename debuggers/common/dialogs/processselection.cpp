@@ -46,7 +46,7 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     QVBoxLayout* mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(m_processList);
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     mainLayout->addWidget(buttonBox);
 
     connect(m_processList->treeView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
@@ -56,11 +56,13 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     m_processList->filterLineEdit()->setFocus();
     //m_processList->setPidFilter(qApp->pid());
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
-    m_okButton->setDefault(true);
-    m_okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    m_okButton->setEnabled(false);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    m_attachButton = buttonBox->button(QDialogButtonBox::Ok);
+    m_attachButton->setDefault(true);
+    m_attachButton->setText(i18n("Attach"));
+    m_attachButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    m_attachButton->setEnabled(false);
 
     KConfigGroup config = KSharedConfig::openConfig()->group("GdbProcessSelectionDialog");
     m_processList->filterLineEdit()->setText(config.readEntry("filterText", QString()));
@@ -93,5 +95,5 @@ QSize ProcessSelectionDialog::sizeHint() const
 
 void ProcessSelectionDialog::selectionChanged()
 {
-    m_okButton->setEnabled(true);
+    m_attachButton->setEnabled(true);
 }
