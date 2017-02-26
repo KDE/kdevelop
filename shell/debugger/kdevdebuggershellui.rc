@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevdebuggershellui" library="kdevdebugger" version="7" translationDomain="kdevplatform">
+<kpartgui name="kdevdebuggershellui" library="kdevdebugger" version="8" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="run">
             <text context="@title:menu">Run</text>
@@ -33,8 +33,10 @@
     </ToolBar>
     
     <State name="ended">
+         <enable>
+             <Action name="debug_continue"/>
++        </enable>
         <disable>
-            <Action name="debug_continue"/>
             <Action name="debug_pause"/>
             <Action name="debug_runtocursor"/>
             <Action name="debug_stepover"/>
@@ -74,10 +76,10 @@
     </State>
     <State name="stopped">
         <enable>
+            <Action name="debug_continue"/>
         </enable>
         <disable>
             <Action name="debug_pause"/>
-            <Action name="debug_continue"/>
             <Action name="debug_runtocursor"/>
             <Action name="debug_stepover"/>
             <Action name="debug_stepoverinst"/>

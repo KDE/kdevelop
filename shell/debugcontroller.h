@@ -95,6 +95,7 @@ Q_SIGNALS:
 private:
     void setupActions();
     void updateDebuggerState(KDevelop::IDebugSession::DebuggerState state, KDevelop::IDebugSession* session);
+    void setContinueStartsDebug(bool startsDebug);
 
     static const QPixmap* executionPointPixmap();
 

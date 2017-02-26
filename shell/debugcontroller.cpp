@@ -50,6 +50,8 @@
 #include "core.h"
 #include "debug.h"
 #include "uicontroller.h"
+#include "iruncontroller.h"
+#include "launchconfigurationdialog.h"
 
 
 namespace KDevelop {
@@ -196,12 +198,8 @@ void DebugController::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
-    QAction* action = m_continueDebugger = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-start")), i18n("&Continue"), this);
-    action->setToolTip( i18n("Continue application execution") );
-    action->setWhatsThis( i18n("Continues the execution of your application in the "
-                               "debugger. This only takes effect when the application "
-                               "has been halted by the debugger (i.e. a breakpoint has "
-                               "been activated or the interrupt was pressed).") );
+    QAction* action = m_continueDebugger = new QAction(this);
+    setContinueStartsDebug(true);
     ac->addAction(QStringLiteral("debug_continue"), action);
     connect(action, &QAction::triggered, this, &DebugController::run);
 
@@ -404,27 +402,50 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
         case IDebugSession::StoppingState:
             qCDebug(SHELL) << "new state: stopped";
             stateChanged(QStringLiteral("stopped"));
+            setContinueStartsDebug(true);
             //m_restartDebugger->setEnabled(session->restartAvailable());
             break;
         case IDebugSession::StartingState:
         case IDebugSession::PausedState:
             qCDebug(SHELL) << "new state: paused";
             stateChanged(QStringLiteral("paused"));
+            setContinueStartsDebug(false);
             //m_restartDebugger->setEnabled(session->restartAvailable());
             break;
         case IDebugSession::ActiveState:
             qCDebug(SHELL) << "new state: active";
             stateChanged(QStringLiteral("active"));
+            setContinueStartsDebug(false);
             //m_restartDebugger->setEnabled(false);
             break;
         case IDebugSession::EndedState:
             qCDebug(SHELL) << "new state: ended";
             stateChanged(QStringLiteral("ended"));
+            setContinueStartsDebug(true);
             //m_restartDebugger->setEnabled(false);
             break;
     }
     if (state == IDebugSession::PausedState && ICore::self()->uiController()->activeMainWindow()) {
         ICore::self()->uiController()->activeMainWindow()->activateWindow();
+    }
+}
+
+void DebugController::setContinueStartsDebug(bool startsDebug)
+{
+    if (startsDebug) {
+        m_continueDebugger->setText(i18n("Debug Launch"));
+        m_continueDebugger->setIcon(QIcon::fromTheme(QStringLiteral("debug-run")));
+        m_continueDebugger->setToolTip(i18n("Debug current launch"));
+        m_continueDebugger->setWhatsThis(i18n("Executes the target or the program specified in "
+                                              "currently active launch configuration inside a Debugger."));
+    } else {
+        m_continueDebugger->setText(i18n("&Continue"));
+        m_continueDebugger->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
+        m_continueDebugger->setToolTip(i18n("Continue application execution") );
+        m_continueDebugger->setWhatsThis(i18n("Continues the execution of your application in the "
+                                              "debugger. This only takes effect when the application "
+                                              "has been halted by the debugger (i.e. a breakpoint has "
+                                              "been activated or the interrupt was pressed).") );
     }
 }
 
@@ -471,6 +492,12 @@ void DebugController::interruptDebugger() {
 void DebugController::run() {
     if (m_currentSession) {
         m_currentSession.data()->run();
+    } else {
+        if (ICore::self()->runController()->launchConfigurations().isEmpty()) {
+            LaunchConfigurationDialog d;
+            d.exec();
+        }
+        ICore::self()->runController()->executeDefaultLaunch(QStringLiteral("debug"));
     }
 }
 
