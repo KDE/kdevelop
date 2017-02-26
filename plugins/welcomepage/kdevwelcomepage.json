@@ -9,6 +9,7 @@
         "Description[pl]": "Dostarcza stronę powitania widoczną przy pustych sesjach", 
         "Description[pt]": "Oferece a página de boas-vindas visível numa sessão vazia", 
         "Description[sk]": "Poskytuje uvítaciu stránku viditeľnú v prázdnom sedení", 
+        "Description[sl]": "Ponuja pozdravni zaslon, ki je viden v prazni seji", 
         "Description[sv]": "Tillhandahåller välkomstsidan synlig i en tom session", 
         "Description[uk]": "Забезпечує роботу сторінки вітання, яку програма показує, якщо сеанс порожній", 
         "Description[x-test]": "xxProvides the welcome page visible in an empty sessionxx", 
