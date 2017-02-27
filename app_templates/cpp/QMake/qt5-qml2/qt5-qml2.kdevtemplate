@@ -2,8 +2,10 @@
 [General]
 Name=QtQuick 2 Application
 Name[ca]=Aplicació QtQuick 2
+Name[en_GB]=QtQuick 2 Application
 Name[nl]=QtQuick 2-toepassing
 Name[pl]=Program QtQuick 2
+Name[pt]=Aplicação em QtQuick 2
 Name[sl]=Program QtQuick 2
 Name[sv]=QtQuick 2-program
 Name[uk]=Програма QtQuick 2
@@ -11,8 +13,10 @@ Name[x-test]=xxQtQuick 2 Applicationxx
 
 Comment=A Qt5 and QML2 basic application using QMake
 Comment[ca]=Una aplicació bàsica en Qt5 i QML2 usant el QMake
+Comment[en_GB]=A Qt5 and QML2 basic application using QMake
 Comment[nl]=Een Qt5 en QML2 basistoepassing met QMake
 Comment[pl]=Podstawowy program Qt5 i QML2 wykorzystujący QMake
+Comment[pt]=Uma aplicação básica em Qt5 e QML2, usando o QMake
 Comment[sl]=Osnovni program Qt5 in QML2 z uporabo QMake
 Comment[sv]=Ett Qt5 och QML2-baserat program som använder QMake
 Comment[uk]=Базова програма мовою QML2 для Qt5 з використанням QMake
