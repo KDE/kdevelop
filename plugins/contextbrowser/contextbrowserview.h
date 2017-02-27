@@ -37,6 +37,7 @@ class QAction;
 class QCheckBox;
 class QMenu;
 class KComboBox;
+class KToggleAction;
 
 namespace KDevelop {
 class IDocument;
@@ -79,7 +80,6 @@ class ContextBrowserView : public QWidget {
         bool isLocked() const;
         
     private Q_SLOTS:
-        void updateLockIcon(bool); 
         void declarationMenu();
         void navigationContextChanged(bool wasInitial, bool isInitial);
 
@@ -97,7 +97,7 @@ class ContextBrowserView : public QWidget {
         
         ContextBrowserPlugin* m_plugin;
         QVBoxLayout* m_layout;
-        QAction* m_lockAction;
+        KToggleAction* m_lockAction;
         QAction* m_declarationMenuAction;
         QHBoxLayout* m_buttons;
 
