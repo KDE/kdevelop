@@ -111,6 +111,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(modelSelector, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &GrepOutputView::changeModel);
 
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
+    resultsTreeView->setRootIsDecorated(false);
     resultsTreeView->setHeaderHidden(true);
     resultsTreeView->setUniformRowHeights(false);
     resultsTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
