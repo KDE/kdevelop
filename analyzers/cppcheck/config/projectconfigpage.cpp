@@ -90,9 +90,9 @@ void ProjectConfigPage::updateCommandLine()
     QString message;
     QString commandLine = m_parameters->commandLine(message).join(' ');
 
-    if (message.isEmpty())
+    if (message.isEmpty()) {
         ui->messageWidget->hide();
-    else {
+    } else {
         ui->messageWidget->setText(message);
         ui->messageWidget->show();
     }
@@ -114,8 +114,9 @@ void ProjectConfigPage::updateCommandLine()
     QMutableStringListIterator i(lines);
 
     while (i.hasNext()) {
-        if (!i.next().contains(filterText))
+        if (!i.next().contains(filterText)) {
             i.remove();
+        }
     }
 
     ui->commandLine->setText(lines.join('\n'));

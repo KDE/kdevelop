@@ -91,8 +91,9 @@ void Job::postProcessStdout(const QStringList& lines)
 
     m_standardOutput << lines;
 
-    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning)
+    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning) {
         KDevelop::OutputExecuteJob::postProcessStdout(lines);
+    }
 }
 
 void Job::postProcessStderr(const QStringList& lines)
@@ -127,15 +128,17 @@ void Job::postProcessStderr(const QStringList& lines)
             m_problems = {problem};
             emitProblems();
 
-            if (m_showXmlOutput)
+            if (m_showXmlOutput) {
                 m_standardOutput << line;
-            else
+            } else {
                 postProcessStdout({line});
+            }
         }
     }
 
-    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning && m_showXmlOutput)
+    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning && m_showXmlOutput) {
         KDevelop::OutputExecuteJob::postProcessStderr(lines);
+    }
 }
 
 void Job::start()
@@ -159,8 +162,9 @@ void Job::childProcessError(QProcess::ProcessError e)
         break;
 
     case QProcess::Crashed:
-        if (status() != KDevelop::OutputExecuteJob::JobStatus::JobCanceled)
+        if (status() != KDevelop::OutputExecuteJob::JobStatus::JobCanceled) {
             message = i18n("Cppcheck crashed.");
+        }
         break;
 
     case QProcess::Timedout:
@@ -181,8 +185,9 @@ void Job::childProcessError(QProcess::ProcessError e)
         break;
     }
 
-    if (!message.isEmpty())
+    if (!message.isEmpty()) {
         KMessageBox::error(qApp->activeWindow(), message, i18n("Cppcheck Error"));
+    }
 
     KDevelop::OutputExecuteJob::childProcessError(e);
 }
@@ -205,8 +210,9 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 
 void Job::emitProblems()
 {
-    if (m_problems.isEmpty())
+    if (m_problems.isEmpty()) {
         return;
+    }
 
     foreach (auto problem, m_problems) {
         problem->setFinalLocationMode(KDevelop::IProblem::TrimmedLine);

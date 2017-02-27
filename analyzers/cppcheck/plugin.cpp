@@ -97,8 +97,9 @@ bool Plugin::isRunning()
 
 void Plugin::killCppcheck()
 {
-    if (m_job)
+    if (m_job) {
         m_job->kill(KJob::EmitResult);
+    }
 }
 
 void Plugin::raiseProblemsView()
@@ -121,18 +122,21 @@ void Plugin::updateActions()
     m_actionFile->setEnabled(false);
     m_actionProject->setEnabled(false);
 
-    if (isRunning())
+    if (isRunning()) {
         return;
+    }
 
     KDevelop::IDocument* activeDocument = core()->documentController()->activeDocument();
-    if (!activeDocument)
+    if (!activeDocument) {
         return;
+    }
 
     QUrl url = activeDocument->url();
 
     m_currentProject = core()->projectController()->findProjectForUrl(url);
-    if (!m_currentProject)
+    if (!m_currentProject) {
         return;
+    }
 
     m_actionFile->setEnabled(true);
     m_actionProject->setEnabled(true);
@@ -140,8 +144,9 @@ void Plugin::updateActions()
 
 void Plugin::projectClosed(KDevelop::IProject* project)
 {
-    if (project != m_model->project())
+    if (project != m_model->project()) {
         return;
+    }
 
     killCppcheck();
     m_model->reset();
@@ -152,10 +157,11 @@ void Plugin::runCppcheck(bool checkProject)
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
     Q_ASSERT(doc);
 
-    if (checkProject)
+    if (checkProject) {
         runCppcheck(m_currentProject, m_currentProject->path().toUrl().toLocalFile());
-    else
+    } else {
         runCppcheck(m_currentProject, doc->url().toLocalFile());
+    }
 }
 
 void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
@@ -173,10 +179,11 @@ void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
     core()->uiController()->registerStatus(new KDevelop::JobStatus(m_job, "Cppcheck"));
     core()->runController()->registerJob(m_job);
 
-    if (params.hideOutputView)
+    if (params.hideOutputView) {
         raiseProblemsView();
-    else
+    } else {
         raiseOutputView();
+    }
 
     updateActions();
 }
@@ -189,10 +196,11 @@ void Plugin::result(KJob*)
         m_model->setProblems();
 
         if (m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
-            m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled)
+            m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled) {
             raiseProblemsView();
-        else
+        } else {
             raiseOutputView();
+        }
     }
 
     m_job = nullptr; // job is automatically deleted later
@@ -213,8 +221,9 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
 
     if (context->hasType(KDevelop::Context::ProjectItemContext) && !isRunning()) {
         auto pContext = dynamic_cast<KDevelop::ProjectItemContext*>(context);
-        if (pContext->items().size() != 1)
+        if (pContext->items().size() != 1) {
             return extension;
+        }
 
         auto item = pContext->items().first();
 

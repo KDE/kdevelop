@@ -39,8 +39,9 @@ namespace cppcheck
 void includesForItem(KDevelop::ProjectBaseItem* parent, QSet<KDevelop::Path>& includes)
 {
     foreach (auto child, parent->children()) {
-        if (child->type() == KDevelop::ProjectBaseItem::ProjectItemType::File)
+        if (child->type() == KDevelop::ProjectBaseItem::ProjectItemType::File) {
             continue;
+        }
 
         else if (child->type() == KDevelop::ProjectBaseItem::ProjectItemType::ExecutableTarget ||
                  child->type() == KDevelop::ProjectBaseItem::ProjectItemType::LibraryTarget ||
@@ -140,32 +141,41 @@ QStringList Parameters::commandLine(QString& infoMessage) const
     result << executablePath;
     result << QStringLiteral("--xml-version=2");
 
-    if (checkStyle)
+    if (checkStyle) {
         result << QStringLiteral("--enable=style");
+    }
 
-    if (checkPerformance)
+    if (checkPerformance) {
         result << QStringLiteral("--enable=performance");
+    }
 
-    if (checkPortability)
+    if (checkPortability) {
         result << QStringLiteral("--enable=portability");
+    }
 
-    if (checkInformation)
+    if (checkInformation) {
         result << QStringLiteral("--enable=information");
+    }
 
-    if (checkUnusedFunction)
+    if (checkUnusedFunction) {
         result << QStringLiteral("--enable=unusedFunction");
+    }
 
-    if (checkMissingInclude)
+    if (checkMissingInclude) {
         result << QStringLiteral("--enable=missingInclude");
+    }
 
-    if (inconclusiveAnalysis)
+    if (inconclusiveAnalysis) {
         result << QStringLiteral("--inconclusive");
+    }
 
-    if (forceCheck)
+    if (forceCheck) {
         result << QStringLiteral("--force");
+    }
 
-    if (checkConfig)
+    if (checkConfig) {
         result << QStringLiteral("--check-config");
+    }
 
     // Try to automatically get value of Q_MOC_OUTPUT_REVISION for Qt-projects.
     // If such define is not correctly set, cppcheck 'fails' on files with moc-includes
@@ -194,24 +204,28 @@ QStringList Parameters::commandLine(QString& infoMessage) const
             }
         }
 
-        if (qtUsed && !mocDefineFound)
+        if (qtUsed && !mocDefineFound) {
             infoMessage = mocMessage;
+        }
     }
 
-    if (!extraParameters.isEmpty())
+    if (!extraParameters.isEmpty()) {
         result << KShell::splitArgs(applyPlaceholders(extraParameters));
+    }
 
     if (m_project && useProjectIncludes) {
         QList<KDevelop::Path> ignored;
 
         foreach (const QString& element, applyPlaceholders(ignoredIncludes).split(';')) {
-            if (!element.trimmed().isEmpty())
+            if (!element.trimmed().isEmpty()) {
                 ignored.append(KDevelop::Path(element));
+            }
         }
 
         foreach (const auto& dir, m_includeDirectories) {
-            if (ignored.contains(dir))
+            if (ignored.contains(dir)) {
                 continue;
+            }
 
             else if (useSystemIncludes ||
                      dir == m_projectRootPath || m_projectRootPath.isParentOf(dir) ||

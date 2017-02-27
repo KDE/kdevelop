@@ -91,14 +91,17 @@ bool CppcheckParser::startElement()
 
     qCDebug(KDEV_CPPCHECK) << "CppcheckParser::startElement: elem: " << qPrintable(name().toString());
 
-    if (name() == "results")
+    if (name() == "results") {
         newState = Results;
+    }
 
-    else if (name() == "cppcheck")
+    else if (name() == "cppcheck") {
         newState = CppCheck;
+    }
 
-    else if (name() == "errors")
+    else if (name() == "errors") {
         newState = Errors;
+    }
 
     else if (name() == "location") {
         newState = Location;
@@ -117,17 +120,21 @@ bool CppcheckParser::startElement()
         m_errorMessage.clear();
         m_errorVerboseMessage.clear();
 
-        if (attributes().hasAttribute("msg"))
+        if (attributes().hasAttribute("msg")) {
             m_errorMessage = attributes().value("msg").toString();
+        }
 
-        if (attributes().hasAttribute("verbose"))
+        if (attributes().hasAttribute("verbose")) {
             m_errorVerboseMessage = verboseMessageToHtml(attributes().value("verbose").toString());
+        }
 
-        if (attributes().hasAttribute("severity"))
+        if (attributes().hasAttribute("severity")) {
             m_errorSeverity = attributes().value("severity").toString();
+        }
 
-        if (attributes().hasAttribute("inconclusive"))
+        if (attributes().hasAttribute("inconclusive")) {
             m_errorInconclusive = true;
+        }
     }
 
     else {
@@ -148,8 +155,9 @@ bool CppcheckParser::endElement(QVector<KDevelop::IProblem::Ptr>& problems)
 
     switch (state) {
     case CppCheck:
-        if (attributes().hasAttribute("version"))
+        if (attributes().hasAttribute("version")) {
             qCDebug(KDEV_CPPCHECK) << "Cppcheck report version: " << attributes().value("version");
+        }
         break;
 
     case Errors:
@@ -253,11 +261,13 @@ KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
 
     problem->setSource(KDevelop::IProblem::Plugin);
 
-    if (m_errorSeverity == "error")
+    if (m_errorSeverity == "error") {
         problem->setSeverity(KDevelop::IProblem::Error);
+    }
 
-    else if (m_errorSeverity == "warning")
+    else if (m_errorSeverity == "warning") {
         problem->setSeverity(KDevelop::IProblem::Warning);
+    }
 
     else {
        problem->setSeverity(KDevelop::IProblem::Hint);
@@ -265,20 +275,22 @@ KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
        messagePrefix.push_back(m_errorSeverity);
     }
 
-    if (m_errorInconclusive)
+    if (m_errorInconclusive) {
         messagePrefix.push_back("inconclusive");
+    }
 
-    if (!messagePrefix.isEmpty())
+    if (!messagePrefix.isEmpty()) {
         errorMessage = QString("(%1) %2").arg(messagePrefix.join(", ")).arg(m_errorMessage);
+    }
 
     problem->setDescription(errorMessage);
     problem->setExplanation(m_errorVerboseMessage);
 
     KDevelop::DocumentRange range;
 
-    if (locationIdx < 0 || locationIdx >= m_errorFiles.size())
+    if (locationIdx < 0 || locationIdx >= m_errorFiles.size()) {
         range = KDevelop::DocumentRange::invalid();
-    else {
+    } else {
         range.document = KDevelop::IndexedString(m_errorFiles.at(locationIdx));
         range.setBothLines(m_errorLines.at(locationIdx) - 1);
         range.setBothColumns(0);
