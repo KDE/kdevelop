@@ -6,6 +6,7 @@ include_directories(
 
 set(kdevcppcheck_SRCS
     plugin.cpp
+    problemmodel.cpp
 
     config/globalconfigpage.cpp
     config/projectconfigpage.cpp
@@ -23,7 +24,7 @@ add_library(kdevcppcheck_core STATIC
     parser.cpp
     job.cpp
     parameters.cpp
-    problemmodel.cpp
+    problem.cpp
     utils.cpp
 
     ${kdevcppcheck_CONFIG_SRCS}

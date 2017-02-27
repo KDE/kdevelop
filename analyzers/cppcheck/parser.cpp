@@ -22,25 +22,15 @@
 #include "parser.h"
 
 #include "debug.h"
+#include "problem.h"
 
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <shell/problem.h>
+#include <klocalizedstring.h>
+#include <kmessagebox.h>
 
 #include <QApplication>
 
 namespace cppcheck
 {
-
-class CppcheckProblem : public KDevelop::DetectedProblem
-{
-public:
-    CppcheckProblem() {}
-    ~CppcheckProblem() override {}
-
-    Source source() const override { return Plugin; };
-    QString sourceString() const override { return QStringLiteral("Cppcheck"); };
-};
 
 /**
  * Convert the value of \<verbose\> attribute of \<error\> element from cppcheck's
