@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
    Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
-   Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
+   Copyright 2016-2017 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -26,11 +26,11 @@
 
 #include "debug.h"
 #include "job.h"
+#include "problemmodel.h"
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
@@ -39,8 +39,6 @@
 #include <language/interfaces/editorcontext.h>
 #include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
-#include <shell/problemmodel.h>
-#include <shell/problemmodelset.h>
 #include <util/jobstatus.h>
 
 #include <QAction>
@@ -51,23 +49,14 @@ K_PLUGIN_FACTORY_WITH_JSON(CppcheckFactory, "kdevcppcheck.json", registerPlugin<
 namespace cppcheck
 {
 
-static const QString modelId = QStringLiteral("Cppcheck");
-
 Plugin::Plugin(QObject* parent, const QVariantList&)
     : IPlugin("kdevcppcheck", parent)
     , m_job(nullptr)
     , m_currentProject(nullptr)
-    , m_checkedProject(nullptr)
-    , m_model(new KDevelop::ProblemModel(this))
+    , m_model(new ProblemModel(this))
 {
     qCDebug(KDEV_CPPCHECK) << "setting cppcheck rc file";
     setXMLFile("kdevcppcheck.rc");
-
-    m_model->setFeatures(
-        KDevelop::ProblemModel::ScopeFilter |
-        KDevelop::ProblemModel::SeverityFilter |
-        KDevelop::ProblemModel::Grouping |
-        KDevelop::ProblemModel::CanByPassScopeFilter);
 
     m_actionFile = new QAction(QIcon::fromTheme("cppcheck"), i18n("Cppcheck (Current File)"), this);
     connect(m_actionFile, &QAction::triggered, [this](){
@@ -93,18 +82,12 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
     connect(core()->projectController(), &KDevelop::IProjectController::projectClosed,
             this, &Plugin::projectClosed);
 
-    KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->addModel(modelId, i18n("Cppcheck"), m_model.data());
-
     updateActions();
 }
 
 Plugin::~Plugin()
 {
     killCppcheck();
-
-    KDevelop::ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->removeModel(modelId);
 }
 
 bool Plugin::isRunning()
@@ -120,7 +103,7 @@ void Plugin::killCppcheck()
 
 void Plugin::raiseProblemsView()
 {
-    core()->languageController()->problemModelSet()->showModel(modelId);
+    m_model->show();
 }
 
 void Plugin::raiseOutputView()
@@ -157,13 +140,11 @@ void Plugin::updateActions()
 
 void Plugin::projectClosed(KDevelop::IProject* project)
 {
-    if (project != m_checkedProject)
+    if (project != m_model->project())
         return;
 
     killCppcheck();
-    m_problems.clear();
-    m_model->clearProblems();
-    m_checkedProject = nullptr;
+    m_model->reset();
 }
 
 void Plugin::runCppcheck(bool checkProject)
@@ -179,18 +160,15 @@ void Plugin::runCppcheck(bool checkProject)
 
 void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
 {
-    m_checkedProject = project;
+    m_model->reset(project, path);
 
-    Parameters params(m_checkedProject);
+    Parameters params(project);
     params.checkPath = path;
-
-    m_problems.clear();
-    m_model->clearProblems();
 
     m_job = new Job(params);
 
-    connect(m_job, &Job::problemsDetected, this, &Plugin::problemsDetected);
-    connect(m_job, &Job::finished,         this, &Plugin::result);
+    connect(m_job, &Job::problemsDetected, m_model.data(), &ProblemModel::addProblems);
+    connect(m_job, &Job::finished, this, &Plugin::result);
 
     core()->uiController()->registerStatus(new KDevelop::JobStatus(m_job, "Cppcheck"));
     core()->runController()->registerJob(m_job);
@@ -203,50 +181,12 @@ void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
     updateActions();
 }
 
-bool Plugin::problemExists(KDevelop::IProblem::Ptr newProblem)
-{
-    foreach (auto problem, m_problems) {
-        if (newProblem->source() == problem->source() &&
-            newProblem->severity() == problem->severity() &&
-            newProblem->finalLocation() == problem->finalLocation() &&
-            newProblem->description() == problem->description() &&
-            newProblem->explanation() == problem->explanation())
-            return true;
-    }
-
-    return false;
-}
-
-void Plugin::problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems)
-{
-    static int maxLength = 0;
-
-    if (m_problems.isEmpty())
-        maxLength = 0;
-
-    foreach (auto p, problems) {
-        if (problemExists(p))
-            continue;
-
-        m_problems.append(p);
-        m_model->addProblem(p);
-
-        // This performs adjusing of columns width in the ProblemsView.
-        // Should be fixed in ProblemsView ?
-        if (maxLength < p->description().length()) {
-            maxLength = p->description().length();
-            m_model->setProblems(m_problems);
-        }
-    }
-}
-
 void Plugin::result(KJob*)
 {
-    if (!core()->projectController()->projects().contains(m_checkedProject)) {
-        m_problems.clear();
-        m_model->clearProblems();
+    if (!core()->projectController()->projects().contains(m_model->project())) {
+        m_model->reset();
     } else {
-        m_model->setProblems(m_problems);
+        m_model->setProblems();
 
         if (m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
             m_job->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled)

@@ -7,7 +7,7 @@
    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
    Copyright 2002 Harald Fernengel <harry@kdevelop.org>
    Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
-   Copyright 2016 Anton Anikin <anton.anikin@htower.ru>
+   Copyright 2016-2017 Anton Anikin <anton.anikin@htower.ru>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -29,11 +29,10 @@
 
 #include "debug.h"
 #include "parser.h"
+#include "utils.h"
 
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
-#include <KLocalizedString>
-#include <KMessageBox>
+#include <klocalizedstring.h>
+#include <kmessagebox.h>
 #include <shell/problem.h>
 
 #include <QApplication>
@@ -50,10 +49,7 @@ Job::Job(const Parameters& params, QObject* parent)
     , m_showXmlOutput(params.showXmlOutput)
     , m_projectRootPath(params.projectRootPath())
 {
-    QString prettyName = KDevelop::ICore::self()->projectController()->prettyFileName(
-        QUrl::fromLocalFile(params.checkPath),
-        KDevelop::IProjectController::FormatPlain);
-    setJobName(i18n("Cppcheck (%1)", prettyName));
+    setJobName(i18n("Cppcheck (%1)", prettyPathName(params.checkPath)));
 
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
