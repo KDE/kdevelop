@@ -236,7 +236,7 @@ void ProblemModel::setFeatures(Features features)
 void ProblemModel::addProblem(const IProblem::Ptr &problem)
 {
     int c = d->m_problems->count();
-    beginInsertRows(QModelIndex(), c, c + 1);
+    beginInsertRows(QModelIndex(), c, c);
     d->m_problems->addProblem(problem);
     endInsertRows();
 }
