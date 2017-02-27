@@ -25,6 +25,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iproject.h>
 #include <shell/problemmodelset.h>
 
 #include <klocalizedstring.h>
@@ -59,6 +60,25 @@ KDevelop::IProject* ProblemModel::project() const
     return m_project;
 }
 
+void ProblemModel::fixProblemFinalLocation(KDevelop::IProblem::Ptr problem)
+{
+    // Fix problems with incorrect range, which produced by cppcheck's errors
+    // without <location> element. In this case location automatically gets "/".
+    // To avoid this we set project's root path as problem location.
+
+    Q_ASSERT(m_project);
+
+    auto range = problem->finalLocation();
+    if (range.document.isEmpty()) {
+        range.document = KDevelop::IndexedString(m_project->path().toLocalFile());
+        problem->setFinalLocation(range);
+    }
+
+    for (auto diagnostic : problem->diagnostics()) {
+        fixProblemFinalLocation(diagnostic);
+    }
+}
+
 void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
 {
     static int maxLength = 0;
@@ -67,15 +87,16 @@ void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
         maxLength = 0;
     }
 
-    m_problems.append(problems);
-    for (auto p : problems) {
-        addProblem(p);
+    for (auto problem : problems) {
+        fixProblemFinalLocation(problem);
+
+        m_problems.append(problem);
+        addProblem(problem);
 
         // This performs adjusting of columns width in the ProblemsView
-        if (maxLength < p->description().length()) {
-            maxLength = p->description().length();
+        if (maxLength < problem->description().length()) {
+            maxLength = problem->description().length();
             setProblems(m_problems);
-            break;
         }
     }
 }

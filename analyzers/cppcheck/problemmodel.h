@@ -52,6 +52,7 @@ public:
     void forceFullUpdate() override;
 
 private:
+    void fixProblemFinalLocation(KDevelop::IProblem::Ptr problem);
     using KDevelop::ProblemModel::setProblems;
 
     Plugin* m_plugin;

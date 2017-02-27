@@ -38,6 +38,7 @@ public:
     CppcheckProblem() {}
     ~CppcheckProblem() override {}
 
+    Source source() const override { return Plugin; };
     QString sourceString() const override { return QStringLiteral("Cppcheck"); };
 };
 
@@ -259,8 +260,6 @@ KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
     QStringList messagePrefix;
     QString errorMessage(m_errorMessage);
 
-    problem->setSource(KDevelop::IProblem::Plugin);
-
     if (m_errorSeverity == "error") {
         problem->setSeverity(KDevelop::IProblem::Error);
     }
@@ -297,6 +296,7 @@ KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
     }
 
     problem->setFinalLocation(range);
+    problem->setFinalLocationMode(KDevelop::IProblem::TrimmedLine);
 
     return problem;
 }
