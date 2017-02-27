@@ -28,6 +28,7 @@
 #include <QTextBrowser>
 #include <QToolButton>
 
+#include <KToggleAction>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -176,11 +177,8 @@ void ContextBrowserView::declarationMenu() {
     }
 }
 
-void ContextBrowserView::updateLockIcon(bool checked) {
-    m_lockAction->setIcon(QIcon::fromTheme(checked ? QStringLiteral("document-encrypt") : QStringLiteral("document-decrypt")));
-}
-
 ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new QTextBrowser()), m_autoLocked(false) {
+    setWindowTitle(i18n("Code Browser"));
     setWindowIcon( QIcon::fromTheme(QStringLiteral("code-context"), windowIcon()) );
 
     m_allowLockedUpdate = false;
@@ -189,13 +187,11 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     m_declarationMenuAction->setToolTip(i18n("Declaration menu"));
     connect(m_declarationMenuAction, &QAction::triggered, this, &ContextBrowserView::declarationMenu);
     addAction(m_declarationMenuAction);
-    m_lockAction = new QAction(this);
-    m_lockAction->setCheckable(true);
-    m_lockAction->setChecked(false);
+    m_lockAction = new KToggleAction(QIcon::fromTheme(QStringLiteral("object-unlocked")), i18n("Lock Current View"), this);
     m_lockAction->setToolTip(i18n("Lock current view"));
+    m_lockAction->setCheckedState(KGuiItem(i18n("Unlock Current View"), QIcon::fromTheme(QStringLiteral("object-locked")), i18n("Unlock current view")));
+    m_lockAction->setChecked(false);
     addAction(m_lockAction);
-    updateLockIcon(m_lockAction->isChecked());
-    connect(m_lockAction, &QAction::triggered, this, &ContextBrowserView::updateLockIcon);
 
     m_layout = new QVBoxLayout;
     m_layout->setSpacing(0);

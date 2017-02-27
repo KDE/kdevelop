@@ -101,7 +101,7 @@ public:
         desired[QStringLiteral("org.kdevelop.KonsoleView")] = Sublime::Bottom;
         a = new Sublime::Area(m_controller, QStringLiteral("debug"), i18n("Debug"));
         a->setDesiredToolViews(desired);
-        a->setIconName(QStringLiteral("tools-report-bug"));
+        a->setIconName(QStringLiteral("debug-run"));
         m_controller->addDefaultArea(a);
 
         desired.clear();

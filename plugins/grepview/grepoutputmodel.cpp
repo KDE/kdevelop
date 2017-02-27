@@ -149,7 +149,9 @@ QVariant GrepOutputItem::data ( int role ) const {
     if(role == Qt::ToolTipRole && grepModel && isText())
     {
         QString start = text().left(m_change->m_range.start().column()).toHtmlEscaped();
-        QString repl  = "<b>" + grepModel->replacementFor(m_change->m_oldText).toHtmlEscaped() + "</b>";
+        // show replaced version in tooltip if we are in replace mode
+        const QString match = isCheckable() ? grepModel->replacementFor(m_change->m_oldText) : m_change->m_oldText;
+        const QString repl  = QLatin1String("<b>") + match.toHtmlEscaped() + QLatin1String("</b>");
         QString end   = text().right(text().length() - m_change->m_range.end().column()).toHtmlEscaped();
         return QVariant(QString(start + repl + end).trimmed());
     } else if (role == Qt::FontRole) {
