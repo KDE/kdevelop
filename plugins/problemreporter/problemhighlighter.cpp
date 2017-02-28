@@ -154,13 +154,15 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
             const QString lineString = m_document->line(line);
 
             int startColumn = 0;
-            int endColumn = lineString.length() - 1;
+            int endColumn = lineString.length();
 
-            if (problem->finalLocationMode() == IProblem::TrimmedLine) {
+            // If the line contains only space-characters then
+            // we will highlight it "as is", without trimming.
+            if (problem->finalLocationMode() == IProblem::TrimmedLine && !lineString.trimmed().isEmpty()) {
                 while (lineString.at(startColumn++).isSpace()) {}
                 --startColumn;
 
-                while (lineString.at(endColumn--).isSpace()) {}
+                while (lineString.at(--endColumn).isSpace()) {}
                 ++endColumn;
             }
 
