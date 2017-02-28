@@ -119,7 +119,7 @@ void ProblemModel::reset(KDevelop::IProject* project, const QString& path)
     clearProblems();
     m_problems.clear();
 
-    QString tooltip = i18nc("@info:tooltip", "Re-run last Cppcheck analyze");
+    QString tooltip = i18nc("@info:tooltip", "Re-Run Last Cppcheck Analysis");
     if (m_project) {
         tooltip += QString(" (%1)").arg(prettyPathName(m_path));
     }
