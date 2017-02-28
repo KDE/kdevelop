@@ -49,7 +49,7 @@ Job::Job(const Parameters& params, QObject* parent)
     , m_showXmlOutput(params.showXmlOutput)
     , m_projectRootPath(params.projectRootPath())
 {
-    setJobName(i18n("Cppcheck (%1)", prettyPathName(params.checkPath)));
+    setJobName(i18n("Cppcheck Analysis (%1)", prettyPathName(params.checkPath)));
 
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
