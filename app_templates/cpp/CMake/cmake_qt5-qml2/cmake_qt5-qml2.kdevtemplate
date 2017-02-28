@@ -2,6 +2,7 @@
 [General]
 Name=QtQuick 2 Application
 Name[ca]=Aplicació QtQuick 2
+Name[cs]=Aplikace QtQuick2
 Name[en_GB]=QtQuick 2 Application
 Name[nl]=QtQuick 2-toepassing
 Name[pl]=Program QtQuick 2
@@ -13,6 +14,7 @@ Name[x-test]=xxQtQuick 2 Applicationxx
 
 Comment=A Qt5 and QtQuick2 basic application using CMake
 Comment[ca]=Una aplicació bàsica en Qt5 i QtQuick2 usant el CMake
+Comment[cs]=Základní aplikace Qt5 a QtQuick2 pomocí CMake
 Comment[en_GB]=A Qt5 and QtQuick2 basic application using CMake
 Comment[nl]=Een Qt5 en QtQuick2 basistoepassing met CMake
 Comment[pl]=Podstawowy program Qt5 i QtQuick2 wykorzystujący CMake.
