@@ -94,6 +94,9 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     setModel(problemModel);
 
     header()->setStretchLastSection(false);
+    if (!problemModel->features().testFlag(ProblemModel::ShowSource)) {
+        hideColumn(ProblemModel::Source);
+    }
 
     connect(this, &ProblemTreeView::clicked, this, &ProblemTreeView::itemActivated);
 

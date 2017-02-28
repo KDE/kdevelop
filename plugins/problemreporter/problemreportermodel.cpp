@@ -50,7 +50,7 @@ const int ProblemReporterModel::MaxTimeout = 5000;
 ProblemReporterModel::ProblemReporterModel(QObject* parent)
     : ProblemModel(parent, new FilteredProblemStore())
 {
-    setFeatures(CanDoFullUpdate | CanShowImports | ScopeFilter | SeverityFilter);
+    setFeatures(CanDoFullUpdate | CanShowImports | ScopeFilter | SeverityFilter | ShowSource);
 
     m_minTimer = new QTimer(this);
     m_minTimer->setInterval(MinTimeout);

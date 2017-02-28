@@ -89,7 +89,8 @@ public:
         ScopeFilter                = 4,  /// Filter problems by scope. E.g.: current document, open documents, etc
         SeverityFilter             = 8,  /// Filter problems by severity. E.g.: hint, warning, error, etc
         Grouping                   = 16, /// Can group problems
-        CanByPassScopeFilter       = 32  /// Can bypass scope filter
+        CanByPassScopeFilter       = 32, /// Can bypass scope filter
+        ShowSource                 = 64  /// Show problem's source. Set if problems can have different sources.
     };
 
     Q_DECLARE_FLAGS(Features, FeatureCode)
