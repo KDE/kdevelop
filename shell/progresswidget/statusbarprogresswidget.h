@@ -67,6 +67,7 @@ protected:
     void setMode();
     void connectSingleItem();
     void activateSingleItemMode();
+    void activateSingleItemMode( unsigned int progress );
 
     bool eventFilter( QObject *, QEvent * ) override;
 

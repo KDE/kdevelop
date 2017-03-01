@@ -210,10 +210,21 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
         item = nullptr;
         return; // we are only interested in top level items
     }
+
+    bool itemUsesBusyIndicator = item->usesBusyIndicator();
     item->deleteLater();
     item = nullptr;
+
     connectSingleItem(); // if going back to 1 item
     if ( ProgressManager::instance()->isEmpty() ) { // No item
+        // If completed item uses busy indicator and progress manager doesn't have any
+        // other items, then we should set it progress to 100% to indicate finishing.
+        // Without this fix we will show busy indicator for already finished item
+        // for next 5s.
+        if ( itemUsesBusyIndicator ) {
+            activateSingleItemMode( 100 );
+        }
+
         // Done. In 5s the progress-widget will close, then we can clean up the statusbar
         mCleanTimer->start( 5000 );
     } else if ( mCurrentItem ) { // Exactly one item
@@ -237,12 +248,17 @@ void StatusbarProgressWidget::connectSingleItem()
 
 void StatusbarProgressWidget::activateSingleItemMode()
 {
+    activateSingleItemMode( mCurrentItem->progress() );
+}
+
+void StatusbarProgressWidget::activateSingleItemMode( unsigned int progress )
+{
     m_pProgressBar->setMaximum( 100 );
-    m_pProgressBar->setValue( mCurrentItem->progress() );
+    m_pProgressBar->setValue( progress );
     m_pProgressBar->setTextVisible( true );
 #ifdef Q_OS_OSX
     MacDockProgressView::setRange( 0, 100 );
-    MacDockProgressView::setProgress( mCurrentItem->progress() );
+    MacDockProgressView::setProgress( progress );
 #endif
 }
 
