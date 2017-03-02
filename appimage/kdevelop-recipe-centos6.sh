@@ -13,7 +13,7 @@ git_pull_rebase_helper()
 {
     git fetch
     git stash || true
-    git pull --rebase
+    git rebase || true
     git stash pop || true
 }
 
