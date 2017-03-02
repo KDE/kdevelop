@@ -24,7 +24,6 @@ add_library(kdevcppcheck_core STATIC
     parser.cpp
     job.cpp
     parameters.cpp
-    problem.cpp
     utils.cpp
 
     ${kdevcppcheck_CONFIG_SRCS}

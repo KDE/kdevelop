@@ -22,10 +22,10 @@
 #include "parser.h"
 
 #include "debug.h"
-#include "problem.h"
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <shell/problem.h>
 
 #include <QApplication>
 
@@ -246,7 +246,7 @@ void CppcheckParser::storeError(QVector<KDevelop::IProblem::Ptr>& problems)
 
 KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
 {
-    KDevelop::IProblem::Ptr problem(new CppcheckProblem);
+    KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem);
     QStringList messagePrefix;
     QString errorMessage(m_errorMessage);
 

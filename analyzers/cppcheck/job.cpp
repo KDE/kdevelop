@@ -29,11 +29,11 @@
 
 #include "debug.h"
 #include "parser.h"
-#include "problem.h"
 #include "utils.h"
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <shell/problem.h>
 
 #include <QApplication>
 #include <QElapsedTimer>
@@ -118,7 +118,7 @@ void Job::postProcessStderr(const QStringList& lines)
             emitProblems();
         }
         else {
-            KDevelop::IProblem::Ptr problem(new CppcheckProblem);
+            KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem);
 
             problem->setSeverity(KDevelop::IProblem::Error);
             problem->setDescription(line);
