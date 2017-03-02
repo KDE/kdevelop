@@ -26,6 +26,7 @@
 #include <QMenu>
 #include <QHeaderView>
 #include <QContextMenuEvent>
+#include <QScrollBar>
 
 #include "interfaces/contextmenuextension.h"
 #include "interfaces/icore.h"
@@ -156,6 +157,7 @@ void ClassTree::highlightIdentifier( KDevelop::IndexedQualifiedIdentifier a_id )
   // expand and select the item.
   selectionModel()->select( index, QItemSelectionModel::ClearAndSelect );
   scrollTo( index, PositionAtCenter );
+  horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
   expand( index );
 }
 
