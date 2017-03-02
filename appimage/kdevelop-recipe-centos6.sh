@@ -154,8 +154,7 @@ function build_framework
         cd $FRAMEWORK 
         git stash
         git reset --hard
-        git checkout master
-        git pull --rebase
+        git fetch
         git fetch --tags
         cd ..
     else
@@ -164,6 +163,7 @@ function build_framework
 
     cd $FRAMEWORK
     git checkout $KF5_VERSION || git checkout $KDE_APPLICATION_VERSION
+    git rebase || true # git rebase will fail if a tag is checked out
     git stash pop || true
     cd ..
 
