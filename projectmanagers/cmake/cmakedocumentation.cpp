@@ -28,16 +28,17 @@
 #include <QMimeDatabase>
 #include <QFontDatabase>
 #include <QStandardPaths>
+#include <KLocalizedString>
 
 #include <interfaces/iproject.h>
 #include <KPluginFactory>
 #include <documentation/standarddocumentationview.h>
 #include <language/duchain/declaration.h>
+#include <serialization/indexedstring.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include "cmakemanager.h"
-#include "cmakeparserutils.h"
 #include "cmakehelpdocumentation.h"
 #include "cmakedoc.h"
 #include "debug.h"

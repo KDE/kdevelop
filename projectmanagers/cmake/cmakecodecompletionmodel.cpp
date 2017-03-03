@@ -35,7 +35,6 @@
 #include <KLocalizedString>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
-#include "astfactory.h"
 #include <cmakeduchaintypes.h>
 #include "cmakeutils.h"
 #include "icmakedocumentation.h"

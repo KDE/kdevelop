@@ -20,8 +20,6 @@
  */
 
 #include "cmakelistsparser.h"
-// #include "cmakeprojectvisitor.h"
-#include "astfactory.h"
 #include "../debug.h"
 
 #include <util/stack.h>

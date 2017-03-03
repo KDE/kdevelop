@@ -13,19 +13,9 @@ add_definitions( -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 set( cmakecommon_SRCS
   parser/cmListFileLexer.c
-#   parser/astfactory.cpp
-#   parser/cmakelistsparser.cpp
-#   parser/cmakeast.cpp
-#   parser/cmakecondition.cpp
-#   parser/cmakeprojectvisitor.cpp
-#   parser/variablemap.cpp
-#   parser/cmakedebugvisitor.cpp
   parser/cmakecachereader.cpp
   parser/cmakelistsparser.cpp
   parser/cmakeduchaintypes.cpp
-#   parser/cmakeparserutils.cpp
-#   parser/cmakeduchaintypes.cpp
-#   parser/generationexpressionsolver.cpp
   cmakeutils.cpp
   cmakeextraargumentshistory.cpp
   cmakebuilddirchooser.cpp
@@ -56,7 +46,6 @@ set( cmakemanager_SRCS
   duchain/contextbuilder.cpp
   cmakecodecompletionmodel.cpp
 #   cmakecommitchangesjob.cpp
-#   cmakeimportjob.cpp
 #   cmakeedit.cpp
   debug.cpp
 )

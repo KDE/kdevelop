@@ -20,7 +20,6 @@
 #define CMAKETYPES_H
 
 #include "cmakelistsparser.h"
-#include "variablemap.h"
 #include <util/path.h>
 
 #include <language/duchain/indexeddeclaration.h>

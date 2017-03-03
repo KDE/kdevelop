@@ -36,7 +36,6 @@
 
 #include "cmakeprojectdata.h"
 #include "icmakemanager.h"
-#include "cmakeprojectvisitor.h"
 
 class WaitAllJobs;
 class CMakeCommitChangesJob;
