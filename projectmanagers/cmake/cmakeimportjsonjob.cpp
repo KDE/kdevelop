@@ -42,7 +42,7 @@ using namespace KDevelop;
 
 namespace {
 
-CMakeJsonData importCommands(const Path& commandsFile)
+CMakeFilesCompilationData importCommands(const Path& commandsFile)
 {
     // NOTE: to get compile_commands.json, you need -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     QFile f(commandsFile.toLocalFile());
@@ -54,7 +54,7 @@ CMakeJsonData importCommands(const Path& commandsFile)
 
     qCDebug(CMAKE) << "Found commands file" << commandsFile;
 
-    CMakeJsonData data;
+    CMakeFilesCompilationData data;
     QJsonParseError error;
     const QJsonDocument document = QJsonDocument::fromJson(f.readAll(), &error);
     if (error.error) {
@@ -141,18 +141,18 @@ ImportData import(const Path& commandsFile, const Path &targetsFilePath, const Q
 
 }
 
-CMakeImportJob::CMakeImportJob(IProject* project, QObject* parent)
+CMakeImportJsonJob::CMakeImportJsonJob(IProject* project, QObject* parent)
     : KJob(parent)
     , m_project(project)
+    , m_data({})
 {
-    connect(&m_futureWatcher, &QFutureWatcher<ImportData>::finished, this, &CMakeImportJob::importFinished);
+    connect(&m_futureWatcher, &QFutureWatcher<ImportData>::finished, this, &CMakeImportJsonJob::importCompileCommandsJsonFinished);
 }
 
-CMakeImportJob::~CMakeImportJob()
-{
-}
+CMakeImportJsonJob::~CMakeImportJsonJob()
+{}
 
-void CMakeImportJob::start()
+void CMakeImportJsonJob::start()
 {
     auto commandsFile = CMake::commandsFile(project());
     if (!QFileInfo::exists(commandsFile.toLocalFile())) {
@@ -171,33 +171,31 @@ void CMakeImportJob::start()
     m_futureWatcher.setFuture(future);
 }
 
-void CMakeImportJob::importFinished()
+void CMakeImportJsonJob::importCompileCommandsJsonFinished()
 {
     Q_ASSERT(m_project->thread() == QThread::currentThread());
     Q_ASSERT(m_futureWatcher.isFinished());
 
     auto future = m_futureWatcher.future();
     auto data = future.result();
-    if (!data.json.isValid) {
+    if (!data.compilationData.isValid) {
         qCWarning(CMAKE) << "Could not import CMake project ('compile_commands.json' invalid)";
         emitResult();
         return;
     }
 
-    m_data = data.json;
-    m_targets = data.targets;
-    m_testSuites = data.testSuites;
-    qCDebug(CMAKE) << "Done importing, found" << m_data.files.count() << "entries for" << project()->path();
+    m_data = CMakeProjectData {data.targets, data.compilationData, data.testSuites};
+    qCDebug(CMAKE) << "Done importing, found" << data.compilationData.files.count() << "entries for" << project()->path();
 
     emitResult();
 }
 
-IProject* CMakeImportJob::project() const
+IProject* CMakeImportJsonJob::project() const
 {
     return m_project;
 }
 
-CMakeJsonData CMakeImportJob::jsonData() const
+CMakeProjectData CMakeImportJsonJob::projectData() const
 {
     Q_ASSERT(!m_futureWatcher.isRunning());
     return m_data;

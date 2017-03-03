@@ -277,10 +277,10 @@ void TestCMakeManager::testCustomTargetSources()
 {
     IProject* project = loadProject("custom_target_sources");
 
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Abort);
     QList<ProjectTargetItem*> targets = project->buildSystemManager()->targets(project->projectItem());
     QVERIFY(targets.size() == 1);
 
+    QEXPECT_FAIL("", "Will fix soon, hopefully", Abort);
     ProjectTargetItem *target = targets.first();
     QCOMPARE(target->fileList().size(), 1);
     QCOMPARE(target->fileList().first()->baseName(), QStringLiteral("foo.cpp"));
@@ -343,7 +343,7 @@ void TestCMakeManager::testParenthesesInTestArguments()
     Path sourceDir = project->path();
     Path buildDir(sourceDir, "build/");
 
-    CMakeImportJob* job = new CMakeImportJob(project, this);
+    auto job = new CMakeImportJsonJob(project, this);
     job->start();
 
 }

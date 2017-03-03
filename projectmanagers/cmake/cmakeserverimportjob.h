@@ -1,6 +1,6 @@
 /* KDevelop CMake Support
  *
- * Copyright 2014 Kevin Funk <kfunk@kde.org>
+ * Copyright 2017 Aleix Pol Gonzalez <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,57 +18,39 @@
  * 02110-1301, USA.
  */
 
-#ifndef CMAKEIMPORTJSONJOB_H
-#define CMAKEIMPORTJSONJOB_H
-
-#include "cmakeprojectdata.h"
-#include <util/path.h>
+#ifndef CMAKESERVERIMPORTJOB_H
+#define CMAKESERVERIMPORTJOB_H
 
 #include <KJob>
-
-#include <QFutureWatcher>
-
-class CMakeFolderItem;
-
-struct ImportData {
-    CMakeFilesCompilationData compilationData;
-    QHash<KDevelop::Path, QStringList> targets;
-    QVector<Test> testSuites;
-};
+#include "cmakeprojectdata.h"
 
 namespace KDevelop
 {
 class IProject;
-class ReferencedTopDUContext;
 }
 
-class CMakeImportJsonJob : public KJob
+class CMakeServerImportJob : public KJob
 {
     Q_OBJECT
-
 public:
-    enum Error {
-        FileMissingError = UserDefinedError, ///< JSON file was not found
-        ReadError ///< Failed to read the JSON file
-    };
+    CMakeServerImportJob(KDevelop::IProject* project, CMakeServer* server, QObject* parent);
 
-    CMakeImportJsonJob(KDevelop::IProject* project, QObject* parent);
-    ~CMakeImportJsonJob() override;
+    enum Error { NoError, UnexpectedDisconnect, ErrorResponse };
 
     void start() override;
 
-    KDevelop::IProject* project() const;
+    KDevelop::IProject* project() const { return m_project; }
 
-    CMakeProjectData projectData() const;
-
-private Q_SLOTS:
-    void importCompileCommandsJsonFinished();
+    CMakeProjectData projectData() const { return m_data; }
 
 private:
+    void doStart();
+    void processResponse(const QJsonObject &response);
+
+    QPointer<CMakeServer> m_server;
     KDevelop::IProject* m_project;
-    QFutureWatcher<ImportData> m_futureWatcher;
 
     CMakeProjectData m_data;
 };
 
-#endif // CMAKEIMPORTJSONJOB_H
+#endif // CMAKESERVERIMPORTJOB_H

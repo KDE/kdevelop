@@ -36,11 +36,11 @@ namespace KDevelop
     class ReferencedTopDUContext;
 }
 
-class CMakeImportJob : public KJob
+class CMakeImportJsonJob : public KJob
 {
     Q_OBJECT
     public:
-        CMakeImportJob(KDevelop::ProjectFolderItem* dom, CMakeManager* parent);
+        CMakeImportJsonJob(KDevelop::ProjectFolderItem* dom, CMakeManager* parent);
 
         virtual void start();
         KDevelop::IProject* project() const;
@@ -48,7 +48,7 @@ class CMakeImportJob : public KJob
 
     private slots:
         void waitFinished(KJob* job);
-        void importFinished();
+        void importCompileCommandsJsonFinished();
 
     private:
         void initialize();

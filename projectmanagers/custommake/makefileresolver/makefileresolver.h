@@ -73,6 +73,8 @@ class MakeFileResolver
     void enableMakeResolution(bool enable);
     PathResolutionResult processOutput(const QString& fullOutput, const QString& workingDirectory) const;
 
+    static QRegularExpression defineRegularExpression();
+
   private:
     PathResolutionResult resolveIncludePath( const QString& file, const QString& workingDirectory, int maxStepsUp = 20 );
 

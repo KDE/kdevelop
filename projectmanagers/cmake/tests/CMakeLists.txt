@@ -24,6 +24,8 @@ endmacro(kdevcmake_add_test)
 kdevcmake_add_test(test_cmakemanager KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
 # kdevcmake_add_test(ctestfindsuitestest KDev::Language KDev::Tests)
 
+kdevcmake_add_test(test_cmakeserver KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
+
 # this is not a unit test but a testing tool, kept here for convenience
 add_executable(kdevprojectopen kdevprojectopen.cpp)
 target_link_libraries(kdevprojectopen Qt5::Test KDev::Project KDev::Tests kdevcmakecommon)

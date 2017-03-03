@@ -78,7 +78,7 @@ private:
     bool m_started;
 };
 
-CMakeImportJob::CMakeImportJob(ProjectFolderItem* dom, CMakeManager* parent)
+CMakeImportJsonJob::CMakeImportJsonJob(ProjectFolderItem* dom, CMakeManager* parent)
     : KJob(parent)
     , m_project(dom->project())
     , m_dom(dom)
@@ -89,13 +89,13 @@ CMakeImportJob::CMakeImportJob(ProjectFolderItem* dom, CMakeManager* parent)
     connect(m_futureWatcher, SIGNAL(finished()), SLOT(importFinished()));
 }
 
-void CMakeImportJob::start()
+void CMakeImportJsonJob::start()
 {
     QFuture<void> future = QtConcurrent::run(this, &CMakeImportJob::initialize);
     m_futureWatcher->setFuture(future);
 }
 
-void CMakeImportJob::importFinished()
+void CMakeImportJsonJob::importCompileCommandsJsonFinished()
 {
     Q_ASSERT(m_project->thread() == QThread::currentThread());
 
@@ -107,7 +107,7 @@ void CMakeImportJob::importFinished()
     wjob->start();
 }
 
-void CMakeImportJob::initialize()
+void CMakeImportJsonJob::initialize()
 {
     ReferencedTopDUContext ctx;
     ProjectBaseItem* parent = m_dom->parent();
@@ -122,7 +122,7 @@ void CMakeImportJob::initialize()
     importDirectory(m_project, m_dom->path(), ctx);
 }
 
-KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderItem* rootFolder)
+KDevelop::ReferencedTopDUContext CMakeImportJsonJob::initializeProject(CMakeFolderItem* rootFolder)
 {
     Path base(CMake::projectRoot(m_project));
 
@@ -193,12 +193,12 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
     return ref;
 }
 
-void CMakeImportJob::waitFinished(KJob*)
+void CMakeImportJsonJob::waitFinished(KJob*)
 {
     emitResult();
 }
 
-KDevelop::ReferencedTopDUContext CMakeImportJob::includeScript(const QString& file, const QString& dir, ReferencedTopDUContext parent)
+KDevelop::ReferencedTopDUContext CMakeImportJsonJob::includeScript(const QString& file, const QString& dir, ReferencedTopDUContext parent)
 {
     m_manager->addWatcher(m_project, file);
     QString profile = CMake::currentEnvironment(m_project);
@@ -206,7 +206,7 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::includeScript(const QString& fi
     return CMakeParserUtils::includeScript( file, parent, &m_data, dir, env.variables(profile));
 }
 
-CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const Path& path, const KDevelop::ReferencedTopDUContext& parentTop)
+CMakeCommitChangesJob* CMakeImportJsonJob::importDirectory(IProject* project, const Path& path, const KDevelop::ReferencedTopDUContext& parentTop)
 {
     Q_ASSERT(thread() == m_project->thread());
     Path cmakeListsPath(path, "CMakeLists.txt");
@@ -241,13 +241,13 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
     return commitJob;
 }
 
-IProject* CMakeImportJob::project() const
+IProject* CMakeImportJsonJob::project() const
 {
     Q_ASSERT(!m_futureWatcher->isRunning());
     return m_project;
 }
 
-CMakeProjectData CMakeImportJob::projectData() const
+CMakeProjectData CMakeImportJsonJob::projectData() const
 {
     Q_ASSERT(!m_futureWatcher->isRunning());
     return m_data;

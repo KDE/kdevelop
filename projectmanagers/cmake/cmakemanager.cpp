@@ -33,6 +33,8 @@
 #include "icmakedocumentation.h"
 #include "cmakemodelitems.h"
 #include "testing/ctestutils.h"
+#include "cmakeserverimportjob.h"
+#include "cmakeserver.h"
 
 #include <QDir>
 #include <QReadWriteLock>
@@ -111,7 +113,7 @@ CMakeManager::~CMakeManager()
 
 bool CMakeManager::hasBuildInfo(ProjectBaseItem* item) const
 {
-    return m_projects[item->project()].jsonData.files.contains(item->path());
+    return m_projects[item->project()].compilationData.files.contains(item->path());
 }
 
 Path CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
@@ -137,26 +139,79 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     return AbstractFileManagerPlugin::import(project);
 }
 
+class ChooseCMakeInterfaceJob : public ExecuteCompositeJob
+{
+    Q_OBJECT
+public:
+    ChooseCMakeInterfaceJob(IProject* project, CMakeManager* manager)
+        : ExecuteCompositeJob(manager, {})
+        , project(project)
+        , manager(manager)
+    {
+    }
+
+    void start() override {
+        server = new CMakeServer(project);
+        connect(server, &CMakeServer::connected, this, &ChooseCMakeInterfaceJob::successfulConnection);
+        connect(server, &CMakeServer::disconnected, this, &ChooseCMakeInterfaceJob::failedConnection);
+    }
+
+private:
+    void successfulConnection() {
+        auto job = new CMakeServerImportJob(project, server, this);
+        connect(job, &CMakeServerImportJob::result, this, [this, job](){
+            if (job->error() == 0) {
+                manager->integrateData(job->projectData(), job->project());
+            }
+        });
+        addSubjob(job);
+        ExecuteCompositeJob::start();
+    }
+
+    void failedConnection() {
+        Q_ASSERT(!server->isServerAvailable());
+
+        delete server;
+        // parse the JSON file
+        CMakeImportJsonJob* job = new CMakeImportJsonJob(project, this);
+
+        // create the JSON file if it doesn't exist
+        auto commandsFile = CMake::commandsFile(project);
+        if (!QFileInfo::exists(commandsFile.toLocalFile())) {
+            qCDebug(CMAKE) << "couldn't find commands file:" << commandsFile << "- now trying to reconfigure";
+            addSubjob(manager->builder()->configure(project));
+        }
+
+        connect(job, &CMakeImportJsonJob::result, this, [this, job](){
+            if (job->error() == 0) {
+                manager->integrateData(job->projectData(), job->project());
+            }
+        });
+        addSubjob(job);
+        ExecuteCompositeJob::start();
+    }
+
+    CMakeServer* server = nullptr;
+    IProject* const project;
+    CMakeManager* const manager;
+};
+
 KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
 {
     auto project = item->project();
 
-    QList<KJob*> jobs;
+    auto job = new ChooseCMakeInterfaceJob(project, this);
+    connect(job, &CMakeImportJsonJob::result, this, [this, job, project](){
+        if (job->error() != 0) {
+            qCWarning(CMAKE) << "couldn't load json successfully" << project->name();
+            m_projects.remove(project);
+        }
+    });
 
-    // create the JSON file if it doesn't exist
-    auto commandsFile = CMake::commandsFile(project);
-    if (!QFileInfo::exists(commandsFile.toLocalFile())) {
-        qCDebug(CMAKE) << "couldn't find commands file:" << commandsFile << "- now trying to reconfigure";
-        jobs << builder()->configure(project);
-    }
-
-    // parse the JSON file
-    CMakeImportJob* job = new CMakeImportJob(project, this);
-    connect(job, &CMakeImportJob::result, this, &CMakeManager::importFinished);
-    jobs << job;
-
-    // generate the file system listing
-    jobs << KDevelop::AbstractFileManagerPlugin::createImportJob(item);
+    const QList<KJob*> jobs = {
+        job,
+        KDevelop::AbstractFileManagerPlugin::createImportJob(item) // generate the file system listing
+    };
 
     Q_ASSERT(!jobs.contains(nullptr));
     ExecuteCompositeJob* composite = new ExecuteCompositeJob(this, jobs);
@@ -182,7 +237,7 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 
 CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
 {
-    const CMakeJsonData & data = m_projects[item->project()].jsonData;
+    const auto & data = m_projects[item->project()].compilationData;
     QHash<KDevelop::Path, CMakeFile>::const_iterator it = data.files.constFind(item->path());
 
     if (it == data.files.constEnd()) {
@@ -285,31 +340,14 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     }
 }
 
-void CMakeManager::importFinished(KJob* j)
+void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProject* project)
 {
-    CMakeImportJob* job = qobject_cast<CMakeImportJob*>(j);
-    Q_ASSERT(job);
-
-    auto project = job->project();
-    if (job->error() != 0) {
-        qCDebug(CMAKE) << "Import failed for project" << project->name() << job->errorText();
-        m_projects.remove(project);
-    }
-
-    qCDebug(CMAKE) << "Successfully imported project" << project->name();
-
-    CMakeProjectData data;
-    data.watcher->addPath(CMake::commandsFile(project).toLocalFile());
-    data.watcher->addPath(CMake::targetDirectoriesFile(project).toLocalFile());
-    data.jsonData = job->jsonData();
-    data.targets = job->targets();
     connect(data.watcher.data(), &QFileSystemWatcher::fileChanged, this, &CMakeManager::dirtyFile);
     connect(data.watcher.data(), &QFileSystemWatcher::directoryChanged, this, &CMakeManager::dirtyFile);
-    m_projects[job->project()] = data;
+    m_projects[project] = data;
 
-    populateTargets(job->project()->projectItem(), job->targets());
-
-    CTestUtils::createTestSuites(job->testSuites(), project);
+    populateTargets(project->projectItem(), data.targets);
+    CTestUtils::createTestSuites(data.m_testSuites, project);
 }
 
 // void CMakeManager::deletedWatchedDirectory(IProject* p, const QUrl &dir)
