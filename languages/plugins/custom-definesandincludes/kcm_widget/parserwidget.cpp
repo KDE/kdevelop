@@ -144,7 +144,7 @@ void ParserWidget::setParserArguments(const ParserArguments& arguments)
 
 ParserArguments ParserWidget::parserArguments() const
 {
-    return {m_ui->parserOptionsC->text(), m_ui->parserOptionsCpp->text(), !m_ui->parseHeadersInPlainC->isChecked()};
+    return {m_ui->parserOptionsC->text(), m_ui->parserOptionsCpp->text(), {}, !m_ui->parseHeadersInPlainC->isChecked()};
 }
 
 void ParserWidget::updateEnablements()

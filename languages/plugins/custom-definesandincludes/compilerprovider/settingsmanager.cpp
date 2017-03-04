@@ -82,10 +82,10 @@ QStringList sorted(QStringList list)
 
 ParserArguments defaultArguments()
 {
-    const static ParserArguments arguments
-    {
+    const static ParserArguments arguments{
         QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c99"),
         QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11"),
+        QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall"),
         true
     };
 
@@ -397,6 +397,12 @@ LanguageType languageType(const KDevelop::Path& path, bool treatAmbiguousAsCPP)
             if (path.lastPathSegment().endsWith(QLatin1String(".h"), Qt::CaseInsensitive)) {
                 return Cpp;
             }
+        }
+
+        // TODO: No proper mime type detection possible yet
+        // cf. https://bugs.freedesktop.org/show_bug.cgi?id=26913
+        if (path.lastPathSegment().endsWith(QLatin1String(".cl"), Qt::CaseInsensitive)) {
+            return OpenCl;
         }
 
         return C;

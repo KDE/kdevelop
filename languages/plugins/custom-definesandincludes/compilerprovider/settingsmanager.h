@@ -38,17 +38,10 @@ class ProjectBaseItem;
 
 struct ParserArguments
 {
-    ParserArguments(const QString& cArguments, const QString& cppArguments, bool parseAmbiguousAsCPP)
-        : cArguments(cArguments)
-        , cppArguments(cppArguments)
-        , parseAmbiguousAsCPP(parseAmbiguousAsCPP)
-    {}
-
-    ParserArguments() = default;
-
     QString cArguments;
     QString cppArguments;
-    bool parseAmbiguousAsCPP = true;
+    QString openClArguments;
+    bool parseAmbiguousAsCPP;
 };
 
 Q_DECLARE_METATYPE(ParserArguments);
@@ -73,6 +66,7 @@ enum LanguageType
 {
     C,
     Cpp,
+    OpenCl,
     ObjC,
 
     Other = 100
