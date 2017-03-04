@@ -46,8 +46,8 @@ Q_OBJECT
 public:
     ProjectPathsWidget( QWidget* parent = nullptr );
     void setProject(KDevelop::IProject* w_project);
-    void setPaths( const QList<ConfigEntry>& );
-    QList<ConfigEntry> paths() const;
+    void setPaths( const QVector<ConfigEntry>& );
+    QVector<ConfigEntry> paths() const;
     void clear();
 
 signals:

@@ -20,8 +20,7 @@
 #define PROJECTPATHSMODEL_H
 
 #include <QAbstractListModel>
-#include <QList>
-
+#include <QVector>
 #include <QUrl>
 
 #include "../compilerprovider/settingsmanager.h"
@@ -44,16 +43,16 @@ public:
     };
     ProjectPathsModel( QObject* parent = nullptr );
     void setProject( KDevelop::IProject* w_project );
-    void setPaths( const QList< ConfigEntry >& paths );
+    void setPaths( const QVector< ConfigEntry >& paths );
     void addPath( const QUrl &url );
-    QList<ConfigEntry> paths() const;
+    QVector<ConfigEntry> paths() const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
     bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
 private:
-    QList<ConfigEntry> projectPaths;
+    QVector<ConfigEntry> projectPaths;
     KDevelop::IProject* project;
 
     void addPathInternal( const ConfigEntry& config, bool prepend );

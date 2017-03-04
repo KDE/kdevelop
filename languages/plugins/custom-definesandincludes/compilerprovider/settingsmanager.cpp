@@ -119,7 +119,7 @@ void writeCompilerToConfig(KConfigGroup& cfg, const CompilerPointer& compiler)
     grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
 }
 
-void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
+void doWriteSettings( KConfigGroup grp, const QVector<ConfigEntry>& paths )
 {
     int pathIndex = 0;
     for ( const auto& path : paths ) {
@@ -148,9 +148,9 @@ void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
 }
 
 /// @param remove if true all read entries will be removed from the config file
-QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
+QVector<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
 {
-    QList<ConfigEntry> paths;
+    QVector<ConfigEntry> paths;
     for( const QString &grpName : sorted(grp.groupList()) ) {
         if ( !grpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
             continue;
@@ -236,13 +236,13 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
  * Reads and converts paths from old (Custom Build System's) format to the current one.
  * @return all converted paths (if any)
  */
-QList<ConfigEntry> convertedPaths( KConfig* cfg )
+QVector<ConfigEntry> convertedPaths( KConfig* cfg )
 {
     KConfigGroup group = cfg->group( ConfigConstants::customBuildSystemGroup );
     if ( !group.isValid() )
         return {};
 
-    QList<ConfigEntry> paths;
+    QVector<ConfigEntry> paths;
     foreach( const QString &grpName, sorted(group.groupList()) ) {
         KConfigGroup subgroup = group.group( grpName );
         if ( !subgroup.isValid() )
@@ -289,7 +289,7 @@ const CompilerProvider* SettingsManager::provider() const
     return &m_provider;
 }
 
-void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& paths )
+void SettingsManager::writePaths( KConfig* cfg, const QVector< ConfigEntry >& paths )
 {
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
@@ -302,7 +302,7 @@ void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& path
     doWriteSettings( grp, paths );
 }
 
-QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
+QVector<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
 {
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 

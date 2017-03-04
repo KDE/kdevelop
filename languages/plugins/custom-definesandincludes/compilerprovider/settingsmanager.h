@@ -27,6 +27,8 @@
 #include "compilerprovider.h"
 #include "icompiler.h"
 
+#include <QVector>
+
 class KConfig;
 
 namespace KDevelop {
@@ -84,8 +86,8 @@ class SettingsManager
 public:
     ~SettingsManager();
 
-    QList<ConfigEntry> readPaths(KConfig* cfg) const;
-    void writePaths(KConfig* cfg, const QList<ConfigEntry>& paths);
+    QVector<ConfigEntry> readPaths(KConfig* cfg) const;
+    void writePaths(KConfig* cfg, const QVector<ConfigEntry>& paths);
 
     QVector<CompilerPointer> userDefinedCompilers() const;
     void writeUserDefinedCompilers(const QVector<CompilerPointer>& compilers);

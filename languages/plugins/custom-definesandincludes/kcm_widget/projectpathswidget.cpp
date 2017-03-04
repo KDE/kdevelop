@@ -85,12 +85,12 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     tabChanged(IncludesPage);
 }
 
-QList<ConfigEntry> ProjectPathsWidget::paths() const
+QVector<ConfigEntry> ProjectPathsWidget::paths() const
 {
     return pathsModel->paths();
 }
 
-void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
+void ProjectPathsWidget::setPaths( const QVector<ConfigEntry>& paths )
 {
     bool b = blockSignals( true );
     clear();
@@ -167,7 +167,7 @@ void ProjectPathsWidget::projectPathSelected( int index )
 void ProjectPathsWidget::clear()
 {
     bool sigDisabled = ui->projectPaths->blockSignals( true );
-    pathsModel->setPaths( QList<ConfigEntry>() );
+    pathsModel->setPaths({});
     ui->includesWidget->clear();
     ui->definesWidget->clear();
     updateEnablements();

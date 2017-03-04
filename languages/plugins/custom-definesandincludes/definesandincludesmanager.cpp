@@ -45,7 +45,7 @@ using namespace KDevelop;
 namespace
 {
 ///@return: The ConfigEntry, with includes/defines from @p paths for all parent folders of @p item.
-static ConfigEntry findConfigForItem(QList<ConfigEntry> paths, const KDevelop::ProjectBaseItem* item)
+static ConfigEntry findConfigForItem(QVector<ConfigEntry> paths, const KDevelop::ProjectBaseItem* item)
 {
     ConfigEntry ret;
 
