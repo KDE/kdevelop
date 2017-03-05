@@ -1,5 +1,10 @@
 [KNewStuff3]
 Name=Application Templates (SDK)
+Name[ca]=Plantilles d'aplicació (SDK)
+Name[nl]=Toepassingsjablonen (SDK)
+Name[pt]=Modelos de Aplicações (SDK)
+Name[uk]=Шаблони програм (SDK)
+Name[x-test]=xxApplication Templates (SDK)xx
 
 ProvidersUrl=http://download.kde.org/ocs/providers.xml
 Categories=KDE App Template

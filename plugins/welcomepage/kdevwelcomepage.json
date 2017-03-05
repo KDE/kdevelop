@@ -1,6 +1,11 @@
 {
     "KPlugin": {
         "Description": "Provides the welcome page visible in an empty session", 
+        "Description[ca]": "Proporciona la visibilitat de la pàgina de benvinguda en una sessió buida", 
+        "Description[nl]": "Biedt de welkomst pagina zichtbaar in een lege sessie", 
+        "Description[pt]": "Oferece a página de boas-vindas que fica visível numa sessão vazia", 
+        "Description[uk]": "Забезпечує роботу сторінки вітання, яку програма показує, якщо сеанс порожній", 
+        "Description[x-test]": "xxProvides the welcome page visible in an empty sessionxx", 
         "Icon": "kdevelop", 
         "Id": "KDevWelcomePage", 
         "Name": "KDevelop Welcome Page", 
