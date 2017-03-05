@@ -189,7 +189,7 @@ bool OktetaDocument::isActive() const
 void OktetaDocument::setCursorPosition( const KTextEditor::Cursor& ) {}
 void OktetaDocument::setTextSelection( const KTextEditor::Range& ) {}
 
-void OktetaDocument::activate( Sublime::View* view, KParts::MainWindow* mainWindow )
+void OktetaDocument::activate( Sublime::View* /* view */, KParts::MainWindow* /* mainWindow */ )
 {
     notifyActivated();
 }
@@ -199,7 +199,7 @@ void OktetaDocument::setPlugin( OktetaPlugin* plugin )
     mPlugin = plugin;
 }
 
-Sublime::View* OktetaDocument::newView( Sublime::Document* document )
+Sublime::View* OktetaDocument::newView( Sublime::Document* /* document */ )
 {
     if( mByteArrayDocument == nullptr )
     {
@@ -210,7 +210,6 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* document )
         Kasten::AbstractLoadJob* loadJob = synchronizer->startLoad( url() );
         connect( loadJob, &Kasten::AbstractLoadJob::documentLoaded,
                  this, &OktetaDocument::onByteArrayDocumentLoaded );
-        const bool syncSucceeded = Kasten::JobManager::executeJob( loadJob );
 
         delete synchronizerFactory;
     }

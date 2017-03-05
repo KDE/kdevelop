@@ -38,7 +38,8 @@
 
 using namespace KDevelop;
 
-MacroNavigationContext::MacroNavigationContext(const MacroDefinition::Ptr& macro, const KDevelop::DocumentCursor& expansionLocation)
+MacroNavigationContext::MacroNavigationContext(const MacroDefinition::Ptr& macro,
+                                               const KDevelop::DocumentCursor& /* expansionLocation */)
     : m_macro(macro)
 {
 }

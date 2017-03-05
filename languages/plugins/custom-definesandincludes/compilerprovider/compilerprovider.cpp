@@ -152,7 +152,7 @@ Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
     return config.compiler->includes(languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
 }
 
-Path::List CompilerProvider::frameworkDirectories( ProjectBaseItem* item ) const
+Path::List CompilerProvider::frameworkDirectories( ProjectBaseItem* /* item */ ) const
 {
     return {};
 }
