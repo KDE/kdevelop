@@ -13,7 +13,7 @@ git_pull_rebase_helper()
 {
     git fetch
     git stash || true
-    git rebase || true
+    git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u}) || true
     git stash pop || true
 }
 
@@ -167,7 +167,7 @@ function build_framework
 
     cd $FRAMEWORK
     git checkout $KF5_VERSION || git checkout $KDE_APPLICATION_VERSION
-    git rebase || true # git rebase will fail if a tag is checked out
+    git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u}) || true # git rebase will fail if a tag is checked out
     git stash pop || true
     cd ..
 
