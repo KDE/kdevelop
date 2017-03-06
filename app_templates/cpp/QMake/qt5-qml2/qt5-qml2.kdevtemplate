@@ -2,6 +2,7 @@
 [General]
 Name=QtQuick 2 Application
 Name[ca]=Aplicació QtQuick 2
+Name[ca@valencia]=Aplicació QtQuick 2
 Name[cs]=Aplikace QtQuick2
 Name[en_GB]=QtQuick 2 Application
 Name[it]=Applicazione QtQuick 2
@@ -15,6 +16,7 @@ Name[x-test]=xxQtQuick 2 Applicationxx
 
 Comment=A Qt5 and QML2 basic application using QMake
 Comment[ca]=Una aplicació bàsica en Qt5 i QML2 usant el QMake
+Comment[ca@valencia]=Una aplicació bàsica en Qt5 i QML2 usant el QMake
 Comment[cs]=Základní aplikace Qt5 a QML2 pomocí QMake
 Comment[en_GB]=A Qt5 and QML2 basic application using QMake
 Comment[it]=Una semplice applicazione Qt5 e QML2 che usa QMake
