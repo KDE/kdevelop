@@ -9,8 +9,6 @@ add_subdirectory(icons)
 # the debug visitor prints out the Ast for the CMakeLists.txt file.
 #add_definitions( -DCMAKEDEBUGVISITOR )
 
-add_definitions( -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
-
 set( cmakecommon_SRCS
   parser/cmListFileLexer.c
   parser/cmakecachereader.cpp
