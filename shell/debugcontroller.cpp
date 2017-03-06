@@ -51,8 +51,6 @@
 #include "debug.h"
 #include "uicontroller.h"
 #include "iruncontroller.h"
-#include "launchconfigurationdialog.h"
-
 
 namespace KDevelop {
 
@@ -493,11 +491,11 @@ void DebugController::run() {
     if (m_currentSession) {
         m_currentSession.data()->run();
     } else {
-        if (ICore::self()->runController()->launchConfigurations().isEmpty()) {
-            LaunchConfigurationDialog d;
-            d.exec();
+        auto runController = ICore::self()->runController();
+        if (runController->launchConfigurations().isEmpty()) {
+            runController->showConfigurationDialog();
         }
-        ICore::self()->runController()->executeDefaultLaunch(QStringLiteral("debug"));
+        runController->executeDefaultLaunch(QStringLiteral("debug"));
     }
 }
 

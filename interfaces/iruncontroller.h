@@ -139,6 +139,9 @@ public:
                                                              KDevelop::IProject* project = nullptr,
                                                              const QString& name = QString() ) = 0;
 
+    /// Opens a dialog to setup new launch configurations, or to change the existing ones.
+    virtual void showConfigurationDialog() const = 0;
+
 public Q_SLOTS:
     /**
      * Request for all running processes to be killed.

@@ -170,12 +170,6 @@ public:
         }
     }
 
-    void configureLaunches()
-    {
-        LaunchConfigurationDialog dlg;
-        dlg.exec();
-    }
-
     QString launchActionText( LaunchConfiguration* l )
     {
         QString label;
@@ -455,7 +449,7 @@ void RunController::setupActions()
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
     action->setToolTip(i18nc("@info:tooltip", "Open Launch Configuration Dialog"));
     action->setWhatsThis(i18nc("@info:whatsthis", "Opens a dialog to setup new launch configurations, or to change the existing ones."));
-    connect(action, &QAction::triggered, this, [&] { d->configureLaunches(); });
+    connect(action, &QAction::triggered, this, &RunController::showConfigurationDialog);
 
     d->runAction = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18n("Execute Launch"), this);
     d->runAction->setIconText( i18nc("Short text for 'Execute launch' used in the toolbar", "Execute") );
@@ -546,36 +540,41 @@ void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
 
 void RunController::slotDebug()
 {
-    if(d->launchConfigurations.isEmpty()) {
-        LaunchConfigurationDialog d;
-        d.exec();
+    if (d->launchConfigurations.isEmpty()) {
+        showConfigurationDialog();
     }
 
-    if(!d->launchConfigurations.isEmpty())
+    if (!d->launchConfigurations.isEmpty()) {
         executeDefaultLaunch( QStringLiteral("debug") );
+    }
 }
 
 void RunController::slotProfile()
 {
-    if(d->launchConfigurations.isEmpty()) {
-        LaunchConfigurationDialog d;
-        d.exec();
+    if (d->launchConfigurations.isEmpty()) {
+        showConfigurationDialog();
     }
 
-    if(!d->launchConfigurations.isEmpty())
+    if (!d->launchConfigurations.isEmpty()) {
         executeDefaultLaunch( QStringLiteral("profile") );
+    }
 }
 
 void RunController::slotExecute()
 {
-
-    if(d->launchConfigurations.isEmpty()) {
-        LaunchConfigurationDialog d;
-        d.exec();
+    if (d->launchConfigurations.isEmpty()) {
+        showConfigurationDialog();
     }
 
-    if(!d->launchConfigurations.isEmpty())
+    if (!d->launchConfigurations.isEmpty()) {
         executeDefaultLaunch( QStringLiteral("execute") );
+    }
+}
+
+void KDevelop::RunController::showConfigurationDialog() const
+{
+    LaunchConfigurationDialog dlg;
+    dlg.exec();
 }
 
 LaunchConfiguration* KDevelop::RunController::defaultLaunch() const
@@ -884,13 +883,11 @@ void RunController::removeLaunchConfigurationInternal(LaunchConfiguration *l)
 
 void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
 {
-    auto dl = defaultLaunch();
-    if( !dl )
-    {
+    if (auto dl = defaultLaunch()) {
+        execute(runMode, dl);
+    } else {
         qWarning() << "no default launch!";
-        return;
     }
-    execute( runMode, dl );
 }
 
 void RunController::setDefaultLaunch(ILaunchConfiguration* l)

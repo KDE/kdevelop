@@ -110,9 +110,13 @@ public:
                                                               IProject* project = nullptr,
                                                               const QString& name = QString() ) override;
 
-
     void setDefaultLaunch(ILaunchConfiguration* l);
     LaunchConfiguration* defaultLaunch() const;
+
+    /**
+     * @copydoc IRunController::showConfigurationDialog()
+     */
+    void showConfigurationDialog() const override;
 
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
