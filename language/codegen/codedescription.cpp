@@ -76,7 +76,9 @@ VariableDescription::VariableDescription(const DeclarationPointer& declaration)
     if (declaration)
     {
         name = declaration->identifier().toString();
-        type = declaration->abstractType()->toString();
+        if (auto abstractType = declaration->abstractType()) {
+            type = abstractType->toString();
+        }
     }
 
     access = accessPolicyName(declaration);

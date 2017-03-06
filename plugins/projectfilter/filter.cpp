@@ -91,7 +91,7 @@ SerializedFilters defaultFilters()
         // binary files (Unix)
         QStringLiteral("*.o"), QStringLiteral("*.a"), QStringLiteral("*.so"), QStringLiteral("*.so.*"),
         // binary files (Windows)
-        QStringLiteral("*.obj"), QStringLiteral("*.lib"), QStringLiteral("*.dll"), QStringLiteral("*.pdb"),
+        QStringLiteral("*.obj"), QStringLiteral("*.lib"), QStringLiteral("*.dll"), QStringLiteral("*.exp"), QStringLiteral("*.pdb"),
         // generated files
         QStringLiteral("moc_*.cpp"), QStringLiteral("*.moc"), QStringLiteral("ui_*.h"), QStringLiteral("qrc_*.cpp"),
         // backup files
