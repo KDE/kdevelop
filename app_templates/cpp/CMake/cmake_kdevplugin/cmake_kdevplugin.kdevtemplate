@@ -2,14 +2,20 @@
 [General]
 Name=Simple KDevelop Plugin
 Name[ca]=Connector senzill del KDevelop
+Name[ca@valencia]=Connector senzill del KDevelop
+Name[en_GB]=Simple KDevelop Plugin
 Name[nl]=Eenvoudige KDevelop-plug-in
 Name[pt]='Plugin' Simples do KDevelop
+Name[sv]=Enkelt KDevelop-insticksprogram
 Name[uk]=Простий додаток до KDevelop
 Name[x-test]=xxSimple KDevelop Pluginxx
 Comment=Generate a general KDevelop plugin, using CMake and C++
 Comment[ca]=Genera un connector del KDevelop general, usant CMake i C++
+Comment[ca@valencia]=Genera un connector del KDevelop general, usant CMake i C++
+Comment[en_GB]=Generate a general KDevelop plugin, using CMake and C++
 Comment[nl]=Genereer een algemene KDevelop-plug-in, met CMake en C++
 Comment[pt]=Gera um 'plugin' geral do KDevelop, usando o CMake e o C++
+Comment[sv]=Skapa ett generellt KDevelop-insticksprogram, med användning av CMake och C++
 Comment[uk]=Створити типовий додаток до KDevelop з використанням CMake і C++
 Comment[x-test]=xxGenerate a general KDevelop plugin, using CMake and C++xx
 ShowFilesAfterGeneration=%{PROJECTDIR}/src/%{APPNAMELC}.cpp

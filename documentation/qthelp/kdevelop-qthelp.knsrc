@@ -1,8 +1,11 @@
 [KNewStuff3]
 Name=API Documentation (QtHelp)
 Name[ca]=Documentació de l'API (QtHelp)
+Name[ca@valencia]=Documentació de l'API (QtHelp)
+Name[en_GB]=API Documentation (QtHelp)
 Name[nl]=API-documentatie (QtHelp)
 Name[pt]=Documentação da API (QtHelp)
+Name[sv]=API-dokumentation (QtHelp)
 Name[uk]=Документація з програмного інтерфейсу (QtHelp)
 Name[x-test]=xxAPI Documentation (QtHelp)xx
 
