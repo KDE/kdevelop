@@ -145,12 +145,12 @@ Qt::ItemFlags ProjectPathsModel::flags( const QModelIndex& index ) const
     return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 }
 
-QList< ConfigEntry > ProjectPathsModel::paths() const
+QVector< ConfigEntry > ProjectPathsModel::paths() const
 {
     return projectPaths;
 }
 
-void ProjectPathsModel::setPaths(const QList< ConfigEntry >& paths )
+void ProjectPathsModel::setPaths(const QVector< ConfigEntry >& paths )
 {
     beginResetModel();
     projectPaths.clear();

@@ -45,7 +45,7 @@ using namespace KDevelop;
 namespace
 {
 ///@return: The ConfigEntry, with includes/defines from @p paths for all parent folders of @p item.
-static ConfigEntry findConfigForItem(QList<ConfigEntry> paths, const KDevelop::ProjectBaseItem* item)
+static ConfigEntry findConfigForItem(QVector<ConfigEntry> paths, const KDevelop::ProjectBaseItem* item)
 {
     ConfigEntry ret;
 
@@ -98,6 +98,25 @@ void merge(Defines* target, const Defines& source)
     for (auto it = source.constBegin(); it != source.constEnd(); ++it) {
         target->insert(it.key(), it.value());
     }
+}
+
+QString argumentsForPath(const Path& path, const ParserArguments& arguments)
+{
+    auto languageType = Utils::languageType(path, arguments.parseAmbiguousAsCPP);
+    switch (languageType) {
+    case Utils::C:
+        return arguments.cArguments;
+    case Utils::Cpp:
+        return arguments.cppArguments;
+    case Utils::OpenCl:
+        return arguments.openClArguments;
+    case Utils::ObjC:
+        return QString();
+    case Utils::Other:
+        return QString();
+    }
+    Q_UNREACHABLE();
+    return QString();
 }
 
 }
@@ -338,16 +357,13 @@ QString DefinesAndIncludesManager::parserArguments(KDevelop::ProjectBaseItem* it
 
     auto cfg = item->project()->projectConfiguration().data();
     const auto arguments = findConfigForItem(m_settings->readPaths(cfg), item).parserArguments;
-    auto languageType = Utils::languageType(item->path(), arguments.parseAmbiguousAsCPP);
-
-    return languageType == Utils::C ? arguments.cArguments : arguments.cppArguments;
+    return argumentsForPath(item->path(), arguments);
 }
 
 QString DefinesAndIncludesManager::parserArguments(const QString& path) const
 {
     const auto args = m_settings->defaultParserArguments();
-    auto languageType = Utils::languageType(Path(path));
-    return languageType == Utils::C ? args.cArguments : args.cppArguments;
+    return argumentsForPath(Path(path), args);
 }
 
 int DefinesAndIncludesManager::perProjectConfigPages() const

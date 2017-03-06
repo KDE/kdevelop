@@ -13,7 +13,7 @@ git_pull_rebase_helper()
 {
     git fetch
     git stash || true
-    git pull --rebase
+    git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u}) || true
     git stash pop || true
 }
 
@@ -21,8 +21,12 @@ QTVERSION=5.7.1
 QVERSION_SHORT=5.7
 QTDIR=/usr/local/Qt-${QTVERSION}/
 
-KDEVELOP_VERSION=5.1
-KDEV_PG_QT_VERSION=2.0
+if [ -z "$KDEVELOP_VERSION" ]; then
+    KDEVELOP_VERSION=5.1
+fi
+if [ -z "$KDEV_PG_QT_VERSION" ]; then
+    KDEV_PG_QT_VERSION=2.0
+fi
 KF5_VERSION=v5.29.0
 KDE_APPLICATION_VERSION=v16.12.0
 GRANTLEE_VERSION=v5.1.0
@@ -154,8 +158,7 @@ function build_framework
         cd $FRAMEWORK 
         git stash
         git reset --hard
-        git checkout master
-        git pull --rebase
+        git fetch
         git fetch --tags
         cd ..
     else
@@ -164,6 +167,7 @@ function build_framework
 
     cd $FRAMEWORK
     git checkout $KF5_VERSION || git checkout $KDE_APPLICATION_VERSION
+    git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u}) || true # git rebase will fail if a tag is checked out
     git stash pop || true
     cd ..
 
