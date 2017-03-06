@@ -109,6 +109,8 @@ QString argumentsForPath(const Path& path, const ParserArguments& arguments)
         return arguments.cppArguments;
     case Utils::OpenCl:
         return arguments.openClArguments;
+    case Utils::Cuda:
+        return arguments.cudaArguments;
     case Utils::ObjC:
         return QString();
     case Utils::Other:

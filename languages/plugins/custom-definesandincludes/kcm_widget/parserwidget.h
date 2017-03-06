@@ -56,6 +56,8 @@ private slots:
     void textEdited();
     void languageStandardChangedC(const QString& standard);
     void languageStandardChangedCpp(const QString& standard);
+    void languageStandardChangedOpenCl(const QString& standard);
+    void languageStandardChangedCuda(const QString& standard);
     void updateEnablements();
 
 private:

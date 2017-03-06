@@ -41,6 +41,7 @@ struct ParserArguments
     QString cArguments;
     QString cppArguments;
     QString openClArguments;
+    QString cudaArguments;
     bool parseAmbiguousAsCPP;
 };
 
@@ -67,6 +68,7 @@ enum LanguageType
     C,
     Cpp,
     OpenCl,
+    Cuda,
     ObjC,
 
     Other = 100

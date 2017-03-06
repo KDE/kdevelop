@@ -104,13 +104,26 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="0">
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>C Profi&amp;le:</string>
         </property>
         <property name="buddy">
-         <cstring>languageStandardsCpp</cstring>
+         <cstring>languageStandardsC</cstring>
         </property>
        </widget>
       </item>
@@ -183,8 +196,8 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <spacer name="verticalSpacer_2">
+      <item row="5" column="0">
+       <spacer name="verticalSpacer_3">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -195,6 +208,167 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>OpenCL &amp;Profile:</string>
+        </property>
+        <property name="buddy">
+         <cstring>languageStandardsOpenCl</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QComboBox" name="languageStandardsOpenCl">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Custom</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c++03</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c++11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c++14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c99</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="argumentsLabel_3">
+        <property name="text">
+         <string>OpenCL comma&amp;nd-line arguments:</string>
+        </property>
+        <property name="buddy">
+         <cstring>parserOptionsOpenCl</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QLineEdit" name="parserOptionsOpenCl">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <spacer name="verticalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>CUDA C P&amp;rofile:</string>
+        </property>
+        <property name="buddy">
+         <cstring>languageStandardsCuda</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QComboBox" name="languageStandardsCuda">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Custom</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c++03</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c++11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c++14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>c99</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="argumentsLabel_4">
+        <property name="text">
+         <string>CUDA C comman&amp;d-line arguments:</string>
+        </property>
+        <property name="buddy">
+         <cstring>parserOptionsCuda</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QLineEdit" name="parserOptionsCuda">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
