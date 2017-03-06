@@ -139,16 +139,22 @@ void CMakeServer::emitResponse(const QByteArray& data)
 void CMakeServer::handshake(const KDevelop::Path& source, const KDevelop::Path& build)
 {
     Q_ASSERT(!source.isEmpty());
-    Q_ASSERT(!build.isEmpty());
+
+    const QString generatorVariable = QStringLiteral("CMAKE_GENERATOR");
+    QString generator = CMake::readCacheValues(KDevelop::Path(build, QStringLiteral("CMakeCache.txt")), { generatorVariable }).value(generatorVariable);
+    if (generator.isEmpty()) {
+        generator = CMake::defaultGenerator();
+    }
+    qCDebug(CMAKE) << "Using generator" << generator << "for project" << source << "in" << build;
 
     sendCommand({
-        {"cookie", ""},
+        {"cookie", {}},
         {"type", "handshake"},
         {"major", 1},
         {"protocolVersion", QJsonObject{{"major", 1}} },
         {"sourceDirectory", source.toLocalFile()},
         {"buildDirectory", build.toLocalFile()},
-        {"generator", "Ninja"} //TODO: make it possible to keep whatever they have ATM
+        {"generator", generator} //TODO: make it possible to keep whatever they have ATM
     });
 }
 

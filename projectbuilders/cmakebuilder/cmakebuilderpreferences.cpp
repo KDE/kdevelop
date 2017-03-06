@@ -41,7 +41,7 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWid
     m_prefsUi->kcfg_cmakeExecutable->setToolTip(CMakeBuilderSettings::self()->cmakeExecutableItem()->whatsThis());
     m_prefsUi->label1->setToolTip(CMakeBuilderSettings::self()->cmakeExecutableItem()->whatsThis());
 
-    foreach(const QString& generator, CMakeBuilder::supportedGenerators())
+    foreach(const QString& generator, CMake::supportedGenerators())
         m_prefsUi->kcfg_generator->addItem(generator);
 }
 

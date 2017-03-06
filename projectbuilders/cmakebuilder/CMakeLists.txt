@@ -14,7 +14,6 @@ set(cmakebuilder_SRCS
 )
 
 ki18n_wrap_ui(cmakebuilder_SRCS cmakebuilderpreferences.ui)
-kconfig_add_kcfg_files( cmakebuilder_SRCS cmakebuilderconfig.kcfgc )
 kdevplatform_add_plugin(kdevcmakebuilder JSON kdevcmakebuilder.json SOURCES ${cmakebuilder_SRCS})
 target_link_libraries(
     kdevcmakebuilder

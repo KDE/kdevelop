@@ -218,6 +218,13 @@ namespace CMake
 
     /** Runs the process specified by @p execName with @p args */
     KDEVCMAKECOMMON_EXPORT QString executeProcess(const QString& execName, const QStringList& args=QStringList());
+
+    /** Opens @p cmakeCachePath and parses it, returns a hash with the specified keys in @p variables */
+    KDEVCMAKECOMMON_EXPORT QHash<QString, QString> readCacheValues(const KDevelop::Path& cmakeCachePath, QSet<QString> variables);
+
+    KDEVCMAKECOMMON_EXPORT QStringList supportedGenerators();
+
+    KDEVCMAKECOMMON_EXPORT QString defaultGenerator();
 }
 
 #endif

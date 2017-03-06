@@ -78,6 +78,7 @@ endif()
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
 
+kconfig_add_kcfg_files( cmakecommon_SRCS cmakebuilderconfig.kcfgc )
 ki18n_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdevcmakecommon

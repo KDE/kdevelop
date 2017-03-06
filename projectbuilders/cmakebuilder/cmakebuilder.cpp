@@ -245,7 +245,7 @@ KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p
     }
     //It means that it still has to be generated, so use the builder for
     //the generator we use
-    return m_buildersForGenerator[defaultGenerator()];
+    return m_buildersForGenerator[CMake::defaultGenerator()];
 }
 
 QList< KDevelop::IProjectBuilder* > CMakeBuilder::additionalBuilderPlugins( KDevelop::IProject* project  ) const
@@ -260,39 +260,6 @@ QList< KDevelop::IProjectBuilder* > CMakeBuilder::additionalBuilderPlugins( KDev
 int CMakeBuilder::configPages() const
 {
     return 1;
-}
-
-QStringList CMakeBuilder::supportedGenerators()
-{
-    QStringList generatorNames;
-    
-    bool hasNinja = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder");
-    if (hasNinja)
-        generatorNames << "Ninja";
-
-#ifdef Q_OS_WIN
-    // Visual Studio solution is the standard generator under windows, but we don't want to use
-    // the VS IDE, so we need nmake makefiles
-    generatorNames << "NMake Makefiles";
-#endif
-    generatorNames << "Unix Makefiles";
-    
-    return generatorNames;
-}
-
-QString CMakeBuilder::defaultGenerator()
-{
-    const QStringList generatorNames = supportedGenerators();
-    
-    QString defGen = generatorNames.value(CMakeBuilderSettings::self()->generator());
-    if (defGen.isEmpty())
-    {
-        qWarning() << "Couldn't find builder with index " << CMakeBuilderSettings::self()->generator()
-                   << ", defaulting to 0";
-        CMakeBuilderSettings::self()->setGenerator(0);
-        defGen = generatorNames.at(0);
-    }
-    return defGen;
 }
 
 KDevelop::ConfigPage* CMakeBuilder::configPage(int number, QWidget* parent)

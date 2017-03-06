@@ -103,7 +103,7 @@ QStringList CMakeJob::commandLine() const
     QDir builddir(CMake::currentBuildDir( m_project ).toLocalFile());
     if(!builddir.exists() || !builddir.exists("CMakeCache.txt")) {
         CMakeBuilderSettings::self()->load();
-        args << QString("-G") << CMakeBuilder::defaultGenerator();
+        args << QString("-G") << CMake::defaultGenerator();
     }
     QString cmakeargs = CMake::currentExtraArguments( m_project );
     if( !cmakeargs.isEmpty() ) {
