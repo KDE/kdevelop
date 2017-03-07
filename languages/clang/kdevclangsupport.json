@@ -55,7 +55,7 @@
     "X-KDevelop-Languages": [
         "C", 
         "C++", 
-        "OpenCL",
+        "OpenCL", 
         "Objective-C"
     ], 
     "X-KDevelop-LoadMode": "AlwaysOn", 
@@ -65,7 +65,7 @@
         "text/x-c++hdr", 
         "text/x-csrc", 
         "text/x-c++src", 
-        "text/x-openclsrc",
+        "text/x-openclsrc", 
         "text/x-objcsrc"
     ]
 }
