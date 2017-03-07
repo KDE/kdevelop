@@ -53,6 +53,8 @@ public:
 
 private:
     void fixProblemFinalLocation(KDevelop::IProblem::Ptr problem);
+    bool problemExists(KDevelop::IProblem::Ptr newProblem);
+
     using KDevelop::ProblemModel::setProblems;
 
     Plugin* m_plugin;

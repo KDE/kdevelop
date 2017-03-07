@@ -79,6 +79,20 @@ void ProblemModel::fixProblemFinalLocation(KDevelop::IProblem::Ptr problem)
     }
 }
 
+bool ProblemModel::problemExists(KDevelop::IProblem::Ptr newProblem)
+{
+    for (auto problem : m_problems) {
+        if (newProblem->source() == problem->source() &&
+            newProblem->severity() == problem->severity() &&
+            newProblem->finalLocation() == problem->finalLocation() &&
+            newProblem->description() == problem->description() &&
+            newProblem->explanation() == problem->explanation())
+            return true;
+    }
+
+    return false;
+}
+
 void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
 {
     static int maxLength = 0;
@@ -89,6 +103,10 @@ void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
 
     for (auto problem : problems) {
         fixProblemFinalLocation(problem);
+
+        if (problemExists(problem)) {
+            continue;
+        }
 
         m_problems.append(problem);
         addProblem(problem);
