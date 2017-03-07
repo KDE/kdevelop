@@ -28,6 +28,7 @@
 #include <shell/problem.h>
 
 #include <QApplication>
+#include <QFile>
 
 namespace cppcheck
 {
