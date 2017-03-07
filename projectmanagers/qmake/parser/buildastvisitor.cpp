@@ -27,7 +27,7 @@
 #include <QtCore/QPair>
 #include <QDebug>
 
-#include "debug.h"
+#include "../debug.h"
 
 namespace QMake {
 

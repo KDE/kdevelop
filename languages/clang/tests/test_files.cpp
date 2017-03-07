@@ -19,8 +19,6 @@
 
 #include "test_files.h"
 
-#include "duchain/builder.h"
-
 #include <language/duchain/duchain.h>
 #include <language/duchain/problem.h>
 #include <language/codegen/coderepresentation.h>
