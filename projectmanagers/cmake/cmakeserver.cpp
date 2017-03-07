@@ -49,6 +49,7 @@ CMakeServer::CMakeServer(QObject* parent)
     connect(&m_process, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, [](int code){
         qCDebug(CMAKE) << "cmake server finished with code" << code;
     });
+    connect(&m_process, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, &CMakeServer::finished);
 
     connect(m_localSocket, &QIODevice::readyRead, this, &CMakeServer::processOutput);
     connect(m_localSocket, static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, [this, path](QLocalSocket::LocalSocketError socketError) {

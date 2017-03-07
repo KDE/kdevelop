@@ -153,7 +153,7 @@ public:
     void start() override {
         server = new CMakeServer(project);
         connect(server, &CMakeServer::connected, this, &ChooseCMakeInterfaceJob::successfulConnection);
-        connect(server, &CMakeServer::disconnected, this, &ChooseCMakeInterfaceJob::failedConnection);
+        connect(server, &CMakeServer::finished, this, &ChooseCMakeInterfaceJob::failedConnection);
     }
 
 private:
@@ -168,10 +168,13 @@ private:
         ExecuteCompositeJob::start();
     }
 
-    void failedConnection() {
+    void failedConnection(int code) {
+        Q_ASSERT(code > 0);
         Q_ASSERT(!server->isServerAvailable());
 
-        delete server;
+        server->deleteLater();
+        server = nullptr;
+
         // parse the JSON file
         CMakeImportJsonJob* job = new CMakeImportJsonJob(project, this);
 

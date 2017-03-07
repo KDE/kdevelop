@@ -44,6 +44,7 @@ public:
 Q_SIGNALS:
     void connected();
     void disconnected();
+    void finished(int code);
     void response(const QJsonObject &value);
 
 private:
