@@ -97,7 +97,18 @@ bool CppcheckParser::startElement()
     else if (name() == "location") {
         newState = Location;
         if (attributes().hasAttribute("file") && attributes().hasAttribute("line")) {
-            m_errorFiles += attributes().value("file").toString();
+            QString errorFile = attributes().value("file").toString();
+
+            // Usually when "file0" attribute exists it associated with source and
+            // attribute "file" associated with header).
+            // But sometimes cppcheck produces errors with "file" and "file0" attributes
+            // both associated with same *source* file. In such cases attribute "file" contains
+            // only file name, without full path. Therefore we should use "file0" instead "file".
+            if (!QFile::exists(errorFile) && attributes().hasAttribute("file0")) {
+                errorFile = attributes().value("file0").toString();
+            }
+
+            m_errorFiles += errorFile;
             m_errorLines += attributes().value("line").toString().toInt();
         }
     }
