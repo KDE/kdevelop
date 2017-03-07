@@ -2,7 +2,7 @@
 Name=Google Test
 Name[ca]=Google Test
 Name[ca@valencia]=Google Test
-Name[de]=Google-Test
+Name[de]=Google Test
 Name[en_GB]=Google Test
 Name[es]=Google Test
 Name[et]=Google Test
@@ -31,7 +31,7 @@ Comment[gl]=Unha proba unitaria que usa a biblioteca Google Test.
 Comment[it]=Un unit test che usa la libreria Google Test
 Comment[nl]=Een test van een eenheid met gebruik van de bibliotheek Google Test
 Comment[pl]=Jednostkowy test wykorzystujący bibliotekę Google Test
-Comment[pt]=Um teste unitário que usa a plataforma de testes do Google
+Comment[pt]=Um teste unitário que usa a plataforma de testes da Google
 Comment[pt_BR]=Teste unitário que usa a biblioteca Google Test
 Comment[ru]=Модульный тест на базе библиотеки Google Test
 Comment[sk]=Unit test pomocou knižnice Google Test
