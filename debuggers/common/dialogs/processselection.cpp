@@ -49,7 +49,8 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     mainLayout->addWidget(buttonBox);
 
-    connect(m_processList->treeView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
+    connect(m_processList->treeView()->selectionModel(), &QItemSelectionModel::selectionChanged,
+             this, &ProcessSelectionDialog::selectionChanged);
     m_processList->treeView()->setSelectionMode(QAbstractItemView::SingleSelection);
     m_processList->setState(ProcessFilter::UserProcesses);
     m_processList->setKillButtonVisible(false);
@@ -91,7 +92,7 @@ QSize ProcessSelectionDialog::sizeHint() const
     return QSize(740, 720);
 }
 
-void ProcessSelectionDialog::selectionChanged()
+void ProcessSelectionDialog::selectionChanged(const QItemSelection &selected)
 {
-    m_okButton->setEnabled(true);
+    m_okButton->setEnabled(selected.count());
 }
