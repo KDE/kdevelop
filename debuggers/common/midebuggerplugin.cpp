@@ -71,8 +71,7 @@ void MIDebuggerPlugin::setupActions(const QString& displayName)
 
     QAction * action = new QAction(this);
     action->setIcon(QIcon::fromTheme("core"));
-    action->setText(i18n("Examine Core File... (%1)", displayName));
-    action->setToolTip(i18n("Examine core file"));
+    action->setText(i18n("Examine Core File with %1", displayName));
     action->setWhatsThis(i18n("<b>Examine core file</b>"
                               "<p>This loads a core file, which is typically created "
                               "after the application has crashed, e.g. with a "
@@ -85,8 +84,7 @@ void MIDebuggerPlugin::setupActions(const QString& displayName)
 #if KF5SysGuard_FOUND
     action = new QAction(this);
     action->setIcon(QIcon::fromTheme("connect_creating"));
-    action->setText(i18n("Attach to Process... (%1)", displayName));
-    action->setToolTip(i18n("Attach to process"));
+    action->setText(i18n("Attach to Process with %1", displayName));
     action->setWhatsThis(i18n("<b>Attach to process</b>"
                               "<p>Attaches the debugger to a running process.</p>"));
     connect(action, &QAction::triggered, this, &MIDebuggerPlugin::slotAttachProcess);
