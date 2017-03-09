@@ -102,6 +102,9 @@ void populateMenuWithGroup(
     for (const ContextMenuExtension& extension : extensions) {
         groupActions += extension.actions(groupName);
     }
+    // remove NULL QActions, if any. Those can end up in groupActions if plugins
+    // like the debugger plugins are not loaded.
+    groupActions.removeAll(nullptr);
 
     if (groupActions.isEmpty()) {
         return;
