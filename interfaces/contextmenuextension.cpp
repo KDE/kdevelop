@@ -92,117 +92,43 @@ void ContextMenuExtension::addAction( const QString& group, QAction* action )
     }
 }
 
+void populateMenuWithGroup(
+    QMenu* menu,
+    const QList<ContextMenuExtension>& extensions,
+    const QString& groupName,
+    const QString& groupDisplayName = QString())
+{
+    QList<QAction*> groupActions;
+    for (const ContextMenuExtension& extension : extensions) {
+        groupActions += extension.actions(groupName);
+    }
+
+    if (groupActions.isEmpty()) {
+        return;
+    }
+
+    QMenu* groupMenu = menu;
+    if (groupActions.count() > 1 && !groupDisplayName.isEmpty()) {
+        groupMenu = menu->addMenu(groupDisplayName);
+    }
+
+    for (QAction* action : groupActions) {
+        groupMenu->addAction(action);
+    }
+
+    menu->addSeparator();
+}
+
 void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExtension>& extensions)
 {
-    QList<QAction*> buildActions;
-    QList<QAction*> vcsActions;
-    QList<QAction*> extActions;
-    QList<QAction*> refactorActions;
-    QList<QAction*> debugActions;
-    QList<QAction*> analyzeActions;
-    foreach( const ContextMenuExtension &ext, extensions )
-    {
-        foreach( QAction* act, ext.actions( ContextMenuExtension::BuildGroup ) )
-        {
-            buildActions << act;
-        }
-
-        foreach( QAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
-        {
-            vcsActions << act;
-        }
-
-        foreach( QAction* act, ext.actions( ContextMenuExtension::AnalyzeGroup ) )
-        {
-            analyzeActions << act;
-        }
-
-        foreach( QAction* act, ext.actions( ContextMenuExtension::ExtensionGroup ) )
-        {
-            extActions << act;
-        }
-
-        foreach( QAction* act, ext.actions( ContextMenuExtension::RefactorGroup ) )
-        {
-            refactorActions << act;
-        }
-
-        foreach( QAction* act, ext.actions( ContextMenuExtension::DebugGroup ) )
-        {
-            debugActions << act;
-        }
-    }
-    
-    if(!buildActions.isEmpty())
-    {
-        foreach(QAction* action, buildActions)
-            menu->addAction(action);
-        
-        menu->addSeparator();
-    }
-
-    foreach( const ContextMenuExtension &ext, extensions )
-    {
-        foreach( QAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
-        {
-            menu->addAction( act );
-        }
-        menu->addSeparator();
-        foreach( QAction* act, ext.actions( ContextMenuExtension::EditGroup ) )
-        {
-            menu->addAction( act );
-        }
-    }
-    
-    QMenu* debugmenu = menu;
-    if( debugActions.count() > 1 )
-    {
-        debugmenu = menu->addMenu( i18n("Debug") );
-    }
-    foreach( QAction* act, debugActions )
-    {
-        debugmenu->addAction( act );
-    }
-    menu->addSeparator();
-
-    QMenu* refactormenu = menu;
-    if( refactorActions.count() > 1 )
-    {
-        refactormenu = menu->addMenu( i18n("Refactor") );
-    }
-    foreach( QAction* act, refactorActions )
-    {
-        refactormenu->addAction( act );
-    }
-    menu->addSeparator();
-
-    QMenu* vcsmenu = menu;
-    if( vcsActions.count() > 1 )
-    {
-        vcsmenu = menu->addMenu( i18n("Version Control") );
-    }
-    foreach( QAction* act, vcsActions )
-    {
-        vcsmenu->addAction( act );
-    }
-    menu->addSeparator();
-
-    QMenu* analyzeMenu = menu;
-    if( analyzeActions.count() > 1 )
-    {
-        analyzeMenu = menu->addMenu( i18n("Analyze With") );
-        analyzeMenu->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
-    }
-    foreach( QAction* act, analyzeActions )
-    {
-        analyzeMenu->addAction( act );
-    }
-    menu->addSeparator();
-
-    foreach( QAction* act, extActions )
-    {
-        menu->addAction( act );
-    }
+    populateMenuWithGroup(menu, extensions, BuildGroup);
+    populateMenuWithGroup(menu, extensions, FileGroup);
+    populateMenuWithGroup(menu, extensions, EditGroup);
+    populateMenuWithGroup(menu, extensions, DebugGroup, i18n("Debug"));
+    populateMenuWithGroup(menu, extensions, RefactorGroup, i18n("Refactor"));
+    populateMenuWithGroup(menu, extensions, VcsGroup, i18n("Version Control"));
+    populateMenuWithGroup(menu, extensions, AnalyzeGroup, i18n("Analyze With"));
+    populateMenuWithGroup(menu, extensions, ExtensionGroup);
 }
 
 }
