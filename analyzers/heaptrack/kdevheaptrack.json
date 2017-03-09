@@ -1,0 +1,33 @@
+{
+    "GenericName": "Heaptrack Support",
+    "GenericName[x-test]": "xxHeaptrack Supportxx",
+
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Anton Anikin",
+                "Name[x-test]": "xxAnton Anikinxx"
+            }
+        ],
+
+        "Category": "Analyzers",
+        "Icon": "office-chart-area",
+        "Id": "kdevheaptrack",
+        "License": "GPL",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ],
+
+        "Name": "Heaptrack Support",
+        "Name[x-test]": "xxHeaptrack Supportxx",
+
+        "Description": "This plugin integrates Heaptrack to KDevelop",
+        "Description[x-test]": "xxThis plugin integrates Heaptrack to KDevelopkxx"
+    },
+
+    "X-KDevelop-Category": "Global",
+    "X-KDevelop-Mode": "GUI",
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IExecutePlugin"
+    ]
+}

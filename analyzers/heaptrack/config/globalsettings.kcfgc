@@ -1,0 +1,4 @@
+File=globalsettings.kcfg
+NameSpace=Heaptrack
+ClassName=GlobalSettings
+Singleton=true
