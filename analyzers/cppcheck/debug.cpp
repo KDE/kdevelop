@@ -18,4 +18,4 @@
 
 #include "debug.h"
 
-Q_LOGGING_CATEGORY(KDEV_CPPCHECK, "kdevelop.plugins.cppcheck")
+Q_LOGGING_CATEGORY(KDEV_CPPCHECK, "kdevelop.analyzers.cppcheck")
