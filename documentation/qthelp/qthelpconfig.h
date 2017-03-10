@@ -48,6 +48,7 @@ public:
       bool checkNamespace(const QString &filename, QTreeWidgetItem* modifiedItem);
 
       QString name() const override;
+      QString fullName() const override;
       QIcon icon() const override;
 
     private slots:

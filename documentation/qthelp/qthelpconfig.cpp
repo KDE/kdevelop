@@ -301,7 +301,12 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
 
 QString QtHelpConfig::name() const
 {
-    return i18n("QtHelp Documentation");
+    return i18n("Qt Help");
+}
+
+QString QtHelpConfig::fullName() const
+{
+    return i18n("Configure Qt Help Settings");
 }
 
 QIcon QtHelpConfig::icon() const
