@@ -46,6 +46,11 @@ ki18n_wrap_ui(kdevclangtidy_PART_SRCS ${kdevclangtidy_PART_UI}
     src/config/clangtidypreferences.ui
     src/config/perprojectconfig.ui
 )
+
+qt5_add_resources(kdevclangtidy_PART_SRCS
+    kdevclangtidy.qrc
+)
+
 kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS src/config/clangtidyconfig.kcfgc)
 kdevplatform_add_plugin(kdevclangtidy JSON kdevclangtidy.json SOURCES
 ${kdevclangtidy_PART_SRCS} ${kdevclangtidy_CONFIG_SRCS})
@@ -63,8 +68,6 @@ target_link_libraries(kdevclangtidy
     KF5::TextEditor
     Qt5::Network
     )
-
-install(FILES kdevclangtidy.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangtidy)
 
 add_subdirectory(tests)
 
