@@ -34,7 +34,6 @@
 #include <interfaces/launchconfigurationtype.h>
 
 #include <KPluginFactory>
-#include <KActionCollection>
 
 using namespace KDevMI::LLDB;
 
@@ -50,7 +49,6 @@ LldbDebuggerPlugin::LldbDebuggerPlugin(QObject *parent, const QVariantList &)
     initMyResource();
 
     setXMLFile("kdevlldbui.rc");
-    actionCollection()->setComponentDisplayName(i18n("LLDB"));
 
     auto pluginController = core()->pluginController();
     for(auto plugin : pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {

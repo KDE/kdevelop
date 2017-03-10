@@ -57,7 +57,6 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
 {
     qCDebug(KDEV_CPPCHECK) << "setting cppcheck rc file";
     setXMLFile("kdevcppcheck.rc");
-    actionCollection()->setComponentDisplayName(i18n("Cppcheck Analyzer"));
 
     m_actionFile = new QAction(QIcon::fromTheme("cppcheck"), i18n("Cppcheck (Current File)"), this);
     connect(m_actionFile, &QAction::triggered, [this](){
