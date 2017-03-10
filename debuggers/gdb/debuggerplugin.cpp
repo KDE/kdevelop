@@ -41,9 +41,9 @@
 #include <interfaces/launchconfigurationtype.h>
 
 #include <KPluginFactory>
+#include <KActionCollection>
 
 using namespace KDevMI::GDB;
-
 
 K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<CppDebuggerPlugin>(); )
 
@@ -54,6 +54,7 @@ CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
     , memoryviewerfactory(nullptr)
 {
     setXMLFile("kdevgdbui.rc");
+    actionCollection()->setComponentDisplayName(i18n("GDB"));
 
     auto pluginController = core()->pluginController();
     for(auto plugin : pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {

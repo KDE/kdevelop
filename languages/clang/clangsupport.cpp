@@ -276,6 +276,7 @@ QVector< QUrl > ClangSupport::getPotentialBuddies(const QUrl &url) const
 void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, QString& _xmlFile, KActionCollection& actions)
 {
     _xmlFile = xmlFile();
+    actions.setComponentDisplayName(i18n("C++ Language Support"));
 
     QAction* renameDeclarationAction = actions.addAction(QStringLiteral("code_rename_declaration"));
     renameDeclarationAction->setText( i18n("Rename Declaration") );

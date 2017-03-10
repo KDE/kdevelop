@@ -50,8 +50,8 @@ namespace Heaptrack
 Plugin::Plugin(QObject* parent, const QVariantList&)
     : IPlugin(QStringLiteral("kdevheaptrack"), parent)
 {
-    setComponentName(QStringLiteral("kdevheaptrack"), i18n("Heaptrack Analyzer"));
     setXMLFile(QStringLiteral("kdevheaptrack.rc"));
+    actionCollection()->setComponentDisplayName(i18n("Heaptrack Analyzer"));
 
     m_launchAction = new QAction(
         QIcon::fromTheme(QStringLiteral("office-chart-area")),
