@@ -235,7 +235,6 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
                                                       KActionCollection& actions)
 {
     xmlFile = QStringLiteral("kdevcontextbrowser.rc");
-    actions.setComponentDisplayName(i18n("Context Browser"));
 
     QAction* sourceBrowseMode = actions.addAction(QStringLiteral("source_browse_mode"));
     sourceBrowseMode->setText( i18n("Source &Browse Mode") );

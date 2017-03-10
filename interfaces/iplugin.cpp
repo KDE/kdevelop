@@ -94,7 +94,8 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
     Q_ASSERT(qobject_cast<KDevelop::ICore*>(parent));
     d->core = static_cast<KDevelop::ICore*>(parent);
 
-    setComponentName(componentName, componentName);
+    auto metaData = core()->pluginController()->infoForPluginId(componentName);
+    setComponentName(componentName, metaData.name());
 
     auto clientAdded = [=] (KXMLGUIClient* client) {
         d->guiClientAdded(client);
@@ -143,17 +144,17 @@ void KDevelop::IPlugin::initializeGuiState()
 class CustomXmlGUIClient : public KXMLGUIClient
 {
 public:
-    explicit CustomXmlGUIClient(const QString& componentName)
+    explicit CustomXmlGUIClient(const KDevelop::IPlugin* plugin)
     {
         // TODO KF5: Get rid off this
-        setComponentName(componentName, componentName);
+        setComponentName(plugin->componentName(), plugin->actionCollection()->componentDisplayName());
     }
     using KXMLGUIClient::setXMLFile;
 };
 
 KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* window)
 {
-    QScopedPointer<CustomXmlGUIClient> ret(new CustomXmlGUIClient(componentName()));
+    QScopedPointer<CustomXmlGUIClient> ret(new CustomXmlGUIClient(this));
 
     QString file;
     createActionsForMainWindow(window, file, *ret->actionCollection());

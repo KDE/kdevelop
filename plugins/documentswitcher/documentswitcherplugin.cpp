@@ -55,7 +55,6 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     :KDevelop::IPlugin(QStringLiteral("kdevdocumentswitcher"), parent), view(nullptr)
 {
     setXMLFile(QStringLiteral("kdevdocumentswitcher.rc"));
-    actionCollection()->setComponentDisplayName(i18n("Document Switcher"));
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "Adding active mainwindow from constructor" << KDevelop::ICore::self()->uiController()->activeMainWindow();
     addMainWindow( qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
     connect( KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::mainWindowAdded, this, &DocumentSwitcherPlugin::addMainWindow );

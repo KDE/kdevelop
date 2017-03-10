@@ -78,7 +78,6 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( QStringLiteral("kdevgrepview"), parent ), m_currentJob(nullptr)
 {
     setXMLFile(QStringLiteral("kdevgrepview.rc"));
-    actionCollection()->setComponentDisplayName(i18n("Find/Replace"));
 
     QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/GrepViewPlugin"),
         this, QDBusConnection::ExportScriptableSlots );

@@ -290,7 +290,6 @@ QuickOpenPlugin* QuickOpenPlugin::self()
 void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions)
 {
     xmlFile = QStringLiteral("kdevquickopen.rc");
-    actions.setComponentDisplayName(i18n("Quick Open"));
 
     QAction* quickOpen = actions.addAction(QStringLiteral("quick_open"));
     quickOpen->setText(i18n("&Quick Open"));

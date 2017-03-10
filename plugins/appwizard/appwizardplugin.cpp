@@ -68,7 +68,6 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     , m_templatesModel(nullptr)
 {
     setXMLFile(QStringLiteral("kdevappwizard.rc"));
-    actionCollection()->setComponentDisplayName(i18n("Application Wizard"));
 
     m_newFromTemplate = actionCollection()->addAction(QStringLiteral("project_new"));
     m_newFromTemplate->setIcon(QIcon::fromTheme(QStringLiteral("project-development-new-template")));

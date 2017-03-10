@@ -82,7 +82,6 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args)
     actionCollection()->addAction(QStringLiteral("stop_running_tests"), stopTest);
 
     setXMLFile(QStringLiteral("kdevtestview.rc"));
-    actionCollection()->setComponentDisplayName(i18n("Unit Tests"));
 
     m_viewFactory = new TestToolViewFactory(this);
     core()->uiController()->addToolView(i18n("Unit Tests"), m_viewFactory);
