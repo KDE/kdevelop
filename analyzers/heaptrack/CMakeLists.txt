@@ -9,8 +9,11 @@ set(kdevheaptrack_SRCS
 
     config/globalconfigpage.cpp
 )
-ki18n_wrap_ui(kdevheaptrack_UI_SRCS
+ki18n_wrap_ui(kdevheaptrack_SRCS
     config/globalconfigpage.ui
+)
+qt5_add_resources(kdevheaptrack_SRCS
+    kdevheaptrack.qrc
 )
 kconfig_add_kcfg_files(kdevheaptrack_CONFIG_SRCS
     config/globalsettings.kcfgc
@@ -23,7 +26,7 @@ target_link_libraries(kdevheaptrack_config
 )
 kdevplatform_add_plugin(kdevheaptrack
     JSON kdevheaptrack.json
-    SOURCES ${kdevheaptrack_SRCS} ${kdevheaptrack_UI_SRCS}
+    SOURCES ${kdevheaptrack_SRCS}
 )
 target_link_libraries(kdevheaptrack
     kdevheaptrack_config
@@ -35,4 +38,3 @@ if(KF5SysGuard_FOUND)
         KF5::ProcessUi
     )
 endif()
-install(FILES kdevheaptrack.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevheaptrack)

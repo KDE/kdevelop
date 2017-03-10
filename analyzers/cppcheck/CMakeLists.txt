@@ -7,9 +7,12 @@ set(kdevcppcheck_SRCS
     config/globalconfigpage.cpp
     config/projectconfigpage.cpp
 )
-ki18n_wrap_ui(kdevcppcheck_UI_SRCS
+ki18n_wrap_ui(kdevcppcheck_SRCS
     config/globalconfigpage.ui
     config/projectconfigpage.ui
+)
+qt5_add_resources(kdevcppcheck_SRCS
+    kdevcppcheck.qrc
 )
 kconfig_add_kcfg_files(kdevcppcheck_CONFIG_SRCS
     config/globalsettings.kcfgc
@@ -31,13 +34,12 @@ target_link_libraries(kdevcppcheck_core
 )
 kdevplatform_add_plugin(kdevcppcheck
     JSON kdevcppcheck.json
-    SOURCES ${kdevcppcheck_SRCS} ${kdevcppcheck_UI_SRCS}
+    SOURCES ${kdevcppcheck_SRCS}
 )
 target_link_libraries(kdevcppcheck
     kdevcppcheck_core
     KF5::ItemViews
 )
-install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
 
 ecm_install_icons(ICONS icons/128-apps-cppcheck.png
                   DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)
