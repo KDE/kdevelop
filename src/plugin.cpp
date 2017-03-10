@@ -66,6 +66,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     , m_model(new KDevelop::ProblemModel(parent))
 {
     setXMLFile("kdevclangtidy.rc");
+    actionCollection()->setComponentDisplayName(i18n("Clang-Tidy Analyzer"));
 
     QAction* act_checkfile;
     act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangTidyFile()));
