@@ -518,6 +518,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
 
     setXMLFile( QStringLiteral("kdevpatchreview.rc") );
+    actionCollection()->setComponentDisplayName(i18n("Patch Review"));
 
     connect( ICore::self()->documentController(), &IDocumentController::documentClosed, this, &PatchReviewPlugin::documentClosed );
     connect( ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &PatchReviewPlugin::textDocumentCreated );
