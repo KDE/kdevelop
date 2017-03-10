@@ -101,7 +101,7 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
         : ISourceFormatterController(parent), m_enabled(true)
 {
     setObjectName(QStringLiteral("SourceFormatterController"));
-    setComponentName(QStringLiteral("kdevsourceformatter"), QStringLiteral("kdevsourceformatter"));
+    setComponentName(QStringLiteral("kdevsourceformatter"), i18n("Source Formatter"));
     setXMLFile(QStringLiteral("kdevsourceformatter.rc"));
 
     if (Core::self()->setupFlags() & Core::NoUi) return;

@@ -146,6 +146,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
 void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions)
 {
     xmlFile = this->xmlFile();
+    actions.setComponentDisplayName(i18n("Switch To"));
 
     QAction* switchDefinitionDeclaration = actions.addAction(QStringLiteral("switch_definition_declaration"));
     switchDefinitionDeclaration->setText(i18n("&Switch Definition/Declaration"));

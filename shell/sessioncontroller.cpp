@@ -259,7 +259,7 @@ SessionController::SessionController( QObject *parent )
         : QObject( parent ), d(new SessionControllerPrivate(this))
 {
     setObjectName(QStringLiteral("SessionController"));
-    setComponentName(QStringLiteral("kdevsession"), QStringLiteral("KDevSession"));
+    setComponentName(QStringLiteral("kdevsession"), i18n("Session Manager"));
 
     setXMLFile(QStringLiteral("kdevsessionui.rc"));
 

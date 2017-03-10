@@ -149,7 +149,10 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     // and so that it's shortcut etc. pp. is restored
     // apparently that is not possible to be done in the view itself *sigh*
     actionCollection()->addAction( QStringLiteral("locate_document") );
+
     setXMLFile( QStringLiteral("kdevprojectmanagerview.rc") );
+    actionCollection()->setComponentDisplayName(i18n("Projects View"));
+
     d->factory = new KDevProjectManagerViewFactory( this );
     core()->uiController()->addToolView( i18n("Projects"), d->factory );
     connect(core()->selectionController(), &ISelectionController::selectionChanged,

@@ -66,6 +66,8 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
     Q_UNUSED(args);
 
     setXMLFile(QStringLiteral("kdevfiletemplates.rc"));
+    actionCollection()->setComponentDisplayName(i18n("File Wizard"));
+
     QAction* action = actionCollection()->addAction(QStringLiteral("new_from_template"));
     action->setText(i18n("New From Template..."));
     action->setIcon( QIcon::fromTheme( QStringLiteral("code-class") ) );

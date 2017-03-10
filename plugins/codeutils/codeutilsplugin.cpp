@@ -63,6 +63,7 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( QStringLiteral("kdevcodeutils"), parent )
 {
     setXMLFile( QStringLiteral("kdevcodeutils.rc") );
+    actionCollection()->setComponentDisplayName(i18n("Code Utils"));
 
     QAction* action = actionCollection()->addAction( QStringLiteral("document_declaration") );
     // i18n: action name; 'Document' is a verb
