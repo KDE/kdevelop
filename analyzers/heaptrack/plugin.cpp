@@ -40,6 +40,7 @@
 #include <shell/runcontroller.h>
 #include <util/executecompositejob.h>
 
+#include <QAction>
 #include <QFile>
 
 K_PLUGIN_FACTORY_WITH_JSON(HeaptrackFactory, "kdevheaptrack.json", registerPlugin<Heaptrack::Plugin>();)
