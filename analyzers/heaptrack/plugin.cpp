@@ -78,7 +78,9 @@ Plugin::~Plugin()
 void Plugin::launchHeaptrack()
 {
     auto runController = KDevelop::Core::self()->runControllerInternal();
-    Q_ASSERT(runController);
+    if (runController->launchConfigurations().isEmpty()) {
+        runController->showConfigurationDialog();
+    }
 
     auto defaultLaunch = runController->defaultLaunch();
     if (!defaultLaunch) {
