@@ -118,7 +118,7 @@ CMakeServerImportJob::CMakeServerImportJob(KDevelop::IProject* project, CMakeSer
     , m_server(server)
     , m_project(project)
 {
-    connect(m_server, &CMakeServer::disconnected, this, [this]() {
+    connect(m_server.data(), &CMakeServer::disconnected, this, [this]() {
         setError(UnexpectedDisconnect);
         emitResult();
     });
@@ -129,12 +129,12 @@ void CMakeServerImportJob::start()
     if (m_server->isServerAvailable())
         doStart();
     else
-        connect(m_server, &CMakeServer::connected, this, &CMakeServerImportJob::doStart);
+        connect(m_server.data(), &CMakeServer::connected, this, &CMakeServerImportJob::doStart);
 }
 
 void CMakeServerImportJob::doStart()
 {
-    connect(m_server, &CMakeServer::response, this, &CMakeServerImportJob::processResponse);
+    connect(m_server.data(), &CMakeServer::response, this, &CMakeServerImportJob::processResponse);
 
     m_server->handshake(m_project->path(), CMake::currentBuildDir(m_project));
 }

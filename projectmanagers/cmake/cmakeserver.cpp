@@ -43,7 +43,12 @@ CMakeServer::CMakeServer(QObject* parent)
 
     m_process.setProcessChannelMode(QProcess::ForwardedChannels);
 
-    connect(&m_process, &QProcess::errorOccurred, this, [this, path](QProcess::ProcessError error) {
+#if QT_VERSION < 0x050600
+    connect(&m_process, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),
+#else
+    connect(&m_process, &QProcess::errorOccurred,
+#endif
+            this, [this, path](QProcess::ProcessError error) {
         qCWarning(CMAKE) << "cmake server error:" << error << path << m_process.readAllStandardError() << m_process.readAllStandardOutput();
     });
     connect(&m_process, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, [](int code){
