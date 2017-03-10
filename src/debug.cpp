@@ -20,4 +20,4 @@
  */
 #include "debug.h"
 
-Q_LOGGING_CATEGORY(KDEV_CLANGTIDY, "kdevelop.plugins.clangtidy")
+Q_LOGGING_CATEGORY(KDEV_CLANGTIDY, "kdevelop.analyzers.clangtidy")
