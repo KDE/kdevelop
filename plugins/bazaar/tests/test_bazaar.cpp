@@ -58,7 +58,7 @@ using namespace KDevelop;
 
 void TestBazaar::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({QStringLiteral("kdevbazaar")});
     TestCore::initialize(Core::NoUi);
 
     m_plugin = new BazaarPlugin(TestCore::self());
