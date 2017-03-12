@@ -123,7 +123,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     QModelIndex widthidx = idx;
     if( model->rowCount( idx ) > 0 )
     {
-        widthidx = idx.child( 0, 0 );
+        widthidx = model->index( 0, 0, idx );
     }
     QModelIndex parentidx = widthidx.parent();
     while( parentidx.isValid() )

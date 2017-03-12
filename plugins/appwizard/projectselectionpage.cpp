@@ -108,7 +108,7 @@ void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
         ui->templateType->setModel(m_templatesModel);
         ui->templateType->setRootModelIndex(idx);
         ui->templateType->setCurrentIndex(0);
-        itemChanged(idx.child(0, 0));
+        itemChanged(idx.model()->index(0, 0, idx));
     } else {
         itemChanged(idx);
     }

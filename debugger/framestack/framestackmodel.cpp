@@ -347,8 +347,7 @@ int FrameStackModel::currentFrame() const
 
 QModelIndex FrameStackModel::currentFrameIndex() const
 {
-    QModelIndex idx = currentThreadIndex();
-    return idx.child(d->m_currentFrame, 0);
+    return index(d->m_currentFrame, 0, currentThreadIndex());
 }
 
 void FrameStackModel::setCurrentFrame(int frame)

@@ -58,7 +58,7 @@ void exec(const QString &cmd)
 
 void TestProjectLoad::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({QStringLiteral("KDevGenericManager")});
     TestCore::initialize();
     ICore::self()->languageController()->backgroundParser()->disableProcessing();
 
@@ -210,45 +210,72 @@ void TestProjectLoad::removeDirRecursive()
     QCOMPARE(project->projectItem()->fileList().count(), 1);
 }
 
-void createFile(const QString& path)
+bool createFile(const QString& path)
 {
     QFile f(path);
-    f.open(QIODevice::WriteOnly);
+    if (!f.open(QIODevice::WriteOnly)) {
+        qWarning() << f.errorString() << path;
+        return false;
+    }
+
     f.write(QByteArray::number(qrand()));
     f.write(QByteArray::number(qrand()));
     f.write(QByteArray::number(qrand()));
     f.write(QByteArray::number(qrand()));
+
+    if (!f.flush()) {
+        qWarning() << f.errorString() << path;
+        return false;
+    }
+
     f.close();
+    return true;
 }
 
-void _writeRandomStructure(QString path, int files)
+bool writeRandomStructure(QString path, int files)
 {
     QDir p(path);
     QString name = QString::number(qrand());
     if (qrand() < RAND_MAX / 5) {
-        p.mkdir(name);
+        if (!p.mkdir(name)) {
+            return false;
+        }
+
+        //qDebug() << "wrote path" << path;
         path += '/' + name;
-//         qDebug() << "wrote path" << path;
     } else {
-        createFile(path+'/'+name);
-//         qDebug() << "wrote file" << path+"/"+name;
+        if (!createFile(path+'/'+name)) {
+            return false;
+        }
+
+        //qDebug() << "wrote file" << path+"/"+name;
     }
     files--;
     if (files > 0) {
-        _writeRandomStructure(path, files);
+        if (!writeRandomStructure(path, files)) {
+            return false;
+        }
     }
+    return true;
 }
 
-void fillProject(int filesPerDir, int dirs, const TestProject& project, bool wait)
+bool fillProject(int filesPerDir, int dirs, const TestProject& project, bool wait)
 {
     for(int i=0; i < dirs; ++i) {
         const QString name = "foox" + QString::number(i);
-        QDir(project.dir->path()).mkdir(name);
-        _writeRandomStructure(project.dir->path() + name, filesPerDir);
+        if (!QDir(project.dir->path()).mkdir(name)) {
+            return false;
+        }
+
+        if (!writeRandomStructure(project.dir->path() + "/" + name, filesPerDir)) {
+            return false;
+        }
+
         if (wait) {
             QTest::qWait(100);
         }
     }
+    return true;
 }
 
 void TestProjectLoad::addLotsOfFiles()
@@ -262,7 +289,7 @@ void TestProjectLoad::addLotsOfFiles()
     IProject* project = ICore::self()->projectController()->projects().first();
     QCOMPARE(project->projectFile().toUrl(), p.file);
 
-    fillProject(50, 25, p, true);
+    QVERIFY(fillProject(50, 25, p, true));
 
     QTest::qWait(2000);
 }
@@ -270,9 +297,9 @@ void TestProjectLoad::addLotsOfFiles()
 void TestProjectLoad::addMultipleJobs()
 {
     const TestProject p1 = makeProject();
-    fillProject(10, 25, p1, false);
+    QVERIFY(fillProject(10, 25, p1, false));
     const TestProject p2 = makeProject();
-    fillProject(10, 25, p2, false);
+    QVERIFY(fillProject(10, 25, p2, false));
 
     QSignalSpy spy(ICore::self()->projectController(),
                    SIGNAL(projectOpened(KDevelop::IProject*)));

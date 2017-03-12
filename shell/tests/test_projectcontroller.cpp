@@ -140,22 +140,23 @@ class FakePluginController : public PluginController
 {
     Q_OBJECT
 public:
-    explicit FakePluginController(Core* core)
-        : PluginController(core)
-        , m_fakeFileManager(new FakeFileManager)
-    {
-    }
+    using PluginController::PluginController;
 
     IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) override
     {
         if (extension == qobject_interface_iid<IProjectFileManager*>()) {
+            if (!m_fakeFileManager) {
+                // Can't initialize in the constructor, because the pluginController must be setup
+                //  before constructing a plugin, and this _is_ the pluginController.
+                m_fakeFileManager = new FakeFileManager;
+            }
             return m_fakeFileManager;
         }
         return PluginController::pluginForExtension(extension, pluginName, constraints);
     }
 
 private:
-    FakeFileManager* m_fakeFileManager;
+    FakeFileManager* m_fakeFileManager = nullptr;
 };
 
 ////////////////////// Fixture ///////////////////////////////////////////////
