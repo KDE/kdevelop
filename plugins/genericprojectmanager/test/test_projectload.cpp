@@ -221,7 +221,7 @@ void createFile(const QString& path)
     f.close();
 }
 
-void _writeRandomStructure(QString path, int files)
+void writeRandomStructure(QString path, int files)
 {
     QDir p(path);
     QString name = QString::number(qrand());
@@ -235,7 +235,7 @@ void _writeRandomStructure(QString path, int files)
     }
     files--;
     if (files > 0) {
-        _writeRandomStructure(path, files);
+        writeRandomStructure(path, files);
     }
 }
 
@@ -244,7 +244,7 @@ void fillProject(int filesPerDir, int dirs, const TestProject& project, bool wai
     for(int i=0; i < dirs; ++i) {
         const QString name = "foox" + QString::number(i);
         QDir(project.dir->path()).mkdir(name);
-        _writeRandomStructure(project.dir->path() + name, filesPerDir);
+        writeRandomStructure(project.dir->path() + name, filesPerDir);
         if (wait) {
             QTest::qWait(100);
         }
