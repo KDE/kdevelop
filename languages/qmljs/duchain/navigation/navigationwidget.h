@@ -26,6 +26,10 @@
 
 #include "duchainexport.h"
 
+namespace KDevelop {
+    class IncludeItem;
+}
+
 namespace QmlJS {
 
 class KDEVQMLJSDUCHAIN_EXPORT NavigationWidget : public KDevelop::AbstractNavigationWidget
@@ -33,6 +37,11 @@ class KDEVQMLJSDUCHAIN_EXPORT NavigationWidget : public KDevelop::AbstractNaviga
 public:
     NavigationWidget(KDevelop::Declaration* decl,
                      KDevelop::TopDUContext* topContext,
+                     const QString& htmlPrefix,
+                     const QString& htmlSuffix,
+                     KDevelop::AbstractNavigationWidget::DisplayHints hints);
+    NavigationWidget(const KDevelop::IncludeItem& includeItem,
+                     KDevelop::TopDUContextPointer topContext,
                      const QString& htmlPrefix,
                      const QString& htmlSuffix,
                      KDevelop::AbstractNavigationWidget::DisplayHints hints);

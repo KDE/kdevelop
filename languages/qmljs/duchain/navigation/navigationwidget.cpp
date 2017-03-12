@@ -23,6 +23,7 @@
 #include "declarationnavigationcontext.h"
 
 #include <language/duchain/topducontext.h>
+#include <language/duchain/navigation/abstractincludenavigationcontext.h>
 
 using namespace KDevelop;
 
@@ -46,4 +47,20 @@ NavigationWidget::NavigationWidget(KDevelop::Declaration* decl,
     setContext(m_startContext);
 }
 
+NavigationWidget::NavigationWidget(const KDevelop::IncludeItem& includeItem,
+                                   KDevelop::TopDUContextPointer topContext,
+                                   const QString& htmlPrefix,
+                                   const QString& htmlSuffix,
+                                   KDevelop::AbstractNavigationWidget::DisplayHints hints)
+    : AbstractNavigationWidget()
+{
+    setDisplayHints(hints);
+    m_topContext = topContext;
+
+    initBrowser(200);
+
+    m_startContext = NavigationContextPointer(new KDevelop::AbstractIncludeNavigationContext(includeItem, m_topContext, StandardParsingEnvironment));
+    m_startContext->setPrefixSuffix(htmlPrefix, htmlSuffix);
+    setContext(m_startContext);
+}
 }
