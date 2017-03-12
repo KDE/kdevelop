@@ -277,7 +277,7 @@ make -j$(nproc) install
 # Build KDevPlatform
 mkdir -p /kdevplatform_build
 cd /kdevplatform_build
-cmake ../kdevplatform \
+cmake3 ../kdevplatform \
     -DCMAKE_INSTALL_PREFIX:PATH=/kdevelop.appdir/usr/ \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DBUILD_TESTING=FALSE
