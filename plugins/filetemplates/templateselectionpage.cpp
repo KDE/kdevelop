@@ -72,7 +72,7 @@ public:
 void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& index)
 {
     // delete preview tabs
-    if (!index.isValid() || index.child(0, 0).isValid())
+    if (!index.isValid() || index.model()->hasChildren(index))
     {
         // invalid or has child
         assistant->setValid(assistant->currentPage(), false);
@@ -217,11 +217,10 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     connect(d->ui->view, &MultiLevelListView::currentIndexChanged,
             this, [&] (const QModelIndex& index) { d->currentTemplateChanged(index); });
 
-    QModelIndex templateIndex = d->model->index(0, 0);
-
-    while (templateIndex.child(0, 0).isValid())
+    QModelIndex templateIndex;
+    while (d->model->hasIndex(0, 0, templateIndex))
     {
-        templateIndex = templateIndex.child(0, 0);
+        templateIndex = d->model->index(0, 0, templateIndex);
     }
 
     KSharedConfigPtr config;

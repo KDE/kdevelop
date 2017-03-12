@@ -197,7 +197,7 @@ void ProjectChangesModel::itemsAdded(const QModelIndex& parent, int start, int e
     QList<QUrl> urls;
     
     for(int i=start; i<end; i++) {
-        QModelIndex idx=parent.child(i, 0);
+        QModelIndex idx=parent.model()->index(i, 0, parent);
         item=model->itemFromIndex(idx);
         
         if(item->type()==ProjectBaseItem::File || item->type()==ProjectBaseItem::Folder || item->type()==ProjectBaseItem::BuildFolder)

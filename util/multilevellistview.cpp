@@ -169,13 +169,13 @@ void MultiLevelListViewPrivate::viewSelectionChanged(const QModelIndex& current,
 
     if (level + 1 == levels) {
         // right-most view
-        if (current.child(0, 0).isValid()) {
+        if (proxy->hasIndex(0, 0, current)) {
             // select the first leaf node for this view
             QModelIndex idx = current;
-            QModelIndex child = idx.child(0, 0);
+            QModelIndex child = proxy->index(0, 0, idx);
             while(child.isValid()) {
                 idx = child;
-                child = idx.child(0, 0);
+                child = proxy->index(0, 0, idx);
             }
             views.last()->setCurrentIndex(idx);
             return;
