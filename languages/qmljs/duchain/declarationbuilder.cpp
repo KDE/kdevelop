@@ -330,7 +330,7 @@ void DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
 
     auto func_declaration = dynamic_cast<FunctionDeclaration*>(func_type->declaration(topContext()));
 
-    if (!func_declaration) {
+    if (!func_declaration || !func_declaration->internalContext()) {
         return;
     }
 
