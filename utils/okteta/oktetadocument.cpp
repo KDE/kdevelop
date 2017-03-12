@@ -210,6 +210,7 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* /* document */ )
         Kasten::AbstractLoadJob* loadJob = synchronizer->startLoad( url() );
         connect( loadJob, &Kasten::AbstractLoadJob::documentLoaded,
                  this, &OktetaDocument::onByteArrayDocumentLoaded );
+        Kasten::JobManager::executeJob( loadJob );
 
         delete synchronizerFactory;
     }
