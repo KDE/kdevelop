@@ -78,6 +78,7 @@ void CustomBuildSystemConfigWidget::loadDefaults()
 void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
 {
     ui->currentConfig->clear();
+    configs.clear();
     QStringList groupNameList;
     KConfigGroup grp = cfg->group(ConfigConstants::customBuildSystemGroup());
     foreach( const QString& grpName, grp.groupList() ) {

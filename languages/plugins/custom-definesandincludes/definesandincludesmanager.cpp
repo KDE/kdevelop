@@ -276,7 +276,7 @@ Path::List DefinesAndIncludesManager::includes(const QString& path) const
            + m_noProjectIPM->includesAndDefines(path).first;
 }
 
-Path::List DefinesAndIncludesManager::frameworkDirectories(const QString& path) const
+Path::List DefinesAndIncludesManager::frameworkDirectories(const QString& /* path */) const
 {
     return m_settings->provider()->frameworkDirectories(nullptr);
 }
