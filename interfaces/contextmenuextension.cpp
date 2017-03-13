@@ -131,7 +131,7 @@ void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExte
     populateMenuWithGroup(menu, extensions, RefactorGroup, i18n("Refactor"));
     populateMenuWithGroup(menu, extensions, NavigationGroup);
     populateMenuWithGroup(menu, extensions, AnalyzeGroup, i18n("Analyze With"));
-    populateMenuWithGroup(menu, extensions, VcsGroup, i18n("Version Control"));
+    populateMenuWithGroup(menu, extensions, VcsGroup);
     populateMenuWithGroup(menu, extensions, ExtensionGroup);
 }
 

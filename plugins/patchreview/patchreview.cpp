@@ -599,11 +599,12 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension( KDevelop
 
     if (urls.size() == 1) {
         QString mimetype = QMimeDatabase().mimeTypeForUrl(urls.first()).name();
-        QAction* reviewAction = new QAction( i18n( "Review Patch" ), this );
+        QAction* reviewAction = new QAction( QIcon::fromTheme(QStringLiteral("text-x-patch")),
+                                             i18n( "Review Patch" ), this );
         reviewAction->setData(QVariant(urls[0]));
         connect( reviewAction, &QAction::triggered, this, &PatchReviewPlugin::executeFileReviewAction );
         ContextMenuExtension cm;
-        cm.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, reviewAction );
+        cm.addAction( KDevelop::ContextMenuExtension::VcsGroup, reviewAction );
         return cm;
     }
 
