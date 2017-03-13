@@ -1,19 +1,9 @@
-/*============================================================================
-  CMake - Cross Platform Makefile Generator
-  Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
-
-  Distributed under the OSI-approved BSD License (the "License");
-  see accompanying file Copyright.txt for details.
-
-  This software is distributed WITHOUT ANY WARRANTY; without even the
-  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-  See the License for more information.
-============================================================================*/
+/* Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
+   file Copyright.txt or https://cmake.org/licensing for details.  */
 #ifndef cmListFileLexer_h
 #define cmListFileLexer_h
 
-typedef enum cmListFileLexer_Type_e
-{
+typedef enum cmListFileLexer_Type_e {
   cmListFileLexer_Token_None,
   cmListFileLexer_Token_Space,
   cmListFileLexer_Token_Newline,
@@ -42,6 +32,7 @@ struct cmListFileLexer_Token_s
 enum cmListFileLexer_BOM_e
 {
   cmListFileLexer_BOM_None,
+  cmListFileLexer_BOM_Broken,
   cmListFileLexer_BOM_UTF8,
   cmListFileLexer_BOM_UTF16BE,
   cmListFileLexer_BOM_UTF16LE,
@@ -53,11 +44,10 @@ typedef enum cmListFileLexer_BOM_e cmListFileLexer_BOM;
 typedef struct cmListFileLexer_s cmListFileLexer;
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-cmListFileLexer* cmListFileLexer_New();
+cmListFileLexer* cmListFileLexer_New(void);
 int cmListFileLexer_SetFileName(cmListFileLexer*, const char*,
                                 cmListFileLexer_BOM* bom);
 int cmListFileLexer_SetString(cmListFileLexer*, const char*);
