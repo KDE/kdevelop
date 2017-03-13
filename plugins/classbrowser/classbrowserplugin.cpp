@@ -125,7 +125,7 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
         //Currently "Find in Class Browser" seems to only work for classes, so only show it in that case
 
         m_findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_findInBrowser);
+        menuExt.addAction( KDevelop::ContextMenuExtension::NavigationGroup, m_findInBrowser);
       }
     }
   }

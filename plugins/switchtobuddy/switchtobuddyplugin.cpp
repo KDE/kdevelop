@@ -137,7 +137,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
         m_signalMapper->setMapping(action, url.toLocalFile());
         connect(m_signalMapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped),
                 this, &SwitchToBuddyPlugin::switchToBuddy, Qt::QueuedConnection);
-        extension.addAction(ContextMenuExtension::ExtensionGroup, action);
+        extension.addAction(ContextMenuExtension::NavigationGroup, action);
     }
 
     return extension;

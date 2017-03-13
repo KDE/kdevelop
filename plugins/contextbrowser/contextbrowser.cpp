@@ -347,7 +347,7 @@ KDevelop::ContextMenuExtension ContextBrowserPlugin::contextMenuExtension(KDevel
 
   qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
 
-  menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_findUses);
+  menuExt.addAction(KDevelop::ContextMenuExtension::NavigationGroup, m_findUses);
 
   return menuExt;
 }

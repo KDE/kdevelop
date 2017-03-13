@@ -446,11 +446,11 @@ ContextMenuExtension QuickOpenPlugin::contextMenuExtension(Context* context)
     if (decl) {
         const bool isDef = FunctionDefinition::definition(decl);
         if (codeContext->use().isValid() || !isDef) {
-            menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_quickOpenDeclaration);
+            menuExt.addAction(KDevelop::ContextMenuExtension::NavigationGroup, m_quickOpenDeclaration);
         }
 
         if (isDef) {
-            menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_quickOpenDefinition);
+            menuExt.addAction(KDevelop::ContextMenuExtension::NavigationGroup, m_quickOpenDefinition);
         }
     }
 

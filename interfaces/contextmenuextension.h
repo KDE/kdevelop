@@ -61,6 +61,8 @@ public:
     static const QString OpenExternalGroup;
     /** menu group to contain analyze actions */
     static const QString AnalyzeGroup;
+    /** The menu group containing navigation actions */
+    static const QString NavigationGroup;
 
     /** menu group that can contain any extension menu.
       * Actions for this extension will always be at the end
