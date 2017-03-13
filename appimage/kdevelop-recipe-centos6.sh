@@ -28,7 +28,7 @@ if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=2.0
 fi
 KF5_VERSION=v5.32.0
-KDE_APPLICATION_VERSION=v16.12.0
+KDE_APPLICATION_VERSION=v16.12.3
 GRANTLEE_VERSION=v5.1.0
 
 export LLVM_ROOT=/opt/llvm/
@@ -277,7 +277,7 @@ make -j$(nproc) install
 # Build KDevPlatform
 mkdir -p /kdevplatform_build
 cd /kdevplatform_build
-cmake ../kdevplatform \
+cmake3 ../kdevplatform \
     -DCMAKE_INSTALL_PREFIX:PATH=/kdevelop.appdir/usr/ \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DBUILD_TESTING=FALSE

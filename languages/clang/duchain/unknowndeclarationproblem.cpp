@@ -270,7 +270,9 @@ QVector<KDevelop::QualifiedIdentifier> findPossibleQualifiedIdentifiers( const Q
     return declarations;
 }
 
-QStringList findMatchingIncludeFiles(const QVector<Declaration*> declarations)
+}
+
+QStringList UnknownDeclarationProblem::findMatchingIncludeFiles(const QVector<Declaration*>& declarations)
 {
     DUChainReadLocker lock;
 
@@ -324,6 +326,8 @@ QStringList findMatchingIncludeFiles(const QVector<Declaration*> declarations)
     clangDebug() << "Candidates: " << candidates;
     return candidates;
 }
+
+namespace {
 
 /**
  * Takes a filepath and the include paths and determines what directive to use.
@@ -394,7 +398,7 @@ QStringList includeFiles(const QualifiedIdentifier& identifier, const QVector<De
         return {};
     }
 
-    const auto candidates = findMatchingIncludeFiles(declarations);
+    const auto candidates = UnknownDeclarationProblem::findMatchingIncludeFiles(declarations);
     if( !candidates.isEmpty() ) {
         // If we find a candidate from the duchain we don't bother scanning the include paths
         return candidates;
@@ -499,6 +503,7 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
     }
 
     const auto includepaths = includePaths( file );
+    clangDebug() << "found include paths for" << file << ":" << includepaths;
 
     /* create fixits for candidates */
     for( const auto& includeFile : includefiles ) {
