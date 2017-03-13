@@ -30,7 +30,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeServer : public QObject
 {
 Q_OBJECT
 public:
-    CMakeServer(QObject* parent);
+    explicit CMakeServer(QObject* parent = nullptr);
     ~CMakeServer() override;
 
     bool isServerAvailable();
