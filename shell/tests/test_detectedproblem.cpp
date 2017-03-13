@@ -41,6 +41,7 @@ private slots:
     void testExplanation();
     void testFinalLocation();
     void testDiagnostics();
+    void testPluginName();
 
 private:
     IProblem::Ptr m_problem;
@@ -193,6 +194,27 @@ void TestDetectedProblem::testDiagnostics()
     QCOMPARE(m_problem->diagnostics().size(), 0);
 }
 
+void TestDetectedProblem::testPluginName()
+{
+    DetectedProblem p1(QStringLiteral("Plugin1"));
+    DetectedProblem p2(QStringLiteral("Plugin2"));
+    DetectedProblem p3(QStringLiteral(""));
+    DetectedProblem p4;
+
+    QCOMPARE(p1.source(), IProblem::Plugin);
+    QCOMPARE(p2.source(), IProblem::Plugin);
+    QCOMPARE(p3.source(), IProblem::Plugin);
+    QCOMPARE(p4.source(), IProblem::Unknown);
+
+    QCOMPARE(p1.sourceString(), QStringLiteral("Plugin1"));
+    QCOMPARE(p2.sourceString(), QStringLiteral("Plugin2"));
+    QCOMPARE(p3.sourceString(), QStringLiteral(""));
+    QCOMPARE(p4.sourceString(), i18n("Unknown"));
+
+    p4.setSource(IProblem::Plugin);
+    QCOMPARE(p4.source(), IProblem::Plugin);
+    QCOMPARE(p4.sourceString(), i18n("Plugin"));
+}
 
 QTEST_MAIN(TestDetectedProblem)
 

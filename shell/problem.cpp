@@ -24,8 +24,9 @@
 
 struct DetectedProblemPrivate
 {
-    DetectedProblemPrivate()
-        : m_severity(KDevelop::IProblem::Error)
+    DetectedProblemPrivate(const QString& pluginName)
+        : m_pluginName(pluginName)
+        , m_severity(KDevelop::IProblem::Error)
         , m_source(KDevelop::IProblem::Unknown)
         , m_finalLocationMode(KDevelop::IProblem::Range)
     {
@@ -33,6 +34,7 @@ struct DetectedProblemPrivate
 
     QString m_description;
     QString m_explanation;
+    QString m_pluginName;
     KDevelop::IProblem::Severity m_severity;
     KDevelop::IProblem::Source m_source;
     KDevelop::DocumentRange m_range;
@@ -44,8 +46,14 @@ namespace KDevelop
 {
 
 DetectedProblem::DetectedProblem()
-    :d(new DetectedProblemPrivate())
+    : d(new DetectedProblemPrivate(i18n("Plugin")))
 {
+}
+
+DetectedProblem::DetectedProblem(const QString& pluginName)
+    : d(new DetectedProblemPrivate(pluginName))
+{
+    setSource(Plugin);
 }
 
 DetectedProblem::~DetectedProblem()
@@ -65,22 +73,20 @@ void DetectedProblem::setSource(Source source)
 
 QString DetectedProblem::sourceString() const
 {
-    QString s;
-
     switch(d->m_source)
     {
-    case Unknown: s = i18n("Unknown"); break;
-    case Disk: s = i18n("Disk"); break;
-    case Preprocessor: s = i18n("Preprocessor"); break;
-    case Lexer: s = i18n("Lexer"); break;
-    case Parser: s = i18n("Parser"); break;
-    case DUChainBuilder: s = i18n("DuchainBuilder"); break;
-    case SemanticAnalysis: s = i18n("Semantic analysis"); break;
-    case ToDo: s = i18n("Todo"); break;
-    case Plugin: s = i18n("Plugin"); break;
+    case Unknown: return i18n("Unknown");
+    case Disk: return i18n("Disk");
+    case Preprocessor: return i18n("Preprocessor");
+    case Lexer: return i18n("Lexer");
+    case Parser: return i18n("Parser");
+    case DUChainBuilder: return i18n("DuchainBuilder");
+    case SemanticAnalysis: return i18n("Semantic analysis");
+    case ToDo: return i18n("Todo");
+    case Plugin: return d->m_pluginName;
     }
 
-    return s;
+    return {};
 }
 
 DocumentRange DetectedProblem::finalLocation() const
@@ -92,7 +98,6 @@ void DetectedProblem::setFinalLocation(const DocumentRange &location)
 {
     d->m_range = location;
 }
-
 
 IProblem::FinalLocationMode DetectedProblem::finalLocationMode() const
 {
@@ -148,7 +153,6 @@ QString DetectedProblem::severityString() const
 
     return s;
 }
-
 
 QVector<IProblem::Ptr> DetectedProblem::diagnostics() const
 {

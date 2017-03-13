@@ -43,9 +43,9 @@ namespace KDevelop
  * @code
  * IProblem::Ptr problem(new DetectedProblem());
  * problem->setSource(IProblem::Plugin);
- * problem->setSeverity(IProblem::Error);
- * problem->setDescription(QStringLiteral("Error message"));
- * problem->setExplanation(QStringLiteral("Error explanation"));
+ * problem->setSeverity(IProblem::Warning);
+ * problem->setDescription(QStringLiteral("Warning message"));
+ * problem->setExplanation(QStringLiteral("Warning explanation"));
  *
  * DocumentRange range;
  * range.document = IndexedString("/path/to/source/file");
@@ -58,8 +58,22 @@ namespace KDevelop
 class KDEVPLATFORMSHELL_EXPORT DetectedProblem : public IProblem
 {
 public:
+    /// Creates new empty DetectedProblem with default properties:
+    /// severity - KDevelop::IProblem::Error;
+    /// source - KDevelop::IProblem::Unknown;
+    /// finalLocationMode - KDevelop::IProblem::Range.
     DetectedProblem();
-    virtual ~DetectedProblem();
+
+    /// Creates new DetectedProblem, produced by some plugin, for example by analyzer plugins
+    /// like cppcheck/clang-tydy/valgrind/etc.
+    /// Default values of problem properties are:
+    /// severity - KDevelop::IProblem::Error;
+    /// source - KDevelop::IProblem::Plugin;
+    /// sourceString - passed pluginName parameter;
+    /// finalLocationMode - KDevelop::IProblem::Range.
+    DetectedProblem(const QString& pluginName);
+
+    ~DetectedProblem() override;
 
     Source source() const override;
     void setSource(Source source) override;
