@@ -118,7 +118,7 @@ void Job::postProcessStderr(const QStringList& lines)
             emitProblems();
         }
         else {
-            KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem);
+            KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem(i18n("Cppcheck")));
 
             problem->setSeverity(KDevelop::IProblem::Error);
             problem->setDescription(line);

@@ -258,7 +258,7 @@ void CppcheckParser::storeError(QVector<KDevelop::IProblem::Ptr>& problems)
 
 KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
 {
-    KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem);
+    KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem(i18n("Cppcheck")));
     QStringList messagePrefix;
     QString errorMessage(m_errorMessage);
 
