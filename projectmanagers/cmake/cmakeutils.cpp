@@ -46,6 +46,8 @@
 #include "cmakebuilderconfig.h"
 #include <cmakecachereader.h>
 
+using namespace KDevelop;
+
 namespace Config
 {
 namespace Old
@@ -606,7 +608,7 @@ QStringList supportedGenerators()
 {
     QStringList generatorNames;
 
-    bool hasNinja = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder");
+    bool hasNinja = ICore::self() && ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder");
     if (hasNinja)
         generatorNames << "Ninja";
 
