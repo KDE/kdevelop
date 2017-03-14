@@ -22,22 +22,56 @@
 #include "documentationfindwidget.h"
 #include "debug.h"
 
+#include <QVBoxLayout>
+
+#ifdef USE_QTWEBKIT
 #include <QFontDatabase>
+#include <QWebView>
 #include <QWebFrame>
+#include <QWebSettings>
+#else
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QWebEngineView>
+#include <QWebEnginePage>
+#include <QWebEngineSettings>
+#include <QWebEngineUrlSchemeHandler>
+#include <QWebEngineUrlRequestJob>
+#include <QWebEngineProfile>
+#endif
 
 using namespace KDevelop;
 
-StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent)
-    : QWebView(parent)
+struct KDevelop::StandardDocumentationViewPrivate
 {
+    IDocumentation::Ptr m_doc;
+
+#ifdef USE_QTWEBKIT
+    QWebView *m_view = nullptr;
+    void init(QWidget* parent) { m_view = new QWebView(parent); }
+#else
+    QWebEngineView* m_view = nullptr;
+    void init(QWidget* parent) { m_view = new QWebEngineView(parent); }
+#endif
+};
+
+StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent)
+    : QWidget(parent)
+    , d(new StandardDocumentationViewPrivate)
+{
+    setLayout(new QVBoxLayout(this));
+    d->init(this);
+    layout()->addWidget(d->m_view);
+
     findWidget->setEnabled(true);
     connect(findWidget, &DocumentationFindWidget::newSearch, this, &StandardDocumentationView::search);
 
+#ifdef USE_QTWEBKIT
     QFont sansSerifFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     QFont monospaceFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     QFont minimalFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
-    QWebSettings* s = settings();
+    QWebSettings* s = d->m_view->settings();
 
     s->setFontFamily(QWebSettings::StandardFont, sansSerifFont.family());
     s->setFontFamily(QWebSettings::SerifFont, "Serif");
@@ -63,48 +97,155 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
     // "flickering" and also to hide font size "jumping". Secondly, we reset position inside page
     // after loading with using standard QWebFrame method scrollToAnchor().
 
-    connect(this, &QWebView::loadStarted, this, [this]() {
-        setUpdatesEnabled(false);
+    connect(d->m_view, &QWebView::loadStarted, d->m_view, [this]() {
+        d->m_view->setUpdatesEnabled(false);
     });
 
-    connect(this, &QWebView::loadFinished, this, [this](bool) {
-        if (url().isValid()) {
-            page()->mainFrame()->scrollToAnchor(url().fragment());
+    connect(d->m_view, &QWebView::loadFinished, this, [this](bool) {
+        if (d->m_view->url().isValid()) {
+            d->m_view->page()->mainFrame()->scrollToAnchor(d->m_view->url().fragment());
         }
         setUpdatesEnabled(true);
     });
-
+#endif
 }
+
+KDevelop::StandardDocumentationView::~StandardDocumentationView() = default;
 
 void StandardDocumentationView::search ( const QString& text, DocumentationFindWidget::FindOptions options )
 {
-    //Highlighting has been commented because it doesn't let me jump around all occurrences
-//     page()->findText(QString(), QWebPage::HighlightAllOccurrences);
-
-    QWebPage::FindFlags ff=QWebPage::FindWrapsAroundDocument /*| QWebPage::HighlightAllOccurrences*/;
+#ifdef USE_QTWEBKIT
+    typedef QWebPage WebkitThing;
+#else
+    typedef QWebEnginePage WebkitThing;
+#endif
+    WebkitThing::FindFlags ff = 0;
     if(options & DocumentationFindWidget::Previous)
-        ff |= QWebPage::FindBackward;
+        ff |= WebkitThing::FindBackward;
 
     if(options & DocumentationFindWidget::MatchCase)
-        ff |= QWebPage::FindCaseSensitively;
+        ff |= WebkitThing::FindCaseSensitively;
 
-    page()->findText(text, ff);
+    d->m_view->page()->findText(text, ff);
 }
 
 void StandardDocumentationView::setDocumentation(const IDocumentation::Ptr& doc)
 {
-    if(m_doc)
-        disconnect(m_doc.data());
-    m_doc = doc;
+    if(d->m_doc)
+        disconnect(d->m_doc.data());
+    d->m_doc = doc;
     update();
-    if(m_doc)
-        connect(m_doc.data(), &IDocumentation::descriptionChanged, this, &StandardDocumentationView::update);
+    if(d->m_doc)
+        connect(d->m_doc.data(), &IDocumentation::descriptionChanged, this, &StandardDocumentationView::update);
 }
 
 void StandardDocumentationView::update()
 {
-    if(m_doc)
-        setHtml(m_doc->description());
-    else
+    if(d->m_doc) {
+        setHtml(d->m_doc->description());
+    } else
         qCDebug(DOCUMENTATION) << "calling StandardDocumentationView::update() on an uninitialized view";
+}
+
+void KDevelop::StandardDocumentationView::setOverrideCss(const QUrl& url)
+{
+#ifdef USE_QTWEBKIT
+    d->m_view->settings()->setUserStyleSheetUrl(url);
+#else
+    d->m_view->page()->runJavaScript(
+        "var link = document.createElement( 'link' );"
+        "link.href = " + url.toString().toUtf8() + ";"
+        "link.type = 'text/css';"
+        "link.rel = 'stylesheet';"
+        "link.media = 'screen,print';"
+        "document.getElementsByTagName( 'head' )[0].appendChild( link );"
+    );
+#endif
+}
+
+void KDevelop::StandardDocumentationView::load(const QUrl& url)
+{
+#ifdef USE_QTWEBKIT
+    d->m_view->load(url);
+#else
+    d->m_view->page()->load(url);
+#endif
+}
+
+void KDevelop::StandardDocumentationView::setHtml(const QString& html)
+{
+#ifdef USE_QTWEBKIT
+    d->m_view->setHtml(html);
+#else
+    d->m_view->page()->setHtml(html);
+#endif
+}
+
+#ifndef USE_QTWEBKIT
+class CustomSchemeHandler : public QWebEngineUrlSchemeHandler
+{
+public:
+    explicit CustomSchemeHandler(QNetworkAccessManager* nam, QObject *parent = 0)
+        : QWebEngineUrlSchemeHandler(parent), m_nam(nam) {}
+
+    void requestStarted(QWebEngineUrlRequestJob *job) override {
+        const QUrl url = job->requestUrl();
+
+        auto reply = m_nam->get(QNetworkRequest(url));
+        job->reply("text/html", reply);
+    }
+
+private:
+    QNetworkAccessManager* m_nam;
+};
+#endif
+
+void KDevelop::StandardDocumentationView::setNetworkAccessManager(QNetworkAccessManager* manager)
+{
+#ifdef USE_QTWEBKIT
+    d->m_view->page()->setNetworkAccessManager(manager);
+#else
+    d->m_view->page()->profile()->installUrlSchemeHandler("qthelp", new CustomSchemeHandler(manager, this));
+#endif
+}
+
+#ifndef USE_QTWEBKIT
+class PageInterceptor : public QWebEnginePage
+{
+public:
+    PageInterceptor(KDevelop::StandardDocumentationView* parent) : QWebEnginePage(parent), m_view(parent) {}
+
+    bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool /*isMainFrame*/) override {
+        qCDebug(DOCUMENTATION) << "navigating to..." << url << type;
+        if (type == NavigationTypeLinkClicked) {
+            m_view->load(url);
+            return false;
+        }
+        return true;
+    }
+
+    KDevelop::StandardDocumentationView* m_view;
+};
+#endif
+
+void KDevelop::StandardDocumentationView::setDelegateLinks(bool delegate)
+{
+#ifdef USE_QTWEBKIT
+    d->m_view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+#else
+    if (delegate)
+        d->m_view->setPage(new PageInterceptor(this));
+    else
+        d->m_view->setPage(new QWebEnginePage(this));
+#endif
+}
+
+QAction * KDevelop::StandardDocumentationView::copyAction() const
+{
+#ifdef USE_QTWEBKIT
+    typedef QWebPage WebkitThing;
+#else
+    typedef QWebEnginePage WebkitThing;
+#endif
+    return d->m_view->pageAction(WebkitThing::Copy);
 }

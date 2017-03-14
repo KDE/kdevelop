@@ -21,23 +21,44 @@
 #ifndef KDEVPLATFORM_STANDARDDOCUMENTATIONVIEW_H
 #define KDEVPLATFORM_STANDARDDOCUMENTATIONVIEW_H
 
-#include <QWebView>
+#include <QWidget>
 #include "documentationexport.h"
 #include "documentationfindwidget.h"
 #include <interfaces/idocumentation.h>
 
+class QNetworkAccessManager;
+
 namespace KDevelop
 {
+struct StandardDocumentationViewPrivate;
 
 /**
- * The standard documentation view, based on QWebView.
+ * A standard documentation view, based on QtWebKit or QtWebEngine, depending on your distribution preferences.
  */
-class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWebView
+class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(StandardDocumentationView)
 public:
     explicit StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent = nullptr );
+    ~StandardDocumentationView() override;
     void setDocumentation(const IDocumentation::Ptr& doc);
+
+    void setOverrideCss(const QUrl &url);
+
+    void load(const QUrl &url);
+    void setHtml(const QString &html);
+    void setNetworkAccessManager(QNetworkAccessManager* manager);
+
+    /**
+     *
+     */
+    void setDelegateLinks(bool delegate);
+
+    QAction* copyAction() const;
+
+Q_SIGNALS:
+    void linkClicked(const QUrl &link);
 
 public slots:
     /**
@@ -54,7 +75,7 @@ public slots:
     void update();
 
 private:
-    IDocumentation::Ptr m_doc;
+    const QScopedPointer<StandardDocumentationViewPrivate> d;
 };
 
 }

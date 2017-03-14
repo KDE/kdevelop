@@ -38,7 +38,7 @@ include(KDECMakeSettings)
 include(KDevPlatformMacros)
 
 set(QT_MIN_VERSION "5.4.0")
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets WebKitWidgets Concurrent Test)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Concurrent Test)
 
 find_package(Qt5QuickWidgets ${QT_MIN_VERSION})
 set_package_properties(Qt5QuickWidgets PROPERTIES
