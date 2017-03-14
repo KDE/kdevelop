@@ -26,6 +26,7 @@
 #include <QStringListModel>
 #include <QMimeDatabase>
 #include <QStandardPaths>
+#include <QIcon>
 #include <KLocalizedString>
 
 #include <interfaces/iproject.h>

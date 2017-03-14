@@ -28,9 +28,9 @@
 #include <QAction>
 #include <interfaces/idocumentation.h>
 
+namespace KDevelop { class StandardDocumentationView; }
 class QModelIndex;
 class QNetworkAccessManager;
-class QWebView;
 class QtHelpProviderAbstract;
 class QTemporaryFile;
 
@@ -61,7 +61,7 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         void jumpedTo(const QUrl& newUrl);
 
     private:
-        void setUserStyleSheet(QWebView* view, const QUrl& url);
+        void setUserStyleSheet(KDevelop::StandardDocumentationView* view, const QUrl& url);
 
     private:
         QtHelpProviderAbstract *m_provider;
@@ -69,7 +69,7 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         const QMap<QString, QUrl> m_info;
         const QMap<QString, QUrl>::const_iterator m_current;
 
-        QWebView* lastView;
+        KDevelop::StandardDocumentationView* lastView;
         QPointer<QTemporaryFile> m_lastStyleSheet;
         QScopedPointer<QNetworkAccessManager> m_sharedQNAM;
 };

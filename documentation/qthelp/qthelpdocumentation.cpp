@@ -224,7 +224,7 @@ QString QtHelpDocumentation::description() const
     return QStringList(m_info.keys()).join(", ");
 }
 
-void QtHelpDocumentation::setUserStyleSheet(QWebView* view, const QUrl& url)
+void QtHelpDocumentation::setUserStyleSheet(StandardDocumentationView* view, const QUrl& url)
 {
 
     QTemporaryFile* file = new QTemporaryFile(view);
@@ -237,7 +237,7 @@ void QtHelpDocumentation::setUserStyleSheet(QWebView* view, const QUrl& url)
           << "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
     }
     file->close();
-    view->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(file->fileName()));
+    view->setOverrideCss(QUrl::fromLocalFile(file->fileName()));
 
     delete m_lastStyleSheet.data();
     m_lastStyleSheet = file;
@@ -250,20 +250,15 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
     } else {
         StandardDocumentationView* view = new StandardDocumentationView(findWidget, parent);
         // QCH files created by doxygen can come with JavaScript
-        view->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
         if (!m_sharedQNAM) {
             m_sharedQNAM.reset(new HelpNetworkAccessManager(m_provider->engine()));
         }
-        view->page()->setNetworkAccessManager(m_sharedQNAM.data());
-        view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+        view->setNetworkAccessManager(m_sharedQNAM.data());
         view->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(view, &StandardDocumentationView::customContextMenuRequested, this, &QtHelpDocumentation::viewContextMenuRequested);
 
-        QObject::connect(view, &StandardDocumentationView::linkClicked, this, &QtHelpDocumentation::jumpedTo);
-
         setUserStyleSheet(view, m_current.value());
-        view->setHtml(m_provider->engine()->fileData(m_current.value()));
-        view->setUrl(m_current.value());
+        view->load(m_current.value());
         lastView = view;
         return view;
     }
@@ -276,7 +271,7 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
         return;
 
     QMenu menu;
-    QAction* copyAction = view->pageAction(QWebPage::Copy);
+    QAction* copyAction = view->copyAction();
     copyAction->setIcon(QIcon::fromTheme("edit-copy"));
     menu.addAction(copyAction);
 
