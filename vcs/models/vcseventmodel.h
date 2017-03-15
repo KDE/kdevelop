@@ -52,7 +52,7 @@ public:
         ColumnCount,
     };
 
-    VcsBasicEventModel(QObject* parent);
+    explicit VcsBasicEventModel(QObject* parent);
     ~VcsBasicEventModel() override;
     int rowCount(const QModelIndex& = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;

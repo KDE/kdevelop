@@ -43,7 +43,7 @@ public:
         ValueColumn = 1
     };
 
-    EnvironmentProfileModel(EnvironmentProfileListModel* profileListModel, QObject* parent = nullptr);
+    explicit EnvironmentProfileModel(EnvironmentProfileListModel* profileListModel, QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = {}) const override;
     int columnCount(const QModelIndex& parent = {}) const override;

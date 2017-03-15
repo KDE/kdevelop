@@ -71,7 +71,7 @@ public:
     /// source - KDevelop::IProblem::Plugin;
     /// sourceString - passed pluginName parameter;
     /// finalLocationMode - KDevelop::IProblem::Range.
-    DetectedProblem(const QString& pluginName);
+    explicit DetectedProblem(const QString& pluginName);
 
     ~DetectedProblem() override;
 
