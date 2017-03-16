@@ -23,7 +23,6 @@
 #ifndef KDEVPLATFORM_CODECOMPLETIONWORKER_H
 #define KDEVPLATFORM_CODECOMPLETIONWORKER_H
 
-#include <QtCore/QThread>
 #include <QtCore/QList>
 
 #include <language/languageexport.h>

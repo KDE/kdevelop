@@ -23,7 +23,6 @@
 #define KDEVPLATFORM_PLUGIN_CONTEXTBROWSERVIEW_H
 
 #include <QWidget>
-#include <QVector>
 #include <QPointer>
 
 #include <language/duchain/topducontext.h>
@@ -35,9 +34,6 @@ class ContextBrowserPlugin;
 class QVBoxLayout;
 class QHBoxLayout;
 class QAction;
-class QCheckBox;
-class QMenu;
-class KComboBox;
 class KToggleAction;
 
 namespace KDevelop {

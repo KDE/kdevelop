@@ -22,7 +22,6 @@
 #define KDEVPLATFORM_KTEXTEDITOR_PLUGIN_INTEGRATION_H
 
 #include <QObject>
-#include <QVector>
 #include <QPointer>
 
 #include <KTextEditor/MainWindow>

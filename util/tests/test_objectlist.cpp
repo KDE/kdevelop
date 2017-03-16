@@ -23,7 +23,7 @@
 
 #include "objectlist.h"
 
-#include <QtTest>
+#include <QTest>
 
 QTEST_MAIN(TestObjectList);
 

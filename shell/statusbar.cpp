@@ -23,8 +23,6 @@
 #include "progresswidget/progressdialog.h"
 
 #include <QtCore/QTimer>
-#include <QProgressBar>
-#include <QLabel>
 #include <QtCore/QSignalMapper>
 
 #include <KColorScheme>

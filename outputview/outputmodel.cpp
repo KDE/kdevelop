@@ -33,7 +33,6 @@
 #include <QtCore/QTimer>
 #include <QThread>
 #include <QFont>
-#include <QApplication>
 #include <QFontDatabase>
 
 #include <functional>

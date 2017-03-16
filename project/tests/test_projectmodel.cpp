@@ -21,7 +21,6 @@
 
 #include <QtTest/QTest>
 #include <QSortFilterProxyModel>
-#include <QtCore/QThread>
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QSignalSpy>

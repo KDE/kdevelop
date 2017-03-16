@@ -28,7 +28,6 @@
 #ifndef KDEVPLATFORM_DVCS_JOB_H
 #define KDEVPLATFORM_DVCS_JOB_H
 
-#include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <KProcess>
 
@@ -36,6 +35,7 @@
 #include "../vcsjob.h"
 
 class QDir;
+class QStringList;
 struct DVcsJobPrivate;
 
 /**

@@ -21,10 +21,7 @@
 #include "vcsstatusinfo.h"
 
 #include <QtCore/QDebug>
-#include <QtCore/QMap>
-#include <QtCore/QPair>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QUrl>
 
 namespace KDevelop
 {

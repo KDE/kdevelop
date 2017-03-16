@@ -18,9 +18,6 @@
 
 #include "uses.h"
 
-#include <QtCore/QHash>
-#include <QtCore/QVector>
-
 #include "declarationid.h"
 #include "duchainpointer.h"
 #include "serialization/itemrepository.h"

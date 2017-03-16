@@ -22,8 +22,6 @@
 
 #include "languagepreferences.h"
 
-#include <QVBoxLayout>
-
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 #include <KTextEditor/CodeCompletionInterface>

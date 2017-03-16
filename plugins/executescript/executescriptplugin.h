@@ -25,12 +25,10 @@
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
-#include <QtCore/QProcess>
 #include "iexecutescriptplugin.h"
 
 class ScriptAppConfigType;
 class QUrl;
-class KJob;
 
 class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugin
 {

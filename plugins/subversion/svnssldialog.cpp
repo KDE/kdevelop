@@ -10,8 +10,8 @@
 
 #include "svnssldialog.h"
 
+#include <QDialogButtonBox>
 #include <QPushButton>
-#include <QTreeWidgetItem>
 
 #include <KLocalizedString>
 

@@ -19,8 +19,6 @@
  ***************************************************************************/
 #include "kdevfilemanagerplugin.h"
 
-#include <QTimer>
-
 #include <KLocalizedString>
 #include <KPluginFactory>
 

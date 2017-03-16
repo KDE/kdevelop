@@ -22,7 +22,6 @@
 #include "svnupdatejob_p.h"
 
 #include <QMutexLocker>
-#include <QDateTime>
 
 #include <KLocalizedString>
 

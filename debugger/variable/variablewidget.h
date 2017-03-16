@@ -16,9 +16,7 @@
 #ifndef KDEVPLATFORM_VARIABLEWIDGET_H
 #define KDEVPLATFORM_VARIABLEWIDGET_H
 
-#include <QAction>
 #include <QSignalMapper>
-#include <QTreeView>
 
 #include <debugger/debuggerexport.h>
 #include "../util/treeview.h"
@@ -26,6 +24,8 @@
 
 class KHistoryComboBox;
 class QSortFilterProxyModel;
+class QAction;
+
 namespace KDevelop
 {
 

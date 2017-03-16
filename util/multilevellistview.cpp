@@ -21,7 +21,6 @@
 
 #include <QHBoxLayout>
 #include <QTreeView>
-#include <QLayout>
 #include <QSortFilterProxyModel>
 
 #include <KSelectionProxyModel>

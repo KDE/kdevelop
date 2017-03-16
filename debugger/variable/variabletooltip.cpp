@@ -24,13 +24,9 @@
 
 #include <QWidget>
 #include <QHBoxLayout>
-#include <QTreeView>
 #include <QApplication>
-#include <QEvent>
-#include <QStandardItemModel>
 #include <QMouseEvent>
 #include <QHeaderView>
-#include <QLabel>
 #include <QPushButton>
 #include <QScrollBar>
 #include <QSignalMapper>

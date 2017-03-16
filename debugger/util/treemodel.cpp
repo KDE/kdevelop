@@ -21,8 +21,6 @@
 
 #include "treemodel.h"
 
-//#include <QtGui>
-
 #include <iostream>
 
 #include "treeitem.h"

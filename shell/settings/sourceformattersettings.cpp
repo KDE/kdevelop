@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 #include <QVBoxLayout>
 #include <QList>
 #include <QListWidgetItem>
-#include <QInputDialog>
 #include <QMimeDatabase>
 #include <QDebug>
 #include <KMessageBox>
@@ -30,7 +29,6 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/configinterface.h>
-#include <KCoreAddons/KAboutData>
 #include <KI18n/KLocalizedString>
 #include <KConfigGroup>
 

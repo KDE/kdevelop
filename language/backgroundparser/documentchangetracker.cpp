@@ -21,9 +21,6 @@
 
 #include "documentchangetracker.h"
 
-#include <QMutex>
-#include <QMutexLocker>
-
 #include <ktexteditor/document.h>
 #include <ktexteditor/movinginterface.h>
 

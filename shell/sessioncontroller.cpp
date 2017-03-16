@@ -23,18 +23,15 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QDir>
 #include <QtCore/QHash>
 #include <QtCore/QStringList>
-#include <QtCore/QTimer>
 #include <QAction>
 #include <QApplication>
-#include <QDBusConnectionInterface>
-#include <QGroupBox>
+#include <QDBusConnection>
 #include <QInputDialog>
 #include <QLabel>
 #include <QLineEdit>
 #include <QListView>
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
-#include <QPushButton>
 #include <QVBoxLayout>
 
 #include <KActionCollection>

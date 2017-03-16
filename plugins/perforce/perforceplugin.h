@@ -31,7 +31,6 @@
 
 class QMenu;
 class QFileInfo;
-class QDir;
 
 
 namespace KDevelop

@@ -25,13 +25,10 @@
 
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KPluginLoader>
-#include <KAboutData>
 #include <KActionCollection>
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <QApplication>
 #include <QStandardPaths>
 
 #include <interfaces/icore.h>

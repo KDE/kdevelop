@@ -19,7 +19,6 @@
 #ifndef KDEVPLATFORM_IASSISTANT_H
 #define KDEVPLATFORM_IASSISTANT_H
 
-#include <QtCore/QPointer>
 #include <QIcon>
 #include <QExplicitlySharedDataPointer>
 #include "interfacesexport.h"

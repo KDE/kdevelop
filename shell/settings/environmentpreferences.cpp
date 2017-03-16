@@ -21,7 +21,6 @@ Boston, MA 02110-1301, USA.
 #include <QVBoxLayout>
 
 #include <KConfigSkeleton>
-#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
 

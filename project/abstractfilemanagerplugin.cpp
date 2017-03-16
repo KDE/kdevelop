@@ -27,7 +27,6 @@
 #include <QFileInfo>
 #include <QApplication>
 
-#include <KConfigGroup>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KDirWatch>

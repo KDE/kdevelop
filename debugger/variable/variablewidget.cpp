@@ -16,9 +16,10 @@
 #include "variablewidget.h"
 
 #include <QApplication>
+#include <QAction>
 #include <QCursor>
 #include <QClipboard>
-#include <QKeyEvent>
+#include <QContextMenuEvent>
 #include <QMenu>
 #include <QVBoxLayout>
 

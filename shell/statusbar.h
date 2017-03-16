@@ -24,10 +24,8 @@
 #include <QtCore/QMap>
 #include <QStatusBar>
 
-class QProgressBar;
 class QSignalMapper;
 class QTimer;
-class QLabel;
 
 namespace Sublime {
 class View;

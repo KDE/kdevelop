@@ -20,12 +20,12 @@
 #define KDEVPLATFORM_ISOURCEFORMATTER_H
 
 #include <QWidget>
-#include <QStringList>
-#include <QMimeType>
 
 #include "interfacesexport.h"
 
 class QUrl;
+class QMimeType;
+class QStringList;
 
 namespace KDevelop
 {

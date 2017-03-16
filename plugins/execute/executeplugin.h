@@ -24,7 +24,6 @@
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
-#include <QtCore/QProcess>
 #include "iexecuteplugin.h"
 
 class QUrl;

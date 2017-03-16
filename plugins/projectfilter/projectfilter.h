@@ -22,8 +22,6 @@
 #ifndef PROJECTFILTER_H
 #define PROJECTFILTER_H
 
-#include <QVector>
-
 #include <project/interfaces/iprojectfilter.h>
 #include <util/path.h>
 

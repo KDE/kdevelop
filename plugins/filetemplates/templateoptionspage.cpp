@@ -28,7 +28,6 @@
 
 #include <QLineEdit>
 #include <QSpinBox>
-#include <QDomElement>
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QFormLayout>

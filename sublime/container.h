@@ -24,7 +24,6 @@
 #include "sublimeexport.h"
 
 class QMenu;
-class QBoxLayout;
 class QPaintEvent;
 
 namespace Sublime {

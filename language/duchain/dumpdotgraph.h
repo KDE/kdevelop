@@ -14,10 +14,10 @@
 #ifndef KDEVPLATFORM_DUMPDOTGRAPH_H
 #define KDEVPLATFORM_DUMPDOTGRAPH_H
 
-#include <QtCore/QMap>
-#include <QtCore/QString>
-#include <QUrl>
+#include <QtGlobal>
 #include <language/languageexport.h>
+
+class QString;
 
 namespace KDevelop {
   class TopDUContext;

@@ -22,6 +22,7 @@
 #include <QtCore/QString>
 #include <QtCore/QList>
 #include <QtCore/QDateTime>
+#include <QVariant>
 
 #include "vcsrevision.h"
 namespace KDevelop

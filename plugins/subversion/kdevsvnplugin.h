@@ -17,7 +17,6 @@
 #include <vcs/vcslocation.h>
 #include <interfaces/iplugin.h>
 
-class QMenu;
 class QUrl;
 class SvnStatusHolder;
 class SvnCommitDialog;

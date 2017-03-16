@@ -23,9 +23,6 @@
 #include "ideallayout.h"
 #include "idealcontroller.h"
 
-#include <KConfigGroup>
-#include <KConfig>
-
 using namespace Sublime;
 
 IdealButtonBarLayout::IdealButtonBarLayout(Qt::Orientation orientation, QWidget *parent)

@@ -1,4 +1,4 @@
-#include <QtTest/QtTest>
+#include <QTest>
 #include <serialization/itemrepositoryregistry.h>
 #include <shell/sessioncontroller.h>
 

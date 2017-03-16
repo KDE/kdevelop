@@ -19,12 +19,12 @@
 ***************************************************************************/
 
 #include "svnimport.h"
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QDebug>
+#include <QLoggingCategory>
 
 #include <QTemporaryDir>
 #include <KProcess>
-#include <kparts/part.h>
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

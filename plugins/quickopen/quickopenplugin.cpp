@@ -25,22 +25,13 @@
 
 #include <cassert>
 #include <typeinfo>
-#include <QTreeView>
-#include <QHeaderView>
-#include <QDialog>
 #include <QKeyEvent>
 #include <QApplication>
-#include <QScrollBar>
-#include <QCheckBox>
 #include <QMetaObject>
 #include <QWidgetAction>
-#include <QMenuBar>
-#include <kparts/mainwindow.h>
 
 #include <KLocalizedString>
 #include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kaboutdata.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <kparts/mainwindow.h>
@@ -72,10 +63,8 @@
 #include "actionsquickopenprovider.h"
 #include "debug.h"
 #include <language/duchain/functiondefinition.h>
-#include <qmenu.h>
 #include <qdesktopwidget.h>
 #include <util/activetooltip.h>
-#include <qboxlayout.h>
 #include <language/util/navigationtooltip.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>

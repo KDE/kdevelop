@@ -18,11 +18,7 @@
 #include "perforceplugin.h"
 #include "debug.h"
 
-#include <KPluginFactory>
-#include <KPluginLoader>
 #include <KLocalizedString>
-#include <KAboutData>
-#include <KActionCollection>
 #include <QFileInfo>
 #include <QDateTime>
 #include <QDir>

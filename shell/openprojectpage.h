@@ -12,7 +12,6 @@
 #define KDEVPLATFORM_OPENPROJECTPAGE_H
 
 #include <QWidget>
-#include <QtCore/QMap>
 
 class QUrl;
 class KFileWidget;

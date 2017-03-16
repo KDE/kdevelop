@@ -21,20 +21,13 @@
 
 #include "colorschemechooser.h"
 
-#include <QStringList>
-#include <QFileInfo>
-#include <QActionGroup>
-#include <QApplication>
 #include <QAction>
-#include <QStandardPaths>
-#include <QDirIterator>
 #include <QMenu>
 #include <QModelIndex>
 
 #include <KActionMenu>
 #include <KColorSchemeManager>
 #include <KLocalizedString>
-#include <KActionCollection>
 #include <KSharedConfig>
 #include <KConfigGroup>
 

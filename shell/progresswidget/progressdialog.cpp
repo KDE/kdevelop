@@ -33,15 +33,11 @@
 #include "progressmanager.h"
 
 #include <KLocalizedString>
-#include <KStandardGuiItem>
 
-#include <QApplication>
 #include <QCloseEvent>
-#include <QEvent>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QLayout>
 #include <QObject>
 #include <QProgressBar>
 #include <QPushButton>

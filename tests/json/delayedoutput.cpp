@@ -16,9 +16,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QDebug>
-
 #include "delayedoutput.h"
+
+#include <QDebug>
+#include <QStack>
 
 namespace KDevelop
 {

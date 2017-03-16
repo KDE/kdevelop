@@ -22,7 +22,6 @@
 
 #include <QWidget>
 #include <QAbstractListModel>
-#include <KToolBar>
 #include <interfaces/idocumentation.h>
 #include "documentationexport.h"
 
@@ -35,6 +34,7 @@ class QModelIndex;
 class QLineEdit;
 class ProvidersModel;
 class QComboBox;
+class KToolBar;
 
 class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
 {

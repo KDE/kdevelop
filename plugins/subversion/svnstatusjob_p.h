@@ -23,8 +23,6 @@
 
 #include "svninternaljobbase.h"
 
-#include <QObject>
-
 #include <vcs/vcsstatusinfo.h>
 #include <QUrl>
 

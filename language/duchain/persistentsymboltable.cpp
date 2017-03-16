@@ -19,7 +19,6 @@
 #include "persistentsymboltable.h"
 
 #include <QHash>
-#include <QVector>
 
 #include "declaration.h"
 #include "declarationid.h"

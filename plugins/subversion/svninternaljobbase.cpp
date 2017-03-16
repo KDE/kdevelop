@@ -23,7 +23,6 @@
 
 #include <QMutex>
 #include <QDateTime>
-#include <QCoreApplication>
 
 #include <iostream>
 

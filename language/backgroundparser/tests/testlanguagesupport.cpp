@@ -23,8 +23,6 @@
 #include "testparsejob.h"
 #include "test_backgroundparser.h"
 
-#include <QObject>
-
 using namespace KDevelop;
 
 ParseJob* TestLanguageSupport::createParseJob(const IndexedString& url)

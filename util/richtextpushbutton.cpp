@@ -27,6 +27,7 @@
 #include <QSize>
 #include <QMenu>
 #include <QStylePainter>
+#include <QStyleOptionButton>
 
 using namespace KDevelop;
 

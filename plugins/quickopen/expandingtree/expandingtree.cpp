@@ -20,8 +20,6 @@
 
 #include "expandingtree.h"
 
-#include <QTextLayout>
-#include <QTextDocument>
 #include <QAbstractProxyModel>
 #include <QAbstractTextDocumentLayout>
 #include <QPainter>

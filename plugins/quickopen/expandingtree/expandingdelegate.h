@@ -23,9 +23,8 @@
 #define KDEVPLATFORM_PLUGIN_EXPANDINGDELEGATE_H
 
 #include <QItemDelegate>
-#include <QTextLine>
+#include <QTextLayout>
 #include <QModelIndex>
-#include <QPoint>
 
 class KateRenderer;
 class KateCompletionWidget;

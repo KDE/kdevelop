@@ -25,7 +25,6 @@
 #include <QtCore/QObject>
 #include <language/languageexport.h>
 
-namespace KParts { class Part; }
 namespace KTextEditor { class Document; class View; class CodeCompletionModel; 
 }
 

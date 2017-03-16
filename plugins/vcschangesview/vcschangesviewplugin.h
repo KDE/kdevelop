@@ -23,10 +23,8 @@
 #include <interfaces/iplugin.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <QVariant>
-#include <QStandardItemModel>
 
 class QModelIndex;
-class KJob;
 
 namespace KDevelop
 {

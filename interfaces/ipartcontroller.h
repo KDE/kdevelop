@@ -25,11 +25,6 @@
 
 class KPluginFactory;
 
-namespace KParts
-{
-class Factory;
-}
-
 namespace KTextEditor
 {
 class Editor;

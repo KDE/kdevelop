@@ -40,8 +40,6 @@
 #define BIG_WIDTH 10
 #define INIT_WIDTH 10
 #define INIT_DEPTH 3
-#include <QInputDialog>
-
 
 using KDevelop::ProjectModel;
 using KDevelop::ProjectFolderItem;

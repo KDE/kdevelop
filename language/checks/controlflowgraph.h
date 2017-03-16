@@ -20,7 +20,6 @@
 #define KDEVPLATFORM_CONTROLFLOWGRAPH_H
 
 #include <QVector>
-#include <QMap>
 #include <language/languageexport.h>
 
 namespace KDevelop {

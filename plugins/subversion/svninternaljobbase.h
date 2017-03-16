@@ -23,7 +23,6 @@
 #define KDEVPLATFORM_PLUGIN_SVNINTERNALJOBBASE_H
 
 #include <ThreadWeaver/Job>
-#include <QEvent>
 #include <QSemaphore>
 #include <QMutex>
 
@@ -45,8 +44,7 @@ namespace svn
 }
 
 class SvnJobBase;
-class QMutex;
-class QSemaphore;
+
 class SvnInternalJobBase : public QObject, public ThreadWeaver::Job, public svn::ContextListener
 {
     Q_OBJECT

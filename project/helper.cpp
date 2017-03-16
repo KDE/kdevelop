@@ -32,7 +32,6 @@
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KParts/MainWindow>
 #include <KTextEditor/Document>
 
 #include <interfaces/iproject.h>

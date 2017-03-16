@@ -38,7 +38,6 @@
 #include <language/duchain/declaration.h>
 
 #include <KActionCollection>
-#include <KConfigGroup>
 #include <KJob>
 #include <KLocalizedString>
 #include <KRecursiveFilterProxyModel>

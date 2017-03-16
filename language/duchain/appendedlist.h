@@ -21,7 +21,6 @@
 
 #include <QMutex>
 #include <QVector>
-#include <QString>
 
 #include <util/kdevvarlengtharray.h>
 #include <util/stack.h>

@@ -22,7 +22,6 @@
 #define PROBLEMSTORE_H
 
 #include <QObject>
-#include <QList>
 #include <shell/shellexport.h>
 #include <serialization/indexedstring.h>
 #include <interfaces/iproblem.h>

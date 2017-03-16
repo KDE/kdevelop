@@ -23,7 +23,8 @@
 
 #include "util/environmentprofilelist.h"
 
-#include <QtTest>
+#include <QTest>
+#include <QProcessEnvironment>
 
 QTEST_MAIN(TestEnvironment);
 

@@ -30,6 +30,8 @@
 
 #include <util/path.h>
 
+#include <QStandardPaths>
+
 using namespace KDevelop;
 
 

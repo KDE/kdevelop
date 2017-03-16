@@ -26,8 +26,6 @@
 
 #include <vcs/vcslocation.h>
 
-#include <QUrl>
-
 #include <vcs/vcsdiff.h>
 
 class SvnCatJob;

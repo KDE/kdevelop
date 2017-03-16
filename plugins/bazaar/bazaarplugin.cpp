@@ -21,13 +21,10 @@
 #include "bazaarplugin.h"
 
 #include <QtCore/QDir>
-#include <QtCore/QDateTime>
 #include <QMenu>
 #include <QStandardPaths>
 
-#include <KPluginFactory>
 #include <KLocalizedString>
-#include <KAboutData>
 
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include <vcs/dvcs/dvcsjob.h>

@@ -19,13 +19,9 @@
 #include "outlinewidget.h"
 
 #include <QAction>
-#include <QLabel>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QHeaderView>
 #include <QTreeView>
 #include <QLineEdit>
-#include <QPushButton>
 #include <QIcon>
 #include <QWidgetAction>
 

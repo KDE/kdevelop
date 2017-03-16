@@ -25,10 +25,6 @@
 
 #include "shellexport.h"
 
-namespace KParts {
-class Part;
-}
-
 namespace KDevelop {
 
 class ILanguageSupport;

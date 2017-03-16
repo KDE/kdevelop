@@ -18,7 +18,8 @@
 
 #include "vcsdiffpatchsources.h"
 
-#include <QBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QDir>
 #include <QFontDatabase>
 #include <QLabel>

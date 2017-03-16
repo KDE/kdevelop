@@ -25,7 +25,6 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <QDateTime>
-#include <QTextCodec>
 #include <QVector>
 #include <QtTest/QTest>
 

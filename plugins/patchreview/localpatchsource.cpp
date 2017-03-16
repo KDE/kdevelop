@@ -17,7 +17,6 @@
 #include <QTemporaryFile>
 #include <QWidget>
 
-#include <KLineEdit>
 #include <KLocalizedString>
 #include <KProcess>
 #include <KShell>

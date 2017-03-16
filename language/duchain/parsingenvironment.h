@@ -19,8 +19,6 @@
 #ifndef KDEVPLATFORM_PARSINGENVIRONMENT_H
 #define KDEVPLATFORM_PARSINGENVIRONMENT_H
 
-#include <QtCore/QString>
-
 #include <serialization/indexedstring.h>
 
 #include <language/languageexport.h>

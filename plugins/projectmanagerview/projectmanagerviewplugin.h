@@ -20,9 +20,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEWPLUGIN_H
 #define KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEWPLUGIN_H
 
-#include <QtCore/QPointer>
 #include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <QVariantList>
 #include <project/builderjob.h>
 
 class ProjectBuildSetModel;

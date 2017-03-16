@@ -12,7 +12,9 @@
 #define KDEVPLATFORM_PLUGIN_SVN_SSLDIALOG_H
 
 #include <QDialog>
-#include <QDialogButtonBox>
+
+class QDialogButtonBox;
+class QAbstractButton;
 
 class SvnSSLTrustDialog: public QDialog
 {

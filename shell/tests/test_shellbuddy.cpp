@@ -20,11 +20,9 @@
 #include "test_shellbuddy.h"
 
 #include <QSplitter>
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QDebug>
 
-#include <kactioncollection.h>
-#include <kxmlguifactory.h>
 #include <kparts/mainwindow.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>

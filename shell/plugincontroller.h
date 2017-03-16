@@ -24,9 +24,6 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_PLUGINCONTROLLER_H
 #define KDEVPLATFORM_PLUGINCONTROLLER_H
 
-
-#include <QtCore/QHash>
-
 #include <interfaces/iplugincontroller.h>
 
 #include "shellexport.h"

@@ -20,7 +20,7 @@
 
 #include "test_dvcsjob.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <tests/testcore.h>

@@ -24,8 +24,7 @@
 
 #include <QIcon>
 #include <QGroupBox>
-#include <QHBoxLayout>
-#include <QSplitter>
+#include <QVBoxLayout>
 #include <QTreeView>
 #include <QHeaderView>
 #include <QMenu>

@@ -22,7 +22,6 @@
 #define KDEVPLATFORM_ICONTENTAWAREVERSIONCONTROL_H
 
 #include <KJob>
-#include <QSharedPointer>
 
 #include <vcs/vcsexport.h>
 

@@ -25,9 +25,6 @@
 #include <serialization/indexedstring.h>
 #include "serialization/itemrepository.h"
 
-#include <QHash>
-#include <QVector>
-
 namespace KDevelop {
 
 DEFINE_LIST_MEMBER_HASH(DefinitionsItem, definitions, IndexedDeclaration)

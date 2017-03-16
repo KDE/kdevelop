@@ -20,7 +20,6 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H
 #define KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H
 
-#include <QHash>
 #include <QMimeType>
 
 #include <interfaces/configpage.h>

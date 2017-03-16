@@ -23,7 +23,7 @@
 
 #include "texteditorhelpers.h"
 
-#include <QtTest>
+#include <QTest>
 
 QTEST_MAIN(TestKTextEditorHelpers);
 

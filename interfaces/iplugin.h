@@ -24,7 +24,6 @@
 #define KDEVPLATFORM_IPLUGIN_H
 
 #include <QtCore/QObject>
-#include <QtCore/QVector>
 
 #include <KXMLGUIClient>
 

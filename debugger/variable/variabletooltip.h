@@ -26,11 +26,8 @@
 #include "../../util/activetooltip.h"
 #include "../util/treeview.h"
 
-#include <QPoint>
-
 class QItemSelectionModel;
 class QString;
-class QResizeEvent;
 class QSortFilterProxyModel;
 
 namespace KDevelop

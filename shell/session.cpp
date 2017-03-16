@@ -19,13 +19,10 @@ Boston, MA 02110-1301, USA.
 
 #include "session.h"
 
-#include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 #include <QUrl>
 
 #include <KConfigGroup>
-#include <KParts/MainWindow>
-#include <KStringHandler>
 
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>

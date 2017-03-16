@@ -20,12 +20,13 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_ABBREVIATIONS_H
 #define KDEVPLATFORM_ABBREVIATIONS_H
 
-#include <QString>
 #include <QVarLengthArray>
-#include <QVector>
-#include <QStringList>
 
 #include <language/languageexport.h>
+
+class QStringList;
+class QStringRef;
+class QString;
 
 // Taken and adapted for kdevelop from katecompletionmodel.cpp
 KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviationHelper(const QStringRef& word, const QString& typed, const QVarLengthArray<int, 32>& offsets,

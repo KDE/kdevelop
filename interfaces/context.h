@@ -33,10 +33,9 @@ Boston, MA 02110-1301, USA.
 
 #include "interfacesexport.h"
 
-#include <QStringList>
-#include <QMimeType>
 #include <QUrl>
 
+class QMimeType;
 template <typename T> class QList;
 
 namespace KDevelop

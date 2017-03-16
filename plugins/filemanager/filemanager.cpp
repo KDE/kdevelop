@@ -22,8 +22,7 @@
 
 #include <QDir>
 #include <QMenu>
-#include <QLayout>
-#include <QAbstractItemView>
+#include <QVBoxLayout>
 #include <QUrl>
 #include <QtWidgets/QFileDialog>
 

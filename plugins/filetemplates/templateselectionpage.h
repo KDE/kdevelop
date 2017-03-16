@@ -22,9 +22,6 @@
 
 #include <QWidget>
 
-
-class QModelIndex;
-
 namespace KDevelop
 {
 

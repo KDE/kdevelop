@@ -20,9 +20,8 @@
 #define UIHELPER_H
 
 #include <QObject>
-#include <QStringList>
 
-class QUrl;
+class QString;
 class QAction;
 class UiHelper : public QObject
 {

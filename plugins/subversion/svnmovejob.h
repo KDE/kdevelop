@@ -23,8 +23,7 @@
 
 #include "svnjobbase.h"
 
-#include <QtCore/QVariant>
-#include <QUrl>
+class QUrl;
 
 class SvnInternalMoveJob;
 

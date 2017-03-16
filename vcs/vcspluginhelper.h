@@ -18,8 +18,6 @@
 #include "vcsrevision.h"
 
 class KJob;
-class QAction;
-class QActionGroup;
 class QMenu;
 
 namespace KTextEditor

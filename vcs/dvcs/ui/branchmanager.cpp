@@ -20,7 +20,6 @@
 
 #include "branchmanager.h"
 
-#include <QListWidget>
 #include <QInputDialog>
 
 #include <KJob>
@@ -36,7 +35,6 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
-#include <KConfigGroup>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>

@@ -28,11 +28,9 @@
 #include "../debug.h"
 
 #include <QtCore/QFile>
-#include <QtCore/QFileInfo>
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
-#include <QStandardItemModel>
 #include <QUrl>
 
 #include <KLocalizedString>

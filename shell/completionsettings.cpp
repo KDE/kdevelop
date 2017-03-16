@@ -21,6 +21,7 @@
 #include "completionsettings.h"
 
 #include <KShell>
+#include <KSharedConfig>
 
 namespace KDevelop
 {

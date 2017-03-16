@@ -28,12 +28,9 @@
 #include "dvcsplugin.h"
 
 #include <QMenu>
-#include <QDialog>
-#include <QVBoxLayout>
 #include <QtCore/QFileInfo>
 #include <QtCore/QString>
 
-#include <KMessageBox>
 #include <KLocalizedString>
 #include <KParts/MainWindow>
 
@@ -49,8 +46,6 @@
 #include "ui/dvcsimportmetadatawidget.h"
 #include "ui/branchmanager.h"
 #include <vcs/vcspluginhelper.h>
-
-#include <KConfigGroup>
 
 namespace KDevelop
 {

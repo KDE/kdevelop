@@ -18,12 +18,11 @@
 
 #include <QAction>
 #include <QStackedWidget>
-#include <QStandardItem>
+#include <QStandardItemModel>
 #include <QItemDelegate>
 #include <QTreeView>
 #include <QtTest/QTest>
 
-#include <QTabWidget>
 #include <KLocalizedString>
 
 #include <tests/testcore.h>
@@ -43,9 +42,6 @@ namespace KDevelop
 {
     class IUiController;
 }
-
-class QAbstractItemDelegate;
-class QStandardItemModel;
 
 QTEST_MAIN(StandardOutputViewTest)
 

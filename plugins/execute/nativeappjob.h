@@ -22,14 +22,10 @@
 
 #include <outputview/outputexecutejob.h>
 
-#include <QtCore/QProcess>
-
 namespace KDevelop
 {
 class ILaunchConfiguration;
 }
-
-class KProcess;
 
 class NativeAppJob : public KDevelop::OutputExecuteJob
 {

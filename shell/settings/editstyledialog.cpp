@@ -23,7 +23,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QUrl>
-#include <KMessageBox>
+#include <QDialogButtonBox>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
@@ -31,7 +31,6 @@
 #include <KI18n/KLocalizedString>
 
 #include <interfaces/isourceformatter.h>
-#include <KConfigGroup>
 
 using namespace KDevelop;
 

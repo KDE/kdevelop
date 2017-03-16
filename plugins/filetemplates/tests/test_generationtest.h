@@ -5,7 +5,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_TEST_GENERATIONTEST_H
 #define KDEVPLATFORM_PLUGIN_TEST_GENERATIONTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QUrl>
 #include <QTemporaryDir>
 

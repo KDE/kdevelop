@@ -19,6 +19,7 @@
 
 #include "abstractnavigationwidget.h"
 
+#include <QWheelEvent>
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QMetaObject>

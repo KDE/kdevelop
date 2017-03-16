@@ -18,7 +18,7 @@
  ***************************************************************************/
 #include "test_aggregatemodel.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QStandardItem>
 #include <QStandardItemModel>
 

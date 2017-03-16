@@ -31,7 +31,6 @@ class KActionMenu;
 class QAction;
 class QActionGroup;
 class QLineEdit;
-class QMenu;
 class QTabWidget;
 
 namespace KDevelop

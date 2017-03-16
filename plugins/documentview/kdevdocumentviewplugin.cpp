@@ -24,9 +24,6 @@
 #include "kdevdocumentmodel.h"
 #include "kdevdocumentselection.h"
 
-#include <QVBoxLayout>
-
-#include <QAction>
 #include <KLocalizedString>
 #include <KPluginFactory>
 

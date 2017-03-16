@@ -18,9 +18,6 @@
 
 #include "codemodel.h"
 
-#include <QHash>
-#include <QVector>
-
 #include "appendedlist.h"
 #include "util/debug.h"
 #include <serialization/itemrepository.h>

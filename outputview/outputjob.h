@@ -28,9 +28,6 @@ Boston, MA 02110-1301, USA.
 #include <outputview/ioutputview.h>
 #include <outputview/outputviewexport.h>
 
-class QStandardItemModel;
-class QItemDelegate;
-
 namespace KDevelop
 {
 

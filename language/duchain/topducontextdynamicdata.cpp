@@ -20,7 +20,6 @@
 
 #include "topducontextdynamicdata.h"
 
-#include <QStandardPaths>
 #include <typeinfo>
 #include <QtCore/QFile>
 #include <QtCore/QByteArray>

@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_CODECOMPLETIONTESTHELPER_H
 #define KDEVPLATFORM_CODECOMPLETIONTESTHELPER_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QStandardItemModel>
 
 #include "../duchain/declaration.h"

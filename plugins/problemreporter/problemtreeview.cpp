@@ -25,7 +25,6 @@
 #include <QAction>
 #include <QContextMenuEvent>
 #include <QHeaderView>
-#include <QIcon>
 #include <QItemDelegate>
 #include <QMenu>
 #include <QSortFilterProxyModel>

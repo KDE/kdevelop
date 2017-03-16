@@ -19,8 +19,6 @@
 #ifndef KDEVPLATFORM_SUBLIMEAGGREGATEMODEL_H
 #define KDEVPLATFORM_SUBLIMEAGGREGATEMODEL_H
 
-#include <QtCore/QMap>
-#include <QtCore/QList>
 #include <QtCore/QAbstractItemModel>
 #include "sublimeexport.h"
 

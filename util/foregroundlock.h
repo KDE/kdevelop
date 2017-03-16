@@ -25,8 +25,6 @@
 #include <QMutex>
 #include <QWaitCondition>
 
-class QApplication;
-
 namespace KDevelop {
 
 /**

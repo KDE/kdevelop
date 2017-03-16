@@ -25,6 +25,8 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
+#include <QStandardPaths>
+
 using namespace KDevelop;
 
 void TestTemplatesModel::initTestCase()

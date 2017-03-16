@@ -20,7 +20,7 @@
 
 #include <QVBoxLayout>
 
-#include <KColorScheme>
+#include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>

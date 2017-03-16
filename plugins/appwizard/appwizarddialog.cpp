@@ -10,7 +10,6 @@
 #include "appwizarddialog.h"
 
 #include <QSignalMapper>
-#include <QDir>
 #include <QPushButton>
 
 #include <KLocalizedString>

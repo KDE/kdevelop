@@ -24,7 +24,6 @@
 
 #include <QAbstractTableModel>
 #include <QVBoxLayout>
-#include <QLabel>
 #include <QTableView>
 #include <QHeaderView>
 #include <QAction>

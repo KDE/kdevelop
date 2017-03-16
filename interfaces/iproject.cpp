@@ -26,8 +26,6 @@
 
 #include "iproject.h"
 
-#include <QtDBus/QtDBus>
-
 namespace KDevelop
 {
 

@@ -20,7 +20,6 @@
 #ifndef KDEVPLATFORM_IBUDDYDOCUMENTFINDER_H
 #define KDEVPLATFORM_IBUDDYDOCUMENTFINDER_H
 
-#include <QObject>
 #include <QVector>
 #include <QUrl>
 

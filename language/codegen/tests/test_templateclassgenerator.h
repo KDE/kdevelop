@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_TESTTEMPLATECLASSGENERATOR_H
 #define KDEVPLATFORM_TESTTEMPLATECLASSGENERATOR_H
 
-#include <QtTest>
+#include <QTest>
 #include <QTemporaryDir>
 #include <QUrl>
 

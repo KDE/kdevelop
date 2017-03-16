@@ -20,7 +20,6 @@
 
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KPluginLoader>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>

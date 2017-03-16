@@ -19,8 +19,6 @@
 
 #include "icompletionsettings.h"
 
-#include <QtCore/QStringList>
-
 namespace KDevelop {
 ICompletionSettings::~ICompletionSettings() {
 }

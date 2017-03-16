@@ -25,7 +25,6 @@
 #include "../vcsjob.h"
 
 #include <QDateTime>
-#include <QtGlobal>
 #include <QBrush>
 #include <QPen>
 #include <QHash>

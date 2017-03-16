@@ -19,7 +19,6 @@
 #include "projectitemquickopen.h"
 
 #include <QIcon>
-#include <QTextBrowser>
 
 #include <KLocalizedString>
 

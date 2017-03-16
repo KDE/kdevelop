@@ -20,8 +20,8 @@
  */
 #include "configpage.h"
 
-#include <QIcon>
-#include <QVBoxLayout>
+#include <KConfigDialogManager>
+#include <KCoreConfigSkeleton>
 
 namespace KDevelop {
 

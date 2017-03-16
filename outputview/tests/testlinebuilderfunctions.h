@@ -18,7 +18,6 @@
 #ifndef KDEVPLATFORM_TESTLINEBUILDERFUNCTIONS_H
 #define KDEVPLATFORM_TESTLINEBUILDERFUNCTIONS_H
 
-#include <QUrl>
 #include <QString>
 #include <QFileInfo>
 

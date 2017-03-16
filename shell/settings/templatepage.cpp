@@ -29,7 +29,6 @@
 #include <KArchive>
 #include <KZip>
 #include <KTar>
-#include <QUrl>
 
 TemplatePage::TemplatePage (KDevelop::ITemplateProvider* provider, QWidget* parent) : QWidget (parent),
 m_provider(provider)

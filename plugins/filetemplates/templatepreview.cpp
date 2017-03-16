@@ -26,7 +26,6 @@
 
 #include <QDir>
 #include <QVBoxLayout>
-#include <QTextStream>
 
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>

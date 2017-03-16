@@ -30,8 +30,6 @@ class IProject;
 class ProjectFileItem;
 }
 
-class QIcon;
-
 /**
  * Internal data class for the BaseFileDataProvider and ProjectFileData.
  */

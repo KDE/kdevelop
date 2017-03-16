@@ -22,7 +22,6 @@
 #include <limits>
 #include <algorithm>
 
-#include <QMutableLinkedListIterator>
 #include <QSet>
 
 #include <ktexteditor/document.h>

@@ -21,7 +21,6 @@
 #include "svnstatusjob.h"
 #include "svnstatusjob_p.h"
 
-#include <QFileInfo>
 #include <QMutexLocker>
 #include <QUrl>
 

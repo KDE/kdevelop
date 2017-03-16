@@ -20,11 +20,10 @@
  */
 
 #include "actionsquickopenprovider.h"
-#include <KParts/MainWindow>
+
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <QIcon>
-#include <QPointer>
 #include <QAction>
 #include <QDebug>
 #include <QRegularExpression>

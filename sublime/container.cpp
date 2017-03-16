@@ -34,7 +34,6 @@
 #include <QToolButton>
 
 #include <KAcceleratorManager>
-#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>

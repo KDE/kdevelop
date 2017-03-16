@@ -23,8 +23,6 @@
 
 #include "svnjobbase.h"
 
-#include <QVariant>
-
 #include <QUrl>
 
 class SvnInternalCopyJob;

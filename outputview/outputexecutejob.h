@@ -25,8 +25,6 @@
 #include <QProcess>
 #include <QUrl>
 
-class KProcess;
-
 namespace KDevelop
 {
 

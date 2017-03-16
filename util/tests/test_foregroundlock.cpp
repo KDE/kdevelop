@@ -18,7 +18,7 @@
 
 #include "test_foregroundlock.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include <QThread>
 

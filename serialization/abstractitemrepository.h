@@ -19,10 +19,11 @@
 #ifndef ABSTRACTITEMREPOSITORY_H
 #define ABSTRACTITEMREPOSITORY_H
 
-#include <QtCore/QString>
 #include <QtCore/QMutex>
 
 #include "serializationexport.h"
+
+class QString;
 
 namespace KDevelop {
 

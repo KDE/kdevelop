@@ -24,7 +24,6 @@
 #include <debugger/debuggerexport.h>
 
 #include <QtCore/QObject>
-#include <QtCore/QAbstractItemModel>
 #include <QUrl>
 
 namespace KDevelop {

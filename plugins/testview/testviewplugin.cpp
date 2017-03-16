@@ -33,7 +33,6 @@
 #include <util/executecompositejob.h>
 
 #include <KPluginFactory>
-#include <KAboutData>
 #include <KLocalizedString>
 #include <KActionCollection>
 

@@ -31,7 +31,6 @@
 #include <interfaces/iruncontroller.h>
 #include "util/path.h"
 
-#include <QScopedPointer>
 #include <QIcon>
 
 #include <KMessageBox>

@@ -20,7 +20,7 @@
 
 #include "test_models.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <tests/autotestshell.h>

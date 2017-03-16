@@ -22,9 +22,7 @@
 #ifndef KDEVPLATFORM_TREEITEM_H
 #define KDEVPLATFORM_TREEITEM_H
 
-#include <QtCore/QList>
 #include <QtCore/QVariant>
-#include <QtCore/QTimer>
 #include <QtCore/QVector>
 #include <QIcon>
 

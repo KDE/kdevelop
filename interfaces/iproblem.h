@@ -22,7 +22,6 @@
 #define IPROBLEM_H
 
 #include <QExplicitlySharedDataPointer>
-#include <QString>
 #include <QVector>
 
 #include <language/editor/documentrange.h>

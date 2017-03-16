@@ -21,7 +21,6 @@
 #ifndef KDEVPLATFORM_PLUGIN_SVNCLIENT_H
 #define KDEVPLATFORM_PLUGIN_SVNCLIENT_H
 
-#include <QString>
 #include <QObject>
 
 #include "kdevsvncpp/path.hpp"

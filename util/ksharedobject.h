@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_KSHAREDOBJECT_H
 #define KDEVPLATFORM_KSHAREDOBJECT_H
 
-#include <QExplicitlySharedDataPointer>
+#include <QSharedData>
 #include <QtCore/QObject>
 
 namespace KDevelop {

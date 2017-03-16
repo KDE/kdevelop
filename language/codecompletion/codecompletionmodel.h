@@ -37,8 +37,6 @@
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 
-class QIcon;
-class QString;
 class QMutex;
 
 namespace KDevelop

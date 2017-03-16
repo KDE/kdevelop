@@ -19,7 +19,6 @@
 
 #include "problemmodelset.h"
 #include "problemmodel.h"
-#include <QAction>
 
 namespace KDevelop
 {

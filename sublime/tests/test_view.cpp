@@ -19,7 +19,7 @@
 #include "test_view.h"
 
 #include <QTextEdit>
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include <sublime/controller.h>
 #include <sublime/tooldocument.h>

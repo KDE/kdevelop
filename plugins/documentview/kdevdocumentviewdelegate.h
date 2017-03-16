@@ -21,7 +21,6 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEWDELEGATE_H
 
 #include <QItemDelegate>
-class QTreeView;
 
 class KDevDocumentViewDelegate: public QItemDelegate
 {

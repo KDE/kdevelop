@@ -17,13 +17,9 @@
 */
 
 #include "problemnavigationcontext.h"
-#include <KColorScheme>
-#include <QListView>
 
 #include "util/debug.h"
 
-#include <QHBoxLayout>
-#include <QMenu>
 #include <QDebug>
 
 #include <KIconLoader>

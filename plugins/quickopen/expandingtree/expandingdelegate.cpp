@@ -24,7 +24,6 @@
 #include <QTextLine>
 #include <QPainter>
 #include <QBrush>
-#include <QKeyEvent>
 #include <QTreeView>
 #include <QApplication>
 

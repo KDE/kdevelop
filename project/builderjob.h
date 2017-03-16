@@ -21,13 +21,9 @@
 #ifndef KDEVPLATFORM_BUILDERJOB_H
 #define KDEVPLATFORM_BUILDERJOB_H
 
-#include <QtCore/QVector>
-
 #include "projectexport.h"
 
 #include <util/executecompositejob.h>
-
-class KConfigGroup;
 
 namespace KDevelop
 {

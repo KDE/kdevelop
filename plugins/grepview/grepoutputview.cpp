@@ -30,7 +30,6 @@
 
 #include <QAction>
 #include <QMenu>
-#include <QStringListModel>
 #include <QWidgetAction>
 
 using namespace KDevelop;

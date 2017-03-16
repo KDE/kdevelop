@@ -24,8 +24,6 @@
 #ifndef KDEVPLATFORM_VARIABLECOLLECTION_H
 #define KDEVPLATFORM_VARIABLECOLLECTION_H
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QMap>
 #include <QtCore/QPointer>
 
 #include <KLocalizedString>

@@ -24,7 +24,6 @@
 #include "svnclient.h"
 
 #include <QDateTime>
-#include <QList>
 #include <QStandardPaths>
 
 extern "C" {

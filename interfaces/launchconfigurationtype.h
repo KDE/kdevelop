@@ -22,12 +22,12 @@
 
 #include "interfacesexport.h"
 
-#include <QStringList>
 #include <QObject>
 
 class QMenu;
 class QIcon;
 class QUrl;
+class QStringList;
 class KConfigGroup;
 
 namespace KDevelop

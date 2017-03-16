@@ -19,7 +19,7 @@
 unsigned int extractor_div_with = 0;
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QVector>
 #include <QDebug>
 

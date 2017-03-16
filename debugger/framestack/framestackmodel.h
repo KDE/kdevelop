@@ -22,7 +22,6 @@
 #define KDEVPLATFORM_FRAMESTACKMODEL_H
 
 #include <QtCore/QModelIndex>
-#include <QtCore/QHash>
 
 #include <debugger/debuggerexport.h>
 #include <debugger/interfaces/idebugsession.h>

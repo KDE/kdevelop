@@ -34,8 +34,6 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/cursor.h>
 
-class QTimer;
-
 typedef QPointer<KTextEditor::Document> SafeDocumentPointer;
 
 namespace KDevelop {

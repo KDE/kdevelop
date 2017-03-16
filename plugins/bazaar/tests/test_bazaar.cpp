@@ -40,7 +40,7 @@
 #include <vcs/vcsannotation.h>
 #include "../bazaarplugin.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 #define VERIFYJOB(j) \
 do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)

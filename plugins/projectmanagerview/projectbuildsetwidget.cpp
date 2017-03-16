@@ -20,17 +20,12 @@
 
 #include "projectbuildsetwidget.h"
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QTreeView>
 #include <QToolButton>
 #include <QItemSelectionModel>
-#include <QStringListModel>
 #include <QModelIndex>
-#include <QStandardItemModel>
 #include <QIcon>
 #include <QMenu>
-#include <QHeaderView>
 
 #include <KLocalizedString>
 

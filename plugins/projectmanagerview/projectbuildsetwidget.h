@@ -22,12 +22,8 @@
 #define KDEVPLATFORM_PLUGIN_PROJECTBUILDSETWIDGET_H
 
 #include <QWidget>
-#include <QMap>
 
-class QTreeView;
-class QToolButton;
 class ProjectManagerViewPlugin;
-class QStringListModel;
 class ProjectManagerView;
 
 namespace KDevelop

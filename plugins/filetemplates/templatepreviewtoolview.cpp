@@ -32,9 +32,6 @@
 #include <KTextEditor/Document>
 #include <KLocalizedString>
 
-#include <QLabel>
-#include <QVBoxLayout>
-
 using namespace KDevelop;
 
 TemplatePreviewToolView::TemplatePreviewToolView(FileTemplatesPlugin* plugin, QWidget* parent, Qt::WindowFlags f)

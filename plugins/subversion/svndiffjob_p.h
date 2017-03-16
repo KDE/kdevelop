@@ -22,7 +22,6 @@
 #define KDEVPLATFORM_PLUGIN_SVNDIFFJOB_P_H
 
 #include "svninternaljobbase.h"
-#include <QVariant>
 #include <vcs/vcsrevision.h>
 
 class SvnInternalDiffJob : public SvnInternalJobBase

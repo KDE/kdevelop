@@ -30,7 +30,6 @@ class QModelIndex;
 class QPainter;
 class QRect;
 class QPalette;
-class QString;
 class QTreeView;
 
 namespace KDevelop {

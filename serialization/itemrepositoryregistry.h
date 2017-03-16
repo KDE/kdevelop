@@ -19,14 +19,13 @@
 #ifndef ITEMREPOSITORYREGISTRY_H
 #define ITEMREPOSITORYREGISTRY_H
 
-#include <QtCore/QString>
-#include <QtCore/QMutex>
-#include <QtCore/QAtomicInt>
-#include <QtCore/QMap>
-
 #include "serializationexport.h"
 
 #include <interfaces/isessionlock.h>
+
+class QString;
+class QMutex;
+class QAtomicInt;
 
 namespace KDevelop {
 

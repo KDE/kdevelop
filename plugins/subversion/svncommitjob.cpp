@@ -27,7 +27,6 @@
 #include <ThreadWeaver/ThreadWeaver>
 #include <ThreadWeaver/Weaver>
 #include <QStandardItemModel>
-#include <kparts/mainwindow.h>
 #include <KLocalizedString>
 
 #include <vector>

@@ -21,7 +21,6 @@
 #include <KLocalizedString>
 
 #include <QModelIndex>
-#include <QTextDocument>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>

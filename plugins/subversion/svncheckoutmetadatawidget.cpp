@@ -12,7 +12,6 @@
 #include "ui_checkoutmetadatawidget.h"
 
 #include <QUrl>
-#include <kurlrequester.h>
 
 #include <vcs/vcslocation.h>
 

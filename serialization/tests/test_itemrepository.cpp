@@ -1,5 +1,5 @@
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QTest>
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
 #include <stdlib.h>

@@ -19,7 +19,9 @@
 #include "isourceformatter.h"
 
 #include <KLocalizedString>
+
 #include <QVariant>
+#include <QMimeType>
 
 namespace KDevelop
 {

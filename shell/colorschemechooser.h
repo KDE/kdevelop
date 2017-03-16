@@ -22,16 +22,9 @@
 #ifndef COLORSCHEMECHOOSER_H
 #define COLORSCHEMECHOOSER_H
 
-#include <QObject>
 #include <QAction>
-#include <QApplication>
-#include <QString>
-
-#include <KColorSchemeManager>
 
 #include "mainwindow.h"
-
-class KActionCollection;
 
 namespace KDevelop
 {

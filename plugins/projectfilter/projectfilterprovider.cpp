@@ -21,9 +21,7 @@
 
 #include "projectfilterprovider.h"
 
-#include <KPluginLoader>
 #include <KPluginFactory>
-#include <KAboutData>
 #include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KLocalizedString>

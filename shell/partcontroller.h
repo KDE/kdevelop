@@ -24,16 +24,16 @@
 #include <interfaces/ipartcontroller.h>
 
 #include <QUrl>
-#include <QWidget>
 
 #include <KSharedConfig>
 
 #include "core.h"
 
+class QWidget;
+
 namespace KParts
 {
 class Part;
-class PartManager;
 class ReadOnlyPart;
 class ReadWritePart;
 }

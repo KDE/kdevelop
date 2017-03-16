@@ -20,7 +20,6 @@
 #ifndef KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H
 #define KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H
 
-#include <QtCore/QString>
 #include <language/languageexport.h>
 #include "indexedducontext.h"
 

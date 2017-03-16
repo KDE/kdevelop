@@ -24,8 +24,6 @@ extern "C"
 #include <svn_wc.h>
 }
 
-
-class QEvent;
 class SvnInternalJobBase;
 
 namespace ThreadWeaver

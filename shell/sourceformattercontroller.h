@@ -24,7 +24,6 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/isourceformattercontroller.h>
 #include <interfaces/isourceformatter.h>
 
-#include <QtCore/QHash>
 #include <QtCore/QList>
 #include <QtCore/QSet>
 #include <QMimeType>

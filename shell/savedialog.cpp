@@ -28,10 +28,8 @@
 #include <KLocalizedString>
 
 #include <interfaces/idocument.h>
-#include <KConfigGroup>
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include <KGuiItem>
 
 using namespace KDevelop;
 

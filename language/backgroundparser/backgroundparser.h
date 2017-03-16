@@ -24,17 +24,10 @@
 #ifndef KDEVPLATFORM_BACKGROUNDPARSER_H
 #define KDEVPLATFORM_BACKGROUNDPARSER_H
 
-#include <QtCore/QMap>
-#include <QtCore/QPair>
-#include <QtCore/QMutex>
-#include <QtCore/QHash>
-
 #include <language/languageexport.h>
 #include <interfaces/istatus.h>
 #include <language/duchain/topducontext.h>
 #include "parsejob.h"
-
-class QMutex;
 
 namespace ThreadWeaver
 {

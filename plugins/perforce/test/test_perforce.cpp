@@ -21,7 +21,7 @@
 
 #include "test_perforce.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

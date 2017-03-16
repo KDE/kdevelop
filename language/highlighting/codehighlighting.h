@@ -26,7 +26,6 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QHash>
-#include <QtCore/QModelIndex>
 
 #include <ktexteditor/attribute.h>
 #include <ktexteditor/movingrange.h>

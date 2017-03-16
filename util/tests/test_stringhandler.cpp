@@ -23,7 +23,7 @@
 
 #include "kdevstringhandler.h"
 
-#include <QtTest>
+#include <QTest>
 
 QTEST_MAIN(TestStringHandler);
 

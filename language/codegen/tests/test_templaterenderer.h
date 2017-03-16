@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_TEST_TEMPLATERENDERER_H
 #define KDEVPLATFORM_TEST_TEMPLATERENDERER_H
 
-#include <QtTest>
+#include <QTest>
 #include <QObject>
 
 namespace KDevelop

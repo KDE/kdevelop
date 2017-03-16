@@ -24,6 +24,7 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QProcess>
 #include <QDir>
 #include <QFileInfo>
 #include <QMenu>

@@ -29,8 +29,8 @@ Boston, MA 02110-1301, USA.
 
 #include "context.h"
 
-#include <QDir>
 #include <QList>
+#include <QMimeType>
 
 #include <ktexteditor/document.h>
 

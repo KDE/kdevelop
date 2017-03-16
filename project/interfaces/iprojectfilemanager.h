@@ -24,7 +24,6 @@
 #define KDEVPLATFORM_IPROJECTFILEMANAGER_H
 
 #include <QObject>
-#include <QStringList>
 
 #include <project/projectexport.h>
 

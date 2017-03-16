@@ -18,7 +18,6 @@
 */
 #include "projectfilterconfigpage.h"
 
-#include <QStandardItemModel>
 #include <QKeyEvent>
 
 #include <KMessageWidget>

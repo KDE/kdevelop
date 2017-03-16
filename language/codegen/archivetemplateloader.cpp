@@ -23,10 +23,6 @@
 #include <grantlee/engine.h>
 
 #include <KArchive>
-#include <KZip>
-#include <KTar>
-
-#include <QFileInfo>
 
 using namespace KDevelop;
 

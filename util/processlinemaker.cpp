@@ -23,7 +23,6 @@
 
 #include <QtCore/QProcess>
 #include <QtCore/QStringList>
-#include <QtCore/QTimer>
 
 namespace KDevelop
 {

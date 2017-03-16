@@ -6,7 +6,7 @@
 #ifndef TESTNAME_H
 #define TESTNAME_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class TestName : public QObject
 {

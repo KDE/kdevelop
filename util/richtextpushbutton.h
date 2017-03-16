@@ -23,9 +23,10 @@
  
 #include <QPushButton>
 #include <QString>
-#include <QStyleOptionButton>
 #include "utilexport.h"
- 
+
+class QStyleOptionButton;
+
 namespace KDevelop {
 class KDEVPLATFORMUTIL_EXPORT RichTextPushButton : public QPushButton
 {

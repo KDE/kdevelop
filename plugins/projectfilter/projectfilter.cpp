@@ -23,7 +23,6 @@
 
 #include <interfaces/iproject.h>
 
-#include <QSet>
 #include <QFile>
 
 using namespace KDevelop;

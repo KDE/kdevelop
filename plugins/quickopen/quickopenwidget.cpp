@@ -30,6 +30,7 @@
 #include <iuicontroller.h>
 
 #include <QDialog>
+#include <QSortFilterProxyModel>
 #include <QIdentityProxyModel>
 #include <QMenuBar>
 #include <QKeyEvent>

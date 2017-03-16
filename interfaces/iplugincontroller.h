@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
+#include <QVariant>
 
 #include <KPluginMetaData>
 

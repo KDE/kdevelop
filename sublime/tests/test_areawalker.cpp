@@ -19,7 +19,7 @@
 #include "test_areawalker.h"
 
 #include <QStringList>
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include <sublime/area.h>
 #include <sublime/view.h>

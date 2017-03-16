@@ -28,7 +28,6 @@
 
 class QAction;
 class QMenu;
-template <typename T> class QList;
 
 namespace KDevelop
 {

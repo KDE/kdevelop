@@ -18,8 +18,6 @@
 
 #include "abstractincludenavigationcontext.h"
 
-#include <QTextDocument>
-
 #include <KLocalizedString>
 
 #include <language/duchain/duchain.h>

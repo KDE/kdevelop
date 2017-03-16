@@ -10,7 +10,6 @@
 
 #include "svnjobbase.h"
 
-#include <QEvent>
 #include <QStandardItemModel>
 
 #include <kpassworddialog.h>

@@ -26,9 +26,8 @@
 #include "../vcsrevision.h"
 
 #include <QColor>
-#include <QUrl>
 
-class QModelIndex;
+class QUrl;
 template<typename T> class QList;
 
 namespace KDevelop

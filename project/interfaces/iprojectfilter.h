@@ -24,8 +24,6 @@
 
 #include <project/projectexport.h>
 
-#include <QObject>
-
 namespace KDevelop
 {
 

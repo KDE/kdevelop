@@ -19,11 +19,8 @@
 #ifndef KDEVPLATFORM_ABSTRACTNAVIGATIONWIDGET_H
 #define KDEVPLATFORM_ABSTRACTNAVIGATIONWIDGET_H
 
-
-#include <QtCore/QObject>
 #include <QtCore/QPointer>
 #include <QWidget>
-#include <QWheelEvent>
 
 #include "../../interfaces/quickopendataprovider.h"
 #include <language/languageexport.h>

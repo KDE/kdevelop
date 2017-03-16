@@ -23,10 +23,8 @@
 #include "parsejob.h"
 
 #include <QFile>
-#include <QByteArray>
 #include <QMutex>
 #include <QMutexLocker>
-#include <QApplication>
 #include <QDebug>
 
 #include <KLocalizedString>

@@ -23,8 +23,6 @@
 
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KPluginLoader>
-#include <KAboutData>
 #include <KActionCollection>
 #include <QAction>
 #include <QFile>

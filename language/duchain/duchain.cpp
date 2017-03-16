@@ -20,11 +20,9 @@
 #include "duchain.h"
 #include "duchainlock.h"
 
-#include <QtCore/QCoreApplication>
 #include <QApplication>
 #include <QtCore/QHash>
 #include <QtCore/QMultiMap>
-#include <QtCore/QTimer>
 #include <QtCore/QReadWriteLock>
 #include <QtCore/QAtomicInt>
 #include <QtCore/QThread>

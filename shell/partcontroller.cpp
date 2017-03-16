@@ -29,10 +29,9 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <KMimeTypeTrader>
-#include <KToggleAction>
 
 #include <KParts/Part>
-#include <KParts/BrowserExtension>
+#include <KParts/OpenUrlArguments>
 
 #include <KTextEditor/View>
 #include <KTextEditor/Editor>

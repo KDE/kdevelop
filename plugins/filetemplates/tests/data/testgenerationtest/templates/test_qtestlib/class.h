@@ -9,7 +9,7 @@
 #define {{ name|upper }}_H
 
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 
 class {{ name }} : public QObject

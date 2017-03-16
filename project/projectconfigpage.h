@@ -31,7 +31,6 @@
 
 class KComponentData;
 class QWidget;
-class QStringList;
 
 namespace KDevelop {
 

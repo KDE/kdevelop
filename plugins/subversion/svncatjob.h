@@ -23,10 +23,6 @@
 
 #include "svnjobbase.h"
 
-#include <QVariant>
-
-#include <QUrl>
-
 #include <vcs/vcsdiff.h>
 
 namespace KDevelop

@@ -35,7 +35,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QIcon>
-#include <QResizeEvent>
 #include <QAction>
 
 #include <KStandardAction>

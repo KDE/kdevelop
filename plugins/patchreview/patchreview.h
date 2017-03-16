@@ -14,7 +14,6 @@
 #ifndef KDEVPLATFORM_PLUGIN_PATCHREVIEW_H
 #define KDEVPLATFORM_PLUGIN_PATCHREVIEW_H
 
-#include <QObject>
 #include <QPointer>
 
 #include <interfaces/iplugin.h>

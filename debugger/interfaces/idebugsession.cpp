@@ -23,8 +23,6 @@
 #include "ivariablecontroller.h"
 #include "util/debug.h"
 
-#include <QApplication>
-#include <QWidget>
 #include <QFileInfo>
 
 

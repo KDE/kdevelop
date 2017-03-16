@@ -26,7 +26,6 @@
 #include <shell/shellexport.h>
 #include <QtCore/QAbstractItemModel>
 #include <shell/problem.h>
-#include <QUrl>
 
 struct ProblemModelPrivate;
 

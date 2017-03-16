@@ -19,6 +19,8 @@ Boston, MA 02110-1301, USA.
 
 #include "abbreviations.h"
 
+#include <QStringList>
+
 bool matchesAbbreviationHelper(const QStringRef &word, const QString &typed, const QVarLengthArray< int, 32 > &offsets, int &depth, int atWord, int i)
 {
   int atLetter = 1;

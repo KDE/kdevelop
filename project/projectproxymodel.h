@@ -23,11 +23,6 @@
 #include <QSortFilterProxyModel>
 #include "projectexport.h"
 
-#include <QList>
-#include <QSharedPointer>
-#include <QRegExp>
-#include <QHash>
-
 namespace KDevelop {
     class ProjectModel;
     class ProjectBaseItem;

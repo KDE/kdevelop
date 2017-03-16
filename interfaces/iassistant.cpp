@@ -20,8 +20,6 @@
 #include "icore.h"
 
 #include <QAction>
-#include <QXmlStreamReader>
-#include <QTextEdit>
 #include <QThread>
 
 using namespace KDevelop;

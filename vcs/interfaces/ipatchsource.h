@@ -20,6 +20,7 @@
 #define KDEVPLATFORM_IPATCHSOURCE_H
 
 #include <QUrl>
+#include <QMap>
 
 #include <qpointer.h>
 #include <vcs/vcsexport.h>

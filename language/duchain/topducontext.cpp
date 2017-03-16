@@ -22,8 +22,6 @@
 
 #include <limits>
 
-#include <QtCore/QThread>
-
 #include "persistentsymboltable.h"
 #include "problem.h"
 #include "declaration.h"

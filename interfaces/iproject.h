@@ -28,7 +28,6 @@
 #define KDEVPLATFORM_IPROJECT_H
 
 #include <QtCore/QObject>
-#include <QUrl>
 
 #include <KSharedConfig>
 

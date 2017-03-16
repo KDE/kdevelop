@@ -24,6 +24,7 @@
 
 #include <QMainWindow>
 #include <QToolBar>
+#include <QStyle>
 
 #include <KAcceleratorManager>
 #include <KActionMenu>

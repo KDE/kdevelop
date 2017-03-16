@@ -25,7 +25,6 @@
 #include <interfaces/iplugin.h>
 
 #include <QtCore/QVariant>
-#include <QtCore/QObject>
 
 class ITestNonGuiInterface
 {

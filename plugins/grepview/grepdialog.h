@@ -22,11 +22,6 @@
 
 class GrepViewPlugin;
 
-class KConfig;
-class KUrlRequester;
-
-class QLineEdit;
-
 class GrepDialog : public QDialog, private Ui::GrepWidget
 {
     Q_OBJECT

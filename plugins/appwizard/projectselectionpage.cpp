@@ -14,7 +14,7 @@
 #include <QDir>
 #include <QFileDialog>
 
-#include <KColorScheme>
+#include <KConfig>
 #include <KConfigGroup>
 #include <KLineEdit>
 #include <KLocalizedString>

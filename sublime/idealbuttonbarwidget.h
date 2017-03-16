@@ -24,7 +24,6 @@
 #define IDEALBUTTONBARWIDGET_H
 
 #include <QWidget>
-#include <QHash>
 
 class IdealToolButton;
 class ToolViewAction;

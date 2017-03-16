@@ -21,11 +21,9 @@
 
 #include "test_toolviewtoolbar.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 
-#include <QListView>
 #include <QTextEdit>
-#include <QDockWidget>
 #include <QToolBar>
 
 #include <sublime/idealcontroller.h>

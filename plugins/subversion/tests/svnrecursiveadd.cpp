@@ -22,7 +22,7 @@
 
 #include <QDebug>
 #include <QTemporaryDir>
-#include <QtTest>
+#include <QTest>
 
 #include <KProcess>
 

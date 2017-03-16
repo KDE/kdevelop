@@ -12,9 +12,6 @@
 
 #include "language/codegen/templatesmodel.h"
 
-#include <QMap>
-#include <QStandardItemModel>
-
 class AppWizardPlugin;
 
 class ProjectTemplatesModel: public KDevelop::TemplatesModel {

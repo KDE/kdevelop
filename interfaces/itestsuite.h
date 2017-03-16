@@ -22,9 +22,9 @@
 
 #include "interfacesexport.h"
 
-#include <QtCore/QStringList>
-
 class KJob;
+class QString;
+class QStringList;
 
 namespace KDevelop {
 

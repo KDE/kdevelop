@@ -30,7 +30,6 @@ Boston, MA 02110-1301, USA.
 #include <KTextEditor/Document>
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
-#include <KToggleFullScreenAction>
 #include <KXMLGUIClient>
 #include <KXMLGUIFactory>
 

@@ -18,7 +18,7 @@
  ***************************************************************************/
 #include "test_shelldocumentoperation.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QAction>
 
 #include <kactioncollection.h>

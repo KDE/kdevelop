@@ -20,9 +20,10 @@
 
 #include <QLayout>
 #include <QSplitter>
-#include <QTimer>
 #include <QApplication>
+#include <QMenuBar>
 #include <QToolBar>
+#include <QKeyEvent>
 
 #include <KActionMenu>
 #include <KActionCollection>

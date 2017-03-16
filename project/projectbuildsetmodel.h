@@ -26,8 +26,6 @@
 #include <QAbstractTableModel>
 #include <QStringList>
 
-class KConfigGroup;
-
 namespace KDevelop
 {
 class ProjectBaseItem;

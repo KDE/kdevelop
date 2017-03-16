@@ -24,10 +24,10 @@
 
 #include <QAction>
 #include <QAbstractProxyModel>
+#include <QKeyEvent>
 #include <QApplication>
 #include <QHeaderView>
 #include <QMenu>
-#include <QMouseEvent>
 #include <QPainter>
 
 #include <KConfigGroup>

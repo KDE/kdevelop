@@ -29,7 +29,7 @@
 
 #include <KIO/Global>
 
-#include <QtTest>
+#include <QTest>
 
 QTEST_MAIN(TestPath);
 

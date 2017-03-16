@@ -27,8 +27,6 @@
 
 #include <KLocalizedString>
 #include <kpluginfactory.h>
-#include <kaboutdata.h>
-#include <kpluginloader.h>
 
 #include <KTextEditor/Document>
 

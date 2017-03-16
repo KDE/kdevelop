@@ -23,26 +23,15 @@
 #include <QObject>
 #include <QPointer>
 #include <QSet>
-#include <QTabBar>
-#include <QHBoxLayout>
-#include <QLabel>
 
 #include "area.h"
 #include "sublimedefs.h"
 
 #include "mainwindow.h"
-#include <qmenubar.h>
-#include <qstylepainter.h>
-#include <qstyleoption.h>
-#include <qevent.h>
 #include <QPushButton>
-#include <KColorScheme>
 
-class QMenu;
 class QAction;
 class QSplitter;
-class QDockWidget;
-class QComboBox;
 class IdealToolBar;
 
 namespace Sublime {

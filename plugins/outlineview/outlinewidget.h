@@ -19,10 +19,10 @@
 #pragma once
 
 #include <QWidget>
-#include <QModelIndex>
 
 class KRecursiveFilterProxyModel;
 
+class QModelIndex;
 class QAction;
 class QTreeView;
 class QLineEdit;

@@ -22,7 +22,6 @@
 
 #include <interfaces/icompletionsettings.h>
 #include <KConfigGroup>
-#include <KSharedConfig>
 
 namespace KDevelop
 {

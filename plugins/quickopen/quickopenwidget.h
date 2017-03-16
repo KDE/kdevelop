@@ -28,10 +28,10 @@
 #include <QMenu>
 #include <QTime>
 #include <QTimer>
-#include <QSortFilterProxyModel>
 
 class QuickOpenModel;
 
+class QAbstractProxyModel;
 class QLineEdit;
 
 /// Will delete itself once the dialog is closed, so use QPointer when referencing it permanently

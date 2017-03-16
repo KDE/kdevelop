@@ -25,9 +25,9 @@
 #include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtCore/QHash>
-#include <QtCore/QStringList>
+#include <QString>
 
-class KJob;
+class QStringList;
 
 namespace KDevelop {
 

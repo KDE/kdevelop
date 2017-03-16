@@ -22,7 +22,6 @@
 #include "svndiffjob_p.h"
 
 #include <QMutexLocker>
-#include <QWaitCondition>
 #include <QRegExp>
 #include <QStringList>
 #include <QFileInfo>

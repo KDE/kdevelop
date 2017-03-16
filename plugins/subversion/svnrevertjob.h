@@ -23,7 +23,6 @@
 
 #include "svnjobbase.h"
 
-#include <QtCore/QVariant>
 #include <QUrl>
 
 class SvnInternalRevertJob;

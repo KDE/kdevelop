@@ -21,8 +21,6 @@
 
 #include <QLabel>
 
-class QMouseEvent;
-
 namespace KDevelop {
 
 class WorkingSetFileLabel : public QLabel {

@@ -23,15 +23,14 @@
 #define KDEVPLATFORM_PLUGIN_IEXECUTESCRIPTPLUGIN_H
 
 #include <QObject>
-#include <QtCore/QString>
 
 namespace KDevelop
 {
 class ILaunchConfiguration;
 }
 
-class KJob;
 class QUrl;
+class QString;
 class QStringList;
 
 /**

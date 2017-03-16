@@ -18,8 +18,6 @@
  ***************************************************************************/
 #include "ipartcontroller.h"
 
-#include <QFile>
-
 #include <KMimeTypeTrader>
 #include <KParts/Part>
 #include <KParts/ReadOnlyPart>

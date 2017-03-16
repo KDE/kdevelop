@@ -21,7 +21,6 @@
 #ifndef KDEVPLATFORM_IPROJECTPROVIDER_H
 #define KDEVPLATFORM_IPROJECTPROVIDER_H
 
-#include <QString>
 #include <QWidget>
 #include "interfacesexport.h"
 

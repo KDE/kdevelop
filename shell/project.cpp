@@ -31,6 +31,7 @@
 #include <QSet>
 #include <QTemporaryFile>
 #include <QTimer>
+#include <QPointer>
 
 #include <KConfigGroup>
 #include <KIO/FileCopyJob>

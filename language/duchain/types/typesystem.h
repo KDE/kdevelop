@@ -21,9 +21,6 @@
 #ifndef KDEVPLATFORM_TYPESYSTEM_H
 #define KDEVPLATFORM_TYPESYSTEM_H
 
-#include <QtCore/QSet>
-#include <QtCore/QList>
-
 #include "typepointer.h"
 #include "../identifier.h"
 #include "abstracttype.h"

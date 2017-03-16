@@ -25,13 +25,13 @@
 #include <interfaces/iplugin.h>
 #include <QVariantList>
 #include <KConfigGroup>
-#include <QModelIndex>
 #include <QUrl>
 
 class ExternalScriptItem;
 
 class QStandardItem;
 class QStandardItemModel;
+class QModelIndex;
 
 class ExternalScriptPlugin : public KDevelop::IPlugin
 {

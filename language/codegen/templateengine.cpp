@@ -29,7 +29,6 @@
 
 #include <interfaces/icore.h>
 #include <QStandardPaths>
-#include <QCoreApplication>
 
 using namespace KDevelop;
 using namespace Grantlee;

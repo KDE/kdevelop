@@ -29,7 +29,6 @@ class Controller;
 class ToolDocument;
 class Area;
 }
-class QDockWidget;
 class QToolBar;
 
 class TestToolViewToolBar : public QObject

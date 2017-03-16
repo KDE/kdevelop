@@ -28,11 +28,6 @@ Boston, MA 02110-1301, USA.
 
 class KAboutData;
 
-namespace KParts
-{
-class PartManager;
-}
-
 /**
  * The KDevelop namespace contains all classes provided by the KDevelop
  * platform libraries.

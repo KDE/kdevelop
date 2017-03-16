@@ -21,9 +21,10 @@
 #ifndef KDEVPLATFORM_ABSTRACTTYPE_H
 #define KDEVPLATFORM_ABSTRACTTYPE_H
 
-#include <QtCore/QString>
 #include "typepointer.h"
 #include <language/languageexport.h>
+
+class QString;
 
 namespace KDevelop
 {

@@ -22,11 +22,11 @@
 #define KDEVELOP_CONFIGPAGE_H
 
 #include <KTextEditor/ConfigPage>
-#include <KCoreConfigSkeleton>
-#include <KConfigDialogManager>
 #include <KLocalizedString>
 
 #include "interfacesexport.h"
+
+class KCoreConfigSkeleton;
 
 namespace KDevelop {
 class IPlugin;

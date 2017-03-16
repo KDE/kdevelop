@@ -21,12 +21,12 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_ISOURCEFORMATTERCONTROLLER_H
 #define KDEVPLATFORM_ISOURCEFORMATTERCONTROLLER_H
 
-#include <QMimeType>
 #include <QObject>
 
 #include "interfacesexport.h"
 
 class QUrl;
+class QMimeType;
 
 namespace KDevelop
 {

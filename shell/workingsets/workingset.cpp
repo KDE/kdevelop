@@ -22,7 +22,6 @@
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>
 
-#include <QApplication>
 #include <QPainter>
 
 #include <KProtocolInfo>

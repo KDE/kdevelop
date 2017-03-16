@@ -26,8 +26,6 @@
 
 #include "sublimeexport.h"
 
-class QDockWidget;
-
 namespace Sublime {
 
 class Container;

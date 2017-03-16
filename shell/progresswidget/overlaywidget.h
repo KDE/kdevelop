@@ -22,9 +22,6 @@
 
 #include <QWidget>
 
-class QResizeEvent;
-class QEvent;
-
 namespace KDevelop {
 
 /**

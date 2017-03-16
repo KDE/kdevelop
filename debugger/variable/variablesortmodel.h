@@ -25,8 +25,6 @@
 #include <QCollator>
 #include <QSortFilterProxyModel>
 
-class QModelIndex;
-
 namespace KDevelop
 {
 

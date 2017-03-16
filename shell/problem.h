@@ -25,7 +25,6 @@
 #include <shell/shellexport.h>
 #include <language/editor/documentrange.h>
 #include <QString>
-#include <QList>
 
 struct DetectedProblemPrivate;
 

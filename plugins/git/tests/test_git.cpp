@@ -24,7 +24,7 @@
 
 #include "test_git.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <QUrl>

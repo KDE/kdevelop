@@ -19,10 +19,7 @@
 */
 #include "genericmanager.h"
 
-#include <KPluginLoader>
 #include <KPluginFactory>
-#include <KAboutData>
-#include <KConfigGroup>
 
 using namespace KDevelop;
 

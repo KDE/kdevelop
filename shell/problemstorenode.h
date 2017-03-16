@@ -22,7 +22,6 @@
 #define PROBLEMNODE_H
 
 #include <QString>
-#include <QList>
 #include <interfaces/iproblem.h>
 
 namespace KDevelop

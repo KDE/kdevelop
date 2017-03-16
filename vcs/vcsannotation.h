@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_VCSANNOTATION_H
 
 #include "vcsexport.h"
-#include <QtCore/QVariant>
+#include <QMetaType>
 
 class QString;
 class QDateTime;

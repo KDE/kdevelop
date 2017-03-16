@@ -25,8 +25,6 @@
 #include <vcs/interfaces/idistributedversioncontrol.h>
 #include <vcs/interfaces/icontentawareversioncontrol.h>
 #include <vcs/dvcs/dvcsplugin.h>
-#include <QObject>
-#include <QProcess>
 #include <vcs/vcsstatusinfo.h>
 #include <outputview/outputjob.h>
 #include <vcs/vcsjob.h>

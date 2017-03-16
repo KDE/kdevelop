@@ -28,9 +28,7 @@
 #include "ifilterstrategy.h"
 #include <outputview/outputviewexport.h>
 
-#include <QList>
 #include <QVector>
-#include <QHash>
 #include <QUrl>
 
 namespace KDevelop

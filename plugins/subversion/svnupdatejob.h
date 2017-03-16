@@ -23,7 +23,6 @@
 
 #include "svnjobbase.h"
 
-#include <QVariant>
 #include <vcs/vcsrevision.h>
 #include <QUrl>
 

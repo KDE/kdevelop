@@ -21,6 +21,7 @@
 
 #include "projectmanagerview.h"
 
+#include <QAction>
 #include <QHeaderView>
 #include <QKeyEvent>
 #include <QUrl>

@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTITEM_H
 #define KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTITEM_H
 
-#include <QStandardItemModel>
+#include <QStandardItem>
 
 class QAction;
 

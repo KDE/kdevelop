@@ -28,6 +28,7 @@
 #include <QSignalMapper>
 #include <QVariantList>
 
+#include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>

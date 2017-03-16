@@ -22,9 +22,6 @@
 
 #include <shell/shellexport.h>
 #include <QObject>
-#include <QList>
-
-class QAbstractItemModel;
 
 namespace KDevelop
 {

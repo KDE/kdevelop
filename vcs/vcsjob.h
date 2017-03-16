@@ -27,7 +27,6 @@
 #include "vcsexport.h"
 
 class QVariant;
-class QString;
 
 namespace KDevelop
 {

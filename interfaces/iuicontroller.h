@@ -21,13 +21,9 @@
 
 #include "interfacesexport.h"
 
-#include <QtCore/QStringList>
 #include <QWidget>
 
 class QAction;
-
-template<class T>
-class QExplicitlySharedDataPointer;
 
 namespace KParts {
     class MainWindow;

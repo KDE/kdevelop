@@ -21,8 +21,6 @@
 #include <interfaces/icodehighlighting.h>
 #include "util/debug.h"
 
-#include <QTimer>
-
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 

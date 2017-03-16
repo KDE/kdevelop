@@ -18,7 +18,7 @@
 #ifndef KDEVPLATFORM_TEST_FILTERINGSTRATEGY_H
 #define KDEVPLATFORM_TEST_FILTERINGSTRATEGY_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 namespace KDevelop
 {

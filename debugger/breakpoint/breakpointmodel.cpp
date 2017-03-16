@@ -24,8 +24,8 @@
 
 #include <QIcon>
 #include <QPixmap>
+#include <QTimer>
 
-#include <KParts/PartManager>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <ktexteditor/movinginterface.h>
@@ -40,7 +40,6 @@
 #include <interfaces/isession.h>
 #include "util/debug.h"
 #include "breakpoint.h"
-#include <KConfigCore/KSharedConfig>
 #include <KConfigGroup>
 #include <QAction>
 #include <QMenu>

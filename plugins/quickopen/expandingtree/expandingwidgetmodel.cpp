@@ -21,12 +21,12 @@
 #include "expandingwidgetmodel.h"
 
 #include <QTreeView>
+#include <QAbstractProxyModel>
 #include <QModelIndex>
 #include <QBrush>
 
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktextedit.h>
-#include <kiconloader.h>
 #include <kcolorutils.h>
 
 #include "expandingdelegate.h"

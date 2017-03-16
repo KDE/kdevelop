@@ -19,7 +19,6 @@
 #include "workingsettoolbutton.h"
 
 #include <QContextMenuEvent>
-#include <QMenu>
 
 #include <sublime/mainwindow.h>
 #include <sublime/area.h>

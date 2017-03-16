@@ -21,7 +21,6 @@
 
 #include <QMultiMap>
 #include <QString>
-#include <QAbstractItemModel>
 #include <QSet>
 
 #include <serialization/indexedstring.h>

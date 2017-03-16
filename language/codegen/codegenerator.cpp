@@ -22,7 +22,6 @@
 #include "documentchangeset.h"
 #include "duchainchangeset.h"
 
-#include <QTimer>
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>

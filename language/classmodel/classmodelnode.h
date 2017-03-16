@@ -29,7 +29,6 @@
 #include "../duchain/duchainpointer.h"
 #include "classmodelnodescontroller.h"
 
-class QTimer;
 class NodesModelInterface;
 
 namespace KDevelop

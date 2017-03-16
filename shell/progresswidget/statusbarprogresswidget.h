@@ -29,8 +29,6 @@
 
 #include <QFrame>
 
-class QBoxLayout;
-class QEvent;
 class QProgressBar;
 class QToolButton;
 class QStackedWidget;

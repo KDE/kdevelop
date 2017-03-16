@@ -24,7 +24,6 @@
 #ifndef KDEVPLATFORM_DEBUGCONTROLLER_H
 #define KDEVPLATFORM_DEBUGCONTROLLER_H
 
-#include <QtCore/QVariantList>
 #include <QPointer>
 
 #include <KXMLGUIClient>

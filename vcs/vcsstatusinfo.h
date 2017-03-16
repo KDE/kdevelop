@@ -22,13 +22,10 @@
 #ifndef KDEVPLATFORM_VCSSTATUSINFO_H
 #define KDEVPLATFORM_VCSSTATUSINFO_H
 
-#include <QtCore/QVariant>
-#include <QUrl>
-
 #include "vcsexport.h"
+#include <QMetaType>
 
-class QString;
-class QStringList;
+class QUrl;
 
 namespace KDevelop
 {

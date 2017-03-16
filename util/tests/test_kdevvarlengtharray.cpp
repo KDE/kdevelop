@@ -17,7 +17,7 @@
 */
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include <QDebug>
 

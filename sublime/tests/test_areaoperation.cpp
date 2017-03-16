@@ -18,8 +18,7 @@
  ***************************************************************************/
 #include "test_areaoperation.h"
 
-#include <QtTest/QtTest>
-#include <QDockWidget>
+#include <QTest>
 #include <QListView>
 #include <QTextEdit>
 #include <QSplitter>

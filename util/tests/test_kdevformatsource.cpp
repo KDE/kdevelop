@@ -19,8 +19,9 @@
 #include "test_kdevformatsource.h"
 #include "../kdevformatfile.h"
 
-#include <QtTest/QtTest>
-
+#include <QTest>
+#include <QDebug>
+#include <QStandardPaths>
 #include <QDir>
 
 QTEST_MAIN(KDevelop::TestKdevFormatSource)

@@ -21,7 +21,6 @@
 #ifndef BAZAAR_BZRANNOTATEJOB_H
 #define BAZAAR_BZRANNOTATEJOB_H
 
-#include <QtCore/QObject>
 #include <QtCore/QStringList>
 #include <QtCore/QHash>
 #include <QtCore/QDir>

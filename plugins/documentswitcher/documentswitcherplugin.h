@@ -36,8 +36,6 @@ class MainWindow;
 
 class DocumentSwitcherTreeView;
 class QModelIndex;
-class QStringListModel;
-class QEvent;
 
 class QAction;
 

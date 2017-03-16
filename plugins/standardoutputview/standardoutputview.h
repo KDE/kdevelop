@@ -24,7 +24,7 @@
 
 #include <outputview/ioutputview.h>
 #include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <QVariantList>
 
 template <typename T> class QList;
 class QAbstractItemModel;

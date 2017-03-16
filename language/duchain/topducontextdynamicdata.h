@@ -20,9 +20,7 @@
 #define KDEVPLATFORM_TOPDUCONTEXTDYNAMICDATA_H
 
 #include <QtCore/QVector>
-#include <QtCore/QMutex>
 #include <QtCore/QByteArray>
-#include <QtCore/QPair>
 #include <interfaces/iastcontainer.h>
 #include "problem.h"
 

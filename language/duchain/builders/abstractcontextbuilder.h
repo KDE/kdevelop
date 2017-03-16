@@ -25,8 +25,6 @@
 
 #include <climits>
 
-#include <QtCore/QMutexLocker>
-
 #include <ktexteditor/range.h>
 
 #include "../topducontext.h"

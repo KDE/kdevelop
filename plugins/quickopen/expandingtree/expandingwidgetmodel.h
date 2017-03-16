@@ -22,18 +22,14 @@
 #define KDEVPLATFORM_PLUGIN_EXPANDING_WIDGET_MODEL_H
 
 #include <QAbstractTableModel>
-#include <QtCore/QHash>
 #include <QIcon>
-#include <QPersistentModelIndex>
 #include <QPointer>
-#include <QSortFilterProxyModel>
 
 class ExpandingDelegate;
 class ExpandingTree;
 
 class KWidget;
 class QTreeView;
-class QTextEdit;
 
 /**
  * Cares about expanding/un-expanding items in a tree-view together with ExpandingDelegate

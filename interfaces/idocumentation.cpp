@@ -18,7 +18,6 @@
 */
 
 #include "idocumentation.h"
-#include <qtextbrowser.h>
 
 namespace KDevelop
 {

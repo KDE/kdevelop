@@ -24,7 +24,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 
-#include <KColorScheme>
 #include <KColorUtils>
 #include <KSharedConfig>
 #include <KConfigGroup>

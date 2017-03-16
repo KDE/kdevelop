@@ -33,7 +33,6 @@
 #include "../breakpoint/breakpoint.h"
 #include "../breakpoint/breakpointmodel.h"
 
-class QModelIndex;
 namespace KDevelop {
 class IDebugSession;
 

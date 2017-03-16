@@ -43,7 +43,6 @@
 #include <language/interfaces/editorcontext.h>
 
 #include <KPluginFactory>
-#include <KAboutData>
 #include <KProcess>
 #include <KLocalizedString>
 

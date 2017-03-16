@@ -29,10 +29,8 @@
 
 class QAbstractProxyModel;
 class QModelIndex;
-class QItemSelection;
 class QTreeView;
 class QMenu;
-class QSplitter;
 
 namespace KDevelop {
 class IDebugController;

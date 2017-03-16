@@ -30,7 +30,6 @@ Boston, MA 02110-1301, USA.
 #include "shellexport.h"
 
 class QStyleOptionViewItem;
-class QPainter;
 class QModelIndex;
 class KStatefulBrush;
 

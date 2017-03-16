@@ -23,7 +23,6 @@
 
 #include "svnjobbase.h"
 
-#include <QVariant>
 #include <QDateTime>
 #include <QUrl>
 

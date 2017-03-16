@@ -23,7 +23,6 @@
 #include "path.h"
 
 #include <QStringList>
-#include <QDir>
 #include <QDebug>
 
 #include <language/util/kdevhash.h>

@@ -24,8 +24,6 @@ Boston, MA 02110-1301, USA.
 #include <QAbstractItemModel>
 #include "util/environmentprofilelist.h"
 
-class QStringList;
-
 namespace KDevelop
 {
 

@@ -22,11 +22,7 @@
 
 #include "codecompletionmodel.h"
 
-#include <QIcon>
-#include <QMetaType>
-#include <QTextFormat>
-#include <QBrush>
-#include <QDir>
+#include <QThread>
 #include <QDebug>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>

@@ -22,15 +22,13 @@
 #include <QAction>
 #include <QIcon>
 #include <QVBoxLayout>
-#include <QLabel>
 #include <QComboBox>
-#include <QTextEdit>
 #include <QCompleter>
 #include <QLayout>
-#include <QTextBrowser>
 #include <QAbstractItemView>
-
 #include <QLineEdit>
+
+#include <KToolBar>
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>

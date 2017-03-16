@@ -23,8 +23,6 @@
 #include "utilexport.h"
 #include <QString>
 
-class QString;
-
 namespace KDevelop {
 /**
  * Helps extracting a re-formatted version of a text fragment, within a specific left and right context.

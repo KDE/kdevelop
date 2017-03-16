@@ -18,7 +18,8 @@
  ***************************************************************************/
 #include "test_viewactivation.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
+#include <QSignalSpy>
 
 #include <QListView>
 #include <QTextEdit>

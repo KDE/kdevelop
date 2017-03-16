@@ -22,7 +22,7 @@
 
 #include <project/projectexport.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QtCore/QUrl>
 
 class KJob;

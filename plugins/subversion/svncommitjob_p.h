@@ -22,7 +22,6 @@
 #ifndef KDEVPLATFORM_PLUGIN_SVNCOMMITJOB_P_H
 #define KDEVPLATFORM_PLUGIN_SVNCOMMITJOB_P_H
 
-#include <QString>
 #include <QUrl>
 #include "svninternaljobbase.h"
 

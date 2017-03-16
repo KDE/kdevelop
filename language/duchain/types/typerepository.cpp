@@ -18,7 +18,6 @@
 
 #include "typerepository.h"
 
-#include <QHash>
 #include <QMutex>
 #include <QMutexLocker>
 

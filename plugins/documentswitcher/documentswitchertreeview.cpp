@@ -20,9 +20,6 @@
 
 #include <QKeyEvent>
 
-#include <KSharedConfig>
-#include <KConfigGroup>
-
 #include <widgetcolorizer.h>
 #include <path.h>
 #include <projectmodel.h>

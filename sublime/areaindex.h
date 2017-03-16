@@ -22,8 +22,6 @@
 #include <QtCore/Qt>
 #include <QtCore/QList>
 
-#include <KConfigGroup>
-
 #include "sublimeexport.h"
 
 namespace Sublime {

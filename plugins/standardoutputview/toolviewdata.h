@@ -31,10 +31,7 @@ namespace Sublime
 class View;
 }
 
-class QItemDelegate;
-class QString;
 class QAbstractItemModel;
-class QListView;
 class StandardOutputView;
 class ToolViewData;
 

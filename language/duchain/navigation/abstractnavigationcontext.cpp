@@ -18,7 +18,6 @@
 
 #include "abstractnavigationcontext.h"
 
-#include <QTextDocument>
 #include <KLocalizedString>
 
 #include "abstractdeclarationnavigationcontext.h"

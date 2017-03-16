@@ -23,7 +23,6 @@
 #define KDEVPLATFORM_PLUGIN_BROWSEMANAGER_H
 
 #include <QCursor>
-#include <QEvent>
 #include <QMap>
 #include <QObject>
 #include <QPointer>

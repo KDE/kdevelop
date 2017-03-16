@@ -24,15 +24,11 @@
 #define SUBLIME_IDEAL_H
 
 #include <QAction>
-#include <QActionEvent>
-#include <QToolButton>
-#include <QDockWidget>
-#include <QStyleOption>
+#include <QSet>
 #include <QPointer>
 
 #include "sublimedefs.h"
 
-class QAction;
 class KActionMenu;
 
 namespace Sublime {

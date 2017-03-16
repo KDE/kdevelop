@@ -21,7 +21,6 @@
 
 #include "treeitem.h"
 
-#include <QStringList>
 #include <QModelIndex>
 
 #include "debug.h"

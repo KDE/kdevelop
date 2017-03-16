@@ -21,8 +21,7 @@
 
 #include <tests/testsexport.h>
 
-#include <QStack>
-#include <QPair>
+#include <QScopedPointer>
 
 namespace KDevelop
 {

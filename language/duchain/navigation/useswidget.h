@@ -30,11 +30,9 @@
 #include <language/editor/persistentmovingrange.h>
 
 class QLabel;
-class QToolButton;
 class QVBoxLayout;
 class QHBoxLayout;
 class QBoxLayout;
-class QPushButton;
 class QProgressBar;
 
 namespace KDevelop {

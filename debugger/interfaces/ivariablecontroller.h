@@ -26,8 +26,6 @@
 
 #include "idebugsession.h"
 
-class QString;
-
 namespace KTextEditor {
 class Document;
 class Cursor;

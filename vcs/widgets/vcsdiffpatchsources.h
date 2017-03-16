@@ -29,6 +29,9 @@
 
 #include <vcs/vcsexport.h>
 
+#include <QMap>
+#include <QUrl>
+
 class KTextEdit;
 class KComboBox;
 namespace KDevelop {

@@ -26,8 +26,6 @@
 
 //krazy:excludeall=dpointer
 
-class QString;
-
 namespace KDevelop {
 
 class Declaration;

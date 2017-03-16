@@ -34,7 +34,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <KDeclarative/KDeclarative>
-#include <qlabel.h>
 
 using namespace KDevelop;
 

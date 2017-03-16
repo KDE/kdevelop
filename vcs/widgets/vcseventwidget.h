@@ -25,8 +25,6 @@
 #include <QWidget>
 #include <vcs/vcsexport.h>
 
-class QPoint;
-class QModelIndex;
 class QUrl;
 
 namespace KDevelop

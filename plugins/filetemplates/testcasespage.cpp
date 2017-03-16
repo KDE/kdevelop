@@ -25,8 +25,6 @@
 #include <KEditListWidget>
 #include <kwidgetsaddons_version.h>
 
-#include <QVBoxLayout>
-
 using namespace KDevelop;
 
 class KDevelop::TestCasesPagePrivate

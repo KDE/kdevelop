@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_TESTTEMPLATESMODEL_H
 #define KDEVPLATFORM_TESTTEMPLATESMODEL_H
 
-#include <QtTest>
+#include <QTest>
 
 namespace KDevelop
 {

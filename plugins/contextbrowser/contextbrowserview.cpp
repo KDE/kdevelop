@@ -21,12 +21,11 @@
 
 #include "contextbrowserview.h"
 
-#include <QBoxLayout>
+#include <QVBoxLayout>
 #include <QIcon>
 #include <QMenu>
 #include <QShowEvent>
 #include <QTextBrowser>
-#include <QToolButton>
 
 #include <KToggleAction>
 #include <KLocalizedString>
