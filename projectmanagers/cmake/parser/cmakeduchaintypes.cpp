@@ -29,7 +29,7 @@ TargetType::TargetType()
     : AbstractType(createData<TargetType>())
 {}
 
-TargetType::TargetType(TargetType& rhs)
+TargetType::TargetType(const TargetType& rhs)
     : AbstractType(copyData<TargetType>(*rhs.d_func()))
 {}
 

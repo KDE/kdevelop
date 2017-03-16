@@ -270,7 +270,7 @@ QVector<Format> IRegisterController::formats(const GroupsName& group)
     return m_formatsModes[idx].formats;
 }
 
-GroupsName IRegisterController::createGroupName(const QString& name, int idx, RegisterType t, const QString flag) const
+GroupsName IRegisterController::createGroupName(const QString& name, int idx, RegisterType t, const QString& flag) const
 {
     return GroupsName(name, idx, t, flag);
 }

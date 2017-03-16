@@ -50,7 +50,7 @@ public:
     GroupsName(): _index(-1), _type(general) {}
 
 private:
-    GroupsName(const QString& name, int idx, RegisterType type = general, const QString flag = QString()): _name(name), _index(idx), _type(type), _flagName(flag) {}
+    GroupsName(const QString& name, int idx, RegisterType type = general, const QString& flag = QString()): _name(name), _index(idx), _type(type), _flagName(flag) {}
 
 private:
     QString _name;
@@ -197,7 +197,7 @@ protected:
     ///Initializes registers, that is gets names of all available registers. Returns true is succeed.
     bool initializeRegisters();
 
-    GroupsName createGroupName(const QString& name, int idx, RegisterType t = general, const QString flag = QString()) const;
+    GroupsName createGroupName(const QString& name, int idx, RegisterType t = general, const QString& flag = QString()) const;
 
     ///Returns register's number for @p name.
     QString numberForName(const QString& name) const;
