@@ -143,13 +143,15 @@ private slots:
     void deleteConfiguration();
     void createConfiguration();
     void addConfiguration(KDevelop::ILaunchConfiguration*);
-    void selectionChanged(QItemSelection,QItemSelection);
-    void modelChanged(QModelIndex,QModelIndex);
+    void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    void modelChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
     void pageChanged();
     void saveConfig();
     void updateNameLabel( LaunchConfiguration* l );
     void createEmptyLauncher();
     void launchModeChanged(int index);
+    void doTreeContextMenu(const QPoint& point);
+    void renameSelected();
 
 private:
     void saveConfig( const QModelIndex& );
@@ -157,9 +159,6 @@ private:
     QMap<LaunchConfigurationType*, LaunchConfigPagesContainer*> typeWidgets;
     QMap<ILauncher*, LaunchConfigPagesContainer*> launcherWidgets;
     bool currentPageChanged;
-private slots:
-    void doTreeContextMenu(QPoint point);
-    void renameSelected();
 };
 
 }

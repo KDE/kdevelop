@@ -43,7 +43,7 @@ namespace KDevelop
     {
     Q_OBJECT
     public:
-        VariableToolTip(QWidget* parent, QPoint position, 
+        VariableToolTip(QWidget* parent, const QPoint& position,
                         const QString& identifier);
         Variable* variable() const { return m_var; };
     private slots:

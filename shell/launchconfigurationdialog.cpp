@@ -197,7 +197,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     resize( QSize(qMax(1200, sizeHint().width()), qMax(500, sizeHint().height())) );
 }
 
-void LaunchConfigurationDialog::doTreeContextMenu(QPoint point)
+void LaunchConfigurationDialog::doTreeContextMenu(const QPoint& point)
 {
     if ( ! tree->selectionModel()->selectedRows().isEmpty() ) {
         QModelIndex selected = tree->selectionModel()->selectedRows().first();
@@ -249,7 +249,7 @@ void LaunchConfigurationDialog::createEmptyLauncher()
     addConfiguration(l);
 }
 
-void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )
+void LaunchConfigurationDialog::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
     if( !deselected.indexes().isEmpty() )
     {
@@ -420,7 +420,7 @@ void LaunchConfigurationDialog::pageChanged()
     buttonBox->button(QDialogButtonBox::Apply)->setEnabled( true );
 }
 
-void LaunchConfigurationDialog::modelChanged(QModelIndex topLeft, QModelIndex bottomRight)
+void LaunchConfigurationDialog::modelChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     if (tree->selectionModel())
     {

@@ -93,7 +93,7 @@ private:
     QPoint m_pos;
 };
 
-VariableToolTip::VariableToolTip(QWidget* parent, QPoint position, 
+VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
                                  const QString& identifier)
 :  ActiveToolTip(parent, position)
 {
