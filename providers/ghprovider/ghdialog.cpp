@@ -22,7 +22,6 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KPasswordDialog>

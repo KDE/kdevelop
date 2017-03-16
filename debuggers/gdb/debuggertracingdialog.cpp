@@ -22,9 +22,6 @@
 #include "debuggertracingdialog.h"
 #include "breakpoint.h"
 
-#include <QLabel>
-#include <QCheckBox>
-#include <QLineEdit>
 #include <keditlistbox.h>
 #include <kmessagebox.h>
 

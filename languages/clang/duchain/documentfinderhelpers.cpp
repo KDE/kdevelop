@@ -30,12 +30,6 @@
 #include <language/duchain/duchainutils.h>
 
 #include <KDesktopFile>
-#include <KConfigGroup>
-
-#include <QSet>
-#include <QStandardPaths>
-#include <QMimeDatabase>
-#include <QMimeType>
 
 using namespace KDevelop;
 

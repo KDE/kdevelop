@@ -20,10 +20,6 @@
 
 #include "cmakeprojectdata.h"
 #include "cmakeutils.h"
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QFileInfo>
 
 CMakeProjectData::CMakeProjectData(const QHash<KDevelop::Path, QStringList>& targets, const CMakeFilesCompilationData& data, const QVector<Test>& tests)
     : compilationData(data)

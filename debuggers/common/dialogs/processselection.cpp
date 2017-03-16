@@ -28,10 +28,8 @@
 
 #include <QAbstractItemView>
 #include <QDialogButtonBox>
-#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QTimer>
 #include <QTreeView>
 #include <QVBoxLayout>
 

@@ -24,8 +24,6 @@
 
 #include <interfaces/idocumentationprovider.h>
 #include <QObject>
-#include <QString>
-#include <QUrl>
 #include <QVariantList>
 #include <QHelpEngine>
 

@@ -41,7 +41,7 @@ fileH = <<HEADER_EOF
 #ifndef CMAKE#{className.upcase}TEST_H
 #define CMAKE#{className.upcase}TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class #{className}Test : public QObject
 {

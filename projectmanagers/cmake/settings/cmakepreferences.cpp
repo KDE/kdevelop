@@ -43,8 +43,6 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <interfaces/iruncontroller.h>
-#include <KAboutData>
-#include <QStandardPaths>
 
 using namespace KDevelop;
 

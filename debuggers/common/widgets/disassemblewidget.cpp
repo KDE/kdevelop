@@ -37,17 +37,15 @@
 
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KTextEdit>
 
 #include <QShowEvent>
 #include <QHideEvent>
 #include <QAction>
 #include <QMenu>
-#include <QBoxLayout>
-#include <QComboBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QSplitter>
-#include <QHeaderView>
 #include <QFontDatabase>
 
 using namespace KDevMI;

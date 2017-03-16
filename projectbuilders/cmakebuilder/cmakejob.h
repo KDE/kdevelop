@@ -23,8 +23,6 @@
 #define CMAKEJOB_H
 
 #include <outputview/outputexecutejob.h>
-#include <QProcess>
-#include <QString>
 
 #include <util/path.h>
 

@@ -22,8 +22,6 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QTemporaryDir>
-#include <qfile.h>
-#include <qtextstream.h>
 #include <qdir.h>
 #include <QPushButton>
 #include <QStandardPaths>
@@ -32,7 +30,7 @@
 #include <QApplication>
 #include <KAboutData>
 #include <QCommandLineParser>
-#include <KConfigGroup>
+#include <KConfig>
 
 #include "custombuildsystemconfigwidget.h"
 #include "../debug.h"

@@ -23,15 +23,15 @@
 #define CMAKELISTSPARSER_H
 
 #include <QList>
-#include <QObject>
 #include <QMetaType>
-#include <QStringList>
 #include <QString>
 
 // #include "cmakemodelitems.h"
 #include "cmListFileLexer.h"
 #include <cmakecommonexport.h>
 #include <language/editor/rangeinrevision.h>
+
+class QStringList;
 
 struct CMakeFunctionArgument
 {

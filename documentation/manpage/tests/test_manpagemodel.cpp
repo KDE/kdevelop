@@ -24,7 +24,7 @@
 
 #include <QDebug>
 #include <QSignalSpy>
-#include <QtTest>
+#include <QTest>
 
 class TestManPageModel : public QObject
 {

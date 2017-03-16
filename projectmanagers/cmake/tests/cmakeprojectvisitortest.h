@@ -21,7 +21,7 @@
 #ifndef CMAKECMAKEPROJECTVISITORTEST_H
 #define CMAKECMAKEPROJECTVISITORTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QString>
 #include <language/duchain/topducontext.h>
 #include "cmakelistsparser.h"

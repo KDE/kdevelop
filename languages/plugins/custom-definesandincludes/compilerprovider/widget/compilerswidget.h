@@ -24,7 +24,6 @@
 #ifndef COMPILERWIDGET_H
 #define COMPILERWIDGET_H
 
-#include <QAbstractItemModel>
 #include <QVector>
 #include <QWidget>
 

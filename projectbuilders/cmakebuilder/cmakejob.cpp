@@ -25,7 +25,6 @@
 #include <cmakebuilderconfig.h>
 #include <cmakebuilder.h>
 
-#include <QtCore/QFile>
 #include <QtCore/QDir>
 
 #include <project/projectmodel.h>
@@ -33,7 +32,6 @@
 #include <interfaces/iproject.h>
 
 #include <kshell.h>
-#include <kjob.h>
 #include <klocalizedstring.h>
 
 #include "cmakeutils.h"

@@ -21,7 +21,7 @@
 #ifndef CMAKECMAKECONDITIONTEST_H
 #define CMAKECMAKECONDITIONTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include "cmaketypes.h"
 

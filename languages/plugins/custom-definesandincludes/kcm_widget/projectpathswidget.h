@@ -21,12 +21,9 @@
 
 #include <QWidget>
 
-#include <qabstractitemmodel.h>
-
 #include "../compilerprovider/icompiler.h"
 #include "../compilerprovider/settingsmanager.h"
 
-class KUrlRequester;
 namespace Ui
 {
 class ProjectPathsWidget;
@@ -38,7 +35,6 @@ namespace KDevelop
 }
 
 class ProjectPathsModel;
-class QItemSelection;
 
 class ProjectPathsWidget : public QWidget
 {

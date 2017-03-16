@@ -23,15 +23,13 @@
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QList>
-#include <QtCore/QVariant>
-#include <QtCore/QPair>
-#include <QtCore/QSet>
+#include <QVariantList>
 #include <QUrl>
 #include <project/interfaces/iprojectbuilder.h>
 
 class QStringList;
-class QSignalMapper;
 class KDialog;
+
 namespace KDevelop{
     class ProjectBaseItem;
     class CommandExecutor;

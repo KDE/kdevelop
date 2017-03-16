@@ -23,7 +23,6 @@
 
 #include <QString>
 #include <QMap>
-#include <QStringList>
 #include <QVariantList>
 #include <interfaces/iplugin.h>
 #include "icmakedocumentation.h"

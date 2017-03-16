@@ -25,7 +25,6 @@
 
 #include "dbgglobal.h"
 
-#include <QFocusEvent>
 #include <QTextEdit>
 #include <QTimer>
 #include <QStringList>
@@ -35,7 +34,6 @@ class IDebugSession;
 }
 
 class KHistoryComboBox;
-class QTextEdit;
 class QToolButton;
 
 namespace KDevMI

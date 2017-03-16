@@ -41,7 +41,6 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMessageBox>
-#include <QTimer>
 #include <QUrl>
 
 #ifdef Q_OS_WIN

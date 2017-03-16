@@ -26,7 +26,6 @@
 
 #include <QAbstractItemModel>
 #include <QItemSelection>
-#include <QHash>
 
 #include "../compilerprovider/icompiler.h"
 

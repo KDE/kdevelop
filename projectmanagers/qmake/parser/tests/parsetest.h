@@ -22,7 +22,7 @@
 #define PARSETEST_H
 
 #include <QtCore/QObject>
-#include <QtTest/QtTest>
+#include <QTest>
 
 namespace QMake
 {

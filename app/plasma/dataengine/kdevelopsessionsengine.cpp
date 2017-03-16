@@ -19,8 +19,6 @@
 
 #include "kdevelopsessionsengine.h"
 #include "kdevelopsessionsservice.h"
-#include <QtCore/QStandardPaths>
-#include <QtCore/QDir>
 
 #include <KDirWatch>
 #include <KConfig>

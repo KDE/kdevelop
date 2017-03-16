@@ -31,7 +31,7 @@
 
 #include "../makefileresolver.h"
 
-#include <QtTest>
+#include <QTest>
 
 using namespace KDevelop;
 

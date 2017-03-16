@@ -19,7 +19,7 @@
 
 #include "test_custombuildsystemplugin.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QDebug>
 
 #include <tests/autotestshell.h>
@@ -31,7 +31,6 @@
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
-#include <kconfiggroup.h>
 
 #include <serialization/indexedstring.h>
 

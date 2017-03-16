@@ -20,9 +20,6 @@ Boston, MA 02110-1301, USA.
 */
 #include "astyle_formatter.h"
 
-#include <QRadioButton>
-#include <QSpinBox>
-#include <QCheckBox>
 #include <QString>
 
 #include <interfaces/isourceformatter.h>

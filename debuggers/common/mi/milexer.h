@@ -20,8 +20,6 @@
 #ifndef MILEXER_H
 #define MILEXER_H
 
-#include <QMap>
-#include <QString>
 #include <QVector>
 
 namespace KDevMI { namespace MI {

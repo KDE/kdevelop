@@ -4,7 +4,7 @@
 #include "{{ output_file_header }}"
 
 
-#include <QtTest>
+#include <QTest>
 
 
 {{ qtest_main }}({{ name }});

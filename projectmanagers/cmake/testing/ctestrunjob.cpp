@@ -36,7 +36,6 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KCompositeJob>
 
 using namespace KDevelop;
 

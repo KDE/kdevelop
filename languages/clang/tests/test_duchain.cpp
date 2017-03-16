@@ -54,7 +54,12 @@
 
 #include <languages/plugins/custom-definesandincludes/idefinesandincludesmanager.h>
 
-#include <QtTest>
+#include <KConfigGroup>
+
+#include <QTest>
+#include <QSignalSpy>
+#include <QLoggingCategory>
+#include <QThread>
 
 QTEST_MAIN(TestDUChain);
 

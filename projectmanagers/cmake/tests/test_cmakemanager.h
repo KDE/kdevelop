@@ -20,7 +20,7 @@
 #ifndef TEST_CMAKEMANAGER_H
 #define TEST_CMAKEMANAGER_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 namespace KDevelop {
 class IProject;

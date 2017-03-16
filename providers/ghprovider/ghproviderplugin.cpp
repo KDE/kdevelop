@@ -19,7 +19,6 @@
 
 
 #include <KLocalizedString>
-#include <KAboutData>
 #include <KPluginFactory>
 
 #include "debug.h"

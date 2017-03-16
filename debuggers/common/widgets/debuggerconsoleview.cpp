@@ -38,7 +38,6 @@
 #include <KLocalizedString>
 
 #include <QAction>
-#include <QClipboard>
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QIcon>
@@ -50,7 +49,7 @@
 #include <QTextEdit>
 #include <QToolBar>
 #include <QVBoxLayout>
-#include <QWidget>
+#include <QPoint>
 
 using namespace KDevMI;
 

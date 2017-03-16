@@ -21,8 +21,6 @@
 
 #include "globalsettings.h"
 
-#include <QVBoxLayout>
-
 namespace cppcheck
 {
 

@@ -21,7 +21,7 @@
 #ifndef CMAKELEXERTEST_H
 #define CMAKELEXERTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class CMakeAst;
 

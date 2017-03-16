@@ -25,7 +25,7 @@
 #include "mi.h"
 #include "milexer.h"
 
-#include <QString>
+class QString;
 
 namespace KDevMI { namespace MI {
 

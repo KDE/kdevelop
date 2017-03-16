@@ -20,7 +20,6 @@
 #define DEFINESMODEL_H
 
 #include <QAbstractTableModel>
-#include <QHash>
 
 #include "idefinesandincludesmanager.h"
 

@@ -25,9 +25,6 @@
 #include <QHash>
 #include <QPointer>
 #include <QString>
-#include <QStringList>
-
-#include <KConfigGroup>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>

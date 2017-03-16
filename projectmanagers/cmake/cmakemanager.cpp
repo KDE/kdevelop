@@ -41,11 +41,8 @@
 #include <QThread>
 #include <QFileSystemWatcher>
 #include <QTimer>
-#include <qjsondocument.h>
 
 #include <KPluginFactory>
-#include <KPluginLoader>
-#include <KAboutData>
 #include <QUrl>
 #include <QAction>
 #include <KMessageBox>
@@ -71,7 +68,6 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/use.h>
 #include <language/duchain/duchain.h>
-#include <QStandardPaths>
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 

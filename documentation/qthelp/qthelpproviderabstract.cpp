@@ -22,7 +22,6 @@
 #include "qthelpprovider.h"
 
 #include <QHelpIndexModel>
-#include <QTemporaryFile>
 #include <QHelpContentModel>
 
 #include <QStandardPaths>

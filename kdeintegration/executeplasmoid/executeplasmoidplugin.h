@@ -25,8 +25,7 @@
 
 #include <interfaces/iplugin.h>
 #include <execute/iexecuteplugin.h>
-#include <QtCore/QVariant>
-#include <QtCore/QProcess>
+#include <QVariantList>
 
 class PlasmoidExecutionConfigType;
 class QUrl;

@@ -42,7 +42,6 @@
 #include <util/jobstatus.h>
 
 #include <QAction>
-#include <QMessageBox>
 
 K_PLUGIN_FACTORY_WITH_JSON(CppcheckFactory, "kdevcppcheck.json", registerPlugin<cppcheck::Plugin>();)
 

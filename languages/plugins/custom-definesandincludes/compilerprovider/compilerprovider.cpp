@@ -33,8 +33,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 
-#include <KPluginFactory>
-#include <KAboutData>
 #include <KLocalizedString>
 #include <QStandardPaths>
 

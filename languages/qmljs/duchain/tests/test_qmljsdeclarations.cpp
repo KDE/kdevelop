@@ -35,7 +35,7 @@
 #include <language/duchain/problem.h>
 #include <language/duchain/classdeclaration.h>
 
-#include <QtTest>
+#include <QTest>
 
 QTEST_GUILESS_MAIN(TestDeclarations);
 

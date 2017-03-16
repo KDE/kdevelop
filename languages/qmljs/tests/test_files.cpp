@@ -36,7 +36,7 @@
 #include <tests/json/jsontypetests.h>
 #include <interfaces/ilanguagecontroller.h>
 
-#include <QtTest>
+#include <QTest>
 
 // #include "cppjsontests.h"
 

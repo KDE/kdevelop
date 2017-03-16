@@ -19,9 +19,6 @@
 
 #include "configwidget.h"
 
-#include <QToolButton>
-#include <QLayout>
-
 #include <KLocalizedString>
 #include <KLineEdit>
 #include <QAction>

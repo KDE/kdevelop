@@ -25,7 +25,6 @@
 #include "plasmoidexecutionjob.h"
 #include "debug.h"
 #include <kpluginfactory.h>
-#include <KAboutData>
 #include <QUrl>
 #include <interfaces/icore.h>
 

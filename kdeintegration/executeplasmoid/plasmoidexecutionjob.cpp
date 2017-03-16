@@ -24,10 +24,8 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <kprocess.h>
 #include <KLocalizedString>
 #include <kconfiggroup.h>
-#include <kparts/mainwindow.h>
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>
@@ -36,7 +34,6 @@
 #include <util/commandexecutor.h>
 #include <util/path.h>
 
-#include <kshell.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>

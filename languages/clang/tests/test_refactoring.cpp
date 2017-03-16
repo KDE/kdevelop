@@ -33,7 +33,8 @@
 #include <language/interfaces/ilanguagesupport.h>
 
 #include <QTemporaryDir>
-#include <QtTest>
+#include <QLoggingCategory>
+#include <QTest>
 
 QTEST_MAIN(TestRefactoring);
 

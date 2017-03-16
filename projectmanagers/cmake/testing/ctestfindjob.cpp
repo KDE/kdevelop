@@ -27,7 +27,6 @@
 #include <language/duchain/duchain.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-#include <QFileInfo>
 #include <KLocalizedString>
 
 CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)

@@ -23,10 +23,8 @@
 
 #include <QProcess>
 #include <QString>
-#include <QTextDocument>
 #include <QStringListModel>
 #include <QMimeDatabase>
-#include <QFontDatabase>
 #include <QStandardPaths>
 #include <KLocalizedString>
 

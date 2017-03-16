@@ -22,7 +22,6 @@
 #include "ninjajob.h"
 #include "ninjabuilderpreferences.h"
 
-#include <KAboutData>
 #include <KPluginFactory>
 #include <KConfigGroup>
 #include <KShell>

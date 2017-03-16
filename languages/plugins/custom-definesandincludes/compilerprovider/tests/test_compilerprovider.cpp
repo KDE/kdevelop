@@ -23,7 +23,8 @@
 
 #include "test_compilerprovider.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
+#include <QTemporaryFile>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

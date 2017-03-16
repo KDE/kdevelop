@@ -42,7 +42,6 @@
 #include <KParts/MainWindow>
 
 #include <QFileInfo>
-#include <QRegularExpression>
 
 using namespace KDevMI;
 using namespace KDevelop;

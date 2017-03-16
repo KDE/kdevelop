@@ -22,8 +22,7 @@
 #define ASSIGNMENTTEST_H
 
 #include <QtCore/QObject>
-#include <QtTest/QtTest>
-#include <QtCore/QList>
+#include <QTest>
 
 namespace QMake
 {

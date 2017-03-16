@@ -21,7 +21,6 @@
 
 #include <QWidget>
 
-#include <qabstractitemmodel.h>
 #include "idefinesandincludesmanager.h"
 
 namespace Ui
@@ -35,7 +34,6 @@ namespace KDevelop
 }
 
 class DefinesModel;
-class QItemSelection;
 
 class DefinesWidget : public QWidget
 {

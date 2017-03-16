@@ -60,7 +60,6 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QReadLocker>
-#include <QProcess>
 #include <memory>
 
 using namespace KDevelop;

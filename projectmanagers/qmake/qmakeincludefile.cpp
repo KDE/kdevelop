@@ -20,9 +20,7 @@
 
 #include "qmakeincludefile.h"
 #include "qmakemkspecs.h"
-#include <QtCore/QMap>
 #include <QtCore/QString>
-#include <QtCore/QStringList>
 
 QMakeIncludeFile::QMakeIncludeFile(const QString& incfile, QMakeFile* parent, const VariableMap& variables)
     : QMakeProjectFile(incfile)

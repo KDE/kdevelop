@@ -37,7 +37,7 @@
 #include <QTest>
 #include <QSignalSpy>
 #include <KConfigGroup>
-#include <kio/deletejob.h>
+#include <KJob>
 
 QTEST_MAIN(TestQMakeProject);
 

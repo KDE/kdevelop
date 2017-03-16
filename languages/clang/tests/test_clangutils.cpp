@@ -34,7 +34,7 @@
 #include <QTemporaryFile>
 
 #include <QDebug>
-#include <QtTest>
+#include <QTest>
 
 #include <memory>
 

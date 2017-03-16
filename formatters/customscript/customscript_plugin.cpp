@@ -20,9 +20,7 @@
 
 #include "customscript_plugin.h"
 
-#include <KPluginLoader>
 #include <KPluginFactory>
-#include <KAboutData>
 #include <QTextStream>
 #include <QTemporaryFile>
 #include <QMimeDatabase>

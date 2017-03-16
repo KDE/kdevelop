@@ -1,6 +1,6 @@
 #include "test.h"
 
-#include <QtTest>
+#include <QTest>
 
 void KdeTest::initTestCase()
 {

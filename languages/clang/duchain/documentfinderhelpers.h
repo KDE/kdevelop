@@ -22,12 +22,14 @@
 #ifndef DOCUMENTFINDERHELPERS_H
 #define DOCUMENTFINDERHELPERS_H
 
-#include <QStringList>
 #include <QVector>
 
 #include <QUrl>
 
 #include "clangprivateexport.h"
+
+class QStringList;
+class QString;
 
 /// Helper class for handling @see IBuddyDocumentFinder features.
 namespace DocumentFinderHelpers

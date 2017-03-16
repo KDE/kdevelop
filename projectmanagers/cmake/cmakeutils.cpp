@@ -26,10 +26,8 @@
 #include <QTemporaryDir>
 #include <QRegularExpression>
 
-#include <kconfig.h>
 #include <KLocalizedString>
 #include <kconfiggroup.h>
-#include <kparts/mainwindow.h>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>

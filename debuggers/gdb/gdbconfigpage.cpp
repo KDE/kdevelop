@@ -28,9 +28,7 @@
 
 #include <kconfiggroup.h>
 #include <KLocalizedString>
-#include <kshell.h>
 #include <kmessagebox.h>
-#include <kparts/mainwindow.h>
 
 #include <outputview/outputmodel.h>
 #include <interfaces/idebugcontroller.h>

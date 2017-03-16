@@ -20,7 +20,9 @@
 
 #include <cmakeserver.h>
 #include "testhelpers.h"
-#include <QtTest>
+
+#include <QTest>
+#include <QJsonObject>
 
 using namespace KDevelop;
 

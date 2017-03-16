@@ -26,7 +26,6 @@
 
 #include <debugger/variable/variablecollection.h>
 
-#include <QMap>
 #include <QPointer>
 
 

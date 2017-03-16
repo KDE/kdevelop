@@ -20,8 +20,6 @@
 
 #include "qmakemodelitems.h"
 
-#include <QtCore/QHash>
-#include <QtCore/QPair>
 #include <QtCore/QList>
 
 #include "qmakeprojectfile.h"

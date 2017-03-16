@@ -25,9 +25,7 @@
 #include <QDebug>
 
 #include <kio/deletejob.h>
-#include <kaboutdata.h>
 #include <klocalizedstring.h>
-#include <kurlrequester.h>
 #include <KMessageBox>
 #include <KJobWidgets>
 

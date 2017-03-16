@@ -18,13 +18,12 @@
  */
 
 
-#include <KConfig>
-#include <KSharedConfig>
-
 #include <ghaccount.h>
+
 #include <ghresource.h>
 #include <ghproviderplugin.h>
 
+#include <KSharedConfig>
 
 namespace gh
 {

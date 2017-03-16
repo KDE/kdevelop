@@ -17,7 +17,6 @@
 #include "cmakeprojectvisitor.h"
 #include <language/duchain/declaration.h>
 #include <QFileInfo>
-#include <QDateTime>
 
 #include "astfactory.h"
 #include "cmakeparserutils.h"

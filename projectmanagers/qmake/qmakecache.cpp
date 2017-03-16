@@ -20,8 +20,6 @@
 
 #include "qmakecache.h"
 
-#include <QtCore/QStringList>
-
 #include "qmakemkspecs.h"
 
 QMakeCache::QMakeCache(const QString& cachefile)

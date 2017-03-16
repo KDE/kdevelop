@@ -31,7 +31,6 @@
 #include <KUrlRequester>
 
 #include <QComboBox>
-#include <QCheckBox>
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QRegularExpression>

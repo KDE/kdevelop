@@ -28,8 +28,6 @@
 // KDevPlatform
 #include <sublime/urldocument.h>
 #include <interfaces/idocument.h>
-//Qt
-#include <QtCore/QList>
 
 namespace Kasten {
 class ByteArrayDocument;

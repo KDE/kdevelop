@@ -24,7 +24,6 @@
 #include <interfaces/iprojectprovider.h>
 
 class QModelIndex;
-class KConfigDialog;
 class KFilterProxySearchLine;
 class QListView;
 class KDEProviderWidget : public KDevelop::IProjectProviderWidget

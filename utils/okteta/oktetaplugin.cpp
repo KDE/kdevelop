@@ -57,10 +57,10 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 // KDE
-#include <KAboutData>
 #include <KPluginFactory>
 #include <KLocalizedString>
 
+#include <QMimeType>
 #include <QAction>
 
 K_PLUGIN_FACTORY_WITH_JSON(OktetaPluginFactory, "kdevokteta.json", registerPlugin<KDevelop::OktetaPlugin>(); )

@@ -18,7 +18,6 @@
 
 #include "kdeprojectsmodel.h"
 #include <QIcon>
-#include <QUrl>
 #include <vcs/vcslocation.h>
 
 using namespace KDevelop;

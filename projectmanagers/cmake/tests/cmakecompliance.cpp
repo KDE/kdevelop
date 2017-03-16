@@ -26,7 +26,6 @@
 #include "../debug.h"
 
 #include <QProcess>
-#include <QFile>
 
 #include <cmakeparserutils.h>
 #include <language/duchain/duchain.h>

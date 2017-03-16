@@ -28,11 +28,13 @@
 #include <util/path.h>
 
 #include <QHash>
-#include <QStringList>
-#include <QFileInfo>
+#include <QString>
+#include <QFileInfoList>
 #include <QList>
 #include <QSet>
 #include <QMutex>
+
+class QStringList;
 
 namespace QmlJS
 {

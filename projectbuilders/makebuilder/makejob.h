@@ -27,7 +27,6 @@
 #include <outputview/outputexecutejob.h>
 
 #include <QString>
-#include <QProcess>
 
 #include "imakebuilder.h"
 

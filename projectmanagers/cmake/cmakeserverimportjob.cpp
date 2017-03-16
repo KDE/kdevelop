@@ -22,6 +22,7 @@
 #include "cmakeutils.h"
 #include "cmakeserver.h"
 #include <interfaces/iproject.h>
+#include <QJsonObject>
 #include <QJsonArray>
 #include <QRegularExpression>
 #include "debug.h"

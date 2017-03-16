@@ -17,26 +17,19 @@
 #include <interfaces/iplugincontroller.h>
 #include <makebuilder/imakebuilder.h>
 #include <kpluginfactory.h>
-#include <kaboutdata.h>
-#include <kpluginloader.h>
 #include <project/projectmodel.h>
 #include <project/helper.h>
 #include <serialization/indexedstring.h>
 
-#include <QDir>
-#include <QFileInfoList>
 #include <QFile>
-#include <QApplication>
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
-#include <QUrl>
 #include <QLoggingCategory>
 Q_DECLARE_LOGGING_CATEGORY(CUSTOMMAKE)
 Q_LOGGING_CATEGORY(CUSTOMMAKE, "kdevelop.projectmanagers.custommake")
 
 #include <KLocalizedString>
-#include <KDirWatch>
 
 #include <algorithm>
 

@@ -21,11 +21,8 @@
 #ifndef CMAKEPROJECTDATA_H
 #define CMAKEPROJECTDATA_H
 
-#include <QPointer>
 #include <QSharedPointer>
 #include <QStringList>
-#include <QJsonObject>
-#include <QProcess>
 #include <QFileSystemWatcher>
 #include "cmaketypes.h"
 #include <util/path.h>

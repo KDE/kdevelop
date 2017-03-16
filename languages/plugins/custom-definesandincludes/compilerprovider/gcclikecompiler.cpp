@@ -23,7 +23,7 @@
 
 #include "gcclikecompiler.h"
 
-#include <QDir>
+#include <QFileInfo>
 #include <QProcess>
 #include <QRegularExpression>
 #include <QMap>

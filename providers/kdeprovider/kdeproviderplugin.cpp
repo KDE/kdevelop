@@ -22,8 +22,6 @@
 #include <QVariantList>
 
 #include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kaboutdata.h>
 #include <KLocalizedString>
 #include "kdeproviderwidget.h"
 

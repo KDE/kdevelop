@@ -22,7 +22,7 @@
 #ifndef CMAKEASTTEST_H
 #define CMAKEASTTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class CMakeAstTest : public QObject
 {

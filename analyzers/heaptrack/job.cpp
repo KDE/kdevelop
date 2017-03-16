@@ -29,7 +29,6 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <util/environmentprofilelist.h>
 #include <util/path.h>
 

@@ -18,13 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <QLabel>
 #include <KLocalizedString>
 #include <QTreeView>
-#include <QHeaderView>
-#include <QProgressBar>
-#include <QVBoxLayout>
-#include <QStackedWidget>
 #include <QStandardPaths>
 
 #include "manpagedocumentation.h"
@@ -32,7 +27,6 @@
 #include "manpagedocumentationwidget.h"
 
 #include <KIO/TransferJob>
-#include <KIO/Job>
 #include <kio/jobclasses.h>
 #include <documentation/standarddocumentationview.h>
 

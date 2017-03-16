@@ -39,7 +39,6 @@
 #include "cache.h"
 #include "frameworks/nodejs.h"
 
-#include <QtCore/QDirIterator>
 #include <QtCore/QFileInfo>
 #include <QtCore/QStandardPaths>
 #include <KLocalizedString>

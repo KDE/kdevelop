@@ -35,7 +35,6 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QToolBox>
-#include <QVariant>
 #include <QVBoxLayout>
 
 #include <cctype>

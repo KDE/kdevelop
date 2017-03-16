@@ -5,7 +5,6 @@
 #include <QLinkedList>
 #include <QSet>
 #include <QString>
-#include <QDebug>
 
 struct A {
     explicit A(const QString& _a = QString(), const QString& _b = QString(),

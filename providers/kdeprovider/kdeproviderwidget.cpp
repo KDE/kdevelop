@@ -28,7 +28,6 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include "ui_kdeconfig.h"
 #include "kdeconfig.h"
-#include <QStandardItemModel>
 #include "kdeprojectsmodel.h"
 #include "kdeprojectsreader.h"
 #include <QSortFilterProxyModel>

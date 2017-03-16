@@ -24,7 +24,6 @@
 #include <interfaces/configpage.h>
 
 class QWidget;
-class QStringList;
 class CMakeBuilderSettings;
 namespace Ui { class CMakeBuilderPreferences; }
 

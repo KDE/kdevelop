@@ -58,6 +58,7 @@
 #include <QPointer>
 #include <QRegularExpression>
 #include <QUrl>
+#include <QTimer>
 
 using namespace KDevelop;
 using namespace KDevMI;

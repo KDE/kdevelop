@@ -28,7 +28,6 @@
 #include <language/codecompletion/abstractincludefilecompletionitem.h>
 
 #include <QDirIterator>
-#include <QRegularExpression>
 
 #include <KTextEditor/View>
 

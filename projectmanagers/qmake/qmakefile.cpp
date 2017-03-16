@@ -22,7 +22,6 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
-#include <QtCore/QProcessEnvironment>
 #include <QDebug>
 
 #include "debug.h"

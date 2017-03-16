@@ -40,8 +40,6 @@
 class WaitAllJobs;
 class CMakeCommitChangesJob;
 struct CMakeProjectData;
-class QStandardItem;
-class QDir;
 class QObject;
 class CMakeHighlighting;
 class CMakeDocumentation;

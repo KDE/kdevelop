@@ -26,9 +26,6 @@
 #include <KConfigGroup>
 #include <KConfig>
 
-#include <QThread>
-#include <QCoreApplication>
-
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 #include <interfaces/iproject.h>

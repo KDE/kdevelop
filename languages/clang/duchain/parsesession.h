@@ -24,7 +24,6 @@
 #define PARSESESSION_H
 
 #include <QList>
-#include <QUrl>
 #include <QTemporaryFile>
 
 #include <clang-c/Index.h>

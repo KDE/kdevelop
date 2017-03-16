@@ -23,7 +23,7 @@
 #include "parser/ast.h"
 
 #include <QtCore/QStringList>
-#include <QtCore/QDir>
+#include <QFileInfo>
 #include <QDebug>
 #include <QProcessEnvironment>
 

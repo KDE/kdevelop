@@ -89,7 +89,6 @@ If custom format string is not enabled, names and values of all expressions will
  </customwidgets>
  <includes>
   <include location="local">keditlistbox.h</include>
-  <include location="local">klineedit.h</include>
  </includes>
  <resources/>
  <connections>

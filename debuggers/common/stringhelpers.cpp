@@ -23,10 +23,8 @@
 #include <language/duchain/stringhelpers.h>
 #include <language/duchain/safetycounter.h>
 
-#include <QByteArray>
 #include <QChar>
 #include <QString>
-#include <QStringList>
 
 namespace Utils {
 

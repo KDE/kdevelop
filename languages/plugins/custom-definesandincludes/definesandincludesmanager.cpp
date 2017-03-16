@@ -33,7 +33,6 @@
 #include <project/projectmodel.h>
 
 #include <KPluginFactory>
-#include <KAboutData>
 
 #include <QThread>
 #include <QCoreApplication>

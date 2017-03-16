@@ -26,10 +26,8 @@
 #include <QFileInfo>
 #include <QRegularExpression>
 #include <QThread>
-#include <QFileInfo>
 
 #include <KShell>
-#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 

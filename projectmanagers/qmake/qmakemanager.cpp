@@ -34,7 +34,6 @@
 #include <KDirWatch>
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KPluginLoader>
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>

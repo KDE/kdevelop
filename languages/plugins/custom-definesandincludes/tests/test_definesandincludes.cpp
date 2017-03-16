@@ -20,7 +20,7 @@
 #include "test_definesandincludes.h"
 #include "projectsgenerator.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>

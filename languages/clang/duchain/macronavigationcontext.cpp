@@ -33,9 +33,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/ipartcontroller.h>
 
-#include <QVBoxLayout>
-#include <QLabel>
-
 using namespace KDevelop;
 
 MacroNavigationContext::MacroNavigationContext(const MacroDefinition::Ptr& macro,

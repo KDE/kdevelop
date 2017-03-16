@@ -22,8 +22,6 @@
 #ifndef CMAKEMODELITEMS_H
 #define CMAKEMODELITEMS_H
 
-#include <QHash>
-
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
 #include <language/duchain/topducontext.h>

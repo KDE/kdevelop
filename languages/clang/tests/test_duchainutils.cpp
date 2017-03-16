@@ -28,7 +28,8 @@
 
 #include "../duchain/duchainutils.h"
 
-#include <QtTest>
+#include <QLoggingCategory>
+#include <QTest>
 
 using namespace KDevelop;
 

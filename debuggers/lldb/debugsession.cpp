@@ -47,7 +47,6 @@
 #include <QApplication>
 #include <QDir>
 #include <QFileInfo>
-#include <QProcess>
 #include <QStandardPaths>
 #include <QGuiApplication>
 

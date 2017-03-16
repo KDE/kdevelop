@@ -24,8 +24,6 @@
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
 
-#include <kprocess.h>
-
 #include "debug.h"
 #include "parser/ast.h"
 #include "qmakecache.h"

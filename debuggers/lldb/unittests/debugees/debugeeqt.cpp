@@ -17,7 +17,6 @@
 */
 #include <QDebug>
 #include <QtCore/QString>
-#include <QtCore/qpointer.h>
 
 int main()
 {

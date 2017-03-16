@@ -27,10 +27,6 @@
 #include <debugger/interfaces/ibreakpointcontroller.h>
 #include <debugger/interfaces/idebugsession.h>
 
-#include <QObject>
-
-class QModelIndex;
-
 namespace KDevMI {
 
 namespace MI {

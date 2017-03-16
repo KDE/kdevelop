@@ -24,8 +24,6 @@
 
 #include <language/codecompletion/codecompletionmodel.h>
 
-#include <QMetaType>
-
 #include "clangprivateexport.h"
 
 class ClangIndex;

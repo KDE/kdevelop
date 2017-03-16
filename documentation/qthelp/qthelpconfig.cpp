@@ -23,12 +23,10 @@
 #include "qthelpconfig.h"
 
 #include <QHelpEngineCore>
-#include <QFileDialog>
 #include <QToolButton>
 #include <QHeaderView>
 
 #include <KMessageBox>
-#include <KMessageWidget>
 #include <KLocalizedString>
 #include <KNS3/Button>
 

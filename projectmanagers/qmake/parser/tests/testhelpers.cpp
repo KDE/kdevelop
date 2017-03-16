@@ -21,7 +21,7 @@
 #include "testhelpers.h"
 
 #include <QtCore/QList>
-#include <QtTest/QtTest>
+#include <QTest>
 #include "ast.h"
 
 void matchScopeBodies(QList<QMake::StatementAST*> realbody, QList<QMake::StatementAST*> testbody)

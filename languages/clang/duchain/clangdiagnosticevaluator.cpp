@@ -24,8 +24,6 @@
 #include "missingincludepathproblem.h"
 #include "util/clangtypes.h"
 
-#include <QString>
-
 namespace
 {
 

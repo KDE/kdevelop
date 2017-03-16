@@ -26,7 +26,6 @@
 #include "ninjabuilderconfig.h"
 
 class QWidget;
-class QStringList;
 namespace Ui {
 class NinjaConfig;
 }

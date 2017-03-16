@@ -21,7 +21,6 @@
 #include "qthelpplugin.h"
 
 #include <kpluginfactory.h>
-#include <KAboutData>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <QDirIterator>

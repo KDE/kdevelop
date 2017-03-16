@@ -42,7 +42,6 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QRegExp>
-#include <QtCore/QStandardPaths>
 
 using namespace KDevelop;
 

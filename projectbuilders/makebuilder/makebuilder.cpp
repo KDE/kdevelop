@@ -29,7 +29,6 @@
 #include <interfaces/iproject.h>
 
 #include <KPluginFactory>
-#include <KAboutData>
 #include <KConfigGroup>
 
 Q_LOGGING_CATEGORY(MAKEBUILDER, "kdevelop.projectbuilders.makebuilder")

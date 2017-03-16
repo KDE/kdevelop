@@ -26,7 +26,7 @@
 
 #include <project/builderjob.h>
 
-#include <QtCore/QVariant>
+#include <QVariantList>
 
 /**
 @author Andreas Pakulat

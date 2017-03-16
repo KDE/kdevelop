@@ -25,7 +25,6 @@
 #include <project/projectconfigpage.h>
 
 class QWidget;
-class QStringList;
 class QMakeBuilderSettings;
 class QMakeBuildDirChooser;
 namespace Ui {

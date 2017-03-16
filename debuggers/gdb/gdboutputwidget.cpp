@@ -32,7 +32,6 @@
 #include <interfaces/idebugcontroller.h>
 
 #include <KColorScheme>
-#include <KComboBox>
 #include <KHistoryComboBox>
 #include <KLocalizedString>
 
@@ -41,7 +40,7 @@
 #include <QFocusEvent>
 #include <QMenu>
 #include <QLabel>
-#include <QLayout>
+#include <QVBoxLayout>
 #include <QToolButton>
 #include <QToolTip>
 #include <QScrollBar>

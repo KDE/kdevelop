@@ -21,7 +21,8 @@
 
 #include "codegen/clangrefactoring.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
+#include <QLoggingCategory>
 #include <QTemporaryDir>
 
 #include <ktexteditor/view.h>

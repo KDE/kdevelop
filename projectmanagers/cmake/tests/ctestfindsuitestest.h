@@ -21,7 +21,7 @@
 #ifndef CTESTFINDSUITESTEST_H
 #define CTESTFINDSUITESTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 namespace KDevelop {
 class IProject;

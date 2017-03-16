@@ -21,7 +21,7 @@
 #ifndef CMAKECMAKEPARSERUTILSTEST_H
 #define CMAKECMAKEPARSERUTILSTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class CMakeParserUtilsTest : public QObject
 {

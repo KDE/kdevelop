@@ -23,7 +23,6 @@
 
 #include <QLineEdit>
 #include <QCheckBox>
-#include <QEvent>
 #include <KUrlRequester>
 #include <QtCore/QUrl>
 

@@ -21,12 +21,11 @@
 #ifndef CMAKEEXTRAARGUMENTS_H
 #define CMAKEEXTRAARGUMENTS_H
 
-#include <QString>
-#include <QStringList>
-
 #include <KComboBox>
 
 #include "cmakecommonexport.h"
+
+class QStringList;
 
 namespace Ui {
     class CMakeExtraArgumentsHistory;

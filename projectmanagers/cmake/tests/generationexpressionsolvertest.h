@@ -21,7 +21,7 @@
 #ifndef GENERATIONEXPRESSIONSOLVERTEST_H
 #define GENERATIONEXPRESSIONSOLVERTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class GenerationExpressionSolverTest : public QObject
 {

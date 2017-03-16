@@ -20,10 +20,7 @@
 #ifndef CUSTOMBUILDSYSTEMCONFIG_H
 #define CUSTOMBUILDSYSTEMCONFIG_H
 
-#include <QMap>
 #include <QVector>
-#include <QList>
-#include <QStringList>
 #include <QUrl>
 #include <QMetaType>
 

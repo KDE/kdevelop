@@ -21,8 +21,6 @@
 #include "cmakecachereader.h"
 
 #include <QString>
-#include <QFile>
-#include <QUrl>
 
 void CacheLine::readLine(const QString& line)
 {

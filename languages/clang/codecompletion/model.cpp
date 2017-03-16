@@ -34,8 +34,6 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
 
-#include <QRegularExpression>
-
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 

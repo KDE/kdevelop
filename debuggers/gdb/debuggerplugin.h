@@ -25,28 +25,16 @@
 
 #include "config.h"
 
-#include <QByteArray>
-#include <QLabel>
-#include <QtCore/QVariant>
+#include <QVariantList>
 
 #include <KConfigGroup>
 #include <KTextEditor/Cursor>
-#include <QUrl>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
 
 #include "midebuggerplugin.h"
 #include "debugsession.h"
-
-class QLabel;
-class QMenu;
-class QDBusInterface;
-class QSignalMapper;
-class ProcessWidget;
-
-class KToolBar;
-class QAction;
 
 class GdbLauncher;
 

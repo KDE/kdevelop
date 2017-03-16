@@ -24,7 +24,8 @@
 #include "cmakeimportjsonjob.h"
 #include <icmakemanager.h>
 
-#include <qtest.h>
+#include <QLoggingCategory>
+#include <QTemporaryFile>
 
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>

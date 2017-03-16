@@ -28,8 +28,6 @@
 // Qt
 #include <QtCore/QVariantList>
 
-class QUrl;
-
 namespace Kasten
 {
 class ByteArrayViewProfileManager;

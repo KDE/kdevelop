@@ -23,9 +23,7 @@
 
 #include <interfaces/iplugin.h>
 
-#include <QtCore/QList>
-#include <QtCore/QPair>
-#include <QtCore/QVariant>
+#include <QVariantList>
 
 #include "imakebuilder.h"
 #include "makejob.h"

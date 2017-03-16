@@ -55,6 +55,7 @@ StatementAST::~StatementAST()
 AssignmentAST::AssignmentAST(AST* parent)
     : StatementAST(parent, AST::Assignment)
     , identifier(nullptr)
+    , op(nullptr)
 {
 }
 

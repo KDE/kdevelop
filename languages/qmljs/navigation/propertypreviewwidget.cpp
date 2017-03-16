@@ -21,9 +21,8 @@
 
 #include <QQuickWidget>
 #include <QQuickItem>
-#include <QLayout>
+#include <QHBoxLayout>
 #include <QLabel>
-#include <QDir>
 #include <QStandardPaths>
 #include <KLocalizedString>
 #include <KTextEditor/Document>

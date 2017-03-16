@@ -20,13 +20,10 @@
 #ifndef CTESTUTILS_H
 #define CTESTUTILS_H
 
-#include <QtCore/QStringList>
 #include <cmaketypes.h>
 
 namespace KDevelop
 {
-class ProjectFolderItem;
-class Path;
 class IProject;
 }
 

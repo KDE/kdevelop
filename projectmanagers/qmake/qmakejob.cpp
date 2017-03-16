@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "qmakejob.h"
-#include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 #include <QDebug>
 #include <QProcess>

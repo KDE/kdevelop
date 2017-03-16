@@ -37,6 +37,8 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
+#include <QLoggingCategory>
+
 void DeleteDocument::operator()(KTextEditor::View* view) const
 {
     delete view->document();

@@ -21,7 +21,7 @@
 #ifndef CMAKEMESSAGEASTTEST_H
 #define CMAKEMESSAGEASTTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class CMakeProjectVisitor;
 class CMakeCompliance : public QObject

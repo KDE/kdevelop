@@ -19,8 +19,6 @@
 
 #include "kcm_custombuildsystem.h"
 
-#include <KPluginFactory>
-#include <KAboutData>
 #include <QVBoxLayout>
 
 #include <interfaces/icore.h>

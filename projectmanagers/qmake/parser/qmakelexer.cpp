@@ -21,8 +21,6 @@
 #include "qmakelexer.h"
 
 #include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QRegExp>
 #include <QtCore/QDebug>
 #include "qmakeparser.h"
 #include <kdev-pg-location-table.h>

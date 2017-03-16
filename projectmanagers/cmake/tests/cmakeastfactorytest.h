@@ -20,7 +20,7 @@
 #ifndef CMAKEASTFACTORYTEST_H
 #define CMAKEASTFACTORYTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class CMakeAstFactoryTest : public QObject
 {

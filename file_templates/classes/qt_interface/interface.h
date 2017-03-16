@@ -4,7 +4,7 @@
 {% block includes %}
 {{ block.super }}
 {% if not base_classes %}
-#include <QtPlugin>
+#include <QObject>
 {% endif %}
 {% endblock %}
 

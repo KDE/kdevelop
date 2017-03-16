@@ -21,7 +21,8 @@
 #include "test_buddies.h"
 
 #include <QSplitter>
-#include <QtTest/QtTest>
+#include <QTest>
+#include <QLoggingCategory>
 
 #include <KParts/MainWindow>
 #include <KTextEditor/View>

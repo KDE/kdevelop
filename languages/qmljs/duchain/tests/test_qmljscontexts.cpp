@@ -29,7 +29,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testhelpers.h>
 
-#include <QtTest>
+#include <QTest>
 
 QTEST_GUILESS_MAIN(TestContexts);
 

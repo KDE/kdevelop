@@ -22,10 +22,8 @@ Boston, MA 02110-1301, USA.
 #ifndef ASTYLEFORMATTER_H
 #define ASTYLEFORMATTER_H
 
-#include <QMap>
 #include <QVariant>
 #include <QString>
-#include <QStringList>
 
 #include "astyle.h"
 

@@ -35,10 +35,6 @@
 #include <makebuilder/imakebuilder.h>
 
 #include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kparts/mainwindow.h>
-#include <kio/deletejob.h>
-#include <kaboutdata.h>
 #include <KLocalizedString>
 #include <kjob.h>
 #include <QUrl>

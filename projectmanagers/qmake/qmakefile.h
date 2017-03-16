@@ -23,9 +23,10 @@
 
 
 #include <util/stack.h>
-#include <QtCore/QStringList>
 
 #include "qmakefilevisitor.h"
+
+class QStringList;
 
 namespace KDevelop
 {

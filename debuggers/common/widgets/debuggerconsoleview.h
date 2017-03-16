@@ -27,7 +27,6 @@
 #define DEBUGGERCONSOLEVIEW_H
 
 #include <QWidget>
-#include <QPoint>
 #include <QStringList>
 #include <QTimer>
 

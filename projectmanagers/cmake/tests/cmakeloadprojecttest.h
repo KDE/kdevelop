@@ -21,7 +21,7 @@
 #ifndef CMAKELOADPROJECTTEST_H
 #define CMAKELOADPROJECTTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 struct CMakeProjectData;
 class CMakeProjectVisitor;

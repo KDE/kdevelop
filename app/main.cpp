@@ -42,8 +42,7 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 #include <QFileInfo>
-#include <QDir>
-#include <QProcess>
+#include <QProcessEnvironment>
 #include <QSessionManager>
 #include <QTextStream>
 #include <QDBusInterface>

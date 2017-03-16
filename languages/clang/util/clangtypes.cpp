@@ -22,7 +22,6 @@
 
 #include "clangtypes.h"
 
-#include <QFileInfo>
 #include <QReadLocker>
 
 #include <language/editor/documentcursor.h>

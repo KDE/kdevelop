@@ -28,7 +28,6 @@
 #include <project/projectconfigpage.h>
 #include <util/path.h>
 
-class QItemSelection;
 class CMakeSettings;
 
 namespace Ui { class CMakeBuildSettings; }

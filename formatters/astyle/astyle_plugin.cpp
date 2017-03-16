@@ -22,9 +22,7 @@
 
 #include <QMimeDatabase>
 
-#include <KPluginLoader>
 #include <KPluginFactory>
-#include <KAboutData>
 
 #include <interfaces/icore.h>
 #include <interfaces/isourceformattercontroller.h>

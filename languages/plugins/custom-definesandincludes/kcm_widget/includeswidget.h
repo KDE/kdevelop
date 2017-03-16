@@ -21,9 +21,6 @@
 
 #include <QWidget>
 
-#include <qabstractitemmodel.h>
-
-class KUrlRequester;
 namespace Ui
 {
 class IncludesWidget;
@@ -36,7 +33,6 @@ namespace KDevelop
 class QUrl;
 class ProjectPathsModel;
 class IncludesModel;
-class QItemSelection;
 
 class IncludesWidget : public QWidget
 {

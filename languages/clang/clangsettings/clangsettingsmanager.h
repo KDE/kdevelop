@@ -29,8 +29,6 @@
 
 #include "clangprivateexport.h"
 
-class KConfig;
-
 namespace KDevelop
 {
 class ProjectBaseItem;

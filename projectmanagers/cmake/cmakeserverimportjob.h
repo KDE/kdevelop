@@ -21,6 +21,7 @@
 #ifndef CMAKESERVERIMPORTJOB_H
 #define CMAKESERVERIMPORTJOB_H
 
+#include <QPointer>
 #include <KJob>
 #include "cmakeprojectdata.h"
 

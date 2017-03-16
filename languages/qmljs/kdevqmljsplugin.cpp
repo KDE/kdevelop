@@ -29,7 +29,6 @@
 #include <qmljs/qmljsmodelmanagerinterface.h>
 
 #include <KPluginFactory>
-#include <KAboutData>
 
 #include <language/codecompletion/codecompletion.h>
 #include <language/assistant/renameassistant.h>

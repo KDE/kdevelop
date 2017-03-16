@@ -24,7 +24,6 @@
 #ifndef ICOMPILER_H
 #define ICOMPILER_H
 
-#include <QHash>
 #include <QString>
 #include <QSharedPointer>
 

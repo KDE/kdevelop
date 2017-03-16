@@ -28,7 +28,6 @@
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/ibuddydocumentfinder.h>
 
-#include <QStringList>
 #include <QVariantList>
 
 class ClangIndex;

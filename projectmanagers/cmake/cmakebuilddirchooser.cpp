@@ -27,11 +27,8 @@
 
 #include <KColorScheme>
 #include <KLocalizedString>
-#include <KSharedConfig>
-#include <KConfigGroup>
 
 #include <QDir>
-#include <QStandardPaths>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 

@@ -21,8 +21,6 @@
 #include "ctestrunjob.h"
 #include "../debug.h"
 
-#include <QFileInfo>
-
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>
 #include <language/duchain/indexeddeclaration.h>

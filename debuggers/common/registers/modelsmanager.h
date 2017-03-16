@@ -31,7 +31,6 @@
 #include "registercontroller.h"
 
 class QAbstractItemView;
-class QStandardItemModel;
 class QStandardItem;
 class QModelIndex;
 

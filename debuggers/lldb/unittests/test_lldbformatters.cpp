@@ -40,7 +40,6 @@
 #include <KSharedConfig>
 
 #include <QDebug>
-#include <QRegularExpression>
 #include <QString>
 #include <QTest>
 #include <QUrl>

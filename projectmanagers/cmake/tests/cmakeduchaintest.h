@@ -21,7 +21,7 @@
 #ifndef CMAKEDUCHAINTEST_H
 #define CMAKEDUCHAINTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <language/duchain/topducontext.h>
 
 /**

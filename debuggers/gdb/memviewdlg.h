@@ -19,7 +19,6 @@
 #include "dbgglobal.h"
 #include "mi/mi.h"
 
-#include <QContextMenuEvent>
 #include <QWidget>
 
 namespace Okteta {
@@ -33,7 +32,6 @@ namespace KDevelop {
 class IDebugSession;
 }
 
-class QLineEdit;
 class QToolBox;
 
 

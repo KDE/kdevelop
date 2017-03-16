@@ -31,7 +31,6 @@
 #include <util/path.h>
 
 #include <QFile>
-#include <QDir>
 #include <QStandardPaths>
 
 using namespace KDevelop;

@@ -20,10 +20,6 @@
 
 #include "ninjabuilderpreferences.h"
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <KAboutData>
-
 #include "ui_ninjaconfig.h"
 #include "ninjabuilderconfig.h"
 

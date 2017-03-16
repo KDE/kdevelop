@@ -35,15 +35,9 @@
 #include "variablecontroller.h"
 #include "mi/mi.h"
 
-
 #include <KConfigGroup>
 
-#include <QPointer>
-#include <QScopedPointer>
-
-
 class IExecutePlugin;
-class KToolBar;
 
 namespace KDevelop {
 class ProcessLineMaker;

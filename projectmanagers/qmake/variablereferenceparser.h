@@ -24,7 +24,8 @@
 #include <QList>
 #include <QMap>
 #include <QString>
-#include <QStringList>
+
+class QStringList;
 
 class VariableInfo
 {

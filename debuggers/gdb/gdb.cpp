@@ -26,7 +26,6 @@
 #include "dbgglobal.h"
 #include "debuglog.h"
 
-#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>

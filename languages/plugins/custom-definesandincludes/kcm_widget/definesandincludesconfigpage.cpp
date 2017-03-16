@@ -19,9 +19,6 @@
 #include <QVBoxLayout>
 #include <QIcon>
 
-#include <KPluginFactory>
-#include <KAboutData>
-
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
 #include "../compilerprovider/compilerprovider.h"

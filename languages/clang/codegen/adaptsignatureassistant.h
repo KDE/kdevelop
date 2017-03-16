@@ -28,7 +28,6 @@
 #include <language/duchain/topducontext.h>
 
 #include <QPointer>
-#include <QUrl>
 
 namespace KTextEditor {
 class View;

@@ -46,7 +46,6 @@
 #include <util/path.h>
 
 #include <QDir>
-#include <QProcess>
 #include <QRegularExpression>
 
 #include <algorithm>
