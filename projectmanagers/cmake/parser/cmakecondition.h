@@ -26,7 +26,7 @@
 class KDEVCMAKECOMMON_EXPORT CMakeCondition
 {
     public:
-        CMakeCondition(const CMakeProjectVisitor* v);
+        explicit CMakeCondition(const CMakeProjectVisitor* v);
         bool condition(const QStringList &expression);
         QList<int> variableArguments() const { return m_argUses; }
         QStringList matches() const { return m_matches; }
