@@ -23,6 +23,7 @@
 
 #include <QAction>
 #include <QMessageBox>
+#include <QMimeType>
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
