@@ -741,13 +741,6 @@ int main( int argc, char *argv[] )
 #endif
 
 
-#ifdef WITH_WELCOMEPAGE
-    // make it possible to disable the welcome page, useful for valgrind runs e.g.
-    if (!qEnvironmentVariableIsSet("KDEV_DISABLE_WELCOMEPAGE")) {
-        trySetupWelcomePageView();
-    }
-#endif
-
     qCDebug(APP) << "Done startup" << "- took:" << timer.elapsed() << "ms";
     timer.invalidate();
 
