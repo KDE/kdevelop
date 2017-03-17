@@ -173,7 +173,7 @@ void CTestRunJob::processFinished(KJob* job)
 
 void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endRow)
 {
-    // This regular expresion matches the name of the testcase (whatever between "::" and "(", indeed )
+    // This regular expression matches the name of the testcase (whatever between "::" and "(", indeed )
     // For example, from:
     //      PASS   : ExpTest::testExp(sum)
     // matches "testExp"

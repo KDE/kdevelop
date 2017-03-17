@@ -155,7 +155,7 @@ public:
             }
             int frame = m_session->frameStackModel()->currentFrame();
             m_session->addCommand(StackListArguments,
-                                //dont'show value, low-frame, high-frame
+                                // do not show value, low-frame, high-frame
                                 QString("0 %1 %2").arg(frame).arg(frame),
                                 new StackListArgumentsHandler(localsName));
         }

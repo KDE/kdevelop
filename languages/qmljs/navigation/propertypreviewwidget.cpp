@@ -82,7 +82,7 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
         // Appearance
         PROP("opacity", "Opacity.qml", QString(), QString())
 
-        // Type-dependend widgets
+        // Type-dependent widgets
         PROP(QString(), "ColorPicker.qml", "color", QString())
     }
 #undef PROP
