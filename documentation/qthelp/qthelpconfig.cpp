@@ -338,7 +338,7 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
         // just removing the files results in wrong installed states in the KNS3 dialog
         // TODO: add API to KNS to remove files without UI interaction
         removeBtn->setEnabled(false);
-        removeBtn->setToolTip(tr("Please uninstall this via GHNS"));
+        removeBtn->setToolTip(i18n("Please uninstall this via GHNS"));
     } else {
         connect(removeBtn, &QPushButton::clicked, this, [=](){
             remove(item);

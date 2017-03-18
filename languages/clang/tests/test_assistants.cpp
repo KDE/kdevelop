@@ -24,6 +24,8 @@
 #include <QtTest/QtTest>
 #include <QTemporaryDir>
 
+#include <KLocalizedString>
+
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
@@ -607,16 +609,16 @@ void TestAssistants::testUnknownDeclarationAssistant()
 
     {
         const bool hasForwardDecls =
-            actionDescriptions.contains(QObject::tr("Forward declare as 'struct'")) ||
-            actionDescriptions.contains(QObject::tr("Forward declare as 'class'"));
+            actionDescriptions.contains(i18n("Forward declare as 'struct'")) ||
+            actionDescriptions.contains(i18n("Forward declare as 'class'"));
         QCOMPARE(hasForwardDecls, static_cast<bool>(actions & ForwardDecls));
     }
 
     {
         auto fileName = testbed.includeFileName();
         fileName = fileName.mid(fileName.lastIndexOf('/') + 1);
-        const auto description = QObject::tr("Insert \'%1\'")
-            .arg(QStringLiteral("#include \"%1\"").arg(fileName));
+        const auto directive = QStringLiteral("#include \"%1\"").arg(fileName);
+        const auto description = i18n("Insert \'%1\'", directive);
         const bool hasMissingInclude = actionDescriptions.contains(description);
         QCOMPARE(hasMissingInclude, static_cast<bool>(actions & MissingInclude));
     }
