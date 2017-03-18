@@ -115,7 +115,7 @@ RenameAssistant::~RenameAssistant()
 
 QString RenameAssistant::title() const
 {
-    return tr("Rename");
+    return i18n("Rename");
 }
 
 bool RenameAssistant::isUseful() const
