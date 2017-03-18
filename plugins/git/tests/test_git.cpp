@@ -352,7 +352,7 @@ void GitInitTest::testMerge()
     j = m_plugin->add(listOfAddedFiles);
     VERIFYJOB(j);
 
-    j = m_plugin->commit("Commiting to the new branch", QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir()));
+    j = m_plugin->commit("Committing to the new branch", QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir()));
     VERIFYJOB(j);
 
     j = m_plugin->switchBranch(baseUrl, QStringLiteral("master"));
@@ -380,7 +380,7 @@ void GitInitTest::testMerge()
     QVERIFY(writeFile(gitTest_BaseDir() + files[2], content));
     j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir() + files[2]));
     VERIFYJOB(j);
-    j = m_plugin->commit(QStringLiteral("Commiting to AnotherBranch"), QList<QUrl>() << baseUrl);
+    j = m_plugin->commit(QStringLiteral("Committing to AnotherBranch"), QList<QUrl>() << baseUrl);
     VERIFYJOB(j);
     j = m_plugin->switchBranch(baseUrl, branchNames[0]);
     VERIFYJOB(j);
