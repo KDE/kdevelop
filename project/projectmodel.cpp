@@ -35,6 +35,7 @@
 #include "interfaces/iprojectfilemanager.h"
 #include <serialization/indexedstring.h>
 
+#include "debug.h"
 #include "path.h"
 
 namespace KDevelop
@@ -426,7 +427,7 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
     }
     if( item->parent() ) {
         // Proper way is to first removeRow() on the original parent, then appendRow on this one
-        qWarning() << "Ignoring double insertion of item" << item;
+        qCWarning(PROJECT) << "Ignoring double insertion of item" << item;
         return;
     }
     // this is too slow... O(n) and thankfully not a problem anyways

@@ -62,7 +62,7 @@ PluginPreferences::PluginPreferences(QWidget* parent)
             QString category = info.category();
             if (!categories.contains(category)) {
                 if (!category.isEmpty()) {
-                    qWarning() << "unknown category for plugin" << info.name() << ":" << info.category();
+                    qCWarning(SHELL) << "unknown category for plugin" << info.name() << ":" << info.category();
                 }
                 category = QStringLiteral("Other");
             }

@@ -313,7 +313,7 @@ public:
                                 i18n( "Could not load %1, a project with the same name '%2' is already open.",
                                 projectFile.pathOrUrl(), name ) );
 
-            qWarning() << "Trying to open a project with a name that is already used by another open project";
+            qCWarning(SHELL) << "Trying to open a project with a name that is already used by another open project";
             return true;
         }
         return false;
@@ -522,7 +522,7 @@ void Project::close()
 {
     Q_ASSERT(d->topItem);
     if (d->topItem->row() == -1) {
-        qWarning() << "Something went wrong. ProjectFolderItem detached. Project closed during reload?";
+        qCWarning(SHELL) << "Something went wrong. ProjectFolderItem detached. Project closed during reload?";
         return;
     }
 

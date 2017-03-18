@@ -144,7 +144,7 @@ void CodeUtilsPlugin::documentDeclaration()
     QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevcodeutils/templates/" + templateName + ".txt");
     if (fileName.isEmpty())
     {
-        qWarning() << "No suitable template found" << fileName;
+        qCWarning(PLUGIN_CODEUTILS) << "No suitable template found" << fileName;
         return;
     }
 

@@ -144,7 +144,7 @@ void FileManagerListJob::handleResults(const KIO::UDSEntryList& entriesIn)
     {
         auto waited = m_subTimer.elapsed();
         m_subWaited += waited;
-        qDebug() << "TIME FOR SUB JOB:" << waited << m_subWaited;
+        qCDebug(PROJECT) << "TIME FOR SUB JOB:" << waited << m_subWaited;
     }
 #endif
 
@@ -154,7 +154,7 @@ void FileManagerListJob::handleResults(const KIO::UDSEntryList& entriesIn)
         emitResult();
 
 #ifdef TIME_IMPORT_JOB
-        qDebug() << "TIME FOR LISTJOB:" << m_timer.elapsed();
+        qCDebug(PROJECT) << "TIME FOR LISTJOB:" << m_timer.elapsed();
 #endif
     } else {
         emit nextJob();

@@ -54,6 +54,7 @@
 #include "interfaces/idistributedversioncontrol.h"
 #include "vcsstatusinfo.h"
 #include "vcsevent.h"
+#include "debug.h"
 #include "widgets/vcsdiffpatchsources.h"
 
 namespace KDevelop
@@ -370,7 +371,7 @@ void VcsPluginHelper::annotation()
         KDevelop::VcsJob* job = iface->annotate(url);
         if( !job )
         {
-            qWarning() << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
+            qCWarning(VCS) << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
             return;
         }
 

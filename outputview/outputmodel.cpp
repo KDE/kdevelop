@@ -305,7 +305,7 @@ void OutputModel::activate( const QModelIndex& index )
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
         QUrl url = item.url;
         if (item.url.isEmpty()) {
-            qWarning() << "trying to open empty url";
+            qCWarning(OUTPUTVIEW) << "trying to open empty url";
             return;
         }
         if(url.isRelative()) {

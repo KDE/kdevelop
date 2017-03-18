@@ -293,7 +293,7 @@ KTextEditor::View *PartController::activeView()
 KTextEditor::Document *PartController::createDocument()
 {
   // NOTE: not implemented
-  qWarning() << "WARNING: interface call not implemented";
+  qCWarning(SHELL) << "WARNING: interface call not implemented";
   return nullptr;
 }
 
@@ -301,7 +301,7 @@ bool PartController::closeDocument(KTextEditor::Document *doc)
 {
   Q_UNUSED(doc)
   // NOTE: not implemented
-  qWarning() << "WARNING: interface call not implemented";
+  qCWarning(SHELL) << "WARNING: interface call not implemented";
   return false;
 }
 
@@ -309,7 +309,7 @@ KTextEditor::View *PartController::createView(KTextEditor::Document *doc)
 {
   Q_UNUSED(doc)
   // NOTE: not implemented
-  qWarning() << "WARNING: interface call not implemented";
+  qCWarning(SHELL) << "WARNING: interface call not implemented";
   return nullptr;
 }
 
@@ -317,7 +317,7 @@ bool PartController::closeView(KTextEditor::View *view)
 {
   Q_UNUSED(view)
   // NOTE: not implemented
-  qWarning() << "WARNING: interface call not implemented";
+  qCWarning(SHELL) << "WARNING: interface call not implemented";
   return false;
 }
 //END KTextEditor::MdiContainer

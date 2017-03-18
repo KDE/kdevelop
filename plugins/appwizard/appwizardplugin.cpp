@@ -209,7 +209,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 {
     QFileInfo templateInfo(info.appTemplate);
     if (!templateInfo.exists()) {
-        qWarning() << "Project app template does not exist:" << info.appTemplate;
+        qCWarning(PLUGIN_APPWIZARD) << "Project app template does not exist:" << info.appTemplate;
         return QString();
     }
 
@@ -225,7 +225,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }
 
     if(templateArchive.isEmpty()) {
-        qWarning() << "Template name does not exist in the template list";
+        qCWarning(PLUGIN_APPWIZARD) << "Template name does not exist in the template list";
         return QString();
     }
 

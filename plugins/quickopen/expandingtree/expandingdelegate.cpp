@@ -325,7 +325,7 @@ QList<QTextLayout::FormatRange> ExpandingDelegate::highlightingFromVariantList(c
 
     for (int i = 0; i + 2 < customHighlights.count(); i += 3) {
       if (!customHighlights[i].canConvert(QVariant::Int) || !customHighlights[i+1].canConvert(QVariant::Int) || !customHighlights[i+2].canConvert<QTextFormat>()) {
-        qWarning() << "Unable to convert triple to custom formatting.";
+        qCWarning(PLUGIN_QUICKOPEN) << "Unable to convert triple to custom formatting.";
         continue;
       }
 
@@ -335,7 +335,7 @@ QList<QTextLayout::FormatRange> ExpandingDelegate::highlightingFromVariantList(c
       format.format = customHighlights[i+2].value<QTextFormat>().toCharFormat();
 
       if(!format.format.isValid())
-        qWarning() << "Format is not valid";
+        qCWarning(PLUGIN_QUICKOPEN) << "Format is not valid";
 
       ret << format;
     }

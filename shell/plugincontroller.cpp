@@ -274,7 +274,7 @@ PluginController::PluginController(Core *core)
             foundPlugins.insert(meta.pluginId());
             return true;
         } else {
-            qWarning() << "Plugin" << meta.fileName() << "is installed into the kdevplatform plugin directory, but does not have"
+            qCWarning(SHELL) << "Plugin" << meta.fileName() << "is installed into the kdevplatform plugin directory, but does not have"
                 " \"KDevelop/Plugin\" set as the service type. This plugin will not be loaded.";
             return false;
         }
@@ -496,12 +496,12 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
     if ( !isEnabled( info ) ) {
         // Do not load disabled plugins
-        qWarning() << "Not loading plugin named" << pluginId << "because it has been disabled!";
+        qCWarning(SHELL) << "Not loading plugin named" << pluginId << "because it has been disabled!";
         return nullptr;
     }
 
     if ( !hasMandatoryProperties( info ) ) {
-        qWarning() << "Unable to load plugin named" << pluginId << "because not all mandatory properties are set.";
+        qCWarning(SHELL) << "Unable to load plugin named" << pluginId << "because not all mandatory properties are set.";
         return nullptr;
     }
 
@@ -522,7 +522,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     // this would happen if we'd skip this step here and directly loadDependencies.
     QStringList missingInterfaces;
     if ( !hasUnresolvedDependencies( info, missingInterfaces ) ) {
-        qWarning() << "Can't load plugin" << pluginId
+        qCWarning(SHELL) << "Can't load plugin" << pluginId
                    << "some of its required dependencies could not be fulfilled:"
                    << missingInterfaces.join(QStringLiteral(","));
         return nullptr;
@@ -531,7 +531,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     // now ensure all dependencies are loaded
     QString failedDependency;
     if( !loadDependencies( info, failedDependency ) ) {
-        qWarning() << "Can't load plugin" << pluginId
+        qCWarning(SHELL) << "Can't load plugin" << pluginId
                    << "because a required dependency could not be loaded:" << failedDependency;
         return nullptr;
     }
@@ -543,7 +543,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     KPluginLoader loader(info.fileName());
     auto factory = loader.factory();
     if (!factory) {
-        qWarning() << "Can't load plugin" << pluginId
+        qCWarning(SHELL) << "Can't load plugin" << pluginId
                    << "because a factory to load the plugin could not be obtained:" << loader.errorString();
         return nullptr;
     }

@@ -468,7 +468,7 @@ QList<QVariant> mergeCustomHighlighting( int leftSize, const QList<QVariant>& le
         for(int a = 0; a < 2; a++) {
           ++testIt;
           if(testIt == right.constEnd()) {
-            qWarning() << "Length of input is not multiple of 3";
+            qCWarning(PLUGIN_QUICKOPEN) << "Length of input is not multiple of 3";
             break;
           }
         }
@@ -491,17 +491,17 @@ QList<QVariant> mergeCustomHighlighting( int leftSize, const QList<QVariant>& le
 QList<QVariant> mergeCustomHighlighting( QStringList strings, QList<QVariantList> highlights, int grapBetweenStrings )
 {
     if(strings.isEmpty())   {
-      qWarning() << "List of strings is empty";
+      qCWarning(PLUGIN_QUICKOPEN) << "List of strings is empty";
       return QList<QVariant>();
     }
 
     if(highlights.isEmpty())   {
-      qWarning() << "List of highlightings is empty";
+      qCWarning(PLUGIN_QUICKOPEN) << "List of highlightings is empty";
       return QList<QVariant>();
     }
 
     if(strings.count() != highlights.count()) {
-      qWarning() << "Length of string-list is " << strings.count() << " while count of highlightings is " << highlights.count() << ", should be same";
+      qCWarning(PLUGIN_QUICKOPEN) << "Length of string-list is " << strings.count() << " while count of highlightings is " << highlights.count() << ", should be same";
       return QList<QVariant>();
     }
 

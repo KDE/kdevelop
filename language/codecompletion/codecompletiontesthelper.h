@@ -130,7 +130,7 @@ struct CodeCompletionItemTester
     void init()
     {
       if ( !completionContext || !completionContext->isValid() ) {
-        qWarning() << "invalid completion context";
+        qCWarning(LANGUAGE) << "invalid completion context";
         return;
       }
 

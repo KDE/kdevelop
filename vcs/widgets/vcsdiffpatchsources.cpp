@@ -288,7 +288,7 @@ bool showVcsDiff(IPatchSource* vcsDiff)
         patchReview->startReview(vcsDiff);
         return true;
     } else {
-        qWarning() << "Patch review plugin not found";
+        qCWarning(VCS) << "Patch review plugin not found";
         return false;
     }
 }

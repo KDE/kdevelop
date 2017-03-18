@@ -249,7 +249,7 @@ void PatchReviewPlugin::updateKompareModel() {
         patchFile = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
         bool ret = KIO::copy(m_patch->file(), QUrl::fromLocalFile(patchFile), KIO::HideProgressInfo)->exec();
         if( !ret ) {
-            qWarning() << "Problem while downloading: " << m_patch->file() << "to" << patchFile;
+            qCWarning(PLUGIN_PATCHREVIEW) << "Problem while downloading: " << m_patch->file() << "to" << patchFile;
             patchFile.clear();
         }
     }
