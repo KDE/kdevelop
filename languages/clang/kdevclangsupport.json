@@ -67,7 +67,7 @@
         "text/x-c++hdr", 
         "text/x-csrc", 
         "text/x-c++src", 
-        "text/x-openclsrc", 
+        "text/x-opencl-src", 
         "text/vnd.nvidia.cuda.csrc", 
         "text/x-objcsrc"
     ]
