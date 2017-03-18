@@ -856,7 +856,7 @@ void ProjectController::projectImportingFinished( IProject* project )
 {
     if( !project )
     {
-        qWarning() << "OOOPS: 0-pointer project";
+        qCWarning(SHELL) << "OOOPS: 0-pointer project";
         return;
     }
     IPlugin *managerPlugin = project->managerPlugin();
@@ -1019,7 +1019,7 @@ void ProjectController::addProject(IProject* project)
 {
     Q_ASSERT(project);
     if (d->m_projects.contains(project)) {
-        qWarning() << "Project already tracked by this project controller:" << project;
+        qCWarning(SHELL) << "Project already tracked by this project controller:" << project;
         return;
     }
 

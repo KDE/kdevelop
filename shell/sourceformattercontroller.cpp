@@ -502,7 +502,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
                 qCDebug(SHELL) << "calling" << cmd;
                 foreach(KTextEditor::View* view, doc->views())
                     if( !command->exec( view, cmd, msg ) )
-                        qWarning() << "setting indentation width failed: " << msg;
+                        qCWarning(SHELL) << "setting indentation width failed: " << msg;
             }
 
             KTextEditor::Document* doc;

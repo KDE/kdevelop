@@ -191,7 +191,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     {
         IDocumentationProviderProvider *docProvider=p->extension<IDocumentationProviderProvider>();
         if (!docProvider) {
-            qWarning() << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca5";
+            qCWarning(SHELL) << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca5";
             continue;
         }
         ret.append(docProvider->providers());
@@ -201,7 +201,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     {
         IDocumentationProvider *doc=p->extension<IDocumentationProvider>();
         if (!doc) {
-            qWarning() << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca5";
+            qCWarning(SHELL) << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca5";
             continue;
         }
         ret.append(doc);
@@ -214,13 +214,13 @@ void KDevelop::DocumentationController::showDocumentation(const IDocumentation::
 {
     QWidget* w = ICore::self()->uiController()->findToolView(i18n("Documentation"), m_factory, KDevelop::IUiController::CreateAndRaise);
     if(!w) {
-        qWarning() << "Could not add documentation toolview";
+        qCWarning(SHELL) << "Could not add documentation toolview";
         return;
     }
 
     DocumentationView* view = dynamic_cast<DocumentationView*>(w);
     if( !view ) {
-        qWarning() << "Could not cast toolview" << w << "to DocumentationView class!";
+        qCWarning(SHELL) << "Could not cast toolview" << w << "to DocumentationView class!";
         return;
     }
     view->showDocumentation(doc);

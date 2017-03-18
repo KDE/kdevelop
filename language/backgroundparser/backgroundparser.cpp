@@ -819,7 +819,7 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
         return nullptr;
     }
     if ( !isValidURL(url) ) {
-        qWarning() << "Tracker requested for invalild URL:" << url.toUrl();
+        qCWarning(LANGUAGE) << "Tracker requested for invalild URL:" << url.toUrl();
     }
     Q_ASSERT(isValidURL(url));
 

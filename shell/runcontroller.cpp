@@ -302,7 +302,7 @@ public:
             return it.value();
         } else
         {
-            qWarning() << "couldn't find type for id:" << id << ". Known types:" << launchConfigurationTypes.keys();
+            qCWarning(SHELL) << "couldn't find type for id:" << id << ". Known types:" << launchConfigurationTypes.keys();
         }
         return nullptr;
 
@@ -591,7 +591,7 @@ void KDevelop::RunController::registerJob(KJob * job)
 
     if (!(job->capabilities() & KJob::Killable)) {
         // see e.g. https://bugs.kde.org/show_bug.cgi?id=314187
-        qWarning() << "non-killable job" << job << "registered - this might lead to crashes on shutdown.";
+        qCWarning(SHELL) << "non-killable job" << job << "registered - this might lead to crashes on shutdown.";
     }
 
     if (!d->jobs.contains(job)) {
@@ -687,7 +687,7 @@ void KDevelop::RunController::stopAllProcesses()
         if (job->capabilities() & KJob::Killable) {
             job->kill(KJob::EmitResult);
         } else {
-            qWarning() << "cannot stop non-killable job: " << job;
+            qCWarning(SHELL) << "cannot stop non-killable job: " << job;
         }
     }
 }
@@ -733,7 +733,7 @@ void RunController::jobDestroyed(QObject* job)
 {
     KJob* kjob = static_cast<KJob*>(job);
     if (d->jobs.contains(kjob)) {
-        qWarning() << "job destroyed without emitting finished signal!";
+        qCWarning(SHELL) << "job destroyed without emitting finished signal!";
         unregisterJob(kjob);
     }
 }
@@ -885,7 +885,7 @@ void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
     if (auto dl = defaultLaunch()) {
         execute(runMode, dl);
     } else {
-        qWarning() << "no default launch!";
+        qCWarning(SHELL) << "no default launch!";
     }
 }
 

@@ -24,6 +24,7 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
+#include "debug.h"
 #include "core.h"
 #include "documentcontroller.h"
 #include "mainwindow.h"
@@ -210,7 +211,7 @@ void WorkingSetToolTipWidget::nextDocument()
 
     if(active == -1)
     {
-        qWarning() << "Found no active document";
+        qCWarning(SHELL) << "Found no active document";
         return;
     }
 
@@ -230,7 +231,7 @@ void WorkingSetToolTipWidget::previousDocument()
 
     if(active == -1)
     {
-        qWarning() << "Found no active document";
+        qCWarning(SHELL) << "Found no active document";
         return;
     }
 

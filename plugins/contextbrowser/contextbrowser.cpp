@@ -400,7 +400,7 @@ QString ContextBrowserHintProvider::textHint(View* view, const KTextEditor::Curs
 {
   m_plugin->m_mouseHoverCursor = KTextEditor::Cursor(cursor);
   if(!view) {
-    qWarning() << "could not cast to view";
+    qCWarning(PLUGIN_CONTEXTBROWSER) << "could not cast to view";
   }else{
     m_plugin->m_mouseHoverDocument = view->document()->url();
     m_plugin->m_updateViews << view;
@@ -1388,7 +1388,7 @@ void ContextBrowserPlugin::doNavigate(NavigationActionType action)
 {
   KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
   if(!view) {
-      qWarning() << "sender is not a view";
+      qCWarning(PLUGIN_CONTEXTBROWSER) << "sender is not a view";
       return;
   }
   KTextEditor::CodeCompletionInterface* iface = qobject_cast<KTextEditor::CodeCompletionInterface*>(view);

@@ -802,9 +802,9 @@ bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > 
             if( !DocumentController::isEmptyDocumentUrl(doc->url()) && !doc->save(mode) )
             {
                 if( doc )
-                    qWarning() << "!! Could not save document:" << doc->url();
+                    qCWarning(SHELL) << "!! Could not save document:" << doc->url();
                 else
-                    qWarning() << "!! Could not save document as its NULL";
+                    qCWarning(SHELL) << "!! Could not save document as its NULL";
             }
             // TODO if (!ret) showErrorDialog() ?
         }
@@ -915,7 +915,7 @@ void DocumentController::closeAllOtherDocuments()
         Sublime::View* activeView = mw->activeView();
 
         if (!activeView) {
-            qWarning() << "Shouldn't there always be an active view when this function is called?";
+            qCWarning(SHELL) << "Shouldn't there always be an active view when this function is called?";
             return;
         }
 

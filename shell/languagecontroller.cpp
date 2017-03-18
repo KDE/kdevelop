@@ -119,7 +119,7 @@ void LanguageControllerPrivate::addLanguageSupport(ILanguageSupport* languageSup
         if (mime.isValid()) {
             mimeTypeCache.insert(mime, languageSupport);
         } else {
-            qWarning() << "could not create mime-type" << mimeTypeName;
+            qCWarning(SHELL) << "could not create mime-type" << mimeTypeName;
         }
     }
 }
@@ -224,7 +224,7 @@ ILanguageSupport* LanguageController::language(const QString &name) const
         supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport(), constraints);
         if (key == keys[1]) {
             for (auto support : supports) {
-                qWarning() << "Plugin" << Core::self()->pluginController()->pluginInfo(support).name() << " has deprecated (since 5.1) metadata key \"X-KDevelop-Language\", needs porting to: \"X-KDevelop-Languages\": ["<<name<<"]'";
+                qCWarning(SHELL) << "Plugin" << Core::self()->pluginController()->pluginInfo(support).name() << " has deprecated (since 5.1) metadata key \"X-KDevelop-Language\", needs porting to: \"X-KDevelop-Languages\": ["<<name<<"]'";
             }
         }
         if (!supports.isEmpty()) {

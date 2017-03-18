@@ -332,7 +332,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 area->addView(view, areaIndex, previousView);
                 createdViews[i] = view;
             } else {
-                qWarning() << "Unable to create view" << specifier;
+                qCWarning(SHELL) << "Unable to create view" << specifier;
             }
         }
 

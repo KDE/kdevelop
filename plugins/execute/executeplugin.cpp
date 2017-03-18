@@ -106,7 +106,7 @@ QStringList ExecutePlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QStri
             "this is not supported currently. Aborting start.", cfg->name() );
         }
         args = QStringList();
-        qWarning() << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
+        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
     }
     return args;
 }
@@ -184,7 +184,7 @@ QUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
     if( executable.isEmpty() )
     {
         err = i18n("No valid executable specified");
-        qWarning() << "Launch Configuration:" << cfg->name() << "no valid executable set";
+        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "no valid executable set";
     } else
     {
         KShell::Errors err_;
@@ -202,7 +202,7 @@ QUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
                 "executable for the launch configuration '%1', "
                 "this is not supported currently. Aborting start.", cfg->name() );
             }
-            qWarning() << "Launch Configuration:" << cfg->name() << "executable has meta characters";
+            qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "executable has meta characters";
         }
     }
     return executable;

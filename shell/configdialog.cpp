@@ -20,6 +20,8 @@
  */
 #include "configdialog.h"
 
+#include "debug.h"
+
 #include <QCloseEvent>
 #include <QDebug>
 #include <QPushButton>
@@ -28,7 +30,6 @@
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KTextEditor/ConfigPage>
-
 
 #include <iplugin.h>
 #include <configpage.h>
@@ -184,7 +185,7 @@ void ConfigDialog::onPageChanged()
 {
     QObject* from = sender();
     if (from && from != currentPage()->widget()) {
-        qWarning() << "Settings in config page" << from << "changed, while" << currentPage()->widget() << "is currently selected. This case is not implemented yet.";
+        qCWarning(SHELL) << "Settings in config page" << from << "changed, while" << currentPage()->widget() << "is currently selected. This case is not implemented yet.";
         return;
         // TODO: add a QHash<ConfigPage*, bool> as a member to make sure the apply button is always correct
 

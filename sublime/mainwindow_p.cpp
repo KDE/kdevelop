@@ -596,7 +596,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     //find the container for the view and remove the widget
     Container *container = qobject_cast<Container*>(splitter->widget(0));
     if (!container) {
-        qWarning() << "Splitter does not have a left widget!";
+        qCWarning(SUBLIME) << "Splitter does not have a left widget!";
         return;
     }
 
@@ -637,7 +637,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         if (view->widget())
             view->widget()->setParent(nullptr);
         else
-            qWarning() << "View does not have a widget!";
+            qCWarning(SUBLIME) << "View does not have a widget!";
 
         Q_ASSERT(container->count() == 0);
         // We can be called from signal handler of container

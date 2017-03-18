@@ -159,7 +159,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
                                   "Please make sure QT_PLUGIN_PATH is set correctly.</p>"
                                   "Refer to <a href=\"https://community.kde.org/Frameworks/Building#Runtime_setup\">this article</a> for more information."),
                                   QMessageBox::Abort, QMessageBox::Abort);
-            qWarning() << "Could not find any plugins, aborting";
+            qCWarning(SHELL) << "Could not find any plugins, aborting";
             return false;
         }
     }

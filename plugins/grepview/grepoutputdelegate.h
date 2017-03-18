@@ -36,7 +36,6 @@ public:
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 private:
     static GrepOutputDelegate* m_self;
-    QColor blendColor(QColor color1, QColor color2, double blend) const;
 };
 
 #endif

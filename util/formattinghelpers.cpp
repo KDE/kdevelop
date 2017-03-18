@@ -18,9 +18,11 @@
  */
 
 #include "formattinghelpers.h"
+
+#include "debug.h"
+
 #include <QString>
 #include <QDebug>
-#include <vector>
 
 namespace KDevelop
 {
@@ -149,7 +151,7 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
             // Try 2: Ignore the fuzzy characters while matching
             endOfLeftContext = matchPrefixIgnoringWhitespace( formattedMergedText, leftContext, fuzzyCharacters );
             if(endOfLeftContext == -1) {
-                qWarning() << "problem matching the left context";
+                qCWarning(UTIL) << "problem matching the left context";
                 return text;
             }
         }
@@ -173,7 +175,7 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
             // Try 2: Ignore the fuzzy characters while matching
             endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+' ', fuzzyCharacters );
             if(endOfText == -1) {
-                qWarning() << "problem matching the text while formatting";
+                qCWarning(UTIL) << "problem matching the text while formatting";
                 return text;
             }
         }

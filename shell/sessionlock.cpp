@@ -21,12 +21,13 @@
 
 #include "sessionlock.h"
 
+#include "debug.h"
 #include "sessioncontroller.h"
 
-#include <QDebug>
 #include <KLocalizedString>
 #include <KMessageBox>
 
+#include <QDebug>
 #include <QDBusConnectionInterface>
 #include <QFile>
 #include <QDir>
@@ -171,7 +172,8 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
             out << i18nc( "@info:shell", "Running %1 instance (PID: %2) detected, making this one visible instead of starting a new one", runInfo.holderApp, runInfo.holderPid ) << endl;
             return QString();
         } else {
-            qWarning() << i18nc("@info:shell", "Running %1 instance (PID: %2) is apparently hung", runInfo.holderApp, runInfo.holderPid);
+            qCWarning(SHELL) << i18nc("@info:shell", "Running %1 instance (PID: %2) is apparently hung", runInfo.holderApp, runInfo.holderPid);
+            qCWarning(SHELL) << i18nc("@info:shell", "running %1 instance (PID: %2) is apparently hung", runInfo.holderApp, runInfo.holderPid);
         }
     }
 

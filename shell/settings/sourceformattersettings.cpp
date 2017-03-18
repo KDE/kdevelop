@@ -123,7 +123,7 @@ void SourceFormatterSettings::reset()
             foreach ( const SourceFormatterStyle::MimeHighlightPair& item, style->mimeTypes() ) {
                 QMimeType mime = QMimeDatabase().mimeTypeForName(item.mimeType);
                 if (!mime.isValid()) {
-                    qWarning() << "plugin" << info.name() << "supports unknown mimetype entry" << item.mimeType;
+                    qCWarning(SHELL) << "plugin" << info.name() << "supports unknown mimetype entry" << item.mimeType;
                     continue;
                 }
                 QString languageName = item.highlightMode;

@@ -476,7 +476,7 @@ bool QuickOpenModel::execute(const QModelIndex& index, QString& filterText)
 {
     qCDebug(PLUGIN_QUICKOPEN) << "executing model";
     if (!index.isValid()) {
-        qWarning() << "Invalid index executed";
+        qCWarning(PLUGIN_QUICKOPEN) << "Invalid index executed";
         return false;
     }
 
@@ -485,7 +485,7 @@ bool QuickOpenModel::execute(const QModelIndex& index, QString& filterText)
     if (item) {
         return item->execute(filterText);
     } else {
-        qWarning() << "Got no item for row " << index.row() << " ";
+        qCWarning(PLUGIN_QUICKOPEN) << "Got no item for row " << index.row() << " ";
     }
 
     return false;

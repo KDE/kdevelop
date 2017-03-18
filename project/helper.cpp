@@ -17,6 +17,7 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include "debug.h"
 #include "helper.h"
 #include "path.h"
 
@@ -51,7 +52,7 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, con
     auto job = KIO::stat(url, KIO::StatJob::DestinationSide, 0);
     KJobWidgets::setWindow(job, window);
     if (!job->exec()) {
-        qWarning() << "tried to remove non-existing url:" << url << project << isFolder;
+        qCWarning(PROJECT) << "tried to remove non-existing url:" << url << project << isFolder;
         return true;
     }
 

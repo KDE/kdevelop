@@ -123,7 +123,7 @@ void DocumentSwitcherPlugin::walk(const int from, const int to)
     Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
     {
-        qWarning() << "This should not happen, tried to walk through document list of an unknown mainwindow!";
+        qCWarning(PLUGIN_DOCUMENTSWITCHER) << "This should not happen, tried to walk through document list of an unknown mainwindow!";
         return;
     }
     QModelIndex idx;

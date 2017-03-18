@@ -111,7 +111,7 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
     qCDebug(PROJECT) << "project item for the project:" << item->project()->projectItem()->text();
     if( !item->project()->buildSystemManager() )
     {
-        qWarning() << "no buildsystem manager for:" << item->text() << item->project()->name();
+        qCWarning(PROJECT) << "no buildsystem manager for:" << item->text() << item->project()->name();
         return;
     }
     qCDebug(PROJECT) << "got build system manager";
