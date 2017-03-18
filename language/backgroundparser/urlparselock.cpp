@@ -37,7 +37,7 @@ struct PerUrlData
     {}
     QMutex mutex;
     // how many people are (trying to) parse this url
-    // we use this to delete the entry once noone needs it anymore
+    // we use this to delete the entry once no-one needs it anymore
     uint ref;
 };
 

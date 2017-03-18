@@ -324,7 +324,7 @@ public:
     else
     {
       // remote URLs only need a subset of the filters:
-      // we dont expect any modified, conflicting, unknown,
+      // we do not expect any modified, conflicting, unknown,
       // ignored entries. And externals arent visible there anyhow
       return localFilteredStatus(
                path, filter, descend, update, entries, m_context);

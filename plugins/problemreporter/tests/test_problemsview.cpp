@@ -76,7 +76,7 @@ void TestProblemsView::testLoad()
 {
     m_view->load();
 
-    // Check that the inital model's tab shows up
+    // Check that the initial model's tab shows up
     QTabWidget* tab = tabWidget();
     QVERIFY(tab);
     QCOMPARE(tab->count(), 1);

@@ -414,7 +414,7 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
     VcsRevision rev = model->revisionForLine(line);
     // check if the user clicked on a row without revision information
     if (rev.revisionType() == VcsRevision::Invalid) {
-        // in this case, do not action depending on revision informations
+        // in this case, do not action depending on revision information
         return;
     }
 

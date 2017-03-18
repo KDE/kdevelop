@@ -47,7 +47,7 @@ ConfigPage::~ConfigPage()
 
 void ConfigPage::apply()
 {
-    // if d->configManager is null, this method must be overriden
+    // if d->configManager is null, this method must be overridden
     Q_ASSERT_X(d->configManager, metaObject()->className(),
                "Config page does not use a KConfigSkeleton, but doesn't override apply()");
 
@@ -59,7 +59,7 @@ void ConfigPage::apply()
 
 void ConfigPage::defaults()
 {
-    // if d->configManager is null, this method must be overriden
+    // if d->configManager is null, this method must be overridden
     Q_ASSERT_X(d->configManager, metaObject()->className(),
                "Config page does not use a KConfigSkeleton, but doesn't override defaults()");
     d->configManager->updateWidgetsDefault();
@@ -67,7 +67,7 @@ void ConfigPage::defaults()
 
 void ConfigPage::reset()
 {
-    // if d->configManager is null, this method must be overriden
+    // if d->configManager is null, this method must be overridden
     Q_ASSERT_X(d->configManager, metaObject()->className(),
                "Config page does not use a KConfigSkeleton, but doesn't override reset()");
     d->configManager->updateWidgets();

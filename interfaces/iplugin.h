@@ -218,7 +218,7 @@ public:
     QString errorDescription() const;
 
     /**
-     * Set a @p description of the errror encountered. An empty error 
+     * Set a @p description of the error encountered. An empty error
      * description implies no error in the plugin.
      */
     void setErrorDescription(QString const& description);

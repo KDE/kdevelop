@@ -113,7 +113,7 @@ void ExternalScriptView::contextMenu( const QPoint& pos )
 
 bool ExternalScriptView::eventFilter( QObject* obj, QEvent* e )
 {
-  // no, listening to activated() is not enough since that would also trigger the edit mode which we _dont_ want here
+  // no, listening to activated() is not enough since that would also trigger the edit mode which we do _not_ want here
   // users may still rename stuff via select + F2 though
   if ( obj == scriptTree->viewport() ) {
 //     const bool singleClick = KGlobalSettings::singleClick();

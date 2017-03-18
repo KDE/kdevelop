@@ -113,7 +113,7 @@ namespace svn
 
         // if we get an error the file might
         // have been deleted in the meantime
-        // anyhow: we dont want to display it
+        // anyhow: we do not want to display it
         if (apr_status != APR_SUCCESS)
           return;
 

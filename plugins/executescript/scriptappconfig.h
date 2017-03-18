@@ -65,7 +65,7 @@ public:
 /**
  * A specific configuration to start a launchable, this could be a native
  * compiled application, or some script file or byte-compiled file or something else
- * Provides access to the various configured informations, as well as its type and a name
+ * Provides access to the various configured information, as well as its type and a name
  */
 class ScriptAppConfigType : public KDevelop::LaunchConfigurationType
 {

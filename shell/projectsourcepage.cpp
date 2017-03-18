@@ -295,8 +295,8 @@ void ProjectSourcePage::clearStatus()
 {
 #if KWIDGETSADDONS_VERSION < QT_VERSION_CHECK(5,32,0)
     // workaround for KMessageWidget bug:
-    // animatedHide() will not explicitely hide the widget if it is not yet shown.
-    // So if it has never been explicitely hidden otherwise,
+    // animatedHide() will not explicitly hide the widget if it is not yet shown.
+    // So if it has never been explicitly hidden otherwise,
     // if show() is called on the parent later the KMessageWidget will be shown as well.
     // As this method is sometimes called when the page is created and thus not yet shown,
     // we have to ensure the hidden state ourselves here.

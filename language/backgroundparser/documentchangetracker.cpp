@@ -40,7 +40,7 @@ using namespace KTextEditor;
 
 /**
  * @todo Track the exact changes to the document, and then:
- * Dont reparse if:
+ * Do not reparse if:
  *  - Comment added/changed
  *  - Newlines added/changed (ready)
  * Complete the document for validation:

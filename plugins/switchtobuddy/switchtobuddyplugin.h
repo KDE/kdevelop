@@ -38,7 +38,7 @@ Q_DECLARE_LOGGING_CATEGORY(PLUGIN_SWITCHTOBUDDY)
  * enables a 'Switch To XXX' action which opens that buddy document
  * using the @c IDocumentController.
  *
- * If a language plugin either doens't provide the @c IBuddyDocumentFinder
+ * If a language plugin either doesn't provide the @c IBuddyDocumentFinder
  * interface or no buddy exists on the file system, no context menu
  * extension is performed.
  *

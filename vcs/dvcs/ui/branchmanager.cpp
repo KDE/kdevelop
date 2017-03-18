@@ -205,8 +205,8 @@ void BranchManager::diffFromBranch()
     srcRev.setRevisionValue(src, KDevelop::VcsRevision::GlobalNumber);
     // We have two options here:
     // * create a regular VcsRevision to represent the last commit on the current branch or
-    // * create a special branch to reflect the staging area. I choosed this one.
-    // If the staing area is clean it automatically defaults to the first option.
+    // * create a special branch to reflect the staging area. I chose this one.
+    // If the staging area is clean it automatically defaults to the first option.
     const auto destRev = VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working);
     const auto job = m_dvcPlugin->diff(QUrl::fromLocalFile(m_repository), srcRev, destRev);
     connect(job, &VcsJob::finished, this, &BranchManager::diffJobFinished);

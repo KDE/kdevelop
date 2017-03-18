@@ -62,7 +62,7 @@ const bool separateThreadForHighPriority = true;
 /**
  * Elides string in @p path, e.g. "VEEERY/LONG/PATH" -> ".../LONG/PATH"
  * - probably much faster than QFontMetrics::elidedText()
- * - we dont need a widget context
+ * - we do not need a widget context
  * - takes path separators into account
  *
  * @p width Maximum number of characters

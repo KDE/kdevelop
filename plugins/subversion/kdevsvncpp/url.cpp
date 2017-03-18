@@ -50,7 +50,7 @@ static void findAndReplace(std::string & source, const std::string & find, const
       // yes, place
       source.replace(pos, findLength, replace);
 
-      // Make sure we dont search from the beginning
+      // Make sure we do not search from the beginning
       // othwise replacing % with %25 would result 
       // in an endless loop
       pos = pos + replaceLength;

@@ -122,7 +122,7 @@ namespace svn
           &file, &unique_name,
           tempPath.c_str(),  // path
           ext.c_str(),  // suffix
-          0, // dont delete on close
+          0, // do not delete on close
           pool);
 
       if (error != nullptr)

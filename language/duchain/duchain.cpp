@@ -1105,7 +1105,7 @@ private:
     Q_ASSERT(m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url)));
   }
 
-  //Loaded environment-informations. Protected by m_chainsMutex
+  //Loaded environment information. Protected by m_chainsMutex
   QMultiMap<IndexedString, ParsingEnvironmentFilePointer> m_fileEnvironmentInformations;
   QHash<uint, ParsingEnvironmentFilePointer> m_indexEnvironmentInformations;
 
