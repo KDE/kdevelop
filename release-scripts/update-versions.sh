@@ -2,10 +2,8 @@
 
 set -x
 
-MAJOR_VERSION=5
-MINOR_VERSION=1
-PATCH_VERSION=0
-BRANCH=5.1
+# load ini file
+source <(grep = VERSIONS.ini)
 
 do_replace() {
     local project=$1

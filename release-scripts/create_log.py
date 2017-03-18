@@ -19,7 +19,7 @@ repos = f.read().rstrip().split(" ")
 
 for repo in repos:
     config = configparser.ConfigParser()
-    config.read(os.path.join(THIS_DIR, "VERSIONS.inc"))
+    config.read(os.path.join(THIS_DIR, "VERSIONS.ini"))
     fromVersion = config['default']['OLD_SHA1']
     toVersion = config['default']['NEW_SHA1']
 
