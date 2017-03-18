@@ -53,13 +53,6 @@ GrepOutputDelegate::~GrepOutputDelegate()
     m_self = nullptr;
 }
 
-QColor GrepOutputDelegate::blendColor(QColor color1, QColor color2, double blend) const
-{
-    return QColor(color1.red() * blend + color2.red() * (1-blend),
-                  color1.green() * blend + color2.green() * (1-blend),
-                  color1.blue() * blend + color2.blue() * (1-blend));
-}
-
 void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 { 
     // there is no function in QString to left-trim. A call to remove this this regexp does the job
