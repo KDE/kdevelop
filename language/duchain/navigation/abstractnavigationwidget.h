@@ -19,16 +19,19 @@
 #ifndef KDEVPLATFORM_ABSTRACTNAVIGATIONWIDGET_H
 #define KDEVPLATFORM_ABSTRACTNAVIGATIONWIDGET_H
 
+#include <language/languageexport.h>
 #include <QtCore/QPointer>
 #include <QWidget>
 
 #include "../../interfaces/quickopendataprovider.h"
-#include <language/languageexport.h>
 #include "abstractnavigationcontext.h"
 
 class QTextBrowser;
 
+
 namespace KDevelop {
+  class AbstractNavigationWidgetPrivate;
+
   /**
    * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
    * The duchain must be read-locked for most operations
@@ -42,7 +45,6 @@ namespace KDevelop {
         EmbeddableWidget = 0x1, // < Omit parts which are only useful for the navigation popup
       };
       Q_DECLARE_FLAGS(DisplayHints, DisplayHint)
-
       AbstractNavigationWidget();
       ~AbstractNavigationWidget() override;
 
@@ -74,16 +76,15 @@ namespace KDevelop {
 
       NavigationContextPointer context();
 
+      void navigateDeclaration(const KDevelop::IndexedDeclaration& decl);
+
     Q_SIGNALS:
       void sizeHintChanged();
       /// Emitted whenever the current navigation-context has changed
       /// @param wasInitial whether the previous context was the initial context
       /// @param isInitial whether the current context is the initial context
       void contextChanged(bool wasInitial, bool isInitial);
-    public slots:
-      void navigateDeclaration(KDevelop::IndexedDeclaration decl);
-    private slots:
-      void anchorClicked(const QUrl&);
+
     protected:
       void wheelEvent(QWheelEvent* ) override;
       void updateIdealSize() const;
@@ -91,20 +92,11 @@ namespace KDevelop {
       void initBrowser(int height);
       void update();
 
-      NavigationContextPointer m_startContext;
-
-      TopDUContextPointer m_topContext;
-
-      QPointer<QTextBrowser> m_browser;
-      QWidget* m_currentWidget;
-      QString m_currentText;
-      mutable QSize m_idealTextSize;
-      DisplayHints m_hints = NoHints;
-
     private:
-      NavigationContextPointer m_context;
+      QScopedPointer<AbstractNavigationWidgetPrivate> d;
+
+      Q_PRIVATE_SLOT(d, void anchorClicked(const QUrl&))
   };
 }
-
 
 #endif

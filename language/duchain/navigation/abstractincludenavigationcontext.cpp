@@ -76,7 +76,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
 {
   clear();
   modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
-  addExternalHtml(m_prefix);
+  addExternalHtml(prefix());
 
   QUrl u = m_item.url();
   NavigationAction action(u, KTextEditor::Cursor(0,0));
@@ -100,7 +100,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
     modifyHtml() += i18n("not parsed yet");
   }
 
-  addExternalHtml(m_suffix);
+  addExternalHtml(suffix());
 
   modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
   return currentHtml();

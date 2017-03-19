@@ -128,6 +128,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
 {
   auto iconPath = iconForSeverity(problem->severity());
 
+
   modifyHtml() += QStringLiteral("<table><tr>");
 
   modifyHtml() += QStringLiteral("<td valign=\"middle\">%1</td>").arg(htmlImg(iconPath, KIconLoader::Panel));
@@ -225,7 +226,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
 
 QString ProblemNavigationContext::html(bool shorten)
 {
-  m_shorten = shorten;
+  AbstractNavigationContext::html(shorten);
 
   clear();
   m_assistantsActions.clear();

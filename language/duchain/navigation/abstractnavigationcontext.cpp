@@ -37,18 +37,50 @@
 
 namespace KDevelop {
 
-void AbstractNavigationContext::setTopContext(KDevelop::TopDUContextPointer context) {
-  m_topContext = context;
+class AbstractNavigationContextPrivate
+{
+public:
+  QVector<NavigationContextPointer> m_children; //Used to keep alive all children until this is deleted
+
+  int m_selectedLink = 0; //The link currently selected
+  NavigationAction m_selectedLinkAction; //Target of the currently selected link
+
+  bool m_shorten = false;
+
+  //A counter used while building the html-code to count the used links.
+  int m_linkCount = -1;
+  //Something else than -1 if the current position is represented by a line-number, not a link.
+  int m_currentLine = 0;
+  int m_currentPositionLine = 0;
+  QMap<QString, NavigationAction> m_links;
+  QMap<int, int> m_linkLines; //Holds the line for each link
+  QMap<int, NavigationAction> m_intLinks;
+  AbstractNavigationContext* m_previousContext;
+  QString m_prefix, m_suffix;
+  TopDUContextPointer m_topContext;
+
+  QString m_currentText; //Here the text is built
+};
+
+void AbstractNavigationContext::setTopContext(const TopDUContextPointer& context)
+{
+  d->m_topContext = context;
 }
 
-KDevelop::TopDUContextPointer AbstractNavigationContext::topContext() const {
-  return m_topContext;
+TopDUContextPointer AbstractNavigationContext::topContext() const
+{
+  return d->m_topContext;
 }
 
+AbstractNavigationContext::AbstractNavigationContext(const TopDUContextPointer& topContext,
+                                                     AbstractNavigationContext* previousContext)
+  : d(new AbstractNavigationContextPrivate)
+{
+  d->m_previousContext = previousContext;
+  d->m_topContext = topContext;
+}
 
-AbstractNavigationContext::AbstractNavigationContext( KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
-  : m_selectedLink(0), m_shorten(false), m_linkCount(-1), m_currentPositionLine(0),
-    m_previousContext(previousContext), m_topContext(topContext)
+AbstractNavigationContext::~AbstractNavigationContext()
 {
 }
 
@@ -86,7 +118,7 @@ void AbstractNavigationContext::makeLink( const QString& name, DeclarationPointe
 
 QString AbstractNavigationContext::createLink(const QString& name, QString, const NavigationAction& action)
 {
-  if(m_shorten) {
+  if(d->m_shorten) {
     //Do not create links in shortened mode, it's only for viewing
     return typeHighlight(name.toHtmlEscaped());
   }
@@ -95,26 +127,26 @@ QString AbstractNavigationContext::createLink(const QString& name, QString, cons
   //       are case-insensitive, we define a new lowercase link-id for each
   //       link. Otherwise Qt 5 seems to mess up the casing and the link
   //       cannot be matched when it's executed.
-  QString hrefId = QString("link_%1").arg(m_links.count());
+  QString hrefId = QString("link_%1").arg(d->m_links.count());
 
-  m_links[ hrefId ] = action;
-  m_intLinks[ m_linkCount ] = action;
-  m_linkLines[ m_linkCount ] = m_currentLine;
-  if(m_currentPositionLine == m_currentLine) {
-    m_currentPositionLine = -1;
-    m_selectedLink = m_linkCount;
+  d->m_links[ hrefId ] = action;
+  d->m_intLinks[ d->m_linkCount ] = action;
+  d->m_linkLines[ d->m_linkCount ] = d->m_currentLine;
+  if(d->m_currentPositionLine == d->m_currentLine) {
+    d->m_currentPositionLine = -1;
+    d->m_selectedLink = d->m_linkCount;
   }
 
   QString str = name.toHtmlEscaped();
-  if( m_linkCount == m_selectedLink )
+  if( d->m_linkCount == d->m_selectedLink )
     str = "<font style=\"background-color:#f1f1f1;\" color=\"#880088\">" + str + "</font>";
 
-  QString ret =  "<a href=\"" + hrefId + "\"" + ((m_linkCount == m_selectedLink && m_currentPositionLine == -1) ? QStringLiteral(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
+  QString ret =  "<a href=\"" + hrefId + "\"" + ((d->m_linkCount == d->m_selectedLink && d->m_currentPositionLine == -1) ? QStringLiteral(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
 
-  if( m_selectedLink == m_linkCount )
-    m_selectedLinkAction = action;
+  if( d->m_selectedLink == d->m_linkCount )
+    d->m_selectedLinkAction = action;
 
-  ++m_linkCount;
+  ++d->m_linkCount;
   return ret;
 }
 
@@ -124,24 +156,24 @@ void AbstractNavigationContext::makeLink( const QString& name, QString targetId,
 }
 
 void AbstractNavigationContext::clear() {
-    m_linkCount = 0;
-    m_currentLine = 0;
-    m_currentText.clear();
-    m_links.clear();
-    m_intLinks.clear();
-    m_linkLines.clear();
+    d->m_linkCount = 0;
+    d->m_currentLine = 0;
+    d->m_currentText.clear();
+    d->m_links.clear();
+    d->m_intLinks.clear();
+    d->m_linkLines.clear();
 }
 
 
-NavigationContextPointer AbstractNavigationContext::executeLink (QString link)
+void AbstractNavigationContext::executeLink(const QString& link)
 {
-  if(!m_links.contains(link))
-    return NavigationContextPointer(this);
+  if(!d->m_links.contains(link))
+    return;
 
-  return execute(m_links[link]);
+  execute(d->m_links[link]);
 }
 
-NavigationContextPointer AbstractNavigationContext::executeKeyAction(QString key) {
+NavigationContextPointer AbstractNavigationContext::executeKeyAction(QString key){
   Q_UNUSED(key);
   return NavigationContextPointer(this);
 }
@@ -169,10 +201,10 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
       break;
     case NavigationAction::NavigateDeclaration:
     {
-      AbstractDeclarationNavigationContext* ctx = dynamic_cast<AbstractDeclarationNavigationContext*>(m_previousContext);
+      auto ctx = dynamic_cast<AbstractDeclarationNavigationContext*>(d->m_previousContext);
       if( ctx && ctx->declaration() == action.decl )
-        return NavigationContextPointer( m_previousContext );
-      return AbstractNavigationContext::registerChild(action.decl);
+        return NavigationContextPointer(d->m_previousContext);
+      return registerChild(action.decl);
     } break;
     case NavigationAction::NavigateUses:
     {
@@ -183,8 +215,9 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
       }
       // fall-through
     }
-    case NavigationAction::ShowUses:
+    case NavigationAction::ShowUses: {
       return registerChild(new UsesNavigationContext(action.decl.data(), this));
+    }
     case NavigationAction::JumpToSource:
       {
         QUrl doc = action.document;
@@ -218,13 +251,19 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
   return NavigationContextPointer( this );
 }
 
-void AbstractNavigationContext::setPreviousContext(KDevelop::AbstractNavigationContext* previous) {
-  m_previousContext = previous;
+AbstractNavigationContext* AbstractNavigationContext::previousContext() const
+{
+  return d->m_previousContext;
 }
 
-NavigationContextPointer AbstractNavigationContext::registerChild( AbstractNavigationContext* context ) {
-  m_children << NavigationContextPointer(context);
-  return m_children.last();
+void AbstractNavigationContext::setPreviousContext(AbstractNavigationContext* previous) {
+  d->m_previousContext = previous;
+}
+
+NavigationContextPointer AbstractNavigationContext::registerChild(AbstractNavigationContext* context)
+{
+  d->m_children << NavigationContextPointer(context);
+  return d->m_children.last();
 }
 
 NavigationContextPointer AbstractNavigationContext::registerChild(DeclarationPointer declaration) {
@@ -233,7 +272,7 @@ NavigationContextPointer AbstractNavigationContext::registerChild(DeclarationPoi
   if (AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget.data()) ) {
     NavigationContextPointer ret = abstractNavigationWidget->context();
     ret->setPreviousContext(this);
-    m_children << ret;
+    d->m_children << ret;
     return ret;
   } else {
     return NavigationContextPointer(this);
@@ -244,22 +283,22 @@ const int lineJump = 3;
 
 void AbstractNavigationContext::down() {
   //Make sure link-count is valid
-  if( m_linkCount == -1 ) {
+  if( d->m_linkCount == -1 ) {
     DUChainReadLocker lock;
     html();
   }
 
-  int fromLine = m_currentPositionLine;
+  int fromLine = d->m_currentPositionLine;
 
-  if(m_selectedLink >= 0 && m_selectedLink < m_linkCount) {
+  if(d->m_selectedLink >= 0 && d->m_selectedLink < d->m_linkCount) {
 
     if(fromLine == -1)
-      fromLine = m_linkLines[m_selectedLink];
+      fromLine = d->m_linkLines[d->m_selectedLink];
 
-    for(int newSelectedLink = m_selectedLink+1; newSelectedLink < m_linkCount; ++newSelectedLink) {
-      if(m_linkLines[newSelectedLink] > fromLine && m_linkLines[newSelectedLink] - fromLine <= lineJump) {
-        m_selectedLink = newSelectedLink;
-        m_currentPositionLine = -1;
+    for(int newSelectedLink = d->m_selectedLink+1; newSelectedLink < d->m_linkCount; ++newSelectedLink) {
+      if(d->m_linkLines[newSelectedLink] > fromLine && d->m_linkLines[newSelectedLink] - fromLine <= lineJump) {
+        d->m_selectedLink = newSelectedLink;
+        d->m_currentPositionLine = -1;
         return;
       }
     }
@@ -267,97 +306,108 @@ void AbstractNavigationContext::down() {
   if(fromLine == -1)
     fromLine = 0;
 
-  m_currentPositionLine = fromLine + lineJump;
+  d->m_currentPositionLine = fromLine + lineJump;
 
-  if(m_currentPositionLine > m_currentLine)
-    m_currentPositionLine = m_currentLine;
+  if(d->m_currentPositionLine > d->m_currentLine)
+    d->m_currentPositionLine = d->m_currentLine;
 }
 
 void AbstractNavigationContext::up() {
   //Make sure link-count is valid
-  if( m_linkCount == -1 ) {
+  if( d->m_linkCount == -1 ) {
     DUChainReadLocker lock;
     html();
   }
 
-  int fromLine = m_currentPositionLine;
+  int fromLine = d->m_currentPositionLine;
 
-  if(m_selectedLink >= 0 && m_selectedLink < m_linkCount) {
+  if(d->m_selectedLink >= 0 && d->m_selectedLink < d->m_linkCount) {
 
     if(fromLine == -1)
-      fromLine = m_linkLines[m_selectedLink];
+      fromLine = d->m_linkLines[d->m_selectedLink];
 
-    for(int newSelectedLink = m_selectedLink-1; newSelectedLink >= 0; --newSelectedLink) {
-      if(m_linkLines[newSelectedLink] < fromLine && fromLine - m_linkLines[newSelectedLink] <= lineJump) {
-        m_selectedLink = newSelectedLink;
-        m_currentPositionLine = -1;
+    for(int newSelectedLink = d->m_selectedLink-1; newSelectedLink >= 0; --newSelectedLink) {
+      if(d->m_linkLines[newSelectedLink] < fromLine && fromLine - d->m_linkLines[newSelectedLink] <= lineJump) {
+        d->m_selectedLink = newSelectedLink;
+        d->m_currentPositionLine = -1;
         return;
       }
     }
   }
 
   if(fromLine == -1)
-    fromLine = m_currentLine;
+    fromLine = d->m_currentLine;
 
-  m_currentPositionLine = fromLine - lineJump;
-  if(m_currentPositionLine < 0)
-    m_currentPositionLine = 0;
+  d->m_currentPositionLine = fromLine - lineJump;
+  if(d->m_currentPositionLine < 0)
+    d->m_currentPositionLine = 0;
 }
 
 void AbstractNavigationContext::nextLink()
 {
   //Make sure link-count is valid
-  if( m_linkCount == -1 ) {
+  if( d->m_linkCount == -1 ) {
     DUChainReadLocker lock;
     html();
   }
 
-  m_currentPositionLine = -1;
+  d->m_currentPositionLine = -1;
 
-  if( m_linkCount > 0 )
-    m_selectedLink = (m_selectedLink+1) % m_linkCount;
+  if( d->m_linkCount > 0 )
+    d->m_selectedLink = (d->m_selectedLink+1) % d->m_linkCount;
 }
 
 void AbstractNavigationContext::previousLink()
 {
   //Make sure link-count is valid
-  if( m_linkCount == -1 ) {
+  if( d->m_linkCount == -1 ) {
     DUChainReadLocker lock;
     html();
   }
 
-  m_currentPositionLine = -1;
+  d->m_currentPositionLine = -1;
 
-  if( m_linkCount > 0 ) {
-    --m_selectedLink;
-    if( m_selectedLink <  0 )
-      m_selectedLink += m_linkCount;
+  if( d->m_linkCount > 0 ) {
+    --d->m_selectedLink;
+    if( d->m_selectedLink <  0 )
+      d->m_selectedLink += d->m_linkCount;
   }
 
-  Q_ASSERT(m_selectedLink >= 0);
+  Q_ASSERT(d->m_selectedLink >= 0);
 }
 
 int AbstractNavigationContext::linkCount() const
 {
-  return m_linkCount;
+  return d->m_linkCount;
 }
 
-void AbstractNavigationContext::setPrefixSuffix( const QString& prefix, const QString& suffix ) {
-  m_prefix = prefix;
-  m_suffix = suffix;
+QString AbstractNavigationContext::prefix() const
+{
+  return d->m_prefix;
+}
+
+QString AbstractNavigationContext::suffix() const
+{
+  return d->m_suffix;
+}
+
+void AbstractNavigationContext::setPrefixSuffix( const QString& prefix, const QString& suffix )
+{
+  d->m_prefix = prefix;
+  d->m_suffix = suffix;
 }
 
 NavigationContextPointer AbstractNavigationContext::back() {
-  if(m_previousContext)
-    return NavigationContextPointer(m_previousContext);
+  if(d->m_previousContext)
+    return NavigationContextPointer(d->m_previousContext);
   else
     return NavigationContextPointer(this);
 }
 
 NavigationContextPointer AbstractNavigationContext::accept() {
-  if( m_selectedLink >= 0 &&  m_selectedLink < m_linkCount )
+  if( d->m_selectedLink >= 0 &&  d->m_selectedLink < d->m_linkCount )
   {
-    NavigationAction action = m_intLinks[m_selectedLink];
+    NavigationAction action = d->m_intLinks[d->m_selectedLink];
     return execute(action);
   }
   return NavigationContextPointer(this);
@@ -373,17 +423,17 @@ NavigationContextPointer AbstractNavigationContext::accept(IndexedDeclaration de
 }
 
 NavigationContextPointer AbstractNavigationContext::acceptLink(const QString& link) {
-  if( !m_links.contains(link) ) {
+  if( !d->m_links.contains(link) ) {
     qCDebug(LANGUAGE) << "Executed unregistered link " << link << endl;
     return NavigationContextPointer(this);
   }
 
-  return execute(m_links[link]);
+  return execute(d->m_links[link]);
 }
 
 
 NavigationAction AbstractNavigationContext::currentAction() const {
-  return m_selectedLinkAction;
+  return d->m_selectedLinkAction;
 }
 
 
@@ -421,12 +471,12 @@ QString AbstractNavigationContext::declarationKind(DeclarationPointer decl)
 }
 
 QString AbstractNavigationContext::html(bool shorten) {
-  m_shorten = shorten;
+  d->m_shorten = shorten;
   return QString();
 }
 
 bool AbstractNavigationContext::alreadyComputed() const {
-  return !m_currentText.isEmpty();
+  return !d->m_currentText.isEmpty();
 }
 
 bool AbstractNavigationContext::isWidgetMaximized() const
@@ -454,19 +504,18 @@ static QStringList splitAndKeep(QString str, QRegExp regExp) {
 void AbstractNavigationContext::addHtml(QString html) {
   QRegExp newLineRegExp("<br>|<br */>");
   foreach(const QString& line, splitAndKeep(html, newLineRegExp)) {
-    m_currentText +=  line;
+    d->m_currentText +=  line;
     if(line.indexOf(newLineRegExp) != -1) {
-      ++m_currentLine;
-      if(m_currentLine == m_currentPositionLine) {
-        m_currentText += QStringLiteral("<font color=\"#880088\"> <a name = \"currentPosition\" >&lt;-&gt;</a> </font>"); // >&lt;-&gt; is <->
+      ++d->m_currentLine;
+      if(d->m_currentLine == d->m_currentPositionLine) {
+        d->m_currentText += QStringLiteral("<font color=\"#880088\"> <a name = \"currentPosition\" >&lt;-&gt;</a> </font>"); // >&lt;-&gt; is <->
       }
     }
   }
 }
 
 QString AbstractNavigationContext::currentHtml() const {
-
-  return m_currentText;
+    return d->m_currentText;
 }
 
 QString AbstractNavigationContext::fontSizePrefix(bool /*shorten*/) const

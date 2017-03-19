@@ -26,6 +26,7 @@
 
 namespace KDevelop {
 
+class AbstractDeclarationNavigationContextPrivate;
 class IdentifiedType;
 class Identifier;
 class QualifiedIdentifier;
@@ -34,7 +35,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
 {
   Q_OBJECT
   public:
-    AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext = nullptr );
+    AbstractDeclarationNavigationContext(const DeclarationPointer& decl, const TopDUContextPointer& topContext,
+                                         AbstractNavigationContext* previousContext = nullptr);
+    ~AbstractDeclarationNavigationContext() override;
 
     QString name() const override;
 
@@ -44,11 +47,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     ///Returns the context pointer for the new state.
     NavigationContextPointer executeKeyAction(QString key) override;
 
-  protected:
     QString html(bool shorten = false) override;
 
-    DeclarationPointer m_declaration;
-
+  protected:
     ///Should returns a stripped version of the declarations qualified identifier, with all implicit/redundant parts removed
     virtual QualifiedIdentifier prettyQualifiedIdentifier(DeclarationPointer decl) const;
     ///Returns a stripped version of the declarations identifier, using prettyQualifiedIdentifier
@@ -87,7 +88,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     ///Creates a link that triggers a recomputation of this context with m_fullBackwardSearch set to true
     void createFullBackwardSearchLink(QString string);
     
-    bool m_fullBackwardSearch;
+private:
+    QScopedPointer<AbstractDeclarationNavigationContextPrivate> d;
 };
 
 }

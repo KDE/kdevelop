@@ -54,15 +54,16 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
 
 class AbstractNavigationContext;
 typedef QExplicitlySharedDataPointer<AbstractNavigationContext> NavigationContextPointer;
+class AbstractNavigationContextPrivate;
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, public QSharedData
 {
   Q_OBJECT
-  public:
-    explicit AbstractNavigationContext( KDevelop::TopDUContextPointer topContext = KDevelop::TopDUContextPointer(), AbstractNavigationContext* previousContext = nullptr );
 
-    ~AbstractNavigationContext() override {
-    }
+public:
+    explicit AbstractNavigationContext(const TopDUContextPointer& topContext = TopDUContextPointer(),
+                                       AbstractNavigationContext* previousContext = nullptr);
+    ~AbstractNavigationContext() override;
 
     void nextLink();
     void previousLink();
@@ -71,7 +72,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
 
     void up();
     void down();
+
+    QString prefix() const;
+    QString suffix() const;
     void setPrefixSuffix( const QString& prefix, const QString& suffix );
+
     NavigationContextPointer accept();
     NavigationContextPointer back();
     NavigationContextPointer accept(IndexedDeclaration decl);
@@ -96,25 +101,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
     ///After clear() was called, this returns false again.
     bool alreadyComputed() const;
     
-    void setTopContext(TopDUContextPointer context);
-
     TopDUContextPointer topContext() const;
+    void setTopContext(const TopDUContextPointer& context);
 
-    NavigationContextPointer executeLink(QString link);
-
+    void executeLink(const QString& link);
     NavigationContextPointer execute(const NavigationAction& action);
 
   Q_SIGNALS:
     void contentsChanged();
 
   protected:
-    
     /// Returns the html font-size prefix (aka. &lt;small&gt; or similar) for the given mode
     QString fontSizePrefix(bool shorten) const;
     /// Returns the html font-size suffix (aka. &lt;small&gt; or similar) for the given mode
     QString fontSizeSuffix(bool shorten) const;
     
-    virtual void setPreviousContext(AbstractNavigationContext* previous);
+    AbstractNavigationContext* previousContext() const;
+    virtual void setPreviousContext(AbstractNavigationContext* previousContext);
     
     struct TextHandler {
       explicit TextHandler(AbstractNavigationContext* c) : context(c) {
@@ -151,27 +154,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
     ///Creates a link that executes the given action and returns it
     QString createLink(const QString& name, QString targetId, const NavigationAction& action);
 
-    int m_selectedLink; //The link currently selected
-    NavigationAction m_selectedLinkAction; //Target of the currently selected link
-
     NavigationContextPointer registerChild(DeclarationPointer /*declaration*/);
-    NavigationContextPointer registerChild( AbstractNavigationContext* context );
-    QList<NavigationContextPointer> m_children; //Useed to keep alive all children until this is deleted
-
-    bool m_shorten;
-
-    int m_currentLine;
-
-    //A counter used while building the html-code to count the used links.
-    int m_linkCount;
-    //Something else than -1 if the current position is represented by a line-number, not a link.
-    int m_currentPositionLine;
-    QMap<QString, NavigationAction> m_links;
-    QMap<int, int> m_linkLines; //Holds the line for each link
-    QMap<int, NavigationAction> m_intLinks;
-    AbstractNavigationContext* m_previousContext;
-    QString m_prefix, m_suffix;
-    KDevelop::TopDUContextPointer m_topContext;
+    NavigationContextPointer registerChild(AbstractNavigationContext* context);
 
     virtual QString declarationKind(DeclarationPointer decl);
 
@@ -184,8 +168,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, pu
     static const Colorizer importantHighlight;
     static const Colorizer commentHighlight;
     static const Colorizer nameHighlight;
-  private:
-    QString m_currentText; //Here the text is built
+
+private:
+    QScopedPointer<AbstractNavigationContextPrivate> d;
 };
 
 }

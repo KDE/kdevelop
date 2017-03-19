@@ -45,21 +45,37 @@
 
 namespace KDevelop {
 
-AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
-  : AbstractNavigationContext((topContext ? topContext : TopDUContextPointer(decl ? decl->topContext() : nullptr)), previousContext), m_declaration(decl), m_fullBackwardSearch(false)
+class AbstractDeclarationNavigationContextPrivate
 {
+public:
+  DeclarationPointer m_declaration;
+  bool m_fullBackwardSearch = false;
+};
+
+AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext(const DeclarationPointer& decl,
+                                                                           const TopDUContextPointer& topContext,
+                                                                           AbstractNavigationContext* previousContext)
+  : AbstractNavigationContext((topContext ? topContext : TopDUContextPointer(decl ? decl->topContext() : nullptr)), previousContext)
+  , d(new AbstractDeclarationNavigationContextPrivate)
+{
+  d->m_declaration = decl;
+
   //Jump from definition to declaration if possible
-  FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data());
+  FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(d->m_declaration.data());
   if(definition && definition->declaration())
-    m_declaration = DeclarationPointer(definition->declaration());
+    d->m_declaration = DeclarationPointer(definition->declaration());
+}
+
+AbstractDeclarationNavigationContext::~AbstractDeclarationNavigationContext()
+{
 }
 
 QString AbstractDeclarationNavigationContext::name() const
 {
-  if(m_declaration.data())
-    return prettyQualifiedIdentifier(m_declaration).toString();
+  if(d->m_declaration.data())
+    return prettyQualifiedIdentifier(d->m_declaration).toString();
   else
-    return declarationName(m_declaration);
+    return declarationName(d->m_declaration);
 }
 
 QString AbstractDeclarationNavigationContext::html(bool shorten)
@@ -68,39 +84,42 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   if ( !lock.locked() ) {
     return {};
   }
+
   clear();
-  m_shorten = shorten;
+  AbstractNavigationContext::html(shorten);
+
   modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
 
-  addExternalHtml(m_prefix);
+  addExternalHtml(prefix());
 
-  if(!m_declaration.data()) {
+  if(!d->m_declaration.data()) {
     modifyHtml() += i18n("<br /> lost declaration <br />");
     return currentHtml();
   }
 
-  if( m_previousContext ) {
-    QString link = createLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
+  if(auto context = previousContext()) {
+    const QString link = createLink(context->name(), context->name(),
+                                    NavigationAction(context));
     modifyHtml() += navigationHighlight(i18n("Back to %1<br />", link));
   }
 
   QExplicitlySharedDataPointer<IDocumentation> doc;
 
   if( !shorten ) {
-    doc = ICore::self()->documentationController()->documentationForDeclaration(m_declaration.data());
+    doc = ICore::self()->documentationController()->documentationForDeclaration(d->m_declaration.data());
 
-    const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
+    const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(d->m_declaration.data());
     if( function ) {
       htmlFunction();
-    } else if( m_declaration->isTypeAlias() || m_declaration->type<EnumeratorType>() || m_declaration->kind() == Declaration::Instance ) {
-      if( m_declaration->isTypeAlias() )
+    } else if( d->m_declaration->isTypeAlias() || d->m_declaration->type<EnumeratorType>() || d->m_declaration->kind() == Declaration::Instance ) {
+      if( d->m_declaration->isTypeAlias() )
         modifyHtml() += importantHighlight(QStringLiteral("typedef "));
 
-      if(m_declaration->type<EnumeratorType>())
+      if(d->m_declaration->type<EnumeratorType>())
         modifyHtml() += i18n("enumerator ");
 
-      AbstractType::Ptr useType = m_declaration->abstractType();
-      if(m_declaration->isTypeAlias()) {
+      AbstractType::Ptr useType = d->m_declaration->abstractType();
+      if(d->m_declaration->isTypeAlias()) {
         //Do not show the own name as type of typedefs
         if(useType.cast<TypeAliasType>())
           useType = useType.cast<TypeAliasType>()->type();
@@ -108,9 +127,9 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
       eventuallyMakeTypeLinks( useType );
 
-      modifyHtml() += ' ' + identifierHighlight(declarationName(m_declaration).toHtmlEscaped(), m_declaration);
+      modifyHtml() += ' ' + identifierHighlight(declarationName(d->m_declaration).toHtmlEscaped(), d->m_declaration);
 
-      if(auto integralType = m_declaration->type<ConstantIntegralType>()) {
+      if(auto integralType = d->m_declaration->type<ConstantIntegralType>()) {
         const QString plainValue = integralType->valueAsString();
         if (!plainValue.isEmpty()) {
           modifyHtml() += QStringLiteral(" = ") + plainValue;
@@ -119,23 +138,23 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
       modifyHtml() += QStringLiteral("<br>");
     }else{
-      if( m_declaration->kind() == Declaration::Type && m_declaration->abstractType().cast<StructureType>() ) {
+      if( d->m_declaration->kind() == Declaration::Type && d->m_declaration->abstractType().cast<StructureType>() ) {
         htmlClass();
       }
-      if ( m_declaration->kind() == Declaration::Namespace ) {
-        modifyHtml() += i18n("namespace %1 ", identifierHighlight(m_declaration->qualifiedIdentifier().toString().toHtmlEscaped(), m_declaration));
-      } else if ( m_declaration->kind() == Declaration::NamespaceAlias ) {
-        modifyHtml() += identifierHighlight(declarationName(m_declaration).toHtmlEscaped(), m_declaration);
+      if ( d->m_declaration->kind() == Declaration::Namespace ) {
+        modifyHtml() += i18n("namespace %1 ", identifierHighlight(d->m_declaration->qualifiedIdentifier().toString().toHtmlEscaped(), d->m_declaration));
+      } else if ( d->m_declaration->kind() == Declaration::NamespaceAlias ) {
+        modifyHtml() += identifierHighlight(declarationName(d->m_declaration).toHtmlEscaped(), d->m_declaration);
       }
 
-      if(m_declaration->type<EnumerationType>()) {
-        EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
-        modifyHtml() += i18n("enumeration %1 ", identifierHighlight(m_declaration->identifier().toString().toHtmlEscaped(), m_declaration));
+      if(d->m_declaration->type<EnumerationType>()) {
+        EnumerationType::Ptr enumeration = d->m_declaration->type<EnumerationType>();
+        modifyHtml() += i18n("enumeration %1 ", identifierHighlight(d->m_declaration->identifier().toString().toHtmlEscaped(), d->m_declaration));
       }
 
-      if(m_declaration->isForwardDeclaration()) {
-        ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(m_declaration.data());
-        Declaration* resolved = forwardDec->resolve(m_topContext.data());
+      if(d->m_declaration->isForwardDeclaration()) {
+        ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(d->m_declaration.data());
+        Declaration* resolved = forwardDec->resolve(topContext().data());
         if(resolved) {
           modifyHtml() += i18n("(resolved forward-declaration: ");
           makeLink(resolved->identifier().toString(), DeclarationPointer(resolved), NavigationAction::NavigateDeclaration );
@@ -168,7 +187,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       modifyHtml() += QStringLiteral("<br />");
     }
   }else{
-    AbstractType::Ptr showType = m_declaration->abstractType();
+    AbstractType::Ptr showType = d->m_declaration->abstractType();
     if(showType && showType.cast<FunctionType>()) {
       showType = showType.cast<FunctionType>()->returnType();
       if(showType)
@@ -183,11 +202,11 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     }
   }
 
-  QualifiedIdentifier identifier = m_declaration->qualifiedIdentifier();
+  QualifiedIdentifier identifier = d->m_declaration->qualifiedIdentifier();
   if( identifier.count() > 1 ) {
-    if( m_declaration->context() && m_declaration->context()->owner() )
+    if( d->m_declaration->context() && d->m_declaration->context()->owner() )
     {
-      Declaration* decl = m_declaration->context()->owner();
+      Declaration* decl = d->m_declaration->context()->owner();
 
       FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(decl);
       if(definition && definition->declaration())
@@ -207,8 +226,8 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     }
   }
 
-  if( shorten && !m_declaration->comment().isEmpty() ) {
-    QString comment = QString::fromUtf8(m_declaration->comment());
+  if( shorten && !d->m_declaration->comment().isEmpty() ) {
+    QString comment = QString::fromUtf8(d->m_declaration->comment());
     if( comment.length() > 60 ) {
       comment.truncate(60);
       comment += QLatin1String("...");
@@ -220,7 +239,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   }
 
 
-  QString access = stringFromAccess(m_declaration);
+  QString access = stringFromAccess(d->m_declaration);
   if( !access.isEmpty() )
     modifyHtml() += labelHighlight(i18n("Access: %1 ", propertyHighlight(access.toHtmlEscaped())));
 
@@ -228,7 +247,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   ///@todo Enumerations
 
   QString detailsHtml;
-  QStringList details = declarationDetails(m_declaration);
+  QStringList details = declarationDetails(d->m_declaration);
   if( !details.isEmpty() ) {
     bool first = true;
     foreach( const QString &str, details ) {
@@ -239,7 +258,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     }
   }
 
-  QString kind = declarationKind(m_declaration);
+  QString kind = declarationKind(d->m_declaration);
   if( !kind.isEmpty() ) {
     if( !detailsHtml.isEmpty() )
       modifyHtml() += labelHighlight(i18n("Kind: %1 %2 ", importantHighlight(kind.toHtmlEscaped()), detailsHtml));
@@ -247,7 +266,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       modifyHtml() += labelHighlight(i18n("Kind: %1 ", importantHighlight(kind.toHtmlEscaped())));
   }
 
-  if (m_declaration->isDeprecated()) {
+  if (d->m_declaration->isDeprecated()) {
     modifyHtml() += labelHighlight(i18n("Status: %1 ", propertyHighlight(i18n("Deprecated"))));
   }
 
@@ -257,22 +276,22 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     htmlAdditionalNavigation();
 
   if( !shorten ) {
-    if(dynamic_cast<FunctionDefinition*>(m_declaration.data()))
+    if(dynamic_cast<FunctionDefinition*>(d->m_declaration.data()))
       modifyHtml() += labelHighlight(i18n( "Def.: " ));
     else
       modifyHtml() += labelHighlight(i18n( "Decl.: " ));
 
-    makeLink( QStringLiteral("%1 :%2").arg( m_declaration->url().toUrl().fileName() ).arg( m_declaration->rangeInCurrentRevision().start().line()+1 ), m_declaration, NavigationAction::JumpToSource );
+    makeLink( QStringLiteral("%1 :%2").arg( d->m_declaration->url().toUrl().fileName() ).arg( d->m_declaration->rangeInCurrentRevision().start().line()+1 ), d->m_declaration, NavigationAction::JumpToSource );
     modifyHtml() += QStringLiteral(" ");
     //modifyHtml() += "<br />";
-    if(!dynamic_cast<FunctionDefinition*>(m_declaration.data())) {
-      if( FunctionDefinition* definition = FunctionDefinition::definition(m_declaration.data()) ) {
+    if(!dynamic_cast<FunctionDefinition*>(d->m_declaration.data())) {
+      if( FunctionDefinition* definition = FunctionDefinition::definition(d->m_declaration.data()) ) {
         modifyHtml() += labelHighlight(i18n( " Def.: " ));
         makeLink( QStringLiteral("%1 :%2").arg( definition->url().toUrl().fileName() ).arg( definition->rangeInCurrentRevision().start().line()+1 ), DeclarationPointer(definition), NavigationAction::JumpToSource );
       }
     }
 
-    if( FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data()) ) {
+    if( FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(d->m_declaration.data()) ) {
       if(definition->declaration()) {
         modifyHtml() += labelHighlight(i18n( " Decl.: " ));
         makeLink( QStringLiteral("%1 :%2").arg( definition->declaration()->url().toUrl().fileName() ).arg( definition->declaration()->rangeInCurrentRevision().start().line()+1 ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
@@ -280,10 +299,10 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     }
 
     modifyHtml() += QStringLiteral(" "); //The action name _must_ stay "show_uses", since that is also used from outside
-    makeLink(i18n("Show uses"), QStringLiteral("show_uses"), NavigationAction(m_declaration, NavigationAction::NavigateUses));
+    makeLink(i18n("Show uses"), QStringLiteral("show_uses"), NavigationAction(d->m_declaration, NavigationAction::NavigateUses));
   }
 
-  QByteArray declarationComment = m_declaration->comment();
+  QByteArray declarationComment = d->m_declaration->comment();
   if( !shorten && (!declarationComment.isEmpty() || doc) ) {
     modifyHtml() += QStringLiteral("<p>");
 
@@ -313,15 +332,15 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
     if(!shorten && doc) {
       modifyHtml() += "<p>" + i18n("Show documentation for ");
-      makeLink(prettyQualifiedName(m_declaration),
-               m_declaration, NavigationAction::ShowDocumentation);
+      makeLink(prettyQualifiedName(d->m_declaration),
+               d->m_declaration, NavigationAction::ShowDocumentation);
       modifyHtml() += "</p>";
     }
 
 
     //modifyHtml() += "<br />";
 
-  addExternalHtml(m_suffix);
+  addExternalHtml(suffix());
 
   modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
 
@@ -334,11 +353,11 @@ AbstractType::Ptr AbstractDeclarationNavigationContext::typeToShow(AbstractType:
 
 void AbstractDeclarationNavigationContext::htmlFunction()
 {
-  const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
+  const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(d->m_declaration.data());
   Q_ASSERT(function);
 
-  const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(m_declaration.data());
-  const FunctionType::Ptr type = m_declaration->abstractType().cast<FunctionType>();
+  const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(d->m_declaration.data());
+  const FunctionType::Ptr type = d->m_declaration->abstractType().cast<FunctionType>();
   if( !type ) {
     modifyHtml() += errorHighlight(QStringLiteral("Invalid type<br />"));
     return;
@@ -349,7 +368,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     eventuallyMakeTypeLinks( type->returnType() );
   }
 
-  modifyHtml() += ' ' + identifierHighlight(prettyIdentifier(m_declaration).toString().toHtmlEscaped(), m_declaration);
+  modifyHtml() += ' ' + identifierHighlight(prettyIdentifier(d->m_declaration).toString().toHtmlEscaped(), d->m_declaration);
 
   if( type->indexedArgumentsSize() == 0 )
   {
@@ -362,8 +381,8 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     int currentArgNum = 0;
 
     QVector<Declaration*> decls;
-    if (DUContext* argumentContext = DUChainUtils::getArgumentContext(m_declaration.data())) {
-      decls = argumentContext->localDeclarations(m_topContext.data());
+    if (DUContext* argumentContext = DUChainUtils::getArgumentContext(d->m_declaration.data())) {
+      decls = argumentContext->localDeclarations(topContext().data());
     }
     foreach(const AbstractType::Ptr& argType, type->arguments()) {
       if( !first )
@@ -372,7 +391,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 
       eventuallyMakeTypeLinks( argType );
       if (currentArgNum < decls.size()) {
-        modifyHtml() += ' ' + identifierHighlight(decls[currentArgNum]->identifier().toString().toHtmlEscaped(), m_declaration);
+        modifyHtml() += ' ' + identifierHighlight(decls[currentArgNum]->identifier().toString().toHtmlEscaped(), d->m_declaration);
       }
 
       if( currentArgNum >= firstDefaultParam )
@@ -419,10 +438,10 @@ QString AbstractDeclarationNavigationContext::prettyQualifiedName(DeclarationPoi
 void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 {
   ///Check if the function overrides or hides another one
-  const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(m_declaration.data());
+  const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(d->m_declaration.data());
   if(classFunDecl) {
 
-    Declaration* overridden = DUChainUtils::getOverridden(m_declaration.data());
+    Declaration* overridden = DUChainUtils::getOverridden(d->m_declaration.data());
 
     if(overridden) {
         modifyHtml() += i18n("Overrides a ");
@@ -437,10 +456,10 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
     }else{
       //Check if this declarations hides other declarations
       QList<Declaration*> decls;
-      foreach(const DUContext::Import &import, m_declaration->context()->importedParentContexts())
-        if(import.context(m_topContext.data()))
-          decls += import.context(m_topContext.data())->findDeclarations(QualifiedIdentifier(m_declaration->identifier()),
-                                                CursorInRevision::invalid(), AbstractType::Ptr(), m_topContext.data(), DUContext::DontSearchInParent);
+      foreach(const DUContext::Import &import, d->m_declaration->context()->importedParentContexts())
+        if(import.context(topContext().data()))
+          decls += import.context(topContext().data())->findDeclarations(QualifiedIdentifier(d->m_declaration->identifier()),
+                                                CursorInRevision::invalid(), AbstractType::Ptr(), topContext().data(), DUContext::DontSearchInParent);
       uint num = 0;
       foreach(Declaration* decl, decls) {
         modifyHtml() += i18n("Hides a ");
@@ -460,9 +479,9 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 
     ///Show all places where this function is overridden
     if(classFunDecl->isVirtual()) {
-      Declaration* classDecl = m_declaration->context()->owner();
+      Declaration* classDecl = d->m_declaration->context()->owner();
       if(classDecl) {
-        uint maxAllowedSteps = m_fullBackwardSearch ? (uint)-1 : 10;
+        uint maxAllowedSteps = d->m_fullBackwardSearch ? (uint)-1 : 10;
         QList<Declaration*> overriders = DUChainUtils::getOverriders(classDecl, classFunDecl, maxAllowedSteps);
 
         if(!overriders.isEmpty()) {
@@ -486,8 +505,8 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
   }
 
   ///Show all classes that inherit this one
-  uint maxAllowedSteps = m_fullBackwardSearch ? (uint)-1 : 10;
-  QList<Declaration*> inheriters = DUChainUtils::getInheriters(m_declaration.data(), maxAllowedSteps);
+  uint maxAllowedSteps = d->m_fullBackwardSearch ? (uint)-1 : 10;
+  QList<Declaration*> inheriters = DUChainUtils::getInheriters(d->m_declaration.data(), maxAllowedSteps);
 
   if(!inheriters.isEmpty()) {
       modifyHtml() += i18n("Inherited by ");
@@ -516,7 +535,7 @@ void AbstractDeclarationNavigationContext::createFullBackwardSearchLink(QString 
 NavigationContextPointer AbstractDeclarationNavigationContext::executeKeyAction( QString key )
 {
   if(key == QLatin1String("m_fullBackwardSearch=true")) {
-    m_fullBackwardSearch = true;
+    d->m_fullBackwardSearch = true;
     clear();
   }
   return NavigationContextPointer(this);
@@ -524,10 +543,10 @@ NavigationContextPointer AbstractDeclarationNavigationContext::executeKeyAction(
 
 void AbstractDeclarationNavigationContext::htmlClass()
 {
-  StructureType::Ptr klass = m_declaration->abstractType().cast<StructureType>();
+  StructureType::Ptr klass = d->m_declaration->abstractType().cast<StructureType>();
   Q_ASSERT(klass);
 
-  ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(klass->declaration(m_topContext.data()));
+  ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(klass->declaration(topContext().data()));
   if(classDecl) {
     switch ( classDecl->classType() ) {
       case ClassDeclarationData::Class:
@@ -568,7 +587,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
   Q_ASSERT(type);
   Q_ASSERT(idType);
 
-  if( Declaration* decl = idType->declaration(m_topContext.data()) ) {
+  if( Declaration* decl = idType->declaration(topContext().data()) ) {
 
     //Remove the last template-identifiers, because we create those directly
     QualifiedIdentifier id = prettyQualifiedIdentifier(DeclarationPointer(decl));
@@ -592,9 +611,9 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
     }
 
     //We leave out the * and & reference and pointer signs, those are added to the end
-    makeLink(id.toString() , DeclarationPointer(idType->declaration(m_topContext.data())), NavigationAction::NavigateDeclaration );
+    makeLink(id.toString() , DeclarationPointer(idType->declaration(topContext().data())), NavigationAction::NavigateDeclaration );
   } else {
-    qCDebug(LANGUAGE) << "could not resolve declaration:" << idType->declarationId().isDirect() << idType->qualifiedIdentifier().toString() << "in top-context" << m_topContext->url().str();
+    qCDebug(LANGUAGE) << "could not resolve declaration:" << idType->declarationId().isDirect() << idType->qualifiedIdentifier().toString() << "in top-context" << topContext()->url().str();
     modifyHtml() += typeHighlight(type->toString().toHtmlEscaped());
   }
 }
@@ -608,12 +627,12 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
     return;
   }
 
-  AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases( type, m_topContext.data() );
+  AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases( type, topContext().data() );
   const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.data() );
 
   qCDebug(LANGUAGE) << "making type-links for" << type->toString();
 
-  if( idType && idType->declaration(m_topContext.data()) ) {
+  if( idType && idType->declaration(topContext().data()) ) {
     ///@todo This is C++ specific, move into subclass
 
     if(target->modifiers() & AbstractType::ConstModifier)
@@ -644,7 +663,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
 
 DeclarationPointer AbstractDeclarationNavigationContext::declaration() const
 {
-  return m_declaration;
+  return d->m_declaration;
 }
 
 QString AbstractDeclarationNavigationContext::identifierHighlight(const QString& identifier, const DeclarationPointer& decl) const

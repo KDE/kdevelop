@@ -26,7 +26,9 @@
 
 using namespace KDevelop;
 
-UsesNavigationContext::UsesNavigationContext( KDevelop::IndexedDeclaration declaration, AbstractNavigationContext* previousContext ) : AbstractNavigationContext(TopDUContextPointer(), previousContext), m_declaration(declaration) {
+UsesNavigationContext::UsesNavigationContext(IndexedDeclaration declaration, AbstractNavigationContext* previousContext )
+  : AbstractNavigationContext(TopDUContextPointer(), previousContext),    m_declaration(declaration)
+{
   m_widget = new UsesWidget(m_declaration);
 }
 
@@ -42,9 +44,9 @@ QString UsesNavigationContext::html(bool shorten) {
   clear();
   modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
   
-  if( m_previousContext ) {
+  if(auto context = previousContext()) {
     modifyHtml() += navigationHighlight(i18n("Uses of "));
-    makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
+    makeLink(context->name(), context->name(), NavigationAction(context));
   }else{
     KDevelop::DUChainReadLocker lock(DUChain::lock());
     if(Declaration* decl = m_declaration.data()) {
