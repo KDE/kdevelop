@@ -69,7 +69,7 @@ void NoProjectCustomIncludePaths::setCustomIncludePaths(const QStringList& paths
 
 void NoProjectCustomIncludePaths::openAddIncludeDirectoryDialog()
 {
-    const QString dirName = QFileDialog::getExistingDirectory(this, tr("Select directory to include"));
+    const QString dirName = QFileDialog::getExistingDirectory(this, i18n("Select directory to include"));
     if (dirName.isEmpty())
         return;
 

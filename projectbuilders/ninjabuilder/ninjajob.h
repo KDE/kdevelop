@@ -54,6 +54,7 @@ public:
 public:
     NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType, const QStringList& arguments,
              const QByteArray& signal, NinjaBuilder* parent);
+    ~NinjaJob() override;
 
     void setIsInstalling(bool isInstalling);
     static QString ninjaExecutable();

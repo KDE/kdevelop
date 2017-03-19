@@ -193,7 +193,7 @@ ClangFixits ClangProblem::allFixits() const
 }
 
 ClangFixitAssistant::ClangFixitAssistant(const ClangFixits& fixits)
-    : m_title(tr("Fix-it Hints"))
+    : m_title(i18n("Fix-it Hints"))
     , m_fixits(fixits)
 {
 }

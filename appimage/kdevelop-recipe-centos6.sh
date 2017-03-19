@@ -78,55 +78,6 @@ export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/kdevelop.appdir/usr/lib:$QTDIR/lib/
 # between Ubuntu and CentOS 6
 ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
 
-# Get kdevplatform
-if [ ! -d /kdevplatform ] ; then
-    git clone --depth 1 http://anongit.kde.org/kdevplatform.git /kdevplatform
-fi
-cd /kdevplatform/
-git_pull_rebase_helper
-git checkout $KDEVELOP_VERSION
-
-# Get kdevelop
-if [ ! -d /kdevelop ] ; then
-    git clone --depth 1 http://anongit.kde.org/kdevelop.git /kdevelop
-fi
-cd /kdevelop/
-git_pull_rebase_helper
-git checkout $KDEVELOP_VERSION
-
-# Get kdev-python
-if [ ! -d /kdev-python ] ; then
-    git clone --depth 1 http://anongit.kde.org/kdev-python.git /kdev-python
-fi
-cd /kdev-python/
-git_pull_rebase_helper
-git checkout $KDEVELOP_VERSION
-
-# Get kdev-pg-qt
-if [ ! -d /kdevelop-pg-qt ] ; then
-    git clone --depth 1 http://anongit.kde.org/kdevelop-pg-qt /kdevelop-pg-qt
-fi
-cd /kdevelop-pg-qt
-git_pull_rebase_helper
-git checkout $KDEV_PG_QT_VERSION
-
-# Get kdev-php
-if [ ! -d /kdev-php ] ; then
-    git clone --depth 1 http://anongit.kde.org/kdev-php /kdev-php
-fi
-cd /kdev-php
-git_pull_rebase_helper
-git checkout $KDEVELOP_VERSION
-
-# Get Grantlee
-if [ ! -d /grantlee ]; then
-    git clone https://github.com/steveire/grantlee.git /grantlee
-fi
-cd /grantlee
-git checkout master
-git_pull_rebase_helper
-git checkout $GRANTLEE_VERSION
-
 # Prepare the install location
 rm -rf /kdevelop.appdir/ || true
 mkdir -p /kdevelop.appdir/usr
@@ -140,39 +91,43 @@ cd  /kdevelop.appdir/usr
 ln -s lib lib64
 
 # start building the deps
-function build_framework
+function build_project
 { (
-    SRC=/kf5
-    BUILD=/kf5/build
+    SRC=$HOME/src/
+    BUILD=$HOME/build
     PREFIX=/kdevelop.appdir/usr/
 
-    # framework
-    FRAMEWORK=$1
+    PROJECT=$1
+    VERSION=$2
 
     # clone if not there
     mkdir -p $SRC
     cd $SRC
-    if ( test -d $FRAMEWORK )
+    if ( test -d $PROJECT )
     then
-        echo "$FRAMEWORK already cloned"
-        cd $FRAMEWORK 
+        echo "$PROJECT already cloned"
+        cd $PROJECT
         git stash
         git reset --hard
         git fetch
         git fetch --tags
         cd ..
     else
-        git clone git://anongit.kde.org/$FRAMEWORK
+        if [ -z "$CUSTOM_GIT_URL" ]; then
+            git clone git://anongit.kde.org/$PROJECT
+        else
+            git clone $CUSTOM_GIT_URL
+        fi
     fi
 
-    cd $FRAMEWORK
-    git checkout $KF5_VERSION || git checkout $KDE_APPLICATION_VERSION
+    cd $PROJECT
+    git checkout $VERSION
     git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u}) || true # git rebase will fail if a tag is checked out
     git stash pop || true
     cd ..
 
-    if [ "$FRAMEWORK" = "knotifications" ]; then
-    cd $FRAMEWORK
+    if [ "$PROJECT" = "knotifications" ]; then
+    cd $PROJECT
         echo "patching knotifications"
     git reset --hard
     cat > no_phonon.patch << EOF
@@ -199,19 +154,24 @@ EOF
     fi
 
     # create build dir
-    mkdir -p $BUILD/$FRAMEWORK
+    mkdir -p $BUILD/$PROJECT
 
     # go there
-    cd $BUILD/$FRAMEWORK
+    cd $BUILD/$PROJECT
 
     # cmake it
-    cmake3 $SRC/$FRAMEWORK -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $2
+    cmake3 $SRC/$PROJECT -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $3
 
     # make
     make -j$(nproc)
 
     # install
     make install
+) }
+
+function build_framework
+{ (
+    build_project $1 $KF5_VERSION $2
 ) }
 
 build_framework extra-cmake-modules
@@ -251,69 +211,25 @@ build_framework kdeclarative
 build_framework kcmutils
 build_framework knotifications
 build_framework knotifyconfig
-build_framework libkomparediff2
 build_framework kdoctools
 build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
 build_framework kpty
 build_framework kinit 
-build_framework konsole
 
-cd /grantlee
-mkdir -p build
-cd build
-cmake3 .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/kdevelop.appdir/usr
-make -j$(nproc) install
+build_project libkomparediff2 $KDE_APPLICATION_VERSION
+build_project kate $KDE_APPLICATION_VERSION # for snippet plugin, see T3826
+build_project konsole $KDE_APPLICATION_VERSION
 
-cd /
+(CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git build_project grantlee $GRANTLEE_VERSION)
 
-# Build kdev-pg-qt
-mkdir -p /kdevelop-pg-qt_build
-cd /kdevelop-pg-qt_build
-cmake3 ../kdevelop-pg-qt \
-    -DCMAKE_INSTALL_PREFIX:PATH=/kdevelop.appdir/usr \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo
-make -j$(nproc) install
+build_project kdevelop-pg-qt $KDEV_PG_QT_VERSION
+build_project kdevplatform $KDEVELOP_VERSION
+build_project kdevelop $KDEVELOP_VERSION
+build_project kdev-php $KDEVELOP_VERSION
 
-# Build KDevPlatform
-mkdir -p /kdevplatform_build
-cd /kdevplatform_build
-cmake3 ../kdevplatform \
-    -DCMAKE_INSTALL_PREFIX:PATH=/kdevelop.appdir/usr/ \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DBUILD_TESTING=FALSE
-make -j$(nproc) install
-# no idea why this is required but otherwise kdevelop picks it up and fails
-rm /kdevplatform_build/KDevPlatformConfig.cmake
-
-# Build KDevelop
-mkdir -p /kdevelop_build
-cd /kdevelop_build
-cmake3 ../kdevelop \
-    -DCMAKE_INSTALL_PREFIX:PATH=/kdevelop.appdir/usr/ \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DBUILD_TESTING=FALSE
-make -j$(nproc) install
-rm /kdevelop_build/KDevelopConfig.cmake
-
-# for python
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
 # Build kdev-python
-mkdir -p /kdev-python_build
-cd /kdev-python_build
-cmake3 ../kdev-python \
-    -DCMAKE_INSTALL_PREFIX:PATH=/kdevelop.appdir/usr/ \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DBUILD_TESTING=FALSE
-make -j$(nproc) install
-
-# Build kdev-php
-mkdir -p /kdev-php_build
-cd /kdev-php_build
-cmake3 ../kdev-php \
-    -DCMAKE_INSTALL_PREFIX:PATH=/kdevelop.appdir/usr \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo
-make -j$(nproc) install
-
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
+build_project kdev-python $KDEVELOP_VERSION
 
 cd /kdevelop.appdir
 
@@ -452,6 +368,7 @@ rm -f ./usr/bin/pyenv*
 # remove big execs
 rm -f ./usr/bin/verify-uselistorder
 rm -f ./usr/bin/obj2yaml ./usr/bin/yaml2obj
+rm -f ./usr/bin/kwrite ./usr/bin/kate
 
 cp /kdevelop.appdir/usr/lib/libexec/kf5/* /kdevelop.appdir/usr/bin/
 

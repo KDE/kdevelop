@@ -176,7 +176,7 @@ void ProjectPathsWidget::clear()
 void ProjectPathsWidget::addProjectPath()
 {
     const QUrl directory = pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<QUrl>();
-    QFileDialog dlg(this, tr("Select Project Path"), directory.toLocalFile());
+    QFileDialog dlg(this, i18n("Select Project Path"), directory.toLocalFile());
     dlg.setFileMode(QFileDialog::Directory);
     dlg.setOption(QFileDialog::ShowDirsOnly);
     dlg.exec();
