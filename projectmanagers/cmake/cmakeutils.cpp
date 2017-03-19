@@ -459,7 +459,7 @@ QHash<QString, QString> readCacheValues(const KDevelop::Path& cmakeCachePath, QS
     while (!in.atEnd() && !variables.isEmpty())
     {
         QString line = in.readLine().trimmed();
-        if(!line.isEmpty() && !line[0].isLetterOrNumber())
+        if(!line.isEmpty() && line[0].isLetter())
         {
             CacheLine c;
             c.readLine(line);
