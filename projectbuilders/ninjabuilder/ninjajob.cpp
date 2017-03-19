@@ -114,6 +114,13 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType,
     connect(this, &NinjaJob::finished, this, &NinjaJob::emitProjectBuilderSignal);
 }
 
+NinjaJob::~NinjaJob()
+{
+    // prevent crash when emitting KJob::finished from ~KJob
+    // (=> at this point NinjaJob is already destructed...)
+    disconnect(this, &NinjaJob::finished, this, &NinjaJob::emitProjectBuilderSignal);
+}
+
 void NinjaJob::setIsInstalling(bool isInstalling)
 {
     m_isInstalling = isInstalling;
