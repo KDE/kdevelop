@@ -297,7 +297,6 @@ void AbstractNavigationWidget::wheelEvent(QWheelEvent* event )
 {
     QWidget::wheelEvent(event);
     event->accept();
-    return;
 }
 
 }
