@@ -29,14 +29,14 @@ namespace Utils {
  * */
 int expressionAt( const QString& contents, int index );
 
-QString quoteExpression(QString expr);
+QString quoteExpression(const QString& expr);
 
-QString unquoteExpression(QString expr);
+QString unquoteExpression(const QString& expr);
 
 /**
  * Qoute the string, using quoteCh
  */
-QString quote(QString str, char quoteCh = '"');
+QString quote(const QString& str, char quoteCh = '"');
 
 /**
  * Unquote and optionally unescape unicode escape sequence.

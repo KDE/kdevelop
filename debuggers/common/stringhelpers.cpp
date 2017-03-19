@@ -26,7 +26,7 @@
 #include <QChar>
 #include <QString>
 
-namespace Utils {
+namespace {
 
 bool parenFits( QChar c1, QChar c2 ) {
   if( c1 == '<' && c2 == '>' ) return true;
@@ -75,7 +75,9 @@ bool isLeftParen( QChar c1 ) {
 
 enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN, T_TEMP };
 
-int expressionAt( const QString& text, int index ) {
+}
+
+int Utils::expressionAt( const QString& text, int index ) {
 
   if( index == 0 )
     return 0;
@@ -169,23 +171,24 @@ int expressionAt( const QString& text, int index ) {
   return index;
 }
 
-QString quoteExpression(QString expr)
+QString Utils::quoteExpression(const QString& expr)
 {
     return quote(expr, '"');
 }
 
-QString unquoteExpression(QString expr)
+QString Utils::unquoteExpression(const QString& expr)
 {
     return unquote(expr, false);
 }
 
-QString quote(QString str, char quoteCh)
+QString Utils::quote(const QString& str, char quoteCh)
 {
-    str.replace("\\", "\\\\").replace(quoteCh, QStringLiteral("\\") + quoteCh);
-    return str.prepend(quoteCh).append(quoteCh);
+    QString res = str;
+    res.replace("\\", "\\\\").replace(quoteCh, QStringLiteral("\\") + quoteCh);
+    return res.prepend(quoteCh).append(quoteCh);
 }
 
-QString unquote(const QString &str, bool unescapeUnicode, char quoteCh)
+QString Utils::unquote(const QString &str, bool unescapeUnicode, char quoteCh)
 {
     if (str.startsWith(quoteCh) && str.endsWith(quoteCh)) {
         QString res;
@@ -280,5 +283,3 @@ QString unquote(const QString &str, bool unescapeUnicode, char quoteCh)
         return str;
     }
 }
-
-} // end of namespace Utils
