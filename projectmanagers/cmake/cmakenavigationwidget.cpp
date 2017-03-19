@@ -50,7 +50,7 @@ class CMakeDeclarationNavigationContext: public AbstractDeclarationNavigationCon
             : AbstractDeclarationNavigationContext(decl, top) {}
 };
 
-CMakeNavigationWidget::CMakeNavigationWidget(TopDUContextPointer top, const IDocumentation::Ptr doc)
+CMakeNavigationWidget::CMakeNavigationWidget(TopDUContextPointer top, const IDocumentation::Ptr& doc)
 {
     setContext( NavigationContextPointer(new CMakeNavigationContext(top, doc->name(), doc->description())) );
 }

@@ -57,7 +57,7 @@ private:
 
     void addPathInternal( const ConfigEntry& config, bool prepend );
     QString sanitizePath( const QString& path, bool expectRelative = true, bool needRelative = true ) const;
-    QString sanitizeUrl( QUrl url, bool needRelative = true ) const;
+    QString sanitizeUrl( const QUrl& url, bool needRelative = true ) const;
 };
 
 #endif // PROJECTPATHSMODEL_H

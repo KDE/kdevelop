@@ -57,7 +57,7 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 }
 
 
-KJob* createTestJob(QString launchModeId, QStringList arguments )
+KJob* createTestJob(const QString& launchModeId, const QStringList& arguments )
 {
     LaunchConfigurationType* type = ICore::self()->runController()->launchConfigurationTypeForId( "Native Application" );
     ILaunchMode* mode = ICore::self()->runController()->launchModeForId( launchModeId );

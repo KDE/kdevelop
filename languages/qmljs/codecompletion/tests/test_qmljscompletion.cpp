@@ -153,7 +153,7 @@ bool containsItemForText(const CompletionParameters& params, const QString& item
     return false;
 }
 
-bool declarationInCompletionList(const QString& initCode, const QString& invokeCode, QString itemName, bool qml)
+bool declarationInCompletionList(const QString& initCode, const QString& invokeCode, const QString& itemName, bool qml)
 {
     return containsItemForDeclarationNamed(
         prepareCompletion(initCode, invokeCode, qml),
@@ -161,7 +161,7 @@ bool declarationInCompletionList(const QString& initCode, const QString& invokeC
     );
 }
 
-bool itemInCompletionList(const QString& initCode, const QString& invokeCode, QString itemName, bool qml)
+bool itemInCompletionList(const QString& initCode, const QString& invokeCode, const QString& itemName, bool qml)
 {
     return containsItemForText(
         prepareCompletion(initCode, invokeCode, qml),

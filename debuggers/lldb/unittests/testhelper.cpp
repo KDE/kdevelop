@@ -75,7 +75,7 @@ bool isAttachForbidden(const char *file, int line)
     return false;
 }
 
-bool compareData(QModelIndex index, QString expected, const char *file, int line, bool useRE)
+bool compareData(QModelIndex index, const QString& expected, const char *file, int line, bool useRE)
 {
     QString s = index.model()->data(index, Qt::DisplayRole).toString();
     bool matched = true;

@@ -76,7 +76,7 @@ Q_DECLARE_METATYPE(CompletionItems);
 
 struct CompletionPriorityItem
 {
-    CompletionPriorityItem(const QString name, int matchQuality = 0, int inheritanceDepth = 0, const QString failMessage = {})
+    CompletionPriorityItem(const QString& name, int matchQuality = 0, int inheritanceDepth = 0, const QString& failMessage = {})
         : name(name)
         , failMessage(failMessage)
         , matchQuality(matchQuality)

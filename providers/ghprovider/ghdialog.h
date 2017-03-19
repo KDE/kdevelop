@@ -82,7 +82,7 @@ private slots:
      *
      * @param orgs A list of organizations for the current user.
      */
-    void updateOrgs(const QStringList orgs);
+    void updateOrgs(const QStringList& orgs);
 
     /// Revoke the access of this application.
     void revokeAccess();

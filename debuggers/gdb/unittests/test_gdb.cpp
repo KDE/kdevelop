@@ -270,7 +270,7 @@ private:
 #define COMPARE_DATA(index, expected) \
     do { if(!compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
 
-bool compareData(QModelIndex index, QString expected, const char *file, int line)
+bool compareData(QModelIndex index, const QString& expected, const char *file, int line)
 {
     QString s = index.model()->data(index, Qt::DisplayRole).toString();
     if (s != expected) {

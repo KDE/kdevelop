@@ -33,7 +33,7 @@ using namespace KDevelop;
      * everything else (mergeTypes(a, function) returns function).
      */
     KDEVQMLJSDUCHAIN_EXPORT AbstractType::Ptr mergeTypes(AbstractType::Ptr type,
-                                                         const AbstractType::Ptr newType);
+                                                         const AbstractType::Ptr& newType);
 
     /**
      * QML attribute value, with its source location

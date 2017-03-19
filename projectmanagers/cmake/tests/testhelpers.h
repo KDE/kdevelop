@@ -51,7 +51,7 @@ struct TestProjectPaths {
     KDevelop::Path configFile;
 };
 
-TestProjectPaths projectPaths(const QString& project, QString name = QString())
+TestProjectPaths projectPaths(const QString& project, const QString& name = QString())
 {
     TestProjectPaths paths;
     if(QDir::isRelativePath(project)) {

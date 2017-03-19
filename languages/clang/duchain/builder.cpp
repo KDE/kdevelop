@@ -661,7 +661,7 @@ struct Visitor
 #endif
 
     /// @param declaration an optional declaration that will be associated with created type
-    AbstractType* createClassTemplateSpecializationType(CXType type, const DeclarationPointer declaration = {})
+    AbstractType* createClassTemplateSpecializationType(CXType type, const DeclarationPointer& declaration = {})
     {
         auto numTA = clang_Type_getNumTemplateArguments(type);
         Q_ASSERT(numTA != -1);

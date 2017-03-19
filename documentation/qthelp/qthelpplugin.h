@@ -53,7 +53,7 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
     private:
         void loadQtDocumentation(bool loadQtDoc);
         void searchHelpDirectory(QStringList& pathList, QStringList& nameList, QStringList& iconList, const QString& searchDir);
-        void loadQtHelpProvider(QStringList pathList, QStringList nameList, QStringList iconList);
+        void loadQtHelpProvider(const QStringList& pathList, const QStringList& nameList, const QStringList& iconList);
 
         static QtHelpPlugin *s_plugin;
         QList<QtHelpProvider*> m_qtHelpProviders;

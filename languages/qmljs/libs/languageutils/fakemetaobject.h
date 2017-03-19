@@ -188,7 +188,7 @@ public:
     QString className() const;
     void setClassName(const QString &name);
 
-    void addExport(const QString &name, const QString &package, ComponentVersion version);
+    void addExport(const QString &name, const QString &package, const ComponentVersion& version);
     void setExportMetaObjectRevision(int exportIndex, int metaObjectRevision);
     QList<Export> exports() const;
     Export exportInPackage(const QString &package) const;

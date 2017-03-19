@@ -59,7 +59,7 @@ void UseBuilder::startVisiting(CMakeContentIterator* node)
     }
 }
 
-void UseBuilder::newUse(const KDevelop::RangeInRevision& sr, KDevelop::DeclarationPointer d)
+void UseBuilder::newUse(const KDevelop::RangeInRevision& sr, const KDevelop::DeclarationPointer& d)
 {
     m_ctx->createUse(m_ctx->indexForUsedDeclaration(d.data()), sr, 0);
 }

@@ -200,7 +200,7 @@ QStringListModel* ManPageModel::indexList()
     return m_indexModel;
 }
 
-bool ManPageModel::containsIdentifier(QString identifier)
+bool ManPageModel::containsIdentifier(const QString& identifier)
 {
     return m_index.contains(identifier);
 }

@@ -212,7 +212,7 @@ void ProjectPathsModel::addPathInternal( const ConfigEntry& config, bool prepend
     }
 }
 
-QString ProjectPathsModel::sanitizeUrl( QUrl url, bool needRelative ) const
+QString ProjectPathsModel::sanitizeUrl( const QUrl& url, bool needRelative ) const
 {
     Q_ASSERT( project );
 

@@ -40,7 +40,7 @@ QUrl findExecutable(const QString& name);
 QString findSourceFile(const char *file, const QString& name);
 bool isAttachForbidden(const char *file, int line);
 
-bool compareData(QModelIndex index, QString expected, const char *file, int line, bool useRE = false);
+bool compareData(QModelIndex index, const QString& expected, const char *file, int line, bool useRE = false);
 
 bool waitForState(MIDebugSession *session, KDevelop::IDebugSession::DebuggerState state,
                   const char *file, int line, bool waitForIdle = false);

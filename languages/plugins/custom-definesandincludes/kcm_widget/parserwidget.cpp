@@ -168,8 +168,8 @@ void ParserWidget::setParserArguments(const ParserArguments& arguments)
 
     setArguments(m_ui->languageStandardsCpp, m_ui->parserOptionsCpp, arguments.cppArguments);
     setArguments(m_ui->languageStandardsC, m_ui->parserOptionsC, arguments.cArguments);
-    setArguments(m_ui->languageStandardsOpenCl, m_ui->parserOptionsOpenCl, arguments.openClArguments);
-    setArguments(m_ui->languageStandardsCuda, m_ui->parserOptionsCuda, arguments.cudaArguments);
+    setArguments(m_ui->languageStandardsCpp, m_ui->parserOptionsOpenCl, arguments.openClArguments);
+    setArguments(m_ui->languageStandardsCpp, m_ui->parserOptionsCuda, arguments.cudaArguments);
 
     m_ui->parseHeadersInPlainC->setChecked(!arguments.parseAmbiguousAsCPP);
 
@@ -191,6 +191,6 @@ void ParserWidget::updateEnablements()
 {
     m_ui->parserOptionsCpp->setEnabled(m_ui->languageStandardsCpp->currentIndex() == customProfileIdx);
     m_ui->parserOptionsC->setEnabled(m_ui->languageStandardsC->currentIndex() == customProfileIdx);
-    m_ui->parserOptionsOpenCl->setEnabled(m_ui->languageStandardsOpenCl->currentIndex() == customProfileIdx);
-    m_ui->parserOptionsCuda->setEnabled(m_ui->languageStandardsCuda->currentIndex() == customProfileIdx);
+    m_ui->parserOptionsCpp->setEnabled(m_ui->languageStandardsOpenCl->currentIndex() == customProfileIdx);
+    m_ui->parserOptionsCpp->setEnabled(m_ui->languageStandardsCuda->currentIndex() == customProfileIdx);
 }

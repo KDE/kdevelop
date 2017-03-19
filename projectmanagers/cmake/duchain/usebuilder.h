@@ -33,7 +33,7 @@ public:
     void startVisiting(CMakeContentIterator* node);
 
 private:
-    void newUse(const KDevelop::RangeInRevision& sr, KDevelop::DeclarationPointer d);
+    void newUse(const KDevelop::RangeInRevision& sr, const KDevelop::DeclarationPointer& d);
 
     KDevelop::ReferencedTopDUContext m_ctx;
 };

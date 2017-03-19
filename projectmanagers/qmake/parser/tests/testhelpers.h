@@ -128,7 +128,7 @@ void classname::funcname()\
     }
 
 void matchScopeBodies( QList<QMake::StatementAST*>,
-                             QList<QMake::StatementAST*> );
+                             const QList<QMake::StatementAST*>& );
 
 #endif
 

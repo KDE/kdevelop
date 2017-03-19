@@ -51,7 +51,7 @@ public:
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 
     QStringListModel* indexList();
-    bool containsIdentifier(QString identifier);
+    bool containsIdentifier(const QString& identifier);
     int sectionCount() const;
     bool isLoaded() const;
     int nbSectionLoaded() const;

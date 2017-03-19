@@ -193,7 +193,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     return context;
 }
 
-DeclarationPointer ClangHelpers::findDeclaration(CXSourceLocation location, QualifiedIdentifier id, const ReferencedTopDUContext& top)
+DeclarationPointer ClangHelpers::findDeclaration(CXSourceLocation location, const QualifiedIdentifier& id, const ReferencedTopDUContext& top)
 {
     if (!top) {
         // may happen for cyclic includes

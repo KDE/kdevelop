@@ -389,7 +389,7 @@ KDevelop::Path::List includePaths( const KDevelop::Path& file )
 /**
  * Return a list of header files viable for inclusions. All elements will be unique
  */
-QStringList includeFiles(const QualifiedIdentifier& identifier, const QVector<Declaration*> declarations, const KDevelop::Path& file)
+QStringList includeFiles(const QualifiedIdentifier& identifier, const QVector<Declaration*>& declarations, const KDevelop::Path& file)
 {
     const auto includes = includePaths( file );
     if( includes.isEmpty() ) {

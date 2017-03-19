@@ -87,7 +87,7 @@ void TestAssistants::cleanupTestCase()
     globalTestLock = nullptr;
 }
 
-static QUrl createFile(const QString& fileContents, QString extension, int id)
+static QUrl createFile(const QString& fileContents, const QString& extension, int id)
 {
     static QTemporaryDir tempDirA;
     Q_ASSERT(tempDirA.isValid());

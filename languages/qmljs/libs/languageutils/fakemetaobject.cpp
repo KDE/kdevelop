@@ -301,7 +301,7 @@ QString FakeMetaObject::className() const
 void FakeMetaObject::setClassName(const QString &name)
 { m_className = name; }
 
-void FakeMetaObject::addExport(const QString &name, const QString &package, ComponentVersion version)
+void FakeMetaObject::addExport(const QString &name, const QString &package, const ComponentVersion& version)
 {
     Export exp;
     exp.type = name;

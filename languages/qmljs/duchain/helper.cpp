@@ -40,12 +40,12 @@ namespace QmlJS
 {
 using namespace KDevelop;
 
-AbstractType::Ptr mergeTypes(AbstractType::Ptr type, const AbstractType::Ptr newType)
+AbstractType::Ptr mergeTypes(AbstractType::Ptr type, const AbstractType::Ptr& newType)
 {
     if (newType && newType->whichType() == AbstractType::TypeFunction) {
         return newType;
     } else {
-        return TypeUtils::mergeTypes(type, newType);
+        return TypeUtils::mergeTypes(std::move(type), newType);
     }
 }
 

@@ -52,12 +52,12 @@ QString QtHelpProvider::iconName() const
     return m_iconName;
 }
 
-void QtHelpProvider::setName(QString name)
+void QtHelpProvider::setName(const QString& name)
 {
     m_name = name;
 }
 
-void QtHelpProvider::setIconName(QString iconName)
+void QtHelpProvider::setIconName(const QString& iconName)
 {
     m_iconName = iconName;
 }

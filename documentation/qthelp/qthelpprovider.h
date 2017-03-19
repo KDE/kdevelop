@@ -33,10 +33,10 @@ public:
 
     QIcon icon() const override;
     QString name() const override;
+    void setName(const QString& name);
     QString fileName() const;
     QString iconName() const;
-    void setName(QString name);
-    void setIconName(QString iconName);
+    void setIconName(const QString& iconName);
 private:
     QString m_fileName;
     QString m_name;
