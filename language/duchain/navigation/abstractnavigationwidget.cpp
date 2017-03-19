@@ -74,6 +74,7 @@ QSize AbstractNavigationWidget::sizeHint() const
                       qMin(d->m_idealTextSize.height(), maxNavigationWidgetHeight));
     if(d->m_idealTextSize.height()>=maxNavigationWidgetHeight) {
       //make space for the scrollbar in case it's not fitting
+      ret.rwidth() += 17; //m_browser->verticalScrollBar()->width() returns 100, for some reason
     }
 
     if(d->m_currentWidget) {
@@ -89,7 +90,9 @@ QSize AbstractNavigationWidget::sizeHint() const
     return QWidget::sizeHint();
 }
 
-void AbstractNavigationWidget::initBrowser(int height) {
+void AbstractNavigationWidget::initBrowser(int height)
+{
+  Q_ASSERT(!d->m_browser);
   Q_UNUSED(height);
   d->m_browser = new QTextBrowser;
 
@@ -188,9 +191,11 @@ void AbstractNavigationWidget::update() {
       html += QStringLiteral("</small></p>");
     }
 
+    d->m_browser->setHtml( html );
 
     d->m_currentText = html;
 
+    d->m_idealTextSize = QSize();
 
     QSize hint = sizeHint();
     if(hint.height() >= d->m_idealTextSize.height()) {
