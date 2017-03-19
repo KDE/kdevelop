@@ -12,6 +12,7 @@
 
 #include <QHBoxLayout>
 
+#include <kio_version.h>
 #include <KDirOperator>
 #include <KFileItem>
 #include <KFileWidget>
@@ -74,8 +75,13 @@ void OpenProjectPage::dirChanged(const QUrl& /*url*/)
     if(fileWidget->selectedFiles().isEmpty()) {
         KFileItemList items=fileWidget->dirOperator()->dirLister()->items();
         foreach(const KFileItem& item, items) {
-            if(item.url().path().endsWith(ShellExtension::getInstance()->projectFileExtension()) && item.isFile())
+            if(item.url().path().endsWith(ShellExtension::getInstance()->projectFileExtension()) && item.isFile()) {
+#if KIO_VERSION >= QT_VERSION_CHECK(5,33,0)
+                fileWidget->setSelectedUrl(item.url());
+#else
                 fileWidget->setSelection(item.url().url());
+#endif
+            }
         }
     }
 }
