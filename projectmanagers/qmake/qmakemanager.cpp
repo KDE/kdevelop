@@ -163,17 +163,8 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem(IProject* project, const
 {
     QFileInfo fi(path.toLocalFile());
     QDir dir(path.toLocalFile());
-    QStringList l = dir.entryList(QStringList() << "*.pro");
 
-    QString projectfile;
-
-    if (l.count() && l.indexOf(project->name() + ".pro") != -1)
-        projectfile = project->name() + ".pro";
-    if (l.isEmpty() || (l.count() && l.indexOf(fi.baseName() + ".pro") != -1)) {
-        projectfile = fi.baseName() + ".pro";
-    } else {
-        projectfile = l.first();
-    }
+    auto item = new QMakeFolderItem(project, path);
 
     QHash<QString, QString> qmvars = QMakeUtils::queryQMake(project);
     const QString mkSpecFile = QMakeConfig::findBasicMkSpec(qmvars);
@@ -186,18 +177,21 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem(IProject* project, const
         cache->setMkSpecs(mkspecs);
         cache->read();
     }
-    Path proPath(path, projectfile);
-    /// TODO: use Path in QMakeProjectFile
-    QMakeProjectFile* scope = new QMakeProjectFile(proPath.toLocalFile());
-    scope->setProject(project);
-    scope->setMkSpecs(mkspecs);
-    if (cache) {
-        scope->setQMakeCache(cache);
+
+    QStringList projectfiles = dir.entryList(QStringList() << "*.pro");
+    for (const auto& projectfile : projectfiles) {
+        Path proPath(path, projectfile);
+        /// TODO: use Path in QMakeProjectFile
+        QMakeProjectFile* scope = new QMakeProjectFile(proPath.toLocalFile());
+        scope->setProject(project);
+        scope->setMkSpecs(mkspecs);
+        if (cache) {
+            scope->setQMakeCache(cache);
+        }
+        scope->read();
+        qCDebug(KDEV_QMAKE) << "top-level scope with variables:" << scope->variables();
+        item->addProjectFile(scope);
     }
-    scope->read();
-    qCDebug(KDEV_QMAKE) << "top-level scope with variables:" << scope->variables();
-    auto item = new QMakeFolderItem(project, path);
-    item->addProjectFile(scope);
     return item;
 }
 
