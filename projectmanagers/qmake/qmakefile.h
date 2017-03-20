@@ -65,9 +65,9 @@ public:
 protected:
     VariableMap m_variableValues;
 
-    QStringList resolveShellGlobbing( const QString& pattern ) const;
-    QStringList resolveFileName( const QString& file ) const;
-    QString resolveToSingleFileName( const QString& file ) const;
+    QStringList resolveShellGlobbing( const QString& pattern, const QString& base = {} ) const;
+    QStringList resolveFileName( const QString& file, const QString& base = {} ) const;
+    QString resolveToSingleFileName( const QString& file, const QString& base = {} ) const;
 private:
     QMake::ProjectAST* m_ast;
     QString m_projectFile;

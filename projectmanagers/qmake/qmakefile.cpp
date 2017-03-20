@@ -181,23 +181,23 @@ QStringList QMakeFile::resolveVariable(const QString& variable, VariableInfo::Va
     }
 }
 
-QStringList QMakeFile::resolveShellGlobbing(const QString& pattern) const
+QStringList QMakeFile::resolveShellGlobbing(const QString& pattern, const QString& base) const
 {
-    return resolveShellGlobbingInternal(pattern, absoluteDir());
+    return resolveShellGlobbingInternal(pattern, base.isEmpty() ? absoluteDir() : base);
 }
 
-QString QMakeFile::resolveToSingleFileName(const QString& file) const
+QString QMakeFile::resolveToSingleFileName(const QString& file, const QString& base) const
 {
-    QStringList l = resolveFileName(file);
+    QStringList l = resolveFileName(file, base);
     if (l.isEmpty())
         return QString();
     else
         return l.first();
 }
 
-QStringList QMakeFile::resolveFileName(const QString& file) const
+QStringList QMakeFile::resolveFileName(const QString& file, const QString& base) const
 {
-    return resolveShellGlobbing(file);
+    return resolveShellGlobbing(file, base);
 }
 
 void QMakeFile::setProject(KDevelop::IProject* project)

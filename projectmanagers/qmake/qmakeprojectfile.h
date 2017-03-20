@@ -74,7 +74,7 @@ public:
     virtual QString proFile() const;
 
 private:
-    void addPathsForVariable(const QString& variable, QStringList* list) const;
+    void addPathsForVariable(const QString& variable, QStringList* list, const QString& base = {}) const;
 
     QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;

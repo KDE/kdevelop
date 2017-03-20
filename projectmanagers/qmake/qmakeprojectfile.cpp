@@ -160,12 +160,12 @@ bool QMakeProjectFile::hasSubProject(const QString& file) const
     return false;
 }
 
-void QMakeProjectFile::addPathsForVariable(const QString& variable, QStringList* list) const
+void QMakeProjectFile::addPathsForVariable(const QString& variable, QStringList* list, const QString& base) const
 {
     const QStringList values = variableValues(variable);
     ifDebug(qCDebug(KDEV_QMAKE) << variable << values;) foreach (const QString& val, values)
     {
-        QString path = resolveToSingleFileName(val);
+        QString path = resolveToSingleFileName(val, base);
         if (!path.isEmpty() && !list->contains(val)) {
             list->append(path);
         }
@@ -244,9 +244,9 @@ QStringList QMakeProjectFile::includeDirectories() const
         addPathsForVariable("QMAKE_INCDIR_X11", &list);
     }
 
-    addPathsForVariable("MOC_DIR", &list);
-    addPathsForVariable("OBJECTS_DIR", &list);
-    addPathsForVariable("UI_DIR", &list);
+    addPathsForVariable("MOC_DIR", &list, outPwd());
+    addPathsForVariable("OBJECTS_DIR", &list, outPwd());
+    addPathsForVariable("UI_DIR", &list, outPwd());
 
     ifDebug(qCDebug(KDEV_QMAKE) << "final list:" << list;) return list;
 }
