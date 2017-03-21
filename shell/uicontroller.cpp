@@ -493,24 +493,26 @@ void UiController::addNewToolView(MainWindow *mw, QListWidgetItem* item)
 
 void UiController::showSettingsDialog()
 {
-    auto parent = activeMainWindow();
+    ConfigDialog cfgDlg(activeMainWindow());
 
-    auto editorConfigPage = new EditorConfigPage(parent);
-    auto languageConfigPage = new LanguagePreferences(parent);
-    auto analyzersPreferences = new AnalyzersPreferences(parent);
-    auto documentationPreferences = new DocumentationPreferences(parent);
+    auto editorConfigPage = new EditorConfigPage(&cfgDlg);
+    auto languageConfigPage = new LanguagePreferences(&cfgDlg);
+    auto analyzersPreferences = new AnalyzersPreferences(&cfgDlg);
+    auto documentationPreferences = new DocumentationPreferences(&cfgDlg);
 
-    auto configPages = QVector<KDevelop::ConfigPage*> {
-        new UiPreferences(parent),
-        new PluginPreferences(parent),
-        new SourceFormatterSettings(parent),
-        new ProjectPreferences(parent),
-        new EnvironmentPreferences(QString(), parent),
-        new TemplateConfig(parent),
+    const auto configPages = QVector<KDevelop::ConfigPage*> {
+        new UiPreferences(&cfgDlg),
+        new PluginPreferences(&cfgDlg),
+        new SourceFormatterSettings(&cfgDlg),
+        new ProjectPreferences(&cfgDlg),
+        new EnvironmentPreferences(QString(), &cfgDlg),
+        new TemplateConfig(&cfgDlg),
         editorConfigPage
     };
 
-    ConfigDialog cfgDlg(configPages, parent);
+    for (auto page : configPages) {
+        cfgDlg.addConfigPage(page);
+    }
 
     auto addPluginPages = [&](IPlugin* plugin) {
         for (int i = 0, numPages = plugin->configPages(); i < numPages; ++i) {
@@ -535,7 +537,7 @@ void UiController::showSettingsDialog()
     cfgDlg.addConfigPage(analyzersPreferences, documentationPreferences);
 
     cfgDlg.addConfigPage(languageConfigPage, analyzersPreferences);
-    cfgDlg.addSubConfigPage(languageConfigPage, new BGPreferences(parent));
+    cfgDlg.addSubConfigPage(languageConfigPage, new BGPreferences(&cfgDlg));
 
     foreach (IPlugin* plugin, ICore::self()->pluginController()->loadedPlugins()) {
         addPluginPages(plugin);

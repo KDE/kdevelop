@@ -128,8 +128,11 @@ public:
         if( !proj )
             return;
 
+        auto cfgDlg = new KDevelop::ConfigDialog(m_core->uiController()->activeMainWindow());
+        cfgDlg->setAttribute(Qt::WA_DeleteOnClose);
+        cfgDlg->setModal(true);
+
         QVector<KDevelop::ConfigPage*> configPages;
-        auto mainWindow = m_core->uiController()->activeMainWindow();
 
         ProjectConfigOptions options;
         options.developerFile = proj->developerFile();
@@ -139,7 +142,7 @@ public:
 
         foreach (IPlugin* plugin, findPluginsForProject(proj)) {
             for (int i = 0; i < plugin->perProjectConfigPages(); ++i) {
-                configPages.append(plugin->perProjectConfigPage(i, options, mainWindow));
+                configPages.append(plugin->perProjectConfigPage(i, options, cfgDlg));
             }
         }
 
@@ -148,9 +151,10 @@ public:
             return a->name() < b->name();
         });
 
-        auto cfgDlg = new KDevelop::ConfigDialog(configPages, mainWindow);
-        cfgDlg->setAttribute(Qt::WA_DeleteOnClose);
-        cfgDlg->setModal(true);
+        for (auto page : configPages) {
+            cfgDlg->addConfigPage(page);
+        }
+
         QObject::connect(cfgDlg, &ConfigDialog::configSaved, cfgDlg, [this, proj](ConfigPage* page) {
             Q_UNUSED(page)
             Q_ASSERT_X(proj, Q_FUNC_INFO,
@@ -191,7 +195,7 @@ public:
         }
     }
 
-    QVector<IPlugin*> findPluginsForProject( IProject* project )
+    QVector<IPlugin*> findPluginsForProject( IProject* project ) const
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QVector<IPlugin*> projectPlugins;
