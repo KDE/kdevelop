@@ -39,9 +39,10 @@ namespace KDevelop
 {
 
 EnvironmentWidget::EnvironmentWidget( QWidget *parent )
-        : QWidget( parent ), groupModel( new EnvironmentGroupModel() ), proxyModel( new QSortFilterProxyModel() )
+    : QWidget( parent )
+    , groupModel( new EnvironmentGroupModel(this) )
+    , proxyModel( new QSortFilterProxyModel(this) )
 {
-
     // setup ui
     ui.setupUi( this );
     ui.variableTable->verticalHeader()->hide();

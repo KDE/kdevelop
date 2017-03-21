@@ -279,7 +279,7 @@ void SourceFormatterSettings::enableStyleButtons()
         const LanguageSettings& l = it.value();
         Q_ASSERT(l.selectedFormatter);
         ISourceFormatter* fmt = l.selectedFormatter->formatter;
-        hasEditWidget = ( fmt && fmt->editStyleWidget( l.mimetypes.first() ) );
+        hasEditWidget = ( fmt && QScopedPointer<QObject>(fmt->editStyleWidget( l.mimetypes.first() )) );
     }
     btnDelStyle->setEnabled( userEntry );
     btnEditStyle->setEnabled( userEntry && hasEditWidget );
@@ -402,7 +402,7 @@ void SourceFormatterSettings::editStyle()
     SourceFormatter* fmt = l.selectedFormatter;
 
     QMimeType mimetype = l.mimetypes.first();
-    if( fmt->formatter->editStyleWidget( mimetype ) != nullptr ) {
+    if( QScopedPointer<QObject>(fmt->formatter->editStyleWidget( mimetype )) ) {
         EditStyleDialog dlg( fmt->formatter, mimetype, *l.selectedStyle, this );
         if( dlg.exec() == QDialog::Accepted )
         {

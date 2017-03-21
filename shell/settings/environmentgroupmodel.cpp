@@ -28,8 +28,8 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-EnvironmentGroupModel::EnvironmentGroupModel()
-    : QAbstractTableModel()
+EnvironmentGroupModel::EnvironmentGroupModel(QObject* parent)
+    : QAbstractTableModel(parent)
 {
 }
 
@@ -239,4 +239,3 @@ void EnvironmentGroupModel::saveToConfig( KConfig* cfg )
 }
 
 }
-
