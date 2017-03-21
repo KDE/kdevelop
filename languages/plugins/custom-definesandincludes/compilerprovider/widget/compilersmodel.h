@@ -42,6 +42,7 @@ public:
     };
 
     CompilersModel( QObject* parent = nullptr );
+    ~CompilersModel() override;
 
     void setCompilers( const QVector<CompilerPointer>& compilers );
     QVector<CompilerPointer> compilers() const;
