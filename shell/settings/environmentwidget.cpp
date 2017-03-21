@@ -26,7 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <QHeaderView>
 #include <QPushButton>
 #include <QSortFilterProxyModel>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QVBoxLayout>
 
 #include <KLocalizedString>
@@ -155,7 +155,7 @@ void EnvironmentWidget::batchModeEditButtonClicked()
 
     QVBoxLayout *layout = new QVBoxLayout(&dialog);
 
-    QTextEdit *edit = new QTextEdit;
+    auto edit = new QPlainTextEdit;
     edit->setPlaceholderText(QStringLiteral("VARIABLE1=VALUE1\nVARIABLE2=VALUE2"));
     QString text;
     for (int i = 0; i < proxyModel->rowCount(); ++i) {
@@ -163,7 +163,7 @@ void EnvironmentWidget::batchModeEditButtonClicked()
         const auto value = proxyModel->index(i, EnvironmentGroupModel::ValueColumn).data().toString();
         text.append(QStringLiteral("%1=%2\n").arg(variable, value));
     }
-    edit->setText(text);
+    edit->setPlainText(text);
     layout->addWidget( edit );
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
