@@ -40,17 +40,13 @@ using namespace KDevelop;
 
 //FIXME: unit test this code!
 
-ConfigDialog::ConfigDialog(const QVector<ConfigPage*>& pages, QWidget* parent, Qt::WindowFlags flags)
+ConfigDialog::ConfigDialog(QWidget* parent, Qt::WindowFlags flags)
     : KPageDialog(parent, flags), m_currentPageHasChanges(false)
 {
     setWindowTitle(i18n("Configure"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     button(QDialogButtonBox::Apply)->setEnabled(false);
     setObjectName(QStringLiteral("configdialog"));
-
-    for (auto page : pages) {
-        addConfigPage(page);
-    }
 
     auto onApplyClicked = [this] {
         auto page = qobject_cast<ConfigPage*>(currentPage()->widget());

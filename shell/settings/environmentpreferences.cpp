@@ -48,7 +48,7 @@ EnvironmentPreferences::EnvironmentPreferences(const QString& preselectedProfile
     connect(d->preferencesDialog, &EnvironmentWidget::changed,
             this, &EnvironmentPreferences::changed);
 
-    d->skel = new KConfigSkeleton(KSharedConfig::openConfig());
+    d->skel = new KConfigSkeleton(KSharedConfig::openConfig(), this);
     setConfigSkeleton(d->skel);
 
     d->preselectedProfileName = preselectedProfileName;

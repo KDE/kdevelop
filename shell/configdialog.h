@@ -40,7 +40,7 @@ class ConfigDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    explicit ConfigDialog(const QVector<ConfigPage*>& pages, QWidget* parent = nullptr, Qt::WindowFlags flags = nullptr);
+    explicit ConfigDialog(QWidget* parent = nullptr, Qt::WindowFlags flags = nullptr);
 
 public Q_SLOTS:
     /**
@@ -54,7 +54,6 @@ public Q_SLOTS:
      * it will be inserted as the last config page.
      */
     void addConfigPage(ConfigPage* page, ConfigPage* next = nullptr);
-
 
     /**
      * Add a new sub config page
