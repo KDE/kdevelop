@@ -3,7 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 find_package(Qt5WebEngineWidgets)
 if(TARGET Qt5::WebEngineWidgets)
     set_package_properties(Qt5WebEngineWidgets PROPERTIES
-        PURPOSE "QtWebKit, for integrated documentation"
+        PURPOSE "QtWebEngine, for integrated documentation"
         URL "http://qt-project.org/"
         TYPE REQUIRED)
 else()
