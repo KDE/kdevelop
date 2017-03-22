@@ -21,12 +21,17 @@
 #include "cmakeserverimportjob.h"
 #include "cmakeutils.h"
 #include "cmakeserver.h"
+
 #include <interfaces/iproject.h>
+#include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
+
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QRegularExpression>
+#include <QFileInfo>
+
 #include "debug.h"
-#include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
+
 
 template <typename T, typename Q, typename W>
 static T kTransform(const Q& list, W func)
@@ -105,7 +110,12 @@ static void processFileData(const QJsonObject &response, CMakeProjectData &data)
                     const auto sourcesArray = fileGroup.value(QLatin1String("sources")).toArray();
                     const KDevelop::Path::List sources = kTransform<KDevelop::Path::List>(sourcesArray, [targetDir](const QJsonValue& val) { return KDevelop::Path(targetDir, val.toString()); });
                     for (const auto& source: sources) {
-                        data.compilationData.files[source] = file;
+                        // NOTE: we use the canonical file path to prevent issues with symlinks in the path
+                        //       leading to lookup failures
+                        const auto localFile = source.toLocalFile();
+                        const auto canonicalFile = QFileInfo(source.toLocalFile()).canonicalFilePath();
+                        const auto sourcePath = localFile == canonicalFile ? source : KDevelop::Path(canonicalFile);
+                        data.compilationData.files[sourcePath] = file;
                     }
                     qCDebug(CMAKE) << "registering..." << sources << file;
                 }
