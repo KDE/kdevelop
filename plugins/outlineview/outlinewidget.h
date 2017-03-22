@@ -47,6 +47,6 @@ private:
 
     Q_DISABLE_COPY(OutlineWidget)
 public slots:
-    void activated(QModelIndex);
+    void activated(const QModelIndex& index);
     void expandFirstLevel();
 };

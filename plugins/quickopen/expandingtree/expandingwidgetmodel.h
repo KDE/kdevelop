@@ -77,7 +77,7 @@ public:
     ///@return whether row is currently expanded
     bool isExpanded(const QModelIndex& row) const;
     ///Change the expand-state of the row given through index. The display will be updated.
-    void setExpanded(QModelIndex index, bool expanded);
+    void setExpanded(const QModelIndex& index, bool expanded);
 
     ///Returns the total height added through all open expanding-widgets
     int expandingWidgetsHeight() const;

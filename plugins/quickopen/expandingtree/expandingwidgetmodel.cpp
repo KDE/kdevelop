@@ -355,7 +355,7 @@ bool ExpandingWidgetModel::isExpanded(const QModelIndex& idx_) const
     return m_expandState.contains(idx) && m_expandState[idx] == Expanded;
 }
 
-void ExpandingWidgetModel::setExpanded(QModelIndex idx_, bool expanded)
+void ExpandingWidgetModel::setExpanded(const QModelIndex& idx_, bool expanded)
 {
     Q_ASSERT(idx_.model() == this);
 

@@ -85,7 +85,7 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     connect(m_model, &QAbstractItemModel::modelReset, this, &OutlineWidget::expandFirstLevel);
 }
 
-void OutlineWidget::activated(QModelIndex index)
+void OutlineWidget::activated(const QModelIndex& index)
 {
     QModelIndex realIndex = m_proxy->mapToSource(index);
     m_model->activate(realIndex);

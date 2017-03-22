@@ -204,7 +204,7 @@ Q_SIGNALS:
     void addNewToolView(MainWindow *mw, QListWidgetItem *item);
 
 private Q_SLOTS:
-    void addNewToolViewByDoubleClick(QModelIndex index)
+    void addNewToolViewByDoubleClick(const QModelIndex& index)
     {
         QListWidgetItem *item = itemFromIndex(index);
         // Disable item so that the toolview can not be added again.
