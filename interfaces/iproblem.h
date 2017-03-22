@@ -27,12 +27,14 @@
 
 #include <language/editor/documentrange.h>
 
+#include "interfacesexport.h"
+
 namespace KDevelop
 {
 class IAssistant;
 
 /// Interface for the Problem classes
-class KDEVPLATFORMLANGUAGE_EXPORT IProblem : public QSharedData
+class KDEVPLATFORMINTERFACES_EXPORT IProblem : public QSharedData
 {
 public:
     typedef QExplicitlySharedDataPointer<IProblem> Ptr;
