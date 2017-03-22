@@ -88,4 +88,5 @@
   <provides>
     <binary>kdevelop</binary>
   </provides>
+  <update_contact>kfunk@kde.org</update_contact>
 </component>
