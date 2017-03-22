@@ -147,10 +147,25 @@ void CMakeServer::handshake(const KDevelop::Path& source, const KDevelop::Path& 
     Q_ASSERT(!source.isEmpty());
 
     const QString generatorVariable = QStringLiteral("CMAKE_GENERATOR");
-    QString generator = CMake::readCacheValues(KDevelop::Path(build, QStringLiteral("CMakeCache.txt")), { generatorVariable }).value(generatorVariable);
+    const QString homeDirectoryVariable = QStringLiteral("CMAKE_HOME_DIRECTORY");
+    const auto cacheValues = CMake::readCacheValues(KDevelop::Path(build, QStringLiteral("CMakeCache.txt")),
+                                                    {generatorVariable, homeDirectoryVariable});
+
+    QString generator = cacheValues.value(generatorVariable);
     if (generator.isEmpty()) {
         generator = CMake::defaultGenerator();
     }
+
+    // prefer pre-existing source directory, see also: https://gitlab.kitware.com/cmake/cmake/issues/16736
+    QString sourceDirectory = cacheValues.value(homeDirectoryVariable);
+    if (sourceDirectory.isEmpty()) {
+        sourceDirectory = source.toLocalFile();
+    } else if (QFileInfo(sourceDirectory).canonicalFilePath() != QFileInfo(source.toLocalFile()).canonicalFilePath()) {
+        qWarning() << "Build directory is configured for another source directory:"
+                   << homeDirectoryVariable << sourceDirectory
+                   << "wanted to open" << source << "in" << build;
+    }
+
     qCDebug(CMAKE) << "Using generator" << generator << "for project" << source << "in" << build;
 
     sendCommand({
@@ -158,7 +173,7 @@ void CMakeServer::handshake(const KDevelop::Path& source, const KDevelop::Path& 
         {"type", "handshake"},
         {"major", 1},
         {"protocolVersion", QJsonObject{{"major", 1}} },
-        {"sourceDirectory", source.toLocalFile()},
+        {"sourceDirectory", sourceDirectory},
         {"buildDirectory", build.toLocalFile()},
         {"generator", generator} //TODO: make it possible to keep whatever they have ATM
     });
