@@ -29,7 +29,6 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/problem.h>
-#include <util/richtextpushbutton.h>
 
 #include <language/duchain/duchain.h>
 
