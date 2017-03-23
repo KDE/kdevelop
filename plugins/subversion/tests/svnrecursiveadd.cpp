@@ -110,7 +110,7 @@ void fillWorkingDirectory(QString const & dirname)
 
 void SvnRecursiveAdd::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({"kdevsubversion"});
     TestCore::initialize();
 }
 
