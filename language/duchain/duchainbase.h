@@ -33,7 +33,6 @@ class Range;
 
 namespace KDevelop
 {
-class PersistentMovingRange;
 class DUContext;
 class TopDUContext;
 class DUChainBase;

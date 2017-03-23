@@ -22,7 +22,6 @@
 #include <shell/core.h>
 #include <shell/shellextension.h>
 
-#include <language/backgroundparser/parsejob.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/definitions.h>
 #include <language/duchain/duchain.h>
@@ -32,7 +31,6 @@
 #include <language/duchain/problem.h>
 #include <language/duchain/persistentsymboltable.h>
 
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

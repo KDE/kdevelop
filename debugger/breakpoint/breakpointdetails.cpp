@@ -30,10 +30,6 @@
 #include <KLocalizedString>
 
 #include "../breakpoint/breakpoint.h"
-#include "../interfaces/idebugsession.h"
-#include "../../interfaces/icore.h"
-#include "../interfaces/ibreakpointcontroller.h"
-#include "../../interfaces/idebugcontroller.h"
 
 using namespace KDevelop;
 

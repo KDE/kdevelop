@@ -21,11 +21,11 @@
 
 #include <language/languageexport.h>
 #include <serialization/indexedstring.h>
-#include "rangeinrevision.h"
+
+#include <KTextEditor/Range>
 
 namespace KDevelop
 {
-class IndexedString;
 
 /**
  * Lightweight object that extends a range with information about the URL to which the range refers.

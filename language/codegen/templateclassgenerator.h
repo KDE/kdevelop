@@ -35,7 +35,6 @@ class Cursor;
 namespace KDevelop
 {
 
-class TemplateEngine;
 struct ClassDescription;
 class TemplateRenderer;
 class SourceFileTemplate;

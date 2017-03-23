@@ -40,7 +40,6 @@ Boston, MA 02110-1301, USA.
 #include "loadedpluginsdialog.h"
 
 #include <interfaces/itoolviewactionlistener.h>
-#include <interfaces/ipartcontroller.h>
 
 namespace KDevelop {
 

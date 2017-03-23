@@ -30,12 +30,9 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iuicontroller.h>
 #include "scriptappconfig.h"
 #include "debug.h"
 #include <project/projectmodel.h>
-#include <project/builderjob.h>
 #include <util/kdevstringhandler.h>
 
 QString ExecuteScriptPlugin::_scriptAppConfigTypeId = QStringLiteral("Script Application");

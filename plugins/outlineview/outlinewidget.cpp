@@ -28,8 +28,6 @@
 #include <KLocalizedString>
 #include <KRecursiveFilterProxyModel>
 
-#include <interfaces/idocumentcontroller.h>
-
 #include "outlineviewplugin.h"
 #include "outlinemodel.h"
 

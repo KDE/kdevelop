@@ -36,6 +36,7 @@
 #include <interfaces/iassistant.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/editor/documentrange.h>
 #include <util/kdevstringhandler.h>
 
 #include "problemreporterplugin.h"

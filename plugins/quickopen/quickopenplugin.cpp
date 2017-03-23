@@ -41,12 +41,9 @@
 #include <QAction>
 
 #include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
-#include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/iprojectcontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
@@ -65,7 +62,6 @@
 #include <language/duchain/functiondefinition.h>
 #include <qdesktopwidget.h>
 #include <util/activetooltip.h>
-#include <language/util/navigationtooltip.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>
 #include <KConfigGroup>

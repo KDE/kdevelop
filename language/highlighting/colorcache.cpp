@@ -20,7 +20,9 @@
  */
 
 #include "colorcache.h"
+
 #include "configurablecolors.h"
+#include "codehighlighting.h"
 
 #include <KColorScheme>
 

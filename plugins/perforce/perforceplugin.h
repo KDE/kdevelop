@@ -19,7 +19,6 @@
 #define KDEVPERFORCEPLUGIN_H
 
 #include <vcs/interfaces/icentralizedversioncontrol.h>
-#include <vcs/vcsstatusinfo.h>
 #include <interfaces/iplugin.h>
 #include <outputview/outputjob.h>
 

@@ -33,7 +33,6 @@
 #include <language/languageexport.h>
 #include "codecompletioncontext.h"
 #include "codecompletionitem.h"
-#include <interfaces/icompletionsettings.h>
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 

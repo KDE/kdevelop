@@ -22,12 +22,11 @@
 
 #include <QInputDialog>
 
-#include <KJob>
 #include <KMessageBox>
 #include <KLocalizedString>
 
-#include "../dvcsjob.h"
 #include "../dvcsplugin.h"
+#include <vcs/vcsjob.h>
 #include <vcs/models/brancheslistmodel.h>
 #include "ui_branchmanager.h"
 #include "../../debug.h"
@@ -35,6 +34,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>

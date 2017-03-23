@@ -27,7 +27,6 @@
 #include <tests/testproject.h>
 #include <itestsuite.h>
 #include <iproject.h>
-#include <iprojectcontroller.h>
 #include <language/duchain/indexeddeclaration.h>
 
 using namespace KDevelop;

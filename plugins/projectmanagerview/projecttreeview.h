@@ -29,11 +29,6 @@ class QAbstractProxyModel;
 namespace KDevelop
 {
 class IProject;
-class ProjectModel;
-class ProjectBaseItem;
-class ProjectFolderItem;
-class ProjectFileItem;
-class ProjectTargetItem;
 class ProjectBaseItem;
 class NavigationToolTip;
 class Path;

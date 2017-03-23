@@ -28,24 +28,17 @@
 #include <QMimeDatabase>
 
 #include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
 
 #include <project/projectmodel.h>
 
 #include "scriptappjob.h"
 #include <interfaces/iproject.h>
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <project/interfaces/iprojectbuilder.h>
-#include <project/builderjob.h>
-#include <interfaces/iuicontroller.h>
-#include <util/executecompositejob.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
 
 #include "executescriptplugin.h"
 #include <util/kdevstringhandler.h>
-#include <project/projectitemlineedit.h>
+#include <util/path.h>
 
 using namespace KDevelop;
 

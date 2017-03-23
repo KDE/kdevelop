@@ -27,10 +27,7 @@
 #include <KUrlRequester>
 #include <KUrlRequesterDialog>
 
-#include <interfaces/iuicontroller.h>
-#include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <project/projectmodel.h>

@@ -29,7 +29,6 @@ namespace KDevelop {
 
 class VariableCollection;
 class BreakpointModel;
-class FrameStackModel;
 class IDebugSession;
 
 /** Top level debugger object. Exists as long as KDevelop exists

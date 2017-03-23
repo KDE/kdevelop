@@ -47,7 +47,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
-#include <vcs/vcslocation.h>
 #include <vcs/vcsjob.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>

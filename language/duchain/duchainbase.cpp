@@ -33,7 +33,6 @@
 #include <backgroundparser/backgroundparser.h>
 #include <backgroundparser/documentchangetracker.h>
 #include <ktexteditor/movinginterface.h>
-#include <editor/persistentmovingrange.h>
 
 namespace KDevelop
 {

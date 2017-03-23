@@ -29,6 +29,7 @@
 #include <kmessagebox.h>
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
+#include <vcs/vcsstatusinfo.h>
 #include <vcs/vcsevent.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>

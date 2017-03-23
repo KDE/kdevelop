@@ -36,7 +36,6 @@
 #include "document.h"
 #include "mainwindow.h"
 #include "ideallayout.h"
-#include "idealtoolbutton.h"
 #include "idealdockwidget.h"
 #include "idealbuttonbarwidget.h"
 

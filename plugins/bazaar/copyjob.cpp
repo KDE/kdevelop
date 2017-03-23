@@ -25,7 +25,6 @@
 #include <KIO/CopyJob>
 
 #include <interfaces/iplugin.h>
-#include <vcs/dvcs/dvcsjob.h>
 
 #include "bazaarplugin.h"
 

@@ -21,7 +21,6 @@
 #include "persistentmovingrange.h"
 #include "persistentmovingrangeprivate.h"
 #include <interfaces/icore.h>
-#include <interfaces/ilanguagecontroller.h>
 #include <util/foregroundlock.h>
 
 KDevelop::PersistentMovingRange::PersistentMovingRange(const KTextEditor::Range& range, const IndexedString& document, bool shouldExpand)

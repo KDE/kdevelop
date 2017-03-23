@@ -21,7 +21,6 @@
 #define KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEW_PART_H
 
 #include <interfaces/iplugin.h>
-#include <interfaces/idocumentcontroller.h>
 
 class KDevDocumentViewPluginFactory;
 

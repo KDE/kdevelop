@@ -21,6 +21,7 @@
 
 #include "problemmodel.h"
 #include <QThread>
+#include <QIcon>
 #include <KLocalizedString>
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
@@ -29,9 +30,9 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
 #include <interfaces/iassistant.h>
-#include <QIcon>
-#include <shell/problem.h>
+#include <language/editor/documentrange.h>
 
+#include <shell/problem.h>
 #include <shell/problemstore.h>
 #include <shell/problemstorenode.h>
 #include <shell/filteredproblemstore.h>

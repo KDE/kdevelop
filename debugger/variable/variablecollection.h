@@ -33,7 +33,6 @@
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"
 #include "../../interfaces/idocument.h"
-#include "../interfaces/idebugsession.h"
 #include "../../interfaces/idebugcontroller.h"
 
 namespace KDevMI { namespace GDB {
@@ -44,6 +43,7 @@ namespace KDevMI { namespace GDB {
 namespace KDevelop
 {
 class VariableToolTip;
+class IDebugSession;
 
 class KDEVPLATFORMDEBUGGER_EXPORT Variable : public TreeItem
 {

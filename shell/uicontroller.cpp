@@ -43,13 +43,8 @@
 #include "debug.h"
 #include "editorconfigpage.h"
 #include "shellextension.h"
-#include "partcontroller.h"
 #include "plugincontroller.h"
 #include "mainwindow.h"
-#include "partdocument.h"
-#include "textdocument.h"
-#include "documentcontroller.h"
-#include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
 #include "settings/bgpreferences.h"

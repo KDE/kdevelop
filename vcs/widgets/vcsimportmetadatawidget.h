@@ -23,7 +23,6 @@
 
 #include <QWidget>
 #include <vcs/vcsexport.h>
-#include <vcs/interfaces/ibasicversioncontrol.h>
 
 class QUrl;
 

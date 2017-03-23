@@ -26,7 +26,6 @@ class QModelIndex;
 
 class GrepViewPlugin;
 class GrepOutputModel;
-class GrepOutputDelegate;
 
 class GrepOutputViewFactory: public KDevelop::IToolViewFactory
 {

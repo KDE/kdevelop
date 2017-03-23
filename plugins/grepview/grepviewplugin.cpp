@@ -32,16 +32,13 @@
 #include <KTextEditor/View>
 
 #include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
-#include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
 #include <language/interfaces/editorcontext.h>
-#include <outputview/ioutputview.h>
 
 Q_LOGGING_CATEGORY(PLUGIN_GREPVIEW, "kdevplatform.plugins.grepview")
 

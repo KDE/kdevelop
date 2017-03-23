@@ -22,7 +22,6 @@
 #define KDEVPLATFORM_PLUGIN_SVNIMPORTJOB_H
 
 #include "svnjobbase.h"
-#include <vcs/interfaces/ibasicversioncontrol.h>
 
 class SvnImportInternalJob;
 

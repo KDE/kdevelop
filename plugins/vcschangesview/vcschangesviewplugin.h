@@ -21,7 +21,6 @@
 #define KDEVPLATFORM_PLUGIN_VCSPROJECTINTEGRATIONPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <vcs/interfaces/ibasicversioncontrol.h>
 #include <QVariant>
 
 class QModelIndex;
@@ -30,7 +29,6 @@ namespace KDevelop
 {
     class IProject;
     class IDocument;
-    class VcsStatusInfo;
     class ProjectChangesModel;
 }
 

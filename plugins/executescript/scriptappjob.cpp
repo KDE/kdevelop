@@ -36,7 +36,6 @@
 #include <util/environmentprofilelist.h>
 
 #include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <project/projectmodel.h>

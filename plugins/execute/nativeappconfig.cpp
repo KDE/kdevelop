@@ -21,6 +21,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
 
 #include <project/projectmodel.h>
@@ -28,10 +29,6 @@
 #include "nativeappjob.h"
 #include <interfaces/iproject.h>
 #include <project/interfaces/iprojectfilemanager.h>
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <project/interfaces/iprojectbuilder.h>
-#include <project/builderjob.h>
-#include <interfaces/iuicontroller.h>
 #include <util/executecompositejob.h>
 
 #include <interfaces/iplugincontroller.h>
@@ -39,7 +36,6 @@
 #include "executeplugin.h"
 #include "debug.h"
 #include <util/kdevstringhandler.h>
-#include <project/projectitemlineedit.h>
 #include "projecttargetscombobox.h"
 
 #include <QDebug>

@@ -29,7 +29,6 @@
 #include <KColorScheme>
 
 #include "../../interfaces/icore.h"
-#include "../../interfaces/idebugcontroller.h"
 #include "../../interfaces/iprojectcontroller.h"
 #include "../interfaces/isession.h"
 #include "util/debug.h"

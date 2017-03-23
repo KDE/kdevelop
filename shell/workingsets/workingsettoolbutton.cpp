@@ -30,7 +30,6 @@
 #include "workingsethelpers.h"
 #include "documentcontroller.h"
 
-#include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <util/activetooltip.h>
 

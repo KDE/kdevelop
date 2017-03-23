@@ -29,7 +29,6 @@
 #include <serialization/indexedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
-#include <language/codegen/documentchangeset.h>
 
 using namespace KDevelop;
 

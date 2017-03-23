@@ -23,8 +23,10 @@
 
 #include <QtCore/QSet>
 #include <QUrl>
-#include "../util/treeitem.h"
 
+#include <debugger/debuggerexport.h>
+
+class QVariant;
 class KConfigGroup;
 namespace KTextEditor {
 class MovingCursor;

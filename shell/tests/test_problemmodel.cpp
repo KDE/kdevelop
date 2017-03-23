@@ -22,6 +22,7 @@
 #include <shell/problemmodel.h>
 #include <shell/problem.h>
 #include <shell/problemconstants.h>
+#include <language/editor/documentrange.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>

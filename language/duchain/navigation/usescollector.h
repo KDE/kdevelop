@@ -26,7 +26,6 @@
 
 namespace KDevelop {
     class IndexedDeclaration;
-    class IndexedString;
     ///A helper base-class for collecting the top-contexts that contain all uses of a declaration
     ///The most important part is that this also updates the duchain if it's not up-to-date or doesn't contain
     ///the required features. The virtual function processUses(..) is called with each up-to-date top-context found

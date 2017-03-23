@@ -33,8 +33,6 @@ class KDirWatch;
 
 namespace KDevelop {
 
-class FileManagerListJob;
-
 /**
  * This class can be used as a common base for file managers.
  *

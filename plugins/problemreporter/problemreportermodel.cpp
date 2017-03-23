@@ -21,7 +21,6 @@
 #include "problemreportermodel.h"
 
 #include <language/backgroundparser/backgroundparser.h>
-#include <language/backgroundparser/parsejob.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/parsingenvironment.h>

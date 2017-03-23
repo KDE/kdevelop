@@ -28,15 +28,9 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
-#include <interfaces/iruncontroller.h>
-#include <interfaces/idocumentcontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <vcs/interfaces/ibasicversioncontrol.h>
-#include <vcs/vcsstatusinfo.h>
-#include <vcs/vcsjob.h>
 #include <project/projectchangesmodel.h>
 #include <project/projectmodel.h>
-#include <interfaces/iplugincontroller.h>
 #include "vcschangesview.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(VcsProjectIntegrationFactory, "kdevvcschangesview.json", registerPlugin<VcsProjectIntegrationPlugin>();)

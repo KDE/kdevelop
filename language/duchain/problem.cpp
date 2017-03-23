@@ -26,6 +26,8 @@ Boston, MA 02110-1301, USA.
 #include "duchain.h"
 #include "duchainlock.h"
 
+#include <editor/documentrange.h>
+
 #include <interfaces/iassistant.h>
 #include <KLocalizedString>
 

@@ -38,13 +38,10 @@
 #include "language/duchain/duchain.h"
 #include "language/duchain/duchainlock.h"
 #include "language/duchain/declaration.h"
-#include <serialization/indexedstring.h>
 
 #include "debug.h"
-#include "language/classmodel/classmodel.h"
 #include "classtree.h"
 #include "classwidget.h"
-#include <language/interfaces/editorcontext.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>

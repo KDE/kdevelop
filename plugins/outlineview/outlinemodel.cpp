@@ -24,11 +24,9 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/declaration.h>
-#include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/ilanguagecontroller.h>
 
 #include "debug_outline.h"
 #include "outlinenode.h"

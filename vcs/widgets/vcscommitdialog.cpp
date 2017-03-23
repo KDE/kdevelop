@@ -14,22 +14,14 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iplugin.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/ipatchsource.h>
 
-#include "../vcsjob.h"
-#include "../interfaces/ibasicversioncontrol.h"
-#include "../interfaces/idistributedversioncontrol.h"
-#include "../interfaces/icentralizedversioncontrol.h"
 #include "../vcsstatusinfo.h"
 #include "../models/vcsfilechangesmodel.h"
 
 #include "ui_vcscommitdialog.h"
-#include <vcspluginhelper.h>
 
 namespace KDevelop
 {

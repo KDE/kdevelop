@@ -31,7 +31,6 @@
 
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>
-#include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <KDeclarative/KDeclarative>
 

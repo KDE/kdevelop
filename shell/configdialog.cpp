@@ -29,7 +29,6 @@
 
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <KTextEditor/ConfigPage>
 
 #include <iplugin.h>
 #include <configpage.h>

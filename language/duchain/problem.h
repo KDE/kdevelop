@@ -23,7 +23,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QExplicitlySharedDataPointer>
 
-#include "../editor/documentrange.h"
 #include <language/languageexport.h>
 
 #include "duchainbase.h"

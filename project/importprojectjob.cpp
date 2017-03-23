@@ -29,7 +29,6 @@
 #include <interfaces/iprojectfilemanager.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
 
 #include <KLocalizedString>
 

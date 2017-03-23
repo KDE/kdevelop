@@ -28,6 +28,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguagesupport.h>
 
 #include "../duchain/duchain.h"
 #include "../duchain/topducontext.h"

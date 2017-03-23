@@ -23,6 +23,7 @@
 
 #include <serialization/itemrepositoryregistry.h>
 #include <interfaces/icore.h>
+#include <language/editor/documentrange.h>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 

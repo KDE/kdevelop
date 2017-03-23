@@ -22,9 +22,10 @@
 #define KDEVPLATFORM_PLUGIN_VCSCHANGESVIEW_H
 
 #include <QTreeView>
+#include <QList>
+#include <QUrl>
 
 class VcsProjectIntegrationPlugin;
-class QUrl;
 namespace KDevelop { class IProject; }
 
 class VcsChangesView : public QTreeView

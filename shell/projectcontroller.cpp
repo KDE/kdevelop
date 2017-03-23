@@ -61,8 +61,6 @@ Boston, MA 02110-1301, USA.
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>
 #include <projectconfigpage.h>
-#include <interfaces/ilanguagecontroller.h>
-#include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parseprojectjob.h>
 #include <interfaces/iruncontroller.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>

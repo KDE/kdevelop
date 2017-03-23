@@ -46,7 +46,6 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
-#include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 
 using namespace KDevelop;

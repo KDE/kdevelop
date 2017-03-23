@@ -21,14 +21,12 @@
 
 #include "breakpoint.h"
 
+#include <QIcon>
+
 #include <KLocalizedString>
 #include <KConfigGroup>
 
 #include "breakpointmodel.h"
-#include "../../interfaces/icore.h"
-#include "../../interfaces/idebugcontroller.h"
-#include "../interfaces/idebugsession.h"
-#include "../interfaces/ibreakpointcontroller.h"
 
 using namespace KDevelop;
 

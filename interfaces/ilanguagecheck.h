@@ -30,7 +30,6 @@ namespace KDevelop
 class DataAccessRepository;
 class ControlFlowGraph;
 class TopDUContext;
-class ControlFlowGraph;
 
 class CheckData
 {

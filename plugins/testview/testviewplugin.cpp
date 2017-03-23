@@ -24,10 +24,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/itestsuite.h>
 #include <interfaces/itestcontroller.h>
-#include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/launchconfigurationtype.h>
 #include <interfaces/iruncontroller.h>
-#include <interfaces/ilauncher.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <util/executecompositejob.h>

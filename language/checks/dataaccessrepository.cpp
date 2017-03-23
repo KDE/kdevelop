@@ -17,7 +17,6 @@
 */
 
 #include "dataaccessrepository.h"
-#include <editor/rangeinrevision.h>
 
 namespace KDevelop {
 

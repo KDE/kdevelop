@@ -24,8 +24,6 @@
 
 #include <QtCore/QList>
 
-#include "iruncontroller.h"
-
 class KJob;
 class QString;
 

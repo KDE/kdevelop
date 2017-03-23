@@ -25,6 +25,7 @@
 #include <QUrl>
 
 #include <language/duchain/topducontext.h>
+#include <serialization/indexedstring.h>
 
 class QCommandLineParser;
 

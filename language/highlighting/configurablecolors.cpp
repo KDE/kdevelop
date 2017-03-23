@@ -22,6 +22,10 @@
  */
 
 #include "configurablecolors.h"
+
+#include "codehighlighting.h"
+#include "colorcache.h"
+
 #include "util/debug.h"
 
 #define ifDebug(x)

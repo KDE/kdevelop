@@ -37,10 +37,8 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
-#include <serialization/indexedstring.h>
 
 #include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
 
 #include "contextbrowser.h"
 #include "debug.h"

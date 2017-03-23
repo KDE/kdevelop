@@ -29,7 +29,6 @@
 
 namespace KDevelop {
 
-class DebugController;
 class FrameStackModelPrivate;
 
 /** FIXME: This class needs rework, since at present it is not true model.

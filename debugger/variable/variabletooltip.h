@@ -24,7 +24,6 @@
 #define KDEVPLATFORM_VARIABLETOOLTIP_H
 
 #include "../../util/activetooltip.h"
-#include "../util/treeview.h"
 
 class QItemSelectionModel;
 class QString;
@@ -35,6 +34,7 @@ namespace KDevelop
     class Variable;
     class TreeModel;
     class TreeItem;
+    class AsyncTreeView;
 
     class VariableToolTip : public ActiveToolTip
     {

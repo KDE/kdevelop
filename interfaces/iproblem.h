@@ -23,14 +23,14 @@
 
 #include <QExplicitlySharedDataPointer>
 #include <QVector>
-
-#include <language/editor/documentrange.h>
+#include <QMetaType>
 
 #include "interfacesexport.h"
 
 namespace KDevelop
 {
 class IAssistant;
+class DocumentRange;
 
 /// Interface for the Problem classes
 class KDEVPLATFORMINTERFACES_EXPORT IProblem : public QSharedData

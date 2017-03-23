@@ -27,7 +27,6 @@
 namespace KDevelop
 {
 class IntegralTypeData;
-class IndexedString;
 
 /**
  * \short A type representing inbuilt data types.

@@ -28,7 +28,6 @@
 #include "../core.h"
 #include "../sessioncontroller.h"
 #include "../session.h"
-#include "../uicontroller.h"
 #include <QDebug>
 #include <QFileInfo>
 #include <QtTest/QSignalSpy>

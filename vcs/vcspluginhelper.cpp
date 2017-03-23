@@ -34,7 +34,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/ipatchsource.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
@@ -52,7 +51,6 @@
 #include <vcs/vcsdiff.h>
 
 #include "interfaces/idistributedversioncontrol.h"
-#include "vcsstatusinfo.h"
 #include "vcsevent.h"
 #include "debug.h"
 #include "widgets/vcsdiffpatchsources.h"

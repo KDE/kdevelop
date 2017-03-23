@@ -27,7 +27,6 @@
 
 #include <interfaces/idocument.h>
 #include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/contextmenuextension.h>

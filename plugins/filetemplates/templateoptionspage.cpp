@@ -21,7 +21,6 @@
 #include "templateclassassistant.h"
 #include "debug.h"
 
-#include <language/codegen/templateclassgenerator.h>
 #include <language/codegen/sourcefiletemplate.h>
 
 #include <KLocalizedString>

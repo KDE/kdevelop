@@ -33,7 +33,6 @@
 #include <sublime/view.h>
 
 #include "core.h"
-#include "partcontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "plugincontroller.h"

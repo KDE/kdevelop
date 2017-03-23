@@ -28,10 +28,7 @@
 #include "kdevsvncpp/client.hpp"
 
 #include <vcs/vcsevent.h>
-namespace KDevelop
-{
-class VcsAnnotationLine;
-}
+
 class SvnClient : public QObject, public svn::Client
 {
     Q_OBJECT

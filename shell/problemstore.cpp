@@ -19,6 +19,8 @@
 
 
 #include "problemstore.h"
+
+#include <language/editor/documentrange.h>
 #include <shell/problem.h>
 #include <shell/watcheddocumentset.h>
 #include "problemstorenode.h"

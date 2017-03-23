@@ -27,6 +27,7 @@
 #include <language/languageexport.h>
 #include <interfaces/istatus.h>
 #include <language/duchain/topducontext.h>
+#include <language/interfaces/ilanguagesupport.h>
 #include "parsejob.h"
 
 namespace ThreadWeaver
@@ -44,7 +45,6 @@ class DocumentChangeTracker;
 class IDocument;
 class IProject;
 class ILanguageController;
-class ParseJob;
 class ParserDependencyPolicy;
 
 /**

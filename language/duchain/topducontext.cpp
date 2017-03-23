@@ -38,6 +38,8 @@
 #include "topducontextdynamicdata.h"
 #include "util/debug.h"
 
+#include <language/interfaces/iastcontainer.h>
+
 // #define DEBUG_SEARCH
 
 const uint maxApplyAliasesRecursion = 100;

@@ -28,7 +28,6 @@
 namespace KDevelop
 {
 
-class ProcessLineMaker;
 class OutputExecuteJobPrivate;
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputExecuteJob : public OutputJob

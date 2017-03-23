@@ -26,7 +26,6 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsjob.h>
 #include <vcs/vcsannotation.h>
 

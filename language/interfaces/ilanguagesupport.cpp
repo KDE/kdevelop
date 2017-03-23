@@ -21,9 +21,6 @@
 #include "ilanguagesupport.h"
 #include "../duchain/duchain.h"
 
-#include <interfaces/icore.h>
-#include <interfaces/ilanguagecontroller.h>
-
 #include <QReadWriteLock>
 
 namespace KDevelop {

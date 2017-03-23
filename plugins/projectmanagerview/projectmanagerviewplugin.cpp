@@ -42,7 +42,6 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
-#include <project/interfaces/iprojectbuilder.h>
 #include <util/jobstatus.h>
 #include <util/path.h>
 #include <interfaces/iprojectcontroller.h>

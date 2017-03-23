@@ -18,7 +18,6 @@
 */
 
 #include "archivetemplateloader.h"
-#include "templateengine.h"
 
 #include <grantlee/engine.h>
 

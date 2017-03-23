@@ -50,9 +50,7 @@ Boston, MA 02110-1301, USA.
 #include "sessionlock.h"
 #include "sessionchooserdialog.h"
 #include "debug.h"
-#include <interfaces/iprojectcontroller.h>
 #include <sublime/mainwindow.h>
-#include <interfaces/idocumentcontroller.h>
 #include <serialization/itemrepositoryregistry.h>
 #include <ktexteditor/document.h>
 

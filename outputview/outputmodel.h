@@ -33,7 +33,6 @@
 namespace KDevelop
 {
 
-struct FilteredItem;
 struct OutputModelPrivate;
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel

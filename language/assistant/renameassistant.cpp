@@ -23,7 +23,6 @@
 #include "renamefileaction.h"
 #include "util/debug.h"
 #include "../codegen/basicrefactoring.h"
-#include "../codegen/documentchangeset.h"
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
 #include "../duchain/duchainutils.h"
@@ -33,6 +32,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguagesupport.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>

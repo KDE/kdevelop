@@ -21,9 +21,6 @@
 
 #include "widgetcolorizer.h"
 
-#include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
-
 #include <KColorUtils>
 #include <KSharedConfig>
 #include <KConfigGroup>

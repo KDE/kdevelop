@@ -18,7 +18,9 @@
  */
 
 #include <shell/problem.h>
+
 #include <interfaces/iassistant.h>
+#include <language/editor/documentrange.h>
 
 #include <KLocalizedString>
 

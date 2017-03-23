@@ -31,6 +31,7 @@ Boston, MA 02110-1301, USA.
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QRegularExpression>
+#include <QPointer>
 
 #include <KActionCollection>
 #include <KEncodingFileDialog>
@@ -64,8 +65,6 @@ Boston, MA 02110-1301, USA.
 #include "debug.h"
 
 #include <vcs/interfaces/ibasicversioncontrol.h>
-#include <vcs/models/vcsannotationmodel.h>
-#include <vcs/vcsjob.h>
 #include <vcs/vcspluginhelper.h>
 
 #define EMPTY_DOCUMENT_URL i18n("Untitled")

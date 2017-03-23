@@ -40,7 +40,6 @@
 #include <language/backgroundparser/backgroundparser.h>
 
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/iplugincontroller.h>
 
 #include "testlanguagesupport.h"
 #include "testparsejob.h"

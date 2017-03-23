@@ -19,6 +19,7 @@
 #include <iostream>
 #include <limits>
 #include <serialization/itemrepository.h>
+#include <serialization/indexedstring.h>
 #include <QtCore/QMutex>
 #include <algorithm>
 

@@ -19,7 +19,6 @@
 #include <QTime>
 
 #include <ui_patchreview.h>
-#include <interfaces/ipatchsource.h>
 
 namespace Sublime { class Area; }
 namespace KDevelop { class IDocument; }

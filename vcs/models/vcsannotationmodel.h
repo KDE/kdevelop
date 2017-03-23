@@ -33,8 +33,6 @@ template<typename T> class QList;
 namespace KDevelop
 {
 
-class VcsAnnotation;
-class VcsAnnotationLine;
 class VcsJob;
     
 class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public KTextEditor::AnnotationModel

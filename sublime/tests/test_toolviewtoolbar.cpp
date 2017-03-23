@@ -26,7 +26,6 @@
 #include <QTextEdit>
 #include <QToolBar>
 
-#include <sublime/idealcontroller.h>
 #include <sublime/view.h>
 #include <sublime/area.h>
 #include <sublime/controller.h>

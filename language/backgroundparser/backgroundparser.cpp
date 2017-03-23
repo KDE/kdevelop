@@ -51,7 +51,6 @@
 #include "util/debug.h"
 
 #include "parsejob.h"
-#include <editor/modificationrevisionset.h>
 
 using namespace KDevelop;
 

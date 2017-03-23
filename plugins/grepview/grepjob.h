@@ -29,7 +29,6 @@
 namespace KDevelop
 {
     class IProject;
-    class ProcessLineMaker;
 }
 
 class QRegExp;

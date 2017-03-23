@@ -23,10 +23,11 @@
 #include <interfaces/iproblem.h>
 
 #include <shell/shellexport.h>
-#include <language/editor/documentrange.h>
-#include <QString>
+
+#include <QScopedPointer>
 
 struct DetectedProblemPrivate;
+
 
 namespace KDevelop
 {

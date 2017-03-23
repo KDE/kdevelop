@@ -29,8 +29,6 @@ class QUrl;
 namespace KDevelop
 {
 
-class VcsLocationWidget;
-class VcsLocation;
 class VcsJob;
 
 class KDEVPLATFORMINTERFACES_EXPORT IProjectProviderWidget : public QWidget

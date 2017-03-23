@@ -37,7 +37,7 @@
 #include <QSortFilterProxyModel>
 
 #include "variablecollection.h"
-#include "../breakpoint/breakpointmodel.h"
+#include "../util/treeview.h"
 #include "../interfaces/ivariablecontroller.h"
 #include "../../util/activetooltip.h"
 #include "../../interfaces/icore.h"

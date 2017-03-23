@@ -36,6 +36,7 @@
 #include "functiondefinition.h"
 
 #include <editor/rangeinrevision.h>
+#include <editor/documentrange.h>
 
 using namespace KDevelop;
 

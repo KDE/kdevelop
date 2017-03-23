@@ -22,7 +22,6 @@
 #define KDEVPLATFORM_PLUGIN_PROJECTVCSPAGE_H
 
 #include "appwizardpagewidget.h"
-#include <vcs/interfaces/ibasicversioncontrol.h>
 
 namespace Ui
 {
@@ -33,6 +32,7 @@ namespace KDevelop
 {
 class IPluginController;
 class VcsImportMetadataWidget;
+class VcsLocation;
 }
 
 class QUrl;

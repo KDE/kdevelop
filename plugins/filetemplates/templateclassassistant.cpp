@@ -34,7 +34,6 @@
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/templaterenderer.h>
-#include <language/codegen/templateengine.h>
 #include <language/interfaces/icreateclasshelper.h>
 #include <language/interfaces/ilanguagesupport.h>
 

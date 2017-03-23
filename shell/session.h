@@ -24,7 +24,6 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QUuid>
 #include <QUrl>
 #include <interfaces/isession.h>
-#include <interfaces/isessionlock.h>
 
 namespace KDevelop
 {

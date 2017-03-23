@@ -32,9 +32,7 @@
 
 #include <KLocalizedString>
 
-#include <interfaces/icore.h>
 #include <interfaces/iplugin.h>
-#include <interfaces/iruncontroller.h>
 
 #include "ui_vcseventwidget.h"
 #include "vcsdiffwidget.h"
@@ -45,7 +43,6 @@
 #include "../debug.h"
 #include "../vcsevent.h"
 #include "../vcsjob.h"
-#include "../vcslocation.h"
 #include "../vcsrevision.h"
 
 

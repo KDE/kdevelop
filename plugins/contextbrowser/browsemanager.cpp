@@ -33,7 +33,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include "contextbrowserview.h"
 #include <interfaces/iuicontroller.h>
-#include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/duchain/duchainutils.h>

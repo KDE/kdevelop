@@ -18,7 +18,6 @@
 
 #include "codecompletioncontext.h"
 
-#include "codecompletionitem.h"
 #include "util/debug.h"
 
 #include <util/pushvalue.h>

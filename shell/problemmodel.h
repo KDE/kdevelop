@@ -31,7 +31,7 @@ struct ProblemModelPrivate;
 
 namespace KDevelop {
     class IDocument;
-
+class IndexedString;
 class ProblemStore;
 
 /**

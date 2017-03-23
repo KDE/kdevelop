@@ -11,9 +11,6 @@
 #include "projectinfopage.h"
 #include "ui_projectinfopage.h"
 
-#include "core.h"
-#include "plugincontroller.h"
-
 namespace KDevelop
 {
     

@@ -25,8 +25,6 @@
 #include "persistentsymboltable.h"
 #include "instantiationinformation.h"
 
-#include "../editor/cursorinrevision.h"
-
 #include <util/convenientfreelist.h>
 
 namespace KDevelop {

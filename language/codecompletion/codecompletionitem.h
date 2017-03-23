@@ -25,7 +25,6 @@
 #include <ktexteditor/codecompletionmodel.h>
 
 #include "../duchain/duchainpointer.h"
-#include "codecompletioncontext.h"
 
 namespace KTextEditor {
   class CodeCompletionModel;

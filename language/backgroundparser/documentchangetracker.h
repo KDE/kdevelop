@@ -29,7 +29,6 @@
 #include <ktexteditor/movingrange.h>
 #include <language/editor/rangeinrevision.h>
 #include <serialization/indexedstring.h>
-#include <language/interfaces/ilanguagesupport.h>
 
 namespace KTextEditor
 {

@@ -21,7 +21,6 @@
 
 #include <language/languageexport.h>
 #include <serialization/indexedstring.h>
-#include "cursorinrevision.h"
 
 #include <ktexteditor/cursor.h>
 

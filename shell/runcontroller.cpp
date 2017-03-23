@@ -38,14 +38,10 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/ilauncher.h>
 #include <interfaces/ilaunchmode.h>
 #include <interfaces/launchconfigurationtype.h>
-#include <outputview/ioutputview.h>
 #include <outputview/outputjob.h>
 #include <project/projectmodel.h>
-#include <project/interfaces/iprojectbuilder.h>
-#include <project/interfaces/ibuildsystemmanager.h>
 
 #include "core.h"
-#include "plugincontroller.h"
 #include "uicontroller.h"
 #include "projectcontroller.h"
 #include "mainwindow.h"

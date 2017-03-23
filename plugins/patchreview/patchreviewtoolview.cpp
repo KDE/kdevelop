@@ -20,6 +20,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <vcs/models/vcsfilechangesmodel.h>
+#include <interfaces/ipatchsource.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/itestsuite.h>

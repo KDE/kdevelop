@@ -18,9 +18,12 @@
  */
 
 #include "filteredproblemstore.h"
+
 #include "problem.h"
 #include "watcheddocumentset.h"
 #include "problemstorenode.h"
+
+#include <language/editor/documentrange.h>
 
 #include <KLocalizedString>
 

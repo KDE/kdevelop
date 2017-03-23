@@ -26,8 +26,6 @@
 #include "delayedtype.h"
 #include "identifiedtype.h"
 
-#include <serialization/indexedstring.h>
-
 namespace KDevelop {
 
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)

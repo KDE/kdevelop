@@ -17,7 +17,6 @@
 #ifndef KDEVPLATFORM_CODEGENERATOR_H
 #define KDEVPLATFORM_CODEGENERATOR_H
 
-#include "language/editor/documentrange.h"
 #include <serialization/indexedstring.h>
 #include "../duchain/topducontext.h"
 #include "../duchain/duchain.h"
@@ -33,6 +32,7 @@ class AstChangeSet;
 class DUContext;
 class DUChainChangeSet;
 class DocumentChangeSet;
+class DocumentRange;
 
 /**
  * \short Base class for generic code generators

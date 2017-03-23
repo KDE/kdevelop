@@ -21,7 +21,6 @@
 
 #include <QtCore/QVector>
 #include <QtCore/QByteArray>
-#include <interfaces/iastcontainer.h>
 #include "problem.h"
 
 class QFile;

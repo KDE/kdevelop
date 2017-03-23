@@ -35,8 +35,6 @@
 #include <KParts/MainWindow>
 
 #include <interfaces/iuicontroller.h>
-#include <interfaces/iruncontroller.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>

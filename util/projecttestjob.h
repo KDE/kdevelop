@@ -29,8 +29,6 @@
 namespace KDevelop {
 
 class IProject;
-class ITestSuite;
-struct TestResult;
 
 /**
  * A combined result of a project test job

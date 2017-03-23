@@ -20,7 +20,6 @@
 #define KDEVPLATFORM_SUBLIMECONTAINER_H
 
 #include <QWidget>
-#include "urldocument.h"
 #include "sublimeexport.h"
 
 class QMenu;

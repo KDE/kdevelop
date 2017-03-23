@@ -24,12 +24,13 @@
 #ifndef KDEVPLATFORM_CONFIGURABLECOLORS_H
 #define KDEVPLATFORM_CONFIGURABLECOLORS_H
 
-#include "codehighlighting.h"
-#include "colorcache.h"
-
 #include <language/languageexport.h>
 
+#include <KTextEditor/Attribute>
+
 namespace KDevelop {
+class ColorCache;
+
 class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors {
   public:
     explicit ConfigurableHighlightingColors();

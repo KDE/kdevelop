@@ -38,6 +38,7 @@
 #include "duchain/duchainlock.h"
 #include "duchain/duchain.h"
 #include "duchain/parsingenvironment.h"
+#include "editor/documentrange.h"
 
 #include <util/foregroundlock.h>
 #include <interfaces/icore.h>

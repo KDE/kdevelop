@@ -17,7 +17,6 @@
  *************************************************************************************/
 
 #include "icoreobject.h"
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 
 ICoreObject::ICoreObject(QObject* parent)

@@ -20,8 +20,6 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
-#include <interfaces/iprojectcontroller.h>
-#include <outputview/ioutputview.h>
 
 #include <KConfigGroup>
 #include <KMessageBox>

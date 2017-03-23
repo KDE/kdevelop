@@ -32,7 +32,6 @@
 #include <QRegularExpression>
 
 #include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 
 #include <util/path.h>

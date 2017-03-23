@@ -40,7 +40,6 @@
 #include <util/kdevstringhandler.h>
 
 #include "problemhighlighter.h"
-#include "problemtreeview.h"
 #include "problemreportermodel.h"
 #include "language/assistant/staticassistantsmanager.h"
 #include <interfaces/context.h>

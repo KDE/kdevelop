@@ -31,6 +31,7 @@
 #include <language/duchain/problem.h>
 
 #include <language/duchain/duchain.h>
+#include <language/editor/documentrange.h>
 
 using namespace KDevelop;
 

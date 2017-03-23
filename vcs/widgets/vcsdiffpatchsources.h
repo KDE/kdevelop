@@ -25,7 +25,6 @@
 
 #include <interfaces/ipatchsource.h>
 #include "vcs/vcsstatusinfo.h"
-#include "vcs/vcsjob.h"
 
 #include <vcs/vcsexport.h>
 
@@ -34,6 +33,7 @@
 
 class KTextEdit;
 class KComboBox;
+class KJob;
 namespace KDevelop {
 class VcsCommitDialog;
 class IBasicVersionControl;

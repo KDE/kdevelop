@@ -21,7 +21,6 @@
 */
 
 #include "ideallayout.h"
-#include "idealcontroller.h"
 
 using namespace Sublime;
 

@@ -30,7 +30,6 @@
 
 #include "interfaces/contextmenuextension.h"
 #include "interfaces/icore.h"
-#include "interfaces/idocumentcontroller.h"
 #include "interfaces/idocument.h"
 #include "interfaces/iplugincontroller.h"
 
@@ -40,7 +39,6 @@
 #include "language/duchain/duchain.h"
 #include "language/duchain/duchainlock.h"
 #include "language/duchain/declaration.h"
-#include <serialization/indexedstring.h>
 
 #include "language/classmodel/classmodel.h"
 #include "classbrowserplugin.h"

@@ -31,8 +31,6 @@
 
 namespace Sublime {
 
-class IdealDockWidget;
-
 class IdealButtonBarLayout: public QLayout
 {
     Q_OBJECT

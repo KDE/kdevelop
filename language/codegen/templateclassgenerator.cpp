@@ -21,20 +21,15 @@
 #include "archivetemplateloader.h"
 #include "util/debug.h"
 
-#include "interfaces/icore.h"
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include "language/codegen/documentchangeset.h"
 #include "codedescription.h"
 #include "templaterenderer.h"
 #include "sourcefiletemplate.h"
-#include "templateengine.h"
 #include <duchain/declaration.h>
 #include <duchain/duchainlock.h>
 #include <duchain/persistentsymboltable.h>
 #include <duchain/types/structuretype.h>
-#include <project/interfaces/iprojectfilemanager.h>
-#include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 
 #include <QFileInfo>

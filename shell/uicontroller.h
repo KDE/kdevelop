@@ -30,7 +30,6 @@
 class QListWidgetItem;
 
 namespace Sublime {
-    class AreaIndex;
     class ToolDocument;
 }
 

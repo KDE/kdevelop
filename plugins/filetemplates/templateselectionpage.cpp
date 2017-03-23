@@ -26,10 +26,8 @@
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/templaterenderer.h>
-#include <language/interfaces/icreateclasshelper.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/icore.h>
-#include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>

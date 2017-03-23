@@ -26,8 +26,6 @@
 #include <QPointer>
 
 #include <language/duchain/topducontext.h>
-#include <language/editor/documentcursor.h>
-#include <serialization/indexedstring.h>
 #include <interfaces/itoolviewactionlistener.h>
 
 class ContextBrowserPlugin;

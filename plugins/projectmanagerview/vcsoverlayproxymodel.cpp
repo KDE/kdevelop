@@ -26,7 +26,6 @@
 #include <interfaces/iplugin.h>
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 #include <vcs/vcsjob.h>
-#include <vcs/models/vcsfilechangesmodel.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
 

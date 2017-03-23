@@ -25,7 +25,6 @@
 
 namespace KDevelop
 {
-class DataAccess;
 
 /**
  * @brief Stores all the data accesses in a file

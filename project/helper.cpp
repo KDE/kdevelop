@@ -40,7 +40,6 @@
 #include <interfaces/iplugin.h>
 #include <vcs/vcsjob.h>
 #include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 
 using namespace KDevelop;

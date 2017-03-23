@@ -48,7 +48,6 @@ Boston, MA 02110-1301, USA.
 #include "projectcontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
-#include "debugcontroller.h"
 #include "workingsetcontroller.h"
 #include "sessioncontroller.h"
 #include "sourceformattercontroller.h"

@@ -24,7 +24,6 @@
 #include <KParts/ReadOnlyPart>
 
 #include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>
 
 #include "kdevkonsoleviewplugin.h"

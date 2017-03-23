@@ -30,8 +30,6 @@ class QUrl;
 namespace KDevelop
 {
 
-class TemplateEngine;
-
 class SourceFileTemplate;
 
 class DocumentChangeSet;

@@ -23,8 +23,6 @@
 
 #include "svnjobbase.h"
 
-#include <vcs/vcsdiff.h>
-
 namespace KDevelop
 {
     class VcsRevision;

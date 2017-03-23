@@ -29,7 +29,6 @@ namespace Sublime
 {
     class View;
     class MainWindow;
-    class AreaIndex;
     class Area;
 class MainWindow;
 }

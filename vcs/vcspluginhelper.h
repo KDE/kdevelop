@@ -30,7 +30,6 @@ using KTextEditor::View;
 
 namespace KDevelop
 {
-class VcsDiff;
 class IPlugin;
 class IBasicVersionControl;
 class Context;

@@ -25,7 +25,6 @@ Boston, MA 02110-1301, USA.
 #include <KConfigGroup>
 
 #include <interfaces/iplugincontroller.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugin.h>
 #include "core.h"
 #include "sessioncontroller.h"

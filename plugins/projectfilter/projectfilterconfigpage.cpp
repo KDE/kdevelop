@@ -23,11 +23,7 @@
 #include <KMessageWidget>
 #include <KLocalizedString>
 
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
-#include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
 
 #include "ui_projectfiltersettings.h"

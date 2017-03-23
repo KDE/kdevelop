@@ -20,7 +20,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <KParts/MainWindow>
-#include <interfaces/iprojectcontroller.h>
 #include <QDebug>
 #include <QMenuBar>
 #include <sublime/area.h>

@@ -33,7 +33,6 @@ class Cursor;
 
 namespace KDevelop {
 
-class IDebugSession;
 class VariableCollection;
 class Variable;
 class TreeModel;

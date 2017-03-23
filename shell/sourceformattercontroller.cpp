@@ -42,7 +42,6 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/isession.h>
 #include <interfaces/isourceformatter.h>

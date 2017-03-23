@@ -29,7 +29,6 @@
 
 #include <serialization/indexedstring.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <language/util/navigationtooltip.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
@@ -37,7 +36,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/navigation/problemnavigationcontext.h>
-#include <util/texteditorhelpers.h>
+#include <language/editor/documentrange.h>
 
 #include <kcolorscheme.h>
 

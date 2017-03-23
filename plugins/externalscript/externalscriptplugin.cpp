@@ -35,7 +35,6 @@
 #include <interfaces/isession.h>
 
 #include <outputview/outputjob.h>
-#include <outputview/outputmodel.h>
 
 #include <project/projectmodel.h>
 #include <util/path.h>

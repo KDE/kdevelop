@@ -24,7 +24,6 @@
 #include <QObject>
 #include <QUrl>
 
-#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugin.h>
 
 #include "dvcsevent.h"

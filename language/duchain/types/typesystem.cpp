@@ -25,8 +25,6 @@
 #include "integraltype.h"
 #include "structuretype.h"
 
-#include <serialization/indexedstring.h>
-
 namespace KDevelop
 {
 

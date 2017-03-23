@@ -25,7 +25,6 @@
 #include "svninternaljobbase.h"
 
 #include <vcs/vcsrevision.h>
-#include <vcs/vcsevent.h>
 
 namespace KDevelop {
     class VcsAnnotationLine;

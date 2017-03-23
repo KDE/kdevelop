@@ -44,8 +44,6 @@
 #include <language/duchain/types/functiontype.h>
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/codedescription.h>
-#include <language/codegen/sourcefiletemplate.h>
-#include <language/codegen/documentchangeset.h>
 #include <language/interfaces/ilanguagesupport.h>
 
 Q_LOGGING_CATEGORY(PLUGIN_CODEUTILS, "kdevplatform.plugins.codeutils")

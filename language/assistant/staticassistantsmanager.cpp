@@ -18,7 +18,6 @@
 */
 
 #include "staticassistantsmanager.h"
-#include <interfaces/icodehighlighting.h>
 #include "util/debug.h"
 
 #include <KTextEditor/Document>
@@ -26,8 +25,8 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguagesupport.h>
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -35,6 +34,7 @@
 #include <language/duchain/duchainutils.h>
 
 #include <language/duchain/problem.h>
+#include <language/editor/documentrange.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;

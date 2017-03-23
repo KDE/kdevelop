@@ -24,16 +24,9 @@
 #include <QVariantList>
 #include <project/builderjob.h>
 
-class ProjectBuildSetModel;
-
 namespace KDevelop
 {
 class ProjectBaseItem;
-class ProjectBuilder;
-class ProjectFileItem;
-class ProjectFolderItem;
-class ProjectTargetItem;
-class IProjectBuilder;
 class IProject;
 class ContextMenuExtension;
 class Context;

@@ -40,7 +40,6 @@
 #include <util/processlinemaker.h>
 
 #include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>

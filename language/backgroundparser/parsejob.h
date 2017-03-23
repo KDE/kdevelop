@@ -41,9 +41,9 @@ namespace KDevelop
 class ParsingEnvironment;
 class ControlFlowGraph;
 class DataAccessRepository;
-class BackgroundParser;
 class TopDUContext;
 class ReferencedTopDUContext;
+class ILanguageSupport;
 
 /**
  * The base class for background parser jobs.

@@ -25,7 +25,7 @@
 #include <ktexteditor/movinginterface.h>
 
 #include <util/foregroundlock.h>
-#include <editor/modificationrevisionset.h>
+#include <editor/modificationrevision.h>
 #include <serialization/indexedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>

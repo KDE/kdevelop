@@ -15,7 +15,7 @@
 
 #include <KAssistantDialog>
 
-#include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/vcslocation.h>
 
 class KPageWidgetItem;
 class QSignalMapper;

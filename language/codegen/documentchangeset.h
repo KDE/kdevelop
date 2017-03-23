@@ -19,12 +19,14 @@
 #ifndef KDEVPLATFORM_DOCUMENTCHANGESET_H
 #define KDEVPLATFORM_DOCUMENTCHANGESET_H
 
+#include <language/languageexport.h>
+
 #include <serialization/indexedstring.h>
+
+#include <KTextEditor/Range>
 
 #include <QExplicitlySharedDataPointer>
 #include <QUrl>
-
-#include "coderepresentation.h"
 
 namespace KDevelop {
 

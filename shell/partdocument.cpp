@@ -22,6 +22,7 @@
 
 #include <KMessageBox>
 #include <KLocalizedString>
+#include <KTextEditor/Cursor>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -31,7 +32,6 @@
 #include "core.h"
 #include "uicontroller.h"
 #include "partcontroller.h"
-#include "documentcontroller.h"
 
 namespace KDevelop {
 
