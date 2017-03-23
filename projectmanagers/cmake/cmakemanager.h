@@ -140,8 +140,8 @@ signals:
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 
 private slots:
-//     void dirtyFile(const QString& file);
-//
+    void serverResponse(KDevelop::IProject* project, const QJsonObject &value);
+
 //     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
     void dirtyFile(const QString& file);

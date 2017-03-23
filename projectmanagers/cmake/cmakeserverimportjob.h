@@ -44,11 +44,13 @@ public:
 
     CMakeProjectData projectData() const { return m_data; }
 
+    static void processFileData(const QJsonObject &response, CMakeProjectData &data);
+
 private:
     void doStart();
     void processResponse(const QJsonObject &response);
 
-    QPointer<CMakeServer> m_server;
+    QSharedPointer<CMakeServer> m_server;
     KDevelop::IProject* m_project;
 
     CMakeProjectData m_data;

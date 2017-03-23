@@ -340,12 +340,43 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
 
 void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProject* project)
 {
-    connect(data.watcher.data(), &QFileSystemWatcher::fileChanged, this, &CMakeManager::dirtyFile);
-    connect(data.watcher.data(), &QFileSystemWatcher::directoryChanged, this, &CMakeManager::dirtyFile);
+    if (data.m_server) {
+        connect(data.m_server.data(), &CMakeServer::response, project, [this, project](const QJsonObject& response) {
+            serverResponse(project, response);
+        });
+    } else {
+        connect(data.watcher.data(), &QFileSystemWatcher::fileChanged, this, &CMakeManager::dirtyFile);
+        connect(data.watcher.data(), &QFileSystemWatcher::directoryChanged, this, &CMakeManager::dirtyFile);
+    }
     m_projects[project] = data;
 
     populateTargets(project->projectItem(), data.targets);
     CTestUtils::createTestSuites(data.m_testSuites, project);
+}
+
+void CMakeManager::serverResponse(KDevelop::IProject* project, const QJsonObject& response)
+{
+    if (response["type"] == QLatin1String("signal")) {
+        if (response["name"] == QLatin1String("dirty")) {
+            m_projects[project].m_server->configure({});
+        } else
+            qDebug() << "unhandled signal response..." << project << response;
+    } else if (response["type"] == QLatin1String("reply")) {
+        const auto inReplyTo = response["inReplyTo"];
+        if (inReplyTo == QLatin1String("configure")) {
+            m_projects[project].m_server->compute();
+        } else if (inReplyTo == QLatin1String("compute")) {
+            m_projects[project].m_server->codemodel();
+        } else if(inReplyTo == QLatin1String("codemodel")) {
+            auto &data = m_projects[project];
+            CMakeServerImportJob::processFileData(response, data);
+            populateTargets(project->projectItem(), data.targets);
+        } else {
+            qDebug() << "unhandled reply response..." << project << response;
+        }
+    } else {
+        qDebug() << "unhandled response..." << project << response;
+    }
 }
 
 // void CMakeManager::deletedWatchedDirectory(IProject* p, const QUrl &dir)

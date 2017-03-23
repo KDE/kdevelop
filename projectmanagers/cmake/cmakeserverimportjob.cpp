@@ -86,7 +86,7 @@ static QHash<QString, QString> processDefines(const QString &compileFlags, const
     return ret;
 }
 
-static void processFileData(const QJsonObject &response, CMakeProjectData &data)
+void CMakeServerImportJob::processFileData(const QJsonObject &response, CMakeProjectData &data)
 {
     const auto configs = response.value(QLatin1String("configurations")).toArray();
     qCDebug(CMAKE) << "process response" << response;
@@ -164,6 +164,7 @@ void CMakeServerImportJob::processResponse(const QJsonObject& response)
             m_server->codemodel();
         } else if(inReplyTo == QLatin1String("codemodel")) {
             processFileData(response, m_data);
+            m_data.m_server = m_server;
             emitResult();
         } else {
             qWarning() << "unhandled reply" << response;
