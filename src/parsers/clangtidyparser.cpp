@@ -23,6 +23,8 @@
 #include <KMessageBox>
 #include <QApplication>
 #include <QRegularExpression>
+#include <language/editor/documentrange.h>
+#include <serialization/indexedstring.h>
 #include <shell/problem.h>
 
 #include "clangtidyparser.h"

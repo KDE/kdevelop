@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QtTest/QTest>
+#include <language/editor/documentrange.h>
 #include <shell/problem.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

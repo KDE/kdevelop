@@ -20,6 +20,7 @@
  */
 
 #include <QtTest/QTest>
+#include <language/editor/documentrange.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
