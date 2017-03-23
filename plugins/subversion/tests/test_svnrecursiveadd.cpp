@@ -18,7 +18,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
 ***************************************************************************/
 
-#include "svnrecursiveadd.h"
+#include "test_svnrecursiveadd.h"
 
 #include <QDebug>
 #include <QTemporaryDir>
@@ -108,18 +108,18 @@ void fillWorkingDirectory(QString const & dirname)
     verifiedWrite(file1, keywordText());
 }
 
-void SvnRecursiveAdd::initTestCase()
+void TestSvnRecursiveAdd::initTestCase()
 {
     AutoTestShell::init({"kdevsubversion"});
     TestCore::initialize();
 }
 
-void SvnRecursiveAdd::cleanupTestCase()
+void TestSvnRecursiveAdd::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void SvnRecursiveAdd::test()
+void TestSvnRecursiveAdd::test()
 {
     QTemporaryDir reposDir;
     KProcess cmd;
@@ -157,4 +157,4 @@ void SvnRecursiveAdd::test()
     validatingExecJob(vcs->revert({addUrl}, IBasicVersionControl::Recursive));
 }
 
-QTEST_MAIN(SvnRecursiveAdd)
+QTEST_MAIN(TestSvnRecursiveAdd)

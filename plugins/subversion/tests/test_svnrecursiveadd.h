@@ -17,30 +17,20 @@
 *   Free Software Foundation, Inc.,                                       *
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
 ***************************************************************************/
-#ifndef KDEVPLATFORM_PLUGIN_SVNIMPORT_H
-#define KDEVPLATFORM_PLUGIN_SVNIMPORT_H
+#ifndef KDEVPLATFORM_PLUGIN_SVNRECURSIVEADD_H
+#define KDEVPLATFORM_PLUGIN_SVNRECURSIVEADD_H
+
 #include <QtCore/QObject>
 
-class QTemporaryDir;
-namespace KDevelop
-{
-class TestCore;
-class ICentralizedVersionControl;
-}
-
-class SvnImport
+class TestSvnRecursiveAdd
             : public QObject
 {
     Q_OBJECT
 private slots:
     void initTestCase();
     void cleanupTestCase();
-    void testBasic();
-    void testImportIntoDir();
-    void testImportWithMissingDirs();
-private:
-    void validateImport( const QString& repo, QTemporaryDir& checkout, const QString& origcontent );
-    KDevelop::ICentralizedVersionControl* vcs = nullptr;
+
+    void test();
 };
 
 #endif // KDEVPLATFORM_PLUGIN_SVNRECURSIVEADD_H
