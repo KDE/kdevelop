@@ -30,13 +30,9 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>
 #include <outputview/outputdelegate.h>
-#include <util/processlinemaker.h>
 #include <util/commandexecutor.h>
 #include <util/path.h>
 
-#include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
 #include <QStandardPaths>

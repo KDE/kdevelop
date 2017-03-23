@@ -28,9 +28,7 @@
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
-#include <project/interfaces/ibuildsystemmanager.h>
 #include <project/builderjob.h>
 #include <makebuilder/imakebuilder.h>
 

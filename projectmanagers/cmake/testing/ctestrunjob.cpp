@@ -29,10 +29,7 @@
 #include <interfaces/ilauncher.h>
 #include <interfaces/launchconfigurationtype.h>
 #include <interfaces/ilaunchmode.h>
-#include <interfaces/iprojectcontroller.h>
-#include <util/processlinemaker.h>
 #include <util/executecompositejob.h>
-#include <outputview/outputmodel.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>

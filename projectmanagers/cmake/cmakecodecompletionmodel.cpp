@@ -33,8 +33,6 @@
 #include <ktexteditor/view.h>
 #include <kio/global.h>
 #include <KLocalizedString>
-#include <interfaces/icore.h>
-#include <interfaces/idocumentationcontroller.h>
 #include <cmakeduchaintypes.h>
 #include "cmakeutils.h"
 #include "icmakedocumentation.h"

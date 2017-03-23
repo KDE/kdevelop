@@ -26,6 +26,7 @@
 #include "clangprivateexport.h"
 
 #include <language/duchain/problem.h>
+#include <language/editor/documentrange.h>
 #include <interfaces/iassistant.h>
 
 #include <clang-c/Index.h>

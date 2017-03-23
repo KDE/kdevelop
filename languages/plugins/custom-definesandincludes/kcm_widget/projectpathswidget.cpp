@@ -26,8 +26,6 @@
 
 #include <interfaces/iproject.h>
 #include <KLocalizedString>
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 
 #include "../compilerprovider/compilerprovider.h"
 #include "../compilerprovider/settingsmanager.h"

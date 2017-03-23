@@ -23,14 +23,10 @@
 #include "customdefinesandincludes.h"
 #include "../compilerprovider/compilerprovider.h"
 
-#include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
-#include <serialization/indexedstring.h>
 #include <project/projectmodel.h>
 
 #include "definesandincludesconfigpage.h"

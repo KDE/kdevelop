@@ -31,9 +31,7 @@
 #include "imakebuilder.h"
 
 namespace KDevelop {
-class OutputModel;
 class ProjectBaseItem;
-class ProcessLineMaker;
 }
 
 class QUrl;

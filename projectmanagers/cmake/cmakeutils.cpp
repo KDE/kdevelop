@@ -32,8 +32,6 @@
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
-#include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <QStandardPaths>
 

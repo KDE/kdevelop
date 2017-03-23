@@ -29,7 +29,6 @@
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>
 #include <debugger/framestack/framestackmodel.h>
-#include <debugger/interfaces/ibreakpointcontroller.h>
 #include <debugger/interfaces/ivariablecontroller.h>
 #include <debugger/variable/variablecollection.h>
 #include <interfaces/idebugcontroller.h>

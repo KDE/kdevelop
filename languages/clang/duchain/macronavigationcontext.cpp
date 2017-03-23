@@ -29,9 +29,6 @@
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
-#include <serialization/indexedstring.h>
-#include <interfaces/icore.h>
-#include <interfaces/ipartcontroller.h>
 
 using namespace KDevelop;
 

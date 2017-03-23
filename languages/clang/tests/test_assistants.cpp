@@ -38,7 +38,6 @@
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/isourceformattercontroller.h>
 
 #include <language/assistant/staticassistant.h>

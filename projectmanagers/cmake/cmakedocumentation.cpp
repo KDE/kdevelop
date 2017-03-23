@@ -34,7 +34,6 @@
 #include <documentation/standarddocumentationview.h>
 #include <language/duchain/declaration.h>
 #include <serialization/indexedstring.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include "cmakemanager.h"

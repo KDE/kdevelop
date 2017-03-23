@@ -40,8 +40,6 @@
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/typealiastype.h>
 #include <language/duchain/types/typeutils.h>
-#include <language/interfaces/iastcontainer.h>
-#include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 

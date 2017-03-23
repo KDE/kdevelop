@@ -40,7 +40,6 @@
 class IExecutePlugin;
 
 namespace KDevelop {
-class ProcessLineMaker;
 class ILaunchConfiguration;
 }
 

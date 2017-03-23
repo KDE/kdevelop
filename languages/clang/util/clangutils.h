@@ -30,10 +30,6 @@
 
 #include "clangprivateexport.h"
 
-namespace KDevelop {
-    class IndexedString;
-}
-
 namespace ClangUtils
 {
     /**

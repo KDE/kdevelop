@@ -26,6 +26,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iproject.h>
+#include <language/editor/documentrange.h>
 #include <shell/problemmodelset.h>
 
 #include <klocalizedstring.h>

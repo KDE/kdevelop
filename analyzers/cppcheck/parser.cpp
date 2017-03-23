@@ -26,6 +26,7 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <shell/problem.h>
+#include <language/editor/documentrange.h>
 
 #include <QApplication>
 #include <QFile>

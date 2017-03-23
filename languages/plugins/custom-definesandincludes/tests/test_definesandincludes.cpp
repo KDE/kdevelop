@@ -29,8 +29,6 @@
 #include <tests/testcore.h>
 #include <tests/testhelpers.h>
 
-#include <serialization/indexedstring.h>
-
 #include "idefinesandincludesmanager.h"
 
 using namespace KDevelop;

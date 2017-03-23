@@ -25,6 +25,7 @@
 
 #include <language/duchain/problem.h>
 #include <language/duchain/stringhelpers.h>
+#include <language/editor/documentrange.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>

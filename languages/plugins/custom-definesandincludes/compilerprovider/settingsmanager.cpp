@@ -33,7 +33,6 @@
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>
 
 #include "compilerprovider.h"

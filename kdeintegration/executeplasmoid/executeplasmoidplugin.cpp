@@ -26,7 +26,9 @@
 #include "debug.h"
 #include <kpluginfactory.h>
 #include <QUrl>
+
 #include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
 
 using namespace KDevelop;
 

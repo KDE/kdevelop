@@ -20,7 +20,6 @@
 #include "adaptsignatureassistant.h"
 
 #include <interfaces/icore.h>
-#include <interfaces/ilanguagecontroller.h>
 #include <language/assistant/renameaction.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/functiondefinition.h>

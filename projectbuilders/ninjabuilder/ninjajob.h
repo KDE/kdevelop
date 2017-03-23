@@ -25,7 +25,6 @@
 #include <QPointer>
 
 namespace KDevelop {
-class OutputModel;
 class ProjectBaseItem;
 }
 

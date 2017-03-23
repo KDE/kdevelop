@@ -36,10 +36,8 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/idocumentcontroller.h>
-#include <language/interfaces/iastcontainer.h>
 
 #include "codegen/clangrefactoring.h"
 #include "codegen/clangclasshelper.h"

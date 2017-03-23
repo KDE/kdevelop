@@ -31,7 +31,6 @@
 #include <QIODevice>
 
 class QWidget;
-class QTreeView;
 
 class ManPagePlugin;
 

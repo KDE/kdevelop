@@ -26,6 +26,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>

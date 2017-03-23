@@ -35,7 +35,6 @@ namespace KDevelop
 {
     class TopDUContext;
     class Declaration;
-class ITestController;
 }
 
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor

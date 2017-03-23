@@ -27,9 +27,7 @@
 #include <QLoggingCategory>
 #include <QTemporaryFile>
 
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
-#include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <tests/autotestshell.h>
 #include <tests/testproject.h>

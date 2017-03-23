@@ -37,6 +37,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/launchconfigurationtype.h>
 

@@ -26,7 +26,6 @@
 #include <interfaces/iproject.h>
 #include <outputview/outputmodel.h>
 #include <outputview/outputdelegate.h>
-#include <util/processlinemaker.h>
 #include <util/environmentprofilelist.h>
 #include <util/commandexecutor.h>
 #include <project/projectmodel.h>

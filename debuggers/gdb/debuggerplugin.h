@@ -38,11 +38,6 @@
 
 class GdbLauncher;
 
-namespace KDevelop {
-class Context;
-class ProcessLineMaker;
-}
-
 namespace KDevMI {
 class DisassembleWidget;
 

@@ -28,7 +28,6 @@
 
 namespace KDevelop{
     class CommandExecutor;
-    class OutputModel;
     class IProject;
 }
 

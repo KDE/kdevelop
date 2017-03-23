@@ -26,6 +26,7 @@
 using namespace KDevelop;
 
 #include <language/duchain/appendedlist.h>
+#include <serialization/indexedstring.h>
 
 // The type is registered in DUChainUtils::registerDUChainItems
 // REGISTER_TYPE(ClassSpecializationType);

@@ -25,12 +25,10 @@
 #include <cmakelistsparser.h>
 #include <cmakemanager.h>
 #include <language/backgroundparser/urlparselock.h>
-#include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <interfaces/icore.h>
-#include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/problem.h>
 #include <kio/global.h>
 #include <QReadWriteLock>

@@ -36,7 +36,6 @@
 #include <QtCore/QFile>
 
 #include <interfaces/icore.h>
-#include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iprojectcontroller.h>
 
 #include "manpageplugin.h"

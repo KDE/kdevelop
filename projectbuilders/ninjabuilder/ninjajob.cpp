@@ -21,8 +21,6 @@
 
 #include "ninjabuilder.h"
 
-#include <interfaces/iproject.h>
-#include <outputview/outputmodel.h>
 #include <outputview/outputfilteringstrategies.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>

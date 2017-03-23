@@ -30,8 +30,6 @@
 
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
 
 #include <KLocalizedString>
 

@@ -26,12 +26,6 @@
 
 class CTestSuite;
 
-namespace KDevelop {
-class ILaunchConfiguration;
-class ProcessLineMaker;
-}
-
-
 class CTestRunJob : public KJob
 {
     Q_OBJECT

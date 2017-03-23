@@ -31,7 +31,6 @@ class KDialogBase;
 namespace KDevelop
 {
 class ProjectBaseItem;
-class IOutputView;
 class IProject;
 }
 

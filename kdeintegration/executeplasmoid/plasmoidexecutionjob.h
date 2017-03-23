@@ -29,7 +29,6 @@ class ExecutePlasmoidPlugin;
 namespace KDevelop
 {
 class ILaunchConfiguration;
-class ProcessLineMaker;
 class OutputModel;
 class CommandExecutor;
 }

@@ -22,6 +22,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
+#include <language/editor/documentrange.h>
 #include "kdevplatform/shell/problem.h"
 #include "parser.h"
 

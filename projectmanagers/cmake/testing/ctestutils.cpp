@@ -27,11 +27,8 @@
 #include "../debug.h"
 
 #include <interfaces/iproject.h>
-#include <interfaces/itestcontroller.h>
 #include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
-#include <interfaces/iprojectcontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <util/path.h>

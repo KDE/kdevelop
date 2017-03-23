@@ -26,7 +26,6 @@
 #include <QHash>
 
 namespace KDevelop {
-class ITestController;
 class ReferencedTopDUContext;
 }
 

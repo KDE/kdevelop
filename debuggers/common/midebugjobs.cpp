@@ -31,7 +31,6 @@
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iuicontroller.h>

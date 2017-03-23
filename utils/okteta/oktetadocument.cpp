@@ -41,15 +41,15 @@
 #include <shell/uicontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
-#include <interfaces/idocumentcontroller.h>
 // Sublime
 #include <sublime/mainwindow.h>
 #include <sublime/view.h>
 #include <sublime/area.h>
 #include <sublime/controller.h>
-// KDE
+// KF
 #include <KMessageBox>
 #include <KLocalizedString>
+#include <KTextEditor/Cursor>
 // Qt
 #include <QApplication>
 #include <QMimeDatabase>

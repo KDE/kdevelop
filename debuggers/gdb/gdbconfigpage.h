@@ -25,7 +25,8 @@
 
 #include <interfaces/ilauncher.h>
 #include <interfaces/launchconfigurationpage.h>
-#include <outputview/outputjob.h>
+
+#include <QPointer>
 
 class IExecutePlugin;
 namespace Ui
@@ -34,7 +35,6 @@ class GdbConfigPage;
 }
 namespace KDevelop
 {
-class OutputModel;
 class ILaunchConfiguration;
 class IProject;
 }
@@ -44,7 +44,6 @@ namespace KDevMI
 namespace GDB
 {
 class CppDebuggerPlugin;
-class DebugSession;
 }
 }
 

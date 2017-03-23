@@ -19,7 +19,6 @@
 #include <kpluginfactory.h>
 #include <project/projectmodel.h>
 #include <project/helper.h>
-#include <serialization/indexedstring.h>
 
 #include <QFile>
 #include <QReadWriteLock>

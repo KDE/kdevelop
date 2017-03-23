@@ -30,9 +30,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/abstractfilemanagerplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
-#include <language/codegen/applychangeswidget.h>
 #include <interfaces/iplugin.h>
-#include <interfaces/idocumentationprovider.h>
 
 #include "cmakeprojectdata.h"
 #include "icmakemanager.h"

@@ -38,7 +38,6 @@
 #include "cmakebuilddirchooser.h"
 #include "../debug.h"
 #include <cmakeutils.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>

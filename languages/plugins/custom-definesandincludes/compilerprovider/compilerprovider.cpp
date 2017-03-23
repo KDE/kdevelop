@@ -28,9 +28,7 @@
 #include "compilerfactories.h"
 #include "settingsmanager.h"
 
-#include <interfaces/icore.h>
 #include <interfaces/iproject.h>
-#include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 
 #include <KLocalizedString>

@@ -21,7 +21,6 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QXmlStreamReader>
-#include <vcs/vcslocation.h>
 
 static const QUrl kdeProjectsUrl("https://projects.kde.org/kde_projects.xml");
 

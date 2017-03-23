@@ -24,9 +24,6 @@
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include "configconstants.h"
 #include "kcm_custombuildsystem.h"
 #include "config.h"

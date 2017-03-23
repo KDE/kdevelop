@@ -19,7 +19,6 @@
 */
 
 #include <KLocalizedString>
-#include <QTreeView>
 #include <QStandardPaths>
 
 #include "manpagedocumentation.h"

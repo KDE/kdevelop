@@ -29,7 +29,6 @@
 namespace KDevelop {
 class IProject;
 class ProjectBaseItem;
-class CommandExecutor;
 }
 
 class CMakeJob: public KDevelop::OutputExecuteJob

@@ -20,9 +20,6 @@
 
 #include "cmakebuilderpreferences.h"
 
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
-
 #include "ui_cmakebuilderpreferences.h"
 #include "cmakebuilder.h"
 #include "cmakebuilderconfig.h"

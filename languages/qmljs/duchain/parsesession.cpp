@@ -28,6 +28,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/declaration.h>
 #include <language/backgroundparser/backgroundparser.h>
+#include <language/editor/documentrange.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icore.h>
 

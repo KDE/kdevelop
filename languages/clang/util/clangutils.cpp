@@ -25,8 +25,6 @@
 #include "../util/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
 
-#include <serialization/indexedstring.h>
-#include <language/editor/documentrange.h>
 #include <language/duchain/stringhelpers.h>
 
 #include <clang-c/Index.h>

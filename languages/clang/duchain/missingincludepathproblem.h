@@ -22,8 +22,6 @@
 #ifndef MISSINGINCLUDEPATHPROBLEM_H
 #define MISSINGINCLUDEPATHPROBLEM_H
 
-#include <serialization/indexedstring.h>
-
 #include "clangproblem.h"
 
 class MissingIncludePathProblem : public ClangProblem

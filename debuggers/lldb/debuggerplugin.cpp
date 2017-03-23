@@ -24,7 +24,6 @@
 
 #include "debuglog.h"
 #include "lldblauncher.h"
-#include "widgets/lldbconfigpage.h"
 #include "widgets/debuggerconsoleview.h"
 
 #include <execute/iexecuteplugin.h>

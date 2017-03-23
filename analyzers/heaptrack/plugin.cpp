@@ -32,7 +32,6 @@
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/iplugincontroller.h>
-#include <interfaces/iuicontroller.h>
 #include <kactioncollection.h>
 #include <kpluginfactory.h>
 #include <shell/core.h>

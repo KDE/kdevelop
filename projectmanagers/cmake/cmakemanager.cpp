@@ -54,7 +54,6 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
-#include <interfaces/ilanguagecontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <interfaces/idocumentation.h>

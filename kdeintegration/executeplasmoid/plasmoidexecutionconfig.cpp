@@ -26,6 +26,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <project/projectmodel.h>
 #include <project/builderjob.h>

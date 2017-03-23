@@ -32,8 +32,6 @@ class KDialog;
 
 namespace KDevelop{
     class ProjectBaseItem;
-    class CommandExecutor;
-    class OutputModel;
 }
 
 /**

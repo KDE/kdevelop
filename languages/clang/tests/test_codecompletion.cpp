@@ -34,7 +34,6 @@
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/iplugincontroller.h>
 
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/types/functiontype.h>

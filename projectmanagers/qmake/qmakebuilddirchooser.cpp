@@ -32,11 +32,8 @@
 #include <util/path.h>
 
 #include <project/helper.h>
-#include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
 
-#include <interfaces/icore.h>
-#include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 #include "debug.h"
 
