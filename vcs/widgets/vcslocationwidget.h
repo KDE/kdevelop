@@ -38,7 +38,7 @@ class KDEVPLATFORMVCS_EXPORT VcsLocationWidget : public QWidget
 {
     Q_OBJECT
     public:
-        explicit VcsLocationWidget(QWidget* parent = nullptr, Qt::WindowFlags f = nullptr);
+        explicit VcsLocationWidget(QWidget* parent = nullptr, Qt::WindowFlags f = {});
         
         /** @returns the VcsLocation specified in the widget. */
         virtual VcsLocation location() const=0;

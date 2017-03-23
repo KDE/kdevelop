@@ -95,13 +95,13 @@ public:
             emit m_documentSet->changed();
     }
 
-    void setDocuments(const DocumentSet& docs, ActionFlags flags = nullptr)
+    void setDocuments(const DocumentSet& docs, ActionFlags flags = {})
     {
         m_documents = docs;
         doUpdate(flags);
     }
 
-    void addDocument(const IndexedString& doc, ActionFlags flags = nullptr)
+    void addDocument(const IndexedString& doc, ActionFlags flags = {})
     {
         if (m_documents.contains(doc))
             return;
@@ -110,7 +110,7 @@ public:
         doUpdate(flags);
     }
 
-    void delDocument(const IndexedString& doc, ActionFlags flags = nullptr)
+    void delDocument(const IndexedString& doc, ActionFlags flags = {})
     {
         if (!m_documents.contains(doc))
             return;

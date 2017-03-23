@@ -33,7 +33,7 @@ class KDEVPLATFORMVCS_EXPORT StandardVcsLocationWidget : public VcsLocationWidge
 {
     Q_OBJECT
     public:
-        explicit StandardVcsLocationWidget(QWidget* parent = nullptr, Qt::WindowFlags f = nullptr);
+        explicit StandardVcsLocationWidget(QWidget* parent = nullptr, Qt::WindowFlags f = {});
         VcsLocation location() const override;
         bool isCorrect() const override;
         QUrl url() const;

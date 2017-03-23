@@ -211,7 +211,7 @@ struct DocumentControllerPrivate
 
     IDocument* openDocumentInternal( const QUrl & inputUrl, const QString& prefName = QString(),
         const KTextEditor::Range& range = KTextEditor::Range::invalid(), const QString& encoding = QString(),
-        DocumentController::DocumentActivationParams activationParams = nullptr,
+        DocumentController::DocumentActivationParams activationParams = {},
         IDocument* buddy = nullptr)
     {
         Q_ASSERT(!inputUrl.isRelative());

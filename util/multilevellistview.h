@@ -52,7 +52,7 @@ public:
      * @param parent parent widget
      * @param f window flags, passed to QWidget
      */
-    explicit MultiLevelListView(QWidget* parent = nullptr, Qt::WindowFlags f = nullptr);
+    explicit MultiLevelListView(QWidget* parent = nullptr, Qt::WindowFlags f = {});
     /**
      * Default destructor
      */
