@@ -31,27 +31,6 @@
   <name xml:lang="x-test">xxKDevelopxx</name>
   <name xml:lang="zh-CN">KDevelop</name>
   <summary>Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
-  <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
-  <summary xml:lang="ca-valencia">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
-  <summary xml:lang="de">KDevelop ist eine leistungsfähige integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann.</summary>
-  <summary xml:lang="en-GB">It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
-  <summary xml:lang="es">Es un entorno de desarrollo integrado para C/C++ y otros lenguajes de programación con múltiples funcionalidades y que se puede extender con complementos.</summary>
-  <summary xml:lang="fi">Kaikkien ominaisuuksien liitännäisillä laajennettava IDE C/C++:lle ja muille ohjelmointikielille.</summary>
-  <summary xml:lang="fr">Il s'agit d'un environnement de développement complet et extensible pour le C/C++ et d'autres langages de programmation.</summary>
-  <summary xml:lang="gl">É un potente ambiente de desenvolvemento integrado para C, C++ e outras linguaxes de programación. As súas funcionalidades poden estenderse mediante complementos.</summary>
-  <summary xml:lang="hu">Teljes, bővítményekkel bővíthető integrált fejlesztői környezet C/C++ és más programozási nyelvekhez.</summary>
-  <summary xml:lang="it">È un IDE per C/C++ e altri linguaggi di programmazione completo ed estensibile.</summary>
-  <summary xml:lang="nl">Het is een IDE, vol functies en uit te breiden met plug-ins voor C/C++ en andere programmeertalen.</summary>
-  <summary xml:lang="pl">Jest to w pełni funkcjonalne, z możliwością rozszerzenia przy użyciu wtyczek, zintegrowane środowisko programistyczne dla C/C++ i innych języków programowania.</summary>
-  <summary xml:lang="pt">É um IDE pleno de funcionalidades e modular para o C/C++ e outras linguagens de programação.</summary>
-  <summary xml:lang="pt-BR">É um IDE repleto de funcionalidades e expansível através de plugins, para C/C++ e outras linguagens de programação.</summary>
-  <summary xml:lang="sk">Je to plne funkčne, pluginmi rozšíriteľné IDE pre C/C++ a iné programovacie jazyky.</summary>
-  <summary xml:lang="sl">KDevelop je zmogljivo integrirano razvojno okolje za C/C++ in druge programske jezike, ki je razširljivo z vstavki.</summary>
-  <summary xml:lang="sv">Det är en funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk, med utökningsmöjligheter via insticksmoduler.</summary>
-  <summary xml:lang="tr">Tam özellikli, eklenti ile geliştirilebilir C/C++ ve diğer programlama dilleri için tümleşik geliştirme ortamı.</summary>
-  <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
-  <summary xml:lang="x-test">xxIt is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.xx</summary>
-  <summary xml:lang="zh-CN">全功能，可扩展的支持 C/C++ 和其他语言的集成开发环境。</summary>
   <description>
     <p>Free and Open Source Integrated Development Environment for your different software projects.</p>
     <p xml:lang="ca">És un entorn de desenvolupament integrat lliure i de codi obert per als vostres diferents projectes de programari.</p>
