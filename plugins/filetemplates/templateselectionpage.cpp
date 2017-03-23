@@ -196,8 +196,8 @@ void TemplateSelectionPage::saveConfig()
     group.sync();
 }
 
-TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt::WindowFlags f)
-: QWidget(parent, f)
+TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
+: QWidget(parent)
 , d(new TemplateSelectionPagePrivate(this))
 {
     d->assistant = parent;

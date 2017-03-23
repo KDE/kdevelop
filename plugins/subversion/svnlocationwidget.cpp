@@ -11,8 +11,8 @@
 #include "svnlocationwidget.h"
 #include <vcs/vcslocation.h>
 
-SvnLocationWidget::SvnLocationWidget(QWidget* parent, Qt::WindowFlags f)
-    : StandardVcsLocationWidget(parent, f)
+SvnLocationWidget::SvnLocationWidget(QWidget* parent)
+    : StandardVcsLocationWidget(parent)
 {}
 
 KDevelop::VcsLocation SvnLocationWidget::location() const

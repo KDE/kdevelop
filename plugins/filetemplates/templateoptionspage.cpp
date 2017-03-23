@@ -46,8 +46,8 @@ public:
     QList<QWidget*> groupBoxes;
 };
 
-TemplateOptionsPage::TemplateOptionsPage(QWidget* parent, Qt::WindowFlags f)
-: QWidget(parent, f)
+TemplateOptionsPage::TemplateOptionsPage(QWidget* parent)
+: QWidget(parent)
 , d(new TemplateOptionsPagePrivate)
 {
     d->firstEditWidget = nullptr;

@@ -38,7 +38,7 @@ class TestCasesPage : public QWidget, public IPageFocus
     Q_PROPERTY(QStringList testCases READ testCases WRITE setTestCases)
 
 public:
-    explicit TestCasesPage(QWidget* parent = nullptr, Qt::WindowFlags f = nullptr);
+    explicit TestCasesPage(QWidget* parent = nullptr);
     ~TestCasesPage() override;
 
     /**

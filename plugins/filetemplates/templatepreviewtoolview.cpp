@@ -34,8 +34,8 @@
 
 using namespace KDevelop;
 
-TemplatePreviewToolView::TemplatePreviewToolView(FileTemplatesPlugin* plugin, QWidget* parent, Qt::WindowFlags f)
-: QWidget(parent, f)
+TemplatePreviewToolView::TemplatePreviewToolView(FileTemplatesPlugin* plugin, QWidget* parent)
+: QWidget(parent)
 , ui(new Ui::TemplatePreviewToolView)
 , m_original(nullptr)
 , m_plugin(plugin)

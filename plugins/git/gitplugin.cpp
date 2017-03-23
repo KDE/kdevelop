@@ -1491,8 +1491,9 @@ class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
 {
     Q_OBJECT
     public:
-        explicit GitVcsLocationWidget(QWidget* parent = nullptr, Qt::WindowFlags f = nullptr)
-            : StandardVcsLocationWidget(parent, f) {}
+        explicit GitVcsLocationWidget(QWidget* parent = nullptr)
+            : StandardVcsLocationWidget(parent)
+        {}
 
         bool isCorrect() const override
         {

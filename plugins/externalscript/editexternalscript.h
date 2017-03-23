@@ -33,7 +33,7 @@ class EditExternalScript : public QDialog, private Ui::EditExternalScriptBase
   Q_OBJECT
 
 public:
-  explicit EditExternalScript( ExternalScriptItem* item, QWidget* parent = nullptr, Qt::WindowFlags flags = nullptr );
+  explicit EditExternalScript(ExternalScriptItem* item, QWidget* parent = nullptr);
   ~EditExternalScript() override;
 
 private slots:

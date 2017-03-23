@@ -36,7 +36,7 @@ class TemplateSelectionPage : public QWidget
     Q_PROPERTY(QString selectedTemplate READ selectedTemplate)
 
 public:
-    explicit TemplateSelectionPage (TemplateClassAssistant* parent, Qt::WindowFlags f = nullptr);
+    explicit TemplateSelectionPage (TemplateClassAssistant* parent);
     ~TemplateSelectionPage() override;
 
     /**

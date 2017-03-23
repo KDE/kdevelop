@@ -87,8 +87,8 @@ TemplatePreviewRenderer::~TemplatePreviewRenderer()
 
 }
 
-TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
-: QWidget(parent, f)
+TemplatePreview::TemplatePreview(QWidget* parent)
+    : QWidget(parent)
 {
     m_variables[QStringLiteral("APPNAME")] = QStringLiteral("Example");
     m_variables[QStringLiteral("APPNAMELC")] = QStringLiteral("example");

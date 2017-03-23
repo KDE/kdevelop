@@ -29,8 +29,9 @@
 #include <KLocalizedString>
 #include <KShell>
 
-EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* parent, Qt::WindowFlags flags )
-    : QDialog( parent, flags ), m_item( item )
+EditExternalScript::EditExternalScript(ExternalScriptItem* item, QWidget* parent)
+    : QDialog(parent)
+    , m_item(item)
 {
   setupUi(this);
 

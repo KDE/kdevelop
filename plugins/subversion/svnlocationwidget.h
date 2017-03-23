@@ -18,7 +18,7 @@ class SvnLocationWidget : public KDevelop::StandardVcsLocationWidget
 {
     Q_OBJECT
     public:
-        explicit SvnLocationWidget(QWidget* parent = nullptr, Qt::WindowFlags f = nullptr);
+        explicit SvnLocationWidget(QWidget* parent = nullptr);
         KDevelop::VcsLocation location() const override;
         bool isCorrect() const override;
 };

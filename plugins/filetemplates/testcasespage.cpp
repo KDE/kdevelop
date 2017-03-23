@@ -33,8 +33,8 @@ public:
     Ui::TestCasesPage* ui;
 };
 
-TestCasesPage::TestCasesPage(QWidget* parent, Qt::WindowFlags f)
-: QWidget (parent, f)
+TestCasesPage::TestCasesPage(QWidget* parent)
+: QWidget(parent)
 , d(new TestCasesPagePrivate)
 {
     d->ui = new Ui::TestCasesPage();
