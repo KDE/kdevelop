@@ -199,9 +199,9 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
     auto project = item->project();
 
     auto job = new ChooseCMakeInterfaceJob(project, this);
-    connect(job, &CMakeImportJsonJob::result, this, [this, job, project](){
+    connect(job, &KJob::result, this, [this, job, project](){
         if (job->error() != 0) {
-            qCWarning(CMAKE) << "couldn't load json successfully" << project->name();
+            qCWarning(CMAKE) << "couldn't load project successfully" << project->name();
             m_projects.remove(project);
         }
     });
