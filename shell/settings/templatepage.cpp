@@ -23,13 +23,14 @@
 #include <interfaces/itemplateprovider.h>
 #include <language/codegen/templatesmodel.h>
 
-#include <QFileDialog>
 #include <KNS3/DownloadDialog>
 #include <KNS3/UploadDialog>
 #include <KArchive>
 #include <KZip>
 #include <KTar>
 #include <QUrl>
+
+#include <QFileDialog>
 
 TemplatePage::TemplatePage (KDevelop::ITemplateProvider* provider, QWidget* parent) : QWidget (parent),
 m_provider(provider)
@@ -67,10 +68,15 @@ TemplatePage::~TemplatePage()
 
 void TemplatePage::loadFromFile()
 {
-    const QString filter = m_provider->supportedMimeTypes().join(QStringLiteral(";;"));
-    const QString filename = QFileDialog::getOpenFileName(this, QString(), QString(), filter);
-    if (!filename.isEmpty()) {
-        m_provider->loadTemplate(filename);
+    QFileDialog fileDialog(this);
+    fileDialog.setMimeTypeFilters(m_provider->supportedMimeTypes());
+    fileDialog.setFileMode(QFileDialog::ExistingFiles);
+    if (!fileDialog.exec()) {
+        return;
+    }
+
+    for (const auto& file : fileDialog.selectedFiles()) {
+        m_provider->loadTemplate(file);
     }
 
     m_provider->reload();
