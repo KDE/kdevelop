@@ -389,10 +389,10 @@ Session* SessionController::createSession( const QString& name )
     Session* s;
     if(name.startsWith('{'))
     {
-        s = new Session( QUuid(name).toString() );
+        s = new Session( QUuid(name).toString(), this );
     }else{
         qsrand(QDateTime::currentDateTimeUtc().toTime_t());
-        s = new Session( QUuid::createUuid().toString() );
+        s = new Session( QUuid::createUuid().toString(), this );
         s->setName( name );
     }
     d->addSession( s );
