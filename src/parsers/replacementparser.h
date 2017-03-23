@@ -71,7 +71,7 @@ protected:
     /**
     * \function
     * \brief generates the next replacement from the regex capture list.
-    * \param smatch: the captured match.
+    * \param smatch the captured match.
     * \return Replacement
     */
     Replacement nextNode(const QRegularExpressionMatch& smatch);

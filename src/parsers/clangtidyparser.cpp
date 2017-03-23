@@ -42,11 +42,11 @@ using KDevelop::IndexedString;
  * tooltips are uncomfortable to read, and large messages will not fit into the
  * screen.
  *
- * This function put the original message into <html> tag that automatically
+ * This function put the original message into \<html\> tag that automatically
  * provides line wrapping by builtin capabilities of Qt library. The source text
  * also can contain tokens '\012' (line break) - they are present in the case of
  * source code examples. In such cases, the entire text between the first and
- * last tokens (i.e. source code) is placed into <pre> tag.
+ * last tokens (i.e. source code) is placed into \<pre\> tag.
  *
  * @param[in] input the original value of <verbose> attribute
  * @return HTML version for displaying in problem's tooltip
