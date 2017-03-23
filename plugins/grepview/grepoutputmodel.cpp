@@ -152,7 +152,8 @@ QVariant GrepOutputItem::data ( int role ) const {
         const QString match = isCheckable() ? grepModel->replacementFor(m_change->m_oldText) : m_change->m_oldText;
         const QString repl  = QLatin1String("<b>") + match.toHtmlEscaped() + QLatin1String("</b>");
         QString end   = text().right(text().length() - m_change->m_range.end().column()).toHtmlEscaped();
-        return QVariant(QString(start + repl + end).trimmed());
+        const QString toolTip = QLatin1String("<span style=\"white-space:nowrap\">") + QString(start + repl + end).trimmed() + QLatin1String("</span>");
+        return toolTip;
     } else if (role == Qt::FontRole) {
         return QFontDatabase::systemFont(QFontDatabase::FixedFont);
     } else {

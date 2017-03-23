@@ -18,7 +18,8 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
 ***************************************************************************/
 
-#include "svnimport.h"
+#include "test_svnimport.h"
+
 #include <QTest>
 #include <QDebug>
 #include <QLoggingCategory>
@@ -69,7 +70,7 @@ void setupSampleProject( const QString& name, const QString& content )
     sampleFile.close();
 }
 
-void SvnImport::initTestCase()
+void TestSvnImport::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevplatform.plugins.svn.debug=true\n"));
     AutoTestShell::init({QStringLiteral("kdevsubversion")});
@@ -90,12 +91,12 @@ void SvnImport::initTestCase()
     QVERIFY(vcs);
 }
 
-void SvnImport::cleanupTestCase()
+void TestSvnImport::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void SvnImport::testBasic()
+void TestSvnImport::testBasic()
 {
     QTemporaryDir reposDir;
     VcsLocation reposLoc;
@@ -112,7 +113,7 @@ void SvnImport::testBasic()
     validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
 }
 
-void SvnImport::testImportWithMissingDirs()
+void TestSvnImport::testImportWithMissingDirs()
 {
     QTemporaryDir reposDir;
     VcsLocation reposLoc;
@@ -130,7 +131,7 @@ void SvnImport::testImportWithMissingDirs()
     validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
 }
 
-void SvnImport::testImportIntoDir()
+void TestSvnImport::testImportIntoDir()
 {
     QTemporaryDir reposDir;
     VcsLocation reposLoc;
@@ -148,7 +149,7 @@ void SvnImport::testImportIntoDir()
     validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
 }
 
-void SvnImport::validateImport( const QString& repourl, QTemporaryDir& checkoutdir, const QString& origcontent )
+void TestSvnImport::validateImport( const QString& repourl, QTemporaryDir& checkoutdir, const QString& origcontent )
 {
     VcsLocation reposLoc;
     reposLoc.setRepositoryServer( repourl );
@@ -161,4 +162,4 @@ void SvnImport::validateImport( const QString& repourl, QTemporaryDir& checkoutd
     QCOMPARE(QString::fromUtf8( newfile.readAll() ), origcontent);
 }
 
-QTEST_MAIN(SvnImport)
+QTEST_MAIN(TestSvnImport)
