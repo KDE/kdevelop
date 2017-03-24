@@ -23,7 +23,7 @@
 
 #include <util/activetooltip.h>
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop {
 
