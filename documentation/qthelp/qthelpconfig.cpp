@@ -48,9 +48,8 @@ enum Column
 class QtHelpConfigEditDialog : public QDialog, public Ui_QtHelpConfigEditDialog
 {
 public:
-    explicit QtHelpConfigEditDialog(QTreeWidgetItem* modifiedItem, QtHelpConfig* parent = nullptr,
-                                    Qt::WindowFlags f = nullptr)
-        : QDialog(parent, f)
+    explicit QtHelpConfigEditDialog(QTreeWidgetItem* modifiedItem, QtHelpConfig* parent = nullptr)
+        : QDialog(parent)
         , m_modifiedItem(modifiedItem)
         , m_config(parent)
     {
