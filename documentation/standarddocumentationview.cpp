@@ -105,7 +105,7 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
         if (d->m_view->url().isValid()) {
             d->m_view->page()->mainFrame()->scrollToAnchor(d->m_view->url().fragment());
         }
-        setUpdatesEnabled(true);
+        d->m_view->setUpdatesEnabled(true);
     });
 #endif
 }
@@ -231,7 +231,7 @@ public:
 void KDevelop::StandardDocumentationView::setDelegateLinks(bool delegate)
 {
 #ifdef USE_QTWEBKIT
-    d->m_view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+    d->m_view->page()->setLinkDelegationPolicy(delegate ? QWebPage::DelegateAllLinks : QWebPage::DontDelegateLinks);
 #else
     if (delegate)
         d->m_view->setPage(new PageInterceptor(this));
