@@ -31,6 +31,13 @@
   <name xml:lang="x-test">xxKDevelopxx</name>
   <name xml:lang="zh-CN">KDevelop</name>
   <summary>Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
+  <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
+  <summary xml:lang="ca-valencia">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
+  <summary xml:lang="nl">IDE voor C/C++ en andere programmeertalen, vol functies en uit te breiden met plug-ins.</summary>
+  <summary xml:lang="pt">IDE pleno de funcionalidades e modular para o C/C++ e outras linguagens de programação</summary>
+  <summary xml:lang="sv">Funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk</summary>
+  <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
+  <summary xml:lang="x-test">xxFeatureful, plugin-extensible IDE for C/C++ and other programming languagesxx</summary>
   <description>
     <p>Free and Open Source Integrated Development Environment for your different software projects.</p>
     <p xml:lang="ca">És un entorn de desenvolupament integrat lliure i de codi obert per als vostres diferents projectes de programari.</p>
