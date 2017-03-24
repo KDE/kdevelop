@@ -36,7 +36,7 @@ class LldbCommand : public MI::MICommand
 {
 protected:
     explicit LldbCommand(MI::CommandType type, const QString& arguments = QString(),
-                MI::CommandFlags flags = nullptr);
+                MI::CommandFlags flags = {});
     friend class KDevMI::LLDB::DebugSession;
 public:
     ~LldbCommand();

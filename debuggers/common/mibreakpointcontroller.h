@@ -97,7 +97,7 @@ private:
 
     void createFromDebugger(const MI::Value& miBkpt);
     void updateFromDebugger(int row, const MI::Value& miBkpt,
-                       KDevelop::BreakpointModel::ColumnFlags lockedColumns = nullptr);
+                            KDevelop::BreakpointModel::ColumnFlags lockedColumns = {});
 
     int rowFromDebuggerId(int gdbId) const;
 
