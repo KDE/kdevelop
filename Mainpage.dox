@@ -7,6 +7,12 @@
  *
  * The libraries available in this KDE module are:
  *
+ * - <a href="../debugger/html/index.html"><b>debugger</b></a>.
+ *   <i>Debugger Interfaces and support library.</i>
+ *
+ * - <a href="../documentation/html/index.html"><b>documentation</b></a>.
+ *   <i>Documentation support library.</i>
+ *
  * - <a href="../interfaces/html/index.html"><b>interfaces</b></a>.
  *   <i>Library with the basic interfaces for the Shell.</i>
  *
@@ -22,8 +28,14 @@
  * - <a href="../shell/html/index.html"><b>shell</b></a>.
  *   <i>The application shell.</i>
  *
+ * - <a href="../serialization/html/index.html"><b>serialization</b></a>.
+ *   <i>A library for code metadata storage.</i>
+ *
  * - <a href="../sublime/html/index.html"><b>sublime</b></a>.
  *   <i>Sublime the user interface library.</i>
+ *
+ * - <a href="../tests/html/index.html"><b>tests</b></a>.
+ *   <i>Testing support library.</i>
  *
  * - <a href="../util/html/index.html"><b>util</b></a>.
  *   <i>A library with stuff that doesn't fit elsewhere.</i>
