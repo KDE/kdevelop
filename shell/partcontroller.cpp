@@ -27,6 +27,7 @@
 #include <QMimeType>
 
 #include <KActionCollection>
+#include <KToggleAction>
 #include <KLocalizedString>
 #include <KMimeTypeTrader>
 
