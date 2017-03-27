@@ -304,10 +304,20 @@ bool ProjectSelectionPage::shouldContinue()
 
 void ProjectSelectionPage::loadFileClicked()
 {
-    QString filter = QStringLiteral("application/x-desktop application/x-bzip-compressed-tar application/zip");
-    const QString fileName = QFileDialog::getOpenFileName(this, i18n("Load Template From File"), QString(), filter);
-    if (!fileName.isEmpty())
-    {
+    const QStringList supportedMimeTypes {
+        QStringLiteral("application/x-desktop"),
+        QStringLiteral("application/x-bzip-compressed-tar"),
+        QStringLiteral("application/zip")
+    };
+    QFileDialog fileDialog(this, i18n("Load Template From File"));
+    fileDialog.setMimeTypeFilters(supportedMimeTypes);
+    fileDialog.setFileMode(QFileDialog::ExistingFiles);
+
+    if (!fileDialog.exec()) {
+        return;
+    }
+
+    for (const auto& fileName : fileDialog.selectedFiles()) {
         QString destination = m_templatesModel->loadTemplateFile(fileName);
         QModelIndexList indexes = m_templatesModel->templateIndexes(destination);
         if (indexes.size() > 2)

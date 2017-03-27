@@ -25,7 +25,7 @@
 
 #include <util/autoorientedsplitter.h>
 
-#include "debuggerexport.h"
+#include <debugger/debuggerexport.h>
 
 class QAbstractProxyModel;
 class QModelIndex;
