@@ -19,6 +19,7 @@ Name[x-test]=xxSimple KDevelop Pluginxx
 Comment=Generate a general KDevelop plugin, using CMake and C++
 Comment[ca]=Genera un connector del KDevelop general, usant CMake i C++
 Comment[ca@valencia]=Genera un connector del KDevelop general, usant CMake i C++
+Comment[de]=erstellt ein allgemeines KDevelop-Modul mit CMake und C++
 Comment[en_GB]=Generate a general KDevelop plugin, using CMake and C++
 Comment[es]=Generar un complemento general para KDevelop que usa CMake y C++
 Comment[it]=Genera un'estensione generica per KDevelop usando CMake e C++
