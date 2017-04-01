@@ -21,8 +21,8 @@
 
 #include "processlinemaker.h"
 
-#include <QtCore/QProcess>
-#include <QtCore/QStringList>
+#include <QProcess>
+#include <QStringList>
 
 namespace KDevelop
 {

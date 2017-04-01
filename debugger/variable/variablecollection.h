@@ -24,7 +24,7 @@
 #ifndef KDEVPLATFORM_VARIABLECOLLECTION_H
 #define KDEVPLATFORM_VARIABLECOLLECTION_H
 
-#include <QtCore/QPointer>
+#include <QPointer>
 
 #include <KLocalizedString>
 #include <KTextEditor/TextHintInterface>

@@ -20,8 +20,8 @@
 #ifndef KDEVELOP_PROJECT_TEST_PROJECTMODEL
 #define KDEVELOP_PROJECT_TEST_PROJECTMODEL
 
-#include <QtCore/QObject>
-#include <QtCore/QModelIndex>
+#include <QObject>
+#include <QModelIndex>
 
 class ProjectProxyModel;
 namespace KDevelop

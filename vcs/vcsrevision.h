@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_VCSREVISION_H
 
 #include "vcsexport.h"
-#include <QtCore/QVariant>
+#include <QVariant>
 class QStringList;
 class QString;
 

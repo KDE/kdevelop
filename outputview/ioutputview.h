@@ -21,8 +21,8 @@
 #ifndef KDEVPLATFORM_IOUTPUTVIEW_H
 #define KDEVPLATFORM_IOUTPUTVIEW_H
 
-#include <QtCore/QMetaType>
-#include <QtCore/QFlags>
+#include <QMetaType>
+#include <QFlags>
 #include <QIcon>
 
 #include "outputviewexport.h"

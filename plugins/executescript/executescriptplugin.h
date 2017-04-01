@@ -24,7 +24,7 @@
 #define KDEVPLATFORM_PLUGIN_EXECUTESCRIPTPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <QVariant>
 #include "iexecutescriptplugin.h"
 
 class ScriptAppConfigType;

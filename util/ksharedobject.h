@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_KSHAREDOBJECT_H
 
 #include <QSharedData>
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop {
 

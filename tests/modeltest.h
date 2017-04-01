@@ -24,9 +24,9 @@
 #ifndef KDEVPLATFORM_MODELTEST_H
 #define KDEVPLATFORM_MODELTEST_H
 
-#include <QtCore/QObject>
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QStack>
+#include <QObject>
+#include <QAbstractItemModel>
+#include <QStack>
 
 #include "testsexport.h"
 

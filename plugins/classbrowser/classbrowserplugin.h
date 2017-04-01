@@ -25,7 +25,7 @@
 #define KDEVPLATFORM_PLUGIN_CLASSBROWSERPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <QVariant>
 #include <language/duchain/duchainpointer.h>
 
 class ClassTree;

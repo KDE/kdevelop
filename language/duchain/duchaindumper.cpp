@@ -21,7 +21,7 @@
 
 #include "duchaindumper.h"
 
-#include <QtCore/QString>
+#include <QString>
 #include <QTextStream>
 
 #include "definitions.h"

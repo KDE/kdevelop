@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROJECTLOADTEST_H
 #define KDEVPLATFORM_PLUGIN_PROJECTLOADTEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop
 {

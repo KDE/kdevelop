@@ -22,7 +22,7 @@
 #include <interfaces/idocumentcontroller.h>
 
 #include <QTemporaryDir>
-#include <QtTest/QTest>
+#include <QTest>
 #include <QTemporaryFile>
 
 QTEST_MAIN(TestQuickOpen);

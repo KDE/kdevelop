@@ -20,8 +20,8 @@
 
 #include "bazaarutils.h"
 
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
+#include <QDateTime>
+#include <QDebug>
 
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsstatusinfo.h>

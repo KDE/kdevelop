@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_DVCSEVENT_H
 #define KDEVPLATFORM_DVCSEVENT_H
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 /**
  * This class is used to store all required Commit(Revision) data: commit (sha string),

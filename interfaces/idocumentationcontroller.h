@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_IDOCUMENTATIONCONTROLLER_H
 
 #include <interfaces/idocumentation.h>
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop {
 class IDocumentationProvider;

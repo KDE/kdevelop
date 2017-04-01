@@ -21,7 +21,7 @@
 #include "core_p.h"
 
 #include <QApplication>
-#include <QtCore/QTimer>
+#include <QTimer>
 
 #include <KLocalizedString>
 

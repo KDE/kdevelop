@@ -20,7 +20,7 @@
 
 #include "bazaarplugin.h"
 
-#include <QtCore/QDir>
+#include <QDir>
 #include <QMenu>
 #include <QStandardPaths>
 

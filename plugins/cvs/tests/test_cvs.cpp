@@ -10,7 +10,8 @@
 
 #include "test_cvs.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
+#include <QLoggingCategory>
 #include <QUrl>
 
 #include <KIO/DeleteJob>

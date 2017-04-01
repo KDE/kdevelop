@@ -27,7 +27,7 @@
 #ifndef KDEVPLATFORM_IPROJECT_H
 #define KDEVPLATFORM_IPROJECT_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include <KSharedConfig>
 

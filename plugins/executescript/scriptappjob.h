@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_SCRIPTAPPJOB_H
 #define KDEVPLATFORM_PLUGIN_SCRIPTAPPJOB_H
 
-#include <QtCore/QProcess>
+#include <QProcess>
 #include <outputview/outputjob.h>
 
 class ExecuteScriptPlugin;

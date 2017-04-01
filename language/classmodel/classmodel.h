@@ -23,7 +23,7 @@
 #ifndef KDEVPLATFORM_CLASSMODEL_H
 #define KDEVPLATFORM_CLASSMODEL_H
 
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 #include "classmodelnode.h"
 
 #include <language/languageexport.h>

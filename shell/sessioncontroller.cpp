@@ -20,9 +20,9 @@ Boston, MA 02110-1301, USA.
 
 #include "sessioncontroller.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QHash>
-#include <QtCore/QStringList>
+#include <QDir>
+#include <QHash>
+#include <QStringList>
 #include <QAction>
 #include <QApplication>
 #include <QDBusConnection>

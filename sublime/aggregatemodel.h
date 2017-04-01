@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_SUBLIMEAGGREGATEMODEL_H
 #define KDEVPLATFORM_SUBLIMEAGGREGATEMODEL_H
 
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 #include "sublimeexport.h"
 
 class QStandardItemModel;

@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_IDOCUMENTCONTROLLER_H
 #define KDEVPLATFORM_IDOCUMENTCONTROLLER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QObject>
+#include <QList>
 #include <QUrl>
 
 #include <ktexteditor/cursor.h>

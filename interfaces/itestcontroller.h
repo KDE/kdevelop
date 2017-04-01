@@ -22,9 +22,9 @@
 
 #include "interfacesexport.h"
 
-#include <QtCore/QList>
-#include <QtCore/QObject>
-#include <QtCore/QHash>
+#include <QList>
+#include <QObject>
+#include <QHash>
 #include <QString>
 
 class QStringList;

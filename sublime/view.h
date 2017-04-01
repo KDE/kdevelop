@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_SUBLIMEVIEW_H
 #define KDEVPLATFORM_SUBLIMEVIEW_H
 
-#include <QtCore/QObject>
-#include <QtCore/QMetaType>
+#include <QObject>
+#include <QMetaType>
 
 #include "sublimeexport.h"
 

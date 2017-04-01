@@ -14,7 +14,7 @@
 #include <QTextBrowser>
 #include <QRegExp>
 #include <KMessageBox>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 #include "cvsplugin.h"
 #include "cvsjob.h"

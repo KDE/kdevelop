@@ -20,9 +20,9 @@
 #include "commandexecutor.h"
 
 #include "processlinemaker.h"
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
-#include <QtCore/QString>
+#include <QMap>
+#include <QStringList>
+#include <QString>
 #include <kprocess.h>
 #include <kshell.h>
 

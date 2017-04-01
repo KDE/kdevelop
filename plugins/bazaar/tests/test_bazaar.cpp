@@ -29,10 +29,10 @@
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
+#include <QDir>
+#include <QFileInfo>
 #include <QUrl>
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #include <KIO/DeleteJob>
 

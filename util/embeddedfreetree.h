@@ -21,7 +21,7 @@
 
 #include "kdevvarlengtharray.h"
 
-#include <QtCore/QPair>
+#include <QPair>
 
 #include <iostream>
 #include <stdlib.h>

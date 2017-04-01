@@ -22,8 +22,8 @@
 #ifndef KDEVPLATFORM_FILTEREDITEM_H
 #define KDEVPLATFORM_FILTEREDITEM_H
 
-#include <QtCore/QMetaType>
-#include <QtCore/QString>
+#include <QMetaType>
+#include <QString>
 #include <QUrl>
 
 #include <outputview/outputviewexport.h>

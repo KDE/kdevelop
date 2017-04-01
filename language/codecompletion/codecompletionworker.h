@@ -23,7 +23,7 @@
 #ifndef KDEVPLATFORM_CODECOMPLETIONWORKER_H
 #define KDEVPLATFORM_CODECOMPLETIONWORKER_H
 
-#include <QtCore/QList>
+#include <QList>
 
 #include <language/languageexport.h>
 #include "../duchain/duchainpointer.h"

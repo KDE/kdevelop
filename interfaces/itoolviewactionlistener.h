@@ -22,7 +22,7 @@
 
 #include "interfacesexport.h"
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop {
 

@@ -20,7 +20,7 @@
  ***************************************************************************/
 #include "gitmessagehighlighter.h"
 
-#include <QtCore/QString>
+#include <QString>
 #include <QTextCharFormat>
 #include <QTextEdit>
 #include <KLocalizedString>

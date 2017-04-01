@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_PROJECTMODEL_H
 #define KDEVPLATFORM_PROJECTMODEL_H
 
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 #include <QUrl>
 
 #include "projectexport.h"

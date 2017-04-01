@@ -24,8 +24,8 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_IPLUGINCONTROLLER_H
 #define KDEVPLATFORM_IPLUGINCONTROLLER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QObject>
+#include <QList>
 #include <QVariant>
 
 #include <KPluginMetaData>

@@ -28,7 +28,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/configinterface.h>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 #include <interfaces/isourceformatter.h>
 

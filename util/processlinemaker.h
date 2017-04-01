@@ -22,7 +22,7 @@
 #ifndef _PROCESSLINEMAKER_H_
 #define _PROCESSLINEMAKER_H_
 
-#include <QtCore/QObject>
+#include <QObject>
 #include "utilexport.h"
 
 /**

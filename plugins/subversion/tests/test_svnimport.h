@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_SVNIMPORT_H
 #define KDEVPLATFORM_PLUGIN_SVNIMPORT_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class QTemporaryDir;
 namespace KDevelop

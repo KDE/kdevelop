@@ -21,7 +21,7 @@
 #ifndef BAZAAR_DIFFJOB_H
 #define BAZAAR_DIFFJOB_H
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 #include <vcs/vcsjob.h>
 

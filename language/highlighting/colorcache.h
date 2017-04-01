@@ -22,10 +22,10 @@
 #ifndef KDEVPLATFORM_COLORCACHE_H
 #define KDEVPLATFORM_COLORCACHE_H
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QObject>
+#include <QList>
 #include <QColor>
-#include <QtCore/QPointer>
+#include <QPointer>
 
 #include <language/languageexport.h>
 

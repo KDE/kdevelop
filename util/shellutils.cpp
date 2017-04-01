@@ -21,10 +21,10 @@
 
 #include "shellutils.h"
 #include <QGuiApplication>
-#include <QtCore/QTextStream>
-#include <QtCore/QUrl>
-#include <QtCore/QFile>
-#include <QtCore/QList>
+#include <QTextStream>
+#include <QUrl>
+#include <QFile>
+#include <QList>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <interfaces/icore.h>

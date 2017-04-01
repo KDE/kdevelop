@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/configinterface.h>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KConfigGroup>
 
 #include <interfaces/iplugin.h>

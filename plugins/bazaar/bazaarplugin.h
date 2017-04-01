@@ -21,7 +21,7 @@
 #ifndef BAZAAR_BAZAARPLUGIN_H
 #define BAZAAR_BAZAARPLUGIN_H
 
-#include <QtCore/QVariantList>
+#include <QVariantList>
 
 #include <interfaces/iplugin.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>

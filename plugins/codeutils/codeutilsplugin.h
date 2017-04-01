@@ -23,7 +23,7 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/contextmenuextension.h>
 
-#include <QtCore/QVariant>
+#include <QVariant>
 #include <QLoggingCategory>
 Q_DECLARE_LOGGING_CATEGORY(PLUGIN_CODEUTILS)
 

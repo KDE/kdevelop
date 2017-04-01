@@ -25,8 +25,8 @@
 
 #include <QUrl>
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QString>
+#include <QAbstractItemModel>
+#include <QString>
 
 namespace KDevelop {
 

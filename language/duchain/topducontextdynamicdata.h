@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_TOPDUCONTEXTDYNAMICDATA_H
 #define KDEVPLATFORM_TOPDUCONTEXTDYNAMICDATA_H
 
-#include <QtCore/QVector>
-#include <QtCore/QByteArray>
+#include <QVector>
+#include <QByteArray>
 #include "problem.h"
 
 class QFile;

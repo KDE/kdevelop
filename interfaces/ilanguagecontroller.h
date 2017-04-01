@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_ILANGUAGECONTROLLER_H
 #define KDEVPLATFORM_ILANGUAGECONTROLLER_H
 
-#include <QtCore/QList>
-#include <QtCore/QObject>
+#include <QList>
+#include <QObject>
 #include <QUrl>
 
 #include "interfacesexport.h"

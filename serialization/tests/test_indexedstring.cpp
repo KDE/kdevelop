@@ -26,7 +26,7 @@
 
 #include <language/util/kdevhash.h>
 #include <serialization/indexedstring.h>
-#include <QtTest/QTest>
+#include <QTest>
 
 #include <utility>
 

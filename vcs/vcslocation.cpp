@@ -20,7 +20,7 @@
 
 #include "vcslocation.h"
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 namespace KDevelop
 {

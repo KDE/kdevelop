@@ -24,8 +24,8 @@
 #ifndef KDEVPLATFORM_CODEHIGHLIGHTING_H
 #define KDEVPLATFORM_CODEHIGHLIGHTING_H
 
-#include <QtCore/QObject>
-#include <QtCore/QHash>
+#include <QObject>
+#include <QHash>
 
 #include <ktexteditor/attribute.h>
 #include <ktexteditor/movingrange.h>

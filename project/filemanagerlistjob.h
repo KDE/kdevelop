@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_FILEMANAGERLISTJOB_H
 
 #include <KIO/Job>
-#include <QtCore/QQueue>
+#include <QQueue>
 
 // uncomment to time imort jobs
 // #define TIME_IMPORT_JOB

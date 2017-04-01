@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_DUCHAINCHANGESET_H
 #define KDEVPLATFORM_DUCHAINCHANGESET_H
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 #include "../duchain/identifier.h"
 #include "../duchain/topducontext.h"

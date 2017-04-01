@@ -25,7 +25,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_GIT_INIT_H
 #define KDEVPLATFORM_PLUGIN_GIT_INIT_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class GitPlugin;
 

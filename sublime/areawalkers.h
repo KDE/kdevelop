@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_SUBLIMEAREAWALKERS_H
 #define KDEVPLATFORM_SUBLIMEAREAWALKERS_H
 
-#include <QtCore/QList>
+#include <QList>
 
 
 namespace Sublime {

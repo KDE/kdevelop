@@ -19,7 +19,7 @@ Boston, MA 02110-1301, USA.
 
 #include "session.h"
 
-#include <QtCore/QDir>
+#include <QDir>
 #include <QUrl>
 
 #include <KConfigGroup>

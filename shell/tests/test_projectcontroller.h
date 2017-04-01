@@ -20,8 +20,8 @@
 #ifndef KDEVELOP_SHELL_TEST_PROJECTCONTROLLER_H
 #define KDEVELOP_SHELL_TEST_PROJECTCONTROLLER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QDir>
+#include <QObject>
+#include <QDir>
 
 #include "util/path.h"
 

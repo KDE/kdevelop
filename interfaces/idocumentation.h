@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_IDOCUMENTATION_H
 #define KDEVPLATFORM_IDOCUMENTATION_H
 
-#include <QtCore/QString>
+#include <QString>
 #include <QExplicitlySharedDataPointer>
 #include "interfacesexport.h"
 #include <util/ksharedobject.h>

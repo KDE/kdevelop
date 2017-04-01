@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_TEST_SESSIONCONTROLLER_H
 #define KDEVPLATFORM_TEST_SESSIONCONTROLLER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop
 {

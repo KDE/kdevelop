@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_IEXECUTEPLUGIN_H
 #define KDEVPLATFORM_PLUGIN_IEXECUTEPLUGIN_H
 
-#include <QtCore/QString>
+#include <QString>
 
 namespace KDevelop
 {

@@ -28,7 +28,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_TEST_BAZAAR_H
 #define KDEVPLATFORM_PLUGIN_TEST_BAZAAR_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class BazaarPlugin;
 

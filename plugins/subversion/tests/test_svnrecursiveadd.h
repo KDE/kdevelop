@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_SVNRECURSIVEADD_H
 #define KDEVPLATFORM_PLUGIN_SVNRECURSIVEADD_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestSvnRecursiveAdd
             : public QObject

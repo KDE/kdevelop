@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "ibuddydocumentfinder.h"
 
-#include <QtCore/QMap>
+#include <QMap>
 
 namespace KDevelop {
 

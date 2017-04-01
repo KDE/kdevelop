@@ -21,7 +21,7 @@
 #include <QStandardItemModel>
 #include <QItemDelegate>
 #include <QTreeView>
-#include <QtTest/QTest>
+#include <QTest>
 
 #include <KLocalizedString>
 

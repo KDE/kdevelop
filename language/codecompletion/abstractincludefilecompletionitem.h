@@ -29,7 +29,7 @@
 #include "../duchain/duchainlock.h"
 #include "codecompletionmodel.h"
 
-#include "QtCore/QDebug"
+#include <QDebug>
 
 namespace KDevelop {
 

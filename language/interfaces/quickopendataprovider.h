@@ -21,9 +21,9 @@
 #ifndef KDEVPLATFORM_QUICKOPENDATAPROVIDER_H
 #define KDEVPLATFORM_QUICKOPENDATAPROVIDER_H
 
-#include <QtCore/QList>
-#include <QtCore/QObject>
-#include <QtCore/QSet>
+#include <QList>
+#include <QObject>
+#include <QSet>
 #include <QExplicitlySharedDataPointer>
 
 #include <language/languageexport.h>

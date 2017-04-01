@@ -20,8 +20,8 @@
 #ifndef KDEVPLATFORM_COMMANDEXECUTOR_H
 #define KDEVPLATFORM_COMMANDEXECUTOR_H
 
-#include <QtCore/QObject>
-#include <QtCore/QProcess>
+#include <QObject>
+#include <QProcess>
 #include "utilexport.h"
 
 namespace KDevelop

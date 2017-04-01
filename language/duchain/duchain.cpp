@@ -21,13 +21,13 @@
 #include "duchainlock.h"
 
 #include <QApplication>
-#include <QtCore/QHash>
-#include <QtCore/QMultiMap>
-#include <QtCore/QReadWriteLock>
-#include <QtCore/QAtomicInt>
-#include <QtCore/QThread>
-#include <QtCore/QWaitCondition>
-#include <QtCore/QMutex>
+#include <QHash>
+#include <QMultiMap>
+#include <QReadWriteLock>
+#include <QAtomicInt>
+#include <QThread>
+#include <QWaitCondition>
+#include <QMutex>
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>

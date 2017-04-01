@@ -24,7 +24,7 @@
 #include <interfaces/iprojectcontroller.h>
 
 #include <QIcon>
-#include <QtTest/QTest>
+#include <QTest>
 
 QTEST_MAIN(BenchQuickOpen);
 

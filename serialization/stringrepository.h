@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_STRINGREPOSITORY_H
 #define KDEVPLATFORM_STRINGREPOSITORY_H
 
-#include <QtCore/QString>
+#include <QString>
 
 #include "itemrepository.h"
 #include "indexedstring.h"

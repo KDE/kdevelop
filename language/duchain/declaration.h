@@ -20,8 +20,8 @@
 #ifndef KDEVPLATFORM_DECLARATION_H
 #define KDEVPLATFORM_DECLARATION_H
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
+#include <QList>
+#include <QMap>
 
 #include "types/abstracttype.h"
 #include "duchainbase.h"

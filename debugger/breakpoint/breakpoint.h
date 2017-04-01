@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_BREAKPOINT_H
 #define KDEVPLATFORM_BREAKPOINT_H
 
-#include <QtCore/QSet>
+#include <QSet>
 #include <QUrl>
 
 #include <debugger/debuggerexport.h>

@@ -26,7 +26,7 @@
 #include "ioutputviewmodel.h"
 #include "ifilterstrategy.h"
 
-#include <QtCore/QAbstractListModel>
+#include <QAbstractListModel>
 #include <QUrl>
 
 

@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_USESCOLLECTOR_H
 #define KDEVPLATFORM_USESCOLLECTOR_H
 
-#include <QtCore/QObject>
-#include <QtCore/QSet>
+#include <QObject>
+#include <QSet>
 #include <language/duchain/topducontext.h>
 #include <serialization/indexedstring.h>
 

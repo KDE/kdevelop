@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_CODECOMPLETION_H
 #define KDEVPLATFORM_CODECOMPLETION_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <language/languageexport.h>
 
 namespace KTextEditor { class Document; class View; class CodeCompletionModel; 

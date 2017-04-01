@@ -20,7 +20,7 @@
 #include "declaration.h"
 #include "declarationdata.h"
 
-#include <QtCore/QByteArray>
+#include <QByteArray>
 
 #include <limits>
 

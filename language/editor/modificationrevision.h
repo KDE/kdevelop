@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_MODIFICATIONREVISION_H
 #define KDEVPLATFORM_MODIFICATIONREVISION_H
 
-#include <QtCore/QDateTime>
+#include <QDateTime>
 #include <language/languageexport.h>
 #include "../backgroundparser/documentchangetracker.h"
 

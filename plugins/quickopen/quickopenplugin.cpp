@@ -35,8 +35,8 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <kparts/mainwindow.h>
-#include <KConfigCore/ksharedconfig.h>
-#include <KConfigCore/KConfigGroup>
+#include <KSharedConfig>
+#include <KConfigGroup>
 #include <kactioncollection.h>
 #include <QAction>
 

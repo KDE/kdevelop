@@ -11,7 +11,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_TEST_CVS_H
 #define KDEVPLATFORM_PLUGIN_TEST_CVS_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class CvsProxy;
 

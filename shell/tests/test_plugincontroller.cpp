@@ -22,8 +22,8 @@
 #include "nonguiinterfaceplugin.h"
 #include "testfilepaths.h"
 
-#include <QtTest/QSignalSpy>
-#include <QtTest/QTest>
+#include <QSignalSpy>
+#include <QTest>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

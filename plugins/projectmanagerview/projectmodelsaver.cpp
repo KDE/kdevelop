@@ -24,7 +24,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 
-#include <QtCore/QStringList>
+#include <QStringList>
 #include <QAbstractProxyModel>
 
 namespace KDevelop

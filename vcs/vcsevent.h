@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_VCSEVENT_H
 #define KDEVPLATFORM_VCSEVENT_H
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 #include "vcsexport.h"
 

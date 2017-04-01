@@ -22,7 +22,7 @@
 #ifndef PERFORCEPLUGIN_TEST_H
 #define PERFORCEPLUGIN_TEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class PerforcePlugin;
 

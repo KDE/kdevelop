@@ -24,15 +24,15 @@
 #include <QMenu>
 #include <QVBoxLayout>
 #include <QUrl>
-#include <QtWidgets/QFileDialog>
+#include <QFileDialog>
 
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/StoredTransferJob>
-#include <KIOFileWidgets/KFilePlacesModel>
+#include <KLocalizedString>
+#include <KIO/StoredTransferJob>
+#include <KFilePlacesModel>
 #include <KParts/MainWindow>
-#include <KXmlGui/KActionCollection>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KActionMenu>
+#include <KActionCollection>
+#include <KMessageBox>
+#include <KActionMenu>
 #include <KJobWidgets>
 #include <KConfigGroup>
 

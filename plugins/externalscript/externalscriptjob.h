@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
 #define KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
 
-#include <QtCore/QProcess>
+#include <QProcess>
 #include <outputview/outputjob.h>
 
 #include "externalscriptitem.h"

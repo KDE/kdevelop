@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_SUBLIMESUBLIMEDEFS_H
 #define KDEVPLATFORM_SUBLIMESUBLIMEDEFS_H
 
-#include <QtCore/Qt>
-#include <QtCore/QFlags>
+#include <Qt>
+#include <QFlags>
 
 #include "sublimeexport.h"
 

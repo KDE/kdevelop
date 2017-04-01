@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_IDOCUMENTATIONPROVIDERPROVIDER_H
 #define KDEVPLATFORM_IDOCUMENTATIONPROVIDERPROVIDER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include "interfacesexport.h"
 
 namespace KDevelop

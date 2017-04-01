@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_TEST_PLUGINCONTROLLER_H
 #define KDEVPLATFORM_TEST_PLUGINCONTROLLER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop
 {

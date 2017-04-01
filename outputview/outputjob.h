@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_OUTPUTJOB_H
 
 #include <QIcon>
-#include <QtCore/QPointer>
+#include <QPointer>
 
 #include <kjob.h>
 

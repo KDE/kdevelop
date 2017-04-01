@@ -20,11 +20,11 @@
 #ifndef KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 #define KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
-#include <KIOCore/KFileItem>
-#include <KIOFileWidgets/KDirOperator>
-#include <KIOFileWidgets/KUrlNavigator>
+#include <KFileItem>
+#include <KDirOperator>
+#include <KUrlNavigator>
 
 class KActionCollection;
 class QAction;

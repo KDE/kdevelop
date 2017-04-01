@@ -15,7 +15,7 @@
 #ifndef __SAFETYCOUNTER_H__
 #define __SAFETYCOUNTER_H__
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 struct SafetyCounter {
   int safetyCounter;

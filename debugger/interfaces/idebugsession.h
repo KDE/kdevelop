@@ -23,7 +23,7 @@
 
 #include <debugger/debuggerexport.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QUrl>
 
 namespace KDevelop {

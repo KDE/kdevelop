@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_SESSION_H
 
 #include "shellexport.h"
-#include <QtCore/QUuid>
+#include <QUuid>
 #include <QUrl>
 #include <interfaces/isession.h>
 

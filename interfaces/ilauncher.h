@@ -22,7 +22,7 @@
 
 #include "interfacesexport.h"
 
-#include <QtCore/QList>
+#include <QList>
 
 class KJob;
 class QString;

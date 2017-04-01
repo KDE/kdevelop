@@ -19,7 +19,7 @@
 #ifndef ABSTRACTITEMREPOSITORY_H
 #define ABSTRACTITEMREPOSITORY_H
 
-#include <QtCore/QMutex>
+#include <QMutex>
 
 #include "serializationexport.h"
 

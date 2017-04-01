@@ -29,7 +29,7 @@
 #include <serialization/indexedstring.h>
 
 #include <algorithm>
-#include <QtTest/QTest>
+#include <QTest>
 
 QTEST_GUILESS_MAIN(TestItemRepository);
 

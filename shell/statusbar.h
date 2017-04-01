@@ -20,8 +20,8 @@
 #ifndef KDEVPLATFORM_STATUSBAR_H
 #define KDEVPLATFORM_STATUSBAR_H
 
-#include <QtCore/QTime>
-#include <QtCore/QMap>
+#include <QTime>
+#include <QMap>
 #include <QStatusBar>
 
 class QSignalMapper;

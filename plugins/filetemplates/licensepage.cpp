@@ -17,10 +17,11 @@
 */
 
 #include "licensepage.h"
-#include <KConfigCore/ksharedconfig.h>
+
 #include "ui_licensechooser.h"
 #include "debug.h"
 
+#include <KSharedConfig>
 #include <KLocalizedString>
 #include <KEMailSettings>
 #include <KMessageBox>

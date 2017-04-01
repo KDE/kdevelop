@@ -20,9 +20,9 @@
 
 #include "vcsdiff.h"
 
-#include <QtCore/QString>
-#include <QtCore/QByteArray>
-#include <QtCore/QHash>
+#include <QString>
+#include <QByteArray>
+#include <QHash>
 
 namespace KDevelop
 {

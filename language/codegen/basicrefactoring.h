@@ -23,7 +23,7 @@
 #define BASICREFACTORING_H_
 
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QSharedPointer>
 #include <language/languageexport.h>
 #include <language/codegen/documentchangeset.h>

@@ -14,7 +14,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_REPLACETEST_H
 #define KDEVPLATFORM_PLUGIN_REPLACETEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QList>
 #include <QMetaType>
 #include <QPair>

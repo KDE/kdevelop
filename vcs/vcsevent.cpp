@@ -19,9 +19,9 @@
  ***************************************************************************/
 
 #include "vcsevent.h"
-#include <QtCore/QString>
-#include <QtCore/QList>
-#include <QtCore/QDateTime>
+#include <QString>
+#include <QList>
+#include <QDateTime>
 #include <QVariant>
 
 #include "vcsrevision.h"

@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_TEST_STANDARDOUTPUTVIEW_H
 #define KDEVPLATFORM_PLUGIN_TEST_STANDARDOUTPUTVIEW_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include <shell/uicontroller.h>
 

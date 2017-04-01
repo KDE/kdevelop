@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_DUCHAIN_H
 #define KDEVPLATFORM_DUCHAIN_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "topducontext.h"
 #include "parsingenvironment.h"

@@ -21,7 +21,7 @@
 #ifndef BAZAAR_BAZAARUTILS_H
 #define BAZAAR_BAZAARUTILS_H
 
-#include <QtCore/QDir>
+#include <QDir>
 #include <QUrl>
 
 #include <vcs/vcsevent.h>

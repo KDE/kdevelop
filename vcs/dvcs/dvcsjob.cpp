@@ -27,10 +27,10 @@
 #include "dvcsjob.h"
 #include "../debug.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QList>
-#include <QtCore/QStringList>
-#include <QtCore/QDir>
+#include <QFile>
+#include <QList>
+#include <QStringList>
+#include <QDir>
 #include <QUrl>
 
 #include <KLocalizedString>

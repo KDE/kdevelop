@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_QUICKOPEN_FILTER_H
 #define KDEVPLATFORM_QUICKOPEN_FILTER_H
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 #include "abbreviations.h"
 

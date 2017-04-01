@@ -23,9 +23,9 @@
 #ifndef KDEVPLATFORM_CODECOMPLETIONMODEL_H
 #define KDEVPLATFORM_CODECOMPLETIONMODEL_H
 
-#include <QtCore/QPair>
-#include <QtCore/QMap>
-#include <QtCore/QPointer>
+#include <QPair>
+#include <QMap>
+#include <QPointer>
 #include <QExplicitlySharedDataPointer>
 #include <QUrl>
 

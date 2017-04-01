@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_ICORE_H
 #define KDEVPLATFORM_ICORE_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include "interfacesexport.h"
 
 #include "isessionlock.h"

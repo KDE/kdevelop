@@ -24,7 +24,7 @@
 #define PROBLEMMODEL_H
 
 #include <shell/shellexport.h>
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 #include <shell/problem.h>
 
 struct ProblemModelPrivate;

@@ -18,10 +18,10 @@
 
 #include "itemrepositoryregistry.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QProcessEnvironment>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
+#include <QDir>
+#include <QProcessEnvironment>
+#include <QCoreApplication>
+#include <QDebug>
 #include <QDataStream>
 #include <QStandardPaths>
 

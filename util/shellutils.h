@@ -23,7 +23,7 @@
 #define SHELLUTILS_H
 
 #include "utilexport.h"
-#include <QtCore/QList>
+#include <QList>
 
 class QString;
 class QUrl;

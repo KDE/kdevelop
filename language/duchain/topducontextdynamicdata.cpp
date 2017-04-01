@@ -21,8 +21,8 @@
 #include "topducontextdynamicdata.h"
 
 #include <typeinfo>
-#include <QtCore/QFile>
-#include <QtCore/QByteArray>
+#include <QFile>
+#include <QByteArray>
 
 #include "declaration.h"
 #include "declarationdata.h"

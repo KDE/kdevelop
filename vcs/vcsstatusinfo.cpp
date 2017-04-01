@@ -20,7 +20,7 @@
 
 #include "vcsstatusinfo.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <QUrl>
 
 namespace KDevelop

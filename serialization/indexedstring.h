@@ -21,7 +21,7 @@
 
 //krazy:excludeall=dpointer,inline
 
-#include <QtCore/QMetaType>
+#include <QMetaType>
 #include <QUrl>
 
 #include "referencecounting.h"

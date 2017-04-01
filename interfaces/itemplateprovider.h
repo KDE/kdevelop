@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_ITEMPLATEPROVIDER_H
 #define KDEVPLATFORM_ITEMPLATEPROVIDER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include "interfacesexport.h"
 
 class QIcon;

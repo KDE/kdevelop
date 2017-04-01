@@ -30,8 +30,8 @@
 #include "../session.h"
 #include <QDebug>
 #include <QFileInfo>
-#include <QtTest/QSignalSpy>
-#include <QtTest/QTest>
+#include <QSignalSpy>
+#include <QTest>
 
 using namespace KDevelop;
 

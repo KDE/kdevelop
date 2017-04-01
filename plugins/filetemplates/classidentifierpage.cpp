@@ -19,7 +19,7 @@
 #include "classidentifierpage.h"
 #include "language/duchain/identifier.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <kwidgetsaddons_version.h>
 
 #include "ui_newclass.h"

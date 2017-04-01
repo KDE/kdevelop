@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_SUBLIMEDOCUMENT_H
 #define KDEVPLATFORM_SUBLIMEDOCUMENT_H
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QObject>
+#include <QList>
 
 
 #include "sublimeexport.h"

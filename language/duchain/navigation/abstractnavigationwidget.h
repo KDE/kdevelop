@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_ABSTRACTNAVIGATIONWIDGET_H
 
 #include <language/languageexport.h>
-#include <QtCore/QPointer>
+#include <QPointer>
 #include <QWidget>
 
 #include "../../interfaces/quickopendataprovider.h"

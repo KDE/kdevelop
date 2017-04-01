@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_IVARIABLECONTROLLER_H
 #define KDEVPLATFORM_IVARIABLECONTROLLER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <KTextEditor/Range>
 
 #include "idebugsession.h"

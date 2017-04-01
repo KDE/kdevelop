@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_PLUGIN_EXECUTEPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <QVariant>
 #include "iexecuteplugin.h"
 
 class QUrl;

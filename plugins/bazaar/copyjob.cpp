@@ -20,7 +20,7 @@
 
 #include "copyjob.h"
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 #include <KIO/CopyJob>
 

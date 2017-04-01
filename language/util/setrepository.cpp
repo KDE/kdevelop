@@ -14,13 +14,13 @@
 #include "setrepository.h"
 #include "util/debug.h"
 #include <list>
-#include <QtCore/QString>
 #include <util/kdevvarlengtharray.h>
 #include <iostream>
 #include <limits>
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
-#include <QtCore/QMutex>
+#include <QString>
+#include <QMutex>
 #include <algorithm>
 
 //#define DEBUG_SETREPOSITORY

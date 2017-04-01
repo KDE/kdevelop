@@ -30,7 +30,7 @@
 #define KDEVPLATFORM_TYPEPOINTER_H
 
 
-#include <QtCore/QExplicitlySharedDataPointer>
+#include <QExplicitlySharedDataPointer>
 
 namespace KDevelop {
 

@@ -20,7 +20,7 @@
 
 #include "test_ktexteditorpluginintegration.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QLoggingCategory>
 #include <QSignalSpy>
 

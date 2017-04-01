@@ -19,7 +19,7 @@
 
 #include "identifier.h"
 
-#include <QtCore/QHash>
+#include <QHash>
 #include "stringhelpers.h"
 #include "appendedlist_static.h"
 #include "serialization/itemrepository.h"

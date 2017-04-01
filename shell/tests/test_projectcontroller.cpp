@@ -20,8 +20,8 @@
 #include "test_projectcontroller.h"
 
 #include <QFile>
-#include <QtTest/QSignalSpy>
-#include <QtTest/QTest>
+#include <QSignalSpy>
+#include <QTest>
 
 #include <KAboutData>
 

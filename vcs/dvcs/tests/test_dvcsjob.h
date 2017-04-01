@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_TEST_DVCSJOB_H
 #define KDEVPLATFORM_TEST_DVCSJOB_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestDVcsJob: public QObject
 {

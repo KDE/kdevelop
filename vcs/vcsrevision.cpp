@@ -20,10 +20,10 @@
 
 #include "vcsrevision.h"
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QMap>
-#include <QtCore/QDateTime>
+#include <QString>
+#include <QStringList>
+#include <QMap>
+#include <QDateTime>
 
 
 namespace KDevelop

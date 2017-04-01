@@ -19,7 +19,7 @@
 
 #include "test_testcontroller.h"
 #include <testcontroller.h>
-#include <QtTest/QTest>
+#include <QTest>
 #include <QSignalSpy>
 
 #include <tests/autotestshell.h>

@@ -22,9 +22,9 @@
 
 #include <functional>
 
-#include <QtCore/QTimer>
-#include <QtCore/QDateTime>
-#include <QtCore/QDir>
+#include <QTimer>
+#include <QDateTime>
+#include <QDir>
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>

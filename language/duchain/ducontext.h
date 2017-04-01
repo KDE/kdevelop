@@ -20,10 +20,10 @@
 #ifndef KDEVPLATFORM_DUCONTEXT_H
 #define KDEVPLATFORM_DUCONTEXT_H
 
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtCore/QSet>
-#include <QtCore/QVector>
+#include <QHash>
+#include <QList>
+#include <QSet>
+#include <QVector>
 
 #include <util/kdevvarlengtharray.h>
 

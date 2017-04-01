@@ -12,8 +12,8 @@
 
 #include <QAction>
 #include <QMenu>
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
+#include <QFileInfo>
+#include <QDir>
 
 #include <KParts/PartManager>
 #include <KParts/Part>

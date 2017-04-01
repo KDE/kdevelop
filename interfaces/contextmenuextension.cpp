@@ -20,7 +20,7 @@
 
 #include "contextmenuextension.h"
 
-#include <QtCore/QMap>
+#include <QMap>
 
 #include <QMenu>
 #include <QAction>

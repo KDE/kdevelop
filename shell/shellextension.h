@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_SHELLEXTENSION_H
 #define KDEVPLATFORM_SHELLEXTENSION_H
 
-#include <QtCore/QString>
+#include <QString>
 #include "shellexport.h"
 
 namespace KDevelop

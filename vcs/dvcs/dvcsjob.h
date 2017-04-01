@@ -28,7 +28,7 @@
 #ifndef KDEVPLATFORM_DVCS_JOB_H
 #define KDEVPLATFORM_DVCS_JOB_H
 
-#include <QtCore/QVariant>
+#include <QVariant>
 #include <KProcess>
 
 #include <vcs/vcsexport.h>

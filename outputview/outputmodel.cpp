@@ -29,8 +29,8 @@
 #include <interfaces/idocumentcontroller.h>
 #include <util/kdevstringhandler.h>
 
-#include <QtCore/QStringList>
-#include <QtCore/QTimer>
+#include <QStringList>
+#include <QTimer>
 #include <QThread>
 #include <QFont>
 #include <QFontDatabase>

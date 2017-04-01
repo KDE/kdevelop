@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_IDEBUGCONTROLLER_H
 #define KDEVPLATFORM_IDEBUGCONTROLLER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include "interfacesexport.h"
 
 namespace KDevelop {

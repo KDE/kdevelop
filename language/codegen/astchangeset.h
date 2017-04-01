@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_ASTCHANGESET_H
 #define KDEVPLATFORM_ASTCHANGESET_H
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 namespace KDevelop {
 

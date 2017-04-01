@@ -27,7 +27,7 @@
 #include <tests/autotestshell.h>
 
 #include <utility>
-#include <QtTest/QTest>
+#include <QTest>
 
 QTEST_GUILESS_MAIN(TestIdentifier);
 

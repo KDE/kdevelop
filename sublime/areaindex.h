@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_SUBLIMEAREAINDEX_H
 #define KDEVPLATFORM_SUBLIMEAREAINDEX_H
 
-#include <QtCore/Qt>
-#include <QtCore/QList>
+#include <Qt>
+#include <QList>
 
 #include "sublimeexport.h"
 

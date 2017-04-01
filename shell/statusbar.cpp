@@ -22,8 +22,8 @@
 #include "progresswidget/progressmanager.h"
 #include "progresswidget/progressdialog.h"
 
-#include <QtCore/QTimer>
-#include <QtCore/QSignalMapper>
+#include <QTimer>
+#include <QSignalMapper>
 
 #include <KColorScheme>
 #include <KSqueezedTextLabel>

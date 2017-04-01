@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_SUBLIMECONTROLLER_H
 #define KDEVPLATFORM_SUBLIMECONTROLLER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "sublimedefs.h"
 #include "sublimeexport.h"

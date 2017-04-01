@@ -25,7 +25,7 @@
 //Needed first as it provides a hash-function for QHash
 #include "vcslocation.h"
 
-#include <QtCore/QHash>
+#include <QHash>
 
 #include "vcsexport.h"
 

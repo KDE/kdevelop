@@ -25,7 +25,7 @@
 #define KDEVPLATFORM_PLUGIN_PROBLEMREPORTERPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <QVariant>
 
 #include <serialization/indexedstring.h>
 #include <language/duchain/topducontext.h>

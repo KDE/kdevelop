@@ -21,9 +21,9 @@
 #ifndef BAZAAR_BZRANNOTATEJOB_H
 #define BAZAAR_BZRANNOTATEJOB_H
 
-#include <QtCore/QStringList>
-#include <QtCore/QHash>
-#include <QtCore/QDir>
+#include <QStringList>
+#include <QHash>
+#include <QDir>
 #include <QUrl>
 
 #include <vcs/vcsevent.h>

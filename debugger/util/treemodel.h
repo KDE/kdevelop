@@ -22,11 +22,11 @@
 #ifndef KDEVPLATFORM_TREEMODEL_H
 #define KDEVPLATFORM_TREEMODEL_H
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QModelIndex>
-#include <QtCore/QVariant>
-#include <QtCore/QVector>
-#include <QtCore/QString>
+#include <QAbstractItemModel>
+#include <QModelIndex>
+#include <QVariant>
+#include <QVector>
+#include <QString>
 
 #include <debugger/debuggerexport.h>
 

@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_SUBLIMEAREA_H
 #define KDEVPLATFORM_SUBLIMEAREA_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "sublimeexport.h"
 

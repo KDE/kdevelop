@@ -19,7 +19,7 @@
 
 #include "test_projectmodel.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QSortFilterProxyModel>
 #include <QMimeType>
 #include <QMimeDatabase>

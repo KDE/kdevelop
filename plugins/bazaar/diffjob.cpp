@@ -20,7 +20,7 @@
 
 #include "diffjob.h"
 
-#include <QtCore/QDir>
+#include <QDir>
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsdiff.h>

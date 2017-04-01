@@ -21,7 +21,7 @@
 
 #include <language/languageexport.h>
 
-#include <QtCore/QChar>
+#include <QChar>
 
 class QByteArray;
 class QString;

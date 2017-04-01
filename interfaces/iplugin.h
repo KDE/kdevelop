@@ -23,7 +23,7 @@
 #ifndef KDEVPLATFORM_IPLUGIN_H
 #define KDEVPLATFORM_IPLUGIN_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include <KXMLGUIClient>
 

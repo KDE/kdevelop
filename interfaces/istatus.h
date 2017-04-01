@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_ISTATUS_H
 
 #include "interfacesexport.h"
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop {
 

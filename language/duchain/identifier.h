@@ -20,8 +20,8 @@
 #ifndef KDEVPLATFORM_IDENTIFIER_H
 #define KDEVPLATFORM_IDENTIFIER_H
 
-#include <QtCore/QList>
-#include <QtCore/QMetaType>
+#include <QList>
+#include <QMetaType>
 #include <util/kdevvarlengtharray.h>
 
 #include <language/languageexport.h>

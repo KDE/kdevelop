@@ -15,7 +15,7 @@
 #define KDEVPLATFORM_SETREPOSITORY_H
 
 #include "basicsetrepository.h"
-#include <QtCore/QMutex>
+#include <QMutex>
 #include <list>
 
 /**

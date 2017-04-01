@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_PLUGIN_TESTVIEWPLUGIN_H
 
 #include "interfaces/iplugin.h"
-#include <QtCore/QVariantList>
+#include <QVariantList>
 
 class TestToolViewFactory;
 

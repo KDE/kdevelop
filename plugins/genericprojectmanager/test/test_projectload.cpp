@@ -19,7 +19,7 @@
 
 #include "test_projectload.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QSignalSpy>
 #include <QProcess>
 #include <QTemporaryDir>

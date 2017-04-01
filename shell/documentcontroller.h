@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_DOCUMENTCONTROLLER_H
 #define KDEVPLATFORM_DOCUMENTCONTROLLER_H
 
-#include <QtCore/QList>
+#include <QList>
 
 #include <interfaces/idocumentcontroller.h>
 

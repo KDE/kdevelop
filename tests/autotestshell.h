@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_AUTOTESTSHELL_H
 #define KDEVPLATFORM_AUTOTESTSHELL_H
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 #include "testsexport.h"
 #include <shell/shellextension.h>

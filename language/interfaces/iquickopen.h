@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_IQUICKOPEN_H
 #define KDEVPLATFORM_IQUICKOPEN_H
 
-#include <QtCore/QSet>
+#include <QSet>
 
 #include <QLineEdit>
 

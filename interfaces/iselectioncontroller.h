@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_ISELECTIONCONTROLLER_H
 #define KDEVPLATFORM_ISELECTIONCONTROLLER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "interfacesexport.h"
 

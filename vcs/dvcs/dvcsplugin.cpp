@@ -28,8 +28,8 @@
 #include "dvcsplugin.h"
 
 #include <QMenu>
-#include <QtCore/QFileInfo>
-#include <QtCore/QString>
+#include <QFileInfo>
+#include <QString>
 
 #include <KLocalizedString>
 #include <KParts/MainWindow>

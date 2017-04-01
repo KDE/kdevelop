@@ -22,9 +22,9 @@
 
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/templaterenderer.h>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KLocalizedString>
 #include <KUrlRequester>
 
 #include <QSpinBox>

@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_DUCHAINPOINTER_H
 #define KDEVPLATFORM_DUCHAINPOINTER_H
 
-#include <QtCore/QMetaType>
-#include <QtCore/QList>
+#include <QMetaType>
+#include <QList>
 #include <QExplicitlySharedDataPointer>
 #include <language/languageexport.h>
 

@@ -26,7 +26,7 @@
 #include <tests/autotestshell.h>
 #include <QDateTime>
 #include <QVector>
-#include <QtTest/QTest>
+#include <QTest>
 
 #include <unordered_map>
 

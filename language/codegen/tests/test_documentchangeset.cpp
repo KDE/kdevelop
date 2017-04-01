@@ -26,7 +26,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
-#include <QtTest/QTest>
+#include <QTest>
 
 QTEST_GUILESS_MAIN(TestDocumentchangeset);
 

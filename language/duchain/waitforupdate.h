@@ -23,7 +23,7 @@
 
 #include <serialization/indexedstring.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop {
 

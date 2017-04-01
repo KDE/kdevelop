@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_TEST_DOCUMENTCONTROLLER_H
 #define KDEVPLATFORM_TEST_DOCUMENTCONTROLLER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QTemporaryFile>
 #include <QTemporaryDir>
 #include <QUrl>

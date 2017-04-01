@@ -33,7 +33,7 @@
 #include <documentcontroller.h>
 #include <tests/testcore.h>
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QSignalSpy>
 
 using namespace KDevelop;

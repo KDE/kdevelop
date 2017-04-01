@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_SPECIALIZATIONSTORE_H
 #define KDEVPLATFORM_SPECIALIZATIONSTORE_H
 
-#include <QtCore/QHash>
+#include <QHash>
 
 #include "instantiationinformation.h"
 

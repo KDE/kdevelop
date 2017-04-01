@@ -21,8 +21,8 @@
 #ifndef KDEVPLATFORM_CONTEXTMENUEXTENSION_H
 #define KDEVPLATFORM_CONTEXTMENUEXTENSION_H
 
-#include <QtCore/QString>
-#include <QtCore/QList>
+#include <QString>
+#include <QList>
 
 #include "interfacesexport.h"
 
