@@ -22,7 +22,7 @@
 #define GH_RESOURCE_H
 
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class KJob;
 namespace KIO {

@@ -33,7 +33,7 @@
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 
-#include <QtCore/QFile>
+#include <QFile>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

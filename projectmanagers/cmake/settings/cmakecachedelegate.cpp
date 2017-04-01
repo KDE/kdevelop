@@ -24,7 +24,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <KUrlRequester>
-#include <QtCore/QUrl>
+#include <QUrl>
 
 CMakeCacheDelegate::CMakeCacheDelegate(QObject * parent)
     : QItemDelegate(parent)

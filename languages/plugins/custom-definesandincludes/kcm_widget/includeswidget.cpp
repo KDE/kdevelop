@@ -29,7 +29,7 @@
 #include "../ui_includeswidget.h"
 #include "includesmodel.h"
 #include "debugarea.h"
-#include <QtWidgets/QShortcut>
+#include <QShortcut>
 
 IncludesWidget::IncludesWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::IncludesWidget )

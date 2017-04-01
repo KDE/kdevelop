@@ -22,7 +22,7 @@
 #define CMAKEHELPDOCUMENTATION_H
 
 #include <interfaces/idocumentation.h>
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 
 class CMakeContentsModel : public QAbstractItemModel
 {

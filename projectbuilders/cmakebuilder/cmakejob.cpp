@@ -25,7 +25,7 @@
 #include <cmakebuilderconfig.h>
 #include <cmakebuilder.h>
 
-#include <QtCore/QDir>
+#include <QDir>
 
 #include <project/projectmodel.h>
 

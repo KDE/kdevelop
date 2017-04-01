@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
 int main(int argc, char* argv[])
 {

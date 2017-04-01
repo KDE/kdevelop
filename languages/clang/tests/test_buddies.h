@@ -21,8 +21,8 @@
 #ifndef SHELLBUDDYTEST_H
 #define SHELLBUDDYTEST_H
 
-#include <QtCore/QObject>
-#include <QtCore/QDir>
+#include <QObject>
+#include <QDir>
 
 namespace Sublime {
 class View;

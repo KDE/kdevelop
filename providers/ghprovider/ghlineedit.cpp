@@ -19,7 +19,7 @@
 
 
 #include <QKeyEvent>
-#include <QtCore/QTimer>
+#include <QTimer>
 #include <ghlineedit.h>
 
 

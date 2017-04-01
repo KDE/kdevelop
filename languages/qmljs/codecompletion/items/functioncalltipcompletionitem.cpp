@@ -28,7 +28,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/ducontext.h>
 
-#include <QtGui/QIcon>
+#include <QIcon>
 
 using namespace KDevelop;
 using namespace QmlJS;

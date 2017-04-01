@@ -20,8 +20,8 @@
 
 #include "qmakefile.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
+#include <QDir>
+#include <QFileInfo>
 #include <QDebug>
 
 #include "debug.h"

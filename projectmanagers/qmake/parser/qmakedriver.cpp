@@ -20,9 +20,9 @@
 
 #include "qmakedriver.h"
 
-#include <QtCore/QTextStream>
-#include <QtCore/QTextCodec>
-#include <QtCore/QFile>
+#include <QTextStream>
+#include <QTextCodec>
+#include <QFile>
 #include <QDebug>
 
 #include "../debug.h"

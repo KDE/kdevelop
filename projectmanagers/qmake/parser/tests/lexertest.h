@@ -21,7 +21,7 @@
 #ifndef LEXERTEST_H
 #define LEXERTEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QTest>
 
 class LexerTest : public QObject

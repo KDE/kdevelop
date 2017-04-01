@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include <iostream>
-#include <QtCore/QThread>
+#include <QThread>
 #include <unistd.h>
 
 class TestThread : public QThread

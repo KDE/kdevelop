@@ -22,7 +22,7 @@
 #define CMAKEBUILDER_H
 
 #include <interfaces/iplugin.h>
-#include <QtCore/QList>
+#include <QList>
 #include <QVariantList>
 #include <QUrl>
 #include <project/interfaces/iprojectbuilder.h>

@@ -20,7 +20,7 @@
 #ifndef TEST_CUSTOMBUILDSYSTEMPLUGIN_H
 #define TEST_CUSTOMBUILDSYSTEMPLUGIN_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop
 {

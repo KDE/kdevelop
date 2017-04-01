@@ -24,7 +24,7 @@
 
 #include <QList>
 #include <QString>
-#include <QtCore/QVariant>
+#include <QVariant>
 
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>

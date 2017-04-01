@@ -22,9 +22,9 @@
 #include <kio/scheduler.h>
 #include <kio/transferjob.h>
 #include <kio/storedtransferjob.h>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QDebug>
-#include <QtNetwork/QHostInfo>
+#include <QJsonDocument>
+#include <QDebug>
+#include <QHostInfo>
 #include <QDateTime>
 
 #include "debug.h"

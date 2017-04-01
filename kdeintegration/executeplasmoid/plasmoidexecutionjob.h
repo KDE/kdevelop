@@ -21,7 +21,7 @@
 #ifndef PLASMOIDEXECUTIONJOB_H
 #define PLASMOIDEXECUTIONJOB_H
 
-#include <QtCore/QProcess>
+#include <QProcess>
 #include <outputview/outputjob.h>
 
 class ExecutePlasmoidPlugin;

@@ -22,7 +22,7 @@
 #ifndef TEST_CUSTOMMAKE_H
 #define TEST_CUSTOMMAKE_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestCustomMake : public QObject
 {

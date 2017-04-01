@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "qmakejob.h"
-#include <QtCore/QDir>
+#include <QDir>
 #include <QDebug>
 #include <QProcess>
 #include <KLocalizedString>

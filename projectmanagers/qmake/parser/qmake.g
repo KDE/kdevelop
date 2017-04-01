@@ -30,7 +30,7 @@ namespace QMake
     class Lexer;
 }
 
-#include <QtCore/QString>
+#include <QString>
 
 :]
 
@@ -148,7 +148,7 @@ namespace QMake
 [:
 #include "qmakelexer.h"
 #include <QDebug>
-#include <QtCore/QString>
+#include <QString>
 #include "../debug.h"
 
 namespace QMake

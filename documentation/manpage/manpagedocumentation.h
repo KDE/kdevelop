@@ -26,8 +26,8 @@
 #include <interfaces/idocumentation.h>
 
 #include <QUrl>
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 #include <QIODevice>
 
 class QWidget;

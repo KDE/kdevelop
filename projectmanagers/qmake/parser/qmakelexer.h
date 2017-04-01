@@ -22,7 +22,7 @@
 #define QMAKELEXER_H
 
 #include <util/stack.h>
-#include <QtCore/QString>
+#include <QString>
 #include "parser_export.h"
 
 class QString;

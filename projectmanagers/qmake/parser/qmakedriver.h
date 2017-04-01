@@ -21,7 +21,7 @@
 #ifndef QMAKEDRIVER_H
 #define QMAKEDRIVER_H
 
-#include <QtCore/QString>
+#include <QString>
 
 #include "parser_export.h"
 

@@ -22,7 +22,7 @@
 #ifndef CLANGDEBUG_H
 #define CLANGDEBUG_H
 
-#include <QtCore/QLoggingCategory>
+#include <QLoggingCategory>
 
 #include <clang-c/Index.h>
 

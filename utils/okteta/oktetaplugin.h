@@ -26,7 +26,7 @@
 // KDev
 #include <interfaces/iplugin.h>
 // Qt
-#include <QtCore/QVariantList>
+#include <QVariantList>
 
 namespace Kasten
 {

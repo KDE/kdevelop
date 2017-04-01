@@ -21,7 +21,7 @@
 #ifndef SCOPETEST_H
 #define SCOPETEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QTest>
 
 

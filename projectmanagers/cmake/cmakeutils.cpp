@@ -20,8 +20,8 @@
 
 #include "cmakeutils.h"
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
+#include <QFileInfo>
+#include <QDir>
 #include <QProcess>
 #include <QTemporaryDir>
 #include <QRegularExpression>

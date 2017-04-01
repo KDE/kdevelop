@@ -39,8 +39,8 @@
 #include "cache.h"
 #include "frameworks/nodejs.h"
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QStandardPaths>
+#include <QFileInfo>
+#include <QStandardPaths>
 #include <KLocalizedString>
 
 using namespace KDevelop;

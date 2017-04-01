@@ -18,7 +18,7 @@
 #ifndef QMLCOMPLETIONTEST_H
 #define QMLCOMPLETIONTEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace QmlJS {
 

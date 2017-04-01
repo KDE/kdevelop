@@ -16,7 +16,7 @@
 
 #include "test_astyle.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QDebug>
 
 #include "../astyle_formatter.h"

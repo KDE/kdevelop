@@ -41,7 +41,6 @@
 #include <QQueue>
 #include <QFile>
 #include <QDir>
-#include <QtCore/qglobal.h>
 #include <QByteArray>
 #include <QFileInfo>
 #include <QScriptEngine>

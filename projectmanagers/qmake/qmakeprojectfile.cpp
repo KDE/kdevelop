@@ -20,9 +20,9 @@
 
 #include "qmakeprojectfile.h"
 
-#include <QtCore/QList>
-#include <QtCore/QStringList>
-#include <QtCore/QDir>
+#include <QList>
+#include <QStringList>
+#include <QDir>
 
 #include "debug.h"
 #include "parser/ast.h"

@@ -19,7 +19,7 @@
 #ifndef TEST_DEFINESANDINCLUDES_H
 #define TEST_DEFINESANDINCLUDES_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace KDevelop
 {

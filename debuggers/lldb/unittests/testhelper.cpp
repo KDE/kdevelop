@@ -29,7 +29,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QRegularExpression>
-#include <QtTest/QTest>
+#include <QTest>
 
 namespace KDevMI { namespace LLDB {
 

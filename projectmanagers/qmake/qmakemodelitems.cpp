@@ -20,7 +20,7 @@
 
 #include "qmakemodelitems.h"
 
-#include <QtCore/QList>
+#include <QList>
 
 #include "qmakeprojectfile.h"
 

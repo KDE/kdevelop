@@ -1,7 +1,7 @@
 #ifndef KDETEST_H
 #define KDETEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class KdeTest : public QObject
 {

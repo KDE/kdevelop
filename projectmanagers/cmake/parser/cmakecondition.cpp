@@ -16,12 +16,13 @@
 #include "cmakecondition.h"
 #include "cmakeprojectvisitor.h"
 #include <language/duchain/declaration.h>
+
 #include <QFileInfo>
+#include <QRegExp>
 
 #include "astfactory.h"
 #include "cmakeparserutils.h"
 #include "../debug.h"
-#include <QtCore/QRegExp>
 
 QMap<QString, CMakeCondition::conditionToken> initNameToToken()
 {

@@ -21,7 +21,7 @@
 #ifndef QTHELP_CONFIG_SHARED_H
 #define QTHELP_CONFIG_SHARED_H
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 void qtHelpReadConfig(QStringList& iconList,
                       QStringList& nameList,

@@ -19,7 +19,7 @@
  */
 
 #include "cmakeastfactorytest.h"
-#include <QtCore/QString>
+#include <QString>
 
 #include "astfactory.h"
 #include "cmakeast.h"

@@ -31,7 +31,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
 
-#include <QtTest/QTest>
+#include <QTest>
 
 #include "../context.h"
 #include "../model.h"

@@ -21,7 +21,7 @@
 #ifndef PARSETEST_H
 #define PARSETEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QTest>
 
 namespace QMake

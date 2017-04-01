@@ -19,8 +19,8 @@
 #ifndef ICMAKEMANAGER_H
 #define ICMAKEMANAGER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QPair>
+#include <QObject>
+#include <QPair>
 
 namespace KDevelop
 {

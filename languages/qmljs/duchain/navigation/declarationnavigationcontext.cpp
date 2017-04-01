@@ -21,7 +21,7 @@
  */
 #include "declarationnavigationcontext.h"
 
-#include <QtGui/QTextDocument>  /* For Qt::escape */
+#include <QTextDocument>  /* For Qt::escape */
 
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/types/structuretype.h>

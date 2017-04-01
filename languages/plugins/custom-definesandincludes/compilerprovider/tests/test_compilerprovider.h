@@ -24,7 +24,7 @@
 #ifndef TESTCOMPILERPROVIDER_H
 #define TESTCOMPILERPROVIDER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestCompilerProvider : public QObject
 {

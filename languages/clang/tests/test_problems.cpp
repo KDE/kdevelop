@@ -37,7 +37,7 @@
 #include <tests/testproject.h>
 #include <interfaces/ilanguagecontroller.h>
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QLoggingCategory>
 
 Q_DECLARE_METATYPE(KDevelop::IProblem::Severity);

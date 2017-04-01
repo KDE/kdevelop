@@ -21,7 +21,7 @@
 #ifndef ASSIGNMENTTEST_H
 #define ASSIGNMENTTEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QTest>
 
 namespace QMake

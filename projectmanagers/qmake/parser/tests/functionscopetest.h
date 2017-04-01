@@ -21,7 +21,7 @@
 #ifndef FUNCTIONSCOPETEST_H
 #define FUNCTIONSCOPETEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QTest>
 
 namespace QMake

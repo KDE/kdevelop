@@ -19,8 +19,8 @@
 
 #include "kdevelopsessions.h"
 
-#include <QtCore/QCollator>
-#include <QtCore/QDir>
+#include <QCollator>
+#include <QDir>
 #include <KLocalizedString>
 
 

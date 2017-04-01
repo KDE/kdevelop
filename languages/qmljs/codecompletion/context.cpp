@@ -40,8 +40,8 @@
 #include "../duchain/cache.h"
 #include "../duchain/frameworks/nodejs.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QRegExp>
+#include <QDir>
+#include <QRegExp>
 
 using namespace KDevelop;
 

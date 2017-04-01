@@ -20,8 +20,8 @@
 
 #include "qmakelexer.h"
 
-#include <QtCore/QString>
-#include <QtCore/QDebug>
+#include <QString>
+#include <QDebug>
 #include "qmakeparser.h"
 #include <kdev-pg-location-table.h>
 #include <kdev-pg-token-stream.h>

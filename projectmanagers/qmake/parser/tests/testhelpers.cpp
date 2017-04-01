@@ -20,7 +20,7 @@
 
 #include "testhelpers.h"
 
-#include <QtCore/QList>
+#include <QList>
 #include <QTest>
 #include "ast.h"
 

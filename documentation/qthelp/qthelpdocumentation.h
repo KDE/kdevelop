@@ -22,8 +22,8 @@
 #ifndef QTHELPDOCUMENTATION_H
 #define QTHELPDOCUMENTATION_H
 
-#include <QtCore/QMap>
-#include <QtCore/QUrl>
+#include <QMap>
+#include <QUrl>
 #include <QPointer>
 #include <QAction>
 #include <interfaces/idocumentation.h>

@@ -17,7 +17,7 @@
 #ifndef TEST_ASTYLE_H
 #define TEST_ASTYLE_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class AStyleFormatter;
 

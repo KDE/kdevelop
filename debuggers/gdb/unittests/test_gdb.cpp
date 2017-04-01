@@ -49,7 +49,7 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QSignalSpy>
-#include <QtTest/QTest>
+#include <QTest>
 #include <QTemporaryFile>
 
 using KDevelop::AutoTestShell;

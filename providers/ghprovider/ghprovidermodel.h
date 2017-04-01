@@ -22,7 +22,7 @@
 #define GH_PROVIDERMODEL_H
 
 
-#include <QtCore/QUrl>
+#include <QUrl>
 #include <QStandardItemModel>
 
 namespace gh

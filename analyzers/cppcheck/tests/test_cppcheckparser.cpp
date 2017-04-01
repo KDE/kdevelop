@@ -18,7 +18,7 @@
 
 #include "test_cppcheckparser.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 

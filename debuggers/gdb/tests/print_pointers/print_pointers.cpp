@@ -1,5 +1,5 @@
 
-#include <QtCore/QString>
+#include <QString>
 #include <vector>
 
 struct B { int i; int j; static int k; };

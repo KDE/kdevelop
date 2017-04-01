@@ -21,8 +21,8 @@
 #ifndef QMAKEMKSPECS_H
 #define QMAKEMKSPECS_H
 
-#include <QtCore/QHash>
-#include <QtCore/QString>
+#include <QHash>
+#include <QString>
 #include "qmakefile.h"
 
 class QMakeMkSpecs : public QMakeFile
