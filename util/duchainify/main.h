@@ -41,7 +41,7 @@ class Manager : public QObject {
         QCommandLineParser* m_args;
         QAtomicInt m_allFilesAdded;
 
-    public slots:
+    public Q_SLOTS:
         // delay init into event loop so the DUChain can always shutdown gracefully
         void init();
         void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);

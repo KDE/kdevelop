@@ -36,7 +36,7 @@ public:
   explicit EditExternalScript(ExternalScriptItem* item, QWidget* parent = nullptr);
   ~EditExternalScript() override;
 
-private slots:
+private Q_SLOTS:
   void save();
   void validate();
 

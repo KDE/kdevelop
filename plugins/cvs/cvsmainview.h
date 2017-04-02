@@ -39,7 +39,7 @@ public:
     CvsMainView(CvsPlugin *plugin, QWidget* parent);
     ~CvsMainView() override;
 
-public slots:
+public Q_SLOTS:
     /**
      * Inserts @p tag into the QTabWidget and calls it @p label .
      * This slot gets connected to CvsPlugin::addNewTabToMainView().

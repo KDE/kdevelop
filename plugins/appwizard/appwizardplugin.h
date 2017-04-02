@@ -40,7 +40,7 @@ public:
     void loadTemplate(const QString& fileName) override;
     void reload() override;
 
-private slots:
+private Q_SLOTS:
     void slotNewProject();
 
 private:

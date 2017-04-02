@@ -55,7 +55,7 @@ void runBench()
 class TestKDevHash : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void benchHash_int()
     {
         runBench<int>();

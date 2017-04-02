@@ -78,7 +78,7 @@ public Q_SLOTS:
     void ensureAllDone();
     void clear();
 
-signals:
+Q_SIGNALS:
     /// If the current filter strategy supports it, reports progress information
     void progress(const KDevelop::IFilterStrategy::Progress& progress);
     void allDone();

@@ -40,10 +40,10 @@ public:
     BranchManager(const QString& repository, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent = nullptr);
     ~BranchManager() override;
 
-signals:
+Q_SIGNALS:
     void checkedOut(KJob*);
 
-private slots:
+private Q_SLOTS:
     void createBranch();
     void deleteBranch();
     void renameBranch();

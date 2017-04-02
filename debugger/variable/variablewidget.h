@@ -78,7 +78,7 @@ private:
     void contextMenuEvent(QContextMenuEvent* event) override;
     Variable *selectedVariable() const;
 
-private slots:
+private Q_SLOTS:
     void changeVariableFormat(int);
     void watchDelete();
     void copyVariableValue();

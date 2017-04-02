@@ -31,7 +31,7 @@ public:
     explicit BenchQuickOpen(QObject* parent = nullptr);
 private:
     void getData();
-private slots:
+private Q_SLOTS:
     void benchProjectFileFilter_addRemoveProject();
     void benchProjectFileFilter_addRemoveProject_data();
     void benchProjectFileFilter_reset();

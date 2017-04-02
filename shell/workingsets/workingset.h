@@ -103,11 +103,11 @@ public:
 
     void deleteSet(bool force, bool silent = false);
 
-private slots:
+private Q_SLOTS:
     void areaViewAdded(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/);
     void areaViewRemoved(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/);
 
-signals:
+Q_SIGNALS:
     void setChangedSignificantly();
     void aboutToRemove(WorkingSet*);
 

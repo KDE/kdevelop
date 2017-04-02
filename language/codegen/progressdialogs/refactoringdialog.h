@@ -36,7 +36,7 @@ class RefactoringProgressDialog : public QDialog
 public:
     RefactoringProgressDialog(const QString& action, UsesCollector* collector);
 
-private slots:
+private Q_SLOTS:
     void progress(uint done, uint max);
     void maximumProgress(uint max);
     void processUses(const KDevelop::ReferencedTopDUContext& context);

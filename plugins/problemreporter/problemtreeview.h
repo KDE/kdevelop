@@ -52,17 +52,17 @@ public:
 
     int setFilter(const QString& filterText);
 
-public slots:
+public Q_SLOTS:
     void openDocumentForCurrentProblem();
 
-signals:
+Q_SIGNALS:
     // Emitted when the model's rows change (added/removed/reset)
     void changed();
 
 protected:
     void showEvent(QShowEvent* event) override;
 
-private slots:
+private Q_SLOTS:
     void itemActivated(const QModelIndex& index);
 
 private:

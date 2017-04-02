@@ -81,7 +81,7 @@ public:
     /// Stops status / progress reporting
     void stop();
 
-signals:
+Q_SIGNALS:
     void clearMessage(KDevelop::IStatus*) override;
     void showMessage(KDevelop::IStatus*, const QString &message, int timeout = 0) override;
     void showErrorMessage(const QString & message, int timeout = 0) override;

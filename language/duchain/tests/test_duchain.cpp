@@ -606,7 +606,7 @@ void TestDUChain::testImportStructure()
 class TestWorker : public QObject
 {
   Q_OBJECT
-public slots:
+public Q_SLOTS:
   void lockForWrite()
   {
     for(int i = 0; i < 10000; ++i) {

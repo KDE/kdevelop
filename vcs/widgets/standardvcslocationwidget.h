@@ -41,7 +41,7 @@ class KDEVPLATFORMVCS_EXPORT StandardVcsLocationWidget : public VcsLocationWidge
         void setLocation(const QUrl& remoteLocation) override;
         void setUrl(const QUrl& url);
 
-    public slots:
+    public Q_SLOTS:
         void textChanged(const QString& str);
         
     private:

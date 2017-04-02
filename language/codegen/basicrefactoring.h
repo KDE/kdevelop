@@ -101,7 +101,7 @@ public:
      */
     virtual bool shouldRenameFile(KDevelop::Declaration* declaration);
 
-public slots:
+public Q_SLOTS:
     void executeRenameAction();
 
 protected:

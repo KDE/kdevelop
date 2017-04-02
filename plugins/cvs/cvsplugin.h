@@ -102,7 +102,7 @@ public:
 
     const QUrl urlFocusedDocument() const;
     KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const override;
-public slots:
+public Q_SLOTS:
     // slots for context menu
     void ctxEdit();
     void ctxUnEdit();
@@ -113,7 +113,7 @@ public slots:
     void slotCheckout();
     void slotStatus();
 
-signals:
+Q_SIGNALS:
     /**
      * Some actions like commit, add, remove... will connect the job's
      * result() signal to this signal. Anybody, like for instance the

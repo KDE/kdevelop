@@ -84,7 +84,7 @@ public:
     void fetchMore(const QModelIndex& parent) override;
     bool canFetchMore(const QModelIndex& parent) const override;
 
-private slots:
+private Q_SLOTS:
     void jobReceivedResults( KJob* job );
 
 private:

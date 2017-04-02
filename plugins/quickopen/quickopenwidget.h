@@ -59,11 +59,11 @@ public:
     //Shows OK + Cancel. By default they are hidden
     void showStandardButtons(bool show);
     void showSearchField(bool show);
-signals:
+Q_SIGNALS:
     void scopesChanged(const QStringList& scopes);
     void itemsChanged(const QStringList& scopes);
     void ready();
-private slots:
+private Q_SLOTS:
     void callRowSelected();
 
     void updateTimerInterval(bool cheapFilterChange);

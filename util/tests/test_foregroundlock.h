@@ -25,7 +25,7 @@ namespace KDevelop {
 class TestForegroundLock : public QObject {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testTryLock_data();
     void testTryLock();
 };

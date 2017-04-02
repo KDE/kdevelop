@@ -105,7 +105,7 @@ private:
     KDevelop::IStatus *m_savedIStatus;
     bool m_itemsCheckable;
 
-private slots:
+private Q_SLOTS:
     void updateCheckState(QStandardItem*);
 };
 

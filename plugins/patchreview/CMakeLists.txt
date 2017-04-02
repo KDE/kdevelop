@@ -11,6 +11,12 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevpatchreview\")
 kde_enable_exceptions()
 include_directories(${LIBKOMPAREDIFF2_INCLUDE_DIR})
 
+if(LibKompareDiff2_VERSION VERSION_LESS 5.1)
+    remove_definitions(
+        -DQT_NO_SIGNALS_SLOTS_KEYWORDS
+    )
+endif()
+
 set(patchreview_PART_SRCS
     patchreview.cpp
     patchhighlighter.cpp

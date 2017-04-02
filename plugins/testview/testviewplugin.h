@@ -37,7 +37,7 @@ public:
 private:
     TestToolViewFactory* m_viewFactory;
 
-private slots:
+private Q_SLOTS:
     void runAllTests();
     void stopRunningTests();
     void jobStateChanged();

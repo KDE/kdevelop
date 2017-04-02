@@ -51,7 +51,7 @@ public:
     ~PatchHighlighter() override;
     KDevelop::IDocument* doc();
     QList< KTextEditor::MovingRange* > ranges() const;
-private slots:
+private Q_SLOTS:
     void documentDestroyed();
     void aboutToDeleteMovingInterfaceContent( KTextEditor::Document* );
 private:
@@ -71,7 +71,7 @@ private:
     PatchReviewPlugin* m_plugin;
     Diff2::DiffModel* m_model;
     bool m_applying;
-public slots:
+public Q_SLOTS:
     void markToolTipRequested( KTextEditor::Document*, const KTextEditor::Mark&, QPoint, bool & );
     void showToolTipForMark( QPoint arg1, KTextEditor::MovingRange* arg2);
     bool isRemoval( Diff2::Difference* );

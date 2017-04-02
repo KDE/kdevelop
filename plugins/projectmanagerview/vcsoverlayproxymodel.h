@@ -40,7 +40,7 @@ class VcsOverlayProxyModel : public QIdentityProxyModel
 
         QVariant data(const QModelIndex& proxyIndex, int role = Qt::DisplayRole) const override;
 
-    private slots:
+    private Q_SLOTS:
         void addProject(KDevelop::IProject* p);
         void removeProject(KDevelop::IProject* p);
         void repositoryBranchChanged(const QUrl& url);

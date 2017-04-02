@@ -36,12 +36,12 @@ class VcsChangesView : public QTreeView
         
         void setModel(QAbstractItemModel* model) override;
         
-    public slots:
+    public Q_SLOTS:
         void popupContextMenu( const QPoint &pos );
         void selectCurrentDocument();
         void openSelected(const QModelIndex& idx);
         
-    signals:
+    Q_SIGNALS:
         void reload(const QList<KDevelop::IProject*>& p);
         void reload(const QList<QUrl>& p);
 };

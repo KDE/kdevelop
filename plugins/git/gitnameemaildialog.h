@@ -40,7 +40,7 @@ public:
 
     bool isGlobal() const;
 
-private slots:
+private Q_SLOTS:
     void updateUi();
 
 private:

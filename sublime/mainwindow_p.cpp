@@ -63,7 +63,7 @@ class IdealToolBar : public QToolBar
             }
         }
 
-    private slots:
+    private Q_SLOTS:
         void updateVisibilty()
         {
             setVisible(!m_buttons->isEmpty());

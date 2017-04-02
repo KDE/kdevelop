@@ -76,7 +76,7 @@ public:
     void setLocation( const QUrl &location );
     void setProvideInformation( ProvideInformationType );
     void setProvideRevisionType( KDevelop::VcsRevision::RevisionType );
-public slots:
+public Q_SLOTS:
     void setInfo( const SvnInfoHolder& );
 private:
     SvnInfoHolder m_info;

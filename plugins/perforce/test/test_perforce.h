@@ -34,7 +34,7 @@ class TestCore;
 class PerforcePluginTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void init();
     void cleanup();
     void testAdd();

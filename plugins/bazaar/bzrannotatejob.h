@@ -50,7 +50,7 @@ public:
 protected:
     bool doKill() override;
 
-private slots:
+private Q_SLOTS:
     void parseBzrAnnotateOutput(KDevelop::DVcsJob* job);
     void parseNextLine();
     void prepareCommitInfo(std::size_t revision);

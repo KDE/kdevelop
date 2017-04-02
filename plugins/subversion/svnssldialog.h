@@ -28,7 +28,7 @@ public:
                        const QString& issuerName, const QString& realm,
                        const QStringList& failures );
     bool useTemporarily();
-private slots:
+private Q_SLOTS:
     void buttonClicked(QAbstractButton *button);
 private:
     class SvnSSLTrustDialogPrivate *d;

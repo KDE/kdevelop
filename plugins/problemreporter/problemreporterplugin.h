@@ -74,7 +74,7 @@ private:
 
     QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
     QSet<KDevelop::IndexedString> m_reHighlightNeeded;
-public slots:
+public Q_SLOTS:
     void documentClosed(KDevelop::IDocument*);
 };
 

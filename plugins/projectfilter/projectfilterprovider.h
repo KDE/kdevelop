@@ -46,13 +46,13 @@ public:
     int perProjectConfigPages() const override;
     ConfigPage* perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent) override;
 
-signals:
+Q_SIGNALS:
     void filterChanged(KDevelop::IProjectFilterProvider*, KDevelop::IProject*);
 
-public slots:
+public Q_SLOTS:
     void updateProjectFilters(KDevelop::IProject* project);
 
-private slots:
+private Q_SLOTS:
     void projectClosing(KDevelop::IProject*);
     void projectAboutToBeOpened(KDevelop::IProject*);
 

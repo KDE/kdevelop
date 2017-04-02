@@ -109,7 +109,7 @@ public:
 
     bool removeUrl(const QUrl& url);
 
-public slots:
+public Q_SLOTS:
     /**
      * Used to post update of status of some file. Any status except UpToDate
      * and Unknown will update (or add) item representation.

@@ -44,7 +44,7 @@ public:
     QUrl location() const;
     KDevelop::VcsRevision startRevision() const;
     KDevelop::VcsRevision endRevision() const;
-signals:
+Q_SIGNALS:
     void blameLine( const KDevelop::VcsAnnotationLine& );
 protected:
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;

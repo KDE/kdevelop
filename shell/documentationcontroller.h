@@ -47,10 +47,10 @@ public:
     void showDocumentation(const IDocumentation::Ptr& doc) override;
     ContextMenuExtension contextMenuExtension( Context* context );
 
-public slots:
+public Q_SLOTS:
     void changedDocumentationProviders() override;
 
-private slots:
+private Q_SLOTS:
     void doShowDocumentation();
 
 private:

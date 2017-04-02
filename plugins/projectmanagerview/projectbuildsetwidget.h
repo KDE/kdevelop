@@ -43,9 +43,9 @@ public:
     explicit ProjectBuildSetWidget( QWidget* parent = nullptr );
     ~ProjectBuildSetWidget() override;
     void setProjectView( ProjectManagerView* view );
-public slots:
+public Q_SLOTS:
     void selectionChanged();
-private slots:
+private Q_SLOTS:
     void addItems();
     void removeItems();
     void moveUp();

@@ -56,7 +56,7 @@ public:
 
     QStringList projectManagerForFile(const QString& file) const;
 
-private slots:
+private Q_SLOTS:
     void validateSourcePage( bool );
     void validateOpenUrl( const QUrl& );
     void validateProjectName( const QString& );

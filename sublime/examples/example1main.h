@@ -31,11 +31,11 @@ class Example1Main: public KXmlGuiWindow {
 public:
     Example1Main();
 
-public slots:
+public Q_SLOTS:
     void selectArea1();
     void selectArea2();
 
-private slots:
+private Q_SLOTS:
     void updateTitle(Sublime::Area *area);
 
 private:

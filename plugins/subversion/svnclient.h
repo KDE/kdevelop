@@ -57,7 +57,7 @@ public:
 
     void emitLogEventReceived( const KDevelop::VcsEvent& );
 
-signals:
+Q_SIGNALS:
     void logEventReceived( const KDevelop::VcsEvent& );
 private:
     svn::Context* m_ctxt;

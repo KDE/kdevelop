@@ -101,7 +101,7 @@ public:
     bool eventFilter(QObject* obj, QEvent* event) override;
     void disableConcentrationMode();
 
-public slots:
+public Q_SLOTS:
     void toggleDocksShown();
 
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
@@ -114,7 +114,7 @@ public slots:
 
     void setTabBarLeftCornerWidget(QWidget* widget);
 
-private slots:
+private Q_SLOTS:
     void switchToArea(QAction *action);
     void updateAreaSwitcher(Sublime::Area *area);
     void slotDockShown(Sublime::View*, Sublime::Position, bool);

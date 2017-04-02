@@ -16,7 +16,7 @@ class TestItemRepositoryRegistryAutomaticDeletion : public QObject {
       KDevelop::TestCore::shutdown();
     }
 
-  private slots:
+  private Q_SLOTS:
     void initTestCase() {
       KDevelop::AutoTestShell::init();
     }

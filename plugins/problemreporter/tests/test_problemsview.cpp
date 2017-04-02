@@ -36,7 +36,7 @@ using namespace KDevelop;
 class TestProblemsView : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

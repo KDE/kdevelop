@@ -59,7 +59,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
      */
     void checkDocuments();
 
-  signals:
+  Q_SIGNALS:
     void registeredToView(KTextEditor::View* view);
     void unregisteredFromView(KTextEditor::View* view);
 

@@ -36,10 +36,10 @@ public:
     ~ProjectInfoPage() override;
     void setProjectName( const QString& );
     void populateProjectFileCombo( const QVector<ProjectFileChoice>& choices );
-signals:
+Q_SIGNALS:
     void projectNameChanged( const QString& );
     void projectManagerChanged( const QString& pluginId, const QString & fileName);
-private slots:
+private Q_SLOTS:
     void changeProjectManager( int );
 private:
     Ui::ProjectInfoPage* page_ui;

@@ -32,7 +32,7 @@ public:
     void setLocation( const QUrl& );
 
     QUrl location() const;
-signals:
+Q_SIGNALS:
     void gotInfo( const SvnInfoHolder& );
 protected:
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;

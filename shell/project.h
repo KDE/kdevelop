@@ -125,7 +125,7 @@ public Q_SLOTS:
 
     void setReloadJob(KJob* job) override;
 
-signals:
+Q_SIGNALS:
     /**
      * Internal signal to make IProjectController::projectAboutToOpen useful.
      */

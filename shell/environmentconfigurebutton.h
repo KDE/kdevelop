@@ -44,7 +44,7 @@ public:
 
     void setSelectionWidget(EnvironmentSelectionWidget* widget);
 
-signals:
+Q_SIGNALS:
     /**
      * Gets emitted whenever the dialog was acceppted
      * and the env settings might have changed.

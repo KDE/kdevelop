@@ -35,7 +35,7 @@ public:
     explicit CodeUtilsPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CodeUtilsPlugin() override;
 
-private slots:
+private Q_SLOTS:
     void documentDeclaration();
 };
 

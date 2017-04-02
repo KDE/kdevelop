@@ -82,7 +82,7 @@ private:
     QLabel*  m_statusLabel;
     GrepViewPlugin *m_plugin;
     
-private slots:
+private Q_SLOTS:
     void selectPreviousItem() override;
     void selectNextItem() override;
     void collapseAllItems();

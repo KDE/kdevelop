@@ -31,7 +31,7 @@ Q_OBJECT
 public:
     explicit TestOutputModel(QObject* parent = nullptr);
 
-private slots:
+private Q_SLOTS:
     void bench();
     void bench_data();
 };

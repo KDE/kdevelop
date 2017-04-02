@@ -71,7 +71,7 @@ public:
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
 
-private slots:
+private Q_SLOTS:
     void selectionChanged();
     void locateCurrentDocument();
     void updateSyncAction();

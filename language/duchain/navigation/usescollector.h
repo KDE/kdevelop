@@ -88,7 +88,7 @@ namespace KDevelop {
             void progressSignal(uint, uint);
             ///@see processUses()
             void processUsesSignal(KDevelop::ReferencedTopDUContext);
-        private slots:
+        private Q_SLOTS:
             void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
         private:
             ///Called with every top-context that can contain uses of the declaration, or if setProcessDeclarations(false)

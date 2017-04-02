@@ -148,7 +148,7 @@ public:
     /// Set the "Force Full Update" action tooltip
     void setFullUpdateTooltip(const QString& tooltip);
 
-signals:
+Q_SIGNALS:
     /// Emitted when the stored problems are changed with addProblem(), setProblems() and
     /// clearProblems() methods. This signal emitted only when internal problems storage is
     /// really changed: for example, it is not emitted when we call clearProblems() method
@@ -159,7 +159,7 @@ signals:
     /// This signal emitted only when tooltip is really changed.
     void fullUpdateTooltipChanged();
 
-public slots:
+public Q_SLOTS:
     /// Show imports
     void setShowImports(bool showImports);
 
@@ -180,11 +180,11 @@ public slots:
      */
     virtual void forceFullUpdate(){}
 
-protected slots:
+protected Q_SLOTS:
     /// Triggered when problems change
     virtual void onProblemsChanged(){}
 
-private slots:
+private Q_SLOTS:
     /// Triggered when the current document changes
     virtual void setCurrentDocument(IDocument* doc);
 

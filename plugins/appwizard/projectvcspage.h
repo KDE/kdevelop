@@ -44,10 +44,10 @@ public:
     explicit ProjectVcsPage( KDevelop::IPluginController*, QWidget* parent = nullptr );
     ~ProjectVcsPage() override;
     bool shouldContinue() override;
-signals:
+Q_SIGNALS:
     void valid();
     void invalid();
-public slots:
+public Q_SLOTS:
     void setSourceLocation( const QUrl& );
     void vcsTypeChanged(int);
     void validateData();

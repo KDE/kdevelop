@@ -82,7 +82,7 @@ Q_SIGNALS:
     // Emitted after a working-set in a main-window was switched
     void workingSetSwitched();
 
-private slots:
+private Q_SLOTS:
     void areaCreated(Sublime::Area* area);
 
     void nextDocument();

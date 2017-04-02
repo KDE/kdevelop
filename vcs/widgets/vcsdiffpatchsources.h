@@ -124,7 +124,7 @@ public:
     QPointer<KTextEdit> m_commitMessageEdit;
     KDevelop::IBasicVersionControl* m_vcs;
     KComboBox* m_oldMessages;
-public slots:
+public Q_SLOTS:
     void addMessageToHistory(const QString& message);
     void oldMessageChanged(QString);
     void jobFinished(KJob*);

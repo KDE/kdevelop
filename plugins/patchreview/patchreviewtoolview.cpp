@@ -59,7 +59,7 @@ public:
     PatchFilesModel( QObject *parent, bool allowSelection ) : VcsFileChangesModel( parent, allowSelection ) { };
     enum ItemRoles { HunksNumberRole = LastItemRole+1 };
 
-public slots:
+public Q_SLOTS:
     void updateState( const KDevelop::VcsStatusInfo &status, unsigned hunksNum ) {
         int row = VcsFileChangesModel::updateState( invisibleRootItem(), status );
         if ( row == -1 )

@@ -29,7 +29,7 @@ public:
     explicit KDevDocumentSelection( QAbstractItemModel* model );
     ~KDevDocumentSelection() override;
 
-public slots:
+public Q_SLOTS:
     void select( const QModelIndex & index,
                          QItemSelectionModel::SelectionFlags command ) override;
     void select( const QItemSelection & selection,

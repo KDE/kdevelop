@@ -23,7 +23,7 @@
 
 class TestController: public QObject {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void documentDeletion();
     void areaDeletion();
     void namedAreas();

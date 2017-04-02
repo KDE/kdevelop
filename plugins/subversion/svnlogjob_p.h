@@ -41,7 +41,7 @@ public:
     KDevelop::VcsRevision startRevision() const;
     KDevelop::VcsRevision endRevision() const;
     int limit() const;
-signals:
+Q_SIGNALS:
     void logEvent( const KDevelop::VcsEvent& );
 protected:
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;

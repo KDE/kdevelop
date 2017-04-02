@@ -97,7 +97,7 @@ TestItem* createItem(uint id, uint size) {
 ///@todo More consistency and lost-space tests, especially about monster-buckets. Make sure their space is re-claimed
 class TestItemRepository : public QObject {
   Q_OBJECT
-  private slots:
+  private Q_SLOTS:
     void initTestCase() {
       KDevelop::AutoTestShell::init();
       KDevelop::TestCore* core = new KDevelop::TestCore();

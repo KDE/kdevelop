@@ -87,7 +87,7 @@ public:
     
     KConfigGroup config() override;
     
-signals:
+Q_SIGNALS:
     void nameChanged( LaunchConfiguration* );
     void typeChanged( LaunchConfigurationType* );
 private:

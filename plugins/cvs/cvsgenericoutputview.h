@@ -34,7 +34,7 @@ public:
     explicit CvsGenericOutputView(CvsJob* job = nullptr, QWidget* parent = nullptr);
     ~CvsGenericOutputView() override;
 
-public slots:
+public Q_SLOTS:
     void appendText(const QString& text);
     void slotJobFinished(KJob* job);
 };

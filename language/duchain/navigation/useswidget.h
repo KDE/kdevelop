@@ -114,7 +114,7 @@ namespace KDevelop {
           TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> localDeclarations, IndexedTopDUContext topContext);
           void setExpanded(bool);
           int usesCount() const;
-        private slots:
+        private Q_SLOTS:
             void labelClicked();
         private:
             IndexedTopDUContext m_topContext;
@@ -154,7 +154,7 @@ namespace KDevelop {
             QLabel* m_headerLine;
             QSharedPointer<UsesWidgetCollector> m_collector;
             QProgressBar* m_progressBar;
-        public slots:
+        public Q_SLOTS:
             void headerLinkActivated(QString linkName);
             void redrawHeaderLine();
     };

@@ -139,7 +139,7 @@ public:
      */
     virtual QMenu* launcherSuggestions() { return nullptr; }
 
-signals:
+Q_SIGNALS:
     void signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration* launch);
 
 private:

@@ -41,7 +41,7 @@ public:
     void setPegRevision( const KDevelop::VcsRevision& );
     void setSrcRevision( const KDevelop::VcsRevision& );
 
-public slots:
+public Q_SLOTS:
     void setContent( const QString& );
 private:
     QString m_content;

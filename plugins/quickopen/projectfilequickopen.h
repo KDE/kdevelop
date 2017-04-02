@@ -119,7 +119,7 @@ public:
     ProjectFileDataProvider();
     void reset() override;
     QSet<KDevelop::IndexedString> files() const override;
-private slots:
+private Q_SLOTS:
     void projectClosing(KDevelop::IProject*);
     void projectOpened(KDevelop::IProject*);
     void fileAddedToSet(KDevelop::ProjectFileItem*);

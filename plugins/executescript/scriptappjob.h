@@ -43,7 +43,7 @@ public:
     void start() override;
     bool doKill() override;
     KDevelop::OutputModel* model();
-private slots:
+private Q_SLOTS:
     void processError(QProcess::ProcessError);
     void processFinished(int,QProcess::ExitStatus);
 private:

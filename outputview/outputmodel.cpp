@@ -71,7 +71,7 @@ public:
         connect(m_timer, &QTimer::timeout, this, &ParseWorker::process);
     }
 
-public slots:
+public Q_SLOTS:
     void changeFilterStrategy( KDevelop::IFilterStrategy* newFilterStrategy )
     {
         m_filter = QSharedPointer<IFilterStrategy>( newFilterStrategy );
@@ -97,12 +97,12 @@ public slots:
         emit allDone();
     }
 
-signals:
+Q_SIGNALS:
     void parsedBatch(const QVector<KDevelop::FilteredItem>& filteredItems);
     void progress(const KDevelop::IFilterStrategy::Progress& progress);
     void allDone();
 
-private slots:
+private Q_SLOTS:
     /**
      * Process *all* cached lines, emit parsedBatch for each batch
      */

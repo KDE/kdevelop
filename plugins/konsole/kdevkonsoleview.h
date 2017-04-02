@@ -25,7 +25,7 @@ public:
     explicit KDevKonsoleView( KDevKonsoleViewPlugin* plugin, QWidget *parent = nullptr );
     ~KDevKonsoleView() override;
 
-public slots:
+public Q_SLOTS:
     void setDirectory( const QUrl &dirUrl );
 
 protected:

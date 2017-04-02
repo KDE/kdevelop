@@ -29,7 +29,7 @@ class UiHelper : public QObject
     public:
         explicit UiHelper(QObject* parent);
         
-    public slots:
+    public Q_SLOTS:
         QAction* retrieveMenuAction(const QString& name);
         void showMenu(const QString& name);
         void setArea(const QString& name);

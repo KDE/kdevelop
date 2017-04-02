@@ -86,7 +86,7 @@ public:
     QuickOpenLineEdit* createQuickOpenLineWidget();
 
     KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind) override;
-public slots:
+public Q_SLOTS:
     void quickOpen();
     void quickOpenFile();
     void quickOpenFunction();
@@ -100,7 +100,7 @@ public slots:
 
     void previousFunction();
     void nextFunction();
-private slots:
+private Q_SLOTS:
     void storeScopes(const QStringList&);
     void storeItems(const QStringList&);
 private:
@@ -149,7 +149,7 @@ public:
         m_defaultText = text;
         setPlaceholderText(m_defaultText);
     }
-private slots:
+private Q_SLOTS:
     void activate();
     void deactivate();
     void checkFocus();

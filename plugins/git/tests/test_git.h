@@ -43,7 +43,7 @@ private:
     void addFiles();
     void commitFiles();
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void init();

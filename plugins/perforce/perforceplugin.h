@@ -140,7 +140,7 @@ public Q_SLOTS:
 //   void ctxLocalRevision();
 //   void ctxImport();
 
-private slots:
+private Q_SLOTS:
     void parseP4StatusOutput(KDevelop::DVcsJob* job);
     void parseP4DiffOutput(KDevelop::DVcsJob* job);
     void parseP4LogOutput(KDevelop::DVcsJob* job);

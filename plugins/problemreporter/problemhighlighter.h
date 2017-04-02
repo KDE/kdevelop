@@ -37,7 +37,7 @@ public:
 
     void setProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
-private slots:
+private Q_SLOTS:
     void aboutToRemoveText(const KTextEditor::Range& range);
     void clearProblems();
 
@@ -46,7 +46,7 @@ private:
     QList<KTextEditor::MovingRange*> m_topHLRanges;
     QVector<KDevelop::IProblem::Ptr> m_problems;
 
-public slots:
+public Q_SLOTS:
     void settingsChanged();
 };
 

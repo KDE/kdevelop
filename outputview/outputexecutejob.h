@@ -225,7 +225,7 @@ public:
 protected:
     bool doKill() override;
 
-protected slots:
+protected Q_SLOTS:
     // Redefine these functions if you want to post-process the output somehow
     // before it hits the output model.
     // Default implementations for either function call "model()->appendLines( lines );".

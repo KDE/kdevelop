@@ -31,7 +31,7 @@ public:
     ~KDevFileManagerPlugin() override;
 
     void unload() override;
-private slots:
+private Q_SLOTS:
     void init();
 
 private:

@@ -48,7 +48,7 @@ public:
 
     ApplicationInfo appInfo() const;
 
-private slots:
+private Q_SLOTS:
     void pageInValid( QWidget* w );
     void pageValid( QWidget* w );
     void next() override;

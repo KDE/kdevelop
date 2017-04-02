@@ -72,7 +72,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void outputRemoved( int, int );
 
-private slots:
+private Q_SLOTS:
     void nextOutput();
     void previousOutput();
     void copySelection();

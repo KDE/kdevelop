@@ -40,14 +40,14 @@ public:
         emitResult();
     }
 
-signals:
+Q_SIGNALS:
     void started(KJob* job);
 };
 
 class TestExecuteCompositeJob : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void runOneJob();
     void runTwoJobs();
 };

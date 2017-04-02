@@ -41,7 +41,7 @@ public:
     explicit TemplatePage(KDevelop::ITemplateProvider* provider, QWidget* parent = nullptr);
     ~TemplatePage() override;
 
-private slots:
+private Q_SLOTS:
     void loadFromFile();
     void getMoreTemplates();
     void shareTemplates();

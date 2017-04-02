@@ -38,7 +38,7 @@ public:
     KDevelop::ParseJob* createParseJob(const IndexedString& url) override;
     QString name() const override;
 
-signals:
+Q_SIGNALS:
     void aboutToCreateParseJob(const IndexedString& url, KDevelop::ParseJob** job);
     void parseJobCreated(KDevelop::ParseJob* job);
 };

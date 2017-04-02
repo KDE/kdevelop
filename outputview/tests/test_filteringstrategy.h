@@ -26,7 +26,7 @@ namespace KDevelop
 class TestFilteringStrategy : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testNoFilterStrategy_data();
     void testNoFilterStrategy();
     void testCompilerFilterStrategy_data();

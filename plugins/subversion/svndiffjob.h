@@ -56,7 +56,7 @@ public:
 
     void setDiffType( KDevelop::VcsDiff::Type type );
 
-public slots:
+public Q_SLOTS:
     void setDiff( const QString& );
     void addLeftText( KDevelop::VcsJob* job );
     void removeJob( KJob* job );

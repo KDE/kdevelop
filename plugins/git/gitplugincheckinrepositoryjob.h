@@ -32,7 +32,7 @@ public:
     ~GitPluginCheckInRepositoryJob() override;
     void start() override;
 
-private slots:
+private Q_SLOTS:
     void repositoryQueryFinished(int);
     void processFailed(QProcess::ProcessError);
 

@@ -53,7 +53,7 @@ namespace KDevelop {
 
       QSize sizeHint() const override;
 
-    public slots:
+    public Q_SLOTS:
       ///Keyboard-action "next"
       void next() override;
       ///Keyboard-action "previous"

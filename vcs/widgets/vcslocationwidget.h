@@ -57,7 +57,7 @@ class KDEVPLATFORMVCS_EXPORT VcsLocationWidget : public QWidget
          */
         virtual void setLocation(const QUrl& remoteLocation) = 0;
 
-    signals:
+    Q_SIGNALS:
         void changed();
 };
 

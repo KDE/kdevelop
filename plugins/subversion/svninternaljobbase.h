@@ -88,7 +88,7 @@ public:
 
     static svn::Revision createSvnCppRevisionFromVcsRevision( const KDevelop::VcsRevision& );
 
-signals:
+Q_SIGNALS:
     void needLogin( const QString& );
     void showNotification( const QString&, const QString& );
     void needCommitMessage();

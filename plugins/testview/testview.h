@@ -40,7 +40,7 @@ public:
     explicit TestView(TestViewPlugin* plugin, QWidget* parent = nullptr);
     ~TestView() override;
 
-public slots:
+public Q_SLOTS:
     void runSelectedTests();
     void showSource();
 

@@ -67,11 +67,11 @@ public:
     QString fullName() const override;
     QIcon icon() const override;
 
-public slots:
+public Q_SLOTS:
     void reset() override;
     void apply() override;
     void defaults() override;
-private slots:
+private Q_SLOTS:
     void deleteStyle();
     void editStyle();
     void newStyle();

@@ -322,7 +322,7 @@ struct NothingDoVisitor {
 
 class TestEmbeddedFreeTree : public QObject {
   Q_OBJECT
-  private slots:
+  private Q_SLOTS:
     void initTestCase() {
         KDevelop::AutoTestShell::init();
         KDevelop::TestCore::initialize(KDevelop::Core::NoUi);

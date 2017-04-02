@@ -47,7 +47,7 @@ private:
     KDevelop::TemplatesModel* m_model;
     KDevelop::IToolViewFactory* m_toolView;
 
-public slots:
+public Q_SLOTS:
     void createFromTemplate();
     void previewTemplate();
 };

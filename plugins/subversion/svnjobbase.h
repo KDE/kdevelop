@@ -43,7 +43,7 @@ public:
     KDevelop::VcsJob::JobStatus status() const override;
     KDevelop::IPlugin* vcsPlugin() const override;
 
-public slots:
+public Q_SLOTS:
     void askForLogin( const QString& );
     void showNotification( const QString&, const QString& );
     void askForCommitMessage();
@@ -53,7 +53,7 @@ public slots:
     void askForSslClientCert( const QString& );
     void askForSslClientCertPassword( const QString& );
 
-protected slots:
+protected Q_SLOTS:
     void internalJobStarted();
     void internalJobDone();
     void internalJobFailed();

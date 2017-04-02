@@ -28,14 +28,14 @@ public:
         QWidget* parent = nullptr );
     void setUrl(const QUrl& url);
 
-signals:
+Q_SIGNALS:
     void urlSelected(const QUrl&);
     void accepted();
 
 protected:
     void showEvent(QShowEvent*) override;
 
-private slots:
+private Q_SLOTS:
     void highlightFile(const QUrl&);
     void opsEntered(const QUrl& item);
     void comboTextChanged(const QString&);

@@ -48,12 +48,12 @@ public:
     void abort();
     void start() override;
 
-signals:
+Q_SIGNALS:
     void entries(FileManagerListJob* job, ProjectFolderItem* baseItem,
                  const KIO::UDSEntryList& entries);
     void nextJob();
 
-private slots:
+private Q_SLOTS:
     void slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn );
     void slotResult(KJob* job) override;
     void handleResults(const KIO::UDSEntryList& entries);

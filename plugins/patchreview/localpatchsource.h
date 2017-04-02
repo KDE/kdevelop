@@ -74,7 +74,7 @@ class LocalPatchWidget : public QWidget
 public:
     LocalPatchWidget(LocalPatchSource* lpatch, QWidget* parent);
 
-public slots:
+public Q_SLOTS:
     void updatePatchFromEdit();
     void syncPatch();
 

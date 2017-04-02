@@ -116,7 +116,7 @@ public:
 
     Core::Setup setupFlags() const;
 
-public slots:
+public Q_SLOTS:
     void shutdown();
 
 protected:

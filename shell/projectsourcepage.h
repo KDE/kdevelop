@@ -35,7 +35,7 @@ class ProjectSourcePage : public QWidget
 
         QUrl workingDir() const;
         
-    private slots:
+    private Q_SLOTS:
         void setSourceIndex(int index);
         void checkoutVcsProject();
         void projectReceived(KJob* job);
@@ -45,7 +45,7 @@ class ProjectSourcePage : public QWidget
         void locationChanged();
         void projectChanged(const QString& name);
         
-    signals:
+    Q_SIGNALS:
         void isCorrect(bool);
         
     private:

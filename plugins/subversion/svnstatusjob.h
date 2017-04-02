@@ -40,7 +40,7 @@ public:
     void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
 
-public slots:
+public Q_SLOTS:
     void addToStats( const KDevelop::VcsStatusInfo& );
 private:
     QList<QVariant> m_stats;

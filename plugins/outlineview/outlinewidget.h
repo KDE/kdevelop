@@ -46,7 +46,7 @@ private:
     QAction* m_sortAlphabeticallyAction;
 
     Q_DISABLE_COPY(OutlineWidget)
-public slots:
+public Q_SLOTS:
     void activated(const QModelIndex& index);
     void expandFirstLevel();
 };

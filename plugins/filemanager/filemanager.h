@@ -44,7 +44,7 @@ public:
     KDirOperator* dirOperator() const;
     KDevFileManagerPlugin* plugin() const;
 
-private slots:
+private Q_SLOTS:
     void fileCreated(KJob *job);
     void openFile(const KFileItem&);
     void gotoUrl(const QUrl&);

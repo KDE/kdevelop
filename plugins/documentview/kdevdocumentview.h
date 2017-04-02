@@ -50,13 +50,13 @@ public:
 
     KDevDocumentViewPlugin *plugin() const;
 
-signals:
+Q_SIGNALS:
     void activateURL( const QUrl &url );
 
-public slots:
+public Q_SLOTS:
     void opened( KDevelop::IDocument* document );
 
-private slots:
+private Q_SLOTS:
     void activated( KDevelop::IDocument* document );
     void saved( KDevelop::IDocument* document );
     void closed( KDevelop::IDocument* document );

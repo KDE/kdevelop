@@ -77,7 +77,7 @@ public:
     /// Retrieves a list of models stored
     QVector<ModelData> models() const;
 
-signals:
+Q_SIGNALS:
     /// Emitted when a new model is added
     void added(const ModelData &model);
 

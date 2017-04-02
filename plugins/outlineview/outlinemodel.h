@@ -49,9 +49,9 @@ public:
     bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-public slots:
+public Q_SLOTS:
     void activate(const QModelIndex& realIndex);
-private slots:
+private Q_SLOTS:
     void rebuildOutline(KDevelop::IDocument* doc);
 private:
     std::unique_ptr<OutlineNode> m_rootNode;

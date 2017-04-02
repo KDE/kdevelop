@@ -155,7 +155,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
 
     void colorSetupChanged();
 
-  private slots:
+  private Q_SLOTS:
     // history browsing
     void documentJumpPerformed( KDevelop::IDocument* newDocument,
                                 const KTextEditor::Cursor& newCursor,

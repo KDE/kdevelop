@@ -26,7 +26,7 @@ using namespace KDevelop;
 class TestProblemStoreNode : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

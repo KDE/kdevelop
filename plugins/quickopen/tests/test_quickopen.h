@@ -29,7 +29,7 @@ class TestQuickOpen
     Q_OBJECT
 public:
     explicit TestQuickOpen(QObject* parent = nullptr);
-private slots:
+private Q_SLOTS:
     void testSorting();
     void testSorting_data();
     void testAbbreviations();

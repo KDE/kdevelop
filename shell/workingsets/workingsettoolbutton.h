@@ -42,7 +42,7 @@ public:
     WorkingSet* workingSet() const;
     void setWorkingSet(WorkingSet* set);
 
-public slots:
+public Q_SLOTS:
     void closeSet(bool ask = false);
     void loadSet();
     void duplicateSet();

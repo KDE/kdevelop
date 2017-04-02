@@ -38,11 +38,11 @@ public:
     QString selectedTemplate();
     QString projectName();
     QUrl location();
-signals:
+Q_SIGNALS:
     void locationChanged( const QUrl& );
     void valid();
     void invalid();
-private slots:
+private Q_SLOTS:
     void itemChanged( const QModelIndex& current );
     void urlEdited();
     void validateData();

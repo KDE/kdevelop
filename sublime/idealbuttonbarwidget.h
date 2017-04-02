@@ -74,7 +74,7 @@ public:
 
     bool isLocked();
 
-signals:
+Q_SIGNALS:
     void emptyChanged();
 
 private:

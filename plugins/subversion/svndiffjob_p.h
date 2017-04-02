@@ -49,7 +49,7 @@ public:
     KDevelop::VcsRevision dstRevision() const;
     KDevelop::VcsRevision pegRevision() const;
 
-signals:
+Q_SIGNALS:
     void gotDiff( const QString& );
 protected:
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;

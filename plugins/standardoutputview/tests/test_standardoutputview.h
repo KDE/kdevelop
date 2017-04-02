@@ -50,7 +50,7 @@ private:
     int outputId[5];
     static const QString toolviewTitle;
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void testRegisterAndRemoveToolView();

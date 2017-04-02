@@ -68,10 +68,10 @@ public:
     
     void setSuggestion(KDevelop::IProject* project);
 
-public slots:
+public Q_SLOTS:
     bool selectItemDialog();
     
-private slots:
+private Q_SLOTS:
     void showCtxMenu(const QPoint& p);
     
 private:

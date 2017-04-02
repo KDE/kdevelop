@@ -44,7 +44,7 @@ public:
     Qt::DockWidgetArea dockWidgetArea() const;
     void setDockWidgetArea(Qt::DockWidgetArea dockingArea);
 
-public slots:
+public Q_SLOTS:
     /// The IdealToolButton also connects to this slot to show the same context menu.
     void contextMenuRequested(const QPoint &point);
 

@@ -67,7 +67,7 @@ public:
     KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
-private slots:
+private Q_SLOTS:
     void parseBzrStatus(KDevelop::DVcsJob* job);
     void parseBzrLog(KDevelop::DVcsJob* job);
     void parseBzrRoot(KDevelop::DVcsJob* job);

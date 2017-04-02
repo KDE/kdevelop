@@ -43,7 +43,7 @@ namespace KDevelop
         VariableToolTip(QWidget* parent, const QPoint& position,
                         const QString& identifier);
         Variable* variable() const { return m_var; };
-    private slots:
+    private Q_SLOTS:
         void variableCreated(bool hasValue);
         void slotLinkActivated(const QString& link);
         void slotRangeChanged(int min, int max);

@@ -43,7 +43,7 @@ public:
     void setLimit( int limit );
     void setEndRevision( const KDevelop::VcsRevision& rev );
     void setStartRevision( const KDevelop::VcsRevision& rev );
-private slots:
+private Q_SLOTS:
     void logEventReceived( const KDevelop::VcsEvent& );
 private:
     QList<QVariant> m_eventList;

@@ -30,7 +30,7 @@ namespace Sublime {
 
 class TestAreaOperation: public QObject {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void init();
     void cleanup();
 

@@ -242,7 +242,7 @@ public:
         return q->sessionDirectory( activeSession->id().toString() );
     }
 
-private slots:
+private Q_SLOTS:
     void sessionUpdated( KDevelop::ISession* s )
     {
         sessionActions[static_cast<Session*>( s )]->setText( KStringHandler::rsqueeze(s->description()) );

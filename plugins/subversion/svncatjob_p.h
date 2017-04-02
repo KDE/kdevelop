@@ -37,7 +37,7 @@ public:
     KDevelop::VcsRevision srcRevision() const;
     KDevelop::VcsRevision pegRevision() const;
 
-signals:
+Q_SIGNALS:
     void gotContent( const QString& );
 protected:
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;

@@ -35,7 +35,7 @@ class WelcomePageWidget : public QQuickWidget
 public:
     explicit WelcomePageWidget(const QList< KDevelop::IProject* >& projects, QWidget* parent = nullptr);
 
-public slots:
+public Q_SLOTS:
     void areaChanged(Sublime::Area* a);
 };
 

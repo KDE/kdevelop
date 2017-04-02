@@ -42,7 +42,7 @@ public:
 Q_SIGNALS:
     void shouldClose();
 
-public slots:
+public Q_SLOTS:
     void buttonClicked(bool);
     void updateFileButtons();
     void labelClicked();

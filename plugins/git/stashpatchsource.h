@@ -47,7 +47,7 @@ public:
     bool canSelectFiles() const override { return true; };
     uint depth() const override { return 1; }
 
-private slots:
+private Q_SLOTS:
     void updatePatchFile(KDevelop::VcsJob* job);
 
 private:

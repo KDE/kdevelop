@@ -44,7 +44,7 @@ public:
     explicit WorkingSetWidget(Sublime::Area* area, QWidget* parent = nullptr);
     void setVisible( bool visible ) override;
 
-private slots:
+private Q_SLOTS:
     void changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
     void setChangedSignificantly();
 

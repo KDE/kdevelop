@@ -45,10 +45,10 @@ public:
     ~DocumentSwitcherPlugin() override;
 
     void unload() override;
-public slots:
+public Q_SLOTS:
     void itemActivated( const QModelIndex& );
     void switchToClicked(const QModelIndex& );
-private slots:
+private Q_SLOTS:
     void addView( Sublime::View* );
     void changeView( Sublime::View* );
     void addMainWindow( Sublime::MainWindow* );

@@ -43,7 +43,7 @@ public:
     void setLocation( const QUrl &location );
     void setEndRevision( const KDevelop::VcsRevision& rev );
     void setStartRevision( const KDevelop::VcsRevision& rev );
-private slots:
+private Q_SLOTS:
     void blameLineReceived( const KDevelop::VcsAnnotationLine& );
 
 private:

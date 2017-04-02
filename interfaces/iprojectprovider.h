@@ -47,7 +47,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IProjectProviderWidget : public QWidget
         /** @returns whether we have a correct location in the widget. */
         virtual bool isCorrect() const = 0;
 
-    signals:
+    Q_SIGNALS:
         void changed(const QString& name);
 };
 

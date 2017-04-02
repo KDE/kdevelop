@@ -74,7 +74,7 @@ public:
 
     JobPrototype jobForUrl(const IndexedString& url);
 
-private slots:
+private Q_SLOTS:
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& context);
     void parseJobCreated(KDevelop::ParseJob*);
 
@@ -90,7 +90,7 @@ class TestBackgroundparser : public QObject
 {
 Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void init();

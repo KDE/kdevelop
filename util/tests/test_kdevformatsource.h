@@ -33,7 +33,7 @@ struct Source
 class TestKdevFormatSource: public QObject {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testNotFound();
     void testNotFound_data();
 

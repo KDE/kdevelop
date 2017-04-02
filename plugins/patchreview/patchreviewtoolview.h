@@ -43,10 +43,10 @@ public:
     // ensuring that the tabs are sorted correctly
     void open( const QUrl& url, bool activate ) const;
 
-signals:
+Q_SIGNALS:
     void dialogClosed( PatchReviewToolView* );
     void  stateChanged( PatchReviewToolView* );
-private slots:
+private Q_SLOTS:
 
     void startingNewReview();
 
@@ -102,7 +102,7 @@ private:
     class PatchFilesModel* m_fileModel;
     QSortFilterProxyModel* m_fileSortProxyModel;
 
-public slots:
+public Q_SLOTS:
     void documentActivated( KDevelop::IDocument* );
     void customContextMenuRequested(const QPoint& p);
     void testJobResult(KJob* job);

@@ -40,7 +40,7 @@ struct TestValue {
 class TestKDevVarLengthArray : public QObject {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     /**
      * Make sure that valgrind does not report any warnings here
      * about uninitialized member variables.

@@ -130,7 +130,7 @@ public:
     /// Retrives the path of the current document
     const KDevelop::IndexedString& currentDocument() const;
 
-signals:
+Q_SIGNALS:
     /// Emitted when any store setting (grouping, scope, severity, document) is changed
     void changed();
 
@@ -145,7 +145,7 @@ signals:
     /// Emitted once the problemlist has been rebuilt
     void endRebuild();
 
-private slots:
+private Q_SLOTS:
     /// Triggered when the watched document set changes. E.g.:document closed, new one added, etc
     virtual void onDocumentSetChanged();
 

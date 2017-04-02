@@ -70,7 +70,7 @@ public:
 
   void saveItem(const ExternalScriptItem* item);
 
-public slots:
+public Q_SLOTS:
   void executeScriptFromActionData() const;
 
   /**
@@ -83,7 +83,7 @@ public slots:
    * */
   Q_SCRIPTABLE QString executeCommandSync(QString command, QString workingDirectory) const;
   
-private slots:
+private Q_SLOTS:
   void rowsRemoved( const QModelIndex& parent, int start, int end );
   void rowsInserted( const QModelIndex& parent, int start, int end );
   void executeScriptFromContextMenu() const;

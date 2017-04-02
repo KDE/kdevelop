@@ -48,7 +48,7 @@ public:
     int id;
     void setModel( QAbstractItemModel* model );
     void setDelegate( QAbstractItemDelegate* delegate );
-signals:
+Q_SIGNALS:
     void modelChanged( int );
     void delegateChanged( int );
 };
@@ -71,7 +71,7 @@ public:
     int toolViewId;
     KDevelop::IOutputView::Options option;
     QList<QAction*> actionList;
-signals:
+Q_SIGNALS:
     void outputAdded( int );
 };
 

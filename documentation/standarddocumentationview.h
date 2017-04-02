@@ -60,7 +60,7 @@ public:
 Q_SIGNALS:
     void linkClicked(const QUrl &link);
 
-public slots:
+public Q_SLOTS:
     /**
      * Search for @p text in the documentation view.
      */

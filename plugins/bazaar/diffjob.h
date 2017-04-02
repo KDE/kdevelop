@@ -48,7 +48,7 @@ public:
 protected:
     bool doKill() override;
 
-private slots:
+private Q_SLOTS:
     void prepareResult(KJob*);
 
 private:

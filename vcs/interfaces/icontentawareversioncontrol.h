@@ -40,11 +40,11 @@ public:
 
     KTextEditor::Document* document() const;
 
-public slots:
+public Q_SLOTS:
     /// Abort this request.
     void abort();
 
-signals:
+Q_SIGNALS:
     void finished(bool canRecreate);
 
 protected:

@@ -48,7 +48,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavi
 
     NavigationContextPointer executeKeyAction(QString key) override;
 
-public slots:
+public Q_SLOTS:
     void executeAction(int index); // TODO: Add API in base class?
 
   private:

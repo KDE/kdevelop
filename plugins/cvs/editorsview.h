@@ -60,7 +60,7 @@ public:
     static void parseOutput(const QString& jobOutput,
                             QMultiMap<QString,CvsLocker>& editorsInfo);
 
-private slots:
+private Q_SLOTS:
     /**
      * Connect a job's result() signal to this slot. When called, the output from the job
      * will be passed to the parseOutput() method and any found locker information will be

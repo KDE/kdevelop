@@ -44,7 +44,7 @@ public:
 
     void apply() override;
 
-private slots:
+private Q_SLOTS:
     void slotSettingsChanged();
 
 private:

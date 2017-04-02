@@ -125,7 +125,7 @@ public:
     explicit LaunchConfigPagesContainer( const QList<LaunchConfigurationPageFactory*> &, QWidget* parent = nullptr );
     void setLaunchConfiguration( LaunchConfiguration* );
     void save();
-signals:
+Q_SIGNALS:
     void changed();
 private:
     LaunchConfiguration* config;
@@ -139,7 +139,7 @@ public:
     explicit LaunchConfigurationDialog(QWidget* parent = nullptr );
     QSize sizeHint() const override;
 
-private slots:
+private Q_SLOTS:
     void deleteConfiguration();
     void createConfiguration();
     void addConfiguration(KDevelop::ILaunchConfiguration*);

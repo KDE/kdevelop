@@ -31,7 +31,7 @@ public:
     ImportDialog(CvsPlugin *plugin, const QUrl &url, QWidget* parent=nullptr);
     ~ImportDialog() override;
 
-public slots:
+public Q_SLOTS:
     void accept() override;
     void jobFinished(KJob* job);
 

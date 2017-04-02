@@ -37,7 +37,7 @@ class StashManagerDialog : public QDialog
         explicit StashManagerDialog(const QDir& stashed, GitPlugin* plugin, QWidget* parent);
         ~StashManagerDialog() override;
         
-    public slots:
+    public Q_SLOTS:
         void showStash();
         void applyClicked();
         void branchClicked();
@@ -61,7 +61,7 @@ class StashModel : public QStandardItemModel
     public:
         explicit StashModel(const QDir& dir, GitPlugin* git, QObject* parent = nullptr);
         
-    private slots:
+    private Q_SLOTS:
         void stashListReady(KJob*);
 };
 

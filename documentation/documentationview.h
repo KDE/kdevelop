@@ -44,7 +44,7 @@ public:
 
     void showDocumentation(const KDevelop::IDocumentation::Ptr& doc);
 
-public slots:
+public Q_SLOTS:
     void initialize();
 
     void addHistory(const KDevelop::IDocumentation::Ptr& doc);
@@ -84,7 +84,7 @@ public:
     KDevelop::IDocumentationProvider* provider(int pos) const;
     int rowForProvider(KDevelop::IDocumentationProvider* provider);
 
-public slots:
+public Q_SLOTS:
     void unloaded(KDevelop::IPlugin* p);
     void loaded(KDevelop::IPlugin* p);
     void reloadProviders();
@@ -94,7 +94,7 @@ private:
     void removeProvider(KDevelop::IDocumentationProvider* provider);
 
     QList<KDevelop::IDocumentationProvider*> mProviders;
-signals:
+Q_SIGNALS:
     void providersChanged();
 };
 

@@ -88,9 +88,9 @@ public:
 
     ///This value will be added to the height of all created expanding-widgets
     void setExpandingWidgetHeightIncrease(int pixels);
-public slots:
+public Q_SLOTS:
     void textChanged(const QString& str);
-private slots:
+private Q_SLOTS:
     void destroyed(QObject* obj);
     void resetTimer();
     void restart_internal(bool keepFilterText);

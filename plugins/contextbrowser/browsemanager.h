@@ -50,7 +50,7 @@ private:
     ///Called for every added view. Reimplement this to catch them.
     virtual void viewAdded(KTextEditor::View*);
 
-private slots:
+private Q_SLOTS:
     void viewDestroyed(QObject* view);
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);
     void documentCreated( KDevelop::IDocument* document );
@@ -89,10 +89,10 @@ class BrowseManager : public QObject {
         void startDelayedBrowsing(KTextEditor::View* view);
         void stopDelayedBrowsing();
         void invokeAction(int index);
-    public slots:
+    public Q_SLOTS:
         ///Enabled/disables the browsing mode
         void setBrowsing(bool);
-    private slots:
+    private Q_SLOTS:
         void eventuallyStartDelayedBrowsing();
     private:
         struct JumpLocation

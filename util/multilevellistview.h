@@ -113,7 +113,7 @@ public:
      * is used and only leafs are selectable in the view for that model.
      */
     void setLastModelsFilterBehavior(KSelectionProxyModel::FilterBehavior filter);
-signals:
+Q_SIGNALS:
     /**
      * Notified that the current index has changed from @p previous to @p current
      *
@@ -124,7 +124,7 @@ signals:
      */
     void currentIndexChanged(const QModelIndex& current, const QModelIndex& previous);
 
-public slots:
+public Q_SLOTS:
     /**
      * Sets the root index of the entire view to @p index.
      *

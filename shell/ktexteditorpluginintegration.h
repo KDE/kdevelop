@@ -48,7 +48,7 @@ public:
     explicit Application(QObject *parent = nullptr);
     ~Application() override;
 
-public slots:
+public Q_SLOTS:
     KTextEditor::MainWindow *activeMainWindow() const;
     QList<KTextEditor::MainWindow *> mainWindows() const;
 
@@ -64,7 +64,7 @@ public:
     explicit MainWindow(KDevelop::MainWindow *mainWindow);
     ~MainWindow() override;
 
-public slots:
+public Q_SLOTS:
     QWidget *createToolView(KTextEditor::Plugin *plugin, const QString &identifier,
                             KTextEditor::MainWindow::ToolViewPosition pos,
                             const QIcon &icon, const QString &text);

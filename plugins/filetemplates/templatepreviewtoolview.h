@@ -56,13 +56,13 @@ private:
     FileTemplatesPlugin* m_plugin;
     KDevelop::TemplateRenderer::EmptyLinesPolicy m_policy;
 
-private slots:
+private Q_SLOTS:
     void sourceTextChanged(const QString& text);
 
 protected:
     void showEvent(QShowEvent*) override;
 
-public slots:
+public Q_SLOTS:
     void documentActivated(KDevelop::IDocument* document);
     void documentChanged(KTextEditor::Document* textDocument);
     void documentClosed(KDevelop::IDocument* document);

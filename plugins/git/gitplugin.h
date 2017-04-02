@@ -49,7 +49,7 @@ class StandardJob : public KDevelop::VcsJob
         JobStatus status() const override { return m_status; }
         KDevelop::IPlugin* vcsPlugin() const override { return m_plugin; }
         
-    public slots:
+    public Q_SLOTS:
         void result(KJob*);
     
     private:
@@ -173,7 +173,7 @@ protected:
                          const QStringList &args,
                          KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Silent);
 
-private slots:
+private Q_SLOTS:
     void parseGitBlameOutput(KDevelop::DVcsJob *job);
     void parseGitLogOutput(KDevelop::DVcsJob *job);
     void parseGitDiffOutput(KDevelop::DVcsJob* job);
@@ -191,7 +191,7 @@ private slots:
     void fileChanged(const QString& file);
     void delayedBranchChanged();
 
-signals:
+Q_SIGNALS:
     void repositoryBranchChanged(const QUrl& repository);
 
 private:

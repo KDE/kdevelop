@@ -70,7 +70,7 @@ public:
      */
     EnvironmentProfileList environmentProfiles() const;
 
-public slots:
+public Q_SLOTS:
     /**
      * Makes the widget re-read its environment group list.
      */

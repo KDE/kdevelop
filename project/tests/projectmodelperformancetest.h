@@ -36,7 +36,7 @@ Q_OBJECT
 public:
     explicit ProjectModelPerformanceTest(QWidget* parent = nullptr);
     ~ProjectModelPerformanceTest() override;
-private slots:
+private Q_SLOTS:
     void init();
     void addSmallTree();
     void addBigTree();

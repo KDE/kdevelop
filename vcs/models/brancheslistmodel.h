@@ -59,10 +59,10 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
         KDevelop::IProject* project() const;
         void setProject(KDevelop::IProject* p);
 
-    public slots:
+    public Q_SLOTS:
         void resetCurrent();
 
-    signals:
+    Q_SIGNALS:
         void currentBranchChanged();
 
     private:

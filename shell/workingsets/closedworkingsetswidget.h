@@ -51,7 +51,7 @@ class ClosedWorkingSetsWidget : public QWidget
 public:
     explicit ClosedWorkingSetsWidget(MainWindow* window);
 
-private slots:
+private Q_SLOTS:
     void areaChanged(Sublime::Area* area);
     void changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
     void addWorkingSet(WorkingSet* set);

@@ -33,7 +33,7 @@ public:
     void setRecursive( bool );
     bool recursive() const;
 
-private slots:
+private Q_SLOTS:
     void ok();
     void cancel();
 

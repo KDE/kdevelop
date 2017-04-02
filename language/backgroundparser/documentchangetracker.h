@@ -237,7 +237,7 @@ protected:
 
     void updateChangedRange(int delay);
     int recommendedDelay(KTextEditor::Document* doc, const KTextEditor::Range& range, const QString& text, bool removal);
-public slots:
+public Q_SLOTS:
     void textInserted(KTextEditor::Document* document, const KTextEditor::Cursor& position, const QString& inserted);
     void textRemoved(KTextEditor::Document* document, const KTextEditor::Range& range, const QString& oldText);
     void lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position);

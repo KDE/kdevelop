@@ -27,7 +27,7 @@ class Example2Main: public Sublime::MainWindow {
 public:
     explicit Example2Main(Sublime::Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
 
-public slots:
+public Q_SLOTS:
     void splitVertical();
     void splitHorizontal();
     void close();

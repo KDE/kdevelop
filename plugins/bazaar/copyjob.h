@@ -49,7 +49,7 @@ public:
 protected:
     bool doKill() override;
 
-private slots:
+private Q_SLOTS:
     void finish(KJob*);
     void addToVcs(KIO::Job* job, const QUrl& from, const QUrl& to, const QDateTime& mtime, bool directory, bool renamed);
 

@@ -31,7 +31,7 @@ public:
     explicit CheckoutDialog(CvsPlugin* plugin, QWidget *parent=nullptr);
     ~CheckoutDialog() override;
 
-public slots:
+public Q_SLOTS:
     void accept() override;
     void jobFinished(KJob* job);
 

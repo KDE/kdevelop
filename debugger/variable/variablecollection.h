@@ -100,7 +100,7 @@ public:
     void setChanged(bool c);
     void resetChanged();
 
-public slots:
+public Q_SLOTS:
     void die();
 
 protected:

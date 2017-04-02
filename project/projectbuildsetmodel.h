@@ -72,7 +72,7 @@ public:
     void moveRowsToTop( int row, int count );
     void moveRowsToBottom( int row, int count );
     QList<BuildItem> items();
-public slots:
+public Q_SLOTS:
     void saveToProject( KDevelop::IProject* ) const;
     void loadFromProject( KDevelop::IProject* );
     void projectClosed( KDevelop::IProject* );

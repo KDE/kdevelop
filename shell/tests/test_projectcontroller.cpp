@@ -53,7 +53,7 @@ public:
     ~DialogProviderFake() override {}
     bool m_reopen;
 
-public slots:
+public Q_SLOTS:
     QUrl askProjectConfigLocation(bool /*fetch*/, const QUrl& /*startUrl*/,
                                   const QUrl& /*repoUrl*/, IPlugin* /*plugin*/) override
     { return QUrl(); }

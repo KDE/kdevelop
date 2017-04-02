@@ -58,7 +58,7 @@ public:
     virtual void setCurrentDocument(const IndexedString& url);
     virtual ProblemScope getScope() const = 0;
 
-signals:
+Q_SIGNALS:
     void changed();
 
 protected:
@@ -88,7 +88,7 @@ public:
     explicit OpenDocumentSet(QObject* parent);
     ProblemScope getScope() const override;
 
-private slots:
+private Q_SLOTS:
     void documentClosed(IDocument* doc);
     void documentCreated(IDocument* doc);
 };
@@ -106,7 +106,7 @@ public:
 protected:
     void trackProjectFiles(const IProject* project);
 
-protected slots:
+protected Q_SLOTS:
     void fileAdded(ProjectFileItem*);
     void fileRemoved(ProjectFileItem* file);
     void fileRenamed(const Path& oldFile, ProjectFileItem* newFile);

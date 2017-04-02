@@ -48,7 +48,7 @@ public:
 protected:
     void openFilesInternal( const QList<QUrl>& files ) override;
 
-private slots:
+private Q_SLOTS:
     void open( const QString& storageId );
     void openService( const KService::Ptr& service );
     void openDefault();

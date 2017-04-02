@@ -30,7 +30,7 @@ class BenchHashes : public QObject
 private:
   void feedData();
 
-private slots:
+private Q_SLOTS:
   void initTestCase();
   void cleanupTestCase();
 

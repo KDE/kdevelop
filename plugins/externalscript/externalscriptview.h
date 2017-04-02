@@ -45,7 +45,7 @@ public:
   /// @return Item for @p index.
   ExternalScriptItem* itemForIndex(const QModelIndex& index) const;
 
-private slots:
+private Q_SLOTS:
   void contextMenu ( const QPoint& pos );
 
   void addScript();

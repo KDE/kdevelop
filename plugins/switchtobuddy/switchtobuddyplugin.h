@@ -55,7 +55,7 @@ public:
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
     void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
 
-private slots:
+private Q_SLOTS:
     /**
      * Context menu slot which switches to the QUrl provided
      * in the data part of the sending QAction.

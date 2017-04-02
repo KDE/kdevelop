@@ -36,7 +36,7 @@ public:
 
     bool recursive() const;
     QList<QUrl> locations() const;
-signals:
+Q_SIGNALS:
     void gotNewStatus( const KDevelop::VcsStatusInfo& );
 protected:
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;

@@ -49,7 +49,7 @@ public:
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
 
-private slots:
+private Q_SLOTS:
     void add();
     void remove();
     void moveUp();

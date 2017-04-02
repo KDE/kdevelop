@@ -104,12 +104,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// access the foreground color
     QColor foregroundColor() const;
 
-  signals:
+  Q_SIGNALS:
     /// will be emitted whenever the colors got changed
     /// @see update()
     void colorsGotChanged();
 
-  private slots:
+  private Q_SLOTS:
     /// if necessary, adapt to the colors of this document
     void slotDocumentActivated();
     /// settings got changed, update to the settings of the sender

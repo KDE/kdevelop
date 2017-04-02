@@ -55,7 +55,7 @@ public:
 protected:
     void init();
 
-public slots:
+public Q_SLOTS:
     void updatePreviewText(const QString &text);
 
 private:

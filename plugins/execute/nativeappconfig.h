@@ -38,7 +38,7 @@ public:
     void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = nullptr ) const override;
     QString title() const override;
     QIcon icon() const override;
-private slots:
+private Q_SLOTS:
     void activateDeps( int );
 };
 
@@ -87,7 +87,7 @@ public:
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
 
-public slots:
+public Q_SLOTS:
     void suggestionTriggered();
 };
 #endif
