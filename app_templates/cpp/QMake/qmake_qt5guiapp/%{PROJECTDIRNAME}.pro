@@ -1,5 +1,7 @@
 TEMPLATE = app
 
+QT += widgets
+
 FORMS += mainwindow.ui
 SOURCES += main.cpp
 

@@ -1,0 +1,6 @@
+[General]
+Name=QMake Qt5 QWidgets GUI Application
+Comment=Generate a QMake/Qt5 based GUI application (crossplatform compatible)
+
+Category=Qt/Graphical (QMake-based)
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
