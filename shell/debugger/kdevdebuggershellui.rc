@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevdebuggershellui" library="kdevdebugger" version="8" translationDomain="kdevplatform">
+<kpartgui name="kdevdebuggershellui" version="8" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="run">
             <text context="@title:menu">Run</text>
