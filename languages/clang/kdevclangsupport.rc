@@ -2,7 +2,6 @@
 <kpartgui name="KDevClangSupport" version="1" translationDomain="kdevclang">
 <MenuBar>
   <Menu name="code">
-    <text context="@title:menu">Code</text>
     <Action name="code_rename_declaration"/>
   </Menu>
 </MenuBar>

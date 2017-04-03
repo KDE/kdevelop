@@ -2,7 +2,6 @@
 <gui name="kdevcustommakemanager" version="5" translationDomain="kdevcustommake">
   <MenuBar>
   <Menu name="run">
-   <text context="@title:menu">Run</text>
    <Action name="build_target"/>
   </Menu>
 </MenuBar>
