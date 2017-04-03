@@ -2,8 +2,6 @@
 <kpartgui name="kdevdebuggershellui" version="8" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="run">
-            <text context="@title:menu">Run</text>
-            
             <Separator group="debug"/>
             <Action name="debug_continue" group="debug"/>
             <Action name="debug_pause" group="debug"/>

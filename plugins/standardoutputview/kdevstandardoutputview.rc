@@ -2,7 +2,6 @@
 <kpartgui name="kdevstandardoutputview" version="7" translationDomain="kdevstandardoutputview">
 <MenuBar>
   <Menu name="navigation">
-    <Text context="@title:menu">Navigation</Text>
     <Action name="prev_error" />
     <Action name="next_error" />
   </Menu>

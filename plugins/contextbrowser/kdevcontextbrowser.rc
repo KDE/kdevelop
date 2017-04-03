@@ -2,8 +2,6 @@
 <kpartgui name="KDevContextBrowser" version="12" translationDomain="kdevcontextbrowser">
 <MenuBar>
   <Menu name="navigation">
-    <text context="@title:menu">Navigation</text>
-
     <Action name="source_browse_mode"/>
 
     <Action name="previous_context"
