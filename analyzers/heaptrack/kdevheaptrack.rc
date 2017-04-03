@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<gui name="kdevheaptrack" library="kdevheaptrack" version="2" translationDomain="kdevheaptrack">
+<gui name="kdevheaptrack" version="2" translationDomain="kdevheaptrack">
 <MenuBar>
   <Menu name="run">
     <Menu name="debug_attach_menu">

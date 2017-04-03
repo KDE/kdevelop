@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevdgdb" library="kdevgdb" version="56" translationDomain="kdevgdb">
+<kpartgui name="kdevdgdb" version="56" translationDomain="kdevgdb">
 <MenuBar>
  <Menu name="run">
     <Menu name="debug_core_menu">
