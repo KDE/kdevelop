@@ -119,7 +119,7 @@ void QMakeJob::start()
     connect(lineMaker, SIGNAL(receivedStdoutLines(QStringList)), m_model, SLOT(appendLines(QStringList)));
     connect(lineMaker, SIGNAL(receivedStderrLines(QStringList)), m_model, SLOT(appendLines(QStringList)));
     connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)));
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
+    connect(m_process, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(processFinished(int,QProcess::ExitStatus)));
 
     m_process->start();
 }
