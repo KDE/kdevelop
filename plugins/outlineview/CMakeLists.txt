@@ -1,8 +1,4 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevoutlineview\")
-if(UNIX)
-  add_compile_options(-pedantic -Wno-gnu-zero-variadic-macro-arguments)
-endif()
-
 set(kdevoutlineview_SRCS
     outlineviewplugin.cpp
     outlinenode.cpp
