@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevdebuggershellui" version="8" translationDomain="kdevplatform">
+<gui name="kdevdebuggershellui" version="8" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="run">
             <Separator group="debug"/>
@@ -87,4 +87,4 @@
             <Action name="debug_jumptocursor"/>
         </disable>
     </State>
-</kpartgui>
+</gui>

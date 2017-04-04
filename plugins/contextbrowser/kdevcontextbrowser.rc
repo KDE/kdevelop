@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevContextBrowser" version="12" translationDomain="kdevcontextbrowser">
+<gui name="KDevContextBrowser" version="12" translationDomain="kdevcontextbrowser">
 <MenuBar>
   <Menu name="navigation">
     <Action name="source_browse_mode"/>
@@ -40,4 +40,4 @@
   </enable>
 </State>
 
-</kpartgui>
+</gui>

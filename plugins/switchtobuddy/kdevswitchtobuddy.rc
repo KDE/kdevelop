@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevSwitchToBuddy" version="7" translationDomain="kdevswitchtobuddy">
+<gui name="KDevSwitchToBuddy" version="7" translationDomain="kdevswitchtobuddy">
 <MenuBar>
   <Menu name="navigation">
     <Action name="switch_definition_declaration" group="navigation_jmp"/>
     <Action name="switch_header_source" group="navigation_jmp"/>
   </Menu>
 </MenuBar>
-</kpartgui>
+</gui>

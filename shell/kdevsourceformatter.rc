@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevsourceformatter" version="4" translationDomain="kdevplatform">
+<gui name="kdevsourceformatter" version="4" translationDomain="kdevplatform">
 <MenuBar>
  <Menu name="edit">
    <Action name="edit_reformat_source" group="edit_formatting"/>
    <Action name="edit_reformat_line" group="edit_formatting"/>
  </Menu>
 </MenuBar>
-</kpartgui>
+</gui>

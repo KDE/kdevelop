@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevsessionui" version="6" translationDomain="kdevplatform">
+<gui name="kdevsessionui" version="6" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="session">
             <Action name="new_session" />
@@ -12,4 +12,4 @@
             <Action name="quit" />
         </Menu>
     </MenuBar>
-</kpartgui>
+</gui>

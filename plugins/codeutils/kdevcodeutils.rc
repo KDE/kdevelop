@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kdevcodeutils" version="7" translationDomain="kdevcodeutils">
+<gui name="kdevcodeutils" version="7" translationDomain="kdevcodeutils">
 <MenuBar>
   <Menu name="code">
     <Action name="document_declaration" />
@@ -7,5 +7,5 @@
     <Action name="test_from_template" />
   </Menu>
 </MenuBar>
-</kpartgui>
+</gui>
 
