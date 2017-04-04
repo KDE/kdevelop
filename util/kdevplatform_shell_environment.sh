@@ -780,7 +780,7 @@ function setenv! {
     # note: keep compatible with FreeBSD: https://bugs.kde.org/show_bug.cgi?id=311186
     local TEMP=$(mktemp /tmp/$USER-XXXXXXXX)
     RESULT=$(executeInAppSync "cat \"$(getCurrentShellEnvPath)\"" "")
-    echo "$RESULT" > $TEMP
+    echo "$RESULT" >| $TEMP
     if ! [ "$RESULT" ]; then
         # If the environment shell file doesn't exist, create it
         executeInAppSync "if ! [ -e $(getCurrentShellEnvPath) ]; then touch $(getCurrentShellEnvPath); fi" ""
