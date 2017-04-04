@@ -53,7 +53,6 @@ public:
      * @brief Create a new template options page
      *
      * @param parent the parent template class assistant
-     * @param f window flags, passed to QWidget
      **/
     explicit TemplateOptionsPage(QWidget* parent);
     /**
