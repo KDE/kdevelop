@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="kdevtestview" library="libkdevtestview" version="8" translationDomain="kdevtestview">
+<gui name="kdevtestview" version="8" translationDomain="kdevtestview">
 <MenuBar>
  <Menu name="run">
   <Action name="run_all_tests"
 	  group="run_operations"/>
  </Menu>
 </MenuBar>
-</kpartplugin>
+</gui>

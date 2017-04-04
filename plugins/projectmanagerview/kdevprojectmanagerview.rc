@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="kdevprojectmanagerview" library="libkdevprojectmanagerview" version="8" translationDomain="kdevprojectmanagerview">
+<gui name="kdevprojectmanagerview" version="8" translationDomain="kdevprojectmanagerview">
 <MenuBar>
  <Menu name="project">
   <Action name="project_configure"
@@ -25,4 +25,4 @@
 <ToolBar name="mainToolBar" position="Top">
   <Action name="project_build" group="build_operations" />
 </ToolBar>
-</kpartplugin>
+</gui>
