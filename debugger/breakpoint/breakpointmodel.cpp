@@ -123,16 +123,10 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 
     if (iface) {
         // can't use new signal slot syntax here, MarkInterface is not a QObject
-        connect(doc->textDocument(), SIGNAL(
-                     markChanged(KTextEditor::Document*,
-                                 KTextEditor::Mark,
-                                 KTextEditor::MarkInterface::MarkChangeAction)),
-                 this,
-                 SLOT(markChanged(KTextEditor::Document*,
-                                 KTextEditor::Mark,
-                                  KTextEditor::MarkInterface::MarkChangeAction)));
-        connect(doc->textDocument(), SIGNAL(markContextMenuRequested(KTextEditor::Document*, KTextEditor::Mark, QPoint, bool&)),
-                SLOT(markContextMenuRequested(KTextEditor::Document*, KTextEditor::Mark, QPoint, bool&)));
+        connect(doc->textDocument(), SIGNAL(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)),
+                 this, SLOT(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)));
+        connect(doc->textDocument(), SIGNAL(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
+                SLOT(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
     }
 }
 

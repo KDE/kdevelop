@@ -61,8 +61,8 @@ struct DVcsJobPrivate;
  * @code
  * VcsJob* j = add(QList<QUrl>() << a << b << c, IBasicVersionControl::Recursive);
  * DVcsJob* job = qobject_cast<DVCSjob*>(j);
- * connect(job, SIGNAL(result(KJob*) ),
- *         this, SIGNAL(jobFinished(KJob*) ));
+ * connect(job, SIGNAL(result(KJob*)),
+ *         this, SIGNAL(jobFinished(KJob*)));
  * ICore::self()->runController()->registerJob(job);
  * @endcode
  * 

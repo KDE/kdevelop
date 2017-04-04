@@ -80,7 +80,7 @@ bool ExecuteCompositeJob::addSubjob(KJob* job)
 
     ++d->m_jobCount;
 
-    connect(job, SIGNAL(percent(KJob*, unsigned long)), this, SLOT(slotPercent(KJob*, unsigned long)));
+    connect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(slotPercent(KJob*,ulong)));
     return true;
 }
 
@@ -99,7 +99,7 @@ void ExecuteCompositeJob::slotPercent(KJob* job, unsigned long percent)
 
 void ExecuteCompositeJob::slotResult(KJob* job)
 {
-    disconnect(job, SIGNAL(percent(KJob*, unsigned long)), this, SLOT(slotPercent(KJob*, unsigned long)));
+    disconnect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(slotPercent(KJob*,ulong)));
 
     // jobIndex + 1 because this job just finished
     const float ratio = d->m_jobIndex != -1 ? (d->m_jobIndex + 1.0) / d->m_jobCount : 1.0;

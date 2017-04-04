@@ -1218,7 +1218,7 @@ void DocumentController::vcsAnnotateCurrentDocument()
         Q_ASSERT(qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->activeTextView()));
         // can't use new signal slot syntax here, AnnotationViewInterface is not a QObject
         connect(doc->activeTextView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
-                helper, SLOT(disposeEventually(View*, bool)));
+                helper, SLOT(disposeEventually(View*,bool)));
         helper->addContextDocument(url);
         helper->annotation();
     }

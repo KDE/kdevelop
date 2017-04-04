@@ -222,12 +222,8 @@ void SvnInternalJobBase::initBeforeRun()
              parent(), SLOT(askForCommitMessage()), Qt::QueuedConnection );
     connect( this, SIGNAL(needLogin(QString)),
              parent(), SLOT(askForLogin(QString)), Qt::QueuedConnection );
-    connect( this, SIGNAL( needSslServerTrust( const QStringList&,
-                           const QString&, const QString&, const QString&,
-                           const QString&, const QString&, const QString& ) ),
-             parent(), SLOT( askForSslServerTrust( const QStringList&,
-                             const QString&, const QString&, const QString&,
-                             const QString&, const QString&, const QString& ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL(needSslServerTrust(QStringList,QString,QString,QString,QString,QString,QString)),
+             parent(), SLOT(askForSslServerTrust(QStringList,QString,QString,QString,QString,QString,QString)), Qt::QueuedConnection );
     connect( this, SIGNAL(showNotification(QString,QString)),
              parent(), SLOT(showNotification(QString,QString)), Qt::QueuedConnection );
     connect( this, SIGNAL(needSslClientCert(QString)),

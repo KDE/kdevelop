@@ -66,7 +66,7 @@ JobStatus::JobStatus(KJob* job, const QString& statusName, QObject* parent)
         deleteLater();
     });
     // no new-signal-slot syntax possible :(
-    connect(job, SIGNAL(percent(KJob*, unsigned long)), this, SLOT(slotPercent(KJob*, unsigned long)));
+    connect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(slotPercent(KJob*,ulong)));
 }
 
 JobStatus::~JobStatus()
