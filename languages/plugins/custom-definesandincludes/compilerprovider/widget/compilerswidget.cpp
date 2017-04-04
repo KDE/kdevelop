@@ -23,7 +23,10 @@
 
 #include "compilerswidget.h"
 
+#include <kio_version.h>
+#if KIO_VERSION < QT_VERSION_CHECK(5,21,0)
 #include <KLineEdit>
+#endif
 
 #include <QAction>
 #include <KLocalizedString>
@@ -81,10 +84,14 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 
     connect(m_ui->compilerName, &QLineEdit::textEdited, this, &CompilersWidget::compilerEdited);
 
-    // TODO: KF5 5.21: Use KUrlRequester::textEdited signal directly
+#if KIO_VERSION < QT_VERSION_CHECK(5,21,0)
+    // KUrlRequester::textEdited signal only added for 5.21
     auto kUrlRequesterLineEdit = m_ui->compilerPath->lineEdit();
     Q_ASSERT(kUrlRequesterLineEdit);
     connect(kUrlRequesterLineEdit, &QLineEdit::textEdited, this, &CompilersWidget::compilerEdited);
+#else
+    connect(m_ui->compilerPath, &KUrlRequester::textEdited, this, &CompilersWidget::compilerEdited);
+#endif
 
     connect(m_compilersModel, &CompilersModel::compilerChanged, this, &CompilersWidget::compilerChanged);
 
