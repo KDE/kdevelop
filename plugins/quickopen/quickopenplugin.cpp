@@ -64,7 +64,6 @@
 #include <util/activetooltip.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>
-#include <KConfigGroup>
 
 Q_LOGGING_CATEGORY(PLUGIN_QUICKOPEN, "kdevplatform.plugins.quickopen")
 
