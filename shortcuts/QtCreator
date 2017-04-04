@@ -1,4 +1,4 @@
-<kpartgui version="1" name="kdevelop">
+<gui version="1" name="kdevelop">
   <ActionProperties>
     <Action shortcut="Ctrl+X" name="edit_cut"/>
     <Action shortcut="Ctrl+V" name="edit_paste"/>
@@ -74,4 +74,4 @@
     <Action shortcut="F1" name="help_contents"/>
     <Action shortcut="Shift+F1" name="help_whats_this"/>
   </ActionProperties>
-</kpartgui>
+</gui>

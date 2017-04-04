@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevcppcheck" version="8" translationDomain="kdevcppcheck">
+<gui name="kdevcppcheck" version="8" translationDomain="kdevcppcheck">
 <MenuBar>
   <Menu name="analyze">
     <Action name="cppcheck_file"/>
@@ -7,4 +7,4 @@
     <Separator/>
   </Menu>
 </MenuBar>
-</kpartgui>
+</gui>
