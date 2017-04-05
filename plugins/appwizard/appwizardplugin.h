@@ -47,7 +47,7 @@ private:
     ProjectTemplatesModel* model();
 
     QString createProject(const ApplicationInfo& );
-    bool unpackArchive(const KArchiveDirectory *dir, const QString &dest);
+    bool unpackArchive(const KArchiveDirectory* dir, const QString& dest, const QStringList& skipList = {});
     bool copyFileAndExpandMacros(const QString &source, const QString &dest);
 
     ProjectTemplatesModel* m_templatesModel;
