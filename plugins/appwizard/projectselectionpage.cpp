@@ -124,7 +124,7 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
     QString picPath = current.data( KDevelop::TemplatesModel::IconNameRole ).toString();
     if( picPath.isEmpty() ) {
-        QIcon icon(QStringLiteral("kdevelop"));
+        const QIcon icon = QIcon::fromTheme(QStringLiteral("kdevelop"));
         ui->icon->setPixmap(icon.pixmap(128, 128));
         ui->icon->setFixedHeight(128);
     } else {
