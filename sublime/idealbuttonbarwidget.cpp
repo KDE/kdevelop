@@ -272,7 +272,7 @@ void IdealButtonBarWidget::saveOrderSettings(KConfigGroup& configGroup)
     configGroup.writeEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), _buttonsOrder);
 }
 
-bool IdealButtonBarWidget::isLocked()
+bool IdealButtonBarWidget::isLocked() const
 {
     KConfigGroup config = KSharedConfig::openConfig()->group("UI");
     return config.readEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(_area), false);
