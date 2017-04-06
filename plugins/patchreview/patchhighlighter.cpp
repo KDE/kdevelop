@@ -457,14 +457,14 @@ PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, Pa
     if (qobject_cast<KTextEditor::MarkInterface*>(doc)) {
         //can't use new signal/slot syntax here, MarkInterface is not a QObject
         connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
-                this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool &)));
+                this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
         connect(doc, SIGNAL(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)),
                 this, SLOT(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)));
     }
     if (qobject_cast<KTextEditor::MovingInterface*>(doc)) {
         //can't use new signal/slot syntax here, MovingInterface is not a QObject
         connect(doc, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
-                this, SLOT( aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
+                this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
         connect(doc, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
                 this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
     }
