@@ -63,6 +63,7 @@ QString ManPageDocumentation::description() const
 QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent )
 {
     KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
+    view->initZoom(provider()->name());
     view->setDocumentation(IDocumentation::Ptr(this));
     view->setDelegateLinks(true);
     QObject::connect(view, &KDevelop::StandardDocumentationView::linkClicked, ManPageDocumentation::s_provider->model(), &ManPageModel::showItemFromUrl);

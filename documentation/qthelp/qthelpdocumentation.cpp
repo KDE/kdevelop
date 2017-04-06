@@ -249,6 +249,7 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         return new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
     } else {
         StandardDocumentationView* view = new StandardDocumentationView(findWidget, parent);
+        view->initZoom(m_provider->name());
         if (!m_sharedQNAM) {
             m_sharedQNAM.reset(new HelpNetworkAccessManager(m_provider->engine()));
         }
