@@ -94,8 +94,6 @@ namespace KDevelop {
 
     private:
       QScopedPointer<AbstractNavigationWidgetPrivate> d;
-
-      Q_PRIVATE_SLOT(d, void anchorClicked(const QUrl&))
   };
 }
 

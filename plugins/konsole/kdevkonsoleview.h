@@ -33,8 +33,6 @@ protected:
 
 private :
     class KDevKonsoleViewPrivate* const d;
-
-    Q_PRIVATE_SLOT( d, void _k_slotTerminalClosed() )
 };
 
 #endif
