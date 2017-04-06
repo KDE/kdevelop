@@ -98,10 +98,12 @@ void AppWizardPlugin::slotNewProject()
 
             KConfig templateConfig(dlg.appInfo().appTemplate);
             KConfigGroup general(&templateConfig, "General");
-            QString file = general.readEntry("ShowFilesAfterGeneration");
-            if (!file.isEmpty())
-            {
-                file = KMacroExpander::expandMacros(file, m_variables);
+            const QStringList fileArgs = general.readEntry("ShowFilesAfterGeneration").split(QLatin1Char(','), QString::SkipEmptyParts);
+            for (const auto& fileArg : fileArgs) {
+                QString file = KMacroExpander::expandMacros(fileArg.trimmed(), m_variables);
+                if (QDir::isRelativePath(file)) {
+                    file = m_variables[QStringLiteral("PROJECTDIR")] + QLatin1Char('/') + file;
+                }
                 core()->documentController()->openDocument(QUrl::fromUserInput(file));
             }
         } else {
