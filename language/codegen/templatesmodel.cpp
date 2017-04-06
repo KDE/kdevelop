@@ -310,6 +310,10 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                 {
                     const KArchiveFile* iconFile = static_cast<const KArchiveFile*>(iconEntry);
                     const QString saveDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ resourceFilter(Preview);
+                    QDir dir(saveDir);
+                    if (!dir.exists()) {
+                        dir.mkpath(QStringLiteral("."));
+                    }
                     iconFile->copyTo(saveDir);
                     QFileInfo iconInfo(saveDir + templateEntry->name());
                     QFile::rename(iconInfo.absoluteFilePath(), saveDir + templateInfo.baseName() + '.' + iconInfo.suffix());

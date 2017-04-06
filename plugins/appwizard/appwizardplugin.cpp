@@ -97,10 +97,12 @@ void AppWizardPlugin::slotNewProject()
 
             KConfig templateConfig(dlg.appInfo().appTemplate);
             KConfigGroup general(&templateConfig, "General");
-            QString file = general.readEntry("ShowFilesAfterGeneration");
-            if (!file.isEmpty())
-            {
-                file = KMacroExpander::expandMacros(file, m_variables);
+            const QStringList fileArgs = general.readEntry("ShowFilesAfterGeneration").split(QLatin1Char(','), QString::SkipEmptyParts);
+            for (const auto& fileArg : fileArgs) {
+                QString file = KMacroExpander::expandMacros(fileArg.trimmed(), m_variables);
+                if (QDir::isRelativePath(file)) {
+                    file = m_variables[QStringLiteral("PROJECTDIR")] + QLatin1Char('/') + file;
+                }
                 core()->documentController()->openDocument(QUrl::fromUserInput(file));
             }
         } else {
@@ -272,8 +274,42 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             }
         }
 
-        if ( !unpackArchive( arch->directory(), unpackDir ) )
-        {
+        // estimate metadata files which should not be copied
+        QStringList metaDataFileNames;
+
+        // try by same name
+        const KArchiveEntry *templateEntry =
+            arch->directory()->entry(templateName + QLatin1String(".kdevtemplate"));
+
+        // but could be different name, if e.g. downloaded, so make a guess
+        if (!templateEntry || !templateEntry->isFile()) {
+            for (const auto& entryName : arch->directory()->entries()) {
+                if (entryName.endsWith(QLatin1String(".kdevtemplate"))) {
+                    templateEntry = arch->directory()->entry(entryName);
+                    break;
+                }
+            }
+        }
+
+        if (templateEntry && templateEntry->isFile()) {
+            metaDataFileNames << templateEntry->name();
+
+            // check if a preview file is to be ignored
+            const KArchiveFile *templateFile = static_cast<const KArchiveFile*>(templateEntry);
+            QTemporaryDir temporaryDir;
+            templateFile->copyTo(temporaryDir.path());
+
+            KConfig config(temporaryDir.path() + QLatin1Char('/') + templateEntry->name());
+            KConfigGroup group(&config, "General");
+            if (group.hasKey("Icon")) {
+                const KArchiveEntry* iconEntry = arch->directory()->entry(group.readEntry("Icon"));
+                if (iconEntry && iconEntry->isFile()) {
+                    metaDataFileNames << iconEntry->name();
+                }
+            }
+        }
+
+        if (!unpackArchive(arch->directory(), unpackDir, metaDataFileNames)) {
             QString errorMsg = i18n("Could not create new project");
             vcsError(errorMsg, tmpdir, QUrl::fromLocalFile(unpackDir));
             return QString();
@@ -360,7 +396,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     return projectFileName;
 }
 
-bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
+bool AppWizardPlugin::unpackArchive(const KArchiveDirectory* dir, const QString& dest, const QStringList& skipList)
 {
     qCDebug(PLUGIN_APPWIZARD) << "unpacking dir:" << dir->name() << "to" << dest;
     const QStringList entries = dir->entries();
@@ -378,8 +414,10 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 
     foreach (const QString& entry, entries)
     {
-        if (entry.endsWith(QLatin1String(".kdevtemplate")))
+        if (skipList.contains(entry)) {
             continue;
+        }
+
         if (dir->entry(entry)->isDirectory())
         {
             const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
