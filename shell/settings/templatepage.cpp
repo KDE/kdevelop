@@ -20,6 +20,9 @@
 
 #include "templatepage.h"
 #include "ui_templatepage.h"
+
+#include "qtcompat_p.h"
+
 #include <interfaces/itemplateprovider.h>
 #include <language/codegen/templatesmodel.h>
 

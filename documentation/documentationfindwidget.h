@@ -37,7 +37,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationFindWidget : public QWidget
             Previous = 2,
             MatchCase = 4
         };
-        Q_DECLARE_FLAGS(FindOptions, FindOption);
+        Q_DECLARE_FLAGS(FindOptions, FindOption)
         
         explicit DocumentationFindWidget(QWidget* parent = nullptr);
         virtual ~DocumentationFindWidget();

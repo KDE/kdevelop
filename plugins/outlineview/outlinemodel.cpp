@@ -174,7 +174,7 @@ QModelIndex OutlineModel::parent(const QModelIndex& index) const
 
 void OutlineModel::rebuildOutline(IDocument* doc)
 {
-    emit beginResetModel();
+    beginResetModel();
     if (!doc) {
         m_rootNode = OutlineNode::dummyNode();
     } else {
@@ -192,7 +192,7 @@ void OutlineModel::rebuildOutline(IDocument* doc)
         m_lastUrl = doc ? IndexedString(doc->url()) : IndexedString();
         m_lastDoc = doc;
     }
-    emit endResetModel();
+    endResetModel();
 }
 
 void OutlineModel::activate(const QModelIndex& realIndex)

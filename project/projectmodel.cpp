@@ -490,7 +490,7 @@ void ProjectBaseItem::setFlags(Qt::ItemFlags flags)
     Q_D(ProjectBaseItem);
     d->flags = flags;
     if(d->model)
-        d->model->dataChanged(index(), index());
+        emit d->model->dataChanged(index(), index());
 }
 
 QString ProjectBaseItem::iconName() const

@@ -273,7 +273,7 @@ void ProblemModel::clearProblems()
     endResetModel();
 }
 
-QVector<IProblem::Ptr> ProblemModel::problems(const KDevelop::IndexedString& document)
+QVector<IProblem::Ptr> ProblemModel::problems(const KDevelop::IndexedString& document) const
 {
     return d->m_problems->problems(document);
 }

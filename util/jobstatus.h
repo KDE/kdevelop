@@ -41,7 +41,7 @@ class JobStatusPrivate;
 class KDEVPLATFORMUTIL_EXPORT JobStatus : public QObject, public IStatus
 {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::IStatus);
+    Q_INTERFACES(KDevelop::IStatus)
 
 public:
     /**
@@ -64,7 +64,7 @@ Q_SIGNALS:
 private:
     QScopedPointer<JobStatusPrivate> const d;
 
-    Q_PRIVATE_SLOT(d, void slotPercent(KJob*, unsigned long));
+    Q_PRIVATE_SLOT(d, void slotPercent(KJob*, unsigned long))
 };
 
 }

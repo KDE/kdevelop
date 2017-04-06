@@ -89,7 +89,7 @@ private:
      *
      * @param field the name of the file to be generated (Header, Implementation, etc)
      */
-    Q_PRIVATE_SLOT(d, void updateFileRange(const QString& field));
+    Q_PRIVATE_SLOT(d, void updateFileRange(const QString& field))
 };
 
 }

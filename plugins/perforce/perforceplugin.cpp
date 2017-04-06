@@ -18,6 +18,8 @@
 #include "perforceplugin.h"
 #include "debug.h"
 
+#include "qtcompat_p.h"
+
 #include <KLocalizedString>
 #include <QFileInfo>
 #include <QDateTime>
@@ -547,12 +549,11 @@ QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outp
         
     }
     
-    for(auto item : changes) {
+    for(const auto& item : qAsConst(changes)) {
         commits.prepend(QVariant::fromValue(item));
     }
     return commits;
 }
-
 
 void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
 {

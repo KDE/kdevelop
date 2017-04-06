@@ -39,6 +39,8 @@ using namespace Sublime;
 
 class ToolViewAction : public QAction
 {
+    Q_OBJECT
+
 public:
     ToolViewAction(IdealDockWidget *dock, QObject* parent) : QAction(parent), m_dock(dock)
     {
@@ -206,7 +208,8 @@ bool IdealButtonBarWidget::isEmpty()
 
 bool IdealButtonBarWidget::isShown()
 {
-    return std::any_of(actions().cbegin(), actions().cend(),
+    const auto actions = this->actions();
+    return std::any_of(actions.cbegin(), actions.cend(),
                        [](const QAction* action){ return action->isChecked(); });
 }
 
@@ -358,3 +361,5 @@ IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *_action) const
 {
     return dynamic_cast<ToolViewAction *>(_action)->dockWidget();
 }
+
+#include "idealbuttonbarwidget.moc"

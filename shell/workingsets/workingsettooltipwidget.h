@@ -22,6 +22,8 @@
 #include <QWidget>
 #include <QMap>
 
+class FileWidget;
+
 class QLabel;
 class QToolButton;
 class QPushButton;
@@ -33,7 +35,8 @@ class WorkingSetToolButton;
 
 class MainWindow;
 
-class WorkingSetToolTipWidget : public QWidget {
+class WorkingSetToolTipWidget : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -51,12 +54,6 @@ public Q_SLOTS:
 
 private:
     bool isActiveSet() const;
-
-    class FileWidget : public QWidget {
-        public:
-        QToolButton* m_button;
-        class WorkingSetFileLabel* m_label;
-    };
 
     QVector<FileWidget*> m_orderedFileWidgets;
     QMap<QString, FileWidget*> m_fileWidgets;

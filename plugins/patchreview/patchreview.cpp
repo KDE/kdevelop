@@ -423,7 +423,7 @@ QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
     if (destPath.size() >= (int)m_depth) {
         destPath = destPath.mid(m_depth);
     }
-    foreach(QString segment, destPath) {
+    foreach(const QString& segment, destPath) {
         path.addPath(segment);
     }
     path.addPath(model->destinationFile());
@@ -597,7 +597,6 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension( KDevelop
     }
 
     if (urls.size() == 1) {
-        QString mimetype = QMimeDatabase().mimeTypeForUrl(urls.first()).name();
         QAction* reviewAction = new QAction( QIcon::fromTheme(QStringLiteral("text-x-patch")),
                                              i18n( "Review Patch" ), this );
         reviewAction->setData(QVariant(urls[0]));

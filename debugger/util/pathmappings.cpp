@@ -146,7 +146,7 @@ public:
             } else if (index.column() == 1) {
                 m_paths[index.row()].local = QUrl::fromLocalFile(value.toString());
             }
-            dataChanged(index, index);
+            emit dataChanged(index, index);
             return true;
         }
         return false;

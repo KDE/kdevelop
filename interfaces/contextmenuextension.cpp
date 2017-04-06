@@ -20,6 +20,8 @@
 
 #include "contextmenuextension.h"
 
+#include "qtcompat_p.h"
+
 #include <QMap>
 
 #include <QMenu>

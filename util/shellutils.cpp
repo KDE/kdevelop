@@ -73,7 +73,7 @@ bool askUser( const QString& mainText,
 bool ensureWritable( const QList<QUrl> &urls )
 {
     QStringList notWritable;
-    foreach (QUrl url, urls)
+    foreach (const QUrl& url, urls)
     {
         if (url.isLocalFile())
         {
@@ -89,7 +89,7 @@ bool ensureWritable( const QList<QUrl> &urls )
         int answer = KMessageBox::questionYesNoCancel(ICore::self()->uiController()->activeMainWindow(), i18n("You don't have write permissions for the following files; add write permissions for owner before saving?")+"\n\n"+notWritable.join("\n"), i18n("Some files are write-protected"), KStandardGuiItem::yes(), KStandardGuiItem::no(), KStandardGuiItem::cancel());
         if (answer == KMessageBox::Yes) {
             bool success = true;
-            foreach (QString filename, notWritable) {
+            foreach (const QString& filename, notWritable) {
                 QFile file(filename);
                 QFileDevice::Permissions permissions = file.permissions();
                 permissions |= QFileDevice::WriteOwner;

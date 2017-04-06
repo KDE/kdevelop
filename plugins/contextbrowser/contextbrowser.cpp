@@ -448,9 +448,9 @@ void ContextBrowserPlugin::hideToolTip() {
 static QVector<KDevelop::IProblem::Ptr> findProblemsUnderCursor(TopDUContext* topContext, KTextEditor::Cursor position)
 {
   QVector<KDevelop::IProblem::Ptr> problems;
-  auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
-  foreach (auto modelData, modelsData) {
-    foreach (auto problem, modelData.model->problems(topContext->url())) {
+  const auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
+  for (const auto& modelData : modelsData) {
+    foreach (const auto& problem, modelData.model->problems(topContext->url())) {
       DocumentRange problemRange = problem->finalLocation();
       if (problemRange.contains(position) || (problemRange.isEmpty() && problemRange.boundaryAtCursor(position)))
         problems += problem;
@@ -463,9 +463,9 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsUnderCursor(TopDUContext* to
 static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(TopDUContext* topContext, KTextEditor::Cursor position, KTextEditor::View* view)
 {
   QVector<KDevelop::IProblem::Ptr> allProblems;
-  auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
-  foreach (auto modelData, modelsData) {
-    foreach (auto problem, modelData.model->problems(topContext->url())) {
+  const auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
+  for (const auto& modelData : modelsData) {
+    foreach (const auto& problem, modelData.model->problems(topContext->url())) {
       allProblems += problem;
     }
   }

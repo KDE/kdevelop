@@ -22,6 +22,8 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "mainwindow_p.h"
 
+#include "qtcompat_p.h"
+
 #include <QDBusConnection>
 #include <QDomElement>
 #include <QDragEnterEvent>
@@ -264,7 +266,7 @@ void MainWindow::dropEvent( QDropEvent* ev )
     }
 
     if (!eventUsed) {
-        for(const auto& url : urls) {
+        for(const auto& url : qAsConst(urls)) {
             Core::self()->documentController()->openDocument(url);
         }
     }

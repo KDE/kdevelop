@@ -54,7 +54,6 @@ void CvsAnnotateJob::parseOutput(const QString& jobOutput, const QString& workin
 
     QStringList lines = jobOutput.split('\n');
 
-    QString filename;
     for (int i=0, linenumber=0; i<lines.count(); ++i) {
         QString s = lines[i];
 

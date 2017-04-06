@@ -35,17 +35,19 @@ namespace KDevelop
  */
 class ColorSchemeChooser : public QAction
 {
-    public:
-        explicit ColorSchemeChooser(QObject* parent);
+    Q_OBJECT
 
-        QString currentSchemeName() const;
-    private Q_SLOTS:
-        void slotSchemeChanged(QAction* triggeredAction);
+public:
+    explicit ColorSchemeChooser(QObject* parent);
 
-    private:
-        QString loadCurrentScheme() const;
-        void    saveCurrentScheme(const QString &name);
-        QString currentDesktopDefaultScheme() const;
+    QString currentSchemeName() const;
+private Q_SLOTS:
+    void slotSchemeChanged(QAction* triggeredAction);
+
+private:
+    QString loadCurrentScheme() const;
+    void    saveCurrentScheme(const QString &name);
+    QString currentDesktopDefaultScheme() const;
 };
 
 }  // namespace KDevelop

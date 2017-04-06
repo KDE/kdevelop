@@ -18,7 +18,9 @@
  */
 
 #include "problemmodelset.h"
+
 #include "problemmodel.h"
+#include "qtcompat_p.h"
 
 namespace KDevelop
 {
@@ -51,7 +53,7 @@ ProblemModel* ProblemModelSet::findModel(const QString &id) const
 {
     ProblemModel *model = nullptr;
 
-    foreach (const ModelData &data, d->data) {
+    foreach (const ModelData &data, qAsConst(d->data)) {
         if (data.id == id) {
             model = data.model;
             break;
@@ -80,7 +82,7 @@ void ProblemModelSet::removeModel(const QString &id)
 
 void ProblemModelSet::showModel(const QString &id)
 {
-    for (const ModelData &data : d->data) {
+    for (const ModelData &data : qAsConst(d->data)) {
         if (data.id == id) {
             emit showRequested(data.id);
             return;

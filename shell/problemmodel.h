@@ -130,7 +130,7 @@ public:
     void clearProblems();
 
     /// Retrieve problems for selected document
-    QVector<IProblem::Ptr> problems(const KDevelop::IndexedString& document);
+    QVector<IProblem::Ptr> problems(const KDevelop::IndexedString& document) const;
 
     /// Retrieve the supported features
     Features features() const;

@@ -24,6 +24,7 @@
 #include "projectmodel.h"
 #include "helper.h"
 
+#include <QHashIterator>
 #include <QFileInfo>
 #include <QApplication>
 
@@ -254,7 +255,9 @@ void AbstractFileManagerPlugin::Private::created(const QString &path_)
     const IndexedString indexedPath(path.pathOrUrl());
     const IndexedString indexedParent(path.parent().pathOrUrl());
 
-    foreach ( IProject* p, m_watchers.keys() ) {
+    QHashIterator<IProject*, KDirWatch*> it(m_watchers);
+    while (it.hasNext()) {
+        const auto p = it.next().key();
         if ( !p->projectItem()->model() ) {
             // not yet finished with loading
             // FIXME: how should this be handled? see unit test
@@ -314,7 +317,10 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path_)
 
     const Path path(path_);
     const IndexedString indexed(path.pathOrUrl());
-    foreach ( IProject* p, m_watchers.keys() ) {
+
+    QHashIterator<IProject*, KDirWatch*> it(m_watchers);
+    while (it.hasNext()) {
+        const auto p = it.next().key();
         if (path == p->path()) {
             KMessageBox::error(qApp->activeWindow(),
                                i18n("The base folder of project <b>%1</b>"

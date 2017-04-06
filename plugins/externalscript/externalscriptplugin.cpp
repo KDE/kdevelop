@@ -74,6 +74,21 @@ private:
   ExternalScriptPlugin *m_plugin;
 };
 
+// We extend ExternalScriptJob so that it deletes the temporarily created item on destruction
+class ExternalScriptJobOwningItem : public ExternalScriptJob
+{
+  Q_OBJECT
+
+public:
+  ExternalScriptJobOwningItem( ExternalScriptItem* item, const QUrl &url, ExternalScriptPlugin* parent ) : ExternalScriptJob(item, url, parent), m_item(item) {
+  }
+  ~ExternalScriptJobOwningItem() override {
+    delete m_item;
+  }
+private:
+  ExternalScriptItem* m_item;
+};
+
 ExternalScriptPlugin* ExternalScriptPlugin::m_self = nullptr;
 
 ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList& /*args*/ )
@@ -255,17 +270,7 @@ void ExternalScriptPlugin::execute(ExternalScriptItem* item) const
 
 bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDirectory ) const
 {
-  // We extend ExternalScriptJob so that it deletes the temporarily created item on destruction
-  class ExternalScriptJobOwningItem : public ExternalScriptJob {
-  public:
-    ExternalScriptJobOwningItem( ExternalScriptItem* item, const QUrl &url, ExternalScriptPlugin* parent ) : ExternalScriptJob(item, url, parent), m_item(item) {
-    }
-    ~ExternalScriptJobOwningItem() override {
-      delete m_item;
-    }
-  private:
-    ExternalScriptItem* m_item;
-  };
+
   ExternalScriptItem* item = new ExternalScriptItem;
   item->setCommand(command);
   item->setWorkingDirectory(workingDirectory);

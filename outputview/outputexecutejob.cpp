@@ -404,7 +404,7 @@ void OutputExecuteJobPrivate::emitProgress(const IFilterStrategy::Progress& prog
         m_owner->emitPercent(progress.percent, 100);
     }
     if (!progress.status.isEmpty()) {
-        m_owner->infoMessage(m_owner, progress.status);
+        emit m_owner->infoMessage(m_owner, progress.status);
     }
 }
 

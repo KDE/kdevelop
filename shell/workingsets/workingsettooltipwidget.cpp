@@ -46,6 +46,15 @@
 
 using namespace KDevelop;
 
+class FileWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    QToolButton* m_button;
+    class WorkingSetFileLabel* m_label;
+};
+
 WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set, MainWindow* mainwindow) : QWidget(parent), m_set(set) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setSpacing(0);
@@ -381,3 +390,4 @@ void WorkingSetToolTipWidget::labelClicked()
         updateFileButtons();
 }
 
+#include "workingsettooltipwidget.moc"

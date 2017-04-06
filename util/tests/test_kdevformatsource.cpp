@@ -19,6 +19,8 @@
 #include "test_kdevformatsource.h"
 #include "../kdevformatfile.h"
 
+#include "qtcompat_p.h"
+
 #include <QTest>
 #include <QDebug>
 #include <QStandardPaths>
@@ -34,7 +36,7 @@ void TestKdevFormatSource::testNotFound_data()
 
     QCOMPARE(initTest(formatFileData), true);
 
-    for (const Source& source : m_sources) {
+    for (const Source& source : qAsConst(m_sources)) {
         QTest::newRow(source.path.toUtf8()) << source.path << false << false << false << source.lines;
     }
 }
@@ -50,7 +52,7 @@ void TestKdevFormatSource::testNoCommands_data()
 
     QCOMPARE(initTest(formatFileData), true);
 
-    for (const Source& source : m_sources) {
+    for (const Source& source : qAsConst(m_sources)) {
         QTest::newRow(source.path.toUtf8()) << source.path << true << false << false << source.lines;
     }
 }
@@ -66,7 +68,7 @@ void TestKdevFormatSource::testNotMatch_data()
 
     QCOMPARE(initTest(formatFileData), true);
 
-    for (const Source& source : m_sources) {
+    for (const Source& source : qAsConst(m_sources)) {
         QTest::newRow(source.path.toUtf8()) << source.path << true << true << false << source.lines;
     }
 }
@@ -91,7 +93,7 @@ void TestKdevFormatSource::testMatch1_data()
     m_sources[1].lines.replaceInStrings("sqrt", "std::sqrt");
     m_sources[2].lines.replaceInStrings("z", "Z");
 
-    for (const Source& source : m_sources) {
+    for (const Source& source : qAsConst(m_sources)) {
         QTest::newRow(source.path.toUtf8()) << source.path << true << true << true << source.lines;
     }
 }
@@ -111,7 +113,6 @@ void TestKdevFormatSource::testMatch2_data()
         source.lines.replaceInStrings(";", ";;");
         QTest::newRow(source.path.toUtf8()) << source.path << true << true << true << source.lines;
     }
-
 }
 
 void TestKdevFormatSource::testMatch2()
@@ -174,7 +175,7 @@ bool TestKdevFormatSource::initTest(const QStringList& formatFileData)
         QStringLiteral("}")
     });
 
-    for (const Source& source : m_sources) {
+    for (const Source& source : qAsConst(m_sources)) {
         if (!writeLines(source.path, source.lines))
             return false;
     }

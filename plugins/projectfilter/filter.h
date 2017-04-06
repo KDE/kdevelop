@@ -42,7 +42,7 @@ public:
         Files = 1,
         Folders = 2
     };
-    Q_DECLARE_FLAGS(Targets, Target);
+    Q_DECLARE_FLAGS(Targets, Target)
 
     enum Type {
         /// Hides matched targets.

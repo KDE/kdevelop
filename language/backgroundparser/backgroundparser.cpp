@@ -23,6 +23,8 @@
 
 #include "backgroundparser.h"
 
+#include "qtcompat_p.h"
+
 #include <QList>
 #include <QMutex>
 #include <QMutexLocker>
@@ -312,7 +314,7 @@ public:
             const auto parsePlanIt = m_documents.find(url);
             if (parsePlanIt != m_documents.end()) {
                 // Remove all mentions of this document.
-                for (const auto& target : parsePlanIt->targets) {
+                for (const auto& target : qAsConst(parsePlanIt->targets)) {
                     m_documentsForPriority[target.priority].remove(url);
                 }
                 m_documents.erase(parsePlanIt);

@@ -46,7 +46,7 @@ public:
     DumpContext =       1 << 0,
     DumpProblems =      1 << 1
   };
-  Q_DECLARE_FLAGS(Features, Feature);
+  Q_DECLARE_FLAGS(Features, Feature)
 
   explicit DUChainDumper(Features features = DumpContext);
   ~DUChainDumper();
