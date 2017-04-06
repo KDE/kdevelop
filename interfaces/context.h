@@ -59,7 +59,7 @@ actions directly to the menu but instead use the same mechanism.
 -# Create a QMenu in context menu event handler: @code QMenu menu(this); @endcode
 -# Create a context: @code FileContext context(list). @endcode
 -# Query for plugins:
-@code @code QList<ContextMenuExtension> extensions =
+@code QList<ContextMenuExtension> extensions =
         ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( context ); @endcode
 -# Populate the menu:
 @code ContextMenuExtension::populateMenu(menu, extensions); @endcode
