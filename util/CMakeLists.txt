@@ -6,6 +6,7 @@ set(KDevPlatformUtil_LIB_SRCS
     autoorientedsplitter.cpp
     foregroundlock.cpp
     formattinghelpers.cpp
+    zoomcontroller.cpp
     kdevstringhandler.cpp
     focusedtreeview.cpp
     processlinemaker.cpp
@@ -67,6 +68,7 @@ install( FILES
     autoorientedsplitter.h
     foregroundlock.h
     formattinghelpers.h
+    zoomcontroller.h
     kdevstringhandler.h
     ksharedobject.h
     focusedtreeview.h

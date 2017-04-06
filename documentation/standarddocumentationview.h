@@ -1,6 +1,7 @@
 /*
  * This file is part of KDevelop
  * Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
+ * Copyright 2016 Igor Kushnir <igorkuo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -42,6 +43,17 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWidge
 public:
     explicit StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent = nullptr );
     ~StandardDocumentationView() override;
+
+    /**
+     * @brief Enables zoom functionality
+     *
+     * @param configSubGroup KConfigGroup nested group name used to store zoom factor.
+     *        Should uniquely describe current documentation provider.
+     *
+     * @warning Call this function at most once
+     */
+    void initZoom(const QString& configSubGroup);
+
     void setDocumentation(const IDocumentation::Ptr& doc);
 
     void setOverrideCss(const QUrl &url);
@@ -74,7 +86,13 @@ public Q_SLOTS:
      */
     void update();
 
+private Q_SLOTS:
+    void updateZoomFactor(double zoomFactor);
+
 private:
+    void keyPressEvent(QKeyEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
+
     const QScopedPointer<StandardDocumentationViewPrivate> d;
 };
 

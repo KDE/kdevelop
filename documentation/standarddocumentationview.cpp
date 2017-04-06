@@ -1,6 +1,7 @@
 /*
  * This file is part of KDevelop
  * Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
+ * Copyright 2016 Igor Kushnir <igorkuo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -21,6 +22,11 @@
 #include "standarddocumentationview.h"
 #include "documentationfindwidget.h"
 #include "debug.h"
+
+#include <util/zoomcontroller.h>
+
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QVBoxLayout>
 
@@ -44,6 +50,7 @@ using namespace KDevelop;
 
 struct KDevelop::StandardDocumentationViewPrivate
 {
+    ZoomController* m_zoomController = nullptr;
     IDocumentation::Ptr m_doc;
 
 #ifdef USE_QTWEBKIT
@@ -69,7 +76,6 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
 #ifdef USE_QTWEBKIT
     QFont sansSerifFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     QFont monospaceFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-    QFont minimalFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
     QWebSettings* s = d->m_view->settings();
 
@@ -80,7 +86,6 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
 
     s->setFontSize(QWebSettings::DefaultFontSize, QFontInfo(sansSerifFont).pixelSize());
     s->setFontSize(QWebSettings::DefaultFixedFontSize, QFontInfo(monospaceFont).pixelSize());
-    s->setFontSize(QWebSettings::MinimumFontSize, QFontInfo(minimalFont).pixelSize());
 
     // Fixes for correct positioning. The problem looks like the following:
     //
@@ -127,6 +132,18 @@ void StandardDocumentationView::search ( const QString& text, DocumentationFindW
         ff |= WebkitThing::FindCaseSensitively;
 
     d->m_view->page()->findText(text, ff);
+}
+
+void StandardDocumentationView::initZoom(const QString& configSubGroup)
+{
+    Q_ASSERT_X(!d->m_zoomController, "StandardDocumentationView::initZoom", "Can not initZoom a second time.");
+
+    const KConfigGroup outerGroup(KSharedConfig::openConfig(), QStringLiteral("Documentation View"));
+    const KConfigGroup configGroup(&outerGroup, configSubGroup);
+    d->m_zoomController = new ZoomController(configGroup, this);
+    connect(d->m_zoomController, &ZoomController::factorChanged,
+            this, &StandardDocumentationView::updateZoomFactor);
+    updateZoomFactor(d->m_zoomController->factor());
 }
 
 void StandardDocumentationView::setDocumentation(const IDocumentation::Ptr& doc)
@@ -248,4 +265,26 @@ QAction * KDevelop::StandardDocumentationView::copyAction() const
     typedef QWebEnginePage WebkitThing;
 #endif
     return d->m_view->pageAction(WebkitThing::Copy);
+}
+
+
+void StandardDocumentationView::updateZoomFactor(double zoomFactor)
+{
+    d->m_view->setZoomFactor(zoomFactor);
+}
+
+void StandardDocumentationView::keyPressEvent(QKeyEvent* event)
+{
+    if (d->m_zoomController && d->m_zoomController->handleKeyPressEvent(event)) {
+        return;
+    }
+    QWidget::keyPressEvent(event);
+}
+
+void StandardDocumentationView::wheelEvent(QWheelEvent* event)
+{
+    if (d->m_zoomController && d->m_zoomController->handleWheelEvent(event)) {
+        return;
+    }
+    QWidget::wheelEvent(event);
 }

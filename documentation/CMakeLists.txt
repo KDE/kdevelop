@@ -24,7 +24,7 @@ set(KDevPlatformDocumentation_LIB_SRCS
 ki18n_wrap_ui(KDevPlatformDocumentation_LIB_SRCS documentationfindwidget.ui)
 kdevplatform_add_library(KDevPlatformDocumentation SOURCES ${KDevPlatformDocumentation_LIB_SRCS})
 
-target_link_libraries(KDevPlatformDocumentation PUBLIC KDev::Interfaces)
+target_link_libraries(KDevPlatformDocumentation PUBLIC KDev::Interfaces PRIVATE KDev::Util)
 
 if(USE_QTWEBKIT)
     target_link_libraries(KDevPlatformDocumentation PRIVATE Qt5::WebKitWidgets)
