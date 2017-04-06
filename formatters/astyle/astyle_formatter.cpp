@@ -290,7 +290,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setNamespaceIndent(false);
         return true;
     } else if (style == "Qt") {
-        // http://qt-project.org/wiki/Qt_Coding_Style
+        // https://wiki.qt.io/Qt_Coding_Style
         resetStyle();
         setPointerAlignment(astyle::PTR_ALIGN_NAME);
         setOperatorPaddingMode(true);

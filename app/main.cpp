@@ -292,7 +292,7 @@ int main( int argc, char *argv[] )
     // Don't show any debug output by default.
     // If you need to enable additional logging for debugging use a rules file
     // as explained in the QLoggingCategory documentation:
-    // http://qt-project.org/doc/qt-5/qloggingcategory.html#logging-rules
+    // https://doc.qt.io/qt-5/qloggingcategory.html#logging-rules
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
     KLocalizedString::setApplicationDomain("kdevelop");
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
