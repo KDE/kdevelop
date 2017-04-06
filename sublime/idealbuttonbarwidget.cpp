@@ -101,10 +101,10 @@ private:
 IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
         IdealController *controller, Sublime::MainWindow *parent)
     : QWidget(parent)
-    , _area(area)
-    , _controller(controller)
-    , _corner(nullptr)
-    , _showState(false)
+    , m_area(area)
+    , m_controller(controller)
+    , m_corner(nullptr)
+    , m_showState(false)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setToolTip(i18nc("@info:tooltip", "Right click to add new tool views."));
@@ -119,11 +119,11 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
         IdealButtonBarLayout *l = new IdealButtonBarLayout(orientation());
         statusLayout->addLayout(l);
 
-        _corner = new QWidget(this);
-        QBoxLayout *cornerLayout = new QBoxLayout(QBoxLayout::LeftToRight, _corner);
+        m_corner = new QWidget(this);
+        QBoxLayout *cornerLayout = new QBoxLayout(QBoxLayout::LeftToRight, m_corner);
         cornerLayout->setMargin(0);
         cornerLayout->setSpacing(0);
-        statusLayout->addWidget(_corner);
+        statusLayout->addWidget(m_corner);
         statusLayout->addStretch(1);
     }
     else
@@ -133,12 +133,12 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
 QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
                                          Area *area, View *view)
 {
-    if (_area == Qt::BottomDockWidgetArea || _area == Qt::TopDockWidgetArea)
+    if (m_area == Qt::BottomDockWidgetArea || m_area == Qt::TopDockWidgetArea)
         dock->setFeatures( dock->features() | IdealDockWidget::DockWidgetVerticalTitleBar );
 
     dock->setArea(area);
     dock->setView(view);
-    dock->setDockWidgetArea(_area);
+    dock->setDockWidgetArea(m_area);
 
     auto action = new ToolViewAction(dock, this);
     addAction(action);
@@ -148,7 +148,7 @@ QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
 
 QWidget* IdealButtonBarWidget::corner()
 {
-    return _corner;
+    return m_corner;
 }
 
 void IdealButtonBarWidget::addAction(QAction* qaction)
@@ -162,7 +162,7 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
 
     bool wasEmpty = isEmpty();
 
-    IdealToolButton *button = new IdealToolButton(_area);
+    IdealToolButton *button = new IdealToolButton(m_area);
     //apol: here we set the usual width of a button for the vertical toolbars as the minimumWidth
     //this is done because otherwise when we remove all the buttons and re-add new ones we get all
     //the screen flickering. This is solved by not defaulting to a smaller width when it's empty
@@ -215,12 +215,12 @@ bool IdealButtonBarWidget::isShown()
 
 void IdealButtonBarWidget::saveShowState()
 {
-    _showState = isShown();
+    m_showState = isShown();
 }
 
 bool IdealButtonBarWidget::lastShowState()
 {
-    return _showState;
+    return m_showState;
 }
 
 QString IdealButtonBarWidget::id(const IdealToolButton* button) const
@@ -250,32 +250,32 @@ IdealToolButton* IdealButtonBarWidget::button(const QString& id) const
 void IdealButtonBarWidget::addButtonToOrder(const IdealToolButton* button)
 {
     QString buttonId = id(button);
-    if (!_buttonsOrder.contains(buttonId)) {
-        if (_area == Qt::BottomDockWidgetArea) {
-            _buttonsOrder.push_front(buttonId);
+    if (!m_buttonsOrder.contains(buttonId)) {
+        if (m_area == Qt::BottomDockWidgetArea) {
+            m_buttonsOrder.push_front(buttonId);
         }
         else {
-            _buttonsOrder.push_back(buttonId);
+            m_buttonsOrder.push_back(buttonId);
         }
     }
 }
 
 void IdealButtonBarWidget::loadOrderSettings(const KConfigGroup& configGroup)
 {
-    _buttonsOrder = configGroup.readEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), QStringList());
+    m_buttonsOrder = configGroup.readEntry(QStringLiteral("(%1) Tool Views Order").arg(m_area), QStringList());
     applyOrderToLayout();
 }
 
 void IdealButtonBarWidget::saveOrderSettings(KConfigGroup& configGroup)
 {
     takeOrderFromLayout();
-    configGroup.writeEntry(QStringLiteral("(%1) Tool Views Order").arg(_area), _buttonsOrder);
+    configGroup.writeEntry(QStringLiteral("(%1) Tool Views Order").arg(m_area), m_buttonsOrder);
 }
 
 bool IdealButtonBarWidget::isLocked() const
 {
     KConfigGroup config = KSharedConfig::openConfig()->group("UI");
-    return config.readEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(_area), false);
+    return config.readEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(m_area), false);
 }
 
 void IdealButtonBarWidget::applyOrderToLayout()
@@ -290,7 +290,7 @@ void IdealButtonBarWidget::applyOrderToLayout()
         }
     }
 
-    foreach(const QString& id, _buttonsOrder) {
+    foreach(const QString& id, m_buttonsOrder) {
         if (auto b = button(id)) {
             layout()->addWidget(b);
         }
@@ -299,17 +299,17 @@ void IdealButtonBarWidget::applyOrderToLayout()
 
 void IdealButtonBarWidget::takeOrderFromLayout()
 {
-    _buttonsOrder.clear();
+    m_buttonsOrder.clear();
     for (int i = 0; i < layout()->count(); ++i) {
         if (auto button = dynamic_cast<IdealToolButton*>(layout()->itemAt(i)->widget())) {
-            _buttonsOrder += id(button);
+            m_buttonsOrder += id(button);
         }
     }
 }
 
 Qt::Orientation IdealButtonBarWidget::orientation() const
 {
-    if (_area == Qt::LeftDockWidgetArea || _area == Qt::RightDockWidgetArea)
+    if (m_area == Qt::LeftDockWidgetArea || m_area == Qt::RightDockWidgetArea)
         return Qt::Vertical;
 
     return Qt::Horizontal;
@@ -317,7 +317,7 @@ Qt::Orientation IdealButtonBarWidget::orientation() const
 
 Qt::DockWidgetArea IdealButtonBarWidget::area() const
 {
-    return _area;
+    return m_area;
 }
 
 void IdealButtonBarWidget::showWidget(bool checked)
@@ -349,10 +349,10 @@ void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
             }
         }
 
-        _controller->lastDockWidget[_area] = widgetAction->dockWidget();
+        m_controller->lastDockWidget[m_area] = widgetAction->dockWidget();
     }
 
-    _controller->showDockWidget(widgetAction->dockWidget(), checked);
+    m_controller->showDockWidget(widgetAction->dockWidget(), checked);
     widgetAction->setChecked(checked);
     button->setChecked(checked);
 }

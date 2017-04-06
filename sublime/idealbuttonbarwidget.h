@@ -88,11 +88,11 @@ private:
 
     void addButtonToOrder(const IdealToolButton* button);
 
-    Qt::DockWidgetArea _area;
-    IdealController *_controller;
-    QWidget *_corner;
-    bool _showState;
-    QStringList _buttonsOrder;
+    Qt::DockWidgetArea m_area;
+    IdealController* m_controller;
+    QWidget* m_corner;
+    bool m_showState;
+    QStringList m_buttonsOrder;
 };
 
 }
