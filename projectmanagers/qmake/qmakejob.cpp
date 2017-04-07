@@ -116,8 +116,8 @@ void QMakeJob::start()
     m_process->setProcessChannelMode(QProcess::MergedChannels);
     auto lineMaker = new KDevelop::ProcessLineMaker(m_process, this);
 
-    connect(lineMaker, SIGNAL(receivedStdoutLines(QStringList)), m_model, SLOT(appendLines(QStringList)));
-    connect(lineMaker, SIGNAL(receivedStderrLines(QStringList)), m_model, SLOT(appendLines(QStringList)));
+    connect(lineMaker, &ProcessLineMaker::receivedStdoutLines, m_model, &OutputModel::appendLines);
+    connect(lineMaker, &ProcessLineMaker::receivedStderrLines, m_model, &OutputModel::appendLines);
     connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)));
     connect(m_process, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(processFinished(int,QProcess::ExitStatus)));
 

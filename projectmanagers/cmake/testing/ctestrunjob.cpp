@@ -129,9 +129,9 @@ void CTestRunJob::start()
 
         m_outputJob->setTitle(title);
 
-        connect(m_outputJob->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(rowsInserted(QModelIndex,int,int)));
+        connect(m_outputJob->model(), &QAbstractItemModel::rowsInserted, this, &CTestRunJob::rowsInserted);
     }
-    connect(m_job, SIGNAL(finished(KJob*)), SLOT(processFinished(KJob*)));
+    connect(m_job, &KJob::finished, this, &CTestRunJob::processFinished);
 
     ICore::self()->testController()->notifyTestRunStarted(m_suite, cases_selected);
 }

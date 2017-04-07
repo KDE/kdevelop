@@ -55,8 +55,8 @@ Utils::FileSystemWatcher *PluginDumper::pluginWatcher()
     if (!m_pluginWatcher) {
         m_pluginWatcher = new Utils::FileSystemWatcher(this);
         m_pluginWatcher->setObjectName(QLatin1String("PluginDumperWatcher"));
-        connect(m_pluginWatcher, SIGNAL(fileChanged(QString)),
-                this, SLOT(pluginChanged(QString)));
+        connect(m_pluginWatcher, &Utils::FileSystemWatcher::fileChanged,
+                this, &PluginDumper::pluginChanged);
     }
     return m_pluginWatcher;
 }

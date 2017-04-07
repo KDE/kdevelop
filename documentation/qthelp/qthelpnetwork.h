@@ -54,7 +54,7 @@ HelpNetworkReply::HelpNetworkReply(const QNetworkRequest &request,
     // signal will never be emitted by the corresponding QWebView.
     if (!origLen) {
         qCDebug(QTHELP) << "Empty data for" << request.url().toDisplayString();
-        QTimer::singleShot(0, this, SIGNAL(finished()));
+        QTimer::singleShot(0, this, &QNetworkReply::finished);
     }
 
     // Fix broken CSS images (tested on Qt 5.5.1 and 5.7.0)
@@ -64,8 +64,8 @@ HelpNetworkReply::HelpNetworkReply(const QNetworkRequest &request,
 
     setHeader(QNetworkRequest::ContentTypeHeader, mimeType);
     setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(origLen));
-    QTimer::singleShot(0, this, SIGNAL(metaDataChanged()));
-    QTimer::singleShot(0, this, SIGNAL(readyRead()));
+    QTimer::singleShot(0, this, &QNetworkReply::metaDataChanged);
+    QTimer::singleShot(0, this, &QIODevice::readyRead);
 }
 
 qint64 HelpNetworkReply::readData(char *buffer, qint64 maxlen)
@@ -76,7 +76,7 @@ qint64 HelpNetworkReply::readData(char *buffer, qint64 maxlen)
 		data.remove(0, len);
 	}
 	if (!data.length())
-		QTimer::singleShot(0, this, SIGNAL(finished()));
+		QTimer::singleShot(0, this, &QNetworkReply::finished);
 	return len;
 }
 

@@ -76,8 +76,8 @@ Dialog::Dialog(QWidget *parent, Account *account)
         buttonBox->addButton(forceSyncButton, QDialogButtonBox::ActionRole);
         connect(forceSyncButton, &QPushButton::clicked, this, &Dialog::syncUser);
 
-        connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-        connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+        connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+        connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     } else {
         m_text = new QLabel(invalidAccountText(), this);
 
@@ -96,8 +96,8 @@ Dialog::Dialog(QWidget *parent, Account *account)
     mainLayout->addWidget(m_text);
 
     mainLayout->addWidget(buttonBox);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     setWindowTitle(i18n("GitHub Account"));
 }

@@ -63,8 +63,8 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
     connect(m_prefsUi->buildDirCombo, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this,
             &QMakeBuilderPreferences::changed);
-    connect(m_prefsUi->addButton, SIGNAL(pressed()), this, SLOT(addBuildConfig()));
-    connect(m_prefsUi->removeButton, SIGNAL(pressed()), this, SLOT(removeBuildConfig()));
+    connect(m_prefsUi->addButton, &QAbstractButton::pressed, this, &QMakeBuilderPreferences::addBuildConfig);
+    connect(m_prefsUi->removeButton, &QAbstractButton::pressed, this, &QMakeBuilderPreferences::removeBuildConfig);
 
     reset(); // load initial values
 }

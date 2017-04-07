@@ -100,7 +100,7 @@ QMakeProjectManager::QMakeProjectManager(QObject* parent, const QVariantList&)
             SLOT(slotFolderAdded(KDevelop::ProjectFolderItem*)));
 
     m_runQMake = new QAction(QIcon::fromTheme("qtlogo"), i18n("Run QMake"), this);
-    connect(m_runQMake, SIGNAL(triggered(bool)), this, SLOT(slotRunQMake()));
+    connect(m_runQMake, &QAction::triggered, this, &QMakeProjectManager::slotRunQMake);
 }
 
 QMakeProjectManager::~QMakeProjectManager()
@@ -311,7 +311,7 @@ ProjectFolderItem* QMakeProjectManager::import(IProject* project)
     QMakeUtils::checkForNeedingConfigure(project);
 
     ProjectFolderItem* ret = AbstractFileManagerPlugin::import(project);
-    connect(projectWatcher(project), SIGNAL(dirty(QString)), this, SLOT(slotDirty(QString)));
+    connect(projectWatcher(project), &KDirWatch::dirty, this, &QMakeProjectManager::slotDirty);
     return ret;
 }
 

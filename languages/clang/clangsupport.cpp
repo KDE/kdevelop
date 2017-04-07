@@ -187,10 +187,10 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
 
     auto model = new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(m_index.data(), this), name() );
     // TODO: use direct signal/slot connect syntax for 5.1
-    connect(model, SIGNAL(registeredToView(KTextEditor::View*)),
-            this, SLOT(disableKeywordCompletion(KTextEditor::View*)));
-    connect(model, SIGNAL(unregisteredFromView(KTextEditor::View*)),
-            this, SLOT(enableKeywordCompletion(KTextEditor::View*)));
+    connect(model, &CodeCompletion::registeredToView,
+            this, &ClangSupport::disableKeywordCompletion);
+    connect(model, &CodeCompletion::unregisteredFromView,
+            this, &ClangSupport::enableKeywordCompletion);
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()){
         KDevelop::IBuddyDocumentFinder::addFinder(type, this);
     }

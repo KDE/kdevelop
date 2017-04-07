@@ -114,7 +114,7 @@ ModelManagerInterface::ModelManagerInterface(QObject *parent)
     m_asyncResetTimer = new QTimer(this);
     m_asyncResetTimer->setInterval(15000);
     m_asyncResetTimer->setSingleShot(true);
-    connect(m_asyncResetTimer, SIGNAL(timeout()), SLOT(resetCodeModel()));
+    connect(m_asyncResetTimer, &QTimer::timeout, this, &ModelManagerInterface::resetCodeModel);
 
     qRegisterMetaType<QmlJS::Document::Ptr>("QmlJS::Document::Ptr");
     qRegisterMetaType<QmlJS::LibraryInfo>("QmlJS::LibraryInfo");
