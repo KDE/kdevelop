@@ -133,7 +133,7 @@ bool KDevFormatFile::executeCommand(QString command)
 #ifdef Q_OS_WIN
     int execResult = QProcess::execute("cmd", {"/c", command});
 #else
-    int execResult = QProcess::execute("sh", {"-c", command});
+    int execResult = QProcess::execute(QStringLiteral("sh"), {"-c", command});
 #endif
 
     if (execResult == -2) {

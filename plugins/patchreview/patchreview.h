@@ -65,7 +65,7 @@ public :
     }
 
     QString name() const override {
-      return "diff";
+      return QStringLiteral("diff");
     }
 
     KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &) override {

@@ -50,9 +50,9 @@ const QString bazaarTest_BaseDir(tempDir + "/kdevBazaar_testdir/");
 const QString bazaarTest_BaseDir2(tempDir + "/kdevBazaar_testdir2/");
 const QString bazaarRepo(bazaarTest_BaseDir + ".bzr");
 const QString bazaarSrcDir(bazaarTest_BaseDir + "src/");
-const QString bazaarTest_FileName("testfile");
-const QString bazaarTest_FileName2("foo");
-const QString bazaarTest_FileName3("bar");
+const QString bazaarTest_FileName(QStringLiteral("testfile"));
+const QString bazaarTest_FileName2(QStringLiteral("foo"));
+const QString bazaarTest_FileName3(QStringLiteral("bar"));
 
 using namespace KDevelop;
 
@@ -149,7 +149,7 @@ void TestBazaar::addFiles()
     VERIFYJOB(j);
 
     //Now let's create several files and try "bzr add file1 file2 file3"
-    QStringList files = QStringList() << "file1" << "file2" << "la la";
+    QStringList files = QStringList() << QStringLiteral("file1") << QStringLiteral("file2") << QStringLiteral("la la");
     QList<QUrl> multipleFiles;
     foreach(const QString& file, files) {
         QFile f(bazaarTest_BaseDir + file);
@@ -272,7 +272,7 @@ void TestBazaar::testRemoveEmptyFolder()
     repoInit();
 
     QDir d(bazaarTest_BaseDir);
-    d.mkdir("emptydir");
+    d.mkdir(QStringLiteral("emptydir"));
 
     VcsJob* j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir+"emptydir/"));
     if (j) VERIFYJOB(j);
@@ -285,10 +285,10 @@ void TestBazaar::testRemoveEmptyFolderInFolder()
     repoInit();
 
     QDir d(bazaarTest_BaseDir);
-    d.mkdir("dir");
+    d.mkdir(QStringLiteral("dir"));
 
     QDir d2(bazaarTest_BaseDir+"dir");
-    d2.mkdir("emptydir");
+    d2.mkdir(QStringLiteral("emptydir"));
 
     VcsJob* j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir+"dir/"));
     if (j) VERIFYJOB(j);
@@ -317,7 +317,7 @@ void TestBazaar::testRemoveFolderContainingUnversionedFiles()
     repoInit();
 
     QDir d(bazaarTest_BaseDir);
-    d.mkdir("dir");
+    d.mkdir(QStringLiteral("dir"));
 
     {
         QFile f(bazaarTest_BaseDir + "dir/foo");
@@ -329,7 +329,7 @@ void TestBazaar::testRemoveFolderContainingUnversionedFiles()
     VcsJob* j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir+"dir"), IBasicVersionControl::NonRecursive);
     VERIFYJOB(j);
     prepareWhoamiInformations();
-    j = m_plugin->commit("initial commit", QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
+    j = m_plugin->commit(QStringLiteral("initial commit"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
     {

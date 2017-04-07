@@ -247,8 +247,8 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
             QVector<ProjectFileChoice> choices;
             Q_FOREACH ( const auto& file, m_fileList ) {
                 auto plugins = projectManagerForFile(file);
-                if ( plugins.contains("<built-in>") ) {
-                    plugins.removeAll("<built-in>");
+                if ( plugins.contains(QStringLiteral("<built-in>")) ) {
+                    plugins.removeAll(QStringLiteral("<built-in>"));
                     choices.append({i18n("Open existing file \"%1\"", file), "<built-in>", QString()});
                 }
                 Q_FOREACH ( const auto& plugin, plugins ) {
@@ -290,7 +290,7 @@ QStringList OpenProjectDialog::projectManagerForFile(const QString& file) const
         }
     }
     if ( file.endsWith(ShellExtension::getInstance()->projectFileExtension()) ) {
-        ret.append("<built-in>");
+        ret.append(QStringLiteral("<built-in>"));
     }
     return ret;
 }

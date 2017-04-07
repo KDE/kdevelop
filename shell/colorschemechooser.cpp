@@ -76,7 +76,7 @@ void ColorSchemeChooser::saveCurrentScheme(const QString &name)
 
 QString ColorSchemeChooser::currentDesktopDefaultScheme() const
 {
-    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("kdeglobals"));
+    KSharedConfigPtr config = KSharedConfig::openConfig(QStringLiteral("kdeglobals"));
     KConfigGroup group(config, "General");
     return group.readEntry("ColorScheme", QStringLiteral("Breeze"));
 }

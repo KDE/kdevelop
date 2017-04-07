@@ -425,7 +425,7 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
 
     QUrl projectFileUrl = dlg.projectFileUrl();
     qCDebug(SHELL) << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
-    if ( dlg.projectManager() == "<built-in>" ) {
+    if ( dlg.projectManager() == QLatin1String("<built-in>") ) {
         return projectFileUrl;
     }
 

@@ -55,7 +55,7 @@ public:
         : QTabBar(container), m_container(container)
     {
         if (QApplication::style()->objectName() == QLatin1String("macintosh")) {
-            static QPointer<QStyle> qTabBarStyle = QStyleFactory::create("fusion");
+            static QPointer<QStyle> qTabBarStyle = QStyleFactory::create(QStringLiteral("fusion"));
             if (qTabBarStyle) {
                 setStyle(qTabBarStyle);
             }

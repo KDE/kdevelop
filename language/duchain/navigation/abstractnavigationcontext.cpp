@@ -127,7 +127,7 @@ QString AbstractNavigationContext::createLink(const QString& name, QString, cons
   //       are case-insensitive, we define a new lowercase link-id for each
   //       link. Otherwise Qt 5 seems to mess up the casing and the link
   //       cannot be matched when it's executed.
-  QString hrefId = QString("link_%1").arg(d->m_links.count());
+  QString hrefId = QStringLiteral("link_%1").arg(d->m_links.count());
 
   d->m_links[ hrefId ] = action;
   d->m_intLinks[ d->m_linkCount ] = action;

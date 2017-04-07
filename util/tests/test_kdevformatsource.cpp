@@ -89,9 +89,9 @@ void TestKdevFormatSource::testMatch1_data()
 
     QCOMPARE(initTest(formatFileData), true);
 
-    m_sources[0].lines.replaceInStrings("foo", "FOO");
-    m_sources[1].lines.replaceInStrings("sqrt", "std::sqrt");
-    m_sources[2].lines.replaceInStrings("z", "Z");
+    m_sources[0].lines.replaceInStrings(QStringLiteral("foo"), QStringLiteral("FOO"));
+    m_sources[1].lines.replaceInStrings(QStringLiteral("sqrt"), QStringLiteral("std::sqrt"));
+    m_sources[2].lines.replaceInStrings(QStringLiteral("z"), QStringLiteral("Z"));
 
     for (const Source& source : qAsConst(m_sources)) {
         QTest::newRow(source.path.toUtf8()) << source.path << true << true << true << source.lines;
@@ -110,7 +110,7 @@ void TestKdevFormatSource::testMatch2_data()
     QCOMPARE(initTest(formatFileData), true);
 
     for (Source& source : m_sources) {
-        source.lines.replaceInStrings(";", ";;");
+        source.lines.replaceInStrings(QStringLiteral(";"), QStringLiteral(";;"));
         QTest::newRow(source.path.toUtf8()) << source.path << true << true << true << source.lines;
     }
 }
@@ -129,7 +129,7 @@ bool TestKdevFormatSource::initTest(const QStringList& formatFileData)
     QTest::addColumn<QStringList>("lines");
 
     QString workPath = QStandardPaths::standardLocations(QStandardPaths::TempLocation).first();
-    workPath += "/test_kdevformatsource/";
+    workPath += QLatin1String("/test_kdevformatsource/");
 
     if (QDir(workPath).exists() && !QDir(workPath).removeRecursively()) {
         qDebug() << "unable to remove existing directory" << workPath;

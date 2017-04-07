@@ -48,7 +48,7 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
     //setup kdeclarative library
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(engine());
-    kdeclarative.setTranslationDomain("kdevwelcomepage");
+    kdeclarative.setTranslationDomain(QStringLiteral("kdevwelcomepage"));
     kdeclarative.setupBindings();
 
     setResizeMode(QQuickWidget::SizeRootObjectToView);

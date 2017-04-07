@@ -128,11 +128,11 @@ QString LaunchConfiguration::launcherForMode(const QString& mode) const
     }
 
     // No launcher configured, if it's debug mode, prefer GDB if available.
-    if( mode == "debug" )
+    if( mode == QLatin1String("debug") )
     {
         foreach( ILauncher* l, type()->launchers() )
         {
-            if( l->supportedModes().contains( mode ) && l->id() == "gdb" )
+            if( l->supportedModes().contains( mode ) && l->id() == QLatin1String("gdb") )
             {
                 return l->id();
             }

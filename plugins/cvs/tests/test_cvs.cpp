@@ -53,7 +53,7 @@ void TestCvs::cleanupTestCase()
 void TestCvs::init()
 {
     // Now create the basic directory structure
-    QDir tmpdir("/tmp");
+    QDir tmpdir(QStringLiteral("/tmp"));
     tmpdir.mkdir(CVSTEST_BASEDIR);
     tmpdir.mkdir(CVS_REPO);
     tmpdir.mkdir(CVS_IMPORT);
@@ -62,7 +62,7 @@ void TestCvs::init()
 void TestCvs::cleanup()
 {
     if ( QFileInfo::exists(CVSTEST_BASEDIR) )
-        KIO::del(QUrl::fromLocalFile(QString(CVSTEST_BASEDIR)))->exec();
+        KIO::del(QUrl::fromLocalFile(QStringLiteral(CVSTEST_BASEDIR)))->exec();
 }
 
 void TestCvs::repoInit()
@@ -92,8 +92,8 @@ void TestCvs::importTestData()
 
 
     CvsJob* j = m_proxy->import(QUrl::fromLocalFile(CVS_IMPORT), CVS_REPO,
-                        "test", "vendor", "release",
-                        "test import message");
+                        QStringLiteral("test"), QStringLiteral("vendor"), QStringLiteral("release"),
+                        QStringLiteral("test import message"));
     QVERIFY( j );
 
     // try to start the job
@@ -111,7 +111,7 @@ void TestCvs::importTestData()
 
 void TestCvs::checkoutTestData()
 {
-    CvsJob* j = m_proxy->checkout(QUrl::fromLocalFile(CVS_CHECKOUT), CVS_REPO, "test");
+    CvsJob* j = m_proxy->checkout(QUrl::fromLocalFile(CVS_CHECKOUT), CVS_REPO, QStringLiteral("test"));
     QVERIFY( j );
 
     // try to start the job

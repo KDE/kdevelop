@@ -37,7 +37,7 @@ using namespace KDevelop;
 
 namespace {
 
-QString KEY_INVOKE_ACTION(int num) { return QString("invoke_action_%1").arg(num); }
+QString KEY_INVOKE_ACTION(int num) { return QStringLiteral("invoke_action_%1").arg(num); }
 
 QString iconForSeverity(IProblem::Severity severity)
 {
@@ -59,7 +59,7 @@ QString htmlImg(const QString& iconName, KIconLoader::Group group)
 {
   KIconLoader loader;
   const int size = loader.currentSize(group);
-  return QString::fromLatin1("<img width='%1' height='%1' src='%2'/>")
+  return QStringLiteral("<img width='%1' height='%1' src='%2'/>")
     .arg(size)
     .arg(loader.iconPath(iconName, group));
 }
@@ -201,7 +201,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
 
   auto assistant = problem->solutionAssistant();
   if (assistant && !assistant->actions().isEmpty()) {
-    modifyHtml() += QString::fromLatin1("<table width='100%' style='border: 1px solid black; background-color: %1;'>").arg("#b3d4ff");
+    modifyHtml() += QStringLiteral("<table width='100%' style='border: 1px solid black; background-color: %1;'>").arg(QStringLiteral("#b3d4ff"));
     modifyHtml() += QStringLiteral("<tr><td valign='middle'>%1</td><td width='100%'>").arg(htmlImg(QStringLiteral("dialog-ok-apply"), KIconLoader::Panel));
 
     const int startIndex = m_assistantsActions.size();
@@ -210,7 +210,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
       m_assistantsActions.append(assistantAction);
 
       if (currentIndex != startIndex)
-        modifyHtml() += "<br/>";
+        modifyHtml() += QStringLiteral("<br/>");
 
       makeLink(i18n("Solution (%1)", currentIndex + 1), KEY_INVOKE_ACTION( currentIndex ),
                NavigationAction(KEY_INVOKE_ACTION( currentIndex )));
@@ -219,7 +219,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
       ++currentIndex;
     }
 
-    modifyHtml() += "</td></tr>";
+    modifyHtml() += QStringLiteral("</td></tr>");
     modifyHtml() += QStringLiteral("</table>");
   }
 }
@@ -236,7 +236,7 @@ QString ProblemNavigationContext::html(bool shorten)
     html(problem);
 
     if (++problemIndex != m_problems.size())
-      modifyHtml() += "<hr>";
+      modifyHtml() += QStringLiteral("<hr>");
   }
 
   return currentHtml();

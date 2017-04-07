@@ -49,7 +49,7 @@ struct EnvironmentSelectionWidgetPrivate
 EnvironmentSelectionWidget::EnvironmentSelectionWidget( QWidget *parent )
     : QWidget( parent ), d( new EnvironmentSelectionWidgetPrivate( this ) )
 {
-    KConfigDialogManager::changedMap()->insert("KDevelop::EnvironmentSelectionWidget", SIGNAL(currentProfileChanged(QString)));
+    KConfigDialogManager::changedMap()->insert(QStringLiteral("KDevelop::EnvironmentSelectionWidget"), SIGNAL(currentProfileChanged(QString)));
 
     setLayout( new QHBoxLayout( this ) );
     layout()->addWidget( d->comboBox );

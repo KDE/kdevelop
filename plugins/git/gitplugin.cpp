@@ -276,7 +276,7 @@ QUrl GitPlugin::repositoryRoot(const QUrl& path)
 bool GitPlugin::isValidDirectory(const QUrl & dirPath)
 {
     QDir dir=dotGitDirectory(dirPath);
-    QFile dotGitPotentialFile(dir.filePath(".git"));
+    QFile dotGitPotentialFile(dir.filePath(QStringLiteral(".git")));
     // if .git is a file, we may be in a git worktree
     QFileInfo dotGitPotentialFileInfo(dotGitPotentialFile);
     if (!dotGitPotentialFileInfo.isDir() && dotGitPotentialFile.exists()) {
@@ -289,7 +289,7 @@ bool GitPlugin::isValidDirectory(const QUrl & dirPath)
             return false;
         }
         const auto items = gitWorktreeFileContent.split(' ');
-        if (items.size() == 2 && items.at(0) == "gitdir:") {
+        if (items.size() == 2 && items.at(0) == QLatin1String("gitdir:")) {
             qCDebug(PLUGIN_GIT) << "we are in a git worktree" << items.at(1);
             return true;
         }
@@ -1044,7 +1044,7 @@ void GitPlugin::parseLogOutput(const DVcsJob * job, QList<DVcsEvent>& commits) c
 //     static QRegExp rx_sep( "[-=]+" );
 //     static QRegExp rx_date( "date:\\s+([^;]*);\\s+author:\\s+([^;]*).*" );
 
-    static QRegularExpression rx_com( "commit \\w{1,40}" );
+    static QRegularExpression rx_com( QStringLiteral("commit \\w{1,40}") );
 
     const auto output = job->output();
     const auto lines = output.splitRef('\n', QString::SkipEmptyParts);
@@ -1541,9 +1541,9 @@ DVcsJob* GitPlugin::setConfigOption(const QUrl& repository, const QString& key, 
 {
     auto job = new DVcsJob(urlDir(repository), this);
     QStringList args;
-    args << "git" << "config";
+    args << QStringLiteral("git") << QStringLiteral("config");
     if(global)
-        args << "--global";
+        args << QStringLiteral("--global");
     args << key << value;
     *job << args;
     return job;
@@ -1553,7 +1553,7 @@ QString GitPlugin::readConfigOption(const QUrl& repository, const QString& key)
 {
     QProcess exec;
     exec.setWorkingDirectory(urlDir(repository).absolutePath());
-    exec.start("git", QStringList() << "config" << "--get" << key);
+    exec.start(QStringLiteral("git"), QStringList() << QStringLiteral("config") << QStringLiteral("--get") << key);
     exec.waitForFinished();
     return exec.readAllStandardOutput().trimmed();
 }

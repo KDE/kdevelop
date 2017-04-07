@@ -334,7 +334,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       modifyHtml() += "<p>" + i18n("Show documentation for ");
       makeLink(prettyQualifiedName(d->m_declaration),
                d->m_declaration, NavigationAction::ShowDocumentation);
-      modifyHtml() += "</p>";
+      modifyHtml() += QStringLiteral("</p>");
     }
 
 

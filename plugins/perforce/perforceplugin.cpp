@@ -90,9 +90,9 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
 
 VcsItemEvent::Actions actionsFromString(QString const& changeDescription)
 {
-    if(changeDescription == "add")
+    if(changeDescription == QLatin1String("add"))
         return VcsItemEvent::Added;
-    if(changeDescription == "delete")
+    if(changeDescription == QLatin1String("delete"))
         return VcsItemEvent::Deleted;
     return VcsItemEvent::Modified;
 }
@@ -111,15 +111,15 @@ QDir urlDir(const QUrl& url)
 Q_LOGGING_CATEGORY(PLUGIN_PERFORCE, "kdevplatform.plugins.perforce")
 
 PerforcePlugin::PerforcePlugin(QObject* parent, const QVariantList&):
-    KDevelop::IPlugin("kdevperforce", parent)
+    KDevelop::IPlugin(QStringLiteral("kdevperforce"), parent)
     , m_common(new KDevelop::VcsPluginHelper(this, this))
     , m_perforcemenu(nullptr)
-    , m_perforceConfigName("p4config.txt")
-    , m_perforceExecutable("p4")
+    , m_perforceConfigName(QStringLiteral("p4config.txt"))
+    , m_perforceExecutable(QStringLiteral("p4"))
     , m_edit_action(nullptr)
 {
     QProcessEnvironment currentEviron(QProcessEnvironment::systemEnvironment());
-    QString tmp(currentEviron.value("P4CONFIG"));
+    QString tmp(currentEviron.value(QStringLiteral("P4CONFIG")));
     if (tmp.isEmpty()) {
         // We require the P4CONFIG variable to be set because the perforce command line client will need it
         setErrorDescription(i18n("The variable P4CONFIG is not set. Is perforce installed on the system?"));
@@ -194,7 +194,7 @@ bool PerforcePlugin::parseP4fstat(const QFileInfo& curFile, OutputJob::OutputJob
 
 QString PerforcePlugin::getRepositoryName(const QFileInfo& curFile)
 {
-    static const QString DEPOT_FILE_STR("... depotFile ");
+    static const QString DEPOT_FILE_STR(QStringLiteral("... depotFile "));
     QString ret;
     QScopedPointer<DVcsJob> job(p4fstatJob(curFile, KDevelop::OutputJob::Silent));
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
@@ -496,18 +496,18 @@ void PerforcePlugin::ctxEdit()
 void PerforcePlugin::setEnvironmentForJob(DVcsJob* job, const QFileInfo& curFile)
 {    
     KProcess* jobproc = job->process();
-    jobproc->setEnv("P4CONFIG", m_perforceConfigName);
+    jobproc->setEnv(QStringLiteral("P4CONFIG"), m_perforceConfigName);
     if (curFile.isDir()) {
-        jobproc->setEnv("PWD", curFile.filePath());
+        jobproc->setEnv(QStringLiteral("PWD"), curFile.filePath());
     } else {
-        jobproc->setEnv("PWD", curFile.absolutePath());        
+        jobproc->setEnv(QStringLiteral("PWD"), curFile.absolutePath());        
     }
 }
 
 QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outputLines)
 {
-    static const QString LOGENTRY_START("... #");
-    static const QString DEPOTMESSAGE_START("... .");
+    static const QString LOGENTRY_START(QStringLiteral("... #"));
+    static const QString DEPOTMESSAGE_START(QStringLiteral("... ."));
     QMap<int, VcsEvent> changes;
     QList<QVariant> commits;
     QString currentFileName;
@@ -536,7 +536,7 @@ QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outp
             
             changes[changeNumber].setRevision(rev);
             changes[changeNumber].setAuthor(author);
-            changes[changeNumber].setDate(QDateTime::fromString(line.section(' ', 6, 7), "yyyy/MM/dd hh:mm:ss"));
+            changes[changeNumber].setDate(QDateTime::fromString(line.section(' ', 6, 7), QStringLiteral("yyyy/MM/dd hh:mm:ss")));
             currentRepoFile.setRepositoryLocation(currentFileName);
             currentRepoFile.setActions( actionsFromString(changeDescription) );
             changes[changeNumber].addItem(currentRepoFile);
@@ -560,8 +560,8 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
     QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
     QVariantList statuses;
     QList<QUrl> processedFiles;
-    static const QString ACTION_STR("... action ");
-    static const QString CLIENT_FILE_STR("... clientFile ");
+    static const QString ACTION_STR(QStringLiteral("... action "));
+    static const QString CLIENT_FILE_STR(QStringLiteral("... clientFile "));
 
 
 
@@ -572,9 +572,9 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
         if (idx != -1) {
             QString curr = line.right(line.size() - ACTION_STR.size());
 
-            if (curr == "edit") {
+            if (curr == QLatin1String("edit")) {
                 status.setState(VcsStatusInfo::ItemModified);
-            } else if (curr == "add") {
+            } else if (curr == QLatin1String("add")) {
                 status.setState(VcsStatusInfo::ItemAdded);
             } else {
                 status.setState(VcsStatusInfo::ItemUserState);

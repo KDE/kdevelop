@@ -41,7 +41,7 @@ GitNameEmailDialog::GitNameEmailDialog(QWidget *parent)
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &GitNameEmailDialog::accept);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &GitNameEmailDialog::reject);
 
-    QRegularExpression rx(".+");
+    QRegularExpression rx(QStringLiteral(".+"));
     auto validator = new QRegularExpressionValidator(rx, this);
     ui->emailEdit->setValidator(validator);
     ui->nameEdit->setValidator(validator);

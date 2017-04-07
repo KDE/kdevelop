@@ -38,12 +38,12 @@ const QString tempDir = QDir::tempPath();
 const QString perforceTestBaseDirNoSlash(tempDir + "/kdevPerforce_testdir");
 const QString perforceTestBaseDir(tempDir + "/kdevPerforce_testdir/");
 const QString perforceTestBaseDir2(tempDir + "/kdevPerforce_testdir2/");
-const QString perforceConfigFileName("p4config.txt");
+const QString perforceConfigFileName(QStringLiteral("p4config.txt"));
 
 const QString perforceSrcDir(perforceTestBaseDir + "src/");
-const QString perforceTest_FileName("testfile");
-const QString perforceTest_FileName2("foo");
-const QString perforceTest_FileName3("bar");
+const QString perforceTest_FileName(QStringLiteral("testfile"));
+const QString perforceTest_FileName2(QStringLiteral("foo"));
+const QString perforceTest_FileName3(QStringLiteral("bar"));
 
 using namespace KDevelop;
 
@@ -168,7 +168,7 @@ void PerforcePluginTest::testUpdateDir()
 
 void PerforcePluginTest::testCommit()
 {
-    QString commitMsg("this is the commit message");
+    QString commitMsg(QStringLiteral("this is the commit message"));
     VcsJob* j = m_plugin->commit(commitMsg, QList<QUrl>( { QUrl::fromLocalFile(perforceTestBaseDirNoSlash) }  ));
     VERIFYJOB(j);
 }

@@ -257,7 +257,7 @@ void GitInitTest::testReadAndSetConfigOption()
         auto job = m_plugin->setConfigOption(QUrl::fromLocalFile(gitTest_BaseDir()),
                                              QStringLiteral("user.name"), QStringLiteral("John Tester"));
         VERIFYJOB(job);
-        const auto name = runCommand("git", {"config", "--get", QStringLiteral("user.name")});
+        const auto name = runCommand(QStringLiteral("git"), {"config", "--get", QStringLiteral("user.name")});
         QCOMPARE(name, QStringLiteral("John Tester"));
     }
 
@@ -266,7 +266,7 @@ void GitInitTest::testReadAndSetConfigOption()
         const QString nameFromPlugin = m_plugin->readConfigOption(QUrl::fromLocalFile(gitTest_BaseDir()),
                                                                QStringLiteral("user.name"));
         QCOMPARE(nameFromPlugin, QStringLiteral("John Tester"));
-        const auto name = runCommand("git", {"config", "--get", QStringLiteral("user.name")});
+        const auto name = runCommand(QStringLiteral("git"), {"config", "--get", QStringLiteral("user.name")});
         QCOMPARE(name, QStringLiteral("John Tester"));
     }
 }
@@ -352,7 +352,7 @@ void GitInitTest::testMerge()
     j = m_plugin->add(listOfAddedFiles);
     VERIFYJOB(j);
 
-    j = m_plugin->commit("Committing to the new branch", QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir()));
+    j = m_plugin->commit(QStringLiteral("Committing to the new branch"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir()));
     VERIFYJOB(j);
 
     j = m_plugin->switchBranch(baseUrl, QStringLiteral("master"));

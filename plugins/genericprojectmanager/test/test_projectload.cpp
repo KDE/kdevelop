@@ -349,9 +349,9 @@ void TestProjectLoad::raceJob()
     QVERIFY(asdfItem->folder());
 
     // move dir
-    dir.rename(QStringLiteral("test"), QStringLiteral("test2"));
+    QVERIFY(dir.rename(QStringLiteral("test"), QStringLiteral("test2")));
     // move sub dir
-    dir.rename(QStringLiteral("test2/zzzzz"), QStringLiteral("test2/bla"));
+    QVERIFY(dir.rename(QStringLiteral("test2/zzzzz"), QStringLiteral("test2/bla")));
 
     QTest::qWait(500);
     QCOMPARE(root->rowCount(), 1);

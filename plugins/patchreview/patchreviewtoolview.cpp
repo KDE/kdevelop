@@ -234,7 +234,7 @@ void PatchReviewToolView::showEditDialog() {
             QMessageBox::warning(nullptr, i18n("Error exporting"), i18n("Couldn't export the patch.\n%1", message));
         }
     });
-    m_exportMenu->model()->setPluginType("Export");
+    m_exportMenu->model()->setPluginType(QStringLiteral("Export"));
     m_editPatch.exportReview->setMenu( m_exportMenu );
 #else
     m_editPatch.exportReview->setEnabled(false);
