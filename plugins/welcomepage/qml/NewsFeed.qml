@@ -29,7 +29,7 @@ ListView {
     id: root
 
     /// Update interval (in minutes) in which the news feed is polled
-    property int updateInterval: 24 * 60 * 1000 // 24 hours
+    property int updateInterval: 24 * 60 // 24 hours
     /// Max age (in minutes) of a news entry so it is shown in the list view
     /// TODO: Implement me
     property int maxNewsAge: 3 * 30 * 24 * 60 // 3 months
@@ -63,7 +63,7 @@ ListView {
         return !isNaN(date) ? Math.floor(Number((new Date() - date)) / 60000) : -1;
     }
 
-    function loadFromCache() {
+    function loadEntriesFromCache() {
         newsFeedOfflineModel.clear()
 
         var data = Storage.get("newsFeedOfflineModelData", null);
@@ -75,14 +75,13 @@ ListView {
         }
         root.positionViewAtBeginning()
     }
-    function saveToCache() {
+    function saveEntriesToCache() {
         var newsEntries = [];
         for (var i = 0; i < newsFeedSyncModel.count; ++i) {
             var entry = newsFeedSyncModel.get(i);
             newsEntries.push(toMap(entry));
         }
         Storage.set("newsFeedOfflineModelData", JSON.stringify(newsEntries));
-        Storage.set("newsFeedLastFetchDate", JSON.stringify(new Date()));
     }
 
     spacing: 10
@@ -102,8 +101,10 @@ ListView {
 
         onStatusChanged: {
             if (status == XmlListModel.Ready) {
-                saveToCache();
-                loadFromCache();
+                saveEntriesToCache();
+                loadEntriesFromCache();
+
+                Storage.set("newsFeedLastFetchDate", JSON.stringify(new Date()));
             } else if (status == XmlListModel.Error) {
                 console.log("Failed to fetch news feed: " + errorString());
             }
@@ -200,12 +201,12 @@ ListView {
     Timer {
         id: reloadFeedTimer
 
-        interval: root.updateInterval
+        interval: root.updateInterval * 1000
         running: true
         repeat: true
 
         onTriggered: root.fetchFeed()
     }
 
-    Component.onCompleted: loadFromCache()
+    Component.onCompleted: loadEntriesFromCache()
 }

@@ -21,7 +21,7 @@
 .import QtQuick.LocalStorage 2.0 as Storage
 
 function getDatabase() {
-    return Storage.LocalStorage.openDatabaseSync("WelcomePage", "0.1", "HelloAppDatabase", 100);
+    return Storage.LocalStorage.openDatabaseSync("WelcomePageSettings", "0.1", "WelcomePageSettings", 100);
 }
 
 function createTable(tx) {
