@@ -303,6 +303,8 @@ private:
 
 class ExpressionValueCommand : public QObject, public MICommand
 {
+    Q_OBJECT
+
 public:
     typedef void (QObject::*handler_method_t)(const QString&);
 

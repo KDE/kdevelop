@@ -36,6 +36,9 @@ namespace KDevMI {
 class MIDebugSession;
 class MIVariable : public KDevelop::Variable
 {
+    Q_OBJECT
+
+
 public:
     MIVariable(MIDebugSession *session, KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                const QString& expression, const QString& display = QLatin1String(""));

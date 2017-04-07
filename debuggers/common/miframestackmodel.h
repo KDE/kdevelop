@@ -31,8 +31,11 @@ struct ResultRecord;
 }
 
 class MIDebugSession;
+
 class MIFrameStackModel : public KDevelop::FrameStackModel
 {
+    Q_OBJECT
+
 public:
     explicit MIFrameStackModel( MIDebugSession* session);
 

@@ -76,6 +76,8 @@ enum DisassemblyFlavor {
 
 class DisassembleWindow : public QTreeWidget
 {
+    Q_OBJECT
+
 public:
     DisassembleWindow(QWidget *parent, DisassembleWidget* widget);
 

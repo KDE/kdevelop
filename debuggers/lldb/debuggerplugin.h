@@ -35,6 +35,8 @@ class LldbLauncher;
 
 class NonInterruptDebuggerConsoleView : public DebuggerConsoleView
 {
+    Q_OBJECT
+
 public:
     explicit NonInterruptDebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *parent = nullptr)
         : DebuggerConsoleView(plugin, parent)

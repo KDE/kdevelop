@@ -29,6 +29,8 @@ class MIDebugSession;
 
 class RegisterControllerGeneral_x86 : public IRegisterController
 {
+    Q_OBJECT
+
 public:
     QVector<GroupsName> namesOfRegisterGroups() const override;
 
@@ -69,6 +71,7 @@ protected:
 
 class RegisterController_x86 : public RegisterControllerGeneral_x86
 {
+    Q_OBJECT
 
 public:
     explicit RegisterController_x86(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
@@ -79,6 +82,7 @@ private:
 
 class RegisterController_x86_64 : public RegisterControllerGeneral_x86
 {
+    Q_OBJECT
 
 public:
     explicit RegisterController_x86_64(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);

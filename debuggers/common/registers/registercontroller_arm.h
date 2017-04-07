@@ -29,6 +29,8 @@ class MIDebugSession;
 
 class RegisterController_Arm : public IRegisterController
 {
+    Q_OBJECT
+
 public:
 
     explicit RegisterController_Arm(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
