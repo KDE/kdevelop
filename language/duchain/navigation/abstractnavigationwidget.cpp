@@ -184,9 +184,9 @@ void AbstractNavigationWidget::update() {
       // TODO: Only show that the first time, or the first few times this context is shown?
       html += QStringLiteral("<p><small>");
       if (d->m_context->linkCount() > 0) {
-        html += i18n("(Hold 'Alt' to show. Navigate via arrow keys, activate by pressing 'Enter')");
+        html += i18n("(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing <em>Enter</em>)");
       } else {
-        html += i18n("(Hold 'Alt' to show this tooltip)");
+        html += i18n("(Hold <em>Alt</em> to show this tooltip)");
       }
       html += QStringLiteral("</small></p>");
     }
