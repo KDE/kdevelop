@@ -87,11 +87,11 @@ Defines MsvcCompiler::defines(const QString&) const
     // MSVC builtin types
     // see http://msdn.microsoft.com/en-us/library/cc953fe1.aspx
     {
-        ret[QStringLiteral("__int8")] = QLatin1String("char");
-        ret[QStringLiteral("__int16")] = QLatin1String("short");
-        ret[QStringLiteral("__int32")] = QLatin1String("int");
-        ret[QStringLiteral("__int64")] = QLatin1String("long long");
-        ret[QStringLiteral("__int16")] = QLatin1String("short");
+        ret[QStringLiteral("__int8")] = QStringLiteral("char");
+        ret[QStringLiteral("__int16")] = QStringLiteral("short");
+        ret[QStringLiteral("__int32")] = QStringLiteral("int");
+        ret[QStringLiteral("__int64")] = QStringLiteral("long long");
+        ret[QStringLiteral("__int16")] = QStringLiteral("short");
         ret[QStringLiteral("__ptr32")] = QLatin1String("");
         ret[QStringLiteral("__ptr64")] = QLatin1String("");
     }

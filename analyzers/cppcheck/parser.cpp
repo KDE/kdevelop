@@ -57,8 +57,8 @@ QString verboseMessageToHtml( const QString & input )
     output.replace(QLatin1String("\\012"), QLatin1String("\n"));
 
     if (output.count('\n') >= 2) {
-        output.replace(output.indexOf('\n'), 1, QLatin1String("<pre>") );
-        output.replace(output.lastIndexOf('\n'), 1, QLatin1String("</pre><br>") );
+        output.replace(output.indexOf('\n'), 1, QStringLiteral("<pre>") );
+        output.replace(output.lastIndexOf('\n'), 1, QStringLiteral("</pre><br>") );
     }
 
     return output;
@@ -117,7 +117,7 @@ bool CppcheckParser::startElement()
 
     else if (name() == "error") {
         newState = Error;
-        m_errorSeverity = QLatin1String("unknown");
+        m_errorSeverity = QStringLiteral("unknown");
         m_errorInconclusive = false;
         m_errorFiles.clear();
         m_errorLines.clear();

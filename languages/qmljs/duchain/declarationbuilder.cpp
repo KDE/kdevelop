@@ -86,7 +86,7 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 
     if (QmlJS::isQmlFile(currentContext()) && !currentContext()->url().str().contains(QLatin1String("__builtin_qml.qml"))) {
         builtinQmlContext = m_session->contextOfFile(
-            QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kdevqmljssupport/nodejsmodules/__builtin_qml.qml"))
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kdevqmljssupport/nodejsmodules/__builtin_qml.qml"))
         );
     }
 
@@ -171,7 +171,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
             QualifiedIdentifier(name)
         ));
 
-        if (name.last() != Identifier(QLatin1String("Object"))) {
+        if (name.last() != Identifier(QStringLiteral("Object"))) {
             // Every class inherit from Object
             QmlJS::importObjectContext(currentContext(), topContext());
         }
@@ -941,7 +941,7 @@ DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(Qml
         // String literal like "Namespace/Class version".
         QStringList nameAndVersion = stringliteral->value.toString().section('/', -1, -1).split(' ');
         QString name = nameAndVersion.at(0);
-        QString version = (nameAndVersion.count() > 1 ? nameAndVersion.at(1) : QLatin1String("1.0"));
+        QString version = (nameAndVersion.count() > 1 ? nameAndVersion.at(1) : QStringLiteral("1.0"));
 
         if (!knownNames.contains(name)) {
             knownNames.insert(name);
@@ -1008,8 +1008,8 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
         entries = QDir(directory).entryInfoList(
             QStringList()
                 << (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1))
-                << QLatin1String("*.qmltypes")
-                << QLatin1String("*.so"),
+                << QStringLiteral("*.qmltypes")
+                << QStringLiteral("*.so"),
             QDir::Files
         );
     } else if (dir.isFile()) {
@@ -1110,7 +1110,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     ExportLiteralsAndNames exports;
 
     if (baseclass == QLatin1String("Component")) {
-        QmlJS::AST::Statement* statement = QmlJS::getQMLAttribute(node->initializer->members, QLatin1String("exports"));
+        QmlJS::AST::Statement* statement = QmlJS::getQMLAttribute(node->initializer->members, QStringLiteral("exports"));
 
         exports = exportedNames(QmlJS::AST::cast<QmlJS::AST::ExpressionStatement *>(statement));
 

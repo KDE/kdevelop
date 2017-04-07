@@ -151,7 +151,7 @@ void RegisterController_Arm::initRegisterNames()
         m_registerNames[VFP_single] << ("s" + QString::number(i));
     }
 
-    m_cpsr.registerName = QLatin1String("cpsr");
+    m_cpsr.registerName = QStringLiteral("cpsr");
     m_cpsr.flags << QStringLiteral("Q") << QStringLiteral("V") << QStringLiteral("C") << QStringLiteral("Z") << QStringLiteral("N");
     m_cpsr.bits << QStringLiteral("27") << QStringLiteral("28") << QStringLiteral("29") << QStringLiteral("30") << QStringLiteral("31");
     m_cpsr.groupName = enumToGroupName(Flags);

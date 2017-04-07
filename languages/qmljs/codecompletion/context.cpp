@@ -178,10 +178,10 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
                                           nullptr,
                                           CompletionItem::NoDecoration);
             items << completionsFromImports(nullptr);
-            items << completionsFromNodeModule(nullptr, QLatin1String("__builtin_ecmascript"));
+            items << completionsFromNodeModule(nullptr, QStringLiteral("__builtin_ecmascript"));
 
             if (!QmlJS::isQmlFile(m_duContext.data())) {
-                items << completionsFromNodeModule(nullptr, QLatin1String("__builtin_dom"));
+                items << completionsFromNodeModule(nullptr, QStringLiteral("__builtin_dom"));
             }
         }
     }

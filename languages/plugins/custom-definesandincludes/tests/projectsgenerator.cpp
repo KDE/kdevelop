@@ -68,7 +68,7 @@ IProject* ProjectsGenerator::GenerateSimpleProject()
     // ./src/main.cpp
     // ./.kdev4/simpleproject.kdev4
 
-    const QString sp = QLatin1String( "simpleproject" );
+    const QString sp = QStringLiteral( "simpleproject" );
     auto rootFolder = QDir::temp();
     QDir(rootFolder.absolutePath() + "/" + sp).removeRecursively();
     rootFolder.mkdir( sp );
@@ -111,7 +111,7 @@ IProject* ProjectsGenerator::GenerateMultiPathProject()
     // ./anotherFolder/tst.h
     // ./.kdev4/multipathproject.kdev4
 
-    const QString mp = QLatin1String( "multipathproject" );
+    const QString mp = QStringLiteral( "multipathproject" );
     auto rootFolder = QDir::temp();
     QDir(rootFolder.absolutePath() + "/" + mp).removeRecursively();
     rootFolder.mkdir( mp );
@@ -180,7 +180,7 @@ IProject* ProjectsGenerator::GenerateEmptyProject()
     // ./emptyproject.kdev4
     // ./.kdev4/emptyproject.kdev4
 
-    const QString ep = QLatin1String("emptyproject");
+    const QString ep = QStringLiteral("emptyproject");
     auto rootFolder = QDir::temp();
     QDir(rootFolder.absolutePath() + "/" + ep).removeRecursively();
     rootFolder.mkdir(ep);

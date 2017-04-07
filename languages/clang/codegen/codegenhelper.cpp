@@ -68,7 +68,7 @@ IndexedTypeIdentifier stripPrefixIdentifiers(const IndexedTypeIdentifier& id, co
 
 int reservedIdentifierCount(const QString &name)
 {
-    QStringList l = name.split(QLatin1String("::"));
+    QStringList l = name.split(QStringLiteral("::"));
     int ret = 0;
     foreach(const QString &s, l)
     if (s.startsWith(QLatin1Char('_'))) {

@@ -415,7 +415,7 @@ bool isInsideComment(CXTranslationUnit unit, CXFile file, const KTextEditor::Cur
 QString& elideStringRight(QString& str, int length)
 {
     if (str.size() > length + 3) {
-        return str.replace(length, str.size() - length, QLatin1String("..."));
+        return str.replace(length, str.size() - length, QStringLiteral("..."));
     }
     return str;
 }
@@ -1174,7 +1174,7 @@ void ClangCodeCompletionContext::addOverwritableItems()
     QList<CompletionTreeItemPointer> overrides;
     for (int i = 0; i < overrideList.count(); i++) {
         FuncOverrideInfo info = overrideList.at(i);
-        QString nameAndParams = info.name + QLatin1Char('(') + info.params.join(QLatin1String(", ")) + QLatin1Char(')');
+        QString nameAndParams = info.name + QLatin1Char('(') + info.params.join(QStringLiteral(", ")) + QLatin1Char(')');
         if(info.isConst)
             nameAndParams = nameAndParams + QLatin1String(" const");
         if(info.isVirtual)

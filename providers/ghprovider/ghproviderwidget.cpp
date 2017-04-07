@@ -150,12 +150,12 @@ void ProviderWidget::searchRepo()
 
     switch (idx) {
     case 0: /* Looking for this user's repo */
-        uri = QLatin1String("/user/repos");
+        uri = QStringLiteral("/user/repos");
         enabled = false;
         break;
     case 1: /* Looking for some user's repo */
         if (text == m_account->name())
-            uri = QLatin1String("/user/repos");
+            uri = QStringLiteral("/user/repos");
         else
             uri = QStringLiteral("/users/%1/repos").arg(text);
         break;

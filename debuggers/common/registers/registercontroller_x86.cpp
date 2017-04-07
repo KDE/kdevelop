@@ -179,7 +179,7 @@ void RegisterControllerGeneral_x86::initRegisterNames()
 
     m_eflags.flags = m_registerNames[Flags];
     m_eflags.bits << QStringLiteral("0") << QStringLiteral("2") << QStringLiteral("4") << QStringLiteral("6") << QStringLiteral("7") << QStringLiteral("8") << QStringLiteral("10") << QStringLiteral("11");
-    m_eflags.registerName = QLatin1String("eflags");
+    m_eflags.registerName = QStringLiteral("eflags");
     m_eflags.groupName = enumToGroupName(Flags);
 }
 

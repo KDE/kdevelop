@@ -130,7 +130,7 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
         QString prefix;
         if (currentFormat == Binary && ((currentMode < v4_float || currentMode > v2_double) &&
         (currentMode < f32 || currentMode > f64) && group.groupName.type() != floatPoint)) {
-            prefix = QLatin1String("0b");
+            prefix = QStringLiteral("0b");
         }
 
         for (int column = 0; column  < values.count(); column ++) {

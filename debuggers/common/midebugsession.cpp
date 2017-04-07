@@ -887,7 +887,7 @@ void MIDebugSession::executeCmd()
     } else {
         if (commandText[length-1] != '\n') {
             bad_command = true;
-            message = QLatin1String("Debugger command does not end with newline");
+            message = QStringLiteral("Debugger command does not end with newline");
         }
     }
 

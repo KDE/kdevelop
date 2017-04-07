@@ -53,105 +53,105 @@ QString LldbCommand::miCommand() const
             command = QLatin1String("");
             break;
         case BreakInsert: // in lldb-mi, '-f' must be the last option switch right before location
-            command = QLatin1String("break-insert");
+            command = QStringLiteral("break-insert");
             isMI = true;
             break;
         case BreakList:
             command = QLatin1String("");
             break;
         case BreakWatch:
-            command = QLatin1String("break set var");
+            command = QStringLiteral("break set var");
             break;
 
         case DataListChangedRegisters:
-            command = QLatin1String("data-list-changed-registers");
+            command = QStringLiteral("data-list-changed-registers");
             break;
         case DataReadMemory: // not implemented, deprecated
-            command = QLatin1String("data-read-memory");
+            command = QStringLiteral("data-read-memory");
             break;
         case DataWriteRegisterVariables:
-            command = QLatin1String("data-write-register-values");
+            command = QStringLiteral("data-write-register-values");
             break;
 
         case EnableTimings:
-            command = QLatin1String("enable-timings");
+            command = QStringLiteral("enable-timings");
             break;
 
         case EnvironmentDirectory:
-            command = QLatin1String("environment-directory");
+            command = QStringLiteral("environment-directory");
             break;
         case EnvironmentPath:
-            command = QLatin1String("environment-path");
+            command = QStringLiteral("environment-path");
             break;
         case EnvironmentPwd:
-            command = QLatin1String("environment-pwd");
+            command = QStringLiteral("environment-pwd");
             break;
 
         case ExecUntil:
             // TODO: write test case for this
-            command = QLatin1String("thread until");
+            command = QStringLiteral("thread until");
             break;
 
         case FileExecFile:
-            command = QLatin1String("file-exec-file");//"exec-file"
+            command = QStringLiteral("file-exec-file");//"exec-file"
             break;
         case FileListExecSourceFile:
-            command = QLatin1String("file-list-exec-source-file");
+            command = QStringLiteral("file-list-exec-source-file");
             break;
         case FileListExecSourceFiles:
-            command = QLatin1String("file-list-exec-source-files");
+            command = QStringLiteral("file-list-exec-source-files");
             break;
         case FileSymbolFile:
-            command = QLatin1String("file-symbol-file");//"symbol-file"
+            command = QStringLiteral("file-symbol-file");//"symbol-file"
             break;
 
         case GdbVersion:
-            command = QLatin1String("gdb-version");//"show version"
+            command = QStringLiteral("gdb-version");//"show version"
             break;
 
         case InferiorTtyShow:
-            command = QLatin1String("inferior-tty-show");
+            command = QStringLiteral("inferior-tty-show");
             break;
 
         case SignalHandle:
-            command = QLatin1String("process handle");
+            command = QStringLiteral("process handle");
             break;
 
         case TargetDisconnect:
-            command = QLatin1String("target-disconnect");//"disconnect"
+            command = QStringLiteral("target-disconnect");//"disconnect"
             break;
         case TargetDownload:
-            command = QLatin1String("target-download");
+            command = QStringLiteral("target-download");
             break;
 
         case ThreadListIds:
-            command = QLatin1String("thread-list-ids");
+            command = QStringLiteral("thread-list-ids");
             break;
         case ThreadSelect:
-            command = QLatin1String("thread-select");
+            command = QStringLiteral("thread-select");
             break;
 
         case TraceFind:
-            command = QLatin1String("trace-find");
+            command = QStringLiteral("trace-find");
             break;
         case TraceStart:
-            command = QLatin1String("trace-start");
+            command = QStringLiteral("trace-start");
             break;
         case TraceStop:
-            command = QLatin1String("trace-stop");
+            command = QStringLiteral("trace-stop");
             break;
 
         case VarInfoNumChildren:
-            command = QLatin1String("var-info-num-children");
+            command = QStringLiteral("var-info-num-children");
             break;
         case VarInfoType:
-            command = QLatin1String("var-info-type");
+            command = QStringLiteral("var-info-type");
             break;
         case VarSetFrozen:
-            command = QLatin1String("var-set-frozen");
+            command = QStringLiteral("var-set-frozen");
             break;
         case VarShowFormat:
-            command = QLatin1String("var-show-format");
+            command = QStringLiteral("var-show-format");
             break;
         default:
             return MICommand::miCommand();
@@ -172,10 +172,10 @@ QString LldbCommand::cmdToSend()
             QString disassembly_flavor = QStringLiteral("disassembly-flavor ");
             if (command_.startsWith(env_name)) {
                 command_ = command_.mid(env_name.length());
-                overrideCmd = QLatin1String("settings set target.env-vars");
+                overrideCmd = QStringLiteral("settings set target.env-vars");
             } else if (command_.startsWith(disassembly_flavor)) {
                 command_ = command_.mid(disassembly_flavor.length());
-                overrideCmd = QLatin1String("settings set target.x86-disassembly-flavor");
+                overrideCmd = QStringLiteral("settings set target.x86-disassembly-flavor");
             }
             break;
         }

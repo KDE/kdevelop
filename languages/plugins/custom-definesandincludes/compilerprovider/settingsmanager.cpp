@@ -41,19 +41,19 @@ using namespace KDevelop;
 
 namespace {
 namespace ConfigConstants {
-const QString configKey = QLatin1String( "CustomDefinesAndIncludes" );
-const QString definesKey = QLatin1String( "Defines" );
-const QString includesKey = QLatin1String( "Includes" );
-const QString projectPathPrefix = QLatin1String( "ProjectPath" );
-const QString projectPathKey = QLatin1String( "Path" );
+const QString configKey = QStringLiteral( "CustomDefinesAndIncludes" );
+const QString definesKey = QStringLiteral( "Defines" );
+const QString includesKey = QStringLiteral( "Includes" );
+const QString projectPathPrefix = QStringLiteral( "ProjectPath" );
+const QString projectPathKey = QStringLiteral( "Path" );
 
-const QString customBuildSystemGroup = QLatin1String( "CustomBuildSystem" );
-const QString definesAndIncludesGroup = QLatin1String( "Defines And Includes" );
+const QString customBuildSystemGroup = QStringLiteral( "CustomBuildSystem" );
+const QString definesAndIncludesGroup = QStringLiteral( "Defines And Includes" );
 
-const QString compilersGroup = QLatin1String( "Compilers" );
-const QString compilerNameKey = QLatin1String( "Name" );
-const QString compilerPathKey = QLatin1String( "Path" );
-const QString compilerTypeKey = QLatin1String( "Type" );
+const QString compilersGroup = QStringLiteral( "Compilers" );
+const QString compilerNameKey = QStringLiteral( "Name" );
+const QString compilerPathKey = QStringLiteral( "Path" );
+const QString compilerTypeKey = QStringLiteral( "Type" );
 
 QString parserArgumentsCPP()
 {

@@ -61,9 +61,9 @@ void testAddingEntry(SettingsManager* settings, KConfig* config){
     auto entry = entries.first();
     auto compilers = settings->provider()->compilers();
     ConfigEntry otherEntry;
-    otherEntry.defines[QStringLiteral("TEST")] = QLatin1String("lalal");
+    otherEntry.defines[QStringLiteral("TEST")] = QStringLiteral("lalal");
     otherEntry.includes = QStringList() << QStringLiteral("/foo");
-    otherEntry.path = QLatin1String("test");
+    otherEntry.path = QStringLiteral("test");
     otherEntry.compiler = compilers.first();
     entries << otherEntry;
     settings->writePaths(config, entries);
@@ -147,7 +147,7 @@ void TestCompilerProvider::testStorageBackwardsCompatible()
     QCOMPARE(entries.size(), 1);
     auto entry = entries.first();
     Defines defines;
-    defines[QStringLiteral("VARIABLE")] = QLatin1String("VALUE");
+    defines[QStringLiteral("VARIABLE")] = QStringLiteral("VALUE");
     defines[QStringLiteral("_DEBUG")] = QString();
     QCOMPARE(entry.defines, defines);
     QStringList includes = QStringList() << QStringLiteral("/usr/include/mydir");
@@ -183,12 +183,12 @@ void TestCompilerProvider::testStorageNewSystem()
     auto entry = entries.first();
     QCOMPARE(entry.path, QString("/"));
     Defines defines;
-    defines[QStringLiteral("VARIABLE")] = QLatin1String("VALUE");
+    defines[QStringLiteral("VARIABLE")] = QStringLiteral("VALUE");
     defines[QStringLiteral("_DEBUG")] = QString();
     QCOMPARE(entry.defines, defines);
     QMap<QString, QString> includeMap;
-    includeMap[QStringLiteral("1")] = QLatin1String("/usr/include/mydir");
-    includeMap[QStringLiteral("2")] = QLatin1String("/usr/local/include/mydir");
+    includeMap[QStringLiteral("1")] = QStringLiteral("/usr/include/mydir");
+    includeMap[QStringLiteral("2")] = QStringLiteral("/usr/local/include/mydir");
 
     int i = 0;
     for(auto it = includeMap.begin(); it != includeMap.end(); it++)
@@ -234,7 +234,7 @@ void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
     QVERIFY(mainCompiler->name() == projectCompiler->name());
 
     ConfigEntry entry;
-    entry.path = QLatin1String("src/main.cpp");
+    entry.path = QStringLiteral("src/main.cpp");
     entry.compiler = compiler;
 
     auto entries = settings->readPaths(project->projectConfiguration().data());

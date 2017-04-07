@@ -49,7 +49,7 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
     if ( supportedProperties.isEmpty() ) {
         QString base = QStandardPaths::locate(
             QStandardPaths::GenericDataLocation,
-            QLatin1String("kdevqmljssupport/propertywidgets"),
+            QStringLiteral("kdevqmljssupport/propertywidgets"),
             QStandardPaths::LocateDirectory
         ) + '/';
 

@@ -62,22 +62,22 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     Format currentFormat = formats(group).first();
     switch (currentFormat) {
     case Binary:
-        registers = QLatin1String("t ");
+        registers = QStringLiteral("t ");
         break;
     case Octal:
-        registers = QLatin1String("o ");
+        registers = QStringLiteral("o ");
         break;
     case Decimal :
-        registers = QLatin1String("d ");
+        registers = QStringLiteral("d ");
         break;
     case Hexadecimal:
-        registers = QLatin1String("x ");
+        registers = QStringLiteral("x ");
         break;
     case Raw:
-        registers = QLatin1String("r ");
+        registers = QStringLiteral("r ");
         break;
     case Unsigned:
-        registers = QLatin1String("u ");
+        registers = QStringLiteral("u ");
         break;
     default:
         break;
@@ -87,7 +87,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     Mode currentMode = modes(group).first();
     if (((currentMode >= v4_float && currentMode <= v2_double) ||
         (currentMode >= f32 && currentMode <= f64) || group.type() == floatPoint) && currentFormat != Raw) {
-        registers = QLatin1String("N ");
+        registers = QStringLiteral("N ");
     }
 
     if (group.type() == flag) {

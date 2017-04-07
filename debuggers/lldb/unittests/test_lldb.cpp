@@ -265,8 +265,8 @@ void LldbTest::testEnvironmentSet()
     WritableEnvironmentProfileList envProfiles(cfg.rootConfig());
     envProfiles.removeProfile(QStringLiteral("LldbTestGroup"));
     auto &envs = envProfiles.variables(QStringLiteral("LldbTestGroup"));
-    envs[QStringLiteral("VariableA")] = QLatin1String("-A' \" complex --value");
-    envs[QStringLiteral("VariableB")] = QLatin1String("-B' \" complex --value");
+    envs[QStringLiteral("VariableA")] = QStringLiteral("-A' \" complex --value");
+    envs[QStringLiteral("VariableB")] = QStringLiteral("-B' \" complex --value");
     envProfiles.saveSettings(cfg.rootConfig());
 
     QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);

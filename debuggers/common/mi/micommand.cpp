@@ -153,157 +153,157 @@ QString MICommand::miCommand() const
             command = QLatin1String("");
             break;
         case BreakAfter:
-            command = QLatin1String("break-after");//"ignore"
+            command = QStringLiteral("break-after");//"ignore"
             break;
         case BreakCommands:
-            command = QLatin1String("break-commands");
+            command = QStringLiteral("break-commands");
             break;
         case BreakCondition:
-            command = QLatin1String("break-condition");//"cond"
+            command = QStringLiteral("break-condition");//"cond"
             break;
         case BreakDelete:
-            command = QLatin1String("break-delete");//"delete breakpoint"
+            command = QStringLiteral("break-delete");//"delete breakpoint"
             break;
         case BreakDisable:
-            command = QLatin1String("break-disable");//"disable breakpoint"
+            command = QStringLiteral("break-disable");//"disable breakpoint"
             break;
         case BreakEnable:
-            command = QLatin1String("break-enable");//"enable breakpoint"
+            command = QStringLiteral("break-enable");//"enable breakpoint"
             break;
         case BreakInfo:
-            command = QLatin1String("break-info");//"info break"
+            command = QStringLiteral("break-info");//"info break"
             break;
         case BreakInsert:
-            command = QLatin1String("break-insert -f");
+            command = QStringLiteral("break-insert -f");
             break;
         case BreakList:
-            command = QLatin1String("break-list");//"info break"
+            command = QStringLiteral("break-list");//"info break"
             break;
         case BreakWatch:
-            command = QLatin1String("break-watch");
+            command = QStringLiteral("break-watch");
             break;
 
         case DataDisassemble:
-            command = QLatin1String("data-disassemble");
+            command = QStringLiteral("data-disassemble");
             break;
         case DataEvaluateExpression:
-            command = QLatin1String("data-evaluate-expression");
+            command = QStringLiteral("data-evaluate-expression");
             break;
         case DataListChangedRegisters:
-            command = QLatin1String("data-list-changed-registers");
+            command = QStringLiteral("data-list-changed-registers");
             break;
         case DataListRegisterNames:
-            command = QLatin1String("data-list-register-names");
+            command = QStringLiteral("data-list-register-names");
             break;
         case DataListRegisterValues:
-            command = QLatin1String("data-list-register-values");
+            command = QStringLiteral("data-list-register-values");
             break;
         case DataReadMemory:
-            command = QLatin1String("data-read-memory");
+            command = QStringLiteral("data-read-memory");
             break;
         case DataWriteMemory:
-            command = QLatin1String("data-write-memory");
+            command = QStringLiteral("data-write-memory");
             break;
         case DataWriteRegisterVariables:
-            command = QLatin1String("data-write-register-values");
+            command = QStringLiteral("data-write-register-values");
             break;
 
         case EnablePrettyPrinting:
-            command = QLatin1String("enable-pretty-printing");
+            command = QStringLiteral("enable-pretty-printing");
             break;
         case EnableTimings:
-            command = QLatin1String("enable-timings");
+            command = QStringLiteral("enable-timings");
             break;
 
         case EnvironmentCd:
-            command = QLatin1String("environment-cd");
+            command = QStringLiteral("environment-cd");
             break;
         case EnvironmentDirectory:
-            command = QLatin1String("environment-directory");
+            command = QStringLiteral("environment-directory");
             break;
         case EnvironmentPath:
-            command = QLatin1String("environment-path");
+            command = QStringLiteral("environment-path");
             break;
         case EnvironmentPwd:
-            command = QLatin1String("environment-pwd");
+            command = QStringLiteral("environment-pwd");
             break;
 
         case ExecAbort:
-            command = QLatin1String("exec-abort");
+            command = QStringLiteral("exec-abort");
             break;
         case ExecArguments:
-            command = QLatin1String("exec-arguments");//"set args"
+            command = QStringLiteral("exec-arguments");//"set args"
             break;
         case ExecContinue:
-            command = QLatin1String("exec-continue");
+            command = QStringLiteral("exec-continue");
             break;
         case ExecFinish:
-            command = QLatin1String("exec-finish");
+            command = QStringLiteral("exec-finish");
             break;
         case ExecInterrupt:
-            command = QLatin1String("exec-interrupt");
+            command = QStringLiteral("exec-interrupt");
             break;
         case ExecNext:
-            command = QLatin1String("exec-next");
+            command = QStringLiteral("exec-next");
             break;
         case ExecNextInstruction:
-            command = QLatin1String("exec-next-instruction");
+            command = QStringLiteral("exec-next-instruction");
             break;
         case ExecRun:
-            command = QLatin1String("exec-run");
+            command = QStringLiteral("exec-run");
             break;
         case ExecStep:
-            command = QLatin1String("exec-step");
+            command = QStringLiteral("exec-step");
             break;
         case ExecStepInstruction:
-            command = QLatin1String("exec-step-instruction");
+            command = QStringLiteral("exec-step-instruction");
             break;
         case ExecUntil:
-            command = QLatin1String("exec-until");
+            command = QStringLiteral("exec-until");
             break;
 
         case FileExecAndSymbols:
-            command = QLatin1String("file-exec-and-symbols");//"file"
+            command = QStringLiteral("file-exec-and-symbols");//"file"
             break;
         case FileExecFile:
-            command = QLatin1String("file-exec-file");//"exec-file"
+            command = QStringLiteral("file-exec-file");//"exec-file"
             break;
         case FileListExecSourceFile:
-            command = QLatin1String("file-list-exec-source-file");
+            command = QStringLiteral("file-list-exec-source-file");
             break;
         case FileListExecSourceFiles:
-            command = QLatin1String("file-list-exec-source-files");
+            command = QStringLiteral("file-list-exec-source-files");
             break;
         case FileSymbolFile:
-            command = QLatin1String("file-symbol-file");//"symbol-file"
+            command = QStringLiteral("file-symbol-file");//"symbol-file"
             break;
 
         case GdbExit:
-            command = QLatin1String("gdb-exit");
+            command = QStringLiteral("gdb-exit");
             break;
         case GdbSet:
-            command = QLatin1String("gdb-set");//"set"
+            command = QStringLiteral("gdb-set");//"set"
             break;
         case GdbShow:
-            command = QLatin1String("gdb-show");//"show"
+            command = QStringLiteral("gdb-show");//"show"
             break;
         case GdbVersion:
-            command = QLatin1String("gdb-version");//"show version"
+            command = QStringLiteral("gdb-version");//"show version"
             break;
 
         case InferiorTtySet:
-            command = QLatin1String("inferior-tty-set");
+            command = QStringLiteral("inferior-tty-set");
             break;
         case InferiorTtyShow:
-            command = QLatin1String("inferior-tty-show");
+            command = QStringLiteral("inferior-tty-show");
             break;
 
         case InterpreterExec:
-            command = QLatin1String("interpreter-exec");
+            command = QStringLiteral("interpreter-exec");
             break;
 
         case ListFeatures:
-            command = QLatin1String("list-features");
+            command = QStringLiteral("list-features");
             break;
 
         case SignalHandle:
@@ -312,106 +312,106 @@ QString MICommand::miCommand() const
             break;
 
         case StackInfoDepth:
-            command = QLatin1String("stack-info-depth");
+            command = QStringLiteral("stack-info-depth");
             break;
         case StackInfoFrame:
-            command = QLatin1String("stack-info-frame");
+            command = QStringLiteral("stack-info-frame");
             break;
         case StackListArguments:
-            command = QLatin1String("stack-list-arguments");
+            command = QStringLiteral("stack-list-arguments");
             break;
         case StackListFrames:
-            command = QLatin1String("stack-list-frames");
+            command = QStringLiteral("stack-list-frames");
             break;
         case StackListLocals:
-            command = QLatin1String("stack-list-locals");
+            command = QStringLiteral("stack-list-locals");
             break;
         case StackSelectFrame:
-            command = QLatin1String("stack-select-frame");
+            command = QStringLiteral("stack-select-frame");
             break;
 
         case SymbolListLines:
-            command = QLatin1String("symbol-list-lines");
+            command = QStringLiteral("symbol-list-lines");
             break;
 
         case TargetAttach:
-            command = QLatin1String("target-attach");
+            command = QStringLiteral("target-attach");
             break;
         case TargetDetach:
-            command = QLatin1String("target-detach");//"detach"
+            command = QStringLiteral("target-detach");//"detach"
             break;
         case TargetDisconnect:
-            command = QLatin1String("target-disconnect");//"disconnect"
+            command = QStringLiteral("target-disconnect");//"disconnect"
             break;
         case TargetDownload:
-            command = QLatin1String("target-download");
+            command = QStringLiteral("target-download");
             break;
         case TargetSelect:
-            command = QLatin1String("target-select");
+            command = QStringLiteral("target-select");
             break;
 
         case ThreadInfo:
-            command = QLatin1String("thread-info");
+            command = QStringLiteral("thread-info");
             break;
         case ThreadListIds:
-            command = QLatin1String("thread-list-ids");
+            command = QStringLiteral("thread-list-ids");
             break;
         case ThreadSelect:
-            command = QLatin1String("thread-select");
+            command = QStringLiteral("thread-select");
             break;
 
         case TraceFind:
-            command = QLatin1String("trace-find");
+            command = QStringLiteral("trace-find");
             break;
         case TraceStart:
-            command = QLatin1String("trace-start");
+            command = QStringLiteral("trace-start");
             break;
         case TraceStop:
-            command = QLatin1String("trace-stop");
+            command = QStringLiteral("trace-stop");
             break;
 
         case VarAssign:
-            command = QLatin1String("var-assign");
+            command = QStringLiteral("var-assign");
             break;
         case VarCreate:
-            command = QLatin1String("var-create");
+            command = QStringLiteral("var-create");
             break;
         case VarDelete:
-            command = QLatin1String("var-delete");
+            command = QStringLiteral("var-delete");
             break;
         case VarEvaluateExpression:
-            command = QLatin1String("var-evaluate-expression");
+            command = QStringLiteral("var-evaluate-expression");
             break;
         case VarInfoPathExpression:
-            command = QLatin1String("var-info-path-expression");
+            command = QStringLiteral("var-info-path-expression");
             break;
         case VarInfoNumChildren:
-            command = QLatin1String("var-info-num-children");
+            command = QStringLiteral("var-info-num-children");
             break;
         case VarInfoType:
-            command = QLatin1String("var-info-type");
+            command = QStringLiteral("var-info-type");
             break;
         case VarListChildren:
-            command = QLatin1String("var-list-children");
+            command = QStringLiteral("var-list-children");
             break;
         case VarSetFormat:
-            command = QLatin1String("var-set-format");
+            command = QStringLiteral("var-set-format");
             break;
         case VarSetFrozen:
-            command = QLatin1String("var-set-frozen");
+            command = QStringLiteral("var-set-frozen");
             break;
         case VarShowAttributes:
-            command = QLatin1String("var-show-attributes");
+            command = QStringLiteral("var-show-attributes");
             break;
         case VarShowFormat:
-            command = QLatin1String("var-show-format");
+            command = QStringLiteral("var-show-format");
             break;
         case VarUpdate:
-            command = QLatin1String("var-update");
+            command = QStringLiteral("var-update");
             break;
 
         default:
-            command = QLatin1String("unknown");
+            command = QStringLiteral("unknown");
             break;
     }
 

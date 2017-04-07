@@ -109,7 +109,7 @@ void OktetaWidget::setupActions(OktetaPlugin* plugin)
     mControllers.append( new Kasten::ViewProfileController(viewProfileManager, mByteArrayView->widget(), this) );
     mControllers.append( new Kasten::ViewProfilesManageController(this, viewProfileManager, mByteArrayView->widget()) );
     // update the text of the viewprofiles_manage action, to make clear this is just for byte arrays
-    QAction* viewprofilesManageAction = actionCollection()->action(QLatin1String("settings_viewprofiles_manage"));
+    QAction* viewprofilesManageAction = actionCollection()->action(QStringLiteral("settings_viewprofiles_manage"));
     viewprofilesManageAction->setText( i18nc("@action:inmenu",
                                              "Manage Byte Array View Profiles...") );
 

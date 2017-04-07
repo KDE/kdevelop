@@ -316,8 +316,8 @@ void GdbTest::testEnvironmentSet()
     WritableEnvironmentProfileList envProfiles(cfg.rootConfig());
     envProfiles.removeProfile(QStringLiteral("GdbTestGroup"));
     auto &envs = envProfiles.variables(QStringLiteral("GdbTestGroup"));
-    envs[QStringLiteral("VariableA")] = QLatin1String("-A' \" complex --value");
-    envs[QStringLiteral("VariableB")] = QLatin1String("-B' \" complex --value");
+    envs[QStringLiteral("VariableA")] = QStringLiteral("-A' \" complex --value");
+    envs[QStringLiteral("VariableB")] = QStringLiteral("-B' \" complex --value");
     envProfiles.saveSettings(cfg.rootConfig());
 
     QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
@@ -1854,7 +1854,7 @@ void GdbTest::testThreadAndFrameInfo()
     QSignalSpy outputSpy(session, &TestDebugSession::debuggerUserCommandOutput);
 
     session->addCommand(new MI::UserCommand(MI::ThreadInfo,QLatin1String("")));
-    session->addCommand(new MI::UserCommand(MI::StackListLocals, QLatin1String("0")));
+    session->addCommand(new MI::UserCommand(MI::StackListLocals, QStringLiteral("0")));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // wait for command finish
 
     // outputs should be

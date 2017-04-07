@@ -68,7 +68,7 @@ void AStyleFormatter::updateFormatter()
         bool force = m_options[QStringLiteral("FillForce")].toBool();
         AStyleFormatter::setTabSpaceConversionMode(false);
         AStyleFormatter::setTabIndentation(wsCount, force );
-        m_indentString = QLatin1String("\t");
+        m_indentString = QStringLiteral("\t");
     } else {
         AStyleFormatter::setSpaceIndentation(wsCount);
         m_indentString = QLatin1String("");

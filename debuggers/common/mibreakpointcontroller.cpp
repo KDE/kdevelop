@@ -328,7 +328,7 @@ void MIBreakpointController::createBreakpoint(int row)
         }
 
         if (location == QLatin1String("catch throw")) {
-            location = QLatin1String("exception throw");
+            location = QStringLiteral("exception throw");
         }
 
         // Note: We rely on '-f' to be automatically added by the MICommand logic
@@ -352,9 +352,9 @@ void MIBreakpointController::createBreakpoint(int row)
     } else {
         QString opt;
         if (modelBreakpoint->kind() == Breakpoint::ReadBreakpoint)
-            opt = QLatin1String("-r ");
+            opt = QStringLiteral("-r ");
         else if (modelBreakpoint->kind() == Breakpoint::AccessBreakpoint)
-            opt = QLatin1String("-a ");
+            opt = QStringLiteral("-a ");
 
         debugSession()->addCommand(BreakWatch,
                                    opt + Utils::quoteExpression(modelBreakpoint->location()),

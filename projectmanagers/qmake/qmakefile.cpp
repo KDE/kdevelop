@@ -79,7 +79,7 @@ QStringList resolveShellGlobbingInternal(const QString& pattern, const QString& 
         return QStringList();
     }
 
-    QDir dir_(pattern.startsWith('/') ? QLatin1String("/") : dir);
+    QDir dir_(pattern.startsWith('/') ? QStringLiteral("/") : dir);
 
     // break up pattern into path segments
     return resolveShellGlobbingInternal(pattern.split(QLatin1Char('/'), QString::SkipEmptyParts), dir_);

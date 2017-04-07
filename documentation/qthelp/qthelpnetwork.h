@@ -103,7 +103,7 @@ QNetworkReply *HelpNetworkAccessManager::createRequest(Operation op, const QNetw
 			// see also: https://bugs.kde.org/show_bug.cgi?id=288277
 			// firefox seems to add this bullshit mimetype above
 			// which breaks displaying of qthelp documentation :(
-			mimeType = QLatin1String("text/html");
+			mimeType = QStringLiteral("text/html");
 		}
 		return new HelpNetworkReply(request, m_helpEngine->fileData(request.url()), mimeType);
 	}

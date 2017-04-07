@@ -84,7 +84,7 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
     m_prefix += decl->identifier().toString();
 
     // (arg1, arg2, [currentArgument in m_currentArgument], arg4, arg5)
-    m_arguments = QLatin1String("(");
+    m_arguments = QStringLiteral("(");
 
     for (int i=0; i<arguments.count(); ++i) {
         if (i > 0) {

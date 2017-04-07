@@ -191,12 +191,12 @@ QString QtHelpDocumentation::description() const
             {
                 const QString sizeRegExp = QStringLiteral("< h\\d ").replace(' ', optionalSpace);
                 const QRegularExpression findSize(sizeRegExp);
-                thisFragment.replace(findSize, QLatin1String("<big "));
+                thisFragment.replace(findSize, QStringLiteral("<big "));
             }
             {
                 const QString sizeCloseRegExp = QStringLiteral("< / h\\d >").replace(' ', optionalSpace);
                 const QRegularExpression closeSize(sizeCloseRegExp);
-                thisFragment.replace(closeSize, QLatin1String("</big><br />"));
+                thisFragment.replace(closeSize, QStringLiteral("</big><br />"));
             }
         }
 
@@ -208,14 +208,14 @@ QString QtHelpDocumentation::description() const
 
             const QString end = QStringLiteral("< /p >").replace(' ', optionalSpace);
             const QRegularExpression findEnd(end);
-            thisFragment.replace(findEnd, QLatin1String("<br />"));
+            thisFragment.replace(findEnd, QStringLiteral("<br />"));
         }
 
         {
             //Remove links, because they won't work
             const QString link = QString("< a href = " + p + ".*?" + p).replace(' ', optionalSpace);
             const QRegularExpression exp(link, QRegularExpression::CaseInsensitiveOption);
-            thisFragment.replace(exp, QLatin1String("<a "));
+            thisFragment.replace(exp, QStringLiteral("<a "));
         }
 
         return thisFragment;

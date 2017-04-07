@@ -210,11 +210,11 @@ QStringList QMakeProjectFile::includeDirectories() const
             }
 
             if (pattern == QLatin1String("qtestlib") || pattern == QLatin1String("testlib")) {
-                pattern = QLatin1String("QtTest");
+                pattern = QStringLiteral("QtTest");
             } else if (pattern == QLatin1String("qaxcontainer")) {
-                pattern = QLatin1String("ActiveQt");
+                pattern = QStringLiteral("ActiveQt");
             } else if (pattern == QLatin1String("qaxserver")) {
-                pattern = QLatin1String("ActiveQt");
+                pattern = QStringLiteral("ActiveQt");
             }
 
             QFileInfoList match = incDir.entryInfoList({QString("Qt%1").arg(pattern)}, QDir::Dirs);

@@ -88,26 +88,26 @@ static QHash<QString, QString> processDefines(const QString &compileFlags, const
 
 void CMakeServerImportJob::processFileData(const QJsonObject &response, CMakeProjectData &data)
 {
-    const auto configs = response.value(QLatin1String("configurations")).toArray();
+    const auto configs = response.value(QStringLiteral("configurations")).toArray();
     qCDebug(CMAKE) << "process response" << response;
     for (const auto &config: configs) {
-        const auto projects = config.toObject().value(QLatin1String("projects")).toArray();
+        const auto projects = config.toObject().value(QStringLiteral("projects")).toArray();
         for (const auto &project: projects) {
-            const auto targets = project.toObject().value(QLatin1String("targets")).toArray();
+            const auto targets = project.toObject().value(QStringLiteral("targets")).toArray();
             for (const auto &targetObject: targets) {
                 const auto target = targetObject.toObject();
-                const KDevelop::Path targetDir(target.value(QLatin1String("sourceDirectory")).toString());
+                const KDevelop::Path targetDir(target.value(QStringLiteral("sourceDirectory")).toString());
 
-                data.targets[targetDir] += target.value(QLatin1String("name")).toString();
+                data.targets[targetDir] += target.value(QStringLiteral("name")).toString();
 
-                const auto fileGroups = target.value(QLatin1String("fileGroups")).toArray();
+                const auto fileGroups = target.value(QStringLiteral("fileGroups")).toArray();
                 for (const auto &fileGroupValue: fileGroups) {
                     const auto fileGroup = fileGroupValue.toObject();
                     CMakeFile file;
-                    file.includes = kTransform<KDevelop::Path::List>(fileGroup.value(QLatin1String("includePath")).toArray(), [](const QJsonValue& val) { return KDevelop::Path(val.toObject().value(QLatin1String("path")).toString()); });
-                    file.defines = processDefines(fileGroup.value(QLatin1String("compileFlags")).toString(), fileGroup.value(QLatin1String("defines")).toArray());
+                    file.includes = kTransform<KDevelop::Path::List>(fileGroup.value(QStringLiteral("includePath")).toArray(), [](const QJsonValue& val) { return KDevelop::Path(val.toObject().value(QStringLiteral("path")).toString()); });
+                    file.defines = processDefines(fileGroup.value(QStringLiteral("compileFlags")).toString(), fileGroup.value(QStringLiteral("defines")).toArray());
 
-                    const auto sourcesArray = fileGroup.value(QLatin1String("sources")).toArray();
+                    const auto sourcesArray = fileGroup.value(QStringLiteral("sources")).toArray();
                     const KDevelop::Path::List sources = kTransform<KDevelop::Path::List>(sourcesArray, [targetDir](const QJsonValue& val) { return KDevelop::Path(targetDir, val.toString()); });
                     for (const auto& source: sources) {
                         // NOTE: we use the canonical file path to prevent issues with symlinks in the path
@@ -152,9 +152,9 @@ void CMakeServerImportJob::doStart()
 
 void CMakeServerImportJob::processResponse(const QJsonObject& response)
 {
-    const auto responseType = response.value(QLatin1String("type"));
+    const auto responseType = response.value(QStringLiteral("type"));
     if (responseType == QLatin1String("reply")) {
-        const auto inReplyTo = response.value(QLatin1String("inReplyTo"));
+        const auto inReplyTo = response.value(QStringLiteral("inReplyTo"));
         qCDebug(CMAKE) << "replying..." << inReplyTo;
         if (inReplyTo == QLatin1String("handshake")) {
             m_server->configure({});
@@ -171,7 +171,7 @@ void CMakeServerImportJob::processResponse(const QJsonObject& response)
         }
     } else if(responseType == QLatin1String("error")) {
         setError(ErrorResponse);
-        setErrorText(response.value(QLatin1String("errorMessage")).toString());
+        setErrorText(response.value(QStringLiteral("errorMessage")).toString());
         qWarning() << "error!!" << response;
         emitResult();
     } else {

@@ -42,16 +42,16 @@ public:
         : Environment(QProcessEnvironment::systemEnvironment().toStringList())
     {
         if (Utils::HostOsInfo::isLinuxHost()) {
-            QString ldLibraryPath = value(QLatin1String("LD_LIBRARY_PATH"));
+            QString ldLibraryPath = value(QStringLiteral("LD_LIBRARY_PATH"));
             QDir lib(QCoreApplication::applicationDirPath());
-            lib.cd(QLatin1String("../lib"));
+            lib.cd(QStringLiteral("../lib"));
             QString toReplace = lib.path();
-            lib.cd(QLatin1String("qtcreator"));
+            lib.cd(QStringLiteral("qtcreator"));
             toReplace.append(QLatin1Char(':'));
             toReplace.append(lib.path());
 
             if (ldLibraryPath.startsWith(toReplace))
-                set(QLatin1String("LD_LIBRARY_PATH"), ldLibraryPath.remove(0, toReplace.length()));
+                set(QStringLiteral("LD_LIBRARY_PATH"), ldLibraryPath.remove(0, toReplace.length()));
         }
     }
 };
@@ -174,13 +174,13 @@ void Environment::prependOrSet(const QString&key, const QString &value, const QS
 
 void Environment::appendOrSetPath(const QString &value)
 {
-    appendOrSet(QLatin1String("PATH"), QDir::toNativeSeparators(value),
+    appendOrSet(QStringLiteral("PATH"), QDir::toNativeSeparators(value),
             QString(OsSpecificAspects(m_osType).pathListSeparator()));
 }
 
 void Environment::prependOrSetPath(const QString &value)
 {
-    prependOrSet(QLatin1String("PATH"), QDir::toNativeSeparators(value),
+    prependOrSet(QStringLiteral("PATH"), QDir::toNativeSeparators(value),
             QString(OsSpecificAspects(m_osType).pathListSeparator()));
 }
 
@@ -194,10 +194,10 @@ void Environment::prependOrSetLibrarySearchPath(const QString &value)
         break;
     }
     case OsTypeMac: {
-        const QString sep = QLatin1String(":");
+        const QString sep = QStringLiteral(":");
         const QString nativeValue = QDir::toNativeSeparators(value);
-        prependOrSet(QLatin1String("DYLD_LIBRARY_PATH"), nativeValue, sep);
-        prependOrSet(QLatin1String("DYLD_FRAMEWORK_PATH"), nativeValue, sep);
+        prependOrSet(QStringLiteral("DYLD_LIBRARY_PATH"), nativeValue, sep);
+        prependOrSet(QStringLiteral("DYLD_FRAMEWORK_PATH"), nativeValue, sep);
         break;
     }
     case OsTypeLinux:
@@ -248,7 +248,7 @@ QStringList Environment::appendExeExtensions(const QString &executable) const
         // Check all the executable extensions on windows:
         // PATHEXT is only used if the executable has no extension
         if (fi.suffix().isEmpty()) {
-            QStringList extensions = value(QLatin1String("PATHEXT")).split(QLatin1Char(';'));
+            QStringList extensions = value(QStringLiteral("PATHEXT")).split(QLatin1Char(';'));
 
             foreach (const QString &ext, extensions)
                 execs << executable + ext.toLower();
@@ -301,7 +301,7 @@ FileName Environment::searchInPath(const QString &executable,
 
 QStringList Environment::path() const
 {
-    return m_values.value(QLatin1String("PATH"))
+    return m_values.value(QStringLiteral("PATH"))
             .split(OsSpecificAspects(m_osType).pathListSeparator(), QString::SkipEmptyParts);
 }
 

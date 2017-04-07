@@ -76,21 +76,21 @@ void JsonValue::operator delete(void *, JsonMemoryPool *)
 QString JsonValue::kindToString(JsonValue::Kind kind)
 {
     if (kind == String)
-        return QLatin1String("string");
+        return QStringLiteral("string");
     if (kind == Double)
-        return QLatin1String("number");
+        return QStringLiteral("number");
     if (kind == Int)
-        return QLatin1String("integer");
+        return QStringLiteral("integer");
     if (kind == Object)
-        return QLatin1String("object");
+        return QStringLiteral("object");
     if (kind == Array)
-        return QLatin1String("array");
+        return QStringLiteral("array");
     if (kind == Boolean)
-        return QLatin1String("boolean");
+        return QStringLiteral("boolean");
     if (kind == Null)
-        return QLatin1String("null");
+        return QStringLiteral("null");
 
-    return QLatin1String("unknown");
+    return QStringLiteral("unknown");
 }
 
 JsonValue *JsonValue::build(const QVariant &variant, JsonMemoryPool *pool)
@@ -679,7 +679,7 @@ JsonSchemaManager::JsonSchemaManager(const QStringList &searchPaths)
         QDir dir(path);
         if (!dir.exists() && !dir.mkpath(path))
             continue;
-        dir.setNameFilters(QStringList(QLatin1String("*.json")));
+        dir.setNameFilters(QStringList(QStringLiteral("*.json")));
         foreach (const QFileInfo &fi, dir.entryInfoList())
             m_schemas.insert(fi.baseName(), JsonSchemaData(fi.absoluteFilePath()));
     }

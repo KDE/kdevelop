@@ -64,7 +64,7 @@ ModelManager::ModelManager(QObject* parent)
 ModelManager::~ModelManager() {}
 
 KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
-: IPlugin(QLatin1String("kdevqmljssupport"), parent )
+: IPlugin(QStringLiteral("kdevqmljssupport"), parent )
 , ILanguageSupport()
 , m_highlighting(new QmlJsHighlighting(this))
 , m_refactoring(new BasicRefactoring(this))

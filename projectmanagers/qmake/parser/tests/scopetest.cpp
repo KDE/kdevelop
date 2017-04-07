@@ -54,13 +54,13 @@ BEGINTESTFUNCIMPL(ScopeTest, basicScope, 1)
     QList<QMake::StatementAST*> testlist;
     auto tst = new QMake::AssignmentAST(scope->body);
     auto val = new QMake::ValueAST(tst);
-    val->value = QLatin1String("VARIABLE");
+    val->value = QStringLiteral("VARIABLE");
     tst->identifier = val;
     val = new QMake::ValueAST(tst);
-    val->value = QLatin1String("=");
+    val->value = QStringLiteral("=");
     tst->op = val;
     val = new QMake::ValueAST(tst);
-    val->value = QLatin1String("FOO");
+    val->value = QStringLiteral("FOO");
     tst->values.append(val);
     testlist.append(tst);
     TESTSCOPEBODY(scope, testlist, 1)
@@ -74,13 +74,13 @@ BEGINTESTFUNCIMPL(ScopeTest, basicScopeBrace, 1)
     QList<QMake::StatementAST*> testlist;
     auto tst = new QMake::AssignmentAST(scope->body);
     auto val = new QMake::ValueAST(tst);
-    val->value = QLatin1String("VARIABLE");
+    val->value = QStringLiteral("VARIABLE");
     tst->identifier = val;
     val = new QMake::ValueAST(tst);
-    val->value = QLatin1String("=");
+    val->value = QStringLiteral("=");
     tst->op = val;
     val = new QMake::ValueAST(tst);
-    val->value = QLatin1String("FOO");
+    val->value = QStringLiteral("FOO");
     tst->values.append(val);
     testlist.append(tst);
     TESTSCOPEBODY(scope, testlist, 1)
@@ -94,19 +94,19 @@ BEGINTESTFUNCIMPL(ScopeTest, nestedScope, 1)
     QList<QMake::StatementAST*> testlist;
     auto simple = new QMake::SimpleScopeAST(scope->body);
     auto val = new QMake::ValueAST(simple);
-    val->value = QLatin1String("barfoo");
+    val->value = QStringLiteral("barfoo");
     simple->identifier = val;
     auto body = new QMake::ScopeBodyAST(simple);
     QList<QMake::StatementAST*> sublist;
     auto tst = new QMake::AssignmentAST(body);
     val = new QMake::ValueAST(tst);
-    val->value = QLatin1String("VARIABLE");
+    val->value = QStringLiteral("VARIABLE");
     tst->identifier = val;
     val = new QMake::ValueAST(tst);
-    val->value = QLatin1String("=");
+    val->value = QStringLiteral("=");
     tst->op = val;
     val = new QMake::ValueAST(tst);
-    val->value = QLatin1String("FOO");
+    val->value = QStringLiteral("FOO");
     tst->values.append(val);
     body->statements.append(tst);
     simple->body = body;

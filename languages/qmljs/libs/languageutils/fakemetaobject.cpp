@@ -85,7 +85,7 @@ void FakeMetaEnum::addToHash(QCryptographicHash &hash) const
 QString FakeMetaEnum::describe(int baseIndent) const
 {
     QString newLine = QString::fromLatin1("\n") + QString::fromLatin1(" ").repeated(baseIndent);
-    QString res = QLatin1String("Enum ");
+    QString res = QStringLiteral("Enum ");
     res += name();
     res += QLatin1String(":{");
     for (int i = 0; i < keyCount(); ++i) {
@@ -182,7 +182,7 @@ void FakeMetaMethod::addToHash(QCryptographicHash &hash) const
 QString FakeMetaMethod::describe(int baseIndent) const
 {
     QString newLine = QString::fromLatin1("\n") + QString::fromLatin1(" ").repeated(baseIndent);
-    QString res = QLatin1String("Method {");
+    QString res = QStringLiteral("Method {");
     res += newLine;
     res += QLatin1String("  methodName:");
     res += methodName();
@@ -262,7 +262,7 @@ void FakeMetaProperty::addToHash(QCryptographicHash &hash) const
 QString FakeMetaProperty::describe(int baseIndent) const
 {
     QString newLine = QString::fromLatin1("\n") + QString::fromLatin1(" ").repeated(baseIndent);
-    QString res = QLatin1String("Property  {");
+    QString res = QStringLiteral("Property  {");
     res += newLine;
     res += QLatin1String("  name:");
     res += name();
@@ -574,7 +574,7 @@ void FakeMetaObject::Export::addToHash(QCryptographicHash &hash) const
 QString FakeMetaObject::Export::describe(int baseIndent) const
 {
     QString newLine = QString::fromLatin1("\n") + QString::fromLatin1(" ").repeated(baseIndent);
-    QString res = QLatin1String("Export {");
+    QString res = QStringLiteral("Export {");
     res += newLine;
     res += QLatin1String("  package:");
     res += package;
