@@ -532,7 +532,7 @@ void BreakpointModel::scheduleSave()
         return;
 
     m_dirty = true;
-    QTimer::singleShot(0, this, SLOT(save()));
+    QTimer::singleShot(0, this, &BreakpointModel::save);
 }
 
 QList<Breakpoint*> KDevelop::BreakpointModel::breakpoints() const

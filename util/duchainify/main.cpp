@@ -316,7 +316,7 @@ int main(int argc, char** argv)
     TestCore::initialize(Core::NoUi, QStringLiteral("duchainify"));
     Manager manager(&parser);
 
-    QTimer::singleShot(0, &manager, SLOT(init()));
+    QTimer::singleShot(0, &manager, &Manager::init);
     int ret = app.exec();
 
     TestCore::shutdown();

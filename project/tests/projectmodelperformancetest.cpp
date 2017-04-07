@@ -140,7 +140,7 @@ void ProjectModelPerformanceTest::addBigTree()
 void ProjectModelPerformanceTest::addBigTreeDelayed()
 {
     originalWidth = model->rowCount();
-    QTimer::singleShot( 0, this, SLOT(addItemDelayed()) );
+    QTimer::singleShot( 0, this, &ProjectModelPerformanceTest::addItemDelayed );
 }
 
 void ProjectModelPerformanceTest::addItemDelayed()
@@ -175,7 +175,7 @@ void ProjectModelPerformanceTest::addItemDelayed()
         currentParent.pop();
     }
     if( ( currentParent.isEmpty() && ( model->rowCount() - originalWidth ) < BIG_WIDTH ) || !currentParent.isEmpty() ) {
-        QTimer::singleShot( 0, this, SLOT(addItemDelayed()) );
+        QTimer::singleShot( 0, this, &ProjectModelPerformanceTest::addItemDelayed );
     }
     qDebug() << "addBigTreeDelayed" << timer.elapsed();
 }

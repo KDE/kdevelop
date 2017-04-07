@@ -302,7 +302,7 @@ void ProgressDialog::slotTransactionAdded( ProgressItem *item )
             mTransactionsToListviewItems.insert( item, ti );
         }
         if ( first && mWasLastShown ) {
-            QTimer::singleShot( 1000, this, SLOT(slotShow()) );
+            QTimer::singleShot( 1000, this, &ProgressDialog::slotShow );
         }
 
     }
@@ -318,7 +318,7 @@ void ProgressDialog::slotTransactionCompleted( ProgressItem *item )
     }
     // This was the last item, hide.
     if ( mTransactionsToListviewItems.empty() ) {
-        QTimer::singleShot( 3000, this, SLOT(slotHide()) );
+        QTimer::singleShot( 3000, this, &ProgressDialog::slotHide );
     }
 }
 

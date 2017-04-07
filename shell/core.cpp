@@ -318,7 +318,7 @@ CorePrivate::~CorePrivate()
 bool Core::initialize(QObject* splash, Setup mode, const QString& session )
 {
     if (splash) {
-        QTimer::singleShot( 200, splash, SLOT(deleteLater()) );
+        QTimer::singleShot( 200, splash, &QObject::deleteLater );
     }
     return initialize(mode, session);
 }

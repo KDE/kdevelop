@@ -1522,7 +1522,7 @@ void GitPlugin::fileChanged(const QString& file)
     //We need to delay the emitted signal, otherwise the branch hasn't change yet
     //and the repository is not functional
     m_branchesChange.append(fileUrl);
-    QTimer::singleShot(1000, this, SLOT(delayedBranchChanged()));
+    QTimer::singleShot(1000, this, &GitPlugin::delayedBranchChanged);
 }
 
 void GitPlugin::delayedBranchChanged()

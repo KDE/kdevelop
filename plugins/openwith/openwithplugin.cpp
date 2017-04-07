@@ -176,7 +176,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     if (canOpenDefault(m_mimeType)) {
         QAction* openAction = new QAction( i18n( "Open" ), this );
         openAction->setIcon( documentOpenIcon );
-        connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
+        connect( openAction, &QAction::triggered, this, &OpenWithPlugin::openDefault );
         ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
     }
 

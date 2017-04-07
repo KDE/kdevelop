@@ -344,14 +344,14 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
     if( !copy_action )
     {
         copy_action = new QAction(i18n("Copy..."), this);
-        connect(copy_action, SIGNAL(triggered()), this, SLOT(ctxCopy()));
+        connect(copy_action, &QAction::triggered, this, &KDevSvnPlugin::ctxCopy);
     }
     svnmenu->addAction(copy_action);
 
     if( !move_action )
     {
         move_action = new QAction(i18n("Move..."), this);
-        connect(move_action, SIGNAL(triggered()), this, SLOT(ctxMove()));
+        connect(move_action, &QAction::triggered, this, &KDevSvnPlugin::ctxMove);
     }
     svnmenu->addAction(move_action);
 

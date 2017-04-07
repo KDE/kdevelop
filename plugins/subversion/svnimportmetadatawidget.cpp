@@ -19,10 +19,10 @@ SvnImportMetadataWidget::SvnImportMetadataWidget( QWidget *parent )
 {
     m_ui->setupUi( this );
     m_ui->srcEdit->setUrl( QUrl() );
-    connect( m_ui->srcEdit, SIGNAL(textChanged(QString)), SIGNAL(changed()) );
-    connect( m_ui->srcEdit, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
-    connect( m_ui->dest, SIGNAL(textChanged(QString)), this, SIGNAL(changed()) );
-    connect( m_ui->message, SIGNAL(textChanged()), this, SIGNAL(changed()) );
+    connect( m_ui->srcEdit, &KUrlRequester::textChanged, this, &KDevelop::VcsImportMetadataWidget::changed );
+    connect( m_ui->srcEdit, &KUrlRequester::urlSelected, this, &KDevelop::VcsImportMetadataWidget::changed );
+    connect( m_ui->dest, &QLineEdit::textChanged, this, &KDevelop::VcsImportMetadataWidget::changed );
+    connect( m_ui->message, &QTextEdit::textChanged, this, &KDevelop::VcsImportMetadataWidget::changed );
 }
 
 SvnImportMetadataWidget::~SvnImportMetadataWidget()

@@ -42,8 +42,8 @@ void SvnInternalLogJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thr
     initBeforeRun();
 
     SvnClient cli(m_ctxt);
-    connect( &cli, SIGNAL(logEventReceived(KDevelop::VcsEvent)),
-             this, SIGNAL(logEvent(KDevelop::VcsEvent)) );
+    connect( &cli, &SvnClient::logEventReceived,
+             this, &SvnInternalLogJob::logEvent );
     try
     {
         QByteArray ba = location().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();

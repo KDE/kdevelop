@@ -388,8 +388,8 @@ void SvnDiffJob::setDiff( const QString& diff )
 
             m_catJobMap[job] = l;
 
-            connect( job, SIGNAL(resultsReady(KDevelop::VcsJob*)), this, SLOT(addLeftText(KDevelop::VcsJob*)) );
-            connect( job, SIGNAL(result(KJob*)), this, SLOT(removeJob(KJob*)) );
+            connect( job, &KDevelop::VcsJob::resultsReady, this, &SvnDiffJob::addLeftText );
+            connect( job, &KJob::result, this, &SvnDiffJob::removeJob );
 
             KDevelop::ICore::self()->runController()->registerJob(job);
         }

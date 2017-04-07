@@ -66,7 +66,7 @@ void BzrAnnotateJob::parseBzrAnnotateOutput(KDevelop::DVcsJob* job)
     m_outputLines = job->output().split('\n');
     m_currentLine = 0;
     if (m_status == KDevelop::VcsJob::JobRunning)
-        QTimer::singleShot(0, this, SLOT(parseNextLine()));
+        QTimer::singleShot(0, this, &BzrAnnotateJob::parseNextLine);
 }
 
 void BzrAnnotateJob::parseNextLine()
@@ -177,7 +177,7 @@ void BzrAnnotateJob::parseBzrLog(KDevelop::DVcsJob* job)
     // Invoke from event loop to protect against stack overflow (it could happen
     // on very big files with very big history of changes if tail-recursion
     // optimization had failed here).
-    QTimer::singleShot(0, this, SLOT(parseNextLine()));
+    QTimer::singleShot(0, this, &BzrAnnotateJob::parseNextLine);
 }
 
 QVariant BzrAnnotateJob::fetchResults()
