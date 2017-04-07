@@ -24,7 +24,7 @@
 KDevelopSessionsService::KDevelopSessionsService(QObject* parent, const QString& sessionName)
     : Plasma::Service(parent)
 {
-    setName("org.kde.plasma.dataengine.kdevelopsessions");
+    setName(QStringLiteral("org.kde.plasma.dataengine.kdevelopsessions"));
     setDestination(sessionName);
 }
 
@@ -40,11 +40,11 @@ SessionJob::SessionJob(KDevelopSessionsService *service, const QString &operatio
 
 void SessionJob::start()
 {
-    if (operationName() == "open")
+    if (operationName() == QLatin1String("open"))
     {
         QStringList args;
-        args << "--open-session" << destination();
-        KToolInvocation::kdeinitExec("kdevelop", args);
+        args << QStringLiteral("--open-session") << destination();
+        KToolInvocation::kdeinitExec(QStringLiteral("kdevelop"), args);
 
         setResult(true);
     }

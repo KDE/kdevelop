@@ -36,7 +36,7 @@
 
 namespace
 {
-const QString includePathsFile = ".kdev_include_paths";
+const QString includePathsFile = QStringLiteral(".kdev_include_paths");
 
 
 bool removeSettings(const QString& storageDirectory)
@@ -89,7 +89,7 @@ std::pair<Path::List, QHash<QString, QString>>
         QFileInfo dir(pathToFile);
         for (const auto& line : lines) {
             auto textLine = line.trimmed();
-            if (textLine.startsWith("#define ")) {
+            if (textLine.startsWith(QLatin1String("#define "))) {
                 QStringList items = textLine.split(' ');
                 if (items.length() > 1)
                 {

@@ -66,8 +66,8 @@ void TestDefinesAndIncludes::loadSimpleProject()
     QCOMPARE( actualIncludes, Path::List() << Path( "/usr/include/mydir") );
 
     Defines defines;
-    defines.insert( "_DEBUG", "" );
-    defines.insert( "VARIABLE", "VALUE" );
+    defines.insert( QStringLiteral("_DEBUG"), QLatin1String("") );
+    defines.insert( QStringLiteral("VARIABLE"), QStringLiteral("VALUE") );
     QCOMPARE( actualDefines, defines );
 
     QVERIFY(!manager->parserArguments(s_currentProject->projectItem()).isEmpty());
@@ -81,11 +81,11 @@ void TestDefinesAndIncludes::loadMultiPathProject()
 
     auto manager = IDefinesAndIncludesManager::manager();
     QVERIFY( manager );
-    Path::List includes = Path::List() << Path("/usr/include/otherdir");
+    Path::List includes = Path::List() << Path(QStringLiteral("/usr/include/otherdir"));
 
     QHash<QString,QString> defines;
-    defines.insert("SOURCE", "CONTENT");
-    defines.insert("_COPY", "");
+    defines.insert(QStringLiteral("SOURCE"), QStringLiteral("CONTENT"));
+    defines.insert(QStringLiteral("_COPY"), QLatin1String(""));
 
     QCOMPARE( manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
@@ -94,7 +94,7 @@ void TestDefinesAndIncludes::loadMultiPathProject()
     ProjectBaseItem* mainfile = nullptr;
     for (const auto& file: s_currentProject->fileSet() ) {
         for (auto i: s_currentProject->filesForPath(file)) {
-            if( i->text() == "main.cpp" ) {
+            if( i->text() == QLatin1String("main.cpp") ) {
                 mainfile = i;
                 break;
             }
@@ -102,8 +102,8 @@ void TestDefinesAndIncludes::loadMultiPathProject()
     }
     QVERIFY(mainfile);
 
-    includes.prepend(Path("/usr/local/include/mydir"));
-    defines.insert("BUILD", "debug");
+    includes.prepend(Path(QStringLiteral("/usr/local/include/mydir")));
+    defines.insert(QStringLiteral("BUILD"), QStringLiteral("debug"));
     qDebug() << includes << "VS" << manager->includes( mainfile, IDefinesAndIncludesManager::UserDefined );
     qDebug() << mainfile << mainfile->path();
     QCOMPARE(manager->includes( mainfile, IDefinesAndIncludesManager::UserDefined ), includes);

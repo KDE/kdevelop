@@ -70,7 +70,7 @@ void MIDebuggerPlugin::setupActions(const QString& displayName)
     KActionCollection* ac = actionCollection();
 
     QAction * action = new QAction(this);
-    action->setIcon(QIcon::fromTheme("core"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("core")));
     action->setText(i18n("Examine Core File with %1", displayName));
     action->setWhatsThis(i18n("<b>Examine core file</b>"
                               "<p>This loads a core file, which is typically created "
@@ -79,16 +79,16 @@ void MIDebuggerPlugin::setupActions(const QString& displayName)
                               "image of the program memory at the time it crashed, "
                               "allowing you to do a post-mortem analysis.</p>"));
     connect(action, &QAction::triggered, this, &MIDebuggerPlugin::slotExamineCore);
-    ac->addAction("debug_core", action);
+    ac->addAction(QStringLiteral("debug_core"), action);
 
 #if KF5SysGuard_FOUND
     action = new QAction(this);
-    action->setIcon(QIcon::fromTheme("connect_creating"));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("connect_creating")));
     action->setText(i18n("Attach to Process with %1", displayName));
     action->setWhatsThis(i18n("<b>Attach to process</b>"
                               "<p>Attaches the debugger to a running process.</p>"));
     connect(action, &QAction::triggered, this, &MIDebuggerPlugin::slotAttachProcess);
-    ac->addAction("debug_attach", action);
+    ac->addAction(QStringLiteral("debug_attach"), action);
 #endif
 }
 
@@ -121,9 +121,9 @@ MIDebuggerPlugin::~MIDebuggerPlugin()
 
 void MIDebuggerPlugin::slotDBusServiceRegistered(const QString& service)
 {
-    if (service.startsWith("org.kde.drkonqi")) {
+    if (service.startsWith(QLatin1String("org.kde.drkonqi"))) {
         // New registration
-        QDBusInterface* drkonqiInterface = new QDBusInterface(service, "/krashinfo",
+        QDBusInterface* drkonqiInterface = new QDBusInterface(service, QStringLiteral("/krashinfo"),
                                                               QString(), QDBusConnection::sessionBus(),
                                                               this);
         m_drkonqis.insert(service, drkonqiInterface);
@@ -131,13 +131,13 @@ void MIDebuggerPlugin::slotDBusServiceRegistered(const QString& service)
         connect(drkonqiInterface, SIGNAL(acceptDebuggingApplication()), m_drkonqiMap, SLOT(map()));
         m_drkonqiMap->setMapping(drkonqiInterface, drkonqiInterface);
 
-        drkonqiInterface->call("registerDebuggingApplication", i18n("KDevelop"));
+        drkonqiInterface->call(QStringLiteral("registerDebuggingApplication"), i18n("KDevelop"));
     }
 }
 
 void MIDebuggerPlugin::slotDBusServiceUnregistered(const QString& service)
 {
-    if (service.startsWith("org.kde.drkonqi")) {
+    if (service.startsWith(QLatin1String("org.kde.drkonqi"))) {
         // Deregistration
         if (m_drkonqis.contains(service))
             delete m_drkonqis.take(service);
@@ -148,7 +148,7 @@ void MIDebuggerPlugin::slotDebugExternalProcess(QObject* interface)
 {
     auto dbusInterface = static_cast<QDBusInterface*>(interface);
 
-    QDBusReply<int> reply = dbusInterface->call("pid");
+    QDBusReply<int> reply = dbusInterface->call(QStringLiteral("pid"));
     if (reply.isValid()) {
         attachProcess(reply.value());
         QTimer::singleShot(500, this, &MIDebuggerPlugin::slotCloseDrKonqi);
@@ -162,8 +162,8 @@ void MIDebuggerPlugin::slotDebugExternalProcess(QObject* interface)
 void MIDebuggerPlugin::slotCloseDrKonqi()
 {
     if (!m_drkonqi.isEmpty()) {
-        QDBusInterface drkonqiInterface(m_drkonqi, "/MainApplication", "org.kde.KApplication");
-        drkonqiInterface.call("quit");
+        QDBusInterface drkonqiInterface(m_drkonqi, QStringLiteral("/MainApplication"), QStringLiteral("org.kde.KApplication"));
+        drkonqiInterface.call(QStringLiteral("quit"));
         m_drkonqi.clear();
     }
 }

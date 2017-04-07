@@ -108,7 +108,7 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
                     args.append(arg->toString());
                 }
 
-                return QString("(%1)").arg(args.join(QLatin1String(", ")));
+                return QStringLiteral("(%1)").arg(args.join(QLatin1String(", ")));
             }
             }
         }
@@ -116,10 +116,10 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
         if (classDecl) {
             if (classDecl->classType() == ClassDeclarationData::Class) {
                 // QML component
-                return QString("component");
+                return QStringLiteral("component");
             } else if (classDecl->classType() == ClassDeclarationData::Interface) {
                 // C++-ish QML component
-                return QString("wrapper");
+                return QStringLiteral("wrapper");
             }
         }
 
@@ -128,14 +128,14 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
                 decl->kind() == Declaration::Namespace
            )) {
             // Display namespaces and namespace aliases as modules
-            return QString("module");
+            return QStringLiteral("module");
         }
 
         if (decl && decl->abstractType() &&
             decl->kind() == Declaration::Type &&
             decl->abstractType()->whichType() == AbstractType::TypeEnumeration) {
             // Enum
-            return QString("enum");
+            return QStringLiteral("enum");
         }
 
         if (declType &&

@@ -52,8 +52,8 @@ void LldbVariable::refetch()
     // update the value itself
     QPointer<LldbVariable> guarded_this(this);
     debugSession->addCommand(VarEvaluateExpression, varobj_, [guarded_this](const ResultRecord &r){
-        if (guarded_this && r.reason == "done" && r.hasField("value")) {
-            guarded_this->setValue(guarded_this->formatValue(r["value"].literal()));
+        if (guarded_this && r.reason == QLatin1String("done") && r.hasField(QStringLiteral("value"))) {
+            guarded_this->setValue(guarded_this->formatValue(r[QStringLiteral("value")].literal()));
         }
     });
 
@@ -69,7 +69,7 @@ void LldbVariable::refetch()
 void LldbVariable::handleRawUpdate(const ResultRecord& r)
 {
     qCDebug(DEBUGGERLLDB) << "handleRawUpdate for variable" << varobj();
-    const Value& changelist = r["changelist"];
+    const Value& changelist = r[QStringLiteral("changelist")];
     Q_ASSERT_X(changelist.size() <= 1, "LldbVariable::handleRawUpdate",
                "should only be used with one variable VarUpdate");
     if (changelist.size() == 1)
@@ -92,10 +92,10 @@ void LldbVariable::formatChanged()
             QPointer<LldbVariable> guarded_this(this);
             debugSession->addCommand(
                 VarSetFormat,
-                QString(" %1 %2 ").arg(varobj_).arg(format2str(format())),
+                QStringLiteral(" %1 %2 ").arg(varobj_).arg(format2str(format())),
                 [guarded_this](const ResultRecord &r){
-                    if(guarded_this && r.hasField("changelist")) {
-                        if (r["changelist"].size() > 0) {
+                    if(guarded_this && r.hasField(QStringLiteral("changelist"))) {
+                        if (r[QStringLiteral("changelist")].size() > 0) {
                             guarded_this->handleRawUpdate(r);
                         }
                     }

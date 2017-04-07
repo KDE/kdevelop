@@ -35,7 +35,7 @@ Q_LOGGING_CATEGORY(MAKEBUILDER, "kdevelop.projectbuilders.makebuilder")
 K_PLUGIN_FACTORY_WITH_JSON(MakeBuilderFactory, "kdevmakebuilder.json", registerPlugin<MakeBuilder>(); )
 
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin("kdevmakebuilder", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevmakebuilder"), parent)
 {
 }
 
@@ -50,7 +50,7 @@ KJob* MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
 
 KJob* MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
 {
-    return runMake( dom, MakeJob::CleanCommand, QStringList("clean") );
+    return runMake( dom, MakeJob::CleanCommand, QStringList(QStringLiteral("clean")) );
 }
 
 KJob* MakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPath)
@@ -59,7 +59,7 @@ KJob* MakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPa
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
     bool installAsRoot = builderGroup.readEntry("Install As Root", false);
 
-    QStringList args("install");
+    QStringList args(QStringLiteral("install"));
     if (!installPath.isEmpty())
         args << "DESTDIR="+installPath.toLocalFile();
 

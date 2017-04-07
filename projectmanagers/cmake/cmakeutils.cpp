@@ -48,33 +48,33 @@ namespace Config
 {
 namespace Old
 {
-static const QString currentBuildDirKey = "CurrentBuildDir";
-static const QString currentCMakeBinaryKey = "Current CMake Binary";
-static const QString currentBuildTypeKey = "CurrentBuildType";
-static const QString currentInstallDirKey = "CurrentInstallDir";
-static const QString currentEnvironmentKey = "CurrentEnvironment";
-static const QString currentExtraArgumentsKey = "Extra Arguments";
-static const QString projectRootRelativeKey = "ProjectRootRelative";
-static const QString projectBuildDirs = "BuildDirs";
+static const QString currentBuildDirKey = QStringLiteral("CurrentBuildDir");
+static const QString currentCMakeBinaryKey = QStringLiteral("Current CMake Binary");
+static const QString currentBuildTypeKey = QStringLiteral("CurrentBuildType");
+static const QString currentInstallDirKey = QStringLiteral("CurrentInstallDir");
+static const QString currentEnvironmentKey = QStringLiteral("CurrentEnvironment");
+static const QString currentExtraArgumentsKey = QStringLiteral("Extra Arguments");
+static const QString projectRootRelativeKey = QStringLiteral("ProjectRootRelative");
+static const QString projectBuildDirs = QStringLiteral("BuildDirs");
 }
 
-static const QString buildDirIndexKey = "Current Build Directory Index";
-static const QString buildDirOverrideIndexKey = "Temporary Build Directory Index";
-static const QString buildDirCountKey = "Build Directory Count";
+static const QString buildDirIndexKey = QStringLiteral("Current Build Directory Index");
+static const QString buildDirOverrideIndexKey = QStringLiteral("Temporary Build Directory Index");
+static const QString buildDirCountKey = QStringLiteral("Build Directory Count");
 
 namespace Specific
 {
-static const QString buildDirPathKey = "Build Directory Path";
+static const QString buildDirPathKey = QStringLiteral("Build Directory Path");
 // TODO: migrate to more generic & consistent key term "CMake Executable"
-static const QString cmakeExecutableKey = "CMake Binary";
-static const QString cmakeBuildTypeKey = "Build Type";
-static const QString cmakeInstallDirKey = "Install Directory";
-static const QString cmakeEnvironmentKey = "Environment Profile";
-static const QString cmakeArgumentsKey = "Extra Arguments";
+static const QString cmakeExecutableKey = QStringLiteral("CMake Binary");
+static const QString cmakeBuildTypeKey = QStringLiteral("Build Type");
+static const QString cmakeInstallDirKey = QStringLiteral("Install Directory");
+static const QString cmakeEnvironmentKey = QStringLiteral("Environment Profile");
+static const QString cmakeArgumentsKey = QStringLiteral("Extra Arguments");
 }
 
-static const QString groupNameBuildDir = "CMake Build Directory %1";
-static const QString groupName = "CMake";
+static const QString groupNameBuildDir = QStringLiteral("CMake Build Directory %1");
+static const QString groupName = QStringLiteral("CMake");
 
 } // namespace Config
 
@@ -222,10 +222,10 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
         CMake::setCurrentEnvironment( project, QString() );
 
         return true;
-    } else if( !QFile::exists( KDevelop::Path(builddir, "CMakeCache.txt").toLocalFile() ) ||
+    } else if( !QFile::exists( KDevelop::Path(builddir, QStringLiteral("CMakeCache.txt")).toLocalFile() ) ||
                 //TODO: maybe we could use the builder for that?
-               !(QFile::exists( KDevelop::Path(builddir, "Makefile").toLocalFile() ) ||
-                    QFile::exists( KDevelop::Path(builddir, "build.ninja").toLocalFile() ) ) )
+               !(QFile::exists( KDevelop::Path(builddir, QStringLiteral("Makefile")).toLocalFile() ) ||
+                    QFile::exists( KDevelop::Path(builddir, QStringLiteral("build.ninja")).toLocalFile() ) ) )
     {
         // User entered information already, but cmake hasn't actually been run yet.
         return true;
@@ -291,12 +291,12 @@ KDevelop::Path targetDirectoriesFile(KDevelop::IProject* project)
 
 QString currentBuildType( KDevelop::IProject* project )
 {
-    return readProjectParameter( project, Config::Specific::cmakeBuildTypeKey, "Release" );
+    return readProjectParameter( project, Config::Specific::cmakeBuildTypeKey, QStringLiteral("Release") );
 }
 
 QString findExecutable()
 {
-    auto cmake = QStandardPaths::findExecutable("cmake");
+    auto cmake = QStandardPaths::findExecutable(QStringLiteral("cmake"));
 #ifdef Q_OS_WIN
     if (cmake.isEmpty())
         cmake = QStandardPaths::findExecutable("cmake",{
@@ -323,7 +323,7 @@ KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project)
 
 KDevelop::Path currentInstallDir( KDevelop::IProject* project )
 {
-    return KDevelop::Path(readProjectParameter( project, Config::Specific::cmakeInstallDirKey, "/usr/local" ));
+    return KDevelop::Path(readProjectParameter( project, Config::Specific::cmakeInstallDirKey, QStringLiteral("/usr/local") ));
 }
 
 QString projectRootRelative( KDevelop::IProject* project )
@@ -567,7 +567,7 @@ void removeOverrideBuildDirIndex( KDevelop::IProject* project, bool writeToMainI
 
 ICMakeDocumentation* cmakeDocumentation()
 {
-    return KDevelop::ICore::self()->pluginController()->extensionForPlugin<ICMakeDocumentation>("org.kdevelop.ICMakeDocumentation");
+    return KDevelop::ICore::self()->pluginController()->extensionForPlugin<ICMakeDocumentation>(QStringLiteral("org.kdevelop.ICMakeDocumentation"));
 }
 
 QStringList allBuildDirs(KDevelop::IProject* project)
@@ -585,7 +585,7 @@ QString executeProcess(const QString& execName, const QStringList& args)
     qCDebug(CMAKE) << "Executing:" << execName << "::" << args;
 
     QProcess p;
-    QTemporaryDir tmp("kdevcmakemanager");
+    QTemporaryDir tmp(QStringLiteral("kdevcmakemanager"));
     p.setWorkingDirectory( tmp.path() );
     p.start(execName, args, QIODevice::ReadOnly);
 
@@ -604,16 +604,16 @@ QStringList supportedGenerators()
 {
     QStringList generatorNames;
 
-    bool hasNinja = ICore::self() && ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder");
+    bool hasNinja = ICore::self() && ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IProjectBuilder"), QStringLiteral("KDevNinjaBuilder"));
     if (hasNinja)
-        generatorNames << "Ninja";
+        generatorNames << QStringLiteral("Ninja");
 
 #ifdef Q_OS_WIN
     // Visual Studio solution is the standard generator under windows, but we don't want to use
     // the VS IDE, so we need nmake makefiles
     generatorNames << "NMake Makefiles";
 #endif
-    generatorNames << "Unix Makefiles";
+    generatorNames << QStringLiteral("Unix Makefiles");
 
     return generatorNames;
 }

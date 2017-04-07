@@ -52,13 +52,13 @@ namespace cppcheck
  */
 QString verboseMessageToHtml( const QString & input )
 {
-    QString output(QString("<html>%1</html>").arg(input.toHtmlEscaped()));
+    QString output(QStringLiteral("<html>%1</html>").arg(input.toHtmlEscaped()));
 
-    output.replace("\\012", "\n");
+    output.replace(QLatin1String("\\012"), QLatin1String("\n"));
 
     if (output.count('\n') >= 2) {
-        output.replace(output.indexOf('\n'), 1, "<pre>" );
-        output.replace(output.lastIndexOf('\n'), 1, "</pre><br>" );
+        output.replace(output.indexOf('\n'), 1, QLatin1String("<pre>") );
+        output.replace(output.lastIndexOf('\n'), 1, QLatin1String("</pre><br>") );
     }
 
     return output;
@@ -98,45 +98,45 @@ bool CppcheckParser::startElement()
 
     else if (name() == "location") {
         newState = Location;
-        if (attributes().hasAttribute("file") && attributes().hasAttribute("line")) {
-            QString errorFile = attributes().value("file").toString();
+        if (attributes().hasAttribute(QStringLiteral("file")) && attributes().hasAttribute(QStringLiteral("line"))) {
+            QString errorFile = attributes().value(QStringLiteral("file")).toString();
 
             // Usually when "file0" attribute exists it associated with source and
             // attribute "file" associated with header).
             // But sometimes cppcheck produces errors with "file" and "file0" attributes
             // both associated with same *source* file. In such cases attribute "file" contains
             // only file name, without full path. Therefore we should use "file0" instead "file".
-            if (!QFile::exists(errorFile) && attributes().hasAttribute("file0")) {
-                errorFile = attributes().value("file0").toString();
+            if (!QFile::exists(errorFile) && attributes().hasAttribute(QStringLiteral("file0"))) {
+                errorFile = attributes().value(QStringLiteral("file0")).toString();
             }
 
             m_errorFiles += errorFile;
-            m_errorLines += attributes().value("line").toString().toInt();
+            m_errorLines += attributes().value(QStringLiteral("line")).toString().toInt();
         }
     }
 
     else if (name() == "error") {
         newState = Error;
-        m_errorSeverity = "unknown";
+        m_errorSeverity = QLatin1String("unknown");
         m_errorInconclusive = false;
         m_errorFiles.clear();
         m_errorLines.clear();
         m_errorMessage.clear();
         m_errorVerboseMessage.clear();
 
-        if (attributes().hasAttribute("msg")) {
-            m_errorMessage = attributes().value("msg").toString();
+        if (attributes().hasAttribute(QStringLiteral("msg"))) {
+            m_errorMessage = attributes().value(QStringLiteral("msg")).toString();
         }
 
-        if (attributes().hasAttribute("verbose")) {
-            m_errorVerboseMessage = verboseMessageToHtml(attributes().value("verbose").toString());
+        if (attributes().hasAttribute(QStringLiteral("verbose"))) {
+            m_errorVerboseMessage = verboseMessageToHtml(attributes().value(QStringLiteral("verbose")).toString());
         }
 
-        if (attributes().hasAttribute("severity")) {
-            m_errorSeverity = attributes().value("severity").toString();
+        if (attributes().hasAttribute(QStringLiteral("severity"))) {
+            m_errorSeverity = attributes().value(QStringLiteral("severity")).toString();
         }
 
-        if (attributes().hasAttribute("inconclusive")) {
+        if (attributes().hasAttribute(QStringLiteral("inconclusive"))) {
             m_errorInconclusive = true;
         }
     }
@@ -159,8 +159,8 @@ bool CppcheckParser::endElement(QVector<KDevelop::IProblem::Ptr>& problems)
 
     switch (state) {
     case CppCheck:
-        if (attributes().hasAttribute("version")) {
-            qCDebug(KDEV_CPPCHECK) << "Cppcheck report version: " << attributes().value("version");
+        if (attributes().hasAttribute(QStringLiteral("version"))) {
+            qCDebug(KDEV_CPPCHECK) << "Cppcheck report version: " << attributes().value(QStringLiteral("version"));
         }
         break;
 
@@ -170,8 +170,8 @@ bool CppcheckParser::endElement(QVector<KDevelop::IProblem::Ptr>& problems)
 
     case Error:
         qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: new error elem: line: "
-                               << (m_errorLines.isEmpty() ? "?" : QString::number(m_errorLines.first()))
-                               << " at " << (m_errorFiles.isEmpty() ? "?" : m_errorFiles.first())
+                               << (m_errorLines.isEmpty() ? QStringLiteral("?") : QString::number(m_errorLines.first()))
+                               << " at " << (m_errorFiles.isEmpty() ? QStringLiteral("?") : m_errorFiles.first())
                                << ", msg: " << m_errorMessage;
 
         storeError(problems);
@@ -263,11 +263,11 @@ KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
     QStringList messagePrefix;
     QString errorMessage(m_errorMessage);
 
-    if (m_errorSeverity == "error") {
+    if (m_errorSeverity == QLatin1String("error")) {
         problem->setSeverity(KDevelop::IProblem::Error);
     }
 
-    else if (m_errorSeverity == "warning") {
+    else if (m_errorSeverity == QLatin1String("warning")) {
         problem->setSeverity(KDevelop::IProblem::Warning);
     }
 
@@ -278,11 +278,11 @@ KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
     }
 
     if (m_errorInconclusive) {
-        messagePrefix.push_back("inconclusive");
+        messagePrefix.push_back(QStringLiteral("inconclusive"));
     }
 
     if (!messagePrefix.isEmpty()) {
-        errorMessage = QString("(%1) %2").arg(messagePrefix.join(", ")).arg(m_errorMessage);
+        errorMessage = QStringLiteral("(%1) %2").arg(messagePrefix.join(QStringLiteral(", "))).arg(m_errorMessage);
     }
 
     problem->setDescription(errorMessage);

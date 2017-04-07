@@ -74,7 +74,7 @@ ProviderWidget::ProviderWidget(QWidget *parent)
     fillCombo();
     topLayout->addWidget(m_combo);
 
-    QPushButton *settings = new QPushButton(QIcon::fromTheme("configure"), "", this);
+    QPushButton *settings = new QPushButton(QIcon::fromTheme(QStringLiteral("configure")), QLatin1String(""), this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     settings->setToolTip(i18n("Click this button to configure your GitHub account"));
     connect(settings, &QPushButton::clicked, this, &ProviderWidget::showSettings);
@@ -91,7 +91,7 @@ KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const QUrl &dest)
     if (!pos.isValid())
         return nullptr;
 
-    auto plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
+    auto plugin = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"), QStringLiteral("kdevgit"));
     if (!plugin) {
         KMessageBox::error(0, i18n("The Git plugin could not be loaded which is required to import a GitHub project."), i18n("GitHub Provider Error"));
         return nullptr;
@@ -150,20 +150,20 @@ void ProviderWidget::searchRepo()
 
     switch (idx) {
     case 0: /* Looking for this user's repo */
-        uri = "/user/repos";
+        uri = QLatin1String("/user/repos");
         enabled = false;
         break;
     case 1: /* Looking for some user's repo */
         if (text == m_account->name())
-            uri = "/user/repos";
+            uri = QLatin1String("/user/repos");
         else
-            uri = QString("/users/%1/repos").arg(text);
+            uri = QStringLiteral("/users/%1/repos").arg(text);
         break;
     case 2: /* Known organization */
         text = m_combo->currentText();
         enabled = false;
     default:/* Looking for some organization's repo. */
-        uri = QString("/orgs/%1/repos").arg(text);
+        uri = QStringLiteral("/orgs/%1/repos").arg(text);
         break;
     }
     m_edit->setEnabled(enabled);

@@ -44,7 +44,7 @@ Defines MsvcCompiler::defines(const QString&) const
 
     // we want to use kdevmsvcdefinehelper as a pseudo compiler backend which
     // returns the defines used in msvc. there is no such thing as -dM with cl.exe
-    proc << path() << "/nologo" << "/Bxkdevmsvcdefinehelper" << "empty.cpp";
+    proc << path() << QStringLiteral("/nologo") << QStringLiteral("/Bxkdevmsvcdefinehelper") << QStringLiteral("empty.cpp");
 
     // this will fail, so check on that as well
     if ( proc.execute( 5000 ) == 2 ) {
@@ -56,14 +56,14 @@ Defines MsvcCompiler::defines(const QString&) const
             definesAndIncludesDebug() << "msvcstandardmacros:" << buff;
             if ( !buff.isEmpty() ) {
                 line = buff;
-                if ( line.startsWith( "#define " ) ) {
+                if ( line.startsWith( QLatin1String("#define ") ) ) {
                     line = line.right( line.length() - 8 ).trimmed();
                     int pos = line.indexOf( ' ' );
 
                     if ( pos != -1 ) {
                         ret[line.left( pos )] = line.right( line.length() - pos - 1 ).toUtf8();
                     } else {
-                        ret[line] = "";
+                        ret[line] = QLatin1String("");
                     }
                 }
             }
@@ -78,38 +78,38 @@ Defines MsvcCompiler::defines(const QString&) const
 
     // MSVC builtin attributes
     {
-        ret["__cdecl"] = "";
-        ret["__fastcall"] = "";
-        ret["__stdcall"] = "";
-        ret["__thiscall"] = "";
+        ret[QStringLiteral("__cdecl")] = QLatin1String("");
+        ret[QStringLiteral("__fastcall")] = QLatin1String("");
+        ret[QStringLiteral("__stdcall")] = QLatin1String("");
+        ret[QStringLiteral("__thiscall")] = QLatin1String("");
     }
 
     // MSVC builtin types
     // see http://msdn.microsoft.com/en-us/library/cc953fe1.aspx
     {
-        ret["__int8"] = "char";
-        ret["__int16"] = "short";
-        ret["__int32"] = "int";
-        ret["__int64"] = "long long";
-        ret["__int16"] = "short";
-        ret["__ptr32"] = "";
-        ret["__ptr64"] = "";
+        ret[QStringLiteral("__int8")] = QLatin1String("char");
+        ret[QStringLiteral("__int16")] = QLatin1String("short");
+        ret[QStringLiteral("__int32")] = QLatin1String("int");
+        ret[QStringLiteral("__int64")] = QLatin1String("long long");
+        ret[QStringLiteral("__int16")] = QLatin1String("short");
+        ret[QStringLiteral("__ptr32")] = QLatin1String("");
+        ret[QStringLiteral("__ptr64")] = QLatin1String("");
     }
 
     // MSVC specific modifiers
     // see http://msdn.microsoft.com/en-us/library/vstudio/s04b5w00.aspx
     {
-        ret["__sptr"] = "";
-        ret["__uptr"] = "";
-        ret["__unaligned"] = "";
-        ret["__w64"] = "";
+        ret[QStringLiteral("__sptr")] = QLatin1String("");
+        ret[QStringLiteral("__uptr")] = QLatin1String("");
+        ret[QStringLiteral("__unaligned")] = QLatin1String("");
+        ret[QStringLiteral("__w64")] = QLatin1String("");
     }
 
     // MSVC function specifiers
     // see http://msdn.microsoft.com/de-de/library/z8y1yy88.aspx
     {
-        ret["__inline"] = "";
-        ret["__forceinline"] = "";
+        ret[QStringLiteral("__inline")] = QLatin1String("");
+        ret[QStringLiteral("__forceinline")] = QLatin1String("");
     }
 
     return ret;
@@ -117,7 +117,7 @@ Defines MsvcCompiler::defines(const QString&) const
 
 Path::List MsvcCompiler::includes(const QString&) const
 {
-    QStringList _includePaths = QProcessEnvironment::systemEnvironment().value( "INCLUDE" ).split( ";", QString::SkipEmptyParts );
+    QStringList _includePaths = QProcessEnvironment::systemEnvironment().value( QStringLiteral("INCLUDE") ).split( QStringLiteral(";"), QString::SkipEmptyParts );
     Path::List includePaths;
     foreach( const QString &include, _includePaths ) {
         includePaths.append( Path( QDir::fromNativeSeparators( include ) ) );

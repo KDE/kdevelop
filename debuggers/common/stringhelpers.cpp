@@ -114,7 +114,7 @@ int Utils::expressionAt( const QString& text, int index ) {
           break;
         }
       }
-    } else if ( last != T_IDE && ch == '>' && ch2 != "->" ) {
+    } else if ( last != T_IDE && ch == '>' && ch2 != QLatin1String("->") ) {
       int count = 0;
       while ( index > 0 ) {
         QChar ch = text[ index ];
@@ -147,10 +147,10 @@ int Utils::expressionAt( const QString& text, int index ) {
     } else if ( ch == '.' ) {
       --index;
       last = T_ACCESS;
-    } else if ( ch2 == "::" ) {
+    } else if ( ch2 == QLatin1String("::") ) {
       index -= 2;
       last = T_ACCESS;
-    } else if ( ch2 == "->" ) {
+    } else if ( ch2 == QLatin1String("->") ) {
       index -= 2;
       last = T_ACCESS;
     } else {
@@ -184,7 +184,7 @@ QString Utils::unquoteExpression(const QString& expr)
 QString Utils::quote(const QString& str, char quoteCh)
 {
     QString res = str;
-    res.replace("\\", "\\\\").replace(quoteCh, QStringLiteral("\\") + quoteCh);
+    res.replace(QLatin1String("\\"), QLatin1String("\\\\")).replace(quoteCh, QStringLiteral("\\") + quoteCh);
     return res.prepend(quoteCh).append(quoteCh);
 }
 

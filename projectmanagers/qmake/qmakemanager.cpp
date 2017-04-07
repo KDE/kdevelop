@@ -83,7 +83,7 @@ QMakeProjectManager* QMakeProjectManager::self()
 }
 
 QMakeProjectManager::QMakeProjectManager(QObject* parent, const QVariantList&)
-    : AbstractFileManagerPlugin("kdevqmakemanager", parent)
+    : AbstractFileManagerPlugin(QStringLiteral("kdevqmakemanager"), parent)
     , IBuildSystemManager()
     , m_builder(nullptr)
     , m_runQMake(nullptr)
@@ -91,7 +91,7 @@ QMakeProjectManager::QMakeProjectManager(QObject* parent, const QVariantList&)
     Q_ASSERT(!m_self);
     m_self = this;
 
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IQMakeBuilder");
+    IPlugin* i = core()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IQMakeBuilder"));
     Q_ASSERT(i);
     m_builder = i->extension<IQMakeBuilder>();
     Q_ASSERT(m_builder);
@@ -99,7 +99,7 @@ QMakeProjectManager::QMakeProjectManager(QObject* parent, const QVariantList&)
     connect(this, SIGNAL(folderAdded(KDevelop::ProjectFolderItem*)), this,
             SLOT(slotFolderAdded(KDevelop::ProjectFolderItem*)));
 
-    m_runQMake = new QAction(QIcon::fromTheme("qtlogo"), i18n("Run QMake"), this);
+    m_runQMake = new QAction(QIcon::fromTheme(QStringLiteral("qtlogo")), i18n("Run QMake"), this);
     connect(m_runQMake, &QAction::triggered, this, &QMakeProjectManager::slotRunQMake);
 }
 
@@ -115,7 +115,7 @@ IProjectFileManager::Features QMakeProjectManager::features() const
 
 bool QMakeProjectManager::isValid(const Path& path, const bool isFolder, IProject* project) const
 {
-    if (!isFolder && path.lastPathSegment().startsWith("Makefile")) {
+    if (!isFolder && path.lastPathSegment().startsWith(QLatin1String("Makefile"))) {
         return false;
     }
     return AbstractFileManagerPlugin::isValid(path, isFolder, project);
@@ -178,7 +178,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem(IProject* project, const
         cache->read();
     }
 
-    QStringList projectfiles = dir.entryList(QStringList() << "*.pro");
+    QStringList projectfiles = dir.entryList(QStringList() << QStringLiteral("*.pro"));
     for (const auto& projectfile : projectfiles) {
         Path proPath(path, projectfile);
         /// TODO: use Path in QMakeProjectFile
@@ -199,8 +199,8 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem(IProject* project, const
 {
     // find .pro or .pri files in dir
     QDir dir(path.toLocalFile());
-    QStringList projectFiles = dir.entryList(QStringList() << "*.pro"
-                                                           << "*.pri",
+    QStringList projectFiles = dir.entryList(QStringList() << QStringLiteral("*.pro")
+                                                           << QStringLiteral("*.pri"),
                                              QDir::Files);
     if (projectFiles.isEmpty()) {
         return nullptr;
@@ -226,7 +226,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem(IProject* project, const
                 break;
             }
         }
-        if (!parentPro && file.endsWith(".pri")) {
+        if (!parentPro && file.endsWith(QLatin1String(".pri"))) {
             continue;
         }
         qCDebug(KDEV_QMAKE) << "add project file:" << absFile;
@@ -317,7 +317,7 @@ ProjectFolderItem* QMakeProjectManager::import(IProject* project)
 
 void QMakeProjectManager::slotDirty(const QString& path)
 {
-    if (!path.endsWith(".pro") && !path.endsWith(".pri")) {
+    if (!path.endsWith(QLatin1String(".pro")) && !path.endsWith(QLatin1String(".pri"))) {
         return;
     }
 
@@ -458,11 +458,11 @@ QMakeCache* QMakeProjectManager::findQMakeCache(IProject* project, const Path& p
 {
     QDir curdir(QMakeConfig::buildDirFromSrc(project, !path.isValid() ? project->path() : path).toLocalFile());
     curdir.makeAbsolute();
-    while (!curdir.exists(".qmake.cache") && !curdir.isRoot() && curdir.cdUp()) {
+    while (!curdir.exists(QStringLiteral(".qmake.cache")) && !curdir.isRoot() && curdir.cdUp()) {
         qDebug() << curdir;
     }
 
-    if (curdir.exists(".qmake.cache")) {
+    if (curdir.exists(QStringLiteral(".qmake.cache"))) {
         qDebug() << "Found QMake cache in " << curdir.absolutePath();
         return new QMakeCache(curdir.canonicalPath() + "/.qmake.cache");
     }

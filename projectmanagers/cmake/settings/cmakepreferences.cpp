@@ -51,8 +51,8 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
     m_prefsUi = new Ui::CMakeBuildSettings;
     m_prefsUi->setupUi(this);
 
-    m_prefsUi->addBuildDir->setIcon(QIcon::fromTheme( "list-add" ));
-    m_prefsUi->removeBuildDir->setIcon(QIcon::fromTheme( "list-remove" ));
+    m_prefsUi->addBuildDir->setIcon(QIcon::fromTheme( QStringLiteral("list-add") ));
+    m_prefsUi->removeBuildDir->setIcon(QIcon::fromTheme( QStringLiteral("list-remove") ));
 
     m_prefsUi->addBuildDir->setText(QString());
     m_prefsUi->removeBuildDir->setText(QString());
@@ -210,7 +210,7 @@ void CMakePreferences::configureCacheView()
 
 void CMakePreferences::updateCache(const Path &newBuildDir)
 {
-    const Path file = newBuildDir.isValid() ? Path(newBuildDir, "CMakeCache.txt") : Path();
+    const Path file = newBuildDir.isValid() ? Path(newBuildDir, QStringLiteral("CMakeCache.txt")) : Path();
     if(QFile::exists(file.toLocalFile()))
     {
         if (m_currentModel) {
@@ -245,7 +245,7 @@ void CMakePreferences::listSelectionChanged(const QModelIndex & index, const QMo
     qCDebug(CMAKE) << "item " << index << " selected";
     QModelIndex idx = index.sibling(index.row(), 3);
     QModelIndex idxType = index.sibling(index.row(), 1);
-    QString comment=QString("%1. %2")
+    QString comment=QStringLiteral("%1. %2")
             .arg(m_currentModel->itemFromIndex(idxType)->text())
             .arg(m_currentModel->itemFromIndex(idx)->text());
     m_prefsUi->commentText->setText(comment);

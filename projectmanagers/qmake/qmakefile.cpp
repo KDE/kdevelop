@@ -100,7 +100,7 @@ bool QMakeFile::read()
     ifDebug(qCDebug(KDEV_QMAKE) << "Is" << m_projectFile << "a dir?" << fi.isDir();) if (fi.isDir())
     {
         QDir dir(m_projectFile);
-        QStringList l = dir.entryList(QStringList() << "*.pro");
+        QStringList l = dir.entryList(QStringList() << QStringLiteral("*.pro"));
 
         QString projectfile;
 

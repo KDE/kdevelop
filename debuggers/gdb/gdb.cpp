@@ -59,7 +59,7 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
     }
 
     QStringList arguments = extraArguments;
-    arguments << "--interpreter=mi2" << "-quiet";
+    arguments << QStringLiteral("--interpreter=mi2") << QStringLiteral("-quiet");
 
     QUrl shell = config.readEntry(Config::DebuggerShellEntry, QUrl());
     if(!shell.isEmpty()) {

@@ -28,11 +28,11 @@ ProviderItem::ProviderItem(const Response &r)
     : QStandardItem(r.name), m_data(r)
 {
     if (r.kind == Private)
-        setIcon(QIcon::fromTheme("github-private"));
+        setIcon(QIcon::fromTheme(QStringLiteral("github-private")));
     else if (r.kind == Fork)
-        setIcon(QIcon::fromTheme("github-forked"));
+        setIcon(QIcon::fromTheme(QStringLiteral("github-forked")));
     else
-        setIcon(QIcon::fromTheme("github-repo"));
+        setIcon(QIcon::fromTheme(QStringLiteral("github-repo")));
 }
 
 QVariant ProviderItem::data(int role) const

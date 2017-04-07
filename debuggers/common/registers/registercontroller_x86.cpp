@@ -164,19 +164,38 @@ void RegisterControllerGeneral_x86::initRegisterNames()
         m_registerNames[FPU] << ("st" + QString::number(i));
     }
 
-    m_registerNames[Flags] << "C" << "P" << "A" << "Z" << "S" << "T" << "D" << "O";
+    m_registerNames[Flags] = QStringList{
+        QStringLiteral("C"),
+        QStringLiteral("P"),
+        QStringLiteral("A"),
+        QStringLiteral("Z"),
+        QStringLiteral("S"),
+        QStringLiteral("T"),
+        QStringLiteral("D"),
+        QStringLiteral("O")
+    };
 
-    m_registerNames[Segment] << "cs" << "ss" << "ds" << "es" << "fs" << "gs";
+    m_registerNames[Segment] << QStringLiteral("cs") << QStringLiteral("ss") << QStringLiteral("ds") << QStringLiteral("es") << QStringLiteral("fs") << QStringLiteral("gs");
 
     m_eflags.flags = m_registerNames[Flags];
-    m_eflags.bits << "0" << "2" << "4" << "6" << "7" << "8" << "10" << "11";
-    m_eflags.registerName = "eflags";
+    m_eflags.bits << QStringLiteral("0") << QStringLiteral("2") << QStringLiteral("4") << QStringLiteral("6") << QStringLiteral("7") << QStringLiteral("8") << QStringLiteral("10") << QStringLiteral("11");
+    m_eflags.registerName = QLatin1String("eflags");
     m_eflags.groupName = enumToGroupName(Flags);
 }
 
 void RegisterController_x86::initRegisterNames()
 {
-    m_registerNames[General] = QStringList() << "eax" << "ebx" << "ecx" << "edx" << "esi" << "edi" << "ebp" << "esp" << "eip";
+    m_registerNames[General] = QStringList{
+        QStringLiteral("eax"),
+        QStringLiteral("ebx"),
+        QStringLiteral("ecx"),
+        QStringLiteral("edx"),
+        QStringLiteral("esi"),
+        QStringLiteral("edi"),
+        QStringLiteral("ebp"),
+        QStringLiteral("esp"),
+        QStringLiteral("eip")
+    };
 
     m_registerNames[XMM].clear();
     for (int i = 0; i < 8; i++) {
@@ -186,7 +205,25 @@ void RegisterController_x86::initRegisterNames()
 
 void RegisterController_x86_64::initRegisterNames()
 {
-    m_registerNames[General] = QStringList() << "rax" << "rbx" << "rcx" << "rdx" << "rsi" << "rdi" << "rbp" << "rsp" << "r8" << "r9" << "r10" << "r11" << "r12" << "r13" << "r14" << "r15" << "rip";
+    m_registerNames[General] = QStringList{
+        QStringLiteral("rax"),
+        QStringLiteral("rbx"),
+        QStringLiteral("rcx"),
+        QStringLiteral("rdx"),
+        QStringLiteral("rsi"),
+        QStringLiteral("rdi"),
+        QStringLiteral("rbp"),
+        QStringLiteral("rsp"),
+        QStringLiteral("r8"),
+        QStringLiteral("r9"),
+        QStringLiteral("r10"),
+        QStringLiteral("r11"),
+        QStringLiteral("r12"),
+        QStringLiteral("r13"),
+        QStringLiteral("r14"),
+        QStringLiteral("r15"),
+        QStringLiteral("rip")
+    };
 
     m_registerNames[XMM].clear();
     for (int i = 0; i < 16; i++) {

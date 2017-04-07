@@ -83,7 +83,7 @@ KJob *LldbLauncher::start(const QString &launchMode, KDevelop::ILaunchConfigurat
         return nullptr;
     }
 
-    if (launchMode == "debug") {
+    if (launchMode == QLatin1String("debug")) {
         if (ICore::self()->debugController()->currentSession()) {
             auto ans = KMessageBox::warningYesNo(qApp->activeWindow(),
                 i18n("A program is already being debugged. Do you want to abort the "

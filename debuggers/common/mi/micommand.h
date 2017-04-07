@@ -294,7 +294,7 @@ public:
 
     QString cmdToSend() override
     {
-        return "";
+        return QLatin1String("");
     }
 
 private:
@@ -320,7 +320,7 @@ public:
 
     void handleResponse(const ResultRecord& r)
     {
-        (handler_this.data()->*handler_method)(r["value"].literal());
+        (handler_this.data()->*handler_method)(r[QStringLiteral("value")].literal());
     }
 
 private:

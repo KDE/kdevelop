@@ -123,7 +123,7 @@ static int chownpty(int fd, int grant)
 STTY::STTY(bool ext, const QString &termAppName)
     : QObject(),
       out(nullptr),
-      ttySlave(""),
+      ttySlave(QLatin1String("")),
       m_externalTerminal(nullptr),
       external_(ext)
 {
@@ -290,7 +290,7 @@ void STTY::readRemaining()
 
 bool STTY::findExternalTTY(const QString& termApp)
 {
-    QString appName(termApp.isEmpty() ? QString("xterm") : termApp);
+    QString appName(termApp.isEmpty() ? QStringLiteral("xterm") : termApp);
 
     if (QStandardPaths::findExecutable(appName).isEmpty()) {
         m_lastError = i18n("%1 is incorrect terminal name", termApp);
@@ -305,12 +305,12 @@ bool STTY::findExternalTTY(const QString& termApp)
 
     m_externalTerminal.reset(new QProcess(this));
 
-    if (appName == "konsole") {
-        m_externalTerminal->start(appName, QStringList() << "-e" << "sh" << "-c" << "tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done");
-    } else if (appName == "xfce4-terminal") {
-        m_externalTerminal->start(appName, QStringList() << "-e" << " sh -c \"tty>" + file.fileName() + ";\"\"<&\\-\"\">&\\-;\"\"while :;\"\"do sleep 3600;\"\"done\"");
+    if (appName == QLatin1String("konsole")) {
+        m_externalTerminal->start(appName, QStringList() << QStringLiteral("-e") << QStringLiteral("sh") << QStringLiteral("-c") << "tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done");
+    } else if (appName == QLatin1String("xfce4-terminal")) {
+        m_externalTerminal->start(appName, QStringList() << QStringLiteral("-e") << " sh -c \"tty>" + file.fileName() + ";\"\"<&\\-\"\">&\\-;\"\"while :;\"\"do sleep 3600;\"\"done\"");
     } else {
-        m_externalTerminal->start(appName, QStringList() << "-e" << "sh -c \"tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done\"");
+        m_externalTerminal->start(appName, QStringList() << QStringLiteral("-e") << "sh -c \"tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done\"");
     }
 
     if (!m_externalTerminal->waitForStarted(500)) {

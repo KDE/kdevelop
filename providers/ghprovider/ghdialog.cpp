@@ -66,13 +66,13 @@ Dialog::Dialog(QWidget *parent, Account *account)
 
         auto logOutButton = new QPushButton;
         logOutButton->setText(i18n("Log Out"));
-        logOutButton->setIcon(QIcon::fromTheme("dialog-cancel"));
+        logOutButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
         buttonBox->addButton(logOutButton, QDialogButtonBox::ActionRole);
         connect(logOutButton, &QPushButton::clicked, this, &Dialog::revokeAccess);
 
         auto forceSyncButton = new QPushButton;
         forceSyncButton->setText(i18n("Force Sync"));
-        forceSyncButton->setIcon(QIcon::fromTheme("view-refresh"));
+        forceSyncButton->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         buttonBox->addButton(forceSyncButton, QDialogButtonBox::ActionRole);
         connect(forceSyncButton, &QPushButton::clicked, this, &Dialog::syncUser);
 
@@ -86,7 +86,7 @@ Dialog::Dialog(QWidget *parent, Account *account)
         auto authorizeButton = new QPushButton;
         buttonBox->addButton(authorizeButton, QDialogButtonBox::ActionRole);
         authorizeButton->setText(i18n("Authorize"));
-        authorizeButton->setIcon(QIcon::fromTheme("dialog-ok"));
+        authorizeButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
         connect(authorizeButton, &QPushButton::clicked, this, &Dialog::authorizeClicked);
     }
 

@@ -41,7 +41,7 @@ void KDevelopSessionsEngine::init()
 {
     m_dirWatch = new KDirWatch( this );
 
-    const QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevelop/sessions", QStandardPaths::LocateDirectory );
+    const QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory );
 
     for ( int i = 0; i < sessionDirs.count(); ++i )
         m_dirWatch->addDir( sessionDirs[i], KDirWatch::WatchSubDirs );
@@ -58,13 +58,13 @@ Plasma::Service *KDevelopSessionsEngine::serviceForSource(const QString &source)
 
 QStringList findSessions()
 {
-    QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevelop/sessions", QStandardPaths::LocateDirectory);
+    QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory);
     QStringList sessionrcs;
     Q_FOREACH(const QString& dir, sessionDirs) {
         QDir d(dir);
         Q_FOREACH(const QString& sessionDir, d.entryList(QDir::Dirs)) {
             QDir sd(d.absoluteFilePath(sessionDir));
-            QString path(sd.filePath("sessionrc"));
+            QString path(sd.filePath(QStringLiteral("sessionrc")));
             if(QFile::exists(path)) {
                 sessionrcs += path;
             }
@@ -108,8 +108,8 @@ void KDevelopSessionsEngine::updateSessions()
             // Publish new session.
 
             m_currentSessions.insert( session.hash, session );
-            setData( session.hash, "sessionName", session.name );
-            setData( session.hash, "sessionString", session.description );
+            setData( session.hash, QStringLiteral("sessionName"), session.name );
+            setData( session.hash, QStringLiteral("sessionString"), session.description );
         }
         else
         {
@@ -123,14 +123,14 @@ void KDevelopSessionsEngine::updateSessions()
             {
                 oldSession.name = session.name;
                 modified = true;
-                setData( session.hash, "sessionName", session.name );
+                setData( session.hash, QStringLiteral("sessionName"), session.name );
             }
 
             if ( session.description != oldSession.description )
             {
                 oldSession.description = session.description;
                 modified = true;
-                setData( session.hash, "sessionString", session.description );
+                setData( session.hash, QStringLiteral("sessionString"), session.description );
             }
 
             if ( modified )

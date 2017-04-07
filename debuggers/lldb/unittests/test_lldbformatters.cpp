@@ -105,7 +105,7 @@ public:
     }
     const KConfigGroup config() const override { return cfg; }
     KConfigGroup config() override { return cfg; };
-    QString name() const override { return QString("Test-Launch"); }
+    QString name() const override { return QStringLiteral("Test-Launch"); }
     KDevelop::IProject* project() const override { return nullptr; }
     KDevelop::LaunchConfigurationType* type() const override { return nullptr; }
 
@@ -160,7 +160,7 @@ void LldbFormattersTest::initTestCase()
     m_core = TestCore::initialize(Core::NoUi);
 
     m_iface = m_core->pluginController()
-                ->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")
+                ->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))
                 ->extension<IExecutePlugin>();
     Q_ASSERT(m_iface);
 }
@@ -299,7 +299,7 @@ bool LldbFormattersTest::verifyVariable(int index, const QString &name,
 
 void LldbFormattersTest::testQChar()
 {
-    TestLaunchConfiguration cfg("lldb_qchar");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qchar"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qchar.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -319,7 +319,7 @@ void LldbFormattersTest::testQChar()
 
 void LldbFormattersTest::testQString()
 {
-    TestLaunchConfiguration cfg("lldb_qstring");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qstring"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qstring.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -344,7 +344,7 @@ void LldbFormattersTest::testQString()
     QCOMPARE(m_session->currentLine(), 5);
 
     expected.append("x");
-    children << "'x'";
+    children << QStringLiteral("'x'");
 
     VERIFY_LOCAL(0, "s", Utils::quote(expected), children);
 
@@ -354,7 +354,7 @@ void LldbFormattersTest::testQString()
 
 void LldbFormattersTest::testQByteArray()
 {
-    TestLaunchConfiguration cfg("lldb_qbytearray");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qbytearray"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qbytearray.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -386,7 +386,7 @@ void LldbFormattersTest::testQByteArray()
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
     QCOMPARE(m_session->currentLine(), 5);
 
-    charlist << "120 'x'";
+    charlist << QStringLiteral("120 'x'");
     VERIFY_LOCAL(0, "ba", R"("\xe6\x98\xaf'\"\\u6211x")", charlist);
 
     m_session->run();
@@ -412,7 +412,7 @@ void LldbFormattersTest::testQListContainer()
     QFETCH(QString, container);
     QFETCH(bool, unordered);
 
-    TestLaunchConfiguration cfg("lldb_qlistcontainer");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qlistcontainer"));
     cfg.config().writeEntry(KDevMI::Config::BreakOnStartEntry, true);
 
     auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
@@ -422,7 +422,7 @@ void LldbFormattersTest::testQListContainer()
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
-    m_session->addUserCommand(QString("break set --func doStuff<%1>()").arg(container));
+    m_session->addUserCommand(QStringLiteral("break set --func doStuff<%1>()").arg(container));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     m_session->run();
@@ -431,10 +431,10 @@ void LldbFormattersTest::testQListContainer()
     // <int>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
-    auto var = variableCollection()->watches()->add("intList");
+    auto var = variableCollection()->watches()->add(QStringLiteral("intList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "intList", "<size=0>", QStringList{},
+    if (!verifyVariable(0, QStringLiteral("intList"), QStringLiteral("<size=0>"), QStringList{},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -445,7 +445,7 @@ void LldbFormattersTest::testQListContainer()
     variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "intList", "<size=2>", QStringList{"10", "20"},
+    if (!verifyVariable(0, QStringLiteral("intList"), QStringLiteral("<size=2>"), QStringList{"10", "20"},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -453,7 +453,7 @@ void LldbFormattersTest::testQListContainer()
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
-    if (!verifyVariable(0, "intList", "<size=3>", QStringList{"10", "20", "30"},
+    if (!verifyVariable(0, QStringLiteral("intList"), QStringLiteral("<size=3>"), QStringList{"10", "20", "30"},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -462,10 +462,10 @@ void LldbFormattersTest::testQListContainer()
     // <QString>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
-    var = variableCollection()->watches()->add("stringList");
+    var = variableCollection()->watches()->add(QStringLiteral("stringList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "stringList", "<size=0>", QStringList{},
+    if (!verifyVariable(0, QStringLiteral("stringList"), QStringLiteral("<size=0>"), QStringList{},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -477,7 +477,7 @@ void LldbFormattersTest::testQListContainer()
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
 
-    if (!verifyVariable(0, "stringList", "<size=2>", QStringList{"\"a\"", "\"bc\""},
+    if (!verifyVariable(0, QStringLiteral("stringList"), QStringLiteral("<size=2>"), QStringList{"\"a\"", "\"bc\""},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -485,7 +485,7 @@ void LldbFormattersTest::testQListContainer()
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
-    if (!verifyVariable(0, "stringList", "<size=3>", QStringList{"\"a\"", "\"bc\"", "\"d\""},
+    if (!verifyVariable(0, QStringLiteral("stringList"), QStringLiteral("<size=3>"), QStringList{"\"a\"", "\"bc\"", "\"d\""},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -494,10 +494,10 @@ void LldbFormattersTest::testQListContainer()
     // <struct A>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
-    var = variableCollection()->watches()->add("structList");
+    var = variableCollection()->watches()->add(QStringLiteral("structList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "structList", "<size=0>", QStringList{},
+    if (!verifyVariable(0, QStringLiteral("structList"), QStringLiteral("<size=0>"), QStringList{},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -508,7 +508,7 @@ void LldbFormattersTest::testQListContainer()
     variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "structList", "<size=1>", QStringList{"{...}"},
+    if (!verifyVariable(0, QStringLiteral("structList"), QStringLiteral("<size=1>"), QStringList{"{...}"},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -516,7 +516,7 @@ void LldbFormattersTest::testQListContainer()
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
-    if (!verifyVariable(0, "structList", "<size=2>", QStringList{"{...}", "{...}"},
+    if (!verifyVariable(0, QStringLiteral("structList"), QStringLiteral("<size=2>"), QStringList{"{...}", "{...}"},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -525,10 +525,10 @@ void LldbFormattersTest::testQListContainer()
     // <int*>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
-    var = variableCollection()->watches()->add("pointerList");
+    var = variableCollection()->watches()->add(QStringLiteral("pointerList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "pointerList", "<size=0>", QStringList{},
+    if (!verifyVariable(0, QStringLiteral("pointerList"), QStringLiteral("<size=0>"), QStringList{},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -539,7 +539,7 @@ void LldbFormattersTest::testQListContainer()
     variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "pointerList", "<size=2>", QStringList{"^0x[0-9A-Fa-f]+$", "^0x[0-9A-Fa-f]+$"},
+    if (!verifyVariable(0, QStringLiteral("pointerList"), QStringLiteral("<size=2>"), QStringList{"^0x[0-9A-Fa-f]+$", "^0x[0-9A-Fa-f]+$"},
                         __FILE__, __LINE__, false, true, unordered)) {
         return;
     }
@@ -547,7 +547,7 @@ void LldbFormattersTest::testQListContainer()
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
-    if (!verifyVariable(0, "pointerList", "<size=3>", QStringList{"^0x[0-9A-Fa-f]+$", "^0x[0-9A-Fa-f]+$",
+    if (!verifyVariable(0, QStringLiteral("pointerList"), QStringLiteral("<size=3>"), QStringList{"^0x[0-9A-Fa-f]+$", "^0x[0-9A-Fa-f]+$",
                                                                   "^0x[0-9A-Fa-f]+$"},
                         __FILE__, __LINE__, false, true, unordered)) {
         return;
@@ -558,7 +558,7 @@ void LldbFormattersTest::testQListContainer()
     // <QPair<int, int>>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
-    var = variableCollection()->watches()->add("pairList");
+    var = variableCollection()->watches()->add(QStringLiteral("pairList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     VERIFY_WATCH(0, "pairList", "<size=0>", QStringList{});
@@ -569,7 +569,7 @@ void LldbFormattersTest::testQListContainer()
     variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "pairList", "<size=2>", QStringList{"{...}", "{...}"},
+    if (!verifyVariable(0, QStringLiteral("pairList"), QStringLiteral("<size=2>"), QStringList{"{...}", "{...}"},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -577,7 +577,7 @@ void LldbFormattersTest::testQListContainer()
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
 
-    if (!verifyVariable(0, "pairList", "<size=3>", QStringList{"{...}", "{...}", "{...}"},
+    if (!verifyVariable(0, QStringLiteral("pairList"), QStringLiteral("<size=3>"), QStringList{"{...}", "{...}", "{...}"},
                         __FILE__, __LINE__, false, false, unordered)) {
         return;
     }
@@ -586,7 +586,7 @@ void LldbFormattersTest::testQListContainer()
 
 void LldbFormattersTest::testQListPOD()
 {
-    TestLaunchConfiguration cfg("lldb_qlistpod");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qlistpod"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qlistpod.cpp")), 30);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -600,19 +600,19 @@ void LldbFormattersTest::testQListPOD()
     variableCollection()->variableWidgetShown();
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    variableCollection()->watches()->add("b");
-    variableCollection()->watches()->add("c");
-    variableCollection()->watches()->add("uc");
-    variableCollection()->watches()->add("s");
-    variableCollection()->watches()->add("us");
-    variableCollection()->watches()->add("i");
-    variableCollection()->watches()->add("ui");
-    variableCollection()->watches()->add("l");
-    variableCollection()->watches()->add("ul");
-    variableCollection()->watches()->add("i64");
-    variableCollection()->watches()->add("ui64");
-    variableCollection()->watches()->add("f");
-    variableCollection()->watches()->add("d");
+    variableCollection()->watches()->add(QStringLiteral("b"));
+    variableCollection()->watches()->add(QStringLiteral("c"));
+    variableCollection()->watches()->add(QStringLiteral("uc"));
+    variableCollection()->watches()->add(QStringLiteral("s"));
+    variableCollection()->watches()->add(QStringLiteral("us"));
+    variableCollection()->watches()->add(QStringLiteral("i"));
+    variableCollection()->watches()->add(QStringLiteral("ui"));
+    variableCollection()->watches()->add(QStringLiteral("l"));
+    variableCollection()->watches()->add(QStringLiteral("ul"));
+    variableCollection()->watches()->add(QStringLiteral("i64"));
+    variableCollection()->watches()->add(QStringLiteral("ui64"));
+    variableCollection()->watches()->add(QStringLiteral("f"));
+    variableCollection()->watches()->add(QStringLiteral("d"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     VERIFY_WATCH(0, "b", "<size=1>", (QStringList{"false"}));
@@ -637,7 +637,7 @@ void LldbFormattersTest::testQListPOD()
 
 void LldbFormattersTest::testQMapInt()
 {
-    TestLaunchConfiguration cfg("lldb_qmapint");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qmapint"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qmapint.cpp")), 6);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -660,7 +660,7 @@ void LldbFormattersTest::testQMapInt()
 
 void LldbFormattersTest::testQMapString()
 {
-    TestLaunchConfiguration cfg("lldb_qmapstring");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qmapstring"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qmapstring.cpp")), 7);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -684,7 +684,7 @@ void LldbFormattersTest::testQMapString()
 
 void LldbFormattersTest::testQMapStringBool()
 {
-    TestLaunchConfiguration cfg("lldb_qmapstringbool");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qmapstringbool"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qmapstringbool.cpp")), 7);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -708,7 +708,7 @@ void LldbFormattersTest::testQMapStringBool()
 
 void LldbFormattersTest::testQHashInt()
 {
-    TestLaunchConfiguration cfg("lldb_qhashint");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qhashint"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qhashint.cpp")), 6);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -720,7 +720,7 @@ void LldbFormattersTest::testQHashInt()
     variableCollection()->expanded(localVariableIndexAt(0));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "h", "<size=2>", {"(10, 100)", "(20, 200)"},
+    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=2>"), {"(10, 100)", "(20, 200)"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -729,7 +729,7 @@ void LldbFormattersTest::testQHashInt()
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
     QCOMPARE(m_session->currentLine(), 7);
 
-    if (!verifyVariable(0, "h", "<size=3>", {"(10, 100)", "(20, 200)", "(30, 300)"},
+    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=3>"), {"(10, 100)", "(20, 200)", "(30, 300)"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -737,7 +737,7 @@ void LldbFormattersTest::testQHashInt()
 
 void LldbFormattersTest::testQHashString()
 {
-    TestLaunchConfiguration cfg("lldb_qhashstring");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qhashstring"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qhashstring.cpp")), 7);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -749,7 +749,7 @@ void LldbFormattersTest::testQHashString()
     variableCollection()->expanded(localVariableIndexAt(0));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "h", "<size=2>", {"(\"10\", \"100\")", "(\"20\", \"200\")"},
+    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=2>"), {"(\"10\", \"100\")", "(\"20\", \"200\")"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -758,7 +758,7 @@ void LldbFormattersTest::testQHashString()
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
     QCOMPARE(m_session->currentLine(), 8);
 
-    if (!verifyVariable(0, "h", "<size=3>",
+    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=3>"),
                         {"(\"10\", \"100\")", "(\"20\", \"200\")", "(\"30\", \"300\")"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
@@ -767,7 +767,7 @@ void LldbFormattersTest::testQHashString()
 
 void LldbFormattersTest::testQSetInt()
 {
-    TestLaunchConfiguration cfg("lldb_qsetint");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qsetint"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qsetint.cpp")), 6);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -779,7 +779,7 @@ void LldbFormattersTest::testQSetInt()
     variableCollection()->expanded(localVariableIndexAt(0));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "s", "<size=2>", {"10", "20"},
+    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=2>"), {"10", "20"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -788,7 +788,7 @@ void LldbFormattersTest::testQSetInt()
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
     QCOMPARE(m_session->currentLine(), 7);
 
-    if (!verifyVariable(0, "s", "<size=3>", {"10", "20", "30"},
+    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=3>"), {"10", "20", "30"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -796,7 +796,7 @@ void LldbFormattersTest::testQSetInt()
 
 void LldbFormattersTest::testQSetString()
 {
-    TestLaunchConfiguration cfg("lldb_qsetstring");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qsetstring"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qsetstring.cpp")), 7);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -808,7 +808,7 @@ void LldbFormattersTest::testQSetString()
     variableCollection()->expanded(localVariableIndexAt(0));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, "s", "<size=2>", {"\"10\"", "\"20\""},
+    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=2>"), {"\"10\"", "\"20\""},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -817,7 +817,7 @@ void LldbFormattersTest::testQSetString()
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
     QCOMPARE(m_session->currentLine(), 8);
 
-    if (!verifyVariable(0, "s", "<size=3>",
+    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=3>"),
                         {"\"10\"", "\"20\"", "\"30\""},
                         __FILE__, __LINE__, true, false, true)) {
         return;
@@ -826,7 +826,7 @@ void LldbFormattersTest::testQSetString()
 
 void LldbFormattersTest::testQDate()
 {
-    TestLaunchConfiguration cfg("lldb_qdate");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qdate"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qdate.cpp")), 5);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -839,10 +839,10 @@ void LldbFormattersTest::testQDate()
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     QList<QPair<QString, QString>> children;
-    children.append({"jd", "2455217"});
-    children.append({"(ISO)", "\"2010-01-20\""});
-    children.append({"(Locale)", "\".+\""}); // (Locale) and summary are locale dependent
-    if (!verifyVariable(0, "d", ".+", children,
+    children.append({QStringLiteral("jd"), QStringLiteral("2455217")});
+    children.append({QStringLiteral("(ISO)"), QStringLiteral("\"2010-01-20\"")});
+    children.append({QStringLiteral("(Locale)"), QStringLiteral("\".+\"")}); // (Locale) and summary are locale dependent
+    if (!verifyVariable(0, QStringLiteral("d"), QStringLiteral(".+"), children,
                         __FILE__, __LINE__, true, true, false)) {
         return;
     }
@@ -850,7 +850,7 @@ void LldbFormattersTest::testQDate()
 
 void LldbFormattersTest::testQTime()
 {
-    TestLaunchConfiguration cfg("lldb_qtime");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qtime"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qtime.cpp")), 5);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -863,10 +863,10 @@ void LldbFormattersTest::testQTime()
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     QList<QPair<QString, QString>> children;
-    children.append({"mds", "55810123"});
-    children.append({"(ISO)", "\"15:30:10.000123\""});
-    children.append({"(Locale)", "\".+\""}); // (Locale) and summary are locale dependent
-    if (!verifyVariable(0, "t", ".+", children,
+    children.append({QStringLiteral("mds"), QStringLiteral("55810123")});
+    children.append({QStringLiteral("(ISO)"), QStringLiteral("\"15:30:10.000123\"")});
+    children.append({QStringLiteral("(Locale)"), QStringLiteral("\".+\"")}); // (Locale) and summary are locale dependent
+    if (!verifyVariable(0, QStringLiteral("t"), QStringLiteral(".+"), children,
                         __FILE__, __LINE__, true, true, false)) {
         return;
     }
@@ -874,7 +874,7 @@ void LldbFormattersTest::testQTime()
 
 void LldbFormattersTest::testQDateTime()
 {
-    TestLaunchConfiguration cfg("lldb_qdatetime");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qdatetime"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qdatetime.cpp")), 5);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -887,11 +887,11 @@ void LldbFormattersTest::testQDateTime()
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     QList<QPair<QString, QString>> children;
-    children.append({"toTime_t", "1264019473"});
-    children.append({"(ISO)", "\"2010-01-20 20:31:13\""});
-    children.append({"(Locale)", "\".+\""}); // (Locale), (UTC) and summary are locale dependent
-    children.append({"(UTC)", "\".+\""});
-    if (!verifyVariable(0, "dt", ".+", children,
+    children.append({QStringLiteral("toTime_t"), QStringLiteral("1264019473")});
+    children.append({QStringLiteral("(ISO)"), QStringLiteral("\"2010-01-20 20:31:13\"")});
+    children.append({QStringLiteral("(Locale)"), QStringLiteral("\".+\"")}); // (Locale), (UTC) and summary are locale dependent
+    children.append({QStringLiteral("(UTC)"), QStringLiteral("\".+\"")});
+    if (!verifyVariable(0, QStringLiteral("dt"), QStringLiteral(".+"), children,
                         __FILE__, __LINE__, true, true, false)) {
         return;
     }
@@ -899,7 +899,7 @@ void LldbFormattersTest::testQDateTime()
 
 void LldbFormattersTest::testQUrl()
 {
-    TestLaunchConfiguration cfg("lldb_qurl");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_qurl"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qurl.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -912,20 +912,20 @@ void LldbFormattersTest::testQUrl()
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     QList<QPair<QString, QString>> children;
-    children.append({"(port)", "-1"});
-    children.append({"(scheme)", "\"http\""});
-    children.append({"(userName)", "<Invalid>"});
-    children.append({"(password)", "<Invalid>"});
-    children.append({"(host)", "\"www.kdevelop.org\""});
-    children.append({"(path)", "\"/foo\""});
-    children.append({"(query)", "<Invalid>"});
-    children.append({"(fragment)", "<Invalid>"});
+    children.append({QStringLiteral("(port)"), QStringLiteral("-1")});
+    children.append({QStringLiteral("(scheme)"), QStringLiteral("\"http\"")});
+    children.append({QStringLiteral("(userName)"), QStringLiteral("<Invalid>")});
+    children.append({QStringLiteral("(password)"), QStringLiteral("<Invalid>")});
+    children.append({QStringLiteral("(host)"), QStringLiteral("\"www.kdevelop.org\"")});
+    children.append({QStringLiteral("(path)"), QStringLiteral("\"/foo\"")});
+    children.append({QStringLiteral("(query)"), QStringLiteral("<Invalid>")});
+    children.append({QStringLiteral("(fragment)"), QStringLiteral("<Invalid>")});
     VERIFY_LOCAL(0, "u", "\"http://www.kdevelop.org/foo\"", children);
 }
 
 void LldbFormattersTest::testQUuid()
 {
-    TestLaunchConfiguration cfg("lldb_quuid");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_quuid"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("quuid.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -942,7 +942,7 @@ void LldbFormattersTest::testQUuid()
 
 void LldbFormattersTest::testKTextEditorTypes()
 {
-    TestLaunchConfiguration cfg("lldb_ktexteditortypes");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_ktexteditortypes"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("ktexteditortypes.cpp")), 8);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -956,17 +956,17 @@ void LldbFormattersTest::testKTextEditorTypes()
     variableCollection()->variableWidgetShown();
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    variableCollection()->watches()->add("cursor");
-    variableCollection()->watches()->add("range");
+    variableCollection()->watches()->add(QStringLiteral("cursor"));
+    variableCollection()->watches()->add(QStringLiteral("range"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     QList<QPair<QString, QString>> cursorChildren;
-    cursorChildren.append({"m_line", "1"});
-    cursorChildren.append({"m_column", "1"});
+    cursorChildren.append({QStringLiteral("m_line"), QStringLiteral("1")});
+    cursorChildren.append({QStringLiteral("m_column"), QStringLiteral("1")});
 
     QList<QPair<QString, QString>> rangeChildren;
-    rangeChildren.append({"m_start", "(1, 1)"});
-    rangeChildren.append({"m_end", "(2, 2)"});
+    rangeChildren.append({QStringLiteral("m_start"), QStringLiteral("(1, 1)")});
+    rangeChildren.append({QStringLiteral("m_end"), QStringLiteral("(2, 2)")});
 
     VERIFY_WATCH(0, "cursor", "(1, 1)", cursorChildren);
     VERIFY_WATCH(1, "range", "[(1, 1) -> (2, 2)]", rangeChildren);
@@ -974,7 +974,7 @@ void LldbFormattersTest::testKTextEditorTypes()
 
 void LldbFormattersTest::testKDevelopTypes()
 {
-    TestLaunchConfiguration cfg("lldb_kdeveloptypes");
+    TestLaunchConfiguration cfg(QStringLiteral("lldb_kdeveloptypes"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("kdeveloptypes.cpp")), 11);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -988,15 +988,15 @@ void LldbFormattersTest::testKDevelopTypes()
     variableCollection()->variableWidgetShown();
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    variableCollection()->watches()->add("path1");
-    variableCollection()->watches()->add("path2");
+    variableCollection()->watches()->add(QStringLiteral("path1"));
+    variableCollection()->watches()->add(QStringLiteral("path2"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     QList<QPair<QString, QString>> path1Children;
-    path1Children.append({"m_data", "<size=2>"});
+    path1Children.append({QStringLiteral("m_data"), QStringLiteral("<size=2>")});
 
     QList<QPair<QString, QString>> path2Children;
-    path2Children.append({"m_data", "<size=3>"});
+    path2Children.append({QStringLiteral("m_data"), QStringLiteral("<size=3>")});
 
     VERIFY_WATCH(0, "path1", "(\"tmp\", \"foo\")", path1Children);
     VERIFY_WATCH(1, "path2", "(\"http://www.test.com\", \"tmp\", \"asdf.txt\")", path2Children);

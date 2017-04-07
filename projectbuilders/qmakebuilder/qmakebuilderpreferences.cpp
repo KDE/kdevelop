@@ -47,9 +47,9 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     m_prefsUi->setupUi(this);
 
     // display icons instead of text
-    m_prefsUi->addButton->setIcon(QIcon::fromTheme("list-add"));
+    m_prefsUi->addButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
     m_prefsUi->addButton->setText(QString());
-    m_prefsUi->removeButton->setIcon(QIcon::fromTheme("list-remove"));
+    m_prefsUi->removeButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     m_prefsUi->removeButton->setText(QString());
 
     m_chooserUi = new QMakeBuildDirChooser(m_project);
@@ -115,7 +115,7 @@ void QMakeBuilderPreferences::apply()
         config.writeEntry(QMakeConfig::BUILD_FOLDER, m_chooserUi->buildDir());
     } else {
         // invalid data: message box
-        KMessageBox::error(nullptr, errormsg, "Data is invalid!");
+        KMessageBox::error(nullptr, errormsg, QStringLiteral("Data is invalid!"));
         // FIXME dialog behaves like if save really happened (dialog closes if user click ok) even if changed signal is
         // emitted
     }

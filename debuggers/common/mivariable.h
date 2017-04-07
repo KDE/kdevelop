@@ -38,7 +38,7 @@ class MIVariable : public KDevelop::Variable
 {
 public:
     MIVariable(MIDebugSession *session, KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
-               const QString& expression, const QString& display = "");
+               const QString& expression, const QString& display = QLatin1String(""));
 
     ~MIVariable();
 

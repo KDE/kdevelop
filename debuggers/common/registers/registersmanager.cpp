@@ -38,13 +38,13 @@ void ArchitectureParser::parseArchitecture()
     Architecture arch = other;
 
     foreach (const QString & reg, m_registerNames) {
-        if (reg == "rax") {
+        if (reg == QLatin1String("rax")) {
             arch = x86_64;
             break;
-        } else if (reg == "r0") {
+        } else if (reg == QLatin1String("r0")) {
             arch = arm;
             break;
-        } else if (reg == "eax") {
+        } else if (reg == QLatin1String("eax")) {
             arch = x86;
             //we don't break because x86_64 contains eax too.
         }
@@ -55,7 +55,7 @@ void ArchitectureParser::parseArchitecture()
 
 void ArchitectureParser::registerNamesHandler(const ResultRecord& r)
 {
-    const Value& names = r["register-names"];
+    const Value& names = r[QStringLiteral("register-names")];
 
     m_registerNames.clear();
     for (int i = 0; i < names.size(); ++i) {
@@ -74,7 +74,7 @@ void ArchitectureParser::determineArchitecture(MIDebugSession* debugSession)
         return;
     }
 
-    debugSession->addCommand(DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler);
+    debugSession->addCommand(DataListRegisterNames, QLatin1String(""), this, &ArchitectureParser::registerNamesHandler);
 }
 
 RegistersManager::RegistersManager(QWidget* parent)

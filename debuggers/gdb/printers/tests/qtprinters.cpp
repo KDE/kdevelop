@@ -35,7 +35,7 @@ public:
     {
         setProcessChannelMode(MergedChannels);
         // don't attempt to load .gdbinit in home (may cause unexpected results)
-        QProcess::start("gdb", (QStringList() << "-nx" << (BINARY_PATH + '/' + program)));
+        QProcess::start(QStringLiteral("gdb"), (QStringList() << QStringLiteral("-nx") << (BINARY_PATH + '/' + program)));
         const bool started = waitForStarted();
         if (!started) {
             qDebug() << "Failed to start 'gdb' executable:" << errorString();
@@ -98,7 +98,7 @@ public:
 
 void QtPrintersTest::testQString()
 {
-    GdbProcess gdb("qstring");
+    GdbProcess gdb(QStringLiteral("qstring"));
     gdb.execute("break qstring.cpp:5");
     gdb.execute("run");
     QVERIFY(gdb.execute("print s").contains("\"test string\""));
@@ -108,7 +108,7 @@ void QtPrintersTest::testQString()
 
 void QtPrintersTest::testQByteArray()
 {
-    GdbProcess gdb("qbytearray");
+    GdbProcess gdb(QStringLiteral("qbytearray"));
     gdb.execute("break qbytearray.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print ba");
@@ -134,10 +134,10 @@ void QtPrintersTest::testQListContainer_data()
 void QtPrintersTest::testQListContainer()
 {
     QFETCH(QString, container);
-    GdbProcess gdb("qlistcontainer");
+    GdbProcess gdb(QStringLiteral("qlistcontainer"));
     gdb.execute("break main");
     gdb.execute("run");
-    gdb.execute(QString("break 'doStuff<%1>()'").arg(container).toLocal8Bit());
+    gdb.execute(QStringLiteral("break 'doStuff<%1>()'").arg(container).toLocal8Bit());
     gdb.execute("cont");
     { // <int>
     gdb.execute("break qlistcontainer.cpp:34");
@@ -147,7 +147,7 @@ void QtPrintersTest::testQListContainer()
     gdb.execute("next");
     out = gdb.execute("print intList");
     QVERIFY(out.contains(QString("%1<int>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
+    if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = 10"));
         QVERIFY(out.contains("[1] = 20"));
         QVERIFY(!out.contains("[2] = 30"));
@@ -159,7 +159,7 @@ void QtPrintersTest::testQListContainer()
     gdb.execute("next");
     out = gdb.execute("print intList");
     QVERIFY(out.contains(QString("%1<int>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
+    if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = 10"));
         QVERIFY(out.contains("[1] = 20"));
         QVERIFY(out.contains("[2] = 30"));
@@ -176,7 +176,7 @@ void QtPrintersTest::testQListContainer()
     gdb.execute("next");
     out = gdb.execute("print stringList");
     QVERIFY(out.contains(QString("%1<QString>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
+    if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = \"a\""));
         QVERIFY(out.contains("[1] = \"bc\""));
         QVERIFY(!out.contains("[2] = \"d\""));
@@ -188,7 +188,7 @@ void QtPrintersTest::testQListContainer()
     gdb.execute("next");
     out = gdb.execute("print stringList");
     QVERIFY(out.contains(QString("%1<QString>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
+    if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = \"a\""));
         QVERIFY(out.contains("[1] = \"bc\""));
         QVERIFY(out.contains("[2] = \"d\""));
@@ -239,7 +239,7 @@ void QtPrintersTest::testQListContainer()
     gdb.execute("next");
     out = gdb.execute("print pairList");
     QVERIFY(out.contains(QString("%1<QPair<int, int>>").arg(container).toLocal8Bit()));
-    if (container != "QSet") {
+    if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
         QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
     } else { // order is undefined in QSet
@@ -249,7 +249,7 @@ void QtPrintersTest::testQListContainer()
     QVERIFY(!out.contains("[2] = "));
     gdb.execute("next");
     out = gdb.execute("print pairList");
-    if (container != "QSet") {
+    if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
         QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
         QVERIFY(out.contains("[2] = {\n    first = 4, \n    second = 5\n  }"));
@@ -263,7 +263,7 @@ void QtPrintersTest::testQListContainer()
 
 void QtPrintersTest::testQMapInt()
 {
-    GdbProcess gdb("qmapint");
+    GdbProcess gdb(QStringLiteral("qmapint"));
     gdb.execute("break qmapint.cpp:7");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
@@ -277,7 +277,7 @@ void QtPrintersTest::testQMapInt()
 
 void QtPrintersTest::testQMapString()
 {
-    GdbProcess gdb("qmapstring");
+    GdbProcess gdb(QStringLiteral("qmapstring"));
     gdb.execute("break qmapstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
@@ -291,7 +291,7 @@ void QtPrintersTest::testQMapString()
 
 void QtPrintersTest::testQMapStringBool()
 {
-    GdbProcess gdb("qmapstringbool");
+    GdbProcess gdb(QStringLiteral("qmapstringbool"));
     gdb.execute("break qmapstringbool.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
@@ -306,7 +306,7 @@ void QtPrintersTest::testQMapStringBool()
 
 void QtPrintersTest::testQDate()
 {
-    GdbProcess gdb("qdate");
+    GdbProcess gdb(QStringLiteral("qdate"));
     gdb.execute("break qdate.cpp:6");
     gdb.execute("run");
     QByteArray out = gdb.execute("print d");
@@ -315,7 +315,7 @@ void QtPrintersTest::testQDate()
 
 void QtPrintersTest::testQTime()
 {
-    GdbProcess gdb("qtime");
+    GdbProcess gdb(QStringLiteral("qtime"));
     gdb.execute("break qtime.cpp:6");
     gdb.execute("run");
     QByteArray out = gdb.execute("print t");
@@ -324,7 +324,7 @@ void QtPrintersTest::testQTime()
 
 void QtPrintersTest::testQDateTime()
 {
-    GdbProcess gdb("qdatetime");
+    GdbProcess gdb(QStringLiteral("qdatetime"));
     gdb.execute("break qdatetime.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print dt");
@@ -333,7 +333,7 @@ void QtPrintersTest::testQDateTime()
 
 void QtPrintersTest::testQUrl()
 {
-    GdbProcess gdb("qurl");
+    GdbProcess gdb(QStringLiteral("qurl"));
     gdb.execute("break qurl.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print u");
@@ -342,7 +342,7 @@ void QtPrintersTest::testQUrl()
 
 void QtPrintersTest::testQHashInt()
 {
-    GdbProcess gdb("qhashint");
+    GdbProcess gdb(QStringLiteral("qhashint"));
     gdb.execute("break qhashint.cpp:7");
     gdb.execute("run");
     QByteArray out = gdb.execute("print h");
@@ -355,7 +355,7 @@ void QtPrintersTest::testQHashInt()
 
 void QtPrintersTest::testQHashString()
 {
-    GdbProcess gdb("qhashstring");
+    GdbProcess gdb(QStringLiteral("qhashstring"));
     gdb.execute("break qhashstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print h");
@@ -368,7 +368,7 @@ void QtPrintersTest::testQHashString()
 
 void QtPrintersTest::testQSetInt()
 {
-    GdbProcess gdb("qsetint");
+    GdbProcess gdb(QStringLiteral("qsetint"));
     gdb.execute("break qsetint.cpp:7");
     gdb.execute("run");
     QByteArray out = gdb.execute("print s");
@@ -381,7 +381,7 @@ void QtPrintersTest::testQSetInt()
 
 void QtPrintersTest::testQSetString()
 {
-    GdbProcess gdb("qsetstring");
+    GdbProcess gdb(QStringLiteral("qsetstring"));
     gdb.execute("break qsetstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print s");
@@ -394,7 +394,7 @@ void QtPrintersTest::testQSetString()
 
 void QtPrintersTest::testQChar()
 {
-    GdbProcess gdb("qchar");
+    GdbProcess gdb(QStringLiteral("qchar"));
     gdb.execute("break qchar.cpp:5");
     gdb.execute("run");
     QVERIFY(gdb.execute("print c").contains("\"k\""));
@@ -402,7 +402,7 @@ void QtPrintersTest::testQChar()
 
 void QtPrintersTest::testQListPOD()
 {
-    GdbProcess gdb("qlistpod");
+    GdbProcess gdb(QStringLiteral("qlistpod"));
     gdb.execute("break qlistpod.cpp:31");
     gdb.execute("run");
     QVERIFY(gdb.execute("print b").contains("false"));
@@ -422,7 +422,7 @@ void QtPrintersTest::testQListPOD()
 
 void QtPrintersTest::testQUuid()
 {
-    GdbProcess gdb("quuid");
+    GdbProcess gdb(QStringLiteral("quuid"));
     gdb.execute("break quuid.cpp:4");
     gdb.execute("run");
     QByteArray data = gdb.execute("print id");
@@ -431,7 +431,7 @@ void QtPrintersTest::testQUuid()
 
 void QtPrintersTest::testKTextEditorTypes()
 {
-    GdbProcess gdb("ktexteditortypes");
+    GdbProcess gdb(QStringLiteral("ktexteditortypes"));
     gdb.execute("break ktexteditortypes.cpp:9");
     gdb.execute("run");
 
@@ -443,7 +443,7 @@ void QtPrintersTest::testKTextEditorTypes()
 
 void QtPrintersTest::testKDevelopTypes()
 {
-    GdbProcess gdb("kdeveloptypes");
+    GdbProcess gdb(QStringLiteral("kdeveloptypes"));
     gdb.execute("break kdeveloptypes.cpp:12");
     gdb.execute("run");
 

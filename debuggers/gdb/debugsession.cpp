@@ -104,31 +104,31 @@ void DebugSession::initializeDebugger()
 {
     //addCommand(new GDBCommand(GDBMI::EnableTimings, "yes"));
 
-    addCommand(new CliCommand(MI::GdbShow, "version", this, &DebugSession::handleVersion));
+    addCommand(new CliCommand(MI::GdbShow, QStringLiteral("version"), this, &DebugSession::handleVersion));
 
     // This makes gdb pump a variable out on one line.
-    addCommand(MI::GdbSet, "width 0");
-    addCommand(MI::GdbSet, "height 0");
+    addCommand(MI::GdbSet, QStringLiteral("width 0"));
+    addCommand(MI::GdbSet, QStringLiteral("height 0"));
 
-    addCommand(MI::SignalHandle, "SIG32 pass nostop noprint");
-    addCommand(MI::SignalHandle, "SIG41 pass nostop noprint");
-    addCommand(MI::SignalHandle, "SIG42 pass nostop noprint");
-    addCommand(MI::SignalHandle, "SIG43 pass nostop noprint");
+    addCommand(MI::SignalHandle, QStringLiteral("SIG32 pass nostop noprint"));
+    addCommand(MI::SignalHandle, QStringLiteral("SIG41 pass nostop noprint"));
+    addCommand(MI::SignalHandle, QStringLiteral("SIG42 pass nostop noprint"));
+    addCommand(MI::SignalHandle, QStringLiteral("SIG43 pass nostop noprint"));
 
     addCommand(MI::EnablePrettyPrinting);
 
-    addCommand(MI::GdbSet, "charset UTF-8");
-    addCommand(MI::GdbSet, "print sevenbit-strings off");
+    addCommand(MI::GdbSet, QStringLiteral("charset UTF-8"));
+    addCommand(MI::GdbSet, QStringLiteral("print sevenbit-strings off"));
 
     QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              "kdevgdb/printers/gdbinit");
+                                              QStringLiteral("kdevgdb/printers/gdbinit"));
     if (!fileName.isEmpty()) {
         QFileInfo fileInfo(fileName);
         QString quotedPrintersPath = fileInfo.dir().path()
-                                             .replace('\\', "\\\\")
-                                             .replace('"', "\\\"");
+                                             .replace('\\', QLatin1String("\\\\"))
+                                             .replace('"', QLatin1String("\\\""));
         addCommand(MI::NonMI,
-                   QString("python sys.path.insert(0, \"%0\")").arg(quotedPrintersPath));
+                   QStringLiteral("python sys.path.insert(0, \"%0\")").arg(quotedPrintersPath));
         addCommand(MI::NonMI, "source " + fileName);
     }
 
@@ -151,13 +151,13 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
         BreakpointModel* m = ICore::self()->debugController()->breakpointModel();
         bool found = false;
         foreach (Breakpoint *b, m->breakpoints()) {
-            if (b->location() == "main") {
+            if (b->location() == QLatin1String("main")) {
                 found = true;
                 break;
             }
         }
         if (!found) {
-            m->addCodeBreakpoint("main");
+            m->addCodeBreakpoint(QStringLiteral("main"));
         }
     }
     // Needed so that breakpoint widget has a chance to insert breakpoints.
@@ -166,15 +166,15 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     raiseEvent(debugger_ready);
 
     if (displayStaticMembers) {
-        addCommand(MI::GdbSet, "print static-members on");
+        addCommand(MI::GdbSet, QStringLiteral("print static-members on"));
     } else {
-        addCommand(MI::GdbSet, "print static-members off");
+        addCommand(MI::GdbSet, QStringLiteral("print static-members off"));
     }
 
     if (asmDemangle) {
-        addCommand(MI::GdbSet, "print asm-demangle on");
+        addCommand(MI::GdbSet, QStringLiteral("print asm-demangle on"));
     } else {
-        addCommand(MI::GdbSet, "print asm-demangle off");
+        addCommand(MI::GdbSet, QStringLiteral("print asm-demangle off"));
     }
 
     // Set the environment variables
@@ -215,11 +215,11 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
 
         QProcess *proc = new QProcess;
         QStringList arguments;
-        arguments << "-c" << KShell::quoteArg(runShellScript.toLocalFile()) +
+        arguments << QStringLiteral("-c") << KShell::quoteArg(runShellScript.toLocalFile()) +
             ' ' + KShell::quoteArg(executable) + QString::fromLatin1(options);
 
         qCDebug(DEBUGGERGDB) << "starting sh" << arguments;
-        proc->start("sh", arguments);
+        proc->start(QStringLiteral("sh"), arguments);
         //PORTING TODO QProcess::DontCare);
     }
 
@@ -300,11 +300,11 @@ void DebugSession::handleVersion(const QStringList& s)
 
 void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
 {
-    if (r.reason == "error") {
+    if (r.reason == QLatin1String("error")) {
         KMessageBox::error(
             qApp->activeWindow(),
             i18n("<b>Could not start debugger:</b><br />")+
-            r["msg"].literal(),
+            r[QStringLiteral("msg")].literal(),
             i18n("Startup error"));
         stopDebugger();
     }
@@ -312,7 +312,7 @@ void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
 
 void DebugSession::handleCoreFile(const ResultRecord& r)
 {
-    if (r.reason != "error") {
+    if (r.reason != QLatin1String("error")) {
         setDebuggerStateOn(s_programExited | s_core);
     } else {
         KMessageBox::error(

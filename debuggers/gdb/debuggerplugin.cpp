@@ -48,12 +48,12 @@ using namespace KDevMI::GDB;
 K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<CppDebuggerPlugin>(); )
 
 CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
-    : MIDebuggerPlugin("kdevgdb", i18n("GDB"), parent)
+    : MIDebuggerPlugin(QStringLiteral("kdevgdb"), i18n("GDB"), parent)
     , disassemblefactory(nullptr)
     , gdbfactory(nullptr)
     , memoryviewerfactory(nullptr)
 {
-    setXMLFile("kdevgdbui.rc");
+    setXMLFile(QStringLiteral("kdevgdbui.rc"));
 
     auto pluginController = core()->pluginController();
     for(auto plugin : pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
@@ -109,10 +109,10 @@ void CppDebuggerPlugin::setupExecutePlugin(KDevelop::IPlugin* plugin, bool load)
 void CppDebuggerPlugin::setupToolviews()
 {
     disassemblefactory = new DebuggerToolFactory<DisassembleWidget>(
-    this, "org.kdevelop.debugger.DisassemblerView", Qt::BottomDockWidgetArea);
+    this, QStringLiteral("org.kdevelop.debugger.DisassemblerView"), Qt::BottomDockWidgetArea);
 
     gdbfactory = new DebuggerToolFactory<GDBOutputWidget, CppDebuggerPlugin>(
-    this, "org.kdevelop.debugger.ConsoleView",Qt::BottomDockWidgetArea);
+    this, QStringLiteral("org.kdevelop.debugger.ConsoleView"),Qt::BottomDockWidgetArea);
 
     core()->uiController()->addToolView(
         i18n("Disassemble/Registers"),
@@ -126,7 +126,7 @@ void CppDebuggerPlugin::setupToolviews()
     memoryviewerfactory = nullptr;
 #else
     memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget, CppDebuggerPlugin>(
-    this, "org.kdevelop.debugger.MemoryView", Qt::BottomDockWidgetArea);
+    this, QStringLiteral("org.kdevelop.debugger.MemoryView"), Qt::BottomDockWidgetArea);
     core()->uiController()->addToolView(
         i18n("Memory"),
         memoryviewerfactory);

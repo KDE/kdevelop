@@ -54,17 +54,17 @@ MIVariable::MIVariable(MIDebugSession *session, TreeModel* model, TreeItem* pare
 MIVariable *MIVariable::createChild(const Value& child)
 {
     if (!debugSession) return nullptr;
-    auto var = static_cast<MIVariable*>(debugSession->variableController()->createVariable(model(), this, child["exp"].literal()));
+    auto var = static_cast<MIVariable*>(debugSession->variableController()->createVariable(model(), this, child[QStringLiteral("exp")].literal()));
     var->setTopLevel(false);
-    var->setVarobj(child["name"].literal());
-    bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
+    var->setVarobj(child[QStringLiteral("name")].literal());
+    bool hasMore = child[QStringLiteral("numchild")].toInt() != 0 || ( child.hasField(QStringLiteral("dynamic")) && child[QStringLiteral("dynamic")].toInt()!=0 );
     var->setHasMoreInitial(hasMore);
 
     // *this must be parent's child before we can set type and value
     appendChild(var);
 
-    var->setType(child["type"].literal());
-    var->setValue(formatValue(child["value"].literal()));
+    var->setType(child[QStringLiteral("type")].literal());
+    var->setValue(formatValue(child[QStringLiteral("value")].literal()));
     var->setChanged(true);
     return var;
 }
@@ -76,7 +76,7 @@ MIVariable::~MIVariable()
         // Delete only top-level variable objects.
         if (topLevel()) {
             if (sessionIsAlive()) {
-                debugSession->addCommand(VarDelete, QString("\"%1\"").arg(varobj_));
+                debugSession->addCommand(VarDelete, QStringLiteral("\"%1\"").arg(varobj_));
             }
         }
         if (debugSession)
@@ -117,13 +117,13 @@ public:
         MIVariable* variable = m_variable.data();
         variable->deleteChildren();
         variable->setInScope(true);
-        if (r.reason == "error") {
+        if (r.reason == QLatin1String("error")) {
             variable->setShowError(true);
         } else {
-            variable->setVarobj(r["name"].literal());
+            variable->setVarobj(r[QStringLiteral("name")].literal());
 
             bool hasMore = false;
-            if (r.hasField("has_more") && r["has_more"].toInt())
+            if (r.hasField(QStringLiteral("has_more")) && r[QStringLiteral("has_more")].toInt())
                 // GDB swears there are more children. Trust it
                 hasMore = true;
             else
@@ -132,14 +132,14 @@ public:
                 // is not yet expanded, and those numchild are not
                 // fetched yet. So, if numchild != 0, hasMore should
                 // be true.
-                hasMore = r["numchild"].toInt() != 0;
+                hasMore = r[QStringLiteral("numchild")].toInt() != 0;
 
             variable->setHasMore(hasMore);
 
-            variable->setType(r["type"].literal());
-            variable->setValue(variable->formatValue(r["value"].literal()));
-            hasValue = !r["value"].literal().isEmpty();
-            if (variable->isExpanded() && r["numchild"].toInt()) {
+            variable->setType(r[QStringLiteral("type")].literal());
+            variable->setValue(variable->formatValue(r[QStringLiteral("value")].literal()));
+            hasValue = !r[QStringLiteral("value")].literal().isEmpty();
+            if (variable->isExpanded() && r[QStringLiteral("numchild")].toInt()) {
                 variable->fetchMoreChildren();
             }
 
@@ -172,7 +172,7 @@ void MIVariable::attachMaybe(QObject *callback, const char *callbackMethod)
 
     if (sessionIsAlive()) {
         debugSession->addCommand(VarCreate,
-                                 QString("var%1 @ %2").arg(nextId++).arg(enquotedExpression()),
+                                 QStringLiteral("var%1 @ %2").arg(nextId++).arg(enquotedExpression()),
                                  new CreateVarobjHandler(this, callback, callbackMethod));
     }
 }
@@ -196,16 +196,16 @@ public:
 
         MIVariable* variable = m_variable.data();
 
-        if (r.hasField("children"))
+        if (r.hasField(QStringLiteral("children")))
         {
-            const Value& children = r["children"];
+            const Value& children = r[QStringLiteral("children")];
             for (int i = 0; i < children.size(); ++i) {
                 const Value& child = children[i];
-                const QString& exp = child["exp"].literal();
-                if (exp == "public" || exp == "protected" || exp == "private") {
+                const QString& exp = child[QStringLiteral("exp")].literal();
+                if (exp == QLatin1String("public") || exp == QLatin1String("protected") || exp == QLatin1String("private")) {
                     ++m_activeCommands;
                     m_session->addCommand(VarListChildren,
-                                          QString("--all-values \"%1\"").arg(child["name"].literal()),
+                                          QStringLiteral("--all-values \"%1\"").arg(child[QStringLiteral("name")].literal()),
                                           this/*use again as handler*/);
                 } else {
                     variable->createChild(child);
@@ -219,8 +219,8 @@ public:
            even theoretical ability to click on "..." item and confuse
            us.  */
         bool hasMore = false;
-        if (r.hasField("has_more"))
-            hasMore = r["has_more"].toInt();
+        if (r.hasField(QStringLiteral("has_more")))
+            hasMore = r[QStringLiteral("has_more")].toInt();
 
         variable->setHasMore(hasMore);
         if (m_activeCommands == 0) {
@@ -250,7 +250,7 @@ void MIVariable::fetchMoreChildren()
     // Probably need to disable open, or something
     if (sessionIsAlive()) {
         debugSession->addCommand(VarListChildren,
-                                 QString("--all-values \"%1\" %2 %3")
+                                 QStringLiteral("--all-values \"%1\" %2 %3")
                                  //   fetch    from ..    to ..
                                  .arg(varobj_).arg(c).arg(c + fetchStep),
                                  new FetchMoreChildrenHandler(this, debugSession));
@@ -259,16 +259,16 @@ void MIVariable::fetchMoreChildren()
 
 void MIVariable::handleUpdate(const Value& var)
 {
-    if (var.hasField("type_changed")
-        && var["type_changed"].literal() == "true")
+    if (var.hasField(QStringLiteral("type_changed"))
+        && var[QStringLiteral("type_changed")].literal() == QLatin1String("true"))
     {
         deleteChildren();
         // FIXME: verify that this check is right.
-        setHasMore(var["new_num_children"].toInt() != 0);
+        setHasMore(var[QStringLiteral("new_num_children")].toInt() != 0);
         fetchMoreChildren();
     }
 
-    if (var.hasField("in_scope") && var["in_scope"].literal() == "false")
+    if (var.hasField(QStringLiteral("in_scope")) && var[QStringLiteral("in_scope")].literal() == QLatin1String("false"))
     {
         setInScope(false);
     }
@@ -276,8 +276,8 @@ void MIVariable::handleUpdate(const Value& var)
     {
         setInScope(true);
 
-        if  (var.hasField("new_num_children")) {
-            int nc = var["new_num_children"].toInt();
+        if  (var.hasField(QStringLiteral("new_num_children"))) {
+            int nc = var[QStringLiteral("new_num_children")].toInt();
             Q_ASSERT(nc != -1);
             setHasMore(false);
             while (childCount() > nc) {
@@ -287,9 +287,9 @@ void MIVariable::handleUpdate(const Value& var)
             }
         }
 
-        if (var.hasField("new_children"))
+        if (var.hasField(QStringLiteral("new_children")))
         {
-            const Value& children = var["new_children"];
+            const Value& children = var[QStringLiteral("new_children")];
             if (debugSession) {
                 for (int i = 0; i < children.size(); ++i) {
                     createChild(children[i]);
@@ -298,12 +298,12 @@ void MIVariable::handleUpdate(const Value& var)
             }
         }
 
-        if (var.hasField("type_changed") && var["type_changed"].literal() == "true") {
-            setType(var["new_type"].literal());
+        if (var.hasField(QStringLiteral("type_changed")) && var[QStringLiteral("type_changed")].literal() == QLatin1String("true")) {
+            setType(var[QStringLiteral("new_type")].literal());
         }
-        setValue(formatValue(var["value"].literal()));
+        setValue(formatValue(var[QStringLiteral("value")].literal()));
         setChanged(true);
-        setHasMore(var.hasField("has_more") && var["has_more"].toInt());
+        setHasMore(var.hasField(QStringLiteral("has_more")) && var[QStringLiteral("has_more")].toInt());
     }
 }
 
@@ -327,8 +327,8 @@ public:
 
     void handle(const ResultRecord &r) override
     {
-        if(m_variable && r.hasField("value"))
-            m_variable->setValue(m_variable->formatValue(r["value"].literal()));
+        if(m_variable && r.hasField(QStringLiteral("value")))
+            m_variable->setValue(m_variable->formatValue(r[QStringLiteral("value")].literal()));
     }
 private:
     QPointer<MIVariable> m_variable;
@@ -348,7 +348,7 @@ void MIVariable::formatChanged()
     {
         if (sessionIsAlive()) {
             debugSession->addCommand(VarSetFormat,
-                                     QString(" %1 %2 ").arg(varobj_).arg(format2str(format())),
+                                     QStringLiteral(" %1 %2 ").arg(varobj_).arg(format2str(format())),
                                      new SetFormatHandler(this));
         }
     }

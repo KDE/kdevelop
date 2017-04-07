@@ -340,7 +340,7 @@ namespace KDevMI { namespace MI {
         inline PromptRecord() { Record::kind = Prompt; }
 
         QString toString() const override
-        { return "(prompt)\n"; }
+        { return QStringLiteral("(prompt)\n"); }
     };
 
     struct StreamRecord : public Record

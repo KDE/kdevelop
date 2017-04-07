@@ -36,7 +36,7 @@ Q_LOGGING_CATEGORY(EXECUTEPLASMOID, "kdevelop.kdeintegration.executeplasmoid")
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecutePlasmoidFactory,"kdevexecuteplasmoid.json", registerPlugin<ExecutePlasmoidPlugin>(); )
 
 ExecutePlasmoidPlugin::ExecutePlasmoidPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin("kdevexecuteplasmoid", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevexecuteplasmoid"), parent)
 {
     m_configType = new PlasmoidExecutionConfigType();
     m_configType->addLauncher( new PlasmoidLauncher( this ) );

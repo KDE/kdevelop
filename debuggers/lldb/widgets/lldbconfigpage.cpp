@@ -47,7 +47,7 @@ LldbConfigPage::LldbConfigPage(QWidget* parent)
     ui->lineDebuggerExec->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
     ui->lineConfigScript->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
 
-    QRegularExpression rx(R"([^:]+:\d+)");
+    QRegularExpression rx(QStringLiteral(R"([^:]+:\d+)"));
     ui->lineRemoteServer->setValidator(new QRegularExpressionValidator(rx, this));
 
     ui->comboStartWith->setItemData(0, "ApplicationOutput");

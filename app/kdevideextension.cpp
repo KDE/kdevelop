@@ -35,7 +35,7 @@ void KDevIDEExtension::init()
 
 QString KDevIDEExtension::xmlFile()
 {
-    return "kdevelopui.rc";
+    return QStringLiteral("kdevelopui.rc");
 }
 
 QString KDevIDEExtension::executableFilePath()
@@ -51,7 +51,7 @@ KDevelop::AreaParams KDevIDEExtension::defaultArea()
 
 QString KDevIDEExtension::projectFileExtension()
 {
-    return "kdev4";
+    return QStringLiteral("kdev4");
 }
 
 QString KDevIDEExtension::projectFileDescription()

@@ -42,9 +42,9 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY_WITH_JSON(QMakeBuilderFactory, "kdevqmakebuilder.json", registerPlugin<QMakeBuilder>();)
 
 QMakeBuilder::QMakeBuilder(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin("kdevqmakebuilder", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevqmakebuilder"), parent)
 {
-    m_makeBuilder = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
+    m_makeBuilder = core()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IMakeBuilder"));
     if (m_makeBuilder) {
         IMakeBuilder* mbuilder = m_makeBuilder->extension<IMakeBuilder>();
         if (mbuilder) {
@@ -73,7 +73,7 @@ KJob* QMakeBuilder::prune(KDevelop::IProject* project)
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
         if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Distcleaning with make";
-            return builder->executeMakeTarget(project->projectItem(), "distclean");
+            return builder->executeMakeTarget(project->projectItem(), QStringLiteral("distclean"));
         }
     }
     return nullptr;

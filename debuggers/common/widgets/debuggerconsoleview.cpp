@@ -60,7 +60,7 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
     , m_cmdEditorHadFocus(false)
     , m_maxLines(5000)
 {
-    setWindowIcon(QIcon::fromTheme("dialog-scripts"));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("dialog-scripts")));
     setWindowTitle(i18n("Debugger Console"));
     setWhatsThis(i18n("<b>Debugger Console</b><p>"
                       "Shows all debugger commands being executed. "
@@ -68,7 +68,7 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
 
     setupUi();
 
-    m_actRepeat = new QAction(QIcon::fromTheme("edit-redo"),
+    m_actRepeat = new QAction(QIcon::fromTheme(QStringLiteral("edit-redo")),
                               i18n("Repeat last command when hit Return"),
                               this);
     m_actRepeat->setCheckable(true);
@@ -76,7 +76,7 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
     connect(m_actRepeat, &QAction::toggled, this, &DebuggerConsoleView::toggleRepeat);
     m_toolBar->insertAction(m_actCmdEditor, m_actRepeat);
 
-    m_actInterrupt = new QAction(QIcon::fromTheme("media-playback-pause"),
+    m_actInterrupt = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-pause")),
                                  i18n("Pause execution of the app to enter gdb commands"),
                                  this);
     connect(m_actInterrupt, &QAction::triggered, this, &DebuggerConsoleView::interruptDebugger);
@@ -300,7 +300,7 @@ QString DebuggerConsoleView::toHtmlEscaped(QString text)
 {
     text = text.toHtmlEscaped();
 
-    text.replace('\n', "<br>");
+    text.replace('\n', QLatin1String("<br>"));
     return text;
 }
 
@@ -324,7 +324,7 @@ void DebuggerConsoleView::receivedUserCommandStdout(const QString& line)
 void DebuggerConsoleView::receivedStdout(const QString& line, bool internal)
 {
     QString colored = toHtmlEscaped(line);
-    if (colored.startsWith("(gdb)")) {
+    if (colored.startsWith(QLatin1String("(gdb)"))) {
         if (!m_alterPrompt.isEmpty()) {
             colored.replace(0, 5, m_alterPrompt);
         }

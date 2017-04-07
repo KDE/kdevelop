@@ -32,10 +32,10 @@ namespace {
 
 QString getFunctionOrAddress(const KDevMI::MI::Value &frame)
 {
-    if (frame.hasField("func"))
-        return frame["func"].literal();
+    if (frame.hasField(QStringLiteral("func")))
+        return frame[QStringLiteral("func")].literal();
     else
-        return frame["addr"].literal();
+        return frame[QStringLiteral("addr")].literal();
 }
 
 }
@@ -59,8 +59,8 @@ void LldbFrameStackModel::inferiorStopped(const MI::AsyncRecord& r)
 {
     if (session()->debuggerStateIsOn(s_shuttingDown)) return;
 
-    if (r.hasField("thread-id")) {
-        stoppedAtThread = r["thread-id"].toInt();
+    if (r.hasField(QStringLiteral("thread-id"))) {
+        stoppedAtThread = r[QStringLiteral("thread-id")].toInt();
     }
 }
 
@@ -70,26 +70,26 @@ void LldbFrameStackModel::fetchThreads()
     // that's causing std::logic_error when executing -thread-info with
     // more than one threads. Find a workaround for this (and report bug
     // if it truly is).
-    session()->addCommand(ThreadInfo, "", this, &LldbFrameStackModel::handleThreadInfo);
+    session()->addCommand(ThreadInfo, QLatin1String(""), this, &LldbFrameStackModel::handleThreadInfo);
 }
 
 void LldbFrameStackModel::handleThreadInfo(const ResultRecord& r)
 {
-    const Value& threads = r["threads"];
+    const Value& threads = r[QStringLiteral("threads")];
 
     QList<FrameStackModel::ThreadItem> threadsList;
     for (int gidx = 0; gidx != threads.size(); ++gidx) {
         FrameStackModel::ThreadItem i;
         const Value & threadMI = threads[gidx];
-        i.nr = threadMI["id"].toInt();
-        if (threadMI["state"].literal() == "stopped") {
+        i.nr = threadMI[QStringLiteral("id")].toInt();
+        if (threadMI[QStringLiteral("state")].literal() == QLatin1String("stopped")) {
             // lldb-mi returns multiple frame entry for each thread
             // so can't directly use threadMI["frame"]
             auto &th = dynamic_cast<const TupleValue&>(threadMI);
             Value *topFrame = nullptr;
             for (auto res : th.results) {
-                if (res->variable == "frame") {
-                    if (!topFrame || (*res->value)["level"].toInt() < (*topFrame)["level"].toInt()) {
+                if (res->variable == QLatin1String("frame")) {
+                    if (!topFrame || (*res->value)[QStringLiteral("level")].toInt() < (*topFrame)[QStringLiteral("level")].toInt()) {
                         topFrame = res->value;
                     }
                 }
@@ -101,8 +101,8 @@ void LldbFrameStackModel::handleThreadInfo(const ResultRecord& r)
         threadsList << i;
     }
     setThreads(threadsList);
-    if (r.hasField("current-thread-id")) {
-        int currentThreadId = r["current-thread-id"].toInt();
+    if (r.hasField(QStringLiteral("current-thread-id"))) {
+        int currentThreadId = r[QStringLiteral("current-thread-id")].toInt();
 
         setCurrentThread(currentThreadId);
 

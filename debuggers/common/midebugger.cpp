@@ -201,7 +201,7 @@ void MIDebugger::processLine(const QByteArray& line)
             }
 
             // GDB doc: "running" and "exit" are status codes equivalent to "done"
-            if (result.reason == "done" || result.reason == "running" || result.reason == "exit")
+            if (result.reason == QLatin1String("done") || result.reason == QLatin1String("running") || result.reason == QLatin1String("exit"))
             {
                 qCDebug(DEBUGGERCOMMON) << "Result token is" << result.token;
                 currentCmd_->markAsCompleted();
@@ -211,7 +211,7 @@ void MIDebugger::processLine(const QByteArray& line)
                                         << currentCmd_->gdbProcessingTime();
                 currentCmd_->invokeHandler(result);
             }
-            else if (result.reason == "error")
+            else if (result.reason == QLatin1String("error"))
             {
                 qCDebug(DEBUGGERCOMMON) << "Handling error";
                 currentCmd_->markAsCompleted();
@@ -246,11 +246,11 @@ void MIDebugger::processLine(const QByteArray& line)
             switch (async.subkind) {
             case MI::AsyncRecord::Exec: {
                 // Prefix '*'; asynchronous state changes of the target
-                if (async.reason == "stopped")
+                if (async.reason == QLatin1String("stopped"))
                 {
                     emit programStopped(async);
                 }
-                else if (async.reason == "running")
+                else if (async.reason == QLatin1String("running"))
                 {
                     emit programRunning();
                 }
@@ -329,7 +329,7 @@ void MIDebugger::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
     qCDebug(DEBUGGERCOMMON) << "Debugger FINISHED\n";
 
     bool abnormal = exitCode != 0 || exitStatus != QProcess::NormalExit;
-    emit userCommandOutput("Process exited\n");
+    emit userCommandOutput(QStringLiteral("Process exited\n"));
     emit exited(abnormal, i18n("Process exited"));
 }
 
@@ -346,7 +346,7 @@ void MIDebugger::processErrored(QProcess::ProcessError error)
                  debuggerExecutable_),
             i18n("Could not start debugger"));
 
-        emit userCommandOutput("Process failed to start\n");
+        emit userCommandOutput(QStringLiteral("Process failed to start\n"));
         emit exited(true, i18n("Process failed to start"));
 
     } else if (error == QProcess::Crashed) {
@@ -359,7 +359,7 @@ void MIDebugger::processErrored(QProcess::ProcessError error)
                  debuggerExecutable_),
             i18n("Debugger crashed"));
 
-        emit userCommandOutput("Process crashed\n");
+        emit userCommandOutput(QStringLiteral("Process crashed\n"));
         emit exited(true, i18n("Process crashed"));
     }
 }

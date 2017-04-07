@@ -55,9 +55,9 @@ bool isSorted(const QList<QmlJS::AST::SourceLocation>& locations)
 
 QmlJS::Dialect ParseSession::guessLanguageFromSuffix(const QString& path)
 {
-    if (path.endsWith(".js")) {
+    if (path.endsWith(QLatin1String(".js"))) {
         return QmlJS::Dialect::JavaScript;
-    } else if (path.endsWith(".json")) {
+    } else if (path.endsWith(QLatin1String(".json"))) {
         return QmlJS::Dialect::Json;
     } else {
         return QmlJS::Dialect::Qml;

@@ -158,7 +158,7 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
     // output signals
     connect(m_debugger, &MIDebugger::applicationOutput,
             this, [this](const QString &output) {
-                auto lines = output.split(QRegularExpression("[\r\n]"), QString::SkipEmptyParts);
+                auto lines = output.split(QRegularExpression(QStringLiteral("[\r\n]")), QString::SkipEmptyParts);
                 for (auto &line : lines) {
                     int p = line.length();
                     while (p >= 1 && (line[p-1] == '\r' || line[p-1] == '\n'))
@@ -188,7 +188,7 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
     // debugger output, and important events like the debugger died are reported.
     QStringList extraArguments;
     if (!m_sourceInitFile)
-        extraArguments << "--nx";
+        extraArguments << QStringLiteral("--nx");
 
     auto config = cfg ? cfg->config()
                 // FIXME: this is only used when attachToProcess or examineCoreFile.
@@ -280,9 +280,9 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
     }
 
     QString config_startWith = cfg->config().readEntry(Config::StartWithEntry, QStringLiteral("ApplicationOutput"));
-    if (config_startWith == "GdbConsole") {
+    if (config_startWith == QLatin1String("GdbConsole")) {
         emit raiseDebuggerConsoleViews();
-    } else if (config_startWith == "FrameStack") {
+    } else if (config_startWith == QLatin1String("FrameStack")) {
         emit raiseFramestackViews();
     } else {
         // ApplicationOutput is raised in DebugJob (by setting job to Verbose/Silent)
@@ -326,11 +326,11 @@ bool MIDebugSession::attachToProcess(int pid)
 
 void MIDebugSession::handleTargetAttach(const MI::ResultRecord& r)
 {
-    if (r.reason == "error") {
+    if (r.reason == QLatin1String("error")) {
         KMessageBox::error(
             qApp->activeWindow(),
             i18n("<b>Could not attach debugger:</b><br />")+
-            r["msg"].literal(),
+            r[QStringLiteral("msg")].literal(),
             i18n("Startup error"));
         stopDebugger();
     }
@@ -520,7 +520,7 @@ void MIDebugSession::restartDebugger()
         }
         // The -exec-abort is not implemented in gdb
         // addCommand(ExecAbort);
-        addCommand(NonMI, "kill");
+        addCommand(NonMI, QStringLiteral("kill"));
     }
     run();
 }
@@ -553,12 +553,12 @@ void MIDebugSession::stopDebugger()
     // the app running.
     if (debuggerStateIsOn(s_attached)) {
         addCommand(TargetDetach);
-        emit debuggerUserCommandOutput("(gdb) detach\n");
+        emit debuggerUserCommandOutput(QStringLiteral("(gdb) detach\n"));
     }
 
     // Now try to stop debugger running.
     addCommand(GdbExit);
-    emit debuggerUserCommandOutput("(gdb) quit");
+    emit debuggerUserCommandOutput(QStringLiteral("(gdb) quit"));
 
     // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
     QPointer<MIDebugSession> guarded_this(this);
@@ -665,7 +665,7 @@ void MIDebugSession::runUntil(const QUrl& url, int line)
                    CmdMaybeStartsRunning | CmdTemporaryRun);
     } else {
         addCommand(ExecUntil,
-                   QString("%1:%2").arg(url.toLocalFile()).arg(line),
+                   QStringLiteral("%1:%2").arg(url.toLocalFile()).arg(line),
                    CmdMaybeStartsRunning | CmdTemporaryRun);
     }
 }
@@ -676,7 +676,7 @@ void MIDebugSession::runUntil(const QString& address)
         return;
 
     if (!address.isEmpty()) {
-        addCommand(ExecUntil, QString("*%1").arg(address),
+        addCommand(ExecUntil, QStringLiteral("*%1").arg(address),
                    CmdMaybeStartsRunning | CmdTemporaryRun);
     }
 }
@@ -687,8 +687,8 @@ void MIDebugSession::jumpTo(const QUrl& url, int line)
         return;
 
     if (url.isValid()) {
-        addCommand(NonMI, QString("tbreak %1:%2").arg(url.toLocalFile()).arg(line));
-        addCommand(NonMI, QString("jump %1:%2").arg(url.toLocalFile()).arg(line));
+        addCommand(NonMI, QStringLiteral("tbreak %1:%2").arg(url.toLocalFile()).arg(line));
+        addCommand(NonMI, QStringLiteral("jump %1:%2").arg(url.toLocalFile()).arg(line));
     }
 }
 
@@ -698,8 +698,8 @@ void MIDebugSession::jumpToMemoryAddress(const QString& address)
         return;
 
     if (!address.isEmpty()) {
-        addCommand(NonMI, QString("tbreak *%1").arg(address));
-        addCommand(NonMI, QString("jump *%1").arg(address));
+        addCommand(NonMI, QStringLiteral("tbreak *%1").arg(address));
+        addCommand(NonMI, QStringLiteral("jump *%1").arg(address));
     }
 }
 
@@ -887,7 +887,7 @@ void MIDebugSession::executeCmd()
     } else {
         if (commandText[length-1] != '\n') {
             bad_command = true;
-            message = "Debugger command does not end with newline";
+            message = QLatin1String("Debugger command does not end with newline");
         }
     }
 
@@ -1024,10 +1024,10 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
     setDebuggerStateOff(s_dbgNotListening);
 
     QString reason;
-    if (r.hasField("reason")) reason = r["reason"].literal();
+    if (r.hasField(QStringLiteral("reason"))) reason = r[QStringLiteral("reason")].literal();
 
-    if (reason == "exited-normally" || reason == "exited") {
-        if (r.hasField("exit-code")) {
+    if (reason == QLatin1String("exited-normally") || reason == QLatin1String("exited")) {
+        if (r.hasField(QStringLiteral("exit-code"))) {
             programNoApp(i18n("Exited with return code: %1", r["exit-code"].literal()));
         } else {
             programNoApp(i18n("Exited normally"));
@@ -1036,14 +1036,14 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
         return;
     }
 
-    if (reason == "exited-signalled") {
+    if (reason == QLatin1String("exited-signalled")) {
         programNoApp(i18n("Exited on signal %1", r["signal-name"].literal()));
         m_stateReloadNeeded = false;
         return;
     }
 
-    if (reason == "watchpoint-scope") {
-        QString number = r["wpnum"].literal();
+    if (reason == QLatin1String("watchpoint-scope")) {
+        QString number = r[QStringLiteral("wpnum")].literal();
 
         // FIXME: shuld remove this watchpoint
         // But first, we should consider if removing all
@@ -1058,15 +1058,15 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
 
     bool wasInterrupt = false;
 
-    if (reason == "signal-received") {
-        QString name = r["signal-name"].literal();
-        QString user_name = r["signal-meaning"].literal();
+    if (reason == QLatin1String("signal-received")) {
+        QString name = r[QStringLiteral("signal-name")].literal();
+        QString user_name = r[QStringLiteral("signal-meaning")].literal();
 
         // SIGINT is a "break into running program".
         // We do this when the user set/mod/clears a breakpoint but the
         // application is running.
         // And the user does this to stop the program also.
-        if (name == "SIGINT" && debuggerStateIsOn(s_interruptSent)) {
+        if (name == QLatin1String("SIGINT") && debuggerStateIsOn(s_interruptSent)) {
             wasInterrupt = true;
         } else {
             // Whenever we have a signal raised then tell the user, but don't
@@ -1080,7 +1080,7 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
         }
     }
 
-    if (!reason.contains("exited")) {
+    if (!reason.contains(QLatin1String("exited"))) {
         // FIXME: we should immediately update the current thread and
         // frame in the framestackmodel, so that any user actions
         // are in that thread. However, the way current framestack model
@@ -1091,13 +1091,13 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
         //Indicates if program state should be reloaded immediately.
         bool updateState = false;
 
-        if (r.hasField("frame")) {
-            const MI::Value& frame = r["frame"];
+        if (r.hasField(QStringLiteral("frame"))) {
+            const MI::Value& frame = r[QStringLiteral("frame")];
             QString file, line, addr;
 
-            if (frame.hasField("fullname")) file = frame["fullname"].literal();;
-            if (frame.hasField("line"))     line = frame["line"].literal();
-            if (frame.hasField("addr"))     addr = frame["addr"].literal();
+            if (frame.hasField(QStringLiteral("fullname"))) file = frame[QStringLiteral("fullname")].literal();;
+            if (frame.hasField(QStringLiteral("line")))     line = frame[QStringLiteral("line")].literal();
+            if (frame.hasField(QStringLiteral("addr")))     addr = frame[QStringLiteral("addr")].literal();
 
             // gdb counts lines from 1 and we don't
             setCurrentPosition(QUrl::fromLocalFile(file), line.toInt() - 1, addr);
@@ -1130,17 +1130,17 @@ void MIDebugSession::slotInferiorRunning()
 
 void MIDebugSession::processNotification(const MI::AsyncRecord & async)
 {
-    if (async.reason == "thread-group-started") {
+    if (async.reason == QLatin1String("thread-group-started")) {
         setDebuggerStateOff(s_appNotStarted | s_programExited);
-    } else if (async.reason == "thread-group-exited") {
+    } else if (async.reason == QLatin1String("thread-group-exited")) {
         setDebuggerStateOn(s_programExited);
-    } else if (async.reason == "library-loaded") {
+    } else if (async.reason == QLatin1String("library-loaded")) {
         // do nothing
-    } else if (async.reason == "breakpoint-created") {
+    } else if (async.reason == QLatin1String("breakpoint-created")) {
         breakpointController()->notifyBreakpointCreated(async);
-    } else if (async.reason == "breakpoint-modified") {
+    } else if (async.reason == QLatin1String("breakpoint-modified")) {
         breakpointController()->notifyBreakpointModified(async);
-    } else if (async.reason == "breakpoint-deleted") {
+    } else if (async.reason == QLatin1String("breakpoint-deleted")) {
         breakpointController()->notifyBreakpointDeleted(async);
     } else {
         qCDebug(DEBUGGERCOMMON) << "Unhandled notification: " << async.reason;
@@ -1194,7 +1194,7 @@ void MIDebugSession::programNoApp(const QString& msg)
 
 void MIDebugSession::programFinished(const QString& msg)
 {
-    QString m = QString("*** %0 ***").arg(msg.trimmed());
+    QString m = QStringLiteral("*** %0 ***").arg(msg.trimmed());
     emit inferiorStderrLines(QStringList(m));
 
     /* Also show message in gdb window, so that users who
@@ -1277,9 +1277,9 @@ void MIDebugSession::handleInferiorFinished(const QString& msg)
 // FIXME: connect to debugger's slot.
 void MIDebugSession::defaultErrorHandler(const MI::ResultRecord& result)
 {
-    QString msg = result["msg"].literal();
+    QString msg = result[QStringLiteral("msg")].literal();
 
-    if (msg.contains("No such process"))
+    if (msg.contains(QLatin1String("No such process")))
     {
         setDebuggerState(s_appNotStarted|s_programExited);
         raiseEvent(program_exited);

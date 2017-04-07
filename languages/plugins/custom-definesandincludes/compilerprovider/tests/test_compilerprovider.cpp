@@ -50,7 +50,7 @@ void testCompilerEntry(SettingsManager* settings, KConfig* config){
     auto entry = entries.first();
     auto compilers = settings->provider()->compilers();
     Q_ASSERT(!compilers.isEmpty());
-    bool gccCompilerInstalled = std::any_of(compilers.begin(), compilers.end(), [](const CompilerPointer& compiler){return compiler->name().contains("gcc", Qt::CaseInsensitive);});
+    bool gccCompilerInstalled = std::any_of(compilers.begin(), compilers.end(), [](const CompilerPointer& compiler){return compiler->name().contains(QLatin1String("gcc"), Qt::CaseInsensitive);});
     if (gccCompilerInstalled) {
         QCOMPARE(entry.compiler->name(), QStringLiteral("GCC"));
     }
@@ -61,9 +61,9 @@ void testAddingEntry(SettingsManager* settings, KConfig* config){
     auto entry = entries.first();
     auto compilers = settings->provider()->compilers();
     ConfigEntry otherEntry;
-    otherEntry.defines["TEST"] = "lalal";
-    otherEntry.includes = QStringList() << "/foo";
-    otherEntry.path = "test";
+    otherEntry.defines[QStringLiteral("TEST")] = QLatin1String("lalal");
+    otherEntry.includes = QStringList() << QStringLiteral("/foo");
+    otherEntry.path = QLatin1String("test");
     otherEntry.compiler = compilers.first();
     entries << otherEntry;
     settings->writePaths(config, entries);
@@ -147,10 +147,10 @@ void TestCompilerProvider::testStorageBackwardsCompatible()
     QCOMPARE(entries.size(), 1);
     auto entry = entries.first();
     Defines defines;
-    defines["VARIABLE"] = "VALUE";
-    defines["_DEBUG"] = QString();
+    defines[QStringLiteral("VARIABLE")] = QLatin1String("VALUE");
+    defines[QStringLiteral("_DEBUG")] = QString();
     QCOMPARE(entry.defines, defines);
-    QStringList includes = QStringList() << "/usr/include/mydir";
+    QStringList includes = QStringList() << QStringLiteral("/usr/include/mydir");
     QCOMPARE(entry.includes, includes);
     QCOMPARE(entry.path, QString("/"));
     QVERIFY(entry.compiler);
@@ -183,12 +183,12 @@ void TestCompilerProvider::testStorageNewSystem()
     auto entry = entries.first();
     QCOMPARE(entry.path, QString("/"));
     Defines defines;
-    defines["VARIABLE"] = "VALUE";
-    defines["_DEBUG"] = QString();
+    defines[QStringLiteral("VARIABLE")] = QLatin1String("VALUE");
+    defines[QStringLiteral("_DEBUG")] = QString();
     QCOMPARE(entry.defines, defines);
     QMap<QString, QString> includeMap;
-    includeMap["1"] = "/usr/include/mydir";
-    includeMap["2"] = "/usr/local/include/mydir";
+    includeMap[QStringLiteral("1")] = QLatin1String("/usr/include/mydir");
+    includeMap[QStringLiteral("2")] = QLatin1String("/usr/local/include/mydir");
 
     int i = 0;
     for(auto it = includeMap.begin(); it != includeMap.end(); it++)
@@ -209,7 +209,7 @@ void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
     auto provider = settings->provider();
 
     Q_ASSERT(!provider->compilerFactories().isEmpty());
-    auto compiler = provider->compilerFactories().first()->createCompiler("name", "path");
+    auto compiler = provider->compilerFactories().first()->createCompiler(QStringLiteral("name"), QStringLiteral("path"));
 
     QVERIFY(provider->registerCompiler(compiler));
     QVERIFY(provider->compilers().contains(compiler));
@@ -222,7 +222,7 @@ void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
     ProjectBaseItem* mainfile = nullptr;
     for (const auto& file: project->fileSet() ) {
         for (auto i: project->filesForPath(file)) {
-            if( i->text() == "main.cpp" ) {
+            if( i->text() == QLatin1String("main.cpp") ) {
                 mainfile = i;
                 break;
             }
@@ -234,7 +234,7 @@ void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
     QVERIFY(mainCompiler->name() == projectCompiler->name());
 
     ConfigEntry entry;
-    entry.path = "src/main.cpp";
+    entry.path = QLatin1String("src/main.cpp");
     entry.compiler = compiler;
 
     auto entries = settings->readPaths(project->projectConfiguration().data());

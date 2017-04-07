@@ -95,7 +95,7 @@ public:
 class TestLaunchConfiguration : public ILaunchConfiguration
 {
 public:
-    explicit TestLaunchConfiguration(const QUrl& executable = findExecutable("lldb_debugee"),
+    explicit TestLaunchConfiguration(const QUrl& executable = findExecutable(QStringLiteral("lldb_debugee")),
                             const QUrl& workingDirectory = QUrl()) {
         qDebug() << "FIND" << executable;
         c = new KConfig();
@@ -110,7 +110,7 @@ public:
     }
     const KConfigGroup config() const override { return cfg; }
     KConfigGroup config() override { return cfg; };
-    QString name() const override { return QString("Test-Launch"); }
+    QString name() const override { return QStringLiteral("Test-Launch"); }
     KDevelop::IProject* project() const override { return nullptr; }
     KDevelop::LaunchConfigurationType* type() const override { return nullptr; }
 
@@ -197,7 +197,7 @@ void LldbTest::initTestCase()
     m_core = TestCore::initialize(Core::NoUi);
 
     m_iface = m_core->pluginController()
-                ->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")
+                ->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))
                 ->extension<IExecutePlugin>();
     Q_ASSERT(m_iface);
 
@@ -258,15 +258,15 @@ void LldbTest::testStdout()
 void LldbTest::testEnvironmentSet()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeeechoenv"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeeechoenv")));
 
     cfg.config().writeEntry("EnvironmentGroup", "LldbTestGroup");
 
     WritableEnvironmentProfileList envProfiles(cfg.rootConfig());
-    envProfiles.removeProfile("LldbTestGroup");
-    auto &envs = envProfiles.variables("LldbTestGroup");
-    envs["VariableA"] = "-A' \" complex --value";
-    envs["VariableB"] = "-B' \" complex --value";
+    envProfiles.removeProfile(QStringLiteral("LldbTestGroup"));
+    auto &envs = envProfiles.variables(QStringLiteral("LldbTestGroup"));
+    envs[QStringLiteral("VariableA")] = QLatin1String("-A' \" complex --value");
+    envs[QStringLiteral("VariableB")] = QLatin1String("-B' \" complex --value");
     envProfiles.saveSettings(cfg.rootConfig());
 
     QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
@@ -471,7 +471,7 @@ void LldbTest::testUpdateBreakpoint()
 
     QCOMPARE(session->currentLine(), 23-1); // at the beginning of foo():23: ++i;
 
-    session->addUserCommand(QString("break set --file %1 --line %2").arg(m_debugeeFileName).arg(33));
+    session->addUserCommand(QStringLiteral("break set --file %1 --line %2").arg(m_debugeeFileName).arg(33));
     WAIT_FOR_A_WHILE(session, 20);
 
     QCOMPARE(breakpoints()->rowCount(), 2);
@@ -517,17 +517,17 @@ void LldbTest::testConditionBreakpoint()
     TestLaunchConfiguration cfg;
 
     auto b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), 39);
-    b->setCondition("x[0] == 'H'");
+    b->setCondition(QStringLiteral("x[0] == 'H'"));
 
     b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), 23);
-    b->setCondition("i==2");
+    b->setCondition(QStringLiteral("i==2"));
 
     b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), 24);
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
     WAIT_FOR(session, session->state() == DebugSession::PausedState && session->currentLine() == 24);
-    b->setCondition("i == 0");
+    b->setCondition(QStringLiteral("i == 0"));
     WAIT_FOR_A_WHILE(session, 100);
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -556,7 +556,7 @@ void LldbTest::testBreakOnWriteBreakpoint()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->currentLine(), 24);
 
-    breakpoints()->addWatchpoint("i");
+    breakpoints()->addWatchpoint(QStringLiteral("i"));
     WAIT_FOR_A_WHILE(session, 100);
 
     session->run();
@@ -582,8 +582,8 @@ void LldbTest::testBreakOnWriteWithConditionBreakpoint()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->currentLine(), 24);
 
-    KDevelop::Breakpoint *b = breakpoints()->addWatchpoint("i");
-    b->setCondition("i==2");
+    KDevelop::Breakpoint *b = breakpoints()->addWatchpoint(QStringLiteral("i"));
+    b->setCondition(QStringLiteral("i==2"));
     QTest::qWait(100);
 
     session->run();
@@ -602,7 +602,7 @@ void LldbTest::testBreakOnReadBreakpoint()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    breakpoints()->addReadWatchpoint("foo::i");
+    breakpoints()->addReadWatchpoint(QStringLiteral("foo::i"));
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
@@ -625,7 +625,7 @@ void LldbTest::testBreakOnReadBreakpoint2()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->currentLine(), 24);
 
-    breakpoints()->addReadWatchpoint("i");
+    breakpoints()->addReadWatchpoint(QStringLiteral("i"));
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -652,7 +652,7 @@ void LldbTest::testBreakOnAccessBreakpoint()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->currentLine(), 24);
 
-    breakpoints()->addAccessWatchpoint("i");
+    breakpoints()->addAccessWatchpoint(QStringLiteral("i"));
 
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -674,7 +674,7 @@ void LldbTest::testBreakOnAccessBreakpoint()
 void LldbTest::testInsertBreakpointWhileRunning()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeeslow"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeeslow")));
     QString fileName = findSourceFile("debugeeslow.cpp");
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -698,7 +698,7 @@ void LldbTest::testInsertBreakpointWhileRunning()
 void LldbTest::testInsertBreakpointWhileRunningMultiple()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeeslow"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeeslow")));
     QString fileName = findSourceFile("debugeeslow.cpp");
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -733,7 +733,7 @@ void LldbTest::testInsertBreakpointFunctionName()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    breakpoints()->addCodeBreakpoint("main");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -749,7 +749,7 @@ void LldbTest::testManualBreakpoint()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    breakpoints()->addCodeBreakpoint("main");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -759,22 +759,22 @@ void LldbTest::testManualBreakpoint()
     WAIT_FOR_A_WHILE(session, 100);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
-    session->addCommand(MI::NonMI, "break set --file debugee.cpp --line 23");
+    session->addCommand(MI::NonMI, QStringLiteral("break set --file debugee.cpp --line 23"));
     WAIT_FOR_A_WHILE(session, 100);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
     auto b = breakpoints()->breakpoint(0);
     QCOMPARE(b->line(), 22);
 
-    session->addCommand(MI::NonMI, "break disable 2");
-    session->addCommand(MI::NonMI, "break modify -c 'i == 1' 2");
-    session->addCommand(MI::NonMI, "break modify -i 1 2");
+    session->addCommand(MI::NonMI, QStringLiteral("break disable 2"));
+    session->addCommand(MI::NonMI, QStringLiteral("break modify -c 'i == 1' 2"));
+    session->addCommand(MI::NonMI, QStringLiteral("break modify -i 1 2"));
     WAIT_FOR_A_WHILE(session, 1000);
     QCOMPARE(b->enabled(), false);
     QCOMPARE(b->condition(), QString("i == 1"));
     QCOMPARE(b->ignoreHits(), 1);
 
-    session->addCommand(MI::NonMI, "break delete 2");
+    session->addCommand(MI::NonMI, QStringLiteral("break delete 2"));
     WAIT_FOR_A_WHILE(session, 100);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
@@ -786,7 +786,7 @@ void LldbTest::testManualBreakpoint()
 void LldbTest::testInsertAndRemoveBreakpointWhileRunning()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeeslow"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeeslow")));
 
     QString fileName = findSourceFile("debugeeslow.cpp");
 
@@ -808,12 +808,12 @@ void LldbTest::testPickupManuallyInsertedBreakpoint()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    breakpoints()->addCodeBreakpoint("main");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
-    session->addCommand(MI::NonMI, "break set --file debugee.cpp --line 32");
+    session->addCommand(MI::NonMI, QStringLiteral("break set --file debugee.cpp --line 32"));
     session->stepInto();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->breakpoints().count(), 2);
@@ -833,14 +833,14 @@ void LldbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
     //inject here, so it behaves similar like a command from .lldbinit
     QTemporaryFile configScript;
     configScript.open();
-    configScript.write(QString("break set --file %0 --line 32\n").arg(sourceFile).toLocal8Bit());
+    configScript.write(QStringLiteral("break set --file %0 --line 32\n").arg(sourceFile).toLocal8Bit());
     configScript.close();
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
     grp.writeEntry(Config::LldbConfigScriptEntry, QUrl::fromLocalFile(configScript.fileName()));
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile("debugee.cpp"), 31);
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(QStringLiteral("debugee.cpp")), 31);
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -854,7 +854,7 @@ void LldbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
 void LldbTest::testBreakpointWithSpaceInPath()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeespace"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeespace")));
 
     KConfigGroup grp = cfg.config();
     QString fileName = findSourceFile("debugee space.cpp");
@@ -898,9 +898,9 @@ void LldbTest::testBreakpointDisabledOnStart()
 void LldbTest::testMultipleLocationsBreakpoint()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeemultilocbreakpoint"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeemultilocbreakpoint")));
 
-    breakpoints()->addCodeBreakpoint("aPlusB");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("aPlusB"));
 
     //TODO check if the additional location breakpoint is added
 
@@ -921,8 +921,8 @@ void LldbTest::testMultipleBreakpoint()
     TestDebugSession *session = new TestDebugSession;
 
     //there'll be about 3-4 breakpoints, but we treat it like one.
-    TestLaunchConfiguration c(findExecutable("lldb_debugeemultiplebreakpoint"));
-    auto b = breakpoints()->addCodeBreakpoint("debugeemultiplebreakpoint.cpp:52");
+    TestLaunchConfiguration c(findExecutable(QStringLiteral("lldb_debugeemultiplebreakpoint")));
+    auto b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeemultiplebreakpoint.cpp:52"));
 
     QVERIFY(session->startDebugging(&c, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -939,20 +939,20 @@ void LldbTest::testRegularExpressionBreakpoint()
     QSKIP("Skipping... lldb has only one breakpoint for multiple locations"
           " (and lldb-mi returns the first one), not support this yet");
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration c(findExecutable("lldb_debugeemultilocbreakpoint"));
+    TestLaunchConfiguration c(findExecutable(QStringLiteral("lldb_debugeemultilocbreakpoint")));
 
-    breakpoints()->addCodeBreakpoint("main");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
     QVERIFY(session->startDebugging(&c, m_iface));
 
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
-    session->addCommand(MI::NonMI, "break set --func-regex .*aPl.*B");
+    session->addCommand(MI::NonMI, QStringLiteral("break set --func-regex .*aPl.*B"));
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     QCOMPARE(breakpoints()->breakpoints().count(), 3);
 
-    session->addCommand(MI::BreakDelete, "");
+    session->addCommand(MI::BreakDelete, QLatin1String(""));
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -961,9 +961,9 @@ void LldbTest::testChangeBreakpointWhileRunning()
 {
     QSKIP("Skipping... lldb-mi command -break-enable doesn't enable breakpoint");
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration c(findExecutable("lldb_debugeeslow"));
+    TestLaunchConfiguration c(findExecutable(QStringLiteral("lldb_debugeeslow")));
 
-    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("debugeeslow.cpp:25");
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:25"));
     QVERIFY(session->startDebugging(&c, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
@@ -980,7 +980,7 @@ void LldbTest::testChangeBreakpointWhileRunning()
     qDebug() << "Enabling breakpoint";
 
     // Use native user command works, but not through -break-enable, which is triggered by setData
-    session->addCommand(MI::NonMI, "break enable");
+    session->addCommand(MI::NonMI, QStringLiteral("break enable"));
     //b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
 
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -994,7 +994,7 @@ void LldbTest::testChangeBreakpointWhileRunning()
 void LldbTest::testCatchpoint()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeeexception"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeeexception")));
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
     TestFrameStackModel* fsModel = session->frameStackModel();
@@ -1007,7 +1007,7 @@ void LldbTest::testCatchpoint()
     QCOMPARE(fsModel->currentFrame(), 0);
     QCOMPARE(session->currentLine(), 29);
 
-    session->addCommand(MI::NonMI, "break set -E c++");
+    session->addCommand(MI::NonMI, QStringLiteral("break set -E c++"));
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
@@ -1114,7 +1114,7 @@ void LldbTest::testStack()
 void LldbTest::testStackFetchMore()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeerecursion"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeerecursion")));
     QString fileName = findSourceFile("debugeerecursion.cpp");
 
     TestFrameStackModel *stackModel = session->frameStackModel();
@@ -1223,7 +1223,7 @@ void LldbTest::testStackSwitchThread()
 {
     QSKIP("Skipping... lldb-mi crashes when break at a location with multiple threads running");
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeethreads"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeethreads")));
     QString fileName = findSourceFile("debugeethreads.cpp");
 
     TestFrameStackModel *stackModel = session->frameStackModel();
@@ -1259,7 +1259,7 @@ void LldbTest::testAttach()
     QString fileName = findSourceFile("debugeeslow.cpp");
 
     KProcess debugeeProcess;
-    debugeeProcess << "nice" << findExecutable("lldb_debugeeslow").toLocalFile();
+    debugeeProcess << QStringLiteral("nice") << findExecutable(QStringLiteral("lldb_debugeeslow")).toLocalFile();
     debugeeProcess.start();
     QVERIFY(debugeeProcess.waitForStarted());
     QTest::qWait(100);
@@ -1285,7 +1285,7 @@ void LldbTest::testAttach()
 void LldbTest::testRemoteDebugging()
 {
     KProcess gdbServer;
-    gdbServer << "lldb-server" << "gdbserver" << "*:1234";
+    gdbServer << QStringLiteral("lldb-server") << QStringLiteral("gdbserver") << QStringLiteral("*:1234");
     gdbServer.start();
     QVERIFY(gdbServer.waitForStarted());
 
@@ -1307,22 +1307,22 @@ void LldbTest::testRemoteDebugging()
 
 void LldbTest::testCoreFile()
 {
-    QFile f("core");
+    QFile f(QStringLiteral("core"));
     if (f.exists()) f.remove();
 
     KProcess debugeeProcess;
     debugeeProcess.setOutputChannelMode(KProcess::MergedChannels);
-    debugeeProcess << "bash" << "-c" << "ulimit -c unlimited; " + findExecutable("lldb_crash").toLocalFile();
+    debugeeProcess << QStringLiteral("bash") << QStringLiteral("-c") << "ulimit -c unlimited; " + findExecutable(QStringLiteral("lldb_crash")).toLocalFile();
     debugeeProcess.start();
     debugeeProcess.waitForFinished();
     qDebug() << debugeeProcess.readAll();
 
-    bool coreFileFound = QFile::exists("core");
+    bool coreFileFound = QFile::exists(QStringLiteral("core"));
     if (!coreFileFound) {
         // Try to use coredumpctl
-        auto coredumpctl = QStandardPaths::findExecutable("coredumpctl");
+        auto coredumpctl = QStandardPaths::findExecutable(QStringLiteral("coredumpctl"));
         if (!coredumpctl.isEmpty()) {
-            QFileInfo fi("core");
+            QFileInfo fi(QStringLiteral("core"));
             KProcess::execute(coredumpctl, {"-1", "-o", fi.absoluteFilePath(), "dump", "lldb_crash"});
             coreFileFound = fi.exists();
         }
@@ -1331,7 +1331,7 @@ void LldbTest::testCoreFile()
         QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).", SkipSingle);
 
     TestDebugSession *session = new TestDebugSession;
-    session->examineCoreFile(findExecutable("lldb_crash"), QUrl::fromLocalFile(QDir::currentPath()+"/core"));
+    session->examineCoreFile(findExecutable(QStringLiteral("lldb_crash")), QUrl::fromLocalFile(QDir::currentPath()+"/core"));
 
     TestFrameStackModel *stackModel = session->frameStackModel();
 
@@ -1393,7 +1393,7 @@ void LldbTest::testVariablesLocalsStruct()
 
     int structIndex = 0;
     for(int j=0; j<3; ++j) {
-        if (variableCollection()->index(j, 0, i).data().toString() == "ts") {
+        if (variableCollection()->index(j, 0, i).data().toString() == QLatin1String("ts")) {
             structIndex = j;
         }
     }
@@ -1433,7 +1433,7 @@ void LldbTest::testVariablesWatches()
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
-    variableCollection()->watches()->add("ts");
+    variableCollection()->watches()->add(QStringLiteral("ts"));
     WAIT_FOR_A_WHILE(session, 300);
 
     QModelIndex i = variableCollection()->index(0, 0);
@@ -1472,8 +1472,8 @@ void LldbTest::testVariablesWatchesQuotes()
     // the unquoted string (the actual content):               t\"t
     // quoted string (what we would write as a c string):     "t\\\"t"
     // written in source file:                             R"("t\\\"t")"
-    const QString testString("t\\\"t"); // the actual content
-    const QString quotedTestString(R"("t\\\"t")");
+    const QString testString(QStringLiteral("t\\\"t")); // the actual content
+    const QString quotedTestString(QStringLiteral(R"("t\\\"t")"));
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(m_debugeeFileName), 38);
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -1517,7 +1517,7 @@ void LldbTest::testVariablesWatchesTwoSessions()
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
-    variableCollection()->watches()->add("ts");
+    variableCollection()->watches()->add(QStringLiteral("ts"));
     WAIT_FOR_A_WHILE(session, 300);
 
     QModelIndex ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
@@ -1693,7 +1693,7 @@ void LldbTest::testSwitchFrameLldbConsole()
     WAIT_FOR_A_WHILE(session, 500);
     QCOMPARE(stackModel->currentFrame(), 1);
 
-    session->addUserCommand("print i");
+    session->addUserCommand(QStringLiteral("print i"));
     WAIT_FOR_A_WHILE(session, 500);
     //currentFrame must not reset to 0; Bug 222882
     QCOMPARE(stackModel->currentFrame(), 1);
@@ -1702,7 +1702,7 @@ void LldbTest::testSwitchFrameLldbConsole()
 void LldbTest::testSegfaultDebugee()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_crash"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_crash")));
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
@@ -1726,9 +1726,9 @@ void LldbTest::testSegfaultDebugee()
 void LldbTest::testCommandOrderFastStepping()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeeqt"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeeqt")));
 
-    breakpoints()->addCodeBreakpoint("main");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
     QVERIFY(session->startDebugging(&cfg, m_iface));
     for(int i=0; i<20; i++) {
         session->stepInto();
@@ -1774,7 +1774,7 @@ void LldbTest::testBug301287()
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
-    variableCollection()->watches()->add("argc");
+    variableCollection()->watches()->add(QStringLiteral("argc"));
     WAIT_FOR_A_WHILE(session, 300);
 
     QModelIndex i = variableCollection()->index(0, 0);
@@ -1841,9 +1841,9 @@ void LldbTest::testSpecialPath()
 
     TestDebugSession* session = new TestDebugSession;
 
-    auto debugee = findExecutable("path with space/lldb_spacedebugee");
+    auto debugee = findExecutable(QStringLiteral("path with space/lldb_spacedebugee"));
     TestLaunchConfiguration c(debugee, KIO::upUrl(debugee));
-    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("spacedebugee.cpp:30");
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("spacedebugee.cpp:30"));
     QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
 
     QVERIFY(session->startDebugging(&c, m_iface));
@@ -1861,8 +1861,8 @@ void KDevMI::LLDB::LldbTest::testEnvironmentCd()
 
     QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
 
-    auto path = KIO::upUrl(findExecutable("path with space/lldb_spacedebugee"));
-    TestLaunchConfiguration cfg(findExecutable("lldb_debugeepath"), path);
+    auto path = KIO::upUrl(findExecutable(QStringLiteral("path with space/lldb_spacedebugee")));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("lldb_debugeepath")), path);
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);

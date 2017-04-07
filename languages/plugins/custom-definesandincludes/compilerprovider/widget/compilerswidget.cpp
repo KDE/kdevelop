@@ -75,7 +75,7 @@ CompilersWidget::CompilersWidget(QWidget* parent)
     connect(m_ui->removeButton, &QPushButton::clicked, this, &CompilersWidget::deleteCompiler);
 
     auto delAction = new QAction( i18n("Delete compiler"), this );
-    delAction->setShortcut( QKeySequence( "Del" ) );
+    delAction->setShortcut( QKeySequence( QStringLiteral("Del") ) );
     delAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     m_ui->compilers->addAction( delAction );
     connect( delAction, &QAction::triggered, this, &CompilersWidget::deleteCompiler );

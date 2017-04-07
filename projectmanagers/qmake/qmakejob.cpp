@@ -35,7 +35,7 @@ QMakeJob::QMakeJob(QString srcDir, QString buildDir, QObject* parent)
     : OutputJob(parent)
     , m_srcDir(std::move(srcDir))
     , m_buildDir(std::move(buildDir))
-    , m_qmakePath("qmake")
+    , m_qmakePath(QStringLiteral("qmake"))
     , m_buildType(0)
     , m_process(nullptr)
     , m_model(nullptr)
@@ -83,7 +83,7 @@ void QMakeJob::start()
 
     QStringList args;
     if (m_buildType < 2)
-        args << QString("CONFIG+=") + BUILD_TYPES[m_buildType];
+        args << QStringLiteral("CONFIG+=") + BUILD_TYPES[m_buildType];
     if (!m_installPrefix.isEmpty())
         args << "target.path=" + m_installPrefix;
     if (!m_extraArguments.isEmpty()) {
@@ -100,9 +100,9 @@ void QMakeJob::start()
             }
         }
     }
-    args << "-r" << m_srcDir;
+    args << QStringLiteral("-r") << m_srcDir;
 
-    m_model->appendLine(m_buildDir + ": " + args.join(" "));
+    m_model->appendLine(m_buildDir + ": " + args.join(QStringLiteral(" ")));
 
     QDir build(m_buildDir);
     if (!build.exists()) {

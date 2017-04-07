@@ -164,7 +164,7 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
                            const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin,
                            CustomTestFunction customTestFunction = {})
 {
-    TestFile file(code, "cpp");
+    TestFile file(code, QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
     executeCompletionTest(file.topContext(), expectedCompletionItems, filters, customTestFunction);
 }
@@ -172,7 +172,7 @@ void executeCompletionTest(const QString& code, const CompletionItems& expectedC
 void executeCompletionPriorityTest(const QString& code, const CompletionPriorityItems& expectedCompletionItems,
                            const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin)
 {
-    TestFile file(code, "cpp");
+    TestFile file(code, QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
     DUChainReadLocker lock;
     auto top = file.topContext();
@@ -209,7 +209,7 @@ void executeCompletionPriorityTest(const QString& code, const CompletionPriority
 void executeMemberAccessReplacerTest(const QString& code, const CompletionItems& expectedCompletionItems,
                                      const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin)
 {
-    TestFile file(code, "cpp");
+    TestFile file(code, QStringLiteral("cpp"));
 
     auto document = ICore::self()->documentController()->openDocument(file.url().toUrl());
     QVERIFY(document);
@@ -804,16 +804,16 @@ void TestCodeCompletion::testImplement_data()
 
 void TestCodeCompletion::testImplementOtherFile()
 {
-    TestFile header1("void foo();", "h");
+    TestFile header1(QStringLiteral("void foo();"), QStringLiteral("h"));
     QVERIFY(header1.parseAndWait());
-    TestFile header2("void bar();", "h");
+    TestFile header2(QStringLiteral("void bar();"), QStringLiteral("h"));
     QVERIFY(header2.parseAndWait());
     TestFile impl(QString("#include \"%1\"\n"
                           "#include \"%2\"\n"
                           "void asdf();\n\n")
                     .arg(header1.url().str())
                     .arg(header2.url().str()),
-                  "cpp", &header1);
+                  QStringLiteral("cpp"), &header1);
 
     CompletionItems expectedItems{{3,1}, {"asdf()", "foo()"}};
     QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
@@ -822,12 +822,12 @@ void TestCodeCompletion::testImplementOtherFile()
 
 void TestCodeCompletion::testImplementAfterEdit()
 {
-    TestFile header1("void foo();", "h");
+    TestFile header1(QStringLiteral("void foo();"), QStringLiteral("h"));
     QVERIFY(header1.parseAndWait());
     TestFile impl(QString("#include \"%1\"\n"
                           "void asdf() {}\nvoid bar() {}")
                     .arg(header1.url().str()),
-                  "cpp", &header1);
+                  QStringLiteral("cpp"), &header1);
 
     auto document = ICore::self()->documentController()->openDocument(impl.url().toUrl());
 
@@ -836,7 +836,7 @@ void TestCodeCompletion::testImplementAfterEdit()
     CompletionItems expectedItems{{2,0}, {"foo()"}};
     executeCompletionTest(impl.topContext(), expectedItems);
 
-    document->textDocument()->insertText(expectedItems.position, "\n");
+    document->textDocument()->insertText(expectedItems.position, QStringLiteral("\n"));
     expectedItems.position.setLine(3);
 
     executeCompletionTest(impl.topContext(), expectedItems);
@@ -869,54 +869,54 @@ void TestCodeCompletion::testIncludePathCompletion_data()
     QTest::addColumn<QString>("itemId");
     QTest::addColumn<QString>("result");
 
-    QTest::newRow("global-1") << QString("#include ") << KTextEditor::Cursor(0, 9)
-                              << QString("iostream") << QString("#include <iostream>");
-    QTest::newRow("global-2") << QString("#include <") << KTextEditor::Cursor(0, 9)
-                              << QString("iostream") << QString("#include <iostream>");
-    QTest::newRow("global-3") << QString("#include <") << KTextEditor::Cursor(0, 10)
-                              << QString("iostream") << QString("#include <iostream>");
-    QTest::newRow("global-4") << QString("#  include <") << KTextEditor::Cursor(0, 12)
-                              << QString("iostream") << QString("#  include <iostream>");
-    QTest::newRow("global-5") << QString("#  include   <") << KTextEditor::Cursor(0, 14)
-                              << QString("iostream") << QString("#  include   <iostream>");
-    QTest::newRow("global-6") << QString("#  include   <> /* 1 */") << KTextEditor::Cursor(0, 14)
-                              << QString("iostream") << QString("#  include   <iostream> /* 1 */");
-    QTest::newRow("global-7") << QString("#  include /* 1 */ <> /* 1 */") << KTextEditor::Cursor(0, 21)
-                              << QString("iostream") << QString("#  include /* 1 */ <iostream> /* 1 */");
-    QTest::newRow("global-8") << QString("# /* 1 */ include /* 1 */ <> /* 1 */") << KTextEditor::Cursor(0, 28)
-                              << QString("iostream") << QString("# /* 1 */ include /* 1 */ <iostream> /* 1 */");
-    QTest::newRow("global-9") << QString("#include <cstdint>") << KTextEditor::Cursor(0, 10)
-                              << QString("iostream") << QString("#include <iostream>");
-    QTest::newRow("global-10") << QString("#include <cstdint>") << KTextEditor::Cursor(0, 14)
-                              << QString("cstdint") << QString("#include <cstdint>");
-    QTest::newRow("global-11") << QString("#include <cstdint>") << KTextEditor::Cursor(0, 17)
-                              << QString("cstdint") << QString("#include <cstdint>");
-    QTest::newRow("local-0") << QString("#include \"") << KTextEditor::Cursor(0, 10)
-                              << QString("foo/") << QString("#include \"foo/\"");
-    QTest::newRow("local-1") << QString("#include \"foo/\"") << KTextEditor::Cursor(0, 14)
-                              << QString("bar/") << QString("#include \"foo/bar/\"");
-    QTest::newRow("local-2") << QString("#include \"foo/") << KTextEditor::Cursor(0, 14)
-                              << QString("bar/") << QString("#include \"foo/bar/\"");
-    QTest::newRow("local-3") << QString("# /* 1 */ include /* 1 */ \"\" /* 1 */") << KTextEditor::Cursor(0, 28)
-                              << QString("foo/") << QString("# /* 1 */ include /* 1 */ \"foo/\" /* 1 */");
-    QTest::newRow("local-4") << QString("# /* 1 */ include /* 1 */ \"foo/\" /* 1 */") << KTextEditor::Cursor(0, 31)
-                              << QString("bar/") << QString("# /* 1 */ include /* 1 */ \"foo/bar/\" /* 1 */");
-    QTest::newRow("local-5") << QString("#include \"foo/\"") << KTextEditor::Cursor(0, 10)
-                              << QString("foo/") << QString("#include \"foo/\"");
-    QTest::newRow("local-6") << QString("#include \"foo/asdf\"") << KTextEditor::Cursor(0, 10)
-                              << QString("foo/") << QString("#include \"foo/\"");
-    QTest::newRow("local-7") << QString("#include \"foo/asdf\"") << KTextEditor::Cursor(0, 14)
-                              << QString("bar/") << QString("#include \"foo/bar/\"");
-    QTest::newRow("dash-1") << QString("#include \"") << KTextEditor::Cursor(0, 10)
-                              << QString("dash-file.h") << QString("#include \"dash-file.h\"");
-    QTest::newRow("dash-2") << QString("#include \"dash-") << KTextEditor::Cursor(0, 15)
-                              << QString("dash-file.h") << QString("#include \"dash-file.h\"");
-    QTest::newRow("dash-4") << QString("#include \"dash-file.h\"") << KTextEditor::Cursor(0, 13)
-                              << QString("dash-file.h") << QString("#include \"dash-file.h\"");
-    QTest::newRow("dash-5") << QString("#include \"dash-file.h\"") << KTextEditor::Cursor(0, 14)
-                              << QString("dash-file.h") << QString("#include \"dash-file.h\"");
-    QTest::newRow("dash-6") << QString("#include \"dash-file.h\"") << KTextEditor::Cursor(0, 15)
-                              << QString("dash-file.h") << QString("#include \"dash-file.h\"");
+    QTest::newRow("global-1") << QStringLiteral("#include ") << KTextEditor::Cursor(0, 9)
+                              << QStringLiteral("iostream") << QStringLiteral("#include <iostream>");
+    QTest::newRow("global-2") << QStringLiteral("#include <") << KTextEditor::Cursor(0, 9)
+                              << QStringLiteral("iostream") << QStringLiteral("#include <iostream>");
+    QTest::newRow("global-3") << QStringLiteral("#include <") << KTextEditor::Cursor(0, 10)
+                              << QStringLiteral("iostream") << QStringLiteral("#include <iostream>");
+    QTest::newRow("global-4") << QStringLiteral("#  include <") << KTextEditor::Cursor(0, 12)
+                              << QStringLiteral("iostream") << QStringLiteral("#  include <iostream>");
+    QTest::newRow("global-5") << QStringLiteral("#  include   <") << KTextEditor::Cursor(0, 14)
+                              << QStringLiteral("iostream") << QStringLiteral("#  include   <iostream>");
+    QTest::newRow("global-6") << QStringLiteral("#  include   <> /* 1 */") << KTextEditor::Cursor(0, 14)
+                              << QStringLiteral("iostream") << QStringLiteral("#  include   <iostream> /* 1 */");
+    QTest::newRow("global-7") << QStringLiteral("#  include /* 1 */ <> /* 1 */") << KTextEditor::Cursor(0, 21)
+                              << QStringLiteral("iostream") << QStringLiteral("#  include /* 1 */ <iostream> /* 1 */");
+    QTest::newRow("global-8") << QStringLiteral("# /* 1 */ include /* 1 */ <> /* 1 */") << KTextEditor::Cursor(0, 28)
+                              << QStringLiteral("iostream") << QStringLiteral("# /* 1 */ include /* 1 */ <iostream> /* 1 */");
+    QTest::newRow("global-9") << QStringLiteral("#include <cstdint>") << KTextEditor::Cursor(0, 10)
+                              << QStringLiteral("iostream") << QStringLiteral("#include <iostream>");
+    QTest::newRow("global-10") << QStringLiteral("#include <cstdint>") << KTextEditor::Cursor(0, 14)
+                              << QStringLiteral("cstdint") << QStringLiteral("#include <cstdint>");
+    QTest::newRow("global-11") << QStringLiteral("#include <cstdint>") << KTextEditor::Cursor(0, 17)
+                              << QStringLiteral("cstdint") << QStringLiteral("#include <cstdint>");
+    QTest::newRow("local-0") << QStringLiteral("#include \"") << KTextEditor::Cursor(0, 10)
+                              << QStringLiteral("foo/") << QStringLiteral("#include \"foo/\"");
+    QTest::newRow("local-1") << QStringLiteral("#include \"foo/\"") << KTextEditor::Cursor(0, 14)
+                              << QStringLiteral("bar/") << QStringLiteral("#include \"foo/bar/\"");
+    QTest::newRow("local-2") << QStringLiteral("#include \"foo/") << KTextEditor::Cursor(0, 14)
+                              << QStringLiteral("bar/") << QStringLiteral("#include \"foo/bar/\"");
+    QTest::newRow("local-3") << QStringLiteral("# /* 1 */ include /* 1 */ \"\" /* 1 */") << KTextEditor::Cursor(0, 28)
+                              << QStringLiteral("foo/") << QStringLiteral("# /* 1 */ include /* 1 */ \"foo/\" /* 1 */");
+    QTest::newRow("local-4") << QStringLiteral("# /* 1 */ include /* 1 */ \"foo/\" /* 1 */") << KTextEditor::Cursor(0, 31)
+                              << QStringLiteral("bar/") << QStringLiteral("# /* 1 */ include /* 1 */ \"foo/bar/\" /* 1 */");
+    QTest::newRow("local-5") << QStringLiteral("#include \"foo/\"") << KTextEditor::Cursor(0, 10)
+                              << QStringLiteral("foo/") << QStringLiteral("#include \"foo/\"");
+    QTest::newRow("local-6") << QStringLiteral("#include \"foo/asdf\"") << KTextEditor::Cursor(0, 10)
+                              << QStringLiteral("foo/") << QStringLiteral("#include \"foo/\"");
+    QTest::newRow("local-7") << QStringLiteral("#include \"foo/asdf\"") << KTextEditor::Cursor(0, 14)
+                              << QStringLiteral("bar/") << QStringLiteral("#include \"foo/bar/\"");
+    QTest::newRow("dash-1") << QStringLiteral("#include \"") << KTextEditor::Cursor(0, 10)
+                              << QStringLiteral("dash-file.h") << QStringLiteral("#include \"dash-file.h\"");
+    QTest::newRow("dash-2") << QStringLiteral("#include \"dash-") << KTextEditor::Cursor(0, 15)
+                              << QStringLiteral("dash-file.h") << QStringLiteral("#include \"dash-file.h\"");
+    QTest::newRow("dash-4") << QStringLiteral("#include \"dash-file.h\"") << KTextEditor::Cursor(0, 13)
+                              << QStringLiteral("dash-file.h") << QStringLiteral("#include \"dash-file.h\"");
+    QTest::newRow("dash-5") << QStringLiteral("#include \"dash-file.h\"") << KTextEditor::Cursor(0, 14)
+                              << QStringLiteral("dash-file.h") << QStringLiteral("#include \"dash-file.h\"");
+    QTest::newRow("dash-6") << QStringLiteral("#include \"dash-file.h\"") << KTextEditor::Cursor(0, 15)
+                              << QStringLiteral("dash-file.h") << QStringLiteral("#include \"dash-file.h\"");
 }
 
 void TestCodeCompletion::testIncludePathCompletion()
@@ -929,7 +929,7 @@ void TestCodeCompletion::testIncludePathCompletion()
     QTemporaryDir tempDir;
     QDir dir(tempDir.path());
     QVERIFY(dir.mkpath("foo/bar/asdf"));
-    TestFile file(code, "cpp", nullptr, tempDir.path());
+    TestFile file(code, QStringLiteral("cpp"), nullptr, tempDir.path());
     {
         QFile otherFile(tempDir.path() + "/dash-file.h");
         QVERIFY(otherFile.open(QIODevice::WriteOnly));
@@ -961,8 +961,8 @@ void TestCodeCompletion::testIncludePathCompletion()
 
 void TestCodeCompletion::testIncludePathCompletionLocal()
 {
-    TestFile header("int foo() { return 42; }\n", "h");
-    TestFile impl("#include \"", "cpp", &header);
+    TestFile header(QStringLiteral("int foo() { return 42; }\n"), QStringLiteral("h"));
+    TestFile impl(QStringLiteral("#include \""), QStringLiteral("cpp"), &header);
 
     IncludeTester tester(executeIncludePathCompletion(&impl, {0, 10}));
     QVERIFY(tester.names.contains(header.url().toUrl().fileName()));
@@ -971,7 +971,7 @@ void TestCodeCompletion::testIncludePathCompletionLocal()
 
 void TestCodeCompletion::testOverloadedFunctions()
 {
-    TestFile file("void f(); int f(int); void f(int, double){\n ", "cpp");
+    TestFile file(QStringLiteral("void f(); int f(int); void f(int, double){\n "), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
     DUChainReadLocker lock;
     auto top = file.topContext();
@@ -1060,7 +1060,7 @@ void TestCodeCompletion::testCompletionPriority_data()
 
 void TestCodeCompletion::testVariableScope()
 {
-    TestFile file("int var; \nvoid test(int var) {int tmp =\n }", "cpp");
+    TestFile file(QStringLiteral("int var; \nvoid test(int var) {int tmp =\n }"), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
     DUChainReadLocker lock;
     auto top = file.topContext();
@@ -1146,7 +1146,7 @@ void TestCodeCompletion::testArgumentHintCompletionDefaultParameters()
     QSKIP("You need at least LibClang 3.7");
 #endif
 
-    TestFile file("void f(int i, int j = 0, double k =1){\nf( ", "cpp");
+    TestFile file(QStringLiteral("void f(int i, int j = 0, double k =1){\nf( "), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
     DUChainReadLocker lock;
     auto top = file.topContext();
@@ -1225,7 +1225,7 @@ void TestCodeCompletion::testIgnoreGccBuiltins()
     m_projectController->addProject(project);
 
     {
-        TestFile file("", "cpp", project, dir.path());
+        TestFile file(QLatin1String(""), QStringLiteral("cpp"), project, dir.path());
 
         QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
 

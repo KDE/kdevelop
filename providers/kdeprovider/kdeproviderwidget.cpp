@@ -52,7 +52,7 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     topLayout->addWidget(filterLine);
 
     
-    QPushButton* settings=new QPushButton(QIcon::fromTheme("configure"), i18n("Settings"), this);
+    QPushButton* settings=new QPushButton(QIcon::fromTheme(QStringLiteral("configure")), i18n("Settings"), this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     connect(settings, &QPushButton::clicked, this, &KDEProviderWidget::showSettings);
 
@@ -74,7 +74,7 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
 VcsLocation extractLocation(const QModelIndex& pos)
 {
     QString gitUrl=KDEProviderSettings::self()->gitProtocol();
-    if(gitUrl=="kde:") {
+    if(gitUrl==QLatin1String("kde:")) {
         return VcsLocation(QUrl("kde:"+pos.data(KDEProjectsModel::IdentifierRole).toString()));
     } else {
         QMap<QString, QVariant> urls = pos.data(KDEProjectsModel::VcsLocationRole).toMap();
@@ -88,7 +88,7 @@ VcsJob* KDEProviderWidget::createWorkingCopy(const QUrl &destinationDirectory)
     if(!pos.isValid())
         return nullptr;
     
-    IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
+    IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"), QStringLiteral("kdevgit"));
     if (!plugin) {
         KMessageBox::error(nullptr, i18n("The Git plugin could not be loaded which is required to download a KDE project."), i18n("KDE Provider Error"));
         return nullptr;
@@ -106,7 +106,7 @@ bool KDEProviderWidget::isCorrect() const
 
 void KDEProviderWidget::showSettings()
 {
-    KConfigDialog* dialog = new KConfigDialog(this, "settings", KDEProviderSettings::self());
+    KConfigDialog* dialog = new KConfigDialog(this, QStringLiteral("settings"), KDEProviderSettings::self());
     dialog->setFaceType(KPageDialog::Auto);
     QWidget* page = new QWidget(dialog);
 

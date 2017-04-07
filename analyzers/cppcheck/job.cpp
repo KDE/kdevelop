@@ -70,8 +70,8 @@ Job::~Job()
 
 void Job::postProcessStdout(const QStringList& lines)
 {
-    static const auto fileNameRegex = QRegularExpression("Checking ([^:]*)\\.{3}");
-    static const auto percentRegex  = QRegularExpression("(\\d+)% done");
+    static const auto fileNameRegex = QRegularExpression(QStringLiteral("Checking ([^:]*)\\.{3}"));
+    static const auto percentRegex  = QRegularExpression(QStringLiteral("(\\d+)% done"));
 
     QRegularExpressionMatch match;
 
@@ -98,7 +98,7 @@ void Job::postProcessStdout(const QStringList& lines)
 
 void Job::postProcessStderr(const QStringList& lines)
 {
-    static const auto xmlStartRegex = QRegularExpression("\\s*<");
+    static const auto xmlStartRegex = QRegularExpression(QStringLiteral("\\s*<"));
 
     for (const QString & line : lines) {
         // unfortunately sometime cppcheck send non-XML messages to stderr.
@@ -122,7 +122,7 @@ void Job::postProcessStderr(const QStringList& lines)
 
             problem->setSeverity(KDevelop::IProblem::Error);
             problem->setDescription(line);
-            problem->setExplanation("Check your cppcheck settings");
+            problem->setExplanation(QStringLiteral("Check your cppcheck settings"));
 
             m_problems = {problem};
             emitProblems();

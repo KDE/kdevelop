@@ -35,7 +35,7 @@
 namespace gh
 {
 /// Base url for the Github API v3.
-const static QUrl baseUrl("https://api.github.com");
+const static QUrl baseUrl(QStringLiteral("https://api.github.com"));
 
 Resource::Resource(QObject *parent, ProviderModel *model)
     : QObject(parent), m_model(model)
@@ -52,7 +52,7 @@ void Resource::searchRepos(const QString &uri, const QString &token)
 
 void Resource::getOrgs(const QString &token)
 {
-    KIO::TransferJob *job = getTransferJob("/user/orgs", token);
+    KIO::TransferJob *job = getTransferJob(QStringLiteral("/user/orgs"), token);
     connect(job, &KIO::TransferJob::data,
             this, &Resource::slotOrgs);
 }
@@ -71,7 +71,7 @@ void Resource::authenticate(const QString &name, const QString &password)
 
     KIO::StoredTransferJob *job = KIO::storedHttpPost(data, url, KIO::HideProgressInfo);
     job->setProperty("requestedTokenName", tokenName);
-    job->addMetaData("customHTTPHeader", "Authorization: Basic " + QString (name + ':' + password).toUtf8().toBase64());
+    job->addMetaData(QStringLiteral("customHTTPHeader"), "Authorization: Basic " + QString (name + ':' + password).toUtf8().toBase64());
     connect(job, &KIO::StoredTransferJob::result, this, &Resource::slotAuthenticate);
     job->start();
 }
@@ -81,7 +81,7 @@ void Resource::revokeAccess(const QString &id, const QString &name, const QStrin
     QUrl url = baseUrl;
     url.setPath(url.path() + "/authorizations/" + id);
     KIO::TransferJob *job = KIO::http_delete(url, KIO::HideProgressInfo);
-    job->addMetaData("customHTTPHeader", "Authorization: Basic " + QString (name + ':' + password).toUtf8().toBase64());
+    job->addMetaData(QStringLiteral("customHTTPHeader"), "Authorization: Basic " + QString (name + ':' + password).toUtf8().toBase64());
     /* And we don't care if it's successful ;) */
     job->start();
 }
@@ -93,7 +93,7 @@ KIO::TransferJob * Resource::getTransferJob(const QString &uri, const QString &t
     url.setPath(url.path() + '/' + uri);
     KIO::TransferJob *job = KIO::get(url, KIO::Reload, KIO::HideProgressInfo);
     if (!token.isEmpty())
-        job->addMetaData("customHTTPHeader", "Authorization: token " + token);
+        job->addMetaData(QStringLiteral("customHTTPHeader"), "Authorization: token " + token);
     return job;
 }
 
@@ -108,11 +108,11 @@ void Resource::retrieveRepos(const QByteArray &data)
         foreach (const QVariant &it, map) {
             const QVariantMap &map = it.toMap();
             Response res;
-            res.name = map.value("name").toString();
-            res.url = map.value("clone_url").toUrl();
-            if (map.value("fork").toBool())
+            res.name = map.value(QStringLiteral("name")).toString();
+            res.url = map.value(QStringLiteral("clone_url")).toUrl();
+            if (map.value(QStringLiteral("fork")).toBool())
                 res.kind = Fork;
-            else if (map.value("private").toBool())
+            else if (map.value(QStringLiteral("private")).toBool())
                 res.kind = Private;
             else
                 res.kind = Public;
@@ -133,7 +133,7 @@ void Resource::retrieveOrgs(const QByteArray &data)
         QVariantList json = doc.toVariant().toList();
         foreach (QVariant it, json) {
             QVariantMap map = it.toMap();
-            res << map.value("login").toString();
+            res << map.value(QStringLiteral("login")).toString();
         }
     }
     emit orgsUpdated(res);
@@ -156,8 +156,8 @@ void Resource::slotAuthenticate(KJob *job)
 
     if (error.error == 0) {
         QVariantMap map = doc.toVariant().toMap();
-        emit authenticated(map.value("id").toByteArray(),
-                           map.value("token").toByteArray(), tokenName);
+        emit authenticated(map.value(QStringLiteral("id")).toByteArray(),
+                           map.value(QStringLiteral("token")).toByteArray(), tokenName);
     } else
         emit authenticated("", "", tokenName);
 }

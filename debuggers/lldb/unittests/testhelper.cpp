@@ -51,7 +51,7 @@ QString findSourceFile(const char *file, const QString& name)
         return info.canonicalFilePath();
     }
 
-    baseDir.cd("debugees");
+    baseDir.cd(QStringLiteral("debugees"));
     info = baseDir.absoluteFilePath(name);
     Q_ASSERT(info.exists());
     return info.canonicalFilePath();
@@ -60,7 +60,7 @@ QString findSourceFile(const char *file, const QString& name)
 bool isAttachForbidden(const char *file, int line)
 {
     // if on linux, ensure we can actually attach
-    QFile canRun("/proc/sys/kernel/yama/ptrace_scope");
+    QFile canRun(QStringLiteral("/proc/sys/kernel/yama/ptrace_scope"));
     if (canRun.exists()) {
         if (!canRun.open(QIODevice::ReadOnly)) {
             QTest::qFail("Something is wrong: /proc/sys/kernel/yama/ptrace_scope exists but cannot be read", file, line);

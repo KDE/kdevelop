@@ -95,9 +95,9 @@ private:
 
 int main(int argc, char* argv[])
 {
-    KAboutData aboutData("cpp-parser", i18n( "cpp-parser" ),
-                         "1", i18n("KDevelop CPP parser debugging utility"), KAboutLicense::GPL,
-                         i18n( "2011 Milian Wolff" ), QString(), "http://www.kdevelop.org" );
+    KAboutData aboutData(QStringLiteral("cpp-parser"), i18n( "cpp-parser" ),
+                         QStringLiteral("1"), i18n("KDevelop CPP parser debugging utility"), KAboutLicense::GPL,
+                         i18n( "2011 Milian Wolff" ), QString(), QStringLiteral("http://www.kdevelop.org") );
 
     return KDevelopUtils::initAndRunParser<QmlParser>(aboutData, argc, argv);
 }

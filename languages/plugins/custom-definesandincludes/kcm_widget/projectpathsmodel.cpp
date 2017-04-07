@@ -54,7 +54,7 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
         break;
     case Qt::DisplayRole: {
         const QString& path = pathConfig.path;
-        return (path == ".") ? "(project root)" : path;
+        return (path == QLatin1String(".")) ? QStringLiteral("(project root)") : path;
         break;
     }
     case FullUrlDataRole:
@@ -157,7 +157,7 @@ void ProjectPathsModel::setPaths(const QVector< ConfigEntry >& paths )
     foreach( const ConfigEntry& existingPathConfig, paths ) {
         // Sanitize the path of loaded config
         ConfigEntry config = existingPathConfig;
-        bool rootPath = config.path == "." ? true : false;
+        bool rootPath = config.path == QLatin1String(".") ? true : false;
         config.path = sanitizePath(rootPath ? QString() : config.path );
         addPathInternal(config, rootPath);
     }
@@ -171,7 +171,7 @@ bool ProjectPathsModel::removeRows( int row, int count, const QModelIndex& paren
         beginRemoveRows( parent, row, row + count - 1 );
 
         for( int i = 0; i < count; ++i ) {
-            if( projectPaths.at(row).path == "." ) {
+            if( projectPaths.at(row).path == QLatin1String(".") ) {
                 continue; // we won't remove the root item
             }
             projectPaths.removeAt(row);

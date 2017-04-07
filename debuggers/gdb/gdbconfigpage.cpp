@@ -124,7 +124,7 @@ QList< KDevelop::LaunchConfigurationPageFactory* > GdbLauncher::configPages() co
 
 QString GdbLauncher::id()
 {
-    return "gdb";
+    return QStringLiteral("gdb");
 }
 
 QString GdbLauncher::name() const
@@ -139,7 +139,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
     {
         return nullptr;
     }
-    if( launchMode == "debug" )
+    if( launchMode == QLatin1String("debug") )
     {
         Q_ASSERT(m_execute);
         Q_ASSERT(m_plugin);
@@ -168,7 +168,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
 
 QStringList GdbLauncher::supportedModes() const
 {
-    return QStringList() << "debug";
+    return QStringList() << QStringLiteral("debug");
 }
 
 QString GdbLauncher::description() const

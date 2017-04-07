@@ -80,13 +80,13 @@ QStringList QMakeFileVisitor::getValueList(const QList<QMake::ValueAST*>& list) 
 
 void QMakeFileVisitor::visitFunctionCall(QMake::FunctionCallAST* node)
 {
-    if (node->identifier->value == "include" || node->identifier->value == "!include") {
+    if (node->identifier->value == QLatin1String("include") || node->identifier->value == QLatin1String("!include")) {
         if (node->args.isEmpty())
             return;
         QStringList arguments = getValueList(node->args);
 
         ifDebug(qCDebug(KDEV_QMAKE) << "found include" << node->identifier->value << arguments;) QString argument
-            = arguments.join("").trimmed();
+            = arguments.join(QLatin1String("")).trimmed();
         if (!argument.isEmpty() && QFileInfo(argument).isRelative()) {
             argument = QFileInfo(m_baseFile->absoluteDir() + '/' + argument).canonicalFilePath();
         }
@@ -113,14 +113,14 @@ void QMakeFileVisitor::visitFunctionCall(QMake::FunctionCallAST* node)
             }
         }
         else if (node->identifier->value.startsWith('!')) { visitNode(node->body); }
-    } else if (node->body && (node->identifier->value == "defineReplace"
+    } else if (node->body && (node->identifier->value == QLatin1String("defineReplace")
                               || node->identifier->value
-                                  == "defineTest")) { // TODO: differentiate between replace and test functions?
+                                  == QLatin1String("defineTest"))) { // TODO: differentiate between replace and test functions?
         QStringList args = getValueList(node->args);
         if (!args.isEmpty()) {
             m_userMacros[args.first()] = node->body;
         } // TODO: else return error
-    } else if (node->identifier->value == "return") {
+    } else if (node->identifier->value == QLatin1String("return")) {
         m_lastReturn = getValueList(node->args);
     } else { // TODO: only visit when test function returned true?
         qCWarning(KDEV_QMAKE) << "unhandled function call" << node->identifier->value;
@@ -132,26 +132,26 @@ void QMakeFileVisitor::visitAssignment(QMake::AssignmentAST* node)
 {
     QString op = node->op->value;
     QStringList values = getValueList(node->values);
-    if (op == "=") {
+    if (op == QLatin1String("=")) {
         m_variableValues[node->identifier->value] = values;
-    } else if (op == "+=") {
+    } else if (op == QLatin1String("+=")) {
         m_variableValues[node->identifier->value] += values;
-    } else if (op == "-=") {
+    } else if (op == QLatin1String("-=")) {
         foreach (const QString& value, values) {
             m_variableValues[node->identifier->value].removeAll(value);
         }
-    } else if (op == "*=") {
+    } else if (op == QLatin1String("*=")) {
         foreach (const QString& value, values) {
             if (!m_variableValues.value(node->identifier->value).contains(value)) {
                 m_variableValues[node->identifier->value].append(value);
             }
         }
-    } else if (op == "~=") {
+    } else if (op == QLatin1String("~=")) {
         if (values.isEmpty())
             return;
         QString value = values.first().trimmed();
-        QString regex = value.mid(2, value.indexOf("/", 2));
-        QString replacement = value.mid(value.indexOf("/", 2) + 1, value.lastIndexOf("/"));
+        QString regex = value.mid(2, value.indexOf(QLatin1String("/"), 2));
+        QString replacement = value.mid(value.indexOf(QLatin1String("/"), 2) + 1, value.lastIndexOf(QLatin1String("/")));
         m_variableValues[node->identifier->value].replaceInStrings(QRegExp(regex), replacement);
     }
 }
@@ -195,7 +195,7 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
                     qCWarning(KDEV_QMAKE) << "undefined macro argument:" << variable;
                 }
             } else {
-                varValue = resolveVariable(variable, vi.type).join(" ");
+                varValue = resolveVariable(variable, vi.type).join(QStringLiteral(" "));
             }
             break;
         case VariableInfo::ShellVariableResolveQMake:
@@ -204,17 +204,17 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
             varValue = QProcessEnvironment::systemEnvironment().value(variable);
             break;
         case VariableInfo::QtConfigVariable:
-            varValue = resolveVariable(variable, vi.type).join(" ");
+            varValue = resolveVariable(variable, vi.type).join(QStringLiteral(" "));
             break;
         case VariableInfo::FunctionCall: {
             QStringList arguments;
             foreach (const VariableInfo::Position& pos, vi.positions) {
                 int start = pos.start + 3 + variable.length();
                 QString args = value.mid(start, pos.end - start);
-                varValue = resolveVariables(args).join(" ");
+                varValue = resolveVariables(args).join(QStringLiteral(" "));
                 arguments << varValue;
             }
-            varValue = evaluateMacro(variable, arguments).join(" ");
+            varValue = evaluateMacro(variable, arguments).join(QStringLiteral(" "));
             break;
         }
         case VariableInfo::Invalid:
@@ -227,7 +227,7 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
         }
     }
 
-    QStringList ret = value.split(" ", QString::SkipEmptyParts);
+    QStringList ret = value.split(QStringLiteral(" "), QString::SkipEmptyParts);
     ifDebug(qCDebug(KDEV_QMAKE) << "resolved variable" << var << "to" << ret;) return ret;
 }
 

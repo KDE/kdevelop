@@ -101,7 +101,7 @@ namespace {
 
     bool hasMakefile() const
     {
-        QFileInfo makeFile(m_path, "Makefile");
+        QFileInfo makeFile(m_path, QStringLiteral("Makefile"));
         return makeFile.exists();
     }
 
@@ -159,7 +159,7 @@ ModificationRevisionSet MakeFileResolver::findIncludePathDependency(const QStrin
   while (currentWd.hasParent()) {
     currentWd = currentWd.parent();
     QString path = currentWd.toLocalFile();
-    QFileInfo makeFile(QDir(path), "Makefile");
+    QFileInfo makeFile(QDir(path), QStringLiteral("Makefile"));
     if (makeFile.exists()) {
       IndexedString makeFileStr(makeFile.filePath());
       rev.addModificationRevision(makeFileStr, ModificationRevision::revisionForFile(makeFileStr));
@@ -241,9 +241,9 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   if (QFileInfo(workingDirectory).isRelative()) {
     QUrl u = QUrl::fromLocalFile(QDir::currentPath());
 
-    if (workingDirectory == ".")
+    if (workingDirectory == QLatin1String("."))
       workingDirectory = QString();
-    else if (workingDirectory.startsWith("./"))
+    else if (workingDirectory.startsWith(QLatin1String("./")))
       workingDirectory = workingDirectory.mid(2);
 
     if (!workingDirectory.isEmpty()) {
@@ -259,7 +259,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   QDir sourceDir(workingDirectory);
   QDir dir = QDir(mapToBuild(sourceDir.absolutePath()));
 
-  QFileInfo makeFile(dir, "Makefile");
+  QFileInfo makeFile(dir, QStringLiteral("Makefile"));
   if (!makeFile.exists()) {
     if (maxStepsUp > 0) {
       //If there is no makefile in this directory, go one up and re-try from there
@@ -360,7 +360,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   ///STEP 3.1: Try resolution using the absolute path
   PathResolutionResult res;
   //Try for each possible target
-  res = resolveIncludePathInternal(absoluteFile, wd, possibleTargets.join(" "), source, maximumInternalResolutionDepth);
+  res = resolveIncludePathInternal(absoluteFile, wd, possibleTargets.join(QStringLiteral(" ")), source, maximumInternalResolutionDepth);
   if (!res) {
     ifTest(cout << "Try for absolute file " << absoluteFile.toLocal8Bit().data() << " and targets " << possibleTargets.join(", ").toLocal8Bit().data()
                  << " failed: " << res.longErrorMessage.toLocal8Bit().data() << endl;)
@@ -434,7 +434,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
   {
     QRegExp newLineRx("\\\\\\n");
-    fullOutput.replace(newLineRx, "");
+    fullOutput.replace(newLineRx, QLatin1String(""));
   }
   ///@todo collect multiple outputs at the same time for performance-reasons
   QString firstLine = fullOutput;
@@ -455,11 +455,11 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
     int offset = 0;
     while ((offset = makeRx.indexIn(firstLine, offset)) != -1) {
       QString prefix = firstLine.left(offset).trimmed();
-      if (prefix.endsWith("&&") || prefix.endsWith(';') || prefix.isEmpty()) {
+      if (prefix.endsWith(QLatin1String("&&")) || prefix.endsWith(';') || prefix.isEmpty()) {
         QString newWorkingDirectory = workingDirectory;
         ///Extract the new working-directory
         if (!prefix.isEmpty()) {
-          if (prefix.endsWith("&&"))
+          if (prefix.endsWith(QLatin1String("&&")))
             prefix.truncate(prefix.length() - 2);
           else if (prefix.endsWith(';'))
             prefix.truncate(prefix.length() - 1);
@@ -468,7 +468,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
           //In cases like "cd /media/data/kdedev/4.0/build/kdevelop && cd /media/data/kdedev/4.0/build/kdevelop"
           //We use the second directory. For t hat reason we search for the last index of "cd "
-          int cdIndex = prefix.lastIndexOf("cd ");
+          int cdIndex = prefix.lastIndexOf(QLatin1String("cd "));
           if (cdIndex != -1) {
             newWorkingDirectory = prefix.right(prefix.length() - 3 - cdIndex).trimmed();
             if (QFileInfo(newWorkingDirectory).isRelative())
@@ -485,7 +485,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
         if (d.exists()) {
           ///The recursive working-directory exists.
           QString makeParams = firstLine.mid(offset+5);
-          if (!makeParams.contains(';') && !makeParams.contains("&&")) {
+          if (!makeParams.contains(';') && !makeParams.contains(QLatin1String("&&"))) {
             ///Looks like valid parameters
             ///Make the file-name absolute, so it can be referenced from any directory
             QString absoluteFile = file;
@@ -528,7 +528,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 QRegularExpression MakeFileResolver::defineRegularExpression()
 {
   static const QRegularExpression pattern(
-    "-D([^\\s=]+)(?:=(?:\"(.*?)(?<!\\\\)\"|([^\\s]*)))?"
+    QStringLiteral("-D([^\\s=]+)(?:=(?:\"(.*?)(?<!\\\\)\"|([^\\s]*)))?")
   );
   Q_ASSERT(pattern.isValid());
   return pattern;

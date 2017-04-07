@@ -22,7 +22,7 @@ int main()
 {
     qDebug();
     for(int i=0; i<10; ++i) {
-        QString x("foobar");
+        QString x(QStringLiteral("foobar"));
         x += QString::number(i);
         qDebug() << x;
     }

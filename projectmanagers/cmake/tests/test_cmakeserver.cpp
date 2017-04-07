@@ -41,19 +41,19 @@ private slots:
         QJsonObject codeModel;
         int errors = 0;
         connect(&server, &CMakeServer::response, this, [&errors, &codeModel, &server](const QJsonObject &response) {
-            if (response.value("type") == QLatin1String("reply")) {
-                if (response.value("inReplyTo") == QLatin1String("configure"))
+            if (response.value(QStringLiteral("type")) == QLatin1String("reply")) {
+                if (response.value(QStringLiteral("inReplyTo")) == QLatin1String("configure"))
                     server.compute();
-                else if (response.value("inReplyTo") == QLatin1String("compute"))
+                else if (response.value(QStringLiteral("inReplyTo")) == QLatin1String("compute"))
                     server.codemodel();
-                else if(response.value("inReplyTo") == QLatin1String("codemodel"))
+                else if(response.value(QStringLiteral("inReplyTo")) == QLatin1String("codemodel"))
                     codeModel = response;
-            } else if(response.value("type") == QLatin1String("error")) {
+            } else if(response.value(QStringLiteral("type")) == QLatin1String("error")) {
                 ++errors;
             }
         });
 
-        const QString name = "single_subdirectory";
+        const QString name = QStringLiteral("single_subdirectory");
         const auto paths = projectPaths(name);
         const QString builddir = QStringLiteral(CMAKE_TESTS_BINARY_DIR "/cmake-server-test-builddir/") + name;
         QVERIFY(QDir(builddir).removeRecursively());

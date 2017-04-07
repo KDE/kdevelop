@@ -106,7 +106,7 @@ void ManPageModel::initModel()
 {
     m_sectionList.clear();
     m_manMap.clear();
-    auto list = KIO::listDir(QUrl("man://"), KIO::HideProgressInfo);
+    auto list = KIO::listDir(QUrl(QStringLiteral("man://")), KIO::HideProgressInfo);
     connect(list, &KIO::ListJob::entries, this, &ManPageModel::indexEntries);
     connect(list, &KIO::ListJob::result, this, &ManPageModel::indexLoaded);
 }
@@ -189,7 +189,7 @@ void ManPageModel::showItem(const QModelIndex& idx)
 
 void ManPageModel::showItemFromUrl(const QUrl& url)
 {
-    if (url.toString().startsWith("man")) {
+    if (url.toString().startsWith(QLatin1String("man"))) {
         IDocumentation::Ptr newDoc(new ManPageDocumentation(url.path(), QUrl(url)));
         ICore::self()->documentationController()->showDocumentation(newDoc);
     }

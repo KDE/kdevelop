@@ -44,16 +44,16 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
     {
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=typeIdx.model()->data(typeIdx, Qt::DisplayRole).toString();
-        if(type=="BOOL")
+        if(type==QLatin1String("BOOL"))
         {
             QCheckBox* box=new QCheckBox(parent);
             connect(box, &QCheckBox::toggled, this, &CMakeCacheDelegate::checkboxToggled);
             ret = box;
         }
-        else if(type=="PATH" || type=="FILEPATH")
+        else if(type==QLatin1String("PATH") || type==QLatin1String("FILEPATH"))
         {
             KUrlRequester *r=new KUrlRequester(parent);
-            if(type=="FILEPATH")
+            if(type==QLatin1String("FILEPATH"))
                 r->setMode(KFile::File);
             else
                 r->setMode(KFile::Directory | KFile::ExistingOnly);
@@ -78,12 +78,12 @@ void CMakeCacheDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
         QString value=index.model()->data(index, Qt::DisplayRole).toString();
-        if(type=="BOOL")
+        if(type==QLatin1String("BOOL"))
         {
             QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
-            boolean->setCheckState(value=="ON" ? Qt::Checked : Qt::Unchecked);
+            boolean->setCheckState(value==QLatin1String("ON") ? Qt::Checked : Qt::Unchecked);
         }
-        else if(type=="PATH" || type=="FILEPATH")
+        else if(type==QLatin1String("PATH") || type==QLatin1String("FILEPATH"))
         {
             KUrlRequester *url=qobject_cast<KUrlRequester*>(editor);
             url->setUrl(QUrl(value));
@@ -104,12 +104,12 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=model->data(typeIdx, Qt::DisplayRole).toString();
         QString value;
-        if(type=="BOOL")
+        if(type==QLatin1String("BOOL"))
         {
             QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
             value = boolean->isChecked() ? "ON" : "OFF";
         }
-        else if(type=="PATH" || type=="FILEPATH")
+        else if(type==QLatin1String("PATH") || type==QLatin1String("FILEPATH"))
         {
             KUrlRequester *urlreq=qobject_cast<KUrlRequester*>(editor);
             value = urlreq->url().toDisplayString(QUrl::StripTrailingSlash | QUrl::PreferLocalFile); //CMake usually don't put it
@@ -131,7 +131,7 @@ void CMakeCacheDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
     {
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
-        if(type=="BOOL")
+        if(type==QLatin1String("BOOL"))
             return;
     }
     QItemDelegate::paint(painter, option, index);
@@ -145,7 +145,7 @@ QSize CMakeCacheDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
     {
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
-        if(type=="PATH")
+        if(type==QLatin1String("PATH"))
         {
             ret.setHeight(m_sample->sizeHint().height());
         }

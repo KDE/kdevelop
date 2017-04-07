@@ -218,10 +218,10 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     {
         switch(type)
         {
-            case Command:   return QIcon::fromTheme("code-block");
-            case Variable:  return QIcon::fromTheme("code-variable");
-            case Macro:     return QIcon::fromTheme("code-function");
-            case Target:    return QIcon::fromTheme("system-run");
+            case Command:   return QIcon::fromTheme(QStringLiteral("code-block"));
+            case Variable:  return QIcon::fromTheme(QStringLiteral("code-variable"));
+            case Macro:     return QIcon::fromTheme(QStringLiteral("code-function"));
+            case Target:    return QIcon::fromTheme(QStringLiteral("system-run"));
             case Path: {
                 QUrl url = QUrl::fromUserInput(m_paths[index.row()-m_declarations.size()]);
                 QString iconName;
@@ -264,7 +264,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
                     DelayedType::Ptr delay = t.cast<DelayedType>();
                     args.append(delay ? delay->identifier().toString() : i18n("wrong"));
                 }
-                return QString('('+args.join(", ")+')');
+                return QString('('+args.join(QStringLiteral(", "))+')');
             }
         }
         
@@ -298,7 +298,7 @@ void CMakeCodeCompletionModel::executeCompletionItem(View* view, const Range& wo
         case Variable: {
             Range r=word, prefix(word.start()-Cursor(0,2), word.start());
             QString bef=document->text(prefix);
-            if(r.start().column()>=2 && bef=="${")
+            if(r.start().column()>=2 && bef==QLatin1String("${"))
                 r.setStart(KTextEditor::Cursor(r.start().line(), r.start().column()-2));
             QString code="${"+data(index(row, Name, QModelIndex())).toString();
             if(document->characterAt(word.end())!='}')

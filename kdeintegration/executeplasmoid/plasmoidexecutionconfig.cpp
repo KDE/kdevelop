@@ -69,10 +69,10 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
     connect( identifier->lineEdit(), &QLineEdit::textEdited, this, &PlasmoidExecutionConfig::changed );
 
     QProcess pPlasmoids;
-    pPlasmoids.start("plasmoidviewer", QStringList("--list"), QIODevice::ReadOnly);
+    pPlasmoids.start(QStringLiteral("plasmoidviewer"), QStringList(QStringLiteral("--list")), QIODevice::ReadOnly);
 
     QProcess pThemes;
-    pThemes.start("plasmoidviewer", QStringList("--list-themes"), QIODevice::ReadOnly);
+    pThemes.start(QStringLiteral("plasmoidviewer"), QStringList(QStringLiteral("--list-themes")), QIODevice::ReadOnly);
     pThemes.waitForFinished();
     pPlasmoids.waitForFinished();
 
@@ -93,10 +93,10 @@ void PlasmoidExecutionConfig::saveToConfiguration( KConfigGroup cfg, KDevelop::I
     Q_UNUSED( project );
     cfg.writeEntry("PlasmoidIdentifier", identifier->lineEdit()->text());
     QStringList args;
-    args += "--formfactor";
+    args += QStringLiteral("--formfactor");
     args += formFactor->currentText();
     if(!themes->currentText().isEmpty()) {
-        args += "--theme";
+        args += QStringLiteral("--theme");
         args += themes->currentText();
     }
     cfg.writeEntry("Arguments", args);
@@ -112,11 +112,11 @@ void PlasmoidExecutionConfig::loadFromConfiguration(const KConfigGroup& cfg, KDe
     blockSignals( b );
 
     QStringList arguments = cfg.readEntry("Arguments", QStringList());
-    int idxFormFactor = arguments.indexOf("--formfactor")+1;
+    int idxFormFactor = arguments.indexOf(QStringLiteral("--formfactor"))+1;
     if(idxFormFactor>0)
         formFactor->setCurrentIndex(formFactor->findText(arguments[idxFormFactor]));
 
-    int idxTheme = arguments.indexOf("--theme")+1;
+    int idxTheme = arguments.indexOf(QStringLiteral("--theme"))+1;
     if(idxTheme>0)
         themes->setCurrentIndex(themes->findText(arguments[idxTheme]));
 
@@ -140,7 +140,7 @@ QString PlasmoidLauncher::description() const
 
 QString PlasmoidLauncher::id()
 {
-    return "PlasmoidLauncher";
+    return QStringLiteral("PlasmoidLauncher");
 }
 
 QString PlasmoidLauncher::name() const
@@ -161,7 +161,7 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
         return nullptr;
     }
 
-    if( launchMode == "execute" )
+    if( launchMode == QLatin1String("execute") )
     {
         KJob* depsJob = dependencies(cfg);
         QList<KJob*> jobs;
@@ -211,7 +211,7 @@ KJob* PlasmoidLauncher::dependencies(KDevelop::ILaunchConfiguration* cfg)
 
 QStringList PlasmoidLauncher::supportedModes() const
 {
-    return QStringList() << "execute";
+    return QStringList() << QStringLiteral("execute");
 }
 
 KDevelop::LaunchConfigurationPage* PlasmoidPageFactory::createWidget(QWidget* parent)
@@ -245,7 +245,7 @@ QList<KDevelop::LaunchConfigurationPageFactory*> PlasmoidExecutionConfigType::co
 
 QString PlasmoidExecutionConfigType::typeId()
 {
-    return "PlasmoidLauncherType";
+    return QStringLiteral("PlasmoidLauncherType");
 }
 
 QIcon PlasmoidExecutionConfigType::icon() const
@@ -258,7 +258,7 @@ static bool canLaunchMetadataFile(const KDevelop::Path &path)
     KConfig cfg(path.toLocalFile(), KConfig::SimpleConfig);
     KConfigGroup group(&cfg, "Desktop Entry");
     QStringList services = group.readEntry("ServiceTypes", group.readEntry("X-KDE-ServiceTypes", QStringList()));
-    return services.contains("Plasma/Applet");
+    return services.contains(QStringLiteral("Plasma/Applet"));
 }
 
 //don't bother, nobody uses this interface
@@ -270,8 +270,8 @@ bool PlasmoidExecutionConfigType::canLaunch(const QUrl& ) const
 bool PlasmoidExecutionConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
 {
     KDevelop::ProjectFolderItem* folder = item->folder();
-    if(folder && folder->hasFileOrFolder("metadata.desktop")) {
-        return canLaunchMetadataFile(KDevelop::Path(folder->path(), "metadata.desktop"));
+    if(folder && folder->hasFileOrFolder(QStringLiteral("metadata.desktop"))) {
+        return canLaunchMetadataFile(KDevelop::Path(folder->path(), QStringLiteral("metadata.desktop")));
     }
     return false;
 }
@@ -292,7 +292,7 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
         QSet<KDevelop::IndexedString> files = p->fileSet();
         foreach(const KDevelop::IndexedString& file, files) {
             KDevelop::Path path(file.str());
-            if (path.lastPathSegment() == "metadata.desktop" && canLaunchMetadataFile(path)) {
+            if (path.lastPathSegment() == QLatin1String("metadata.desktop") && canLaunchMetadataFile(path)) {
                 path = path.parent();
                 QString relUrl = p->path().relativePath(path);
                 QAction* action = new QAction(relUrl, this);

@@ -53,7 +53,7 @@ char* toString(const QStringList& list)
     if (list.isEmpty()) {
         ba = "()";
     } else {
-        ba = "(\"" + list.join("\", \"").toLocal8Bit() + "\")";
+        ba = "(\"" + list.join(QStringLiteral("\", \"")).toLocal8Bit() + "\")";
     }
     return qstrdup(ba.data());
 }
@@ -114,41 +114,41 @@ void TestQMakeFile::varResolution_data()
 
     {
         QMakeFile::VariableMap variables;
-        variables["VAR1"] = QStringList() << "1";
+        variables[QStringLiteral("VAR1")] = QStringList() << QStringLiteral("1");
         QTest::newRow("simple") << "VAR1 = 1\n" << variables;
     }
 
     {
         QMakeFile::VariableMap variables;
-        variables["VAR1"] = QStringList() << "1";
-        variables["VAR2"] = QStringList() << "1";
+        variables[QStringLiteral("VAR1")] = QStringList() << QStringLiteral("1");
+        variables[QStringLiteral("VAR2")] = QStringList() << QStringLiteral("1");
         QTest::newRow("var-in-var") << "VAR1 = 1\nVAR2 = $$VAR1\n" << variables;
     }
     {
         QMakeFile::VariableMap variables;
 
-        variables["VAR1"] = QStringList() << "foo";
-        variables["VAR2"] = QStringList() << "foo";
+        variables[QStringLiteral("VAR1")] = QStringList() << QStringLiteral("foo");
+        variables[QStringLiteral("VAR2")] = QStringList() << QStringLiteral("foo");
         QTest::newRow("curlyvar") << "VAR1 = foo\nVAR2 = $${VAR1}\n" << variables;
     }
     {
         QMakeFile::VariableMap variables;
 
-        variables["VAR1"] = QStringList() << QProcessEnvironment::systemEnvironment().value("USER");
+        variables[QStringLiteral("VAR1")] = QStringList() << QProcessEnvironment::systemEnvironment().value(QStringLiteral("USER"));
         QTest::newRow("qmakeshell") << "VAR1 = $$(USER)\n" << variables;
     }
     {
         QMakeFile::VariableMap variables;
 
-        variables["VAR1"] = QStringList() << "foo";
-        variables["VAR2"] = QStringList() << "foo/bar";
+        variables[QStringLiteral("VAR1")] = QStringList() << QStringLiteral("foo");
+        variables[QStringLiteral("VAR2")] = QStringList() << QStringLiteral("foo/bar");
         QTest::newRow("path") << "VAR1 = foo\nVAR2 = $$VAR1/bar\n" << variables;
     }
     {
         QMakeFile::VariableMap variables;
 
-        variables["VAR_1"] = QStringList() << "foo";
-        variables["VAR_2"] = QStringList() << "foo/bar";
+        variables[QStringLiteral("VAR_1")] = QStringList() << QStringLiteral("foo");
+        variables[QStringLiteral("VAR_2")] = QStringList() << QStringLiteral("foo/bar");
         QTest::newRow("var-underscore") << "VAR_1 = foo\nVAR_2 = $$VAR_1/bar" << variables;
     }
 }
@@ -234,18 +234,18 @@ void TestQMakeFile::defines_data()
     QTest::addColumn<DefineHash>("expectedDefines");
     {
         DefineHash list;
-        list.insert("VAR1", "");
+        list.insert(QStringLiteral("VAR1"), QLatin1String(""));
         QTest::newRow("Simple define") << "DEFINES += VAR1" << list;
     }
     {
         DefineHash list;
-        list.insert("ANSWER", "42");
+        list.insert(QStringLiteral("ANSWER"), QStringLiteral("42"));
         QTest::newRow("Define with value") << "DEFINES += ANSWER=42" << list;
     }
     {
         DefineHash list;
-        list.insert("ANSWER", "42");
-        list.insert("ANOTHER_DEFINE", "");
+        list.insert(QStringLiteral("ANSWER"), QStringLiteral("42"));
+        list.insert(QStringLiteral("ANOTHER_DEFINE"), QLatin1String(""));
         QTest::newRow("Multiple defines") << "DEFINES += ANSWER=42 ANOTHER_DEFINE" << list;
     }
 }
@@ -263,10 +263,10 @@ void TestQMakeFile::replaceFunctions_data()
                            "}\n"
                            "BAR = $$test(asdf)\n";
         QMakeFile::VariableMap vars;
-        vars["BAR"] = QStringList() << "asdf";
+        vars[QStringLiteral("BAR")] = QStringList() << QStringLiteral("asdf");
         QStringList undefined;
-        undefined << "FOO"
-                  << "1";
+        undefined << QStringLiteral("FOO")
+                  << QStringLiteral("1");
         QTest::newRow("defineReplace-1") << contents << vars << undefined;
     }
 }
@@ -306,47 +306,47 @@ void TestQMakeFile::qtIncludeDirs_data()
 
     {
         QStringList list;
-        list << "core"
-             << "gui";
+        list << QStringLiteral("core")
+             << QStringLiteral("gui");
         QTest::newRow("defaults") << "" << list;
     }
     {
         QStringList list;
-        list << "core";
+        list << QStringLiteral("core");
         QTest::newRow("minimal") << "QT -= gui" << list;
     }
     {
         QStringList modules;
-        modules << "core"
-                << "gui"
-                << "network"
-                << "opengl"
-                << "phonon"
-                << "script"
-                << "scripttools"
-                << "sql"
-                << "svg"
-                << "webkit"
-                << "xml"
-                << "xmlpatterns"
-                << "qt3support"
-                << "designer"
-                << "uitools"
-                << "help"
-                << "assistant"
-                << "qtestlib"
-                << "testlib"
-                << "qaxcontainer"
-                << "qaxserver"
-                << "dbus"
-                << "declarative";
+        modules << QStringLiteral("core")
+                << QStringLiteral("gui")
+                << QStringLiteral("network")
+                << QStringLiteral("opengl")
+                << QStringLiteral("phonon")
+                << QStringLiteral("script")
+                << QStringLiteral("scripttools")
+                << QStringLiteral("sql")
+                << QStringLiteral("svg")
+                << QStringLiteral("webkit")
+                << QStringLiteral("xml")
+                << QStringLiteral("xmlpatterns")
+                << QStringLiteral("qt3support")
+                << QStringLiteral("designer")
+                << QStringLiteral("uitools")
+                << QStringLiteral("help")
+                << QStringLiteral("assistant")
+                << QStringLiteral("qtestlib")
+                << QStringLiteral("testlib")
+                << QStringLiteral("qaxcontainer")
+                << QStringLiteral("qaxserver")
+                << QStringLiteral("dbus")
+                << QStringLiteral("declarative");
         foreach (const QString& module, modules) {
             QStringList expected;
             expected << module;
-            if (module != "core") {
-                expected << "core";
+            if (module != QLatin1String("core")) {
+                expected << QStringLiteral("core");
             }
-            QTest::newRow(qPrintable(module)) << QString("QT = %1").arg(module) << expected;
+            QTest::newRow(qPrintable(module)) << QStringLiteral("QT = %1").arg(module) << expected;
         }
     }
 }
@@ -357,29 +357,29 @@ void TestQMakeFile::qtIncludeDirs()
     QFETCH(QStringList, modules);
 
     QMap<QString, QString> moduleMap;
-    moduleMap["core"] = "QtCore";
-    moduleMap["gui"] = "QtGui";
-    moduleMap["network"] = "QtNetwork";
-    moduleMap["opengl"] = "QtOpenGL";
-    moduleMap["phonon"] = "Phonon";
-    moduleMap["script"] = "QtScript";
-    moduleMap["scripttools"] = "QtScriptTools";
-    moduleMap["sql"] = "QtSql";
-    moduleMap["svg"] = "QtSvg";
-    moduleMap["webkit"] = "QtWebKit";
-    moduleMap["xml"] = "QtXml";
-    moduleMap["xmlpatterns"] = "QtXmlPatterns";
-    moduleMap["qt3support"] = "Qt3Support";
-    moduleMap["designer"] = "QtDesigner";
-    moduleMap["uitools"] = "QtUiTools";
-    moduleMap["help"] = "QtHelp";
-    moduleMap["assistant"] = "QtAssistant";
-    moduleMap["qtestlib"] = "QtTest";
-    moduleMap["testlib"] = "QtTest";
-    moduleMap["qaxcontainer"] = "ActiveQt";
-    moduleMap["qaxserver"] = "ActiveQt";
-    moduleMap["dbus"] = "QtDBus";
-    moduleMap["declarative"] = "QtDeclarative";
+    moduleMap[QStringLiteral("core")] = QLatin1String("QtCore");
+    moduleMap[QStringLiteral("gui")] = QLatin1String("QtGui");
+    moduleMap[QStringLiteral("network")] = QLatin1String("QtNetwork");
+    moduleMap[QStringLiteral("opengl")] = QLatin1String("QtOpenGL");
+    moduleMap[QStringLiteral("phonon")] = QLatin1String("Phonon");
+    moduleMap[QStringLiteral("script")] = QLatin1String("QtScript");
+    moduleMap[QStringLiteral("scripttools")] = QLatin1String("QtScriptTools");
+    moduleMap[QStringLiteral("sql")] = QLatin1String("QtSql");
+    moduleMap[QStringLiteral("svg")] = QLatin1String("QtSvg");
+    moduleMap[QStringLiteral("webkit")] = QLatin1String("QtWebKit");
+    moduleMap[QStringLiteral("xml")] = QLatin1String("QtXml");
+    moduleMap[QStringLiteral("xmlpatterns")] = QLatin1String("QtXmlPatterns");
+    moduleMap[QStringLiteral("qt3support")] = QLatin1String("Qt3Support");
+    moduleMap[QStringLiteral("designer")] = QLatin1String("QtDesigner");
+    moduleMap[QStringLiteral("uitools")] = QLatin1String("QtUiTools");
+    moduleMap[QStringLiteral("help")] = QLatin1String("QtHelp");
+    moduleMap[QStringLiteral("assistant")] = QLatin1String("QtAssistant");
+    moduleMap[QStringLiteral("qtestlib")] = QLatin1String("QtTest");
+    moduleMap[QStringLiteral("testlib")] = QLatin1String("QtTest");
+    moduleMap[QStringLiteral("qaxcontainer")] = QLatin1String("ActiveQt");
+    moduleMap[QStringLiteral("qaxserver")] = QLatin1String("ActiveQt");
+    moduleMap[QStringLiteral("dbus")] = QLatin1String("QtDBus");
+    moduleMap[QStringLiteral("declarative")] = QLatin1String("QtDeclarative");
 
     QTemporaryFile tmpFile;
     tmpFile.open();
@@ -398,7 +398,7 @@ void TestQMakeFile::qtIncludeDirs()
     QVERIFY(includes.contains(qmvars["QT_INSTALL_HEADERS"]));
 
     for (QMap<QString, QString>::const_iterator it = moduleMap.constBegin(); it != moduleMap.constEnd(); ++it) {
-        QFileInfo include(qmvars["QT_INSTALL_HEADERS"] + "/" + it.value());
+        QFileInfo include(qmvars[QStringLiteral("QT_INSTALL_HEADERS")] + "/" + it.value());
 
         bool shouldBeIncluded = include.exists();
         if (shouldBeIncluded) {
@@ -507,43 +507,43 @@ void TestQMakeFile::globbing_data()
     QTest::addColumn<QString>("pattern");
     QTest::addColumn<QStringList>("matches");
 
-    QTest::newRow("wildcard-simple") << (QStringList() << "foo.cpp") << "*.cpp" << (QStringList() << "foo.cpp");
+    QTest::newRow("wildcard-simple") << (QStringList() << QStringLiteral("foo.cpp")) << "*.cpp" << (QStringList() << QStringLiteral("foo.cpp"));
 
-    QTest::newRow("wildcard-extended") << (QStringList() << "foo.cpp"
-                                                         << "bar.h"
-                                                         << "asdf.cpp")
-                                       << "*.cpp" << (QStringList() << "foo.cpp"
-                                                                    << "asdf.cpp");
+    QTest::newRow("wildcard-extended") << (QStringList() << QStringLiteral("foo.cpp")
+                                                         << QStringLiteral("bar.h")
+                                                         << QStringLiteral("asdf.cpp"))
+                                       << "*.cpp" << (QStringList() << QStringLiteral("foo.cpp")
+                                                                    << QStringLiteral("asdf.cpp"));
 
-    QTest::newRow("wildcard-multiple") << (QStringList() << "foo.cpp"
-                                                         << "bar.h"
-                                                         << "asdf.cpp")
-                                       << "*.cpp *.h" << (QStringList() << "foo.cpp"
-                                                                        << "bar.h"
-                                                                        << "asdf.cpp");
+    QTest::newRow("wildcard-multiple") << (QStringList() << QStringLiteral("foo.cpp")
+                                                         << QStringLiteral("bar.h")
+                                                         << QStringLiteral("asdf.cpp"))
+                                       << "*.cpp *.h" << (QStringList() << QStringLiteral("foo.cpp")
+                                                                        << QStringLiteral("bar.h")
+                                                                        << QStringLiteral("asdf.cpp"));
 
-    QTest::newRow("wildcard-subdir") << (QStringList() << "foo/bar.cpp"
-                                                       << "fooasdf/bar.cpp"
-                                                       << "asdf/asdf.cpp")
-                                     << "foo*/*.cpp" << (QStringList() << "foo/bar.cpp"
-                                                                       << "fooasdf/bar.cpp");
+    QTest::newRow("wildcard-subdir") << (QStringList() << QStringLiteral("foo/bar.cpp")
+                                                       << QStringLiteral("fooasdf/bar.cpp")
+                                                       << QStringLiteral("asdf/asdf.cpp"))
+                                     << "foo*/*.cpp" << (QStringList() << QStringLiteral("foo/bar.cpp")
+                                                                       << QStringLiteral("fooasdf/bar.cpp"));
 
-    QTest::newRow("bracket") << (QStringList() << "foo1.cpp"
-                                               << "foo2.cpp"
-                                               << "fooX.cpp")
-                             << "foo[0-9].cpp" << (QStringList() << "foo1.cpp"
-                                                                 << "foo2.cpp");
+    QTest::newRow("bracket") << (QStringList() << QStringLiteral("foo1.cpp")
+                                               << QStringLiteral("foo2.cpp")
+                                               << QStringLiteral("fooX.cpp"))
+                             << "foo[0-9].cpp" << (QStringList() << QStringLiteral("foo1.cpp")
+                                                                 << QStringLiteral("foo2.cpp"));
 
-    QTest::newRow("questionmark") << (QStringList() << "foo1.cpp"
-                                                    << "fooX.cpp"
-                                                    << "foo.cpp"
-                                                    << "fooXY.cpp")
-                                  << "foo?.cpp" << (QStringList() << "foo1.cpp"
-                                                                  << "fooX.cpp");
+    QTest::newRow("questionmark") << (QStringList() << QStringLiteral("foo1.cpp")
+                                                    << QStringLiteral("fooX.cpp")
+                                                    << QStringLiteral("foo.cpp")
+                                                    << QStringLiteral("fooXY.cpp"))
+                                  << "foo?.cpp" << (QStringList() << QStringLiteral("foo1.cpp")
+                                                                  << QStringLiteral("fooX.cpp"));
 
-    QTest::newRow("mixed") << (QStringList() << "foo/asdf/test.cpp"
-                                             << "fooX/asdf1/test.cpp")
-                           << "foo?/asdf[0-9]/*.cpp" << (QStringList() << "fooX/asdf1/test.cpp");
+    QTest::newRow("mixed") << (QStringList() << QStringLiteral("foo/asdf/test.cpp")
+                                             << QStringLiteral("fooX/asdf1/test.cpp"))
+                           << "foo?/asdf[0-9]/*.cpp" << (QStringList() << QStringLiteral("fooX/asdf1/test.cpp"));
 }
 
 void TestQMakeFile::globbing()
@@ -589,12 +589,12 @@ void TestQMakeFile::benchGlobbing()
     const int folders = 10;
     const int files = 100;
     for (int i = 0; i < folders; ++i) {
-        QString folder = QString("folder%1").arg(i);
+        QString folder = QStringLiteral("folder%1").arg(i);
         dir.mkdir(folder);
         for (int j = 0; j < files; ++j) {
-            QFile f1(dir.filePath(folder + QString("/file%1.cpp").arg(j)));
+            QFile f1(dir.filePath(folder + QStringLiteral("/file%1.cpp").arg(j)));
             QVERIFY(f1.open(QIODevice::WriteOnly));
-            QFile f2(dir.filePath(folder + QString("/file%1.h").arg(j)));
+            QFile f2(dir.filePath(folder + QStringLiteral("/file%1.h").arg(j)));
             QVERIFY(f2.open(QIODevice::WriteOnly));
         }
     }
@@ -623,12 +623,12 @@ void TestQMakeFile::benchGlobbingNoPattern()
     const int folders = 10;
     const int files = 100;
     for (int i = 0; i < folders; ++i) {
-        QString folder = QString("folder%1").arg(i);
+        QString folder = QStringLiteral("folder%1").arg(i);
         dir.mkdir(folder);
         for (int j = 0; j < files; ++j) {
-            QFile f1(dir.filePath(folder + QString("/file%1.cpp").arg(j)));
+            QFile f1(dir.filePath(folder + QStringLiteral("/file%1.cpp").arg(j)));
             QVERIFY(f1.open(QIODevice::WriteOnly));
-            QFile f2(dir.filePath(folder + QString("/file%1.h").arg(j)));
+            QFile f2(dir.filePath(folder + QStringLiteral("/file%1.h").arg(j)));
             QVERIFY(f2.open(QIODevice::WriteOnly));
         }
     }

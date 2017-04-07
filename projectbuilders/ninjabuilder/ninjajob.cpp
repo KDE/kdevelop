@@ -50,7 +50,7 @@ public:
 IFilterStrategy::Progress NinjaJobCompilerFilterStrategy::progressInLine(const QString& line)
 {
     // example string: [87/88] Building CXX object projectbuilders/ninjabuilder/CMakeFiles/kdevninja.dir/ninjajob.cpp.o
-    static const QRegularExpression re("^\\[([0-9]+)\\/([0-9]+)\\] (.*)");
+    static const QRegularExpression re(QStringLiteral("^\\[([0-9]+)\\/([0-9]+)\\] (.*)"));
 
     QRegularExpressionMatch match = re.match(line);
     if (match.hasMatch()) {
@@ -126,9 +126,9 @@ void NinjaJob::setIsInstalling(bool isInstalling)
 
 QString NinjaJob::ninjaExecutable()
 {
-    QString path = QStandardPaths::findExecutable("ninja-build");
+    QString path = QStandardPaths::findExecutable(QStringLiteral("ninja-build"));
     if (path.isEmpty()) {
-        path = QStandardPaths::findExecutable("ninja");
+        path = QStandardPaths::findExecutable(QStringLiteral("ninja"));
     }
     return path;
 }
@@ -167,13 +167,13 @@ QStringList NinjaJob::privilegedExecutionCommand() const
         QString suCommandName;
         switch (suCommand) {
         case 1:
-            return QStringList() << "kdesudo" << "-t";
+            return QStringList() << QStringLiteral("kdesudo") << QStringLiteral("-t");
 
         case 2:
-            return QStringList() << "sudo";
+            return QStringList() << QStringLiteral("sudo");
 
         default:
-            return QStringList() << "kdesu" << "-t";
+            return QStringList() << QStringLiteral("kdesu") << QStringLiteral("-t");
         }
     }
     return QStringList();
@@ -219,7 +219,7 @@ void NinjaJob::appendLines(const QStringList& lines)
     for (QStringList::iterator it = ret.end(); it != ret.begin(); ) {
         --it;
         bool curr = it->startsWith('[');
-        if ((prev && curr) || it->endsWith("] ")) {
+        if ((prev && curr) || it->endsWith(QLatin1String("] "))) {
             it = ret.erase(it);
         }
         prev = curr;

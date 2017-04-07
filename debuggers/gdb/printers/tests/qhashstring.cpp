@@ -3,8 +3,8 @@
 int main()
 {
     QHash<QString, QString> h;
-    h[QString("10")] = QString("100");
-    h[QString("20")] = QString("200");
-    h[QString("30")] = QString("300");
+    h[QStringLiteral("10")] = QStringLiteral("100");
+    h[QStringLiteral("20")] = QStringLiteral("200");
+    h[QStringLiteral("30")] = QStringLiteral("300");
     return 0;
 }

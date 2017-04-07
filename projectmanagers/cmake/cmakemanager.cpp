@@ -77,7 +77,7 @@ K_PLUGIN_FACTORY_WITH_JSON(CMakeSupportFactory, "kdevcmakemanager.json", registe
 const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
 
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
-    : KDevelop::AbstractFileManagerPlugin( "kdevcmakemanager", parent )
+    : KDevelop::AbstractFileManagerPlugin( QStringLiteral("kdevcmakemanager"), parent )
     , m_filter( new ProjectFilterManager( this ) )
 {
     if (CMake::findExecutable().isEmpty()) {
@@ -284,7 +284,7 @@ QHash<QString, QString> CMakeManager::defines(KDevelop::ProjectBaseItem *item ) 
 
 KDevelop::IProjectBuilder * CMakeManager::builder() const
 {
-    IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IProjectBuilder", "KDevCMakeBuilder");
+    IPlugin* i = core()->pluginController()->pluginForExtension( QStringLiteral("org.kdevelop.IProjectBuilder"), QStringLiteral("KDevCMakeBuilder"));
     Q_ASSERT(i);
     KDevelop::IProjectBuilder* _builder = i->extension<KDevelop::IProjectBuilder>();
     Q_ASSERT(_builder );
@@ -356,13 +356,13 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
 
 void CMakeManager::serverResponse(KDevelop::IProject* project, const QJsonObject& response)
 {
-    if (response["type"] == QLatin1String("signal")) {
-        if (response["name"] == QLatin1String("dirty")) {
+    if (response[QStringLiteral("type")] == QLatin1String("signal")) {
+        if (response[QStringLiteral("name")] == QLatin1String("dirty")) {
             m_projects[project].m_server->configure({});
         } else
             qDebug() << "unhandled signal response..." << project << response;
-    } else if (response["type"] == QLatin1String("reply")) {
-        const auto inReplyTo = response["inReplyTo"];
+    } else if (response[QStringLiteral("type")] == QLatin1String("reply")) {
+        const auto inReplyTo = response[QStringLiteral("inReplyTo")];
         if (inReplyTo == QLatin1String("configure")) {
             m_projects[project].m_server->compute();
         } else if (inReplyTo == QLatin1String("compute")) {

@@ -34,21 +34,21 @@ using namespace KDevMI::MI;
 
 QString getFunctionOrAddress(const Value &frame)
 {
-    if (frame.hasField("func"))
-        return frame["func"].literal();
+    if (frame.hasField(QStringLiteral("func")))
+        return frame[QStringLiteral("func")].literal();
     else
-        return frame["addr"].literal();
+        return frame[QStringLiteral("addr")].literal();
 }
 
 QPair<QString, int> getSource(const Value &frame)
 {
     QPair<QString, int> ret(QString(), -1);
-    if (frame.hasField("fullname"))
-        ret=qMakePair(frame["fullname"].literal(), frame["line"].toInt()-1);
-    else if (frame.hasField("file"))
-        ret=qMakePair(frame["file"].literal(), frame["line"].toInt()-1);
-    else if (frame.hasField("from"))
-        ret.first=frame["from"].literal();
+    if (frame.hasField(QStringLiteral("fullname")))
+        ret=qMakePair(frame[QStringLiteral("fullname")].literal(), frame[QStringLiteral("line")].toInt()-1);
+    else if (frame.hasField(QStringLiteral("file")))
+        ret=qMakePair(frame[QStringLiteral("file")].literal(), frame[QStringLiteral("line")].toInt()-1);
+    else if (frame.hasField(QStringLiteral("from")))
+        ret.first=frame[QStringLiteral("from")].literal();
 
     return ret;
 }
@@ -65,20 +65,20 @@ MIDebugSession * MIFrameStackModel::session()
 
 void MIFrameStackModel::fetchThreads()
 {
-    session()->addCommand(ThreadInfo, "", this, &MIFrameStackModel::handleThreadInfo);
+    session()->addCommand(ThreadInfo, QLatin1String(""), this, &MIFrameStackModel::handleThreadInfo);
 }
 
 void MIFrameStackModel::handleThreadInfo(const ResultRecord& r)
 {
-    const Value& threads = r["threads"];
+    const Value& threads = r[QStringLiteral("threads")];
 
     QList<FrameStackModel::ThreadItem> threadsList;
     for (int i = 0; i!= threads.size(); ++i) {
         const auto &threadMI = threads[i];
         FrameStackModel::ThreadItem threadItem;
-        threadItem.nr = threadMI["id"].toInt();
-        if (threadMI["state"].literal() == "stopped") {
-            threadItem.name = getFunctionOrAddress(threadMI["frame"]);
+        threadItem.nr = threadMI[QStringLiteral("id")].toInt();
+        if (threadMI[QStringLiteral("state")].literal() == QLatin1String("stopped")) {
+            threadItem.name = getFunctionOrAddress(threadMI[QStringLiteral("frame")]);
         } else {
             i18n("(running)");
         }
@@ -93,8 +93,8 @@ void MIFrameStackModel::handleThreadInfo(const ResultRecord& r)
               });
 
     setThreads(threadsList);
-    if (r.hasField("current-thread-id")) {
-        int currentThreadId = r["current-thread-id"].toInt();
+    if (r.hasField(QStringLiteral("current-thread-id"))) {
+        int currentThreadId = r[QStringLiteral("current-thread-id")].toInt();
 
         setCurrentThread(currentThreadId);
 
@@ -111,13 +111,13 @@ struct FrameListHandler : public MICommandHandler
 
     void handle(const ResultRecord &r) override
     {
-        const Value& stack = r["stack"];
-        int first = stack[0]["level"].toInt();
+        const Value& stack = r[QStringLiteral("stack")];
+        int first = stack[0][QStringLiteral("level")].toInt();
         QList<KDevelop::FrameStackModel::FrameItem> frames;
         for (int i = 0; i< stack.size(); ++i) {
             const Value& frame = stack[i];
             KDevelop::FrameStackModel::FrameItem f;
-            f.nr = frame["level"].toInt();
+            f.nr = frame[QStringLiteral("level")].toInt();
             f.name = getFunctionOrAddress(frame);
             QPair<QString, int> loc = getSource(frame);
             f.file = QUrl::fromLocalFile(loc.first).adjusted(QUrl::NormalizePathSegments);
@@ -147,7 +147,7 @@ private:
 void MIFrameStackModel::fetchFrames(int threadNumber, int from, int to)
 {
     //to+1 so we know if there are more
-    QString arg = QString("%1 %2").arg(from).arg(to+1);
+    QString arg = QStringLiteral("%1 %2").arg(from).arg(to+1);
     MICommand *c = session()->createCommand(StackListFrames, arg);
     c->setHandler(new FrameListHandler(this, threadNumber, to));
     c->setThread(threadNumber);

@@ -94,7 +94,7 @@ void CMakeBuildDirChooser::buildDirSettings(
     static const QString installLine = QStringLiteral("CMAKE_INSTALL_PREFIX:PATH=");
     static const QString buildLine = QStringLiteral("CMAKE_BUILD_TYPE:STRING=");
 
-    const Path cachePath(buildDir, "CMakeCache.txt");
+    const Path cachePath(buildDir, QStringLiteral("CMakeCache.txt"));
     QFile file(cachePath.toLocalFile());
 
     srcDir.clear();
@@ -169,7 +169,7 @@ void CMakeBuildDirChooser::updated()
         dirRelative = d.isRelative();
         if(!dirEmpty && dirExists && !dirRelative)
         {
-            bool hasCache=QFile::exists(Path(chosenBuildFolder, "CMakeCache.txt").toLocalFile());
+            bool hasCache=QFile::exists(Path(chosenBuildFolder, QStringLiteral("CMakeCache.txt")).toLocalFile());
             if(hasCache)
             {
                 QString proposed=m_srcFolder.toLocalFile();
@@ -287,7 +287,7 @@ void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
     } else {
         role = KColorScheme::NegativeText;
     }
-    m_chooserUi->status->setText(QString("<i><font color='%1'>%2</font></i>").arg(scheme.foreground(role).color().name()).arg(message));
+    m_chooserUi->status->setText(QStringLiteral("<i><font color='%1'>%2</font></i>").arg(scheme.foreground(role).color().name()).arg(message));
 
     auto okButton = m_buttonBox->button(QDialogButtonBox::Ok);
     okButton->setEnabled(canApply);

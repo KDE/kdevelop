@@ -111,7 +111,7 @@ QVector<Test> importTestSuites(const Path &buildDir)
         return ret;
     }
 
-    const QRegularExpression rx("add_test *\\((.+?) (.*?)\\) *$");
+    const QRegularExpression rx(QStringLiteral("add_test *\\((.+?) (.*?)\\) *$"));
     Q_ASSERT(rx.isValid());
     for (; !file.atEnd();) {
         QByteArray line = file.readLine();

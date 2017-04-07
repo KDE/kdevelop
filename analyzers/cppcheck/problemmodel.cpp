@@ -140,7 +140,7 @@ void ProblemModel::reset(KDevelop::IProject* project, const QString& path)
 
     QString tooltip = i18nc("@info:tooltip", "Re-Run Last Cppcheck Analysis");
     if (m_project) {
-        tooltip += QString(" (%1)").arg(prettyPathName(m_path));
+        tooltip += QStringLiteral(" (%1)").arg(prettyPathName(m_path));
     }
     setFullUpdateTooltip(tooltip);
 }

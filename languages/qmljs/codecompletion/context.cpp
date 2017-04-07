@@ -55,7 +55,7 @@ CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, co
   m_completionKind(NormalCompletion)
 {
     // Detect "import ..." and provide import completions
-    if (m_text.startsWith("import ")) {
+    if (m_text.startsWith(QLatin1String("import "))) {
         m_completionKind = ImportCompletion;
     }
 
@@ -468,7 +468,7 @@ DeclarationPointer CodeCompletionContext::declarationAtEndOfString(const QString
     // Build the expression stack of expression and use the valid portion of the
     // top sub-expression to find the right-most declaration that can be found
     // in expression.
-    QmlJS::Document::MutablePtr doc = QmlJS::Document::create("inline", Dialect::JavaScript);
+    QmlJS::Document::MutablePtr doc = QmlJS::Document::create(QStringLiteral("inline"), Dialect::JavaScript);
     ExpressionStackEntry topEntry = expressionStack(expression).top();
 
     doc->setSource(expression.mid(topEntry.operatorEnd));

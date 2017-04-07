@@ -262,7 +262,7 @@ void TestProblems::testMissingInclude()
     QFETCH(QString, dummyFileName);
     QFETCH(QVector<ClangFixit>, fixits);
 
-    TestFile include(includeFileContent, "h");
+    TestFile include(includeFileContent, QStringLiteral("h"));
     include.parse(TopDUContext::AllDeclarationsAndContexts);
 
     QScopedPointer<QTemporaryFile> dummyFile;
@@ -270,10 +270,10 @@ void TestProblems::testMissingInclude()
         dummyFile.reset(new QTemporaryFile(QDir::tempPath() + dummyFileName));
         QVERIFY(dummyFile->open());
 
-        workingFileContent.replace("dummyInclude", dummyFile->fileName());
+        workingFileContent.replace(QLatin1String("dummyInclude"), dummyFile->fileName());
     }
 
-    TestFile workingFile(workingFileContent, "cpp");
+    TestFile workingFile(workingFileContent, QStringLiteral("cpp"));
     workingFile.parse(TopDUContext::AllDeclarationsAndContexts);
 
     QCOMPARE(include.url().toUrl().adjusted(QUrl::RemoveFilename), workingFile.url().toUrl().adjusted(QUrl::RemoveFilename));
@@ -352,7 +352,7 @@ void TestProblems::testTodoProblems()
     QFETCH(QString, code);
     QFETCH(ExpectedTodos, expectedTodos);
 
-    TestFile file(code, "cpp");
+    TestFile file(code, QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
@@ -413,8 +413,8 @@ void TestProblems::testTodoProblems_data()
 
 void TestProblems::testProblemsForIncludedFiles()
 {
-    TestFile header("#pragma once\n//TODO: header\n", "h");
-    TestFile file("#include \"" + header.url().byteArray() + "\"\n//TODO: source\n", "cpp");
+    TestFile header(QStringLiteral("#pragma once\n//TODO: header\n"), QStringLiteral("h"));
+    TestFile file("#include \"" + header.url().byteArray() + "\"\n//TODO: source\n", QStringLiteral("cpp"));
 
     file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST | TopDUContext::ForceUpdate));
     QVERIFY(file.waitForParsed(5000));

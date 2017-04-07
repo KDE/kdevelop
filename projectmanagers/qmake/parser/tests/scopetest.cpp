@@ -54,13 +54,13 @@ BEGINTESTFUNCIMPL(ScopeTest, basicScope, 1)
     QList<QMake::StatementAST*> testlist;
     auto tst = new QMake::AssignmentAST(scope->body);
     auto val = new QMake::ValueAST(tst);
-    val->value = "VARIABLE";
+    val->value = QLatin1String("VARIABLE");
     tst->identifier = val;
     val = new QMake::ValueAST(tst);
-    val->value = "=";
+    val->value = QLatin1String("=");
     tst->op = val;
     val = new QMake::ValueAST(tst);
-    val->value = "FOO";
+    val->value = QLatin1String("FOO");
     tst->values.append(val);
     testlist.append(tst);
     TESTSCOPEBODY(scope, testlist, 1)
@@ -74,13 +74,13 @@ BEGINTESTFUNCIMPL(ScopeTest, basicScopeBrace, 1)
     QList<QMake::StatementAST*> testlist;
     auto tst = new QMake::AssignmentAST(scope->body);
     auto val = new QMake::ValueAST(tst);
-    val->value = "VARIABLE";
+    val->value = QLatin1String("VARIABLE");
     tst->identifier = val;
     val = new QMake::ValueAST(tst);
-    val->value = "=";
+    val->value = QLatin1String("=");
     tst->op = val;
     val = new QMake::ValueAST(tst);
-    val->value = "FOO";
+    val->value = QLatin1String("FOO");
     tst->values.append(val);
     testlist.append(tst);
     TESTSCOPEBODY(scope, testlist, 1)
@@ -94,19 +94,19 @@ BEGINTESTFUNCIMPL(ScopeTest, nestedScope, 1)
     QList<QMake::StatementAST*> testlist;
     auto simple = new QMake::SimpleScopeAST(scope->body);
     auto val = new QMake::ValueAST(simple);
-    val->value = "barfoo";
+    val->value = QLatin1String("barfoo");
     simple->identifier = val;
     auto body = new QMake::ScopeBodyAST(simple);
     QList<QMake::StatementAST*> sublist;
     auto tst = new QMake::AssignmentAST(body);
     val = new QMake::ValueAST(tst);
-    val->value = "VARIABLE";
+    val->value = QLatin1String("VARIABLE");
     tst->identifier = val;
     val = new QMake::ValueAST(tst);
-    val->value = "=";
+    val->value = QLatin1String("=");
     tst->op = val;
     val = new QMake::ValueAST(tst);
-    val->value = "FOO";
+    val->value = QLatin1String("FOO");
     tst->values.append(val);
     body->statements.append(tst);
     simple->body = body;
@@ -132,7 +132,7 @@ DATAFUNCIMPL(ScopeTest, missingColon, "eval \n")
 void ScopeTest::strangeScopeNames()
 {
     QMake::Driver d;
-    d.setContent("linux-gcc++-* {\n  VARIABLE = FOO\n}\n");
+    d.setContent(QStringLiteral("linux-gcc++-* {\n  VARIABLE = FOO\n}\n"));
     bool ret = d.parse(&ast);
     QVERIFY(ret);
 }

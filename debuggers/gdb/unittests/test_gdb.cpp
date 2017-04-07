@@ -74,7 +74,7 @@ QString findSourceFile(const QString& name)
 static bool isAttachForbidden(const char * file, int line)
 {
     // if on linux, ensure we can actually attach
-    QFile canRun("/proc/sys/kernel/yama/ptrace_scope");
+    QFile canRun(QStringLiteral("/proc/sys/kernel/yama/ptrace_scope"));
     if (canRun.exists()) {
         if (!canRun.open(QIODevice::ReadOnly)) {
             QTest::qFail("Something is wrong: /proc/sys/kernel/yama/ptrace_scope exists but cannot be read", file, line);
@@ -100,7 +100,7 @@ void GdbTest::initTestCase()
     AutoTestShell::init();
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
-    m_iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
+    m_iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
     Q_ASSERT(m_iface);
 }
 
@@ -139,7 +139,7 @@ public:
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
 public:
-    explicit TestLaunchConfiguration(const QUrl& executable = findExecutable("debugee"),
+    explicit TestLaunchConfiguration(const QUrl& executable = findExecutable(QStringLiteral("debugee")),
                             const QUrl& workingDirectory = QUrl()) {
         qDebug() << "FIND" << executable;
         c = new KConfig();
@@ -154,7 +154,7 @@ public:
     }
     const KConfigGroup config() const override { return cfg; }
     KConfigGroup config() override { return cfg; };
-    QString name() const override { return QString("Test-Launch"); }
+    QString name() const override { return QStringLiteral("Test-Launch"); }
     KDevelop::IProject* project() const override { return nullptr; }
     KDevelop::LaunchConfigurationType* type() const override { return nullptr; }
 
@@ -281,7 +281,7 @@ bool compareData(QModelIndex index, const QString& expected, const char *file, i
     return true;
 }
 
-static const QString debugeeFileName = findSourceFile("debugee.cpp");
+static const QString debugeeFileName = findSourceFile(QStringLiteral("debugee.cpp"));
 
 KDevelop::BreakpointModel* breakpoints()
 {
@@ -309,15 +309,15 @@ void GdbTest::testStdOut()
 void GdbTest::testEnvironmentSet()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("debugeeechoenv"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeeechoenv")));
 
     cfg.config().writeEntry("EnvironmentGroup", "GdbTestGroup");
 
     WritableEnvironmentProfileList envProfiles(cfg.rootConfig());
-    envProfiles.removeProfile("GdbTestGroup");
-    auto &envs = envProfiles.variables("GdbTestGroup");
-    envs["VariableA"] = "-A' \" complex --value";
-    envs["VariableB"] = "-B' \" complex --value";
+    envProfiles.removeProfile(QStringLiteral("GdbTestGroup"));
+    auto &envs = envProfiles.variables(QStringLiteral("GdbTestGroup"));
+    envs[QStringLiteral("VariableA")] = QLatin1String("-A' \" complex --value");
+    envs[QStringLiteral("VariableB")] = QLatin1String("-B' \" complex --value");
     envProfiles.saveSettings(cfg.rootConfig());
 
     QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
@@ -471,7 +471,7 @@ void GdbTest::testPendingBreakpoint()
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 28);
 
-    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("test_gdb.cpp")), 10);
+    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile(QStringLiteral("test_gdb.cpp"))), 10);
     QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
 
     session->startDebugging(&cfg, m_iface);
@@ -537,17 +537,17 @@ void GdbTest::testConditionBreakpoint()
     TestLaunchConfiguration cfg;
 
     KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 39);
-    b->setCondition("x[0] == 'H'");
+    b->setCondition(QStringLiteral("x[0] == 'H'"));
 
     b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 23);
-    b->setCondition("i==2");
+    b->setCondition(QStringLiteral("i==2"));
 
     b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 24);
 
     session->startDebugging(&cfg, m_iface);
 
     WAIT_FOR(session, session->state() == DebugSession::PausedState && session->line() == 24);
-    b->setCondition("i == 0");
+    b->setCondition(QStringLiteral("i == 0"));
     QTest::qWait(100);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -571,7 +571,7 @@ void GdbTest::testBreakOnWriteBreakpoint()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 24);
 
-    breakpoints()->addWatchpoint("i");
+    breakpoints()->addWatchpoint(QStringLiteral("i"));
     QTest::qWait(100);
 
     session->run();
@@ -596,8 +596,8 @@ void GdbTest::testBreakOnWriteWithConditionBreakpoint()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 24);
 
-    KDevelop::Breakpoint *b = breakpoints()->addWatchpoint("i");
-    b->setCondition("i==2");
+    KDevelop::Breakpoint *b = breakpoints()->addWatchpoint(QStringLiteral("i"));
+    b->setCondition(QStringLiteral("i==2"));
     QTest::qWait(100);
 
     session->run();
@@ -641,7 +641,7 @@ void GdbTest::testBreakOnReadBreakpoint2()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 24);
 
-    breakpoints()->addReadWatchpoint("i");
+    breakpoints()->addReadWatchpoint(QStringLiteral("i"));
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -667,7 +667,7 @@ void GdbTest::testBreakOnAccessBreakpoint()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 24);
 
-    breakpoints()->addAccessWatchpoint("i");
+    breakpoints()->addAccessWatchpoint(QStringLiteral("i"));
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -689,8 +689,8 @@ void GdbTest::testBreakOnAccessBreakpoint()
 void GdbTest::testInsertBreakpointWhileRunning()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("debugeeslow"));
-    QString fileName = findSourceFile("debugeeslow.cpp");
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeeslow")));
+    QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
 
     session->startDebugging(&cfg, m_iface);
 
@@ -710,8 +710,8 @@ void GdbTest::testInsertBreakpointWhileRunning()
 void GdbTest::testInsertBreakpointWhileRunningMultiple()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("debugeeslow"));
-    QString fileName = findSourceFile("debugeeslow.cpp");
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeeslow")));
+    QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
 
     session->startDebugging(&cfg, m_iface);
 
@@ -739,7 +739,7 @@ void GdbTest::testInsertBreakpointFunctionName()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    breakpoints()->addCodeBreakpoint("main");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
 
     session->startDebugging(&cfg, m_iface);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -753,7 +753,7 @@ void GdbTest::testManualBreakpoint()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    breakpoints()->addCodeBreakpoint("main");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
 
     session->startDebugging(&cfg, m_iface);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -763,22 +763,22 @@ void GdbTest::testManualBreakpoint()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
-    session->addCommand(MI::NonMI, "break debugee.cpp:23");
+    session->addCommand(MI::NonMI, QStringLiteral("break debugee.cpp:23"));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
     KDevelop::Breakpoint* b = breakpoints()->breakpoint(0);
     QCOMPARE(b->line(), 22);
 
-    session->addCommand(MI::NonMI, "disable 2");
-    session->addCommand(MI::NonMI, "condition 2 i == 1");
-    session->addCommand(MI::NonMI, "ignore 2 1");
+    session->addCommand(MI::NonMI, QStringLiteral("disable 2"));
+    session->addCommand(MI::NonMI, QStringLiteral("condition 2 i == 1"));
+    session->addCommand(MI::NonMI, QStringLiteral("ignore 2 1"));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(b->enabled(), false);
     QCOMPARE(b->condition(), QString("i == 1"));
     QCOMPARE(b->ignoreHits(), 1);
 
-    session->addCommand(MI::NonMI, "delete 2");
+    session->addCommand(MI::NonMI, QStringLiteral("delete 2"));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
@@ -863,8 +863,8 @@ void GdbTest::testStack()
 void GdbTest::testStackFetchMore()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("debugeerecursion"));
-    QString fileName = findSourceFile("debugeerecursion.cpp");
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeerecursion")));
+    QString fileName = findSourceFile(QStringLiteral("debugeerecursion.cpp"));
 
     TestFrameStackModel *stackModel = session->frameStackModel();
 
@@ -962,8 +962,8 @@ void GdbTest::testStackDeactivateAndActive()
 void GdbTest::testStackSwitchThread()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("debugeethreads"));
-    QString fileName = findSourceFile("debugeethreads.cpp");
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeethreads")));
+    QString fileName = findSourceFile(QStringLiteral("debugeethreads.cpp"));
 
     TestFrameStackModel *stackModel = session->frameStackModel();
 
@@ -995,10 +995,10 @@ void GdbTest::testAttach()
 {
     SKIP_IF_ATTACH_FORBIDDEN();
 
-    QString fileName = findSourceFile("debugeeslow.cpp");
+    QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
 
     KProcess debugeeProcess;
-    debugeeProcess << "nice" << findExecutable("debugeeslow").toLocalFile();
+    debugeeProcess << QStringLiteral("nice") << findExecutable(QStringLiteral("debugeeslow")).toLocalFile();
     debugeeProcess.start();
     QVERIFY(debugeeProcess.waitForStarted());
     QTest::qWait(100);
@@ -1024,20 +1024,20 @@ void GdbTest::testManualAttach()
 {
     SKIP_IF_ATTACH_FORBIDDEN();
 
-    QString fileName = findSourceFile("debugeeslow.cpp");
+    QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
 
     KProcess debugeeProcess;
-    debugeeProcess << "nice" << findExecutable("debugeeslow").toLocalFile();
+    debugeeProcess << QStringLiteral("nice") << findExecutable(QStringLiteral("debugeeslow")).toLocalFile();
     debugeeProcess.start();
     QVERIFY(debugeeProcess.waitForStarted());
 
     TestDebugSession *session = new TestDebugSession;
 
     TestLaunchConfiguration cfg;
-    cfg.config().writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(findSourceFile("gdb_script_empty")));
+    cfg.config().writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(findSourceFile(QStringLiteral("gdb_script_empty"))));
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
-    session->addCommand(MI::NonMI, QString("attach %0").arg(debugeeProcess.pid()));
+    session->addCommand(MI::NonMI, QStringLiteral("attach %0").arg(debugeeProcess.pid()));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     session->run();
@@ -1047,22 +1047,22 @@ void GdbTest::testManualAttach()
 
 void GdbTest::testCoreFile()
 {
-    QFile f("core");
+    QFile f(QStringLiteral("core"));
     if (f.exists()) f.remove();
 
     KProcess debugeeProcess;
     debugeeProcess.setOutputChannelMode(KProcess::MergedChannels);
-    debugeeProcess << "bash" << "-c" << "ulimit -c unlimited; " + findExecutable("debugeecrash").toLocalFile();
+    debugeeProcess << QStringLiteral("bash") << QStringLiteral("-c") << "ulimit -c unlimited; " + findExecutable(QStringLiteral("debugeecrash")).toLocalFile();
     debugeeProcess.start();
     debugeeProcess.waitForFinished();
     qDebug() << debugeeProcess.readAll();
 
-    bool coreFileFound = QFile::exists("core");
+    bool coreFileFound = QFile::exists(QStringLiteral("core"));
     if (!coreFileFound) {
         // Try to use coredumpctl
-        auto coredumpctl = QStandardPaths::findExecutable("coredumpctl");
+        auto coredumpctl = QStandardPaths::findExecutable(QStringLiteral("coredumpctl"));
         if (!coredumpctl.isEmpty()) {
-            QFileInfo fi("core");
+            QFileInfo fi(QStringLiteral("core"));
             KProcess::execute(coredumpctl, {"-1", "-o", fi.absoluteFilePath(), "dump", "debugeecrash"});
             coreFileFound = fi.exists();
         }
@@ -1071,7 +1071,7 @@ void GdbTest::testCoreFile()
         QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).", SkipSingle);
 
     TestDebugSession *session = new TestDebugSession;
-    session->examineCoreFile(findExecutable("debugeecrash"), QUrl::fromLocalFile(QDir::currentPath()+"/core"));
+    session->examineCoreFile(findExecutable(QStringLiteral("debugeecrash")), QUrl::fromLocalFile(QDir::currentPath()+"/core"));
 
     TestFrameStackModel *stackModel = session->frameStackModel();
 
@@ -1136,7 +1136,7 @@ void GdbTest::testVariablesLocalsStruct()
 
     int structIndex = 0;
     for(int j=0; j<3; ++j) {
-        if (variableCollection()->index(j, 0, i).data().toString() == "ts") {
+        if (variableCollection()->index(j, 0, i).data().toString() == QLatin1String("ts")) {
             structIndex = j;
         }
     }
@@ -1176,7 +1176,7 @@ void GdbTest::testVariablesWatches()
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
-    variableCollection()->watches()->add("ts");
+    variableCollection()->watches()->add(QStringLiteral("ts"));
     QTest::qWait(300);
 
     QModelIndex i = variableCollection()->index(0, 0);
@@ -1215,8 +1215,8 @@ void GdbTest::testVariablesWatchesQuotes()
     // the unquoted string (the actual content):               t\"t
     // quoted string (what we would write as a c string):     "t\\\"t"
     // written in source file:                             R"("t\\\"t")"
-    const QString testString("t\\\"t"); // the actual content
-    const QString quotedTestString(R"("t\\\"t")");
+    const QString testString(QStringLiteral("t\\\"t")); // the actual content
+    const QString quotedTestString(QStringLiteral(R"("t\\\"t")"));
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 38);
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -1241,12 +1241,12 @@ void GdbTest::testVariablesWatchesQuotes()
         QChar c = testString.at(ind);
         QString value = QString::number(c.toLatin1()) + " '";
         if (c == '\\')
-            value += "\\\\";
+            value += QLatin1String("\\\\");
         else if (c == '\'')
-            value += "\\'";
+            value += QLatin1String("\\'");
         else
             value += c;
-        value += "'";
+        value += QLatin1String("'");
         COMPARE_DATA(variableCollection()->index(ind, 1, testStr), value);
     }
     COMPARE_DATA(variableCollection()->index(len, 0, testStr), QString::number(len));
@@ -1267,7 +1267,7 @@ void GdbTest::testVariablesWatchesTwoSessions()
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
-    variableCollection()->watches()->add("ts");
+    variableCollection()->watches()->add(QStringLiteral("ts"));
     QTest::qWait(300);
 
     QModelIndex ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
@@ -1433,8 +1433,8 @@ void GdbTest::testSegfaultDebugee()
 {
     TestDebugSession *session = new TestDebugSession;
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-    TestLaunchConfiguration cfg(findExecutable("debugeecrash"));
-    QString fileName = findSourceFile("debugeecrash.cpp");
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeecrash")));
+    QString fileName = findSourceFile(QStringLiteral("debugeecrash.cpp"));
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 23);
 
@@ -1468,7 +1468,7 @@ void GdbTest::testSwitchFrameGdbConsole()
     QTest::qWait(500);
     QCOMPARE(stackModel->currentFrame(), 1);
 
-    session->addUserCommand("print x");
+    session->addUserCommand(QStringLiteral("print x"));
     QTest::qWait(500);
     //currentFrame must not reset to 0; Bug 222882
     QCOMPARE(stackModel->currentFrame(), 1);
@@ -1479,8 +1479,8 @@ void GdbTest::testSwitchFrameGdbConsole()
 void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("debugeeslow"));
-    QString fileName = findSourceFile("debugeeslow.cpp");
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeeslow")));
+    QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
 
     session->startDebugging(&cfg, m_iface);
 
@@ -1497,9 +1497,9 @@ void GdbTest::testCommandOrderFastStepping()
 {
     TestDebugSession *session = new TestDebugSession;
 
-    TestLaunchConfiguration cfg(findExecutable("debugeeqt"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeeqt")));
 
-    breakpoints()->addCodeBreakpoint("main");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
     QVERIFY(session->startDebugging(&cfg, m_iface));
     for(int i=0; i<20; i++) {
         session->stepInto();
@@ -1515,9 +1515,9 @@ void GdbTest::testPickupManuallyInsertedBreakpoint()
 
     TestLaunchConfiguration cfg;
 
-    breakpoints()->addCodeBreakpoint("main");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
     QVERIFY(session->startDebugging(&cfg, m_iface));
-    session->addCommand(MI::NonMI, "break debugee.cpp:32");
+    session->addCommand(MI::NonMI, QStringLiteral("break debugee.cpp:32"));
     session->stepInto();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000); //wait for breakpoints update
@@ -1537,7 +1537,7 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
     //inject here, so it behaves similar like a command from .gdbinit
     QTemporaryFile configScript;
     configScript.open();
-    configScript.write(QString("file %0\n").arg(findExecutable("debugee").toLocalFile()).toLocal8Bit());
+    configScript.write(QStringLiteral("file %0\n").arg(findExecutable(QStringLiteral("debugee")).toLocalFile()).toLocal8Bit());
     configScript.write("break debugee.cpp:32\n");
     configScript.close();
 
@@ -1545,7 +1545,7 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
     KConfigGroup grp = cfg.config();
     grp.writeEntry(Config::RemoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile("debugee.cpp"), 31);
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(QStringLiteral("debugee.cpp")), 31);
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -1583,7 +1583,7 @@ void GdbTest::testRunGdbScript()
     QTemporaryFile runScript;
     runScript.open();
 
-    runScript.write("file " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
+    runScript.write("file " + findExecutable(QStringLiteral("debugee")).toLocalFile().toUtf8() + "\n");
     runScript.write("break main\n");
     runScript.write("run\n");
     runScript.close();
@@ -1604,7 +1604,7 @@ void GdbTest::testRunGdbScript()
 
 void GdbTest::testRemoteDebug()
 {
-    const QString gdbserverExecutable = QStandardPaths::findExecutable("gdbserver");
+    const QString gdbserverExecutable = QStandardPaths::findExecutable(QStringLiteral("gdbserver"));
     if (gdbserverExecutable.isEmpty()) {
         QSKIP("Skipping, gdbserver not available", SkipSingle);
     }
@@ -1613,14 +1613,14 @@ void GdbTest::testRemoteDebug()
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
     shellScript.open();
-    shellScript.write("gdbserver localhost:2345 " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
+    shellScript.write("gdbserver localhost:2345 " + findExecutable(QStringLiteral("debugee")).toLocalFile().toUtf8() + "\n");
     shellScript.close();
     shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
     QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
     runScript.open();
-    runScript.write("file " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
+    runScript.write("file " + findExecutable(QStringLiteral("debugee")).toLocalFile().toUtf8() + "\n");
     runScript.write("target remote localhost:2345\n");
     runScript.write("break debugee.cpp:30\n");
     runScript.write("continue\n");
@@ -1645,7 +1645,7 @@ void GdbTest::testRemoteDebug()
 
 void GdbTest::testRemoteDebugInsertBreakpoint()
 {
-    const QString gdbserverExecutable = QStandardPaths::findExecutable("gdbserver");
+    const QString gdbserverExecutable = QStandardPaths::findExecutable(QStringLiteral("gdbserver"));
     if (gdbserverExecutable.isEmpty()) {
         QSKIP("Skipping, gdbserver not available", SkipSingle);
     }
@@ -1657,14 +1657,14 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
     shellScript.open();
-    shellScript.write("gdbserver localhost:2345 " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
+    shellScript.write("gdbserver localhost:2345 " + findExecutable(QStringLiteral("debugee")).toLocalFile().toUtf8() + "\n");
     shellScript.close();
     shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
     QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
     runScript.open();
-    runScript.write("file " + findExecutable("debugee").toLocalFile().toUtf8() + '\n');
+    runScript.write("file " + findExecutable(QStringLiteral("debugee")).toLocalFile().toUtf8() + '\n');
     runScript.write("target remote localhost:2345\n");
     runScript.write("break debugee.cpp:30\n");
     runScript.write("continue\n");
@@ -1697,7 +1697,7 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
 void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 {
-    const QString gdbserverExecutable = QStandardPaths::findExecutable("gdbserver");
+    const QString gdbserverExecutable = QStandardPaths::findExecutable(QStringLiteral("gdbserver"));
     if (gdbserverExecutable.isEmpty()) {
         QSKIP("Skipping, gdbserver not available", SkipSingle);
     }
@@ -1708,14 +1708,14 @@ void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
     shellScript.open();
-    shellScript.write("gdbserver localhost:2345 "+findExecutable("debugee").toLocalFile().toLatin1()+"\n");
+    shellScript.write("gdbserver localhost:2345 "+findExecutable(QStringLiteral("debugee")).toLocalFile().toLatin1()+"\n");
     shellScript.close();
     shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
     QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
     runScript.open();
-    runScript.write("file "+findExecutable("debugee").toLocalFile().toLatin1()+"\n");
+    runScript.write("file "+findExecutable(QStringLiteral("debugee")).toLocalFile().toLatin1()+"\n");
     runScript.write("target remote localhost:2345\n");
     runScript.write("break debugee.cpp:30\n");
     runScript.write("continue\n");
@@ -1767,9 +1767,9 @@ void GdbTest::testBreakpointWithSpaceInPath()
 {
     TestDebugSession *session = new TestDebugSession;
 
-    TestLaunchConfiguration cfg(findExecutable("debugeespace"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeespace")));
     KConfigGroup grp = cfg.config();
-    QString fileName = findSourceFile("debugee space.cpp");
+    QString fileName = findSourceFile(QStringLiteral("debugee space.cpp"));
 
     KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 20);
     QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
@@ -1809,9 +1809,9 @@ void GdbTest::testCatchpoint()
     TestDebugSession *session = new TestDebugSession;
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
-    TestLaunchConfiguration cfg(findExecutable("debugeeexception"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeeexception")));
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("debugeeexception.cpp")), 29);
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile(QStringLiteral("debugeeexception.cpp"))), 29);
 
     session->startDebugging(&cfg, m_iface);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -1820,7 +1820,7 @@ void GdbTest::testCatchpoint()
     QCOMPARE(fsModel->currentFrame(), 0);
     QCOMPARE(session->line(), 29);
 
-    session->addCommand(MI::NonMI, "catch throw");
+    session->addCommand(MI::NonMI, QStringLiteral("catch throw"));
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
@@ -1844,8 +1844,8 @@ void GdbTest::testThreadAndFrameInfo()
     // Check if --thread is added to user commands
 
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable("debugeethreads"));
-    QString fileName = findSourceFile("debugeethreads.cpp");
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeethreads")));
+    QString fileName = findSourceFile(QStringLiteral("debugeethreads.cpp"));
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 38);
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -1853,7 +1853,7 @@ void GdbTest::testThreadAndFrameInfo()
 
     QSignalSpy outputSpy(session, &TestDebugSession::debuggerUserCommandOutput);
 
-    session->addCommand(new MI::UserCommand(MI::ThreadInfo,""));
+    session->addCommand(new MI::UserCommand(MI::ThreadInfo,QLatin1String("")));
     session->addCommand(new MI::UserCommand(MI::StackListLocals, QLatin1String("0")));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // wait for command finish
 
@@ -1901,9 +1901,9 @@ void GdbTest::testMultipleLocationsBreakpoint()
 {
     TestDebugSession *session = new TestDebugSession;
 
-    TestLaunchConfiguration cfg(findExecutable("debugeemultilocbreakpoint"));
+    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debugeemultilocbreakpoint")));
 
-    breakpoints()->addCodeBreakpoint("aPlusB");
+    breakpoints()->addCodeBreakpoint(QStringLiteral("aPlusB"));
 
     //TODO check if the additional location breakpoint is added
 
@@ -1931,7 +1931,7 @@ void GdbTest::testBug301287()
     session->startDebugging(&cfg, m_iface);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
-    variableCollection()->watches()->add("argc");
+    variableCollection()->watches()->add(QStringLiteral("argc"));
     QTest::qWait(300);
 
     QModelIndex i = variableCollection()->index(0, 0);
@@ -1965,8 +1965,8 @@ void GdbTest::testMultipleBreakpoint()
         TestDebugSession *session = new TestDebugSession;
 
         //there'll be about 3-4 breakpoints, but we treat it like one.
-        TestLaunchConfiguration c(findExecutable("debugeemultiplebreakpoint"));
-        KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint("debugeemultiplebreakpoint.cpp:52");
+        TestLaunchConfiguration c(findExecutable(QStringLiteral("debugeemultiplebreakpoint")));
+        KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeemultiplebreakpoint.cpp:52"));
         session->startDebugging(&c, m_iface);
         WAIT_FOR_STATE(session, DebugSession::PausedState);
         QCOMPARE(breakpoints()->breakpoints().count(), 1);
@@ -1980,17 +1980,17 @@ void GdbTest::testRegularExpressionBreakpoint()
 {
         TestDebugSession *session = new TestDebugSession;
 
-        TestLaunchConfiguration c(findExecutable("debugeemultilocbreakpoint"));
-        breakpoints()->addCodeBreakpoint("main");
+        TestLaunchConfiguration c(findExecutable(QStringLiteral("debugeemultilocbreakpoint")));
+        breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
         session->startDebugging(&c, m_iface);
         WAIT_FOR_STATE(session, DebugSession::PausedState);
-        session->addCommand(MI::NonMI, "rbreak .*aPl.*B");
+        session->addCommand(MI::NonMI, QStringLiteral("rbreak .*aPl.*B"));
         QTest::qWait(100);
         session->run();
         WAIT_FOR_STATE(session, DebugSession::PausedState);
         QCOMPARE(breakpoints()->breakpoints().count(), 3);
 
-        session->addCommand(MI::BreakDelete, "");
+        session->addCommand(MI::BreakDelete, QLatin1String(""));
         session->run();
         WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -1999,8 +1999,8 @@ void GdbTest::testChangeBreakpointWhileRunning() {
 
     TestDebugSession *session = new TestDebugSession;
 
-    TestLaunchConfiguration c(findExecutable("debugeeslow"));
-    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("debugeeslow.cpp:25");
+    TestLaunchConfiguration c(findExecutable(QStringLiteral("debugeeslow")));
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:25"));
     session->startDebugging(&c, m_iface);
 
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
@@ -2055,9 +2055,9 @@ void GdbTest::testPathWithSpace()
 #ifdef HAVE_PATH_WITH_SPACES_TEST
     TestDebugSession* session = new TestDebugSession;
 
-    auto debugee = findExecutable("path with space/spacedebugee");
+    auto debugee = findExecutable(QStringLiteral("path with space/spacedebugee"));
     TestLaunchConfiguration c(debugee, KIO::upUrl(debugee));
-    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("spacedebugee.cpp:30");
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("spacedebugee.cpp:30"));
     QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
     session->startDebugging(&c, m_iface);
 

@@ -62,22 +62,22 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     Format currentFormat = formats(group).first();
     switch (currentFormat) {
     case Binary:
-        registers = "t ";
+        registers = QLatin1String("t ");
         break;
     case Octal:
-        registers = "o ";
+        registers = QLatin1String("o ");
         break;
     case Decimal :
-        registers = "d ";
+        registers = QLatin1String("d ");
         break;
     case Hexadecimal:
-        registers = "x ";
+        registers = QLatin1String("x ");
         break;
     case Raw:
-        registers = "r ";
+        registers = QLatin1String("r ");
         break;
     case Unsigned:
-        registers = "u ";
+        registers = QLatin1String("u ");
         break;
     default:
         break;
@@ -87,7 +87,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     Mode currentMode = modes(group).first();
     if (((currentMode >= v4_float && currentMode <= v2_double) ||
         (currentMode >= f32 && currentMode <= f64) || group.type() == floatPoint) && currentFormat != Raw) {
-        registers = "N ";
+        registers = QLatin1String("N ");
     }
 
     if (group.type() == flag) {
@@ -99,7 +99,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     }
 
     //Not initialized yet. They'll be updated afterwards.
-    if (registers.contains("-1")) {
+    if (registers.contains(QLatin1String("-1"))) {
         qCDebug(DEBUGGERCOMMON) << "Will update later";
         m_pendingGroups.clear();
         return;
@@ -117,7 +117,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
 
 void IRegisterController::registerNamesHandler(const ResultRecord& r)
 {
-    const Value& names = r["register-names"];
+    const Value& names = r[QStringLiteral("register-names")];
 
     m_rawRegisterNames.clear();
     for (int i = 0; i < names.size(); ++i) {
@@ -135,17 +135,17 @@ void IRegisterController::generalRegistersHandler(const ResultRecord& r)
 
     QString registerName;
 
-    const Value& values = r["register-values"];
+    const Value& values = r[QStringLiteral("register-values")];
     for (int i = 0; i < values.size(); ++i) {
         const Value& entry = values[i];
-        int number = entry["number"].literal().toInt();
+        int number = entry[QStringLiteral("number")].literal().toInt();
         Q_ASSERT(m_rawRegisterNames.size() >  number);
 
         if (!m_rawRegisterNames[number].isEmpty()) {
             if (registerName.isEmpty()) {
                 registerName = m_rawRegisterNames[number];
             }
-            const QString value = entry["value"].literal();
+            const QString value = entry[QStringLiteral("value")].literal();
             m_registers.insert(m_rawRegisterNames[number], value);
         }
     }
@@ -185,7 +185,7 @@ bool IRegisterController::initializeRegisters()
         return false;
     }
 
-    m_debugSession->addCommand(DataListRegisterNames, "", this, &IRegisterController::registerNamesHandler);
+    m_debugSession->addCommand(DataListRegisterNames, QLatin1String(""), this, &IRegisterController::registerNamesHandler);
     return true;
 }
 
@@ -224,7 +224,7 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
 
     if (idx != -1) {
         flagsValue ^= static_cast<int>(qPow(2, flag.bits[idx].toUInt()));
-        setGeneralRegister(Register(flag.registerName, QString("0x%1").arg(flagsValue, 0, 16)), flag.groupName);
+        setGeneralRegister(Register(flag.registerName, QStringLiteral("0x%1").arg(flagsValue, 0, 16)), flag.groupName);
     } else {
         updateRegisters(flag.groupName);
         qCDebug(DEBUGGERCOMMON) << reg.name << ' ' << reg.value << "is incorrect flag name/value";
@@ -237,7 +237,7 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
         return;
     }
 
-    const QString command = QString("set var $%1=%2").arg(reg.name).arg(reg.value);
+    const QString command = QStringLiteral("set var $%1=%2").arg(reg.name).arg(reg.value);
     qCDebug(DEBUGGERCOMMON) << "Setting register: " << command;
 
     m_debugSession->addCommand(NonMI, command);
@@ -341,20 +341,20 @@ void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
     QString registerName;
     Mode currentMode = LAST_MODE;
     GroupsName group;
-    const Value& values = r["register-values"];
+    const Value& values = r[QStringLiteral("register-values")];
 
     Q_ASSERT(!m_rawRegisterNames.isEmpty());
 
     for (int i = 0; i < values.size(); ++i) {
         const Value& entry = values[i];
-        int number = entry["number"].literal().toInt();
+        int number = entry[QStringLiteral("number")].literal().toInt();
         registerName = m_rawRegisterNames[number];
         if (currentMode == LAST_MODE) {
             group = groupForRegisterName(registerName);
             currentMode = modes(group).first();
         }
 
-        QString record = entry["value"].literal();
+        QString record = entry[QStringLiteral("value")].literal();
         int start = record.indexOf(Converters::modeToString(currentMode));
         Q_ASSERT(start != -1);
         start += Converters::modeToString(currentMode).size();

@@ -95,13 +95,13 @@ QString QMakeConfig::qmakeExecutable(const IProject* project)
         }
     }
     if (exe.isEmpty()) {
-        exe = QStandardPaths::findExecutable("qmake");
+        exe = QStandardPaths::findExecutable(QStringLiteral("qmake"));
     }
     if (exe.isEmpty()) {
-        exe = QStandardPaths::findExecutable("qmake-qt5");
+        exe = QStandardPaths::findExecutable(QStringLiteral("qmake-qt5"));
     }
     if (exe.isEmpty()) {
-        exe = QStandardPaths::findExecutable("qmake-qt4");
+        exe = QStandardPaths::findExecutable(QStringLiteral("qmake-qt4"));
     }
     Q_ASSERT(!exe.isEmpty());
     return exe;
@@ -116,7 +116,7 @@ QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeExecutable, 
 
     const int rc = p.execute();
     if (rc != 0) {
-        qCWarning(KDEV_QMAKE) << "failed to execute qmake query " << p.program().join(" ") << "return code was:" << rc;
+        qCWarning(KDEV_QMAKE) << "failed to execute qmake query " << p.program().join(QStringLiteral(" ")) << "return code was:" << rc;
         return QHash<QString, QString>();
     }
 
@@ -133,37 +133,37 @@ QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeExecutable, 
         const auto value = line.mid(colon + 1);
         hash.insert(key, value);
     }
-    qCDebug(KDEV_QMAKE) << "Ran qmake (" << p.program().join(" ") << "), found:" << hash;
+    qCDebug(KDEV_QMAKE) << "Ran qmake (" << p.program().join(QStringLiteral(" ")) << "), found:" << hash;
     return hash;
 }
 
 QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
 {
     QStringList paths;
-    if (qmakeVars.contains("QMAKE_MKSPECS")) {
+    if (qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS"))) {
         // qt4
         foreach (const QString& dir, qmakeVars["QMAKE_MKSPECS"].split(listSeparator())) {
             paths << dir + "/default/qmake.conf";
         }
-    } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QMAKE_SPEC")) {
+    } else if (!qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS")) && qmakeVars.contains(QStringLiteral("QMAKE_SPEC"))) {
         QString path;
         // qt5 doesn't have the MKSPECS nor default anymore
         // let's try to look up the mkspec path ourselves,
         // see QMakeEvaluator::updateMkspecPaths() in QMake source code as reference
-        if (qmakeVars.contains("QT_HOST_DATA/src")) {
+        if (qmakeVars.contains(QStringLiteral("QT_HOST_DATA/src"))) {
             // >=qt5.2: since 0d463c05fc4f2e79e5a4e5a5382a1e6ed5d2615e (in Qt5 qtbase repository)
             // mkspecs are no longer copied to the build directory.
             // instead, we have to look them up in the source directory.
             // this commit also introduced the key 'QT_HOST_DATA/src' which we use here
-            path = qmakeVars["QT_HOST_DATA/src"];
-        } else if (qmakeVars.contains("QT_HOST_DATA")) {
+            path = qmakeVars[QStringLiteral("QT_HOST_DATA/src")];
+        } else if (qmakeVars.contains(QStringLiteral("QT_HOST_DATA"))) {
             // cross compilation
-            path = qmakeVars["QT_HOST_DATA"];
+            path = qmakeVars[QStringLiteral("QT_HOST_DATA")];
         } else {
             Q_ASSERT(qmakeVars.contains("QT_INSTALL_PREFIX"));
-            path = qmakeVars["QT_INSTALL_PREFIX"];
+            path = qmakeVars[QStringLiteral("QT_INSTALL_PREFIX")];
         }
-        path += "/mkspecs/" + qmakeVars["QMAKE_SPEC"] + "/qmake.conf";
+        path += "/mkspecs/" + qmakeVars[QStringLiteral("QMAKE_SPEC")] + "/qmake.conf";
         paths << path;
     }
 

@@ -57,7 +57,7 @@ void TestDeclarations::cleanupTestCase()
 
 void TestDeclarations::testJSProblems()
 {
-    const IndexedString file(QUrl("file:///internal/jsproblems.js"));
+    const IndexedString file(QUrl(QStringLiteral("file:///internal/jsproblems.js")));
     ParseSession session(file,
         "function f(a) {}\n"
         "f(2);\n"
@@ -76,7 +76,7 @@ void TestDeclarations::testJSProblems()
 
 void TestDeclarations::testFunction()
 {
-    const IndexedString file(QUrl("file:///internal/functionArgs.js"));
+    const IndexedString file(QUrl(QStringLiteral("file:///internal/functionArgs.js")));
     //                          0         1         2         3
     //                          01234567890123456789012345678901234567890
     ParseSession session(file, "/**\n * some comment\n */\n"
@@ -131,7 +131,7 @@ void TestDeclarations::testFunction()
 
 void TestDeclarations::testQMLId()
 {
-    const IndexedString file(QUrl("file:///internal/qmlId.qml"));
+    const IndexedString file(QUrl(QStringLiteral("file:///internal/qmlId.qml")));
 
     ReferencedTopDUContext top;
 
@@ -211,7 +211,7 @@ void TestDeclarations::testQMLId()
 
 void TestDeclarations::testProperty()
 {
-    const IndexedString file(QUrl("file:///internal/qmlProperty.qml"));
+    const IndexedString file(QUrl(QStringLiteral("file:///internal/qmlProperty.qml")));
     //                          0         1         2         3
     //                          01234567890123456789012345678901234567890
     ParseSession session(file, "Text {\n"
@@ -252,38 +252,38 @@ void TestDeclarations::testQMLtypesImportPaths()
     QString path;
 
     // QtQuick QML modules
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick", "2.0");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick"), QStringLiteral("2.0"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtTest", "1.1");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtTest"), QStringLiteral("1.1"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Layouts", "1.1");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick.Layouts"), QStringLiteral("1.1"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Controls", "1.1");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick.Controls"), QStringLiteral("1.1"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Dialogs", "1.1");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick.Dialogs"), QStringLiteral("1.1"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.LocalStorage", "2.0");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick.LocalStorage"), QStringLiteral("2.0"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Particles", "2.0");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick.Particles"), QStringLiteral("2.0"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.Window", "2.2");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick.Window"), QStringLiteral("2.2"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQuick.XmlListModel", "2.0");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQuick.XmlListModel"), QStringLiteral("2.0"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
     // QtQml QML modules
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtQml.Models", "2.3");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtQml.Models"), QStringLiteral("2.3"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 
     // QtMultimedia QML modules
-    path = QmlJS::Cache::instance().modulePath(stubPath, "QtMultimedia", "5.6");
+    path = QmlJS::Cache::instance().modulePath(stubPath, QStringLiteral("QtMultimedia"), QStringLiteral("5.6"));
     QVERIFY(QFileInfo::exists(path + "/plugins.qmltypes"));
 }

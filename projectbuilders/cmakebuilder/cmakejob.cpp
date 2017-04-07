@@ -57,7 +57,7 @@ void CMakeJob::start()
 
     if( !m_project ) {
         setError(NoProjectError);
-        setErrorText("Internal error: no project specified to configure.");
+        setErrorText(QStringLiteral("Internal error: no project specified to configure."));
         emitResult();
         return;
     }
@@ -80,7 +80,7 @@ QStringList CMakeJob::commandLine() const
 {
     QStringList args;
     args << CMake::currentCMakeExecutable(m_project).toLocalFile();
-    args << "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON";
+    args << QStringLiteral("-DCMAKE_EXPORT_COMPILE_COMMANDS=ON");
 
     QString installDir = CMake::currentInstallDir( m_project ).toLocalFile();
     if( !installDir.isEmpty() )
@@ -99,9 +99,9 @@ QStringList CMakeJob::commandLine() const
 
     //if we are creating a new build directory, we'll want to specify the generator
     QDir builddir(CMake::currentBuildDir( m_project ).toLocalFile());
-    if(!builddir.exists() || !builddir.exists("CMakeCache.txt")) {
+    if(!builddir.exists() || !builddir.exists(QStringLiteral("CMakeCache.txt"))) {
         CMakeBuilderSettings::self()->load();
-        args << QString("-G") << CMake::defaultGenerator();
+        args << QStringLiteral("-G") << CMake::defaultGenerator();
     }
     QString cmakeargs = CMake::currentExtraArguments( m_project );
     if( !cmakeargs.isEmpty() ) {

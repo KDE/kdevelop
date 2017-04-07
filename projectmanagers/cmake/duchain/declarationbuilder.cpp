@@ -30,7 +30,7 @@ void DeclarationBuilder::startVisiting(CMakeContentIterator* node)
     for(; node->hasNext(); ) {
         const CMakeFunctionDesc& func = node->next();
 
-        if (func.name == "add_executable" || func.name == "add_library") {
+        if (func.name == QLatin1String("add_executable") || func.name == QLatin1String("add_library")) {
             if (func.arguments.isEmpty()) {
                 continue;
             }
@@ -40,7 +40,7 @@ void DeclarationBuilder::startVisiting(CMakeContentIterator* node)
             Declaration* decl = openDeclaration<Declaration>(QualifiedIdentifier(arg.value), arg.range(), DeclarationIsDefinition);
             decl->setAbstractType(AbstractType::Ptr(new TargetType));
             closeDeclaration();
-        } else if(func.name == "macro" || func.name == "function") {
+        } else if(func.name == QLatin1String("macro") || func.name == QLatin1String("function")) {
             if (func.arguments.isEmpty()) {
                 continue;
             }

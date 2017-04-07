@@ -104,11 +104,11 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     m_selectAddrAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(m_selectAddrAction, &QAction::triggered, widget, &DisassembleWidget::slotChangeAddress);
 
-    m_jumpToLocation = new QAction(QIcon::fromTheme("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
+    m_jumpToLocation = new QAction(QIcon::fromTheme(QStringLiteral("debug-execute-to-cursor")), i18n("&Jump to Cursor"), this);
     m_jumpToLocation->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
     connect(m_jumpToLocation,&QAction::triggered, widget, &DisassembleWidget::jumpToCursor);
 
-    m_runUntilCursor = new QAction(QIcon::fromTheme("debug-run-cursor"), i18n("&Run to Cursor"), this);
+    m_runUntilCursor = new QAction(QIcon::fromTheme(QStringLiteral("debug-run-cursor")), i18n("&Run to Cursor"), this);
     m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
     connect(m_runUntilCursor,&QAction::triggered, widget, &DisassembleWidget::runToCursor);
 
@@ -201,7 +201,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
         m_disassembleWindow->setUniformRowHeights(true);
         m_disassembleWindow->setRootIsDecorated(false);
 
-        m_disassembleWindow->setHeaderLabels(QStringList() << "" << i18n("Address") << i18n("Function") << i18n("Instruction"));
+        m_disassembleWindow->setHeaderLabels(QStringList() << QLatin1String("") << i18n("Address") << i18n("Function") << i18n("Instruction"));
 
         m_splitter->setStretchFactor(0, 1);
         m_splitter->setContentsMargins(0, 0, 0, 0);
@@ -219,7 +219,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
 
     setLayout(topLayout);
 
-    setWindowIcon( QIcon::fromTheme("system-run", windowIcon()) );
+    setWindowIcon( QIcon::fromTheme(QStringLiteral("system-run"), windowIcon()) );
     setWindowTitle(i18n("Disassemble/Registers View"));
 
     KDevelop::IDebugController* pDC=KDevelop::ICore::self()->debugController();
@@ -338,10 +338,10 @@ void DisassembleWidget::slotShowStepInSource(const QUrl&, int,
 
 void DisassembleWidget::updateExecutionAddressHandler(const ResultRecord& r)
 {
-    const Value& content = r["asm_insns"];
+    const Value& content = r[QStringLiteral("asm_insns")];
     const Value& pc = content[0];
-    if( pc.hasField("address") ){
-        QString addr = pc["address"].literal();
+    if( pc.hasField(QStringLiteral("address")) ){
+        QString addr = pc[QStringLiteral("address")].literal();
         address_ = addr.toULong(&ok,16);
 
         disassembleMemoryRegion(addr);
@@ -358,13 +358,13 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
 
     //only get $pc
     if (from.isEmpty()){
-        s->addCommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0",
+        s->addCommand(DataDisassemble, QStringLiteral("-s \"$pc\" -e \"$pc+1\" -- 0"),
                       this, &DisassembleWidget::updateExecutionAddressHandler);
     }else{
 
         QString cmd = (to.isEmpty())?
-        QString("-s %1 -e \"%1 + 256\" -- 0").arg(from ):
-        QString("-s %1 -e %2+1 -- 0").arg(from).arg(to); // if both addr set
+        QStringLiteral("-s %1 -e \"%1 + 256\" -- 0").arg(from ):
+        QStringLiteral("-s %1 -e %2+1 -- 0").arg(from).arg(to); // if both addr set
 
         s->addCommand(DataDisassemble, cmd,
                       this, &DisassembleWidget::disassembleMemoryHandler);
@@ -375,7 +375,7 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
 
 void DisassembleWidget::disassembleMemoryHandler(const ResultRecord& r)
 {
-    const Value& content = r["asm_insns"];
+    const Value& content = r[QStringLiteral("asm_insns")];
     QString currentFunction;
 
     m_disassembleWindow->clear();
@@ -386,15 +386,15 @@ void DisassembleWidget::disassembleMemoryHandler(const ResultRecord& r)
 
         QString addr, fct, offs, inst;
 
-        if( line.hasField("address") )   addr = line["address"].literal();
-        if( line.hasField("func-name") ) fct  = line["func-name"].literal();
-        if( line.hasField("offset") )    offs = line["offset"].literal();
-        if( line.hasField("inst") )      inst = line["inst"].literal();
+        if( line.hasField(QStringLiteral("address")) )   addr = line[QStringLiteral("address")].literal();
+        if( line.hasField(QStringLiteral("func-name")) ) fct  = line[QStringLiteral("func-name")].literal();
+        if( line.hasField(QStringLiteral("offset")) )    offs = line[QStringLiteral("offset")].literal();
+        if( line.hasField(QStringLiteral("inst")) )      inst = line[QStringLiteral("inst")].literal();
 
         //We use offset at the same column where function is.
         if(currentFunction == fct){
             if(!fct.isEmpty()){
-                fct = QString("+") + offs;
+                fct = QStringLiteral("+") + offs;
             }
         }else { currentFunction = fct; }
 
@@ -506,7 +506,7 @@ void DisassembleWidget::setDisassemblyFlavor(QAction* action)
 
 void DisassembleWidget::setDisassemblyFlavorHandler(const ResultRecord& r)
 {
-    if (r.reason == "done" && active_) {
+    if (r.reason == QLatin1String("done") && active_) {
         disassembleMemoryRegion();
     }
 }
@@ -524,15 +524,15 @@ void DisassembleWidget::updateDisassemblyFlavor()
 
 void DisassembleWidget::showDisassemblyFlavorHandler(const ResultRecord& r)
 {
-    const Value& value = r["value"];
+    const Value& value = r[QStringLiteral("value")];
     qCDebug(DEBUGGERCOMMON) << "Disassemble widget disassembly flavor" << value.literal();
 
     DisassemblyFlavor disassemblyFlavor = DisassemblyFlavorUnknown;
-    if (value.literal() == "att") {
+    if (value.literal() == QLatin1String("att")) {
         disassemblyFlavor = DisassemblyFlavorATT;
-    } else if (value.literal() == "intel") {
+    } else if (value.literal() == QLatin1String("intel")) {
         disassemblyFlavor = DisassemblyFlavorIntel;
-    } else if (value.literal() == "default") {
+    } else if (value.literal() == QLatin1String("default")) {
         disassemblyFlavor = DisassemblyFlavorATT;
     }
     m_disassembleWindow->setDisassemblyFlavor(disassemblyFlavor);

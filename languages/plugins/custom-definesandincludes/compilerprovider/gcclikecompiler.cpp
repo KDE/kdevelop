@@ -43,7 +43,7 @@ QStringList languageOptions(const QString& arguments)
 
     // TODO: handle -ansi flag: In C mode, this is equivalent to -std=c90. In C++ mode, it is equivalent to -std=c++98.
     // TODO: check for -x flag on command line
-    const QRegularExpression regexp("-std=(\\S+)");
+    const QRegularExpression regexp(QStringLiteral("-std=(\\S+)"));
     // see gcc manpage or llvm/tools/clang/include/clang/Frontend/LangStandards.def for list of valid language options
     auto result = regexp.match(arguments);
     if(result.hasMatch()){
@@ -57,7 +57,7 @@ QStringList languageOptions(const QString& arguments)
             language = minusXC();
         } else {
             // check for c11, gnu99, etc: all of them have a digit after the c/gnu
-            const QRegularExpression cRegexp("(c|gnu)\\d.*");
+            const QRegularExpression cRegexp(QStringLiteral("(c|gnu)\\d.*"));
             if (cRegexp.match(mode).hasMatch()) {
                 language = minusXC();
             }
@@ -90,8 +90,8 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
 
     // TODO: what about -mXXX or -target= flags, some of these change search paths/defines
     auto compilerArguments = languageOptions(arguments);
-    compilerArguments.append("-dM");
-    compilerArguments.append("-E");
+    compilerArguments.append(QStringLiteral("-dM"));
+    compilerArguments.append(QStringLiteral("-E"));
     compilerArguments.append(QProcess::nullDevice());
 
     proc.start(path(), compilerArguments);
@@ -135,8 +135,8 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     // End of search list.
 
     auto compilerArguments = languageOptions(arguments);
-    compilerArguments.append("-E");
-    compilerArguments.append("-v");
+    compilerArguments.append(QStringLiteral("-E"));
+    compilerArguments.append(QStringLiteral("-v"));
     compilerArguments.append(QProcess::nullDevice());
 
     proc.start(path(), compilerArguments);
@@ -158,12 +158,12 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     foreach( const QString &line, QString::fromLocal8Bit( proc.readAllStandardOutput() ).split( '\n' ) ) {
         switch ( mode ) {
             case Initial:
-                if ( line.indexOf( "#include \"...\"" ) != -1 ) {
+                if ( line.indexOf( QLatin1String("#include \"...\"") ) != -1 ) {
                     mode = FirstSearch;
                 }
                 break;
             case FirstSearch:
-                if ( line.indexOf( "#include <...>" ) != -1 ) {
+                if ( line.indexOf( QLatin1String("#include <...>") ) != -1 ) {
                     mode = Includes;
                     break;
                 }

@@ -39,7 +39,7 @@ Q_LOGGING_CATEGORY(NINJABUILDER, "kdevelop.projectbuilders.ninjabuilder")
 K_PLUGIN_FACTORY_WITH_JSON(NinjaBuilderFactory, "kdevninja.json", registerPlugin<NinjaBuilder>(); )
 
 NinjaBuilder::NinjaBuilder(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin("kdevninja", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevninja"), parent)
 {
     if (NinjaJob::ninjaExecutable().isEmpty()) {
         setErrorDescription(i18n("Unable to find ninja executable. Is it installed on the system?"));
@@ -112,20 +112,20 @@ NinjaJob* NinjaBuilder::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::Comm
     KConfigGroup group = config->group("NinjaBuilder");
 
     if (!group.readEntry("Abort on First Error", true)) {
-        jobArguments << "-k";
+        jobArguments << QStringLiteral("-k");
     }
     if (group.readEntry("Override Number Of Jobs", false)) {
         int jobCount = group.readEntry("Number Of Jobs", 1);
         if (jobCount > 0) {
-            jobArguments << QString("-j%1").arg(jobCount);
+            jobArguments << QStringLiteral("-j%1").arg(jobCount);
         }
     }
     int errorCount = group.readEntry("Number Of Errors", 1);
     if (errorCount > 1) {
-        jobArguments << QString("-k%1").arg(errorCount);
+        jobArguments << QStringLiteral("-k%1").arg(errorCount);
     }
     if (group.readEntry("Display Only", false)) {
-        jobArguments << "-n";
+        jobArguments << QStringLiteral("-n");
     }
     QString extraOptions = group.readEntry("Additional Options", QString());
     if (!extraOptions.isEmpty()) {
@@ -147,12 +147,12 @@ KJob* NinjaBuilder::build(KDevelop::ProjectBaseItem* item)
 
 KJob* NinjaBuilder::clean(KDevelop::ProjectBaseItem* item)
 {
-    return runNinja(item, NinjaJob::CleanCommand, QStringList("-t") << "clean", "cleaned");
+    return runNinja(item, NinjaJob::CleanCommand, QStringList(QStringLiteral("-t")) << QStringLiteral("clean"), "cleaned");
 }
 
 KJob* NinjaBuilder::install(KDevelop::ProjectBaseItem* item)
 {
-    NinjaJob* installJob = runNinja(item, NinjaJob::InstallCommand, QStringList("install"), "installed");
+    NinjaJob* installJob = runNinja(item, NinjaJob::InstallCommand, QStringList(QStringLiteral("install")), "installed");
     installJob->setIsInstalling(true);
 
     KSharedConfigPtr configPtr = item->project()->projectConfiguration();

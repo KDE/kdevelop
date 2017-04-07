@@ -73,7 +73,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
 void PlasmoidExecutionJob::start()
 {
     startOutput();
-    model()->appendLine( m_process->workingDirectory() + "> " + m_process->command() + " " + m_process->arguments().join(" ") );
+    model()->appendLine( m_process->workingDirectory() + "> " + m_process->command() + " " + m_process->arguments().join(QStringLiteral(" ")) );
     m_process->start();
 }
 
@@ -111,7 +111,7 @@ void PlasmoidExecutionJob::slotFailed(QProcess::ProcessError error)
 
 QString PlasmoidExecutionJob::executable(ILaunchConfiguration*)
 {
-    return QStandardPaths::findExecutable("plasmoidviewer");
+    return QStandardPaths::findExecutable(QStringLiteral("plasmoidviewer"));
 }
 
 QStringList PlasmoidExecutionJob::arguments(ILaunchConfiguration* cfg)
@@ -119,7 +119,7 @@ QStringList PlasmoidExecutionJob::arguments(ILaunchConfiguration* cfg)
     QStringList arguments = cfg->config().readEntry("Arguments", QStringList());
     if(workingDirectory(cfg) == QDir::tempPath()) {
         QString identifier = cfg->config().readEntry("PlasmoidIdentifier", "");
-        arguments += "-a";
+        arguments += QStringLiteral("-a");
         arguments += identifier;
     } else {
         arguments += { "-a", "." };

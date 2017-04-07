@@ -40,7 +40,7 @@ QString DebugVisitor::getTokenInfo(qint64 idx)
     qint64 line, col;
     QMake::Parser::Token token = m_parser->tokenStream->at(idx);
     m_parser->tokenStream->startPosition(idx, &line, &col);
-    return QString("%1,%2,%3").arg(line).arg(col).arg(m_parser->tokenText(token.begin, token.end).replace('\n', "\\n"));
+    return QStringLiteral("%1,%2,%3").arg(line).arg(col).arg(m_parser->tokenText(token.begin, token.end).replace('\n', QLatin1String("\\n")));
 }
 
 QString DebugVisitor::getIndent()

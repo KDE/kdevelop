@@ -71,14 +71,14 @@ int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
 
-    KAboutData aboutData( "kdevprojectopen", i18n( "KDevelop" ), "0.99", i18n("opens a project then closes it, debugging tool"), KAboutLicense::GPL,
-                          i18n( "Copyright 1999-2012, The KDevelop developers" ), QString(), "http://www.kdevelop.org/" );
-    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "" ), "aleixpol@kde.org" );
+    KAboutData aboutData( QStringLiteral("kdevprojectopen"), i18n( "KDevelop" ), QStringLiteral("0.99"), i18n("opens a project then closes it, debugging tool"), KAboutLicense::GPL,
+                          i18n( "Copyright 1999-2012, The KDevelop developers" ), QString(), QStringLiteral("http://www.kdevelop.org/") );
+    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "" ), QStringLiteral("aleixpol@kde.org") );
 
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;
-    parser.addPositionalArgument("projects", i18n("Projects to load"));
+    parser.addPositionalArgument(QStringLiteral("projects"), i18n("Projects to load"));
 
     aboutData.setupCommandLine(&parser);
     parser.process(app);

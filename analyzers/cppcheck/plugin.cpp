@@ -49,27 +49,27 @@ namespace cppcheck
 {
 
 Plugin::Plugin(QObject* parent, const QVariantList&)
-    : IPlugin("kdevcppcheck", parent)
+    : IPlugin(QStringLiteral("kdevcppcheck"), parent)
     , m_job(nullptr)
     , m_currentProject(nullptr)
     , m_model(new ProblemModel(this))
 {
     qCDebug(KDEV_CPPCHECK) << "setting cppcheck rc file";
-    setXMLFile("kdevcppcheck.rc");
+    setXMLFile(QStringLiteral("kdevcppcheck.rc"));
 
-    m_actionFile = new QAction(QIcon::fromTheme("cppcheck"), i18n("Cppcheck (Current File)"), this);
+    m_actionFile = new QAction(QIcon::fromTheme(QStringLiteral("cppcheck")), i18n("Cppcheck (Current File)"), this);
     connect(m_actionFile, &QAction::triggered, [this](){
         runCppcheck(false);
     });
-    actionCollection()->addAction("cppcheck_file", m_actionFile);
+    actionCollection()->addAction(QStringLiteral("cppcheck_file"), m_actionFile);
 
-    m_actionProject = new QAction(QIcon::fromTheme("cppcheck"), i18n("Cppcheck (Current Project)"), this);
+    m_actionProject = new QAction(QIcon::fromTheme(QStringLiteral("cppcheck")), i18n("Cppcheck (Current Project)"), this);
     connect(m_actionProject, &QAction::triggered, [this](){
         runCppcheck(true);
     });
-    actionCollection()->addAction("cppcheck_project", m_actionProject);
+    actionCollection()->addAction(QStringLiteral("cppcheck_project"), m_actionProject);
 
-    m_actionProjectItem = new QAction(QIcon::fromTheme("cppcheck"), i18n("Cppcheck"), this);
+    m_actionProjectItem = new QAction(QIcon::fromTheme(QStringLiteral("cppcheck")), i18n("Cppcheck"), this);
 
     connect(core()->documentController(), &KDevelop::IDocumentController::documentClosed,
             this, &Plugin::updateActions);
@@ -175,7 +175,7 @@ void Plugin::runCppcheck(KDevelop::IProject* project, const QString& path)
     connect(m_job, &Job::problemsDetected, m_model.data(), &ProblemModel::addProblems);
     connect(m_job, &Job::finished, this, &Plugin::result);
 
-    core()->uiController()->registerStatus(new KDevelop::JobStatus(m_job, "Cppcheck"));
+    core()->uiController()->registerStatus(new KDevelop::JobStatus(m_job, QStringLiteral("Cppcheck")));
     core()->runController()->registerJob(m_job);
 
     if (params.hideOutputView) {

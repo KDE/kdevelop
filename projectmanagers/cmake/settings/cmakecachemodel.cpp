@@ -68,7 +68,7 @@ void CMakeCacheModel::read()
     while (!in.atEnd())
     {
         QString line = in.readLine().trimmed();
-        if(line.startsWith("//"))
+        if(line.startsWith(QLatin1String("//")))
             currentComment += line.right(line.count()-2);
         else if(!line.isEmpty() && !line.startsWith('#')) //it is a variable
         {
@@ -86,12 +86,12 @@ void CMakeCacheModel::read()
                 lineItems.append(new QStandardItem(name));
                 lineItems.append(new QStandardItem(type));
                 lineItems.append(new QStandardItem(value));
-                lineItems.append(new QStandardItem(currentComment.join("\n")));
+                lineItems.append(new QStandardItem(currentComment.join(QStringLiteral("\n"))));
 
-                if(flag=="INTERNAL")
+                if(flag==QLatin1String("INTERNAL"))
                 {
                     m_internal.insert(name);
-                } else if(flag=="ADVANCED")
+                } else if(flag==QLatin1String("ADVANCED"))
                 {
                     if(variablePos.contains(name))
                     {
@@ -123,7 +123,7 @@ void CMakeCacheModel::read()
                 currentComment.clear();
             }
         }
-        else if(line.startsWith('#') && line.contains("INTERNAL"))
+        else if(line.startsWith('#') && line.contains(QLatin1String("INTERNAL")))
         {
             m_internalBegin=currentIdx;
 //                 qCDebug(CMAKE) << "Comment: " << line << " -.- " << currentIdx;
@@ -182,7 +182,7 @@ bool CMakeCacheModel::isAdvanced(int i) const
     if(!isAdv)
     {
         p=item(i, 1);
-        isAdv = p->text()=="INTERNAL" || p->text()=="STATIC";
+        isAdv = p->text()==QLatin1String("INTERNAL") || p->text()==QLatin1String("STATIC");
     }
 
     return isAdv || m_internal.contains(item(i,0)->text());
@@ -200,7 +200,7 @@ QList< QModelIndex > CMakeCacheModel::persistentIndices() const
     for(int i=0; i<rowCount(); i++)
     {
         QStandardItem* type = item(i, 1);
-        if(type->text()=="BOOL")
+        if(type->text()==QLatin1String("BOOL"))
         {
             QStandardItem* valu = item(i, 2);
             ret.append(valu->index());

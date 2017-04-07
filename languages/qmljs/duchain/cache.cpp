@@ -147,7 +147,7 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
         }
 
         // Locate an existing dump of the file
-        QString dumpFile = QString("kdevqmljssupport/%1.qml").arg(
+        QString dumpFile = QStringLiteral("kdevqmljssupport/%1.qml").arg(
             QString::fromLatin1(QCryptographicHash::hash(filePath.toUtf8(), QCryptographicHash::Md5).toHex())
         );
         QString dumpPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,

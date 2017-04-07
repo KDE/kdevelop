@@ -38,7 +38,7 @@ ProjectConfigPage::ProjectConfigPage(KDevelop::IPlugin* plugin, KDevelop::IProje
 
     ui->setupUi(this);
 
-    ui->commandLine->setFontFamily("Monospace");
+    ui->commandLine->setFontFamily(QStringLiteral("Monospace"));
 
     connect(this, &ProjectConfigPage::changed, this, &ProjectConfigPage::updateCommandLine);
     connect(ui->commandLineFilter->lineEdit(), &QLineEdit::textChanged, this, &ProjectConfigPage::updateCommandLine);
@@ -102,7 +102,7 @@ void ProjectConfigPage::updateCommandLine()
         return;
     }
 
-    commandLine.replace(" -", "\n-");
+    commandLine.replace(QLatin1String(" -"), QLatin1String("\n-"));
     QString filterText = ui->commandLineFilter->lineEdit()->text();
     if (filterText.isEmpty()) {
         ui->commandLine->setText(commandLine);

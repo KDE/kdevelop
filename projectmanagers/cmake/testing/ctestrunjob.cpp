@@ -56,7 +56,7 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 
 KJob* createTestJob(const QString& launchModeId, const QStringList& arguments )
 {
-    LaunchConfigurationType* type = ICore::self()->runController()->launchConfigurationTypeForId( "Native Application" );
+    LaunchConfigurationType* type = ICore::self()->runController()->launchConfigurationTypeForId( QStringLiteral("Native Application") );
     ILaunchMode* mode = ICore::self()->runController()->launchModeForId( launchModeId );
 
     qCDebug(CMAKE) << "got mode and type:" << type << type->id() << mode << mode->id();
@@ -113,7 +113,7 @@ void CTestRunJob::start()
 
     QStringList cases_selected = arguments;
     arguments.prepend(m_suite->executable().toLocalFile());
-    m_job = createTestJob("execute", arguments);
+    m_job = createTestJob(QStringLiteral("execute"), arguments);
 
     if (ExecuteCompositeJob* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
         m_outputJob = cjob->findChild<OutputJob*>();
@@ -160,7 +160,7 @@ void CTestRunJob::processFinished(KJob* job)
     // in case the job was killed, mark this job as killed as well
     if (job->error() == KJob::KilledJobError) {
         setError(KJob::KilledJobError);
-        setErrorText("Child job was killed.");
+        setErrorText(QStringLiteral("Child job was killed."));
     }
 
     qCDebug(CMAKE) << result.suiteResult << result.testCaseResults;
@@ -188,23 +188,23 @@ void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endR
         if (prevResult == TestResult::Passed || prevResult == TestResult::NotRun)
         {
             TestResult::TestCaseResult result = TestResult::NotRun;
-            if (line.startsWith("PASS   :"))
+            if (line.startsWith(QLatin1String("PASS   :")))
             {
                 result = m_expectFail ? TestResult::UnexpectedPass : TestResult::Passed;
             }
-            else if (line.startsWith("FAIL!  :"))
+            else if (line.startsWith(QLatin1String("FAIL!  :")))
             {
                 result = m_expectFail ? TestResult::ExpectedFail : TestResult::Failed;
             }
-            else if (line.startsWith("XFAIL  :"))
+            else if (line.startsWith(QLatin1String("XFAIL  :")))
             {
                 result = TestResult::ExpectedFail;
             }
-            else if (line.startsWith("XPASS  :"))
+            else if (line.startsWith(QLatin1String("XPASS  :")))
             {
                 result = TestResult::UnexpectedPass;
             }
-            else if (line.startsWith("SKIP   :"))
+            else if (line.startsWith(QLatin1String("SKIP   :")))
             {
                 result = TestResult::Skipped;
             }

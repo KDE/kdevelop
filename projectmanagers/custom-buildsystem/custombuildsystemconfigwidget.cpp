@@ -54,8 +54,8 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    ui->addConfig->setIcon(QIcon::fromTheme( "list-add" ));
-    ui->removeConfig->setIcon(QIcon::fromTheme( "list-remove" ));
+    ui->addConfig->setIcon(QIcon::fromTheme( QStringLiteral("list-add") ));
+    ui->removeConfig->setIcon(QIcon::fromTheme( QStringLiteral("list-remove") ));
 
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
@@ -169,7 +169,7 @@ void CustomBuildSystemConfigWidget::changeCurrentConfig( int idx )
 void CustomBuildSystemConfigWidget::addConfig()
 {
     CustomBuildSystemConfig c;
-    c.title = "";
+    c.title = QLatin1String("");
     configs.append( c );
     ui->currentConfig->addItem( c.title );
     ui->currentConfig->setCurrentIndex( ui->currentConfig->count() - 1 );

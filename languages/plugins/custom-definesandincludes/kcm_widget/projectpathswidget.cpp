@@ -53,8 +53,8 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    ui->addPath->setIcon(QIcon::fromTheme("list-add"));
-    ui->removePath->setIcon(QIcon::fromTheme("list-remove"));
+    ui->addPath->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+    ui->removePath->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addPath->setFixedHeight( ui->projectPaths->sizeHint().height() );
@@ -186,7 +186,7 @@ void ProjectPathsWidget::addProjectPath()
 void ProjectPathsWidget::deleteProjectPath()
 {
     const QModelIndex idx = pathsModel->index( ui->projectPaths->currentIndex(), 0 );
-    if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to remove the configuration for the path '%1'?", pathsModel->data( idx, Qt::DisplayRole ).toString() ), "Remove Path Configuration" ) == KMessageBox::Yes ) {
+    if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to remove the configuration for the path '%1'?", pathsModel->data( idx, Qt::DisplayRole ).toString() ), QStringLiteral("Remove Path Configuration") ) == KMessageBox::Yes ) {
         pathsModel->removeRows( ui->projectPaths->currentIndex(), 1 );
     }
     updateEnablements();
@@ -220,7 +220,7 @@ void ProjectPathsWidget::batchEdit()
     bool includesTab = ui->languageParameters->currentIndex() == 0;
     if (includesTab) {
         auto includes = pathsModel->data(midx, ProjectPathsModel::IncludesDataRole).toStringList();
-        be.textEdit->setPlainText(includes.join("\n"));
+        be.textEdit->setPlainText(includes.join(QStringLiteral("\n")));
 
         dialog.setWindowTitle(i18n("Edit include directories/files"));
     } else {

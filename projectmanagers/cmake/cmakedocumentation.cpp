@@ -47,7 +47,7 @@ CMakeDocumentation* CMakeDoc::s_provider=nullptr;
 KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider; }
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin( "kdevcmakedocumentation", parent )
+    : KDevelop::IPlugin( QStringLiteral("kdevcmakedocumentation"), parent )
     , m_cmakeExecutable(CMake::findExecutable())
     , m_index(nullptr)
 {
@@ -92,7 +92,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
     QString desc;
     if(args[t]) {
         desc = CMake::executeProcess(m_cmakeExecutable, { args[t], id.simplified() });
-        desc = desc.remove(":ref:");
+        desc = desc.remove(QStringLiteral(":ref:"));
 
         const QString rst2html = QStandardPaths::findExecutable(QStringLiteral("rst2html"));
         if (rst2html.isEmpty()) {
@@ -115,7 +115,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 KDevelop::IDocumentation::Ptr CMakeDocumentation::description(const QString& identifier, const QUrl &file) const
 {
     initializeModel(); //make it not queued
-    if (!file.isEmpty() && !QMimeDatabase().mimeTypeForUrl(file).inherits("text/x-cmake")) {
+    if (!file.isEmpty() && !QMimeDatabase().mimeTypeForUrl(file).inherits(QStringLiteral("text/x-cmake"))) {
         return KDevelop::IDocumentation::Ptr();
     }
 
@@ -172,7 +172,7 @@ QIcon CMakeDocumentation::icon() const
 
 QString CMakeDocumentation::name() const
 {
-    return "CMake";
+    return QStringLiteral("CMake");
 }
 
 KDevelop::IDocumentation::Ptr CMakeDocumentation::homePage() const

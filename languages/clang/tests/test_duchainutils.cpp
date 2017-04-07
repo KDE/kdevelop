@@ -53,7 +53,7 @@ void TestDUChainUtils::getFunctionSignatureRange()
     QFETCH(QString, code);
     QFETCH(KTextEditor::Range, expectedRange);
     {
-        TestFile file(code, "cpp");
+        TestFile file(code, QStringLiteral("cpp"));
         file.parse();
         QVERIFY(file.waitForParsed());
 

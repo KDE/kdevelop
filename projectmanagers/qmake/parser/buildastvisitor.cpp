@@ -259,7 +259,7 @@ T* BuildASTVisitor::stackPop()
 QString BuildASTVisitor::getTokenString(qint64 idx)
 {
     QMake::Parser::Token token = m_parser->tokenStream->at(idx);
-    return m_parser->tokenText(token.begin, token.end).replace('\n', "\\n");
+    return m_parser->tokenText(token.begin, token.end).replace('\n', QLatin1String("\\n"));
 }
 
 void BuildASTVisitor::setPositionForAst(AstNode* node, AST* ast)

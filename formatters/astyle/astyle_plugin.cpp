@@ -38,7 +38,7 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY_WITH_JSON(AStyleFactory, "kdevastyle.json", registerPlugin<AStylePlugin>();)
 
 AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
-    : IPlugin("kdevastyle", parent)
+    : IPlugin(QStringLiteral("kdevastyle"), parent)
     , m_formatter(new AStyleFormatter())
 {
     currentStyle = predefinedStyles().at(0);
@@ -135,9 +135,9 @@ QList<SourceFormatterStyle> AStylePlugin::predefinedStyles()
 SettingsWidget* AStylePlugin::editStyleWidget(const QMimeType& mime)
 {
     AStylePreferences::Language lang = AStylePreferences::CPP;
-    if(mime.inherits("text/x-java"))
+    if(mime.inherits(QStringLiteral("text/x-java")))
         lang = AStylePreferences::Java;
-    else if(mime.inherits("text/x-csharp"))
+    else if(mime.inherits(QStringLiteral("text/x-csharp")))
         lang = AStylePreferences::CSharp;
     return new AStylePreferences(lang);
 }
@@ -151,14 +151,14 @@ QString AStylePlugin::previewText(const SourceFormatterStyle& /*style*/, const Q
 AStylePlugin::Indentation AStylePlugin::indentation( const QUrl &url )
 {
     // Call formatSource first, to initialize the m_formatter data structures according to the URL
-    formatSource( "", url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString() );
+    formatSource( QLatin1String(""), url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString() );
 
     Indentation ret;
 
-    ret.indentWidth = m_formatter->option("FillCount").toInt();
+    ret.indentWidth = m_formatter->option(QStringLiteral("FillCount")).toInt();
     
-    QString s = m_formatter->option("Fill").toString();
-    if(s == "Tabs")
+    QString s = m_formatter->option(QStringLiteral("Fill")).toString();
+    if(s == QLatin1String("Tabs"))
     {
         // Do tabs-only indentation
         ret.indentationTabWidth = ret.indentWidth;

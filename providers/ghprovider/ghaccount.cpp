@@ -63,7 +63,7 @@ const QString Account::name() const
 
 void Account::setOrgs(const QStringList &orgs)
 {
-    QString res = orgs.join(",");
+    QString res = orgs.join(QStringLiteral(","));
     m_group.writeEntry("orgs", orgs);
 }
 
@@ -72,7 +72,7 @@ const QStringList Account::orgs() const
     const QString orgs = m_group.readEntry("orgs", QString());
     if (orgs.isEmpty())
         return QStringList();
-    return orgs.split(",");
+    return orgs.split(QStringLiteral(","));
 }
 
 void Account::saveToken(const QByteArray &id, const QByteArray &token)

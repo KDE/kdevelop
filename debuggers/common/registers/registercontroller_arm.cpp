@@ -151,9 +151,9 @@ void RegisterController_Arm::initRegisterNames()
         m_registerNames[VFP_single] << ("s" + QString::number(i));
     }
 
-    m_cpsr.registerName = "cpsr";
-    m_cpsr.flags << "Q" << "V" << "C" << "Z" << "N";
-    m_cpsr.bits << "27" << "28" << "29" << "30" << "31";
+    m_cpsr.registerName = QLatin1String("cpsr");
+    m_cpsr.flags << QStringLiteral("Q") << QStringLiteral("V") << QStringLiteral("C") << QStringLiteral("Z") << QStringLiteral("N");
+    m_cpsr.bits << QStringLiteral("27") << QStringLiteral("28") << QStringLiteral("29") << QStringLiteral("30") << QStringLiteral("31");
     m_cpsr.groupName = enumToGroupName(Flags);
 
     m_registerNames[Flags] = m_cpsr.flags;
@@ -161,7 +161,7 @@ void RegisterController_Arm::initRegisterNames()
     for (int i = 0; i < 13; i++) {
         m_registerNames[General] << ("r" + QString::number(i));
     }
-    m_registerNames[General] << "sp" << "lr" << "pc";
+    m_registerNames[General] << QStringLiteral("sp") << QStringLiteral("lr") << QStringLiteral("pc");
 
     for (int i = 0; i < 32; i++) {
         m_registerNames[VFP_double] << ("d" + QString::number(i));

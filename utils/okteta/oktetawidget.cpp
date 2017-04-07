@@ -72,8 +72,8 @@ OktetaWidget::OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayVie
     KXMLGUIClient(),
     mByteArrayView( byteArrayView )
 {
-    setComponentName( "kdevokteta" , "KDevelop Okteta");
-    setXMLFile( "kdevokteta.rc" );
+    setComponentName( QStringLiteral("kdevokteta") , QStringLiteral("KDevelop Okteta"));
+    setXMLFile( QStringLiteral("kdevokteta.rc") );
 
     setupActions(plugin);
 

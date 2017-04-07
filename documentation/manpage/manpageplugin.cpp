@@ -47,7 +47,7 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY_WITH_JSON(ManPageFactory, "kdevmanpage.json", registerPlugin<ManPagePlugin>(); )
 
 ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
-    : IPlugin("kdevmanpage", parent)
+    : IPlugin(QStringLiteral("kdevmanpage"), parent)
 {
     Q_UNUSED(args);
     ManPageDocumentation::s_provider = this;
@@ -92,7 +92,7 @@ IDocumentation::Ptr ManPagePlugin::documentationForDeclaration( Declaration* dec
 
     // Don't show man-page documentation for files that are not in /usr/include, because then we
     // most probably will be confusing the global function-name with a local one
-    if (!dec->topContext()->url().str().startsWith("/usr/"))
+    if (!dec->topContext()->url().str().startsWith(QLatin1String("/usr/")))
         return {};
 
     ///@todo Do more verification to make sure that we're showing the correct documentation for the declaration
@@ -128,10 +128,10 @@ KDevelop::IDocumentation::Ptr ManPagePlugin::documentationForIdentifier(const QS
     if (!m_model->containsIdentifier(identifier))
         return KDevelop::IDocumentation::Ptr(nullptr);
 
-    if (m_model->identifierInSection(identifier, "3"))
+    if (m_model->identifierInSection(identifier, QStringLiteral("3")))
         return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(3)/" + identifier)));
 
-    if (m_model->identifierInSection(identifier, "2"))
+    if (m_model->identifierInSection(identifier, QStringLiteral("2")))
         return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(2)/" + identifier)));
 
     return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:/" + identifier)));

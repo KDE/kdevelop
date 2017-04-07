@@ -25,7 +25,7 @@
 
 static QStringList initCommands()
 {
-    QStringList ids = CMake::executeProcess("cmake", QStringList("--help-command-list")).split('\n');
+    QStringList ids = CMake::executeProcess(QStringLiteral("cmake"), QStringList(QStringLiteral("--help-command-list"))).split('\n');
     ids.removeFirst();
     return ids;
 }

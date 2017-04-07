@@ -34,7 +34,7 @@ namespace
 
 QString languageStandard(const QString& arguments)
 {
-    int idx = arguments.indexOf("-std=");
+    int idx = arguments.indexOf(QLatin1String("-std="));
     if(idx == -1){
         return QStringLiteral("c++11");
     }
@@ -51,7 +51,7 @@ bool isCustomParserArguments(const QString& arguments, const QStringList& standa
     auto standard = languageStandard(arguments);
 
     auto tmpArgs(arguments);
-    tmpArgs.replace(standard, "c++11");
+    tmpArgs.replace(standard, QLatin1String("c++11"));
 
     if (tmpArgs == defaultArguments.cppArguments && standards.contains(standard)) {
         return false;

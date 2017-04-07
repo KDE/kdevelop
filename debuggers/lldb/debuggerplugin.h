@@ -40,7 +40,7 @@ public:
         : DebuggerConsoleView(plugin, parent)
     {
         setShowInterrupt(false);
-        setReplacePrompt("(lldb)");
+        setReplacePrompt(QStringLiteral("(lldb)"));
     }
 };
 

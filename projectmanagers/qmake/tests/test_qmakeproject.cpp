@@ -87,7 +87,7 @@ void TestQMakeProject::testBuildDirectory()
     QFETCH(QString, target);
     QFETCH(QString, expected);
 
-    const QString buildDir = "/tmp/some/path"; // some dummy directory to build (nothing will be built anyway)
+    const QString buildDir = QStringLiteral("/tmp/some/path"); // some dummy directory to build (nothing will be built anyway)
 
     foreach (IProject* p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
@@ -97,7 +97,7 @@ void TestQMakeProject::testBuildDirectory()
     {
         // note: all checks from QMakeProjectManager::projectNeedsConfiguration must be satisfied
         const QString fileName
-            = QString("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName);
+            = QStringLiteral("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName);
 
         KConfig cfg(fileName);
         KConfigGroup group(&cfg, QMakeConfig::CONFIG_GROUP);
@@ -116,7 +116,7 @@ void TestQMakeProject::testBuildDirectory()
 
     // opens project with kdevelop
     const QUrl projectUrl = QUrl::fromLocalFile(
-        QString("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
+        QStringLiteral("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
     ICore::self()->projectController()->openProject(projectUrl);
 
     // wait for loading finished
@@ -130,7 +130,7 @@ void TestQMakeProject::testBuildDirectory()
     Path expectedPath(Path(buildDir), expected);
 
     // path for files to build
-    Path buildUrl(QString("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(target));
+    Path buildUrl(QStringLiteral("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(target));
     QList<ProjectFolderItem*> buildItems = project->foldersForPath(IndexedString(buildUrl.pathOrUrl()));
     QCOMPARE(buildItems.size(), 1);
     IBuildSystemManager* buildManager = project->buildSystemManager();

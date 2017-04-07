@@ -66,7 +66,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
     }
 
     Declaration* testClass = nullptr;
-    Identifier testCaseIdentifier("tc");
+    Identifier testCaseIdentifier(QStringLiteral("tc"));
     foreach (Declaration* declaration, topContext->findLocalDeclarations(Identifier("main")))
     {
         if (declaration->isDefinition())
@@ -110,13 +110,13 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
                 QString name = function->qualifiedIdentifier().last().toString();
                 qCDebug(CMAKE) << "Found private slot in test" << name;
 
-                if (name.endsWith("_data"))
+                if (name.endsWith(QLatin1String("_data")))
                 {
                     continue;
                 }
 
-                if (name != "initTestCase" && name != "cleanupTestCase"
-                    && name != "init" && name != "cleanup")
+                if (name != QLatin1String("initTestCase") && name != QLatin1String("cleanupTestCase")
+                    && name != QLatin1String("init") && name != QLatin1String("cleanup"))
                 {
                     m_cases << name;
                 }

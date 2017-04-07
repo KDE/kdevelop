@@ -200,7 +200,7 @@ void MemoryView::slotChangeMemoryRange()
 
     QString amount = m_rangeSelector->amountLineEdit->text();
     if(amount.isEmpty())
-        amount = QString("sizeof(%1)").arg(m_rangeSelector->startAddressLineEdit->text());
+        amount = QStringLiteral("sizeof(%1)").arg(m_rangeSelector->startAddressLineEdit->text());
 
     session->addCommand(new MI::ExpressionValueCommand(amount, this, &MemoryView::sizeComputed));
 }
@@ -212,7 +212,7 @@ void MemoryView::sizeComputed(const QString& size)
     if (!session) return;
 
     session->addCommand(MI::DataReadMemory,
-            QString("%1 x 1 1 %2")
+            QStringLiteral("%1 x 1 1 %2")
                 .arg(m_rangeSelector->startAddressLineEdit->text())
                 .arg(size),
             this,
@@ -221,9 +221,9 @@ void MemoryView::sizeComputed(const QString& size)
 
 void MemoryView::memoryRead(const MI::ResultRecord& r)
 {
-    const MI::Value& content = r["memory"][0]["data"];
+    const MI::Value& content = r[QStringLiteral("memory")][0][QStringLiteral("data")];
     bool startStringConverted;
-    m_memStart = r["addr"].literal().toULongLong(&startStringConverted, 16);
+    m_memStart = r[QStringLiteral("addr")].literal().toULongLong(&startStringConverted, 16);
     m_memData.resize(content.size());
 
     m_memStartStr = m_rangeSelector->startAddressLineEdit->text();
@@ -252,7 +252,7 @@ void MemoryView::memoryEdited(int start, int end)
     for(int i = start; i <= end; ++i)
     {
         session->addCommand(MI::GdbSet,
-                QString("*(char*)(%1 + %2) = %3")
+                QStringLiteral("*(char*)(%1 + %2) = %3")
                     .arg(m_memStart)
                     .arg(i)
                     .arg(QString::number(m_memData[i])));
@@ -269,7 +269,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     bool app_running = !(m_debuggerState & s_appNotStarted);
 
     QAction* reload = menu.addAction(i18n("&Reload"));
-    reload->setIcon(QIcon::fromTheme("view-refresh"));
+    reload->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
     reload->setEnabled(app_running && !m_memData.isEmpty() );
 
     QActionGroup *formatGroup = NULL;
@@ -355,15 +355,15 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     }
 
     QAction* write = menu.addAction(i18n("Write changes"));
-    write->setIcon(QIcon::fromTheme("document-save"));
+    write->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
     write->setEnabled(app_running && m_memViewView && m_memViewView->isModified());
 
     QAction* range = menu.addAction(i18n("Change memory range"));
     range->setEnabled(app_running && !m_rangeSelector->isVisible());
-    range->setIcon(QIcon::fromTheme("document-edit"));
+    range->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
 
     QAction* close = menu.addAction(i18n("Close this view"));
-    close->setIcon(QIcon::fromTheme("window-close"));
+    close->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
 
 
     QAction* result = menu.exec(e->globalPos());
@@ -379,7 +379,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
             KDevelop::ICore::self()->debugController()->currentSession());
         if (session) {
             session->addCommand(MI::DataReadMemory,
-                    QString("%1 x 1 1 %2").arg(m_memStart).arg(m_memData.size()),
+                    QStringLiteral("%1 x 1 1 %2").arg(m_memStart).arg(m_memData.size()),
                     this,
                     &MemoryView::memoryRead);
         }
@@ -428,14 +428,14 @@ void MemoryView::slotEnableOrDisable()
 MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* parent)
 : QWidget(parent)
 {
-    setWindowIcon(QIcon::fromTheme("server-database", windowIcon()));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("server-database"), windowIcon()));
     setWindowTitle(i18n("Memory viewer"));
 
     QAction * newMemoryViewerAction = new QAction(this);
     newMemoryViewerAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     newMemoryViewerAction->setText(i18n("New memory viewer"));
     newMemoryViewerAction->setToolTip(i18nc("@info:tooltip", "Open a new memory viewer."));
-    newMemoryViewerAction->setIcon(QIcon::fromTheme("window-new"));
+    newMemoryViewerAction->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
     connect(newMemoryViewerAction, &QAction::triggered, this , &MemoryViewerWidget::slotAddMemoryView);
     addAction(newMemoryViewerAction);
 
@@ -468,7 +468,7 @@ void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
     QWidget* ncs = const_cast<QWidget*>(s);
     QString cap = caption;
     // Prevent intepreting '&' as accelerator specifier.
-    cap.replace('&', "&&");
+    cap.replace('&', QLatin1String("&&"));
     m_toolBox->setItemText(m_toolBox->indexOf(ncs), cap);
 }
 

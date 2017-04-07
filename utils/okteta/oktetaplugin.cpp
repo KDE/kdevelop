@@ -81,7 +81,7 @@ void addTool( IUiController* uiController,
 
 
 OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
-  : IPlugin( "kdevokteta", parent )
+  : IPlugin( QStringLiteral("kdevokteta"), parent )
   , mDocumentFactory( new OktetaDocumentFactory(this) )
   , mViewProfileManager( new Kasten::ByteArrayViewProfileManager() )
 {
@@ -101,17 +101,17 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
     addTool( uiController, new Kasten::BookmarksToolViewFactory, new Kasten::BookmarksToolFactory() );
 
     KDevelop::IDocumentController* documentController = core()->documentController();
-    documentController->registerDocumentForMimetype("application/octet-stream", mDocumentFactory);
+    documentController->registerDocumentForMimetype(QStringLiteral("application/octet-stream"), mDocumentFactory);
 }
 
 ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
 {
     OpenWithContext* openWithContext = dynamic_cast<OpenWithContext*>( context );
 
-    if( openWithContext && !openWithContext->mimeType().inherits("inode/directory"))
+    if( openWithContext && !openWithContext->mimeType().inherits(QStringLiteral("inode/directory")))
     {
         QAction* openAction = new QAction( i18n("Hex Editor"), this );
-        openAction->setIcon( QIcon::fromTheme("document-open") );
+        openAction->setIcon( QIcon::fromTheme(QStringLiteral("document-open")) );
         openAction->setData( QVariant::fromValue(openWithContext->urls()) );
         connect( openAction, &QAction::triggered, this, &OktetaPlugin::onOpenTriggered );
 

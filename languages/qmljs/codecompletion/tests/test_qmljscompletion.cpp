@@ -84,7 +84,7 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
     Q_ASSERT(initCode.indexOf("%INVOKE") != -1);
 
     // Create a file containing the given code, with "%INVOKE" removed
-    completion_data.file = QSharedPointer<TestFile>(new TestFile(QString(initCode).replace("%INVOKE", ""),
+    completion_data.file = QSharedPointer<TestFile>(new TestFile(QString(initCode).replace(QLatin1String("%INVOKE"), QLatin1String("")),
                                                     qml ? "qml" : "js"));
 
     completion_data.file->parse();
@@ -99,12 +99,12 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
       Q_ASSERT_X(false, Q_FUNC_INFO, "Failed to parse initCode.");
     }
 
-    QString allCode = QString(initCode).replace("%INVOKE", invokeCode);
+    QString allCode = QString(initCode).replace(QLatin1String("%INVOKE"), invokeCode);
 
     QStringList lines = allCode.split('\n');
     completion_data.cursorAt = CursorInRevision::invalid();
     for ( int i = 0; i < lines.length(); i++ ) {
-        int j = lines.at(i).indexOf("%CURSOR");
+        int j = lines.at(i).indexOf(QLatin1String("%CURSOR"));
         if ( j != -1 ) {
             completion_data.cursorAt = CursorInRevision(i, j);
             break;
@@ -113,8 +113,8 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
     Q_ASSERT(completion_data.cursorAt.isValid());
 
     // codeCompletionContext only gets passed the text until the place where completion is invoked
-    completion_data.snip = allCode.mid(0, allCode.indexOf("%CURSOR"));
-    completion_data.remaining = allCode.mid(allCode.indexOf("%CURSOR") + 7);
+    completion_data.snip = allCode.mid(0, allCode.indexOf(QLatin1String("%CURSOR")));
+    completion_data.remaining = allCode.mid(allCode.indexOf(QLatin1String("%CURSOR")) + 7);
 
     DUChainReadLocker lock;
     completion_data.contextAtCursor = DUContextPointer(completion_data.file->topContext()->findContextAt(completion_data.cursorAt, true));

@@ -39,23 +39,23 @@ void QtTestDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option
 {
     const QString line = index.data().toString();
     QStyleOptionViewItem opt = option;
-    if (line.startsWith("PASS   :"))
+    if (line.startsWith(QLatin1String("PASS   :")))
     {
         highlight(opt, passBrush);
     }
-    else if (line.startsWith("FAIL!  :"))
+    else if (line.startsWith(QLatin1String("FAIL!  :")))
     {
         highlight(opt, failBrush);
     }
-    else if (line.startsWith("XFAIL  :") || line.startsWith("SKIP   :"))
+    else if (line.startsWith(QLatin1String("XFAIL  :")) || line.startsWith(QLatin1String("SKIP   :")))
     {
         highlight(opt, xFailBrush);
     }
-    else if (line.startsWith("XPASS  :"))
+    else if (line.startsWith(QLatin1String("XPASS  :")))
     {
         highlight(opt, xPassBrush);
     }
-    else if (line.startsWith("QDEBUG :"))
+    else if (line.startsWith(QLatin1String("QDEBUG :")))
     {
         highlight(opt, debugBrush);
     }

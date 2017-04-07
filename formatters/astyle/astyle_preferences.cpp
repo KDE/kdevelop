@@ -145,10 +145,10 @@ void AStylePreferences::updateWidgets()
     // block signals to avoid writing stuff to m_formatter
     m_enableWidgetSignals = false;
     //indent
-    if(m_formatter->option("Fill").toString() == "Tabs") {
+    if(m_formatter->option(QStringLiteral("Fill")).toString() == QLatin1String("Tabs")) {
         chkConvertTabs->setEnabled(false);
         chkConvertTabs->setChecked(false);
-        if(m_formatter->option("FillForce").toBool()) {
+        if(m_formatter->option(QStringLiteral("FillForce")).toBool()) {
             cbIndentType->setCurrentIndex(INDENT_TABSFORCE);
         } else {
             cbIndentType->setCurrentIndex(INDENT_TABS);
@@ -156,48 +156,48 @@ void AStylePreferences::updateWidgets()
     } else {
         cbIndentType->setCurrentIndex(INDENT_SPACES);
         chkConvertTabs->setEnabled(true);
-        chkConvertTabs->setChecked(m_formatter->option("FillForce").toBool());
+        chkConvertTabs->setChecked(m_formatter->option(QStringLiteral("FillForce")).toBool());
     }
-    inpNuberSpaces->setValue(m_formatter->option("FillCount").toInt());
-    chkFillEmptyLines->setChecked(m_formatter->option("FillEmptyLines").toBool());
+    inpNuberSpaces->setValue(m_formatter->option(QStringLiteral("FillCount")).toInt());
+    chkFillEmptyLines->setChecked(m_formatter->option(QStringLiteral("FillEmptyLines")).toBool());
 
     // indent objects
-    setItemChecked(INDENT_BLOCK, m_formatter->option("IndentBlocks").toBool());
-    setItemChecked(INDENT_BRACKET, m_formatter->option("IndentBrackets").toBool());
-    setItemChecked(INDENT_CASE, m_formatter->option("IndentCases").toBool());
-    setItemChecked(INDENT_CLASS, m_formatter->option("IndentClasses").toBool());
-    setItemChecked(INDENT_LABEL, m_formatter->option("IndentLabels").toBool());
-    setItemChecked(INDENT_NAMESPACE, m_formatter->option("IndentNamespaces").toBool());
-    setItemChecked(INDENT_PREPROCESSOR, m_formatter->option("IndentPreprocessors").toBool());
-    setItemChecked(INDENT_SWITCH, m_formatter->option("IndentSwitches").toBool());
+    setItemChecked(INDENT_BLOCK, m_formatter->option(QStringLiteral("IndentBlocks")).toBool());
+    setItemChecked(INDENT_BRACKET, m_formatter->option(QStringLiteral("IndentBrackets")).toBool());
+    setItemChecked(INDENT_CASE, m_formatter->option(QStringLiteral("IndentCases")).toBool());
+    setItemChecked(INDENT_CLASS, m_formatter->option(QStringLiteral("IndentClasses")).toBool());
+    setItemChecked(INDENT_LABEL, m_formatter->option(QStringLiteral("IndentLabels")).toBool());
+    setItemChecked(INDENT_NAMESPACE, m_formatter->option(QStringLiteral("IndentNamespaces")).toBool());
+    setItemChecked(INDENT_PREPROCESSOR, m_formatter->option(QStringLiteral("IndentPreprocessors")).toBool());
+    setItemChecked(INDENT_SWITCH, m_formatter->option(QStringLiteral("IndentSwitches")).toBool());
 
-    inpMaxStatement->setValue(m_formatter->option("MaxStatement").toInt());
-    inpMinConditional->setValue(m_formatter->option("MinConditional").toInt());
+    inpMaxStatement->setValue(m_formatter->option(QStringLiteral("MaxStatement")).toInt());
+    inpMinConditional->setValue(m_formatter->option(QStringLiteral("MinConditional")).toInt());
 
     // brackets
-    QString s = m_formatter->option("Brackets").toString();
-    if(s == "Attach")
+    QString s = m_formatter->option(QStringLiteral("Brackets")).toString();
+    if(s == QLatin1String("Attach"))
         cbBrackets->setCurrentIndex(BRACKET_ATTACH);
-    else if(s == "Break")
+    else if(s == QLatin1String("Break"))
         cbBrackets->setCurrentIndex(BRACKET_BREAK);
-    else if(s == "Linux")
+    else if(s == QLatin1String("Linux"))
         cbBrackets->setCurrentIndex(BRACKET_LINUX);
     else
         cbBrackets->setCurrentIndex(BRACKET_NOCHANGE);
     chkBracketsCloseHeaders->setChecked(
-        m_formatter->option("BracketsCloseHeaders").toBool());
+        m_formatter->option(QStringLiteral("BracketsCloseHeaders")).toBool());
 
     // blocks
-    chkBlockBreak->setChecked(m_formatter->option("BlockBreak").toBool());
-    chkBlockBreakAll->setChecked(m_formatter->option("BlockBreakAll").toBool());
-    chkBlockIfElse->setChecked(m_formatter->option("BlockIfElse").toBool());
+    chkBlockBreak->setChecked(m_formatter->option(QStringLiteral("BlockBreak")).toBool());
+    chkBlockBreakAll->setChecked(m_formatter->option(QStringLiteral("BlockBreakAll")).toBool());
+    chkBlockIfElse->setChecked(m_formatter->option(QStringLiteral("BlockIfElse")).toBool());
     // enable or not chkBlockBreakAll
     chkBlockBreakAll->setEnabled(chkBlockBreak->isChecked());
 
     // padding
-    bool padin = m_formatter->option("PadParenthesesIn").toBool();
-    bool padout = m_formatter->option("PadParenthesesOut").toBool();
-    bool unpad = m_formatter->option("PadParenthesesUn").toBool();
+    bool padin = m_formatter->option(QStringLiteral("PadParenthesesIn")).toBool();
+    bool padout = m_formatter->option(QStringLiteral("PadParenthesesOut")).toBool();
+    bool unpad = m_formatter->option(QStringLiteral("PadParenthesesUn")).toBool();
     if(unpad) {
         if(padin) {
             if(padout)
@@ -215,19 +215,19 @@ void AStylePreferences::updateWidgets()
     if (padout)
         chkPadParenthesisHeader->setDisabled(true);
 
-    chkPadParenthesisHeader->setChecked(m_formatter->option("PadParenthesesHeader").toBool());
-    chkPadOperators->setChecked(m_formatter->option("PadOperators").toBool());
+    chkPadParenthesisHeader->setChecked(m_formatter->option(QStringLiteral("PadParenthesesHeader")).toBool());
+    chkPadOperators->setChecked(m_formatter->option(QStringLiteral("PadOperators")).toBool());
     // oneliner
-    chkKeepStatements->setChecked(m_formatter->option("KeepStatements").toBool());
-    chkKeepBlocks->setChecked(m_formatter->option("KeepBlocks").toBool());
+    chkKeepStatements->setChecked(m_formatter->option(QStringLiteral("KeepStatements")).toBool());
+    chkKeepBlocks->setChecked(m_formatter->option(QStringLiteral("KeepBlocks")).toBool());
 
     // pointer align
-    s = m_formatter->option("PointerAlign").toString();
-    if (s == "Name")
+    s = m_formatter->option(QStringLiteral("PointerAlign")).toString();
+    if (s == QLatin1String("Name"))
         cbPointerAlign->setCurrentIndex(POINTERALIGN_NAME);
-    else if (s == "Type")
+    else if (s == QLatin1String("Type"))
         cbPointerAlign->setCurrentIndex(POINTERALIGN_TYPE);
-    else if (s == "Middle")
+    else if (s == QLatin1String("Middle"))
         cbPointerAlign->setCurrentIndex(POINTERALIGN_MIDDLE);
     else
         cbPointerAlign->setCurrentIndex(POINTERALIGN_NOCHANGE);

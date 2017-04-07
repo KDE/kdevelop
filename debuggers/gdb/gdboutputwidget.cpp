@@ -58,7 +58,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     showInternalCommands_(false),
     maxLines_(5000)
 {
-    setWindowIcon(QIcon::fromTheme("dialog-scripts", windowIcon()));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("dialog-scripts"), windowIcon()));
     setWindowTitle(i18n("GDB Output"));
     setWhatsThis(i18n("<b>GDB output</b><p>"
                     "Shows all gdb commands being executed. "
@@ -73,7 +73,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     label->setBuddy(m_userGDBCmdEditor);
 
     m_Interrupt = new QToolButton( this );
-    m_Interrupt->setIcon ( QIcon::fromTheme( "media-playback-pause" ) );
+    m_Interrupt->setIcon ( QIcon::fromTheme( QStringLiteral("media-playback-pause") ) );
     m_Interrupt->setToolTip( i18n ( "Pause execution of the app to enter gdb commands" ) );
 
     QVBoxLayout *topLayout = new QVBoxLayout(this);
@@ -206,12 +206,12 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
                                     bool internal)
 {
     QString s = line.toHtmlEscaped();
-    if (s.startsWith("(gdb)"))
+    if (s.startsWith(QLatin1String("(gdb)")))
     {
         s = colorify(s, gdbColor_);
     }
     else
-        s.replace('\n', "<br>");
+        s.replace('\n', QLatin1String("<br>"));
 
     allCommands_.append(s);
     allCommandsRaw_.append(line);
@@ -321,7 +321,7 @@ void GDBOutputWidget::flushPending()
     QTextCursor cursor(document);
     cursor.movePosition(QTextCursor::End);
     cursor.insertHtml(pendingOutput_);
-    pendingOutput_ = "";
+    pendingOutput_ = QLatin1String("");
 
     m_gdbView->verticalScrollBar()->setValue(m_gdbView->verticalScrollBar()->maximum());
     m_gdbView->setUpdatesEnabled(true);

@@ -66,7 +66,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, KDevelop::IPr
 //         }
 //         exe.replace("#[bin_dir]", binDir);
 
-        const bool willFail = test.properties.value("WILL_FAIL", "FALSE") == "TRUE";
+        const bool willFail = test.properties.value(QStringLiteral("WILL_FAIL"), QStringLiteral("FALSE")) == QLatin1String("TRUE");
         CTestSuite* suite = new CTestSuite(test.name, test.executable, files, project, test.arguments, willFail);
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }

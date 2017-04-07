@@ -84,9 +84,9 @@ private:
 
 int main(int argc, char **argv)
 {
-    KAboutData aboutData("kcm_uitest", i18n("kcm_uitest"), version, i18n(description),
+    KAboutData aboutData(QStringLiteral("kcm_uitest"), i18n("kcm_uitest"), version, i18n(description),
                      KAboutLicense::GPL, i18n("(C) 2012 Andreas Pakulat"));
-    aboutData.addAuthor( i18n("Andreas Pakulat"), QString(), "apaku@gmx.de" );
+    aboutData.addAuthor( i18n("Andreas Pakulat"), QString(), QStringLiteral("apaku@gmx.de") );
     QApplication app(argc, argv);
     QCommandLineParser parser;
     KAboutData::setApplicationData(aboutData);
@@ -103,11 +103,11 @@ int main(int argc, char **argv)
     KConfig projkcfg( tempdir.path() + "/kdev-custom-uitest.kdev4" );
 
     QDir projdir(tempdir.path());
-    projdir.mkdir("includedir");
-    projdir.mkdir("subtree");
-    projdir.mkpath("subtree/includedir");
-    projdir.mkpath("subtree/deeptree");
-    projdir.mkpath("subtree/deeptree/includedir");
+    projdir.mkdir(QStringLiteral("includedir"));
+    projdir.mkdir(QStringLiteral("subtree"));
+    projdir.mkpath(QStringLiteral("subtree/includedir"));
+    projdir.mkpath(QStringLiteral("subtree/deeptree"));
+    projdir.mkpath(QStringLiteral("subtree/deeptree/includedir"));
 
     qCDebug(CUSTOMBUILDSYSTEM) << "project config:" << projkcfg.name();
 
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     widget.loadFrom(&projkcfg);
     mainLayout.addWidget(&widget);
 
-    dlg.setWindowTitle("Ui Test App for Config Widget");
+    dlg.setWindowTitle(QStringLiteral("Ui Test App for Config Widget"));
 
     QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel);
     buttonBox.button(QDialogButtonBox::Apply)->setEnabled(false);

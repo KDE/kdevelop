@@ -95,7 +95,7 @@ ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)
 
 QString KDevQmlJsPlugin::name() const
 {
-    return "qml/js";
+    return QStringLiteral("qml/js");
 }
 
 ICodeHighlighting* KDevQmlJsPlugin::codeHighlighting() const

@@ -73,21 +73,21 @@ IProject* ProjectsGenerator::GenerateSimpleProject()
     QDir(rootFolder.absolutePath() + "/" + sp).removeRecursively();
     rootFolder.mkdir( sp );
     rootFolder.cd( sp );
-    rootFolder.mkdir( "src" );
-    rootFolder.mkdir( ".kdev4" );
+    rootFolder.mkdir( QStringLiteral("src") );
+    rootFolder.mkdir( QStringLiteral(".kdev4") );
 
     {
-        QFile file( rootFolder.filePath( "simpleproject.kdev4" ) );
+        QFile file( rootFolder.filePath( QStringLiteral("simpleproject.kdev4") ) );
         createFile( file );
         QTextStream stream1( &file );
         stream1 << "[Project]\nName=SimpleProject\nManager=KDevCustomBuildSystem";
     }
     {
-        QFile file( rootFolder.filePath( "src/main.cpp" ) );
+        QFile file( rootFolder.filePath( QStringLiteral("src/main.cpp") ) );
         createFile( file );
     }
     {
-        QFile file( rootFolder.filePath( ".kdev4/simpleproject.kdev4" ) );
+        QFile file( rootFolder.filePath( QStringLiteral(".kdev4/simpleproject.kdev4") ) );
         createFile( file );
         QTextStream stream( &file );
         stream << "[Buildset]\n" <<
@@ -100,7 +100,7 @@ IProject* ProjectsGenerator::GenerateSimpleProject()
         "[Project]\n" <<
         "VersionControlSupport=\n";
     }
-    return loadProject( QDir::tempPath() + "/simpleproject/simpleproject.kdev4", "SimpleProject" );
+    return loadProject( QDir::tempPath() + "/simpleproject/simpleproject.kdev4", QStringLiteral("SimpleProject") );
 }
 
 IProject* ProjectsGenerator::GenerateMultiPathProject()
@@ -116,25 +116,25 @@ IProject* ProjectsGenerator::GenerateMultiPathProject()
     QDir(rootFolder.absolutePath() + "/" + mp).removeRecursively();
     rootFolder.mkdir( mp );
     rootFolder.cd( mp );
-    rootFolder.mkdir( "src" );
-    rootFolder.mkdir( ".kdev4" );
-    rootFolder.mkdir( "anotherFolder" );
+    rootFolder.mkdir( QStringLiteral("src") );
+    rootFolder.mkdir( QStringLiteral(".kdev4") );
+    rootFolder.mkdir( QStringLiteral("anotherFolder") );
 
     {
-        QFile file( rootFolder.filePath( "multipathproject.kdev4" ) );
+        QFile file( rootFolder.filePath( QStringLiteral("multipathproject.kdev4") ) );
         createFile( file );
         QTextStream stream1( &file );
         stream1 << "[Project]\nName=MultiPathProject\nManager=KDevCustomBuildSystem";
         ;
     }
     {
-        QFile file1( rootFolder.filePath( "src/main.cpp" ) );
+        QFile file1( rootFolder.filePath( QStringLiteral("src/main.cpp") ) );
         createFile( file1 );
-        QFile file2( rootFolder.filePath( "anotherFolder/tst.h" ) );
+        QFile file2( rootFolder.filePath( QStringLiteral("anotherFolder/tst.h") ) );
         createFile( file2 );
     }
     {
-        QFile file( rootFolder.filePath( ".kdev4/multipathproject.kdev4" ) );
+        QFile file( rootFolder.filePath( QStringLiteral(".kdev4/multipathproject.kdev4") ) );
         createFile( file );
         QTextStream stream( &file );
         stream << "[Buildset]\n" <<
@@ -155,7 +155,7 @@ IProject* ProjectsGenerator::GenerateMultiPathProject()
         "[Project]\n" <<
         "VersionControlSupport=\n";
     }
-    return loadProject( QDir::tempPath() + "/multipathproject/multipathproject.kdev4", "MultiPathProject" );
+    return loadProject( QDir::tempPath() + "/multipathproject/multipathproject.kdev4", QStringLiteral("MultiPathProject") );
 }
 
 IProject* ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles()
@@ -164,7 +164,7 @@ IProject* ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles()
     Q_ASSERT(project);
 
     auto rootFolder = QDir(project->path().path());
-    const QString includePaths = ".kdev_include_paths";
+    const QString includePaths = QStringLiteral(".kdev_include_paths");
 
     QFile file(rootFolder.filePath(includePaths));
     createFile(file);
@@ -185,20 +185,20 @@ IProject* ProjectsGenerator::GenerateEmptyProject()
     QDir(rootFolder.absolutePath() + "/" + ep).removeRecursively();
     rootFolder.mkdir(ep);
     rootFolder.cd(ep);
-    rootFolder.mkdir(".kdev4");
+    rootFolder.mkdir(QStringLiteral(".kdev4"));
 
     {
-        QFile file(rootFolder.filePath("emptyproject.kdev4"));
+        QFile file(rootFolder.filePath(QStringLiteral("emptyproject.kdev4")));
         createFile(file);
         QTextStream stream(&file);
         stream << "[Project]\nName=EmptyProject\nManager=KDevCustomBuildSystem";
     }
 
     {
-        QFile file(rootFolder.filePath(".kdev4/emptyproject.kdev4"));
+        QFile file(rootFolder.filePath(QStringLiteral(".kdev4/emptyproject.kdev4")));
         createFile(file);
         QTextStream stream(&file);
         stream << "[Project]\n" << "VersionControlSupport=\n";
     }
-    return loadProject(QDir::tempPath() + "/emptyproject/emptyproject.kdev4", "EmptyProject");
+    return loadProject(QDir::tempPath() + "/emptyproject/emptyproject.kdev4", QStringLiteral("EmptyProject"));
 }

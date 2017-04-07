@@ -54,7 +54,7 @@ void TestContexts::testFunctionContext()
     QFETCH(RangeInRevision, argCtxRange);
     QFETCH(RangeInRevision, bodyCtxRange);
 
-    const IndexedString file(QUrl(QString("file:///internal/%1-functionContext.js").arg(qrand())));
+    const IndexedString file(QUrl(QStringLiteral("file:///internal/%1-functionContext.js").arg(qrand())));
     ParseSession session(file, code, 0);
     QVERIFY(session.ast());
     QCOMPARE(session.language().dialect(), QmlJS::Dialect::JavaScript);
@@ -107,7 +107,7 @@ void TestContexts::testFunctionContext_data()
 
 void TestContexts::testQMLContext()
 {
-    const IndexedString file(QUrl("file:///internal/testQMLContext.qml"));
+    const IndexedString file(QUrl(QStringLiteral("file:///internal/testQMLContext.qml")));
     ParseSession session(file, "Text {\n"
                                "  id: main\n"
                                "  Text {\n"

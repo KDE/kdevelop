@@ -54,9 +54,9 @@ K_PLUGIN_FACTORY_WITH_JSON(CustomScriptFactory, "kdevcustomscript.json", registe
 // Replaces ${KEY} in command with variables[KEY]
 static QString replaceVariables(QString command, QMap<QString, QString> variables)
 {
-    while (command.contains("${")) {
-        int pos = command.indexOf("${");
-        int end = command.indexOf("}", pos + 2);
+    while (command.contains(QLatin1String("${"))) {
+        int pos = command.indexOf(QLatin1String("${"));
+        int end = command.indexOf(QLatin1String("}"), pos + 2);
         if (end == -1) {
             break;
         }
@@ -66,14 +66,14 @@ static QString replaceVariables(QString command, QMap<QString, QString> variable
             command.replace(pos, 1 + end - pos, variables[key]);
         } else {
             qCDebug(CUSTOMSCRIPT) << "found no variable while replacing in shell-command" << command << "key" << key << "available:" << variables;
-            command.replace(pos, 1 + end - pos, "");
+            command.replace(pos, 1 + end - pos, QLatin1String(""));
         }
     }
     return command;
 }
 
 CustomScriptPlugin::CustomScriptPlugin(QObject* parent, const QVariantList&)
-    : IPlugin("kdevcustomscript", parent)
+    : IPlugin(QStringLiteral("kdevcustomscript"), parent)
 {
     m_currentStyle = predefinedStyles().at(0);
     indentPluginSingleton = this;
@@ -86,12 +86,12 @@ CustomScriptPlugin::~CustomScriptPlugin()
 QString CustomScriptPlugin::name()
 {
     // This needs to match the X-KDE-PluginInfo-Name entry from the .desktop file!
-    return "kdevcustomscript";
+    return QStringLiteral("kdevcustomscript");
 }
 
 QString CustomScriptPlugin::caption()
 {
-    return "Custom Script Formatter";
+    return QStringLiteral("Custom Script Formatter");
 }
 
 QString CustomScriptPlugin::description()
@@ -132,14 +132,14 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 
     // Replace ${Project} with the project path
     command = replaceVariables(command, projectVariables);
-    command.replace("$FILE", url.toLocalFile());
+    command.replace(QLatin1String("$FILE"), url.toLocalFile());
 
-    if (command.contains("$TMPFILE")) {
+    if (command.contains(QLatin1String("$TMPFILE"))) {
         tmpFile.reset(new QTemporaryFile(QDir::tempPath() + "/code"));
         tmpFile->setAutoRemove(false);
         if (tmpFile->open()) {
             qCDebug(CUSTOMSCRIPT) << "using temporary file" << tmpFile->fileName();
-            command.replace("$TMPFILE", tmpFile->fileName());
+            command.replace(QLatin1String("$TMPFILE"), tmpFile->fileName());
             QByteArray useTextArray = useText.toLocal8Bit();
             if (tmpFile->write(useTextArray) != useTextArray.size()) {
                 qWarning() << "failed to write text to temporary file";
@@ -214,7 +214,7 @@ static QList<SourceFormatterStyle> stylesFromLanguagePlugins()
     foreach (auto lang, ICore::self()->languageController()->loadedLanguages()) {
         const SourceFormatterItemList& languageStyles = lang->sourceFormatterItems();
         for (const SourceFormatterStyleItem& item: languageStyles) {
-            if (item.engine == "customscript") {
+            if (item.engine == QLatin1String("customscript")) {
                 styles << item.style;
             }
         }
@@ -233,18 +233,18 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
     }
 
     SourceFormatterStyle result(name);
-    if (name == "GNU_indent_GNU") {
+    if (name == QLatin1String("GNU_indent_GNU")) {
         result.setCaption(i18n("Gnu Indent: GNU"));
-        result.setContent("indent");
-    } else if (name == "GNU_indent_KR") {
+        result.setContent(QStringLiteral("indent"));
+    } else if (name == QLatin1String("GNU_indent_KR")) {
         result.setCaption(i18n("Gnu Indent: Kernighan & Ritchie"));
-        result.setContent("indent -kr");
-    } else if (name == "GNU_indent_orig") {
+        result.setContent(QStringLiteral("indent -kr"));
+    } else if (name == QLatin1String("GNU_indent_orig")) {
         result.setCaption(i18n("Gnu Indent: Original Berkeley indent style"));
-        result.setContent("indent -orig");
-    } else if (name == "kdev_format_source") {
-        result.setCaption("KDevelop: kdev_format_source");
-        result.setContent("kdev_format_source $FILE $TMPFILE");
+        result.setContent(QStringLiteral("indent -orig"));
+    } else if (name == QLatin1String("kdev_format_source")) {
+        result.setCaption(QStringLiteral("KDevelop: kdev_format_source"));
+        result.setContent(QStringLiteral("kdev_format_source $FILE $TMPFILE"));
         result.setUsePreview(false);
         result.setDescription(i18n("Description:<br />"
                                    "<b>kdev_format_source</b> is a script bundled with KDevelop "
@@ -274,10 +274,10 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
 QList<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles()
 {
     QList<KDevelop::SourceFormatterStyle> styles = stylesFromLanguagePlugins();
-    styles << predefinedStyle("kdev_format_source");
-    styles << predefinedStyle("GNU_indent_GNU");
-    styles << predefinedStyle("GNU_indent_KR");
-    styles << predefinedStyle("GNU_indent_orig");
+    styles << predefinedStyle(QStringLiteral("kdev_format_source"));
+    styles << predefinedStyle(QStringLiteral("GNU_indent_GNU"));
+    styles << predefinedStyle(QStringLiteral("GNU_indent_KR"));
+    styles << predefinedStyle(QStringLiteral("GNU_indent_orig"));
     return styles;
 }
 
@@ -397,7 +397,7 @@ QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url)
     QString sample = languages[0]->indentationSample();
     QString formattedSample = formatSource(sample, url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString());
 
-    QStringList lines = formattedSample.split("\n");
+    QStringList lines = formattedSample.split(QStringLiteral("\n"));
     foreach (QString line, lines) {
         if (!line.isEmpty() && line[0].isSpace()) {
             QString indent;
@@ -431,10 +431,10 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url)
         ret.indentWidth = indent[0].count(' ');
     }
 
-    if (!indent.join("").contains('	')) {
+    if (!indent.join(QLatin1String("")).contains('	')) {
         ret.indentationTabWidth = -1;         // Tabs are not used for indentation
     }
-    if (indent[0] == "	") {
+    if (indent[0] == QLatin1String("	")) {
         // The script indents with tabs-only
         // The problem is that we don't know how
         // wide a tab is supposed to be.
@@ -450,7 +450,7 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url)
         // Do it by assuming a uniform indentation-step with each level.
 
         for (int pos = 0; pos < indent.size(); ++pos) {
-            if (indent[pos] == "	"&& pos >= 1) {
+            if (indent[pos] == QLatin1String("	")&& pos >= 1) {
                 // This line consists of only a tab.
                 int prevWidth = indent[pos - 1].length();
                 int prevPrevWidth = (pos >= 2) ? indent[pos - 2].length() : 0;
@@ -465,7 +465,7 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url)
         }
     }
 
-    qCDebug(CUSTOMSCRIPT) << "indent-sample" << "\"" + indent.join("\n") + "\"" << "extracted tab-width" << ret.indentationTabWidth << "extracted indentation width" << ret.indentWidth;
+    qCDebug(CUSTOMSCRIPT) << "indent-sample" << "\"" + indent.join(QStringLiteral("\n")) + "\"" << "extracted tab-width" << ret.indentationTabWidth << "extracted indentation width" << ret.indentWidth;
 
     return ret;
 }

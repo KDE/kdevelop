@@ -46,7 +46,7 @@ QString findconfigFile(const QString& projectDir)
     QDirIterator dirIterator(projectDir + '/' + ".kdev4");
     while (dirIterator.hasNext()) {
         dirIterator.next();
-        if (dirIterator.fileName().endsWith(".kdev4")) {
+        if (dirIterator.fileName().endsWith(QLatin1String(".kdev4"))) {
             return dirIterator.fileInfo().canonicalFilePath();
         }
     }
@@ -57,7 +57,7 @@ QString findProject(const QString& subdirectory)
 {
     QDir project(subdirectory);
     do {
-        if (project.exists(".kdev4")) {
+        if (project.exists(QStringLiteral(".kdev4"))) {
             return project.path();
         }
     } while(project.cdUp());
@@ -78,7 +78,7 @@ bool IncludePathsConverter::addIncludePaths(const QStringList& includeDirectorie
     }
 
     auto configEntries = SettingsManager::globalInstance()->readPaths(configFile.data());
-    QString path = subdirectory.isEmpty() ? "." : subdirectory;
+    QString path = subdirectory.isEmpty() ? QStringLiteral(".") : subdirectory;
 
     ConfigEntry config;
     for (auto& entry: configEntries) {
@@ -110,7 +110,7 @@ bool IncludePathsConverter::removeIncludePaths(const QStringList& includeDirecto
     }
 
     auto configEntries = SettingsManager::globalInstance()->readPaths(configFile.data());
-    QString path = subdirectory.isEmpty() ? "." : subdirectory;
+    QString path = subdirectory.isEmpty() ? QStringLiteral(".") : subdirectory;
 
     for (auto& entry: configEntries) {
         if (path == entry.path) {
@@ -132,7 +132,7 @@ QStringList IncludePathsConverter::readIncludePaths(const QString& projectConfig
         return  {};
     }
 
-    QString path = subdirectory.isEmpty() ? "." : subdirectory;
+    QString path = subdirectory.isEmpty() ? QStringLiteral(".") : subdirectory;
     auto configEntries = SettingsManager::globalInstance()->readPaths(configFile.data());
     for (const auto& entry: configEntries) {
         if (path == entry.path) {
@@ -146,7 +146,7 @@ QStringList IncludePathsConverter::readIncludePaths(const QString& projectConfig
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
-    QCoreApplication::setApplicationName("kdev_includepathsconverter");
+    QCoreApplication::setApplicationName(QStringLiteral("kdev_includepathsconverter"));
 
     QCommandLineParser parser;
     parser.setApplicationDescription("\nAdds, removes or shows include directories of a project. Also it can be used as a tool to convert include directories from .kdev_include_paths file to the new format.\n\n"
@@ -155,13 +155,13 @@ int main(int argc, char** argv)
     "kdev_includepathsconverter -l /project/path/another/subdirectory/");
     parser.addHelpOption();
 
-    QCommandLineOption listOption("l", QCoreApplication::translate("main", "Shows include directories used by the project"),
+    QCommandLineOption listOption(QStringLiteral("l"), QCoreApplication::translate("main", "Shows include directories used by the project"),
                                      QCoreApplication::translate("main", "project"));
     parser.addOption(listOption);
-    QCommandLineOption addOption("a", QCoreApplication::translate("main", "Adds include directories to the project"),
+    QCommandLineOption addOption(QStringLiteral("a"), QCoreApplication::translate("main", "Adds include directories to the project"),
                                      QCoreApplication::translate("main", "project"));
     parser.addOption(addOption);
-    QCommandLineOption removeOption("r", QCoreApplication::translate("main", "Removes include directories from the project"),
+    QCommandLineOption removeOption(QStringLiteral("r"), QCoreApplication::translate("main", "Removes include directories from the project"),
                                      QCoreApplication::translate("main", "project"));
     parser.addOption(removeOption);
 

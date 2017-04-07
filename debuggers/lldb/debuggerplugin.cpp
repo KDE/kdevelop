@@ -41,13 +41,13 @@ inline void initMyResource() { Q_INIT_RESOURCE(kdevlldb); }
 K_PLUGIN_FACTORY_WITH_JSON(LldbDebuggerFactory, "kdevlldb.json", registerPlugin<LldbDebuggerPlugin>(); )
 
 LldbDebuggerPlugin::LldbDebuggerPlugin(QObject *parent, const QVariantList &)
-    : MIDebuggerPlugin("kdevlldb", i18n("LLDB"), parent)
+    : MIDebuggerPlugin(QStringLiteral("kdevlldb"), i18n("LLDB"), parent)
     , m_consoleFactory(nullptr)
     , m_disassembleFactory(nullptr)
 {
     initMyResource();
 
-    setXMLFile("kdevlldbui.rc");
+    setXMLFile(QStringLiteral("kdevlldbui.rc"));
 
     auto pluginController = core()->pluginController();
     for(auto plugin : pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
@@ -103,7 +103,7 @@ void LldbDebuggerPlugin::setupExecutePlugin(KDevelop::IPlugin* plugin, bool load
 void LldbDebuggerPlugin::setupToolviews()
 {
     m_consoleFactory = new DebuggerToolFactory<NonInterruptDebuggerConsoleView>(this,
-                            "org.kdevelop.debugger.LldbConsole", Qt::BottomDockWidgetArea);
+                            QStringLiteral("org.kdevelop.debugger.LldbConsole"), Qt::BottomDockWidgetArea);
     core()->uiController()->addToolView(i18n("LLDB Console"), m_consoleFactory);
     /*
     m_disassembleFactory = new DebuggerToolFactory<DisassembleWidget>(this,

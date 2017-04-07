@@ -22,7 +22,7 @@
 #include <QNetworkReply>
 #include <QXmlStreamReader>
 
-static const QUrl kdeProjectsUrl("https://projects.kde.org/kde_projects.xml");
+static const QUrl kdeProjectsUrl(QStringLiteral("https://projects.kde.org/kde_projects.xml"));
 
 KDEProjectsReader::KDEProjectsReader(KDEProjectsModel* m, QObject* parent)
     : QObject(parent)
@@ -78,14 +78,14 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
                     m_current.top().type = Source::Project;
                 else if (name == "module")
                     m_current.top().type = Source::Module;
-                m_current.top().identifier = xml.attributes().value("identifier").toString();
+                m_current.top().identifier = xml.attributes().value(QStringLiteral("identifier")).toString();
             }
             else if(!m_current.isEmpty())
             {
                 if(name == "name")
                     m_current.top().name = readText(&xml);
                 else if(name == "url") {
-                    QString protocol = xml.attributes().value("protocol").toString();
+                    QString protocol = xml.attributes().value(QStringLiteral("protocol")).toString();
                     m_current.top().m_urls[protocol] = readText(&xml);
                 } else if(name == "icon")
                     m_current.top().icon = readText(&xml);
@@ -115,5 +115,5 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
 
 void KDEProjectsReader::downloadError(QNetworkReply::NetworkError error)
 {
-    m_errors += QString("error: %1").arg(error);
+    m_errors += QStringLiteral("error: %1").arg(error);
 }

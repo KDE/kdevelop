@@ -64,10 +64,10 @@ void MIVariableController::programStopped(const AsyncRecord& r)
 {
     if (debugSession()->debuggerStateIsOn(s_shuttingDown)) return;
 
-    if (r.hasField("reason") && r["reason"].literal() == "function-finished"
-        && r.hasField("gdb-result-var"))
+    if (r.hasField(QStringLiteral("reason")) && r[QStringLiteral("reason")].literal() == QLatin1String("function-finished")
+        && r.hasField(QStringLiteral("gdb-result-var")))
     {
-        variableCollection()->watches()->addFinishResult(r["gdb-result-var"].literal());
+        variableCollection()->watches()->addFinishResult(r[QStringLiteral("gdb-result-var")].literal());
     } else {
         variableCollection()->watches()->removeFinishResult();
     }
@@ -87,18 +87,18 @@ void MIVariableController::update()
    if ((autoUpdate() & UpdateLocals) ||
        ((autoUpdate() & UpdateWatches) && variableCollection()->watches()->childCount() > 0))
     {
-        debugSession()->addCommand(VarUpdate, "--all-values *", this,
+        debugSession()->addCommand(VarUpdate, QStringLiteral("--all-values *"), this,
                                    &MIVariableController::handleVarUpdate);
     }
 }
 
 void MIVariableController::handleVarUpdate(const ResultRecord& r)
 {
-    const Value& changed = r["changelist"];
+    const Value& changed = r[QStringLiteral("changelist")];
     for (int i = 0; i < changed.size(); ++i)
     {
         const Value& var = changed[i];
-        MIVariable* v = debugSession()->findVariableByVarobjName(var["name"].literal());
+        MIVariable* v = debugSession()->findVariableByVarobjName(var[QStringLiteral("name")].literal());
         // v can be NULL here if we've already removed locals after step,
         // but the corresponding -var-delete command is still in the queue.
         if (v) {
@@ -118,8 +118,8 @@ public:
     {
         if (!KDevelop::ICore::self()->debugController()) return; //happens on shutdown
 
-        if (r.hasField("stack-args") && r["stack-args"].size() > 0) {
-            const Value& locals = r["stack-args"][0]["args"];
+        if (r.hasField(QStringLiteral("stack-args")) && r[QStringLiteral("stack-args")].size() > 0) {
+            const Value& locals = r[QStringLiteral("stack-args")][0][QStringLiteral("args")];
 
             for (int i = 0; i < locals.size(); i++) {
                 m_localsName << locals[i].literal();
@@ -145,18 +145,18 @@ public:
 
     void handle(const ResultRecord &r) override
     {
-        if (r.hasField("locals")) {
-            const Value& locals = r["locals"];
+        if (r.hasField(QStringLiteral("locals"))) {
+            const Value& locals = r[QStringLiteral("locals")];
 
             QStringList localsName;
             for (int i = 0; i < locals.size(); i++) {
                 const Value& var = locals[i];
-                localsName << var["name"].literal();
+                localsName << var[QStringLiteral("name")].literal();
             }
             int frame = m_session->frameStackModel()->currentFrame();
             m_session->addCommand(StackListArguments,
                                 // do not show value, low-frame, high-frame
-                                QString("0 %1 %2").arg(frame).arg(frame),
+                                QStringLiteral("0 %1 %2").arg(frame).arg(frame),
                                 new StackListArgumentsHandler(localsName));
         }
     }
@@ -167,7 +167,7 @@ private:
 
 void MIVariableController::updateLocals()
 {
-    debugSession()->addCommand(StackListLocals, "--simple-values",
+    debugSession()->addCommand(StackListLocals, QStringLiteral("--simple-values"),
                                new StackListLocalsHandler(debugSession()));
 }
 
@@ -224,17 +224,17 @@ void MIVariableController::addWatchpoint(KDevelop::Variable* variable)
 
 void MIVariableController::addWatch(const ResultRecord& r)
 {
-    if (r.reason == "done"
-        && r.hasField("path_expr")
-        && !r["path_expr"].literal().isEmpty()) {
-        variableCollection()->watches()->add(r["path_expr"].literal());
+    if (r.reason == QLatin1String("done")
+        && r.hasField(QStringLiteral("path_expr"))
+        && !r[QStringLiteral("path_expr")].literal().isEmpty()) {
+        variableCollection()->watches()->add(r[QStringLiteral("path_expr")].literal());
     }
 }
 
 void MIVariableController::addWatchpoint(const ResultRecord& r)
 {
-    if (r.reason == "done" && !r["path_expr"].literal().isEmpty()) {
-        KDevelop::ICore::self()->debugController()->breakpointModel()->addWatchpoint(r["path_expr"].literal());
+    if (r.reason == QLatin1String("done") && !r[QStringLiteral("path_expr")].literal().isEmpty()) {
+        KDevelop::ICore::self()->debugController()->breakpointModel()->addWatchpoint(r[QStringLiteral("path_expr")].literal());
     }
 }
 

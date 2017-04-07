@@ -47,7 +47,7 @@ QString qmakeCandidate()
 }
 
 QtHelpQtDoc::QtHelpQtDoc(QObject *parent, const QVariantList &args)
-    : QtHelpProviderAbstract(parent, "qthelpcollection.qhc", args)
+    : QtHelpProviderAbstract(parent, QStringLiteral("qthelpcollection.qhc"), args)
     , m_path(QString())
 {
     Q_UNUSED(args);

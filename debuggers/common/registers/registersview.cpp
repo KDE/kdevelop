@@ -201,7 +201,7 @@ QStringList RegistersView::activeViews()
 void RegistersView::clear()
 {
     for (int i = 0; i < TABLES_COUNT; i++) {
-        tabWidget->setTabText(i, "");
+        tabWidget->setTabText(i, QLatin1String(""));
     }
 }
 

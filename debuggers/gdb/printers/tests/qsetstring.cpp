@@ -3,8 +3,8 @@
 int main()
 {
     QSet<QString> s;
-    s.insert(QString("10"));
-    s.insert(QString("20"));
-    s.insert(QString("30"));
+    s.insert(QStringLiteral("10"));
+    s.insert(QStringLiteral("20"));
+    s.insert(QStringLiteral("30"));
     return 0;
 }

@@ -67,8 +67,8 @@ struct ExecRunHandler : public MICommandHandler
     {
         --m_activeCommands;
         if (r.reason == QLatin1String("error")) {
-            if (r.hasField("msg")
-                && r["msg"].literal().contains("Invalid process during debug session")) {
+            if (r.hasField(QStringLiteral("msg"))
+                && r[QStringLiteral("msg")].literal().contains(QLatin1String("Invalid process during debug session"))) {
                 // for some unknown reason, lldb-mi sometimes fails to start process
                 if (m_remainRetry && m_session) {
                     qCDebug(DEBUGGERLLDB) << "Retry starting";
@@ -165,13 +165,13 @@ void DebugSession::initializeDebugger()
     //addCommand(MI::EnableTimings, "yes");
 
     // Check version
-    addCommand(new CliCommand(MI::NonMI, "version", this, &DebugSession::handleVersion));
+    addCommand(new CliCommand(MI::NonMI, QStringLiteral("version"), this, &DebugSession::handleVersion));
 
     // load data formatter
     auto formatterPath = m_formatterPath;
     if (!QFileInfo(formatterPath).isFile()) {
         formatterPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                               "kdevlldb/formatters/all.py");
+                                               QStringLiteral("kdevlldb/formatters/all.py"));
     }
     if (!formatterPath.isEmpty()) {
         addCommand(MI::NonMI, "command script import " + KShell::quoteArg(formatterPath));
@@ -179,11 +179,11 @@ void DebugSession::initializeDebugger()
 
 
     // Treat char array as string
-    addCommand(MI::GdbSet, "print char-array-as-string on");
+    addCommand(MI::GdbSet, QStringLiteral("print char-array-as-string on"));
 
     // set a larger term width.
     // TODO: set term-width to exact max column count in console view
-    addCommand(MI::NonMI, "settings set term-width 1024");
+    addCommand(MI::NonMI, QStringLiteral("settings set term-width 1024"));
 
     qCDebug(DEBUGGERLLDB) << "Initialized LLDB";
 }
@@ -238,7 +238,7 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
         vars.append(QStringLiteral("%0=%1").arg(it.key(), Utils::quote(it.value())));
     }
     // actually using lldb command 'settings set target.env-vars' which accepts multiple values
-    addCommand(GdbSet, "environment " + vars.join(" "));
+    addCommand(GdbSet, "environment " + vars.join(QStringLiteral(" ")));
 
     // Break on start: can't use "-exec-run --start" because in lldb-mi
     // the inferior stops without any notification
@@ -247,13 +247,13 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
         BreakpointModel* m = ICore::self()->debugController()->breakpointModel();
         bool found = false;
         foreach (Breakpoint *b, m->breakpoints()) {
-            if (b->location() == "main") {
+            if (b->location() == QLatin1String("main")) {
                 found = true;
                 break;
             }
         }
         if (!found) {
-            m->addCodeBreakpoint("main");
+            m->addCodeBreakpoint(QStringLiteral("main"));
         }
     }
 
@@ -346,11 +346,11 @@ void DebugSession::ensureDebuggerListening()
 
 void DebugSession::handleFileExecAndSymbols(const MI::ResultRecord& r)
 {
-    if (r.reason == "error") {
+    if (r.reason == QLatin1String("error")) {
         KMessageBox::error(
             qApp->activeWindow(),
             i18n("<b>Could not start debugger:</b><br />")+
-            r["msg"].literal(),
+            r[QStringLiteral("msg")].literal(),
             i18n("Startup error"));
         stopDebugger();
     }
@@ -358,10 +358,10 @@ void DebugSession::handleFileExecAndSymbols(const MI::ResultRecord& r)
 
 void DebugSession::handleTargetSelect(const MI::ResultRecord& r)
 {
-    if (r.reason == "error") {
+    if (r.reason == QLatin1String("error")) {
         KMessageBox::error(qApp->activeWindow(),
             i18n("<b>Error connecting to remote target:</b><br />")+
-            r["msg"].literal(),
+            r[QStringLiteral("msg")].literal(),
             i18n("Startup error"));
         stopDebugger();
     }
@@ -371,7 +371,7 @@ void DebugSession::handleCoreFile(const QStringList &s)
 {
     qCDebug(DEBUGGERLLDB) << s;
     for (const auto &line : s) {
-        if (line.startsWith("error:")) {
+        if (line.startsWith(QLatin1String("error:"))) {
             KMessageBox::error(
                 qApp->activeWindow(),
                 i18n("<b>Failed to load core file</b>"
@@ -411,9 +411,9 @@ void DebugSession::handleVersion(const QStringList& s)
             i18n("LLDB Version Unsupported"),
             KStandardGuiItem::yes(),
             KStandardGuiItem::no(),
-            "unsupported-lldb-debugger");
+            QStringLiteral("unsupported-lldb-debugger"));
         if (ans == KMessageBox::ButtonCode::No) {
-            programFinished("Stopped because of unsupported LLDB version");
+            programFinished(QStringLiteral("Stopped because of unsupported LLDB version"));
             stopDebugger();
         }
         return;
@@ -427,7 +427,7 @@ void DebugSession::handleVersion(const QStringList& s)
     // lldb 3.8.1 reports version 350.99.0 on OS X
     const int min_ver[] = {350, 99, 0};
 #else
-    QRegularExpression rx("^lldb version (\\d+).(\\d+).(\\d+)\\b", QRegularExpression::MultilineOption);
+    QRegularExpression rx(QStringLiteral("^lldb version (\\d+).(\\d+).(\\d+)\\b"), QRegularExpression::MultilineOption);
     const int min_ver[] = {3, 8, 1};
 #endif
 

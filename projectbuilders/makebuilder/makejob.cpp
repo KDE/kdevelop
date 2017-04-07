@@ -55,7 +55,7 @@ public:
 IFilterStrategy::Progress MakeJobCompilerFilterStrategy::progressInLine(const QString& line)
 {
     // example string: [ 97%] Built target clang-parser
-    static const QRegularExpression re("^\\[([\\d ][\\d ]\\d)%\\] (.*)");
+    static const QRegularExpression re(QStringLiteral("^\\[([\\d ][\\d ]\\d)%\\] (.*)"));
 
     QRegularExpressionMatch match = re.match(line);
     if (match.hasMatch()) {
@@ -104,7 +104,7 @@ MakeJob::~MakeJob()
 void MakeJob::start()
 {
     ProjectBaseItem* it = item();
-    qCDebug(MAKEBUILDER) << "Building with make" << m_command << m_overrideTargets.join(" ");
+    qCDebug(MAKEBUILDER) << "Building with make" << m_command << m_overrideTargets.join(QStringLiteral(" "));
     if (!it)
     {
         setError(ItemNoLongerValidError);
@@ -182,13 +182,13 @@ QStringList MakeJob::privilegedExecutionCommand() const
         QString suCommandName;
         switch( suCommand ) {
             case 1:
-                return QStringList() << "kdesudo" << "-t";
+                return QStringList() << QStringLiteral("kdesudo") << QStringLiteral("-t");
 
             case 2:
-                return QStringList() << "sudo";
+                return QStringList() << QStringLiteral("sudo");
 
             default:
-                return QStringList() << "kdesu" << "-t";
+                return QStringList() << QStringLiteral("kdesu") << QStringLiteral("-t");
         }
     }
     return QStringList();
@@ -218,11 +218,11 @@ QStringList MakeJob::commandLine() const
         if (builderGroup.readEntry("Override Number Of Jobs", false)) {
             int jobCount = builderGroup.readEntry("Number Of Jobs", 1);
             if (jobCount > 0) {
-                cmdline << QString("-j%1").arg(jobCount);
+                cmdline << QStringLiteral("-j%1").arg(jobCount);
             }
         } else {
             // use the ideal thread count by default
-            cmdline << QString("-j%1").arg(QThread::idealThreadCount());
+            cmdline << QStringLiteral("-j%1").arg(QThread::idealThreadCount());
         }
     }
 
@@ -240,7 +240,7 @@ QStringList MakeJob::commandLine() const
 
     for (MakeVariables::const_iterator it = m_variables.constBegin(); it != m_variables.constEnd(); ++it)
     {
-        cmdline += QString("%1=%2").arg(it->first).arg(it->second);
+        cmdline += QStringLiteral("%1=%2").arg(it->first).arg(it->second);
     }
 
     if( m_overrideTargets.isEmpty() )

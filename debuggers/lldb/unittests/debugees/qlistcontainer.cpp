@@ -39,7 +39,7 @@ void doStuff()
     stringList << "d";
 
     Container<A> structList;
-    structList << A("a", "b", 100, -200);
+    structList << A(QStringLiteral("a"), QStringLiteral("b"), 100, -200);
     structList << A();
 
     Container<int*> pointerList;

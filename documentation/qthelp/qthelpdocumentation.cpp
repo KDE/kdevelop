@@ -191,12 +191,12 @@ QString QtHelpDocumentation::description() const
             {
                 const QString sizeRegExp = QStringLiteral("< h\\d ").replace(' ', optionalSpace);
                 const QRegularExpression findSize(sizeRegExp);
-                thisFragment.replace(findSize, "<big ");
+                thisFragment.replace(findSize, QLatin1String("<big "));
             }
             {
                 const QString sizeCloseRegExp = QStringLiteral("< / h\\d >").replace(' ', optionalSpace);
                 const QRegularExpression closeSize(sizeCloseRegExp);
-                thisFragment.replace(closeSize, "</big><br />");
+                thisFragment.replace(closeSize, QLatin1String("</big><br />"));
             }
         }
 
@@ -208,20 +208,20 @@ QString QtHelpDocumentation::description() const
 
             const QString end = QStringLiteral("< /p >").replace(' ', optionalSpace);
             const QRegularExpression findEnd(end);
-            thisFragment.replace(findEnd, "<br />");
+            thisFragment.replace(findEnd, QLatin1String("<br />"));
         }
 
         {
             //Remove links, because they won't work
             const QString link = QString("< a href = " + p + ".*?" + p).replace(' ', optionalSpace);
             const QRegularExpression exp(link, QRegularExpression::CaseInsensitiveOption);
-            thisFragment.replace(exp, "<a ");
+            thisFragment.replace(exp, QLatin1String("<a "));
         }
 
         return thisFragment;
     }
 
-    return QStringList(m_info.keys()).join(", ");
+    return QStringList(m_info.keys()).join(QStringLiteral(", "));
 }
 
 void QtHelpDocumentation::setUserStyleSheet(StandardDocumentationView* view, const QUrl& url)
@@ -232,7 +232,7 @@ void QtHelpDocumentation::setUserStyleSheet(StandardDocumentationView* view, con
 
     QTextStream ts(file);
     ts << "html { background: white !important; }\n";
-    if (url.scheme() == "qthelp" && url.host().startsWith("com.trolltech.qt.")) {
+    if (url.scheme() == QLatin1String("qthelp") && url.host().startsWith(QLatin1String("com.trolltech.qt."))) {
        ts << ".content .toc + .title + p { clear:left; }\n"
           << "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
     }
@@ -272,7 +272,7 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
 
     QMenu menu;
     QAction* copyAction = view->copyAction();
-    copyAction->setIcon(QIcon::fromTheme("edit-copy"));
+    copyAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
     menu.addAction(copyAction);
 
     if (m_info.count() > 1) {

@@ -51,13 +51,13 @@ void TestManPageModel::testModel()
 
 void TestManPageModel::testDocumentation()
 {
-    ManPageDocumentation documentation("dlopen", QUrl("man: (3)/dlmopen"));
+    ManPageDocumentation documentation(QStringLiteral("dlopen"), QUrl(QStringLiteral("man: (3)/dlmopen")));
     QSignalSpy spy(&documentation, SIGNAL(descriptionChanged()));
     QVERIFY(spy.wait());
 
     const QString description = documentation.description();
     qDebug() << "Description:" << description;
-    if (description.isEmpty() || description.contains("No man page matching to dlmopen found")) {
+    if (description.isEmpty() || description.contains(QLatin1String("No man page matching to dlmopen found"))) {
         QSKIP("This test requires installed man pages for dlmopen & friends");
     }
 

@@ -52,7 +52,7 @@ void PruneJob::start()
         emitResult();
         return;
     }
-    else if (!builddir.isLocalFile() || QDir(builddir.toLocalFile()).exists("CMakeLists.txt"))
+    else if (!builddir.isLocalFile() || QDir(builddir.toLocalFile()).exists(QStringLiteral("CMakeLists.txt")))
     {
         output->appendLine(i18n("Wrong build directory, cannot clear the build directory"));
         emitResult();

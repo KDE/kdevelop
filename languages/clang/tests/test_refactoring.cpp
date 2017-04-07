@@ -71,7 +71,7 @@ void TestRefactoring::init()
 
 void TestRefactoring::testClassRename()
 {
-    const QString codeBefore(R"(
+    const QString codeBefore(QStringLiteral(R"(
 class Foo {
 public:
     Foo();
@@ -81,9 +81,9 @@ Foo::Foo() {
 }
 Foo::~Foo() {
 }
-    )");
+    )"));
 
-    const QString codeAfter(R"(
+    const QString codeAfter(QStringLiteral(R"(
 class FooNew {
 public:
     FooNew();
@@ -93,13 +93,13 @@ FooNew::FooNew() {
 }
 FooNew::~FooNew() {
 }
-    )");
+    )"));
 
     QTemporaryDir dir;
     auto project = new TestProject(Path(dir.path()), this);
     m_projectController->addProject(project);
 
-    TestFile file(codeBefore, "cpp", project, dir.path());
+    TestFile file(codeBefore, QStringLiteral("cpp"), project, dir.path());
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses));
 
     DUChainReadLocker lock;

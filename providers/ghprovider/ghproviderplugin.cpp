@@ -35,7 +35,7 @@ namespace gh
 {
 
 ProviderPlugin::ProviderPlugin(QObject *parent, const QList<QVariant> &args)
-    : IPlugin("kdevghprovider", parent)
+    : IPlugin(QStringLiteral("kdevghprovider"), parent)
 {
     Q_UNUSED(args);
 }

@@ -92,9 +92,9 @@ void TestQtHelpPlugin::testAddOneValidProvider()
 {
     QStringList path, name, icon, ghns;
     path << VALID1;
-    name << "file1";
-    icon << "myIcon";
-    ghns << "0";
+    name << QStringLiteral("file1");
+    icon << QStringLiteral("myIcon");
+    ghns << QStringLiteral("0");
     qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
@@ -108,9 +108,9 @@ void TestQtHelpPlugin::testAddTwoDifferentValidProvider()
 {
     QStringList path, name, icon, ghns;
     path << VALID1 << VALID2;
-    name << "file1" << "file2";
-    icon << "myIcon" << "myIcon";
-    ghns << "0" << "0";
+    name << QStringLiteral("file1") << QStringLiteral("file2");
+    icon << QStringLiteral("myIcon") << QStringLiteral("myIcon");
+    ghns << QStringLiteral("0") << QStringLiteral("0");
     qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
@@ -129,9 +129,9 @@ void TestQtHelpPlugin::testAddInvalidProvider()
 {
     QStringList path, name, icon, ghns;
     path << INVALID;
-    name << "file1";
-    icon << "myIcon";
-    ghns << "0";
+    name << QStringLiteral("file1");
+    icon << QStringLiteral("myIcon");
+    ghns << QStringLiteral("0");
     qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
@@ -142,9 +142,9 @@ void TestQtHelpPlugin::testAddTwiceSameProvider()
 {
     QStringList path, name, icon, ghns;
     path << VALID1 << VALID1;
-    name << "file1" << "file2";
-    icon << "myIcon" << "myIcon";
-    ghns << "0" << "0";
+    name << QStringLiteral("file1") << QStringLiteral("file2");
+    icon << QStringLiteral("myIcon") << QStringLiteral("myIcon");
+    ghns << QStringLiteral("0") << QStringLiteral("0");
     qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
@@ -155,9 +155,9 @@ void TestQtHelpPlugin::testRemoveOneProvider()
 {
     QStringList path, name, icon, ghns;
     path << VALID1 << VALID2;
-    name << "file1" << "file2";
-    icon << "myIcon" << "myIcon";
-    ghns << "0" << "0";
+    name << QStringLiteral("file1") << QStringLiteral("file2");
+    icon << QStringLiteral("myIcon") << QStringLiteral("myIcon");
+    ghns << QStringLiteral("0") << QStringLiteral("0");
     qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
@@ -179,20 +179,20 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
 {
     init();
 
-    TestFile file("class QObject; QObject* o;", "cpp");
+    TestFile file(QStringLiteral("class QObject; QObject* o;"), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
     auto ctx = file.topContext();
     QVERIFY(ctx);
-    auto decl = ctx->findDeclarations(QualifiedIdentifier("o")).first();
+    auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("o"))).first();
     QVERIFY(decl);
     auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().data())->declaration(nullptr);
     QVERIFY(typeDecl);
 
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
-    if (!provider->isValid() || provider->engine()->linksForIdentifier("QObject").isEmpty()) {
+    if (!provider->isValid() || provider->engine()->linksForIdentifier(QStringLiteral("QObject")).isEmpty()) {
         QSKIP("Qt help not available", SkipSingle);
     }
 
@@ -207,19 +207,19 @@ void TestQtHelpPlugin::testDeclarationLookup_Method()
 {
     init();
 
-    TestFile file("class QString { static QString fromLatin1(const QByteArray&); };", "cpp");
+    TestFile file(QStringLiteral("class QString { static QString fromLatin1(const QByteArray&); };"), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
     auto ctx = file.topContext();
     QVERIFY(ctx);
-    auto decl = ctx->findDeclarations(QualifiedIdentifier("QString")).first();
-    auto declFromLatin1 = decl->internalContext()->findDeclarations(QualifiedIdentifier("fromLatin1")).first();
+    auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("QString"))).first();
+    auto declFromLatin1 = decl->internalContext()->findDeclarations(QualifiedIdentifier(QStringLiteral("fromLatin1"))).first();
     QVERIFY(decl);
 
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
-    if (!provider->isValid() || provider->engine()->linksForIdentifier("QString::fromLatin1").isEmpty()) {
+    if (!provider->isValid() || provider->engine()->linksForIdentifier(QStringLiteral("QString::fromLatin1")).isEmpty()) {
         QSKIP("Qt help not available", SkipSingle);
     }
 
@@ -234,17 +234,17 @@ void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
 {
     init();
 
-    TestFile file("class C {}; bool operator<(const C& a, const C& b) { return true; }", "cpp");
+    TestFile file(QStringLiteral("class C {}; bool operator<(const C& a, const C& b) { return true; }"), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
     auto ctx = file.topContext();
-    auto decl = ctx->findDeclarations(QualifiedIdentifier("operator<")).first();
+    auto decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("operator<"))).first();
     QVERIFY(decl);
 
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
-    if (!provider->isValid() || provider->engine()->linksForIdentifier("QObject").isEmpty()) {
+    if (!provider->isValid() || provider->engine()->linksForIdentifier(QStringLiteral("QObject")).isEmpty()) {
         QSKIP("Qt help not available", SkipSingle);
     }
 

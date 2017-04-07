@@ -53,13 +53,13 @@ struct MIBreakpointController::Handler : public MICommandHandler
     {
         breakpoint->sent &= ~columns;
 
-        if (r.reason == "error") {
+        if (r.reason == QLatin1String("error")) {
             breakpoint->errors |= columns;
 
             int row = controller->breakpointRow(breakpoint);
             if (row >= 0) {
-                controller->updateErrorText(row, r["msg"].literal());
-                qWarning() << r["msg"].literal();
+                controller->updateErrorText(row, r[QStringLiteral("msg")].literal());
+                qWarning() << r[QStringLiteral("msg")].literal();
             }
         } else {
             if (breakpoint->errors & columns) {
@@ -119,7 +119,7 @@ struct MIBreakpointController::InsertedHandler : public MIBreakpointController::
 
         int row = controller->breakpointRow(breakpoint);
 
-        if (r.reason != "error") {
+        if (r.reason != QLatin1String("error")) {
             QString bkptKind;
             for (auto kind : {"bkpt", "wpt", "hw-rwpt", "hw-awpt"}) {
                 if (r.hasField(kind)) {
@@ -134,7 +134,7 @@ struct MIBreakpointController::InsertedHandler : public MIBreakpointController::
 
             const Value& miBkpt = r[bkptKind];
 
-            breakpoint->debuggerId = miBkpt["number"].toInt();
+            breakpoint->debuggerId = miBkpt[QStringLiteral("number")].toInt();
 
             if (row >= 0) {
                 controller->updateFromDebugger(row, miBkpt);
@@ -320,25 +320,25 @@ void MIBreakpointController::createBreakpoint(int row)
     if (modelBreakpoint->kind() == Breakpoint::CodeBreakpoint) {
         QString location;
         if (modelBreakpoint->line() != -1) {
-            location = QString("%0:%1")
+            location = QStringLiteral("%0:%1")
                 .arg(modelBreakpoint->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash))
                 .arg(modelBreakpoint->line() + 1);
         } else {
             location = modelBreakpoint->location();
         }
 
-        if (location == "catch throw") {
-            location = "exception throw";
+        if (location == QLatin1String("catch throw")) {
+            location = QLatin1String("exception throw");
         }
 
         // Note: We rely on '-f' to be automatically added by the MICommand logic
         QString arguments;
         if (!modelBreakpoint->enabled())
-            arguments += "-d ";
+            arguments += QLatin1String("-d ");
         if (!modelBreakpoint->condition().isEmpty())
-            arguments += QString("-c %0 ").arg(Utils::quoteExpression(modelBreakpoint->condition()));
+            arguments += QStringLiteral("-c %0 ").arg(Utils::quoteExpression(modelBreakpoint->condition()));
         if (modelBreakpoint->ignoreHits() != 0)
-            arguments += QString("-i %0 ").arg(modelBreakpoint->ignoreHits());
+            arguments += QStringLiteral("-i %0 ").arg(modelBreakpoint->ignoreHits());
         arguments += Utils::quoteExpression(location);
 
         BreakpointModel::ColumnFlags sent =
@@ -352,9 +352,9 @@ void MIBreakpointController::createBreakpoint(int row)
     } else {
         QString opt;
         if (modelBreakpoint->kind() == Breakpoint::ReadBreakpoint)
-            opt = "-r ";
+            opt = QLatin1String("-r ");
         else if (modelBreakpoint->kind() == Breakpoint::AccessBreakpoint)
-            opt = "-a ";
+            opt = QLatin1String("-a ");
 
         debugSession()->addCommand(BreakWatch,
                                    opt + Utils::quoteExpression(modelBreakpoint->location()),
@@ -394,7 +394,7 @@ void MIBreakpointController::sendUpdates(int row)
     }
     if (breakpoint->dirty & BreakpointModel::IgnoreHitsColumnFlag) {
         debugSession()->addCommand(BreakAfter,
-                                   QString("%0 %1").arg(breakpoint->debuggerId)
+                                   QStringLiteral("%0 %1").arg(breakpoint->debuggerId)
                                                    .arg(modelBreakpoint->ignoreHits()),
                                    new UpdateHandler(this, breakpoint,
                                                      BreakpointModel::IgnoreHitsColumnFlag),
@@ -402,7 +402,7 @@ void MIBreakpointController::sendUpdates(int row)
     }
     if (breakpoint->dirty & BreakpointModel::ConditionColumnFlag) {
         debugSession()->addCommand(BreakCondition,
-                                   QString("%0 %1").arg(breakpoint->debuggerId)
+                                   QStringLiteral("%0 %1").arg(breakpoint->debuggerId)
                                                    .arg(modelBreakpoint->condition()),
                                    new UpdateHandler(this, breakpoint,
                                                      BreakpointModel::ConditionColumnFlag),
@@ -449,7 +449,7 @@ int MIBreakpointController::rowFromDebuggerId(int gdbId) const
 
 void MIBreakpointController::notifyBreakpointCreated(const AsyncRecord& r)
 {
-    const Value& miBkpt = r["bkpt"];
+    const Value& miBkpt = r[QStringLiteral("bkpt")];
 
     // Breakpoints with multiple locations are represented by a parent breakpoint (e.g. 1)
     // and multiple child breakpoints (e.g. 1.1, 1.2, 1.3, ...).
@@ -457,7 +457,7 @@ void MIBreakpointController::notifyBreakpointCreated(const AsyncRecord& r)
     // results in the UI when breakpoints are marked in document views (e.g. when a breakpoint
     // applies to multiple overloads of a C++ function simultaneously) and in disassembly
     // (e.g. when a breakpoint is set in an inlined functions).
-    if (miBkpt["number"].literal().contains('.'))
+    if (miBkpt[QStringLiteral("number")].literal().contains('.'))
         return;
 
     createFromDebugger(miBkpt);
@@ -465,8 +465,8 @@ void MIBreakpointController::notifyBreakpointCreated(const AsyncRecord& r)
 
 void MIBreakpointController::notifyBreakpointModified(const AsyncRecord& r)
 {
-    const Value& miBkpt = r["bkpt"];
-    const int gdbId = miBkpt["number"].toInt();
+    const Value& miBkpt = r[QStringLiteral("bkpt")];
+    const int gdbId = miBkpt[QStringLiteral("number")].toInt();
     const int row = rowFromDebuggerId(gdbId);
 
     if (row < 0) {
@@ -487,7 +487,7 @@ void MIBreakpointController::notifyBreakpointModified(const AsyncRecord& r)
 
 void MIBreakpointController::notifyBreakpointDeleted(const AsyncRecord& r)
 {
-    const int gdbId = r["id"].toInt();
+    const int gdbId = r[QStringLiteral("id")].toInt();
     const int row = rowFromDebuggerId(gdbId);
 
     if (row < 0) {
@@ -502,15 +502,15 @@ void MIBreakpointController::notifyBreakpointDeleted(const AsyncRecord& r)
 
 void MIBreakpointController::createFromDebugger(const Value& miBkpt)
 {
-    const QString type = miBkpt["type"].literal();
+    const QString type = miBkpt[QStringLiteral("type")].literal();
     Breakpoint::BreakpointKind gdbKind;
-    if (type == "breakpoint") {
+    if (type == QLatin1String("breakpoint")) {
         gdbKind = Breakpoint::CodeBreakpoint;
-    } else if (type == "watchpoint" || type == "hw watchpoint") {
+    } else if (type == QLatin1String("watchpoint") || type == QLatin1String("hw watchpoint")) {
         gdbKind = Breakpoint::WriteBreakpoint;
-    } else if (type == "read watchpoint") {
+    } else if (type == QLatin1String("read watchpoint")) {
         gdbKind = Breakpoint::ReadBreakpoint;
-    } else if (type == "acc watchpoint") {
+    } else if (type == QLatin1String("acc watchpoint")) {
         gdbKind = Breakpoint::AccessBreakpoint;
     } else {
         qCWarning(DEBUGGERCOMMON) << "Unknown breakpoint type " << type;
@@ -534,9 +534,9 @@ void MIBreakpointController::createFromDebugger(const Value& miBkpt)
         if (gdbKind == Breakpoint::CodeBreakpoint) {
             bool sameLocation = false;
 
-            if (miBkpt.hasField("fullname") && miBkpt.hasField("line")) {
-                const QString location = Utils::unquoteExpression(miBkpt["fullname"].literal());
-                const int line = miBkpt["line"].toInt() - 1;
+            if (miBkpt.hasField(QStringLiteral("fullname")) && miBkpt.hasField(QStringLiteral("line"))) {
+                const QString location = Utils::unquoteExpression(miBkpt[QStringLiteral("fullname")].literal());
+                const int line = miBkpt[QStringLiteral("line")].toInt() - 1;
                 if (location == modelBreakpoint->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash) &&
                     line == modelBreakpoint->line())
                 {
@@ -544,8 +544,8 @@ void MIBreakpointController::createFromDebugger(const Value& miBkpt)
                 }
             }
 
-            if (!sameLocation && miBkpt.hasField("original-location")) {
-                const QString location = miBkpt["original-location"].literal();
+            if (!sameLocation && miBkpt.hasField(QStringLiteral("original-location"))) {
+                const QString location = miBkpt[QStringLiteral("original-location")].literal();
                 if (location == modelBreakpoint->location()) {
                     sameLocation = true;
                 } else {
@@ -558,9 +558,9 @@ void MIBreakpointController::createFromDebugger(const Value& miBkpt)
                 }
             }
 
-            if (!sameLocation && miBkpt.hasField("what") && miBkpt["what"].literal() == "exception throw") {
-                if (modelBreakpoint->expression() == "catch throw" ||
-                    modelBreakpoint->expression() == "exception throw") {
+            if (!sameLocation && miBkpt.hasField(QStringLiteral("what")) && miBkpt[QStringLiteral("what")].literal() == QLatin1String("exception throw")) {
+                if (modelBreakpoint->expression() == QLatin1String("catch throw") ||
+                    modelBreakpoint->expression() == QLatin1String("exception throw")) {
                     sameLocation = true;
                 }
             }
@@ -568,34 +568,34 @@ void MIBreakpointController::createFromDebugger(const Value& miBkpt)
             if (!sameLocation)
                 continue;
         } else {
-            if (Utils::unquoteExpression(miBkpt["original-location"].literal()) != modelBreakpoint->expression()) {
+            if (Utils::unquoteExpression(miBkpt[QStringLiteral("original-location")].literal()) != modelBreakpoint->expression()) {
                 continue;
             }
         }
 
         QString condition;
-        if (miBkpt.hasField("cond")) {
-            condition = miBkpt["cond"].literal();
+        if (miBkpt.hasField(QStringLiteral("cond"))) {
+            condition = miBkpt[QStringLiteral("cond")].literal();
         }
         if (condition != modelBreakpoint->condition())
             continue;
 
         // Breakpoint is equivalent
         if (!breakpointSent) {
-            breakpoint->debuggerId = miBkpt["number"].toInt();
+            breakpoint->debuggerId = miBkpt[QStringLiteral("number")].toInt();
 
             // Reasonable people can probably have different opinions about what the "correct" behavior
             // should be for the "enabled" and "ignore hits" column.
             // Here, we let the status in KDevelop's UI take precedence, which we suspect to be
             // marginally more useful. Dirty data will be sent during the initial sending of the
             // breakpoint list.
-            const bool gdbEnabled = miBkpt["enabled"].literal() == "y";
+            const bool gdbEnabled = miBkpt[QStringLiteral("enabled")].literal() == QLatin1String("y");
             if (gdbEnabled != modelBreakpoint->enabled())
                 breakpoint->dirty |= BreakpointModel::EnableColumnFlag;
 
             int gdbIgnoreHits = 0;
-            if (miBkpt.hasField("ignore"))
-                gdbIgnoreHits = miBkpt["ignore"].toInt();
+            if (miBkpt.hasField(QStringLiteral("ignore")))
+                gdbIgnoreHits = miBkpt[QStringLiteral("ignore")].toInt();
             if (gdbIgnoreHits != modelBreakpoint->ignoreHits())
                 breakpoint->dirty |= BreakpointModel::IgnoreHitsColumnFlag;
 
@@ -632,7 +632,7 @@ void MIBreakpointController::createFromDebugger(const Value& miBkpt)
     // Since we are in ignore-changes mode, we have to add the BreakpointData manually.
     auto breakpoint = BreakpointDataPtr::create();
     m_breakpoints << breakpoint;
-    breakpoint->debuggerId = miBkpt["number"].toInt();
+    breakpoint->debuggerId = miBkpt[QStringLiteral("number")].toInt();
 
     updateFromDebugger(row, miBkpt);
 }
@@ -659,29 +659,29 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
     // address, source file and line). The breakpoint model currently does not map well to this
     // (though it arguably should), and does not support multi-location breakpoints at all.
     // We try to do the best we can until the breakpoint model gets cleaned up.
-    if (miBkpt.hasField("fullname") && miBkpt.hasField("line")) {
+    if (miBkpt.hasField(QStringLiteral("fullname")) && miBkpt.hasField(QStringLiteral("line"))) {
         modelBreakpoint->setLocation(
-            QUrl::fromLocalFile(Utils::unquoteExpression(miBkpt["fullname"].literal())),
-            miBkpt["line"].toInt() - 1);
-    } else if (miBkpt.hasField("original-location")) {
+            QUrl::fromLocalFile(Utils::unquoteExpression(miBkpt[QStringLiteral("fullname")].literal())),
+            miBkpt[QStringLiteral("line")].toInt() - 1);
+    } else if (miBkpt.hasField(QStringLiteral("original-location"))) {
         QRegExp rx("^(.+):(\\d+)$");
-        QString location = miBkpt["original-location"].literal();
+        QString location = miBkpt[QStringLiteral("original-location")].literal();
         if (rx.indexIn(location) != -1) {
             modelBreakpoint->setLocation(QUrl::fromLocalFile(Utils::unquoteExpression(rx.cap(1))),
                                          rx.cap(2).toInt()-1);
         } else {
             modelBreakpoint->setData(Breakpoint::LocationColumn, Utils::unquoteExpression(location));
         }
-    } else if (miBkpt.hasField("what")) {
-        modelBreakpoint->setExpression(miBkpt["what"].literal());
+    } else if (miBkpt.hasField(QStringLiteral("what"))) {
+        modelBreakpoint->setExpression(miBkpt[QStringLiteral("what")].literal());
     } else {
         qWarning() << "Breakpoint doesn't contain required location/expression data";
     }
 
     if (!(lockedColumns & BreakpointModel::EnableColumnFlag)) {
         bool enabled = true;
-        if (miBkpt.hasField("enabled")) {
-            if (miBkpt["enabled"].literal() == "n")
+        if (miBkpt.hasField(QStringLiteral("enabled"))) {
+            if (miBkpt[QStringLiteral("enabled")].literal() == QLatin1String("n"))
                 enabled = false;
         }
         modelBreakpoint->setData(Breakpoint::EnableColumn, enabled ? Qt::Checked : Qt::Unchecked);
@@ -690,8 +690,8 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
 
     if (!(lockedColumns & BreakpointModel::ConditionColumnFlag)) {
         QString condition;
-        if (miBkpt.hasField("cond")) {
-            condition = miBkpt["cond"].literal();
+        if (miBkpt.hasField(QStringLiteral("cond"))) {
+            condition = miBkpt[QStringLiteral("cond")].literal();
         }
         modelBreakpoint->setCondition(condition);
         breakpoint->dirty &= ~BreakpointModel::ConditionColumnFlag;
@@ -699,21 +699,21 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
 
     if (!(lockedColumns & BreakpointModel::IgnoreHitsColumnFlag)) {
         int ignoreHits = 0;
-        if (miBkpt.hasField("ignore")) {
-            ignoreHits = miBkpt["ignore"].toInt();
+        if (miBkpt.hasField(QStringLiteral("ignore"))) {
+            ignoreHits = miBkpt[QStringLiteral("ignore")].toInt();
         }
         modelBreakpoint->setIgnoreHits(ignoreHits);
         breakpoint->dirty &= ~BreakpointModel::IgnoreHitsColumnFlag;
     }
 
     breakpoint->pending = false;
-    if (miBkpt.hasField("addr") && miBkpt["addr"].literal() == "<PENDING>") {
+    if (miBkpt.hasField(QStringLiteral("addr")) && miBkpt[QStringLiteral("addr")].literal() == QLatin1String("<PENDING>")) {
         breakpoint->pending = true;
     }
 
     int hitCount = 0;
-    if (miBkpt.hasField("times")) {
-        hitCount = miBkpt["times"].toInt();
+    if (miBkpt.hasField(QStringLiteral("times"))) {
+        hitCount = miBkpt[QStringLiteral("times")].toInt();
     }
     updateHitCount(row, hitCount);
 
@@ -722,20 +722,20 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
 
 void MIBreakpointController::programStopped(const AsyncRecord& r)
 {
-    if (!r.hasField("reason"))
+    if (!r.hasField(QStringLiteral("reason")))
         return;
 
-    const QString reason = r["reason"].literal();
+    const QString reason = r[QStringLiteral("reason")].literal();
 
     int debuggerId = -1;
-    if (reason == "breakpoint-hit") {
-        debuggerId = r["bkptno"].toInt();
-    } else if (reason == "watchpoint-trigger") {
-        debuggerId = r["wpt"]["number"].toInt();
-    } else if (reason == "read-watchpoint-trigger") {
-        debuggerId = r["hw-rwpt"]["number"].toInt();
-    } else if (reason == "access-watchpoint-trigger") {
-        debuggerId = r["hw-awpt"]["number"].toInt();
+    if (reason == QLatin1String("breakpoint-hit")) {
+        debuggerId = r[QStringLiteral("bkptno")].toInt();
+    } else if (reason == QLatin1String("watchpoint-trigger")) {
+        debuggerId = r[QStringLiteral("wpt")][QStringLiteral("number")].toInt();
+    } else if (reason == QLatin1String("read-watchpoint-trigger")) {
+        debuggerId = r[QStringLiteral("hw-rwpt")][QStringLiteral("number")].toInt();
+    } else if (reason == QLatin1String("access-watchpoint-trigger")) {
+        debuggerId = r[QStringLiteral("hw-awpt")][QStringLiteral("number")].toInt();
     }
 
     if (debuggerId < 0)
@@ -746,11 +746,11 @@ void MIBreakpointController::programStopped(const AsyncRecord& r)
         return;
 
     QString msg;
-    if (r.hasField("value")) {
-        if (r["value"].hasField("old")) {
+    if (r.hasField(QStringLiteral("value"))) {
+        if (r[QStringLiteral("value")].hasField(QStringLiteral("old"))) {
             msg += i18n("<br>Old value: %1", r["value"]["old"].literal());
         }
-        if (r["value"].hasField("new")) {
+        if (r[QStringLiteral("value")].hasField(QStringLiteral("new"))) {
             msg += i18n("<br>New value: %1", r["value"]["new"].literal());
         }
     }

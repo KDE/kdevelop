@@ -89,11 +89,11 @@ void QmlJS::ModuleCompletionItem::execute(KTextEditor::View* view, const KTextEd
         // Replace the whole line with an import statement
         view->document()->replaceText(
             KTextEditor::Range(word.start().line(), 0, word.start().line(), INT_MAX),
-            QString("import %1").arg(m_name)
+            QStringLiteral("import %1").arg(m_name)
         );
         break;
     case Quotes:
-        view->document()->replaceText(word, QString("\"%1\"").arg(m_name));
+        view->document()->replaceText(word, QStringLiteral("\"%1\"").arg(m_name));
         break;
     }
 }

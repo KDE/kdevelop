@@ -104,16 +104,16 @@ CustomMakeProvider::~CustomMakeProvider() Q_DECL_NOEXCEPT
 K_PLUGIN_FACTORY_WITH_JSON(CustomMakeSupportFactory, "kdevcustommakemanager.json", registerPlugin<CustomMakeManager>(); )
 
 CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args )
-: KDevelop::AbstractFileManagerPlugin( "kdevcustommakemanager", parent )
+: KDevelop::AbstractFileManagerPlugin( QStringLiteral("kdevcustommakemanager"), parent )
     , m_builder( nullptr )
     , m_provider(new CustomMakeProvider(this))
 {
     Q_UNUSED(args)
 
-    setXMLFile( "kdevcustommakemanager.rc" );
+    setXMLFile( QStringLiteral("kdevcustommakemanager.rc") );
 
     // TODO use CustomMakeBuilder
-    IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IMakeBuilder" );
+    IPlugin* i = core()->pluginController()->pluginForExtension( QStringLiteral("org.kdevelop.IMakeBuilder") );
     Q_ASSERT(i);
     m_builder = i->extension<IMakeBuilder>();
     Q_ASSERT(m_builder);

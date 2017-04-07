@@ -35,7 +35,7 @@ QtHelpPlugin *QtHelpPlugin::s_plugin = nullptr;
 K_PLUGIN_FACTORY_WITH_JSON(QtHelpPluginFactory, "kdevqthelp.json", registerPlugin<QtHelpPlugin>(); )
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
-    : KDevelop::IPlugin("kdevqthelp", parent)
+    : KDevelop::IPlugin(QStringLiteral("kdevqthelp"), parent)
     , m_qtHelpProviders()
     , m_qtDoc(new QtHelpQtDoc(this, QVariantList()))
     , m_loadSystemQtDoc(false)
@@ -80,8 +80,8 @@ void QtHelpPlugin::searchHelpDirectory(QStringList& pathList, QStringList& nameL
     }
 
     qCDebug(QTHELP) << "Searching qch files in: " << searchDir;
-    QDirIterator dirIt(searchDir, QStringList() << "*.qch", QDir::Files, QDirIterator::Subdirectories);
-    const QString logo("qtlogo");
+    QDirIterator dirIt(searchDir, QStringList() << QStringLiteral("*.qch"), QDir::Files, QDirIterator::Subdirectories);
+    const QString logo(QStringLiteral("qtlogo"));
     while(dirIt.hasNext() == true)
     {
         dirIt.next();

@@ -63,7 +63,7 @@ void TestCustomBuildSystemPlugin::loadSimpleProject()
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
     QVERIFY(projectSpy->wait(10000));
-    IProject* project = ICore::self()->projectController()->findProjectByName( "SimpleProject" );
+    IProject* project = ICore::self()->projectController()->findProjectByName( QStringLiteral("SimpleProject") );
     QVERIFY( project );
 
     QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ),
@@ -77,7 +77,7 @@ void TestCustomBuildSystemPlugin::buildDirProject()
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
     QVERIFY(projectSpy->wait(10000));
-    IProject* project = ICore::self()->projectController()->findProjectByName( "BuilddirProject" );
+    IProject* project = ICore::self()->projectController()->findProjectByName( QStringLiteral("BuilddirProject") );
     QVERIFY( project );
 
     Path currentBuilddir = project->buildSystemManager()->buildDirectory( project->projectItem() );
@@ -93,12 +93,12 @@ void TestCustomBuildSystemPlugin::loadMultiPathProject()
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
     QVERIFY(projectSpy->wait(10000));
-    IProject* project = ICore::self()->projectController()->findProjectByName( "MultiPathProject" );
+    IProject* project = ICore::self()->projectController()->findProjectByName( QStringLiteral("MultiPathProject") );
     QVERIFY( project );
     KDevelop::ProjectBaseItem* mainfile = nullptr;
     for (const auto& file: project->fileSet() ) {
         for (auto i: project->filesForPath(file)) {
-            if( i->text() == "main.cpp" ) {
+            if( i->text() == QLatin1String("main.cpp") ) {
                 mainfile = i;
                 break;
             }

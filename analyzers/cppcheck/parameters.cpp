@@ -126,8 +126,8 @@ QStringList Parameters::commandLine() const
 
 QStringList Parameters::commandLine(QString& infoMessage) const
 {
-    static const auto mocHeaderRegex = QRegularExpression("#define\\s+Q_MOC_OUTPUT_REVISION\\s+(.+)");
-    static const auto mocParametersRegex = QRegularExpression("-DQ_MOC_OUTPUT_REVISION=\\d{2,}");
+    static const auto mocHeaderRegex = QRegularExpression(QStringLiteral("#define\\s+Q_MOC_OUTPUT_REVISION\\s+(.+)"));
+    static const auto mocParametersRegex = QRegularExpression(QStringLiteral("-DQ_MOC_OUTPUT_REVISION=\\d{2,}"));
 
     const QString mocMessage = i18n(
         "It seems that this project uses Qt library. For correctly work of cppcheck "
@@ -184,7 +184,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
         bool qtUsed = false;
         bool mocDefineFound = false;
         foreach (auto dir, m_includeDirectories) {
-            if (dir.path().endsWith("QtCore")) {
+            if (dir.path().endsWith(QLatin1String("QtCore"))) {
                 qtUsed = true;
 
                 QFile qtHeader(dir.path() + QStringLiteral("/qobjectdefs.h"));
@@ -252,8 +252,8 @@ QString Parameters::applyPlaceholders(const QString& text) const
     QString result(text);
 
     if (m_project) {
-        result.replace("%p", m_projectRootPath.toLocalFile());
-        result.replace("%b", m_projectBuildPath.toLocalFile());
+        result.replace(QLatin1String("%p"), m_projectRootPath.toLocalFile());
+        result.replace(QLatin1String("%b"), m_projectBuildPath.toLocalFile());
     }
 
     return result;

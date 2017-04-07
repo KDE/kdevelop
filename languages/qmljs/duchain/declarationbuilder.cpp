@@ -84,7 +84,7 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 {
     DUContext* builtinQmlContext = nullptr;
 
-    if (QmlJS::isQmlFile(currentContext()) && !currentContext()->url().str().contains("__builtin_qml.qml")) {
+    if (QmlJS::isQmlFile(currentContext()) && !currentContext()->url().str().contains(QLatin1String("__builtin_qml.qml"))) {
         builtinQmlContext = m_session->contextOfFile(
             QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kdevqmljssupport/nodejsmodules/__builtin_qml.qml"))
         );
@@ -697,7 +697,7 @@ void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
 {
-    QString baseClass = QmlJS::getQMLAttributeValue(node->members, "prototype").value.section('/', -1, -1);
+    QString baseClass = QmlJS::getQMLAttributeValue(node->members, QStringLiteral("prototype")).value.section('/', -1, -1);
 
     // Declare the component itself
     StructureType::Ptr type(new StructureType);
@@ -727,11 +727,11 @@ void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectInitializer* node,
                                        bool isSlot,
                                        bool isSignal)
 {
-    QString type_name = QmlJS::getQMLAttributeValue(node->members, "type").value;
+    QString type_name = QmlJS::getQMLAttributeValue(node->members, QStringLiteral("type")).value;
     QmlJS::FunctionType::Ptr type(new QmlJS::FunctionType);
 
     if (type_name.isNull()) {
-        type->setReturnType(typeFromName("void"));
+        type->setReturnType(typeFromName(QStringLiteral("void")));
     } else {
         type->setReturnType(typeFromName(type_name));
     }
@@ -751,7 +751,7 @@ void DeclarationBuilder::declareProperty(QmlJS::AST::UiObjectInitializer* node,
                                          const RangeInRevision &range,
                                          const QualifiedIdentifier &name)
 {
-    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->members, "type").value);
+    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->members, QStringLiteral("type")).value);
 
     {
         DUChainWriteLocker lock;
@@ -767,7 +767,7 @@ void DeclarationBuilder::declareParameter(QmlJS::AST::UiObjectInitializer* node,
                                           const QualifiedIdentifier &name)
 {
     QmlJS::FunctionType::Ptr function = currentType<QmlJS::FunctionType>();
-    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->members, "type").value);
+    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->members, QStringLiteral("type")).value);
 
     Q_ASSERT(function);
     function->addArgument(type);
@@ -803,7 +803,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
                                                   QmlJS::AST::UiQualifiedId* qualifiedId)
 {
     QualifiedIdentifier name(
-        QmlJS::getQMLAttributeValue(node->members, "name").value.section('/', -1, -1)
+        QmlJS::getQMLAttributeValue(node->members, QStringLiteral("name")).value.section('/', -1, -1)
     );
     DUContext::ContextType contextType = DUContext::Class;
 
@@ -1287,12 +1287,12 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
             DUChainWriteLocker lock;
 
             currentDeclaration<ClassFunctionDeclaration>()->setIsSignal(true);
-            currentType<QmlJS::FunctionType>()->setReturnType(typeFromName("void"));
+            currentType<QmlJS::FunctionType>()->setReturnType(typeFromName(QStringLiteral("void")));
         }
     } else {
         AbstractType::Ptr type;
 
-        if (typeName == "alias") {
+        if (typeName == QLatin1String("alias")) {
             // Property aliases take the type of their aliased property
             type = findType(node->statement).type;
             res = false;        // findType has already explored node->statement

@@ -92,7 +92,7 @@ DeclarationPointer NodeJS::moduleExports(const QString& moduleName, const Indexe
     QString fileName = moduleFileName(moduleName, urlStr);
     DeclarationPointer exports;
 
-    if (fileName.isEmpty() || urlStr.contains("__builtin_ecmascript.js") || urlStr == fileName) {
+    if (fileName.isEmpty() || urlStr.contains(QLatin1String("__builtin_ecmascript.js")) || urlStr == fileName) {
         return exports;
     }
 

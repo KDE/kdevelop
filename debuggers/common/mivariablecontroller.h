@@ -46,7 +46,7 @@ public:
 
     KDevelop::Variable* createVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                                        const QString& expression,
-                                       const QString& display = "") override;
+                                       const QString& display = QLatin1String(QLatin1String(""))) override;
 
     KTextEditor::Range expressionRangeUnderCursor(KTextEditor::Document* doc,
                                                   const KTextEditor::Cursor& cursor) override;

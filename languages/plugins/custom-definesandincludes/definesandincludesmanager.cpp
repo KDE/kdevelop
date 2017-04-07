@@ -60,7 +60,7 @@ static ConfigEntry findConfigForItem(QVector<ConfigEntry> paths, const KDevelop:
     for (const ConfigEntry & entry : paths) {
         Path targetDirectory = rootDirectory;
         // note: a dot represents the project root
-        if (entry.path != ".") {
+        if (entry.path != QLatin1String(".")) {
             targetDirectory.addPath(entry.path);
         }
 
@@ -125,7 +125,7 @@ QString argumentsForPath(const Path& path, const ParserArguments& arguments)
 K_PLUGIN_FACTORY_WITH_JSON(DefinesAndIncludesManagerFactory, "kdevdefinesandincludesmanager.json", registerPlugin<DefinesAndIncludesManager>(); )
 
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
-    : IPlugin("kdevdefinesandincludesmanager", parent )
+    : IPlugin(QStringLiteral("kdevdefinesandincludesmanager"), parent )
     , m_settings(SettingsManager::globalInstance())
     , m_noProjectIPM(new NoProjectIncludePathsManager())
 {

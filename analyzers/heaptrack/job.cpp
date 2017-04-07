@@ -112,7 +112,7 @@ Job::~Job()
 QString Job::statusName() const
 {
     QString target = m_pid < 0 ? QFileInfo(m_analyzedExecutable).fileName()
-                               : QString("PID: %1").arg(m_pid);
+                               : QStringLiteral("PID: %1").arg(m_pid);
     return i18n("Heaptrack Analysis (%1)", target);
 }
 

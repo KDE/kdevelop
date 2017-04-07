@@ -128,21 +128,21 @@ namespace KDevelopUtils {
 template<>
 void setupCustomArgs<ClangParser>(QCommandLineParser* args)
 {
-    args->addOption(QCommandLineOption{QStringList{"I", "include"}, i18n("add include path"), "include"});
+    args->addOption(QCommandLineOption{QStringList{"I", "include"}, i18n("add include path"), QStringLiteral("include")});
 }
 
 template<>
 void setCustomArgs<ClangParser>(ClangParser* parser, QCommandLineParser* args)
 {
-    parser->setIncludePaths(args->values("include"));
+    parser->setIncludePaths(args->values(QStringLiteral("include")));
 }
 }
 
 int main(int argc, char* argv[])
 {
-    KAboutData aboutData( "clang-parser", i18n( "clang-parser" ),
-                          "1", i18n("KDevelop Clang parser debugging utility"), KAboutLicense::GPL,
-                          i18n( "2013 Milian Wolff" ), QString(), "http://www.kdevelop.org" );
+    KAboutData aboutData( QStringLiteral("clang-parser"), i18n( "clang-parser" ),
+                          QStringLiteral("1"), i18n("KDevelop Clang parser debugging utility"), KAboutLicense::GPL,
+                          i18n( "2013 Milian Wolff" ), QString(), QStringLiteral("http://www.kdevelop.org") );
 
     return KDevelopUtils::initAndRunParser<ClangParser>(aboutData, argc, argv);
 }

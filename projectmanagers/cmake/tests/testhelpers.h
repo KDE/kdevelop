@@ -32,15 +32,15 @@
 #include <interfaces/iprojectcontroller.h>
 #include <QSignalSpy>
 
-static QString currentBuildDirKey = "Build Directory Path";
-static QString currentCMakeExecutableKey = "CMake Binary";
-static QString currentBuildTypeKey = "Build Type";
-static QString currentInstallDirKey = "Install Directory";
-static QString currentExtraArgumentsKey = "Extra Arguments";
-static QString currentBuildDirectoryIndexKey = "Current Build Directory Index";
-static QString projectBuildDirectoryCount = "Build Directory Count";
-static QString projectRootRelativeKey = "ProjectRootRelative";
-static QString projectBuildDirs = "BuildDirs";
+static QString currentBuildDirKey = QStringLiteral("Build Directory Path");
+static QString currentCMakeExecutableKey = QStringLiteral("CMake Binary");
+static QString currentBuildTypeKey = QStringLiteral("Build Type");
+static QString currentInstallDirKey = QStringLiteral("Install Directory");
+static QString currentExtraArgumentsKey = QStringLiteral("Extra Arguments");
+static QString currentBuildDirectoryIndexKey = QStringLiteral("Current Build Directory Index");
+static QString projectBuildDirectoryCount = QStringLiteral("Build Directory Count");
+static QString projectRootRelativeKey = QStringLiteral("ProjectRootRelative");
+static QString projectBuildDirs = QStringLiteral("BuildDirs");
 
 struct TestProjectPaths {
     // foo/
@@ -55,7 +55,7 @@ TestProjectPaths projectPaths(const QString& project, const QString& name = QStr
 {
     TestProjectPaths paths;
     if(QDir::isRelativePath(project)) {
-        QFileInfo info(QString(CMAKE_TESTS_PROJECTS_DIR)+"/"+project);
+        QFileInfo info(QStringLiteral(CMAKE_TESTS_PROJECTS_DIR)+"/"+project);
         Q_ASSERT(info.exists());
         paths.sourceDir = KDevelop::Path(info.canonicalFilePath());
     } else {
@@ -66,7 +66,7 @@ TestProjectPaths projectPaths(const QString& project, const QString& name = QStr
     QString kdev4Name;
     if (name.isEmpty()) {
         QDir d(paths.sourceDir.toLocalFile());
-        kdev4Name = d.entryList(QStringList("*.kdev4"), QDir::Files).takeFirst();
+        kdev4Name = d.entryList(QStringList(QStringLiteral("*.kdev4")), QDir::Files).takeFirst();
     } else
         kdev4Name = name+".kdev4";
 

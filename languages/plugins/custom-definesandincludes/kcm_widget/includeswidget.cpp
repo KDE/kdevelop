@@ -39,8 +39,8 @@ IncludesWidget::IncludesWidget( QWidget* parent )
 
     // Hack to workaround broken setIcon(QIcon) overload in QPushButton, the function does not set the icon at all
     // So need to explicitly use the QIcon overload
-    ui->addIncludePath->setIcon(QIcon::fromTheme("list-add"));
-    ui->removeIncludePath->setIcon(QIcon::fromTheme("list-remove"));
+    ui->addIncludePath->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+    ui->removeIncludePath->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
