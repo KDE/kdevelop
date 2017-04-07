@@ -331,7 +331,7 @@ void LldbFormattersTest::testQString()
     variableCollection()->expanded(localVariableIndexAt(0));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    QString expected = QString::fromUtf8("test最后一个不是特殊字符'\"\\u6211");
+    QString expected = QStringLiteral("test最后一个不是特殊字符'\"\\u6211");
     QStringList children;
     for (auto ch : expected) {
         children << Utils::quote(ch, '\'');

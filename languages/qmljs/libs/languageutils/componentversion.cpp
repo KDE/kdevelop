@@ -78,7 +78,7 @@ bool ComponentVersion::isValid() const
 
 QString ComponentVersion::toString() const
 {
-    return QString::fromLatin1("%1.%2").arg(QString::number(_major),
+    return QStringLiteral("%1.%2").arg(QString::number(_major),
                                             QString::number(_minor));
 }
 

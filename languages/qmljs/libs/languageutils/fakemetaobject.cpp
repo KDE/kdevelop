@@ -84,7 +84,7 @@ void FakeMetaEnum::addToHash(QCryptographicHash &hash) const
 
 QString FakeMetaEnum::describe(int baseIndent) const
 {
-    QString newLine = QString::fromLatin1("\n") + QString::fromLatin1(" ").repeated(baseIndent);
+    QString newLine = QLatin1String("\n") + QStringLiteral(" ").repeated(baseIndent);
     QString res = QStringLiteral("Enum ");
     res += name();
     res += QLatin1String(":{");
@@ -181,7 +181,7 @@ void FakeMetaMethod::addToHash(QCryptographicHash &hash) const
 
 QString FakeMetaMethod::describe(int baseIndent) const
 {
-    QString newLine = QString::fromLatin1("\n") + QString::fromLatin1(" ").repeated(baseIndent);
+    QString newLine = QLatin1String("\n") + QStringLiteral(" ").repeated(baseIndent);
     QString res = QStringLiteral("Method {");
     res += newLine;
     res += QLatin1String("  methodName:");
@@ -261,7 +261,7 @@ void FakeMetaProperty::addToHash(QCryptographicHash &hash) const
 
 QString FakeMetaProperty::describe(int baseIndent) const
 {
-    QString newLine = QString::fromLatin1("\n") + QString::fromLatin1(" ").repeated(baseIndent);
+    QString newLine = QLatin1String("\n") + QStringLiteral(" ").repeated(baseIndent);
     QString res = QStringLiteral("Property  {");
     res += newLine;
     res += QLatin1String("  name:");
@@ -481,11 +481,11 @@ QString FakeMetaObject::toString() const
 
 QString FakeMetaObject::describe(bool printDetails, int baseIndent) const
 {
-    QString res = QString::fromLatin1("FakeMetaObject@%1")
+    QString res = QStringLiteral("FakeMetaObject@%1")
          .arg((quintptr)(void *)this, 0, 16);
     if (!printDetails)
         return res;
-    QString newLine = QString::fromLatin1("\n") + QString::fromLatin1(" ").repeated(baseIndent);
+    QString newLine = QLatin1String("\n") + QStringLiteral(" ").repeated(baseIndent);
     res += QLatin1Char('{');
     res += newLine;
     res += QLatin1String("className:");
@@ -573,7 +573,7 @@ void FakeMetaObject::Export::addToHash(QCryptographicHash &hash) const
 
 QString FakeMetaObject::Export::describe(int baseIndent) const
 {
-    QString newLine = QString::fromLatin1("\n") + QString::fromLatin1(" ").repeated(baseIndent);
+    QString newLine = QLatin1String("\n") + QStringLiteral(" ").repeated(baseIndent);
     QString res = QStringLiteral("Export {");
     res += newLine;
     res += QLatin1String("  package:");

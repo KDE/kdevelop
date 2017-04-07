@@ -156,11 +156,11 @@ KDevelop::Path::List resolveSystemDirs(KDevelop::IProject* project, const QStrin
     foreach(const QString& s, dirs)
     {
         KDevelop::Path dir;
-        if(s.startsWith(QString::fromUtf8("#[bin_dir]")))
+        if(s.startsWith(QLatin1String("#[bin_dir]")))
         {
             dir = KDevelop::Path(buildDir, s);
         }
-        else if(s.startsWith(QString::fromUtf8("#[install_dir]")))
+        else if(s.startsWith(QLatin1String("#[install_dir]")))
         {
             dir = KDevelop::Path(installDir, s);
         }
