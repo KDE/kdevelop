@@ -299,7 +299,7 @@ bool LldbFormattersTest::verifyVariable(int index, const QString &name,
 
 void LldbFormattersTest::testQChar()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qchar"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qchar"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qchar.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -319,7 +319,7 @@ void LldbFormattersTest::testQChar()
 
 void LldbFormattersTest::testQString()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qstring"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qstring"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qstring.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -354,7 +354,7 @@ void LldbFormattersTest::testQString()
 
 void LldbFormattersTest::testQByteArray()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qbytearray"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qbytearray"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qbytearray.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -412,7 +412,7 @@ void LldbFormattersTest::testQListContainer()
     QFETCH(QString, container);
     QFETCH(bool, unordered);
 
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qlistcontainer"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qlistcontainer"));
     cfg.config().writeEntry(KDevMI::Config::BreakOnStartEntry, true);
 
     auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
@@ -586,7 +586,7 @@ void LldbFormattersTest::testQListContainer()
 
 void LldbFormattersTest::testQListPOD()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qlistpod"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qlistpod"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qlistpod.cpp")), 30);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -637,7 +637,7 @@ void LldbFormattersTest::testQListPOD()
 
 void LldbFormattersTest::testQMapInt()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qmapint"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qmapint"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qmapint.cpp")), 6);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -660,7 +660,7 @@ void LldbFormattersTest::testQMapInt()
 
 void LldbFormattersTest::testQMapString()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qmapstring"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qmapstring"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qmapstring.cpp")), 7);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -684,7 +684,7 @@ void LldbFormattersTest::testQMapString()
 
 void LldbFormattersTest::testQMapStringBool()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qmapstringbool"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qmapstringbool"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qmapstringbool.cpp")), 7);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -708,7 +708,7 @@ void LldbFormattersTest::testQMapStringBool()
 
 void LldbFormattersTest::testQHashInt()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qhashint"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qhashint"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qhashint.cpp")), 6);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -737,7 +737,7 @@ void LldbFormattersTest::testQHashInt()
 
 void LldbFormattersTest::testQHashString()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qhashstring"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qhashstring"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qhashstring.cpp")), 7);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -767,7 +767,7 @@ void LldbFormattersTest::testQHashString()
 
 void LldbFormattersTest::testQSetInt()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qsetint"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qsetint"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qsetint.cpp")), 6);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -796,7 +796,7 @@ void LldbFormattersTest::testQSetInt()
 
 void LldbFormattersTest::testQSetString()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qsetstring"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qsetstring"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qsetstring.cpp")), 7);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -826,7 +826,7 @@ void LldbFormattersTest::testQSetString()
 
 void LldbFormattersTest::testQDate()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qdate"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qdate"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qdate.cpp")), 5);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -850,7 +850,7 @@ void LldbFormattersTest::testQDate()
 
 void LldbFormattersTest::testQTime()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qtime"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qtime"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qtime.cpp")), 5);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -874,7 +874,7 @@ void LldbFormattersTest::testQTime()
 
 void LldbFormattersTest::testQDateTime()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qdatetime"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qdatetime"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qdatetime.cpp")), 5);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -899,7 +899,7 @@ void LldbFormattersTest::testQDateTime()
 
 void LldbFormattersTest::testQUrl()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_qurl"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_qurl"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("qurl.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -925,7 +925,7 @@ void LldbFormattersTest::testQUrl()
 
 void LldbFormattersTest::testQUuid()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_quuid"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_quuid"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("quuid.cpp")), 4);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -942,7 +942,7 @@ void LldbFormattersTest::testQUuid()
 
 void LldbFormattersTest::testKTextEditorTypes()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_ktexteditortypes"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_ktexteditortypes"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("ktexteditortypes.cpp")), 8);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
@@ -974,7 +974,7 @@ void LldbFormattersTest::testKTextEditorTypes()
 
 void LldbFormattersTest::testKDevelopTypes()
 {
-    TestLaunchConfiguration cfg(QStringLiteral("lldb_kdeveloptypes"));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_kdeveloptypes"));
     addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("kdeveloptypes.cpp")), 11);
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));

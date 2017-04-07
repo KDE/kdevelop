@@ -1,0 +1,4 @@
+#pragma once
+
+#define DEBUGGEE_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/debuggees"
+#cmakedefine01 HAVE_PATH_WITH_SPACES_TEST

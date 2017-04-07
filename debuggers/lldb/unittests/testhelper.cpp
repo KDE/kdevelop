@@ -22,6 +22,7 @@
 
 #include "testhelper.h"
 
+#include "common/tests/debuggers-tests-config.h"
 #include "midebugsession.h"
 
 #include <QApplication>
@@ -35,7 +36,7 @@ namespace KDevMI { namespace LLDB {
 
 QUrl findExecutable(const QString& name)
 {
-    QFileInfo info(qApp->applicationDirPath()  + "/debugees/" + name);
+    QFileInfo info(QString("%1/%2").arg(QString::fromLocal8Bit(DEBUGGEE_BIN_DIR), name));
     Q_ASSERT(info.exists());
     Q_ASSERT(info.isExecutable());
     return QUrl::fromLocalFile(info.canonicalFilePath());

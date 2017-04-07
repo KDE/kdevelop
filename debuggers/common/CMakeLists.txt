@@ -74,3 +74,5 @@ if(KF5SysGuard_FOUND)
 endif()
 
 kde_target_enable_exceptions(kdevdebuggercommon PUBLIC)
+
+add_subdirectory(tests)
