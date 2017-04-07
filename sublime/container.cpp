@@ -640,7 +640,7 @@ void Container::contextMenu( const QPoint& pos )
             auto view = viewForWidget( widget( currentTab ) );
             auto urlDocument = qobject_cast<UrlDocument*>( view->document() );
             if( urlDocument ) {
-                QApplication::clipboard()->setText( urlDocument->url().toString() );
+                QApplication::clipboard()->setText(urlDocument->url().toDisplayString(QUrl::PreferLocalFile));
             }
         } // else the action was handled by someone else
     }
