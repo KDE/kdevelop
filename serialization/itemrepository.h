@@ -1785,7 +1785,7 @@ class ItemRepository : public AbstractItemRepository {
       bucketIndex = bucketPtr->nextBucketForHash(hash);
     }
 
-    return {};
+    return {}; // clazy:exclude=returning-void-expression
   }
 
   ///Makes sure the order within m_freeSpaceBuckets is correct, after largestFreeSize has been changed for m_freeSpaceBuckets[index].

@@ -34,7 +34,7 @@ namespace Utils {
 template<class T, class Conversion>
 class ConvenientIterator : public Conversion {
   public:
-    explicit ConvenientIterator(Set::Iterator it=Set::Iterator()) : m_it(it) {
+    explicit ConvenientIterator(const Set::Iterator& it = Set::Iterator()) : m_it(it) {
     }
     explicit ConvenientIterator(const Set& set) : m_it(set.iterator()) {
     }

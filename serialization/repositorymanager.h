@@ -30,7 +30,7 @@ template<class ItemRepositoryType, bool unloadingEnabled = true, bool lazy = tru
 struct RepositoryManager : public AbstractRepositoryManager {
 public:
   ///@param shareMutex Option repository from where this repository should take the thread-safety mutex
-  explicit RepositoryManager(QString name,
+  explicit RepositoryManager(const QString& name,
                     int version = 1,
                     AbstractRepositoryManager*(*shareMutex)() = nullptr,
                     ItemRepositoryRegistry& registry = globalItemRepositoryRegistry()) :

@@ -174,7 +174,7 @@ public:
 };
 
 struct KDEVPLATFORMLANGUAGE_EXPORT SetDataRepository : public SetDataRepositoryBase {
-  SetDataRepository(BasicSetRepository* _setRepository, QString name, KDevelop::ItemRepositoryRegistry* registry) : SetDataRepositoryBase(name, registry), setRepository(_setRepository) {
+  SetDataRepository(BasicSetRepository* _setRepository, const QString& name, KDevelop::ItemRepositoryRegistry* registry) : SetDataRepositoryBase(name, registry), setRepository(_setRepository) {
   }
   
   BasicSetRepository* setRepository;
