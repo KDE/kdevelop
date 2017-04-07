@@ -81,7 +81,7 @@ struct CompilerFilterStrategyPrivate
 {
     CompilerFilterStrategyPrivate(const QUrl& buildDir);
     Path pathForFile( const QString& ) const;
-    bool isMultiLineCase(ErrorFormat curErrFilter) const;
+    bool isMultiLineCase(const ErrorFormat& curErrFilter) const;
     void putDirAtEnd(const Path& pathToInsert);
 
     QVector<Path> m_currentDirs;
@@ -117,7 +117,7 @@ Path CompilerFilterStrategyPrivate::pathForFile(const QString& filename) const
     return currentPath;
 }
 
-bool CompilerFilterStrategyPrivate::isMultiLineCase(KDevelop::ErrorFormat curErrFilter) const
+bool CompilerFilterStrategyPrivate::isMultiLineCase(const KDevelop::ErrorFormat& curErrFilter) const
 {
     if(curErrFilter.compiler == QLatin1String("gfortran") || curErrFilter.compiler == QLatin1String("cmake")) {
         return true;
