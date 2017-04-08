@@ -78,12 +78,13 @@
     <p xml:lang="x-test">xxFree and Open Source Integrated Development Environment for your different software projects.xx</p>
     <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
   </description>
-  <url type="homepage">http://kdevelop.org</url>
+  <url type="homepage">https://kdevelop.org</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kdevelop</url>
   <url type="help">https://docs.kde.org/index.php?application=kdevelop</url>
+  <url type="donation">https://www.kde.org/community/donations/?app=kdevelop</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://kde.org/images/screenshots/kdevelop.png</image>
+      <image>https://kde.org/images/screenshots/kdevelop.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
