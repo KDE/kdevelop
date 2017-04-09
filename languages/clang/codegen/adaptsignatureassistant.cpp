@@ -312,7 +312,6 @@ KTextEditor::Range AdaptSignatureAssistant::displayRange() const
 
     auto s = m_lastEditPosition;
     KTextEditor::Range ran = {s.line(), 0, s.line(), m_document->lineLength(s.line())};
-    qDebug() << "display range:" << ran;
     return ran;
 }
 
