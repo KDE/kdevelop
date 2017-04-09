@@ -1,14 +1,14 @@
 {
     "KPlugin": {
-        "Description": "%{APPNAME}", 
-        "Description[x-test]": "xx%{APPNAME}xx", 
-        "Id": "%{APPNAMELC}", 
-        "Name": "%{APPNAME}", 
-        "Name[x-test]": "xx%{APPNAME}xx", 
+        "Description": "%{APPNAME}",
+        "Description[x-test]": "xx%{APPNAME}xx",
+        "Id": "%{APPNAMELC}",
+        "Name": "%{APPNAME}",
+        "Name[x-test]": "xx%{APPNAME}xx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
-    }, 
-    "X-KDevelop-Category": "Global", 
+    },
+    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"
 }
