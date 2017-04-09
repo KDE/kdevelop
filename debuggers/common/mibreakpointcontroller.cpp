@@ -59,7 +59,7 @@ struct MIBreakpointController::Handler : public MICommandHandler
             int row = controller->breakpointRow(breakpoint);
             if (row >= 0) {
                 controller->updateErrorText(row, r[QStringLiteral("msg")].literal());
-                qWarning() << r[QStringLiteral("msg")].literal();
+                qCWarning(DEBUGGERCOMMON) << r[QStringLiteral("msg")].literal();
             }
         } else {
             if (breakpoint->errors & columns) {
@@ -128,7 +128,7 @@ struct MIBreakpointController::InsertedHandler : public MIBreakpointController::
                 }
             }
             if (bkptKind.isEmpty()) {
-                qWarning() << "Gdb sent unknown breakpoint kind";
+                qCWarning(DEBUGGERCOMMON) << "Gdb sent unknown breakpoint kind";
                 return;
             }
 
@@ -675,7 +675,7 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
     } else if (miBkpt.hasField(QStringLiteral("what"))) {
         modelBreakpoint->setExpression(miBkpt[QStringLiteral("what")].literal());
     } else {
-        qWarning() << "Breakpoint doesn't contain required location/expression data";
+        qCWarning(DEBUGGERCOMMON) << "Breakpoint doesn't contain required location/expression data";
     }
 
     if (!(lockedColumns & BreakpointModel::EnableColumnFlag)) {

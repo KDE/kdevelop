@@ -167,14 +167,14 @@ void CMakeServerImportJob::processResponse(const QJsonObject& response)
             m_data.m_server = m_server;
             emitResult();
         } else {
-            qWarning() << "unhandled reply" << response;
+            qCWarning(CMAKE) << "unhandled reply" << response;
         }
     } else if(responseType == QLatin1String("error")) {
         setError(ErrorResponse);
         setErrorText(response.value(QStringLiteral("errorMessage")).toString());
-        qWarning() << "error!!" << response;
+        qCWarning(CMAKE) << "error!!" << response;
         emitResult();
     } else {
-        qWarning() << "unhandled message" << response;
+        qCWarning(CMAKE) << "unhandled message" << response;
     }
 }

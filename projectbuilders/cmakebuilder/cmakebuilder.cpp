@@ -96,7 +96,7 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
             qCDebug(CMAKEBUILDER) << "Added builder " << i->metaObject()->className() << "for" << neededfile;
         }
         else
-            qWarning() << "Couldn't add" << i->metaObject()->className();
+            qCWarning(CMAKEBUILDER) << "Couldn't add" << i->metaObject()->className();
     }
 }
 

@@ -109,7 +109,7 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
         break;
     default:
         m_registerController.reset();
-        qWarning() << "Unsupported architecture. Registers won't be available.";
+        qCWarning(DEBUGGERCOMMON) << "Unsupported architecture. Registers won't be available.";
         break;
     }
 

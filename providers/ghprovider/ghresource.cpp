@@ -165,11 +165,11 @@ void Resource::slotAuthenticate(KJob *job)
 void Resource::slotRepos(KIO::Job *job, const QByteArray &data)
 {
     if (!job) {
-        qWarning() << "NULL job returned!";
+        qCWarning(GHPROVIDER) << "NULL job returned!";
         return;
     }
     if (job->error()) {
-        qWarning() << "Job error: " << job->errorString();
+        qCWarning(GHPROVIDER) << "Job error: " << job->errorString();
         return;
     }
 
@@ -185,12 +185,12 @@ void Resource::slotOrgs(KIO::Job *job, const QByteArray &data)
     QList<QString> res;
 
     if (!job) {
-        qWarning() << "NULL job returned!";
+        qCWarning(GHPROVIDER) << "NULL job returned!";
         emit orgsUpdated(res);
         return;
     }
     if (job->error()) {
-        qWarning() << "Job error: " << job->errorString();
+        qCWarning(GHPROVIDER) << "Job error: " << job->errorString();
         emit orgsUpdated(res);
         return;
     }

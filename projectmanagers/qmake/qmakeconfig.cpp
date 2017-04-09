@@ -89,7 +89,7 @@ QString QMakeConfig::qmakeExecutable(const IProject* project)
             exe = group.readEntry(QMAKE_EXECUTABLE, QString());
             QFileInfo info(exe);
             if (!info.exists() || !info.isExecutable()) {
-                qWarning() << "bad QMake configured for project " << project->path().toUrl() << ":" << exe;
+                qCWarning(KDEV_QMAKE) << "bad QMake configured for project " << project->path().toUrl() << ":" << exe;
                 exe.clear();
             }
         }

@@ -97,7 +97,7 @@ void QMakeJob::setProject(KDevelop::IProject* project)
 
 void QMakeJob::slotFailed(QProcess::ProcessError error)
 {
-    qDebug() << error;
+    qCDebug(KDEV_QMAKE) << error;
 
     if (!m_killed) {
         setError(ConfigureError);

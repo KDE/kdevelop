@@ -131,7 +131,7 @@ void writeProjectParameter( KDevelop::IProject* project, const QString& key, con
 
     else
     {
-        qWarning() << "cannot write key" << key << "(" << value << ")" << "when no builddir is set!";
+        qCWarning(CMAKE) << "cannot write key" << key << "(" << value << ")" << "when no builddir is set!";
     }
 }
 
@@ -420,7 +420,7 @@ void removeBuildDirConfig( KDevelop::IProject* project )
     int buildDirIndex = currentBuildDirIndex( project );
     if ( !buildDirGroupExists( project, buildDirIndex ) )
     {
-        qWarning() << "build directory config" << buildDirIndex << "to be removed but does not exist";
+        qCWarning(CMAKE) << "build directory config" << buildDirIndex << "to be removed but does not exist";
         return;
     }
 
@@ -625,7 +625,7 @@ QString defaultGenerator()
     QString defGen = generatorNames.value(CMakeBuilderSettings::self()->generator());
     if (defGen.isEmpty())
     {
-        qWarning() << "Couldn't find builder with index " << CMakeBuilderSettings::self()->generator()
+        qCWarning(CMAKE) << "Couldn't find builder with index " << CMakeBuilderSettings::self()->generator()
                    << ", defaulting to 0";
         CMakeBuilderSettings::self()->setGenerator(0);
         defGen = generatorNames.at(0);

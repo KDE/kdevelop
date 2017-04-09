@@ -161,7 +161,7 @@ void CMakeServer::handshake(const KDevelop::Path& source, const KDevelop::Path& 
     if (sourceDirectory.isEmpty()) {
         sourceDirectory = source.toLocalFile();
     } else if (QFileInfo(sourceDirectory).canonicalFilePath() != QFileInfo(source.toLocalFile()).canonicalFilePath()) {
-        qWarning() << "Build directory is configured for another source directory:"
+        qCWarning(CMAKE) << "Build directory is configured for another source directory:"
                    << homeDirectoryVariable << sourceDirectory
                    << "wanted to open" << source << "in" << build;
     }

@@ -110,11 +110,11 @@ QStringList CMakeJob::commandLine() const
         if( err == KShell::NoError ) {
             args += tmp;
         } else {
-            qWarning() << "Ignoring cmake Extra arguments";
+            qCWarning(CMAKEBUILDER) << "Ignoring cmake Extra arguments";
             if( err == KShell::BadQuoting ) {
-                qWarning() << "CMake arguments badly quoted:" << cmakeargs;
+                qCWarning(CMAKEBUILDER) << "CMake arguments badly quoted:" << cmakeargs;
             } else {
-                qWarning() << "CMake arguments had meta character:" << cmakeargs;
+                qCWarning(CMAKEBUILDER) << "CMake arguments had meta character:" << cmakeargs;
             }
         }
     }

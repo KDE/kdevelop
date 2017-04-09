@@ -115,7 +115,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
     if (style.content().isEmpty()) {
         style = predefinedStyle(style.name());
         if (style.content().isEmpty()) {
-            qWarning() << "Empty contents for style" << style.name() << "for indent plugin";
+            qCWarning(CUSTOMSCRIPT) << "Empty contents for style" << style.name() << "for indent plugin";
             return text;
         }
     }
@@ -142,11 +142,11 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
             command.replace(QLatin1String("$TMPFILE"), tmpFile->fileName());
             QByteArray useTextArray = useText.toLocal8Bit();
             if (tmpFile->write(useTextArray) != useTextArray.size()) {
-                qWarning() << "failed to write text to temporary file";
+                qCWarning(CUSTOMSCRIPT) << "failed to write text to temporary file";
                 return text;
             }
         } else {
-            qWarning() << "Failed to create a temporary file";
+            qCWarning(CUSTOMSCRIPT) << "Failed to create a temporary file";
             return text;
         }
         tmpFile->close();
@@ -179,14 +179,14 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
         if (f.open(QIODevice::ReadOnly)) {
             output = QString::fromLocal8Bit(f.readAll());
         } else {
-            qWarning() << "Failed opening the temporary file for reading";
+            qCWarning(CUSTOMSCRIPT) << "Failed opening the temporary file for reading";
             return text;
         }
     } else {
         output = ios.readAll();
     }
     if (output.isEmpty()) {
-        qWarning() << "indent returned empty text for style" << style.name() << style.content();
+        qCWarning(CUSTOMSCRIPT) << "indent returned empty text for style" << style.name() << style.content();
         return text;
     }
 

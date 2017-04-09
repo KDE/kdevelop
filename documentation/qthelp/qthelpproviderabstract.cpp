@@ -42,7 +42,7 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &c
 {
     Q_UNUSED(args);
     if( !m_engine.setupData() ) {
-        qWarning() << "Couldn't setup QtHelp Collection file";
+        qCWarning(QTHELP) << "Couldn't setup QtHelp Collection file";
     }
 }
 

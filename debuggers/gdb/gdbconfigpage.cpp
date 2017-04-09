@@ -24,8 +24,6 @@
 
 #include "gdbconfigpage.h"
 
-#include <QDebug>
-
 #include <kconfiggroup.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
@@ -38,6 +36,7 @@
 
 #include "dbgglobal.h"
 #include "debuggerplugin.h"
+#include "debuglog.h"
 #include "midebugjobs.h"
 
 #include "ui_gdbconfigpage.h"
@@ -162,7 +161,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
         l << new KDevMI::MIDebugJob( m_plugin, cfg, m_execute );
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
     }
-    qWarning() << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
+    qCWarning(DEBUGGERGDB) << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
     return nullptr;
 }
 

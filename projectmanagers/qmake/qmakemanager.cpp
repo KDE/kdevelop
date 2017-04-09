@@ -345,13 +345,13 @@ void QMakeProjectManager::slotDirty(const QString& path)
                 if (pro->absoluteFile() == path) {
                     // TODO: children
                     // TODO: cache added
-                    qDebug() << "reloading" << pro << path;
+                    qCDebug(KDEV_QMAKE) << "reloading" << pro << path;
                     pro->read();
                 }
             }
             finished = true;
         } else if (ProjectFolderItem* newFolder = buildFolderItem(project, folder->path(), folder->parent())) {
-            qDebug() << "changing from normal folder to qmake project folder:" << folder->path().toUrl();
+            qCDebug(KDEV_QMAKE) << "changing from normal folder to qmake project folder:" << folder->path().toUrl();
             // .pro / .pri file did not exist before
             while (folder->rowCount()) {
                 newFolder->appendRow(folder->takeRow(0));
@@ -459,11 +459,11 @@ QMakeCache* QMakeProjectManager::findQMakeCache(IProject* project, const Path& p
     QDir curdir(QMakeConfig::buildDirFromSrc(project, !path.isValid() ? project->path() : path).toLocalFile());
     curdir.makeAbsolute();
     while (!curdir.exists(QStringLiteral(".qmake.cache")) && !curdir.isRoot() && curdir.cdUp()) {
-        qDebug() << curdir;
+        qCDebug(KDEV_QMAKE) << curdir;
     }
 
     if (curdir.exists(QStringLiteral(".qmake.cache"))) {
-        qDebug() << "Found QMake cache in " << curdir.absolutePath();
+        qCDebug(KDEV_QMAKE) << "Found QMake cache in " << curdir.absolutePath();
         return new QMakeCache(curdir.canonicalPath() + "/.qmake.cache");
     }
     return nullptr;

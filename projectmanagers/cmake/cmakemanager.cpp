@@ -360,7 +360,7 @@ void CMakeManager::serverResponse(KDevelop::IProject* project, const QJsonObject
         if (response[QStringLiteral("name")] == QLatin1String("dirty")) {
             m_projects[project].m_server->configure({});
         } else
-            qDebug() << "unhandled signal response..." << project << response;
+            qCDebug(CMAKE) << "unhandled signal response..." << project << response;
     } else if (response[QStringLiteral("type")] == QLatin1String("reply")) {
         const auto inReplyTo = response[QStringLiteral("inReplyTo")];
         if (inReplyTo == QLatin1String("configure")) {
@@ -372,10 +372,10 @@ void CMakeManager::serverResponse(KDevelop::IProject* project, const QJsonObject
             CMakeServerImportJob::processFileData(response, data);
             populateTargets(project->projectItem(), data.targets);
         } else {
-            qDebug() << "unhandled reply response..." << project << response;
+            qCDebug(CMAKE) << "unhandled reply response..." << project << response;
         }
     } else {
-        qDebug() << "unhandled response..." << project << response;
+        qCDebug(CMAKE) << "unhandled response..." << project << response;
     }
 }
 
@@ -884,7 +884,7 @@ void CMakeManager::addWatcher(IProject* p, const QString& path)
     if (QFileSystemWatcher* watcher = m_watchers.value(p)) {
         watcher->addPath(path);
     } else {
-        qWarning() << "Could not find a watcher for project" << p << p->name() << ", path " << path;
+        qCWarning(CMAKE) << "Could not find a watcher for project" << p << p->name() << ", path " << path;
         Q_ASSERT(false);
     }
 }*/

@@ -139,7 +139,7 @@ void addFrameworkDirectories(QVector<const char*>* args, QVector<QByteArray>* ot
 
         QFileInfo info(url.toLocalFile());
         if (!info.isDir()) {
-            qWarning() << "supposed framework directory is not a directory:" << url.pathOrUrl();
+            qCWarning(KDEV_CLANG) << "supposed framework directory is not a directory:" << url.pathOrUrl();
             continue;
         }
         QByteArray path = url.toLocalFile().toUtf8();
@@ -290,9 +290,9 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         &m_unit
     );
     if (code != CXError_Success) {
-        qWarning() << "clang_parseTranslationUnit2 return with error code" << code;
+        qCWarning(KDEV_CLANG) << "clang_parseTranslationUnit2 return with error code" << code;
         if (!qEnvironmentVariableIsSet("KDEV_CLANG_DISPLAY_DIAGS")) {
-            qWarning() << "  (start KDevelop with `KDEV_CLANG_DISPLAY_DIAGS=1 kdevelop` to see more diagnostics)";
+            qCWarning(KDEV_CLANG) << "  (start KDevelop with `KDEV_CLANG_DISPLAY_DIAGS=1 kdevelop` to see more diagnostics)";
         }
     }
 
@@ -304,7 +304,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
             clang_saveTranslationUnit(m_unit, (tuUrl.byteArray() + ".pch").constData(), CXSaveTranslationUnit_None);
         }
     } else {
-        qWarning() << "Failed to parse translation unit:" << tuUrl;
+        qCWarning(KDEV_CLANG) << "Failed to parse translation unit:" << tuUrl;
     }
 }
 
@@ -472,7 +472,7 @@ bool ParseSession::reparse(const QVector<UnsavedFile>& unsavedFiles, const Clang
     const auto code = clang_reparseTranslationUnit(d->m_unit, unsaved.size(), unsaved.data(),
                                                    clang_defaultReparseOptions(d->m_unit));
     if (code != CXError_Success) {
-        qWarning() << "clang_reparseTranslationUnit return with error code" << code;
+        qCWarning(KDEV_CLANG) << "clang_reparseTranslationUnit return with error code" << code;
         // if error code != 0 => clang_reparseTranslationUnit invalidates the old translation unit => clean up
         clang_disposeTranslationUnit(d->m_unit);
         d->setUnit(nullptr);

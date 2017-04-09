@@ -55,7 +55,7 @@ int lastIndexOf(const QString& str, const QRegularExpression& re, int from, QReg
 int indexOf(const QString& str, const QRegularExpression& re, int from, QRegularExpressionMatch* rmatch)
 {
     if (!re.isValid()) {
-        qWarning("QString::indexOf: invalid QRegularExpression object");
+        qCWarning(QTHELP) << "QString::indexOf: invalid QRegularExpression object";
         return -1;
     }
 
@@ -73,7 +73,7 @@ int indexOf(const QString& str, const QRegularExpression& re, int from, QRegular
 int lastIndexOf(const QString &str, const QRegularExpression &re, int from, QRegularExpressionMatch *rmatch)
 {
     if (!re.isValid()) {
-        qWarning("QString::lastIndexOf: invalid QRegularExpression object");
+        qCWarning(QTHELP) << "QString::lastIndexOf: invalid QRegularExpression object";
         return -1;
     }
 
