@@ -9,7 +9,6 @@ set_package_properties(KDEExperimentalPurpose PROPERTIES DESCRIPTION "EXPERIMENT
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevpatchreview\")
 kde_enable_exceptions()
-include_directories(${LIBKOMPAREDIFF2_INCLUDE_DIR})
 
 if(LibKompareDiff2_VERSION VERSION_LESS 5.1)
     remove_definitions(
