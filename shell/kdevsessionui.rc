@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui>
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="kdevsessionui" version="6" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="session">

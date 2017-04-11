@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="KDevDocumentSwitcher" version="6" translationDomain="kdevdocumentswitcher">
 <MenuBar>
   <Menu name="navigation">

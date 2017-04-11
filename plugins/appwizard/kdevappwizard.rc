@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="KDevAppWizard" version="4" translationDomain="kdevappwizard">
 <MenuBar>
   <Menu name="project" >

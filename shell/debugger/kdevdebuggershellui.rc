@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui>
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="kdevdebuggershellui" version="8" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="run">

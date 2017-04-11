@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="kdevgrepview" version="8" translationDomain="kdevgrepview">
 <MenuBar>
   <Menu name="edit">

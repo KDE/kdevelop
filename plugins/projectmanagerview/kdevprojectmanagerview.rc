@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui>
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="kdevprojectmanagerview" version="8" translationDomain="kdevprojectmanagerview">
 <MenuBar>
  <Menu name="project">

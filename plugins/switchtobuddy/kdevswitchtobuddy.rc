@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="KDevSwitchToBuddy" version="7" translationDomain="kdevswitchtobuddy">
 <MenuBar>
   <Menu name="navigation">
