@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="okteta" version="4" translationDomain="kdevokteta">
 <MenuBar>
   <Menu name="file">

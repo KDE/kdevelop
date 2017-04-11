@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui>
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="kdevdgdb" version="56" translationDomain="kdevgdb">
 <MenuBar>
  <Menu name="run">

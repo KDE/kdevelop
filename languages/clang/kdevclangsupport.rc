@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="KDevClangSupport" version="1" translationDomain="kdevclang">
 <MenuBar>
   <Menu name="code">

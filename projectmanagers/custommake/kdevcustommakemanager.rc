@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui>
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="kdevcustommakemanager" version="5" translationDomain="kdevcustommake">
   <MenuBar>
   <Menu name="run">

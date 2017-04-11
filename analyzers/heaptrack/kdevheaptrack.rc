@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui>
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="kdevheaptrack" version="2" translationDomain="kdevheaptrack">
 <MenuBar>
   <Menu name="run">

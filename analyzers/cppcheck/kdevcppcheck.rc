@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui>
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="kdevcppcheck" version="8" translationDomain="kdevcppcheck">
 <MenuBar>
   <Menu name="analyze">
