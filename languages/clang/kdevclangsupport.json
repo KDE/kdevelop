@@ -56,7 +56,7 @@
     "X-KDevelop-Languages": [
         "C",
         "C++",
-        "OpenCL",
+        "OpenCL C",
         "CUDA C",
         "Objective-C"
     ],

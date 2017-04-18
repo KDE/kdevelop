@@ -212,7 +212,7 @@
       <item row="6" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>OpenCL &amp;Profile:</string>
+         <string>OpenCL C &amp;Profile:</string>
         </property>
         <property name="buddy">
          <cstring>languageStandardsOpenCl</cstring>
@@ -266,7 +266,7 @@
       <item row="7" column="0">
        <widget class="QLabel" name="argumentsLabel_3">
         <property name="text">
-         <string>OpenCL comma&amp;nd-line arguments:</string>
+         <string>OpenCL C comma&amp;nd-line arguments:</string>
         </property>
         <property name="buddy">
          <cstring>parserOptionsOpenCl</cstring>
