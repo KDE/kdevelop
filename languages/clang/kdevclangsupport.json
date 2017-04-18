@@ -55,7 +55,7 @@
     "X-KDevelop-Languages": [
         "C",
         "C++",
-        "OpenCL",
+        "OpenCL C",
         "Objective-C"
     ],
     "X-KDevelop-LoadMode": "AlwaysOn",
