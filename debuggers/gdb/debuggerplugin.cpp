@@ -43,6 +43,11 @@
 
 #include <KPluginFactory>
 
+// explicit init of resources needed, because all files
+// are first compiled into a static library which is also used for unit testing
+// for some reason the respective resource init methods are not triggered or registered then
+inline void initMyResource() { Q_INIT_RESOURCE(kdevgdb); }
+
 using namespace KDevMI::GDB;
 
 K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<CppDebuggerPlugin>(); )
@@ -53,7 +58,10 @@ CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
     , gdbfactory(nullptr)
     , memoryviewerfactory(nullptr)
 {
+    initMyResource();
+
     setXMLFile(QStringLiteral("kdevgdbui.rc"));
+
 
     auto pluginController = core()->pluginController();
     for(auto plugin : pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
