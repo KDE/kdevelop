@@ -48,6 +48,8 @@ using namespace KDevelop;
 
 bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, const bool isFolder)
 {
+    qCDebug(PROJECT) << "Removing url:" << url << "from project" << project;
+
     QWidget* window = QApplication::activeWindow();
 
     auto job = KIO::stat(url, KIO::StatJob::DestinationSide, 0);
