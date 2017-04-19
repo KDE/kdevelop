@@ -313,7 +313,7 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path_)
     }
     qCDebug(FILEMANAGER) << "deleted:" << path_;
 
-    const Path path(path_);
+    const Path path(QUrl::fromLocalFile(path_));
     const IndexedString indexed(path.pathOrUrl());
     foreach ( IProject* p, m_watchers.keys() ) {
         if (path == p->path()) {
