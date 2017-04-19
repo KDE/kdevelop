@@ -1,4 +1,3 @@
 [Project]
 Name=unit_tests
 Manager=KDevCMakeManager
-VersionControl=
