@@ -66,4 +66,4 @@ Comment[uk]=Створити програму, засновану на CMake/Qt4
 Comment[x-test]=xxGenerate a QMake/Qt4 based application with graphical user interface (crossplatform compatible)xx
 Comment[zh_CN]=生成基于 QMake/Qt4 的图形界面应用程序(跨平台兼容)
 Comment[zh_TW]=產生一個 QMake/Qt4 為基礎的使用者介面應用程式（跨平台相容）
-ShowFilesAfterGeneration=%{PROJECTDIR}/main.cpp
+ShowFilesAfterGeneration=main.cpp

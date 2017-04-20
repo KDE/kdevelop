@@ -34,4 +34,4 @@ Comment[x-test]=xxA Qt5 and QML2 basic application using QMakexx
 
 Category=Qt/Graphical (QMake-based)
 Icon=qt5-qml2.png
-ShowFilesAfterGeneration=%{PROJECTDIR}/src/main.cpp
+ShowFilesAfterGeneration=src/main.cpp
