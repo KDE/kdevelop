@@ -1,4 +1,3 @@
 [Project]
 Name=qt4app
 Manager=KDevCMakeManager
-VersionControl=
