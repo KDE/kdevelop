@@ -99,20 +99,9 @@ bool buildDirGroupExists( KDevelop::IProject* project, int buildDirIndex )
     return baseGroup(project).hasGroup( Config::groupNameBuildDir.arg(buildDirIndex) );
 }
 
-int currentBuildDirIndex( KDevelop::IProject* project )
+QString readBuildDirParameter( KDevelop::IProject* project, const QString& key, const QString& aDefault )
 {
-    KConfigGroup baseGrp = baseGroup(project);
-
-    if ( baseGrp.hasKey( Config::buildDirOverrideIndexKey ) )
-        return baseGrp.readEntry<int>( Config::buildDirOverrideIndexKey, 0 );
-
-    else
-        return baseGrp.readEntry<int>( Config::buildDirIndexKey, 0 ); // default is 0 because QString::number(0) apparently returns an empty string
-}
-
-QString readProjectParameter( KDevelop::IProject* project, const QString& key, const QString& aDefault )
-{
-    int buildDirIndex = currentBuildDirIndex(project);
+    int buildDirIndex = CMake::currentBuildDirIndex(project);
     if (buildDirIndex >= 0)
         return buildDirGroup( project, buildDirIndex ).readEntry( key, aDefault );
 
@@ -120,9 +109,9 @@ QString readProjectParameter( KDevelop::IProject* project, const QString& key, c
         return aDefault;
 }
 
-void writeProjectParameter( KDevelop::IProject* project, const QString& key, const QString& value )
+void writeBuildDirParameter( KDevelop::IProject* project, const QString& key, const QString& value )
 {
-    int buildDirIndex = currentBuildDirIndex(project);
+    int buildDirIndex = CMake::currentBuildDirIndex(project);
     if (buildDirIndex >= 0)
     {
         KConfigGroup buildDirGrp = buildDirGroup( project, buildDirIndex );
@@ -266,7 +255,7 @@ KDevelop::Path projectRoot(KDevelop::IProject* project)
 
 KDevelop::Path currentBuildDir( KDevelop::IProject* project )
 {
-    return KDevelop::Path(readProjectParameter( project, Config::Specific::buildDirPathKey, QString() ));
+    return KDevelop::Path(readBuildDirParameter( project, Config::Specific::buildDirPathKey, QString() ));
 }
 
 KDevelop::Path commandsFile(KDevelop::IProject* project)
@@ -291,7 +280,7 @@ KDevelop::Path targetDirectoriesFile(KDevelop::IProject* project)
 
 QString currentBuildType( KDevelop::IProject* project )
 {
-    return readProjectParameter( project, Config::Specific::cmakeBuildTypeKey, QStringLiteral("Release") );
+    return readBuildDirParameter( project, Config::Specific::cmakeBuildTypeKey, QStringLiteral("Release") );
 }
 
 QString findExecutable()
@@ -311,7 +300,7 @@ QString findExecutable()
 KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project)
 {
     const auto systemExecutable = findExecutable();
-    auto path = readProjectParameter(project, Config::Specific::cmakeExecutableKey, systemExecutable);
+    auto path = readBuildDirParameter(project, Config::Specific::cmakeExecutableKey, systemExecutable);
     if (path != systemExecutable) {
         QFileInfo info(path);
         if (!info.isExecutable()) {
@@ -323,7 +312,7 @@ KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project)
 
 KDevelop::Path currentInstallDir( KDevelop::IProject* project )
 {
-    return KDevelop::Path(readProjectParameter( project, Config::Specific::cmakeInstallDirKey, QStringLiteral("/usr/local") ));
+    return KDevelop::Path(readBuildDirParameter( project, Config::Specific::cmakeInstallDirKey, QStringLiteral("/usr/local") ));
 }
 
 QString projectRootRelative( KDevelop::IProject* project )
@@ -338,27 +327,27 @@ bool hasProjectRootRelative(KDevelop::IProject* project)
 
 QString currentExtraArguments( KDevelop::IProject* project )
 {
-    return readProjectParameter( project, Config::Specific::cmakeArgumentsKey, QString() );
+    return readBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, QString() );
 }
 
 void setCurrentInstallDir( KDevelop::IProject* project, const KDevelop::Path& path )
 {
-    writeProjectParameter( project, Config::Specific::cmakeInstallDirKey, path.toLocalFile() );
+    writeBuildDirParameter( project, Config::Specific::cmakeInstallDirKey, path.toLocalFile() );
 }
 
 void setCurrentBuildType( KDevelop::IProject* project, const QString& type )
 {
-    writeProjectParameter( project, Config::Specific::cmakeBuildTypeKey, type );
+    writeBuildDirParameter( project, Config::Specific::cmakeBuildTypeKey, type );
 }
 
 void setCurrentCMakeExecutable(KDevelop::IProject* project, const KDevelop::Path& path)
 {
-    writeProjectParameter(project, Config::Specific::cmakeExecutableKey, path.toLocalFile());
+    writeBuildDirParameter(project, Config::Specific::cmakeExecutableKey, path.toLocalFile());
 }
 
 void setCurrentBuildDir( KDevelop::IProject* project, const KDevelop::Path& path )
 {
-    writeProjectParameter( project, Config::Specific::buildDirPathKey, path.toLocalFile() );
+    writeBuildDirParameter( project, Config::Specific::buildDirPathKey, path.toLocalFile() );
 }
 
 void setProjectRootRelative( KDevelop::IProject* project, const QString& relative)
@@ -368,14 +357,13 @@ void setProjectRootRelative( KDevelop::IProject* project, const QString& relativ
 
 void setCurrentExtraArguments( KDevelop::IProject* project, const QString& string)
 {
-    writeProjectParameter( project, Config::Specific::cmakeArgumentsKey, string );
+    writeBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, string );
 }
 
 QString currentEnvironment(KDevelop::IProject* project)
 {
-    return readProjectParameter( project, Config::Specific::cmakeEnvironmentKey, QString() );
+    return readBuildDirParameter( project, Config::Specific::cmakeEnvironmentKey, QString() );
 }
-
 
 int currentBuildDirIndex( KDevelop::IProject* project )
 {
@@ -395,7 +383,7 @@ void setCurrentBuildDirIndex( KDevelop::IProject* project, int buildDirIndex )
 
 void setCurrentEnvironment( KDevelop::IProject* project, const QString& environment )
 {
-    writeProjectParameter( project, Config::Specific::cmakeEnvironmentKey, environment );
+    writeBuildDirParameter( project, Config::Specific::cmakeEnvironmentKey, environment );
 }
 
 void initBuildDirConfig( KDevelop::IProject* project )
