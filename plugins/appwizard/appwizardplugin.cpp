@@ -367,8 +367,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
     qCDebug(PLUGIN_APPWIZARD) << "Returning" << projectFileName << QFileInfo::exists( projectFileName ) ;
 
-    if( ! QFileInfo::exists( projectFileName ) )
-    {
+    const QFileInfo projectFileInfo(projectFileName);
+    if (!projectFileInfo.exists()) {
         qCDebug(PLUGIN_APPWIZARD) << "creating .kdev4 file";
         KSharedConfigPtr cfg = KSharedConfig::openConfig( projectFileName, KConfig::SimpleConfig );
         KConfigGroup project = cfg->group( "Project" );
@@ -392,6 +392,17 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         KConfigGroup project2 = cfg->group( "Project" );
         qCDebug(PLUGIN_APPWIZARD) << "kdev4 file contents:" << project2.readEntry("Name", "") << project2.readEntry("Manager", "" );
     }
+
+    // create developer .kde4 file
+    const QString developerProjectFileName = projectFileInfo.canonicalPath() + QLatin1String("/.kdev4/") + projectFileInfo.fileName();
+
+    qCDebug(PLUGIN_APPWIZARD) << "creating developer .kdev4 file:" << developerProjectFileName;
+    KSharedConfigPtr developerCfg = KSharedConfig::openConfig(developerProjectFileName, KConfig::SimpleConfig);
+    KConfigGroup developerProjectGroup = developerCfg->group("Project");
+    developerProjectGroup.writeEntry("VersionControlSupport", info.vcsPluginName);
+    developerProjectGroup.sync();
+
+    developerCfg->sync();
 
     return projectFileName;
 }

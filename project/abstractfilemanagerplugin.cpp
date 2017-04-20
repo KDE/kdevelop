@@ -315,7 +315,7 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path_)
     }
     qCDebug(FILEMANAGER) << "deleted:" << path_;
 
-    const Path path(path_);
+    const Path path(QUrl::fromLocalFile(path_));
     const IndexedString indexed(path.pathOrUrl());
 
     QHashIterator<IProject*, KDirWatch*> it(m_watchers);
