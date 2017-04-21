@@ -62,7 +62,7 @@ protected:
     template<typename Decl>
     void declareFunction(QmlJS::AST::Node* node,
                          bool newPrototypeContext,
-                         const KDevelop::QualifiedIdentifier& name,
+                         const KDevelop::Identifier& name,
                          const KDevelop::RangeInRevision& nameRange,
                          QmlJS::AST::Node* parameters,
                          const KDevelop::RangeInRevision& parametersRange,
@@ -106,20 +106,20 @@ protected:
     // plugin.qmltypes
     void declareComponent(QmlJS::AST::UiObjectInitializer* node,
                           const KDevelop::RangeInRevision &range,
-                          const KDevelop::QualifiedIdentifier &name);
+                          const KDevelop::Identifier &name);
     void declareMethod(QmlJS::AST::UiObjectInitializer* node,
                        const KDevelop::RangeInRevision &range,
-                       const KDevelop::QualifiedIdentifier &name,
+                       const KDevelop::Identifier &name,
                        bool isSlot,
                        bool isSignal);
     void declareProperty(QmlJS::AST::UiObjectInitializer* node,
                          const KDevelop::RangeInRevision &range,
-                         const KDevelop::QualifiedIdentifier &name);
+                         const KDevelop::Identifier &name);
     void declareParameter(QmlJS::AST::UiObjectInitializer* node,
                           const KDevelop::RangeInRevision &range,
-                          const KDevelop::QualifiedIdentifier &name);
+                          const KDevelop::Identifier &name);
     void declareEnum(const KDevelop::RangeInRevision &range,
-                     const KDevelop::QualifiedIdentifier &name);
+                     const KDevelop::Identifier &name);
     void declareComponentSubclass(QmlJS::AST::UiObjectInitializer* node,
                                   const KDevelop::RangeInRevision& range,
                                   const QString& baseclass,
@@ -147,7 +147,7 @@ protected:
 
 protected:
     template<class DeclarationT>
-    DeclarationT* openDeclaration(const KDevelop::QualifiedIdentifier& id,
+    DeclarationT* openDeclaration(const KDevelop::Identifier& id,
                                   const KDevelop::RangeInRevision& newRange,
                                   DeclarationFlags flags = NoFlags)
     {

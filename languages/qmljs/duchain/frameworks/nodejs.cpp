@@ -66,7 +66,7 @@ void NodeJS::initialize(DeclarationBuilder* builder)
 
 void NodeJS::createObject(const QString& name, int index, DeclarationBuilder* builder)
 {
-    QualifiedIdentifier identifier(name);
+    Identifier identifier(name);
 
     StructureType::Ptr type(new StructureType);
     Declaration* decl = builder->openDeclaration<Declaration>(identifier, RangeInRevision());
@@ -78,7 +78,7 @@ void NodeJS::createObject(const QString& name, int index, DeclarationBuilder* bu
         (QmlJS::AST::Node*)nullptr + index,                // Index is used to disambiguate the contexts. "node" is never dereferenced and is only stored in a hash table
         RangeInRevision(),
         DUContext::Class,
-        identifier
+        QualifiedIdentifier(identifier)
     ));
 
     builder->closeContext();

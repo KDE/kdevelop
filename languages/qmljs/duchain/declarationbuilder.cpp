@@ -115,7 +115,7 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 template<typename Decl>
 void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
                                          bool newPrototypeContext,
-                                         const QualifiedIdentifier& name,
+                                         const Identifier& name,
                                          const RangeInRevision& nameRange,
                                          QmlJS::AST::Node* parameters,
                                          const RangeInRevision& parametersRange,
@@ -144,7 +144,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
         node + 1,                                               // Don't call setContextOnNode on node, only the body context can be associated with node
         RangeInRevision(parametersRange.start, bodyRange.end),  // Ensure that this context contains both the parameters and the body
         DUContext::Function,
-        name
+        QualifiedIdentifier(name)
     );
 
     if (parameters) {
@@ -171,7 +171,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
             QualifiedIdentifier(name)
         ));
 
-        if (name.last() != Identifier(QStringLiteral("Object"))) {
+        if (name != Identifier(QStringLiteral("Object"))) {
             // Every class inherit from Object
             QmlJS::importObjectContext(currentContext(), topContext());
         }
@@ -184,7 +184,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
         node,
         bodyRange,
         DUContext::Other,
-        name
+        QualifiedIdentifier(name)
     );
 
     if (body) {
@@ -200,7 +200,7 @@ template<typename Node>
 void DeclarationBuilder::declareParameters(Node* node, QStringRef Node::*typeAttribute)
 {
     for (Node *plist = node; plist; plist = plist->next) {
-        const QualifiedIdentifier name(plist->name.toString());
+        const Identifier name(plist->name.toString());
         const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
 
         AbstractType::Ptr type = (typeAttribute ?
@@ -226,7 +226,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
     declareFunction<QmlJS::FunctionDeclaration>(
         node,
         true,   // A function declaration always has its own prototype context
-        QualifiedIdentifier(node->name.toString()),
+        Identifier(node->name.toString()),
         m_session->locationToRange(node->identifierToken),
         node->formals,
         m_session->locationsToRange(node->lparenToken, node->rparenToken),
@@ -242,7 +242,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
     declareFunction<QmlJS::FunctionDeclaration>(
         node,
         false,
-        QualifiedIdentifier(),
+        Identifier(),
         QmlJS::emptyRangeOnLine(node->functionToken),
         node->formals,
         m_session->locationsToRange(node->lparenToken, node->rparenToken),
@@ -395,7 +395,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
 
-    const QualifiedIdentifier name(node->name.toString());
+    const Identifier name(node->name.toString());
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
     const AbstractType::Ptr type = findType(node->expression).type;
 
@@ -501,7 +501,7 @@ void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& 
     }
 
     DUChainWriteLocker lock;
-    QualifiedIdentifier identifier(member);
+    Identifier identifier(member);
 
     // Declaration must have an internal context so that the member can be added
     // into it.
@@ -512,7 +512,8 @@ void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& 
     }
 
     // No need to re-declare a field if it already exists
-    if (QmlJS::getDeclaration(identifier, ctx, false)) {
+    // TODO check if we can make getDeclaration receive an Identifier directly
+    if (QmlJS::getDeclaration(QualifiedIdentifier(identifier), ctx, false)) {
         return;
     }
 
@@ -593,7 +594,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
     {
         DUChainWriteLocker lock;
         ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
-            QualifiedIdentifier(),
+            Identifier(),
             QmlJS::emptyRangeOnLine(node->lbraceToken)
         );
 
@@ -623,7 +624,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
     }
 
     RangeInRevision range(m_session->locationToRange(node->name->propertyNameToken));
-    QualifiedIdentifier name(QmlJS::getNodeValue(node->name));
+    Identifier name(QmlJS::getNodeValue(node->name));
 
     // The type of the declaration can either be an enumeration value or the type
     // of its expression
@@ -695,7 +696,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::ObjectLiteral* node)
  */
 void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
-                                          const QualifiedIdentifier &name)
+                                          const Identifier &name)
 {
     QString baseClass = QmlJS::getQMLAttributeValue(node->members, QStringLiteral("prototype")).value.section('/', -1, -1);
 
@@ -723,7 +724,7 @@ void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectInitializer* node,
 
 void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectInitializer* node,
                                        const RangeInRevision &range,
-                                       const QualifiedIdentifier &name,
+                                       const Identifier &name,
                                        bool isSlot,
                                        bool isSignal)
 {
@@ -749,7 +750,7 @@ void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectInitializer* node,
 
 void DeclarationBuilder::declareProperty(QmlJS::AST::UiObjectInitializer* node,
                                          const RangeInRevision &range,
-                                         const QualifiedIdentifier &name)
+                                         const Identifier &name)
 {
     AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->members, QStringLiteral("type")).value);
 
@@ -764,7 +765,7 @@ void DeclarationBuilder::declareProperty(QmlJS::AST::UiObjectInitializer* node,
 
 void DeclarationBuilder::declareParameter(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
-                                          const QualifiedIdentifier &name)
+                                          const Identifier &name)
 {
     QmlJS::FunctionType::Ptr function = currentType<QmlJS::FunctionType>();
     AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->members, QStringLiteral("type")).value);
@@ -780,7 +781,7 @@ void DeclarationBuilder::declareParameter(QmlJS::AST::UiObjectInitializer* node,
 }
 
 void DeclarationBuilder::declareEnum(const RangeInRevision &range,
-                                     const QualifiedIdentifier &name)
+                                     const Identifier &name)
 {
     EnumerationType::Ptr type(new EnumerationType);
 
@@ -802,7 +803,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
                                                   const QString& baseclass,
                                                   QmlJS::AST::UiQualifiedId* qualifiedId)
 {
-    QualifiedIdentifier name(
+    Identifier name(
         QmlJS::getQMLAttributeValue(node->members, QStringLiteral("name")).value.section('/', -1, -1)
     );
     DUContext::ContextType contextType = DUContext::Class;
@@ -826,11 +827,11 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         // Enumeration. The "values" key contains a dictionary of name -> number entries.
         declareEnum(range, name);
         contextType = DUContext::Enum;
-        name = QualifiedIdentifier();   // Enum contexts should have no name so that their members have the correct scope
+        name = Identifier();   // Enum contexts should have no name so that their members have the correct scope
     } else {
         // Define an anonymous subclass of the baseclass. This subclass will
         // be instantiated when "id:" is encountered
-        name = QualifiedIdentifier();
+        name = Identifier();
 
         // Use ExpressionVisitor to find the declaration of the base class
         DeclarationPointer baseClass = findType(qualifiedId).declaration;
@@ -840,7 +841,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
             DUChainWriteLocker lock;
             ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
                 currentContext()->type() == DUContext::Global ?
-                    QualifiedIdentifier(m_session->moduleName()) :
+                    Identifier(m_session->moduleName()) :
                     name,
                 QmlJS::emptyRangeOnLine(node->lbraceToken)
             );
@@ -862,7 +863,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         node,
         m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken),
         contextType,
-        name
+        QualifiedIdentifier(name)
     );
 
     DUContext* ctx = currentContext();
@@ -901,7 +902,7 @@ void DeclarationBuilder::declareComponentInstance(QmlJS::AST::ExpressionStatemen
 
         injectContext(topContext());
         Declaration* decl = openDeclaration<Declaration>(
-            QualifiedIdentifier(identifier->name.toString()),
+            Identifier(identifier->name.toString()),
             m_session->locationToRange(identifier->identifierToken)
         );
         closeInjectedContext();
@@ -966,7 +967,7 @@ void DeclarationBuilder::declareExports(const ExportLiteralsAndNames& exports,
 
         injectContext(currentContext()->parentContext());   // Don't declare the export in its C++-ish component, but in the scope above
         ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
-            QualifiedIdentifier(name),
+            Identifier(name),
             m_session->locationToRange(literal->literalToken)
         );
         closeInjectedContext();
@@ -1028,12 +1029,12 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
 
     if (node && !node->importId.isEmpty()) {
         // Open a namespace that will contain the declarations
-        QualifiedIdentifier identifier(node->importId.toString());
+        Identifier identifier(node->importId.toString());
         RangeInRevision range = m_session->locationToRange(node->importIdToken);
 
         Declaration* decl = openDeclaration<Declaration>(identifier, range);
         decl->setKind(Declaration::Namespace);
-        decl->setInternalContext(openContext(node, range, DUContext::Class, identifier));
+        decl->setInternalContext(openContext(node, range, DUContext::Class, QualifiedIdentifier(identifier)));
     }
 
     for (const QString& filePath : filePaths) {
@@ -1264,7 +1265,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
     setComment(node);
 
     RangeInRevision range = m_session->locationToRange(node->identifierToken);
-    QualifiedIdentifier id(node->name.toString());
+    Identifier id(node->name.toString());
     QString typeName = node->memberType.toString();
     bool res = DeclarationBuilderBase::visit(node);
 
@@ -1274,7 +1275,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
         declareFunction<ClassFunctionDeclaration>(
             node,
             false,
-            QualifiedIdentifier(node->name.toString()),
+            Identifier(node->name.toString()),
             m_session->locationToRange(node->identifierToken),
             node->parameters,
             m_session->locationToRange(node->identifierToken),  // The AST does not provide the location of the parens
