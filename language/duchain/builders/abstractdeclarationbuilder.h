@@ -87,12 +87,28 @@ protected:
   template<class DeclarationT>
   DeclarationT* openDeclaration(const QualifiedIdentifier& id, const RangeInRevision& newRange, DeclarationFlags flags = NoFlags)
   {
+    if (id.count() > 1) {
+      qWarning() << "openDeclaration called with a multi-component QualifiedIdentifier!";
+    }
     Identifier localId;
 
     if(!id.isEmpty()) {
       localId = id.last();
     }
 
+    return openDeclaration<DeclarationT>(localId, newRange, flags);
+  }
+  /**
+   * \copydoc
+   *
+   * \param localId the identifier of the new declaration.
+   * \param newRange the range which the identifier for the new declaration occupies.
+   * \param flags equal to <b>DeclarationIsDefinition</b> whether the new declaration is also a definition
+   * \return the new declaration created
+   */
+  template<class DeclarationT>
+  DeclarationT* openDeclaration(const Identifier& localId, const RangeInRevision& newRange, DeclarationFlags flags = NoFlags)
+  {
     DeclarationT* declaration = 0;
 
     if (LanguageSpecificDeclarationBuilderBase::recompiling()) {
