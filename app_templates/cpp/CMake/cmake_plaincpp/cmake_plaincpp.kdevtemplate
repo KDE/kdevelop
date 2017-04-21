@@ -70,5 +70,5 @@ Comment[zh_CN]=基于 CMake 的简单 C++ 应用程序
 Comment[zh_TW]=簡單的使用 CMake 的 C++ 應用程式
 Category=Standard/Terminal
 Icon=default-kdevelop
-ShowFilesAfterGeneration=%{PROJECTDIR}/main.cpp
+ShowFilesAfterGeneration=main.cpp
 ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_]+$

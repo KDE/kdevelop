@@ -27,4 +27,4 @@ Comment[uk]=Створити програму з графічним інтерф
 Comment[x-test]=xxGenerate a QMake/Qt5 based GUI application (crossplatform compatible)xx
 
 Category=Qt/Graphical (QMake-based)
-ShowFilesAfterGeneration=%{PROJECTDIR}/main.cpp
+ShowFilesAfterGeneration=main.cpp

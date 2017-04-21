@@ -34,4 +34,4 @@ Comment[x-test]=xxA Qt5 and QtQuick2 basic application using CMakexx
 
 Category=Qt/Graphical
 Icon=qt5-qml2.png
-ShowFilesAfterGeneration=%{PROJECTDIR}/src/main.cpp
+ShowFilesAfterGeneration=src/main.cpp
