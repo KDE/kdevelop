@@ -53,6 +53,8 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iruntimecontroller.h>
+#include <interfaces/iruntime.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
@@ -91,6 +93,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
 
     connect(ICore::self()->projectController(), &IProjectController::projectClosing, this, &CMakeManager::projectClosing);
+    connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, &CMakeManager::reloadProjects);
     connect(this, &KDevelop::AbstractFileManagerPlugin::folderAdded, this, &CMakeManager::folderAdded);
 
 //     m_fileSystemChangeTimer = new QTimer(this);
@@ -943,6 +946,14 @@ ConfigPage* CMakeManager::perProjectConfigPage(int number, const ProjectConfigOp
         return new CMakePreferences(this, options, parent);
     }
     return nullptr;
+}
+
+void CMakeManager::reloadProjects()
+{
+    for(IProject* project: m_projects.keys()) {
+        CMake::checkForNeedingConfigure(project);
+        reload(project->projectItem());
+    }
 }
 
 #include "cmakemanager.moc"

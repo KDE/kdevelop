@@ -56,6 +56,7 @@ namespace KDevelop
     class ParseJob;
     class ContextMenuExtension;
     class Context;
+    class IRuntime;
 }
 
 class CMakeFolderItem;
@@ -150,6 +151,7 @@ private slots:
 //     void filesystemBuffererTimeout();
 
 private:
+    void reloadProjects();
     CMakeFile fileInformation(KDevelop::ProjectBaseItem* item) const;
 
     void folderAdded(KDevelop::ProjectFolderItem* folder);

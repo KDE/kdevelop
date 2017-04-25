@@ -21,6 +21,11 @@
 #include "cmakeserver.h"
 #include "cmakeprojectdata.h"
 #include "cmakeutils.h"
+
+#include <interfaces/iruntime.h>
+#include <interfaces/iruntimecontroller.h>
+#include <interfaces/icore.h>
+
 #include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -69,7 +74,9 @@ CMakeServer::CMakeServer(QObject* parent)
             m_localSocket->connectToServer(path, QIODevice::ReadWrite);
         });
     });
-    m_process.start(CMake::findExecutable(), {"-E", "server", "--experimental", "--pipe=" + path});
+    m_process.setProgram(CMake::findExecutable());
+    m_process.setArguments({"-E", "server", "--experimental", "--pipe=" + path});
+    KDevelop::ICore::self()->runtimeController()->currentRuntime()->startProcess(&m_process);
 }
 
 CMakeServer::~CMakeServer()

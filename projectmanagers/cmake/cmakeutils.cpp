@@ -32,6 +32,8 @@
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
+#include <interfaces/iruntimecontroller.h>
+#include <interfaces/iruntime.h>
 #include <interfaces/iplugincontroller.h>
 #include <QStandardPaths>
 
@@ -182,8 +184,9 @@ KDevelop::Path::List resolveSystemDirs(KDevelop::IProject* project, const QStrin
 ///NOTE: when you change this, update @c defaultConfigure in cmakemanagertest.cpp
 bool checkForNeedingConfigure( KDevelop::IProject* project )
 {
+    const QString currentRuntime = ICore::self()->runtimeController()->currentRuntime()->name();
     const KDevelop::Path builddir = currentBuildDir(project);
-    const bool isValid = builddir.isValid();
+    const bool isValid = (buildDirRuntime(project, -1) == currentRuntime || buildDirRuntime(project, -1).isEmpty()) && builddir.isValid();
 
     if( !isValid )
     {
@@ -227,6 +230,7 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
             CMake::setCurrentBuildType( project, bd.buildType() );
             CMake::setCurrentCMakeExecutable(project, bd.cmakeExecutable());
             CMake::setCurrentEnvironment( project, QString() );
+            setBuildDirRuntime( project, currentRuntime );
         }
 
         return true;
@@ -236,8 +240,10 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
                     QFile::exists( KDevelop::Path(builddir, QStringLiteral("build.ninja")).toLocalFile() ) ) )
     {
         // User entered information already, but cmake hasn't actually been run yet.
+        setBuildDirRuntime( project, currentRuntime );
         return true;
     }
+    setBuildDirRuntime( project, currentRuntime );
     return false;
 }
 
