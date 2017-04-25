@@ -34,6 +34,7 @@
     <Action name="run_debug" /> <!-- ### remove me -->
     <Action name="run_profile" /> <!-- ### remove me -->
 
+    <Action name="switch_runtimes" />
     <Menu name="debug_core_menu">
       <text name="@title:menu">Examine Core File</text>
     </Menu>
@@ -52,6 +53,9 @@
 
     <Separator />
     <DefineGroup name="debug" /> <!-- ### remove me -->
+
+    <Separator />
+    <DefineGroup name="runtime_operations" />
 
     <Separator />
     <Merge />
@@ -182,6 +186,7 @@
   <Separator/>
   <DefineGroup append="build_operations" name="build_operations"/>
   <DefineGroup append="run_operations" name="run_operations"/>
+  <Action name="switch_runtimes" group="run_operations"/>
   <Action name="run_execute" group="run_operations"/>
   <Action name="run_debug" group="run_operations"/>
   <Action name="run_stop_all" group="run_operations" />
@@ -192,6 +197,7 @@
   <DefineGroup append="edit_operations" name="edit_operations"/>
   <Separator/>
   <Action name="commit_current_project" />
+  <Action name="switch_runtimes" />
 </ToolBar>
 
 <Menu name="rb_popup">
