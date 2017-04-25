@@ -46,6 +46,7 @@
 #include "kdevplatform_version.h"
 #include "workingsetcontroller.h"
 #include "testcontroller.h"
+#include "runtimecontroller.h"
 #include "debug.h"
 
 #include <KTextEditor/Document>
@@ -210,6 +211,11 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         documentationController = new DocumentationController(m_core);
     }
 
+    if( !runtimeController )
+    {
+        runtimeController = new RuntimeController(m_core);
+    }
+
     if( !debugController )
     {
         debugController = new DebugController(m_core);
@@ -275,6 +281,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     }
     debugController.data()->initialize();
     testController.data()->initialize();
+    runtimeController.data()->initialize();
 
     installSignalHandler();
 
@@ -298,6 +305,7 @@ CorePrivate::~CorePrivate()
     delete debugController.data();
     delete workingSetController.data();
     delete testController.data();
+    delete runtimeController.data();
 
     selectionController.clear();
     projectController.clear();
@@ -313,6 +321,7 @@ CorePrivate::~CorePrivate()
     debugController.clear();
     workingSetController.clear();
     testController.clear();
+    runtimeController.clear();
 }
 
 bool Core::initialize(QObject* splash, Setup mode, const QString& session )
@@ -550,6 +559,16 @@ IDocumentationController* Core::documentationController()
 DocumentationController* Core::documentationControllerInternal()
 {
     return d->documentationController.data();
+}
+
+IRuntimeController* Core::runtimeController()
+{
+    return d->runtimeController.data();
+}
+
+RuntimeController* Core::runtimeControllerInternal()
+{
+    return d->runtimeController.data();
 }
 
 IDebugController* Core::debugController()

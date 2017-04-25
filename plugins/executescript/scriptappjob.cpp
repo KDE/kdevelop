@@ -29,6 +29,8 @@
 #include <KShell>
 
 #include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/iruntimecontroller.h>
+#include <interfaces/iruntime.h>
 #include <outputview/outputmodel.h>
 #include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
@@ -38,6 +40,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <project/projectmodel.h>
+#include <util/path.h>
 
 #include "iexecutescriptplugin.h"
 #include "debug.h"
@@ -86,7 +89,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
             setErrorText( i18n( "There is no active document to launch." ) );
             return;
         }
-        script = document->url();
+        script = ICore::self()->runtimeController()->currentRuntime()->pathInRuntime(KDevelop::Path(document->url())).toUrl();
     }
 
     if( !err.isEmpty() )
@@ -145,7 +148,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     {
         wc = QUrl::fromLocalFile( QFileInfo( script.toLocalFile() ).absolutePath() );
     }
-    proc->setWorkingDirectory( wc.toLocalFile() );
+    proc->setWorkingDirectory( ICore::self()->runtimeController()->currentRuntime()->pathInRuntime(KDevelop::Path(wc)).toLocalFile() );
     proc->setProperty( "executable", interpreter.first() );
 
     QStringList program;
@@ -178,7 +181,7 @@ void ScriptAppJob::start()
     {
         startOutput();
         appendLine( i18n("Starting: %1", proc->program().join(QLatin1Char( ' ' ) ) ) );
-        proc->start();
+        ICore::self()->runtimeController()->currentRuntime()->startProcess(proc);
     } else
     {
         qWarning() << "No process, something went wrong when creating the job";

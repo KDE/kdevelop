@@ -21,6 +21,9 @@ Boston, MA 02110-1301, USA.
 #include "outputmodel.h"
 #include "outputdelegate.h"
 #include "debug.h"
+#include <interfaces/icore.h>
+#include <interfaces/iruntime.h>
+#include <interfaces/iruntimecontroller.h>
 #include <util/environmentprofilelist.h>
 #include <util/processlinemaker.h>
 #include <KProcess>
@@ -65,6 +68,7 @@ public:
     QHash<QString, QString> m_environmentOverrides;
     QString m_jobName;
     bool m_outputStarted;
+    bool m_executeOnHost = false;
 };
 
 OutputExecuteJobPrivate::OutputExecuteJobPrivate( OutputExecuteJob* owner ) :
@@ -102,7 +106,7 @@ OutputExecuteJob::~OutputExecuteJob()
         killSuccessful = doKill();
     }
 
-    Q_ASSERT( d->m_process->state() == QProcess::NotRunning || !killSuccessful );
+    Q_ASSERT( d->m_process->state() != QProcess::Running || !killSuccessful );
     delete d;
 }
 
@@ -277,8 +281,12 @@ void OutputExecuteJob::start()
         d->m_process->setProgram( d->effectiveCommandLine() );
         // there is no way to input data in the output view so redirect stdin to the null device
         d->m_process->setStandardInputFile(QProcess::nullDevice());
-        qCDebug(OUTPUTVIEW) << "Starting:" << d->m_process->program().join(QStringLiteral(" ")) << "in" << d->m_process->workingDirectory();
-        d->m_process->start();
+        qCDebug(OUTPUTVIEW) << "Starting:" << d->effectiveCommandLine() << d->m_process->QProcess::program() << "in" << d->m_process->workingDirectory();
+        if (d->m_executeOnHost) {
+            d->m_process->start();
+        } else {
+            KDevelop::ICore::self()->runtimeController()->currentRuntime()->startProcess(d->m_process);
+        }
     } else {
         QString errorMessage = i18n("Failed to specify program to start");
         model()->appendLine( i18n( "*** %1 ***", errorMessage) );
@@ -296,6 +304,7 @@ bool OutputExecuteJob::doKill()
     if( d->m_status != JobRunning ) {
         return true;
     }
+
     d->m_status = JobCanceled;
 
     d->m_process->terminate();
@@ -471,6 +480,17 @@ void OutputExecuteJob::addEnvironmentOverride( const QString& name, const QStrin
 void OutputExecuteJob::removeEnvironmentOverride( const QString& name )
 {
     d->m_environmentOverrides.remove( name );
+}
+
+
+void OutputExecuteJob::setExecuteOnHost(bool executeHost)
+{
+    d->m_executeOnHost = executeHost;
+}
+
+bool OutputExecuteJob::executeOnHost() const
+{
+    return d->m_executeOnHost;
 }
 
 template< typename T >

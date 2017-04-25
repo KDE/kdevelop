@@ -45,6 +45,7 @@ class DocumentationController;
 class DebugController;
 class WorkingSetController;
 class TestController;
+class RuntimeController;
 
 class KDEVPLATFORMSHELL_EXPORT CorePrivate {
 public:
@@ -66,6 +67,7 @@ public:
     QPointer<DebugController> debugController;
     QPointer<WorkingSetController> workingSetController;
     QPointer<TestController> testController;
+    QPointer<RuntimeController> runtimeController;
 
     KAboutData m_aboutData;
     Core *m_core;

@@ -222,6 +222,9 @@ public:
 
     void start() override;
 
+    void setExecuteOnHost(bool executeHost);
+    bool executeOnHost() const;
+
 protected:
     bool doKill() override;
 

@@ -50,6 +50,7 @@ class IDebugController;
 class IPartController;
 class IDashboardController;
 class ITestController;
+class IRuntimeController;
 
 /**
  * ICore is the container class for all the various objects in use by
@@ -120,6 +121,9 @@ public:
 
     /** @return the test controller */
     virtual KDevelop::ITestController* testController() = 0;
+
+    /** @return the runtime controller */
+    Q_SCRIPTABLE virtual KDevelop::IRuntimeController* runtimeController() = 0;
 
     /** @return the about data of the framework, different from the main about data which is created by the application */
     virtual KAboutData aboutData() const = 0;

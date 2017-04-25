@@ -51,6 +51,8 @@ set(KDevPlatformShell_LIB_SRCS
     configdialog.cpp
     editorconfigpage.cpp
     environmentconfigurebutton.cpp
+    runtimecontroller.cpp
+    runtimesmodel.cpp
 
     checkerstatus.cpp
     problem.cpp

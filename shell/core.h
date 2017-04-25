@@ -43,6 +43,7 @@ class SelectionController;
 class DocumentationController;
 class DebugController;
 class WorkingSetController;
+class RuntimeController;
 class TestController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore
@@ -85,6 +86,7 @@ public:
     IDocumentationController* documentationController() override;
     IDebugController* debugController() override;
     ITestController* testController() override;
+    IRuntimeController* runtimeController() override;
     ISession *activeSession() override;
     ISessionLock::Ptr activeSessionLock() override;
 
@@ -104,6 +106,7 @@ public:
     WorkingSetController* workingSetControllerInternal();
     SourceFormatterController* sourceFormatterControllerInternal();
     TestController* testControllerInternal();
+    RuntimeController* runtimeControllerInternal();
 
     /// @internal
     SessionController *sessionController();
