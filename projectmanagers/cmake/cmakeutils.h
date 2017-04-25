@@ -51,7 +51,7 @@ namespace CMake
      * @returns the current builddir for the given project or an empty url if none
      * has been set by the user.
      */
-    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentBuildDir( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentBuildDir( KDevelop::IProject* project, int builddir = -1 );
 
     /**
      * @returns the path to the 'compile_commands.json' file in the current builddir for the given project
@@ -67,7 +67,7 @@ namespace CMake
     /**
      * @returns the current build type for the given project or "Release" as default value.
      */
-    KDEVCMAKECOMMON_EXPORT QString currentBuildType( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT QString currentBuildType( KDevelop::IProject* project, int builddir = -1 );
 
     /**
     * @returns the CMake executable, taking into account standard
@@ -78,17 +78,17 @@ namespace CMake
      * @returns the current CMake executable for the given project or
      * QStandardPaths::findExecutable("cmake") as default value. 
      */
-    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project);
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project, int builddir = -1);
 
     /**
      * @returns the current install dir for the given project or "/usr/local" as default value.
      */
-    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentInstallDir( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentInstallDir( KDevelop::IProject* project, int builddir = -1 );
     
     /**
      * @returns the current extra arguments for the given project or "" as default value.
      */
-    KDEVCMAKECOMMON_EXPORT QString currentExtraArguments( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT QString currentExtraArguments( KDevelop::IProject* project, int builddir = -1 );
 
     /**
      * @returns the current build dir for the given project.
@@ -113,7 +113,7 @@ namespace CMake
     /**
      * @returns the environment configuration for a @p project
      */
-    KDEVCMAKECOMMON_EXPORT QString currentEnvironment( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT QString currentEnvironment( KDevelop::IProject* project, int builddir = -1 );
 
     /**
      * Sets the current install dir for the given project.

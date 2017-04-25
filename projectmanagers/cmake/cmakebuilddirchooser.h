@@ -34,6 +34,9 @@ class QDialogButtonBox;
 namespace Ui {
     class CMakeBuildDirChooser;
 }
+namespace KDevelop {
+    class IProject;
+}
 
 class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
 {
@@ -58,31 +61,37 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
         KDevelop::Path buildFolder() const;
         QString buildType() const;
         QString extraArguments() const;
+        int alreadyUsedIndex() const;
+        bool reuseBuilddir();
 
         void setCMakeExecutable(const KDevelop::Path& path);
         void setInstallPrefix(const KDevelop::Path& path);
         void setBuildFolder(const KDevelop::Path& path);
         void setBuildType(const QString& buildType);
-        void setSourceFolder( const KDevelop::Path& srcFolder );
+        void setProject( KDevelop::IProject* project );
+        void setSourceFolder(const KDevelop::Path &path) { m_srcFolder = path; }
         void setAlreadyUsed(const QStringList& used);
         void setStatus(const QString& message, bool canApply);
         void setExtraArguments(const QString& args);
+        void setShowAvailableBuildDirs(bool show);
 
     private slots:
         void updated();
     private:
-        QStringList m_alreadyUsed;
+        void adoptPreviousBuildDirectory(int index);
         void buildDirSettings(
             const KDevelop::Path& buildDir,
             QString& srcDir,
             QString& installDir,
             QString& buildType);
 
+        QStringList m_alreadyUsed;
         CMakeExtraArgumentsHistory* m_extraArgumentsHistory;
 
         Ui::CMakeBuildDirChooser* m_chooserUi;
         QDialogButtonBox* m_buttonBox;
 
+        KDevelop::IProject* m_project;
         KDevelop::Path m_srcFolder;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS( CMakeBuildDirChooser::StatusTypes )

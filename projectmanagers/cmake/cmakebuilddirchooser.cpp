@@ -24,6 +24,7 @@
 #include "debug.h"
 
 #include <project/helper.h>
+#include <interfaces/iproject.h>
 
 #include <KColorScheme>
 #include <KLocalizedString>
@@ -51,6 +52,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 
     m_chooserUi = new Ui::CMakeBuildDirChooser;
     m_chooserUi->setupUi(mainWidget);
+    setShowAvailableBuildDirs(false);
     mainLayout->addWidget(m_buttonBox);
 
     m_chooserUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
@@ -64,6 +66,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     connect(m_chooserUi->buildFolder, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->buildType, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->extraArguments, &KComboBox::editTextChanged, this, &CMakeBuildDirChooser::updated);
+    connect(m_chooserUi->availableBuildDirs, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::adoptPreviousBuildDirectory);
 
     updated();
 }
@@ -75,12 +78,17 @@ CMakeBuildDirChooser::~CMakeBuildDirChooser()
     delete m_chooserUi;
 }
 
-void CMakeBuildDirChooser::setSourceFolder( const Path &srcFolder )
+void CMakeBuildDirChooser::setProject( IProject* project )
 {
-    m_srcFolder = srcFolder;
+    m_project = project;
 
-    m_chooserUi->buildFolder->setUrl(KDevelop::proposedBuildFolder(srcFolder).toUrl());
-    setWindowTitle(i18n("Configure a build directory for %1", srcFolder.toLocalFile()));
+    KDevelop::Path folder = m_project->path();
+    QString relative=CMake::projectRootRelative(m_project);
+    folder.cd(relative);
+    m_srcFolder = folder;
+
+    m_chooserUi->buildFolder->setUrl(KDevelop::proposedBuildFolder(m_srcFolder).toUrl());
+    setWindowTitle(i18n("Configure a build directory for %1", project->name()));
     update();
 }
 
@@ -196,7 +204,7 @@ void CMakeBuildDirChooser::updated()
             }
         }
 
-        if(m_alreadyUsed.contains(chosenBuildFolder.toLocalFile())) {
+        if(m_alreadyUsed.contains(chosenBuildFolder.toLocalFile()) && !m_chooserUi->availableBuildDirs->isEnabled()) {
             st=DirAlreadyCreated;
         }
     }
@@ -268,6 +276,7 @@ void CMakeBuildDirChooser::setBuildType(const QString& s)
 
 void CMakeBuildDirChooser::setAlreadyUsed (const QStringList & used)
 {
+    m_chooserUi->availableBuildDirs->addItems(used);
     m_alreadyUsed = used;
     updated();
 }
@@ -295,6 +304,46 @@ void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
         auto cancelButton = m_buttonBox->button(QDialogButtonBox::Cancel);
         cancelButton->clearFocus();
     }
+}
+
+void CMakeBuildDirChooser::adoptPreviousBuildDirectory(int index)
+{
+    if (index > 0) {
+        Q_ASSERT(m_project);
+        m_chooserUi->cmakeExecutable->setUrl(CMake::currentCMakeExecutable(m_project, index -1).toUrl());
+        m_chooserUi->buildFolder->setUrl(CMake::currentBuildDir(m_project, index -1).toUrl());
+        m_chooserUi->installPrefix->setUrl(CMake::currentInstallDir(m_project, index -1).toUrl());
+        m_chooserUi->buildType->setCurrentText(CMake::currentBuildType(m_project, index -1));
+        m_chooserUi->extraArguments->setCurrentText(CMake::currentExtraArguments(m_project, index -1));
+    }
+
+    m_chooserUi->label_5->setEnabled(index == 0);
+    m_chooserUi->cmakeExecutable->setEnabled(index == 0);
+    m_chooserUi->label_3->setEnabled(index == 0);
+    m_chooserUi->buildFolder->setEnabled(index == 0);
+    m_chooserUi->label->setEnabled(index == 0);
+    m_chooserUi->installPrefix->setEnabled(index == 0);
+    m_chooserUi->label_2->setEnabled(index == 0);
+    m_chooserUi->buildType->setEnabled(index == 0);
+    m_chooserUi->status->setEnabled(index == 0);
+    m_chooserUi->extraArguments->setEnabled(index == 0);
+    m_chooserUi->label_4->setEnabled(index == 0);
+}
+
+bool CMakeBuildDirChooser::reuseBuilddir()
+{
+    return m_chooserUi->availableBuildDirs->currentIndex() > 0;
+}
+
+int CMakeBuildDirChooser::alreadyUsedIndex() const
+{
+    return m_chooserUi->availableBuildDirs->currentIndex() - 1;
+}
+
+void CMakeBuildDirChooser::setShowAvailableBuildDirs(bool show)
+{
+    m_chooserUi->availableLabel->setVisible(show);
+    m_chooserUi->availableBuildDirs->setVisible(show);
 }
 
 Path CMakeBuildDirChooser::cmakeExecutable() const { return Path(m_chooserUi->cmakeExecutable->url()); }

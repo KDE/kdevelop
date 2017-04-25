@@ -31,6 +31,8 @@
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iruntimecontroller.h>
+#include <interfaces/iruntime.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <QStandardPaths>
@@ -71,6 +73,7 @@ static const QString cmakeBuildTypeKey = QStringLiteral("Build Type");
 static const QString cmakeInstallDirKey = QStringLiteral("Install Directory");
 static const QString cmakeEnvironmentKey = QStringLiteral("Environment Profile");
 static const QString cmakeArgumentsKey = QStringLiteral("Extra Arguments");
+static const QString buildDirRuntime = QStringLiteral("Runtime");
 }
 
 static const QString groupNameBuildDir = QStringLiteral("CMake Build Directory %1");
@@ -99,9 +102,9 @@ bool buildDirGroupExists( KDevelop::IProject* project, int buildDirIndex )
     return baseGroup(project).hasGroup( Config::groupNameBuildDir.arg(buildDirIndex) );
 }
 
-QString readBuildDirParameter( KDevelop::IProject* project, const QString& key, const QString& aDefault )
+QString readBuildDirParameter( KDevelop::IProject* project, const QString& key, const QString& aDefault, int buildDirectory )
 {
-    int buildDirIndex = CMake::currentBuildDirIndex(project);
+    const int buildDirIndex = buildDirectory<0 ? CMake::currentBuildDirIndex(project) : buildDirectory;
     if (buildDirIndex >= 0)
         return buildDirGroup( project, buildDirIndex ).readEntry( key, aDefault );
 
@@ -128,6 +131,16 @@ void writeProjectBaseParameter( KDevelop::IProject* project, const QString& key,
 {
     KConfigGroup baseGrp = baseGroup(project);
     baseGrp.writeEntry( key, value );
+}
+
+void setBuildDirRuntime( KDevelop::IProject* project, const QString& name)
+{
+    writeBuildDirParameter(project, Config::Specific::buildDirRuntime, name);
+}
+
+QString buildDirRuntime( KDevelop::IProject* project, int builddir)
+{
+    return readBuildDirParameter(project, Config::Specific::buildDirRuntime, QString(), builddir);
 }
 
 } // namespace
@@ -171,17 +184,19 @@ KDevelop::Path::List resolveSystemDirs(KDevelop::IProject* project, const QStrin
 ///NOTE: when you change this, update @c defaultConfigure in cmakemanagertest.cpp
 bool checkForNeedingConfigure( KDevelop::IProject* project )
 {
+    const QString currentRuntime = ICore::self()->runtimeController()->currentRuntime()->name();
     const KDevelop::Path builddir = currentBuildDir(project);
-    if( !builddir.isValid() )
+    qDebug() << "checking..." << buildDirRuntime(project, -1) << currentRuntime;
+    const bool isValid = (buildDirRuntime(project, -1) == currentRuntime || buildDirRuntime(project, -1).isEmpty()) && builddir.isValid();
+
+    if( !isValid )
     {
         CMakeBuildDirChooser bd;
 
-        KDevelop::Path folder = project->path();
-        QString relative=CMake::projectRootRelative(project);
-        folder.cd(relative);
-
-        bd.setSourceFolder( folder );
-        bd.setAlreadyUsed( CMake::allBuildDirs(project) );
+        bd.setProject( project );
+        const auto builddirs = CMake::allBuildDirs(project);
+        bd.setAlreadyUsed( builddirs );
+        bd.setShowAvailableBuildDirs(!builddirs.isEmpty());
         bd.setCMakeExecutable(currentCMakeExecutable(project));
 
         if( !bd.exec() )
@@ -189,26 +204,35 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
             return false;
         }
 
-        QString newbuilddir = bd.buildFolder().toLocalFile();
-        int addedBuildDirIndex = buildDirCount( project ); // old count is the new index
+        if (bd.reuseBuilddir())
+        {
+            CMake::setBuildDirCount( project, bd.alreadyUsedIndex() );
+        }
+        else
+        {
 
-        // Initialize the kconfig items with the values from the dialog, this ensures the settings
-        // end up in the config file once the changes are saved
-        qCDebug(CMAKE) << "adding to cmake config: new builddir index" << addedBuildDirIndex;
-        qCDebug(CMAKE) << "adding to cmake config: builddir path " << bd.buildFolder();
-        qCDebug(CMAKE) << "adding to cmake config: installdir " << bd.installPrefix();
-        qCDebug(CMAKE) << "adding to cmake config: extra args" << bd.extraArguments();
-        qCDebug(CMAKE) << "adding to cmake config: build type " << bd.buildType();
-        qCDebug(CMAKE) << "adding to cmake config: cmake executable " << bd.cmakeExecutable();
-        qCDebug(CMAKE) << "adding to cmake config: environment <null>";
-        CMake::setBuildDirCount( project, addedBuildDirIndex + 1 );
-        CMake::setCurrentBuildDirIndex( project, addedBuildDirIndex );
-        CMake::setCurrentBuildDir( project, bd.buildFolder() );
-        CMake::setCurrentInstallDir( project, bd.installPrefix() );
-        CMake::setCurrentExtraArguments( project, bd.extraArguments() );
-        CMake::setCurrentBuildType( project, bd.buildType() );
-        CMake::setCurrentCMakeExecutable(project, bd.cmakeExecutable());
-        CMake::setCurrentEnvironment( project, QString() );
+            QString newbuilddir = bd.buildFolder().toLocalFile();
+            int addedBuildDirIndex = buildDirCount( project ); // old count is the new index
+
+            // Initialize the kconfig items with the values from the dialog, this ensures the settings
+            // end up in the config file once the changes are saved
+            qCDebug(CMAKE) << "adding to cmake config: new builddir index" << addedBuildDirIndex;
+            qCDebug(CMAKE) << "adding to cmake config: builddir path " << bd.buildFolder();
+            qCDebug(CMAKE) << "adding to cmake config: installdir " << bd.installPrefix();
+            qCDebug(CMAKE) << "adding to cmake config: extra args" << bd.extraArguments();
+            qCDebug(CMAKE) << "adding to cmake config: build type " << bd.buildType();
+            qCDebug(CMAKE) << "adding to cmake config: cmake executable " << bd.cmakeExecutable();
+            qCDebug(CMAKE) << "adding to cmake config: environment <null>";
+            CMake::setBuildDirCount( project, addedBuildDirIndex + 1 );
+            CMake::setCurrentBuildDirIndex( project, addedBuildDirIndex );
+            CMake::setCurrentBuildDir( project, bd.buildFolder() );
+            CMake::setCurrentInstallDir( project, bd.installPrefix() );
+            CMake::setCurrentExtraArguments( project, bd.extraArguments() );
+            CMake::setCurrentBuildType( project, bd.buildType() );
+            CMake::setCurrentCMakeExecutable(project, bd.cmakeExecutable());
+            CMake::setCurrentEnvironment( project, QString() );
+            setBuildDirRuntime( project, currentRuntime );
+        }
 
         return true;
     } else if( !QFile::exists( KDevelop::Path(builddir, QStringLiteral("CMakeCache.txt")).toLocalFile() ) ||
@@ -217,8 +241,10 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
                     QFile::exists( KDevelop::Path(builddir, QStringLiteral("build.ninja")).toLocalFile() ) ) )
     {
         // User entered information already, but cmake hasn't actually been run yet.
+        setBuildDirRuntime( project, currentRuntime );
         return true;
     }
+    setBuildDirRuntime( project, currentRuntime );
     return false;
 }
 
@@ -253,9 +279,9 @@ KDevelop::Path projectRoot(KDevelop::IProject* project)
     return project->path().cd(CMake::projectRootRelative(project));
 }
 
-KDevelop::Path currentBuildDir( KDevelop::IProject* project )
+KDevelop::Path currentBuildDir( KDevelop::IProject* project, int builddir )
 {
-    return KDevelop::Path(readBuildDirParameter( project, Config::Specific::buildDirPathKey, QString() ));
+    return KDevelop::Path(readBuildDirParameter( project, Config::Specific::buildDirPathKey, QString(), builddir ));
 }
 
 KDevelop::Path commandsFile(KDevelop::IProject* project)
@@ -278,9 +304,9 @@ KDevelop::Path targetDirectoriesFile(KDevelop::IProject* project)
     return KDevelop::Path(currentBuildDir, QStringLiteral("CMakeFiles/TargetDirectories.txt"));
 }
 
-QString currentBuildType( KDevelop::IProject* project )
+QString currentBuildType( KDevelop::IProject* project, int builddir )
 {
-    return readBuildDirParameter( project, Config::Specific::cmakeBuildTypeKey, QStringLiteral("Release") );
+    return readBuildDirParameter( project, Config::Specific::cmakeBuildTypeKey, QStringLiteral("Release"), builddir );
 }
 
 QString findExecutable()
@@ -297,10 +323,10 @@ QString findExecutable()
     return cmake;
 }
 
-KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project)
+KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project, int builddir)
 {
     const auto systemExecutable = findExecutable();
-    auto path = readBuildDirParameter(project, Config::Specific::cmakeExecutableKey, systemExecutable);
+    auto path = readBuildDirParameter(project, Config::Specific::cmakeExecutableKey, systemExecutable, builddir);
     if (path != systemExecutable) {
         QFileInfo info(path);
         if (!info.isExecutable()) {
@@ -310,9 +336,9 @@ KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project)
     return KDevelop::Path(path);
 }
 
-KDevelop::Path currentInstallDir( KDevelop::IProject* project )
+KDevelop::Path currentInstallDir( KDevelop::IProject* project, int builddir )
 {
-    return KDevelop::Path(readBuildDirParameter( project, Config::Specific::cmakeInstallDirKey, QStringLiteral("/usr/local") ));
+    return KDevelop::Path(readBuildDirParameter( project, Config::Specific::cmakeInstallDirKey, QStringLiteral("/usr/local"), builddir ));
 }
 
 QString projectRootRelative( KDevelop::IProject* project )
@@ -325,9 +351,9 @@ bool hasProjectRootRelative(KDevelop::IProject* project)
     return baseGroup(project).hasKey( Config::Old::projectRootRelativeKey );
 }
 
-QString currentExtraArguments( KDevelop::IProject* project )
+QString currentExtraArguments( KDevelop::IProject* project, int builddir )
 {
-    return readBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, QString() );
+    return readBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, QString(), builddir );
 }
 
 void setCurrentInstallDir( KDevelop::IProject* project, const KDevelop::Path& path )
@@ -360,9 +386,9 @@ void setCurrentExtraArguments( KDevelop::IProject* project, const QString& strin
     writeBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, string );
 }
 
-QString currentEnvironment(KDevelop::IProject* project)
+QString currentEnvironment(KDevelop::IProject* project, int builddir)
 {
-    return readBuildDirParameter( project, Config::Specific::cmakeEnvironmentKey, QString() );
+    return readBuildDirParameter( project, Config::Specific::cmakeEnvironmentKey, QString(), builddir );
 }
 
 int currentBuildDirIndex( KDevelop::IProject* project )

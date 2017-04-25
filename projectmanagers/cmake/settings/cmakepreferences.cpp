@@ -284,7 +284,7 @@ void CMakePreferences::cacheUpdated()
 void CMakePreferences::createBuildDir()
 {
     CMakeBuildDirChooser bdCreator;
-    bdCreator.setSourceFolder( m_srcFolder );
+    bdCreator.setProject( m_project );
 
     // NOTE: (on removing the trailing slashes)
     // Generally, we have no clue about how shall a trailing slash look in the current system.
