@@ -31,8 +31,6 @@
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
-#include <interfaces/iruntimecontroller.h>
-#include <interfaces/iruntime.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <QStandardPaths>
