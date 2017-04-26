@@ -27,6 +27,7 @@ class GrepOutputViewFactory;
 class GrepViewPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
+    Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.GrepViewPlugin" )
 
 public:
     explicit GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
