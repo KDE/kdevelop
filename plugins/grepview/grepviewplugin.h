@@ -53,7 +53,7 @@ public Q_SLOTS:
     Q_SCRIPTABLE void startSearch(QString pattern, QString directory, bool show);
 
 Q_SIGNALS:
-    Q_SIGNAL void grepJobFinished();
+    void grepJobFinished();
 
 private Q_SLOTS:
     void showDialogFromMenu();
