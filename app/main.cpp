@@ -311,6 +311,34 @@ int main( int argc, char *argv[] )
     }
 #endif
 
+    //we can't use KCmdLineArgs as it doesn't allow arguments for the debugee
+    //so lookup the --debug switch and eat everything behind by decrementing argc
+    //debugArgs is filled with args after --debug <debuger>
+    QStringList debugArgs;
+    QString debugeeName;
+    {
+        bool debugFound = false;
+        int c = argc;
+        for (int i=0; i < c; ++i) {
+            if (debugFound) {
+                debugArgs << argv[i];
+            } else if (qstrcmp(argv[i], "--debug") == 0 || qstrcmp(argv[i], "-d") == 0) {
+                if (argc <= i+1) {
+                    argc = i + 1;
+                } else {
+                    i++;
+                    argc = i + 1;
+                }
+                debugFound = true;
+            } else if (QString(argv[i]).startsWith("--debug=")) {
+                argc = i + 1;
+                debugFound = true;
+            }
+        }
+    }
+
+    KDevelopApplication app(argc, argv);
+
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", i18n( "KDevelop" ), QByteArray(VERSION), i18n(description), KAboutLicense::GPL,
                           i18n("Copyright 1999-2016, The KDevelop developers"), QString(), "http://www.kdevelop.org/");
@@ -374,35 +402,6 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( i18n("Andreas Koepfle") , i18n( "QMake project manager patches" ), "koepfle@ti.uni-mannheim.de" );
     aboutData.addCredit( i18n("Sascha Cunz") , i18n( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), "mail@sacu.de" );
     aboutData.addCredit( i18n("Zoran Karavla"), i18n( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
-
-
-    //we can't use KCmdLineArgs as it doesn't allow arguments for the debugee
-    //so lookup the --debug switch and eat everything behind by decrementing argc
-    //debugArgs is filled with args after --debug <debuger>
-    QStringList debugArgs;
-    QString debugeeName;
-    {
-        bool debugFound = false;
-        int c = argc;
-        for (int i=0; i < c; ++i) {
-            if (debugFound) {
-                debugArgs << argv[i];
-            } else if (qstrcmp(argv[i], "--debug") == 0 || qstrcmp(argv[i], "-d") == 0) {
-                if (argc <= i+1) {
-                    argc = i + 1;
-                } else {
-                    i++;
-                    argc = i + 1;
-                }
-                debugFound = true;
-            } else if (QString(argv[i]).startsWith("--debug=")) {
-                argc = i + 1;
-                debugFound = true;
-            }
-        }
-    }
-
-    KDevelopApplication app(argc, argv);
 
     KCrash::initialize();
 
