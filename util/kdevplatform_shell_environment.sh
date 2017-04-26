@@ -565,7 +565,7 @@ function search! {
         LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
 
-    qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
+    qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
 }
 
 function dsearch! {
@@ -594,7 +594,7 @@ function dsearch! {
         LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
 
-    qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" false
+    qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" false
 }
 
 ##### SSH DBUS FORWARDING --------------------------------------------------------------------------------------------------------------------
