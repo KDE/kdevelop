@@ -65,10 +65,8 @@ CMakeServer::CMakeServer(QObject* parent)
 
     connect(&m_process, &QProcess::started, this, [this, path](){
         //Once the process has started, wait for the file to be created, then connect to it
-        m_localSocket->connectToServer(path, QIODevice::ReadWrite);
         QTimer::singleShot(100, this, [this, path]() {
-            if (!m_localSocket->isOpen())
-                m_localSocket->connectToServer(path, QIODevice::ReadWrite);
+            m_localSocket->connectToServer(path, QIODevice::ReadWrite);
         });
     });
     m_process.start(CMake::findExecutable(), {"-E", "server", "--experimental", "--pipe=" + path});
@@ -76,6 +74,7 @@ CMakeServer::CMakeServer(QObject* parent)
 
 CMakeServer::~CMakeServer()
 {
+    m_process.disconnect();
     m_process.kill();
     m_process.waitForFinished();
 }
